@@ -96,7 +96,7 @@ class IDiscovererRef(
 
     @builtins.property
     @jsii.member(jsii_name="discovererRef")
-    def discoverer_ref(self) -> DiscovererReference:
+    def discoverer_ref(self) -> "DiscovererReference":
         '''(experimental) A reference to a Discoverer resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IDiscovererRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="discovererRef")
-    def discoverer_ref(self) -> DiscovererReference:
+    def discoverer_ref(self) -> "DiscovererReference":
         '''(experimental) A reference to a Discoverer resource.
 
         :stability: experimental
         '''
-        return typing.cast(DiscovererReference, jsii.get(self, "discovererRef"))
+        return typing.cast("DiscovererReference", jsii.get(self, "discovererRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDiscovererRef).__jsii_proxy_class__ = lambda : _IDiscovererRefProxy

@@ -112,7 +112,7 @@ class IDatabaseRef(
 
     @builtins.property
     @jsii.member(jsii_name="databaseRef")
-    def database_ref(self) -> DatabaseReference:
+    def database_ref(self) -> "DatabaseReference":
         '''(experimental) A reference to a Database resource.
 
         :stability: experimental
@@ -133,12 +133,12 @@ class _IDatabaseRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="databaseRef")
-    def database_ref(self) -> DatabaseReference:
+    def database_ref(self) -> "DatabaseReference":
         '''(experimental) A reference to a Database resource.
 
         :stability: experimental
         '''
-        return typing.cast(DatabaseReference, jsii.get(self, "databaseRef"))
+        return typing.cast("DatabaseReference", jsii.get(self, "databaseRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDatabaseRef).__jsii_proxy_class__ = lambda : _IDatabaseRefProxy

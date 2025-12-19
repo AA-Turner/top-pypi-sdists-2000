@@ -147,7 +147,7 @@ class IAppRef(
 
     @builtins.property
     @jsii.member(jsii_name="appRef")
-    def app_ref(self) -> AppReference:
+    def app_ref(self) -> "AppReference":
         '''(experimental) A reference to a App resource.
 
         :stability: experimental
@@ -168,12 +168,12 @@ class _IAppRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="appRef")
-    def app_ref(self) -> AppReference:
+    def app_ref(self) -> "AppReference":
         '''(experimental) A reference to a App resource.
 
         :stability: experimental
         '''
-        return typing.cast(AppReference, jsii.get(self, "appRef"))
+        return typing.cast("AppReference", jsii.get(self, "appRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAppRef).__jsii_proxy_class__ = lambda : _IAppRefProxy
@@ -196,7 +196,7 @@ class IElasticLoadBalancerAttachmentRef(
     @jsii.member(jsii_name="elasticLoadBalancerAttachmentRef")
     def elastic_load_balancer_attachment_ref(
         self,
-    ) -> ElasticLoadBalancerAttachmentReference:
+    ) -> "ElasticLoadBalancerAttachmentReference":
         '''(experimental) A reference to a ElasticLoadBalancerAttachment resource.
 
         :stability: experimental
@@ -219,12 +219,12 @@ class _IElasticLoadBalancerAttachmentRefProxy(
     @jsii.member(jsii_name="elasticLoadBalancerAttachmentRef")
     def elastic_load_balancer_attachment_ref(
         self,
-    ) -> ElasticLoadBalancerAttachmentReference:
+    ) -> "ElasticLoadBalancerAttachmentReference":
         '''(experimental) A reference to a ElasticLoadBalancerAttachment resource.
 
         :stability: experimental
         '''
-        return typing.cast(ElasticLoadBalancerAttachmentReference, jsii.get(self, "elasticLoadBalancerAttachmentRef"))
+        return typing.cast("ElasticLoadBalancerAttachmentReference", jsii.get(self, "elasticLoadBalancerAttachmentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IElasticLoadBalancerAttachmentRef).__jsii_proxy_class__ = lambda : _IElasticLoadBalancerAttachmentRefProxy

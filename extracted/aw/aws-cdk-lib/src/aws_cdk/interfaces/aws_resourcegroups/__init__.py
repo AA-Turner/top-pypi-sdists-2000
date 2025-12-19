@@ -107,7 +107,7 @@ class IGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="groupRef")
-    def group_ref(self) -> GroupReference:
+    def group_ref(self) -> "GroupReference":
         '''(experimental) A reference to a Group resource.
 
         :stability: experimental
@@ -128,12 +128,12 @@ class _IGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="groupRef")
-    def group_ref(self) -> GroupReference:
+    def group_ref(self) -> "GroupReference":
         '''(experimental) A reference to a Group resource.
 
         :stability: experimental
         '''
-        return typing.cast(GroupReference, jsii.get(self, "groupRef"))
+        return typing.cast("GroupReference", jsii.get(self, "groupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGroupRef).__jsii_proxy_class__ = lambda : _IGroupRefProxy

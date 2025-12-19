@@ -231,13 +231,13 @@ class CfnAccountAuditConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account_id: builtins.str,
-        audit_check_configurations: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]],
+        audit_check_configurations: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]],
         role_arn: builtins.str,
-        audit_notification_target_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        audit_notification_target_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::AccountAuditConfiguration``.
 
@@ -274,7 +274,7 @@ class CfnAccountAuditConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccountAuditConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -307,9 +307,9 @@ class CfnAccountAuditConfiguration(
     @jsii.member(jsii_name="accountAuditConfigurationRef")
     def account_audit_configuration_ref(
         self,
-    ) -> _AccountAuditConfigurationReference_f8e98698:
+    ) -> "_AccountAuditConfigurationReference_f8e98698":
         '''A reference to a AccountAuditConfiguration resource.'''
-        return typing.cast(_AccountAuditConfigurationReference_f8e98698, jsii.get(self, "accountAuditConfigurationRef"))
+        return typing.cast("_AccountAuditConfigurationReference_f8e98698", jsii.get(self, "accountAuditConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -333,14 +333,14 @@ class CfnAccountAuditConfiguration(
     @jsii.member(jsii_name="auditCheckConfigurations")
     def audit_check_configurations(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty"]:
         '''Specifies which audit checks are enabled and disabled for this account.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty"], jsii.get(self, "auditCheckConfigurations"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty"], jsii.get(self, "auditCheckConfigurations"))
 
     @audit_check_configurations.setter
     def audit_check_configurations(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__38ac903da9fb4592fd18210eef2ef7a6a051e403e2674ec7625634f574ef8485)
@@ -364,14 +364,14 @@ class CfnAccountAuditConfiguration(
     @jsii.member(jsii_name="auditNotificationTargetConfigurations")
     def audit_notification_target_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty"]]:
         '''Information about the targets to which audit notifications are sent.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty"]], jsii.get(self, "auditNotificationTargetConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty"]], jsii.get(self, "auditNotificationTargetConfigurations"))
 
     @audit_notification_target_configurations.setter
     def audit_notification_target_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a5adb6d17dbf65ccb196c1848ae8c6fa83773373f35cc6bd6ac1bbba5db26c63)
@@ -387,7 +387,7 @@ class CfnAccountAuditConfiguration(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Which audit checks are enabled and disabled for this account.
 
@@ -416,13 +416,13 @@ class CfnAccountAuditConfiguration(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''True if this audit check is enabled for this account.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfiguration.html#cfn-iot-accountauditconfiguration-auditcheckconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -462,23 +462,23 @@ class CfnAccountAuditConfiguration(
         def __init__(
             self,
             *,
-            authenticated_cognito_role_overly_permissive_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            ca_certificate_expiring_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            ca_certificate_key_quality_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            conflicting_client_ids_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            device_certificate_age_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.DeviceCertAgeAuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            device_certificate_expiring_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            device_certificate_key_quality_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            device_certificate_shared_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            intermediate_ca_revoked_for_active_device_certificates_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            iot_policy_overly_permissive_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            io_t_policy_potential_mis_configuration_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            iot_role_alias_allows_access_to_unused_services_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            iot_role_alias_overly_permissive_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            logging_disabled_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            revoked_ca_certificate_still_active_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            revoked_device_certificate_still_active_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            unauthenticated_cognito_role_overly_permissive_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            authenticated_cognito_role_overly_permissive_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ca_certificate_expiring_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ca_certificate_key_quality_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            conflicting_client_ids_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            device_certificate_age_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.DeviceCertAgeAuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            device_certificate_expiring_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            device_certificate_key_quality_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            device_certificate_shared_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            intermediate_ca_revoked_for_active_device_certificates_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            iot_policy_overly_permissive_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            io_t_policy_potential_mis_configuration_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            iot_role_alias_allows_access_to_unused_services_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            iot_role_alias_overly_permissive_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            logging_disabled_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            revoked_ca_certificate_still_active_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            revoked_device_certificate_still_active_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            unauthenticated_cognito_role_overly_permissive_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The types of audit checks that can be performed.
 
@@ -624,7 +624,7 @@ class CfnAccountAuditConfiguration(
         @builtins.property
         def authenticated_cognito_role_overly_permissive_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks the permissiveness of an authenticated Amazon Cognito identity pool role.
 
             For this check, AWS IoT Device Defender audits all Amazon Cognito identity pools that have been used to connect to the AWS IoT message broker during the 31 days before the audit is performed.
@@ -632,12 +632,12 @@ class CfnAccountAuditConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-authenticatedcognitoroleoverlypermissivecheck
             '''
             result = self._values.get("authenticated_cognito_role_overly_permissive_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def ca_certificate_expiring_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks if a CA certificate is expiring.
 
             This check applies to CA certificates expiring within 30 days or that have expired.
@@ -645,12 +645,12 @@ class CfnAccountAuditConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-cacertificateexpiringcheck
             '''
             result = self._values.get("ca_certificate_expiring_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def ca_certificate_key_quality_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks the quality of the CA certificate key.
 
             The quality checks if the key is in a valid format, not expired, and if the key meets a minimum required size. This check applies to CA certificates that are ``ACTIVE`` or ``PENDING_TRANSFER`` .
@@ -658,34 +658,34 @@ class CfnAccountAuditConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-cacertificatekeyqualitycheck
             '''
             result = self._values.get("ca_certificate_key_quality_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def conflicting_client_ids_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks if multiple devices connect using the same client ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-conflictingclientidscheck
             '''
             result = self._values.get("conflicting_client_ids_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def device_certificate_age_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.DeviceCertAgeAuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.DeviceCertAgeAuditCheckConfigurationProperty"]]:
             '''Checks when a device certificate has been active for a number of days greater than or equal to the number you specify.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-devicecertificateagecheck
             '''
             result = self._values.get("device_certificate_age_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.DeviceCertAgeAuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.DeviceCertAgeAuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def device_certificate_expiring_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks if a device certificate is expiring.
 
             By default, this check applies to device certificates expiring within 30 days or that have expired. You can modify this threshold by configuring the DeviceCertExpirationAuditCheckConfiguration.
@@ -693,12 +693,12 @@ class CfnAccountAuditConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-devicecertificateexpiringcheck
             '''
             result = self._values.get("device_certificate_expiring_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def device_certificate_key_quality_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks the quality of the device certificate key.
 
             The quality checks if the key is in a valid format, not expired, signed by a registered certificate authority, and if the key meets a minimum required size.
@@ -706,45 +706,45 @@ class CfnAccountAuditConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-devicecertificatekeyqualitycheck
             '''
             result = self._values.get("device_certificate_key_quality_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def device_certificate_shared_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks if multiple concurrent connections use the same X.509 certificate to authenticate with AWS IoT .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-devicecertificatesharedcheck
             '''
             result = self._values.get("device_certificate_shared_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def intermediate_ca_revoked_for_active_device_certificates_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks if device certificates are still active despite being revoked by an intermediate CA.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-intermediatecarevokedforactivedevicecertificatescheck
             '''
             result = self._values.get("intermediate_ca_revoked_for_active_device_certificates_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def iot_policy_overly_permissive_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks the permissiveness of a policy attached to an authenticated Amazon Cognito identity pool role.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-iotpolicyoverlypermissivecheck
             '''
             result = self._values.get("iot_policy_overly_permissive_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def io_t_policy_potential_mis_configuration_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks if an AWS IoT policy is potentially misconfigured.
 
             Misconfigured policies, including overly permissive policies, can cause security incidents like allowing devices access to unintended resources. This check is a warning for you to make sure that only intended actions are allowed before updating the policy.
@@ -752,73 +752,73 @@ class CfnAccountAuditConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-iotpolicypotentialmisconfigurationcheck
             '''
             result = self._values.get("io_t_policy_potential_mis_configuration_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def iot_role_alias_allows_access_to_unused_services_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks if a role alias has access to services that haven't been used for the AWS IoT device in the last year.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-iotrolealiasallowsaccesstounusedservicescheck
             '''
             result = self._values.get("iot_role_alias_allows_access_to_unused_services_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def iot_role_alias_overly_permissive_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks if the temporary credentials provided by AWS IoT role aliases are overly permissive.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-iotrolealiasoverlypermissivecheck
             '''
             result = self._values.get("iot_role_alias_overly_permissive_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def logging_disabled_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks if AWS IoT logs are disabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-loggingdisabledcheck
             '''
             result = self._values.get("logging_disabled_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def revoked_ca_certificate_still_active_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks if a revoked CA certificate is still active.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-revokedcacertificatestillactivecheck
             '''
             result = self._values.get("revoked_ca_certificate_still_active_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def revoked_device_certificate_still_active_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks if a revoked device certificate is still active.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-revokeddevicecertificatestillactivecheck
             '''
             result = self._values.get("revoked_device_certificate_still_active_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         @builtins.property
         def unauthenticated_cognito_role_overly_permissive_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]]:
             '''Checks if policy attached to an unauthenticated Amazon Cognito identity pool role is too permissive.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditcheckconfigurations.html#cfn-iot-accountauditconfiguration-auditcheckconfigurations-unauthenticatedcognitoroleoverlypermissivecheck
             '''
             result = self._values.get("unauthenticated_cognito_role_overly_permissive_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -840,7 +840,7 @@ class CfnAccountAuditConfiguration(
         def __init__(
             self,
             *,
-            sns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.AuditNotificationTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sns: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditNotificationTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration of the audit notification target.
 
@@ -873,13 +873,13 @@ class CfnAccountAuditConfiguration(
         @builtins.property
         def sns(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditNotificationTargetProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditNotificationTargetProperty"]]:
             '''The ``Sns`` notification target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditnotificationtargetconfigurations.html#cfn-iot-accountauditconfiguration-auditnotificationtargetconfigurations-sns
             '''
             result = self._values.get("sns")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.AuditNotificationTargetProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditNotificationTargetProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -905,7 +905,7 @@ class CfnAccountAuditConfiguration(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             role_arn: typing.Optional[builtins.str] = None,
             target_arn: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -946,13 +946,13 @@ class CfnAccountAuditConfiguration(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''True if notifications to the target are enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-auditnotificationtarget.html#cfn-iot-accountauditconfiguration-auditnotificationtarget-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def role_arn(self) -> typing.Optional[builtins.str]:
@@ -1049,8 +1049,8 @@ class CfnAccountAuditConfiguration(
         def __init__(
             self,
             *,
-            configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccountAuditConfiguration.CertAgeCheckCustomConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.CertAgeCheckCustomConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Configuration for the device certificate age audit check.
 
@@ -1086,7 +1086,7 @@ class CfnAccountAuditConfiguration(
         @builtins.property
         def configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.CertAgeCheckCustomConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.CertAgeCheckCustomConfigurationProperty"]]:
             '''Configuration settings for the device certificate age check, including the threshold in days for certificate age.
 
             This configuration is of type ``CertAgeCheckCustomConfiguration`` .
@@ -1094,18 +1094,18 @@ class CfnAccountAuditConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-devicecertageauditcheckconfiguration.html#cfn-iot-accountauditconfiguration-devicecertageauditcheckconfiguration-configuration
             '''
             result = self._values.get("configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccountAuditConfiguration.CertAgeCheckCustomConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.CertAgeCheckCustomConfigurationProperty"]], result)
 
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''True if this audit check is enabled for this account.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-accountauditconfiguration-devicecertageauditcheckconfiguration.html#cfn-iot-accountauditconfiguration-devicecertageauditcheckconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1134,9 +1134,9 @@ class CfnAccountAuditConfigurationProps:
         self,
         *,
         account_id: builtins.str,
-        audit_check_configurations: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty, typing.Dict[builtins.str, typing.Any]]],
+        audit_check_configurations: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]],
         role_arn: builtins.str,
-        audit_notification_target_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        audit_notification_target_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAccountAuditConfiguration``.
 
@@ -1253,7 +1253,7 @@ class CfnAccountAuditConfigurationProps:
     @builtins.property
     def audit_check_configurations(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty"]:
         '''Specifies which audit checks are enabled and disabled for this account.
 
         Some data collection might start immediately when certain checks are enabled. When a check is disabled, any data collected so far in relation to the check is deleted. To disable a check, set the value of the ``Enabled:`` key to ``false`` .
@@ -1268,7 +1268,7 @@ class CfnAccountAuditConfigurationProps:
         '''
         result = self._values.get("audit_check_configurations")
         assert result is not None, "Required property 'audit_check_configurations' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditCheckConfigurationsProperty"], result)
 
     @builtins.property
     def role_arn(self) -> builtins.str:
@@ -1283,13 +1283,13 @@ class CfnAccountAuditConfigurationProps:
     @builtins.property
     def audit_notification_target_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty"]]:
         '''Information about the targets to which audit notifications are sent.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-accountauditconfiguration.html#cfn-iot-accountauditconfiguration-auditnotificationtargetconfigurations
         '''
         result = self._values.get("audit_notification_target_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccountAuditConfiguration.AuditNotificationTargetConfigurationsProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1317,6 +1317,7 @@ class CfnAuthorizer(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -1342,17 +1343,17 @@ class CfnAuthorizer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         authorizer_function_arn: builtins.str,
         authorizer_name: typing.Optional[builtins.str] = None,
-        enable_caching_for_http: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        signing_disabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_caching_for_http: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        signing_disabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         status: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         token_key_name: typing.Optional[builtins.str] = None,
-        token_signing_public_keys: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        token_signing_public_keys: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::Authorizer``.
 
@@ -1386,7 +1387,7 @@ class CfnAuthorizer(
 
     @jsii.member(jsii_name="arnForAuthorizer")
     @builtins.classmethod
-    def arn_for_authorizer(cls, resource: _IAuthorizerRef_65593d38) -> builtins.str:
+    def arn_for_authorizer(cls, resource: "_IAuthorizerRef_65593d38") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1399,10 +1400,10 @@ class CfnAuthorizer(
     @builtins.classmethod
     def from_authorizer_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IAuthorizerRef_65593d38:
+    ) -> "_IAuthorizerRef_65593d38":
         '''Creates a new IAuthorizerRef from an ARN.
 
         :param scope: -
@@ -1414,16 +1415,16 @@ class CfnAuthorizer(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IAuthorizerRef_65593d38, jsii.sinvoke(cls, "fromAuthorizerArn", [scope, id, arn]))
+        return typing.cast("_IAuthorizerRef_65593d38", jsii.sinvoke(cls, "fromAuthorizerArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromAuthorizerName")
     @builtins.classmethod
     def from_authorizer_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         authorizer_name: builtins.str,
-    ) -> _IAuthorizerRef_65593d38:
+    ) -> "_IAuthorizerRef_65593d38":
         '''Creates a new IAuthorizerRef from a authorizerName.
 
         :param scope: -
@@ -1435,7 +1436,7 @@ class CfnAuthorizer(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument authorizer_name", value=authorizer_name, expected_type=type_hints["authorizer_name"])
-        return typing.cast(_IAuthorizerRef_65593d38, jsii.sinvoke(cls, "fromAuthorizerName", [scope, id, authorizer_name]))
+        return typing.cast("_IAuthorizerRef_65593d38", jsii.sinvoke(cls, "fromAuthorizerName", [scope, id, authorizer_name]))
 
     @jsii.member(jsii_name="isCfnAuthorizer")
     @builtins.classmethod
@@ -1450,7 +1451,7 @@ class CfnAuthorizer(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAuthorizer", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1490,9 +1491,9 @@ class CfnAuthorizer(
 
     @builtins.property
     @jsii.member(jsii_name="authorizerRef")
-    def authorizer_ref(self) -> _AuthorizerReference_b295c2a2:
+    def authorizer_ref(self) -> "_AuthorizerReference_b295c2a2":
         '''A reference to a Authorizer resource.'''
-        return typing.cast(_AuthorizerReference_b295c2a2, jsii.get(self, "authorizerRef"))
+        return typing.cast("_AuthorizerReference_b295c2a2", jsii.get(self, "authorizerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1501,9 +1502,9 @@ class CfnAuthorizer(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="authorizerFunctionArn")
@@ -1535,14 +1536,14 @@ class CfnAuthorizer(
     @jsii.member(jsii_name="enableCachingForHttp")
     def enable_caching_for_http(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When ``true`` , the result from the authorizer's Lambda function is cached for clients that use persistent HTTP connections.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableCachingForHttp"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enableCachingForHttp"))
 
     @enable_caching_for_http.setter
     def enable_caching_for_http(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ac093ede771d684d9e96ee8da968de1c397a538dde506a947a4449cea004c207)
@@ -1553,14 +1554,14 @@ class CfnAuthorizer(
     @jsii.member(jsii_name="signingDisabled")
     def signing_disabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether AWS IoT validates the token signature in an authorization request.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "signingDisabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "signingDisabled"))
 
     @signing_disabled.setter
     def signing_disabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d6cfd04068eb5a532e0eb9f12770ceb4fd104c776c392577f7d712274bc8ac25)
@@ -1582,12 +1583,12 @@ class CfnAuthorizer(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the custom authorizer.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__42b70164fad8da71b13d199b4cd95949cb0c8b91eccece4e983098c8a16ec2c6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1610,14 +1611,14 @@ class CfnAuthorizer(
     @jsii.member(jsii_name="tokenSigningPublicKeys")
     def token_signing_public_keys(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The public keys used to validate the token signature returned by your custom authentication service.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "tokenSigningPublicKeys"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "tokenSigningPublicKeys"))
 
     @token_signing_public_keys.setter
     def token_signing_public_keys(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__292c5d20f52e15072af8a106dd16ac2741974991e592d6bd74453dcc9e4822ff)
@@ -1645,12 +1646,12 @@ class CfnAuthorizerProps:
         *,
         authorizer_function_arn: builtins.str,
         authorizer_name: typing.Optional[builtins.str] = None,
-        enable_caching_for_http: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        signing_disabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_caching_for_http: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        signing_disabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         status: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         token_key_name: typing.Optional[builtins.str] = None,
-        token_signing_public_keys: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        token_signing_public_keys: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAuthorizer``.
 
@@ -1668,6 +1669,7 @@ class CfnAuthorizerProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -1740,7 +1742,7 @@ class CfnAuthorizerProps:
     @builtins.property
     def enable_caching_for_http(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When ``true`` , the result from the authorizer's Lambda function is cached for clients that use persistent HTTP connections.
 
         The results are cached for the time specified by the Lambda function in ``refreshAfterInSeconds`` . This value doesn't affect authorization of clients that use MQTT connections.
@@ -1748,18 +1750,18 @@ class CfnAuthorizerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-authorizer.html#cfn-iot-authorizer-enablecachingforhttp
         '''
         result = self._values.get("enable_caching_for_http")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def signing_disabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether AWS IoT validates the token signature in an authorization request.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-authorizer.html#cfn-iot-authorizer-signingdisabled
         '''
         result = self._values.get("signing_disabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def status(self) -> typing.Optional[builtins.str]:
@@ -1773,7 +1775,7 @@ class CfnAuthorizerProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the custom authorizer.
 
         .. epigraph::
@@ -1787,7 +1789,7 @@ class CfnAuthorizerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-authorizer.html#cfn-iot-authorizer-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def token_key_name(self) -> typing.Optional[builtins.str]:
@@ -1801,13 +1803,13 @@ class CfnAuthorizerProps:
     @builtins.property
     def token_signing_public_keys(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The public keys used to validate the token signature returned by your custom authentication service.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-authorizer.html#cfn-iot-authorizer-tokensigningpublickeys
         '''
         result = self._values.get("token_signing_public_keys")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1837,6 +1839,7 @@ class CfnBillingGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -1855,12 +1858,12 @@ class CfnBillingGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         billing_group_name: typing.Optional[builtins.str] = None,
-        billing_group_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBillingGroup.BillingGroupPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        billing_group_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBillingGroup.BillingGroupPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::BillingGroup``.
 
@@ -1886,7 +1889,7 @@ class CfnBillingGroup(
     @builtins.classmethod
     def arn_for_billing_group(
         cls,
-        resource: _IBillingGroupRef_9603d1f5,
+        resource: "_IBillingGroupRef_9603d1f5",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1900,10 +1903,10 @@ class CfnBillingGroup(
     @builtins.classmethod
     def from_billing_group_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IBillingGroupRef_9603d1f5:
+    ) -> "_IBillingGroupRef_9603d1f5":
         '''Creates a new IBillingGroupRef from an ARN.
 
         :param scope: -
@@ -1915,16 +1918,16 @@ class CfnBillingGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IBillingGroupRef_9603d1f5, jsii.sinvoke(cls, "fromBillingGroupArn", [scope, id, arn]))
+        return typing.cast("_IBillingGroupRef_9603d1f5", jsii.sinvoke(cls, "fromBillingGroupArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromBillingGroupName")
     @builtins.classmethod
     def from_billing_group_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         billing_group_name: builtins.str,
-    ) -> _IBillingGroupRef_9603d1f5:
+    ) -> "_IBillingGroupRef_9603d1f5":
         '''Creates a new IBillingGroupRef from a billingGroupName.
 
         :param scope: -
@@ -1936,7 +1939,7 @@ class CfnBillingGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument billing_group_name", value=billing_group_name, expected_type=type_hints["billing_group_name"])
-        return typing.cast(_IBillingGroupRef_9603d1f5, jsii.sinvoke(cls, "fromBillingGroupName", [scope, id, billing_group_name]))
+        return typing.cast("_IBillingGroupRef_9603d1f5", jsii.sinvoke(cls, "fromBillingGroupName", [scope, id, billing_group_name]))
 
     @jsii.member(jsii_name="isCfnBillingGroup")
     @builtins.classmethod
@@ -1951,7 +1954,7 @@ class CfnBillingGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBillingGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2000,9 +2003,9 @@ class CfnBillingGroup(
 
     @builtins.property
     @jsii.member(jsii_name="billingGroupRef")
-    def billing_group_ref(self) -> _BillingGroupReference_66cca5b6:
+    def billing_group_ref(self) -> "_BillingGroupReference_66cca5b6":
         '''A reference to a BillingGroup resource.'''
-        return typing.cast(_BillingGroupReference_66cca5b6, jsii.get(self, "billingGroupRef"))
+        return typing.cast("_BillingGroupReference_66cca5b6", jsii.get(self, "billingGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2011,9 +2014,9 @@ class CfnBillingGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="billingGroupName")
@@ -2032,14 +2035,14 @@ class CfnBillingGroup(
     @jsii.member(jsii_name="billingGroupProperties")
     def billing_group_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBillingGroup.BillingGroupPropertiesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.BillingGroupPropertiesProperty"]]:
         '''The properties of the billing group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBillingGroup.BillingGroupPropertiesProperty"]], jsii.get(self, "billingGroupProperties"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.BillingGroupPropertiesProperty"]], jsii.get(self, "billingGroupProperties"))
 
     @billing_group_properties.setter
     def billing_group_properties(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBillingGroup.BillingGroupPropertiesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.BillingGroupPropertiesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__499d7c5310d6807b8e23124149bf9575835dddf2208f3c84a9bc2575c3240386)
@@ -2048,12 +2051,12 @@ class CfnBillingGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the billing group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b3c5eda5a38a4adae250954d4038b3e27d46a9d6214a6da9bbd9f5c20abeb652)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2129,8 +2132,8 @@ class CfnBillingGroupProps:
         self,
         *,
         billing_group_name: typing.Optional[builtins.str] = None,
-        billing_group_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBillingGroup.BillingGroupPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        billing_group_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBillingGroup.BillingGroupPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnBillingGroup``.
 
@@ -2143,6 +2146,7 @@ class CfnBillingGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -2183,22 +2187,22 @@ class CfnBillingGroupProps:
     @builtins.property
     def billing_group_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBillingGroup.BillingGroupPropertiesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.BillingGroupPropertiesProperty"]]:
         '''The properties of the billing group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-billinggroup.html#cfn-iot-billinggroup-billinggroupproperties
         '''
         result = self._values.get("billing_group_properties")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBillingGroup.BillingGroupPropertiesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.BillingGroupPropertiesProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the billing group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-billinggroup.html#cfn-iot-billinggroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2226,6 +2230,7 @@ class CfnCACertificate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -2253,16 +2258,16 @@ class CfnCACertificate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         ca_certificate_pem: builtins.str,
         status: builtins.str,
         auto_registration_status: typing.Optional[builtins.str] = None,
         certificate_mode: typing.Optional[builtins.str] = None,
-        registration_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCACertificate.RegistrationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        remove_auto_registration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        registration_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCACertificate.RegistrationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        remove_auto_registration: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         verification_certificate_pem: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::CACertificate``.
@@ -2299,7 +2304,7 @@ class CfnCACertificate(
     @builtins.classmethod
     def arn_for_ca_certificate(
         cls,
-        resource: _ICACertificateRef_68956798,
+        resource: "_ICACertificateRef_68956798",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2322,7 +2327,7 @@ class CfnCACertificate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCACertificate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2377,9 +2382,9 @@ class CfnCACertificate(
 
     @builtins.property
     @jsii.member(jsii_name="caCertificateRef")
-    def ca_certificate_ref(self) -> _CACertificateReference_83573cce:
+    def ca_certificate_ref(self) -> "_CACertificateReference_83573cce":
         '''A reference to a CACertificate resource.'''
-        return typing.cast(_CACertificateReference_83573cce, jsii.get(self, "caCertificateRef"))
+        return typing.cast("_CACertificateReference_83573cce", jsii.get(self, "caCertificateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2388,9 +2393,9 @@ class CfnCACertificate(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="caCertificatePem")
@@ -2448,14 +2453,14 @@ class CfnCACertificate(
     @jsii.member(jsii_name="registrationConfig")
     def registration_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCACertificate.RegistrationConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCACertificate.RegistrationConfigProperty"]]:
         '''Information about the registration configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCACertificate.RegistrationConfigProperty"]], jsii.get(self, "registrationConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCACertificate.RegistrationConfigProperty"]], jsii.get(self, "registrationConfig"))
 
     @registration_config.setter
     def registration_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCACertificate.RegistrationConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCACertificate.RegistrationConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__95d3785b2d27c118215b6fa0a0a177e7e3171b9b5c81d2535ba07e72d784ce8e)
@@ -2466,14 +2471,14 @@ class CfnCACertificate(
     @jsii.member(jsii_name="removeAutoRegistration")
     def remove_auto_registration(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If true, removes auto registration.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "removeAutoRegistration"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "removeAutoRegistration"))
 
     @remove_auto_registration.setter
     def remove_auto_registration(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b09f14735dc81316d6d3fbba88119fe9f0b25ee686f00e1ef77c0b85d091990b)
@@ -2482,12 +2487,12 @@ class CfnCACertificate(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__104d78e34efe86c554da5ec0869a36ee82c4b97069c59795e537c100d3d66c22)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2621,9 +2626,9 @@ class CfnCACertificateProps:
         status: builtins.str,
         auto_registration_status: typing.Optional[builtins.str] = None,
         certificate_mode: typing.Optional[builtins.str] = None,
-        registration_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCACertificate.RegistrationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        remove_auto_registration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        registration_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCACertificate.RegistrationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        remove_auto_registration: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         verification_certificate_pem: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnCACertificate``.
@@ -2642,6 +2647,7 @@ class CfnCACertificateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -2742,27 +2748,27 @@ class CfnCACertificateProps:
     @builtins.property
     def registration_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCACertificate.RegistrationConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCACertificate.RegistrationConfigProperty"]]:
         '''Information about the registration configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-cacertificate.html#cfn-iot-cacertificate-registrationconfig
         '''
         result = self._values.get("registration_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCACertificate.RegistrationConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCACertificate.RegistrationConfigProperty"]], result)
 
     @builtins.property
     def remove_auto_registration(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If true, removes auto registration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-cacertificate.html#cfn-iot-cacertificate-removeautoregistration
         '''
         result = self._values.get("remove_auto_registration")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -2770,7 +2776,7 @@ class CfnCACertificateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-cacertificate.html#cfn-iot-cacertificate-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def verification_certificate_pem(self) -> typing.Optional[builtins.str]:
@@ -2824,7 +2830,7 @@ class CfnCertificate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         status: builtins.str,
@@ -2859,7 +2865,7 @@ class CfnCertificate(
 
     @jsii.member(jsii_name="arnForCertificate")
     @builtins.classmethod
-    def arn_for_certificate(cls, resource: _ICertificateRef_c215b21a) -> builtins.str:
+    def arn_for_certificate(cls, resource: "_ICertificateRef_c215b21a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2872,10 +2878,10 @@ class CfnCertificate(
     @builtins.classmethod
     def from_certificate_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ICertificateRef_c215b21a:
+    ) -> "_ICertificateRef_c215b21a":
         '''Creates a new ICertificateRef from an ARN.
 
         :param scope: -
@@ -2887,16 +2893,16 @@ class CfnCertificate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ICertificateRef_c215b21a, jsii.sinvoke(cls, "fromCertificateArn", [scope, id, arn]))
+        return typing.cast("_ICertificateRef_c215b21a", jsii.sinvoke(cls, "fromCertificateArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromCertificateId")
     @builtins.classmethod
     def from_certificate_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         certificate_id: builtins.str,
-    ) -> _ICertificateRef_c215b21a:
+    ) -> "_ICertificateRef_c215b21a":
         '''Creates a new ICertificateRef from a certificateId.
 
         :param scope: -
@@ -2908,7 +2914,7 @@ class CfnCertificate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument certificate_id", value=certificate_id, expected_type=type_hints["certificate_id"])
-        return typing.cast(_ICertificateRef_c215b21a, jsii.sinvoke(cls, "fromCertificateId", [scope, id, certificate_id]))
+        return typing.cast("_ICertificateRef_c215b21a", jsii.sinvoke(cls, "fromCertificateId", [scope, id, certificate_id]))
 
     @jsii.member(jsii_name="isCfnCertificate")
     @builtins.classmethod
@@ -2923,7 +2929,7 @@ class CfnCertificate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCertificate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2978,9 +2984,9 @@ class CfnCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> _CertificateReference_533e2762:
+    def certificate_ref(self) -> "_CertificateReference_533e2762":
         '''A reference to a Certificate resource.'''
-        return typing.cast(_CertificateReference_533e2762, jsii.get(self, "certificateRef"))
+        return typing.cast("_CertificateReference_533e2762", jsii.get(self, "certificateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3206,6 +3212,7 @@ class CfnCertificateProvider(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -3225,13 +3232,13 @@ class CfnCertificateProvider(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account_default_for_operations: typing.Sequence[builtins.str],
         lambda_function_arn: builtins.str,
         certificate_provider_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::CertificateProvider``.
 
@@ -3259,7 +3266,7 @@ class CfnCertificateProvider(
     @builtins.classmethod
     def arn_for_certificate_provider(
         cls,
-        resource: _ICertificateProviderRef_14051fa1,
+        resource: "_ICertificateProviderRef_14051fa1",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3273,10 +3280,10 @@ class CfnCertificateProvider(
     @builtins.classmethod
     def from_certificate_provider_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ICertificateProviderRef_14051fa1:
+    ) -> "_ICertificateProviderRef_14051fa1":
         '''Creates a new ICertificateProviderRef from an ARN.
 
         :param scope: -
@@ -3288,16 +3295,16 @@ class CfnCertificateProvider(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ICertificateProviderRef_14051fa1, jsii.sinvoke(cls, "fromCertificateProviderArn", [scope, id, arn]))
+        return typing.cast("_ICertificateProviderRef_14051fa1", jsii.sinvoke(cls, "fromCertificateProviderArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromCertificateProviderName")
     @builtins.classmethod
     def from_certificate_provider_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         certificate_provider_name: builtins.str,
-    ) -> _ICertificateProviderRef_14051fa1:
+    ) -> "_ICertificateProviderRef_14051fa1":
         '''Creates a new ICertificateProviderRef from a certificateProviderName.
 
         :param scope: -
@@ -3309,7 +3316,7 @@ class CfnCertificateProvider(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument certificate_provider_name", value=certificate_provider_name, expected_type=type_hints["certificate_provider_name"])
-        return typing.cast(_ICertificateProviderRef_14051fa1, jsii.sinvoke(cls, "fromCertificateProviderName", [scope, id, certificate_provider_name]))
+        return typing.cast("_ICertificateProviderRef_14051fa1", jsii.sinvoke(cls, "fromCertificateProviderName", [scope, id, certificate_provider_name]))
 
     @jsii.member(jsii_name="isCfnCertificateProvider")
     @builtins.classmethod
@@ -3324,7 +3331,7 @@ class CfnCertificateProvider(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCertificateProvider", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3370,15 +3377,15 @@ class CfnCertificateProvider(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="certificateProviderRef")
-    def certificate_provider_ref(self) -> _CertificateProviderReference_981164d1:
+    def certificate_provider_ref(self) -> "_CertificateProviderReference_981164d1":
         '''A reference to a CertificateProvider resource.'''
-        return typing.cast(_CertificateProviderReference_981164d1, jsii.get(self, "certificateProviderRef"))
+        return typing.cast("_CertificateProviderReference_981164d1", jsii.get(self, "certificateProviderRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3426,12 +3433,12 @@ class CfnCertificateProvider(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the certificate provider.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__12247eb57a1af046f6da6ac517ed9b00e8e63df490a5d5134fd3bc4483e0ef9b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3455,7 +3462,7 @@ class CfnCertificateProviderProps:
         account_default_for_operations: typing.Sequence[builtins.str],
         lambda_function_arn: builtins.str,
         certificate_provider_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCertificateProvider``.
 
@@ -3469,6 +3476,7 @@ class CfnCertificateProviderProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -3532,13 +3540,13 @@ class CfnCertificateProviderProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the certificate provider.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-certificateprovider.html#cfn-iot-certificateprovider-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3566,6 +3574,7 @@ class CfnCommand(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -3619,21 +3628,21 @@ class CfnCommand(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         command_id: builtins.str,
         created_at: typing.Optional[builtins.str] = None,
-        deprecated: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        deprecated: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
         last_updated_at: typing.Optional[builtins.str] = None,
-        mandatory_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCommand.CommandParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        mandatory_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCommand.CommandParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         namespace: typing.Optional[builtins.str] = None,
-        payload: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCommand.CommandPayloadProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        pending_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        payload: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCommand.CommandPayloadProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        pending_deletion: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         role_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::Command``.
 
@@ -3675,7 +3684,7 @@ class CfnCommand(
 
     @jsii.member(jsii_name="arnForCommand")
     @builtins.classmethod
-    def arn_for_command(cls, resource: _ICommandRef_ea63e38e) -> builtins.str:
+    def arn_for_command(cls, resource: "_ICommandRef_ea63e38e") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3688,10 +3697,10 @@ class CfnCommand(
     @builtins.classmethod
     def from_command_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ICommandRef_ea63e38e:
+    ) -> "_ICommandRef_ea63e38e":
         '''Creates a new ICommandRef from an ARN.
 
         :param scope: -
@@ -3703,16 +3712,16 @@ class CfnCommand(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ICommandRef_ea63e38e, jsii.sinvoke(cls, "fromCommandArn", [scope, id, arn]))
+        return typing.cast("_ICommandRef_ea63e38e", jsii.sinvoke(cls, "fromCommandArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromCommandId")
     @builtins.classmethod
     def from_command_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         command_id: builtins.str,
-    ) -> _ICommandRef_ea63e38e:
+    ) -> "_ICommandRef_ea63e38e":
         '''Creates a new ICommandRef from a commandId.
 
         :param scope: -
@@ -3724,7 +3733,7 @@ class CfnCommand(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument command_id", value=command_id, expected_type=type_hints["command_id"])
-        return typing.cast(_ICommandRef_ea63e38e, jsii.sinvoke(cls, "fromCommandId", [scope, id, command_id]))
+        return typing.cast("_ICommandRef_ea63e38e", jsii.sinvoke(cls, "fromCommandId", [scope, id, command_id]))
 
     @jsii.member(jsii_name="isCfnCommand")
     @builtins.classmethod
@@ -3739,7 +3748,7 @@ class CfnCommand(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCommand", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3779,9 +3788,9 @@ class CfnCommand(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3790,9 +3799,9 @@ class CfnCommand(
 
     @builtins.property
     @jsii.member(jsii_name="commandRef")
-    def command_ref(self) -> _CommandReference_e9477faf:
+    def command_ref(self) -> "_CommandReference_e9477faf":
         '''A reference to a Command resource.'''
-        return typing.cast(_CommandReference_e9477faf, jsii.get(self, "commandRef"))
+        return typing.cast("_CommandReference_e9477faf", jsii.get(self, "commandRef"))
 
     @builtins.property
     @jsii.member(jsii_name="commandId")
@@ -3824,14 +3833,14 @@ class CfnCommand(
     @jsii.member(jsii_name="deprecated")
     def deprecated(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the command has been deprecated.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deprecated"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deprecated"))
 
     @deprecated.setter
     def deprecated(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__874ee23167c2e3e047820e274c4918d81d5941402b8ebed8f09459dd63b2b7ba)
@@ -3881,13 +3890,13 @@ class CfnCommand(
     @jsii.member(jsii_name="mandatoryParameters")
     def mandatory_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCommand.CommandParameterProperty"]]]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCommand.CommandParameterProperty"]]]], jsii.get(self, "mandatoryParameters"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandParameterProperty"]]]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandParameterProperty"]]]], jsii.get(self, "mandatoryParameters"))
 
     @mandatory_parameters.setter
     def mandatory_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCommand.CommandParameterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandParameterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__691a363a0f06abc1275985213903851414cd558497a764a951e60c6cd3c652fa)
@@ -3911,13 +3920,13 @@ class CfnCommand(
     @jsii.member(jsii_name="payload")
     def payload(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCommand.CommandPayloadProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCommand.CommandPayloadProperty"]], jsii.get(self, "payload"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandPayloadProperty"]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandPayloadProperty"]], jsii.get(self, "payload"))
 
     @payload.setter
     def payload(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCommand.CommandPayloadProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandPayloadProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c3f5f713dd2cc757210c4e779e7be62cdcc9f2946712dbdacee9c4e682fe6e52)
@@ -3928,14 +3937,14 @@ class CfnCommand(
     @jsii.member(jsii_name="pendingDeletion")
     def pending_deletion(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the command is pending deletion.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "pendingDeletion"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "pendingDeletion"))
 
     @pending_deletion.setter
     def pending_deletion(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__168433ddf3dc08672d53b72a1ed7d0f06c27c11abf74395951551302abbf0058)
@@ -3957,12 +3966,12 @@ class CfnCommand(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to be associated with the command.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__796bc40f0d34b9617c2b284b8f6c6da82f9403d435e15f09fab295e70e2f0fa8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3983,9 +3992,9 @@ class CfnCommand(
             self,
             *,
             name: builtins.str,
-            default_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCommand.CommandParameterValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            default_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCommand.CommandParameterValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             description: typing.Optional[builtins.str] = None,
-            value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCommand.CommandParameterValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCommand.CommandParameterValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''
             :param name: 
@@ -4055,12 +4064,12 @@ class CfnCommand(
         @builtins.property
         def default_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCommand.CommandParameterValueProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandParameterValueProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-command-commandparameter.html#cfn-iot-command-commandparameter-defaultvalue
             '''
             result = self._values.get("default_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCommand.CommandParameterValueProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandParameterValueProperty"]], result)
 
         @builtins.property
         def description(self) -> typing.Optional[builtins.str]:
@@ -4073,12 +4082,12 @@ class CfnCommand(
         @builtins.property
         def value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCommand.CommandParameterValueProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandParameterValueProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-command-commandparameter.html#cfn-iot-command-commandparameter-value
             '''
             result = self._values.get("value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCommand.CommandParameterValueProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandParameterValueProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4108,7 +4117,7 @@ class CfnCommand(
         def __init__(
             self,
             *,
-            b: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            b: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             bin: typing.Optional[builtins.str] = None,
             d: typing.Optional[jsii.Number] = None,
             i: typing.Optional[jsii.Number] = None,
@@ -4172,12 +4181,12 @@ class CfnCommand(
         @builtins.property
         def b(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-command-commandparametervalue.html#cfn-iot-command-commandparametervalue-b
             '''
             result = self._values.get("b")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def bin(self) -> typing.Optional[builtins.str]:
@@ -4330,16 +4339,16 @@ class CfnCommandProps:
         *,
         command_id: builtins.str,
         created_at: typing.Optional[builtins.str] = None,
-        deprecated: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        deprecated: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
         last_updated_at: typing.Optional[builtins.str] = None,
-        mandatory_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCommand.CommandParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        mandatory_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCommand.CommandParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         namespace: typing.Optional[builtins.str] = None,
-        payload: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCommand.CommandPayloadProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        pending_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        payload: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCommand.CommandPayloadProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        pending_deletion: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         role_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCommand``.
 
@@ -4361,6 +4370,7 @@ class CfnCommandProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -4473,13 +4483,13 @@ class CfnCommandProps:
     @builtins.property
     def deprecated(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the command has been deprecated.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-command.html#cfn-iot-command-deprecated
         '''
         result = self._values.get("deprecated")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -4511,12 +4521,12 @@ class CfnCommandProps:
     @builtins.property
     def mandatory_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCommand.CommandParameterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandParameterProperty"]]]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-command.html#cfn-iot-command-mandatoryparameters
         '''
         result = self._values.get("mandatory_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCommand.CommandParameterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandParameterProperty"]]]], result)
 
     @builtins.property
     def namespace(self) -> typing.Optional[builtins.str]:
@@ -4530,23 +4540,23 @@ class CfnCommandProps:
     @builtins.property
     def payload(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCommand.CommandPayloadProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandPayloadProperty"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-command.html#cfn-iot-command-payload
         '''
         result = self._values.get("payload")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCommand.CommandPayloadProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCommand.CommandPayloadProperty"]], result)
 
     @builtins.property
     def pending_deletion(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the command is pending deletion.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-command.html#cfn-iot-command-pendingdeletion
         '''
         result = self._values.get("pending_deletion")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def role_arn(self) -> typing.Optional[builtins.str]:
@@ -4558,13 +4568,13 @@ class CfnCommandProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to be associated with the command.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-command.html#cfn-iot-command-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4594,6 +4604,7 @@ class CfnCustomMetric(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -4613,13 +4624,13 @@ class CfnCustomMetric(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         metric_type: builtins.str,
         display_name: typing.Optional[builtins.str] = None,
         metric_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::CustomMetric``.
 
@@ -4647,7 +4658,7 @@ class CfnCustomMetric(
     @builtins.classmethod
     def arn_for_custom_metric(
         cls,
-        resource: _ICustomMetricRef_007a6e16,
+        resource: "_ICustomMetricRef_007a6e16",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -4661,10 +4672,10 @@ class CfnCustomMetric(
     @builtins.classmethod
     def from_metric_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         metric_name: builtins.str,
-    ) -> _ICustomMetricRef_007a6e16:
+    ) -> "_ICustomMetricRef_007a6e16":
         '''Creates a new ICustomMetricRef from a metricName.
 
         :param scope: -
@@ -4676,7 +4687,7 @@ class CfnCustomMetric(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument metric_name", value=metric_name, expected_type=type_hints["metric_name"])
-        return typing.cast(_ICustomMetricRef_007a6e16, jsii.sinvoke(cls, "fromMetricName", [scope, id, metric_name]))
+        return typing.cast("_ICustomMetricRef_007a6e16", jsii.sinvoke(cls, "fromMetricName", [scope, id, metric_name]))
 
     @jsii.member(jsii_name="isCfnCustomMetric")
     @builtins.classmethod
@@ -4691,7 +4702,7 @@ class CfnCustomMetric(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCustomMetric", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4738,15 +4749,15 @@ class CfnCustomMetric(
 
     @builtins.property
     @jsii.member(jsii_name="customMetricRef")
-    def custom_metric_ref(self) -> _CustomMetricReference_d8d67689:
+    def custom_metric_ref(self) -> "_CustomMetricReference_d8d67689":
         '''A reference to a CustomMetric resource.'''
-        return typing.cast(_CustomMetricReference_d8d67689, jsii.get(self, "customMetricRef"))
+        return typing.cast("_CustomMetricReference_d8d67689", jsii.get(self, "customMetricRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="metricType")
@@ -4792,12 +4803,12 @@ class CfnCustomMetric(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the custom metric.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__db923b814ce2bc3ba6388f16f297d7c7442cd88cdc8392ee295be4fdf8da0fa8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4821,7 +4832,7 @@ class CfnCustomMetricProps:
         metric_type: builtins.str,
         display_name: typing.Optional[builtins.str] = None,
         metric_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCustomMetric``.
 
@@ -4835,6 +4846,7 @@ class CfnCustomMetricProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -4904,13 +4916,13 @@ class CfnCustomMetricProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the custom metric.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-custommetric.html#cfn-iot-custommetric-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4940,6 +4952,7 @@ class CfnDimension(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -4959,13 +4972,13 @@ class CfnDimension(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         string_values: typing.Sequence[builtins.str],
         type: builtins.str,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::Dimension``.
 
@@ -4988,7 +5001,7 @@ class CfnDimension(
 
     @jsii.member(jsii_name="arnForDimension")
     @builtins.classmethod
-    def arn_for_dimension(cls, resource: _IDimensionRef_b32b102e) -> builtins.str:
+    def arn_for_dimension(cls, resource: "_IDimensionRef_b32b102e") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5001,10 +5014,10 @@ class CfnDimension(
     @builtins.classmethod
     def from_dimension_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDimensionRef_b32b102e:
+    ) -> "_IDimensionRef_b32b102e":
         '''Creates a new IDimensionRef from an ARN.
 
         :param scope: -
@@ -5016,16 +5029,16 @@ class CfnDimension(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDimensionRef_b32b102e, jsii.sinvoke(cls, "fromDimensionArn", [scope, id, arn]))
+        return typing.cast("_IDimensionRef_b32b102e", jsii.sinvoke(cls, "fromDimensionArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromDimensionName")
     @builtins.classmethod
     def from_dimension_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         dimension_name: builtins.str,
-    ) -> _IDimensionRef_b32b102e:
+    ) -> "_IDimensionRef_b32b102e":
         '''Creates a new IDimensionRef from a dimensionName.
 
         :param scope: -
@@ -5037,7 +5050,7 @@ class CfnDimension(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument dimension_name", value=dimension_name, expected_type=type_hints["dimension_name"])
-        return typing.cast(_IDimensionRef_b32b102e, jsii.sinvoke(cls, "fromDimensionName", [scope, id, dimension_name]))
+        return typing.cast("_IDimensionRef_b32b102e", jsii.sinvoke(cls, "fromDimensionName", [scope, id, dimension_name]))
 
     @jsii.member(jsii_name="isCfnDimension")
     @builtins.classmethod
@@ -5052,7 +5065,7 @@ class CfnDimension(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDimension", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5097,15 +5110,15 @@ class CfnDimension(
 
     @builtins.property
     @jsii.member(jsii_name="dimensionRef")
-    def dimension_ref(self) -> _DimensionReference_63d400e8:
+    def dimension_ref(self) -> "_DimensionReference_63d400e8":
         '''A reference to a Dimension resource.'''
-        return typing.cast(_DimensionReference_63d400e8, jsii.get(self, "dimensionRef"))
+        return typing.cast("_DimensionReference_63d400e8", jsii.get(self, "dimensionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="stringValues")
@@ -5148,12 +5161,12 @@ class CfnDimension(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the dimension.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__096e518a3ecb7c11af4f571ea40c00adc34fd83b1487e626950a3bd65bf3f631)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5177,7 +5190,7 @@ class CfnDimensionProps:
         string_values: typing.Sequence[builtins.str],
         type: builtins.str,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDimension``.
 
@@ -5191,6 +5204,7 @@ class CfnDimensionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -5256,13 +5270,13 @@ class CfnDimensionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the dimension.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-dimension.html#cfn-iot-dimension-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5290,6 +5304,7 @@ class CfnDomainConfiguration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -5327,21 +5342,21 @@ class CfnDomainConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_protocol: typing.Optional[builtins.str] = None,
         authentication_type: typing.Optional[builtins.str] = None,
-        authorizer_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainConfiguration.AuthorizerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        client_certificate_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainConfiguration.ClientCertificateConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        authorizer_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainConfiguration.AuthorizerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        client_certificate_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainConfiguration.ClientCertificateConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         domain_configuration_name: typing.Optional[builtins.str] = None,
         domain_configuration_status: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
         server_certificate_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        server_certificate_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainConfiguration.ServerCertificateConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        server_certificate_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainConfiguration.ServerCertificateConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         service_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tls_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainConfiguration.TlsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tls_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainConfiguration.TlsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         validation_certificate_arn: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::DomainConfiguration``.
@@ -5388,7 +5403,7 @@ class CfnDomainConfiguration(
     @builtins.classmethod
     def arn_for_domain_configuration(
         cls,
-        resource: _IDomainConfigurationRef_fb2399ab,
+        resource: "_IDomainConfigurationRef_fb2399ab",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -5402,10 +5417,10 @@ class CfnDomainConfiguration(
     @builtins.classmethod
     def from_domain_configuration_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDomainConfigurationRef_fb2399ab:
+    ) -> "_IDomainConfigurationRef_fb2399ab":
         '''Creates a new IDomainConfigurationRef from an ARN.
 
         :param scope: -
@@ -5417,16 +5432,16 @@ class CfnDomainConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDomainConfigurationRef_fb2399ab, jsii.sinvoke(cls, "fromDomainConfigurationArn", [scope, id, arn]))
+        return typing.cast("_IDomainConfigurationRef_fb2399ab", jsii.sinvoke(cls, "fromDomainConfigurationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromDomainConfigurationName")
     @builtins.classmethod
     def from_domain_configuration_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         domain_configuration_name: builtins.str,
-    ) -> _IDomainConfigurationRef_fb2399ab:
+    ) -> "_IDomainConfigurationRef_fb2399ab":
         '''Creates a new IDomainConfigurationRef from a domainConfigurationName.
 
         :param scope: -
@@ -5438,7 +5453,7 @@ class CfnDomainConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument domain_configuration_name", value=domain_configuration_name, expected_type=type_hints["domain_configuration_name"])
-        return typing.cast(_IDomainConfigurationRef_fb2399ab, jsii.sinvoke(cls, "fromDomainConfigurationName", [scope, id, domain_configuration_name]))
+        return typing.cast("_IDomainConfigurationRef_fb2399ab", jsii.sinvoke(cls, "fromDomainConfigurationName", [scope, id, domain_configuration_name]))
 
     @jsii.member(jsii_name="isCfnDomainConfiguration")
     @builtins.classmethod
@@ -5453,7 +5468,7 @@ class CfnDomainConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomainConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5502,14 +5517,14 @@ class CfnDomainConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="attrServerCertificates")
-    def attr_server_certificates(self) -> _IResolvable_da3f097b:
+    def attr_server_certificates(self) -> "_IResolvable_da3f097b":
         '''The ARNs of the certificates that AWS IoT passes to the device during the TLS handshake.
 
         Currently you can specify only one certificate ARN. This value is not required for AWS -managed domains.
 
         :cloudformationAttribute: ServerCertificates
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrServerCertificates"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrServerCertificates"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5518,15 +5533,15 @@ class CfnDomainConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="domainConfigurationRef")
-    def domain_configuration_ref(self) -> _DomainConfigurationReference_854e303a:
+    def domain_configuration_ref(self) -> "_DomainConfigurationReference_854e303a":
         '''A reference to a DomainConfiguration resource.'''
-        return typing.cast(_DomainConfigurationReference_854e303a, jsii.get(self, "domainConfigurationRef"))
+        return typing.cast("_DomainConfigurationReference_854e303a", jsii.get(self, "domainConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationProtocol")
@@ -5558,14 +5573,14 @@ class CfnDomainConfiguration(
     @jsii.member(jsii_name="authorizerConfig")
     def authorizer_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainConfiguration.AuthorizerConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.AuthorizerConfigProperty"]]:
         '''An object that specifies the authorization service for a domain.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainConfiguration.AuthorizerConfigProperty"]], jsii.get(self, "authorizerConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.AuthorizerConfigProperty"]], jsii.get(self, "authorizerConfig"))
 
     @authorizer_config.setter
     def authorizer_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainConfiguration.AuthorizerConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.AuthorizerConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__329022c3008fb4066b0011ab5576f6f0f1167a46f7001262c9a1ac8f8be9cab6)
@@ -5576,14 +5591,14 @@ class CfnDomainConfiguration(
     @jsii.member(jsii_name="clientCertificateConfig")
     def client_certificate_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainConfiguration.ClientCertificateConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.ClientCertificateConfigProperty"]]:
         '''An object that speciﬁes the client certificate conﬁguration for a domain.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainConfiguration.ClientCertificateConfigProperty"]], jsii.get(self, "clientCertificateConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.ClientCertificateConfigProperty"]], jsii.get(self, "clientCertificateConfig"))
 
     @client_certificate_config.setter
     def client_certificate_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainConfiguration.ClientCertificateConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.ClientCertificateConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4ab4978fd026c7ea2fc74d21bd58dee6eadb9b9b060cbafbe372806ed35e195a)
@@ -5649,14 +5664,14 @@ class CfnDomainConfiguration(
     @jsii.member(jsii_name="serverCertificateConfig")
     def server_certificate_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainConfiguration.ServerCertificateConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.ServerCertificateConfigProperty"]]:
         '''The server certificate configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainConfiguration.ServerCertificateConfigProperty"]], jsii.get(self, "serverCertificateConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.ServerCertificateConfigProperty"]], jsii.get(self, "serverCertificateConfig"))
 
     @server_certificate_config.setter
     def server_certificate_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainConfiguration.ServerCertificateConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.ServerCertificateConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e961d38604909272268f83e6241e14f8644edf3b972e95582c0126a54e77a342)
@@ -5678,12 +5693,12 @@ class CfnDomainConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the domain configuration.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c9ee70e42c70369441f4956632f6ce2c764e754cc8e61b403135102cdd74965d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5693,14 +5708,14 @@ class CfnDomainConfiguration(
     @jsii.member(jsii_name="tlsConfig")
     def tls_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainConfiguration.TlsConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.TlsConfigProperty"]]:
         '''An object that specifies the TLS configuration for a domain.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainConfiguration.TlsConfigProperty"]], jsii.get(self, "tlsConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.TlsConfigProperty"]], jsii.get(self, "tlsConfig"))
 
     @tls_config.setter
     def tls_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainConfiguration.TlsConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.TlsConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6fbb046d1c54cdcf8ab1a97fce56134018e2e2d34e01169b9c303110654d4261)
@@ -5732,7 +5747,7 @@ class CfnDomainConfiguration(
         def __init__(
             self,
             *,
-            allow_authorizer_override: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            allow_authorizer_override: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             default_authorizer_name: typing.Optional[builtins.str] = None,
         ) -> None:
             '''An object that specifies the authorization service for a domain.
@@ -5767,13 +5782,13 @@ class CfnDomainConfiguration(
         @builtins.property
         def allow_authorizer_override(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean that specifies whether the domain configuration's authorization service can be overridden.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-domainconfiguration-authorizerconfig.html#cfn-iot-domainconfiguration-authorizerconfig-allowauthorizeroverride
             '''
             result = self._values.get("allow_authorizer_override")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def default_authorizer_name(self) -> typing.Optional[builtins.str]:
@@ -5865,7 +5880,7 @@ class CfnDomainConfiguration(
         def __init__(
             self,
             *,
-            enable_ocsp_check: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_ocsp_check: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             ocsp_authorized_responder_arn: typing.Optional[builtins.str] = None,
             ocsp_lambda_arn: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -5908,7 +5923,7 @@ class CfnDomainConfiguration(
         @builtins.property
         def enable_ocsp_check(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean value that indicates whether Online Certificate Status Protocol (OCSP) server certificate check is enabled or not.
 
             For more information, see `Configurable endpoints <https://docs.aws.amazon.com//iot/latest/developerguide/iot-custom-endpoints-configurable.html>`_ from the AWS IoT Core Developer Guide.
@@ -5916,7 +5931,7 @@ class CfnDomainConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-domainconfiguration-servercertificateconfig.html#cfn-iot-domainconfiguration-servercertificateconfig-enableocspcheck
             '''
             result = self._values.get("enable_ocsp_check")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def ocsp_authorized_responder_arn(self) -> typing.Optional[builtins.str]:
@@ -6121,16 +6136,16 @@ class CfnDomainConfigurationProps:
         *,
         application_protocol: typing.Optional[builtins.str] = None,
         authentication_type: typing.Optional[builtins.str] = None,
-        authorizer_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainConfiguration.AuthorizerConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        client_certificate_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainConfiguration.ClientCertificateConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        authorizer_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainConfiguration.AuthorizerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        client_certificate_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainConfiguration.ClientCertificateConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         domain_configuration_name: typing.Optional[builtins.str] = None,
         domain_configuration_status: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
         server_certificate_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        server_certificate_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainConfiguration.ServerCertificateConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        server_certificate_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainConfiguration.ServerCertificateConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         service_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tls_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainConfiguration.TlsConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tls_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainConfiguration.TlsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         validation_certificate_arn: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnDomainConfiguration``.
@@ -6154,6 +6169,7 @@ class CfnDomainConfigurationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -6252,24 +6268,24 @@ class CfnDomainConfigurationProps:
     @builtins.property
     def authorizer_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainConfiguration.AuthorizerConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.AuthorizerConfigProperty"]]:
         '''An object that specifies the authorization service for a domain.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-domainconfiguration.html#cfn-iot-domainconfiguration-authorizerconfig
         '''
         result = self._values.get("authorizer_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainConfiguration.AuthorizerConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.AuthorizerConfigProperty"]], result)
 
     @builtins.property
     def client_certificate_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainConfiguration.ClientCertificateConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.ClientCertificateConfigProperty"]]:
         '''An object that speciﬁes the client certificate conﬁguration for a domain.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-domainconfiguration.html#cfn-iot-domainconfiguration-clientcertificateconfig
         '''
         result = self._values.get("client_certificate_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainConfiguration.ClientCertificateConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.ClientCertificateConfigProperty"]], result)
 
     @builtins.property
     def domain_configuration_name(self) -> typing.Optional[builtins.str]:
@@ -6316,7 +6332,7 @@ class CfnDomainConfigurationProps:
     @builtins.property
     def server_certificate_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainConfiguration.ServerCertificateConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.ServerCertificateConfigProperty"]]:
         '''The server certificate configuration.
 
         For more information, see `Configurable endpoints <https://docs.aws.amazon.com//iot/latest/developerguide/iot-custom-endpoints-configurable.html>`_ from the AWS IoT Core Developer Guide.
@@ -6324,7 +6340,7 @@ class CfnDomainConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-domainconfiguration.html#cfn-iot-domainconfiguration-servercertificateconfig
         '''
         result = self._values.get("server_certificate_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainConfiguration.ServerCertificateConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.ServerCertificateConfigProperty"]], result)
 
     @builtins.property
     def service_type(self) -> typing.Optional[builtins.str]:
@@ -6340,7 +6356,7 @@ class CfnDomainConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the domain configuration.
 
         .. epigraph::
@@ -6354,18 +6370,18 @@ class CfnDomainConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-domainconfiguration.html#cfn-iot-domainconfiguration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def tls_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainConfiguration.TlsConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.TlsConfigProperty"]]:
         '''An object that specifies the TLS configuration for a domain.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-domainconfiguration.html#cfn-iot-domainconfiguration-tlsconfig
         '''
         result = self._values.get("tls_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainConfiguration.TlsConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainConfiguration.TlsConfigProperty"]], result)
 
     @builtins.property
     def validation_certificate_arn(self) -> typing.Optional[builtins.str]:
@@ -6421,7 +6437,7 @@ class CfnEncryptionConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         encryption_type: builtins.str,
@@ -6461,7 +6477,7 @@ class CfnEncryptionConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEncryptionConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6501,11 +6517,11 @@ class CfnEncryptionConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="attrConfigurationDetails")
-    def attr_configuration_details(self) -> _IResolvable_da3f097b:
+    def attr_configuration_details(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: ConfigurationDetails
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrConfigurationDetails"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrConfigurationDetails"))
 
     @builtins.property
     @jsii.member(jsii_name="attrLastModifiedDate")
@@ -6525,9 +6541,9 @@ class CfnEncryptionConfiguration(
     @jsii.member(jsii_name="encryptionConfigurationRef")
     def encryption_configuration_ref(
         self,
-    ) -> _EncryptionConfigurationReference_6480130f:
+    ) -> "_EncryptionConfigurationReference_6480130f":
         '''A reference to a EncryptionConfiguration resource.'''
-        return typing.cast(_EncryptionConfigurationReference_6480130f, jsii.get(self, "encryptionConfigurationRef"))
+        return typing.cast("_EncryptionConfigurationReference_6480130f", jsii.get(self, "encryptionConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionType")
@@ -6769,6 +6785,7 @@ class CfnFleetMetric(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -6797,18 +6814,18 @@ class CfnFleetMetric(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         metric_name: builtins.str,
         aggregation_field: typing.Optional[builtins.str] = None,
-        aggregation_type: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleetMetric.AggregationTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        aggregation_type: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleetMetric.AggregationTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         index_name: typing.Optional[builtins.str] = None,
         period: typing.Optional[jsii.Number] = None,
         query_string: typing.Optional[builtins.str] = None,
         query_version: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         unit: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::FleetMetric``.
@@ -6858,7 +6875,7 @@ class CfnFleetMetric(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFleetMetric", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6889,21 +6906,21 @@ class CfnFleetMetric(
 
     @builtins.property
     @jsii.member(jsii_name="attrCreationDate")
-    def attr_creation_date(self) -> _IResolvable_da3f097b:
+    def attr_creation_date(self) -> "_IResolvable_da3f097b":
         '''The time the fleet metric was created.
 
         :cloudformationAttribute: CreationDate
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrCreationDate"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrCreationDate"))
 
     @builtins.property
     @jsii.member(jsii_name="attrLastModifiedDate")
-    def attr_last_modified_date(self) -> _IResolvable_da3f097b:
+    def attr_last_modified_date(self) -> "_IResolvable_da3f097b":
         '''The time the fleet metric was last modified.
 
         :cloudformationAttribute: LastModifiedDate
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLastModifiedDate"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrLastModifiedDate"))
 
     @builtins.property
     @jsii.member(jsii_name="attrMetricArn")
@@ -6916,12 +6933,12 @@ class CfnFleetMetric(
 
     @builtins.property
     @jsii.member(jsii_name="attrVersion")
-    def attr_version(self) -> _IResolvable_da3f097b:
+    def attr_version(self) -> "_IResolvable_da3f097b":
         '''The fleet metric version.
 
         :cloudformationAttribute: Version
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrVersion"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrVersion"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -6930,15 +6947,15 @@ class CfnFleetMetric(
 
     @builtins.property
     @jsii.member(jsii_name="fleetMetricRef")
-    def fleet_metric_ref(self) -> _FleetMetricReference_c11c8509:
+    def fleet_metric_ref(self) -> "_FleetMetricReference_c11c8509":
         '''A reference to a FleetMetric resource.'''
-        return typing.cast(_FleetMetricReference_c11c8509, jsii.get(self, "fleetMetricRef"))
+        return typing.cast("_FleetMetricReference_c11c8509", jsii.get(self, "fleetMetricRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="metricName")
@@ -6970,14 +6987,14 @@ class CfnFleetMetric(
     @jsii.member(jsii_name="aggregationType")
     def aggregation_type(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleetMetric.AggregationTypeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleetMetric.AggregationTypeProperty"]]:
         '''The type of the aggregation query.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleetMetric.AggregationTypeProperty"]], jsii.get(self, "aggregationType"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleetMetric.AggregationTypeProperty"]], jsii.get(self, "aggregationType"))
 
     @aggregation_type.setter
     def aggregation_type(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleetMetric.AggregationTypeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleetMetric.AggregationTypeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fc284110b23b8a63c1a216a46f1fca1253d03eb74c998276de4538830a1b6364)
@@ -7051,12 +7068,12 @@ class CfnFleetMetric(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the fleet metric.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6322cf532fd3c2c28c0039ae6d0572e4d23c4f6b8ca6069be1f356e2142c9b05)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7169,13 +7186,13 @@ class CfnFleetMetricProps:
         *,
         metric_name: builtins.str,
         aggregation_field: typing.Optional[builtins.str] = None,
-        aggregation_type: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleetMetric.AggregationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        aggregation_type: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleetMetric.AggregationTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         index_name: typing.Optional[builtins.str] = None,
         period: typing.Optional[jsii.Number] = None,
         query_string: typing.Optional[builtins.str] = None,
         query_version: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         unit: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnFleetMetric``.
@@ -7196,6 +7213,7 @@ class CfnFleetMetricProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -7277,13 +7295,13 @@ class CfnFleetMetricProps:
     @builtins.property
     def aggregation_type(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleetMetric.AggregationTypeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleetMetric.AggregationTypeProperty"]]:
         '''The type of the aggregation query.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-fleetmetric.html#cfn-iot-fleetmetric-aggregationtype
         '''
         result = self._values.get("aggregation_type")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleetMetric.AggregationTypeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleetMetric.AggregationTypeProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -7333,13 +7351,13 @@ class CfnFleetMetricProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the fleet metric.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-fleetmetric.html#cfn-iot-fleetmetric-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def unit(self) -> typing.Optional[builtins.str]:
@@ -7378,6 +7396,7 @@ class CfnJobTemplate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -7419,7 +7438,7 @@ class CfnJobTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: builtins.str,
@@ -7429,11 +7448,11 @@ class CfnJobTemplate(
         document: typing.Optional[builtins.str] = None,
         document_source: typing.Optional[builtins.str] = None,
         job_arn: typing.Optional[builtins.str] = None,
-        job_executions_retry_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobTemplate.JobExecutionsRetryConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        job_executions_retry_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJobTemplate.JobExecutionsRetryConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         job_executions_rollout_config: typing.Any = None,
-        maintenance_windows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobTemplate.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        maintenance_windows: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJobTemplate.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         presigned_url_config: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout_config: typing.Any = None,
     ) -> None:
         '''Create a new ``AWS::IoT::JobTemplate``.
@@ -7478,7 +7497,10 @@ class CfnJobTemplate(
 
     @jsii.member(jsii_name="arnForJobTemplate")
     @builtins.classmethod
-    def arn_for_job_template(cls, resource: _IJobTemplateRef_f04ac76b) -> builtins.str:
+    def arn_for_job_template(
+        cls,
+        resource: "_IJobTemplateRef_f04ac76b",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -7491,10 +7513,10 @@ class CfnJobTemplate(
     @builtins.classmethod
     def from_job_template_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IJobTemplateRef_f04ac76b:
+    ) -> "_IJobTemplateRef_f04ac76b":
         '''Creates a new IJobTemplateRef from an ARN.
 
         :param scope: -
@@ -7506,16 +7528,16 @@ class CfnJobTemplate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IJobTemplateRef_f04ac76b, jsii.sinvoke(cls, "fromJobTemplateArn", [scope, id, arn]))
+        return typing.cast("_IJobTemplateRef_f04ac76b", jsii.sinvoke(cls, "fromJobTemplateArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromJobTemplateId")
     @builtins.classmethod
     def from_job_template_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         job_template_id: builtins.str,
-    ) -> _IJobTemplateRef_f04ac76b:
+    ) -> "_IJobTemplateRef_f04ac76b":
         '''Creates a new IJobTemplateRef from a jobTemplateId.
 
         :param scope: -
@@ -7527,7 +7549,7 @@ class CfnJobTemplate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument job_template_id", value=job_template_id, expected_type=type_hints["job_template_id"])
-        return typing.cast(_IJobTemplateRef_f04ac76b, jsii.sinvoke(cls, "fromJobTemplateId", [scope, id, job_template_id]))
+        return typing.cast("_IJobTemplateRef_f04ac76b", jsii.sinvoke(cls, "fromJobTemplateId", [scope, id, job_template_id]))
 
     @jsii.member(jsii_name="isCfnJobTemplate")
     @builtins.classmethod
@@ -7542,7 +7564,7 @@ class CfnJobTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnJobTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7587,15 +7609,15 @@ class CfnJobTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="jobTemplateRef")
-    def job_template_ref(self) -> _JobTemplateReference_235350b5:
+    def job_template_ref(self) -> "_JobTemplateReference_235350b5":
         '''A reference to a JobTemplate resource.'''
-        return typing.cast(_JobTemplateReference_235350b5, jsii.get(self, "jobTemplateRef"))
+        return typing.cast("_JobTemplateReference_235350b5", jsii.get(self, "jobTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -7697,14 +7719,14 @@ class CfnJobTemplate(
     @jsii.member(jsii_name="jobExecutionsRetryConfig")
     def job_executions_retry_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.JobExecutionsRetryConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.JobExecutionsRetryConfigProperty"]]:
         '''Allows you to create the criteria to retry a job.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.JobExecutionsRetryConfigProperty"]], jsii.get(self, "jobExecutionsRetryConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.JobExecutionsRetryConfigProperty"]], jsii.get(self, "jobExecutionsRetryConfig"))
 
     @job_executions_retry_config.setter
     def job_executions_retry_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.JobExecutionsRetryConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.JobExecutionsRetryConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f06014baeaf6002138bac789e24d18ef62114c2addaa5f368395bdf1efff320b)
@@ -7728,14 +7750,14 @@ class CfnJobTemplate(
     @jsii.member(jsii_name="maintenanceWindows")
     def maintenance_windows(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.MaintenanceWindowProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.MaintenanceWindowProperty"]]]]:
         '''An optional configuration within the SchedulingConfig to setup a recurring maintenance window with a predetermined start time and duration for the rollout of a job document to all devices in a target group for a job.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.MaintenanceWindowProperty"]]]], jsii.get(self, "maintenanceWindows"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.MaintenanceWindowProperty"]]]], jsii.get(self, "maintenanceWindows"))
 
     @maintenance_windows.setter
     def maintenance_windows(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.MaintenanceWindowProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.MaintenanceWindowProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0f132479de3bbee81c8ebdc76379b3feeed37c925ad91198dee50eb4140f3b2a)
@@ -7757,12 +7779,12 @@ class CfnJobTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the job template.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2ac72e1296cc8de2004ee1a5cb79bd2213507a7ac113aad45202fcef9cfe9b9a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7790,7 +7812,7 @@ class CfnJobTemplate(
         def __init__(
             self,
             *,
-            criteria_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobTemplate.AbortCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            criteria_list: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJobTemplate.AbortCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''The criteria that determine when and how a job abort takes place.
 
@@ -7824,14 +7846,14 @@ class CfnJobTemplate(
         @builtins.property
         def criteria_list(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.AbortCriteriaProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.AbortCriteriaProperty"]]]:
             '''The list of criteria that determine when and how to abort the job.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-jobtemplate-abortconfig.html#cfn-iot-jobtemplate-abortconfig-criterialist
             '''
             result = self._values.get("criteria_list")
             assert result is not None, "Required property 'criteria_list' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.AbortCriteriaProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.AbortCriteriaProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7967,7 +7989,7 @@ class CfnJobTemplate(
             *,
             base_rate_per_minute: jsii.Number,
             increment_factor: jsii.Number,
-            rate_increase_criteria: typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobTemplate.RateIncreaseCriteriaProperty", typing.Dict[builtins.str, typing.Any]]],
+            rate_increase_criteria: typing.Union["_IResolvable_da3f097b", typing.Union["CfnJobTemplate.RateIncreaseCriteriaProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Allows you to create an exponential rate of rollout for a job.
 
@@ -8031,14 +8053,14 @@ class CfnJobTemplate(
         @builtins.property
         def rate_increase_criteria(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.RateIncreaseCriteriaProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.RateIncreaseCriteriaProperty"]:
             '''The criteria to initiate the increase in rate of rollout for a job.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-jobtemplate-exponentialrolloutrate.html#cfn-iot-jobtemplate-exponentialrolloutrate-rateincreasecriteria
             '''
             result = self._values.get("rate_increase_criteria")
             assert result is not None, "Required property 'rate_increase_criteria' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.RateIncreaseCriteriaProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.RateIncreaseCriteriaProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8060,7 +8082,7 @@ class CfnJobTemplate(
         def __init__(
             self,
             *,
-            retry_criteria_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobTemplate.RetryCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            retry_criteria_list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJobTemplate.RetryCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The configuration that determines how many retries are allowed for each failure type for a job.
 
@@ -8092,13 +8114,13 @@ class CfnJobTemplate(
         @builtins.property
         def retry_criteria_list(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.RetryCriteriaProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.RetryCriteriaProperty"]]]]:
             '''The list of criteria that determines how many retries are allowed for each failure type for a job.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-jobtemplate-jobexecutionsretryconfig.html#cfn-iot-jobtemplate-jobexecutionsretryconfig-retrycriterialist
             '''
             result = self._values.get("retry_criteria_list")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.RetryCriteriaProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.RetryCriteriaProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8123,7 +8145,7 @@ class CfnJobTemplate(
         def __init__(
             self,
             *,
-            exponential_rollout_rate: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobTemplate.ExponentialRolloutRateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            exponential_rollout_rate: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJobTemplate.ExponentialRolloutRateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             maximum_per_minute: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Allows you to create a staged rollout of a job.
@@ -8165,7 +8187,7 @@ class CfnJobTemplate(
         @builtins.property
         def exponential_rollout_rate(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.ExponentialRolloutRateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.ExponentialRolloutRateProperty"]]:
             '''The rate of increase for a job rollout.
 
             This parameter allows you to define an exponential rate for a job rollout.
@@ -8173,7 +8195,7 @@ class CfnJobTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-jobtemplate-jobexecutionsrolloutconfig.html#cfn-iot-jobtemplate-jobexecutionsrolloutconfig-exponentialrolloutrate
             '''
             result = self._values.get("exponential_rollout_rate")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.ExponentialRolloutRateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.ExponentialRolloutRateProperty"]], result)
 
         @builtins.property
         def maximum_per_minute(self) -> typing.Optional[jsii.Number]:
@@ -8583,11 +8605,11 @@ class CfnJobTemplateProps:
         document: typing.Optional[builtins.str] = None,
         document_source: typing.Optional[builtins.str] = None,
         job_arn: typing.Optional[builtins.str] = None,
-        job_executions_retry_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobTemplate.JobExecutionsRetryConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        job_executions_retry_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJobTemplate.JobExecutionsRetryConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         job_executions_rollout_config: typing.Any = None,
-        maintenance_windows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobTemplate.MaintenanceWindowProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        maintenance_windows: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJobTemplate.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         presigned_url_config: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout_config: typing.Any = None,
     ) -> None:
         '''Properties for defining a ``CfnJobTemplate``.
@@ -8611,6 +8633,7 @@ class CfnJobTemplateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -8773,13 +8796,13 @@ class CfnJobTemplateProps:
     @builtins.property
     def job_executions_retry_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJobTemplate.JobExecutionsRetryConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.JobExecutionsRetryConfigProperty"]]:
         '''Allows you to create the criteria to retry a job.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-jobtemplate.html#cfn-iot-jobtemplate-jobexecutionsretryconfig
         '''
         result = self._values.get("job_executions_retry_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJobTemplate.JobExecutionsRetryConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.JobExecutionsRetryConfigProperty"]], result)
 
     @builtins.property
     def job_executions_rollout_config(self) -> typing.Any:
@@ -8793,13 +8816,13 @@ class CfnJobTemplateProps:
     @builtins.property
     def maintenance_windows(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJobTemplate.MaintenanceWindowProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.MaintenanceWindowProperty"]]]]:
         '''An optional configuration within the SchedulingConfig to setup a recurring maintenance window with a predetermined start time and duration for the rollout of a job document to all devices in a target group for a job.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-jobtemplate.html#cfn-iot-jobtemplate-maintenancewindows
         '''
         result = self._values.get("maintenance_windows")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJobTemplate.MaintenanceWindowProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.MaintenanceWindowProperty"]]]], result)
 
     @builtins.property
     def presigned_url_config(self) -> typing.Any:
@@ -8811,13 +8834,13 @@ class CfnJobTemplateProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the job template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-jobtemplate.html#cfn-iot-jobtemplate-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def timeout_config(self) -> typing.Any:
@@ -8876,12 +8899,12 @@ class CfnLogging(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account_id: builtins.str,
         default_log_level: builtins.str,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
     ) -> None:
         '''Create a new ``AWS::IoT::Logging``.
 
@@ -8916,7 +8939,7 @@ class CfnLogging(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLogging", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8952,9 +8975,9 @@ class CfnLogging(
 
     @builtins.property
     @jsii.member(jsii_name="loggingRef")
-    def logging_ref(self) -> _LoggingReference_668b4b4d:
+    def logging_ref(self) -> "_LoggingReference_668b4b4d":
         '''A reference to a Logging resource.'''
-        return typing.cast(_LoggingReference_668b4b4d, jsii.get(self, "loggingRef"))
+        return typing.cast("_LoggingReference_668b4b4d", jsii.get(self, "loggingRef"))
 
     @builtins.property
     @jsii.member(jsii_name="accountId")
@@ -9011,7 +9034,7 @@ class CfnLoggingProps:
         *,
         account_id: builtins.str,
         default_log_level: builtins.str,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
     ) -> None:
         '''Properties for defining a ``CfnLogging``.
 
@@ -9068,14 +9091,14 @@ class CfnLoggingProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The role ARN used for the log.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-logging.html#cfn-iot-logging-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9105,6 +9128,7 @@ class CfnMitigationAction(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -9147,13 +9171,13 @@ class CfnMitigationAction(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        action_params: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMitigationAction.ActionParamsProperty", typing.Dict[builtins.str, typing.Any]]],
+        action_params: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMitigationAction.ActionParamsProperty", typing.Dict[builtins.str, typing.Any]]],
         role_arn: builtins.str,
         action_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::MitigationAction``.
 
@@ -9181,7 +9205,7 @@ class CfnMitigationAction(
     @builtins.classmethod
     def arn_for_mitigation_action(
         cls,
-        resource: _IMitigationActionRef_e47dbe04,
+        resource: "_IMitigationActionRef_e47dbe04",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -9204,7 +9228,7 @@ class CfnMitigationAction(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMitigationAction", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9258,28 +9282,28 @@ class CfnMitigationAction(
 
     @builtins.property
     @jsii.member(jsii_name="mitigationActionRef")
-    def mitigation_action_ref(self) -> _MitigationActionReference_1c906c4b:
+    def mitigation_action_ref(self) -> "_MitigationActionReference_1c906c4b":
         '''A reference to a MitigationAction resource.'''
-        return typing.cast(_MitigationActionReference_1c906c4b, jsii.get(self, "mitigationActionRef"))
+        return typing.cast("_MitigationActionReference_1c906c4b", jsii.get(self, "mitigationActionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="actionParams")
     def action_params(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.ActionParamsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.ActionParamsProperty"]:
         '''The set of parameters for this mitigation action.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.ActionParamsProperty"], jsii.get(self, "actionParams"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.ActionParamsProperty"], jsii.get(self, "actionParams"))
 
     @action_params.setter
     def action_params(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.ActionParamsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.ActionParamsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3fba3536fe7867caa9e5c2a9c1ddc8aa4d8c062fd6522a8f3b26326cd942f731)
@@ -9314,12 +9338,12 @@ class CfnMitigationAction(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the mitigation action.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5c0f0d52324feb26d35d10bb75c0bb85540e2fb5b3bc9657a50e2f0bafdc3d7b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9341,12 +9365,12 @@ class CfnMitigationAction(
         def __init__(
             self,
             *,
-            add_things_to_thing_group_params: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMitigationAction.AddThingsToThingGroupParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            enable_io_t_logging_params: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMitigationAction.EnableIoTLoggingParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            publish_finding_to_sns_params: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMitigationAction.PublishFindingToSnsParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            replace_default_policy_version_params: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMitigationAction.ReplaceDefaultPolicyVersionParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            update_ca_certificate_params: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMitigationAction.UpdateCACertificateParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            update_device_certificate_params: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMitigationAction.UpdateDeviceCertificateParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            add_things_to_thing_group_params: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMitigationAction.AddThingsToThingGroupParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            enable_io_t_logging_params: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMitigationAction.EnableIoTLoggingParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            publish_finding_to_sns_params: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMitigationAction.PublishFindingToSnsParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            replace_default_policy_version_params: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMitigationAction.ReplaceDefaultPolicyVersionParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            update_ca_certificate_params: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMitigationAction.UpdateCACertificateParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            update_device_certificate_params: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMitigationAction.UpdateDeviceCertificateParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Defines the type of action and the parameters for that action.
 
@@ -9416,18 +9440,18 @@ class CfnMitigationAction(
         @builtins.property
         def add_things_to_thing_group_params(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.AddThingsToThingGroupParamsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.AddThingsToThingGroupParamsProperty"]]:
             '''Specifies the group to which you want to add the devices.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-mitigationaction-actionparams.html#cfn-iot-mitigationaction-actionparams-addthingstothinggroupparams
             '''
             result = self._values.get("add_things_to_thing_group_params")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.AddThingsToThingGroupParamsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.AddThingsToThingGroupParamsProperty"]], result)
 
         @builtins.property
         def enable_io_t_logging_params(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.EnableIoTLoggingParamsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.EnableIoTLoggingParamsProperty"]]:
             '''Specifies the logging level and the role with permissions for logging.
 
             You cannot specify a logging level of ``DISABLED`` .
@@ -9435,23 +9459,23 @@ class CfnMitigationAction(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-mitigationaction-actionparams.html#cfn-iot-mitigationaction-actionparams-enableiotloggingparams
             '''
             result = self._values.get("enable_io_t_logging_params")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.EnableIoTLoggingParamsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.EnableIoTLoggingParamsProperty"]], result)
 
         @builtins.property
         def publish_finding_to_sns_params(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.PublishFindingToSnsParamsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.PublishFindingToSnsParamsProperty"]]:
             '''Specifies the topic to which the finding should be published.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-mitigationaction-actionparams.html#cfn-iot-mitigationaction-actionparams-publishfindingtosnsparams
             '''
             result = self._values.get("publish_finding_to_sns_params")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.PublishFindingToSnsParamsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.PublishFindingToSnsParamsProperty"]], result)
 
         @builtins.property
         def replace_default_policy_version_params(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.ReplaceDefaultPolicyVersionParamsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.ReplaceDefaultPolicyVersionParamsProperty"]]:
             '''Replaces the policy version with a default or blank policy.
 
             You specify the template name. Only a value of ``BLANK_POLICY`` is currently supported.
@@ -9459,12 +9483,12 @@ class CfnMitigationAction(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-mitigationaction-actionparams.html#cfn-iot-mitigationaction-actionparams-replacedefaultpolicyversionparams
             '''
             result = self._values.get("replace_default_policy_version_params")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.ReplaceDefaultPolicyVersionParamsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.ReplaceDefaultPolicyVersionParamsProperty"]], result)
 
         @builtins.property
         def update_ca_certificate_params(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.UpdateCACertificateParamsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.UpdateCACertificateParamsProperty"]]:
             '''Specifies the new state for the CA certificate.
 
             Only a value of ``DEACTIVATE`` is currently supported.
@@ -9472,12 +9496,12 @@ class CfnMitigationAction(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-mitigationaction-actionparams.html#cfn-iot-mitigationaction-actionparams-updatecacertificateparams
             '''
             result = self._values.get("update_ca_certificate_params")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.UpdateCACertificateParamsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.UpdateCACertificateParamsProperty"]], result)
 
         @builtins.property
         def update_device_certificate_params(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.UpdateDeviceCertificateParamsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.UpdateDeviceCertificateParamsProperty"]]:
             '''Specifies the new state for a device certificate.
 
             Only a value of ``DEACTIVATE`` is currently supported.
@@ -9485,7 +9509,7 @@ class CfnMitigationAction(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-mitigationaction-actionparams.html#cfn-iot-mitigationaction-actionparams-updatedevicecertificateparams
             '''
             result = self._values.get("update_device_certificate_params")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMitigationAction.UpdateDeviceCertificateParamsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.UpdateDeviceCertificateParamsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9511,7 +9535,7 @@ class CfnMitigationAction(
             self,
             *,
             thing_group_names: typing.Sequence[builtins.str],
-            override_dynamic_groups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            override_dynamic_groups: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Parameters used when defining a mitigation action that move a set of things to a thing group.
 
@@ -9559,13 +9583,13 @@ class CfnMitigationAction(
         @builtins.property
         def override_dynamic_groups(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies if this mitigation action can move the things that triggered the mitigation action even if they are part of one or more dynamic thing groups.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-mitigationaction-addthingstothinggroupparams.html#cfn-iot-mitigationaction-addthingstothinggroupparams-overridedynamicgroups
             '''
             result = self._values.get("override_dynamic_groups")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9883,10 +9907,10 @@ class CfnMitigationActionProps:
     def __init__(
         self,
         *,
-        action_params: typing.Union[_IResolvable_da3f097b, typing.Union[CfnMitigationAction.ActionParamsProperty, typing.Dict[builtins.str, typing.Any]]],
+        action_params: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMitigationAction.ActionParamsProperty", typing.Dict[builtins.str, typing.Any]]],
         role_arn: builtins.str,
         action_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMitigationAction``.
 
@@ -9900,6 +9924,7 @@ class CfnMitigationActionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -9957,7 +9982,7 @@ class CfnMitigationActionProps:
     @builtins.property
     def action_params(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnMitigationAction.ActionParamsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.ActionParamsProperty"]:
         '''The set of parameters for this mitigation action.
 
         The parameters vary, depending on the kind of action you apply.
@@ -9966,7 +9991,7 @@ class CfnMitigationActionProps:
         '''
         result = self._values.get("action_params")
         assert result is not None, "Required property 'action_params' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnMitigationAction.ActionParamsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMitigationAction.ActionParamsProperty"], result)
 
     @builtins.property
     def role_arn(self) -> builtins.str:
@@ -9988,13 +10013,13 @@ class CfnMitigationActionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the mitigation action.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-mitigationaction.html#cfn-iot-mitigationaction-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10024,6 +10049,7 @@ class CfnPolicy(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -10044,12 +10070,12 @@ class CfnPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_document: typing.Any,
         policy_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::Policy``.
 
@@ -10071,7 +10097,7 @@ class CfnPolicy(
 
     @jsii.member(jsii_name="arnForPolicy")
     @builtins.classmethod
-    def arn_for_policy(cls, resource: _IPolicyRef_d07d9913) -> builtins.str:
+    def arn_for_policy(cls, resource: "_IPolicyRef_d07d9913") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -10093,7 +10119,7 @@ class CfnPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10142,9 +10168,9 @@ class CfnPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -10153,9 +10179,9 @@ class CfnPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="policyRef")
-    def policy_ref(self) -> _PolicyReference_824a382c:
+    def policy_ref(self) -> "_PolicyReference_824a382c":
         '''A reference to a Policy resource.'''
-        return typing.cast(_PolicyReference_824a382c, jsii.get(self, "policyRef"))
+        return typing.cast("_PolicyReference_824a382c", jsii.get(self, "policyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
@@ -10185,11 +10211,11 @@ class CfnPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bc270801a0f2e8e913d7d5cefc556afbf9876f254b49c5d75d688576e6780cab)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -10224,7 +10250,7 @@ class CfnPolicyPrincipalAttachment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_name: builtins.str,
@@ -10260,7 +10286,7 @@ class CfnPolicyPrincipalAttachment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPolicyPrincipalAttachment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10306,9 +10332,9 @@ class CfnPolicyPrincipalAttachment(
     @jsii.member(jsii_name="policyPrincipalAttachmentRef")
     def policy_principal_attachment_ref(
         self,
-    ) -> _PolicyPrincipalAttachmentReference_e9204988:
+    ) -> "_PolicyPrincipalAttachmentReference_e9204988":
         '''A reference to a PolicyPrincipalAttachment resource.'''
-        return typing.cast(_PolicyPrincipalAttachmentReference_e9204988, jsii.get(self, "policyPrincipalAttachmentRef"))
+        return typing.cast("_PolicyPrincipalAttachmentReference_e9204988", jsii.get(self, "policyPrincipalAttachmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policyName")
@@ -10419,7 +10445,7 @@ class CfnPolicyProps:
         *,
         policy_document: typing.Any,
         policy_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPolicy``.
 
@@ -10432,6 +10458,7 @@ class CfnPolicyProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -10482,12 +10509,12 @@ class CfnPolicyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-policy.html#cfn-iot-policy-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10515,6 +10542,7 @@ class CfnProvisioningTemplate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -10541,15 +10569,15 @@ class CfnProvisioningTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        provisioning_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        provisioning_role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         template_body: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        pre_provisioning_hook: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProvisioningTemplate.ProvisioningHookProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        pre_provisioning_hook: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProvisioningTemplate.ProvisioningHookProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         template_name: typing.Optional[builtins.str] = None,
         template_type: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -10587,7 +10615,7 @@ class CfnProvisioningTemplate(
     @builtins.classmethod
     def arn_for_provisioning_template(
         cls,
-        resource: _IProvisioningTemplateRef_3b3b40e9,
+        resource: "_IProvisioningTemplateRef_3b3b40e9",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -10601,10 +10629,10 @@ class CfnProvisioningTemplate(
     @builtins.classmethod
     def from_template_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         template_name: builtins.str,
-    ) -> _IProvisioningTemplateRef_3b3b40e9:
+    ) -> "_IProvisioningTemplateRef_3b3b40e9":
         '''Creates a new IProvisioningTemplateRef from a templateName.
 
         :param scope: -
@@ -10616,7 +10644,7 @@ class CfnProvisioningTemplate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument template_name", value=template_name, expected_type=type_hints["template_name"])
-        return typing.cast(_IProvisioningTemplateRef_3b3b40e9, jsii.sinvoke(cls, "fromTemplateName", [scope, id, template_name]))
+        return typing.cast("_IProvisioningTemplateRef_3b3b40e9", jsii.sinvoke(cls, "fromTemplateName", [scope, id, template_name]))
 
     @jsii.member(jsii_name="isCfnProvisioningTemplate")
     @builtins.classmethod
@@ -10631,7 +10659,7 @@ class CfnProvisioningTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProvisioningTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10676,15 +10704,15 @@ class CfnProvisioningTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="provisioningTemplateRef")
-    def provisioning_template_ref(self) -> _ProvisioningTemplateReference_dbcf5a40:
+    def provisioning_template_ref(self) -> "_ProvisioningTemplateReference_dbcf5a40":
         '''A reference to a ProvisioningTemplate resource.'''
-        return typing.cast(_ProvisioningTemplateReference_dbcf5a40, jsii.get(self, "provisioningTemplateRef"))
+        return typing.cast("_ProvisioningTemplateReference_dbcf5a40", jsii.get(self, "provisioningTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="provisioningRoleArn")
@@ -10729,14 +10757,14 @@ class CfnProvisioningTemplate(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''True to enable the fleet provisioning template, otherwise false.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e2a88a920d2ef7659080d009f7e10aa5ec8ddf65d0ec8e3ef62e046b9e234fa3)
@@ -10747,14 +10775,14 @@ class CfnProvisioningTemplate(
     @jsii.member(jsii_name="preProvisioningHook")
     def pre_provisioning_hook(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProvisioningTemplate.ProvisioningHookProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProvisioningTemplate.ProvisioningHookProperty"]]:
         '''Creates a pre-provisioning hook template.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProvisioningTemplate.ProvisioningHookProperty"]], jsii.get(self, "preProvisioningHook"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProvisioningTemplate.ProvisioningHookProperty"]], jsii.get(self, "preProvisioningHook"))
 
     @pre_provisioning_hook.setter
     def pre_provisioning_hook(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProvisioningTemplate.ProvisioningHookProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProvisioningTemplate.ProvisioningHookProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0be1cb7e1af5edd11b680b8802542f4b8f291873852058fafa18ec4c3736c8a1)
@@ -10763,12 +10791,12 @@ class CfnProvisioningTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the fleet provisioning template.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8a7085c86959651e3e9340aecb9426212ff7095c811bbf5ace0413cdecce39f7)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -10893,12 +10921,12 @@ class CfnProvisioningTemplateProps:
     def __init__(
         self,
         *,
-        provisioning_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        provisioning_role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         template_body: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        pre_provisioning_hook: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProvisioningTemplate.ProvisioningHookProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        pre_provisioning_hook: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProvisioningTemplate.ProvisioningHookProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         template_name: typing.Optional[builtins.str] = None,
         template_type: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -10918,6 +10946,7 @@ class CfnProvisioningTemplateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -10969,7 +10998,7 @@ class CfnProvisioningTemplateProps:
             self._values["template_type"] = template_type
 
     @builtins.property
-    def provisioning_role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def provisioning_role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The role ARN for the role associated with the fleet provisioning template.
 
         This IoT role grants permission to provision a device.
@@ -10978,7 +11007,7 @@ class CfnProvisioningTemplateProps:
         '''
         result = self._values.get("provisioning_role_arn")
         assert result is not None, "Required property 'provisioning_role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def template_body(self) -> builtins.str:
@@ -11002,33 +11031,33 @@ class CfnProvisioningTemplateProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''True to enable the fleet provisioning template, otherwise false.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-provisioningtemplate.html#cfn-iot-provisioningtemplate-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def pre_provisioning_hook(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProvisioningTemplate.ProvisioningHookProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProvisioningTemplate.ProvisioningHookProperty"]]:
         '''Creates a pre-provisioning hook template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-provisioningtemplate.html#cfn-iot-provisioningtemplate-preprovisioninghook
         '''
         result = self._values.get("pre_provisioning_hook")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProvisioningTemplate.ProvisioningHookProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProvisioningTemplate.ProvisioningHookProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the fleet provisioning template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-provisioningtemplate.html#cfn-iot-provisioningtemplate-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def template_name(self) -> typing.Optional[builtins.str]:
@@ -11087,7 +11116,7 @@ class CfnResourceSpecificLogging(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         log_level: builtins.str,
@@ -11125,7 +11154,7 @@ class CfnResourceSpecificLogging(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourceSpecificLogging", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -11172,9 +11201,9 @@ class CfnResourceSpecificLogging(
     @jsii.member(jsii_name="resourceSpecificLoggingRef")
     def resource_specific_logging_ref(
         self,
-    ) -> _ResourceSpecificLoggingReference_0f3d93df:
+    ) -> "_ResourceSpecificLoggingReference_0f3d93df":
         '''A reference to a ResourceSpecificLogging resource.'''
-        return typing.cast(_ResourceSpecificLoggingReference_0f3d93df, jsii.get(self, "resourceSpecificLoggingRef"))
+        return typing.cast("_ResourceSpecificLoggingReference_0f3d93df", jsii.get(self, "resourceSpecificLoggingRef"))
 
     @builtins.property
     @jsii.member(jsii_name="logLevel")
@@ -11325,6 +11354,7 @@ class CfnRoleAlias(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -11344,13 +11374,13 @@ class CfnRoleAlias(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         credential_duration_seconds: typing.Optional[jsii.Number] = None,
         role_alias: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::RoleAlias``.
 
@@ -11376,7 +11406,7 @@ class CfnRoleAlias(
 
     @jsii.member(jsii_name="arnForRoleAlias")
     @builtins.classmethod
-    def arn_for_role_alias(cls, resource: _IRoleAliasRef_26714b8b) -> builtins.str:
+    def arn_for_role_alias(cls, resource: "_IRoleAliasRef_26714b8b") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -11389,10 +11419,10 @@ class CfnRoleAlias(
     @builtins.classmethod
     def from_role_alias(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         role_alias: builtins.str,
-    ) -> _IRoleAliasRef_26714b8b:
+    ) -> "_IRoleAliasRef_26714b8b":
         '''Creates a new IRoleAliasRef from a roleAlias.
 
         :param scope: -
@@ -11404,16 +11434,16 @@ class CfnRoleAlias(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument role_alias", value=role_alias, expected_type=type_hints["role_alias"])
-        return typing.cast(_IRoleAliasRef_26714b8b, jsii.sinvoke(cls, "fromRoleAlias", [scope, id, role_alias]))
+        return typing.cast("_IRoleAliasRef_26714b8b", jsii.sinvoke(cls, "fromRoleAlias", [scope, id, role_alias]))
 
     @jsii.member(jsii_name="fromRoleAliasArn")
     @builtins.classmethod
     def from_role_alias_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IRoleAliasRef_26714b8b:
+    ) -> "_IRoleAliasRef_26714b8b":
         '''Creates a new IRoleAliasRef from an ARN.
 
         :param scope: -
@@ -11425,7 +11455,7 @@ class CfnRoleAlias(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IRoleAliasRef_26714b8b, jsii.sinvoke(cls, "fromRoleAliasArn", [scope, id, arn]))
+        return typing.cast("_IRoleAliasRef_26714b8b", jsii.sinvoke(cls, "fromRoleAliasArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="isCfnRoleAlias")
     @builtins.classmethod
@@ -11440,7 +11470,7 @@ class CfnRoleAlias(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRoleAlias", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -11485,15 +11515,15 @@ class CfnRoleAlias(
 
     @builtins.property
     @jsii.member(jsii_name="roleAliasRef")
-    def role_alias_ref(self) -> _RoleAliasReference_b4e8a4b0:
+    def role_alias_ref(self) -> "_RoleAliasReference_b4e8a4b0":
         '''A reference to a RoleAlias resource.'''
-        return typing.cast(_RoleAliasReference_b4e8a4b0, jsii.get(self, "roleAliasRef"))
+        return typing.cast("_RoleAliasReference_b4e8a4b0", jsii.get(self, "roleAliasRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="roleArn")
@@ -11536,12 +11566,12 @@ class CfnRoleAlias(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d2352c1a8d22a8f103dd785adf934aa19ab3df57269d51fd6a4d82d221a582db)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -11562,10 +11592,10 @@ class CfnRoleAliasProps:
     def __init__(
         self,
         *,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         credential_duration_seconds: typing.Optional[jsii.Number] = None,
         role_alias: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRoleAlias``.
 
@@ -11579,6 +11609,7 @@ class CfnRoleAliasProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -11612,14 +11643,14 @@ class CfnRoleAliasProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The role ARN.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-rolealias.html#cfn-iot-rolealias-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def credential_duration_seconds(self) -> typing.Optional[jsii.Number]:
@@ -11642,7 +11673,7 @@ class CfnRoleAliasProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -11650,7 +11681,7 @@ class CfnRoleAliasProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-rolealias.html#cfn-iot-rolealias-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11680,6 +11711,7 @@ class CfnScheduledAudit(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -11701,7 +11733,7 @@ class CfnScheduledAudit(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         frequency: builtins.str,
@@ -11709,7 +11741,7 @@ class CfnScheduledAudit(
         day_of_month: typing.Optional[builtins.str] = None,
         day_of_week: typing.Optional[builtins.str] = None,
         scheduled_audit_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::ScheduledAudit``.
 
@@ -11741,7 +11773,7 @@ class CfnScheduledAudit(
     @builtins.classmethod
     def arn_for_scheduled_audit(
         cls,
-        resource: _IScheduledAuditRef_a5878e17,
+        resource: "_IScheduledAuditRef_a5878e17",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -11755,10 +11787,10 @@ class CfnScheduledAudit(
     @builtins.classmethod
     def from_scheduled_audit_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IScheduledAuditRef_a5878e17:
+    ) -> "_IScheduledAuditRef_a5878e17":
         '''Creates a new IScheduledAuditRef from an ARN.
 
         :param scope: -
@@ -11770,16 +11802,16 @@ class CfnScheduledAudit(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IScheduledAuditRef_a5878e17, jsii.sinvoke(cls, "fromScheduledAuditArn", [scope, id, arn]))
+        return typing.cast("_IScheduledAuditRef_a5878e17", jsii.sinvoke(cls, "fromScheduledAuditArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromScheduledAuditName")
     @builtins.classmethod
     def from_scheduled_audit_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         scheduled_audit_name: builtins.str,
-    ) -> _IScheduledAuditRef_a5878e17:
+    ) -> "_IScheduledAuditRef_a5878e17":
         '''Creates a new IScheduledAuditRef from a scheduledAuditName.
 
         :param scope: -
@@ -11791,7 +11823,7 @@ class CfnScheduledAudit(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument scheduled_audit_name", value=scheduled_audit_name, expected_type=type_hints["scheduled_audit_name"])
-        return typing.cast(_IScheduledAuditRef_a5878e17, jsii.sinvoke(cls, "fromScheduledAuditName", [scope, id, scheduled_audit_name]))
+        return typing.cast("_IScheduledAuditRef_a5878e17", jsii.sinvoke(cls, "fromScheduledAuditName", [scope, id, scheduled_audit_name]))
 
     @jsii.member(jsii_name="isCfnScheduledAudit")
     @builtins.classmethod
@@ -11806,7 +11838,7 @@ class CfnScheduledAudit(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnScheduledAudit", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -11851,15 +11883,15 @@ class CfnScheduledAudit(
 
     @builtins.property
     @jsii.member(jsii_name="scheduledAuditRef")
-    def scheduled_audit_ref(self) -> _ScheduledAuditReference_68453d17:
+    def scheduled_audit_ref(self) -> "_ScheduledAuditReference_68453d17":
         '''A reference to a ScheduledAudit resource.'''
-        return typing.cast(_ScheduledAuditReference_68453d17, jsii.get(self, "scheduledAuditRef"))
+        return typing.cast("_ScheduledAuditReference_68453d17", jsii.get(self, "scheduledAuditRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="frequency")
@@ -11928,12 +11960,12 @@ class CfnScheduledAudit(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the scheduled audit.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3a6c40d069d52bd4e9c711de21441a770a6a753f250ce5301233af807e300951)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -11961,7 +11993,7 @@ class CfnScheduledAuditProps:
         day_of_month: typing.Optional[builtins.str] = None,
         day_of_week: typing.Optional[builtins.str] = None,
         scheduled_audit_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnScheduledAudit``.
 
@@ -11977,6 +12009,7 @@ class CfnScheduledAuditProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -12085,13 +12118,13 @@ class CfnScheduledAuditProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the scheduled audit.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-scheduledaudit.html#cfn-iot-scheduledaudit-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12121,6 +12154,7 @@ class CfnSecurityProfile(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -12194,16 +12228,16 @@ class CfnSecurityProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        additional_metrics_to_retain_v2: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityProfile.MetricToRetainProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        alert_targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityProfile.AlertTargetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        behaviors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityProfile.BehaviorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        metrics_export_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityProfile.MetricsExportConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        additional_metrics_to_retain_v2: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.MetricToRetainProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        alert_targets: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.AlertTargetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        behaviors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.BehaviorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        metrics_export_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.MetricsExportConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         security_profile_description: typing.Optional[builtins.str] = None,
         security_profile_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::SecurityProfile``.
@@ -12240,7 +12274,7 @@ class CfnSecurityProfile(
     @builtins.classmethod
     def arn_for_security_profile(
         cls,
-        resource: _ISecurityProfileRef_5d371790,
+        resource: "_ISecurityProfileRef_5d371790",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -12254,10 +12288,10 @@ class CfnSecurityProfile(
     @builtins.classmethod
     def from_security_profile_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ISecurityProfileRef_5d371790:
+    ) -> "_ISecurityProfileRef_5d371790":
         '''Creates a new ISecurityProfileRef from an ARN.
 
         :param scope: -
@@ -12269,16 +12303,16 @@ class CfnSecurityProfile(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ISecurityProfileRef_5d371790, jsii.sinvoke(cls, "fromSecurityProfileArn", [scope, id, arn]))
+        return typing.cast("_ISecurityProfileRef_5d371790", jsii.sinvoke(cls, "fromSecurityProfileArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromSecurityProfileName")
     @builtins.classmethod
     def from_security_profile_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         security_profile_name: builtins.str,
-    ) -> _ISecurityProfileRef_5d371790:
+    ) -> "_ISecurityProfileRef_5d371790":
         '''Creates a new ISecurityProfileRef from a securityProfileName.
 
         :param scope: -
@@ -12290,7 +12324,7 @@ class CfnSecurityProfile(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument security_profile_name", value=security_profile_name, expected_type=type_hints["security_profile_name"])
-        return typing.cast(_ISecurityProfileRef_5d371790, jsii.sinvoke(cls, "fromSecurityProfileName", [scope, id, security_profile_name]))
+        return typing.cast("_ISecurityProfileRef_5d371790", jsii.sinvoke(cls, "fromSecurityProfileName", [scope, id, security_profile_name]))
 
     @jsii.member(jsii_name="isCfnSecurityProfile")
     @builtins.classmethod
@@ -12305,7 +12339,7 @@ class CfnSecurityProfile(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSecurityProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12350,28 +12384,28 @@ class CfnSecurityProfile(
 
     @builtins.property
     @jsii.member(jsii_name="securityProfileRef")
-    def security_profile_ref(self) -> _SecurityProfileReference_8c2c6ff2:
+    def security_profile_ref(self) -> "_SecurityProfileReference_8c2c6ff2":
         '''A reference to a SecurityProfile resource.'''
-        return typing.cast(_SecurityProfileReference_8c2c6ff2, jsii.get(self, "securityProfileRef"))
+        return typing.cast("_SecurityProfileReference_8c2c6ff2", jsii.get(self, "securityProfileRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="additionalMetricsToRetainV2")
     def additional_metrics_to_retain_v2(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MetricToRetainProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricToRetainProperty"]]]]:
         '''A list of metrics whose data is retained (stored).'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MetricToRetainProperty"]]]], jsii.get(self, "additionalMetricsToRetainV2"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricToRetainProperty"]]]], jsii.get(self, "additionalMetricsToRetainV2"))
 
     @additional_metrics_to_retain_v2.setter
     def additional_metrics_to_retain_v2(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MetricToRetainProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricToRetainProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__46662b18e2b175e2271e8a39db13429ced5e7d575f8402505c8f3f604184e0de)
@@ -12382,14 +12416,14 @@ class CfnSecurityProfile(
     @jsii.member(jsii_name="alertTargets")
     def alert_targets(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.AlertTargetProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.AlertTargetProperty"]]]]:
         '''Specifies the destinations to which alerts are sent.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.AlertTargetProperty"]]]], jsii.get(self, "alertTargets"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.AlertTargetProperty"]]]], jsii.get(self, "alertTargets"))
 
     @alert_targets.setter
     def alert_targets(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.AlertTargetProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.AlertTargetProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ffd25103cac14ee05d5a4a5ec52dc43d1eaa500e9a81b00c7ca497019a8a023b)
@@ -12400,14 +12434,14 @@ class CfnSecurityProfile(
     @jsii.member(jsii_name="behaviors")
     def behaviors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.BehaviorProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.BehaviorProperty"]]]]:
         '''Specifies the behaviors that, when violated by a device (thing), cause an alert.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.BehaviorProperty"]]]], jsii.get(self, "behaviors"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.BehaviorProperty"]]]], jsii.get(self, "behaviors"))
 
     @behaviors.setter
     def behaviors(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.BehaviorProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.BehaviorProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2039d0a50b4b0108a33e48e1b26feb973a5e87c8327e2c8e8eaeba40facdd1cf)
@@ -12418,14 +12452,14 @@ class CfnSecurityProfile(
     @jsii.member(jsii_name="metricsExportConfig")
     def metrics_export_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MetricsExportConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricsExportConfigProperty"]]:
         '''Specifies the MQTT topic and role ARN required for metric export.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MetricsExportConfigProperty"]], jsii.get(self, "metricsExportConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricsExportConfigProperty"]], jsii.get(self, "metricsExportConfig"))
 
     @metrics_export_config.setter
     def metrics_export_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MetricsExportConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricsExportConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__523d669379787420bf63eb3735ae147ed664e78a47cae7b549d64f556b4e9d67)
@@ -12463,12 +12497,12 @@ class CfnSecurityProfile(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the security profile.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8cf7ed9c23f21d7c1b406ae548440d50d9d3b4f0ecc4a7e93867e7482a73acde)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -12579,9 +12613,9 @@ class CfnSecurityProfile(
             consecutive_datapoints_to_alarm: typing.Optional[jsii.Number] = None,
             consecutive_datapoints_to_clear: typing.Optional[jsii.Number] = None,
             duration_seconds: typing.Optional[jsii.Number] = None,
-            ml_detection_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityProfile.MachineLearningDetectionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            statistical_threshold: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityProfile.StatisticalThresholdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityProfile.MetricValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ml_detection_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.MachineLearningDetectionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            statistical_threshold: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.StatisticalThresholdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.MetricValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The criteria by which the behavior is determined to be normal.
 
@@ -12700,35 +12734,35 @@ class CfnSecurityProfile(
         @builtins.property
         def ml_detection_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MachineLearningDetectionConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MachineLearningDetectionConfigProperty"]]:
             '''The confidence level of the detection model.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-securityprofile-behaviorcriteria.html#cfn-iot-securityprofile-behaviorcriteria-mldetectionconfig
             '''
             result = self._values.get("ml_detection_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MachineLearningDetectionConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MachineLearningDetectionConfigProperty"]], result)
 
         @builtins.property
         def statistical_threshold(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.StatisticalThresholdProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.StatisticalThresholdProperty"]]:
             '''A statistical ranking (percentile)that indicates a threshold value by which a behavior is determined to be in compliance or in violation of the behavior.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-securityprofile-behaviorcriteria.html#cfn-iot-securityprofile-behaviorcriteria-statisticalthreshold
             '''
             result = self._values.get("statistical_threshold")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.StatisticalThresholdProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.StatisticalThresholdProperty"]], result)
 
         @builtins.property
         def value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MetricValueProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricValueProperty"]]:
             '''The value to be compared with the ``metric`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-securityprofile-behaviorcriteria.html#cfn-iot-securityprofile-behaviorcriteria-value
             '''
             result = self._values.get("value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MetricValueProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricValueProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12758,11 +12792,11 @@ class CfnSecurityProfile(
             self,
             *,
             name: builtins.str,
-            criteria: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityProfile.BehaviorCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            export_metric: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            criteria: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.BehaviorCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            export_metric: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             metric: typing.Optional[builtins.str] = None,
-            metric_dimension: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityProfile.MetricDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            suppress_alerts: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            metric_dimension: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.MetricDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            suppress_alerts: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''A Device Defender security profile behavior.
 
@@ -12852,7 +12886,7 @@ class CfnSecurityProfile(
         @builtins.property
         def criteria(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.BehaviorCriteriaProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.BehaviorCriteriaProperty"]]:
             '''The criteria that determine if a device is behaving normally in regard to the ``metric`` .
 
             .. epigraph::
@@ -12862,18 +12896,18 @@ class CfnSecurityProfile(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-securityprofile-behavior.html#cfn-iot-securityprofile-behavior-criteria
             '''
             result = self._values.get("criteria")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.BehaviorCriteriaProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.BehaviorCriteriaProperty"]], result)
 
         @builtins.property
         def export_metric(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Value indicates exporting metrics related to the behavior when it is true.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-securityprofile-behavior.html#cfn-iot-securityprofile-behavior-exportmetric
             '''
             result = self._values.get("export_metric")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def metric(self) -> typing.Optional[builtins.str]:
@@ -12887,18 +12921,18 @@ class CfnSecurityProfile(
         @builtins.property
         def metric_dimension(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MetricDimensionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricDimensionProperty"]]:
             '''The dimension of the metric.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-securityprofile-behavior.html#cfn-iot-securityprofile-behavior-metricdimension
             '''
             result = self._values.get("metric_dimension")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MetricDimensionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricDimensionProperty"]], result)
 
         @builtins.property
         def suppress_alerts(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''The alert status.
 
             If you set the value to ``true`` , alerts will be suppressed.
@@ -12906,7 +12940,7 @@ class CfnSecurityProfile(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-securityprofile-behavior.html#cfn-iot-securityprofile-behavior-suppressalerts
             '''
             result = self._values.get("suppress_alerts")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13067,8 +13101,8 @@ class CfnSecurityProfile(
             self,
             *,
             metric: builtins.str,
-            export_metric: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            metric_dimension: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityProfile.MetricDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            export_metric: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            metric_dimension: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.MetricDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The metric you want to retain.
 
@@ -13126,24 +13160,24 @@ class CfnSecurityProfile(
         @builtins.property
         def export_metric(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''The value indicates exporting metrics related to the ``MetricToRetain`` when it's true.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-securityprofile-metrictoretain.html#cfn-iot-securityprofile-metrictoretain-exportmetric
             '''
             result = self._values.get("export_metric")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def metric_dimension(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MetricDimensionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricDimensionProperty"]]:
             '''The dimension of the metric.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-securityprofile-metrictoretain.html#cfn-iot-securityprofile-metrictoretain-metricdimension
             '''
             result = self._values.get("metric_dimension")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityProfile.MetricDimensionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricDimensionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13175,8 +13209,8 @@ class CfnSecurityProfile(
             cidrs: typing.Optional[typing.Sequence[builtins.str]] = None,
             count: typing.Optional[builtins.str] = None,
             number: typing.Optional[jsii.Number] = None,
-            numbers: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
-            ports: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+            numbers: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
+            ports: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
             strings: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''The value to be compared with the ``metric`` .
@@ -13258,24 +13292,24 @@ class CfnSecurityProfile(
         @builtins.property
         def numbers(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
             '''The numeric value of a metric.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-securityprofile-metricvalue.html#cfn-iot-securityprofile-metricvalue-numbers
             '''
             result = self._values.get("numbers")
-            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def ports(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
             '''If the ``comparisonOperator`` calls for a set of ports, use this to specify that set to be compared with the ``metric`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-securityprofile-metricvalue.html#cfn-iot-securityprofile-metricvalue-ports
             '''
             result = self._values.get("ports")
-            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def strings(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -13435,13 +13469,13 @@ class CfnSecurityProfileProps:
     def __init__(
         self,
         *,
-        additional_metrics_to_retain_v2: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityProfile.MetricToRetainProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        alert_targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityProfile.AlertTargetProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        behaviors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityProfile.BehaviorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        metrics_export_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityProfile.MetricsExportConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        additional_metrics_to_retain_v2: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.MetricToRetainProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        alert_targets: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.AlertTargetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        behaviors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.BehaviorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        metrics_export_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityProfile.MetricsExportConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         security_profile_description: typing.Optional[builtins.str] = None,
         security_profile_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSecurityProfile``.
@@ -13460,6 +13494,7 @@ class CfnSecurityProfileProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -13561,7 +13596,7 @@ class CfnSecurityProfileProps:
     @builtins.property
     def additional_metrics_to_retain_v2(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSecurityProfile.MetricToRetainProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricToRetainProperty"]]]]:
         '''A list of metrics whose data is retained (stored).
 
         By default, data is retained for any metric used in the profile's ``behaviors`` , but it's also retained for any metric specified here. Can be used with custom metrics; can't be used with dimensions.
@@ -13569,12 +13604,12 @@ class CfnSecurityProfileProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-securityprofile.html#cfn-iot-securityprofile-additionalmetricstoretainv2
         '''
         result = self._values.get("additional_metrics_to_retain_v2")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSecurityProfile.MetricToRetainProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricToRetainProperty"]]]], result)
 
     @builtins.property
     def alert_targets(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnSecurityProfile.AlertTargetProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.AlertTargetProperty"]]]]:
         '''Specifies the destinations to which alerts are sent.
 
         (Alerts are always sent to the console.) Alerts are generated when a device (thing) violates a behavior.
@@ -13582,29 +13617,29 @@ class CfnSecurityProfileProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-securityprofile.html#cfn-iot-securityprofile-alerttargets
         '''
         result = self._values.get("alert_targets")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnSecurityProfile.AlertTargetProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.AlertTargetProperty"]]]], result)
 
     @builtins.property
     def behaviors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSecurityProfile.BehaviorProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.BehaviorProperty"]]]]:
         '''Specifies the behaviors that, when violated by a device (thing), cause an alert.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-securityprofile.html#cfn-iot-securityprofile-behaviors
         '''
         result = self._values.get("behaviors")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSecurityProfile.BehaviorProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.BehaviorProperty"]]]], result)
 
     @builtins.property
     def metrics_export_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecurityProfile.MetricsExportConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricsExportConfigProperty"]]:
         '''Specifies the MQTT topic and role ARN required for metric export.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-securityprofile.html#cfn-iot-securityprofile-metricsexportconfig
         '''
         result = self._values.get("metrics_export_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecurityProfile.MetricsExportConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityProfile.MetricsExportConfigProperty"]], result)
 
     @builtins.property
     def security_profile_description(self) -> typing.Optional[builtins.str]:
@@ -13625,13 +13660,13 @@ class CfnSecurityProfileProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the security profile.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-securityprofile.html#cfn-iot-securityprofile-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def target_arns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -13670,6 +13705,7 @@ class CfnSoftwarePackage(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -13686,12 +13722,12 @@ class CfnSoftwarePackage(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
         package_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::SoftwarePackage``.
 
@@ -13715,7 +13751,7 @@ class CfnSoftwarePackage(
     @builtins.classmethod
     def arn_for_software_package(
         cls,
-        resource: _ISoftwarePackageRef_8860c56e,
+        resource: "_ISoftwarePackageRef_8860c56e",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -13729,10 +13765,10 @@ class CfnSoftwarePackage(
     @builtins.classmethod
     def from_package_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         package_name: builtins.str,
-    ) -> _ISoftwarePackageRef_8860c56e:
+    ) -> "_ISoftwarePackageRef_8860c56e":
         '''Creates a new ISoftwarePackageRef from a packageName.
 
         :param scope: -
@@ -13744,7 +13780,7 @@ class CfnSoftwarePackage(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument package_name", value=package_name, expected_type=type_hints["package_name"])
-        return typing.cast(_ISoftwarePackageRef_8860c56e, jsii.sinvoke(cls, "fromPackageName", [scope, id, package_name]))
+        return typing.cast("_ISoftwarePackageRef_8860c56e", jsii.sinvoke(cls, "fromPackageName", [scope, id, package_name]))
 
     @jsii.member(jsii_name="isCfnSoftwarePackage")
     @builtins.classmethod
@@ -13759,7 +13795,7 @@ class CfnSoftwarePackage(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSoftwarePackage", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -13799,9 +13835,9 @@ class CfnSoftwarePackage(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -13810,9 +13846,9 @@ class CfnSoftwarePackage(
 
     @builtins.property
     @jsii.member(jsii_name="softwarePackageRef")
-    def software_package_ref(self) -> _SoftwarePackageReference_2fe38c44:
+    def software_package_ref(self) -> "_SoftwarePackageReference_2fe38c44":
         '''A reference to a SoftwarePackage resource.'''
-        return typing.cast(_SoftwarePackageReference_2fe38c44, jsii.get(self, "softwarePackageRef"))
+        return typing.cast("_SoftwarePackageReference_2fe38c44", jsii.get(self, "softwarePackageRef"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -13842,12 +13878,12 @@ class CfnSoftwarePackage(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the package.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__52bd98db72c254315d460ad032c500cccdb51730608ace5ecc37eeded0dfbb80)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -13869,7 +13905,7 @@ class CfnSoftwarePackageProps:
         *,
         description: typing.Optional[builtins.str] = None,
         package_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSoftwarePackage``.
 
@@ -13882,6 +13918,7 @@ class CfnSoftwarePackageProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -13929,13 +13966,13 @@ class CfnSoftwarePackageProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the package.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-softwarepackage.html#cfn-iot-softwarepackage-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13970,6 +14007,7 @@ class CfnSoftwarePackageVersion(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -14007,16 +14045,16 @@ class CfnSoftwarePackageVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         package_name: builtins.str,
-        artifact: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSoftwarePackageVersion.PackageVersionArtifactProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        artifact: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSoftwarePackageVersion.PackageVersionArtifactProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
         recipe: typing.Optional[builtins.str] = None,
-        sbom: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSoftwarePackageVersion.SbomProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sbom: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSoftwarePackageVersion.SbomProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         version_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::SoftwarePackageVersion``.
@@ -14062,7 +14100,7 @@ class CfnSoftwarePackageVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSoftwarePackageVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -14131,9 +14169,9 @@ class CfnSoftwarePackageVersion(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -14142,9 +14180,11 @@ class CfnSoftwarePackageVersion(
 
     @builtins.property
     @jsii.member(jsii_name="softwarePackageVersionRef")
-    def software_package_version_ref(self) -> _SoftwarePackageVersionReference_fa8c0d20:
+    def software_package_version_ref(
+        self,
+    ) -> "_SoftwarePackageVersionReference_fa8c0d20":
         '''A reference to a SoftwarePackageVersion resource.'''
-        return typing.cast(_SoftwarePackageVersionReference_fa8c0d20, jsii.get(self, "softwarePackageVersionRef"))
+        return typing.cast("_SoftwarePackageVersionReference_fa8c0d20", jsii.get(self, "softwarePackageVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="packageName")
@@ -14163,14 +14203,14 @@ class CfnSoftwarePackageVersion(
     @jsii.member(jsii_name="artifact")
     def artifact(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSoftwarePackageVersion.PackageVersionArtifactProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.PackageVersionArtifactProperty"]]:
         '''The artifact location of the package version.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSoftwarePackageVersion.PackageVersionArtifactProperty"]], jsii.get(self, "artifact"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.PackageVersionArtifactProperty"]], jsii.get(self, "artifact"))
 
     @artifact.setter
     def artifact(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSoftwarePackageVersion.PackageVersionArtifactProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.PackageVersionArtifactProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ef719379e4bacafe5187ab2d184d7a60bf91a7f1896d5e16d2e75da4e01bd477)
@@ -14181,14 +14221,14 @@ class CfnSoftwarePackageVersion(
     @jsii.member(jsii_name="attributes")
     def attributes(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''Metadata that can be used to define a package version’s configuration.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "attributes"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "attributes"))
 
     @attributes.setter
     def attributes(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c101d3151063e2d9f4c7195d752acf7d3941838f08c5a5cf6532f60a6ebb2dce)
@@ -14225,14 +14265,14 @@ class CfnSoftwarePackageVersion(
     @jsii.member(jsii_name="sbom")
     def sbom(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSoftwarePackageVersion.SbomProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.SbomProperty"]]:
         '''The sbom zip archive location of the package version.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSoftwarePackageVersion.SbomProperty"]], jsii.get(self, "sbom"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.SbomProperty"]], jsii.get(self, "sbom"))
 
     @sbom.setter
     def sbom(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSoftwarePackageVersion.SbomProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.SbomProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__44a7d0587cdb74a05b35cdc5cf77914f5b62933c4554463c42d18928dc82b5db)
@@ -14241,12 +14281,12 @@ class CfnSoftwarePackageVersion(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the package version.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7c6a2c2e1accb87813c9cd034a270a43e73b47118eefc286bea739d462e600ef)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -14274,7 +14314,7 @@ class CfnSoftwarePackageVersion(
         def __init__(
             self,
             *,
-            s3_location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSoftwarePackageVersion.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+            s3_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSoftwarePackageVersion.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The artifact location of the package version.
 
@@ -14307,14 +14347,14 @@ class CfnSoftwarePackageVersion(
         @builtins.property
         def s3_location(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnSoftwarePackageVersion.S3LocationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.S3LocationProperty"]:
             '''The Amazon S3 location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-softwarepackageversion-packageversionartifact.html#cfn-iot-softwarepackageversion-packageversionartifact-s3location
             '''
             result = self._values.get("s3_location")
             assert result is not None, "Required property 's3_location' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSoftwarePackageVersion.S3LocationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.S3LocationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14422,7 +14462,7 @@ class CfnSoftwarePackageVersion(
         def __init__(
             self,
             *,
-            s3_location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSoftwarePackageVersion.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+            s3_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSoftwarePackageVersion.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The sbom zip archive location of the package version.
 
@@ -14455,14 +14495,14 @@ class CfnSoftwarePackageVersion(
         @builtins.property
         def s3_location(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnSoftwarePackageVersion.S3LocationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.S3LocationProperty"]:
             '''The Amazon S3 location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-softwarepackageversion-sbom.html#cfn-iot-softwarepackageversion-sbom-s3location
             '''
             result = self._values.get("s3_location")
             assert result is not None, "Required property 's3_location' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSoftwarePackageVersion.S3LocationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.S3LocationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14495,12 +14535,12 @@ class CfnSoftwarePackageVersionProps:
         self,
         *,
         package_name: builtins.str,
-        artifact: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSoftwarePackageVersion.PackageVersionArtifactProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        artifact: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSoftwarePackageVersion.PackageVersionArtifactProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
         recipe: typing.Optional[builtins.str] = None,
-        sbom: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSoftwarePackageVersion.SbomProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sbom: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSoftwarePackageVersion.SbomProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         version_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnSoftwarePackageVersion``.
@@ -14519,6 +14559,7 @@ class CfnSoftwarePackageVersionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -14594,18 +14635,18 @@ class CfnSoftwarePackageVersionProps:
     @builtins.property
     def artifact(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSoftwarePackageVersion.PackageVersionArtifactProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.PackageVersionArtifactProperty"]]:
         '''The artifact location of the package version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-softwarepackageversion.html#cfn-iot-softwarepackageversion-artifact
         '''
         result = self._values.get("artifact")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSoftwarePackageVersion.PackageVersionArtifactProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.PackageVersionArtifactProperty"]], result)
 
     @builtins.property
     def attributes(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''Metadata that can be used to define a package version’s configuration.
 
         For example, the S3 file location, configuration options that are being sent to the device or fleet.
@@ -14615,7 +14656,7 @@ class CfnSoftwarePackageVersionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-softwarepackageversion.html#cfn-iot-softwarepackageversion-attributes
         '''
         result = self._values.get("attributes")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -14640,22 +14681,22 @@ class CfnSoftwarePackageVersionProps:
     @builtins.property
     def sbom(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSoftwarePackageVersion.SbomProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.SbomProperty"]]:
         '''The sbom zip archive location of the package version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-softwarepackageversion.html#cfn-iot-softwarepackageversion-sbom
         '''
         result = self._values.get("sbom")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSoftwarePackageVersion.SbomProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSoftwarePackageVersion.SbomProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the package version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-softwarepackageversion.html#cfn-iot-softwarepackageversion-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def version_name(self) -> typing.Optional[builtins.str]:
@@ -14710,10 +14751,10 @@ class CfnThing(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        attribute_payload: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnThing.AttributePayloadProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        attribute_payload: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnThing.AttributePayloadProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         thing_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::Thing``.
@@ -14735,7 +14776,7 @@ class CfnThing(
 
     @jsii.member(jsii_name="arnForThing")
     @builtins.classmethod
-    def arn_for_thing(cls, resource: _IThingRef_8c8528e2) -> builtins.str:
+    def arn_for_thing(cls, resource: "_IThingRef_8c8528e2") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -14748,10 +14789,10 @@ class CfnThing(
     @builtins.classmethod
     def from_thing_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IThingRef_8c8528e2:
+    ) -> "_IThingRef_8c8528e2":
         '''Creates a new IThingRef from an ARN.
 
         :param scope: -
@@ -14763,16 +14804,16 @@ class CfnThing(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IThingRef_8c8528e2, jsii.sinvoke(cls, "fromThingArn", [scope, id, arn]))
+        return typing.cast("_IThingRef_8c8528e2", jsii.sinvoke(cls, "fromThingArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromThingName")
     @builtins.classmethod
     def from_thing_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         thing_name: builtins.str,
-    ) -> _IThingRef_8c8528e2:
+    ) -> "_IThingRef_8c8528e2":
         '''Creates a new IThingRef from a thingName.
 
         :param scope: -
@@ -14784,7 +14825,7 @@ class CfnThing(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument thing_name", value=thing_name, expected_type=type_hints["thing_name"])
-        return typing.cast(_IThingRef_8c8528e2, jsii.sinvoke(cls, "fromThingName", [scope, id, thing_name]))
+        return typing.cast("_IThingRef_8c8528e2", jsii.sinvoke(cls, "fromThingName", [scope, id, thing_name]))
 
     @jsii.member(jsii_name="isCfnThing")
     @builtins.classmethod
@@ -14799,7 +14840,7 @@ class CfnThing(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnThing", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -14853,22 +14894,22 @@ class CfnThing(
 
     @builtins.property
     @jsii.member(jsii_name="thingRef")
-    def thing_ref(self) -> _ThingReference_c3929a14:
+    def thing_ref(self) -> "_ThingReference_c3929a14":
         '''A reference to a Thing resource.'''
-        return typing.cast(_ThingReference_c3929a14, jsii.get(self, "thingRef"))
+        return typing.cast("_ThingReference_c3929a14", jsii.get(self, "thingRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attributePayload")
     def attribute_payload(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThing.AttributePayloadProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThing.AttributePayloadProperty"]]:
         '''A string that contains up to three key value pairs.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThing.AttributePayloadProperty"]], jsii.get(self, "attributePayload"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThing.AttributePayloadProperty"]], jsii.get(self, "attributePayload"))
 
     @attribute_payload.setter
     def attribute_payload(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThing.AttributePayloadProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThing.AttributePayloadProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__377b5072bb14da439dbf201362672416c4491cfeeaf262f8157a7eada39ed0df)
@@ -14897,7 +14938,7 @@ class CfnThing(
         def __init__(
             self,
             *,
-            attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The AttributePayload property specifies up to three attributes for an AWS IoT as key-value pairs.
 
@@ -14930,7 +14971,7 @@ class CfnThing(
         @builtins.property
         def attributes(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''A JSON string containing up to three key-value pair in JSON format. For example:.
 
             ``{\\"attributes\\":{\\"string1\\":\\"string2\\"}}``
@@ -14938,7 +14979,7 @@ class CfnThing(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-thing-attributepayload.html#cfn-iot-thing-attributepayload-attributes
             '''
             result = self._values.get("attributes")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14973,6 +15014,7 @@ class CfnThingGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -14998,14 +15040,14 @@ class CfnThingGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         parent_group_name: typing.Optional[builtins.str] = None,
         query_string: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         thing_group_name: typing.Optional[builtins.str] = None,
-        thing_group_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnThingGroup.ThingGroupPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        thing_group_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnThingGroup.ThingGroupPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::ThingGroup``.
 
@@ -15033,7 +15075,7 @@ class CfnThingGroup(
 
     @jsii.member(jsii_name="arnForThingGroup")
     @builtins.classmethod
-    def arn_for_thing_group(cls, resource: _IThingGroupRef_d398d262) -> builtins.str:
+    def arn_for_thing_group(cls, resource: "_IThingGroupRef_d398d262") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -15046,10 +15088,10 @@ class CfnThingGroup(
     @builtins.classmethod
     def from_thing_group_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IThingGroupRef_d398d262:
+    ) -> "_IThingGroupRef_d398d262":
         '''Creates a new IThingGroupRef from an ARN.
 
         :param scope: -
@@ -15061,16 +15103,16 @@ class CfnThingGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IThingGroupRef_d398d262, jsii.sinvoke(cls, "fromThingGroupArn", [scope, id, arn]))
+        return typing.cast("_IThingGroupRef_d398d262", jsii.sinvoke(cls, "fromThingGroupArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromThingGroupName")
     @builtins.classmethod
     def from_thing_group_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         thing_group_name: builtins.str,
-    ) -> _IThingGroupRef_d398d262:
+    ) -> "_IThingGroupRef_d398d262":
         '''Creates a new IThingGroupRef from a thingGroupName.
 
         :param scope: -
@@ -15082,7 +15124,7 @@ class CfnThingGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument thing_group_name", value=thing_group_name, expected_type=type_hints["thing_group_name"])
-        return typing.cast(_IThingGroupRef_d398d262, jsii.sinvoke(cls, "fromThingGroupName", [scope, id, thing_group_name]))
+        return typing.cast("_IThingGroupRef_d398d262", jsii.sinvoke(cls, "fromThingGroupName", [scope, id, thing_group_name]))
 
     @jsii.member(jsii_name="isCfnThingGroup")
     @builtins.classmethod
@@ -15097,7 +15139,7 @@ class CfnThingGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnThingGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -15151,15 +15193,15 @@ class CfnThingGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="thingGroupRef")
-    def thing_group_ref(self) -> _ThingGroupReference_32809203:
+    def thing_group_ref(self) -> "_ThingGroupReference_32809203":
         '''A reference to a ThingGroup resource.'''
-        return typing.cast(_ThingGroupReference_32809203, jsii.get(self, "thingGroupRef"))
+        return typing.cast("_ThingGroupReference_32809203", jsii.get(self, "thingGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="parentGroupName")
@@ -15189,12 +15231,12 @@ class CfnThingGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the thing group or dynamic thing group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__81790eb454413e70b1daf2c9a75e0c4a6dae40ec6f5b6da76d81dfd0ac5795f7)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -15217,14 +15259,14 @@ class CfnThingGroup(
     @jsii.member(jsii_name="thingGroupProperties")
     def thing_group_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThingGroup.ThingGroupPropertiesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingGroup.ThingGroupPropertiesProperty"]]:
         '''Thing group properties.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThingGroup.ThingGroupPropertiesProperty"]], jsii.get(self, "thingGroupProperties"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingGroup.ThingGroupPropertiesProperty"]], jsii.get(self, "thingGroupProperties"))
 
     @thing_group_properties.setter
     def thing_group_properties(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThingGroup.ThingGroupPropertiesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingGroup.ThingGroupPropertiesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2d2773a84800bde5107733f622a68c900ce1d4994d26bea29dcab1f26b1c8042)
@@ -15240,7 +15282,7 @@ class CfnThingGroup(
         def __init__(
             self,
             *,
-            attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The attribute payload.
 
@@ -15271,7 +15313,7 @@ class CfnThingGroup(
         @builtins.property
         def attributes(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''A JSON string containing up to three key-value pair in JSON format. For example:.
 
             ``{\\"attributes\\":{\\"string1\\":\\"string2\\"}}``
@@ -15279,7 +15321,7 @@ class CfnThingGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-thinggroup-attributepayload.html#cfn-iot-thinggroup-attributepayload-attributes
             '''
             result = self._values.get("attributes")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15304,7 +15346,7 @@ class CfnThingGroup(
         def __init__(
             self,
             *,
-            attribute_payload: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnThingGroup.AttributePayloadProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            attribute_payload: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnThingGroup.AttributePayloadProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             thing_group_description: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Thing group properties.
@@ -15343,13 +15385,13 @@ class CfnThingGroup(
         @builtins.property
         def attribute_payload(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThingGroup.AttributePayloadProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingGroup.AttributePayloadProperty"]]:
             '''The thing group attributes in JSON format.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-thinggroup-thinggroupproperties.html#cfn-iot-thinggroup-thinggroupproperties-attributepayload
             '''
             result = self._values.get("attribute_payload")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThingGroup.AttributePayloadProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingGroup.AttributePayloadProperty"]], result)
 
         @builtins.property
         def thing_group_description(self) -> typing.Optional[builtins.str]:
@@ -15389,9 +15431,9 @@ class CfnThingGroupProps:
         *,
         parent_group_name: typing.Optional[builtins.str] = None,
         query_string: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         thing_group_name: typing.Optional[builtins.str] = None,
-        thing_group_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnThingGroup.ThingGroupPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        thing_group_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnThingGroup.ThingGroupPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnThingGroup``.
 
@@ -15406,6 +15448,7 @@ class CfnThingGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -15470,13 +15513,13 @@ class CfnThingGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the thing group or dynamic thing group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-thinggroup.html#cfn-iot-thinggroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def thing_group_name(self) -> typing.Optional[builtins.str]:
@@ -15490,13 +15533,13 @@ class CfnThingGroupProps:
     @builtins.property
     def thing_group_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnThingGroup.ThingGroupPropertiesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingGroup.ThingGroupPropertiesProperty"]]:
         '''Thing group properties.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-thinggroup.html#cfn-iot-thinggroup-thinggroupproperties
         '''
         result = self._values.get("thing_group_properties")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnThingGroup.ThingGroupPropertiesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingGroup.ThingGroupPropertiesProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15541,7 +15584,7 @@ class CfnThingPrincipalAttachment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         principal: builtins.str,
@@ -15581,7 +15624,7 @@ class CfnThingPrincipalAttachment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnThingPrincipalAttachment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -15627,9 +15670,9 @@ class CfnThingPrincipalAttachment(
     @jsii.member(jsii_name="thingPrincipalAttachmentRef")
     def thing_principal_attachment_ref(
         self,
-    ) -> _ThingPrincipalAttachmentReference_fd3d444d:
+    ) -> "_ThingPrincipalAttachmentReference_fd3d444d":
         '''A reference to a ThingPrincipalAttachment resource.'''
-        return typing.cast(_ThingPrincipalAttachmentReference_fd3d444d, jsii.get(self, "thingPrincipalAttachmentRef"))
+        return typing.cast("_ThingPrincipalAttachmentReference_fd3d444d", jsii.get(self, "thingPrincipalAttachmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="principal")
@@ -15771,7 +15814,7 @@ class CfnThingProps:
     def __init__(
         self,
         *,
-        attribute_payload: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnThing.AttributePayloadProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        attribute_payload: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnThing.AttributePayloadProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         thing_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnThing``.
@@ -15810,7 +15853,7 @@ class CfnThingProps:
     @builtins.property
     def attribute_payload(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnThing.AttributePayloadProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThing.AttributePayloadProperty"]]:
         '''A string that contains up to three key value pairs.
 
         Maximum length of 800. Duplicates not allowed.
@@ -15818,7 +15861,7 @@ class CfnThingProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-thing.html#cfn-iot-thing-attributepayload
         '''
         result = self._values.get("attribute_payload")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnThing.AttributePayloadProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThing.AttributePayloadProperty"]], result)
 
     @builtins.property
     def thing_name(self) -> typing.Optional[builtins.str]:
@@ -15857,6 +15900,7 @@ class CfnThingType(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -15886,13 +15930,13 @@ class CfnThingType(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        deprecate_thing_type: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        deprecate_thing_type: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         thing_type_name: typing.Optional[builtins.str] = None,
-        thing_type_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnThingType.ThingTypePropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        thing_type_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnThingType.ThingTypePropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::ThingType``.
 
@@ -15918,7 +15962,7 @@ class CfnThingType(
 
     @jsii.member(jsii_name="arnForThingType")
     @builtins.classmethod
-    def arn_for_thing_type(cls, resource: _IThingTypeRef_464ea9b2) -> builtins.str:
+    def arn_for_thing_type(cls, resource: "_IThingTypeRef_464ea9b2") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -15931,10 +15975,10 @@ class CfnThingType(
     @builtins.classmethod
     def from_thing_type_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IThingTypeRef_464ea9b2:
+    ) -> "_IThingTypeRef_464ea9b2":
         '''Creates a new IThingTypeRef from an ARN.
 
         :param scope: -
@@ -15946,16 +15990,16 @@ class CfnThingType(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IThingTypeRef_464ea9b2, jsii.sinvoke(cls, "fromThingTypeArn", [scope, id, arn]))
+        return typing.cast("_IThingTypeRef_464ea9b2", jsii.sinvoke(cls, "fromThingTypeArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromThingTypeName")
     @builtins.classmethod
     def from_thing_type_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         thing_type_name: builtins.str,
-    ) -> _IThingTypeRef_464ea9b2:
+    ) -> "_IThingTypeRef_464ea9b2":
         '''Creates a new IThingTypeRef from a thingTypeName.
 
         :param scope: -
@@ -15967,7 +16011,7 @@ class CfnThingType(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument thing_type_name", value=thing_type_name, expected_type=type_hints["thing_type_name"])
-        return typing.cast(_IThingTypeRef_464ea9b2, jsii.sinvoke(cls, "fromThingTypeName", [scope, id, thing_type_name]))
+        return typing.cast("_IThingTypeRef_464ea9b2", jsii.sinvoke(cls, "fromThingTypeName", [scope, id, thing_type_name]))
 
     @jsii.member(jsii_name="isCfnThingType")
     @builtins.classmethod
@@ -15982,7 +16026,7 @@ class CfnThingType(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnThingType", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -16036,31 +16080,31 @@ class CfnThingType(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="thingTypeRef")
-    def thing_type_ref(self) -> _ThingTypeReference_ab8a3ee4:
+    def thing_type_ref(self) -> "_ThingTypeReference_ab8a3ee4":
         '''A reference to a ThingType resource.'''
-        return typing.cast(_ThingTypeReference_ab8a3ee4, jsii.get(self, "thingTypeRef"))
+        return typing.cast("_ThingTypeReference_ab8a3ee4", jsii.get(self, "thingTypeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="deprecateThingType")
     def deprecate_thing_type(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Deprecates a thing type.
 
         You can not associate new things with deprecated thing type.
         '''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deprecateThingType"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deprecateThingType"))
 
     @deprecate_thing_type.setter
     def deprecate_thing_type(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__36ee9c2251ca7b0b220c68a7d30cbe316f290cf610e438ae39e6b5a508d36ae3)
@@ -16069,12 +16113,12 @@ class CfnThingType(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the thing type.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__93f567eb11f0cc5ec319af20c198c1802485f1a92191437cfd1aafbe97970082)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -16097,14 +16141,14 @@ class CfnThingType(
     @jsii.member(jsii_name="thingTypeProperties")
     def thing_type_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThingType.ThingTypePropertiesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingType.ThingTypePropertiesProperty"]]:
         '''The thing type properties for the thing type to create.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThingType.ThingTypePropertiesProperty"]], jsii.get(self, "thingTypeProperties"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingType.ThingTypePropertiesProperty"]], jsii.get(self, "thingTypeProperties"))
 
     @thing_type_properties.setter
     def thing_type_properties(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThingType.ThingTypePropertiesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingType.ThingTypePropertiesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__61835870660f4f9053e96274057265cbd30a5753240810087550b4e600066ed8)
@@ -16120,7 +16164,7 @@ class CfnThingType(
         def __init__(
             self,
             *,
-            propagating_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnThingType.PropagatingAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            propagating_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnThingType.PropagatingAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The configuration to add user-defined properties to enrich MQTT 5 messages.
 
@@ -16155,13 +16199,13 @@ class CfnThingType(
         @builtins.property
         def propagating_attributes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnThingType.PropagatingAttributeProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnThingType.PropagatingAttributeProperty"]]]]:
             '''An object that represents the connection attribute, the thing attribute, and the MQTT 5 user property key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-thingtype-mqtt5configuration.html#cfn-iot-thingtype-mqtt5configuration-propagatingattributes
             '''
             result = self._values.get("propagating_attributes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnThingType.PropagatingAttributeProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnThingType.PropagatingAttributeProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16279,7 +16323,7 @@ class CfnThingType(
         def __init__(
             self,
             *,
-            mqtt5_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnThingType.Mqtt5ConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mqtt5_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnThingType.Mqtt5ConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             searchable_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
             thing_type_description: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -16328,13 +16372,13 @@ class CfnThingType(
         @builtins.property
         def mqtt5_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThingType.Mqtt5ConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingType.Mqtt5ConfigurationProperty"]]:
             '''The configuration to add user-defined properties to enrich MQTT 5 messages.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-thingtype-thingtypeproperties.html#cfn-iot-thingtype-thingtypeproperties-mqtt5configuration
             '''
             result = self._values.get("mqtt5_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnThingType.Mqtt5ConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingType.Mqtt5ConfigurationProperty"]], result)
 
         @builtins.property
         def searchable_attributes(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -16380,10 +16424,10 @@ class CfnThingTypeProps:
     def __init__(
         self,
         *,
-        deprecate_thing_type: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        deprecate_thing_type: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         thing_type_name: typing.Optional[builtins.str] = None,
-        thing_type_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnThingType.ThingTypePropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        thing_type_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnThingType.ThingTypePropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnThingType``.
 
@@ -16397,6 +16441,7 @@ class CfnThingTypeProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -16442,7 +16487,7 @@ class CfnThingTypeProps:
     @builtins.property
     def deprecate_thing_type(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Deprecates a thing type. You can not associate new things with deprecated thing type.
 
         Requires permission to access the `DeprecateThingType <https://docs.aws.amazon.com//service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions>`_ action.
@@ -16450,16 +16495,16 @@ class CfnThingTypeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-thingtype.html#cfn-iot-thingtype-deprecatethingtype
         '''
         result = self._values.get("deprecate_thing_type")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the thing type.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-thingtype.html#cfn-iot-thingtype-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def thing_type_name(self) -> typing.Optional[builtins.str]:
@@ -16473,7 +16518,7 @@ class CfnThingTypeProps:
     @builtins.property
     def thing_type_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnThingType.ThingTypePropertiesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingType.ThingTypePropertiesProperty"]]:
         '''The thing type properties for the thing type to create.
 
         It contains information about the new thing type including a description, a list of searchable thing attribute names, and a list of propagating attributes. After a thing type is created, you can only update ``Mqtt5Configuration`` .
@@ -16481,7 +16526,7 @@ class CfnThingTypeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-thingtype.html#cfn-iot-thingtype-thingtypeproperties
         '''
         result = self._values.get("thing_type_properties")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnThingType.ThingTypePropertiesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnThingType.ThingTypePropertiesProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16511,6 +16556,7 @@ class CfnTopicRule(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iot as iot
@@ -16992,12 +17038,12 @@ class CfnTopicRule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        topic_rule_payload: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.TopicRulePayloadProperty", typing.Dict[builtins.str, typing.Any]]],
+        topic_rule_payload: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.TopicRulePayloadProperty", typing.Dict[builtins.str, typing.Any]]],
         rule_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::TopicRule``.
 
@@ -17019,7 +17065,7 @@ class CfnTopicRule(
 
     @jsii.member(jsii_name="arnForTopicRule")
     @builtins.classmethod
-    def arn_for_topic_rule(cls, resource: _ITopicRuleRef_748e9f37) -> builtins.str:
+    def arn_for_topic_rule(cls, resource: "_ITopicRuleRef_748e9f37") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -17032,10 +17078,10 @@ class CfnTopicRule(
     @builtins.classmethod
     def from_rule_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         rule_name: builtins.str,
-    ) -> _ITopicRuleRef_748e9f37:
+    ) -> "_ITopicRuleRef_748e9f37":
         '''Creates a new ITopicRuleRef from a ruleName.
 
         :param scope: -
@@ -17047,16 +17093,16 @@ class CfnTopicRule(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument rule_name", value=rule_name, expected_type=type_hints["rule_name"])
-        return typing.cast(_ITopicRuleRef_748e9f37, jsii.sinvoke(cls, "fromRuleName", [scope, id, rule_name]))
+        return typing.cast("_ITopicRuleRef_748e9f37", jsii.sinvoke(cls, "fromRuleName", [scope, id, rule_name]))
 
     @jsii.member(jsii_name="fromTopicRuleArn")
     @builtins.classmethod
     def from_topic_rule_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ITopicRuleRef_748e9f37:
+    ) -> "_ITopicRuleRef_748e9f37":
         '''Creates a new ITopicRuleRef from an ARN.
 
         :param scope: -
@@ -17068,7 +17114,7 @@ class CfnTopicRule(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ITopicRuleRef_748e9f37, jsii.sinvoke(cls, "fromTopicRuleArn", [scope, id, arn]))
+        return typing.cast("_ITopicRuleRef_748e9f37", jsii.sinvoke(cls, "fromTopicRuleArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="isCfnTopicRule")
     @builtins.classmethod
@@ -17083,7 +17129,7 @@ class CfnTopicRule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTopicRule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -17128,28 +17174,28 @@ class CfnTopicRule(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="topicRuleRef")
-    def topic_rule_ref(self) -> _TopicRuleReference_dd2457a8:
+    def topic_rule_ref(self) -> "_TopicRuleReference_dd2457a8":
         '''A reference to a TopicRule resource.'''
-        return typing.cast(_TopicRuleReference_dd2457a8, jsii.get(self, "topicRuleRef"))
+        return typing.cast("_TopicRuleReference_dd2457a8", jsii.get(self, "topicRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="topicRulePayload")
     def topic_rule_payload(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnTopicRule.TopicRulePayloadProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TopicRulePayloadProperty"]:
         '''The rule payload.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTopicRule.TopicRulePayloadProperty"], jsii.get(self, "topicRulePayload"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TopicRulePayloadProperty"], jsii.get(self, "topicRulePayload"))
 
     @topic_rule_payload.setter
     def topic_rule_payload(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnTopicRule.TopicRulePayloadProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TopicRulePayloadProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0c4a2cac51f49a02fcbd2507a3fe1c5750702f5ac86ea7b859f3acd34fd8142e)
@@ -17171,12 +17217,12 @@ class CfnTopicRule(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the topic rule.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f06afcd574807e23cacb325197dddfcd79b6887457d398b13cf7713d5e8730b5)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -17214,28 +17260,28 @@ class CfnTopicRule(
         def __init__(
             self,
             *,
-            cloudwatch_alarm: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.CloudwatchAlarmActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloudwatch_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.CloudwatchLogsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloudwatch_metric: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.CloudwatchMetricActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            dynamo_db: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.DynamoDBActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            dynamo_d_bv2: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.DynamoDBv2ActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            elasticsearch: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.ElasticsearchActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            firehose: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.FirehoseActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            http: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.HttpActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            iot_analytics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.IotAnalyticsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            iot_events: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.IotEventsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            iot_site_wise: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.IotSiteWiseActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            kafka: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.KafkaActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            kinesis: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.KinesisActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            lambda_: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.LambdaActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.LocationActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            open_search: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.OpenSearchActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            republish: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.RepublishActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.S3ActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.SnsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sqs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.SqsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            step_functions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.StepFunctionsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            timestream: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.TimestreamActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloudwatch_alarm: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.CloudwatchAlarmActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloudwatch_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.CloudwatchLogsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloudwatch_metric: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.CloudwatchMetricActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            dynamo_db: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.DynamoDBActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            dynamo_d_bv2: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.DynamoDBv2ActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            elasticsearch: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.ElasticsearchActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            firehose: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.FirehoseActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.HttpActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            iot_analytics: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.IotAnalyticsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            iot_events: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.IotEventsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            iot_site_wise: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.IotSiteWiseActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            kafka: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.KafkaActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            kinesis: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.KinesisActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lambda_: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.LambdaActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.LocationActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            open_search: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.OpenSearchActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            republish: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.RepublishActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.S3ActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sns: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.SnsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sqs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.SqsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            step_functions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.StepFunctionsActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            timestream: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.TimestreamActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the actions associated with a rule.
 
@@ -17573,51 +17619,51 @@ class CfnTopicRule(
         @builtins.property
         def cloudwatch_alarm(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.CloudwatchAlarmActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.CloudwatchAlarmActionProperty"]]:
             '''Change the state of a CloudWatch alarm.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-cloudwatchalarm
             '''
             result = self._values.get("cloudwatch_alarm")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.CloudwatchAlarmActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.CloudwatchAlarmActionProperty"]], result)
 
         @builtins.property
         def cloudwatch_logs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.CloudwatchLogsActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.CloudwatchLogsActionProperty"]]:
             '''Sends data to CloudWatch.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-cloudwatchlogs
             '''
             result = self._values.get("cloudwatch_logs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.CloudwatchLogsActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.CloudwatchLogsActionProperty"]], result)
 
         @builtins.property
         def cloudwatch_metric(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.CloudwatchMetricActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.CloudwatchMetricActionProperty"]]:
             '''Capture a CloudWatch metric.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-cloudwatchmetric
             '''
             result = self._values.get("cloudwatch_metric")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.CloudwatchMetricActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.CloudwatchMetricActionProperty"]], result)
 
         @builtins.property
         def dynamo_db(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.DynamoDBActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.DynamoDBActionProperty"]]:
             '''Write to a DynamoDB table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-dynamodb
             '''
             result = self._values.get("dynamo_db")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.DynamoDBActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.DynamoDBActionProperty"]], result)
 
         @builtins.property
         def dynamo_d_bv2(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.DynamoDBv2ActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.DynamoDBv2ActionProperty"]]:
             '''Write to a DynamoDB table.
 
             This is a new version of the DynamoDB action. It allows you to write each attribute in an MQTT message payload into a separate DynamoDB column.
@@ -17625,12 +17671,12 @@ class CfnTopicRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-dynamodbv2
             '''
             result = self._values.get("dynamo_d_bv2")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.DynamoDBv2ActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.DynamoDBv2ActionProperty"]], result)
 
         @builtins.property
         def elasticsearch(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.ElasticsearchActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.ElasticsearchActionProperty"]]:
             '''Write data to an Amazon OpenSearch Service domain.
 
             .. epigraph::
@@ -17640,183 +17686,183 @@ class CfnTopicRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-elasticsearch
             '''
             result = self._values.get("elasticsearch")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.ElasticsearchActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.ElasticsearchActionProperty"]], result)
 
         @builtins.property
         def firehose(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.FirehoseActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.FirehoseActionProperty"]]:
             '''Write to an Amazon Kinesis Firehose stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-firehose
             '''
             result = self._values.get("firehose")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.FirehoseActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.FirehoseActionProperty"]], result)
 
         @builtins.property
         def http(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.HttpActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.HttpActionProperty"]]:
             '''Send data to an HTTPS endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-http
             '''
             result = self._values.get("http")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.HttpActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.HttpActionProperty"]], result)
 
         @builtins.property
         def iot_analytics(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.IotAnalyticsActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.IotAnalyticsActionProperty"]]:
             '''Sends message data to an AWS IoT Analytics channel.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-iotanalytics
             '''
             result = self._values.get("iot_analytics")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.IotAnalyticsActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.IotAnalyticsActionProperty"]], result)
 
         @builtins.property
         def iot_events(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.IotEventsActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.IotEventsActionProperty"]]:
             '''Sends an input to an AWS IoT Events detector.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-iotevents
             '''
             result = self._values.get("iot_events")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.IotEventsActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.IotEventsActionProperty"]], result)
 
         @builtins.property
         def iot_site_wise(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.IotSiteWiseActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.IotSiteWiseActionProperty"]]:
             '''Sends data from the MQTT message that triggered the rule to AWS IoT SiteWise asset properties.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-iotsitewise
             '''
             result = self._values.get("iot_site_wise")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.IotSiteWiseActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.IotSiteWiseActionProperty"]], result)
 
         @builtins.property
         def kafka(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.KafkaActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.KafkaActionProperty"]]:
             '''Send messages to an Amazon Managed Streaming for Apache Kafka (Amazon MSK) or self-managed Apache Kafka cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-kafka
             '''
             result = self._values.get("kafka")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.KafkaActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.KafkaActionProperty"]], result)
 
         @builtins.property
         def kinesis(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.KinesisActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.KinesisActionProperty"]]:
             '''Write data to an Amazon Kinesis stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-kinesis
             '''
             result = self._values.get("kinesis")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.KinesisActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.KinesisActionProperty"]], result)
 
         @builtins.property
         def lambda_(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.LambdaActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.LambdaActionProperty"]]:
             '''Invoke a Lambda function.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-lambda
             '''
             result = self._values.get("lambda_")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.LambdaActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.LambdaActionProperty"]], result)
 
         @builtins.property
         def location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.LocationActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.LocationActionProperty"]]:
             '''Sends device location data to `Amazon Location Service <https://docs.aws.amazon.com//location/latest/developerguide/welcome.html>`_ .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-location
             '''
             result = self._values.get("location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.LocationActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.LocationActionProperty"]], result)
 
         @builtins.property
         def open_search(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.OpenSearchActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.OpenSearchActionProperty"]]:
             '''Write data to an Amazon OpenSearch Service domain.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-opensearch
             '''
             result = self._values.get("open_search")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.OpenSearchActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.OpenSearchActionProperty"]], result)
 
         @builtins.property
         def republish(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.RepublishActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.RepublishActionProperty"]]:
             '''Publish to another MQTT topic.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-republish
             '''
             result = self._values.get("republish")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.RepublishActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.RepublishActionProperty"]], result)
 
         @builtins.property
         def s3(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.S3ActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.S3ActionProperty"]]:
             '''Write to an Amazon S3 bucket.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-s3
             '''
             result = self._values.get("s3")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.S3ActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.S3ActionProperty"]], result)
 
         @builtins.property
         def sns(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.SnsActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.SnsActionProperty"]]:
             '''Publish to an Amazon SNS topic.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-sns
             '''
             result = self._values.get("sns")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.SnsActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.SnsActionProperty"]], result)
 
         @builtins.property
         def sqs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.SqsActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.SqsActionProperty"]]:
             '''Publish to an Amazon SQS queue.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-sqs
             '''
             result = self._values.get("sqs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.SqsActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.SqsActionProperty"]], result)
 
         @builtins.property
         def step_functions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.StepFunctionsActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.StepFunctionsActionProperty"]]:
             '''Starts execution of a Step Functions state machine.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-stepfunctions
             '''
             result = self._values.get("step_functions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.StepFunctionsActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.StepFunctionsActionProperty"]], result)
 
         @builtins.property
         def timestream(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.TimestreamActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TimestreamActionProperty"]]:
             '''Writes attributes from an MQTT message.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-timestream
             '''
             result = self._values.get("timestream")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.TimestreamActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TimestreamActionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17922,8 +17968,8 @@ class CfnTopicRule(
         def __init__(
             self,
             *,
-            timestamp: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.AssetPropertyTimestampProperty", typing.Dict[builtins.str, typing.Any]]],
-            value: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.AssetPropertyVariantProperty", typing.Dict[builtins.str, typing.Any]]],
+            timestamp: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.AssetPropertyTimestampProperty", typing.Dict[builtins.str, typing.Any]]],
+            value: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.AssetPropertyVariantProperty", typing.Dict[builtins.str, typing.Any]]],
             quality: typing.Optional[builtins.str] = None,
         ) -> None:
             '''An asset property value entry containing the following information.
@@ -17974,26 +18020,26 @@ class CfnTopicRule(
         @builtins.property
         def timestamp(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTopicRule.AssetPropertyTimestampProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTopicRule.AssetPropertyTimestampProperty"]:
             '''The asset property value timestamp.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-assetpropertyvalue.html#cfn-iot-topicrule-assetpropertyvalue-timestamp
             '''
             result = self._values.get("timestamp")
             assert result is not None, "Required property 'timestamp' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTopicRule.AssetPropertyTimestampProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTopicRule.AssetPropertyTimestampProperty"], result)
 
         @builtins.property
         def value(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTopicRule.AssetPropertyVariantProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTopicRule.AssetPropertyVariantProperty"]:
             '''The value of the asset property.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-assetpropertyvalue.html#cfn-iot-topicrule-assetpropertyvalue-value
             '''
             result = self._values.get("value")
             assert result is not None, "Required property 'value' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTopicRule.AssetPropertyVariantProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTopicRule.AssetPropertyVariantProperty"], result)
 
         @builtins.property
         def quality(self) -> typing.Optional[builtins.str]:
@@ -18253,7 +18299,7 @@ class CfnTopicRule(
             *,
             log_group_name: builtins.str,
             role_arn: builtins.str,
-            batch_mode: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            batch_mode: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Describes an action that updates a CloudWatch log.
 
@@ -18313,13 +18359,13 @@ class CfnTopicRule(
         @builtins.property
         def batch_mode(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether batches of log records will be extracted and uploaded into CloudWatch.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-cloudwatchlogsaction.html#cfn-iot-topicrule-cloudwatchlogsaction-batchmode
             '''
             result = self._values.get("batch_mode")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18689,7 +18735,7 @@ class CfnTopicRule(
         def __init__(
             self,
             *,
-            put_item: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.PutItemInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            put_item: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.PutItemInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             role_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Describes an action to write to a DynamoDB table.
@@ -18728,7 +18774,7 @@ class CfnTopicRule(
         @builtins.property
         def put_item(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.PutItemInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.PutItemInputProperty"]]:
             '''Specifies the DynamoDB table to which the message data will be written. For example:.
 
             ``{ "dynamoDBv2": { "roleArn": "aws:iam:12341251:my-role" "putItem": { "tableName": "my-table" } } }``
@@ -18738,7 +18784,7 @@ class CfnTopicRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-dynamodbv2action.html#cfn-iot-topicrule-dynamodbv2action-putitem
             '''
             result = self._values.get("put_item")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.PutItemInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.PutItemInputProperty"]], result)
 
         @builtins.property
         def role_arn(self) -> typing.Optional[builtins.str]:
@@ -18902,7 +18948,7 @@ class CfnTopicRule(
             *,
             delivery_stream_name: builtins.str,
             role_arn: builtins.str,
-            batch_mode: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            batch_mode: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             separator: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Describes an action that writes data to an Amazon Kinesis Firehose stream.
@@ -18968,7 +19014,7 @@ class CfnTopicRule(
         @builtins.property
         def batch_mode(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether to deliver the Kinesis Data Firehose stream as a batch by using ```PutRecordBatch`` <https://docs.aws.amazon.com/firehose/latest/APIReference/API_PutRecordBatch.html>`_ . The default value is ``false`` .
 
             When ``batchMode`` is ``true`` and the rule's SQL statement evaluates to an Array, each Array element forms one record in the ```PutRecordBatch`` <https://docs.aws.amazon.com/firehose/latest/APIReference/API_PutRecordBatch.html>`_ request. The resulting array can't have more than 500 records.
@@ -18976,7 +19022,7 @@ class CfnTopicRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-firehoseaction.html#cfn-iot-topicrule-firehoseaction-batchmode
             '''
             result = self._values.get("batch_mode")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def separator(self) -> typing.Optional[builtins.str]:
@@ -19083,9 +19129,9 @@ class CfnTopicRule(
             self,
             *,
             url: builtins.str,
-            auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.HttpAuthorizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            auth: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.HttpAuthorizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             confirmation_url: typing.Optional[builtins.str] = None,
-            headers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.HttpActionHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            headers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.HttpActionHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Send data to an HTTPS endpoint.
 
@@ -19152,13 +19198,13 @@ class CfnTopicRule(
         @builtins.property
         def auth(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.HttpAuthorizationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.HttpAuthorizationProperty"]]:
             '''The authentication method to use when sending data to an HTTPS endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-httpaction.html#cfn-iot-topicrule-httpaction-auth
             '''
             result = self._values.get("auth")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.HttpAuthorizationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.HttpAuthorizationProperty"]], result)
 
         @builtins.property
         def confirmation_url(self) -> typing.Optional[builtins.str]:
@@ -19174,13 +19220,13 @@ class CfnTopicRule(
         @builtins.property
         def headers(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.HttpActionHeaderProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.HttpActionHeaderProperty"]]]]:
             '''The HTTP headers to send with the message data.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-httpaction.html#cfn-iot-topicrule-httpaction-headers
             '''
             result = self._values.get("headers")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.HttpActionHeaderProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.HttpActionHeaderProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19202,7 +19248,7 @@ class CfnTopicRule(
         def __init__(
             self,
             *,
-            sigv4: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.SigV4AuthorizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sigv4: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.SigV4AuthorizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The authorization method used to send messages.
 
@@ -19235,7 +19281,7 @@ class CfnTopicRule(
         @builtins.property
         def sigv4(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.SigV4AuthorizationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.SigV4AuthorizationProperty"]]:
             '''Use Sig V4 authorization.
 
             For more information, see `Signature Version 4 Signing Process <https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html>`_ .
@@ -19243,7 +19289,7 @@ class CfnTopicRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-httpauthorization.html#cfn-iot-topicrule-httpauthorization-sigv4
             '''
             result = self._values.get("sigv4")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.SigV4AuthorizationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.SigV4AuthorizationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19271,7 +19317,7 @@ class CfnTopicRule(
             *,
             channel_name: builtins.str,
             role_arn: builtins.str,
-            batch_mode: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            batch_mode: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Sends message data to an AWS IoT Analytics channel.
 
@@ -19331,7 +19377,7 @@ class CfnTopicRule(
         @builtins.property
         def batch_mode(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether to process the action as a batch. The default value is ``false`` .
 
             When ``batchMode`` is ``true`` and the rule SQL statement evaluates to an Array, each Array element is delivered as a separate message when passed by ```BatchPutMessage`` <https://docs.aws.amazon.com/iotanalytics/latest/APIReference/API_BatchPutMessage.html>`_ The resulting array can't have more than 100 messages.
@@ -19339,7 +19385,7 @@ class CfnTopicRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-iotanalyticsaction.html#cfn-iot-topicrule-iotanalyticsaction-batchmode
             '''
             result = self._values.get("batch_mode")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19368,7 +19414,7 @@ class CfnTopicRule(
             *,
             input_name: builtins.str,
             role_arn: builtins.str,
-            batch_mode: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            batch_mode: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             message_id: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Sends an input to an AWS IoT Events detector.
@@ -19436,7 +19482,7 @@ class CfnTopicRule(
         @builtins.property
         def batch_mode(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether to process the event actions as a batch. The default value is ``false`` .
 
             When ``batchMode`` is ``true`` , you can't specify a ``messageId`` .
@@ -19446,7 +19492,7 @@ class CfnTopicRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-ioteventsaction.html#cfn-iot-topicrule-ioteventsaction-batchmode
             '''
             result = self._values.get("batch_mode")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def message_id(self) -> typing.Optional[builtins.str]:
@@ -19484,7 +19530,7 @@ class CfnTopicRule(
         def __init__(
             self,
             *,
-            put_asset_property_value_entries: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.PutAssetPropertyValueEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            put_asset_property_value_entries: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.PutAssetPropertyValueEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
             role_arn: builtins.str,
         ) -> None:
             '''Describes an action to send data from an MQTT message that triggered the rule to AWS IoT SiteWise asset properties.
@@ -19542,14 +19588,14 @@ class CfnTopicRule(
         @builtins.property
         def put_asset_property_value_entries(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.PutAssetPropertyValueEntryProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.PutAssetPropertyValueEntryProperty"]]]:
             '''A list of asset property value entries.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-iotsitewiseaction.html#cfn-iot-topicrule-iotsitewiseaction-putassetpropertyvalueentries
             '''
             result = self._values.get("put_asset_property_value_entries")
             assert result is not None, "Required property 'put_asset_property_value_entries' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.PutAssetPropertyValueEntryProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.PutAssetPropertyValueEntryProperty"]]], result)
 
         @builtins.property
         def role_arn(self) -> builtins.str:
@@ -19658,10 +19704,10 @@ class CfnTopicRule(
         def __init__(
             self,
             *,
-            client_properties: typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b],
+            client_properties: typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"],
             destination_arn: builtins.str,
             topic: builtins.str,
-            headers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.KafkaActionHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            headers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.KafkaActionHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             key: typing.Optional[builtins.str] = None,
             partition: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -19722,14 +19768,14 @@ class CfnTopicRule(
         @builtins.property
         def client_properties(
             self,
-        ) -> typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]:
+        ) -> typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]:
             '''Properties of the Apache Kafka producer client.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-kafkaaction.html#cfn-iot-topicrule-kafkaaction-clientproperties
             '''
             result = self._values.get("client_properties")
             assert result is not None, "Required property 'client_properties' is missing"
-            return typing.cast(typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def destination_arn(self) -> builtins.str:
@@ -19754,13 +19800,13 @@ class CfnTopicRule(
         @builtins.property
         def headers(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.KafkaActionHeaderProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.KafkaActionHeaderProperty"]]]]:
             '''The list of Kafka headers that you specify.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-kafkaaction.html#cfn-iot-topicrule-kafkaaction-headers
             '''
             result = self._values.get("headers")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.KafkaActionHeaderProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.KafkaActionHeaderProperty"]]]], result)
 
         @builtins.property
         def key(self) -> typing.Optional[builtins.str]:
@@ -19959,7 +20005,7 @@ class CfnTopicRule(
             longitude: builtins.str,
             role_arn: builtins.str,
             tracker_name: builtins.str,
-            timestamp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.TimestampProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            timestamp: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.TimestampProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes an action to send device location updates from an MQTT message to an Amazon Location tracker resource.
 
@@ -20066,7 +20112,7 @@ class CfnTopicRule(
         @builtins.property
         def timestamp(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.TimestampProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TimestampProperty"]]:
             '''The time that the location data was sampled.
 
             The default value is the time the MQTT message was processed.
@@ -20074,7 +20120,7 @@ class CfnTopicRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-locationaction.html#cfn-iot-topicrule-locationaction-timestamp
             '''
             result = self._values.get("timestamp")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.TimestampProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TimestampProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20224,7 +20270,7 @@ class CfnTopicRule(
         def __init__(
             self,
             *,
-            property_values: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.AssetPropertyValueProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            property_values: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.AssetPropertyValueProperty", typing.Dict[builtins.str, typing.Any]]]]],
             asset_id: typing.Optional[builtins.str] = None,
             entry_id: typing.Optional[builtins.str] = None,
             property_alias: typing.Optional[builtins.str] = None,
@@ -20295,14 +20341,14 @@ class CfnTopicRule(
         @builtins.property
         def property_values(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.AssetPropertyValueProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.AssetPropertyValueProperty"]]]:
             '''A list of property values to insert that each contain timestamp, quality, and value (TQV) information.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-putassetpropertyvalueentry.html#cfn-iot-topicrule-putassetpropertyvalueentry-propertyvalues
             '''
             result = self._values.get("property_values")
             assert result is not None, "Required property 'property_values' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.AssetPropertyValueProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.AssetPropertyValueProperty"]]], result)
 
         @builtins.property
         def asset_id(self) -> typing.Optional[builtins.str]:
@@ -20432,7 +20478,7 @@ class CfnTopicRule(
             message_expiry: typing.Optional[builtins.str] = None,
             payload_format_indicator: typing.Optional[builtins.str] = None,
             response_topic: typing.Optional[builtins.str] = None,
-            user_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.UserPropertyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            user_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.UserPropertyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Specifies MQTT Version 5.0 headers information. For more information, see `MQTT <https://docs.aws.amazon.com//iot/latest/developerguide/mqtt.html>`_ in the IoT Core Developer Guide.
 
@@ -20561,13 +20607,13 @@ class CfnTopicRule(
         @builtins.property
         def user_properties(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.UserPropertyProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.UserPropertyProperty"]]]]:
             '''An array of key-value pairs that you define in the MQTT5 header.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-republishactionheaders.html#cfn-iot-topicrule-republishactionheaders-userproperties
             '''
             result = self._values.get("user_properties")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.UserPropertyProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.UserPropertyProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20596,7 +20642,7 @@ class CfnTopicRule(
             *,
             role_arn: builtins.str,
             topic: builtins.str,
-            headers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.RepublishActionHeadersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            headers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.RepublishActionHeadersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             qos: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Describes an action to republish to another topic.
@@ -20672,13 +20718,13 @@ class CfnTopicRule(
         @builtins.property
         def headers(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.RepublishActionHeadersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.RepublishActionHeadersProperty"]]:
             '''MQTT Version 5.0 headers information. For more information, see `MQTT <https://docs.aws.amazon.com//iot/latest/developerguide/mqtt.html>`_ in the IoT Core Developer Guide.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-republishaction.html#cfn-iot-topicrule-republishaction-headers
             '''
             result = self._values.get("headers")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.RepublishActionHeadersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.RepublishActionHeadersProperty"]], result)
 
         @builtins.property
         def qos(self) -> typing.Optional[jsii.Number]:
@@ -21013,7 +21059,7 @@ class CfnTopicRule(
             *,
             queue_url: builtins.str,
             role_arn: builtins.str,
-            use_base64: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            use_base64: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Describes an action to publish data to an Amazon SQS queue.
 
@@ -21073,13 +21119,13 @@ class CfnTopicRule(
         @builtins.property
         def use_base64(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to use Base64 encoding.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-sqsaction.html#cfn-iot-topicrule-sqsaction-usebase64
             '''
             result = self._values.get("use_base64")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -21275,10 +21321,10 @@ class CfnTopicRule(
             self,
             *,
             database_name: builtins.str,
-            dimensions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.TimestreamDimensionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            dimensions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.TimestreamDimensionProperty", typing.Dict[builtins.str, typing.Any]]]]],
             role_arn: builtins.str,
             table_name: builtins.str,
-            timestamp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.TimestreamTimestampProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            timestamp: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.TimestreamTimestampProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes an action that writes records into an Amazon Timestream table.
 
@@ -21342,14 +21388,14 @@ class CfnTopicRule(
         @builtins.property
         def dimensions(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.TimestreamDimensionProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TimestreamDimensionProperty"]]]:
             '''Metadata attributes of the time series that are written in each measure record.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-timestreamaction.html#cfn-iot-topicrule-timestreamaction-dimensions
             '''
             result = self._values.get("dimensions")
             assert result is not None, "Required property 'dimensions' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.TimestreamDimensionProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TimestreamDimensionProperty"]]], result)
 
         @builtins.property
         def role_arn(self) -> builtins.str:
@@ -21374,7 +21420,7 @@ class CfnTopicRule(
         @builtins.property
         def timestamp(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.TimestreamTimestampProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TimestreamTimestampProperty"]]:
             '''The value to use for the entry's timestamp.
 
             If blank, the time that the entry was processed is used.
@@ -21382,7 +21428,7 @@ class CfnTopicRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-timestreamaction.html#cfn-iot-topicrule-timestreamaction-timestamp
             '''
             result = self._values.get("timestamp")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.TimestreamTimestampProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TimestreamTimestampProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -21547,12 +21593,12 @@ class CfnTopicRule(
         def __init__(
             self,
             *,
-            actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.ActionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            actions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.ActionProperty", typing.Dict[builtins.str, typing.Any]]]]],
             sql: builtins.str,
             aws_iot_sql_version: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
-            error_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRule.ActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            rule_disabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            error_action: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.ActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            rule_disabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Describes a rule.
 
@@ -22061,14 +22107,14 @@ class CfnTopicRule(
         @builtins.property
         def actions(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.ActionProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.ActionProperty"]]]:
             '''The actions associated with the rule.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-topicrulepayload.html#cfn-iot-topicrule-topicrulepayload-actions
             '''
             result = self._values.get("actions")
             assert result is not None, "Required property 'actions' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.ActionProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.ActionProperty"]]], result)
 
         @builtins.property
         def sql(self) -> builtins.str:
@@ -22105,24 +22151,24 @@ class CfnTopicRule(
         @builtins.property
         def error_action(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.ActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.ActionProperty"]]:
             '''The action to take when an error occurs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-topicrulepayload.html#cfn-iot-topicrule-topicrulepayload-erroraction
             '''
             result = self._values.get("error_action")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRule.ActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.ActionProperty"]], result)
 
         @builtins.property
         def rule_disabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether the rule is disabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-topicrulepayload.html#cfn-iot-topicrule-topicrulepayload-ruledisabled
             '''
             result = self._values.get("rule_disabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22236,12 +22282,12 @@ class CfnTopicRuleDestination(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        http_url_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_url_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         status: typing.Optional[builtins.str] = None,
-        vpc_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopicRuleDestination.VpcDestinationPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRuleDestination.VpcDestinationPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoT::TopicRuleDestination``.
 
@@ -22267,7 +22313,7 @@ class CfnTopicRuleDestination(
     @builtins.classmethod
     def arn_for_topic_rule_destination(
         cls,
-        resource: _ITopicRuleDestinationRef_a6a50916,
+        resource: "_ITopicRuleDestinationRef_a6a50916",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -22290,7 +22336,7 @@ class CfnTopicRuleDestination(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTopicRuleDestination", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -22344,22 +22390,22 @@ class CfnTopicRuleDestination(
 
     @builtins.property
     @jsii.member(jsii_name="topicRuleDestinationRef")
-    def topic_rule_destination_ref(self) -> _TopicRuleDestinationReference_f55f3506:
+    def topic_rule_destination_ref(self) -> "_TopicRuleDestinationReference_f55f3506":
         '''A reference to a TopicRuleDestination resource.'''
-        return typing.cast(_TopicRuleDestinationReference_f55f3506, jsii.get(self, "topicRuleDestinationRef"))
+        return typing.cast("_TopicRuleDestinationReference_f55f3506", jsii.get(self, "topicRuleDestinationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="httpUrlProperties")
     def http_url_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty"]]:
         '''Properties of the HTTP URL.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty"]], jsii.get(self, "httpUrlProperties"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty"]], jsii.get(self, "httpUrlProperties"))
 
     @http_url_properties.setter
     def http_url_properties(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__937a406523227f852a191d149431092f0504986a0ff0c5395a574f701b9795af)
@@ -22383,14 +22429,14 @@ class CfnTopicRuleDestination(
     @jsii.member(jsii_name="vpcProperties")
     def vpc_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRuleDestination.VpcDestinationPropertiesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRuleDestination.VpcDestinationPropertiesProperty"]]:
         '''Properties of the virtual private cloud (VPC) connection.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRuleDestination.VpcDestinationPropertiesProperty"]], jsii.get(self, "vpcProperties"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRuleDestination.VpcDestinationPropertiesProperty"]], jsii.get(self, "vpcProperties"))
 
     @vpc_properties.setter
     def vpc_properties(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTopicRuleDestination.VpcDestinationPropertiesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRuleDestination.VpcDestinationPropertiesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0606b592b8d3600783b28d4ca8a2cf7ec66a0ae8a8b399d1df3e3f2d65f45c2c)
@@ -22571,9 +22617,9 @@ class CfnTopicRuleDestinationProps:
     def __init__(
         self,
         *,
-        http_url_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_url_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         status: typing.Optional[builtins.str] = None,
-        vpc_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopicRuleDestination.VpcDestinationPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRuleDestination.VpcDestinationPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTopicRuleDestination``.
 
@@ -22619,13 +22665,13 @@ class CfnTopicRuleDestinationProps:
     @builtins.property
     def http_url_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty"]]:
         '''Properties of the HTTP URL.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-topicruledestination.html#cfn-iot-topicruledestination-httpurlproperties
         '''
         result = self._values.get("http_url_properties")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty"]], result)
 
     @builtins.property
     def status(self) -> typing.Optional[builtins.str]:
@@ -22645,13 +22691,13 @@ class CfnTopicRuleDestinationProps:
     @builtins.property
     def vpc_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTopicRuleDestination.VpcDestinationPropertiesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRuleDestination.VpcDestinationPropertiesProperty"]]:
         '''Properties of the virtual private cloud (VPC) connection.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-topicruledestination.html#cfn-iot-topicruledestination-vpcproperties
         '''
         result = self._values.get("vpc_properties")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTopicRuleDestination.VpcDestinationPropertiesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRuleDestination.VpcDestinationPropertiesProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22678,9 +22724,9 @@ class CfnTopicRuleProps:
     def __init__(
         self,
         *,
-        topic_rule_payload: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopicRule.TopicRulePayloadProperty, typing.Dict[builtins.str, typing.Any]]],
+        topic_rule_payload: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.TopicRulePayloadProperty", typing.Dict[builtins.str, typing.Any]]],
         rule_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTopicRule``.
 
@@ -22693,6 +22739,7 @@ class CfnTopicRuleProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iot as iot
@@ -23187,14 +23234,14 @@ class CfnTopicRuleProps:
     @builtins.property
     def topic_rule_payload(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnTopicRule.TopicRulePayloadProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TopicRulePayloadProperty"]:
         '''The rule payload.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-topicrule.html#cfn-iot-topicrule-topicrulepayload
         '''
         result = self._values.get("topic_rule_payload")
         assert result is not None, "Required property 'topic_rule_payload' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnTopicRule.TopicRulePayloadProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTopicRule.TopicRulePayloadProperty"], result)
 
     @builtins.property
     def rule_name(self) -> typing.Optional[builtins.str]:
@@ -23206,7 +23253,7 @@ class CfnTopicRuleProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata which can be used to manage the topic rule.
 
         .. epigraph::
@@ -23220,7 +23267,7 @@ class CfnTopicRuleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-topicrule.html#cfn-iot-topicrule-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

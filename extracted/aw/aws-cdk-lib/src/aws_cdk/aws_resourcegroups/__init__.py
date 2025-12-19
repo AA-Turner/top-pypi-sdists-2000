@@ -83,7 +83,7 @@ class CfnGroup(
 ):
     '''Creates a resource group with the specified name and description.
 
-    You can optionally include either a resource query or a service configuration. For more information about constructing a resource query, see `Build queries and groups in AWS Resource Groups <https://docs.aws.amazon.com//ARG/latest/userguide/getting_started-query.html>`_ in the *AWS Resource Groups User Guide* . For more information about service-linked groups and service configurations, see `Service configurations for Resource Groups <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html>`_ .
+    You can optionally include either a resource query or a service configuration. For more information about constructing a resource query, see `Build queries and groups in Resource Groups <https://docs.aws.amazon.com//ARG/latest/userguide/getting_started-query.html>`_ in the *Resource Groups User Guide* . For more information about service-linked groups and service configurations, see `Service configurations for Resource Groups <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html>`_ .
 
     *Minimum permissions*
 
@@ -97,6 +97,7 @@ class CfnGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_resourcegroups as resourcegroups
@@ -134,24 +135,24 @@ class CfnGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGroup.ConfigurationItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGroup.ConfigurationItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        resource_query: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGroup.ResourceQueryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        resource_query: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGroup.ResourceQueryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resources: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ResourceGroups::Group``.
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: The name of a resource group. The name must be unique within the AWS Region in which you create the resource. To create multiple resource groups based on the same CloudFormation stack, you must generate unique names for each.
-        :param configuration: The service configuration currently associated with the resource group and in effect for the members of the resource group. A ``Configuration`` consists of one or more ``ConfigurationItem`` entries. For information about service configurations for resource groups and how to construct them, see `Service configurations for resource groups <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html>`_ in the *AWS Resource Groups User Guide* . .. epigraph:: You can include either a ``Configuration`` or a ``ResourceQuery`` , but not both.
+        :param configuration: The service configuration currently associated with the resource group and in effect for the members of the resource group. A ``Configuration`` consists of one or more ``ConfigurationItem`` entries. For information about service configurations for resource groups and how to construct them, see `Service configurations for resource groups <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html>`_ in the *Resource Groups User Guide* . .. epigraph:: You can include either a ``Configuration`` or a ``ResourceQuery`` , but not both.
         :param description: The description of the resource group.
-        :param resource_query: The resource query structure that is used to dynamically determine which AWS resources are members of the associated resource group. For more information about queries and how to construct them, see `Build queries and groups in AWS Resource Groups <https://docs.aws.amazon.com//ARG/latest/userguide/gettingstarted-query.html>`_ in the *AWS Resource Groups User Guide* .. epigraph:: - You can include either a ``ResourceQuery`` or a ``Configuration`` , but not both. - You can specify the group's membership either by using a ``ResourceQuery`` or by using a list of ``Resources`` , but not both.
+        :param resource_query: The resource query structure that is used to dynamically determine which AWS resources are members of the associated resource group. For more information about queries and how to construct them, see `Build queries and groups in Resource Groups <https://docs.aws.amazon.com//ARG/latest/userguide/gettingstarted-query.html>`_ in the *Resource Groups User Guide* .. epigraph:: - You can include either a ``ResourceQuery`` or a ``Configuration`` , but not both. - You can specify the group's membership either by using a ``ResourceQuery`` or by using a list of ``Resources`` , but not both.
         :param resources: A list of the Amazon Resource Names (ARNs) of AWS resources that you want to add to the specified group. .. epigraph:: - You can specify the group membership either by using a list of ``Resources`` or by using a ``ResourceQuery`` , but not both. - You can include a ``Resources`` property only if you also specify a ``Configuration`` property.
         :param tags: The tag key and value pairs that are attached to the resource group.
         '''
@@ -172,7 +173,7 @@ class CfnGroup(
 
     @jsii.member(jsii_name="arnForGroup")
     @builtins.classmethod
-    def arn_for_group(cls, resource: _IGroupRef_0073e6c0) -> builtins.str:
+    def arn_for_group(cls, resource: "_IGroupRef_0073e6c0") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -185,10 +186,10 @@ class CfnGroup(
     @builtins.classmethod
     def from_group_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IGroupRef_0073e6c0:
+    ) -> "_IGroupRef_0073e6c0":
         '''Creates a new IGroupRef from an ARN.
 
         :param scope: -
@@ -200,16 +201,16 @@ class CfnGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IGroupRef_0073e6c0, jsii.sinvoke(cls, "fromGroupArn", [scope, id, arn]))
+        return typing.cast("_IGroupRef_0073e6c0", jsii.sinvoke(cls, "fromGroupArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromGroupName")
     @builtins.classmethod
     def from_group_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         group_name: builtins.str,
-    ) -> _IGroupRef_0073e6c0:
+    ) -> "_IGroupRef_0073e6c0":
         '''Creates a new IGroupRef from a groupName.
 
         :param scope: -
@@ -221,7 +222,7 @@ class CfnGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument group_name", value=group_name, expected_type=type_hints["group_name"])
-        return typing.cast(_IGroupRef_0073e6c0, jsii.sinvoke(cls, "fromGroupName", [scope, id, group_name]))
+        return typing.cast("_IGroupRef_0073e6c0", jsii.sinvoke(cls, "fromGroupName", [scope, id, group_name]))
 
     @jsii.member(jsii_name="isCfnGroup")
     @builtins.classmethod
@@ -236,7 +237,7 @@ class CfnGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -281,15 +282,15 @@ class CfnGroup(
 
     @builtins.property
     @jsii.member(jsii_name="groupRef")
-    def group_ref(self) -> _GroupReference_e7196e0c:
+    def group_ref(self) -> "_GroupReference_e7196e0c":
         '''A reference to a Group resource.'''
-        return typing.cast(_GroupReference_e7196e0c, jsii.get(self, "groupRef"))
+        return typing.cast("_GroupReference_e7196e0c", jsii.get(self, "groupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -308,14 +309,14 @@ class CfnGroup(
     @jsii.member(jsii_name="configuration")
     def configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroup.ConfigurationItemProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGroup.ConfigurationItemProperty"]]]]:
         '''The service configuration currently associated with the resource group and in effect for the members of the resource group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroup.ConfigurationItemProperty"]]]], jsii.get(self, "configuration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGroup.ConfigurationItemProperty"]]]], jsii.get(self, "configuration"))
 
     @configuration.setter
     def configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroup.ConfigurationItemProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGroup.ConfigurationItemProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__56889ede3bf0843233df07492d5e36e93f6f5ad8b3b6894bea09d2c2aa369841)
@@ -339,14 +340,14 @@ class CfnGroup(
     @jsii.member(jsii_name="resourceQuery")
     def resource_query(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGroup.ResourceQueryProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGroup.ResourceQueryProperty"]]:
         '''The resource query structure that is used to dynamically determine which AWS resources are members of the associated resource group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGroup.ResourceQueryProperty"]], jsii.get(self, "resourceQuery"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGroup.ResourceQueryProperty"]], jsii.get(self, "resourceQuery"))
 
     @resource_query.setter
     def resource_query(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGroup.ResourceQueryProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGroup.ResourceQueryProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9e2574547a43b663c181b5199ba036c82cd5588e02f3893cdcd62d4b02f9725c)
@@ -368,12 +369,12 @@ class CfnGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tag key and value pairs that are attached to the resource group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8113e3dbacf905cc48de4875007be130bff61fc11c5e5ae757d147588d54c863)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -388,15 +389,15 @@ class CfnGroup(
         def __init__(
             self,
             *,
-            parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGroup.ConfigurationParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGroup.ConfigurationParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''One of the items in the service configuration assigned to a resource group.
 
-            A service configuration can consist of one or more items. For details service configurations and how to construct them, see `Service configurations for resource groups <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html>`_ in the *AWS Resource Groups User Guide* .
+            A service configuration can consist of one or more items. For details service configurations and how to construct them, see `Service configurations for resource groups <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html>`_ in the *Resource Groups User Guide* .
 
-            :param parameters: A collection of parameters for this configuration item. For the list of parameters that you can use with each configuration item ``Type`` , see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ in the *AWS Resource Groups User Guide* .
-            :param type: Specifies the type of configuration item. Each item must have a unique value for type. For the list of the types that you can specify for a configuration item, see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ in the *AWS Resource Groups User Guide* .
+            :param parameters: A collection of parameters for this configuration item. For the list of parameters that you can use with each configuration item ``Type`` , see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ in the *Resource Groups User Guide* .
+            :param type: Specifies the type of configuration item. Each item must have a unique value for type. For the list of the types that you can specify for a configuration item, see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ in the *Resource Groups User Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resourcegroups-group-configurationitem.html
             :exampleMetadata: fixture=_generated
@@ -428,21 +429,21 @@ class CfnGroup(
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroup.ConfigurationParameterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGroup.ConfigurationParameterProperty"]]]]:
             '''A collection of parameters for this configuration item.
 
-            For the list of parameters that you can use with each configuration item ``Type`` , see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ in the *AWS Resource Groups User Guide* .
+            For the list of parameters that you can use with each configuration item ``Type`` , see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ in the *Resource Groups User Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resourcegroups-group-configurationitem.html#cfn-resourcegroups-group-configurationitem-parameters
             '''
             result = self._values.get("parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroup.ConfigurationParameterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGroup.ConfigurationParameterProperty"]]]], result)
 
         @builtins.property
         def type(self) -> typing.Optional[builtins.str]:
             '''Specifies the type of configuration item.
 
-            Each item must have a unique value for type. For the list of the types that you can specify for a configuration item, see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ in the *AWS Resource Groups User Guide* .
+            Each item must have a unique value for type. For the list of the types that you can specify for a configuration item, see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ in the *Resource Groups User Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resourcegroups-group-configurationitem.html#cfn-resourcegroups-group-configurationitem-type
             '''
@@ -474,9 +475,9 @@ class CfnGroup(
         ) -> None:
             '''One parameter for a group configuration item.
 
-            For details about service configurations and how to construct them, see `Service configurations for resource groups <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html>`_ in the *AWS Resource Groups User Guide* .
+            For details about service configurations and how to construct them, see `Service configurations for resource groups <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html>`_ in the *Resource Groups User Guide* .
 
-            :param name: The name of the group configuration parameter. For the list of parameters that you can use with each configuration item type, see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ in the *AWS Resource Groups User Guide* .
+            :param name: The name of the group configuration parameter. For the list of parameters that you can use with each configuration item type, see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ in the *Resource Groups User Guide* .
             :param values: The value or values to be used for the specified parameter. For the list of values you can use with each parameter, see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resourcegroups-group-configurationparameter.html
@@ -507,7 +508,7 @@ class CfnGroup(
         def name(self) -> typing.Optional[builtins.str]:
             '''The name of the group configuration parameter.
 
-            For the list of parameters that you can use with each configuration item type, see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ in the *AWS Resource Groups User Guide* .
+            For the list of parameters that you can use with each configuration item type, see `Supported resource types and parameters <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html#about-slg-types>`_ in the *Resource Groups User Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resourcegroups-group-configurationparameter.html#cfn-resourcegroups-group-configurationparameter-name
             '''
@@ -551,7 +552,7 @@ class CfnGroup(
             *,
             resource_type_filters: typing.Optional[typing.Sequence[builtins.str]] = None,
             stack_identifier: typing.Optional[builtins.str] = None,
-            tag_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGroup.TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            tag_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGroup.TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Specifies details within a ``ResourceQuery`` structure that determines the membership of the resource group.
 
@@ -619,7 +620,7 @@ class CfnGroup(
         @builtins.property
         def tag_filters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroup.TagFilterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGroup.TagFilterProperty"]]]]:
             '''A list of key-value pair objects that limit which resources can be members of the resource group.
 
             This property is required when the ``ResourceQuery.Type`` property is ``TAG_FILTERS_1_0`` .
@@ -629,7 +630,7 @@ class CfnGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resourcegroups-group-query.html#cfn-resourcegroups-group-query-tagfilters
             '''
             result = self._values.get("tag_filters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGroup.TagFilterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGroup.TagFilterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -651,12 +652,12 @@ class CfnGroup(
         def __init__(
             self,
             *,
-            query: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGroup.QueryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            query: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGroup.QueryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The query used to dynamically define the members of a group.
 
-            For more information about how to construct a query, see `Build queries and groups in AWS Resource Groups <https://docs.aws.amazon.com//ARG/latest/userguide/gettingstarted-query.html>`_ .
+            For more information about how to construct a query, see `Build queries and groups in Resource Groups <https://docs.aws.amazon.com//ARG/latest/userguide/gettingstarted-query.html>`_ .
 
             :param query: The query that defines the membership of the group. This is a structure with properties that depend on the ``Type`` . The ``Query`` structure must be included in the following scenarios: - When the ``Type`` is ``TAG_FILTERS_1_0`` , you must specify a ``Query`` structure that contains a ``TagFilters`` list of tags. Resources with tags that match those in the ``TagFilter`` list become members of the resource group. - When the ``Type`` is ``CLOUDFORMATION_STACK_1_0`` then this field is required only when you must specify a CloudFormation stack other than the one you are defining. To do this, the ``Query`` structure must contain the ``StackIdentifier`` property. If you don't specify either a ``Query`` structure or a ``StackIdentifier`` within that ``Query`` , then it defaults to the CloudFormation stack that you're currently constructing.
             :param type: Specifies the type of resource query that determines this group's membership. There are two valid query types:. - ``TAG_FILTERS_1_0`` indicates that the group is a tag-based group. To complete the group membership, you must include the ``TagFilters`` property to specify the tag filters to use in the query. - ``CLOUDFORMATION_STACK_1_0`` , the default, indicates that the group is a CloudFormation stack-based group. Group membership is based on the CloudFormation stack. You must specify the ``StackIdentifier`` property in the query to define which stack to associate the group with, or leave it empty to default to the stack where the group is defined.
@@ -695,7 +696,7 @@ class CfnGroup(
         @builtins.property
         def query(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGroup.QueryProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGroup.QueryProperty"]]:
             '''The query that defines the membership of the group.
 
             This is a structure with properties that depend on the ``Type`` .
@@ -708,7 +709,7 @@ class CfnGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resourcegroups-group-resourcequery.html#cfn-resourcegroups-group-resourcequery-query
             '''
             result = self._values.get("query")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGroup.QueryProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGroup.QueryProperty"]], result)
 
         @builtins.property
         def type(self) -> typing.Optional[builtins.str]:
@@ -836,18 +837,18 @@ class CfnGroupProps:
         self,
         *,
         name: builtins.str,
-        configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroup.ConfigurationItemProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGroup.ConfigurationItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        resource_query: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroup.ResourceQueryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        resource_query: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGroup.ResourceQueryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resources: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnGroup``.
 
         :param name: The name of a resource group. The name must be unique within the AWS Region in which you create the resource. To create multiple resource groups based on the same CloudFormation stack, you must generate unique names for each.
-        :param configuration: The service configuration currently associated with the resource group and in effect for the members of the resource group. A ``Configuration`` consists of one or more ``ConfigurationItem`` entries. For information about service configurations for resource groups and how to construct them, see `Service configurations for resource groups <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html>`_ in the *AWS Resource Groups User Guide* . .. epigraph:: You can include either a ``Configuration`` or a ``ResourceQuery`` , but not both.
+        :param configuration: The service configuration currently associated with the resource group and in effect for the members of the resource group. A ``Configuration`` consists of one or more ``ConfigurationItem`` entries. For information about service configurations for resource groups and how to construct them, see `Service configurations for resource groups <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html>`_ in the *Resource Groups User Guide* . .. epigraph:: You can include either a ``Configuration`` or a ``ResourceQuery`` , but not both.
         :param description: The description of the resource group.
-        :param resource_query: The resource query structure that is used to dynamically determine which AWS resources are members of the associated resource group. For more information about queries and how to construct them, see `Build queries and groups in AWS Resource Groups <https://docs.aws.amazon.com//ARG/latest/userguide/gettingstarted-query.html>`_ in the *AWS Resource Groups User Guide* .. epigraph:: - You can include either a ``ResourceQuery`` or a ``Configuration`` , but not both. - You can specify the group's membership either by using a ``ResourceQuery`` or by using a list of ``Resources`` , but not both.
+        :param resource_query: The resource query structure that is used to dynamically determine which AWS resources are members of the associated resource group. For more information about queries and how to construct them, see `Build queries and groups in Resource Groups <https://docs.aws.amazon.com//ARG/latest/userguide/gettingstarted-query.html>`_ in the *Resource Groups User Guide* .. epigraph:: - You can include either a ``ResourceQuery`` or a ``Configuration`` , but not both. - You can specify the group's membership either by using a ``ResourceQuery`` or by using a list of ``Resources`` , but not both.
         :param resources: A list of the Amazon Resource Names (ARNs) of AWS resources that you want to add to the specified group. .. epigraph:: - You can specify the group membership either by using a list of ``Resources`` or by using a ``ResourceQuery`` , but not both. - You can include a ``Resources`` property only if you also specify a ``Configuration`` property.
         :param tags: The tag key and value pairs that are attached to the resource group.
 
@@ -856,6 +857,7 @@ class CfnGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_resourcegroups as resourcegroups
@@ -927,10 +929,10 @@ class CfnGroupProps:
     @builtins.property
     def configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGroup.ConfigurationItemProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGroup.ConfigurationItemProperty"]]]]:
         '''The service configuration currently associated with the resource group and in effect for the members of the resource group.
 
-        A ``Configuration`` consists of one or more ``ConfigurationItem`` entries. For information about service configurations for resource groups and how to construct them, see `Service configurations for resource groups <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html>`_ in the *AWS Resource Groups User Guide* .
+        A ``Configuration`` consists of one or more ``ConfigurationItem`` entries. For information about service configurations for resource groups and how to construct them, see `Service configurations for resource groups <https://docs.aws.amazon.com//ARG/latest/APIReference/about-slg.html>`_ in the *Resource Groups User Guide* .
         .. epigraph::
 
            You can include either a ``Configuration`` or a ``ResourceQuery`` , but not both.
@@ -938,7 +940,7 @@ class CfnGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resourcegroups-group.html#cfn-resourcegroups-group-configuration
         '''
         result = self._values.get("configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGroup.ConfigurationItemProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGroup.ConfigurationItemProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -952,10 +954,10 @@ class CfnGroupProps:
     @builtins.property
     def resource_query(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGroup.ResourceQueryProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGroup.ResourceQueryProperty"]]:
         '''The resource query structure that is used to dynamically determine which AWS resources are members of the associated resource group.
 
-        For more information about queries and how to construct them, see `Build queries and groups in AWS Resource Groups <https://docs.aws.amazon.com//ARG/latest/userguide/gettingstarted-query.html>`_ in the *AWS Resource Groups User Guide*
+        For more information about queries and how to construct them, see `Build queries and groups in Resource Groups <https://docs.aws.amazon.com//ARG/latest/userguide/gettingstarted-query.html>`_ in the *Resource Groups User Guide*
         .. epigraph::
 
            - You can include either a ``ResourceQuery`` or a ``Configuration`` , but not both.
@@ -964,7 +966,7 @@ class CfnGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resourcegroups-group.html#cfn-resourcegroups-group-resourcequery
         '''
         result = self._values.get("resource_query")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGroup.ResourceQueryProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGroup.ResourceQueryProperty"]], result)
 
     @builtins.property
     def resources(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -981,13 +983,13 @@ class CfnGroupProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tag key and value pairs that are attached to the resource group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resourcegroups-group.html#cfn-resourcegroups-group-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1037,7 +1039,7 @@ class CfnTagSyncTask(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         group: builtins.str,
@@ -1077,7 +1079,7 @@ class CfnTagSyncTask(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTagSyncTask", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1154,9 +1156,9 @@ class CfnTagSyncTask(
 
     @builtins.property
     @jsii.member(jsii_name="tagSyncTaskRef")
-    def tag_sync_task_ref(self) -> _TagSyncTaskReference_9f9e09a5:
+    def tag_sync_task_ref(self) -> "_TagSyncTaskReference_9f9e09a5":
         '''A reference to a TagSyncTask resource.'''
-        return typing.cast(_TagSyncTaskReference_9f9e09a5, jsii.get(self, "tagSyncTaskRef"))
+        return typing.cast("_TagSyncTaskReference_9f9e09a5", jsii.get(self, "tagSyncTaskRef"))
 
     @builtins.property
     @jsii.member(jsii_name="group")

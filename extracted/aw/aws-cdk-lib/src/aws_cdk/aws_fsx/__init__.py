@@ -364,6 +364,7 @@ class CfnDataRepositoryAssociation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_fsx as fsx
@@ -393,16 +394,16 @@ class CfnDataRepositoryAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         data_repository_path: builtins.str,
         file_system_id: builtins.str,
         file_system_path: builtins.str,
-        batch_import_meta_data_on_create: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        batch_import_meta_data_on_create: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         imported_file_chunk_size: typing.Optional[jsii.Number] = None,
-        s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataRepositoryAssociation.S3Property", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataRepositoryAssociation.S3Property", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::FSx::DataRepositoryAssociation``.
 
@@ -445,7 +446,7 @@ class CfnDataRepositoryAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataRepositoryAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -505,15 +506,15 @@ class CfnDataRepositoryAssociation(
     @jsii.member(jsii_name="dataRepositoryAssociationRef")
     def data_repository_association_ref(
         self,
-    ) -> _DataRepositoryAssociationReference_ec908964:
+    ) -> "_DataRepositoryAssociationReference_ec908964":
         '''A reference to a DataRepositoryAssociation resource.'''
-        return typing.cast(_DataRepositoryAssociationReference_ec908964, jsii.get(self, "dataRepositoryAssociationRef"))
+        return typing.cast("_DataRepositoryAssociationReference_ec908964", jsii.get(self, "dataRepositoryAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="dataRepositoryPath")
@@ -558,14 +559,14 @@ class CfnDataRepositoryAssociation(
     @jsii.member(jsii_name="batchImportMetaDataOnCreate")
     def batch_import_meta_data_on_create(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean flag indicating whether an import data repository task to import metadata should run after the data repository association is created.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "batchImportMetaDataOnCreate"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "batchImportMetaDataOnCreate"))
 
     @batch_import_meta_data_on_create.setter
     def batch_import_meta_data_on_create(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__66eebe886c3f0810ceaf823210df9d48c8a819acffcccea06fb28a46a9476c9c)
@@ -589,14 +590,14 @@ class CfnDataRepositoryAssociation(
     @jsii.member(jsii_name="s3")
     def s3(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataRepositoryAssociation.S3Property"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataRepositoryAssociation.S3Property"]]:
         '''The configuration for an Amazon S3 data repository linked to an Amazon FSx Lustre file system with a data repository association.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataRepositoryAssociation.S3Property"]], jsii.get(self, "s3"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataRepositoryAssociation.S3Property"]], jsii.get(self, "s3"))
 
     @s3.setter
     def s3(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataRepositoryAssociation.S3Property"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataRepositoryAssociation.S3Property"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b26b64eafc3f22ff73c4e762a5a0160c62bfbb5da4b94dcfbfc5ee130fd3dbbe)
@@ -605,12 +606,12 @@ class CfnDataRepositoryAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of ``Tag`` values, with a maximum of 50 elements.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5b17b8dd1997c9e3ce27b7046b8e926e741f7ff40cb4c08761a6963b701aa37b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -752,8 +753,8 @@ class CfnDataRepositoryAssociation(
         def __init__(
             self,
             *,
-            auto_export_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataRepositoryAssociation.AutoExportPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            auto_import_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataRepositoryAssociation.AutoImportPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            auto_export_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataRepositoryAssociation.AutoExportPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            auto_import_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataRepositoryAssociation.AutoImportPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration for an Amazon S3 data repository linked to an Amazon FSx Lustre file system with a data repository association.
 
@@ -793,7 +794,7 @@ class CfnDataRepositoryAssociation(
         @builtins.property
         def auto_export_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataRepositoryAssociation.AutoExportPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataRepositoryAssociation.AutoExportPolicyProperty"]]:
             '''Describes a data repository association's automatic export policy.
 
             The ``AutoExportPolicy`` defines the types of updated objects on the file system that will be automatically exported to the data repository. As you create, modify, or delete files, Amazon FSx for Lustre automatically exports the defined changes asynchronously once your application finishes modifying the file.
@@ -803,12 +804,12 @@ class CfnDataRepositoryAssociation(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-datarepositoryassociation-s3.html#cfn-fsx-datarepositoryassociation-s3-autoexportpolicy
             '''
             result = self._values.get("auto_export_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataRepositoryAssociation.AutoExportPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataRepositoryAssociation.AutoExportPolicyProperty"]], result)
 
         @builtins.property
         def auto_import_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataRepositoryAssociation.AutoImportPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataRepositoryAssociation.AutoImportPolicyProperty"]]:
             '''Describes the data repository association's automatic import policy.
 
             The AutoImportPolicy defines how Amazon FSx keeps your file metadata and directory listings up to date by importing changes to your Amazon FSx for Lustre file system as you modify objects in a linked S3 bucket.
@@ -818,7 +819,7 @@ class CfnDataRepositoryAssociation(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-datarepositoryassociation-s3.html#cfn-fsx-datarepositoryassociation-s3-autoimportpolicy
             '''
             result = self._values.get("auto_import_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataRepositoryAssociation.AutoImportPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataRepositoryAssociation.AutoImportPolicyProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -852,10 +853,10 @@ class CfnDataRepositoryAssociationProps:
         data_repository_path: builtins.str,
         file_system_id: builtins.str,
         file_system_path: builtins.str,
-        batch_import_meta_data_on_create: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        batch_import_meta_data_on_create: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         imported_file_chunk_size: typing.Optional[jsii.Number] = None,
-        s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataRepositoryAssociation.S3Property, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataRepositoryAssociation.S3Property", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataRepositoryAssociation``.
 
@@ -872,6 +873,7 @@ class CfnDataRepositoryAssociationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_fsx as fsx
@@ -963,7 +965,7 @@ class CfnDataRepositoryAssociationProps:
     @builtins.property
     def batch_import_meta_data_on_create(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean flag indicating whether an import data repository task to import metadata should run after the data repository association is created.
 
         The task runs if this flag is set to ``true`` .
@@ -971,7 +973,7 @@ class CfnDataRepositoryAssociationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-datarepositoryassociation.html#cfn-fsx-datarepositoryassociation-batchimportmetadataoncreate
         '''
         result = self._values.get("batch_import_meta_data_on_create")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def imported_file_chunk_size(self) -> typing.Optional[jsii.Number]:
@@ -989,7 +991,7 @@ class CfnDataRepositoryAssociationProps:
     @builtins.property
     def s3(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataRepositoryAssociation.S3Property]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataRepositoryAssociation.S3Property"]]:
         '''The configuration for an Amazon S3 data repository linked to an Amazon FSx Lustre file system with a data repository association.
 
         The configuration defines which file events (new, changed, or deleted files or directories) are automatically imported from the linked data repository to the file system or automatically exported from the file system to the data repository.
@@ -997,16 +999,16 @@ class CfnDataRepositoryAssociationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-datarepositoryassociation.html#cfn-fsx-datarepositoryassociation-s3
         '''
         result = self._values.get("s3")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataRepositoryAssociation.S3Property]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataRepositoryAssociation.S3Property"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of ``Tag`` values, with a maximum of 50 elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-datarepositoryassociation.html#cfn-fsx-datarepositoryassociation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1041,6 +1043,7 @@ class CfnFileSystem(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_fsx as fsx
@@ -1184,7 +1187,7 @@ class CfnFileSystem(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         file_system_type: builtins.str,
@@ -1192,15 +1195,15 @@ class CfnFileSystem(
         backup_id: typing.Optional[builtins.str] = None,
         file_system_type_version: typing.Optional[builtins.str] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        lustre_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.LustreConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lustre_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.LustreConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         network_type: typing.Optional[builtins.str] = None,
-        ontap_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.OntapConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_zfs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.OpenZFSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ontap_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.OntapConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_zfs_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.OpenZFSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         storage_capacity: typing.Optional[jsii.Number] = None,
         storage_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        windows_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.WindowsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        windows_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.WindowsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::FSx::FileSystem``.
 
@@ -1257,7 +1260,7 @@ class CfnFileSystem(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFileSystem", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1347,15 +1350,15 @@ class CfnFileSystem(
 
     @builtins.property
     @jsii.member(jsii_name="fileSystemRef")
-    def file_system_ref(self) -> _FileSystemReference_1300395b:
+    def file_system_ref(self) -> "_FileSystemReference_1300395b":
         '''A reference to a FileSystem resource.'''
-        return typing.cast(_FileSystemReference_1300395b, jsii.get(self, "fileSystemRef"))
+        return typing.cast("_FileSystemReference_1300395b", jsii.get(self, "fileSystemRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="fileSystemType")
@@ -1426,14 +1429,14 @@ class CfnFileSystem(
     @jsii.member(jsii_name="lustreConfiguration")
     def lustre_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.LustreConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.LustreConfigurationProperty"]]:
         '''The Lustre configuration for the file system being created.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.LustreConfigurationProperty"]], jsii.get(self, "lustreConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.LustreConfigurationProperty"]], jsii.get(self, "lustreConfiguration"))
 
     @lustre_configuration.setter
     def lustre_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.LustreConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.LustreConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8646d19693a6f9abdd169bfa6ea6d4e784eba3f5391bff175f38918b462ca24a)
@@ -1457,14 +1460,14 @@ class CfnFileSystem(
     @jsii.member(jsii_name="ontapConfiguration")
     def ontap_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.OntapConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.OntapConfigurationProperty"]]:
         '''The ONTAP configuration properties of the FSx for ONTAP file system that you are creating.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.OntapConfigurationProperty"]], jsii.get(self, "ontapConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.OntapConfigurationProperty"]], jsii.get(self, "ontapConfiguration"))
 
     @ontap_configuration.setter
     def ontap_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.OntapConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.OntapConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bc9b2f53e3a613c4a5e71936700bde6bac2b8c2691534dac7d5a5ce18f7e0687)
@@ -1475,14 +1478,14 @@ class CfnFileSystem(
     @jsii.member(jsii_name="openZfsConfiguration")
     def open_zfs_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.OpenZFSConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.OpenZFSConfigurationProperty"]]:
         '''The Amazon FSx for OpenZFS configuration properties for the file system that you are creating.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.OpenZFSConfigurationProperty"]], jsii.get(self, "openZfsConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.OpenZFSConfigurationProperty"]], jsii.get(self, "openZfsConfiguration"))
 
     @open_zfs_configuration.setter
     def open_zfs_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.OpenZFSConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.OpenZFSConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__80c2475105ebf7a37b52d7be075d63b18127d19bbaf5585ca32a46cdec15b7a3)
@@ -1533,12 +1536,12 @@ class CfnFileSystem(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to associate with the file system.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2e720c29458830d75de1bdfe562cd79a9e10dc997dc803507ee904c454c56ac0)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1548,14 +1551,14 @@ class CfnFileSystem(
     @jsii.member(jsii_name="windowsConfiguration")
     def windows_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.WindowsConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.WindowsConfigurationProperty"]]:
         '''The configuration object for the Microsoft Windows file system you are creating.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.WindowsConfigurationProperty"]], jsii.get(self, "windowsConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.WindowsConfigurationProperty"]], jsii.get(self, "windowsConfiguration"))
 
     @windows_configuration.setter
     def windows_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.WindowsConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.WindowsConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8c37e88d82ec2034f4c5130e12938ecf5cd2b51c51c06bfc9fdb84426b3e5117)
@@ -1927,17 +1930,17 @@ class CfnFileSystem(
             *,
             auto_import_policy: typing.Optional[builtins.str] = None,
             automatic_backup_retention_days: typing.Optional[jsii.Number] = None,
-            copy_tags_to_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            copy_tags_to_backups: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             daily_automatic_backup_start_time: typing.Optional[builtins.str] = None,
             data_compression_type: typing.Optional[builtins.str] = None,
-            data_read_cache_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.DataReadCacheConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            data_read_cache_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.DataReadCacheConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             deployment_type: typing.Optional[builtins.str] = None,
             drive_cache_type: typing.Optional[builtins.str] = None,
-            efa_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            efa_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             export_path: typing.Optional[builtins.str] = None,
             imported_file_chunk_size: typing.Optional[jsii.Number] = None,
             import_path: typing.Optional[builtins.str] = None,
-            metadata_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.MetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            metadata_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.MetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             per_unit_storage_throughput: typing.Optional[jsii.Number] = None,
             throughput_capacity: typing.Optional[jsii.Number] = None,
             weekly_maintenance_start_time: typing.Optional[builtins.str] = None,
@@ -2082,7 +2085,7 @@ class CfnFileSystem(
         @builtins.property
         def copy_tags_to_backups(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''(Optional) Not available for use with file systems that are linked to a data repository.
 
             A boolean flag indicating whether tags for the file system should be copied to backups. The default value is false. If ``CopyTagsToBackups`` is set to true, all file system tags are copied to all automatic and user-initiated backups when the user doesn't specify any backup-specific tags. If ``CopyTagsToBackups`` is set to true and you specify one or more backup tags, only the specified tags are copied to backups. If you specify one or more tags when creating a user-initiated backup, no tags are copied from the file system, regardless of this value.
@@ -2094,7 +2097,7 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-lustreconfiguration.html#cfn-fsx-filesystem-lustreconfiguration-copytagstobackups
             '''
             result = self._values.get("copy_tags_to_backups")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def daily_automatic_backup_start_time(self) -> typing.Optional[builtins.str]:
@@ -2124,7 +2127,7 @@ class CfnFileSystem(
         @builtins.property
         def data_read_cache_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.DataReadCacheConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.DataReadCacheConfigurationProperty"]]:
             '''Specifies the optional provisioned SSD read cache on FSx for Lustre file systems that use the Intelligent-Tiering storage class.
 
             Required when ``StorageType`` is set to ``INTELLIGENT_TIERING`` .
@@ -2132,7 +2135,7 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-lustreconfiguration.html#cfn-fsx-filesystem-lustreconfiguration-datareadcacheconfiguration
             '''
             result = self._values.get("data_read_cache_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.DataReadCacheConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.DataReadCacheConfigurationProperty"]], result)
 
         @builtins.property
         def deployment_type(self) -> typing.Optional[builtins.str]:
@@ -2172,7 +2175,7 @@ class CfnFileSystem(
         @builtins.property
         def efa_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''(Optional) Specifies whether Elastic Fabric Adapter (EFA) and GPUDirect Storage (GDS) support is enabled for the Amazon FSx for Lustre file system.
 
             (Default = ``false`` )
@@ -2180,7 +2183,7 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-lustreconfiguration.html#cfn-fsx-filesystem-lustreconfiguration-efaenabled
             '''
             result = self._values.get("efa_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def export_path(self) -> typing.Optional[builtins.str]:
@@ -2231,13 +2234,13 @@ class CfnFileSystem(
         @builtins.property
         def metadata_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.MetadataConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.MetadataConfigurationProperty"]]:
             '''The Lustre metadata performance configuration for the creation of an FSx for Lustre file system using a ``PERSISTENT_2`` deployment type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-lustreconfiguration.html#cfn-fsx-filesystem-lustreconfiguration-metadataconfiguration
             '''
             result = self._values.get("metadata_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.MetadataConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.MetadataConfigurationProperty"]], result)
 
         @builtins.property
         def per_unit_storage_throughput(self) -> typing.Optional[jsii.Number]:
@@ -2368,7 +2371,7 @@ class CfnFileSystem(
         def __init__(
             self,
             *,
-            client_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.ClientConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            client_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.ClientConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The configuration object for mounting a file system.
 
@@ -2400,13 +2403,13 @@ class CfnFileSystem(
         @builtins.property
         def client_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.ClientConfigurationsProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.ClientConfigurationsProperty"]]]]:
             '''A list of configuration objects that contain the client and options for mounting the OpenZFS file system.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-nfsexports.html#cfn-fsx-filesystem-nfsexports-clientconfigurations
             '''
             result = self._values.get("client_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.ClientConfigurationsProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.ClientConfigurationsProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2445,7 +2448,7 @@ class CfnFileSystem(
             deployment_type: builtins.str,
             automatic_backup_retention_days: typing.Optional[jsii.Number] = None,
             daily_automatic_backup_start_time: typing.Optional[builtins.str] = None,
-            disk_iops_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.DiskIopsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            disk_iops_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.DiskIopsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             endpoint_ip_address_range: typing.Optional[builtins.str] = None,
             endpoint_ipv6_address_range: typing.Optional[builtins.str] = None,
             fsx_admin_password: typing.Optional[builtins.str] = None,
@@ -2587,13 +2590,13 @@ class CfnFileSystem(
         @builtins.property
         def disk_iops_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.DiskIopsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.DiskIopsConfigurationProperty"]]:
             '''The SSD IOPS configuration for the FSx for ONTAP file system.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-ontapconfiguration.html#cfn-fsx-filesystem-ontapconfiguration-diskiopsconfiguration
             '''
             result = self._values.get("disk_iops_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.DiskIopsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.DiskIopsConfigurationProperty"]], result)
 
         @builtins.property
         def endpoint_ip_address_range(self) -> typing.Optional[builtins.str]:
@@ -2752,16 +2755,16 @@ class CfnFileSystem(
             *,
             deployment_type: builtins.str,
             automatic_backup_retention_days: typing.Optional[jsii.Number] = None,
-            copy_tags_to_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            copy_tags_to_volumes: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            copy_tags_to_backups: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            copy_tags_to_volumes: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             daily_automatic_backup_start_time: typing.Optional[builtins.str] = None,
-            disk_iops_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.DiskIopsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            disk_iops_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.DiskIopsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             endpoint_ip_address_range: typing.Optional[builtins.str] = None,
             endpoint_ipv6_address_range: typing.Optional[builtins.str] = None,
             options: typing.Optional[typing.Sequence[builtins.str]] = None,
             preferred_subnet_id: typing.Optional[builtins.str] = None,
-            read_cache_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.ReadCacheConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            root_volume_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.RootVolumeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            read_cache_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.ReadCacheConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            root_volume_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.RootVolumeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             route_table_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
             throughput_capacity: typing.Optional[jsii.Number] = None,
             weekly_maintenance_start_time: typing.Optional[builtins.str] = None,
@@ -2916,7 +2919,7 @@ class CfnFileSystem(
         @builtins.property
         def copy_tags_to_backups(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean value indicating whether tags for the file system should be copied to backups.
 
             This value defaults to ``false`` . If it's set to ``true`` , all tags for the file system are copied to all automatic and user-initiated backups where the user doesn't specify tags. If this value is ``true`` , and you specify one or more tags, only the specified tags are copied to backups. If you specify one or more tags when creating a user-initiated backup, no tags are copied from the file system, regardless of this value.
@@ -2924,12 +2927,12 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-openzfsconfiguration.html#cfn-fsx-filesystem-openzfsconfiguration-copytagstobackups
             '''
             result = self._values.get("copy_tags_to_backups")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def copy_tags_to_volumes(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean value indicating whether tags for the file system should be copied to volumes.
 
             This value defaults to ``false`` . If it's set to ``true`` , all tags for the file system are copied to volumes where the user doesn't specify tags. If this value is ``true`` , and you specify one or more tags, only the specified tags are copied to volumes. If you specify one or more tags when creating the volume, no tags are copied from the file system, regardless of this value.
@@ -2937,7 +2940,7 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-openzfsconfiguration.html#cfn-fsx-filesystem-openzfsconfiguration-copytagstovolumes
             '''
             result = self._values.get("copy_tags_to_volumes")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def daily_automatic_backup_start_time(self) -> typing.Optional[builtins.str]:
@@ -2953,7 +2956,7 @@ class CfnFileSystem(
         @builtins.property
         def disk_iops_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.DiskIopsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.DiskIopsConfigurationProperty"]]:
             '''The SSD IOPS (input/output operations per second) configuration for an Amazon FSx for NetApp ONTAP, Amazon FSx for Windows File Server, or FSx for OpenZFS file system.
 
             By default, Amazon FSx automatically provisions 3 IOPS per GB of storage capacity. You can provision additional IOPS per GB of storage. The configuration consists of the total number of provisioned SSD IOPS and how it is was provisioned, or the mode (by the customer or by Amazon FSx).
@@ -2961,7 +2964,7 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-openzfsconfiguration.html#cfn-fsx-filesystem-openzfsconfiguration-diskiopsconfiguration
             '''
             result = self._values.get("disk_iops_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.DiskIopsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.DiskIopsConfigurationProperty"]], result)
 
         @builtins.property
         def endpoint_ip_address_range(self) -> typing.Optional[builtins.str]:
@@ -3010,18 +3013,18 @@ class CfnFileSystem(
         @builtins.property
         def read_cache_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.ReadCacheConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.ReadCacheConfigurationProperty"]]:
             '''Specifies the optional provisioned SSD read cache on file systems that use the Intelligent-Tiering storage class.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-openzfsconfiguration.html#cfn-fsx-filesystem-openzfsconfiguration-readcacheconfiguration
             '''
             result = self._values.get("read_cache_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.ReadCacheConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.ReadCacheConfigurationProperty"]], result)
 
         @builtins.property
         def root_volume_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.RootVolumeConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.RootVolumeConfigurationProperty"]]:
             '''The configuration Amazon FSx uses when creating the root value of the Amazon FSx for OpenZFS file system.
 
             All volumes are children of the root volume.
@@ -3029,7 +3032,7 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-openzfsconfiguration.html#cfn-fsx-filesystem-openzfsconfiguration-rootvolumeconfiguration
             '''
             result = self._values.get("root_volume_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.RootVolumeConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.RootVolumeConfigurationProperty"]], result)
 
         @builtins.property
         def route_table_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3174,12 +3177,12 @@ class CfnFileSystem(
         def __init__(
             self,
             *,
-            copy_tags_to_snapshots: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            copy_tags_to_snapshots: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             data_compression_type: typing.Optional[builtins.str] = None,
-            nfs_exports: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.NfsExportsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            read_only: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            nfs_exports: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.NfsExportsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            read_only: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             record_size_kib: typing.Optional[jsii.Number] = None,
-            user_and_group_quotas: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.UserAndGroupQuotasProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            user_and_group_quotas: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.UserAndGroupQuotasProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The configuration of an Amazon FSx for OpenZFS root volume.
 
@@ -3242,7 +3245,7 @@ class CfnFileSystem(
         @builtins.property
         def copy_tags_to_snapshots(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean value indicating whether tags for the volume should be copied to snapshots of the volume.
 
             This value defaults to ``false`` . If it's set to ``true`` , all tags for the volume are copied to snapshots where the user doesn't specify tags. If this value is ``true`` and you specify one or more tags, only the specified tags are copied to snapshots. If you specify one or more tags when creating the snapshot, no tags are copied from the volume, regardless of this value.
@@ -3250,7 +3253,7 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-rootvolumeconfiguration.html#cfn-fsx-filesystem-rootvolumeconfiguration-copytagstosnapshots
             '''
             result = self._values.get("copy_tags_to_snapshots")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def data_compression_type(self) -> typing.Optional[builtins.str]:
@@ -3268,18 +3271,18 @@ class CfnFileSystem(
         @builtins.property
         def nfs_exports(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.NfsExportsProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.NfsExportsProperty"]]]]:
             '''The configuration object for mounting a file system.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-rootvolumeconfiguration.html#cfn-fsx-filesystem-rootvolumeconfiguration-nfsexports
             '''
             result = self._values.get("nfs_exports")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.NfsExportsProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.NfsExportsProperty"]]]], result)
 
         @builtins.property
         def read_only(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean value indicating whether the volume is read-only.
 
             Setting this value to ``true`` can be useful after you have completed changes to a volume and no longer want changes to occur.
@@ -3287,7 +3290,7 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-rootvolumeconfiguration.html#cfn-fsx-filesystem-rootvolumeconfiguration-readonly
             '''
             result = self._values.get("read_only")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def record_size_kib(self) -> typing.Optional[jsii.Number]:
@@ -3303,13 +3306,13 @@ class CfnFileSystem(
         @builtins.property
         def user_and_group_quotas(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.UserAndGroupQuotasProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.UserAndGroupQuotasProperty"]]]]:
             '''An object specifying how much storage users or groups can use on the volume.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-rootvolumeconfiguration.html#cfn-fsx-filesystem-rootvolumeconfiguration-userandgroupquotas
             '''
             result = self._values.get("user_and_group_quotas")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.UserAndGroupQuotasProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.UserAndGroupQuotasProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3613,14 +3616,14 @@ class CfnFileSystem(
             throughput_capacity: jsii.Number,
             active_directory_id: typing.Optional[builtins.str] = None,
             aliases: typing.Optional[typing.Sequence[builtins.str]] = None,
-            audit_log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.AuditLogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            audit_log_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.AuditLogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             automatic_backup_retention_days: typing.Optional[jsii.Number] = None,
-            copy_tags_to_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            copy_tags_to_backups: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             daily_automatic_backup_start_time: typing.Optional[builtins.str] = None,
             deployment_type: typing.Optional[builtins.str] = None,
-            disk_iops_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.DiskIopsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            disk_iops_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.DiskIopsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             preferred_subnet_id: typing.Optional[builtins.str] = None,
-            self_managed_active_directory_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.SelfManagedActiveDirectoryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            self_managed_active_directory_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.SelfManagedActiveDirectoryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             weekly_maintenance_start_time: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The Microsoft Windows configuration for the file system that's being created.
@@ -3771,13 +3774,13 @@ class CfnFileSystem(
         @builtins.property
         def audit_log_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.AuditLogConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.AuditLogConfigurationProperty"]]:
             '''The configuration that Amazon FSx for Windows File Server uses to audit and log user accesses of files, folders, and file shares on the Amazon FSx for Windows File Server file system.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-windowsconfiguration.html#cfn-fsx-filesystem-windowsconfiguration-auditlogconfiguration
             '''
             result = self._values.get("audit_log_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.AuditLogConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.AuditLogConfigurationProperty"]], result)
 
         @builtins.property
         def automatic_backup_retention_days(self) -> typing.Optional[jsii.Number]:
@@ -3793,7 +3796,7 @@ class CfnFileSystem(
         @builtins.property
         def copy_tags_to_backups(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A boolean flag indicating whether tags for the file system should be copied to backups.
 
             This value defaults to false. If it's set to true, all tags for the file system are copied to all automatic and user-initiated backups where the user doesn't specify tags. If this value is true, and you specify one or more tags, only the specified tags are copied to backups. If you specify one or more tags when creating a user-initiated backup, no tags are copied from the file system, regardless of this value.
@@ -3801,7 +3804,7 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-windowsconfiguration.html#cfn-fsx-filesystem-windowsconfiguration-copytagstobackups
             '''
             result = self._values.get("copy_tags_to_backups")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def daily_automatic_backup_start_time(self) -> typing.Optional[builtins.str]:
@@ -3832,7 +3835,7 @@ class CfnFileSystem(
         @builtins.property
         def disk_iops_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.DiskIopsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.DiskIopsConfigurationProperty"]]:
             '''The SSD IOPS (input/output operations per second) configuration for an Amazon FSx for Windows file system.
 
             By default, Amazon FSx automatically provisions 3 IOPS per GiB of storage capacity. You can provision additional IOPS per GiB of storage, up to the maximum limit associated with your chosen throughput capacity.
@@ -3840,7 +3843,7 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-windowsconfiguration.html#cfn-fsx-filesystem-windowsconfiguration-diskiopsconfiguration
             '''
             result = self._values.get("disk_iops_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.DiskIopsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.DiskIopsConfigurationProperty"]], result)
 
         @builtins.property
         def preferred_subnet_id(self) -> typing.Optional[builtins.str]:
@@ -3856,7 +3859,7 @@ class CfnFileSystem(
         @builtins.property
         def self_managed_active_directory_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.SelfManagedActiveDirectoryConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.SelfManagedActiveDirectoryConfigurationProperty"]]:
             '''The configuration that Amazon FSx uses to join a FSx for Windows File Server file system or an FSx for ONTAP storage virtual machine (SVM) to a self-managed (including on-premises) Microsoft Active Directory (AD) directory.
 
             For more information, see `Using Amazon FSx for Windows with your self-managed Microsoft Active Directory <https://docs.aws.amazon.com/fsx/latest/WindowsGuide/self-managed-AD.html>`_ or `Managing FSx for ONTAP SVMs <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/managing-svms.html>`_ .
@@ -3864,7 +3867,7 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-windowsconfiguration.html#cfn-fsx-filesystem-windowsconfiguration-selfmanagedactivedirectoryconfiguration
             '''
             result = self._values.get("self_managed_active_directory_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.SelfManagedActiveDirectoryConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.SelfManagedActiveDirectoryConfigurationProperty"]], result)
 
         @builtins.property
         def weekly_maintenance_start_time(self) -> typing.Optional[builtins.str]:
@@ -3916,15 +3919,15 @@ class CfnFileSystemProps:
         backup_id: typing.Optional[builtins.str] = None,
         file_system_type_version: typing.Optional[builtins.str] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        lustre_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.LustreConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        lustre_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.LustreConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         network_type: typing.Optional[builtins.str] = None,
-        ontap_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.OntapConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_zfs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.OpenZFSConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        ontap_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.OntapConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_zfs_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.OpenZFSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         storage_capacity: typing.Optional[jsii.Number] = None,
         storage_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        windows_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.WindowsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        windows_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.WindowsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFileSystem``.
 
@@ -3948,6 +3951,7 @@ class CfnFileSystemProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_fsx as fsx
@@ -4212,7 +4216,7 @@ class CfnFileSystemProps:
     @builtins.property
     def lustre_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.LustreConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.LustreConfigurationProperty"]]:
         '''The Lustre configuration for the file system being created.
 
         This configuration is required if the ``FileSystemType`` is set to ``LUSTRE`` .
@@ -4228,7 +4232,7 @@ class CfnFileSystemProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-filesystem.html#cfn-fsx-filesystem-lustreconfiguration
         '''
         result = self._values.get("lustre_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.LustreConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.LustreConfigurationProperty"]], result)
 
     @builtins.property
     def network_type(self) -> typing.Optional[builtins.str]:
@@ -4242,7 +4246,7 @@ class CfnFileSystemProps:
     @builtins.property
     def ontap_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.OntapConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.OntapConfigurationProperty"]]:
         '''The ONTAP configuration properties of the FSx for ONTAP file system that you are creating.
 
         This configuration is required if the ``FileSystemType`` is set to ``ONTAP`` .
@@ -4250,12 +4254,12 @@ class CfnFileSystemProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-filesystem.html#cfn-fsx-filesystem-ontapconfiguration
         '''
         result = self._values.get("ontap_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.OntapConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.OntapConfigurationProperty"]], result)
 
     @builtins.property
     def open_zfs_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.OpenZFSConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.OpenZFSConfigurationProperty"]]:
         '''The Amazon FSx for OpenZFS configuration properties for the file system that you are creating.
 
         This configuration is required if the ``FileSystemType`` is set to ``OPENZFS`` .
@@ -4263,7 +4267,7 @@ class CfnFileSystemProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-filesystem.html#cfn-fsx-filesystem-openzfsconfiguration
         '''
         result = self._values.get("open_zfs_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.OpenZFSConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.OpenZFSConfigurationProperty"]], result)
 
     @builtins.property
     def security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -4323,7 +4327,7 @@ class CfnFileSystemProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to associate with the file system.
 
         For more information, see `Tagging your Amazon FSx resources <https://docs.aws.amazon.com/fsx/latest/LustreGuide/tag-resources.html>`_ in the *Amazon FSx for Lustre User Guide* .
@@ -4331,12 +4335,12 @@ class CfnFileSystemProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-filesystem.html#cfn-fsx-filesystem-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def windows_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.WindowsConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.WindowsConfigurationProperty"]]:
         '''The configuration object for the Microsoft Windows file system you are creating.
 
         This configuration is required if ``FileSystemType`` is set to ``WINDOWS`` .
@@ -4344,7 +4348,7 @@ class CfnFileSystemProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-filesystem.html#cfn-fsx-filesystem-windowsconfiguration
         '''
         result = self._values.get("windows_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.WindowsConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.WindowsConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4425,14 +4429,14 @@ class CfnS3AccessPointAttachment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         type: builtins.str,
-        ontap_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_zfs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        s3_access_point: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.S3AccessPointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ontap_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_zfs_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        s3_access_point: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.S3AccessPointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::FSx::S3AccessPointAttachment``.
 
@@ -4440,7 +4444,7 @@ class CfnS3AccessPointAttachment(
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: The name of the S3 access point attachment; also used for the name of the S3 access point.
         :param type: The type of Amazon FSx volume that the S3 access point is attached to.
-        :param ontap_configuration: 
+        :param ontap_configuration: The ONTAP configuration of the S3 access point attachment.
         :param open_zfs_configuration: The OpenZFSConfiguration of the S3 access point attachment.
         :param s3_access_point: The S3 access point configuration of the S3 access point attachment.
         '''
@@ -4471,7 +4475,7 @@ class CfnS3AccessPointAttachment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnS3AccessPointAttachment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4527,9 +4531,9 @@ class CfnS3AccessPointAttachment(
     @jsii.member(jsii_name="s3AccessPointAttachmentRef")
     def s3_access_point_attachment_ref(
         self,
-    ) -> _S3AccessPointAttachmentReference_4957ffc1:
+    ) -> "_S3AccessPointAttachmentReference_4957ffc1":
         '''A reference to a S3AccessPointAttachment resource.'''
-        return typing.cast(_S3AccessPointAttachmentReference_4957ffc1, jsii.get(self, "s3AccessPointAttachmentRef"))
+        return typing.cast("_S3AccessPointAttachmentReference_4957ffc1", jsii.get(self, "s3AccessPointAttachmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -4561,13 +4565,14 @@ class CfnS3AccessPointAttachment(
     @jsii.member(jsii_name="ontapConfiguration")
     def ontap_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty"]], jsii.get(self, "ontapConfiguration"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty"]]:
+        '''The ONTAP configuration of the S3 access point attachment.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty"]], jsii.get(self, "ontapConfiguration"))
 
     @ontap_configuration.setter
     def ontap_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ccdbf866601ccc3fde6f940ff739a2562cc1c309ef90b42b775dd99df2fdfcaa)
@@ -4578,14 +4583,14 @@ class CfnS3AccessPointAttachment(
     @jsii.member(jsii_name="openZfsConfiguration")
     def open_zfs_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"]]:
         '''The OpenZFSConfiguration of the S3 access point attachment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"]], jsii.get(self, "openZfsConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"]], jsii.get(self, "openZfsConfiguration"))
 
     @open_zfs_configuration.setter
     def open_zfs_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0756a73fef71599ffefeead45c6d0ea227439b511cdc73a360780b4f4c0df186)
@@ -4596,14 +4601,14 @@ class CfnS3AccessPointAttachment(
     @jsii.member(jsii_name="s3AccessPoint")
     def s3_access_point(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointProperty"]]:
         '''The S3 access point configuration of the S3 access point attachment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointProperty"]], jsii.get(self, "s3AccessPoint"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointProperty"]], jsii.get(self, "s3AccessPoint"))
 
     @s3_access_point.setter
     def s3_access_point(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1588dcc78f8354bc56e434d157b8dadab331295e3cbf0c065b7bd4b4b793aaa0)
@@ -4676,13 +4681,16 @@ class CfnS3AccessPointAttachment(
             self,
             *,
             type: builtins.str,
-            unix_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            windows_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            unix_user: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            windows_user: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param type: Specifies the FSx for ONTAP user identity type, accepts either UNIX or WINDOWS.
-            :param unix_user: 
-            :param windows_user: 
+            '''Specifies the file system user identity that will be used for authorizing all file access requests that are made using the S3 access point.
+
+            The identity can be either a UNIX user or a Windows user.
+
+            :param type: Specifies the FSx for ONTAP user identity type. Valid values are ``UNIX`` and ``WINDOWS`` .
+            :param unix_user: Specifies the UNIX user identity for file system operations.
+            :param windows_user: Specifies the Windows user identity for file system operations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapfilesystemidentity.html
             :exampleMetadata: fixture=_generated
@@ -4720,7 +4728,9 @@ class CfnS3AccessPointAttachment(
 
         @builtins.property
         def type(self) -> builtins.str:
-            '''Specifies the FSx for ONTAP user identity type, accepts either UNIX or WINDOWS.
+            '''Specifies the FSx for ONTAP user identity type.
+
+            Valid values are ``UNIX`` and ``WINDOWS`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapfilesystemidentity.html#cfn-fsx-s3accesspointattachment-ontapfilesystemidentity-type
             '''
@@ -4731,22 +4741,24 @@ class CfnS3AccessPointAttachment(
         @builtins.property
         def unix_user(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty"]]:
-            '''
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty"]]:
+            '''Specifies the UNIX user identity for file system operations.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapfilesystemidentity.html#cfn-fsx-s3accesspointattachment-ontapfilesystemidentity-unixuser
             '''
             result = self._values.get("unix_user")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty"]], result)
 
         @builtins.property
         def windows_user(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty"]]:
-            '''
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty"]]:
+            '''Specifies the Windows user identity for file system operations.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapfilesystemidentity.html#cfn-fsx-s3accesspointattachment-ontapfilesystemidentity-windowsuser
             '''
             result = self._values.get("windows_user")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4766,8 +4778,9 @@ class CfnS3AccessPointAttachment(
     )
     class OntapUnixFileSystemUserProperty:
         def __init__(self, *, name: builtins.str) -> None:
-            '''
-            :param name: The name of the UNIX user.
+            '''The FSx for ONTAP UNIX file system user that is used for authorizing all file access requests that are made using the S3 access point.
+
+            :param name: The name of the UNIX user. The name can be up to 256 characters long.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapunixfilesystemuser.html
             :exampleMetadata: fixture=_generated
@@ -4793,6 +4806,8 @@ class CfnS3AccessPointAttachment(
         def name(self) -> builtins.str:
             '''The name of the UNIX user.
 
+            The name can be up to 256 characters long.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapunixfilesystemuser.html#cfn-fsx-s3accesspointattachment-ontapunixfilesystemuser-name
             '''
             result = self._values.get("name")
@@ -4817,8 +4832,9 @@ class CfnS3AccessPointAttachment(
     )
     class OntapWindowsFileSystemUserProperty:
         def __init__(self, *, name: builtins.str) -> None:
-            '''
-            :param name: The name of the Windows user.
+            '''The FSx for ONTAP Windows file system user that is used for authorizing all file access requests that are made using the S3 access point.
+
+            :param name: The name of the Windows user. The name can be up to 256 characters long and supports Active Directory users.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapwindowsfilesystemuser.html
             :exampleMetadata: fixture=_generated
@@ -4843,6 +4859,8 @@ class CfnS3AccessPointAttachment(
         @builtins.property
         def name(self) -> builtins.str:
             '''The name of the Windows user.
+
+            The name can be up to 256 characters long and supports Active Directory users.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapwindowsfilesystemuser.html#cfn-fsx-s3accesspointattachment-ontapwindowsfilesystemuser-name
             '''
@@ -4870,7 +4888,7 @@ class CfnS3AccessPointAttachment(
         def __init__(
             self,
             *,
-            posix_user: typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.OpenZFSPosixFileSystemUserProperty", typing.Dict[builtins.str, typing.Any]]],
+            posix_user: typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.OpenZFSPosixFileSystemUserProperty", typing.Dict[builtins.str, typing.Any]]],
             type: builtins.str,
         ) -> None:
             '''Specifies the file system user identity that will be used for authorizing all file access requests that are made using the S3 access point.
@@ -4912,14 +4930,14 @@ class CfnS3AccessPointAttachment(
         @builtins.property
         def posix_user(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OpenZFSPosixFileSystemUserProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.OpenZFSPosixFileSystemUserProperty"]:
             '''Specifies the UID and GIDs of the file system POSIX user.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-openzfsfilesystemidentity.html#cfn-fsx-s3accesspointattachment-openzfsfilesystemidentity-posixuser
             '''
             result = self._values.get("posix_user")
             assert result is not None, "Required property 'posix_user' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OpenZFSPosixFileSystemUserProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.OpenZFSPosixFileSystemUserProperty"], result)
 
         @builtins.property
         def type(self) -> builtins.str:
@@ -4953,7 +4971,7 @@ class CfnS3AccessPointAttachment(
             *,
             gid: jsii.Number,
             uid: jsii.Number,
-            secondary_gids: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.FileSystemGIDProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            secondary_gids: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.FileSystemGIDProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The FSx for OpenZFS file system user that is used for authorizing all file access requests that are made using the S3 access point.
 
@@ -5015,13 +5033,13 @@ class CfnS3AccessPointAttachment(
         @builtins.property
         def secondary_gids(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.FileSystemGIDProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.FileSystemGIDProperty"]]]]:
             '''The list of secondary GIDs for the file system user.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-openzfsposixfilesystemuser.html#cfn-fsx-s3accesspointattachment-openzfsposixfilesystemuser-secondarygids
             '''
             result = self._values.get("secondary_gids")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.FileSystemGIDProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.FileSystemGIDProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5046,11 +5064,12 @@ class CfnS3AccessPointAttachment(
         def __init__(
             self,
             *,
-            file_system_identity: typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty", typing.Dict[builtins.str, typing.Any]]],
+            file_system_identity: typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty", typing.Dict[builtins.str, typing.Any]]],
             volume_id: builtins.str,
         ) -> None:
-            '''
-            :param file_system_identity: 
+            '''Describes the FSx for ONTAP attachment configuration of an S3 access point attachment.
+
+            :param file_system_identity: The file system identity used to authorize file access requests made using the S3 access point.
             :param volume_id: The ID of the FSx for ONTAP volume that the S3 access point is attached to.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-s3accesspointontapconfiguration.html
@@ -5089,13 +5108,14 @@ class CfnS3AccessPointAttachment(
         @builtins.property
         def file_system_identity(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty"]:
-            '''
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty"]:
+            '''The file system identity used to authorize file access requests made using the S3 access point.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-s3accesspointontapconfiguration.html#cfn-fsx-s3accesspointattachment-s3accesspointontapconfiguration-filesystemidentity
             '''
             result = self._values.get("file_system_identity")
             assert result is not None, "Required property 'file_system_identity' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty"], result)
 
         @builtins.property
         def volume_id(self) -> builtins.str:
@@ -5130,7 +5150,7 @@ class CfnS3AccessPointAttachment(
         def __init__(
             self,
             *,
-            file_system_identity: typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.OpenZFSFileSystemIdentityProperty", typing.Dict[builtins.str, typing.Any]]],
+            file_system_identity: typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.OpenZFSFileSystemIdentityProperty", typing.Dict[builtins.str, typing.Any]]],
             volume_id: builtins.str,
         ) -> None:
             '''Describes the FSx for OpenZFS attachment configuration of an S3 access point attachment.
@@ -5175,14 +5195,14 @@ class CfnS3AccessPointAttachment(
         @builtins.property
         def file_system_identity(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OpenZFSFileSystemIdentityProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.OpenZFSFileSystemIdentityProperty"]:
             '''The file system identity used to authorize file access requests made using the S3 access point.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-s3accesspointopenzfsconfiguration.html#cfn-fsx-s3accesspointattachment-s3accesspointopenzfsconfiguration-filesystemidentity
             '''
             result = self._values.get("file_system_identity")
             assert result is not None, "Required property 'file_system_identity' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OpenZFSFileSystemIdentityProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.OpenZFSFileSystemIdentityProperty"], result)
 
         @builtins.property
         def volume_id(self) -> builtins.str:
@@ -5222,7 +5242,7 @@ class CfnS3AccessPointAttachment(
             alias: typing.Optional[builtins.str] = None,
             policy: typing.Any = None,
             resource_arn: typing.Optional[builtins.str] = None,
-            vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.S3AccessPointVpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.S3AccessPointVpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the S3 access point configuration of the S3 access point attachment.
 
@@ -5297,13 +5317,13 @@ class CfnS3AccessPointAttachment(
         @builtins.property
         def vpc_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointVpcConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointVpcConfigurationProperty"]]:
             '''The S3 access point's virtual private cloud (VPC) configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-s3accesspoint.html#cfn-fsx-s3accesspointattachment-s3accesspoint-vpcconfiguration
             '''
             result = self._values.get("vpc_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointVpcConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointVpcConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5386,15 +5406,15 @@ class CfnS3AccessPointAttachmentProps:
         *,
         name: builtins.str,
         type: builtins.str,
-        ontap_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_zfs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        s3_access_point: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        ontap_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_zfs_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        s3_access_point: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnS3AccessPointAttachment.S3AccessPointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnS3AccessPointAttachment``.
 
         :param name: The name of the S3 access point attachment; also used for the name of the S3 access point.
         :param type: The type of Amazon FSx volume that the S3 access point is attached to.
-        :param ontap_configuration: 
+        :param ontap_configuration: The ONTAP configuration of the S3 access point attachment.
         :param open_zfs_configuration: The OpenZFSConfiguration of the S3 access point attachment.
         :param s3_access_point: The S3 access point configuration of the S3 access point attachment.
 
@@ -5496,34 +5516,35 @@ class CfnS3AccessPointAttachmentProps:
     @builtins.property
     def ontap_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty]]:
-        '''
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty"]]:
+        '''The ONTAP configuration of the S3 access point attachment.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-s3accesspointattachment.html#cfn-fsx-s3accesspointattachment-ontapconfiguration
         '''
         result = self._values.get("ontap_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty"]], result)
 
     @builtins.property
     def open_zfs_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"]]:
         '''The OpenZFSConfiguration of the S3 access point attachment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-s3accesspointattachment.html#cfn-fsx-s3accesspointattachment-openzfsconfiguration
         '''
         result = self._values.get("open_zfs_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"]], result)
 
     @builtins.property
     def s3_access_point(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointProperty"]]:
         '''The S3 access point configuration of the S3 access point attachment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-s3accesspointattachment.html#cfn-fsx-s3accesspointattachment-s3accesspoint
         '''
         result = self._values.get("s3_access_point")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnS3AccessPointAttachment.S3AccessPointProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5551,6 +5572,7 @@ class CfnSnapshot(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_fsx as fsx
@@ -5569,12 +5591,12 @@ class CfnSnapshot(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         volume_id: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::FSx::Snapshot``.
 
@@ -5605,7 +5627,7 @@ class CfnSnapshot(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSnapshot", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5660,15 +5682,15 @@ class CfnSnapshot(
 
     @builtins.property
     @jsii.member(jsii_name="snapshotRef")
-    def snapshot_ref(self) -> _SnapshotReference_84fbb991:
+    def snapshot_ref(self) -> "_SnapshotReference_84fbb991":
         '''A reference to a Snapshot resource.'''
-        return typing.cast(_SnapshotReference_84fbb991, jsii.get(self, "snapshotRef"))
+        return typing.cast("_SnapshotReference_84fbb991", jsii.get(self, "snapshotRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -5698,12 +5720,12 @@ class CfnSnapshot(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of ``Tag`` values, with a maximum of 50 elements.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__240c01330f696630f8aa879c03a1e67f9e74372d6432d08d7ec8fe84e6ad0a72)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5721,7 +5743,7 @@ class CfnSnapshotProps:
         *,
         name: builtins.str,
         volume_id: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSnapshot``.
 
@@ -5734,6 +5756,7 @@ class CfnSnapshotProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_fsx as fsx
@@ -5782,13 +5805,13 @@ class CfnSnapshotProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of ``Tag`` values, with a maximum of 50 elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-snapshot.html#cfn-fsx-snapshot-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5816,6 +5839,7 @@ class CfnStorageVirtualMachine(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_fsx as fsx
@@ -5848,15 +5872,15 @@ class CfnStorageVirtualMachine(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         file_system_id: builtins.str,
         name: builtins.str,
-        active_directory_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        active_directory_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         root_volume_security_style: typing.Optional[builtins.str] = None,
         svm_admin_password: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::FSx::StorageVirtualMachine``.
 
@@ -5897,7 +5921,7 @@ class CfnStorageVirtualMachine(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStorageVirtualMachine", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5966,15 +5990,15 @@ class CfnStorageVirtualMachine(
 
     @builtins.property
     @jsii.member(jsii_name="storageVirtualMachineRef")
-    def storage_virtual_machine_ref(self) -> _StorageVirtualMachineReference_27e496a6:
+    def storage_virtual_machine_ref(self) -> "_StorageVirtualMachineReference_27e496a6":
         '''A reference to a StorageVirtualMachine resource.'''
-        return typing.cast(_StorageVirtualMachineReference_27e496a6, jsii.get(self, "storageVirtualMachineRef"))
+        return typing.cast("_StorageVirtualMachineReference_27e496a6", jsii.get(self, "storageVirtualMachineRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="fileSystemId")
@@ -6006,14 +6030,14 @@ class CfnStorageVirtualMachine(
     @jsii.member(jsii_name="activeDirectoryConfiguration")
     def active_directory_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty"]]:
         '''Describes the Microsoft Active Directory configuration to which the SVM is joined, if applicable.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty"]], jsii.get(self, "activeDirectoryConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty"]], jsii.get(self, "activeDirectoryConfiguration"))
 
     @active_directory_configuration.setter
     def active_directory_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f6d378bddb8b214a0ee61f681ebc3e6e2a6e039306c8569fe43fd3a40f9d8b82)
@@ -6051,12 +6075,12 @@ class CfnStorageVirtualMachine(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of ``Tag`` values, with a maximum of 50 elements.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c36644ee4704160a7ea3d6f3129675404852974497abe8a0a6b5373b6c063f92)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6075,7 +6099,7 @@ class CfnStorageVirtualMachine(
             self,
             *,
             net_bios_name: typing.Optional[builtins.str] = None,
-            self_managed_active_directory_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageVirtualMachine.SelfManagedActiveDirectoryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            self_managed_active_directory_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStorageVirtualMachine.SelfManagedActiveDirectoryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the self-managed Microsoft Active Directory to which you want to join the SVM.
 
@@ -6128,13 +6152,13 @@ class CfnStorageVirtualMachine(
         @builtins.property
         def self_managed_active_directory_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageVirtualMachine.SelfManagedActiveDirectoryConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageVirtualMachine.SelfManagedActiveDirectoryConfigurationProperty"]]:
             '''The configuration that Amazon FSx uses to join the ONTAP storage virtual machine (SVM) to your self-managed (including on-premises) Microsoft Active Directory directory.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-storagevirtualmachine-activedirectoryconfiguration.html#cfn-fsx-storagevirtualmachine-activedirectoryconfiguration-selfmanagedactivedirectoryconfiguration
             '''
             result = self._values.get("self_managed_active_directory_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageVirtualMachine.SelfManagedActiveDirectoryConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageVirtualMachine.SelfManagedActiveDirectoryConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6339,10 +6363,10 @@ class CfnStorageVirtualMachineProps:
         *,
         file_system_id: builtins.str,
         name: builtins.str,
-        active_directory_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        active_directory_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         root_volume_security_style: typing.Optional[builtins.str] = None,
         svm_admin_password: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStorageVirtualMachine``.
 
@@ -6358,6 +6382,7 @@ class CfnStorageVirtualMachineProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_fsx as fsx
@@ -6431,13 +6456,13 @@ class CfnStorageVirtualMachineProps:
     @builtins.property
     def active_directory_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty"]]:
         '''Describes the Microsoft Active Directory configuration to which the SVM is joined, if applicable.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-storagevirtualmachine.html#cfn-fsx-storagevirtualmachine-activedirectoryconfiguration
         '''
         result = self._values.get("active_directory_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageVirtualMachine.ActiveDirectoryConfigurationProperty"]], result)
 
     @builtins.property
     def root_volume_security_style(self) -> typing.Optional[builtins.str]:
@@ -6464,13 +6489,13 @@ class CfnStorageVirtualMachineProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of ``Tag`` values, with a maximum of 50 elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-storagevirtualmachine.html#cfn-fsx-storagevirtualmachine-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6498,6 +6523,7 @@ class CfnVolume(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_fsx as fsx
@@ -6600,14 +6626,14 @@ class CfnVolume(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         backup_id: typing.Optional[builtins.str] = None,
-        ontap_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.OntapConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_zfs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.OpenZFSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        ontap_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.OntapConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_zfs_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.OpenZFSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         volume_type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::FSx::Volume``.
@@ -6649,7 +6675,7 @@ class CfnVolume(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVolume", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6718,15 +6744,15 @@ class CfnVolume(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="volumeRef")
-    def volume_ref(self) -> _VolumeReference_ad7f96eb:
+    def volume_ref(self) -> "_VolumeReference_ad7f96eb":
         '''A reference to a Volume resource.'''
-        return typing.cast(_VolumeReference_ad7f96eb, jsii.get(self, "volumeRef"))
+        return typing.cast("_VolumeReference_ad7f96eb", jsii.get(self, "volumeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -6758,14 +6784,14 @@ class CfnVolume(
     @jsii.member(jsii_name="ontapConfiguration")
     def ontap_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.OntapConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.OntapConfigurationProperty"]]:
         '''The configuration of an Amazon FSx for NetApp ONTAP volume.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.OntapConfigurationProperty"]], jsii.get(self, "ontapConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.OntapConfigurationProperty"]], jsii.get(self, "ontapConfiguration"))
 
     @ontap_configuration.setter
     def ontap_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.OntapConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.OntapConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9d9d5aa82b45919603e76f1eb93e8d847f3f30ecda3dd0f9daafc4ac8393f820)
@@ -6776,14 +6802,14 @@ class CfnVolume(
     @jsii.member(jsii_name="openZfsConfiguration")
     def open_zfs_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.OpenZFSConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.OpenZFSConfigurationProperty"]]:
         '''The configuration of an Amazon FSx for OpenZFS volume.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.OpenZFSConfigurationProperty"]], jsii.get(self, "openZfsConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.OpenZFSConfigurationProperty"]], jsii.get(self, "openZfsConfiguration"))
 
     @open_zfs_configuration.setter
     def open_zfs_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.OpenZFSConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.OpenZFSConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b8c561a21f1815fe46ff87dc14e109264d04a4cb99e438a866e3e0f045e636db)
@@ -6792,12 +6818,12 @@ class CfnVolume(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__634c85533e9a6b79f20e610d3f3d0cf9acdaa9fc5989a7eaf5e5c378160ab13e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7071,7 +7097,7 @@ class CfnVolume(
         def __init__(
             self,
             *,
-            client_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.ClientConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            client_configurations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.ClientConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''The configuration object for mounting a Network File System (NFS) file system.
 
@@ -7103,14 +7129,14 @@ class CfnVolume(
         @builtins.property
         def client_configurations(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVolume.ClientConfigurationsProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVolume.ClientConfigurationsProperty"]]]:
             '''A list of configuration objects that contain the client and options for mounting the OpenZFS file system.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-nfsexports.html#cfn-fsx-volume-nfsexports-clientconfigurations
             '''
             result = self._values.get("client_configurations")
             assert result is not None, "Required property 'client_configurations' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVolume.ClientConfigurationsProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVolume.ClientConfigurationsProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7147,17 +7173,17 @@ class CfnVolume(
             self,
             *,
             storage_virtual_machine_id: builtins.str,
-            aggregate_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.AggregateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            aggregate_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.AggregateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             copy_tags_to_backups: typing.Optional[builtins.str] = None,
             junction_path: typing.Optional[builtins.str] = None,
             ontap_volume_type: typing.Optional[builtins.str] = None,
             security_style: typing.Optional[builtins.str] = None,
             size_in_bytes: typing.Optional[builtins.str] = None,
             size_in_megabytes: typing.Optional[builtins.str] = None,
-            snaplock_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.SnaplockConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            snaplock_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.SnaplockConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             snapshot_policy: typing.Optional[builtins.str] = None,
             storage_efficiency_enabled: typing.Optional[builtins.str] = None,
-            tiering_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.TieringPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tiering_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.TieringPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             volume_style: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Specifies the configuration of the ONTAP volume that you are creating.
@@ -7298,13 +7324,13 @@ class CfnVolume(
         @builtins.property
         def aggregate_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.AggregateConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.AggregateConfigurationProperty"]]:
             '''Used to specify the configuration options for an FSx for ONTAP volume's storage aggregate or aggregates.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-ontapconfiguration.html#cfn-fsx-volume-ontapconfiguration-aggregateconfiguration
             '''
             result = self._values.get("aggregate_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.AggregateConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.AggregateConfigurationProperty"]], result)
 
         @builtins.property
         def copy_tags_to_backups(self) -> typing.Optional[builtins.str]:
@@ -7382,13 +7408,13 @@ class CfnVolume(
         @builtins.property
         def snaplock_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.SnaplockConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.SnaplockConfigurationProperty"]]:
             '''The SnapLock configuration object for an FSx for ONTAP SnapLock volume.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-ontapconfiguration.html#cfn-fsx-volume-ontapconfiguration-snaplockconfiguration
             '''
             result = self._values.get("snaplock_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.SnaplockConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.SnaplockConfigurationProperty"]], result)
 
         @builtins.property
         def snapshot_policy(self) -> typing.Optional[builtins.str]:
@@ -7421,7 +7447,7 @@ class CfnVolume(
         @builtins.property
         def tiering_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.TieringPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.TieringPolicyProperty"]]:
             '''Describes the data tiering policy for an ONTAP volume.
 
             When enabled, Amazon FSx for ONTAP's intelligent tiering automatically transitions a volume's data between the file system's primary storage and capacity pool storage based on your access patterns.
@@ -7436,7 +7462,7 @@ class CfnVolume(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-ontapconfiguration.html#cfn-fsx-volume-ontapconfiguration-tieringpolicy
             '''
             result = self._values.get("tiering_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.TieringPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.TieringPolicyProperty"]], result)
 
         @builtins.property
         def volume_style(self) -> typing.Optional[builtins.str]:
@@ -7482,16 +7508,16 @@ class CfnVolume(
             self,
             *,
             parent_volume_id: builtins.str,
-            copy_tags_to_snapshots: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            copy_tags_to_snapshots: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             data_compression_type: typing.Optional[builtins.str] = None,
-            nfs_exports: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.NfsExportsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            nfs_exports: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.NfsExportsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             options: typing.Optional[typing.Sequence[builtins.str]] = None,
-            origin_snapshot: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.OriginSnapshotProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            read_only: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            origin_snapshot: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.OriginSnapshotProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            read_only: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             record_size_kib: typing.Optional[jsii.Number] = None,
             storage_capacity_quota_gib: typing.Optional[jsii.Number] = None,
             storage_capacity_reservation_gib: typing.Optional[jsii.Number] = None,
-            user_and_group_quotas: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.UserAndGroupQuotasProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            user_and_group_quotas: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.UserAndGroupQuotasProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Specifies the configuration of the Amazon FSx for OpenZFS volume that you are creating.
 
@@ -7594,7 +7620,7 @@ class CfnVolume(
         @builtins.property
         def copy_tags_to_snapshots(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean value indicating whether tags for the volume should be copied to snapshots.
 
             This value defaults to ``false`` . If this value is set to ``true`` , and you do not specify any tags, all tags for the original volume are copied over to snapshots. If this value is set to ``true`` , and you do specify one or more tags, only the specified tags for the original volume are copied over to snapshots. If you specify one or more tags when creating a new snapshot, no tags are copied over from the original volume, regardless of this value.
@@ -7602,7 +7628,7 @@ class CfnVolume(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-openzfsconfiguration.html#cfn-fsx-volume-openzfsconfiguration-copytagstosnapshots
             '''
             result = self._values.get("copy_tags_to_snapshots")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def data_compression_type(self) -> typing.Optional[builtins.str]:
@@ -7620,13 +7646,13 @@ class CfnVolume(
         @builtins.property
         def nfs_exports(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVolume.NfsExportsProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVolume.NfsExportsProperty"]]]]:
             '''The configuration object for mounting a Network File System (NFS) file system.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-openzfsconfiguration.html#cfn-fsx-volume-openzfsconfiguration-nfsexports
             '''
             result = self._values.get("nfs_exports")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVolume.NfsExportsProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVolume.NfsExportsProperty"]]]], result)
 
         @builtins.property
         def options(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -7640,24 +7666,24 @@ class CfnVolume(
         @builtins.property
         def origin_snapshot(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.OriginSnapshotProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.OriginSnapshotProperty"]]:
             '''The configuration object that specifies the snapshot to use as the origin of the data for the volume.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-openzfsconfiguration.html#cfn-fsx-volume-openzfsconfiguration-originsnapshot
             '''
             result = self._values.get("origin_snapshot")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.OriginSnapshotProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.OriginSnapshotProperty"]], result)
 
         @builtins.property
         def read_only(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean value indicating whether the volume is read-only.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-openzfsconfiguration.html#cfn-fsx-volume-openzfsconfiguration-readonly
             '''
             result = self._values.get("read_only")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def record_size_kib(self) -> typing.Optional[jsii.Number]:
@@ -7697,13 +7723,13 @@ class CfnVolume(
         @builtins.property
         def user_and_group_quotas(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVolume.UserAndGroupQuotasProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVolume.UserAndGroupQuotasProperty"]]]]:
             '''Configures how much storage users and groups can use on the volume.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-openzfsconfiguration.html#cfn-fsx-volume-openzfsconfiguration-userandgroupquotas
             '''
             result = self._values.get("user_and_group_quotas")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVolume.UserAndGroupQuotasProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVolume.UserAndGroupQuotasProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7901,9 +7927,9 @@ class CfnVolume(
             *,
             snaplock_type: builtins.str,
             audit_log_volume: typing.Optional[builtins.str] = None,
-            autocommit_period: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.AutocommitPeriodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            autocommit_period: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.AutocommitPeriodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             privileged_delete: typing.Optional[builtins.str] = None,
-            retention_period: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.SnaplockRetentionPeriodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retention_period: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.SnaplockRetentionPeriodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             volume_append_mode_enabled: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Specifies the SnapLock configuration for an FSx for ONTAP SnapLock volume.
@@ -8012,13 +8038,13 @@ class CfnVolume(
         @builtins.property
         def autocommit_period(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.AutocommitPeriodProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.AutocommitPeriodProperty"]]:
             '''The configuration object for setting the autocommit period of files in an FSx for ONTAP SnapLock volume.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-snaplockconfiguration.html#cfn-fsx-volume-snaplockconfiguration-autocommitperiod
             '''
             result = self._values.get("autocommit_period")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.AutocommitPeriodProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.AutocommitPeriodProperty"]], result)
 
         @builtins.property
         def privileged_delete(self) -> typing.Optional[builtins.str]:
@@ -8036,13 +8062,13 @@ class CfnVolume(
         @builtins.property
         def retention_period(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.SnaplockRetentionPeriodProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.SnaplockRetentionPeriodProperty"]]:
             '''Specifies the retention period of an FSx for ONTAP SnapLock volume.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-snaplockconfiguration.html#cfn-fsx-volume-snaplockconfiguration-retentionperiod
             '''
             result = self._values.get("retention_period")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVolume.SnaplockRetentionPeriodProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.SnaplockRetentionPeriodProperty"]], result)
 
         @builtins.property
         def volume_append_mode_enabled(self) -> typing.Optional[builtins.str]:
@@ -8081,9 +8107,9 @@ class CfnVolume(
         def __init__(
             self,
             *,
-            default_retention: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.RetentionPeriodProperty", typing.Dict[builtins.str, typing.Any]]],
-            maximum_retention: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.RetentionPeriodProperty", typing.Dict[builtins.str, typing.Any]]],
-            minimum_retention: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVolume.RetentionPeriodProperty", typing.Dict[builtins.str, typing.Any]]],
+            default_retention: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.RetentionPeriodProperty", typing.Dict[builtins.str, typing.Any]]],
+            maximum_retention: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.RetentionPeriodProperty", typing.Dict[builtins.str, typing.Any]]],
+            minimum_retention: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.RetentionPeriodProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The configuration to set the retention period of an FSx for ONTAP SnapLock volume.
 
@@ -8137,7 +8163,7 @@ class CfnVolume(
         @builtins.property
         def default_retention(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVolume.RetentionPeriodProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVolume.RetentionPeriodProperty"]:
             '''The retention period assigned to a write once, read many (WORM) file by default if an explicit retention period is not set for an FSx for ONTAP SnapLock volume.
 
             The default retention period must be greater than or equal to the minimum retention period and less than or equal to the maximum retention period.
@@ -8146,31 +8172,31 @@ class CfnVolume(
             '''
             result = self._values.get("default_retention")
             assert result is not None, "Required property 'default_retention' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVolume.RetentionPeriodProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVolume.RetentionPeriodProperty"], result)
 
         @builtins.property
         def maximum_retention(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVolume.RetentionPeriodProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVolume.RetentionPeriodProperty"]:
             '''The longest retention period that can be assigned to a WORM file on an FSx for ONTAP SnapLock volume.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-snaplockretentionperiod.html#cfn-fsx-volume-snaplockretentionperiod-maximumretention
             '''
             result = self._values.get("maximum_retention")
             assert result is not None, "Required property 'maximum_retention' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVolume.RetentionPeriodProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVolume.RetentionPeriodProperty"], result)
 
         @builtins.property
         def minimum_retention(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVolume.RetentionPeriodProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVolume.RetentionPeriodProperty"]:
             '''The shortest retention period that can be assigned to a WORM file on an FSx for ONTAP SnapLock volume.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-volume-snaplockretentionperiod.html#cfn-fsx-volume-snaplockretentionperiod-minimumretention
             '''
             result = self._values.get("minimum_retention")
             assert result is not None, "Required property 'minimum_retention' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVolume.RetentionPeriodProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVolume.RetentionPeriodProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8378,9 +8404,9 @@ class CfnVolumeProps:
         *,
         name: builtins.str,
         backup_id: typing.Optional[builtins.str] = None,
-        ontap_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVolume.OntapConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_zfs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVolume.OpenZFSConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        ontap_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.OntapConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_zfs_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVolume.OpenZFSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         volume_type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnVolume``.
@@ -8397,6 +8423,7 @@ class CfnVolumeProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_fsx as fsx
@@ -8540,27 +8567,27 @@ class CfnVolumeProps:
     @builtins.property
     def ontap_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVolume.OntapConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.OntapConfigurationProperty"]]:
         '''The configuration of an Amazon FSx for NetApp ONTAP volume.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-volume.html#cfn-fsx-volume-ontapconfiguration
         '''
         result = self._values.get("ontap_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVolume.OntapConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.OntapConfigurationProperty"]], result)
 
     @builtins.property
     def open_zfs_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVolume.OpenZFSConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.OpenZFSConfigurationProperty"]]:
         '''The configuration of an Amazon FSx for OpenZFS volume.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-volume.html#cfn-fsx-volume-openzfsconfiguration
         '''
         result = self._values.get("open_zfs_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVolume.OpenZFSConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVolume.OpenZFSConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -8568,7 +8595,7 @@ class CfnVolumeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-volume.html#cfn-fsx-volume-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def volume_type(self) -> typing.Optional[builtins.str]:
@@ -8732,7 +8759,7 @@ class FileSystemAttributes:
         *,
         dns_name: builtins.str,
         file_system_id: builtins.str,
-        security_group: _ISecurityGroup_acf8a799,
+        security_group: "_ISecurityGroup_acf8a799",
     ) -> None:
         '''Properties that describe an existing FSx file system.
 
@@ -8796,11 +8823,11 @@ class FileSystemAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def security_group(self) -> _ISecurityGroup_acf8a799:
+    def security_group(self) -> "_ISecurityGroup_acf8a799":
         '''The security group of the file system.'''
         result = self._values.get("security_group")
         assert result is not None, "Required property 'security_group' is missing"
-        return typing.cast(_ISecurityGroup_acf8a799, result)
+        return typing.cast("_ISecurityGroup_acf8a799", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8832,11 +8859,11 @@ class FileSystemProps:
         self,
         *,
         storage_capacity_gib: jsii.Number,
-        vpc: _IVpc_f30d5663,
+        vpc: "_IVpc_f30d5663",
         backup_id: typing.Optional[builtins.str] = None,
-        kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
+        kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
         storage_type: typing.Optional["StorageType"] = None,
     ) -> None:
         '''Properties for the FSx file system.
@@ -8915,11 +8942,11 @@ class FileSystemProps:
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def vpc(self) -> _IVpc_f30d5663:
+    def vpc(self) -> "_IVpc_f30d5663":
         '''The VPC to launch the file system in.'''
         result = self._values.get("vpc")
         assert result is not None, "Required property 'vpc' is missing"
-        return typing.cast(_IVpc_f30d5663, result)
+        return typing.cast("_IVpc_f30d5663", result)
 
     @builtins.property
     def backup_id(self) -> typing.Optional[builtins.str]:
@@ -8933,31 +8960,31 @@ class FileSystemProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def kms_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def kms_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The KMS key used for encryption to protect your data at rest.
 
         :default: - the aws/fsx default KMS key for the AWS account being deployed into.
         '''
         result = self._values.get("kms_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Policy to apply when the file system is removed from the stack.
 
         :default: RemovalPolicy.RETAIN
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def security_group(self) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    def security_group(self) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''Security Group to assign to this file system.
 
         :default: - creates new security group which allows all outbound traffic.
         '''
         result = self._values.get("security_group")
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
     def storage_type(self) -> typing.Optional["StorageType"]:
@@ -9118,12 +9145,12 @@ class LustreConfiguration:
         self,
         *,
         deployment_type: "LustreDeploymentType",
-        auto_import_policy: typing.Optional[LustreAutoImportPolicy] = None,
-        automatic_backup_retention: typing.Optional[_Duration_4839e8c3] = None,
+        auto_import_policy: typing.Optional["LustreAutoImportPolicy"] = None,
+        automatic_backup_retention: typing.Optional["_Duration_4839e8c3"] = None,
         copy_tags_to_backups: typing.Optional[builtins.bool] = None,
-        daily_automatic_backup_start_time: typing.Optional[DailyAutomaticBackupStartTime] = None,
+        daily_automatic_backup_start_time: typing.Optional["DailyAutomaticBackupStartTime"] = None,
         data_compression_type: typing.Optional["LustreDataCompressionType"] = None,
-        drive_cache_type: typing.Optional[DriveCacheType] = None,
+        drive_cache_type: typing.Optional["DriveCacheType"] = None,
         export_path: typing.Optional[builtins.str] = None,
         imported_file_chunk_size_mib: typing.Optional[jsii.Number] = None,
         import_path: typing.Optional[builtins.str] = None,
@@ -9218,7 +9245,7 @@ class LustreConfiguration:
         return typing.cast("LustreDeploymentType", result)
 
     @builtins.property
-    def auto_import_policy(self) -> typing.Optional[LustreAutoImportPolicy]:
+    def auto_import_policy(self) -> typing.Optional["LustreAutoImportPolicy"]:
         '''Available with ``Scratch`` and ``Persistent_1`` deployment types.
 
         When you create your file system, your existing S3 objects appear as file and directory listings. Use this property to choose how Amazon FSx keeps your file and directory listings up to date as you add or modify objects in your linked S3 bucket. ``AutoImportPolicy`` can have the following values:
@@ -9233,10 +9260,10 @@ class LustreConfiguration:
         :link: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-lustreconfiguration.html#cfn-fsx-filesystem-lustreconfiguration-autoimportpolicy
         '''
         result = self._values.get("auto_import_policy")
-        return typing.cast(typing.Optional[LustreAutoImportPolicy], result)
+        return typing.cast(typing.Optional["LustreAutoImportPolicy"], result)
 
     @builtins.property
-    def automatic_backup_retention(self) -> typing.Optional[_Duration_4839e8c3]:
+    def automatic_backup_retention(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of days to retain automatic backups.
 
         Setting this property to 0 disables automatic backups.
@@ -9247,7 +9274,7 @@ class LustreConfiguration:
         :default: Duration.days(0)
         '''
         result = self._values.get("automatic_backup_retention")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def copy_tags_to_backups(self) -> typing.Optional[builtins.bool]:
@@ -9261,13 +9288,13 @@ class LustreConfiguration:
     @builtins.property
     def daily_automatic_backup_start_time(
         self,
-    ) -> typing.Optional[DailyAutomaticBackupStartTime]:
+    ) -> typing.Optional["DailyAutomaticBackupStartTime"]:
         '''Start time for 30-minute daily automatic backup window in Coordinated Universal Time (UTC).
 
         :default: - no backup window
         '''
         result = self._values.get("daily_automatic_backup_start_time")
-        return typing.cast(typing.Optional[DailyAutomaticBackupStartTime], result)
+        return typing.cast(typing.Optional["DailyAutomaticBackupStartTime"], result)
 
     @builtins.property
     def data_compression_type(self) -> typing.Optional["LustreDataCompressionType"]:
@@ -9283,13 +9310,13 @@ class LustreConfiguration:
         return typing.cast(typing.Optional["LustreDataCompressionType"], result)
 
     @builtins.property
-    def drive_cache_type(self) -> typing.Optional[DriveCacheType]:
+    def drive_cache_type(self) -> typing.Optional["DriveCacheType"]:
         '''The type of drive cache used by PERSISTENT_1 file systems that are provisioned with HDD storage devices.
 
         :default: - no drive cache
         '''
         result = self._values.get("drive_cache_type")
-        return typing.cast(typing.Optional[DriveCacheType], result)
+        return typing.cast(typing.Optional["DriveCacheType"], result)
 
     @builtins.property
     def export_path(self) -> typing.Optional[builtins.str]:
@@ -9468,15 +9495,15 @@ class LustreFileSystemProps(FileSystemProps):
         self,
         *,
         storage_capacity_gib: jsii.Number,
-        vpc: _IVpc_f30d5663,
+        vpc: "_IVpc_f30d5663",
         backup_id: typing.Optional[builtins.str] = None,
-        kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
+        kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
         storage_type: typing.Optional["StorageType"] = None,
-        lustre_configuration: typing.Union[LustreConfiguration, typing.Dict[builtins.str, typing.Any]],
-        vpc_subnet: _ISubnet_d57d1229,
-        file_system_type_version: typing.Optional[FileSystemTypeVersion] = None,
+        lustre_configuration: typing.Union["LustreConfiguration", typing.Dict[builtins.str, typing.Any]],
+        vpc_subnet: "_ISubnet_d57d1229",
+        file_system_type_version: typing.Optional["FileSystemTypeVersion"] = None,
     ) -> None:
         '''Properties specific to the Lustre version of the FSx file system.
 
@@ -9562,11 +9589,11 @@ class LustreFileSystemProps(FileSystemProps):
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def vpc(self) -> _IVpc_f30d5663:
+    def vpc(self) -> "_IVpc_f30d5663":
         '''The VPC to launch the file system in.'''
         result = self._values.get("vpc")
         assert result is not None, "Required property 'vpc' is missing"
-        return typing.cast(_IVpc_f30d5663, result)
+        return typing.cast("_IVpc_f30d5663", result)
 
     @builtins.property
     def backup_id(self) -> typing.Optional[builtins.str]:
@@ -9580,31 +9607,31 @@ class LustreFileSystemProps(FileSystemProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def kms_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def kms_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The KMS key used for encryption to protect your data at rest.
 
         :default: - the aws/fsx default KMS key for the AWS account being deployed into.
         '''
         result = self._values.get("kms_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Policy to apply when the file system is removed from the stack.
 
         :default: RemovalPolicy.RETAIN
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def security_group(self) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    def security_group(self) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''Security Group to assign to this file system.
 
         :default: - creates new security group which allows all outbound traffic.
         '''
         result = self._values.get("security_group")
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
     def storage_type(self) -> typing.Optional["StorageType"]:
@@ -9618,21 +9645,21 @@ class LustreFileSystemProps(FileSystemProps):
         return typing.cast(typing.Optional["StorageType"], result)
 
     @builtins.property
-    def lustre_configuration(self) -> LustreConfiguration:
+    def lustre_configuration(self) -> "LustreConfiguration":
         '''Additional configuration for FSx specific to Lustre.'''
         result = self._values.get("lustre_configuration")
         assert result is not None, "Required property 'lustre_configuration' is missing"
-        return typing.cast(LustreConfiguration, result)
+        return typing.cast("LustreConfiguration", result)
 
     @builtins.property
-    def vpc_subnet(self) -> _ISubnet_d57d1229:
+    def vpc_subnet(self) -> "_ISubnet_d57d1229":
         '''The subnet that the file system will be accessible from.'''
         result = self._values.get("vpc_subnet")
         assert result is not None, "Required property 'vpc_subnet' is missing"
-        return typing.cast(_ISubnet_d57d1229, result)
+        return typing.cast("_ISubnet_d57d1229", result)
 
     @builtins.property
-    def file_system_type_version(self) -> typing.Optional[FileSystemTypeVersion]:
+    def file_system_type_version(self) -> typing.Optional["FileSystemTypeVersion"]:
         '''The Lustre version for the file system.
 
         :default: - V_2_10, except for PERSISTENT_2 deployment type, where it is V_2_12 without metadata configuration mode and V_2_15 with metadata configuration mode.
@@ -9640,7 +9667,7 @@ class LustreFileSystemProps(FileSystemProps):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-filesystem.html#cfn-fsx-filesystem-filesystemtypeversion
         '''
         result = self._values.get("file_system_type_version")
-        return typing.cast(typing.Optional[FileSystemTypeVersion], result)
+        return typing.cast(typing.Optional["FileSystemTypeVersion"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9832,7 +9859,7 @@ class FileSystemBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -9864,7 +9891,7 @@ class FileSystemBase(
     @builtins.property
     @jsii.member(jsii_name="connections")
     @abc.abstractmethod
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''The security groups/rules used to allow network connections to the file system.
 
         :attribute: true
@@ -9898,12 +9925,12 @@ class _FileSystemBaseProxy(
 ):
     @builtins.property
     @jsii.member(jsii_name="connections")
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''The security groups/rules used to allow network connections to the file system.
 
         :attribute: true
         '''
-        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
     @jsii.member(jsii_name="dnsName")
@@ -9963,19 +9990,19 @@ class LustreFileSystem(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        lustre_configuration: typing.Union[LustreConfiguration, typing.Dict[builtins.str, typing.Any]],
-        vpc_subnet: _ISubnet_d57d1229,
-        file_system_type_version: typing.Optional[FileSystemTypeVersion] = None,
+        lustre_configuration: typing.Union["LustreConfiguration", typing.Dict[builtins.str, typing.Any]],
+        vpc_subnet: "_ISubnet_d57d1229",
+        file_system_type_version: typing.Optional["FileSystemTypeVersion"] = None,
         storage_capacity_gib: jsii.Number,
-        vpc: _IVpc_f30d5663,
+        vpc: "_IVpc_f30d5663",
         backup_id: typing.Optional[builtins.str] = None,
-        kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        storage_type: typing.Optional[StorageType] = None,
+        kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        storage_type: typing.Optional["StorageType"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -10014,13 +10041,13 @@ class LustreFileSystem(
     @builtins.classmethod
     def from_lustre_file_system_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         dns_name: builtins.str,
         file_system_id: builtins.str,
-        security_group: _ISecurityGroup_acf8a799,
-    ) -> IFileSystem:
+        security_group: "_ISecurityGroup_acf8a799",
+    ) -> "IFileSystem":
         '''Import an existing FSx for Lustre file system from the given properties.
 
         :param scope: -
@@ -10039,7 +10066,7 @@ class LustreFileSystem(
             security_group=security_group,
         )
 
-        return typing.cast(IFileSystem, jsii.sinvoke(cls, "fromLustreFileSystemAttributes", [scope, id, attrs]))
+        return typing.cast("IFileSystem", jsii.sinvoke(cls, "fromLustreFileSystemAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -10049,9 +10076,9 @@ class LustreFileSystem(
 
     @builtins.property
     @jsii.member(jsii_name="connections")
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''The security groups/rules used to allow network connections to the file system.'''
-        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
     @jsii.member(jsii_name="dnsName")

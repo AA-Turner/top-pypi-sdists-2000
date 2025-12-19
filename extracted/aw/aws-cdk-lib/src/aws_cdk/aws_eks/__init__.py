@@ -2623,7 +2623,7 @@ class AccessPolicyProps:
         self,
         *,
         access_scope: typing.Union["AccessScope", typing.Dict[builtins.str, typing.Any]],
-        policy: AccessPolicyArn,
+        policy: "AccessPolicyArn",
     ) -> None:
         '''Properties for configuring an Amazon EKS Access Policy.
 
@@ -2669,11 +2669,11 @@ class AccessPolicyProps:
         return typing.cast("AccessScope", result)
 
     @builtins.property
-    def policy(self) -> AccessPolicyArn:
+    def policy(self) -> "AccessPolicyArn":
         '''The access policy itself, which defines the specific permissions.'''
         result = self._values.get("policy")
         assert result is not None, "Required property 'policy' is missing"
-        return typing.cast(AccessPolicyArn, result)
+        return typing.cast("AccessPolicyArn", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3018,7 +3018,7 @@ class AlbController(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster: "Cluster",
@@ -3054,7 +3054,7 @@ class AlbController(
     @builtins.classmethod
     def create(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
         cluster: "Cluster",
         version: "AlbControllerVersion",
@@ -3177,7 +3177,7 @@ class AlbControllerOptions:
         self,
         *,
         version: "AlbControllerVersion",
-        additional_helm_chart_values: typing.Optional[typing.Union[AlbControllerHelmChartOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        additional_helm_chart_values: typing.Optional[typing.Union["AlbControllerHelmChartOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         policy: typing.Any = None,
         repository: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -3231,13 +3231,13 @@ class AlbControllerOptions:
     @builtins.property
     def additional_helm_chart_values(
         self,
-    ) -> typing.Optional[AlbControllerHelmChartOptions]:
+    ) -> typing.Optional["AlbControllerHelmChartOptions"]:
         '''Additional helm chart values for ALB controller.
 
         :default: - no additional helm chart values
         '''
         result = self._values.get("additional_helm_chart_values")
-        return typing.cast(typing.Optional[AlbControllerHelmChartOptions], result)
+        return typing.cast(typing.Optional["AlbControllerHelmChartOptions"], result)
 
     @builtins.property
     def policy(self) -> typing.Any:
@@ -3294,7 +3294,7 @@ class AlbControllerProps(AlbControllerOptions):
         self,
         *,
         version: "AlbControllerVersion",
-        additional_helm_chart_values: typing.Optional[typing.Union[AlbControllerHelmChartOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        additional_helm_chart_values: typing.Optional[typing.Union["AlbControllerHelmChartOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         policy: typing.Any = None,
         repository: typing.Optional[builtins.str] = None,
         cluster: "Cluster",
@@ -3362,13 +3362,13 @@ class AlbControllerProps(AlbControllerOptions):
     @builtins.property
     def additional_helm_chart_values(
         self,
-    ) -> typing.Optional[AlbControllerHelmChartOptions]:
+    ) -> typing.Optional["AlbControllerHelmChartOptions"]:
         '''Additional helm chart values for ALB controller.
 
         :default: - no additional helm chart values
         '''
         result = self._values.get("additional_helm_chart_values")
-        return typing.cast(typing.Optional[AlbControllerHelmChartOptions], result)
+        return typing.cast(typing.Optional["AlbControllerHelmChartOptions"], result)
 
     @builtins.property
     def policy(self) -> typing.Any:
@@ -3779,32 +3779,32 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         associate_public_ip_address: typing.Optional[builtins.bool] = None,
         auto_scaling_group_name: typing.Optional[builtins.str] = None,
-        az_capacity_distribution_strategy: typing.Optional[_CapacityDistributionStrategy_2393ccfe] = None,
-        block_devices: typing.Optional[typing.Sequence[typing.Union[_BlockDevice_0cfc0568, typing.Dict[builtins.str, typing.Any]]]] = None,
+        az_capacity_distribution_strategy: typing.Optional["_CapacityDistributionStrategy_2393ccfe"] = None,
+        block_devices: typing.Optional[typing.Sequence[typing.Union["_BlockDevice_0cfc0568", typing.Dict[builtins.str, typing.Any]]]] = None,
         capacity_rebalance: typing.Optional[builtins.bool] = None,
-        cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        default_instance_warmup: typing.Optional[_Duration_4839e8c3] = None,
+        cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        default_instance_warmup: typing.Optional["_Duration_4839e8c3"] = None,
         desired_capacity: typing.Optional[jsii.Number] = None,
-        group_metrics: typing.Optional[typing.Sequence[_GroupMetrics_7cdf729b]] = None,
-        health_check: typing.Optional[_HealthCheck_03a4bd5a] = None,
-        health_checks: typing.Optional[_HealthChecks_b8757873] = None,
+        group_metrics: typing.Optional[typing.Sequence["_GroupMetrics_7cdf729b"]] = None,
+        health_check: typing.Optional["_HealthCheck_03a4bd5a"] = None,
+        health_checks: typing.Optional["_HealthChecks_b8757873"] = None,
         ignore_unmodified_size_properties: typing.Optional[builtins.bool] = None,
-        instance_monitoring: typing.Optional[_Monitoring_50020f91] = None,
+        instance_monitoring: typing.Optional["_Monitoring_50020f91"] = None,
         key_name: typing.Optional[builtins.str] = None,
-        key_pair: typing.Optional[_IKeyPair_bc344eda] = None,
+        key_pair: typing.Optional["_IKeyPair_bc344eda"] = None,
         max_capacity: typing.Optional[jsii.Number] = None,
-        max_instance_lifetime: typing.Optional[_Duration_4839e8c3] = None,
+        max_instance_lifetime: typing.Optional["_Duration_4839e8c3"] = None,
         min_capacity: typing.Optional[jsii.Number] = None,
         new_instances_protected_from_scale_in: typing.Optional[builtins.bool] = None,
-        notifications: typing.Optional[typing.Sequence[typing.Union[_NotificationConfiguration_d5911670, typing.Dict[builtins.str, typing.Any]]]] = None,
-        signals: typing.Optional[_Signals_69fbeb6e] = None,
+        notifications: typing.Optional[typing.Sequence[typing.Union["_NotificationConfiguration_d5911670", typing.Dict[builtins.str, typing.Any]]]] = None,
+        signals: typing.Optional["_Signals_69fbeb6e"] = None,
         spot_price: typing.Optional[builtins.str] = None,
         ssm_session_permissions: typing.Optional[builtins.bool] = None,
-        termination_policies: typing.Optional[typing.Sequence[_TerminationPolicy_89633c56]] = None,
+        termination_policies: typing.Optional[typing.Sequence["_TerminationPolicy_89633c56"]] = None,
         termination_policy_custom_lambda_function_arn: typing.Optional[builtins.str] = None,
-        update_policy: typing.Optional[_UpdatePolicy_6dffc7ca] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        instance_type: _InstanceType_f64915b9,
+        update_policy: typing.Optional["_UpdatePolicy_6dffc7ca"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        instance_type: "_InstanceType_f64915b9",
         bootstrap_enabled: typing.Optional[builtins.bool] = None,
         bootstrap_options: typing.Optional[typing.Union["BootstrapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         machine_image_type: typing.Optional["MachineImageType"] = None,
@@ -4004,16 +4004,16 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
     @builtins.property
     def az_capacity_distribution_strategy(
         self,
-    ) -> typing.Optional[_CapacityDistributionStrategy_2393ccfe]:
+    ) -> typing.Optional["_CapacityDistributionStrategy_2393ccfe"]:
         '''The strategy for distributing instances across Availability Zones.
 
         :default: None
         '''
         result = self._values.get("az_capacity_distribution_strategy")
-        return typing.cast(typing.Optional[_CapacityDistributionStrategy_2393ccfe], result)
+        return typing.cast(typing.Optional["_CapacityDistributionStrategy_2393ccfe"], result)
 
     @builtins.property
-    def block_devices(self) -> typing.Optional[typing.List[_BlockDevice_0cfc0568]]:
+    def block_devices(self) -> typing.Optional[typing.List["_BlockDevice_0cfc0568"]]:
         '''Specifies how block devices are exposed to the instance. You can specify virtual devices and EBS volumes.
 
         Each instance that is launched has an associated root device volume,
@@ -4028,7 +4028,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         :see: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html
         '''
         result = self._values.get("block_devices")
-        return typing.cast(typing.Optional[typing.List[_BlockDevice_0cfc0568]], result)
+        return typing.cast(typing.Optional[typing.List["_BlockDevice_0cfc0568"]], result)
 
     @builtins.property
     def capacity_rebalance(self) -> typing.Optional[builtins.bool]:
@@ -4046,16 +4046,16 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Default scaling cooldown for this AutoScalingGroup.
 
         :default: Duration.minutes(5)
         '''
         result = self._values.get("cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def default_instance_warmup(self) -> typing.Optional[_Duration_4839e8c3]:
+    def default_instance_warmup(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The amount of time, in seconds, until a newly launched instance can contribute to the Amazon CloudWatch metrics.
 
         This delay lets an instance finish initializing before Amazon EC2 Auto Scaling aggregates instance metrics,
@@ -4072,7 +4072,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         :see: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-default-instance-warmup.html
         '''
         result = self._values.get("default_instance_warmup")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def desired_capacity(self) -> typing.Optional[jsii.Number]:
@@ -4089,7 +4089,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def group_metrics(self) -> typing.Optional[typing.List[_GroupMetrics_7cdf729b]]:
+    def group_metrics(self) -> typing.Optional[typing.List["_GroupMetrics_7cdf729b"]]:
         '''Enable monitoring for group metrics, these metrics describe the group rather than any of its instances.
 
         To report all group metrics use ``GroupMetrics.all()``
@@ -4098,10 +4098,10 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         :default: - no group metrics will be reported
         '''
         result = self._values.get("group_metrics")
-        return typing.cast(typing.Optional[typing.List[_GroupMetrics_7cdf729b]], result)
+        return typing.cast(typing.Optional[typing.List["_GroupMetrics_7cdf729b"]], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[_HealthCheck_03a4bd5a]:
+    def health_check(self) -> typing.Optional["_HealthCheck_03a4bd5a"]:
         '''(deprecated) Configuration for health checks.
 
         :default: - HealthCheck.ec2 with no grace period
@@ -4111,10 +4111,10 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         :stability: deprecated
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[_HealthCheck_03a4bd5a], result)
+        return typing.cast(typing.Optional["_HealthCheck_03a4bd5a"], result)
 
     @builtins.property
-    def health_checks(self) -> typing.Optional[_HealthChecks_b8757873]:
+    def health_checks(self) -> typing.Optional["_HealthChecks_b8757873"]:
         '''Configuration for EC2 or additional health checks.
 
         Even when using ``HealthChecks.withAdditionalChecks()``, the EC2 type is implicitly included.
@@ -4124,7 +4124,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         :see: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html
         '''
         result = self._values.get("health_checks")
-        return typing.cast(typing.Optional[_HealthChecks_b8757873], result)
+        return typing.cast(typing.Optional["_HealthChecks_b8757873"], result)
 
     @builtins.property
     def ignore_unmodified_size_properties(self) -> typing.Optional[builtins.bool]:
@@ -4142,7 +4142,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def instance_monitoring(self) -> typing.Optional[_Monitoring_50020f91]:
+    def instance_monitoring(self) -> typing.Optional["_Monitoring_50020f91"]:
         '''Controls whether instances in this group are launched with detailed or basic monitoring.
 
         When detailed monitoring is enabled, Amazon CloudWatch generates metrics every minute and your account
@@ -4155,7 +4155,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         :see: https://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html#enable-as-instance-metrics
         '''
         result = self._values.get("instance_monitoring")
-        return typing.cast(typing.Optional[_Monitoring_50020f91], result)
+        return typing.cast(typing.Optional["_Monitoring_50020f91"], result)
 
     @builtins.property
     def key_name(self) -> typing.Optional[builtins.str]:
@@ -4175,7 +4175,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def key_pair(self) -> typing.Optional[_IKeyPair_bc344eda]:
+    def key_pair(self) -> typing.Optional["_IKeyPair_bc344eda"]:
         '''The SSH keypair to grant access to the instance.
 
         Feature flag ``AUTOSCALING_GENERATE_LAUNCH_TEMPLATE`` must be enabled to use this property.
@@ -4187,7 +4187,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         :default: - No SSH access will be possible.
         '''
         result = self._values.get("key_pair")
-        return typing.cast(typing.Optional[_IKeyPair_bc344eda], result)
+        return typing.cast(typing.Optional["_IKeyPair_bc344eda"], result)
 
     @builtins.property
     def max_capacity(self) -> typing.Optional[jsii.Number]:
@@ -4199,7 +4199,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def max_instance_lifetime(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_instance_lifetime(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum amount of time that an instance can be in service.
 
         The maximum duration applies
@@ -4214,7 +4214,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         :see: https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-max-instance-lifetime.html
         '''
         result = self._values.get("max_instance_lifetime")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def min_capacity(self) -> typing.Optional[jsii.Number]:
@@ -4246,7 +4246,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
     @builtins.property
     def notifications(
         self,
-    ) -> typing.Optional[typing.List[_NotificationConfiguration_d5911670]]:
+    ) -> typing.Optional[typing.List["_NotificationConfiguration_d5911670"]]:
         '''Configure autoscaling group to send notifications about fleet changes to an SNS topic(s).
 
         :default: - No fleet change notifications will be sent.
@@ -4254,10 +4254,10 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-notificationconfigurations
         '''
         result = self._values.get("notifications")
-        return typing.cast(typing.Optional[typing.List[_NotificationConfiguration_d5911670]], result)
+        return typing.cast(typing.Optional[typing.List["_NotificationConfiguration_d5911670"]], result)
 
     @builtins.property
-    def signals(self) -> typing.Optional[_Signals_69fbeb6e]:
+    def signals(self) -> typing.Optional["_Signals_69fbeb6e"]:
         '''Configure waiting for signals during deployment.
 
         Use this to pause the CloudFormation deployment to wait for the instances
@@ -4279,7 +4279,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         :default: - Do not wait for signals
         '''
         result = self._values.get("signals")
-        return typing.cast(typing.Optional[_Signals_69fbeb6e], result)
+        return typing.cast(typing.Optional["_Signals_69fbeb6e"], result)
 
     @builtins.property
     def spot_price(self) -> typing.Optional[builtins.str]:
@@ -4317,7 +4317,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
     @builtins.property
     def termination_policies(
         self,
-    ) -> typing.Optional[typing.List[_TerminationPolicy_89633c56]]:
+    ) -> typing.Optional[typing.List["_TerminationPolicy_89633c56"]]:
         '''A policy or a list of policies that are used to select the instances to terminate.
 
         The policies are executed in the order that you list them.
@@ -4327,7 +4327,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         :see: https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html
         '''
         result = self._values.get("termination_policies")
-        return typing.cast(typing.Optional[typing.List[_TerminationPolicy_89633c56]], result)
+        return typing.cast(typing.Optional[typing.List["_TerminationPolicy_89633c56"]], result)
 
     @builtins.property
     def termination_policy_custom_lambda_function_arn(
@@ -4346,7 +4346,7 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def update_policy(self) -> typing.Optional[_UpdatePolicy_6dffc7ca]:
+    def update_policy(self) -> typing.Optional["_UpdatePolicy_6dffc7ca"]:
         '''What to do when an AutoScalingGroup's instance configuration is changed.
 
         This is applied when any of the settings on the ASG are changed that
@@ -4358,23 +4358,23 @@ class AutoScalingGroupCapacityOptions(_CommonAutoScalingGroupProps_808bbf2d):
         :default: - ``UpdatePolicy.rollingUpdate()`` if using ``init``, ``UpdatePolicy.none()`` otherwise
         '''
         result = self._values.get("update_policy")
-        return typing.cast(typing.Optional[_UpdatePolicy_6dffc7ca], result)
+        return typing.cast(typing.Optional["_UpdatePolicy_6dffc7ca"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where to place instances within the VPC.
 
         :default: - All Private subnets.
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def instance_type(self) -> _InstanceType_f64915b9:
+    def instance_type(self) -> "_InstanceType_f64915b9":
         '''Instance type of the instances to start.'''
         result = self._values.get("instance_type")
         assert result is not None, "Required property 'instance_type' is missing"
-        return typing.cast(_InstanceType_f64915b9, result)
+        return typing.cast("_InstanceType_f64915b9", result)
 
     @builtins.property
     def bootstrap_enabled(self) -> typing.Optional[builtins.bool]:
@@ -4588,7 +4588,7 @@ class AwsAuth(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster: "Cluster",
@@ -4620,7 +4620,7 @@ class AwsAuth(
     @jsii.member(jsii_name="addMastersRole")
     def add_masters_role(
         self,
-        role: _IRole_235f5d8e,
+        role: "_IRole_235f5d8e",
         username: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Adds the specified IAM role to the ``system:masters`` RBAC group, which means that anyone that can assume it will be able to administer this Kubernetes system.
@@ -4637,7 +4637,7 @@ class AwsAuth(
     @jsii.member(jsii_name="addRoleMapping")
     def add_role_mapping(
         self,
-        role: _IRole_235f5d8e,
+        role: "_IRole_235f5d8e",
         *,
         groups: typing.Sequence[builtins.str],
         username: typing.Optional[builtins.str] = None,
@@ -4658,7 +4658,7 @@ class AwsAuth(
     @jsii.member(jsii_name="addUserMapping")
     def add_user_mapping(
         self,
-        user: _IUser_c32311f7,
+        user: "_IUser_c32311f7",
         *,
         groups: typing.Sequence[builtins.str],
         username: typing.Optional[builtins.str] = None,
@@ -5002,6 +5002,7 @@ class CfnAccessEntry(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_eks as eks
@@ -5032,14 +5033,14 @@ class CfnAccessEntry(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster_name: builtins.str,
         principal_arn: builtins.str,
-        access_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessEntry.AccessPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        access_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessEntry.AccessPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         kubernetes_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
         username: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -5073,7 +5074,10 @@ class CfnAccessEntry(
 
     @jsii.member(jsii_name="arnForAccessEntry")
     @builtins.classmethod
-    def arn_for_access_entry(cls, resource: _IAccessEntryRef_14bb9c0a) -> builtins.str:
+    def arn_for_access_entry(
+        cls,
+        resource: "_IAccessEntryRef_14bb9c0a",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5095,7 +5099,7 @@ class CfnAccessEntry(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessEntry", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5126,9 +5130,9 @@ class CfnAccessEntry(
 
     @builtins.property
     @jsii.member(jsii_name="accessEntryRef")
-    def access_entry_ref(self) -> _AccessEntryReference_447195cd:
+    def access_entry_ref(self) -> "_AccessEntryReference_447195cd":
         '''A reference to a AccessEntry resource.'''
-        return typing.cast(_AccessEntryReference_447195cd, jsii.get(self, "accessEntryRef"))
+        return typing.cast("_AccessEntryReference_447195cd", jsii.get(self, "accessEntryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAccessEntryArn")
@@ -5141,9 +5145,9 @@ class CfnAccessEntry(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5180,14 +5184,14 @@ class CfnAccessEntry(
     @jsii.member(jsii_name="accessPolicies")
     def access_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAccessEntry.AccessPolicyProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAccessEntry.AccessPolicyProperty"]]]]:
         '''The access policies to associate to the access entry.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAccessEntry.AccessPolicyProperty"]]]], jsii.get(self, "accessPolicies"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAccessEntry.AccessPolicyProperty"]]]], jsii.get(self, "accessPolicies"))
 
     @access_policies.setter
     def access_policies(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAccessEntry.AccessPolicyProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAccessEntry.AccessPolicyProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__72525fb57b071712551a1a70513a19122fa4b07addc9565813f0c1ad6c531aa6)
@@ -5212,12 +5216,12 @@ class CfnAccessEntry(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that assists with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__343de9e1ac76cbf6a67d73d349089c21fca695294c67398109df2c6ad597bba3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5258,7 +5262,7 @@ class CfnAccessEntry(
         def __init__(
             self,
             *,
-            access_scope: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessEntry.AccessScopeProperty", typing.Dict[builtins.str, typing.Any]]],
+            access_scope: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessEntry.AccessScopeProperty", typing.Dict[builtins.str, typing.Any]]],
             policy_arn: builtins.str,
         ) -> None:
             '''An access policy includes permissions that allow Amazon EKS to authorize an IAM principal to work with Kubernetes objects on your cluster.
@@ -5299,14 +5303,14 @@ class CfnAccessEntry(
         @builtins.property
         def access_scope(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAccessEntry.AccessScopeProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAccessEntry.AccessScopeProperty"]:
             '''The scope of an ``AccessPolicy`` that's associated to an ``AccessEntry`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-accessentry-accesspolicy.html#cfn-eks-accessentry-accesspolicy-accessscope
             '''
             result = self._values.get("access_scope")
             assert result is not None, "Required property 'access_scope' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAccessEntry.AccessScopeProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAccessEntry.AccessScopeProperty"], result)
 
         @builtins.property
         def policy_arn(self) -> builtins.str:
@@ -5424,9 +5428,9 @@ class CfnAccessEntryProps:
         *,
         cluster_name: builtins.str,
         principal_arn: builtins.str,
-        access_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessEntry.AccessPolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        access_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessEntry.AccessPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         kubernetes_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
         username: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -5445,6 +5449,7 @@ class CfnAccessEntryProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_eks as eks
@@ -5525,13 +5530,13 @@ class CfnAccessEntryProps:
     @builtins.property
     def access_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAccessEntry.AccessPolicyProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAccessEntry.AccessPolicyProperty"]]]]:
         '''The access policies to associate to the access entry.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-accessentry.html#cfn-eks-accessentry-accesspolicies
         '''
         result = self._values.get("access_policies")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAccessEntry.AccessPolicyProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAccessEntry.AccessPolicyProperty"]]]], result)
 
     @builtins.property
     def kubernetes_groups(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5549,7 +5554,7 @@ class CfnAccessEntryProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that assists with categorization and organization.
 
         Each tag consists of a key and an optional value. You define both. Tags don't propagate to any other cluster or AWS resources.
@@ -5557,7 +5562,7 @@ class CfnAccessEntryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-accessentry.html#cfn-eks-accessentry-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def type(self) -> typing.Optional[builtins.str]:
@@ -5613,6 +5618,7 @@ class CfnAddon(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_eks as eks
@@ -5643,19 +5649,19 @@ class CfnAddon(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         addon_name: builtins.str,
         cluster_name: builtins.str,
         addon_version: typing.Optional[builtins.str] = None,
         configuration_values: typing.Optional[builtins.str] = None,
-        namespace_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAddon.NamespaceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        pod_identity_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAddon.PodIdentityAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        preserve_on_delete: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        namespace_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAddon.NamespaceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        pod_identity_associations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAddon.PodIdentityAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        preserve_on_delete: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         resolve_conflicts: typing.Optional[builtins.str] = None,
-        service_account_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        service_account_role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::EKS::Addon``.
 
@@ -5693,7 +5699,7 @@ class CfnAddon(
 
     @jsii.member(jsii_name="arnForAddon")
     @builtins.classmethod
-    def arn_for_addon(cls, resource: _IAddonRef_fb5de88c) -> builtins.str:
+    def arn_for_addon(cls, resource: "_IAddonRef_fb5de88c") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5715,7 +5721,7 @@ class CfnAddon(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAddon", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5746,9 +5752,9 @@ class CfnAddon(
 
     @builtins.property
     @jsii.member(jsii_name="addonRef")
-    def addon_ref(self) -> _AddonReference_afb1bd13:
+    def addon_ref(self) -> "_AddonReference_afb1bd13":
         '''A reference to a Addon resource.'''
-        return typing.cast(_AddonReference_afb1bd13, jsii.get(self, "addonRef"))
+        return typing.cast("_AddonReference_afb1bd13", jsii.get(self, "addonRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -5766,9 +5772,9 @@ class CfnAddon(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="addonName")
@@ -5826,14 +5832,14 @@ class CfnAddon(
     @jsii.member(jsii_name="namespaceConfig")
     def namespace_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAddon.NamespaceConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAddon.NamespaceConfigProperty"]]:
         '''The namespace configuration for the addon.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAddon.NamespaceConfigProperty"]], jsii.get(self, "namespaceConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAddon.NamespaceConfigProperty"]], jsii.get(self, "namespaceConfig"))
 
     @namespace_config.setter
     def namespace_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAddon.NamespaceConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAddon.NamespaceConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__039b518895f39f54dce3ea31a35bed66445fb7b5e7f4c52a89adafc86911f331)
@@ -5844,14 +5850,14 @@ class CfnAddon(
     @jsii.member(jsii_name="podIdentityAssociations")
     def pod_identity_associations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAddon.PodIdentityAssociationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAddon.PodIdentityAssociationProperty"]]]]:
         '''An array of EKS Pod Identity associations owned by the add-on.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAddon.PodIdentityAssociationProperty"]]]], jsii.get(self, "podIdentityAssociations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAddon.PodIdentityAssociationProperty"]]]], jsii.get(self, "podIdentityAssociations"))
 
     @pod_identity_associations.setter
     def pod_identity_associations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAddon.PodIdentityAssociationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAddon.PodIdentityAssociationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__04a430658e28600fba10a8c3e5edab2978904829dda6f2c70e9cca8560f7e400)
@@ -5862,14 +5868,14 @@ class CfnAddon(
     @jsii.member(jsii_name="preserveOnDelete")
     def preserve_on_delete(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifying this option preserves the add-on software on your cluster but Amazon EKS stops managing any settings for the add-on.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "preserveOnDelete"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "preserveOnDelete"))
 
     @preserve_on_delete.setter
     def preserve_on_delete(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c38bc0bc32707ba96b79f5dda73d99054ea5b77577796b10a0f95ff6fe51b133)
@@ -5904,12 +5910,12 @@ class CfnAddon(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The metadata that you apply to the add-on to assist with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__61cfcc2cd9aba81e02df7f2a5c976044dc5e5cbf6c05b880c4944cb357ebd775)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6065,12 +6071,12 @@ class CfnAddonProps:
         cluster_name: builtins.str,
         addon_version: typing.Optional[builtins.str] = None,
         configuration_values: typing.Optional[builtins.str] = None,
-        namespace_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAddon.NamespaceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        pod_identity_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAddon.PodIdentityAssociationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        preserve_on_delete: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        namespace_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAddon.NamespaceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        pod_identity_associations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAddon.PodIdentityAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        preserve_on_delete: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         resolve_conflicts: typing.Optional[builtins.str] = None,
-        service_account_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        service_account_role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAddon``.
 
@@ -6090,6 +6096,7 @@ class CfnAddonProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_eks as eks
@@ -6191,7 +6198,7 @@ class CfnAddonProps:
     @builtins.property
     def namespace_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAddon.NamespaceConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAddon.NamespaceConfigProperty"]]:
         '''The namespace configuration for the addon.
 
         This specifies the Kubernetes namespace where the addon is installed.
@@ -6199,12 +6206,12 @@ class CfnAddonProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-addon.html#cfn-eks-addon-namespaceconfig
         '''
         result = self._values.get("namespace_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAddon.NamespaceConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAddon.NamespaceConfigProperty"]], result)
 
     @builtins.property
     def pod_identity_associations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAddon.PodIdentityAssociationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAddon.PodIdentityAssociationProperty"]]]]:
         '''An array of EKS Pod Identity associations owned by the add-on.
 
         Each association maps a role to a service account in a namespace in the cluster.
@@ -6214,12 +6221,12 @@ class CfnAddonProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-addon.html#cfn-eks-addon-podidentityassociations
         '''
         result = self._values.get("pod_identity_associations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAddon.PodIdentityAssociationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAddon.PodIdentityAssociationProperty"]]]], result)
 
     @builtins.property
     def preserve_on_delete(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifying this option preserves the add-on software on your cluster but Amazon EKS stops managing any settings for the add-on.
 
         If an IAM account is associated with the add-on, it isn't removed.
@@ -6227,7 +6234,7 @@ class CfnAddonProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-addon.html#cfn-eks-addon-preserveondelete
         '''
         result = self._values.get("preserve_on_delete")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def resolve_conflicts(self) -> typing.Optional[builtins.str]:
@@ -6249,7 +6256,7 @@ class CfnAddonProps:
     @builtins.property
     def service_account_role_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''The Amazon Resource Name (ARN) of an existing IAM role to bind to the add-on's service account.
 
         The role must be assigned the IAM permissions required by the add-on. If you don't specify an existing IAM role, then the add-on uses the permissions assigned to the node IAM role. For more information, see `Amazon EKS node IAM role <https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html>`_ in the *Amazon EKS User Guide* .
@@ -6260,10 +6267,10 @@ class CfnAddonProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-addon.html#cfn-eks-addon-serviceaccountrolearn
         '''
         result = self._values.get("service_account_role_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The metadata that you apply to the add-on to assist with categorization and organization.
 
         Each tag consists of a key and an optional value, both of which you define. Add-on tags do not propagate to any other resources associated with the cluster.
@@ -6271,7 +6278,7 @@ class CfnAddonProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-addon.html#cfn-eks-addon-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6291,7 +6298,9 @@ class CfnCapability(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_eks.CfnCapability",
 ):
-    '''Resource Type definition for EKS Capability.
+    '''An object representing a managed capability in an Amazon EKS cluster.
+
+    This includes all configuration, status, and health information for the capability.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html
     :cloudformationResource: AWS::EKS::Capability
@@ -6299,6 +6308,7 @@ class CfnCapability(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_eks as eks
@@ -6345,7 +6355,7 @@ class CfnCapability(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         capability_name: builtins.str,
@@ -6353,19 +6363,19 @@ class CfnCapability(
         delete_propagation_policy: builtins.str,
         role_arn: builtins.str,
         type: builtins.str,
-        configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapability.CapabilityConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapability.CapabilityConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::EKS::Capability``.
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param capability_name: A unique name for the capability. The name must be unique within your cluster and can contain alphanumeric characters, hyphens, and underscores.
-        :param cluster_name: The name of the EKS cluster where you want to create the capability.
-        :param delete_propagation_policy: Specifies how Kubernetes resources managed by the capability should be handled when the capability is deleted. Currently, the only supported value is RETAIN which retains all Kubernetes resources managed by the capability when the capability is deleted.
-        :param role_arn: The Amazon Resource Name (ARN) of the IAM role that the capability uses to interact with AWS services. This role must have a trust policy that allows the EKS service principal to assume it, and it must have the necessary permissions for the capability type you're creating.
-        :param type: The type of capability to create. Valid values are: ACK (AWS Controllers for Kubernetes, which lets you manage AWS resources directly from Kubernetes), ARGOCD (Argo CD for GitOps-based continuous delivery), or KRO (Kube Resource Orchestrator for composing and managing custom Kubernetes resources).
-        :param configuration: Configuration settings for a capability. The structure of this object varies depending on the capability type.
+        :param capability_name: The unique name of the capability within the cluster.
+        :param cluster_name: The name of the Amazon EKS cluster that contains this capability.
+        :param delete_propagation_policy: The delete propagation policy for the capability. Currently, the only supported value is ``RETAIN`` , which keeps all resources managed by the capability when the capability is deleted.
+        :param role_arn: The Amazon Resource Name (ARN) of the IAM role that the capability uses to interact with AWS services.
+        :param type: The type of capability. Valid values are ``ACK`` , ``ARGOCD`` , or ``KRO`` .
+        :param configuration: The configuration settings for the capability. The structure varies depending on the capability type.
         :param tags: An array of key-value pairs to apply to this resource.
         '''
         if __debug__:
@@ -6386,7 +6396,7 @@ class CfnCapability(
 
     @jsii.member(jsii_name="arnForCapability")
     @builtins.classmethod
-    def arn_for_capability(cls, resource: _ICapabilityRef_3aad918f) -> builtins.str:
+    def arn_for_capability(cls, resource: "_ICapabilityRef_3aad918f") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -6408,7 +6418,7 @@ class CfnCapability(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCapability", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6491,9 +6501,15 @@ class CfnCapability(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''The current status of the capability.
+        '''The current status of the capability. Valid values include:.
 
-        Valid values include: CREATING (the capability is being created), ACTIVE (the capability is running and available), UPDATING (the capability is being updated), DELETING (the capability is being deleted), CREATE_FAILED (the capability creation failed), UPDATE_FAILED (the capability update failed), or DELETE_FAILED (the capability deletion failed).
+        - ``CREATING`` – The capability is being created.
+        - ``ACTIVE`` – The capability is running and available.
+        - ``UPDATING`` – The capability is being updated.
+        - ``DELETING`` – The capability is being deleted.
+        - ``CREATE_FAILED`` – The capability creation failed.
+        - ``UPDATE_FAILED`` – The capability update failed.
+        - ``DELETE_FAILED`` – The capability deletion failed.
 
         :cloudformationAttribute: Status
         '''
@@ -6510,15 +6526,15 @@ class CfnCapability(
 
     @builtins.property
     @jsii.member(jsii_name="capabilityRef")
-    def capability_ref(self) -> _CapabilityReference_ae98e6d7:
+    def capability_ref(self) -> "_CapabilityReference_ae98e6d7":
         '''A reference to a Capability resource.'''
-        return typing.cast(_CapabilityReference_ae98e6d7, jsii.get(self, "capabilityRef"))
+        return typing.cast("_CapabilityReference_ae98e6d7", jsii.get(self, "capabilityRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -6528,7 +6544,7 @@ class CfnCapability(
     @builtins.property
     @jsii.member(jsii_name="capabilityName")
     def capability_name(self) -> builtins.str:
-        '''A unique name for the capability.'''
+        '''The unique name of the capability within the cluster.'''
         return typing.cast(builtins.str, jsii.get(self, "capabilityName"))
 
     @capability_name.setter
@@ -6541,7 +6557,7 @@ class CfnCapability(
     @builtins.property
     @jsii.member(jsii_name="clusterName")
     def cluster_name(self) -> builtins.str:
-        '''The name of the EKS cluster where you want to create the capability.'''
+        '''The name of the Amazon EKS cluster that contains this capability.'''
         return typing.cast(builtins.str, jsii.get(self, "clusterName"))
 
     @cluster_name.setter
@@ -6554,7 +6570,7 @@ class CfnCapability(
     @builtins.property
     @jsii.member(jsii_name="deletePropagationPolicy")
     def delete_propagation_policy(self) -> builtins.str:
-        '''Specifies how Kubernetes resources managed by the capability should be handled when the capability is deleted.'''
+        '''The delete propagation policy for the capability.'''
         return typing.cast(builtins.str, jsii.get(self, "deletePropagationPolicy"))
 
     @delete_propagation_policy.setter
@@ -6580,7 +6596,7 @@ class CfnCapability(
     @builtins.property
     @jsii.member(jsii_name="type")
     def type(self) -> builtins.str:
-        '''The type of capability to create.'''
+        '''The type of capability.'''
         return typing.cast(builtins.str, jsii.get(self, "type"))
 
     @type.setter
@@ -6594,14 +6610,14 @@ class CfnCapability(
     @jsii.member(jsii_name="configuration")
     def configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.CapabilityConfigurationProperty"]]:
-        '''Configuration settings for a capability.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.CapabilityConfigurationProperty"]], jsii.get(self, "configuration"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapability.CapabilityConfigurationProperty"]]:
+        '''The configuration settings for the capability.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapability.CapabilityConfigurationProperty"]], jsii.get(self, "configuration"))
 
     @configuration.setter
     def configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.CapabilityConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapability.CapabilityConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__292eb262615ca3e11e4723da01bedda397199714a5de67b4c36de40819e1b905)
@@ -6610,12 +6626,12 @@ class CfnCapability(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__eb37ce6f0e5ae3f7fc9be815c224238918f0f32968ca83cdb3707245d23f81d8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6636,10 +6652,10 @@ class CfnCapability(
         def __init__(
             self,
             *,
-            aws_idc: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapability.AwsIdcProperty", typing.Dict[builtins.str, typing.Any]]],
+            aws_idc: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapability.AwsIdcProperty", typing.Dict[builtins.str, typing.Any]]],
             namespace: typing.Optional[builtins.str] = None,
-            network_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapability.NetworkAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            rbac_role_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapability.ArgoCdRoleMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            network_access: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapability.NetworkAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            rbac_role_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapability.ArgoCdRoleMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             server_url: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Configuration settings for an Argo CD capability.
@@ -6707,7 +6723,7 @@ class CfnCapability(
         @builtins.property
         def aws_idc(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnCapability.AwsIdcProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnCapability.AwsIdcProperty"]:
             '''Configuration for integrating Argo CD with IAM Identity Center.
 
             This allows you to use your organization's identity provider for authentication to Argo CD.
@@ -6716,7 +6732,7 @@ class CfnCapability(
             '''
             result = self._values.get("aws_idc")
             assert result is not None, "Required property 'aws_idc' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCapability.AwsIdcProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCapability.AwsIdcProperty"], result)
 
         @builtins.property
         def namespace(self) -> typing.Optional[builtins.str]:
@@ -6732,7 +6748,7 @@ class CfnCapability(
         @builtins.property
         def network_access(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.NetworkAccessProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapability.NetworkAccessProperty"]]:
             '''Configuration for network access to the Argo CD capability's managed API server endpoint.
 
             By default, the Argo CD server is accessible via a public endpoint. You can optionally specify one or more VPC endpoint IDs to enable private connectivity from your VPCs.
@@ -6740,12 +6756,12 @@ class CfnCapability(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocd.html#cfn-eks-capability-argocd-networkaccess
             '''
             result = self._values.get("network_access")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.NetworkAccessProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapability.NetworkAccessProperty"]], result)
 
         @builtins.property
         def rbac_role_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapability.ArgoCdRoleMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCapability.ArgoCdRoleMappingProperty"]]]]:
             '''A list of role mappings that define which IAM Identity Center users or groups have which Argo CD roles.
 
             Each mapping associates an Argo CD role (ADMIN, EDITOR, or VIEWER) with one or more IAM Identity Center identities.
@@ -6753,7 +6769,7 @@ class CfnCapability(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocd.html#cfn-eks-capability-argocd-rbacrolemappings
             '''
             result = self._values.get("rbac_role_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapability.ArgoCdRoleMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCapability.ArgoCdRoleMappingProperty"]]]], result)
 
         @builtins.property
         def server_url(self) -> typing.Optional[builtins.str]:
@@ -6786,15 +6802,15 @@ class CfnCapability(
         def __init__(
             self,
             *,
-            identities: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapability.SsoIdentityProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            identities: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapability.SsoIdentityProperty", typing.Dict[builtins.str, typing.Any]]]]],
             role: builtins.str,
         ) -> None:
-            '''A mapping between an Argo CD role and IAM Identity Center identities.
+            '''A mapping between an Argo CD role and IAM Identity CenterIAM;
 
-            This defines which users or groups have specific permissions in Argo CD.
+            Identity Center identities. This defines which users or groups have specific permissions in Argo CD.
 
-            :param identities: A list of IAM Identity Center identities (users or groups) that should be assigned this Argo CD role.
-            :param role: The Argo CD role to assign. Valid values are: ADMIN (full administrative access to Argo CD), EDITOR (edit access to Argo CD resources), or VIEWER (read-only access to Argo CD resources).
+            :param identities: A list of IAM Identity CenterIAM; Identity Center identities (users or groups) that should be assigned this Argo CD role.
+            :param role: The Argo CD role to assign. Valid values are:. - ``ADMIN`` – Full administrative access to Argo CD. - ``EDITOR`` – Edit access to Argo CD resources. - ``VIEWER`` – Read-only access to Argo CD resources.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocdrolemapping.html
             :exampleMetadata: fixture=_generated
@@ -6825,20 +6841,24 @@ class CfnCapability(
         @builtins.property
         def identities(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapability.SsoIdentityProperty"]]]:
-            '''A list of IAM Identity Center identities (users or groups) that should be assigned this Argo CD role.
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCapability.SsoIdentityProperty"]]]:
+            '''A list of IAM Identity CenterIAM;
+
+            Identity Center identities (users or groups) that should be assigned this Argo CD role.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocdrolemapping.html#cfn-eks-capability-argocdrolemapping-identities
             '''
             result = self._values.get("identities")
             assert result is not None, "Required property 'identities' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapability.SsoIdentityProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCapability.SsoIdentityProperty"]]], result)
 
         @builtins.property
         def role(self) -> builtins.str:
-            '''The Argo CD role to assign.
+            '''The Argo CD role to assign. Valid values are:.
 
-            Valid values are: ADMIN (full administrative access to Argo CD), EDITOR (edit access to Argo CD resources), or VIEWER (read-only access to Argo CD resources).
+            - ``ADMIN`` – Full administrative access to Argo CD.
+            - ``EDITOR`` – Edit access to Argo CD resources.
+            - ``VIEWER`` – Read-only access to Argo CD resources.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocdrolemapping.html#cfn-eks-capability-argocdrolemapping-role
             '''
@@ -6962,7 +6982,7 @@ class CfnCapability(
         def __init__(
             self,
             *,
-            argo_cd: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapability.ArgoCdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            argo_cd: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapability.ArgoCdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Configuration settings for a capability.
 
@@ -7015,7 +7035,7 @@ class CfnCapability(
         @builtins.property
         def argo_cd(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.ArgoCdProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapability.ArgoCdProperty"]]:
             '''Configuration settings for an Argo CD capability.
 
             This includes the Kubernetes namespace, IAM Identity Center integration, RBAC role mappings, and network access configuration.
@@ -7023,7 +7043,7 @@ class CfnCapability(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-capabilityconfiguration.html#cfn-eks-capability-capabilityconfiguration-argocd
             '''
             result = self._values.get("argo_cd")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.ArgoCdProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapability.ArgoCdProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7102,10 +7122,12 @@ class CfnCapability(
     )
     class SsoIdentityProperty:
         def __init__(self, *, id: builtins.str, type: builtins.str) -> None:
-            '''An IAM Identity Center identity (user or group) that can be assigned permissions in a capability.
+            '''An IAM Identity CenterIAM;
 
-            :param id: The unique identifier of the IAM Identity Center user or group.
-            :param type: The type of identity. Valid values are SSO_USER or SSO_GROUP.
+            Identity Center identity (user or group) that can be assigned permissions in a capability.
+
+            :param id: The unique identifier of the IAM Identity CenterIAM; Identity Center user or group.
+            :param type: The type of identity. Valid values are ``SSO_USER`` or ``SSO_GROUP`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-ssoidentity.html
             :exampleMetadata: fixture=_generated
@@ -7132,7 +7154,9 @@ class CfnCapability(
 
         @builtins.property
         def id(self) -> builtins.str:
-            '''The unique identifier of the IAM Identity Center user or group.
+            '''The unique identifier of the IAM Identity CenterIAM;
+
+            Identity Center user or group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-ssoidentity.html#cfn-eks-capability-ssoidentity-id
             '''
@@ -7144,7 +7168,7 @@ class CfnCapability(
         def type(self) -> builtins.str:
             '''The type of identity.
 
-            Valid values are SSO_USER or SSO_GROUP.
+            Valid values are ``SSO_USER`` or ``SSO_GROUP`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-ssoidentity.html#cfn-eks-capability-ssoidentity-type
             '''
@@ -7186,17 +7210,17 @@ class CfnCapabilityProps:
         delete_propagation_policy: builtins.str,
         role_arn: builtins.str,
         type: builtins.str,
-        configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapability.CapabilityConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapability.CapabilityConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCapability``.
 
-        :param capability_name: A unique name for the capability. The name must be unique within your cluster and can contain alphanumeric characters, hyphens, and underscores.
-        :param cluster_name: The name of the EKS cluster where you want to create the capability.
-        :param delete_propagation_policy: Specifies how Kubernetes resources managed by the capability should be handled when the capability is deleted. Currently, the only supported value is RETAIN which retains all Kubernetes resources managed by the capability when the capability is deleted.
-        :param role_arn: The Amazon Resource Name (ARN) of the IAM role that the capability uses to interact with AWS services. This role must have a trust policy that allows the EKS service principal to assume it, and it must have the necessary permissions for the capability type you're creating.
-        :param type: The type of capability to create. Valid values are: ACK (AWS Controllers for Kubernetes, which lets you manage AWS resources directly from Kubernetes), ARGOCD (Argo CD for GitOps-based continuous delivery), or KRO (Kube Resource Orchestrator for composing and managing custom Kubernetes resources).
-        :param configuration: Configuration settings for a capability. The structure of this object varies depending on the capability type.
+        :param capability_name: The unique name of the capability within the cluster.
+        :param cluster_name: The name of the Amazon EKS cluster that contains this capability.
+        :param delete_propagation_policy: The delete propagation policy for the capability. Currently, the only supported value is ``RETAIN`` , which keeps all resources managed by the capability when the capability is deleted.
+        :param role_arn: The Amazon Resource Name (ARN) of the IAM role that the capability uses to interact with AWS services.
+        :param type: The type of capability. Valid values are ``ACK`` , ``ARGOCD`` , or ``KRO`` .
+        :param configuration: The configuration settings for the capability. The structure varies depending on the capability type.
         :param tags: An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html
@@ -7204,6 +7228,7 @@ class CfnCapabilityProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_eks as eks
@@ -7270,9 +7295,7 @@ class CfnCapabilityProps:
 
     @builtins.property
     def capability_name(self) -> builtins.str:
-        '''A unique name for the capability.
-
-        The name must be unique within your cluster and can contain alphanumeric characters, hyphens, and underscores.
+        '''The unique name of the capability within the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-capabilityname
         '''
@@ -7282,7 +7305,7 @@ class CfnCapabilityProps:
 
     @builtins.property
     def cluster_name(self) -> builtins.str:
-        '''The name of the EKS cluster where you want to create the capability.
+        '''The name of the Amazon EKS cluster that contains this capability.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-clustername
         '''
@@ -7292,9 +7315,9 @@ class CfnCapabilityProps:
 
     @builtins.property
     def delete_propagation_policy(self) -> builtins.str:
-        '''Specifies how Kubernetes resources managed by the capability should be handled when the capability is deleted.
+        '''The delete propagation policy for the capability.
 
-        Currently, the only supported value is RETAIN which retains all Kubernetes resources managed by the capability when the capability is deleted.
+        Currently, the only supported value is ``RETAIN`` , which keeps all resources managed by the capability when the capability is deleted.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-deletepropagationpolicy
         '''
@@ -7306,8 +7329,6 @@ class CfnCapabilityProps:
     def role_arn(self) -> builtins.str:
         '''The Amazon Resource Name (ARN) of the IAM role that the capability uses to interact with AWS services.
 
-        This role must have a trust policy that allows the EKS service principal to assume it, and it must have the necessary permissions for the capability type you're creating.
-
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-rolearn
         '''
         result = self._values.get("role_arn")
@@ -7316,9 +7337,9 @@ class CfnCapabilityProps:
 
     @builtins.property
     def type(self) -> builtins.str:
-        '''The type of capability to create.
+        '''The type of capability.
 
-        Valid values are: ACK (AWS Controllers for Kubernetes, which lets you manage AWS resources directly from Kubernetes), ARGOCD (Argo CD for GitOps-based continuous delivery), or KRO (Kube Resource Orchestrator for composing and managing custom Kubernetes resources).
+        Valid values are ``ACK`` , ``ARGOCD`` , or ``KRO`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-type
         '''
@@ -7329,24 +7350,24 @@ class CfnCapabilityProps:
     @builtins.property
     def configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapability.CapabilityConfigurationProperty]]:
-        '''Configuration settings for a capability.
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapability.CapabilityConfigurationProperty"]]:
+        '''The configuration settings for the capability.
 
-        The structure of this object varies depending on the capability type.
+        The structure varies depending on the capability type.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-configuration
         '''
         result = self._values.get("configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapability.CapabilityConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapability.CapabilityConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7389,6 +7410,7 @@ class CfnCluster(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_eks as eks
@@ -7483,28 +7505,28 @@ class CfnCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        resources_vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ResourcesVpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        access_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.AccessConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        bootstrap_self_managed_addons: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        compute_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ComputeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        control_plane_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ControlPlaneScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.EncryptionConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        force: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kubernetes_network_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.KubernetesNetworkConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        logging: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.LoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        resources_vpc_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ResourcesVpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        access_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.AccessConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        bootstrap_self_managed_addons: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        compute_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ComputeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        control_plane_scaling_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ControlPlaneScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        deletion_protection: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        encryption_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.EncryptionConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        force: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        kubernetes_network_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.KubernetesNetworkConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.LoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        outpost_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.OutpostConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        remote_network_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.RemoteNetworkConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        storage_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.StorageConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        upgrade_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.UpgradePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        outpost_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.OutpostConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        remote_network_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.RemoteNetworkConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        storage_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.StorageConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        upgrade_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.UpgradePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         version: typing.Optional[builtins.str] = None,
-        zonal_shift_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ZonalShiftConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        zonal_shift_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ZonalShiftConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::EKS::Cluster``.
 
@@ -7560,7 +7582,7 @@ class CfnCluster(
 
     @jsii.member(jsii_name="arnForCluster")
     @builtins.classmethod
-    def arn_for_cluster(cls, resource: _IClusterRef_5527f448) -> builtins.str:
+    def arn_for_cluster(cls, resource: "_IClusterRef_5527f448") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -7573,10 +7595,10 @@ class CfnCluster(
     @builtins.classmethod
     def from_cluster_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IClusterRef_5527f448:
+    ) -> "_IClusterRef_5527f448":
         '''Creates a new IClusterRef from an ARN.
 
         :param scope: -
@@ -7588,16 +7610,16 @@ class CfnCluster(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IClusterRef_5527f448, jsii.sinvoke(cls, "fromClusterArn", [scope, id, arn]))
+        return typing.cast("_IClusterRef_5527f448", jsii.sinvoke(cls, "fromClusterArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromClusterName")
     @builtins.classmethod
     def from_cluster_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         cluster_name: builtins.str,
-    ) -> _IClusterRef_5527f448:
+    ) -> "_IClusterRef_5527f448":
         '''Creates a new IClusterRef from a clusterName.
 
         :param scope: -
@@ -7609,7 +7631,7 @@ class CfnCluster(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
-        return typing.cast(_IClusterRef_5527f448, jsii.sinvoke(cls, "fromClusterName", [scope, id, cluster_name]))
+        return typing.cast("_IClusterRef_5527f448", jsii.sinvoke(cls, "fromClusterName", [scope, id, cluster_name]))
 
     @jsii.member(jsii_name="isCfnCluster")
     @builtins.classmethod
@@ -7624,7 +7646,7 @@ class CfnCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7740,28 +7762,28 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> _ClusterReference_d6e6b9ff:
+    def cluster_ref(self) -> "_ClusterReference_d6e6b9ff":
         '''A reference to a Cluster resource.'''
-        return typing.cast(_ClusterReference_d6e6b9ff, jsii.get(self, "clusterRef"))
+        return typing.cast("_ClusterReference_d6e6b9ff", jsii.get(self, "clusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="resourcesVpcConfig")
     def resources_vpc_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCluster.ResourcesVpcConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCluster.ResourcesVpcConfigProperty"]:
         '''The VPC configuration that's used by the cluster control plane.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCluster.ResourcesVpcConfigProperty"], jsii.get(self, "resourcesVpcConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCluster.ResourcesVpcConfigProperty"], jsii.get(self, "resourcesVpcConfig"))
 
     @resources_vpc_config.setter
     def resources_vpc_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCluster.ResourcesVpcConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCluster.ResourcesVpcConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7faae717d69e9ef08dfb05330d411b9baaf6babf8cf2b4715f8a02a4bd949f0c)
@@ -7785,14 +7807,14 @@ class CfnCluster(
     @jsii.member(jsii_name="accessConfig")
     def access_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.AccessConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.AccessConfigProperty"]]:
         '''The access configuration for the cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.AccessConfigProperty"]], jsii.get(self, "accessConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.AccessConfigProperty"]], jsii.get(self, "accessConfig"))
 
     @access_config.setter
     def access_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.AccessConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.AccessConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__249431e71bfb6d15cdb94aea4df14d4b3371f709cb261f00cb7dc77e72be7680)
@@ -7803,14 +7825,14 @@ class CfnCluster(
     @jsii.member(jsii_name="bootstrapSelfManagedAddons")
     def bootstrap_self_managed_addons(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If you set this value to ``False`` when creating a cluster, the default networking add-ons will not be installed.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "bootstrapSelfManagedAddons"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "bootstrapSelfManagedAddons"))
 
     @bootstrap_self_managed_addons.setter
     def bootstrap_self_managed_addons(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1b3725246139251af199def1d548b17a13e8ddd4df825377563ea01cdea555c4)
@@ -7821,14 +7843,14 @@ class CfnCluster(
     @jsii.member(jsii_name="computeConfig")
     def compute_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ComputeConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ComputeConfigProperty"]]:
         '''Indicates the current configuration of the compute capability on your EKS Auto Mode cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ComputeConfigProperty"]], jsii.get(self, "computeConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ComputeConfigProperty"]], jsii.get(self, "computeConfig"))
 
     @compute_config.setter
     def compute_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ComputeConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ComputeConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5d35f88b28db161e1414d604c41ffc1d10fcf76351a0503d110f81158a8e15ca)
@@ -7839,14 +7861,14 @@ class CfnCluster(
     @jsii.member(jsii_name="controlPlaneScalingConfig")
     def control_plane_scaling_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ControlPlaneScalingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ControlPlaneScalingConfigProperty"]]:
         '''The control plane scaling tier configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ControlPlaneScalingConfigProperty"]], jsii.get(self, "controlPlaneScalingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ControlPlaneScalingConfigProperty"]], jsii.get(self, "controlPlaneScalingConfig"))
 
     @control_plane_scaling_config.setter
     def control_plane_scaling_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ControlPlaneScalingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ControlPlaneScalingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4436ea4cc18d196aa3ff9d13eb20f342735d0595592ac8760060155ddcb0a250)
@@ -7857,14 +7879,14 @@ class CfnCluster(
     @jsii.member(jsii_name="deletionProtection")
     def deletion_protection(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The current deletion protection setting for the cluster.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deletionProtection"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deletionProtection"))
 
     @deletion_protection.setter
     def deletion_protection(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__19e2a4eccf6e2e232dc5d0a9572dba914015320e88042ef8f90020cd0d14b037)
@@ -7875,14 +7897,14 @@ class CfnCluster(
     @jsii.member(jsii_name="encryptionConfig")
     def encryption_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.EncryptionConfigProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionConfigProperty"]]]]:
         '''The encryption configuration for the cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.EncryptionConfigProperty"]]]], jsii.get(self, "encryptionConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionConfigProperty"]]]], jsii.get(self, "encryptionConfig"))
 
     @encryption_config.setter
     def encryption_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.EncryptionConfigProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionConfigProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b161fda542258d1cd8a20fecd3943cacecb658f19ab16b918baf49908459644c)
@@ -7893,14 +7915,14 @@ class CfnCluster(
     @jsii.member(jsii_name="force")
     def force(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Set this value to ``true`` to override upgrade-blocking readiness checks when updating a cluster.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "force"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "force"))
 
     @force.setter
     def force(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ec11778764d939bb12cbec68a418a76be768d7a638339c5189ae6cfe44059ebd)
@@ -7911,14 +7933,14 @@ class CfnCluster(
     @jsii.member(jsii_name="kubernetesNetworkConfig")
     def kubernetes_network_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.KubernetesNetworkConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.KubernetesNetworkConfigProperty"]]:
         '''The Kubernetes network configuration for the cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.KubernetesNetworkConfigProperty"]], jsii.get(self, "kubernetesNetworkConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.KubernetesNetworkConfigProperty"]], jsii.get(self, "kubernetesNetworkConfig"))
 
     @kubernetes_network_config.setter
     def kubernetes_network_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.KubernetesNetworkConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.KubernetesNetworkConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1a14e543582631e80cb6fc2093270dba17f568b8779b381e3bc7398bfafb6699)
@@ -7929,14 +7951,14 @@ class CfnCluster(
     @jsii.member(jsii_name="logging")
     def logging(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.LoggingProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingProperty"]]:
         '''The logging configuration for your cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.LoggingProperty"]], jsii.get(self, "logging"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingProperty"]], jsii.get(self, "logging"))
 
     @logging.setter
     def logging(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.LoggingProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1b894c6ae9e0b1d84fb3b436c969bb8c93262be35c47c6439769089b1b511372)
@@ -7960,14 +7982,14 @@ class CfnCluster(
     @jsii.member(jsii_name="outpostConfig")
     def outpost_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.OutpostConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.OutpostConfigProperty"]]:
         '''An object representing the configuration of your local Amazon EKS cluster on an AWS Outpost.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.OutpostConfigProperty"]], jsii.get(self, "outpostConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.OutpostConfigProperty"]], jsii.get(self, "outpostConfig"))
 
     @outpost_config.setter
     def outpost_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.OutpostConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.OutpostConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f8fa649bbaac6b12d9fb99e325d6fa46e4aea0d9d4d376abd8c7ac60009fc3d6)
@@ -7978,14 +8000,14 @@ class CfnCluster(
     @jsii.member(jsii_name="remoteNetworkConfig")
     def remote_network_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.RemoteNetworkConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.RemoteNetworkConfigProperty"]]:
         '''The configuration in the cluster for EKS Hybrid Nodes.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.RemoteNetworkConfigProperty"]], jsii.get(self, "remoteNetworkConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.RemoteNetworkConfigProperty"]], jsii.get(self, "remoteNetworkConfig"))
 
     @remote_network_config.setter
     def remote_network_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.RemoteNetworkConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.RemoteNetworkConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cbca5e74535463c8d56fe42358d9cdf712c85039267d6580c6b1dbd855c5f255)
@@ -7996,14 +8018,14 @@ class CfnCluster(
     @jsii.member(jsii_name="storageConfig")
     def storage_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.StorageConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.StorageConfigProperty"]]:
         '''Indicates the current configuration of the block storage capability on your EKS Auto Mode cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.StorageConfigProperty"]], jsii.get(self, "storageConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.StorageConfigProperty"]], jsii.get(self, "storageConfig"))
 
     @storage_config.setter
     def storage_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.StorageConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.StorageConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d43c0cb2280b293bbb9f09aa10579d43dbb7df4786771157ba149230c817ecfa)
@@ -8012,12 +8034,12 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The metadata that you apply to the cluster to assist with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__201bfcb16f7ebd474e1c66a732f38f2234c0211f4a0ed45e7caebec7a8eb318a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -8027,14 +8049,14 @@ class CfnCluster(
     @jsii.member(jsii_name="upgradePolicy")
     def upgrade_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.UpgradePolicyProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.UpgradePolicyProperty"]]:
         '''This value indicates if extended support is enabled or disabled for the cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.UpgradePolicyProperty"]], jsii.get(self, "upgradePolicy"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.UpgradePolicyProperty"]], jsii.get(self, "upgradePolicy"))
 
     @upgrade_policy.setter
     def upgrade_policy(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.UpgradePolicyProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.UpgradePolicyProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__877948a2bf4549e042b17570af8e5dd5d247428b7baca13d83a600f308601333)
@@ -8058,14 +8080,14 @@ class CfnCluster(
     @jsii.member(jsii_name="zonalShiftConfig")
     def zonal_shift_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ZonalShiftConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ZonalShiftConfigProperty"]]:
         '''The configuration for zonal shift for the cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ZonalShiftConfigProperty"]], jsii.get(self, "zonalShiftConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ZonalShiftConfigProperty"]], jsii.get(self, "zonalShiftConfig"))
 
     @zonal_shift_config.setter
     def zonal_shift_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ZonalShiftConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ZonalShiftConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__42ffc6381adc5fa8c427a16d5fff74a44f4b6ebca1899d06adc2bd5949d0cfca)
@@ -8085,7 +8107,7 @@ class CfnCluster(
             self,
             *,
             authentication_mode: typing.Optional[builtins.str] = None,
-            bootstrap_cluster_creator_admin_permissions: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            bootstrap_cluster_creator_admin_permissions: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The access configuration for the cluster.
 
@@ -8130,7 +8152,7 @@ class CfnCluster(
         @builtins.property
         def bootstrap_cluster_creator_admin_permissions(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether or not the cluster creator IAM principal was set as a cluster admin access entry during cluster creation time.
 
             The default value is ``true`` .
@@ -8138,7 +8160,7 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-accessconfig.html#cfn-eks-cluster-accessconfig-bootstrapclustercreatoradminpermissions
             '''
             result = self._values.get("bootstrap_cluster_creator_admin_permissions")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8160,7 +8182,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Indicates the current configuration of the block storage capability on your EKS Auto Mode cluster.
 
@@ -8191,7 +8213,7 @@ class CfnCluster(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates if the block storage capability is enabled on your EKS Auto Mode cluster.
 
             If the block storage capability is enabled, EKS Auto Mode will create and delete EBS volumes in your AWS account.
@@ -8199,7 +8221,7 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-blockstorage.html#cfn-eks-cluster-blockstorage-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8221,7 +8243,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.LoggingTypeConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            enabled_types: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.LoggingTypeConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The cluster control plane logging configuration for your cluster.
 
@@ -8256,7 +8278,7 @@ class CfnCluster(
         @builtins.property
         def enabled_types(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.LoggingTypeConfigProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingTypeConfigProperty"]]]]:
             '''The enabled control plane logs for your cluster. All log types are disabled if the array is empty.
 
             .. epigraph::
@@ -8266,7 +8288,7 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-clusterlogging.html#cfn-eks-cluster-clusterlogging-enabledtypes
             '''
             result = self._values.get("enabled_types")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.LoggingTypeConfigProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingTypeConfigProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8292,7 +8314,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             node_pools: typing.Optional[typing.Sequence[builtins.str]] = None,
             node_role_arn: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -8335,7 +8357,7 @@ class CfnCluster(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Request to enable or disable the compute capability on your EKS Auto Mode cluster.
 
             If the compute capability is enabled, EKS Auto Mode will create and delete EC2 Managed Instances in your AWS account.
@@ -8343,7 +8365,7 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-computeconfig.html#cfn-eks-cluster-computeconfig-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def node_pools(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -8497,7 +8519,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Indicates the current configuration of the load balancing capability on your EKS Auto Mode cluster.
 
@@ -8528,7 +8550,7 @@ class CfnCluster(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates if the load balancing capability is enabled on your EKS Auto Mode cluster.
 
             If the load balancing capability is enabled, EKS Auto Mode will create and delete load balancers in your AWS account.
@@ -8536,7 +8558,7 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-elasticloadbalancing.html#cfn-eks-cluster-elasticloadbalancing-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8558,7 +8580,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            provider: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             resources: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''The encryption configuration for the cluster.
@@ -8595,13 +8617,13 @@ class CfnCluster(
         @builtins.property
         def provider(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ProviderProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ProviderProperty"]]:
             '''The encryption provider for the cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-encryptionconfig.html#cfn-eks-cluster-encryptionconfig-provider
             '''
             result = self._values.get("provider")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ProviderProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ProviderProperty"]], result)
 
         @builtins.property
         def resources(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -8639,7 +8661,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            elastic_load_balancing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ElasticLoadBalancingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            elastic_load_balancing: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ElasticLoadBalancingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             ip_family: typing.Optional[builtins.str] = None,
             service_ipv4_cidr: typing.Optional[builtins.str] = None,
             service_ipv6_cidr: typing.Optional[builtins.str] = None,
@@ -8688,7 +8710,7 @@ class CfnCluster(
         @builtins.property
         def elastic_load_balancing(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ElasticLoadBalancingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ElasticLoadBalancingProperty"]]:
             '''Request to enable or disable the load balancing capability on your EKS Auto Mode cluster.
 
             For more information, see EKS Auto Mode load balancing capability in the *Amazon EKS User Guide* .
@@ -8696,7 +8718,7 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-kubernetesnetworkconfig.html#cfn-eks-cluster-kubernetesnetworkconfig-elasticloadbalancing
             '''
             result = self._values.get("elastic_load_balancing")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ElasticLoadBalancingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ElasticLoadBalancingProperty"]], result)
 
         @builtins.property
         def ip_family(self) -> typing.Optional[builtins.str]:
@@ -8759,7 +8781,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            cluster_logging: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterLoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cluster_logging: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ClusterLoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs.
 
@@ -8797,13 +8819,13 @@ class CfnCluster(
         @builtins.property
         def cluster_logging(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterLoggingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ClusterLoggingProperty"]]:
             '''The cluster control plane logging configuration for your cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-logging.html#cfn-eks-cluster-logging-clusterlogging
             '''
             result = self._values.get("cluster_logging")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterLoggingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ClusterLoggingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8884,7 +8906,7 @@ class CfnCluster(
             *,
             control_plane_instance_type: builtins.str,
             outpost_arns: typing.Sequence[builtins.str],
-            control_plane_placement: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ControlPlanePlacementProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            control_plane_placement: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ControlPlanePlacementProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration of your local Amazon EKS cluster on an AWS Outpost.
 
@@ -8954,7 +8976,7 @@ class CfnCluster(
         @builtins.property
         def control_plane_placement(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ControlPlanePlacementProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ControlPlanePlacementProperty"]]:
             '''An object representing the placement configuration for all the control plane instances of your local Amazon EKS cluster on an AWS Outpost.
 
             For more information, see `Capacity considerations <https://docs.aws.amazon.com/eks/latest/userguide/eks-outposts-capacity-considerations.html>`_ in the *Amazon EKS User Guide* .
@@ -8962,7 +8984,7 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-outpostconfig.html#cfn-eks-cluster-outpostconfig-controlplaneplacement
             '''
             result = self._values.get("control_plane_placement")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ControlPlanePlacementProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ControlPlanePlacementProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9040,8 +9062,8 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            remote_node_networks: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.RemoteNodeNetworkProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            remote_pod_networks: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.RemotePodNetworkProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            remote_node_networks: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.RemoteNodeNetworkProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            remote_pod_networks: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.RemotePodNetworkProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The configuration in the cluster for EKS Hybrid Nodes.
 
@@ -9083,7 +9105,7 @@ class CfnCluster(
         @builtins.property
         def remote_node_networks(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.RemoteNodeNetworkProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.RemoteNodeNetworkProperty"]]]:
             '''The list of network CIDRs that can contain hybrid nodes.
 
             These CIDR blocks define the expected IP address range of the hybrid nodes that join the cluster. These blocks are typically determined by your network administrator.
@@ -9103,12 +9125,12 @@ class CfnCluster(
             '''
             result = self._values.get("remote_node_networks")
             assert result is not None, "Required property 'remote_node_networks' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.RemoteNodeNetworkProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.RemoteNodeNetworkProperty"]]], result)
 
         @builtins.property
         def remote_pod_networks(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.RemotePodNetworkProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.RemotePodNetworkProperty"]]]]:
             '''The list of network CIDRs that can contain pods that run Kubernetes webhooks on hybrid nodes.
 
             These CIDR blocks are determined by configuring your Container Network Interface (CNI) plugin. We recommend the Calico CNI or Cilium CNI. Note that the Amazon VPC CNI plugin for Kubernetes isn't available for on-premises and edge locations.
@@ -9123,7 +9145,7 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-remotenetworkconfig.html#cfn-eks-cluster-remotenetworkconfig-remotepodnetworks
             '''
             result = self._values.get("remote_pod_networks")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.RemotePodNetworkProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.RemotePodNetworkProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9300,8 +9322,8 @@ class CfnCluster(
             self,
             *,
             subnet_ids: typing.Sequence[builtins.str],
-            endpoint_private_access: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            endpoint_public_access: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            endpoint_private_access: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            endpoint_public_access: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             public_access_cidrs: typing.Optional[typing.Sequence[builtins.str]] = None,
             security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -9374,7 +9396,7 @@ class CfnCluster(
         @builtins.property
         def endpoint_private_access(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this value to ``true`` to enable private access for your cluster's Kubernetes API server endpoint.
 
             If you enable private access, Kubernetes API requests from within your cluster's VPC use the private VPC endpoint. The default value for this parameter is ``false`` , which disables private access for your Kubernetes API server. If you disable private access and you have nodes or AWS Fargate pods in the cluster, then ensure that ``publicAccessCidrs`` includes the necessary CIDR blocks for communication with the nodes or Fargate pods. For more information, see `Cluster API server endpoint <https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html>`_ in the **Amazon EKS User Guide** .
@@ -9382,12 +9404,12 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-resourcesvpcconfig.html#cfn-eks-cluster-resourcesvpcconfig-endpointprivateaccess
             '''
             result = self._values.get("endpoint_private_access")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def endpoint_public_access(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this value to ``false`` to disable public access to your cluster's Kubernetes API server endpoint.
 
             If you disable public access, your cluster's Kubernetes API server can only receive requests from within the cluster VPC. The default value for this parameter is ``true`` , which enables public access for your Kubernetes API server. The endpoint domain name and IP address family depends on the value of the ``ipFamily`` for the cluster. For more information, see `Cluster API server endpoint <https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html>`_ in the **Amazon EKS User Guide** .
@@ -9395,7 +9417,7 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-resourcesvpcconfig.html#cfn-eks-cluster-resourcesvpcconfig-endpointpublicaccess
             '''
             result = self._values.get("endpoint_public_access")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def public_access_cidrs(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -9441,7 +9463,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            block_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.BlockStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            block_storage: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.BlockStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Request to update the configuration of the storage capability of your EKS Auto Mode cluster.
 
@@ -9474,13 +9496,13 @@ class CfnCluster(
         @builtins.property
         def block_storage(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.BlockStorageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.BlockStorageProperty"]]:
             '''Request to configure EBS Block Storage settings for your EKS Auto Mode cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-storageconfig.html#cfn-eks-cluster-storageconfig-blockstorage
             '''
             result = self._values.get("block_storage")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.BlockStorageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.BlockStorageProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9565,7 +9587,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The configuration for zonal shift for the cluster.
 
@@ -9594,13 +9616,13 @@ class CfnCluster(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If zonal shift is enabled, AWS configures zonal autoshift for the cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-zonalshiftconfig.html#cfn-eks-cluster-zonalshiftconfig-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9643,25 +9665,25 @@ class CfnClusterProps:
     def __init__(
         self,
         *,
-        resources_vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ResourcesVpcConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        access_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.AccessConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        bootstrap_self_managed_addons: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        compute_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ComputeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        control_plane_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ControlPlaneScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.EncryptionConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        force: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kubernetes_network_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.KubernetesNetworkConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        logging: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.LoggingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        resources_vpc_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ResourcesVpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        access_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.AccessConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        bootstrap_self_managed_addons: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        compute_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ComputeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        control_plane_scaling_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ControlPlaneScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        deletion_protection: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        encryption_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.EncryptionConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        force: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        kubernetes_network_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.KubernetesNetworkConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.LoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        outpost_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.OutpostConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        remote_network_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.RemoteNetworkConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        storage_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.StorageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        upgrade_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.UpgradePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        outpost_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.OutpostConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        remote_network_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.RemoteNetworkConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        storage_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.StorageConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        upgrade_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.UpgradePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         version: typing.Optional[builtins.str] = None,
-        zonal_shift_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ZonalShiftConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        zonal_shift_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ZonalShiftConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCluster``.
 
@@ -9690,6 +9712,7 @@ class CfnClusterProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_eks as eks
@@ -9844,7 +9867,7 @@ class CfnClusterProps:
     @builtins.property
     def resources_vpc_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCluster.ResourcesVpcConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCluster.ResourcesVpcConfigProperty"]:
         '''The VPC configuration that's used by the cluster control plane.
 
         Amazon EKS VPC resources have specific requirements to work properly with Kubernetes. For more information, see `Cluster VPC Considerations <https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html>`_ and `Cluster Security Group Considerations <https://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html>`_ in the *Amazon EKS User Guide* . You must specify at least two subnets. You can specify up to five security groups, but we recommend that you use a dedicated security group for your cluster control plane.
@@ -9853,10 +9876,10 @@ class CfnClusterProps:
         '''
         result = self._values.get("resources_vpc_config")
         assert result is not None, "Required property 'resources_vpc_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCluster.ResourcesVpcConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCluster.ResourcesVpcConfigProperty"], result)
 
     @builtins.property
-    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The Amazon Resource Name (ARN) of the IAM role that provides permissions for the Kubernetes control plane to make calls to AWS API operations on your behalf.
 
         For more information, see `Amazon EKS Service IAM Role <https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html>`_ in the **Amazon EKS User Guide** .
@@ -9865,23 +9888,23 @@ class CfnClusterProps:
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def access_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.AccessConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.AccessConfigProperty"]]:
         '''The access configuration for the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-accessconfig
         '''
         result = self._values.get("access_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.AccessConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.AccessConfigProperty"]], result)
 
     @builtins.property
     def bootstrap_self_managed_addons(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If you set this value to ``False`` when creating a cluster, the default networking add-ons will not be installed.
 
         The default networking add-ons include ``vpc-cni`` , ``coredns`` , and ``kube-proxy`` .
@@ -9891,12 +9914,12 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-bootstrapselfmanagedaddons
         '''
         result = self._values.get("bootstrap_self_managed_addons")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def compute_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ComputeConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ComputeConfigProperty"]]:
         '''Indicates the current configuration of the compute capability on your EKS Auto Mode cluster.
 
         For example, if the capability is enabled or disabled. If the compute capability is enabled, EKS Auto Mode will create and delete EC2 Managed Instances in your AWS account. For more information, see EKS Auto Mode compute capability in the *Amazon EKS User Guide* .
@@ -9904,12 +9927,12 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-computeconfig
         '''
         result = self._values.get("compute_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ComputeConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ComputeConfigProperty"]], result)
 
     @builtins.property
     def control_plane_scaling_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ControlPlaneScalingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ControlPlaneScalingConfigProperty"]]:
         '''The control plane scaling tier configuration.
 
         For more information, see EKS Provisioned Control Plane in the Amazon EKS User Guide.
@@ -9917,12 +9940,12 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-controlplanescalingconfig
         '''
         result = self._values.get("control_plane_scaling_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ControlPlaneScalingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ControlPlaneScalingConfigProperty"]], result)
 
     @builtins.property
     def deletion_protection(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The current deletion protection setting for the cluster.
 
         When ``true`` , deletion protection is enabled and the cluster cannot be deleted until protection is disabled. When ``false`` , the cluster can be deleted normally. This setting only applies to clusters in an active state.
@@ -9930,23 +9953,23 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-deletionprotection
         '''
         result = self._values.get("deletion_protection")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def encryption_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCluster.EncryptionConfigProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionConfigProperty"]]]]:
         '''The encryption configuration for the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-encryptionconfig
         '''
         result = self._values.get("encryption_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCluster.EncryptionConfigProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionConfigProperty"]]]], result)
 
     @builtins.property
     def force(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Set this value to ``true`` to override upgrade-blocking readiness checks when updating a cluster.
 
         :default: - false
@@ -9954,29 +9977,29 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-force
         '''
         result = self._values.get("force")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def kubernetes_network_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.KubernetesNetworkConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.KubernetesNetworkConfigProperty"]]:
         '''The Kubernetes network configuration for the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-kubernetesnetworkconfig
         '''
         result = self._values.get("kubernetes_network_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.KubernetesNetworkConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.KubernetesNetworkConfigProperty"]], result)
 
     @builtins.property
     def logging(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.LoggingProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingProperty"]]:
         '''The logging configuration for your cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-logging
         '''
         result = self._values.get("logging")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.LoggingProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -9992,7 +10015,7 @@ class CfnClusterProps:
     @builtins.property
     def outpost_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.OutpostConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.OutpostConfigProperty"]]:
         '''An object representing the configuration of your local Amazon EKS cluster on an AWS Outpost.
 
         This object isn't available for clusters on the AWS cloud.
@@ -10000,12 +10023,12 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-outpostconfig
         '''
         result = self._values.get("outpost_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.OutpostConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.OutpostConfigProperty"]], result)
 
     @builtins.property
     def remote_network_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.RemoteNetworkConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.RemoteNetworkConfigProperty"]]:
         '''The configuration in the cluster for EKS Hybrid Nodes.
 
         You can add, change, or remove this configuration after the cluster is created.
@@ -10013,12 +10036,12 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-remotenetworkconfig
         '''
         result = self._values.get("remote_network_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.RemoteNetworkConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.RemoteNetworkConfigProperty"]], result)
 
     @builtins.property
     def storage_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.StorageConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.StorageConfigProperty"]]:
         '''Indicates the current configuration of the block storage capability on your EKS Auto Mode cluster.
 
         For example, if the capability is enabled or disabled. If the block storage capability is enabled, EKS Auto Mode will create and delete EBS volumes in your AWS account. For more information, see EKS Auto Mode block storage capability in the *Amazon EKS User Guide* .
@@ -10026,10 +10049,10 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-storageconfig
         '''
         result = self._values.get("storage_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.StorageConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.StorageConfigProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The metadata that you apply to the cluster to assist with categorization and organization.
 
         Each tag consists of a key and an optional value, both of which you define. Cluster tags don't propagate to any other resources associated with the cluster.
@@ -10040,12 +10063,12 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def upgrade_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.UpgradePolicyProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.UpgradePolicyProperty"]]:
         '''This value indicates if extended support is enabled or disabled for the cluster.
 
         `Learn more about EKS Extended Support in the *Amazon EKS User Guide* . <https://docs.aws.amazon.com/eks/latest/userguide/extended-support-control.html>`_
@@ -10053,7 +10076,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-upgradepolicy
         '''
         result = self._values.get("upgrade_policy")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.UpgradePolicyProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.UpgradePolicyProperty"]], result)
 
     @builtins.property
     def version(self) -> typing.Optional[builtins.str]:
@@ -10072,13 +10095,13 @@ class CfnClusterProps:
     @builtins.property
     def zonal_shift_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ZonalShiftConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ZonalShiftConfigProperty"]]:
         '''The configuration for zonal shift for the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-zonalshiftconfig
         '''
         result = self._values.get("zonal_shift_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ZonalShiftConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ZonalShiftConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10118,6 +10141,7 @@ class CfnFargateProfile(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_eks as eks
@@ -10147,15 +10171,15 @@ class CfnFargateProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster_name: builtins.str,
         pod_execution_role_arn: builtins.str,
-        selectors: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFargateProfile.SelectorProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        selectors: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFargateProfile.SelectorProperty", typing.Dict[builtins.str, typing.Any]]]]],
         fargate_profile_name: typing.Optional[builtins.str] = None,
         subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::EKS::FargateProfile``.
 
@@ -10187,7 +10211,7 @@ class CfnFargateProfile(
     @builtins.classmethod
     def arn_for_fargate_profile(
         cls,
-        resource: _IFargateProfileRef_ebba9623,
+        resource: "_IFargateProfileRef_ebba9623",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -10210,7 +10234,7 @@ class CfnFargateProfile(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFargateProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10255,15 +10279,15 @@ class CfnFargateProfile(
 
     @builtins.property
     @jsii.member(jsii_name="fargateProfileRef")
-    def fargate_profile_ref(self) -> _FargateProfileReference_5fd534f8:
+    def fargate_profile_ref(self) -> "_FargateProfileReference_5fd534f8":
         '''A reference to a FargateProfile resource.'''
-        return typing.cast(_FargateProfileReference_5fd534f8, jsii.get(self, "fargateProfileRef"))
+        return typing.cast("_FargateProfileReference_5fd534f8", jsii.get(self, "fargateProfileRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterName")
@@ -10295,14 +10319,14 @@ class CfnFargateProfile(
     @jsii.member(jsii_name="selectors")
     def selectors(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFargateProfile.SelectorProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFargateProfile.SelectorProperty"]]]:
         '''The selectors to match for a ``Pod`` to use this Fargate profile.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFargateProfile.SelectorProperty"]]], jsii.get(self, "selectors"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFargateProfile.SelectorProperty"]]], jsii.get(self, "selectors"))
 
     @selectors.setter
     def selectors(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFargateProfile.SelectorProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFargateProfile.SelectorProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3467e37d13629d1721d8e96f13c9b469fdaf5eb821e204838ae461e856021d34)
@@ -10337,12 +10361,12 @@ class CfnFargateProfile(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that assists with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__93fe5db83ef1635270c7973406a7644b19576f909eda3840d06be03d3182d9aa)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -10424,7 +10448,7 @@ class CfnFargateProfile(
             self,
             *,
             namespace: builtins.str,
-            labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFargateProfile.LabelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            labels: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFargateProfile.LabelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''An object representing an AWS Fargate profile selector.
 
@@ -10473,7 +10497,7 @@ class CfnFargateProfile(
         @builtins.property
         def labels(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFargateProfile.LabelProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFargateProfile.LabelProperty"]]]]:
             '''The Kubernetes labels that the selector should match.
 
             A pod must contain all of the labels that are specified in the selector for it to be considered a match.
@@ -10481,7 +10505,7 @@ class CfnFargateProfile(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-fargateprofile-selector.html#cfn-eks-fargateprofile-selector-labels
             '''
             result = self._values.get("labels")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFargateProfile.LabelProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFargateProfile.LabelProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10513,10 +10537,10 @@ class CfnFargateProfileProps:
         *,
         cluster_name: builtins.str,
         pod_execution_role_arn: builtins.str,
-        selectors: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFargateProfile.SelectorProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        selectors: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFargateProfile.SelectorProperty", typing.Dict[builtins.str, typing.Any]]]]],
         fargate_profile_name: typing.Optional[builtins.str] = None,
         subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFargateProfile``.
 
@@ -10532,6 +10556,7 @@ class CfnFargateProfileProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_eks as eks
@@ -10603,7 +10628,7 @@ class CfnFargateProfileProps:
     @builtins.property
     def selectors(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFargateProfile.SelectorProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFargateProfile.SelectorProperty"]]]:
         '''The selectors to match for a ``Pod`` to use this Fargate profile.
 
         Each selector must have an associated Kubernetes ``namespace`` . Optionally, you can also specify ``labels`` for a ``namespace`` . You may specify up to five selectors in a Fargate profile.
@@ -10612,7 +10637,7 @@ class CfnFargateProfileProps:
         '''
         result = self._values.get("selectors")
         assert result is not None, "Required property 'selectors' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFargateProfile.SelectorProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFargateProfile.SelectorProperty"]]], result)
 
     @builtins.property
     def fargate_profile_name(self) -> typing.Optional[builtins.str]:
@@ -10635,7 +10660,7 @@ class CfnFargateProfileProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that assists with categorization and organization.
 
         Each tag consists of a key and an optional value. You define both. Tags don't propagate to any other cluster or AWS resources.
@@ -10643,7 +10668,7 @@ class CfnFargateProfileProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-fargateprofile.html#cfn-eks-fargateprofile-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10673,6 +10698,7 @@ class CfnIdentityProviderConfig(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_eks as eks
@@ -10706,14 +10732,14 @@ class CfnIdentityProviderConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster_name: builtins.str,
         type: builtins.str,
         identity_provider_config_name: typing.Optional[builtins.str] = None,
-        oidc: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        oidc: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::EKS::IdentityProviderConfig``.
 
@@ -10743,7 +10769,7 @@ class CfnIdentityProviderConfig(
     @builtins.classmethod
     def arn_for_identity_provider_config(
         cls,
-        resource: _IIdentityProviderConfigRef_0106e882,
+        resource: "_IIdentityProviderConfigRef_0106e882",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -10766,7 +10792,7 @@ class CfnIdentityProviderConfig(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIdentityProviderConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10811,15 +10837,17 @@ class CfnIdentityProviderConfig(
 
     @builtins.property
     @jsii.member(jsii_name="identityProviderConfigRef")
-    def identity_provider_config_ref(self) -> _IdentityProviderConfigReference_7c0f381e:
+    def identity_provider_config_ref(
+        self,
+    ) -> "_IdentityProviderConfigReference_7c0f381e":
         '''A reference to a IdentityProviderConfig resource.'''
-        return typing.cast(_IdentityProviderConfigReference_7c0f381e, jsii.get(self, "identityProviderConfigRef"))
+        return typing.cast("_IdentityProviderConfigReference_7c0f381e", jsii.get(self, "identityProviderConfigRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterName")
@@ -10867,14 +10895,14 @@ class CfnIdentityProviderConfig(
     @jsii.member(jsii_name="oidc")
     def oidc(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty"]]:
         '''An object representing an OpenID Connect (OIDC) identity provider configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty"]], jsii.get(self, "oidc"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty"]], jsii.get(self, "oidc"))
 
     @oidc.setter
     def oidc(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b3cbe654a8630cea4fa1389f38c348cf1618c501d058aa09878d216f3bc8d816)
@@ -10883,12 +10911,12 @@ class CfnIdentityProviderConfig(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that assists with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__67379d77a7e93ae2068934f518398b760115c19c314ddb0ce7aff1f3c0dfdb24)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -10915,7 +10943,7 @@ class CfnIdentityProviderConfig(
             issuer_url: builtins.str,
             groups_claim: typing.Optional[builtins.str] = None,
             groups_prefix: typing.Optional[builtins.str] = None,
-            required_claims: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentityProviderConfig.RequiredClaimProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            required_claims: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentityProviderConfig.RequiredClaimProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             username_claim: typing.Optional[builtins.str] = None,
             username_prefix: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -11022,7 +11050,7 @@ class CfnIdentityProviderConfig(
         @builtins.property
         def required_claims(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIdentityProviderConfig.RequiredClaimProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIdentityProviderConfig.RequiredClaimProperty"]]]]:
             '''The key-value pairs that describe required claims in the identity token.
 
             If set, each claim is verified to be present in the token with a matching value.
@@ -11030,7 +11058,7 @@ class CfnIdentityProviderConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-identityproviderconfig-oidcidentityproviderconfig.html#cfn-eks-identityproviderconfig-oidcidentityproviderconfig-requiredclaims
             '''
             result = self._values.get("required_claims")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIdentityProviderConfig.RequiredClaimProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIdentityProviderConfig.RequiredClaimProperty"]]]], result)
 
         @builtins.property
         def username_claim(self) -> typing.Optional[builtins.str]:
@@ -11150,8 +11178,8 @@ class CfnIdentityProviderConfigProps:
         cluster_name: builtins.str,
         type: builtins.str,
         identity_provider_config_name: typing.Optional[builtins.str] = None,
-        oidc: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        oidc: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnIdentityProviderConfig``.
 
@@ -11166,6 +11194,7 @@ class CfnIdentityProviderConfigProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_eks as eks
@@ -11248,16 +11277,16 @@ class CfnIdentityProviderConfigProps:
     @builtins.property
     def oidc(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty"]]:
         '''An object representing an OpenID Connect (OIDC) identity provider configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-identityproviderconfig.html#cfn-eks-identityproviderconfig-oidc
         '''
         result = self._values.get("oidc")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentityProviderConfig.OidcIdentityProviderConfigProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that assists with categorization and organization.
 
         Each tag consists of a key and an optional value. You define both. Tags don't propagate to any other cluster or AWS resources.
@@ -11265,7 +11294,7 @@ class CfnIdentityProviderConfigProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-identityproviderconfig.html#cfn-eks-identityproviderconfig-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11370,27 +11399,27 @@ class CfnNodegroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        cluster_name: typing.Union[builtins.str, _IClusterRef_5527f448],
-        node_role: typing.Union[builtins.str, _IRoleRef_8400221f],
-        subnets: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        cluster_name: typing.Union[builtins.str, "_IClusterRef_5527f448"],
+        node_role: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        subnets: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
         ami_type: typing.Optional[builtins.str] = None,
         capacity_type: typing.Optional[builtins.str] = None,
         disk_size: typing.Optional[jsii.Number] = None,
-        force_update_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        force_update_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-        labels: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        launch_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnNodegroup.LaunchTemplateSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        labels: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        launch_template: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.LaunchTemplateSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         nodegroup_name: typing.Optional[builtins.str] = None,
-        node_repair_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnNodegroup.NodeRepairConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        node_repair_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.NodeRepairConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         release_version: typing.Optional[builtins.str] = None,
-        remote_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnNodegroup.RemoteAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnNodegroup.ScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        remote_access: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.RemoteAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        scaling_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.ScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        taints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnNodegroup.TaintProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        update_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnNodegroup.UpdateConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        taints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.TaintProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        update_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.UpdateConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::EKS::Nodegroup``.
@@ -11447,7 +11476,7 @@ class CfnNodegroup(
 
     @jsii.member(jsii_name="arnForNodegroup")
     @builtins.classmethod
-    def arn_for_nodegroup(cls, resource: _INodegroupRef_cac0d8aa) -> builtins.str:
+    def arn_for_nodegroup(cls, resource: "_INodegroupRef_cac0d8aa") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -11469,7 +11498,7 @@ class CfnNodegroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnNodegroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -11540,15 +11569,15 @@ class CfnNodegroup(
 
     @builtins.property
     @jsii.member(jsii_name="nodegroupRef")
-    def nodegroup_ref(self) -> _NodegroupReference_eab944f6:
+    def nodegroup_ref(self) -> "_NodegroupReference_eab944f6":
         '''A reference to a Nodegroup resource.'''
-        return typing.cast(_NodegroupReference_eab944f6, jsii.get(self, "nodegroupRef"))
+        return typing.cast("_NodegroupReference_eab944f6", jsii.get(self, "nodegroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterName")
@@ -11632,14 +11661,14 @@ class CfnNodegroup(
     @jsii.member(jsii_name="forceUpdateEnabled")
     def force_update_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Force the update if any ``Pod`` on the existing node group can't be drained due to a ``Pod`` disruption budget issue.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "forceUpdateEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "forceUpdateEnabled"))
 
     @force_update_enabled.setter
     def force_update_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7cce0ad9b5b51aaeaa6d678d457aa515ac721bcdd6f2676cca34a3fb307a858b)
@@ -11663,14 +11692,14 @@ class CfnNodegroup(
     @jsii.member(jsii_name="labels")
     def labels(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The Kubernetes ``labels`` applied to the nodes in the node group.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "labels"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "labels"))
 
     @labels.setter
     def labels(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bfdcdc90e2da680bcf24a101a162039fcfa5c8ddbf5eae9a97a45451dc10a0e1)
@@ -11681,14 +11710,14 @@ class CfnNodegroup(
     @jsii.member(jsii_name="launchTemplate")
     def launch_template(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.LaunchTemplateSpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.LaunchTemplateSpecificationProperty"]]:
         '''An object representing a node group's launch template specification.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.LaunchTemplateSpecificationProperty"]], jsii.get(self, "launchTemplate"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.LaunchTemplateSpecificationProperty"]], jsii.get(self, "launchTemplate"))
 
     @launch_template.setter
     def launch_template(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.LaunchTemplateSpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.LaunchTemplateSpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f986a2a8b814558b87814aecfa28259e5d1b52be1fde18a8f0252c4f20b20b44)
@@ -11712,14 +11741,14 @@ class CfnNodegroup(
     @jsii.member(jsii_name="nodeRepairConfig")
     def node_repair_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.NodeRepairConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.NodeRepairConfigProperty"]]:
         '''The node auto repair configuration for the node group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.NodeRepairConfigProperty"]], jsii.get(self, "nodeRepairConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.NodeRepairConfigProperty"]], jsii.get(self, "nodeRepairConfig"))
 
     @node_repair_config.setter
     def node_repair_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.NodeRepairConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.NodeRepairConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__32d9a193c1fbf4f744119faa14907eda38fe01339dc08c10a27310a3e1360bee)
@@ -11743,14 +11772,14 @@ class CfnNodegroup(
     @jsii.member(jsii_name="remoteAccess")
     def remote_access(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.RemoteAccessProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.RemoteAccessProperty"]]:
         '''The remote access configuration to use with your node group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.RemoteAccessProperty"]], jsii.get(self, "remoteAccess"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.RemoteAccessProperty"]], jsii.get(self, "remoteAccess"))
 
     @remote_access.setter
     def remote_access(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.RemoteAccessProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.RemoteAccessProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2306ea427981e78be59e04448bcf0d6eacd69ff104d5df09fcb847b77a2903c8)
@@ -11761,14 +11790,14 @@ class CfnNodegroup(
     @jsii.member(jsii_name="scalingConfig")
     def scaling_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.ScalingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.ScalingConfigProperty"]]:
         '''The scaling configuration details for the Auto Scaling group that is created for your node group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.ScalingConfigProperty"]], jsii.get(self, "scalingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.ScalingConfigProperty"]], jsii.get(self, "scalingConfig"))
 
     @scaling_config.setter
     def scaling_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.ScalingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.ScalingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9a5e379ed1faa0fad6a31a3083279e1b70d6e65ab0aeb2918f33039ee9868e7c)
@@ -11795,14 +11824,14 @@ class CfnNodegroup(
     @jsii.member(jsii_name="taints")
     def taints(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.TaintProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.TaintProperty"]]]]:
         '''The Kubernetes taints to be applied to the nodes in the node group when they are created.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.TaintProperty"]]]], jsii.get(self, "taints"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.TaintProperty"]]]], jsii.get(self, "taints"))
 
     @taints.setter
     def taints(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.TaintProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.TaintProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2a536373a8cd2abd0a608e8b4018137f75247b8cfdc1d5dd505b555e1f8679d4)
@@ -11813,14 +11842,14 @@ class CfnNodegroup(
     @jsii.member(jsii_name="updateConfig")
     def update_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.UpdateConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.UpdateConfigProperty"]]:
         '''The node group update configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.UpdateConfigProperty"]], jsii.get(self, "updateConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.UpdateConfigProperty"]], jsii.get(self, "updateConfig"))
 
     @update_config.setter
     def update_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.UpdateConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.UpdateConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a91d7f81c1a3c53f8f75a4727dbdc4bdd123a517aa6a6faa4540c448309ab792)
@@ -11958,7 +11987,7 @@ class CfnNodegroup(
 
             These overrides control the repair action and the repair delay time before a node is considered eligible for repair. If you use this, you must specify all the values.
 
-            :param min_repair_wait_time_mins: Specify the minimum time in minutes to wait before attempting to repair a node with this specific NodeMonitoringCondition and NodeUnhealthyReason.
+            :param min_repair_wait_time_mins: Specify the minimum time in minutes to wait before attempting to repair a node with this specific ``nodeMonitoringCondition`` and ``nodeUnhealthyReason`` .
             :param node_monitoring_condition: Specify an unhealthy condition reported by the node monitoring agent that this override would apply to.
             :param node_unhealthy_reason: Specify a reason reported by the node monitoring agent that this override would apply to.
             :param repair_action: Specify the repair action to take for nodes when all of the specified conditions are met.
@@ -11997,7 +12026,7 @@ class CfnNodegroup(
 
         @builtins.property
         def min_repair_wait_time_mins(self) -> typing.Optional[jsii.Number]:
-            '''Specify the minimum time in minutes to wait before attempting to repair a node with this specific NodeMonitoringCondition and NodeUnhealthyReason.
+            '''Specify the minimum time in minutes to wait before attempting to repair a node with this specific ``nodeMonitoringCondition`` and ``nodeUnhealthyReason`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfigoverrides.html#cfn-eks-nodegroup-noderepairconfigoverrides-minrepairwaittimemins
             '''
@@ -12058,20 +12087,20 @@ class CfnNodegroup(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             max_parallel_nodes_repaired_count: typing.Optional[jsii.Number] = None,
             max_parallel_nodes_repaired_percentage: typing.Optional[jsii.Number] = None,
             max_unhealthy_node_threshold_count: typing.Optional[jsii.Number] = None,
             max_unhealthy_node_threshold_percentage: typing.Optional[jsii.Number] = None,
-            node_repair_config_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnNodegroup.NodeRepairConfigOverridesProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            node_repair_config_overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.NodeRepairConfigOverridesProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The node auto repair configuration for the node group.
 
             :param enabled: Specifies whether to enable node auto repair for the node group. Node auto repair is disabled by default.
-            :param max_parallel_nodes_repaired_count: Specify the maximum number of nodes that can be repaired concurrently or in parallel, expressed as a count of unhealthy nodes. This gives you finer-grained control over the pace of node replacements. When using this, you cannot also set MaxParallelNodesRepairedPercentage at the same time.
-            :param max_parallel_nodes_repaired_percentage: Specify the maximum number of nodes that can be repaired concurrently or in parallel, expressed as a percentage of unhealthy nodes. This gives you finer-grained control over the pace of node replacements. When using this, you cannot also set MaxParallelNodesRepairedCount at the same time.
-            :param max_unhealthy_node_threshold_count: Specify a count threshold of unhealthy nodes, above which node auto repair actions will stop. When using this, you cannot also set MaxUnhealthyNodeThresholdPercentage at the same time.
-            :param max_unhealthy_node_threshold_percentage: Specify a percentage threshold of unhealthy nodes, above which node auto repair actions will stop. When using this, you cannot also set MaxUnhealthyNodeThresholdCount at the same time.
+            :param max_parallel_nodes_repaired_count: Specify the maximum number of nodes that can be repaired concurrently or in parallel, expressed as a count of unhealthy nodes. This gives you finer-grained control over the pace of node replacements. When using this, you cannot also set ``maxParallelNodesRepairedPercentage`` at the same time.
+            :param max_parallel_nodes_repaired_percentage: Specify the maximum number of nodes that can be repaired concurrently or in parallel, expressed as a percentage of unhealthy nodes. This gives you finer-grained control over the pace of node replacements. When using this, you cannot also set ``maxParallelNodesRepairedCount`` at the same time.
+            :param max_unhealthy_node_threshold_count: Specify a count threshold of unhealthy nodes, above which node auto repair actions will stop. When using this, you cannot also set ``maxUnhealthyNodeThresholdPercentage`` at the same time.
+            :param max_unhealthy_node_threshold_percentage: Specify a percentage threshold of unhealthy nodes, above which node auto repair actions will stop. When using this, you cannot also set ``maxUnhealthyNodeThresholdCount`` at the same time.
             :param node_repair_config_overrides: Specify granular overrides for specific repair actions. These overrides control the repair action and the repair delay time before a node is considered eligible for repair. If you use this, you must specify all the values.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html
@@ -12122,7 +12151,7 @@ class CfnNodegroup(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to enable node auto repair for the node group.
 
             Node auto repair is disabled by default.
@@ -12130,13 +12159,13 @@ class CfnNodegroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html#cfn-eks-nodegroup-noderepairconfig-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def max_parallel_nodes_repaired_count(self) -> typing.Optional[jsii.Number]:
             '''Specify the maximum number of nodes that can be repaired concurrently or in parallel, expressed as a count of unhealthy nodes.
 
-            This gives you finer-grained control over the pace of node replacements. When using this, you cannot also set MaxParallelNodesRepairedPercentage at the same time.
+            This gives you finer-grained control over the pace of node replacements. When using this, you cannot also set ``maxParallelNodesRepairedPercentage`` at the same time.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html#cfn-eks-nodegroup-noderepairconfig-maxparallelnodesrepairedcount
             '''
@@ -12149,7 +12178,7 @@ class CfnNodegroup(
         ) -> typing.Optional[jsii.Number]:
             '''Specify the maximum number of nodes that can be repaired concurrently or in parallel, expressed as a percentage of unhealthy nodes.
 
-            This gives you finer-grained control over the pace of node replacements. When using this, you cannot also set MaxParallelNodesRepairedCount at the same time.
+            This gives you finer-grained control over the pace of node replacements. When using this, you cannot also set ``maxParallelNodesRepairedCount`` at the same time.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html#cfn-eks-nodegroup-noderepairconfig-maxparallelnodesrepairedpercentage
             '''
@@ -12160,7 +12189,7 @@ class CfnNodegroup(
         def max_unhealthy_node_threshold_count(self) -> typing.Optional[jsii.Number]:
             '''Specify a count threshold of unhealthy nodes, above which node auto repair actions will stop.
 
-            When using this, you cannot also set MaxUnhealthyNodeThresholdPercentage at the same time.
+            When using this, you cannot also set ``maxUnhealthyNodeThresholdPercentage`` at the same time.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html#cfn-eks-nodegroup-noderepairconfig-maxunhealthynodethresholdcount
             '''
@@ -12173,7 +12202,7 @@ class CfnNodegroup(
         ) -> typing.Optional[jsii.Number]:
             '''Specify a percentage threshold of unhealthy nodes, above which node auto repair actions will stop.
 
-            When using this, you cannot also set MaxUnhealthyNodeThresholdCount at the same time.
+            When using this, you cannot also set ``maxUnhealthyNodeThresholdCount`` at the same time.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html#cfn-eks-nodegroup-noderepairconfig-maxunhealthynodethresholdpercentage
             '''
@@ -12183,7 +12212,7 @@ class CfnNodegroup(
         @builtins.property
         def node_repair_config_overrides(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.NodeRepairConfigOverridesProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.NodeRepairConfigOverridesProperty"]]]]:
             '''Specify granular overrides for specific repair actions.
 
             These overrides control the repair action and the repair delay time before a node is considered eligible for repair. If you use this, you must specify all the values.
@@ -12191,7 +12220,7 @@ class CfnNodegroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-nodegroup-noderepairconfig.html#cfn-eks-nodegroup-noderepairconfig-noderepairconfigoverrides
             '''
             result = self._values.get("node_repair_config_overrides")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnNodegroup.NodeRepairConfigOverridesProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.NodeRepairConfigOverridesProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12599,24 +12628,24 @@ class CfnNodegroupProps:
     def __init__(
         self,
         *,
-        cluster_name: typing.Union[builtins.str, _IClusterRef_5527f448],
-        node_role: typing.Union[builtins.str, _IRoleRef_8400221f],
-        subnets: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        cluster_name: typing.Union[builtins.str, "_IClusterRef_5527f448"],
+        node_role: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        subnets: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
         ami_type: typing.Optional[builtins.str] = None,
         capacity_type: typing.Optional[builtins.str] = None,
         disk_size: typing.Optional[jsii.Number] = None,
-        force_update_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        force_update_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-        labels: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        launch_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnNodegroup.LaunchTemplateSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        labels: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        launch_template: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.LaunchTemplateSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         nodegroup_name: typing.Optional[builtins.str] = None,
-        node_repair_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnNodegroup.NodeRepairConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        node_repair_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.NodeRepairConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         release_version: typing.Optional[builtins.str] = None,
-        remote_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnNodegroup.RemoteAccessProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnNodegroup.ScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        remote_access: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.RemoteAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        scaling_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.ScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        taints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnNodegroup.TaintProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        update_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnNodegroup.UpdateConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        taints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.TaintProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        update_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNodegroup.UpdateConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnNodegroup``.
@@ -12771,17 +12800,17 @@ class CfnNodegroupProps:
             self._values["version"] = version
 
     @builtins.property
-    def cluster_name(self) -> typing.Union[builtins.str, _IClusterRef_5527f448]:
+    def cluster_name(self) -> typing.Union[builtins.str, "_IClusterRef_5527f448"]:
         '''The name of your cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-clustername
         '''
         result = self._values.get("cluster_name")
         assert result is not None, "Required property 'cluster_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _IClusterRef_5527f448], result)
+        return typing.cast(typing.Union[builtins.str, "_IClusterRef_5527f448"], result)
 
     @builtins.property
-    def node_role(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def node_role(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The Amazon Resource Name (ARN) of the IAM role to associate with your node group.
 
         The Amazon EKS worker node ``kubelet`` daemon makes calls to AWS APIs on your behalf. Nodes receive permissions for these API calls through an IAM instance profile and associated policies. Before you can launch nodes and register them into a cluster, you must create an IAM role for those nodes to use when they are launched. For more information, see `Amazon EKS node IAM role <https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html>`_ in the **Amazon EKS User Guide** . If you specify ``launchTemplate`` , then don't specify ``[IamInstanceProfile](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_IamInstanceProfile.html)`` in your launch template, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see `Customizing managed nodes with launch templates <https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html>`_ in the *Amazon EKS User Guide* .
@@ -12790,10 +12819,12 @@ class CfnNodegroupProps:
         '''
         result = self._values.get("node_role")
         assert result is not None, "Required property 'node_role' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
-    def subnets(self) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
+    def subnets(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]]:
         '''The subnets to use for the Auto Scaling group that is created for your node group.
 
         If you specify ``launchTemplate`` , then don't specify ``[SubnetId](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateNetworkInterface.html)`` in your launch template, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see `Customizing managed nodes with launch templates <https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html>`_ in the *Amazon EKS User Guide* .
@@ -12802,7 +12833,7 @@ class CfnNodegroupProps:
         '''
         result = self._values.get("subnets")
         assert result is not None, "Required property 'subnets' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]], result)
 
     @builtins.property
     def ami_type(self) -> typing.Optional[builtins.str]:
@@ -12838,7 +12869,7 @@ class CfnNodegroupProps:
     @builtins.property
     def force_update_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Force the update if any ``Pod`` on the existing node group can't be drained due to a ``Pod`` disruption budget issue.
 
         If an update fails because all Pods can't be drained, you can force the update after it fails to terminate the old node whether or not any ``Pod`` is running on the node.
@@ -12848,7 +12879,7 @@ class CfnNodegroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-forceupdateenabled
         '''
         result = self._values.get("force_update_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def instance_types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -12864,7 +12895,7 @@ class CfnNodegroupProps:
     @builtins.property
     def labels(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The Kubernetes ``labels`` applied to the nodes in the node group.
 
         .. epigraph::
@@ -12874,12 +12905,12 @@ class CfnNodegroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-labels
         '''
         result = self._values.get("labels")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def launch_template(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnNodegroup.LaunchTemplateSpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.LaunchTemplateSpecificationProperty"]]:
         '''An object representing a node group's launch template specification.
 
         When using this object, don't directly specify ``instanceTypes`` , ``diskSize`` , or ``remoteAccess`` . You cannot later specify a different launch template ID or name than what was used to create the node group.
@@ -12889,7 +12920,7 @@ class CfnNodegroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-launchtemplate
         '''
         result = self._values.get("launch_template")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnNodegroup.LaunchTemplateSpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.LaunchTemplateSpecificationProperty"]], result)
 
     @builtins.property
     def nodegroup_name(self) -> typing.Optional[builtins.str]:
@@ -12903,13 +12934,13 @@ class CfnNodegroupProps:
     @builtins.property
     def node_repair_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnNodegroup.NodeRepairConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.NodeRepairConfigProperty"]]:
         '''The node auto repair configuration for the node group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-noderepairconfig
         '''
         result = self._values.get("node_repair_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnNodegroup.NodeRepairConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.NodeRepairConfigProperty"]], result)
 
     @builtins.property
     def release_version(self) -> typing.Optional[builtins.str]:
@@ -12927,7 +12958,7 @@ class CfnNodegroupProps:
     @builtins.property
     def remote_access(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnNodegroup.RemoteAccessProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.RemoteAccessProperty"]]:
         '''The remote access configuration to use with your node group.
 
         For Linux, the protocol is SSH. For Windows, the protocol is RDP. If you specify ``launchTemplate`` , then don't specify ``remoteAccess`` , or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see `Customizing managed nodes with launch templates <https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html>`_ in the *Amazon EKS User Guide* .
@@ -12935,18 +12966,18 @@ class CfnNodegroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-remoteaccess
         '''
         result = self._values.get("remote_access")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnNodegroup.RemoteAccessProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.RemoteAccessProperty"]], result)
 
     @builtins.property
     def scaling_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnNodegroup.ScalingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.ScalingConfigProperty"]]:
         '''The scaling configuration details for the Auto Scaling group that is created for your node group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-scalingconfig
         '''
         result = self._values.get("scaling_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnNodegroup.ScalingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.ScalingConfigProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -12962,7 +12993,7 @@ class CfnNodegroupProps:
     @builtins.property
     def taints(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnNodegroup.TaintProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.TaintProperty"]]]]:
         '''The Kubernetes taints to be applied to the nodes in the node group when they are created.
 
         Effect is one of ``No_Schedule`` , ``Prefer_No_Schedule`` , or ``No_Execute`` . Kubernetes taints can be used together with tolerations to control how workloads are scheduled to your nodes. For more information, see `Node taints on managed node groups <https://docs.aws.amazon.com/eks/latest/userguide/node-taints-managed-node-groups.html>`_ .
@@ -12970,18 +13001,18 @@ class CfnNodegroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-taints
         '''
         result = self._values.get("taints")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnNodegroup.TaintProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.TaintProperty"]]]], result)
 
     @builtins.property
     def update_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnNodegroup.UpdateConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.UpdateConfigProperty"]]:
         '''The node group update configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-updateconfig
         '''
         result = self._values.get("update_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnNodegroup.UpdateConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnNodegroup.UpdateConfigProperty"]], result)
 
     @builtins.property
     def version(self) -> typing.Optional[builtins.str]:
@@ -13023,6 +13054,7 @@ class CfnPodIdentityAssociation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_eks as eks
@@ -13045,15 +13077,15 @@ class CfnPodIdentityAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster_name: builtins.str,
         namespace: builtins.str,
         role_arn: builtins.str,
         service_account: builtins.str,
-        disable_session_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        disable_session_tags: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_role_arn: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::EKS::PodIdentityAssociation``.
@@ -13097,7 +13129,7 @@ class CfnPodIdentityAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPodIdentityAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -13159,9 +13191,9 @@ class CfnPodIdentityAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -13170,9 +13202,11 @@ class CfnPodIdentityAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="podIdentityAssociationRef")
-    def pod_identity_association_ref(self) -> _PodIdentityAssociationReference_14e19bbb:
+    def pod_identity_association_ref(
+        self,
+    ) -> "_PodIdentityAssociationReference_14e19bbb":
         '''A reference to a PodIdentityAssociation resource.'''
-        return typing.cast(_PodIdentityAssociationReference_14e19bbb, jsii.get(self, "podIdentityAssociationRef"))
+        return typing.cast("_PodIdentityAssociationReference_14e19bbb", jsii.get(self, "podIdentityAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterName")
@@ -13230,17 +13264,17 @@ class CfnPodIdentityAssociation(
     @jsii.member(jsii_name="disableSessionTags")
     def disable_session_tags(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The state of the automatic sessions tags.
 
         The value of *true* disables these tags.
         '''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "disableSessionTags"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "disableSessionTags"))
 
     @disable_session_tags.setter
     def disable_session_tags(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cb3dbe4cc3b44e9265bbfe13e41235db909b0c1dc0e052b3bdda07fd4b228e8b)
@@ -13249,12 +13283,12 @@ class CfnPodIdentityAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that assists with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b0e0a0551adefc10761733af04b8c51e7dad6b483be9252882ecff10539c7dcc)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -13295,8 +13329,8 @@ class CfnPodIdentityAssociationProps:
         namespace: builtins.str,
         role_arn: builtins.str,
         service_account: builtins.str,
-        disable_session_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        disable_session_tags: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_role_arn: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnPodIdentityAssociation``.
@@ -13314,6 +13348,7 @@ class CfnPodIdentityAssociationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_eks as eks
@@ -13402,7 +13437,7 @@ class CfnPodIdentityAssociationProps:
     @builtins.property
     def disable_session_tags(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The state of the automatic sessions tags. The value of *true* disables these tags.
 
         EKS Pod Identity adds a pre-defined set of session tags when it assumes the role. You can use these tags to author a single role that can work across resources by allowing access to AWS resources based on matching tags. By default, EKS Pod Identity attaches six tags, including tags for cluster name, namespace, and service account name. For the list of tags added by EKS Pod Identity, see `List of session tags added by EKS Pod Identity <https://docs.aws.amazon.com/eks/latest/userguide/pod-id-abac.html#pod-id-abac-tags>`_ in the *Amazon EKS User Guide* .
@@ -13410,10 +13445,10 @@ class CfnPodIdentityAssociationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-podidentityassociation.html#cfn-eks-podidentityassociation-disablesessiontags
         '''
         result = self._values.get("disable_session_tags")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that assists with categorization and organization.
 
         Each tag consists of a key and an optional value. You define both. Tags don't propagate to any other cluster or AWS resources.
@@ -13435,7 +13470,7 @@ class CfnPodIdentityAssociationProps:
         - Do not use ``aws:`` , ``AWS:`` , or any upper or lowercase combination of such as a prefix for either keys or values as it is reserved for AWS use. You cannot edit or delete tag keys or values with this prefix. Tags with this prefix do not count against your tags per resource limit.
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def target_role_arn(self) -> typing.Optional[builtins.str]:
@@ -13492,7 +13527,7 @@ class ClusterAttributes:
         self,
         *,
         cluster_name: builtins.str,
-        awscli_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
+        awscli_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
         cluster_certificate_authority_data: typing.Optional[builtins.str] = None,
         cluster_encryption_config_key_arn: typing.Optional[builtins.str] = None,
         cluster_endpoint: typing.Optional[builtins.str] = None,
@@ -13500,18 +13535,18 @@ class ClusterAttributes:
         cluster_security_group_id: typing.Optional[builtins.str] = None,
         ip_family: typing.Optional["IpFamily"] = None,
         kubectl_environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        kubectl_lambda_role: typing.Optional[_IRole_235f5d8e] = None,
-        kubectl_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
-        kubectl_memory: typing.Optional[_Size_7b441c34] = None,
+        kubectl_lambda_role: typing.Optional["_IRole_235f5d8e"] = None,
+        kubectl_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
+        kubectl_memory: typing.Optional["_Size_7b441c34"] = None,
         kubectl_private_subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         kubectl_provider: typing.Optional["IKubectlProvider"] = None,
         kubectl_role_arn: typing.Optional[builtins.str] = None,
         kubectl_security_group_id: typing.Optional[builtins.str] = None,
-        on_event_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
-        open_id_connect_provider: typing.Optional[_IOpenIdConnectProvider_203f0793] = None,
+        on_event_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
+        open_id_connect_provider: typing.Optional["_IOpenIdConnectProvider_203f0793"] = None,
         prune: typing.Optional[builtins.bool] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
     ) -> None:
         '''Attributes for EKS clusters.
 
@@ -13626,7 +13661,7 @@ class ClusterAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def awscli_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def awscli_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda layer that contains the ``aws`` CLI.
 
         The handler expects the layer to include the following executables::
@@ -13636,7 +13671,7 @@ class ClusterAttributes:
         :default: - a default layer with the AWS CLI 1.x
         '''
         result = self._values.get("awscli_layer")
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], result)
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], result)
 
     @builtins.property
     def cluster_certificate_authority_data(self) -> typing.Optional[builtins.str]:
@@ -13717,7 +13752,7 @@ class ClusterAttributes:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def kubectl_lambda_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def kubectl_lambda_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that can perform kubectl operations against this cluster.
 
         The role should be mapped to the ``system:masters`` Kubernetes RBAC role.
@@ -13731,10 +13766,10 @@ class ClusterAttributes:
         be used.
         '''
         result = self._values.get("kubectl_lambda_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def kubectl_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def kubectl_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda Layer which includes ``kubectl`` and Helm.
 
         This layer is used by the kubectl handler to apply manifests and install
@@ -13750,16 +13785,16 @@ class ClusterAttributes:
         :default: - No default layer will be provided
         '''
         result = self._values.get("kubectl_layer")
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], result)
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], result)
 
     @builtins.property
-    def kubectl_memory(self) -> typing.Optional[_Size_7b441c34]:
+    def kubectl_memory(self) -> typing.Optional["_Size_7b441c34"]:
         '''Amount of memory to allocate to the provider's lambda function.
 
         :default: Size.gibibytes(1)
         '''
         result = self._values.get("kubectl_memory")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def kubectl_private_subnet_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -13807,7 +13842,7 @@ class ClusterAttributes:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def on_event_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def on_event_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda Layer which includes the NPM dependency ``proxy-agent``.
 
         This layer
@@ -13820,12 +13855,12 @@ class ClusterAttributes:
         :default: - a layer bundled with this module.
         '''
         result = self._values.get("on_event_layer")
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], result)
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], result)
 
     @builtins.property
     def open_id_connect_provider(
         self,
-    ) -> typing.Optional[_IOpenIdConnectProvider_203f0793]:
+    ) -> typing.Optional["_IOpenIdConnectProvider_203f0793"]:
         '''An Open ID Connect provider for this cluster that can be used to configure service accounts.
 
         You can either import an existing provider using ``iam.OpenIdConnectProvider.fromProviderArn``,
@@ -13834,7 +13869,7 @@ class ClusterAttributes:
         :default: - if not specified ``cluster.openIdConnectProvider`` and ``cluster.addServiceAccount`` will throw an error.
         '''
         result = self._values.get("open_id_connect_provider")
-        return typing.cast(typing.Optional[_IOpenIdConnectProvider_203f0793], result)
+        return typing.cast(typing.Optional["_IOpenIdConnectProvider_203f0793"], result)
 
     @builtins.property
     def prune(self) -> typing.Optional[builtins.bool]:
@@ -13862,13 +13897,13 @@ class ClusterAttributes:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''The VPC in which this Cluster was created.
 
         :default: - if not specified ``cluster.vpc`` will throw an error
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13936,10 +13971,10 @@ class CommonClusterOptions:
         cluster_name: typing.Optional[builtins.str] = None,
         output_cluster_name: typing.Optional[builtins.bool] = None,
         output_config_command: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Sequence[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]]] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Sequence[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Options for configuring an EKS cluster.
 
@@ -14059,34 +14094,34 @@ class CommonClusterOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Role that provides permissions for the Kubernetes control plane to make calls to AWS API operations on your behalf.
 
         :default: - A role is automatically created for you
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def security_group(self) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    def security_group(self) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''Security Group to use for Control Plane ENIs.
 
         :default: - A security group is automatically created
         '''
         result = self._values.get("security_group")
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''The VPC in which to create the Cluster.
 
         :default: - a VPC with default configuration will be created and can be accessed through ``cluster.vpc``.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[typing.List[_SubnetSelection_e57d76df]]:
+    def vpc_subnets(self) -> typing.Optional[typing.List["_SubnetSelection_e57d76df"]]:
         '''Where to place EKS Control Plane ENIs.
 
         For example, to only select private subnets, supply the following:
@@ -14096,7 +14131,7 @@ class CommonClusterOptions:
         :default: - All public and private subnets
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[typing.List[_SubnetSelection_e57d76df]], result)
+        return typing.cast(typing.Optional[typing.List["_SubnetSelection_e57d76df"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14179,7 +14214,7 @@ class EksOptimizedImage(
     def __init__(
         self,
         *,
-        cpu_arch: typing.Optional[CpuArch] = None,
+        cpu_arch: typing.Optional["CpuArch"] = None,
         kubernetes_version: typing.Optional[builtins.str] = None,
         node_type: typing.Optional["NodeType"] = None,
     ) -> None:
@@ -14200,8 +14235,8 @@ class EksOptimizedImage(
     @jsii.member(jsii_name="getImage")
     def get_image(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-    ) -> _MachineImageConfig_187edaee:
+        scope: "_constructs_77d1e7e8.Construct",
+    ) -> "_MachineImageConfig_187edaee":
         '''Return the correct image.
 
         :param scope: -
@@ -14209,7 +14244,7 @@ class EksOptimizedImage(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__629e4d4811fb64af8e661195cc881959015c1512e23da98c5c9484740a0b770d)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-        return typing.cast(_MachineImageConfig_187edaee, jsii.invoke(self, "getImage", [scope]))
+        return typing.cast("_MachineImageConfig_187edaee", jsii.invoke(self, "getImage", [scope]))
 
 
 @jsii.data_type(
@@ -14225,7 +14260,7 @@ class EksOptimizedImageProps:
     def __init__(
         self,
         *,
-        cpu_arch: typing.Optional[CpuArch] = None,
+        cpu_arch: typing.Optional["CpuArch"] = None,
         kubernetes_version: typing.Optional[builtins.str] = None,
         node_type: typing.Optional["NodeType"] = None,
     ) -> None:
@@ -14263,13 +14298,13 @@ class EksOptimizedImageProps:
             self._values["node_type"] = node_type
 
     @builtins.property
-    def cpu_arch(self) -> typing.Optional[CpuArch]:
+    def cpu_arch(self) -> typing.Optional["CpuArch"]:
         '''What cpu architecture to retrieve the image for (arm64 or x86_64).
 
         :default: CpuArch.X86_64
         '''
         result = self._values.get("cpu_arch")
-        return typing.cast(typing.Optional[CpuArch], result)
+        return typing.cast(typing.Optional["CpuArch"], result)
 
     @builtins.property
     def kubernetes_version(self) -> typing.Optional[builtins.str]:
@@ -14411,15 +14446,15 @@ class FargateProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster: "Cluster",
         selectors: typing.Sequence[typing.Union["Selector", typing.Dict[builtins.str, typing.Any]]],
         fargate_profile_name: typing.Optional[builtins.str] = None,
-        pod_execution_role: typing.Optional[_IRole_235f5d8e] = None,
-        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
+        pod_execution_role: typing.Optional["_IRole_235f5d8e"] = None,
+        subnet_selection: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -14466,20 +14501,20 @@ class FargateProfile(
 
     @builtins.property
     @jsii.member(jsii_name="podExecutionRole")
-    def pod_execution_role(self) -> _IRole_235f5d8e:
+    def pod_execution_role(self) -> "_IRole_235f5d8e":
         '''The pod execution role to use for pods that match the selectors in the Fargate profile.
 
         The pod execution role allows Fargate infrastructure to
         register with your cluster as a node, and it provides read access to Amazon
         ECR image repositories.
         '''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "podExecutionRole"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "podExecutionRole"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Resource tags.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
 
 @jsii.data_type(
@@ -14499,9 +14534,9 @@ class FargateProfileOptions:
         *,
         selectors: typing.Sequence[typing.Union["Selector", typing.Dict[builtins.str, typing.Any]]],
         fargate_profile_name: typing.Optional[builtins.str] = None,
-        pod_execution_role: typing.Optional[_IRole_235f5d8e] = None,
-        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
+        pod_execution_role: typing.Optional["_IRole_235f5d8e"] = None,
+        subnet_selection: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
     ) -> None:
         '''Options for defining EKS Fargate Profiles.
 
@@ -14566,7 +14601,7 @@ class FargateProfileOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def pod_execution_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def pod_execution_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The pod execution role to use for pods that match the selectors in the Fargate profile.
 
         The pod execution role allows Fargate infrastructure to
@@ -14578,10 +14613,10 @@ class FargateProfileOptions:
         :see: https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html
         '''
         result = self._values.get("pod_execution_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def subnet_selection(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def subnet_selection(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Select which subnets to launch your pods into.
 
         At this time, pods running
@@ -14593,10 +14628,10 @@ class FargateProfileOptions:
         :default: - all private subnets of the VPC are selected.
         '''
         result = self._values.get("subnet_selection")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''The VPC from which to select subnets to launch your pods into.
 
         By default, all private subnets are selected. You can customize this using
@@ -14605,7 +14640,7 @@ class FargateProfileOptions:
         :default: - all private subnets used by the EKS cluster
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14637,9 +14672,9 @@ class FargateProfileProps(FargateProfileOptions):
         *,
         selectors: typing.Sequence[typing.Union["Selector", typing.Dict[builtins.str, typing.Any]]],
         fargate_profile_name: typing.Optional[builtins.str] = None,
-        pod_execution_role: typing.Optional[_IRole_235f5d8e] = None,
-        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
+        pod_execution_role: typing.Optional["_IRole_235f5d8e"] = None,
+        subnet_selection: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
         cluster: "Cluster",
     ) -> None:
         '''Configuration props for EKS Fargate Profiles.
@@ -14709,7 +14744,7 @@ class FargateProfileProps(FargateProfileOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def pod_execution_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def pod_execution_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The pod execution role to use for pods that match the selectors in the Fargate profile.
 
         The pod execution role allows Fargate infrastructure to
@@ -14721,10 +14756,10 @@ class FargateProfileProps(FargateProfileOptions):
         :see: https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html
         '''
         result = self._values.get("pod_execution_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def subnet_selection(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def subnet_selection(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Select which subnets to launch your pods into.
 
         At this time, pods running
@@ -14736,10 +14771,10 @@ class FargateProfileProps(FargateProfileOptions):
         :default: - all private subnets of the VPC are selected.
         '''
         result = self._values.get("subnet_selection")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''The VPC from which to select subnets to launch your pods into.
 
         By default, all private subnets are selected. You can customize this using
@@ -14748,7 +14783,7 @@ class FargateProfileProps(FargateProfileOptions):
         :default: - all private subnets used by the EKS cluster
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
     def cluster(self) -> "Cluster":
@@ -14799,19 +14834,19 @@ class HelmChart(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster: "ICluster",
         atomic: typing.Optional[builtins.bool] = None,
         chart: typing.Optional[builtins.str] = None,
-        chart_asset: typing.Optional[_Asset_ac2a7e61] = None,
+        chart_asset: typing.Optional["_Asset_ac2a7e61"] = None,
         create_namespace: typing.Optional[builtins.bool] = None,
         namespace: typing.Optional[builtins.str] = None,
         release: typing.Optional[builtins.str] = None,
         repository: typing.Optional[builtins.str] = None,
         skip_crds: typing.Optional[builtins.bool] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         values: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         version: typing.Optional[builtins.str] = None,
         wait: typing.Optional[builtins.bool] = None,
@@ -14873,8 +14908,8 @@ class HelmChart(
 
     @builtins.property
     @jsii.member(jsii_name="chartAsset")
-    def chart_asset(self) -> typing.Optional[_Asset_ac2a7e61]:
-        return typing.cast(typing.Optional[_Asset_ac2a7e61], jsii.get(self, "chartAsset"))
+    def chart_asset(self) -> typing.Optional["_Asset_ac2a7e61"]:
+        return typing.cast(typing.Optional["_Asset_ac2a7e61"], jsii.get(self, "chartAsset"))
 
     @builtins.property
     @jsii.member(jsii_name="repository")
@@ -14911,13 +14946,13 @@ class HelmChartOptions:
         *,
         atomic: typing.Optional[builtins.bool] = None,
         chart: typing.Optional[builtins.str] = None,
-        chart_asset: typing.Optional[_Asset_ac2a7e61] = None,
+        chart_asset: typing.Optional["_Asset_ac2a7e61"] = None,
         create_namespace: typing.Optional[builtins.bool] = None,
         namespace: typing.Optional[builtins.str] = None,
         release: typing.Optional[builtins.str] = None,
         repository: typing.Optional[builtins.str] = None,
         skip_crds: typing.Optional[builtins.bool] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         values: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         version: typing.Optional[builtins.str] = None,
         wait: typing.Optional[builtins.bool] = None,
@@ -15017,7 +15052,7 @@ class HelmChartOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def chart_asset(self) -> typing.Optional[_Asset_ac2a7e61]:
+    def chart_asset(self) -> typing.Optional["_Asset_ac2a7e61"]:
         '''The chart in the form of an asset.
 
         Either this or ``chart`` must be specified.
@@ -15025,7 +15060,7 @@ class HelmChartOptions:
         :default: - No chart asset. Implies ``chart`` is used.
         '''
         result = self._values.get("chart_asset")
-        return typing.cast(typing.Optional[_Asset_ac2a7e61], result)
+        return typing.cast(typing.Optional["_Asset_ac2a7e61"], result)
 
     @builtins.property
     def create_namespace(self) -> typing.Optional[builtins.bool]:
@@ -15075,7 +15110,7 @@ class HelmChartOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Amount of time to wait for any individual Kubernetes operation.
 
         Maximum 15 minutes.
@@ -15083,7 +15118,7 @@ class HelmChartOptions:
         :default: Duration.minutes(5)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def values(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
@@ -15155,13 +15190,13 @@ class HelmChartProps(HelmChartOptions):
         *,
         atomic: typing.Optional[builtins.bool] = None,
         chart: typing.Optional[builtins.str] = None,
-        chart_asset: typing.Optional[_Asset_ac2a7e61] = None,
+        chart_asset: typing.Optional["_Asset_ac2a7e61"] = None,
         create_namespace: typing.Optional[builtins.bool] = None,
         namespace: typing.Optional[builtins.str] = None,
         release: typing.Optional[builtins.str] = None,
         repository: typing.Optional[builtins.str] = None,
         skip_crds: typing.Optional[builtins.bool] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         values: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         version: typing.Optional[builtins.str] = None,
         wait: typing.Optional[builtins.bool] = None,
@@ -15265,7 +15300,7 @@ class HelmChartProps(HelmChartOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def chart_asset(self) -> typing.Optional[_Asset_ac2a7e61]:
+    def chart_asset(self) -> typing.Optional["_Asset_ac2a7e61"]:
         '''The chart in the form of an asset.
 
         Either this or ``chart`` must be specified.
@@ -15273,7 +15308,7 @@ class HelmChartProps(HelmChartOptions):
         :default: - No chart asset. Implies ``chart`` is used.
         '''
         result = self._values.get("chart_asset")
-        return typing.cast(typing.Optional[_Asset_ac2a7e61], result)
+        return typing.cast(typing.Optional["_Asset_ac2a7e61"], result)
 
     @builtins.property
     def create_namespace(self) -> typing.Optional[builtins.bool]:
@@ -15323,7 +15358,7 @@ class HelmChartProps(HelmChartOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Amount of time to wait for any individual Kubernetes operation.
 
         Maximum 15 minutes.
@@ -15331,7 +15366,7 @@ class HelmChartProps(HelmChartOptions):
         :default: Duration.minutes(5)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def values(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
@@ -15463,7 +15498,7 @@ class IAccessPolicy(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="accessScope")
-    def access_scope(self) -> AccessScope:
+    def access_scope(self) -> "AccessScope":
         '''The scope of the access policy, which determines the level of access granted.'''
         ...
 
@@ -15484,9 +15519,9 @@ class _IAccessPolicyProxy:
 
     @builtins.property
     @jsii.member(jsii_name="accessScope")
-    def access_scope(self) -> AccessScope:
+    def access_scope(self) -> "AccessScope":
         '''The scope of the access policy, which determines the level of access granted.'''
-        return typing.cast(AccessScope, jsii.get(self, "accessScope"))
+        return typing.cast("AccessScope", jsii.get(self, "accessScope"))
 
     @builtins.property
     @jsii.member(jsii_name="policy")
@@ -15601,7 +15636,7 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
 
     @builtins.property
     @jsii.member(jsii_name="clusterSecurityGroup")
-    def cluster_security_group(self) -> _ISecurityGroup_acf8a799:
+    def cluster_security_group(self) -> "_ISecurityGroup_acf8a799":
         '''The cluster security group that was created by Amazon EKS for the cluster.
 
         :attribute: true
@@ -15619,7 +15654,7 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
 
     @builtins.property
     @jsii.member(jsii_name="openIdConnectProvider")
-    def open_id_connect_provider(self) -> _IOpenIdConnectProvider_203f0793:
+    def open_id_connect_provider(self) -> "_IOpenIdConnectProvider_203f0793":
         '''The Open ID Connect Provider of the cluster used to configure Service Accounts.'''
         ...
 
@@ -15636,13 +15671,13 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
 
     @builtins.property
     @jsii.member(jsii_name="vpc")
-    def vpc(self) -> _IVpc_f30d5663:
+    def vpc(self) -> "_IVpc_f30d5663":
         '''The VPC in which this Cluster was created.'''
         ...
 
     @builtins.property
     @jsii.member(jsii_name="authenticationMode")
-    def authentication_mode(self) -> typing.Optional[AuthenticationMode]:
+    def authentication_mode(self) -> typing.Optional["AuthenticationMode"]:
         '''The authentication mode for the cluster.
 
         :default: AuthenticationMode.CONFIG_MAP
@@ -15651,7 +15686,7 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
 
     @builtins.property
     @jsii.member(jsii_name="awscliLayer")
-    def awscli_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def awscli_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda layer that contains the ``aws`` CLI.
 
         If not defined, a default layer will be used containing the AWS CLI 1.x.
@@ -15662,7 +15697,7 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
     @jsii.member(jsii_name="clusterHandlerSecurityGroup")
     def cluster_handler_security_group(
         self,
-    ) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    ) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''A security group to associate with the Cluster Handler's Lambdas.
 
         The Cluster Handler's Lambdas are responsible for calling AWS's EKS API.
@@ -15677,7 +15712,7 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
 
     @builtins.property
     @jsii.member(jsii_name="eksPodIdentityAgent")
-    def eks_pod_identity_agent(self) -> typing.Optional[IAddon]:
+    def eks_pod_identity_agent(self) -> typing.Optional["IAddon"]:
         '''The EKS Pod Identity Agent addon for the EKS cluster.
 
         The EKS Pod Identity Agent is responsible for managing the temporary credentials
@@ -15712,7 +15747,7 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
 
     @builtins.property
     @jsii.member(jsii_name="kubectlLambdaRole")
-    def kubectl_lambda_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def kubectl_lambda_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that can perform kubectl operations against this cluster.
 
         The role should be mapped to the ``system:masters`` Kubernetes RBAC role.
@@ -15723,13 +15758,13 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
 
     @builtins.property
     @jsii.member(jsii_name="kubectlLayer")
-    def kubectl_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def kubectl_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda layer that includes ``kubectl`` and ``helm``.'''
         ...
 
     @builtins.property
     @jsii.member(jsii_name="kubectlMemory")
-    def kubectl_memory(self) -> typing.Optional[_Size_7b441c34]:
+    def kubectl_memory(self) -> typing.Optional["_Size_7b441c34"]:
         '''Amount of memory to allocate to the provider's lambda function.'''
         ...
 
@@ -15737,7 +15772,7 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
     @jsii.member(jsii_name="kubectlPrivateSubnets")
     def kubectl_private_subnets(
         self,
-    ) -> typing.Optional[typing.List[_ISubnet_d57d1229]]:
+    ) -> typing.Optional[typing.List["_ISubnet_d57d1229"]]:
         '''Subnets to host the ``kubectl`` compute resources.
 
         If this is undefined, the k8s endpoint is expected to be accessible
@@ -15756,7 +15791,7 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
 
     @builtins.property
     @jsii.member(jsii_name="kubectlRole")
-    def kubectl_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def kubectl_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that can perform kubectl operations against this cluster.
 
         The role should be mapped to the ``system:masters`` Kubernetes RBAC role.
@@ -15765,7 +15800,7 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
 
     @builtins.property
     @jsii.member(jsii_name="kubectlSecurityGroup")
-    def kubectl_security_group(self) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    def kubectl_security_group(self) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''A security group to use for ``kubectl`` execution.
 
         If this is undefined, the k8s endpoint is expected to be accessible
@@ -15775,7 +15810,7 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
 
     @builtins.property
     @jsii.member(jsii_name="onEventLayer")
-    def on_event_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def on_event_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda layer that includes the NPM dependency ``proxy-agent``.
 
         If not defined, a default layer will be used.
@@ -15786,10 +15821,10 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
     def add_cdk8s_chart(
         self,
         id: builtins.str,
-        chart: _constructs_77d1e7e8.Construct,
+        chart: "_constructs_77d1e7e8.Construct",
         *,
         ingress_alb: typing.Optional[builtins.bool] = None,
-        ingress_alb_scheme: typing.Optional[AlbScheme] = None,
+        ingress_alb_scheme: typing.Optional["AlbScheme"] = None,
         prune: typing.Optional[builtins.bool] = None,
         skip_validation: typing.Optional[builtins.bool] = None,
     ) -> "KubernetesManifest":
@@ -15813,17 +15848,17 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
         *,
         atomic: typing.Optional[builtins.bool] = None,
         chart: typing.Optional[builtins.str] = None,
-        chart_asset: typing.Optional[_Asset_ac2a7e61] = None,
+        chart_asset: typing.Optional["_Asset_ac2a7e61"] = None,
         create_namespace: typing.Optional[builtins.bool] = None,
         namespace: typing.Optional[builtins.str] = None,
         release: typing.Optional[builtins.str] = None,
         repository: typing.Optional[builtins.str] = None,
         skip_crds: typing.Optional[builtins.bool] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         values: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         version: typing.Optional[builtins.str] = None,
         wait: typing.Optional[builtins.bool] = None,
-    ) -> HelmChart:
+    ) -> "HelmChart":
         '''Defines a Helm chart in this cluster.
 
         :param id: logical id of this chart.
@@ -15886,10 +15921,10 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
     @jsii.member(jsii_name="connectAutoScalingGroupCapacity")
     def connect_auto_scaling_group_capacity(
         self,
-        auto_scaling_group: _AutoScalingGroup_c547a7b9,
+        auto_scaling_group: "_AutoScalingGroup_c547a7b9",
         *,
         bootstrap_enabled: typing.Optional[builtins.bool] = None,
-        bootstrap_options: typing.Optional[typing.Union[BootstrapOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        bootstrap_options: typing.Optional[typing.Union["BootstrapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         machine_image_type: typing.Optional["MachineImageType"] = None,
         map_role: typing.Optional[builtins.bool] = None,
         spot_interrupt_handler: typing.Optional[builtins.bool] = None,
@@ -15976,12 +16011,12 @@ class _IClusterProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterSecurityGroup")
-    def cluster_security_group(self) -> _ISecurityGroup_acf8a799:
+    def cluster_security_group(self) -> "_ISecurityGroup_acf8a799":
         '''The cluster security group that was created by Amazon EKS for the cluster.
 
         :attribute: true
         '''
-        return typing.cast(_ISecurityGroup_acf8a799, jsii.get(self, "clusterSecurityGroup"))
+        return typing.cast("_ISecurityGroup_acf8a799", jsii.get(self, "clusterSecurityGroup"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterSecurityGroupId")
@@ -15994,9 +16029,9 @@ class _IClusterProxy(
 
     @builtins.property
     @jsii.member(jsii_name="openIdConnectProvider")
-    def open_id_connect_provider(self) -> _IOpenIdConnectProvider_203f0793:
+    def open_id_connect_provider(self) -> "_IOpenIdConnectProvider_203f0793":
         '''The Open ID Connect Provider of the cluster used to configure Service Accounts.'''
-        return typing.cast(_IOpenIdConnectProvider_203f0793, jsii.get(self, "openIdConnectProvider"))
+        return typing.cast("_IOpenIdConnectProvider_203f0793", jsii.get(self, "openIdConnectProvider"))
 
     @builtins.property
     @jsii.member(jsii_name="prune")
@@ -16011,33 +16046,33 @@ class _IClusterProxy(
 
     @builtins.property
     @jsii.member(jsii_name="vpc")
-    def vpc(self) -> _IVpc_f30d5663:
+    def vpc(self) -> "_IVpc_f30d5663":
         '''The VPC in which this Cluster was created.'''
-        return typing.cast(_IVpc_f30d5663, jsii.get(self, "vpc"))
+        return typing.cast("_IVpc_f30d5663", jsii.get(self, "vpc"))
 
     @builtins.property
     @jsii.member(jsii_name="authenticationMode")
-    def authentication_mode(self) -> typing.Optional[AuthenticationMode]:
+    def authentication_mode(self) -> typing.Optional["AuthenticationMode"]:
         '''The authentication mode for the cluster.
 
         :default: AuthenticationMode.CONFIG_MAP
         '''
-        return typing.cast(typing.Optional[AuthenticationMode], jsii.get(self, "authenticationMode"))
+        return typing.cast(typing.Optional["AuthenticationMode"], jsii.get(self, "authenticationMode"))
 
     @builtins.property
     @jsii.member(jsii_name="awscliLayer")
-    def awscli_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def awscli_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda layer that contains the ``aws`` CLI.
 
         If not defined, a default layer will be used containing the AWS CLI 1.x.
         '''
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], jsii.get(self, "awscliLayer"))
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], jsii.get(self, "awscliLayer"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterHandlerSecurityGroup")
     def cluster_handler_security_group(
         self,
-    ) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    ) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''A security group to associate with the Cluster Handler's Lambdas.
 
         The Cluster Handler's Lambdas are responsible for calling AWS's EKS API.
@@ -16048,11 +16083,11 @@ class _IClusterProxy(
 
         :attribute: true
         '''
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], jsii.get(self, "clusterHandlerSecurityGroup"))
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], jsii.get(self, "clusterHandlerSecurityGroup"))
 
     @builtins.property
     @jsii.member(jsii_name="eksPodIdentityAgent")
-    def eks_pod_identity_agent(self) -> typing.Optional[IAddon]:
+    def eks_pod_identity_agent(self) -> typing.Optional["IAddon"]:
         '''The EKS Pod Identity Agent addon for the EKS cluster.
 
         The EKS Pod Identity Agent is responsible for managing the temporary credentials
@@ -16064,7 +16099,7 @@ class _IClusterProxy(
         Agent addon. If the addon has not been created yet, it will be created and
         returned.
         '''
-        return typing.cast(typing.Optional[IAddon], jsii.get(self, "eksPodIdentityAgent"))
+        return typing.cast(typing.Optional["IAddon"], jsii.get(self, "eksPodIdentityAgent"))
 
     @builtins.property
     @jsii.member(jsii_name="ipFamily")
@@ -16087,38 +16122,38 @@ class _IClusterProxy(
 
     @builtins.property
     @jsii.member(jsii_name="kubectlLambdaRole")
-    def kubectl_lambda_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def kubectl_lambda_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that can perform kubectl operations against this cluster.
 
         The role should be mapped to the ``system:masters`` Kubernetes RBAC role.
 
         This role is directly passed to the lambda handler that sends Kube Ctl commands to the cluster.
         '''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "kubectlLambdaRole"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "kubectlLambdaRole"))
 
     @builtins.property
     @jsii.member(jsii_name="kubectlLayer")
-    def kubectl_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def kubectl_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda layer that includes ``kubectl`` and ``helm``.'''
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], jsii.get(self, "kubectlLayer"))
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], jsii.get(self, "kubectlLayer"))
 
     @builtins.property
     @jsii.member(jsii_name="kubectlMemory")
-    def kubectl_memory(self) -> typing.Optional[_Size_7b441c34]:
+    def kubectl_memory(self) -> typing.Optional["_Size_7b441c34"]:
         '''Amount of memory to allocate to the provider's lambda function.'''
-        return typing.cast(typing.Optional[_Size_7b441c34], jsii.get(self, "kubectlMemory"))
+        return typing.cast(typing.Optional["_Size_7b441c34"], jsii.get(self, "kubectlMemory"))
 
     @builtins.property
     @jsii.member(jsii_name="kubectlPrivateSubnets")
     def kubectl_private_subnets(
         self,
-    ) -> typing.Optional[typing.List[_ISubnet_d57d1229]]:
+    ) -> typing.Optional[typing.List["_ISubnet_d57d1229"]]:
         '''Subnets to host the ``kubectl`` compute resources.
 
         If this is undefined, the k8s endpoint is expected to be accessible
         publicly.
         '''
-        return typing.cast(typing.Optional[typing.List[_ISubnet_d57d1229]], jsii.get(self, "kubectlPrivateSubnets"))
+        return typing.cast(typing.Optional[typing.List["_ISubnet_d57d1229"]], jsii.get(self, "kubectlPrivateSubnets"))
 
     @builtins.property
     @jsii.member(jsii_name="kubectlProvider")
@@ -16131,40 +16166,40 @@ class _IClusterProxy(
 
     @builtins.property
     @jsii.member(jsii_name="kubectlRole")
-    def kubectl_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def kubectl_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that can perform kubectl operations against this cluster.
 
         The role should be mapped to the ``system:masters`` Kubernetes RBAC role.
         '''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "kubectlRole"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "kubectlRole"))
 
     @builtins.property
     @jsii.member(jsii_name="kubectlSecurityGroup")
-    def kubectl_security_group(self) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    def kubectl_security_group(self) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''A security group to use for ``kubectl`` execution.
 
         If this is undefined, the k8s endpoint is expected to be accessible
         publicly.
         '''
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], jsii.get(self, "kubectlSecurityGroup"))
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], jsii.get(self, "kubectlSecurityGroup"))
 
     @builtins.property
     @jsii.member(jsii_name="onEventLayer")
-    def on_event_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def on_event_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda layer that includes the NPM dependency ``proxy-agent``.
 
         If not defined, a default layer will be used.
         '''
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], jsii.get(self, "onEventLayer"))
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], jsii.get(self, "onEventLayer"))
 
     @jsii.member(jsii_name="addCdk8sChart")
     def add_cdk8s_chart(
         self,
         id: builtins.str,
-        chart: _constructs_77d1e7e8.Construct,
+        chart: "_constructs_77d1e7e8.Construct",
         *,
         ingress_alb: typing.Optional[builtins.bool] = None,
-        ingress_alb_scheme: typing.Optional[AlbScheme] = None,
+        ingress_alb_scheme: typing.Optional["AlbScheme"] = None,
         prune: typing.Optional[builtins.bool] = None,
         skip_validation: typing.Optional[builtins.bool] = None,
     ) -> "KubernetesManifest":
@@ -16199,17 +16234,17 @@ class _IClusterProxy(
         *,
         atomic: typing.Optional[builtins.bool] = None,
         chart: typing.Optional[builtins.str] = None,
-        chart_asset: typing.Optional[_Asset_ac2a7e61] = None,
+        chart_asset: typing.Optional["_Asset_ac2a7e61"] = None,
         create_namespace: typing.Optional[builtins.bool] = None,
         namespace: typing.Optional[builtins.str] = None,
         release: typing.Optional[builtins.str] = None,
         repository: typing.Optional[builtins.str] = None,
         skip_crds: typing.Optional[builtins.bool] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         values: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         version: typing.Optional[builtins.str] = None,
         wait: typing.Optional[builtins.bool] = None,
-    ) -> HelmChart:
+    ) -> "HelmChart":
         '''Defines a Helm chart in this cluster.
 
         :param id: logical id of this chart.
@@ -16246,7 +16281,7 @@ class _IClusterProxy(
             wait=wait,
         )
 
-        return typing.cast(HelmChart, jsii.invoke(self, "addHelmChart", [id, options]))
+        return typing.cast("HelmChart", jsii.invoke(self, "addHelmChart", [id, options]))
 
     @jsii.member(jsii_name="addManifest")
     def add_manifest(
@@ -16305,10 +16340,10 @@ class _IClusterProxy(
     @jsii.member(jsii_name="connectAutoScalingGroupCapacity")
     def connect_auto_scaling_group_capacity(
         self,
-        auto_scaling_group: _AutoScalingGroup_c547a7b9,
+        auto_scaling_group: "_AutoScalingGroup_c547a7b9",
         *,
         bootstrap_enabled: typing.Optional[builtins.bool] = None,
-        bootstrap_options: typing.Optional[typing.Union[BootstrapOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        bootstrap_options: typing.Optional[typing.Union["BootstrapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         machine_image_type: typing.Optional["MachineImageType"] = None,
         map_role: typing.Optional[builtins.bool] = None,
         spot_interrupt_handler: typing.Optional[builtins.bool] = None,
@@ -16360,7 +16395,7 @@ class IKubectlProvider(_constructs_77d1e7e8.IConstruct, typing_extensions.Protoc
 
     @builtins.property
     @jsii.member(jsii_name="handlerRole")
-    def handler_role(self) -> _IRole_235f5d8e:
+    def handler_role(self) -> "_IRole_235f5d8e":
         '''The IAM execution role of the handler.'''
         ...
 
@@ -16386,9 +16421,9 @@ class _IKubectlProviderProxy(
 
     @builtins.property
     @jsii.member(jsii_name="handlerRole")
-    def handler_role(self) -> _IRole_235f5d8e:
+    def handler_role(self) -> "_IRole_235f5d8e":
         '''The IAM execution role of the handler.'''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "handlerRole"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "handlerRole"))
 
     @builtins.property
     @jsii.member(jsii_name="roleArn")
@@ -16559,10 +16594,10 @@ class KubectlProvider(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        cluster: ICluster,
+        cluster: "ICluster",
     ) -> None:
         '''
         :param scope: -
@@ -16581,13 +16616,13 @@ class KubectlProvider(
     @builtins.classmethod
     def from_kubectl_provider_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         function_arn: builtins.str,
-        handler_role: _IRole_235f5d8e,
+        handler_role: "_IRole_235f5d8e",
         kubectl_role_arn: builtins.str,
-    ) -> IKubectlProvider:
+    ) -> "IKubectlProvider":
         '''Import an existing provider.
 
         :param scope: Construct.
@@ -16606,15 +16641,15 @@ class KubectlProvider(
             kubectl_role_arn=kubectl_role_arn,
         )
 
-        return typing.cast(IKubectlProvider, jsii.sinvoke(cls, "fromKubectlProviderAttributes", [scope, id, attrs]))
+        return typing.cast("IKubectlProvider", jsii.sinvoke(cls, "fromKubectlProviderAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="getOrCreate")
     @builtins.classmethod
     def get_or_create(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
-        cluster: ICluster,
-    ) -> IKubectlProvider:
+        scope: "_constructs_77d1e7e8.Construct",
+        cluster: "ICluster",
+    ) -> "IKubectlProvider":
         '''Take existing provider or create new based on cluster.
 
         :param scope: Construct.
@@ -16624,13 +16659,13 @@ class KubectlProvider(
             type_hints = typing.get_type_hints(_typecheckingstub__a1be6786d017d5c8ecdac27431e97d30ee84a7aa05b526b912aea67bfd5bb3c7)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument cluster", value=cluster, expected_type=type_hints["cluster"])
-        return typing.cast(IKubectlProvider, jsii.sinvoke(cls, "getOrCreate", [scope, cluster]))
+        return typing.cast("IKubectlProvider", jsii.sinvoke(cls, "getOrCreate", [scope, cluster]))
 
     @builtins.property
     @jsii.member(jsii_name="handlerRole")
-    def handler_role(self) -> _IRole_235f5d8e:
+    def handler_role(self) -> "_IRole_235f5d8e":
         '''The IAM execution role of the handler.'''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "handlerRole"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "handlerRole"))
 
     @builtins.property
     @jsii.member(jsii_name="roleArn")
@@ -16659,7 +16694,7 @@ class KubectlProviderAttributes:
         self,
         *,
         function_arn: builtins.str,
-        handler_role: _IRole_235f5d8e,
+        handler_role: "_IRole_235f5d8e",
         kubectl_role_arn: builtins.str,
     ) -> None:
         '''Kubectl Provider Attributes.
@@ -16705,14 +16740,14 @@ class KubectlProviderAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def handler_role(self) -> _IRole_235f5d8e:
+    def handler_role(self) -> "_IRole_235f5d8e":
         '''The IAM execution role of the handler.
 
         This role must be able to assume kubectlRoleArn
         '''
         result = self._values.get("handler_role")
         assert result is not None, "Required property 'handler_role' is missing"
-        return typing.cast(_IRole_235f5d8e, result)
+        return typing.cast("_IRole_235f5d8e", result)
 
     @builtins.property
     def kubectl_role_arn(self) -> builtins.str:
@@ -16739,7 +16774,7 @@ class KubectlProviderAttributes:
     name_mapping={"cluster": "cluster"},
 )
 class KubectlProviderProps:
-    def __init__(self, *, cluster: ICluster) -> None:
+    def __init__(self, *, cluster: "ICluster") -> None:
         '''Properties for a KubectlProvider.
 
         :param cluster: The cluster to control.
@@ -16766,11 +16801,11 @@ class KubectlProviderProps:
         }
 
     @builtins.property
-    def cluster(self) -> ICluster:
+    def cluster(self) -> "ICluster":
         '''The cluster to control.'''
         result = self._values.get("cluster")
         assert result is not None, "Required property 'cluster' is missing"
-        return typing.cast(ICluster, result)
+        return typing.cast("ICluster", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16821,14 +16856,14 @@ class KubernetesManifest(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        cluster: ICluster,
+        cluster: "ICluster",
         manifest: typing.Sequence[typing.Mapping[builtins.str, typing.Any]],
         overwrite: typing.Optional[builtins.bool] = None,
         ingress_alb: typing.Optional[builtins.bool] = None,
-        ingress_alb_scheme: typing.Optional[AlbScheme] = None,
+        ingress_alb_scheme: typing.Optional["AlbScheme"] = None,
         prune: typing.Optional[builtins.bool] = None,
         skip_validation: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -16887,7 +16922,7 @@ class KubernetesManifestOptions:
         self,
         *,
         ingress_alb: typing.Optional[builtins.bool] = None,
-        ingress_alb_scheme: typing.Optional[AlbScheme] = None,
+        ingress_alb_scheme: typing.Optional["AlbScheme"] = None,
         prune: typing.Optional[builtins.bool] = None,
         skip_validation: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -16939,7 +16974,7 @@ class KubernetesManifestOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def ingress_alb_scheme(self) -> typing.Optional[AlbScheme]:
+    def ingress_alb_scheme(self) -> typing.Optional["AlbScheme"]:
         '''Specify the ALB scheme that should be applied to ``Ingress`` resources.
 
         Only applicable if ``ingressAlb`` is set to ``true``.
@@ -16947,7 +16982,7 @@ class KubernetesManifestOptions:
         :default: AlbScheme.INTERNAL
         '''
         result = self._values.get("ingress_alb_scheme")
-        return typing.cast(typing.Optional[AlbScheme], result)
+        return typing.cast(typing.Optional["AlbScheme"], result)
 
     @builtins.property
     def prune(self) -> typing.Optional[builtins.bool]:
@@ -17016,10 +17051,10 @@ class KubernetesManifestProps(KubernetesManifestOptions):
         self,
         *,
         ingress_alb: typing.Optional[builtins.bool] = None,
-        ingress_alb_scheme: typing.Optional[AlbScheme] = None,
+        ingress_alb_scheme: typing.Optional["AlbScheme"] = None,
         prune: typing.Optional[builtins.bool] = None,
         skip_validation: typing.Optional[builtins.bool] = None,
-        cluster: ICluster,
+        cluster: "ICluster",
         manifest: typing.Sequence[typing.Mapping[builtins.str, typing.Any]],
         overwrite: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -17116,7 +17151,7 @@ class KubernetesManifestProps(KubernetesManifestOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def ingress_alb_scheme(self) -> typing.Optional[AlbScheme]:
+    def ingress_alb_scheme(self) -> typing.Optional["AlbScheme"]:
         '''Specify the ALB scheme that should be applied to ``Ingress`` resources.
 
         Only applicable if ``ingressAlb`` is set to ``true``.
@@ -17124,7 +17159,7 @@ class KubernetesManifestProps(KubernetesManifestOptions):
         :default: AlbScheme.INTERNAL
         '''
         result = self._values.get("ingress_alb_scheme")
-        return typing.cast(typing.Optional[AlbScheme], result)
+        return typing.cast(typing.Optional["AlbScheme"], result)
 
     @builtins.property
     def prune(self) -> typing.Optional[builtins.bool]:
@@ -17164,14 +17199,14 @@ class KubernetesManifestProps(KubernetesManifestOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def cluster(self) -> ICluster:
+    def cluster(self) -> "ICluster":
         '''The EKS cluster to apply this manifest to.
 
         [disable-awslint:ref-via-interface]
         '''
         result = self._values.get("cluster")
         assert result is not None, "Required property 'cluster' is missing"
-        return typing.cast(ICluster, result)
+        return typing.cast("ICluster", result)
 
     @builtins.property
     def manifest(self) -> typing.List[typing.Mapping[builtins.str, typing.Any]]:
@@ -17259,15 +17294,15 @@ class KubernetesObjectValue(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        cluster: ICluster,
+        cluster: "ICluster",
         json_path: builtins.str,
         object_name: builtins.str,
         object_type: builtins.str,
         object_namespace: typing.Optional[builtins.str] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -17323,12 +17358,12 @@ class KubernetesObjectValueProps:
     def __init__(
         self,
         *,
-        cluster: ICluster,
+        cluster: "ICluster",
         json_path: builtins.str,
         object_name: builtins.str,
         object_type: builtins.str,
         object_namespace: typing.Optional[builtins.str] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Properties for KubernetesObjectValue.
 
@@ -17383,14 +17418,14 @@ class KubernetesObjectValueProps:
             self._values["timeout"] = timeout
 
     @builtins.property
-    def cluster(self) -> ICluster:
+    def cluster(self) -> "ICluster":
         '''The EKS cluster to fetch attributes from.
 
         [disable-awslint:ref-via-interface]
         '''
         result = self._values.get("cluster")
         assert result is not None, "Required property 'cluster' is missing"
-        return typing.cast(ICluster, result)
+        return typing.cast("ICluster", result)
 
     @builtins.property
     def json_path(self) -> builtins.str:
@@ -17429,13 +17464,13 @@ class KubernetesObjectValueProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Timeout for waiting on a value.
 
         :default: Duration.minutes(5)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17473,11 +17508,11 @@ class KubernetesPatch(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         apply_patch: typing.Mapping[builtins.str, typing.Any],
-        cluster: ICluster,
+        cluster: "ICluster",
         resource_name: builtins.str,
         restore_patch: typing.Mapping[builtins.str, typing.Any],
         patch_type: typing.Optional["PatchType"] = None,
@@ -17526,7 +17561,7 @@ class KubernetesPatchProps:
         self,
         *,
         apply_patch: typing.Mapping[builtins.str, typing.Any],
-        cluster: ICluster,
+        cluster: "ICluster",
         resource_name: builtins.str,
         restore_patch: typing.Mapping[builtins.str, typing.Any],
         patch_type: typing.Optional["PatchType"] = None,
@@ -17581,14 +17616,14 @@ class KubernetesPatchProps:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], result)
 
     @builtins.property
-    def cluster(self) -> ICluster:
+    def cluster(self) -> "ICluster":
         '''The cluster to apply the patch to.
 
         [disable-awslint:ref-via-interface]
         '''
         result = self._values.get("cluster")
         assert result is not None, "Required property 'cluster' is missing"
-        return typing.cast(ICluster, result)
+        return typing.cast("ICluster", result)
 
     @builtins.property
     def resource_name(self) -> builtins.str:
@@ -18116,28 +18151,28 @@ class Nodegroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        cluster: ICluster,
+        cluster: "ICluster",
         ami_type: typing.Optional["NodegroupAmiType"] = None,
-        capacity_type: typing.Optional[CapacityType] = None,
+        capacity_type: typing.Optional["CapacityType"] = None,
         desired_size: typing.Optional[jsii.Number] = None,
         disk_size: typing.Optional[jsii.Number] = None,
         enable_node_auto_repair: typing.Optional[builtins.bool] = None,
         force_update: typing.Optional[builtins.bool] = None,
-        instance_types: typing.Optional[typing.Sequence[_InstanceType_f64915b9]] = None,
+        instance_types: typing.Optional[typing.Sequence["_InstanceType_f64915b9"]] = None,
         labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        launch_template_spec: typing.Optional[typing.Union[LaunchTemplateSpec, typing.Dict[builtins.str, typing.Any]]] = None,
+        launch_template_spec: typing.Optional[typing.Union["LaunchTemplateSpec", typing.Dict[builtins.str, typing.Any]]] = None,
         max_size: typing.Optional[jsii.Number] = None,
         max_unavailable: typing.Optional[jsii.Number] = None,
         max_unavailable_percentage: typing.Optional[jsii.Number] = None,
         min_size: typing.Optional[jsii.Number] = None,
         nodegroup_name: typing.Optional[builtins.str] = None,
-        node_role: typing.Optional[_IRole_235f5d8e] = None,
+        node_role: typing.Optional["_IRole_235f5d8e"] = None,
         release_version: typing.Optional[builtins.str] = None,
         remote_access: typing.Optional[typing.Union["NodegroupRemoteAccess", typing.Dict[builtins.str, typing.Any]]] = None,
-        subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         taints: typing.Optional[typing.Sequence[typing.Union["TaintSpec", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -18200,10 +18235,10 @@ class Nodegroup(
     @builtins.classmethod
     def from_nodegroup_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         nodegroup_name: builtins.str,
-    ) -> INodegroup:
+    ) -> "INodegroup":
         '''Import the Nodegroup from attributes.
 
         :param scope: -
@@ -18215,7 +18250,7 @@ class Nodegroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument nodegroup_name", value=nodegroup_name, expected_type=type_hints["nodegroup_name"])
-        return typing.cast(INodegroup, jsii.sinvoke(cls, "fromNodegroupName", [scope, id, nodegroup_name]))
+        return typing.cast("INodegroup", jsii.sinvoke(cls, "fromNodegroupName", [scope, id, nodegroup_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -18225,12 +18260,12 @@ class Nodegroup(
 
     @builtins.property
     @jsii.member(jsii_name="cluster")
-    def cluster(self) -> ICluster:
+    def cluster(self) -> "ICluster":
         '''the Amazon EKS cluster resource.
 
         :attribute: ClusterName
         '''
-        return typing.cast(ICluster, jsii.get(self, "cluster"))
+        return typing.cast("ICluster", jsii.get(self, "cluster"))
 
     @builtins.property
     @jsii.member(jsii_name="nodegroupArn")
@@ -18252,9 +18287,9 @@ class Nodegroup(
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''IAM role of the instance profile for the nodegroup.'''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "role"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "role"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_eks.NodegroupAmiType")
@@ -18347,24 +18382,24 @@ class NodegroupOptions:
     def __init__(
         self,
         *,
-        ami_type: typing.Optional[NodegroupAmiType] = None,
-        capacity_type: typing.Optional[CapacityType] = None,
+        ami_type: typing.Optional["NodegroupAmiType"] = None,
+        capacity_type: typing.Optional["CapacityType"] = None,
         desired_size: typing.Optional[jsii.Number] = None,
         disk_size: typing.Optional[jsii.Number] = None,
         enable_node_auto_repair: typing.Optional[builtins.bool] = None,
         force_update: typing.Optional[builtins.bool] = None,
-        instance_types: typing.Optional[typing.Sequence[_InstanceType_f64915b9]] = None,
+        instance_types: typing.Optional[typing.Sequence["_InstanceType_f64915b9"]] = None,
         labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        launch_template_spec: typing.Optional[typing.Union[LaunchTemplateSpec, typing.Dict[builtins.str, typing.Any]]] = None,
+        launch_template_spec: typing.Optional[typing.Union["LaunchTemplateSpec", typing.Dict[builtins.str, typing.Any]]] = None,
         max_size: typing.Optional[jsii.Number] = None,
         max_unavailable: typing.Optional[jsii.Number] = None,
         max_unavailable_percentage: typing.Optional[jsii.Number] = None,
         min_size: typing.Optional[jsii.Number] = None,
         nodegroup_name: typing.Optional[builtins.str] = None,
-        node_role: typing.Optional[_IRole_235f5d8e] = None,
+        node_role: typing.Optional["_IRole_235f5d8e"] = None,
         release_version: typing.Optional[builtins.str] = None,
         remote_access: typing.Optional[typing.Union["NodegroupRemoteAccess", typing.Dict[builtins.str, typing.Any]]] = None,
-        subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         taints: typing.Optional[typing.Sequence[typing.Union["TaintSpec", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -18478,7 +18513,7 @@ class NodegroupOptions:
             self._values["taints"] = taints
 
     @builtins.property
-    def ami_type(self) -> typing.Optional[NodegroupAmiType]:
+    def ami_type(self) -> typing.Optional["NodegroupAmiType"]:
         '''The AMI type for your node group.
 
         If you explicitly specify the launchTemplate with custom AMI, do not specify this property, or
@@ -18487,16 +18522,16 @@ class NodegroupOptions:
         :default: - auto-determined from the instanceTypes property when launchTemplateSpec property is not specified
         '''
         result = self._values.get("ami_type")
-        return typing.cast(typing.Optional[NodegroupAmiType], result)
+        return typing.cast(typing.Optional["NodegroupAmiType"], result)
 
     @builtins.property
-    def capacity_type(self) -> typing.Optional[CapacityType]:
+    def capacity_type(self) -> typing.Optional["CapacityType"]:
         '''The capacity type of the nodegroup.
 
         :default: - ON_DEMAND
         '''
         result = self._values.get("capacity_type")
-        return typing.cast(typing.Optional[CapacityType], result)
+        return typing.cast(typing.Optional["CapacityType"], result)
 
     @builtins.property
     def desired_size(self) -> typing.Optional[jsii.Number]:
@@ -18546,7 +18581,7 @@ class NodegroupOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def instance_types(self) -> typing.Optional[typing.List[_InstanceType_f64915b9]]:
+    def instance_types(self) -> typing.Optional[typing.List["_InstanceType_f64915b9"]]:
         '''The instance types to use for your node group.
 
         :default: t3.medium will be used according to the cloudformation document.
@@ -18554,7 +18589,7 @@ class NodegroupOptions:
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-instancetypes
         '''
         result = self._values.get("instance_types")
-        return typing.cast(typing.Optional[typing.List[_InstanceType_f64915b9]], result)
+        return typing.cast(typing.Optional[typing.List["_InstanceType_f64915b9"]], result)
 
     @builtins.property
     def labels(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -18566,7 +18601,7 @@ class NodegroupOptions:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def launch_template_spec(self) -> typing.Optional[LaunchTemplateSpec]:
+    def launch_template_spec(self) -> typing.Optional["LaunchTemplateSpec"]:
         '''Launch template specification used for the nodegroup.
 
         :default: - no launch template
@@ -18574,7 +18609,7 @@ class NodegroupOptions:
         :see: https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html
         '''
         result = self._values.get("launch_template_spec")
-        return typing.cast(typing.Optional[LaunchTemplateSpec], result)
+        return typing.cast(typing.Optional["LaunchTemplateSpec"], result)
 
     @builtins.property
     def max_size(self) -> typing.Optional[jsii.Number]:
@@ -18638,7 +18673,7 @@ class NodegroupOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def node_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def node_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role to associate with your node group.
 
         The Amazon EKS worker node kubelet daemon
@@ -18649,7 +18684,7 @@ class NodegroupOptions:
         :default: - None. Auto-generated if not specified.
         '''
         result = self._values.get("node_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def release_version(self) -> typing.Optional[builtins.str]:
@@ -18674,7 +18709,7 @@ class NodegroupOptions:
         return typing.cast(typing.Optional["NodegroupRemoteAccess"], result)
 
     @builtins.property
-    def subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''The subnets to use for the Auto Scaling group that is created for your node group.
 
         By specifying the
@@ -18685,7 +18720,7 @@ class NodegroupOptions:
         :default: - private subnets
         '''
         result = self._values.get("subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -18752,27 +18787,27 @@ class NodegroupProps(NodegroupOptions):
     def __init__(
         self,
         *,
-        ami_type: typing.Optional[NodegroupAmiType] = None,
-        capacity_type: typing.Optional[CapacityType] = None,
+        ami_type: typing.Optional["NodegroupAmiType"] = None,
+        capacity_type: typing.Optional["CapacityType"] = None,
         desired_size: typing.Optional[jsii.Number] = None,
         disk_size: typing.Optional[jsii.Number] = None,
         enable_node_auto_repair: typing.Optional[builtins.bool] = None,
         force_update: typing.Optional[builtins.bool] = None,
-        instance_types: typing.Optional[typing.Sequence[_InstanceType_f64915b9]] = None,
+        instance_types: typing.Optional[typing.Sequence["_InstanceType_f64915b9"]] = None,
         labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        launch_template_spec: typing.Optional[typing.Union[LaunchTemplateSpec, typing.Dict[builtins.str, typing.Any]]] = None,
+        launch_template_spec: typing.Optional[typing.Union["LaunchTemplateSpec", typing.Dict[builtins.str, typing.Any]]] = None,
         max_size: typing.Optional[jsii.Number] = None,
         max_unavailable: typing.Optional[jsii.Number] = None,
         max_unavailable_percentage: typing.Optional[jsii.Number] = None,
         min_size: typing.Optional[jsii.Number] = None,
         nodegroup_name: typing.Optional[builtins.str] = None,
-        node_role: typing.Optional[_IRole_235f5d8e] = None,
+        node_role: typing.Optional["_IRole_235f5d8e"] = None,
         release_version: typing.Optional[builtins.str] = None,
         remote_access: typing.Optional[typing.Union["NodegroupRemoteAccess", typing.Dict[builtins.str, typing.Any]]] = None,
-        subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         taints: typing.Optional[typing.Sequence[typing.Union["TaintSpec", typing.Dict[builtins.str, typing.Any]]]] = None,
-        cluster: ICluster,
+        cluster: "ICluster",
     ) -> None:
         '''NodeGroup properties interface.
 
@@ -18940,7 +18975,7 @@ class NodegroupProps(NodegroupOptions):
             self._values["taints"] = taints
 
     @builtins.property
-    def ami_type(self) -> typing.Optional[NodegroupAmiType]:
+    def ami_type(self) -> typing.Optional["NodegroupAmiType"]:
         '''The AMI type for your node group.
 
         If you explicitly specify the launchTemplate with custom AMI, do not specify this property, or
@@ -18949,16 +18984,16 @@ class NodegroupProps(NodegroupOptions):
         :default: - auto-determined from the instanceTypes property when launchTemplateSpec property is not specified
         '''
         result = self._values.get("ami_type")
-        return typing.cast(typing.Optional[NodegroupAmiType], result)
+        return typing.cast(typing.Optional["NodegroupAmiType"], result)
 
     @builtins.property
-    def capacity_type(self) -> typing.Optional[CapacityType]:
+    def capacity_type(self) -> typing.Optional["CapacityType"]:
         '''The capacity type of the nodegroup.
 
         :default: - ON_DEMAND
         '''
         result = self._values.get("capacity_type")
-        return typing.cast(typing.Optional[CapacityType], result)
+        return typing.cast(typing.Optional["CapacityType"], result)
 
     @builtins.property
     def desired_size(self) -> typing.Optional[jsii.Number]:
@@ -19008,7 +19043,7 @@ class NodegroupProps(NodegroupOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def instance_types(self) -> typing.Optional[typing.List[_InstanceType_f64915b9]]:
+    def instance_types(self) -> typing.Optional[typing.List["_InstanceType_f64915b9"]]:
         '''The instance types to use for your node group.
 
         :default: t3.medium will be used according to the cloudformation document.
@@ -19016,7 +19051,7 @@ class NodegroupProps(NodegroupOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-instancetypes
         '''
         result = self._values.get("instance_types")
-        return typing.cast(typing.Optional[typing.List[_InstanceType_f64915b9]], result)
+        return typing.cast(typing.Optional[typing.List["_InstanceType_f64915b9"]], result)
 
     @builtins.property
     def labels(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -19028,7 +19063,7 @@ class NodegroupProps(NodegroupOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def launch_template_spec(self) -> typing.Optional[LaunchTemplateSpec]:
+    def launch_template_spec(self) -> typing.Optional["LaunchTemplateSpec"]:
         '''Launch template specification used for the nodegroup.
 
         :default: - no launch template
@@ -19036,7 +19071,7 @@ class NodegroupProps(NodegroupOptions):
         :see: https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html
         '''
         result = self._values.get("launch_template_spec")
-        return typing.cast(typing.Optional[LaunchTemplateSpec], result)
+        return typing.cast(typing.Optional["LaunchTemplateSpec"], result)
 
     @builtins.property
     def max_size(self) -> typing.Optional[jsii.Number]:
@@ -19100,7 +19135,7 @@ class NodegroupProps(NodegroupOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def node_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def node_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role to associate with your node group.
 
         The Amazon EKS worker node kubelet daemon
@@ -19111,7 +19146,7 @@ class NodegroupProps(NodegroupOptions):
         :default: - None. Auto-generated if not specified.
         '''
         result = self._values.get("node_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def release_version(self) -> typing.Optional[builtins.str]:
@@ -19136,7 +19171,7 @@ class NodegroupProps(NodegroupOptions):
         return typing.cast(typing.Optional["NodegroupRemoteAccess"], result)
 
     @builtins.property
-    def subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''The subnets to use for the Auto Scaling group that is created for your node group.
 
         By specifying the
@@ -19147,7 +19182,7 @@ class NodegroupProps(NodegroupOptions):
         :default: - private subnets
         '''
         result = self._values.get("subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -19172,11 +19207,11 @@ class NodegroupProps(NodegroupOptions):
         return typing.cast(typing.Optional[typing.List["TaintSpec"]], result)
 
     @builtins.property
-    def cluster(self) -> ICluster:
+    def cluster(self) -> "ICluster":
         '''Cluster resource.'''
         result = self._values.get("cluster")
         assert result is not None, "Required property 'cluster' is missing"
-        return typing.cast(ICluster, result)
+        return typing.cast("ICluster", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19203,7 +19238,7 @@ class NodegroupRemoteAccess:
         self,
         *,
         ssh_key_name: builtins.str,
-        source_security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        source_security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
     ) -> None:
         '''The remote access (SSH) configuration to use with your node group.
 
@@ -19249,7 +19284,7 @@ class NodegroupRemoteAccess:
     @builtins.property
     def source_security_groups(
         self,
-    ) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''The security groups that are allowed SSH access (port 22) to the worker nodes.
 
         If you specify an Amazon EC2 SSH
@@ -19259,7 +19294,7 @@ class NodegroupRemoteAccess:
         :default: - port 22 on the worker nodes is opened to the internet (0.0.0.0/0)
         '''
         result = self._values.get("source_security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19315,7 +19350,7 @@ class OpenIdConnectProvider(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         url: builtins.str,
@@ -19642,12 +19677,12 @@ class ServiceAccount(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        cluster: ICluster,
+        cluster: "ICluster",
         annotations: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        identity_type: typing.Optional[IdentityType] = None,
+        identity_type: typing.Optional["IdentityType"] = None,
         labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         name: typing.Optional[builtins.str] = None,
         namespace: typing.Optional[builtins.str] = None,
@@ -19680,8 +19715,8 @@ class ServiceAccount(
     @jsii.member(jsii_name="addToPrincipalPolicy")
     def add_to_principal_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToPrincipalPolicyResult_946c9561:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToPrincipalPolicyResult_946c9561":
         '''Add to the policy of this principal.
 
         :param statement: -
@@ -19689,7 +19724,7 @@ class ServiceAccount(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__644b8e999f78647ce72c2476e43febe6c5bec18a337cfb7b041c87773cdc07cf)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToPrincipalPolicyResult_946c9561, jsii.invoke(self, "addToPrincipalPolicy", [statement]))
+        return typing.cast("_AddToPrincipalPolicyResult_946c9561", jsii.invoke(self, "addToPrincipalPolicy", [statement]))
 
     @builtins.property
     @jsii.member(jsii_name="assumeRoleAction")
@@ -19699,21 +19734,21 @@ class ServiceAccount(
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The principal to grant permissions to.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
     @builtins.property
     @jsii.member(jsii_name="policyFragment")
-    def policy_fragment(self) -> _PrincipalPolicyFragment_6a855d11:
+    def policy_fragment(self) -> "_PrincipalPolicyFragment_6a855d11":
         '''Return the policy fragment that identifies this principal in a Policy.'''
-        return typing.cast(_PrincipalPolicyFragment_6a855d11, jsii.get(self, "policyFragment"))
+        return typing.cast("_PrincipalPolicyFragment_6a855d11", jsii.get(self, "policyFragment"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''The role which is linked to the service account.'''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "role"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "role"))
 
     @builtins.property
     @jsii.member(jsii_name="serviceAccountName")
@@ -19744,7 +19779,7 @@ class ServiceAccountOptions:
         self,
         *,
         annotations: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        identity_type: typing.Optional[IdentityType] = None,
+        identity_type: typing.Optional["IdentityType"] = None,
         labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         name: typing.Optional[builtins.str] = None,
         namespace: typing.Optional[builtins.str] = None,
@@ -19804,13 +19839,13 @@ class ServiceAccountOptions:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def identity_type(self) -> typing.Optional[IdentityType]:
+    def identity_type(self) -> typing.Optional["IdentityType"]:
         '''The identity type to use for the service account.
 
         :default: IdentityType.IRSA
         '''
         result = self._values.get("identity_type")
-        return typing.cast(typing.Optional[IdentityType], result)
+        return typing.cast(typing.Optional["IdentityType"], result)
 
     @builtins.property
     def labels(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -19874,11 +19909,11 @@ class ServiceAccountProps(ServiceAccountOptions):
         self,
         *,
         annotations: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        identity_type: typing.Optional[IdentityType] = None,
+        identity_type: typing.Optional["IdentityType"] = None,
         labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         name: typing.Optional[builtins.str] = None,
         namespace: typing.Optional[builtins.str] = None,
-        cluster: ICluster,
+        cluster: "ICluster",
     ) -> None:
         '''Properties for defining service accounts.
 
@@ -19937,13 +19972,13 @@ class ServiceAccountProps(ServiceAccountOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def identity_type(self) -> typing.Optional[IdentityType]:
+    def identity_type(self) -> typing.Optional["IdentityType"]:
         '''The identity type to use for the service account.
 
         :default: IdentityType.IRSA
         '''
         result = self._values.get("identity_type")
-        return typing.cast(typing.Optional[IdentityType], result)
+        return typing.cast(typing.Optional["IdentityType"], result)
 
     @builtins.property
     def labels(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -19979,11 +20014,11 @@ class ServiceAccountProps(ServiceAccountOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def cluster(self) -> ICluster:
+    def cluster(self) -> "ICluster":
         '''The cluster to apply the patch to.'''
         result = self._values.get("cluster")
         assert result is not None, "Required property 'cluster' is missing"
-        return typing.cast(ICluster, result)
+        return typing.cast("ICluster", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20007,7 +20042,7 @@ class ServiceLoadBalancerAddressOptions:
         self,
         *,
         namespace: typing.Optional[builtins.str] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Options for fetching a ServiceLoadBalancerAddress.
 
@@ -20048,13 +20083,13 @@ class ServiceLoadBalancerAddressOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Timeout for waiting on the load balancer address.
 
         :default: Duration.minutes(5)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20117,7 +20152,7 @@ class TaintSpec:
     def __init__(
         self,
         *,
-        effect: typing.Optional[TaintEffect] = None,
+        effect: typing.Optional["TaintEffect"] = None,
         key: typing.Optional[builtins.str] = None,
         value: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -20155,13 +20190,13 @@ class TaintSpec:
             self._values["value"] = value
 
     @builtins.property
-    def effect(self) -> typing.Optional[TaintEffect]:
+    def effect(self) -> typing.Optional["TaintEffect"]:
         '''Effect type.
 
         :default: - None
         '''
         result = self._values.get("effect")
-        return typing.cast(typing.Optional[TaintEffect], result)
+        return typing.cast(typing.Optional["TaintEffect"], result)
 
     @builtins.property
     def key(self) -> typing.Optional[builtins.str]:
@@ -20228,14 +20263,14 @@ class AccessEntry(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        access_policies: typing.Sequence[IAccessPolicy],
-        cluster: ICluster,
+        access_policies: typing.Sequence["IAccessPolicy"],
+        cluster: "ICluster",
         principal: builtins.str,
         access_entry_name: typing.Optional[builtins.str] = None,
-        access_entry_type: typing.Optional[AccessEntryType] = None,
+        access_entry_type: typing.Optional["AccessEntryType"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -20264,12 +20299,12 @@ class AccessEntry(
     @builtins.classmethod
     def from_access_entry_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         access_entry_arn: builtins.str,
         access_entry_name: builtins.str,
-    ) -> IAccessEntry:
+    ) -> "IAccessEntry":
         '''Imports an ``AccessEntry`` from its attributes.
 
         :param scope: - The parent construct.
@@ -20287,12 +20322,12 @@ class AccessEntry(
             access_entry_arn=access_entry_arn, access_entry_name=access_entry_name
         )
 
-        return typing.cast(IAccessEntry, jsii.sinvoke(cls, "fromAccessEntryAttributes", [scope, id, attrs]))
+        return typing.cast("IAccessEntry", jsii.sinvoke(cls, "fromAccessEntryAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addAccessPolicies")
     def add_access_policies(
         self,
-        new_access_policies: typing.Sequence[IAccessPolicy],
+        new_access_policies: typing.Sequence["IAccessPolicy"],
     ) -> None:
         '''Add the access policies for this entry.
 
@@ -20348,8 +20383,8 @@ class AccessPolicy(
     def __init__(
         self,
         *,
-        access_scope: typing.Union[AccessScope, typing.Dict[builtins.str, typing.Any]],
-        policy: AccessPolicyArn,
+        access_scope: typing.Union["AccessScope", typing.Dict[builtins.str, typing.Any]],
+        policy: "AccessPolicyArn",
     ) -> None:
         '''Constructs a new instance of the AccessPolicy class.
 
@@ -20366,9 +20401,9 @@ class AccessPolicy(
         cls,
         policy_name: builtins.str,
         *,
-        access_scope_type: AccessScopeType,
+        access_scope_type: "AccessScopeType",
         namespaces: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> IAccessPolicy:
+    ) -> "IAccessPolicy":
         '''Import AccessPolicy by name.
 
         :param policy_name: -
@@ -20382,13 +20417,13 @@ class AccessPolicy(
             access_scope_type=access_scope_type, namespaces=namespaces
         )
 
-        return typing.cast(IAccessPolicy, jsii.sinvoke(cls, "fromAccessPolicyName", [policy_name, options]))
+        return typing.cast("IAccessPolicy", jsii.sinvoke(cls, "fromAccessPolicyName", [policy_name, options]))
 
     @builtins.property
     @jsii.member(jsii_name="accessScope")
-    def access_scope(self) -> AccessScope:
+    def access_scope(self) -> "AccessScope":
         '''The scope of the access policy, which determines the level of access granted.'''
-        return typing.cast(AccessScope, jsii.get(self, "accessScope"))
+        return typing.cast("AccessScope", jsii.get(self, "accessScope"))
 
     @builtins.property
     @jsii.member(jsii_name="policy")
@@ -20426,11 +20461,11 @@ class Addon(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         addon_name: builtins.str,
-        cluster: ICluster,
+        cluster: "ICluster",
         addon_version: typing.Optional[builtins.str] = None,
         configuration_values: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         preserve_on_delete: typing.Optional[builtins.bool] = None,
@@ -20463,10 +20498,10 @@ class Addon(
     @builtins.classmethod
     def from_addon_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         addon_arn: builtins.str,
-    ) -> IAddon:
+    ) -> "IAddon":
         '''Creates an ``IAddon`` from an existing addon ARN.
 
         :param scope: - The parent construct.
@@ -20480,18 +20515,18 @@ class Addon(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument addon_arn", value=addon_arn, expected_type=type_hints["addon_arn"])
-        return typing.cast(IAddon, jsii.sinvoke(cls, "fromAddonArn", [scope, id, addon_arn]))
+        return typing.cast("IAddon", jsii.sinvoke(cls, "fromAddonArn", [scope, id, addon_arn]))
 
     @jsii.member(jsii_name="fromAddonAttributes")
     @builtins.classmethod
     def from_addon_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         addon_name: builtins.str,
         cluster_name: builtins.str,
-    ) -> IAddon:
+    ) -> "IAddon":
         '''Creates an ``IAddon`` instance from the given addon attributes.
 
         :param scope: - The parent construct.
@@ -20507,7 +20542,7 @@ class Addon(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         attrs = AddonAttributes(addon_name=addon_name, cluster_name=cluster_name)
 
-        return typing.cast(IAddon, jsii.sinvoke(cls, "fromAddonAttributes", [scope, id, attrs]))
+        return typing.cast("IAddon", jsii.sinvoke(cls, "fromAddonAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -20563,46 +20598,46 @@ class Cluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         bootstrap_cluster_creator_admin_permissions: typing.Optional[builtins.bool] = None,
         bootstrap_self_managed_addons: typing.Optional[builtins.bool] = None,
         default_capacity: typing.Optional[jsii.Number] = None,
-        default_capacity_instance: typing.Optional[_InstanceType_f64915b9] = None,
-        default_capacity_type: typing.Optional[DefaultCapacityType] = None,
-        kubectl_lambda_role: typing.Optional[_IRole_235f5d8e] = None,
+        default_capacity_instance: typing.Optional["_InstanceType_f64915b9"] = None,
+        default_capacity_type: typing.Optional["DefaultCapacityType"] = None,
+        kubectl_lambda_role: typing.Optional["_IRole_235f5d8e"] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        kubectl_layer: _ILayerVersion_5ac127c8,
-        alb_controller: typing.Optional[typing.Union[AlbControllerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        authentication_mode: typing.Optional[AuthenticationMode] = None,
-        awscli_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
+        kubectl_layer: "_ILayerVersion_5ac127c8",
+        alb_controller: typing.Optional[typing.Union["AlbControllerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        authentication_mode: typing.Optional["AuthenticationMode"] = None,
+        awscli_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
         cluster_handler_environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        cluster_handler_security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        cluster_logging: typing.Optional[typing.Sequence[ClusterLoggingTypes]] = None,
-        core_dns_compute_type: typing.Optional[CoreDnsComputeType] = None,
-        endpoint_access: typing.Optional[EndpointAccess] = None,
-        ip_family: typing.Optional[IpFamily] = None,
+        cluster_handler_security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        cluster_logging: typing.Optional[typing.Sequence["ClusterLoggingTypes"]] = None,
+        core_dns_compute_type: typing.Optional["CoreDnsComputeType"] = None,
+        endpoint_access: typing.Optional["EndpointAccess"] = None,
+        ip_family: typing.Optional["IpFamily"] = None,
         kubectl_environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        kubectl_memory: typing.Optional[_Size_7b441c34] = None,
-        masters_role: typing.Optional[_IRole_235f5d8e] = None,
-        on_event_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
+        kubectl_memory: typing.Optional["_Size_7b441c34"] = None,
+        masters_role: typing.Optional["_IRole_235f5d8e"] = None,
+        on_event_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
         output_masters_role_arn: typing.Optional[builtins.bool] = None,
         place_cluster_handler_in_vpc: typing.Optional[builtins.bool] = None,
         prune: typing.Optional[builtins.bool] = None,
-        remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
-        remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        secrets_encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        remote_node_networks: typing.Optional[typing.Sequence[typing.Union["RemoteNodeNetwork", typing.Dict[builtins.str, typing.Any]]]] = None,
+        remote_pod_networks: typing.Optional[typing.Sequence[typing.Union["RemotePodNetwork", typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        secrets_encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         service_ipv4_cidr: typing.Optional[builtins.str] = None,
-        version: KubernetesVersion,
+        version: "KubernetesVersion",
         cluster_name: typing.Optional[builtins.str] = None,
         output_cluster_name: typing.Optional[builtins.bool] = None,
         output_config_command: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Sequence[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]]] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Sequence[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Initiates an EKS Cluster with the supplied arguments.
 
@@ -20696,31 +20731,31 @@ class Cluster(
     @builtins.classmethod
     def from_cluster_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster_name: builtins.str,
-        awscli_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
+        awscli_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
         cluster_certificate_authority_data: typing.Optional[builtins.str] = None,
         cluster_encryption_config_key_arn: typing.Optional[builtins.str] = None,
         cluster_endpoint: typing.Optional[builtins.str] = None,
         cluster_handler_security_group_id: typing.Optional[builtins.str] = None,
         cluster_security_group_id: typing.Optional[builtins.str] = None,
-        ip_family: typing.Optional[IpFamily] = None,
+        ip_family: typing.Optional["IpFamily"] = None,
         kubectl_environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        kubectl_lambda_role: typing.Optional[_IRole_235f5d8e] = None,
-        kubectl_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
-        kubectl_memory: typing.Optional[_Size_7b441c34] = None,
+        kubectl_lambda_role: typing.Optional["_IRole_235f5d8e"] = None,
+        kubectl_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
+        kubectl_memory: typing.Optional["_Size_7b441c34"] = None,
         kubectl_private_subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        kubectl_provider: typing.Optional[IKubectlProvider] = None,
+        kubectl_provider: typing.Optional["IKubectlProvider"] = None,
         kubectl_role_arn: typing.Optional[builtins.str] = None,
         kubectl_security_group_id: typing.Optional[builtins.str] = None,
-        on_event_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
-        open_id_connect_provider: typing.Optional[_IOpenIdConnectProvider_203f0793] = None,
+        on_event_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
+        open_id_connect_provider: typing.Optional["_IOpenIdConnectProvider_203f0793"] = None,
         prune: typing.Optional[builtins.bool] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-    ) -> ICluster:
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+    ) -> "ICluster":
         '''Import an existing cluster.
 
         :param scope: the construct scope, in most cases 'this'.
@@ -20775,48 +20810,48 @@ class Cluster(
             vpc=vpc,
         )
 
-        return typing.cast(ICluster, jsii.sinvoke(cls, "fromClusterAttributes", [scope, id, attrs]))
+        return typing.cast("ICluster", jsii.sinvoke(cls, "fromClusterAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addAutoScalingGroupCapacity")
     def add_auto_scaling_group_capacity(
         self,
         id: builtins.str,
         *,
-        instance_type: _InstanceType_f64915b9,
+        instance_type: "_InstanceType_f64915b9",
         bootstrap_enabled: typing.Optional[builtins.bool] = None,
-        bootstrap_options: typing.Optional[typing.Union[BootstrapOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        machine_image_type: typing.Optional[MachineImageType] = None,
+        bootstrap_options: typing.Optional[typing.Union["BootstrapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        machine_image_type: typing.Optional["MachineImageType"] = None,
         map_role: typing.Optional[builtins.bool] = None,
         spot_interrupt_handler: typing.Optional[builtins.bool] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         associate_public_ip_address: typing.Optional[builtins.bool] = None,
         auto_scaling_group_name: typing.Optional[builtins.str] = None,
-        az_capacity_distribution_strategy: typing.Optional[_CapacityDistributionStrategy_2393ccfe] = None,
-        block_devices: typing.Optional[typing.Sequence[typing.Union[_BlockDevice_0cfc0568, typing.Dict[builtins.str, typing.Any]]]] = None,
+        az_capacity_distribution_strategy: typing.Optional["_CapacityDistributionStrategy_2393ccfe"] = None,
+        block_devices: typing.Optional[typing.Sequence[typing.Union["_BlockDevice_0cfc0568", typing.Dict[builtins.str, typing.Any]]]] = None,
         capacity_rebalance: typing.Optional[builtins.bool] = None,
-        cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        default_instance_warmup: typing.Optional[_Duration_4839e8c3] = None,
+        cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        default_instance_warmup: typing.Optional["_Duration_4839e8c3"] = None,
         desired_capacity: typing.Optional[jsii.Number] = None,
-        group_metrics: typing.Optional[typing.Sequence[_GroupMetrics_7cdf729b]] = None,
-        health_check: typing.Optional[_HealthCheck_03a4bd5a] = None,
-        health_checks: typing.Optional[_HealthChecks_b8757873] = None,
+        group_metrics: typing.Optional[typing.Sequence["_GroupMetrics_7cdf729b"]] = None,
+        health_check: typing.Optional["_HealthCheck_03a4bd5a"] = None,
+        health_checks: typing.Optional["_HealthChecks_b8757873"] = None,
         ignore_unmodified_size_properties: typing.Optional[builtins.bool] = None,
-        instance_monitoring: typing.Optional[_Monitoring_50020f91] = None,
+        instance_monitoring: typing.Optional["_Monitoring_50020f91"] = None,
         key_name: typing.Optional[builtins.str] = None,
-        key_pair: typing.Optional[_IKeyPair_bc344eda] = None,
+        key_pair: typing.Optional["_IKeyPair_bc344eda"] = None,
         max_capacity: typing.Optional[jsii.Number] = None,
-        max_instance_lifetime: typing.Optional[_Duration_4839e8c3] = None,
+        max_instance_lifetime: typing.Optional["_Duration_4839e8c3"] = None,
         min_capacity: typing.Optional[jsii.Number] = None,
         new_instances_protected_from_scale_in: typing.Optional[builtins.bool] = None,
-        notifications: typing.Optional[typing.Sequence[typing.Union[_NotificationConfiguration_d5911670, typing.Dict[builtins.str, typing.Any]]]] = None,
-        signals: typing.Optional[_Signals_69fbeb6e] = None,
+        notifications: typing.Optional[typing.Sequence[typing.Union["_NotificationConfiguration_d5911670", typing.Dict[builtins.str, typing.Any]]]] = None,
+        signals: typing.Optional["_Signals_69fbeb6e"] = None,
         spot_price: typing.Optional[builtins.str] = None,
         ssm_session_permissions: typing.Optional[builtins.bool] = None,
-        termination_policies: typing.Optional[typing.Sequence[_TerminationPolicy_89633c56]] = None,
+        termination_policies: typing.Optional[typing.Sequence["_TerminationPolicy_89633c56"]] = None,
         termination_policy_custom_lambda_function_arn: typing.Optional[builtins.str] = None,
-        update_policy: typing.Optional[_UpdatePolicy_6dffc7ca] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-    ) -> _AutoScalingGroup_c547a7b9:
+        update_policy: typing.Optional["_UpdatePolicy_6dffc7ca"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+    ) -> "_AutoScalingGroup_c547a7b9":
         '''Add nodes to this EKS cluster.
 
         The nodes will automatically be configured with the right VPC and AMI
@@ -20907,19 +20942,19 @@ class Cluster(
             vpc_subnets=vpc_subnets,
         )
 
-        return typing.cast(_AutoScalingGroup_c547a7b9, jsii.invoke(self, "addAutoScalingGroupCapacity", [id, options]))
+        return typing.cast("_AutoScalingGroup_c547a7b9", jsii.invoke(self, "addAutoScalingGroupCapacity", [id, options]))
 
     @jsii.member(jsii_name="addCdk8sChart")
     def add_cdk8s_chart(
         self,
         id: builtins.str,
-        chart: _constructs_77d1e7e8.Construct,
+        chart: "_constructs_77d1e7e8.Construct",
         *,
         ingress_alb: typing.Optional[builtins.bool] = None,
-        ingress_alb_scheme: typing.Optional[AlbScheme] = None,
+        ingress_alb_scheme: typing.Optional["AlbScheme"] = None,
         prune: typing.Optional[builtins.bool] = None,
         skip_validation: typing.Optional[builtins.bool] = None,
-    ) -> KubernetesManifest:
+    ) -> "KubernetesManifest":
         '''Defines a CDK8s chart in this cluster.
 
         :param id: logical id of this chart.
@@ -20942,19 +20977,19 @@ class Cluster(
             skip_validation=skip_validation,
         )
 
-        return typing.cast(KubernetesManifest, jsii.invoke(self, "addCdk8sChart", [id, chart, options]))
+        return typing.cast("KubernetesManifest", jsii.invoke(self, "addCdk8sChart", [id, chart, options]))
 
     @jsii.member(jsii_name="addFargateProfile")
     def add_fargate_profile(
         self,
         id: builtins.str,
         *,
-        selectors: typing.Sequence[typing.Union[Selector, typing.Dict[builtins.str, typing.Any]]],
+        selectors: typing.Sequence[typing.Union["Selector", typing.Dict[builtins.str, typing.Any]]],
         fargate_profile_name: typing.Optional[builtins.str] = None,
-        pod_execution_role: typing.Optional[_IRole_235f5d8e] = None,
-        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-    ) -> FargateProfile:
+        pod_execution_role: typing.Optional["_IRole_235f5d8e"] = None,
+        subnet_selection: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+    ) -> "FargateProfile":
         '''Adds a Fargate profile to this cluster.
 
         :param id: the id of this profile.
@@ -20977,7 +21012,7 @@ class Cluster(
             vpc=vpc,
         )
 
-        return typing.cast(FargateProfile, jsii.invoke(self, "addFargateProfile", [id, options]))
+        return typing.cast("FargateProfile", jsii.invoke(self, "addFargateProfile", [id, options]))
 
     @jsii.member(jsii_name="addHelmChart")
     def add_helm_chart(
@@ -20986,17 +21021,17 @@ class Cluster(
         *,
         atomic: typing.Optional[builtins.bool] = None,
         chart: typing.Optional[builtins.str] = None,
-        chart_asset: typing.Optional[_Asset_ac2a7e61] = None,
+        chart_asset: typing.Optional["_Asset_ac2a7e61"] = None,
         create_namespace: typing.Optional[builtins.bool] = None,
         namespace: typing.Optional[builtins.str] = None,
         release: typing.Optional[builtins.str] = None,
         repository: typing.Optional[builtins.str] = None,
         skip_crds: typing.Optional[builtins.bool] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         values: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         version: typing.Optional[builtins.str] = None,
         wait: typing.Optional[builtins.bool] = None,
-    ) -> HelmChart:
+    ) -> "HelmChart":
         '''Defines a Helm chart in this cluster.
 
         :param id: logical id of this chart.
@@ -21033,14 +21068,14 @@ class Cluster(
             wait=wait,
         )
 
-        return typing.cast(HelmChart, jsii.invoke(self, "addHelmChart", [id, options]))
+        return typing.cast("HelmChart", jsii.invoke(self, "addHelmChart", [id, options]))
 
     @jsii.member(jsii_name="addManifest")
     def add_manifest(
         self,
         id: builtins.str,
         *manifest: typing.Mapping[builtins.str, typing.Any],
-    ) -> KubernetesManifest:
+    ) -> "KubernetesManifest":
         '''Defines a Kubernetes resource in this cluster.
 
         The manifest will be applied/deleted using kubectl as needed.
@@ -21054,34 +21089,34 @@ class Cluster(
             type_hints = typing.get_type_hints(_typecheckingstub__8e86f333dc31590babdc3e5ef2e86a2ab43f7ef63e489882759a3079a37c9874)
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument manifest", value=manifest, expected_type=typing.Tuple[type_hints["manifest"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(KubernetesManifest, jsii.invoke(self, "addManifest", [id, *manifest]))
+        return typing.cast("KubernetesManifest", jsii.invoke(self, "addManifest", [id, *manifest]))
 
     @jsii.member(jsii_name="addNodegroupCapacity")
     def add_nodegroup_capacity(
         self,
         id: builtins.str,
         *,
-        ami_type: typing.Optional[NodegroupAmiType] = None,
-        capacity_type: typing.Optional[CapacityType] = None,
+        ami_type: typing.Optional["NodegroupAmiType"] = None,
+        capacity_type: typing.Optional["CapacityType"] = None,
         desired_size: typing.Optional[jsii.Number] = None,
         disk_size: typing.Optional[jsii.Number] = None,
         enable_node_auto_repair: typing.Optional[builtins.bool] = None,
         force_update: typing.Optional[builtins.bool] = None,
-        instance_types: typing.Optional[typing.Sequence[_InstanceType_f64915b9]] = None,
+        instance_types: typing.Optional[typing.Sequence["_InstanceType_f64915b9"]] = None,
         labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        launch_template_spec: typing.Optional[typing.Union[LaunchTemplateSpec, typing.Dict[builtins.str, typing.Any]]] = None,
+        launch_template_spec: typing.Optional[typing.Union["LaunchTemplateSpec", typing.Dict[builtins.str, typing.Any]]] = None,
         max_size: typing.Optional[jsii.Number] = None,
         max_unavailable: typing.Optional[jsii.Number] = None,
         max_unavailable_percentage: typing.Optional[jsii.Number] = None,
         min_size: typing.Optional[jsii.Number] = None,
         nodegroup_name: typing.Optional[builtins.str] = None,
-        node_role: typing.Optional[_IRole_235f5d8e] = None,
+        node_role: typing.Optional["_IRole_235f5d8e"] = None,
         release_version: typing.Optional[builtins.str] = None,
-        remote_access: typing.Optional[typing.Union[NodegroupRemoteAccess, typing.Dict[builtins.str, typing.Any]]] = None,
-        subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        remote_access: typing.Optional[typing.Union["NodegroupRemoteAccess", typing.Dict[builtins.str, typing.Any]]] = None,
+        subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        taints: typing.Optional[typing.Sequence[typing.Union[TaintSpec, typing.Dict[builtins.str, typing.Any]]]] = None,
-    ) -> Nodegroup:
+        taints: typing.Optional[typing.Sequence[typing.Union["TaintSpec", typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> "Nodegroup":
         '''Add managed nodegroup to this Amazon EKS cluster.
 
         This method will create a new managed nodegroup and add into the capacity.
@@ -21136,7 +21171,7 @@ class Cluster(
             taints=taints,
         )
 
-        return typing.cast(Nodegroup, jsii.invoke(self, "addNodegroupCapacity", [id, options]))
+        return typing.cast("Nodegroup", jsii.invoke(self, "addNodegroupCapacity", [id, options]))
 
     @jsii.member(jsii_name="addServiceAccount")
     def add_service_account(
@@ -21144,11 +21179,11 @@ class Cluster(
         id: builtins.str,
         *,
         annotations: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        identity_type: typing.Optional[IdentityType] = None,
+        identity_type: typing.Optional["IdentityType"] = None,
         labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         name: typing.Optional[builtins.str] = None,
         namespace: typing.Optional[builtins.str] = None,
-    ) -> ServiceAccount:
+    ) -> "ServiceAccount":
         '''Creates a new service account with corresponding IAM Role (IRSA).
 
         :param id: -
@@ -21169,16 +21204,16 @@ class Cluster(
             namespace=namespace,
         )
 
-        return typing.cast(ServiceAccount, jsii.invoke(self, "addServiceAccount", [id, options]))
+        return typing.cast("ServiceAccount", jsii.invoke(self, "addServiceAccount", [id, options]))
 
     @jsii.member(jsii_name="connectAutoScalingGroupCapacity")
     def connect_auto_scaling_group_capacity(
         self,
-        auto_scaling_group: _AutoScalingGroup_c547a7b9,
+        auto_scaling_group: "_AutoScalingGroup_c547a7b9",
         *,
         bootstrap_enabled: typing.Optional[builtins.bool] = None,
-        bootstrap_options: typing.Optional[typing.Union[BootstrapOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        machine_image_type: typing.Optional[MachineImageType] = None,
+        bootstrap_options: typing.Optional[typing.Union["BootstrapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        machine_image_type: typing.Optional["MachineImageType"] = None,
         map_role: typing.Optional[builtins.bool] = None,
         spot_interrupt_handler: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -21225,7 +21260,7 @@ class Cluster(
         ingress_name: builtins.str,
         *,
         namespace: typing.Optional[builtins.str] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> builtins.str:
         '''Fetch the load balancer address of an ingress backed by a load balancer.
 
@@ -21248,7 +21283,7 @@ class Cluster(
         service_name: builtins.str,
         *,
         namespace: typing.Optional[builtins.str] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> builtins.str:
         '''Fetch the load balancer address of a service of type 'LoadBalancer'.
 
@@ -21270,7 +21305,7 @@ class Cluster(
         self,
         id: builtins.str,
         principal: builtins.str,
-        access_policies: typing.Sequence[IAccessPolicy],
+        access_policies: typing.Sequence["IAccessPolicy"],
     ) -> None:
         '''Grants the specified IAM principal access to the EKS cluster based on the provided access policies.
 
@@ -21297,18 +21332,18 @@ class Cluster(
 
     @builtins.property
     @jsii.member(jsii_name="adminRole")
-    def admin_role(self) -> _Role_e8c6e11f:
+    def admin_role(self) -> "_Role_e8c6e11f":
         '''An IAM role with administrative permissions to create or update the cluster.
 
         This role also has ``systems:master`` permissions.
         '''
-        return typing.cast(_Role_e8c6e11f, jsii.get(self, "adminRole"))
+        return typing.cast("_Role_e8c6e11f", jsii.get(self, "adminRole"))
 
     @builtins.property
     @jsii.member(jsii_name="awsAuth")
-    def aws_auth(self) -> AwsAuth:
+    def aws_auth(self) -> "AwsAuth":
         '''Lazily creates the AwsAuth resource, which manages AWS authentication mapping.'''
-        return typing.cast(AwsAuth, jsii.get(self, "awsAuth"))
+        return typing.cast("AwsAuth", jsii.get(self, "awsAuth"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterArn")
@@ -21376,9 +21411,9 @@ class Cluster(
 
     @builtins.property
     @jsii.member(jsii_name="clusterSecurityGroup")
-    def cluster_security_group(self) -> _ISecurityGroup_acf8a799:
+    def cluster_security_group(self) -> "_ISecurityGroup_acf8a799":
         '''The cluster security group that was created by Amazon EKS for the cluster.'''
-        return typing.cast(_ISecurityGroup_acf8a799, jsii.get(self, "clusterSecurityGroup"))
+        return typing.cast("_ISecurityGroup_acf8a799", jsii.get(self, "clusterSecurityGroup"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterSecurityGroupId")
@@ -21388,22 +21423,22 @@ class Cluster(
 
     @builtins.property
     @jsii.member(jsii_name="connections")
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''Manages connection rules (Security Group Rules) for the cluster.
 
         :memberof: Cluster
         :type: {ec2.Connections}
         '''
-        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
     @jsii.member(jsii_name="openIdConnectProvider")
-    def open_id_connect_provider(self) -> _IOpenIdConnectProvider_203f0793:
+    def open_id_connect_provider(self) -> "_IOpenIdConnectProvider_203f0793":
         '''An ``OpenIdConnectProvider`` resource associated with this cluster, and which can be used to link this cluster to AWS IAM.
 
         A provider will only be defined if this property is accessed (lazy initialization).
         '''
-        return typing.cast(_IOpenIdConnectProvider_203f0793, jsii.get(self, "openIdConnectProvider"))
+        return typing.cast("_IOpenIdConnectProvider_203f0793", jsii.get(self, "openIdConnectProvider"))
 
     @builtins.property
     @jsii.member(jsii_name="prune")
@@ -21413,28 +21448,28 @@ class Cluster(
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''IAM role assumed by the EKS Control Plane.'''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "role"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "role"))
 
     @builtins.property
     @jsii.member(jsii_name="vpc")
-    def vpc(self) -> _IVpc_f30d5663:
+    def vpc(self) -> "_IVpc_f30d5663":
         '''The VPC in which this Cluster was created.'''
-        return typing.cast(_IVpc_f30d5663, jsii.get(self, "vpc"))
+        return typing.cast("_IVpc_f30d5663", jsii.get(self, "vpc"))
 
     @builtins.property
     @jsii.member(jsii_name="albController")
-    def alb_controller(self) -> typing.Optional[AlbController]:
+    def alb_controller(self) -> typing.Optional["AlbController"]:
         '''The ALB Controller construct defined for this cluster.
 
         Will be undefined if ``albController`` wasn't configured.
         '''
-        return typing.cast(typing.Optional[AlbController], jsii.get(self, "albController"))
+        return typing.cast(typing.Optional["AlbController"], jsii.get(self, "albController"))
 
     @builtins.property
     @jsii.member(jsii_name="authenticationMode")
-    def authentication_mode(self) -> typing.Optional[AuthenticationMode]:
+    def authentication_mode(self) -> typing.Optional["AuthenticationMode"]:
         '''The authentication mode for the Amazon EKS cluster.
 
         The authentication mode determines how users and applications authenticate to the Kubernetes API server.
@@ -21443,22 +21478,22 @@ class Cluster(
 
         :property: {AuthenticationMode} [authenticationMode] - The authentication mode for the Amazon EKS cluster.
         '''
-        return typing.cast(typing.Optional[AuthenticationMode], jsii.get(self, "authenticationMode"))
+        return typing.cast(typing.Optional["AuthenticationMode"], jsii.get(self, "authenticationMode"))
 
     @builtins.property
     @jsii.member(jsii_name="awscliLayer")
-    def awscli_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def awscli_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda layer that contains the ``aws`` CLI.
 
         If not defined, a default layer will be used containing the AWS CLI 1.x.
         '''
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], jsii.get(self, "awscliLayer"))
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], jsii.get(self, "awscliLayer"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterHandlerSecurityGroup")
     def cluster_handler_security_group(
         self,
-    ) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    ) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''A security group to associate with the Cluster Handler's Lambdas.
 
         The Cluster Handler's Lambdas are responsible for calling AWS's EKS API.
@@ -21467,31 +21502,31 @@ class Cluster(
 
         :default: - No security group.
         '''
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], jsii.get(self, "clusterHandlerSecurityGroup"))
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], jsii.get(self, "clusterHandlerSecurityGroup"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultCapacity")
-    def default_capacity(self) -> typing.Optional[_AutoScalingGroup_c547a7b9]:
+    def default_capacity(self) -> typing.Optional["_AutoScalingGroup_c547a7b9"]:
         '''The auto scaling group that hosts the default capacity for this cluster.
 
         This will be ``undefined`` if the ``defaultCapacityType`` is not ``EC2`` or
         ``defaultCapacityType`` is ``EC2`` but default capacity is set to 0.
         '''
-        return typing.cast(typing.Optional[_AutoScalingGroup_c547a7b9], jsii.get(self, "defaultCapacity"))
+        return typing.cast(typing.Optional["_AutoScalingGroup_c547a7b9"], jsii.get(self, "defaultCapacity"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultNodegroup")
-    def default_nodegroup(self) -> typing.Optional[Nodegroup]:
+    def default_nodegroup(self) -> typing.Optional["Nodegroup"]:
         '''The node group that hosts the default capacity for this cluster.
 
         This will be ``undefined`` if the ``defaultCapacityType`` is ``EC2`` or
         ``defaultCapacityType`` is ``NODEGROUP`` but default capacity is set to 0.
         '''
-        return typing.cast(typing.Optional[Nodegroup], jsii.get(self, "defaultNodegroup"))
+        return typing.cast(typing.Optional["Nodegroup"], jsii.get(self, "defaultNodegroup"))
 
     @builtins.property
     @jsii.member(jsii_name="eksPodIdentityAgent")
-    def eks_pod_identity_agent(self) -> typing.Optional[IAddon]:
+    def eks_pod_identity_agent(self) -> typing.Optional["IAddon"]:
         '''Retrieves the EKS Pod Identity Agent addon for the EKS cluster.
 
         The EKS Pod Identity Agent is responsible for managing the temporary credentials
@@ -21499,18 +21534,18 @@ class Cluster(
         each node and provides the necessary credentials to the pods based on their
         associated service account.
         '''
-        return typing.cast(typing.Optional[IAddon], jsii.get(self, "eksPodIdentityAgent"))
+        return typing.cast(typing.Optional["IAddon"], jsii.get(self, "eksPodIdentityAgent"))
 
     @builtins.property
     @jsii.member(jsii_name="ipFamily")
-    def ip_family(self) -> typing.Optional[IpFamily]:
+    def ip_family(self) -> typing.Optional["IpFamily"]:
         '''Specify which IP family is used to assign Kubernetes pod and service IP addresses.
 
         :default: - IpFamily.IP_V4
 
         :see: https://docs.aws.amazon.com/eks/latest/APIReference/API_KubernetesNetworkConfigRequest.html#AmazonEKS-Type-KubernetesNetworkConfigRequest-ipFamily
         '''
-        return typing.cast(typing.Optional[IpFamily], jsii.get(self, "ipFamily"))
+        return typing.cast(typing.Optional["IpFamily"], jsii.get(self, "ipFamily"))
 
     @builtins.property
     @jsii.member(jsii_name="kubectlEnvironment")
@@ -21522,7 +21557,7 @@ class Cluster(
 
     @builtins.property
     @jsii.member(jsii_name="kubectlLambdaRole")
-    def kubectl_lambda_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def kubectl_lambda_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that can perform kubectl operations against this cluster.
 
         The role should be mapped to the ``system:masters`` Kubernetes RBAC role.
@@ -21534,25 +21569,25 @@ class Cluster(
         - if not specified, the default role created by a lambda function will
         be used.
         '''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "kubectlLambdaRole"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "kubectlLambdaRole"))
 
     @builtins.property
     @jsii.member(jsii_name="kubectlLayer")
-    def kubectl_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def kubectl_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda layer that includes ``kubectl`` and ``helm``.'''
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], jsii.get(self, "kubectlLayer"))
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], jsii.get(self, "kubectlLayer"))
 
     @builtins.property
     @jsii.member(jsii_name="kubectlMemory")
-    def kubectl_memory(self) -> typing.Optional[_Size_7b441c34]:
+    def kubectl_memory(self) -> typing.Optional["_Size_7b441c34"]:
         '''The amount of memory allocated to the kubectl provider's lambda function.'''
-        return typing.cast(typing.Optional[_Size_7b441c34], jsii.get(self, "kubectlMemory"))
+        return typing.cast(typing.Optional["_Size_7b441c34"], jsii.get(self, "kubectlMemory"))
 
     @builtins.property
     @jsii.member(jsii_name="kubectlPrivateSubnets")
     def kubectl_private_subnets(
         self,
-    ) -> typing.Optional[typing.List[_ISubnet_d57d1229]]:
+    ) -> typing.Optional[typing.List["_ISubnet_d57d1229"]]:
         '''Subnets to host the ``kubectl`` compute resources.
 
         :default:
@@ -21560,20 +21595,20 @@ class Cluster(
         - If not specified, the k8s endpoint is expected to be accessible
         publicly.
         '''
-        return typing.cast(typing.Optional[typing.List[_ISubnet_d57d1229]], jsii.get(self, "kubectlPrivateSubnets"))
+        return typing.cast(typing.Optional[typing.List["_ISubnet_d57d1229"]], jsii.get(self, "kubectlPrivateSubnets"))
 
     @builtins.property
     @jsii.member(jsii_name="kubectlRole")
-    def kubectl_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def kubectl_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that can perform kubectl operations against this cluster.
 
         The role should be mapped to the ``system:masters`` Kubernetes RBAC role.
         '''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "kubectlRole"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "kubectlRole"))
 
     @builtins.property
     @jsii.member(jsii_name="kubectlSecurityGroup")
-    def kubectl_security_group(self) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    def kubectl_security_group(self) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''A security group to use for ``kubectl`` execution.
 
         :default:
@@ -21581,17 +21616,17 @@ class Cluster(
         - If not specified, the k8s endpoint is expected to be accessible
         publicly.
         '''
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], jsii.get(self, "kubectlSecurityGroup"))
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], jsii.get(self, "kubectlSecurityGroup"))
 
     @builtins.property
     @jsii.member(jsii_name="onEventLayer")
-    def on_event_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def on_event_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''The AWS Lambda layer that contains the NPM dependency ``proxy-agent``.
 
         If
         undefined, a SAR app that contains this layer will be used.
         '''
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], jsii.get(self, "onEventLayer"))
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], jsii.get(self, "onEventLayer"))
 
 
 @jsii.data_type(
@@ -21634,35 +21669,35 @@ class ClusterOptions(CommonClusterOptions):
     def __init__(
         self,
         *,
-        version: KubernetesVersion,
+        version: "KubernetesVersion",
         cluster_name: typing.Optional[builtins.str] = None,
         output_cluster_name: typing.Optional[builtins.bool] = None,
         output_config_command: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Sequence[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kubectl_layer: _ILayerVersion_5ac127c8,
-        alb_controller: typing.Optional[typing.Union[AlbControllerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        authentication_mode: typing.Optional[AuthenticationMode] = None,
-        awscli_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Sequence[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kubectl_layer: "_ILayerVersion_5ac127c8",
+        alb_controller: typing.Optional[typing.Union["AlbControllerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        authentication_mode: typing.Optional["AuthenticationMode"] = None,
+        awscli_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
         cluster_handler_environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        cluster_handler_security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        cluster_logging: typing.Optional[typing.Sequence[ClusterLoggingTypes]] = None,
-        core_dns_compute_type: typing.Optional[CoreDnsComputeType] = None,
-        endpoint_access: typing.Optional[EndpointAccess] = None,
-        ip_family: typing.Optional[IpFamily] = None,
+        cluster_handler_security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        cluster_logging: typing.Optional[typing.Sequence["ClusterLoggingTypes"]] = None,
+        core_dns_compute_type: typing.Optional["CoreDnsComputeType"] = None,
+        endpoint_access: typing.Optional["EndpointAccess"] = None,
+        ip_family: typing.Optional["IpFamily"] = None,
         kubectl_environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        kubectl_memory: typing.Optional[_Size_7b441c34] = None,
-        masters_role: typing.Optional[_IRole_235f5d8e] = None,
-        on_event_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
+        kubectl_memory: typing.Optional["_Size_7b441c34"] = None,
+        masters_role: typing.Optional["_IRole_235f5d8e"] = None,
+        on_event_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
         output_masters_role_arn: typing.Optional[builtins.bool] = None,
         place_cluster_handler_in_vpc: typing.Optional[builtins.bool] = None,
         prune: typing.Optional[builtins.bool] = None,
-        remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
-        remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        secrets_encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        remote_node_networks: typing.Optional[typing.Sequence[typing.Union["RemoteNodeNetwork", typing.Dict[builtins.str, typing.Any]]]] = None,
+        remote_pod_networks: typing.Optional[typing.Sequence[typing.Union["RemotePodNetwork", typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        secrets_encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         service_ipv4_cidr: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Options for EKS clusters.
@@ -21880,11 +21915,11 @@ class ClusterOptions(CommonClusterOptions):
             self._values["service_ipv4_cidr"] = service_ipv4_cidr
 
     @builtins.property
-    def version(self) -> KubernetesVersion:
+    def version(self) -> "KubernetesVersion":
         '''The Kubernetes version to run in the cluster.'''
         result = self._values.get("version")
         assert result is not None, "Required property 'version' is missing"
-        return typing.cast(KubernetesVersion, result)
+        return typing.cast("KubernetesVersion", result)
 
     @builtins.property
     def cluster_name(self) -> typing.Optional[builtins.str]:
@@ -21921,34 +21956,34 @@ class ClusterOptions(CommonClusterOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Role that provides permissions for the Kubernetes control plane to make calls to AWS API operations on your behalf.
 
         :default: - A role is automatically created for you
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def security_group(self) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    def security_group(self) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''Security Group to use for Control Plane ENIs.
 
         :default: - A security group is automatically created
         '''
         result = self._values.get("security_group")
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''The VPC in which to create the Cluster.
 
         :default: - a VPC with default configuration will be created and can be accessed through ``cluster.vpc``.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[typing.List[_SubnetSelection_e57d76df]]:
+    def vpc_subnets(self) -> typing.Optional[typing.List["_SubnetSelection_e57d76df"]]:
         '''Where to place EKS Control Plane ENIs.
 
         For example, to only select private subnets, supply the following:
@@ -21958,10 +21993,10 @@ class ClusterOptions(CommonClusterOptions):
         :default: - All public and private subnets
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[typing.List[_SubnetSelection_e57d76df]], result)
+        return typing.cast(typing.Optional[typing.List["_SubnetSelection_e57d76df"]], result)
 
     @builtins.property
-    def kubectl_layer(self) -> _ILayerVersion_5ac127c8:
+    def kubectl_layer(self) -> "_ILayerVersion_5ac127c8":
         '''An AWS Lambda Layer which includes ``kubectl`` and Helm.
 
         This layer is used by the kubectl handler to apply manifests and install
@@ -21976,10 +22011,10 @@ class ClusterOptions(CommonClusterOptions):
         '''
         result = self._values.get("kubectl_layer")
         assert result is not None, "Required property 'kubectl_layer' is missing"
-        return typing.cast(_ILayerVersion_5ac127c8, result)
+        return typing.cast("_ILayerVersion_5ac127c8", result)
 
     @builtins.property
-    def alb_controller(self) -> typing.Optional[AlbControllerOptions]:
+    def alb_controller(self) -> typing.Optional["AlbControllerOptions"]:
         '''Install the AWS Load Balancer Controller onto the cluster.
 
         :default: - The controller is not installed.
@@ -21987,19 +22022,19 @@ class ClusterOptions(CommonClusterOptions):
         :see: https://kubernetes-sigs.github.io/aws-load-balancer-controller
         '''
         result = self._values.get("alb_controller")
-        return typing.cast(typing.Optional[AlbControllerOptions], result)
+        return typing.cast(typing.Optional["AlbControllerOptions"], result)
 
     @builtins.property
-    def authentication_mode(self) -> typing.Optional[AuthenticationMode]:
+    def authentication_mode(self) -> typing.Optional["AuthenticationMode"]:
         '''The desired authentication mode for the cluster.
 
         :default: AuthenticationMode.CONFIG_MAP
         '''
         result = self._values.get("authentication_mode")
-        return typing.cast(typing.Optional[AuthenticationMode], result)
+        return typing.cast(typing.Optional["AuthenticationMode"], result)
 
     @builtins.property
-    def awscli_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def awscli_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda layer that contains the ``aws`` CLI.
 
         The handler expects the layer to include the following executables::
@@ -22009,7 +22044,7 @@ class ClusterOptions(CommonClusterOptions):
         :default: - a default layer with the AWS CLI 1.x
         '''
         result = self._values.get("awscli_layer")
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], result)
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], result)
 
     @builtins.property
     def cluster_handler_environment(
@@ -22025,7 +22060,7 @@ class ClusterOptions(CommonClusterOptions):
     @builtins.property
     def cluster_handler_security_group(
         self,
-    ) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    ) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''A security group to associate with the Cluster Handler's Lambdas.
 
         The Cluster Handler's Lambdas are responsible for calling AWS's EKS API.
@@ -22035,28 +22070,28 @@ class ClusterOptions(CommonClusterOptions):
         :default: - No security group.
         '''
         result = self._values.get("cluster_handler_security_group")
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
-    def cluster_logging(self) -> typing.Optional[typing.List[ClusterLoggingTypes]]:
+    def cluster_logging(self) -> typing.Optional[typing.List["ClusterLoggingTypes"]]:
         '''The cluster log types which you want to enable.
 
         :default: - none
         '''
         result = self._values.get("cluster_logging")
-        return typing.cast(typing.Optional[typing.List[ClusterLoggingTypes]], result)
+        return typing.cast(typing.Optional[typing.List["ClusterLoggingTypes"]], result)
 
     @builtins.property
-    def core_dns_compute_type(self) -> typing.Optional[CoreDnsComputeType]:
+    def core_dns_compute_type(self) -> typing.Optional["CoreDnsComputeType"]:
         '''Controls the "eks.amazonaws.com/compute-type" annotation in the CoreDNS configuration on your cluster to determine which compute type to use for CoreDNS.
 
         :default: CoreDnsComputeType.EC2 (for ``FargateCluster`` the default is FARGATE)
         '''
         result = self._values.get("core_dns_compute_type")
-        return typing.cast(typing.Optional[CoreDnsComputeType], result)
+        return typing.cast(typing.Optional["CoreDnsComputeType"], result)
 
     @builtins.property
-    def endpoint_access(self) -> typing.Optional[EndpointAccess]:
+    def endpoint_access(self) -> typing.Optional["EndpointAccess"]:
         '''Configure access to the Kubernetes API server endpoint..
 
         :default: EndpointAccess.PUBLIC_AND_PRIVATE
@@ -22064,10 +22099,10 @@ class ClusterOptions(CommonClusterOptions):
         :see: https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html
         '''
         result = self._values.get("endpoint_access")
-        return typing.cast(typing.Optional[EndpointAccess], result)
+        return typing.cast(typing.Optional["EndpointAccess"], result)
 
     @builtins.property
-    def ip_family(self) -> typing.Optional[IpFamily]:
+    def ip_family(self) -> typing.Optional["IpFamily"]:
         '''Specify which IP family is used to assign Kubernetes pod and service IP addresses.
 
         :default: - IpFamily.IP_V4
@@ -22075,7 +22110,7 @@ class ClusterOptions(CommonClusterOptions):
         :see: https://docs.aws.amazon.com/eks/latest/APIReference/API_KubernetesNetworkConfigRequest.html#AmazonEKS-Type-KubernetesNetworkConfigRequest-ipFamily
         '''
         result = self._values.get("ip_family")
-        return typing.cast(typing.Optional[IpFamily], result)
+        return typing.cast(typing.Optional["IpFamily"], result)
 
     @builtins.property
     def kubectl_environment(
@@ -22091,16 +22126,16 @@ class ClusterOptions(CommonClusterOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def kubectl_memory(self) -> typing.Optional[_Size_7b441c34]:
+    def kubectl_memory(self) -> typing.Optional["_Size_7b441c34"]:
         '''Amount of memory to allocate to the provider's lambda function.
 
         :default: Size.gibibytes(1)
         '''
         result = self._values.get("kubectl_memory")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def masters_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def masters_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that will be added to the ``system:masters`` Kubernetes RBAC group.
 
         :default: - no masters role.
@@ -22108,10 +22143,10 @@ class ClusterOptions(CommonClusterOptions):
         :see: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#default-roles-and-role-bindings
         '''
         result = self._values.get("masters_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def on_event_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def on_event_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda Layer which includes the NPM dependency ``proxy-agent``.
 
         This layer
@@ -22131,7 +22166,7 @@ class ClusterOptions(CommonClusterOptions):
         :default: - a layer bundled with this module.
         '''
         result = self._values.get("on_event_layer")
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], result)
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], result)
 
     @builtins.property
     def output_masters_role_arn(self) -> typing.Optional[builtins.bool]:
@@ -22165,25 +22200,25 @@ class ClusterOptions(CommonClusterOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def remote_node_networks(self) -> typing.Optional[typing.List[RemoteNodeNetwork]]:
+    def remote_node_networks(self) -> typing.Optional[typing.List["RemoteNodeNetwork"]]:
         '''IPv4 CIDR blocks defining the expected address range of hybrid nodes that will join the cluster.
 
         :default: - none
         '''
         result = self._values.get("remote_node_networks")
-        return typing.cast(typing.Optional[typing.List[RemoteNodeNetwork]], result)
+        return typing.cast(typing.Optional[typing.List["RemoteNodeNetwork"]], result)
 
     @builtins.property
-    def remote_pod_networks(self) -> typing.Optional[typing.List[RemotePodNetwork]]:
+    def remote_pod_networks(self) -> typing.Optional[typing.List["RemotePodNetwork"]]:
         '''IPv4 CIDR blocks for Pods running Kubernetes webhooks on hybrid nodes.
 
         :default: - none
         '''
         result = self._values.get("remote_pod_networks")
-        return typing.cast(typing.Optional[typing.List[RemotePodNetwork]], result)
+        return typing.cast(typing.Optional[typing.List["RemotePodNetwork"]], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy applied to all CloudFormation resources created by this construct when they are no longer managed by CloudFormation.
 
         This can happen in one of three situations:
@@ -22198,10 +22233,10 @@ class ClusterOptions(CommonClusterOptions):
         :default: - Resources will be deleted.
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def secrets_encryption_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def secrets_encryption_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''KMS secret for envelope encryption for Kubernetes secrets.
 
         :default:
@@ -22211,7 +22246,7 @@ class ClusterOptions(CommonClusterOptions):
         using AWS-Managed encryption keys.
         '''
         result = self._values.get("secrets_encryption_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
     def service_ipv4_cidr(self) -> typing.Optional[builtins.str]:
@@ -22286,42 +22321,42 @@ class ClusterProps(ClusterOptions):
     def __init__(
         self,
         *,
-        version: KubernetesVersion,
+        version: "KubernetesVersion",
         cluster_name: typing.Optional[builtins.str] = None,
         output_cluster_name: typing.Optional[builtins.bool] = None,
         output_config_command: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Sequence[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kubectl_layer: _ILayerVersion_5ac127c8,
-        alb_controller: typing.Optional[typing.Union[AlbControllerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        authentication_mode: typing.Optional[AuthenticationMode] = None,
-        awscli_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Sequence[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kubectl_layer: "_ILayerVersion_5ac127c8",
+        alb_controller: typing.Optional[typing.Union["AlbControllerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        authentication_mode: typing.Optional["AuthenticationMode"] = None,
+        awscli_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
         cluster_handler_environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        cluster_handler_security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        cluster_logging: typing.Optional[typing.Sequence[ClusterLoggingTypes]] = None,
-        core_dns_compute_type: typing.Optional[CoreDnsComputeType] = None,
-        endpoint_access: typing.Optional[EndpointAccess] = None,
-        ip_family: typing.Optional[IpFamily] = None,
+        cluster_handler_security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        cluster_logging: typing.Optional[typing.Sequence["ClusterLoggingTypes"]] = None,
+        core_dns_compute_type: typing.Optional["CoreDnsComputeType"] = None,
+        endpoint_access: typing.Optional["EndpointAccess"] = None,
+        ip_family: typing.Optional["IpFamily"] = None,
         kubectl_environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        kubectl_memory: typing.Optional[_Size_7b441c34] = None,
-        masters_role: typing.Optional[_IRole_235f5d8e] = None,
-        on_event_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
+        kubectl_memory: typing.Optional["_Size_7b441c34"] = None,
+        masters_role: typing.Optional["_IRole_235f5d8e"] = None,
+        on_event_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
         output_masters_role_arn: typing.Optional[builtins.bool] = None,
         place_cluster_handler_in_vpc: typing.Optional[builtins.bool] = None,
         prune: typing.Optional[builtins.bool] = None,
-        remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
-        remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        secrets_encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        remote_node_networks: typing.Optional[typing.Sequence[typing.Union["RemoteNodeNetwork", typing.Dict[builtins.str, typing.Any]]]] = None,
+        remote_pod_networks: typing.Optional[typing.Sequence[typing.Union["RemotePodNetwork", typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        secrets_encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         service_ipv4_cidr: typing.Optional[builtins.str] = None,
         bootstrap_cluster_creator_admin_permissions: typing.Optional[builtins.bool] = None,
         bootstrap_self_managed_addons: typing.Optional[builtins.bool] = None,
         default_capacity: typing.Optional[jsii.Number] = None,
-        default_capacity_instance: typing.Optional[_InstanceType_f64915b9] = None,
-        default_capacity_type: typing.Optional[DefaultCapacityType] = None,
-        kubectl_lambda_role: typing.Optional[_IRole_235f5d8e] = None,
+        default_capacity_instance: typing.Optional["_InstanceType_f64915b9"] = None,
+        default_capacity_type: typing.Optional["DefaultCapacityType"] = None,
+        kubectl_lambda_role: typing.Optional["_IRole_235f5d8e"] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Common configuration props for EKS clusters.
@@ -22502,11 +22537,11 @@ class ClusterProps(ClusterOptions):
             self._values["tags"] = tags
 
     @builtins.property
-    def version(self) -> KubernetesVersion:
+    def version(self) -> "KubernetesVersion":
         '''The Kubernetes version to run in the cluster.'''
         result = self._values.get("version")
         assert result is not None, "Required property 'version' is missing"
-        return typing.cast(KubernetesVersion, result)
+        return typing.cast("KubernetesVersion", result)
 
     @builtins.property
     def cluster_name(self) -> typing.Optional[builtins.str]:
@@ -22543,34 +22578,34 @@ class ClusterProps(ClusterOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Role that provides permissions for the Kubernetes control plane to make calls to AWS API operations on your behalf.
 
         :default: - A role is automatically created for you
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def security_group(self) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    def security_group(self) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''Security Group to use for Control Plane ENIs.
 
         :default: - A security group is automatically created
         '''
         result = self._values.get("security_group")
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''The VPC in which to create the Cluster.
 
         :default: - a VPC with default configuration will be created and can be accessed through ``cluster.vpc``.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[typing.List[_SubnetSelection_e57d76df]]:
+    def vpc_subnets(self) -> typing.Optional[typing.List["_SubnetSelection_e57d76df"]]:
         '''Where to place EKS Control Plane ENIs.
 
         For example, to only select private subnets, supply the following:
@@ -22580,10 +22615,10 @@ class ClusterProps(ClusterOptions):
         :default: - All public and private subnets
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[typing.List[_SubnetSelection_e57d76df]], result)
+        return typing.cast(typing.Optional[typing.List["_SubnetSelection_e57d76df"]], result)
 
     @builtins.property
-    def kubectl_layer(self) -> _ILayerVersion_5ac127c8:
+    def kubectl_layer(self) -> "_ILayerVersion_5ac127c8":
         '''An AWS Lambda Layer which includes ``kubectl`` and Helm.
 
         This layer is used by the kubectl handler to apply manifests and install
@@ -22598,10 +22633,10 @@ class ClusterProps(ClusterOptions):
         '''
         result = self._values.get("kubectl_layer")
         assert result is not None, "Required property 'kubectl_layer' is missing"
-        return typing.cast(_ILayerVersion_5ac127c8, result)
+        return typing.cast("_ILayerVersion_5ac127c8", result)
 
     @builtins.property
-    def alb_controller(self) -> typing.Optional[AlbControllerOptions]:
+    def alb_controller(self) -> typing.Optional["AlbControllerOptions"]:
         '''Install the AWS Load Balancer Controller onto the cluster.
 
         :default: - The controller is not installed.
@@ -22609,19 +22644,19 @@ class ClusterProps(ClusterOptions):
         :see: https://kubernetes-sigs.github.io/aws-load-balancer-controller
         '''
         result = self._values.get("alb_controller")
-        return typing.cast(typing.Optional[AlbControllerOptions], result)
+        return typing.cast(typing.Optional["AlbControllerOptions"], result)
 
     @builtins.property
-    def authentication_mode(self) -> typing.Optional[AuthenticationMode]:
+    def authentication_mode(self) -> typing.Optional["AuthenticationMode"]:
         '''The desired authentication mode for the cluster.
 
         :default: AuthenticationMode.CONFIG_MAP
         '''
         result = self._values.get("authentication_mode")
-        return typing.cast(typing.Optional[AuthenticationMode], result)
+        return typing.cast(typing.Optional["AuthenticationMode"], result)
 
     @builtins.property
-    def awscli_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def awscli_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda layer that contains the ``aws`` CLI.
 
         The handler expects the layer to include the following executables::
@@ -22631,7 +22666,7 @@ class ClusterProps(ClusterOptions):
         :default: - a default layer with the AWS CLI 1.x
         '''
         result = self._values.get("awscli_layer")
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], result)
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], result)
 
     @builtins.property
     def cluster_handler_environment(
@@ -22647,7 +22682,7 @@ class ClusterProps(ClusterOptions):
     @builtins.property
     def cluster_handler_security_group(
         self,
-    ) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    ) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''A security group to associate with the Cluster Handler's Lambdas.
 
         The Cluster Handler's Lambdas are responsible for calling AWS's EKS API.
@@ -22657,28 +22692,28 @@ class ClusterProps(ClusterOptions):
         :default: - No security group.
         '''
         result = self._values.get("cluster_handler_security_group")
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
-    def cluster_logging(self) -> typing.Optional[typing.List[ClusterLoggingTypes]]:
+    def cluster_logging(self) -> typing.Optional[typing.List["ClusterLoggingTypes"]]:
         '''The cluster log types which you want to enable.
 
         :default: - none
         '''
         result = self._values.get("cluster_logging")
-        return typing.cast(typing.Optional[typing.List[ClusterLoggingTypes]], result)
+        return typing.cast(typing.Optional[typing.List["ClusterLoggingTypes"]], result)
 
     @builtins.property
-    def core_dns_compute_type(self) -> typing.Optional[CoreDnsComputeType]:
+    def core_dns_compute_type(self) -> typing.Optional["CoreDnsComputeType"]:
         '''Controls the "eks.amazonaws.com/compute-type" annotation in the CoreDNS configuration on your cluster to determine which compute type to use for CoreDNS.
 
         :default: CoreDnsComputeType.EC2 (for ``FargateCluster`` the default is FARGATE)
         '''
         result = self._values.get("core_dns_compute_type")
-        return typing.cast(typing.Optional[CoreDnsComputeType], result)
+        return typing.cast(typing.Optional["CoreDnsComputeType"], result)
 
     @builtins.property
-    def endpoint_access(self) -> typing.Optional[EndpointAccess]:
+    def endpoint_access(self) -> typing.Optional["EndpointAccess"]:
         '''Configure access to the Kubernetes API server endpoint..
 
         :default: EndpointAccess.PUBLIC_AND_PRIVATE
@@ -22686,10 +22721,10 @@ class ClusterProps(ClusterOptions):
         :see: https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html
         '''
         result = self._values.get("endpoint_access")
-        return typing.cast(typing.Optional[EndpointAccess], result)
+        return typing.cast(typing.Optional["EndpointAccess"], result)
 
     @builtins.property
-    def ip_family(self) -> typing.Optional[IpFamily]:
+    def ip_family(self) -> typing.Optional["IpFamily"]:
         '''Specify which IP family is used to assign Kubernetes pod and service IP addresses.
 
         :default: - IpFamily.IP_V4
@@ -22697,7 +22732,7 @@ class ClusterProps(ClusterOptions):
         :see: https://docs.aws.amazon.com/eks/latest/APIReference/API_KubernetesNetworkConfigRequest.html#AmazonEKS-Type-KubernetesNetworkConfigRequest-ipFamily
         '''
         result = self._values.get("ip_family")
-        return typing.cast(typing.Optional[IpFamily], result)
+        return typing.cast(typing.Optional["IpFamily"], result)
 
     @builtins.property
     def kubectl_environment(
@@ -22713,16 +22748,16 @@ class ClusterProps(ClusterOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def kubectl_memory(self) -> typing.Optional[_Size_7b441c34]:
+    def kubectl_memory(self) -> typing.Optional["_Size_7b441c34"]:
         '''Amount of memory to allocate to the provider's lambda function.
 
         :default: Size.gibibytes(1)
         '''
         result = self._values.get("kubectl_memory")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def masters_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def masters_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that will be added to the ``system:masters`` Kubernetes RBAC group.
 
         :default: - no masters role.
@@ -22730,10 +22765,10 @@ class ClusterProps(ClusterOptions):
         :see: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#default-roles-and-role-bindings
         '''
         result = self._values.get("masters_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def on_event_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def on_event_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda Layer which includes the NPM dependency ``proxy-agent``.
 
         This layer
@@ -22753,7 +22788,7 @@ class ClusterProps(ClusterOptions):
         :default: - a layer bundled with this module.
         '''
         result = self._values.get("on_event_layer")
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], result)
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], result)
 
     @builtins.property
     def output_masters_role_arn(self) -> typing.Optional[builtins.bool]:
@@ -22787,25 +22822,25 @@ class ClusterProps(ClusterOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def remote_node_networks(self) -> typing.Optional[typing.List[RemoteNodeNetwork]]:
+    def remote_node_networks(self) -> typing.Optional[typing.List["RemoteNodeNetwork"]]:
         '''IPv4 CIDR blocks defining the expected address range of hybrid nodes that will join the cluster.
 
         :default: - none
         '''
         result = self._values.get("remote_node_networks")
-        return typing.cast(typing.Optional[typing.List[RemoteNodeNetwork]], result)
+        return typing.cast(typing.Optional[typing.List["RemoteNodeNetwork"]], result)
 
     @builtins.property
-    def remote_pod_networks(self) -> typing.Optional[typing.List[RemotePodNetwork]]:
+    def remote_pod_networks(self) -> typing.Optional[typing.List["RemotePodNetwork"]]:
         '''IPv4 CIDR blocks for Pods running Kubernetes webhooks on hybrid nodes.
 
         :default: - none
         '''
         result = self._values.get("remote_pod_networks")
-        return typing.cast(typing.Optional[typing.List[RemotePodNetwork]], result)
+        return typing.cast(typing.Optional[typing.List["RemotePodNetwork"]], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy applied to all CloudFormation resources created by this construct when they are no longer managed by CloudFormation.
 
         This can happen in one of three situations:
@@ -22820,10 +22855,10 @@ class ClusterProps(ClusterOptions):
         :default: - Resources will be deleted.
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def secrets_encryption_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def secrets_encryption_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''KMS secret for envelope encryption for Kubernetes secrets.
 
         :default:
@@ -22833,7 +22868,7 @@ class ClusterProps(ClusterOptions):
         using AWS-Managed encryption keys.
         '''
         result = self._values.get("secrets_encryption_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
     def service_ipv4_cidr(self) -> typing.Optional[builtins.str]:
@@ -22892,7 +22927,7 @@ class ClusterProps(ClusterOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def default_capacity_instance(self) -> typing.Optional[_InstanceType_f64915b9]:
+    def default_capacity_instance(self) -> typing.Optional["_InstanceType_f64915b9"]:
         '''The instance type to use for the default capacity.
 
         This will only be taken
@@ -22901,25 +22936,25 @@ class ClusterProps(ClusterOptions):
         :default: m5.large
         '''
         result = self._values.get("default_capacity_instance")
-        return typing.cast(typing.Optional[_InstanceType_f64915b9], result)
+        return typing.cast(typing.Optional["_InstanceType_f64915b9"], result)
 
     @builtins.property
-    def default_capacity_type(self) -> typing.Optional[DefaultCapacityType]:
+    def default_capacity_type(self) -> typing.Optional["DefaultCapacityType"]:
         '''The default capacity type for the cluster.
 
         :default: NODEGROUP
         '''
         result = self._values.get("default_capacity_type")
-        return typing.cast(typing.Optional[DefaultCapacityType], result)
+        return typing.cast(typing.Optional["DefaultCapacityType"], result)
 
     @builtins.property
-    def kubectl_lambda_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def kubectl_lambda_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role to pass to the Kubectl Lambda Handler.
 
         :default: - Default Lambda IAM Execution Role
         '''
         result = self._values.get("kubectl_lambda_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -22968,40 +23003,40 @@ class FargateCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        default_profile: typing.Optional[typing.Union[FargateProfileOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        kubectl_layer: _ILayerVersion_5ac127c8,
-        alb_controller: typing.Optional[typing.Union[AlbControllerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        authentication_mode: typing.Optional[AuthenticationMode] = None,
-        awscli_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
+        default_profile: typing.Optional[typing.Union["FargateProfileOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        kubectl_layer: "_ILayerVersion_5ac127c8",
+        alb_controller: typing.Optional[typing.Union["AlbControllerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        authentication_mode: typing.Optional["AuthenticationMode"] = None,
+        awscli_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
         cluster_handler_environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        cluster_handler_security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        cluster_logging: typing.Optional[typing.Sequence[ClusterLoggingTypes]] = None,
-        core_dns_compute_type: typing.Optional[CoreDnsComputeType] = None,
-        endpoint_access: typing.Optional[EndpointAccess] = None,
-        ip_family: typing.Optional[IpFamily] = None,
+        cluster_handler_security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        cluster_logging: typing.Optional[typing.Sequence["ClusterLoggingTypes"]] = None,
+        core_dns_compute_type: typing.Optional["CoreDnsComputeType"] = None,
+        endpoint_access: typing.Optional["EndpointAccess"] = None,
+        ip_family: typing.Optional["IpFamily"] = None,
         kubectl_environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        kubectl_memory: typing.Optional[_Size_7b441c34] = None,
-        masters_role: typing.Optional[_IRole_235f5d8e] = None,
-        on_event_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
+        kubectl_memory: typing.Optional["_Size_7b441c34"] = None,
+        masters_role: typing.Optional["_IRole_235f5d8e"] = None,
+        on_event_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
         output_masters_role_arn: typing.Optional[builtins.bool] = None,
         place_cluster_handler_in_vpc: typing.Optional[builtins.bool] = None,
         prune: typing.Optional[builtins.bool] = None,
-        remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
-        remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        secrets_encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        remote_node_networks: typing.Optional[typing.Sequence[typing.Union["RemoteNodeNetwork", typing.Dict[builtins.str, typing.Any]]]] = None,
+        remote_pod_networks: typing.Optional[typing.Sequence[typing.Union["RemotePodNetwork", typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        secrets_encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         service_ipv4_cidr: typing.Optional[builtins.str] = None,
-        version: KubernetesVersion,
+        version: "KubernetesVersion",
         cluster_name: typing.Optional[builtins.str] = None,
         output_cluster_name: typing.Optional[builtins.bool] = None,
         output_config_command: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Sequence[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]]] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Sequence[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -23086,9 +23121,9 @@ class FargateCluster(
 
     @builtins.property
     @jsii.member(jsii_name="defaultProfile")
-    def default_profile(self) -> FargateProfile:
+    def default_profile(self) -> "FargateProfile":
         '''Fargate Profile that was created with the cluster.'''
-        return typing.cast(FargateProfile, jsii.get(self, "defaultProfile"))
+        return typing.cast("FargateProfile", jsii.get(self, "defaultProfile"))
 
 
 @jsii.data_type(
@@ -23132,37 +23167,37 @@ class FargateClusterProps(ClusterOptions):
     def __init__(
         self,
         *,
-        version: KubernetesVersion,
+        version: "KubernetesVersion",
         cluster_name: typing.Optional[builtins.str] = None,
         output_cluster_name: typing.Optional[builtins.bool] = None,
         output_config_command: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Sequence[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kubectl_layer: _ILayerVersion_5ac127c8,
-        alb_controller: typing.Optional[typing.Union[AlbControllerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        authentication_mode: typing.Optional[AuthenticationMode] = None,
-        awscli_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Sequence[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kubectl_layer: "_ILayerVersion_5ac127c8",
+        alb_controller: typing.Optional[typing.Union["AlbControllerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        authentication_mode: typing.Optional["AuthenticationMode"] = None,
+        awscli_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
         cluster_handler_environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        cluster_handler_security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        cluster_logging: typing.Optional[typing.Sequence[ClusterLoggingTypes]] = None,
-        core_dns_compute_type: typing.Optional[CoreDnsComputeType] = None,
-        endpoint_access: typing.Optional[EndpointAccess] = None,
-        ip_family: typing.Optional[IpFamily] = None,
+        cluster_handler_security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        cluster_logging: typing.Optional[typing.Sequence["ClusterLoggingTypes"]] = None,
+        core_dns_compute_type: typing.Optional["CoreDnsComputeType"] = None,
+        endpoint_access: typing.Optional["EndpointAccess"] = None,
+        ip_family: typing.Optional["IpFamily"] = None,
         kubectl_environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        kubectl_memory: typing.Optional[_Size_7b441c34] = None,
-        masters_role: typing.Optional[_IRole_235f5d8e] = None,
-        on_event_layer: typing.Optional[_ILayerVersion_5ac127c8] = None,
+        kubectl_memory: typing.Optional["_Size_7b441c34"] = None,
+        masters_role: typing.Optional["_IRole_235f5d8e"] = None,
+        on_event_layer: typing.Optional["_ILayerVersion_5ac127c8"] = None,
         output_masters_role_arn: typing.Optional[builtins.bool] = None,
         place_cluster_handler_in_vpc: typing.Optional[builtins.bool] = None,
         prune: typing.Optional[builtins.bool] = None,
-        remote_node_networks: typing.Optional[typing.Sequence[typing.Union[RemoteNodeNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
-        remote_pod_networks: typing.Optional[typing.Sequence[typing.Union[RemotePodNetwork, typing.Dict[builtins.str, typing.Any]]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        secrets_encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        remote_node_networks: typing.Optional[typing.Sequence[typing.Union["RemoteNodeNetwork", typing.Dict[builtins.str, typing.Any]]]] = None,
+        remote_pod_networks: typing.Optional[typing.Sequence[typing.Union["RemotePodNetwork", typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        secrets_encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         service_ipv4_cidr: typing.Optional[builtins.str] = None,
-        default_profile: typing.Optional[typing.Union[FargateProfileOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_profile: typing.Optional[typing.Union["FargateProfileOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Configuration props for EKS Fargate.
 
@@ -23311,11 +23346,11 @@ class FargateClusterProps(ClusterOptions):
             self._values["default_profile"] = default_profile
 
     @builtins.property
-    def version(self) -> KubernetesVersion:
+    def version(self) -> "KubernetesVersion":
         '''The Kubernetes version to run in the cluster.'''
         result = self._values.get("version")
         assert result is not None, "Required property 'version' is missing"
-        return typing.cast(KubernetesVersion, result)
+        return typing.cast("KubernetesVersion", result)
 
     @builtins.property
     def cluster_name(self) -> typing.Optional[builtins.str]:
@@ -23352,34 +23387,34 @@ class FargateClusterProps(ClusterOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Role that provides permissions for the Kubernetes control plane to make calls to AWS API operations on your behalf.
 
         :default: - A role is automatically created for you
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def security_group(self) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    def security_group(self) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''Security Group to use for Control Plane ENIs.
 
         :default: - A security group is automatically created
         '''
         result = self._values.get("security_group")
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''The VPC in which to create the Cluster.
 
         :default: - a VPC with default configuration will be created and can be accessed through ``cluster.vpc``.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[typing.List[_SubnetSelection_e57d76df]]:
+    def vpc_subnets(self) -> typing.Optional[typing.List["_SubnetSelection_e57d76df"]]:
         '''Where to place EKS Control Plane ENIs.
 
         For example, to only select private subnets, supply the following:
@@ -23389,10 +23424,10 @@ class FargateClusterProps(ClusterOptions):
         :default: - All public and private subnets
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[typing.List[_SubnetSelection_e57d76df]], result)
+        return typing.cast(typing.Optional[typing.List["_SubnetSelection_e57d76df"]], result)
 
     @builtins.property
-    def kubectl_layer(self) -> _ILayerVersion_5ac127c8:
+    def kubectl_layer(self) -> "_ILayerVersion_5ac127c8":
         '''An AWS Lambda Layer which includes ``kubectl`` and Helm.
 
         This layer is used by the kubectl handler to apply manifests and install
@@ -23407,10 +23442,10 @@ class FargateClusterProps(ClusterOptions):
         '''
         result = self._values.get("kubectl_layer")
         assert result is not None, "Required property 'kubectl_layer' is missing"
-        return typing.cast(_ILayerVersion_5ac127c8, result)
+        return typing.cast("_ILayerVersion_5ac127c8", result)
 
     @builtins.property
-    def alb_controller(self) -> typing.Optional[AlbControllerOptions]:
+    def alb_controller(self) -> typing.Optional["AlbControllerOptions"]:
         '''Install the AWS Load Balancer Controller onto the cluster.
 
         :default: - The controller is not installed.
@@ -23418,19 +23453,19 @@ class FargateClusterProps(ClusterOptions):
         :see: https://kubernetes-sigs.github.io/aws-load-balancer-controller
         '''
         result = self._values.get("alb_controller")
-        return typing.cast(typing.Optional[AlbControllerOptions], result)
+        return typing.cast(typing.Optional["AlbControllerOptions"], result)
 
     @builtins.property
-    def authentication_mode(self) -> typing.Optional[AuthenticationMode]:
+    def authentication_mode(self) -> typing.Optional["AuthenticationMode"]:
         '''The desired authentication mode for the cluster.
 
         :default: AuthenticationMode.CONFIG_MAP
         '''
         result = self._values.get("authentication_mode")
-        return typing.cast(typing.Optional[AuthenticationMode], result)
+        return typing.cast(typing.Optional["AuthenticationMode"], result)
 
     @builtins.property
-    def awscli_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def awscli_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda layer that contains the ``aws`` CLI.
 
         The handler expects the layer to include the following executables::
@@ -23440,7 +23475,7 @@ class FargateClusterProps(ClusterOptions):
         :default: - a default layer with the AWS CLI 1.x
         '''
         result = self._values.get("awscli_layer")
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], result)
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], result)
 
     @builtins.property
     def cluster_handler_environment(
@@ -23456,7 +23491,7 @@ class FargateClusterProps(ClusterOptions):
     @builtins.property
     def cluster_handler_security_group(
         self,
-    ) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    ) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''A security group to associate with the Cluster Handler's Lambdas.
 
         The Cluster Handler's Lambdas are responsible for calling AWS's EKS API.
@@ -23466,28 +23501,28 @@ class FargateClusterProps(ClusterOptions):
         :default: - No security group.
         '''
         result = self._values.get("cluster_handler_security_group")
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
-    def cluster_logging(self) -> typing.Optional[typing.List[ClusterLoggingTypes]]:
+    def cluster_logging(self) -> typing.Optional[typing.List["ClusterLoggingTypes"]]:
         '''The cluster log types which you want to enable.
 
         :default: - none
         '''
         result = self._values.get("cluster_logging")
-        return typing.cast(typing.Optional[typing.List[ClusterLoggingTypes]], result)
+        return typing.cast(typing.Optional[typing.List["ClusterLoggingTypes"]], result)
 
     @builtins.property
-    def core_dns_compute_type(self) -> typing.Optional[CoreDnsComputeType]:
+    def core_dns_compute_type(self) -> typing.Optional["CoreDnsComputeType"]:
         '''Controls the "eks.amazonaws.com/compute-type" annotation in the CoreDNS configuration on your cluster to determine which compute type to use for CoreDNS.
 
         :default: CoreDnsComputeType.EC2 (for ``FargateCluster`` the default is FARGATE)
         '''
         result = self._values.get("core_dns_compute_type")
-        return typing.cast(typing.Optional[CoreDnsComputeType], result)
+        return typing.cast(typing.Optional["CoreDnsComputeType"], result)
 
     @builtins.property
-    def endpoint_access(self) -> typing.Optional[EndpointAccess]:
+    def endpoint_access(self) -> typing.Optional["EndpointAccess"]:
         '''Configure access to the Kubernetes API server endpoint..
 
         :default: EndpointAccess.PUBLIC_AND_PRIVATE
@@ -23495,10 +23530,10 @@ class FargateClusterProps(ClusterOptions):
         :see: https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html
         '''
         result = self._values.get("endpoint_access")
-        return typing.cast(typing.Optional[EndpointAccess], result)
+        return typing.cast(typing.Optional["EndpointAccess"], result)
 
     @builtins.property
-    def ip_family(self) -> typing.Optional[IpFamily]:
+    def ip_family(self) -> typing.Optional["IpFamily"]:
         '''Specify which IP family is used to assign Kubernetes pod and service IP addresses.
 
         :default: - IpFamily.IP_V4
@@ -23506,7 +23541,7 @@ class FargateClusterProps(ClusterOptions):
         :see: https://docs.aws.amazon.com/eks/latest/APIReference/API_KubernetesNetworkConfigRequest.html#AmazonEKS-Type-KubernetesNetworkConfigRequest-ipFamily
         '''
         result = self._values.get("ip_family")
-        return typing.cast(typing.Optional[IpFamily], result)
+        return typing.cast(typing.Optional["IpFamily"], result)
 
     @builtins.property
     def kubectl_environment(
@@ -23522,16 +23557,16 @@ class FargateClusterProps(ClusterOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def kubectl_memory(self) -> typing.Optional[_Size_7b441c34]:
+    def kubectl_memory(self) -> typing.Optional["_Size_7b441c34"]:
         '''Amount of memory to allocate to the provider's lambda function.
 
         :default: Size.gibibytes(1)
         '''
         result = self._values.get("kubectl_memory")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def masters_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def masters_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that will be added to the ``system:masters`` Kubernetes RBAC group.
 
         :default: - no masters role.
@@ -23539,10 +23574,10 @@ class FargateClusterProps(ClusterOptions):
         :see: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#default-roles-and-role-bindings
         '''
         result = self._values.get("masters_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def on_event_layer(self) -> typing.Optional[_ILayerVersion_5ac127c8]:
+    def on_event_layer(self) -> typing.Optional["_ILayerVersion_5ac127c8"]:
         '''An AWS Lambda Layer which includes the NPM dependency ``proxy-agent``.
 
         This layer
@@ -23562,7 +23597,7 @@ class FargateClusterProps(ClusterOptions):
         :default: - a layer bundled with this module.
         '''
         result = self._values.get("on_event_layer")
-        return typing.cast(typing.Optional[_ILayerVersion_5ac127c8], result)
+        return typing.cast(typing.Optional["_ILayerVersion_5ac127c8"], result)
 
     @builtins.property
     def output_masters_role_arn(self) -> typing.Optional[builtins.bool]:
@@ -23596,25 +23631,25 @@ class FargateClusterProps(ClusterOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def remote_node_networks(self) -> typing.Optional[typing.List[RemoteNodeNetwork]]:
+    def remote_node_networks(self) -> typing.Optional[typing.List["RemoteNodeNetwork"]]:
         '''IPv4 CIDR blocks defining the expected address range of hybrid nodes that will join the cluster.
 
         :default: - none
         '''
         result = self._values.get("remote_node_networks")
-        return typing.cast(typing.Optional[typing.List[RemoteNodeNetwork]], result)
+        return typing.cast(typing.Optional[typing.List["RemoteNodeNetwork"]], result)
 
     @builtins.property
-    def remote_pod_networks(self) -> typing.Optional[typing.List[RemotePodNetwork]]:
+    def remote_pod_networks(self) -> typing.Optional[typing.List["RemotePodNetwork"]]:
         '''IPv4 CIDR blocks for Pods running Kubernetes webhooks on hybrid nodes.
 
         :default: - none
         '''
         result = self._values.get("remote_pod_networks")
-        return typing.cast(typing.Optional[typing.List[RemotePodNetwork]], result)
+        return typing.cast(typing.Optional[typing.List["RemotePodNetwork"]], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy applied to all CloudFormation resources created by this construct when they are no longer managed by CloudFormation.
 
         This can happen in one of three situations:
@@ -23629,10 +23664,10 @@ class FargateClusterProps(ClusterOptions):
         :default: - Resources will be deleted.
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def secrets_encryption_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def secrets_encryption_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''KMS secret for envelope encryption for Kubernetes secrets.
 
         :default:
@@ -23642,7 +23677,7 @@ class FargateClusterProps(ClusterOptions):
         using AWS-Managed encryption keys.
         '''
         result = self._values.get("secrets_encryption_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
     def service_ipv4_cidr(self) -> typing.Optional[builtins.str]:
@@ -23659,7 +23694,7 @@ class FargateClusterProps(ClusterOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def default_profile(self) -> typing.Optional[FargateProfileOptions]:
+    def default_profile(self) -> typing.Optional["FargateProfileOptions"]:
         '''Fargate Profile to create along with the cluster.
 
         :default:
@@ -23668,7 +23703,7 @@ class FargateClusterProps(ClusterOptions):
         selectors will be created if this is left undefined.
         '''
         result = self._values.get("default_profile")
-        return typing.cast(typing.Optional[FargateProfileOptions], result)
+        return typing.cast(typing.Optional["FargateProfileOptions"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -23692,7 +23727,7 @@ class IngressLoadBalancerAddressOptions(ServiceLoadBalancerAddressOptions):
         self,
         *,
         namespace: typing.Optional[builtins.str] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Options for fetching an IngressLoadBalancerAddress.
 
@@ -23733,13 +23768,13 @@ class IngressLoadBalancerAddressOptions(ServiceLoadBalancerAddressOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Timeout for waiting on the load balancer address.
 
         :default: Duration.minutes(5)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

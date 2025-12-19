@@ -130,6 +130,7 @@ class CfnAccount(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_organizations as organizations
@@ -150,14 +151,14 @@ class CfnAccount(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account_name: builtins.str,
         email: builtins.str,
         parent_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         role_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Organizations::Account``.
 
@@ -185,7 +186,7 @@ class CfnAccount(
 
     @jsii.member(jsii_name="arnForAccount")
     @builtins.classmethod
-    def arn_for_account(cls, resource: _IAccountRef_ee273c41) -> builtins.str:
+    def arn_for_account(cls, resource: "_IAccountRef_ee273c41") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -207,7 +208,7 @@ class CfnAccount(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccount", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -238,9 +239,9 @@ class CfnAccount(
 
     @builtins.property
     @jsii.member(jsii_name="accountRef")
-    def account_ref(self) -> _AccountReference_aedc6357:
+    def account_ref(self) -> "_AccountReference_aedc6357":
         '''A reference to a Account resource.'''
-        return typing.cast(_AccountReference_aedc6357, jsii.get(self, "accountRef"))
+        return typing.cast("_AccountReference_aedc6357", jsii.get(self, "accountRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAccountId")
@@ -317,9 +318,9 @@ class CfnAccount(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="accountName")
@@ -375,12 +376,12 @@ class CfnAccount(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags that you want to attach to the newly created account.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__797fecb1b9a4bafd998e385c8ea18d8b31431a28a593cf9eba2da34a96ca8e0a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -406,7 +407,7 @@ class CfnAccountProps:
         email: builtins.str,
         parent_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         role_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAccount``.
 
@@ -421,6 +422,7 @@ class CfnAccountProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_organizations as organizations
@@ -519,7 +521,7 @@ class CfnAccountProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags that you want to attach to the newly created account.
 
         For each tag in the list, you must specify both a tag key and a value. You can set the value to an empty string, but you can't set it to ``null`` . For more information about tagging, see `Tagging AWS Organizations resources <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_tagging.html>`_ in the AWS Organizations User Guide.
@@ -530,7 +532,7 @@ class CfnAccountProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-organizations-account.html#cfn-organizations-account-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -580,7 +582,7 @@ class CfnOrganization(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         feature_set: typing.Optional[builtins.str] = None,
@@ -601,7 +603,10 @@ class CfnOrganization(
 
     @jsii.member(jsii_name="arnForOrganization")
     @builtins.classmethod
-    def arn_for_organization(cls, resource: _IOrganizationRef_74d1fc09) -> builtins.str:
+    def arn_for_organization(
+        cls,
+        resource: "_IOrganizationRef_74d1fc09",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -623,7 +628,7 @@ class CfnOrganization(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOrganization", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -713,9 +718,9 @@ class CfnOrganization(
 
     @builtins.property
     @jsii.member(jsii_name="organizationRef")
-    def organization_ref(self) -> _OrganizationReference_fc9037cc:
+    def organization_ref(self) -> "_OrganizationReference_fc9037cc":
         '''A reference to a Organization resource.'''
-        return typing.cast(_OrganizationReference_fc9037cc, jsii.get(self, "organizationRef"))
+        return typing.cast("_OrganizationReference_fc9037cc", jsii.get(self, "organizationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="featureSet")
@@ -819,6 +824,7 @@ class CfnOrganizationalUnit(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_organizations as organizations
@@ -837,12 +843,12 @@ class CfnOrganizationalUnit(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         parent_id: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Organizations::OrganizationalUnit``.
 
@@ -864,7 +870,7 @@ class CfnOrganizationalUnit(
     @builtins.classmethod
     def arn_for_organizational_unit(
         cls,
-        resource: _IOrganizationalUnitRef_1eee9aae,
+        resource: "_IOrganizationalUnitRef_1eee9aae",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -887,7 +893,7 @@ class CfnOrganizationalUnit(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOrganizationalUnit", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -945,15 +951,15 @@ class CfnOrganizationalUnit(
 
     @builtins.property
     @jsii.member(jsii_name="organizationalUnitRef")
-    def organizational_unit_ref(self) -> _OrganizationalUnitReference_bb42755f:
+    def organizational_unit_ref(self) -> "_OrganizationalUnitReference_bb42755f":
         '''A reference to a OrganizationalUnit resource.'''
-        return typing.cast(_OrganizationalUnitReference_bb42755f, jsii.get(self, "organizationalUnitRef"))
+        return typing.cast("_OrganizationalUnitReference_bb42755f", jsii.get(self, "organizationalUnitRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -983,12 +989,12 @@ class CfnOrganizationalUnit(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags that you want to attach to the newly created OU.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__eabed8f386c5c6fcea2646194b0879df9b16b1d40979baac245b456985dfa3e7)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1006,7 +1012,7 @@ class CfnOrganizationalUnitProps:
         *,
         name: builtins.str,
         parent_id: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnOrganizationalUnit``.
 
@@ -1019,6 +1025,7 @@ class CfnOrganizationalUnitProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_organizations as organizations
@@ -1078,7 +1085,7 @@ class CfnOrganizationalUnitProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags that you want to attach to the newly created OU.
 
         For each tag in the list, you must specify both a tag key and a value. You can set the value to an empty string, but you can't set it to ``null`` . For more information about tagging, see `Tagging AWS Organizations resources <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_tagging.html>`_ in the AWS Organizations User Guide.
@@ -1089,7 +1096,7 @@ class CfnOrganizationalUnitProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-organizations-organizationalunit.html#cfn-organizations-organizationalunit-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1126,6 +1133,7 @@ class CfnPolicy(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_organizations as organizations
@@ -1149,14 +1157,14 @@ class CfnPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         content: typing.Any,
         name: builtins.str,
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::Organizations::Policy``.
@@ -1187,7 +1195,7 @@ class CfnPolicy(
 
     @jsii.member(jsii_name="arnForPolicy")
     @builtins.classmethod
-    def arn_for_policy(cls, resource: _IPolicyRef_f285244f) -> builtins.str:
+    def arn_for_policy(cls, resource: "_IPolicyRef_f285244f") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1209,7 +1217,7 @@ class CfnPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1251,14 +1259,14 @@ class CfnPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="attrAwsManaged")
-    def attr_aws_managed(self) -> _IResolvable_da3f097b:
+    def attr_aws_managed(self) -> "_IResolvable_da3f097b":
         '''Returns a boolean value that indicates whether the specified policy is an AWS managed policy.
 
         If true, then you can attach the policy to roots, OUs, or accounts, but you cannot edit it. For example: ``true | false`` .
 
         :cloudformationAttribute: AwsManaged
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrAwsManaged"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrAwsManaged"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -1278,15 +1286,15 @@ class CfnPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="policyRef")
-    def policy_ref(self) -> _PolicyReference_b6a2b56e:
+    def policy_ref(self) -> "_PolicyReference_b6a2b56e":
         '''A reference to a Policy resource.'''
-        return typing.cast(_PolicyReference_b6a2b56e, jsii.get(self, "policyRef"))
+        return typing.cast("_PolicyReference_b6a2b56e", jsii.get(self, "policyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="content")
@@ -1345,12 +1353,12 @@ class CfnPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags that you want to attach to the newly created policy.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9caafe6d9a16db2e71e0d35514c7cc53b1f7f3b30806cee494691748e49625f2)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1390,7 +1398,7 @@ class CfnPolicyProps:
         name: builtins.str,
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPolicy``.
@@ -1407,6 +1415,7 @@ class CfnPolicyProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_organizations as organizations
@@ -1509,7 +1518,7 @@ class CfnPolicyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags that you want to attach to the newly created policy.
 
         For each tag in the list, you must specify both a tag key and a value. You can set the value to an empty string, but you can't set it to ``null`` . For more information about tagging, see `Tagging AWS Organizations resources <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_tagging.html>`_ in the AWS Organizations User Guide.
@@ -1520,7 +1529,7 @@ class CfnPolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-organizations-policy.html#cfn-organizations-policy-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def target_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1569,6 +1578,7 @@ class CfnResourcePolicy(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_organizations as organizations
@@ -1588,11 +1598,11 @@ class CfnResourcePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         content: typing.Any,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Organizations::ResourcePolicy``.
 
@@ -1613,7 +1623,7 @@ class CfnResourcePolicy(
     @builtins.classmethod
     def arn_for_resource_policy(
         cls,
-        resource: _IResourcePolicyRef_10723097,
+        resource: "_IResourcePolicyRef_10723097",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1636,7 +1646,7 @@ class CfnResourcePolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourcePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1694,15 +1704,15 @@ class CfnResourcePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicyRef")
-    def resource_policy_ref(self) -> _ResourcePolicyReference_3ac39914:
+    def resource_policy_ref(self) -> "_ResourcePolicyReference_3ac39914":
         '''A reference to a ResourcePolicy resource.'''
-        return typing.cast(_ResourcePolicyReference_3ac39914, jsii.get(self, "resourcePolicyRef"))
+        return typing.cast("_ResourcePolicyReference_3ac39914", jsii.get(self, "resourcePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="content")
@@ -1719,12 +1729,12 @@ class CfnResourcePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags that you want to attach to the newly created resource policy.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__164d77bb0e3c4701ced04ca47a3969c95a5eff28be165197ce2e498bf32cedd1)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1741,7 +1751,7 @@ class CfnResourcePolicyProps:
         self,
         *,
         content: typing.Any,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnResourcePolicy``.
 
@@ -1753,6 +1763,7 @@ class CfnResourcePolicyProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_organizations as organizations
@@ -1795,7 +1806,7 @@ class CfnResourcePolicyProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags that you want to attach to the newly created resource policy.
 
         For each tag in the list, you must specify both a tag key and a value. You can set the value to an empty string, but you can't set it to ``null`` . For more information about tagging, see `Tagging AWS Organizations resources <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_tagging.html>`_ in the *AWS Organizations User Guide* .
@@ -1806,7 +1817,7 @@ class CfnResourcePolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-organizations-resourcepolicy.html#cfn-organizations-resourcepolicy-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

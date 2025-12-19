@@ -96,7 +96,7 @@ class IDRTAccessRef(
 
     @builtins.property
     @jsii.member(jsii_name="drtAccessRef")
-    def drt_access_ref(self) -> DRTAccessReference:
+    def drt_access_ref(self) -> "DRTAccessReference":
         '''(experimental) A reference to a DRTAccess resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IDRTAccessRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="drtAccessRef")
-    def drt_access_ref(self) -> DRTAccessReference:
+    def drt_access_ref(self) -> "DRTAccessReference":
         '''(experimental) A reference to a DRTAccess resource.
 
         :stability: experimental
         '''
-        return typing.cast(DRTAccessReference, jsii.get(self, "drtAccessRef"))
+        return typing.cast("DRTAccessReference", jsii.get(self, "drtAccessRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDRTAccessRef).__jsii_proxy_class__ = lambda : _IDRTAccessRefProxy

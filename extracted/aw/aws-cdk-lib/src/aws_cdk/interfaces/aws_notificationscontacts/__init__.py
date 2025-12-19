@@ -98,7 +98,7 @@ class IEmailContactRef(
 
     @builtins.property
     @jsii.member(jsii_name="emailContactRef")
-    def email_contact_ref(self) -> EmailContactReference:
+    def email_contact_ref(self) -> "EmailContactReference":
         '''(experimental) A reference to a EmailContact resource.
 
         :stability: experimental
@@ -119,12 +119,12 @@ class _IEmailContactRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="emailContactRef")
-    def email_contact_ref(self) -> EmailContactReference:
+    def email_contact_ref(self) -> "EmailContactReference":
         '''(experimental) A reference to a EmailContact resource.
 
         :stability: experimental
         '''
-        return typing.cast(EmailContactReference, jsii.get(self, "emailContactRef"))
+        return typing.cast("EmailContactReference", jsii.get(self, "emailContactRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEmailContactRef).__jsii_proxy_class__ = lambda : _IEmailContactRefProxy

@@ -96,7 +96,7 @@ class IAccountAliasRef(
 
     @builtins.property
     @jsii.member(jsii_name="accountAliasRef")
-    def account_alias_ref(self) -> AccountAliasReference:
+    def account_alias_ref(self) -> "AccountAliasReference":
         '''(experimental) A reference to a AccountAlias resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IAccountAliasRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accountAliasRef")
-    def account_alias_ref(self) -> AccountAliasReference:
+    def account_alias_ref(self) -> "AccountAliasReference":
         '''(experimental) A reference to a AccountAlias resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccountAliasReference, jsii.get(self, "accountAliasRef"))
+        return typing.cast("AccountAliasReference", jsii.get(self, "accountAliasRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccountAliasRef).__jsii_proxy_class__ = lambda : _IAccountAliasRefProxy

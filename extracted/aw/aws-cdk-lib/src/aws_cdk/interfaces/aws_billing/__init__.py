@@ -96,7 +96,7 @@ class IBillingViewRef(
 
     @builtins.property
     @jsii.member(jsii_name="billingViewRef")
-    def billing_view_ref(self) -> BillingViewReference:
+    def billing_view_ref(self) -> "BillingViewReference":
         '''(experimental) A reference to a BillingView resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IBillingViewRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="billingViewRef")
-    def billing_view_ref(self) -> BillingViewReference:
+    def billing_view_ref(self) -> "BillingViewReference":
         '''(experimental) A reference to a BillingView resource.
 
         :stability: experimental
         '''
-        return typing.cast(BillingViewReference, jsii.get(self, "billingViewRef"))
+        return typing.cast("BillingViewReference", jsii.get(self, "billingViewRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBillingViewRef).__jsii_proxy_class__ = lambda : _IBillingViewRefProxy

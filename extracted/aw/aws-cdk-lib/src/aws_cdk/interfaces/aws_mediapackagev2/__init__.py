@@ -213,7 +213,7 @@ class IChannelGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="channelGroupRef")
-    def channel_group_ref(self) -> ChannelGroupReference:
+    def channel_group_ref(self) -> "ChannelGroupReference":
         '''(experimental) A reference to a ChannelGroup resource.
 
         :stability: experimental
@@ -234,12 +234,12 @@ class _IChannelGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="channelGroupRef")
-    def channel_group_ref(self) -> ChannelGroupReference:
+    def channel_group_ref(self) -> "ChannelGroupReference":
         '''(experimental) A reference to a ChannelGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(ChannelGroupReference, jsii.get(self, "channelGroupRef"))
+        return typing.cast("ChannelGroupReference", jsii.get(self, "channelGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IChannelGroupRef).__jsii_proxy_class__ = lambda : _IChannelGroupRefProxy
@@ -260,7 +260,7 @@ class IChannelPolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="channelPolicyRef")
-    def channel_policy_ref(self) -> ChannelPolicyReference:
+    def channel_policy_ref(self) -> "ChannelPolicyReference":
         '''(experimental) A reference to a ChannelPolicy resource.
 
         :stability: experimental
@@ -281,12 +281,12 @@ class _IChannelPolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="channelPolicyRef")
-    def channel_policy_ref(self) -> ChannelPolicyReference:
+    def channel_policy_ref(self) -> "ChannelPolicyReference":
         '''(experimental) A reference to a ChannelPolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(ChannelPolicyReference, jsii.get(self, "channelPolicyRef"))
+        return typing.cast("ChannelPolicyReference", jsii.get(self, "channelPolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IChannelPolicyRef).__jsii_proxy_class__ = lambda : _IChannelPolicyRefProxy
@@ -305,7 +305,7 @@ class IChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="channelRef")
-    def channel_ref(self) -> ChannelReference:
+    def channel_ref(self) -> "ChannelReference":
         '''(experimental) A reference to a Channel resource.
 
         :stability: experimental
@@ -326,12 +326,12 @@ class _IChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="channelRef")
-    def channel_ref(self) -> ChannelReference:
+    def channel_ref(self) -> "ChannelReference":
         '''(experimental) A reference to a Channel resource.
 
         :stability: experimental
         '''
-        return typing.cast(ChannelReference, jsii.get(self, "channelRef"))
+        return typing.cast("ChannelReference", jsii.get(self, "channelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IChannelRef).__jsii_proxy_class__ = lambda : _IChannelRefProxy

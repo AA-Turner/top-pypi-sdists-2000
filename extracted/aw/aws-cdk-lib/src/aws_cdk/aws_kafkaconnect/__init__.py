@@ -91,6 +91,7 @@ class CfnConnector(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_kafkaconnect as kafkaconnect
@@ -181,22 +182,22 @@ class CfnConnector(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        capacity: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.CapacityProperty", typing.Dict[builtins.str, typing.Any]]],
-        connector_configuration: typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b],
+        capacity: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.CapacityProperty", typing.Dict[builtins.str, typing.Any]]],
+        connector_configuration: typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"],
         connector_name: builtins.str,
-        kafka_cluster: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.KafkaClusterProperty", typing.Dict[builtins.str, typing.Any]]],
-        kafka_cluster_client_authentication: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.KafkaClusterClientAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]],
-        kafka_cluster_encryption_in_transit: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.KafkaClusterEncryptionInTransitProperty", typing.Dict[builtins.str, typing.Any]]],
+        kafka_cluster: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.KafkaClusterProperty", typing.Dict[builtins.str, typing.Any]]],
+        kafka_cluster_client_authentication: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.KafkaClusterClientAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]],
+        kafka_cluster_encryption_in_transit: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.KafkaClusterEncryptionInTransitProperty", typing.Dict[builtins.str, typing.Any]]],
         kafka_connect_version: builtins.str,
-        plugins: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.PluginProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        plugins: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.PluginProperty", typing.Dict[builtins.str, typing.Any]]]]],
         service_execution_role_arn: builtins.str,
         connector_description: typing.Optional[builtins.str] = None,
-        log_delivery: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.LogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        worker_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.WorkerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        log_delivery: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.LogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        worker_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.WorkerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::KafkaConnect::Connector``.
 
@@ -240,7 +241,7 @@ class CfnConnector(
 
     @jsii.member(jsii_name="arnForConnector")
     @builtins.classmethod
-    def arn_for_connector(cls, resource: _IConnectorRef_e9a5be01) -> builtins.str:
+    def arn_for_connector(cls, resource: "_IConnectorRef_e9a5be01") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -262,7 +263,7 @@ class CfnConnector(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnector", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -302,9 +303,9 @@ class CfnConnector(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -313,22 +314,22 @@ class CfnConnector(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> _ConnectorReference_cba617c0:
+    def connector_ref(self) -> "_ConnectorReference_cba617c0":
         '''A reference to a Connector resource.'''
-        return typing.cast(_ConnectorReference_cba617c0, jsii.get(self, "connectorRef"))
+        return typing.cast("_ConnectorReference_cba617c0", jsii.get(self, "connectorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="capacity")
     def capacity(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.CapacityProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.CapacityProperty"]:
         '''The connector's compute capacity settings.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.CapacityProperty"], jsii.get(self, "capacity"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.CapacityProperty"], jsii.get(self, "capacity"))
 
     @capacity.setter
     def capacity(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnConnector.CapacityProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnConnector.CapacityProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__93190e39585ede0b426e62964acf4d1946b2270b8cdf90fd760fca16bb13e558)
@@ -339,14 +340,14 @@ class CfnConnector(
     @jsii.member(jsii_name="connectorConfiguration")
     def connector_configuration(
         self,
-    ) -> typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]:
+    ) -> typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]:
         '''The configuration of the connector.'''
-        return typing.cast(typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b], jsii.get(self, "connectorConfiguration"))
+        return typing.cast(typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"], jsii.get(self, "connectorConfiguration"))
 
     @connector_configuration.setter
     def connector_configuration(
         self,
-        value: typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b],
+        value: typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__405d7e0ae6f7748331d41486bdc7f8856109d58d35c557e79a28b1b86a730e8d)
@@ -370,14 +371,14 @@ class CfnConnector(
     @jsii.member(jsii_name="kafkaCluster")
     def kafka_cluster(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.KafkaClusterProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterProperty"]:
         '''The details of the Apache Kafka cluster to which the connector is connected.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.KafkaClusterProperty"], jsii.get(self, "kafkaCluster"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterProperty"], jsii.get(self, "kafkaCluster"))
 
     @kafka_cluster.setter
     def kafka_cluster(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnConnector.KafkaClusterProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3fb859f7d210b463ce7d87e19c928b68134af5a207e21f3d0b913b811695dfad)
@@ -388,14 +389,14 @@ class CfnConnector(
     @jsii.member(jsii_name="kafkaClusterClientAuthentication")
     def kafka_cluster_client_authentication(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.KafkaClusterClientAuthenticationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterClientAuthenticationProperty"]:
         '''The type of client authentication used to connect to the Apache Kafka cluster.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.KafkaClusterClientAuthenticationProperty"], jsii.get(self, "kafkaClusterClientAuthentication"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterClientAuthenticationProperty"], jsii.get(self, "kafkaClusterClientAuthentication"))
 
     @kafka_cluster_client_authentication.setter
     def kafka_cluster_client_authentication(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnConnector.KafkaClusterClientAuthenticationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterClientAuthenticationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c7859bcdf95e20025063609459542a94ce1364b2b031ffa476d5bbd530daa22c)
@@ -406,14 +407,14 @@ class CfnConnector(
     @jsii.member(jsii_name="kafkaClusterEncryptionInTransit")
     def kafka_cluster_encryption_in_transit(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.KafkaClusterEncryptionInTransitProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterEncryptionInTransitProperty"]:
         '''Details of encryption in transit to the Apache Kafka cluster.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.KafkaClusterEncryptionInTransitProperty"], jsii.get(self, "kafkaClusterEncryptionInTransit"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterEncryptionInTransitProperty"], jsii.get(self, "kafkaClusterEncryptionInTransit"))
 
     @kafka_cluster_encryption_in_transit.setter
     def kafka_cluster_encryption_in_transit(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnConnector.KafkaClusterEncryptionInTransitProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterEncryptionInTransitProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__431b322bcb07c1c51a8b9a735113100e17fffb620cca37b220e3b3aec73425d2)
@@ -437,14 +438,14 @@ class CfnConnector(
     @jsii.member(jsii_name="plugins")
     def plugins(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConnector.PluginProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnector.PluginProperty"]]]:
         '''Specifies which plugin to use for the connector.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConnector.PluginProperty"]]], jsii.get(self, "plugins"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnector.PluginProperty"]]], jsii.get(self, "plugins"))
 
     @plugins.setter
     def plugins(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConnector.PluginProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnector.PluginProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ccf2fe35d5eab3697adb8d50736b2ecb8b794ef8d48f98745b61d6534ad954b6)
@@ -481,14 +482,14 @@ class CfnConnector(
     @jsii.member(jsii_name="logDelivery")
     def log_delivery(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.LogDeliveryProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.LogDeliveryProperty"]]:
         '''The settings for delivering connector logs to Amazon CloudWatch Logs.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.LogDeliveryProperty"]], jsii.get(self, "logDelivery"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.LogDeliveryProperty"]], jsii.get(self, "logDelivery"))
 
     @log_delivery.setter
     def log_delivery(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.LogDeliveryProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.LogDeliveryProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__49a29da785c6c8f30f5fc4ffcb9320d7a0377e8c1032eb5ff26ba046ae554772)
@@ -497,12 +498,12 @@ class CfnConnector(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A collection of tags associated with a resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6afece2b4589a6c48de5a35d55d9159549277f37f560c619fd1daf8392fd3534)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -512,14 +513,14 @@ class CfnConnector(
     @jsii.member(jsii_name="workerConfiguration")
     def worker_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.WorkerConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.WorkerConfigurationProperty"]]:
         '''The worker configurations that are in use with the connector.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.WorkerConfigurationProperty"]], jsii.get(self, "workerConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.WorkerConfigurationProperty"]], jsii.get(self, "workerConfiguration"))
 
     @worker_configuration.setter
     def worker_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.WorkerConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.WorkerConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__17aecc33a40fa4008d52fdd6c617a4bffcf013ba695a96ef9a4694b70b03b576)
@@ -536,7 +537,7 @@ class CfnConnector(
             self,
             *,
             bootstrap_servers: builtins.str,
-            vpc: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.VpcProperty", typing.Dict[builtins.str, typing.Any]]],
+            vpc: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.VpcProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The details of the Apache Kafka cluster to which the connector is connected.
 
@@ -582,14 +583,14 @@ class CfnConnector(
         @builtins.property
         def vpc(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.VpcProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.VpcProperty"]:
             '''Details of an Amazon VPC which has network connectivity to the Apache Kafka cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-apachekafkacluster.html#cfn-kafkaconnect-connector-apachekafkacluster-vpc
             '''
             result = self._values.get("vpc")
             assert result is not None, "Required property 'vpc' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.VpcProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.VpcProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -620,8 +621,8 @@ class CfnConnector(
             max_worker_count: jsii.Number,
             mcu_count: jsii.Number,
             min_worker_count: jsii.Number,
-            scale_in_policy: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.ScaleInPolicyProperty", typing.Dict[builtins.str, typing.Any]]],
-            scale_out_policy: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.ScaleOutPolicyProperty", typing.Dict[builtins.str, typing.Any]]],
+            scale_in_policy: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.ScaleInPolicyProperty", typing.Dict[builtins.str, typing.Any]]],
+            scale_out_policy: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.ScaleOutPolicyProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Specifies how the connector scales.
 
@@ -702,26 +703,26 @@ class CfnConnector(
         @builtins.property
         def scale_in_policy(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.ScaleInPolicyProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.ScaleInPolicyProperty"]:
             '''The sacle-in policy for the connector.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-autoscaling.html#cfn-kafkaconnect-connector-autoscaling-scaleinpolicy
             '''
             result = self._values.get("scale_in_policy")
             assert result is not None, "Required property 'scale_in_policy' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.ScaleInPolicyProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.ScaleInPolicyProperty"], result)
 
         @builtins.property
         def scale_out_policy(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.ScaleOutPolicyProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.ScaleOutPolicyProperty"]:
             '''The sacle-out policy for the connector.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-autoscaling.html#cfn-kafkaconnect-connector-autoscaling-scaleoutpolicy
             '''
             result = self._values.get("scale_out_policy")
             assert result is not None, "Required property 'scale_out_policy' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.ScaleOutPolicyProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.ScaleOutPolicyProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -746,8 +747,8 @@ class CfnConnector(
         def __init__(
             self,
             *,
-            auto_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.AutoScalingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            provisioned_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.ProvisionedCapacityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            auto_scaling: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.AutoScalingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            provisioned_capacity: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.ProvisionedCapacityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Information about the capacity of the connector, whether it is auto scaled or provisioned.
 
@@ -796,24 +797,24 @@ class CfnConnector(
         @builtins.property
         def auto_scaling(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.AutoScalingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.AutoScalingProperty"]]:
             '''Information about the auto scaling parameters for the connector.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-capacity.html#cfn-kafkaconnect-connector-capacity-autoscaling
             '''
             result = self._values.get("auto_scaling")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.AutoScalingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.AutoScalingProperty"]], result)
 
         @builtins.property
         def provisioned_capacity(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.ProvisionedCapacityProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.ProvisionedCapacityProperty"]]:
             '''Details about a fixed capacity allocated to a connector.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-capacity.html#cfn-kafkaconnect-connector-capacity-provisionedcapacity
             '''
             result = self._values.get("provisioned_capacity")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.ProvisionedCapacityProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.ProvisionedCapacityProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -835,7 +836,7 @@ class CfnConnector(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             log_group: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The settings for delivering connector logs to Amazon CloudWatch Logs.
@@ -870,14 +871,14 @@ class CfnConnector(
                 self._values["log_group"] = log_group
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Whether log delivery to Amazon CloudWatch Logs is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-cloudwatchlogslogdelivery.html#cfn-kafkaconnect-connector-cloudwatchlogslogdelivery-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def log_group(self) -> typing.Optional[builtins.str]:
@@ -979,7 +980,7 @@ class CfnConnector(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             delivery_stream: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The settings for delivering logs to Amazon Kinesis Data Firehose.
@@ -1014,14 +1015,14 @@ class CfnConnector(
                 self._values["delivery_stream"] = delivery_stream
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Specifies whether connector logs get delivered to Amazon Kinesis Data Firehose.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-firehoselogdelivery.html#cfn-kafkaconnect-connector-firehoselogdelivery-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def delivery_stream(self) -> typing.Optional[builtins.str]:
@@ -1158,7 +1159,7 @@ class CfnConnector(
         def __init__(
             self,
             *,
-            apache_kafka_cluster: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.ApacheKafkaClusterProperty", typing.Dict[builtins.str, typing.Any]]],
+            apache_kafka_cluster: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.ApacheKafkaClusterProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The details of the Apache Kafka cluster to which the connector is connected.
 
@@ -1193,14 +1194,14 @@ class CfnConnector(
         @builtins.property
         def apache_kafka_cluster(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.ApacheKafkaClusterProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.ApacheKafkaClusterProperty"]:
             '''The Apache Kafka cluster to which the connector is connected.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-kafkacluster.html#cfn-kafkaconnect-connector-kafkacluster-apachekafkacluster
             '''
             result = self._values.get("apache_kafka_cluster")
             assert result is not None, "Required property 'apache_kafka_cluster' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.ApacheKafkaClusterProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.ApacheKafkaClusterProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1222,7 +1223,7 @@ class CfnConnector(
         def __init__(
             self,
             *,
-            worker_log_delivery: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.WorkerLogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]],
+            worker_log_delivery: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.WorkerLogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Details about log delivery.
 
@@ -1271,7 +1272,7 @@ class CfnConnector(
         @builtins.property
         def worker_log_delivery(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.WorkerLogDeliveryProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.WorkerLogDeliveryProperty"]:
             '''The workers can send worker logs to different destination types.
 
             This configuration specifies the details of these destinations.
@@ -1280,7 +1281,7 @@ class CfnConnector(
             '''
             result = self._values.get("worker_log_delivery")
             assert result is not None, "Required property 'worker_log_delivery' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.WorkerLogDeliveryProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.WorkerLogDeliveryProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1302,7 +1303,7 @@ class CfnConnector(
         def __init__(
             self,
             *,
-            custom_plugin: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.CustomPluginProperty", typing.Dict[builtins.str, typing.Any]]],
+            custom_plugin: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.CustomPluginProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''A plugin is an AWS resource that contains the code that defines your connector logic.
 
@@ -1334,14 +1335,14 @@ class CfnConnector(
         @builtins.property
         def custom_plugin(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.CustomPluginProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.CustomPluginProperty"]:
             '''Details about a custom plugin.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-plugin.html#cfn-kafkaconnect-connector-plugin-customplugin
             '''
             result = self._values.get("custom_plugin")
             assert result is not None, "Required property 'custom_plugin' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.CustomPluginProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.CustomPluginProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1438,7 +1439,7 @@ class CfnConnector(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             bucket: typing.Optional[builtins.str] = None,
             prefix: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -1479,14 +1480,14 @@ class CfnConnector(
                 self._values["prefix"] = prefix
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Specifies whether connector logs get sent to the specified Amazon S3 destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-s3logdelivery.html#cfn-kafkaconnect-connector-s3logdelivery-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def bucket(self) -> typing.Optional[builtins.str]:
@@ -1779,9 +1780,9 @@ class CfnConnector(
         def __init__(
             self,
             *,
-            cloud_watch_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.CloudWatchLogsLogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            firehose: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.FirehoseLogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.S3LogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.CloudWatchLogsLogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            firehose: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.FirehoseLogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.S3LogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Workers can send worker logs to different destination types.
 
@@ -1838,35 +1839,35 @@ class CfnConnector(
         @builtins.property
         def cloud_watch_logs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.CloudWatchLogsLogDeliveryProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.CloudWatchLogsLogDeliveryProperty"]]:
             '''Details about delivering logs to Amazon CloudWatch Logs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-workerlogdelivery.html#cfn-kafkaconnect-connector-workerlogdelivery-cloudwatchlogs
             '''
             result = self._values.get("cloud_watch_logs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.CloudWatchLogsLogDeliveryProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.CloudWatchLogsLogDeliveryProperty"]], result)
 
         @builtins.property
         def firehose(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.FirehoseLogDeliveryProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.FirehoseLogDeliveryProperty"]]:
             '''Details about delivering logs to Amazon Kinesis Data Firehose.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-workerlogdelivery.html#cfn-kafkaconnect-connector-workerlogdelivery-firehose
             '''
             result = self._values.get("firehose")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.FirehoseLogDeliveryProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.FirehoseLogDeliveryProperty"]], result)
 
         @builtins.property
         def s3(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.S3LogDeliveryProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.S3LogDeliveryProperty"]]:
             '''Details about delivering logs to Amazon S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-connector-workerlogdelivery.html#cfn-kafkaconnect-connector-workerlogdelivery-s3
             '''
             result = self._values.get("s3")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.S3LogDeliveryProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.S3LogDeliveryProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1903,19 +1904,19 @@ class CfnConnectorProps:
     def __init__(
         self,
         *,
-        capacity: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.CapacityProperty, typing.Dict[builtins.str, typing.Any]]],
-        connector_configuration: typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b],
+        capacity: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.CapacityProperty", typing.Dict[builtins.str, typing.Any]]],
+        connector_configuration: typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"],
         connector_name: builtins.str,
-        kafka_cluster: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.KafkaClusterProperty, typing.Dict[builtins.str, typing.Any]]],
-        kafka_cluster_client_authentication: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.KafkaClusterClientAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]],
-        kafka_cluster_encryption_in_transit: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.KafkaClusterEncryptionInTransitProperty, typing.Dict[builtins.str, typing.Any]]],
+        kafka_cluster: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.KafkaClusterProperty", typing.Dict[builtins.str, typing.Any]]],
+        kafka_cluster_client_authentication: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.KafkaClusterClientAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]],
+        kafka_cluster_encryption_in_transit: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.KafkaClusterEncryptionInTransitProperty", typing.Dict[builtins.str, typing.Any]]],
         kafka_connect_version: builtins.str,
-        plugins: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.PluginProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        plugins: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.PluginProperty", typing.Dict[builtins.str, typing.Any]]]]],
         service_execution_role_arn: builtins.str,
         connector_description: typing.Optional[builtins.str] = None,
-        log_delivery: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.LogDeliveryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        worker_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.WorkerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        log_delivery: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.LogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        worker_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.WorkerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConnector``.
 
@@ -1938,6 +1939,7 @@ class CfnConnectorProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_kafkaconnect as kafkaconnect
@@ -2063,26 +2065,26 @@ class CfnConnectorProps:
     @builtins.property
     def capacity(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnConnector.CapacityProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.CapacityProperty"]:
         '''The connector's compute capacity settings.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kafkaconnect-connector.html#cfn-kafkaconnect-connector-capacity
         '''
         result = self._values.get("capacity")
         assert result is not None, "Required property 'capacity' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnConnector.CapacityProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.CapacityProperty"], result)
 
     @builtins.property
     def connector_configuration(
         self,
-    ) -> typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]:
+    ) -> typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]:
         '''The configuration of the connector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kafkaconnect-connector.html#cfn-kafkaconnect-connector-connectorconfiguration
         '''
         result = self._values.get("connector_configuration")
         assert result is not None, "Required property 'connector_configuration' is missing"
-        return typing.cast(typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b], result)
+        return typing.cast(typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"], result)
 
     @builtins.property
     def connector_name(self) -> builtins.str:
@@ -2099,19 +2101,19 @@ class CfnConnectorProps:
     @builtins.property
     def kafka_cluster(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnConnector.KafkaClusterProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterProperty"]:
         '''The details of the Apache Kafka cluster to which the connector is connected.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kafkaconnect-connector.html#cfn-kafkaconnect-connector-kafkacluster
         '''
         result = self._values.get("kafka_cluster")
         assert result is not None, "Required property 'kafka_cluster' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnConnector.KafkaClusterProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterProperty"], result)
 
     @builtins.property
     def kafka_cluster_client_authentication(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnConnector.KafkaClusterClientAuthenticationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterClientAuthenticationProperty"]:
         '''The type of client authentication used to connect to the Apache Kafka cluster.
 
         The value is NONE when no client authentication is used.
@@ -2120,19 +2122,19 @@ class CfnConnectorProps:
         '''
         result = self._values.get("kafka_cluster_client_authentication")
         assert result is not None, "Required property 'kafka_cluster_client_authentication' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnConnector.KafkaClusterClientAuthenticationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterClientAuthenticationProperty"], result)
 
     @builtins.property
     def kafka_cluster_encryption_in_transit(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnConnector.KafkaClusterEncryptionInTransitProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterEncryptionInTransitProperty"]:
         '''Details of encryption in transit to the Apache Kafka cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kafkaconnect-connector.html#cfn-kafkaconnect-connector-kafkaclusterencryptionintransit
         '''
         result = self._values.get("kafka_cluster_encryption_in_transit")
         assert result is not None, "Required property 'kafka_cluster_encryption_in_transit' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnConnector.KafkaClusterEncryptionInTransitProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.KafkaClusterEncryptionInTransitProperty"], result)
 
     @builtins.property
     def kafka_connect_version(self) -> builtins.str:
@@ -2149,7 +2151,7 @@ class CfnConnectorProps:
     @builtins.property
     def plugins(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConnector.PluginProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnector.PluginProperty"]]]:
         '''Specifies which plugin to use for the connector.
 
         You must specify a single-element list. Amazon MSK Connect does not currently support specifying multiple plugins.
@@ -2158,7 +2160,7 @@ class CfnConnectorProps:
         '''
         result = self._values.get("plugins")
         assert result is not None, "Required property 'plugins' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConnector.PluginProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnector.PluginProperty"]]], result)
 
     @builtins.property
     def service_execution_role_arn(self) -> builtins.str:
@@ -2182,33 +2184,33 @@ class CfnConnectorProps:
     @builtins.property
     def log_delivery(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.LogDeliveryProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.LogDeliveryProperty"]]:
         '''The settings for delivering connector logs to Amazon CloudWatch Logs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kafkaconnect-connector.html#cfn-kafkaconnect-connector-logdelivery
         '''
         result = self._values.get("log_delivery")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.LogDeliveryProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.LogDeliveryProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A collection of tags associated with a resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kafkaconnect-connector.html#cfn-kafkaconnect-connector-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def worker_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.WorkerConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.WorkerConfigurationProperty"]]:
         '''The worker configurations that are in use with the connector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kafkaconnect-connector.html#cfn-kafkaconnect-connector-workerconfiguration
         '''
         result = self._values.get("worker_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.WorkerConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.WorkerConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2236,6 +2238,7 @@ class CfnCustomPlugin(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_kafkaconnect as kafkaconnect
@@ -2264,14 +2267,14 @@ class CfnCustomPlugin(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         content_type: builtins.str,
-        location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomPlugin.CustomPluginLocationProperty", typing.Dict[builtins.str, typing.Any]]],
+        location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomPlugin.CustomPluginLocationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::KafkaConnect::CustomPlugin``.
 
@@ -2301,7 +2304,7 @@ class CfnCustomPlugin(
     @builtins.classmethod
     def arn_for_custom_plugin(
         cls,
-        resource: _ICustomPluginRef_ddeca45d,
+        resource: "_ICustomPluginRef_ddeca45d",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2324,7 +2327,7 @@ class CfnCustomPlugin(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCustomPlugin", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2364,12 +2367,12 @@ class CfnCustomPlugin(
 
     @builtins.property
     @jsii.member(jsii_name="attrFileDescription")
-    def attr_file_description(self) -> _IResolvable_da3f097b:
+    def attr_file_description(self) -> "_IResolvable_da3f097b":
         '''Details about the custom plugin file.
 
         :cloudformationAttribute: FileDescription
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrFileDescription"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrFileDescription"))
 
     @builtins.property
     @jsii.member(jsii_name="attrRevision")
@@ -2382,9 +2385,9 @@ class CfnCustomPlugin(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2393,9 +2396,9 @@ class CfnCustomPlugin(
 
     @builtins.property
     @jsii.member(jsii_name="customPluginRef")
-    def custom_plugin_ref(self) -> _CustomPluginReference_944d1765:
+    def custom_plugin_ref(self) -> "_CustomPluginReference_944d1765":
         '''A reference to a CustomPlugin resource.'''
-        return typing.cast(_CustomPluginReference_944d1765, jsii.get(self, "customPluginRef"))
+        return typing.cast("_CustomPluginReference_944d1765", jsii.get(self, "customPluginRef"))
 
     @builtins.property
     @jsii.member(jsii_name="contentType")
@@ -2414,14 +2417,14 @@ class CfnCustomPlugin(
     @jsii.member(jsii_name="location")
     def location(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCustomPlugin.CustomPluginLocationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCustomPlugin.CustomPluginLocationProperty"]:
         '''Information about the location of the custom plugin.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCustomPlugin.CustomPluginLocationProperty"], jsii.get(self, "location"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCustomPlugin.CustomPluginLocationProperty"], jsii.get(self, "location"))
 
     @location.setter
     def location(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCustomPlugin.CustomPluginLocationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCustomPlugin.CustomPluginLocationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7dc28b9198145db094f79802e21f70587ba9ea39d8bf86eecd4baa600f164d5b)
@@ -2456,12 +2459,12 @@ class CfnCustomPlugin(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__11b359e6a300e42bfcb9aa594841d75ad92accb911de61cc64790b7fc061f9fd)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2550,7 +2553,7 @@ class CfnCustomPlugin(
         def __init__(
             self,
             *,
-            s3_location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomPlugin.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+            s3_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomPlugin.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Information about the location of a custom plugin.
 
@@ -2585,14 +2588,14 @@ class CfnCustomPlugin(
         @builtins.property
         def s3_location(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnCustomPlugin.S3LocationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnCustomPlugin.S3LocationProperty"]:
             '''The S3 bucket Amazon Resource Name (ARN), file key, and object version of the plugin file stored in Amazon S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kafkaconnect-customplugin-custompluginlocation.html#cfn-kafkaconnect-customplugin-custompluginlocation-s3location
             '''
             result = self._values.get("s3_location")
             assert result is not None, "Required property 's3_location' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCustomPlugin.S3LocationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCustomPlugin.S3LocationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2714,10 +2717,10 @@ class CfnCustomPluginProps:
         self,
         *,
         content_type: builtins.str,
-        location: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomPlugin.CustomPluginLocationProperty, typing.Dict[builtins.str, typing.Any]]],
+        location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomPlugin.CustomPluginLocationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCustomPlugin``.
 
@@ -2732,6 +2735,7 @@ class CfnCustomPluginProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_kafkaconnect as kafkaconnect
@@ -2787,14 +2791,14 @@ class CfnCustomPluginProps:
     @builtins.property
     def location(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCustomPlugin.CustomPluginLocationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCustomPlugin.CustomPluginLocationProperty"]:
         '''Information about the location of the custom plugin.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kafkaconnect-customplugin.html#cfn-kafkaconnect-customplugin-location
         '''
         result = self._values.get("location")
         assert result is not None, "Required property 'location' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCustomPlugin.CustomPluginLocationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCustomPlugin.CustomPluginLocationProperty"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -2816,13 +2820,13 @@ class CfnCustomPluginProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kafkaconnect-customplugin.html#cfn-kafkaconnect-customplugin-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2850,6 +2854,7 @@ class CfnWorkerConfiguration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_kafkaconnect as kafkaconnect
@@ -2869,13 +2874,13 @@ class CfnWorkerConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         properties_file_content: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::KafkaConnect::WorkerConfiguration``.
 
@@ -2903,7 +2908,7 @@ class CfnWorkerConfiguration(
     @builtins.classmethod
     def arn_for_worker_configuration(
         cls,
-        resource: _IWorkerConfigurationRef_7ea18433,
+        resource: "_IWorkerConfigurationRef_7ea18433",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2926,7 +2931,7 @@ class CfnWorkerConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWorkerConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2975,9 +2980,9 @@ class CfnWorkerConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2986,9 +2991,9 @@ class CfnWorkerConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="workerConfigurationRef")
-    def worker_configuration_ref(self) -> _WorkerConfigurationReference_9e60f2c6:
+    def worker_configuration_ref(self) -> "_WorkerConfigurationReference_9e60f2c6":
         '''A reference to a WorkerConfiguration resource.'''
-        return typing.cast(_WorkerConfigurationReference_9e60f2c6, jsii.get(self, "workerConfigurationRef"))
+        return typing.cast("_WorkerConfigurationReference_9e60f2c6", jsii.get(self, "workerConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -3031,12 +3036,12 @@ class CfnWorkerConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A collection of tags associated with a resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9a36569b41baa16c75dbfb344c8382fd94b5dc82a3a87fd538c07957efff63b2)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3060,7 +3065,7 @@ class CfnWorkerConfigurationProps:
         name: builtins.str,
         properties_file_content: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnWorkerConfiguration``.
 
@@ -3074,6 +3079,7 @@ class CfnWorkerConfigurationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_kafkaconnect as kafkaconnect
@@ -3135,13 +3141,13 @@ class CfnWorkerConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A collection of tags associated with a resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kafkaconnect-workerconfiguration.html#cfn-kafkaconnect-workerconfiguration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

@@ -718,7 +718,7 @@ def _eltwise_usage_rule(
   return [used_out]
 
 
-def _bcast_block_spec(
+def _pull_bcast_block_spec(
     block_spec: pallas_core.BlockSpec, i: int
 ) -> pallas_core.BlockSpec:
   def new_index_map(*args):
@@ -739,6 +739,21 @@ def _bcast_block_spec(
       block_spec.block_shape, i, bcast_dim_block_shape
   )
   return pallas_core.BlockSpec(new_block_shape, new_index_map)
+
+
+def _push_bcast_block_spec(
+    block_spec: pallas_core.BlockSpec,
+    i: int,
+    size: int,
+) -> pallas_core.BlockSpec:
+
+  bcast_dim_block_shape = size
+  if isinstance(block_spec.block_shape[i], pallas_core.Element):
+    bcast_dim_block_shape = pallas_core.Element(size)
+  new_block_shape = util.tuple_update(  # pytype: disable=wrong-arg-types
+      block_spec.block_shape, i, bcast_dim_block_shape
+  )
+  return pallas_core.BlockSpec(new_block_shape, block_spec.index_map)
 
 
 def _binop_usage_rule(prim, ctx, used_out: set[Usage]):
@@ -782,9 +797,9 @@ def _binop_pull_rule(prim, ctx: PullRuleContext, block_spec):
       zip(left_aval.shape, right_aval.shape, strict=True)
   ):
     if l == 1 and r != 1:
-      l_block_spec = _bcast_block_spec(l_block_spec, i)
+      l_block_spec = _pull_bcast_block_spec(l_block_spec, i)
     if r == 1 and l != 1:
-      r_block_spec = _bcast_block_spec(r_block_spec, i)
+      r_block_spec = _pull_bcast_block_spec(r_block_spec, i)
 
   return [l_block_spec, r_block_spec]
 
@@ -2117,6 +2132,23 @@ def _binop_push_rule(
   left_aval, right_aval = ctx.avals_in
   assert isinstance(left_aval, core.ShapedArray)
   assert isinstance(right_aval, core.ShapedArray)
+  if not right_aval.shape:
+    return left_block_spec
+  if not left_aval.shape:
+    return right_block_spec
+  lhs_has_block_spec = left_block_spec is not pallas_core.no_block_spec
+  rhs_has_block_spec = right_block_spec is not pallas_core.no_block_spec
+  if not (lhs_has_block_spec ^ rhs_has_block_spec):
+    # We can only do a push if one of the block specs is unspecified
+    # or they are identical.
+    if left_block_spec is right_block_spec:
+      return left_block_spec
+    raise ValueError('Illegal binary push. One of the block specs must be no_block_spec.')
+  for l, r in zip(left_aval.shape, right_aval.shape, strict=True):
+    if l == 1 and r != 1 and lhs_has_block_spec:
+      raise ValueError('Cannot propagate block spec through LHS broadcast.')
+    if r == 1 and l != 1 and rhs_has_block_spec:
+      raise ValueError('Cannot propagate block spec through RHS broadcast.')
   if left_block_spec is pallas_core.no_block_spec:
     return right_block_spec
   if right_block_spec is pallas_core.no_block_spec:
@@ -2231,7 +2263,6 @@ def _custom_call_hi_primitive_push_block_spec_rule(
     ctx: PullRuleContext, *block_specs, prim
 ):
   return prim.push_block_spec_rule(ctx, block_specs)
-
 
 
 @register_push_block_spec_rule(pjit.jit_p)
@@ -2375,3 +2406,55 @@ def _broadcast_in_dim_push_rule(
     )
 
   return pallas_core.BlockSpec(tuple(new_block_shape), new_index_map)
+
+
+@register_push_block_spec_rule(lax.concatenate_p)
+def _concatenate_push_rule(
+    ctx: PushRuleContext,
+    *block_specs: pallas_core.BlockSpec,
+    dimension: int,
+):
+  avals_in = ctx.avals_in
+  block_shapes = [
+      pallas_core._canonicalize_block_shape(block_spec.block_shape)
+      for block_spec in block_specs
+  ]
+  # We only support concatenation if the entirety of the concat dimension is blocked.
+  assert all(hasattr(aval_in, 'shape') for aval_in in avals_in)
+  if not all(
+      block_shape[dimension] == pallas_core.Blocked(avals_in.shape[dimension])  # pytype: disable=attribute-error
+      for block_shape, avals_in in zip(block_shapes, avals_in)
+  ):
+    raise NotImplementedError(
+        f'concatenate not supported yet: {block_shapes=}, {avals_in=}'
+    )
+  def _new_index_map(*args):
+    all_indices = [block_spec.index_map(*args) for block_spec in block_specs]
+    # This is a very important check. We cannot actually construct a single BlockSpec
+    # for the output of concatenate if the indices are not identical across all the
+    # inputs. This is not something we can always enforce statically, but to be conservative
+    # we apply a very aggressive check. We can consider relaxing this later.
+    if not all(
+        (all_indices[0][i] is all_indices[j][i])
+        for i in range(len(all_indices[0]))
+        for j in range(len(all_indices))
+    ):
+      raise ValueError(
+          'Cannot statically prove that all input blocks to concatenate are the'
+          ' same.'
+      )
+    # If all block indices are the same, we are materializing the full concatenation along
+    # the concat dimension, so we use index 0.
+    base_indices = list(all_indices[0])
+    base_indices[dimension] = 0
+    return tuple(base_indices)
+
+  new_block_shape = list(block_specs[0].block_shape)
+  # Since the entirety of the concat dimension is materialized in the blocks,
+  # the new block size is the sum of the block sizes of the inputs along that
+  # dimension.
+  new_block_shape[dimension] = sum(
+      pallas_core.get_block_size(block_shape[dimension])
+      for block_shape in block_shapes
+  )
+  return pallas_core.BlockSpec(tuple(new_block_shape), _new_index_map)

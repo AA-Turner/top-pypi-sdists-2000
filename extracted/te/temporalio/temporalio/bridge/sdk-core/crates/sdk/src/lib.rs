@@ -10,27 +10,29 @@
 //! ```no_run
 //! use std::{str::FromStr, sync::Arc};
 //! use temporalio_sdk::{sdk_client_options, ActContext, Worker};
-//! use temporalio_sdk_core::{init_worker, Url, CoreRuntime, RuntimeOptionsBuilder};
+//! use temporalio_sdk_core::{init_worker, Url, CoreRuntime, RuntimeOptions};
 //! use temporalio_common::{
-//!     worker::{WorkerConfigBuilder, WorkerVersioningStrategy},
-//!     telemetry::TelemetryOptionsBuilder
+//!     worker::{WorkerConfig, WorkerTaskTypes, WorkerVersioningStrategy},
+//!     telemetry::TelemetryOptions
 //! };
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {
-//!     let server_options = sdk_client_options(Url::from_str("http://localhost:7233")?).build()?;
+//!     let server_options = sdk_client_options(Url::from_str("http://localhost:7233")?).build();
 //!
-//!     let telemetry_options = TelemetryOptionsBuilder::default().build()?;
-//!     let runtime_options = RuntimeOptionsBuilder::default().telemetry_options(telemetry_options).build().unwrap();
+//!     let telemetry_options = TelemetryOptions::builder().build();
+//!     let runtime_options = RuntimeOptions::builder().telemetry_options(telemetry_options).build().unwrap();
 //!     let runtime = CoreRuntime::new_assume_tokio(runtime_options)?;
 //!
 //!     let client = server_options.connect("default", None).await?;
 //!
-//!     let worker_config = WorkerConfigBuilder::default()
+//!     let worker_config = WorkerConfig::builder()
 //!         .namespace("default")
 //!         .task_queue("task_queue")
+//!         .task_types(WorkerTaskTypes::activity_only())
 //!         .versioning_strategy(WorkerVersioningStrategy::None { build_id: "rust-sdk".to_owned() })
-//!         .build()?;
+//!         .build()
+//!         .unwrap();
 //!
 //!     let core_worker = init_worker(&runtime, worker_config, client)?;
 //!
@@ -82,7 +84,7 @@ use std::{
     sync::Arc,
     time::Duration,
 };
-use temporalio_client::ClientOptionsBuilder;
+use temporalio_client::{ClientOptions, ClientOptionsBuilder, client_options_builder};
 use temporalio_common::{
     Worker as CoreWorker,
     errors::PollError,
@@ -128,14 +130,13 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// Returns a [ClientOptionsBuilder] with required fields set to appropriate values
 /// for the Rust SDK.
-pub fn sdk_client_options(url: impl Into<Url>) -> ClientOptionsBuilder {
-    let mut builder = ClientOptionsBuilder::default();
-    builder
+pub fn sdk_client_options(
+    url: impl Into<Url>,
+) -> ClientOptionsBuilder<impl client_options_builder::IsComplete> {
+    ClientOptions::builder()
         .target_url(url)
         .client_name("temporal-rust".to_string())
-        .client_version(VERSION.to_string());
-
-    builder
+        .client_version(VERSION.to_string())
 }
 
 /// A worker that can poll for and respond to workflow tasks by using [WorkflowFunction]s,
@@ -347,7 +348,7 @@ impl Worker {
             wf_completion_processor,
         )?;
 
-        info!("Polling loops exited");
+        debug!("Polling loops exited");
         if let Some(i) = self.common.worker_interceptor.as_ref() {
             i.on_shutdown(self);
         }

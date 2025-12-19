@@ -96,7 +96,7 @@ class IGitHubRepositoryRef(
 
     @builtins.property
     @jsii.member(jsii_name="gitHubRepositoryRef")
-    def git_hub_repository_ref(self) -> GitHubRepositoryReference:
+    def git_hub_repository_ref(self) -> "GitHubRepositoryReference":
         '''(experimental) A reference to a GitHubRepository resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IGitHubRepositoryRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="gitHubRepositoryRef")
-    def git_hub_repository_ref(self) -> GitHubRepositoryReference:
+    def git_hub_repository_ref(self) -> "GitHubRepositoryReference":
         '''(experimental) A reference to a GitHubRepository resource.
 
         :stability: experimental
         '''
-        return typing.cast(GitHubRepositoryReference, jsii.get(self, "gitHubRepositoryRef"))
+        return typing.cast("GitHubRepositoryReference", jsii.get(self, "gitHubRepositoryRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGitHubRepositoryRef).__jsii_proxy_class__ = lambda : _IGitHubRepositoryRefProxy

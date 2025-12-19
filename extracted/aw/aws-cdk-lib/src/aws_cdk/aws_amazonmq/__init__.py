@@ -185,29 +185,29 @@ class CfnBroker(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         broker_name: builtins.str,
         deployment_mode: builtins.str,
         engine_type: builtins.str,
         host_instance_type: builtins.str,
-        publicly_accessible: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        publicly_accessible: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         authentication_strategy: typing.Optional[builtins.str] = None,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBroker.ConfigurationIdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBroker.ConfigurationIdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         data_replication_mode: typing.Optional[builtins.str] = None,
         data_replication_primary_broker_arn: typing.Optional[builtins.str] = None,
-        encryption_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBroker.EncryptionOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBroker.EncryptionOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         engine_version: typing.Optional[builtins.str] = None,
-        ldap_server_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBroker.LdapServerMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBroker.LogListProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        maintenance_window_start_time: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBroker.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ldap_server_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBroker.LdapServerMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBroker.LogListProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        maintenance_window_start_time: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBroker.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
         storage_type: typing.Optional[builtins.str] = None,
         subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnBroker.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        users: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBroker.UserProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        users: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBroker.UserProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AmazonMQ::Broker``.
 
@@ -265,7 +265,7 @@ class CfnBroker(
 
     @jsii.member(jsii_name="arnForBroker")
     @builtins.classmethod
-    def arn_for_broker(cls, resource: _IBrokerRef_bd875819) -> builtins.str:
+    def arn_for_broker(cls, resource: "_IBrokerRef_bd875819") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -287,7 +287,7 @@ class CfnBroker(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBroker", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -444,9 +444,9 @@ class CfnBroker(
 
     @builtins.property
     @jsii.member(jsii_name="brokerRef")
-    def broker_ref(self) -> _BrokerReference_1d1cbbf7:
+    def broker_ref(self) -> "_BrokerReference_1d1cbbf7":
         '''A reference to a Broker resource.'''
-        return typing.cast(_BrokerReference_1d1cbbf7, jsii.get(self, "brokerRef"))
+        return typing.cast("_BrokerReference_1d1cbbf7", jsii.get(self, "brokerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -455,9 +455,9 @@ class CfnBroker(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="brokerName")
@@ -513,14 +513,16 @@ class CfnBroker(
 
     @builtins.property
     @jsii.member(jsii_name="publiclyAccessible")
-    def publicly_accessible(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    def publicly_accessible(
+        self,
+    ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''Enables connections from applications outside of the VPC that hosts the broker's subnets.'''
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], jsii.get(self, "publiclyAccessible"))
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], jsii.get(self, "publiclyAccessible"))
 
     @publicly_accessible.setter
     def publicly_accessible(
         self,
-        value: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        value: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4a82a112ececec828f3c746f7c18e6b6ce32a5aa08550a05a69d7babd8852a7e)
@@ -544,14 +546,14 @@ class CfnBroker(
     @jsii.member(jsii_name="autoMinorVersionUpgrade")
     def auto_minor_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables automatic upgrades to new patch versions for brokers as new versions are released and supported by Amazon MQ.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "autoMinorVersionUpgrade"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "autoMinorVersionUpgrade"))
 
     @auto_minor_version_upgrade.setter
     def auto_minor_version_upgrade(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1becedc098602474059b0aaa465b25ea1b7124443411ed6a42b02d6a5344cdda)
@@ -562,14 +564,14 @@ class CfnBroker(
     @jsii.member(jsii_name="configuration")
     def configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.ConfigurationIdProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.ConfigurationIdProperty"]]:
         '''A list of information about the configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.ConfigurationIdProperty"]], jsii.get(self, "configuration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.ConfigurationIdProperty"]], jsii.get(self, "configuration"))
 
     @configuration.setter
     def configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.ConfigurationIdProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.ConfigurationIdProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0eabdb321f6595584d9f056a97a3a7481faa1ad417f76f3ea42484e5ef0b195f)
@@ -609,14 +611,14 @@ class CfnBroker(
     @jsii.member(jsii_name="encryptionOptions")
     def encryption_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.EncryptionOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.EncryptionOptionsProperty"]]:
         '''Encryption options for the broker.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.EncryptionOptionsProperty"]], jsii.get(self, "encryptionOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.EncryptionOptionsProperty"]], jsii.get(self, "encryptionOptions"))
 
     @encryption_options.setter
     def encryption_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.EncryptionOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.EncryptionOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3846e06a73702f6e76ab386acc1ad9128b00ec2357b3396abf86d893cdbae15d)
@@ -640,14 +642,14 @@ class CfnBroker(
     @jsii.member(jsii_name="ldapServerMetadata")
     def ldap_server_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.LdapServerMetadataProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.LdapServerMetadataProperty"]]:
         '''Optional.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.LdapServerMetadataProperty"]], jsii.get(self, "ldapServerMetadata"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.LdapServerMetadataProperty"]], jsii.get(self, "ldapServerMetadata"))
 
     @ldap_server_metadata.setter
     def ldap_server_metadata(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.LdapServerMetadataProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.LdapServerMetadataProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b8de6a532c388b2fc838b3141f942b6cbbc5d1a796bb76e3fc3fe5a446d932f8)
@@ -658,14 +660,14 @@ class CfnBroker(
     @jsii.member(jsii_name="logs")
     def logs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.LogListProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.LogListProperty"]]:
         '''Enables Amazon CloudWatch logging for brokers.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.LogListProperty"]], jsii.get(self, "logs"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.LogListProperty"]], jsii.get(self, "logs"))
 
     @logs.setter
     def logs(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.LogListProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.LogListProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__36b6d40f90e93b4b35c3ffbb3065567a24c0bd9312758826697afa2118901335)
@@ -676,14 +678,14 @@ class CfnBroker(
     @jsii.member(jsii_name="maintenanceWindowStartTime")
     def maintenance_window_start_time(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.MaintenanceWindowProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.MaintenanceWindowProperty"]]:
         '''The parameters that determine the WeeklyStartTime.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.MaintenanceWindowProperty"]], jsii.get(self, "maintenanceWindowStartTime"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.MaintenanceWindowProperty"]], jsii.get(self, "maintenanceWindowStartTime"))
 
     @maintenance_window_start_time.setter
     def maintenance_window_start_time(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBroker.MaintenanceWindowProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.MaintenanceWindowProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7e2d1a75b2e491fa226b7065a64e24f522ac7be048073da54600cfd720b1240f)
@@ -752,14 +754,14 @@ class CfnBroker(
     @jsii.member(jsii_name="users")
     def users(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnBroker.UserProperty"]]]]:
         '''The list of broker users (persons or applications) who can access queues and topics.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]]], jsii.get(self, "users"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnBroker.UserProperty"]]]], jsii.get(self, "users"))
 
     @users.setter
     def users(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBroker.UserProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnBroker.UserProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__85b9c0c3c3aa438279362aeaae2a3de844ec906edf5b12b7601c78bc63fbfd6b)
@@ -843,7 +845,7 @@ class CfnBroker(
         def __init__(
             self,
             *,
-            use_aws_owned_key: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            use_aws_owned_key: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             kms_key_id: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Encryption options for the broker.
@@ -880,7 +882,7 @@ class CfnBroker(
         @builtins.property
         def use_aws_owned_key(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Enables the use of an AWS owned CMK using AWS  (KMS).
 
             Set to ``true`` by default, if no value is provided, for example, for RabbitMQ brokers.
@@ -889,7 +891,7 @@ class CfnBroker(
             '''
             result = self._values.get("use_aws_owned_key")
             assert result is not None, "Required property 'use_aws_owned_key' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def kms_key_id(self) -> typing.Optional[builtins.str]:
@@ -941,10 +943,10 @@ class CfnBroker(
             user_base: builtins.str,
             user_search_matching: builtins.str,
             role_name: typing.Optional[builtins.str] = None,
-            role_search_subtree: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            role_search_subtree: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             service_account_password: typing.Optional[builtins.str] = None,
             user_role_name: typing.Optional[builtins.str] = None,
-            user_search_subtree: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            user_search_subtree: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Optional.
 
@@ -1084,12 +1086,12 @@ class CfnBroker(
         @builtins.property
         def role_search_subtree(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-rolesearchsubtree
             '''
             result = self._values.get("role_search_subtree")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def service_account_password(self) -> typing.Optional[builtins.str]:
@@ -1110,12 +1112,12 @@ class CfnBroker(
         @builtins.property
         def user_search_subtree(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-ldapservermetadata.html#cfn-amazonmq-broker-ldapservermetadata-usersearchsubtree
             '''
             result = self._values.get("user_search_subtree")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1137,8 +1139,8 @@ class CfnBroker(
         def __init__(
             self,
             *,
-            audit: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            general: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            audit: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            general: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The list of information about logs to be enabled for the specified broker.
 
@@ -1172,7 +1174,7 @@ class CfnBroker(
         @builtins.property
         def audit(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables audit logging.
 
             Every user management action made using JMX or the ActiveMQ Web Console is logged. Does not apply to RabbitMQ brokers.
@@ -1180,18 +1182,18 @@ class CfnBroker(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-loglist.html#cfn-amazonmq-broker-loglist-audit
             '''
             result = self._values.get("audit")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def general(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables general logging.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-loglist.html#cfn-amazonmq-broker-loglist-general
             '''
             result = self._values.get("general")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1379,9 +1381,9 @@ class CfnBroker(
             *,
             password: builtins.str,
             username: builtins.str,
-            console_access: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            console_access: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-            replication_user: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            replication_user: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The list of broker users (persons or applications) who can access queues and topics.
 
@@ -1464,7 +1466,7 @@ class CfnBroker(
         @builtins.property
         def console_access(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables access to the ActiveMQ Web Console for the ActiveMQ user.
 
             Does not apply to RabbitMQ brokers.
@@ -1472,7 +1474,7 @@ class CfnBroker(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-user.html#cfn-amazonmq-broker-user-consoleaccess
             '''
             result = self._values.get("console_access")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def groups(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1488,13 +1490,13 @@ class CfnBroker(
         @builtins.property
         def replication_user(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Defines if this user is intended for CRDR replication purposes.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-user.html#cfn-amazonmq-broker-user-replicationuser
             '''
             result = self._values.get("replication_user")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1542,22 +1544,22 @@ class CfnBrokerProps:
         deployment_mode: builtins.str,
         engine_type: builtins.str,
         host_instance_type: builtins.str,
-        publicly_accessible: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        publicly_accessible: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         authentication_strategy: typing.Optional[builtins.str] = None,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBroker.ConfigurationIdProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBroker.ConfigurationIdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         data_replication_mode: typing.Optional[builtins.str] = None,
         data_replication_primary_broker_arn: typing.Optional[builtins.str] = None,
-        encryption_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBroker.EncryptionOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBroker.EncryptionOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         engine_version: typing.Optional[builtins.str] = None,
-        ldap_server_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBroker.LdapServerMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBroker.LogListProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        maintenance_window_start_time: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBroker.MaintenanceWindowProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        ldap_server_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBroker.LdapServerMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBroker.LogListProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        maintenance_window_start_time: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBroker.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
         storage_type: typing.Optional[builtins.str] = None,
         subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnBroker.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        users: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBroker.UserProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnBroker.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        users: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBroker.UserProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnBroker``.
 
@@ -1768,7 +1770,9 @@ class CfnBrokerProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def publicly_accessible(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    def publicly_accessible(
+        self,
+    ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''Enables connections from applications outside of the VPC that hosts the broker's subnets.
 
         Set to ``false`` by default, if no value is provided.
@@ -1777,7 +1781,7 @@ class CfnBrokerProps:
         '''
         result = self._values.get("publicly_accessible")
         assert result is not None, "Required property 'publicly_accessible' is missing"
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
     @builtins.property
     def authentication_strategy(self) -> typing.Optional[builtins.str]:
@@ -1793,7 +1797,7 @@ class CfnBrokerProps:
     @builtins.property
     def auto_minor_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables automatic upgrades to new patch versions for brokers as new versions are released and supported by Amazon MQ.
 
         Automatic upgrades occur during the scheduled maintenance window or after a manual broker reboot. Set to ``true`` by default, if no value is specified.
@@ -1804,18 +1808,18 @@ class CfnBrokerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-autominorversionupgrade
         '''
         result = self._values.get("auto_minor_version_upgrade")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBroker.ConfigurationIdProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.ConfigurationIdProperty"]]:
         '''A list of information about the configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-configuration
         '''
         result = self._values.get("configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBroker.ConfigurationIdProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.ConfigurationIdProperty"]], result)
 
     @builtins.property
     def data_replication_mode(self) -> typing.Optional[builtins.str]:
@@ -1840,13 +1844,13 @@ class CfnBrokerProps:
     @builtins.property
     def encryption_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBroker.EncryptionOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.EncryptionOptionsProperty"]]:
         '''Encryption options for the broker.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-encryptionoptions
         '''
         result = self._values.get("encryption_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBroker.EncryptionOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.EncryptionOptionsProperty"]], result)
 
     @builtins.property
     def engine_version(self) -> typing.Optional[builtins.str]:
@@ -1862,7 +1866,7 @@ class CfnBrokerProps:
     @builtins.property
     def ldap_server_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBroker.LdapServerMetadataProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.LdapServerMetadataProperty"]]:
         '''Optional.
 
         The metadata of the LDAP server used to authenticate and authorize connections to the broker. Does not apply to RabbitMQ brokers.
@@ -1870,29 +1874,29 @@ class CfnBrokerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-ldapservermetadata
         '''
         result = self._values.get("ldap_server_metadata")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBroker.LdapServerMetadataProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.LdapServerMetadataProperty"]], result)
 
     @builtins.property
     def logs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBroker.LogListProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.LogListProperty"]]:
         '''Enables Amazon CloudWatch logging for brokers.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-logs
         '''
         result = self._values.get("logs")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBroker.LogListProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.LogListProperty"]], result)
 
     @builtins.property
     def maintenance_window_start_time(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBroker.MaintenanceWindowProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.MaintenanceWindowProperty"]]:
         '''The parameters that determine the WeeklyStartTime.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-maintenancewindowstarttime
         '''
         result = self._values.get("maintenance_window_start_time")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBroker.MaintenanceWindowProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBroker.MaintenanceWindowProperty"]], result)
 
     @builtins.property
     def security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1927,18 +1931,18 @@ class CfnBrokerProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[CfnBroker.TagsEntryProperty]]:
+    def tags(self) -> typing.Optional[typing.List["CfnBroker.TagsEntryProperty"]]:
         '''Create tags when creating the broker.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnBroker.TagsEntryProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnBroker.TagsEntryProperty"]], result)
 
     @builtins.property
     def users(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnBroker.UserProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnBroker.UserProperty"]]]]:
         '''The list of broker users (persons or applications) who can access queues and topics.
 
         For Amazon MQ for RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent broker users are created by making RabbitMQ API calls directly to brokers or via the RabbitMQ web console.
@@ -1948,7 +1952,7 @@ class CfnBrokerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-users
         '''
         result = self._values.get("users")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnBroker.UserProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnBroker.UserProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2000,7 +2004,7 @@ class CfnConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         engine_type: builtins.str,
@@ -2043,7 +2047,7 @@ class CfnConfiguration(
     @builtins.classmethod
     def arn_for_configuration(
         cls,
-        resource: _IConfigurationRef_769e84b9,
+        resource: "_IConfigurationRef_769e84b9",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2057,10 +2061,10 @@ class CfnConfiguration(
     @builtins.classmethod
     def from_configuration_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IConfigurationRef_769e84b9:
+    ) -> "_IConfigurationRef_769e84b9":
         '''Creates a new IConfigurationRef from an ARN.
 
         :param scope: -
@@ -2072,16 +2076,16 @@ class CfnConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IConfigurationRef_769e84b9, jsii.sinvoke(cls, "fromConfigurationArn", [scope, id, arn]))
+        return typing.cast("_IConfigurationRef_769e84b9", jsii.sinvoke(cls, "fromConfigurationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromConfigurationId")
     @builtins.classmethod
     def from_configuration_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         configuration_id: builtins.str,
-    ) -> _IConfigurationRef_769e84b9:
+    ) -> "_IConfigurationRef_769e84b9":
         '''Creates a new IConfigurationRef from a configurationId.
 
         :param scope: -
@@ -2093,7 +2097,7 @@ class CfnConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument configuration_id", value=configuration_id, expected_type=type_hints["configuration_id"])
-        return typing.cast(_IConfigurationRef_769e84b9, jsii.sinvoke(cls, "fromConfigurationId", [scope, id, configuration_id]))
+        return typing.cast("_IConfigurationRef_769e84b9", jsii.sinvoke(cls, "fromConfigurationId", [scope, id, configuration_id]))
 
     @jsii.member(jsii_name="isCfnConfiguration")
     @builtins.classmethod
@@ -2108,7 +2112,7 @@ class CfnConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2177,15 +2181,15 @@ class CfnConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="configurationRef")
-    def configuration_ref(self) -> _ConfigurationReference_19cddfe8:
+    def configuration_ref(self) -> "_ConfigurationReference_19cddfe8":
         '''A reference to a Configuration resource.'''
-        return typing.cast(_ConfigurationReference_19cddfe8, jsii.get(self, "configurationRef"))
+        return typing.cast("_ConfigurationReference_19cddfe8", jsii.get(self, "configurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="engineType")
@@ -2377,11 +2381,11 @@ class CfnConfigurationAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         broker: builtins.str,
-        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationAssociation.ConfigurationIdProperty", typing.Dict[builtins.str, typing.Any]]],
+        configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationAssociation.ConfigurationIdProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::AmazonMQ::ConfigurationAssociation``.
 
@@ -2413,7 +2417,7 @@ class CfnConfigurationAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigurationAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2460,9 +2464,9 @@ class CfnConfigurationAssociation(
     @jsii.member(jsii_name="configurationAssociationRef")
     def configuration_association_ref(
         self,
-    ) -> _ConfigurationAssociationReference_c6685840:
+    ) -> "_ConfigurationAssociationReference_c6685840":
         '''A reference to a ConfigurationAssociation resource.'''
-        return typing.cast(_ConfigurationAssociationReference_c6685840, jsii.get(self, "configurationAssociationRef"))
+        return typing.cast("_ConfigurationAssociationReference_c6685840", jsii.get(self, "configurationAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="broker")
@@ -2481,14 +2485,14 @@ class CfnConfigurationAssociation(
     @jsii.member(jsii_name="configuration")
     def configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnConfigurationAssociation.ConfigurationIdProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConfigurationAssociation.ConfigurationIdProperty"]:
         '''Returns information about all configurations.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConfigurationAssociation.ConfigurationIdProperty"], jsii.get(self, "configuration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfigurationAssociation.ConfigurationIdProperty"], jsii.get(self, "configuration"))
 
     @configuration.setter
     def configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnConfigurationAssociation.ConfigurationIdProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnConfigurationAssociation.ConfigurationIdProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f4880b79512d307d86febbd936290d7f133d94115f216f3f043c71ceab0b3e4c)
@@ -2574,7 +2578,7 @@ class CfnConfigurationAssociationProps:
         self,
         *,
         broker: builtins.str,
-        configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationAssociation.ConfigurationIdProperty, typing.Dict[builtins.str, typing.Any]]],
+        configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationAssociation.ConfigurationIdProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnConfigurationAssociation``.
 
@@ -2620,14 +2624,14 @@ class CfnConfigurationAssociationProps:
     @builtins.property
     def configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnConfigurationAssociation.ConfigurationIdProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConfigurationAssociation.ConfigurationIdProperty"]:
         '''Returns information about all configurations.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configurationassociation.html#cfn-amazonmq-configurationassociation-configuration
         '''
         result = self._values.get("configuration")
         assert result is not None, "Required property 'configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnConfigurationAssociation.ConfigurationIdProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfigurationAssociation.ConfigurationIdProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2664,7 +2668,7 @@ class CfnConfigurationProps:
         data: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnConfiguration.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnConfiguration.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfiguration``.
 
@@ -2791,13 +2795,15 @@ class CfnConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[CfnConfiguration.TagsEntryProperty]]:
+    def tags(
+        self,
+    ) -> typing.Optional[typing.List["CfnConfiguration.TagsEntryProperty"]]:
         '''Create tags when creating the configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-configuration.html#cfn-amazonmq-configuration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnConfiguration.TagsEntryProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnConfiguration.TagsEntryProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

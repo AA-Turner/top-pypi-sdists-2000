@@ -89,6 +89,7 @@ class CfnApplication(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_emrserverless as emrserverless
@@ -196,26 +197,26 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         release_label: builtins.str,
         type: builtins.str,
         architecture: typing.Optional[builtins.str] = None,
-        auto_start_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.AutoStartConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        auto_stop_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.AutoStopConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        identity_center_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.IdentityCenterConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        image_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ImageConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        initial_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.InitialCapacityConfigKeyValuePairProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        interactive_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.InteractiveConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        maximum_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.MaximumAllowedResourcesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_start_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.AutoStartConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_stop_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.AutoStopConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        identity_center_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.IdentityCenterConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        image_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ImageConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_capacity: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.InitialCapacityConfigKeyValuePairProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        interactive_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.InteractiveConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        maximum_capacity: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.MaximumAllowedResourcesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        monitoring_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.NetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        runtime_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ConfigurationObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        scheduler_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.SchedulerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        worker_type_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.WorkerTypeSpecificationInputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        network_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.NetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        runtime_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ConfigurationObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        scheduler_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.SchedulerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        worker_type_specifications: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.WorkerTypeSpecificationInputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::EMRServerless::Application``.
 
@@ -267,7 +268,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_cc4bb3a0) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_cc4bb3a0") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -280,10 +281,10 @@ class CfnApplication(
     @builtins.classmethod
     def from_application_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IApplicationRef_cc4bb3a0:
+    ) -> "_IApplicationRef_cc4bb3a0":
         '''Creates a new IApplicationRef from an ARN.
 
         :param scope: -
@@ -295,16 +296,16 @@ class CfnApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IApplicationRef_cc4bb3a0, jsii.sinvoke(cls, "fromApplicationArn", [scope, id, arn]))
+        return typing.cast("_IApplicationRef_cc4bb3a0", jsii.sinvoke(cls, "fromApplicationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromApplicationId")
     @builtins.classmethod
     def from_application_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         application_id: builtins.str,
-    ) -> _IApplicationRef_cc4bb3a0:
+    ) -> "_IApplicationRef_cc4bb3a0":
         '''Creates a new IApplicationRef from a applicationId.
 
         :param scope: -
@@ -316,7 +317,7 @@ class CfnApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument application_id", value=application_id, expected_type=type_hints["application_id"])
-        return typing.cast(_IApplicationRef_cc4bb3a0, jsii.sinvoke(cls, "fromApplicationId", [scope, id, application_id]))
+        return typing.cast("_IApplicationRef_cc4bb3a0", jsii.sinvoke(cls, "fromApplicationId", [scope, id, application_id]))
 
     @jsii.member(jsii_name="isCfnApplication")
     @builtins.classmethod
@@ -331,7 +332,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -362,9 +363,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_ca86ec38:
+    def application_ref(self) -> "_ApplicationReference_ca86ec38":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_ca86ec38, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_ca86ec38", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrApplicationId")
@@ -391,9 +392,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="releaseLabel")
@@ -438,14 +439,14 @@ class CfnApplication(
     @jsii.member(jsii_name="autoStartConfiguration")
     def auto_start_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.AutoStartConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.AutoStartConfigurationProperty"]]:
         '''The configuration for an application to automatically start on job submission.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.AutoStartConfigurationProperty"]], jsii.get(self, "autoStartConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.AutoStartConfigurationProperty"]], jsii.get(self, "autoStartConfiguration"))
 
     @auto_start_configuration.setter
     def auto_start_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.AutoStartConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.AutoStartConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__250efc466f983b8a885240945cba35864cbd2a6767d45f9c36fd1d25d01092c1)
@@ -456,14 +457,14 @@ class CfnApplication(
     @jsii.member(jsii_name="autoStopConfiguration")
     def auto_stop_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.AutoStopConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.AutoStopConfigurationProperty"]]:
         '''The configuration for an application to automatically stop after a certain amount of time being idle.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.AutoStopConfigurationProperty"]], jsii.get(self, "autoStopConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.AutoStopConfigurationProperty"]], jsii.get(self, "autoStopConfiguration"))
 
     @auto_stop_configuration.setter
     def auto_stop_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.AutoStopConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.AutoStopConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6f1b3d83107f5e408234e2bfc84b1e4ecd5f468b8f46ba51ddf116c1b97908f3)
@@ -474,14 +475,14 @@ class CfnApplication(
     @jsii.member(jsii_name="identityCenterConfiguration")
     def identity_center_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.IdentityCenterConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.IdentityCenterConfigurationProperty"]]:
         '''The IAM Identity Center configuration applied to enable trusted identity propagation.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.IdentityCenterConfigurationProperty"]], jsii.get(self, "identityCenterConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.IdentityCenterConfigurationProperty"]], jsii.get(self, "identityCenterConfiguration"))
 
     @identity_center_configuration.setter
     def identity_center_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.IdentityCenterConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.IdentityCenterConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f1eed40ed1dc7d44d38be43c5f1ba67a1974e1b84a61945af44e0b33ee6910a0)
@@ -492,14 +493,14 @@ class CfnApplication(
     @jsii.member(jsii_name="imageConfiguration")
     def image_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ImageConfigurationInputProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ImageConfigurationInputProperty"]]:
         '''The image configuration applied to all worker types.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ImageConfigurationInputProperty"]], jsii.get(self, "imageConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ImageConfigurationInputProperty"]], jsii.get(self, "imageConfiguration"))
 
     @image_configuration.setter
     def image_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ImageConfigurationInputProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ImageConfigurationInputProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__368a96aa7c6ff916676fe29b5a922fae846a89a5edbb8c71b20a5d60107bff71)
@@ -510,14 +511,14 @@ class CfnApplication(
     @jsii.member(jsii_name="initialCapacity")
     def initial_capacity(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.InitialCapacityConfigKeyValuePairProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.InitialCapacityConfigKeyValuePairProperty"]]]]:
         '''The initial capacity of the application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.InitialCapacityConfigKeyValuePairProperty"]]]], jsii.get(self, "initialCapacity"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.InitialCapacityConfigKeyValuePairProperty"]]]], jsii.get(self, "initialCapacity"))
 
     @initial_capacity.setter
     def initial_capacity(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.InitialCapacityConfigKeyValuePairProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.InitialCapacityConfigKeyValuePairProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ba3bfbe46861fe91b5e1b2fe0373abb6e5b5f46147bf7eb286264343039f5b04)
@@ -528,14 +529,14 @@ class CfnApplication(
     @jsii.member(jsii_name="interactiveConfiguration")
     def interactive_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.InteractiveConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.InteractiveConfigurationProperty"]]:
         '''The interactive configuration object that enables the interactive use cases for an application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.InteractiveConfigurationProperty"]], jsii.get(self, "interactiveConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.InteractiveConfigurationProperty"]], jsii.get(self, "interactiveConfiguration"))
 
     @interactive_configuration.setter
     def interactive_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.InteractiveConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.InteractiveConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a5e2d0378fc995986df3226a55a32f8f98870643c813df22c545aa19c4ef5d06)
@@ -546,14 +547,14 @@ class CfnApplication(
     @jsii.member(jsii_name="maximumCapacity")
     def maximum_capacity(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MaximumAllowedResourcesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MaximumAllowedResourcesProperty"]]:
         '''The maximum capacity of the application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MaximumAllowedResourcesProperty"]], jsii.get(self, "maximumCapacity"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MaximumAllowedResourcesProperty"]], jsii.get(self, "maximumCapacity"))
 
     @maximum_capacity.setter
     def maximum_capacity(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MaximumAllowedResourcesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MaximumAllowedResourcesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__358e38959731258abe08d7ec2ddde30c2f91167a5e3a6ed66750a800db2cf6b2)
@@ -564,14 +565,14 @@ class CfnApplication(
     @jsii.member(jsii_name="monitoringConfiguration")
     def monitoring_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MonitoringConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MonitoringConfigurationProperty"]]:
         '''A configuration specification to be used when provisioning an application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MonitoringConfigurationProperty"]], jsii.get(self, "monitoringConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MonitoringConfigurationProperty"]], jsii.get(self, "monitoringConfiguration"))
 
     @monitoring_configuration.setter
     def monitoring_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MonitoringConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MonitoringConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9899534798dfa06d9a764edbb0466853de6132045ef162d2e77c6ee2692e88ab)
@@ -595,14 +596,14 @@ class CfnApplication(
     @jsii.member(jsii_name="networkConfiguration")
     def network_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.NetworkConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.NetworkConfigurationProperty"]]:
         '''The network configuration for customer VPC connectivity for the application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.NetworkConfigurationProperty"]], jsii.get(self, "networkConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.NetworkConfigurationProperty"]], jsii.get(self, "networkConfiguration"))
 
     @network_configuration.setter
     def network_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.NetworkConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.NetworkConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9c89ab319e8ae68523a39499d53338babf76d8a1fa439e7e46c3daeacb28a4bc)
@@ -613,14 +614,14 @@ class CfnApplication(
     @jsii.member(jsii_name="runtimeConfiguration")
     def runtime_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.ConfigurationObjectProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ConfigurationObjectProperty"]]]]:
         '''The `Configuration <https://docs.aws.amazon.com/emr-serverless/latest/APIReference/API_Configuration.html>`_ specifications of an application. Each configuration consists of a classification and properties. You use this parameter when creating or updating an application. To see the runtimeConfiguration object of an application, run the `GetApplication <https://docs.aws.amazon.com/emr-serverless/latest/APIReference/API_GetApplication.html>`_ API operation.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.ConfigurationObjectProperty"]]]], jsii.get(self, "runtimeConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ConfigurationObjectProperty"]]]], jsii.get(self, "runtimeConfiguration"))
 
     @runtime_configuration.setter
     def runtime_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.ConfigurationObjectProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ConfigurationObjectProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8009c989bc781626fbf3067531c118d2a94649c7cd583ee7c5604a168e732dfa)
@@ -631,14 +632,14 @@ class CfnApplication(
     @jsii.member(jsii_name="schedulerConfiguration")
     def scheduler_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.SchedulerConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.SchedulerConfigurationProperty"]]:
         '''The scheduler configuration for batch and streaming jobs running on this application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.SchedulerConfigurationProperty"]], jsii.get(self, "schedulerConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.SchedulerConfigurationProperty"]], jsii.get(self, "schedulerConfiguration"))
 
     @scheduler_configuration.setter
     def scheduler_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.SchedulerConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.SchedulerConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ae390ce3dee69eb24138412f3ea73ad1784b60ef3e604100dc3a0830ed36116a)
@@ -647,12 +648,12 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags assigned to the application.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c62e07950c8c2fa752bd4e5ac938292f2380eb4b2fc5d19d5f5a2a46e5fc39aa)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -662,14 +663,14 @@ class CfnApplication(
     @jsii.member(jsii_name="workerTypeSpecifications")
     def worker_type_specifications(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnApplication.WorkerTypeSpecificationInputProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnApplication.WorkerTypeSpecificationInputProperty"]]]]:
         '''The specification applied to each worker type.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnApplication.WorkerTypeSpecificationInputProperty"]]]], jsii.get(self, "workerTypeSpecifications"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnApplication.WorkerTypeSpecificationInputProperty"]]]], jsii.get(self, "workerTypeSpecifications"))
 
     @worker_type_specifications.setter
     def worker_type_specifications(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnApplication.WorkerTypeSpecificationInputProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnApplication.WorkerTypeSpecificationInputProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__04bd95d4e436eaf679b9831515cb5d2d9cce5c8686b56c55065b2b99bd9660ea)
@@ -685,7 +686,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The configuration for an application to automatically start on job submission.
 
@@ -714,7 +715,7 @@ class CfnApplication(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables the application to automatically start on job submission.
 
             :default: - true
@@ -722,7 +723,7 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-autostartconfiguration.html#cfn-emrserverless-application-autostartconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -747,7 +748,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             idle_timeout_minutes: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''The configuration for an application to automatically stop after a certain amount of time being idle.
@@ -782,7 +783,7 @@ class CfnApplication(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables the application to automatically stop after a certain amount of time being idle.
 
             Defaults to true.
@@ -792,7 +793,7 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-autostopconfiguration.html#cfn-emrserverless-application-autostopconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def idle_timeout_minutes(self) -> typing.Optional[jsii.Number]:
@@ -831,11 +832,11 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             encryption_key_arn: typing.Optional[builtins.str] = None,
             log_group_name: typing.Optional[builtins.str] = None,
             log_stream_name_prefix: typing.Optional[builtins.str] = None,
-            log_type_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.LogTypeMapKeyValuePairProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            log_type_map: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.LogTypeMapKeyValuePairProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The Amazon CloudWatch configuration for monitoring logs.
 
@@ -889,7 +890,7 @@ class CfnApplication(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables CloudWatch logging.
 
             :default: - false
@@ -897,7 +898,7 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-cloudwatchloggingconfiguration.html#cfn-emrserverless-application-cloudwatchloggingconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def encryption_key_arn(self) -> typing.Optional[builtins.str]:
@@ -929,13 +930,13 @@ class CfnApplication(
         @builtins.property
         def log_type_map(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.LogTypeMapKeyValuePairProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogTypeMapKeyValuePairProperty"]]]]:
             '''The specific log-streams which need to be uploaded to CloudWatch.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-cloudwatchloggingconfiguration.html#cfn-emrserverless-application-cloudwatchloggingconfiguration-logtypemap
             '''
             result = self._values.get("log_type_map")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.LogTypeMapKeyValuePairProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogTypeMapKeyValuePairProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -962,8 +963,8 @@ class CfnApplication(
             self,
             *,
             classification: builtins.str,
-            configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ConfigurationObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ConfigurationObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''A configuration specification to be used when provisioning an application.
 
@@ -1020,24 +1021,24 @@ class CfnApplication(
         @builtins.property
         def configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.ConfigurationObjectProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ConfigurationObjectProperty"]]]]:
             '''A list of additional configurations to apply within a configuration object.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-configurationobject.html#cfn-emrserverless-application-configurationobject-configurations
             '''
             result = self._values.get("configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.ConfigurationObjectProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ConfigurationObjectProperty"]]]], result)
 
         @builtins.property
         def properties(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''A set of properties specified within a configuration classification.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-configurationobject.html#cfn-emrserverless-application-configurationobject-properties
             '''
             result = self._values.get("properties")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1170,7 +1171,7 @@ class CfnApplication(
             self,
             *,
             key: builtins.str,
-            value: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.InitialCapacityConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            value: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.InitialCapacityConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''
             :param key: Worker type for an analytics framework.
@@ -1222,13 +1223,13 @@ class CfnApplication(
         @builtins.property
         def value(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnApplication.InitialCapacityConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.InitialCapacityConfigProperty"]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-initialcapacityconfigkeyvaluepair.html#cfn-emrserverless-application-initialcapacityconfigkeyvaluepair-value
             '''
             result = self._values.get("value")
             assert result is not None, "Required property 'value' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplication.InitialCapacityConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.InitialCapacityConfigProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1253,7 +1254,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            worker_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.WorkerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            worker_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.WorkerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             worker_count: jsii.Number,
         ) -> None:
             '''The initial capacity configuration per worker.
@@ -1294,14 +1295,14 @@ class CfnApplication(
         @builtins.property
         def worker_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnApplication.WorkerConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.WorkerConfigurationProperty"]:
             '''The resource configuration of the initial capacity configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-initialcapacityconfig.html#cfn-emrserverless-application-initialcapacityconfig-workerconfiguration
             '''
             result = self._values.get("worker_configuration")
             assert result is not None, "Required property 'worker_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplication.WorkerConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.WorkerConfigurationProperty"], result)
 
         @builtins.property
         def worker_count(self) -> jsii.Number:
@@ -1336,8 +1337,8 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            livy_endpoint_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            studio_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            livy_endpoint_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            studio_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The configuration to use to enable the different types of interactive use cases in an application.
 
@@ -1371,7 +1372,7 @@ class CfnApplication(
         @builtins.property
         def livy_endpoint_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables an Apache Livy endpoint that you can connect to and run interactive jobs.
 
             :default: - false
@@ -1379,12 +1380,12 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-interactiveconfiguration.html#cfn-emrserverless-application-interactiveconfiguration-livyendpointenabled
             '''
             result = self._values.get("livy_endpoint_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def studio_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables you to connect an application to Amazon EMR Studio to run interactive workloads in a notebook.
 
             :default: - false
@@ -1392,7 +1393,7 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-interactiveconfiguration.html#cfn-emrserverless-application-interactiveconfiguration-studioenabled
             '''
             result = self._values.get("studio_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1483,7 +1484,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             encryption_key_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The managed log persistence configuration for a job run.
@@ -1518,7 +1519,7 @@ class CfnApplication(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables managed logging and defaults to true.
 
             If set to false, managed logging will be turned off.
@@ -1528,7 +1529,7 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-managedpersistencemonitoringconfiguration.html#cfn-emrserverless-application-managedpersistencemonitoringconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def encryption_key_arn(self) -> typing.Optional[builtins.str]:
@@ -1654,10 +1655,10 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            cloud_watch_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.CloudWatchLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            managed_persistence_monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ManagedPersistenceMonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            prometheus_monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.PrometheusMonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.S3MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logging_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.CloudWatchLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            managed_persistence_monitoring_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ManagedPersistenceMonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            prometheus_monitoring_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.PrometheusMonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_monitoring_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.S3MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration setting for monitoring logs.
 
@@ -1718,7 +1719,7 @@ class CfnApplication(
         @builtins.property
         def cloud_watch_logging_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.CloudWatchLoggingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.CloudWatchLoggingConfigurationProperty"]]:
             '''The Amazon CloudWatch configuration for monitoring logs.
 
             You can configure your jobs to send log information to CloudWatch.
@@ -1726,40 +1727,40 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-monitoringconfiguration.html#cfn-emrserverless-application-monitoringconfiguration-cloudwatchloggingconfiguration
             '''
             result = self._values.get("cloud_watch_logging_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.CloudWatchLoggingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.CloudWatchLoggingConfigurationProperty"]], result)
 
         @builtins.property
         def managed_persistence_monitoring_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ManagedPersistenceMonitoringConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ManagedPersistenceMonitoringConfigurationProperty"]]:
             '''The managed log persistence configuration for a job run.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-monitoringconfiguration.html#cfn-emrserverless-application-monitoringconfiguration-managedpersistencemonitoringconfiguration
             '''
             result = self._values.get("managed_persistence_monitoring_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ManagedPersistenceMonitoringConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ManagedPersistenceMonitoringConfigurationProperty"]], result)
 
         @builtins.property
         def prometheus_monitoring_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.PrometheusMonitoringConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.PrometheusMonitoringConfigurationProperty"]]:
             '''The monitoring configuration object you can configure to send metrics to Amazon Managed Service for Prometheus for a job run.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-monitoringconfiguration.html#cfn-emrserverless-application-monitoringconfiguration-prometheusmonitoringconfiguration
             '''
             result = self._values.get("prometheus_monitoring_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.PrometheusMonitoringConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.PrometheusMonitoringConfigurationProperty"]], result)
 
         @builtins.property
         def s3_monitoring_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.S3MonitoringConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.S3MonitoringConfigurationProperty"]]:
             '''The Amazon S3 configuration for monitoring log publishing.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-monitoringconfiguration.html#cfn-emrserverless-application-monitoringconfiguration-s3monitoringconfiguration
             '''
             result = self._values.get("s3_monitoring_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.S3MonitoringConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.S3MonitoringConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2174,7 +2175,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            image_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ImageConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            image_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ImageConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The specifications for a worker type.
 
@@ -2205,13 +2206,13 @@ class CfnApplication(
         @builtins.property
         def image_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ImageConfigurationInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ImageConfigurationInputProperty"]]:
             '''The image configuration for a worker type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-emrserverless-application-workertypespecificationinput.html#cfn-emrserverless-application-workertypespecificationinput-imageconfiguration
             '''
             result = self._values.get("image_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ImageConfigurationInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ImageConfigurationInputProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2255,20 +2256,20 @@ class CfnApplicationProps:
         release_label: builtins.str,
         type: builtins.str,
         architecture: typing.Optional[builtins.str] = None,
-        auto_start_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.AutoStartConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        auto_stop_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.AutoStopConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        identity_center_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.IdentityCenterConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        image_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ImageConfigurationInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        initial_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.InitialCapacityConfigKeyValuePairProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        interactive_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.InteractiveConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        maximum_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.MaximumAllowedResourcesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.MonitoringConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_start_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.AutoStartConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_stop_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.AutoStopConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        identity_center_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.IdentityCenterConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        image_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ImageConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_capacity: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.InitialCapacityConfigKeyValuePairProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        interactive_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.InteractiveConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        maximum_capacity: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.MaximumAllowedResourcesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        monitoring_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.NetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        runtime_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ConfigurationObjectProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        scheduler_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.SchedulerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        worker_type_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.WorkerTypeSpecificationInputProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        network_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.NetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        runtime_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ConfigurationObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        scheduler_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.SchedulerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        worker_type_specifications: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.WorkerTypeSpecificationInputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplication``.
 
@@ -2295,6 +2296,7 @@ class CfnApplicationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_emrserverless as emrserverless
@@ -2485,73 +2487,73 @@ class CfnApplicationProps:
     @builtins.property
     def auto_start_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.AutoStartConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.AutoStartConfigurationProperty"]]:
         '''The configuration for an application to automatically start on job submission.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-autostartconfiguration
         '''
         result = self._values.get("auto_start_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.AutoStartConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.AutoStartConfigurationProperty"]], result)
 
     @builtins.property
     def auto_stop_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.AutoStopConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.AutoStopConfigurationProperty"]]:
         '''The configuration for an application to automatically stop after a certain amount of time being idle.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-autostopconfiguration
         '''
         result = self._values.get("auto_stop_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.AutoStopConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.AutoStopConfigurationProperty"]], result)
 
     @builtins.property
     def identity_center_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.IdentityCenterConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.IdentityCenterConfigurationProperty"]]:
         '''The IAM Identity Center configuration applied to enable trusted identity propagation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-identitycenterconfiguration
         '''
         result = self._values.get("identity_center_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.IdentityCenterConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.IdentityCenterConfigurationProperty"]], result)
 
     @builtins.property
     def image_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.ImageConfigurationInputProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ImageConfigurationInputProperty"]]:
         '''The image configuration applied to all worker types.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-imageconfiguration
         '''
         result = self._values.get("image_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.ImageConfigurationInputProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ImageConfigurationInputProperty"]], result)
 
     @builtins.property
     def initial_capacity(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApplication.InitialCapacityConfigKeyValuePairProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.InitialCapacityConfigKeyValuePairProperty"]]]]:
         '''The initial capacity of the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-initialcapacity
         '''
         result = self._values.get("initial_capacity")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApplication.InitialCapacityConfigKeyValuePairProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.InitialCapacityConfigKeyValuePairProperty"]]]], result)
 
     @builtins.property
     def interactive_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.InteractiveConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.InteractiveConfigurationProperty"]]:
         '''The interactive configuration object that enables the interactive use cases for an application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-interactiveconfiguration
         '''
         result = self._values.get("interactive_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.InteractiveConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.InteractiveConfigurationProperty"]], result)
 
     @builtins.property
     def maximum_capacity(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.MaximumAllowedResourcesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MaximumAllowedResourcesProperty"]]:
         '''The maximum capacity of the application.
 
         This is cumulative across all workers at any given point in time during the lifespan of the application is created. No new resources will be created once any one of the defined limits is hit.
@@ -2559,12 +2561,12 @@ class CfnApplicationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-maximumcapacity
         '''
         result = self._values.get("maximum_capacity")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.MaximumAllowedResourcesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MaximumAllowedResourcesProperty"]], result)
 
     @builtins.property
     def monitoring_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.MonitoringConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MonitoringConfigurationProperty"]]:
         '''A configuration specification to be used when provisioning an application.
 
         A configuration consists of a classification, properties, and optional nested configurations. A classification refers to an application-specific configuration file. Properties are the settings you want to change in that file.
@@ -2572,7 +2574,7 @@ class CfnApplicationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-monitoringconfiguration
         '''
         result = self._values.get("monitoring_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.MonitoringConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MonitoringConfigurationProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -2586,29 +2588,29 @@ class CfnApplicationProps:
     @builtins.property
     def network_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.NetworkConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.NetworkConfigurationProperty"]]:
         '''The network configuration for customer VPC connectivity for the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-networkconfiguration
         '''
         result = self._values.get("network_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.NetworkConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.NetworkConfigurationProperty"]], result)
 
     @builtins.property
     def runtime_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApplication.ConfigurationObjectProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ConfigurationObjectProperty"]]]]:
         '''The `Configuration <https://docs.aws.amazon.com/emr-serverless/latest/APIReference/API_Configuration.html>`_ specifications of an application. Each configuration consists of a classification and properties. You use this parameter when creating or updating an application. To see the runtimeConfiguration object of an application, run the `GetApplication <https://docs.aws.amazon.com/emr-serverless/latest/APIReference/API_GetApplication.html>`_ API operation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-runtimeconfiguration
         '''
         result = self._values.get("runtime_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApplication.ConfigurationObjectProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ConfigurationObjectProperty"]]]], result)
 
     @builtins.property
     def scheduler_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.SchedulerConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.SchedulerConfigurationProperty"]]:
         '''The scheduler configuration for batch and streaming jobs running on this application.
 
         Supported with release labels emr-7.0.0 and above.
@@ -2616,27 +2618,27 @@ class CfnApplicationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-schedulerconfiguration
         '''
         result = self._values.get("scheduler_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.SchedulerConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.SchedulerConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags assigned to the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def worker_type_specifications(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnApplication.WorkerTypeSpecificationInputProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnApplication.WorkerTypeSpecificationInputProperty"]]]]:
         '''The specification applied to each worker type.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrserverless-application.html#cfn-emrserverless-application-workertypespecifications
         '''
         result = self._values.get("worker_type_specifications")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnApplication.WorkerTypeSpecificationInputProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnApplication.WorkerTypeSpecificationInputProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

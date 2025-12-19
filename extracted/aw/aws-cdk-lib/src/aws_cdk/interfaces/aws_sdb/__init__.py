@@ -96,7 +96,7 @@ class IDomainRef(
 
     @builtins.property
     @jsii.member(jsii_name="domainRef")
-    def domain_ref(self) -> DomainReference:
+    def domain_ref(self) -> "DomainReference":
         '''(experimental) A reference to a Domain resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IDomainRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="domainRef")
-    def domain_ref(self) -> DomainReference:
+    def domain_ref(self) -> "DomainReference":
         '''(experimental) A reference to a Domain resource.
 
         :stability: experimental
         '''
-        return typing.cast(DomainReference, jsii.get(self, "domainRef"))
+        return typing.cast("DomainReference", jsii.get(self, "domainRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDomainRef).__jsii_proxy_class__ = lambda : _IDomainRefProxy

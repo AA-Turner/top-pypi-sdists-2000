@@ -7376,6 +7376,7 @@ class SpotPlacementTypeDef(TypedDict):
     AvailabilityZone: NotRequired[str]
     GroupName: NotRequired[str]
     Tenancy: NotRequired[TenancyType]
+    AvailabilityZoneId: NotRequired[str]
 
 
 class LaunchTemplateEbsBlockDeviceRequestTypeDef(TypedDict):
@@ -22198,6 +22199,7 @@ class FleetLaunchTemplateOverridesTypeDef(TypedDict):
     InstanceRequirements: NotRequired[InstanceRequirementsOutputTypeDef]
     ImageId: NotRequired[str]
     BlockDeviceMappings: NotRequired[list[BlockDeviceMappingResponseTypeDef]]
+    AvailabilityZoneId: NotRequired[str]
 
 
 class LaunchTemplateOverridesOutputTypeDef(TypedDict):
@@ -22208,6 +22210,7 @@ class LaunchTemplateOverridesOutputTypeDef(TypedDict):
     WeightedCapacity: NotRequired[float]
     Priority: NotRequired[float]
     InstanceRequirements: NotRequired[InstanceRequirementsOutputTypeDef]
+    AvailabilityZoneId: NotRequired[str]
 
 
 class ResponseLaunchTemplateDataTypeDef(TypedDict):
@@ -22288,6 +22291,7 @@ class FleetLaunchTemplateOverridesRequestTypeDef(TypedDict):
     BlockDeviceMappings: NotRequired[Sequence[FleetBlockDeviceMappingRequestTypeDef]]
     InstanceRequirements: NotRequired[InstanceRequirementsRequestTypeDef]
     ImageId: NotRequired[str]
+    AvailabilityZoneId: NotRequired[str]
 
 
 class GetInstanceTypesFromInstanceRequirementsRequestPaginateTypeDef(TypedDict):
@@ -23063,6 +23067,7 @@ class LaunchTemplateOverridesTypeDef(TypedDict):
     WeightedCapacity: NotRequired[float]
     Priority: NotRequired[float]
     InstanceRequirements: NotRequired[InstanceRequirementsUnionTypeDef]
+    AvailabilityZoneId: NotRequired[str]
 
 
 class DescribeFleetsResultTypeDef(TypedDict):

@@ -95,6 +95,7 @@ class CfnConfigurationSet(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_pinpointemail as pinpointemail
@@ -124,15 +125,15 @@ class CfnConfigurationSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        delivery_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSet.DeliveryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        reputation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSet.ReputationOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        sending_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSet.SendingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tracking_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSet.TrackingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        delivery_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.DeliveryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        reputation_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.ReputationOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sending_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.SendingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tracking_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.TrackingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::PinpointEmail::ConfigurationSet``.
 
@@ -173,7 +174,7 @@ class CfnConfigurationSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigurationSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -212,9 +213,9 @@ class CfnConfigurationSet(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -223,9 +224,9 @@ class CfnConfigurationSet(
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetRef")
-    def configuration_set_ref(self) -> _ConfigurationSetReference_889214ce:
+    def configuration_set_ref(self) -> "_ConfigurationSetReference_889214ce":
         '''A reference to a ConfigurationSet resource.'''
-        return typing.cast(_ConfigurationSetReference_889214ce, jsii.get(self, "configurationSetRef"))
+        return typing.cast("_ConfigurationSetReference_889214ce", jsii.get(self, "configurationSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -244,14 +245,14 @@ class CfnConfigurationSet(
     @jsii.member(jsii_name="deliveryOptions")
     def delivery_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.DeliveryOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.DeliveryOptionsProperty"]]:
         '''An object that defines the dedicated IP pool that is used to send emails that you send using the configuration set.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.DeliveryOptionsProperty"]], jsii.get(self, "deliveryOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.DeliveryOptionsProperty"]], jsii.get(self, "deliveryOptions"))
 
     @delivery_options.setter
     def delivery_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.DeliveryOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.DeliveryOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cdcf7f0b3bf6a04a00a0208ead0f7591a2bd56d6ba291c6b4adff7cb91ec5478)
@@ -262,14 +263,14 @@ class CfnConfigurationSet(
     @jsii.member(jsii_name="reputationOptions")
     def reputation_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.ReputationOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.ReputationOptionsProperty"]]:
         '''An object that defines whether or not Amazon Pinpoint collects reputation metrics for the emails that you send that use the configuration set.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.ReputationOptionsProperty"]], jsii.get(self, "reputationOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.ReputationOptionsProperty"]], jsii.get(self, "reputationOptions"))
 
     @reputation_options.setter
     def reputation_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.ReputationOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.ReputationOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__08a035b25a3044f443eb9cde1e8501ee0eede79cdfcd1d0177653d7d73eb455b)
@@ -280,14 +281,14 @@ class CfnConfigurationSet(
     @jsii.member(jsii_name="sendingOptions")
     def sending_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.SendingOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.SendingOptionsProperty"]]:
         '''An object that defines whether or not Amazon Pinpoint can send email that you send using the configuration set.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.SendingOptionsProperty"]], jsii.get(self, "sendingOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.SendingOptionsProperty"]], jsii.get(self, "sendingOptions"))
 
     @sending_options.setter
     def sending_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.SendingOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.SendingOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a002abbcbbddd9fe2b7eeab04bcbf56da40005220f6a6b628394edc7a7e25416)
@@ -296,12 +297,12 @@ class CfnConfigurationSet(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An object that defines the tags (keys and values) that you want to associate with the configuration set.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4e1905ded5be062554dde4d6148690ed8450e064903c4976c9e0eae6a7dd3e7e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -311,14 +312,14 @@ class CfnConfigurationSet(
     @jsii.member(jsii_name="trackingOptions")
     def tracking_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.TrackingOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.TrackingOptionsProperty"]]:
         '''An object that defines the open and click tracking options for emails that you send using the configuration set.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.TrackingOptionsProperty"]], jsii.get(self, "trackingOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.TrackingOptionsProperty"]], jsii.get(self, "trackingOptions"))
 
     @tracking_options.setter
     def tracking_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.TrackingOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.TrackingOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d8a9d08348c04d0e30f1fef6c518db68645e9f8ea6b383d9c916bafb9534f1aa)
@@ -389,7 +390,7 @@ class CfnConfigurationSet(
         def __init__(
             self,
             *,
-            reputation_metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            reputation_metrics_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Enable or disable collection of reputation metrics for emails that you send using this configuration set in the current AWS Region.
 
@@ -418,7 +419,7 @@ class CfnConfigurationSet(
         @builtins.property
         def reputation_metrics_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If ``true`` , tracking of reputation metrics is enabled for the configuration set.
 
             If ``false`` , tracking of reputation metrics is disabled for the configuration set.
@@ -426,7 +427,7 @@ class CfnConfigurationSet(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpointemail-configurationset-reputationoptions.html#cfn-pinpointemail-configurationset-reputationoptions-reputationmetricsenabled
             '''
             result = self._values.get("reputation_metrics_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -448,7 +449,7 @@ class CfnConfigurationSet(
         def __init__(
             self,
             *,
-            sending_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            sending_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Used to enable or disable email sending for messages that use this configuration set in the current AWS Region.
 
@@ -477,7 +478,7 @@ class CfnConfigurationSet(
         @builtins.property
         def sending_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If ``true`` , email sending is enabled for the configuration set.
 
             If ``false`` , email sending is disabled for the configuration set.
@@ -485,7 +486,7 @@ class CfnConfigurationSet(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpointemail-configurationset-sendingoptions.html#cfn-pinpointemail-configurationset-sendingoptions-sendingenabled
             '''
             result = self._values.get("sending_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -613,12 +614,12 @@ class CfnConfigurationSetEventDestination(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         configuration_set_name: builtins.str,
         event_destination_name: builtins.str,
-        event_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSetEventDestination.EventDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSetEventDestination.EventDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::PinpointEmail::ConfigurationSetEventDestination``.
 
@@ -653,7 +654,7 @@ class CfnConfigurationSetEventDestination(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigurationSetEventDestination", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -699,9 +700,9 @@ class CfnConfigurationSetEventDestination(
     @jsii.member(jsii_name="configurationSetEventDestinationRef")
     def configuration_set_event_destination_ref(
         self,
-    ) -> _ConfigurationSetEventDestinationReference_00d23957:
+    ) -> "_ConfigurationSetEventDestinationReference_00d23957":
         '''A reference to a ConfigurationSetEventDestination resource.'''
-        return typing.cast(_ConfigurationSetEventDestinationReference_00d23957, jsii.get(self, "configurationSetEventDestinationRef"))
+        return typing.cast("_ConfigurationSetEventDestinationReference_00d23957", jsii.get(self, "configurationSetEventDestinationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetName")
@@ -733,14 +734,14 @@ class CfnConfigurationSetEventDestination(
     @jsii.member(jsii_name="eventDestination")
     def event_destination(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.EventDestinationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.EventDestinationProperty"]]:
         '''An object that defines the event destination.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.EventDestinationProperty"]], jsii.get(self, "eventDestination"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.EventDestinationProperty"]], jsii.get(self, "eventDestination"))
 
     @event_destination.setter
     def event_destination(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.EventDestinationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.EventDestinationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__da1cbb4828ca2826fd6cc6f4229b9942f7954db47a766c559f870e0067b4ca12)
@@ -756,7 +757,7 @@ class CfnConfigurationSetEventDestination(
         def __init__(
             self,
             *,
-            dimension_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSetEventDestination.DimensionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            dimension_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSetEventDestination.DimensionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''An object that defines an Amazon CloudWatch destination for email events.
 
@@ -791,13 +792,13 @@ class CfnConfigurationSetEventDestination(
         @builtins.property
         def dimension_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.DimensionConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.DimensionConfigurationProperty"]]]]:
             '''An array of objects that define the dimensions to use when you send email events to Amazon CloudWatch.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpointemail-configurationseteventdestination-cloudwatchdestination.html#cfn-pinpointemail-configurationseteventdestination-cloudwatchdestination-dimensionconfigurations
             '''
             result = self._values.get("dimension_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.DimensionConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.DimensionConfigurationProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -931,11 +932,11 @@ class CfnConfigurationSetEventDestination(
             self,
             *,
             matching_event_types: typing.Sequence[builtins.str],
-            cloud_watch_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSetEventDestination.CloudWatchDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            kinesis_firehose_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSetEventDestination.KinesisFirehoseDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            pinpoint_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSetEventDestination.PinpointDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sns_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSetEventDestination.SnsDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSetEventDestination.CloudWatchDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            kinesis_firehose_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSetEventDestination.KinesisFirehoseDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            pinpoint_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSetEventDestination.PinpointDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sns_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSetEventDestination.SnsDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''In Amazon Pinpoint, *events* include message sends, deliveries, opens, clicks, bounces, and complaints.
 
@@ -1018,7 +1019,7 @@ class CfnConfigurationSetEventDestination(
         @builtins.property
         def cloud_watch_destination(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.CloudWatchDestinationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.CloudWatchDestinationProperty"]]:
             '''An object that defines an Amazon CloudWatch destination for email events.
 
             You can use Amazon CloudWatch to monitor and gain insights on your email sending metrics.
@@ -1026,12 +1027,12 @@ class CfnConfigurationSetEventDestination(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpointemail-configurationseteventdestination-eventdestination.html#cfn-pinpointemail-configurationseteventdestination-eventdestination-cloudwatchdestination
             '''
             result = self._values.get("cloud_watch_destination")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.CloudWatchDestinationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.CloudWatchDestinationProperty"]], result)
 
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If ``true`` , the event destination is enabled.
 
             When the event destination is enabled, the specified event types are sent to the destinations in this ``EventDestinationDefinition`` .
@@ -1041,12 +1042,12 @@ class CfnConfigurationSetEventDestination(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpointemail-configurationseteventdestination-eventdestination.html#cfn-pinpointemail-configurationseteventdestination-eventdestination-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def kinesis_firehose_destination(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.KinesisFirehoseDestinationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.KinesisFirehoseDestinationProperty"]]:
             '''An object that defines an Amazon Kinesis Data Firehose destination for email events.
 
             You can use Amazon Kinesis Data Firehose to stream data to other services, such as Amazon S3 and Amazon Redshift.
@@ -1054,12 +1055,12 @@ class CfnConfigurationSetEventDestination(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpointemail-configurationseteventdestination-eventdestination.html#cfn-pinpointemail-configurationseteventdestination-eventdestination-kinesisfirehosedestination
             '''
             result = self._values.get("kinesis_firehose_destination")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.KinesisFirehoseDestinationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.KinesisFirehoseDestinationProperty"]], result)
 
         @builtins.property
         def pinpoint_destination(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.PinpointDestinationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.PinpointDestinationProperty"]]:
             '''An object that defines a Amazon Pinpoint destination for email events.
 
             You can use Amazon Pinpoint events to create attributes in Amazon Pinpoint projects. You can use these attributes to create segments for your campaigns.
@@ -1067,12 +1068,12 @@ class CfnConfigurationSetEventDestination(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpointemail-configurationseteventdestination-eventdestination.html#cfn-pinpointemail-configurationseteventdestination-eventdestination-pinpointdestination
             '''
             result = self._values.get("pinpoint_destination")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.PinpointDestinationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.PinpointDestinationProperty"]], result)
 
         @builtins.property
         def sns_destination(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.SnsDestinationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.SnsDestinationProperty"]]:
             '''An object that defines an Amazon SNS destination for email events.
 
             You can use Amazon SNS to send notification when certain email events occur.
@@ -1080,7 +1081,7 @@ class CfnConfigurationSetEventDestination(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpointemail-configurationseteventdestination-eventdestination.html#cfn-pinpointemail-configurationseteventdestination-eventdestination-snsdestination
             '''
             result = self._values.get("sns_destination")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSetEventDestination.SnsDestinationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.SnsDestinationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1298,7 +1299,7 @@ class CfnConfigurationSetEventDestinationProps:
         *,
         configuration_set_name: builtins.str,
         event_destination_name: builtins.str,
-        event_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSetEventDestination.EventDestinationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSetEventDestination.EventDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfigurationSetEventDestination``.
 
@@ -1380,13 +1381,13 @@ class CfnConfigurationSetEventDestinationProps:
     @builtins.property
     def event_destination(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationSetEventDestination.EventDestinationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.EventDestinationProperty"]]:
         '''An object that defines the event destination.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpointemail-configurationseteventdestination.html#cfn-pinpointemail-configurationseteventdestination-eventdestination
         '''
         result = self._values.get("event_destination")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationSetEventDestination.EventDestinationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSetEventDestination.EventDestinationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1417,11 +1418,11 @@ class CfnConfigurationSetProps:
         self,
         *,
         name: builtins.str,
-        delivery_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSet.DeliveryOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        reputation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSet.ReputationOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        sending_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSet.SendingOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tracking_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSet.TrackingOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        delivery_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.DeliveryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        reputation_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.ReputationOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sending_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.SendingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tracking_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.TrackingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfigurationSet``.
 
@@ -1437,6 +1438,7 @@ class CfnConfigurationSetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_pinpointemail as pinpointemail
@@ -1498,55 +1500,55 @@ class CfnConfigurationSetProps:
     @builtins.property
     def delivery_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationSet.DeliveryOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.DeliveryOptionsProperty"]]:
         '''An object that defines the dedicated IP pool that is used to send emails that you send using the configuration set.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpointemail-configurationset.html#cfn-pinpointemail-configurationset-deliveryoptions
         '''
         result = self._values.get("delivery_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationSet.DeliveryOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.DeliveryOptionsProperty"]], result)
 
     @builtins.property
     def reputation_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationSet.ReputationOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.ReputationOptionsProperty"]]:
         '''An object that defines whether or not Amazon Pinpoint collects reputation metrics for the emails that you send that use the configuration set.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpointemail-configurationset.html#cfn-pinpointemail-configurationset-reputationoptions
         '''
         result = self._values.get("reputation_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationSet.ReputationOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.ReputationOptionsProperty"]], result)
 
     @builtins.property
     def sending_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationSet.SendingOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.SendingOptionsProperty"]]:
         '''An object that defines whether or not Amazon Pinpoint can send email that you send using the configuration set.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpointemail-configurationset.html#cfn-pinpointemail-configurationset-sendingoptions
         '''
         result = self._values.get("sending_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationSet.SendingOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.SendingOptionsProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An object that defines the tags (keys and values) that you want to associate with the configuration set.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpointemail-configurationset.html#cfn-pinpointemail-configurationset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def tracking_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationSet.TrackingOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.TrackingOptionsProperty"]]:
         '''An object that defines the open and click tracking options for emails that you send using the configuration set.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpointemail-configurationset.html#cfn-pinpointemail-configurationset-trackingoptions
         '''
         result = self._values.get("tracking_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationSet.TrackingOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.TrackingOptionsProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1574,6 +1576,7 @@ class CfnDedicatedIpPool(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_pinpointemail as pinpointemail
@@ -1589,11 +1592,11 @@ class CfnDedicatedIpPool(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         pool_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::PinpointEmail::DedicatedIpPool``.
 
@@ -1623,7 +1626,7 @@ class CfnDedicatedIpPool(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDedicatedIpPool", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1662,9 +1665,9 @@ class CfnDedicatedIpPool(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1673,9 +1676,9 @@ class CfnDedicatedIpPool(
 
     @builtins.property
     @jsii.member(jsii_name="dedicatedIpPoolRef")
-    def dedicated_ip_pool_ref(self) -> _DedicatedIpPoolReference_3a54384d:
+    def dedicated_ip_pool_ref(self) -> "_DedicatedIpPoolReference_3a54384d":
         '''A reference to a DedicatedIpPool resource.'''
-        return typing.cast(_DedicatedIpPoolReference_3a54384d, jsii.get(self, "dedicatedIpPoolRef"))
+        return typing.cast("_DedicatedIpPoolReference_3a54384d", jsii.get(self, "dedicatedIpPoolRef"))
 
     @builtins.property
     @jsii.member(jsii_name="poolName")
@@ -1692,12 +1695,12 @@ class CfnDedicatedIpPool(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An object that defines the tags (keys and values) that you want to associate with the dedicated IP pool.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__717209b640ba8aaa41556e1eebf21b07d3a79a0194abd55440b0b7e9eaab3e51)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1714,7 +1717,7 @@ class CfnDedicatedIpPoolProps:
         self,
         *,
         pool_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDedicatedIpPool``.
 
@@ -1726,6 +1729,7 @@ class CfnDedicatedIpPoolProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_pinpointemail as pinpointemail
@@ -1758,13 +1762,13 @@ class CfnDedicatedIpPoolProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An object that defines the tags (keys and values) that you want to associate with the dedicated IP pool.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpointemail-dedicatedippool.html#cfn-pinpointemail-dedicatedippool-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1801,6 +1805,7 @@ class CfnIdentity(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_pinpointemail as pinpointemail
@@ -1824,14 +1829,14 @@ class CfnIdentity(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        dkim_signing_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        feedback_forwarding_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        mail_from_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentity.MailFromAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        dkim_signing_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        feedback_forwarding_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        mail_from_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentity.MailFromAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::PinpointEmail::Identity``.
 
@@ -1870,7 +1875,7 @@ class CfnIdentity(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIdentity", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1965,9 +1970,9 @@ class CfnIdentity(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1976,9 +1981,9 @@ class CfnIdentity(
 
     @builtins.property
     @jsii.member(jsii_name="identityRef")
-    def identity_ref(self) -> _IdentityReference_42470869:
+    def identity_ref(self) -> "_IdentityReference_42470869":
         '''A reference to a Identity resource.'''
-        return typing.cast(_IdentityReference_42470869, jsii.get(self, "identityRef"))
+        return typing.cast("_IdentityReference_42470869", jsii.get(self, "identityRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1997,14 +2002,14 @@ class CfnIdentity(
     @jsii.member(jsii_name="dkimSigningEnabled")
     def dkim_signing_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''For domain identities, this attribute is used to enable or disable DomainKeys Identified Mail (DKIM) signing for the domain.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "dkimSigningEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "dkimSigningEnabled"))
 
     @dkim_signing_enabled.setter
     def dkim_signing_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__12d0a095db592acb68d9c479b2be05bf7557914e245d0d076aed2c2cecf3b945)
@@ -2015,14 +2020,14 @@ class CfnIdentity(
     @jsii.member(jsii_name="feedbackForwardingEnabled")
     def feedback_forwarding_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Used to enable or disable feedback forwarding for an identity.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "feedbackForwardingEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "feedbackForwardingEnabled"))
 
     @feedback_forwarding_enabled.setter
     def feedback_forwarding_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ff82aaaef73393b328387bb3901051117fe4defd7e0c76ae82e9bcdbcccb25fe)
@@ -2033,14 +2038,14 @@ class CfnIdentity(
     @jsii.member(jsii_name="mailFromAttributes")
     def mail_from_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentity.MailFromAttributesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentity.MailFromAttributesProperty"]]:
         '''Used to enable or disable the custom Mail-From domain configuration for an email identity.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentity.MailFromAttributesProperty"]], jsii.get(self, "mailFromAttributes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentity.MailFromAttributesProperty"]], jsii.get(self, "mailFromAttributes"))
 
     @mail_from_attributes.setter
     def mail_from_attributes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentity.MailFromAttributesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentity.MailFromAttributesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__58adb03bd00520402e29450292dd98c03ea130644b0ff31629f5af40200b7411)
@@ -2049,12 +2054,12 @@ class CfnIdentity(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An object that defines the tags (keys and values) that you want to associate with the email identity.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__43129449e96a5f647cffa7f20d0cf0a1c571e88e40b467b90ed004495e72fe4e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2154,10 +2159,10 @@ class CfnIdentityProps:
         self,
         *,
         name: builtins.str,
-        dkim_signing_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        feedback_forwarding_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        mail_from_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdentity.MailFromAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        dkim_signing_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        feedback_forwarding_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        mail_from_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentity.MailFromAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnIdentity``.
 
@@ -2172,6 +2177,7 @@ class CfnIdentityProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_pinpointemail as pinpointemail
@@ -2224,7 +2230,7 @@ class CfnIdentityProps:
     @builtins.property
     def dkim_signing_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''For domain identities, this attribute is used to enable or disable DomainKeys Identified Mail (DKIM) signing for the domain.
 
         If the value is ``true`` , then the messages that you send from the domain are signed using both the DKIM keys for your domain, as well as the keys for the ``amazonses.com`` domain. If the value is ``false`` , then the messages that you send are only signed using the DKIM keys for the ``amazonses.com`` domain.
@@ -2232,12 +2238,12 @@ class CfnIdentityProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpointemail-identity.html#cfn-pinpointemail-identity-dkimsigningenabled
         '''
         result = self._values.get("dkim_signing_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def feedback_forwarding_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Used to enable or disable feedback forwarding for an identity.
 
         This setting determines what happens when an identity is used to send an email that results in a bounce or complaint event.
@@ -2249,27 +2255,27 @@ class CfnIdentityProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpointemail-identity.html#cfn-pinpointemail-identity-feedbackforwardingenabled
         '''
         result = self._values.get("feedback_forwarding_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def mail_from_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIdentity.MailFromAttributesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentity.MailFromAttributesProperty"]]:
         '''Used to enable or disable the custom Mail-From domain configuration for an email identity.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpointemail-identity.html#cfn-pinpointemail-identity-mailfromattributes
         '''
         result = self._values.get("mail_from_attributes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIdentity.MailFromAttributesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentity.MailFromAttributesProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An object that defines the tags (keys and values) that you want to associate with the email identity.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpointemail-identity.html#cfn-pinpointemail-identity-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

@@ -152,15 +152,15 @@ class CfnBrowserCustom(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        network_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnBrowserCustom.BrowserNetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-        browser_signing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBrowserCustom.BrowserSigningProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        network_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnBrowserCustom.BrowserNetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        browser_signing: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBrowserCustom.BrowserSigningProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         execution_role_arn: typing.Optional[builtins.str] = None,
-        recording_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBrowserCustom.RecordingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        recording_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBrowserCustom.RecordingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::BedrockAgentCore::BrowserCustom``.
@@ -195,7 +195,7 @@ class CfnBrowserCustom(
     @builtins.classmethod
     def arn_for_browser_custom(
         cls,
-        resource: _IBrowserCustomRef_f12bfa35,
+        resource: "_IBrowserCustomRef_f12bfa35",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -209,10 +209,10 @@ class CfnBrowserCustom(
     @builtins.classmethod
     def from_browser_custom_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IBrowserCustomRef_f12bfa35:
+    ) -> "_IBrowserCustomRef_f12bfa35":
         '''Creates a new IBrowserCustomRef from an ARN.
 
         :param scope: -
@@ -224,16 +224,16 @@ class CfnBrowserCustom(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IBrowserCustomRef_f12bfa35, jsii.sinvoke(cls, "fromBrowserCustomArn", [scope, id, arn]))
+        return typing.cast("_IBrowserCustomRef_f12bfa35", jsii.sinvoke(cls, "fromBrowserCustomArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromBrowserId")
     @builtins.classmethod
     def from_browser_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         browser_id: builtins.str,
-    ) -> _IBrowserCustomRef_f12bfa35:
+    ) -> "_IBrowserCustomRef_f12bfa35":
         '''Creates a new IBrowserCustomRef from a browserId.
 
         :param scope: -
@@ -245,7 +245,7 @@ class CfnBrowserCustom(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument browser_id", value=browser_id, expected_type=type_hints["browser_id"])
-        return typing.cast(_IBrowserCustomRef_f12bfa35, jsii.sinvoke(cls, "fromBrowserId", [scope, id, browser_id]))
+        return typing.cast("_IBrowserCustomRef_f12bfa35", jsii.sinvoke(cls, "fromBrowserId", [scope, id, browser_id]))
 
     @jsii.member(jsii_name="isCfnBrowserCustom")
     @builtins.classmethod
@@ -260,7 +260,7 @@ class CfnBrowserCustom(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBrowserCustom", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -345,15 +345,15 @@ class CfnBrowserCustom(
 
     @builtins.property
     @jsii.member(jsii_name="browserCustomRef")
-    def browser_custom_ref(self) -> _BrowserCustomReference_ceb8fdba:
+    def browser_custom_ref(self) -> "_BrowserCustomReference_ceb8fdba":
         '''A reference to a BrowserCustom resource.'''
-        return typing.cast(_BrowserCustomReference_ceb8fdba, jsii.get(self, "browserCustomRef"))
+        return typing.cast("_BrowserCustomReference_ceb8fdba", jsii.get(self, "browserCustomRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -377,14 +377,14 @@ class CfnBrowserCustom(
     @jsii.member(jsii_name="networkConfiguration")
     def network_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.BrowserNetworkConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.BrowserNetworkConfigurationProperty"]:
         '''The network configuration for a code interpreter.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.BrowserNetworkConfigurationProperty"], jsii.get(self, "networkConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.BrowserNetworkConfigurationProperty"], jsii.get(self, "networkConfiguration"))
 
     @network_configuration.setter
     def network_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.BrowserNetworkConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.BrowserNetworkConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b89dfccc35ccd0a377234eb3e008038ad66200df7a4f3c63bf61ebf273a7f42e)
@@ -395,14 +395,14 @@ class CfnBrowserCustom(
     @jsii.member(jsii_name="browserSigning")
     def browser_signing(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.BrowserSigningProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.BrowserSigningProperty"]]:
         '''Browser signing configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.BrowserSigningProperty"]], jsii.get(self, "browserSigning"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.BrowserSigningProperty"]], jsii.get(self, "browserSigning"))
 
     @browser_signing.setter
     def browser_signing(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.BrowserSigningProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.BrowserSigningProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__81fba2b1346993fe8f90531b960f456b9bae96a895915ce3c4c9fa5127ad0a23)
@@ -439,14 +439,14 @@ class CfnBrowserCustom(
     @jsii.member(jsii_name="recordingConfig")
     def recording_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.RecordingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.RecordingConfigProperty"]]:
         '''THe custom browser configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.RecordingConfigProperty"]], jsii.get(self, "recordingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.RecordingConfigProperty"]], jsii.get(self, "recordingConfig"))
 
     @recording_config.setter
     def recording_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.RecordingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.RecordingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__089c5a25d69d7c7abf4193f45206b584472351088cbe92835bb014923a48f2e7)
@@ -479,7 +479,7 @@ class CfnBrowserCustom(
             self,
             *,
             network_mode: builtins.str,
-            vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBrowserCustom.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBrowserCustom.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The network configuration.
 
@@ -528,13 +528,13 @@ class CfnBrowserCustom(
         @builtins.property
         def vpc_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.VpcConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.VpcConfigProperty"]]:
             '''Network mode configuration for VPC.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-browsercustom-browsernetworkconfiguration.html#cfn-bedrockagentcore-browsercustom-browsernetworkconfiguration-vpcconfig
             '''
             result = self._values.get("vpc_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.VpcConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.VpcConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -556,7 +556,7 @@ class CfnBrowserCustom(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Browser signing configuration.
 
@@ -585,14 +585,14 @@ class CfnBrowserCustom(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''
             :default: - false
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-browsercustom-browsersigning.html#cfn-bedrockagentcore-browsercustom-browsersigning-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -614,8 +614,8 @@ class CfnBrowserCustom(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBrowserCustom.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            s3_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBrowserCustom.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The recording configuration.
 
@@ -652,7 +652,7 @@ class CfnBrowserCustom(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''The recording configuration for a browser.
 
             This structure defines how browser sessions are recorded.
@@ -662,18 +662,18 @@ class CfnBrowserCustom(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-browsercustom-recordingconfig.html#cfn-bedrockagentcore-browsercustom-recordingconfig-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def s3_location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.S3LocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.S3LocationProperty"]]:
             '''The S3 location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-browsercustom-recordingconfig.html#cfn-bedrockagentcore-browsercustom-recordingconfig-s3location
             '''
             result = self._values.get("s3_location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserCustom.S3LocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.S3LocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -842,11 +842,11 @@ class CfnBrowserCustomProps:
         self,
         *,
         name: builtins.str,
-        network_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBrowserCustom.BrowserNetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-        browser_signing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBrowserCustom.BrowserSigningProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        network_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnBrowserCustom.BrowserNetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        browser_signing: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBrowserCustom.BrowserSigningProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         execution_role_arn: typing.Optional[builtins.str] = None,
-        recording_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBrowserCustom.RecordingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        recording_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBrowserCustom.RecordingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnBrowserCustom``.
@@ -935,7 +935,7 @@ class CfnBrowserCustomProps:
     @builtins.property
     def network_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnBrowserCustom.BrowserNetworkConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.BrowserNetworkConfigurationProperty"]:
         '''The network configuration for a code interpreter.
 
         This structure defines how the code interpreter connects to the network.
@@ -944,18 +944,18 @@ class CfnBrowserCustomProps:
         '''
         result = self._values.get("network_configuration")
         assert result is not None, "Required property 'network_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnBrowserCustom.BrowserNetworkConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.BrowserNetworkConfigurationProperty"], result)
 
     @builtins.property
     def browser_signing(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBrowserCustom.BrowserSigningProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.BrowserSigningProperty"]]:
         '''Browser signing configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-browsercustom.html#cfn-bedrockagentcore-browsercustom-browsersigning
         '''
         result = self._values.get("browser_signing")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBrowserCustom.BrowserSigningProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.BrowserSigningProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -978,13 +978,13 @@ class CfnBrowserCustomProps:
     @builtins.property
     def recording_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBrowserCustom.RecordingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.RecordingConfigProperty"]]:
         '''THe custom browser configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-browsercustom.html#cfn-bedrockagentcore-browsercustom-recordingconfig
         '''
         result = self._values.get("recording_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBrowserCustom.RecordingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBrowserCustom.RecordingConfigProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -1054,11 +1054,11 @@ class CfnCodeInterpreterCustom(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        network_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        network_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
         execution_role_arn: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -1091,7 +1091,7 @@ class CfnCodeInterpreterCustom(
     @builtins.classmethod
     def arn_for_code_interpreter_custom(
         cls,
-        resource: _ICodeInterpreterCustomRef_2d5c05fb,
+        resource: "_ICodeInterpreterCustomRef_2d5c05fb",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1105,10 +1105,10 @@ class CfnCodeInterpreterCustom(
     @builtins.classmethod
     def from_code_interpreter_custom_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ICodeInterpreterCustomRef_2d5c05fb:
+    ) -> "_ICodeInterpreterCustomRef_2d5c05fb":
         '''Creates a new ICodeInterpreterCustomRef from an ARN.
 
         :param scope: -
@@ -1120,16 +1120,16 @@ class CfnCodeInterpreterCustom(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ICodeInterpreterCustomRef_2d5c05fb, jsii.sinvoke(cls, "fromCodeInterpreterCustomArn", [scope, id, arn]))
+        return typing.cast("_ICodeInterpreterCustomRef_2d5c05fb", jsii.sinvoke(cls, "fromCodeInterpreterCustomArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromCodeInterpreterId")
     @builtins.classmethod
     def from_code_interpreter_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         code_interpreter_id: builtins.str,
-    ) -> _ICodeInterpreterCustomRef_2d5c05fb:
+    ) -> "_ICodeInterpreterCustomRef_2d5c05fb":
         '''Creates a new ICodeInterpreterCustomRef from a codeInterpreterId.
 
         :param scope: -
@@ -1141,7 +1141,7 @@ class CfnCodeInterpreterCustom(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument code_interpreter_id", value=code_interpreter_id, expected_type=type_hints["code_interpreter_id"])
-        return typing.cast(_ICodeInterpreterCustomRef_2d5c05fb, jsii.sinvoke(cls, "fromCodeInterpreterId", [scope, id, code_interpreter_id]))
+        return typing.cast("_ICodeInterpreterCustomRef_2d5c05fb", jsii.sinvoke(cls, "fromCodeInterpreterId", [scope, id, code_interpreter_id]))
 
     @jsii.member(jsii_name="isCfnCodeInterpreterCustom")
     @builtins.classmethod
@@ -1156,7 +1156,7 @@ class CfnCodeInterpreterCustom(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCodeInterpreterCustom", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1241,9 +1241,9 @@ class CfnCodeInterpreterCustom(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1252,9 +1252,9 @@ class CfnCodeInterpreterCustom(
 
     @builtins.property
     @jsii.member(jsii_name="codeInterpreterCustomRef")
-    def code_interpreter_custom_ref(self) -> _CodeInterpreterCustomReference_0b253bc0:
+    def code_interpreter_custom_ref(self) -> "_CodeInterpreterCustomReference_0b253bc0":
         '''A reference to a CodeInterpreterCustom resource.'''
-        return typing.cast(_CodeInterpreterCustomReference_0b253bc0, jsii.get(self, "codeInterpreterCustomRef"))
+        return typing.cast("_CodeInterpreterCustomReference_0b253bc0", jsii.get(self, "codeInterpreterCustomRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1273,14 +1273,14 @@ class CfnCodeInterpreterCustom(
     @jsii.member(jsii_name="networkConfiguration")
     def network_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty"]:
         '''The network configuration for a code interpreter.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty"], jsii.get(self, "networkConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty"], jsii.get(self, "networkConfiguration"))
 
     @network_configuration.setter
     def network_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a36911cef74e5cac559eb0b558b639739fba4dccbbc8a224553a0f0a0cace3cd)
@@ -1339,7 +1339,7 @@ class CfnCodeInterpreterCustom(
             self,
             *,
             network_mode: builtins.str,
-            vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCodeInterpreterCustom.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCodeInterpreterCustom.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The network configuration.
 
@@ -1388,13 +1388,13 @@ class CfnCodeInterpreterCustom(
         @builtins.property
         def vpc_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCodeInterpreterCustom.VpcConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCodeInterpreterCustom.VpcConfigProperty"]]:
             '''Network mode configuration for VPC.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-codeinterpretercustom-codeinterpreternetworkconfiguration.html#cfn-bedrockagentcore-codeinterpretercustom-codeinterpreternetworkconfiguration-vpcconfig
             '''
             result = self._values.get("vpc_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCodeInterpreterCustom.VpcConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCodeInterpreterCustom.VpcConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1495,7 +1495,7 @@ class CfnCodeInterpreterCustomProps:
         self,
         *,
         name: builtins.str,
-        network_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        network_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
         execution_role_arn: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -1568,7 +1568,7 @@ class CfnCodeInterpreterCustomProps:
     @builtins.property
     def network_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty"]:
         '''The network configuration for a code interpreter.
 
         This structure defines how the code interpreter connects to the network.
@@ -1577,7 +1577,7 @@ class CfnCodeInterpreterCustomProps:
         '''
         result = self._values.get("network_configuration")
         assert result is not None, "Required property 'network_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCodeInterpreterCustom.CodeInterpreterNetworkConfigurationProperty"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1658,6 +1658,19 @@ class CfnGateway(
             ),
             description="description",
             exception_level="exceptionLevel",
+            interceptor_configurations=[bedrockagentcore.CfnGateway.GatewayInterceptorConfigurationProperty(
+                interception_points=["interceptionPoints"],
+                interceptor=bedrockagentcore.CfnGateway.InterceptorConfigurationProperty(
+                    lambda_=bedrockagentcore.CfnGateway.LambdaInterceptorConfigurationProperty(
+                        arn="arn"
+                    )
+                ),
+        
+                # the properties below are optional
+                input_configuration=bedrockagentcore.CfnGateway.InterceptorInputConfigurationProperty(
+                    pass_request_headers=False
+                )
+            )],
             kms_key_arn="kmsKeyArn",
             protocol_configuration=bedrockagentcore.CfnGateway.GatewayProtocolConfigurationProperty(
                 mcp=bedrockagentcore.CfnGateway.MCPGatewayConfigurationProperty(
@@ -1674,18 +1687,19 @@ class CfnGateway(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         authorizer_type: builtins.str,
         name: builtins.str,
         protocol_type: builtins.str,
         role_arn: builtins.str,
-        authorizer_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGateway.AuthorizerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        authorizer_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGateway.AuthorizerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         exception_level: typing.Optional[builtins.str] = None,
+        interceptor_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGateway.GatewayInterceptorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
-        protocol_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGateway.GatewayProtocolConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        protocol_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGateway.GatewayProtocolConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::BedrockAgentCore::Gateway``.
@@ -1699,6 +1713,7 @@ class CfnGateway(
         :param authorizer_configuration: 
         :param description: The description for the gateway.
         :param exception_level: The exception level for the gateway.
+        :param interceptor_configurations: 
         :param kms_key_arn: The KMS key ARN for the gateway.
         :param protocol_configuration: The protocol configuration for the gateway target.
         :param tags: The tags for the gateway.
@@ -1715,6 +1730,7 @@ class CfnGateway(
             authorizer_configuration=authorizer_configuration,
             description=description,
             exception_level=exception_level,
+            interceptor_configurations=interceptor_configurations,
             kms_key_arn=kms_key_arn,
             protocol_configuration=protocol_configuration,
             tags=tags,
@@ -1724,7 +1740,7 @@ class CfnGateway(
 
     @jsii.member(jsii_name="arnForGateway")
     @builtins.classmethod
-    def arn_for_gateway(cls, resource: _IGatewayRef_a3ed30fe) -> builtins.str:
+    def arn_for_gateway(cls, resource: "_IGatewayRef_a3ed30fe") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1746,7 +1762,7 @@ class CfnGateway(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGateway", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1838,17 +1854,17 @@ class CfnGateway(
 
     @builtins.property
     @jsii.member(jsii_name="attrWorkloadIdentityDetails")
-    def attr_workload_identity_details(self) -> _IResolvable_da3f097b:
+    def attr_workload_identity_details(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: WorkloadIdentityDetails
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrWorkloadIdentityDetails"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrWorkloadIdentityDetails"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1857,9 +1873,9 @@ class CfnGateway(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayRef")
-    def gateway_ref(self) -> _GatewayReference_350c3a07:
+    def gateway_ref(self) -> "_GatewayReference_350c3a07":
         '''A reference to a Gateway resource.'''
-        return typing.cast(_GatewayReference_350c3a07, jsii.get(self, "gatewayRef"))
+        return typing.cast("_GatewayReference_350c3a07", jsii.get(self, "gatewayRef"))
 
     @builtins.property
     @jsii.member(jsii_name="authorizerType")
@@ -1916,13 +1932,13 @@ class CfnGateway(
     @jsii.member(jsii_name="authorizerConfiguration")
     def authorizer_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGateway.AuthorizerConfigurationProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGateway.AuthorizerConfigurationProperty"]], jsii.get(self, "authorizerConfiguration"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGateway.AuthorizerConfigurationProperty"]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGateway.AuthorizerConfigurationProperty"]], jsii.get(self, "authorizerConfiguration"))
 
     @authorizer_configuration.setter
     def authorizer_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGateway.AuthorizerConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGateway.AuthorizerConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8c34ffb86639149c1c6323ad6aa1ec7b9f7d9e7f17a5f5306e5d67d30110ba83)
@@ -1956,6 +1972,23 @@ class CfnGateway(
         jsii.set(self, "exceptionLevel", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="interceptorConfigurations")
+    def interceptor_configurations(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGateway.GatewayInterceptorConfigurationProperty"]]]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGateway.GatewayInterceptorConfigurationProperty"]]]], jsii.get(self, "interceptorConfigurations"))
+
+    @interceptor_configurations.setter
+    def interceptor_configurations(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGateway.GatewayInterceptorConfigurationProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1fa23efd99303a8f763464c84881ac739adef3c104051bc1d3f02ad8262450c5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "interceptorConfigurations", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="kmsKeyArn")
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
         '''The KMS key ARN for the gateway.'''
@@ -1972,14 +2005,14 @@ class CfnGateway(
     @jsii.member(jsii_name="protocolConfiguration")
     def protocol_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGateway.GatewayProtocolConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGateway.GatewayProtocolConfigurationProperty"]]:
         '''The protocol configuration for the gateway target.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGateway.GatewayProtocolConfigurationProperty"]], jsii.get(self, "protocolConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGateway.GatewayProtocolConfigurationProperty"]], jsii.get(self, "protocolConfiguration"))
 
     @protocol_configuration.setter
     def protocol_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGateway.GatewayProtocolConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGateway.GatewayProtocolConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__05982d11a516cc3cf2e986a22173b4993c5267490c660a8f123f9c141f3f117b)
@@ -2011,7 +2044,7 @@ class CfnGateway(
         def __init__(
             self,
             *,
-            custom_jwt_authorizer: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGateway.CustomJWTAuthorizerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            custom_jwt_authorizer: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGateway.CustomJWTAuthorizerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''
             :param custom_jwt_authorizer: The authorizer configuration for the gateway.
@@ -2045,14 +2078,14 @@ class CfnGateway(
         @builtins.property
         def custom_jwt_authorizer(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGateway.CustomJWTAuthorizerConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGateway.CustomJWTAuthorizerConfigurationProperty"]:
             '''The authorizer configuration for the gateway.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gateway-authorizerconfiguration.html#cfn-bedrockagentcore-gateway-authorizerconfiguration-customjwtauthorizer
             '''
             result = self._values.get("custom_jwt_authorizer")
             assert result is not None, "Required property 'custom_jwt_authorizer' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGateway.CustomJWTAuthorizerConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGateway.CustomJWTAuthorizerConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2156,6 +2189,104 @@ class CfnGateway(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGateway.GatewayInterceptorConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "interception_points": "interceptionPoints",
+            "interceptor": "interceptor",
+            "input_configuration": "inputConfiguration",
+        },
+    )
+    class GatewayInterceptorConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            interception_points: typing.Sequence[builtins.str],
+            interceptor: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGateway.InterceptorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            input_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGateway.InterceptorInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param interception_points: 
+            :param interceptor: 
+            :param input_configuration: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gateway-gatewayinterceptorconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                gateway_interceptor_configuration_property = bedrockagentcore.CfnGateway.GatewayInterceptorConfigurationProperty(
+                    interception_points=["interceptionPoints"],
+                    interceptor=bedrockagentcore.CfnGateway.InterceptorConfigurationProperty(
+                        lambda_=bedrockagentcore.CfnGateway.LambdaInterceptorConfigurationProperty(
+                            arn="arn"
+                        )
+                    ),
+                
+                    # the properties below are optional
+                    input_configuration=bedrockagentcore.CfnGateway.InterceptorInputConfigurationProperty(
+                        pass_request_headers=False
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__715cb5162dd44f0620c0da9c35156ecbbe6adcf966dd3dabfefa1ba61c16a0aa)
+                check_type(argname="argument interception_points", value=interception_points, expected_type=type_hints["interception_points"])
+                check_type(argname="argument interceptor", value=interceptor, expected_type=type_hints["interceptor"])
+                check_type(argname="argument input_configuration", value=input_configuration, expected_type=type_hints["input_configuration"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "interception_points": interception_points,
+                "interceptor": interceptor,
+            }
+            if input_configuration is not None:
+                self._values["input_configuration"] = input_configuration
+
+        @builtins.property
+        def interception_points(self) -> typing.List[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gateway-gatewayinterceptorconfiguration.html#cfn-bedrockagentcore-gateway-gatewayinterceptorconfiguration-interceptionpoints
+            '''
+            result = self._values.get("interception_points")
+            assert result is not None, "Required property 'interception_points' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        @builtins.property
+        def interceptor(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGateway.InterceptorConfigurationProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gateway-gatewayinterceptorconfiguration.html#cfn-bedrockagentcore-gateway-gatewayinterceptorconfiguration-interceptor
+            '''
+            result = self._values.get("interceptor")
+            assert result is not None, "Required property 'interceptor' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGateway.InterceptorConfigurationProperty"], result)
+
+        @builtins.property
+        def input_configuration(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGateway.InterceptorInputConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gateway-gatewayinterceptorconfiguration.html#cfn-bedrockagentcore-gateway-gatewayinterceptorconfiguration-inputconfiguration
+            '''
+            result = self._values.get("input_configuration")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGateway.InterceptorInputConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "GatewayInterceptorConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGateway.GatewayProtocolConfigurationProperty",
         jsii_struct_bases=[],
         name_mapping={"mcp": "mcp"},
@@ -2164,7 +2295,7 @@ class CfnGateway(
         def __init__(
             self,
             *,
-            mcp: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGateway.MCPGatewayConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            mcp: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGateway.MCPGatewayConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The protocol configuration.
 
@@ -2197,14 +2328,14 @@ class CfnGateway(
         @builtins.property
         def mcp(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGateway.MCPGatewayConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGateway.MCPGatewayConfigurationProperty"]:
             '''The gateway protocol configuration for MCP.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gateway-gatewayprotocolconfiguration.html#cfn-bedrockagentcore-gateway-gatewayprotocolconfiguration-mcp
             '''
             result = self._values.get("mcp")
             assert result is not None, "Required property 'mcp' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGateway.MCPGatewayConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGateway.MCPGatewayConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2214,6 +2345,170 @@ class CfnGateway(
 
         def __repr__(self) -> str:
             return "GatewayProtocolConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGateway.InterceptorConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"lambda_": "lambda"},
+    )
+    class InterceptorConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            lambda_: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGateway.LambdaInterceptorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''
+            :param lambda_: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gateway-interceptorconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                interceptor_configuration_property = bedrockagentcore.CfnGateway.InterceptorConfigurationProperty(
+                    lambda_=bedrockagentcore.CfnGateway.LambdaInterceptorConfigurationProperty(
+                        arn="arn"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4ca22e725c6291ac4361eed78ba4e61d1c53d3ed16f378864154be6a22b3fbdc)
+                check_type(argname="argument lambda_", value=lambda_, expected_type=type_hints["lambda_"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "lambda_": lambda_,
+            }
+
+        @builtins.property
+        def lambda_(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGateway.LambdaInterceptorConfigurationProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gateway-interceptorconfiguration.html#cfn-bedrockagentcore-gateway-interceptorconfiguration-lambda
+            '''
+            result = self._values.get("lambda_")
+            assert result is not None, "Required property 'lambda_' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGateway.LambdaInterceptorConfigurationProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "InterceptorConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGateway.InterceptorInputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"pass_request_headers": "passRequestHeaders"},
+    )
+    class InterceptorInputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            pass_request_headers: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+        ) -> None:
+            '''
+            :param pass_request_headers: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gateway-interceptorinputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                interceptor_input_configuration_property = bedrockagentcore.CfnGateway.InterceptorInputConfigurationProperty(
+                    pass_request_headers=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__1a99f30cc6576d66eb555d4d72e4d8cc323b7560bf001996fd8ea8a3cbcdee5f)
+                check_type(argname="argument pass_request_headers", value=pass_request_headers, expected_type=type_hints["pass_request_headers"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "pass_request_headers": pass_request_headers,
+            }
+
+        @builtins.property
+        def pass_request_headers(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gateway-interceptorinputconfiguration.html#cfn-bedrockagentcore-gateway-interceptorinputconfiguration-passrequestheaders
+            '''
+            result = self._values.get("pass_request_headers")
+            assert result is not None, "Required property 'pass_request_headers' is missing"
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "InterceptorInputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGateway.LambdaInterceptorConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"arn": "arn"},
+    )
+    class LambdaInterceptorConfigurationProperty:
+        def __init__(self, *, arn: builtins.str) -> None:
+            '''
+            :param arn: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gateway-lambdainterceptorconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                lambda_interceptor_configuration_property = bedrockagentcore.CfnGateway.LambdaInterceptorConfigurationProperty(
+                    arn="arn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4fdc3a3b136445d808e02f01ce34f7cf7f93adae6e8dae1f234c0991d3782da4)
+                check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "arn": arn,
+            }
+
+        @builtins.property
+        def arn(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gateway-lambdainterceptorconfiguration.html#cfn-bedrockagentcore-gateway-lambdainterceptorconfiguration-arn
+            '''
+            result = self._values.get("arn")
+            assert result is not None, "Required property 'arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LambdaInterceptorConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2368,6 +2663,7 @@ class CfnGateway(
         "authorizer_configuration": "authorizerConfiguration",
         "description": "description",
         "exception_level": "exceptionLevel",
+        "interceptor_configurations": "interceptorConfigurations",
         "kms_key_arn": "kmsKeyArn",
         "protocol_configuration": "protocolConfiguration",
         "tags": "tags",
@@ -2381,11 +2677,12 @@ class CfnGatewayProps:
         name: builtins.str,
         protocol_type: builtins.str,
         role_arn: builtins.str,
-        authorizer_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.AuthorizerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        authorizer_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGateway.AuthorizerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         exception_level: typing.Optional[builtins.str] = None,
+        interceptor_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGateway.GatewayInterceptorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
-        protocol_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.GatewayProtocolConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        protocol_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGateway.GatewayProtocolConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnGateway``.
@@ -2397,6 +2694,7 @@ class CfnGatewayProps:
         :param authorizer_configuration: 
         :param description: The description for the gateway.
         :param exception_level: The exception level for the gateway.
+        :param interceptor_configurations: 
         :param kms_key_arn: The KMS key ARN for the gateway.
         :param protocol_configuration: The protocol configuration for the gateway target.
         :param tags: The tags for the gateway.
@@ -2428,6 +2726,19 @@ class CfnGatewayProps:
                 ),
                 description="description",
                 exception_level="exceptionLevel",
+                interceptor_configurations=[bedrockagentcore.CfnGateway.GatewayInterceptorConfigurationProperty(
+                    interception_points=["interceptionPoints"],
+                    interceptor=bedrockagentcore.CfnGateway.InterceptorConfigurationProperty(
+                        lambda_=bedrockagentcore.CfnGateway.LambdaInterceptorConfigurationProperty(
+                            arn="arn"
+                        )
+                    ),
+            
+                    # the properties below are optional
+                    input_configuration=bedrockagentcore.CfnGateway.InterceptorInputConfigurationProperty(
+                        pass_request_headers=False
+                    )
+                )],
                 kms_key_arn="kmsKeyArn",
                 protocol_configuration=bedrockagentcore.CfnGateway.GatewayProtocolConfigurationProperty(
                     mcp=bedrockagentcore.CfnGateway.MCPGatewayConfigurationProperty(
@@ -2450,6 +2761,7 @@ class CfnGatewayProps:
             check_type(argname="argument authorizer_configuration", value=authorizer_configuration, expected_type=type_hints["authorizer_configuration"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
             check_type(argname="argument exception_level", value=exception_level, expected_type=type_hints["exception_level"])
+            check_type(argname="argument interceptor_configurations", value=interceptor_configurations, expected_type=type_hints["interceptor_configurations"])
             check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
             check_type(argname="argument protocol_configuration", value=protocol_configuration, expected_type=type_hints["protocol_configuration"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
@@ -2465,6 +2777,8 @@ class CfnGatewayProps:
             self._values["description"] = description
         if exception_level is not None:
             self._values["exception_level"] = exception_level
+        if interceptor_configurations is not None:
+            self._values["interceptor_configurations"] = interceptor_configurations
         if kms_key_arn is not None:
             self._values["kms_key_arn"] = kms_key_arn
         if protocol_configuration is not None:
@@ -2514,12 +2828,12 @@ class CfnGatewayProps:
     @builtins.property
     def authorizer_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGateway.AuthorizerConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGateway.AuthorizerConfigurationProperty"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gateway.html#cfn-bedrockagentcore-gateway-authorizerconfiguration
         '''
         result = self._values.get("authorizer_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGateway.AuthorizerConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGateway.AuthorizerConfigurationProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -2540,6 +2854,16 @@ class CfnGatewayProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def interceptor_configurations(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGateway.GatewayInterceptorConfigurationProperty"]]]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gateway.html#cfn-bedrockagentcore-gateway-interceptorconfigurations
+        '''
+        result = self._values.get("interceptor_configurations")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGateway.GatewayInterceptorConfigurationProperty"]]]], result)
+
+    @builtins.property
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
         '''The KMS key ARN for the gateway.
 
@@ -2551,13 +2875,13 @@ class CfnGatewayProps:
     @builtins.property
     def protocol_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGateway.GatewayProtocolConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGateway.GatewayProtocolConfigurationProperty"]]:
         '''The protocol configuration for the gateway target.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gateway.html#cfn-bedrockagentcore-gateway-protocolconfiguration
         '''
         result = self._values.get("protocol_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGateway.GatewayProtocolConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGateway.GatewayProtocolConfigurationProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -2697,12 +3021,12 @@ class CfnGatewayTarget(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        credential_provider_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.CredentialProviderConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        credential_provider_configurations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.CredentialProviderConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
-        target_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.TargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        target_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.TargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
         gateway_identifier: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -2743,7 +3067,7 @@ class CfnGatewayTarget(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGatewayTarget", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2840,22 +3164,22 @@ class CfnGatewayTarget(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayTargetRef")
-    def gateway_target_ref(self) -> _GatewayTargetReference_8759ec47:
+    def gateway_target_ref(self) -> "_GatewayTargetReference_8759ec47":
         '''A reference to a GatewayTarget resource.'''
-        return typing.cast(_GatewayTargetReference_8759ec47, jsii.get(self, "gatewayTargetRef"))
+        return typing.cast("_GatewayTargetReference_8759ec47", jsii.get(self, "gatewayTargetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="credentialProviderConfigurations")
     def credential_provider_configurations(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]]:
         '''The OAuth credential provider configuration.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]], jsii.get(self, "credentialProviderConfigurations"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]], jsii.get(self, "credentialProviderConfigurations"))
 
     @credential_provider_configurations.setter
     def credential_provider_configurations(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__087a7adedbf9e4e0e6abc10f84df215c78eebc146c64c53668096978e91820bd)
@@ -2879,14 +3203,14 @@ class CfnGatewayTarget(
     @jsii.member(jsii_name="targetConfiguration")
     def target_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.TargetConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.TargetConfigurationProperty"]:
         '''The target configuration for the Smithy model target.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.TargetConfigurationProperty"], jsii.get(self, "targetConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.TargetConfigurationProperty"], jsii.get(self, "targetConfiguration"))
 
     @target_configuration.setter
     def target_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.TargetConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.TargetConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b8d18e620b511ca77468615f894540073998d43a19f84c7bd4555618e80c9a3d)
@@ -3037,7 +3361,7 @@ class CfnGatewayTarget(
             self,
             *,
             inline_payload: typing.Optional[builtins.str] = None,
-            s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.S3ConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.S3ConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The API schema configuration for the gateway target.
 
@@ -3083,13 +3407,13 @@ class CfnGatewayTarget(
         @builtins.property
         def s3(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.S3ConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.S3ConfigurationProperty"]]:
             '''The API schema configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apischemaconfiguration.html#cfn-bedrockagentcore-gatewaytarget-apischemaconfiguration-s3
             '''
             result = self._values.get("s3")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.S3ConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.S3ConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3115,7 +3439,7 @@ class CfnGatewayTarget(
             self,
             *,
             credential_provider_type: builtins.str,
-            credential_provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.CredentialProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            credential_provider: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.CredentialProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The credential provider configuration for the gateway target.
 
@@ -3179,13 +3503,13 @@ class CfnGatewayTarget(
         @builtins.property
         def credential_provider(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.CredentialProviderProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderProperty"]]:
             '''The credential provider for the gateway target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-credentialproviderconfiguration.html#cfn-bedrockagentcore-gatewaytarget-credentialproviderconfiguration-credentialprovider
             '''
             result = self._values.get("credential_provider")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.CredentialProviderProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3210,8 +3534,8 @@ class CfnGatewayTarget(
         def __init__(
             self,
             *,
-            api_key_credential_provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.ApiKeyCredentialProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            oauth_credential_provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.OAuthCredentialProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            api_key_credential_provider: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.ApiKeyCredentialProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            oauth_credential_provider: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.OAuthCredentialProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''
             :param api_key_credential_provider: The API key credential provider.
@@ -3259,24 +3583,24 @@ class CfnGatewayTarget(
         @builtins.property
         def api_key_credential_provider(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.ApiKeyCredentialProviderProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiKeyCredentialProviderProperty"]]:
             '''The API key credential provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-credentialprovider.html#cfn-bedrockagentcore-gatewaytarget-credentialprovider-apikeycredentialprovider
             '''
             result = self._values.get("api_key_credential_provider")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.ApiKeyCredentialProviderProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiKeyCredentialProviderProperty"]], result)
 
         @builtins.property
         def oauth_credential_provider(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.OAuthCredentialProviderProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.OAuthCredentialProviderProperty"]]:
             '''The OAuth credential provider for the gateway target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-credentialprovider.html#cfn-bedrockagentcore-gatewaytarget-credentialprovider-oauthcredentialprovider
             '''
             result = self._values.get("oauth_credential_provider")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.OAuthCredentialProviderProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.OAuthCredentialProviderProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3299,7 +3623,7 @@ class CfnGatewayTarget(
             self,
             *,
             lambda_arn: builtins.str,
-            tool_schema: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.ToolSchemaProperty", typing.Dict[builtins.str, typing.Any]]],
+            tool_schema: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.ToolSchemaProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The Lambda target configuration.
 
@@ -3377,14 +3701,14 @@ class CfnGatewayTarget(
         @builtins.property
         def tool_schema(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.ToolSchemaProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ToolSchemaProperty"]:
             '''The tool schema configuration for the gateway target MCP configuration for Lambda.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-mcplambdatargetconfiguration.html#cfn-bedrockagentcore-gatewaytarget-mcplambdatargetconfiguration-toolschema
             '''
             result = self._values.get("tool_schema")
             assert result is not None, "Required property 'tool_schema' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.ToolSchemaProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ToolSchemaProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3461,10 +3785,10 @@ class CfnGatewayTarget(
         def __init__(
             self,
             *,
-            lambda_: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.McpLambdaTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            mcp_server: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.McpServerTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            open_api_schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.ApiSchemaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            smithy_model: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.ApiSchemaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lambda_: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.McpLambdaTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mcp_server: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.McpServerTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            open_api_schema: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.ApiSchemaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            smithy_model: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.ApiSchemaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The MCP target configuration for the gateway target.
 
@@ -3560,45 +3884,45 @@ class CfnGatewayTarget(
         @builtins.property
         def lambda_(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.McpLambdaTargetConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.McpLambdaTargetConfigurationProperty"]]:
             '''The Lambda MCP configuration for the gateway target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-mcptargetconfiguration.html#cfn-bedrockagentcore-gatewaytarget-mcptargetconfiguration-lambda
             '''
             result = self._values.get("lambda_")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.McpLambdaTargetConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.McpLambdaTargetConfigurationProperty"]], result)
 
         @builtins.property
         def mcp_server(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.McpServerTargetConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.McpServerTargetConfigurationProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-mcptargetconfiguration.html#cfn-bedrockagentcore-gatewaytarget-mcptargetconfiguration-mcpserver
             '''
             result = self._values.get("mcp_server")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.McpServerTargetConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.McpServerTargetConfigurationProperty"]], result)
 
         @builtins.property
         def open_api_schema(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.ApiSchemaConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiSchemaConfigurationProperty"]]:
             '''The OpenApi schema for the gateway target MCP configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-mcptargetconfiguration.html#cfn-bedrockagentcore-gatewaytarget-mcptargetconfiguration-openapischema
             '''
             result = self._values.get("open_api_schema")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.ApiSchemaConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiSchemaConfigurationProperty"]], result)
 
         @builtins.property
         def smithy_model(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.ApiSchemaConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiSchemaConfigurationProperty"]]:
             '''The target configuration for the Smithy model target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-mcptargetconfiguration.html#cfn-bedrockagentcore-gatewaytarget-mcptargetconfiguration-smithymodel
             '''
             result = self._values.get("smithy_model")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.ApiSchemaConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiSchemaConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3626,7 +3950,7 @@ class CfnGatewayTarget(
             *,
             provider_arn: builtins.str,
             scopes: typing.Sequence[builtins.str],
-            custom_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            custom_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The OAuth credential provider for the gateway target.
 
@@ -3688,13 +4012,13 @@ class CfnGatewayTarget(
         @builtins.property
         def custom_parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The OAuth credential provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-oauthcredentialprovider.html#cfn-bedrockagentcore-gatewaytarget-oauthcredentialprovider-customparameters
             '''
             result = self._values.get("custom_parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3794,8 +4118,8 @@ class CfnGatewayTarget(
             *,
             type: builtins.str,
             description: typing.Optional[builtins.str] = None,
-            items: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.SchemaDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.SchemaDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            items: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.SchemaDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.SchemaDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             required: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''The schema definition for the gateway target.
@@ -3870,23 +4194,23 @@ class CfnGatewayTarget(
         @builtins.property
         def items(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.SchemaDefinitionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.SchemaDefinitionProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-schemadefinition.html#cfn-bedrockagentcore-gatewaytarget-schemadefinition-items
             '''
             result = self._values.get("items")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.SchemaDefinitionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.SchemaDefinitionProperty"]], result)
 
         @builtins.property
         def properties(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.SchemaDefinitionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.SchemaDefinitionProperty"]]]]:
             '''The schema definition properties for the gateway target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-schemadefinition.html#cfn-bedrockagentcore-gatewaytarget-schemadefinition-properties
             '''
             result = self._values.get("properties")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.SchemaDefinitionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.SchemaDefinitionProperty"]]]], result)
 
         @builtins.property
         def required(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3917,7 +4241,7 @@ class CfnGatewayTarget(
         def __init__(
             self,
             *,
-            mcp: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.McpTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            mcp: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.McpTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The target configuration.
 
@@ -4003,14 +4327,14 @@ class CfnGatewayTarget(
         @builtins.property
         def mcp(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.McpTargetConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.McpTargetConfigurationProperty"]:
             '''The target configuration definition for MCP.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-targetconfiguration.html#cfn-bedrockagentcore-gatewaytarget-targetconfiguration-mcp
             '''
             result = self._values.get("mcp")
             assert result is not None, "Required property 'mcp' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.McpTargetConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.McpTargetConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4038,9 +4362,9 @@ class CfnGatewayTarget(
             self,
             *,
             description: builtins.str,
-            input_schema: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.SchemaDefinitionProperty", typing.Dict[builtins.str, typing.Any]]],
+            input_schema: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.SchemaDefinitionProperty", typing.Dict[builtins.str, typing.Any]]],
             name: builtins.str,
-            output_schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.SchemaDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            output_schema: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.SchemaDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The tool definition for the gateway.
 
@@ -4115,14 +4439,14 @@ class CfnGatewayTarget(
         @builtins.property
         def input_schema(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.SchemaDefinitionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.SchemaDefinitionProperty"]:
             '''The input schema for the gateway target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-tooldefinition.html#cfn-bedrockagentcore-gatewaytarget-tooldefinition-inputschema
             '''
             result = self._values.get("input_schema")
             assert result is not None, "Required property 'input_schema' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.SchemaDefinitionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.SchemaDefinitionProperty"], result)
 
         @builtins.property
         def name(self) -> builtins.str:
@@ -4137,13 +4461,13 @@ class CfnGatewayTarget(
         @builtins.property
         def output_schema(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.SchemaDefinitionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.SchemaDefinitionProperty"]]:
             '''The tool definition output schema for the gateway target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-tooldefinition.html#cfn-bedrockagentcore-gatewaytarget-tooldefinition-outputschema
             '''
             result = self._values.get("output_schema")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.SchemaDefinitionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.SchemaDefinitionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4165,8 +4489,8 @@ class CfnGatewayTarget(
         def __init__(
             self,
             *,
-            inline_payload: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.ToolDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayTarget.S3ConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            inline_payload: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.ToolDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.S3ConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The tool schema for the gateway target.
 
@@ -4232,24 +4556,24 @@ class CfnGatewayTarget(
         @builtins.property
         def inline_payload(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.ToolDefinitionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ToolDefinitionProperty"]]]]:
             '''The inline payload for the gateway target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-toolschema.html#cfn-bedrockagentcore-gatewaytarget-toolschema-inlinepayload
             '''
             result = self._values.get("inline_payload")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.ToolDefinitionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ToolDefinitionProperty"]]]], result)
 
         @builtins.property
         def s3(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.S3ConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.S3ConfigurationProperty"]]:
             '''The S3 tool schema for the gateway target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-toolschema.html#cfn-bedrockagentcore-gatewaytarget-toolschema-s3
             '''
             result = self._values.get("s3")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayTarget.S3ConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.S3ConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4278,9 +4602,9 @@ class CfnGatewayTargetProps:
     def __init__(
         self,
         *,
-        credential_provider_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.CredentialProviderConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        credential_provider_configurations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.CredentialProviderConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
-        target_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.TargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        target_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.TargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
         gateway_identifier: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -4413,14 +4737,14 @@ class CfnGatewayTargetProps:
     @builtins.property
     def credential_provider_configurations(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGatewayTarget.CredentialProviderConfigurationProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]]:
         '''The OAuth credential provider configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewaytarget.html#cfn-bedrockagentcore-gatewaytarget-credentialproviderconfigurations
         '''
         result = self._values.get("credential_provider_configurations")
         assert result is not None, "Required property 'credential_provider_configurations' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGatewayTarget.CredentialProviderConfigurationProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -4435,14 +4759,14 @@ class CfnGatewayTargetProps:
     @builtins.property
     def target_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnGatewayTarget.TargetConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.TargetConfigurationProperty"]:
         '''The target configuration for the Smithy model target.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewaytarget.html#cfn-bedrockagentcore-gatewaytarget-targetconfiguration
         '''
         result = self._values.get("target_configuration")
         assert result is not None, "Required property 'target_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnGatewayTarget.TargetConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.TargetConfigurationProperty"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -4608,7 +4932,7 @@ class CfnMemory(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         event_expiry_duration: jsii.Number,
@@ -4616,7 +4940,7 @@ class CfnMemory(
         description: typing.Optional[builtins.str] = None,
         encryption_key_arn: typing.Optional[builtins.str] = None,
         memory_execution_role_arn: typing.Optional[builtins.str] = None,
-        memory_strategies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.MemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        memory_strategies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.MemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::BedrockAgentCore::Memory``.
@@ -4649,7 +4973,7 @@ class CfnMemory(
 
     @jsii.member(jsii_name="arnForMemory")
     @builtins.classmethod
-    def arn_for_memory(cls, resource: _IMemoryRef_2d13cc89) -> builtins.str:
+    def arn_for_memory(cls, resource: "_IMemoryRef_2d13cc89") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4671,7 +4995,7 @@ class CfnMemory(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMemory", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4754,9 +5078,9 @@ class CfnMemory(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4765,9 +5089,9 @@ class CfnMemory(
 
     @builtins.property
     @jsii.member(jsii_name="memoryRef")
-    def memory_ref(self) -> _MemoryReference_a1aef278:
+    def memory_ref(self) -> "_MemoryReference_a1aef278":
         '''A reference to a Memory resource.'''
-        return typing.cast(_MemoryReference_a1aef278, jsii.get(self, "memoryRef"))
+        return typing.cast("_MemoryReference_a1aef278", jsii.get(self, "memoryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="eventExpiryDuration")
@@ -4838,14 +5162,14 @@ class CfnMemory(
     @jsii.member(jsii_name="memoryStrategies")
     def memory_strategies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMemory.MemoryStrategyProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMemory.MemoryStrategyProperty"]]]]:
         '''The memory strategies.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMemory.MemoryStrategyProperty"]]]], jsii.get(self, "memoryStrategies"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMemory.MemoryStrategyProperty"]]]], jsii.get(self, "memoryStrategies"))
 
     @memory_strategies.setter
     def memory_strategies(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMemory.MemoryStrategyProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMemory.MemoryStrategyProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b18515e6738d6694af7855ee5a84c8940fcfa482c5e51f03ea9e0abda4a56765)
@@ -4882,10 +5206,10 @@ class CfnMemory(
         def __init__(
             self,
             *,
-            self_managed_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SelfManagedConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            semantic_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SemanticOverrideProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            summary_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SummaryOverrideProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            user_preference_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.UserPreferenceOverrideProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            self_managed_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.SelfManagedConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            semantic_override: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.SemanticOverrideProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            summary_override: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.SummaryOverrideProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            user_preference_override: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.UserPreferenceOverrideProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The memory configuration input.
 
@@ -4969,46 +5293,46 @@ class CfnMemory(
         @builtins.property
         def self_managed_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SelfManagedConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SelfManagedConfigurationProperty"]]:
             '''The custom configuration input.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-customconfigurationinput.html#cfn-bedrockagentcore-memory-customconfigurationinput-selfmanagedconfiguration
             '''
             result = self._values.get("self_managed_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SelfManagedConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SelfManagedConfigurationProperty"]], result)
 
         @builtins.property
         def semantic_override(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SemanticOverrideProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SemanticOverrideProperty"]]:
             '''The memory override configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-customconfigurationinput.html#cfn-bedrockagentcore-memory-customconfigurationinput-semanticoverride
             '''
             result = self._values.get("semantic_override")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SemanticOverrideProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SemanticOverrideProperty"]], result)
 
         @builtins.property
         def summary_override(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SummaryOverrideProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SummaryOverrideProperty"]]:
             '''The memory configuration override.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-customconfigurationinput.html#cfn-bedrockagentcore-memory-customconfigurationinput-summaryoverride
             '''
             result = self._values.get("summary_override")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SummaryOverrideProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SummaryOverrideProperty"]], result)
 
         @builtins.property
         def user_preference_override(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.UserPreferenceOverrideProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.UserPreferenceOverrideProperty"]]:
             '''The memory user preference override.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-customconfigurationinput.html#cfn-bedrockagentcore-memory-customconfigurationinput-userpreferenceoverride
             '''
             result = self._values.get("user_preference_override")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.UserPreferenceOverrideProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.UserPreferenceOverrideProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5041,7 +5365,7 @@ class CfnMemory(
             self,
             *,
             name: builtins.str,
-            configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.CustomConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.CustomConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             created_at: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
             namespaces: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -5174,13 +5498,13 @@ class CfnMemory(
         @builtins.property
         def configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.CustomConfigurationInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.CustomConfigurationInputProperty"]]:
             '''The memory strategy configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-custommemorystrategy.html#cfn-bedrockagentcore-memory-custommemorystrategy-configuration
             '''
             result = self._values.get("configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.CustomConfigurationInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.CustomConfigurationInputProperty"]], result)
 
         @builtins.property
         def created_at(self) -> typing.Optional[builtins.str]:
@@ -5343,10 +5667,10 @@ class CfnMemory(
         def __init__(
             self,
             *,
-            custom_memory_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.CustomMemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            semantic_memory_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SemanticMemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            summary_memory_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SummaryMemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            user_preference_memory_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.UserPreferenceMemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom_memory_strategy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.CustomMemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            semantic_memory_strategy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.SemanticMemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            summary_memory_strategy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.SummaryMemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            user_preference_memory_strategy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.UserPreferenceMemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The memory strategy.
 
@@ -5480,46 +5804,46 @@ class CfnMemory(
         @builtins.property
         def custom_memory_strategy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.CustomMemoryStrategyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.CustomMemoryStrategyProperty"]]:
             '''The memory strategy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-memorystrategy.html#cfn-bedrockagentcore-memory-memorystrategy-custommemorystrategy
             '''
             result = self._values.get("custom_memory_strategy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.CustomMemoryStrategyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.CustomMemoryStrategyProperty"]], result)
 
         @builtins.property
         def semantic_memory_strategy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SemanticMemoryStrategyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SemanticMemoryStrategyProperty"]]:
             '''The memory strategy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-memorystrategy.html#cfn-bedrockagentcore-memory-memorystrategy-semanticmemorystrategy
             '''
             result = self._values.get("semantic_memory_strategy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SemanticMemoryStrategyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SemanticMemoryStrategyProperty"]], result)
 
         @builtins.property
         def summary_memory_strategy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SummaryMemoryStrategyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SummaryMemoryStrategyProperty"]]:
             '''The memory strategy summary.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-memorystrategy.html#cfn-bedrockagentcore-memory-memorystrategy-summarymemorystrategy
             '''
             result = self._values.get("summary_memory_strategy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SummaryMemoryStrategyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SummaryMemoryStrategyProperty"]], result)
 
         @builtins.property
         def user_preference_memory_strategy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.UserPreferenceMemoryStrategyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.UserPreferenceMemoryStrategyProperty"]]:
             '''The memory strategy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-memorystrategy.html#cfn-bedrockagentcore-memory-memorystrategy-userpreferencememorystrategy
             '''
             result = self._values.get("user_preference_memory_strategy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.UserPreferenceMemoryStrategyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.UserPreferenceMemoryStrategyProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5601,8 +5925,8 @@ class CfnMemory(
             self,
             *,
             historical_context_window_size: typing.Optional[jsii.Number] = None,
-            invocation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.InvocationConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            trigger_conditions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.TriggerConditionInputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            invocation_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.InvocationConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            trigger_conditions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.TriggerConditionInputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The self managed configuration.
 
@@ -5663,23 +5987,23 @@ class CfnMemory(
         @builtins.property
         def invocation_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.InvocationConfigurationInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.InvocationConfigurationInputProperty"]]:
             '''The self managed configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-selfmanagedconfiguration.html#cfn-bedrockagentcore-memory-selfmanagedconfiguration-invocationconfiguration
             '''
             result = self._values.get("invocation_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.InvocationConfigurationInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.InvocationConfigurationInputProperty"]], result)
 
         @builtins.property
         def trigger_conditions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMemory.TriggerConditionInputProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMemory.TriggerConditionInputProperty"]]]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-selfmanagedconfiguration.html#cfn-bedrockagentcore-memory-selfmanagedconfiguration-triggerconditions
             '''
             result = self._values.get("trigger_conditions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMemory.TriggerConditionInputProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMemory.TriggerConditionInputProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6015,8 +6339,8 @@ class CfnMemory(
         def __init__(
             self,
             *,
-            consolidation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            extraction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SemanticOverrideExtractionConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            consolidation: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            extraction: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.SemanticOverrideExtractionConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The memory override.
 
@@ -6056,24 +6380,24 @@ class CfnMemory(
         @builtins.property
         def consolidation(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty"]]:
             '''The memory override consolidation.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticoverride.html#cfn-bedrockagentcore-memory-semanticoverride-consolidation
             '''
             result = self._values.get("consolidation")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SemanticOverrideConsolidationConfigurationInputProperty"]], result)
 
         @builtins.property
         def extraction(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SemanticOverrideExtractionConfigurationInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SemanticOverrideExtractionConfigurationInputProperty"]]:
             '''The memory override extraction.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-semanticoverride.html#cfn-bedrockagentcore-memory-semanticoverride-extraction
             '''
             result = self._values.get("extraction")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SemanticOverrideExtractionConfigurationInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SemanticOverrideExtractionConfigurationInputProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6338,7 +6662,7 @@ class CfnMemory(
         def __init__(
             self,
             *,
-            consolidation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.SummaryOverrideConsolidationConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            consolidation: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.SummaryOverrideConsolidationConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The memory summary override.
 
@@ -6370,13 +6694,13 @@ class CfnMemory(
         @builtins.property
         def consolidation(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SummaryOverrideConsolidationConfigurationInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SummaryOverrideConsolidationConfigurationInputProperty"]]:
             '''The memory override consolidation.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-summaryoverride.html#cfn-bedrockagentcore-memory-summaryoverride-consolidation
             '''
             result = self._values.get("consolidation")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.SummaryOverrideConsolidationConfigurationInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.SummaryOverrideConsolidationConfigurationInputProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6508,9 +6832,9 @@ class CfnMemory(
         def __init__(
             self,
             *,
-            message_based_trigger: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.MessageBasedTriggerInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            time_based_trigger: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.TimeBasedTriggerInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            token_based_trigger: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.TokenBasedTriggerInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            message_based_trigger: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.MessageBasedTriggerInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            time_based_trigger: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.TimeBasedTriggerInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            token_based_trigger: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.TokenBasedTriggerInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The memory trigger condition input.
 
@@ -6555,35 +6879,35 @@ class CfnMemory(
         @builtins.property
         def message_based_trigger(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.MessageBasedTriggerInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.MessageBasedTriggerInputProperty"]]:
             '''The memory trigger condition input for the message based trigger.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-triggerconditioninput.html#cfn-bedrockagentcore-memory-triggerconditioninput-messagebasedtrigger
             '''
             result = self._values.get("message_based_trigger")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.MessageBasedTriggerInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.MessageBasedTriggerInputProperty"]], result)
 
         @builtins.property
         def time_based_trigger(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.TimeBasedTriggerInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.TimeBasedTriggerInputProperty"]]:
             '''The memory trigger condition input.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-triggerconditioninput.html#cfn-bedrockagentcore-memory-triggerconditioninput-timebasedtrigger
             '''
             result = self._values.get("time_based_trigger")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.TimeBasedTriggerInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.TimeBasedTriggerInputProperty"]], result)
 
         @builtins.property
         def token_based_trigger(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.TokenBasedTriggerInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.TokenBasedTriggerInputProperty"]]:
             '''The trigger condition information for a token based trigger.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-triggerconditioninput.html#cfn-bedrockagentcore-memory-triggerconditioninput-tokenbasedtrigger
             '''
             result = self._values.get("token_based_trigger")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.TokenBasedTriggerInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.TokenBasedTriggerInputProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6919,8 +7243,8 @@ class CfnMemory(
         def __init__(
             self,
             *,
-            consolidation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.UserPreferenceOverrideConsolidationConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            extraction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMemory.UserPreferenceOverrideExtractionConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            consolidation: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.UserPreferenceOverrideConsolidationConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            extraction: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.UserPreferenceOverrideExtractionConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The memory user preference override.
 
@@ -6960,24 +7284,24 @@ class CfnMemory(
         @builtins.property
         def consolidation(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.UserPreferenceOverrideConsolidationConfigurationInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.UserPreferenceOverrideConsolidationConfigurationInputProperty"]]:
             '''The memory override consolidation information.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferenceoverride.html#cfn-bedrockagentcore-memory-userpreferenceoverride-consolidation
             '''
             result = self._values.get("consolidation")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.UserPreferenceOverrideConsolidationConfigurationInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.UserPreferenceOverrideConsolidationConfigurationInputProperty"]], result)
 
         @builtins.property
         def extraction(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.UserPreferenceOverrideExtractionConfigurationInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.UserPreferenceOverrideExtractionConfigurationInputProperty"]]:
             '''The memory user preferences for extraction.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-memory-userpreferenceoverride.html#cfn-bedrockagentcore-memory-userpreferenceoverride-extraction
             '''
             result = self._values.get("extraction")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMemory.UserPreferenceOverrideExtractionConfigurationInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMemory.UserPreferenceOverrideExtractionConfigurationInputProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7013,7 +7337,7 @@ class CfnMemoryProps:
         description: typing.Optional[builtins.str] = None,
         encryption_key_arn: typing.Optional[builtins.str] = None,
         memory_execution_role_arn: typing.Optional[builtins.str] = None,
-        memory_strategies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.MemoryStrategyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        memory_strategies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMemory.MemoryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMemory``.
@@ -7218,13 +7542,13 @@ class CfnMemoryProps:
     @builtins.property
     def memory_strategies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMemory.MemoryStrategyProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMemory.MemoryStrategyProperty"]]]]:
         '''The memory strategies.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-memory.html#cfn-bedrockagentcore-memory-memorystrategies
         '''
         result = self._values.get("memory_strategies")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMemory.MemoryStrategyProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMemory.MemoryStrategyProperty"]]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -7332,19 +7656,19 @@ class CfnRuntime(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        agent_runtime_artifact: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.AgentRuntimeArtifactProperty", typing.Dict[builtins.str, typing.Any]]],
+        agent_runtime_artifact: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.AgentRuntimeArtifactProperty", typing.Dict[builtins.str, typing.Any]]],
         agent_runtime_name: builtins.str,
-        network_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.NetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        network_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.NetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         role_arn: builtins.str,
-        authorizer_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.AuthorizerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        authorizer_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.AuthorizerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        environment_variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        lifecycle_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.LifecycleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        environment_variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        lifecycle_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.LifecycleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         protocol_configuration: typing.Optional[builtins.str] = None,
-        request_header_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.RequestHeaderConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        request_header_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.RequestHeaderConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::BedrockAgentCore::Runtime``.
@@ -7385,7 +7709,7 @@ class CfnRuntime(
 
     @jsii.member(jsii_name="arnForRuntime")
     @builtins.classmethod
-    def arn_for_runtime(cls, resource: _IRuntimeRef_00302e12) -> builtins.str:
+    def arn_for_runtime(cls, resource: "_IRuntimeRef_00302e12") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -7407,7 +7731,7 @@ class CfnRuntime(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRuntime", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7492,18 +7816,18 @@ class CfnRuntime(
 
     @builtins.property
     @jsii.member(jsii_name="attrWorkloadIdentityDetails")
-    def attr_workload_identity_details(self) -> _IResolvable_da3f097b:
+    def attr_workload_identity_details(self) -> "_IResolvable_da3f097b":
         '''Configuration for workload identity.
 
         :cloudformationAttribute: WorkloadIdentityDetails
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrWorkloadIdentityDetails"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrWorkloadIdentityDetails"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -7512,22 +7836,22 @@ class CfnRuntime(
 
     @builtins.property
     @jsii.member(jsii_name="runtimeRef")
-    def runtime_ref(self) -> _RuntimeReference_bdb3da48:
+    def runtime_ref(self) -> "_RuntimeReference_bdb3da48":
         '''A reference to a Runtime resource.'''
-        return typing.cast(_RuntimeReference_bdb3da48, jsii.get(self, "runtimeRef"))
+        return typing.cast("_RuntimeReference_bdb3da48", jsii.get(self, "runtimeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="agentRuntimeArtifact")
     def agent_runtime_artifact(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnRuntime.AgentRuntimeArtifactProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnRuntime.AgentRuntimeArtifactProperty"]:
         '''The artifact of the agent.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRuntime.AgentRuntimeArtifactProperty"], jsii.get(self, "agentRuntimeArtifact"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRuntime.AgentRuntimeArtifactProperty"], jsii.get(self, "agentRuntimeArtifact"))
 
     @agent_runtime_artifact.setter
     def agent_runtime_artifact(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnRuntime.AgentRuntimeArtifactProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnRuntime.AgentRuntimeArtifactProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9afa965e1f7852c99b813a59ddc326e4e8b2e629273fff790e48abcc309421fb)
@@ -7551,14 +7875,14 @@ class CfnRuntime(
     @jsii.member(jsii_name="networkConfiguration")
     def network_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnRuntime.NetworkConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnRuntime.NetworkConfigurationProperty"]:
         '''The network configuration.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRuntime.NetworkConfigurationProperty"], jsii.get(self, "networkConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRuntime.NetworkConfigurationProperty"], jsii.get(self, "networkConfiguration"))
 
     @network_configuration.setter
     def network_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnRuntime.NetworkConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnRuntime.NetworkConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__76a3b80aa643920bb76e97b49e6d7c54f3367df4203a420045d6d631a4d54658)
@@ -7582,14 +7906,14 @@ class CfnRuntime(
     @jsii.member(jsii_name="authorizerConfiguration")
     def authorizer_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.AuthorizerConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.AuthorizerConfigurationProperty"]]:
         '''Represents inbound authorization configuration options used to authenticate incoming requests.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.AuthorizerConfigurationProperty"]], jsii.get(self, "authorizerConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.AuthorizerConfigurationProperty"]], jsii.get(self, "authorizerConfiguration"))
 
     @authorizer_configuration.setter
     def authorizer_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.AuthorizerConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.AuthorizerConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__577d498b775175712bf02d50d4dc0a7fa74d069187c6c0daba641442a844c29e)
@@ -7613,14 +7937,14 @@ class CfnRuntime(
     @jsii.member(jsii_name="environmentVariables")
     def environment_variables(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The environment variables for the agent.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "environmentVariables"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "environmentVariables"))
 
     @environment_variables.setter
     def environment_variables(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__27b52f571e16cbee3d0cb6aef888169b2fdf172a92199c29075b1bbfe5eb3091)
@@ -7631,14 +7955,14 @@ class CfnRuntime(
     @jsii.member(jsii_name="lifecycleConfiguration")
     def lifecycle_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.LifecycleConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.LifecycleConfigurationProperty"]]:
         '''Configuration for managing the lifecycle of runtime sessions and resources.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.LifecycleConfigurationProperty"]], jsii.get(self, "lifecycleConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.LifecycleConfigurationProperty"]], jsii.get(self, "lifecycleConfiguration"))
 
     @lifecycle_configuration.setter
     def lifecycle_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.LifecycleConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.LifecycleConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2fa017855df5800a745ab54e05af1f928ca7fbff9580670f50aa611ef9670585)
@@ -7662,14 +7986,14 @@ class CfnRuntime(
     @jsii.member(jsii_name="requestHeaderConfiguration")
     def request_header_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.RequestHeaderConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.RequestHeaderConfigurationProperty"]]:
         '''Configuration for HTTP request headers.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.RequestHeaderConfigurationProperty"]], jsii.get(self, "requestHeaderConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.RequestHeaderConfigurationProperty"]], jsii.get(self, "requestHeaderConfiguration"))
 
     @request_header_configuration.setter
     def request_header_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.RequestHeaderConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.RequestHeaderConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0964845eb3d77c8d88078f56bcf318b9fe4fa50078a5bf150216455e4bc0cde0)
@@ -7704,8 +8028,8 @@ class CfnRuntime(
         def __init__(
             self,
             *,
-            code_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.CodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            container_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.ContainerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            code_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.CodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            container_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.ContainerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The artifact of the agent.
 
@@ -7753,24 +8077,24 @@ class CfnRuntime(
         @builtins.property
         def code_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.CodeConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.CodeConfigurationProperty"]]:
             '''Representation of a code configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-agentruntimeartifact.html#cfn-bedrockagentcore-runtime-agentruntimeartifact-codeconfiguration
             '''
             result = self._values.get("code_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.CodeConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.CodeConfigurationProperty"]], result)
 
         @builtins.property
         def container_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.ContainerConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.ContainerConfigurationProperty"]]:
             '''Representation of a container configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-agentruntimeartifact.html#cfn-bedrockagentcore-runtime-agentruntimeartifact-containerconfiguration
             '''
             result = self._values.get("container_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.ContainerConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.ContainerConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7792,7 +8116,7 @@ class CfnRuntime(
         def __init__(
             self,
             *,
-            custom_jwt_authorizer: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.CustomJWTAuthorizerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom_jwt_authorizer: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.CustomJWTAuthorizerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The authorizer configuration.
 
@@ -7827,13 +8151,13 @@ class CfnRuntime(
         @builtins.property
         def custom_jwt_authorizer(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.CustomJWTAuthorizerConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.CustomJWTAuthorizerConfigurationProperty"]]:
             '''Represents inbound authorization configuration options used to authenticate incoming requests.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-authorizerconfiguration.html#cfn-bedrockagentcore-runtime-authorizerconfiguration-customjwtauthorizer
             '''
             result = self._values.get("custom_jwt_authorizer")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.CustomJWTAuthorizerConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.CustomJWTAuthorizerConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7859,7 +8183,7 @@ class CfnRuntime(
         def __init__(
             self,
             *,
-            code: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.CodeProperty", typing.Dict[builtins.str, typing.Any]]],
+            code: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.CodeProperty", typing.Dict[builtins.str, typing.Any]]],
             entry_point: typing.Sequence[builtins.str],
             runtime: builtins.str,
         ) -> None:
@@ -7906,14 +8230,14 @@ class CfnRuntime(
         @builtins.property
         def code(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRuntime.CodeProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRuntime.CodeProperty"]:
             '''Object represents source code from zip file.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-codeconfiguration.html#cfn-bedrockagentcore-runtime-codeconfiguration-code
             '''
             result = self._values.get("code")
             assert result is not None, "Required property 'code' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRuntime.CodeProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRuntime.CodeProperty"], result)
 
         @builtins.property
         def entry_point(self) -> typing.List[builtins.str]:
@@ -7955,7 +8279,7 @@ class CfnRuntime(
         def __init__(
             self,
             *,
-            s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Object represents source code from zip file.
 
@@ -7990,13 +8314,13 @@ class CfnRuntime(
         @builtins.property
         def s3(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.S3LocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.S3LocationProperty"]]:
             '''S3 Location Configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-code.html#cfn-bedrockagentcore-runtime-code-s3
             '''
             result = self._values.get("s3")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.S3LocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.S3LocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8239,7 +8563,7 @@ class CfnRuntime(
             self,
             *,
             network_mode: builtins.str,
-            network_mode_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuntime.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            network_mode_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The network configuration for the agent.
 
@@ -8288,13 +8612,13 @@ class CfnRuntime(
         @builtins.property
         def network_mode_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.VpcConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.VpcConfigProperty"]]:
             '''Network mode configuration for VPC.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-runtime-networkconfiguration.html#cfn-bedrockagentcore-runtime-networkconfiguration-networkmodeconfig
             '''
             result = self._values.get("network_mode_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuntime.VpcConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.VpcConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8617,7 +8941,7 @@ class CfnRuntimeEndpoint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         agent_runtime_id: builtins.str,
@@ -8663,7 +8987,7 @@ class CfnRuntimeEndpoint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRuntimeEndpoint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8775,9 +9099,9 @@ class CfnRuntimeEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -8786,9 +9110,9 @@ class CfnRuntimeEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="runtimeEndpointRef")
-    def runtime_endpoint_ref(self) -> _RuntimeEndpointReference_dff8b038:
+    def runtime_endpoint_ref(self) -> "_RuntimeEndpointReference_dff8b038":
         '''A reference to a RuntimeEndpoint resource.'''
-        return typing.cast(_RuntimeEndpointReference_dff8b038, jsii.get(self, "runtimeEndpointRef"))
+        return typing.cast("_RuntimeEndpointReference_dff8b038", jsii.get(self, "runtimeEndpointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="agentRuntimeId")
@@ -9009,16 +9333,16 @@ class CfnRuntimeProps:
     def __init__(
         self,
         *,
-        agent_runtime_artifact: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRuntime.AgentRuntimeArtifactProperty, typing.Dict[builtins.str, typing.Any]]],
+        agent_runtime_artifact: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.AgentRuntimeArtifactProperty", typing.Dict[builtins.str, typing.Any]]],
         agent_runtime_name: builtins.str,
-        network_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRuntime.NetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        network_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.NetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         role_arn: builtins.str,
-        authorizer_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRuntime.AuthorizerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        authorizer_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.AuthorizerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        environment_variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        lifecycle_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRuntime.LifecycleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        environment_variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        lifecycle_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.LifecycleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         protocol_configuration: typing.Optional[builtins.str] = None,
-        request_header_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRuntime.RequestHeaderConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        request_header_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuntime.RequestHeaderConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRuntime``.
@@ -9139,14 +9463,14 @@ class CfnRuntimeProps:
     @builtins.property
     def agent_runtime_artifact(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnRuntime.AgentRuntimeArtifactProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnRuntime.AgentRuntimeArtifactProperty"]:
         '''The artifact of the agent.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-agentruntimeartifact
         '''
         result = self._values.get("agent_runtime_artifact")
         assert result is not None, "Required property 'agent_runtime_artifact' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnRuntime.AgentRuntimeArtifactProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRuntime.AgentRuntimeArtifactProperty"], result)
 
     @builtins.property
     def agent_runtime_name(self) -> builtins.str:
@@ -9161,14 +9485,14 @@ class CfnRuntimeProps:
     @builtins.property
     def network_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnRuntime.NetworkConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnRuntime.NetworkConfigurationProperty"]:
         '''The network configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-networkconfiguration
         '''
         result = self._values.get("network_configuration")
         assert result is not None, "Required property 'network_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnRuntime.NetworkConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRuntime.NetworkConfigurationProperty"], result)
 
     @builtins.property
     def role_arn(self) -> builtins.str:
@@ -9183,13 +9507,13 @@ class CfnRuntimeProps:
     @builtins.property
     def authorizer_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRuntime.AuthorizerConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.AuthorizerConfigurationProperty"]]:
         '''Represents inbound authorization configuration options used to authenticate incoming requests.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-authorizerconfiguration
         '''
         result = self._values.get("authorizer_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRuntime.AuthorizerConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.AuthorizerConfigurationProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -9203,24 +9527,24 @@ class CfnRuntimeProps:
     @builtins.property
     def environment_variables(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The environment variables for the agent.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-environmentvariables
         '''
         result = self._values.get("environment_variables")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def lifecycle_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRuntime.LifecycleConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.LifecycleConfigurationProperty"]]:
         '''Configuration for managing the lifecycle of runtime sessions and resources.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-lifecycleconfiguration
         '''
         result = self._values.get("lifecycle_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRuntime.LifecycleConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.LifecycleConfigurationProperty"]], result)
 
     @builtins.property
     def protocol_configuration(self) -> typing.Optional[builtins.str]:
@@ -9236,13 +9560,13 @@ class CfnRuntimeProps:
     @builtins.property
     def request_header_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRuntime.RequestHeaderConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.RequestHeaderConfigurationProperty"]]:
         '''Configuration for HTTP request headers.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-runtime.html#cfn-bedrockagentcore-runtime-requestheaderconfiguration
         '''
         result = self._values.get("request_header_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRuntime.RequestHeaderConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuntime.RequestHeaderConfigurationProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -9285,6 +9609,7 @@ class CfnWorkloadIdentity(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_bedrockagentcore as bedrockagentcore
@@ -9303,12 +9628,12 @@ class CfnWorkloadIdentity(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         allowed_resource_oauth2_return_urls: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::BedrockAgentCore::WorkloadIdentity``.
 
@@ -9334,7 +9659,7 @@ class CfnWorkloadIdentity(
     @builtins.classmethod
     def arn_for_workload_identity(
         cls,
-        resource: _IWorkloadIdentityRef_dc6077a7,
+        resource: "_IWorkloadIdentityRef_dc6077a7",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -9357,7 +9682,7 @@ class CfnWorkloadIdentity(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWorkloadIdentity", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9388,21 +9713,21 @@ class CfnWorkloadIdentity(
 
     @builtins.property
     @jsii.member(jsii_name="attrCreatedTime")
-    def attr_created_time(self) -> _IResolvable_da3f097b:
+    def attr_created_time(self) -> "_IResolvable_da3f097b":
         '''The timestamp when the workload identity was created.
 
         :cloudformationAttribute: CreatedTime
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrCreatedTime"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrCreatedTime"))
 
     @builtins.property
     @jsii.member(jsii_name="attrLastUpdatedTime")
-    def attr_last_updated_time(self) -> _IResolvable_da3f097b:
+    def attr_last_updated_time(self) -> "_IResolvable_da3f097b":
         '''The timestamp when the workload identity was last updated.
 
         :cloudformationAttribute: LastUpdatedTime
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLastUpdatedTime"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrLastUpdatedTime"))
 
     @builtins.property
     @jsii.member(jsii_name="attrWorkloadIdentityArn")
@@ -9415,9 +9740,9 @@ class CfnWorkloadIdentity(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -9426,9 +9751,9 @@ class CfnWorkloadIdentity(
 
     @builtins.property
     @jsii.member(jsii_name="workloadIdentityRef")
-    def workload_identity_ref(self) -> _WorkloadIdentityReference_255b3126:
+    def workload_identity_ref(self) -> "_WorkloadIdentityReference_255b3126":
         '''A reference to a WorkloadIdentity resource.'''
-        return typing.cast(_WorkloadIdentityReference_255b3126, jsii.get(self, "workloadIdentityRef"))
+        return typing.cast("_WorkloadIdentityReference_255b3126", jsii.get(self, "workloadIdentityRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -9463,12 +9788,12 @@ class CfnWorkloadIdentity(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the workload identity.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d24890b8ce488c10d666570acfa91e9c0c2c358e35cc3bbad1ef37fc9bad1869)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9490,7 +9815,7 @@ class CfnWorkloadIdentityProps:
         *,
         name: builtins.str,
         allowed_resource_oauth2_return_urls: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnWorkloadIdentity``.
 
@@ -9503,6 +9828,7 @@ class CfnWorkloadIdentityProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_bedrockagentcore as bedrockagentcore
@@ -9555,13 +9881,13 @@ class CfnWorkloadIdentityProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the workload identity.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-workloadidentity.html#cfn-bedrockagentcore-workloadidentity-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9866,6 +10192,7 @@ def _typecheckingstub__718d4d7128ca57b0228b268f1204c5574e63e51d4e7701a53fd67a1e8
     authorizer_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.AuthorizerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     exception_level: typing.Optional[builtins.str] = None,
+    interceptor_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.GatewayInterceptorConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     kms_key_arn: typing.Optional[builtins.str] = None,
     protocol_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.GatewayProtocolConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -9939,6 +10266,12 @@ def _typecheckingstub__791936566b3e629fd378dc6a46c31b1a5134acc616fbd9ed9eebc092e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1fa23efd99303a8f763464c84881ac739adef3c104051bc1d3f02ad8262450c5(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGateway.GatewayInterceptorConfigurationProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__68d2d9d8c84164d38a9976889d155298546ea61a787e120117719ee748ac6cf6(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -9973,9 +10306,39 @@ def _typecheckingstub__8cc4944f630bec36007bb93b09eab3e99763f1bed11457e642c0ab535
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__715cb5162dd44f0620c0da9c35156ecbbe6adcf966dd3dabfefa1ba61c16a0aa(
+    *,
+    interception_points: typing.Sequence[builtins.str],
+    interceptor: typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.InterceptorConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    input_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.InterceptorInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__381e09b484f23635acaed28352a759fdd9ac853b91ce6a848c9ed3892887eb7c(
     *,
     mcp: typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.MCPGatewayConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4ca22e725c6291ac4361eed78ba4e61d1c53d3ed16f378864154be6a22b3fbdc(
+    *,
+    lambda_: typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.LambdaInterceptorConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1a99f30cc6576d66eb555d4d72e4d8cc323b7560bf001996fd8ea8a3cbcdee5f(
+    *,
+    pass_request_headers: typing.Union[builtins.bool, _IResolvable_da3f097b],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4fdc3a3b136445d808e02f01ce34f7cf7f93adae6e8dae1f234c0991d3782da4(
+    *,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10005,6 +10368,7 @@ def _typecheckingstub__790df6c55e75e75d6f8c8a9a5518586d5e4ae350e3bfc4555e2ed4bf3
     authorizer_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.AuthorizerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     exception_level: typing.Optional[builtins.str] = None,
+    interceptor_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.GatewayInterceptorConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     kms_key_arn: typing.Optional[builtins.str] = None,
     protocol_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.GatewayProtocolConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,

@@ -96,7 +96,7 @@ class IGraphRef(
 
     @builtins.property
     @jsii.member(jsii_name="graphRef")
-    def graph_ref(self) -> GraphReference:
+    def graph_ref(self) -> "GraphReference":
         '''(experimental) A reference to a Graph resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IGraphRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="graphRef")
-    def graph_ref(self) -> GraphReference:
+    def graph_ref(self) -> "GraphReference":
         '''(experimental) A reference to a Graph resource.
 
         :stability: experimental
         '''
-        return typing.cast(GraphReference, jsii.get(self, "graphRef"))
+        return typing.cast("GraphReference", jsii.get(self, "graphRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGraphRef).__jsii_proxy_class__ = lambda : _IGraphRefProxy

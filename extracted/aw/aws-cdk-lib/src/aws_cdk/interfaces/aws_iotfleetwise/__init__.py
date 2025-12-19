@@ -240,7 +240,7 @@ class ICampaignRef(
 
     @builtins.property
     @jsii.member(jsii_name="campaignRef")
-    def campaign_ref(self) -> CampaignReference:
+    def campaign_ref(self) -> "CampaignReference":
         '''(experimental) A reference to a Campaign resource.
 
         :stability: experimental
@@ -261,12 +261,12 @@ class _ICampaignRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="campaignRef")
-    def campaign_ref(self) -> CampaignReference:
+    def campaign_ref(self) -> "CampaignReference":
         '''(experimental) A reference to a Campaign resource.
 
         :stability: experimental
         '''
-        return typing.cast(CampaignReference, jsii.get(self, "campaignRef"))
+        return typing.cast("CampaignReference", jsii.get(self, "campaignRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICampaignRef).__jsii_proxy_class__ = lambda : _ICampaignRefProxy
@@ -287,7 +287,7 @@ class IDecoderManifestRef(
 
     @builtins.property
     @jsii.member(jsii_name="decoderManifestRef")
-    def decoder_manifest_ref(self) -> DecoderManifestReference:
+    def decoder_manifest_ref(self) -> "DecoderManifestReference":
         '''(experimental) A reference to a DecoderManifest resource.
 
         :stability: experimental
@@ -308,12 +308,12 @@ class _IDecoderManifestRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="decoderManifestRef")
-    def decoder_manifest_ref(self) -> DecoderManifestReference:
+    def decoder_manifest_ref(self) -> "DecoderManifestReference":
         '''(experimental) A reference to a DecoderManifest resource.
 
         :stability: experimental
         '''
-        return typing.cast(DecoderManifestReference, jsii.get(self, "decoderManifestRef"))
+        return typing.cast("DecoderManifestReference", jsii.get(self, "decoderManifestRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDecoderManifestRef).__jsii_proxy_class__ = lambda : _IDecoderManifestRefProxy
@@ -332,7 +332,7 @@ class IFleetRef(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> FleetReference:
+    def fleet_ref(self) -> "FleetReference":
         '''(experimental) A reference to a Fleet resource.
 
         :stability: experimental
@@ -353,12 +353,12 @@ class _IFleetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> FleetReference:
+    def fleet_ref(self) -> "FleetReference":
         '''(experimental) A reference to a Fleet resource.
 
         :stability: experimental
         '''
-        return typing.cast(FleetReference, jsii.get(self, "fleetRef"))
+        return typing.cast("FleetReference", jsii.get(self, "fleetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFleetRef).__jsii_proxy_class__ = lambda : _IFleetRefProxy

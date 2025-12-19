@@ -153,12 +153,12 @@ class CfnDetector(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        enable: typing.Union[builtins.bool, _IResolvable_da3f097b],
-        data_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.CFNDataSourceConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        features: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.CFNFeatureConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        enable: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+        data_sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.CFNDataSourceConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        features: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.CFNFeatureConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         finding_publishing_frequency: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnDetector.TagItemProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -188,7 +188,7 @@ class CfnDetector(
 
     @jsii.member(jsii_name="arnForDetector")
     @builtins.classmethod
-    def arn_for_detector(cls, resource: _IDetectorRef_92be1dc2) -> builtins.str:
+    def arn_for_detector(cls, resource: "_IDetectorRef_92be1dc2") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -201,10 +201,10 @@ class CfnDetector(
     @builtins.classmethod
     def from_detector_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         detector_id: builtins.str,
-    ) -> _IDetectorRef_92be1dc2:
+    ) -> "_IDetectorRef_92be1dc2":
         '''Creates a new IDetectorRef from a detectorId.
 
         :param scope: -
@@ -216,7 +216,7 @@ class CfnDetector(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument detector_id", value=detector_id, expected_type=type_hints["detector_id"])
-        return typing.cast(_IDetectorRef_92be1dc2, jsii.sinvoke(cls, "fromDetectorId", [scope, id, detector_id]))
+        return typing.cast("_IDetectorRef_92be1dc2", jsii.sinvoke(cls, "fromDetectorId", [scope, id, detector_id]))
 
     @jsii.member(jsii_name="isCfnDetector")
     @builtins.classmethod
@@ -231,7 +231,7 @@ class CfnDetector(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDetector", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -276,24 +276,27 @@ class CfnDetector(
 
     @builtins.property
     @jsii.member(jsii_name="detectorRef")
-    def detector_ref(self) -> _DetectorReference_c465ba9e:
+    def detector_ref(self) -> "_DetectorReference_c465ba9e":
         '''A reference to a Detector resource.'''
-        return typing.cast(_DetectorReference_c465ba9e, jsii.get(self, "detectorRef"))
+        return typing.cast("_DetectorReference_c465ba9e", jsii.get(self, "detectorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="enable")
-    def enable(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    def enable(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''Specifies whether the detector is to be enabled on creation.'''
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], jsii.get(self, "enable"))
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], jsii.get(self, "enable"))
 
     @enable.setter
-    def enable(self, value: typing.Union[builtins.bool, _IResolvable_da3f097b]) -> None:
+    def enable(
+        self,
+        value: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+    ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__be1c4208def5e29bff60511511974687c29f282d57c3bb461675543b67475958)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -303,14 +306,14 @@ class CfnDetector(
     @jsii.member(jsii_name="dataSources")
     def data_sources(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNDataSourceConfigurationsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNDataSourceConfigurationsProperty"]]:
         '''Describes which data sources will be enabled for the detector.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNDataSourceConfigurationsProperty"]], jsii.get(self, "dataSources"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNDataSourceConfigurationsProperty"]], jsii.get(self, "dataSources"))
 
     @data_sources.setter
     def data_sources(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNDataSourceConfigurationsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNDataSourceConfigurationsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d984644fe0d5555f018ae12b1bfbb1e875501438854ca50d249d3cd6091178f1)
@@ -321,14 +324,14 @@ class CfnDetector(
     @jsii.member(jsii_name="features")
     def features(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNFeatureConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNFeatureConfigurationProperty"]]]]:
         '''A list of features that will be configured for the detector.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNFeatureConfigurationProperty"]]]], jsii.get(self, "features"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNFeatureConfigurationProperty"]]]], jsii.get(self, "features"))
 
     @features.setter
     def features(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNFeatureConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNFeatureConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__77d162426268bf9dc8b5f3efea1e4d49418ad72947ae8c15de703212246d36f5)
@@ -380,9 +383,9 @@ class CfnDetector(
         def __init__(
             self,
             *,
-            kubernetes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.CFNKubernetesConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            malware_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.CFNMalwareProtectionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.CFNS3LogsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            kubernetes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.CFNKubernetesConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            malware_protection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.CFNMalwareProtectionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.CFNS3LogsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes whether S3 data event logs, Kubernetes audit logs, or Malware Protection will be enabled as a data source when the detector is created.
 
@@ -431,35 +434,35 @@ class CfnDetector(
         @builtins.property
         def kubernetes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNKubernetesConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNKubernetesConfigurationProperty"]]:
             '''Describes which Kubernetes data sources are enabled for a detector.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-guardduty-detector-cfndatasourceconfigurations.html#cfn-guardduty-detector-cfndatasourceconfigurations-kubernetes
             '''
             result = self._values.get("kubernetes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNKubernetesConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNKubernetesConfigurationProperty"]], result)
 
         @builtins.property
         def malware_protection(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNMalwareProtectionConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNMalwareProtectionConfigurationProperty"]]:
             '''Describes whether Malware Protection will be enabled as a data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-guardduty-detector-cfndatasourceconfigurations.html#cfn-guardduty-detector-cfndatasourceconfigurations-malwareprotection
             '''
             result = self._values.get("malware_protection")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNMalwareProtectionConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNMalwareProtectionConfigurationProperty"]], result)
 
         @builtins.property
         def s3_logs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNS3LogsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNS3LogsConfigurationProperty"]]:
             '''Describes whether S3 data event logs are enabled as a data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-guardduty-detector-cfndatasourceconfigurations.html#cfn-guardduty-detector-cfndatasourceconfigurations-s3logs
             '''
             result = self._values.get("s3_logs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNS3LogsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNS3LogsConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -557,7 +560,7 @@ class CfnDetector(
             *,
             name: builtins.str,
             status: builtins.str,
-            additional_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.CFNFeatureAdditionalConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            additional_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.CFNFeatureAdditionalConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Information about the configuration of a feature in your account.
 
@@ -622,13 +625,13 @@ class CfnDetector(
         @builtins.property
         def additional_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNFeatureAdditionalConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNFeatureAdditionalConfigurationProperty"]]]]:
             '''Information about the additional configuration of a feature in your account.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-guardduty-detector-cfnfeatureconfiguration.html#cfn-guardduty-detector-cfnfeatureconfiguration-additionalconfiguration
             '''
             result = self._values.get("additional_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNFeatureAdditionalConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNFeatureAdditionalConfigurationProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -650,7 +653,7 @@ class CfnDetector(
         def __init__(
             self,
             *,
-            enable: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enable: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Describes which optional data sources are enabled for a detector.
 
@@ -677,14 +680,14 @@ class CfnDetector(
             }
 
         @builtins.property
-        def enable(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enable(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Describes whether Kubernetes audit logs are enabled as a data source for the detector.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-guardduty-detector-cfnkubernetesauditlogsconfiguration.html#cfn-guardduty-detector-cfnkubernetesauditlogsconfiguration-enable
             '''
             result = self._values.get("enable")
             assert result is not None, "Required property 'enable' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -706,7 +709,7 @@ class CfnDetector(
         def __init__(
             self,
             *,
-            audit_logs: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.CFNKubernetesAuditLogsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            audit_logs: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.CFNKubernetesAuditLogsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Describes which Kubernetes protection data sources are enabled for the detector.
 
@@ -737,14 +740,14 @@ class CfnDetector(
         @builtins.property
         def audit_logs(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNKubernetesAuditLogsConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNKubernetesAuditLogsConfigurationProperty"]:
             '''Describes whether Kubernetes audit logs are enabled as a data source for the detector.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-guardduty-detector-cfnkubernetesconfiguration.html#cfn-guardduty-detector-cfnkubernetesconfiguration-auditlogs
             '''
             result = self._values.get("audit_logs")
             assert result is not None, "Required property 'audit_logs' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNKubernetesAuditLogsConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNKubernetesAuditLogsConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -768,7 +771,7 @@ class CfnDetector(
         def __init__(
             self,
             *,
-            scan_ec2_instance_with_findings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.CFNScanEc2InstanceWithFindingsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            scan_ec2_instance_with_findings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.CFNScanEc2InstanceWithFindingsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes whether Malware Protection will be enabled as a data source.
 
@@ -799,13 +802,13 @@ class CfnDetector(
         @builtins.property
         def scan_ec2_instance_with_findings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNScanEc2InstanceWithFindingsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNScanEc2InstanceWithFindingsConfigurationProperty"]]:
             '''Describes the configuration of Malware Protection for EC2 instances with findings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-guardduty-detector-cfnmalwareprotectionconfiguration.html#cfn-guardduty-detector-cfnmalwareprotectionconfiguration-scanec2instancewithfindings
             '''
             result = self._values.get("scan_ec2_instance_with_findings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDetector.CFNScanEc2InstanceWithFindingsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNScanEc2InstanceWithFindingsConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -827,7 +830,7 @@ class CfnDetector(
         def __init__(
             self,
             *,
-            enable: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enable: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Describes whether S3 data event logs will be enabled as a data source when the detector is created.
 
@@ -854,14 +857,14 @@ class CfnDetector(
             }
 
         @builtins.property
-        def enable(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enable(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''The status of S3 data event logs as a data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-guardduty-detector-cfns3logsconfiguration.html#cfn-guardduty-detector-cfns3logsconfiguration-enable
             '''
             result = self._values.get("enable")
             assert result is not None, "Required property 'enable' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -883,7 +886,7 @@ class CfnDetector(
         def __init__(
             self,
             *,
-            ebs_volumes: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            ebs_volumes: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Describes whether Malware Protection for EC2 instances with findings will be enabled as a data source.
 
@@ -912,13 +915,13 @@ class CfnDetector(
         @builtins.property
         def ebs_volumes(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Describes the configuration for scanning EBS volumes as data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-guardduty-detector-cfnscanec2instancewithfindingsconfiguration.html#cfn-guardduty-detector-cfnscanec2instancewithfindingsconfiguration-ebsvolumes
             '''
             result = self._values.get("ebs_volumes")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1013,11 +1016,11 @@ class CfnDetectorProps:
     def __init__(
         self,
         *,
-        enable: typing.Union[builtins.bool, _IResolvable_da3f097b],
-        data_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDetector.CFNDataSourceConfigurationsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        features: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDetector.CFNFeatureConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        enable: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+        data_sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.CFNDataSourceConfigurationsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        features: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.CFNFeatureConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         finding_publishing_frequency: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnDetector.TagItemProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnDetector.TagItemProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDetector``.
 
@@ -1092,36 +1095,36 @@ class CfnDetectorProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def enable(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    def enable(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''Specifies whether the detector is to be enabled on creation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-detector.html#cfn-guardduty-detector-enable
         '''
         result = self._values.get("enable")
         assert result is not None, "Required property 'enable' is missing"
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
     @builtins.property
     def data_sources(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDetector.CFNDataSourceConfigurationsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNDataSourceConfigurationsProperty"]]:
         '''Describes which data sources will be enabled for the detector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-detector.html#cfn-guardduty-detector-datasources
         '''
         result = self._values.get("data_sources")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDetector.CFNDataSourceConfigurationsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNDataSourceConfigurationsProperty"]], result)
 
     @builtins.property
     def features(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDetector.CFNFeatureConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNFeatureConfigurationProperty"]]]]:
         '''A list of features that will be configured for the detector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-detector.html#cfn-guardduty-detector-features
         '''
         result = self._values.get("features")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDetector.CFNFeatureConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.CFNFeatureConfigurationProperty"]]]], result)
 
     @builtins.property
     def finding_publishing_frequency(self) -> typing.Optional[builtins.str]:
@@ -1133,7 +1136,7 @@ class CfnDetectorProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[CfnDetector.TagItemProperty]]:
+    def tags(self) -> typing.Optional[typing.List["CfnDetector.TagItemProperty"]]:
         '''Specifies tags added to a new detector resource.
 
         Each tag consists of a key and an optional value, both of which you define.
@@ -1145,7 +1148,7 @@ class CfnDetectorProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-detector.html#cfn-guardduty-detector-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnDetector.TagItemProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnDetector.TagItemProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1173,6 +1176,7 @@ class CfnFilter(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_guardduty as guardduty
@@ -1213,16 +1217,16 @@ class CfnFilter(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         detector_id: builtins.str,
-        finding_criteria: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFilter.FindingCriteriaProperty", typing.Dict[builtins.str, typing.Any]]],
+        finding_criteria: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFilter.FindingCriteriaProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
         action: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         rank: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GuardDuty::Filter``.
 
@@ -1265,7 +1269,7 @@ class CfnFilter(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFilter", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1301,15 +1305,15 @@ class CfnFilter(
 
     @builtins.property
     @jsii.member(jsii_name="filterRef")
-    def filter_ref(self) -> _FilterReference_41cdec6d:
+    def filter_ref(self) -> "_FilterReference_41cdec6d":
         '''A reference to a Filter resource.'''
-        return typing.cast(_FilterReference_41cdec6d, jsii.get(self, "filterRef"))
+        return typing.cast("_FilterReference_41cdec6d", jsii.get(self, "filterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="detectorId")
@@ -1328,14 +1332,14 @@ class CfnFilter(
     @jsii.member(jsii_name="findingCriteria")
     def finding_criteria(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnFilter.FindingCriteriaProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnFilter.FindingCriteriaProperty"]:
         '''Represents the criteria to be used in the filter for querying findings.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFilter.FindingCriteriaProperty"], jsii.get(self, "findingCriteria"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFilter.FindingCriteriaProperty"], jsii.get(self, "findingCriteria"))
 
     @finding_criteria.setter
     def finding_criteria(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnFilter.FindingCriteriaProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnFilter.FindingCriteriaProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8fbed2e2e1c4e36b77bef70f5730cf33088965585e081220ea8782f1bc6ec58e)
@@ -1396,12 +1400,12 @@ class CfnFilter(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to be added to a new filter resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2ec0b341923b31034fd13a73457e5a7351149963826be423d3b727494075107d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1650,7 +1654,7 @@ class CfnFilter(
             self,
             *,
             criterion: typing.Any = None,
-            item_type: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFilter.ConditionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            item_type: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFilter.ConditionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents a map of finding properties that match specified conditions and values when querying findings.
 
@@ -1819,12 +1823,12 @@ class CfnFilter(
         @builtins.property
         def item_type(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFilter.ConditionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFilter.ConditionProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-guardduty-filter-findingcriteria.html#cfn-guardduty-filter-findingcriteria-itemtype
             '''
             result = self._values.get("item_type")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFilter.ConditionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFilter.ConditionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1856,12 +1860,12 @@ class CfnFilterProps:
         self,
         *,
         detector_id: builtins.str,
-        finding_criteria: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFilter.FindingCriteriaProperty, typing.Dict[builtins.str, typing.Any]]],
+        finding_criteria: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFilter.FindingCriteriaProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
         action: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         rank: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFilter``.
 
@@ -1878,6 +1882,7 @@ class CfnFilterProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_guardduty as guardduty
@@ -1954,14 +1959,14 @@ class CfnFilterProps:
     @builtins.property
     def finding_criteria(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnFilter.FindingCriteriaProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnFilter.FindingCriteriaProperty"]:
         '''Represents the criteria to be used in the filter for querying findings.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-filter.html#cfn-guardduty-filter-findingcriteria
         '''
         result = self._values.get("finding_criteria")
         assert result is not None, "Required property 'finding_criteria' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnFilter.FindingCriteriaProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFilter.FindingCriteriaProperty"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -2009,7 +2014,7 @@ class CfnFilterProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to be added to a new filter resource.
 
         Each tag consists of a key and an optional value, both of which you define.
@@ -2019,7 +2024,7 @@ class CfnFilterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-filter.html#cfn-guardduty-filter-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2051,6 +2056,7 @@ class CfnIPSet(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_guardduty as guardduty
@@ -2073,16 +2079,16 @@ class CfnIPSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         format: builtins.str,
         location: builtins.str,
-        activate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        activate: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         detector_id: typing.Optional[builtins.str] = None,
         expected_bucket_owner: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GuardDuty::IPSet``.
 
@@ -2125,7 +2131,7 @@ class CfnIPSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIPSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2169,15 +2175,15 @@ class CfnIPSet(
 
     @builtins.property
     @jsii.member(jsii_name="ipSetRef")
-    def ip_set_ref(self) -> _IPSetReference_1898f771:
+    def ip_set_ref(self) -> "_IPSetReference_1898f771":
         '''A reference to a IPSet resource.'''
-        return typing.cast(_IPSetReference_1898f771, jsii.get(self, "ipSetRef"))
+        return typing.cast("_IPSetReference_1898f771", jsii.get(self, "ipSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="format")
@@ -2209,14 +2215,14 @@ class CfnIPSet(
     @jsii.member(jsii_name="activate")
     def activate(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value that determines if GuardDuty can start using this list for custom threat detection.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "activate"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "activate"))
 
     @activate.setter
     def activate(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7b1596d6c0cfe12615f22b3beb59354b8df0675c2e4bc8f6df3b493378f87f7c)
@@ -2264,12 +2270,12 @@ class CfnIPSet(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to be added to a new threat entity set resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3575dce7e4be33e061dd476657db25cdd931a4eb3f742afe675edf5d4a2df5ce)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2295,11 +2301,11 @@ class CfnIPSetProps:
         *,
         format: builtins.str,
         location: builtins.str,
-        activate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        activate: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         detector_id: typing.Optional[builtins.str] = None,
         expected_bucket_owner: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnIPSet``.
 
@@ -2316,6 +2322,7 @@ class CfnIPSetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_guardduty as guardduty
@@ -2384,7 +2391,7 @@ class CfnIPSetProps:
     @builtins.property
     def activate(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value that determines if GuardDuty can start using this list for custom threat detection.
 
         For GuardDuty to prevent generating findings based on an activity associated with these entries, this list must be active.
@@ -2392,7 +2399,7 @@ class CfnIPSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-ipset.html#cfn-guardduty-ipset-activate
         '''
         result = self._values.get("activate")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def detector_id(self) -> typing.Optional[builtins.str]:
@@ -2429,7 +2436,7 @@ class CfnIPSetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to be added to a new threat entity set resource.
 
         Each tag consists of a key and an optional value, both of which you define.
@@ -2439,7 +2446,7 @@ class CfnIPSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-ipset.html#cfn-guardduty-ipset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2497,12 +2504,12 @@ class CfnMalwareProtectionPlan(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        protected_resource: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMalwareProtectionPlan.CFNProtectedResourceProperty", typing.Dict[builtins.str, typing.Any]]],
+        protected_resource: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMalwareProtectionPlan.CFNProtectedResourceProperty", typing.Dict[builtins.str, typing.Any]]],
         role: builtins.str,
-        actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMalwareProtectionPlan.CFNActionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        actions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMalwareProtectionPlan.CFNActionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnMalwareProtectionPlan.TagItemProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GuardDuty::MalwareProtectionPlan``.
@@ -2531,7 +2538,7 @@ class CfnMalwareProtectionPlan(
     @builtins.classmethod
     def arn_for_malware_protection_plan(
         cls,
-        resource: _IMalwareProtectionPlanRef_3cd61995,
+        resource: "_IMalwareProtectionPlanRef_3cd61995",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2545,10 +2552,10 @@ class CfnMalwareProtectionPlan(
     @builtins.classmethod
     def from_malware_protection_plan_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IMalwareProtectionPlanRef_3cd61995:
+    ) -> "_IMalwareProtectionPlanRef_3cd61995":
         '''Creates a new IMalwareProtectionPlanRef from an ARN.
 
         :param scope: -
@@ -2560,16 +2567,16 @@ class CfnMalwareProtectionPlan(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IMalwareProtectionPlanRef_3cd61995, jsii.sinvoke(cls, "fromMalwareProtectionPlanArn", [scope, id, arn]))
+        return typing.cast("_IMalwareProtectionPlanRef_3cd61995", jsii.sinvoke(cls, "fromMalwareProtectionPlanArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromMalwareProtectionPlanId")
     @builtins.classmethod
     def from_malware_protection_plan_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         malware_protection_plan_id: builtins.str,
-    ) -> _IMalwareProtectionPlanRef_3cd61995:
+    ) -> "_IMalwareProtectionPlanRef_3cd61995":
         '''Creates a new IMalwareProtectionPlanRef from a malwareProtectionPlanId.
 
         :param scope: -
@@ -2581,7 +2588,7 @@ class CfnMalwareProtectionPlan(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument malware_protection_plan_id", value=malware_protection_plan_id, expected_type=type_hints["malware_protection_plan_id"])
-        return typing.cast(_IMalwareProtectionPlanRef_3cd61995, jsii.sinvoke(cls, "fromMalwareProtectionPlanId", [scope, id, malware_protection_plan_id]))
+        return typing.cast("_IMalwareProtectionPlanRef_3cd61995", jsii.sinvoke(cls, "fromMalwareProtectionPlanId", [scope, id, malware_protection_plan_id]))
 
     @jsii.member(jsii_name="isCfnMalwareProtectionPlan")
     @builtins.classmethod
@@ -2596,7 +2603,7 @@ class CfnMalwareProtectionPlan(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMalwareProtectionPlan", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2663,18 +2670,18 @@ class CfnMalwareProtectionPlan(
 
     @builtins.property
     @jsii.member(jsii_name="attrStatusReasons")
-    def attr_status_reasons(self) -> _IResolvable_da3f097b:
+    def attr_status_reasons(self) -> "_IResolvable_da3f097b":
         '''Status details associated with the Malware Protection plan resource status.
 
         :cloudformationAttribute: StatusReasons
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrStatusReasons"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrStatusReasons"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2683,22 +2690,22 @@ class CfnMalwareProtectionPlan(
 
     @builtins.property
     @jsii.member(jsii_name="malwareProtectionPlanRef")
-    def malware_protection_plan_ref(self) -> _MalwareProtectionPlanReference_097f2811:
+    def malware_protection_plan_ref(self) -> "_MalwareProtectionPlanReference_097f2811":
         '''A reference to a MalwareProtectionPlan resource.'''
-        return typing.cast(_MalwareProtectionPlanReference_097f2811, jsii.get(self, "malwareProtectionPlanRef"))
+        return typing.cast("_MalwareProtectionPlanReference_097f2811", jsii.get(self, "malwareProtectionPlanRef"))
 
     @builtins.property
     @jsii.member(jsii_name="protectedResource")
     def protected_resource(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnMalwareProtectionPlan.CFNProtectedResourceProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.CFNProtectedResourceProperty"]:
         '''Information about the protected resource.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMalwareProtectionPlan.CFNProtectedResourceProperty"], jsii.get(self, "protectedResource"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.CFNProtectedResourceProperty"], jsii.get(self, "protectedResource"))
 
     @protected_resource.setter
     def protected_resource(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnMalwareProtectionPlan.CFNProtectedResourceProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.CFNProtectedResourceProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a380560cce55c21ddf0570542e599e109af7dd74da03656308d8f1082ea92bc6)
@@ -2722,14 +2729,14 @@ class CfnMalwareProtectionPlan(
     @jsii.member(jsii_name="actions")
     def actions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMalwareProtectionPlan.CFNActionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.CFNActionsProperty"]]:
         '''Specifies the action that is to be applied to the Malware Protection plan resource.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMalwareProtectionPlan.CFNActionsProperty"]], jsii.get(self, "actions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.CFNActionsProperty"]], jsii.get(self, "actions"))
 
     @actions.setter
     def actions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMalwareProtectionPlan.CFNActionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.CFNActionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__87536f4fee47b32d2726bd495eeb160305899f097f41d5953ef86e973512fe4b)
@@ -2763,7 +2770,7 @@ class CfnMalwareProtectionPlan(
         def __init__(
             self,
             *,
-            tagging: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMalwareProtectionPlan.CFNTaggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tagging: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMalwareProtectionPlan.CFNTaggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the action that is to be applied to the Malware Protection plan resource.
 
@@ -2794,13 +2801,13 @@ class CfnMalwareProtectionPlan(
         @builtins.property
         def tagging(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMalwareProtectionPlan.CFNTaggingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.CFNTaggingProperty"]]:
             '''Contains information about tagging status of the Malware Protection plan resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-guardduty-malwareprotectionplan-cfnactions.html#cfn-guardduty-malwareprotectionplan-cfnactions-tagging
             '''
             result = self._values.get("tagging")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMalwareProtectionPlan.CFNTaggingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.CFNTaggingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2822,7 +2829,7 @@ class CfnMalwareProtectionPlan(
         def __init__(
             self,
             *,
-            s3_bucket: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMalwareProtectionPlan.S3BucketProperty", typing.Dict[builtins.str, typing.Any]]],
+            s3_bucket: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMalwareProtectionPlan.S3BucketProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Information about the protected resource.
 
@@ -2856,14 +2863,14 @@ class CfnMalwareProtectionPlan(
         @builtins.property
         def s3_bucket(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnMalwareProtectionPlan.S3BucketProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.S3BucketProperty"]:
             '''Information about the protected S3 bucket resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-guardduty-malwareprotectionplan-cfnprotectedresource.html#cfn-guardduty-malwareprotectionplan-cfnprotectedresource-s3bucket
             '''
             result = self._values.get("s3_bucket")
             assert result is not None, "Required property 's3_bucket' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMalwareProtectionPlan.S3BucketProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.S3BucketProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3159,10 +3166,10 @@ class CfnMalwareProtectionPlanProps:
     def __init__(
         self,
         *,
-        protected_resource: typing.Union[_IResolvable_da3f097b, typing.Union[CfnMalwareProtectionPlan.CFNProtectedResourceProperty, typing.Dict[builtins.str, typing.Any]]],
+        protected_resource: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMalwareProtectionPlan.CFNProtectedResourceProperty", typing.Dict[builtins.str, typing.Any]]],
         role: builtins.str,
-        actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMalwareProtectionPlan.CFNActionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnMalwareProtectionPlan.TagItemProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        actions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMalwareProtectionPlan.CFNActionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnMalwareProtectionPlan.TagItemProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMalwareProtectionPlan``.
 
@@ -3219,7 +3226,7 @@ class CfnMalwareProtectionPlanProps:
     @builtins.property
     def protected_resource(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnMalwareProtectionPlan.CFNProtectedResourceProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.CFNProtectedResourceProperty"]:
         '''Information about the protected resource.
 
         Presently, ``S3Bucket`` is the only supported protected resource.
@@ -3228,7 +3235,7 @@ class CfnMalwareProtectionPlanProps:
         '''
         result = self._values.get("protected_resource")
         assert result is not None, "Required property 'protected_resource' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnMalwareProtectionPlan.CFNProtectedResourceProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.CFNProtectedResourceProperty"], result)
 
     @builtins.property
     def role(self) -> builtins.str:
@@ -3245,18 +3252,18 @@ class CfnMalwareProtectionPlanProps:
     @builtins.property
     def actions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMalwareProtectionPlan.CFNActionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.CFNActionsProperty"]]:
         '''Specifies the action that is to be applied to the Malware Protection plan resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-malwareprotectionplan.html#cfn-guardduty-malwareprotectionplan-actions
         '''
         result = self._values.get("actions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMalwareProtectionPlan.CFNActionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMalwareProtectionPlan.CFNActionsProperty"]], result)
 
     @builtins.property
     def tags(
         self,
-    ) -> typing.Optional[typing.List[CfnMalwareProtectionPlan.TagItemProperty]]:
+    ) -> typing.Optional[typing.List["CfnMalwareProtectionPlan.TagItemProperty"]]:
         '''The tags to be added to the created Malware Protection plan resource.
 
         Each tag consists of a key and an optional value, both of which you need to specify.
@@ -3264,7 +3271,7 @@ class CfnMalwareProtectionPlanProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-malwareprotectionplan.html#cfn-guardduty-malwareprotectionplan-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnMalwareProtectionPlan.TagItemProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnMalwareProtectionPlan.TagItemProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3309,7 +3316,7 @@ class CfnMaster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         detector_id: builtins.str,
@@ -3347,7 +3354,7 @@ class CfnMaster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMaster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3383,9 +3390,9 @@ class CfnMaster(
 
     @builtins.property
     @jsii.member(jsii_name="masterRef")
-    def master_ref(self) -> _MasterReference_b6aabded:
+    def master_ref(self) -> "_MasterReference_b6aabded":
         '''A reference to a Master resource.'''
-        return typing.cast(_MasterReference_b6aabded, jsii.get(self, "masterRef"))
+        return typing.cast("_MasterReference_b6aabded", jsii.get(self, "masterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="detectorId")
@@ -3559,12 +3566,12 @@ class CfnMember(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         email: builtins.str,
         detector_id: typing.Optional[builtins.str] = None,
-        disable_email_notification: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        disable_email_notification: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         member_id: typing.Optional[builtins.str] = None,
         message: typing.Optional[builtins.str] = None,
         status: typing.Optional[builtins.str] = None,
@@ -3608,7 +3615,7 @@ class CfnMember(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMember", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3644,9 +3651,9 @@ class CfnMember(
 
     @builtins.property
     @jsii.member(jsii_name="memberRef")
-    def member_ref(self) -> _MemberReference_cee728b6:
+    def member_ref(self) -> "_MemberReference_cee728b6":
         '''A reference to a Member resource.'''
-        return typing.cast(_MemberReference_cee728b6, jsii.get(self, "memberRef"))
+        return typing.cast("_MemberReference_cee728b6", jsii.get(self, "memberRef"))
 
     @builtins.property
     @jsii.member(jsii_name="email")
@@ -3678,14 +3685,14 @@ class CfnMember(
     @jsii.member(jsii_name="disableEmailNotification")
     def disable_email_notification(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether or not to disable email notification for the member account that you invite.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "disableEmailNotification"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "disableEmailNotification"))
 
     @disable_email_notification.setter
     def disable_email_notification(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a0d936d65b44cfdbfcf7b0213e06a4664e73ffce48a3399a6c5e192b98602f0e)
@@ -3750,7 +3757,7 @@ class CfnMemberProps:
         *,
         email: builtins.str,
         detector_id: typing.Optional[builtins.str] = None,
-        disable_email_notification: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        disable_email_notification: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         member_id: typing.Optional[builtins.str] = None,
         message: typing.Optional[builtins.str] = None,
         status: typing.Optional[builtins.str] = None,
@@ -3828,13 +3835,13 @@ class CfnMemberProps:
     @builtins.property
     def disable_email_notification(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether or not to disable email notification for the member account that you invite.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-member.html#cfn-guardduty-member-disableemailnotification
         '''
         result = self._values.get("disable_email_notification")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def member_id(self) -> typing.Optional[builtins.str]:
@@ -3917,10 +3924,10 @@ class CfnPublishingDestination(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        destination_properties: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPublishingDestination.CFNDestinationPropertiesProperty", typing.Dict[builtins.str, typing.Any]]],
+        destination_properties: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPublishingDestination.CFNDestinationPropertiesProperty", typing.Dict[builtins.str, typing.Any]]],
         destination_type: builtins.str,
         detector_id: builtins.str,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnPublishingDestination.TagItemProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3960,7 +3967,7 @@ class CfnPublishingDestination(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPublishingDestination", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4018,9 +4025,9 @@ class CfnPublishingDestination(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4029,22 +4036,22 @@ class CfnPublishingDestination(
 
     @builtins.property
     @jsii.member(jsii_name="publishingDestinationRef")
-    def publishing_destination_ref(self) -> _PublishingDestinationReference_07aff059:
+    def publishing_destination_ref(self) -> "_PublishingDestinationReference_07aff059":
         '''A reference to a PublishingDestination resource.'''
-        return typing.cast(_PublishingDestinationReference_07aff059, jsii.get(self, "publishingDestinationRef"))
+        return typing.cast("_PublishingDestinationReference_07aff059", jsii.get(self, "publishingDestinationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="destinationProperties")
     def destination_properties(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnPublishingDestination.CFNDestinationPropertiesProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPublishingDestination.CFNDestinationPropertiesProperty"]:
         '''Contains the Amazon Resource Name (ARN) of the resource to publish to, such as an S3 bucket, and the ARN of the KMS key to use to encrypt published findings.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPublishingDestination.CFNDestinationPropertiesProperty"], jsii.get(self, "destinationProperties"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPublishingDestination.CFNDestinationPropertiesProperty"], jsii.get(self, "destinationProperties"))
 
     @destination_properties.setter
     def destination_properties(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnPublishingDestination.CFNDestinationPropertiesProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnPublishingDestination.CFNDestinationPropertiesProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8462a478ae531b30000f0c0ec193ea3228621fae41ff65fd5092497681704207)
@@ -4246,10 +4253,10 @@ class CfnPublishingDestinationProps:
     def __init__(
         self,
         *,
-        destination_properties: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPublishingDestination.CFNDestinationPropertiesProperty, typing.Dict[builtins.str, typing.Any]]],
+        destination_properties: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPublishingDestination.CFNDestinationPropertiesProperty", typing.Dict[builtins.str, typing.Any]]],
         destination_type: builtins.str,
         detector_id: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnPublishingDestination.TagItemProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnPublishingDestination.TagItemProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPublishingDestination``.
 
@@ -4299,14 +4306,14 @@ class CfnPublishingDestinationProps:
     @builtins.property
     def destination_properties(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnPublishingDestination.CFNDestinationPropertiesProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPublishingDestination.CFNDestinationPropertiesProperty"]:
         '''Contains the Amazon Resource Name (ARN) of the resource to publish to, such as an S3 bucket, and the ARN of the KMS key to use to encrypt published findings.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-publishingdestination.html#cfn-guardduty-publishingdestination-destinationproperties
         '''
         result = self._values.get("destination_properties")
         assert result is not None, "Required property 'destination_properties' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnPublishingDestination.CFNDestinationPropertiesProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPublishingDestination.CFNDestinationPropertiesProperty"], result)
 
     @builtins.property
     def destination_type(self) -> builtins.str:
@@ -4333,13 +4340,13 @@ class CfnPublishingDestinationProps:
     @builtins.property
     def tags(
         self,
-    ) -> typing.Optional[typing.List[CfnPublishingDestination.TagItemProperty]]:
+    ) -> typing.Optional[typing.List["CfnPublishingDestination.TagItemProperty"]]:
         '''Describes a tag.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-publishingdestination.html#cfn-guardduty-publishingdestination-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnPublishingDestination.TagItemProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnPublishingDestination.TagItemProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4393,12 +4400,12 @@ class CfnThreatEntitySet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         format: builtins.str,
         location: builtins.str,
-        activate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        activate: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         detector_id: typing.Optional[builtins.str] = None,
         expected_bucket_owner: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -4445,7 +4452,7 @@ class CfnThreatEntitySet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnThreatEntitySet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4523,9 +4530,9 @@ class CfnThreatEntitySet(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4534,9 +4541,9 @@ class CfnThreatEntitySet(
 
     @builtins.property
     @jsii.member(jsii_name="threatEntitySetRef")
-    def threat_entity_set_ref(self) -> _ThreatEntitySetReference_41072a7f:
+    def threat_entity_set_ref(self) -> "_ThreatEntitySetReference_41072a7f":
         '''A reference to a ThreatEntitySet resource.'''
-        return typing.cast(_ThreatEntitySetReference_41072a7f, jsii.get(self, "threatEntitySetRef"))
+        return typing.cast("_ThreatEntitySetReference_41072a7f", jsii.get(self, "threatEntitySetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="format")
@@ -4568,14 +4575,14 @@ class CfnThreatEntitySet(
     @jsii.member(jsii_name="activate")
     def activate(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value that determines if GuardDuty can start using this list for custom threat detection.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "activate"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "activate"))
 
     @activate.setter
     def activate(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bdf2f505562fc426590d0aff2e1eca3a53df58abfd1e69b8495ac49ff3b42763)
@@ -4729,11 +4736,11 @@ class CfnThreatEntitySetProps:
         *,
         format: builtins.str,
         location: builtins.str,
-        activate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        activate: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         detector_id: typing.Optional[builtins.str] = None,
         expected_bucket_owner: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnThreatEntitySet.TagItemProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnThreatEntitySet.TagItemProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnThreatEntitySet``.
 
@@ -4818,7 +4825,7 @@ class CfnThreatEntitySetProps:
     @builtins.property
     def activate(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value that determines if GuardDuty can start using this list for custom threat detection.
 
         For GuardDuty to consider the entries in this list and generate findings based on associated activity, this list must be active.
@@ -4826,7 +4833,7 @@ class CfnThreatEntitySetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-threatentityset.html#cfn-guardduty-threatentityset-activate
         '''
         result = self._values.get("activate")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def detector_id(self) -> typing.Optional[builtins.str]:
@@ -4862,7 +4869,9 @@ class CfnThreatEntitySetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[CfnThreatEntitySet.TagItemProperty]]:
+    def tags(
+        self,
+    ) -> typing.Optional[typing.List["CfnThreatEntitySet.TagItemProperty"]]:
         '''The tags to be added to a new threat entity set resource.
 
         Each tag consists of a key and an optional value, both of which you define.
@@ -4872,7 +4881,7 @@ class CfnThreatEntitySetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-threatentityset.html#cfn-guardduty-threatentityset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnThreatEntitySet.TagItemProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnThreatEntitySet.TagItemProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4904,6 +4913,7 @@ class CfnThreatIntelSet(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_guardduty as guardduty
@@ -4926,16 +4936,16 @@ class CfnThreatIntelSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         format: builtins.str,
         location: builtins.str,
-        activate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        activate: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         detector_id: typing.Optional[builtins.str] = None,
         expected_bucket_owner: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GuardDuty::ThreatIntelSet``.
 
@@ -4978,7 +4988,7 @@ class CfnThreatIntelSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnThreatIntelSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5023,15 +5033,15 @@ class CfnThreatIntelSet(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="threatIntelSetRef")
-    def threat_intel_set_ref(self) -> _ThreatIntelSetReference_fb526e93:
+    def threat_intel_set_ref(self) -> "_ThreatIntelSetReference_fb526e93":
         '''A reference to a ThreatIntelSet resource.'''
-        return typing.cast(_ThreatIntelSetReference_fb526e93, jsii.get(self, "threatIntelSetRef"))
+        return typing.cast("_ThreatIntelSetReference_fb526e93", jsii.get(self, "threatIntelSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="format")
@@ -5063,14 +5073,14 @@ class CfnThreatIntelSet(
     @jsii.member(jsii_name="activate")
     def activate(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value that determines if GuardDuty can start using this list for custom threat detection.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "activate"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "activate"))
 
     @activate.setter
     def activate(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3660f9080839cb6141a3aaf57ad04008ebbf5e29b4ee2cf7c3bcbdb94c082285)
@@ -5118,12 +5128,12 @@ class CfnThreatIntelSet(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to be added to a new threat entity set resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__213606bb8c2a17afd6b75e6224d08fd34ab33f0ef606dcd3df99402aa81754e0)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5149,11 +5159,11 @@ class CfnThreatIntelSetProps:
         *,
         format: builtins.str,
         location: builtins.str,
-        activate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        activate: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         detector_id: typing.Optional[builtins.str] = None,
         expected_bucket_owner: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnThreatIntelSet``.
 
@@ -5170,6 +5180,7 @@ class CfnThreatIntelSetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_guardduty as guardduty
@@ -5238,7 +5249,7 @@ class CfnThreatIntelSetProps:
     @builtins.property
     def activate(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value that determines if GuardDuty can start using this list for custom threat detection.
 
         For GuardDuty to be able to generate findings based on an activity associated with these entries, this list must be active.
@@ -5246,7 +5257,7 @@ class CfnThreatIntelSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-threatintelset.html#cfn-guardduty-threatintelset-activate
         '''
         result = self._values.get("activate")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def detector_id(self) -> typing.Optional[builtins.str]:
@@ -5283,7 +5294,7 @@ class CfnThreatIntelSetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to be added to a new threat entity set resource.
 
         Each tag consists of a key and an optional value, both of which you define.
@@ -5293,7 +5304,7 @@ class CfnThreatIntelSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-threatintelset.html#cfn-guardduty-threatintelset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5347,12 +5358,12 @@ class CfnTrustedEntitySet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         format: builtins.str,
         location: builtins.str,
-        activate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        activate: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         detector_id: typing.Optional[builtins.str] = None,
         expected_bucket_owner: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -5399,7 +5410,7 @@ class CfnTrustedEntitySet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTrustedEntitySet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5476,9 +5487,9 @@ class CfnTrustedEntitySet(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5487,9 +5498,9 @@ class CfnTrustedEntitySet(
 
     @builtins.property
     @jsii.member(jsii_name="trustedEntitySetRef")
-    def trusted_entity_set_ref(self) -> _TrustedEntitySetReference_ed75751f:
+    def trusted_entity_set_ref(self) -> "_TrustedEntitySetReference_ed75751f":
         '''A reference to a TrustedEntitySet resource.'''
-        return typing.cast(_TrustedEntitySetReference_ed75751f, jsii.get(self, "trustedEntitySetRef"))
+        return typing.cast("_TrustedEntitySetReference_ed75751f", jsii.get(self, "trustedEntitySetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="format")
@@ -5521,14 +5532,14 @@ class CfnTrustedEntitySet(
     @jsii.member(jsii_name="activate")
     def activate(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value that determines if GuardDuty can start using this list for custom threat detection.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "activate"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "activate"))
 
     @activate.setter
     def activate(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fcb17f7765a352c56401cef5289d093d9eeec88b494b555090ed231a335472a8)
@@ -5682,11 +5693,11 @@ class CfnTrustedEntitySetProps:
         *,
         format: builtins.str,
         location: builtins.str,
-        activate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        activate: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         detector_id: typing.Optional[builtins.str] = None,
         expected_bucket_owner: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnTrustedEntitySet.TagItemProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnTrustedEntitySet.TagItemProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTrustedEntitySet``.
 
@@ -5771,7 +5782,7 @@ class CfnTrustedEntitySetProps:
     @builtins.property
     def activate(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value that determines if GuardDuty can start using this list for custom threat detection.
 
         For GuardDuty to prevent generating findings based on an activity associated with these entries, this list must be active.
@@ -5779,7 +5790,7 @@ class CfnTrustedEntitySetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-trustedentityset.html#cfn-guardduty-trustedentityset-activate
         '''
         result = self._values.get("activate")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def detector_id(self) -> typing.Optional[builtins.str]:
@@ -5815,7 +5826,9 @@ class CfnTrustedEntitySetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[CfnTrustedEntitySet.TagItemProperty]]:
+    def tags(
+        self,
+    ) -> typing.Optional[typing.List["CfnTrustedEntitySet.TagItemProperty"]]:
         '''The tags to be added to a new trusted entity set resource.
 
         Each tag consists of a key and an optional value, both of which you define.
@@ -5825,7 +5838,7 @@ class CfnTrustedEntitySetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-trustedentityset.html#cfn-guardduty-trustedentityset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnTrustedEntitySet.TagItemProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnTrustedEntitySet.TagItemProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

@@ -147,7 +147,7 @@ class IFirewallPolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="firewallPolicyRef")
-    def firewall_policy_ref(self) -> FirewallPolicyReference:
+    def firewall_policy_ref(self) -> "FirewallPolicyReference":
         '''(experimental) A reference to a FirewallPolicy resource.
 
         :stability: experimental
@@ -168,12 +168,12 @@ class _IFirewallPolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="firewallPolicyRef")
-    def firewall_policy_ref(self) -> FirewallPolicyReference:
+    def firewall_policy_ref(self) -> "FirewallPolicyReference":
         '''(experimental) A reference to a FirewallPolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(FirewallPolicyReference, jsii.get(self, "firewallPolicyRef"))
+        return typing.cast("FirewallPolicyReference", jsii.get(self, "firewallPolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFirewallPolicyRef).__jsii_proxy_class__ = lambda : _IFirewallPolicyRefProxy
@@ -192,7 +192,7 @@ class IFirewallRef(
 
     @builtins.property
     @jsii.member(jsii_name="firewallRef")
-    def firewall_ref(self) -> FirewallReference:
+    def firewall_ref(self) -> "FirewallReference":
         '''(experimental) A reference to a Firewall resource.
 
         :stability: experimental
@@ -213,12 +213,12 @@ class _IFirewallRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="firewallRef")
-    def firewall_ref(self) -> FirewallReference:
+    def firewall_ref(self) -> "FirewallReference":
         '''(experimental) A reference to a Firewall resource.
 
         :stability: experimental
         '''
-        return typing.cast(FirewallReference, jsii.get(self, "firewallRef"))
+        return typing.cast("FirewallReference", jsii.get(self, "firewallRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFirewallRef).__jsii_proxy_class__ = lambda : _IFirewallRefProxy

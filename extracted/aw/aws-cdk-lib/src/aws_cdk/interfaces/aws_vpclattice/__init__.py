@@ -196,7 +196,7 @@ class IAccessLogSubscriptionRef(
 
     @builtins.property
     @jsii.member(jsii_name="accessLogSubscriptionRef")
-    def access_log_subscription_ref(self) -> AccessLogSubscriptionReference:
+    def access_log_subscription_ref(self) -> "AccessLogSubscriptionReference":
         '''(experimental) A reference to a AccessLogSubscription resource.
 
         :stability: experimental
@@ -217,12 +217,12 @@ class _IAccessLogSubscriptionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accessLogSubscriptionRef")
-    def access_log_subscription_ref(self) -> AccessLogSubscriptionReference:
+    def access_log_subscription_ref(self) -> "AccessLogSubscriptionReference":
         '''(experimental) A reference to a AccessLogSubscription resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccessLogSubscriptionReference, jsii.get(self, "accessLogSubscriptionRef"))
+        return typing.cast("AccessLogSubscriptionReference", jsii.get(self, "accessLogSubscriptionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessLogSubscriptionRef).__jsii_proxy_class__ = lambda : _IAccessLogSubscriptionRefProxy
@@ -241,7 +241,7 @@ class IAuthPolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="authPolicyRef")
-    def auth_policy_ref(self) -> AuthPolicyReference:
+    def auth_policy_ref(self) -> "AuthPolicyReference":
         '''(experimental) A reference to a AuthPolicy resource.
 
         :stability: experimental
@@ -262,12 +262,12 @@ class _IAuthPolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="authPolicyRef")
-    def auth_policy_ref(self) -> AuthPolicyReference:
+    def auth_policy_ref(self) -> "AuthPolicyReference":
         '''(experimental) A reference to a AuthPolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(AuthPolicyReference, jsii.get(self, "authPolicyRef"))
+        return typing.cast("AuthPolicyReference", jsii.get(self, "authPolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAuthPolicyRef).__jsii_proxy_class__ = lambda : _IAuthPolicyRefProxy
@@ -288,7 +288,7 @@ class IDomainVerificationRef(
 
     @builtins.property
     @jsii.member(jsii_name="domainVerificationRef")
-    def domain_verification_ref(self) -> DomainVerificationReference:
+    def domain_verification_ref(self) -> "DomainVerificationReference":
         '''(experimental) A reference to a DomainVerification resource.
 
         :stability: experimental
@@ -309,12 +309,12 @@ class _IDomainVerificationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="domainVerificationRef")
-    def domain_verification_ref(self) -> DomainVerificationReference:
+    def domain_verification_ref(self) -> "DomainVerificationReference":
         '''(experimental) A reference to a DomainVerification resource.
 
         :stability: experimental
         '''
-        return typing.cast(DomainVerificationReference, jsii.get(self, "domainVerificationRef"))
+        return typing.cast("DomainVerificationReference", jsii.get(self, "domainVerificationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDomainVerificationRef).__jsii_proxy_class__ = lambda : _IDomainVerificationRefProxy

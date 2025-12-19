@@ -192,7 +192,7 @@ class IDataCellsFilterRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataCellsFilterRef")
-    def data_cells_filter_ref(self) -> DataCellsFilterReference:
+    def data_cells_filter_ref(self) -> "DataCellsFilterReference":
         '''(experimental) A reference to a DataCellsFilter resource.
 
         :stability: experimental
@@ -213,12 +213,12 @@ class _IDataCellsFilterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataCellsFilterRef")
-    def data_cells_filter_ref(self) -> DataCellsFilterReference:
+    def data_cells_filter_ref(self) -> "DataCellsFilterReference":
         '''(experimental) A reference to a DataCellsFilter resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataCellsFilterReference, jsii.get(self, "dataCellsFilterRef"))
+        return typing.cast("DataCellsFilterReference", jsii.get(self, "dataCellsFilterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataCellsFilterRef).__jsii_proxy_class__ = lambda : _IDataCellsFilterRefProxy
@@ -239,7 +239,7 @@ class IDataLakeSettingsRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataLakeSettingsRef")
-    def data_lake_settings_ref(self) -> DataLakeSettingsReference:
+    def data_lake_settings_ref(self) -> "DataLakeSettingsReference":
         '''(experimental) A reference to a DataLakeSettings resource.
 
         :stability: experimental
@@ -260,12 +260,12 @@ class _IDataLakeSettingsRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataLakeSettingsRef")
-    def data_lake_settings_ref(self) -> DataLakeSettingsReference:
+    def data_lake_settings_ref(self) -> "DataLakeSettingsReference":
         '''(experimental) A reference to a DataLakeSettings resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataLakeSettingsReference, jsii.get(self, "dataLakeSettingsRef"))
+        return typing.cast("DataLakeSettingsReference", jsii.get(self, "dataLakeSettingsRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataLakeSettingsRef).__jsii_proxy_class__ = lambda : _IDataLakeSettingsRefProxy

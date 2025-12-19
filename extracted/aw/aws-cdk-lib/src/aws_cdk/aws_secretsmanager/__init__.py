@@ -488,12 +488,12 @@ class CfnResourcePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         resource_policy: typing.Any,
-        secret_id: typing.Union[builtins.str, _ISecretRef_3a7b28a3],
-        block_public_policy: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        secret_id: typing.Union[builtins.str, "_ISecretRef_3a7b28a3"],
+        block_public_policy: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::SecretsManager::ResourcePolicy``.
 
@@ -528,7 +528,7 @@ class CfnResourcePolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourcePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -573,9 +573,9 @@ class CfnResourcePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicyRef")
-    def resource_policy_ref(self) -> _ResourcePolicyReference_55b14df8:
+    def resource_policy_ref(self) -> "_ResourcePolicyReference_55b14df8":
         '''A reference to a ResourcePolicy resource.'''
-        return typing.cast(_ResourcePolicyReference_55b14df8, jsii.get(self, "resourcePolicyRef"))
+        return typing.cast("_ResourcePolicyReference_55b14df8", jsii.get(self, "resourcePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicy")
@@ -607,14 +607,14 @@ class CfnResourcePolicy(
     @jsii.member(jsii_name="blockPublicPolicy")
     def block_public_policy(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to block resource-based policies that allow broad access to the secret.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "blockPublicPolicy"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "blockPublicPolicy"))
 
     @block_public_policy.setter
     def block_public_policy(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__97e910a4dd0fff31572a19f4856d29ae4c7e5bc35ca2bec8ff207bb2656b95af)
@@ -636,8 +636,8 @@ class CfnResourcePolicyProps:
         self,
         *,
         resource_policy: typing.Any,
-        secret_id: typing.Union[builtins.str, _ISecretRef_3a7b28a3],
-        block_public_policy: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        secret_id: typing.Union[builtins.str, "_ISecretRef_3a7b28a3"],
+        block_public_policy: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnResourcePolicy``.
 
@@ -689,7 +689,7 @@ class CfnResourcePolicyProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def secret_id(self) -> typing.Union[builtins.str, _ISecretRef_3a7b28a3]:
+    def secret_id(self) -> typing.Union[builtins.str, "_ISecretRef_3a7b28a3"]:
         '''The ARN or name of the secret to attach the resource-based policy.
 
         For an ARN, we recommend that you specify a complete ARN rather than a partial ARN.
@@ -698,12 +698,12 @@ class CfnResourcePolicyProps:
         '''
         result = self._values.get("secret_id")
         assert result is not None, "Required property 'secret_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _ISecretRef_3a7b28a3], result)
+        return typing.cast(typing.Union[builtins.str, "_ISecretRef_3a7b28a3"], result)
 
     @builtins.property
     def block_public_policy(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to block resource-based policies that allow broad access to the secret.
 
         By default, Secrets Manager blocks policies that allow broad access, for example those that use a wildcard for the principal.
@@ -711,7 +711,7 @@ class CfnResourcePolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-resourcepolicy.html#cfn-secretsmanager-resourcepolicy-blockpublicpolicy
         '''
         result = self._values.get("block_public_policy")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -796,16 +796,16 @@ class CfnRotationSchedule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         secret_id: builtins.str,
-        external_secret_rotation_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        external_secret_rotation_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         external_secret_rotation_role_arn: typing.Optional[builtins.str] = None,
-        hosted_rotation_lambda: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRotationSchedule.HostedRotationLambdaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        rotate_immediately_on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        hosted_rotation_lambda: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRotationSchedule.HostedRotationLambdaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        rotate_immediately_on_update: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         rotation_lambda_arn: typing.Optional[builtins.str] = None,
-        rotation_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRotationSchedule.RotationRulesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        rotation_rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRotationSchedule.RotationRulesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SecretsManager::RotationSchedule``.
 
@@ -848,7 +848,7 @@ class CfnRotationSchedule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRotationSchedule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -893,9 +893,9 @@ class CfnRotationSchedule(
 
     @builtins.property
     @jsii.member(jsii_name="rotationScheduleRef")
-    def rotation_schedule_ref(self) -> _RotationScheduleReference_430d14ec:
+    def rotation_schedule_ref(self) -> "_RotationScheduleReference_430d14ec":
         '''A reference to a RotationSchedule resource.'''
-        return typing.cast(_RotationScheduleReference_430d14ec, jsii.get(self, "rotationScheduleRef"))
+        return typing.cast("_RotationScheduleReference_430d14ec", jsii.get(self, "rotationScheduleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="secretId")
@@ -917,14 +917,14 @@ class CfnRotationSchedule(
     @jsii.member(jsii_name="externalSecretRotationMetadata")
     def external_secret_rotation_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty"]]]]:
         '''The list of metadata needed to successfully rotate a managed external secret.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty"]]]], jsii.get(self, "externalSecretRotationMetadata"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty"]]]], jsii.get(self, "externalSecretRotationMetadata"))
 
     @external_secret_rotation_metadata.setter
     def external_secret_rotation_metadata(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a137dbdb2b8bf5b81e3be66ca1a95e203ab984fc427ebe6079f0ed9df6c8ebf4)
@@ -951,14 +951,14 @@ class CfnRotationSchedule(
     @jsii.member(jsii_name="hostedRotationLambda")
     def hosted_rotation_lambda(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRotationSchedule.HostedRotationLambdaProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.HostedRotationLambdaProperty"]]:
         '''Creates a new Lambda rotation function based on one of the `Secrets Manager rotation function templates <https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_available-rotation-templates.html>`_ . To use a rotation function that already exists, specify ``RotationLambdaARN`` instead.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRotationSchedule.HostedRotationLambdaProperty"]], jsii.get(self, "hostedRotationLambda"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.HostedRotationLambdaProperty"]], jsii.get(self, "hostedRotationLambda"))
 
     @hosted_rotation_lambda.setter
     def hosted_rotation_lambda(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRotationSchedule.HostedRotationLambdaProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.HostedRotationLambdaProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d6ac8fdda0fa8c417961c6fd7e6417f93af36b5af165e9b05ab8fcc0d73d0a1e)
@@ -969,14 +969,14 @@ class CfnRotationSchedule(
     @jsii.member(jsii_name="rotateImmediatelyOnUpdate")
     def rotate_immediately_on_update(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Determines whether to rotate the secret immediately or wait until the next scheduled rotation window when the rotation schedule is updated.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "rotateImmediatelyOnUpdate"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "rotateImmediatelyOnUpdate"))
 
     @rotate_immediately_on_update.setter
     def rotate_immediately_on_update(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__18363d4cc6e349ad4777136b0b08d5b6531c2367523a5c2aff46a38a3b42d9ab)
@@ -1000,14 +1000,14 @@ class CfnRotationSchedule(
     @jsii.member(jsii_name="rotationRules")
     def rotation_rules(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRotationSchedule.RotationRulesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.RotationRulesProperty"]]:
         '''A structure that defines the rotation configuration for this secret.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRotationSchedule.RotationRulesProperty"]], jsii.get(self, "rotationRules"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.RotationRulesProperty"]], jsii.get(self, "rotationRules"))
 
     @rotation_rules.setter
     def rotation_rules(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRotationSchedule.RotationRulesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.RotationRulesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1ae1bb268119d43a6dbbcc451761eef4982447d7465d9e1cb05714ac78eeae51)
@@ -1492,12 +1492,12 @@ class CfnRotationScheduleProps:
         self,
         *,
         secret_id: builtins.str,
-        external_secret_rotation_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        external_secret_rotation_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         external_secret_rotation_role_arn: typing.Optional[builtins.str] = None,
-        hosted_rotation_lambda: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRotationSchedule.HostedRotationLambdaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        rotate_immediately_on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        hosted_rotation_lambda: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRotationSchedule.HostedRotationLambdaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        rotate_immediately_on_update: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         rotation_lambda_arn: typing.Optional[builtins.str] = None,
-        rotation_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRotationSchedule.RotationRulesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        rotation_rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRotationSchedule.RotationRulesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRotationSchedule``.
 
@@ -1591,13 +1591,13 @@ class CfnRotationScheduleProps:
     @builtins.property
     def external_secret_rotation_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty"]]]]:
         '''The list of metadata needed to successfully rotate a managed external secret.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-rotationschedule.html#cfn-secretsmanager-rotationschedule-externalsecretrotationmetadata
         '''
         result = self._values.get("external_secret_rotation_metadata")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty"]]]], result)
 
     @builtins.property
     def external_secret_rotation_role_arn(self) -> typing.Optional[builtins.str]:
@@ -1611,7 +1611,7 @@ class CfnRotationScheduleProps:
     @builtins.property
     def hosted_rotation_lambda(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRotationSchedule.HostedRotationLambdaProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.HostedRotationLambdaProperty"]]:
         '''Creates a new Lambda rotation function based on one of the `Secrets Manager rotation function templates <https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_available-rotation-templates.html>`_ . To use a rotation function that already exists, specify ``RotationLambdaARN`` instead.
 
         You must specify ``Transform: AWS::SecretsManager-2024-09-16`` at the beginning of the CloudFormation template. Transforms are macros hosted by AWS CloudFormation that help you create and manage complex infrastructure. The ``Transform: AWS::SecretsManager-2024-09-16`` transform automatically extends the CloudFormation stack to include a nested stack (of type ``AWS::CloudFormation::Stack`` ), which then creates and updates on your behalf during subsequent stack operations, the appropriate rotation Lambda function for your database or service. For general information on transforms, see the `AWS CloudFormation documentation. <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-reference.html>`_
@@ -1623,12 +1623,12 @@ class CfnRotationScheduleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-rotationschedule.html#cfn-secretsmanager-rotationschedule-hostedrotationlambda
         '''
         result = self._values.get("hosted_rotation_lambda")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRotationSchedule.HostedRotationLambdaProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.HostedRotationLambdaProperty"]], result)
 
     @builtins.property
     def rotate_immediately_on_update(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Determines whether to rotate the secret immediately or wait until the next scheduled rotation window when the rotation schedule is updated.
 
         The rotation schedule is defined in ``RotationRules`` .
@@ -1648,7 +1648,7 @@ class CfnRotationScheduleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-rotationschedule.html#cfn-secretsmanager-rotationschedule-rotateimmediatelyonupdate
         '''
         result = self._values.get("rotate_immediately_on_update")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def rotation_lambda_arn(self) -> typing.Optional[builtins.str]:
@@ -1670,13 +1670,13 @@ class CfnRotationScheduleProps:
     @builtins.property
     def rotation_rules(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRotationSchedule.RotationRulesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.RotationRulesProperty"]]:
         '''A structure that defines the rotation configuration for this secret.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-rotationschedule.html#cfn-secretsmanager-rotationschedule-rotationrules
         '''
         result = self._values.get("rotation_rules")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRotationSchedule.RotationRulesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRotationSchedule.RotationRulesProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1716,6 +1716,7 @@ class CfnSecret(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_secretsmanager as secretsmanager
@@ -1753,16 +1754,16 @@ class CfnSecret(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
-        generate_secret_string: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecret.GenerateSecretStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        generate_secret_string: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecret.GenerateSecretStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
         name: typing.Optional[builtins.str] = None,
-        replica_regions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecret.ReplicaRegionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        replica_regions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecret.ReplicaRegionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         secret_string: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::SecretsManager::Secret``.
@@ -1797,7 +1798,7 @@ class CfnSecret(
 
     @jsii.member(jsii_name="arnForSecret")
     @builtins.classmethod
-    def arn_for_secret(cls, resource: _ISecretRef_3a7b28a3) -> builtins.str:
+    def arn_for_secret(cls, resource: "_ISecretRef_3a7b28a3") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1810,10 +1811,10 @@ class CfnSecret(
     @builtins.classmethod
     def from_secret_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         secret_id: builtins.str,
-    ) -> _ISecretRef_3a7b28a3:
+    ) -> "_ISecretRef_3a7b28a3":
         '''Creates a new ISecretRef from a secretId.
 
         :param scope: -
@@ -1825,7 +1826,7 @@ class CfnSecret(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument secret_id", value=secret_id, expected_type=type_hints["secret_id"])
-        return typing.cast(_ISecretRef_3a7b28a3, jsii.sinvoke(cls, "fromSecretId", [scope, id, secret_id]))
+        return typing.cast("_ISecretRef_3a7b28a3", jsii.sinvoke(cls, "fromSecretId", [scope, id, secret_id]))
 
     @jsii.member(jsii_name="isCfnSecret")
     @builtins.classmethod
@@ -1840,7 +1841,7 @@ class CfnSecret(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSecret", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1885,15 +1886,15 @@ class CfnSecret(
 
     @builtins.property
     @jsii.member(jsii_name="secretRef")
-    def secret_ref(self) -> _SecretReference_6b31850e:
+    def secret_ref(self) -> "_SecretReference_6b31850e":
         '''A reference to a Secret resource.'''
-        return typing.cast(_SecretReference_6b31850e, jsii.get(self, "secretRef"))
+        return typing.cast("_SecretReference_6b31850e", jsii.get(self, "secretRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -1912,14 +1913,14 @@ class CfnSecret(
     @jsii.member(jsii_name="generateSecretString")
     def generate_secret_string(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecret.GenerateSecretStringProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecret.GenerateSecretStringProperty"]]:
         '''A structure that specifies how to generate a password to encrypt and store in the secret.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecret.GenerateSecretStringProperty"]], jsii.get(self, "generateSecretString"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecret.GenerateSecretStringProperty"]], jsii.get(self, "generateSecretString"))
 
     @generate_secret_string.setter
     def generate_secret_string(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecret.GenerateSecretStringProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecret.GenerateSecretStringProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b749a9285682dedc5e74b552ab46e9bf3d0adc46fe9b38129cc919c4f81a4aec)
@@ -1956,14 +1957,14 @@ class CfnSecret(
     @jsii.member(jsii_name="replicaRegions")
     def replica_regions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSecret.ReplicaRegionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecret.ReplicaRegionProperty"]]]]:
         '''A custom type that specifies a ``Region`` and the ``KmsKeyId`` for a replica secret.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSecret.ReplicaRegionProperty"]]]], jsii.get(self, "replicaRegions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecret.ReplicaRegionProperty"]]]], jsii.get(self, "replicaRegions"))
 
     @replica_regions.setter
     def replica_regions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSecret.ReplicaRegionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecret.ReplicaRegionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ec39c5af61a0a49805320163d8adbaa0f7e050ef32906034a3e7e910b33dfac9)
@@ -1985,12 +1986,12 @@ class CfnSecret(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to attach to the secret.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6527b124c6c9c6b9e2adcab3d3441c54cfa7c9d19a5dd471a056cab26b59cd2b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2030,14 +2031,14 @@ class CfnSecret(
             self,
             *,
             exclude_characters: typing.Optional[builtins.str] = None,
-            exclude_lowercase: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            exclude_numbers: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            exclude_punctuation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            exclude_uppercase: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            exclude_lowercase: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            exclude_numbers: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            exclude_punctuation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            exclude_uppercase: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             generate_string_key: typing.Optional[builtins.str] = None,
-            include_space: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            include_space: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             password_length: typing.Optional[jsii.Number] = None,
-            require_each_included_type: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            require_each_included_type: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             secret_string_template: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Generates a random password.
@@ -2125,7 +2126,7 @@ class CfnSecret(
         @builtins.property
         def exclude_lowercase(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to exclude lowercase letters from the password.
 
             If you don't include this switch, the password can contain lowercase letters.
@@ -2133,12 +2134,12 @@ class CfnSecret(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-secretsmanager-secret-generatesecretstring.html#cfn-secretsmanager-secret-generatesecretstring-excludelowercase
             '''
             result = self._values.get("exclude_lowercase")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def exclude_numbers(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to exclude numbers from the password.
 
             If you don't include this switch, the password can contain numbers.
@@ -2146,12 +2147,12 @@ class CfnSecret(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-secretsmanager-secret-generatesecretstring.html#cfn-secretsmanager-secret-generatesecretstring-excludenumbers
             '''
             result = self._values.get("exclude_numbers")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def exclude_punctuation(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to exclude the following punctuation characters from the password: `!
 
             " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ `` { | } ~`` . If you don't include this switch, the password can contain punctuation.
@@ -2159,12 +2160,12 @@ class CfnSecret(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-secretsmanager-secret-generatesecretstring.html#cfn-secretsmanager-secret-generatesecretstring-excludepunctuation
             '''
             result = self._values.get("exclude_punctuation")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def exclude_uppercase(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to exclude uppercase letters from the password.
 
             If you don't include this switch, the password can contain uppercase letters.
@@ -2172,7 +2173,7 @@ class CfnSecret(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-secretsmanager-secret-generatesecretstring.html#cfn-secretsmanager-secret-generatesecretstring-excludeuppercase
             '''
             result = self._values.get("exclude_uppercase")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def generate_string_key(self) -> typing.Optional[builtins.str]:
@@ -2188,7 +2189,7 @@ class CfnSecret(
         @builtins.property
         def include_space(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to include the space character.
 
             If you include this switch, the password can contain space characters.
@@ -2196,7 +2197,7 @@ class CfnSecret(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-secretsmanager-secret-generatesecretstring.html#cfn-secretsmanager-secret-generatesecretstring-includespace
             '''
             result = self._values.get("include_space")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def password_length(self) -> typing.Optional[jsii.Number]:
@@ -2212,7 +2213,7 @@ class CfnSecret(
         @builtins.property
         def require_each_included_type(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to include at least one upper and lowercase letter, one number, and one punctuation.
 
             If you don't include this switch, the password contains at least one of every character type.
@@ -2220,7 +2221,7 @@ class CfnSecret(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-secretsmanager-secret-generatesecretstring.html#cfn-secretsmanager-secret-generatesecretstring-requireeachincludedtype
             '''
             result = self._values.get("require_each_included_type")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def secret_string_template(self) -> typing.Optional[builtins.str]:
@@ -2339,12 +2340,12 @@ class CfnSecretProps:
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        generate_secret_string: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecret.GenerateSecretStringProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        generate_secret_string: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecret.GenerateSecretStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
         name: typing.Optional[builtins.str] = None,
-        replica_regions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecret.ReplicaRegionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        replica_regions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecret.ReplicaRegionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         secret_string: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnSecret``.
@@ -2363,6 +2364,7 @@ class CfnSecretProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_secretsmanager as secretsmanager
@@ -2437,7 +2439,7 @@ class CfnSecretProps:
     @builtins.property
     def generate_secret_string(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecret.GenerateSecretStringProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecret.GenerateSecretStringProperty"]]:
         '''A structure that specifies how to generate a password to encrypt and store in the secret.
 
         To include a specific string in the secret, use ``SecretString`` instead. If you omit both ``GenerateSecretString`` and ``SecretString`` , you create an empty secret. When you make a change to this property, a new secret version is created.
@@ -2447,12 +2449,12 @@ class CfnSecretProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-secret.html#cfn-secretsmanager-secret-generatesecretstring
         '''
         result = self._values.get("generate_secret_string")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecret.GenerateSecretStringProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecret.GenerateSecretStringProperty"]], result)
 
     @builtins.property
     def kms_key_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]]:
         '''The ARN, key ID, or alias of the AWS  key that Secrets Manager uses to encrypt the secret value in the secret.
 
         An alias is always prefixed by ``alias/`` , for example ``alias/aws/secretsmanager`` . For more information, see `About aliases <https://docs.aws.amazon.com/kms/latest/developerguide/alias-about.html>`_ .
@@ -2466,7 +2468,7 @@ class CfnSecretProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-secret.html#cfn-secretsmanager-secret-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -2484,13 +2486,13 @@ class CfnSecretProps:
     @builtins.property
     def replica_regions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSecret.ReplicaRegionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecret.ReplicaRegionProperty"]]]]:
         '''A custom type that specifies a ``Region`` and the ``KmsKeyId`` for a replica secret.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-secret.html#cfn-secretsmanager-secret-replicaregions
         '''
         result = self._values.get("replica_regions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSecret.ReplicaRegionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSecret.ReplicaRegionProperty"]]]], result)
 
     @builtins.property
     def secret_string(self) -> typing.Optional[builtins.str]:
@@ -2504,7 +2506,7 @@ class CfnSecretProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to attach to the secret.
 
         Each tag is a key and value pair of strings in a JSON text string, for example:
@@ -2532,7 +2534,7 @@ class CfnSecretProps:
         :: .
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def type(self) -> typing.Optional[builtins.str]:
@@ -2594,7 +2596,7 @@ class CfnSecretTargetAttachment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         secret_id: builtins.str,
@@ -2632,7 +2634,7 @@ class CfnSecretTargetAttachment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSecretTargetAttachment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2676,9 +2678,11 @@ class CfnSecretTargetAttachment(
 
     @builtins.property
     @jsii.member(jsii_name="secretTargetAttachmentRef")
-    def secret_target_attachment_ref(self) -> _SecretTargetAttachmentReference_5ec6f11b:
+    def secret_target_attachment_ref(
+        self,
+    ) -> "_SecretTargetAttachmentReference_5ec6f11b":
         '''A reference to a SecretTargetAttachment resource.'''
-        return typing.cast(_SecretTargetAttachmentReference_5ec6f11b, jsii.get(self, "secretTargetAttachmentRef"))
+        return typing.cast("_SecretTargetAttachmentReference_5ec6f11b", jsii.get(self, "secretTargetAttachmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="secretId")
@@ -2849,9 +2853,9 @@ class HostedRotation(
         master_secret: "ISecret",
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''MariaDB Multi User.
 
@@ -2880,9 +2884,9 @@ class HostedRotation(
         *,
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''MariaDB Single User.
 
@@ -2910,9 +2914,9 @@ class HostedRotation(
         master_secret: "ISecret",
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''MongoDB Multi User.
 
@@ -2941,9 +2945,9 @@ class HostedRotation(
         *,
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''MongoDB Single User.
 
@@ -2971,9 +2975,9 @@ class HostedRotation(
         master_secret: "ISecret",
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''MySQL Multi User.
 
@@ -3002,9 +3006,9 @@ class HostedRotation(
         *,
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''MySQL Single User.
 
@@ -3032,9 +3036,9 @@ class HostedRotation(
         master_secret: "ISecret",
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''Oracle Multi User.
 
@@ -3063,9 +3067,9 @@ class HostedRotation(
         *,
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''Oracle Single User.
 
@@ -3093,9 +3097,9 @@ class HostedRotation(
         master_secret: "ISecret",
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''PostgreSQL Multi User.
 
@@ -3124,9 +3128,9 @@ class HostedRotation(
         *,
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''PostgreSQL Single User.
 
@@ -3154,9 +3158,9 @@ class HostedRotation(
         master_secret: "ISecret",
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''Redshift Multi User.
 
@@ -3185,9 +3189,9 @@ class HostedRotation(
         *,
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''Redshift Single User.
 
@@ -3215,9 +3219,9 @@ class HostedRotation(
         master_secret: "ISecret",
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''SQL Server Multi User.
 
@@ -3246,9 +3250,9 @@ class HostedRotation(
         *,
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "HostedRotation":
         '''SQL Server Single User.
 
@@ -3272,8 +3276,8 @@ class HostedRotation(
     def bind(
         self,
         secret: "ISecret",
-        scope: _constructs_77d1e7e8.Construct,
-    ) -> CfnRotationSchedule.HostedRotationLambdaProperty:
+        scope: "_constructs_77d1e7e8.Construct",
+    ) -> "CfnRotationSchedule.HostedRotationLambdaProperty":
         '''Binds this hosted rotation to a secret.
 
         :param secret: -
@@ -3283,13 +3287,13 @@ class HostedRotation(
             type_hints = typing.get_type_hints(_typecheckingstub__0296aa9bdf8ce9144e34613aa1c1464127b91b8af87d320a0eb53189b026cf7f)
             check_type(argname="argument secret", value=secret, expected_type=type_hints["secret"])
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-        return typing.cast(CfnRotationSchedule.HostedRotationLambdaProperty, jsii.invoke(self, "bind", [secret, scope]))
+        return typing.cast("CfnRotationSchedule.HostedRotationLambdaProperty", jsii.invoke(self, "bind", [secret, scope]))
 
     @builtins.property
     @jsii.member(jsii_name="connections")
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''Security group connections for this hosted rotation.'''
-        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
 
 class HostedRotationType(
@@ -3434,7 +3438,7 @@ class ISecret(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="secretValue")
-    def secret_value(self) -> _SecretValue_3dd0ddae:
+    def secret_value(self) -> "_SecretValue_3dd0ddae":
         '''Retrieve the value of the stored secret as a ``SecretValue``.
 
         :attribute: true
@@ -3443,7 +3447,7 @@ class ISecret(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The customer-managed encryption key that is used to encrypt this secret, if any.
 
         When not specified, the default
@@ -3465,10 +3469,10 @@ class ISecret(_IResource_c80c4260, typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        automatically_after: typing.Optional[_Duration_4839e8c3] = None,
-        hosted_rotation: typing.Optional[HostedRotation] = None,
+        automatically_after: typing.Optional["_Duration_4839e8c3"] = None,
+        hosted_rotation: typing.Optional["HostedRotation"] = None,
         rotate_immediately_on_update: typing.Optional[builtins.bool] = None,
-        rotation_lambda: typing.Optional[_IFunction_6adb0ab8] = None,
+        rotation_lambda: typing.Optional["_IFunction_6adb0ab8"] = None,
     ) -> "RotationSchedule":
         '''Adds a rotation schedule to the secret.
 
@@ -3483,8 +3487,8 @@ class ISecret(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this secret.
 
         If this secret was created in this stack, a resource policy will be
@@ -3531,9 +3535,9 @@ class ISecret(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="grantRead")
     def grant_read(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         version_stages: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grants reading the secret value to some role.
 
         :param grantee: the principal being granted permission.
@@ -3542,7 +3546,7 @@ class ISecret(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants writing and updating the secret value to some role.
 
         :param grantee: the principal being granted permission.
@@ -3550,7 +3554,7 @@ class ISecret(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="secretValueFromJson")
-    def secret_value_from_json(self, key: builtins.str) -> _SecretValue_3dd0ddae:
+    def secret_value_from_json(self, key: builtins.str) -> "_SecretValue_3dd0ddae":
         '''Interpret the secret as a JSON object and return a field's value from it as a ``SecretValue``.
 
         :param key: -
@@ -3589,22 +3593,22 @@ class _ISecretProxy(
 
     @builtins.property
     @jsii.member(jsii_name="secretValue")
-    def secret_value(self) -> _SecretValue_3dd0ddae:
+    def secret_value(self) -> "_SecretValue_3dd0ddae":
         '''Retrieve the value of the stored secret as a ``SecretValue``.
 
         :attribute: true
         '''
-        return typing.cast(_SecretValue_3dd0ddae, jsii.get(self, "secretValue"))
+        return typing.cast("_SecretValue_3dd0ddae", jsii.get(self, "secretValue"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The customer-managed encryption key that is used to encrypt this secret, if any.
 
         When not specified, the default
         KMS key for the account and region is being used.
         '''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionKey"))
 
     @builtins.property
     @jsii.member(jsii_name="secretFullArn")
@@ -3620,10 +3624,10 @@ class _ISecretProxy(
         self,
         id: builtins.str,
         *,
-        automatically_after: typing.Optional[_Duration_4839e8c3] = None,
-        hosted_rotation: typing.Optional[HostedRotation] = None,
+        automatically_after: typing.Optional["_Duration_4839e8c3"] = None,
+        hosted_rotation: typing.Optional["HostedRotation"] = None,
         rotate_immediately_on_update: typing.Optional[builtins.bool] = None,
-        rotation_lambda: typing.Optional[_IFunction_6adb0ab8] = None,
+        rotation_lambda: typing.Optional["_IFunction_6adb0ab8"] = None,
     ) -> "RotationSchedule":
         '''Adds a rotation schedule to the secret.
 
@@ -3648,8 +3652,8 @@ class _ISecretProxy(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this secret.
 
         If this secret was created in this stack, a resource policy will be
@@ -3661,10 +3665,10 @@ class _ISecretProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7ca8a3a04172cc7290ea795d4ed22a2018d69433a152fce410fa5b29236fff0a)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="attach")
-    def attach(self, target: "ISecretAttachmentTarget") -> ISecret:
+    def attach(self, target: "ISecretAttachmentTarget") -> "ISecret":
         '''Attach a target to this secret.
 
         :param target: The target to attach.
@@ -3674,7 +3678,7 @@ class _ISecretProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0800447869be5f35a1e4dbb472254f3a11a06295360c640823fd9ee2418745e0)
             check_type(argname="argument target", value=target, expected_type=type_hints["target"])
-        return typing.cast(ISecret, jsii.invoke(self, "attach", [target]))
+        return typing.cast("ISecret", jsii.invoke(self, "attach", [target]))
 
     @jsii.member(jsii_name="cfnDynamicReferenceKey")
     def cfn_dynamic_reference_key(
@@ -3706,9 +3710,9 @@ class _ISecretProxy(
     @jsii.member(jsii_name="grantRead")
     def grant_read(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         version_stages: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grants reading the secret value to some role.
 
         :param grantee: the principal being granted permission.
@@ -3718,10 +3722,10 @@ class _ISecretProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__aa9b36ba3358a080c3fdc6f338877e097c1b68d22444b7b4d3530bebfb65bab5)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument version_stages", value=version_stages, expected_type=type_hints["version_stages"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee, version_stages]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee, version_stages]))
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants writing and updating the secret value to some role.
 
         :param grantee: the principal being granted permission.
@@ -3729,10 +3733,10 @@ class _ISecretProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b3d8d811bce40c68bb8d8ce3a12b36334b7d98fc6a70a53aef2c5e9aa70aa637)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWrite", [grantee]))
 
     @jsii.member(jsii_name="secretValueFromJson")
-    def secret_value_from_json(self, key: builtins.str) -> _SecretValue_3dd0ddae:
+    def secret_value_from_json(self, key: builtins.str) -> "_SecretValue_3dd0ddae":
         '''Interpret the secret as a JSON object and return a field's value from it as a ``SecretValue``.
 
         :param key: -
@@ -3740,7 +3744,7 @@ class _ISecretProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c318161f2dad977a974bfdf1b8617f4afb364dda4cd8be7309aafc7305bcba10)
             check_type(argname="argument key", value=key, expected_type=type_hints["key"])
-        return typing.cast(_SecretValue_3dd0ddae, jsii.invoke(self, "secretValueFromJson", [key]))
+        return typing.cast("_SecretValue_3dd0ddae", jsii.invoke(self, "secretValueFromJson", [key]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ISecret).__jsii_proxy_class__ = lambda : _ISecretProxy
@@ -3810,7 +3814,7 @@ class ReplicaRegion:
         self,
         *,
         region: builtins.str,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
     ) -> None:
         '''Secret replica region.
 
@@ -3853,13 +3857,13 @@ class ReplicaRegion:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The customer-managed encryption key to use for encrypting the secret value.
 
         :default: - A default KMS key for the account and region is used.
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3908,10 +3912,10 @@ class ResourcePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        secret: ISecret,
+        secret: "ISecret",
     ) -> None:
         '''
         :param scope: -
@@ -3934,9 +3938,9 @@ class ResourcePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="document")
-    def document(self) -> _PolicyDocument_3ac34393:
+    def document(self) -> "_PolicyDocument_3ac34393":
         '''The IAM policy document for this policy.'''
-        return typing.cast(_PolicyDocument_3ac34393, jsii.get(self, "document"))
+        return typing.cast("_PolicyDocument_3ac34393", jsii.get(self, "document"))
 
 
 @jsii.data_type(
@@ -3945,7 +3949,7 @@ class ResourcePolicy(
     name_mapping={"secret": "secret"},
 )
 class ResourcePolicyProps:
-    def __init__(self, *, secret: ISecret) -> None:
+    def __init__(self, *, secret: "ISecret") -> None:
         '''Construction properties for a ResourcePolicy.
 
         :param secret: The secret to attach a resource-based permissions policy.
@@ -3972,11 +3976,11 @@ class ResourcePolicyProps:
         }
 
     @builtins.property
-    def secret(self) -> ISecret:
+    def secret(self) -> "ISecret":
         '''The secret to attach a resource-based permissions policy.'''
         result = self._values.get("secret")
         assert result is not None, "Required property 'secret' is missing"
-        return typing.cast(ISecret, result)
+        return typing.cast("ISecret", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4024,14 +4028,14 @@ class RotationSchedule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        secret: ISecret,
-        automatically_after: typing.Optional[_Duration_4839e8c3] = None,
-        hosted_rotation: typing.Optional[HostedRotation] = None,
+        secret: "ISecret",
+        automatically_after: typing.Optional["_Duration_4839e8c3"] = None,
+        hosted_rotation: typing.Optional["HostedRotation"] = None,
         rotate_immediately_on_update: typing.Optional[builtins.bool] = None,
-        rotation_lambda: typing.Optional[_IFunction_6adb0ab8] = None,
+        rotation_lambda: typing.Optional["_IFunction_6adb0ab8"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -4077,10 +4081,10 @@ class RotationScheduleOptions:
     def __init__(
         self,
         *,
-        automatically_after: typing.Optional[_Duration_4839e8c3] = None,
-        hosted_rotation: typing.Optional[HostedRotation] = None,
+        automatically_after: typing.Optional["_Duration_4839e8c3"] = None,
+        hosted_rotation: typing.Optional["HostedRotation"] = None,
         rotate_immediately_on_update: typing.Optional[builtins.bool] = None,
-        rotation_lambda: typing.Optional[_IFunction_6adb0ab8] = None,
+        rotation_lambda: typing.Optional["_IFunction_6adb0ab8"] = None,
     ) -> None:
         '''Options to add a rotation schedule to a secret.
 
@@ -4122,7 +4126,7 @@ class RotationScheduleOptions:
             self._values["rotation_lambda"] = rotation_lambda
 
     @builtins.property
-    def automatically_after(self) -> typing.Optional[_Duration_4839e8c3]:
+    def automatically_after(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies the number of days after the previous rotation before Secrets Manager triggers the next automatic rotation.
 
         The minimum value is 4 hours.
@@ -4133,16 +4137,16 @@ class RotationScheduleOptions:
         :default: Duration.days(30)
         '''
         result = self._values.get("automatically_after")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def hosted_rotation(self) -> typing.Optional[HostedRotation]:
+    def hosted_rotation(self) -> typing.Optional["HostedRotation"]:
         '''Hosted rotation.
 
         :default: - either ``rotationLambda`` or ``hostedRotation`` must be specified
         '''
         result = self._values.get("hosted_rotation")
-        return typing.cast(typing.Optional[HostedRotation], result)
+        return typing.cast(typing.Optional["HostedRotation"], result)
 
     @builtins.property
     def rotate_immediately_on_update(self) -> typing.Optional[builtins.bool]:
@@ -4154,13 +4158,13 @@ class RotationScheduleOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def rotation_lambda(self) -> typing.Optional[_IFunction_6adb0ab8]:
+    def rotation_lambda(self) -> typing.Optional["_IFunction_6adb0ab8"]:
         '''A Lambda function that can rotate the secret.
 
         :default: - either ``rotationLambda`` or ``hostedRotation`` must be specified
         '''
         result = self._values.get("rotation_lambda")
-        return typing.cast(typing.Optional[_IFunction_6adb0ab8], result)
+        return typing.cast(typing.Optional["_IFunction_6adb0ab8"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4189,11 +4193,11 @@ class RotationScheduleProps(RotationScheduleOptions):
     def __init__(
         self,
         *,
-        automatically_after: typing.Optional[_Duration_4839e8c3] = None,
-        hosted_rotation: typing.Optional[HostedRotation] = None,
+        automatically_after: typing.Optional["_Duration_4839e8c3"] = None,
+        hosted_rotation: typing.Optional["HostedRotation"] = None,
         rotate_immediately_on_update: typing.Optional[builtins.bool] = None,
-        rotation_lambda: typing.Optional[_IFunction_6adb0ab8] = None,
-        secret: ISecret,
+        rotation_lambda: typing.Optional["_IFunction_6adb0ab8"] = None,
+        secret: "ISecret",
     ) -> None:
         '''Construction properties for a RotationSchedule.
 
@@ -4247,7 +4251,7 @@ class RotationScheduleProps(RotationScheduleOptions):
             self._values["rotation_lambda"] = rotation_lambda
 
     @builtins.property
-    def automatically_after(self) -> typing.Optional[_Duration_4839e8c3]:
+    def automatically_after(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies the number of days after the previous rotation before Secrets Manager triggers the next automatic rotation.
 
         The minimum value is 4 hours.
@@ -4258,16 +4262,16 @@ class RotationScheduleProps(RotationScheduleOptions):
         :default: Duration.days(30)
         '''
         result = self._values.get("automatically_after")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def hosted_rotation(self) -> typing.Optional[HostedRotation]:
+    def hosted_rotation(self) -> typing.Optional["HostedRotation"]:
         '''Hosted rotation.
 
         :default: - either ``rotationLambda`` or ``hostedRotation`` must be specified
         '''
         result = self._values.get("hosted_rotation")
-        return typing.cast(typing.Optional[HostedRotation], result)
+        return typing.cast(typing.Optional["HostedRotation"], result)
 
     @builtins.property
     def rotate_immediately_on_update(self) -> typing.Optional[builtins.bool]:
@@ -4279,16 +4283,16 @@ class RotationScheduleProps(RotationScheduleOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def rotation_lambda(self) -> typing.Optional[_IFunction_6adb0ab8]:
+    def rotation_lambda(self) -> typing.Optional["_IFunction_6adb0ab8"]:
         '''A Lambda function that can rotate the secret.
 
         :default: - either ``rotationLambda`` or ``hostedRotation`` must be specified
         '''
         result = self._values.get("rotation_lambda")
-        return typing.cast(typing.Optional[_IFunction_6adb0ab8], result)
+        return typing.cast(typing.Optional["_IFunction_6adb0ab8"], result)
 
     @builtins.property
-    def secret(self) -> ISecret:
+    def secret(self) -> "ISecret":
         '''The secret to rotate.
 
         If hosted rotation is used, this must be a JSON string with the following format::
@@ -4308,7 +4312,7 @@ class RotationScheduleProps(RotationScheduleOptions):
         '''
         result = self._values.get("secret")
         assert result is not None, "Required property 'secret' is missing"
-        return typing.cast(ISecret, result)
+        return typing.cast("ISecret", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4349,18 +4353,18 @@ class Secret(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
         generate_secret_string: typing.Optional[typing.Union["SecretStringGenerator", typing.Dict[builtins.str, typing.Any]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        replica_regions: typing.Optional[typing.Sequence[typing.Union[ReplicaRegion, typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        replica_regions: typing.Optional[typing.Sequence[typing.Union["ReplicaRegion", typing.Dict[builtins.str, typing.Any]]]] = None,
         secret_name: typing.Optional[builtins.str] = None,
-        secret_object_value: typing.Optional[typing.Mapping[builtins.str, _SecretValue_3dd0ddae]] = None,
+        secret_object_value: typing.Optional[typing.Mapping[builtins.str, "_SecretValue_3dd0ddae"]] = None,
         secret_string_beta1: typing.Optional["SecretStringValueBeta1"] = None,
-        secret_string_value: typing.Optional[_SecretValue_3dd0ddae] = None,
+        secret_string_value: typing.Optional["_SecretValue_3dd0ddae"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -4397,13 +4401,13 @@ class Secret(
     @builtins.classmethod
     def from_secret_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
         secret_complete_arn: typing.Optional[builtins.str] = None,
         secret_partial_arn: typing.Optional[builtins.str] = None,
-    ) -> ISecret:
+    ) -> "ISecret":
         '''Import an existing secret into the Stack.
 
         :param scope: the scope of the import.
@@ -4422,16 +4426,16 @@ class Secret(
             secret_partial_arn=secret_partial_arn,
         )
 
-        return typing.cast(ISecret, jsii.sinvoke(cls, "fromSecretAttributes", [scope, id, attrs]))
+        return typing.cast("ISecret", jsii.sinvoke(cls, "fromSecretAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromSecretCompleteArn")
     @builtins.classmethod
     def from_secret_complete_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         secret_complete_arn: builtins.str,
-    ) -> ISecret:
+    ) -> "ISecret":
         '''Imports a secret by complete ARN.
 
         The complete ARN is the ARN with the Secrets Manager-supplied suffix.
@@ -4445,16 +4449,16 @@ class Secret(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument secret_complete_arn", value=secret_complete_arn, expected_type=type_hints["secret_complete_arn"])
-        return typing.cast(ISecret, jsii.sinvoke(cls, "fromSecretCompleteArn", [scope, id, secret_complete_arn]))
+        return typing.cast("ISecret", jsii.sinvoke(cls, "fromSecretCompleteArn", [scope, id, secret_complete_arn]))
 
     @jsii.member(jsii_name="fromSecretNameV2")
     @builtins.classmethod
     def from_secret_name_v2(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         secret_name: builtins.str,
-    ) -> ISecret:
+    ) -> "ISecret":
         '''Imports a secret by secret name.
 
         A secret with this name must exist in the same account & region.
@@ -4474,16 +4478,16 @@ class Secret(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument secret_name", value=secret_name, expected_type=type_hints["secret_name"])
-        return typing.cast(ISecret, jsii.sinvoke(cls, "fromSecretNameV2", [scope, id, secret_name]))
+        return typing.cast("ISecret", jsii.sinvoke(cls, "fromSecretNameV2", [scope, id, secret_name]))
 
     @jsii.member(jsii_name="fromSecretPartialArn")
     @builtins.classmethod
     def from_secret_partial_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         secret_partial_arn: builtins.str,
-    ) -> ISecret:
+    ) -> "ISecret":
         '''Imports a secret by partial ARN.
 
         The partial ARN is the ARN without the Secrets Manager-supplied suffix.
@@ -4497,7 +4501,7 @@ class Secret(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument secret_partial_arn", value=secret_partial_arn, expected_type=type_hints["secret_partial_arn"])
-        return typing.cast(ISecret, jsii.sinvoke(cls, "fromSecretPartialArn", [scope, id, secret_partial_arn]))
+        return typing.cast("ISecret", jsii.sinvoke(cls, "fromSecretPartialArn", [scope, id, secret_partial_arn]))
 
     @jsii.member(jsii_name="isSecret")
     @builtins.classmethod
@@ -4515,7 +4519,7 @@ class Secret(
     def add_replica_region(
         self,
         region: builtins.str,
-        encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
     ) -> None:
         '''Adds a replica region for the secret.
 
@@ -4533,11 +4537,11 @@ class Secret(
         self,
         id: builtins.str,
         *,
-        automatically_after: typing.Optional[_Duration_4839e8c3] = None,
-        hosted_rotation: typing.Optional[HostedRotation] = None,
+        automatically_after: typing.Optional["_Duration_4839e8c3"] = None,
+        hosted_rotation: typing.Optional["HostedRotation"] = None,
         rotate_immediately_on_update: typing.Optional[builtins.bool] = None,
-        rotation_lambda: typing.Optional[_IFunction_6adb0ab8] = None,
-    ) -> RotationSchedule:
+        rotation_lambda: typing.Optional["_IFunction_6adb0ab8"] = None,
+    ) -> "RotationSchedule":
         '''Adds a rotation schedule to the secret.
 
         :param id: -
@@ -4556,13 +4560,13 @@ class Secret(
             rotation_lambda=rotation_lambda,
         )
 
-        return typing.cast(RotationSchedule, jsii.invoke(self, "addRotationSchedule", [id, options]))
+        return typing.cast("RotationSchedule", jsii.invoke(self, "addRotationSchedule", [id, options]))
 
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this secret.
 
         If this secret was created in this stack, a resource policy will be
@@ -4574,10 +4578,10 @@ class Secret(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0ef7ff6cd3fc707bb99a8ad0234b8a9f63ecf93170c54831da20185d8e9bf092)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="attach")
-    def attach(self, target: ISecretAttachmentTarget) -> ISecret:
+    def attach(self, target: "ISecretAttachmentTarget") -> "ISecret":
         '''Attach a target to this secret.
 
         :param target: The target to attach.
@@ -4587,7 +4591,7 @@ class Secret(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d8c825de04d07bcd42da640fbe5f103da35051a0e6fcb375c69042725bbd039e)
             check_type(argname="argument target", value=target, expected_type=type_hints["target"])
-        return typing.cast(ISecret, jsii.invoke(self, "attach", [target]))
+        return typing.cast("ISecret", jsii.invoke(self, "attach", [target]))
 
     @jsii.member(jsii_name="cfnDynamicReferenceKey")
     def cfn_dynamic_reference_key(
@@ -4619,9 +4623,9 @@ class Secret(
     @jsii.member(jsii_name="grantRead")
     def grant_read(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         version_stages: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grants reading the secret value to some role.
 
         :param grantee: -
@@ -4631,10 +4635,10 @@ class Secret(
             type_hints = typing.get_type_hints(_typecheckingstub__a48942a92a2250d7cf4bcff79a5204a435c39b97180397cd931a98c02ae3aef2)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument version_stages", value=version_stages, expected_type=type_hints["version_stages"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee, version_stages]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee, version_stages]))
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants writing and updating the secret value to some role.
 
         :param grantee: -
@@ -4642,10 +4646,13 @@ class Secret(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f9c207e7bde6262ef902d6d8002da6b7e4c929174a6f4306bab488f55b5a32c7)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWrite", [grantee]))
 
     @jsii.member(jsii_name="secretValueFromJson")
-    def secret_value_from_json(self, json_field: builtins.str) -> _SecretValue_3dd0ddae:
+    def secret_value_from_json(
+        self,
+        json_field: builtins.str,
+    ) -> "_SecretValue_3dd0ddae":
         '''Interpret the secret as a JSON object and return a field's value from it as a ``SecretValue``.
 
         :param json_field: -
@@ -4653,7 +4660,7 @@ class Secret(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0b5506b8e74910c6bcedb58ad6aba08df4f75faf9c12c09a961f9d0300901011)
             check_type(argname="argument json_field", value=json_field, expected_type=type_hints["json_field"])
-        return typing.cast(_SecretValue_3dd0ddae, jsii.invoke(self, "secretValueFromJson", [json_field]))
+        return typing.cast("_SecretValue_3dd0ddae", jsii.invoke(self, "secretValueFromJson", [json_field]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -4699,19 +4706,19 @@ class Secret(
 
     @builtins.property
     @jsii.member(jsii_name="secretValue")
-    def secret_value(self) -> _SecretValue_3dd0ddae:
+    def secret_value(self) -> "_SecretValue_3dd0ddae":
         '''Retrieve the value of the stored secret as a ``SecretValue``.'''
-        return typing.cast(_SecretValue_3dd0ddae, jsii.get(self, "secretValue"))
+        return typing.cast("_SecretValue_3dd0ddae", jsii.get(self, "secretValue"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The customer-managed encryption key that is used to encrypt this secret, if any.
 
         When not specified, the default
         KMS key for the account and region is being used.
         '''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionKey"))
 
     @builtins.property
     @jsii.member(jsii_name="excludeCharacters")
@@ -4739,7 +4746,7 @@ class SecretAttachmentTargetProps:
         self,
         *,
         target_id: builtins.str,
-        target_type: AttachmentTargetType,
+        target_type: "AttachmentTargetType",
     ) -> None:
         '''Attachment target specifications.
 
@@ -4776,11 +4783,11 @@ class SecretAttachmentTargetProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def target_type(self) -> AttachmentTargetType:
+    def target_type(self) -> "AttachmentTargetType":
         '''The type of the target to attach the secret to.'''
         result = self._values.get("target_type")
         assert result is not None, "Required property 'target_type' is missing"
-        return typing.cast(AttachmentTargetType, result)
+        return typing.cast("AttachmentTargetType", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4807,7 +4814,7 @@ class SecretAttributes:
     def __init__(
         self,
         *,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
         secret_complete_arn: typing.Optional[builtins.str] = None,
         secret_partial_arn: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -4848,10 +4855,10 @@ class SecretAttributes:
             self._values["secret_partial_arn"] = secret_partial_arn
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The encryption key that is used to encrypt the secret, unless the default SecretsManager key is used.'''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def secret_complete_arn(self) -> typing.Optional[builtins.str]:
@@ -4905,14 +4912,14 @@ class SecretProps:
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
         generate_secret_string: typing.Optional[typing.Union["SecretStringGenerator", typing.Dict[builtins.str, typing.Any]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        replica_regions: typing.Optional[typing.Sequence[typing.Union[ReplicaRegion, typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        replica_regions: typing.Optional[typing.Sequence[typing.Union["ReplicaRegion", typing.Dict[builtins.str, typing.Any]]]] = None,
         secret_name: typing.Optional[builtins.str] = None,
-        secret_object_value: typing.Optional[typing.Mapping[builtins.str, _SecretValue_3dd0ddae]] = None,
+        secret_object_value: typing.Optional[typing.Mapping[builtins.str, "_SecretValue_3dd0ddae"]] = None,
         secret_string_beta1: typing.Optional["SecretStringValueBeta1"] = None,
-        secret_string_value: typing.Optional[_SecretValue_3dd0ddae] = None,
+        secret_string_value: typing.Optional["_SecretValue_3dd0ddae"] = None,
     ) -> None:
         '''The properties required to create a new secret in AWS Secrets Manager.
 
@@ -4985,13 +4992,13 @@ class SecretProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The customer-managed encryption key to use for encrypting the secret value.
 
         :default: - A default KMS key for the account and region is used.
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def generate_secret_string(self) -> typing.Optional["SecretStringGenerator"]:
@@ -5008,22 +5015,22 @@ class SecretProps:
         return typing.cast(typing.Optional["SecretStringGenerator"], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Policy to apply when the secret is removed from this stack.
 
         :default: - Not set.
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def replica_regions(self) -> typing.Optional[typing.List[ReplicaRegion]]:
+    def replica_regions(self) -> typing.Optional[typing.List["ReplicaRegion"]]:
         '''A list of regions where to replicate this secret.
 
         :default: - Secret is not replicated
         '''
         result = self._values.get("replica_regions")
-        return typing.cast(typing.Optional[typing.List[ReplicaRegion]], result)
+        return typing.cast(typing.Optional[typing.List["ReplicaRegion"]], result)
 
     @builtins.property
     def secret_name(self) -> typing.Optional[builtins.str]:
@@ -5040,7 +5047,7 @@ class SecretProps:
     @builtins.property
     def secret_object_value(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, _SecretValue_3dd0ddae]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "_SecretValue_3dd0ddae"]]:
         '''Initial value for a JSON secret.
 
         **NOTE:** *It is **highly** encouraged to leave this field undefined and allow SecretsManager to create the secret value.
@@ -5071,7 +5078,7 @@ class SecretProps:
             )
         '''
         result = self._values.get("secret_object_value")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, _SecretValue_3dd0ddae]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "_SecretValue_3dd0ddae"]], result)
 
     @builtins.property
     def secret_string_beta1(self) -> typing.Optional["SecretStringValueBeta1"]:
@@ -5098,7 +5105,7 @@ class SecretProps:
         return typing.cast(typing.Optional["SecretStringValueBeta1"], result)
 
     @builtins.property
-    def secret_string_value(self) -> typing.Optional[_SecretValue_3dd0ddae]:
+    def secret_string_value(self) -> typing.Optional["_SecretValue_3dd0ddae"]:
         '''Initial value for the secret.
 
         **NOTE:** *It is **highly** encouraged to leave this field undefined and allow SecretsManager to create the secret value.
@@ -5115,7 +5122,7 @@ class SecretProps:
         :default: - SecretsManager generates a new secret value.
         '''
         result = self._values.get("secret_string_value")
-        return typing.cast(typing.Optional[_SecretValue_3dd0ddae], result)
+        return typing.cast(typing.Optional["_SecretValue_3dd0ddae"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5157,20 +5164,20 @@ class SecretRotation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application: "SecretRotationApplication",
-        secret: ISecret,
-        target: _IConnectable_10015a05,
-        vpc: _IVpc_f30d5663,
-        automatically_after: typing.Optional[_Duration_4839e8c3] = None,
-        endpoint: typing.Optional[_IInterfaceVpcEndpoint_7481aea1] = None,
+        secret: "ISecret",
+        target: "_IConnectable_10015a05",
+        vpc: "_IVpc_f30d5663",
+        automatically_after: typing.Optional["_Duration_4839e8c3"] = None,
+        endpoint: typing.Optional["_IInterfaceVpcEndpoint_7481aea1"] = None,
         exclude_characters: typing.Optional[builtins.str] = None,
-        master_secret: typing.Optional[ISecret] = None,
+        master_secret: typing.Optional["ISecret"] = None,
         rotate_immediately_on_update: typing.Optional[builtins.bool] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -5442,17 +5449,17 @@ class SecretRotationProps:
     def __init__(
         self,
         *,
-        application: SecretRotationApplication,
-        secret: ISecret,
-        target: _IConnectable_10015a05,
-        vpc: _IVpc_f30d5663,
-        automatically_after: typing.Optional[_Duration_4839e8c3] = None,
-        endpoint: typing.Optional[_IInterfaceVpcEndpoint_7481aea1] = None,
+        application: "SecretRotationApplication",
+        secret: "ISecret",
+        target: "_IConnectable_10015a05",
+        vpc: "_IVpc_f30d5663",
+        automatically_after: typing.Optional["_Duration_4839e8c3"] = None,
+        endpoint: typing.Optional["_IInterfaceVpcEndpoint_7481aea1"] = None,
         exclude_characters: typing.Optional[builtins.str] = None,
-        master_secret: typing.Optional[ISecret] = None,
+        master_secret: typing.Optional["ISecret"] = None,
         rotate_immediately_on_update: typing.Optional[builtins.bool] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Construction properties for a SecretRotation.
 
@@ -5523,14 +5530,14 @@ class SecretRotationProps:
             self._values["vpc_subnets"] = vpc_subnets
 
     @builtins.property
-    def application(self) -> SecretRotationApplication:
+    def application(self) -> "SecretRotationApplication":
         '''The serverless application for the rotation.'''
         result = self._values.get("application")
         assert result is not None, "Required property 'application' is missing"
-        return typing.cast(SecretRotationApplication, result)
+        return typing.cast("SecretRotationApplication", result)
 
     @builtins.property
-    def secret(self) -> ISecret:
+    def secret(self) -> "ISecret":
         '''The secret to rotate. It must be a JSON string with the following format:.
 
         Example::
@@ -5552,33 +5559,33 @@ class SecretRotationProps:
         '''
         result = self._values.get("secret")
         assert result is not None, "Required property 'secret' is missing"
-        return typing.cast(ISecret, result)
+        return typing.cast("ISecret", result)
 
     @builtins.property
-    def target(self) -> _IConnectable_10015a05:
+    def target(self) -> "_IConnectable_10015a05":
         '''The target service or database.'''
         result = self._values.get("target")
         assert result is not None, "Required property 'target' is missing"
-        return typing.cast(_IConnectable_10015a05, result)
+        return typing.cast("_IConnectable_10015a05", result)
 
     @builtins.property
-    def vpc(self) -> _IVpc_f30d5663:
+    def vpc(self) -> "_IVpc_f30d5663":
         '''The VPC where the Lambda rotation function will run.'''
         result = self._values.get("vpc")
         assert result is not None, "Required property 'vpc' is missing"
-        return typing.cast(_IVpc_f30d5663, result)
+        return typing.cast("_IVpc_f30d5663", result)
 
     @builtins.property
-    def automatically_after(self) -> typing.Optional[_Duration_4839e8c3]:
+    def automatically_after(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies the number of days after the previous rotation before Secrets Manager triggers the next automatic rotation.
 
         :default: Duration.days(30)
         '''
         result = self._values.get("automatically_after")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def endpoint(self) -> typing.Optional[_IInterfaceVpcEndpoint_7481aea1]:
+    def endpoint(self) -> typing.Optional["_IInterfaceVpcEndpoint_7481aea1"]:
         '''The VPC interface endpoint to use for the Secrets Manager API.
 
         If you enable private DNS hostnames for your VPC private endpoint (the default), you don't
@@ -5589,7 +5596,7 @@ class SecretRotationProps:
         :default: https://secretsmanager..amazonaws.com
         '''
         result = self._values.get("endpoint")
-        return typing.cast(typing.Optional[_IInterfaceVpcEndpoint_7481aea1], result)
+        return typing.cast(typing.Optional["_IInterfaceVpcEndpoint_7481aea1"], result)
 
     @builtins.property
     def exclude_characters(self) -> typing.Optional[builtins.str]:
@@ -5601,13 +5608,13 @@ class SecretRotationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def master_secret(self) -> typing.Optional[ISecret]:
+    def master_secret(self) -> typing.Optional["ISecret"]:
         '''The master secret for a multi user rotation scheme.
 
         :default: - single user rotation scheme
         '''
         result = self._values.get("master_secret")
-        return typing.cast(typing.Optional[ISecret], result)
+        return typing.cast(typing.Optional["ISecret"], result)
 
     @builtins.property
     def rotate_immediately_on_update(self) -> typing.Optional[builtins.bool]:
@@ -5619,22 +5626,22 @@ class SecretRotationProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def security_group(self) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    def security_group(self) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''The security group for the Lambda rotation function.
 
         :default: - a new security group is created
         '''
         result = self._values.get("security_group")
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''The type of subnets in the VPC where the Lambda rotation function will run.
 
         :default: - the Vpc default strategy if not specified.
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5992,11 +5999,11 @@ class SecretTargetAttachment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        secret: ISecret,
-        target: ISecretAttachmentTarget,
+        secret: "ISecret",
+        target: "ISecretAttachmentTarget",
     ) -> None:
         '''
         :param scope: -
@@ -6016,10 +6023,10 @@ class SecretTargetAttachment(
     @builtins.classmethod
     def from_secret_target_attachment_secret_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         secret_target_attachment_secret_arn: builtins.str,
-    ) -> ISecretTargetAttachment:
+    ) -> "ISecretTargetAttachment":
         '''
         :param scope: -
         :param id: -
@@ -6030,18 +6037,18 @@ class SecretTargetAttachment(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument secret_target_attachment_secret_arn", value=secret_target_attachment_secret_arn, expected_type=type_hints["secret_target_attachment_secret_arn"])
-        return typing.cast(ISecretTargetAttachment, jsii.sinvoke(cls, "fromSecretTargetAttachmentSecretArn", [scope, id, secret_target_attachment_secret_arn]))
+        return typing.cast("ISecretTargetAttachment", jsii.sinvoke(cls, "fromSecretTargetAttachmentSecretArn", [scope, id, secret_target_attachment_secret_arn]))
 
     @jsii.member(jsii_name="addRotationSchedule")
     def add_rotation_schedule(
         self,
         id: builtins.str,
         *,
-        automatically_after: typing.Optional[_Duration_4839e8c3] = None,
-        hosted_rotation: typing.Optional[HostedRotation] = None,
+        automatically_after: typing.Optional["_Duration_4839e8c3"] = None,
+        hosted_rotation: typing.Optional["HostedRotation"] = None,
         rotate_immediately_on_update: typing.Optional[builtins.bool] = None,
-        rotation_lambda: typing.Optional[_IFunction_6adb0ab8] = None,
-    ) -> RotationSchedule:
+        rotation_lambda: typing.Optional["_IFunction_6adb0ab8"] = None,
+    ) -> "RotationSchedule":
         '''Adds a rotation schedule to the secret.
 
         :param id: -
@@ -6060,13 +6067,13 @@ class SecretTargetAttachment(
             rotation_lambda=rotation_lambda,
         )
 
-        return typing.cast(RotationSchedule, jsii.invoke(self, "addRotationSchedule", [id, options]))
+        return typing.cast("RotationSchedule", jsii.invoke(self, "addRotationSchedule", [id, options]))
 
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Forward any additions to the resource policy to the original secret.
 
         This is required because a secret can only have a single resource policy.
@@ -6078,10 +6085,10 @@ class SecretTargetAttachment(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__41342fb8f49c554e1068be9362e679b9cc90d9da4cd9d258c1d635c8e02bdabf)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="attach")
-    def attach(self, target: ISecretAttachmentTarget) -> ISecret:
+    def attach(self, target: "ISecretAttachmentTarget") -> "ISecret":
         '''Attach a target to this secret.
 
         :param target: The target to attach.
@@ -6091,7 +6098,7 @@ class SecretTargetAttachment(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c9029e68cc0f687fd0e9722956c6dc35ac3413cf8205c10d8715ba08a6fd1816)
             check_type(argname="argument target", value=target, expected_type=type_hints["target"])
-        return typing.cast(ISecret, jsii.invoke(self, "attach", [target]))
+        return typing.cast("ISecret", jsii.invoke(self, "attach", [target]))
 
     @jsii.member(jsii_name="cfnDynamicReferenceKey")
     def cfn_dynamic_reference_key(
@@ -6123,9 +6130,9 @@ class SecretTargetAttachment(
     @jsii.member(jsii_name="grantRead")
     def grant_read(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         version_stages: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grants reading the secret value to some role.
 
         :param grantee: -
@@ -6135,10 +6142,10 @@ class SecretTargetAttachment(
             type_hints = typing.get_type_hints(_typecheckingstub__b26070cb15c32ddaaf51fc49faef5a70e11cbad79c1aab14a543fe3696bf9a78)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument version_stages", value=version_stages, expected_type=type_hints["version_stages"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee, version_stages]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee, version_stages]))
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants writing and updating the secret value to some role.
 
         :param grantee: -
@@ -6146,10 +6153,13 @@ class SecretTargetAttachment(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f9295c8510d053c88c2cd12c14d0fb07dfa1f728cb86cbb209719878cdaa2ecc)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWrite", [grantee]))
 
     @jsii.member(jsii_name="secretValueFromJson")
-    def secret_value_from_json(self, json_field: builtins.str) -> _SecretValue_3dd0ddae:
+    def secret_value_from_json(
+        self,
+        json_field: builtins.str,
+    ) -> "_SecretValue_3dd0ddae":
         '''Interpret the secret as a JSON object and return a field's value from it as a ``SecretValue``.
 
         :param json_field: -
@@ -6157,7 +6167,7 @@ class SecretTargetAttachment(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b8cbc1b2c0b7e4c5034f81f7e19b10a9a5c4f8a1130cae389291c758992793dd)
             check_type(argname="argument json_field", value=json_field, expected_type=type_hints["json_field"])
-        return typing.cast(_SecretValue_3dd0ddae, jsii.invoke(self, "secretValueFromJson", [json_field]))
+        return typing.cast("_SecretValue_3dd0ddae", jsii.invoke(self, "secretValueFromJson", [json_field]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -6212,19 +6222,19 @@ class SecretTargetAttachment(
 
     @builtins.property
     @jsii.member(jsii_name="secretValue")
-    def secret_value(self) -> _SecretValue_3dd0ddae:
+    def secret_value(self) -> "_SecretValue_3dd0ddae":
         '''Retrieve the value of the stored secret as a ``SecretValue``.'''
-        return typing.cast(_SecretValue_3dd0ddae, jsii.get(self, "secretValue"))
+        return typing.cast("_SecretValue_3dd0ddae", jsii.get(self, "secretValue"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The customer-managed encryption key that is used to encrypt this secret, if any.
 
         When not specified, the default
         KMS key for the account and region is being used.
         '''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionKey"))
 
     @builtins.property
     @jsii.member(jsii_name="secretFullArn")
@@ -6242,7 +6252,7 @@ class SecretTargetAttachment(
     name_mapping={"target": "target", "secret": "secret"},
 )
 class SecretTargetAttachmentProps(AttachedSecretOptions):
-    def __init__(self, *, target: ISecretAttachmentTarget, secret: ISecret) -> None:
+    def __init__(self, *, target: "ISecretAttachmentTarget", secret: "ISecret") -> None:
         '''Construction properties for an AttachedSecret.
 
         :param target: The target to attach the secret to.
@@ -6274,18 +6284,18 @@ class SecretTargetAttachmentProps(AttachedSecretOptions):
         }
 
     @builtins.property
-    def target(self) -> ISecretAttachmentTarget:
+    def target(self) -> "ISecretAttachmentTarget":
         '''The target to attach the secret to.'''
         result = self._values.get("target")
         assert result is not None, "Required property 'target' is missing"
-        return typing.cast(ISecretAttachmentTarget, result)
+        return typing.cast("ISecretAttachmentTarget", result)
 
     @builtins.property
-    def secret(self) -> ISecret:
+    def secret(self) -> "ISecret":
         '''The secret to attach to the target.'''
         result = self._values.get("secret")
         assert result is not None, "Required property 'secret' is missing"
-        return typing.cast(ISecret, result)
+        return typing.cast("ISecret", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6316,9 +6326,9 @@ class SingleUserHostedRotationOptions:
         *,
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Single user hosted rotation options.
 
@@ -6384,31 +6394,33 @@ class SingleUserHostedRotationOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''A list of security groups for the Lambda created to rotate the secret.
 
         :default: - a new security group is created
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''The VPC where the Lambda rotation function will run.
 
         :default: - the Lambda is not deployed in a VPC
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''The type of subnets in the VPC where the Lambda rotation function will run.
 
         :default: - the Vpc default strategy if not specified.
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6440,10 +6452,10 @@ class MultiUserHostedRotationOptions(SingleUserHostedRotationOptions):
         *,
         exclude_characters: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        master_secret: ISecret,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        master_secret: "ISecret",
     ) -> None:
         '''Multi user hosted rotation options.
 
@@ -6533,38 +6545,40 @@ class MultiUserHostedRotationOptions(SingleUserHostedRotationOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''A list of security groups for the Lambda created to rotate the secret.
 
         :default: - a new security group is created
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''The VPC where the Lambda rotation function will run.
 
         :default: - the Lambda is not deployed in a VPC
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''The type of subnets in the VPC where the Lambda rotation function will run.
 
         :default: - the Vpc default strategy if not specified.
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def master_secret(self) -> ISecret:
+    def master_secret(self) -> "ISecret":
         '''The master secret for a multi user rotation scheme.'''
         result = self._values.get("master_secret")
         assert result is not None, "Required property 'master_secret' is missing"
-        return typing.cast(ISecret, result)
+        return typing.cast("ISecret", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

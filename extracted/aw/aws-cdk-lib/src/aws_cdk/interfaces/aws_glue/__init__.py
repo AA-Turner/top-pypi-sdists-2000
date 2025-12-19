@@ -441,7 +441,7 @@ class IClassifierRef(
 
     @builtins.property
     @jsii.member(jsii_name="classifierRef")
-    def classifier_ref(self) -> ClassifierReference:
+    def classifier_ref(self) -> "ClassifierReference":
         '''(experimental) A reference to a Classifier resource.
 
         :stability: experimental
@@ -462,12 +462,12 @@ class _IClassifierRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="classifierRef")
-    def classifier_ref(self) -> ClassifierReference:
+    def classifier_ref(self) -> "ClassifierReference":
         '''(experimental) A reference to a Classifier resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClassifierReference, jsii.get(self, "classifierRef"))
+        return typing.cast("ClassifierReference", jsii.get(self, "classifierRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClassifierRef).__jsii_proxy_class__ = lambda : _IClassifierRefProxy
@@ -486,7 +486,7 @@ class IConnectionRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectionRef")
-    def connection_ref(self) -> ConnectionReference:
+    def connection_ref(self) -> "ConnectionReference":
         '''(experimental) A reference to a Connection resource.
 
         :stability: experimental
@@ -507,12 +507,12 @@ class _IConnectionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectionRef")
-    def connection_ref(self) -> ConnectionReference:
+    def connection_ref(self) -> "ConnectionReference":
         '''(experimental) A reference to a Connection resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectionReference, jsii.get(self, "connectionRef"))
+        return typing.cast("ConnectionReference", jsii.get(self, "connectionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectionRef).__jsii_proxy_class__ = lambda : _IConnectionRefProxy
@@ -531,7 +531,7 @@ class ICrawlerRef(
 
     @builtins.property
     @jsii.member(jsii_name="crawlerRef")
-    def crawler_ref(self) -> CrawlerReference:
+    def crawler_ref(self) -> "CrawlerReference":
         '''(experimental) A reference to a Crawler resource.
 
         :stability: experimental
@@ -552,12 +552,12 @@ class _ICrawlerRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="crawlerRef")
-    def crawler_ref(self) -> CrawlerReference:
+    def crawler_ref(self) -> "CrawlerReference":
         '''(experimental) A reference to a Crawler resource.
 
         :stability: experimental
         '''
-        return typing.cast(CrawlerReference, jsii.get(self, "crawlerRef"))
+        return typing.cast("CrawlerReference", jsii.get(self, "crawlerRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICrawlerRef).__jsii_proxy_class__ = lambda : _ICrawlerRefProxy
@@ -576,7 +576,7 @@ class ICustomEntityTypeRef(
 
     @builtins.property
     @jsii.member(jsii_name="customEntityTypeRef")
-    def custom_entity_type_ref(self) -> CustomEntityTypeReference:
+    def custom_entity_type_ref(self) -> "CustomEntityTypeReference":
         '''(experimental) A reference to a CustomEntityType resource.
 
         :stability: experimental
@@ -597,12 +597,12 @@ class _ICustomEntityTypeRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="customEntityTypeRef")
-    def custom_entity_type_ref(self) -> CustomEntityTypeReference:
+    def custom_entity_type_ref(self) -> "CustomEntityTypeReference":
         '''(experimental) A reference to a CustomEntityType resource.
 
         :stability: experimental
         '''
-        return typing.cast(CustomEntityTypeReference, jsii.get(self, "customEntityTypeRef"))
+        return typing.cast("CustomEntityTypeReference", jsii.get(self, "customEntityTypeRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICustomEntityTypeRef).__jsii_proxy_class__ = lambda : _ICustomEntityTypeRefProxy
@@ -625,7 +625,7 @@ class IDataCatalogEncryptionSettingsRef(
     @jsii.member(jsii_name="dataCatalogEncryptionSettingsRef")
     def data_catalog_encryption_settings_ref(
         self,
-    ) -> DataCatalogEncryptionSettingsReference:
+    ) -> "DataCatalogEncryptionSettingsReference":
         '''(experimental) A reference to a DataCatalogEncryptionSettings resource.
 
         :stability: experimental
@@ -648,12 +648,12 @@ class _IDataCatalogEncryptionSettingsRefProxy(
     @jsii.member(jsii_name="dataCatalogEncryptionSettingsRef")
     def data_catalog_encryption_settings_ref(
         self,
-    ) -> DataCatalogEncryptionSettingsReference:
+    ) -> "DataCatalogEncryptionSettingsReference":
         '''(experimental) A reference to a DataCatalogEncryptionSettings resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataCatalogEncryptionSettingsReference, jsii.get(self, "dataCatalogEncryptionSettingsRef"))
+        return typing.cast("DataCatalogEncryptionSettingsReference", jsii.get(self, "dataCatalogEncryptionSettingsRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataCatalogEncryptionSettingsRef).__jsii_proxy_class__ = lambda : _IDataCatalogEncryptionSettingsRefProxy
@@ -672,7 +672,7 @@ class IDataQualityRulesetRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataQualityRulesetRef")
-    def data_quality_ruleset_ref(self) -> DataQualityRulesetReference:
+    def data_quality_ruleset_ref(self) -> "DataQualityRulesetReference":
         '''(experimental) A reference to a DataQualityRuleset resource.
 
         :stability: experimental
@@ -693,12 +693,12 @@ class _IDataQualityRulesetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataQualityRulesetRef")
-    def data_quality_ruleset_ref(self) -> DataQualityRulesetReference:
+    def data_quality_ruleset_ref(self) -> "DataQualityRulesetReference":
         '''(experimental) A reference to a DataQualityRuleset resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataQualityRulesetReference, jsii.get(self, "dataQualityRulesetRef"))
+        return typing.cast("DataQualityRulesetReference", jsii.get(self, "dataQualityRulesetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataQualityRulesetRef).__jsii_proxy_class__ = lambda : _IDataQualityRulesetRefProxy
@@ -717,7 +717,7 @@ class IDatabaseRef(
 
     @builtins.property
     @jsii.member(jsii_name="databaseRef")
-    def database_ref(self) -> DatabaseReference:
+    def database_ref(self) -> "DatabaseReference":
         '''(experimental) A reference to a Database resource.
 
         :stability: experimental
@@ -738,12 +738,12 @@ class _IDatabaseRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="databaseRef")
-    def database_ref(self) -> DatabaseReference:
+    def database_ref(self) -> "DatabaseReference":
         '''(experimental) A reference to a Database resource.
 
         :stability: experimental
         '''
-        return typing.cast(DatabaseReference, jsii.get(self, "databaseRef"))
+        return typing.cast("DatabaseReference", jsii.get(self, "databaseRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDatabaseRef).__jsii_proxy_class__ = lambda : _IDatabaseRefProxy
@@ -762,7 +762,7 @@ class IDevEndpointRef(
 
     @builtins.property
     @jsii.member(jsii_name="devEndpointRef")
-    def dev_endpoint_ref(self) -> DevEndpointReference:
+    def dev_endpoint_ref(self) -> "DevEndpointReference":
         '''(experimental) A reference to a DevEndpoint resource.
 
         :stability: experimental
@@ -783,12 +783,12 @@ class _IDevEndpointRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="devEndpointRef")
-    def dev_endpoint_ref(self) -> DevEndpointReference:
+    def dev_endpoint_ref(self) -> "DevEndpointReference":
         '''(experimental) A reference to a DevEndpoint resource.
 
         :stability: experimental
         '''
-        return typing.cast(DevEndpointReference, jsii.get(self, "devEndpointRef"))
+        return typing.cast("DevEndpointReference", jsii.get(self, "devEndpointRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDevEndpointRef).__jsii_proxy_class__ = lambda : _IDevEndpointRefProxy

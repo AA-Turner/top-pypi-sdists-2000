@@ -112,7 +112,7 @@ class ICollectionRef(
 
     @builtins.property
     @jsii.member(jsii_name="collectionRef")
-    def collection_ref(self) -> CollectionReference:
+    def collection_ref(self) -> "CollectionReference":
         '''(experimental) A reference to a Collection resource.
 
         :stability: experimental
@@ -133,12 +133,12 @@ class _ICollectionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="collectionRef")
-    def collection_ref(self) -> CollectionReference:
+    def collection_ref(self) -> "CollectionReference":
         '''(experimental) A reference to a Collection resource.
 
         :stability: experimental
         '''
-        return typing.cast(CollectionReference, jsii.get(self, "collectionRef"))
+        return typing.cast("CollectionReference", jsii.get(self, "collectionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICollectionRef).__jsii_proxy_class__ = lambda : _ICollectionRefProxy

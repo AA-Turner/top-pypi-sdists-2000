@@ -94,6 +94,7 @@ class CfnEnvironmentEC2(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cloud9 as cloud9
@@ -122,7 +123,7 @@ class CfnEnvironmentEC2(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         image_id: builtins.str,
@@ -132,9 +133,9 @@ class CfnEnvironmentEC2(
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         owner_arn: typing.Optional[builtins.str] = None,
-        repositories: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironmentEC2.RepositoryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        repositories: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironmentEC2.RepositoryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         subnet_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Cloud9::EnvironmentEC2``.
 
@@ -174,7 +175,7 @@ class CfnEnvironmentEC2(
     @builtins.classmethod
     def arn_for_environment_ec2(
         cls,
-        resource: _IEnvironmentEC2Ref_cc598673,
+        resource: "_IEnvironmentEC2Ref_cc598673",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -197,7 +198,7 @@ class CfnEnvironmentEC2(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEnvironmentEC2", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -259,15 +260,15 @@ class CfnEnvironmentEC2(
 
     @builtins.property
     @jsii.member(jsii_name="environmentEc2Ref")
-    def environment_ec2_ref(self) -> _EnvironmentEC2Reference_742b8017:
+    def environment_ec2_ref(self) -> "_EnvironmentEC2Reference_742b8017":
         '''A reference to a EnvironmentEC2 resource.'''
-        return typing.cast(_EnvironmentEC2Reference_742b8017, jsii.get(self, "environmentEc2Ref"))
+        return typing.cast("_EnvironmentEC2Reference_742b8017", jsii.get(self, "environmentEc2Ref"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="imageId")
@@ -364,14 +365,14 @@ class CfnEnvironmentEC2(
     @jsii.member(jsii_name="repositories")
     def repositories(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironmentEC2.RepositoryProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironmentEC2.RepositoryProperty"]]]]:
         '''Any AWS CodeCommit source code repositories to be cloned into the development environment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironmentEC2.RepositoryProperty"]]]], jsii.get(self, "repositories"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironmentEC2.RepositoryProperty"]]]], jsii.get(self, "repositories"))
 
     @repositories.setter
     def repositories(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironmentEC2.RepositoryProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironmentEC2.RepositoryProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__33cc7cfcf14da7cc801212fb0f6bde87f66f7a89bbb8b1431ff0da977a8adfbb)
@@ -393,12 +394,12 @@ class CfnEnvironmentEC2(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs that will be associated with the new AWS Cloud9 development environment.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f6e91291aa91d4092e5d643c1959f01ebac2b9c2b63e175fe396fc6fa242c91e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -510,9 +511,9 @@ class CfnEnvironmentEC2Props:
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         owner_arn: typing.Optional[builtins.str] = None,
-        repositories: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironmentEC2.RepositoryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        repositories: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironmentEC2.RepositoryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         subnet_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEnvironmentEC2``.
 
@@ -532,6 +533,7 @@ class CfnEnvironmentEC2Props:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloud9 as cloud9
@@ -682,13 +684,13 @@ class CfnEnvironmentEC2Props:
     @builtins.property
     def repositories(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEnvironmentEC2.RepositoryProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironmentEC2.RepositoryProperty"]]]]:
         '''Any AWS CodeCommit source code repositories to be cloned into the development environment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloud9-environmentec2.html#cfn-cloud9-environmentec2-repositories
         '''
         result = self._values.get("repositories")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEnvironmentEC2.RepositoryProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironmentEC2.RepositoryProperty"]]]], result)
 
     @builtins.property
     def subnet_id(self) -> typing.Optional[builtins.str]:
@@ -700,13 +702,13 @@ class CfnEnvironmentEC2Props:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs that will be associated with the new AWS Cloud9 development environment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloud9-environmentec2.html#cfn-cloud9-environmentec2-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

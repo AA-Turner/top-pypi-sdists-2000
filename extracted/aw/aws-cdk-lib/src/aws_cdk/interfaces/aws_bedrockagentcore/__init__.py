@@ -310,7 +310,7 @@ class IBrowserCustomRef(
 
     @builtins.property
     @jsii.member(jsii_name="browserCustomRef")
-    def browser_custom_ref(self) -> BrowserCustomReference:
+    def browser_custom_ref(self) -> "BrowserCustomReference":
         '''(experimental) A reference to a BrowserCustom resource.
 
         :stability: experimental
@@ -331,12 +331,12 @@ class _IBrowserCustomRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="browserCustomRef")
-    def browser_custom_ref(self) -> BrowserCustomReference:
+    def browser_custom_ref(self) -> "BrowserCustomReference":
         '''(experimental) A reference to a BrowserCustom resource.
 
         :stability: experimental
         '''
-        return typing.cast(BrowserCustomReference, jsii.get(self, "browserCustomRef"))
+        return typing.cast("BrowserCustomReference", jsii.get(self, "browserCustomRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBrowserCustomRef).__jsii_proxy_class__ = lambda : _IBrowserCustomRefProxy
@@ -357,7 +357,7 @@ class ICodeInterpreterCustomRef(
 
     @builtins.property
     @jsii.member(jsii_name="codeInterpreterCustomRef")
-    def code_interpreter_custom_ref(self) -> CodeInterpreterCustomReference:
+    def code_interpreter_custom_ref(self) -> "CodeInterpreterCustomReference":
         '''(experimental) A reference to a CodeInterpreterCustom resource.
 
         :stability: experimental
@@ -378,12 +378,12 @@ class _ICodeInterpreterCustomRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="codeInterpreterCustomRef")
-    def code_interpreter_custom_ref(self) -> CodeInterpreterCustomReference:
+    def code_interpreter_custom_ref(self) -> "CodeInterpreterCustomReference":
         '''(experimental) A reference to a CodeInterpreterCustom resource.
 
         :stability: experimental
         '''
-        return typing.cast(CodeInterpreterCustomReference, jsii.get(self, "codeInterpreterCustomRef"))
+        return typing.cast("CodeInterpreterCustomReference", jsii.get(self, "codeInterpreterCustomRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICodeInterpreterCustomRef).__jsii_proxy_class__ = lambda : _ICodeInterpreterCustomRefProxy
@@ -402,7 +402,7 @@ class IGatewayRef(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayRef")
-    def gateway_ref(self) -> GatewayReference:
+    def gateway_ref(self) -> "GatewayReference":
         '''(experimental) A reference to a Gateway resource.
 
         :stability: experimental
@@ -423,12 +423,12 @@ class _IGatewayRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayRef")
-    def gateway_ref(self) -> GatewayReference:
+    def gateway_ref(self) -> "GatewayReference":
         '''(experimental) A reference to a Gateway resource.
 
         :stability: experimental
         '''
-        return typing.cast(GatewayReference, jsii.get(self, "gatewayRef"))
+        return typing.cast("GatewayReference", jsii.get(self, "gatewayRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGatewayRef).__jsii_proxy_class__ = lambda : _IGatewayRefProxy
@@ -449,7 +449,7 @@ class IGatewayTargetRef(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayTargetRef")
-    def gateway_target_ref(self) -> GatewayTargetReference:
+    def gateway_target_ref(self) -> "GatewayTargetReference":
         '''(experimental) A reference to a GatewayTarget resource.
 
         :stability: experimental
@@ -470,12 +470,12 @@ class _IGatewayTargetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayTargetRef")
-    def gateway_target_ref(self) -> GatewayTargetReference:
+    def gateway_target_ref(self) -> "GatewayTargetReference":
         '''(experimental) A reference to a GatewayTarget resource.
 
         :stability: experimental
         '''
-        return typing.cast(GatewayTargetReference, jsii.get(self, "gatewayTargetRef"))
+        return typing.cast("GatewayTargetReference", jsii.get(self, "gatewayTargetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGatewayTargetRef).__jsii_proxy_class__ = lambda : _IGatewayTargetRefProxy

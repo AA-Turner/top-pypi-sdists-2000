@@ -167,7 +167,7 @@ class IAssetRef(
 
     @builtins.property
     @jsii.member(jsii_name="assetRef")
-    def asset_ref(self) -> AssetReference:
+    def asset_ref(self) -> "AssetReference":
         '''(experimental) A reference to a Asset resource.
 
         :stability: experimental
@@ -188,12 +188,12 @@ class _IAssetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="assetRef")
-    def asset_ref(self) -> AssetReference:
+    def asset_ref(self) -> "AssetReference":
         '''(experimental) A reference to a Asset resource.
 
         :stability: experimental
         '''
-        return typing.cast(AssetReference, jsii.get(self, "assetRef"))
+        return typing.cast("AssetReference", jsii.get(self, "assetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAssetRef).__jsii_proxy_class__ = lambda : _IAssetRefProxy
@@ -212,7 +212,7 @@ class IChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="channelRef")
-    def channel_ref(self) -> ChannelReference:
+    def channel_ref(self) -> "ChannelReference":
         '''(experimental) A reference to a Channel resource.
 
         :stability: experimental
@@ -233,12 +233,12 @@ class _IChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="channelRef")
-    def channel_ref(self) -> ChannelReference:
+    def channel_ref(self) -> "ChannelReference":
         '''(experimental) A reference to a Channel resource.
 
         :stability: experimental
         '''
-        return typing.cast(ChannelReference, jsii.get(self, "channelRef"))
+        return typing.cast("ChannelReference", jsii.get(self, "channelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IChannelRef).__jsii_proxy_class__ = lambda : _IChannelRefProxy

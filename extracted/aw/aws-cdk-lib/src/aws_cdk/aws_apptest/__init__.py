@@ -207,11 +207,11 @@ class CfnTestCase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        steps: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.StepProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        steps: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.StepProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -236,7 +236,7 @@ class CfnTestCase(
 
     @jsii.member(jsii_name="arnForTestCase")
     @builtins.classmethod
-    def arn_for_test_case(cls, resource: _ITestCaseRef_0a7c2b60) -> builtins.str:
+    def arn_for_test_case(cls, resource: "_ITestCaseRef_0a7c2b60") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -249,10 +249,10 @@ class CfnTestCase(
     @builtins.classmethod
     def from_test_case_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ITestCaseRef_0a7c2b60:
+    ) -> "_ITestCaseRef_0a7c2b60":
         '''Creates a new ITestCaseRef from an ARN.
 
         :param scope: -
@@ -264,16 +264,16 @@ class CfnTestCase(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ITestCaseRef_0a7c2b60, jsii.sinvoke(cls, "fromTestCaseArn", [scope, id, arn]))
+        return typing.cast("_ITestCaseRef_0a7c2b60", jsii.sinvoke(cls, "fromTestCaseArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromTestCaseId")
     @builtins.classmethod
     def from_test_case_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         test_case_id: builtins.str,
-    ) -> _ITestCaseRef_0a7c2b60:
+    ) -> "_ITestCaseRef_0a7c2b60":
         '''Creates a new ITestCaseRef from a testCaseId.
 
         :param scope: -
@@ -285,7 +285,7 @@ class CfnTestCase(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument test_case_id", value=test_case_id, expected_type=type_hints["test_case_id"])
-        return typing.cast(_ITestCaseRef_0a7c2b60, jsii.sinvoke(cls, "fromTestCaseId", [scope, id, test_case_id]))
+        return typing.cast("_ITestCaseRef_0a7c2b60", jsii.sinvoke(cls, "fromTestCaseId", [scope, id, test_case_id]))
 
     @jsii.member(jsii_name="isCfnTestCase")
     @builtins.classmethod
@@ -300,7 +300,7 @@ class CfnTestCase(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTestCase", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -349,11 +349,11 @@ class CfnTestCase(
 
     @builtins.property
     @jsii.member(jsii_name="attrLatestVersion")
-    def attr_latest_version(self) -> _IResolvable_da3f097b:
+    def attr_latest_version(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: LatestVersion
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLatestVersion"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrLatestVersion"))
 
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
@@ -384,18 +384,18 @@ class CfnTestCase(
 
     @builtins.property
     @jsii.member(jsii_name="attrTestCaseVersion")
-    def attr_test_case_version(self) -> _IResolvable_da3f097b:
+    def attr_test_case_version(self) -> "_IResolvable_da3f097b":
         '''The version of the test case.
 
         :cloudformationAttribute: TestCaseVersion
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrTestCaseVersion"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrTestCaseVersion"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -404,9 +404,9 @@ class CfnTestCase(
 
     @builtins.property
     @jsii.member(jsii_name="testCaseRef")
-    def test_case_ref(self) -> _TestCaseReference_239c1fad:
+    def test_case_ref(self) -> "_TestCaseReference_239c1fad":
         '''A reference to a TestCase resource.'''
-        return typing.cast(_TestCaseReference_239c1fad, jsii.get(self, "testCaseRef"))
+        return typing.cast("_TestCaseReference_239c1fad", jsii.get(self, "testCaseRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -425,14 +425,14 @@ class CfnTestCase(
     @jsii.member(jsii_name="steps")
     def steps(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTestCase.StepProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTestCase.StepProperty"]]]:
         '''The steps in the test case.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTestCase.StepProperty"]]], jsii.get(self, "steps"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTestCase.StepProperty"]]], jsii.get(self, "steps"))
 
     @steps.setter
     def steps(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTestCase.StepProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTestCase.StepProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b0a0c6d80a2bab21c010f9956a7784691e07a0d6ed782a3cc4f9fe81b470a060)
@@ -482,7 +482,7 @@ class CfnTestCase(
             self,
             *,
             batch_job_name: builtins.str,
-            batch_job_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            batch_job_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             export_data_set_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Defines a batch.
@@ -536,13 +536,13 @@ class CfnTestCase(
         @builtins.property
         def batch_job_parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The batch job parameters of the batch.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-batch.html#cfn-apptest-testcase-batch-batchjobparameters
             '''
             result = self._values.get("batch_job_parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def export_data_set_names(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -646,8 +646,8 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            input: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.InputProperty", typing.Dict[builtins.str, typing.Any]]],
-            output: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.OutputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            input: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.InputProperty", typing.Dict[builtins.str, typing.Any]]],
+            output: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.OutputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Compares the action.
 
@@ -711,25 +711,25 @@ class CfnTestCase(
         @builtins.property
         def input(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTestCase.InputProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTestCase.InputProperty"]:
             '''The input of the compare action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-compareaction.html#cfn-apptest-testcase-compareaction-input
             '''
             result = self._values.get("input")
             assert result is not None, "Required property 'input' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTestCase.InputProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTestCase.InputProperty"], result)
 
         @builtins.property
         def output(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.OutputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.OutputProperty"]]:
             '''The output of the compare action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-compareaction.html#cfn-apptest-testcase-compareaction-output
             '''
             result = self._values.get("output")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.OutputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.OutputProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -876,8 +876,8 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            source_metadata: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.SourceDatabaseMetadataProperty", typing.Dict[builtins.str, typing.Any]]],
-            target_metadata: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.TargetDatabaseMetadataProperty", typing.Dict[builtins.str, typing.Any]]],
+            source_metadata: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.SourceDatabaseMetadataProperty", typing.Dict[builtins.str, typing.Any]]],
+            target_metadata: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.TargetDatabaseMetadataProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Defines the Change Data Capture (CDC) of the database.
 
@@ -916,26 +916,26 @@ class CfnTestCase(
         @builtins.property
         def source_metadata(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTestCase.SourceDatabaseMetadataProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTestCase.SourceDatabaseMetadataProperty"]:
             '''The source metadata of the database CDC.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-databasecdc.html#cfn-apptest-testcase-databasecdc-sourcemetadata
             '''
             result = self._values.get("source_metadata")
             assert result is not None, "Required property 'source_metadata' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTestCase.SourceDatabaseMetadataProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTestCase.SourceDatabaseMetadataProperty"], result)
 
         @builtins.property
         def target_metadata(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTestCase.TargetDatabaseMetadataProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTestCase.TargetDatabaseMetadataProperty"]:
             '''The target metadata of the database CDC.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-databasecdc.html#cfn-apptest-testcase-databasecdc-targetmetadata
             '''
             result = self._values.get("target_metadata")
             assert result is not None, "Required property 'target_metadata' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTestCase.TargetDatabaseMetadataProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTestCase.TargetDatabaseMetadataProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -957,8 +957,8 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            database_cdc: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.DatabaseCDCProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            data_sets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.DataSetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            database_cdc: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.DatabaseCDCProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            data_sets: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.DataSetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Specifies a file metadata.
 
@@ -1007,24 +1007,24 @@ class CfnTestCase(
         @builtins.property
         def database_cdc(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.DatabaseCDCProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.DatabaseCDCProperty"]]:
             '''The database CDC of the file metadata.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-filemetadata.html#cfn-apptest-testcase-filemetadata-databasecdc
             '''
             result = self._values.get("database_cdc")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.DatabaseCDCProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.DatabaseCDCProperty"]], result)
 
         @builtins.property
         def data_sets(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTestCase.DataSetProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTestCase.DataSetProperty"]]]]:
             '''The data sets of the file metadata.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-filemetadata.html#cfn-apptest-testcase-filemetadata-datasets
             '''
             result = self._values.get("data_sets")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTestCase.DataSetProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTestCase.DataSetProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1050,7 +1050,7 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            file_metadata: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.FileMetadataProperty", typing.Dict[builtins.str, typing.Any]]],
+            file_metadata: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.FileMetadataProperty", typing.Dict[builtins.str, typing.Any]]],
             source_location: builtins.str,
             target_location: builtins.str,
         ) -> None:
@@ -1107,14 +1107,14 @@ class CfnTestCase(
         @builtins.property
         def file_metadata(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTestCase.FileMetadataProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTestCase.FileMetadataProperty"]:
             '''The file metadata of the input file.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-inputfile.html#cfn-apptest-testcase-inputfile-filemetadata
             '''
             result = self._values.get("file_metadata")
             assert result is not None, "Required property 'file_metadata' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTestCase.FileMetadataProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTestCase.FileMetadataProperty"], result)
 
         @builtins.property
         def source_location(self) -> builtins.str:
@@ -1156,7 +1156,7 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            file: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.InputFileProperty", typing.Dict[builtins.str, typing.Any]]],
+            file: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.InputFileProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Specifies the input.
 
@@ -1207,14 +1207,14 @@ class CfnTestCase(
         @builtins.property
         def file(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTestCase.InputFileProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTestCase.InputFileProperty"]:
             '''The file in the input.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-input.html#cfn-apptest-testcase-input-file
             '''
             result = self._values.get("file")
             assert result is not None, "Required property 'file' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTestCase.InputFileProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTestCase.InputFileProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1239,7 +1239,7 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            force_stop: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            force_stop: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             import_data_set_location: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Specifies the Mainframe Modernization managed action properties.
@@ -1274,13 +1274,13 @@ class CfnTestCase(
         @builtins.property
         def force_stop(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Force stops the Mainframe Modernization managed action properties.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-m2managedactionproperties.html#cfn-apptest-testcase-m2managedactionproperties-forcestop
             '''
             result = self._values.get("force_stop")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def import_data_set_location(self) -> typing.Optional[builtins.str]:
@@ -1317,7 +1317,7 @@ class CfnTestCase(
             *,
             action_type: builtins.str,
             resource: builtins.str,
-            properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.M2ManagedActionPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.M2ManagedActionPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the Mainframe Modernization managed application action.
 
@@ -1380,13 +1380,13 @@ class CfnTestCase(
         @builtins.property
         def properties(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.M2ManagedActionPropertiesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.M2ManagedActionPropertiesProperty"]]:
             '''The properties of the Mainframe Modernization managed application action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-m2managedapplicationaction.html#cfn-apptest-testcase-m2managedapplicationaction-properties
             '''
             result = self._values.get("properties")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.M2ManagedActionPropertiesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.M2ManagedActionPropertiesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1538,9 +1538,9 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            action_type: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.MainframeActionTypeProperty", typing.Dict[builtins.str, typing.Any]]],
+            action_type: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.MainframeActionTypeProperty", typing.Dict[builtins.str, typing.Any]]],
             resource: builtins.str,
-            properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.MainframeActionPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.MainframeActionPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the mainframe action.
 
@@ -1601,14 +1601,14 @@ class CfnTestCase(
         @builtins.property
         def action_type(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTestCase.MainframeActionTypeProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTestCase.MainframeActionTypeProperty"]:
             '''The action type of the mainframe action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-mainframeaction.html#cfn-apptest-testcase-mainframeaction-actiontype
             '''
             result = self._values.get("action_type")
             assert result is not None, "Required property 'action_type' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTestCase.MainframeActionTypeProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTestCase.MainframeActionTypeProperty"], result)
 
         @builtins.property
         def resource(self) -> builtins.str:
@@ -1623,13 +1623,13 @@ class CfnTestCase(
         @builtins.property
         def properties(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.MainframeActionPropertiesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.MainframeActionPropertiesProperty"]]:
             '''The properties of the mainframe action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-mainframeaction.html#cfn-apptest-testcase-mainframeaction-properties
             '''
             result = self._values.get("properties")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.MainframeActionPropertiesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.MainframeActionPropertiesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1651,8 +1651,8 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            batch: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.BatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            tn3270: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.TN3270Property", typing.Dict[builtins.str, typing.Any]]]] = None,
+            batch: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.BatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tn3270: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.TN3270Property", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the mainframe action type.
 
@@ -1702,24 +1702,24 @@ class CfnTestCase(
         @builtins.property
         def batch(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.BatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.BatchProperty"]]:
             '''The batch of the mainframe action type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-mainframeactiontype.html#cfn-apptest-testcase-mainframeactiontype-batch
             '''
             result = self._values.get("batch")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.BatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.BatchProperty"]], result)
 
         @builtins.property
         def tn3270(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.TN3270Property"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.TN3270Property"]]:
             '''The tn3270 port of the mainframe action type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-mainframeactiontype.html#cfn-apptest-testcase-mainframeactiontype-tn3270
             '''
             result = self._values.get("tn3270")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.TN3270Property"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.TN3270Property"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1796,7 +1796,7 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            file: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.OutputFileProperty", typing.Dict[builtins.str, typing.Any]]],
+            file: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.OutputFileProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Specifies an output.
 
@@ -1827,14 +1827,14 @@ class CfnTestCase(
         @builtins.property
         def file(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTestCase.OutputFileProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTestCase.OutputFileProperty"]:
             '''The file of the output.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-output.html#cfn-apptest-testcase-output-file
             '''
             result = self._values.get("file")
             assert result is not None, "Required property 'file' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTestCase.OutputFileProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTestCase.OutputFileProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1860,9 +1860,9 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            cloud_formation_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.CloudFormationActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            m2_managed_application_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.M2ManagedApplicationActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            m2_non_managed_application_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.M2NonManagedApplicationActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_formation_action: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.CloudFormationActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            m2_managed_application_action: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.M2ManagedApplicationActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            m2_non_managed_application_action: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.M2NonManagedApplicationActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies a resource action.
 
@@ -1918,35 +1918,35 @@ class CfnTestCase(
         @builtins.property
         def cloud_formation_action(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.CloudFormationActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.CloudFormationActionProperty"]]:
             '''The CloudFormation action of the resource action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-resourceaction.html#cfn-apptest-testcase-resourceaction-cloudformationaction
             '''
             result = self._values.get("cloud_formation_action")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.CloudFormationActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.CloudFormationActionProperty"]], result)
 
         @builtins.property
         def m2_managed_application_action(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.M2ManagedApplicationActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.M2ManagedApplicationActionProperty"]]:
             '''The Mainframe Modernization managed application action of the resource action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-resourceaction.html#cfn-apptest-testcase-resourceaction-m2managedapplicationaction
             '''
             result = self._values.get("m2_managed_application_action")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.M2ManagedApplicationActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.M2ManagedApplicationActionProperty"]], result)
 
         @builtins.property
         def m2_non_managed_application_action(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.M2NonManagedApplicationActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.M2NonManagedApplicationActionProperty"]]:
             '''The Mainframe Modernization non-managed application action of the resource action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-resourceaction.html#cfn-apptest-testcase-resourceaction-m2nonmanagedapplicationaction
             '''
             result = self._values.get("m2_non_managed_application_action")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.M2NonManagedApplicationActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.M2NonManagedApplicationActionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2109,9 +2109,9 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            compare_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.CompareActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            mainframe_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.MainframeActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            resource_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.ResourceActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            compare_action: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.CompareActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mainframe_action: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.MainframeActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            resource_action: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.ResourceActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies a step action.
 
@@ -2231,35 +2231,35 @@ class CfnTestCase(
         @builtins.property
         def compare_action(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.CompareActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.CompareActionProperty"]]:
             '''The compare action of the step action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-stepaction.html#cfn-apptest-testcase-stepaction-compareaction
             '''
             result = self._values.get("compare_action")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.CompareActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.CompareActionProperty"]], result)
 
         @builtins.property
         def mainframe_action(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.MainframeActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.MainframeActionProperty"]]:
             '''The mainframe action of the step action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-stepaction.html#cfn-apptest-testcase-stepaction-mainframeaction
             '''
             result = self._values.get("mainframe_action")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.MainframeActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.MainframeActionProperty"]], result)
 
         @builtins.property
         def resource_action(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.ResourceActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.ResourceActionProperty"]]:
             '''The resource action of the step action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-stepaction.html#cfn-apptest-testcase-stepaction-resourceaction
             '''
             result = self._values.get("resource_action")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTestCase.ResourceActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTestCase.ResourceActionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2285,7 +2285,7 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.StepActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.StepActionProperty", typing.Dict[builtins.str, typing.Any]]],
             name: builtins.str,
             description: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -2412,14 +2412,14 @@ class CfnTestCase(
         @builtins.property
         def action(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTestCase.StepActionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTestCase.StepActionProperty"]:
             '''The action of the step.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-step.html#cfn-apptest-testcase-step-action
             '''
             result = self._values.get("action")
             assert result is not None, "Required property 'action' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTestCase.StepActionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTestCase.StepActionProperty"], result)
 
         @builtins.property
         def name(self) -> builtins.str:
@@ -2463,7 +2463,7 @@ class CfnTestCase(
         def __init__(
             self,
             *,
-            script: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTestCase.ScriptProperty", typing.Dict[builtins.str, typing.Any]]],
+            script: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.ScriptProperty", typing.Dict[builtins.str, typing.Any]]],
             export_data_set_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Specifies the TN3270 protocol.
@@ -2503,14 +2503,14 @@ class CfnTestCase(
         @builtins.property
         def script(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTestCase.ScriptProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTestCase.ScriptProperty"]:
             '''The script of the TN3270 protocol.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apptest-testcase-tn3270.html#cfn-apptest-testcase-tn3270-script
             '''
             result = self._values.get("script")
             assert result is not None, "Required property 'script' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTestCase.ScriptProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTestCase.ScriptProperty"], result)
 
         @builtins.property
         def export_data_set_names(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2680,7 +2680,7 @@ class CfnTestCaseProps:
         self,
         *,
         name: builtins.str,
-        steps: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTestCase.StepProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        steps: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTestCase.StepProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -2830,14 +2830,14 @@ class CfnTestCaseProps:
     @builtins.property
     def steps(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTestCase.StepProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTestCase.StepProperty"]]]:
         '''The steps in the test case.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apptest-testcase.html#cfn-apptest-testcase-steps
         '''
         result = self._values.get("steps")
         assert result is not None, "Required property 'steps' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTestCase.StepProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTestCase.StepProperty"]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:

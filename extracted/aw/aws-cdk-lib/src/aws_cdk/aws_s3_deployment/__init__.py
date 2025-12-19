@@ -725,42 +725,42 @@ class BucketDeployment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        destination_bucket: _IBucket_42e086fd,
+        destination_bucket: "_IBucket_42e086fd",
         sources: typing.Sequence["ISource"],
-        access_control: typing.Optional[_BucketAccessControl_466c7e1b] = None,
+        access_control: typing.Optional["_BucketAccessControl_466c7e1b"] = None,
         cache_control: typing.Optional[typing.Sequence["CacheControl"]] = None,
         content_disposition: typing.Optional[builtins.str] = None,
         content_encoding: typing.Optional[builtins.str] = None,
         content_language: typing.Optional[builtins.str] = None,
         content_type: typing.Optional[builtins.str] = None,
         destination_key_prefix: typing.Optional[builtins.str] = None,
-        distribution: typing.Optional[_IDistributionRef_36fd2094] = None,
+        distribution: typing.Optional["_IDistributionRef_36fd2094"] = None,
         distribution_paths: typing.Optional[typing.Sequence[builtins.str]] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        expires: typing.Optional[_Expiration_059d47d0] = None,
+        expires: typing.Optional["_Expiration_059d47d0"] = None,
         extract: typing.Optional[builtins.bool] = None,
         include: typing.Optional[typing.Sequence[builtins.str]] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         memory_limit: typing.Optional[jsii.Number] = None,
         metadata: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         output_object_keys: typing.Optional[builtins.bool] = None,
         prune: typing.Optional[builtins.bool] = None,
         retain_on_delete: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         server_side_encryption: typing.Optional["ServerSideEncryption"] = None,
         server_side_encryption_aws_kms_key_id: typing.Optional[builtins.str] = None,
         server_side_encryption_customer_algorithm: typing.Optional[builtins.str] = None,
         sign_content: typing.Optional[builtins.bool] = None,
         storage_class: typing.Optional["StorageClass"] = None,
         use_efs: typing.Optional[builtins.bool] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         wait_for_distribution_invalidation: typing.Optional[builtins.bool] = None,
         website_redirect_location: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -877,7 +877,7 @@ class BucketDeployment(
 
     @builtins.property
     @jsii.member(jsii_name="deployedBucket")
-    def deployed_bucket(self) -> _IBucket_42e086fd:
+    def deployed_bucket(self) -> "_IBucket_42e086fd":
         '''The bucket after the deployment.
 
         If you want to reference the destination bucket in another construct and make sure the
@@ -888,13 +888,13 @@ class BucketDeployment(
         If sequenced access to the original destination bucket is required, you may add a dependency
         on the bucket deployment instead: ``otherResource.node.addDependency(deployment)``
         '''
-        return typing.cast(_IBucket_42e086fd, jsii.get(self, "deployedBucket"))
+        return typing.cast("_IBucket_42e086fd", jsii.get(self, "deployedBucket"))
 
     @builtins.property
     @jsii.member(jsii_name="handlerRole")
-    def handler_role(self) -> _IRole_235f5d8e:
+    def handler_role(self) -> "_IRole_235f5d8e":
         '''Execution role of the Lambda function behind the custom CloudFormation resource of type ``Custom::CDKBucketDeployment``.'''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "handlerRole"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "handlerRole"))
 
     @builtins.property
     @jsii.member(jsii_name="objectKeys")
@@ -958,39 +958,39 @@ class BucketDeploymentProps:
     def __init__(
         self,
         *,
-        destination_bucket: _IBucket_42e086fd,
+        destination_bucket: "_IBucket_42e086fd",
         sources: typing.Sequence["ISource"],
-        access_control: typing.Optional[_BucketAccessControl_466c7e1b] = None,
+        access_control: typing.Optional["_BucketAccessControl_466c7e1b"] = None,
         cache_control: typing.Optional[typing.Sequence["CacheControl"]] = None,
         content_disposition: typing.Optional[builtins.str] = None,
         content_encoding: typing.Optional[builtins.str] = None,
         content_language: typing.Optional[builtins.str] = None,
         content_type: typing.Optional[builtins.str] = None,
         destination_key_prefix: typing.Optional[builtins.str] = None,
-        distribution: typing.Optional[_IDistributionRef_36fd2094] = None,
+        distribution: typing.Optional["_IDistributionRef_36fd2094"] = None,
         distribution_paths: typing.Optional[typing.Sequence[builtins.str]] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        expires: typing.Optional[_Expiration_059d47d0] = None,
+        expires: typing.Optional["_Expiration_059d47d0"] = None,
         extract: typing.Optional[builtins.bool] = None,
         include: typing.Optional[typing.Sequence[builtins.str]] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         memory_limit: typing.Optional[jsii.Number] = None,
         metadata: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         output_object_keys: typing.Optional[builtins.bool] = None,
         prune: typing.Optional[builtins.bool] = None,
         retain_on_delete: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         server_side_encryption: typing.Optional["ServerSideEncryption"] = None,
         server_side_encryption_aws_kms_key_id: typing.Optional[builtins.str] = None,
         server_side_encryption_customer_algorithm: typing.Optional[builtins.str] = None,
         sign_content: typing.Optional[builtins.bool] = None,
         storage_class: typing.Optional["StorageClass"] = None,
         use_efs: typing.Optional[builtins.bool] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         wait_for_distribution_invalidation: typing.Optional[builtins.bool] = None,
         website_redirect_location: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -1162,11 +1162,11 @@ class BucketDeploymentProps:
             self._values["website_redirect_location"] = website_redirect_location
 
     @builtins.property
-    def destination_bucket(self) -> _IBucket_42e086fd:
+    def destination_bucket(self) -> "_IBucket_42e086fd":
         '''The S3 bucket to sync the contents of the zip file to.'''
         result = self._values.get("destination_bucket")
         assert result is not None, "Required property 'destination_bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
     def sources(self) -> typing.List["ISource"]:
@@ -1176,7 +1176,7 @@ class BucketDeploymentProps:
         return typing.cast(typing.List["ISource"], result)
 
     @builtins.property
-    def access_control(self) -> typing.Optional[_BucketAccessControl_466c7e1b]:
+    def access_control(self) -> typing.Optional["_BucketAccessControl_466c7e1b"]:
         '''System-defined x-amz-acl metadata to be set on all objects in the deployment.
 
         :default: - Not set.
@@ -1184,7 +1184,7 @@ class BucketDeploymentProps:
         :see: https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl
         '''
         result = self._values.get("access_control")
-        return typing.cast(typing.Optional[_BucketAccessControl_466c7e1b], result)
+        return typing.cast(typing.Optional["_BucketAccessControl_466c7e1b"], result)
 
     @builtins.property
     def cache_control(self) -> typing.Optional[typing.List["CacheControl"]]:
@@ -1256,7 +1256,7 @@ class BucketDeploymentProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def distribution(self) -> typing.Optional[_IDistributionRef_36fd2094]:
+    def distribution(self) -> typing.Optional["_IDistributionRef_36fd2094"]:
         '''The CloudFront distribution using the destination bucket as an origin.
 
         Files in the distribution's edge caches will be invalidated after
@@ -1265,7 +1265,7 @@ class BucketDeploymentProps:
         :default: - No invalidation occurs
         '''
         result = self._values.get("distribution")
-        return typing.cast(typing.Optional[_IDistributionRef_36fd2094], result)
+        return typing.cast(typing.Optional["_IDistributionRef_36fd2094"], result)
 
     @builtins.property
     def distribution_paths(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1277,13 +1277,13 @@ class BucketDeploymentProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def ephemeral_storage_size(self) -> typing.Optional[_Size_7b441c34]:
+    def ephemeral_storage_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The size of the AWS Lambda function’s /tmp directory in MiB.
 
         :default: 512 MiB
         '''
         result = self._values.get("ephemeral_storage_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def exclude(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1303,7 +1303,7 @@ class BucketDeploymentProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def expires(self) -> typing.Optional[_Expiration_059d47d0]:
+    def expires(self) -> typing.Optional["_Expiration_059d47d0"]:
         '''System-defined expires metadata to be set on all objects in the deployment.
 
         :default: - The objects in the distribution will not expire.
@@ -1311,7 +1311,7 @@ class BucketDeploymentProps:
         :see: https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#SysMetadata
         '''
         result = self._values.get("expires")
-        return typing.cast(typing.Optional[_Expiration_059d47d0], result)
+        return typing.cast(typing.Optional["_Expiration_059d47d0"], result)
 
     @builtins.property
     def extract(self) -> typing.Optional[builtins.bool]:
@@ -1339,7 +1339,7 @@ class BucketDeploymentProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
+    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
         '''The Log Group used for logging of events emitted by the custom resource's lambda function.
 
         Providing a user-controlled log group was rolled out to commercial regions on 2023-11-16.
@@ -1348,10 +1348,10 @@ class BucketDeploymentProps:
         :default: - a default log group created by AWS Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional[_ILogGroup_3c4fa718], result)
+        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
 
     @builtins.property
-    def log_retention(self) -> typing.Optional[_RetentionDays_070f99f0]:
+    def log_retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
         '''The number of days that the lambda function's log events are kept in CloudWatch Logs.
 
         This is a legacy API and we strongly recommend you migrate to ``logGroup`` if you can.
@@ -1360,7 +1360,7 @@ class BucketDeploymentProps:
         :default: logs.RetentionDays.INFINITE
         '''
         result = self._values.get("log_retention")
-        return typing.cast(typing.Optional[_RetentionDays_070f99f0], result)
+        return typing.cast(typing.Optional["_RetentionDays_070f99f0"], result)
 
     @builtins.property
     def memory_limit(self) -> typing.Optional[jsii.Number]:
@@ -1427,16 +1427,18 @@ class BucketDeploymentProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Execution role associated with this function.
 
         :default: - A role is automatically created
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''The list of security groups to associate with the lambda handlers network interfaces.
 
         Only used if 'vpc' is supplied.
@@ -1447,7 +1449,7 @@ class BucketDeploymentProps:
         not specified a dedicated security group will be created for this function.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
     def server_side_encryption(self) -> typing.Optional["ServerSideEncryption"]:
@@ -1519,7 +1521,7 @@ class BucketDeploymentProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''The VPC network to place the deployment lambda handler in.
 
         This is required if ``useEfs`` is set.
@@ -1527,10 +1529,10 @@ class BucketDeploymentProps:
         :default: None
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where in the VPC to place the deployment lambda handler.
 
         Only used if 'vpc' is supplied.
@@ -1538,7 +1540,7 @@ class BucketDeploymentProps:
         :default: - the Vpc default strategy if not specified
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
     def wait_for_distribution_invalidation(self) -> typing.Optional[builtins.bool]:
@@ -1631,7 +1633,7 @@ class CacheControl(
 
     @jsii.member(jsii_name="maxAge")
     @builtins.classmethod
-    def max_age(cls, t: _Duration_4839e8c3) -> "CacheControl":
+    def max_age(cls, t: "_Duration_4839e8c3") -> "CacheControl":
         '''Sets 'max-age='.
 
         :param t: -
@@ -1691,7 +1693,7 @@ class CacheControl(
 
     @jsii.member(jsii_name="sMaxAge")
     @builtins.classmethod
-    def s_max_age(cls, t: _Duration_4839e8c3) -> "CacheControl":
+    def s_max_age(cls, t: "_Duration_4839e8c3") -> "CacheControl":
         '''Sets 's-maxage='.
 
         :param t: -
@@ -1703,7 +1705,7 @@ class CacheControl(
 
     @jsii.member(jsii_name="staleIfError")
     @builtins.classmethod
-    def stale_if_error(cls, t: _Duration_4839e8c3) -> "CacheControl":
+    def stale_if_error(cls, t: "_Duration_4839e8c3") -> "CacheControl":
         '''Sets 'stale-if-error='.
 
         :param t: -
@@ -1715,7 +1717,7 @@ class CacheControl(
 
     @jsii.member(jsii_name="staleWhileRevalidate")
     @builtins.classmethod
-    def stale_while_revalidate(cls, t: _Duration_4839e8c3) -> "CacheControl":
+    def stale_while_revalidate(cls, t: "_Duration_4839e8c3") -> "CacheControl":
         '''Sets 'stale-while-revalidate='.
 
         :param t: -
@@ -1765,14 +1767,14 @@ class DeployTimeSubstitutedFile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        destination_bucket: _IBucket_42e086fd,
+        destination_bucket: "_IBucket_42e086fd",
         source: builtins.str,
         substitutions: typing.Mapping[builtins.str, builtins.str],
         destination_key: typing.Optional[builtins.str] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -1799,8 +1801,8 @@ class DeployTimeSubstitutedFile(
 
     @builtins.property
     @jsii.member(jsii_name="bucket")
-    def bucket(self) -> _IBucket_42e086fd:
-        return typing.cast(_IBucket_42e086fd, jsii.get(self, "bucket"))
+    def bucket(self) -> "_IBucket_42e086fd":
+        return typing.cast("_IBucket_42e086fd", jsii.get(self, "bucket"))
 
     @builtins.property
     @jsii.member(jsii_name="objectKey")
@@ -1823,11 +1825,11 @@ class DeployTimeSubstitutedFileProps:
     def __init__(
         self,
         *,
-        destination_bucket: _IBucket_42e086fd,
+        destination_bucket: "_IBucket_42e086fd",
         source: builtins.str,
         substitutions: typing.Mapping[builtins.str, builtins.str],
         destination_key: typing.Optional[builtins.str] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''
         :param destination_bucket: The S3 bucket to sync the contents of the zip file to.
@@ -1877,11 +1879,11 @@ class DeployTimeSubstitutedFileProps:
             self._values["role"] = role
 
     @builtins.property
-    def destination_bucket(self) -> _IBucket_42e086fd:
+    def destination_bucket(self) -> "_IBucket_42e086fd":
         '''The S3 bucket to sync the contents of the zip file to.'''
         result = self._values.get("destination_bucket")
         assert result is not None, "Required property 'destination_bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
     def source(self) -> builtins.str:
@@ -1913,13 +1915,13 @@ class DeployTimeSubstitutedFileProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Execution role associated with this function.
 
         :default: - A role is automatically created
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1939,7 +1941,7 @@ class DeployTimeSubstitutedFileProps:
     name_mapping={"handler_role": "handlerRole"},
 )
 class DeploymentSourceContext:
-    def __init__(self, *, handler_role: _IRole_235f5d8e) -> None:
+    def __init__(self, *, handler_role: "_IRole_235f5d8e") -> None:
         '''Bind context for ISources.
 
         :param handler_role: The role for the handler.
@@ -1967,11 +1969,11 @@ class DeploymentSourceContext:
         }
 
     @builtins.property
-    def handler_role(self) -> _IRole_235f5d8e:
+    def handler_role(self) -> "_IRole_235f5d8e":
         '''The role for the handler.'''
         result = self._values.get("handler_role")
         assert result is not None, "Required property 'handler_role' is missing"
-        return typing.cast(_IRole_235f5d8e, result)
+        return typing.cast("_IRole_235f5d8e", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1992,9 +1994,9 @@ class ISource(typing_extensions.Protocol):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
-        handler_role: _IRole_235f5d8e,
+        handler_role: "_IRole_235f5d8e",
     ) -> "SourceConfig":
         '''Binds the source to a bucket deployment.
 
@@ -2012,9 +2014,9 @@ class _ISourceProxy:
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
-        handler_role: _IRole_235f5d8e,
+        handler_role: "_IRole_235f5d8e",
     ) -> "SourceConfig":
         '''Binds the source to a bucket deployment.
 
@@ -2226,15 +2228,15 @@ class Source(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_s3_deployment.S
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
-    ) -> ISource:
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
+    ) -> "ISource":
         '''Uses a local asset as the deployment source.
 
         If the local asset is a .zip archive, make sure you trust the
@@ -2268,11 +2270,15 @@ class Source(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_s3_deployment.S
             ignore_mode=ignore_mode,
         )
 
-        return typing.cast(ISource, jsii.sinvoke(cls, "asset", [path, options]))
+        return typing.cast("ISource", jsii.sinvoke(cls, "asset", [path, options]))
 
     @jsii.member(jsii_name="bucket")
     @builtins.classmethod
-    def bucket(cls, bucket: _IBucket_42e086fd, zip_object_key: builtins.str) -> ISource:
+    def bucket(
+        cls,
+        bucket: "_IBucket_42e086fd",
+        zip_object_key: builtins.str,
+    ) -> "ISource":
         '''Uses a .zip file stored in an S3 bucket as the source for the destination bucket contents.
 
         Make sure you trust the producer of the archive.
@@ -2307,7 +2313,7 @@ class Source(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_s3_deployment.S
             type_hints = typing.get_type_hints(_typecheckingstub__bcaba123a95f1aa9d99f9f5af319da23dd5f345454e757ba9257364325b3efb5)
             check_type(argname="argument bucket", value=bucket, expected_type=type_hints["bucket"])
             check_type(argname="argument zip_object_key", value=zip_object_key, expected_type=type_hints["zip_object_key"])
-        return typing.cast(ISource, jsii.sinvoke(cls, "bucket", [bucket, zip_object_key]))
+        return typing.cast("ISource", jsii.sinvoke(cls, "bucket", [bucket, zip_object_key]))
 
     @jsii.member(jsii_name="data")
     @builtins.classmethod
@@ -2317,7 +2323,7 @@ class Source(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_s3_deployment.S
         data: builtins.str,
         *,
         json_escape: typing.Optional[builtins.bool] = None,
-    ) -> ISource:
+    ) -> "ISource":
         '''Deploys an object with the specified string contents into the bucket.
 
         The
@@ -2337,7 +2343,7 @@ class Source(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_s3_deployment.S
             check_type(argname="argument data", value=data, expected_type=type_hints["data"])
         markers_config = MarkersConfig(json_escape=json_escape)
 
-        return typing.cast(ISource, jsii.sinvoke(cls, "data", [object_key, data, markers_config]))
+        return typing.cast("ISource", jsii.sinvoke(cls, "data", [object_key, data, markers_config]))
 
     @jsii.member(jsii_name="jsonData")
     @builtins.classmethod
@@ -2347,7 +2353,7 @@ class Source(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_s3_deployment.S
         obj: typing.Any,
         *,
         escape: typing.Optional[builtins.bool] = None,
-    ) -> ISource:
+    ) -> "ISource":
         '''Deploys an object with the specified JSON object into the bucket.
 
         The
@@ -2364,11 +2370,11 @@ class Source(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_s3_deployment.S
             check_type(argname="argument obj", value=obj, expected_type=type_hints["obj"])
         json_processing_options = JsonProcessingOptions(escape=escape)
 
-        return typing.cast(ISource, jsii.sinvoke(cls, "jsonData", [object_key, obj, json_processing_options]))
+        return typing.cast("ISource", jsii.sinvoke(cls, "jsonData", [object_key, obj, json_processing_options]))
 
     @jsii.member(jsii_name="yamlData")
     @builtins.classmethod
-    def yaml_data(cls, object_key: builtins.str, obj: typing.Any) -> ISource:
+    def yaml_data(cls, object_key: builtins.str, obj: typing.Any) -> "ISource":
         '''Deploys an object with the specified JSON object formatted as YAML into the bucket.
 
         The object can include deploy-time values (such as ``snsTopic.topicArn``) that
@@ -2381,7 +2387,7 @@ class Source(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_s3_deployment.S
             type_hints = typing.get_type_hints(_typecheckingstub__bb0fa5367aafa7b8db0300fa69edeca060cb4ca66d1517ccc855345cc9bfe37e)
             check_type(argname="argument object_key", value=object_key, expected_type=type_hints["object_key"])
             check_type(argname="argument obj", value=obj, expected_type=type_hints["obj"])
-        return typing.cast(ISource, jsii.sinvoke(cls, "yamlData", [object_key, obj]))
+        return typing.cast("ISource", jsii.sinvoke(cls, "yamlData", [object_key, obj]))
 
 
 @jsii.data_type(
@@ -2398,10 +2404,10 @@ class SourceConfig:
     def __init__(
         self,
         *,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         zip_object_key: builtins.str,
         markers: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        markers_config: typing.Optional[typing.Union[MarkersConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        markers_config: typing.Optional[typing.Union["MarkersConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Source information.
 
@@ -2453,11 +2459,11 @@ class SourceConfig:
             self._values["markers_config"] = markers_config
 
     @builtins.property
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''The source bucket to deploy from.'''
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
     def zip_object_key(self) -> builtins.str:
@@ -2476,13 +2482,13 @@ class SourceConfig:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
-    def markers_config(self) -> typing.Optional[MarkersConfig]:
+    def markers_config(self) -> typing.Optional["MarkersConfig"]:
         '''A configuration for markers substitution strategy.
 
         :default: - no configuration
         '''
         result = self._values.get("markers_config")
-        return typing.cast(typing.Optional[MarkersConfig], result)
+        return typing.cast(typing.Optional["MarkersConfig"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

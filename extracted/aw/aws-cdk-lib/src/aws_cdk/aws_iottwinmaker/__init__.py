@@ -191,18 +191,18 @@ class CfnComponentType(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         component_type_id: builtins.str,
         workspace_id: builtins.str,
-        composite_component_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.CompositeComponentTypeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        composite_component_types: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.CompositeComponentTypeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         extends_from: typing.Optional[typing.Sequence[builtins.str]] = None,
-        functions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.FunctionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        is_singleton: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        property_definitions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.PropertyDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        property_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.PropertyGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        functions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.FunctionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        is_singleton: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        property_definitions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.PropertyDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        property_groups: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.PropertyGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::IoTTwinMaker::ComponentType``.
@@ -243,7 +243,7 @@ class CfnComponentType(
     @builtins.classmethod
     def arn_for_component_type(
         cls,
-        resource: _IComponentTypeRef_219f2c31,
+        resource: "_IComponentTypeRef_219f2c31",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -266,7 +266,7 @@ class CfnComponentType(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnComponentType", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -315,37 +315,37 @@ class CfnComponentType(
 
     @builtins.property
     @jsii.member(jsii_name="attrIsAbstract")
-    def attr_is_abstract(self) -> _IResolvable_da3f097b:
+    def attr_is_abstract(self) -> "_IResolvable_da3f097b":
         '''A boolean value that specifies whether the component type is abstract.
 
         :cloudformationAttribute: IsAbstract
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrIsAbstract"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrIsAbstract"))
 
     @builtins.property
     @jsii.member(jsii_name="attrIsSchemaInitialized")
-    def attr_is_schema_initialized(self) -> _IResolvable_da3f097b:
+    def attr_is_schema_initialized(self) -> "_IResolvable_da3f097b":
         '''A boolean value that specifies whether the component type has a schema initializer and that the schema initializer has run.
 
         :cloudformationAttribute: IsSchemaInitialized
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrIsSchemaInitialized"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrIsSchemaInitialized"))
 
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
-    def attr_status(self) -> _IResolvable_da3f097b:
+    def attr_status(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: Status
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrStatus"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrStatus"))
 
     @builtins.property
     @jsii.member(jsii_name="attrStatusError")
-    def attr_status_error(self) -> _IResolvable_da3f097b:
+    def attr_status_error(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: Status.Error
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrStatusError"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrStatusError"))
 
     @builtins.property
     @jsii.member(jsii_name="attrStatusErrorCode")
@@ -387,15 +387,15 @@ class CfnComponentType(
 
     @builtins.property
     @jsii.member(jsii_name="componentTypeRef")
-    def component_type_ref(self) -> _ComponentTypeReference_a69aa683:
+    def component_type_ref(self) -> "_ComponentTypeReference_a69aa683":
         '''A reference to a ComponentType resource.'''
-        return typing.cast(_ComponentTypeReference_a69aa683, jsii.get(self, "componentTypeRef"))
+        return typing.cast("_ComponentTypeReference_a69aa683", jsii.get(self, "componentTypeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="componentTypeId")
@@ -427,14 +427,14 @@ class CfnComponentType(
     @jsii.member(jsii_name="compositeComponentTypes")
     def composite_component_types(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.CompositeComponentTypeProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.CompositeComponentTypeProperty"]]]]:
         '''Maps strings to ``compositeComponentTypes`` of the ``componentType`` .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.CompositeComponentTypeProperty"]]]], jsii.get(self, "compositeComponentTypes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.CompositeComponentTypeProperty"]]]], jsii.get(self, "compositeComponentTypes"))
 
     @composite_component_types.setter
     def composite_component_types(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.CompositeComponentTypeProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.CompositeComponentTypeProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8c14203e7cfc843c6531b2731fc869708b5c539a43808b0ec12f7462e5e3e774)
@@ -471,14 +471,14 @@ class CfnComponentType(
     @jsii.member(jsii_name="functions")
     def functions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.FunctionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.FunctionProperty"]]]]:
         '''An object that maps strings to the functions in the component type.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.FunctionProperty"]]]], jsii.get(self, "functions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.FunctionProperty"]]]], jsii.get(self, "functions"))
 
     @functions.setter
     def functions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.FunctionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.FunctionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4c18d78b62d26be5852013391c05c78956f0decd19a229ac7f58b866ae466c14)
@@ -489,14 +489,14 @@ class CfnComponentType(
     @jsii.member(jsii_name="isSingleton")
     def is_singleton(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value that specifies whether an entity can have more than one component of this type.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "isSingleton"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "isSingleton"))
 
     @is_singleton.setter
     def is_singleton(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__74f5b5fcf3c80cef383cad8a20c79fb45b21b0d73ef476054a81873ff26b199c)
@@ -507,14 +507,14 @@ class CfnComponentType(
     @jsii.member(jsii_name="propertyDefinitions")
     def property_definitions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.PropertyDefinitionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.PropertyDefinitionProperty"]]]]:
         '''An object that maps strings to the property definitions in the component type.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.PropertyDefinitionProperty"]]]], jsii.get(self, "propertyDefinitions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.PropertyDefinitionProperty"]]]], jsii.get(self, "propertyDefinitions"))
 
     @property_definitions.setter
     def property_definitions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.PropertyDefinitionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.PropertyDefinitionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1be07e93843a09c1fedf2924bac62d38324ad54f2879a9be1a8e23ad7beb09f8)
@@ -525,14 +525,14 @@ class CfnComponentType(
     @jsii.member(jsii_name="propertyGroups")
     def property_groups(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.PropertyGroupProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.PropertyGroupProperty"]]]]:
         '''An object that maps strings to the property groups in the component type.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.PropertyGroupProperty"]]]], jsii.get(self, "propertyGroups"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.PropertyGroupProperty"]]]], jsii.get(self, "propertyGroups"))
 
     @property_groups.setter
     def property_groups(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.PropertyGroupProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.PropertyGroupProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__36507cd81b3c73a3a55b64d8b8b5eda472ce5b6929f6f7ba9baa53055e83dcb5)
@@ -619,8 +619,8 @@ class CfnComponentType(
         def __init__(
             self,
             *,
-            is_native: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            lambda_: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.LambdaFunctionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            is_native: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            lambda_: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.LambdaFunctionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The data connector.
 
@@ -656,24 +656,24 @@ class CfnComponentType(
         @builtins.property
         def is_native(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A boolean value that specifies whether the data connector is native to IoT TwinMaker.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-dataconnector.html#cfn-iottwinmaker-componenttype-dataconnector-isnative
             '''
             result = self._values.get("is_native")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def lambda_(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.LambdaFunctionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.LambdaFunctionProperty"]]:
             '''The Lambda function associated with the data connector.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-dataconnector.html#cfn-iottwinmaker-componenttype-dataconnector-lambda
             '''
             result = self._values.get("lambda_")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.LambdaFunctionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.LambdaFunctionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -702,9 +702,9 @@ class CfnComponentType(
             self,
             *,
             type: builtins.str,
-            allowed_values: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            nested_type: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.DataTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            relationship: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.RelationshipProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            allowed_values: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            nested_type: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.DataTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            relationship: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.RelationshipProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             unit_of_measure: typing.Optional[builtins.str] = None,
         ) -> None:
             '''An object that specifies the data type of a property.
@@ -787,35 +787,35 @@ class CfnComponentType(
         @builtins.property
         def allowed_values(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataValueProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataValueProperty"]]]]:
             '''The allowed values for this data type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-datatype.html#cfn-iottwinmaker-componenttype-datatype-allowedvalues
             '''
             result = self._values.get("allowed_values")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataValueProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataValueProperty"]]]], result)
 
         @builtins.property
         def nested_type(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataTypeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataTypeProperty"]]:
             '''The nested type in the data type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-datatype.html#cfn-iottwinmaker-componenttype-datatype-nestedtype
             '''
             result = self._values.get("nested_type")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataTypeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataTypeProperty"]], result)
 
         @builtins.property
         def relationship(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.RelationshipProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.RelationshipProperty"]]:
             '''A relationship that associates a component with another component.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-datatype.html#cfn-iottwinmaker-componenttype-datatype-relationship
             '''
             result = self._values.get("relationship")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.RelationshipProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.RelationshipProperty"]], result)
 
         @builtins.property
         def unit_of_measure(self) -> typing.Optional[builtins.str]:
@@ -856,13 +856,13 @@ class CfnComponentType(
         def __init__(
             self,
             *,
-            boolean_value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            boolean_value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             double_value: typing.Optional[jsii.Number] = None,
             expression: typing.Optional[builtins.str] = None,
             integer_value: typing.Optional[jsii.Number] = None,
-            list_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            list_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             long_value: typing.Optional[jsii.Number] = None,
-            map_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            map_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             relationship_value: typing.Any = None,
             string_value: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -938,13 +938,13 @@ class CfnComponentType(
         @builtins.property
         def boolean_value(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A boolean value.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-datavalue.html#cfn-iottwinmaker-componenttype-datavalue-booleanvalue
             '''
             result = self._values.get("boolean_value")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def double_value(self) -> typing.Optional[jsii.Number]:
@@ -976,13 +976,13 @@ class CfnComponentType(
         @builtins.property
         def list_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataValueProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataValueProperty"]]]]:
             '''A list of multiple values.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-datavalue.html#cfn-iottwinmaker-componenttype-datavalue-listvalue
             '''
             result = self._values.get("list_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataValueProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataValueProperty"]]]], result)
 
         @builtins.property
         def long_value(self) -> typing.Optional[jsii.Number]:
@@ -996,13 +996,13 @@ class CfnComponentType(
         @builtins.property
         def map_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataValueProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataValueProperty"]]]]:
             '''An object that maps strings to multiple ``DataValue`` objects.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-datavalue.html#cfn-iottwinmaker-componenttype-datavalue-mapvalue
             '''
             result = self._values.get("map_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataValueProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataValueProperty"]]]], result)
 
         @builtins.property
         def relationship_value(self) -> typing.Any:
@@ -1116,7 +1116,7 @@ class CfnComponentType(
         def __init__(
             self,
             *,
-            implemented_by: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.DataConnectorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            implemented_by: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.DataConnectorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             required_properties: typing.Optional[typing.Sequence[builtins.str]] = None,
             scope: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -1162,13 +1162,13 @@ class CfnComponentType(
         @builtins.property
         def implemented_by(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataConnectorProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataConnectorProperty"]]:
             '''The data connector.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-function.html#cfn-iottwinmaker-componenttype-function-implementedby
             '''
             result = self._values.get("implemented_by")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataConnectorProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataConnectorProperty"]], result)
 
         @builtins.property
         def required_properties(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1268,13 +1268,13 @@ class CfnComponentType(
         def __init__(
             self,
             *,
-            configurations: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            data_type: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.DataTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            default_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            is_external_id: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            is_required_in_entity: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            is_stored_externally: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            is_time_series: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            configurations: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            data_type: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.DataTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            default_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            is_external_id: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            is_required_in_entity: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            is_stored_externally: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            is_time_series: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''PropertyDefinition is an object that maps strings to the property definitions in the component type.
 
@@ -1374,79 +1374,79 @@ class CfnComponentType(
         @builtins.property
         def configurations(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''A mapping that specifies configuration information about the property.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-propertydefinition.html#cfn-iottwinmaker-componenttype-propertydefinition-configurations
             '''
             result = self._values.get("configurations")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def data_type(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataTypeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataTypeProperty"]]:
             '''An object that specifies the data type of a property.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-propertydefinition.html#cfn-iottwinmaker-componenttype-propertydefinition-datatype
             '''
             result = self._values.get("data_type")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataTypeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataTypeProperty"]], result)
 
         @builtins.property
         def default_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataValueProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataValueProperty"]]:
             '''A boolean value that specifies whether the property ID comes from an external data store.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-propertydefinition.html#cfn-iottwinmaker-componenttype-propertydefinition-defaultvalue
             '''
             result = self._values.get("default_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.DataValueProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.DataValueProperty"]], result)
 
         @builtins.property
         def is_external_id(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean value that specifies whether the property ID comes from an external data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-propertydefinition.html#cfn-iottwinmaker-componenttype-propertydefinition-isexternalid
             '''
             result = self._values.get("is_external_id")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def is_required_in_entity(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A boolean value that specifies whether the property is required in an entity.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-propertydefinition.html#cfn-iottwinmaker-componenttype-propertydefinition-isrequiredinentity
             '''
             result = self._values.get("is_required_in_entity")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def is_stored_externally(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A boolean value that specifies whether the property is stored externally.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-propertydefinition.html#cfn-iottwinmaker-componenttype-propertydefinition-isstoredexternally
             '''
             result = self._values.get("is_stored_externally")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def is_time_series(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A boolean value that specifies whether the property consists of time series data.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-propertydefinition.html#cfn-iottwinmaker-componenttype-propertydefinition-istimeseries
             '''
             result = self._values.get("is_time_series")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1684,7 +1684,7 @@ class CfnComponentType(
         def __init__(
             self,
             *,
-            error: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentType.ErrorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            error: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.ErrorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             state: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The component type status.
@@ -1722,13 +1722,13 @@ class CfnComponentType(
         @builtins.property
         def error(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.ErrorProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.ErrorProperty"]]:
             '''The component type error.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-componenttype-status.html#cfn-iottwinmaker-componenttype-status-error
             '''
             result = self._values.get("error")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentType.ErrorProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentType.ErrorProperty"]], result)
 
         @builtins.property
         def state(self) -> typing.Optional[builtins.str]:
@@ -1773,13 +1773,13 @@ class CfnComponentTypeProps:
         *,
         component_type_id: builtins.str,
         workspace_id: builtins.str,
-        composite_component_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnComponentType.CompositeComponentTypeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        composite_component_types: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.CompositeComponentTypeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         extends_from: typing.Optional[typing.Sequence[builtins.str]] = None,
-        functions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnComponentType.FunctionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        is_singleton: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        property_definitions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnComponentType.PropertyDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        property_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnComponentType.PropertyGroupProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        functions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.FunctionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        is_singleton: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        property_definitions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.PropertyDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        property_groups: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentType.PropertyGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnComponentType``.
@@ -1948,7 +1948,7 @@ class CfnComponentTypeProps:
     @builtins.property
     def composite_component_types(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnComponentType.CompositeComponentTypeProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.CompositeComponentTypeProperty"]]]]:
         '''Maps strings to ``compositeComponentTypes`` of the ``componentType`` .
 
         ``CompositeComponentType`` is referenced by ``componentTypeId`` .
@@ -1956,7 +1956,7 @@ class CfnComponentTypeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-componenttype.html#cfn-iottwinmaker-componenttype-compositecomponenttypes
         '''
         result = self._values.get("composite_component_types")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnComponentType.CompositeComponentTypeProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.CompositeComponentTypeProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1979,7 +1979,7 @@ class CfnComponentTypeProps:
     @builtins.property
     def functions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnComponentType.FunctionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.FunctionProperty"]]]]:
         '''An object that maps strings to the functions in the component type.
 
         Each string in the mapping must be unique to this object.
@@ -1989,23 +1989,23 @@ class CfnComponentTypeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-componenttype.html#cfn-iottwinmaker-componenttype-functions
         '''
         result = self._values.get("functions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnComponentType.FunctionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.FunctionProperty"]]]], result)
 
     @builtins.property
     def is_singleton(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value that specifies whether an entity can have more than one component of this type.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-componenttype.html#cfn-iottwinmaker-componenttype-issingleton
         '''
         result = self._values.get("is_singleton")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def property_definitions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnComponentType.PropertyDefinitionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.PropertyDefinitionProperty"]]]]:
         '''An object that maps strings to the property definitions in the component type.
 
         Each string in the mapping must be unique to this object.
@@ -2015,12 +2015,12 @@ class CfnComponentTypeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-componenttype.html#cfn-iottwinmaker-componenttype-propertydefinitions
         '''
         result = self._values.get("property_definitions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnComponentType.PropertyDefinitionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.PropertyDefinitionProperty"]]]], result)
 
     @builtins.property
     def property_groups(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnComponentType.PropertyGroupProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.PropertyGroupProperty"]]]]:
         '''An object that maps strings to the property groups in the component type.
 
         Each string in the mapping must be unique to this object.
@@ -2028,7 +2028,7 @@ class CfnComponentTypeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-componenttype.html#cfn-iottwinmaker-componenttype-propertygroups
         '''
         result = self._values.get("property_groups")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnComponentType.PropertyGroupProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentType.PropertyGroupProperty"]]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -2162,13 +2162,13 @@ class CfnEntity(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         entity_name: builtins.str,
         workspace_id: builtins.str,
-        components: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.ComponentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        composite_components: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.CompositeComponentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        components: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.ComponentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        composite_components: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.CompositeComponentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         entity_id: typing.Optional[builtins.str] = None,
         parent_entity_id: typing.Optional[builtins.str] = None,
@@ -2206,7 +2206,7 @@ class CfnEntity(
 
     @jsii.member(jsii_name="arnForEntity")
     @builtins.classmethod
-    def arn_for_entity(cls, resource: _IEntityRef_350ebea0) -> builtins.str:
+    def arn_for_entity(cls, resource: "_IEntityRef_350ebea0") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2228,7 +2228,7 @@ class CfnEntity(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEntity", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2277,28 +2277,28 @@ class CfnEntity(
 
     @builtins.property
     @jsii.member(jsii_name="attrHasChildEntities")
-    def attr_has_child_entities(self) -> _IResolvable_da3f097b:
+    def attr_has_child_entities(self) -> "_IResolvable_da3f097b":
         '''A boolean value that specifies whether the entity has child entities or not.
 
         :cloudformationAttribute: HasChildEntities
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrHasChildEntities"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrHasChildEntities"))
 
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
-    def attr_status(self) -> _IResolvable_da3f097b:
+    def attr_status(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: Status
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrStatus"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrStatus"))
 
     @builtins.property
     @jsii.member(jsii_name="attrStatusError")
-    def attr_status_error(self) -> _IResolvable_da3f097b:
+    def attr_status_error(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: Status.Error
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrStatusError"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrStatusError"))
 
     @builtins.property
     @jsii.member(jsii_name="attrStatusErrorCode")
@@ -2340,15 +2340,15 @@ class CfnEntity(
 
     @builtins.property
     @jsii.member(jsii_name="entityRef")
-    def entity_ref(self) -> _EntityReference_afeeeb38:
+    def entity_ref(self) -> "_EntityReference_afeeeb38":
         '''A reference to a Entity resource.'''
-        return typing.cast(_EntityReference_afeeeb38, jsii.get(self, "entityRef"))
+        return typing.cast("_EntityReference_afeeeb38", jsii.get(self, "entityRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="entityName")
@@ -2380,14 +2380,14 @@ class CfnEntity(
     @jsii.member(jsii_name="components")
     def components(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.ComponentProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.ComponentProperty"]]]]:
         '''An object that maps strings to the components in the entity.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.ComponentProperty"]]]], jsii.get(self, "components"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.ComponentProperty"]]]], jsii.get(self, "components"))
 
     @components.setter
     def components(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.ComponentProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.ComponentProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2d33ce5aae02e9b9d53db2dc6a1f173aca65b2d0541e1f42ac4dcedca4032bbc)
@@ -2398,14 +2398,14 @@ class CfnEntity(
     @jsii.member(jsii_name="compositeComponents")
     def composite_components(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.CompositeComponentProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.CompositeComponentProperty"]]]]:
         '''Maps string to ``compositeComponent`` updates in the request.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.CompositeComponentProperty"]]]], jsii.get(self, "compositeComponents"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.CompositeComponentProperty"]]]], jsii.get(self, "compositeComponents"))
 
     @composite_components.setter
     def composite_components(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.CompositeComponentProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.CompositeComponentProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0017e47e10dfdb66e08a079285fc540a61555d50cdc03d0a6b817fa6b17349ed)
@@ -2488,9 +2488,9 @@ class CfnEntity(
             component_type_id: typing.Optional[builtins.str] = None,
             defined_in: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
-            properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.PropertyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            property_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.PropertyGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            status: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.StatusProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.PropertyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            property_groups: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.PropertyGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            status: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.StatusProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The entity component.
 
@@ -2615,7 +2615,7 @@ class CfnEntity(
         @builtins.property
         def properties(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.PropertyProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.PropertyProperty"]]]]:
             '''An object that maps strings to the properties to set in the component type.
 
             Each string in the mapping must be unique to this object.
@@ -2623,12 +2623,12 @@ class CfnEntity(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-component.html#cfn-iottwinmaker-entity-component-properties
             '''
             result = self._values.get("properties")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.PropertyProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.PropertyProperty"]]]], result)
 
         @builtins.property
         def property_groups(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.PropertyGroupProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.PropertyGroupProperty"]]]]:
             '''An object that maps strings to the property groups in the component type.
 
             Each string in the mapping must be unique to this object.
@@ -2636,18 +2636,18 @@ class CfnEntity(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-component.html#cfn-iottwinmaker-entity-component-propertygroups
             '''
             result = self._values.get("property_groups")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.PropertyGroupProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.PropertyGroupProperty"]]]], result)
 
         @builtins.property
         def status(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.StatusProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.StatusProperty"]]:
             '''The status of the component.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-component.html#cfn-iottwinmaker-entity-component-status
             '''
             result = self._values.get("status")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.StatusProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.StatusProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2681,9 +2681,9 @@ class CfnEntity(
             component_path: typing.Optional[builtins.str] = None,
             component_type_id: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
-            properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.PropertyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            property_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.PropertyGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            status: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.StatusProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.PropertyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            property_groups: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.PropertyGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            status: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.StatusProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Information about a composite component.
 
@@ -2808,7 +2808,7 @@ class CfnEntity(
         @builtins.property
         def properties(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.PropertyProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.PropertyProperty"]]]]:
             '''Map of strings to the properties in the component type.
 
             Each string in the mapping must be unique to this component.
@@ -2816,29 +2816,29 @@ class CfnEntity(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-compositecomponent.html#cfn-iottwinmaker-entity-compositecomponent-properties
             '''
             result = self._values.get("properties")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.PropertyProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.PropertyProperty"]]]], result)
 
         @builtins.property
         def property_groups(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.PropertyGroupProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.PropertyGroupProperty"]]]]:
             '''The property groups.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-compositecomponent.html#cfn-iottwinmaker-entity-compositecomponent-propertygroups
             '''
             result = self._values.get("property_groups")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.PropertyGroupProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.PropertyGroupProperty"]]]], result)
 
         @builtins.property
         def status(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.StatusProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.StatusProperty"]]:
             '''The current status of the composite component.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-compositecomponent.html#cfn-iottwinmaker-entity-compositecomponent-status
             '''
             result = self._values.get("status")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.StatusProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.StatusProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2866,9 +2866,9 @@ class CfnEntity(
         def __init__(
             self,
             *,
-            allowed_values: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            nested_type: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.DataTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            relationship: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.RelationshipProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            allowed_values: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            nested_type: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.DataTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            relationship: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.RelationshipProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             type: typing.Optional[builtins.str] = None,
             unit_of_measure: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -2938,35 +2938,35 @@ class CfnEntity(
         @builtins.property
         def allowed_values(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEntity.DataValueProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEntity.DataValueProperty"]]]]:
             '''The allowed values.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-datatype.html#cfn-iottwinmaker-entity-datatype-allowedvalues
             '''
             result = self._values.get("allowed_values")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEntity.DataValueProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEntity.DataValueProperty"]]]], result)
 
         @builtins.property
         def nested_type(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.DataTypeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.DataTypeProperty"]]:
             '''The nested type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-datatype.html#cfn-iottwinmaker-entity-datatype-nestedtype
             '''
             result = self._values.get("nested_type")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.DataTypeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.DataTypeProperty"]], result)
 
         @builtins.property
         def relationship(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.RelationshipProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.RelationshipProperty"]]:
             '''The relationship.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-datatype.html#cfn-iottwinmaker-entity-datatype-relationship
             '''
             result = self._values.get("relationship")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.RelationshipProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.RelationshipProperty"]], result)
 
         @builtins.property
         def type(self) -> typing.Optional[builtins.str]:
@@ -3016,13 +3016,13 @@ class CfnEntity(
         def __init__(
             self,
             *,
-            boolean_value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            boolean_value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             double_value: typing.Optional[jsii.Number] = None,
             expression: typing.Optional[builtins.str] = None,
             integer_value: typing.Optional[jsii.Number] = None,
-            list_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            list_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             long_value: typing.Optional[jsii.Number] = None,
-            map_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            map_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             relationship_value: typing.Any = None,
             string_value: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -3098,13 +3098,13 @@ class CfnEntity(
         @builtins.property
         def boolean_value(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A boolean value.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-datavalue.html#cfn-iottwinmaker-entity-datavalue-booleanvalue
             '''
             result = self._values.get("boolean_value")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def double_value(self) -> typing.Optional[jsii.Number]:
@@ -3136,13 +3136,13 @@ class CfnEntity(
         @builtins.property
         def list_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEntity.DataValueProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEntity.DataValueProperty"]]]]:
             '''A list of multiple values.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-datavalue.html#cfn-iottwinmaker-entity-datavalue-listvalue
             '''
             result = self._values.get("list_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEntity.DataValueProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEntity.DataValueProperty"]]]], result)
 
         @builtins.property
         def long_value(self) -> typing.Optional[jsii.Number]:
@@ -3156,13 +3156,13 @@ class CfnEntity(
         @builtins.property
         def map_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.DataValueProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.DataValueProperty"]]]]:
             '''An object that maps strings to multiple DataValue objects.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-datavalue.html#cfn-iottwinmaker-entity-datavalue-mapvalue
             '''
             result = self._values.get("map_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnEntity.DataValueProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.DataValueProperty"]]]], result)
 
         @builtins.property
         def relationship_value(self) -> typing.Any:
@@ -3213,16 +3213,16 @@ class CfnEntity(
         def __init__(
             self,
             *,
-            configuration: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            data_type: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.DataTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            default_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            is_external_id: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            is_final: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            is_imported: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            is_inherited: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            is_required_in_entity: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            is_stored_externally: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            is_time_series: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            configuration: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            data_type: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.DataTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            default_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            is_external_id: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            is_final: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            is_imported: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            is_inherited: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            is_required_in_entity: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            is_stored_externally: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            is_time_series: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The entity definition.
 
@@ -3335,112 +3335,112 @@ class CfnEntity(
         @builtins.property
         def configuration(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-definition.html#cfn-iottwinmaker-entity-definition-configuration
             '''
             result = self._values.get("configuration")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def data_type(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.DataTypeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.DataTypeProperty"]]:
             '''The data type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-definition.html#cfn-iottwinmaker-entity-definition-datatype
             '''
             result = self._values.get("data_type")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.DataTypeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.DataTypeProperty"]], result)
 
         @builtins.property
         def default_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.DataValueProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.DataValueProperty"]]:
             '''The default value.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-definition.html#cfn-iottwinmaker-entity-definition-defaultvalue
             '''
             result = self._values.get("default_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.DataValueProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.DataValueProperty"]], result)
 
         @builtins.property
         def is_external_id(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Displays if the entity has a external Id.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-definition.html#cfn-iottwinmaker-entity-definition-isexternalid
             '''
             result = self._values.get("is_external_id")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def is_final(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Displays if the entity is final.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-definition.html#cfn-iottwinmaker-entity-definition-isfinal
             '''
             result = self._values.get("is_final")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def is_imported(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Displays if the entity is imported.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-definition.html#cfn-iottwinmaker-entity-definition-isimported
             '''
             result = self._values.get("is_imported")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def is_inherited(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Displays if the entity is inherited.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-definition.html#cfn-iottwinmaker-entity-definition-isinherited
             '''
             result = self._values.get("is_inherited")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def is_required_in_entity(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Displays if the entity is a required entity.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-definition.html#cfn-iottwinmaker-entity-definition-isrequiredinentity
             '''
             result = self._values.get("is_required_in_entity")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def is_stored_externally(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Displays if the entity is tored externally.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-definition.html#cfn-iottwinmaker-entity-definition-isstoredexternally
             '''
             result = self._values.get("is_stored_externally")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def is_time_series(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Displays if the entity.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-definition.html#cfn-iottwinmaker-entity-definition-istimeseries
             '''
             result = self._values.get("is_time_series")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3603,7 +3603,7 @@ class CfnEntity(
             self,
             *,
             definition: typing.Any = None,
-            value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntity.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.DataValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that sets information about a property.
 
@@ -3662,13 +3662,13 @@ class CfnEntity(
         @builtins.property
         def value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.DataValueProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.DataValueProperty"]]:
             '''An object that contains information about a value for a time series property.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iottwinmaker-entity-property.html#cfn-iottwinmaker-entity-property-value
             '''
             result = self._values.get("value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEntity.DataValueProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEntity.DataValueProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3922,8 +3922,8 @@ class CfnEntityProps:
         *,
         entity_name: builtins.str,
         workspace_id: builtins.str,
-        components: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnEntity.ComponentProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        composite_components: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnEntity.CompositeComponentProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        components: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.ComponentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        composite_components: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntity.CompositeComponentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         entity_id: typing.Optional[builtins.str] = None,
         parent_entity_id: typing.Optional[builtins.str] = None,
@@ -4089,7 +4089,7 @@ class CfnEntityProps:
     @builtins.property
     def components(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnEntity.ComponentProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.ComponentProperty"]]]]:
         '''An object that maps strings to the components in the entity.
 
         Each string in the mapping must be unique to this object.
@@ -4099,12 +4099,12 @@ class CfnEntityProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-entity.html#cfn-iottwinmaker-entity-components
         '''
         result = self._values.get("components")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnEntity.ComponentProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.ComponentProperty"]]]], result)
 
     @builtins.property
     def composite_components(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnEntity.CompositeComponentProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.CompositeComponentProperty"]]]]:
         '''Maps string to ``compositeComponent`` updates in the request.
 
         Each key of the map represents the ``componentPath`` of the ``compositeComponent`` .
@@ -4112,7 +4112,7 @@ class CfnEntityProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-entity.html#cfn-iottwinmaker-entity-compositecomponents
         '''
         result = self._values.get("composite_components")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnEntity.CompositeComponentProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnEntity.CompositeComponentProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -4199,7 +4199,7 @@ class CfnScene(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         content_location: builtins.str,
@@ -4207,7 +4207,7 @@ class CfnScene(
         workspace_id: builtins.str,
         capabilities: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
-        scene_metadata: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        scene_metadata: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::IoTTwinMaker::Scene``.
@@ -4240,7 +4240,7 @@ class CfnScene(
 
     @jsii.member(jsii_name="arnForScene")
     @builtins.classmethod
-    def arn_for_scene(cls, resource: _ISceneRef_ee2d0430) -> builtins.str:
+    def arn_for_scene(cls, resource: "_ISceneRef_ee2d0430") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4262,7 +4262,7 @@ class CfnScene(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnScene", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4311,12 +4311,12 @@ class CfnScene(
 
     @builtins.property
     @jsii.member(jsii_name="attrGeneratedSceneMetadata")
-    def attr_generated_scene_metadata(self) -> _IResolvable_da3f097b:
+    def attr_generated_scene_metadata(self) -> "_IResolvable_da3f097b":
         '''A key-value pair of generated scene metadata for the scene.
 
         :cloudformationAttribute: GeneratedSceneMetadata
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrGeneratedSceneMetadata"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrGeneratedSceneMetadata"))
 
     @builtins.property
     @jsii.member(jsii_name="attrUpdateDateTime")
@@ -4334,15 +4334,15 @@ class CfnScene(
 
     @builtins.property
     @jsii.member(jsii_name="sceneRef")
-    def scene_ref(self) -> _SceneReference_f83e12a9:
+    def scene_ref(self) -> "_SceneReference_f83e12a9":
         '''A reference to a Scene resource.'''
-        return typing.cast(_SceneReference_f83e12a9, jsii.get(self, "sceneRef"))
+        return typing.cast("_SceneReference_f83e12a9", jsii.get(self, "sceneRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="contentLocation")
@@ -4413,14 +4413,14 @@ class CfnScene(
     @jsii.member(jsii_name="sceneMetadata")
     def scene_metadata(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The scene metadata.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "sceneMetadata"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "sceneMetadata"))
 
     @scene_metadata.setter
     def scene_metadata(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fa25c12f7674749ea653aa0c11493d07c4498263f37af0f06244591382f5bba6)
@@ -4466,7 +4466,7 @@ class CfnSceneProps:
         workspace_id: builtins.str,
         capabilities: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
-        scene_metadata: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        scene_metadata: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnScene``.
@@ -4578,13 +4578,13 @@ class CfnSceneProps:
     @builtins.property
     def scene_metadata(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The scene metadata.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-scene.html#cfn-iottwinmaker-scene-scenemetadata
         '''
         result = self._values.get("scene_metadata")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -4639,7 +4639,7 @@ class CfnSyncJob(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         sync_role: builtins.str,
@@ -4671,7 +4671,7 @@ class CfnSyncJob(
 
     @jsii.member(jsii_name="arnForSyncJob")
     @builtins.classmethod
-    def arn_for_sync_job(cls, resource: _ISyncJobRef_c576edea) -> builtins.str:
+    def arn_for_sync_job(cls, resource: "_ISyncJobRef_c576edea") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4693,7 +4693,7 @@ class CfnSyncJob(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSyncJob", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4765,15 +4765,15 @@ class CfnSyncJob(
 
     @builtins.property
     @jsii.member(jsii_name="syncJobRef")
-    def sync_job_ref(self) -> _SyncJobReference_a71cd428:
+    def sync_job_ref(self) -> "_SyncJobReference_a71cd428":
         '''A reference to a SyncJob resource.'''
-        return typing.cast(_SyncJobReference_a71cd428, jsii.get(self, "syncJobRef"))
+        return typing.cast("_SyncJobReference_a71cd428", jsii.get(self, "syncJobRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="syncRole")
@@ -4981,11 +4981,11 @@ class CfnWorkspace(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        role: typing.Union[builtins.str, _IRoleRef_8400221f],
-        s3_location: typing.Union[builtins.str, _IBucketRef_3debe44e],
+        role: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        s3_location: typing.Union[builtins.str, "_IBucketRef_3debe44e"],
         workspace_id: builtins.str,
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -5016,7 +5016,7 @@ class CfnWorkspace(
 
     @jsii.member(jsii_name="arnForWorkspace")
     @builtins.classmethod
-    def arn_for_workspace(cls, resource: _IWorkspaceRef_8afeb0b7) -> builtins.str:
+    def arn_for_workspace(cls, resource: "_IWorkspaceRef_8afeb0b7") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5029,10 +5029,10 @@ class CfnWorkspace(
     @builtins.classmethod
     def from_workspace_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IWorkspaceRef_8afeb0b7:
+    ) -> "_IWorkspaceRef_8afeb0b7":
         '''Creates a new IWorkspaceRef from an ARN.
 
         :param scope: -
@@ -5044,16 +5044,16 @@ class CfnWorkspace(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IWorkspaceRef_8afeb0b7, jsii.sinvoke(cls, "fromWorkspaceArn", [scope, id, arn]))
+        return typing.cast("_IWorkspaceRef_8afeb0b7", jsii.sinvoke(cls, "fromWorkspaceArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromWorkspaceId")
     @builtins.classmethod
     def from_workspace_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         workspace_id: builtins.str,
-    ) -> _IWorkspaceRef_8afeb0b7:
+    ) -> "_IWorkspaceRef_8afeb0b7":
         '''Creates a new IWorkspaceRef from a workspaceId.
 
         :param scope: -
@@ -5065,7 +5065,7 @@ class CfnWorkspace(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument workspace_id", value=workspace_id, expected_type=type_hints["workspace_id"])
-        return typing.cast(_IWorkspaceRef_8afeb0b7, jsii.sinvoke(cls, "fromWorkspaceId", [scope, id, workspace_id]))
+        return typing.cast("_IWorkspaceRef_8afeb0b7", jsii.sinvoke(cls, "fromWorkspaceId", [scope, id, workspace_id]))
 
     @jsii.member(jsii_name="isCfnWorkspace")
     @builtins.classmethod
@@ -5080,7 +5080,7 @@ class CfnWorkspace(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWorkspace", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5143,15 +5143,15 @@ class CfnWorkspace(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="workspaceRef")
-    def workspace_ref(self) -> _WorkspaceReference_271a37e1:
+    def workspace_ref(self) -> "_WorkspaceReference_271a37e1":
         '''A reference to a Workspace resource.'''
-        return typing.cast(_WorkspaceReference_271a37e1, jsii.get(self, "workspaceRef"))
+        return typing.cast("_WorkspaceReference_271a37e1", jsii.get(self, "workspaceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
@@ -5237,8 +5237,8 @@ class CfnWorkspaceProps:
     def __init__(
         self,
         *,
-        role: typing.Union[builtins.str, _IRoleRef_8400221f],
-        s3_location: typing.Union[builtins.str, _IBucketRef_3debe44e],
+        role: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        s3_location: typing.Union[builtins.str, "_IBucketRef_3debe44e"],
         workspace_id: builtins.str,
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -5290,24 +5290,24 @@ class CfnWorkspaceProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def role(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The ARN of the execution role associated with the workspace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-workspace.html#cfn-iottwinmaker-workspace-role
         '''
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
-    def s3_location(self) -> typing.Union[builtins.str, _IBucketRef_3debe44e]:
+    def s3_location(self) -> typing.Union[builtins.str, "_IBucketRef_3debe44e"]:
         '''The ARN of the S3 bucket where resources associated with the workspace are stored.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-workspace.html#cfn-iottwinmaker-workspace-s3location
         '''
         result = self._values.get("s3_location")
         assert result is not None, "Required property 's3_location' is missing"
-        return typing.cast(typing.Union[builtins.str, _IBucketRef_3debe44e], result)
+        return typing.cast(typing.Union[builtins.str, "_IBucketRef_3debe44e"], result)
 
     @builtins.property
     def workspace_id(self) -> builtins.str:

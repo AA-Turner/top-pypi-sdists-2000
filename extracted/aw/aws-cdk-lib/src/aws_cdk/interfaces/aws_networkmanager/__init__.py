@@ -133,6 +133,74 @@ class ConnectPeerReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_networkmanager.CoreNetworkPrefixListAssociationReference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "core_network_id": "coreNetworkId",
+        "prefix_list_arn": "prefixListArn",
+    },
+)
+class CoreNetworkPrefixListAssociationReference:
+    def __init__(
+        self,
+        *,
+        core_network_id: builtins.str,
+        prefix_list_arn: builtins.str,
+    ) -> None:
+        '''A reference to a CoreNetworkPrefixListAssociation resource.
+
+        :param core_network_id: The CoreNetworkId of the CoreNetworkPrefixListAssociation resource.
+        :param prefix_list_arn: The PrefixListArn of the CoreNetworkPrefixListAssociation resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
+            
+            core_network_prefix_list_association_reference = interfaces_networkmanager.CoreNetworkPrefixListAssociationReference(
+                core_network_id="coreNetworkId",
+                prefix_list_arn="prefixListArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8c8d4f555ff411e787c4b2f46cde88abc78ed7ee372570671fa5c40432bdc805)
+            check_type(argname="argument core_network_id", value=core_network_id, expected_type=type_hints["core_network_id"])
+            check_type(argname="argument prefix_list_arn", value=prefix_list_arn, expected_type=type_hints["prefix_list_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "core_network_id": core_network_id,
+            "prefix_list_arn": prefix_list_arn,
+        }
+
+    @builtins.property
+    def core_network_id(self) -> builtins.str:
+        '''The CoreNetworkId of the CoreNetworkPrefixListAssociation resource.'''
+        result = self._values.get("core_network_id")
+        assert result is not None, "Required property 'core_network_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def prefix_list_arn(self) -> builtins.str:
+        '''The PrefixListArn of the CoreNetworkPrefixListAssociation resource.'''
+        result = self._values.get("prefix_list_arn")
+        assert result is not None, "Required property 'prefix_list_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CoreNetworkPrefixListAssociationReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_networkmanager.CoreNetworkReference",
     jsii_struct_bases=[],
     name_mapping={
@@ -481,7 +549,7 @@ class IConnectAttachmentRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectAttachmentRef")
-    def connect_attachment_ref(self) -> ConnectAttachmentReference:
+    def connect_attachment_ref(self) -> "ConnectAttachmentReference":
         '''(experimental) A reference to a ConnectAttachment resource.
 
         :stability: experimental
@@ -502,12 +570,12 @@ class _IConnectAttachmentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectAttachmentRef")
-    def connect_attachment_ref(self) -> ConnectAttachmentReference:
+    def connect_attachment_ref(self) -> "ConnectAttachmentReference":
         '''(experimental) A reference to a ConnectAttachment resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectAttachmentReference, jsii.get(self, "connectAttachmentRef"))
+        return typing.cast("ConnectAttachmentReference", jsii.get(self, "connectAttachmentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectAttachmentRef).__jsii_proxy_class__ = lambda : _IConnectAttachmentRefProxy
@@ -526,7 +594,7 @@ class IConnectPeerRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectPeerRef")
-    def connect_peer_ref(self) -> ConnectPeerReference:
+    def connect_peer_ref(self) -> "ConnectPeerReference":
         '''(experimental) A reference to a ConnectPeer resource.
 
         :stability: experimental
@@ -547,15 +615,66 @@ class _IConnectPeerRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectPeerRef")
-    def connect_peer_ref(self) -> ConnectPeerReference:
+    def connect_peer_ref(self) -> "ConnectPeerReference":
         '''(experimental) A reference to a ConnectPeer resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectPeerReference, jsii.get(self, "connectPeerRef"))
+        return typing.cast("ConnectPeerReference", jsii.get(self, "connectPeerRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectPeerRef).__jsii_proxy_class__ = lambda : _IConnectPeerRefProxy
+
+
+@jsii.interface(
+    jsii_type="aws-cdk-lib.interfaces.aws_networkmanager.ICoreNetworkPrefixListAssociationRef"
+)
+class ICoreNetworkPrefixListAssociationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a CoreNetworkPrefixListAssociation.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="coreNetworkPrefixListAssociationRef")
+    def core_network_prefix_list_association_ref(
+        self,
+    ) -> "CoreNetworkPrefixListAssociationReference":
+        '''(experimental) A reference to a CoreNetworkPrefixListAssociation resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _ICoreNetworkPrefixListAssociationRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a CoreNetworkPrefixListAssociation.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_networkmanager.ICoreNetworkPrefixListAssociationRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="coreNetworkPrefixListAssociationRef")
+    def core_network_prefix_list_association_ref(
+        self,
+    ) -> "CoreNetworkPrefixListAssociationReference":
+        '''(experimental) A reference to a CoreNetworkPrefixListAssociation resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("CoreNetworkPrefixListAssociationReference", jsii.get(self, "coreNetworkPrefixListAssociationRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, ICoreNetworkPrefixListAssociationRef).__jsii_proxy_class__ = lambda : _ICoreNetworkPrefixListAssociationRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_networkmanager.ICoreNetworkRef")
@@ -571,7 +690,7 @@ class ICoreNetworkRef(
 
     @builtins.property
     @jsii.member(jsii_name="coreNetworkRef")
-    def core_network_ref(self) -> CoreNetworkReference:
+    def core_network_ref(self) -> "CoreNetworkReference":
         '''(experimental) A reference to a CoreNetwork resource.
 
         :stability: experimental
@@ -592,12 +711,12 @@ class _ICoreNetworkRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="coreNetworkRef")
-    def core_network_ref(self) -> CoreNetworkReference:
+    def core_network_ref(self) -> "CoreNetworkReference":
         '''(experimental) A reference to a CoreNetwork resource.
 
         :stability: experimental
         '''
-        return typing.cast(CoreNetworkReference, jsii.get(self, "coreNetworkRef"))
+        return typing.cast("CoreNetworkReference", jsii.get(self, "coreNetworkRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICoreNetworkRef).__jsii_proxy_class__ = lambda : _ICoreNetworkRefProxy
@@ -618,7 +737,7 @@ class ICustomerGatewayAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="customerGatewayAssociationRef")
-    def customer_gateway_association_ref(self) -> CustomerGatewayAssociationReference:
+    def customer_gateway_association_ref(self) -> "CustomerGatewayAssociationReference":
         '''(experimental) A reference to a CustomerGatewayAssociation resource.
 
         :stability: experimental
@@ -639,12 +758,12 @@ class _ICustomerGatewayAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="customerGatewayAssociationRef")
-    def customer_gateway_association_ref(self) -> CustomerGatewayAssociationReference:
+    def customer_gateway_association_ref(self) -> "CustomerGatewayAssociationReference":
         '''(experimental) A reference to a CustomerGatewayAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(CustomerGatewayAssociationReference, jsii.get(self, "customerGatewayAssociationRef"))
+        return typing.cast("CustomerGatewayAssociationReference", jsii.get(self, "customerGatewayAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICustomerGatewayAssociationRef).__jsii_proxy_class__ = lambda : _ICustomerGatewayAssociationRefProxy
@@ -663,7 +782,7 @@ class IDeviceRef(
 
     @builtins.property
     @jsii.member(jsii_name="deviceRef")
-    def device_ref(self) -> DeviceReference:
+    def device_ref(self) -> "DeviceReference":
         '''(experimental) A reference to a Device resource.
 
         :stability: experimental
@@ -684,12 +803,12 @@ class _IDeviceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deviceRef")
-    def device_ref(self) -> DeviceReference:
+    def device_ref(self) -> "DeviceReference":
         '''(experimental) A reference to a Device resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeviceReference, jsii.get(self, "deviceRef"))
+        return typing.cast("DeviceReference", jsii.get(self, "deviceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeviceRef).__jsii_proxy_class__ = lambda : _IDeviceRefProxy
@@ -712,7 +831,7 @@ class IDirectConnectGatewayAttachmentRef(
     @jsii.member(jsii_name="directConnectGatewayAttachmentRef")
     def direct_connect_gateway_attachment_ref(
         self,
-    ) -> DirectConnectGatewayAttachmentReference:
+    ) -> "DirectConnectGatewayAttachmentReference":
         '''(experimental) A reference to a DirectConnectGatewayAttachment resource.
 
         :stability: experimental
@@ -735,12 +854,12 @@ class _IDirectConnectGatewayAttachmentRefProxy(
     @jsii.member(jsii_name="directConnectGatewayAttachmentRef")
     def direct_connect_gateway_attachment_ref(
         self,
-    ) -> DirectConnectGatewayAttachmentReference:
+    ) -> "DirectConnectGatewayAttachmentReference":
         '''(experimental) A reference to a DirectConnectGatewayAttachment resource.
 
         :stability: experimental
         '''
-        return typing.cast(DirectConnectGatewayAttachmentReference, jsii.get(self, "directConnectGatewayAttachmentRef"))
+        return typing.cast("DirectConnectGatewayAttachmentReference", jsii.get(self, "directConnectGatewayAttachmentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDirectConnectGatewayAttachmentRef).__jsii_proxy_class__ = lambda : _IDirectConnectGatewayAttachmentRefProxy
@@ -761,7 +880,7 @@ class IGlobalNetworkRef(
 
     @builtins.property
     @jsii.member(jsii_name="globalNetworkRef")
-    def global_network_ref(self) -> GlobalNetworkReference:
+    def global_network_ref(self) -> "GlobalNetworkReference":
         '''(experimental) A reference to a GlobalNetwork resource.
 
         :stability: experimental
@@ -782,12 +901,12 @@ class _IGlobalNetworkRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="globalNetworkRef")
-    def global_network_ref(self) -> GlobalNetworkReference:
+    def global_network_ref(self) -> "GlobalNetworkReference":
         '''(experimental) A reference to a GlobalNetwork resource.
 
         :stability: experimental
         '''
-        return typing.cast(GlobalNetworkReference, jsii.get(self, "globalNetworkRef"))
+        return typing.cast("GlobalNetworkReference", jsii.get(self, "globalNetworkRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGlobalNetworkRef).__jsii_proxy_class__ = lambda : _IGlobalNetworkRefProxy
@@ -1679,6 +1798,7 @@ class VpcAttachmentReference:
 __all__ = [
     "ConnectAttachmentReference",
     "ConnectPeerReference",
+    "CoreNetworkPrefixListAssociationReference",
     "CoreNetworkReference",
     "CustomerGatewayAssociationReference",
     "DeviceReference",
@@ -1686,6 +1806,7 @@ __all__ = [
     "GlobalNetworkReference",
     "IConnectAttachmentRef",
     "IConnectPeerRef",
+    "ICoreNetworkPrefixListAssociationRef",
     "ICoreNetworkRef",
     "ICustomerGatewayAssociationRef",
     "IDeviceRef",
@@ -1721,6 +1842,14 @@ def _typecheckingstub__7f015d9931081e9ffd7676e999aae6fc39f581562fb6e8347743350a1
 def _typecheckingstub__66c18e1d85bf0c649a8ea0d151647ff638d4397ed0718be580410310894d2d7a(
     *,
     connect_peer_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8c8d4f555ff411e787c4b2f46cde88abc78ed7ee372570671fa5c40432bdc805(
+    *,
+    core_network_id: builtins.str,
+    prefix_list_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1828,5 +1957,5 @@ def _typecheckingstub__0e0ff976fac1bf48401e97de79ca9adb82683b277d96c4c2b04e54051
     """Type checking stubs"""
     pass
 
-for cls in [IConnectAttachmentRef, IConnectPeerRef, ICoreNetworkRef, ICustomerGatewayAssociationRef, IDeviceRef, IDirectConnectGatewayAttachmentRef, IGlobalNetworkRef, ILinkAssociationRef, ILinkRef, ISiteRef, ISiteToSiteVpnAttachmentRef, ITransitGatewayPeeringRef, ITransitGatewayRegistrationRef, ITransitGatewayRouteTableAttachmentRef, IVpcAttachmentRef]:
+for cls in [IConnectAttachmentRef, IConnectPeerRef, ICoreNetworkPrefixListAssociationRef, ICoreNetworkRef, ICustomerGatewayAssociationRef, IDeviceRef, IDirectConnectGatewayAttachmentRef, IGlobalNetworkRef, ILinkAssociationRef, ILinkRef, ISiteRef, ISiteToSiteVpnAttachmentRef, ITransitGatewayPeeringRef, ITransitGatewayRegistrationRef, ITransitGatewayRouteTableAttachmentRef, IVpcAttachmentRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

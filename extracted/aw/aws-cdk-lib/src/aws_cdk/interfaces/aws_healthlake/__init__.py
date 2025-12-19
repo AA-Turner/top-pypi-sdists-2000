@@ -112,7 +112,7 @@ class IFHIRDatastoreRef(
 
     @builtins.property
     @jsii.member(jsii_name="fhirDatastoreRef")
-    def fhir_datastore_ref(self) -> FHIRDatastoreReference:
+    def fhir_datastore_ref(self) -> "FHIRDatastoreReference":
         '''(experimental) A reference to a FHIRDatastore resource.
 
         :stability: experimental
@@ -133,12 +133,12 @@ class _IFHIRDatastoreRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="fhirDatastoreRef")
-    def fhir_datastore_ref(self) -> FHIRDatastoreReference:
+    def fhir_datastore_ref(self) -> "FHIRDatastoreReference":
         '''(experimental) A reference to a FHIRDatastore resource.
 
         :stability: experimental
         '''
-        return typing.cast(FHIRDatastoreReference, jsii.get(self, "fhirDatastoreRef"))
+        return typing.cast("FHIRDatastoreReference", jsii.get(self, "fhirDatastoreRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFHIRDatastoreRef).__jsii_proxy_class__ = lambda : _IFHIRDatastoreRefProxy

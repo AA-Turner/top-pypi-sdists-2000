@@ -8,10 +8,11 @@ from __future__ import annotations
 
 import asyncio
 import base64
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import orjson
 import structlog
+from starlette.authentication import BaseUser
 from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request  # noqa: TC002
@@ -40,7 +41,54 @@ if LANGGRAPH_ENCRYPTION:
 
 logger = structlog.stdlib.get_logger(__name__)
 
-ENCRYPTION_CONTEXT_KEY = "langchain.dev/encryption_context/v1"
+ENCRYPTION_CONTEXT_KEY = "__encryption_context__"
+
+
+def _serialize_user_for_encryption(user: BaseUser) -> dict[str, Any]:
+    """Serialize a BaseUser to a JSON-serializable dict for encryption.
+
+    Called by _prepare_data_for_encryption when langgraph_auth_user contains a
+    BaseUser that needs to be serialized before JSON encryption.
+
+    Args:
+        user: The BaseUser to serialize (ProxyUser, SimpleUser, or custom subclass)
+
+    Returns:
+        A JSON-serializable dict with user data
+    """
+    # ProxyUser has model_dump() which preserves extra fields from the wrapped user
+    if hasattr(user, "model_dump") and callable(user.model_dump):
+        return cast("dict[str, Any]", user.model_dump())
+
+    # Plain BaseUser subclasses - extract the required properties
+    return {
+        "identity": user.identity,
+        "is_authenticated": user.is_authenticated,
+        "display_name": user.display_name,
+    }
+
+
+def _prepare_data_for_encryption(data: dict[str, Any]) -> dict[str, Any]:
+    """Prepare data dict for encryption by serializing non-JSON-serializable objects.
+
+    Specifically handles langgraph_auth_user which may contain BaseUser objects
+    that can't be JSON-serialized. Dicts pass through unchanged (already serializable).
+
+    Args:
+        data: The data dict to prepare
+
+    Returns:
+        A new dict with serialized values where needed
+    """
+    if "langgraph_auth_user" not in data:
+        return data
+
+    user = data["langgraph_auth_user"]
+    if isinstance(user, BaseUser):
+        data = dict(data)  # shallow copy
+        data["langgraph_auth_user"] = _serialize_user_for_encryption(user)
+
+    return data
 
 
 def extract_encryption_context(request: Request) -> dict[str, Any]:
@@ -111,6 +159,18 @@ class EncryptionContextMiddleware(BaseHTTPMiddleware):
         return response
 
 
+class EncryptionKeyError(Exception):
+    """Raised when JSON encryptor violates key preservation constraint."""
+
+
+class DoubleEncryptionError(Exception):
+    """Raised when attempting to encrypt data that is already encrypted.
+
+    This typically indicates a bug where encrypted data is being passed through
+    the encryption pipeline again, which would corrupt the data.
+    """
+
+
 async def encrypt_json_if_needed(
     data: dict[str, Any] | None,
     encryption_instance: Encryption | None,
@@ -127,23 +187,57 @@ async def encrypt_json_if_needed(
 
     Returns:
         Encrypted data dict with stored context, or original if no encryption configured
+
+    Raises:
+        EncryptionKeyError: If the encryptor adds or removes keys (violates key preservation)
+        DoubleEncryptionError: If data already has encryption context marker (already encrypted)
     """
     if data is None or encryption_instance is None:
         return data
 
+    # Safety check: detect if data is already encrypted to prevent double encryption.
+    # The encryption marker (__encryption_context__) is added by this function after encryption.
+    if ENCRYPTION_CONTEXT_KEY in data:
+        raise DoubleEncryptionError(
+            f"Attempted to encrypt data that is already encrypted (has {ENCRYPTION_CONTEXT_KEY}). "
+            f"model_type={model_type}, field={field}. "
+            f"This indicates a bug where encrypted data is being re-encrypted. "
+            f"Ensure data is decrypted before re-encrypting."
+        )
+
     encryptor = encryption_instance.get_json_encryptor(model_type)
     if encryptor is None:
         return data
+
+    # Prepare data for encryption by serializing non-JSON-serializable objects
+    # (e.g., BaseUser in langgraph_auth_user)
+    data = _prepare_data_for_encryption(data)
 
     context_dict = get_encryption_context()
 
     ctx = EncryptionContext(model=model_type, field=field, metadata=context_dict)
     encrypted = await encryptor(ctx, data)
 
+    # Validate key preservation: encryptor must not add or remove keys
+    # This constraint exists because SQL-level JSONB merge (||) operates on keys:
+    # if encryptor consolidates keys (e.g., multiple fields → __encrypted__),
+    # merge will overwrite, causing data loss. Per-key encryption is safe.
+    if encrypted is not None and isinstance(encrypted, dict):
+        input_keys = set(data.keys())
+        output_keys = set(encrypted.keys())
+        added_keys = output_keys - input_keys
+        removed_keys = input_keys - output_keys
+        if added_keys or removed_keys:
+            raise EncryptionKeyError(
+                f"JSON encryptor must preserve key structure for SQL JSONB merge compatibility. "
+                f"Added keys: {added_keys or 'none'}, removed keys: {removed_keys or 'none'}. "
+                f"Use per-key encryption (transform values, not keys) instead of envelope patterns."
+            )
+
     # Always store the context marker when encrypting (even if context is empty)
     # This marker is used during decryption to know if data was encrypted
     if encrypted is not None and isinstance(encrypted, dict):
-        encrypted[ENCRYPTION_CONTEXT_KEY] = orjson.dumps(context_dict).decode()
+        encrypted[ENCRYPTION_CONTEXT_KEY] = context_dict
 
     await logger.adebug(
         "Encrypted JSON data",
@@ -152,6 +246,26 @@ async def encrypt_json_if_needed(
         context_stored=bool(context_dict),
     )
     return encrypted
+
+
+def extract_encryption_context_from_data(
+    data: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Extract and parse the encryption context from a data dict.
+
+    Use this to extract the encryption context BEFORE calling decrypt_response,
+    since decrypt_response strips the context key from the data.
+
+    Args:
+        data: The data dict that may contain an encryption context
+
+    Returns:
+        The parsed encryption context dict, or None if not present
+    """
+    if data is None:
+        return None
+
+    return data.get(ENCRYPTION_CONTEXT_KEY)
 
 
 async def decrypt_json_if_needed(
@@ -187,16 +301,7 @@ async def decrypt_json_if_needed(
     if decryptor is None:
         return data
 
-    context_dict = {}
-    try:
-        context_dict = orjson.loads(data[ENCRYPTION_CONTEXT_KEY])
-    except Exception as e:
-        await logger.awarning(
-            "Failed to parse stored encryption context",
-            error=str(e),
-            model_type=model_type,
-            field=field,
-        )
+    context_dict = data[ENCRYPTION_CONTEXT_KEY]
     # Remove key before passing to user's decryptor to avoid duplication
     # (context is already passed via ctx.metadata)
     data = {k: v for k, v in data.items() if k != ENCRYPTION_CONTEXT_KEY}
@@ -225,12 +330,8 @@ async def _decrypt_field(
 ) -> tuple[str, Any]:
     """Decrypt a single field, returning (field_name, decrypted_value).
 
-    Special handling for 'config' field: also decrypts config['configurable']
-    (synced from context by the ops layer) and config['metadata'] (merged from
-    assistant/thread/run metadata).
-
-    JSONB fields (defined in NESTED_ENCRYPTED_SUBFIELDS) have their
-    subfields decrypted automatically.
+    Fields defined in NESTED_ENCRYPTED_SUBFIELDS have their subfields decrypted
+    recursively (e.g., run.kwargs.config.configurable).
 
     Returns (field_name, None) if field doesn't exist or is falsy.
     """
@@ -256,35 +357,9 @@ async def _decrypt_field(
         value, encryption_instance, model_type, field=field_name
     )
 
-    # Special case: config['configurable'] is synced from context by the ops layer,
-    # so it may contain encrypted data that needs decryption.
-    # config['metadata'] is merged from assistant/thread/run metadata, so also needs decryption.
-    if field_name == "config" and isinstance(decrypted, dict):
-        configurable = decrypted.get("configurable")
-        if configurable and isinstance(configurable, dict):
-            decrypted["configurable"] = await decrypt_json_if_needed(
-                configurable, encryption_instance, model_type, field="context"
-            )
-        metadata = decrypted.get("metadata")
-        if metadata and isinstance(metadata, dict):
-            decrypted["metadata"] = await decrypt_json_if_needed(
-                metadata, encryption_instance, model_type, field="metadata"
-            )
-
-    # Handle JSONB fields (run.kwargs, cron.payload) that contain their own encrypted subfields.
-    #
-    # This special-casing is unfortunate but necessary: the ops layer performs JSONB merge
-    # operations in Postgres SQL (e.g., `kwargs || jsonb_build_object('config', ...)` and
-    # `coalesce(kwargs -> 'context', '{}')` in Runs.put). These SQL operations need to
-    # access kwargs.config and kwargs.context as structured JSON, so we can't encrypt kwargs
-    # as a single blob. Instead, we encrypt the sensitive subfields individually, preserving
-    # the outer structure for Postgres to merge.
-    # See: storage_postgres/langgraph_runtime_postgres/ops.py Runs.put/next
-    #
-    # This lives in the middleware (rather than API layer) because decrypt_response is the
-    # centralized path for all reads. Handling subfield decryption here means API endpoints
-    # don't need to know about this complexity - they just call decrypt_response with the
-    # top-level fields and subfields are handled automatically.
+    # Recursively decrypt subfields defined in NESTED_ENCRYPTED_SUBFIELDS.
+    # This handles nested structures like run.kwargs.config.configurable where each
+    # level needs individual encryption to preserve structure for SQL JSONB operations.
     nested_key = (model_type, field_name)
     if nested_key in NESTED_ENCRYPTED_SUBFIELDS and decrypted is not None:
         results = await asyncio.gather(
@@ -330,20 +405,17 @@ async def decrypt_response(
     """Decrypt specified fields in a response object (from database).
 
     IMPORTANT: This function only parses and decrypts fields when encryption is
-    enabled. When encryption is disabled, fields are returned unchanged (as bytes
-    if that's how they came from the DB). This is intentional: some fields can be
-    very large, and we want to avoid parsing overhead when the bytes can be passed
-    through directly to the response. Callers that need parsed dicts regardless of
+    enabled. When encryption is disabled, the original object is returned as-is
+    (no copy, no parsing). This is intentional: some fields can be very large,
+    and we want to avoid parsing overhead when the bytes can be passed through
+    directly to the response. Callers that need parsed dicts regardless of
     encryption state should use json_loads() on the fields they need to inspect.
 
     When encryption IS enabled, this parses bytes/memoryview/Fragment to dicts
-    before decryption.
+    before decryption, and returns a shallow copy with decrypted fields.
 
-    Special handling: When 'config' is in fields, also decrypts config['configurable']
-    since the ops layer syncs context into config['configurable'].
-
-    Note: This function returns a shallow copy of the input with decrypted fields.
-    The original object is not mutated.
+    Fields defined in NESTED_ENCRYPTED_SUBFIELDS have their subfields decrypted
+    recursively (e.g., config.configurable, config.metadata).
 
     Args:
         obj: Single mapping from database (fields may be bytes or already-parsed dicts, not mutated)
@@ -352,12 +424,12 @@ async def decrypt_response(
         encryption_instance: Optional encryption instance (auto-fetched if None)
 
     Returns:
-        New dict with fields decrypted (and parsed) only if encryption is enabled (original unchanged)
+        Original object if encryption disabled, otherwise new dict with decrypted fields
     """
     if encryption_instance is None:
         encryption_instance = get_encryption_instance()
         if encryption_instance is None:
-            return dict(obj)
+            return obj  # type: ignore[return-value]
 
     result = dict(obj)
     await _decrypt_object(result, model_type, fields, encryption_instance)
@@ -373,20 +445,17 @@ async def decrypt_responses(
     """Decrypt specified fields in multiple response objects (from database).
 
     IMPORTANT: This function only parses and decrypts fields when encryption is
-    enabled. When encryption is disabled, fields are returned unchanged (as bytes
-    if that's how they came from the DB). This is intentional: some fields can be
-    very large, and we want to avoid parsing overhead when the bytes can be passed
-    through directly to the response. Callers that need parsed dicts regardless of
+    enabled. When encryption is disabled, the original sequence is returned as-is
+    (no copies, no parsing). This is intentional: some fields can be very large,
+    and we want to avoid parsing overhead when the bytes can be passed through
+    directly to the response. Callers that need parsed dicts regardless of
     encryption state should use json_loads() on the fields they need to inspect.
 
     When encryption IS enabled, this parses bytes/memoryview/Fragment to dicts
-    before decryption.
+    before decryption, and returns a new list of shallow copies with decrypted fields.
 
-    Special handling: When 'config' is in fields, also decrypts config['configurable']
-    since the ops layer syncs context into config['configurable'].
-
-    Note: This function returns a new list of shallow copies with decrypted fields.
-    The original objects are not mutated.
+    Fields defined in NESTED_ENCRYPTED_SUBFIELDS have their subfields decrypted
+    recursively (e.g., config.configurable, config.metadata).
 
     Args:
         objects: Sequence of mappings from database (fields may be bytes or already-parsed dicts, not mutated)
@@ -395,12 +464,12 @@ async def decrypt_responses(
         encryption_instance: Optional encryption instance (auto-fetched if None)
 
     Returns:
-        New list of dicts with fields decrypted (and parsed) only if encryption is enabled (originals unchanged)
+        Original sequence if encryption disabled, otherwise new list with decrypted fields
     """
     if encryption_instance is None:
         encryption_instance = get_encryption_instance()
         if encryption_instance is None:
-            return [dict(obj) for obj in objects]
+            return objects  # type: ignore[return-value]
 
     results = [dict(obj) for obj in objects]
     await asyncio.gather(
@@ -420,29 +489,55 @@ async def _encrypt_field(
 ) -> tuple[str, Any]:
     """Encrypt a single field, returning (field_name, encrypted_value).
 
-    Special handling for 'config' field: also encrypts config['configurable']
-    since the ops layer syncs config['configurable'] to context.
+    Fields defined in NESTED_ENCRYPTED_SUBFIELDS have their subfields extracted
+    and encrypted separately, then added back. This preserves the nested structure
+    for SQL JSONB operations while encrypting each level individually.
 
     Returns (field_name, None) if field doesn't exist or is None.
     """
     if field_name not in data or data[field_name] is None:
         return (field_name, data.get(field_name))
 
+    field_data = data[field_name]
+
+    # Check if this field has subfields that need separate encryption
+    nested_key = (model_type, field_name)
+    subfields_to_extract: dict[str, Any] = {}
+
+    if nested_key in NESTED_ENCRYPTED_SUBFIELDS and isinstance(field_data, dict):
+        for subfield in NESTED_ENCRYPTED_SUBFIELDS[nested_key]:
+            subfield_value = field_data.get(subfield)
+            if subfield_value and isinstance(subfield_value, dict):
+                subfields_to_extract[subfield] = subfield_value
+
+        if subfields_to_extract:
+            # Create a copy without subfields for the first encryption pass
+            field_data = {
+                k: v for k, v in field_data.items() if k not in subfields_to_extract
+            }
+
     encrypted = await encrypt_json_if_needed(
-        data[field_name],
+        field_data,
         encryption_instance,
         model_type,
         field=field_name,
     )
 
-    # Special case: config['configurable'] will be synced to context by the ops layer,
-    # so it needs to be encrypted with field="context" to match decryption.
-    if field_name == "config" and isinstance(encrypted, dict):
-        configurable = encrypted.get("configurable")
-        if configurable and isinstance(configurable, dict):
-            encrypted["configurable"] = await encrypt_json_if_needed(
-                configurable, encryption_instance, model_type, field="context"
-            )
+    # Recursively encrypt extracted subfields and add them back
+    if subfields_to_extract and isinstance(encrypted, dict):
+        subfield_results = await asyncio.gather(
+            *[
+                _encrypt_field(
+                    {sf_name: sf_value},
+                    sf_name,
+                    encryption_instance,
+                    model_type,
+                )
+                for sf_name, sf_value in subfields_to_extract.items()
+            ]
+        )
+        for sf_name, sf_encrypted in subfield_results:
+            encrypted[sf_name] = sf_encrypted
 
     return (field_name, encrypted)
 
@@ -458,13 +553,13 @@ async def encrypt_request(
     This is a generic helper that handles encryption for any object type.
     It uses the ContextVar to get encryption context (set by middleware or endpoint).
 
-    Special handling: When 'config' is in fields, also encrypts config['configurable']
-    since the ops layer syncs config['configurable'] to context.
+    When encryption is disabled, the original data is returned as-is (no copy).
+    When encryption IS enabled, returns a shallow copy with encrypted fields.
+
+    Fields defined in NESTED_ENCRYPTED_SUBFIELDS have their subfields encrypted
+    recursively (e.g., config.configurable, config.metadata).
 
     Only processes fields that exist in the data to avoid adding new fields.
-
-    Note: This function returns a shallow copy of the input with encrypted fields.
-    The original data is not mutated.
 
     Args:
         data: Request data mapping to encrypt (not mutated)
@@ -473,7 +568,7 @@ async def encrypt_request(
         encryption_instance: Optional encryption instance (auto-fetched if None)
 
     Returns:
-        New dict with encrypted fields (original unchanged)
+        Original data if encryption disabled, otherwise new dict with encrypted fields
 
     Example:
         encrypted = await encrypt_request(
@@ -485,7 +580,7 @@ async def encrypt_request(
     if encryption_instance is None:
         encryption_instance = get_encryption_instance()
         if encryption_instance is None:
-            return dict(data)
+            return data  # type: ignore[return-value]
 
     result = dict(data)
     encrypted_fields = await asyncio.gather(

@@ -87,6 +87,7 @@ class CfnEnvironment(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_finspace as finspace
@@ -124,17 +125,17 @@ class CfnEnvironment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         data_bundles: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
         federation_mode: typing.Optional[builtins.str] = None,
-        federation_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.FederationParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        federation_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.FederationParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        superuser_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.SuperuserParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        superuser_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.SuperuserParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::FinSpace::Environment``.
 
@@ -168,7 +169,7 @@ class CfnEnvironment(
 
     @jsii.member(jsii_name="arnForEnvironment")
     @builtins.classmethod
-    def arn_for_environment(cls, resource: _IEnvironmentRef_e735ced8) -> builtins.str:
+    def arn_for_environment(cls, resource: "_IEnvironmentRef_e735ced8") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -181,10 +182,10 @@ class CfnEnvironment(
     @builtins.classmethod
     def from_environment_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IEnvironmentRef_e735ced8:
+    ) -> "_IEnvironmentRef_e735ced8":
         '''Creates a new IEnvironmentRef from an ARN.
 
         :param scope: -
@@ -196,16 +197,16 @@ class CfnEnvironment(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IEnvironmentRef_e735ced8, jsii.sinvoke(cls, "fromEnvironmentArn", [scope, id, arn]))
+        return typing.cast("_IEnvironmentRef_e735ced8", jsii.sinvoke(cls, "fromEnvironmentArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromEnvironmentId")
     @builtins.classmethod
     def from_environment_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         environment_id: builtins.str,
-    ) -> _IEnvironmentRef_e735ced8:
+    ) -> "_IEnvironmentRef_e735ced8":
         '''Creates a new IEnvironmentRef from a environmentId.
 
         :param scope: -
@@ -217,7 +218,7 @@ class CfnEnvironment(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument environment_id", value=environment_id, expected_type=type_hints["environment_id"])
-        return typing.cast(_IEnvironmentRef_e735ced8, jsii.sinvoke(cls, "fromEnvironmentId", [scope, id, environment_id]))
+        return typing.cast("_IEnvironmentRef_e735ced8", jsii.sinvoke(cls, "fromEnvironmentId", [scope, id, environment_id]))
 
     @jsii.member(jsii_name="isCfnEnvironment")
     @builtins.classmethod
@@ -232,7 +233,7 @@ class CfnEnvironment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEnvironment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -331,15 +332,15 @@ class CfnEnvironment(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> _EnvironmentReference_a51ccd8f:
+    def environment_ref(self) -> "_EnvironmentReference_a51ccd8f":
         '''A reference to a Environment resource.'''
-        return typing.cast(_EnvironmentReference_a51ccd8f, jsii.get(self, "environmentRef"))
+        return typing.cast("_EnvironmentReference_a51ccd8f", jsii.get(self, "environmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -402,14 +403,14 @@ class CfnEnvironment(
     @jsii.member(jsii_name="federationParameters")
     def federation_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.FederationParametersProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.FederationParametersProperty"]]:
         '''Configuration information when authentication mode is FEDERATED.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.FederationParametersProperty"]], jsii.get(self, "federationParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.FederationParametersProperty"]], jsii.get(self, "federationParameters"))
 
     @federation_parameters.setter
     def federation_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.FederationParametersProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.FederationParametersProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1cca90468c4b1d8a076ea02e32a24ca04ce7d592d32ea406233dd210b7eaa423)
@@ -433,14 +434,14 @@ class CfnEnvironment(
     @jsii.member(jsii_name="superuserParameters")
     def superuser_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.SuperuserParametersProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.SuperuserParametersProperty"]]:
         '''Configuration information for the superuser.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.SuperuserParametersProperty"]], jsii.get(self, "superuserParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.SuperuserParametersProperty"]], jsii.get(self, "superuserParameters"))
 
     @superuser_parameters.setter
     def superuser_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.SuperuserParametersProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.SuperuserParametersProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1f6516c69c8c2885eb602c5a32e8226805adc98ac19c7289e214f05c0825e6ef)
@@ -449,12 +450,12 @@ class CfnEnvironment(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6df014d0d715549eb062b878e03daf791b461fc8b0696c22784f904bd8c4fc9f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -550,7 +551,7 @@ class CfnEnvironment(
             self,
             *,
             application_call_back_url: typing.Optional[builtins.str] = None,
-            attribute_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.AttributeMapItemsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            attribute_map: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.AttributeMapItemsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             federation_provider_name: typing.Optional[builtins.str] = None,
             federation_urn: typing.Optional[builtins.str] = None,
             saml_metadata_document: typing.Optional[builtins.str] = None,
@@ -620,7 +621,7 @@ class CfnEnvironment(
         @builtins.property
         def attribute_map(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.AttributeMapItemsProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.AttributeMapItemsProperty"]]]]:
             '''SAML attribute name and value.
 
             The name must always be ``Email`` and the value should be set to the attribute definition in which user email is set. For example, name would be ``Email`` and value ``http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress`` . Please check your SAML 2.0 compliant identity provider (IdP) documentation for details.
@@ -628,7 +629,7 @@ class CfnEnvironment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-finspace-environment-federationparameters.html#cfn-finspace-environment-federationparameters-attributemap
             '''
             result = self._values.get("attribute_map")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.AttributeMapItemsProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.AttributeMapItemsProperty"]]]], result)
 
         @builtins.property
         def federation_provider_name(self) -> typing.Optional[builtins.str]:
@@ -791,10 +792,10 @@ class CfnEnvironmentProps:
         data_bundles: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
         federation_mode: typing.Optional[builtins.str] = None,
-        federation_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.FederationParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        federation_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.FederationParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        superuser_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.SuperuserParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        superuser_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.SuperuserParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEnvironment``.
 
@@ -812,6 +813,7 @@ class CfnEnvironmentProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_finspace as finspace
@@ -917,13 +919,13 @@ class CfnEnvironmentProps:
     @builtins.property
     def federation_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEnvironment.FederationParametersProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.FederationParametersProperty"]]:
         '''Configuration information when authentication mode is FEDERATED.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-finspace-environment.html#cfn-finspace-environment-federationparameters
         '''
         result = self._values.get("federation_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEnvironment.FederationParametersProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.FederationParametersProperty"]], result)
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
@@ -937,22 +939,22 @@ class CfnEnvironmentProps:
     @builtins.property
     def superuser_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEnvironment.SuperuserParametersProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.SuperuserParametersProperty"]]:
         '''Configuration information for the superuser.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-finspace-environment.html#cfn-finspace-environment-superuserparameters
         '''
         result = self._values.get("superuser_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEnvironment.SuperuserParametersProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.SuperuserParametersProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-finspace-environment.html#cfn-finspace-environment-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

@@ -624,7 +624,7 @@ class IAlarmRef(
 
     @builtins.property
     @jsii.member(jsii_name="alarmRef")
-    def alarm_ref(self) -> AlarmReference:
+    def alarm_ref(self) -> "AlarmReference":
         '''(experimental) A reference to a Alarm resource.
 
         :stability: experimental
@@ -645,12 +645,12 @@ class _IAlarmRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="alarmRef")
-    def alarm_ref(self) -> AlarmReference:
+    def alarm_ref(self) -> "AlarmReference":
         '''(experimental) A reference to a Alarm resource.
 
         :stability: experimental
         '''
-        return typing.cast(AlarmReference, jsii.get(self, "alarmRef"))
+        return typing.cast("AlarmReference", jsii.get(self, "alarmRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAlarmRef).__jsii_proxy_class__ = lambda : _IAlarmRefProxy
@@ -669,7 +669,7 @@ class IBucketRef(
 
     @builtins.property
     @jsii.member(jsii_name="bucketRef")
-    def bucket_ref(self) -> BucketReference:
+    def bucket_ref(self) -> "BucketReference":
         '''(experimental) A reference to a Bucket resource.
 
         :stability: experimental
@@ -690,12 +690,12 @@ class _IBucketRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="bucketRef")
-    def bucket_ref(self) -> BucketReference:
+    def bucket_ref(self) -> "BucketReference":
         '''(experimental) A reference to a Bucket resource.
 
         :stability: experimental
         '''
-        return typing.cast(BucketReference, jsii.get(self, "bucketRef"))
+        return typing.cast("BucketReference", jsii.get(self, "bucketRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBucketRef).__jsii_proxy_class__ = lambda : _IBucketRefProxy
@@ -714,7 +714,7 @@ class ICertificateRef(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> CertificateReference:
+    def certificate_ref(self) -> "CertificateReference":
         '''(experimental) A reference to a Certificate resource.
 
         :stability: experimental
@@ -735,12 +735,12 @@ class _ICertificateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> CertificateReference:
+    def certificate_ref(self) -> "CertificateReference":
         '''(experimental) A reference to a Certificate resource.
 
         :stability: experimental
         '''
-        return typing.cast(CertificateReference, jsii.get(self, "certificateRef"))
+        return typing.cast("CertificateReference", jsii.get(self, "certificateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICertificateRef).__jsii_proxy_class__ = lambda : _ICertificateRefProxy
@@ -759,7 +759,7 @@ class IContainerRef(
 
     @builtins.property
     @jsii.member(jsii_name="containerRef")
-    def container_ref(self) -> ContainerReference:
+    def container_ref(self) -> "ContainerReference":
         '''(experimental) A reference to a Container resource.
 
         :stability: experimental
@@ -780,12 +780,12 @@ class _IContainerRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="containerRef")
-    def container_ref(self) -> ContainerReference:
+    def container_ref(self) -> "ContainerReference":
         '''(experimental) A reference to a Container resource.
 
         :stability: experimental
         '''
-        return typing.cast(ContainerReference, jsii.get(self, "containerRef"))
+        return typing.cast("ContainerReference", jsii.get(self, "containerRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContainerRef).__jsii_proxy_class__ = lambda : _IContainerRefProxy
@@ -804,7 +804,7 @@ class IDatabaseRef(
 
     @builtins.property
     @jsii.member(jsii_name="databaseRef")
-    def database_ref(self) -> DatabaseReference:
+    def database_ref(self) -> "DatabaseReference":
         '''(experimental) A reference to a Database resource.
 
         :stability: experimental
@@ -825,12 +825,12 @@ class _IDatabaseRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="databaseRef")
-    def database_ref(self) -> DatabaseReference:
+    def database_ref(self) -> "DatabaseReference":
         '''(experimental) A reference to a Database resource.
 
         :stability: experimental
         '''
-        return typing.cast(DatabaseReference, jsii.get(self, "databaseRef"))
+        return typing.cast("DatabaseReference", jsii.get(self, "databaseRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDatabaseRef).__jsii_proxy_class__ = lambda : _IDatabaseRefProxy
@@ -849,7 +849,7 @@ class IDiskRef(
 
     @builtins.property
     @jsii.member(jsii_name="diskRef")
-    def disk_ref(self) -> DiskReference:
+    def disk_ref(self) -> "DiskReference":
         '''(experimental) A reference to a Disk resource.
 
         :stability: experimental
@@ -870,12 +870,12 @@ class _IDiskRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="diskRef")
-    def disk_ref(self) -> DiskReference:
+    def disk_ref(self) -> "DiskReference":
         '''(experimental) A reference to a Disk resource.
 
         :stability: experimental
         '''
-        return typing.cast(DiskReference, jsii.get(self, "diskRef"))
+        return typing.cast("DiskReference", jsii.get(self, "diskRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDiskRef).__jsii_proxy_class__ = lambda : _IDiskRefProxy
@@ -894,7 +894,7 @@ class IDiskSnapshotRef(
 
     @builtins.property
     @jsii.member(jsii_name="diskSnapshotRef")
-    def disk_snapshot_ref(self) -> DiskSnapshotReference:
+    def disk_snapshot_ref(self) -> "DiskSnapshotReference":
         '''(experimental) A reference to a DiskSnapshot resource.
 
         :stability: experimental
@@ -915,12 +915,12 @@ class _IDiskSnapshotRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="diskSnapshotRef")
-    def disk_snapshot_ref(self) -> DiskSnapshotReference:
+    def disk_snapshot_ref(self) -> "DiskSnapshotReference":
         '''(experimental) A reference to a DiskSnapshot resource.
 
         :stability: experimental
         '''
-        return typing.cast(DiskSnapshotReference, jsii.get(self, "diskSnapshotRef"))
+        return typing.cast("DiskSnapshotReference", jsii.get(self, "diskSnapshotRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDiskSnapshotRef).__jsii_proxy_class__ = lambda : _IDiskSnapshotRefProxy
@@ -939,7 +939,7 @@ class IDistributionRef(
 
     @builtins.property
     @jsii.member(jsii_name="distributionRef")
-    def distribution_ref(self) -> DistributionReference:
+    def distribution_ref(self) -> "DistributionReference":
         '''(experimental) A reference to a Distribution resource.
 
         :stability: experimental
@@ -960,12 +960,12 @@ class _IDistributionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="distributionRef")
-    def distribution_ref(self) -> DistributionReference:
+    def distribution_ref(self) -> "DistributionReference":
         '''(experimental) A reference to a Distribution resource.
 
         :stability: experimental
         '''
-        return typing.cast(DistributionReference, jsii.get(self, "distributionRef"))
+        return typing.cast("DistributionReference", jsii.get(self, "distributionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDistributionRef).__jsii_proxy_class__ = lambda : _IDistributionRefProxy
@@ -984,7 +984,7 @@ class IDomainRef(
 
     @builtins.property
     @jsii.member(jsii_name="domainRef")
-    def domain_ref(self) -> DomainReference:
+    def domain_ref(self) -> "DomainReference":
         '''(experimental) A reference to a Domain resource.
 
         :stability: experimental
@@ -1005,12 +1005,12 @@ class _IDomainRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="domainRef")
-    def domain_ref(self) -> DomainReference:
+    def domain_ref(self) -> "DomainReference":
         '''(experimental) A reference to a Domain resource.
 
         :stability: experimental
         '''
-        return typing.cast(DomainReference, jsii.get(self, "domainRef"))
+        return typing.cast("DomainReference", jsii.get(self, "domainRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDomainRef).__jsii_proxy_class__ = lambda : _IDomainRefProxy

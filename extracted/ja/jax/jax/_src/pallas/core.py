@@ -27,8 +27,9 @@ import itertools
 import threading
 from typing import Any, ClassVar, Literal, Protocol, TypeAlias, Union, runtime_checkable
 
-import jax
+
 from jax._src import api_util
+from jax._src.api import jit
 from jax._src import config
 from jax._src import core as jax_core
 from jax._src import dtypes
@@ -37,6 +38,7 @@ from jax._src import frozen_dict
 from jax._src import linear_util as lu
 from jax._src import state
 from jax._src import tree_util
+from jax._src import typing as jax_typing
 from jax._src import util
 from jax._src.export._export import export
 from jax._src.interpreters import mlir
@@ -45,7 +47,7 @@ from jax._src.state import discharge as state_discharge
 from jax._src.state import indexing
 from jax._src.state import types as state_types
 from jax._src.state.types import TransformedRef
-import jax.numpy as jnp
+from jax._src import numpy as jnp
 
 
 class DynamicGridDim:
@@ -55,7 +57,7 @@ dynamic_grid_dim = DynamicGridDim()
 
 
 partial = functools.partial
-GridElement = int | jax_core.Array
+GridElement = int | jax_typing.Array
 GridName = Hashable
 GridNames = tuple[Hashable, ...] | None
 NamedGrid = tuple[tuple[GridName, int], ...]
@@ -99,7 +101,7 @@ class semaphore_dtype(dtypes.extended):
   """Common dtype for all kinds of semaphore dtypes.
 
   This is an abstract class that should never be instantiated, but rather
-  exists for the sake of `jnp.issubdtype`.
+  exists for the sake of ``jnp.issubdtype``.
   """
 
 class semaphore(semaphore_dtype):
@@ -240,6 +242,10 @@ class MemoryRef:
   def shape(self):
     return self.inner_aval.shape
 
+  def __lt__(self, other):
+    return (self.shape, self.dtype, self.memory_space) < (
+        other.shape, other.dtype, other.memory_space)
+
 
 class MemorySpace(enum.Enum):
   """Logical, device-agnostic memory spaces.
@@ -303,7 +309,7 @@ def axis_frame() -> PallasGridContext:
 
 @dataclasses.dataclass(frozen=True)
 class GridAxis:
-  index: jax.Array
+  index: jax_typing.Array
   size: int
 
 # Stores the kernel execution position and the size along grid axes.
@@ -353,7 +359,7 @@ class Blocked:
 class BoundedSlice:
   """Allows to specify a bounded slice of a dimension.
 
-  Specifically, the index_map need to return a `pl.Slice/pl.ds` for this
+  Specifically, the index_map need to return a ``pl.Slice/pl.ds`` for this
   dimension. The start and size may be dynamic, as long as the size <=
   block_size.
   """
@@ -523,15 +529,7 @@ class BlockSpec:
         )
 
     ref_block_shape = _get_ref_block_shape(block_shape)
-    if isinstance(array_aval, jax_core.DShapedArray):
-      # Get the "max" shape for the ragged array.
-      block_array_aval = array_aval.update(shape=ref_block_shape)
-      block_array_aval = jax_core.ShapedArray(
-          block_array_aval.shape,
-          block_array_aval.dtype,
-          block_array_aval.weak_type,
-      )
-    elif isinstance(array_aval, ShapedArrayWithMemorySpace):
+    if isinstance(array_aval, ShapedArrayWithMemorySpace):
       block_array_aval = jax_core.ShapedArray(
           ref_block_shape, array_aval.dtype, array_aval.weak_type
       )
@@ -611,10 +609,6 @@ class BlockSpec:
           f"Index map function {debug_info.func_src_info} for "
           f"{origin} must not capture constants: {consts}"
       )
-
-    if isinstance(array_aval, (jax_core.ShapedArray, jax_core.DShapedArray)):
-      array_aval_shape = _max_shape_from_aval(array_aval)
-      array_aval = array_aval.update(shape=array_aval_shape)
 
     mapping = BlockMapping(
         block_shape=block_shape,
@@ -961,14 +955,14 @@ class GridMapping:
       return slice(0, 0)
 
   @property
-  def in_shapes(self) -> Iterable[jax.ShapeDtypeStruct]:
+  def in_shapes(self) -> Iterable[jax_core.ShapeDtypeStruct]:
     """The shapes of *index, *inputs."""
     index_shapes = (
-        jax.ShapeDtypeStruct(ia.shape, ia.dtype)
+        jax_core.ShapeDtypeStruct(ia.shape, ia.dtype)
         for ia in self.index_map_avals[len(self.grid) :]
     )
     inputs_shapes = (
-        jax.ShapeDtypeStruct(bm.array_aval.shape, bm.array_aval.dtype)
+        jax_core.ShapeDtypeStruct(bm.array_aval.shape, bm.array_aval.dtype)
         for bm in self.block_mappings[:self.num_inputs])
     return itertools.chain(index_shapes, inputs_shapes)
 
@@ -980,9 +974,9 @@ class GridMapping:
         self.num_inputs + self.num_outputs)
 
   @property
-  def out_shapes(self) -> Iterable[jax.ShapeDtypeStruct]:
+  def out_shapes(self) -> Iterable[jax_core.ShapeDtypeStruct]:
     return tuple(
-        jax.ShapeDtypeStruct(bm.array_aval.shape, bm.array_aval.dtype)
+        jax_core.ShapeDtypeStruct(bm.array_aval.shape, bm.array_aval.dtype)
         for bm in self.block_mappings_output)
 
   def to_lojax(self):
@@ -1047,8 +1041,8 @@ class GridMapping:
     return self.__repr__()
 
 
-def _is_valid_grid_dim(dim: int | jax.Array) -> bool:
-  if isinstance(dim, jax.Array):
+def _is_valid_grid_dim(dim: int | jax_typing.Array) -> bool:
+  if isinstance(dim, jax_typing.Array):
     return True
   return jax_core.is_dim(dim)
 
@@ -1058,8 +1052,6 @@ def _max_shape_from_aval(array_aval: jax_core.ShapedArray):
   for i, s in enumerate(array_aval.shape):
     try:
       aval = jax_core.get_aval(s)
-      if isinstance(aval, jax_core.DShapedArray):
-        array_aval_shape[i] = aval.dtype.bound
     except OverflowError as e:
       # Note - there are annoying cases where on 32 bit hardware,
       # a flattened index space may overflow - for these cases,
@@ -1365,13 +1357,34 @@ def _get_sds(aval: jax_core.AbstractValue):
     case ShapedArrayWithMemorySpace():
       return aval.memory_space(aval.shape, aval.dtype)
     case jax_core.ShapedArray():
-      return jax.ShapeDtypeStruct(aval.shape, aval.dtype)
+      return jax_core.ShapeDtypeStruct(aval.shape, aval.dtype, vma=aval.vma)
     case _:
       raise ValueError(f"Unsupported abstract value: {aval}")
 
 
 core_map_p = jax_core.Primitive("core_map")
 core_map_p.multiple_results = True
+
+def _core_map_is_high(*avals, jaxpr, **params):
+  del avals, params
+  return jaxpr.is_high
+core_map_p.is_high = _core_map_is_high  # type: ignore[method-assign]
+
+def _core_map_to_lojax(*consts, jaxpr, mesh, **params):
+  closed_hi_jaxpr = jax_core.ClosedJaxpr(jaxpr, consts)
+  with (
+      tracing_grid_env(tuple(mesh.shape.values()), mapped_dims=()),
+      jax_core.extend_axis_env_nd(mesh.shape.items()),
+  ):
+    closed_lo_jaxpr = pe.lower_jaxpr(closed_hi_jaxpr)
+  assert not closed_lo_jaxpr.is_high
+  return core_map_p.bind(
+      *closed_lo_jaxpr.consts,
+      jaxpr=closed_lo_jaxpr.jaxpr,
+      mesh=mesh,
+      **params,
+  )
+core_map_p.to_lojax = _core_map_to_lojax
 
 
 def core_map(
@@ -1543,8 +1556,13 @@ def default_mesh_discharge_rule(
     scratch_shapes,
 ):
   """Discharges a ``core_map`` over a mesh to a ``pallas_call``."""
-  del out_avals  # Unused.
   default_memory_space = memory_space
+  if not all(
+      isinstance(aval, state.AbstractRef) for aval in (in_avals + out_avals)
+  ):
+    raise ValueError(
+        "default_mesh_discharge_rule only supports Ref inputs/outputs."
+    )
 
   def body(*args):
     # Due to aliasing, ``args`` contains aliased inputs and outputs so we
@@ -1613,15 +1631,24 @@ def _core_map_discharge_rule(in_avals, out_avals, *args_flat, jaxpr, debug_info,
         for var in jaxpr.constvars
         if not isinstance(aval := var.aval, state.AbstractRef)
     ]
-    if consts_avals:
+    is_scalar_const_aval = [
+        isinstance(aval, jax_core.ShapedArray) and not aval.shape
+        for aval in consts_avals
+    ]
+    if not all(is_scalar_const_aval):
       ctx = jax_core.JaxprPpContext()
-      pp_const_avals = ", ".join(
-          jax_core.pp_aval(aval, ctx) for aval in consts_avals
+      non_scalar_const_avals = [
+          aval
+          for aval, is_scalar in zip(consts_avals, is_scalar_const_aval)
+          if not is_scalar
+      ]
+      non_scalar_const_pp_avals = ", ".join(
+          jax_core.pp_aval(aval, ctx) for aval in non_scalar_const_avals
       )
       raise ValueError(
           "The kernel function in core_map"
-          f" {debug_info.func_src_info} captures constants"
-          f" [{pp_const_avals}]. You should pass them as inputs."
+          f" {debug_info.func_src_info} captures non-scalar constants"
+          f" [{non_scalar_const_pp_avals}]. You should pass them as inputs."
       )
   return _core_map_mesh_rules[type(mesh)](
       in_avals, out_avals, *args_flat, jaxpr=jaxpr, mesh=mesh, **kwargs
@@ -1663,7 +1690,7 @@ def lower_as_mlir(
     **kwargs,
 ) -> mlir.ir.Module:
   with pallas_export_experimental(dynamic_shapes):
-    f = jax.jit(f, device=device, static_argnames=static_argnames)
+    f = jit(f, device=device, static_argnames=static_argnames)
     if platforms is None:
       platforms = ["tpu"]
     exported = export(f, platforms=platforms)(*args, **kwargs)

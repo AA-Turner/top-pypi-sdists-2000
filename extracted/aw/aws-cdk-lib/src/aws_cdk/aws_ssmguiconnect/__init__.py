@@ -113,10 +113,10 @@ class CfnPreferences(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        connection_recording_preferences: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPreferences.ConnectionRecordingPreferencesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        connection_recording_preferences: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPreferences.ConnectionRecordingPreferencesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SSMGuiConnect::Preferences``.
 
@@ -147,7 +147,7 @@ class CfnPreferences(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPreferences", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -192,22 +192,22 @@ class CfnPreferences(
 
     @builtins.property
     @jsii.member(jsii_name="preferencesRef")
-    def preferences_ref(self) -> _PreferencesReference_1ed48663:
+    def preferences_ref(self) -> "_PreferencesReference_1ed48663":
         '''A reference to a Preferences resource.'''
-        return typing.cast(_PreferencesReference_1ed48663, jsii.get(self, "preferencesRef"))
+        return typing.cast("_PreferencesReference_1ed48663", jsii.get(self, "preferencesRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connectionRecordingPreferences")
     def connection_recording_preferences(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPreferences.ConnectionRecordingPreferencesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPreferences.ConnectionRecordingPreferencesProperty"]]:
         '''The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPreferences.ConnectionRecordingPreferencesProperty"]], jsii.get(self, "connectionRecordingPreferences"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPreferences.ConnectionRecordingPreferencesProperty"]], jsii.get(self, "connectionRecordingPreferences"))
 
     @connection_recording_preferences.setter
     def connection_recording_preferences(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPreferences.ConnectionRecordingPreferencesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPreferences.ConnectionRecordingPreferencesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9c66582ef0ec82c9acb896e156d048eb1944403cdb814f8c249895be7c4d8043)
@@ -227,7 +227,7 @@ class CfnPreferences(
             self,
             *,
             kms_key_arn: builtins.str,
-            recording_destinations: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPreferences.RecordingDestinationsProperty", typing.Dict[builtins.str, typing.Any]]],
+            recording_destinations: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPreferences.RecordingDestinationsProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region .
 
@@ -279,14 +279,14 @@ class CfnPreferences(
         @builtins.property
         def recording_destinations(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPreferences.RecordingDestinationsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPreferences.RecordingDestinationsProperty"]:
             '''Determines where recordings of RDP connections are stored.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmguiconnect-preferences-connectionrecordingpreferences.html#cfn-ssmguiconnect-preferences-connectionrecordingpreferences-recordingdestinations
             '''
             result = self._values.get("recording_destinations")
             assert result is not None, "Required property 'recording_destinations' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPreferences.RecordingDestinationsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPreferences.RecordingDestinationsProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -308,7 +308,7 @@ class CfnPreferences(
         def __init__(
             self,
             *,
-            s3_buckets: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPreferences.S3BucketProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            s3_buckets: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPreferences.S3BucketProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Determines where recordings of RDP connections are stored.
 
@@ -340,14 +340,14 @@ class CfnPreferences(
         @builtins.property
         def s3_buckets(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPreferences.S3BucketProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPreferences.S3BucketProperty"]]]:
             '''The S3 bucket where RDP connection recordings are stored.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmguiconnect-preferences-recordingdestinations.html#cfn-ssmguiconnect-preferences-recordingdestinations-s3buckets
             '''
             result = self._values.get("s3_buckets")
             assert result is not None, "Required property 's3_buckets' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPreferences.S3BucketProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPreferences.S3BucketProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -443,7 +443,7 @@ class CfnPreferencesProps:
     def __init__(
         self,
         *,
-        connection_recording_preferences: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPreferences.ConnectionRecordingPreferencesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        connection_recording_preferences: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPreferences.ConnectionRecordingPreferencesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPreferences``.
 
@@ -480,7 +480,7 @@ class CfnPreferencesProps:
     @builtins.property
     def connection_recording_preferences(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPreferences.ConnectionRecordingPreferencesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPreferences.ConnectionRecordingPreferencesProperty"]]:
         '''The set of preferences used for recording RDP connections in the requesting AWS account and AWS Region .
 
         This includes details such as which S3 bucket recordings are stored in.
@@ -488,7 +488,7 @@ class CfnPreferencesProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmguiconnect-preferences.html#cfn-ssmguiconnect-preferences-connectionrecordingpreferences
         '''
         result = self._values.get("connection_recording_preferences")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPreferences.ConnectionRecordingPreferencesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPreferences.ConnectionRecordingPreferencesProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

@@ -107,7 +107,7 @@ class CfnAutoshiftObserverNotificationStatus(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         status: builtins.str,
@@ -142,7 +142,7 @@ class CfnAutoshiftObserverNotificationStatus(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAutoshiftObserverNotificationStatus", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -193,9 +193,9 @@ class CfnAutoshiftObserverNotificationStatus(
     @jsii.member(jsii_name="autoshiftObserverNotificationStatusRef")
     def autoshift_observer_notification_status_ref(
         self,
-    ) -> _AutoshiftObserverNotificationStatusReference_9514dd80:
+    ) -> "_AutoshiftObserverNotificationStatusReference_9514dd80":
         '''A reference to a AutoshiftObserverNotificationStatus resource.'''
-        return typing.cast(_AutoshiftObserverNotificationStatusReference_9514dd80, jsii.get(self, "autoshiftObserverNotificationStatusRef"))
+        return typing.cast("_AutoshiftObserverNotificationStatusReference_9514dd80", jsii.get(self, "autoshiftObserverNotificationStatusRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -313,11 +313,11 @@ class CfnZonalAutoshiftConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         resource_identifier: builtins.str,
-        practice_run_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        practice_run_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         zonal_autoshift_status: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::ARCZonalShift::ZonalAutoshiftConfiguration``.
@@ -353,7 +353,7 @@ class CfnZonalAutoshiftConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnZonalAutoshiftConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -391,9 +391,9 @@ class CfnZonalAutoshiftConfiguration(
     @jsii.member(jsii_name="zonalAutoshiftConfigurationRef")
     def zonal_autoshift_configuration_ref(
         self,
-    ) -> _ZonalAutoshiftConfigurationReference_d88ceb0c:
+    ) -> "_ZonalAutoshiftConfigurationReference_d88ceb0c":
         '''A reference to a ZonalAutoshiftConfiguration resource.'''
-        return typing.cast(_ZonalAutoshiftConfigurationReference_d88ceb0c, jsii.get(self, "zonalAutoshiftConfigurationRef"))
+        return typing.cast("_ZonalAutoshiftConfigurationReference_d88ceb0c", jsii.get(self, "zonalAutoshiftConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="resourceIdentifier")
@@ -412,14 +412,14 @@ class CfnZonalAutoshiftConfiguration(
     @jsii.member(jsii_name="practiceRunConfiguration")
     def practice_run_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty"]]:
         '''A practice run configuration for a resource includes the Amazon CloudWatch alarms that you've specified for a practice run, as well as any blocked dates or blocked windows for the practice run.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty"]], jsii.get(self, "practiceRunConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty"]], jsii.get(self, "practiceRunConfiguration"))
 
     @practice_run_configuration.setter
     def practice_run_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__deabf71a3e0015b91f35f23b96354f1d2feeb19a3f783edd9e6c4be281a4d00a)
@@ -532,10 +532,10 @@ class CfnZonalAutoshiftConfiguration(
         def __init__(
             self,
             *,
-            outcome_alarms: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnZonalAutoshiftConfiguration.ControlConditionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            outcome_alarms: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnZonalAutoshiftConfiguration.ControlConditionProperty", typing.Dict[builtins.str, typing.Any]]]]],
             blocked_dates: typing.Optional[typing.Sequence[builtins.str]] = None,
             blocked_windows: typing.Optional[typing.Sequence[builtins.str]] = None,
-            blocking_alarms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnZonalAutoshiftConfiguration.ControlConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            blocking_alarms: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnZonalAutoshiftConfiguration.ControlConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''A practice run configuration for a resource includes the Amazon CloudWatch alarms that you've specified for a practice run, as well as any blocked dates or blocked windows for the practice run.
 
@@ -591,7 +591,7 @@ class CfnZonalAutoshiftConfiguration(
         @builtins.property
         def outcome_alarms(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnZonalAutoshiftConfiguration.ControlConditionProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnZonalAutoshiftConfiguration.ControlConditionProperty"]]]:
             '''The alarm that you specify to monitor the health of your application during practice runs.
 
             When the outcome alarm goes into an ``ALARM`` state, the practice run is ended and the outcome is set to ``FAILED`` .
@@ -600,7 +600,7 @@ class CfnZonalAutoshiftConfiguration(
             '''
             result = self._values.get("outcome_alarms")
             assert result is not None, "Required property 'outcome_alarms' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnZonalAutoshiftConfiguration.ControlConditionProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnZonalAutoshiftConfiguration.ControlConditionProperty"]]], result)
 
         @builtins.property
         def blocked_dates(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -634,7 +634,7 @@ class CfnZonalAutoshiftConfiguration(
         @builtins.property
         def blocking_alarms(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnZonalAutoshiftConfiguration.ControlConditionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnZonalAutoshiftConfiguration.ControlConditionProperty"]]]]:
             '''An optional alarm that you can specify that blocks practice runs when the alarm is in an ``ALARM`` state.
 
             When a blocking alarm goes into an ``ALARM`` state, it prevents practice runs from being started, and ends practice runs that are in progress.
@@ -642,7 +642,7 @@ class CfnZonalAutoshiftConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-arczonalshift-zonalautoshiftconfiguration-practicerunconfiguration.html#cfn-arczonalshift-zonalautoshiftconfiguration-practicerunconfiguration-blockingalarms
             '''
             result = self._values.get("blocking_alarms")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnZonalAutoshiftConfiguration.ControlConditionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnZonalAutoshiftConfiguration.ControlConditionProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -670,7 +670,7 @@ class CfnZonalAutoshiftConfigurationProps:
         self,
         *,
         resource_identifier: builtins.str,
-        practice_run_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        practice_run_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         zonal_autoshift_status: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnZonalAutoshiftConfiguration``.
@@ -739,7 +739,7 @@ class CfnZonalAutoshiftConfigurationProps:
     @builtins.property
     def practice_run_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty"]]:
         '''A practice run configuration for a resource includes the Amazon CloudWatch alarms that you've specified for a practice run, as well as any blocked dates or blocked windows for the practice run.
 
         When a resource has a practice run configuration, ARC shifts traffic for the resource weekly for practice runs.
@@ -751,7 +751,7 @@ class CfnZonalAutoshiftConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-arczonalshift-zonalautoshiftconfiguration.html#cfn-arczonalshift-zonalautoshiftconfiguration-practicerunconfiguration
         '''
         result = self._values.get("practice_run_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty"]], result)
 
     @builtins.property
     def zonal_autoshift_status(self) -> typing.Optional[builtins.str]:

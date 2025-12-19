@@ -104,6 +104,7 @@ class CfnACL(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_memorydb as memorydb
@@ -122,11 +123,11 @@ class CfnACL(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         acl_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         user_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::MemoryDB::ACL``.
@@ -147,7 +148,7 @@ class CfnACL(
 
     @jsii.member(jsii_name="arnForACL")
     @builtins.classmethod
-    def arn_for_acl(cls, resource: _IACLRef_c364f794) -> builtins.str:
+    def arn_for_acl(cls, resource: "_IACLRef_c364f794") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -160,10 +161,10 @@ class CfnACL(
     @builtins.classmethod
     def from_acl_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IACLRef_c364f794:
+    ) -> "_IACLRef_c364f794":
         '''Creates a new IACLRef from an ARN.
 
         :param scope: -
@@ -175,16 +176,16 @@ class CfnACL(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IACLRef_c364f794, jsii.sinvoke(cls, "fromACLArn", [scope, id, arn]))
+        return typing.cast("_IACLRef_c364f794", jsii.sinvoke(cls, "fromACLArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromAclName")
     @builtins.classmethod
     def from_acl_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         acl_name: builtins.str,
-    ) -> _IACLRef_c364f794:
+    ) -> "_IACLRef_c364f794":
         '''Creates a new IACLRef from a aclName.
 
         :param scope: -
@@ -196,7 +197,7 @@ class CfnACL(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument acl_name", value=acl_name, expected_type=type_hints["acl_name"])
-        return typing.cast(_IACLRef_c364f794, jsii.sinvoke(cls, "fromAclName", [scope, id, acl_name]))
+        return typing.cast("_IACLRef_c364f794", jsii.sinvoke(cls, "fromAclName", [scope, id, acl_name]))
 
     @jsii.member(jsii_name="isCfnACL")
     @builtins.classmethod
@@ -211,7 +212,7 @@ class CfnACL(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnACL", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -242,9 +243,9 @@ class CfnACL(
 
     @builtins.property
     @jsii.member(jsii_name="aclRef")
-    def acl_ref(self) -> _ACLReference_054b0a92:
+    def acl_ref(self) -> "_ACLReference_054b0a92":
         '''A reference to a ACL resource.'''
-        return typing.cast(_ACLReference_054b0a92, jsii.get(self, "aclRef"))
+        return typing.cast("_ACLReference_054b0a92", jsii.get(self, "aclRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -273,9 +274,9 @@ class CfnACL(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="aclName")
@@ -292,12 +293,12 @@ class CfnACL(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__19dfb38b66bc6a76c22f50b7a62a4979bd2a681026ccd6e3e50920eb6c5cf6f4)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -327,7 +328,7 @@ class CfnACLProps:
         self,
         *,
         acl_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         user_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnACL``.
@@ -341,6 +342,7 @@ class CfnACLProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_memorydb as memorydb
@@ -380,7 +382,7 @@ class CfnACLProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -388,7 +390,7 @@ class CfnACLProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-acl.html#cfn-memorydb-acl-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def user_names(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -427,6 +429,7 @@ class CfnCluster(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_memorydb as memorydb
@@ -474,14 +477,14 @@ class CfnCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         acl_name: builtins.str,
         cluster_name: builtins.str,
         node_type: builtins.str,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        cluster_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        cluster_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         data_tiering: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         engine: typing.Optional[builtins.str] = None,
@@ -496,7 +499,7 @@ class CfnCluster(
         num_shards: typing.Optional[jsii.Number] = None,
         parameter_group_name: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
-        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]] = None,
         snapshot_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         snapshot_name: typing.Optional[builtins.str] = None,
         snapshot_retention_limit: typing.Optional[jsii.Number] = None,
@@ -504,8 +507,8 @@ class CfnCluster(
         sns_topic_arn: typing.Optional[builtins.str] = None,
         sns_topic_status: typing.Optional[builtins.str] = None,
         subnet_group_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tls_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tls_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::MemoryDB::Cluster``.
 
@@ -581,7 +584,7 @@ class CfnCluster(
 
     @jsii.member(jsii_name="arnForCluster")
     @builtins.classmethod
-    def arn_for_cluster(cls, resource: _IClusterRef_8cb56f6f) -> builtins.str:
+    def arn_for_cluster(cls, resource: "_IClusterRef_8cb56f6f") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -594,10 +597,10 @@ class CfnCluster(
     @builtins.classmethod
     def from_cluster_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IClusterRef_8cb56f6f:
+    ) -> "_IClusterRef_8cb56f6f":
         '''Creates a new IClusterRef from an ARN.
 
         :param scope: -
@@ -609,16 +612,16 @@ class CfnCluster(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IClusterRef_8cb56f6f, jsii.sinvoke(cls, "fromClusterArn", [scope, id, arn]))
+        return typing.cast("_IClusterRef_8cb56f6f", jsii.sinvoke(cls, "fromClusterArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromClusterName")
     @builtins.classmethod
     def from_cluster_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         cluster_name: builtins.str,
-    ) -> _IClusterRef_8cb56f6f:
+    ) -> "_IClusterRef_8cb56f6f":
         '''Creates a new IClusterRef from a clusterName.
 
         :param scope: -
@@ -630,7 +633,7 @@ class CfnCluster(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
-        return typing.cast(_IClusterRef_8cb56f6f, jsii.sinvoke(cls, "fromClusterName", [scope, id, cluster_name]))
+        return typing.cast("_IClusterRef_8cb56f6f", jsii.sinvoke(cls, "fromClusterName", [scope, id, cluster_name]))
 
     @jsii.member(jsii_name="isCfnCluster")
     @builtins.classmethod
@@ -645,7 +648,7 @@ class CfnCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -728,15 +731,15 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> _ClusterReference_75855dd3:
+    def cluster_ref(self) -> "_ClusterReference_75855dd3":
         '''A reference to a Cluster resource.'''
-        return typing.cast(_ClusterReference_75855dd3, jsii.get(self, "clusterRef"))
+        return typing.cast("_ClusterReference_75855dd3", jsii.get(self, "clusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="aclName")
@@ -781,14 +784,14 @@ class CfnCluster(
     @jsii.member(jsii_name="autoMinorVersionUpgrade")
     def auto_minor_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When set to true, the cluster will automatically receive minor engine version upgrades after launch.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "autoMinorVersionUpgrade"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "autoMinorVersionUpgrade"))
 
     @auto_minor_version_upgrade.setter
     def auto_minor_version_upgrade(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__85ceb7f4779e4cc3158fd10ae0f789f977bf4ec7b305427de026b71410314aa2)
@@ -799,14 +802,14 @@ class CfnCluster(
     @jsii.member(jsii_name="clusterEndpoint")
     def cluster_endpoint(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EndpointProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EndpointProperty"]]:
         '''The cluster 's configuration endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EndpointProperty"]], jsii.get(self, "clusterEndpoint"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EndpointProperty"]], jsii.get(self, "clusterEndpoint"))
 
     @cluster_endpoint.setter
     def cluster_endpoint(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EndpointProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EndpointProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8cb933d0258a10b86325bdd089031bbb07512679b44ad9da34f9d222d2a6f441)
@@ -1104,12 +1107,12 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5fb518ff45629b2fc5f7488c33f7e4de652dc27f32c98792c355068710db9cbd)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1119,14 +1122,14 @@ class CfnCluster(
     @jsii.member(jsii_name="tlsEnabled")
     def tls_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag to indicate if In-transit encryption is enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "tlsEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "tlsEnabled"))
 
     @tls_enabled.setter
     def tls_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c35c0a09eb3a078c7c40fabc044eb0877fe7280b70079614ef1383d482cdaa0c)
@@ -1246,8 +1249,8 @@ class CfnClusterProps:
         acl_name: builtins.str,
         cluster_name: builtins.str,
         node_type: builtins.str,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        cluster_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        cluster_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         data_tiering: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         engine: typing.Optional[builtins.str] = None,
@@ -1262,7 +1265,7 @@ class CfnClusterProps:
         num_shards: typing.Optional[jsii.Number] = None,
         parameter_group_name: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
-        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]] = None,
         snapshot_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         snapshot_name: typing.Optional[builtins.str] = None,
         snapshot_retention_limit: typing.Optional[jsii.Number] = None,
@@ -1270,8 +1273,8 @@ class CfnClusterProps:
         sns_topic_arn: typing.Optional[builtins.str] = None,
         sns_topic_status: typing.Optional[builtins.str] = None,
         subnet_group_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tls_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tls_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCluster``.
 
@@ -1310,6 +1313,7 @@ class CfnClusterProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_memorydb as memorydb
@@ -1476,24 +1480,24 @@ class CfnClusterProps:
     @builtins.property
     def auto_minor_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When set to true, the cluster will automatically receive minor engine version upgrades after launch.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-cluster.html#cfn-memorydb-cluster-autominorversionupgrade
         '''
         result = self._values.get("auto_minor_version_upgrade")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def cluster_endpoint(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.EndpointProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EndpointProperty"]]:
         '''The cluster 's configuration endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-cluster.html#cfn-memorydb-cluster-clusterendpoint
         '''
         result = self._values.get("cluster_endpoint")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.EndpointProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EndpointProperty"]], result)
 
     @builtins.property
     def data_tiering(self) -> typing.Optional[builtins.str]:
@@ -1640,13 +1644,13 @@ class CfnClusterProps:
     @builtins.property
     def security_group_ids(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]]:
         '''A list of security group names to associate with this cluster .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-cluster.html#cfn-memorydb-cluster-securitygroupids
         '''
         result = self._values.get("security_group_ids")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]], result)
 
     @builtins.property
     def snapshot_arns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1720,7 +1724,7 @@ class CfnClusterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -1728,18 +1732,18 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-cluster.html#cfn-memorydb-cluster-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def tls_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag to indicate if In-transit encryption is enabled.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-cluster.html#cfn-memorydb-cluster-tlsenabled
         '''
         result = self._values.get("tls_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1767,6 +1771,7 @@ class CfnMultiRegionCluster(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_memorydb as memorydb
@@ -1792,7 +1797,7 @@ class CfnMultiRegionCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         node_type: builtins.str,
@@ -1802,8 +1807,8 @@ class CfnMultiRegionCluster(
         multi_region_cluster_name_suffix: typing.Optional[builtins.str] = None,
         multi_region_parameter_group_name: typing.Optional[builtins.str] = None,
         num_shards: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tls_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tls_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         update_strategy: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::MemoryDB::MultiRegionCluster``.
@@ -1844,7 +1849,7 @@ class CfnMultiRegionCluster(
     @builtins.classmethod
     def arn_for_multi_region_cluster(
         cls,
-        resource: _IMultiRegionClusterRef_b7a8c236,
+        resource: "_IMultiRegionClusterRef_b7a8c236",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1867,7 +1872,7 @@ class CfnMultiRegionCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMultiRegionCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1925,9 +1930,9 @@ class CfnMultiRegionCluster(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1936,9 +1941,9 @@ class CfnMultiRegionCluster(
 
     @builtins.property
     @jsii.member(jsii_name="multiRegionClusterRef")
-    def multi_region_cluster_ref(self) -> _MultiRegionClusterReference_24d0cd7a:
+    def multi_region_cluster_ref(self) -> "_MultiRegionClusterReference_24d0cd7a":
         '''A reference to a MultiRegionCluster resource.'''
-        return typing.cast(_MultiRegionClusterReference_24d0cd7a, jsii.get(self, "multiRegionClusterRef"))
+        return typing.cast("_MultiRegionClusterReference_24d0cd7a", jsii.get(self, "multiRegionClusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="nodeType")
@@ -2039,12 +2044,12 @@ class CfnMultiRegionCluster(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to be applied to the multi-Region cluster.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4c31a456bc7dbec66c70a71ddb629df188e1935a42408620a3f750d3a77a57e6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2054,14 +2059,14 @@ class CfnMultiRegionCluster(
     @jsii.member(jsii_name="tlsEnabled")
     def tls_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indiciates if the multi-Region cluster is TLS enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "tlsEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "tlsEnabled"))
 
     @tls_enabled.setter
     def tls_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1bb0298e9385954745a7301100806d16ede0f588fef6d462765b2aec1749a85d)
@@ -2109,8 +2114,8 @@ class CfnMultiRegionClusterProps:
         multi_region_cluster_name_suffix: typing.Optional[builtins.str] = None,
         multi_region_parameter_group_name: typing.Optional[builtins.str] = None,
         num_shards: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tls_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tls_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         update_strategy: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnMultiRegionCluster``.
@@ -2131,6 +2136,7 @@ class CfnMultiRegionClusterProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_memorydb as memorydb
@@ -2254,24 +2260,24 @@ class CfnMultiRegionClusterProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to be applied to the multi-Region cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-multiregioncluster.html#cfn-memorydb-multiregioncluster-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def tls_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indiciates if the multi-Region cluster is TLS enabled.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-multiregioncluster.html#cfn-memorydb-multiregioncluster-tlsenabled
         '''
         result = self._values.get("tls_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def update_strategy(self) -> typing.Optional[builtins.str]:
@@ -2312,6 +2318,7 @@ class CfnParameterGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_memorydb as memorydb
@@ -2334,14 +2341,14 @@ class CfnParameterGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         family: builtins.str,
         parameter_group_name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         parameters: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::MemoryDB::ParameterGroup``.
 
@@ -2371,7 +2378,7 @@ class CfnParameterGroup(
     @builtins.classmethod
     def arn_for_parameter_group(
         cls,
-        resource: _IParameterGroupRef_471eb1a8,
+        resource: "_IParameterGroupRef_471eb1a8",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2385,10 +2392,10 @@ class CfnParameterGroup(
     @builtins.classmethod
     def from_parameter_group_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IParameterGroupRef_471eb1a8:
+    ) -> "_IParameterGroupRef_471eb1a8":
         '''Creates a new IParameterGroupRef from an ARN.
 
         :param scope: -
@@ -2400,16 +2407,16 @@ class CfnParameterGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IParameterGroupRef_471eb1a8, jsii.sinvoke(cls, "fromParameterGroupArn", [scope, id, arn]))
+        return typing.cast("_IParameterGroupRef_471eb1a8", jsii.sinvoke(cls, "fromParameterGroupArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromParameterGroupName")
     @builtins.classmethod
     def from_parameter_group_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         parameter_group_name: builtins.str,
-    ) -> _IParameterGroupRef_471eb1a8:
+    ) -> "_IParameterGroupRef_471eb1a8":
         '''Creates a new IParameterGroupRef from a parameterGroupName.
 
         :param scope: -
@@ -2421,7 +2428,7 @@ class CfnParameterGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument parameter_group_name", value=parameter_group_name, expected_type=type_hints["parameter_group_name"])
-        return typing.cast(_IParameterGroupRef_471eb1a8, jsii.sinvoke(cls, "fromParameterGroupName", [scope, id, parameter_group_name]))
+        return typing.cast("_IParameterGroupRef_471eb1a8", jsii.sinvoke(cls, "fromParameterGroupName", [scope, id, parameter_group_name]))
 
     @jsii.member(jsii_name="isCfnParameterGroup")
     @builtins.classmethod
@@ -2436,7 +2443,7 @@ class CfnParameterGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnParameterGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2481,15 +2488,15 @@ class CfnParameterGroup(
 
     @builtins.property
     @jsii.member(jsii_name="parameterGroupRef")
-    def parameter_group_ref(self) -> _ParameterGroupReference_bde11e60:
+    def parameter_group_ref(self) -> "_ParameterGroupReference_bde11e60":
         '''A reference to a ParameterGroup resource.'''
-        return typing.cast(_ParameterGroupReference_bde11e60, jsii.get(self, "parameterGroupRef"))
+        return typing.cast("_ParameterGroupReference_bde11e60", jsii.get(self, "parameterGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="family")
@@ -2545,12 +2552,12 @@ class CfnParameterGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__15c759a2a9795495d5bfdf5e24f113bc8b0166dd214c06992783c7263752a055)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2576,7 +2583,7 @@ class CfnParameterGroupProps:
         parameter_group_name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         parameters: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnParameterGroup``.
 
@@ -2591,6 +2598,7 @@ class CfnParameterGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_memorydb as memorydb
@@ -2667,7 +2675,7 @@ class CfnParameterGroupProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -2675,7 +2683,7 @@ class CfnParameterGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-parametergroup.html#cfn-memorydb-parametergroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2705,6 +2713,7 @@ class CfnSubnetGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_memorydb as memorydb
@@ -2724,13 +2733,13 @@ class CfnSubnetGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         subnet_group_name: builtins.str,
-        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::MemoryDB::SubnetGroup``.
 
@@ -2756,7 +2765,10 @@ class CfnSubnetGroup(
 
     @jsii.member(jsii_name="arnForSubnetGroup")
     @builtins.classmethod
-    def arn_for_subnet_group(cls, resource: _ISubnetGroupRef_efc982f4) -> builtins.str:
+    def arn_for_subnet_group(
+        cls,
+        resource: "_ISubnetGroupRef_efc982f4",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2769,10 +2781,10 @@ class CfnSubnetGroup(
     @builtins.classmethod
     def from_subnet_group_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ISubnetGroupRef_efc982f4:
+    ) -> "_ISubnetGroupRef_efc982f4":
         '''Creates a new ISubnetGroupRef from an ARN.
 
         :param scope: -
@@ -2784,16 +2796,16 @@ class CfnSubnetGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ISubnetGroupRef_efc982f4, jsii.sinvoke(cls, "fromSubnetGroupArn", [scope, id, arn]))
+        return typing.cast("_ISubnetGroupRef_efc982f4", jsii.sinvoke(cls, "fromSubnetGroupArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromSubnetGroupName")
     @builtins.classmethod
     def from_subnet_group_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         subnet_group_name: builtins.str,
-    ) -> _ISubnetGroupRef_efc982f4:
+    ) -> "_ISubnetGroupRef_efc982f4":
         '''Creates a new ISubnetGroupRef from a subnetGroupName.
 
         :param scope: -
@@ -2805,7 +2817,7 @@ class CfnSubnetGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument subnet_group_name", value=subnet_group_name, expected_type=type_hints["subnet_group_name"])
-        return typing.cast(_ISubnetGroupRef_efc982f4, jsii.sinvoke(cls, "fromSubnetGroupName", [scope, id, subnet_group_name]))
+        return typing.cast("_ISubnetGroupRef_efc982f4", jsii.sinvoke(cls, "fromSubnetGroupName", [scope, id, subnet_group_name]))
 
     @jsii.member(jsii_name="isCfnSubnetGroup")
     @builtins.classmethod
@@ -2820,7 +2832,7 @@ class CfnSubnetGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSubnetGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2876,15 +2888,15 @@ class CfnSubnetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="subnetGroupRef")
-    def subnet_group_ref(self) -> _SubnetGroupReference_69a6dcdb:
+    def subnet_group_ref(self) -> "_SubnetGroupReference_69a6dcdb":
         '''A reference to a SubnetGroup resource.'''
-        return typing.cast(_SubnetGroupReference_69a6dcdb, jsii.get(self, "subnetGroupRef"))
+        return typing.cast("_SubnetGroupReference_69a6dcdb", jsii.get(self, "subnetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="subnetGroupName")
@@ -2927,12 +2939,12 @@ class CfnSubnetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__085e1da0c8228c03b5e87f741c2983f9ac01339c717a01009e150bd087ab288f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2954,9 +2966,9 @@ class CfnSubnetGroupProps:
         self,
         *,
         subnet_group_name: builtins.str,
-        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSubnetGroup``.
 
@@ -2970,6 +2982,7 @@ class CfnSubnetGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_memorydb as memorydb
@@ -3014,14 +3027,14 @@ class CfnSubnetGroupProps:
     @builtins.property
     def subnet_ids(
         self,
-    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
+    ) -> typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]]:
         '''A list of Amazon VPC subnet IDs for the subnet group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-subnetgroup.html#cfn-memorydb-subnetgroup-subnetids
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -3033,7 +3046,7 @@ class CfnSubnetGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -3041,7 +3054,7 @@ class CfnSubnetGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-subnetgroup.html#cfn-memorydb-subnetgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3071,6 +3084,7 @@ class CfnUser(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_memorydb as memorydb
@@ -3092,13 +3106,13 @@ class CfnUser(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         user_name: builtins.str,
         access_string: typing.Optional[builtins.str] = None,
         authentication_mode: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::MemoryDB::User``.
 
@@ -3124,7 +3138,7 @@ class CfnUser(
 
     @jsii.member(jsii_name="arnForUser")
     @builtins.classmethod
-    def arn_for_user(cls, resource: _IUserRef_ee6ccd70) -> builtins.str:
+    def arn_for_user(cls, resource: "_IUserRef_ee6ccd70") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3137,10 +3151,10 @@ class CfnUser(
     @builtins.classmethod
     def from_user_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IUserRef_ee6ccd70:
+    ) -> "_IUserRef_ee6ccd70":
         '''Creates a new IUserRef from an ARN.
 
         :param scope: -
@@ -3152,16 +3166,16 @@ class CfnUser(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IUserRef_ee6ccd70, jsii.sinvoke(cls, "fromUserArn", [scope, id, arn]))
+        return typing.cast("_IUserRef_ee6ccd70", jsii.sinvoke(cls, "fromUserArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromUserName")
     @builtins.classmethod
     def from_user_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         user_name: builtins.str,
-    ) -> _IUserRef_ee6ccd70:
+    ) -> "_IUserRef_ee6ccd70":
         '''Creates a new IUserRef from a userName.
 
         :param scope: -
@@ -3173,7 +3187,7 @@ class CfnUser(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument user_name", value=user_name, expected_type=type_hints["user_name"])
-        return typing.cast(_IUserRef_ee6ccd70, jsii.sinvoke(cls, "fromUserName", [scope, id, user_name]))
+        return typing.cast("_IUserRef_ee6ccd70", jsii.sinvoke(cls, "fromUserName", [scope, id, user_name]))
 
     @jsii.member(jsii_name="isCfnUser")
     @builtins.classmethod
@@ -3188,7 +3202,7 @@ class CfnUser(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUser", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3244,15 +3258,15 @@ class CfnUser(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="userRef")
-    def user_ref(self) -> _UserReference_10bdf757:
+    def user_ref(self) -> "_UserReference_10bdf757":
         '''A reference to a User resource.'''
-        return typing.cast(_UserReference_10bdf757, jsii.get(self, "userRef"))
+        return typing.cast("_UserReference_10bdf757", jsii.get(self, "userRef"))
 
     @builtins.property
     @jsii.member(jsii_name="userName")
@@ -3295,12 +3309,12 @@ class CfnUser(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e1caf541d919490fde818383ad7111c6060c95572004849b73f36d7935d02afe)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3398,7 +3412,7 @@ class CfnUserProps:
         user_name: builtins.str,
         access_string: typing.Optional[builtins.str] = None,
         authentication_mode: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnUser``.
 
@@ -3412,6 +3426,7 @@ class CfnUserProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_memorydb as memorydb
@@ -3479,7 +3494,7 @@ class CfnUserProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -3487,7 +3502,7 @@ class CfnUserProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-user.html#cfn-memorydb-user-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

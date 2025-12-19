@@ -129,10 +129,10 @@ class CfnConfigurationManager(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        configuration_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationManager.ConfigurationDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        configuration_definitions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationManager.ConfigurationDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -172,7 +172,7 @@ class CfnConfigurationManager(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigurationManager", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -230,20 +230,20 @@ class CfnConfigurationManager(
 
     @builtins.property
     @jsii.member(jsii_name="attrStatusSummaries")
-    def attr_status_summaries(self) -> _IResolvable_da3f097b:
+    def attr_status_summaries(self) -> "_IResolvable_da3f097b":
         '''Summaries of the state of the configuration manager.
 
         These summaries include an aggregate of the statuses from the configuration definition associated with the configuration manager. This includes deployment statuses, association statuses, drift statuses, health checks, and more.
 
         :cloudformationAttribute: StatusSummaries
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrStatusSummaries"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrStatusSummaries"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -252,22 +252,22 @@ class CfnConfigurationManager(
 
     @builtins.property
     @jsii.member(jsii_name="configurationManagerRef")
-    def configuration_manager_ref(self) -> _ConfigurationManagerReference_09310beb:
+    def configuration_manager_ref(self) -> "_ConfigurationManagerReference_09310beb":
         '''A reference to a ConfigurationManager resource.'''
-        return typing.cast(_ConfigurationManagerReference_09310beb, jsii.get(self, "configurationManagerRef"))
+        return typing.cast("_ConfigurationManagerReference_09310beb", jsii.get(self, "configurationManagerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="configurationDefinitions")
     def configuration_definitions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationManager.ConfigurationDefinitionProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationManager.ConfigurationDefinitionProperty"]]]:
         '''The definition of the Quick Setup configuration that the configuration manager deploys.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationManager.ConfigurationDefinitionProperty"]]], jsii.get(self, "configurationDefinitions"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationManager.ConfigurationDefinitionProperty"]]], jsii.get(self, "configurationDefinitions"))
 
     @configuration_definitions.setter
     def configuration_definitions(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationManager.ConfigurationDefinitionProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationManager.ConfigurationDefinitionProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4f9aeebefd7ded0fa6621da4ee350d72e44673d4d472c3967d6a19c3b1ec3fb9)
@@ -332,7 +332,7 @@ class CfnConfigurationManager(
         def __init__(
             self,
             *,
-            parameters: typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b],
+            parameters: typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"],
             type: builtins.str,
             id: typing.Optional[builtins.str] = None,
             local_deployment_administration_role_arn: typing.Optional[builtins.str] = None,
@@ -394,7 +394,7 @@ class CfnConfigurationManager(
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]:
+        ) -> typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]:
             '''The parameters for the configuration definition type.
 
             Parameters for configuration definitions vary based the configuration type. The following lists outline the parameters for each configuration type.
@@ -604,7 +604,7 @@ class CfnConfigurationManager(
             '''
             result = self._values.get("parameters")
             assert result is not None, "Required property 'parameters' is missing"
-            return typing.cast(typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def type(self) -> builtins.str:
@@ -691,7 +691,7 @@ class CfnConfigurationManager(
             last_updated_at: builtins.str,
             status_type: builtins.str,
             status: typing.Optional[builtins.str] = None,
-            status_details: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            status_details: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             status_message: typing.Optional[builtins.str] = None,
         ) -> None:
             '''A summarized description of the status.
@@ -773,13 +773,13 @@ class CfnConfigurationManager(
         @builtins.property
         def status_details(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Details about the status.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmquicksetup-configurationmanager-statussummary.html#cfn-ssmquicksetup-configurationmanager-statussummary-statusdetails
             '''
             result = self._values.get("status_details")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def status_message(self) -> typing.Optional[builtins.str]:
@@ -818,7 +818,7 @@ class CfnConfigurationManagerProps:
     def __init__(
         self,
         *,
-        configuration_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationManager.ConfigurationDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        configuration_definitions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationManager.ConfigurationDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -880,14 +880,14 @@ class CfnConfigurationManagerProps:
     @builtins.property
     def configuration_definitions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationManager.ConfigurationDefinitionProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationManager.ConfigurationDefinitionProperty"]]]:
         '''The definition of the Quick Setup configuration that the configuration manager deploys.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmquicksetup-configurationmanager.html#cfn-ssmquicksetup-configurationmanager-configurationdefinitions
         '''
         result = self._values.get("configuration_definitions")
         assert result is not None, "Required property 'configuration_definitions' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationManager.ConfigurationDefinitionProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationManager.ConfigurationDefinitionProperty"]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -964,11 +964,11 @@ class CfnLifecycleAutomation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         automation_document: builtins.str,
-        automation_parameters: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Sequence[builtins.str]]],
+        automation_parameters: typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Sequence[builtins.str]]],
         resource_key: builtins.str,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -1007,7 +1007,7 @@ class CfnLifecycleAutomation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLifecycleAutomation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1047,9 +1047,9 @@ class CfnLifecycleAutomation(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1058,9 +1058,9 @@ class CfnLifecycleAutomation(
 
     @builtins.property
     @jsii.member(jsii_name="lifecycleAutomationRef")
-    def lifecycle_automation_ref(self) -> _LifecycleAutomationReference_bf9c6785:
+    def lifecycle_automation_ref(self) -> "_LifecycleAutomationReference_bf9c6785":
         '''A reference to a LifecycleAutomation resource.'''
-        return typing.cast(_LifecycleAutomationReference_bf9c6785, jsii.get(self, "lifecycleAutomationRef"))
+        return typing.cast("_LifecycleAutomationReference_bf9c6785", jsii.get(self, "lifecycleAutomationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="automationDocument")
@@ -1079,14 +1079,14 @@ class CfnLifecycleAutomation(
     @jsii.member(jsii_name="automationParameters")
     def automation_parameters(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.List[builtins.str]]]:
         '''A map of key-value parameters passed to the Automation document during execution.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]], jsii.get(self, "automationParameters"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.List[builtins.str]]], jsii.get(self, "automationParameters"))
 
     @automation_parameters.setter
     def automation_parameters(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.List[builtins.str]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b2fd63e0dc60f38ac5eb15dfe40d1d3878ce56f7a2d8643491a70e49d6ccfa30)
@@ -1138,7 +1138,7 @@ class CfnLifecycleAutomationProps:
         self,
         *,
         automation_document: builtins.str,
-        automation_parameters: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Sequence[builtins.str]]],
+        automation_parameters: typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Sequence[builtins.str]]],
         resource_key: builtins.str,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -1198,7 +1198,7 @@ class CfnLifecycleAutomationProps:
     @builtins.property
     def automation_parameters(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.List[builtins.str]]]:
         '''A map of key-value parameters passed to the Automation document during execution.
 
         Each parameter name maps to a list of values, even for single values. Parameters can include configuration-specific values for your automation workflow.
@@ -1207,7 +1207,7 @@ class CfnLifecycleAutomationProps:
         '''
         result = self._values.get("automation_parameters")
         assert result is not None, "Required property 'automation_parameters' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.List[builtins.str]]], result)
 
     @builtins.property
     def resource_key(self) -> builtins.str:

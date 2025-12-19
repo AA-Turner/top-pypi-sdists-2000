@@ -88,7 +88,7 @@ class CfnAgentSpace(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_devopsagent.CfnAgentSpace",
 ):
-    '''Resource Type definition for AWS::DevOpsAgent::AgentSpace.
+    '''The ``AWS::DevOpsAgent::AgentSpace`` resource specifies an Agent Space for the AWS DevOps Agent Service.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-agentspace.html
     :cloudformationResource: AWS::DevOpsAgent::AgentSpace
@@ -110,7 +110,7 @@ class CfnAgentSpace(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -120,8 +120,8 @@ class CfnAgentSpace(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param name: The name of the AgentSpace.
-        :param description: The description of the AgentSpace.
+        :param name: The name of the Agent Space.
+        :param description: The description of the Agent Space.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3897cdc52c2bc2a74bdd32702e32905947b3c0fc36798edcdac7875cc9939456)
@@ -133,7 +133,7 @@ class CfnAgentSpace(
 
     @jsii.member(jsii_name="arnForAgentSpace")
     @builtins.classmethod
-    def arn_for_agent_space(cls, resource: _IAgentSpaceRef_2ffb48ed) -> builtins.str:
+    def arn_for_agent_space(cls, resource: "_IAgentSpaceRef_2ffb48ed") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -155,7 +155,7 @@ class CfnAgentSpace(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAgentSpace", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -186,14 +186,14 @@ class CfnAgentSpace(
 
     @builtins.property
     @jsii.member(jsii_name="agentSpaceRef")
-    def agent_space_ref(self) -> _AgentSpaceReference_4cf55ea9:
+    def agent_space_ref(self) -> "_AgentSpaceReference_4cf55ea9":
         '''A reference to a AgentSpace resource.'''
-        return typing.cast(_AgentSpaceReference_4cf55ea9, jsii.get(self, "agentSpaceRef"))
+        return typing.cast("_AgentSpaceReference_4cf55ea9", jsii.get(self, "agentSpaceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAgentSpaceId")
     def attr_agent_space_id(self) -> builtins.str:
-        '''The unique identifier of the AgentSpace.
+        '''The unique identifier of the Agent Space.
 
         :cloudformationAttribute: AgentSpaceId
         '''
@@ -202,7 +202,7 @@ class CfnAgentSpace(
     @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the AgentSpace.
+        '''The Amazon Resource Name (ARN) of the Agent Space.
 
         :cloudformationAttribute: Arn
         '''
@@ -234,7 +234,7 @@ class CfnAgentSpace(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
-        '''The name of the AgentSpace.'''
+        '''The name of the Agent Space.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -247,7 +247,7 @@ class CfnAgentSpace(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
-        '''The description of the AgentSpace.'''
+        '''The description of the Agent Space.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -272,8 +272,8 @@ class CfnAgentSpaceProps:
     ) -> None:
         '''Properties for defining a ``CfnAgentSpace``.
 
-        :param name: The name of the AgentSpace.
-        :param description: The description of the AgentSpace.
+        :param name: The name of the Agent Space.
+        :param description: The description of the Agent Space.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-agentspace.html
         :exampleMetadata: fixture=_generated
@@ -303,7 +303,7 @@ class CfnAgentSpaceProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''The name of the AgentSpace.
+        '''The name of the Agent Space.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-agentspace.html#cfn-devopsagent-agentspace-name
         '''
@@ -313,7 +313,7 @@ class CfnAgentSpaceProps:
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        '''The description of the AgentSpace.
+        '''The description of the Agent Space.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-agentspace.html#cfn-devopsagent-agentspace-description
         '''
@@ -338,7 +338,7 @@ class CfnAssociation(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_devopsagent.CfnAssociation",
 ):
-    '''Resource Type definition for AWS::DevOpsAgent::Association defining how the AgentSpace interacts with external services like GitHub, Slack, AWS accounts, and others.
+    '''The ``AWS::DevOpsAgent::Association`` resource specifies an association between an Agent Space and a service, defining how the Agent Space interacts with external services like GitHub, Slack, AWS accounts, and others.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-association.html
     :cloudformationResource: AWS::DevOpsAgent::Association
@@ -461,26 +461,31 @@ class CfnAssociation(
                     )]
                 )
             ),
-            service_id="serviceId"
+            service_id="serviceId",
+        
+            # the properties below are optional
+            linked_association_ids=["linkedAssociationIds"]
         )
     '''
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         agent_space_id: builtins.str,
-        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.ServiceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.ServiceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         service_id: builtins.str,
+        linked_association_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::DevOpsAgent::Association``.
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param agent_space_id: The unique identifier of the AgentSpace.
-        :param configuration: The configuration that directs how AgentSpace interacts with the given service.
-        :param service_id: The identifier for the associated service. For SourceAws and Aws configurations, this must be 'aws'. For all other service types, this is a UUID generated from the RegisterService command
+        :param agent_space_id: The unique identifier of the Agent Space.
+        :param configuration: The configuration that directs how the Agent Space interacts with the given service. You can specify only one configuration type per association. *Allowed Values* : ``SourceAws`` | ``Aws`` | ``GitHub`` | ``GitLab`` | ``Slack`` | ``Dynatrace`` | ``ServiceNow`` | ``MCPServer`` | ``MCPServerNewRelic`` | ``MCPServerDatadog`` | ``MCPServerSplunk`` | ``EventChannel``
+        :param service_id: The identifier for the associated service. For ``SourceAws`` and ``Aws`` configurations, this must be ``aws`` . For all other service types, this is a UUID generated from the RegisterService command.
+        :param linked_association_ids: Set of linked association IDs for parent-child relationships.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9507e77277cf05febf82ccf8829d008e3d5bca6bfbb5c229a629346a34d445ff)
@@ -490,6 +495,7 @@ class CfnAssociation(
             agent_space_id=agent_space_id,
             configuration=configuration,
             service_id=service_id,
+            linked_association_ids=linked_association_ids,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -507,7 +513,7 @@ class CfnAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -538,9 +544,9 @@ class CfnAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="associationRef")
-    def association_ref(self) -> _AssociationReference_249ec236:
+    def association_ref(self) -> "_AssociationReference_249ec236":
         '''A reference to a Association resource.'''
-        return typing.cast(_AssociationReference_249ec236, jsii.get(self, "associationRef"))
+        return typing.cast("_AssociationReference_249ec236", jsii.get(self, "associationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAssociationId")
@@ -577,7 +583,7 @@ class CfnAssociation(
     @builtins.property
     @jsii.member(jsii_name="agentSpaceId")
     def agent_space_id(self) -> builtins.str:
-        '''The unique identifier of the AgentSpace.'''
+        '''The unique identifier of the Agent Space.'''
         return typing.cast(builtins.str, jsii.get(self, "agentSpaceId"))
 
     @agent_space_id.setter
@@ -591,14 +597,14 @@ class CfnAssociation(
     @jsii.member(jsii_name="configuration")
     def configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAssociation.ServiceConfigurationProperty"]:
-        '''The configuration that directs how AgentSpace interacts with the given service.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAssociation.ServiceConfigurationProperty"], jsii.get(self, "configuration"))
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAssociation.ServiceConfigurationProperty"]:
+        '''The configuration that directs how the Agent Space interacts with the given service.'''
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAssociation.ServiceConfigurationProperty"], jsii.get(self, "configuration"))
 
     @configuration.setter
     def configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAssociation.ServiceConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAssociation.ServiceConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b224d34e655755660b3f83f1ef3ad78de31336ef41e61cf24dfb47a3d5e00b96)
@@ -618,6 +624,22 @@ class CfnAssociation(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "serviceId", value) # pyright: ignore[reportArgumentType]
 
+    @builtins.property
+    @jsii.member(jsii_name="linkedAssociationIds")
+    def linked_association_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Set of linked association IDs for parent-child relationships.'''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "linkedAssociationIds"))
+
+    @linked_association_ids.setter
+    def linked_association_ids(
+        self,
+        value: typing.Optional[typing.List[builtins.str]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2a926a8cb577bf81233b764232f042b444bc6a9e989283355f36b9faf248fe46)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "linkedAssociationIds", value) # pyright: ignore[reportArgumentType]
+
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_devopsagent.CfnAssociation.AWSConfigurationProperty",
         jsii_struct_bases=[],
@@ -636,16 +658,18 @@ class CfnAssociation(
             account_id: builtins.str,
             account_type: builtins.str,
             assumable_role_arn: builtins.str,
-            resources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.AWSResourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            resources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.AWSResourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             tags: typing.Optional[typing.Sequence[typing.Union["CfnAssociation.KeyValuePairProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''AWS association for 'monitor' account.
+            '''Configuration for AWS monitor account integration.
 
-            :param account_id: AWS Account Id corresponding to provided resources.
-            :param account_type: Account Type 'monitor' for DevOpsAgent monitoring.
-            :param assumable_role_arn: Role ARN to be assumed by DevOpsAgent to operate on behalf of customer.
-            :param resources: List of AWS resources.
-            :param tags: List of AWS tags as key-value pairs.
+            Specifies the account ID, assumable role ARN, and resources to be monitored in the primary monitoring account.
+
+            :param account_id: Account ID corresponding to the provided resources.
+            :param account_type: Account Type 'monitor' for AWS DevOps Agent monitoring.
+            :param assumable_role_arn: Role ARN used by AWS DevOps Agent to access resources in the primary account.
+            :param resources: List of resources to monitor.
+            :param tags: List of tags as key-value pairs, used to identify resources for topology crawl.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-awsconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -696,7 +720,7 @@ class CfnAssociation(
 
         @builtins.property
         def account_id(self) -> builtins.str:
-            '''AWS Account Id corresponding to provided resources.
+            '''Account ID corresponding to the provided resources.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-awsconfiguration.html#cfn-devopsagent-association-awsconfiguration-accountid
             '''
@@ -706,7 +730,7 @@ class CfnAssociation(
 
         @builtins.property
         def account_type(self) -> builtins.str:
-            '''Account Type 'monitor' for DevOpsAgent monitoring.
+            '''Account Type 'monitor' for AWS DevOps Agent monitoring.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-awsconfiguration.html#cfn-devopsagent-association-awsconfiguration-accounttype
             '''
@@ -716,7 +740,7 @@ class CfnAssociation(
 
         @builtins.property
         def assumable_role_arn(self) -> builtins.str:
-            '''Role ARN to be assumed by DevOpsAgent to operate on behalf of customer.
+            '''Role ARN used by AWS DevOps Agent to access resources in the primary account.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-awsconfiguration.html#cfn-devopsagent-association-awsconfiguration-assumablerolearn
             '''
@@ -727,19 +751,19 @@ class CfnAssociation(
         @builtins.property
         def resources(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssociation.AWSResourceProperty"]]]]:
-            '''List of AWS resources.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssociation.AWSResourceProperty"]]]]:
+            '''List of resources to monitor.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-awsconfiguration.html#cfn-devopsagent-association-awsconfiguration-resources
             '''
             result = self._values.get("resources")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssociation.AWSResourceProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssociation.AWSResourceProperty"]]]], result)
 
         @builtins.property
         def tags(
             self,
         ) -> typing.Optional[typing.List["CfnAssociation.KeyValuePairProperty"]]:
-            '''List of AWS tags as key-value pairs.
+            '''List of tags as key-value pairs, used to identify resources for topology crawl.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-awsconfiguration.html#cfn-devopsagent-association-awsconfiguration-tags
             '''
@@ -774,10 +798,10 @@ class CfnAssociation(
             resource_metadata: typing.Any = None,
             resource_type: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''AWS resource definition.
+            '''Defines an AWS resource to be monitored, including its type, ARN, and optional metadata.
 
             :param resource_arn: The Amazon Resource Name (ARN) of the resource.
-            :param resource_metadata: Additional metadata for the resource.
+            :param resource_metadata: Additional metadata specific to the resource. This is an optional JSON object that can include resource-specific information to provide additional context for monitoring and management.
             :param resource_type: Resource type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-awsresource.html
@@ -824,7 +848,9 @@ class CfnAssociation(
 
         @builtins.property
         def resource_metadata(self) -> typing.Any:
-            '''Additional metadata for the resource.
+            '''Additional metadata specific to the resource.
+
+            This is an optional JSON object that can include resource-specific information to provide additional context for monitoring and management.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-awsresource.html#cfn-devopsagent-association-awsresource-resourcemetadata
             '''
@@ -865,10 +891,12 @@ class CfnAssociation(
             self,
             *,
             env_id: builtins.str,
-            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             resources: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
-            '''Dynatrace monitoring configuration.
+            '''Configuration for Dynatrace monitoring integration.
+
+            Defines the Dynatrace environment ID, list of resources to monitor, and webhook update settings required for the Agent Space to access metrics, traces, and logs from Dynatrace.
 
             :param env_id: Dynatrace environment id.
             :param enable_webhook_updates: When set to true, enables the Agent Space to create and update webhooks for receiving notifications and events from the service.
@@ -917,13 +945,13 @@ class CfnAssociation(
         @builtins.property
         def enable_webhook_updates(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to true, enables the Agent Space to create and update webhooks for receiving notifications and events from the service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-dynatraceconfiguration.html#cfn-devopsagent-association-dynatraceconfiguration-enablewebhookupdates
             '''
             result = self._values.get("enable_webhook_updates")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def resources(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -954,9 +982,11 @@ class CfnAssociation(
         def __init__(
             self,
             *,
-            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
-            '''EventChannelconfiguration.
+            '''Configuration for Event Channel integration.
+
+            Defines webhook update settings to enable the Agent Space to receive real-time event notifications from event channel integrations.
 
             :param enable_webhook_updates: When set to true, enables the Agent Space to create and update webhooks for receiving notifications and events from the service.
 
@@ -983,13 +1013,13 @@ class CfnAssociation(
         @builtins.property
         def enable_webhook_updates(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to true, enables the Agent Space to create and update webhooks for receiving notifications and events from the service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-eventchannelconfiguration.html#cfn-devopsagent-association-eventchannelconfiguration-enablewebhookupdates
             '''
             result = self._values.get("enable_webhook_updates")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1021,7 +1051,9 @@ class CfnAssociation(
             repo_id: builtins.str,
             repo_name: builtins.str,
         ) -> None:
-            '''GitHub repository integration configuration.
+            '''Configuration for GitHub repository integration.
+
+            Defines the repository name, numeric repository ID, owner name, and owner type (user or organization) required for the Agent Space to access and interact with the GitHub repository.
 
             :param owner: Repository owner.
             :param owner_type: Type of repository owner.
@@ -1124,15 +1156,17 @@ class CfnAssociation(
             *,
             project_id: builtins.str,
             project_path: builtins.str,
-            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             instance_identifier: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''GitLab project integration configuration.
+            '''Configuration for GitLab project integration.
+
+            Defines the numeric project ID, full project path (namespace/project-name), GitLab instance identifier, and webhook update settings required for the Agent Space to access and interact with the GitLab project.
 
             :param project_id: GitLab numeric project ID.
             :param project_path: Full GitLab project path (e.g., namespace/project-name).
             :param enable_webhook_updates: When set to true, enables the Agent Space to create and update webhooks for receiving notifications and events from the service.
-            :param instance_identifier: GitLab instance identifier.
+            :param instance_identifier: GitLab instance identifier (e.g., gitlab.com).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-gitlabconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1190,17 +1224,17 @@ class CfnAssociation(
         @builtins.property
         def enable_webhook_updates(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to true, enables the Agent Space to create and update webhooks for receiving notifications and events from the service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-gitlabconfiguration.html#cfn-devopsagent-association-gitlabconfiguration-enablewebhookupdates
             '''
             result = self._values.get("enable_webhook_updates")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def instance_identifier(self) -> typing.Optional[builtins.str]:
-            '''GitLab instance identifier.
+            '''GitLab instance identifier (e.g., gitlab.com).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-gitlabconfiguration.html#cfn-devopsagent-association-gitlabconfiguration-instanceidentifier
             '''
@@ -1227,8 +1261,8 @@ class CfnAssociation(
         def __init__(self, *, key: builtins.str, value: builtins.str) -> None:
             '''A key-value pair for tags.
 
-            :param key: 
-            :param value: 
+            :param key: The key name of the tag.
+            :param value: The value for the tag.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-keyvaluepair.html
             :exampleMetadata: fixture=_generated
@@ -1255,7 +1289,8 @@ class CfnAssociation(
 
         @builtins.property
         def key(self) -> builtins.str:
-            '''
+            '''The key name of the tag.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-keyvaluepair.html#cfn-devopsagent-association-keyvaluepair-key
             '''
             result = self._values.get("key")
@@ -1264,7 +1299,8 @@ class CfnAssociation(
 
         @builtins.property
         def value(self) -> builtins.str:
-            '''
+            '''The value for the tag.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-keyvaluepair.html#cfn-devopsagent-association-keyvaluepair-value
             '''
             result = self._values.get("value")
@@ -1301,9 +1337,11 @@ class CfnAssociation(
             name: builtins.str,
             tools: typing.Sequence[builtins.str],
             description: typing.Optional[builtins.str] = None,
-            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
-            '''MCP server configuration.
+            '''Configuration for MCP (Model Context Protocol) server integration.
+
+            Defines the server name, endpoint URL, available tools, optional description, and webhook update settings for custom MCP servers.
 
             :param endpoint: MCP server endpoint URL.
             :param name: The name of the MCP server.
@@ -1389,13 +1427,13 @@ class CfnAssociation(
         @builtins.property
         def enable_webhook_updates(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to true, enables the Agent Space to create and update webhooks for receiving notifications and events from the service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-mcpserverconfiguration.html#cfn-devopsagent-association-mcpserverconfiguration-enablewebhookupdates
             '''
             result = self._values.get("enable_webhook_updates")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1425,9 +1463,11 @@ class CfnAssociation(
             endpoint: builtins.str,
             name: builtins.str,
             description: typing.Optional[builtins.str] = None,
-            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
-            '''Datadog MCP server configuration.
+            '''Configuration for Datadog MCP server integration.
+
+            Defines the server name, endpoint URL, optional description, and webhook update settings.
 
             :param endpoint: MCP server endpoint URL.
             :param name: The name of the MCP server.
@@ -1499,13 +1539,13 @@ class CfnAssociation(
         @builtins.property
         def enable_webhook_updates(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to true, enables the Agent Space to create and update webhooks for receiving notifications and events from the service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-mcpserverdatadogconfiguration.html#cfn-devopsagent-association-mcpserverdatadogconfiguration-enablewebhookupdates
             '''
             result = self._values.get("enable_webhook_updates")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1525,7 +1565,9 @@ class CfnAssociation(
     )
     class MCPServerNewRelicConfigurationProperty:
         def __init__(self, *, account_id: builtins.str, endpoint: builtins.str) -> None:
-            '''NewRelic MCP server configuration.
+            '''Configuration for New Relic MCP server integration.
+
+            Defines the New Relic account ID and MCP server endpoint URL required for the Agent Space to authenticate and query observability data from New Relic.
 
             :param account_id: New Relic Account ID.
             :param endpoint: MCP server endpoint URL (e.g., https://mcp.newrelic.com/mcp/).
@@ -1601,9 +1643,11 @@ class CfnAssociation(
             endpoint: builtins.str,
             name: builtins.str,
             description: typing.Optional[builtins.str] = None,
-            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
-            '''Splunk MCP server configuration.
+            '''Configuration for Splunk MCP server integration.
+
+            Defines the server name, endpoint URL, optional description, and webhook update settings.
 
             :param endpoint: MCP server endpoint URL.
             :param name: The name of the MCP server.
@@ -1675,13 +1719,13 @@ class CfnAssociation(
         @builtins.property
         def enable_webhook_updates(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to true, enables the Agent Space to create and update webhooks for receiving notifications and events from the service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-mcpserversplunkconfiguration.html#cfn-devopsagent-association-mcpserversplunkconfiguration-enablewebhookupdates
             '''
             result = self._values.get("enable_webhook_updates")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1716,32 +1760,35 @@ class CfnAssociation(
         def __init__(
             self,
             *,
-            aws: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.AWSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            dynatrace: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.DynatraceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            event_channel: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.EventChannelConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            git_hub: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.GitHubConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            git_lab: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.GitLabConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            mcp_server: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.MCPServerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            mcp_server_datadog: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.MCPServerDatadogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            mcp_server_new_relic: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.MCPServerNewRelicConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            mcp_server_splunk: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.MCPServerSplunkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            service_now: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.ServiceNowConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            slack: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.SlackConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            source_aws: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.SourceAwsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            aws: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.AWSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            dynatrace: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.DynatraceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            event_channel: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.EventChannelConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            git_hub: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.GitHubConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            git_lab: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.GitLabConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mcp_server: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.MCPServerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mcp_server_datadog: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.MCPServerDatadogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mcp_server_new_relic: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.MCPServerNewRelicConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mcp_server_splunk: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.MCPServerSplunkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            service_now: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.ServiceNowConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            slack: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.SlackConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            source_aws: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.SourceAwsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param aws: AWS association for 'monitor' account.
-            :param dynatrace: Dynatrace monitoring configuration.
-            :param event_channel: EventChannelconfiguration.
-            :param git_hub: GitHub repository integration configuration.
-            :param git_lab: GitLab project integration configuration.
-            :param mcp_server: MCP server configuration.
-            :param mcp_server_datadog: Datadog MCP server configuration.
-            :param mcp_server_new_relic: NewRelic MCP server configuration.
-            :param mcp_server_splunk: Splunk MCP server configuration.
-            :param service_now: ServiceNow integration configuration.
-            :param slack: Slack workspace integration configuration.
-            :param source_aws: AWS association for 'source' account.
+            '''The configuration that directs how Agent Space interacts with the given service.
+
+            You can specify only one configuration type per association.
+
+            :param aws: Configuration for AWS monitor account integration. Specifies the account ID, assumable role ARN, and resources to be monitored in the primary monitoring account.
+            :param dynatrace: Configuration for Dynatrace monitoring integration. Specifies the environment ID, resources to monitor, and webhook settings to enable the Agent Space to access Dynatrace metrics, traces, and logs.
+            :param event_channel: Configuration for Event Channel integration. Specifies webhook settings to enable the Agent Space to receive and process real-time events from external systems.
+            :param git_hub: Configuration for GitHub repository integration. Specifies the repository name, repository ID, owner, and owner type to enable the Agent Space to access code, pull requests, and issues.
+            :param git_lab: Configuration for GitLab project integration. Specifies the project ID, project path, instance identifier, and webhook settings to enable the Agent Space to access code, merge requests, and issues.
+            :param mcp_server: Configuration for custom MCP (Model Context Protocol) server integration. Specifies the server name, endpoint URL, available tools, description, and webhook settings to enable the Agent Space to interact with custom MCP servers.
+            :param mcp_server_datadog: Configuration for Datadog MCP server integration. Specifies the server name, endpoint URL, optional description, and webhook settings to enable the Agent Space to query metrics, traces, and logs from Datadog.
+            :param mcp_server_new_relic: Configuration for New Relic MCP server integration. Specifies the New Relic account ID and MCP endpoint URL to enable the Agent Space to query metrics, traces, and logs from New Relic.
+            :param mcp_server_splunk: Configuration for Splunk MCP server integration. Specifies the server name, endpoint URL, optional description, and webhook settings to enable the Agent Space to query logs, metrics, and events from Splunk.
+            :param service_now: Configuration for ServiceNow instance integration. Specifies the instance URL, instance ID, and webhook settings to enable the Agent Space to create, update, and manage ServiceNow incidents and change requests.
+            :param slack: Configuration for Slack workspace integration. Specifies the workspace ID, workspace name, and transmission targets to enable the Agent Space to send notifications to designated Slack channels.
+            :param source_aws: Configuration for AWS source account integration. Specifies the account ID, assumable role ARN, and resources to be monitored in the source account.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1905,134 +1952,158 @@ class CfnAssociation(
         @builtins.property
         def aws(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.AWSConfigurationProperty"]]:
-            '''AWS association for 'monitor' account.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.AWSConfigurationProperty"]]:
+            '''Configuration for AWS monitor account integration.
+
+            Specifies the account ID, assumable role ARN, and resources to be monitored in the primary monitoring account.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html#cfn-devopsagent-association-serviceconfiguration-aws
             '''
             result = self._values.get("aws")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.AWSConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.AWSConfigurationProperty"]], result)
 
         @builtins.property
         def dynatrace(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.DynatraceConfigurationProperty"]]:
-            '''Dynatrace monitoring configuration.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.DynatraceConfigurationProperty"]]:
+            '''Configuration for Dynatrace monitoring integration.
+
+            Specifies the environment ID, resources to monitor, and webhook settings to enable the Agent Space to access Dynatrace metrics, traces, and logs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html#cfn-devopsagent-association-serviceconfiguration-dynatrace
             '''
             result = self._values.get("dynatrace")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.DynatraceConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.DynatraceConfigurationProperty"]], result)
 
         @builtins.property
         def event_channel(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.EventChannelConfigurationProperty"]]:
-            '''EventChannelconfiguration.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.EventChannelConfigurationProperty"]]:
+            '''Configuration for Event Channel integration.
+
+            Specifies webhook settings to enable the Agent Space to receive and process real-time events from external systems.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html#cfn-devopsagent-association-serviceconfiguration-eventchannel
             '''
             result = self._values.get("event_channel")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.EventChannelConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.EventChannelConfigurationProperty"]], result)
 
         @builtins.property
         def git_hub(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.GitHubConfigurationProperty"]]:
-            '''GitHub repository integration configuration.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.GitHubConfigurationProperty"]]:
+            '''Configuration for GitHub repository integration.
+
+            Specifies the repository name, repository ID, owner, and owner type to enable the Agent Space to access code, pull requests, and issues.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html#cfn-devopsagent-association-serviceconfiguration-github
             '''
             result = self._values.get("git_hub")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.GitHubConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.GitHubConfigurationProperty"]], result)
 
         @builtins.property
         def git_lab(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.GitLabConfigurationProperty"]]:
-            '''GitLab project integration configuration.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.GitLabConfigurationProperty"]]:
+            '''Configuration for GitLab project integration.
+
+            Specifies the project ID, project path, instance identifier, and webhook settings to enable the Agent Space to access code, merge requests, and issues.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html#cfn-devopsagent-association-serviceconfiguration-gitlab
             '''
             result = self._values.get("git_lab")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.GitLabConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.GitLabConfigurationProperty"]], result)
 
         @builtins.property
         def mcp_server(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.MCPServerConfigurationProperty"]]:
-            '''MCP server configuration.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.MCPServerConfigurationProperty"]]:
+            '''Configuration for custom MCP (Model Context Protocol) server integration.
+
+            Specifies the server name, endpoint URL, available tools, description, and webhook settings to enable the Agent Space to interact with custom MCP servers.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html#cfn-devopsagent-association-serviceconfiguration-mcpserver
             '''
             result = self._values.get("mcp_server")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.MCPServerConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.MCPServerConfigurationProperty"]], result)
 
         @builtins.property
         def mcp_server_datadog(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.MCPServerDatadogConfigurationProperty"]]:
-            '''Datadog MCP server configuration.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.MCPServerDatadogConfigurationProperty"]]:
+            '''Configuration for Datadog MCP server integration.
+
+            Specifies the server name, endpoint URL, optional description, and webhook settings to enable the Agent Space to query metrics, traces, and logs from Datadog.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html#cfn-devopsagent-association-serviceconfiguration-mcpserverdatadog
             '''
             result = self._values.get("mcp_server_datadog")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.MCPServerDatadogConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.MCPServerDatadogConfigurationProperty"]], result)
 
         @builtins.property
         def mcp_server_new_relic(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.MCPServerNewRelicConfigurationProperty"]]:
-            '''NewRelic MCP server configuration.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.MCPServerNewRelicConfigurationProperty"]]:
+            '''Configuration for New Relic MCP server integration.
+
+            Specifies the New Relic account ID and MCP endpoint URL to enable the Agent Space to query metrics, traces, and logs from New Relic.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html#cfn-devopsagent-association-serviceconfiguration-mcpservernewrelic
             '''
             result = self._values.get("mcp_server_new_relic")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.MCPServerNewRelicConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.MCPServerNewRelicConfigurationProperty"]], result)
 
         @builtins.property
         def mcp_server_splunk(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.MCPServerSplunkConfigurationProperty"]]:
-            '''Splunk MCP server configuration.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.MCPServerSplunkConfigurationProperty"]]:
+            '''Configuration for Splunk MCP server integration.
+
+            Specifies the server name, endpoint URL, optional description, and webhook settings to enable the Agent Space to query logs, metrics, and events from Splunk.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html#cfn-devopsagent-association-serviceconfiguration-mcpserversplunk
             '''
             result = self._values.get("mcp_server_splunk")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.MCPServerSplunkConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.MCPServerSplunkConfigurationProperty"]], result)
 
         @builtins.property
         def service_now(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.ServiceNowConfigurationProperty"]]:
-            '''ServiceNow integration configuration.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.ServiceNowConfigurationProperty"]]:
+            '''Configuration for ServiceNow instance integration.
+
+            Specifies the instance URL, instance ID, and webhook settings to enable the Agent Space to create, update, and manage ServiceNow incidents and change requests.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html#cfn-devopsagent-association-serviceconfiguration-servicenow
             '''
             result = self._values.get("service_now")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.ServiceNowConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.ServiceNowConfigurationProperty"]], result)
 
         @builtins.property
         def slack(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.SlackConfigurationProperty"]]:
-            '''Slack workspace integration configuration.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.SlackConfigurationProperty"]]:
+            '''Configuration for Slack workspace integration.
+
+            Specifies the workspace ID, workspace name, and transmission targets to enable the Agent Space to send notifications to designated Slack channels.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html#cfn-devopsagent-association-serviceconfiguration-slack
             '''
             result = self._values.get("slack")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.SlackConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.SlackConfigurationProperty"]], result)
 
         @builtins.property
         def source_aws(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.SourceAwsConfigurationProperty"]]:
-            '''AWS association for 'source' account.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.SourceAwsConfigurationProperty"]]:
+            '''Configuration for AWS source account integration.
+
+            Specifies the account ID, assumable role ARN, and resources to be monitored in the source account.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-serviceconfiguration.html#cfn-devopsagent-association-serviceconfiguration-sourceaws
             '''
             result = self._values.get("source_aws")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssociation.SourceAwsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssociation.SourceAwsConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2057,10 +2128,12 @@ class CfnAssociation(
         def __init__(
             self,
             *,
-            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_webhook_updates: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             instance_id: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''ServiceNow integration configuration.
+            '''Configuration for ServiceNow integration.
+
+            Defines the ServiceNow instance URL, instance ID, and webhook update settings required for the Agent Space to create, update, and manage incidents and change requests.
 
             :param enable_webhook_updates: When set to true, enables the Agent Space to create and update webhooks for receiving notifications and events from the service.
             :param instance_id: ServiceNow instance ID.
@@ -2092,13 +2165,13 @@ class CfnAssociation(
         @builtins.property
         def enable_webhook_updates(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to true, enables the Agent Space to create and update webhooks for receiving notifications and events from the service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-servicenowconfiguration.html#cfn-devopsagent-association-servicenowconfiguration-enablewebhookupdates
             '''
             result = self._values.get("enable_webhook_updates")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def instance_id(self) -> typing.Optional[builtins.str]:
@@ -2132,7 +2205,7 @@ class CfnAssociation(
             channel_id: builtins.str,
             channel_name: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Slack channel configuration.
+            '''Represents a Slack channel with its unique identifier and optional display name.
 
             :param channel_id: Slack channel ID.
             :param channel_name: Slack channel name.
@@ -2206,11 +2279,13 @@ class CfnAssociation(
         def __init__(
             self,
             *,
-            transmission_target: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.SlackTransmissionTargetProperty", typing.Dict[builtins.str, typing.Any]]],
+            transmission_target: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.SlackTransmissionTargetProperty", typing.Dict[builtins.str, typing.Any]]],
             workspace_id: builtins.str,
             workspace_name: builtins.str,
         ) -> None:
-            '''Slack workspace integration configuration.
+            '''Configuration for Slack workspace integration.
+
+            Defines the workspace ID, workspace name, and transmission targets that specify which Slack channels receive notifications.
 
             :param transmission_target: Transmission targets for agent notifications.
             :param workspace_id: Associated Slack workspace ID.
@@ -2252,14 +2327,14 @@ class CfnAssociation(
         @builtins.property
         def transmission_target(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAssociation.SlackTransmissionTargetProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAssociation.SlackTransmissionTargetProperty"]:
             '''Transmission targets for agent notifications.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-slackconfiguration.html#cfn-devopsagent-association-slackconfiguration-transmissiontarget
             '''
             result = self._values.get("transmission_target")
             assert result is not None, "Required property 'transmission_target' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAssociation.SlackTransmissionTargetProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAssociation.SlackTransmissionTargetProperty"], result)
 
         @builtins.property
         def workspace_id(self) -> builtins.str:
@@ -2301,11 +2376,11 @@ class CfnAssociation(
         def __init__(
             self,
             *,
-            incident_response_target: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.SlackChannelProperty", typing.Dict[builtins.str, typing.Any]]],
+            incident_response_target: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.SlackChannelProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
-            '''Transmission targets for agent notifications.
+            '''Defines the Slack channels where different types of agent notifications will be sent.
 
-            :param incident_response_target: Slack channel configuration.
+            :param incident_response_target: Destination for AWS DevOps Agent Incident Response.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-slacktransmissiontarget.html
             :exampleMetadata: fixture=_generated
@@ -2335,14 +2410,14 @@ class CfnAssociation(
         @builtins.property
         def incident_response_target(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAssociation.SlackChannelProperty"]:
-            '''Slack channel configuration.
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAssociation.SlackChannelProperty"]:
+            '''Destination for AWS DevOps Agent Incident Response.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-slacktransmissiontarget.html#cfn-devopsagent-association-slacktransmissiontarget-incidentresponsetarget
             '''
             result = self._values.get("incident_response_target")
             assert result is not None, "Required property 'incident_response_target' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAssociation.SlackChannelProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAssociation.SlackChannelProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2373,16 +2448,18 @@ class CfnAssociation(
             account_id: builtins.str,
             account_type: builtins.str,
             assumable_role_arn: builtins.str,
-            resources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssociation.AWSResourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            resources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.AWSResourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             tags: typing.Optional[typing.Sequence[typing.Union["CfnAssociation.KeyValuePairProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''AWS association for 'source' account.
+            '''Configuration for AWS source account integration.
 
-            :param account_id: AWS Account Id corresponding to provided resources.
-            :param account_type: Account Type 'source' for DevOpsAgent monitoring.
-            :param assumable_role_arn: Role ARN to be assumed by DevOpsAgent to operate on behalf of customer.
-            :param resources: List of AWS resources.
-            :param tags: List of AWS tags as key-value pairs.
+            Specifies the account ID, assumable role ARN, and resources to be monitored in the source account.
+
+            :param account_id: Account ID corresponding to the provided resources.
+            :param account_type: Account Type 'source' for AWS DevOps Agent monitoring.
+            :param assumable_role_arn: Role ARN to be assumed by AWS DevOps Agent to operate on behalf of customer.
+            :param resources: List of resources to monitor.
+            :param tags: List of tags as key-value pairs, used to identify resources for topology crawl.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-sourceawsconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2433,7 +2510,7 @@ class CfnAssociation(
 
         @builtins.property
         def account_id(self) -> builtins.str:
-            '''AWS Account Id corresponding to provided resources.
+            '''Account ID corresponding to the provided resources.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-sourceawsconfiguration.html#cfn-devopsagent-association-sourceawsconfiguration-accountid
             '''
@@ -2443,7 +2520,7 @@ class CfnAssociation(
 
         @builtins.property
         def account_type(self) -> builtins.str:
-            '''Account Type 'source' for DevOpsAgent monitoring.
+            '''Account Type 'source' for AWS DevOps Agent monitoring.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-sourceawsconfiguration.html#cfn-devopsagent-association-sourceawsconfiguration-accounttype
             '''
@@ -2453,7 +2530,7 @@ class CfnAssociation(
 
         @builtins.property
         def assumable_role_arn(self) -> builtins.str:
-            '''Role ARN to be assumed by DevOpsAgent to operate on behalf of customer.
+            '''Role ARN to be assumed by AWS DevOps Agent to operate on behalf of customer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-sourceawsconfiguration.html#cfn-devopsagent-association-sourceawsconfiguration-assumablerolearn
             '''
@@ -2464,19 +2541,19 @@ class CfnAssociation(
         @builtins.property
         def resources(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssociation.AWSResourceProperty"]]]]:
-            '''List of AWS resources.
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssociation.AWSResourceProperty"]]]]:
+            '''List of resources to monitor.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-sourceawsconfiguration.html#cfn-devopsagent-association-sourceawsconfiguration-resources
             '''
             result = self._values.get("resources")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssociation.AWSResourceProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssociation.AWSResourceProperty"]]]], result)
 
         @builtins.property
         def tags(
             self,
         ) -> typing.Optional[typing.List["CfnAssociation.KeyValuePairProperty"]]:
-            '''List of AWS tags as key-value pairs.
+            '''List of tags as key-value pairs, used to identify resources for topology crawl.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devopsagent-association-sourceawsconfiguration.html#cfn-devopsagent-association-sourceawsconfiguration-tags
             '''
@@ -2502,6 +2579,7 @@ class CfnAssociation(
         "agent_space_id": "agentSpaceId",
         "configuration": "configuration",
         "service_id": "serviceId",
+        "linked_association_ids": "linkedAssociationIds",
     },
 )
 class CfnAssociationProps:
@@ -2509,14 +2587,16 @@ class CfnAssociationProps:
         self,
         *,
         agent_space_id: builtins.str,
-        configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssociation.ServiceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssociation.ServiceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         service_id: builtins.str,
+        linked_association_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAssociation``.
 
-        :param agent_space_id: The unique identifier of the AgentSpace.
-        :param configuration: The configuration that directs how AgentSpace interacts with the given service.
-        :param service_id: The identifier for the associated service. For SourceAws and Aws configurations, this must be 'aws'. For all other service types, this is a UUID generated from the RegisterService command
+        :param agent_space_id: The unique identifier of the Agent Space.
+        :param configuration: The configuration that directs how the Agent Space interacts with the given service. You can specify only one configuration type per association. *Allowed Values* : ``SourceAws`` | ``Aws`` | ``GitHub`` | ``GitLab`` | ``Slack`` | ``Dynatrace`` | ``ServiceNow`` | ``MCPServer`` | ``MCPServerNewRelic`` | ``MCPServerDatadog`` | ``MCPServerSplunk`` | ``EventChannel``
+        :param service_id: The identifier for the associated service. For ``SourceAws`` and ``Aws`` configurations, this must be ``aws`` . For all other service types, this is a UUID generated from the RegisterService command.
+        :param linked_association_ids: Set of linked association IDs for parent-child relationships.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-association.html
         :exampleMetadata: fixture=_generated
@@ -2638,7 +2718,10 @@ class CfnAssociationProps:
                         )]
                     )
                 ),
-                service_id="serviceId"
+                service_id="serviceId",
+            
+                # the properties below are optional
+                linked_association_ids=["linkedAssociationIds"]
             )
         '''
         if __debug__:
@@ -2646,15 +2729,18 @@ class CfnAssociationProps:
             check_type(argname="argument agent_space_id", value=agent_space_id, expected_type=type_hints["agent_space_id"])
             check_type(argname="argument configuration", value=configuration, expected_type=type_hints["configuration"])
             check_type(argname="argument service_id", value=service_id, expected_type=type_hints["service_id"])
+            check_type(argname="argument linked_association_ids", value=linked_association_ids, expected_type=type_hints["linked_association_ids"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "agent_space_id": agent_space_id,
             "configuration": configuration,
             "service_id": service_id,
         }
+        if linked_association_ids is not None:
+            self._values["linked_association_ids"] = linked_association_ids
 
     @builtins.property
     def agent_space_id(self) -> builtins.str:
-        '''The unique identifier of the AgentSpace.
+        '''The unique identifier of the Agent Space.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-association.html#cfn-devopsagent-association-agentspaceid
         '''
@@ -2665,26 +2751,39 @@ class CfnAssociationProps:
     @builtins.property
     def configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAssociation.ServiceConfigurationProperty]:
-        '''The configuration that directs how AgentSpace interacts with the given service.
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAssociation.ServiceConfigurationProperty"]:
+        '''The configuration that directs how the Agent Space interacts with the given service.
+
+        You can specify only one configuration type per association.
+
+        *Allowed Values* : ``SourceAws`` | ``Aws`` | ``GitHub`` | ``GitLab`` | ``Slack`` | ``Dynatrace`` | ``ServiceNow`` | ``MCPServer`` | ``MCPServerNewRelic`` | ``MCPServerDatadog`` | ``MCPServerSplunk`` | ``EventChannel``
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-association.html#cfn-devopsagent-association-configuration
         '''
         result = self._values.get("configuration")
         assert result is not None, "Required property 'configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAssociation.ServiceConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAssociation.ServiceConfigurationProperty"], result)
 
     @builtins.property
     def service_id(self) -> builtins.str:
         '''The identifier for the associated service.
 
-        For SourceAws and Aws configurations, this must be 'aws'. For all other service types, this is a UUID generated from the RegisterService command
+        For ``SourceAws`` and ``Aws`` configurations, this must be ``aws`` . For all other service types, this is a UUID generated from the RegisterService command.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-association.html#cfn-devopsagent-association-serviceid
         '''
         result = self._values.get("service_id")
         assert result is not None, "Required property 'service_id' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def linked_association_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Set of linked association IDs for parent-child relationships.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-association.html#cfn-devopsagent-association-linkedassociationids
+        '''
+        result = self._values.get("linked_association_ids")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2768,6 +2867,7 @@ def _typecheckingstub__9507e77277cf05febf82ccf8829d008e3d5bca6bfbb5c229a629346a3
     agent_space_id: builtins.str,
     configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssociation.ServiceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     service_id: builtins.str,
+    linked_association_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2804,6 +2904,12 @@ def _typecheckingstub__b224d34e655755660b3f83f1ef3ad78de31336ef41e61cf24dfb47a3d
 
 def _typecheckingstub__08d88d472b1933bfd27859b1b634111a6667c50bedacee3234cfc98a8a05797a(
     value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2a926a8cb577bf81233b764232f042b444bc6a9e989283355f36b9faf248fe46(
+    value: typing.Optional[typing.List[builtins.str]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2977,6 +3083,7 @@ def _typecheckingstub__4b9c7866e61a4a7267964c2e97d2c2f23071408ae1546eca41521d60b
     agent_space_id: builtins.str,
     configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssociation.ServiceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     service_id: builtins.str,
+    linked_association_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -409,7 +409,7 @@ class IAccessGrantRef(
 
     @builtins.property
     @jsii.member(jsii_name="accessGrantRef")
-    def access_grant_ref(self) -> AccessGrantReference:
+    def access_grant_ref(self) -> "AccessGrantReference":
         '''(experimental) A reference to a AccessGrant resource.
 
         :stability: experimental
@@ -430,12 +430,12 @@ class _IAccessGrantRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accessGrantRef")
-    def access_grant_ref(self) -> AccessGrantReference:
+    def access_grant_ref(self) -> "AccessGrantReference":
         '''(experimental) A reference to a AccessGrant resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccessGrantReference, jsii.get(self, "accessGrantRef"))
+        return typing.cast("AccessGrantReference", jsii.get(self, "accessGrantRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessGrantRef).__jsii_proxy_class__ = lambda : _IAccessGrantRefProxy
@@ -454,7 +454,7 @@ class IAccessGrantsInstanceRef(
 
     @builtins.property
     @jsii.member(jsii_name="accessGrantsInstanceRef")
-    def access_grants_instance_ref(self) -> AccessGrantsInstanceReference:
+    def access_grants_instance_ref(self) -> "AccessGrantsInstanceReference":
         '''(experimental) A reference to a AccessGrantsInstance resource.
 
         :stability: experimental
@@ -475,12 +475,12 @@ class _IAccessGrantsInstanceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accessGrantsInstanceRef")
-    def access_grants_instance_ref(self) -> AccessGrantsInstanceReference:
+    def access_grants_instance_ref(self) -> "AccessGrantsInstanceReference":
         '''(experimental) A reference to a AccessGrantsInstance resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccessGrantsInstanceReference, jsii.get(self, "accessGrantsInstanceRef"))
+        return typing.cast("AccessGrantsInstanceReference", jsii.get(self, "accessGrantsInstanceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessGrantsInstanceRef).__jsii_proxy_class__ = lambda : _IAccessGrantsInstanceRefProxy
@@ -499,7 +499,7 @@ class IAccessGrantsLocationRef(
 
     @builtins.property
     @jsii.member(jsii_name="accessGrantsLocationRef")
-    def access_grants_location_ref(self) -> AccessGrantsLocationReference:
+    def access_grants_location_ref(self) -> "AccessGrantsLocationReference":
         '''(experimental) A reference to a AccessGrantsLocation resource.
 
         :stability: experimental
@@ -520,12 +520,12 @@ class _IAccessGrantsLocationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accessGrantsLocationRef")
-    def access_grants_location_ref(self) -> AccessGrantsLocationReference:
+    def access_grants_location_ref(self) -> "AccessGrantsLocationReference":
         '''(experimental) A reference to a AccessGrantsLocation resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccessGrantsLocationReference, jsii.get(self, "accessGrantsLocationRef"))
+        return typing.cast("AccessGrantsLocationReference", jsii.get(self, "accessGrantsLocationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessGrantsLocationRef).__jsii_proxy_class__ = lambda : _IAccessGrantsLocationRefProxy
@@ -544,7 +544,7 @@ class IAccessPointRef(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointRef")
-    def access_point_ref(self) -> AccessPointReference:
+    def access_point_ref(self) -> "AccessPointReference":
         '''(experimental) A reference to a AccessPoint resource.
 
         :stability: experimental
@@ -565,12 +565,12 @@ class _IAccessPointRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointRef")
-    def access_point_ref(self) -> AccessPointReference:
+    def access_point_ref(self) -> "AccessPointReference":
         '''(experimental) A reference to a AccessPoint resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccessPointReference, jsii.get(self, "accessPointRef"))
+        return typing.cast("AccessPointReference", jsii.get(self, "accessPointRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessPointRef).__jsii_proxy_class__ = lambda : _IAccessPointRefProxy
@@ -589,7 +589,7 @@ class IBucketPolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="bucketPolicyRef")
-    def bucket_policy_ref(self) -> BucketPolicyReference:
+    def bucket_policy_ref(self) -> "BucketPolicyReference":
         '''(experimental) A reference to a BucketPolicy resource.
 
         :stability: experimental
@@ -610,12 +610,12 @@ class _IBucketPolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="bucketPolicyRef")
-    def bucket_policy_ref(self) -> BucketPolicyReference:
+    def bucket_policy_ref(self) -> "BucketPolicyReference":
         '''(experimental) A reference to a BucketPolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(BucketPolicyReference, jsii.get(self, "bucketPolicyRef"))
+        return typing.cast("BucketPolicyReference", jsii.get(self, "bucketPolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBucketPolicyRef).__jsii_proxy_class__ = lambda : _IBucketPolicyRefProxy
@@ -634,7 +634,7 @@ class IBucketRef(
 
     @builtins.property
     @jsii.member(jsii_name="bucketRef")
-    def bucket_ref(self) -> BucketReference:
+    def bucket_ref(self) -> "BucketReference":
         '''(experimental) A reference to a Bucket resource.
 
         :stability: experimental
@@ -655,12 +655,12 @@ class _IBucketRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="bucketRef")
-    def bucket_ref(self) -> BucketReference:
+    def bucket_ref(self) -> "BucketReference":
         '''(experimental) A reference to a Bucket resource.
 
         :stability: experimental
         '''
-        return typing.cast(BucketReference, jsii.get(self, "bucketRef"))
+        return typing.cast("BucketReference", jsii.get(self, "bucketRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBucketRef).__jsii_proxy_class__ = lambda : _IBucketRefProxy

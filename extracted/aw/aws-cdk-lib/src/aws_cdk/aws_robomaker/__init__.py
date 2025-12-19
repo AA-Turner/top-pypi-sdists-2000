@@ -119,7 +119,7 @@ class CfnFleet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: typing.Optional[builtins.str] = None,
@@ -142,7 +142,7 @@ class CfnFleet(
 
     @jsii.member(jsii_name="arnForFleet")
     @builtins.classmethod
-    def arn_for_fleet(cls, resource: _IFleetRef_0583e5dd) -> builtins.str:
+    def arn_for_fleet(cls, resource: "_IFleetRef_0583e5dd") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -164,7 +164,7 @@ class CfnFleet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFleet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -209,15 +209,15 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> _FleetReference_4138ef0f:
+    def fleet_ref(self) -> "_FleetReference_4138ef0f":
         '''A reference to a Fleet resource.'''
-        return typing.cast(_FleetReference_4138ef0f, jsii.get(self, "fleetRef"))
+        return typing.cast("_FleetReference_4138ef0f", jsii.get(self, "fleetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -364,12 +364,12 @@ class CfnRobot(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         architecture: builtins.str,
         greengrass_group_id: builtins.str,
-        fleet: typing.Optional[typing.Union[builtins.str, _IFleetRef_0583e5dd]] = None,
+        fleet: typing.Optional[typing.Union[builtins.str, "_IFleetRef_0583e5dd"]] = None,
         name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -399,7 +399,7 @@ class CfnRobot(
 
     @jsii.member(jsii_name="arnForRobot")
     @builtins.classmethod
-    def arn_for_robot(cls, resource: _IRobotRef_1acaea37) -> builtins.str:
+    def arn_for_robot(cls, resource: "_IRobotRef_1acaea37") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -421,7 +421,7 @@ class CfnRobot(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRobot", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -466,15 +466,15 @@ class CfnRobot(
 
     @builtins.property
     @jsii.member(jsii_name="robotRef")
-    def robot_ref(self) -> _RobotReference_472e1f1f:
+    def robot_ref(self) -> "_RobotReference_472e1f1f":
         '''A reference to a Robot resource.'''
-        return typing.cast(_RobotReference_472e1f1f, jsii.get(self, "robotRef"))
+        return typing.cast("_RobotReference_472e1f1f", jsii.get(self, "robotRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="architecture")
@@ -588,14 +588,14 @@ class CfnRobotApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        robot_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRobotApplication.RobotSoftwareSuiteProperty", typing.Dict[builtins.str, typing.Any]]],
+        robot_software_suite: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRobotApplication.RobotSoftwareSuiteProperty", typing.Dict[builtins.str, typing.Any]]],
         current_revision_id: typing.Optional[builtins.str] = None,
         environment: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRobotApplication.SourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRobotApplication.SourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::RoboMaker::RobotApplication``.
@@ -628,7 +628,7 @@ class CfnRobotApplication(
     @builtins.classmethod
     def arn_for_robot_application(
         cls,
-        resource: _IRobotApplicationRef_4ff8e56d,
+        resource: "_IRobotApplicationRef_4ff8e56d",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -651,7 +651,7 @@ class CfnRobotApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRobotApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -705,28 +705,28 @@ class CfnRobotApplication(
 
     @builtins.property
     @jsii.member(jsii_name="robotApplicationRef")
-    def robot_application_ref(self) -> _RobotApplicationReference_4c0805f6:
+    def robot_application_ref(self) -> "_RobotApplicationReference_4c0805f6":
         '''A reference to a RobotApplication resource.'''
-        return typing.cast(_RobotApplicationReference_4c0805f6, jsii.get(self, "robotApplicationRef"))
+        return typing.cast("_RobotApplicationReference_4c0805f6", jsii.get(self, "robotApplicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="robotSoftwareSuite")
     def robot_software_suite(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnRobotApplication.RobotSoftwareSuiteProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnRobotApplication.RobotSoftwareSuiteProperty"]:
         '''The robot software suite used by the robot application.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRobotApplication.RobotSoftwareSuiteProperty"], jsii.get(self, "robotSoftwareSuite"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRobotApplication.RobotSoftwareSuiteProperty"], jsii.get(self, "robotSoftwareSuite"))
 
     @robot_software_suite.setter
     def robot_software_suite(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnRobotApplication.RobotSoftwareSuiteProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnRobotApplication.RobotSoftwareSuiteProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3a0183b45e0172b50d6049b802258f5f54543ee36f6ff14d04a41472f312ff04)
@@ -776,14 +776,14 @@ class CfnRobotApplication(
     @jsii.member(jsii_name="sources")
     def sources(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRobotApplication.SourceConfigProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRobotApplication.SourceConfigProperty"]]]]:
         '''The sources of the robot application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRobotApplication.SourceConfigProperty"]]]], jsii.get(self, "sources"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRobotApplication.SourceConfigProperty"]]]], jsii.get(self, "sources"))
 
     @sources.setter
     def sources(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRobotApplication.SourceConfigProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRobotApplication.SourceConfigProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__921f41fab15ec19f628942a860f0c537326ffdf47bee9bc67baf283fbf524254)
@@ -990,11 +990,11 @@ class CfnRobotApplicationProps:
     def __init__(
         self,
         *,
-        robot_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRobotApplication.RobotSoftwareSuiteProperty, typing.Dict[builtins.str, typing.Any]]],
+        robot_software_suite: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRobotApplication.RobotSoftwareSuiteProperty", typing.Dict[builtins.str, typing.Any]]],
         current_revision_id: typing.Optional[builtins.str] = None,
         environment: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRobotApplication.SourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRobotApplication.SourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRobotApplication``.
@@ -1062,14 +1062,14 @@ class CfnRobotApplicationProps:
     @builtins.property
     def robot_software_suite(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnRobotApplication.RobotSoftwareSuiteProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnRobotApplication.RobotSoftwareSuiteProperty"]:
         '''The robot software suite used by the robot application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-robotsoftwaresuite
         '''
         result = self._values.get("robot_software_suite")
         assert result is not None, "Required property 'robot_software_suite' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnRobotApplication.RobotSoftwareSuiteProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRobotApplication.RobotSoftwareSuiteProperty"], result)
 
     @builtins.property
     def current_revision_id(self) -> typing.Optional[builtins.str]:
@@ -1101,13 +1101,13 @@ class CfnRobotApplicationProps:
     @builtins.property
     def sources(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRobotApplication.SourceConfigProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRobotApplication.SourceConfigProperty"]]]]:
         '''The sources of the robot application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplication.html#cfn-robomaker-robotapplication-sources
         '''
         result = self._values.get("sources")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRobotApplication.SourceConfigProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRobotApplication.SourceConfigProperty"]]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -1158,10 +1158,10 @@ class CfnRobotApplicationVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application: typing.Union[builtins.str, _IRobotApplicationRef_4ff8e56d],
+        application: typing.Union[builtins.str, "_IRobotApplicationRef_4ff8e56d"],
         current_revision_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::RoboMaker::RobotApplicationVersion``.
@@ -1185,7 +1185,7 @@ class CfnRobotApplicationVersion(
     @builtins.classmethod
     def arn_for_robot_application_version(
         cls,
-        resource: _IRobotApplicationVersionRef_0def63df,
+        resource: "_IRobotApplicationVersionRef_0def63df",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1208,7 +1208,7 @@ class CfnRobotApplicationVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRobotApplicationVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1264,9 +1264,9 @@ class CfnRobotApplicationVersion(
     @jsii.member(jsii_name="robotApplicationVersionRef")
     def robot_application_version_ref(
         self,
-    ) -> _RobotApplicationVersionReference_2f8b2a61:
+    ) -> "_RobotApplicationVersionReference_2f8b2a61":
         '''A reference to a RobotApplicationVersion resource.'''
-        return typing.cast(_RobotApplicationVersionReference_2f8b2a61, jsii.get(self, "robotApplicationVersionRef"))
+        return typing.cast("_RobotApplicationVersionReference_2f8b2a61", jsii.get(self, "robotApplicationVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="application")
@@ -1307,7 +1307,7 @@ class CfnRobotApplicationVersionProps:
     def __init__(
         self,
         *,
-        application: typing.Union[builtins.str, _IRobotApplicationRef_4ff8e56d],
+        application: typing.Union[builtins.str, "_IRobotApplicationRef_4ff8e56d"],
         current_revision_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnRobotApplicationVersion``.
@@ -1342,14 +1342,16 @@ class CfnRobotApplicationVersionProps:
             self._values["current_revision_id"] = current_revision_id
 
     @builtins.property
-    def application(self) -> typing.Union[builtins.str, _IRobotApplicationRef_4ff8e56d]:
+    def application(
+        self,
+    ) -> typing.Union[builtins.str, "_IRobotApplicationRef_4ff8e56d"]:
         '''The application information for the robot application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robotapplicationversion.html#cfn-robomaker-robotapplicationversion-application
         '''
         result = self._values.get("application")
         assert result is not None, "Required property 'application' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRobotApplicationRef_4ff8e56d], result)
+        return typing.cast(typing.Union[builtins.str, "_IRobotApplicationRef_4ff8e56d"], result)
 
     @builtins.property
     def current_revision_id(self) -> typing.Optional[builtins.str]:
@@ -1391,7 +1393,7 @@ class CfnRobotProps:
         *,
         architecture: builtins.str,
         greengrass_group_id: builtins.str,
-        fleet: typing.Optional[typing.Union[builtins.str, _IFleetRef_0583e5dd]] = None,
+        fleet: typing.Optional[typing.Union[builtins.str, "_IFleetRef_0583e5dd"]] = None,
         name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -1463,13 +1465,15 @@ class CfnRobotProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def fleet(self) -> typing.Optional[typing.Union[builtins.str, _IFleetRef_0583e5dd]]:
+    def fleet(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, "_IFleetRef_0583e5dd"]]:
         '''The Amazon Resource Name (ARN) of the fleet to which the robot will be registered.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-robot.html#cfn-robomaker-robot-fleet
         '''
         result = self._values.get("fleet")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IFleetRef_0583e5dd]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IFleetRef_0583e5dd"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -1554,16 +1558,16 @@ class CfnSimulationApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        robot_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSimulationApplication.RobotSoftwareSuiteProperty", typing.Dict[builtins.str, typing.Any]]],
-        simulation_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSimulationApplication.SimulationSoftwareSuiteProperty", typing.Dict[builtins.str, typing.Any]]],
+        robot_software_suite: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimulationApplication.RobotSoftwareSuiteProperty", typing.Dict[builtins.str, typing.Any]]],
+        simulation_software_suite: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimulationApplication.SimulationSoftwareSuiteProperty", typing.Dict[builtins.str, typing.Any]]],
         current_revision_id: typing.Optional[builtins.str] = None,
         environment: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        rendering_engine: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSimulationApplication.RenderingEngineProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSimulationApplication.SourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        rendering_engine: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimulationApplication.RenderingEngineProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimulationApplication.SourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::RoboMaker::SimulationApplication``.
@@ -1600,7 +1604,7 @@ class CfnSimulationApplication(
     @builtins.classmethod
     def arn_for_simulation_application(
         cls,
-        resource: _ISimulationApplicationRef_b0735a82,
+        resource: "_ISimulationApplicationRef_b0735a82",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1623,7 +1627,7 @@ class CfnSimulationApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSimulationApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1677,28 +1681,28 @@ class CfnSimulationApplication(
 
     @builtins.property
     @jsii.member(jsii_name="simulationApplicationRef")
-    def simulation_application_ref(self) -> _SimulationApplicationReference_461b3c69:
+    def simulation_application_ref(self) -> "_SimulationApplicationReference_461b3c69":
         '''A reference to a SimulationApplication resource.'''
-        return typing.cast(_SimulationApplicationReference_461b3c69, jsii.get(self, "simulationApplicationRef"))
+        return typing.cast("_SimulationApplicationReference_461b3c69", jsii.get(self, "simulationApplicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="robotSoftwareSuite")
     def robot_software_suite(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.RobotSoftwareSuiteProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.RobotSoftwareSuiteProperty"]:
         '''The robot software suite used by the simulation application.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.RobotSoftwareSuiteProperty"], jsii.get(self, "robotSoftwareSuite"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.RobotSoftwareSuiteProperty"], jsii.get(self, "robotSoftwareSuite"))
 
     @robot_software_suite.setter
     def robot_software_suite(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.RobotSoftwareSuiteProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.RobotSoftwareSuiteProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c5eddba1cd6f8159da95d199756aece7189ac992724326ee1649fe22981dd1e0)
@@ -1709,14 +1713,14 @@ class CfnSimulationApplication(
     @jsii.member(jsii_name="simulationSoftwareSuite")
     def simulation_software_suite(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.SimulationSoftwareSuiteProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.SimulationSoftwareSuiteProperty"]:
         '''The simulation software suite used by the simulation application.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.SimulationSoftwareSuiteProperty"], jsii.get(self, "simulationSoftwareSuite"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.SimulationSoftwareSuiteProperty"], jsii.get(self, "simulationSoftwareSuite"))
 
     @simulation_software_suite.setter
     def simulation_software_suite(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.SimulationSoftwareSuiteProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.SimulationSoftwareSuiteProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__003dd21a203873e85f6980fecd86a94b0531507d8242c4a61748ccddd022255b)
@@ -1766,14 +1770,14 @@ class CfnSimulationApplication(
     @jsii.member(jsii_name="renderingEngine")
     def rendering_engine(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.RenderingEngineProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.RenderingEngineProperty"]]:
         '''The rendering engine for the simulation application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.RenderingEngineProperty"]], jsii.get(self, "renderingEngine"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.RenderingEngineProperty"]], jsii.get(self, "renderingEngine"))
 
     @rendering_engine.setter
     def rendering_engine(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.RenderingEngineProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.RenderingEngineProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c52139e81e980013fe63c79055c9c5a430c7b60d4f73dab46a912bb62fccda4f)
@@ -1784,14 +1788,14 @@ class CfnSimulationApplication(
     @jsii.member(jsii_name="sources")
     def sources(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.SourceConfigProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.SourceConfigProperty"]]]]:
         '''The sources of the simulation application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.SourceConfigProperty"]]]], jsii.get(self, "sources"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.SourceConfigProperty"]]]], jsii.get(self, "sources"))
 
     @sources.setter
     def sources(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSimulationApplication.SourceConfigProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.SourceConfigProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__351059f5bb1169ead5062e07e9d73fd8ac37f0cbad54a1d4e8e137cf716e9fae)
@@ -2143,13 +2147,13 @@ class CfnSimulationApplicationProps:
     def __init__(
         self,
         *,
-        robot_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.RobotSoftwareSuiteProperty, typing.Dict[builtins.str, typing.Any]]],
-        simulation_software_suite: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.SimulationSoftwareSuiteProperty, typing.Dict[builtins.str, typing.Any]]],
+        robot_software_suite: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimulationApplication.RobotSoftwareSuiteProperty", typing.Dict[builtins.str, typing.Any]]],
+        simulation_software_suite: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimulationApplication.SimulationSoftwareSuiteProperty", typing.Dict[builtins.str, typing.Any]]],
         current_revision_id: typing.Optional[builtins.str] = None,
         environment: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        rendering_engine: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.RenderingEngineProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulationApplication.SourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        rendering_engine: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimulationApplication.RenderingEngineProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimulationApplication.SourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSimulationApplication``.
@@ -2234,26 +2238,26 @@ class CfnSimulationApplicationProps:
     @builtins.property
     def robot_software_suite(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.RobotSoftwareSuiteProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.RobotSoftwareSuiteProperty"]:
         '''The robot software suite used by the simulation application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-robotsoftwaresuite
         '''
         result = self._values.get("robot_software_suite")
         assert result is not None, "Required property 'robot_software_suite' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.RobotSoftwareSuiteProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.RobotSoftwareSuiteProperty"], result)
 
     @builtins.property
     def simulation_software_suite(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.SimulationSoftwareSuiteProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.SimulationSoftwareSuiteProperty"]:
         '''The simulation software suite used by the simulation application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-simulationsoftwaresuite
         '''
         result = self._values.get("simulation_software_suite")
         assert result is not None, "Required property 'simulation_software_suite' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.SimulationSoftwareSuiteProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.SimulationSoftwareSuiteProperty"], result)
 
     @builtins.property
     def current_revision_id(self) -> typing.Optional[builtins.str]:
@@ -2285,24 +2289,24 @@ class CfnSimulationApplicationProps:
     @builtins.property
     def rendering_engine(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.RenderingEngineProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.RenderingEngineProperty"]]:
         '''The rendering engine for the simulation application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-renderingengine
         '''
         result = self._values.get("rendering_engine")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.RenderingEngineProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.RenderingEngineProperty"]], result)
 
     @builtins.property
     def sources(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.SourceConfigProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.SourceConfigProperty"]]]]:
         '''The sources of the simulation application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplication.html#cfn-robomaker-simulationapplication-sources
         '''
         result = self._values.get("sources")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSimulationApplication.SourceConfigProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSimulationApplication.SourceConfigProperty"]]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -2353,10 +2357,10 @@ class CfnSimulationApplicationVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application: typing.Union[builtins.str, _ISimulationApplicationRef_b0735a82],
+        application: typing.Union[builtins.str, "_ISimulationApplicationRef_b0735a82"],
         current_revision_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::RoboMaker::SimulationApplicationVersion``.
@@ -2380,7 +2384,7 @@ class CfnSimulationApplicationVersion(
     @builtins.classmethod
     def arn_for_simulation_application_version(
         cls,
-        resource: _ISimulationApplicationVersionRef_aa56ccfe,
+        resource: "_ISimulationApplicationVersionRef_aa56ccfe",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2403,7 +2407,7 @@ class CfnSimulationApplicationVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSimulationApplicationVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2459,9 +2463,9 @@ class CfnSimulationApplicationVersion(
     @jsii.member(jsii_name="simulationApplicationVersionRef")
     def simulation_application_version_ref(
         self,
-    ) -> _SimulationApplicationVersionReference_c1423217:
+    ) -> "_SimulationApplicationVersionReference_c1423217":
         '''A reference to a SimulationApplicationVersion resource.'''
-        return typing.cast(_SimulationApplicationVersionReference_c1423217, jsii.get(self, "simulationApplicationVersionRef"))
+        return typing.cast("_SimulationApplicationVersionReference_c1423217", jsii.get(self, "simulationApplicationVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="application")
@@ -2502,7 +2506,7 @@ class CfnSimulationApplicationVersionProps:
     def __init__(
         self,
         *,
-        application: typing.Union[builtins.str, _ISimulationApplicationRef_b0735a82],
+        application: typing.Union[builtins.str, "_ISimulationApplicationRef_b0735a82"],
         current_revision_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnSimulationApplicationVersion``.
@@ -2539,14 +2543,14 @@ class CfnSimulationApplicationVersionProps:
     @builtins.property
     def application(
         self,
-    ) -> typing.Union[builtins.str, _ISimulationApplicationRef_b0735a82]:
+    ) -> typing.Union[builtins.str, "_ISimulationApplicationRef_b0735a82"]:
         '''The application information for the simulation application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-robomaker-simulationapplicationversion.html#cfn-robomaker-simulationapplicationversion-application
         '''
         result = self._values.get("application")
         assert result is not None, "Required property 'application' is missing"
-        return typing.cast(typing.Union[builtins.str, _ISimulationApplicationRef_b0735a82], result)
+        return typing.cast(typing.Union[builtins.str, "_ISimulationApplicationRef_b0735a82"], result)
 
     @builtins.property
     def current_revision_id(self) -> typing.Optional[builtins.str]:

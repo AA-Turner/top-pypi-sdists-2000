@@ -1162,7 +1162,7 @@ class BaseTrafficShiftingConfigProps:
     def __init__(
         self,
         *,
-        interval: _Duration_4839e8c3,
+        interval: "_Duration_4839e8c3",
         percentage: jsii.Number,
     ) -> None:
         '''Common properties of traffic shifting routing configurations.
@@ -1194,11 +1194,11 @@ class BaseTrafficShiftingConfigProps:
         }
 
     @builtins.property
-    def interval(self) -> _Duration_4839e8c3:
+    def interval(self) -> "_Duration_4839e8c3":
         '''The amount of time between traffic shifts.'''
         result = self._values.get("interval")
         assert result is not None, "Required property 'interval' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
     def percentage(self) -> jsii.Number:
@@ -1303,6 +1303,7 @@ class CfnApplication(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codedeploy as codedeploy
@@ -1319,12 +1320,12 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application_name: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
+        application_name: typing.Optional[typing.Union[builtins.str, "_IFunctionRef_2601eb33"]] = None,
         compute_platform: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeDeploy::Application``.
 
@@ -1348,7 +1349,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_1ffc51d6) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_1ffc51d6") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1361,10 +1362,10 @@ class CfnApplication(
     @builtins.classmethod
     def from_application_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         application_name: builtins.str,
-    ) -> _IApplicationRef_1ffc51d6:
+    ) -> "_IApplicationRef_1ffc51d6":
         '''Creates a new IApplicationRef from a applicationName.
 
         :param scope: -
@@ -1376,7 +1377,7 @@ class CfnApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument application_name", value=application_name, expected_type=type_hints["application_name"])
-        return typing.cast(_IApplicationRef_1ffc51d6, jsii.sinvoke(cls, "fromApplicationName", [scope, id, application_name]))
+        return typing.cast("_IApplicationRef_1ffc51d6", jsii.sinvoke(cls, "fromApplicationName", [scope, id, application_name]))
 
     @jsii.member(jsii_name="isCfnApplication")
     @builtins.classmethod
@@ -1391,7 +1392,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1422,9 +1423,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_936fe716:
+    def application_ref(self) -> "_ApplicationReference_936fe716":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_936fe716, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_936fe716", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1433,9 +1434,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationName")
@@ -1465,12 +1466,12 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The metadata that you apply to CodeDeploy applications to help you organize and categorize them.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3b760e30495233c290b05641b219df0417ec34a7cdcb66209b76925733db09c3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1490,9 +1491,9 @@ class CfnApplicationProps:
     def __init__(
         self,
         *,
-        application_name: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
+        application_name: typing.Optional[typing.Union[builtins.str, "_IFunctionRef_2601eb33"]] = None,
         compute_platform: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplication``.
 
@@ -1505,6 +1506,7 @@ class CfnApplicationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codedeploy as codedeploy
@@ -1534,7 +1536,7 @@ class CfnApplicationProps:
     @builtins.property
     def application_name(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IFunctionRef_2601eb33"]]:
         '''A name for the application.
 
         If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the application name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
@@ -1545,7 +1547,7 @@ class CfnApplicationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-application.html#cfn-codedeploy-application-applicationname
         '''
         result = self._values.get("application_name")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IFunctionRef_2601eb33"]], result)
 
     @builtins.property
     def compute_platform(self) -> typing.Optional[builtins.str]:
@@ -1557,7 +1559,7 @@ class CfnApplicationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The metadata that you apply to CodeDeploy applications to help you organize and categorize them.
 
         Each tag consists of a key and an optional value, both of which you define.
@@ -1565,7 +1567,7 @@ class CfnApplicationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-application.html#cfn-codedeploy-application-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1632,14 +1634,14 @@ class CfnDeploymentConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         compute_platform: typing.Optional[builtins.str] = None,
         deployment_config_name: typing.Optional[builtins.str] = None,
-        minimum_healthy_hosts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentConfig.MinimumHealthyHostsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        traffic_routing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentConfig.TrafficRoutingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        zonal_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentConfig.ZonalConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        minimum_healthy_hosts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentConfig.MinimumHealthyHostsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        traffic_routing_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentConfig.TrafficRoutingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        zonal_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentConfig.ZonalConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeDeploy::DeploymentConfig``.
 
@@ -1678,7 +1680,7 @@ class CfnDeploymentConfig(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeploymentConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1714,9 +1716,9 @@ class CfnDeploymentConfig(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfigRef")
-    def deployment_config_ref(self) -> _DeploymentConfigReference_df2fccdb:
+    def deployment_config_ref(self) -> "_DeploymentConfigReference_df2fccdb":
         '''A reference to a DeploymentConfig resource.'''
-        return typing.cast(_DeploymentConfigReference_df2fccdb, jsii.get(self, "deploymentConfigRef"))
+        return typing.cast("_DeploymentConfigReference_df2fccdb", jsii.get(self, "deploymentConfigRef"))
 
     @builtins.property
     @jsii.member(jsii_name="computePlatform")
@@ -1748,14 +1750,14 @@ class CfnDeploymentConfig(
     @jsii.member(jsii_name="minimumHealthyHosts")
     def minimum_healthy_hosts(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.MinimumHealthyHostsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.MinimumHealthyHostsProperty"]]:
         '''The minimum number of healthy instances that should be available at any time during the deployment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.MinimumHealthyHostsProperty"]], jsii.get(self, "minimumHealthyHosts"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.MinimumHealthyHostsProperty"]], jsii.get(self, "minimumHealthyHosts"))
 
     @minimum_healthy_hosts.setter
     def minimum_healthy_hosts(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.MinimumHealthyHostsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.MinimumHealthyHostsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a51d4f90c94e060ed843233d31547707cbf9d10d3d4de60cd6205bda621edc94)
@@ -1766,14 +1768,14 @@ class CfnDeploymentConfig(
     @jsii.member(jsii_name="trafficRoutingConfig")
     def traffic_routing_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.TrafficRoutingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.TrafficRoutingConfigProperty"]]:
         '''The configuration that specifies how the deployment traffic is routed.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.TrafficRoutingConfigProperty"]], jsii.get(self, "trafficRoutingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.TrafficRoutingConfigProperty"]], jsii.get(self, "trafficRoutingConfig"))
 
     @traffic_routing_config.setter
     def traffic_routing_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.TrafficRoutingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.TrafficRoutingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fe1bae2a6b88ba41a47472dc8dc7bbf6f72bde54b89b4ed3b8f8e3fd35645ce4)
@@ -1784,14 +1786,14 @@ class CfnDeploymentConfig(
     @jsii.member(jsii_name="zonalConfig")
     def zonal_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.ZonalConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.ZonalConfigProperty"]]:
         '''Configure the ``ZonalConfig`` object if you want AWS CodeDeploy to deploy your application to one `Availability Zone <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones>`_ at a time, within an AWS Region.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.ZonalConfigProperty"]], jsii.get(self, "zonalConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.ZonalConfigProperty"]], jsii.get(self, "zonalConfig"))
 
     @zonal_config.setter
     def zonal_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.ZonalConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.ZonalConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b0fc8d5b7ad2a2a7cd82c46195cb23f97c32d3c56a1872111486e2ce1020d343)
@@ -2106,8 +2108,8 @@ class CfnDeploymentConfig(
             self,
             *,
             type: builtins.str,
-            time_based_canary: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentConfig.TimeBasedCanaryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            time_based_linear: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentConfig.TimeBasedLinearProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            time_based_canary: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentConfig.TimeBasedCanaryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            time_based_linear: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentConfig.TimeBasedLinearProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration that specifies how traffic is shifted from one version of a Lambda function to another version during an AWS Lambda deployment, or from one Amazon ECS task set to another during an Amazon ECS deployment.
 
@@ -2164,7 +2166,7 @@ class CfnDeploymentConfig(
         @builtins.property
         def time_based_canary(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.TimeBasedCanaryProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.TimeBasedCanaryProperty"]]:
             '''A configuration that shifts traffic from one version of a Lambda function or ECS task set to another in two increments.
 
             The original and target Lambda function versions or ECS task sets are specified in the deployment's AppSpec file.
@@ -2172,12 +2174,12 @@ class CfnDeploymentConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentconfig-trafficroutingconfig.html#cfn-codedeploy-deploymentconfig-trafficroutingconfig-timebasedcanary
             '''
             result = self._values.get("time_based_canary")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.TimeBasedCanaryProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.TimeBasedCanaryProperty"]], result)
 
         @builtins.property
         def time_based_linear(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.TimeBasedLinearProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.TimeBasedLinearProperty"]]:
             '''A configuration that shifts traffic from one version of a Lambda function or Amazon ECS task set to another in equal increments, with an equal number of minutes between each increment.
 
             The original and target Lambda function versions or Amazon ECS task sets are specified in the deployment's AppSpec file.
@@ -2185,7 +2187,7 @@ class CfnDeploymentConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentconfig-trafficroutingconfig.html#cfn-codedeploy-deploymentconfig-trafficroutingconfig-timebasedlinear
             '''
             result = self._values.get("time_based_linear")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.TimeBasedLinearProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.TimeBasedLinearProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2212,7 +2214,7 @@ class CfnDeploymentConfig(
             self,
             *,
             first_zone_monitor_duration_in_seconds: typing.Optional[jsii.Number] = None,
-            minimum_healthy_hosts_per_zone: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentConfig.MinimumHealthyHostsPerZoneProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            minimum_healthy_hosts_per_zone: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentConfig.MinimumHealthyHostsPerZoneProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             monitor_duration_in_seconds: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Configure the ``ZonalConfig`` object if you want AWS CodeDeploy to deploy your application to one `Availability Zone <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones>`_ at a time, within an AWS Region. By deploying to one Availability Zone at a time, you can expose your deployment to a progressively larger audience as confidence in the deployment's performance and viability grows. If you don't configure the ``ZonalConfig`` object, CodeDeploy deploys your application to a random selection of hosts across a Region.
@@ -2272,7 +2274,7 @@ class CfnDeploymentConfig(
         @builtins.property
         def minimum_healthy_hosts_per_zone(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.MinimumHealthyHostsPerZoneProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.MinimumHealthyHostsPerZoneProperty"]]:
             '''The number or percentage of instances that must remain available per Availability Zone during a deployment.
 
             This option works in conjunction with the ``MinimumHealthyHosts`` option. For more information, see `About the minimum number of healthy hosts per Availability Zone <https://docs.aws.amazon.com//codedeploy/latest/userguide/instances-health.html#minimum-healthy-hosts-az>`_ in the *CodeDeploy User Guide* .
@@ -2284,7 +2286,7 @@ class CfnDeploymentConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentconfig-zonalconfig.html#cfn-codedeploy-deploymentconfig-zonalconfig-minimumhealthyhostsperzone
             '''
             result = self._values.get("minimum_healthy_hosts_per_zone")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentConfig.MinimumHealthyHostsPerZoneProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.MinimumHealthyHostsPerZoneProperty"]], result)
 
         @builtins.property
         def monitor_duration_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -2328,9 +2330,9 @@ class CfnDeploymentConfigProps:
         *,
         compute_platform: typing.Optional[builtins.str] = None,
         deployment_config_name: typing.Optional[builtins.str] = None,
-        minimum_healthy_hosts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentConfig.MinimumHealthyHostsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        traffic_routing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentConfig.TrafficRoutingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        zonal_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentConfig.ZonalConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        minimum_healthy_hosts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentConfig.MinimumHealthyHostsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        traffic_routing_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentConfig.TrafficRoutingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        zonal_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentConfig.ZonalConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDeploymentConfig``.
 
@@ -2424,7 +2426,7 @@ class CfnDeploymentConfigProps:
     @builtins.property
     def minimum_healthy_hosts(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentConfig.MinimumHealthyHostsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.MinimumHealthyHostsProperty"]]:
         '''The minimum number of healthy instances that should be available at any time during the deployment.
 
         There are two parameters expected in the input: type and value.
@@ -2443,23 +2445,23 @@ class CfnDeploymentConfigProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentconfig.html#cfn-codedeploy-deploymentconfig-minimumhealthyhosts
         '''
         result = self._values.get("minimum_healthy_hosts")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentConfig.MinimumHealthyHostsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.MinimumHealthyHostsProperty"]], result)
 
     @builtins.property
     def traffic_routing_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentConfig.TrafficRoutingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.TrafficRoutingConfigProperty"]]:
         '''The configuration that specifies how the deployment traffic is routed.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentconfig.html#cfn-codedeploy-deploymentconfig-trafficroutingconfig
         '''
         result = self._values.get("traffic_routing_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentConfig.TrafficRoutingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.TrafficRoutingConfigProperty"]], result)
 
     @builtins.property
     def zonal_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentConfig.ZonalConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.ZonalConfigProperty"]]:
         '''Configure the ``ZonalConfig`` object if you want AWS CodeDeploy to deploy your application to one `Availability Zone <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones>`_ at a time, within an AWS Region.
 
         For more information about the zonal configuration feature, see `zonal configuration <https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations-create.html#zonal-config>`_ in the *CodeDeploy User Guide* .
@@ -2467,7 +2469,7 @@ class CfnDeploymentConfigProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentconfig.html#cfn-codedeploy-deploymentconfig-zonalconfig
         '''
         result = self._values.get("zonal_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentConfig.ZonalConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentConfig.ZonalConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2500,6 +2502,7 @@ class CfnDeploymentGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codedeploy as codedeploy
@@ -2629,29 +2632,29 @@ class CfnDeploymentGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_name: builtins.str,
         service_role_arn: builtins.str,
-        alarm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.AlarmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        auto_rollback_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.AutoRollbackConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        alarm_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.AlarmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_rollback_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.AutoRollbackConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         auto_scaling_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-        blue_green_deployment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        deployment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.DeploymentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        blue_green_deployment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        deployment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.DeploymentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         deployment_config_name: typing.Optional[builtins.str] = None,
         deployment_group_name: typing.Optional[builtins.str] = None,
-        deployment_style: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.DeploymentStyleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        ec2_tag_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.EC2TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        ec2_tag_set: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.EC2TagSetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        ecs_services: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.ECSServiceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        load_balancer_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.LoadBalancerInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        on_premises_instance_tag_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        on_premises_tag_set: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.OnPremisesTagSetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        deployment_style: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.DeploymentStyleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ec2_tag_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.EC2TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ec2_tag_set: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.EC2TagSetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ecs_services: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.ECSServiceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        load_balancer_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.LoadBalancerInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        on_premises_instance_tag_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        on_premises_tag_set: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.OnPremisesTagSetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         outdated_instances_strategy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        termination_hook_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        trigger_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.TriggerConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        termination_hook_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        trigger_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.TriggerConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeDeploy::DeploymentGroup``.
 
@@ -2720,7 +2723,7 @@ class CfnDeploymentGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeploymentGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2764,15 +2767,15 @@ class CfnDeploymentGroup(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentGroupRef")
-    def deployment_group_ref(self) -> _DeploymentGroupReference_9112f387:
+    def deployment_group_ref(self) -> "_DeploymentGroupReference_9112f387":
         '''A reference to a DeploymentGroup resource.'''
-        return typing.cast(_DeploymentGroupReference_9112f387, jsii.get(self, "deploymentGroupRef"))
+        return typing.cast("_DeploymentGroupReference_9112f387", jsii.get(self, "deploymentGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationName")
@@ -2804,14 +2807,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="alarmConfiguration")
     def alarm_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.AlarmConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.AlarmConfigurationProperty"]]:
         '''Information about the Amazon CloudWatch alarms that are associated with the deployment group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.AlarmConfigurationProperty"]], jsii.get(self, "alarmConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.AlarmConfigurationProperty"]], jsii.get(self, "alarmConfiguration"))
 
     @alarm_configuration.setter
     def alarm_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.AlarmConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.AlarmConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5e91a52d4fd08a0b9deb3baefb2ccf408f0cb24c44a56893da4cb20fc1d8c83c)
@@ -2822,14 +2825,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="autoRollbackConfiguration")
     def auto_rollback_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.AutoRollbackConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.AutoRollbackConfigurationProperty"]]:
         '''Information about the automatic rollback configuration that is associated with the deployment group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.AutoRollbackConfigurationProperty"]], jsii.get(self, "autoRollbackConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.AutoRollbackConfigurationProperty"]], jsii.get(self, "autoRollbackConfiguration"))
 
     @auto_rollback_configuration.setter
     def auto_rollback_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.AutoRollbackConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.AutoRollbackConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__69accffcb10c8665244d6da2f6e58570690d0e957e337792a901cb7be04905b7)
@@ -2856,14 +2859,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="blueGreenDeploymentConfiguration")
     def blue_green_deployment_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty"]]:
         '''Information about blue/green deployment options for a deployment group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty"]], jsii.get(self, "blueGreenDeploymentConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty"]], jsii.get(self, "blueGreenDeploymentConfiguration"))
 
     @blue_green_deployment_configuration.setter
     def blue_green_deployment_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e01bb8b0c5b5d341a669261e31783fa832409200e3eb8a634fe33223a72f7306)
@@ -2874,14 +2877,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="deployment")
     def deployment(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.DeploymentProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.DeploymentProperty"]]:
         '''The application revision to deploy to this deployment group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.DeploymentProperty"]], jsii.get(self, "deployment"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.DeploymentProperty"]], jsii.get(self, "deployment"))
 
     @deployment.setter
     def deployment(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.DeploymentProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.DeploymentProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__08845fc7de26e5f1faa42234a437c12699ffe9eb475932cf303f7acd1c272595)
@@ -2918,14 +2921,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="deploymentStyle")
     def deployment_style(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.DeploymentStyleProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.DeploymentStyleProperty"]]:
         '''Attributes that determine the type of deployment to run and whether to route deployment traffic behind a load balancer.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.DeploymentStyleProperty"]], jsii.get(self, "deploymentStyle"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.DeploymentStyleProperty"]], jsii.get(self, "deploymentStyle"))
 
     @deployment_style.setter
     def deployment_style(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.DeploymentStyleProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.DeploymentStyleProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5bf1c6eb87ee1012ff4d9949ecda81e6dcac87415f749d230c6ee6752153ec80)
@@ -2936,14 +2939,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="ec2TagFilters")
     def ec2_tag_filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.EC2TagFilterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagFilterProperty"]]]]:
         '''The Amazon EC2 tags that are already applied to Amazon EC2 instances that you want to include in the deployment group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.EC2TagFilterProperty"]]]], jsii.get(self, "ec2TagFilters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagFilterProperty"]]]], jsii.get(self, "ec2TagFilters"))
 
     @ec2_tag_filters.setter
     def ec2_tag_filters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.EC2TagFilterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagFilterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ee79962691a5c39e41198cbe8d3feba8224218b0f0150b5f282db760c6c767ab)
@@ -2954,14 +2957,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="ec2TagSet")
     def ec2_tag_set(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.EC2TagSetProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagSetProperty"]]:
         '''Information about groups of tags applied to Amazon EC2 instances.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.EC2TagSetProperty"]], jsii.get(self, "ec2TagSet"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagSetProperty"]], jsii.get(self, "ec2TagSet"))
 
     @ec2_tag_set.setter
     def ec2_tag_set(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.EC2TagSetProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagSetProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6196a4cb27800772b6bd881880397500b9e720f740bb7b6289f13d2f51e04863)
@@ -2972,14 +2975,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="ecsServices")
     def ecs_services(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.ECSServiceProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.ECSServiceProperty"]]]]:
         '''The target Amazon ECS services in the deployment group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.ECSServiceProperty"]]]], jsii.get(self, "ecsServices"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.ECSServiceProperty"]]]], jsii.get(self, "ecsServices"))
 
     @ecs_services.setter
     def ecs_services(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.ECSServiceProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.ECSServiceProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__04e313b8ad9be6363e7a8552e9cf937d4c0cf7ff77b9f105105f6b3bab3b53c6)
@@ -2990,14 +2993,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="loadBalancerInfo")
     def load_balancer_info(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.LoadBalancerInfoProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.LoadBalancerInfoProperty"]]:
         '''Information about the load balancer to use in a deployment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.LoadBalancerInfoProperty"]], jsii.get(self, "loadBalancerInfo"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.LoadBalancerInfoProperty"]], jsii.get(self, "loadBalancerInfo"))
 
     @load_balancer_info.setter
     def load_balancer_info(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.LoadBalancerInfoProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.LoadBalancerInfoProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__72f10ac10d280e8586e5bdb5699bdb0c53aab83965020339a2a5611d15d4061e)
@@ -3008,14 +3011,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="onPremisesInstanceTagFilters")
     def on_premises_instance_tag_filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TagFilterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TagFilterProperty"]]]]:
         '''The on-premises instance tags already applied to on-premises instances that you want to include in the deployment group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TagFilterProperty"]]]], jsii.get(self, "onPremisesInstanceTagFilters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TagFilterProperty"]]]], jsii.get(self, "onPremisesInstanceTagFilters"))
 
     @on_premises_instance_tag_filters.setter
     def on_premises_instance_tag_filters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TagFilterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TagFilterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f88440801309d20e368d659f0132d109e5c37cb01b5a5f894053f4f9081f75f1)
@@ -3026,14 +3029,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="onPremisesTagSet")
     def on_premises_tag_set(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.OnPremisesTagSetProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.OnPremisesTagSetProperty"]]:
         '''Information about groups of tags applied to on-premises instances.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.OnPremisesTagSetProperty"]], jsii.get(self, "onPremisesTagSet"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.OnPremisesTagSetProperty"]], jsii.get(self, "onPremisesTagSet"))
 
     @on_premises_tag_set.setter
     def on_premises_tag_set(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.OnPremisesTagSetProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.OnPremisesTagSetProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e1da01bcd68da7d01c5ffa220e48c83cd4d65bd034d7416a79c12856e9a25fad)
@@ -3055,12 +3058,12 @@ class CfnDeploymentGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The metadata that you apply to CodeDeploy deployment groups to help you organize and categorize them.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ca51d486320d92369410ca709970091be367eabeebde41a60143404eeb1cc6a8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3070,14 +3073,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="terminationHookEnabled")
     def termination_hook_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Amazon EC2 Auto Scaling group.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "terminationHookEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "terminationHookEnabled"))
 
     @termination_hook_enabled.setter
     def termination_hook_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2bf9c1fbb66f570f500b907e6dae98c96270a20d62e93986637535a81ad80522)
@@ -3088,14 +3091,14 @@ class CfnDeploymentGroup(
     @jsii.member(jsii_name="triggerConfigurations")
     def trigger_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TriggerConfigProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TriggerConfigProperty"]]]]:
         '''Information about triggers associated with the deployment group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TriggerConfigProperty"]]]], jsii.get(self, "triggerConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TriggerConfigProperty"]]]], jsii.get(self, "triggerConfigurations"))
 
     @trigger_configurations.setter
     def trigger_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TriggerConfigProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TriggerConfigProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__19f14404bcc2f5c2897842d997eb29c01baf8bcd6619fdc09e6b87d0df1f7693)
@@ -3115,9 +3118,9 @@ class CfnDeploymentGroup(
         def __init__(
             self,
             *,
-            alarms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.AlarmProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            ignore_poll_alarm_failure: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            alarms: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.AlarmProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            ignore_poll_alarm_failure: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The ``AlarmConfiguration`` property type configures CloudWatch alarms for an AWS CodeDeploy deployment group.
 
@@ -3160,7 +3163,7 @@ class CfnDeploymentGroup(
         @builtins.property
         def alarms(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.AlarmProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.AlarmProperty"]]]]:
             '''A list of alarms configured for the deployment or deployment group.
 
             A maximum of 10 alarms can be added.
@@ -3168,23 +3171,23 @@ class CfnDeploymentGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-alarmconfiguration.html#cfn-codedeploy-deploymentgroup-alarmconfiguration-alarms
             '''
             result = self._values.get("alarms")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.AlarmProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.AlarmProperty"]]]], result)
 
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the alarm configuration is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-alarmconfiguration.html#cfn-codedeploy-deploymentgroup-alarmconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def ignore_poll_alarm_failure(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether a deployment should continue if information about the current state of alarms cannot be retrieved from Amazon CloudWatch .
 
             The default value is ``false`` .
@@ -3195,7 +3198,7 @@ class CfnDeploymentGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-alarmconfiguration.html#cfn-codedeploy-deploymentgroup-alarmconfiguration-ignorepollalarmfailure
             '''
             result = self._values.get("ignore_poll_alarm_failure")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3272,7 +3275,7 @@ class CfnDeploymentGroup(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             events: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''The ``AutoRollbackConfiguration`` property type configures automatic rollback for an AWS CodeDeploy deployment group when a deployment is not completed successfully.
@@ -3311,13 +3314,13 @@ class CfnDeploymentGroup(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether a defined automatic rollback configuration is currently enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-autorollbackconfiguration.html#cfn-codedeploy-deploymentgroup-autorollbackconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def events(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3354,9 +3357,9 @@ class CfnDeploymentGroup(
         def __init__(
             self,
             *,
-            deployment_ready_option: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.DeploymentReadyOptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            green_fleet_provisioning_option: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.GreenFleetProvisioningOptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            terminate_blue_instances_on_deployment_success: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.BlueInstanceTerminationOptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            deployment_ready_option: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.DeploymentReadyOptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            green_fleet_provisioning_option: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.GreenFleetProvisioningOptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            terminate_blue_instances_on_deployment_success: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.BlueInstanceTerminationOptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Information about blue/green deployment options for a deployment group.
 
@@ -3403,35 +3406,35 @@ class CfnDeploymentGroup(
         @builtins.property
         def deployment_ready_option(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.DeploymentReadyOptionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.DeploymentReadyOptionProperty"]]:
             '''Information about the action to take when newly provisioned instances are ready to receive traffic in a blue/green deployment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-bluegreendeploymentconfiguration.html#cfn-codedeploy-deploymentgroup-bluegreendeploymentconfiguration-deploymentreadyoption
             '''
             result = self._values.get("deployment_ready_option")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.DeploymentReadyOptionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.DeploymentReadyOptionProperty"]], result)
 
         @builtins.property
         def green_fleet_provisioning_option(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.GreenFleetProvisioningOptionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.GreenFleetProvisioningOptionProperty"]]:
             '''Information about how instances are provisioned for a replacement environment in a blue/green deployment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-bluegreendeploymentconfiguration.html#cfn-codedeploy-deploymentgroup-bluegreendeploymentconfiguration-greenfleetprovisioningoption
             '''
             result = self._values.get("green_fleet_provisioning_option")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.GreenFleetProvisioningOptionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.GreenFleetProvisioningOptionProperty"]], result)
 
         @builtins.property
         def terminate_blue_instances_on_deployment_success(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.BlueInstanceTerminationOptionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.BlueInstanceTerminationOptionProperty"]]:
             '''Information about whether to terminate instances in the original fleet during a blue/green deployment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-bluegreendeploymentconfiguration.html#cfn-codedeploy-deploymentgroup-bluegreendeploymentconfiguration-terminateblueinstancesondeploymentsuccess
             '''
             result = self._values.get("terminate_blue_instances_on_deployment_success")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.BlueInstanceTerminationOptionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.BlueInstanceTerminationOptionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3539,9 +3542,9 @@ class CfnDeploymentGroup(
         def __init__(
             self,
             *,
-            revision: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.RevisionLocationProperty", typing.Dict[builtins.str, typing.Any]]],
+            revision: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.RevisionLocationProperty", typing.Dict[builtins.str, typing.Any]]],
             description: typing.Optional[builtins.str] = None,
-            ignore_application_stop_failures: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            ignore_application_stop_failures: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''``Deployment`` is a property of the `DeploymentGroup <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html>`_ resource that specifies an AWS CodeDeploy application revision to be deployed to instances in the deployment group. If you specify an application revision, your target revision is deployed as soon as the provisioning process is complete.
 
@@ -3597,14 +3600,14 @@ class CfnDeploymentGroup(
         @builtins.property
         def revision(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.RevisionLocationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.RevisionLocationProperty"]:
             '''Information about the location of stored application artifacts and the service from which to retrieve them.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-deployment.html#cfn-codedeploy-deploymentgroup-deployment-revision
             '''
             result = self._values.get("revision")
             assert result is not None, "Required property 'revision' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.RevisionLocationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.RevisionLocationProperty"], result)
 
         @builtins.property
         def description(self) -> typing.Optional[builtins.str]:
@@ -3618,7 +3621,7 @@ class CfnDeploymentGroup(
         @builtins.property
         def ignore_application_stop_failures(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If true, then if an ``ApplicationStop`` , ``BeforeBlockTraffic`` , or ``AfterBlockTraffic`` deployment lifecycle event to an instance fails, then the deployment continues to the next deployment lifecycle event.
 
             For example, if ``ApplicationStop`` fails, the deployment continues with DownloadBundle. If ``BeforeBlockTraffic`` fails, the deployment continues with ``BlockTraffic`` . If ``AfterBlockTraffic`` fails, the deployment continues with ``ApplicationStop`` .
@@ -3632,7 +3635,7 @@ class CfnDeploymentGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-deployment.html#cfn-codedeploy-deploymentgroup-deployment-ignoreapplicationstopfailures
             '''
             result = self._values.get("ignore_application_stop_failures")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3900,7 +3903,7 @@ class CfnDeploymentGroup(
         def __init__(
             self,
             *,
-            ec2_tag_group: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.EC2TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            ec2_tag_group: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.EC2TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The ``EC2TagSet`` property type specifies information about groups of tags applied to Amazon EC2 instances.
 
@@ -3939,7 +3942,7 @@ class CfnDeploymentGroup(
         @builtins.property
         def ec2_tag_group(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.EC2TagFilterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagFilterProperty"]]]]:
             '''A list that contains other lists of Amazon EC2 instance tag groups.
 
             For an instance to be included in the deployment group, it must be identified by all of the tag groups in the list.
@@ -3947,7 +3950,7 @@ class CfnDeploymentGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-ec2tagsetlistobject.html#cfn-codedeploy-deploymentgroup-ec2tagsetlistobject-ec2taggroup
             '''
             result = self._values.get("ec2_tag_group")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.EC2TagFilterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagFilterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3969,7 +3972,7 @@ class CfnDeploymentGroup(
         def __init__(
             self,
             *,
-            ec2_tag_set_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.EC2TagSetListObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            ec2_tag_set_list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.EC2TagSetListObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The ``EC2TagSet`` property type specifies information about groups of tags applied to Amazon EC2 instances.
 
@@ -4008,7 +4011,7 @@ class CfnDeploymentGroup(
         @builtins.property
         def ec2_tag_set_list(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.EC2TagSetListObjectProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagSetListObjectProperty"]]]]:
             '''The Amazon EC2 tags that are already applied to Amazon EC2 instances that you want to include in the deployment group.
 
             CodeDeploy includes all Amazon EC2 instances identified by any of the tags you specify in this deployment group.
@@ -4018,7 +4021,7 @@ class CfnDeploymentGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-ec2tagset.html#cfn-codedeploy-deploymentgroup-ec2tagset-ec2tagsetlist
             '''
             result = self._values.get("ec2_tag_set_list")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.EC2TagSetListObjectProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagSetListObjectProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4302,9 +4305,9 @@ class CfnDeploymentGroup(
         def __init__(
             self,
             *,
-            elb_info_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.ELBInfoProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            target_group_info_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.TargetGroupInfoProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            target_group_pair_info_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.TargetGroupPairInfoProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            elb_info_list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.ELBInfoProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            target_group_info_list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.TargetGroupInfoProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            target_group_pair_info_list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.TargetGroupPairInfoProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The ``LoadBalancerInfo`` property type specifies information about the load balancer or target group used for an AWS CodeDeploy deployment group.
 
@@ -4366,7 +4369,7 @@ class CfnDeploymentGroup(
         @builtins.property
         def elb_info_list(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.ELBInfoProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.ELBInfoProperty"]]]]:
             '''An array that contains information about the load balancers to use for load balancing in a deployment.
 
             If you're using Classic Load Balancers, specify those load balancers in this array.
@@ -4377,12 +4380,12 @@ class CfnDeploymentGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-loadbalancerinfo.html#cfn-codedeploy-deploymentgroup-loadbalancerinfo-elbinfolist
             '''
             result = self._values.get("elb_info_list")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.ELBInfoProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.ELBInfoProperty"]]]], result)
 
         @builtins.property
         def target_group_info_list(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TargetGroupInfoProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TargetGroupInfoProperty"]]]]:
             '''An array that contains information about the target groups to use for load balancing in a deployment.
 
             If you're using Application Load Balancers and Network Load Balancers, specify their associated target groups in this array.
@@ -4393,12 +4396,12 @@ class CfnDeploymentGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-loadbalancerinfo.html#cfn-codedeploy-deploymentgroup-loadbalancerinfo-targetgroupinfolist
             '''
             result = self._values.get("target_group_info_list")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TargetGroupInfoProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TargetGroupInfoProperty"]]]], result)
 
         @builtins.property
         def target_group_pair_info_list(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TargetGroupPairInfoProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TargetGroupPairInfoProperty"]]]]:
             '''The target group pair information.
 
             This is an array of ``TargeGroupPairInfo`` objects with a maximum size of one.
@@ -4406,7 +4409,7 @@ class CfnDeploymentGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-loadbalancerinfo.html#cfn-codedeploy-deploymentgroup-loadbalancerinfo-targetgrouppairinfolist
             '''
             result = self._values.get("target_group_pair_info_list")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TargetGroupPairInfoProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TargetGroupPairInfoProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4428,7 +4431,7 @@ class CfnDeploymentGroup(
         def __init__(
             self,
             *,
-            on_premises_tag_group: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            on_premises_tag_group: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The ``OnPremisesTagSetListObject`` property type specifies lists of on-premises instance tag groups.
 
@@ -4465,13 +4468,13 @@ class CfnDeploymentGroup(
         @builtins.property
         def on_premises_tag_group(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TagFilterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TagFilterProperty"]]]]:
             '''Information about groups of on-premises instance tags.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-onpremisestagsetlistobject.html#cfn-codedeploy-deploymentgroup-onpremisestagsetlistobject-onpremisestaggroup
             '''
             result = self._values.get("on_premises_tag_group")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TagFilterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TagFilterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4493,7 +4496,7 @@ class CfnDeploymentGroup(
         def __init__(
             self,
             *,
-            on_premises_tag_set_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.OnPremisesTagSetListObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            on_premises_tag_set_list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.OnPremisesTagSetListObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The ``OnPremisesTagSet`` property type specifies a list containing other lists of on-premises instance tag groups.
 
@@ -4534,7 +4537,7 @@ class CfnDeploymentGroup(
         @builtins.property
         def on_premises_tag_set_list(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.OnPremisesTagSetListObjectProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.OnPremisesTagSetListObjectProperty"]]]]:
             '''A list that contains other lists of on-premises instance tag groups.
 
             For an instance to be included in the deployment group, it must be identified by all of the tag groups in the list.
@@ -4544,7 +4547,7 @@ class CfnDeploymentGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-onpremisestagset.html#cfn-codedeploy-deploymentgroup-onpremisestagset-onpremisestagsetlist
             '''
             result = self._values.get("on_premises_tag_set_list")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.OnPremisesTagSetListObjectProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.OnPremisesTagSetListObjectProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4570,9 +4573,9 @@ class CfnDeploymentGroup(
         def __init__(
             self,
             *,
-            git_hub_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.GitHubLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            git_hub_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.GitHubLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             revision_type: typing.Optional[builtins.str] = None,
-            s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''``RevisionLocation`` is a property that defines the location of the CodeDeploy application revision to deploy.
 
@@ -4622,13 +4625,13 @@ class CfnDeploymentGroup(
         @builtins.property
         def git_hub_location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.GitHubLocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.GitHubLocationProperty"]]:
             '''Information about the location of application artifacts stored in GitHub.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-revisionlocation.html#cfn-codedeploy-deploymentgroup-revisionlocation-githublocation
             '''
             result = self._values.get("git_hub_location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.GitHubLocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.GitHubLocationProperty"]], result)
 
         @builtins.property
         def revision_type(self) -> typing.Optional[builtins.str]:
@@ -4647,13 +4650,13 @@ class CfnDeploymentGroup(
         @builtins.property
         def s3_location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.S3LocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.S3LocationProperty"]]:
             '''Information about the location of a revision stored in Amazon S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-revisionlocation.html#cfn-codedeploy-deploymentgroup-revisionlocation-s3location
             '''
             result = self._values.get("s3_location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.S3LocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.S3LocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4968,9 +4971,9 @@ class CfnDeploymentGroup(
         def __init__(
             self,
             *,
-            prod_traffic_route: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.TrafficRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            target_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.TargetGroupInfoProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            test_traffic_route: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeploymentGroup.TrafficRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            prod_traffic_route: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.TrafficRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            target_groups: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.TargetGroupInfoProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            test_traffic_route: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.TrafficRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Information about two target groups and how traffic is routed during an Amazon ECS deployment.
 
@@ -5017,18 +5020,18 @@ class CfnDeploymentGroup(
         @builtins.property
         def prod_traffic_route(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TrafficRouteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TrafficRouteProperty"]]:
             '''The path used by a load balancer to route production traffic when an Amazon ECS deployment is complete.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-targetgrouppairinfo.html#cfn-codedeploy-deploymentgroup-targetgrouppairinfo-prodtrafficroute
             '''
             result = self._values.get("prod_traffic_route")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TrafficRouteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TrafficRouteProperty"]], result)
 
         @builtins.property
         def target_groups(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TargetGroupInfoProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TargetGroupInfoProperty"]]]]:
             '''One pair of target groups.
 
             One is associated with the original task set. The second is associated with the task set that serves traffic after the deployment is complete.
@@ -5036,12 +5039,12 @@ class CfnDeploymentGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-targetgrouppairinfo.html#cfn-codedeploy-deploymentgroup-targetgrouppairinfo-targetgroups
             '''
             result = self._values.get("target_groups")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TargetGroupInfoProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TargetGroupInfoProperty"]]]], result)
 
         @builtins.property
         def test_traffic_route(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TrafficRouteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TrafficRouteProperty"]]:
             '''An optional path used by a load balancer to route test traffic after an Amazon ECS deployment.
 
             Validation can occur while test traffic is served during a deployment.
@@ -5049,7 +5052,7 @@ class CfnDeploymentGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-targetgrouppairinfo.html#cfn-codedeploy-deploymentgroup-targetgrouppairinfo-testtrafficroute
             '''
             result = self._values.get("test_traffic_route")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeploymentGroup.TrafficRouteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TrafficRouteProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5243,24 +5246,24 @@ class CfnDeploymentGroupProps:
         *,
         application_name: builtins.str,
         service_role_arn: builtins.str,
-        alarm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.AlarmConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        auto_rollback_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.AutoRollbackConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        alarm_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.AlarmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_rollback_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.AutoRollbackConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         auto_scaling_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-        blue_green_deployment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        deployment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.DeploymentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        blue_green_deployment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        deployment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.DeploymentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         deployment_config_name: typing.Optional[builtins.str] = None,
         deployment_group_name: typing.Optional[builtins.str] = None,
-        deployment_style: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.DeploymentStyleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        ec2_tag_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.EC2TagFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        ec2_tag_set: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.EC2TagSetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        ecs_services: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.ECSServiceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        load_balancer_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.LoadBalancerInfoProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        on_premises_instance_tag_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.TagFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        on_premises_tag_set: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.OnPremisesTagSetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        deployment_style: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.DeploymentStyleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ec2_tag_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.EC2TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ec2_tag_set: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.EC2TagSetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ecs_services: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.ECSServiceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        load_balancer_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.LoadBalancerInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        on_premises_instance_tag_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        on_premises_tag_set: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.OnPremisesTagSetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         outdated_instances_strategy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        termination_hook_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        trigger_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.TriggerConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        termination_hook_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        trigger_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeploymentGroup.TriggerConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDeploymentGroup``.
 
@@ -5290,6 +5293,7 @@ class CfnDeploymentGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codedeploy as codedeploy
@@ -5507,18 +5511,18 @@ class CfnDeploymentGroupProps:
     @builtins.property
     def alarm_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.AlarmConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.AlarmConfigurationProperty"]]:
         '''Information about the Amazon CloudWatch alarms that are associated with the deployment group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-alarmconfiguration
         '''
         result = self._values.get("alarm_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.AlarmConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.AlarmConfigurationProperty"]], result)
 
     @builtins.property
     def auto_rollback_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.AutoRollbackConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.AutoRollbackConfigurationProperty"]]:
         '''Information about the automatic rollback configuration that is associated with the deployment group.
 
         If you specify this property, don't specify the ``Deployment`` property.
@@ -5526,7 +5530,7 @@ class CfnDeploymentGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-autorollbackconfiguration
         '''
         result = self._values.get("auto_rollback_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.AutoRollbackConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.AutoRollbackConfigurationProperty"]], result)
 
     @builtins.property
     def auto_scaling_groups(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5542,18 +5546,18 @@ class CfnDeploymentGroupProps:
     @builtins.property
     def blue_green_deployment_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty"]]:
         '''Information about blue/green deployment options for a deployment group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-bluegreendeploymentconfiguration
         '''
         result = self._values.get("blue_green_deployment_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.BlueGreenDeploymentConfigurationProperty"]], result)
 
     @builtins.property
     def deployment(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.DeploymentProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.DeploymentProperty"]]:
         '''The application revision to deploy to this deployment group.
 
         If you specify this property, your target application revision is deployed as soon as the provisioning process is complete. If you specify this property, don't specify the ``AutoRollbackConfiguration`` property.
@@ -5561,7 +5565,7 @@ class CfnDeploymentGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-deployment
         '''
         result = self._values.get("deployment")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.DeploymentProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.DeploymentProperty"]], result)
 
     @builtins.property
     def deployment_config_name(self) -> typing.Optional[builtins.str]:
@@ -5591,7 +5595,7 @@ class CfnDeploymentGroupProps:
     @builtins.property
     def deployment_style(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.DeploymentStyleProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.DeploymentStyleProperty"]]:
         '''Attributes that determine the type of deployment to run and whether to route deployment traffic behind a load balancer.
 
         If you specify this property with a blue/green deployment type, don't specify the ``AutoScalingGroups`` , ``LoadBalancerInfo`` , or ``Deployment`` properties.
@@ -5602,12 +5606,12 @@ class CfnDeploymentGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-deploymentstyle
         '''
         result = self._values.get("deployment_style")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.DeploymentStyleProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.DeploymentStyleProperty"]], result)
 
     @builtins.property
     def ec2_tag_filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.EC2TagFilterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagFilterProperty"]]]]:
         '''The Amazon EC2 tags that are already applied to Amazon EC2 instances that you want to include in the deployment group.
 
         CodeDeploy includes all Amazon EC2 instances identified by any of the tags you specify in this deployment group. Duplicates are not allowed.
@@ -5617,12 +5621,12 @@ class CfnDeploymentGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-ec2tagfilters
         '''
         result = self._values.get("ec2_tag_filters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.EC2TagFilterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagFilterProperty"]]]], result)
 
     @builtins.property
     def ec2_tag_set(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.EC2TagSetProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagSetProperty"]]:
         '''Information about groups of tags applied to Amazon EC2 instances.
 
         The deployment group includes only Amazon EC2 instances identified by all the tag groups. Cannot be used in the same call as ``ec2TagFilter`` .
@@ -5630,12 +5634,12 @@ class CfnDeploymentGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-ec2tagset
         '''
         result = self._values.get("ec2_tag_set")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.EC2TagSetProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.EC2TagSetProperty"]], result)
 
     @builtins.property
     def ecs_services(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.ECSServiceProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.ECSServiceProperty"]]]]:
         '''The target Amazon ECS services in the deployment group.
 
         This applies only to deployment groups that use the Amazon ECS compute platform. A target Amazon ECS service is specified as an Amazon ECS cluster and service name pair using the format ``<clustername>:<servicename>`` .
@@ -5643,12 +5647,12 @@ class CfnDeploymentGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-ecsservices
         '''
         result = self._values.get("ecs_services")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.ECSServiceProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.ECSServiceProperty"]]]], result)
 
     @builtins.property
     def load_balancer_info(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.LoadBalancerInfoProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.LoadBalancerInfoProperty"]]:
         '''Information about the load balancer to use in a deployment.
 
         For more information, see `Integrating CodeDeploy with ELB <https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-elastic-load-balancing.html>`_ in the *AWS CodeDeploy User Guide* .
@@ -5656,12 +5660,12 @@ class CfnDeploymentGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-loadbalancerinfo
         '''
         result = self._values.get("load_balancer_info")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.LoadBalancerInfoProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.LoadBalancerInfoProperty"]], result)
 
     @builtins.property
     def on_premises_instance_tag_filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.TagFilterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TagFilterProperty"]]]]:
         '''The on-premises instance tags already applied to on-premises instances that you want to include in the deployment group.
 
         CodeDeploy includes all on-premises instances identified by any of the tags you specify in this deployment group. To register on-premises instances with CodeDeploy , see `Working with On-Premises Instances for CodeDeploy <https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-on-premises.html>`_ in the *AWS CodeDeploy User Guide* . Duplicates are not allowed.
@@ -5671,12 +5675,12 @@ class CfnDeploymentGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-onpremisesinstancetagfilters
         '''
         result = self._values.get("on_premises_instance_tag_filters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.TagFilterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TagFilterProperty"]]]], result)
 
     @builtins.property
     def on_premises_tag_set(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.OnPremisesTagSetProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.OnPremisesTagSetProperty"]]:
         '''Information about groups of tags applied to on-premises instances.
 
         The deployment group includes only on-premises instances identified by all the tag groups.
@@ -5686,7 +5690,7 @@ class CfnDeploymentGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-onpremisestagset
         '''
         result = self._values.get("on_premises_tag_set")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.OnPremisesTagSetProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.OnPremisesTagSetProperty"]], result)
 
     @builtins.property
     def outdated_instances_strategy(self) -> typing.Optional[builtins.str]:
@@ -5702,7 +5706,7 @@ class CfnDeploymentGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The metadata that you apply to CodeDeploy deployment groups to help you organize and categorize them.
 
         Each tag consists of a key and an optional value, both of which you define.
@@ -5710,12 +5714,12 @@ class CfnDeploymentGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def termination_hook_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Amazon EC2 Auto Scaling group.
 
         For more information about the termination hook, see `How Amazon EC2 Auto Scaling works with CodeDeploy <https://docs.aws.amazon.com//codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors>`_ in the *AWS CodeDeploy User Guide* .
@@ -5723,12 +5727,12 @@ class CfnDeploymentGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-terminationhookenabled
         '''
         result = self._values.get("termination_hook_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def trigger_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.TriggerConfigProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TriggerConfigProperty"]]]]:
         '''Information about triggers associated with the deployment group.
 
         Duplicates are not allowed
@@ -5736,7 +5740,7 @@ class CfnDeploymentGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-triggerconfigurations
         '''
         result = self._values.get("trigger_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.TriggerConfigProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeploymentGroup.TriggerConfigProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5776,7 +5780,7 @@ class CustomLambdaDeploymentConfigProps:
     def __init__(
         self,
         *,
-        interval: _Duration_4839e8c3,
+        interval: "_Duration_4839e8c3",
         percentage: jsii.Number,
         type: "CustomLambdaDeploymentConfigType",
         deployment_config_name: typing.Optional[builtins.str] = None,
@@ -5824,7 +5828,7 @@ class CustomLambdaDeploymentConfigProps:
             self._values["deployment_config_name"] = deployment_config_name
 
     @builtins.property
-    def interval(self) -> _Duration_4839e8c3:
+    def interval(self) -> "_Duration_4839e8c3":
         '''(deprecated) The interval, in number of minutes: - For LINEAR, how frequently additional traffic is shifted - For CANARY, how long to shift traffic before the full deployment.
 
         :deprecated: Use ``LambdaDeploymentConfig``
@@ -5833,7 +5837,7 @@ class CustomLambdaDeploymentConfigProps:
         '''
         result = self._values.get("interval")
         assert result is not None, "Required property 'interval' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
     def percentage(self) -> jsii.Number:
@@ -5979,12 +5983,12 @@ class EcsBlueGreenDeploymentConfig:
     def __init__(
         self,
         *,
-        blue_target_group: _ITargetGroup_83c6f8c4,
-        green_target_group: _ITargetGroup_83c6f8c4,
-        listener: _IListener_7f84e41f,
-        deployment_approval_wait_time: typing.Optional[_Duration_4839e8c3] = None,
-        termination_wait_time: typing.Optional[_Duration_4839e8c3] = None,
-        test_listener: typing.Optional[_IListener_7f84e41f] = None,
+        blue_target_group: "_ITargetGroup_83c6f8c4",
+        green_target_group: "_ITargetGroup_83c6f8c4",
+        listener: "_IListener_7f84e41f",
+        deployment_approval_wait_time: typing.Optional["_Duration_4839e8c3"] = None,
+        termination_wait_time: typing.Optional["_Duration_4839e8c3"] = None,
+        test_listener: typing.Optional["_IListener_7f84e41f"] = None,
     ) -> None:
         '''Specify how the deployment behaves and how traffic is routed to the ECS service during a blue-green ECS deployment.
 
@@ -6047,28 +6051,28 @@ class EcsBlueGreenDeploymentConfig:
             self._values["test_listener"] = test_listener
 
     @builtins.property
-    def blue_target_group(self) -> _ITargetGroup_83c6f8c4:
+    def blue_target_group(self) -> "_ITargetGroup_83c6f8c4":
         '''The target group that will be associated with the 'blue' ECS task set during a blue-green deployment.'''
         result = self._values.get("blue_target_group")
         assert result is not None, "Required property 'blue_target_group' is missing"
-        return typing.cast(_ITargetGroup_83c6f8c4, result)
+        return typing.cast("_ITargetGroup_83c6f8c4", result)
 
     @builtins.property
-    def green_target_group(self) -> _ITargetGroup_83c6f8c4:
+    def green_target_group(self) -> "_ITargetGroup_83c6f8c4":
         '''The target group that will be associated with the 'green' ECS task set during a blue-green deployment.'''
         result = self._values.get("green_target_group")
         assert result is not None, "Required property 'green_target_group' is missing"
-        return typing.cast(_ITargetGroup_83c6f8c4, result)
+        return typing.cast("_ITargetGroup_83c6f8c4", result)
 
     @builtins.property
-    def listener(self) -> _IListener_7f84e41f:
+    def listener(self) -> "_IListener_7f84e41f":
         '''The load balancer listener used to serve production traffic and to shift production traffic from the 'blue' ECS task set to the 'green' ECS task set during a blue-green deployment.'''
         result = self._values.get("listener")
         assert result is not None, "Required property 'listener' is missing"
-        return typing.cast(_IListener_7f84e41f, result)
+        return typing.cast("_IListener_7f84e41f", result)
 
     @builtins.property
-    def deployment_approval_wait_time(self) -> typing.Optional[_Duration_4839e8c3]:
+    def deployment_approval_wait_time(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specify how long CodeDeploy waits for approval to continue a blue-green deployment before it stops the deployment.
 
         After provisioning the 'green' ECS task set and re-routing test traffic, CodeDeploy can wait for approval before
@@ -6085,10 +6089,10 @@ class EcsBlueGreenDeploymentConfig:
         :default: 0
         '''
         result = self._values.get("deployment_approval_wait_time")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def termination_wait_time(self) -> typing.Optional[_Duration_4839e8c3]:
+    def termination_wait_time(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specify how long CodeDeploy waits before it terminates the original 'blue' ECS task set when a blue-green deployment is complete.
 
         During this wait time, CodeDeploy will continue to monitor any CloudWatch alarms specified for the deployment group,
@@ -6101,10 +6105,10 @@ class EcsBlueGreenDeploymentConfig:
         :default: 0
         '''
         result = self._values.get("termination_wait_time")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def test_listener(self) -> typing.Optional[_IListener_7f84e41f]:
+    def test_listener(self) -> typing.Optional["_IListener_7f84e41f"]:
         '''The load balancer listener used to route test traffic to the 'green' ECS task set during a blue-green deployment.
 
         During a blue-green deployment, validation can occur after test traffic has been re-routed and before production
@@ -6119,7 +6123,7 @@ class EcsBlueGreenDeploymentConfig:
         :default: No test listener will be added
         '''
         result = self._values.get("test_listener")
-        return typing.cast(typing.Optional[_IListener_7f84e41f], result)
+        return typing.cast(typing.Optional["_IListener_7f84e41f"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6306,16 +6310,16 @@ class EcsDeploymentGroupProps:
     def __init__(
         self,
         *,
-        blue_green_deployment_config: typing.Union[EcsBlueGreenDeploymentConfig, typing.Dict[builtins.str, typing.Any]],
-        service: _IBaseService_3fcdd913,
-        alarms: typing.Optional[typing.Sequence[_IAlarm_ff3eabc0]] = None,
+        blue_green_deployment_config: typing.Union["EcsBlueGreenDeploymentConfig", typing.Dict[builtins.str, typing.Any]],
+        service: "_IBaseService_3fcdd913",
+        alarms: typing.Optional[typing.Sequence["_IAlarm_ff3eabc0"]] = None,
         application: typing.Optional["IEcsApplication"] = None,
-        auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         deployment_config: typing.Optional["IEcsDeploymentConfig"] = None,
         deployment_group_name: typing.Optional[builtins.str] = None,
         ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
         ignore_poll_alarms_failure: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''Construction properties for ``EcsDeploymentGroup``.
 
@@ -6398,21 +6402,21 @@ class EcsDeploymentGroupProps:
             self._values["role"] = role
 
     @builtins.property
-    def blue_green_deployment_config(self) -> EcsBlueGreenDeploymentConfig:
+    def blue_green_deployment_config(self) -> "EcsBlueGreenDeploymentConfig":
         '''The configuration options for blue-green ECS deployments.'''
         result = self._values.get("blue_green_deployment_config")
         assert result is not None, "Required property 'blue_green_deployment_config' is missing"
-        return typing.cast(EcsBlueGreenDeploymentConfig, result)
+        return typing.cast("EcsBlueGreenDeploymentConfig", result)
 
     @builtins.property
-    def service(self) -> _IBaseService_3fcdd913:
+    def service(self) -> "_IBaseService_3fcdd913":
         '''The ECS service to deploy with this Deployment Group.'''
         result = self._values.get("service")
         assert result is not None, "Required property 'service' is missing"
-        return typing.cast(_IBaseService_3fcdd913, result)
+        return typing.cast("_IBaseService_3fcdd913", result)
 
     @builtins.property
-    def alarms(self) -> typing.Optional[typing.List[_IAlarm_ff3eabc0]]:
+    def alarms(self) -> typing.Optional[typing.List["_IAlarm_ff3eabc0"]]:
         '''The CloudWatch alarms associated with this Deployment Group.
 
         CodeDeploy will stop (and optionally roll back)
@@ -6425,7 +6429,7 @@ class EcsDeploymentGroupProps:
         :see: https://docs.aws.amazon.com/codedeploy/latest/userguide/monitoring-create-alarms.html
         '''
         result = self._values.get("alarms")
-        return typing.cast(typing.Optional[typing.List[_IAlarm_ff3eabc0]], result)
+        return typing.cast(typing.Optional[typing.List["_IAlarm_ff3eabc0"]], result)
 
     @builtins.property
     def application(self) -> typing.Optional["IEcsApplication"]:
@@ -6437,13 +6441,13 @@ class EcsDeploymentGroupProps:
         return typing.cast(typing.Optional["IEcsApplication"], result)
 
     @builtins.property
-    def auto_rollback(self) -> typing.Optional[AutoRollbackConfig]:
+    def auto_rollback(self) -> typing.Optional["AutoRollbackConfig"]:
         '''The auto-rollback configuration for this Deployment Group.
 
         :default: - default AutoRollbackConfig.
         '''
         result = self._values.get("auto_rollback")
-        return typing.cast(typing.Optional[AutoRollbackConfig], result)
+        return typing.cast(typing.Optional["AutoRollbackConfig"], result)
 
     @builtins.property
     def deployment_config(self) -> typing.Optional["IEcsDeploymentConfig"]:
@@ -6482,13 +6486,13 @@ class EcsDeploymentGroupProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The service Role of this Deployment Group.
 
         :default: - A new Role will be created.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6663,13 +6667,13 @@ class IEcsDeploymentGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> IEcsApplication:
+    def application(self) -> "IEcsApplication":
         '''The reference to the CodeDeploy ECS Application that this Deployment Group belongs to.'''
         ...
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfig")
-    def deployment_config(self) -> IEcsDeploymentConfig:
+    def deployment_config(self) -> "IEcsDeploymentConfig":
         '''The Deployment Configuration this Group uses.'''
         ...
 
@@ -6701,15 +6705,15 @@ class _IEcsDeploymentGroupProxy(
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> IEcsApplication:
+    def application(self) -> "IEcsApplication":
         '''The reference to the CodeDeploy ECS Application that this Deployment Group belongs to.'''
-        return typing.cast(IEcsApplication, jsii.get(self, "application"))
+        return typing.cast("IEcsApplication", jsii.get(self, "application"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfig")
-    def deployment_config(self) -> IEcsDeploymentConfig:
+    def deployment_config(self) -> "IEcsDeploymentConfig":
         '''The Deployment Configuration this Group uses.'''
-        return typing.cast(IEcsDeploymentConfig, jsii.get(self, "deploymentConfig"))
+        return typing.cast("IEcsDeploymentConfig", jsii.get(self, "deploymentConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentGroupArn")
@@ -6844,13 +6848,13 @@ class ILambdaDeploymentGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> ILambdaApplication:
+    def application(self) -> "ILambdaApplication":
         '''The reference to the CodeDeploy Lambda Application that this Deployment Group belongs to.'''
         ...
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfig")
-    def deployment_config(self) -> ILambdaDeploymentConfig:
+    def deployment_config(self) -> "ILambdaDeploymentConfig":
         '''The Deployment Configuration this Group uses.'''
         ...
 
@@ -6882,15 +6886,15 @@ class _ILambdaDeploymentGroupProxy(
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> ILambdaApplication:
+    def application(self) -> "ILambdaApplication":
         '''The reference to the CodeDeploy Lambda Application that this Deployment Group belongs to.'''
-        return typing.cast(ILambdaApplication, jsii.get(self, "application"))
+        return typing.cast("ILambdaApplication", jsii.get(self, "application"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfig")
-    def deployment_config(self) -> ILambdaDeploymentConfig:
+    def deployment_config(self) -> "ILambdaDeploymentConfig":
         '''The Deployment Configuration this Group uses.'''
-        return typing.cast(ILambdaDeploymentConfig, jsii.get(self, "deploymentConfig"))
+        return typing.cast("ILambdaDeploymentConfig", jsii.get(self, "deploymentConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentGroupArn")
@@ -7013,12 +7017,12 @@ typing.cast(typing.Any, IServerDeploymentConfig).__jsii_proxy_class__ = lambda :
 class IServerDeploymentGroup(_IResource_c80c4260, typing_extensions.Protocol):
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> IServerApplication:
+    def application(self) -> "IServerApplication":
         ...
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfig")
-    def deployment_config(self) -> IServerDeploymentConfig:
+    def deployment_config(self) -> "IServerDeploymentConfig":
         ...
 
     @builtins.property
@@ -7041,12 +7045,12 @@ class IServerDeploymentGroup(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="autoScalingGroups")
     def auto_scaling_groups(
         self,
-    ) -> typing.Optional[typing.List[_IAutoScalingGroup_360f1cde]]:
+    ) -> typing.Optional[typing.List["_IAutoScalingGroup_360f1cde"]]:
         ...
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         ...
 
 
@@ -7057,13 +7061,13 @@ class _IServerDeploymentGroupProxy(
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> IServerApplication:
-        return typing.cast(IServerApplication, jsii.get(self, "application"))
+    def application(self) -> "IServerApplication":
+        return typing.cast("IServerApplication", jsii.get(self, "application"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfig")
-    def deployment_config(self) -> IServerDeploymentConfig:
-        return typing.cast(IServerDeploymentConfig, jsii.get(self, "deploymentConfig"))
+    def deployment_config(self) -> "IServerDeploymentConfig":
+        return typing.cast("IServerDeploymentConfig", jsii.get(self, "deploymentConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentGroupArn")
@@ -7085,13 +7089,13 @@ class _IServerDeploymentGroupProxy(
     @jsii.member(jsii_name="autoScalingGroups")
     def auto_scaling_groups(
         self,
-    ) -> typing.Optional[typing.List[_IAutoScalingGroup_360f1cde]]:
-        return typing.cast(typing.Optional[typing.List[_IAutoScalingGroup_360f1cde]], jsii.get(self, "autoScalingGroups"))
+    ) -> typing.Optional[typing.List["_IAutoScalingGroup_360f1cde"]]:
+        return typing.cast(typing.Optional[typing.List["_IAutoScalingGroup_360f1cde"]], jsii.get(self, "autoScalingGroups"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IServerDeploymentGroup).__jsii_proxy_class__ = lambda : _IServerDeploymentGroupProxy
@@ -7200,7 +7204,7 @@ class LambdaApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_name: typing.Optional[builtins.str] = None,
@@ -7222,10 +7226,10 @@ class LambdaApplication(
     @builtins.classmethod
     def from_lambda_application_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         lambda_application_arn: builtins.str,
-    ) -> ILambdaApplication:
+    ) -> "ILambdaApplication":
         '''Import an Application defined either outside the CDK, or in a different CDK Stack, by ARN.
 
         :param scope: the parent Construct for this new Construct.
@@ -7239,16 +7243,16 @@ class LambdaApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument lambda_application_arn", value=lambda_application_arn, expected_type=type_hints["lambda_application_arn"])
-        return typing.cast(ILambdaApplication, jsii.sinvoke(cls, "fromLambdaApplicationArn", [scope, id, lambda_application_arn]))
+        return typing.cast("ILambdaApplication", jsii.sinvoke(cls, "fromLambdaApplicationArn", [scope, id, lambda_application_arn]))
 
     @jsii.member(jsii_name="fromLambdaApplicationName")
     @builtins.classmethod
     def from_lambda_application_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         lambda_application_name: builtins.str,
-    ) -> ILambdaApplication:
+    ) -> "ILambdaApplication":
         '''Import an Application defined either outside the CDK, or in a different CDK Stack.
 
         The Application's account and region are assumed to be the same as the stack it is being imported
@@ -7265,7 +7269,7 @@ class LambdaApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument lambda_application_name", value=lambda_application_name, expected_type=type_hints["lambda_application_name"])
-        return typing.cast(ILambdaApplication, jsii.sinvoke(cls, "fromLambdaApplicationName", [scope, id, lambda_application_name]))
+        return typing.cast("ILambdaApplication", jsii.sinvoke(cls, "fromLambdaApplicationName", [scope, id, lambda_application_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -7492,20 +7496,20 @@ class LambdaDeploymentGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        alias: _Alias_55be8873,
-        alarms: typing.Optional[typing.Sequence[_IAlarm_ff3eabc0]] = None,
-        application: typing.Optional[ILambdaApplication] = None,
-        auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        deployment_config: typing.Optional[ILambdaDeploymentConfig] = None,
+        alias: "_Alias_55be8873",
+        alarms: typing.Optional[typing.Sequence["_IAlarm_ff3eabc0"]] = None,
+        application: typing.Optional["ILambdaApplication"] = None,
+        auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        deployment_config: typing.Optional["ILambdaDeploymentConfig"] = None,
         deployment_group_name: typing.Optional[builtins.str] = None,
         ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
         ignore_poll_alarms_failure: typing.Optional[builtins.bool] = None,
-        post_hook: typing.Optional[_IFunction_6adb0ab8] = None,
-        pre_hook: typing.Optional[_IFunction_6adb0ab8] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        post_hook: typing.Optional["_IFunction_6adb0ab8"] = None,
+        pre_hook: typing.Optional["_IFunction_6adb0ab8"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -7546,13 +7550,13 @@ class LambdaDeploymentGroup(
     @builtins.classmethod
     def from_lambda_deployment_group_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application: ILambdaApplication,
+        application: "ILambdaApplication",
         deployment_group_name: builtins.str,
-        deployment_config: typing.Optional[ILambdaDeploymentConfig] = None,
-    ) -> ILambdaDeploymentGroup:
+        deployment_config: typing.Optional["ILambdaDeploymentConfig"] = None,
+    ) -> "ILambdaDeploymentGroup":
         '''Import an Lambda Deployment Group defined either outside the CDK app, or in a different AWS region.
 
         Account and region for the DeploymentGroup are taken from the application.
@@ -7575,10 +7579,10 @@ class LambdaDeploymentGroup(
             deployment_config=deployment_config,
         )
 
-        return typing.cast(ILambdaDeploymentGroup, jsii.sinvoke(cls, "fromLambdaDeploymentGroupAttributes", [scope, id, attrs]))
+        return typing.cast("ILambdaDeploymentGroup", jsii.sinvoke(cls, "fromLambdaDeploymentGroupAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addAlarm")
-    def add_alarm(self, alarm: _IAlarm_ff3eabc0) -> None:
+    def add_alarm(self, alarm: "_IAlarm_ff3eabc0") -> None:
         '''Associates an additional alarm with this Deployment Group.
 
         :param alarm: the alarm to associate with this Deployment Group.
@@ -7589,7 +7593,7 @@ class LambdaDeploymentGroup(
         return typing.cast(None, jsii.invoke(self, "addAlarm", [alarm]))
 
     @jsii.member(jsii_name="addPostHook")
-    def add_post_hook(self, post_hook: _IFunction_6adb0ab8) -> None:
+    def add_post_hook(self, post_hook: "_IFunction_6adb0ab8") -> None:
         '''Associate a function to run after deployment completes.
 
         :param post_hook: function to run after deployment completes.
@@ -7602,7 +7606,7 @@ class LambdaDeploymentGroup(
         return typing.cast(None, jsii.invoke(self, "addPostHook", [post_hook]))
 
     @jsii.member(jsii_name="addPreHook")
-    def add_pre_hook(self, pre_hook: _IFunction_6adb0ab8) -> None:
+    def add_pre_hook(self, pre_hook: "_IFunction_6adb0ab8") -> None:
         '''Associate a function to run before deployment begins.
 
         :param pre_hook: function to run before deployment beings.
@@ -7617,8 +7621,8 @@ class LambdaDeploymentGroup(
     @jsii.member(jsii_name="grantPutLifecycleEventHookExecutionStatus")
     def grant_put_lifecycle_event_hook_execution_status(
         self,
-        grantee: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant a principal permission to codedeploy:PutLifecycleEventHookExecutionStatus on this deployment group resource.
 
         :param grantee: to grant permission to.
@@ -7626,7 +7630,7 @@ class LambdaDeploymentGroup(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6d8689c21818340ec688b7586fd416bd82b1e7011d11184910717b5859285cb4)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPutLifecycleEventHookExecutionStatus", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPutLifecycleEventHookExecutionStatus", [grantee]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -7636,15 +7640,15 @@ class LambdaDeploymentGroup(
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> ILambdaApplication:
+    def application(self) -> "ILambdaApplication":
         '''The reference to the CodeDeploy Lambda Application that this Deployment Group belongs to.'''
-        return typing.cast(ILambdaApplication, jsii.get(self, "application"))
+        return typing.cast("ILambdaApplication", jsii.get(self, "application"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfig")
-    def deployment_config(self) -> ILambdaDeploymentConfig:
+    def deployment_config(self) -> "ILambdaDeploymentConfig":
         '''The Deployment Configuration this Group uses.'''
-        return typing.cast(ILambdaDeploymentConfig, jsii.get(self, "deploymentConfig"))
+        return typing.cast("ILambdaDeploymentConfig", jsii.get(self, "deploymentConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentGroupArn")
@@ -7660,9 +7664,9 @@ class LambdaDeploymentGroup(
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''The service Role of this Deployment Group.'''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "role"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "role"))
 
 
 @jsii.data_type(
@@ -7678,9 +7682,9 @@ class LambdaDeploymentGroupAttributes:
     def __init__(
         self,
         *,
-        application: ILambdaApplication,
+        application: "ILambdaApplication",
         deployment_group_name: builtins.str,
-        deployment_config: typing.Optional[ILambdaDeploymentConfig] = None,
+        deployment_config: typing.Optional["ILambdaDeploymentConfig"] = None,
     ) -> None:
         '''Properties of a reference to a CodeDeploy Lambda Deployment Group.
 
@@ -7713,11 +7717,11 @@ class LambdaDeploymentGroupAttributes:
             self._values["deployment_config"] = deployment_config
 
     @builtins.property
-    def application(self) -> ILambdaApplication:
+    def application(self) -> "ILambdaApplication":
         '''The reference to the CodeDeploy Lambda Application that this Deployment Group belongs to.'''
         result = self._values.get("application")
         assert result is not None, "Required property 'application' is missing"
-        return typing.cast(ILambdaApplication, result)
+        return typing.cast("ILambdaApplication", result)
 
     @builtins.property
     def deployment_group_name(self) -> builtins.str:
@@ -7727,13 +7731,13 @@ class LambdaDeploymentGroupAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def deployment_config(self) -> typing.Optional[ILambdaDeploymentConfig]:
+    def deployment_config(self) -> typing.Optional["ILambdaDeploymentConfig"]:
         '''The Deployment Configuration this Deployment Group uses.
 
         :default: LambdaDeploymentConfig.CANARY_10PERCENT_5MINUTES
         '''
         result = self._values.get("deployment_config")
-        return typing.cast(typing.Optional[ILambdaDeploymentConfig], result)
+        return typing.cast(typing.Optional["ILambdaDeploymentConfig"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7768,17 +7772,17 @@ class LambdaDeploymentGroupProps:
     def __init__(
         self,
         *,
-        alias: _Alias_55be8873,
-        alarms: typing.Optional[typing.Sequence[_IAlarm_ff3eabc0]] = None,
-        application: typing.Optional[ILambdaApplication] = None,
-        auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        deployment_config: typing.Optional[ILambdaDeploymentConfig] = None,
+        alias: "_Alias_55be8873",
+        alarms: typing.Optional[typing.Sequence["_IAlarm_ff3eabc0"]] = None,
+        application: typing.Optional["ILambdaApplication"] = None,
+        auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        deployment_config: typing.Optional["ILambdaDeploymentConfig"] = None,
         deployment_group_name: typing.Optional[builtins.str] = None,
         ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
         ignore_poll_alarms_failure: typing.Optional[builtins.bool] = None,
-        post_hook: typing.Optional[_IFunction_6adb0ab8] = None,
-        pre_hook: typing.Optional[_IFunction_6adb0ab8] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        post_hook: typing.Optional["_IFunction_6adb0ab8"] = None,
+        pre_hook: typing.Optional["_IFunction_6adb0ab8"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''Construction properties for ``LambdaDeploymentGroup``.
 
@@ -7853,17 +7857,17 @@ class LambdaDeploymentGroupProps:
             self._values["role"] = role
 
     @builtins.property
-    def alias(self) -> _Alias_55be8873:
+    def alias(self) -> "_Alias_55be8873":
         '''Lambda Alias to shift traffic. Updating the version of the alias will trigger a CodeDeploy deployment.
 
         [disable-awslint:ref-via-interface] since we need to modify the alias CFN resource update policy
         '''
         result = self._values.get("alias")
         assert result is not None, "Required property 'alias' is missing"
-        return typing.cast(_Alias_55be8873, result)
+        return typing.cast("_Alias_55be8873", result)
 
     @builtins.property
-    def alarms(self) -> typing.Optional[typing.List[_IAlarm_ff3eabc0]]:
+    def alarms(self) -> typing.Optional[typing.List["_IAlarm_ff3eabc0"]]:
         '''The CloudWatch alarms associated with this Deployment Group.
 
         CodeDeploy will stop (and optionally roll back)
@@ -7876,34 +7880,34 @@ class LambdaDeploymentGroupProps:
         :see: https://docs.aws.amazon.com/codedeploy/latest/userguide/monitoring-create-alarms.html
         '''
         result = self._values.get("alarms")
-        return typing.cast(typing.Optional[typing.List[_IAlarm_ff3eabc0]], result)
+        return typing.cast(typing.Optional[typing.List["_IAlarm_ff3eabc0"]], result)
 
     @builtins.property
-    def application(self) -> typing.Optional[ILambdaApplication]:
+    def application(self) -> typing.Optional["ILambdaApplication"]:
         '''The reference to the CodeDeploy Lambda Application that this Deployment Group belongs to.
 
         :default: - One will be created for you.
         '''
         result = self._values.get("application")
-        return typing.cast(typing.Optional[ILambdaApplication], result)
+        return typing.cast(typing.Optional["ILambdaApplication"], result)
 
     @builtins.property
-    def auto_rollback(self) -> typing.Optional[AutoRollbackConfig]:
+    def auto_rollback(self) -> typing.Optional["AutoRollbackConfig"]:
         '''The auto-rollback configuration for this Deployment Group.
 
         :default: - default AutoRollbackConfig.
         '''
         result = self._values.get("auto_rollback")
-        return typing.cast(typing.Optional[AutoRollbackConfig], result)
+        return typing.cast(typing.Optional["AutoRollbackConfig"], result)
 
     @builtins.property
-    def deployment_config(self) -> typing.Optional[ILambdaDeploymentConfig]:
+    def deployment_config(self) -> typing.Optional["ILambdaDeploymentConfig"]:
         '''The Deployment Configuration this Deployment Group uses.
 
         :default: LambdaDeploymentConfig.CANARY_10PERCENT_5MINUTES
         '''
         result = self._values.get("deployment_config")
-        return typing.cast(typing.Optional[ILambdaDeploymentConfig], result)
+        return typing.cast(typing.Optional["ILambdaDeploymentConfig"], result)
 
     @builtins.property
     def deployment_group_name(self) -> typing.Optional[builtins.str]:
@@ -7933,31 +7937,31 @@ class LambdaDeploymentGroupProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def post_hook(self) -> typing.Optional[_IFunction_6adb0ab8]:
+    def post_hook(self) -> typing.Optional["_IFunction_6adb0ab8"]:
         '''The Lambda function to run after traffic routing starts.
 
         :default: - None.
         '''
         result = self._values.get("post_hook")
-        return typing.cast(typing.Optional[_IFunction_6adb0ab8], result)
+        return typing.cast(typing.Optional["_IFunction_6adb0ab8"], result)
 
     @builtins.property
-    def pre_hook(self) -> typing.Optional[_IFunction_6adb0ab8]:
+    def pre_hook(self) -> typing.Optional["_IFunction_6adb0ab8"]:
         '''The Lambda function to run before traffic routing starts.
 
         :default: - None.
         '''
         result = self._values.get("pre_hook")
-        return typing.cast(typing.Optional[_IFunction_6adb0ab8], result)
+        return typing.cast(typing.Optional["_IFunction_6adb0ab8"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The service Role of this Deployment Group.
 
         :default: - A new Role will be created.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8069,7 +8073,7 @@ class LoadBalancer(
     @builtins.classmethod
     def application(
         cls,
-        alb_target_group: _IApplicationTargetGroup_57799827,
+        alb_target_group: "_IApplicationTargetGroup_57799827",
     ) -> "LoadBalancer":
         '''Creates a new CodeDeploy load balancer from an Application Load Balancer Target Group.
 
@@ -8082,7 +8086,7 @@ class LoadBalancer(
 
     @jsii.member(jsii_name="classic")
     @builtins.classmethod
-    def classic(cls, load_balancer: _LoadBalancer_a894d40e) -> "LoadBalancer":
+    def classic(cls, load_balancer: "_LoadBalancer_a894d40e") -> "LoadBalancer":
         '''Creates a new CodeDeploy load balancer from a Classic ELB Load Balancer.
 
         :param load_balancer: a classic ELB Load Balancer.
@@ -8094,7 +8098,10 @@ class LoadBalancer(
 
     @jsii.member(jsii_name="network")
     @builtins.classmethod
-    def network(cls, nlb_target_group: _INetworkTargetGroup_abca2df7) -> "LoadBalancer":
+    def network(
+        cls,
+        nlb_target_group: "_INetworkTargetGroup_abca2df7",
+    ) -> "LoadBalancer":
         '''Creates a new CodeDeploy load balancer from a Network Load Balancer Target Group.
 
         :param nlb_target_group: an NLB Target Group.
@@ -8249,7 +8256,7 @@ class ServerApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_name: typing.Optional[builtins.str] = None,
@@ -8271,10 +8278,10 @@ class ServerApplication(
     @builtins.classmethod
     def from_server_application_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         server_application_arn: builtins.str,
-    ) -> IServerApplication:
+    ) -> "IServerApplication":
         '''Import an Application defined either outside the CDK, or in a different CDK Stack, by ARN.
 
         :param scope: the parent Construct for this new Construct.
@@ -8288,16 +8295,16 @@ class ServerApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument server_application_arn", value=server_application_arn, expected_type=type_hints["server_application_arn"])
-        return typing.cast(IServerApplication, jsii.sinvoke(cls, "fromServerApplicationArn", [scope, id, server_application_arn]))
+        return typing.cast("IServerApplication", jsii.sinvoke(cls, "fromServerApplicationArn", [scope, id, server_application_arn]))
 
     @jsii.member(jsii_name="fromServerApplicationName")
     @builtins.classmethod
     def from_server_application_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         server_application_name: builtins.str,
-    ) -> IServerApplication:
+    ) -> "IServerApplication":
         '''Import an Application defined either outside the CDK app, or in a different region.
 
         The Application's account and region are assumed to be the same as the stack it is being imported
@@ -8314,7 +8321,7 @@ class ServerApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument server_application_name", value=server_application_name, expected_type=type_hints["server_application_name"])
-        return typing.cast(IServerApplication, jsii.sinvoke(cls, "fromServerApplicationName", [scope, id, server_application_name]))
+        return typing.cast("IServerApplication", jsii.sinvoke(cls, "fromServerApplicationName", [scope, id, server_application_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -8398,7 +8405,7 @@ class ServerDeploymentConfigProps(BaseDeploymentConfigOptions):
         self,
         *,
         deployment_config_name: typing.Optional[builtins.str] = None,
-        minimum_healthy_hosts: MinimumHealthyHosts,
+        minimum_healthy_hosts: "MinimumHealthyHosts",
         zonal_config: typing.Optional[typing.Union["ZonalConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Construction properties of ``ServerDeploymentConfig``.
@@ -8442,11 +8449,11 @@ class ServerDeploymentConfigProps(BaseDeploymentConfigOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def minimum_healthy_hosts(self) -> MinimumHealthyHosts:
+    def minimum_healthy_hosts(self) -> "MinimumHealthyHosts":
         '''Minimum number of healthy hosts.'''
         result = self._values.get("minimum_healthy_hosts")
         assert result is not None, "Required property 'minimum_healthy_hosts' is missing"
-        return typing.cast(MinimumHealthyHosts, result)
+        return typing.cast("MinimumHealthyHosts", result)
 
     @builtins.property
     def zonal_config(self) -> typing.Optional["ZonalConfig"]:
@@ -8494,23 +8501,23 @@ class ServerDeploymentGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        alarms: typing.Optional[typing.Sequence[_IAlarm_ff3eabc0]] = None,
-        application: typing.Optional[IServerApplication] = None,
-        auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        auto_scaling_groups: typing.Optional[typing.Sequence[_IAutoScalingGroup_360f1cde]] = None,
-        deployment_config: typing.Optional[IServerDeploymentConfig] = None,
+        alarms: typing.Optional[typing.Sequence["_IAlarm_ff3eabc0"]] = None,
+        application: typing.Optional["IServerApplication"] = None,
+        auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        auto_scaling_groups: typing.Optional[typing.Sequence["_IAutoScalingGroup_360f1cde"]] = None,
+        deployment_config: typing.Optional["IServerDeploymentConfig"] = None,
         deployment_group_name: typing.Optional[builtins.str] = None,
-        ec2_instance_tags: typing.Optional[InstanceTagSet] = None,
+        ec2_instance_tags: typing.Optional["InstanceTagSet"] = None,
         ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
         ignore_poll_alarms_failure: typing.Optional[builtins.bool] = None,
         install_agent: typing.Optional[builtins.bool] = None,
-        load_balancer: typing.Optional[LoadBalancer] = None,
-        load_balancers: typing.Optional[typing.Sequence[LoadBalancer]] = None,
-        on_premise_instance_tags: typing.Optional[InstanceTagSet] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        load_balancer: typing.Optional["LoadBalancer"] = None,
+        load_balancers: typing.Optional[typing.Sequence["LoadBalancer"]] = None,
+        on_premise_instance_tags: typing.Optional["InstanceTagSet"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         termination_hook: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''
@@ -8560,13 +8567,13 @@ class ServerDeploymentGroup(
     @builtins.classmethod
     def from_server_deployment_group_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application: IServerApplication,
+        application: "IServerApplication",
         deployment_group_name: builtins.str,
-        deployment_config: typing.Optional[IServerDeploymentConfig] = None,
-    ) -> IServerDeploymentGroup:
+        deployment_config: typing.Optional["IServerDeploymentConfig"] = None,
+    ) -> "IServerDeploymentGroup":
         '''Import an EC2/on-premise Deployment Group defined either outside the CDK app, or in a different region.
 
         :param scope: the parent Construct for this new Construct.
@@ -8587,10 +8594,10 @@ class ServerDeploymentGroup(
             deployment_config=deployment_config,
         )
 
-        return typing.cast(IServerDeploymentGroup, jsii.sinvoke(cls, "fromServerDeploymentGroupAttributes", [scope, id, attrs]))
+        return typing.cast("IServerDeploymentGroup", jsii.sinvoke(cls, "fromServerDeploymentGroupAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addAlarm")
-    def add_alarm(self, alarm: _IAlarm_ff3eabc0) -> None:
+    def add_alarm(self, alarm: "_IAlarm_ff3eabc0") -> None:
         '''Associates an additional alarm with this Deployment Group.
 
         :param alarm: the alarm to associate with this Deployment Group.
@@ -8601,7 +8608,7 @@ class ServerDeploymentGroup(
         return typing.cast(None, jsii.invoke(self, "addAlarm", [alarm]))
 
     @jsii.member(jsii_name="addAutoScalingGroup")
-    def add_auto_scaling_group(self, asg: _AutoScalingGroup_c547a7b9) -> None:
+    def add_auto_scaling_group(self, asg: "_AutoScalingGroup_c547a7b9") -> None:
         '''Adds an additional auto-scaling group to this Deployment Group.
 
         :param asg: the auto-scaling group to add to this Deployment Group. [disable-awslint:ref-via-interface] is needed in order to install the code deploy agent by updating the ASGs user data.
@@ -8619,13 +8626,13 @@ class ServerDeploymentGroup(
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> IServerApplication:
-        return typing.cast(IServerApplication, jsii.get(self, "application"))
+    def application(self) -> "IServerApplication":
+        return typing.cast("IServerApplication", jsii.get(self, "application"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfig")
-    def deployment_config(self) -> IServerDeploymentConfig:
-        return typing.cast(IServerDeploymentConfig, jsii.get(self, "deploymentConfig"))
+    def deployment_config(self) -> "IServerDeploymentConfig":
+        return typing.cast("IServerDeploymentConfig", jsii.get(self, "deploymentConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentGroupArn")
@@ -8643,14 +8650,14 @@ class ServerDeploymentGroup(
     @jsii.member(jsii_name="autoScalingGroups")
     def auto_scaling_groups(
         self,
-    ) -> typing.Optional[typing.List[_IAutoScalingGroup_360f1cde]]:
-        return typing.cast(typing.Optional[typing.List[_IAutoScalingGroup_360f1cde]], jsii.get(self, "autoScalingGroups"))
+    ) -> typing.Optional[typing.List["_IAutoScalingGroup_360f1cde"]]:
+        return typing.cast(typing.Optional[typing.List["_IAutoScalingGroup_360f1cde"]], jsii.get(self, "autoScalingGroups"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The service Role of this Deployment Group.'''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
 
 @jsii.data_type(
@@ -8666,9 +8673,9 @@ class ServerDeploymentGroupAttributes:
     def __init__(
         self,
         *,
-        application: IServerApplication,
+        application: "IServerApplication",
         deployment_group_name: builtins.str,
-        deployment_config: typing.Optional[IServerDeploymentConfig] = None,
+        deployment_config: typing.Optional["IServerDeploymentConfig"] = None,
     ) -> None:
         '''Properties of a reference to a CodeDeploy EC2/on-premise Deployment Group.
 
@@ -8701,11 +8708,11 @@ class ServerDeploymentGroupAttributes:
             self._values["deployment_config"] = deployment_config
 
     @builtins.property
-    def application(self) -> IServerApplication:
+    def application(self) -> "IServerApplication":
         '''The reference to the CodeDeploy EC2/on-premise Application that this Deployment Group belongs to.'''
         result = self._values.get("application")
         assert result is not None, "Required property 'application' is missing"
-        return typing.cast(IServerApplication, result)
+        return typing.cast("IServerApplication", result)
 
     @builtins.property
     def deployment_group_name(self) -> builtins.str:
@@ -8715,13 +8722,13 @@ class ServerDeploymentGroupAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def deployment_config(self) -> typing.Optional[IServerDeploymentConfig]:
+    def deployment_config(self) -> typing.Optional["IServerDeploymentConfig"]:
         '''The Deployment Configuration this Deployment Group uses.
 
         :default: ServerDeploymentConfig#OneAtATime
         '''
         result = self._values.get("deployment_config")
-        return typing.cast(typing.Optional[IServerDeploymentConfig], result)
+        return typing.cast(typing.Optional["IServerDeploymentConfig"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8760,20 +8767,20 @@ class ServerDeploymentGroupProps:
     def __init__(
         self,
         *,
-        alarms: typing.Optional[typing.Sequence[_IAlarm_ff3eabc0]] = None,
-        application: typing.Optional[IServerApplication] = None,
-        auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        auto_scaling_groups: typing.Optional[typing.Sequence[_IAutoScalingGroup_360f1cde]] = None,
-        deployment_config: typing.Optional[IServerDeploymentConfig] = None,
+        alarms: typing.Optional[typing.Sequence["_IAlarm_ff3eabc0"]] = None,
+        application: typing.Optional["IServerApplication"] = None,
+        auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        auto_scaling_groups: typing.Optional[typing.Sequence["_IAutoScalingGroup_360f1cde"]] = None,
+        deployment_config: typing.Optional["IServerDeploymentConfig"] = None,
         deployment_group_name: typing.Optional[builtins.str] = None,
-        ec2_instance_tags: typing.Optional[InstanceTagSet] = None,
+        ec2_instance_tags: typing.Optional["InstanceTagSet"] = None,
         ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
         ignore_poll_alarms_failure: typing.Optional[builtins.bool] = None,
         install_agent: typing.Optional[builtins.bool] = None,
-        load_balancer: typing.Optional[LoadBalancer] = None,
-        load_balancers: typing.Optional[typing.Sequence[LoadBalancer]] = None,
-        on_premise_instance_tags: typing.Optional[InstanceTagSet] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        load_balancer: typing.Optional["LoadBalancer"] = None,
+        load_balancers: typing.Optional[typing.Sequence["LoadBalancer"]] = None,
+        on_premise_instance_tags: typing.Optional["InstanceTagSet"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         termination_hook: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Construction properties for ``ServerDeploymentGroup``.
@@ -8859,7 +8866,7 @@ class ServerDeploymentGroupProps:
             self._values["termination_hook"] = termination_hook
 
     @builtins.property
-    def alarms(self) -> typing.Optional[typing.List[_IAlarm_ff3eabc0]]:
+    def alarms(self) -> typing.Optional[typing.List["_IAlarm_ff3eabc0"]]:
         '''The CloudWatch alarms associated with this Deployment Group.
 
         CodeDeploy will stop (and optionally roll back)
@@ -8872,30 +8879,30 @@ class ServerDeploymentGroupProps:
         :see: https://docs.aws.amazon.com/codedeploy/latest/userguide/monitoring-create-alarms.html
         '''
         result = self._values.get("alarms")
-        return typing.cast(typing.Optional[typing.List[_IAlarm_ff3eabc0]], result)
+        return typing.cast(typing.Optional[typing.List["_IAlarm_ff3eabc0"]], result)
 
     @builtins.property
-    def application(self) -> typing.Optional[IServerApplication]:
+    def application(self) -> typing.Optional["IServerApplication"]:
         '''The CodeDeploy EC2/on-premise Application this Deployment Group belongs to.
 
         :default: - A new Application will be created.
         '''
         result = self._values.get("application")
-        return typing.cast(typing.Optional[IServerApplication], result)
+        return typing.cast(typing.Optional["IServerApplication"], result)
 
     @builtins.property
-    def auto_rollback(self) -> typing.Optional[AutoRollbackConfig]:
+    def auto_rollback(self) -> typing.Optional["AutoRollbackConfig"]:
         '''The auto-rollback configuration for this Deployment Group.
 
         :default: - default AutoRollbackConfig.
         '''
         result = self._values.get("auto_rollback")
-        return typing.cast(typing.Optional[AutoRollbackConfig], result)
+        return typing.cast(typing.Optional["AutoRollbackConfig"], result)
 
     @builtins.property
     def auto_scaling_groups(
         self,
-    ) -> typing.Optional[typing.List[_IAutoScalingGroup_360f1cde]]:
+    ) -> typing.Optional[typing.List["_IAutoScalingGroup_360f1cde"]]:
         '''The auto-scaling groups belonging to this Deployment Group.
 
         Auto-scaling groups can also be added after the Deployment Group is created
@@ -8907,16 +8914,16 @@ class ServerDeploymentGroupProps:
         :default: []
         '''
         result = self._values.get("auto_scaling_groups")
-        return typing.cast(typing.Optional[typing.List[_IAutoScalingGroup_360f1cde]], result)
+        return typing.cast(typing.Optional[typing.List["_IAutoScalingGroup_360f1cde"]], result)
 
     @builtins.property
-    def deployment_config(self) -> typing.Optional[IServerDeploymentConfig]:
+    def deployment_config(self) -> typing.Optional["IServerDeploymentConfig"]:
         '''The EC2/on-premise Deployment Configuration to use for this Deployment Group.
 
         :default: ServerDeploymentConfig#OneAtATime
         '''
         result = self._values.get("deployment_config")
-        return typing.cast(typing.Optional[IServerDeploymentConfig], result)
+        return typing.cast(typing.Optional["IServerDeploymentConfig"], result)
 
     @builtins.property
     def deployment_group_name(self) -> typing.Optional[builtins.str]:
@@ -8928,13 +8935,13 @@ class ServerDeploymentGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ec2_instance_tags(self) -> typing.Optional[InstanceTagSet]:
+    def ec2_instance_tags(self) -> typing.Optional["InstanceTagSet"]:
         '''All EC2 instances matching the given set of tags when a deployment occurs will be added to this Deployment Group.
 
         :default: - No additional EC2 instances will be added to the Deployment Group.
         '''
         result = self._values.get("ec2_instance_tags")
-        return typing.cast(typing.Optional[InstanceTagSet], result)
+        return typing.cast(typing.Optional["InstanceTagSet"], result)
 
     @builtins.property
     def ignore_alarm_configuration(self) -> typing.Optional[builtins.bool]:
@@ -8966,7 +8973,7 @@ class ServerDeploymentGroupProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def load_balancer(self) -> typing.Optional[LoadBalancer]:
+    def load_balancer(self) -> typing.Optional["LoadBalancer"]:
         '''(deprecated) The load balancer to place in front of this Deployment Group.
 
         Can be created from either a classic Elastic Load Balancer,
@@ -8979,10 +8986,10 @@ class ServerDeploymentGroupProps:
         :stability: deprecated
         '''
         result = self._values.get("load_balancer")
-        return typing.cast(typing.Optional[LoadBalancer], result)
+        return typing.cast(typing.Optional["LoadBalancer"], result)
 
     @builtins.property
-    def load_balancers(self) -> typing.Optional[typing.List[LoadBalancer]]:
+    def load_balancers(self) -> typing.Optional[typing.List["LoadBalancer"]]:
         '''CodeDeploy supports the deployment to multiple load balancers.
 
         Specify either multiple Classic Load Balancers, or
@@ -8991,25 +8998,25 @@ class ServerDeploymentGroupProps:
         :default: - Deployment Group will not have load balancers defined.
         '''
         result = self._values.get("load_balancers")
-        return typing.cast(typing.Optional[typing.List[LoadBalancer]], result)
+        return typing.cast(typing.Optional[typing.List["LoadBalancer"]], result)
 
     @builtins.property
-    def on_premise_instance_tags(self) -> typing.Optional[InstanceTagSet]:
+    def on_premise_instance_tags(self) -> typing.Optional["InstanceTagSet"]:
         '''All on-premise instances matching the given set of tags when a deployment occurs will be added to this Deployment Group.
 
         :default: - No additional on-premise instances will be added to the Deployment Group.
         '''
         result = self._values.get("on_premise_instance_tags")
-        return typing.cast(typing.Optional[InstanceTagSet], result)
+        return typing.cast(typing.Optional["InstanceTagSet"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The service Role of this Deployment Group.
 
         :default: - A new Role will be created.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def termination_hook(self) -> typing.Optional[builtins.bool]:
@@ -9043,7 +9050,7 @@ class TimeBasedCanaryTrafficRoutingProps(BaseTrafficShiftingConfigProps):
     def __init__(
         self,
         *,
-        interval: _Duration_4839e8c3,
+        interval: "_Duration_4839e8c3",
         percentage: jsii.Number,
     ) -> None:
         '''Construction properties for ``TimeBasedCanaryTrafficRouting``.
@@ -9073,11 +9080,11 @@ class TimeBasedCanaryTrafficRoutingProps(BaseTrafficShiftingConfigProps):
         }
 
     @builtins.property
-    def interval(self) -> _Duration_4839e8c3:
+    def interval(self) -> "_Duration_4839e8c3":
         '''The amount of time between traffic shifts.'''
         result = self._values.get("interval")
         assert result is not None, "Required property 'interval' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
     def percentage(self) -> jsii.Number:
@@ -9107,7 +9114,7 @@ class TimeBasedLinearTrafficRoutingProps(BaseTrafficShiftingConfigProps):
     def __init__(
         self,
         *,
-        interval: _Duration_4839e8c3,
+        interval: "_Duration_4839e8c3",
         percentage: jsii.Number,
     ) -> None:
         '''Construction properties for ``TimeBasedLinearTrafficRouting``.
@@ -9139,11 +9146,11 @@ class TimeBasedLinearTrafficRoutingProps(BaseTrafficShiftingConfigProps):
         }
 
     @builtins.property
-    def interval(self) -> _Duration_4839e8c3:
+    def interval(self) -> "_Duration_4839e8c3":
         '''The amount of time between traffic shifts.'''
         result = self._values.get("interval")
         assert result is not None, "Required property 'interval' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
     def percentage(self) -> jsii.Number:
@@ -9197,7 +9204,7 @@ class TrafficRouting(
     def time_based_canary(
         cls,
         *,
-        interval: _Duration_4839e8c3,
+        interval: "_Duration_4839e8c3",
         percentage: jsii.Number,
     ) -> "TrafficRouting":
         '''Shifts a specified percentage of traffic, waits for a specified amount of time, then shifts the rest of traffic.
@@ -9216,7 +9223,7 @@ class TrafficRouting(
     def time_based_linear(
         cls,
         *,
-        interval: _Duration_4839e8c3,
+        interval: "_Duration_4839e8c3",
         percentage: jsii.Number,
     ) -> "TrafficRouting":
         '''Keeps shifting a specified percentage of traffic until reaching 100%, waiting for a specified amount of time in between each traffic shift.
@@ -9232,7 +9239,7 @@ class TrafficRouting(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "TrafficRoutingConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "TrafficRoutingConfig":
         '''Returns the traffic routing configuration.
 
         :param scope: -
@@ -9242,7 +9249,7 @@ class TrafficRouting(
 
 class _TrafficRoutingProxy(TrafficRouting):
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "TrafficRoutingConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "TrafficRoutingConfig":
         '''Returns the traffic routing configuration.
 
         :param scope: -
@@ -9270,8 +9277,8 @@ class TrafficRoutingConfig:
         self,
         *,
         type: builtins.str,
-        time_based_canary: typing.Optional[typing.Union[CanaryTrafficRoutingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        time_based_linear: typing.Optional[typing.Union[LinearTrafficRoutingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        time_based_canary: typing.Optional[typing.Union["CanaryTrafficRoutingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        time_based_linear: typing.Optional[typing.Union["LinearTrafficRoutingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Represents the structure to pass into the underlying CfnDeploymentConfig class.
 
@@ -9326,22 +9333,22 @@ class TrafficRoutingConfig:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def time_based_canary(self) -> typing.Optional[CanaryTrafficRoutingConfig]:
+    def time_based_canary(self) -> typing.Optional["CanaryTrafficRoutingConfig"]:
         '''A configuration that shifts traffic from one version of a Lambda function or ECS task set to another in two increments.
 
         :default: none
         '''
         result = self._values.get("time_based_canary")
-        return typing.cast(typing.Optional[CanaryTrafficRoutingConfig], result)
+        return typing.cast(typing.Optional["CanaryTrafficRoutingConfig"], result)
 
     @builtins.property
-    def time_based_linear(self) -> typing.Optional[LinearTrafficRoutingConfig]:
+    def time_based_linear(self) -> typing.Optional["LinearTrafficRoutingConfig"]:
         '''A configuration that shifts traffic from one version of a Lambda function or Amazon ECS task set to another in equal increments, with an equal number of minutes between each increment.
 
         :default: none
         '''
         result = self._values.get("time_based_linear")
-        return typing.cast(typing.Optional[LinearTrafficRoutingConfig], result)
+        return typing.cast(typing.Optional["LinearTrafficRoutingConfig"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9368,9 +9375,9 @@ class ZonalConfig:
     def __init__(
         self,
         *,
-        first_zone_monitor_duration: typing.Optional[_Duration_4839e8c3] = None,
-        minimum_healthy_hosts_per_zone: typing.Optional[MinimumHealthyHostsPerZone] = None,
-        monitor_duration: typing.Optional[_Duration_4839e8c3] = None,
+        first_zone_monitor_duration: typing.Optional["_Duration_4839e8c3"] = None,
+        minimum_healthy_hosts_per_zone: typing.Optional["MinimumHealthyHostsPerZone"] = None,
+        monitor_duration: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Configuration for CodeDeploy to deploy your application to one Availability Zone at a time within an AWS Region.
 
@@ -9405,7 +9412,7 @@ class ZonalConfig:
             self._values["monitor_duration"] = monitor_duration
 
     @builtins.property
-    def first_zone_monitor_duration(self) -> typing.Optional[_Duration_4839e8c3]:
+    def first_zone_monitor_duration(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period of time that CodeDeploy must wait after completing a deployment to the first Availability Zone.
 
         Accepted Values:
@@ -9416,12 +9423,12 @@ class ZonalConfig:
         :default: - the same value as ``monitorDuration``
         '''
         result = self._values.get("first_zone_monitor_duration")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def minimum_healthy_hosts_per_zone(
         self,
-    ) -> typing.Optional[MinimumHealthyHostsPerZone]:
+    ) -> typing.Optional["MinimumHealthyHostsPerZone"]:
         '''The number or percentage of instances that must remain available per Availability Zone during a deployment.
 
         This option works in conjunction with the ``minimumHealthyHosts`` option.
@@ -9431,10 +9438,10 @@ class ZonalConfig:
         :see: https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html#minimum-healthy-hosts-az
         '''
         result = self._values.get("minimum_healthy_hosts_per_zone")
-        return typing.cast(typing.Optional[MinimumHealthyHostsPerZone], result)
+        return typing.cast(typing.Optional["MinimumHealthyHostsPerZone"], result)
 
     @builtins.property
-    def monitor_duration(self) -> typing.Optional[_Duration_4839e8c3]:
+    def monitor_duration(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period of time that CodeDeploy must wait after completing a deployment to an Availability Zone.
 
         Accepted Values:
@@ -9445,7 +9452,7 @@ class ZonalConfig:
         :default: - CodeDeploy starts deploying to the next Availability Zone immediately
         '''
         result = self._values.get("monitor_duration")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9481,7 +9488,7 @@ class AllAtOnceTrafficRouting(
         jsii.create(self.__class__, self, [])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> TrafficRoutingConfig:
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "TrafficRoutingConfig":
         '''Return a TrafficRoutingConfig of type ``AllAtOnce``.
 
         :param _scope: -
@@ -9489,7 +9496,7 @@ class AllAtOnceTrafficRouting(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f05ebc00e48366a13e2ad293e1822da6d979a050647a74d9f563aab403921d0d)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(TrafficRoutingConfig, jsii.invoke(self, "bind", [_scope]))
+        return typing.cast("TrafficRoutingConfig", jsii.invoke(self, "bind", [_scope]))
 
 
 @jsii.implements(IBaseDeploymentConfig)
@@ -9505,13 +9512,13 @@ class BaseDeploymentConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        compute_platform: typing.Optional[ComputePlatform] = None,
-        minimum_healthy_hosts: typing.Optional[MinimumHealthyHosts] = None,
-        traffic_routing: typing.Optional[TrafficRouting] = None,
-        zonal_config: typing.Optional[typing.Union[ZonalConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        compute_platform: typing.Optional["ComputePlatform"] = None,
+        minimum_healthy_hosts: typing.Optional["MinimumHealthyHosts"] = None,
+        traffic_routing: typing.Optional["TrafficRouting"] = None,
+        zonal_config: typing.Optional[typing.Union["ZonalConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         deployment_config_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -9541,10 +9548,10 @@ class BaseDeploymentConfig(
     @builtins.classmethod
     def from_deployment_config_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         deployment_config_name: builtins.str,
-    ) -> IBaseDeploymentConfig:
+    ) -> "IBaseDeploymentConfig":
         '''Import a custom Deployment Configuration for a Deployment Group defined outside the CDK.
 
         :param scope: the parent Construct for this new Construct.
@@ -9558,7 +9565,7 @@ class BaseDeploymentConfig(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument deployment_config_name", value=deployment_config_name, expected_type=type_hints["deployment_config_name"])
-        return typing.cast(IBaseDeploymentConfig, jsii.sinvoke(cls, "fromDeploymentConfigName", [scope, id, deployment_config_name]))
+        return typing.cast("IBaseDeploymentConfig", jsii.sinvoke(cls, "fromDeploymentConfigName", [scope, id, deployment_config_name]))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfigArn")
@@ -9622,12 +9629,12 @@ class CustomLambdaDeploymentConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        interval: _Duration_4839e8c3,
+        interval: "_Duration_4839e8c3",
         percentage: jsii.Number,
-        type: CustomLambdaDeploymentConfigType,
+        type: "CustomLambdaDeploymentConfigType",
         deployment_config_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -9707,7 +9714,7 @@ class EcsApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_name: typing.Optional[builtins.str] = None,
@@ -9729,10 +9736,10 @@ class EcsApplication(
     @builtins.classmethod
     def from_ecs_application_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         ecs_application_arn: builtins.str,
-    ) -> IEcsApplication:
+    ) -> "IEcsApplication":
         '''Import an Application defined either outside the CDK, or in a different CDK Stack, by ARN.
 
         :param scope: the parent Construct for this new Construct.
@@ -9746,16 +9753,16 @@ class EcsApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument ecs_application_arn", value=ecs_application_arn, expected_type=type_hints["ecs_application_arn"])
-        return typing.cast(IEcsApplication, jsii.sinvoke(cls, "fromEcsApplicationArn", [scope, id, ecs_application_arn]))
+        return typing.cast("IEcsApplication", jsii.sinvoke(cls, "fromEcsApplicationArn", [scope, id, ecs_application_arn]))
 
     @jsii.member(jsii_name="fromEcsApplicationName")
     @builtins.classmethod
     def from_ecs_application_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         ecs_application_name: builtins.str,
-    ) -> IEcsApplication:
+    ) -> "IEcsApplication":
         '''Import an Application defined either outside the CDK, or in a different CDK Stack.
 
         The Application's account and region are assumed to be the same as the stack it is being imported
@@ -9772,7 +9779,7 @@ class EcsApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument ecs_application_name", value=ecs_application_name, expected_type=type_hints["ecs_application_name"])
-        return typing.cast(IEcsApplication, jsii.sinvoke(cls, "fromEcsApplicationName", [scope, id, ecs_application_name]))
+        return typing.cast("IEcsApplication", jsii.sinvoke(cls, "fromEcsApplicationName", [scope, id, ecs_application_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -9831,10 +9838,10 @@ class EcsDeploymentConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        traffic_routing: typing.Optional[TrafficRouting] = None,
+        traffic_routing: typing.Optional["TrafficRouting"] = None,
         deployment_config_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -9858,10 +9865,10 @@ class EcsDeploymentConfig(
     @builtins.classmethod
     def from_ecs_deployment_config_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         ecs_deployment_config_name: builtins.str,
-    ) -> IEcsDeploymentConfig:
+    ) -> "IEcsDeploymentConfig":
         '''Import a custom Deployment Configuration for an ECS Deployment Group defined outside the CDK.
 
         :param scope: the parent Construct for this new Construct.
@@ -9875,43 +9882,43 @@ class EcsDeploymentConfig(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument ecs_deployment_config_name", value=ecs_deployment_config_name, expected_type=type_hints["ecs_deployment_config_name"])
-        return typing.cast(IEcsDeploymentConfig, jsii.sinvoke(cls, "fromEcsDeploymentConfigName", [scope, id, ecs_deployment_config_name]))
+        return typing.cast("IEcsDeploymentConfig", jsii.sinvoke(cls, "fromEcsDeploymentConfigName", [scope, id, ecs_deployment_config_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ALL_AT_ONCE")
-    def ALL_AT_ONCE(cls) -> IEcsDeploymentConfig:
+    def ALL_AT_ONCE(cls) -> "IEcsDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts all traffic to the updated ECS task set at once.'''
-        return typing.cast(IEcsDeploymentConfig, jsii.sget(cls, "ALL_AT_ONCE"))
+        return typing.cast("IEcsDeploymentConfig", jsii.sget(cls, "ALL_AT_ONCE"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CANARY_10PERCENT_15MINUTES")
-    def CANARY_10_PERCENT_15_MINUTES(cls) -> IEcsDeploymentConfig:
+    def CANARY_10_PERCENT_15_MINUTES(cls) -> "IEcsDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic in the first increment.
 
         The remaining 90 percent is deployed 15 minutes later.
         '''
-        return typing.cast(IEcsDeploymentConfig, jsii.sget(cls, "CANARY_10PERCENT_15MINUTES"))
+        return typing.cast("IEcsDeploymentConfig", jsii.sget(cls, "CANARY_10PERCENT_15MINUTES"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CANARY_10PERCENT_5MINUTES")
-    def CANARY_10_PERCENT_5_MINUTES(cls) -> IEcsDeploymentConfig:
+    def CANARY_10_PERCENT_5_MINUTES(cls) -> "IEcsDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic in the first increment.
 
         The remaining 90 percent is deployed five minutes later.
         '''
-        return typing.cast(IEcsDeploymentConfig, jsii.sget(cls, "CANARY_10PERCENT_5MINUTES"))
+        return typing.cast("IEcsDeploymentConfig", jsii.sget(cls, "CANARY_10PERCENT_5MINUTES"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="LINEAR_10PERCENT_EVERY_1MINUTES")
-    def LINEAR_10_PERCENT_EVERY_1_MINUTES(cls) -> IEcsDeploymentConfig:
+    def LINEAR_10_PERCENT_EVERY_1_MINUTES(cls) -> "IEcsDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic every minute until all traffic is shifted.'''
-        return typing.cast(IEcsDeploymentConfig, jsii.sget(cls, "LINEAR_10PERCENT_EVERY_1MINUTES"))
+        return typing.cast("IEcsDeploymentConfig", jsii.sget(cls, "LINEAR_10PERCENT_EVERY_1MINUTES"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="LINEAR_10PERCENT_EVERY_3MINUTES")
-    def LINEAR_10_PERCENT_EVERY_3_MINUTES(cls) -> IEcsDeploymentConfig:
+    def LINEAR_10_PERCENT_EVERY_3_MINUTES(cls) -> "IEcsDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic every three minutes until all traffic is shifted.'''
-        return typing.cast(IEcsDeploymentConfig, jsii.sget(cls, "LINEAR_10PERCENT_EVERY_3MINUTES"))
+        return typing.cast("IEcsDeploymentConfig", jsii.sget(cls, "LINEAR_10PERCENT_EVERY_3MINUTES"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -9962,19 +9969,19 @@ class EcsDeploymentGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        blue_green_deployment_config: typing.Union[EcsBlueGreenDeploymentConfig, typing.Dict[builtins.str, typing.Any]],
-        service: _IBaseService_3fcdd913,
-        alarms: typing.Optional[typing.Sequence[_IAlarm_ff3eabc0]] = None,
-        application: typing.Optional[IEcsApplication] = None,
-        auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        deployment_config: typing.Optional[IEcsDeploymentConfig] = None,
+        blue_green_deployment_config: typing.Union["EcsBlueGreenDeploymentConfig", typing.Dict[builtins.str, typing.Any]],
+        service: "_IBaseService_3fcdd913",
+        alarms: typing.Optional[typing.Sequence["_IAlarm_ff3eabc0"]] = None,
+        application: typing.Optional["IEcsApplication"] = None,
+        auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        deployment_config: typing.Optional["IEcsDeploymentConfig"] = None,
         deployment_group_name: typing.Optional[builtins.str] = None,
         ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
         ignore_poll_alarms_failure: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -10013,13 +10020,13 @@ class EcsDeploymentGroup(
     @builtins.classmethod
     def from_ecs_deployment_group_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application: IEcsApplication,
+        application: "IEcsApplication",
         deployment_group_name: builtins.str,
-        deployment_config: typing.Optional[IEcsDeploymentConfig] = None,
-    ) -> IEcsDeploymentGroup:
+        deployment_config: typing.Optional["IEcsDeploymentConfig"] = None,
+    ) -> "IEcsDeploymentGroup":
         '''Reference an ECS Deployment Group defined outside the CDK app.
 
         Account and region for the DeploymentGroup are taken from the application.
@@ -10042,10 +10049,10 @@ class EcsDeploymentGroup(
             deployment_config=deployment_config,
         )
 
-        return typing.cast(IEcsDeploymentGroup, jsii.sinvoke(cls, "fromEcsDeploymentGroupAttributes", [scope, id, attrs]))
+        return typing.cast("IEcsDeploymentGroup", jsii.sinvoke(cls, "fromEcsDeploymentGroupAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addAlarm")
-    def add_alarm(self, alarm: _IAlarm_ff3eabc0) -> None:
+    def add_alarm(self, alarm: "_IAlarm_ff3eabc0") -> None:
         '''Associates an additional alarm with this Deployment Group.
 
         :param alarm: the alarm to associate with this Deployment Group.
@@ -10063,15 +10070,15 @@ class EcsDeploymentGroup(
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> IEcsApplication:
+    def application(self) -> "IEcsApplication":
         '''The reference to the CodeDeploy ECS Application that this Deployment Group belongs to.'''
-        return typing.cast(IEcsApplication, jsii.get(self, "application"))
+        return typing.cast("IEcsApplication", jsii.get(self, "application"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfig")
-    def deployment_config(self) -> IEcsDeploymentConfig:
+    def deployment_config(self) -> "IEcsDeploymentConfig":
         '''The Deployment Configuration this Group uses.'''
-        return typing.cast(IEcsDeploymentConfig, jsii.get(self, "deploymentConfig"))
+        return typing.cast("IEcsDeploymentConfig", jsii.get(self, "deploymentConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentGroupArn")
@@ -10087,9 +10094,9 @@ class EcsDeploymentGroup(
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''The service Role of this Deployment Group.'''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "role"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "role"))
 
 
 @jsii.implements(ILambdaDeploymentConfig)
@@ -10122,10 +10129,10 @@ class LambdaDeploymentConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        traffic_routing: typing.Optional[TrafficRouting] = None,
+        traffic_routing: typing.Optional["TrafficRouting"] = None,
         deployment_config_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -10149,10 +10156,10 @@ class LambdaDeploymentConfig(
     @builtins.classmethod
     def from_lambda_deployment_config_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         lambda_deployment_config_name: builtins.str,
-    ) -> ILambdaDeploymentConfig:
+    ) -> "ILambdaDeploymentConfig":
         '''Import a Deployment Configuration for a Lambda Deployment Group defined outside the CDK.
 
         :param scope: the parent Construct for this new Construct.
@@ -10166,17 +10173,17 @@ class LambdaDeploymentConfig(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument lambda_deployment_config_name", value=lambda_deployment_config_name, expected_type=type_hints["lambda_deployment_config_name"])
-        return typing.cast(ILambdaDeploymentConfig, jsii.sinvoke(cls, "fromLambdaDeploymentConfigName", [scope, id, lambda_deployment_config_name]))
+        return typing.cast("ILambdaDeploymentConfig", jsii.sinvoke(cls, "fromLambdaDeploymentConfigName", [scope, id, lambda_deployment_config_name]))
 
     @jsii.member(jsii_name="import")
     @builtins.classmethod
     def import_(
         cls,
-        _scope: _constructs_77d1e7e8.Construct,
+        _scope: "_constructs_77d1e7e8.Construct",
         _id: builtins.str,
         *,
         deployment_config_name: builtins.str,
-    ) -> ILambdaDeploymentConfig:
+    ) -> "ILambdaDeploymentConfig":
         '''(deprecated) Import a Deployment Configuration for a Lambda Deployment Group defined outside the CDK.
 
         :param _scope: the parent Construct for this new Construct.
@@ -10197,73 +10204,73 @@ class LambdaDeploymentConfig(
             deployment_config_name=deployment_config_name
         )
 
-        return typing.cast(ILambdaDeploymentConfig, jsii.sinvoke(cls, "import", [_scope, _id, props]))
+        return typing.cast("ILambdaDeploymentConfig", jsii.sinvoke(cls, "import", [_scope, _id, props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ALL_AT_ONCE")
-    def ALL_AT_ONCE(cls) -> ILambdaDeploymentConfig:
+    def ALL_AT_ONCE(cls) -> "ILambdaDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts all traffic to the updated Lambda function at once.'''
-        return typing.cast(ILambdaDeploymentConfig, jsii.sget(cls, "ALL_AT_ONCE"))
+        return typing.cast("ILambdaDeploymentConfig", jsii.sget(cls, "ALL_AT_ONCE"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CANARY_10PERCENT_10MINUTES")
-    def CANARY_10_PERCENT_10_MINUTES(cls) -> ILambdaDeploymentConfig:
+    def CANARY_10_PERCENT_10_MINUTES(cls) -> "ILambdaDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic in the first increment.
 
         The remaining 90 percent is deployed 10 minutes later.
         '''
-        return typing.cast(ILambdaDeploymentConfig, jsii.sget(cls, "CANARY_10PERCENT_10MINUTES"))
+        return typing.cast("ILambdaDeploymentConfig", jsii.sget(cls, "CANARY_10PERCENT_10MINUTES"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CANARY_10PERCENT_15MINUTES")
-    def CANARY_10_PERCENT_15_MINUTES(cls) -> ILambdaDeploymentConfig:
+    def CANARY_10_PERCENT_15_MINUTES(cls) -> "ILambdaDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic in the first increment.
 
         The remaining 90 percent is deployed 15 minutes later.
         '''
-        return typing.cast(ILambdaDeploymentConfig, jsii.sget(cls, "CANARY_10PERCENT_15MINUTES"))
+        return typing.cast("ILambdaDeploymentConfig", jsii.sget(cls, "CANARY_10PERCENT_15MINUTES"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CANARY_10PERCENT_30MINUTES")
-    def CANARY_10_PERCENT_30_MINUTES(cls) -> ILambdaDeploymentConfig:
+    def CANARY_10_PERCENT_30_MINUTES(cls) -> "ILambdaDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic in the first increment.
 
         The remaining 90 percent is deployed 30 minutes later.
         '''
-        return typing.cast(ILambdaDeploymentConfig, jsii.sget(cls, "CANARY_10PERCENT_30MINUTES"))
+        return typing.cast("ILambdaDeploymentConfig", jsii.sget(cls, "CANARY_10PERCENT_30MINUTES"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CANARY_10PERCENT_5MINUTES")
-    def CANARY_10_PERCENT_5_MINUTES(cls) -> ILambdaDeploymentConfig:
+    def CANARY_10_PERCENT_5_MINUTES(cls) -> "ILambdaDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic in the first increment.
 
         The remaining 90 percent is deployed five minutes later.
         '''
-        return typing.cast(ILambdaDeploymentConfig, jsii.sget(cls, "CANARY_10PERCENT_5MINUTES"))
+        return typing.cast("ILambdaDeploymentConfig", jsii.sget(cls, "CANARY_10PERCENT_5MINUTES"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="LINEAR_10PERCENT_EVERY_10MINUTES")
-    def LINEAR_10_PERCENT_EVERY_10_MINUTES(cls) -> ILambdaDeploymentConfig:
+    def LINEAR_10_PERCENT_EVERY_10_MINUTES(cls) -> "ILambdaDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic every 10 minutes until all traffic is shifted.'''
-        return typing.cast(ILambdaDeploymentConfig, jsii.sget(cls, "LINEAR_10PERCENT_EVERY_10MINUTES"))
+        return typing.cast("ILambdaDeploymentConfig", jsii.sget(cls, "LINEAR_10PERCENT_EVERY_10MINUTES"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="LINEAR_10PERCENT_EVERY_1MINUTE")
-    def LINEAR_10_PERCENT_EVERY_1_MINUTE(cls) -> ILambdaDeploymentConfig:
+    def LINEAR_10_PERCENT_EVERY_1_MINUTE(cls) -> "ILambdaDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic every minute until all traffic is shifted.'''
-        return typing.cast(ILambdaDeploymentConfig, jsii.sget(cls, "LINEAR_10PERCENT_EVERY_1MINUTE"))
+        return typing.cast("ILambdaDeploymentConfig", jsii.sget(cls, "LINEAR_10PERCENT_EVERY_1MINUTE"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="LINEAR_10PERCENT_EVERY_2MINUTES")
-    def LINEAR_10_PERCENT_EVERY_2_MINUTES(cls) -> ILambdaDeploymentConfig:
+    def LINEAR_10_PERCENT_EVERY_2_MINUTES(cls) -> "ILambdaDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic every two minutes until all traffic is shifted.'''
-        return typing.cast(ILambdaDeploymentConfig, jsii.sget(cls, "LINEAR_10PERCENT_EVERY_2MINUTES"))
+        return typing.cast("ILambdaDeploymentConfig", jsii.sget(cls, "LINEAR_10PERCENT_EVERY_2MINUTES"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="LINEAR_10PERCENT_EVERY_3MINUTES")
-    def LINEAR_10_PERCENT_EVERY_3_MINUTES(cls) -> ILambdaDeploymentConfig:
+    def LINEAR_10_PERCENT_EVERY_3_MINUTES(cls) -> "ILambdaDeploymentConfig":
         '''CodeDeploy predefined deployment configuration that shifts 10 percent of traffic every three minutes until all traffic is shifted.'''
-        return typing.cast(ILambdaDeploymentConfig, jsii.sget(cls, "LINEAR_10PERCENT_EVERY_3MINUTES"))
+        return typing.cast("ILambdaDeploymentConfig", jsii.sget(cls, "LINEAR_10PERCENT_EVERY_3MINUTES"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -10294,11 +10301,11 @@ class ServerDeploymentConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        minimum_healthy_hosts: MinimumHealthyHosts,
-        zonal_config: typing.Optional[typing.Union[ZonalConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        minimum_healthy_hosts: "MinimumHealthyHosts",
+        zonal_config: typing.Optional[typing.Union["ZonalConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         deployment_config_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -10324,10 +10331,10 @@ class ServerDeploymentConfig(
     @builtins.classmethod
     def from_server_deployment_config_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         server_deployment_config_name: builtins.str,
-    ) -> IServerDeploymentConfig:
+    ) -> "IServerDeploymentConfig":
         '''Import a custom Deployment Configuration for an EC2/on-premise Deployment Group defined either outside the CDK app, or in a different region.
 
         :param scope: the parent Construct for this new Construct.
@@ -10341,34 +10348,34 @@ class ServerDeploymentConfig(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument server_deployment_config_name", value=server_deployment_config_name, expected_type=type_hints["server_deployment_config_name"])
-        return typing.cast(IServerDeploymentConfig, jsii.sinvoke(cls, "fromServerDeploymentConfigName", [scope, id, server_deployment_config_name]))
+        return typing.cast("IServerDeploymentConfig", jsii.sinvoke(cls, "fromServerDeploymentConfigName", [scope, id, server_deployment_config_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ALL_AT_ONCE")
-    def ALL_AT_ONCE(cls) -> IServerDeploymentConfig:
+    def ALL_AT_ONCE(cls) -> "IServerDeploymentConfig":
         '''The CodeDeployDefault.AllAtOnce predefined deployment configuration for EC2/on-premises compute platform.
 
         :see: https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html#deployment-configuration-server
         '''
-        return typing.cast(IServerDeploymentConfig, jsii.sget(cls, "ALL_AT_ONCE"))
+        return typing.cast("IServerDeploymentConfig", jsii.sget(cls, "ALL_AT_ONCE"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="HALF_AT_A_TIME")
-    def HALF_AT_A_TIME(cls) -> IServerDeploymentConfig:
+    def HALF_AT_A_TIME(cls) -> "IServerDeploymentConfig":
         '''The CodeDeployDefault.HalfAtATime predefined deployment configuration for EC2/on-premises compute platform.
 
         :see: https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html#deployment-configuration-server
         '''
-        return typing.cast(IServerDeploymentConfig, jsii.sget(cls, "HALF_AT_A_TIME"))
+        return typing.cast("IServerDeploymentConfig", jsii.sget(cls, "HALF_AT_A_TIME"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ONE_AT_A_TIME")
-    def ONE_AT_A_TIME(cls) -> IServerDeploymentConfig:
+    def ONE_AT_A_TIME(cls) -> "IServerDeploymentConfig":
         '''The CodeDeployDefault.OneAtATime predefined deployment configuration for EC2/on-premises compute platform.
 
         :see: https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html#deployment-configuration-server
         '''
-        return typing.cast(IServerDeploymentConfig, jsii.sget(cls, "ONE_AT_A_TIME"))
+        return typing.cast("IServerDeploymentConfig", jsii.sget(cls, "ONE_AT_A_TIME"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -10400,7 +10407,7 @@ class TimeBasedCanaryTrafficRouting(
     def __init__(
         self,
         *,
-        interval: _Duration_4839e8c3,
+        interval: "_Duration_4839e8c3",
         percentage: jsii.Number,
     ) -> None:
         '''
@@ -10414,7 +10421,7 @@ class TimeBasedCanaryTrafficRouting(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> TrafficRoutingConfig:
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "TrafficRoutingConfig":
         '''Return a TrafficRoutingConfig of type ``TimeBasedCanary``.
 
         :param _scope: -
@@ -10422,13 +10429,13 @@ class TimeBasedCanaryTrafficRouting(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f62d359f751a6aad86ee02e74d93fa8692f764928aa7fa26224cb9b7679affc8)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(TrafficRoutingConfig, jsii.invoke(self, "bind", [_scope]))
+        return typing.cast("TrafficRoutingConfig", jsii.invoke(self, "bind", [_scope]))
 
     @builtins.property
     @jsii.member(jsii_name="interval")
-    def interval(self) -> _Duration_4839e8c3:
+    def interval(self) -> "_Duration_4839e8c3":
         '''The amount of time between additional traffic shifts.'''
-        return typing.cast(_Duration_4839e8c3, jsii.get(self, "interval"))
+        return typing.cast("_Duration_4839e8c3", jsii.get(self, "interval"))
 
     @builtins.property
     @jsii.member(jsii_name="percentage")
@@ -10458,7 +10465,7 @@ class TimeBasedLinearTrafficRouting(
     def __init__(
         self,
         *,
-        interval: _Duration_4839e8c3,
+        interval: "_Duration_4839e8c3",
         percentage: jsii.Number,
     ) -> None:
         '''
@@ -10472,7 +10479,7 @@ class TimeBasedLinearTrafficRouting(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> TrafficRoutingConfig:
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "TrafficRoutingConfig":
         '''Return a TrafficRoutingConfig of type ``TimeBasedLinear``.
 
         :param _scope: -
@@ -10480,13 +10487,13 @@ class TimeBasedLinearTrafficRouting(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aa5564b995bb046b6d26e38cc462ee09779219878f550d6e7a210ed2d50a5b84)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(TrafficRoutingConfig, jsii.invoke(self, "bind", [_scope]))
+        return typing.cast("TrafficRoutingConfig", jsii.invoke(self, "bind", [_scope]))
 
     @builtins.property
     @jsii.member(jsii_name="interval")
-    def interval(self) -> _Duration_4839e8c3:
+    def interval(self) -> "_Duration_4839e8c3":
         '''The amount of time between additional traffic shifts.'''
-        return typing.cast(_Duration_4839e8c3, jsii.get(self, "interval"))
+        return typing.cast("_Duration_4839e8c3", jsii.get(self, "interval"))
 
     @builtins.property
     @jsii.member(jsii_name="percentage")

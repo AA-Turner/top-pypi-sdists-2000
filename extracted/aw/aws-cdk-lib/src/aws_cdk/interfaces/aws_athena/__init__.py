@@ -145,7 +145,7 @@ class ICapacityReservationRef(
 
     @builtins.property
     @jsii.member(jsii_name="capacityReservationRef")
-    def capacity_reservation_ref(self) -> CapacityReservationReference:
+    def capacity_reservation_ref(self) -> "CapacityReservationReference":
         '''(experimental) A reference to a CapacityReservation resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _ICapacityReservationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="capacityReservationRef")
-    def capacity_reservation_ref(self) -> CapacityReservationReference:
+    def capacity_reservation_ref(self) -> "CapacityReservationReference":
         '''(experimental) A reference to a CapacityReservation resource.
 
         :stability: experimental
         '''
-        return typing.cast(CapacityReservationReference, jsii.get(self, "capacityReservationRef"))
+        return typing.cast("CapacityReservationReference", jsii.get(self, "capacityReservationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICapacityReservationRef).__jsii_proxy_class__ = lambda : _ICapacityReservationRefProxy
@@ -190,7 +190,7 @@ class IDataCatalogRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataCatalogRef")
-    def data_catalog_ref(self) -> DataCatalogReference:
+    def data_catalog_ref(self) -> "DataCatalogReference":
         '''(experimental) A reference to a DataCatalog resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IDataCatalogRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataCatalogRef")
-    def data_catalog_ref(self) -> DataCatalogReference:
+    def data_catalog_ref(self) -> "DataCatalogReference":
         '''(experimental) A reference to a DataCatalog resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataCatalogReference, jsii.get(self, "dataCatalogRef"))
+        return typing.cast("DataCatalogReference", jsii.get(self, "dataCatalogRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataCatalogRef).__jsii_proxy_class__ = lambda : _IDataCatalogRefProxy

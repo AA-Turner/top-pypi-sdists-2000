@@ -575,7 +575,7 @@ class IApiCacheRef(
 
     @builtins.property
     @jsii.member(jsii_name="apiCacheRef")
-    def api_cache_ref(self) -> ApiCacheReference:
+    def api_cache_ref(self) -> "ApiCacheReference":
         '''(experimental) A reference to a ApiCache resource.
 
         :stability: experimental
@@ -596,12 +596,12 @@ class _IApiCacheRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="apiCacheRef")
-    def api_cache_ref(self) -> ApiCacheReference:
+    def api_cache_ref(self) -> "ApiCacheReference":
         '''(experimental) A reference to a ApiCache resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApiCacheReference, jsii.get(self, "apiCacheRef"))
+        return typing.cast("ApiCacheReference", jsii.get(self, "apiCacheRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApiCacheRef).__jsii_proxy_class__ = lambda : _IApiCacheRefProxy
@@ -620,7 +620,7 @@ class IApiKeyRef(
 
     @builtins.property
     @jsii.member(jsii_name="apiKeyRef")
-    def api_key_ref(self) -> ApiKeyReference:
+    def api_key_ref(self) -> "ApiKeyReference":
         '''(experimental) A reference to a ApiKey resource.
 
         :stability: experimental
@@ -641,12 +641,12 @@ class _IApiKeyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="apiKeyRef")
-    def api_key_ref(self) -> ApiKeyReference:
+    def api_key_ref(self) -> "ApiKeyReference":
         '''(experimental) A reference to a ApiKey resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApiKeyReference, jsii.get(self, "apiKeyRef"))
+        return typing.cast("ApiKeyReference", jsii.get(self, "apiKeyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApiKeyRef).__jsii_proxy_class__ = lambda : _IApiKeyRefProxy
@@ -665,7 +665,7 @@ class IApiRef(
 
     @builtins.property
     @jsii.member(jsii_name="apiRef")
-    def api_ref(self) -> ApiReference:
+    def api_ref(self) -> "ApiReference":
         '''(experimental) A reference to a Api resource.
 
         :stability: experimental
@@ -686,12 +686,12 @@ class _IApiRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="apiRef")
-    def api_ref(self) -> ApiReference:
+    def api_ref(self) -> "ApiReference":
         '''(experimental) A reference to a Api resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApiReference, jsii.get(self, "apiRef"))
+        return typing.cast("ApiReference", jsii.get(self, "apiRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApiRef).__jsii_proxy_class__ = lambda : _IApiRefProxy
@@ -710,7 +710,7 @@ class IChannelNamespaceRef(
 
     @builtins.property
     @jsii.member(jsii_name="channelNamespaceRef")
-    def channel_namespace_ref(self) -> ChannelNamespaceReference:
+    def channel_namespace_ref(self) -> "ChannelNamespaceReference":
         '''(experimental) A reference to a ChannelNamespace resource.
 
         :stability: experimental
@@ -731,12 +731,12 @@ class _IChannelNamespaceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="channelNamespaceRef")
-    def channel_namespace_ref(self) -> ChannelNamespaceReference:
+    def channel_namespace_ref(self) -> "ChannelNamespaceReference":
         '''(experimental) A reference to a ChannelNamespace resource.
 
         :stability: experimental
         '''
-        return typing.cast(ChannelNamespaceReference, jsii.get(self, "channelNamespaceRef"))
+        return typing.cast("ChannelNamespaceReference", jsii.get(self, "channelNamespaceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IChannelNamespaceRef).__jsii_proxy_class__ = lambda : _IChannelNamespaceRefProxy
@@ -755,7 +755,7 @@ class IDataSourceRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataSourceRef")
-    def data_source_ref(self) -> DataSourceReference:
+    def data_source_ref(self) -> "DataSourceReference":
         '''(experimental) A reference to a DataSource resource.
 
         :stability: experimental
@@ -776,12 +776,12 @@ class _IDataSourceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataSourceRef")
-    def data_source_ref(self) -> DataSourceReference:
+    def data_source_ref(self) -> "DataSourceReference":
         '''(experimental) A reference to a DataSource resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataSourceReference, jsii.get(self, "dataSourceRef"))
+        return typing.cast("DataSourceReference", jsii.get(self, "dataSourceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataSourceRef).__jsii_proxy_class__ = lambda : _IDataSourceRefProxy
@@ -802,7 +802,7 @@ class IDomainNameApiAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="domainNameApiAssociationRef")
-    def domain_name_api_association_ref(self) -> DomainNameApiAssociationReference:
+    def domain_name_api_association_ref(self) -> "DomainNameApiAssociationReference":
         '''(experimental) A reference to a DomainNameApiAssociation resource.
 
         :stability: experimental
@@ -823,12 +823,12 @@ class _IDomainNameApiAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="domainNameApiAssociationRef")
-    def domain_name_api_association_ref(self) -> DomainNameApiAssociationReference:
+    def domain_name_api_association_ref(self) -> "DomainNameApiAssociationReference":
         '''(experimental) A reference to a DomainNameApiAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(DomainNameApiAssociationReference, jsii.get(self, "domainNameApiAssociationRef"))
+        return typing.cast("DomainNameApiAssociationReference", jsii.get(self, "domainNameApiAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDomainNameApiAssociationRef).__jsii_proxy_class__ = lambda : _IDomainNameApiAssociationRefProxy
@@ -847,7 +847,7 @@ class IDomainNameRef(
 
     @builtins.property
     @jsii.member(jsii_name="domainNameRef")
-    def domain_name_ref(self) -> DomainNameReference:
+    def domain_name_ref(self) -> "DomainNameReference":
         '''(experimental) A reference to a DomainName resource.
 
         :stability: experimental
@@ -868,12 +868,12 @@ class _IDomainNameRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="domainNameRef")
-    def domain_name_ref(self) -> DomainNameReference:
+    def domain_name_ref(self) -> "DomainNameReference":
         '''(experimental) A reference to a DomainName resource.
 
         :stability: experimental
         '''
-        return typing.cast(DomainNameReference, jsii.get(self, "domainNameRef"))
+        return typing.cast("DomainNameReference", jsii.get(self, "domainNameRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDomainNameRef).__jsii_proxy_class__ = lambda : _IDomainNameRefProxy
@@ -894,7 +894,7 @@ class IFunctionConfigurationRef(
 
     @builtins.property
     @jsii.member(jsii_name="functionConfigurationRef")
-    def function_configuration_ref(self) -> FunctionConfigurationReference:
+    def function_configuration_ref(self) -> "FunctionConfigurationReference":
         '''(experimental) A reference to a FunctionConfiguration resource.
 
         :stability: experimental
@@ -915,12 +915,12 @@ class _IFunctionConfigurationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="functionConfigurationRef")
-    def function_configuration_ref(self) -> FunctionConfigurationReference:
+    def function_configuration_ref(self) -> "FunctionConfigurationReference":
         '''(experimental) A reference to a FunctionConfiguration resource.
 
         :stability: experimental
         '''
-        return typing.cast(FunctionConfigurationReference, jsii.get(self, "functionConfigurationRef"))
+        return typing.cast("FunctionConfigurationReference", jsii.get(self, "functionConfigurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFunctionConfigurationRef).__jsii_proxy_class__ = lambda : _IFunctionConfigurationRefProxy
@@ -939,7 +939,7 @@ class IGraphQLApiRef(
 
     @builtins.property
     @jsii.member(jsii_name="graphQlApiRef")
-    def graph_ql_api_ref(self) -> GraphQLApiReference:
+    def graph_ql_api_ref(self) -> "GraphQLApiReference":
         '''(experimental) A reference to a GraphQLApi resource.
 
         :stability: experimental
@@ -960,12 +960,12 @@ class _IGraphQLApiRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="graphQlApiRef")
-    def graph_ql_api_ref(self) -> GraphQLApiReference:
+    def graph_ql_api_ref(self) -> "GraphQLApiReference":
         '''(experimental) A reference to a GraphQLApi resource.
 
         :stability: experimental
         '''
-        return typing.cast(GraphQLApiReference, jsii.get(self, "graphQlApiRef"))
+        return typing.cast("GraphQLApiReference", jsii.get(self, "graphQlApiRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGraphQLApiRef).__jsii_proxy_class__ = lambda : _IGraphQLApiRefProxy
@@ -984,7 +984,7 @@ class IGraphQLSchemaRef(
 
     @builtins.property
     @jsii.member(jsii_name="graphQlSchemaRef")
-    def graph_ql_schema_ref(self) -> GraphQLSchemaReference:
+    def graph_ql_schema_ref(self) -> "GraphQLSchemaReference":
         '''(experimental) A reference to a GraphQLSchema resource.
 
         :stability: experimental
@@ -1005,12 +1005,12 @@ class _IGraphQLSchemaRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="graphQlSchemaRef")
-    def graph_ql_schema_ref(self) -> GraphQLSchemaReference:
+    def graph_ql_schema_ref(self) -> "GraphQLSchemaReference":
         '''(experimental) A reference to a GraphQLSchema resource.
 
         :stability: experimental
         '''
-        return typing.cast(GraphQLSchemaReference, jsii.get(self, "graphQlSchemaRef"))
+        return typing.cast("GraphQLSchemaReference", jsii.get(self, "graphQlSchemaRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGraphQLSchemaRef).__jsii_proxy_class__ = lambda : _IGraphQLSchemaRefProxy

@@ -345,7 +345,7 @@ class IAnalysisTemplateRef(
 
     @builtins.property
     @jsii.member(jsii_name="analysisTemplateRef")
-    def analysis_template_ref(self) -> AnalysisTemplateReference:
+    def analysis_template_ref(self) -> "AnalysisTemplateReference":
         '''(experimental) A reference to a AnalysisTemplate resource.
 
         :stability: experimental
@@ -366,12 +366,12 @@ class _IAnalysisTemplateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="analysisTemplateRef")
-    def analysis_template_ref(self) -> AnalysisTemplateReference:
+    def analysis_template_ref(self) -> "AnalysisTemplateReference":
         '''(experimental) A reference to a AnalysisTemplate resource.
 
         :stability: experimental
         '''
-        return typing.cast(AnalysisTemplateReference, jsii.get(self, "analysisTemplateRef"))
+        return typing.cast("AnalysisTemplateReference", jsii.get(self, "analysisTemplateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAnalysisTemplateRef).__jsii_proxy_class__ = lambda : _IAnalysisTemplateRefProxy
@@ -390,7 +390,7 @@ class ICollaborationRef(
 
     @builtins.property
     @jsii.member(jsii_name="collaborationRef")
-    def collaboration_ref(self) -> CollaborationReference:
+    def collaboration_ref(self) -> "CollaborationReference":
         '''(experimental) A reference to a Collaboration resource.
 
         :stability: experimental
@@ -411,12 +411,12 @@ class _ICollaborationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="collaborationRef")
-    def collaboration_ref(self) -> CollaborationReference:
+    def collaboration_ref(self) -> "CollaborationReference":
         '''(experimental) A reference to a Collaboration resource.
 
         :stability: experimental
         '''
-        return typing.cast(CollaborationReference, jsii.get(self, "collaborationRef"))
+        return typing.cast("CollaborationReference", jsii.get(self, "collaborationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICollaborationRef).__jsii_proxy_class__ = lambda : _ICollaborationRefProxy
@@ -437,7 +437,7 @@ class IConfiguredTableAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="configuredTableAssociationRef")
-    def configured_table_association_ref(self) -> ConfiguredTableAssociationReference:
+    def configured_table_association_ref(self) -> "ConfiguredTableAssociationReference":
         '''(experimental) A reference to a ConfiguredTableAssociation resource.
 
         :stability: experimental
@@ -458,12 +458,12 @@ class _IConfiguredTableAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configuredTableAssociationRef")
-    def configured_table_association_ref(self) -> ConfiguredTableAssociationReference:
+    def configured_table_association_ref(self) -> "ConfiguredTableAssociationReference":
         '''(experimental) A reference to a ConfiguredTableAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfiguredTableAssociationReference, jsii.get(self, "configuredTableAssociationRef"))
+        return typing.cast("ConfiguredTableAssociationReference", jsii.get(self, "configuredTableAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfiguredTableAssociationRef).__jsii_proxy_class__ = lambda : _IConfiguredTableAssociationRefProxy
@@ -482,7 +482,7 @@ class IConfiguredTableRef(
 
     @builtins.property
     @jsii.member(jsii_name="configuredTableRef")
-    def configured_table_ref(self) -> ConfiguredTableReference:
+    def configured_table_ref(self) -> "ConfiguredTableReference":
         '''(experimental) A reference to a ConfiguredTable resource.
 
         :stability: experimental
@@ -503,12 +503,12 @@ class _IConfiguredTableRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configuredTableRef")
-    def configured_table_ref(self) -> ConfiguredTableReference:
+    def configured_table_ref(self) -> "ConfiguredTableReference":
         '''(experimental) A reference to a ConfiguredTable resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfiguredTableReference, jsii.get(self, "configuredTableRef"))
+        return typing.cast("ConfiguredTableReference", jsii.get(self, "configuredTableRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfiguredTableRef).__jsii_proxy_class__ = lambda : _IConfiguredTableRefProxy

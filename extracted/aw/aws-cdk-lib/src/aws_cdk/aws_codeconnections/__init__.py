@@ -98,6 +98,7 @@ class CfnConnection(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codeconnections as codeconnections
@@ -117,13 +118,13 @@ class CfnConnection(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         connection_name: builtins.str,
         host_arn: typing.Optional[builtins.str] = None,
         provider_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeConnections::Connection``.
 
@@ -149,7 +150,7 @@ class CfnConnection(
 
     @jsii.member(jsii_name="arnForConnection")
     @builtins.classmethod
-    def arn_for_connection(cls, resource: _IConnectionRef_31f0710d) -> builtins.str:
+    def arn_for_connection(cls, resource: "_IConnectionRef_31f0710d") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -171,7 +172,7 @@ class CfnConnection(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnection", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -236,9 +237,9 @@ class CfnConnection(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -247,9 +248,9 @@ class CfnConnection(
 
     @builtins.property
     @jsii.member(jsii_name="connectionRef")
-    def connection_ref(self) -> _ConnectionReference_c7ca42e3:
+    def connection_ref(self) -> "_ConnectionReference_c7ca42e3":
         '''A reference to a Connection resource.'''
-        return typing.cast(_ConnectionReference_c7ca42e3, jsii.get(self, "connectionRef"))
+        return typing.cast("_ConnectionReference_c7ca42e3", jsii.get(self, "connectionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connectionName")
@@ -292,12 +293,12 @@ class CfnConnection(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the tags applied to a connection.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cd277a1214d747c2b8b1a0998909d0fe0edc54719c5d7b8ae3621585dbf60405)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -321,7 +322,7 @@ class CfnConnectionProps:
         connection_name: builtins.str,
         host_arn: typing.Optional[builtins.str] = None,
         provider_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConnection``.
 
@@ -335,6 +336,7 @@ class CfnConnectionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codeconnections as codeconnections
@@ -398,13 +400,13 @@ class CfnConnectionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the tags applied to a connection.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codeconnections-connection.html#cfn-codeconnections-connection-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

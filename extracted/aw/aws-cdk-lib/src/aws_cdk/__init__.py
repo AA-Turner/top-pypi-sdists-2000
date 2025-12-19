@@ -297,6 +297,7 @@ enabled it is possible to do something like creating a CloudFront distribution i
 an ACM certificate in `us-east-1`.
 
 ```python
+from aws_cdk import Environment, Environment
 stack1 = Stack(app, "Stack1",
     env=Environment(
         region="us-east-1"
@@ -1007,6 +1008,7 @@ a property of the creationPolicy on the resource options. Setting it to true wil
 resources that depend on the fleet resource.
 
 ```python
+from aws_cdk import CfnCreationPolicy
 fleet = appstream.CfnFleet(self, "Fleet",
     instance_type="stream.standard.small",
     name="Fleet",
@@ -1030,6 +1032,7 @@ The format of the timeout is `PT#H#M#S`. In the example below AWS Cloudformation
 `CREATE_COMPLETE`.
 
 ```python
+from aws_cdk import CfnCreationPolicy, CfnResourceSignal
 # resource: CfnResource
 
 
@@ -1614,6 +1617,7 @@ plugin should return an instance of `PolicyValidationPluginReportBeta1`. This ob
 represents the report that the user wil receive at the end of the synthesis.
 
 ```python
+from aws_cdk import PolicyValidationPluginReportBeta1, PolicyViolationBeta1, PolicyViolatingResourceBeta1
 @jsii.implements(IPolicyValidationPluginBeta1)
 class MyPlugin:
 
@@ -2028,6 +2032,7 @@ class AWSEventMetadataProps:
 
         Example::
 
+            from aws_cdk import AWSEventMetadataProps
             from aws_cdk.mixins_preview.aws_s3.events import BucketEvents
             
             # bucket: s3.Bucket
@@ -2238,7 +2243,7 @@ class Annotations(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Annotations"):
 
     @jsii.member(jsii_name="of")
     @builtins.classmethod
-    def of(cls, scope: _constructs_77d1e7e8.IConstruct) -> "Annotations":
+    def of(cls, scope: "_constructs_77d1e7e8.IConstruct") -> "Annotations":
         '''Returns the annotations API for a construct scope.
 
         :param scope: The scope.
@@ -3001,7 +3006,7 @@ class AspectApplication(
 
     def __init__(
         self,
-        construct: _constructs_77d1e7e8.IConstruct,
+        construct: "_constructs_77d1e7e8.IConstruct",
         aspect: "IAspect",
         priority: jsii.Number,
     ) -> None:
@@ -3026,9 +3031,9 @@ class AspectApplication(
 
     @builtins.property
     @jsii.member(jsii_name="construct")
-    def construct(self) -> _constructs_77d1e7e8.IConstruct:
+    def construct(self) -> "_constructs_77d1e7e8.IConstruct":
         '''The construct that the Aspect was applied to.'''
-        return typing.cast(_constructs_77d1e7e8.IConstruct, jsii.get(self, "construct"))
+        return typing.cast("_constructs_77d1e7e8.IConstruct", jsii.get(self, "construct"))
 
     @builtins.property
     @jsii.member(jsii_name="priority")
@@ -3179,7 +3184,7 @@ class Aspects(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Aspects"):
 
     @jsii.member(jsii_name="of")
     @builtins.classmethod
-    def of(cls, scope: _constructs_77d1e7e8.IConstruct) -> "Aspects":
+    def of(cls, scope: "_constructs_77d1e7e8.IConstruct") -> "Aspects":
         '''Returns the ``Aspects`` object associated with a construct scope.
 
         :param scope: The scope for which these aspects will apply.
@@ -3216,12 +3221,12 @@ class Aspects(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Aspects"):
 
     @builtins.property
     @jsii.member(jsii_name="applied")
-    def applied(self) -> typing.List[AspectApplication]:
+    def applied(self) -> typing.List["AspectApplication"]:
         '''The list of aspects with priority which were directly applied on this scope.
 
         Also returns inherited Aspects of this node.
         '''
-        return typing.cast(typing.List[AspectApplication], jsii.get(self, "applied"))
+        return typing.cast(typing.List["AspectApplication"], jsii.get(self, "applied"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.AssetHashType")
@@ -3276,11 +3281,11 @@ class AssetManifestBuilder(
         self,
         stack: "Stack",
         source_hash: builtins.str,
-        source: typing.Union[_DockerImageSource_5db2cfa3, typing.Dict[builtins.str, typing.Any]],
-        dest: typing.Union[_DockerImageDestination_132046c7, typing.Dict[builtins.str, typing.Any]],
+        source: typing.Union["_DockerImageSource_5db2cfa3", typing.Dict[builtins.str, typing.Any]],
+        dest: typing.Union["_DockerImageDestination_132046c7", typing.Dict[builtins.str, typing.Any]],
         *,
         display_name: typing.Optional[builtins.str] = None,
-    ) -> _DockerImageDestination_132046c7:
+    ) -> "_DockerImageDestination_132046c7":
         '''Add a docker asset source and destination to the manifest.
 
         sourceHash should be unique for every source.
@@ -3299,18 +3304,18 @@ class AssetManifestBuilder(
             check_type(argname="argument dest", value=dest, expected_type=type_hints["dest"])
         options = AddDockerImageAssetOptions(display_name=display_name)
 
-        return typing.cast(_DockerImageDestination_132046c7, jsii.invoke(self, "addDockerImageAsset", [stack, source_hash, source, dest, options]))
+        return typing.cast("_DockerImageDestination_132046c7", jsii.invoke(self, "addDockerImageAsset", [stack, source_hash, source, dest, options]))
 
     @jsii.member(jsii_name="addFileAsset")
     def add_file_asset(
         self,
         stack: "Stack",
         source_hash: builtins.str,
-        source: typing.Union[_FileSource_66254048, typing.Dict[builtins.str, typing.Any]],
-        dest: typing.Union[_FileDestination_7d285b38, typing.Dict[builtins.str, typing.Any]],
+        source: typing.Union["_FileSource_66254048", typing.Dict[builtins.str, typing.Any]],
+        dest: typing.Union["_FileDestination_7d285b38", typing.Dict[builtins.str, typing.Any]],
         *,
         display_name: typing.Optional[builtins.str] = None,
-    ) -> _FileDestination_7d285b38:
+    ) -> "_FileDestination_7d285b38":
         '''Add a file asset source and destination to the manifest.
 
         sourceHash should be unique for every source.
@@ -3329,7 +3334,7 @@ class AssetManifestBuilder(
             check_type(argname="argument dest", value=dest, expected_type=type_hints["dest"])
         options = AddFileAssetOptions(display_name=display_name)
 
-        return typing.cast(_FileDestination_7d285b38, jsii.invoke(self, "addFileAsset", [stack, source_hash, source, dest, options]))
+        return typing.cast("_FileDestination_7d285b38", jsii.invoke(self, "addFileAsset", [stack, source_hash, source, dest, options]))
 
     @jsii.member(jsii_name="defaultAddDockerImageAsset")
     def default_add_docker_image_asset(
@@ -3339,7 +3344,7 @@ class AssetManifestBuilder(
         target: typing.Union["AssetManifestDockerImageDestination", typing.Dict[builtins.str, typing.Any]],
         *,
         display_name: typing.Optional[builtins.str] = None,
-    ) -> _DockerImageDestination_132046c7:
+    ) -> "_DockerImageDestination_132046c7":
         '''Add a docker image asset to the manifest with default settings.
 
         Derive the region from the stack, use the asset hash as the key, and set the prefix.
@@ -3356,7 +3361,7 @@ class AssetManifestBuilder(
             check_type(argname="argument target", value=target, expected_type=type_hints["target"])
         options = AddDockerImageAssetOptions(display_name=display_name)
 
-        return typing.cast(_DockerImageDestination_132046c7, jsii.invoke(self, "defaultAddDockerImageAsset", [stack, asset, target, options]))
+        return typing.cast("_DockerImageDestination_132046c7", jsii.invoke(self, "defaultAddDockerImageAsset", [stack, asset, target, options]))
 
     @jsii.member(jsii_name="defaultAddFileAsset")
     def default_add_file_asset(
@@ -3366,7 +3371,7 @@ class AssetManifestBuilder(
         target: typing.Union["AssetManifestFileDestination", typing.Dict[builtins.str, typing.Any]],
         *,
         display_name: typing.Optional[builtins.str] = None,
-    ) -> _FileDestination_7d285b38:
+    ) -> "_FileDestination_7d285b38":
         '''Add a file asset to the manifest with default settings.
 
         Derive the region from the stack, use the asset hash as the key, copy the
@@ -3384,14 +3389,14 @@ class AssetManifestBuilder(
             check_type(argname="argument target", value=target, expected_type=type_hints["target"])
         options = AddFileAssetOptions(display_name=display_name)
 
-        return typing.cast(_FileDestination_7d285b38, jsii.invoke(self, "defaultAddFileAsset", [stack, asset, target, options]))
+        return typing.cast("_FileDestination_7d285b38", jsii.invoke(self, "defaultAddFileAsset", [stack, asset, target, options]))
 
     @jsii.member(jsii_name="emitManifest")
     def emit_manifest(
         self,
         stack: "Stack",
         session: "ISynthesisSession",
-        options: typing.Optional[typing.Union[_AssetManifestOptions_73b93270, typing.Dict[builtins.str, typing.Any]]] = None,
+        options: typing.Optional[typing.Union["_AssetManifestOptions_73b93270", typing.Dict[builtins.str, typing.Any]]] = None,
         dependencies: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> builtins.str:
         '''Write the manifest to disk, and add it to the synthesis session.
@@ -3635,7 +3640,7 @@ class AssetOptions:
         self,
         *,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[AssetHashType] = None,
+        asset_hash_type: typing.Optional["AssetHashType"] = None,
         bundling: typing.Optional[typing.Union["BundlingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Asset hash options.
@@ -3722,7 +3727,7 @@ class AssetOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def asset_hash_type(self) -> typing.Optional[AssetHashType]:
+    def asset_hash_type(self) -> typing.Optional["AssetHashType"]:
         '''Specifies the type of hash to calculate for this asset.
 
         If ``assetHash`` is configured, this option must be ``undefined`` or
@@ -3734,7 +3739,7 @@ class AssetOptions:
         explicitly specified this value defaults to ``AssetHashType.CUSTOM``.
         '''
         result = self._values.get("asset_hash_type")
-        return typing.cast(typing.Optional[AssetHashType], result)
+        return typing.cast(typing.Optional["AssetHashType"], result)
 
     @builtins.property
     def bundling(self) -> typing.Optional["BundlingOptions"]:
@@ -3838,13 +3843,13 @@ class AssetStaging(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         source_path: builtins.str,
         extra_hash: typing.Optional[builtins.str] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[AssetHashType] = None,
+        asset_hash_type: typing.Optional["AssetHashType"] = None,
         bundling: typing.Optional[typing.Union["BundlingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
         follow: typing.Optional["SymlinkFollowMode"] = None,
@@ -4155,7 +4160,7 @@ class BundlingOptions:
         self,
         *,
         image: "DockerImage",
-        bundling_file_access: typing.Optional[BundlingFileAccess] = None,
+        bundling_file_access: typing.Optional["BundlingFileAccess"] = None,
         command: typing.Optional[typing.Sequence[builtins.str]] = None,
         entrypoint: typing.Optional[typing.Sequence[builtins.str]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -4256,13 +4261,13 @@ class BundlingOptions:
         return typing.cast("DockerImage", result)
 
     @builtins.property
-    def bundling_file_access(self) -> typing.Optional[BundlingFileAccess]:
+    def bundling_file_access(self) -> typing.Optional["BundlingFileAccess"]:
         '''The access mechanism used to make source files available to the bundling container and to return the bundling output back to the host.
 
         :default: - BundlingFileAccess.BIND_MOUNT
         '''
         result = self._values.get("bundling_file_access")
-        return typing.cast(typing.Optional[BundlingFileAccess], result)
+        return typing.cast(typing.Optional["BundlingFileAccess"], result)
 
     @builtins.property
     def command(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5100,9 +5105,9 @@ class CfnCodeDeployBlueGreenHookProps:
     def __init__(
         self,
         *,
-        applications: typing.Sequence[typing.Union[CfnCodeDeployBlueGreenApplication, typing.Dict[builtins.str, typing.Any]]],
+        applications: typing.Sequence[typing.Union["CfnCodeDeployBlueGreenApplication", typing.Dict[builtins.str, typing.Any]]],
         service_role: builtins.str,
-        additional_options: typing.Optional[typing.Union[CfnCodeDeployBlueGreenAdditionalOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        additional_options: typing.Optional[typing.Union["CfnCodeDeployBlueGreenAdditionalOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         lifecycle_event_hooks: typing.Optional[typing.Union["CfnCodeDeployBlueGreenLifecycleEventHooks", typing.Dict[builtins.str, typing.Any]]] = None,
         traffic_routing_config: typing.Optional[typing.Union["CfnTrafficRoutingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
@@ -5197,11 +5202,11 @@ class CfnCodeDeployBlueGreenHookProps:
             self._values["traffic_routing_config"] = traffic_routing_config
 
     @builtins.property
-    def applications(self) -> typing.List[CfnCodeDeployBlueGreenApplication]:
+    def applications(self) -> typing.List["CfnCodeDeployBlueGreenApplication"]:
         '''Properties of the Amazon ECS applications being deployed.'''
         result = self._values.get("applications")
         assert result is not None, "Required property 'applications' is missing"
-        return typing.cast(typing.List[CfnCodeDeployBlueGreenApplication], result)
+        return typing.cast(typing.List["CfnCodeDeployBlueGreenApplication"], result)
 
     @builtins.property
     def service_role(self) -> builtins.str:
@@ -5213,13 +5218,13 @@ class CfnCodeDeployBlueGreenHookProps:
     @builtins.property
     def additional_options(
         self,
-    ) -> typing.Optional[CfnCodeDeployBlueGreenAdditionalOptions]:
+    ) -> typing.Optional["CfnCodeDeployBlueGreenAdditionalOptions"]:
         '''Additional options for the blue/green deployment.
 
         :default: - no additional options
         '''
         result = self._values.get("additional_options")
-        return typing.cast(typing.Optional[CfnCodeDeployBlueGreenAdditionalOptions], result)
+        return typing.cast(typing.Optional["CfnCodeDeployBlueGreenAdditionalOptions"], result)
 
     @builtins.property
     def lifecycle_event_hooks(
@@ -5854,7 +5859,11 @@ class CfnElement(
 ):
     '''An element of a CloudFormation stack.'''
 
-    def __init__(self, scope: _constructs_77d1e7e8.Construct, id: builtins.str) -> None:
+    def __init__(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+    ) -> None:
         '''Creates an entity and binds it to a tree.
 
         Note that the root of the tree must be a Stack object (not just any Root).
@@ -6240,7 +6249,7 @@ class CfnHook(CfnElement, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnHoo
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         type: builtins.str,
@@ -7212,7 +7221,7 @@ class CfnModuleDefaultVersionProps:
     def __init__(
         self,
         *,
-        arn: typing.Optional[typing.Union[builtins.str, _IModuleVersionRef_76485182]] = None,
+        arn: typing.Optional[typing.Union[builtins.str, "_IModuleVersionRef_76485182"]] = None,
         module_name: typing.Optional[builtins.str] = None,
         version_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -7253,7 +7262,7 @@ class CfnModuleDefaultVersionProps:
     @builtins.property
     def arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IModuleVersionRef_76485182]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IModuleVersionRef_76485182"]]:
         '''The Amazon Resource Name (ARN) of the module version to set as the default version.
 
         Conditional: You must specify either ``Arn`` , or ``ModuleName`` and ``VersionId`` .
@@ -7261,7 +7270,7 @@ class CfnModuleDefaultVersionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-moduledefaultversion.html#cfn-cloudformation-moduledefaultversion-arn
         '''
         result = self._values.get("arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IModuleVersionRef_76485182]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IModuleVersionRef_76485182"]], result)
 
     @builtins.property
     def module_name(self) -> typing.Optional[builtins.str]:
@@ -7412,7 +7421,7 @@ class CfnOutput(CfnElement, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnO
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         value: builtins.str,
@@ -7705,7 +7714,7 @@ class CfnParameter(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         allowed_pattern: typing.Optional[builtins.str] = None,
@@ -8432,7 +8441,11 @@ class CfnRefElement(
     resources aren't referenceable at all (such as BucketPolicies or GatewayAttachments).
     '''
 
-    def __init__(self, scope: _constructs_77d1e7e8.Construct, id: builtins.str) -> None:
+    def __init__(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+    ) -> None:
         '''Creates an entity and binds it to a tree.
 
         Note that the root of the tree must be a Stack object (not just any Root).
@@ -8495,7 +8508,7 @@ class CfnResource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         type: builtins.str,
@@ -8855,8 +8868,8 @@ class CfnResource(
 
     @builtins.property
     @jsii.member(jsii_name="env")
-    def env(self) -> _ResourceEnvironment_603baf00:
-        return typing.cast(_ResourceEnvironment_603baf00, jsii.get(self, "env"))
+    def env(self) -> "_ResourceEnvironment_603baf00":
+        return typing.cast("_ResourceEnvironment_603baf00", jsii.get(self, "env"))
 
     @builtins.property
     @jsii.member(jsii_name="updatedProperites")
@@ -8959,7 +8972,7 @@ class CfnResourceDefaultVersionProps:
         self,
         *,
         type_name: typing.Optional[builtins.str] = None,
-        type_version_arn: typing.Optional[typing.Union[builtins.str, _IResourceVersionRef_8fc1bbae]] = None,
+        type_version_arn: typing.Optional[typing.Union[builtins.str, "_IResourceVersionRef_8fc1bbae"]] = None,
         version_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnResourceDefaultVersion``.
@@ -9010,7 +9023,7 @@ class CfnResourceDefaultVersionProps:
     @builtins.property
     def type_version_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IResourceVersionRef_8fc1bbae]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IResourceVersionRef_8fc1bbae"]]:
         '''The Amazon Resource Name (ARN) of the resource version.
 
         Conditional: You must specify either ``TypeVersionArn`` , or ``TypeName`` and ``VersionId`` .
@@ -9018,7 +9031,7 @@ class CfnResourceDefaultVersionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-resourcedefaultversion.html#cfn-cloudformation-resourcedefaultversion-typeversionarn
         '''
         result = self._values.get("type_version_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IResourceVersionRef_8fc1bbae]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IResourceVersionRef_8fc1bbae"]], result)
 
     @builtins.property
     def version_id(self) -> typing.Optional[builtins.str]:
@@ -9138,6 +9151,7 @@ class CfnResourceSignal:
 
         Example::
 
+            from aws_cdk import CfnCreationPolicy, CfnResourceSignal
             # resource: CfnResource
             
             
@@ -9352,7 +9366,7 @@ class CfnRule(CfnRefElement, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Cfn
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         assertions: typing.Optional[typing.Sequence[typing.Union["CfnRuleAssertion", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -9467,7 +9481,7 @@ class CfnRuleProps:
     def __init__(
         self,
         *,
-        assertions: typing.Optional[typing.Sequence[typing.Union[CfnRuleAssertion, typing.Dict[builtins.str, typing.Any]]]] = None,
+        assertions: typing.Optional[typing.Sequence[typing.Union["CfnRuleAssertion", typing.Dict[builtins.str, typing.Any]]]] = None,
         rule_condition: typing.Optional["ICfnConditionExpression"] = None,
     ) -> None:
         '''A rule can include a RuleCondition property and must include an Assertions property.
@@ -9523,13 +9537,13 @@ class CfnRuleProps:
             self._values["rule_condition"] = rule_condition
 
     @builtins.property
-    def assertions(self) -> typing.Optional[typing.List[CfnRuleAssertion]]:
+    def assertions(self) -> typing.Optional[typing.List["CfnRuleAssertion"]]:
         '''Assertions which define the rule.
 
         :default: - No assertions for the rule.
         '''
         result = self._values.get("assertions")
-        return typing.cast(typing.Optional[typing.List[CfnRuleAssertion]], result)
+        return typing.cast(typing.Optional[typing.List["CfnRuleAssertion"]], result)
 
     @builtins.property
     def rule_condition(self) -> typing.Optional["ICfnConditionExpression"]:
@@ -9731,12 +9745,12 @@ class CfnStackSetProps:
         *,
         permission_model: builtins.str,
         stack_set_name: builtins.str,
-        administration_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        administration_role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
         auto_deployment: typing.Optional[typing.Union["IResolvable", typing.Union["CfnStackSet.AutoDeploymentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         call_as: typing.Optional[builtins.str] = None,
         capabilities: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
-        execution_role_name: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        execution_role_name: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
         managed_execution: typing.Any = None,
         operation_preferences: typing.Optional[typing.Union["IResolvable", typing.Union["CfnStackSet.OperationPreferencesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         parameters: typing.Optional[typing.Union["IResolvable", typing.Sequence[typing.Union["IResolvable", typing.Union["CfnStackSet.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -9902,7 +9916,7 @@ class CfnStackSetProps:
     @builtins.property
     def administration_role_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''The Amazon Resource Number (ARN) of the IAM role to use to create this StackSet.
 
         Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific StackSets within the same administrator account.
@@ -9914,7 +9928,7 @@ class CfnStackSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-stackset.html#cfn-cloudformation-stackset-administrationrolearn
         '''
         result = self._values.get("administration_role_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     @builtins.property
     def auto_deployment(
@@ -9974,7 +9988,7 @@ class CfnStackSetProps:
     @builtins.property
     def execution_role_name(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''The name of the IAM execution role to use to create the StackSet.
 
         If you don't specify an execution role, CloudFormation uses the ``AWSCloudFormationStackSetExecutionRole`` role for the StackSet operation.
@@ -9986,7 +10000,7 @@ class CfnStackSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-stackset.html#cfn-cloudformation-stackset-executionrolename
         '''
         result = self._values.get("execution_role_name")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     @builtins.property
     def managed_execution(self) -> typing.Any:
@@ -10228,9 +10242,9 @@ class CfnTrafficRouting:
     def __init__(
         self,
         *,
-        prod_traffic_route: typing.Union[CfnTrafficRoute, typing.Dict[builtins.str, typing.Any]],
+        prod_traffic_route: typing.Union["CfnTrafficRoute", typing.Dict[builtins.str, typing.Any]],
         target_groups: typing.Sequence[builtins.str],
-        test_traffic_route: typing.Union[CfnTrafficRoute, typing.Dict[builtins.str, typing.Any]],
+        test_traffic_route: typing.Union["CfnTrafficRoute", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''Type of the ``CfnCodeDeployBlueGreenEcsAttributes.trafficRouting`` property.
 
@@ -10274,11 +10288,11 @@ class CfnTrafficRouting:
         }
 
     @builtins.property
-    def prod_traffic_route(self) -> CfnTrafficRoute:
+    def prod_traffic_route(self) -> "CfnTrafficRoute":
         '''The listener to be used by your load balancer to direct traffic to your target groups.'''
         result = self._values.get("prod_traffic_route")
         assert result is not None, "Required property 'prod_traffic_route' is missing"
-        return typing.cast(CfnTrafficRoute, result)
+        return typing.cast("CfnTrafficRoute", result)
 
     @builtins.property
     def target_groups(self) -> typing.List[builtins.str]:
@@ -10288,11 +10302,11 @@ class CfnTrafficRouting:
         return typing.cast(typing.List[builtins.str], result)
 
     @builtins.property
-    def test_traffic_route(self) -> CfnTrafficRoute:
+    def test_traffic_route(self) -> "CfnTrafficRoute":
         '''The listener to be used by your load balancer to direct traffic to your target groups.'''
         result = self._values.get("test_traffic_route")
         assert result is not None, "Required property 'test_traffic_route' is missing"
-        return typing.cast(CfnTrafficRoute, result)
+        return typing.cast("CfnTrafficRoute", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10822,10 +10836,10 @@ class CfnUpdatePolicy:
     def __init__(
         self,
         *,
-        auto_scaling_replacing_update: typing.Optional[typing.Union[CfnAutoScalingReplacingUpdate, typing.Dict[builtins.str, typing.Any]]] = None,
-        auto_scaling_rolling_update: typing.Optional[typing.Union[CfnAutoScalingRollingUpdate, typing.Dict[builtins.str, typing.Any]]] = None,
-        auto_scaling_scheduled_action: typing.Optional[typing.Union[CfnAutoScalingScheduledAction, typing.Dict[builtins.str, typing.Any]]] = None,
-        code_deploy_lambda_alias_update: typing.Optional[typing.Union[CfnCodeDeployLambdaAliasUpdate, typing.Dict[builtins.str, typing.Any]]] = None,
+        auto_scaling_replacing_update: typing.Optional[typing.Union["CfnAutoScalingReplacingUpdate", typing.Dict[builtins.str, typing.Any]]] = None,
+        auto_scaling_rolling_update: typing.Optional[typing.Union["CfnAutoScalingRollingUpdate", typing.Dict[builtins.str, typing.Any]]] = None,
+        auto_scaling_scheduled_action: typing.Optional[typing.Union["CfnAutoScalingScheduledAction", typing.Dict[builtins.str, typing.Any]]] = None,
+        code_deploy_lambda_alias_update: typing.Optional[typing.Union["CfnCodeDeployLambdaAliasUpdate", typing.Dict[builtins.str, typing.Any]]] = None,
         enable_version_upgrade: typing.Optional[builtins.bool] = None,
         use_online_resharding: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -10910,7 +10924,7 @@ class CfnUpdatePolicy:
     @builtins.property
     def auto_scaling_replacing_update(
         self,
-    ) -> typing.Optional[CfnAutoScalingReplacingUpdate]:
+    ) -> typing.Optional["CfnAutoScalingReplacingUpdate"]:
         '''Specifies whether an Auto Scaling group and the instances it contains are replaced during an update.
 
         During replacement,
@@ -10918,35 +10932,35 @@ class CfnUpdatePolicy:
         can roll back to the old Auto Scaling group and delete the new Auto Scaling group.
         '''
         result = self._values.get("auto_scaling_replacing_update")
-        return typing.cast(typing.Optional[CfnAutoScalingReplacingUpdate], result)
+        return typing.cast(typing.Optional["CfnAutoScalingReplacingUpdate"], result)
 
     @builtins.property
     def auto_scaling_rolling_update(
         self,
-    ) -> typing.Optional[CfnAutoScalingRollingUpdate]:
+    ) -> typing.Optional["CfnAutoScalingRollingUpdate"]:
         '''To specify how AWS CloudFormation handles rolling updates for an Auto Scaling group, use the AutoScalingRollingUpdate policy.
 
         Rolling updates enable you to specify whether AWS CloudFormation updates instances that are in an Auto Scaling
         group in batches or all at once.
         '''
         result = self._values.get("auto_scaling_rolling_update")
-        return typing.cast(typing.Optional[CfnAutoScalingRollingUpdate], result)
+        return typing.cast(typing.Optional["CfnAutoScalingRollingUpdate"], result)
 
     @builtins.property
     def auto_scaling_scheduled_action(
         self,
-    ) -> typing.Optional[CfnAutoScalingScheduledAction]:
+    ) -> typing.Optional["CfnAutoScalingScheduledAction"]:
         '''To specify how AWS CloudFormation handles updates for the MinSize, MaxSize, and DesiredCapacity properties when the AWS::AutoScaling::AutoScalingGroup resource has an associated scheduled action, use the AutoScalingScheduledAction policy.'''
         result = self._values.get("auto_scaling_scheduled_action")
-        return typing.cast(typing.Optional[CfnAutoScalingScheduledAction], result)
+        return typing.cast(typing.Optional["CfnAutoScalingScheduledAction"], result)
 
     @builtins.property
     def code_deploy_lambda_alias_update(
         self,
-    ) -> typing.Optional[CfnCodeDeployLambdaAliasUpdate]:
+    ) -> typing.Optional["CfnCodeDeployLambdaAliasUpdate"]:
         '''To perform an AWS CodeDeploy deployment when the version changes on an AWS::Lambda::Alias resource, use the CodeDeployLambdaAliasUpdate update policy.'''
         result = self._values.get("code_deploy_lambda_alias_update")
-        return typing.cast(typing.Optional[CfnCodeDeployLambdaAliasUpdate], result)
+        return typing.cast(typing.Optional["CfnCodeDeployLambdaAliasUpdate"], result)
 
     @builtins.property
     def enable_version_upgrade(self) -> typing.Optional[builtins.bool]:
@@ -11259,7 +11273,7 @@ class ContextProvider(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.ContextPro
     @builtins.classmethod
     def get_key(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
         provider: builtins.str,
         additional_cache_key: typing.Optional[builtins.str] = None,
@@ -11291,7 +11305,7 @@ class ContextProvider(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.ContextPro
     @builtins.classmethod
     def get_value(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
         dummy_value: typing.Any,
         ignore_error_on_missing_context: typing.Optional[builtins.bool] = None,
@@ -11633,7 +11647,7 @@ class CustomResourceProviderBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         code_directory: builtins.str,
@@ -12615,6 +12629,7 @@ class DockerBuildOptions:
 
         Example::
 
+            from aws_cdk import BundlingOptions
             lambda_.Function(self, "Function",
                 code=lambda_.Code.from_asset("/path/to/handler",
                     bundling=BundlingOptions(
@@ -12921,8 +12936,8 @@ class DockerImage(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.DockerImage"):
         *,
         build_args: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         cache_disabled: typing.Optional[builtins.bool] = None,
-        cache_from: typing.Optional[typing.Sequence[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache_to: typing.Optional[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]] = None,
+        cache_from: typing.Optional[typing.Sequence[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_to: typing.Optional[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]] = None,
         file: typing.Optional[builtins.str] = None,
         network: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
@@ -13171,8 +13186,8 @@ class DockerImageAssetSource:
         docker_build_ssh: typing.Optional[builtins.str] = None,
         docker_build_target: typing.Optional[builtins.str] = None,
         docker_cache_disabled: typing.Optional[builtins.bool] = None,
-        docker_cache_from: typing.Optional[typing.Sequence[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]]] = None,
-        docker_cache_to: typing.Optional[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]] = None,
+        docker_cache_from: typing.Optional[typing.Sequence[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]]] = None,
+        docker_cache_to: typing.Optional[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]] = None,
         docker_file: typing.Optional[builtins.str] = None,
         docker_outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -13409,22 +13424,22 @@ class DockerImageAssetSource:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def docker_cache_from(self) -> typing.Optional[typing.List[DockerCacheOption]]:
+    def docker_cache_from(self) -> typing.Optional[typing.List["DockerCacheOption"]]:
         '''Cache from options to pass to the ``docker build`` command.
 
         :default: - no cache from args are passed
         '''
         result = self._values.get("docker_cache_from")
-        return typing.cast(typing.Optional[typing.List[DockerCacheOption]], result)
+        return typing.cast(typing.Optional[typing.List["DockerCacheOption"]], result)
 
     @builtins.property
-    def docker_cache_to(self) -> typing.Optional[DockerCacheOption]:
+    def docker_cache_to(self) -> typing.Optional["DockerCacheOption"]:
         '''Cache to options to pass to the ``docker build`` command.
 
         :default: - no cache to args are passed
         '''
         result = self._values.get("docker_cache_to")
-        return typing.cast(typing.Optional[DockerCacheOption], result)
+        return typing.cast(typing.Optional["DockerCacheOption"], result)
 
     @builtins.property
     def docker_file(self) -> typing.Optional[builtins.str]:
@@ -14335,7 +14350,7 @@ class Expiration(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Expiration"):
 
     @jsii.member(jsii_name="after")
     @builtins.classmethod
-    def after(cls, t: Duration) -> "Expiration":
+    def after(cls, t: "Duration") -> "Expiration":
         '''Expire once the specified duration has passed since deployment time.
 
         :param t: the duration to wait before expiring.
@@ -14382,7 +14397,7 @@ class Expiration(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Expiration"):
         return typing.cast("Expiration", jsii.sinvoke(cls, "fromString", [s]))
 
     @jsii.member(jsii_name="isAfter")
-    def is_after(self, t: Duration) -> builtins.bool:
+    def is_after(self, t: "Duration") -> builtins.bool:
         '''Check if Expiration expires after input.
 
         :param t: the duration to check against.
@@ -14393,7 +14408,7 @@ class Expiration(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Expiration"):
         return typing.cast(builtins.bool, jsii.invoke(self, "isAfter", [t]))
 
     @jsii.member(jsii_name="isBefore")
-    def is_before(self, t: Duration) -> builtins.bool:
+    def is_before(self, t: "Duration") -> builtins.bool:
         '''Check if Expiration expires before input.
 
         :param t: the duration to check against.
@@ -14505,7 +14520,7 @@ class FeatureFlags(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.FeatureFlags"
 
     @jsii.member(jsii_name="of")
     @builtins.classmethod
-    def of(cls, scope: _constructs_77d1e7e8.IConstruct) -> "FeatureFlags":
+    def of(cls, scope: "_constructs_77d1e7e8.IConstruct") -> "FeatureFlags":
         '''Inspect feature flags on the construct node's context.
 
         :param scope: -
@@ -14715,7 +14730,7 @@ class FileAssetSource:
         display_name: typing.Optional[builtins.str] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         file_name: typing.Optional[builtins.str] = None,
-        packaging: typing.Optional[FileAssetPackaging] = None,
+        packaging: typing.Optional["FileAssetPackaging"] = None,
     ) -> None:
         '''Represents the source for a file asset.
 
@@ -14834,13 +14849,13 @@ class FileAssetSource:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def packaging(self) -> typing.Optional[FileAssetPackaging]:
+    def packaging(self) -> typing.Optional["FileAssetPackaging"]:
         '''Which type of packaging to perform.
 
         :default: - Required if ``fileName`` is specified.
         '''
         result = self._values.get("packaging")
-        return typing.cast(typing.Optional[FileAssetPackaging], result)
+        return typing.cast(typing.Optional["FileAssetPackaging"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15077,7 +15092,7 @@ class FileSystem(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.FileSystem"):
         cls,
         src_dir: builtins.str,
         dest_dir: builtins.str,
-        options: typing.Optional[typing.Union[CopyOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        options: typing.Optional[typing.Union["CopyOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         root_dir: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Copies an entire directory structure.
@@ -16355,7 +16370,7 @@ class IAspect(typing_extensions.Protocol):
     '''Represents an Aspect.'''
 
     @jsii.member(jsii_name="visit")
-    def visit(self, node: _constructs_77d1e7e8.IConstruct) -> None:
+    def visit(self, node: "_constructs_77d1e7e8.IConstruct") -> None:
         '''All aspects can visit an IConstruct.
 
         :param node: -
@@ -16369,7 +16384,7 @@ class _IAspectProxy:
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.IAspect"
 
     @jsii.member(jsii_name="visit")
-    def visit(self, node: _constructs_77d1e7e8.IConstruct) -> None:
+    def visit(self, node: "_constructs_77d1e7e8.IConstruct") -> None:
         '''All aspects can visit an IConstruct.
 
         :param node: -
@@ -16438,7 +16453,7 @@ class ICfnResourceOptions(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="creationPolicy")
-    def creation_policy(self) -> typing.Optional[CfnCreationPolicy]:
+    def creation_policy(self) -> typing.Optional["CfnCreationPolicy"]:
         '''Associate the CreationPolicy attribute with a resource to prevent its status from reaching create complete until AWS CloudFormation receives a specified number of success signals or the timeout period is exceeded.
 
         To signal a
@@ -16448,12 +16463,12 @@ class ICfnResourceOptions(typing_extensions.Protocol):
         ...
 
     @creation_policy.setter
-    def creation_policy(self, value: typing.Optional[CfnCreationPolicy]) -> None:
+    def creation_policy(self, value: typing.Optional["CfnCreationPolicy"]) -> None:
         ...
 
     @builtins.property
     @jsii.member(jsii_name="deletionPolicy")
-    def deletion_policy(self) -> typing.Optional[CfnDeletionPolicy]:
+    def deletion_policy(self) -> typing.Optional["CfnDeletionPolicy"]:
         '''With the DeletionPolicy attribute you can preserve or (in some cases) backup a resource when its stack is deleted.
 
         You specify a DeletionPolicy attribute for each resource that you want to control. If a resource has no DeletionPolicy
@@ -16463,7 +16478,7 @@ class ICfnResourceOptions(typing_extensions.Protocol):
         ...
 
     @deletion_policy.setter
-    def deletion_policy(self, value: typing.Optional[CfnDeletionPolicy]) -> None:
+    def deletion_policy(self, value: typing.Optional["CfnDeletionPolicy"]) -> None:
         ...
 
     @builtins.property
@@ -16500,7 +16515,7 @@ class ICfnResourceOptions(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="updatePolicy")
-    def update_policy(self) -> typing.Optional[CfnUpdatePolicy]:
+    def update_policy(self) -> typing.Optional["CfnUpdatePolicy"]:
         '''Use the UpdatePolicy attribute to specify how AWS CloudFormation handles updates to the AWS::AutoScaling::AutoScalingGroup resource.
 
         AWS CloudFormation invokes one of three update policies depending on the type of change you make or whether a
@@ -16509,17 +16524,20 @@ class ICfnResourceOptions(typing_extensions.Protocol):
         ...
 
     @update_policy.setter
-    def update_policy(self, value: typing.Optional[CfnUpdatePolicy]) -> None:
+    def update_policy(self, value: typing.Optional["CfnUpdatePolicy"]) -> None:
         ...
 
     @builtins.property
     @jsii.member(jsii_name="updateReplacePolicy")
-    def update_replace_policy(self) -> typing.Optional[CfnDeletionPolicy]:
+    def update_replace_policy(self) -> typing.Optional["CfnDeletionPolicy"]:
         '''Use the UpdateReplacePolicy attribute to retain or (in some cases) backup the existing physical instance of a resource when it is replaced during a stack update operation.'''
         ...
 
     @update_replace_policy.setter
-    def update_replace_policy(self, value: typing.Optional[CfnDeletionPolicy]) -> None:
+    def update_replace_policy(
+        self,
+        value: typing.Optional["CfnDeletionPolicy"],
+    ) -> None:
         ...
 
     @builtins.property
@@ -16561,17 +16579,17 @@ class _ICfnResourceOptionsProxy:
 
     @builtins.property
     @jsii.member(jsii_name="creationPolicy")
-    def creation_policy(self) -> typing.Optional[CfnCreationPolicy]:
+    def creation_policy(self) -> typing.Optional["CfnCreationPolicy"]:
         '''Associate the CreationPolicy attribute with a resource to prevent its status from reaching create complete until AWS CloudFormation receives a specified number of success signals or the timeout period is exceeded.
 
         To signal a
         resource, you can use the cfn-signal helper script or SignalResource API. AWS CloudFormation publishes valid signals
         to the stack events so that you track the number of signals sent.
         '''
-        return typing.cast(typing.Optional[CfnCreationPolicy], jsii.get(self, "creationPolicy"))
+        return typing.cast(typing.Optional["CfnCreationPolicy"], jsii.get(self, "creationPolicy"))
 
     @creation_policy.setter
-    def creation_policy(self, value: typing.Optional[CfnCreationPolicy]) -> None:
+    def creation_policy(self, value: typing.Optional["CfnCreationPolicy"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__810d44b93f0de1f70deab96318824fa079fd4fad9830b45ed196a06bd2a32899)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -16579,17 +16597,17 @@ class _ICfnResourceOptionsProxy:
 
     @builtins.property
     @jsii.member(jsii_name="deletionPolicy")
-    def deletion_policy(self) -> typing.Optional[CfnDeletionPolicy]:
+    def deletion_policy(self) -> typing.Optional["CfnDeletionPolicy"]:
         '''With the DeletionPolicy attribute you can preserve or (in some cases) backup a resource when its stack is deleted.
 
         You specify a DeletionPolicy attribute for each resource that you want to control. If a resource has no DeletionPolicy
         attribute, AWS CloudFormation deletes the resource by default. Note that this capability also applies to update operations
         that lead to resources being removed.
         '''
-        return typing.cast(typing.Optional[CfnDeletionPolicy], jsii.get(self, "deletionPolicy"))
+        return typing.cast(typing.Optional["CfnDeletionPolicy"], jsii.get(self, "deletionPolicy"))
 
     @deletion_policy.setter
-    def deletion_policy(self, value: typing.Optional[CfnDeletionPolicy]) -> None:
+    def deletion_policy(self, value: typing.Optional["CfnDeletionPolicy"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d217244047834b21b19a7d6d13f0a9ee80513ca9adeed4eecb61cc60f4cbc083)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -16635,16 +16653,16 @@ class _ICfnResourceOptionsProxy:
 
     @builtins.property
     @jsii.member(jsii_name="updatePolicy")
-    def update_policy(self) -> typing.Optional[CfnUpdatePolicy]:
+    def update_policy(self) -> typing.Optional["CfnUpdatePolicy"]:
         '''Use the UpdatePolicy attribute to specify how AWS CloudFormation handles updates to the AWS::AutoScaling::AutoScalingGroup resource.
 
         AWS CloudFormation invokes one of three update policies depending on the type of change you make or whether a
         scheduled action is associated with the Auto Scaling group.
         '''
-        return typing.cast(typing.Optional[CfnUpdatePolicy], jsii.get(self, "updatePolicy"))
+        return typing.cast(typing.Optional["CfnUpdatePolicy"], jsii.get(self, "updatePolicy"))
 
     @update_policy.setter
-    def update_policy(self, value: typing.Optional[CfnUpdatePolicy]) -> None:
+    def update_policy(self, value: typing.Optional["CfnUpdatePolicy"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7c725970b5b7c9a0b3b4f52905cab1308f1db7c3e61f492c49e4c25040aca4bf)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -16652,12 +16670,15 @@ class _ICfnResourceOptionsProxy:
 
     @builtins.property
     @jsii.member(jsii_name="updateReplacePolicy")
-    def update_replace_policy(self) -> typing.Optional[CfnDeletionPolicy]:
+    def update_replace_policy(self) -> typing.Optional["CfnDeletionPolicy"]:
         '''Use the UpdateReplacePolicy attribute to retain or (in some cases) backup the existing physical instance of a resource when it is replaced during a stack update operation.'''
-        return typing.cast(typing.Optional[CfnDeletionPolicy], jsii.get(self, "updateReplacePolicy"))
+        return typing.cast(typing.Optional["CfnDeletionPolicy"], jsii.get(self, "updateReplacePolicy"))
 
     @update_replace_policy.setter
-    def update_replace_policy(self, value: typing.Optional[CfnDeletionPolicy]) -> None:
+    def update_replace_policy(
+        self,
+        value: typing.Optional["CfnDeletionPolicy"],
+    ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f38be0d686c18d026164a59d72c296e1e4f3624847d244ce628f7b90984abd80)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -16808,18 +16829,18 @@ class ILocalBundling(typing_extensions.Protocol):
         self,
         output_dir: builtins.str,
         *,
-        image: DockerImage,
-        bundling_file_access: typing.Optional[BundlingFileAccess] = None,
+        image: "DockerImage",
+        bundling_file_access: typing.Optional["BundlingFileAccess"] = None,
         command: typing.Optional[typing.Sequence[builtins.str]] = None,
         entrypoint: typing.Optional[typing.Sequence[builtins.str]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         local: typing.Optional["ILocalBundling"] = None,
         network: typing.Optional[builtins.str] = None,
-        output_type: typing.Optional[BundlingOutput] = None,
+        output_type: typing.Optional["BundlingOutput"] = None,
         platform: typing.Optional[builtins.str] = None,
         security_opt: typing.Optional[builtins.str] = None,
         user: typing.Optional[builtins.str] = None,
-        volumes: typing.Optional[typing.Sequence[typing.Union[DockerVolume, typing.Dict[builtins.str, typing.Any]]]] = None,
+        volumes: typing.Optional[typing.Sequence[typing.Union["DockerVolume", typing.Dict[builtins.str, typing.Any]]]] = None,
         volumes_from: typing.Optional[typing.Sequence[builtins.str]] = None,
         working_directory: typing.Optional[builtins.str] = None,
     ) -> builtins.bool:
@@ -16857,18 +16878,18 @@ class _ILocalBundlingProxy:
         self,
         output_dir: builtins.str,
         *,
-        image: DockerImage,
-        bundling_file_access: typing.Optional[BundlingFileAccess] = None,
+        image: "DockerImage",
+        bundling_file_access: typing.Optional["BundlingFileAccess"] = None,
         command: typing.Optional[typing.Sequence[builtins.str]] = None,
         entrypoint: typing.Optional[typing.Sequence[builtins.str]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        local: typing.Optional[ILocalBundling] = None,
+        local: typing.Optional["ILocalBundling"] = None,
         network: typing.Optional[builtins.str] = None,
-        output_type: typing.Optional[BundlingOutput] = None,
+        output_type: typing.Optional["BundlingOutput"] = None,
         platform: typing.Optional[builtins.str] = None,
         security_opt: typing.Optional[builtins.str] = None,
         user: typing.Optional[builtins.str] = None,
-        volumes: typing.Optional[typing.Sequence[typing.Union[DockerVolume, typing.Dict[builtins.str, typing.Any]]]] = None,
+        volumes: typing.Optional[typing.Sequence[typing.Union["DockerVolume", typing.Dict[builtins.str, typing.Any]]]] = None,
         volumes_from: typing.Optional[typing.Sequence[builtins.str]] = None,
         working_directory: typing.Optional[builtins.str] = None,
     ) -> builtins.bool:
@@ -16984,6 +17005,7 @@ class IPolicyValidationPluginBeta1(typing_extensions.Protocol):
 
     Example::
 
+        from aws_cdk import PolicyValidationPluginReportBeta1, PolicyViolationBeta1, PolicyViolatingResourceBeta1
         @jsii.implements(IPolicyValidationPluginBeta1)
         class MyPlugin:
         
@@ -17034,7 +17056,7 @@ class IPolicyValidationPluginBeta1(typing_extensions.Protocol):
     @jsii.member(jsii_name="validate")
     def validate(
         self,
-        context: IPolicyValidationContextBeta1,
+        context: "IPolicyValidationContextBeta1",
     ) -> "PolicyValidationPluginReportBeta1":
         '''The method that will be called by the CDK framework to perform validations.
 
@@ -17051,6 +17073,7 @@ class _IPolicyValidationPluginBeta1Proxy:
 
     Example::
 
+        from aws_cdk import PolicyValidationPluginReportBeta1, PolicyViolationBeta1, PolicyViolatingResourceBeta1
         @jsii.implements(IPolicyValidationPluginBeta1)
         class MyPlugin:
         
@@ -17103,7 +17126,7 @@ class _IPolicyValidationPluginBeta1Proxy:
     @jsii.member(jsii_name="validate")
     def validate(
         self,
-        context: IPolicyValidationContextBeta1,
+        context: "IPolicyValidationContextBeta1",
     ) -> "PolicyValidationPluginReportBeta1":
         '''The method that will be called by the CDK framework to perform validations.
 
@@ -17176,7 +17199,7 @@ class IPropertyInjector(typing_extensions.Protocol):
         original_props: typing.Any,
         *,
         id: builtins.str,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> typing.Any:
         '''The injector to be applied to the constructor properties of the Construct.
 
@@ -17207,7 +17230,7 @@ class _IPropertyInjectorProxy:
         original_props: typing.Any,
         *,
         id: builtins.str,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> typing.Any:
         '''The injector to be applied to the constructor properties of the Construct.
 
@@ -17331,12 +17354,12 @@ class IResolveContext(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="scope")
-    def scope(self) -> _constructs_77d1e7e8.IConstruct:
+    def scope(self) -> "_constructs_77d1e7e8.IConstruct":
         '''The scope from which resolution has been initiated.'''
         ...
 
     @jsii.member(jsii_name="registerPostProcessor")
-    def register_post_processor(self, post_processor: IPostProcessor) -> None:
+    def register_post_processor(self, post_processor: "IPostProcessor") -> None:
         '''Use this postprocessor after the entire token structure has been resolved.
 
         :param post_processor: -
@@ -17379,12 +17402,12 @@ class _IResolveContextProxy:
 
     @builtins.property
     @jsii.member(jsii_name="scope")
-    def scope(self) -> _constructs_77d1e7e8.IConstruct:
+    def scope(self) -> "_constructs_77d1e7e8.IConstruct":
         '''The scope from which resolution has been initiated.'''
-        return typing.cast(_constructs_77d1e7e8.IConstruct, jsii.get(self, "scope"))
+        return typing.cast("_constructs_77d1e7e8.IConstruct", jsii.get(self, "scope"))
 
     @jsii.member(jsii_name="registerPostProcessor")
-    def register_post_processor(self, post_processor: IPostProcessor) -> None:
+    def register_post_processor(self, post_processor: "IPostProcessor") -> None:
         '''Use this postprocessor after the entire token structure has been resolved.
 
         :param post_processor: -
@@ -17620,14 +17643,14 @@ class IStackSynthesizer(typing_extensions.Protocol):
         docker_build_ssh: typing.Optional[builtins.str] = None,
         docker_build_target: typing.Optional[builtins.str] = None,
         docker_cache_disabled: typing.Optional[builtins.bool] = None,
-        docker_cache_from: typing.Optional[typing.Sequence[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]]] = None,
-        docker_cache_to: typing.Optional[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]] = None,
+        docker_cache_from: typing.Optional[typing.Sequence[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]]] = None,
+        docker_cache_to: typing.Optional[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]] = None,
         docker_file: typing.Optional[builtins.str] = None,
         docker_outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         network_mode: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
-    ) -> DockerImageAssetLocation:
+    ) -> "DockerImageAssetLocation":
         '''Register a Docker Image Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -17660,8 +17683,8 @@ class IStackSynthesizer(typing_extensions.Protocol):
         display_name: typing.Optional[builtins.str] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         file_name: typing.Optional[builtins.str] = None,
-        packaging: typing.Optional[FileAssetPackaging] = None,
-    ) -> FileAssetLocation:
+        packaging: typing.Optional["FileAssetPackaging"] = None,
+    ) -> "FileAssetLocation":
         '''Register a File Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -17730,14 +17753,14 @@ class _IStackSynthesizerProxy:
         docker_build_ssh: typing.Optional[builtins.str] = None,
         docker_build_target: typing.Optional[builtins.str] = None,
         docker_cache_disabled: typing.Optional[builtins.bool] = None,
-        docker_cache_from: typing.Optional[typing.Sequence[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]]] = None,
-        docker_cache_to: typing.Optional[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]] = None,
+        docker_cache_from: typing.Optional[typing.Sequence[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]]] = None,
+        docker_cache_to: typing.Optional[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]] = None,
         docker_file: typing.Optional[builtins.str] = None,
         docker_outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         network_mode: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
-    ) -> DockerImageAssetLocation:
+    ) -> "DockerImageAssetLocation":
         '''Register a Docker Image Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -17778,7 +17801,7 @@ class _IStackSynthesizerProxy:
             platform=platform,
         )
 
-        return typing.cast(DockerImageAssetLocation, jsii.invoke(self, "addDockerImageAsset", [asset]))
+        return typing.cast("DockerImageAssetLocation", jsii.invoke(self, "addDockerImageAsset", [asset]))
 
     @jsii.member(jsii_name="addFileAsset")
     def add_file_asset(
@@ -17789,8 +17812,8 @@ class _IStackSynthesizerProxy:
         display_name: typing.Optional[builtins.str] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         file_name: typing.Optional[builtins.str] = None,
-        packaging: typing.Optional[FileAssetPackaging] = None,
-    ) -> FileAssetLocation:
+        packaging: typing.Optional["FileAssetPackaging"] = None,
+    ) -> "FileAssetLocation":
         '''Register a File Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -17811,7 +17834,7 @@ class _IStackSynthesizerProxy:
             packaging=packaging,
         )
 
-        return typing.cast(FileAssetLocation, jsii.invoke(self, "addFileAsset", [asset]))
+        return typing.cast("FileAssetLocation", jsii.invoke(self, "addFileAsset", [asset]))
 
     @jsii.member(jsii_name="bind")
     def bind(self, stack: "Stack") -> None:
@@ -17846,7 +17869,7 @@ class IStringProducer(typing_extensions.Protocol):
     '''Interface for lazy string producers.'''
 
     @jsii.member(jsii_name="produce")
-    def produce(self, context: IResolveContext) -> typing.Optional[builtins.str]:
+    def produce(self, context: "IResolveContext") -> typing.Optional[builtins.str]:
         '''Produce the string value.
 
         :param context: -
@@ -17860,7 +17883,7 @@ class _IStringProducerProxy:
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.IStringProducer"
 
     @jsii.member(jsii_name="produce")
-    def produce(self, context: IResolveContext) -> typing.Optional[builtins.str]:
+    def produce(self, context: "IResolveContext") -> typing.Optional[builtins.str]:
         '''Produce the string value.
 
         :param context: -
@@ -17883,12 +17906,12 @@ class ISynthesisSession(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="assembly")
-    def assembly(self) -> _CloudAssemblyBuilder_c90cccf3:
+    def assembly(self) -> "_CloudAssemblyBuilder_c90cccf3":
         '''Cloud assembly builder.'''
         ...
 
     @assembly.setter
-    def assembly(self, value: _CloudAssemblyBuilder_c90cccf3) -> None:
+    def assembly(self, value: "_CloudAssemblyBuilder_c90cccf3") -> None:
         ...
 
     @builtins.property
@@ -17925,12 +17948,12 @@ class _ISynthesisSessionProxy:
 
     @builtins.property
     @jsii.member(jsii_name="assembly")
-    def assembly(self) -> _CloudAssemblyBuilder_c90cccf3:
+    def assembly(self) -> "_CloudAssemblyBuilder_c90cccf3":
         '''Cloud assembly builder.'''
-        return typing.cast(_CloudAssemblyBuilder_c90cccf3, jsii.get(self, "assembly"))
+        return typing.cast("_CloudAssemblyBuilder_c90cccf3", jsii.get(self, "assembly"))
 
     @assembly.setter
-    def assembly(self, value: _CloudAssemblyBuilder_c90cccf3) -> None:
+    def assembly(self, value: "_CloudAssemblyBuilder_c90cccf3") -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__46911aaa2f35f64b5c8d1cad71cbd1206b72081a1063b06d7ea031c371fdd641)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -18163,7 +18186,7 @@ class ITokenMapper(typing_extensions.Protocol):
     '''
 
     @jsii.member(jsii_name="mapToken")
-    def map_token(self, t: IResolvable) -> typing.Any:
+    def map_token(self, t: "IResolvable") -> typing.Any:
         '''Replace a single token.
 
         :param t: -
@@ -18180,7 +18203,7 @@ class _ITokenMapperProxy:
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.ITokenMapper"
 
     @jsii.member(jsii_name="mapToken")
-    def map_token(self, t: IResolvable) -> typing.Any:
+    def map_token(self, t: "IResolvable") -> typing.Any:
         '''Replace a single token.
 
         :param t: -
@@ -18202,7 +18225,7 @@ class ITokenResolver(typing_extensions.Protocol):
     def resolve_list(
         self,
         l: typing.Sequence[builtins.str],
-        context: IResolveContext,
+        context: "IResolveContext",
     ) -> typing.Any:
         '''Resolve a tokenized list.
 
@@ -18215,7 +18238,7 @@ class ITokenResolver(typing_extensions.Protocol):
     def resolve_string(
         self,
         s: "TokenizedStringFragments",
-        context: IResolveContext,
+        context: "IResolveContext",
     ) -> typing.Any:
         '''Resolve a string with at least one stringified token in it.
 
@@ -18229,9 +18252,9 @@ class ITokenResolver(typing_extensions.Protocol):
     @jsii.member(jsii_name="resolveToken")
     def resolve_token(
         self,
-        t: IResolvable,
-        context: IResolveContext,
-        post_processor: IPostProcessor,
+        t: "IResolvable",
+        context: "IResolveContext",
+        post_processor: "IPostProcessor",
     ) -> typing.Any:
         '''Resolve a single token.
 
@@ -18251,7 +18274,7 @@ class _ITokenResolverProxy:
     def resolve_list(
         self,
         l: typing.Sequence[builtins.str],
-        context: IResolveContext,
+        context: "IResolveContext",
     ) -> typing.Any:
         '''Resolve a tokenized list.
 
@@ -18268,7 +18291,7 @@ class _ITokenResolverProxy:
     def resolve_string(
         self,
         s: "TokenizedStringFragments",
-        context: IResolveContext,
+        context: "IResolveContext",
     ) -> typing.Any:
         '''Resolve a string with at least one stringified token in it.
 
@@ -18286,9 +18309,9 @@ class _ITokenResolverProxy:
     @jsii.member(jsii_name="resolveToken")
     def resolve_token(
         self,
-        t: IResolvable,
-        context: IResolveContext,
-        post_processor: IPostProcessor,
+        t: "IResolvable",
+        context: "IResolveContext",
+        post_processor: "IPostProcessor",
     ) -> typing.Any:
         '''Resolve a single token.
 
@@ -18391,7 +18414,7 @@ class IgnoreStrategy(
     @builtins.classmethod
     def from_copy_options(
         cls,
-        options: typing.Union[CopyOptions, typing.Dict[builtins.str, typing.Any]],
+        options: typing.Union["CopyOptions", typing.Dict[builtins.str, typing.Any]],
         absolute_root_path: builtins.str,
     ) -> "IgnoreStrategy":
         '''Creates an IgnoreStrategy based on the ``ignoreMode`` and ``exclude`` in a ``CopyOptions``.
@@ -18527,7 +18550,7 @@ class InjectionContext:
         self,
         *,
         id: builtins.str,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> None:
         '''This defines the values needed for Injection.
 
@@ -18567,11 +18590,11 @@ class InjectionContext:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def scope(self) -> _constructs_77d1e7e8.Construct:
+    def scope(self) -> "_constructs_77d1e7e8.Construct":
         '''scope from the  constructor.'''
         result = self._values.get("scope")
         assert result is not None, "Required property 'scope' is missing"
-        return typing.cast(_constructs_77d1e7e8.Construct, result)
+        return typing.cast("_constructs_77d1e7e8.Construct", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18641,7 +18664,7 @@ class Intrinsic(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Intrinsic"):
         return typing.cast(typing.Any, jsii.invoke(self, "newError", [message]))
 
     @jsii.member(jsii_name="resolve")
-    def resolve(self, _context: IResolveContext) -> typing.Any:
+    def resolve(self, _context: "IResolveContext") -> typing.Any:
         '''Produce the Token's value at resolution time.
 
         :param _context: -
@@ -18778,7 +18801,7 @@ class JsonNull(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.JsonNull"):
     '''
 
     @jsii.member(jsii_name="resolve")
-    def resolve(self, _ctx: IResolveContext) -> typing.Any:
+    def resolve(self, _ctx: "IResolveContext") -> typing.Any:
         '''Produce the Token's value at resolution time.
 
         :param _ctx: -
@@ -18826,11 +18849,11 @@ class Lazy(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Lazy"):
     @builtins.classmethod
     def any(
         cls,
-        producer: IStableAnyProducer,
+        producer: "IStableAnyProducer",
         *,
         display_hint: typing.Optional[builtins.str] = None,
         omit_empty_array: typing.Optional[builtins.bool] = None,
-    ) -> IResolvable:
+    ) -> "IResolvable":
         '''Defer the one-time calculation of an arbitrarily typed value to synthesis time.
 
         Use this if you want to render an object to a template whose actual value depends on
@@ -18850,13 +18873,13 @@ class Lazy(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Lazy"):
             display_hint=display_hint, omit_empty_array=omit_empty_array
         )
 
-        return typing.cast(IResolvable, jsii.sinvoke(cls, "any", [producer, options]))
+        return typing.cast("IResolvable", jsii.sinvoke(cls, "any", [producer, options]))
 
     @jsii.member(jsii_name="list")
     @builtins.classmethod
     def list(
         cls,
-        producer: IStableListProducer,
+        producer: "IStableListProducer",
         *,
         display_hint: typing.Optional[builtins.str] = None,
         omit_empty: typing.Optional[builtins.bool] = None,
@@ -18887,7 +18910,7 @@ class Lazy(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Lazy"):
 
     @jsii.member(jsii_name="number")
     @builtins.classmethod
-    def number(cls, producer: IStableNumberProducer) -> jsii.Number:
+    def number(cls, producer: "IStableNumberProducer") -> jsii.Number:
         '''Defer the one-time calculation of a number value to synthesis time.
 
         Use this if you want to render a number to a template whose actual value depends on
@@ -18910,7 +18933,7 @@ class Lazy(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Lazy"):
     @builtins.classmethod
     def string(
         cls,
-        producer: IStableStringProducer,
+        producer: "IStableStringProducer",
         *,
         display_hint: typing.Optional[builtins.str] = None,
     ) -> builtins.str:
@@ -18939,11 +18962,11 @@ class Lazy(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Lazy"):
     @builtins.classmethod
     def uncached_any(
         cls,
-        producer: IAnyProducer,
+        producer: "IAnyProducer",
         *,
         display_hint: typing.Optional[builtins.str] = None,
         omit_empty_array: typing.Optional[builtins.bool] = None,
-    ) -> IResolvable:
+    ) -> "IResolvable":
         '''Defer the calculation of an untyped value to synthesis time.
 
         Use of this function is not recommended; unless you know you need it for sure, you
@@ -18966,13 +18989,13 @@ class Lazy(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Lazy"):
             display_hint=display_hint, omit_empty_array=omit_empty_array
         )
 
-        return typing.cast(IResolvable, jsii.sinvoke(cls, "uncachedAny", [producer, options]))
+        return typing.cast("IResolvable", jsii.sinvoke(cls, "uncachedAny", [producer, options]))
 
     @jsii.member(jsii_name="uncachedList")
     @builtins.classmethod
     def uncached_list(
         cls,
-        producer: IListProducer,
+        producer: "IListProducer",
         *,
         display_hint: typing.Optional[builtins.str] = None,
         omit_empty: typing.Optional[builtins.bool] = None,
@@ -19003,7 +19026,7 @@ class Lazy(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Lazy"):
 
     @jsii.member(jsii_name="uncachedNumber")
     @builtins.classmethod
-    def uncached_number(cls, producer: INumberProducer) -> jsii.Number:
+    def uncached_number(cls, producer: "INumberProducer") -> jsii.Number:
         '''Defer the calculation of a number value to synthesis time.
 
         Use of this function is not recommended; unless you know you need it for sure, you
@@ -19026,7 +19049,7 @@ class Lazy(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Lazy"):
     @builtins.classmethod
     def uncached_string(
         cls,
-        producer: IStringProducer,
+        producer: "IStringProducer",
         *,
         display_hint: typing.Optional[builtins.str] = None,
     ) -> builtins.str:
@@ -19262,7 +19285,7 @@ class MissingRemovalPolicies(
 
     @jsii.member(jsii_name="of")
     @builtins.classmethod
-    def of(cls, scope: _constructs_77d1e7e8.IConstruct) -> "MissingRemovalPolicies":
+    def of(cls, scope: "_constructs_77d1e7e8.IConstruct") -> "MissingRemovalPolicies":
         '''Returns the missing removal policies API for the given scope.
 
         :param scope: The scope.
@@ -19397,7 +19420,7 @@ class Names(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Names"):
 
     @jsii.member(jsii_name="nodeUniqueId")
     @builtins.classmethod
-    def node_unique_id(cls, node: _constructs_77d1e7e8.Node) -> builtins.str:
+    def node_unique_id(cls, node: "_constructs_77d1e7e8.Node") -> builtins.str:
         '''Returns a CloudFormation-compatible unique identifier for a construct based on its path.
 
         The identifier includes a human readable portion rendered
@@ -19418,7 +19441,7 @@ class Names(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Names"):
     @builtins.classmethod
     def stack_relative_construct_path(
         cls,
-        construct: _constructs_77d1e7e8.IConstruct,
+        construct: "_constructs_77d1e7e8.IConstruct",
     ) -> builtins.str:
         '''Return the construct path of the given construct, starting at the nearest enclosing Stack.
 
@@ -19434,7 +19457,7 @@ class Names(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Names"):
 
     @jsii.member(jsii_name="uniqueId")
     @builtins.classmethod
-    def unique_id(cls, construct: _constructs_77d1e7e8.IConstruct) -> builtins.str:
+    def unique_id(cls, construct: "_constructs_77d1e7e8.IConstruct") -> builtins.str:
         '''Returns a CloudFormation-compatible unique identifier for a construct based on its path.
 
         The identifier includes a human readable portion rendered
@@ -19454,7 +19477,7 @@ class Names(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Names"):
     @builtins.classmethod
     def unique_resource_name(
         cls,
-        construct: _constructs_77d1e7e8.IConstruct,
+        construct: "_constructs_77d1e7e8.IConstruct",
         *,
         allowed_special_characters: typing.Optional[builtins.str] = None,
         max_length: typing.Optional[jsii.Number] = None,
@@ -19508,7 +19531,7 @@ class NestedStackProps:
         notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         removal_policy: typing.Optional["RemovalPolicy"] = None,
-        timeout: typing.Optional[Duration] = None,
+        timeout: typing.Optional["Duration"] = None,
     ) -> None:
         '''Initialization props for the ``NestedStack`` construct.
 
@@ -19697,7 +19720,7 @@ class NestedStackProps:
         return typing.cast(typing.Optional["RemovalPolicy"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[Duration]:
+    def timeout(self) -> typing.Optional["Duration"]:
         '''The length of time that CloudFormation waits for the nested stack to reach the CREATE_COMPLETE state.
 
         When CloudFormation detects that the nested stack has reached the
@@ -19710,7 +19733,7 @@ class NestedStackProps:
         :default: - no timeout
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[Duration], result)
+        return typing.cast(typing.Optional["Duration"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20094,7 +20117,7 @@ class PolicyViolationBeta1:
         *,
         description: builtins.str,
         rule_name: builtins.str,
-        violating_resources: typing.Sequence[typing.Union[PolicyViolatingResourceBeta1, typing.Dict[builtins.str, typing.Any]]],
+        violating_resources: typing.Sequence[typing.Union["PolicyViolatingResourceBeta1", typing.Dict[builtins.str, typing.Any]]],
         fix: typing.Optional[builtins.str] = None,
         rule_metadata: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         severity: typing.Optional[builtins.str] = None,
@@ -20168,11 +20191,11 @@ class PolicyViolationBeta1:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def violating_resources(self) -> typing.List[PolicyViolatingResourceBeta1]:
+    def violating_resources(self) -> typing.List["PolicyViolatingResourceBeta1"]:
         '''The resources violating this rule.'''
         result = self._values.get("violating_resources")
         assert result is not None, "Required property 'violating_resources' is missing"
-        return typing.cast(typing.List[PolicyViolatingResourceBeta1], result)
+        return typing.cast(typing.List["PolicyViolatingResourceBeta1"], result)
 
     @builtins.property
     def fix(self) -> typing.Optional[builtins.str]:
@@ -20256,7 +20279,7 @@ class PropertyInjectors(
 
     @jsii.member(jsii_name="of")
     @builtins.classmethod
-    def of(cls, scope: _constructs_77d1e7e8.IConstruct) -> "PropertyInjectors":
+    def of(cls, scope: "_constructs_77d1e7e8.IConstruct") -> "PropertyInjectors":
         '''Returns the ``PropertyInjectors`` object associated with a construct scope.
 
         If ``PropertyInjectors`` object doesn't exist on this scope, then it creates one and attaches it to scope.
@@ -20269,7 +20292,7 @@ class PropertyInjectors(
         return typing.cast("PropertyInjectors", jsii.sinvoke(cls, "of", [scope]))
 
     @jsii.member(jsii_name="add")
-    def add(self, *props_injectors: IPropertyInjector) -> None:
+    def add(self, *props_injectors: "IPropertyInjector") -> None:
         '''Add a list of  IPropertyInjectors to this collection of PropertyInjectors.
 
         :param props_injectors: - a list of IPropertyInjector.
@@ -20280,7 +20303,7 @@ class PropertyInjectors(
         return typing.cast(None, jsii.invoke(self, "add", [*props_injectors]))
 
     @jsii.member(jsii_name="for")
-    def for_(self, unique_id: builtins.str) -> typing.Optional[IPropertyInjector]:
+    def for_(self, unique_id: builtins.str) -> typing.Optional["IPropertyInjector"]:
         '''Get the PropertyInjector that is registered to the Construct's uniqueId.
 
         :param unique_id: - the construct uniqueId.
@@ -20290,7 +20313,7 @@ class PropertyInjectors(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ba79b618f23d72687ff58834f8d791bcc5f41fb49c8301987bb45eee4378958b)
             check_type(argname="argument unique_id", value=unique_id, expected_type=type_hints["unique_id"])
-        return typing.cast(typing.Optional[IPropertyInjector], jsii.invoke(self, "for", [unique_id]))
+        return typing.cast(typing.Optional["IPropertyInjector"], jsii.invoke(self, "for", [unique_id]))
 
     @jsii.member(jsii_name="supportedClasses")
     def supported_classes(self) -> typing.List[builtins.str]:
@@ -20302,9 +20325,9 @@ class PropertyInjectors(
 
     @builtins.property
     @jsii.member(jsii_name="scope")
-    def scope(self) -> _constructs_77d1e7e8.IConstruct:
+    def scope(self) -> "_constructs_77d1e7e8.IConstruct":
         '''The scope attached to Injectors.'''
-        return typing.cast(_constructs_77d1e7e8.IConstruct, jsii.get(self, "scope"))
+        return typing.cast("_constructs_77d1e7e8.IConstruct", jsii.get(self, "scope"))
 
 
 class Reference(
@@ -20320,7 +20343,7 @@ class Reference(
     def __init__(
         self,
         value: typing.Any,
-        target: _constructs_77d1e7e8.IConstruct,
+        target: "_constructs_77d1e7e8.IConstruct",
         display_name: typing.Optional[builtins.str] = None,
         type_hint: typing.Optional["ResolutionTypeHint"] = None,
     ) -> None:
@@ -20357,8 +20380,8 @@ class Reference(
 
     @builtins.property
     @jsii.member(jsii_name="target")
-    def target(self) -> _constructs_77d1e7e8.IConstruct:
-        return typing.cast(_constructs_77d1e7e8.IConstruct, jsii.get(self, "target"))
+    def target(self) -> "_constructs_77d1e7e8.IConstruct":
+        return typing.cast("_constructs_77d1e7e8.IConstruct", jsii.get(self, "target"))
 
 
 class _ReferenceProxy(Reference):
@@ -20384,7 +20407,7 @@ class RemovalPolicies(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.RemovalPol
 
     @jsii.member(jsii_name="of")
     @builtins.classmethod
-    def of(cls, scope: _constructs_77d1e7e8.IConstruct) -> "RemovalPolicies":
+    def of(cls, scope: "_constructs_77d1e7e8.IConstruct") -> "RemovalPolicies":
         '''Returns the removal policies API for the given scope.
 
         :param scope: The scope.
@@ -20620,7 +20643,7 @@ class RemovalPolicyOptions:
         self,
         *,
         apply_to_update_replace_policy: typing.Optional[builtins.bool] = None,
-        default: typing.Optional[RemovalPolicy] = None,
+        default: typing.Optional["RemovalPolicy"] = None,
     ) -> None:
         '''
         :param apply_to_update_replace_policy: Apply the same deletion policy to the resource's "UpdateReplacePolicy". Default: true
@@ -20659,7 +20682,7 @@ class RemovalPolicyOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def default(self) -> typing.Optional[RemovalPolicy]:
+    def default(self) -> typing.Optional["RemovalPolicy"]:
         '''The default policy to apply in case the removal policy is not defined.
 
         :default:
@@ -20668,7 +20691,7 @@ class RemovalPolicyOptions:
         please consult that specific resource's documentation.
         '''
         result = self._values.get("default")
-        return typing.cast(typing.Optional[RemovalPolicy], result)
+        return typing.cast(typing.Optional["RemovalPolicy"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20849,7 +20872,7 @@ class RemoveTag(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.RemoveTag"):
         jsii.create(self.__class__, self, [key, props])
 
     @jsii.member(jsii_name="applyTag")
-    def _apply_tag(self, resource: ITaggable) -> None:
+    def _apply_tag(self, resource: "ITaggable") -> None:
         '''
         :param resource: -
         '''
@@ -20859,7 +20882,7 @@ class RemoveTag(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.RemoveTag"):
         return typing.cast(None, jsii.invoke(self, "applyTag", [resource]))
 
     @jsii.member(jsii_name="applyTagV2")
-    def _apply_tag_v2(self, resource: ITaggableV2) -> None:
+    def _apply_tag_v2(self, resource: "ITaggableV2") -> None:
         '''
         :param resource: -
         '''
@@ -20869,7 +20892,7 @@ class RemoveTag(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.RemoveTag"):
         return typing.cast(None, jsii.invoke(self, "applyTagV2", [resource]))
 
     @jsii.member(jsii_name="visit")
-    def visit(self, construct: _constructs_77d1e7e8.IConstruct) -> None:
+    def visit(self, construct: "_constructs_77d1e7e8.IConstruct") -> None:
         '''All aspects can visit an IConstruct.
 
         :param construct: -
@@ -20990,8 +21013,8 @@ class ResolveOptions:
     def __init__(
         self,
         *,
-        resolver: ITokenResolver,
-        scope: _constructs_77d1e7e8.IConstruct,
+        resolver: "ITokenResolver",
+        scope: "_constructs_77d1e7e8.IConstruct",
         preparing: typing.Optional[builtins.bool] = None,
         remove_empty: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -21044,18 +21067,18 @@ class ResolveOptions:
             self._values["remove_empty"] = remove_empty
 
     @builtins.property
-    def resolver(self) -> ITokenResolver:
+    def resolver(self) -> "ITokenResolver":
         '''The resolver to apply to any resolvable tokens found.'''
         result = self._values.get("resolver")
         assert result is not None, "Required property 'resolver' is missing"
-        return typing.cast(ITokenResolver, result)
+        return typing.cast("ITokenResolver", result)
 
     @builtins.property
-    def scope(self) -> _constructs_77d1e7e8.IConstruct:
+    def scope(self) -> "_constructs_77d1e7e8.IConstruct":
         '''The scope from which resolution is performed.'''
         result = self._values.get("scope")
         assert result is not None, "Required property 'scope' is missing"
-        return typing.cast(_constructs_77d1e7e8.IConstruct, result)
+        return typing.cast("_constructs_77d1e7e8.IConstruct", result)
 
     @builtins.property
     def preparing(self) -> typing.Optional[builtins.bool]:
@@ -21116,7 +21139,7 @@ class Resource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -21149,7 +21172,7 @@ class Resource(
     @builtins.classmethod
     def is_owned_resource(
         cls,
-        construct: _constructs_77d1e7e8.IConstruct,
+        construct: "_constructs_77d1e7e8.IConstruct",
     ) -> builtins.bool:
         '''Returns true if the construct was created by CDK, and false otherwise.
 
@@ -21162,7 +21185,7 @@ class Resource(
 
     @jsii.member(jsii_name="isResource")
     @builtins.classmethod
-    def is_resource(cls, construct: _constructs_77d1e7e8.IConstruct) -> builtins.bool:
+    def is_resource(cls, construct: "_constructs_77d1e7e8.IConstruct") -> builtins.bool:
         '''Check whether the given construct is a Resource.
 
         :param construct: -
@@ -21173,7 +21196,7 @@ class Resource(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isResource", [construct]))
 
     @jsii.member(jsii_name="applyRemovalPolicy")
-    def apply_removal_policy(self, policy: RemovalPolicy) -> None:
+    def apply_removal_policy(self, policy: "RemovalPolicy") -> None:
         '''Apply the given removal policy to this resource.
 
         The Removal Policy controls what happens to this resource when it stops
@@ -21203,7 +21226,7 @@ class Resource(
         resource: builtins.str,
         service: builtins.str,
         account: typing.Optional[builtins.str] = None,
-        arn_format: typing.Optional[ArnFormat] = None,
+        arn_format: typing.Optional["ArnFormat"] = None,
         partition: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         resource_name: typing.Optional[builtins.str] = None,
@@ -21256,7 +21279,7 @@ class Resource(
 
     @builtins.property
     @jsii.member(jsii_name="env")
-    def env(self) -> _ResourceEnvironment_603baf00:
+    def env(self) -> "_ResourceEnvironment_603baf00":
         '''The environment this resource belongs to.
 
         For resources that are created and managed in a Stack (those created by
@@ -21267,7 +21290,7 @@ class Resource(
         ``Role.fromRoleArn()``, ``Bucket.fromBucketName()``, etc.), they might be
         different than the stack they were imported into.
         '''
-        return typing.cast(_ResourceEnvironment_603baf00, jsii.get(self, "env"))
+        return typing.cast("_ResourceEnvironment_603baf00", jsii.get(self, "env"))
 
     @builtins.property
     @jsii.member(jsii_name="physicalName")
@@ -21584,7 +21607,7 @@ class ScopedAws(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.ScopedAws"):
         scoped_aws = cdk.ScopedAws(self)
     '''
 
-    def __init__(self, scope: _constructs_77d1e7e8.Construct) -> None:
+    def __init__(self, scope: "_constructs_77d1e7e8.Construct") -> None:
         '''
         :param scope: -
         '''
@@ -21689,7 +21712,7 @@ class SecretValue(
         protected_value: typing.Any,
         *,
         stack_trace: typing.Optional[builtins.bool] = None,
-        type_hint: typing.Optional[ResolutionTypeHint] = None,
+        type_hint: typing.Optional["ResolutionTypeHint"] = None,
     ) -> None:
         '''Construct a SecretValue (do not use!).
 
@@ -21751,7 +21774,7 @@ class SecretValue(
 
     @jsii.member(jsii_name="cfnParameter")
     @builtins.classmethod
-    def cfn_parameter(cls, param: CfnParameter) -> "SecretValue":
+    def cfn_parameter(cls, param: "CfnParameter") -> "SecretValue":
         '''Obtain the secret value through a CloudFormation parameter.
 
         Generally, this is not a recommended approach. AWS Secrets Manager is the
@@ -21893,7 +21916,7 @@ class SecretValue(
         return typing.cast("SecretValue", jsii.sinvoke(cls, "unsafePlainText", [secret]))
 
     @jsii.member(jsii_name="resolve")
-    def resolve(self, context: IResolveContext) -> typing.Any:
+    def resolve(self, context: "IResolveContext") -> typing.Any:
         '''Resolve the secret.
 
         If the feature flag is not set, resolve as normal. Otherwise, throw a descriptive
@@ -22359,19 +22382,19 @@ class Stack(
 
     def __init__(
         self,
-        scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         id: typing.Optional[builtins.str] = None,
         *,
         analytics_reporting: typing.Optional[builtins.bool] = None,
         cross_region_references: typing.Optional[builtins.bool] = None,
         description: typing.Optional[builtins.str] = None,
-        env: typing.Optional[typing.Union[Environment, typing.Dict[builtins.str, typing.Any]]] = None,
+        env: typing.Optional[typing.Union["Environment", typing.Dict[builtins.str, typing.Any]]] = None,
         notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        permissions_boundary: typing.Optional[PermissionsBoundary] = None,
-        property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
+        permissions_boundary: typing.Optional["PermissionsBoundary"] = None,
+        property_injectors: typing.Optional[typing.Sequence["IPropertyInjector"]] = None,
         stack_name: typing.Optional[builtins.str] = None,
         suppress_template_indentation: typing.Optional[builtins.bool] = None,
-        synthesizer: typing.Optional[IStackSynthesizer] = None,
+        synthesizer: typing.Optional["IStackSynthesizer"] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         termination_protection: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -22429,7 +22452,7 @@ class Stack(
 
     @jsii.member(jsii_name="of")
     @builtins.classmethod
-    def of(cls, construct: _constructs_77d1e7e8.IConstruct) -> "Stack":
+    def of(cls, construct: "_constructs_77d1e7e8.IConstruct") -> "Stack":
         '''Looks up the first stack scope in which ``construct`` is defined.
 
         Fails if there is no stack up the tree.
@@ -22516,7 +22539,7 @@ class Stack(
         return typing.cast(None, jsii.invoke(self, "addTransform", [transform]))
 
     @jsii.member(jsii_name="allocateLogicalId")
-    def _allocate_logical_id(self, cfn_element: CfnElement) -> builtins.str:
+    def _allocate_logical_id(self, cfn_element: "CfnElement") -> builtins.str:
         '''Returns the naming scheme used to allocate logical IDs.
 
         By default, uses
@@ -22671,7 +22694,7 @@ class Stack(
         resource: builtins.str,
         service: builtins.str,
         account: typing.Optional[builtins.str] = None,
-        arn_format: typing.Optional[ArnFormat] = None,
+        arn_format: typing.Optional["ArnFormat"] = None,
         partition: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         resource_name: typing.Optional[builtins.str] = None,
@@ -22713,7 +22736,7 @@ class Stack(
         return typing.cast(builtins.str, jsii.invoke(self, "formatArn", [components]))
 
     @jsii.member(jsii_name="getLogicalId")
-    def get_logical_id(self, element: CfnElement) -> builtins.str:
+    def get_logical_id(self, element: "CfnElement") -> builtins.str:
         '''Allocates a stack-unique CloudFormation-compatible logical identity for a specific resource.
 
         This method is called when a ``CfnElement`` is created and used to render the
@@ -22798,8 +22821,8 @@ class Stack(
         self,
         *,
         key: builtins.str,
-        props: typing.Union[typing.Union[_AmiContextQuery_74bf4b1b, typing.Dict[builtins.str, typing.Any]], typing.Union[_AvailabilityZonesContextQuery_715a9fea, typing.Dict[builtins.str, typing.Any]], typing.Union[_HostedZoneContextQuery_8e6ca28f, typing.Dict[builtins.str, typing.Any]], typing.Union[_SSMParameterContextQuery_675de122, typing.Dict[builtins.str, typing.Any]], typing.Union[_VpcContextQuery_a193c650, typing.Dict[builtins.str, typing.Any]], typing.Union[_EndpointServiceAvailabilityZonesContextQuery_ea3ca0d1, typing.Dict[builtins.str, typing.Any]], typing.Union[_LoadBalancerContextQuery_cb08d67c, typing.Dict[builtins.str, typing.Any]], typing.Union[_LoadBalancerListenerContextQuery_0eaf3c16, typing.Dict[builtins.str, typing.Any]], typing.Union[_SecurityGroupContextQuery_e772f3e6, typing.Dict[builtins.str, typing.Any]], typing.Union[_KeyContextQuery_3ac6128d, typing.Dict[builtins.str, typing.Any]], typing.Union[_CcApiContextQuery_7347fbd4, typing.Dict[builtins.str, typing.Any]], typing.Union[_PluginContextQuery_31a9d073, typing.Dict[builtins.str, typing.Any]]],
-        provider: _ContextProvider_fa789bb5,
+        props: typing.Union[typing.Union["_AmiContextQuery_74bf4b1b", typing.Dict[builtins.str, typing.Any]], typing.Union["_AvailabilityZonesContextQuery_715a9fea", typing.Dict[builtins.str, typing.Any]], typing.Union["_HostedZoneContextQuery_8e6ca28f", typing.Dict[builtins.str, typing.Any]], typing.Union["_SSMParameterContextQuery_675de122", typing.Dict[builtins.str, typing.Any]], typing.Union["_VpcContextQuery_a193c650", typing.Dict[builtins.str, typing.Any]], typing.Union["_EndpointServiceAvailabilityZonesContextQuery_ea3ca0d1", typing.Dict[builtins.str, typing.Any]], typing.Union["_LoadBalancerContextQuery_cb08d67c", typing.Dict[builtins.str, typing.Any]], typing.Union["_LoadBalancerListenerContextQuery_0eaf3c16", typing.Dict[builtins.str, typing.Any]], typing.Union["_SecurityGroupContextQuery_e772f3e6", typing.Dict[builtins.str, typing.Any]], typing.Union["_KeyContextQuery_3ac6128d", typing.Dict[builtins.str, typing.Any]], typing.Union["_CcApiContextQuery_7347fbd4", typing.Dict[builtins.str, typing.Any]], typing.Union["_PluginContextQuery_31a9d073", typing.Dict[builtins.str, typing.Any]]],
+        provider: "_ContextProvider_fa789bb5",
     ) -> None:
         '''Indicate that a context key was expected.
 
@@ -22826,7 +22849,7 @@ class Stack(
         return typing.cast(typing.Any, jsii.invoke(self, "resolve", [obj]))
 
     @jsii.member(jsii_name="splitArn")
-    def split_arn(self, arn: builtins.str, arn_format: ArnFormat) -> ArnComponents:
+    def split_arn(self, arn: builtins.str, arn_format: "ArnFormat") -> "ArnComponents":
         '''Splits the provided ARN into its components.
 
         Works both if 'arn' is a string like 'arn:aws:s3:::bucket',
@@ -22841,7 +22864,7 @@ class Stack(
             type_hints = typing.get_type_hints(_typecheckingstub__d3147eb5412c7f1036bf499bf00f2d138de465e3460a509e64d2ff9e2f1dc1bf)
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
             check_type(argname="argument arn_format", value=arn_format, expected_type=type_hints["arn_format"])
-        return typing.cast(ArnComponents, jsii.invoke(self, "splitArn", [arn, arn_format]))
+        return typing.cast("ArnComponents", jsii.invoke(self, "splitArn", [arn, arn_format]))
 
     @jsii.member(jsii_name="toJsonString")
     def to_json_string(
@@ -23022,9 +23045,9 @@ class Stack(
 
     @builtins.property
     @jsii.member(jsii_name="synthesizer")
-    def synthesizer(self) -> IStackSynthesizer:
+    def synthesizer(self) -> "IStackSynthesizer":
         '''Synthesis method for this stack.'''
-        return typing.cast(IStackSynthesizer, jsii.get(self, "synthesizer"))
+        return typing.cast("IStackSynthesizer", jsii.get(self, "synthesizer"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -23043,9 +23066,9 @@ class Stack(
 
     @builtins.property
     @jsii.member(jsii_name="templateOptions")
-    def template_options(self) -> ITemplateOptions:
+    def template_options(self) -> "ITemplateOptions":
         '''Options for CloudFormation template (like version, transform, description).'''
-        return typing.cast(ITemplateOptions, jsii.get(self, "templateOptions"))
+        return typing.cast("ITemplateOptions", jsii.get(self, "templateOptions"))
 
     @builtins.property
     @jsii.member(jsii_name="urlSuffix")
@@ -23061,12 +23084,12 @@ class Stack(
 
     @builtins.property
     @jsii.member(jsii_name="nestedStackResource")
-    def nested_stack_resource(self) -> typing.Optional[CfnResource]:
+    def nested_stack_resource(self) -> typing.Optional["CfnResource"]:
         '''If this is a nested stack, this represents its ``AWS::CloudFormation::Stack`` resource.
 
         ``undefined`` for top-level (non-nested) stacks.
         '''
-        return typing.cast(typing.Optional[CfnResource], jsii.get(self, "nestedStackResource"))
+        return typing.cast(typing.Optional["CfnResource"], jsii.get(self, "nestedStackResource"))
 
     @builtins.property
     @jsii.member(jsii_name="terminationProtection")
@@ -23107,13 +23130,13 @@ class StackProps:
         analytics_reporting: typing.Optional[builtins.bool] = None,
         cross_region_references: typing.Optional[builtins.bool] = None,
         description: typing.Optional[builtins.str] = None,
-        env: typing.Optional[typing.Union[Environment, typing.Dict[builtins.str, typing.Any]]] = None,
+        env: typing.Optional[typing.Union["Environment", typing.Dict[builtins.str, typing.Any]]] = None,
         notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        permissions_boundary: typing.Optional[PermissionsBoundary] = None,
-        property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
+        permissions_boundary: typing.Optional["PermissionsBoundary"] = None,
+        property_injectors: typing.Optional[typing.Sequence["IPropertyInjector"]] = None,
         stack_name: typing.Optional[builtins.str] = None,
         suppress_template_indentation: typing.Optional[builtins.bool] = None,
-        synthesizer: typing.Optional[IStackSynthesizer] = None,
+        synthesizer: typing.Optional["IStackSynthesizer"] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         termination_protection: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -23135,6 +23158,7 @@ class StackProps:
 
         Example::
 
+            from aws_cdk import Environment, Environment
             stack1 = Stack(app, "Stack1",
                 env=Environment(
                     region="us-east-1"
@@ -23238,7 +23262,7 @@ class StackProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def env(self) -> typing.Optional[Environment]:
+    def env(self) -> typing.Optional["Environment"]:
         '''The AWS environment (account/region) where this stack will be deployed.
 
         Set the ``region``/``account`` fields of ``env`` to either a concrete value to
@@ -23267,6 +23291,7 @@ class StackProps:
 
         Example::
 
+            from aws_cdk import Environment, Environment, Environment
             # Use a concrete account and region to deploy this stack to:
             # `.account` and `.region` will simply return these values.
             Stack(app, "Stack1",
@@ -23305,7 +23330,7 @@ class StackProps:
             MyStack(app, "Stack1")
         '''
         result = self._values.get("env")
-        return typing.cast(typing.Optional[Environment], result)
+        return typing.cast(typing.Optional["Environment"], result)
 
     @builtins.property
     def notification_arns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -23317,22 +23342,22 @@ class StackProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def permissions_boundary(self) -> typing.Optional[PermissionsBoundary]:
+    def permissions_boundary(self) -> typing.Optional["PermissionsBoundary"]:
         '''Options for applying a permissions boundary to all IAM Roles and Users created within this Stage.
 
         :default: - no permissions boundary is applied
         '''
         result = self._values.get("permissions_boundary")
-        return typing.cast(typing.Optional[PermissionsBoundary], result)
+        return typing.cast(typing.Optional["PermissionsBoundary"], result)
 
     @builtins.property
-    def property_injectors(self) -> typing.Optional[typing.List[IPropertyInjector]]:
+    def property_injectors(self) -> typing.Optional[typing.List["IPropertyInjector"]]:
         '''A list of IPropertyInjector attached to this Stack.
 
         :default: - no PropertyInjectors
         '''
         result = self._values.get("property_injectors")
-        return typing.cast(typing.Optional[typing.List[IPropertyInjector]], result)
+        return typing.cast(typing.Optional[typing.List["IPropertyInjector"]], result)
 
     @builtins.property
     def stack_name(self) -> typing.Optional[builtins.str]:
@@ -23357,7 +23382,7 @@ class StackProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def synthesizer(self) -> typing.Optional[IStackSynthesizer]:
+    def synthesizer(self) -> typing.Optional["IStackSynthesizer"]:
         '''Synthesis method to use while deploying this stack.
 
         The Stack Synthesizer controls aspects of synthesis and deployment,
@@ -23373,7 +23398,7 @@ class StackProps:
         :default: - The synthesizer specified on ``App``, or ``DefaultStackSynthesizer`` otherwise.
         '''
         result = self._values.get("synthesizer")
-        return typing.cast(typing.Optional[IStackSynthesizer], result)
+        return typing.cast(typing.Optional["IStackSynthesizer"], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -23466,14 +23491,14 @@ class StackSynthesizer(
         docker_build_ssh: typing.Optional[builtins.str] = None,
         docker_build_target: typing.Optional[builtins.str] = None,
         docker_cache_disabled: typing.Optional[builtins.bool] = None,
-        docker_cache_from: typing.Optional[typing.Sequence[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]]] = None,
-        docker_cache_to: typing.Optional[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]] = None,
+        docker_cache_from: typing.Optional[typing.Sequence[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]]] = None,
+        docker_cache_to: typing.Optional[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]] = None,
         docker_file: typing.Optional[builtins.str] = None,
         docker_outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         network_mode: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
-    ) -> DockerImageAssetLocation:
+    ) -> "DockerImageAssetLocation":
         '''Register a Docker Image Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -23513,8 +23538,8 @@ class StackSynthesizer(
         display_name: typing.Optional[builtins.str] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         file_name: typing.Optional[builtins.str] = None,
-        packaging: typing.Optional[FileAssetPackaging] = None,
-    ) -> FileAssetLocation:
+        packaging: typing.Optional["FileAssetPackaging"] = None,
+    ) -> "FileAssetLocation":
         '''Register a File Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -23535,7 +23560,7 @@ class StackSynthesizer(
         ...
 
     @jsii.member(jsii_name="bind")
-    def bind(self, stack: Stack) -> None:
+    def bind(self, stack: "Stack") -> None:
         '''Bind to the stack this environment is going to be used on.
 
         Must be called before any of the other methods are called.
@@ -23557,7 +23582,7 @@ class StackSynthesizer(
         assume_role_arn: typing.Optional[builtins.str] = None,
         assume_role_external_id: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
-    ) -> DockerImageAssetLocation:
+    ) -> "DockerImageAssetLocation":
         '''Turn a docker asset location into a CloudFormation representation of that location.
 
         If any of the fields contain placeholders, the result will be wrapped in a ``Fn.sub``.
@@ -23578,7 +23603,7 @@ class StackSynthesizer(
             region=region,
         )
 
-        return typing.cast(DockerImageAssetLocation, jsii.invoke(self, "cloudFormationLocationFromDockerImageAsset", [dest]))
+        return typing.cast("DockerImageAssetLocation", jsii.invoke(self, "cloudFormationLocationFromDockerImageAsset", [dest]))
 
     @jsii.member(jsii_name="cloudFormationLocationFromFileAsset")
     def _cloud_formation_location_from_file_asset(
@@ -23590,7 +23615,7 @@ class StackSynthesizer(
         assume_role_arn: typing.Optional[builtins.str] = None,
         assume_role_external_id: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
-    ) -> FileAssetLocation:
+    ) -> "FileAssetLocation":
         '''Turn a file asset location into a CloudFormation representation of that location.
 
         If any of the fields contain placeholders, the result will be wrapped in a ``Fn.sub``.
@@ -23611,12 +23636,12 @@ class StackSynthesizer(
             region=region,
         )
 
-        return typing.cast(FileAssetLocation, jsii.invoke(self, "cloudFormationLocationFromFileAsset", [location]))
+        return typing.cast("FileAssetLocation", jsii.invoke(self, "cloudFormationLocationFromFileAsset", [location]))
 
     @jsii.member(jsii_name="emitArtifact")
     def _emit_artifact(
         self,
-        session: ISynthesisSession,
+        session: "ISynthesisSession",
         *,
         additional_dependencies: typing.Optional[typing.Sequence[builtins.str]] = None,
         assume_role_additional_options: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -23624,7 +23649,7 @@ class StackSynthesizer(
         assume_role_external_id: typing.Optional[builtins.str] = None,
         bootstrap_stack_version_ssm_parameter: typing.Optional[builtins.str] = None,
         cloud_formation_execution_role_arn: typing.Optional[builtins.str] = None,
-        lookup_role: typing.Optional[typing.Union[_BootstrapRole_9b326056, typing.Dict[builtins.str, typing.Any]]] = None,
+        lookup_role: typing.Optional[typing.Union["_BootstrapRole_9b326056", typing.Dict[builtins.str, typing.Any]]] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         requires_bootstrap_stack_version: typing.Optional[jsii.Number] = None,
         stack_template_asset_object_url: typing.Optional[builtins.str] = None,
@@ -23668,8 +23693,8 @@ class StackSynthesizer(
     @jsii.member(jsii_name="emitStackArtifact")
     def _emit_stack_artifact(
         self,
-        stack: Stack,
-        session: ISynthesisSession,
+        stack: "Stack",
+        session: "ISynthesisSession",
         *,
         additional_dependencies: typing.Optional[typing.Sequence[builtins.str]] = None,
         assume_role_additional_options: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -23677,7 +23702,7 @@ class StackSynthesizer(
         assume_role_external_id: typing.Optional[builtins.str] = None,
         bootstrap_stack_version_ssm_parameter: typing.Optional[builtins.str] = None,
         cloud_formation_execution_role_arn: typing.Optional[builtins.str] = None,
-        lookup_role: typing.Optional[typing.Union[_BootstrapRole_9b326056, typing.Dict[builtins.str, typing.Any]]] = None,
+        lookup_role: typing.Optional[typing.Union["_BootstrapRole_9b326056", typing.Dict[builtins.str, typing.Any]]] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         requires_bootstrap_stack_version: typing.Optional[jsii.Number] = None,
         stack_template_asset_object_url: typing.Optional[builtins.str] = None,
@@ -23725,7 +23750,7 @@ class StackSynthesizer(
 
     @jsii.member(jsii_name="synthesize")
     @abc.abstractmethod
-    def synthesize(self, session: ISynthesisSession) -> None:
+    def synthesize(self, session: "ISynthesisSession") -> None:
         '''Synthesize the associated stack to the session.
 
         :param session: -
@@ -23735,8 +23760,8 @@ class StackSynthesizer(
     @jsii.member(jsii_name="synthesizeStackTemplate")
     def _synthesize_stack_template(
         self,
-        stack: Stack,
-        session: ISynthesisSession,
+        stack: "Stack",
+        session: "ISynthesisSession",
     ) -> None:
         '''(deprecated) Have the stack write out its template.
 
@@ -23756,11 +23781,11 @@ class StackSynthesizer(
     @jsii.member(jsii_name="synthesizeTemplate")
     def _synthesize_template(
         self,
-        session: ISynthesisSession,
+        session: "ISynthesisSession",
         lookup_role_arn: typing.Optional[builtins.str] = None,
         lookup_role_external_id: typing.Optional[builtins.str] = None,
         lookup_role_additional_options: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-    ) -> FileAssetSource:
+    ) -> "FileAssetSource":
         '''Write the stack template to the given session.
 
         Return a descriptor that represents the stack template as a file asset
@@ -23788,16 +23813,16 @@ class StackSynthesizer(
             check_type(argname="argument lookup_role_arn", value=lookup_role_arn, expected_type=type_hints["lookup_role_arn"])
             check_type(argname="argument lookup_role_external_id", value=lookup_role_external_id, expected_type=type_hints["lookup_role_external_id"])
             check_type(argname="argument lookup_role_additional_options", value=lookup_role_additional_options, expected_type=type_hints["lookup_role_additional_options"])
-        return typing.cast(FileAssetSource, jsii.invoke(self, "synthesizeTemplate", [session, lookup_role_arn, lookup_role_external_id, lookup_role_additional_options]))
+        return typing.cast("FileAssetSource", jsii.invoke(self, "synthesizeTemplate", [session, lookup_role_arn, lookup_role_external_id, lookup_role_additional_options]))
 
     @builtins.property
     @jsii.member(jsii_name="boundStack")
-    def _bound_stack(self) -> Stack:
+    def _bound_stack(self) -> "Stack":
         '''Retrieve the bound stack.
 
         Fails if the stack hasn't been bound yet.
         '''
-        return typing.cast(Stack, jsii.get(self, "boundStack"))
+        return typing.cast("Stack", jsii.get(self, "boundStack"))
 
     @builtins.property
     @jsii.member(jsii_name="bootstrapQualifier")
@@ -23826,14 +23851,14 @@ class _StackSynthesizerProxy(StackSynthesizer):
         docker_build_ssh: typing.Optional[builtins.str] = None,
         docker_build_target: typing.Optional[builtins.str] = None,
         docker_cache_disabled: typing.Optional[builtins.bool] = None,
-        docker_cache_from: typing.Optional[typing.Sequence[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]]] = None,
-        docker_cache_to: typing.Optional[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]] = None,
+        docker_cache_from: typing.Optional[typing.Sequence[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]]] = None,
+        docker_cache_to: typing.Optional[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]] = None,
         docker_file: typing.Optional[builtins.str] = None,
         docker_outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         network_mode: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
-    ) -> DockerImageAssetLocation:
+    ) -> "DockerImageAssetLocation":
         '''Register a Docker Image Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -23880,7 +23905,7 @@ class _StackSynthesizerProxy(StackSynthesizer):
             platform=platform,
         )
 
-        return typing.cast(DockerImageAssetLocation, jsii.invoke(self, "addDockerImageAsset", [asset]))
+        return typing.cast("DockerImageAssetLocation", jsii.invoke(self, "addDockerImageAsset", [asset]))
 
     @jsii.member(jsii_name="addFileAsset")
     def add_file_asset(
@@ -23891,8 +23916,8 @@ class _StackSynthesizerProxy(StackSynthesizer):
         display_name: typing.Optional[builtins.str] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         file_name: typing.Optional[builtins.str] = None,
-        packaging: typing.Optional[FileAssetPackaging] = None,
-    ) -> FileAssetLocation:
+        packaging: typing.Optional["FileAssetPackaging"] = None,
+    ) -> "FileAssetLocation":
         '''Register a File Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -23919,10 +23944,10 @@ class _StackSynthesizerProxy(StackSynthesizer):
             packaging=packaging,
         )
 
-        return typing.cast(FileAssetLocation, jsii.invoke(self, "addFileAsset", [asset]))
+        return typing.cast("FileAssetLocation", jsii.invoke(self, "addFileAsset", [asset]))
 
     @jsii.member(jsii_name="synthesize")
-    def synthesize(self, session: ISynthesisSession) -> None:
+    def synthesize(self, session: "ISynthesisSession") -> None:
         '''Synthesize the associated stack to the session.
 
         :param session: -
@@ -23969,14 +23994,14 @@ class Stage(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        env: typing.Optional[typing.Union[Environment, typing.Dict[builtins.str, typing.Any]]] = None,
+        env: typing.Optional[typing.Union["Environment", typing.Dict[builtins.str, typing.Any]]] = None,
         outdir: typing.Optional[builtins.str] = None,
-        permissions_boundary: typing.Optional[PermissionsBoundary] = None,
-        policy_validation_beta1: typing.Optional[typing.Sequence[IPolicyValidationPluginBeta1]] = None,
-        property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
+        permissions_boundary: typing.Optional["PermissionsBoundary"] = None,
+        policy_validation_beta1: typing.Optional[typing.Sequence["IPolicyValidationPluginBeta1"]] = None,
+        property_injectors: typing.Optional[typing.Sequence["IPropertyInjector"]] = None,
         stage_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -24018,7 +24043,10 @@ class Stage(
 
     @jsii.member(jsii_name="of")
     @builtins.classmethod
-    def of(cls, construct: _constructs_77d1e7e8.IConstruct) -> typing.Optional["Stage"]:
+    def of(
+        cls,
+        construct: "_constructs_77d1e7e8.IConstruct",
+    ) -> typing.Optional["Stage"]:
         '''Return the stage this construct is contained with, if available.
 
         If called
@@ -24040,7 +24068,7 @@ class Stage(
         force: typing.Optional[builtins.bool] = None,
         skip_validation: typing.Optional[builtins.bool] = None,
         validate_on_synthesis: typing.Optional[builtins.bool] = None,
-    ) -> _CloudAssembly_c693643e:
+    ) -> "_CloudAssembly_c693643e":
         '''Synthesize this stage into a cloud assembly.
 
         Once an assembly has been synthesized, it cannot be modified. Subsequent
@@ -24060,7 +24088,7 @@ class Stage(
             validate_on_synthesis=validate_on_synthesis,
         )
 
-        return typing.cast(_CloudAssembly_c693643e, jsii.invoke(self, "synth", [options]))
+        return typing.cast("_CloudAssembly_c693643e", jsii.invoke(self, "synth", [options]))
 
     @builtins.property
     @jsii.member(jsii_name="artifactId")
@@ -24085,7 +24113,7 @@ class Stage(
 
     @builtins.property
     @jsii.member(jsii_name="policyValidationBeta1")
-    def policy_validation_beta1(self) -> typing.List[IPolicyValidationPluginBeta1]:
+    def policy_validation_beta1(self) -> typing.List["IPolicyValidationPluginBeta1"]:
         '''Validation plugins to run during synthesis.
 
         If any plugin reports any violation,
@@ -24093,7 +24121,7 @@ class Stage(
 
         :default: - no validation plugins are used
         '''
-        return typing.cast(typing.List[IPolicyValidationPluginBeta1], jsii.get(self, "policyValidationBeta1"))
+        return typing.cast(typing.List["IPolicyValidationPluginBeta1"], jsii.get(self, "policyValidationBeta1"))
 
     @builtins.property
     @jsii.member(jsii_name="stageName")
@@ -24143,11 +24171,11 @@ class StageProps:
     def __init__(
         self,
         *,
-        env: typing.Optional[typing.Union[Environment, typing.Dict[builtins.str, typing.Any]]] = None,
+        env: typing.Optional[typing.Union["Environment", typing.Dict[builtins.str, typing.Any]]] = None,
         outdir: typing.Optional[builtins.str] = None,
-        permissions_boundary: typing.Optional[PermissionsBoundary] = None,
-        policy_validation_beta1: typing.Optional[typing.Sequence[IPolicyValidationPluginBeta1]] = None,
-        property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
+        permissions_boundary: typing.Optional["PermissionsBoundary"] = None,
+        policy_validation_beta1: typing.Optional[typing.Sequence["IPolicyValidationPluginBeta1"]] = None,
+        property_injectors: typing.Optional[typing.Sequence["IPropertyInjector"]] = None,
         stage_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Initialization props for a stage.
@@ -24205,7 +24233,7 @@ class StageProps:
             self._values["stage_name"] = stage_name
 
     @builtins.property
-    def env(self) -> typing.Optional[Environment]:
+    def env(self) -> typing.Optional["Environment"]:
         '''Default AWS environment (account/region) for ``Stack``s in this ``Stage``.
 
         Stacks defined inside this ``Stage`` with either ``region`` or ``account`` missing
@@ -24225,6 +24253,7 @@ class StageProps:
 
         Example::
 
+            from aws_cdk import Environment, Environment
             # Use a concrete account and region to deploy this Stage to
             Stage(app, "Stage1",
                 env=Environment(account="123456789012", region="us-east-1")
@@ -24236,7 +24265,7 @@ class StageProps:
             )
         '''
         result = self._values.get("env")
-        return typing.cast(typing.Optional[Environment], result)
+        return typing.cast(typing.Optional["Environment"], result)
 
     @builtins.property
     def outdir(self) -> typing.Optional[builtins.str]:
@@ -24256,7 +24285,7 @@ class StageProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def permissions_boundary(self) -> typing.Optional[PermissionsBoundary]:
+    def permissions_boundary(self) -> typing.Optional["PermissionsBoundary"]:
         '''Options for applying a permissions boundary to all IAM Roles and Users created within this Stage.
 
         Be aware that this feature uses Aspects, and the Aspects are applied at the
@@ -24276,12 +24305,12 @@ class StageProps:
         :default: - no permissions boundary is applied
         '''
         result = self._values.get("permissions_boundary")
-        return typing.cast(typing.Optional[PermissionsBoundary], result)
+        return typing.cast(typing.Optional["PermissionsBoundary"], result)
 
     @builtins.property
     def policy_validation_beta1(
         self,
-    ) -> typing.Optional[typing.List[IPolicyValidationPluginBeta1]]:
+    ) -> typing.Optional[typing.List["IPolicyValidationPluginBeta1"]]:
         '''Validation plugins to run during synthesis.
 
         If any plugin reports any violation,
@@ -24290,16 +24319,16 @@ class StageProps:
         :default: - no validation plugins are used
         '''
         result = self._values.get("policy_validation_beta1")
-        return typing.cast(typing.Optional[typing.List[IPolicyValidationPluginBeta1]], result)
+        return typing.cast(typing.Optional[typing.List["IPolicyValidationPluginBeta1"]], result)
 
     @builtins.property
-    def property_injectors(self) -> typing.Optional[typing.List[IPropertyInjector]]:
+    def property_injectors(self) -> typing.Optional[typing.List["IPropertyInjector"]]:
         '''A list of IPropertyInjector attached to this Stage.
 
         :default: - no PropertyInjectors
         '''
         result = self._values.get("property_injectors")
-        return typing.cast(typing.Optional[typing.List[IPropertyInjector]], result)
+        return typing.cast(typing.Optional[typing.List["IPropertyInjector"]], result)
 
     @builtins.property
     def stage_name(self) -> typing.Optional[builtins.str]:
@@ -24532,7 +24561,7 @@ class SynthesizeStackArtifactOptions:
         assume_role_external_id: typing.Optional[builtins.str] = None,
         bootstrap_stack_version_ssm_parameter: typing.Optional[builtins.str] = None,
         cloud_formation_execution_role_arn: typing.Optional[builtins.str] = None,
-        lookup_role: typing.Optional[typing.Union[_BootstrapRole_9b326056, typing.Dict[builtins.str, typing.Any]]] = None,
+        lookup_role: typing.Optional[typing.Union["_BootstrapRole_9b326056", typing.Dict[builtins.str, typing.Any]]] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         requires_bootstrap_stack_version: typing.Optional[jsii.Number] = None,
         stack_template_asset_object_url: typing.Optional[builtins.str] = None,
@@ -24557,6 +24586,7 @@ class SynthesizeStackArtifactOptions:
 
         Example::
 
+            from aws_cdk.cloud_assembly_schema import BootstrapRole
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             import aws_cdk as cdk
@@ -24697,13 +24727,13 @@ class SynthesizeStackArtifactOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def lookup_role(self) -> typing.Optional[_BootstrapRole_9b326056]:
+    def lookup_role(self) -> typing.Optional["_BootstrapRole_9b326056"]:
         '''The role to use to look up values from the target AWS account.
 
         :default: - None
         '''
         result = self._values.get("lookup_role")
-        return typing.cast(typing.Optional[_BootstrapRole_9b326056], result)
+        return typing.cast(typing.Optional["_BootstrapRole_9b326056"], result)
 
     @builtins.property
     def parameters(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -24796,7 +24826,7 @@ class Tag(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Tag"):
         jsii.create(self.__class__, self, [key, value, props])
 
     @jsii.member(jsii_name="applyTag")
-    def _apply_tag(self, resource: ITaggable) -> None:
+    def _apply_tag(self, resource: "ITaggable") -> None:
         '''
         :param resource: -
         '''
@@ -24806,7 +24836,7 @@ class Tag(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Tag"):
         return typing.cast(None, jsii.invoke(self, "applyTag", [resource]))
 
     @jsii.member(jsii_name="applyTagV2")
-    def _apply_tag_v2(self, resource: ITaggableV2) -> None:
+    def _apply_tag_v2(self, resource: "ITaggableV2") -> None:
         '''
         :param resource: -
         '''
@@ -24816,7 +24846,7 @@ class Tag(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Tag"):
         return typing.cast(None, jsii.invoke(self, "applyTagV2", [resource]))
 
     @jsii.member(jsii_name="visit")
-    def visit(self, construct: _constructs_77d1e7e8.IConstruct) -> None:
+    def visit(self, construct: "_constructs_77d1e7e8.IConstruct") -> None:
         '''All aspects can visit an IConstruct.
 
         :param construct: -
@@ -25012,13 +25042,13 @@ class TagManager(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.TagManager"):
 
     @builtins.property
     @jsii.member(jsii_name="renderedTags")
-    def rendered_tags(self) -> IResolvable:
+    def rendered_tags(self) -> "IResolvable":
         '''A lazy value that represents the rendered tags at synthesis time.
 
         If you need to make a custom construct taggable, use the value of this
         property to pass to the ``tags`` property of the underlying construct.
         '''
-        return typing.cast(IResolvable, jsii.get(self, "renderedTags"))
+        return typing.cast("IResolvable", jsii.get(self, "renderedTags"))
 
     @builtins.property
     @jsii.member(jsii_name="tagPropertyName")
@@ -25283,7 +25313,7 @@ class Tags(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Tags"):
 
     @jsii.member(jsii_name="of")
     @builtins.classmethod
-    def of(cls, scope: _constructs_77d1e7e8.IConstruct) -> "Tags":
+    def of(cls, scope: "_constructs_77d1e7e8.IConstruct") -> "Tags":
         '''Returns the tags API for this scope.
 
         :param scope: The scope.
@@ -28660,7 +28690,7 @@ class Token(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Token"):
 
     @jsii.member(jsii_name="asAny")
     @builtins.classmethod
-    def as_any(cls, value: typing.Any) -> IResolvable:
+    def as_any(cls, value: typing.Any) -> "IResolvable":
         '''Return a resolvable representation of the given value.
 
         :param value: -
@@ -28668,7 +28698,7 @@ class Token(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Token"):
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d346f9975c8460e64e106626dca1c6856f9b41d048d78203c4d72bb2d04f18a7)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        return typing.cast(IResolvable, jsii.sinvoke(cls, "asAny", [value]))
+        return typing.cast("IResolvable", jsii.sinvoke(cls, "asAny", [value]))
 
     @jsii.member(jsii_name="asList")
     @builtins.classmethod
@@ -28836,8 +28866,8 @@ class Tokenization(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Tokenization"
         cls,
         obj: typing.Any,
         *,
-        resolver: ITokenResolver,
-        scope: _constructs_77d1e7e8.IConstruct,
+        resolver: "ITokenResolver",
+        scope: "_constructs_77d1e7e8.IConstruct",
         preparing: typing.Optional[builtins.bool] = None,
         remove_empty: typing.Optional[builtins.bool] = None,
     ) -> typing.Any:
@@ -28870,7 +28900,7 @@ class Tokenization(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Tokenization"
         x: typing.Any,
         *,
         fail_concat: typing.Optional[builtins.bool] = None,
-    ) -> typing.Optional[IResolvable]:
+    ) -> typing.Optional["IResolvable"]:
         '''Reverse any value into a Resolvable, if possible.
 
         In case of a string, the string must not be a concatenation.
@@ -28883,11 +28913,11 @@ class Tokenization(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Tokenization"
             check_type(argname="argument x", value=x, expected_type=type_hints["x"])
         options = ReverseOptions(fail_concat=fail_concat)
 
-        return typing.cast(typing.Optional[IResolvable], jsii.sinvoke(cls, "reverse", [x, options]))
+        return typing.cast(typing.Optional["IResolvable"], jsii.sinvoke(cls, "reverse", [x, options]))
 
     @jsii.member(jsii_name="reverseCompleteString")
     @builtins.classmethod
-    def reverse_complete_string(cls, s: builtins.str) -> typing.Optional[IResolvable]:
+    def reverse_complete_string(cls, s: builtins.str) -> typing.Optional["IResolvable"]:
         '''Un-encode a string which is either a complete encoded token, or doesn't contain tokens at all.
 
         It's illegal for the string to be a concatenation of an encoded token and something else.
@@ -28897,14 +28927,14 @@ class Tokenization(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Tokenization"
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1f4af763db4ffe8b2aff5680b272df79d51cc349667abe1e7f54c9dd2e8e1502)
             check_type(argname="argument s", value=s, expected_type=type_hints["s"])
-        return typing.cast(typing.Optional[IResolvable], jsii.sinvoke(cls, "reverseCompleteString", [s]))
+        return typing.cast(typing.Optional["IResolvable"], jsii.sinvoke(cls, "reverseCompleteString", [s]))
 
     @jsii.member(jsii_name="reverseList")
     @builtins.classmethod
     def reverse_list(
         cls,
         l: typing.Sequence[builtins.str],
-    ) -> typing.Optional[IResolvable]:
+    ) -> typing.Optional["IResolvable"]:
         '''Un-encode a Tokenized value from a list.
 
         :param l: -
@@ -28912,11 +28942,11 @@ class Tokenization(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Tokenization"
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__37c1d7115e8df759f868c2aeb958c200347927023c95b399759fe372061b7f84)
             check_type(argname="argument l", value=l, expected_type=type_hints["l"])
-        return typing.cast(typing.Optional[IResolvable], jsii.sinvoke(cls, "reverseList", [l]))
+        return typing.cast(typing.Optional["IResolvable"], jsii.sinvoke(cls, "reverseList", [l]))
 
     @jsii.member(jsii_name="reverseNumber")
     @builtins.classmethod
-    def reverse_number(cls, n: jsii.Number) -> typing.Optional[IResolvable]:
+    def reverse_number(cls, n: jsii.Number) -> typing.Optional["IResolvable"]:
         '''Un-encode a Tokenized value from a number.
 
         :param n: -
@@ -28924,7 +28954,7 @@ class Tokenization(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Tokenization"
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__20530240c60a77d5b332e072f6b4e804a166422d6a3acf339a567aeddd593e74)
             check_type(argname="argument n", value=n, expected_type=type_hints["n"])
-        return typing.cast(typing.Optional[IResolvable], jsii.sinvoke(cls, "reverseNumber", [n]))
+        return typing.cast(typing.Optional["IResolvable"], jsii.sinvoke(cls, "reverseNumber", [n]))
 
     @jsii.member(jsii_name="reverseString")
     @builtins.classmethod
@@ -28994,7 +29024,7 @@ class TokenizedStringFragments(
         return typing.cast(None, jsii.invoke(self, "addLiteral", [lit]))
 
     @jsii.member(jsii_name="addToken")
-    def add_token(self, token: IResolvable) -> None:
+    def add_token(self, token: "IResolvable") -> None:
         '''
         :param token: -
         '''
@@ -29004,7 +29034,7 @@ class TokenizedStringFragments(
         return typing.cast(None, jsii.invoke(self, "addToken", [token]))
 
     @jsii.member(jsii_name="join")
-    def join(self, concat: IFragmentConcatenator) -> typing.Any:
+    def join(self, concat: "IFragmentConcatenator") -> typing.Any:
         '''Combine the string fragments using the given joiner.
 
         If there are any
@@ -29017,7 +29047,7 @@ class TokenizedStringFragments(
         return typing.cast(typing.Any, jsii.invoke(self, "join", [concat]))
 
     @jsii.member(jsii_name="mapTokens")
-    def map_tokens(self, mapper: ITokenMapper) -> "TokenizedStringFragments":
+    def map_tokens(self, mapper: "ITokenMapper") -> "TokenizedStringFragments":
         '''Apply a transformation function to all tokens in the string.
 
         :param mapper: -
@@ -29039,14 +29069,14 @@ class TokenizedStringFragments(
 
     @builtins.property
     @jsii.member(jsii_name="tokens")
-    def tokens(self) -> typing.List[IResolvable]:
+    def tokens(self) -> typing.List["IResolvable"]:
         '''Return all Tokens from this string.'''
-        return typing.cast(typing.List[IResolvable], jsii.get(self, "tokens"))
+        return typing.cast(typing.List["IResolvable"], jsii.get(self, "tokens"))
 
     @builtins.property
     @jsii.member(jsii_name="firstToken")
-    def first_token(self) -> typing.Optional[IResolvable]:
-        return typing.cast(typing.Optional[IResolvable], jsii.get(self, "firstToken"))
+    def first_token(self) -> typing.Optional["IResolvable"]:
+        return typing.cast(typing.Optional["IResolvable"], jsii.get(self, "firstToken"))
 
 
 class TreeInspector(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.TreeInspector"):
@@ -29273,7 +29303,7 @@ class ValidationResults(
 
     def __init__(
         self,
-        results: typing.Optional[typing.Sequence[ValidationResult]] = None,
+        results: typing.Optional[typing.Sequence["ValidationResult"]] = None,
     ) -> None:
         '''
         :param results: -
@@ -29284,7 +29314,7 @@ class ValidationResults(
         jsii.create(self.__class__, self, [results])
 
     @jsii.member(jsii_name="collect")
-    def collect(self, result: ValidationResult) -> None:
+    def collect(self, result: "ValidationResult") -> None:
         '''
         :param result: -
         '''
@@ -29298,7 +29328,7 @@ class ValidationResults(
         return typing.cast(builtins.str, jsii.invoke(self, "errorTreeList", []))
 
     @jsii.member(jsii_name="wrap")
-    def wrap(self, message: builtins.str) -> ValidationResult:
+    def wrap(self, message: builtins.str) -> "ValidationResult":
         '''Wrap up all validation results into a single tree node.
 
         If there are failures in the collection, add a message, otherwise
@@ -29309,7 +29339,7 @@ class ValidationResults(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6fbc5f8bcfa9e9c60a5fa223fba62c4c69e4dd1d5425be4b12cc8d1eb271f99f)
             check_type(argname="argument message", value=message, expected_type=type_hints["message"])
-        return typing.cast(ValidationResult, jsii.invoke(self, "wrap", [message]))
+        return typing.cast("ValidationResult", jsii.invoke(self, "wrap", [message]))
 
     @builtins.property
     @jsii.member(jsii_name="isSuccess")
@@ -29318,11 +29348,11 @@ class ValidationResults(
 
     @builtins.property
     @jsii.member(jsii_name="results")
-    def results(self) -> typing.List[ValidationResult]:
-        return typing.cast(typing.List[ValidationResult], jsii.get(self, "results"))
+    def results(self) -> typing.List["ValidationResult"]:
+        return typing.cast(typing.List["ValidationResult"], jsii.get(self, "results"))
 
     @results.setter
-    def results(self, value: typing.List[ValidationResult]) -> None:
+    def results(self, value: typing.List["ValidationResult"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9effc33e84903ea022b71088eb4acbafab3c5e135ab84d1b08231a7b3bb0dae9)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -29380,9 +29410,9 @@ class App(Stage, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.App"):
         context: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         default_stack_synthesizer: typing.Optional["IReusableStackSynthesizer"] = None,
         outdir: typing.Optional[builtins.str] = None,
-        policy_validation_beta1: typing.Optional[typing.Sequence[IPolicyValidationPluginBeta1]] = None,
+        policy_validation_beta1: typing.Optional[typing.Sequence["IPolicyValidationPluginBeta1"]] = None,
         post_cli_context: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        property_injectors: typing.Optional[typing.Sequence[IPropertyInjector]] = None,
+        property_injectors: typing.Optional[typing.Sequence["IPropertyInjector"]] = None,
         stack_traces: typing.Optional[builtins.bool] = None,
         tree_metadata: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -29448,12 +29478,12 @@ class AssetStagingProps(FingerprintOptions, AssetOptions):
         self,
         *,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow: typing.Optional[SymlinkFollowMode] = None,
-        ignore_mode: typing.Optional[IgnoreMode] = None,
+        follow: typing.Optional["SymlinkFollowMode"] = None,
+        ignore_mode: typing.Optional["IgnoreMode"] = None,
         extra_hash: typing.Optional[builtins.str] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[AssetHashType] = None,
-        bundling: typing.Optional[typing.Union[BundlingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["AssetHashType"] = None,
+        bundling: typing.Optional[typing.Union["BundlingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         source_path: builtins.str,
     ) -> None:
         '''Initialization properties for ``AssetStaging``.
@@ -29559,22 +29589,22 @@ class AssetStagingProps(FingerprintOptions, AssetOptions):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def follow(self) -> typing.Optional[SymlinkFollowMode]:
+    def follow(self) -> typing.Optional["SymlinkFollowMode"]:
         '''A strategy for how to handle symlinks.
 
         :default: SymlinkFollowMode.NEVER
         '''
         result = self._values.get("follow")
-        return typing.cast(typing.Optional[SymlinkFollowMode], result)
+        return typing.cast(typing.Optional["SymlinkFollowMode"], result)
 
     @builtins.property
-    def ignore_mode(self) -> typing.Optional[IgnoreMode]:
+    def ignore_mode(self) -> typing.Optional["IgnoreMode"]:
         '''The ignore behavior to use for ``exclude`` patterns.
 
         :default: IgnoreMode.GLOB
         '''
         result = self._values.get("ignore_mode")
-        return typing.cast(typing.Optional[IgnoreMode], result)
+        return typing.cast(typing.Optional["IgnoreMode"], result)
 
     @builtins.property
     def extra_hash(self) -> typing.Optional[builtins.str]:
@@ -29606,7 +29636,7 @@ class AssetStagingProps(FingerprintOptions, AssetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def asset_hash_type(self) -> typing.Optional[AssetHashType]:
+    def asset_hash_type(self) -> typing.Optional["AssetHashType"]:
         '''Specifies the type of hash to calculate for this asset.
 
         If ``assetHash`` is configured, this option must be ``undefined`` or
@@ -29618,10 +29648,10 @@ class AssetStagingProps(FingerprintOptions, AssetOptions):
         explicitly specified this value defaults to ``AssetHashType.CUSTOM``.
         '''
         result = self._values.get("asset_hash_type")
-        return typing.cast(typing.Optional[AssetHashType], result)
+        return typing.cast(typing.Optional["AssetHashType"], result)
 
     @builtins.property
-    def bundling(self) -> typing.Optional[BundlingOptions]:
+    def bundling(self) -> typing.Optional["BundlingOptions"]:
         '''Bundle the asset by executing a command in a Docker container or a custom bundling provider.
 
         The asset path will be mounted at ``/asset-input``. The Docker
@@ -29635,7 +29665,7 @@ class AssetStagingProps(FingerprintOptions, AssetOptions):
         archived into a .zip file and uploaded to S3 otherwise
         '''
         result = self._values.get("bundling")
-        return typing.cast(typing.Optional[BundlingOptions], result)
+        return typing.cast(typing.Optional["BundlingOptions"], result)
 
     @builtins.property
     def source_path(self) -> builtins.str:
@@ -29680,14 +29710,14 @@ class CfnCodeDeployBlueGreenHook(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        applications: typing.Sequence[typing.Union[CfnCodeDeployBlueGreenApplication, typing.Dict[builtins.str, typing.Any]]],
+        applications: typing.Sequence[typing.Union["CfnCodeDeployBlueGreenApplication", typing.Dict[builtins.str, typing.Any]]],
         service_role: builtins.str,
-        additional_options: typing.Optional[typing.Union[CfnCodeDeployBlueGreenAdditionalOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        lifecycle_event_hooks: typing.Optional[typing.Union[CfnCodeDeployBlueGreenLifecycleEventHooks, typing.Dict[builtins.str, typing.Any]]] = None,
-        traffic_routing_config: typing.Optional[typing.Union[CfnTrafficRoutingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        additional_options: typing.Optional[typing.Union["CfnCodeDeployBlueGreenAdditionalOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        lifecycle_event_hooks: typing.Optional[typing.Union["CfnCodeDeployBlueGreenLifecycleEventHooks", typing.Dict[builtins.str, typing.Any]]] = None,
+        traffic_routing_config: typing.Optional[typing.Union["CfnTrafficRoutingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Creates a new CodeDeploy blue-green ECS Hook.
 
@@ -29728,14 +29758,14 @@ class CfnCodeDeployBlueGreenHook(
 
     @builtins.property
     @jsii.member(jsii_name="applications")
-    def applications(self) -> typing.List[CfnCodeDeployBlueGreenApplication]:
+    def applications(self) -> typing.List["CfnCodeDeployBlueGreenApplication"]:
         '''Properties of the Amazon ECS applications being deployed.'''
-        return typing.cast(typing.List[CfnCodeDeployBlueGreenApplication], jsii.get(self, "applications"))
+        return typing.cast(typing.List["CfnCodeDeployBlueGreenApplication"], jsii.get(self, "applications"))
 
     @applications.setter
     def applications(
         self,
-        value: typing.List[CfnCodeDeployBlueGreenApplication],
+        value: typing.List["CfnCodeDeployBlueGreenApplication"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__301622392d5f5e3371a565308249226a6bcffd963009eb56723f533552550e66)
@@ -29759,17 +29789,17 @@ class CfnCodeDeployBlueGreenHook(
     @jsii.member(jsii_name="additionalOptions")
     def additional_options(
         self,
-    ) -> typing.Optional[CfnCodeDeployBlueGreenAdditionalOptions]:
+    ) -> typing.Optional["CfnCodeDeployBlueGreenAdditionalOptions"]:
         '''Additional options for the blue/green deployment.
 
         :default: - no additional options
         '''
-        return typing.cast(typing.Optional[CfnCodeDeployBlueGreenAdditionalOptions], jsii.get(self, "additionalOptions"))
+        return typing.cast(typing.Optional["CfnCodeDeployBlueGreenAdditionalOptions"], jsii.get(self, "additionalOptions"))
 
     @additional_options.setter
     def additional_options(
         self,
-        value: typing.Optional[CfnCodeDeployBlueGreenAdditionalOptions],
+        value: typing.Optional["CfnCodeDeployBlueGreenAdditionalOptions"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__063fca93608346f764089509004a16657f58484d0a0d3f6252ea50e6455bcf5b)
@@ -29780,7 +29810,7 @@ class CfnCodeDeployBlueGreenHook(
     @jsii.member(jsii_name="lifecycleEventHooks")
     def lifecycle_event_hooks(
         self,
-    ) -> typing.Optional[CfnCodeDeployBlueGreenLifecycleEventHooks]:
+    ) -> typing.Optional["CfnCodeDeployBlueGreenLifecycleEventHooks"]:
         '''Use lifecycle event hooks to specify a Lambda function that CodeDeploy can call to validate a deployment.
 
         You can use the same function or a different one for deployment lifecycle events.
@@ -29790,12 +29820,12 @@ class CfnCodeDeployBlueGreenHook(
 
         :default: - no lifecycle event hooks
         '''
-        return typing.cast(typing.Optional[CfnCodeDeployBlueGreenLifecycleEventHooks], jsii.get(self, "lifecycleEventHooks"))
+        return typing.cast(typing.Optional["CfnCodeDeployBlueGreenLifecycleEventHooks"], jsii.get(self, "lifecycleEventHooks"))
 
     @lifecycle_event_hooks.setter
     def lifecycle_event_hooks(
         self,
-        value: typing.Optional[CfnCodeDeployBlueGreenLifecycleEventHooks],
+        value: typing.Optional["CfnCodeDeployBlueGreenLifecycleEventHooks"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5de2abc350cd318250210cd72574a10ab7615e6e5eaea18c45bd7e82dfc56590)
@@ -29804,17 +29834,17 @@ class CfnCodeDeployBlueGreenHook(
 
     @builtins.property
     @jsii.member(jsii_name="trafficRoutingConfig")
-    def traffic_routing_config(self) -> typing.Optional[CfnTrafficRoutingConfig]:
+    def traffic_routing_config(self) -> typing.Optional["CfnTrafficRoutingConfig"]:
         '''Traffic routing configuration settings.
 
         :default: - time-based canary traffic shifting, with a 15% step percentage and a five minute bake time
         '''
-        return typing.cast(typing.Optional[CfnTrafficRoutingConfig], jsii.get(self, "trafficRoutingConfig"))
+        return typing.cast(typing.Optional["CfnTrafficRoutingConfig"], jsii.get(self, "trafficRoutingConfig"))
 
     @traffic_routing_config.setter
     def traffic_routing_config(
         self,
-        value: typing.Optional[CfnTrafficRoutingConfig],
+        value: typing.Optional["CfnTrafficRoutingConfig"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c78641539d02a4305c5aded1d4cfdeae4440529ff8644bacc5d0fbf0868457fb)
@@ -29857,7 +29887,7 @@ class CfnCustomResource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         service_token: builtins.str,
@@ -29893,7 +29923,7 @@ class CfnCustomResource(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCustomResource", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -29937,9 +29967,9 @@ class CfnCustomResource(
 
     @builtins.property
     @jsii.member(jsii_name="customResourceRef")
-    def custom_resource_ref(self) -> _CustomResourceReference_d8e366c9:
+    def custom_resource_ref(self) -> "_CustomResourceReference_d8e366c9":
         '''A reference to a CustomResource resource.'''
-        return typing.cast(_CustomResourceReference_d8e366c9, jsii.get(self, "customResourceRef"))
+        return typing.cast("_CustomResourceReference_d8e366c9", jsii.get(self, "customResourceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="serviceToken")
@@ -29986,7 +30016,11 @@ class CfnDynamicReference(
         CfnDynamicReference(CfnDynamicReferenceService.SECRETS_MANAGER, "secret-id:secret-string:json-key:version-stage:version-id")
     '''
 
-    def __init__(self, service: CfnDynamicReferenceService, key: builtins.str) -> None:
+    def __init__(
+        self,
+        service: "CfnDynamicReferenceService",
+        key: builtins.str,
+    ) -> None:
         '''
         :param service: -
         :param key: -
@@ -30073,19 +30107,19 @@ class CfnGuardHook(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         alias: builtins.str,
         execution_role: builtins.str,
         failure_mode: builtins.str,
         hook_status: builtins.str,
-        rule_location: typing.Union[IResolvable, typing.Union["CfnGuardHook.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+        rule_location: typing.Union["IResolvable", typing.Union["CfnGuardHook.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         target_operations: typing.Sequence[builtins.str],
         log_bucket: typing.Optional[builtins.str] = None,
-        options: typing.Optional[typing.Union[IResolvable, typing.Union["CfnGuardHook.OptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        stack_filters: typing.Optional[typing.Union[IResolvable, typing.Union["CfnGuardHook.StackFiltersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        target_filters: typing.Optional[typing.Union[IResolvable, typing.Union["CfnGuardHook.TargetFiltersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        options: typing.Optional[typing.Union["IResolvable", typing.Union["CfnGuardHook.OptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        stack_filters: typing.Optional[typing.Union["IResolvable", typing.Union["CfnGuardHook.StackFiltersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_filters: typing.Optional[typing.Union["IResolvable", typing.Union["CfnGuardHook.TargetFiltersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFormation::GuardHook``.
 
@@ -30134,7 +30168,7 @@ class CfnGuardHook(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGuardHook", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -30179,9 +30213,9 @@ class CfnGuardHook(
 
     @builtins.property
     @jsii.member(jsii_name="guardHookRef")
-    def guard_hook_ref(self) -> _GuardHookReference_9ad20ca0:
+    def guard_hook_ref(self) -> "_GuardHookReference_9ad20ca0":
         '''A reference to a GuardHook resource.'''
-        return typing.cast(_GuardHookReference_9ad20ca0, jsii.get(self, "guardHookRef"))
+        return typing.cast("_GuardHookReference_9ad20ca0", jsii.get(self, "guardHookRef"))
 
     @builtins.property
     @jsii.member(jsii_name="alias")
@@ -30242,14 +30276,14 @@ class CfnGuardHook(
     @jsii.member(jsii_name="ruleLocation")
     def rule_location(
         self,
-    ) -> typing.Union[IResolvable, "CfnGuardHook.S3LocationProperty"]:
+    ) -> typing.Union["IResolvable", "CfnGuardHook.S3LocationProperty"]:
         '''Specifies the S3 location of your Guard rules.'''
-        return typing.cast(typing.Union[IResolvable, "CfnGuardHook.S3LocationProperty"], jsii.get(self, "ruleLocation"))
+        return typing.cast(typing.Union["IResolvable", "CfnGuardHook.S3LocationProperty"], jsii.get(self, "ruleLocation"))
 
     @rule_location.setter
     def rule_location(
         self,
-        value: typing.Union[IResolvable, "CfnGuardHook.S3LocationProperty"],
+        value: typing.Union["IResolvable", "CfnGuardHook.S3LocationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2dd7a94264b39d1c6984dcd5da3b88f9e4b4a6698c14a1ceb364dde28ed5079d)
@@ -30286,14 +30320,14 @@ class CfnGuardHook(
     @jsii.member(jsii_name="options")
     def options(
         self,
-    ) -> typing.Optional[typing.Union[IResolvable, "CfnGuardHook.OptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["IResolvable", "CfnGuardHook.OptionsProperty"]]:
         '''Specifies the S3 location of your input parameters.'''
-        return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnGuardHook.OptionsProperty"]], jsii.get(self, "options"))
+        return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnGuardHook.OptionsProperty"]], jsii.get(self, "options"))
 
     @options.setter
     def options(
         self,
-        value: typing.Optional[typing.Union[IResolvable, "CfnGuardHook.OptionsProperty"]],
+        value: typing.Optional[typing.Union["IResolvable", "CfnGuardHook.OptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__72a34d4a2e31683bbacfca52f8500480feb773f1d0bb8dfd891f0c07eba975ef)
@@ -30304,14 +30338,14 @@ class CfnGuardHook(
     @jsii.member(jsii_name="stackFilters")
     def stack_filters(
         self,
-    ) -> typing.Optional[typing.Union[IResolvable, "CfnGuardHook.StackFiltersProperty"]]:
+    ) -> typing.Optional[typing.Union["IResolvable", "CfnGuardHook.StackFiltersProperty"]]:
         '''Specifies the stack level filters for the Hook.'''
-        return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnGuardHook.StackFiltersProperty"]], jsii.get(self, "stackFilters"))
+        return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnGuardHook.StackFiltersProperty"]], jsii.get(self, "stackFilters"))
 
     @stack_filters.setter
     def stack_filters(
         self,
-        value: typing.Optional[typing.Union[IResolvable, "CfnGuardHook.StackFiltersProperty"]],
+        value: typing.Optional[typing.Union["IResolvable", "CfnGuardHook.StackFiltersProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0102df7c7e94c66e6c55290d9509c5cbc77b7f58c865dab580e07f5729f7daaa)
@@ -30322,14 +30356,14 @@ class CfnGuardHook(
     @jsii.member(jsii_name="targetFilters")
     def target_filters(
         self,
-    ) -> typing.Optional[typing.Union[IResolvable, "CfnGuardHook.TargetFiltersProperty"]]:
+    ) -> typing.Optional[typing.Union["IResolvable", "CfnGuardHook.TargetFiltersProperty"]]:
         '''Specifies the target filters for the Hook.'''
-        return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnGuardHook.TargetFiltersProperty"]], jsii.get(self, "targetFilters"))
+        return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnGuardHook.TargetFiltersProperty"]], jsii.get(self, "targetFilters"))
 
     @target_filters.setter
     def target_filters(
         self,
-        value: typing.Optional[typing.Union[IResolvable, "CfnGuardHook.TargetFiltersProperty"]],
+        value: typing.Optional[typing.Union["IResolvable", "CfnGuardHook.TargetFiltersProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2c07d8e25f948404b7d403a52c44adfd2f8e72c8f2562df3d53c28d2455a5043)
@@ -30437,7 +30471,7 @@ class CfnGuardHook(
         def __init__(
             self,
             *,
-            input_params: typing.Optional[typing.Union[IResolvable, typing.Union["CfnGuardHook.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            input_params: typing.Optional[typing.Union["IResolvable", typing.Union["CfnGuardHook.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the input parameters for a Guard Hook.
 
@@ -30471,13 +30505,13 @@ class CfnGuardHook(
         @builtins.property
         def input_params(
             self,
-        ) -> typing.Optional[typing.Union[IResolvable, "CfnGuardHook.S3LocationProperty"]]:
+        ) -> typing.Optional[typing.Union["IResolvable", "CfnGuardHook.S3LocationProperty"]]:
             '''Specifies the S3 location where your input parameters are located.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-guardhook-options.html#cfn-cloudformation-guardhook-options-inputparams
             '''
             result = self._values.get("input_params")
-            return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnGuardHook.S3LocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnGuardHook.S3LocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -30583,8 +30617,8 @@ class CfnGuardHook(
             self,
             *,
             filtering_criteria: builtins.str,
-            stack_names: typing.Optional[typing.Union[IResolvable, typing.Union["CfnGuardHook.StackNamesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            stack_roles: typing.Optional[typing.Union[IResolvable, typing.Union["CfnGuardHook.StackRolesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            stack_names: typing.Optional[typing.Union["IResolvable", typing.Union["CfnGuardHook.StackNamesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            stack_roles: typing.Optional[typing.Union["IResolvable", typing.Union["CfnGuardHook.StackRolesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The ``StackFilters`` property type specifies stack level filters for a Hook.
 
@@ -30650,24 +30684,24 @@ class CfnGuardHook(
         @builtins.property
         def stack_names(
             self,
-        ) -> typing.Optional[typing.Union[IResolvable, "CfnGuardHook.StackNamesProperty"]]:
+        ) -> typing.Optional[typing.Union["IResolvable", "CfnGuardHook.StackNamesProperty"]]:
             '''Includes or excludes specific stacks from Hook invocations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-guardhook-stackfilters.html#cfn-cloudformation-guardhook-stackfilters-stacknames
             '''
             result = self._values.get("stack_names")
-            return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnGuardHook.StackNamesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnGuardHook.StackNamesProperty"]], result)
 
         @builtins.property
         def stack_roles(
             self,
-        ) -> typing.Optional[typing.Union[IResolvable, "CfnGuardHook.StackRolesProperty"]]:
+        ) -> typing.Optional[typing.Union["IResolvable", "CfnGuardHook.StackRolesProperty"]]:
             '''Includes or excludes specific stacks from Hook invocations based on their associated IAM roles.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-guardhook-stackfilters.html#cfn-cloudformation-guardhook-stackfilters-stackroles
             '''
             result = self._values.get("stack_roles")
-            return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnGuardHook.StackRolesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnGuardHook.StackRolesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -30846,7 +30880,7 @@ class CfnGuardHook(
         def __init__(
             self,
             *,
-            targets: typing.Union[IResolvable, typing.Sequence[typing.Union[IResolvable, typing.Union["CfnGuardHook.HookTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            targets: typing.Union["IResolvable", typing.Sequence[typing.Union["IResolvable", typing.Union["CfnGuardHook.HookTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
             actions: typing.Optional[typing.Sequence[builtins.str]] = None,
             invocation_points: typing.Optional[typing.Sequence[builtins.str]] = None,
             target_names: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -30901,14 +30935,14 @@ class CfnGuardHook(
         @builtins.property
         def targets(
             self,
-        ) -> typing.Union[IResolvable, typing.List[typing.Union[IResolvable, "CfnGuardHook.HookTargetProperty"]]]:
+        ) -> typing.Union["IResolvable", typing.List[typing.Union["IResolvable", "CfnGuardHook.HookTargetProperty"]]]:
             '''List of hook targets.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-guardhook-targetfilters.html#cfn-cloudformation-guardhook-targetfilters-targets
             '''
             result = self._values.get("targets")
             assert result is not None, "Required property 'targets' is missing"
-            return typing.cast(typing.Union[IResolvable, typing.List[typing.Union[IResolvable, "CfnGuardHook.HookTargetProperty"]]], result)
+            return typing.cast(typing.Union["IResolvable", typing.List[typing.Union["IResolvable", "CfnGuardHook.HookTargetProperty"]]], result)
 
         @builtins.property
         def actions(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -30982,7 +31016,7 @@ class CfnHookDefaultVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         type_name: typing.Optional[builtins.str] = None,
@@ -31013,7 +31047,7 @@ class CfnHookDefaultVersion(
     @builtins.classmethod
     def arn_for_hook_default_version(
         cls,
-        resource: _IHookDefaultVersionRef_a4784949,
+        resource: "_IHookDefaultVersionRef_a4784949",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -31036,7 +31070,7 @@ class CfnHookDefaultVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnHookDefaultVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -31081,9 +31115,9 @@ class CfnHookDefaultVersion(
 
     @builtins.property
     @jsii.member(jsii_name="hookDefaultVersionRef")
-    def hook_default_version_ref(self) -> _HookDefaultVersionReference_11df53e8:
+    def hook_default_version_ref(self) -> "_HookDefaultVersionReference_11df53e8":
         '''A reference to a HookDefaultVersion resource.'''
-        return typing.cast(_HookDefaultVersionReference_11df53e8, jsii.get(self, "hookDefaultVersionRef"))
+        return typing.cast("_HookDefaultVersionReference_11df53e8", jsii.get(self, "hookDefaultVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="typeName")
@@ -31157,7 +31191,7 @@ class CfnHookTypeConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         configuration: builtins.str,
@@ -31200,7 +31234,7 @@ class CfnHookTypeConfig(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnHookTypeConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -31245,9 +31279,9 @@ class CfnHookTypeConfig(
 
     @builtins.property
     @jsii.member(jsii_name="hookTypeConfigRef")
-    def hook_type_config_ref(self) -> _HookTypeConfigReference_ed91f4cb:
+    def hook_type_config_ref(self) -> "_HookTypeConfigReference_ed91f4cb":
         '''A reference to a HookTypeConfig resource.'''
-        return typing.cast(_HookTypeConfigReference_ed91f4cb, jsii.get(self, "hookTypeConfigRef"))
+        return typing.cast("_HookTypeConfigReference_ed91f4cb", jsii.get(self, "hookTypeConfigRef"))
 
     @builtins.property
     @jsii.member(jsii_name="configuration")
@@ -31339,13 +31373,13 @@ class CfnHookVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         schema_handler_package: builtins.str,
         type_name: builtins.str,
         execution_role_arn: typing.Optional[builtins.str] = None,
-        logging_config: typing.Optional[typing.Union[IResolvable, typing.Union["CfnHookVersion.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging_config: typing.Optional[typing.Union["IResolvable", typing.Union["CfnHookVersion.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFormation::HookVersion``.
 
@@ -31371,7 +31405,10 @@ class CfnHookVersion(
 
     @jsii.member(jsii_name="arnForHookVersion")
     @builtins.classmethod
-    def arn_for_hook_version(cls, resource: _IHookVersionRef_0d71a867) -> builtins.str:
+    def arn_for_hook_version(
+        cls,
+        resource: "_IHookVersionRef_0d71a867",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -31393,7 +31430,7 @@ class CfnHookVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnHookVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -31433,12 +31470,12 @@ class CfnHookVersion(
 
     @builtins.property
     @jsii.member(jsii_name="attrIsDefaultVersion")
-    def attr_is_default_version(self) -> IResolvable:
+    def attr_is_default_version(self) -> "IResolvable":
         '''Whether the specified Hook version is set as the default version.
 
         :cloudformationAttribute: IsDefaultVersion
         '''
-        return typing.cast(IResolvable, jsii.get(self, "attrIsDefaultVersion"))
+        return typing.cast("IResolvable", jsii.get(self, "attrIsDefaultVersion"))
 
     @builtins.property
     @jsii.member(jsii_name="attrTypeArn")
@@ -31477,9 +31514,9 @@ class CfnHookVersion(
 
     @builtins.property
     @jsii.member(jsii_name="hookVersionRef")
-    def hook_version_ref(self) -> _HookVersionReference_3688b53a:
+    def hook_version_ref(self) -> "_HookVersionReference_3688b53a":
         '''A reference to a HookVersion resource.'''
-        return typing.cast(_HookVersionReference_3688b53a, jsii.get(self, "hookVersionRef"))
+        return typing.cast("_HookVersionReference_3688b53a", jsii.get(self, "hookVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="schemaHandlerPackage")
@@ -31524,14 +31561,14 @@ class CfnHookVersion(
     @jsii.member(jsii_name="loggingConfig")
     def logging_config(
         self,
-    ) -> typing.Optional[typing.Union[IResolvable, "CfnHookVersion.LoggingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["IResolvable", "CfnHookVersion.LoggingConfigProperty"]]:
         '''Contains logging configuration information for an extension.'''
-        return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnHookVersion.LoggingConfigProperty"]], jsii.get(self, "loggingConfig"))
+        return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnHookVersion.LoggingConfigProperty"]], jsii.get(self, "loggingConfig"))
 
     @logging_config.setter
     def logging_config(
         self,
-        value: typing.Optional[typing.Union[IResolvable, "CfnHookVersion.LoggingConfigProperty"]],
+        value: typing.Optional[typing.Union["IResolvable", "CfnHookVersion.LoggingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3db339eaaa37dfe72ee5f61fbe419e70e49b5d4471ce4c5733792ddeb0c097dc)
@@ -31648,7 +31685,7 @@ class CfnJson(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         value: typing.Any,
@@ -31667,7 +31704,7 @@ class CfnJson(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="resolve")
-    def resolve(self, _context: IResolveContext) -> typing.Any:
+    def resolve(self, _context: "IResolveContext") -> typing.Any:
         '''Produce the Token's value at resolution time.
 
         :param _context: -
@@ -31694,13 +31731,13 @@ class CfnJson(
 
     @builtins.property
     @jsii.member(jsii_name="value")
-    def value(self) -> Reference:
+    def value(self) -> "Reference":
         '''An Fn::GetAtt to the JSON object passed through ``value`` and resolved during synthesis.
 
         Normally there is no need to use this property since ``CfnJson`` is an
         IResolvable, so it can be simply used as a value.
         '''
-        return typing.cast(Reference, jsii.get(self, "value"))
+        return typing.cast("Reference", jsii.get(self, "value"))
 
 
 @jsii.implements(IInspectable, _ILambdaHookRef_5ceec28e)
@@ -31764,7 +31801,7 @@ class CfnLambdaHook(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         alias: builtins.str,
@@ -31773,8 +31810,8 @@ class CfnLambdaHook(
         hook_status: builtins.str,
         lambda_function: builtins.str,
         target_operations: typing.Sequence[builtins.str],
-        stack_filters: typing.Optional[typing.Union[IResolvable, typing.Union["CfnLambdaHook.StackFiltersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        target_filters: typing.Optional[typing.Union[IResolvable, typing.Union["CfnLambdaHook.TargetFiltersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        stack_filters: typing.Optional[typing.Union["IResolvable", typing.Union["CfnLambdaHook.StackFiltersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_filters: typing.Optional[typing.Union["IResolvable", typing.Union["CfnLambdaHook.TargetFiltersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFormation::LambdaHook``.
 
@@ -31819,7 +31856,7 @@ class CfnLambdaHook(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLambdaHook", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -31864,9 +31901,9 @@ class CfnLambdaHook(
 
     @builtins.property
     @jsii.member(jsii_name="lambdaHookRef")
-    def lambda_hook_ref(self) -> _LambdaHookReference_1c262218:
+    def lambda_hook_ref(self) -> "_LambdaHookReference_1c262218":
         '''A reference to a LambdaHook resource.'''
-        return typing.cast(_LambdaHookReference_1c262218, jsii.get(self, "lambdaHookRef"))
+        return typing.cast("_LambdaHookReference_1c262218", jsii.get(self, "lambdaHookRef"))
 
     @builtins.property
     @jsii.member(jsii_name="alias")
@@ -31956,14 +31993,14 @@ class CfnLambdaHook(
     @jsii.member(jsii_name="stackFilters")
     def stack_filters(
         self,
-    ) -> typing.Optional[typing.Union[IResolvable, "CfnLambdaHook.StackFiltersProperty"]]:
+    ) -> typing.Optional[typing.Union["IResolvable", "CfnLambdaHook.StackFiltersProperty"]]:
         '''Specifies the stack level filters for the Hook.'''
-        return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnLambdaHook.StackFiltersProperty"]], jsii.get(self, "stackFilters"))
+        return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnLambdaHook.StackFiltersProperty"]], jsii.get(self, "stackFilters"))
 
     @stack_filters.setter
     def stack_filters(
         self,
-        value: typing.Optional[typing.Union[IResolvable, "CfnLambdaHook.StackFiltersProperty"]],
+        value: typing.Optional[typing.Union["IResolvable", "CfnLambdaHook.StackFiltersProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b3b265cde01add2f07458da4c365ab2135a7f387383ca39d0b26bfac5dbed2f2)
@@ -31974,14 +32011,14 @@ class CfnLambdaHook(
     @jsii.member(jsii_name="targetFilters")
     def target_filters(
         self,
-    ) -> typing.Optional[typing.Union[IResolvable, "CfnLambdaHook.TargetFiltersProperty"]]:
+    ) -> typing.Optional[typing.Union["IResolvable", "CfnLambdaHook.TargetFiltersProperty"]]:
         '''Specifies the target filters for the Hook.'''
-        return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnLambdaHook.TargetFiltersProperty"]], jsii.get(self, "targetFilters"))
+        return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnLambdaHook.TargetFiltersProperty"]], jsii.get(self, "targetFilters"))
 
     @target_filters.setter
     def target_filters(
         self,
-        value: typing.Optional[typing.Union[IResolvable, "CfnLambdaHook.TargetFiltersProperty"]],
+        value: typing.Optional[typing.Union["IResolvable", "CfnLambdaHook.TargetFiltersProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b3f0452e1487a1c5085ea420b80ea51e64c7defd79084c39a9f38bc17b122184)
@@ -32094,8 +32131,8 @@ class CfnLambdaHook(
             self,
             *,
             filtering_criteria: builtins.str,
-            stack_names: typing.Optional[typing.Union[IResolvable, typing.Union["CfnLambdaHook.StackNamesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            stack_roles: typing.Optional[typing.Union[IResolvable, typing.Union["CfnLambdaHook.StackRolesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            stack_names: typing.Optional[typing.Union["IResolvable", typing.Union["CfnLambdaHook.StackNamesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            stack_roles: typing.Optional[typing.Union["IResolvable", typing.Union["CfnLambdaHook.StackRolesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The ``StackFilters`` property type specifies stack level filters for a Hook.
 
@@ -32161,24 +32198,24 @@ class CfnLambdaHook(
         @builtins.property
         def stack_names(
             self,
-        ) -> typing.Optional[typing.Union[IResolvable, "CfnLambdaHook.StackNamesProperty"]]:
+        ) -> typing.Optional[typing.Union["IResolvable", "CfnLambdaHook.StackNamesProperty"]]:
             '''Includes or excludes specific stacks from Hook invocations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-lambdahook-stackfilters.html#cfn-cloudformation-lambdahook-stackfilters-stacknames
             '''
             result = self._values.get("stack_names")
-            return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnLambdaHook.StackNamesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnLambdaHook.StackNamesProperty"]], result)
 
         @builtins.property
         def stack_roles(
             self,
-        ) -> typing.Optional[typing.Union[IResolvable, "CfnLambdaHook.StackRolesProperty"]]:
+        ) -> typing.Optional[typing.Union["IResolvable", "CfnLambdaHook.StackRolesProperty"]]:
             '''Includes or excludes specific stacks from Hook invocations based on their associated IAM roles.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-lambdahook-stackfilters.html#cfn-cloudformation-lambdahook-stackfilters-stackroles
             '''
             result = self._values.get("stack_roles")
-            return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnLambdaHook.StackRolesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnLambdaHook.StackRolesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -32357,7 +32394,7 @@ class CfnLambdaHook(
         def __init__(
             self,
             *,
-            targets: typing.Union[IResolvable, typing.Sequence[typing.Union[IResolvable, typing.Union["CfnLambdaHook.HookTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            targets: typing.Union["IResolvable", typing.Sequence[typing.Union["IResolvable", typing.Union["CfnLambdaHook.HookTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
             actions: typing.Optional[typing.Sequence[builtins.str]] = None,
             invocation_points: typing.Optional[typing.Sequence[builtins.str]] = None,
             target_names: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -32412,14 +32449,14 @@ class CfnLambdaHook(
         @builtins.property
         def targets(
             self,
-        ) -> typing.Union[IResolvable, typing.List[typing.Union[IResolvable, "CfnLambdaHook.HookTargetProperty"]]]:
+        ) -> typing.Union["IResolvable", typing.List[typing.Union["IResolvable", "CfnLambdaHook.HookTargetProperty"]]]:
             '''List of hook targets.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-lambdahook-targetfilters.html#cfn-cloudformation-lambdahook-targetfilters-targets
             '''
             result = self._values.get("targets")
             assert result is not None, "Required property 'targets' is missing"
-            return typing.cast(typing.Union[IResolvable, typing.List[typing.Union[IResolvable, "CfnLambdaHook.HookTargetProperty"]]], result)
+            return typing.cast(typing.Union["IResolvable", typing.List[typing.Union["IResolvable", "CfnLambdaHook.HookTargetProperty"]]], result)
 
         @builtins.property
         def actions(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -32489,7 +32526,7 @@ class CfnMacro(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnM
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         function_name: builtins.str,
@@ -32535,7 +32572,7 @@ class CfnMacro(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnM
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMacro", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -32580,9 +32617,9 @@ class CfnMacro(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnM
 
     @builtins.property
     @jsii.member(jsii_name="macroRef")
-    def macro_ref(self) -> _MacroReference_2603df14:
+    def macro_ref(self) -> "_MacroReference_2603df14":
         '''A reference to a Macro resource.'''
-        return typing.cast(_MacroReference_2603df14, jsii.get(self, "macroRef"))
+        return typing.cast("_MacroReference_2603df14", jsii.get(self, "macroRef"))
 
     @builtins.property
     @jsii.member(jsii_name="functionName")
@@ -32677,7 +32714,7 @@ class CfnMapping(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         lazy: typing.Optional[builtins.bool] = None,
@@ -32775,10 +32812,10 @@ class CfnModuleDefaultVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        arn: typing.Optional[typing.Union[builtins.str, _IModuleVersionRef_76485182]] = None,
+        arn: typing.Optional[typing.Union[builtins.str, "_IModuleVersionRef_76485182"]] = None,
         module_name: typing.Optional[builtins.str] = None,
         version_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -32813,7 +32850,7 @@ class CfnModuleDefaultVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnModuleDefaultVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -32849,9 +32886,9 @@ class CfnModuleDefaultVersion(
 
     @builtins.property
     @jsii.member(jsii_name="moduleDefaultVersionRef")
-    def module_default_version_ref(self) -> _ModuleDefaultVersionReference_6e4498de:
+    def module_default_version_ref(self) -> "_ModuleDefaultVersionReference_6e4498de":
         '''A reference to a ModuleDefaultVersion resource.'''
-        return typing.cast(_ModuleDefaultVersionReference_6e4498de, jsii.get(self, "moduleDefaultVersionRef"))
+        return typing.cast("_ModuleDefaultVersionReference_6e4498de", jsii.get(self, "moduleDefaultVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="arn")
@@ -32925,7 +32962,7 @@ class CfnModuleVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         module_name: builtins.str,
@@ -32952,7 +32989,7 @@ class CfnModuleVersion(
     @builtins.classmethod
     def arn_for_module_version(
         cls,
-        resource: _IModuleVersionRef_76485182,
+        resource: "_IModuleVersionRef_76485182",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -32975,7 +33012,7 @@ class CfnModuleVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnModuleVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -33033,14 +33070,14 @@ class CfnModuleVersion(
 
     @builtins.property
     @jsii.member(jsii_name="attrIsDefaultVersion")
-    def attr_is_default_version(self) -> IResolvable:
+    def attr_is_default_version(self) -> "IResolvable":
         '''Whether the specified module version is set as the default version.
 
         This applies only to private extensions you have registered in your account, and extensions published by AWS . For public third-party extensions, whether they are activated in your account, CloudFormation returns ``null`` .
 
         :cloudformationAttribute: IsDefaultVersion
         '''
-        return typing.cast(IResolvable, jsii.get(self, "attrIsDefaultVersion"))
+        return typing.cast("IResolvable", jsii.get(self, "attrIsDefaultVersion"))
 
     @builtins.property
     @jsii.member(jsii_name="attrSchema")
@@ -33088,9 +33125,9 @@ class CfnModuleVersion(
 
     @builtins.property
     @jsii.member(jsii_name="moduleVersionRef")
-    def module_version_ref(self) -> _ModuleVersionReference_16e9080f:
+    def module_version_ref(self) -> "_ModuleVersionReference_16e9080f":
         '''A reference to a ModuleVersion resource.'''
-        return typing.cast(_ModuleVersionReference_16e9080f, jsii.get(self, "moduleVersionRef"))
+        return typing.cast("_ModuleVersionReference_16e9080f", jsii.get(self, "moduleVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="moduleName")
@@ -33161,7 +33198,7 @@ class CfnPublicTypeVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         arn: typing.Optional[builtins.str] = None,
@@ -33207,7 +33244,7 @@ class CfnPublicTypeVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPublicTypeVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -33272,9 +33309,9 @@ class CfnPublicTypeVersion(
 
     @builtins.property
     @jsii.member(jsii_name="publicTypeVersionRef")
-    def public_type_version_ref(self) -> _PublicTypeVersionReference_da345091:
+    def public_type_version_ref(self) -> "_PublicTypeVersionReference_da345091":
         '''A reference to a PublicTypeVersion resource.'''
-        return typing.cast(_PublicTypeVersionReference_da345091, jsii.get(self, "publicTypeVersionRef"))
+        return typing.cast("_PublicTypeVersionReference_da345091", jsii.get(self, "publicTypeVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="arn")
@@ -33374,10 +33411,10 @@ class CfnPublisher(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        accept_terms_and_conditions: typing.Union[builtins.bool, IResolvable],
+        accept_terms_and_conditions: typing.Union[builtins.bool, "IResolvable"],
         connection_arn: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFormation::Publisher``.
@@ -33411,7 +33448,7 @@ class CfnPublisher(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPublisher", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -33485,20 +33522,20 @@ class CfnPublisher(
 
     @builtins.property
     @jsii.member(jsii_name="publisherRef")
-    def publisher_ref(self) -> _PublisherReference_2058d21f:
+    def publisher_ref(self) -> "_PublisherReference_2058d21f":
         '''A reference to a Publisher resource.'''
-        return typing.cast(_PublisherReference_2058d21f, jsii.get(self, "publisherRef"))
+        return typing.cast("_PublisherReference_2058d21f", jsii.get(self, "publisherRef"))
 
     @builtins.property
     @jsii.member(jsii_name="acceptTermsAndConditions")
-    def accept_terms_and_conditions(self) -> typing.Union[builtins.bool, IResolvable]:
+    def accept_terms_and_conditions(self) -> typing.Union[builtins.bool, "IResolvable"]:
         '''Whether you accept the `Terms and Conditions <https://docs.aws.amazon.com/https://cloudformation-registry-documents.s3.amazonaws.com/Terms_and_Conditions_for_AWS_CloudFormation_Registry_Publishers.pdf>`_ for publishing extensions in the CloudFormation registry. You must accept the terms and conditions in order to register to publish public extensions to the CloudFormation registry.'''
-        return typing.cast(typing.Union[builtins.bool, IResolvable], jsii.get(self, "acceptTermsAndConditions"))
+        return typing.cast(typing.Union[builtins.bool, "IResolvable"], jsii.get(self, "acceptTermsAndConditions"))
 
     @accept_terms_and_conditions.setter
     def accept_terms_and_conditions(
         self,
-        value: typing.Union[builtins.bool, IResolvable],
+        value: typing.Union[builtins.bool, "IResolvable"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7088dca6cd0921f0733368bd21bbdadae5a33c23ec8020691bc9faea3f1624c5)
@@ -33550,11 +33587,11 @@ class CfnResourceDefaultVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         type_name: typing.Optional[builtins.str] = None,
-        type_version_arn: typing.Optional[typing.Union[builtins.str, _IResourceVersionRef_8fc1bbae]] = None,
+        type_version_arn: typing.Optional[typing.Union[builtins.str, "_IResourceVersionRef_8fc1bbae"]] = None,
         version_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFormation::ResourceDefaultVersion``.
@@ -33581,7 +33618,7 @@ class CfnResourceDefaultVersion(
     @builtins.classmethod
     def arn_for_resource_default_version(
         cls,
-        resource: _IResourceDefaultVersionRef_6bcf9f85,
+        resource: "_IResourceDefaultVersionRef_6bcf9f85",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -33604,7 +33641,7 @@ class CfnResourceDefaultVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourceDefaultVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -33649,9 +33686,11 @@ class CfnResourceDefaultVersion(
 
     @builtins.property
     @jsii.member(jsii_name="resourceDefaultVersionRef")
-    def resource_default_version_ref(self) -> _ResourceDefaultVersionReference_878c9c7f:
+    def resource_default_version_ref(
+        self,
+    ) -> "_ResourceDefaultVersionReference_878c9c7f":
         '''A reference to a ResourceDefaultVersion resource.'''
-        return typing.cast(_ResourceDefaultVersionReference_878c9c7f, jsii.get(self, "resourceDefaultVersionRef"))
+        return typing.cast("_ResourceDefaultVersionReference_878c9c7f", jsii.get(self, "resourceDefaultVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="typeName")
@@ -33736,13 +33775,13 @@ class CfnResourceVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         schema_handler_package: builtins.str,
         type_name: builtins.str,
         execution_role_arn: typing.Optional[builtins.str] = None,
-        logging_config: typing.Optional[typing.Union[IResolvable, typing.Union["CfnResourceVersion.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging_config: typing.Optional[typing.Union["IResolvable", typing.Union["CfnResourceVersion.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFormation::ResourceVersion``.
 
@@ -33770,7 +33809,7 @@ class CfnResourceVersion(
     @builtins.classmethod
     def arn_for_resource_version(
         cls,
-        resource: _IResourceVersionRef_8fc1bbae,
+        resource: "_IResourceVersionRef_8fc1bbae",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -33793,7 +33832,7 @@ class CfnResourceVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourceVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -33833,14 +33872,14 @@ class CfnResourceVersion(
 
     @builtins.property
     @jsii.member(jsii_name="attrIsDefaultVersion")
-    def attr_is_default_version(self) -> IResolvable:
+    def attr_is_default_version(self) -> "IResolvable":
         '''Whether the specified resource version is set as the default version.
 
         This applies only to private extensions you have registered in your account, and extensions published by AWS . For public third-party extensions, whether they are activated in your account, CloudFormation returns ``null`` .
 
         :cloudformationAttribute: IsDefaultVersion
         '''
-        return typing.cast(IResolvable, jsii.get(self, "attrIsDefaultVersion"))
+        return typing.cast("IResolvable", jsii.get(self, "attrIsDefaultVersion"))
 
     @builtins.property
     @jsii.member(jsii_name="attrProvisioningType")
@@ -33901,9 +33940,9 @@ class CfnResourceVersion(
 
     @builtins.property
     @jsii.member(jsii_name="resourceVersionRef")
-    def resource_version_ref(self) -> _ResourceVersionReference_a8ae93f7:
+    def resource_version_ref(self) -> "_ResourceVersionReference_a8ae93f7":
         '''A reference to a ResourceVersion resource.'''
-        return typing.cast(_ResourceVersionReference_a8ae93f7, jsii.get(self, "resourceVersionRef"))
+        return typing.cast("_ResourceVersionReference_a8ae93f7", jsii.get(self, "resourceVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="schemaHandlerPackage")
@@ -33948,14 +33987,14 @@ class CfnResourceVersion(
     @jsii.member(jsii_name="loggingConfig")
     def logging_config(
         self,
-    ) -> typing.Optional[typing.Union[IResolvable, "CfnResourceVersion.LoggingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["IResolvable", "CfnResourceVersion.LoggingConfigProperty"]]:
         '''Logging configuration information for a resource.'''
-        return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnResourceVersion.LoggingConfigProperty"]], jsii.get(self, "loggingConfig"))
+        return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnResourceVersion.LoggingConfigProperty"]], jsii.get(self, "loggingConfig"))
 
     @logging_config.setter
     def logging_config(
         self,
-        value: typing.Optional[typing.Union[IResolvable, "CfnResourceVersion.LoggingConfigProperty"]],
+        value: typing.Optional[typing.Union["IResolvable", "CfnResourceVersion.LoggingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0023472172aa2dc5cedd209d8df08ad231cc90ecdfd1ce431ed9d5d0165034df)
@@ -34108,12 +34147,12 @@ class CfnStack(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnS
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], IResolvable]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnTag, typing.Dict[builtins.str, typing.Any]]]] = None,
+        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "IResolvable"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnTag", typing.Dict[builtins.str, typing.Any]]]] = None,
         template_url: typing.Optional[builtins.str] = None,
         timeout_in_minutes: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -34154,7 +34193,7 @@ class CfnStack(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnS
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStack", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -34214,12 +34253,12 @@ class CfnStack(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnS
 
     @builtins.property
     @jsii.member(jsii_name="attrOutputs")
-    def attr_outputs(self) -> IResolvable:
+    def attr_outputs(self) -> "IResolvable":
         '''Returns a list of output structures.
 
         :cloudformationAttribute: Outputs
         '''
-        return typing.cast(IResolvable, jsii.get(self, "attrOutputs"))
+        return typing.cast("IResolvable", jsii.get(self, "attrOutputs"))
 
     @builtins.property
     @jsii.member(jsii_name="attrParentId")
@@ -34266,15 +34305,15 @@ class CfnStack(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnS
 
     @builtins.property
     @jsii.member(jsii_name="stackRef")
-    def stack_ref(self) -> _StackReference_15f8b984:
+    def stack_ref(self) -> "_StackReference_15f8b984":
         '''A reference to a Stack resource.'''
-        return typing.cast(_StackReference_15f8b984, jsii.get(self, "stackRef"))
+        return typing.cast("_StackReference_15f8b984", jsii.get(self, "stackRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> TagManager:
+    def tags(self) -> "TagManager":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(TagManager, jsii.get(self, "tags"))
+        return typing.cast("TagManager", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="notificationArns")
@@ -34296,14 +34335,14 @@ class CfnStack(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnS
     @jsii.member(jsii_name="parameters")
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], IResolvable]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "IResolvable"]]:
         '''The set value pairs that represent the parameters passed to CloudFormation when this nested stack is created.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], IResolvable]], jsii.get(self, "parameters"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "IResolvable"]], jsii.get(self, "parameters"))
 
     @parameters.setter
     def parameters(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], IResolvable]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "IResolvable"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f3fb0b9b7598b79bde64721506e8cfa836e6901da44b747530857a860a1cc111)
@@ -34312,12 +34351,12 @@ class CfnStack(CfnResource, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.CfnS
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[CfnTag]]:
+    def tags_raw(self) -> typing.Optional[typing.List["CfnTag"]]:
         '''Key-value pairs to associate with this stack.'''
-        return typing.cast(typing.Optional[typing.List[CfnTag]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["CfnTag"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[CfnTag]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["CfnTag"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__01a1e89136d78f617e17761b0d0ff550a27df4b2af18d366390e087562377641)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -34535,22 +34574,22 @@ class CfnStackSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         permission_model: builtins.str,
         stack_set_name: builtins.str,
-        administration_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
-        auto_deployment: typing.Optional[typing.Union[IResolvable, typing.Union["CfnStackSet.AutoDeploymentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        administration_role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
+        auto_deployment: typing.Optional[typing.Union["IResolvable", typing.Union["CfnStackSet.AutoDeploymentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         call_as: typing.Optional[builtins.str] = None,
         capabilities: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
-        execution_role_name: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        execution_role_name: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
         managed_execution: typing.Any = None,
-        operation_preferences: typing.Optional[typing.Union[IResolvable, typing.Union["CfnStackSet.OperationPreferencesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        parameters: typing.Optional[typing.Union[IResolvable, typing.Sequence[typing.Union[IResolvable, typing.Union["CfnStackSet.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        stack_instances_group: typing.Optional[typing.Union[IResolvable, typing.Sequence[typing.Union[IResolvable, typing.Union["CfnStackSet.StackInstancesProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnTag, typing.Dict[builtins.str, typing.Any]]]] = None,
+        operation_preferences: typing.Optional[typing.Union["IResolvable", typing.Union["CfnStackSet.OperationPreferencesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        parameters: typing.Optional[typing.Union["IResolvable", typing.Sequence[typing.Union["IResolvable", typing.Union["CfnStackSet.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        stack_instances_group: typing.Optional[typing.Union["IResolvable", typing.Sequence[typing.Union["IResolvable", typing.Union["CfnStackSet.StackInstancesProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnTag", typing.Dict[builtins.str, typing.Any]]]] = None,
         template_body: typing.Optional[builtins.str] = None,
         template_url: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -34611,7 +34650,7 @@ class CfnStackSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStackSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -34656,15 +34695,15 @@ class CfnStackSet(
 
     @builtins.property
     @jsii.member(jsii_name="stackSetRef")
-    def stack_set_ref(self) -> _StackSetReference_c5c1f82d:
+    def stack_set_ref(self) -> "_StackSetReference_c5c1f82d":
         '''A reference to a StackSet resource.'''
-        return typing.cast(_StackSetReference_c5c1f82d, jsii.get(self, "stackSetRef"))
+        return typing.cast("_StackSetReference_c5c1f82d", jsii.get(self, "stackSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> TagManager:
+    def tags(self) -> "TagManager":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(TagManager, jsii.get(self, "tags"))
+        return typing.cast("TagManager", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="permissionModel")
@@ -34709,14 +34748,14 @@ class CfnStackSet(
     @jsii.member(jsii_name="autoDeployment")
     def auto_deployment(
         self,
-    ) -> typing.Optional[typing.Union[IResolvable, "CfnStackSet.AutoDeploymentProperty"]]:
+    ) -> typing.Optional[typing.Union["IResolvable", "CfnStackSet.AutoDeploymentProperty"]]:
         '''Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU).'''
-        return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnStackSet.AutoDeploymentProperty"]], jsii.get(self, "autoDeployment"))
+        return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnStackSet.AutoDeploymentProperty"]], jsii.get(self, "autoDeployment"))
 
     @auto_deployment.setter
     def auto_deployment(
         self,
-        value: typing.Optional[typing.Union[IResolvable, "CfnStackSet.AutoDeploymentProperty"]],
+        value: typing.Optional[typing.Union["IResolvable", "CfnStackSet.AutoDeploymentProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d8b70cf0a59aaa8cfdb268b6617eb15a49e9b73ccfbbc6e55c6337feada2b437)
@@ -34792,14 +34831,14 @@ class CfnStackSet(
     @jsii.member(jsii_name="operationPreferences")
     def operation_preferences(
         self,
-    ) -> typing.Optional[typing.Union[IResolvable, "CfnStackSet.OperationPreferencesProperty"]]:
+    ) -> typing.Optional[typing.Union["IResolvable", "CfnStackSet.OperationPreferencesProperty"]]:
         '''The user-specified preferences for how CloudFormation performs a StackSet operation.'''
-        return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnStackSet.OperationPreferencesProperty"]], jsii.get(self, "operationPreferences"))
+        return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnStackSet.OperationPreferencesProperty"]], jsii.get(self, "operationPreferences"))
 
     @operation_preferences.setter
     def operation_preferences(
         self,
-        value: typing.Optional[typing.Union[IResolvable, "CfnStackSet.OperationPreferencesProperty"]],
+        value: typing.Optional[typing.Union["IResolvable", "CfnStackSet.OperationPreferencesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8e37d30562640aa75e0ac76db39c35de57213394a2ce91bdf51e549a80b2f018)
@@ -34810,14 +34849,14 @@ class CfnStackSet(
     @jsii.member(jsii_name="parameters")
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[IResolvable, typing.List[typing.Union[IResolvable, "CfnStackSet.ParameterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["IResolvable", typing.List[typing.Union["IResolvable", "CfnStackSet.ParameterProperty"]]]]:
         '''The input parameters for the StackSet template.'''
-        return typing.cast(typing.Optional[typing.Union[IResolvable, typing.List[typing.Union[IResolvable, "CfnStackSet.ParameterProperty"]]]], jsii.get(self, "parameters"))
+        return typing.cast(typing.Optional[typing.Union["IResolvable", typing.List[typing.Union["IResolvable", "CfnStackSet.ParameterProperty"]]]], jsii.get(self, "parameters"))
 
     @parameters.setter
     def parameters(
         self,
-        value: typing.Optional[typing.Union[IResolvable, typing.List[typing.Union[IResolvable, "CfnStackSet.ParameterProperty"]]]],
+        value: typing.Optional[typing.Union["IResolvable", typing.List[typing.Union["IResolvable", "CfnStackSet.ParameterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__09dcba4507180e686f621170a91e1dfc965d008d03485dd491ba2d1cc410e35a)
@@ -34828,14 +34867,14 @@ class CfnStackSet(
     @jsii.member(jsii_name="stackInstancesGroup")
     def stack_instances_group(
         self,
-    ) -> typing.Optional[typing.Union[IResolvable, typing.List[typing.Union[IResolvable, "CfnStackSet.StackInstancesProperty"]]]]:
+    ) -> typing.Optional[typing.Union["IResolvable", typing.List[typing.Union["IResolvable", "CfnStackSet.StackInstancesProperty"]]]]:
         '''A group of stack instances with parameters in some specific accounts and Regions.'''
-        return typing.cast(typing.Optional[typing.Union[IResolvable, typing.List[typing.Union[IResolvable, "CfnStackSet.StackInstancesProperty"]]]], jsii.get(self, "stackInstancesGroup"))
+        return typing.cast(typing.Optional[typing.Union["IResolvable", typing.List[typing.Union["IResolvable", "CfnStackSet.StackInstancesProperty"]]]], jsii.get(self, "stackInstancesGroup"))
 
     @stack_instances_group.setter
     def stack_instances_group(
         self,
-        value: typing.Optional[typing.Union[IResolvable, typing.List[typing.Union[IResolvable, "CfnStackSet.StackInstancesProperty"]]]],
+        value: typing.Optional[typing.Union["IResolvable", typing.List[typing.Union["IResolvable", "CfnStackSet.StackInstancesProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8190897c9db2be7522404cc59a903c2a29fb676e3e499e673b2a3d41196fb27c)
@@ -34844,12 +34883,12 @@ class CfnStackSet(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[CfnTag]]:
+    def tags_raw(self) -> typing.Optional[typing.List["CfnTag"]]:
         '''Key-value pairs to associate with this stack.'''
-        return typing.cast(typing.Optional[typing.List[CfnTag]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["CfnTag"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[CfnTag]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["CfnTag"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6b08cfb2362e301b6d719febc0b9056b8148548584ea3562f39eeb1a313a5812)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -34895,8 +34934,8 @@ class CfnStackSet(
             self,
             *,
             depends_on: typing.Optional[typing.Sequence[builtins.str]] = None,
-            enabled: typing.Optional[typing.Union[builtins.bool, IResolvable]] = None,
-            retain_stacks_on_account_removal: typing.Optional[typing.Union[builtins.bool, IResolvable]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "IResolvable"]] = None,
+            retain_stacks_on_account_removal: typing.Optional[typing.Union[builtins.bool, "IResolvable"]] = None,
         ) -> None:
             '''Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU).
 
@@ -34946,7 +34985,9 @@ class CfnStackSet(
             return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
         @builtins.property
-        def enabled(self) -> typing.Optional[typing.Union[builtins.bool, IResolvable]]:
+        def enabled(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, "IResolvable"]]:
             '''If set to ``true`` , StackSets automatically deploys additional stack instances to AWS Organizations accounts that are added to a target organization or organizational unit (OU) in the specified Regions.
 
             If an account is removed from a target organization or OU, StackSets deletes stack instances from the account in the specified Regions.
@@ -34954,12 +34995,12 @@ class CfnStackSet(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-stackset-autodeployment.html#cfn-cloudformation-stackset-autodeployment-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, IResolvable]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "IResolvable"]], result)
 
         @builtins.property
         def retain_stacks_on_account_removal(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, IResolvable]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "IResolvable"]]:
             '''If set to ``true`` , stack resources are retained when an account is removed from a target organization or OU.
 
             If set to ``false`` , stack resources are deleted. Specify only if ``Enabled`` is set to ``True`` .
@@ -34967,7 +35008,7 @@ class CfnStackSet(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-stackset-autodeployment.html#cfn-cloudformation-stackset-autodeployment-retainstacksonaccountremoval
             '''
             result = self._values.get("retain_stacks_on_account_removal")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, IResolvable]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "IResolvable"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -35119,7 +35160,7 @@ class CfnStackSet(
         def __init__(
             self,
             *,
-            active: typing.Optional[typing.Union[builtins.bool, IResolvable]] = None,
+            active: typing.Optional[typing.Union[builtins.bool, "IResolvable"]] = None,
         ) -> None:
             '''Describes whether StackSets performs non-conflicting operations concurrently and queues conflicting operations.
 
@@ -35146,7 +35187,7 @@ class CfnStackSet(
                 self._values["active"] = active
 
         @builtins.property
-        def active(self) -> typing.Optional[typing.Union[builtins.bool, IResolvable]]:
+        def active(self) -> typing.Optional[typing.Union[builtins.bool, "IResolvable"]]:
             '''When ``true`` , CloudFormation performs non-conflicting operations concurrently and queues conflicting operations.
 
             After conflicting operations finish, CloudFormation starts queued operations in request order.
@@ -35161,7 +35202,7 @@ class CfnStackSet(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-stackset-managedexecution.html#cfn-cloudformation-stackset-managedexecution-active
             '''
             result = self._values.get("active")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, IResolvable]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "IResolvable"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -35446,9 +35487,9 @@ class CfnStackSet(
         def __init__(
             self,
             *,
-            deployment_targets: typing.Union[IResolvable, typing.Union["CfnStackSet.DeploymentTargetsProperty", typing.Dict[builtins.str, typing.Any]]],
+            deployment_targets: typing.Union["IResolvable", typing.Union["CfnStackSet.DeploymentTargetsProperty", typing.Dict[builtins.str, typing.Any]]],
             regions: typing.Sequence[builtins.str],
-            parameter_overrides: typing.Optional[typing.Union[IResolvable, typing.Sequence[typing.Union[IResolvable, typing.Union["CfnStackSet.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            parameter_overrides: typing.Optional[typing.Union["IResolvable", typing.Sequence[typing.Union["IResolvable", typing.Union["CfnStackSet.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Stack instances in some specific accounts and Regions.
 
@@ -35496,14 +35537,14 @@ class CfnStackSet(
         @builtins.property
         def deployment_targets(
             self,
-        ) -> typing.Union[IResolvable, "CfnStackSet.DeploymentTargetsProperty"]:
+        ) -> typing.Union["IResolvable", "CfnStackSet.DeploymentTargetsProperty"]:
             '''The AWS Organizations accounts or AWS accounts to deploy stacks to in the specified Regions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-stackset-stackinstances.html#cfn-cloudformation-stackset-stackinstances-deploymenttargets
             '''
             result = self._values.get("deployment_targets")
             assert result is not None, "Required property 'deployment_targets' is missing"
-            return typing.cast(typing.Union[IResolvable, "CfnStackSet.DeploymentTargetsProperty"], result)
+            return typing.cast(typing.Union["IResolvable", "CfnStackSet.DeploymentTargetsProperty"], result)
 
         @builtins.property
         def regions(self) -> typing.List[builtins.str]:
@@ -35518,13 +35559,13 @@ class CfnStackSet(
         @builtins.property
         def parameter_overrides(
             self,
-        ) -> typing.Optional[typing.Union[IResolvable, typing.List[typing.Union[IResolvable, "CfnStackSet.ParameterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["IResolvable", typing.List[typing.Union["IResolvable", "CfnStackSet.ParameterProperty"]]]]:
             '''A list of StackSet parameters whose values you want to override in the selected stack instances.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-stackset-stackinstances.html#cfn-cloudformation-stackset-stackinstances-parameteroverrides
             '''
             result = self._values.get("parameter_overrides")
-            return typing.cast(typing.Optional[typing.Union[IResolvable, typing.List[typing.Union[IResolvable, "CfnStackSet.ParameterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["IResolvable", typing.List[typing.Union["IResolvable", "CfnStackSet.ParameterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -35577,12 +35618,12 @@ class CfnTypeActivation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        auto_update: typing.Optional[typing.Union[builtins.bool, IResolvable]] = None,
+        auto_update: typing.Optional[typing.Union[builtins.bool, "IResolvable"]] = None,
         execution_role_arn: typing.Optional[builtins.str] = None,
-        logging_config: typing.Optional[typing.Union[IResolvable, typing.Union["CfnTypeActivation.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging_config: typing.Optional[typing.Union["IResolvable", typing.Union["CfnTypeActivation.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         major_version: typing.Optional[builtins.str] = None,
         public_type_arn: typing.Optional[builtins.str] = None,
         publisher_id: typing.Optional[builtins.str] = None,
@@ -35629,7 +35670,7 @@ class CfnTypeActivation(
     @builtins.classmethod
     def arn_for_type_activation(
         cls,
-        resource: _ITypeActivationRef_95db49a7,
+        resource: "_ITypeActivationRef_95db49a7",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -35652,7 +35693,7 @@ class CfnTypeActivation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTypeActivation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -35697,20 +35738,22 @@ class CfnTypeActivation(
 
     @builtins.property
     @jsii.member(jsii_name="typeActivationRef")
-    def type_activation_ref(self) -> _TypeActivationReference_03c77595:
+    def type_activation_ref(self) -> "_TypeActivationReference_03c77595":
         '''A reference to a TypeActivation resource.'''
-        return typing.cast(_TypeActivationReference_03c77595, jsii.get(self, "typeActivationRef"))
+        return typing.cast("_TypeActivationReference_03c77595", jsii.get(self, "typeActivationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="autoUpdate")
-    def auto_update(self) -> typing.Optional[typing.Union[builtins.bool, IResolvable]]:
+    def auto_update(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, "IResolvable"]]:
         '''Whether to automatically update the extension in this account and Region when a new *minor* version is published by the extension publisher.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, IResolvable]], jsii.get(self, "autoUpdate"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "IResolvable"]], jsii.get(self, "autoUpdate"))
 
     @auto_update.setter
     def auto_update(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, IResolvable]],
+        value: typing.Optional[typing.Union[builtins.bool, "IResolvable"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__05c503620ac691702b279d7b84e9b83f3ff36c3f686220ac1622e4a4fa101c74)
@@ -35734,14 +35777,14 @@ class CfnTypeActivation(
     @jsii.member(jsii_name="loggingConfig")
     def logging_config(
         self,
-    ) -> typing.Optional[typing.Union[IResolvable, "CfnTypeActivation.LoggingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["IResolvable", "CfnTypeActivation.LoggingConfigProperty"]]:
         '''Specifies logging configuration information for an extension.'''
-        return typing.cast(typing.Optional[typing.Union[IResolvable, "CfnTypeActivation.LoggingConfigProperty"]], jsii.get(self, "loggingConfig"))
+        return typing.cast(typing.Optional[typing.Union["IResolvable", "CfnTypeActivation.LoggingConfigProperty"]], jsii.get(self, "loggingConfig"))
 
     @logging_config.setter
     def logging_config(
         self,
-        value: typing.Optional[typing.Union[IResolvable, "CfnTypeActivation.LoggingConfigProperty"]],
+        value: typing.Optional[typing.Union["IResolvable", "CfnTypeActivation.LoggingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__980f164c67ee3423187ae7c96a8caae825eb72c714cb6b6d07a224f79fdebc60)
@@ -35942,7 +35985,7 @@ class CfnWaitCondition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         count: typing.Optional[jsii.Number] = None,
@@ -35978,7 +36021,7 @@ class CfnWaitCondition(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWaitCondition", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -36009,11 +36052,11 @@ class CfnWaitCondition(
 
     @builtins.property
     @jsii.member(jsii_name="attrData")
-    def attr_data(self) -> IResolvable:
+    def attr_data(self) -> "IResolvable":
         '''
         :cloudformationAttribute: Data
         '''
-        return typing.cast(IResolvable, jsii.get(self, "attrData"))
+        return typing.cast("IResolvable", jsii.get(self, "attrData"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -36031,9 +36074,9 @@ class CfnWaitCondition(
 
     @builtins.property
     @jsii.member(jsii_name="waitConditionRef")
-    def wait_condition_ref(self) -> _WaitConditionReference_e2d94a43:
+    def wait_condition_ref(self) -> "_WaitConditionReference_e2d94a43":
         '''A reference to a WaitCondition resource.'''
-        return typing.cast(_WaitConditionReference_e2d94a43, jsii.get(self, "waitConditionRef"))
+        return typing.cast("_WaitConditionReference_e2d94a43", jsii.get(self, "waitConditionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="count")
@@ -36104,7 +36147,11 @@ class CfnWaitConditionHandle(
         cfn_wait_condition_handle = cdk.CfnWaitConditionHandle(self, "MyCfnWaitConditionHandle")
     '''
 
-    def __init__(self, scope: _constructs_77d1e7e8.Construct, id: builtins.str) -> None:
+    def __init__(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+    ) -> None:
         '''Create a new ``AWS::CloudFormation::WaitConditionHandle``.
 
         :param scope: Scope in which this resource is defined.
@@ -36131,7 +36178,7 @@ class CfnWaitConditionHandle(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWaitConditionHandle", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: TreeInspector) -> None:
+    def inspect(self, inspector: "TreeInspector") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -36176,9 +36223,9 @@ class CfnWaitConditionHandle(
 
     @builtins.property
     @jsii.member(jsii_name="waitConditionHandleRef")
-    def wait_condition_handle_ref(self) -> _WaitConditionHandleReference_ba26e35b:
+    def wait_condition_handle_ref(self) -> "_WaitConditionHandleReference_ba26e35b":
         '''A reference to a WaitConditionHandle resource.'''
-        return typing.cast(_WaitConditionHandleReference_ba26e35b, jsii.get(self, "waitConditionHandleRef"))
+        return typing.cast("_WaitConditionHandleReference_ba26e35b", jsii.get(self, "waitConditionHandleRef"))
 
 
 class CustomResource(
@@ -36224,15 +36271,15 @@ class CustomResource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         service_token: builtins.str,
         pascal_case_properties: typing.Optional[builtins.bool] = None,
         properties: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        removal_policy: typing.Optional[RemovalPolicy] = None,
+        removal_policy: typing.Optional["RemovalPolicy"] = None,
         resource_type: typing.Optional[builtins.str] = None,
-        service_timeout: typing.Optional[Duration] = None,
+        service_timeout: typing.Optional["Duration"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -36260,7 +36307,7 @@ class CustomResource(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="getAtt")
-    def get_att(self, attribute_name: builtins.str) -> Reference:
+    def get_att(self, attribute_name: builtins.str) -> "Reference":
         '''Returns the value of an attribute of the custom resource of an arbitrary type.
 
         Attributes are returned from the custom resource provider through the
@@ -36276,7 +36323,7 @@ class CustomResource(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__df75eb9fc7a387097b40aeef3aed3b3a82fae9b826d9d79442f6256b53ffab19)
             check_type(argname="argument attribute_name", value=attribute_name, expected_type=type_hints["attribute_name"])
-        return typing.cast(Reference, jsii.invoke(self, "getAtt", [attribute_name]))
+        return typing.cast("Reference", jsii.invoke(self, "getAtt", [attribute_name]))
 
     @jsii.member(jsii_name="getAttString")
     def get_att_string(self, attribute_name: builtins.str) -> builtins.str:
@@ -36352,16 +36399,16 @@ class CustomResourceProvider(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         code_directory: builtins.str,
-        runtime: CustomResourceProviderRuntime,
+        runtime: "CustomResourceProviderRuntime",
         description: typing.Optional[builtins.str] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        memory_size: typing.Optional[Size] = None,
+        memory_size: typing.Optional["Size"] = None,
         policy_statements: typing.Optional[typing.Sequence[typing.Any]] = None,
-        timeout: typing.Optional[Duration] = None,
+        timeout: typing.Optional["Duration"] = None,
         use_cfn_response_wrapper: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''
@@ -36397,16 +36444,16 @@ class CustomResourceProvider(
     @builtins.classmethod
     def get_or_create(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         uniqueid: builtins.str,
         *,
         code_directory: builtins.str,
-        runtime: CustomResourceProviderRuntime,
+        runtime: "CustomResourceProviderRuntime",
         description: typing.Optional[builtins.str] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        memory_size: typing.Optional[Size] = None,
+        memory_size: typing.Optional["Size"] = None,
         policy_statements: typing.Optional[typing.Sequence[typing.Any]] = None,
-        timeout: typing.Optional[Duration] = None,
+        timeout: typing.Optional["Duration"] = None,
         use_cfn_response_wrapper: typing.Optional[builtins.bool] = None,
     ) -> builtins.str:
         '''Returns a stack-level singleton ARN (service token) for the custom resource provider.
@@ -36448,16 +36495,16 @@ class CustomResourceProvider(
     @builtins.classmethod
     def get_or_create_provider(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         uniqueid: builtins.str,
         *,
         code_directory: builtins.str,
-        runtime: CustomResourceProviderRuntime,
+        runtime: "CustomResourceProviderRuntime",
         description: typing.Optional[builtins.str] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        memory_size: typing.Optional[Size] = None,
+        memory_size: typing.Optional["Size"] = None,
         policy_statements: typing.Optional[typing.Sequence[typing.Any]] = None,
-        timeout: typing.Optional[Duration] = None,
+        timeout: typing.Optional["Duration"] = None,
         use_cfn_response_wrapper: typing.Optional[builtins.bool] = None,
     ) -> "CustomResourceProvider":
         '''Returns a stack-level singleton for the custom resource provider.
@@ -36516,9 +36563,9 @@ class CustomResourceProviderBaseProps(CustomResourceProviderOptions):
         *,
         description: typing.Optional[builtins.str] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        memory_size: typing.Optional[Size] = None,
+        memory_size: typing.Optional["Size"] = None,
         policy_statements: typing.Optional[typing.Sequence[typing.Any]] = None,
-        timeout: typing.Optional[Duration] = None,
+        timeout: typing.Optional["Duration"] = None,
         use_cfn_response_wrapper: typing.Optional[builtins.bool] = None,
         code_directory: builtins.str,
         runtime_name: builtins.str,
@@ -36608,7 +36655,7 @@ class CustomResourceProviderBaseProps(CustomResourceProviderOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def memory_size(self) -> typing.Optional[Size]:
+    def memory_size(self) -> typing.Optional["Size"]:
         '''The amount of memory that your function has access to.
 
         Increasing the
@@ -36617,7 +36664,7 @@ class CustomResourceProviderBaseProps(CustomResourceProviderOptions):
         :default: Size.mebibytes(128)
         '''
         result = self._values.get("memory_size")
-        return typing.cast(typing.Optional[Size], result)
+        return typing.cast(typing.Optional["Size"], result)
 
     @builtins.property
     def policy_statements(self) -> typing.Optional[typing.List[typing.Any]]:
@@ -36645,13 +36692,13 @@ class CustomResourceProviderBaseProps(CustomResourceProviderOptions):
         return typing.cast(typing.Optional[typing.List[typing.Any]], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[Duration]:
+    def timeout(self) -> typing.Optional["Duration"]:
         '''AWS Lambda timeout for the provider.
 
         :default: Duration.minutes(15)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[Duration], result)
+        return typing.cast(typing.Optional["Duration"], result)
 
     @builtins.property
     def use_cfn_response_wrapper(self) -> typing.Optional[builtins.bool]:
@@ -36712,7 +36759,7 @@ class DefaultTokenResolver(
         default_token_resolver = cdk.DefaultTokenResolver(fragment_concatenator)
     '''
 
-    def __init__(self, concat: IFragmentConcatenator) -> None:
+    def __init__(self, concat: "IFragmentConcatenator") -> None:
         '''
         :param concat: -
         '''
@@ -36725,7 +36772,7 @@ class DefaultTokenResolver(
     def resolve_list(
         self,
         xs: typing.Sequence[builtins.str],
-        context: IResolveContext,
+        context: "IResolveContext",
     ) -> typing.Any:
         '''Resolve a tokenized list.
 
@@ -36741,8 +36788,8 @@ class DefaultTokenResolver(
     @jsii.member(jsii_name="resolveString")
     def resolve_string(
         self,
-        fragments: TokenizedStringFragments,
-        context: IResolveContext,
+        fragments: "TokenizedStringFragments",
+        context: "IResolveContext",
     ) -> typing.Any:
         '''Resolve string fragments to Tokens.
 
@@ -36758,9 +36805,9 @@ class DefaultTokenResolver(
     @jsii.member(jsii_name="resolveToken")
     def resolve_token(
         self,
-        t: IResolvable,
-        context: IResolveContext,
-        post_processor: IPostProcessor,
+        t: "IResolvable",
+        context: "IResolveContext",
+        post_processor: "IPostProcessor",
     ) -> typing.Any:
         '''Default Token resolution.
 
@@ -37146,7 +37193,7 @@ class IReusableStackSynthesizer(IStackSynthesizer, typing_extensions.Protocol):
     '''
 
     @jsii.member(jsii_name="reusableBind")
-    def reusable_bind(self, stack: Stack) -> IBoundStackSynthesizer:
+    def reusable_bind(self, stack: "Stack") -> "IBoundStackSynthesizer":
         '''Produce a bound Stack Synthesizer for the given stack.
 
         This method may be called more than once on the same object.
@@ -37172,7 +37219,7 @@ class _IReusableStackSynthesizerProxy(
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.IReusableStackSynthesizer"
 
     @jsii.member(jsii_name="reusableBind")
-    def reusable_bind(self, stack: Stack) -> IBoundStackSynthesizer:
+    def reusable_bind(self, stack: "Stack") -> "IBoundStackSynthesizer":
         '''Produce a bound Stack Synthesizer for the given stack.
 
         This method may be called more than once on the same object.
@@ -37182,7 +37229,7 @@ class _IReusableStackSynthesizerProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9e78dcd60dd21a0a33797ba8033f56ae102a374587ba43520b10b827acd6088f)
             check_type(argname="argument stack", value=stack, expected_type=type_hints["stack"])
-        return typing.cast(IBoundStackSynthesizer, jsii.invoke(self, "reusableBind", [stack]))
+        return typing.cast("IBoundStackSynthesizer", jsii.invoke(self, "reusableBind", [stack]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IReusableStackSynthesizer).__jsii_proxy_class__ = lambda : _IReusableStackSynthesizerProxy
@@ -37241,14 +37288,14 @@ class LegacyStackSynthesizer(
         docker_build_ssh: typing.Optional[builtins.str] = None,
         docker_build_target: typing.Optional[builtins.str] = None,
         docker_cache_disabled: typing.Optional[builtins.bool] = None,
-        docker_cache_from: typing.Optional[typing.Sequence[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]]] = None,
-        docker_cache_to: typing.Optional[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]] = None,
+        docker_cache_from: typing.Optional[typing.Sequence[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]]] = None,
+        docker_cache_to: typing.Optional[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]] = None,
         docker_file: typing.Optional[builtins.str] = None,
         docker_outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         network_mode: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
-    ) -> DockerImageAssetLocation:
+    ) -> "DockerImageAssetLocation":
         '''Register a Docker Image Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -37295,7 +37342,7 @@ class LegacyStackSynthesizer(
             platform=platform,
         )
 
-        return typing.cast(DockerImageAssetLocation, jsii.invoke(self, "addDockerImageAsset", [asset]))
+        return typing.cast("DockerImageAssetLocation", jsii.invoke(self, "addDockerImageAsset", [asset]))
 
     @jsii.member(jsii_name="addFileAsset")
     def add_file_asset(
@@ -37306,8 +37353,8 @@ class LegacyStackSynthesizer(
         display_name: typing.Optional[builtins.str] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         file_name: typing.Optional[builtins.str] = None,
-        packaging: typing.Optional[FileAssetPackaging] = None,
-    ) -> FileAssetLocation:
+        packaging: typing.Optional["FileAssetPackaging"] = None,
+    ) -> "FileAssetLocation":
         '''Register a File Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -37334,10 +37381,10 @@ class LegacyStackSynthesizer(
             packaging=packaging,
         )
 
-        return typing.cast(FileAssetLocation, jsii.invoke(self, "addFileAsset", [asset]))
+        return typing.cast("FileAssetLocation", jsii.invoke(self, "addFileAsset", [asset]))
 
     @jsii.member(jsii_name="reusableBind")
-    def reusable_bind(self, stack: Stack) -> IBoundStackSynthesizer:
+    def reusable_bind(self, stack: "Stack") -> "IBoundStackSynthesizer":
         '''Produce a bound Stack Synthesizer for the given stack.
 
         This method may be called more than once on the same object.
@@ -37347,10 +37394,10 @@ class LegacyStackSynthesizer(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__30a9d7ca283ad7cf1099b7b53195052f5cbc31c4b107047a2a69fcc9730ecc72)
             check_type(argname="argument stack", value=stack, expected_type=type_hints["stack"])
-        return typing.cast(IBoundStackSynthesizer, jsii.invoke(self, "reusableBind", [stack]))
+        return typing.cast("IBoundStackSynthesizer", jsii.invoke(self, "reusableBind", [stack]))
 
     @jsii.member(jsii_name="synthesize")
-    def synthesize(self, session: ISynthesisSession) -> None:
+    def synthesize(self, session: "ISynthesisSession") -> None:
         '''Synthesize the associated stack to the session.
 
         :param session: -
@@ -37409,14 +37456,14 @@ class NestedStack(Stack, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.NestedS
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
         notification_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        removal_policy: typing.Optional[RemovalPolicy] = None,
-        timeout: typing.Optional[Duration] = None,
+        removal_policy: typing.Optional["RemovalPolicy"] = None,
+        timeout: typing.Optional["Duration"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -37515,12 +37562,12 @@ class NestedStack(Stack, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.NestedS
 
     @builtins.property
     @jsii.member(jsii_name="nestedStackResource")
-    def nested_stack_resource(self) -> typing.Optional[CfnResource]:
+    def nested_stack_resource(self) -> typing.Optional["CfnResource"]:
         '''If this is a nested stack, this represents its ``AWS::CloudFormation::Stack`` resource.
 
         ``undefined`` for top-level (non-nested) stacks.
         '''
-        return typing.cast(typing.Optional[CfnResource], jsii.get(self, "nestedStackResource"))
+        return typing.cast(typing.Optional["CfnResource"], jsii.get(self, "nestedStackResource"))
 
 
 class NestedStackSynthesizer(
@@ -37548,7 +37595,7 @@ class NestedStackSynthesizer(
         nested_stack_synthesizer = cdk.NestedStackSynthesizer(stack_synthesizer)
     '''
 
-    def __init__(self, parent_deployment: IStackSynthesizer) -> None:
+    def __init__(self, parent_deployment: "IStackSynthesizer") -> None:
         '''
         :param parent_deployment: -
         '''
@@ -37570,14 +37617,14 @@ class NestedStackSynthesizer(
         docker_build_ssh: typing.Optional[builtins.str] = None,
         docker_build_target: typing.Optional[builtins.str] = None,
         docker_cache_disabled: typing.Optional[builtins.bool] = None,
-        docker_cache_from: typing.Optional[typing.Sequence[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]]] = None,
-        docker_cache_to: typing.Optional[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]] = None,
+        docker_cache_from: typing.Optional[typing.Sequence[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]]] = None,
+        docker_cache_to: typing.Optional[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]] = None,
         docker_file: typing.Optional[builtins.str] = None,
         docker_outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         network_mode: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
-    ) -> DockerImageAssetLocation:
+    ) -> "DockerImageAssetLocation":
         '''Register a Docker Image Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -37624,7 +37671,7 @@ class NestedStackSynthesizer(
             platform=platform,
         )
 
-        return typing.cast(DockerImageAssetLocation, jsii.invoke(self, "addDockerImageAsset", [asset]))
+        return typing.cast("DockerImageAssetLocation", jsii.invoke(self, "addDockerImageAsset", [asset]))
 
     @jsii.member(jsii_name="addFileAsset")
     def add_file_asset(
@@ -37635,8 +37682,8 @@ class NestedStackSynthesizer(
         display_name: typing.Optional[builtins.str] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         file_name: typing.Optional[builtins.str] = None,
-        packaging: typing.Optional[FileAssetPackaging] = None,
-    ) -> FileAssetLocation:
+        packaging: typing.Optional["FileAssetPackaging"] = None,
+    ) -> "FileAssetLocation":
         '''Register a File Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -37663,10 +37710,10 @@ class NestedStackSynthesizer(
             packaging=packaging,
         )
 
-        return typing.cast(FileAssetLocation, jsii.invoke(self, "addFileAsset", [asset]))
+        return typing.cast("FileAssetLocation", jsii.invoke(self, "addFileAsset", [asset]))
 
     @jsii.member(jsii_name="synthesize")
-    def synthesize(self, session: ISynthesisSession) -> None:
+    def synthesize(self, session: "ISynthesisSession") -> None:
         '''Synthesize the associated stack to the session.
 
         :param session: -
@@ -37714,10 +37761,10 @@ class CfnCondition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        expression: typing.Optional[ICfnConditionExpression] = None,
+        expression: typing.Optional["ICfnConditionExpression"] = None,
     ) -> None:
         '''Build a new condition.
 
@@ -37737,7 +37784,7 @@ class CfnCondition(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="resolve")
-    def resolve(self, _context: IResolveContext) -> typing.Any:
+    def resolve(self, _context: "IResolveContext") -> typing.Any:
         '''Synthesizes the condition.
 
         :param _context: -
@@ -37749,12 +37796,12 @@ class CfnCondition(
 
     @builtins.property
     @jsii.member(jsii_name="expression")
-    def expression(self) -> typing.Optional[ICfnConditionExpression]:
+    def expression(self) -> typing.Optional["ICfnConditionExpression"]:
         '''The condition statement.'''
-        return typing.cast(typing.Optional[ICfnConditionExpression], jsii.get(self, "expression"))
+        return typing.cast(typing.Optional["ICfnConditionExpression"], jsii.get(self, "expression"))
 
     @expression.setter
-    def expression(self, value: typing.Optional[ICfnConditionExpression]) -> None:
+    def expression(self, value: typing.Optional["ICfnConditionExpression"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__520eaac3c160a5dbd339868eadb4b6e1430b0196bd533ef619b6b3352bca706c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -37842,14 +37889,14 @@ class CliCredentialsStackSynthesizer(
         docker_build_ssh: typing.Optional[builtins.str] = None,
         docker_build_target: typing.Optional[builtins.str] = None,
         docker_cache_disabled: typing.Optional[builtins.bool] = None,
-        docker_cache_from: typing.Optional[typing.Sequence[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]]] = None,
-        docker_cache_to: typing.Optional[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]] = None,
+        docker_cache_from: typing.Optional[typing.Sequence[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]]] = None,
+        docker_cache_to: typing.Optional[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]] = None,
         docker_file: typing.Optional[builtins.str] = None,
         docker_outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         network_mode: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
-    ) -> DockerImageAssetLocation:
+    ) -> "DockerImageAssetLocation":
         '''Register a Docker Image Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -37896,7 +37943,7 @@ class CliCredentialsStackSynthesizer(
             platform=platform,
         )
 
-        return typing.cast(DockerImageAssetLocation, jsii.invoke(self, "addDockerImageAsset", [asset]))
+        return typing.cast("DockerImageAssetLocation", jsii.invoke(self, "addDockerImageAsset", [asset]))
 
     @jsii.member(jsii_name="addFileAsset")
     def add_file_asset(
@@ -37907,8 +37954,8 @@ class CliCredentialsStackSynthesizer(
         display_name: typing.Optional[builtins.str] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         file_name: typing.Optional[builtins.str] = None,
-        packaging: typing.Optional[FileAssetPackaging] = None,
-    ) -> FileAssetLocation:
+        packaging: typing.Optional["FileAssetPackaging"] = None,
+    ) -> "FileAssetLocation":
         '''Register a File Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -37935,10 +37982,10 @@ class CliCredentialsStackSynthesizer(
             packaging=packaging,
         )
 
-        return typing.cast(FileAssetLocation, jsii.invoke(self, "addFileAsset", [asset]))
+        return typing.cast("FileAssetLocation", jsii.invoke(self, "addFileAsset", [asset]))
 
     @jsii.member(jsii_name="bind")
-    def bind(self, stack: Stack) -> None:
+    def bind(self, stack: "Stack") -> None:
         '''Bind to the stack this environment is going to be used on.
 
         Must be called before any of the other methods are called.
@@ -37951,7 +37998,7 @@ class CliCredentialsStackSynthesizer(
         return typing.cast(None, jsii.invoke(self, "bind", [stack]))
 
     @jsii.member(jsii_name="reusableBind")
-    def reusable_bind(self, stack: Stack) -> IBoundStackSynthesizer:
+    def reusable_bind(self, stack: "Stack") -> "IBoundStackSynthesizer":
         '''Produce a bound Stack Synthesizer for the given stack.
 
         This method may be called more than once on the same object.
@@ -37961,10 +38008,10 @@ class CliCredentialsStackSynthesizer(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e83ea0158d734fd0a3fbadd431d84a889d6bdc646768a47f0e300f1cf88933d2)
             check_type(argname="argument stack", value=stack, expected_type=type_hints["stack"])
-        return typing.cast(IBoundStackSynthesizer, jsii.invoke(self, "reusableBind", [stack]))
+        return typing.cast("IBoundStackSynthesizer", jsii.invoke(self, "reusableBind", [stack]))
 
     @jsii.member(jsii_name="synthesize")
-    def synthesize(self, session: ISynthesisSession) -> None:
+    def synthesize(self, session: "ISynthesisSession") -> None:
         '''Synthesize the associated stack to the session.
 
         :param session: -
@@ -38110,14 +38157,14 @@ class DefaultStackSynthesizer(
         docker_build_ssh: typing.Optional[builtins.str] = None,
         docker_build_target: typing.Optional[builtins.str] = None,
         docker_cache_disabled: typing.Optional[builtins.bool] = None,
-        docker_cache_from: typing.Optional[typing.Sequence[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]]] = None,
-        docker_cache_to: typing.Optional[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]] = None,
+        docker_cache_from: typing.Optional[typing.Sequence[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]]] = None,
+        docker_cache_to: typing.Optional[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]] = None,
         docker_file: typing.Optional[builtins.str] = None,
         docker_outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         network_mode: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
-    ) -> DockerImageAssetLocation:
+    ) -> "DockerImageAssetLocation":
         '''Register a Docker Image Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -38164,7 +38211,7 @@ class DefaultStackSynthesizer(
             platform=platform,
         )
 
-        return typing.cast(DockerImageAssetLocation, jsii.invoke(self, "addDockerImageAsset", [asset]))
+        return typing.cast("DockerImageAssetLocation", jsii.invoke(self, "addDockerImageAsset", [asset]))
 
     @jsii.member(jsii_name="addFileAsset")
     def add_file_asset(
@@ -38175,8 +38222,8 @@ class DefaultStackSynthesizer(
         display_name: typing.Optional[builtins.str] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         file_name: typing.Optional[builtins.str] = None,
-        packaging: typing.Optional[FileAssetPackaging] = None,
-    ) -> FileAssetLocation:
+        packaging: typing.Optional["FileAssetPackaging"] = None,
+    ) -> "FileAssetLocation":
         '''Register a File Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -38203,10 +38250,10 @@ class DefaultStackSynthesizer(
             packaging=packaging,
         )
 
-        return typing.cast(FileAssetLocation, jsii.invoke(self, "addFileAsset", [asset]))
+        return typing.cast("FileAssetLocation", jsii.invoke(self, "addFileAsset", [asset]))
 
     @jsii.member(jsii_name="bind")
-    def bind(self, stack: Stack) -> None:
+    def bind(self, stack: "Stack") -> None:
         '''Bind to the stack this environment is going to be used on.
 
         Must be called before any of the other methods are called.
@@ -38219,7 +38266,7 @@ class DefaultStackSynthesizer(
         return typing.cast(None, jsii.invoke(self, "bind", [stack]))
 
     @jsii.member(jsii_name="reusableBind")
-    def reusable_bind(self, stack: Stack) -> IBoundStackSynthesizer:
+    def reusable_bind(self, stack: "Stack") -> "IBoundStackSynthesizer":
         '''Produce a bound Stack Synthesizer for the given stack.
 
         This method may be called more than once on the same object.
@@ -38229,10 +38276,10 @@ class DefaultStackSynthesizer(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7c184d4a9907d7086993ae567db6d5fa9ce4b47f0a475d5ceefa81472291a2e2)
             check_type(argname="argument stack", value=stack, expected_type=type_hints["stack"])
-        return typing.cast(IBoundStackSynthesizer, jsii.invoke(self, "reusableBind", [stack]))
+        return typing.cast("IBoundStackSynthesizer", jsii.invoke(self, "reusableBind", [stack]))
 
     @jsii.member(jsii_name="synthesize")
-    def synthesize(self, session: ISynthesisSession) -> None:
+    def synthesize(self, session: "ISynthesisSession") -> None:
         '''Synthesize the associated stack to the session.
 
         :param session: -
@@ -38245,8 +38292,8 @@ class DefaultStackSynthesizer(
     @jsii.member(jsii_name="synthesizeStackTemplate")
     def _synthesize_stack_template(
         self,
-        stack: Stack,
-        session: ISynthesisSession,
+        stack: "Stack",
+        session: "ISynthesisSession",
     ) -> None:
         '''Synthesize the stack template to the given session, passing the configured lookup role ARN.
 
@@ -38357,14 +38404,14 @@ class DefaultStackSynthesizer(
 
     @builtins.property
     @jsii.member(jsii_name="stack")
-    def _stack(self) -> typing.Optional[Stack]:
+    def _stack(self) -> typing.Optional["Stack"]:
         '''(deprecated) Return the currently bound stack.
 
         :deprecated: Use ``boundStack`` instead.
 
         :stability: deprecated
         '''
-        return typing.cast(typing.Optional[Stack], jsii.get(self, "stack"))
+        return typing.cast(typing.Optional["Stack"], jsii.get(self, "stack"))
 
 
 class BootstraplessSynthesizer(
@@ -38437,14 +38484,14 @@ class BootstraplessSynthesizer(
         docker_build_ssh: typing.Optional[builtins.str] = None,
         docker_build_target: typing.Optional[builtins.str] = None,
         docker_cache_disabled: typing.Optional[builtins.bool] = None,
-        docker_cache_from: typing.Optional[typing.Sequence[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]]] = None,
-        docker_cache_to: typing.Optional[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]] = None,
+        docker_cache_from: typing.Optional[typing.Sequence[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]]] = None,
+        docker_cache_to: typing.Optional[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]] = None,
         docker_file: typing.Optional[builtins.str] = None,
         docker_outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         network_mode: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
-    ) -> DockerImageAssetLocation:
+    ) -> "DockerImageAssetLocation":
         '''Register a Docker Image Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -38491,7 +38538,7 @@ class BootstraplessSynthesizer(
             platform=platform,
         )
 
-        return typing.cast(DockerImageAssetLocation, jsii.invoke(self, "addDockerImageAsset", [_asset]))
+        return typing.cast("DockerImageAssetLocation", jsii.invoke(self, "addDockerImageAsset", [_asset]))
 
     @jsii.member(jsii_name="addFileAsset")
     def add_file_asset(
@@ -38502,8 +38549,8 @@ class BootstraplessSynthesizer(
         display_name: typing.Optional[builtins.str] = None,
         executable: typing.Optional[typing.Sequence[builtins.str]] = None,
         file_name: typing.Optional[builtins.str] = None,
-        packaging: typing.Optional[FileAssetPackaging] = None,
-    ) -> FileAssetLocation:
+        packaging: typing.Optional["FileAssetPackaging"] = None,
+    ) -> "FileAssetLocation":
         '''Register a File Asset.
 
         Returns the parameters that can be used to refer to the asset inside the template.
@@ -38530,10 +38577,10 @@ class BootstraplessSynthesizer(
             packaging=packaging,
         )
 
-        return typing.cast(FileAssetLocation, jsii.invoke(self, "addFileAsset", [_asset]))
+        return typing.cast("FileAssetLocation", jsii.invoke(self, "addFileAsset", [_asset]))
 
     @jsii.member(jsii_name="synthesize")
-    def synthesize(self, session: ISynthesisSession) -> None:
+    def synthesize(self, session: "ISynthesisSession") -> None:
         '''Synthesize the associated stack to the session.
 
         :param session: -

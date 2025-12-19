@@ -2162,11 +2162,11 @@ class CfnActivity(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnActivity.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnActivity.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnActivity.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::StepFunctions::Activity``.
@@ -2189,7 +2189,7 @@ class CfnActivity(
 
     @jsii.member(jsii_name="arnForActivity")
     @builtins.classmethod
-    def arn_for_activity(cls, resource: _IActivityRef_cfa2906a) -> builtins.str:
+    def arn_for_activity(cls, resource: "_IActivityRef_cfa2906a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2211,7 +2211,7 @@ class CfnActivity(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnActivity", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2242,9 +2242,9 @@ class CfnActivity(
 
     @builtins.property
     @jsii.member(jsii_name="activityRef")
-    def activity_ref(self) -> _ActivityReference_781f8e4f:
+    def activity_ref(self) -> "_ActivityReference_781f8e4f":
         '''A reference to a Activity resource.'''
-        return typing.cast(_ActivityReference_781f8e4f, jsii.get(self, "activityRef"))
+        return typing.cast("_ActivityReference_781f8e4f", jsii.get(self, "activityRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -2279,9 +2279,9 @@ class CfnActivity(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2300,14 +2300,14 @@ class CfnActivity(
     @jsii.member(jsii_name="encryptionConfiguration")
     def encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnActivity.EncryptionConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnActivity.EncryptionConfigurationProperty"]]:
         '''Encryption configuration for the activity.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnActivity.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnActivity.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
 
     @encryption_configuration.setter
     def encryption_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnActivity.EncryptionConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnActivity.EncryptionConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__50ec6c3cd7c2d1844e46c4fd7f9d3d9befacc4e6129f6a8dea961ef8c315ae54)
@@ -2509,8 +2509,8 @@ class CfnActivityProps:
         self,
         *,
         name: builtins.str,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnActivity.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnActivity.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnActivity.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnActivity.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnActivity``.
 
@@ -2582,7 +2582,7 @@ class CfnActivityProps:
     @builtins.property
     def encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnActivity.EncryptionConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnActivity.EncryptionConfigurationProperty"]]:
         '''Encryption configuration for the activity.
 
         Activity configuration is immutable, and resource names must be unique. To set customer managed keys for encryption, you must create a *new Activity* . If you attempt to change the configuration in your CFN template for an existing activity, you will receive an ``ActivityAlreadyExists`` exception.
@@ -2592,10 +2592,10 @@ class CfnActivityProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-stepfunctions-activity.html#cfn-stepfunctions-activity-encryptionconfiguration
         '''
         result = self._values.get("encryption_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnActivity.EncryptionConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnActivity.EncryptionConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[CfnActivity.TagsEntryProperty]]:
+    def tags(self) -> typing.Optional[typing.List["CfnActivity.TagsEntryProperty"]]:
         '''The list of tags to add to a resource.
 
         Tags may only contain Unicode letters, digits, white space, or these symbols: `_ . : / = + -
@@ -2604,7 +2604,7 @@ class CfnActivityProps:
         :: ` .
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnActivity.TagsEntryProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnActivity.TagsEntryProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2686,20 +2686,20 @@ class CfnStateMachine(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         definition: typing.Any = None,
-        definition_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStateMachine.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        definition_string: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198, _ITableRef_4478f0ad, _ITaskDefinitionRef_8091fc1c]] = None,
-        definition_substitutions: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStateMachine.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStateMachine.LoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        definition_s3_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachine.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        definition_string: typing.Optional[typing.Union[builtins.str, "_ITableRef_4478f0ad", "_ITaskDefinitionRef_8091fc1c", "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad", "_ITopicRef_29aa9a88", "_IQueueRef_fa8b2198"]] = None,
+        definition_substitutions: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachine.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachine.LoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         state_machine_name: typing.Optional[builtins.str] = None,
         state_machine_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnStateMachine.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tracing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStateMachine.TracingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tracing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachine.TracingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::StepFunctions::StateMachine``.
 
@@ -2741,7 +2741,7 @@ class CfnStateMachine(
     @builtins.classmethod
     def arn_for_state_machine(
         cls,
-        resource: _IStateMachineRef_65490661,
+        resource: "_IStateMachineRef_65490661",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2764,7 +2764,7 @@ class CfnStateMachine(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStateMachine", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2839,15 +2839,15 @@ class CfnStateMachine(
 
     @builtins.property
     @jsii.member(jsii_name="stateMachineRef")
-    def state_machine_ref(self) -> _StateMachineReference_db0983bb:
+    def state_machine_ref(self) -> "_StateMachineReference_db0983bb":
         '''A reference to a StateMachine resource.'''
-        return typing.cast(_StateMachineReference_db0983bb, jsii.get(self, "stateMachineRef"))
+        return typing.cast("_StateMachineReference_db0983bb", jsii.get(self, "stateMachineRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="roleArn")
@@ -2879,14 +2879,14 @@ class CfnStateMachine(
     @jsii.member(jsii_name="definitionS3Location")
     def definition_s3_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.S3LocationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.S3LocationProperty"]]:
         '''The name of the S3 bucket where the state machine definition is stored.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.S3LocationProperty"]], jsii.get(self, "definitionS3Location"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.S3LocationProperty"]], jsii.get(self, "definitionS3Location"))
 
     @definition_s3_location.setter
     def definition_s3_location(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.S3LocationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.S3LocationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2c6f22451e8abd968219b59f11a227c9451d5cd7cb1ff91b3bd91c4ab25bd6da)
@@ -2910,14 +2910,14 @@ class CfnStateMachine(
     @jsii.member(jsii_name="definitionSubstitutions")
     def definition_substitutions(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''A map (string to string) that specifies the mappings for placeholder variables in the state machine definition.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "definitionSubstitutions"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "definitionSubstitutions"))
 
     @definition_substitutions.setter
     def definition_substitutions(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e05fa36d2c9116cb2c90b1560cd6e7bc08699fa552a7e75ce5775a927ad53415)
@@ -2928,14 +2928,14 @@ class CfnStateMachine(
     @jsii.member(jsii_name="encryptionConfiguration")
     def encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.EncryptionConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.EncryptionConfigurationProperty"]]:
         '''Encryption configuration for the state machine.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
 
     @encryption_configuration.setter
     def encryption_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.EncryptionConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.EncryptionConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ce904333e518564adf04f2eb84a1f9cc5b437dde18f6aed04e958a4a0dac58a5)
@@ -2946,14 +2946,14 @@ class CfnStateMachine(
     @jsii.member(jsii_name="loggingConfiguration")
     def logging_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.LoggingConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.LoggingConfigurationProperty"]]:
         '''Defines what execution history events are logged and where they are logged.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.LoggingConfigurationProperty"]], jsii.get(self, "loggingConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.LoggingConfigurationProperty"]], jsii.get(self, "loggingConfiguration"))
 
     @logging_configuration.setter
     def logging_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.LoggingConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.LoggingConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__79f4c64119545b342b25a9aba40a7ac8de878e2ca38859e38a10004112309301)
@@ -3008,14 +3008,14 @@ class CfnStateMachine(
     @jsii.member(jsii_name="tracingConfiguration")
     def tracing_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.TracingConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.TracingConfigurationProperty"]]:
         '''Selects whether or not the state machine's AWS X-Ray tracing is enabled.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.TracingConfigurationProperty"]], jsii.get(self, "tracingConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.TracingConfigurationProperty"]], jsii.get(self, "tracingConfiguration"))
 
     @tracing_configuration.setter
     def tracing_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.TracingConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.TracingConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7975c26bdc928c8d9fd66a2493df6fc6818b885815e25f63844e956d275c1d01)
@@ -3190,7 +3190,7 @@ class CfnStateMachine(
         def __init__(
             self,
             *,
-            cloud_watch_logs_log_group: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStateMachine.CloudWatchLogsLogGroupProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logs_log_group: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachine.CloudWatchLogsLogGroupProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Defines a destination for ``LoggingConfiguration`` .
 
@@ -3225,7 +3225,7 @@ class CfnStateMachine(
         @builtins.property
         def cloud_watch_logs_log_group(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.CloudWatchLogsLogGroupProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.CloudWatchLogsLogGroupProperty"]]:
             '''An object describing a CloudWatch log group.
 
             For more information, see `AWS::Logs::LogGroup <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html>`_ in the CloudFormation User Guide.
@@ -3233,7 +3233,7 @@ class CfnStateMachine(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stepfunctions-statemachine-logdestination.html#cfn-stepfunctions-statemachine-logdestination-cloudwatchlogsloggroup
             '''
             result = self._values.get("cloud_watch_logs_log_group")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.CloudWatchLogsLogGroupProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.CloudWatchLogsLogGroupProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3259,8 +3259,8 @@ class CfnStateMachine(
         def __init__(
             self,
             *,
-            destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStateMachine.LogDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            include_execution_data: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            destinations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachine.LogDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            include_execution_data: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             level: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Defines what execution history events are logged and where they are logged.
@@ -3309,7 +3309,7 @@ class CfnStateMachine(
         @builtins.property
         def destinations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.LogDestinationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.LogDestinationProperty"]]]]:
             '''An array of objects that describes where your execution history events will be logged.
 
             Limited to size 1. Required, if your log level is not set to ``OFF`` .
@@ -3317,12 +3317,12 @@ class CfnStateMachine(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stepfunctions-statemachine-loggingconfiguration.html#cfn-stepfunctions-statemachine-loggingconfiguration-destinations
             '''
             result = self._values.get("destinations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStateMachine.LogDestinationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.LogDestinationProperty"]]]], result)
 
         @builtins.property
         def include_execution_data(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Determines whether execution data is included in your log.
 
             When set to ``false`` , data is excluded.
@@ -3330,7 +3330,7 @@ class CfnStateMachine(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stepfunctions-statemachine-loggingconfiguration.html#cfn-stepfunctions-statemachine-loggingconfiguration-includeexecutiondata
             '''
             result = self._values.get("include_execution_data")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def level(self) -> typing.Optional[builtins.str]:
@@ -3517,7 +3517,7 @@ class CfnStateMachine(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Selects whether or not the state machine's AWS X-Ray tracing is enabled.
 
@@ -3548,13 +3548,13 @@ class CfnStateMachine(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to ``true`` , X-Ray tracing is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stepfunctions-statemachine-tracingconfiguration.html#cfn-stepfunctions-statemachine-tracingconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3609,13 +3609,13 @@ class CfnStateMachineAlias(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        deployment_preference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStateMachineAlias.DeploymentPreferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        deployment_preference: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachineAlias.DeploymentPreferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        routing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStateMachineAlias.RoutingConfigurationVersionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        routing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachineAlias.RoutingConfigurationVersionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::StepFunctions::StateMachineAlias``.
 
@@ -3643,7 +3643,7 @@ class CfnStateMachineAlias(
     @builtins.classmethod
     def arn_for_state_machine_alias(
         cls,
-        resource: _IStateMachineAliasRef_f68ce683,
+        resource: "_IStateMachineAliasRef_f68ce683",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3666,7 +3666,7 @@ class CfnStateMachineAlias(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStateMachineAlias", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3713,22 +3713,22 @@ class CfnStateMachineAlias(
 
     @builtins.property
     @jsii.member(jsii_name="stateMachineAliasRef")
-    def state_machine_alias_ref(self) -> _StateMachineAliasReference_f0ebcede:
+    def state_machine_alias_ref(self) -> "_StateMachineAliasReference_f0ebcede":
         '''A reference to a StateMachineAlias resource.'''
-        return typing.cast(_StateMachineAliasReference_f0ebcede, jsii.get(self, "stateMachineAliasRef"))
+        return typing.cast("_StateMachineAliasReference_f0ebcede", jsii.get(self, "stateMachineAliasRef"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentPreference")
     def deployment_preference(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachineAlias.DeploymentPreferenceProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachineAlias.DeploymentPreferenceProperty"]]:
         '''The settings that enable gradual state machine deployments.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachineAlias.DeploymentPreferenceProperty"]], jsii.get(self, "deploymentPreference"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachineAlias.DeploymentPreferenceProperty"]], jsii.get(self, "deploymentPreference"))
 
     @deployment_preference.setter
     def deployment_preference(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStateMachineAlias.DeploymentPreferenceProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachineAlias.DeploymentPreferenceProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__291c291374c3a7bdc720916a40ec17c8994233f17b521e36f88493f1dfea6abe)
@@ -3765,14 +3765,14 @@ class CfnStateMachineAlias(
     @jsii.member(jsii_name="routingConfiguration")
     def routing_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStateMachineAlias.RoutingConfigurationVersionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStateMachineAlias.RoutingConfigurationVersionProperty"]]]]:
         '''The routing configuration of an alias.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStateMachineAlias.RoutingConfigurationVersionProperty"]]]], jsii.get(self, "routingConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStateMachineAlias.RoutingConfigurationVersionProperty"]]]], jsii.get(self, "routingConfiguration"))
 
     @routing_configuration.setter
     def routing_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStateMachineAlias.RoutingConfigurationVersionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStateMachineAlias.RoutingConfigurationVersionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__91c36ec8b9a1fe59c6e03fb3ba3b15d8849aa3ea74c639879915303e21486168)
@@ -4014,10 +4014,10 @@ class CfnStateMachineAliasProps:
     def __init__(
         self,
         *,
-        deployment_preference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStateMachineAlias.DeploymentPreferenceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        deployment_preference: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachineAlias.DeploymentPreferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        routing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStateMachineAlias.RoutingConfigurationVersionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        routing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachineAlias.RoutingConfigurationVersionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStateMachineAlias``.
 
@@ -4072,7 +4072,7 @@ class CfnStateMachineAliasProps:
     @builtins.property
     def deployment_preference(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStateMachineAlias.DeploymentPreferenceProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachineAlias.DeploymentPreferenceProperty"]]:
         '''The settings that enable gradual state machine deployments.
 
         These settings include `Alarms <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stepfunctions-statemachinealias-deploymentpreference.html#cfn-stepfunctions-statemachinealias-deploymentpreference-alarms>`_ , `Interval <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stepfunctions-statemachinealias-deploymentpreference.html#cfn-stepfunctions-statemachinealias-deploymentpreference-interval>`_ , `Percentage <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stepfunctions-statemachinealias-deploymentpreference.html#cfn-stepfunctions-statemachinealias-deploymentpreference-percentage>`_ , `StateMachineVersionArn <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stepfunctions-statemachinealias-deploymentpreference.html#cfn-stepfunctions-statemachinealias-deploymentpreference-statemachineversionarn>`_ , and `Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stepfunctions-statemachinealias-deploymentpreference.html#cfn-stepfunctions-statemachinealias-deploymentpreference-type>`_ .
@@ -4096,7 +4096,7 @@ class CfnStateMachineAliasProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-stepfunctions-statemachinealias.html#cfn-stepfunctions-statemachinealias-deploymentpreference
         '''
         result = self._values.get("deployment_preference")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStateMachineAlias.DeploymentPreferenceProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachineAlias.DeploymentPreferenceProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -4121,7 +4121,7 @@ class CfnStateMachineAliasProps:
     @builtins.property
     def routing_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStateMachineAlias.RoutingConfigurationVersionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStateMachineAlias.RoutingConfigurationVersionProperty"]]]]:
         '''The routing configuration of an alias.
 
         Routing configuration splits `StartExecution <https://docs.aws.amazon.com/step-functions/latest/apireference/API_StartExecution.html>`_ requests between one or two versions of the same state machine.
@@ -4134,7 +4134,7 @@ class CfnStateMachineAliasProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-stepfunctions-statemachinealias.html#cfn-stepfunctions-statemachinealias-routingconfiguration
         '''
         result = self._values.get("routing_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStateMachineAlias.RoutingConfigurationVersionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStateMachineAlias.RoutingConfigurationVersionProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4169,17 +4169,17 @@ class CfnStateMachineProps:
     def __init__(
         self,
         *,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         definition: typing.Any = None,
-        definition_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStateMachine.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        definition_string: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198, _ITableRef_4478f0ad, _ITaskDefinitionRef_8091fc1c]] = None,
-        definition_substitutions: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStateMachine.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStateMachine.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        definition_s3_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachine.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        definition_string: typing.Optional[typing.Union[builtins.str, "_ITableRef_4478f0ad", "_ITaskDefinitionRef_8091fc1c", "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad", "_ITopicRef_29aa9a88", "_IQueueRef_fa8b2198"]] = None,
+        definition_substitutions: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachine.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachine.LoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         state_machine_name: typing.Optional[builtins.str] = None,
         state_machine_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnStateMachine.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tracing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStateMachine.TracingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnStateMachine.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tracing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStateMachine.TracingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStateMachine``.
 
@@ -4287,14 +4287,14 @@ class CfnStateMachineProps:
             self._values["tracing_configuration"] = tracing_configuration
 
     @builtins.property
-    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The Amazon Resource Name (ARN) of the IAM role to use for this state machine.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-stepfunctions-statemachine.html#cfn-stepfunctions-statemachine-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def definition(self) -> typing.Any:
@@ -4310,7 +4310,7 @@ class CfnStateMachineProps:
     @builtins.property
     def definition_s3_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStateMachine.S3LocationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.S3LocationProperty"]]:
         '''The name of the S3 bucket where the state machine definition is stored.
 
         The state machine definition must be a JSON or YAML file.
@@ -4318,12 +4318,12 @@ class CfnStateMachineProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-stepfunctions-statemachine.html#cfn-stepfunctions-statemachine-definitions3location
         '''
         result = self._values.get("definition_s3_location")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStateMachine.S3LocationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.S3LocationProperty"]], result)
 
     @builtins.property
     def definition_string(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198, _ITableRef_4478f0ad, _ITaskDefinitionRef_8091fc1c]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_ITableRef_4478f0ad", "_ITaskDefinitionRef_8091fc1c", "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad", "_ITopicRef_29aa9a88", "_IQueueRef_fa8b2198"]]:
         '''The Amazon States Language definition of the state machine.
 
         The state machine definition must be in JSON. See `Amazon States Language <https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html>`_ .
@@ -4331,12 +4331,12 @@ class CfnStateMachineProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-stepfunctions-statemachine.html#cfn-stepfunctions-statemachine-definitionstring
         '''
         result = self._values.get("definition_string")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198, _ITableRef_4478f0ad, _ITaskDefinitionRef_8091fc1c]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_ITableRef_4478f0ad", "_ITaskDefinitionRef_8091fc1c", "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad", "_ITopicRef_29aa9a88", "_IQueueRef_fa8b2198"]], result)
 
     @builtins.property
     def definition_substitutions(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''A map (string to string) that specifies the mappings for placeholder variables in the state machine definition.
 
         This enables the customer to inject values obtained at runtime, for example from intrinsic functions, in the state machine definition. Variables can be template parameter names, resource logical IDs, resource attributes, or a variable in a key-value map.
@@ -4346,23 +4346,23 @@ class CfnStateMachineProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-stepfunctions-statemachine.html#cfn-stepfunctions-statemachine-definitionsubstitutions
         '''
         result = self._values.get("definition_substitutions")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStateMachine.EncryptionConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.EncryptionConfigurationProperty"]]:
         '''Encryption configuration for the state machine.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-stepfunctions-statemachine.html#cfn-stepfunctions-statemachine-encryptionconfiguration
         '''
         result = self._values.get("encryption_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStateMachine.EncryptionConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.EncryptionConfigurationProperty"]], result)
 
     @builtins.property
     def logging_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStateMachine.LoggingConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.LoggingConfigurationProperty"]]:
         '''Defines what execution history events are logged and where they are logged.
 
         .. epigraph::
@@ -4372,7 +4372,7 @@ class CfnStateMachineProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-stepfunctions-statemachine.html#cfn-stepfunctions-statemachine-loggingconfiguration
         '''
         result = self._values.get("logging_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStateMachine.LoggingConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.LoggingConfigurationProperty"]], result)
 
     @builtins.property
     def state_machine_name(self) -> typing.Optional[builtins.str]:
@@ -4407,7 +4407,7 @@ class CfnStateMachineProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[CfnStateMachine.TagsEntryProperty]]:
+    def tags(self) -> typing.Optional[typing.List["CfnStateMachine.TagsEntryProperty"]]:
         '''The list of tags to add to a resource.
 
         Tags may only contain Unicode letters, digits, white space, or these symbols: `_ . : / = + -
@@ -4416,18 +4416,18 @@ class CfnStateMachineProps:
         :: ` .
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnStateMachine.TagsEntryProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnStateMachine.TagsEntryProperty"]], result)
 
     @builtins.property
     def tracing_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStateMachine.TracingConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.TracingConfigurationProperty"]]:
         '''Selects whether or not the state machine's AWS X-Ray tracing is enabled.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-stepfunctions-statemachine.html#cfn-stepfunctions-statemachine-tracingconfiguration
         '''
         result = self._values.get("tracing_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStateMachine.TracingConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStateMachine.TracingConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4475,7 +4475,7 @@ class CfnStateMachineVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         state_machine_arn: builtins.str,
@@ -4506,7 +4506,7 @@ class CfnStateMachineVersion(
     @builtins.classmethod
     def arn_for_state_machine_version(
         cls,
-        resource: _IStateMachineVersionRef_33f36186,
+        resource: "_IStateMachineVersionRef_33f36186",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -4529,7 +4529,7 @@ class CfnStateMachineVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStateMachineVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4576,9 +4576,9 @@ class CfnStateMachineVersion(
 
     @builtins.property
     @jsii.member(jsii_name="stateMachineVersionRef")
-    def state_machine_version_ref(self) -> _StateMachineVersionReference_c50b7750:
+    def state_machine_version_ref(self) -> "_StateMachineVersionReference_c50b7750":
         '''A reference to a StateMachineVersion resource.'''
-        return typing.cast(_StateMachineVersionReference_c50b7750, jsii.get(self, "stateMachineVersionRef"))
+        return typing.cast("_StateMachineVersionReference_c50b7750", jsii.get(self, "stateMachineVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="stateMachineArn")
@@ -5800,9 +5800,9 @@ class CsvHeaders(
 
     @builtins.property
     @jsii.member(jsii_name="headerLocation")
-    def header_location(self) -> CsvHeaderLocation:
+    def header_location(self) -> "CsvHeaderLocation":
         '''Location of headers in CSV file.'''
-        return typing.cast(CsvHeaderLocation, jsii.get(self, "headerLocation"))
+        return typing.cast("CsvHeaderLocation", jsii.get(self, "headerLocation"))
 
     @builtins.property
     @jsii.member(jsii_name="headers")
@@ -5958,14 +5958,14 @@ class DefinitionBody(
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> "DefinitionBody":
         '''
         :param path: -
@@ -6013,8 +6013,8 @@ class DefinitionBody(
     @abc.abstractmethod
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        sfn_principal: _IPrincipal_539bb2fd,
+        scope: "_constructs_77d1e7e8.Construct",
+        sfn_principal: "_IPrincipal_539bb2fd",
         sfn_props: typing.Union["StateMachineProps", typing.Dict[builtins.str, typing.Any]],
         graph: typing.Optional["StateGraph"] = None,
     ) -> "DefinitionConfig":
@@ -6031,8 +6031,8 @@ class _DefinitionBodyProxy(DefinitionBody):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        sfn_principal: _IPrincipal_539bb2fd,
+        scope: "_constructs_77d1e7e8.Construct",
+        sfn_principal: "_IPrincipal_539bb2fd",
         sfn_props: typing.Union["StateMachineProps", typing.Dict[builtins.str, typing.Any]],
         graph: typing.Optional["StateGraph"] = None,
     ) -> "DefinitionConfig":
@@ -6068,7 +6068,7 @@ class DefinitionConfig:
         self,
         *,
         definition: typing.Any = None,
-        definition_s3_location: typing.Optional[typing.Union[CfnStateMachine.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        definition_s3_location: typing.Optional[typing.Union["CfnStateMachine.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         definition_string: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Partial object from the StateMachine L1 construct properties containing definition information.
@@ -6122,9 +6122,9 @@ class DefinitionConfig:
     @builtins.property
     def definition_s3_location(
         self,
-    ) -> typing.Optional[CfnStateMachine.S3LocationProperty]:
+    ) -> typing.Optional["CfnStateMachine.S3LocationProperty"]:
         result = self._values.get("definition_s3_location")
-        return typing.cast(typing.Optional[CfnStateMachine.S3LocationProperty], result)
+        return typing.cast(typing.Optional["CfnStateMachine.S3LocationProperty"], result)
 
     @builtins.property
     def definition_string(self) -> typing.Optional[builtins.str]:
@@ -6401,14 +6401,14 @@ class FileDefinitionBody(
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> None:
         '''
         :param path: -
@@ -6444,11 +6444,11 @@ class FileDefinitionBody(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        _sfn_principal: _IPrincipal_539bb2fd,
+        scope: "_constructs_77d1e7e8.Construct",
+        _sfn_principal: "_IPrincipal_539bb2fd",
         _sfn_props: typing.Union["StateMachineProps", typing.Dict[builtins.str, typing.Any]],
         _graph: typing.Optional["StateGraph"] = None,
-    ) -> DefinitionConfig:
+    ) -> "DefinitionConfig":
         '''
         :param scope: -
         :param _sfn_principal: -
@@ -6461,7 +6461,7 @@ class FileDefinitionBody(
             check_type(argname="argument _sfn_principal", value=_sfn_principal, expected_type=type_hints["_sfn_principal"])
             check_type(argname="argument _sfn_props", value=_sfn_props, expected_type=type_hints["_sfn_props"])
             check_type(argname="argument _graph", value=_graph, expected_type=type_hints["_graph"])
-        return typing.cast(DefinitionConfig, jsii.invoke(self, "bind", [scope, _sfn_principal, _sfn_props, _graph]))
+        return typing.cast("DefinitionConfig", jsii.invoke(self, "bind", [scope, _sfn_principal, _sfn_props, _graph]))
 
     @builtins.property
     @jsii.member(jsii_name="path")
@@ -6548,7 +6548,7 @@ class IActivity(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="encryptionConfiguration")
-    def encryption_configuration(self) -> typing.Optional[EncryptionConfiguration]:
+    def encryption_configuration(self) -> typing.Optional["EncryptionConfiguration"]:
         '''The encryptionConfiguration object used for server-side encryption of the activity inputs.
 
         :attribute: true
@@ -6583,12 +6583,12 @@ class _IActivityProxy(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionConfiguration")
-    def encryption_configuration(self) -> typing.Optional[EncryptionConfiguration]:
+    def encryption_configuration(self) -> typing.Optional["EncryptionConfiguration"]:
         '''The encryptionConfiguration object used for server-side encryption of the activity inputs.
 
         :attribute: true
         '''
-        return typing.cast(typing.Optional[EncryptionConfiguration], jsii.get(self, "encryptionConfiguration"))
+        return typing.cast(typing.Optional["EncryptionConfiguration"], jsii.get(self, "encryptionConfiguration"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IActivity).__jsii_proxy_class__ = lambda : _IActivityProxy
@@ -6650,7 +6650,7 @@ class IItemReader(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="bucket")
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''S3 Bucket containing objects to iterate over or a file with a list to iterate over.'''
         ...
 
@@ -6676,7 +6676,7 @@ class IItemReader(typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="providePolicyStatements")
-    def provide_policy_statements(self) -> typing.List[_PolicyStatement_0fe33853]:
+    def provide_policy_statements(self) -> typing.List["_PolicyStatement_0fe33853"]:
         '''Compile policy statements to provide relevent permissions to the state machine.'''
         ...
 
@@ -6707,9 +6707,9 @@ class _IItemReaderProxy:
 
     @builtins.property
     @jsii.member(jsii_name="bucket")
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''S3 Bucket containing objects to iterate over or a file with a list to iterate over.'''
-        return typing.cast(_IBucket_42e086fd, jsii.get(self, "bucket"))
+        return typing.cast("_IBucket_42e086fd", jsii.get(self, "bucket"))
 
     @builtins.property
     @jsii.member(jsii_name="resource")
@@ -6733,9 +6733,9 @@ class _IItemReaderProxy:
         return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "maxItems"))
 
     @jsii.member(jsii_name="providePolicyStatements")
-    def provide_policy_statements(self) -> typing.List[_PolicyStatement_0fe33853]:
+    def provide_policy_statements(self) -> typing.List["_PolicyStatement_0fe33853"]:
         '''Compile policy statements to provide relevent permissions to the state machine.'''
-        return typing.cast(typing.List[_PolicyStatement_0fe33853], jsii.invoke(self, "providePolicyStatements", []))
+        return typing.cast(typing.List["_PolicyStatement_0fe33853"], jsii.invoke(self, "providePolicyStatements", []))
 
     @jsii.member(jsii_name="render")
     def render(
@@ -6768,7 +6768,7 @@ class INextable(typing_extensions.Protocol):
     '''Interface for states that can have 'next' states.'''
 
     @jsii.member(jsii_name="next")
-    def next(self, state: IChainable) -> "Chain":
+    def next(self, state: "IChainable") -> "Chain":
         '''Go to the indicated state after this state.
 
         :param state: -
@@ -6784,7 +6784,7 @@ class _INextableProxy:
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_stepfunctions.INextable"
 
     @jsii.member(jsii_name="next")
-    def next(self, state: IChainable) -> "Chain":
+    def next(self, state: "IChainable") -> "Chain":
         '''Go to the indicated state after this state.
 
         :param state: -
@@ -6821,9 +6821,9 @@ class IStateMachine(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity custom permissions.
 
         :param identity: The principal.
@@ -6834,9 +6834,9 @@ class IStateMachine(
     @jsii.member(jsii_name="grantExecution")
     def grant_execution(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions for all executions of a state machine.
 
         :param identity: The principal.
@@ -6845,7 +6845,7 @@ class IStateMachine(
         ...
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity read permissions for this state machine.
 
         :param identity: The principal.
@@ -6855,8 +6855,8 @@ class IStateMachine(
     @jsii.member(jsii_name="grantRedriveExecution")
     def grant_redrive_execution(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permission to redrive the execution of the state machine.
 
         :param identity: The principal.
@@ -6864,7 +6864,10 @@ class IStateMachine(
         ...
 
     @jsii.member(jsii_name="grantStartExecution")
-    def grant_start_execution(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_start_execution(
+        self,
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to start an execution of this state machine.
 
         :param identity: The principal.
@@ -6874,8 +6877,8 @@ class IStateMachine(
     @jsii.member(jsii_name="grantStartSyncExecution")
     def grant_start_sync_execution(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to start a synchronous execution of this state machine.
 
         :param identity: The principal.
@@ -6883,7 +6886,10 @@ class IStateMachine(
         ...
 
     @jsii.member(jsii_name="grantTaskResponse")
-    def grant_task_response(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_task_response(
+        self,
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity read permissions for this state machine.
 
         :param identity: The principal.
@@ -6900,14 +6906,14 @@ class IStateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this State Machine's executions.
 
         :param metric_name: -
@@ -6937,14 +6943,14 @@ class IStateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that were aborted.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -6973,14 +6979,14 @@ class IStateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that failed.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7009,14 +7015,14 @@ class IStateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that were started.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7045,14 +7051,14 @@ class IStateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that succeeded.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7081,14 +7087,14 @@ class IStateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that were throttled.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7117,14 +7123,14 @@ class IStateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the interval, in milliseconds, between the time the execution starts and the time it closes.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7153,14 +7159,14 @@ class IStateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that timed out.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7202,9 +7208,9 @@ class _IStateMachineProxy(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity custom permissions.
 
         :param identity: The principal.
@@ -7214,14 +7220,14 @@ class _IStateMachineProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__330377705d17e346007692578b485457a023c38351a46c6e22975a8a2b8192ae)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [identity, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [identity, *actions]))
 
     @jsii.member(jsii_name="grantExecution")
     def grant_execution(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions for all executions of a state machine.
 
         :param identity: The principal.
@@ -7231,10 +7237,10 @@ class _IStateMachineProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__31bd3fa2600dc4d3bf5687e9b4e868f708b68f607efbd2cfa7fb5f71fba15756)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantExecution", [identity, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantExecution", [identity, *actions]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity read permissions for this state machine.
 
         :param identity: The principal.
@@ -7242,13 +7248,13 @@ class _IStateMachineProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__67aefd85a78dbc72556e294ed43f407d7fe2e40185f6dcefcda2b91bce4a9e6c)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [identity]))
 
     @jsii.member(jsii_name="grantRedriveExecution")
     def grant_redrive_execution(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permission to redrive the execution of the state machine.
 
         :param identity: The principal.
@@ -7256,10 +7262,13 @@ class _IStateMachineProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1263659f24791988667803166a24080d04a876b31403b25165aea620a8e4fbaa)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRedriveExecution", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRedriveExecution", [identity]))
 
     @jsii.member(jsii_name="grantStartExecution")
-    def grant_start_execution(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_start_execution(
+        self,
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to start an execution of this state machine.
 
         :param identity: The principal.
@@ -7267,13 +7276,13 @@ class _IStateMachineProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b84edd8c4dd517d793cea8632f963ea68ac72a33187299a17ff7549b1e1dc14d)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStartExecution", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStartExecution", [identity]))
 
     @jsii.member(jsii_name="grantStartSyncExecution")
     def grant_start_sync_execution(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to start a synchronous execution of this state machine.
 
         :param identity: The principal.
@@ -7281,10 +7290,13 @@ class _IStateMachineProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__92ed05a6f0e60c0385d1fe8dff7aa6ee6308b0dbdec64f6f70f98b5d1fdf23ed)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStartSyncExecution", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStartSyncExecution", [identity]))
 
     @jsii.member(jsii_name="grantTaskResponse")
-    def grant_task_response(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_task_response(
+        self,
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity read permissions for this state machine.
 
         :param identity: The principal.
@@ -7292,7 +7304,7 @@ class _IStateMachineProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__789a3eccb8c002cee01668ce309a302eced31df5999f98457203940330528ab4)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantTaskResponse", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantTaskResponse", [identity]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -7304,14 +7316,14 @@ class _IStateMachineProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this State Machine's executions.
 
         :param metric_name: -
@@ -7348,7 +7360,7 @@ class _IStateMachineProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricAborted")
     def metric_aborted(
@@ -7359,14 +7371,14 @@ class _IStateMachineProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that were aborted.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7399,7 +7411,7 @@ class _IStateMachineProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricAborted", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricAborted", [props]))
 
     @jsii.member(jsii_name="metricFailed")
     def metric_failed(
@@ -7410,14 +7422,14 @@ class _IStateMachineProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that failed.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7450,7 +7462,7 @@ class _IStateMachineProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricFailed", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricFailed", [props]))
 
     @jsii.member(jsii_name="metricStarted")
     def metric_started(
@@ -7461,14 +7473,14 @@ class _IStateMachineProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that were started.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7501,7 +7513,7 @@ class _IStateMachineProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricStarted", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricStarted", [props]))
 
     @jsii.member(jsii_name="metricSucceeded")
     def metric_succeeded(
@@ -7512,14 +7524,14 @@ class _IStateMachineProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that succeeded.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7552,7 +7564,7 @@ class _IStateMachineProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSucceeded", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSucceeded", [props]))
 
     @jsii.member(jsii_name="metricThrottled")
     def metric_throttled(
@@ -7563,14 +7575,14 @@ class _IStateMachineProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that were throttled.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7603,7 +7615,7 @@ class _IStateMachineProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricThrottled", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricThrottled", [props]))
 
     @jsii.member(jsii_name="metricTime")
     def metric_time(
@@ -7614,14 +7626,14 @@ class _IStateMachineProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the interval, in milliseconds, between the time the execution starts and the time it closes.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7654,7 +7666,7 @@ class _IStateMachineProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTime", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricTime", [props]))
 
     @jsii.member(jsii_name="metricTimedOut")
     def metric_timed_out(
@@ -7665,14 +7677,14 @@ class _IStateMachineProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that timed out.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -7705,7 +7717,7 @@ class _IStateMachineProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTimedOut", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricTimedOut", [props]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IStateMachine).__jsii_proxy_class__ = lambda : _IStateMachineProxy
@@ -8014,7 +8026,7 @@ class ItemReaderProps:
     def __init__(
         self,
         *,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         bucket_name_path: typing.Optional[builtins.str] = None,
         max_items: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -8055,7 +8067,7 @@ class ItemReaderProps:
             self._values["max_items"] = max_items
 
     @builtins.property
-    def bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''S3 Bucket containing objects to iterate over or a file with a list to iterate over.
 
         :default: - S3 bucket will be determined from
@@ -8063,7 +8075,7 @@ class ItemReaderProps:
         :see: bucketNamePath
         '''
         result = self._values.get("bucket")
-        return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     @builtins.property
     def bucket_name_path(self) -> typing.Optional[builtins.str]:
@@ -8481,7 +8493,7 @@ class JsonPath(
 
     @jsii.member(jsii_name="objectAt")
     @builtins.classmethod
-    def object_at(cls, path: builtins.str) -> _IResolvable_da3f097b:
+    def object_at(cls, path: builtins.str) -> "_IResolvable_da3f097b":
         '''Reference a complete (complex) object in a JSON path location.
 
         :param path: -
@@ -8489,7 +8501,7 @@ class JsonPath(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7664cbc5a31ad0f20576e6a4f0186b6bc4c3f582ca1f2a5e05e6947613b85107)
             check_type(argname="argument path", value=path, expected_type=type_hints["path"])
-        return typing.cast(_IResolvable_da3f097b, jsii.sinvoke(cls, "objectAt", [path]))
+        return typing.cast("_IResolvable_da3f097b", jsii.sinvoke(cls, "objectAt", [path]))
 
     @jsii.member(jsii_name="stringAt")
     @builtins.classmethod
@@ -8527,7 +8539,7 @@ class JsonPath(
 
     @jsii.member(jsii_name="stringToJson")
     @builtins.classmethod
-    def string_to_json(cls, json_string: builtins.str) -> _IResolvable_da3f097b:
+    def string_to_json(cls, json_string: builtins.str) -> "_IResolvable_da3f097b":
         '''Make an intrinsic States.StringToJson expression.
 
         During the execution of the Step Functions state machine, parse the given
@@ -8544,7 +8556,7 @@ class JsonPath(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ad3c4072377fc7d5595082ca2f09f08e9f4d6f6919262abf3916a57efba60e27)
             check_type(argname="argument json_string", value=json_string, expected_type=type_hints["json_string"])
-        return typing.cast(_IResolvable_da3f097b, jsii.sinvoke(cls, "stringToJson", [json_string]))
+        return typing.cast("_IResolvable_da3f097b", jsii.sinvoke(cls, "stringToJson", [json_string]))
 
     @jsii.member(jsii_name="uuid")
     @builtins.classmethod
@@ -8929,9 +8941,9 @@ class LogOptions:
     def __init__(
         self,
         *,
-        destination: typing.Optional[_ILogGroup_3c4fa718] = None,
+        destination: typing.Optional["_ILogGroup_3c4fa718"] = None,
         include_execution_data: typing.Optional[builtins.bool] = None,
-        level: typing.Optional[LogLevel] = None,
+        level: typing.Optional["LogLevel"] = None,
     ) -> None:
         '''Defines what execution history events are logged and where they are logged.
 
@@ -8972,13 +8984,13 @@ class LogOptions:
             self._values["level"] = level
 
     @builtins.property
-    def destination(self) -> typing.Optional[_ILogGroup_3c4fa718]:
+    def destination(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
         '''The log group where the execution history events will be logged.
 
         :default: No log group. Required if your log level is not set to OFF.
         '''
         result = self._values.get("destination")
-        return typing.cast(typing.Optional[_ILogGroup_3c4fa718], result)
+        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
 
     @builtins.property
     def include_execution_data(self) -> typing.Optional[builtins.bool]:
@@ -8990,13 +9002,13 @@ class LogOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def level(self) -> typing.Optional[LogLevel]:
+    def level(self) -> typing.Optional["LogLevel"]:
         '''Defines which category of execution history events are logged.
 
         :default: ERROR
         '''
         result = self._values.get("level")
-        return typing.cast(typing.Optional[LogLevel], result)
+        return typing.cast(typing.Optional["LogLevel"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9778,7 +9790,7 @@ class ResultWriter(
     def __init__(
         self,
         *,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         prefix: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -9792,17 +9804,17 @@ class ResultWriter(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="providePolicyStatements")
-    def provide_policy_statements(self) -> typing.List[_PolicyStatement_0fe33853]:
+    def provide_policy_statements(self) -> typing.List["_PolicyStatement_0fe33853"]:
         '''(deprecated) Compile policy statements to provide relevent permissions to the state machine.
 
         :stability: deprecated
         '''
-        return typing.cast(typing.List[_PolicyStatement_0fe33853], jsii.invoke(self, "providePolicyStatements", []))
+        return typing.cast(typing.List["_PolicyStatement_0fe33853"], jsii.invoke(self, "providePolicyStatements", []))
 
     @jsii.member(jsii_name="render")
     def render(
         self,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Any:
         '''(deprecated) Render ResultWriter in ASL JSON format.
 
@@ -9817,12 +9829,12 @@ class ResultWriter(
 
     @builtins.property
     @jsii.member(jsii_name="bucket")
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''(deprecated) S3 Bucket in which to save Map Run results.
 
         :stability: deprecated
         '''
-        return typing.cast(_IBucket_42e086fd, jsii.get(self, "bucket"))
+        return typing.cast("_IBucket_42e086fd", jsii.get(self, "bucket"))
 
     @builtins.property
     @jsii.member(jsii_name="prefix")
@@ -9845,7 +9857,7 @@ class ResultWriterProps:
     def __init__(
         self,
         *,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         prefix: typing.Optional[builtins.str] = None,
     ) -> None:
         '''(deprecated) Interface for Result Writer configuration props.
@@ -9885,14 +9897,14 @@ class ResultWriterProps:
             self._values["prefix"] = prefix
 
     @builtins.property
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''(deprecated) S3 Bucket in which to save Map Run results.
 
         :stability: deprecated
         '''
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
     def prefix(self) -> typing.Optional[builtins.str]:
@@ -9956,7 +9968,7 @@ class ResultWriterV2(
     def __init__(
         self,
         *,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         bucket_name_path: typing.Optional[builtins.str] = None,
         prefix: typing.Optional[builtins.str] = None,
         writer_config: typing.Optional["WriterConfig"] = None,
@@ -9977,14 +9989,14 @@ class ResultWriterV2(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="providePolicyStatements")
-    def provide_policy_statements(self) -> typing.List[_PolicyStatement_0fe33853]:
+    def provide_policy_statements(self) -> typing.List["_PolicyStatement_0fe33853"]:
         '''Compile policy statements to provide relevent permissions to the state machine.'''
-        return typing.cast(typing.List[_PolicyStatement_0fe33853], jsii.invoke(self, "providePolicyStatements", []))
+        return typing.cast(typing.List["_PolicyStatement_0fe33853"], jsii.invoke(self, "providePolicyStatements", []))
 
     @jsii.member(jsii_name="render")
     def render(
         self,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Any:
         '''Render ResultWriter in ASL JSON format.
 
@@ -10005,9 +10017,9 @@ class ResultWriterV2(
 
     @builtins.property
     @jsii.member(jsii_name="bucket")
-    def bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''S3 Bucket in which to save Map Run results.'''
-        return typing.cast(typing.Optional[_IBucket_42e086fd], jsii.get(self, "bucket"))
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], jsii.get(self, "bucket"))
 
     @builtins.property
     @jsii.member(jsii_name="bucketNamePath")
@@ -10045,7 +10057,7 @@ class ResultWriterV2Props:
     def __init__(
         self,
         *,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         bucket_name_path: typing.Optional[builtins.str] = None,
         prefix: typing.Optional[builtins.str] = None,
         writer_config: typing.Optional["WriterConfig"] = None,
@@ -10098,13 +10110,13 @@ class ResultWriterV2Props:
             self._values["writer_config"] = writer_config
 
     @builtins.property
-    def bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''S3 Bucket in which to save Map Run results.
 
         :default: - specify a bucket
         '''
         result = self._values.get("bucket")
-        return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     @builtins.property
     def bucket_name_path(self) -> typing.Optional[builtins.str]:
@@ -10163,10 +10175,10 @@ class RetryProps:
         *,
         backoff_rate: typing.Optional[jsii.Number] = None,
         errors: typing.Optional[typing.Sequence[builtins.str]] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
-        jitter_strategy: typing.Optional[JitterType] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
+        jitter_strategy: typing.Optional["JitterType"] = None,
         max_attempts: typing.Optional[jsii.Number] = None,
-        max_delay: typing.Optional[_Duration_4839e8c3] = None,
+        max_delay: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Retry details.
 
@@ -10250,22 +10262,22 @@ class RetryProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def interval(self) -> typing.Optional[_Duration_4839e8c3]:
+    def interval(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''How many seconds to wait initially before retrying.
 
         :default: Duration.seconds(1)
         '''
         result = self._values.get("interval")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def jitter_strategy(self) -> typing.Optional[JitterType]:
+    def jitter_strategy(self) -> typing.Optional["JitterType"]:
         '''Introduces a randomization over the retry interval.
 
         :default: - No jitter strategy
         '''
         result = self._values.get("jitter_strategy")
-        return typing.cast(typing.Optional[JitterType], result)
+        return typing.cast(typing.Optional["JitterType"], result)
 
     @builtins.property
     def max_attempts(self) -> typing.Optional[jsii.Number]:
@@ -10280,13 +10292,13 @@ class RetryProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def max_delay(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_delay(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Maximum limit on retry interval growth during exponential backoff.
 
         :default: - No max delay
         '''
         result = self._values.get("max_delay")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10334,10 +10346,10 @@ class S3CsvItemReader(
     def __init__(
         self,
         *,
-        csv_delimiter: typing.Optional[CsvDelimiter] = None,
-        csv_headers: typing.Optional[CsvHeaders] = None,
+        csv_delimiter: typing.Optional["CsvDelimiter"] = None,
+        csv_headers: typing.Optional["CsvHeaders"] = None,
         key: builtins.str,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         bucket_name_path: typing.Optional[builtins.str] = None,
         max_items: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -10361,14 +10373,14 @@ class S3CsvItemReader(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="providePolicyStatements")
-    def provide_policy_statements(self) -> typing.List[_PolicyStatement_0fe33853]:
+    def provide_policy_statements(self) -> typing.List["_PolicyStatement_0fe33853"]:
         '''Compile policy statements to provide relevent permissions to the state machine.'''
-        return typing.cast(typing.List[_PolicyStatement_0fe33853], jsii.invoke(self, "providePolicyStatements", []))
+        return typing.cast(typing.List["_PolicyStatement_0fe33853"], jsii.invoke(self, "providePolicyStatements", []))
 
     @jsii.member(jsii_name="render")
     def render(
         self,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Any:
         '''Renders the ItemReader configuration as JSON object.
 
@@ -10389,15 +10401,15 @@ class S3CsvItemReader(
 
     @builtins.property
     @jsii.member(jsii_name="bucket")
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''S3 Bucket containing a file with a list to iterate over.'''
-        return typing.cast(_IBucket_42e086fd, jsii.get(self, "bucket"))
+        return typing.cast("_IBucket_42e086fd", jsii.get(self, "bucket"))
 
     @builtins.property
     @jsii.member(jsii_name="csvHeaders")
-    def csv_headers(self) -> CsvHeaders:
+    def csv_headers(self) -> "CsvHeaders":
         '''CSV headers configuration.'''
-        return typing.cast(CsvHeaders, jsii.get(self, "csvHeaders"))
+        return typing.cast("CsvHeaders", jsii.get(self, "csvHeaders"))
 
     @builtins.property
     @jsii.member(jsii_name="inputType")
@@ -10424,9 +10436,9 @@ class S3CsvItemReader(
 
     @builtins.property
     @jsii.member(jsii_name="csvDelimiter")
-    def csv_delimiter(self) -> typing.Optional[CsvDelimiter]:
+    def csv_delimiter(self) -> typing.Optional["CsvDelimiter"]:
         '''Delimiter used in CSV file.'''
-        return typing.cast(typing.Optional[CsvDelimiter], jsii.get(self, "csvDelimiter"))
+        return typing.cast(typing.Optional["CsvDelimiter"], jsii.get(self, "csvDelimiter"))
 
     @builtins.property
     @jsii.member(jsii_name="maxItems")
@@ -10452,7 +10464,7 @@ class S3FileItemReaderProps(ItemReaderProps):
     def __init__(
         self,
         *,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         bucket_name_path: typing.Optional[builtins.str] = None,
         max_items: typing.Optional[jsii.Number] = None,
         key: builtins.str,
@@ -10514,7 +10526,7 @@ class S3FileItemReaderProps(ItemReaderProps):
             self._values["max_items"] = max_items
 
     @builtins.property
-    def bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''S3 Bucket containing objects to iterate over or a file with a list to iterate over.
 
         :default: - S3 bucket will be determined from
@@ -10522,7 +10534,7 @@ class S3FileItemReaderProps(ItemReaderProps):
         :see: bucketNamePath
         '''
         result = self._values.get("bucket")
-        return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     @builtins.property
     def bucket_name_path(self) -> typing.Optional[builtins.str]:
@@ -10608,7 +10620,7 @@ class S3JsonItemReader(
         self,
         *,
         key: builtins.str,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         bucket_name_path: typing.Optional[builtins.str] = None,
         max_items: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -10628,14 +10640,14 @@ class S3JsonItemReader(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="providePolicyStatements")
-    def provide_policy_statements(self) -> typing.List[_PolicyStatement_0fe33853]:
+    def provide_policy_statements(self) -> typing.List["_PolicyStatement_0fe33853"]:
         '''Compile policy statements to provide relevent permissions to the state machine.'''
-        return typing.cast(typing.List[_PolicyStatement_0fe33853], jsii.invoke(self, "providePolicyStatements", []))
+        return typing.cast(typing.List["_PolicyStatement_0fe33853"], jsii.invoke(self, "providePolicyStatements", []))
 
     @jsii.member(jsii_name="render")
     def render(
         self,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Any:
         '''Renders the ItemReader configuration as JSON object.
 
@@ -10658,9 +10670,9 @@ class S3JsonItemReader(
 
     @builtins.property
     @jsii.member(jsii_name="bucket")
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''S3 Bucket containing a file with a list to iterate over.'''
-        return typing.cast(_IBucket_42e086fd, jsii.get(self, "bucket"))
+        return typing.cast("_IBucket_42e086fd", jsii.get(self, "bucket"))
 
     @builtins.property
     @jsii.member(jsii_name="inputType")
@@ -10727,7 +10739,7 @@ class S3JsonLItemReader(
         self,
         *,
         key: builtins.str,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         bucket_name_path: typing.Optional[builtins.str] = None,
         max_items: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -10747,14 +10759,14 @@ class S3JsonLItemReader(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="providePolicyStatements")
-    def provide_policy_statements(self) -> typing.List[_PolicyStatement_0fe33853]:
+    def provide_policy_statements(self) -> typing.List["_PolicyStatement_0fe33853"]:
         '''Compile policy statements to provide relevent permissions to the state machine.'''
-        return typing.cast(typing.List[_PolicyStatement_0fe33853], jsii.invoke(self, "providePolicyStatements", []))
+        return typing.cast(typing.List["_PolicyStatement_0fe33853"], jsii.invoke(self, "providePolicyStatements", []))
 
     @jsii.member(jsii_name="render")
     def render(
         self,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Any:
         '''Renders the ItemReader configuration as JSON object.
 
@@ -10777,9 +10789,9 @@ class S3JsonLItemReader(
 
     @builtins.property
     @jsii.member(jsii_name="bucket")
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''S3 Bucket containing a file with a list to iterate over.'''
-        return typing.cast(_IBucket_42e086fd, jsii.get(self, "bucket"))
+        return typing.cast("_IBucket_42e086fd", jsii.get(self, "bucket"))
 
     @builtins.property
     @jsii.member(jsii_name="inputType")
@@ -10846,7 +10858,7 @@ class S3ManifestItemReader(
         self,
         *,
         key: builtins.str,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         bucket_name_path: typing.Optional[builtins.str] = None,
         max_items: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -10866,14 +10878,14 @@ class S3ManifestItemReader(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="providePolicyStatements")
-    def provide_policy_statements(self) -> typing.List[_PolicyStatement_0fe33853]:
+    def provide_policy_statements(self) -> typing.List["_PolicyStatement_0fe33853"]:
         '''Compile policy statements to provide relevent permissions to the state machine.'''
-        return typing.cast(typing.List[_PolicyStatement_0fe33853], jsii.invoke(self, "providePolicyStatements", []))
+        return typing.cast(typing.List["_PolicyStatement_0fe33853"], jsii.invoke(self, "providePolicyStatements", []))
 
     @jsii.member(jsii_name="render")
     def render(
         self,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Any:
         '''Renders the ItemReader configuration as JSON object.
 
@@ -10896,9 +10908,9 @@ class S3ManifestItemReader(
 
     @builtins.property
     @jsii.member(jsii_name="bucket")
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''S3 Bucket containing a file with a list to iterate over.'''
-        return typing.cast(_IBucket_42e086fd, jsii.get(self, "bucket"))
+        return typing.cast("_IBucket_42e086fd", jsii.get(self, "bucket"))
 
     @builtins.property
     @jsii.member(jsii_name="inputType")
@@ -10976,7 +10988,7 @@ class S3ObjectsItemReader(
         self,
         *,
         prefix: typing.Optional[builtins.str] = None,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         bucket_name_path: typing.Optional[builtins.str] = None,
         max_items: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -10996,14 +11008,14 @@ class S3ObjectsItemReader(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="providePolicyStatements")
-    def provide_policy_statements(self) -> typing.List[_PolicyStatement_0fe33853]:
+    def provide_policy_statements(self) -> typing.List["_PolicyStatement_0fe33853"]:
         '''Compile policy statements to provide relevent permissions to the state machine.'''
-        return typing.cast(typing.List[_PolicyStatement_0fe33853], jsii.invoke(self, "providePolicyStatements", []))
+        return typing.cast(typing.List["_PolicyStatement_0fe33853"], jsii.invoke(self, "providePolicyStatements", []))
 
     @jsii.member(jsii_name="render")
     def render(
         self,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Any:
         '''Renders the ItemReader configuration as JSON object.
 
@@ -11026,9 +11038,9 @@ class S3ObjectsItemReader(
 
     @builtins.property
     @jsii.member(jsii_name="bucket")
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''S3 Bucket containing objects to iterate over.'''
-        return typing.cast(_IBucket_42e086fd, jsii.get(self, "bucket"))
+        return typing.cast("_IBucket_42e086fd", jsii.get(self, "bucket"))
 
     @builtins.property
     @jsii.member(jsii_name="resource")
@@ -11075,7 +11087,7 @@ class S3ObjectsItemReaderProps(ItemReaderProps):
     def __init__(
         self,
         *,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         bucket_name_path: typing.Optional[builtins.str] = None,
         max_items: typing.Optional[jsii.Number] = None,
         prefix: typing.Optional[builtins.str] = None,
@@ -11135,7 +11147,7 @@ class S3ObjectsItemReaderProps(ItemReaderProps):
             self._values["prefix"] = prefix
 
     @builtins.property
-    def bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''S3 Bucket containing objects to iterate over or a file with a list to iterate over.
 
         :default: - S3 bucket will be determined from
@@ -11143,7 +11155,7 @@ class S3ObjectsItemReaderProps(ItemReaderProps):
         :see: bucketNamePath
         '''
         result = self._values.get("bucket")
-        return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     @builtins.property
     def bucket_name_path(self) -> typing.Optional[builtins.str]:
@@ -11217,14 +11229,14 @@ class State(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -11272,7 +11284,7 @@ class State(
     def filter_nextables(
         cls,
         states: typing.Sequence["State"],
-    ) -> typing.List[INextable]:
+    ) -> typing.List["INextable"]:
         '''Return only the states that allow chaining from an array of states.
 
         :param states: -
@@ -11280,7 +11292,7 @@ class State(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a8285bd9e997c66a751e5455febad37743a69532169b26fb46600526e58ae970)
             check_type(argname="argument states", value=states, expected_type=type_hints["states"])
-        return typing.cast(typing.List[INextable], jsii.sinvoke(cls, "filterNextables", [states]))
+        return typing.cast(typing.List["INextable"], jsii.sinvoke(cls, "filterNextables", [states]))
 
     @jsii.member(jsii_name="findReachableEndStates")
     @builtins.classmethod
@@ -11328,7 +11340,7 @@ class State(
     @builtins.classmethod
     def prefix_states(
         cls,
-        root: _constructs_77d1e7e8.IConstruct,
+        root: "_constructs_77d1e7e8.IConstruct",
         prefix: builtins.str,
     ) -> None:
         '''Add a prefix to the stateId of all States found in a construct tree.
@@ -11356,7 +11368,7 @@ class State(
     @jsii.member(jsii_name="addChoice")
     def _add_choice(
         self,
-        condition: Condition,
+        condition: "Condition",
         next: "State",
         *,
         comment: typing.Optional[builtins.str] = None,
@@ -11386,8 +11398,8 @@ class State(
         self,
         processor: "StateGraph",
         *,
-        execution_type: typing.Optional[ProcessorType] = None,
-        mode: typing.Optional[ProcessorMode] = None,
+        execution_type: typing.Optional["ProcessorType"] = None,
+        mode: typing.Optional["ProcessorMode"] = None,
     ) -> None:
         '''Add a item processor to this state.
 
@@ -11463,7 +11475,7 @@ class State(
     @jsii.member(jsii_name="renderAssign")
     def _render_assign(
         self,
-        top_level_query_language: typing.Optional[QueryLanguage] = None,
+        top_level_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Any:
         '''Render the assign in ASL JSON format.
 
@@ -11482,7 +11494,7 @@ class State(
     @jsii.member(jsii_name="renderChoices")
     def _render_choices(
         self,
-        top_level_query_language: typing.Optional[QueryLanguage] = None,
+        top_level_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Any:
         '''Render the choices in ASL JSON format.
 
@@ -11516,7 +11528,7 @@ class State(
     @jsii.member(jsii_name="renderQueryLanguage")
     def _render_query_language(
         self,
-        top_level_query_language: typing.Optional[QueryLanguage] = None,
+        top_level_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Any:
         '''Render QueryLanguage in ASL JSON format if needed.
 
@@ -11535,7 +11547,7 @@ class State(
     @jsii.member(jsii_name="renderRetryCatch")
     def _render_retry_catch(
         self,
-        top_level_query_language: typing.Optional[QueryLanguage] = None,
+        top_level_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Any:
         '''Render error recovery options in ASL JSON format.
 
@@ -11550,7 +11562,7 @@ class State(
     @abc.abstractmethod
     def to_state_json(
         self,
-        state_machine_query_language: typing.Optional[QueryLanguage] = None,
+        state_machine_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Render the state as JSON.
 
@@ -11584,7 +11596,7 @@ class State(
     @builtins.property
     @jsii.member(jsii_name="endStates")
     @abc.abstractmethod
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''Continuable states of this Chainable.'''
         ...
 
@@ -11643,8 +11655,8 @@ class State(
 
     @builtins.property
     @jsii.member(jsii_name="queryLanguage")
-    def _query_language(self) -> typing.Optional[QueryLanguage]:
-        return typing.cast(typing.Optional[QueryLanguage], jsii.get(self, "queryLanguage"))
+    def _query_language(self) -> typing.Optional["QueryLanguage"]:
+        return typing.cast(typing.Optional["QueryLanguage"], jsii.get(self, "queryLanguage"))
 
     @builtins.property
     @jsii.member(jsii_name="resultPath")
@@ -11701,11 +11713,11 @@ class State(
 
     @builtins.property
     @jsii.member(jsii_name="processorConfig")
-    def _processor_config(self) -> typing.Optional[ProcessorConfig]:
-        return typing.cast(typing.Optional[ProcessorConfig], jsii.get(self, "processorConfig"))
+    def _processor_config(self) -> typing.Optional["ProcessorConfig"]:
+        return typing.cast(typing.Optional["ProcessorConfig"], jsii.get(self, "processorConfig"))
 
     @_processor_config.setter
-    def _processor_config(self, value: typing.Optional[ProcessorConfig]) -> None:
+    def _processor_config(self, value: typing.Optional["ProcessorConfig"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2064eb72a766ce7c2f9e0be9e43dd6ea46736ba5dd83721de5468681035dcb9f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -11713,11 +11725,11 @@ class State(
 
     @builtins.property
     @jsii.member(jsii_name="processorMode")
-    def _processor_mode(self) -> typing.Optional[ProcessorMode]:
-        return typing.cast(typing.Optional[ProcessorMode], jsii.get(self, "processorMode"))
+    def _processor_mode(self) -> typing.Optional["ProcessorMode"]:
+        return typing.cast(typing.Optional["ProcessorMode"], jsii.get(self, "processorMode"))
 
     @_processor_mode.setter
-    def _processor_mode(self, value: typing.Optional[ProcessorMode]) -> None:
+    def _processor_mode(self, value: typing.Optional["ProcessorMode"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2607af153540f000865a3d1354fc0086931cc826a2328eb0ae249231c9c35ef2)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -11728,7 +11740,7 @@ class _StateProxy(State):
     @jsii.member(jsii_name="toStateJson")
     def to_state_json(
         self,
-        state_machine_query_language: typing.Optional[QueryLanguage] = None,
+        state_machine_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Render the state as JSON.
 
@@ -11741,9 +11753,9 @@ class _StateProxy(State):
 
     @builtins.property
     @jsii.member(jsii_name="endStates")
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''Continuable states of this Chainable.'''
-        return typing.cast(typing.List[INextable], jsii.get(self, "endStates"))
+        return typing.cast(typing.List["INextable"], jsii.get(self, "endStates"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, State).__jsii_proxy_class__ = lambda : _StateProxy
@@ -11763,7 +11775,7 @@ class StateBaseProps:
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties shared by all states.
@@ -11809,7 +11821,7 @@ class StateBaseProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -11818,7 +11830,7 @@ class StateBaseProps:
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -11879,7 +11891,7 @@ class StateGraph(
         state_graph = stepfunctions.StateGraph(state, "graphDescription")
     '''
 
-    def __init__(self, start_state: State, graph_description: builtins.str) -> None:
+    def __init__(self, start_state: "State", graph_description: builtins.str) -> None:
         '''
         :param start_state: state that gets executed when the state machine is launched.
         :param graph_description: description of the state machine.
@@ -11902,7 +11914,7 @@ class StateGraph(
         return typing.cast(None, jsii.invoke(self, "bind", [state_machine]))
 
     @jsii.member(jsii_name="registerPolicyStatement")
-    def register_policy_statement(self, statement: _PolicyStatement_0fe33853) -> None:
+    def register_policy_statement(self, statement: "_PolicyStatement_0fe33853") -> None:
         '''Register a Policy Statement used by states in this graph.
 
         :param statement: -
@@ -11913,7 +11925,7 @@ class StateGraph(
         return typing.cast(None, jsii.invoke(self, "registerPolicyStatement", [statement]))
 
     @jsii.member(jsii_name="registerState")
-    def register_state(self, state: State) -> None:
+    def register_state(self, state: "State") -> None:
         '''Register a state as part of this graph.
 
         Called by State.bindToGraph().
@@ -11941,7 +11953,7 @@ class StateGraph(
     @jsii.member(jsii_name="toGraphJson")
     def to_graph_json(
         self,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Return the Amazon States Language JSON for this graph.
 
@@ -11959,19 +11971,19 @@ class StateGraph(
 
     @builtins.property
     @jsii.member(jsii_name="policyStatements")
-    def policy_statements(self) -> typing.List[_PolicyStatement_0fe33853]:
+    def policy_statements(self) -> typing.List["_PolicyStatement_0fe33853"]:
         '''The accumulated policy statements.'''
-        return typing.cast(typing.List[_PolicyStatement_0fe33853], jsii.get(self, "policyStatements"))
+        return typing.cast(typing.List["_PolicyStatement_0fe33853"], jsii.get(self, "policyStatements"))
 
     @builtins.property
     @jsii.member(jsii_name="startState")
-    def start_state(self) -> State:
+    def start_state(self) -> "State":
         '''state that gets executed when the state machine is launched.'''
-        return typing.cast(State, jsii.get(self, "startState"))
+        return typing.cast("State", jsii.get(self, "startState"))
 
     @builtins.property
     @jsii.member(jsii_name="timeout")
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Set a timeout to render into the graph JSON.
 
         Read/write. Only makes sense on the top-level graph, subgraphs
@@ -11979,10 +11991,10 @@ class StateGraph(
 
         :default: No timeout
         '''
-        return typing.cast(typing.Optional[_Duration_4839e8c3], jsii.get(self, "timeout"))
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], jsii.get(self, "timeout"))
 
     @timeout.setter
-    def timeout(self, value: typing.Optional[_Duration_4839e8c3]) -> None:
+    def timeout(self, value: typing.Optional["_Duration_4839e8c3"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0d70fd99dfd053938f6857187678eff1538a49411584203816fe1ee6e2e95a57)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -12023,21 +12035,21 @@ class StateMachine(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
-        definition: typing.Optional[IChainable] = None,
-        definition_body: typing.Optional[DefinitionBody] = None,
+        definition: typing.Optional["IChainable"] = None,
+        definition_body: typing.Optional["DefinitionBody"] = None,
         definition_substitutions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        encryption_configuration: typing.Optional[EncryptionConfiguration] = None,
-        logs: typing.Optional[typing.Union[LogOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        encryption_configuration: typing.Optional["EncryptionConfiguration"] = None,
+        logs: typing.Optional[typing.Union["LogOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         state_machine_name: typing.Optional[builtins.str] = None,
         state_machine_type: typing.Optional["StateMachineType"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         tracing_enabled: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''
@@ -12083,10 +12095,10 @@ class StateMachine(
     @builtins.classmethod
     def from_state_machine_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         state_machine_arn: builtins.str,
-    ) -> IStateMachine:
+    ) -> "IStateMachine":
         '''Import a state machine.
 
         :param scope: -
@@ -12098,16 +12110,16 @@ class StateMachine(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument state_machine_arn", value=state_machine_arn, expected_type=type_hints["state_machine_arn"])
-        return typing.cast(IStateMachine, jsii.sinvoke(cls, "fromStateMachineArn", [scope, id, state_machine_arn]))
+        return typing.cast("IStateMachine", jsii.sinvoke(cls, "fromStateMachineArn", [scope, id, state_machine_arn]))
 
     @jsii.member(jsii_name="fromStateMachineName")
     @builtins.classmethod
     def from_state_machine_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         state_machine_name: builtins.str,
-    ) -> IStateMachine:
+    ) -> "IStateMachine":
         '''Import a state machine via resource name.
 
         :param scope: -
@@ -12119,10 +12131,10 @@ class StateMachine(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument state_machine_name", value=state_machine_name, expected_type=type_hints["state_machine_name"])
-        return typing.cast(IStateMachine, jsii.sinvoke(cls, "fromStateMachineName", [scope, id, state_machine_name]))
+        return typing.cast("IStateMachine", jsii.sinvoke(cls, "fromStateMachineName", [scope, id, state_machine_name]))
 
     @jsii.member(jsii_name="addToRolePolicy")
-    def add_to_role_policy(self, statement: _PolicyStatement_0fe33853) -> None:
+    def add_to_role_policy(self, statement: "_PolicyStatement_0fe33853") -> None:
         '''Add the given statement to the role's policy.
 
         :param statement: -
@@ -12135,9 +12147,9 @@ class StateMachine(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity custom permissions.
 
         :param identity: -
@@ -12147,14 +12159,14 @@ class StateMachine(
             type_hints = typing.get_type_hints(_typecheckingstub__4a379c65b3abf8422a7281124e586179178f0b3549b77f94825bb37365de34c5)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [identity, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [identity, *actions]))
 
     @jsii.member(jsii_name="grantExecution")
     def grant_execution(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions on all executions of the state machine.
 
         :param identity: -
@@ -12164,10 +12176,10 @@ class StateMachine(
             type_hints = typing.get_type_hints(_typecheckingstub__403096ab0bc513019435d412939f8df18641c1b52bfba18e821c391fa4b9024d)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantExecution", [identity, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantExecution", [identity, *actions]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to read results from state machine.
 
         :param identity: -
@@ -12175,13 +12187,13 @@ class StateMachine(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__de328dbf28de2be4ba9b61ea81bce4e6d383ec0968b0e914acb7378b694c7b96)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [identity]))
 
     @jsii.member(jsii_name="grantRedriveExecution")
     def grant_redrive_execution(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permission to redrive the execution of the state machine.
 
         :param identity: -
@@ -12189,10 +12201,13 @@ class StateMachine(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__105b46fe8f1d3a0f8f8d86eed1f7f5587ebf18870718ca73c5b57e8281defaf5)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRedriveExecution", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRedriveExecution", [identity]))
 
     @jsii.member(jsii_name="grantStartExecution")
-    def grant_start_execution(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_start_execution(
+        self,
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to start an execution of this state machine.
 
         :param identity: -
@@ -12200,13 +12215,13 @@ class StateMachine(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__efa2d941a46220f1692542e8c26652619270873ffe07f55fc9aa7a063799ed08)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStartExecution", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStartExecution", [identity]))
 
     @jsii.member(jsii_name="grantStartSyncExecution")
     def grant_start_sync_execution(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to start a synchronous execution of this state machine.
 
         :param identity: -
@@ -12214,10 +12229,13 @@ class StateMachine(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b1fc6bb22c960bfd2ca38ccc6a9922c3aadc1289dcf5bed18e2559bd0700d32e)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStartSyncExecution", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStartSyncExecution", [identity]))
 
     @jsii.member(jsii_name="grantTaskResponse")
-    def grant_task_response(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_task_response(
+        self,
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity task response permissions on a state machine.
 
         :param identity: -
@@ -12225,7 +12243,7 @@ class StateMachine(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__95b16d8608f524913e06d7166d119ec903318d80b6015288e92a06223a03e95a)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantTaskResponse", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantTaskResponse", [identity]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -12237,14 +12255,14 @@ class StateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this State Machine's executions.
 
         :param metric_name: -
@@ -12281,7 +12299,7 @@ class StateMachine(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricAborted")
     def metric_aborted(
@@ -12292,14 +12310,14 @@ class StateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that were aborted.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -12332,7 +12350,7 @@ class StateMachine(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricAborted", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricAborted", [props]))
 
     @jsii.member(jsii_name="metricFailed")
     def metric_failed(
@@ -12343,14 +12361,14 @@ class StateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that failed.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -12383,7 +12401,7 @@ class StateMachine(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricFailed", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricFailed", [props]))
 
     @jsii.member(jsii_name="metricStarted")
     def metric_started(
@@ -12394,14 +12412,14 @@ class StateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that were started.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -12434,7 +12452,7 @@ class StateMachine(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricStarted", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricStarted", [props]))
 
     @jsii.member(jsii_name="metricSucceeded")
     def metric_succeeded(
@@ -12445,14 +12463,14 @@ class StateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that succeeded.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -12485,7 +12503,7 @@ class StateMachine(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSucceeded", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSucceeded", [props]))
 
     @jsii.member(jsii_name="metricThrottled")
     def metric_throttled(
@@ -12496,14 +12514,14 @@ class StateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that were throttled.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -12536,7 +12554,7 @@ class StateMachine(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricThrottled", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricThrottled", [props]))
 
     @jsii.member(jsii_name="metricTime")
     def metric_time(
@@ -12547,14 +12565,14 @@ class StateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the interval, in milliseconds, between the time the execution starts and the time it closes.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -12587,7 +12605,7 @@ class StateMachine(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTime", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricTime", [props]))
 
     @jsii.member(jsii_name="metricTimedOut")
     def metric_timed_out(
@@ -12598,14 +12616,14 @@ class StateMachine(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of executions that timed out.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -12638,7 +12656,7 @@ class StateMachine(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTimedOut", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricTimedOut", [props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -12648,15 +12666,15 @@ class StateMachine(
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The principal this state machine is running as.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''Execution role of this state machine.'''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "role"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "role"))
 
     @builtins.property
     @jsii.member(jsii_name="stateMachineArn")
@@ -12675,9 +12693,9 @@ class StateMachine(
 
     @builtins.property
     @jsii.member(jsii_name="stateMachineRef")
-    def state_machine_ref(self) -> _StateMachineReference_db0983bb:
+    def state_machine_ref(self) -> "_StateMachineReference_db0983bb":
         '''A reference to a StateMachine resource.'''
-        return typing.cast(_StateMachineReference_db0983bb, jsii.get(self, "stateMachineRef"))
+        return typing.cast("_StateMachineReference_db0983bb", jsii.get(self, "stateMachineRef"))
 
     @builtins.property
     @jsii.member(jsii_name="stateMachineRevisionId")
@@ -12750,7 +12768,11 @@ class StateMachineFragment(
                 )
     '''
 
-    def __init__(self, scope: _constructs_77d1e7e8.Construct, id: builtins.str) -> None:
+    def __init__(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+    ) -> None:
         '''Creates a new construct node.
 
         :param scope: The scope in which to define this construct.
@@ -12763,7 +12785,7 @@ class StateMachineFragment(
         jsii.create(self.__class__, self, [scope, id])
 
     @jsii.member(jsii_name="next")
-    def next(self, next: IChainable) -> "Chain":
+    def next(self, next: "IChainable") -> "Chain":
         '''Continue normal execution with the given state.
 
         :param next: -
@@ -12801,7 +12823,7 @@ class StateMachineFragment(
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -12853,7 +12875,7 @@ class StateMachineFragment(
     @builtins.property
     @jsii.member(jsii_name="endStates")
     @abc.abstractmethod
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''The states to chain onto if this fragment is used.'''
         ...
 
@@ -12866,7 +12888,7 @@ class StateMachineFragment(
     @builtins.property
     @jsii.member(jsii_name="startState")
     @abc.abstractmethod
-    def start_state(self) -> State:
+    def start_state(self) -> "State":
         '''The start state of this state machine fragment.'''
         ...
 
@@ -12874,15 +12896,15 @@ class StateMachineFragment(
 class _StateMachineFragmentProxy(StateMachineFragment):
     @builtins.property
     @jsii.member(jsii_name="endStates")
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''The states to chain onto if this fragment is used.'''
-        return typing.cast(typing.List[INextable], jsii.get(self, "endStates"))
+        return typing.cast(typing.List["INextable"], jsii.get(self, "endStates"))
 
     @builtins.property
     @jsii.member(jsii_name="startState")
-    def start_state(self) -> State:
+    def start_state(self) -> "State":
         '''The start state of this state machine fragment.'''
-        return typing.cast(State, jsii.get(self, "startState"))
+        return typing.cast("State", jsii.get(self, "startState"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, StateMachineFragment).__jsii_proxy_class__ = lambda : _StateMachineFragmentProxy
@@ -12892,14 +12914,43 @@ class StateMachineGrants(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_stepfunctions.StateMachineGrants",
 ):
-    '''Collection of grant methods for a IStateMachineRef.'''
+    '''Collection of grant methods for a IStateMachineRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_stepfunctions as stepfunctions
+        from aws_cdk.interfaces import aws_stepfunctions as interfaces_stepfunctions
+        
+        # state_machine_ref: interfaces_stepfunctions.IStateMachineRef
+        
+        state_machine_grants = stepfunctions.StateMachineGrants.from_state_machine(state_machine_ref)
+    '''
+
+    @jsii.member(jsii_name="fromStateMachine")
+    @builtins.classmethod
+    def from_state_machine(
+        cls,
+        resource: "_IStateMachineRef_65490661",
+    ) -> "StateMachineGrants":
+        '''Creates grants for StateMachineGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__499a5e89de7380c7745bafb1a6b705c59b7857cd27a08356e6791849f03dc5c8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("StateMachineGrants", jsii.sinvoke(cls, "fromStateMachine", [resource]))
 
     @jsii.member(jsii_name="actions")
     def actions(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity custom permissions.
 
         :param identity: -
@@ -12909,14 +12960,14 @@ class StateMachineGrants(
             type_hints = typing.get_type_hints(_typecheckingstub__cf5f42d21e6d0b64d4ee2bcde2d74bd9b4f7249574f60308bf48d0877933f1cc)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "actions", [identity, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "actions", [identity, *actions]))
 
     @jsii.member(jsii_name="execution")
     def execution(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to start an execution of this state machine.
 
         :param grantee: The principal.
@@ -12926,10 +12977,10 @@ class StateMachineGrants(
             type_hints = typing.get_type_hints(_typecheckingstub__202f211546ecc2af49fb7ad52596cf81b25d3a26837e291ca0d3f3d7f2f90f46)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "execution", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "execution", [grantee, *actions]))
 
     @jsii.member(jsii_name="read")
-    def read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to read results from state machine.
 
         :param grantee: -
@@ -12937,10 +12988,10 @@ class StateMachineGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bb08fa6ada952f09683db57c2c3974467d820471582d4243f0ceff035b0d6ad3)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "read", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "read", [grantee]))
 
     @jsii.member(jsii_name="redriveExecution")
-    def redrive_execution(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def redrive_execution(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permission to redrive the execution of the state machine.
 
         :param grantee: -
@@ -12948,10 +12999,10 @@ class StateMachineGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__570f54251e220541e4bf36d9de7ccd1438bda41d3b3045f76aaf2f560f6a98f5)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "redriveExecution", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "redriveExecution", [grantee]))
 
     @jsii.member(jsii_name="startExecution")
-    def start_execution(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def start_execution(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to start an execution of this state machine.
 
         :param grantee: The principal.
@@ -12959,10 +13010,13 @@ class StateMachineGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d79ebeeb6e79c2f50527ddfb96b6f9e66a605d2e4981eb085319b9cdd20c3405)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "startExecution", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "startExecution", [grantee]))
 
     @jsii.member(jsii_name="startSyncExecution")
-    def start_sync_execution(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def start_sync_execution(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to start a synchronous execution of this state machine.
 
         :param grantee: The principal.
@@ -12970,10 +13024,10 @@ class StateMachineGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d88a2328c71da3d32259dad9c3bcdb267c0ff4a31279b91da9f02cf561412627)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "startSyncExecution", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "startSyncExecution", [grantee]))
 
     @jsii.member(jsii_name="taskResponse")
-    def task_response(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def task_response(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity task response permissions on a state machine.
 
         :param grantee: -
@@ -12981,12 +13035,12 @@ class StateMachineGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__780d72444143e550cd524e24d98cc675b9aaff09405978a0dfc0ffba7963d5bd)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "taskResponse", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "taskResponse", [grantee]))
 
     @builtins.property
     @jsii.member(jsii_name="resource")
-    def _resource(self) -> _IStateMachineRef_65490661:
-        return typing.cast(_IStateMachineRef_65490661, jsii.get(self, "resource"))
+    def _resource(self) -> "_IStateMachineRef_65490661":
+        return typing.cast("_IStateMachineRef_65490661", jsii.get(self, "resource"))
 
 
 @jsii.data_type(
@@ -12995,7 +13049,7 @@ class StateMachineGrants(
     name_mapping={"resource": "resource"},
 )
 class StateMachineGrantsProps:
-    def __init__(self, *, resource: _IStateMachineRef_65490661) -> None:
+    def __init__(self, *, resource: "_IStateMachineRef_65490661") -> None:
         '''Properties for StateMachineGrants.
 
         :param resource: The resource on which actions will be allowed.
@@ -13023,11 +13077,11 @@ class StateMachineGrantsProps:
         }
 
     @builtins.property
-    def resource(self) -> _IStateMachineRef_65490661:
+    def resource(self) -> "_IStateMachineRef_65490661":
         '''The resource on which actions will be allowed.'''
         result = self._values.get("resource")
         assert result is not None, "Required property 'resource' is missing"
-        return typing.cast(_IStateMachineRef_65490661, result)
+        return typing.cast("_IStateMachineRef_65490661", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13065,17 +13119,17 @@ class StateMachineProps:
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        definition: typing.Optional[IChainable] = None,
-        definition_body: typing.Optional[DefinitionBody] = None,
+        definition: typing.Optional["IChainable"] = None,
+        definition_body: typing.Optional["DefinitionBody"] = None,
         definition_substitutions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        encryption_configuration: typing.Optional[EncryptionConfiguration] = None,
-        logs: typing.Optional[typing.Union[LogOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        encryption_configuration: typing.Optional["EncryptionConfiguration"] = None,
+        logs: typing.Optional[typing.Union["LogOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         state_machine_name: typing.Optional[builtins.str] = None,
         state_machine_type: typing.Optional["StateMachineType"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         tracing_enabled: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Properties for defining a State Machine.
@@ -13172,7 +13226,7 @@ class StateMachineProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def definition(self) -> typing.Optional[IChainable]:
+    def definition(self) -> typing.Optional["IChainable"]:
         '''(deprecated) Definition for this state machine.
 
         :deprecated: use definitionBody: DefinitionBody.fromChainable()
@@ -13180,13 +13234,13 @@ class StateMachineProps:
         :stability: deprecated
         '''
         result = self._values.get("definition")
-        return typing.cast(typing.Optional[IChainable], result)
+        return typing.cast(typing.Optional["IChainable"], result)
 
     @builtins.property
-    def definition_body(self) -> typing.Optional[DefinitionBody]:
+    def definition_body(self) -> typing.Optional["DefinitionBody"]:
         '''Definition for this state machine.'''
         result = self._values.get("definition_body")
-        return typing.cast(typing.Optional[DefinitionBody], result)
+        return typing.cast(typing.Optional["DefinitionBody"], result)
 
     @builtins.property
     def definition_substitutions(
@@ -13197,25 +13251,25 @@ class StateMachineProps:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def encryption_configuration(self) -> typing.Optional[EncryptionConfiguration]:
+    def encryption_configuration(self) -> typing.Optional["EncryptionConfiguration"]:
         '''Configures server-side encryption of the state machine definition and execution history.
 
         :default: - data is transparently encrypted using an AWS owned key
         '''
         result = self._values.get("encryption_configuration")
-        return typing.cast(typing.Optional[EncryptionConfiguration], result)
+        return typing.cast(typing.Optional["EncryptionConfiguration"], result)
 
     @builtins.property
-    def logs(self) -> typing.Optional[LogOptions]:
+    def logs(self) -> typing.Optional["LogOptions"]:
         '''Defines what execution history events are logged and where they are logged.
 
         :default: No logging
         '''
         result = self._values.get("logs")
-        return typing.cast(typing.Optional[LogOptions], result)
+        return typing.cast(typing.Optional["LogOptions"], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state machine.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -13224,25 +13278,25 @@ class StateMachineProps:
         :default: - JSON_PATH
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy to apply to state machine.
 
         :default: RemovalPolicy.DESTROY
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The execution role for the state machine service.
 
         :default: A role is automatically created
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def state_machine_name(self) -> typing.Optional[builtins.str]:
@@ -13263,13 +13317,13 @@ class StateMachineProps:
         return typing.cast(typing.Optional["StateMachineType"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Maximum run time for this state machine.
 
         :default: No timeout
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def tracing_enabled(self) -> typing.Optional[builtins.bool]:
@@ -13354,7 +13408,7 @@ class StateProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -13460,7 +13514,7 @@ class StateProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -13469,7 +13523,7 @@ class StateProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -13629,14 +13683,14 @@ class StateTransitionMetric(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for the service's state transition metrics.
 
         :param metric_name: -
@@ -13673,7 +13727,7 @@ class StateTransitionMetric(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.sinvoke(cls, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricConsumedCapacity")
     @builtins.classmethod
@@ -13685,14 +13739,14 @@ class StateTransitionMetric(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of available state transitions per second.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -13725,7 +13779,7 @@ class StateTransitionMetric(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metricConsumedCapacity", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.sinvoke(cls, "metricConsumedCapacity", [props]))
 
     @jsii.member(jsii_name="metricProvisionedBucketSize")
     @builtins.classmethod
@@ -13737,14 +13791,14 @@ class StateTransitionMetric(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of available state transitions.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -13777,7 +13831,7 @@ class StateTransitionMetric(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metricProvisionedBucketSize", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.sinvoke(cls, "metricProvisionedBucketSize", [props]))
 
     @jsii.member(jsii_name="metricProvisionedRefillRate")
     @builtins.classmethod
@@ -13789,14 +13843,14 @@ class StateTransitionMetric(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the provisioned steady-state execution rate.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -13829,7 +13883,7 @@ class StateTransitionMetric(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metricProvisionedRefillRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.sinvoke(cls, "metricProvisionedRefillRate", [props]))
 
     @jsii.member(jsii_name="metricThrottledEvents")
     @builtins.classmethod
@@ -13841,14 +13895,14 @@ class StateTransitionMetric(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of throttled state transitions.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -13881,7 +13935,7 @@ class StateTransitionMetric(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metricThrottledEvents", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.sinvoke(cls, "metricThrottledEvents", [props]))
 
 
 class StringDefinitionBody(
@@ -13915,11 +13969,11 @@ class StringDefinitionBody(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
-        _sfn_principal: _IPrincipal_539bb2fd,
-        _sfn_props: typing.Union[StateMachineProps, typing.Dict[builtins.str, typing.Any]],
-        _graph: typing.Optional[StateGraph] = None,
-    ) -> DefinitionConfig:
+        _scope: "_constructs_77d1e7e8.Construct",
+        _sfn_principal: "_IPrincipal_539bb2fd",
+        _sfn_props: typing.Union["StateMachineProps", typing.Dict[builtins.str, typing.Any]],
+        _graph: typing.Optional["StateGraph"] = None,
+    ) -> "DefinitionConfig":
         '''
         :param _scope: -
         :param _sfn_principal: -
@@ -13932,7 +13986,7 @@ class StringDefinitionBody(
             check_type(argname="argument _sfn_principal", value=_sfn_principal, expected_type=type_hints["_sfn_principal"])
             check_type(argname="argument _sfn_props", value=_sfn_props, expected_type=type_hints["_sfn_props"])
             check_type(argname="argument _graph", value=_graph, expected_type=type_hints["_graph"])
-        return typing.cast(DefinitionConfig, jsii.invoke(self, "bind", [_scope, _sfn_principal, _sfn_props, _graph]))
+        return typing.cast("DefinitionConfig", jsii.invoke(self, "bind", [_scope, _sfn_principal, _sfn_props, _graph]))
 
     @builtins.property
     @jsii.member(jsii_name="body")
@@ -13958,11 +14012,11 @@ class Succeed(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -13997,11 +14051,11 @@ class Succeed(
     @builtins.classmethod
     def jsonata(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         outputs: typing.Any = None,
     ) -> "Succeed":
@@ -14033,11 +14087,11 @@ class Succeed(
     @builtins.classmethod
     def json_path(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -14071,7 +14125,7 @@ class Succeed(
     @jsii.member(jsii_name="toStateJson")
     def to_state_json(
         self,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Return the Amazon States Language object for this state.
 
@@ -14084,9 +14138,9 @@ class Succeed(
 
     @builtins.property
     @jsii.member(jsii_name="endStates")
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''Continuable states of this Chainable.'''
-        return typing.cast(typing.List[INextable], jsii.get(self, "endStates"))
+        return typing.cast(typing.List["INextable"], jsii.get(self, "endStates"))
 
 
 @jsii.data_type(
@@ -14105,7 +14159,7 @@ class SucceedJsonPathProps(StateBaseProps, JsonPathCommonOptions):
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -14163,7 +14217,7 @@ class SucceedJsonPathProps(StateBaseProps, JsonPathCommonOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -14172,7 +14226,7 @@ class SucceedJsonPathProps(StateBaseProps, JsonPathCommonOptions):
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -14234,7 +14288,7 @@ class SucceedJsonataProps(StateBaseProps, JsonataCommonOptions):
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         outputs: typing.Any = None,
     ) -> None:
@@ -14288,7 +14342,7 @@ class SucceedJsonataProps(StateBaseProps, JsonataCommonOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -14297,7 +14351,7 @@ class SucceedJsonataProps(StateBaseProps, JsonataCommonOptions):
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -14354,7 +14408,7 @@ class SucceedProps(StateBaseProps, JsonPathCommonOptions, JsonataCommonOptions):
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -14420,7 +14474,7 @@ class SucceedProps(StateBaseProps, JsonPathCommonOptions, JsonataCommonOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -14429,7 +14483,7 @@ class SucceedProps(StateBaseProps, JsonPathCommonOptions, JsonataCommonOptions):
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -14566,9 +14620,9 @@ class TaskInput(
 
     @builtins.property
     @jsii.member(jsii_name="type")
-    def type(self) -> InputType:
+    def type(self) -> "InputType":
         '''type of task input.'''
-        return typing.cast(InputType, jsii.get(self, "type"))
+        return typing.cast("InputType", jsii.get(self, "type"))
 
     @builtins.property
     @jsii.member(jsii_name="value")
@@ -14710,7 +14764,7 @@ class TaskRole(
 
     @jsii.member(jsii_name="fromRole")
     @builtins.classmethod
-    def from_role(cls, role: _IRole_235f5d8e) -> "TaskRole":
+    def from_role(cls, role: "_IRole_235f5d8e") -> "TaskRole":
         '''Construct a task role based on the provided IAM Role.
 
         :param role: IAM Role.
@@ -14786,20 +14840,20 @@ class TaskStateBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
-        credentials: typing.Optional[typing.Union[Credentials, typing.Dict[builtins.str, typing.Any]]] = None,
-        heartbeat: typing.Optional[_Duration_4839e8c3] = None,
+        credentials: typing.Optional[typing.Union["Credentials", typing.Dict[builtins.str, typing.Any]]] = None,
+        heartbeat: typing.Optional["_Duration_4839e8c3"] = None,
         heartbeat_timeout: typing.Optional["Timeout"] = None,
-        integration_pattern: typing.Optional[IntegrationPattern] = None,
+        integration_pattern: typing.Optional["IntegrationPattern"] = None,
         task_timeout: typing.Optional["Timeout"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -14851,7 +14905,7 @@ class TaskStateBase(
     @jsii.member(jsii_name="addCatch")
     def add_catch(
         self,
-        handler: IChainable,
+        handler: "IChainable",
         *,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         errors: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -14884,10 +14938,10 @@ class TaskStateBase(
         *,
         backoff_rate: typing.Optional[jsii.Number] = None,
         errors: typing.Optional[typing.Sequence[builtins.str]] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
-        jitter_strategy: typing.Optional[JitterType] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
+        jitter_strategy: typing.Optional["JitterType"] = None,
         max_attempts: typing.Optional[jsii.Number] = None,
-        max_delay: typing.Optional[_Duration_4839e8c3] = None,
+        max_delay: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "TaskStateBase":
         '''Add retry configuration for this state.
 
@@ -14922,14 +14976,14 @@ class TaskStateBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Task.
 
         :param metric_name: -
@@ -14966,7 +15020,7 @@ class TaskStateBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricFailed")
     def metric_failed(
@@ -14977,14 +15031,14 @@ class TaskStateBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of times this activity fails.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -15017,7 +15071,7 @@ class TaskStateBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricFailed", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricFailed", [props]))
 
     @jsii.member(jsii_name="metricHeartbeatTimedOut")
     def metric_heartbeat_timed_out(
@@ -15028,14 +15082,14 @@ class TaskStateBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of times the heartbeat times out for this activity.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -15068,7 +15122,7 @@ class TaskStateBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricHeartbeatTimedOut", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricHeartbeatTimedOut", [props]))
 
     @jsii.member(jsii_name="metricRunTime")
     def metric_run_time(
@@ -15079,14 +15133,14 @@ class TaskStateBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The interval, in milliseconds, between the time the Task starts and the time it closes.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -15119,7 +15173,7 @@ class TaskStateBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricRunTime", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricRunTime", [props]))
 
     @jsii.member(jsii_name="metricScheduled")
     def metric_scheduled(
@@ -15130,14 +15184,14 @@ class TaskStateBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of times this activity is scheduled.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -15170,7 +15224,7 @@ class TaskStateBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricScheduled", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricScheduled", [props]))
 
     @jsii.member(jsii_name="metricScheduleTime")
     def metric_schedule_time(
@@ -15181,14 +15235,14 @@ class TaskStateBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The interval, in milliseconds, for which the activity stays in the schedule state.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -15221,7 +15275,7 @@ class TaskStateBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricScheduleTime", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricScheduleTime", [props]))
 
     @jsii.member(jsii_name="metricStarted")
     def metric_started(
@@ -15232,14 +15286,14 @@ class TaskStateBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of times this activity is started.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -15272,7 +15326,7 @@ class TaskStateBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricStarted", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricStarted", [props]))
 
     @jsii.member(jsii_name="metricSucceeded")
     def metric_succeeded(
@@ -15283,14 +15337,14 @@ class TaskStateBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of times this activity succeeds.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -15323,7 +15377,7 @@ class TaskStateBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSucceeded", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSucceeded", [props]))
 
     @jsii.member(jsii_name="metricTime")
     def metric_time(
@@ -15334,14 +15388,14 @@ class TaskStateBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The interval, in milliseconds, between the time the activity is scheduled and the time it closes.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -15374,7 +15428,7 @@ class TaskStateBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTime", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricTime", [props]))
 
     @jsii.member(jsii_name="metricTimedOut")
     def metric_timed_out(
@@ -15385,14 +15439,14 @@ class TaskStateBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of times this activity times out.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -15425,10 +15479,10 @@ class TaskStateBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTimedOut", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricTimedOut", [props]))
 
     @jsii.member(jsii_name="next")
-    def next(self, next: IChainable) -> "Chain":
+    def next(self, next: "IChainable") -> "Chain":
         '''Continue normal execution with the given state.
 
         :param next: -
@@ -15441,7 +15495,7 @@ class TaskStateBase(
     @jsii.member(jsii_name="toStateJson")
     def to_state_json(
         self,
-        top_level_query_language: typing.Optional[QueryLanguage] = None,
+        top_level_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Return the Amazon States Language object for this state.
 
@@ -15453,7 +15507,7 @@ class TaskStateBase(
         return typing.cast(typing.Mapping[typing.Any, typing.Any], jsii.invoke(self, "toStateJson", [top_level_query_language]))
 
     @jsii.member(jsii_name="whenBoundToGraph")
-    def _when_bound_to_graph(self, graph: StateGraph) -> None:
+    def _when_bound_to_graph(self, graph: "StateGraph") -> None:
         '''Called whenever this state is bound to a graph.
 
         Can be overridden by subclasses.
@@ -15467,20 +15521,22 @@ class TaskStateBase(
 
     @builtins.property
     @jsii.member(jsii_name="endStates")
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''Continuable states of this Chainable.'''
-        return typing.cast(typing.List[INextable], jsii.get(self, "endStates"))
+        return typing.cast(typing.List["INextable"], jsii.get(self, "endStates"))
 
     @builtins.property
     @jsii.member(jsii_name="taskMetrics")
     @abc.abstractmethod
-    def _task_metrics(self) -> typing.Optional[TaskMetricsConfig]:
+    def _task_metrics(self) -> typing.Optional["TaskMetricsConfig"]:
         ...
 
     @builtins.property
     @jsii.member(jsii_name="taskPolicies")
     @abc.abstractmethod
-    def _task_policies(self) -> typing.Optional[typing.List[_PolicyStatement_0fe33853]]:
+    def _task_policies(
+        self,
+    ) -> typing.Optional[typing.List["_PolicyStatement_0fe33853"]]:
         ...
 
 
@@ -15490,13 +15546,15 @@ class _TaskStateBaseProxy(
 ):
     @builtins.property
     @jsii.member(jsii_name="taskMetrics")
-    def _task_metrics(self) -> typing.Optional[TaskMetricsConfig]:
-        return typing.cast(typing.Optional[TaskMetricsConfig], jsii.get(self, "taskMetrics"))
+    def _task_metrics(self) -> typing.Optional["TaskMetricsConfig"]:
+        return typing.cast(typing.Optional["TaskMetricsConfig"], jsii.get(self, "taskMetrics"))
 
     @builtins.property
     @jsii.member(jsii_name="taskPolicies")
-    def _task_policies(self) -> typing.Optional[typing.List[_PolicyStatement_0fe33853]]:
-        return typing.cast(typing.Optional[typing.List[_PolicyStatement_0fe33853]], jsii.get(self, "taskPolicies"))
+    def _task_policies(
+        self,
+    ) -> typing.Optional[typing.List["_PolicyStatement_0fe33853"]]:
+        return typing.cast(typing.Optional[typing.List["_PolicyStatement_0fe33853"]], jsii.get(self, "taskPolicies"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, TaskStateBase).__jsii_proxy_class__ = lambda : _TaskStateBaseProxy
@@ -15518,12 +15576,12 @@ class TaskStateBaseOptions:
     def __init__(
         self,
         *,
-        credentials: typing.Optional[typing.Union[Credentials, typing.Dict[builtins.str, typing.Any]]] = None,
-        heartbeat: typing.Optional[_Duration_4839e8c3] = None,
+        credentials: typing.Optional[typing.Union["Credentials", typing.Dict[builtins.str, typing.Any]]] = None,
+        heartbeat: typing.Optional["_Duration_4839e8c3"] = None,
         heartbeat_timeout: typing.Optional["Timeout"] = None,
-        integration_pattern: typing.Optional[IntegrationPattern] = None,
+        integration_pattern: typing.Optional["IntegrationPattern"] = None,
         task_timeout: typing.Optional["Timeout"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Base options for all task states.
 
@@ -15582,7 +15640,7 @@ class TaskStateBaseOptions:
             self._values["timeout"] = timeout
 
     @builtins.property
-    def credentials(self) -> typing.Optional[Credentials]:
+    def credentials(self) -> typing.Optional["Credentials"]:
         '''Credentials for an IAM Role that the State Machine assumes for executing the task.
 
         This enables cross-account resource invocations.
@@ -15592,10 +15650,10 @@ class TaskStateBaseOptions:
         :see: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-access-cross-acct-resources.html
         '''
         result = self._values.get("credentials")
-        return typing.cast(typing.Optional[Credentials], result)
+        return typing.cast(typing.Optional["Credentials"], result)
 
     @builtins.property
-    def heartbeat(self) -> typing.Optional[_Duration_4839e8c3]:
+    def heartbeat(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''(deprecated) Timeout for the heartbeat.
 
         :default: - None
@@ -15605,7 +15663,7 @@ class TaskStateBaseOptions:
         :stability: deprecated
         '''
         result = self._values.get("heartbeat")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def heartbeat_timeout(self) -> typing.Optional["Timeout"]:
@@ -15620,7 +15678,7 @@ class TaskStateBaseOptions:
         return typing.cast(typing.Optional["Timeout"], result)
 
     @builtins.property
-    def integration_pattern(self) -> typing.Optional[IntegrationPattern]:
+    def integration_pattern(self) -> typing.Optional["IntegrationPattern"]:
         '''AWS Step Functions integrates with services directly in the Amazon States Language.
 
         You can control these AWS services using service integration patterns.
@@ -15636,7 +15694,7 @@ class TaskStateBaseOptions:
         :see: https://docs.aws.amazon.com/step-functions/latest/dg/connect-supported-services.html
         '''
         result = self._values.get("integration_pattern")
-        return typing.cast(typing.Optional[IntegrationPattern], result)
+        return typing.cast(typing.Optional["IntegrationPattern"], result)
 
     @builtins.property
     def task_timeout(self) -> typing.Optional["Timeout"]:
@@ -15651,7 +15709,7 @@ class TaskStateBaseOptions:
         return typing.cast(typing.Optional["Timeout"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''(deprecated) Timeout for the task.
 
         :default: - None
@@ -15661,7 +15719,7 @@ class TaskStateBaseOptions:
         :stability: deprecated
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15713,14 +15771,14 @@ class TaskStateBaseProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
-        credentials: typing.Optional[typing.Union[Credentials, typing.Dict[builtins.str, typing.Any]]] = None,
-        heartbeat: typing.Optional[_Duration_4839e8c3] = None,
+        credentials: typing.Optional[typing.Union["Credentials", typing.Dict[builtins.str, typing.Any]]] = None,
+        heartbeat: typing.Optional["_Duration_4839e8c3"] = None,
         heartbeat_timeout: typing.Optional["Timeout"] = None,
-        integration_pattern: typing.Optional[IntegrationPattern] = None,
+        integration_pattern: typing.Optional["IntegrationPattern"] = None,
         task_timeout: typing.Optional["Timeout"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -15846,7 +15904,7 @@ class TaskStateBaseProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -15855,7 +15913,7 @@ class TaskStateBaseProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -15867,7 +15925,7 @@ class TaskStateBaseProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def credentials(self) -> typing.Optional[Credentials]:
+    def credentials(self) -> typing.Optional["Credentials"]:
         '''Credentials for an IAM Role that the State Machine assumes for executing the task.
 
         This enables cross-account resource invocations.
@@ -15877,10 +15935,10 @@ class TaskStateBaseProps(
         :see: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-access-cross-acct-resources.html
         '''
         result = self._values.get("credentials")
-        return typing.cast(typing.Optional[Credentials], result)
+        return typing.cast(typing.Optional["Credentials"], result)
 
     @builtins.property
-    def heartbeat(self) -> typing.Optional[_Duration_4839e8c3]:
+    def heartbeat(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''(deprecated) Timeout for the heartbeat.
 
         :default: - None
@@ -15890,7 +15948,7 @@ class TaskStateBaseProps(
         :stability: deprecated
         '''
         result = self._values.get("heartbeat")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def heartbeat_timeout(self) -> typing.Optional["Timeout"]:
@@ -15905,7 +15963,7 @@ class TaskStateBaseProps(
         return typing.cast(typing.Optional["Timeout"], result)
 
     @builtins.property
-    def integration_pattern(self) -> typing.Optional[IntegrationPattern]:
+    def integration_pattern(self) -> typing.Optional["IntegrationPattern"]:
         '''AWS Step Functions integrates with services directly in the Amazon States Language.
 
         You can control these AWS services using service integration patterns.
@@ -15921,7 +15979,7 @@ class TaskStateBaseProps(
         :see: https://docs.aws.amazon.com/step-functions/latest/dg/connect-supported-services.html
         '''
         result = self._values.get("integration_pattern")
-        return typing.cast(typing.Optional[IntegrationPattern], result)
+        return typing.cast(typing.Optional["IntegrationPattern"], result)
 
     @builtins.property
     def task_timeout(self) -> typing.Optional["Timeout"]:
@@ -15936,7 +15994,7 @@ class TaskStateBaseProps(
         return typing.cast(typing.Optional["Timeout"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''(deprecated) Timeout for the task.
 
         :default: - None
@@ -15946,7 +16004,7 @@ class TaskStateBaseProps(
         :stability: deprecated
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def assign(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
@@ -16077,14 +16135,14 @@ class TaskStateJsonPathBaseProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
-        credentials: typing.Optional[typing.Union[Credentials, typing.Dict[builtins.str, typing.Any]]] = None,
-        heartbeat: typing.Optional[_Duration_4839e8c3] = None,
+        credentials: typing.Optional[typing.Union["Credentials", typing.Dict[builtins.str, typing.Any]]] = None,
+        heartbeat: typing.Optional["_Duration_4839e8c3"] = None,
         heartbeat_timeout: typing.Optional["Timeout"] = None,
-        integration_pattern: typing.Optional[IntegrationPattern] = None,
+        integration_pattern: typing.Optional["IntegrationPattern"] = None,
         task_timeout: typing.Optional["Timeout"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -16203,7 +16261,7 @@ class TaskStateJsonPathBaseProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -16212,7 +16270,7 @@ class TaskStateJsonPathBaseProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -16224,7 +16282,7 @@ class TaskStateJsonPathBaseProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def credentials(self) -> typing.Optional[Credentials]:
+    def credentials(self) -> typing.Optional["Credentials"]:
         '''Credentials for an IAM Role that the State Machine assumes for executing the task.
 
         This enables cross-account resource invocations.
@@ -16234,10 +16292,10 @@ class TaskStateJsonPathBaseProps(
         :see: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-access-cross-acct-resources.html
         '''
         result = self._values.get("credentials")
-        return typing.cast(typing.Optional[Credentials], result)
+        return typing.cast(typing.Optional["Credentials"], result)
 
     @builtins.property
-    def heartbeat(self) -> typing.Optional[_Duration_4839e8c3]:
+    def heartbeat(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''(deprecated) Timeout for the heartbeat.
 
         :default: - None
@@ -16247,7 +16305,7 @@ class TaskStateJsonPathBaseProps(
         :stability: deprecated
         '''
         result = self._values.get("heartbeat")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def heartbeat_timeout(self) -> typing.Optional["Timeout"]:
@@ -16262,7 +16320,7 @@ class TaskStateJsonPathBaseProps(
         return typing.cast(typing.Optional["Timeout"], result)
 
     @builtins.property
-    def integration_pattern(self) -> typing.Optional[IntegrationPattern]:
+    def integration_pattern(self) -> typing.Optional["IntegrationPattern"]:
         '''AWS Step Functions integrates with services directly in the Amazon States Language.
 
         You can control these AWS services using service integration patterns.
@@ -16278,7 +16336,7 @@ class TaskStateJsonPathBaseProps(
         :see: https://docs.aws.amazon.com/step-functions/latest/dg/connect-supported-services.html
         '''
         result = self._values.get("integration_pattern")
-        return typing.cast(typing.Optional[IntegrationPattern], result)
+        return typing.cast(typing.Optional["IntegrationPattern"], result)
 
     @builtins.property
     def task_timeout(self) -> typing.Optional["Timeout"]:
@@ -16293,7 +16351,7 @@ class TaskStateJsonPathBaseProps(
         return typing.cast(typing.Optional["Timeout"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''(deprecated) Timeout for the task.
 
         :default: - None
@@ -16303,7 +16361,7 @@ class TaskStateJsonPathBaseProps(
         :stability: deprecated
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def assign(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
@@ -16414,14 +16472,14 @@ class TaskStateJsonataBaseProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
-        credentials: typing.Optional[typing.Union[Credentials, typing.Dict[builtins.str, typing.Any]]] = None,
-        heartbeat: typing.Optional[_Duration_4839e8c3] = None,
+        credentials: typing.Optional[typing.Union["Credentials", typing.Dict[builtins.str, typing.Any]]] = None,
+        heartbeat: typing.Optional["_Duration_4839e8c3"] = None,
         heartbeat_timeout: typing.Optional["Timeout"] = None,
-        integration_pattern: typing.Optional[IntegrationPattern] = None,
+        integration_pattern: typing.Optional["IntegrationPattern"] = None,
         task_timeout: typing.Optional["Timeout"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
     ) -> None:
@@ -16520,7 +16578,7 @@ class TaskStateJsonataBaseProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -16529,7 +16587,7 @@ class TaskStateJsonataBaseProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -16541,7 +16599,7 @@ class TaskStateJsonataBaseProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def credentials(self) -> typing.Optional[Credentials]:
+    def credentials(self) -> typing.Optional["Credentials"]:
         '''Credentials for an IAM Role that the State Machine assumes for executing the task.
 
         This enables cross-account resource invocations.
@@ -16551,10 +16609,10 @@ class TaskStateJsonataBaseProps(
         :see: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-access-cross-acct-resources.html
         '''
         result = self._values.get("credentials")
-        return typing.cast(typing.Optional[Credentials], result)
+        return typing.cast(typing.Optional["Credentials"], result)
 
     @builtins.property
-    def heartbeat(self) -> typing.Optional[_Duration_4839e8c3]:
+    def heartbeat(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''(deprecated) Timeout for the heartbeat.
 
         :default: - None
@@ -16564,7 +16622,7 @@ class TaskStateJsonataBaseProps(
         :stability: deprecated
         '''
         result = self._values.get("heartbeat")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def heartbeat_timeout(self) -> typing.Optional["Timeout"]:
@@ -16579,7 +16637,7 @@ class TaskStateJsonataBaseProps(
         return typing.cast(typing.Optional["Timeout"], result)
 
     @builtins.property
-    def integration_pattern(self) -> typing.Optional[IntegrationPattern]:
+    def integration_pattern(self) -> typing.Optional["IntegrationPattern"]:
         '''AWS Step Functions integrates with services directly in the Amazon States Language.
 
         You can control these AWS services using service integration patterns.
@@ -16595,7 +16653,7 @@ class TaskStateJsonataBaseProps(
         :see: https://docs.aws.amazon.com/step-functions/latest/dg/connect-supported-services.html
         '''
         result = self._values.get("integration_pattern")
-        return typing.cast(typing.Optional[IntegrationPattern], result)
+        return typing.cast(typing.Optional["IntegrationPattern"], result)
 
     @builtins.property
     def task_timeout(self) -> typing.Optional["Timeout"]:
@@ -16610,7 +16668,7 @@ class TaskStateJsonataBaseProps(
         return typing.cast(typing.Optional["Timeout"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''(deprecated) Timeout for the task.
 
         :default: - None
@@ -16620,7 +16678,7 @@ class TaskStateJsonataBaseProps(
         :stability: deprecated
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def assign(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
@@ -16703,7 +16761,7 @@ class Timeout(
 
     @jsii.member(jsii_name="duration")
     @builtins.classmethod
-    def duration(cls, duration: _Duration_4839e8c3) -> "Timeout":
+    def duration(cls, duration: "_Duration_4839e8c3") -> "Timeout":
         '''Use a duration as timeout.
 
         :param duration: -
@@ -16862,12 +16920,12 @@ class Wait(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         time: "WaitTime",
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     ) -> None:
@@ -16898,12 +16956,12 @@ class Wait(
     @builtins.classmethod
     def jsonata(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         time: "WaitTime",
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
@@ -16940,12 +16998,12 @@ class Wait(
     @builtins.classmethod
     def json_path(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         time: "WaitTime",
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -16982,7 +17040,7 @@ class Wait(
         return typing.cast("Wait", jsii.sinvoke(cls, "jsonPath", [scope, id, props]))
 
     @jsii.member(jsii_name="next")
-    def next(self, next: IChainable) -> "Chain":
+    def next(self, next: "IChainable") -> "Chain":
         '''Continue normal execution with the given state.
 
         :param next: -
@@ -16995,7 +17053,7 @@ class Wait(
     @jsii.member(jsii_name="toStateJson")
     def to_state_json(
         self,
-        top_level_query_language: typing.Optional[QueryLanguage] = None,
+        top_level_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Return the Amazon States Language object for this state.
 
@@ -17008,9 +17066,9 @@ class Wait(
 
     @builtins.property
     @jsii.member(jsii_name="endStates")
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''Continuable states of this Chainable.'''
-        return typing.cast(typing.List[INextable], jsii.get(self, "endStates"))
+        return typing.cast(typing.List["INextable"], jsii.get(self, "endStates"))
 
 
 @jsii.data_type(
@@ -17031,7 +17089,7 @@ class WaitJsonPathProps(StateBaseProps, AssignableStateOptions, JsonPathCommonOp
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -17108,7 +17166,7 @@ class WaitJsonPathProps(StateBaseProps, AssignableStateOptions, JsonPathCommonOp
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -17117,7 +17175,7 @@ class WaitJsonPathProps(StateBaseProps, AssignableStateOptions, JsonPathCommonOp
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -17201,7 +17259,7 @@ class WaitJsonataProps(StateBaseProps, AssignableStateOptions, JsonataCommonOpti
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
@@ -17263,7 +17321,7 @@ class WaitJsonataProps(StateBaseProps, AssignableStateOptions, JsonataCommonOpti
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -17272,7 +17330,7 @@ class WaitJsonataProps(StateBaseProps, AssignableStateOptions, JsonataCommonOpti
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -17348,7 +17406,7 @@ class WaitProps(StateBaseProps, AssignableStateOptions):
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         time: "WaitTime",
@@ -17420,7 +17478,7 @@ class WaitProps(StateBaseProps, AssignableStateOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -17429,7 +17487,7 @@ class WaitProps(StateBaseProps, AssignableStateOptions):
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -17512,7 +17570,7 @@ class WaitTime(
 
     @jsii.member(jsii_name="duration")
     @builtins.classmethod
-    def duration(cls, duration: _Duration_4839e8c3) -> "WaitTime":
+    def duration(cls, duration: "_Duration_4839e8c3") -> "WaitTime":
         '''Wait a fixed amount of time.
 
         :param duration: -
@@ -17615,8 +17673,8 @@ class WriterConfig(
     def __init__(
         self,
         *,
-        output_type: OutputType,
-        transformation: Transformation,
+        output_type: "OutputType",
+        transformation: "Transformation",
     ) -> None:
         '''
         :param output_type: The format of the Output of the child workflow executions.
@@ -17630,15 +17688,15 @@ class WriterConfig(
 
     @builtins.property
     @jsii.member(jsii_name="outputType")
-    def output_type(self) -> OutputType:
+    def output_type(self) -> "OutputType":
         '''The format of the Output of the child workflow executions.'''
-        return typing.cast(OutputType, jsii.get(self, "outputType"))
+        return typing.cast("OutputType", jsii.get(self, "outputType"))
 
     @builtins.property
     @jsii.member(jsii_name="transformation")
-    def transformation(self) -> Transformation:
+    def transformation(self) -> "Transformation":
         '''The transformation to be applied to the Output of the Child Workflow executions.'''
-        return typing.cast(Transformation, jsii.get(self, "transformation"))
+        return typing.cast("Transformation", jsii.get(self, "transformation"))
 
 
 @jsii.data_type(
@@ -17650,8 +17708,8 @@ class WriterConfigProps:
     def __init__(
         self,
         *,
-        output_type: OutputType,
-        transformation: Transformation,
+        output_type: "OutputType",
+        transformation: "Transformation",
     ) -> None:
         '''Interface for Writer Config props.
 
@@ -17681,18 +17739,18 @@ class WriterConfigProps:
         }
 
     @builtins.property
-    def output_type(self) -> OutputType:
+    def output_type(self) -> "OutputType":
         '''The format of the Output of the child workflow executions.'''
         result = self._values.get("output_type")
         assert result is not None, "Required property 'output_type' is missing"
-        return typing.cast(OutputType, result)
+        return typing.cast("OutputType", result)
 
     @builtins.property
-    def transformation(self) -> Transformation:
+    def transformation(self) -> "Transformation":
         '''The transformation to be applied to the Output of the Child Workflow executions.'''
         result = self._values.get("transformation")
         assert result is not None, "Required property 'transformation' is missing"
-        return typing.cast(Transformation, result)
+        return typing.cast("Transformation", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17729,11 +17787,11 @@ class Activity(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         activity_name: typing.Optional[builtins.str] = None,
-        encryption_configuration: typing.Optional[EncryptionConfiguration] = None,
+        encryption_configuration: typing.Optional["EncryptionConfiguration"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -17756,10 +17814,10 @@ class Activity(
     @builtins.classmethod
     def from_activity_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         activity_arn: builtins.str,
-    ) -> IActivity:
+    ) -> "IActivity":
         '''Construct an Activity from an existing Activity ARN.
 
         :param scope: -
@@ -17771,16 +17829,16 @@ class Activity(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument activity_arn", value=activity_arn, expected_type=type_hints["activity_arn"])
-        return typing.cast(IActivity, jsii.sinvoke(cls, "fromActivityArn", [scope, id, activity_arn]))
+        return typing.cast("IActivity", jsii.sinvoke(cls, "fromActivityArn", [scope, id, activity_arn]))
 
     @jsii.member(jsii_name="fromActivityName")
     @builtins.classmethod
     def from_activity_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         activity_name: builtins.str,
-    ) -> IActivity:
+    ) -> "IActivity":
         '''Construct an Activity from an existing Activity Name.
 
         :param scope: -
@@ -17792,14 +17850,14 @@ class Activity(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument activity_name", value=activity_name, expected_type=type_hints["activity_name"])
-        return typing.cast(IActivity, jsii.sinvoke(cls, "fromActivityName", [scope, id, activity_name]))
+        return typing.cast("IActivity", jsii.sinvoke(cls, "fromActivityName", [scope, id, activity_name]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions on this Activity.
 
         :param identity: The principal.
@@ -17809,7 +17867,7 @@ class Activity(
             type_hints = typing.get_type_hints(_typecheckingstub__01d112510c9f361d871db6717bbfc59060fea12f921f3593ef09bffe88a48574)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [identity, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [identity, *actions]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -17821,14 +17879,14 @@ class Activity(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Activity.
 
         :param metric_name: -
@@ -17865,7 +17923,7 @@ class Activity(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricFailed")
     def metric_failed(
@@ -17876,14 +17934,14 @@ class Activity(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of times this activity fails.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -17916,7 +17974,7 @@ class Activity(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricFailed", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricFailed", [props]))
 
     @jsii.member(jsii_name="metricHeartbeatTimedOut")
     def metric_heartbeat_timed_out(
@@ -17927,14 +17985,14 @@ class Activity(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of times the heartbeat times out for this activity.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -17967,7 +18025,7 @@ class Activity(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricHeartbeatTimedOut", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricHeartbeatTimedOut", [props]))
 
     @jsii.member(jsii_name="metricRunTime")
     def metric_run_time(
@@ -17978,14 +18036,14 @@ class Activity(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The interval, in milliseconds, between the time the activity starts and the time it closes.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -18018,7 +18076,7 @@ class Activity(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricRunTime", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricRunTime", [props]))
 
     @jsii.member(jsii_name="metricScheduled")
     def metric_scheduled(
@@ -18029,14 +18087,14 @@ class Activity(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of times this activity is scheduled.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -18069,7 +18127,7 @@ class Activity(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricScheduled", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricScheduled", [props]))
 
     @jsii.member(jsii_name="metricScheduleTime")
     def metric_schedule_time(
@@ -18080,14 +18138,14 @@ class Activity(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The interval, in milliseconds, for which the activity stays in the schedule state.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -18120,7 +18178,7 @@ class Activity(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricScheduleTime", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricScheduleTime", [props]))
 
     @jsii.member(jsii_name="metricStarted")
     def metric_started(
@@ -18131,14 +18189,14 @@ class Activity(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of times this activity is started.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -18171,7 +18229,7 @@ class Activity(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricStarted", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricStarted", [props]))
 
     @jsii.member(jsii_name="metricSucceeded")
     def metric_succeeded(
@@ -18182,14 +18240,14 @@ class Activity(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of times this activity succeeds.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -18222,7 +18280,7 @@ class Activity(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSucceeded", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSucceeded", [props]))
 
     @jsii.member(jsii_name="metricTime")
     def metric_time(
@@ -18233,14 +18291,14 @@ class Activity(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The interval, in milliseconds, between the time the activity is scheduled and the time it closes.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -18273,7 +18331,7 @@ class Activity(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTime", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricTime", [props]))
 
     @jsii.member(jsii_name="metricTimedOut")
     def metric_timed_out(
@@ -18284,14 +18342,14 @@ class Activity(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of times this activity times out.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -18324,7 +18382,7 @@ class Activity(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTimedOut", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricTimedOut", [props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -18352,12 +18410,12 @@ class Activity(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionConfiguration")
-    def encryption_configuration(self) -> typing.Optional[EncryptionConfiguration]:
+    def encryption_configuration(self) -> typing.Optional["EncryptionConfiguration"]:
         '''The encryptionConfiguration object used for server-side encryption of the activity inputs.
 
         :attribute: true
         '''
-        return typing.cast(typing.Optional[EncryptionConfiguration], jsii.get(self, "encryptionConfiguration"))
+        return typing.cast(typing.Optional["EncryptionConfiguration"], jsii.get(self, "encryptionConfiguration"))
 
 
 class AwsOwnedEncryptionConfiguration(
@@ -18420,9 +18478,9 @@ class Chain(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_stepfunctions.Ch
     @builtins.classmethod
     def custom(
         cls,
-        start_state: State,
-        end_states: typing.Sequence[INextable],
-        last_added: IChainable,
+        start_state: "State",
+        end_states: typing.Sequence["INextable"],
+        last_added: "IChainable",
     ) -> "Chain":
         '''Make a Chain with specific start and end states, and a last-added Chainable.
 
@@ -18439,7 +18497,7 @@ class Chain(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_stepfunctions.Ch
 
     @jsii.member(jsii_name="sequence")
     @builtins.classmethod
-    def sequence(cls, start: IChainable, next: IChainable) -> "Chain":
+    def sequence(cls, start: "IChainable", next: "IChainable") -> "Chain":
         '''Make a Chain with the start from one chain and the ends from another.
 
         :param start: -
@@ -18453,7 +18511,7 @@ class Chain(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_stepfunctions.Ch
 
     @jsii.member(jsii_name="start")
     @builtins.classmethod
-    def start(cls, state: IChainable) -> "Chain":
+    def start(cls, state: "IChainable") -> "Chain":
         '''Begin a new Chain from one chainable.
 
         :param state: -
@@ -18464,7 +18522,7 @@ class Chain(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_stepfunctions.Ch
         return typing.cast("Chain", jsii.sinvoke(cls, "start", [state]))
 
     @jsii.member(jsii_name="next")
-    def next(self, next: IChainable) -> "Chain":
+    def next(self, next: "IChainable") -> "Chain":
         '''Continue normal execution with the given state.
 
         :param next: -
@@ -18484,7 +18542,7 @@ class Chain(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_stepfunctions.Ch
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -18534,9 +18592,9 @@ class Chain(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_stepfunctions.Ch
 
     @builtins.property
     @jsii.member(jsii_name="endStates")
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''The chainable end state(s) of this chain.'''
-        return typing.cast(typing.List[INextable], jsii.get(self, "endStates"))
+        return typing.cast(typing.List["INextable"], jsii.get(self, "endStates"))
 
     @builtins.property
     @jsii.member(jsii_name="id")
@@ -18546,9 +18604,9 @@ class Chain(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_stepfunctions.Ch
 
     @builtins.property
     @jsii.member(jsii_name="startState")
-    def start_state(self) -> State:
+    def start_state(self) -> "State":
         '''The start state of this chain.'''
-        return typing.cast(State, jsii.get(self, "startState"))
+        return typing.cast("State", jsii.get(self, "startState"))
 
 
 class ChainDefinitionBody(
@@ -18570,7 +18628,7 @@ class ChainDefinitionBody(
         chain_definition_body = stepfunctions.ChainDefinitionBody.from_chainable(chainable)
     '''
 
-    def __init__(self, chainable: IChainable) -> None:
+    def __init__(self, chainable: "IChainable") -> None:
         '''
         :param chainable: -
         '''
@@ -18582,11 +18640,11 @@ class ChainDefinitionBody(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        _sfn_principal: _IPrincipal_539bb2fd,
-        sfn_props: typing.Union[StateMachineProps, typing.Dict[builtins.str, typing.Any]],
-        graph: typing.Optional[StateGraph] = None,
-    ) -> DefinitionConfig:
+        scope: "_constructs_77d1e7e8.Construct",
+        _sfn_principal: "_IPrincipal_539bb2fd",
+        sfn_props: typing.Union["StateMachineProps", typing.Dict[builtins.str, typing.Any]],
+        graph: typing.Optional["StateGraph"] = None,
+    ) -> "DefinitionConfig":
         '''
         :param scope: -
         :param _sfn_principal: -
@@ -18599,12 +18657,12 @@ class ChainDefinitionBody(
             check_type(argname="argument _sfn_principal", value=_sfn_principal, expected_type=type_hints["_sfn_principal"])
             check_type(argname="argument sfn_props", value=sfn_props, expected_type=type_hints["sfn_props"])
             check_type(argname="argument graph", value=graph, expected_type=type_hints["graph"])
-        return typing.cast(DefinitionConfig, jsii.invoke(self, "bind", [scope, _sfn_principal, sfn_props, graph]))
+        return typing.cast("DefinitionConfig", jsii.invoke(self, "bind", [scope, _sfn_principal, sfn_props, graph]))
 
     @builtins.property
     @jsii.member(jsii_name="chainable")
-    def chainable(self) -> IChainable:
-        return typing.cast(IChainable, jsii.get(self, "chainable"))
+    def chainable(self) -> "IChainable":
+        return typing.cast("IChainable", jsii.get(self, "chainable"))
 
 
 class Choice(
@@ -18645,11 +18703,11 @@ class Choice(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -18687,11 +18745,11 @@ class Choice(
     @builtins.classmethod
     def jsonata(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
@@ -18727,11 +18785,11 @@ class Choice(
     @builtins.classmethod
     def json_path(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -18772,7 +18830,7 @@ class Choice(
         *,
         include_error_handlers: typing.Optional[builtins.bool] = None,
         include_otherwise: typing.Optional[builtins.bool] = None,
-    ) -> Chain:
+    ) -> "Chain":
         '''Return a Chain that contains all reachable end states from this Choice.
 
         Use this to combine all possible choice paths back.
@@ -18785,10 +18843,10 @@ class Choice(
             include_otherwise=include_otherwise,
         )
 
-        return typing.cast(Chain, jsii.invoke(self, "afterwards", [options]))
+        return typing.cast("Chain", jsii.invoke(self, "afterwards", [options]))
 
     @jsii.member(jsii_name="otherwise")
-    def otherwise(self, def_: IChainable) -> "Choice":
+    def otherwise(self, def_: "IChainable") -> "Choice":
         '''If none of the given conditions match, continue execution with the given state.
 
         If no conditions match and no otherwise() has been given, an execution
@@ -18804,7 +18862,7 @@ class Choice(
     @jsii.member(jsii_name="toStateJson")
     def to_state_json(
         self,
-        top_level_query_language: typing.Optional[QueryLanguage] = None,
+        top_level_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Return the Amazon States Language object for this state.
 
@@ -18818,8 +18876,8 @@ class Choice(
     @jsii.member(jsii_name="when")
     def when(
         self,
-        condition: Condition,
-        next: IChainable,
+        condition: "Condition",
+        next: "IChainable",
         *,
         comment: typing.Optional[builtins.str] = None,
         outputs: typing.Any = None,
@@ -18845,9 +18903,9 @@ class Choice(
 
     @builtins.property
     @jsii.member(jsii_name="endStates")
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''Continuable states of this Chainable.'''
-        return typing.cast(typing.List[INextable], jsii.get(self, "endStates"))
+        return typing.cast(typing.List["INextable"], jsii.get(self, "endStates"))
 
 
 @jsii.data_type(
@@ -18871,7 +18929,7 @@ class ChoiceJsonPathProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -18939,7 +18997,7 @@ class ChoiceJsonPathProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -18948,7 +19006,7 @@ class ChoiceJsonPathProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -19024,7 +19082,7 @@ class ChoiceJsonataProps(StateBaseProps, AssignableStateOptions, JsonataCommonOp
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
@@ -19087,7 +19145,7 @@ class ChoiceJsonataProps(StateBaseProps, AssignableStateOptions, JsonataCommonOp
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -19096,7 +19154,7 @@ class ChoiceJsonataProps(StateBaseProps, AssignableStateOptions, JsonataCommonOp
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -19177,7 +19235,7 @@ class ChoiceProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -19243,7 +19301,7 @@ class ChoiceProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -19252,7 +19310,7 @@ class ChoiceProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -19400,7 +19458,7 @@ class CustomState(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         state_json: typing.Mapping[builtins.str, typing.Any],
@@ -19421,7 +19479,7 @@ class CustomState(
     @jsii.member(jsii_name="addCatch")
     def add_catch(
         self,
-        handler: IChainable,
+        handler: "IChainable",
         *,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         errors: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -19454,10 +19512,10 @@ class CustomState(
         *,
         backoff_rate: typing.Optional[jsii.Number] = None,
         errors: typing.Optional[typing.Sequence[builtins.str]] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
-        jitter_strategy: typing.Optional[JitterType] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
+        jitter_strategy: typing.Optional["JitterType"] = None,
         max_attempts: typing.Optional[jsii.Number] = None,
-        max_delay: typing.Optional[_Duration_4839e8c3] = None,
+        max_delay: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "CustomState":
         '''Add retry configuration for this state.
 
@@ -19483,7 +19541,7 @@ class CustomState(
         return typing.cast("CustomState", jsii.invoke(self, "addRetry", [props]))
 
     @jsii.member(jsii_name="next")
-    def next(self, next: IChainable) -> Chain:
+    def next(self, next: "IChainable") -> "Chain":
         '''Continue normal execution with the given state.
 
         :param next: -
@@ -19491,12 +19549,12 @@ class CustomState(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c55cf19adb97a87b3d9f8561497d58ec4f0dc221883c0d757f4bec5f4690cadd)
             check_type(argname="argument next", value=next, expected_type=type_hints["next"])
-        return typing.cast(Chain, jsii.invoke(self, "next", [next]))
+        return typing.cast("Chain", jsii.invoke(self, "next", [next]))
 
     @jsii.member(jsii_name="toStateJson")
     def to_state_json(
         self,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Returns the Amazon States Language object for this state.
 
@@ -19509,9 +19567,9 @@ class CustomState(
 
     @builtins.property
     @jsii.member(jsii_name="endStates")
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''Continuable states of this Chainable.'''
-        return typing.cast(typing.List[INextable], jsii.get(self, "endStates"))
+        return typing.cast(typing.List["INextable"], jsii.get(self, "endStates"))
 
 
 class CustomerManagedEncryptionConfiguration(
@@ -19540,8 +19598,8 @@ class CustomerManagedEncryptionConfiguration(
 
     def __init__(
         self,
-        kms_key: _IKey_5f11635f,
-        kms_data_key_reuse_period_seconds: typing.Optional[_Duration_4839e8c3] = None,
+        kms_key: "_IKey_5f11635f",
+        kms_data_key_reuse_period_seconds: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param kms_key: -
@@ -19555,25 +19613,27 @@ class CustomerManagedEncryptionConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="kmsKey")
-    def kms_key(self) -> _IKey_5f11635f:
+    def kms_key(self) -> "_IKey_5f11635f":
         '''The symmetric customer managed KMS key for server-side encryption of the state machine definition, and execution history or activity inputs.
 
         Step Functions will reuse the key for a maximum of ``kmsDataKeyReusePeriodSeconds``.
 
         :default: - data is transparently encrypted using an AWS owned key
         '''
-        return typing.cast(_IKey_5f11635f, jsii.get(self, "kmsKey"))
+        return typing.cast("_IKey_5f11635f", jsii.get(self, "kmsKey"))
 
     @builtins.property
     @jsii.member(jsii_name="kmsDataKeyReusePeriodSeconds")
-    def kms_data_key_reuse_period_seconds(self) -> typing.Optional[_Duration_4839e8c3]:
+    def kms_data_key_reuse_period_seconds(
+        self,
+    ) -> typing.Optional["_Duration_4839e8c3"]:
         '''Maximum duration that Step Functions will reuse customer managed data keys. When the period expires, Step Functions will call GenerateDataKey.
 
         Must be between 60 and 900 seconds.
 
         :default: Duration.seconds(300)
         '''
-        return typing.cast(typing.Optional[_Duration_4839e8c3], jsii.get(self, "kmsDataKeyReusePeriodSeconds"))
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], jsii.get(self, "kmsDataKeyReusePeriodSeconds"))
 
 
 @jsii.data_type(
@@ -19614,7 +19674,7 @@ class DistributedMapJsonPathProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -19626,12 +19686,12 @@ class DistributedMapJsonPathProps(
         max_concurrency_path: typing.Optional[builtins.str] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        item_batcher: typing.Optional[ItemBatcher] = None,
-        item_reader: typing.Optional[IItemReader] = None,
+        item_batcher: typing.Optional["ItemBatcher"] = None,
+        item_reader: typing.Optional["IItemReader"] = None,
         label: typing.Optional[builtins.str] = None,
-        map_execution_type: typing.Optional[StateMachineType] = None,
-        result_writer: typing.Optional[ResultWriter] = None,
-        result_writer_v2: typing.Optional[ResultWriterV2] = None,
+        map_execution_type: typing.Optional["StateMachineType"] = None,
+        result_writer: typing.Optional["ResultWriter"] = None,
+        result_writer_v2: typing.Optional["ResultWriterV2"] = None,
         tolerated_failure_count: typing.Optional[jsii.Number] = None,
         tolerated_failure_count_path: typing.Optional[builtins.str] = None,
         tolerated_failure_percentage: typing.Optional[jsii.Number] = None,
@@ -19794,7 +19854,7 @@ class DistributedMapJsonPathProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -19803,7 +19863,7 @@ class DistributedMapJsonPathProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -19939,16 +19999,16 @@ class DistributedMapJsonPathProps(
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
-    def item_batcher(self) -> typing.Optional[ItemBatcher]:
+    def item_batcher(self) -> typing.Optional["ItemBatcher"]:
         '''Specifies to process a group of items in a single child workflow execution.
 
         :default: - No itemBatcher
         '''
         result = self._values.get("item_batcher")
-        return typing.cast(typing.Optional[ItemBatcher], result)
+        return typing.cast(typing.Optional["ItemBatcher"], result)
 
     @builtins.property
-    def item_reader(self) -> typing.Optional[IItemReader]:
+    def item_reader(self) -> typing.Optional["IItemReader"]:
         '''ItemReader.
 
         Configuration for where to read items dataset in S3 to iterate
@@ -19956,7 +20016,7 @@ class DistributedMapJsonPathProps(
         :default: - No itemReader
         '''
         result = self._values.get("item_reader")
-        return typing.cast(typing.Optional[IItemReader], result)
+        return typing.cast(typing.Optional["IItemReader"], result)
 
     @builtins.property
     def label(self) -> typing.Optional[builtins.str]:
@@ -19970,7 +20030,7 @@ class DistributedMapJsonPathProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def map_execution_type(self) -> typing.Optional[StateMachineType]:
+    def map_execution_type(self) -> typing.Optional["StateMachineType"]:
         '''MapExecutionType.
 
         The execution type of the distributed map state
@@ -19980,10 +20040,10 @@ class DistributedMapJsonPathProps(
         :default: StateMachineType.STANDARD
         '''
         result = self._values.get("map_execution_type")
-        return typing.cast(typing.Optional[StateMachineType], result)
+        return typing.cast(typing.Optional["StateMachineType"], result)
 
     @builtins.property
-    def result_writer(self) -> typing.Optional[ResultWriter]:
+    def result_writer(self) -> typing.Optional["ResultWriter"]:
         '''(deprecated) Configuration for S3 location in which to save Map Run results.
 
         :default: - No resultWriter
@@ -19993,16 +20053,16 @@ class DistributedMapJsonPathProps(
         :stability: deprecated
         '''
         result = self._values.get("result_writer")
-        return typing.cast(typing.Optional[ResultWriter], result)
+        return typing.cast(typing.Optional["ResultWriter"], result)
 
     @builtins.property
-    def result_writer_v2(self) -> typing.Optional[ResultWriterV2]:
+    def result_writer_v2(self) -> typing.Optional["ResultWriterV2"]:
         '''Configuration for S3 location in which to save Map Run results Enable "@aws-cdk/aws-stepfunctions:useDistributedMapResultWriterV2" feature in the context to use resultWriterV2 Example: stack.node.setContext("@aws-cdk/aws-stepfunctions:useDistributedMapResultWriterV2", true);
 
         :default: - No resultWriterV2
         '''
         result = self._values.get("result_writer_v2")
-        return typing.cast(typing.Optional[ResultWriterV2], result)
+        return typing.cast(typing.Optional["ResultWriterV2"], result)
 
     @builtins.property
     def tolerated_failure_count(self) -> typing.Optional[jsii.Number]:
@@ -20088,20 +20148,20 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         outputs: typing.Any = None,
-        items: typing.Optional[ProvideItems] = None,
-        item_batcher: typing.Optional[ItemBatcher] = None,
-        item_reader: typing.Optional[IItemReader] = None,
+        items: typing.Optional["ProvideItems"] = None,
+        item_batcher: typing.Optional["ItemBatcher"] = None,
+        item_reader: typing.Optional["IItemReader"] = None,
         label: typing.Optional[builtins.str] = None,
-        map_execution_type: typing.Optional[StateMachineType] = None,
-        result_writer: typing.Optional[ResultWriter] = None,
-        result_writer_v2: typing.Optional[ResultWriterV2] = None,
+        map_execution_type: typing.Optional["StateMachineType"] = None,
+        result_writer: typing.Optional["ResultWriter"] = None,
+        result_writer_v2: typing.Optional["ResultWriterV2"] = None,
         tolerated_failure_count: typing.Optional[jsii.Number] = None,
         tolerated_failure_percentage: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -20231,7 +20291,7 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -20240,7 +20300,7 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -20319,25 +20379,25 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def items(self) -> typing.Optional[ProvideItems]:
+    def items(self) -> typing.Optional["ProvideItems"]:
         '''The array that the Map state will iterate over.
 
         :default: - The state input as is.
         '''
         result = self._values.get("items")
-        return typing.cast(typing.Optional[ProvideItems], result)
+        return typing.cast(typing.Optional["ProvideItems"], result)
 
     @builtins.property
-    def item_batcher(self) -> typing.Optional[ItemBatcher]:
+    def item_batcher(self) -> typing.Optional["ItemBatcher"]:
         '''Specifies to process a group of items in a single child workflow execution.
 
         :default: - No itemBatcher
         '''
         result = self._values.get("item_batcher")
-        return typing.cast(typing.Optional[ItemBatcher], result)
+        return typing.cast(typing.Optional["ItemBatcher"], result)
 
     @builtins.property
-    def item_reader(self) -> typing.Optional[IItemReader]:
+    def item_reader(self) -> typing.Optional["IItemReader"]:
         '''ItemReader.
 
         Configuration for where to read items dataset in S3 to iterate
@@ -20345,7 +20405,7 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
         :default: - No itemReader
         '''
         result = self._values.get("item_reader")
-        return typing.cast(typing.Optional[IItemReader], result)
+        return typing.cast(typing.Optional["IItemReader"], result)
 
     @builtins.property
     def label(self) -> typing.Optional[builtins.str]:
@@ -20359,7 +20419,7 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def map_execution_type(self) -> typing.Optional[StateMachineType]:
+    def map_execution_type(self) -> typing.Optional["StateMachineType"]:
         '''MapExecutionType.
 
         The execution type of the distributed map state
@@ -20369,10 +20429,10 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
         :default: StateMachineType.STANDARD
         '''
         result = self._values.get("map_execution_type")
-        return typing.cast(typing.Optional[StateMachineType], result)
+        return typing.cast(typing.Optional["StateMachineType"], result)
 
     @builtins.property
-    def result_writer(self) -> typing.Optional[ResultWriter]:
+    def result_writer(self) -> typing.Optional["ResultWriter"]:
         '''(deprecated) Configuration for S3 location in which to save Map Run results.
 
         :default: - No resultWriter
@@ -20382,16 +20442,16 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
         :stability: deprecated
         '''
         result = self._values.get("result_writer")
-        return typing.cast(typing.Optional[ResultWriter], result)
+        return typing.cast(typing.Optional["ResultWriter"], result)
 
     @builtins.property
-    def result_writer_v2(self) -> typing.Optional[ResultWriterV2]:
+    def result_writer_v2(self) -> typing.Optional["ResultWriterV2"]:
         '''Configuration for S3 location in which to save Map Run results Enable "@aws-cdk/aws-stepfunctions:useDistributedMapResultWriterV2" feature in the context to use resultWriterV2 Example: stack.node.setContext("@aws-cdk/aws-stepfunctions:useDistributedMapResultWriterV2", true);
 
         :default: - No resultWriterV2
         '''
         result = self._values.get("result_writer_v2")
-        return typing.cast(typing.Optional[ResultWriterV2], result)
+        return typing.cast(typing.Optional["ResultWriterV2"], result)
 
     @builtins.property
     def tolerated_failure_count(self) -> typing.Optional[jsii.Number]:
@@ -20448,7 +20508,7 @@ class Fail(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cause: typing.Optional[builtins.str] = None,
@@ -20456,7 +20516,7 @@ class Fail(
         error: typing.Optional[builtins.str] = None,
         error_path: typing.Optional[builtins.str] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -20490,13 +20550,13 @@ class Fail(
     @builtins.classmethod
     def jsonata(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cause: typing.Optional[builtins.str] = None,
         error: typing.Optional[builtins.str] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
     ) -> "Fail":
         '''Define a Fail state using JSONata in the state machine.
@@ -20529,7 +20589,7 @@ class Fail(
     @builtins.classmethod
     def json_path(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cause: typing.Optional[builtins.str] = None,
@@ -20537,7 +20597,7 @@ class Fail(
         error: typing.Optional[builtins.str] = None,
         error_path: typing.Optional[builtins.str] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
     ) -> "Fail":
         '''Define a Fail state using JSONPath in the state machine.
@@ -20573,7 +20633,7 @@ class Fail(
     @jsii.member(jsii_name="toStateJson")
     def to_state_json(
         self,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Return the Amazon States Language object for this state.
 
@@ -20591,9 +20651,9 @@ class Fail(
 
     @builtins.property
     @jsii.member(jsii_name="endStates")
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''Continuable states of this Chainable.'''
-        return typing.cast(typing.List[INextable], jsii.get(self, "endStates"))
+        return typing.cast(typing.List["INextable"], jsii.get(self, "endStates"))
 
 
 @jsii.data_type(
@@ -20614,7 +20674,7 @@ class FailJsonPathProps(StateBaseProps):
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         cause: typing.Optional[builtins.str] = None,
         cause_path: typing.Optional[builtins.str] = None,
@@ -20684,7 +20744,7 @@ class FailJsonPathProps(StateBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -20693,7 +20753,7 @@ class FailJsonPathProps(StateBaseProps):
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -20774,7 +20834,7 @@ class FailJsonataProps(StateBaseProps):
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         cause: typing.Optional[builtins.str] = None,
         error: typing.Optional[builtins.str] = None,
@@ -20832,7 +20892,7 @@ class FailJsonataProps(StateBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -20841,7 +20901,7 @@ class FailJsonataProps(StateBaseProps):
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -20900,7 +20960,7 @@ class FailProps(StateBaseProps):
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         cause: typing.Optional[builtins.str] = None,
         cause_path: typing.Optional[builtins.str] = None,
@@ -20961,7 +21021,7 @@ class FailProps(StateBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -20970,7 +21030,7 @@ class FailProps(StateBaseProps):
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -21055,7 +21115,7 @@ class JsonPathStateProps(StateBaseProps, JsonPathCommonOptions, AssignableStateO
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -21147,7 +21207,7 @@ class JsonPathStateProps(StateBaseProps, JsonPathCommonOptions, AssignableStateO
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -21156,7 +21216,7 @@ class JsonPathStateProps(StateBaseProps, JsonPathCommonOptions, AssignableStateO
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -21272,7 +21332,7 @@ class JsonataStateProps(StateBaseProps, JsonataStateOptions, AssignableStateOpti
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         outputs: typing.Any = None,
         arguments: typing.Any = None,
@@ -21342,7 +21402,7 @@ class JsonataStateProps(StateBaseProps, JsonataStateOptions, AssignableStateOpti
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -21351,7 +21411,7 @@ class JsonataStateProps(StateBaseProps, JsonataStateOptions, AssignableStateOpti
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -21434,11 +21494,11 @@ class MapBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
@@ -21447,7 +21507,7 @@ class MapBase(
         max_concurrency_path: typing.Optional[builtins.str] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        items: typing.Optional[ProvideItems] = None,
+        items: typing.Optional["ProvideItems"] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -21497,7 +21557,7 @@ class MapBase(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="next")
-    def next(self, next: IChainable) -> Chain:
+    def next(self, next: "IChainable") -> "Chain":
         '''Continue normal execution with the given state.
 
         :param next: -
@@ -21505,12 +21565,12 @@ class MapBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8bfdae9c7d12de08b43f94e8bc33eaeef588cdf2a814eb233b86a9976943ed7b)
             check_type(argname="argument next", value=next, expected_type=type_hints["next"])
-        return typing.cast(Chain, jsii.invoke(self, "next", [next]))
+        return typing.cast("Chain", jsii.invoke(self, "next", [next]))
 
     @jsii.member(jsii_name="toStateJson")
     def to_state_json(
         self,
-        top_level_query_language: typing.Optional[QueryLanguage] = None,
+        top_level_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Return the Amazon States Language object for this state.
 
@@ -21528,14 +21588,14 @@ class MapBase(
 
     @builtins.property
     @jsii.member(jsii_name="endStates")
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''Continuable states of this Chainable.'''
-        return typing.cast(typing.List[INextable], jsii.get(self, "endStates"))
+        return typing.cast(typing.List["INextable"], jsii.get(self, "endStates"))
 
     @builtins.property
     @jsii.member(jsii_name="items")
-    def _items(self) -> typing.Optional[ProvideItems]:
-        return typing.cast(typing.Optional[ProvideItems], jsii.get(self, "items"))
+    def _items(self) -> typing.Optional["ProvideItems"]:
+        return typing.cast(typing.Optional["ProvideItems"], jsii.get(self, "items"))
 
     @builtins.property
     @jsii.member(jsii_name="itemSelector")
@@ -21598,7 +21658,7 @@ class MapBaseProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -21611,7 +21671,7 @@ class MapBaseProps(
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
-        items: typing.Optional[ProvideItems] = None,
+        items: typing.Optional["ProvideItems"] = None,
     ) -> None:
         '''Properties for defining a Map state.
 
@@ -21728,7 +21788,7 @@ class MapBaseProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -21737,7 +21797,7 @@ class MapBaseProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -21890,13 +21950,13 @@ class MapBaseProps(
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def items(self) -> typing.Optional[ProvideItems]:
+    def items(self) -> typing.Optional["ProvideItems"]:
         '''The array that the Map state will iterate over.
 
         :default: - The state input as is.
         '''
         result = self._values.get("items")
-        return typing.cast(typing.Optional[ProvideItems], result)
+        return typing.cast(typing.Optional["ProvideItems"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -21935,7 +21995,7 @@ class MapJsonPathProps(StateBaseProps, MapBaseOptions, MapBaseJsonPathOptions):
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -22060,7 +22120,7 @@ class MapJsonPathProps(StateBaseProps, MapBaseOptions, MapBaseJsonPathOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -22069,7 +22129,7 @@ class MapJsonPathProps(StateBaseProps, MapBaseOptions, MapBaseJsonPathOptions):
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -22254,14 +22314,14 @@ class MapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataOptions):
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         outputs: typing.Any = None,
-        items: typing.Optional[ProvideItems] = None,
+        items: typing.Optional["ProvideItems"] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     ) -> None:
         '''Properties for defining a Map state that using JSONata.
@@ -22354,7 +22414,7 @@ class MapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -22363,7 +22423,7 @@ class MapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataOptions):
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -22442,13 +22502,13 @@ class MapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataOptions):
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def items(self) -> typing.Optional[ProvideItems]:
+    def items(self) -> typing.Optional["ProvideItems"]:
         '''The array that the Map state will iterate over.
 
         :default: - The state input as is.
         '''
         result = self._values.get("items")
-        return typing.cast(typing.Optional[ProvideItems], result)
+        return typing.cast(typing.Optional["ProvideItems"], result)
 
     @builtins.property
     def parameters(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
@@ -22506,7 +22566,7 @@ class MapProps(MapBaseProps, MapBaseOptions):
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -22519,7 +22579,7 @@ class MapProps(MapBaseProps, MapBaseOptions):
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
-        items: typing.Optional[ProvideItems] = None,
+        items: typing.Optional["ProvideItems"] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     ) -> None:
         '''Properties for defining a Map state.
@@ -22621,7 +22681,7 @@ class MapProps(MapBaseProps, MapBaseOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -22630,7 +22690,7 @@ class MapProps(MapBaseProps, MapBaseOptions):
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -22783,13 +22843,13 @@ class MapProps(MapBaseProps, MapBaseOptions):
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def items(self) -> typing.Optional[ProvideItems]:
+    def items(self) -> typing.Optional["ProvideItems"]:
         '''The array that the Map state will iterate over.
 
         :default: - The state input as is.
         '''
         result = self._values.get("items")
-        return typing.cast(typing.Optional[ProvideItems], result)
+        return typing.cast(typing.Optional["ProvideItems"], result)
 
     @builtins.property
     def parameters(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
@@ -22866,7 +22926,7 @@ class Parallel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         arguments: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -22874,7 +22934,7 @@ class Parallel(
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -22920,12 +22980,12 @@ class Parallel(
     @builtins.classmethod
     def jsonata(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         arguments: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
@@ -22965,14 +23025,14 @@ class Parallel(
     @builtins.classmethod
     def json_path(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -23018,7 +23078,7 @@ class Parallel(
     @jsii.member(jsii_name="addCatch")
     def add_catch(
         self,
-        handler: IChainable,
+        handler: "IChainable",
         *,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         errors: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -23051,10 +23111,10 @@ class Parallel(
         *,
         backoff_rate: typing.Optional[jsii.Number] = None,
         errors: typing.Optional[typing.Sequence[builtins.str]] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
-        jitter_strategy: typing.Optional[JitterType] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
+        jitter_strategy: typing.Optional["JitterType"] = None,
         max_attempts: typing.Optional[jsii.Number] = None,
-        max_delay: typing.Optional[_Duration_4839e8c3] = None,
+        max_delay: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "Parallel":
         '''Add retry configuration for this state.
 
@@ -23080,7 +23140,7 @@ class Parallel(
         return typing.cast("Parallel", jsii.invoke(self, "addRetry", [props]))
 
     @jsii.member(jsii_name="bindToGraph")
-    def bind_to_graph(self, graph: StateGraph) -> None:
+    def bind_to_graph(self, graph: "StateGraph") -> None:
         '''Overwrites State.bindToGraph. Adds branches to the Parallel state here so that any necessary prefixes are appended first.
 
         :param graph: -
@@ -23091,7 +23151,7 @@ class Parallel(
         return typing.cast(None, jsii.invoke(self, "bindToGraph", [graph]))
 
     @jsii.member(jsii_name="branch")
-    def branch(self, *branches: IChainable) -> "Parallel":
+    def branch(self, *branches: "IChainable") -> "Parallel":
         '''Define one or more branches to run in parallel.
 
         :param branches: -
@@ -23102,7 +23162,7 @@ class Parallel(
         return typing.cast("Parallel", jsii.invoke(self, "branch", [*branches]))
 
     @jsii.member(jsii_name="next")
-    def next(self, next: IChainable) -> Chain:
+    def next(self, next: "IChainable") -> "Chain":
         '''Continue normal execution with the given state.
 
         :param next: -
@@ -23110,12 +23170,12 @@ class Parallel(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bf2f89f1d526659416028630d3a07331a2f13a5067fd5e45f41dd46895179826)
             check_type(argname="argument next", value=next, expected_type=type_hints["next"])
-        return typing.cast(Chain, jsii.invoke(self, "next", [next]))
+        return typing.cast("Chain", jsii.invoke(self, "next", [next]))
 
     @jsii.member(jsii_name="toStateJson")
     def to_state_json(
         self,
-        top_level_query_language: typing.Optional[QueryLanguage] = None,
+        top_level_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Return the Amazon States Language object for this state.
 
@@ -23133,9 +23193,9 @@ class Parallel(
 
     @builtins.property
     @jsii.member(jsii_name="endStates")
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''Continuable states of this Chainable.'''
-        return typing.cast(typing.List[INextable], jsii.get(self, "endStates"))
+        return typing.cast(typing.List["INextable"], jsii.get(self, "endStates"))
 
 
 @jsii.data_type(
@@ -23162,7 +23222,7 @@ class ParallelJsonPathProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -23254,7 +23314,7 @@ class ParallelJsonPathProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -23263,7 +23323,7 @@ class ParallelJsonPathProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -23383,7 +23443,7 @@ class ParallelJsonataProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
@@ -23455,7 +23515,7 @@ class ParallelJsonataProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -23464,7 +23524,7 @@ class ParallelJsonataProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -23560,7 +23620,7 @@ class ParallelProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -23668,7 +23728,7 @@ class ParallelProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -23677,7 +23737,7 @@ class ParallelProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -23831,14 +23891,14 @@ class Pass(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        result: typing.Optional[Result] = None,
+        result: typing.Optional["Result"] = None,
         result_path: typing.Optional[builtins.str] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -23882,11 +23942,11 @@ class Pass(
     @builtins.classmethod
     def jsonata(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
@@ -23921,14 +23981,14 @@ class Pass(
     @builtins.classmethod
     def json_path(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        result: typing.Optional[Result] = None,
+        result: typing.Optional["Result"] = None,
         result_path: typing.Optional[builtins.str] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -23969,7 +24029,7 @@ class Pass(
         return typing.cast("Pass", jsii.sinvoke(cls, "jsonPath", [scope, id, props]))
 
     @jsii.member(jsii_name="next")
-    def next(self, next: IChainable) -> Chain:
+    def next(self, next: "IChainable") -> "Chain":
         '''Continue normal execution with the given state.
 
         :param next: -
@@ -23977,12 +24037,12 @@ class Pass(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f4f3a4b985638e018cf9da160ea401084953cf6a22e9ff97cb9b82310d664a55)
             check_type(argname="argument next", value=next, expected_type=type_hints["next"])
-        return typing.cast(Chain, jsii.invoke(self, "next", [next]))
+        return typing.cast("Chain", jsii.invoke(self, "next", [next]))
 
     @jsii.member(jsii_name="toStateJson")
     def to_state_json(
         self,
-        top_level_query_language: typing.Optional[QueryLanguage] = None,
+        top_level_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Return the Amazon States Language object for this state.
 
@@ -23995,9 +24055,9 @@ class Pass(
 
     @builtins.property
     @jsii.member(jsii_name="endStates")
-    def end_states(self) -> typing.List[INextable]:
+    def end_states(self) -> typing.List["INextable"]:
         '''Continuable states of this Chainable.'''
-        return typing.cast(typing.List[INextable], jsii.get(self, "endStates"))
+        return typing.cast(typing.List["INextable"], jsii.get(self, "endStates"))
 
 
 @jsii.data_type(
@@ -24020,13 +24080,13 @@ class PassJsonPathProps(StateBaseProps, AssignableStateOptions, JsonPathCommonOp
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        result: typing.Optional[Result] = None,
+        result: typing.Optional["Result"] = None,
         result_path: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a Pass state that using JSONPath.
@@ -24107,7 +24167,7 @@ class PassJsonPathProps(StateBaseProps, AssignableStateOptions, JsonPathCommonOp
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -24116,7 +24176,7 @@ class PassJsonPathProps(StateBaseProps, AssignableStateOptions, JsonPathCommonOp
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -24176,7 +24236,7 @@ class PassJsonPathProps(StateBaseProps, AssignableStateOptions, JsonPathCommonOp
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
-    def result(self) -> typing.Optional[Result]:
+    def result(self) -> typing.Optional["Result"]:
         '''If given, treat as the result of this operation.
 
         Can be used to inject or replace the current execution state.
@@ -24184,7 +24244,7 @@ class PassJsonPathProps(StateBaseProps, AssignableStateOptions, JsonPathCommonOp
         :default: No injected result
         '''
         result = self._values.get("result")
-        return typing.cast(typing.Optional[Result], result)
+        return typing.cast(typing.Optional["Result"], result)
 
     @builtins.property
     def result_path(self) -> typing.Optional[builtins.str]:
@@ -24226,7 +24286,7 @@ class PassJsonataProps(StateBaseProps, AssignableStateOptions, JsonataCommonOpti
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
@@ -24293,7 +24353,7 @@ class PassJsonataProps(StateBaseProps, AssignableStateOptions, JsonataCommonOpti
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -24302,7 +24362,7 @@ class PassJsonataProps(StateBaseProps, AssignableStateOptions, JsonataCommonOpti
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -24386,14 +24446,14 @@ class PassProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
         outputs: typing.Any = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        result: typing.Optional[Result] = None,
+        result: typing.Optional["Result"] = None,
         result_path: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a Pass state.
@@ -24478,7 +24538,7 @@ class PassProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -24487,7 +24547,7 @@ class PassProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -24564,7 +24624,7 @@ class PassProps(
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
-    def result(self) -> typing.Optional[Result]:
+    def result(self) -> typing.Optional["Result"]:
         '''If given, treat as the result of this operation.
 
         Can be used to inject or replace the current execution state.
@@ -24572,7 +24632,7 @@ class PassProps(
         :default: No injected result
         '''
         result = self._values.get("result")
-        return typing.cast(typing.Optional[Result], result)
+        return typing.cast(typing.Optional["Result"], result)
 
     @builtins.property
     def result_path(self) -> typing.Optional[builtins.str]:
@@ -24614,12 +24674,12 @@ class S3CsvItemReaderProps(S3FileItemReaderProps):
     def __init__(
         self,
         *,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         bucket_name_path: typing.Optional[builtins.str] = None,
         max_items: typing.Optional[jsii.Number] = None,
         key: builtins.str,
-        csv_delimiter: typing.Optional[CsvDelimiter] = None,
-        csv_headers: typing.Optional[CsvHeaders] = None,
+        csv_delimiter: typing.Optional["CsvDelimiter"] = None,
+        csv_headers: typing.Optional["CsvHeaders"] = None,
     ) -> None:
         '''Properties for configuring an Item Reader that iterates over items in a CSV file in S3.
 
@@ -24676,7 +24736,7 @@ class S3CsvItemReaderProps(S3FileItemReaderProps):
             self._values["csv_headers"] = csv_headers
 
     @builtins.property
-    def bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''S3 Bucket containing objects to iterate over or a file with a list to iterate over.
 
         :default: - S3 bucket will be determined from
@@ -24684,7 +24744,7 @@ class S3CsvItemReaderProps(S3FileItemReaderProps):
         :see: bucketNamePath
         '''
         result = self._values.get("bucket")
-        return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     @builtins.property
     def bucket_name_path(self) -> typing.Optional[builtins.str]:
@@ -24714,22 +24774,22 @@ class S3CsvItemReaderProps(S3FileItemReaderProps):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def csv_delimiter(self) -> typing.Optional[CsvDelimiter]:
+    def csv_delimiter(self) -> typing.Optional["CsvDelimiter"]:
         '''Delimiter used in a CSV file.
 
         :default: undefined - Default setting is COMMA.
         '''
         result = self._values.get("csv_delimiter")
-        return typing.cast(typing.Optional[CsvDelimiter], result)
+        return typing.cast(typing.Optional["CsvDelimiter"], result)
 
     @builtins.property
-    def csv_headers(self) -> typing.Optional[CsvHeaders]:
+    def csv_headers(self) -> typing.Optional["CsvHeaders"]:
         '''CSV file header configuration.
 
         :default: - CsvHeaders with CsvHeadersLocation.FIRST_ROW
         '''
         result = self._values.get("csv_headers")
-        return typing.cast(typing.Optional[CsvHeaders], result)
+        return typing.cast(typing.Optional["CsvHeaders"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24767,7 +24827,7 @@ class SingleStateOptions(ParallelProps):
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -24887,7 +24947,7 @@ class SingleStateOptions(ParallelProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -24896,7 +24956,7 @@ class SingleStateOptions(ParallelProps):
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -25079,15 +25139,15 @@ class DistributedMap(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        item_batcher: typing.Optional[ItemBatcher] = None,
-        item_reader: typing.Optional[IItemReader] = None,
+        item_batcher: typing.Optional["ItemBatcher"] = None,
+        item_reader: typing.Optional["IItemReader"] = None,
         label: typing.Optional[builtins.str] = None,
-        map_execution_type: typing.Optional[StateMachineType] = None,
-        result_writer: typing.Optional[ResultWriter] = None,
-        result_writer_v2: typing.Optional[ResultWriterV2] = None,
+        map_execution_type: typing.Optional["StateMachineType"] = None,
+        result_writer: typing.Optional["ResultWriter"] = None,
+        result_writer_v2: typing.Optional["ResultWriterV2"] = None,
         tolerated_failure_count: typing.Optional[jsii.Number] = None,
         tolerated_failure_count_path: typing.Optional[builtins.str] = None,
         tolerated_failure_percentage: typing.Optional[jsii.Number] = None,
@@ -25099,9 +25159,9 @@ class DistributedMap(
         max_concurrency_path: typing.Optional[builtins.str] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        items: typing.Optional[ProvideItems] = None,
+        items: typing.Optional["ProvideItems"] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
@@ -25187,24 +25247,24 @@ class DistributedMap(
     @builtins.classmethod
     def jsonata(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        item_batcher: typing.Optional[ItemBatcher] = None,
-        item_reader: typing.Optional[IItemReader] = None,
+        item_batcher: typing.Optional["ItemBatcher"] = None,
+        item_reader: typing.Optional["IItemReader"] = None,
         label: typing.Optional[builtins.str] = None,
-        map_execution_type: typing.Optional[StateMachineType] = None,
-        result_writer: typing.Optional[ResultWriter] = None,
-        result_writer_v2: typing.Optional[ResultWriterV2] = None,
+        map_execution_type: typing.Optional["StateMachineType"] = None,
+        result_writer: typing.Optional["ResultWriter"] = None,
+        result_writer_v2: typing.Optional["ResultWriterV2"] = None,
         tolerated_failure_count: typing.Optional[jsii.Number] = None,
         tolerated_failure_percentage: typing.Optional[jsii.Number] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
-        items: typing.Optional[ProvideItems] = None,
+        items: typing.Optional["ProvideItems"] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
     ) -> "DistributedMap":
@@ -25271,21 +25331,21 @@ class DistributedMap(
     @builtins.classmethod
     def json_path(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        item_batcher: typing.Optional[ItemBatcher] = None,
-        item_reader: typing.Optional[IItemReader] = None,
+        item_batcher: typing.Optional["ItemBatcher"] = None,
+        item_reader: typing.Optional["IItemReader"] = None,
         label: typing.Optional[builtins.str] = None,
-        map_execution_type: typing.Optional[StateMachineType] = None,
-        result_writer: typing.Optional[ResultWriter] = None,
-        result_writer_v2: typing.Optional[ResultWriterV2] = None,
+        map_execution_type: typing.Optional["StateMachineType"] = None,
+        result_writer: typing.Optional["ResultWriter"] = None,
+        result_writer_v2: typing.Optional["ResultWriterV2"] = None,
         tolerated_failure_count: typing.Optional[jsii.Number] = None,
         tolerated_failure_count_path: typing.Optional[builtins.str] = None,
         tolerated_failure_percentage: typing.Optional[jsii.Number] = None,
         tolerated_failure_percentage_path: typing.Optional[builtins.str] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
@@ -25372,7 +25432,7 @@ class DistributedMap(
     @jsii.member(jsii_name="addCatch")
     def add_catch(
         self,
-        handler: IChainable,
+        handler: "IChainable",
         *,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         errors: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -25405,10 +25465,10 @@ class DistributedMap(
         *,
         backoff_rate: typing.Optional[jsii.Number] = None,
         errors: typing.Optional[typing.Sequence[builtins.str]] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
-        jitter_strategy: typing.Optional[JitterType] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
+        jitter_strategy: typing.Optional["JitterType"] = None,
         max_attempts: typing.Optional[jsii.Number] = None,
-        max_delay: typing.Optional[_Duration_4839e8c3] = None,
+        max_delay: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "DistributedMap":
         '''Add retry configuration for this state.
 
@@ -25436,10 +25496,10 @@ class DistributedMap(
     @jsii.member(jsii_name="itemProcessor")
     def item_processor(
         self,
-        processor: IChainable,
+        processor: "IChainable",
         *,
-        execution_type: typing.Optional[ProcessorType] = None,
-        mode: typing.Optional[ProcessorMode] = None,
+        execution_type: typing.Optional["ProcessorType"] = None,
+        mode: typing.Optional["ProcessorMode"] = None,
     ) -> "DistributedMap":
         '''Define item processor in a Distributed Map.
 
@@ -25459,7 +25519,7 @@ class DistributedMap(
     @jsii.member(jsii_name="toStateJson")
     def to_state_json(
         self,
-        state_machine_query_language: typing.Optional[QueryLanguage] = None,
+        state_machine_query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Return the Amazon States Language object for this state.
 
@@ -25476,7 +25536,7 @@ class DistributedMap(
         return typing.cast(typing.List[builtins.str], jsii.invoke(self, "validateState", []))
 
     @jsii.member(jsii_name="whenBoundToGraph")
-    def _when_bound_to_graph(self, graph: StateGraph) -> None:
+    def _when_bound_to_graph(self, graph: "StateGraph") -> None:
         '''Called whenever this state is bound to a graph.
 
         Can be overridden by subclasses.
@@ -25532,7 +25592,7 @@ class DistributedMapProps(
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -25545,13 +25605,13 @@ class DistributedMapProps(
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
-        items: typing.Optional[ProvideItems] = None,
-        item_batcher: typing.Optional[ItemBatcher] = None,
-        item_reader: typing.Optional[IItemReader] = None,
+        items: typing.Optional["ProvideItems"] = None,
+        item_batcher: typing.Optional["ItemBatcher"] = None,
+        item_reader: typing.Optional["IItemReader"] = None,
         label: typing.Optional[builtins.str] = None,
-        map_execution_type: typing.Optional[StateMachineType] = None,
-        result_writer: typing.Optional[ResultWriter] = None,
-        result_writer_v2: typing.Optional[ResultWriterV2] = None,
+        map_execution_type: typing.Optional["StateMachineType"] = None,
+        result_writer: typing.Optional["ResultWriter"] = None,
+        result_writer_v2: typing.Optional["ResultWriterV2"] = None,
         tolerated_failure_count: typing.Optional[jsii.Number] = None,
         tolerated_failure_count_path: typing.Optional[builtins.str] = None,
         tolerated_failure_percentage: typing.Optional[jsii.Number] = None,
@@ -25693,7 +25753,7 @@ class DistributedMapProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[QueryLanguage]:
+    def query_language(self) -> typing.Optional["QueryLanguage"]:
         '''The name of the query language used by the state.
 
         If the state does not contain a ``queryLanguage`` field,
@@ -25702,7 +25762,7 @@ class DistributedMapProps(
         :default: - JSONPath
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[QueryLanguage], result)
+        return typing.cast(typing.Optional["QueryLanguage"], result)
 
     @builtins.property
     def state_name(self) -> typing.Optional[builtins.str]:
@@ -25855,25 +25915,25 @@ class DistributedMapProps(
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def items(self) -> typing.Optional[ProvideItems]:
+    def items(self) -> typing.Optional["ProvideItems"]:
         '''The array that the Map state will iterate over.
 
         :default: - The state input as is.
         '''
         result = self._values.get("items")
-        return typing.cast(typing.Optional[ProvideItems], result)
+        return typing.cast(typing.Optional["ProvideItems"], result)
 
     @builtins.property
-    def item_batcher(self) -> typing.Optional[ItemBatcher]:
+    def item_batcher(self) -> typing.Optional["ItemBatcher"]:
         '''Specifies to process a group of items in a single child workflow execution.
 
         :default: - No itemBatcher
         '''
         result = self._values.get("item_batcher")
-        return typing.cast(typing.Optional[ItemBatcher], result)
+        return typing.cast(typing.Optional["ItemBatcher"], result)
 
     @builtins.property
-    def item_reader(self) -> typing.Optional[IItemReader]:
+    def item_reader(self) -> typing.Optional["IItemReader"]:
         '''ItemReader.
 
         Configuration for where to read items dataset in S3 to iterate
@@ -25881,7 +25941,7 @@ class DistributedMapProps(
         :default: - No itemReader
         '''
         result = self._values.get("item_reader")
-        return typing.cast(typing.Optional[IItemReader], result)
+        return typing.cast(typing.Optional["IItemReader"], result)
 
     @builtins.property
     def label(self) -> typing.Optional[builtins.str]:
@@ -25895,7 +25955,7 @@ class DistributedMapProps(
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def map_execution_type(self) -> typing.Optional[StateMachineType]:
+    def map_execution_type(self) -> typing.Optional["StateMachineType"]:
         '''MapExecutionType.
 
         The execution type of the distributed map state
@@ -25905,10 +25965,10 @@ class DistributedMapProps(
         :default: StateMachineType.STANDARD
         '''
         result = self._values.get("map_execution_type")
-        return typing.cast(typing.Optional[StateMachineType], result)
+        return typing.cast(typing.Optional["StateMachineType"], result)
 
     @builtins.property
-    def result_writer(self) -> typing.Optional[ResultWriter]:
+    def result_writer(self) -> typing.Optional["ResultWriter"]:
         '''(deprecated) Configuration for S3 location in which to save Map Run results.
 
         :default: - No resultWriter
@@ -25918,16 +25978,16 @@ class DistributedMapProps(
         :stability: deprecated
         '''
         result = self._values.get("result_writer")
-        return typing.cast(typing.Optional[ResultWriter], result)
+        return typing.cast(typing.Optional["ResultWriter"], result)
 
     @builtins.property
-    def result_writer_v2(self) -> typing.Optional[ResultWriterV2]:
+    def result_writer_v2(self) -> typing.Optional["ResultWriterV2"]:
         '''Configuration for S3 location in which to save Map Run results Enable "@aws-cdk/aws-stepfunctions:useDistributedMapResultWriterV2" feature in the context to use resultWriterV2 Example: stack.node.setContext("@aws-cdk/aws-stepfunctions:useDistributedMapResultWriterV2", true);
 
         :default: - No resultWriterV2
         '''
         result = self._values.get("result_writer_v2")
-        return typing.cast(typing.Optional[ResultWriterV2], result)
+        return typing.cast(typing.Optional["ResultWriterV2"], result)
 
     @builtins.property
     def tolerated_failure_count(self) -> typing.Optional[jsii.Number]:
@@ -26021,7 +26081,7 @@ class Map(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -26029,13 +26089,13 @@ class Map(
         jsonata_item_selector: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         items_path: typing.Optional[builtins.str] = None,
         max_concurrency_path: typing.Optional[builtins.str] = None,
         result_path: typing.Optional[builtins.str] = None,
         result_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        items: typing.Optional[ProvideItems] = None,
+        items: typing.Optional["ProvideItems"] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -26090,17 +26150,17 @@ class Map(
     @builtins.classmethod
     def jsonata(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
-        items: typing.Optional[ProvideItems] = None,
+        items: typing.Optional["ProvideItems"] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         outputs: typing.Any = None,
     ) -> "Map":
@@ -26150,12 +26210,12 @@ class Map(
     @builtins.classmethod
     def json_path(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         comment: typing.Optional[builtins.str] = None,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
         state_name: typing.Optional[builtins.str] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
@@ -26221,7 +26281,7 @@ class Map(
     @jsii.member(jsii_name="addCatch")
     def add_catch(
         self,
-        handler: IChainable,
+        handler: "IChainable",
         *,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         errors: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -26254,10 +26314,10 @@ class Map(
         *,
         backoff_rate: typing.Optional[jsii.Number] = None,
         errors: typing.Optional[typing.Sequence[builtins.str]] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
-        jitter_strategy: typing.Optional[JitterType] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
+        jitter_strategy: typing.Optional["JitterType"] = None,
         max_attempts: typing.Optional[jsii.Number] = None,
-        max_delay: typing.Optional[_Duration_4839e8c3] = None,
+        max_delay: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "Map":
         '''Add retry configuration for this state.
 
@@ -26285,10 +26345,10 @@ class Map(
     @jsii.member(jsii_name="itemProcessor")
     def item_processor(
         self,
-        processor: IChainable,
+        processor: "IChainable",
         *,
-        execution_type: typing.Optional[ProcessorType] = None,
-        mode: typing.Optional[ProcessorMode] = None,
+        execution_type: typing.Optional["ProcessorType"] = None,
+        mode: typing.Optional["ProcessorMode"] = None,
     ) -> "Map":
         '''Define item processor in Map.
 
@@ -26306,7 +26366,7 @@ class Map(
         return typing.cast("Map", jsii.invoke(self, "itemProcessor", [processor, config]))
 
     @jsii.member(jsii_name="iterator")
-    def iterator(self, iterator: IChainable) -> "Map":
+    def iterator(self, iterator: "IChainable") -> "Map":
         '''(deprecated) Define iterator state machine in Map.
 
         A Map must either have a non-empty iterator or a non-empty item processor (mutually exclusive  with ``itemProcessor``).
@@ -26325,7 +26385,7 @@ class Map(
     @jsii.member(jsii_name="toStateJson")
     def to_state_json(
         self,
-        query_language: typing.Optional[QueryLanguage] = None,
+        query_language: typing.Optional["QueryLanguage"] = None,
     ) -> typing.Mapping[typing.Any, typing.Any]:
         '''Return the Amazon States Language object for this state.
 
@@ -26601,7 +26661,7 @@ def _typecheckingstub__8b19fff9309f98c9776cf416019a5217333b4d6f0f81e27e2256a87f9
     role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     definition: typing.Any = None,
     definition_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStateMachine.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    definition_string: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198, _ITableRef_4478f0ad, _ITaskDefinitionRef_8091fc1c]] = None,
+    definition_string: typing.Optional[typing.Union[builtins.str, _ITableRef_4478f0ad, _ITaskDefinitionRef_8091fc1c, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _ITopicRef_29aa9a88, _IQueueRef_fa8b2198]] = None,
     definition_substitutions: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStateMachine.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStateMachine.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -26853,7 +26913,7 @@ def _typecheckingstub__bf4d4e83bd396b6667f5c30b66226d7e76f61626aea9c4ec1355f6e6a
     role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     definition: typing.Any = None,
     definition_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStateMachine.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    definition_string: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198, _ITableRef_4478f0ad, _ITaskDefinitionRef_8091fc1c]] = None,
+    definition_string: typing.Optional[typing.Union[builtins.str, _ITableRef_4478f0ad, _ITaskDefinitionRef_8091fc1c, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _ITopicRef_29aa9a88, _IQueueRef_fa8b2198]] = None,
     definition_substitutions: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStateMachine.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStateMachine.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -28190,6 +28250,12 @@ def _typecheckingstub__1c75eaddac3409d6cdf5dd627e25e2ee4bb9a37cb569d80a08e184768
 
 def _typecheckingstub__18974d4c0fc7d5b60c0b12888f566840996e0be64f94ae03e6639ebccff3409b(
     prefix: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__499a5e89de7380c7745bafb1a6b705c59b7857cd27a08356e6791849f03dc5c8(
+    resource: _IStateMachineRef_65490661,
 ) -> None:
     """Type checking stubs"""
     pass

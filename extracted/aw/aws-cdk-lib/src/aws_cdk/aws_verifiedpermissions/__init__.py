@@ -161,10 +161,10 @@ class CfnIdentitySource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentitySource.IdentitySourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentitySource.IdentitySourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         policy_store_id: builtins.str,
         principal_entity_type: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -201,7 +201,7 @@ class CfnIdentitySource(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIdentitySource", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -232,11 +232,11 @@ class CfnIdentitySource(
 
     @builtins.property
     @jsii.member(jsii_name="attrDetails")
-    def attr_details(self) -> _IResolvable_da3f097b:
+    def attr_details(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: Details
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrDetails"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrDetails"))
 
     @builtins.property
     @jsii.member(jsii_name="attrDetailsClientIds")
@@ -286,22 +286,22 @@ class CfnIdentitySource(
 
     @builtins.property
     @jsii.member(jsii_name="identitySourceRef")
-    def identity_source_ref(self) -> _IdentitySourceReference_a313a3c3:
+    def identity_source_ref(self) -> "_IdentitySourceReference_a313a3c3":
         '''A reference to a IdentitySource resource.'''
-        return typing.cast(_IdentitySourceReference_a313a3c3, jsii.get(self, "identitySourceRef"))
+        return typing.cast("_IdentitySourceReference_a313a3c3", jsii.get(self, "identitySourceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="configuration")
     def configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.IdentitySourceConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.IdentitySourceConfigurationProperty"]:
         '''Contains configuration information used when creating a new identity source.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.IdentitySourceConfigurationProperty"], jsii.get(self, "configuration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.IdentitySourceConfigurationProperty"], jsii.get(self, "configuration"))
 
     @configuration.setter
     def configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.IdentitySourceConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.IdentitySourceConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f4a4151d5edcacd46d57d191db8fc897a1618f6b6c43e1f07f119ab8f8b421c0)
@@ -403,7 +403,7 @@ class CfnIdentitySource(
             *,
             user_pool_arn: builtins.str,
             client_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-            group_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentitySource.CognitoGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            group_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentitySource.CognitoGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A structure that contains configuration information used when creating or updating an identity source that represents a connection to an Amazon Cognito user pool used as an identity provider for Verified Permissions .
 
@@ -467,13 +467,13 @@ class CfnIdentitySource(
         @builtins.property
         def group_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.CognitoGroupConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.CognitoGroupConfigurationProperty"]]:
             '''The type of entity that a policy store maps to groups from an Amazon Cognito user pool identity source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-verifiedpermissions-identitysource-cognitouserpoolconfiguration.html#cfn-verifiedpermissions-identitysource-cognitouserpoolconfiguration-groupconfiguration
             '''
             result = self._values.get("group_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.CognitoGroupConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.CognitoGroupConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -498,8 +498,8 @@ class CfnIdentitySource(
         def __init__(
             self,
             *,
-            cognito_user_pool_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentitySource.CognitoUserPoolConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            open_id_connect_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentitySource.OpenIdConnectConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cognito_user_pool_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentitySource.CognitoUserPoolConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            open_id_connect_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentitySource.OpenIdConnectConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A structure that contains configuration information used when creating or updating a new identity source.
 
@@ -566,23 +566,23 @@ class CfnIdentitySource(
         @builtins.property
         def cognito_user_pool_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.CognitoUserPoolConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.CognitoUserPoolConfigurationProperty"]]:
             '''A structure that contains configuration information used when creating or updating an identity source that represents a connection to an Amazon Cognito user pool used as an identity provider for Verified Permissions .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-verifiedpermissions-identitysource-identitysourceconfiguration.html#cfn-verifiedpermissions-identitysource-identitysourceconfiguration-cognitouserpoolconfiguration
             '''
             result = self._values.get("cognito_user_pool_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.CognitoUserPoolConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.CognitoUserPoolConfigurationProperty"]], result)
 
         @builtins.property
         def open_id_connect_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.OpenIdConnectConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.OpenIdConnectConfigurationProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-verifiedpermissions-identitysource-identitysourceconfiguration.html#cfn-verifiedpermissions-identitysource-identitysourceconfiguration-openidconnectconfiguration
             '''
             result = self._values.get("open_id_connect_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.OpenIdConnectConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.OpenIdConnectConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -793,9 +793,9 @@ class CfnIdentitySource(
             self,
             *,
             issuer: builtins.str,
-            token_selection: typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentitySource.OpenIdConnectTokenSelectionProperty", typing.Dict[builtins.str, typing.Any]]],
+            token_selection: typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentitySource.OpenIdConnectTokenSelectionProperty", typing.Dict[builtins.str, typing.Any]]],
             entity_id_prefix: typing.Optional[builtins.str] = None,
-            group_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentitySource.OpenIdConnectGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            group_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentitySource.OpenIdConnectGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Contains configuration details of an OpenID Connect (OIDC) identity provider, or identity source, that Verified Permissions can use to generate entities from authenticated identities.
 
@@ -868,7 +868,7 @@ class CfnIdentitySource(
         @builtins.property
         def token_selection(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.OpenIdConnectTokenSelectionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.OpenIdConnectTokenSelectionProperty"]:
             '''The token type that you want to process from your OIDC identity provider.
 
             Your policy store can process either identity (ID) or access tokens from a given OIDC identity source.
@@ -877,7 +877,7 @@ class CfnIdentitySource(
             '''
             result = self._values.get("token_selection")
             assert result is not None, "Required property 'token_selection' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.OpenIdConnectTokenSelectionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.OpenIdConnectTokenSelectionProperty"], result)
 
         @builtins.property
         def entity_id_prefix(self) -> typing.Optional[builtins.str]:
@@ -893,7 +893,7 @@ class CfnIdentitySource(
         @builtins.property
         def group_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.OpenIdConnectGroupConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.OpenIdConnectGroupConfigurationProperty"]]:
             '''The claim in OIDC identity provider tokens that indicates a user's group membership, and the entity type that you want to map it to.
 
             For example, this object can map the contents of a ``groups`` claim to ``MyCorp::UserGroup`` .
@@ -901,7 +901,7 @@ class CfnIdentitySource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-verifiedpermissions-identitysource-openidconnectconfiguration.html#cfn-verifiedpermissions-identitysource-openidconnectconfiguration-groupconfiguration
             '''
             result = self._values.get("group_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.OpenIdConnectGroupConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.OpenIdConnectGroupConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1091,8 +1091,8 @@ class CfnIdentitySource(
         def __init__(
             self,
             *,
-            access_token_only: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentitySource.OpenIdConnectAccessTokenConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            identity_token_only: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentitySource.OpenIdConnectIdentityTokenConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            access_token_only: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentitySource.OpenIdConnectAccessTokenConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            identity_token_only: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentitySource.OpenIdConnectIdentityTokenConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The token type that you want to process from your OIDC identity provider.
 
@@ -1136,7 +1136,7 @@ class CfnIdentitySource(
         @builtins.property
         def access_token_only(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.OpenIdConnectAccessTokenConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.OpenIdConnectAccessTokenConfigurationProperty"]]:
             '''The OIDC configuration for processing access tokens.
 
             Contains allowed audience claims, for example ``https://auth.example.com`` , and the claim that you want to map to the principal, for example ``sub`` .
@@ -1144,12 +1144,12 @@ class CfnIdentitySource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-verifiedpermissions-identitysource-openidconnecttokenselection.html#cfn-verifiedpermissions-identitysource-openidconnecttokenselection-accesstokenonly
             '''
             result = self._values.get("access_token_only")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.OpenIdConnectAccessTokenConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.OpenIdConnectAccessTokenConfigurationProperty"]], result)
 
         @builtins.property
         def identity_token_only(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.OpenIdConnectIdentityTokenConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.OpenIdConnectIdentityTokenConfigurationProperty"]]:
             '''The OIDC configuration for processing identity (ID) tokens.
 
             Contains allowed client ID claims, for example ``1example23456789`` , and the claim that you want to map to the principal, for example ``sub`` .
@@ -1157,7 +1157,7 @@ class CfnIdentitySource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-verifiedpermissions-identitysource-openidconnecttokenselection.html#cfn-verifiedpermissions-identitysource-openidconnecttokenselection-identitytokenonly
             '''
             result = self._values.get("identity_token_only")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdentitySource.OpenIdConnectIdentityTokenConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.OpenIdConnectIdentityTokenConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1184,7 +1184,7 @@ class CfnIdentitySourceProps:
     def __init__(
         self,
         *,
-        configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdentitySource.IdentitySourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdentitySource.IdentitySourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         policy_store_id: builtins.str,
         principal_entity_type: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -1256,14 +1256,14 @@ class CfnIdentitySourceProps:
     @builtins.property
     def configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnIdentitySource.IdentitySourceConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.IdentitySourceConfigurationProperty"]:
         '''Contains configuration information used when creating a new identity source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-identitysource.html#cfn-verifiedpermissions-identitysource-configuration
         '''
         result = self._values.get("configuration")
         assert result is not None, "Required property 'configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnIdentitySource.IdentitySourceConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.IdentitySourceConfigurationProperty"], result)
 
     @builtins.property
     def policy_store_id(self) -> builtins.str:
@@ -1366,10 +1366,10 @@ class CfnPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        definition: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPolicy.PolicyDefinitionProperty", typing.Dict[builtins.str, typing.Any]]],
+        definition: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPolicy.PolicyDefinitionProperty", typing.Dict[builtins.str, typing.Any]]],
         policy_store_id: builtins.str,
     ) -> None:
         '''Create a new ``AWS::VerifiedPermissions::Policy``.
@@ -1400,7 +1400,7 @@ class CfnPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1457,22 +1457,22 @@ class CfnPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="policyRef")
-    def policy_ref(self) -> _PolicyReference_c40df487:
+    def policy_ref(self) -> "_PolicyReference_c40df487":
         '''A reference to a Policy resource.'''
-        return typing.cast(_PolicyReference_c40df487, jsii.get(self, "policyRef"))
+        return typing.cast("_PolicyReference_c40df487", jsii.get(self, "policyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="definition")
     def definition(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnPolicy.PolicyDefinitionProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPolicy.PolicyDefinitionProperty"]:
         '''Specifies the policy type and content to use for the new or updated policy.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPolicy.PolicyDefinitionProperty"], jsii.get(self, "definition"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPolicy.PolicyDefinitionProperty"], jsii.get(self, "definition"))
 
     @definition.setter
     def definition(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnPolicy.PolicyDefinitionProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnPolicy.PolicyDefinitionProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f0e3117111907b9eabd5104f9c3da934606ecead2cc1dd472a311797c17559e5)
@@ -1576,8 +1576,8 @@ class CfnPolicy(
         def __init__(
             self,
             *,
-            static: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPolicy.StaticPolicyDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            template_linked: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPolicy.TemplateLinkedPolicyDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            static: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPolicy.StaticPolicyDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            template_linked: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPolicy.TemplateLinkedPolicyDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A structure that defines a Cedar policy.
 
@@ -1632,7 +1632,7 @@ class CfnPolicy(
         @builtins.property
         def static(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicy.StaticPolicyDefinitionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicy.StaticPolicyDefinitionProperty"]]:
             '''A structure that describes a static policy.
 
             An static policy doesn't use a template or allow placeholders for entities.
@@ -1640,12 +1640,12 @@ class CfnPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-verifiedpermissions-policy-policydefinition.html#cfn-verifiedpermissions-policy-policydefinition-static
             '''
             result = self._values.get("static")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicy.StaticPolicyDefinitionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicy.StaticPolicyDefinitionProperty"]], result)
 
         @builtins.property
         def template_linked(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicy.TemplateLinkedPolicyDefinitionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicy.TemplateLinkedPolicyDefinitionProperty"]]:
             '''A structure that describes a policy that was instantiated from a template.
 
             The template can specify placeholders for ``principal`` and ``resource`` . When you use `CreatePolicy <https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_CreatePolicy.html>`_ to create a policy from a template, you specify the exact principal and resource to use for the instantiated policy.
@@ -1653,7 +1653,7 @@ class CfnPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-verifiedpermissions-policy-policydefinition.html#cfn-verifiedpermissions-policy-policydefinition-templatelinked
             '''
             result = self._values.get("template_linked")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicy.TemplateLinkedPolicyDefinitionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicy.TemplateLinkedPolicyDefinitionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1753,8 +1753,8 @@ class CfnPolicy(
             self,
             *,
             policy_template_id: builtins.str,
-            principal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPolicy.EntityIdentifierProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            resource: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPolicy.EntityIdentifierProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            principal: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPolicy.EntityIdentifierProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            resource: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPolicy.EntityIdentifierProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A structure that describes a policy created by instantiating a policy template.
 
@@ -1815,7 +1815,7 @@ class CfnPolicy(
         @builtins.property
         def principal(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicy.EntityIdentifierProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicy.EntityIdentifierProperty"]]:
             '''The principal associated with this template-linked policy.
 
             Verified Permissions substitutes this principal for the ``?principal`` placeholder in the policy template when it evaluates an authorization request.
@@ -1823,12 +1823,12 @@ class CfnPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-verifiedpermissions-policy-templatelinkedpolicydefinition.html#cfn-verifiedpermissions-policy-templatelinkedpolicydefinition-principal
             '''
             result = self._values.get("principal")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicy.EntityIdentifierProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicy.EntityIdentifierProperty"]], result)
 
         @builtins.property
         def resource(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicy.EntityIdentifierProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicy.EntityIdentifierProperty"]]:
             '''The resource associated with this template-linked policy.
 
             Verified Permissions substitutes this resource for the ``?resource`` placeholder in the policy template when it evaluates an authorization request.
@@ -1836,7 +1836,7 @@ class CfnPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-verifiedpermissions-policy-templatelinkedpolicydefinition.html#cfn-verifiedpermissions-policy-templatelinkedpolicydefinition-resource
             '''
             result = self._values.get("resource")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicy.EntityIdentifierProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicy.EntityIdentifierProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1859,7 +1859,7 @@ class CfnPolicyProps:
     def __init__(
         self,
         *,
-        definition: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicy.PolicyDefinitionProperty, typing.Dict[builtins.str, typing.Any]]],
+        definition: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPolicy.PolicyDefinitionProperty", typing.Dict[builtins.str, typing.Any]]],
         policy_store_id: builtins.str,
     ) -> None:
         '''Properties for defining a ``CfnPolicy``.
@@ -1913,7 +1913,7 @@ class CfnPolicyProps:
     @builtins.property
     def definition(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnPolicy.PolicyDefinitionProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPolicy.PolicyDefinitionProperty"]:
         '''Specifies the policy type and content to use for the new or updated policy.
 
         The definition structure must include either a ``Static`` or a ``TemplateLinked`` element.
@@ -1922,7 +1922,7 @@ class CfnPolicyProps:
         '''
         result = self._values.get("definition")
         assert result is not None, "Required property 'definition' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnPolicy.PolicyDefinitionProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPolicy.PolicyDefinitionProperty"], result)
 
     @builtins.property
     def policy_store_id(self) -> builtins.str:
@@ -1962,6 +1962,7 @@ class CfnPolicyStore(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_verifiedpermissions as verifiedpermissions
@@ -1989,14 +1990,14 @@ class CfnPolicyStore(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        validation_settings: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPolicyStore.ValidationSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
-        deletion_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPolicyStore.DeletionProtectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        validation_settings: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPolicyStore.ValidationSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        deletion_protection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPolicyStore.DeletionProtectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPolicyStore.SchemaDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        schema: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPolicyStore.SchemaDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VerifiedPermissions::PolicyStore``.
 
@@ -2024,7 +2025,10 @@ class CfnPolicyStore(
 
     @jsii.member(jsii_name="arnForPolicyStore")
     @builtins.classmethod
-    def arn_for_policy_store(cls, resource: _IPolicyStoreRef_ac45e491) -> builtins.str:
+    def arn_for_policy_store(
+        cls,
+        resource: "_IPolicyStoreRef_ac45e491",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2037,10 +2041,10 @@ class CfnPolicyStore(
     @builtins.classmethod
     def from_policy_store_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IPolicyStoreRef_ac45e491:
+    ) -> "_IPolicyStoreRef_ac45e491":
         '''Creates a new IPolicyStoreRef from an ARN.
 
         :param scope: -
@@ -2052,16 +2056,16 @@ class CfnPolicyStore(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IPolicyStoreRef_ac45e491, jsii.sinvoke(cls, "fromPolicyStoreArn", [scope, id, arn]))
+        return typing.cast("_IPolicyStoreRef_ac45e491", jsii.sinvoke(cls, "fromPolicyStoreArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromPolicyStoreId")
     @builtins.classmethod
     def from_policy_store_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         policy_store_id: builtins.str,
-    ) -> _IPolicyStoreRef_ac45e491:
+    ) -> "_IPolicyStoreRef_ac45e491":
         '''Creates a new IPolicyStoreRef from a policyStoreId.
 
         :param scope: -
@@ -2073,7 +2077,7 @@ class CfnPolicyStore(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument policy_store_id", value=policy_store_id, expected_type=type_hints["policy_store_id"])
-        return typing.cast(_IPolicyStoreRef_ac45e491, jsii.sinvoke(cls, "fromPolicyStoreId", [scope, id, policy_store_id]))
+        return typing.cast("_IPolicyStoreRef_ac45e491", jsii.sinvoke(cls, "fromPolicyStoreId", [scope, id, policy_store_id]))
 
     @jsii.member(jsii_name="isCfnPolicyStore")
     @builtins.classmethod
@@ -2088,7 +2092,7 @@ class CfnPolicyStore(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPolicyStore", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2137,9 +2141,9 @@ class CfnPolicyStore(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2148,22 +2152,22 @@ class CfnPolicyStore(
 
     @builtins.property
     @jsii.member(jsii_name="policyStoreRef")
-    def policy_store_ref(self) -> _PolicyStoreReference_a5975c12:
+    def policy_store_ref(self) -> "_PolicyStoreReference_a5975c12":
         '''A reference to a PolicyStore resource.'''
-        return typing.cast(_PolicyStoreReference_a5975c12, jsii.get(self, "policyStoreRef"))
+        return typing.cast("_PolicyStoreReference_a5975c12", jsii.get(self, "policyStoreRef"))
 
     @builtins.property
     @jsii.member(jsii_name="validationSettings")
     def validation_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnPolicyStore.ValidationSettingsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.ValidationSettingsProperty"]:
         '''Specifies the validation setting for this policy store.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPolicyStore.ValidationSettingsProperty"], jsii.get(self, "validationSettings"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.ValidationSettingsProperty"], jsii.get(self, "validationSettings"))
 
     @validation_settings.setter
     def validation_settings(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnPolicyStore.ValidationSettingsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.ValidationSettingsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f75a45bc8d480e61f7e4827904f9e4cfad1881a595a32bf1bebfb6efb618e30f)
@@ -2174,17 +2178,17 @@ class CfnPolicyStore(
     @jsii.member(jsii_name="deletionProtection")
     def deletion_protection(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicyStore.DeletionProtectionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.DeletionProtectionProperty"]]:
         '''Specifies whether the policy store can be deleted.
 
         If enabled, the policy store can't be deleted.
         '''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicyStore.DeletionProtectionProperty"]], jsii.get(self, "deletionProtection"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.DeletionProtectionProperty"]], jsii.get(self, "deletionProtection"))
 
     @deletion_protection.setter
     def deletion_protection(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicyStore.DeletionProtectionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.DeletionProtectionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__57833e423b36e13e7920abdf1a2596b9080e63fa65941f6d185d155792d5ccf6)
@@ -2208,14 +2212,14 @@ class CfnPolicyStore(
     @jsii.member(jsii_name="schema")
     def schema(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicyStore.SchemaDefinitionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.SchemaDefinitionProperty"]]:
         '''Creates or updates the policy schema in a policy store.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicyStore.SchemaDefinitionProperty"]], jsii.get(self, "schema"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.SchemaDefinitionProperty"]], jsii.get(self, "schema"))
 
     @schema.setter
     def schema(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPolicyStore.SchemaDefinitionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.SchemaDefinitionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__59218b40bcf4539ad10409fa2f065ad910ceb568598b66b8276c1d8844d45901)
@@ -2224,12 +2228,12 @@ class CfnPolicyStore(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of key-value pairs to associate with the policy store.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a4e637b2595daab8d8dca7da125f3bf21d442c1f8fb59f4caefd71bced88d6b5)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2443,11 +2447,11 @@ class CfnPolicyStoreProps:
     def __init__(
         self,
         *,
-        validation_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.ValidationSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
-        deletion_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.DeletionProtectionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        validation_settings: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPolicyStore.ValidationSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        deletion_protection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPolicyStore.DeletionProtectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.SchemaDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        schema: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPolicyStore.SchemaDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPolicyStore``.
 
@@ -2462,6 +2466,7 @@ class CfnPolicyStoreProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_verifiedpermissions as verifiedpermissions
@@ -2508,7 +2513,7 @@ class CfnPolicyStoreProps:
     @builtins.property
     def validation_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnPolicyStore.ValidationSettingsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.ValidationSettingsProperty"]:
         '''Specifies the validation setting for this policy store.
 
         Currently, the only valid and required value is ``Mode`` .
@@ -2520,12 +2525,12 @@ class CfnPolicyStoreProps:
         '''
         result = self._values.get("validation_settings")
         assert result is not None, "Required property 'validation_settings' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnPolicyStore.ValidationSettingsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.ValidationSettingsProperty"], result)
 
     @builtins.property
     def deletion_protection(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPolicyStore.DeletionProtectionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.DeletionProtectionProperty"]]:
         '''Specifies whether the policy store can be deleted. If enabled, the policy store can't be deleted.
 
         The default state is ``DISABLED`` .
@@ -2533,7 +2538,7 @@ class CfnPolicyStoreProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policystore.html#cfn-verifiedpermissions-policystore-deletionprotection
         '''
         result = self._values.get("deletion_protection")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPolicyStore.DeletionProtectionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.DeletionProtectionProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -2547,7 +2552,7 @@ class CfnPolicyStoreProps:
     @builtins.property
     def schema(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPolicyStore.SchemaDefinitionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.SchemaDefinitionProperty"]]:
         '''Creates or updates the policy schema in a policy store.
 
         Cedar can use the schema to validate any Cedar policies and policy templates submitted to the policy store. Any changes to the schema validate only policies and templates submitted after the schema change. Existing policies and templates are not re-evaluated against the changed schema. If you later update a policy, then it is evaluated against the new schema at that time.
@@ -2555,16 +2560,16 @@ class CfnPolicyStoreProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policystore.html#cfn-verifiedpermissions-policystore-schema
         '''
         result = self._values.get("schema")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPolicyStore.SchemaDefinitionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPolicyStore.SchemaDefinitionProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of key-value pairs to associate with the policy store.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policystore.html#cfn-verifiedpermissions-policystore-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2609,7 +2614,7 @@ class CfnPolicyTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_store_id: builtins.str,
@@ -2649,7 +2654,7 @@ class CfnPolicyTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPolicyTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2694,9 +2699,9 @@ class CfnPolicyTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="policyTemplateRef")
-    def policy_template_ref(self) -> _PolicyTemplateReference_dcad6159:
+    def policy_template_ref(self) -> "_PolicyTemplateReference_dcad6159":
         '''A reference to a PolicyTemplate resource.'''
-        return typing.cast(_PolicyTemplateReference_dcad6159, jsii.get(self, "policyTemplateRef"))
+        return typing.cast("_PolicyTemplateReference_dcad6159", jsii.get(self, "policyTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policyStoreId")

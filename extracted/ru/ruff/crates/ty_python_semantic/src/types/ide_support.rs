@@ -7,8 +7,9 @@ use crate::semantic_index::definition::DefinitionKind;
 use crate::semantic_index::{attribute_scopes, global_scope, semantic_index, use_def_map};
 use crate::types::call::{CallArguments, MatchedArgument};
 use crate::types::signatures::{ParameterKind, Signature};
-use crate::types::{CallDunderError, UnionType};
-use crate::types::{CallableTypes, ClassBase, KnownClass, Type, TypeContext};
+use crate::types::{
+    CallDunderError, CallableTypes, ClassBase, KnownUnion, Type, TypeContext, UnionType,
+};
 use crate::{Db, DisplaySettings, HasType, SemanticModel};
 use ruff_db::files::FileRange;
 use ruff_db::parsed::parsed_module;
@@ -193,21 +194,8 @@ pub fn definitions_for_name<'db>(
 
 fn is_float_or_complex_annotation(db: &dyn Db, ty: UnionType, name: &str) -> bool {
     let float_or_complex_ty = match name {
-        "float" => UnionType::from_elements(
-            db,
-            [
-                KnownClass::Int.to_instance(db),
-                KnownClass::Float.to_instance(db),
-            ],
-        ),
-        "complex" => UnionType::from_elements(
-            db,
-            [
-                KnownClass::Int.to_instance(db),
-                KnownClass::Float.to_instance(db),
-                KnownClass::Complex.to_instance(db),
-            ],
-        ),
+        "float" => KnownUnion::Float.to_type(db),
+        "complex" => KnownUnion::Complex.to_type(db),
         _ => return false,
     }
     .expect_union();
@@ -1053,21 +1041,26 @@ mod resolve_definition {
             }
         }
 
-        // Resolve the target module file
-        let module_file = {
-            // Resolve the module being imported from (handles both relative and absolute imports)
-            let Some(module_name) = ModuleName::from_import_statement(db, file, import_node).ok()
-            else {
-                return Vec::new();
-            };
-            let Some(resolved_module) = resolve_module(db, file, &module_name) else {
-                return Vec::new();
-            };
-            resolved_module.file(db)
+        // Resolve the module being imported from (handles both relative and absolute imports)
+        let Some(module_name) = ModuleName::from_import_statement(db, file, import_node).ok()
+        else {
+            return Vec::new();
+        };
+        let Some(resolved_module) = resolve_module(db, file, &module_name) else {
+            return Vec::new();
         };
 
+        // Resolve the target module file
+        let module_file = resolved_module.file(db);
+
         let Some(module_file) = module_file else {
-            return Vec::new(); // Module resolution failed
+            // No file means this is a namespace package, try to import the submodule
+            return Vec::from_iter(resolve_from_import_submodule_definitions(
+                db,
+                file,
+                symbol_name,
+                module_name,
+            ));
         };
 
         // Find the definition of this symbol in the imported module's global scope
@@ -1076,22 +1069,38 @@ mod resolve_definition {
 
         // Recursively resolve any import definitions found in the target module
         if definitions_in_module.is_empty() {
-            // If we can't find the specific symbol, return empty list
-            Vec::new()
-        } else {
-            let mut resolved_definitions = Vec::new();
-            for def in definitions_in_module {
-                let resolved = resolve_definition_recursive(
-                    db,
-                    def,
-                    visited,
-                    Some(symbol_name),
-                    alias_resolution,
-                );
-                resolved_definitions.extend(resolved);
-            }
-            resolved_definitions
+            // This might be importing a submodule, try that
+            return Vec::from_iter(resolve_from_import_submodule_definitions(
+                db,
+                file,
+                symbol_name,
+                module_name,
+            ));
         }
+
+        let mut resolved_definitions = Vec::new();
+        for def in definitions_in_module {
+            let resolved =
+                resolve_definition_recursive(db, def, visited, Some(symbol_name), alias_resolution);
+            resolved_definitions.extend(resolved);
+        }
+        resolved_definitions
+    }
+
+    // Helper to resolve `from x.y import z` assuming `x.y.z` is a module.
+    fn resolve_from_import_submodule_definitions<'db>(
+        db: &'db dyn Db,
+        file: File,
+        symbol_name: &str,
+        module_name: ModuleName,
+    ) -> Option<ResolvedDefinition<'db>> {
+        let submodule_name = ModuleName::new(symbol_name)?;
+        let mut full_submodule_name = module_name;
+        full_submodule_name.extend(&submodule_name);
+        let module = resolve_module(db, file, &full_submodule_name)?;
+        let file = module.file(db)?;
+
+        Some(ResolvedDefinition::Module(file))
     }
 
     /// Find definitions for a symbol name in a specific scope.

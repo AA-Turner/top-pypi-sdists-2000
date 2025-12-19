@@ -115,6 +115,7 @@ class CfnAlias(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_gamelift as gamelift
@@ -140,13 +141,13 @@ class CfnAlias(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        routing_strategy: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlias.RoutingStrategyProperty", typing.Dict[builtins.str, typing.Any]]],
+        routing_strategy: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlias.RoutingStrategyProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GameLift::Alias``.
 
@@ -172,7 +173,7 @@ class CfnAlias(
 
     @jsii.member(jsii_name="arnForAlias")
     @builtins.classmethod
-    def arn_for_alias(cls, resource: _IAliasRef_e769a35f) -> builtins.str:
+    def arn_for_alias(cls, resource: "_IAliasRef_e769a35f") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -185,10 +186,10 @@ class CfnAlias(
     @builtins.classmethod
     def from_alias_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IAliasRef_e769a35f:
+    ) -> "_IAliasRef_e769a35f":
         '''Creates a new IAliasRef from an ARN.
 
         :param scope: -
@@ -200,16 +201,16 @@ class CfnAlias(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IAliasRef_e769a35f, jsii.sinvoke(cls, "fromAliasArn", [scope, id, arn]))
+        return typing.cast("_IAliasRef_e769a35f", jsii.sinvoke(cls, "fromAliasArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromAliasId")
     @builtins.classmethod
     def from_alias_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         alias_id: builtins.str,
-    ) -> _IAliasRef_e769a35f:
+    ) -> "_IAliasRef_e769a35f":
         '''Creates a new IAliasRef from a aliasId.
 
         :param scope: -
@@ -221,7 +222,7 @@ class CfnAlias(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument alias_id", value=alias_id, expected_type=type_hints["alias_id"])
-        return typing.cast(_IAliasRef_e769a35f, jsii.sinvoke(cls, "fromAliasId", [scope, id, alias_id]))
+        return typing.cast("_IAliasRef_e769a35f", jsii.sinvoke(cls, "fromAliasId", [scope, id, alias_id]))
 
     @jsii.member(jsii_name="isCfnAlias")
     @builtins.classmethod
@@ -236,7 +237,7 @@ class CfnAlias(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAlias", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -267,9 +268,9 @@ class CfnAlias(
 
     @builtins.property
     @jsii.member(jsii_name="aliasRef")
-    def alias_ref(self) -> _AliasReference_05a49177:
+    def alias_ref(self) -> "_AliasReference_05a49177":
         '''A reference to a Alias resource.'''
-        return typing.cast(_AliasReference_05a49177, jsii.get(self, "aliasRef"))
+        return typing.cast("_AliasReference_05a49177", jsii.get(self, "aliasRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAliasArn")
@@ -293,9 +294,9 @@ class CfnAlias(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -319,14 +320,14 @@ class CfnAlias(
     @jsii.member(jsii_name="routingStrategy")
     def routing_strategy(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAlias.RoutingStrategyProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAlias.RoutingStrategyProperty"]:
         '''The routing configuration, including routing type and fleet target, for the alias.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAlias.RoutingStrategyProperty"], jsii.get(self, "routingStrategy"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAlias.RoutingStrategyProperty"], jsii.get(self, "routingStrategy"))
 
     @routing_strategy.setter
     def routing_strategy(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAlias.RoutingStrategyProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAlias.RoutingStrategyProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__529d8fec4c06eafb4c38da47298670dd8132ede4d21975eafb43f51a366a3d82)
@@ -348,12 +349,12 @@ class CfnAlias(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cc43df2fa439cbdde0361a6e15a7a3a916a006856add3cb38bca18959f9c8775)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -472,9 +473,9 @@ class CfnAliasProps:
         self,
         *,
         name: builtins.str,
-        routing_strategy: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAlias.RoutingStrategyProperty, typing.Dict[builtins.str, typing.Any]]],
+        routing_strategy: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlias.RoutingStrategyProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAlias``.
 
@@ -488,6 +489,7 @@ class CfnAliasProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_gamelift as gamelift
@@ -540,14 +542,14 @@ class CfnAliasProps:
     @builtins.property
     def routing_strategy(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAlias.RoutingStrategyProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAlias.RoutingStrategyProperty"]:
         '''The routing configuration, including routing type and fleet target, for the alias.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-alias.html#cfn-gamelift-alias-routingstrategy
         '''
         result = self._values.get("routing_strategy")
         assert result is not None, "Required property 'routing_strategy' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAlias.RoutingStrategyProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAlias.RoutingStrategyProperty"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -559,13 +561,13 @@ class CfnAliasProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-alias.html#cfn-gamelift-alias-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -595,6 +597,7 @@ class CfnBuild(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_gamelift as gamelift
@@ -621,14 +624,14 @@ class CfnBuild(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: typing.Optional[builtins.str] = None,
         operating_system: typing.Optional[builtins.str] = None,
         server_sdk_version: typing.Optional[builtins.str] = None,
-        storage_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBuild.StorageLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        storage_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBuild.StorageLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::GameLift::Build``.
@@ -659,7 +662,7 @@ class CfnBuild(
 
     @jsii.member(jsii_name="arnForBuild")
     @builtins.classmethod
-    def arn_for_build(cls, resource: _IBuildRef_a9adc427) -> builtins.str:
+    def arn_for_build(cls, resource: "_IBuildRef_a9adc427") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -672,10 +675,10 @@ class CfnBuild(
     @builtins.classmethod
     def from_build_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IBuildRef_a9adc427:
+    ) -> "_IBuildRef_a9adc427":
         '''Creates a new IBuildRef from an ARN.
 
         :param scope: -
@@ -687,16 +690,16 @@ class CfnBuild(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IBuildRef_a9adc427, jsii.sinvoke(cls, "fromBuildArn", [scope, id, arn]))
+        return typing.cast("_IBuildRef_a9adc427", jsii.sinvoke(cls, "fromBuildArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromBuildId")
     @builtins.classmethod
     def from_build_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         build_id: builtins.str,
-    ) -> _IBuildRef_a9adc427:
+    ) -> "_IBuildRef_a9adc427":
         '''Creates a new IBuildRef from a buildId.
 
         :param scope: -
@@ -708,7 +711,7 @@ class CfnBuild(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument build_id", value=build_id, expected_type=type_hints["build_id"])
-        return typing.cast(_IBuildRef_a9adc427, jsii.sinvoke(cls, "fromBuildId", [scope, id, build_id]))
+        return typing.cast("_IBuildRef_a9adc427", jsii.sinvoke(cls, "fromBuildId", [scope, id, build_id]))
 
     @jsii.member(jsii_name="isCfnBuild")
     @builtins.classmethod
@@ -723,7 +726,7 @@ class CfnBuild(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBuild", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -772,15 +775,15 @@ class CfnBuild(
 
     @builtins.property
     @jsii.member(jsii_name="buildRef")
-    def build_ref(self) -> _BuildReference_9f4f10e0:
+    def build_ref(self) -> "_BuildReference_9f4f10e0":
         '''A reference to a Build resource.'''
-        return typing.cast(_BuildReference_9f4f10e0, jsii.get(self, "buildRef"))
+        return typing.cast("_BuildReference_9f4f10e0", jsii.get(self, "buildRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -830,14 +833,14 @@ class CfnBuild(
     @jsii.member(jsii_name="storageLocation")
     def storage_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBuild.StorageLocationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBuild.StorageLocationProperty"]]:
         '''Information indicating where your game build files are stored.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBuild.StorageLocationProperty"]], jsii.get(self, "storageLocation"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBuild.StorageLocationProperty"]], jsii.get(self, "storageLocation"))
 
     @storage_location.setter
     def storage_location(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBuild.StorageLocationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBuild.StorageLocationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fdd3e9ea10aa8547b05a398258efac5d3e786e68d7875c76104c89d2a3178e02)
@@ -846,12 +849,12 @@ class CfnBuild(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__61f5c317acb9e4d0abf34641df15710032d796e858c0b0962748ce1d84bf6d9d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1004,8 +1007,8 @@ class CfnBuildProps:
         name: typing.Optional[builtins.str] = None,
         operating_system: typing.Optional[builtins.str] = None,
         server_sdk_version: typing.Optional[builtins.str] = None,
-        storage_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBuild.StorageLocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        storage_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBuild.StorageLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnBuild``.
@@ -1022,6 +1025,7 @@ class CfnBuildProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_gamelift as gamelift
@@ -1106,7 +1110,7 @@ class CfnBuildProps:
     @builtins.property
     def storage_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBuild.StorageLocationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBuild.StorageLocationProperty"]]:
         '''Information indicating where your game build files are stored.
 
         Use this parameter only when creating a build with files stored in an Amazon S3 bucket that you own. The storage location must specify an Amazon S3 bucket name and key. The location must also specify a role ARN that you set up to allow Amazon GameLift Servers to access your Amazon S3 bucket. The S3 bucket and your new build must be in the same Region.
@@ -1116,16 +1120,16 @@ class CfnBuildProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-build.html#cfn-gamelift-build-storagelocation
         '''
         result = self._values.get("storage_location")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBuild.StorageLocationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBuild.StorageLocationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-build.html#cfn-gamelift-build-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def version(self) -> typing.Optional[builtins.str]:
@@ -1164,6 +1168,7 @@ class CfnContainerFleet(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_gamelift as gamelift
@@ -1241,26 +1246,26 @@ class CfnContainerFleet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         fleet_role_arn: builtins.str,
         billing_type: typing.Optional[builtins.str] = None,
-        deployment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerFleet.DeploymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        deployment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.DeploymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         game_server_container_group_definition_name: typing.Optional[builtins.str] = None,
         game_server_container_groups_per_instance: typing.Optional[jsii.Number] = None,
-        game_session_creation_limit_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerFleet.GameSessionCreationLimitPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        instance_connection_port_range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerFleet.ConnectionPortRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        instance_inbound_permissions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerFleet.IpPermissionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        game_session_creation_limit_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.GameSessionCreationLimitPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        instance_connection_port_range: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.ConnectionPortRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        instance_inbound_permissions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.IpPermissionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         instance_type: typing.Optional[builtins.str] = None,
-        locations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerFleet.LocationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerFleet.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        locations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.LocationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        log_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         metric_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
         new_game_session_protection_policy: typing.Optional[builtins.str] = None,
         per_instance_container_group_definition_name: typing.Optional[builtins.str] = None,
-        scaling_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerFleet.ScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        scaling_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.ScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GameLift::ContainerFleet``.
 
@@ -1314,7 +1319,7 @@ class CfnContainerFleet(
     @builtins.classmethod
     def arn_for_container_fleet(
         cls,
-        resource: _IContainerFleetRef_f4f92a80,
+        resource: "_IContainerFleetRef_f4f92a80",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1328,10 +1333,10 @@ class CfnContainerFleet(
     @builtins.classmethod
     def from_container_fleet_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IContainerFleetRef_f4f92a80:
+    ) -> "_IContainerFleetRef_f4f92a80":
         '''Creates a new IContainerFleetRef from an ARN.
 
         :param scope: -
@@ -1343,16 +1348,16 @@ class CfnContainerFleet(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IContainerFleetRef_f4f92a80, jsii.sinvoke(cls, "fromContainerFleetArn", [scope, id, arn]))
+        return typing.cast("_IContainerFleetRef_f4f92a80", jsii.sinvoke(cls, "fromContainerFleetArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromFleetId")
     @builtins.classmethod
     def from_fleet_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         fleet_id: builtins.str,
-    ) -> _IContainerFleetRef_f4f92a80:
+    ) -> "_IContainerFleetRef_f4f92a80":
         '''Creates a new IContainerFleetRef from a fleetId.
 
         :param scope: -
@@ -1364,7 +1369,7 @@ class CfnContainerFleet(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument fleet_id", value=fleet_id, expected_type=type_hints["fleet_id"])
-        return typing.cast(_IContainerFleetRef_f4f92a80, jsii.sinvoke(cls, "fromFleetId", [scope, id, fleet_id]))
+        return typing.cast("_IContainerFleetRef_f4f92a80", jsii.sinvoke(cls, "fromFleetId", [scope, id, fleet_id]))
 
     @jsii.member(jsii_name="isCfnContainerFleet")
     @builtins.classmethod
@@ -1379,7 +1384,7 @@ class CfnContainerFleet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContainerFleet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1421,12 +1426,12 @@ class CfnContainerFleet(
 
     @builtins.property
     @jsii.member(jsii_name="attrDeploymentDetails")
-    def attr_deployment_details(self) -> _IResolvable_da3f097b:
+    def attr_deployment_details(self) -> "_IResolvable_da3f097b":
         '''Provides information about the last deployment ID and its status.
 
         :cloudformationAttribute: DeploymentDetails
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrDeploymentDetails"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrDeploymentDetails"))
 
     @builtins.property
     @jsii.member(jsii_name="attrFleetArn")
@@ -1493,9 +1498,9 @@ class CfnContainerFleet(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1504,9 +1509,9 @@ class CfnContainerFleet(
 
     @builtins.property
     @jsii.member(jsii_name="containerFleetRef")
-    def container_fleet_ref(self) -> _ContainerFleetReference_e37842ff:
+    def container_fleet_ref(self) -> "_ContainerFleetReference_e37842ff":
         '''A reference to a ContainerFleet resource.'''
-        return typing.cast(_ContainerFleetReference_e37842ff, jsii.get(self, "containerFleetRef"))
+        return typing.cast("_ContainerFleetReference_e37842ff", jsii.get(self, "containerFleetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="fleetRoleArn")
@@ -1538,14 +1543,14 @@ class CfnContainerFleet(
     @jsii.member(jsii_name="deploymentConfiguration")
     def deployment_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.DeploymentConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.DeploymentConfigurationProperty"]]:
         '''Set of rules for processing a deployment for a container fleet update.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.DeploymentConfigurationProperty"]], jsii.get(self, "deploymentConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.DeploymentConfigurationProperty"]], jsii.get(self, "deploymentConfiguration"))
 
     @deployment_configuration.setter
     def deployment_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.DeploymentConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.DeploymentConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ef9932c78fa010240b75995b843da6e043ab92ac23a400685eeeebc9b2d9e5c4)
@@ -1603,14 +1608,14 @@ class CfnContainerFleet(
     @jsii.member(jsii_name="gameSessionCreationLimitPolicy")
     def game_session_creation_limit_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.GameSessionCreationLimitPolicyProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.GameSessionCreationLimitPolicyProperty"]]:
         '''A policy that limits the number of game sessions that each individual player can create on instances in this fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.GameSessionCreationLimitPolicyProperty"]], jsii.get(self, "gameSessionCreationLimitPolicy"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.GameSessionCreationLimitPolicyProperty"]], jsii.get(self, "gameSessionCreationLimitPolicy"))
 
     @game_session_creation_limit_policy.setter
     def game_session_creation_limit_policy(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.GameSessionCreationLimitPolicyProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.GameSessionCreationLimitPolicyProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ee374c5590b404e3cb8d6cde909b11f0fb3541f0c11fc73da3c85400628cec3d)
@@ -1621,14 +1626,14 @@ class CfnContainerFleet(
     @jsii.member(jsii_name="instanceConnectionPortRange")
     def instance_connection_port_range(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.ConnectionPortRangeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.ConnectionPortRangeProperty"]]:
         '''The set of port numbers to open on each instance in a container fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.ConnectionPortRangeProperty"]], jsii.get(self, "instanceConnectionPortRange"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.ConnectionPortRangeProperty"]], jsii.get(self, "instanceConnectionPortRange"))
 
     @instance_connection_port_range.setter
     def instance_connection_port_range(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.ConnectionPortRangeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.ConnectionPortRangeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7cd714c6adf18c5cdb2b4cad3d4dbf1a4a07bdbe94b6ffd5d751f200d7347426)
@@ -1639,14 +1644,14 @@ class CfnContainerFleet(
     @jsii.member(jsii_name="instanceInboundPermissions")
     def instance_inbound_permissions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.IpPermissionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.IpPermissionProperty"]]]]:
         '''The IP address ranges and port settings that allow inbound traffic to access game server processes and other processes on this fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.IpPermissionProperty"]]]], jsii.get(self, "instanceInboundPermissions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.IpPermissionProperty"]]]], jsii.get(self, "instanceInboundPermissions"))
 
     @instance_inbound_permissions.setter
     def instance_inbound_permissions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.IpPermissionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.IpPermissionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aae77cedd1161d46848109370fc6b6d65ab8d346c0a5f95f915a98f0d6efdbcd)
@@ -1670,13 +1675,13 @@ class CfnContainerFleet(
     @jsii.member(jsii_name="locations")
     def locations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.LocationConfigurationProperty"]]]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.LocationConfigurationProperty"]]]], jsii.get(self, "locations"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.LocationConfigurationProperty"]]]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.LocationConfigurationProperty"]]]], jsii.get(self, "locations"))
 
     @locations.setter
     def locations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.LocationConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.LocationConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a36ecc94bdbfc4085b1baaf7462461cb77b4e640a5f1017b6653f6dc89c0b20f)
@@ -1687,14 +1692,14 @@ class CfnContainerFleet(
     @jsii.member(jsii_name="logConfiguration")
     def log_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.LogConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.LogConfigurationProperty"]]:
         '''The method that is used to collect container logs for the fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.LogConfigurationProperty"]], jsii.get(self, "logConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.LogConfigurationProperty"]], jsii.get(self, "logConfiguration"))
 
     @log_configuration.setter
     def log_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.LogConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.LogConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4618d18b990fa28be1054e4840c2f8afe6e85b406433ad49087577b8e2dfaf53)
@@ -1752,14 +1757,14 @@ class CfnContainerFleet(
     @jsii.member(jsii_name="scalingPolicies")
     def scaling_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.ScalingPolicyProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.ScalingPolicyProperty"]]]]:
         '''A list of rules that control how a fleet is scaled.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.ScalingPolicyProperty"]]]], jsii.get(self, "scalingPolicies"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.ScalingPolicyProperty"]]]], jsii.get(self, "scalingPolicies"))
 
     @scaling_policies.setter
     def scaling_policies(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.ScalingPolicyProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.ScalingPolicyProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0b8d26c0f526c6120c09026205884464ccfb9805906c0810312a9ac8dc69119a)
@@ -1768,12 +1773,12 @@ class CfnContainerFleet(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f9b56d077e864bb1e2553942ee500751751ac23fc1e29dfd0bb471e69e99ff44)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2310,7 +2315,7 @@ class CfnContainerFleet(
             self,
             *,
             location: builtins.str,
-            location_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerFleet.LocationCapacityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            location_capacity: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.LocationCapacityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             stopped_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''A remote location where a multi-location fleet can deploy game servers for game hosting.
@@ -2370,7 +2375,7 @@ class CfnContainerFleet(
         @builtins.property
         def location_capacity(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.LocationCapacityProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.LocationCapacityProperty"]]:
             '''Current resource capacity settings in a specified fleet or location.
 
             The location value might refer to a fleet's remote location or its home Region.
@@ -2378,7 +2383,7 @@ class CfnContainerFleet(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containerfleet-locationconfiguration.html#cfn-gamelift-containerfleet-locationconfiguration-locationcapacity
             '''
             result = self._values.get("location_capacity")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.LocationCapacityProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.LocationCapacityProperty"]], result)
 
         @builtins.property
         def stopped_actions(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2521,7 +2526,7 @@ class CfnContainerFleet(
             policy_type: typing.Optional[builtins.str] = None,
             scaling_adjustment: typing.Optional[jsii.Number] = None,
             scaling_adjustment_type: typing.Optional[builtins.str] = None,
-            target_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerFleet.TargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            target_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.TargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             threshold: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Rule that controls how a fleet is scaled.
@@ -2683,13 +2688,13 @@ class CfnContainerFleet(
         @builtins.property
         def target_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.TargetConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.TargetConfigurationProperty"]]:
             '''An object that contains settings for a target-based scaling policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containerfleet-scalingpolicy.html#cfn-gamelift-containerfleet-scalingpolicy-targetconfiguration
             '''
             result = self._values.get("target_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerFleet.TargetConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.TargetConfigurationProperty"]], result)
 
         @builtins.property
         def threshold(self) -> typing.Optional[jsii.Number]:
@@ -2797,21 +2802,21 @@ class CfnContainerFleetProps:
         *,
         fleet_role_arn: builtins.str,
         billing_type: typing.Optional[builtins.str] = None,
-        deployment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainerFleet.DeploymentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        deployment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.DeploymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         game_server_container_group_definition_name: typing.Optional[builtins.str] = None,
         game_server_container_groups_per_instance: typing.Optional[jsii.Number] = None,
-        game_session_creation_limit_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainerFleet.GameSessionCreationLimitPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        instance_connection_port_range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainerFleet.ConnectionPortRangeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        instance_inbound_permissions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainerFleet.IpPermissionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        game_session_creation_limit_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.GameSessionCreationLimitPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        instance_connection_port_range: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.ConnectionPortRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        instance_inbound_permissions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.IpPermissionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         instance_type: typing.Optional[builtins.str] = None,
-        locations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainerFleet.LocationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainerFleet.LogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        locations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.LocationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        log_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         metric_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
         new_game_session_protection_policy: typing.Optional[builtins.str] = None,
         per_instance_container_group_definition_name: typing.Optional[builtins.str] = None,
-        scaling_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainerFleet.ScalingPolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        scaling_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerFleet.ScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnContainerFleet``.
 
@@ -2838,6 +2843,7 @@ class CfnContainerFleetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_gamelift as gamelift
@@ -2995,13 +3001,13 @@ class CfnContainerFleetProps:
     @builtins.property
     def deployment_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.DeploymentConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.DeploymentConfigurationProperty"]]:
         '''Set of rules for processing a deployment for a container fleet update.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-containerfleet.html#cfn-gamelift-containerfleet-deploymentconfiguration
         '''
         result = self._values.get("deployment_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.DeploymentConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.DeploymentConfigurationProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -3035,7 +3041,7 @@ class CfnContainerFleetProps:
     @builtins.property
     def game_session_creation_limit_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.GameSessionCreationLimitPolicyProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.GameSessionCreationLimitPolicyProperty"]]:
         '''A policy that limits the number of game sessions that each individual player can create on instances in this fleet.
 
         The limit applies for a specified span of time.
@@ -3043,12 +3049,12 @@ class CfnContainerFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-containerfleet.html#cfn-gamelift-containerfleet-gamesessioncreationlimitpolicy
         '''
         result = self._values.get("game_session_creation_limit_policy")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.GameSessionCreationLimitPolicyProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.GameSessionCreationLimitPolicyProperty"]], result)
 
     @builtins.property
     def instance_connection_port_range(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.ConnectionPortRangeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.ConnectionPortRangeProperty"]]:
         '''The set of port numbers to open on each instance in a container fleet.
 
         Connection ports are used by inbound traffic to connect with processes that are running in containers on the fleet.
@@ -3056,18 +3062,18 @@ class CfnContainerFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-containerfleet.html#cfn-gamelift-containerfleet-instanceconnectionportrange
         '''
         result = self._values.get("instance_connection_port_range")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.ConnectionPortRangeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.ConnectionPortRangeProperty"]], result)
 
     @builtins.property
     def instance_inbound_permissions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.IpPermissionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.IpPermissionProperty"]]]]:
         '''The IP address ranges and port settings that allow inbound traffic to access game server processes and other processes on this fleet.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-containerfleet.html#cfn-gamelift-containerfleet-instanceinboundpermissions
         '''
         result = self._values.get("instance_inbound_permissions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.IpPermissionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.IpPermissionProperty"]]]], result)
 
     @builtins.property
     def instance_type(self) -> typing.Optional[builtins.str]:
@@ -3083,17 +3089,17 @@ class CfnContainerFleetProps:
     @builtins.property
     def locations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.LocationConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.LocationConfigurationProperty"]]]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-containerfleet.html#cfn-gamelift-containerfleet-locations
         '''
         result = self._values.get("locations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.LocationConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.LocationConfigurationProperty"]]]], result)
 
     @builtins.property
     def log_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.LogConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.LogConfigurationProperty"]]:
         '''The method that is used to collect container logs for the fleet.
 
         Amazon GameLift Servers saves all standard output for each container in logs, including game session logs.
@@ -3105,7 +3111,7 @@ class CfnContainerFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-containerfleet.html#cfn-gamelift-containerfleet-logconfiguration
         '''
         result = self._values.get("log_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.LogConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.LogConfigurationProperty"]], result)
 
     @builtins.property
     def metric_groups(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3146,22 +3152,22 @@ class CfnContainerFleetProps:
     @builtins.property
     def scaling_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.ScalingPolicyProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.ScalingPolicyProperty"]]]]:
         '''A list of rules that control how a fleet is scaled.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-containerfleet.html#cfn-gamelift-containerfleet-scalingpolicies
         '''
         result = self._values.get("scaling_policies")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContainerFleet.ScalingPolicyProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerFleet.ScalingPolicyProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-containerfleet.html#cfn-gamelift-containerfleet-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3195,6 +3201,7 @@ class CfnContainerGroupDefinition(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_gamelift as gamelift
@@ -3289,7 +3296,7 @@ class CfnContainerGroupDefinition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -3297,10 +3304,10 @@ class CfnContainerGroupDefinition(
         total_memory_limit_mebibytes: jsii.Number,
         total_vcpu_limit: jsii.Number,
         container_group_type: typing.Optional[builtins.str] = None,
-        game_server_container_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerGroupDefinition.GameServerContainerDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        game_server_container_definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.GameServerContainerDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         source_version_number: typing.Optional[jsii.Number] = None,
-        support_container_definitions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerGroupDefinition.SupportContainerDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        support_container_definitions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.SupportContainerDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         version_description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::GameLift::ContainerGroupDefinition``.
@@ -3341,7 +3348,7 @@ class CfnContainerGroupDefinition(
     @builtins.classmethod
     def arn_for_container_group_definition(
         cls,
-        resource: _IContainerGroupDefinitionRef_2e4eba1f,
+        resource: "_IContainerGroupDefinitionRef_2e4eba1f",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3364,7 +3371,7 @@ class CfnContainerGroupDefinition(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContainerGroupDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3454,9 +3461,9 @@ class CfnContainerGroupDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3467,9 +3474,9 @@ class CfnContainerGroupDefinition(
     @jsii.member(jsii_name="containerGroupDefinitionRef")
     def container_group_definition_ref(
         self,
-    ) -> _ContainerGroupDefinitionReference_55e844c4:
+    ) -> "_ContainerGroupDefinitionReference_55e844c4":
         '''A reference to a ContainerGroupDefinition resource.'''
-        return typing.cast(_ContainerGroupDefinitionReference_55e844c4, jsii.get(self, "containerGroupDefinitionRef"))
+        return typing.cast("_ContainerGroupDefinitionReference_55e844c4", jsii.get(self, "containerGroupDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -3540,14 +3547,14 @@ class CfnContainerGroupDefinition(
     @jsii.member(jsii_name="gameServerContainerDefinition")
     def game_server_container_definition(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.GameServerContainerDefinitionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.GameServerContainerDefinitionProperty"]]:
         '''The definition for the game server container in this group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.GameServerContainerDefinitionProperty"]], jsii.get(self, "gameServerContainerDefinition"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.GameServerContainerDefinitionProperty"]], jsii.get(self, "gameServerContainerDefinition"))
 
     @game_server_container_definition.setter
     def game_server_container_definition(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.GameServerContainerDefinitionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.GameServerContainerDefinitionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1c82cba9110173a8477c870dcd9dc5096dee3fc3981d5dbbdb3e909b3777f47d)
@@ -3571,14 +3578,14 @@ class CfnContainerGroupDefinition(
     @jsii.member(jsii_name="supportContainerDefinitions")
     def support_container_definitions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.SupportContainerDefinitionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.SupportContainerDefinitionProperty"]]]]:
         '''The set of definitions for support containers in this group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.SupportContainerDefinitionProperty"]]]], jsii.get(self, "supportContainerDefinitions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.SupportContainerDefinitionProperty"]]]], jsii.get(self, "supportContainerDefinitions"))
 
     @support_container_definitions.setter
     def support_container_definitions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.SupportContainerDefinitionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.SupportContainerDefinitionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8eefcc08a08c4e2d5876a924350a3f3122337dadd842f4c45350099127878a77)
@@ -3587,12 +3594,12 @@ class CfnContainerGroupDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__39d9905e11429554186c96e0a5c07109b132519014161fc8e8d7aa9f4250218d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4106,10 +4113,10 @@ class CfnContainerGroupDefinition(
             container_name: builtins.str,
             image_uri: builtins.str,
             server_sdk_version: builtins.str,
-            depends_on: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerGroupDefinition.ContainerDependencyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            environment_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerGroupDefinition.ContainerEnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            mount_points: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerGroupDefinition.ContainerMountPointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            port_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerGroupDefinition.PortConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            depends_on: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.ContainerDependencyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            environment_override: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.ContainerEnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            mount_points: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.ContainerMountPointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            port_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.PortConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             resolved_image_digest: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Describes the game server container in an existing game server container group.
@@ -4236,7 +4243,7 @@ class CfnContainerGroupDefinition(
         @builtins.property
         def depends_on(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerDependencyProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerDependencyProperty"]]]]:
             '''Indicates that the container relies on the status of other containers in the same container group during startup and shutdown sequences.
 
             A container might have dependencies on multiple containers.
@@ -4244,12 +4251,12 @@ class CfnContainerGroupDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containergroupdefinition-gameservercontainerdefinition.html#cfn-gamelift-containergroupdefinition-gameservercontainerdefinition-dependson
             '''
             result = self._values.get("depends_on")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerDependencyProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerDependencyProperty"]]]], result)
 
         @builtins.property
         def environment_override(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerEnvironmentProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerEnvironmentProperty"]]]]:
             '''A set of environment variables that's passed to the container on startup.
 
             See the `ContainerDefinition::environment <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html#ECS-Type-ContainerDefinition-environment>`_ parameter in the *Amazon Elastic Container Service API Reference* .
@@ -4257,23 +4264,23 @@ class CfnContainerGroupDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containergroupdefinition-gameservercontainerdefinition.html#cfn-gamelift-containergroupdefinition-gameservercontainerdefinition-environmentoverride
             '''
             result = self._values.get("environment_override")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerEnvironmentProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerEnvironmentProperty"]]]], result)
 
         @builtins.property
         def mount_points(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerMountPointProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerMountPointProperty"]]]]:
             '''A mount point that binds a path inside the container to a file or directory on the host system and lets it access the file or directory.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containergroupdefinition-gameservercontainerdefinition.html#cfn-gamelift-containergroupdefinition-gameservercontainerdefinition-mountpoints
             '''
             result = self._values.get("mount_points")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerMountPointProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerMountPointProperty"]]]], result)
 
         @builtins.property
         def port_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.PortConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.PortConfigurationProperty"]]:
             '''The set of ports that are available to bind to processes in the container.
 
             For example, a game server process requires a container port to allow game clients to connect to it. Container ports aren't directly accessed by inbound traffic. Amazon GameLift Servers maps these container ports to externally accessible connection ports, which are assigned as needed from the container fleet's ``ConnectionPortRange`` .
@@ -4281,7 +4288,7 @@ class CfnContainerGroupDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containergroupdefinition-gameservercontainerdefinition.html#cfn-gamelift-containergroupdefinition-gameservercontainerdefinition-portconfiguration
             '''
             result = self._values.get("port_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.PortConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.PortConfigurationProperty"]], result)
 
         @builtins.property
         def resolved_image_digest(self) -> typing.Optional[builtins.str]:
@@ -4314,7 +4321,7 @@ class CfnContainerGroupDefinition(
         def __init__(
             self,
             *,
-            container_port_ranges: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerGroupDefinition.ContainerPortRangeProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            container_port_ranges: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.ContainerPortRangeProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Defines the ports on a container.
 
@@ -4347,14 +4354,14 @@ class CfnContainerGroupDefinition(
         @builtins.property
         def container_port_ranges(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerPortRangeProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerPortRangeProperty"]]]:
             '''Specifies one or more ranges of ports on a container.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containergroupdefinition-portconfiguration.html#cfn-gamelift-containergroupdefinition-portconfiguration-containerportranges
             '''
             result = self._values.get("container_port_ranges")
             assert result is not None, "Required property 'container_port_ranges' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerPortRangeProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerPortRangeProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4390,13 +4397,13 @@ class CfnContainerGroupDefinition(
             *,
             container_name: builtins.str,
             image_uri: builtins.str,
-            depends_on: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerGroupDefinition.ContainerDependencyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            environment_override: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerGroupDefinition.ContainerEnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            essential: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            health_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerGroupDefinition.ContainerHealthCheckProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            depends_on: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.ContainerDependencyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            environment_override: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.ContainerEnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            essential: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            health_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.ContainerHealthCheckProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             memory_hard_limit_mebibytes: typing.Optional[jsii.Number] = None,
-            mount_points: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerGroupDefinition.ContainerMountPointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            port_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainerGroupDefinition.PortConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mount_points: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.ContainerMountPointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            port_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.PortConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             resolved_image_digest: typing.Optional[builtins.str] = None,
             vcpu: typing.Optional[jsii.Number] = None,
         ) -> None:
@@ -4536,7 +4543,7 @@ class CfnContainerGroupDefinition(
         @builtins.property
         def depends_on(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerDependencyProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerDependencyProperty"]]]]:
             '''Indicates that the container relies on the status of other containers in the same container group during its startup and shutdown sequences.
 
             A container might have dependencies on multiple containers.
@@ -4544,12 +4551,12 @@ class CfnContainerGroupDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containergroupdefinition-supportcontainerdefinition.html#cfn-gamelift-containergroupdefinition-supportcontainerdefinition-dependson
             '''
             result = self._values.get("depends_on")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerDependencyProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerDependencyProperty"]]]], result)
 
         @builtins.property
         def environment_override(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerEnvironmentProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerEnvironmentProperty"]]]]:
             '''A set of environment variables that's passed to the container on startup.
 
             See the `ContainerDefinition::environment <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html#ECS-Type-ContainerDefinition-environment>`_ parameter in the *Amazon Elastic Container Service API Reference* .
@@ -4557,12 +4564,12 @@ class CfnContainerGroupDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containergroupdefinition-supportcontainerdefinition.html#cfn-gamelift-containergroupdefinition-supportcontainerdefinition-environmentoverride
             '''
             result = self._values.get("environment_override")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerEnvironmentProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerEnvironmentProperty"]]]], result)
 
         @builtins.property
         def essential(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the container is vital to the container group.
 
             If an essential container fails, the entire container group restarts.
@@ -4570,12 +4577,12 @@ class CfnContainerGroupDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containergroupdefinition-supportcontainerdefinition.html#cfn-gamelift-containergroupdefinition-supportcontainerdefinition-essential
             '''
             result = self._values.get("essential")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def health_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerHealthCheckProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerHealthCheckProperty"]]:
             '''A configuration for a non-terminal health check.
 
             A support container automatically restarts if it stops functioning or if it fails this health check.
@@ -4583,7 +4590,7 @@ class CfnContainerGroupDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containergroupdefinition-supportcontainerdefinition.html#cfn-gamelift-containergroupdefinition-supportcontainerdefinition-healthcheck
             '''
             result = self._values.get("health_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerHealthCheckProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerHealthCheckProperty"]], result)
 
         @builtins.property
         def memory_hard_limit_mebibytes(self) -> typing.Optional[jsii.Number]:
@@ -4601,18 +4608,18 @@ class CfnContainerGroupDefinition(
         @builtins.property
         def mount_points(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerMountPointProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerMountPointProperty"]]]]:
             '''A mount point that binds a path inside the container to a file or directory on the host system and lets it access the file or directory.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containergroupdefinition-supportcontainerdefinition.html#cfn-gamelift-containergroupdefinition-supportcontainerdefinition-mountpoints
             '''
             result = self._values.get("mount_points")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.ContainerMountPointProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.ContainerMountPointProperty"]]]], result)
 
         @builtins.property
         def port_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.PortConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.PortConfigurationProperty"]]:
             '''A set of ports that allow access to the container from external users.
 
             Processes running in the container can bind to a one of these ports. Container ports aren't directly accessed by inbound traffic. Amazon GameLift Servers maps these container ports to externally accessible connection ports, which are assigned as needed from the container fleet's ``ConnectionPortRange`` .
@@ -4620,7 +4627,7 @@ class CfnContainerGroupDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containergroupdefinition-supportcontainerdefinition.html#cfn-gamelift-containergroupdefinition-supportcontainerdefinition-portconfiguration
             '''
             result = self._values.get("port_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainerGroupDefinition.PortConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.PortConfigurationProperty"]], result)
 
         @builtins.property
         def resolved_image_digest(self) -> typing.Optional[builtins.str]:
@@ -4683,10 +4690,10 @@ class CfnContainerGroupDefinitionProps:
         total_memory_limit_mebibytes: jsii.Number,
         total_vcpu_limit: jsii.Number,
         container_group_type: typing.Optional[builtins.str] = None,
-        game_server_container_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainerGroupDefinition.GameServerContainerDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        game_server_container_definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.GameServerContainerDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         source_version_number: typing.Optional[jsii.Number] = None,
-        support_container_definitions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainerGroupDefinition.SupportContainerDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        support_container_definitions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainerGroupDefinition.SupportContainerDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         version_description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnContainerGroupDefinition``.
@@ -4707,6 +4714,7 @@ class CfnContainerGroupDefinitionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_gamelift as gamelift
@@ -4895,7 +4903,7 @@ class CfnContainerGroupDefinitionProps:
     @builtins.property
     def game_server_container_definition(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainerGroupDefinition.GameServerContainerDefinitionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.GameServerContainerDefinitionProperty"]]:
         '''The definition for the game server container in this group.
 
         This property is used only when the container group type is ``GAME_SERVER`` . This container definition specifies a container image with the game server build.
@@ -4903,7 +4911,7 @@ class CfnContainerGroupDefinitionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-containergroupdefinition.html#cfn-gamelift-containergroupdefinition-gameservercontainerdefinition
         '''
         result = self._values.get("game_server_container_definition")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainerGroupDefinition.GameServerContainerDefinitionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.GameServerContainerDefinitionProperty"]], result)
 
     @builtins.property
     def source_version_number(self) -> typing.Optional[jsii.Number]:
@@ -4917,7 +4925,7 @@ class CfnContainerGroupDefinitionProps:
     @builtins.property
     def support_container_definitions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContainerGroupDefinition.SupportContainerDefinitionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.SupportContainerDefinitionProperty"]]]]:
         '''The set of definitions for support containers in this group.
 
         A container group definition might have zero support container definitions. Support container can be used in any type of container group.
@@ -4925,16 +4933,16 @@ class CfnContainerGroupDefinitionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-containergroupdefinition.html#cfn-gamelift-containergroupdefinition-supportcontainerdefinitions
         '''
         result = self._values.get("support_container_definitions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContainerGroupDefinition.SupportContainerDefinitionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainerGroupDefinition.SupportContainerDefinitionProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-containergroupdefinition.html#cfn-gamelift-containergroupdefinition-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def version_description(self) -> typing.Optional[builtins.str]:
@@ -4975,6 +4983,7 @@ class CfnFleet(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_gamelift as gamelift
@@ -5068,23 +5077,23 @@ class CfnFleet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        anywhere_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.AnywhereConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        anywhere_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.AnywhereConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         apply_capacity: typing.Optional[builtins.str] = None,
         build_id: typing.Optional[builtins.str] = None,
-        certificate_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.CertificateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        certificate_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.CertificateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         compute_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         desired_ec2_instances: typing.Optional[jsii.Number] = None,
-        ec2_inbound_permissions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.IpPermissionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ec2_inbound_permissions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.IpPermissionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ec2_instance_type: typing.Optional[builtins.str] = None,
         fleet_type: typing.Optional[builtins.str] = None,
         instance_role_arn: typing.Optional[builtins.str] = None,
         instance_role_credentials_provider: typing.Optional[builtins.str] = None,
-        locations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.LocationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        locations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.LocationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         log_paths: typing.Optional[typing.Sequence[builtins.str]] = None,
         max_size: typing.Optional[jsii.Number] = None,
         metric_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -5092,13 +5101,13 @@ class CfnFleet(
         new_game_session_protection_policy: typing.Optional[builtins.str] = None,
         peer_vpc_aws_account_id: typing.Optional[builtins.str] = None,
         peer_vpc_id: typing.Optional[builtins.str] = None,
-        resource_creation_limit_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.ResourceCreationLimitPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        runtime_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.RuntimeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        scaling_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.ScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        resource_creation_limit_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ResourceCreationLimitPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        runtime_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.RuntimeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        scaling_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         script_id: typing.Optional[builtins.str] = None,
         server_launch_parameters: typing.Optional[builtins.str] = None,
         server_launch_path: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GameLift::Fleet``.
 
@@ -5172,7 +5181,7 @@ class CfnFleet(
 
     @jsii.member(jsii_name="arnForFleet")
     @builtins.classmethod
-    def arn_for_fleet(cls, resource: _IFleetRef_6df955ee) -> builtins.str:
+    def arn_for_fleet(cls, resource: "_IFleetRef_6df955ee") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5185,10 +5194,10 @@ class CfnFleet(
     @builtins.classmethod
     def from_fleet_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IFleetRef_6df955ee:
+    ) -> "_IFleetRef_6df955ee":
         '''Creates a new IFleetRef from an ARN.
 
         :param scope: -
@@ -5200,16 +5209,16 @@ class CfnFleet(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IFleetRef_6df955ee, jsii.sinvoke(cls, "fromFleetArn", [scope, id, arn]))
+        return typing.cast("_IFleetRef_6df955ee", jsii.sinvoke(cls, "fromFleetArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromFleetId")
     @builtins.classmethod
     def from_fleet_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         fleet_id: builtins.str,
-    ) -> _IFleetRef_6df955ee:
+    ) -> "_IFleetRef_6df955ee":
         '''Creates a new IFleetRef from a fleetId.
 
         :param scope: -
@@ -5221,7 +5230,7 @@ class CfnFleet(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument fleet_id", value=fleet_id, expected_type=type_hints["fleet_id"])
-        return typing.cast(_IFleetRef_6df955ee, jsii.sinvoke(cls, "fromFleetId", [scope, id, fleet_id]))
+        return typing.cast("_IFleetRef_6df955ee", jsii.sinvoke(cls, "fromFleetId", [scope, id, fleet_id]))
 
     @jsii.member(jsii_name="isCfnFleet")
     @builtins.classmethod
@@ -5236,7 +5245,7 @@ class CfnFleet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFleet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5285,9 +5294,9 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5296,9 +5305,9 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> _FleetReference_8e92bc3f:
+    def fleet_ref(self) -> "_FleetReference_8e92bc3f":
         '''A reference to a Fleet resource.'''
-        return typing.cast(_FleetReference_8e92bc3f, jsii.get(self, "fleetRef"))
+        return typing.cast("_FleetReference_8e92bc3f", jsii.get(self, "fleetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -5317,14 +5326,14 @@ class CfnFleet(
     @jsii.member(jsii_name="anywhereConfiguration")
     def anywhere_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.AnywhereConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AnywhereConfigurationProperty"]]:
         '''Amazon GameLift Servers Anywhere configuration options.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.AnywhereConfigurationProperty"]], jsii.get(self, "anywhereConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AnywhereConfigurationProperty"]], jsii.get(self, "anywhereConfiguration"))
 
     @anywhere_configuration.setter
     def anywhere_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.AnywhereConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AnywhereConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bc575abdd043760dd1cbe4178328d65df4b96ee18072484d24bd88d2e2d340ac)
@@ -5361,14 +5370,14 @@ class CfnFleet(
     @jsii.member(jsii_name="certificateConfiguration")
     def certificate_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.CertificateConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.CertificateConfigurationProperty"]]:
         '''Prompts Amazon GameLift Servers to generate a TLS/SSL certificate for the fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.CertificateConfigurationProperty"]], jsii.get(self, "certificateConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.CertificateConfigurationProperty"]], jsii.get(self, "certificateConfiguration"))
 
     @certificate_configuration.setter
     def certificate_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.CertificateConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.CertificateConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9f46d27389fd45eb3384977842c4289c60e5795c4a4bd6e08002ec26643232bc)
@@ -5423,14 +5432,14 @@ class CfnFleet(
     @jsii.member(jsii_name="ec2InboundPermissions")
     def ec2_inbound_permissions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.IpPermissionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.IpPermissionProperty"]]]]:
         '''The IP address ranges and port settings that allow inbound traffic to access game server processes and other processes on this fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.IpPermissionProperty"]]]], jsii.get(self, "ec2InboundPermissions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.IpPermissionProperty"]]]], jsii.get(self, "ec2InboundPermissions"))
 
     @ec2_inbound_permissions.setter
     def ec2_inbound_permissions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.IpPermissionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.IpPermissionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d84bfe64c88748026f1ea76b00a3c1eeeffe26c5a9e7df3f052f9069032249c9)
@@ -5496,14 +5505,14 @@ class CfnFleet(
     @jsii.member(jsii_name="locations")
     def locations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.LocationConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.LocationConfigurationProperty"]]]]:
         '''A set of remote locations to deploy additional instances to and manage as a multi-location fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.LocationConfigurationProperty"]]]], jsii.get(self, "locations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.LocationConfigurationProperty"]]]], jsii.get(self, "locations"))
 
     @locations.setter
     def locations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.LocationConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.LocationConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1377dfdecc90d2457b2fe3e90aa35cecb44bf218eb1836fc28cbc15b7a4812f3)
@@ -5623,14 +5632,14 @@ class CfnFleet(
     @jsii.member(jsii_name="resourceCreationLimitPolicy")
     def resource_creation_limit_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ResourceCreationLimitPolicyProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ResourceCreationLimitPolicyProperty"]]:
         '''A policy that limits the number of game sessions that an individual player can create on instances in this fleet within a specified span of time.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ResourceCreationLimitPolicyProperty"]], jsii.get(self, "resourceCreationLimitPolicy"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ResourceCreationLimitPolicyProperty"]], jsii.get(self, "resourceCreationLimitPolicy"))
 
     @resource_creation_limit_policy.setter
     def resource_creation_limit_policy(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ResourceCreationLimitPolicyProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ResourceCreationLimitPolicyProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__21ee8415ef994fb87ac2edf852ffd98a21384f9eccc26d3a0537563c2b00fbed)
@@ -5641,14 +5650,14 @@ class CfnFleet(
     @jsii.member(jsii_name="runtimeConfiguration")
     def runtime_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.RuntimeConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.RuntimeConfigurationProperty"]]:
         '''Instructions for how to launch and maintain server processes on instances in the fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.RuntimeConfigurationProperty"]], jsii.get(self, "runtimeConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.RuntimeConfigurationProperty"]], jsii.get(self, "runtimeConfiguration"))
 
     @runtime_configuration.setter
     def runtime_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.RuntimeConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.RuntimeConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__91bbc8eaa0f72d2032ef5cfd51906c5fc923f7ed24ede99b907cb24fe23da499)
@@ -5659,14 +5668,14 @@ class CfnFleet(
     @jsii.member(jsii_name="scalingPolicies")
     def scaling_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.ScalingPolicyProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.ScalingPolicyProperty"]]]]:
         '''Rule that controls how a fleet is scaled.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.ScalingPolicyProperty"]]]], jsii.get(self, "scalingPolicies"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.ScalingPolicyProperty"]]]], jsii.get(self, "scalingPolicies"))
 
     @scaling_policies.setter
     def scaling_policies(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.ScalingPolicyProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.ScalingPolicyProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__082c3456142a6049adc9dd4639e8b2ca94a21dbf9412cc70d0ea2e1babccf7c3)
@@ -5724,12 +5733,12 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__27ef86cf1bf34b50ec355a45305857c52751912f8408dec34a63b8a26665856d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6080,7 +6089,7 @@ class CfnFleet(
             self,
             *,
             location: builtins.str,
-            location_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.LocationCapacityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            location_capacity: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.LocationCapacityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A remote location where a multi-location fleet can deploy game servers for game hosting.
 
@@ -6134,7 +6143,7 @@ class CfnFleet(
         @builtins.property
         def location_capacity(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.LocationCapacityProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.LocationCapacityProperty"]]:
             '''Current resource capacity settings for managed EC2 fleets and managed container fleets.
 
             For multi-location fleets, location values might refer to a fleet's remote location or its home Region.
@@ -6144,7 +6153,7 @@ class CfnFleet(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-fleet-locationconfiguration.html#cfn-gamelift-fleet-locationconfiguration-locationcapacity
             '''
             result = self._values.get("location_capacity")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.LocationCapacityProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.LocationCapacityProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6253,7 +6262,7 @@ class CfnFleet(
             *,
             game_session_activation_timeout_seconds: typing.Optional[jsii.Number] = None,
             max_concurrent_game_session_activations: typing.Optional[jsii.Number] = None,
-            server_processes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.ServerProcessProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            server_processes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ServerProcessProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''A collection of server process configurations that describe the set of processes to run on each instance in a fleet.
 
@@ -6328,13 +6337,13 @@ class CfnFleet(
         @builtins.property
         def server_processes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.ServerProcessProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.ServerProcessProperty"]]]]:
             '''A collection of server process configurations that identify what server processes to run on fleet computes.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-fleet-runtimeconfiguration.html#cfn-gamelift-fleet-runtimeconfiguration-serverprocesses
             '''
             result = self._values.get("server_processes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.ServerProcessProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.ServerProcessProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6378,7 +6387,7 @@ class CfnFleet(
             scaling_adjustment: typing.Optional[jsii.Number] = None,
             scaling_adjustment_type: typing.Optional[builtins.str] = None,
             status: typing.Optional[builtins.str] = None,
-            target_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.TargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            target_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.TargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             threshold: typing.Optional[jsii.Number] = None,
             update_status: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -6584,13 +6593,13 @@ class CfnFleet(
         @builtins.property
         def target_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.TargetConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.TargetConfigurationProperty"]]:
             '''An object that contains settings for a target-based scaling policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-fleet-scalingpolicy.html#cfn-gamelift-fleet-scalingpolicy-targetconfiguration
             '''
             result = self._values.get("target_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.TargetConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.TargetConfigurationProperty"]], result)
 
         @builtins.property
         def threshold(self) -> typing.Optional[jsii.Number]:
@@ -6826,19 +6835,19 @@ class CfnFleetProps:
         self,
         *,
         name: builtins.str,
-        anywhere_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.AnywhereConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        anywhere_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.AnywhereConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         apply_capacity: typing.Optional[builtins.str] = None,
         build_id: typing.Optional[builtins.str] = None,
-        certificate_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.CertificateConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        certificate_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.CertificateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         compute_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         desired_ec2_instances: typing.Optional[jsii.Number] = None,
-        ec2_inbound_permissions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.IpPermissionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ec2_inbound_permissions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.IpPermissionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ec2_instance_type: typing.Optional[builtins.str] = None,
         fleet_type: typing.Optional[builtins.str] = None,
         instance_role_arn: typing.Optional[builtins.str] = None,
         instance_role_credentials_provider: typing.Optional[builtins.str] = None,
-        locations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.LocationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        locations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.LocationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         log_paths: typing.Optional[typing.Sequence[builtins.str]] = None,
         max_size: typing.Optional[jsii.Number] = None,
         metric_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -6846,13 +6855,13 @@ class CfnFleetProps:
         new_game_session_protection_policy: typing.Optional[builtins.str] = None,
         peer_vpc_aws_account_id: typing.Optional[builtins.str] = None,
         peer_vpc_id: typing.Optional[builtins.str] = None,
-        resource_creation_limit_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.ResourceCreationLimitPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        runtime_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.RuntimeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        scaling_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.ScalingPolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        resource_creation_limit_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ResourceCreationLimitPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        runtime_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.RuntimeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        scaling_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         script_id: typing.Optional[builtins.str] = None,
         server_launch_parameters: typing.Optional[builtins.str] = None,
         server_launch_path: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFleet``.
 
@@ -6890,6 +6899,7 @@ class CfnFleetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_gamelift as gamelift
@@ -7083,13 +7093,13 @@ class CfnFleetProps:
     @builtins.property
     def anywhere_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.AnywhereConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AnywhereConfigurationProperty"]]:
         '''Amazon GameLift Servers Anywhere configuration options.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-anywhereconfiguration
         '''
         result = self._values.get("anywhere_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.AnywhereConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AnywhereConfigurationProperty"]], result)
 
     @builtins.property
     def apply_capacity(self) -> typing.Optional[builtins.str]:
@@ -7118,7 +7128,7 @@ class CfnFleetProps:
     @builtins.property
     def certificate_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.CertificateConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.CertificateConfigurationProperty"]]:
         '''Prompts Amazon GameLift Servers to generate a TLS/SSL certificate for the fleet.
 
         Amazon GameLift Servers uses the certificates to encrypt traffic between game clients and the game servers running on Amazon GameLift Servers. By default, the ``CertificateConfiguration`` is ``DISABLED`` . You can't change this property after you create the fleet.
@@ -7131,7 +7141,7 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-certificateconfiguration
         '''
         result = self._values.get("certificate_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.CertificateConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.CertificateConfigurationProperty"]], result)
 
     @builtins.property
     def compute_type(self) -> typing.Optional[builtins.str]:
@@ -7171,7 +7181,7 @@ class CfnFleetProps:
     @builtins.property
     def ec2_inbound_permissions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFleet.IpPermissionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.IpPermissionProperty"]]]]:
         '''The IP address ranges and port settings that allow inbound traffic to access game server processes and other processes on this fleet.
 
         Set this parameter for managed EC2 fleets. You can leave this parameter empty when creating the fleet, but you must call ` <https://docs.aws.amazon.com/gamelift/latest/apireference/API_UpdateFleetPortSettings>`_ to set it before players can connect to game sessions. As a best practice, we recommend opening ports for remote access only when you need them and closing them when you're finished. For Amazon GameLift Servers Realtime fleets, Amazon GameLift Servers automatically sets TCP and UDP ranges.
@@ -7179,7 +7189,7 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-ec2inboundpermissions
         '''
         result = self._values.get("ec2_inbound_permissions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFleet.IpPermissionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.IpPermissionProperty"]]]], result)
 
     @builtins.property
     def ec2_instance_type(self) -> typing.Optional[builtins.str]:
@@ -7228,7 +7238,7 @@ class CfnFleetProps:
     @builtins.property
     def locations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFleet.LocationConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.LocationConfigurationProperty"]]]]:
         '''A set of remote locations to deploy additional instances to and manage as a multi-location fleet.
 
         Use this parameter when creating a fleet in AWS Regions that support multiple locations. You can add any AWS Region or Local Zone that's supported by Amazon GameLift Servers. Provide a list of one or more AWS Region codes, such as ``us-west-2`` , or Local Zone names. When using this parameter, Amazon GameLift Servers requires you to include your home location in the request. For a list of supported Regions and Local Zones, see `Amazon GameLift Servers service locations <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-regions.html>`_ for managed hosting.
@@ -7236,7 +7246,7 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-locations
         '''
         result = self._values.get("locations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFleet.LocationConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.LocationConfigurationProperty"]]]], result)
 
     @builtins.property
     def log_paths(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -7330,18 +7340,18 @@ class CfnFleetProps:
     @builtins.property
     def resource_creation_limit_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.ResourceCreationLimitPolicyProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ResourceCreationLimitPolicyProperty"]]:
         '''A policy that limits the number of game sessions that an individual player can create on instances in this fleet within a specified span of time.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-resourcecreationlimitpolicy
         '''
         result = self._values.get("resource_creation_limit_policy")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.ResourceCreationLimitPolicyProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ResourceCreationLimitPolicyProperty"]], result)
 
     @builtins.property
     def runtime_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.RuntimeConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.RuntimeConfigurationProperty"]]:
         '''Instructions for how to launch and maintain server processes on instances in the fleet.
 
         The runtime configuration defines one or more server process configurations, each identifying a build executable or Realtime script file and the number of processes of that type to run concurrently.
@@ -7352,12 +7362,12 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-runtimeconfiguration
         '''
         result = self._values.get("runtime_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.RuntimeConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.RuntimeConfigurationProperty"]], result)
 
     @builtins.property
     def scaling_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFleet.ScalingPolicyProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.ScalingPolicyProperty"]]]]:
         '''Rule that controls how a fleet is scaled.
 
         Scaling policies are uniquely identified by the combination of name and fleet ID.
@@ -7365,7 +7375,7 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-scalingpolicies
         '''
         result = self._values.get("scaling_policies")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFleet.ScalingPolicyProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.ScalingPolicyProperty"]]]], result)
 
     @builtins.property
     def script_id(self) -> typing.Optional[builtins.str]:
@@ -7410,13 +7420,13 @@ class CfnFleetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7459,6 +7469,7 @@ class CfnGameServerGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_gamelift as gamelift
@@ -7502,20 +7513,20 @@ class CfnGameServerGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         game_server_group_name: builtins.str,
-        instance_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGameServerGroup.InstanceDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        instance_definitions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameServerGroup.InstanceDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         role_arn: builtins.str,
-        auto_scaling_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGameServerGroup.AutoScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_scaling_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameServerGroup.AutoScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         balancing_strategy: typing.Optional[builtins.str] = None,
         delete_option: typing.Optional[builtins.str] = None,
         game_server_protection_policy: typing.Optional[builtins.str] = None,
-        launch_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGameServerGroup.LaunchTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        launch_template: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameServerGroup.LaunchTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         max_size: typing.Optional[jsii.Number] = None,
         min_size: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::GameLift::GameServerGroup``.
@@ -7560,7 +7571,7 @@ class CfnGameServerGroup(
     @builtins.classmethod
     def arn_for_game_server_group(
         cls,
-        resource: _IGameServerGroupRef_36f43b5d,
+        resource: "_IGameServerGroupRef_36f43b5d",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -7583,7 +7594,7 @@ class CfnGameServerGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGameServerGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7637,15 +7648,15 @@ class CfnGameServerGroup(
 
     @builtins.property
     @jsii.member(jsii_name="gameServerGroupRef")
-    def game_server_group_ref(self) -> _GameServerGroupReference_0a010963:
+    def game_server_group_ref(self) -> "_GameServerGroupReference_0a010963":
         '''A reference to a GameServerGroup resource.'''
-        return typing.cast(_GameServerGroupReference_0a010963, jsii.get(self, "gameServerGroupRef"))
+        return typing.cast("_GameServerGroupReference_0a010963", jsii.get(self, "gameServerGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="gameServerGroupName")
@@ -7664,14 +7675,14 @@ class CfnGameServerGroup(
     @jsii.member(jsii_name="instanceDefinitions")
     def instance_definitions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGameServerGroup.InstanceDefinitionProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.InstanceDefinitionProperty"]]]:
         '''The set of Amazon EC2 instance types that Amazon GameLift Servers FleetIQ can use when balancing and automatically scaling instances in the corresponding Auto Scaling group.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGameServerGroup.InstanceDefinitionProperty"]]], jsii.get(self, "instanceDefinitions"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.InstanceDefinitionProperty"]]], jsii.get(self, "instanceDefinitions"))
 
     @instance_definitions.setter
     def instance_definitions(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGameServerGroup.InstanceDefinitionProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.InstanceDefinitionProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__868421ea021122381c2075a524c1d4785b63637a5ae0e28ee1747043ceaf14fc)
@@ -7695,14 +7706,14 @@ class CfnGameServerGroup(
     @jsii.member(jsii_name="autoScalingPolicy")
     def auto_scaling_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGameServerGroup.AutoScalingPolicyProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.AutoScalingPolicyProperty"]]:
         '''Configuration settings to define a scaling policy for the Auto Scaling group that is optimized for game hosting.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGameServerGroup.AutoScalingPolicyProperty"]], jsii.get(self, "autoScalingPolicy"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.AutoScalingPolicyProperty"]], jsii.get(self, "autoScalingPolicy"))
 
     @auto_scaling_policy.setter
     def auto_scaling_policy(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGameServerGroup.AutoScalingPolicyProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.AutoScalingPolicyProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a5ee0eb377684162644f965e1106f08af9e4431bca94796da59b89abc7ffd998)
@@ -7755,14 +7766,14 @@ class CfnGameServerGroup(
     @jsii.member(jsii_name="launchTemplate")
     def launch_template(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGameServerGroup.LaunchTemplateProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.LaunchTemplateProperty"]]:
         '''The Amazon EC2 launch template that contains configuration settings and game server code to be deployed to all instances in the game server group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGameServerGroup.LaunchTemplateProperty"]], jsii.get(self, "launchTemplate"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.LaunchTemplateProperty"]], jsii.get(self, "launchTemplate"))
 
     @launch_template.setter
     def launch_template(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGameServerGroup.LaunchTemplateProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.LaunchTemplateProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2e1b30118131dd3fcdd29554603028109f41bf9f28d638ff1f26fc0de989e8b6)
@@ -7797,12 +7808,12 @@ class CfnGameServerGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new game server group resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0dba0594bea5d13fc9125228769f878f9679d696d511472809787acd5605b3e6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7833,7 +7844,7 @@ class CfnGameServerGroup(
         def __init__(
             self,
             *,
-            target_tracking_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGameServerGroup.TargetTrackingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            target_tracking_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameServerGroup.TargetTrackingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             estimated_instance_warmup: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''*This data type is used with the GameLift FleetIQ and game server groups.*.
@@ -7874,7 +7885,7 @@ class CfnGameServerGroup(
         @builtins.property
         def target_tracking_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGameServerGroup.TargetTrackingConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.TargetTrackingConfigurationProperty"]:
             '''Settings for a target-based scaling policy applied to Auto Scaling group.
 
             These settings are used to create a target-based policy that tracks the GameLift FleetIQ metric ``PercentUtilizedGameServers`` and specifies a target value for the metric. As player usage changes, the policy triggers to adjust the game server group capacity so that the metric returns to the target value.
@@ -7883,7 +7894,7 @@ class CfnGameServerGroup(
             '''
             result = self._values.get("target_tracking_configuration")
             assert result is not None, "Required property 'target_tracking_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGameServerGroup.TargetTrackingConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.TargetTrackingConfigurationProperty"], result)
 
         @builtins.property
         def estimated_instance_warmup(self) -> typing.Optional[jsii.Number]:
@@ -8158,16 +8169,16 @@ class CfnGameServerGroupProps:
         self,
         *,
         game_server_group_name: builtins.str,
-        instance_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGameServerGroup.InstanceDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        instance_definitions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameServerGroup.InstanceDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         role_arn: builtins.str,
-        auto_scaling_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGameServerGroup.AutoScalingPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_scaling_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameServerGroup.AutoScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         balancing_strategy: typing.Optional[builtins.str] = None,
         delete_option: typing.Optional[builtins.str] = None,
         game_server_protection_policy: typing.Optional[builtins.str] = None,
-        launch_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGameServerGroup.LaunchTemplateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        launch_template: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameServerGroup.LaunchTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         max_size: typing.Optional[jsii.Number] = None,
         min_size: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnGameServerGroup``.
@@ -8190,6 +8201,7 @@ class CfnGameServerGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_gamelift as gamelift
@@ -8283,14 +8295,14 @@ class CfnGameServerGroupProps:
     @builtins.property
     def instance_definitions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGameServerGroup.InstanceDefinitionProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.InstanceDefinitionProperty"]]]:
         '''The set of Amazon EC2 instance types that Amazon GameLift Servers FleetIQ can use when balancing and automatically scaling instances in the corresponding Auto Scaling group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-gameservergroup.html#cfn-gamelift-gameservergroup-instancedefinitions
         '''
         result = self._values.get("instance_definitions")
         assert result is not None, "Required property 'instance_definitions' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGameServerGroup.InstanceDefinitionProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.InstanceDefinitionProperty"]]], result)
 
     @builtins.property
     def role_arn(self) -> builtins.str:
@@ -8305,7 +8317,7 @@ class CfnGameServerGroupProps:
     @builtins.property
     def auto_scaling_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGameServerGroup.AutoScalingPolicyProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.AutoScalingPolicyProperty"]]:
         '''Configuration settings to define a scaling policy for the Auto Scaling group that is optimized for game hosting.
 
         The scaling policy uses the metric ``"PercentUtilizedGameServers"`` to maintain a buffer of idle game servers that can immediately accommodate new games and players. After the Auto Scaling group is created, update this value directly in the Auto Scaling group using the AWS console or APIs.
@@ -8313,7 +8325,7 @@ class CfnGameServerGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-gameservergroup.html#cfn-gamelift-gameservergroup-autoscalingpolicy
         '''
         result = self._values.get("auto_scaling_policy")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGameServerGroup.AutoScalingPolicyProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.AutoScalingPolicyProperty"]], result)
 
     @builtins.property
     def balancing_strategy(self) -> typing.Optional[builtins.str]:
@@ -8359,7 +8371,7 @@ class CfnGameServerGroupProps:
     @builtins.property
     def launch_template(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGameServerGroup.LaunchTemplateProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.LaunchTemplateProperty"]]:
         '''The Amazon EC2 launch template that contains configuration settings and game server code to be deployed to all instances in the game server group.
 
         You can specify the template using either the template name or ID. For help with creating a launch template, see `Creating a Launch Template for an Auto Scaling Group <https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-template.html>`_ in the *Amazon Elastic Compute Cloud Auto Scaling User Guide* . After the Auto Scaling group is created, update this value directly in the Auto Scaling group using the AWS console or APIs.
@@ -8370,7 +8382,7 @@ class CfnGameServerGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-gameservergroup.html#cfn-gamelift-gameservergroup-launchtemplate
         '''
         result = self._values.get("launch_template")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGameServerGroup.LaunchTemplateProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameServerGroup.LaunchTemplateProperty"]], result)
 
     @builtins.property
     def max_size(self) -> typing.Optional[jsii.Number]:
@@ -8395,7 +8407,7 @@ class CfnGameServerGroupProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new game server group resource.
 
         Tags are developer-defined key-value pairs. Tagging AWS resources is useful for resource management, access management, and cost allocation. For more information, see `Tagging AWS Resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ in the *AWS General Reference* . Once the resource is created, you can use TagResource, UntagResource, and ListTagsForResource to add, remove, and view tags, respectively. The maximum tag limit may be lower than stated. See the AWS General Reference for actual tagging limits.
@@ -8403,7 +8415,7 @@ class CfnGameServerGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-gameservergroup.html#cfn-gamelift-gameservergroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def vpc_subnets(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -8444,6 +8456,7 @@ class CfnGameSessionQueue(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_gamelift as gamelift
@@ -8478,17 +8491,17 @@ class CfnGameSessionQueue(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         custom_event_data: typing.Optional[builtins.str] = None,
-        destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGameSessionQueue.DestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        filter_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGameSessionQueue.FilterConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        destinations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameSessionQueue.DestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        filter_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameSessionQueue.FilterConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         notification_target: typing.Optional[builtins.str] = None,
-        player_latency_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGameSessionQueue.PlayerLatencyPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        priority_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGameSessionQueue.PriorityConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        player_latency_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameSessionQueue.PlayerLatencyPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        priority_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameSessionQueue.PriorityConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout_in_seconds: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Create a new ``AWS::GameLift::GameSessionQueue``.
@@ -8527,7 +8540,7 @@ class CfnGameSessionQueue(
     @builtins.classmethod
     def arn_for_game_session_queue(
         cls,
-        resource: _IGameSessionQueueRef_8896df67,
+        resource: "_IGameSessionQueueRef_8896df67",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -8541,10 +8554,10 @@ class CfnGameSessionQueue(
     @builtins.classmethod
     def from_game_session_queue_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IGameSessionQueueRef_8896df67:
+    ) -> "_IGameSessionQueueRef_8896df67":
         '''Creates a new IGameSessionQueueRef from an ARN.
 
         :param scope: -
@@ -8556,16 +8569,16 @@ class CfnGameSessionQueue(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IGameSessionQueueRef_8896df67, jsii.sinvoke(cls, "fromGameSessionQueueArn", [scope, id, arn]))
+        return typing.cast("_IGameSessionQueueRef_8896df67", jsii.sinvoke(cls, "fromGameSessionQueueArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromGameSessionQueueName")
     @builtins.classmethod
     def from_game_session_queue_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         game_session_queue_name: builtins.str,
-    ) -> _IGameSessionQueueRef_8896df67:
+    ) -> "_IGameSessionQueueRef_8896df67":
         '''Creates a new IGameSessionQueueRef from a gameSessionQueueName.
 
         :param scope: -
@@ -8577,7 +8590,7 @@ class CfnGameSessionQueue(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument game_session_queue_name", value=game_session_queue_name, expected_type=type_hints["game_session_queue_name"])
-        return typing.cast(_IGameSessionQueueRef_8896df67, jsii.sinvoke(cls, "fromGameSessionQueueName", [scope, id, game_session_queue_name]))
+        return typing.cast("_IGameSessionQueueRef_8896df67", jsii.sinvoke(cls, "fromGameSessionQueueName", [scope, id, game_session_queue_name]))
 
     @jsii.member(jsii_name="isCfnGameSessionQueue")
     @builtins.classmethod
@@ -8592,7 +8605,7 @@ class CfnGameSessionQueue(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGameSessionQueue", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8648,15 +8661,15 @@ class CfnGameSessionQueue(
 
     @builtins.property
     @jsii.member(jsii_name="gameSessionQueueRef")
-    def game_session_queue_ref(self) -> _GameSessionQueueReference_fd5bb819:
+    def game_session_queue_ref(self) -> "_GameSessionQueueReference_fd5bb819":
         '''A reference to a GameSessionQueue resource.'''
-        return typing.cast(_GameSessionQueueReference_fd5bb819, jsii.get(self, "gameSessionQueueRef"))
+        return typing.cast("_GameSessionQueueReference_fd5bb819", jsii.get(self, "gameSessionQueueRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -8688,14 +8701,14 @@ class CfnGameSessionQueue(
     @jsii.member(jsii_name="destinations")
     def destinations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGameSessionQueue.DestinationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.DestinationProperty"]]]]:
         '''A list of fleets and/or fleet aliases that can be used to fulfill game session placement requests in the queue.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGameSessionQueue.DestinationProperty"]]]], jsii.get(self, "destinations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.DestinationProperty"]]]], jsii.get(self, "destinations"))
 
     @destinations.setter
     def destinations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGameSessionQueue.DestinationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.DestinationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f656db0c32504c821ba5c5d5067bac317db7def96a39500c5847a853576e95ec)
@@ -8706,14 +8719,14 @@ class CfnGameSessionQueue(
     @jsii.member(jsii_name="filterConfiguration")
     def filter_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGameSessionQueue.FilterConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.FilterConfigurationProperty"]]:
         '''A list of locations where a queue is allowed to place new game sessions.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGameSessionQueue.FilterConfigurationProperty"]], jsii.get(self, "filterConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.FilterConfigurationProperty"]], jsii.get(self, "filterConfiguration"))
 
     @filter_configuration.setter
     def filter_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGameSessionQueue.FilterConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.FilterConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__08e5b9b16ae8732de19b82da87c71cb00a9d06d7a37c8d217314158c063bf0f7)
@@ -8737,14 +8750,14 @@ class CfnGameSessionQueue(
     @jsii.member(jsii_name="playerLatencyPolicies")
     def player_latency_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGameSessionQueue.PlayerLatencyPolicyProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.PlayerLatencyPolicyProperty"]]]]:
         '''A set of policies that enforce a sliding cap on player latency when processing game sessions placement requests.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGameSessionQueue.PlayerLatencyPolicyProperty"]]]], jsii.get(self, "playerLatencyPolicies"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.PlayerLatencyPolicyProperty"]]]], jsii.get(self, "playerLatencyPolicies"))
 
     @player_latency_policies.setter
     def player_latency_policies(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGameSessionQueue.PlayerLatencyPolicyProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.PlayerLatencyPolicyProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3da0f541db3f4dba488790dc678e2dd0872a5271bf05bb0ddcb181884f5dfb80)
@@ -8755,14 +8768,14 @@ class CfnGameSessionQueue(
     @jsii.member(jsii_name="priorityConfiguration")
     def priority_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGameSessionQueue.PriorityConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.PriorityConfigurationProperty"]]:
         '''Custom settings to use when prioritizing destinations and locations for game session placements.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGameSessionQueue.PriorityConfigurationProperty"]], jsii.get(self, "priorityConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.PriorityConfigurationProperty"]], jsii.get(self, "priorityConfiguration"))
 
     @priority_configuration.setter
     def priority_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGameSessionQueue.PriorityConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.PriorityConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__622dc07e672d46f719db763d6bf2dec499f84a17b72186d593df03f3fcb1ae7f)
@@ -8771,12 +8784,12 @@ class CfnGameSessionQueue(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new game session queue resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e3a8c431c366d3fa711cfb42cebf2d1647b8f2a1a5e129b5536c91cdf0135eb8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9154,12 +9167,12 @@ class CfnGameSessionQueueProps:
         *,
         name: builtins.str,
         custom_event_data: typing.Optional[builtins.str] = None,
-        destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGameSessionQueue.DestinationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        filter_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGameSessionQueue.FilterConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        destinations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameSessionQueue.DestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        filter_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameSessionQueue.FilterConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         notification_target: typing.Optional[builtins.str] = None,
-        player_latency_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGameSessionQueue.PlayerLatencyPolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        priority_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGameSessionQueue.PriorityConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        player_latency_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameSessionQueue.PlayerLatencyPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        priority_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGameSessionQueue.PriorityConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout_in_seconds: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties for defining a ``CfnGameSessionQueue``.
@@ -9179,6 +9192,7 @@ class CfnGameSessionQueueProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_gamelift as gamelift
@@ -9265,7 +9279,7 @@ class CfnGameSessionQueueProps:
     @builtins.property
     def destinations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGameSessionQueue.DestinationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.DestinationProperty"]]]]:
         '''A list of fleets and/or fleet aliases that can be used to fulfill game session placement requests in the queue.
 
         Destinations are identified by either a fleet ARN or a fleet alias ARN, and are listed in order of placement preference.
@@ -9273,12 +9287,12 @@ class CfnGameSessionQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-gamesessionqueue.html#cfn-gamelift-gamesessionqueue-destinations
         '''
         result = self._values.get("destinations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGameSessionQueue.DestinationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.DestinationProperty"]]]], result)
 
     @builtins.property
     def filter_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGameSessionQueue.FilterConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.FilterConfigurationProperty"]]:
         '''A list of locations where a queue is allowed to place new game sessions.
 
         Locations are specified in the form of AWS Region codes, such as ``us-west-2`` . If this parameter is not set, game sessions can be placed in any queue location.
@@ -9286,7 +9300,7 @@ class CfnGameSessionQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-gamesessionqueue.html#cfn-gamelift-gamesessionqueue-filterconfiguration
         '''
         result = self._values.get("filter_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGameSessionQueue.FilterConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.FilterConfigurationProperty"]], result)
 
     @builtins.property
     def notification_target(self) -> typing.Optional[builtins.str]:
@@ -9302,7 +9316,7 @@ class CfnGameSessionQueueProps:
     @builtins.property
     def player_latency_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGameSessionQueue.PlayerLatencyPolicyProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.PlayerLatencyPolicyProperty"]]]]:
         '''A set of policies that enforce a sliding cap on player latency when processing game sessions placement requests.
 
         Use multiple policies to gradually relax the cap over time if Amazon GameLift Servers can't make a placement. Policies are evaluated in order starting with the lowest maximum latency value.
@@ -9310,12 +9324,12 @@ class CfnGameSessionQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-gamesessionqueue.html#cfn-gamelift-gamesessionqueue-playerlatencypolicies
         '''
         result = self._values.get("player_latency_policies")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGameSessionQueue.PlayerLatencyPolicyProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.PlayerLatencyPolicyProperty"]]]], result)
 
     @builtins.property
     def priority_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGameSessionQueue.PriorityConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.PriorityConfigurationProperty"]]:
         '''Custom settings to use when prioritizing destinations and locations for game session placements.
 
         This configuration replaces the FleetIQ default prioritization process. Priority types that are not explicitly named will be automatically applied at the end of the prioritization process.
@@ -9323,10 +9337,10 @@ class CfnGameSessionQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-gamesessionqueue.html#cfn-gamelift-gamesessionqueue-priorityconfiguration
         '''
         result = self._values.get("priority_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGameSessionQueue.PriorityConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGameSessionQueue.PriorityConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new game session queue resource.
 
         Tags are developer-defined key-value pairs. Tagging AWS resources are useful for resource management, access management and cost allocation. For more information, see `Tagging AWS Resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ in the *AWS General Reference* . Once the resource is created, you can use TagResource, UntagResource, and ListTagsForResource to add, remove, and view tags. The maximum tag limit may be lower than stated. See the AWS General Reference for actual tagging limits.
@@ -9334,7 +9348,7 @@ class CfnGameSessionQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-gamesessionqueue.html#cfn-gamelift-gamesessionqueue-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def timeout_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -9373,6 +9387,7 @@ class CfnLocation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_gamelift as gamelift
@@ -9390,11 +9405,11 @@ class CfnLocation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         location_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GameLift::Location``.
 
@@ -9413,7 +9428,7 @@ class CfnLocation(
 
     @jsii.member(jsii_name="arnForLocation")
     @builtins.classmethod
-    def arn_for_location(cls, resource: _ILocationRef_bbf078ef) -> builtins.str:
+    def arn_for_location(cls, resource: "_ILocationRef_bbf078ef") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -9435,7 +9450,7 @@ class CfnLocation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9482,15 +9497,15 @@ class CfnLocation(
 
     @builtins.property
     @jsii.member(jsii_name="locationRef")
-    def location_ref(self) -> _LocationReference_3c6fb983:
+    def location_ref(self) -> "_LocationReference_3c6fb983":
         '''A reference to a Location resource.'''
-        return typing.cast(_LocationReference_3c6fb983, jsii.get(self, "locationRef"))
+        return typing.cast("_LocationReference_3c6fb983", jsii.get(self, "locationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="locationName")
@@ -9507,12 +9522,12 @@ class CfnLocation(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__db22dc038d314307a9d7182d88d8959bd024bf2feff9aee7f03deba1df46ca5c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9529,7 +9544,7 @@ class CfnLocationProps:
         self,
         *,
         location_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocation``.
 
@@ -9541,6 +9556,7 @@ class CfnLocationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_gamelift as gamelift
@@ -9576,7 +9592,7 @@ class CfnLocationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new resource.
 
         Tags are developer-defined key-value pairs. Tagging AWS resources are useful for resource management, access management, and cost allocation. For more information, see `Tagging AWS Resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ in the *AWS General Rareference* .
@@ -9584,7 +9600,7 @@ class CfnLocationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-location.html#cfn-gamelift-location-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9614,6 +9630,7 @@ class CfnMatchmakingConfiguration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_gamelift as gamelift
@@ -9649,10 +9666,10 @@ class CfnMatchmakingConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        acceptance_required: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        acceptance_required: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         name: builtins.str,
         request_timeout_seconds: jsii.Number,
         rule_set_name: builtins.str,
@@ -9663,12 +9680,12 @@ class CfnMatchmakingConfiguration(
         custom_event_data: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         flex_match_mode: typing.Optional[builtins.str] = None,
-        game_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMatchmakingConfiguration.GamePropertyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        game_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMatchmakingConfiguration.GamePropertyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         game_session_data: typing.Optional[builtins.str] = None,
         game_session_queue_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         notification_target: typing.Optional[builtins.str] = None,
         rule_set_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GameLift::MatchmakingConfiguration``.
 
@@ -9722,7 +9739,7 @@ class CfnMatchmakingConfiguration(
     @builtins.classmethod
     def arn_for_matchmaking_configuration(
         cls,
-        resource: _IMatchmakingConfigurationRef_419e9495,
+        resource: "_IMatchmakingConfigurationRef_419e9495",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -9736,10 +9753,10 @@ class CfnMatchmakingConfiguration(
     @builtins.classmethod
     def from_matchmaking_configuration_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IMatchmakingConfigurationRef_419e9495:
+    ) -> "_IMatchmakingConfigurationRef_419e9495":
         '''Creates a new IMatchmakingConfigurationRef from an ARN.
 
         :param scope: -
@@ -9751,16 +9768,16 @@ class CfnMatchmakingConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IMatchmakingConfigurationRef_419e9495, jsii.sinvoke(cls, "fromMatchmakingConfigurationArn", [scope, id, arn]))
+        return typing.cast("_IMatchmakingConfigurationRef_419e9495", jsii.sinvoke(cls, "fromMatchmakingConfigurationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromMatchmakingConfigurationName")
     @builtins.classmethod
     def from_matchmaking_configuration_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         matchmaking_configuration_name: builtins.str,
-    ) -> _IMatchmakingConfigurationRef_419e9495:
+    ) -> "_IMatchmakingConfigurationRef_419e9495":
         '''Creates a new IMatchmakingConfigurationRef from a matchmakingConfigurationName.
 
         :param scope: -
@@ -9772,7 +9789,7 @@ class CfnMatchmakingConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument matchmaking_configuration_name", value=matchmaking_configuration_name, expected_type=type_hints["matchmaking_configuration_name"])
-        return typing.cast(_IMatchmakingConfigurationRef_419e9495, jsii.sinvoke(cls, "fromMatchmakingConfigurationName", [scope, id, matchmaking_configuration_name]))
+        return typing.cast("_IMatchmakingConfigurationRef_419e9495", jsii.sinvoke(cls, "fromMatchmakingConfigurationName", [scope, id, matchmaking_configuration_name]))
 
     @jsii.member(jsii_name="isCfnMatchmakingConfiguration")
     @builtins.classmethod
@@ -9787,7 +9804,7 @@ class CfnMatchmakingConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMatchmakingConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9843,26 +9860,28 @@ class CfnMatchmakingConfiguration(
     @jsii.member(jsii_name="matchmakingConfigurationRef")
     def matchmaking_configuration_ref(
         self,
-    ) -> _MatchmakingConfigurationReference_3a33fd2a:
+    ) -> "_MatchmakingConfigurationReference_3a33fd2a":
         '''A reference to a MatchmakingConfiguration resource.'''
-        return typing.cast(_MatchmakingConfigurationReference_3a33fd2a, jsii.get(self, "matchmakingConfigurationRef"))
+        return typing.cast("_MatchmakingConfigurationReference_3a33fd2a", jsii.get(self, "matchmakingConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="acceptanceRequired")
-    def acceptance_required(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    def acceptance_required(
+        self,
+    ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''A flag that determines whether a match that was created with this configuration must be accepted by the matched players.'''
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], jsii.get(self, "acceptanceRequired"))
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], jsii.get(self, "acceptanceRequired"))
 
     @acceptance_required.setter
     def acceptance_required(
         self,
-        value: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        value: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__22e4fb0874509d31426b22f3ffefc8f7d3c205a887689be775fe8344351315b4)
@@ -10003,14 +10022,14 @@ class CfnMatchmakingConfiguration(
     @jsii.member(jsii_name="gameProperties")
     def game_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMatchmakingConfiguration.GamePropertyProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMatchmakingConfiguration.GamePropertyProperty"]]]]:
         '''A set of custom properties for a game session, formatted as key-value pairs.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMatchmakingConfiguration.GamePropertyProperty"]]]], jsii.get(self, "gameProperties"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMatchmakingConfiguration.GamePropertyProperty"]]]], jsii.get(self, "gameProperties"))
 
     @game_properties.setter
     def game_properties(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMatchmakingConfiguration.GamePropertyProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMatchmakingConfiguration.GamePropertyProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0086331ec6c1fe164de53253519ecf95f522026cd3c4b9b2c0b16c300b99ceb2)
@@ -10074,12 +10093,12 @@ class CfnMatchmakingConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new matchmaking configuration resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9777adaa1c91123290fcf69dfad3f29c9d5affe68344eb61a6147f7c78954b2c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -10185,7 +10204,7 @@ class CfnMatchmakingConfigurationProps:
     def __init__(
         self,
         *,
-        acceptance_required: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        acceptance_required: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         name: builtins.str,
         request_timeout_seconds: jsii.Number,
         rule_set_name: builtins.str,
@@ -10196,12 +10215,12 @@ class CfnMatchmakingConfigurationProps:
         custom_event_data: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         flex_match_mode: typing.Optional[builtins.str] = None,
-        game_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMatchmakingConfiguration.GamePropertyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        game_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMatchmakingConfiguration.GamePropertyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         game_session_data: typing.Optional[builtins.str] = None,
         game_session_queue_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         notification_target: typing.Optional[builtins.str] = None,
         rule_set_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMatchmakingConfiguration``.
 
@@ -10228,6 +10247,7 @@ class CfnMatchmakingConfigurationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_gamelift as gamelift
@@ -10313,7 +10333,9 @@ class CfnMatchmakingConfigurationProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def acceptance_required(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    def acceptance_required(
+        self,
+    ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''A flag that determines whether a match that was created with this configuration must be accepted by the matched players.
 
         To require acceptance, set to ``TRUE`` . With this option enabled, matchmaking tickets use the status ``REQUIRES_ACCEPTANCE`` to indicate when a completed potential match is waiting for player acceptance.
@@ -10322,7 +10344,7 @@ class CfnMatchmakingConfigurationProps:
         '''
         result = self._values.get("acceptance_required")
         assert result is not None, "Required property 'acceptance_required' is missing"
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -10435,7 +10457,7 @@ class CfnMatchmakingConfigurationProps:
     @builtins.property
     def game_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMatchmakingConfiguration.GamePropertyProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMatchmakingConfiguration.GamePropertyProperty"]]]]:
         '''A set of custom properties for a game session, formatted as key-value pairs.
 
         These properties are passed to a game server process with a request to start a new game session. See `Start a Game Session <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession>`_ . This parameter is not used if ``FlexMatchMode`` is set to ``STANDALONE`` .
@@ -10443,7 +10465,7 @@ class CfnMatchmakingConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-matchmakingconfiguration.html#cfn-gamelift-matchmakingconfiguration-gameproperties
         '''
         result = self._values.get("game_properties")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMatchmakingConfiguration.GamePropertyProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMatchmakingConfiguration.GamePropertyProperty"]]]], result)
 
     @builtins.property
     def game_session_data(self) -> typing.Optional[builtins.str]:
@@ -10486,7 +10508,7 @@ class CfnMatchmakingConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new matchmaking configuration resource.
 
         Tags are developer-defined key-value pairs. Tagging AWS resources are useful for resource management, access management and cost allocation. For more information, see `Tagging AWS Resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ in the *AWS General Reference* . Once the resource is created, you can use TagResource, UntagResource, and ListTagsForResource to add, remove, and view tags. The maximum tag limit may be lower than stated. See the AWS General Reference for actual tagging limits.
@@ -10494,7 +10516,7 @@ class CfnMatchmakingConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-matchmakingconfiguration.html#cfn-gamelift-matchmakingconfiguration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10534,6 +10556,7 @@ class CfnMatchmakingRuleSet(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_gamelift as gamelift
@@ -10552,12 +10575,12 @@ class CfnMatchmakingRuleSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         rule_set_body: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GameLift::MatchmakingRuleSet``.
 
@@ -10581,7 +10604,7 @@ class CfnMatchmakingRuleSet(
     @builtins.classmethod
     def arn_for_matchmaking_rule_set(
         cls,
-        resource: _IMatchmakingRuleSetRef_57b0825c,
+        resource: "_IMatchmakingRuleSetRef_57b0825c",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -10595,10 +10618,10 @@ class CfnMatchmakingRuleSet(
     @builtins.classmethod
     def from_matchmaking_rule_set_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IMatchmakingRuleSetRef_57b0825c:
+    ) -> "_IMatchmakingRuleSetRef_57b0825c":
         '''Creates a new IMatchmakingRuleSetRef from an ARN.
 
         :param scope: -
@@ -10610,16 +10633,16 @@ class CfnMatchmakingRuleSet(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IMatchmakingRuleSetRef_57b0825c, jsii.sinvoke(cls, "fromMatchmakingRuleSetArn", [scope, id, arn]))
+        return typing.cast("_IMatchmakingRuleSetRef_57b0825c", jsii.sinvoke(cls, "fromMatchmakingRuleSetArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromMatchmakingRuleSetName")
     @builtins.classmethod
     def from_matchmaking_rule_set_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         matchmaking_rule_set_name: builtins.str,
-    ) -> _IMatchmakingRuleSetRef_57b0825c:
+    ) -> "_IMatchmakingRuleSetRef_57b0825c":
         '''Creates a new IMatchmakingRuleSetRef from a matchmakingRuleSetName.
 
         :param scope: -
@@ -10631,7 +10654,7 @@ class CfnMatchmakingRuleSet(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument matchmaking_rule_set_name", value=matchmaking_rule_set_name, expected_type=type_hints["matchmaking_rule_set_name"])
-        return typing.cast(_IMatchmakingRuleSetRef_57b0825c, jsii.sinvoke(cls, "fromMatchmakingRuleSetName", [scope, id, matchmaking_rule_set_name]))
+        return typing.cast("_IMatchmakingRuleSetRef_57b0825c", jsii.sinvoke(cls, "fromMatchmakingRuleSetName", [scope, id, matchmaking_rule_set_name]))
 
     @jsii.member(jsii_name="isCfnMatchmakingRuleSet")
     @builtins.classmethod
@@ -10646,7 +10669,7 @@ class CfnMatchmakingRuleSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMatchmakingRuleSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10711,15 +10734,15 @@ class CfnMatchmakingRuleSet(
 
     @builtins.property
     @jsii.member(jsii_name="matchmakingRuleSetRef")
-    def matchmaking_rule_set_ref(self) -> _MatchmakingRuleSetReference_f58d9892:
+    def matchmaking_rule_set_ref(self) -> "_MatchmakingRuleSetReference_f58d9892":
         '''A reference to a MatchmakingRuleSet resource.'''
-        return typing.cast(_MatchmakingRuleSetReference_f58d9892, jsii.get(self, "matchmakingRuleSetRef"))
+        return typing.cast("_MatchmakingRuleSetReference_f58d9892", jsii.get(self, "matchmakingRuleSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -10749,12 +10772,12 @@ class CfnMatchmakingRuleSet(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new matchmaking rule set resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0b8486d81489f869526b41e6ebf2b191599f06a6370135adbf247ac933792cd6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -10772,7 +10795,7 @@ class CfnMatchmakingRuleSetProps:
         *,
         name: builtins.str,
         rule_set_body: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMatchmakingRuleSet``.
 
@@ -10785,6 +10808,7 @@ class CfnMatchmakingRuleSetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_gamelift as gamelift
@@ -10837,7 +10861,7 @@ class CfnMatchmakingRuleSetProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new matchmaking rule set resource.
 
         Tags are developer-defined key-value pairs. Tagging AWS resources are useful for resource management, access management and cost allocation. For more information, see `Tagging AWS Resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ in the *AWS General Reference* . Once the resource is created, you can use TagResource, UntagResource, and ListTagsForResource to add, remove, and view tags. The maximum tag limit may be lower than stated. See the AWS General Reference for actual tagging limits.
@@ -10845,7 +10869,7 @@ class CfnMatchmakingRuleSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-matchmakingruleset.html#cfn-gamelift-matchmakingruleset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10875,6 +10899,7 @@ class CfnScript(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_gamelift as gamelift
@@ -10901,12 +10926,12 @@ class CfnScript(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        storage_location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnScript.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+        storage_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnScript.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::GameLift::Script``.
@@ -10930,7 +10955,7 @@ class CfnScript(
 
     @jsii.member(jsii_name="arnForScript")
     @builtins.classmethod
-    def arn_for_script(cls, resource: _IScriptRef_c20d81ab) -> builtins.str:
+    def arn_for_script(cls, resource: "_IScriptRef_c20d81ab") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -10943,10 +10968,10 @@ class CfnScript(
     @builtins.classmethod
     def from_script_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IScriptRef_c20d81ab:
+    ) -> "_IScriptRef_c20d81ab":
         '''Creates a new IScriptRef from an ARN.
 
         :param scope: -
@@ -10958,16 +10983,16 @@ class CfnScript(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IScriptRef_c20d81ab, jsii.sinvoke(cls, "fromScriptArn", [scope, id, arn]))
+        return typing.cast("_IScriptRef_c20d81ab", jsii.sinvoke(cls, "fromScriptArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromScriptId")
     @builtins.classmethod
     def from_script_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         script_id: builtins.str,
-    ) -> _IScriptRef_c20d81ab:
+    ) -> "_IScriptRef_c20d81ab":
         '''Creates a new IScriptRef from a scriptId.
 
         :param scope: -
@@ -10979,7 +11004,7 @@ class CfnScript(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument script_id", value=script_id, expected_type=type_hints["script_id"])
-        return typing.cast(_IScriptRef_c20d81ab, jsii.sinvoke(cls, "fromScriptId", [scope, id, script_id]))
+        return typing.cast("_IScriptRef_c20d81ab", jsii.sinvoke(cls, "fromScriptId", [scope, id, script_id]))
 
     @jsii.member(jsii_name="isCfnScript")
     @builtins.classmethod
@@ -10994,7 +11019,7 @@ class CfnScript(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnScript", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -11070,28 +11095,28 @@ class CfnScript(
 
     @builtins.property
     @jsii.member(jsii_name="scriptRef")
-    def script_ref(self) -> _ScriptReference_b01a13d0:
+    def script_ref(self) -> "_ScriptReference_b01a13d0":
         '''A reference to a Script resource.'''
-        return typing.cast(_ScriptReference_b01a13d0, jsii.get(self, "scriptRef"))
+        return typing.cast("_ScriptReference_b01a13d0", jsii.get(self, "scriptRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="storageLocation")
     def storage_location(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnScript.S3LocationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnScript.S3LocationProperty"]:
         '''The location of the Amazon S3 bucket where a zipped file containing your Realtime scripts is stored.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnScript.S3LocationProperty"], jsii.get(self, "storageLocation"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnScript.S3LocationProperty"], jsii.get(self, "storageLocation"))
 
     @storage_location.setter
     def storage_location(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnScript.S3LocationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnScript.S3LocationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__67239519d512a22693f642bf29d26d0bffc0cf4f5f242e2295be3b8cf8bc1f30)
@@ -11113,12 +11138,12 @@ class CfnScript(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new script resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__59fee6448a284bb6932305c7159828353c13832415292cceb7a74453dd8177cc)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -11266,9 +11291,9 @@ class CfnScriptProps:
     def __init__(
         self,
         *,
-        storage_location: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScript.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]],
+        storage_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnScript.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnScript``.
@@ -11283,6 +11308,7 @@ class CfnScriptProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_gamelift as gamelift
@@ -11325,7 +11351,7 @@ class CfnScriptProps:
     @builtins.property
     def storage_location(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnScript.S3LocationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnScript.S3LocationProperty"]:
         '''The location of the Amazon S3 bucket where a zipped file containing your Realtime scripts is stored.
 
         The storage location must specify the Amazon S3 bucket name, the zip file name (the "key"), and a role ARN that allows Amazon GameLift Servers to access the Amazon S3 storage location. The S3 bucket must be in the same Region where you want to create a new script. By default, Amazon GameLift Servers uploads the latest version of the zip file; if you have S3 object versioning turned on, you can use the ``ObjectVersion`` parameter to specify an earlier version.
@@ -11334,7 +11360,7 @@ class CfnScriptProps:
         '''
         result = self._values.get("storage_location")
         assert result is not None, "Required property 'storage_location' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnScript.S3LocationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnScript.S3LocationProperty"], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -11348,7 +11374,7 @@ class CfnScriptProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new script resource.
 
         Tags are developer-defined key-value pairs. Tagging AWS resources are useful for resource management, access management and cost allocation. For more information, see `Tagging AWS Resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ in the *AWS General Reference* . Once the resource is created, you can use TagResource, UntagResource, and ListTagsForResource to add, remove, and view tags. The maximum tag limit may be lower than stated. See the AWS General Reference for actual tagging limits.
@@ -11356,7 +11382,7 @@ class CfnScriptProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-script.html#cfn-gamelift-script-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def version(self) -> typing.Optional[builtins.str]:

@@ -99,6 +99,7 @@ class CfnExperiment(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_evidently as evidently
@@ -155,21 +156,21 @@ class CfnExperiment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        metric_goals: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperiment.MetricGoalObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        metric_goals: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperiment.MetricGoalObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
-        online_ab_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperiment.OnlineAbConfigObjectProperty", typing.Dict[builtins.str, typing.Any]]],
+        online_ab_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperiment.OnlineAbConfigObjectProperty", typing.Dict[builtins.str, typing.Any]]],
         project: builtins.str,
-        treatments: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperiment.TreatmentObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        treatments: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperiment.TreatmentObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
         randomization_salt: typing.Optional[builtins.str] = None,
-        remove_segment: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        running_status: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperiment.RunningStatusObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        remove_segment: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        running_status: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperiment.RunningStatusObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         sampling_rate: typing.Optional[jsii.Number] = None,
         segment: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Evidently::Experiment``.
 
@@ -211,7 +212,7 @@ class CfnExperiment(
 
     @jsii.member(jsii_name="arnForExperiment")
     @builtins.classmethod
-    def arn_for_experiment(cls, resource: _IExperimentRef_4d4533a4) -> builtins.str:
+    def arn_for_experiment(cls, resource: "_IExperimentRef_4d4533a4") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -233,7 +234,7 @@ class CfnExperiment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnExperiment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -280,28 +281,28 @@ class CfnExperiment(
 
     @builtins.property
     @jsii.member(jsii_name="experimentRef")
-    def experiment_ref(self) -> _ExperimentReference_2bba9ee3:
+    def experiment_ref(self) -> "_ExperimentReference_2bba9ee3":
         '''A reference to a Experiment resource.'''
-        return typing.cast(_ExperimentReference_2bba9ee3, jsii.get(self, "experimentRef"))
+        return typing.cast("_ExperimentReference_2bba9ee3", jsii.get(self, "experimentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="metricGoals")
     def metric_goals(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperiment.MetricGoalObjectProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperiment.MetricGoalObjectProperty"]]]:
         '''An array of structures that defines the metrics used for the experiment, and whether a higher or lower value for each metric is the goal.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperiment.MetricGoalObjectProperty"]]], jsii.get(self, "metricGoals"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperiment.MetricGoalObjectProperty"]]], jsii.get(self, "metricGoals"))
 
     @metric_goals.setter
     def metric_goals(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperiment.MetricGoalObjectProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperiment.MetricGoalObjectProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__608184263fdaf5c6ddc6386129d9fcd580b9dd416b72defa8d9f5ff27dc0ad80)
@@ -325,14 +326,14 @@ class CfnExperiment(
     @jsii.member(jsii_name="onlineAbConfig")
     def online_ab_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnExperiment.OnlineAbConfigObjectProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnExperiment.OnlineAbConfigObjectProperty"]:
         '''A structure that contains the configuration of which variation to use as the "control" version.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnExperiment.OnlineAbConfigObjectProperty"], jsii.get(self, "onlineAbConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnExperiment.OnlineAbConfigObjectProperty"], jsii.get(self, "onlineAbConfig"))
 
     @online_ab_config.setter
     def online_ab_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnExperiment.OnlineAbConfigObjectProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnExperiment.OnlineAbConfigObjectProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b9651d87c6a5223e7d5416809c8358bf08d64bb82e3e66321fbc5472926f1e38)
@@ -356,14 +357,14 @@ class CfnExperiment(
     @jsii.member(jsii_name="treatments")
     def treatments(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperiment.TreatmentObjectProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperiment.TreatmentObjectProperty"]]]:
         '''An array of structures that describe the configuration of each feature variation used in the experiment.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperiment.TreatmentObjectProperty"]]], jsii.get(self, "treatments"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperiment.TreatmentObjectProperty"]]], jsii.get(self, "treatments"))
 
     @treatments.setter
     def treatments(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperiment.TreatmentObjectProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperiment.TreatmentObjectProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e8a944ff8713baacf061323da7bcd1ccc67e8156291e472b1a6e7bfd7c1cf92b)
@@ -400,14 +401,14 @@ class CfnExperiment(
     @jsii.member(jsii_name="removeSegment")
     def remove_segment(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Set this to ``true`` to remove the segment that is associated with this experiment.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "removeSegment"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "removeSegment"))
 
     @remove_segment.setter
     def remove_segment(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f1c2ff5ffa047cc8e5fe6a3846276a1d082e084a7ec198cae726e776bdd2d4e6)
@@ -418,14 +419,14 @@ class CfnExperiment(
     @jsii.member(jsii_name="runningStatus")
     def running_status(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperiment.RunningStatusObjectProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperiment.RunningStatusObjectProperty"]]:
         '''A structure that you can use to start and stop the experiment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperiment.RunningStatusObjectProperty"]], jsii.get(self, "runningStatus"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperiment.RunningStatusObjectProperty"]], jsii.get(self, "runningStatus"))
 
     @running_status.setter
     def running_status(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperiment.RunningStatusObjectProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperiment.RunningStatusObjectProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d6064ddcd75be5c188ab7d11fc7107d2eac8214fd898eaf1de24a1cf499a71e0)
@@ -460,12 +461,12 @@ class CfnExperiment(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags (key-value pairs) to the experiment.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b5fbe1b3ff9f5bf995bd927d269240a4d47815a9b472e6e6ae669666dd96a2dd)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -632,7 +633,7 @@ class CfnExperiment(
             self,
             *,
             control_treatment_name: typing.Optional[builtins.str] = None,
-            treatment_weights: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperiment.TreatmentToWeightProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            treatment_weights: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperiment.TreatmentToWeightProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''A structure that contains the configuration of which variation to use as the "control" version.
 
@@ -680,7 +681,7 @@ class CfnExperiment(
         @builtins.property
         def treatment_weights(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperiment.TreatmentToWeightProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperiment.TreatmentToWeightProperty"]]]]:
             '''A set of key-value pairs.
 
             The keys are treatment names, and the values are the portion of experiment traffic to be assigned to that treatment. Specify the traffic portion in thousandths of a percent, so 20,000 for a variation would allocate 20% of the experiment traffic to that variation.
@@ -688,7 +689,7 @@ class CfnExperiment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evidently-experiment-onlineabconfigobject.html#cfn-evidently-experiment-onlineabconfigobject-treatmentweights
             '''
             result = self._values.get("treatment_weights")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperiment.TreatmentToWeightProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperiment.TreatmentToWeightProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1021,18 +1022,18 @@ class CfnExperimentProps:
     def __init__(
         self,
         *,
-        metric_goals: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperiment.MetricGoalObjectProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        metric_goals: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperiment.MetricGoalObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
-        online_ab_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperiment.OnlineAbConfigObjectProperty, typing.Dict[builtins.str, typing.Any]]],
+        online_ab_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperiment.OnlineAbConfigObjectProperty", typing.Dict[builtins.str, typing.Any]]],
         project: builtins.str,
-        treatments: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperiment.TreatmentObjectProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        treatments: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperiment.TreatmentObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
         randomization_salt: typing.Optional[builtins.str] = None,
-        remove_segment: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        running_status: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperiment.RunningStatusObjectProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        remove_segment: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        running_status: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperiment.RunningStatusObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         sampling_rate: typing.Optional[jsii.Number] = None,
         segment: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnExperiment``.
 
@@ -1054,6 +1055,7 @@ class CfnExperimentProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_evidently as evidently
@@ -1146,7 +1148,7 @@ class CfnExperimentProps:
     @builtins.property
     def metric_goals(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnExperiment.MetricGoalObjectProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperiment.MetricGoalObjectProperty"]]]:
         '''An array of structures that defines the metrics used for the experiment, and whether a higher or lower value for each metric is the goal.
 
         You can use up to three metrics in an experiment.
@@ -1155,7 +1157,7 @@ class CfnExperimentProps:
         '''
         result = self._values.get("metric_goals")
         assert result is not None, "Required property 'metric_goals' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnExperiment.MetricGoalObjectProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperiment.MetricGoalObjectProperty"]]], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -1170,7 +1172,7 @@ class CfnExperimentProps:
     @builtins.property
     def online_ab_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnExperiment.OnlineAbConfigObjectProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnExperiment.OnlineAbConfigObjectProperty"]:
         '''A structure that contains the configuration of which variation to use as the "control" version.
 
         The "control" version is used for comparison with other variations. This structure also specifies how much experiment traffic is allocated to each variation.
@@ -1179,7 +1181,7 @@ class CfnExperimentProps:
         '''
         result = self._values.get("online_ab_config")
         assert result is not None, "Required property 'online_ab_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnExperiment.OnlineAbConfigObjectProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnExperiment.OnlineAbConfigObjectProperty"], result)
 
     @builtins.property
     def project(self) -> builtins.str:
@@ -1194,14 +1196,14 @@ class CfnExperimentProps:
     @builtins.property
     def treatments(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnExperiment.TreatmentObjectProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperiment.TreatmentObjectProperty"]]]:
         '''An array of structures that describe the configuration of each feature variation used in the experiment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-experiment.html#cfn-evidently-experiment-treatments
         '''
         result = self._values.get("treatments")
         assert result is not None, "Required property 'treatments' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnExperiment.TreatmentObjectProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperiment.TreatmentObjectProperty"]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1226,7 +1228,7 @@ class CfnExperimentProps:
     @builtins.property
     def remove_segment(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Set this to ``true`` to remove the segment that is associated with this experiment.
 
         You can't use this parameter if the experiment is currently running.
@@ -1234,18 +1236,18 @@ class CfnExperimentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-experiment.html#cfn-evidently-experiment-removesegment
         '''
         result = self._values.get("remove_segment")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def running_status(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExperiment.RunningStatusObjectProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperiment.RunningStatusObjectProperty"]]:
         '''A structure that you can use to start and stop the experiment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-experiment.html#cfn-evidently-experiment-runningstatus
         '''
         result = self._values.get("running_status")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExperiment.RunningStatusObjectProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperiment.RunningStatusObjectProperty"]], result)
 
     @builtins.property
     def sampling_rate(self) -> typing.Optional[jsii.Number]:
@@ -1274,7 +1276,7 @@ class CfnExperimentProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags (key-value pairs) to the experiment.
 
         Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.
@@ -1288,7 +1290,7 @@ class CfnExperimentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-experiment.html#cfn-evidently-experiment-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1318,6 +1320,7 @@ class CfnFeature(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_evidently as evidently
@@ -1352,17 +1355,17 @@ class CfnFeature(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        project: typing.Union[builtins.str, _IProjectRef_8191fb70],
-        variations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFeature.VariationObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        project: typing.Union[builtins.str, "_IProjectRef_8191fb70"],
+        variations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFeature.VariationObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
         default_variation: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        entity_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFeature.EntityOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        entity_overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFeature.EntityOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         evaluation_strategy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Evidently::Feature``.
 
@@ -1396,7 +1399,7 @@ class CfnFeature(
 
     @jsii.member(jsii_name="arnForFeature")
     @builtins.classmethod
-    def arn_for_feature(cls, resource: _IFeatureRef_675ff66e) -> builtins.str:
+    def arn_for_feature(cls, resource: "_IFeatureRef_675ff66e") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1418,7 +1421,7 @@ class CfnFeature(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFeature", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1465,15 +1468,15 @@ class CfnFeature(
 
     @builtins.property
     @jsii.member(jsii_name="featureRef")
-    def feature_ref(self) -> _FeatureReference_26d9a6b2:
+    def feature_ref(self) -> "_FeatureReference_26d9a6b2":
         '''A reference to a Feature resource.'''
-        return typing.cast(_FeatureReference_26d9a6b2, jsii.get(self, "featureRef"))
+        return typing.cast("_FeatureReference_26d9a6b2", jsii.get(self, "featureRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1505,14 +1508,14 @@ class CfnFeature(
     @jsii.member(jsii_name="variations")
     def variations(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFeature.VariationObjectProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFeature.VariationObjectProperty"]]]:
         '''An array of structures that contain the configuration of the feature's different variations.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFeature.VariationObjectProperty"]]], jsii.get(self, "variations"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFeature.VariationObjectProperty"]]], jsii.get(self, "variations"))
 
     @variations.setter
     def variations(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFeature.VariationObjectProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFeature.VariationObjectProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6955963eddf06f8bac909ceb0999e345a3de2bab55b1154054f5891fcb0da73d)
@@ -1549,14 +1552,14 @@ class CfnFeature(
     @jsii.member(jsii_name="entityOverrides")
     def entity_overrides(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFeature.EntityOverrideProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFeature.EntityOverrideProperty"]]]]:
         '''Specify users that should always be served a specific variation of a feature.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFeature.EntityOverrideProperty"]]]], jsii.get(self, "entityOverrides"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFeature.EntityOverrideProperty"]]]], jsii.get(self, "entityOverrides"))
 
     @entity_overrides.setter
     def entity_overrides(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFeature.EntityOverrideProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFeature.EntityOverrideProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__92a59dc479738d64f37719a4c84ee0a1aee9546c14b55d9de1e19e98ed4ea8eb)
@@ -1578,12 +1581,12 @@ class CfnFeature(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags (key-value pairs) to the feature.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__452ab42f442291f21b09b8398172655babfb13efba8ffa52142570f0b06b2fc2)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1677,7 +1680,7 @@ class CfnFeature(
             self,
             *,
             variation_name: builtins.str,
-            boolean_value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            boolean_value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             double_value: typing.Optional[jsii.Number] = None,
             long_value: typing.Optional[jsii.Number] = None,
             string_value: typing.Optional[builtins.str] = None,
@@ -1745,13 +1748,13 @@ class CfnFeature(
         @builtins.property
         def boolean_value(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''The value assigned to this variation, if the variation type is boolean.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evidently-feature-variationobject.html#cfn-evidently-feature-variationobject-booleanvalue
             '''
             result = self._values.get("boolean_value")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def double_value(self) -> typing.Optional[jsii.Number]:
@@ -1811,13 +1814,13 @@ class CfnFeatureProps:
         self,
         *,
         name: builtins.str,
-        project: typing.Union[builtins.str, _IProjectRef_8191fb70],
-        variations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFeature.VariationObjectProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        project: typing.Union[builtins.str, "_IProjectRef_8191fb70"],
+        variations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFeature.VariationObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
         default_variation: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        entity_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFeature.EntityOverrideProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        entity_overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFeature.EntityOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         evaluation_strategy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFeature``.
 
@@ -1835,6 +1838,7 @@ class CfnFeatureProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_evidently as evidently
@@ -1905,19 +1909,19 @@ class CfnFeatureProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def project(self) -> typing.Union[builtins.str, _IProjectRef_8191fb70]:
+    def project(self) -> typing.Union[builtins.str, "_IProjectRef_8191fb70"]:
         '''The name or ARN of the project that is to contain the new feature.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-feature.html#cfn-evidently-feature-project
         '''
         result = self._values.get("project")
         assert result is not None, "Required property 'project' is missing"
-        return typing.cast(typing.Union[builtins.str, _IProjectRef_8191fb70], result)
+        return typing.cast(typing.Union[builtins.str, "_IProjectRef_8191fb70"], result)
 
     @builtins.property
     def variations(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFeature.VariationObjectProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFeature.VariationObjectProperty"]]]:
         '''An array of structures that contain the configuration of the feature's different variations.
 
         Each ``VariationObject`` in the ``Variations`` array for a feature must have the same type of value ( ``BooleanValue`` , ``DoubleValue`` , ``LongValue`` or ``StringValue`` ).
@@ -1926,7 +1930,7 @@ class CfnFeatureProps:
         '''
         result = self._values.get("variations")
         assert result is not None, "Required property 'variations' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFeature.VariationObjectProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFeature.VariationObjectProperty"]]], result)
 
     @builtins.property
     def default_variation(self) -> typing.Optional[builtins.str]:
@@ -1955,7 +1959,7 @@ class CfnFeatureProps:
     @builtins.property
     def entity_overrides(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFeature.EntityOverrideProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFeature.EntityOverrideProperty"]]]]:
         '''Specify users that should always be served a specific variation of a feature.
 
         Each user is specified by a key-value pair . For each key, specify a user by entering their user ID, account ID, or some other identifier. For the value, specify the name of the variation that they are to be served.
@@ -1963,7 +1967,7 @@ class CfnFeatureProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-feature.html#cfn-evidently-feature-entityoverrides
         '''
         result = self._values.get("entity_overrides")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFeature.EntityOverrideProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFeature.EntityOverrideProperty"]]]], result)
 
     @builtins.property
     def evaluation_strategy(self) -> typing.Optional[builtins.str]:
@@ -1977,7 +1981,7 @@ class CfnFeatureProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags (key-value pairs) to the feature.
 
         Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.
@@ -1991,7 +1995,7 @@ class CfnFeatureProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-feature.html#cfn-evidently-feature-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2023,6 +2027,7 @@ class CfnLaunch(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_evidently as evidently
@@ -2084,18 +2089,18 @@ class CfnLaunch(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        groups: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunch.LaunchGroupObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        groups: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLaunch.LaunchGroupObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
-        project: typing.Union[builtins.str, _IProjectRef_8191fb70],
-        scheduled_splits_config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunch.StepConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        project: typing.Union[builtins.str, "_IProjectRef_8191fb70"],
+        scheduled_splits_config: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLaunch.StepConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
-        execution_status: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunch.ExecutionStatusObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        metric_monitors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunch.MetricDefinitionObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        execution_status: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLaunch.ExecutionStatusObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        metric_monitors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLaunch.MetricDefinitionObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         randomization_salt: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Evidently::Launch``.
 
@@ -2131,7 +2136,7 @@ class CfnLaunch(
 
     @jsii.member(jsii_name="arnForLaunch")
     @builtins.classmethod
-    def arn_for_launch(cls, resource: _ILaunchRef_b4b50bda) -> builtins.str:
+    def arn_for_launch(cls, resource: "_ILaunchRef_b4b50bda") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2153,7 +2158,7 @@ class CfnLaunch(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLaunch", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2200,28 +2205,28 @@ class CfnLaunch(
 
     @builtins.property
     @jsii.member(jsii_name="launchRef")
-    def launch_ref(self) -> _LaunchReference_e0a3cc77:
+    def launch_ref(self) -> "_LaunchReference_e0a3cc77":
         '''A reference to a Launch resource.'''
-        return typing.cast(_LaunchReference_e0a3cc77, jsii.get(self, "launchRef"))
+        return typing.cast("_LaunchReference_e0a3cc77", jsii.get(self, "launchRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="groups")
     def groups(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.LaunchGroupObjectProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.LaunchGroupObjectProperty"]]]:
         '''An array of structures that contains the feature and variations that are to be used for the launch.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.LaunchGroupObjectProperty"]]], jsii.get(self, "groups"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.LaunchGroupObjectProperty"]]], jsii.get(self, "groups"))
 
     @groups.setter
     def groups(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.LaunchGroupObjectProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.LaunchGroupObjectProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cd24dbcf6b27e75d516fcab8552edc84e63fbab001d5a0b07fe75bd2161b3d08)
@@ -2258,14 +2263,14 @@ class CfnLaunch(
     @jsii.member(jsii_name="scheduledSplitsConfig")
     def scheduled_splits_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.StepConfigProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.StepConfigProperty"]]]:
         '''An array of structures that define the traffic allocation percentages among the feature variations during each step of the launch.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.StepConfigProperty"]]], jsii.get(self, "scheduledSplitsConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.StepConfigProperty"]]], jsii.get(self, "scheduledSplitsConfig"))
 
     @scheduled_splits_config.setter
     def scheduled_splits_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.StepConfigProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.StepConfigProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__353ad69c0312cbb355b090decf45009d0f35cfd3174fb1768cda62970dd90e3a)
@@ -2289,14 +2294,14 @@ class CfnLaunch(
     @jsii.member(jsii_name="executionStatus")
     def execution_status(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLaunch.ExecutionStatusObjectProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLaunch.ExecutionStatusObjectProperty"]]:
         '''A structure that you can use to start and stop the launch.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLaunch.ExecutionStatusObjectProperty"]], jsii.get(self, "executionStatus"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLaunch.ExecutionStatusObjectProperty"]], jsii.get(self, "executionStatus"))
 
     @execution_status.setter
     def execution_status(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLaunch.ExecutionStatusObjectProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLaunch.ExecutionStatusObjectProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__62fb950dcca9c33f47ee901068ff569f19d2c54c24fd80f64fe62c91549eb16d)
@@ -2307,14 +2312,14 @@ class CfnLaunch(
     @jsii.member(jsii_name="metricMonitors")
     def metric_monitors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.MetricDefinitionObjectProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.MetricDefinitionObjectProperty"]]]]:
         '''An array of structures that define the metrics that will be used to monitor the launch performance.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.MetricDefinitionObjectProperty"]]]], jsii.get(self, "metricMonitors"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.MetricDefinitionObjectProperty"]]]], jsii.get(self, "metricMonitors"))
 
     @metric_monitors.setter
     def metric_monitors(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.MetricDefinitionObjectProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.MetricDefinitionObjectProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__72d460c5d783a1b583d7e0ff21f1c468740fdd12724891a96b32387d12665ced)
@@ -2336,12 +2341,12 @@ class CfnLaunch(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags (key-value pairs) to the launch.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__10b8aca9ed0c9918ec1dddb03aba9046d4089f9d1d756bd5bc04a138123e650e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2775,7 +2780,7 @@ class CfnLaunch(
             *,
             evaluation_order: jsii.Number,
             segment: builtins.str,
-            weights: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunch.GroupToWeightProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            weights: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLaunch.GroupToWeightProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Use this structure to specify different traffic splits for one or more audience *segments* .
 
@@ -2843,7 +2848,7 @@ class CfnLaunch(
         @builtins.property
         def weights(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.GroupToWeightProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.GroupToWeightProperty"]]]:
             '''The traffic allocation percentages among the feature variations to assign to this segment.
 
             This is a set of key-value pairs. The keys are variation names. The values represent the amount of traffic to allocate to that variation for this segment. This is expressed in thousandths of a percent, so a weight of 50000 represents 50% of traffic.
@@ -2852,7 +2857,7 @@ class CfnLaunch(
             '''
             result = self._values.get("weights")
             assert result is not None, "Required property 'weights' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.GroupToWeightProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.GroupToWeightProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2878,9 +2883,9 @@ class CfnLaunch(
         def __init__(
             self,
             *,
-            group_weights: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunch.GroupToWeightProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            group_weights: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLaunch.GroupToWeightProperty", typing.Dict[builtins.str, typing.Any]]]]],
             start_time: builtins.str,
-            segment_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunch.SegmentOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            segment_overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLaunch.SegmentOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''A structure that defines when each step of the launch is to start, and how much launch traffic is to be allocated to each variation during each step.
 
@@ -2930,14 +2935,14 @@ class CfnLaunch(
         @builtins.property
         def group_weights(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.GroupToWeightProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.GroupToWeightProperty"]]]:
             '''An array of structures that define how much launch traffic to allocate to each launch group during this step of the launch.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evidently-launch-stepconfig.html#cfn-evidently-launch-stepconfig-groupweights
             '''
             result = self._values.get("group_weights")
             assert result is not None, "Required property 'group_weights' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.GroupToWeightProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.GroupToWeightProperty"]]], result)
 
         @builtins.property
         def start_time(self) -> builtins.str:
@@ -2954,7 +2959,7 @@ class CfnLaunch(
         @builtins.property
         def segment_overrides(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.SegmentOverrideProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.SegmentOverrideProperty"]]]]:
             '''An array of structures that you can use to specify different traffic splits for one or more audience *segments* .
 
             A segment is a portion of your audience that share one or more characteristics. Examples could be Chrome browser users, users in Europe, or Firefox browser users in Europe who also fit other criteria that your application collects, such as age.
@@ -2964,7 +2969,7 @@ class CfnLaunch(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evidently-launch-stepconfig.html#cfn-evidently-launch-stepconfig-segmentoverrides
             '''
             result = self._values.get("segment_overrides")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLaunch.SegmentOverrideProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.SegmentOverrideProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2997,15 +3002,15 @@ class CfnLaunchProps:
     def __init__(
         self,
         *,
-        groups: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.LaunchGroupObjectProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        groups: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLaunch.LaunchGroupObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
-        project: typing.Union[builtins.str, _IProjectRef_8191fb70],
-        scheduled_splits_config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.StepConfigProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        project: typing.Union[builtins.str, "_IProjectRef_8191fb70"],
+        scheduled_splits_config: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLaunch.StepConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
-        execution_status: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.ExecutionStatusObjectProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        metric_monitors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.MetricDefinitionObjectProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        execution_status: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLaunch.ExecutionStatusObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        metric_monitors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLaunch.MetricDefinitionObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         randomization_salt: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLaunch``.
 
@@ -3024,6 +3029,7 @@ class CfnLaunchProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_evidently as evidently
@@ -3113,7 +3119,7 @@ class CfnLaunchProps:
     @builtins.property
     def groups(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLaunch.LaunchGroupObjectProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.LaunchGroupObjectProperty"]]]:
         '''An array of structures that contains the feature and variations that are to be used for the launch.
 
         You can up to five launch groups in a launch.
@@ -3122,7 +3128,7 @@ class CfnLaunchProps:
         '''
         result = self._values.get("groups")
         assert result is not None, "Required property 'groups' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLaunch.LaunchGroupObjectProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.LaunchGroupObjectProperty"]]], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -3137,26 +3143,26 @@ class CfnLaunchProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def project(self) -> typing.Union[builtins.str, _IProjectRef_8191fb70]:
+    def project(self) -> typing.Union[builtins.str, "_IProjectRef_8191fb70"]:
         '''The name or ARN of the project that you want to create the launch in.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-launch.html#cfn-evidently-launch-project
         '''
         result = self._values.get("project")
         assert result is not None, "Required property 'project' is missing"
-        return typing.cast(typing.Union[builtins.str, _IProjectRef_8191fb70], result)
+        return typing.cast(typing.Union[builtins.str, "_IProjectRef_8191fb70"], result)
 
     @builtins.property
     def scheduled_splits_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLaunch.StepConfigProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.StepConfigProperty"]]]:
         '''An array of structures that define the traffic allocation percentages among the feature variations during each step of the launch.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-launch.html#cfn-evidently-launch-scheduledsplitsconfig
         '''
         result = self._values.get("scheduled_splits_config")
         assert result is not None, "Required property 'scheduled_splits_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLaunch.StepConfigProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.StepConfigProperty"]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -3170,18 +3176,18 @@ class CfnLaunchProps:
     @builtins.property
     def execution_status(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLaunch.ExecutionStatusObjectProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLaunch.ExecutionStatusObjectProperty"]]:
         '''A structure that you can use to start and stop the launch.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-launch.html#cfn-evidently-launch-executionstatus
         '''
         result = self._values.get("execution_status")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLaunch.ExecutionStatusObjectProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLaunch.ExecutionStatusObjectProperty"]], result)
 
     @builtins.property
     def metric_monitors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLaunch.MetricDefinitionObjectProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.MetricDefinitionObjectProperty"]]]]:
         '''An array of structures that define the metrics that will be used to monitor the launch performance.
 
         You can have up to three metric monitors in the array.
@@ -3189,7 +3195,7 @@ class CfnLaunchProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-launch.html#cfn-evidently-launch-metricmonitors
         '''
         result = self._values.get("metric_monitors")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLaunch.MetricDefinitionObjectProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLaunch.MetricDefinitionObjectProperty"]]]], result)
 
     @builtins.property
     def randomization_salt(self) -> typing.Optional[builtins.str]:
@@ -3203,7 +3209,7 @@ class CfnLaunchProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags (key-value pairs) to the launch.
 
         Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.
@@ -3217,7 +3223,7 @@ class CfnLaunchProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-launch.html#cfn-evidently-launch-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3247,6 +3253,7 @@ class CfnProject(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_evidently as evidently
@@ -3278,14 +3285,14 @@ class CfnProject(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        app_config_resource: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.AppConfigResourceObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        data_delivery: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.DataDeliveryObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        app_config_resource: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.AppConfigResourceObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        data_delivery: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.DataDeliveryObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Evidently::Project``.
 
@@ -3313,7 +3320,7 @@ class CfnProject(
 
     @jsii.member(jsii_name="arnForProject")
     @builtins.classmethod
-    def arn_for_project(cls, resource: _IProjectRef_8191fb70) -> builtins.str:
+    def arn_for_project(cls, resource: "_IProjectRef_8191fb70") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3335,7 +3342,7 @@ class CfnProject(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProject", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3382,15 +3389,15 @@ class CfnProject(
 
     @builtins.property
     @jsii.member(jsii_name="projectRef")
-    def project_ref(self) -> _ProjectReference_0639a1fc:
+    def project_ref(self) -> "_ProjectReference_0639a1fc":
         '''A reference to a Project resource.'''
-        return typing.cast(_ProjectReference_0639a1fc, jsii.get(self, "projectRef"))
+        return typing.cast("_ProjectReference_0639a1fc", jsii.get(self, "projectRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -3409,14 +3416,14 @@ class CfnProject(
     @jsii.member(jsii_name="appConfigResource")
     def app_config_resource(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.AppConfigResourceObjectProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.AppConfigResourceObjectProperty"]]:
         '''Use this parameter if the project will use *client-side evaluation powered by AWS AppConfig* .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.AppConfigResourceObjectProperty"]], jsii.get(self, "appConfigResource"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.AppConfigResourceObjectProperty"]], jsii.get(self, "appConfigResource"))
 
     @app_config_resource.setter
     def app_config_resource(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.AppConfigResourceObjectProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.AppConfigResourceObjectProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__839d7fab373b2b68743dd50f95e3601bb6fad99024909ea6c4fafc4a1f81f7d3)
@@ -3427,14 +3434,14 @@ class CfnProject(
     @jsii.member(jsii_name="dataDelivery")
     def data_delivery(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.DataDeliveryObjectProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.DataDeliveryObjectProperty"]]:
         '''A structure that contains information about where Evidently is to store evaluation events for longer term storage, if you choose to do so.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.DataDeliveryObjectProperty"]], jsii.get(self, "dataDelivery"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.DataDeliveryObjectProperty"]], jsii.get(self, "dataDelivery"))
 
     @data_delivery.setter
     def data_delivery(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.DataDeliveryObjectProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.DataDeliveryObjectProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f8c0d4732b3a336b47854521db2baec1b07649626695e868d1d8ad744e8aeb6b)
@@ -3456,12 +3463,12 @@ class CfnProject(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags (key-value pairs) to the project.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bf0a54e7cf0c37d82554cdade5042d2b06c498c4099b1925825853dfcfe89060)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3551,7 +3558,7 @@ class CfnProject(
             self,
             *,
             log_group: typing.Optional[builtins.str] = None,
-            s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.S3DestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.S3DestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A structure that contains information about where Evidently is to store evaluation events for longer term storage.
 
@@ -3599,13 +3606,13 @@ class CfnProject(
         @builtins.property
         def s3(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.S3DestinationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.S3DestinationProperty"]]:
             '''If the project stores evaluation events in an Amazon S3 bucket, this structure stores the bucket name and bucket prefix.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evidently-project-datadeliveryobject.html#cfn-evidently-project-datadeliveryobject-s3
             '''
             result = self._values.get("s3")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.S3DestinationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.S3DestinationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3708,10 +3715,10 @@ class CfnProjectProps:
         self,
         *,
         name: builtins.str,
-        app_config_resource: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.AppConfigResourceObjectProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        data_delivery: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.DataDeliveryObjectProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        app_config_resource: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.AppConfigResourceObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        data_delivery: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.DataDeliveryObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnProject``.
 
@@ -3726,6 +3733,7 @@ class CfnProjectProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_evidently as evidently
@@ -3788,7 +3796,7 @@ class CfnProjectProps:
     @builtins.property
     def app_config_resource(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.AppConfigResourceObjectProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.AppConfigResourceObjectProperty"]]:
         '''Use this parameter if the project will use *client-side evaluation powered by AWS AppConfig* .
 
         Client-side evaluation allows your application to assign variations to user sessions locally instead of by calling the `EvaluateFeature <https://docs.aws.amazon.com/cloudwatchevidently/latest/APIReference/API_EvaluateFeature.html>`_ operation. This mitigates the latency and availability risks that come with an API call. For more information, see `Use client-side evaluation - powered by AWS AppConfig . <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Evidently-client-side-evaluation.html>`_
@@ -3800,12 +3808,12 @@ class CfnProjectProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-project.html#cfn-evidently-project-appconfigresource
         '''
         result = self._values.get("app_config_resource")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.AppConfigResourceObjectProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.AppConfigResourceObjectProperty"]], result)
 
     @builtins.property
     def data_delivery(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.DataDeliveryObjectProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.DataDeliveryObjectProperty"]]:
         '''A structure that contains information about where Evidently is to store evaluation events for longer term storage, if you choose to do so.
 
         If you choose not to store these events, Evidently deletes them after using them to produce metrics and other experiment results that you can view.
@@ -3815,7 +3823,7 @@ class CfnProjectProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-project.html#cfn-evidently-project-datadelivery
         '''
         result = self._values.get("data_delivery")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.DataDeliveryObjectProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.DataDeliveryObjectProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -3827,7 +3835,7 @@ class CfnProjectProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags (key-value pairs) to the project.
 
         Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.
@@ -3841,7 +3849,7 @@ class CfnProjectProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-project.html#cfn-evidently-project-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3877,6 +3885,7 @@ class CfnSegment(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_evidently as evidently
@@ -3896,13 +3905,13 @@ class CfnSegment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         pattern: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Evidently::Segment``.
 
@@ -3925,7 +3934,7 @@ class CfnSegment(
 
     @jsii.member(jsii_name="arnForSegment")
     @builtins.classmethod
-    def arn_for_segment(cls, resource: _ISegmentRef_bba19c3b) -> builtins.str:
+    def arn_for_segment(cls, resource: "_ISegmentRef_bba19c3b") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3947,7 +3956,7 @@ class CfnSegment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSegment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3994,15 +4003,15 @@ class CfnSegment(
 
     @builtins.property
     @jsii.member(jsii_name="segmentRef")
-    def segment_ref(self) -> _SegmentReference_d44d04d4:
+    def segment_ref(self) -> "_SegmentReference_d44d04d4":
         '''A reference to a Segment resource.'''
-        return typing.cast(_SegmentReference_d44d04d4, jsii.get(self, "segmentRef"))
+        return typing.cast("_SegmentReference_d44d04d4", jsii.get(self, "segmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -4045,12 +4054,12 @@ class CfnSegment(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags (key-value pairs) to the feature.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__699cd365ca1e9e81d1b1415334e92effb9e6ec1384e6de77039b6fa9552aa28d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4074,7 +4083,7 @@ class CfnSegmentProps:
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         pattern: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSegment``.
 
@@ -4088,6 +4097,7 @@ class CfnSegmentProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_evidently as evidently
@@ -4151,7 +4161,7 @@ class CfnSegmentProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags (key-value pairs) to the feature.
 
         Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.
@@ -4165,7 +4175,7 @@ class CfnSegmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-segment.html#cfn-evidently-segment-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

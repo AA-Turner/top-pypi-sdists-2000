@@ -164,7 +164,7 @@ class IConfigRef(
 
     @builtins.property
     @jsii.member(jsii_name="configRef")
-    def config_ref(self) -> ConfigReference:
+    def config_ref(self) -> "ConfigReference":
         '''(experimental) A reference to a Config resource.
 
         :stability: experimental
@@ -185,12 +185,12 @@ class _IConfigRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configRef")
-    def config_ref(self) -> ConfigReference:
+    def config_ref(self) -> "ConfigReference":
         '''(experimental) A reference to a Config resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigReference, jsii.get(self, "configRef"))
+        return typing.cast("ConfigReference", jsii.get(self, "configRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigRef).__jsii_proxy_class__ = lambda : _IConfigRefProxy
@@ -211,7 +211,7 @@ class IDataflowEndpointGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataflowEndpointGroupRef")
-    def dataflow_endpoint_group_ref(self) -> DataflowEndpointGroupReference:
+    def dataflow_endpoint_group_ref(self) -> "DataflowEndpointGroupReference":
         '''(experimental) A reference to a DataflowEndpointGroup resource.
 
         :stability: experimental
@@ -232,12 +232,12 @@ class _IDataflowEndpointGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataflowEndpointGroupRef")
-    def dataflow_endpoint_group_ref(self) -> DataflowEndpointGroupReference:
+    def dataflow_endpoint_group_ref(self) -> "DataflowEndpointGroupReference":
         '''(experimental) A reference to a DataflowEndpointGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataflowEndpointGroupReference, jsii.get(self, "dataflowEndpointGroupRef"))
+        return typing.cast("DataflowEndpointGroupReference", jsii.get(self, "dataflowEndpointGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataflowEndpointGroupRef).__jsii_proxy_class__ = lambda : _IDataflowEndpointGroupRefProxy

@@ -98,7 +98,7 @@ class IConfigurationManagerRef(
 
     @builtins.property
     @jsii.member(jsii_name="configurationManagerRef")
-    def configuration_manager_ref(self) -> ConfigurationManagerReference:
+    def configuration_manager_ref(self) -> "ConfigurationManagerReference":
         '''(experimental) A reference to a ConfigurationManager resource.
 
         :stability: experimental
@@ -119,12 +119,12 @@ class _IConfigurationManagerRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configurationManagerRef")
-    def configuration_manager_ref(self) -> ConfigurationManagerReference:
+    def configuration_manager_ref(self) -> "ConfigurationManagerReference":
         '''(experimental) A reference to a ConfigurationManager resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationManagerReference, jsii.get(self, "configurationManagerRef"))
+        return typing.cast("ConfigurationManagerReference", jsii.get(self, "configurationManagerRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationManagerRef).__jsii_proxy_class__ = lambda : _IConfigurationManagerRefProxy

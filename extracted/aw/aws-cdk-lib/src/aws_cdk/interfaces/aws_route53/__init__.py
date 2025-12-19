@@ -262,7 +262,7 @@ class ICidrCollectionRef(
 
     @builtins.property
     @jsii.member(jsii_name="cidrCollectionRef")
-    def cidr_collection_ref(self) -> CidrCollectionReference:
+    def cidr_collection_ref(self) -> "CidrCollectionReference":
         '''(experimental) A reference to a CidrCollection resource.
 
         :stability: experimental
@@ -283,12 +283,12 @@ class _ICidrCollectionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="cidrCollectionRef")
-    def cidr_collection_ref(self) -> CidrCollectionReference:
+    def cidr_collection_ref(self) -> "CidrCollectionReference":
         '''(experimental) A reference to a CidrCollection resource.
 
         :stability: experimental
         '''
-        return typing.cast(CidrCollectionReference, jsii.get(self, "cidrCollectionRef"))
+        return typing.cast("CidrCollectionReference", jsii.get(self, "cidrCollectionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICidrCollectionRef).__jsii_proxy_class__ = lambda : _ICidrCollectionRefProxy
@@ -307,7 +307,7 @@ class IDNSSECRef(
 
     @builtins.property
     @jsii.member(jsii_name="dnssecRef")
-    def dnssec_ref(self) -> DNSSECReference:
+    def dnssec_ref(self) -> "DNSSECReference":
         '''(experimental) A reference to a DNSSEC resource.
 
         :stability: experimental
@@ -328,12 +328,12 @@ class _IDNSSECRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dnssecRef")
-    def dnssec_ref(self) -> DNSSECReference:
+    def dnssec_ref(self) -> "DNSSECReference":
         '''(experimental) A reference to a DNSSEC resource.
 
         :stability: experimental
         '''
-        return typing.cast(DNSSECReference, jsii.get(self, "dnssecRef"))
+        return typing.cast("DNSSECReference", jsii.get(self, "dnssecRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDNSSECRef).__jsii_proxy_class__ = lambda : _IDNSSECRefProxy
@@ -352,7 +352,7 @@ class IHealthCheckRef(
 
     @builtins.property
     @jsii.member(jsii_name="healthCheckRef")
-    def health_check_ref(self) -> HealthCheckReference:
+    def health_check_ref(self) -> "HealthCheckReference":
         '''(experimental) A reference to a HealthCheck resource.
 
         :stability: experimental
@@ -373,12 +373,12 @@ class _IHealthCheckRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="healthCheckRef")
-    def health_check_ref(self) -> HealthCheckReference:
+    def health_check_ref(self) -> "HealthCheckReference":
         '''(experimental) A reference to a HealthCheck resource.
 
         :stability: experimental
         '''
-        return typing.cast(HealthCheckReference, jsii.get(self, "healthCheckRef"))
+        return typing.cast("HealthCheckReference", jsii.get(self, "healthCheckRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHealthCheckRef).__jsii_proxy_class__ = lambda : _IHealthCheckRefProxy
@@ -397,7 +397,7 @@ class IHostedZoneRef(
 
     @builtins.property
     @jsii.member(jsii_name="hostedZoneRef")
-    def hosted_zone_ref(self) -> HostedZoneReference:
+    def hosted_zone_ref(self) -> "HostedZoneReference":
         '''(experimental) A reference to a HostedZone resource.
 
         :stability: experimental
@@ -418,12 +418,12 @@ class _IHostedZoneRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="hostedZoneRef")
-    def hosted_zone_ref(self) -> HostedZoneReference:
+    def hosted_zone_ref(self) -> "HostedZoneReference":
         '''(experimental) A reference to a HostedZone resource.
 
         :stability: experimental
         '''
-        return typing.cast(HostedZoneReference, jsii.get(self, "hostedZoneRef"))
+        return typing.cast("HostedZoneReference", jsii.get(self, "hostedZoneRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHostedZoneRef).__jsii_proxy_class__ = lambda : _IHostedZoneRefProxy

@@ -112,7 +112,7 @@ class IGlobalTableRef(
 
     @builtins.property
     @jsii.member(jsii_name="globalTableRef")
-    def global_table_ref(self) -> GlobalTableReference:
+    def global_table_ref(self) -> "GlobalTableReference":
         '''(experimental) A reference to a GlobalTable resource.
 
         :stability: experimental
@@ -133,12 +133,12 @@ class _IGlobalTableRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="globalTableRef")
-    def global_table_ref(self) -> GlobalTableReference:
+    def global_table_ref(self) -> "GlobalTableReference":
         '''(experimental) A reference to a GlobalTable resource.
 
         :stability: experimental
         '''
-        return typing.cast(GlobalTableReference, jsii.get(self, "globalTableRef"))
+        return typing.cast("GlobalTableReference", jsii.get(self, "globalTableRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGlobalTableRef).__jsii_proxy_class__ = lambda : _IGlobalTableRefProxy

@@ -86,6 +86,7 @@ class CfnApplication(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iotfleethub as iotfleethub
@@ -105,13 +106,13 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_name: builtins.str,
         role_arn: builtins.str,
         application_description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoTFleetHub::Application``.
 
@@ -137,7 +138,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_acbdc0fc) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_acbdc0fc") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -145,48 +146,6 @@ class CfnApplication(
             type_hints = typing.get_type_hints(_typecheckingstub__daddc7bf9dbe9c634b123431ba51b43c538323ae78e1edf32af6df6d5684ecca)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
-
-    @jsii.member(jsii_name="fromApplicationArn")
-    @builtins.classmethod
-    def from_application_arn(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> _IApplicationRef_acbdc0fc:
-        '''Creates a new IApplicationRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__875f082c455ace02f7d6232f58f4047ae2f2c5b06d63b051e6cb24f55bba901b)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IApplicationRef_acbdc0fc, jsii.sinvoke(cls, "fromApplicationArn", [scope, id, arn]))
-
-    @jsii.member(jsii_name="fromApplicationId")
-    @builtins.classmethod
-    def from_application_id(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        application_id: builtins.str,
-    ) -> _IApplicationRef_acbdc0fc:
-        '''Creates a new IApplicationRef from a applicationId.
-
-        :param scope: -
-        :param id: -
-        :param application_id: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1067620c303cd543bab59a50b3262f84fd21bb6c0cc28e8c18b489da182a8292)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument application_id", value=application_id, expected_type=type_hints["application_id"])
-        return typing.cast(_IApplicationRef_acbdc0fc, jsii.sinvoke(cls, "fromApplicationId", [scope, id, application_id]))
 
     @jsii.member(jsii_name="isCfnApplication")
     @builtins.classmethod
@@ -201,7 +160,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -232,9 +191,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_5cf37b87:
+    def application_ref(self) -> "_ApplicationReference_5cf37b87":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_5cf37b87, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_5cf37b87", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrApplicationArn")
@@ -317,9 +276,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationName")
@@ -362,12 +321,12 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A set of key/value pairs that you can use to manage the web application resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7b43c026e02cc2c3b3b72623cb3ba7d19a57e7fc258e370d84051f810254158d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -391,7 +350,7 @@ class CfnApplicationProps:
         application_name: builtins.str,
         role_arn: builtins.str,
         application_description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplication``.
 
@@ -405,6 +364,7 @@ class CfnApplicationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iotfleethub as iotfleethub
@@ -472,13 +432,13 @@ class CfnApplicationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A set of key/value pairs that you can use to manage the web application resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotfleethub-application.html#cfn-iotfleethub-application-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -513,22 +473,6 @@ def _typecheckingstub__b0980596631cbe713d270d139797274438ec1f918af98c8c9381e0d2b
 
 def _typecheckingstub__daddc7bf9dbe9c634b123431ba51b43c538323ae78e1edf32af6df6d5684ecca(
     resource: _IApplicationRef_acbdc0fc,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__875f082c455ace02f7d6232f58f4047ae2f2c5b06d63b051e6cb24f55bba901b(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__1067620c303cd543bab59a50b3262f84fd21bb6c0cc28e8c18b489da182a8292(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    application_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

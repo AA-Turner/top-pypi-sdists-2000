@@ -93,6 +93,7 @@ class CfnMonitor(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_internetmonitor as internetmonitor
@@ -139,20 +140,20 @@ class CfnMonitor(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         monitor_name: builtins.str,
-        health_events_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMonitor.HealthEventsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        include_linked_accounts: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        internet_measurements_log_delivery: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMonitor.InternetMeasurementsLogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        health_events_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMonitor.HealthEventsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        include_linked_accounts: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        internet_measurements_log_delivery: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMonitor.InternetMeasurementsLogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         linked_account_id: typing.Optional[builtins.str] = None,
         max_city_networks_to_monitor: typing.Optional[jsii.Number] = None,
         resources: typing.Optional[typing.Sequence[builtins.str]] = None,
         resources_to_add: typing.Optional[typing.Sequence[builtins.str]] = None,
         resources_to_remove: typing.Optional[typing.Sequence[builtins.str]] = None,
         status: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         traffic_percentage_to_monitor: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Create a new ``AWS::InternetMonitor::Monitor``.
@@ -195,7 +196,7 @@ class CfnMonitor(
 
     @jsii.member(jsii_name="arnForMonitor")
     @builtins.classmethod
-    def arn_for_monitor(cls, resource: _IMonitorRef_a18ca427) -> builtins.str:
+    def arn_for_monitor(cls, resource: "_IMonitorRef_a18ca427") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -208,10 +209,10 @@ class CfnMonitor(
     @builtins.classmethod
     def from_monitor_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IMonitorRef_a18ca427:
+    ) -> "_IMonitorRef_a18ca427":
         '''Creates a new IMonitorRef from an ARN.
 
         :param scope: -
@@ -223,16 +224,16 @@ class CfnMonitor(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IMonitorRef_a18ca427, jsii.sinvoke(cls, "fromMonitorArn", [scope, id, arn]))
+        return typing.cast("_IMonitorRef_a18ca427", jsii.sinvoke(cls, "fromMonitorArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromMonitorName")
     @builtins.classmethod
     def from_monitor_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         monitor_name: builtins.str,
-    ) -> _IMonitorRef_a18ca427:
+    ) -> "_IMonitorRef_a18ca427":
         '''Creates a new IMonitorRef from a monitorName.
 
         :param scope: -
@@ -244,7 +245,7 @@ class CfnMonitor(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument monitor_name", value=monitor_name, expected_type=type_hints["monitor_name"])
-        return typing.cast(_IMonitorRef_a18ca427, jsii.sinvoke(cls, "fromMonitorName", [scope, id, monitor_name]))
+        return typing.cast("_IMonitorRef_a18ca427", jsii.sinvoke(cls, "fromMonitorName", [scope, id, monitor_name]))
 
     @jsii.member(jsii_name="isCfnMonitor")
     @builtins.classmethod
@@ -259,7 +260,7 @@ class CfnMonitor(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMonitor", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -342,15 +343,15 @@ class CfnMonitor(
 
     @builtins.property
     @jsii.member(jsii_name="monitorRef")
-    def monitor_ref(self) -> _MonitorReference_16bd6e94:
+    def monitor_ref(self) -> "_MonitorReference_16bd6e94":
         '''A reference to a Monitor resource.'''
-        return typing.cast(_MonitorReference_16bd6e94, jsii.get(self, "monitorRef"))
+        return typing.cast("_MonitorReference_16bd6e94", jsii.get(self, "monitorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="monitorName")
@@ -369,14 +370,14 @@ class CfnMonitor(
     @jsii.member(jsii_name="healthEventsConfig")
     def health_events_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitor.HealthEventsConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.HealthEventsConfigProperty"]]:
         '''A complex type with the configuration information that determines the threshold and other conditions for when Internet Monitor creates a health event for an overall performance or availability issue, across an application's geographies.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitor.HealthEventsConfigProperty"]], jsii.get(self, "healthEventsConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.HealthEventsConfigProperty"]], jsii.get(self, "healthEventsConfig"))
 
     @health_events_config.setter
     def health_events_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitor.HealthEventsConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.HealthEventsConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1fcad87a381a34c71141a2be73ac8e81c442bd9d4616b8a8a55279c77a30bf9b)
@@ -387,14 +388,14 @@ class CfnMonitor(
     @jsii.member(jsii_name="includeLinkedAccounts")
     def include_linked_accounts(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean option that you can set to ``TRUE`` to include monitors for linked accounts in a list of monitors, when you've set up cross-account sharing in Internet Monitor.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "includeLinkedAccounts"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "includeLinkedAccounts"))
 
     @include_linked_accounts.setter
     def include_linked_accounts(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__80a74cd4b87837dd8170028ab147883219b1546ce841f056d4ef2aa4f1fd501b)
@@ -405,14 +406,14 @@ class CfnMonitor(
     @jsii.member(jsii_name="internetMeasurementsLogDelivery")
     def internet_measurements_log_delivery(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitor.InternetMeasurementsLogDeliveryProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.InternetMeasurementsLogDeliveryProperty"]]:
         '''Publish internet measurements for a monitor for all city-networks (up to the 500,000 service limit) to another location, such as an Amazon S3 bucket.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitor.InternetMeasurementsLogDeliveryProperty"]], jsii.get(self, "internetMeasurementsLogDelivery"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.InternetMeasurementsLogDeliveryProperty"]], jsii.get(self, "internetMeasurementsLogDelivery"))
 
     @internet_measurements_log_delivery.setter
     def internet_measurements_log_delivery(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitor.InternetMeasurementsLogDeliveryProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.InternetMeasurementsLogDeliveryProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__edd584d7d64cd02983ca8858b15c31728e9294c416931001fc1a9ce5732ebad9)
@@ -505,12 +506,12 @@ class CfnMonitor(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for a monitor, listed as a set of *key:value* pairs.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8356cdf68080604804446d5b83fa308a2aa120e493bdc0ac24c31dbdc37894b7)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -546,9 +547,9 @@ class CfnMonitor(
         def __init__(
             self,
             *,
-            availability_local_health_events_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMonitor.LocalHealthEventsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            availability_local_health_events_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMonitor.LocalHealthEventsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             availability_score_threshold: typing.Optional[jsii.Number] = None,
-            performance_local_health_events_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMonitor.LocalHealthEventsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            performance_local_health_events_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMonitor.LocalHealthEventsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             performance_score_threshold: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Define the health event threshold percentages for the performance score and availability score for your application's monitor.
@@ -605,13 +606,13 @@ class CfnMonitor(
         @builtins.property
         def availability_local_health_events_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitor.LocalHealthEventsConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.LocalHealthEventsConfigProperty"]]:
             '''The configuration that determines the threshold and other conditions for when Internet Monitor creates a health event for a local availability issue.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-internetmonitor-monitor-healtheventsconfig.html#cfn-internetmonitor-monitor-healtheventsconfig-availabilitylocalhealtheventsconfig
             '''
             result = self._values.get("availability_local_health_events_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitor.LocalHealthEventsConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.LocalHealthEventsConfigProperty"]], result)
 
         @builtins.property
         def availability_score_threshold(self) -> typing.Optional[jsii.Number]:
@@ -627,13 +628,13 @@ class CfnMonitor(
         @builtins.property
         def performance_local_health_events_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitor.LocalHealthEventsConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.LocalHealthEventsConfigProperty"]]:
             '''The configuration that determines the threshold and other conditions for when Internet Monitor creates a health event for a local performance issue.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-internetmonitor-monitor-healtheventsconfig.html#cfn-internetmonitor-monitor-healtheventsconfig-performancelocalhealtheventsconfig
             '''
             result = self._values.get("performance_local_health_events_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitor.LocalHealthEventsConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.LocalHealthEventsConfigProperty"]], result)
 
         @builtins.property
         def performance_score_threshold(self) -> typing.Optional[jsii.Number]:
@@ -666,7 +667,7 @@ class CfnMonitor(
         def __init__(
             self,
             *,
-            s3_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMonitor.S3ConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMonitor.S3ConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Publish internet measurements to an Amazon S3 bucket in addition to CloudWatch Logs.
 
@@ -699,13 +700,13 @@ class CfnMonitor(
         @builtins.property
         def s3_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitor.S3ConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.S3ConfigProperty"]]:
             '''The configuration for publishing Amazon CloudWatch Internet Monitor internet measurements to Amazon S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-internetmonitor-monitor-internetmeasurementslogdelivery.html#cfn-internetmonitor-monitor-internetmeasurementslogdelivery-s3config
             '''
             result = self._values.get("s3_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitor.S3ConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.S3ConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -936,16 +937,16 @@ class CfnMonitorProps:
         self,
         *,
         monitor_name: builtins.str,
-        health_events_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMonitor.HealthEventsConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        include_linked_accounts: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        internet_measurements_log_delivery: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMonitor.InternetMeasurementsLogDeliveryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        health_events_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMonitor.HealthEventsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        include_linked_accounts: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        internet_measurements_log_delivery: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMonitor.InternetMeasurementsLogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         linked_account_id: typing.Optional[builtins.str] = None,
         max_city_networks_to_monitor: typing.Optional[jsii.Number] = None,
         resources: typing.Optional[typing.Sequence[builtins.str]] = None,
         resources_to_add: typing.Optional[typing.Sequence[builtins.str]] = None,
         resources_to_remove: typing.Optional[typing.Sequence[builtins.str]] = None,
         status: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         traffic_percentage_to_monitor: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties for defining a ``CfnMonitor``.
@@ -968,6 +969,7 @@ class CfnMonitorProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_internetmonitor as internetmonitor
@@ -1066,7 +1068,7 @@ class CfnMonitorProps:
     @builtins.property
     def health_events_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMonitor.HealthEventsConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.HealthEventsConfigProperty"]]:
         '''A complex type with the configuration information that determines the threshold and other conditions for when Internet Monitor creates a health event for an overall performance or availability issue, across an application's geographies.
 
         Defines the percentages, for overall performance scores and availability scores for an application, that are the thresholds for when Internet Monitor creates a health event. You can override the defaults to set a custom threshold for overall performance or availability scores, or both.
@@ -1082,12 +1084,12 @@ class CfnMonitorProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-internetmonitor-monitor.html#cfn-internetmonitor-monitor-healtheventsconfig
         '''
         result = self._values.get("health_events_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMonitor.HealthEventsConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.HealthEventsConfigProperty"]], result)
 
     @builtins.property
     def include_linked_accounts(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean option that you can set to ``TRUE`` to include monitors for linked accounts in a list of monitors, when you've set up cross-account sharing in Internet Monitor.
 
         You configure cross-account sharing by using Amazon CloudWatch Observability Access Manager. For more information, see `Internet Monitor cross-account observability <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cwim-cross-account.html>`_ in the Amazon CloudWatch User Guide.
@@ -1095,12 +1097,12 @@ class CfnMonitorProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-internetmonitor-monitor.html#cfn-internetmonitor-monitor-includelinkedaccounts
         '''
         result = self._values.get("include_linked_accounts")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def internet_measurements_log_delivery(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMonitor.InternetMeasurementsLogDeliveryProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.InternetMeasurementsLogDeliveryProperty"]]:
         '''Publish internet measurements for a monitor for all city-networks (up to the 500,000 service limit) to another location, such as an Amazon S3 bucket.
 
         Measurements are also published to Amazon CloudWatch Logs for the first 500 (by traffic volume) city-networks (client locations and ASNs, typically internet service providers or ISPs).
@@ -1108,7 +1110,7 @@ class CfnMonitorProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-internetmonitor-monitor.html#cfn-internetmonitor-monitor-internetmeasurementslogdelivery
         '''
         result = self._values.get("internet_measurements_log_delivery")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMonitor.InternetMeasurementsLogDeliveryProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitor.InternetMeasurementsLogDeliveryProperty"]], result)
 
     @builtins.property
     def linked_account_id(self) -> typing.Optional[builtins.str]:
@@ -1191,13 +1193,13 @@ class CfnMonitorProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for a monitor, listed as a set of *key:value* pairs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-internetmonitor-monitor.html#cfn-internetmonitor-monitor-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def traffic_percentage_to_monitor(self) -> typing.Optional[jsii.Number]:

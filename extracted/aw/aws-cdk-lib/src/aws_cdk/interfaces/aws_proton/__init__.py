@@ -151,7 +151,7 @@ class IEnvironmentAccountConnectionRef(
     @jsii.member(jsii_name="environmentAccountConnectionRef")
     def environment_account_connection_ref(
         self,
-    ) -> EnvironmentAccountConnectionReference:
+    ) -> "EnvironmentAccountConnectionReference":
         '''(experimental) A reference to a EnvironmentAccountConnection resource.
 
         :stability: experimental
@@ -174,12 +174,12 @@ class _IEnvironmentAccountConnectionRefProxy(
     @jsii.member(jsii_name="environmentAccountConnectionRef")
     def environment_account_connection_ref(
         self,
-    ) -> EnvironmentAccountConnectionReference:
+    ) -> "EnvironmentAccountConnectionReference":
         '''(experimental) A reference to a EnvironmentAccountConnection resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnvironmentAccountConnectionReference, jsii.get(self, "environmentAccountConnectionRef"))
+        return typing.cast("EnvironmentAccountConnectionReference", jsii.get(self, "environmentAccountConnectionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnvironmentAccountConnectionRef).__jsii_proxy_class__ = lambda : _IEnvironmentAccountConnectionRefProxy
@@ -198,7 +198,7 @@ class IEnvironmentTemplateRef(
 
     @builtins.property
     @jsii.member(jsii_name="environmentTemplateRef")
-    def environment_template_ref(self) -> EnvironmentTemplateReference:
+    def environment_template_ref(self) -> "EnvironmentTemplateReference":
         '''(experimental) A reference to a EnvironmentTemplate resource.
 
         :stability: experimental
@@ -219,12 +219,12 @@ class _IEnvironmentTemplateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="environmentTemplateRef")
-    def environment_template_ref(self) -> EnvironmentTemplateReference:
+    def environment_template_ref(self) -> "EnvironmentTemplateReference":
         '''(experimental) A reference to a EnvironmentTemplate resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnvironmentTemplateReference, jsii.get(self, "environmentTemplateRef"))
+        return typing.cast("EnvironmentTemplateReference", jsii.get(self, "environmentTemplateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnvironmentTemplateRef).__jsii_proxy_class__ = lambda : _IEnvironmentTemplateRefProxy

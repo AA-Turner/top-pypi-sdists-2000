@@ -91,6 +91,7 @@ class CfnPermission(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ram as ram
@@ -112,13 +113,13 @@ class CfnPermission(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         policy_template: typing.Any,
         resource_type: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::RAM::Permission``.
 
@@ -144,7 +145,7 @@ class CfnPermission(
 
     @jsii.member(jsii_name="arnForPermission")
     @builtins.classmethod
-    def arn_for_permission(cls, resource: _IPermissionRef_0711eda0) -> builtins.str:
+    def arn_for_permission(cls, resource: "_IPermissionRef_0711eda0") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -166,7 +167,7 @@ class CfnPermission(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPermission", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -206,12 +207,12 @@ class CfnPermission(
 
     @builtins.property
     @jsii.member(jsii_name="attrIsResourceTypeDefault")
-    def attr_is_resource_type_default(self) -> _IResolvable_da3f097b:
+    def attr_is_resource_type_default(self) -> "_IResolvable_da3f097b":
         '''Specifies whether this permission is the default for new resource shares that include resources of the associated resource type.
 
         :cloudformationAttribute: IsResourceTypeDefault
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrIsResourceTypeDefault"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrIsResourceTypeDefault"))
 
     @builtins.property
     @jsii.member(jsii_name="attrPermissionType")
@@ -241,15 +242,15 @@ class CfnPermission(
 
     @builtins.property
     @jsii.member(jsii_name="permissionRef")
-    def permission_ref(self) -> _PermissionReference_51dc2d59:
+    def permission_ref(self) -> "_PermissionReference_51dc2d59":
         '''A reference to a Permission resource.'''
-        return typing.cast(_PermissionReference_51dc2d59, jsii.get(self, "permissionRef"))
+        return typing.cast("_PermissionReference_51dc2d59", jsii.get(self, "permissionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -292,12 +293,12 @@ class CfnPermission(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies a list of one or more tag key and value pairs to attach to the permission.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4e38f5af40d9dfeea4630580bc03fc46db30f305dafe61dc85a0a22e71eb103d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -321,7 +322,7 @@ class CfnPermissionProps:
         name: builtins.str,
         policy_template: typing.Any,
         resource_type: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPermission``.
 
@@ -335,6 +336,7 @@ class CfnPermissionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ram as ram
@@ -408,13 +410,13 @@ class CfnPermissionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies a list of one or more tag key and value pairs to attach to the permission.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ram-permission.html#cfn-ram-permission-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -447,6 +449,7 @@ class CfnResourceShare(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ram as ram
@@ -469,16 +472,16 @@ class CfnResourceShare(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        allow_external_principals: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        allow_external_principals: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         permission_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         principals: typing.Optional[typing.Sequence[builtins.str]] = None,
         resource_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         sources: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::RAM::ResourceShare``.
 
@@ -512,7 +515,7 @@ class CfnResourceShare(
     @builtins.classmethod
     def arn_for_resource_share(
         cls,
-        resource: _IResourceShareRef_43a2a79e,
+        resource: "_IResourceShareRef_43a2a79e",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -535,7 +538,7 @@ class CfnResourceShare(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourceShare", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -574,21 +577,70 @@ class CfnResourceShare(
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrCreationTime")
+    def attr_creation_time(self) -> builtins.str:
+        '''The date and time when the resource share was created.
+
+        :cloudformationAttribute: CreationTime
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreationTime"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrFeatureSet")
+    def attr_feature_set(self) -> builtins.str:
+        '''Indicates what features are available for this resource share. This parameter can have one of the following values:.
+
+        - *STANDARD* – A resource share that supports all functionality. These resource shares are visible to all principals you share the resource share with. You can modify these resource shares in AWS RAM using the console or APIs. This resource share might have been created by AWS RAM , or it might have been *CREATED_FROM_POLICY* and then promoted.
+        - *CREATED_FROM_POLICY* – The customer manually shared a resource by attaching a resource-based policy. That policy did not match any existing managed permissions, so AWS RAM created this customer managed permission automatically on the customer's behalf based on the attached policy document. This type of resource share is visible only to the AWS account that created it. You can't modify it in AWS RAM unless you promote it. For more information, see ``PromoteResourceShareCreatedFromPolicy`` .
+        - *PROMOTING_TO_STANDARD* – This resource share was originally ``CREATED_FROM_POLICY`` , but the customer ran the ``PromoteResourceShareCreatedFromPolicy`` and that operation is still in progress. This value changes to ``STANDARD`` when complete.
+
+        :cloudformationAttribute: FeatureSet
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrFeatureSet"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastUpdatedTime")
+    def attr_last_updated_time(self) -> builtins.str:
+        '''The date and time when the resource share was last updated.
+
+        :cloudformationAttribute: LastUpdatedTime
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLastUpdatedTime"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrOwningAccountId")
+    def attr_owning_account_id(self) -> builtins.str:
+        '''The ID of the AWS account that owns the resource share.
+
+        :cloudformationAttribute: OwningAccountId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrOwningAccountId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrStatus")
+    def attr_status(self) -> builtins.str:
+        '''The current status of the resource share.
+
+        :cloudformationAttribute: Status
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
+
+    @builtins.property
     @jsii.member(jsii_name="cfnProperties")
     def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
 
     @builtins.property
     @jsii.member(jsii_name="resourceShareRef")
-    def resource_share_ref(self) -> _ResourceShareReference_a7fbd0a4:
+    def resource_share_ref(self) -> "_ResourceShareReference_a7fbd0a4":
         '''A reference to a ResourceShare resource.'''
-        return typing.cast(_ResourceShareReference_a7fbd0a4, jsii.get(self, "resourceShareRef"))
+        return typing.cast("_ResourceShareReference_a7fbd0a4", jsii.get(self, "resourceShareRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -607,14 +659,14 @@ class CfnResourceShare(
     @jsii.member(jsii_name="allowExternalPrincipals")
     def allow_external_principals(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether principals outside your organization in AWS Organizations can be associated with a resource share.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "allowExternalPrincipals"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "allowExternalPrincipals"))
 
     @allow_external_principals.setter
     def allow_external_principals(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1a8ac8ee18a992b418a8b6fc421772eee1a5d5b0b675ccfe6c0ce0c7f18b40e7)
@@ -681,12 +733,12 @@ class CfnResourceShare(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies one or more tags to attach to the resource share itself.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2e8df76745e5c0758e8b5233e879c50ee5a6f6f817a0850af55da2744c10ef55)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -711,12 +763,12 @@ class CfnResourceShareProps:
         self,
         *,
         name: builtins.str,
-        allow_external_principals: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        allow_external_principals: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         permission_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         principals: typing.Optional[typing.Sequence[builtins.str]] = None,
         resource_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         sources: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnResourceShare``.
 
@@ -733,6 +785,7 @@ class CfnResourceShareProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ram as ram
@@ -790,7 +843,7 @@ class CfnResourceShareProps:
     @builtins.property
     def allow_external_principals(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether principals outside your organization in AWS Organizations can be associated with a resource share.
 
         A value of ``true`` lets you share with individual AWS accounts that are *not* in your organization. A value of ``false`` only has meaning if your account is a member of an AWS Organization. The default value is ``true`` .
@@ -798,7 +851,7 @@ class CfnResourceShareProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ram-resourceshare.html#cfn-ram-resourceshare-allowexternalprincipals
         '''
         result = self._values.get("allow_external_principals")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def permission_arns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -847,7 +900,7 @@ class CfnResourceShareProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies one or more tags to attach to the resource share itself.
 
         It doesn't attach the tags to the resources associated with the resource share.
@@ -855,7 +908,7 @@ class CfnResourceShareProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ram-resourceshare.html#cfn-ram-resourceshare-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

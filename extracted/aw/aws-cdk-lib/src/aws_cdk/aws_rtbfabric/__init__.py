@@ -110,6 +110,7 @@ class CfnInboundExternalLink(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_rtbfabric as rtbfabric
@@ -146,13 +147,13 @@ class CfnInboundExternalLink(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         gateway_id: builtins.str,
-        link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union["CfnInboundExternalLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
-        link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInboundExternalLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        link_log_settings: typing.Union["_IResolvable_da3f097b", typing.Union["CfnInboundExternalLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        link_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInboundExternalLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::RTBFabric::InboundExternalLink``.
 
@@ -180,7 +181,7 @@ class CfnInboundExternalLink(
     @builtins.classmethod
     def arn_for_inbound_external_link(
         cls,
-        resource: _IInboundExternalLinkRef_087c1bc6,
+        resource: "_IInboundExternalLinkRef_087c1bc6",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -203,7 +204,7 @@ class CfnInboundExternalLink(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInboundExternalLink", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -274,9 +275,9 @@ class CfnInboundExternalLink(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -285,9 +286,9 @@ class CfnInboundExternalLink(
 
     @builtins.property
     @jsii.member(jsii_name="inboundExternalLinkRef")
-    def inbound_external_link_ref(self) -> _InboundExternalLinkReference_89bab665:
+    def inbound_external_link_ref(self) -> "_InboundExternalLinkReference_89bab665":
         '''A reference to a InboundExternalLink resource.'''
-        return typing.cast(_InboundExternalLinkReference_89bab665, jsii.get(self, "inboundExternalLinkRef"))
+        return typing.cast("_InboundExternalLinkReference_89bab665", jsii.get(self, "inboundExternalLinkRef"))
 
     @builtins.property
     @jsii.member(jsii_name="gatewayId")
@@ -305,13 +306,13 @@ class CfnInboundExternalLink(
     @jsii.member(jsii_name="linkLogSettings")
     def link_log_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnInboundExternalLink.LinkLogSettingsProperty"]:
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnInboundExternalLink.LinkLogSettingsProperty"], jsii.get(self, "linkLogSettings"))
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.LinkLogSettingsProperty"]:
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.LinkLogSettingsProperty"], jsii.get(self, "linkLogSettings"))
 
     @link_log_settings.setter
     def link_log_settings(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnInboundExternalLink.LinkLogSettingsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.LinkLogSettingsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cf1ee8508990492f8168ad7b68f62077e25e97d32af167928f013ed58b2c4d15)
@@ -322,13 +323,13 @@ class CfnInboundExternalLink(
     @jsii.member(jsii_name="linkAttributes")
     def link_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInboundExternalLink.LinkAttributesProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInboundExternalLink.LinkAttributesProperty"]], jsii.get(self, "linkAttributes"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.LinkAttributesProperty"]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.LinkAttributesProperty"]], jsii.get(self, "linkAttributes"))
 
     @link_attributes.setter
     def link_attributes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInboundExternalLink.LinkAttributesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.LinkAttributesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5745f3776bc1df4e80af5ddcc1b274597b1aab22d6cd1cf3d3f615d1fba4c3f7)
@@ -337,12 +338,12 @@ class CfnInboundExternalLink(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Link.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__13f41f0dd733ffddc6dae564597b6fd8c0c31c02cd444ba959242500384e99aa)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -357,7 +358,7 @@ class CfnInboundExternalLink(
         def __init__(
             self,
             *,
-            link_application_log_sampling: typing.Union[_IResolvable_da3f097b, typing.Union["CfnInboundExternalLink.LinkApplicationLogSamplingProperty", typing.Dict[builtins.str, typing.Any]]],
+            link_application_log_sampling: typing.Union["_IResolvable_da3f097b", typing.Union["CfnInboundExternalLink.LinkApplicationLogSamplingProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''
             :param link_application_log_sampling: 
@@ -388,13 +389,13 @@ class CfnInboundExternalLink(
         @builtins.property
         def link_application_log_sampling(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnInboundExternalLink.LinkApplicationLogSamplingProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.LinkApplicationLogSamplingProperty"]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-inboundexternallink-applicationlogs.html#cfn-rtbfabric-inboundexternallink-applicationlogs-linkapplicationlogsampling
             '''
             result = self._values.get("link_application_log_sampling")
             assert result is not None, "Required property 'link_application_log_sampling' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnInboundExternalLink.LinkApplicationLogSamplingProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.LinkApplicationLogSamplingProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -483,7 +484,7 @@ class CfnInboundExternalLink(
             self,
             *,
             customer_provided_id: typing.Optional[builtins.str] = None,
-            responder_error_masking: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInboundExternalLink.ResponderErrorMaskingForHttpCodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            responder_error_masking: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInboundExternalLink.ResponderErrorMaskingForHttpCodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''
             :param customer_provided_id: 
@@ -531,12 +532,12 @@ class CfnInboundExternalLink(
         @builtins.property
         def responder_error_masking(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInboundExternalLink.ResponderErrorMaskingForHttpCodeProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.ResponderErrorMaskingForHttpCodeProperty"]]]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-inboundexternallink-linkattributes.html#cfn-rtbfabric-inboundexternallink-linkattributes-respondererrormasking
             '''
             result = self._values.get("responder_error_masking")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInboundExternalLink.ResponderErrorMaskingForHttpCodeProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.ResponderErrorMaskingForHttpCodeProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -558,7 +559,7 @@ class CfnInboundExternalLink(
         def __init__(
             self,
             *,
-            application_logs: typing.Union[_IResolvable_da3f097b, typing.Union["CfnInboundExternalLink.ApplicationLogsProperty", typing.Dict[builtins.str, typing.Any]]],
+            application_logs: typing.Union["_IResolvable_da3f097b", typing.Union["CfnInboundExternalLink.ApplicationLogsProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''
             :param application_logs: 
@@ -591,13 +592,13 @@ class CfnInboundExternalLink(
         @builtins.property
         def application_logs(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnInboundExternalLink.ApplicationLogsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.ApplicationLogsProperty"]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-inboundexternallink-linklogsettings.html#cfn-rtbfabric-inboundexternallink-linklogsettings-applicationlogs
             '''
             result = self._values.get("application_logs")
             assert result is not None, "Required property 'application_logs' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnInboundExternalLink.ApplicationLogsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.ApplicationLogsProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -729,9 +730,9 @@ class CfnInboundExternalLinkProps:
         self,
         *,
         gateway_id: builtins.str,
-        link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnInboundExternalLink.LinkLogSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
-        link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInboundExternalLink.LinkAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        link_log_settings: typing.Union["_IResolvable_da3f097b", typing.Union["CfnInboundExternalLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        link_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInboundExternalLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnInboundExternalLink``.
 
@@ -745,6 +746,7 @@ class CfnInboundExternalLinkProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_rtbfabric as rtbfabric
@@ -805,32 +807,32 @@ class CfnInboundExternalLinkProps:
     @builtins.property
     def link_log_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnInboundExternalLink.LinkLogSettingsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.LinkLogSettingsProperty"]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-inboundexternallink.html#cfn-rtbfabric-inboundexternallink-linklogsettings
         '''
         result = self._values.get("link_log_settings")
         assert result is not None, "Required property 'link_log_settings' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnInboundExternalLink.LinkLogSettingsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.LinkLogSettingsProperty"], result)
 
     @builtins.property
     def link_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInboundExternalLink.LinkAttributesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.LinkAttributesProperty"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-inboundexternallink.html#cfn-rtbfabric-inboundexternallink-linkattributes
         '''
         result = self._values.get("link_attributes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInboundExternalLink.LinkAttributesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInboundExternalLink.LinkAttributesProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Link.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-inboundexternallink.html#cfn-rtbfabric-inboundexternallink-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -860,6 +862,7 @@ class CfnLink(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_rtbfabric as rtbfabric
@@ -931,16 +934,16 @@ class CfnLink(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         gateway_id: builtins.str,
-        link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        link_log_settings: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
         peer_gateway_id: builtins.str,
-        http_responder_allowed: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        module_configuration_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ModuleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_responder_allowed: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        link_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        module_configuration_list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.ModuleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::RTBFabric::Link``.
 
@@ -972,7 +975,7 @@ class CfnLink(
 
     @jsii.member(jsii_name="arnForLink")
     @builtins.classmethod
-    def arn_for_link(cls, resource: _ILinkRef_1c71e733) -> builtins.str:
+    def arn_for_link(cls, resource: "_ILinkRef_1c71e733") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -994,7 +997,7 @@ class CfnLink(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLink", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1074,9 +1077,9 @@ class CfnLink(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1085,9 +1088,9 @@ class CfnLink(
 
     @builtins.property
     @jsii.member(jsii_name="linkRef")
-    def link_ref(self) -> _LinkReference_a62a8bc7:
+    def link_ref(self) -> "_LinkReference_a62a8bc7":
         '''A reference to a Link resource.'''
-        return typing.cast(_LinkReference_a62a8bc7, jsii.get(self, "linkRef"))
+        return typing.cast("_LinkReference_a62a8bc7", jsii.get(self, "linkRef"))
 
     @builtins.property
     @jsii.member(jsii_name="gatewayId")
@@ -1106,14 +1109,14 @@ class CfnLink(
     @jsii.member(jsii_name="linkLogSettings")
     def link_log_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.LinkLogSettingsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLink.LinkLogSettingsProperty"]:
         '''Settings for the application logs.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.LinkLogSettingsProperty"], jsii.get(self, "linkLogSettings"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLink.LinkLogSettingsProperty"], jsii.get(self, "linkLogSettings"))
 
     @link_log_settings.setter
     def link_log_settings(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnLink.LinkLogSettingsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnLink.LinkLogSettingsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ab7e556ca0c98de786d1067094aa52ffc4810802cdeabb970d57fd2e6e7032cc)
@@ -1137,14 +1140,14 @@ class CfnLink(
     @jsii.member(jsii_name="httpResponderAllowed")
     def http_responder_allowed(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Boolean to specify if an HTTP responder is allowed.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "httpResponderAllowed"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "httpResponderAllowed"))
 
     @http_responder_allowed.setter
     def http_responder_allowed(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__48b3206215bae9d2e48e79793f9ffd87062a4b1724e8972850cbacafec752632)
@@ -1155,14 +1158,14 @@ class CfnLink(
     @jsii.member(jsii_name="linkAttributes")
     def link_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkAttributesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkAttributesProperty"]]:
         '''Attributes of the link.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkAttributesProperty"]], jsii.get(self, "linkAttributes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkAttributesProperty"]], jsii.get(self, "linkAttributes"))
 
     @link_attributes.setter
     def link_attributes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkAttributesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkAttributesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a1ab4741f8f8f4356c5390e467941454f9741185b5834e0d5c912d2df062bb22)
@@ -1173,13 +1176,13 @@ class CfnLink(
     @jsii.member(jsii_name="moduleConfigurationList")
     def module_configuration_list(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleConfigurationProperty"]]]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleConfigurationProperty"]]]], jsii.get(self, "moduleConfigurationList"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLink.ModuleConfigurationProperty"]]]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLink.ModuleConfigurationProperty"]]]], jsii.get(self, "moduleConfigurationList"))
 
     @module_configuration_list.setter
     def module_configuration_list(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLink.ModuleConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bfe068c99595620eaa7b9882ede77a4ac9cf63b8112fdeb95ec82ba2220f47c9)
@@ -1188,12 +1191,12 @@ class CfnLink(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map of the key-value pairs of the tag or tags to assign to the resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__89f50ed2507493ec960d7f22a7f5e59b8cd846866c52a44638fb170da225c31a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1208,8 +1211,8 @@ class CfnLink(
         def __init__(
             self,
             *,
-            header_tag: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.HeaderTagActionProperty", typing.Dict[builtins.str, typing.Any]]],
-            no_bid: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.NoBidActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            header_tag: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.HeaderTagActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            no_bid: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.NoBidActionProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Describes a bid action.
 
@@ -1247,26 +1250,26 @@ class CfnLink(
         @builtins.property
         def header_tag(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.HeaderTagActionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnLink.HeaderTagActionProperty"]:
             '''Describes the header tag for a bid action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-action.html#cfn-rtbfabric-link-action-headertag
             '''
             result = self._values.get("header_tag")
             assert result is not None, "Required property 'header_tag' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.HeaderTagActionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLink.HeaderTagActionProperty"], result)
 
         @builtins.property
         def no_bid(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.NoBidActionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnLink.NoBidActionProperty"]:
             '''Describes the parameters of a no bid module.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-action.html#cfn-rtbfabric-link-action-nobid
             '''
             result = self._values.get("no_bid")
             assert result is not None, "Required property 'no_bid' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.NoBidActionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLink.NoBidActionProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1288,7 +1291,7 @@ class CfnLink(
         def __init__(
             self,
             *,
-            link_application_log_sampling: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkApplicationLogSamplingProperty", typing.Dict[builtins.str, typing.Any]]],
+            link_application_log_sampling: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.LinkApplicationLogSamplingProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Describes the configuration of a link application log.
 
@@ -1320,14 +1323,14 @@ class CfnLink(
         @builtins.property
         def link_application_log_sampling(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.LinkApplicationLogSamplingProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnLink.LinkApplicationLogSamplingProperty"]:
             '''Describes a link application log sample.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-applicationlogs.html#cfn-rtbfabric-link-applicationlogs-linkapplicationlogsampling
             '''
             result = self._values.get("link_application_log_sampling")
             assert result is not None, "Required property 'link_application_log_sampling' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.LinkApplicationLogSamplingProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLink.LinkApplicationLogSamplingProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1420,7 +1423,7 @@ class CfnLink(
         def __init__(
             self,
             *,
-            criteria: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.FilterCriterionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            criteria: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.FilterCriterionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Describes the configuration of a filter.
 
@@ -1452,14 +1455,14 @@ class CfnLink(
         @builtins.property
         def criteria(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.FilterCriterionProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLink.FilterCriterionProperty"]]]:
             '''Describes the criteria for a filter.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-filter.html#cfn-rtbfabric-link-filter-criteria
             '''
             result = self._values.get("criteria")
             assert result is not None, "Required property 'criteria' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.FilterCriterionProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLink.FilterCriterionProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1617,7 +1620,7 @@ class CfnLink(
             self,
             *,
             customer_provided_id: typing.Optional[builtins.str] = None,
-            responder_error_masking: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ResponderErrorMaskingForHttpCodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            responder_error_masking: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.ResponderErrorMaskingForHttpCodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Describes the attributes of a link.
 
@@ -1667,13 +1670,13 @@ class CfnLink(
         @builtins.property
         def responder_error_masking(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ResponderErrorMaskingForHttpCodeProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLink.ResponderErrorMaskingForHttpCodeProperty"]]]]:
             '''Describes the masking for HTTP error codes.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linkattributes.html#cfn-rtbfabric-link-linkattributes-respondererrormasking
             '''
             result = self._values.get("responder_error_masking")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.ResponderErrorMaskingForHttpCodeProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLink.ResponderErrorMaskingForHttpCodeProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1695,7 +1698,7 @@ class CfnLink(
         def __init__(
             self,
             *,
-            application_logs: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ApplicationLogsProperty", typing.Dict[builtins.str, typing.Any]]],
+            application_logs: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.ApplicationLogsProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Describes the settings for a link log.
 
@@ -1729,14 +1732,14 @@ class CfnLink(
         @builtins.property
         def application_logs(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.ApplicationLogsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnLink.ApplicationLogsProperty"]:
             '''Describes the configuration of a link application log.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-linklogsettings.html#cfn-rtbfabric-link-linklogsettings-applicationlogs
             '''
             result = self._values.get("application_logs")
             assert result is not None, "Required property 'application_logs' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.ApplicationLogsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLink.ApplicationLogsProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1765,7 +1768,7 @@ class CfnLink(
             *,
             name: builtins.str,
             depends_on: typing.Optional[typing.Sequence[builtins.str]] = None,
-            module_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ModuleParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            module_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.ModuleParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             version: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Describes the configuration of a module.
@@ -1856,13 +1859,13 @@ class CfnLink(
         @builtins.property
         def module_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.ModuleParametersProperty"]]:
             '''Describes the parameters of a module.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleconfiguration.html#cfn-rtbfabric-link-moduleconfiguration-moduleparameters
             '''
             result = self._values.get("module_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.ModuleParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.ModuleParametersProperty"]], result)
 
         @builtins.property
         def version(self) -> typing.Optional[builtins.str]:
@@ -1893,8 +1896,8 @@ class CfnLink(
         def __init__(
             self,
             *,
-            no_bid: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.NoBidModuleParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            open_rtb_attribute: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.OpenRtbAttributeModuleParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            no_bid: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.NoBidModuleParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            open_rtb_attribute: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.OpenRtbAttributeModuleParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the parameters of a module.
 
@@ -1950,24 +1953,24 @@ class CfnLink(
         @builtins.property
         def no_bid(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.NoBidModuleParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.NoBidModuleParametersProperty"]]:
             '''Describes the parameters of a no bid module.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleparameters.html#cfn-rtbfabric-link-moduleparameters-nobid
             '''
             result = self._values.get("no_bid")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.NoBidModuleParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.NoBidModuleParametersProperty"]], result)
 
         @builtins.property
         def open_rtb_attribute(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.OpenRtbAttributeModuleParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.OpenRtbAttributeModuleParametersProperty"]]:
             '''Describes the parameters of an open RTB attribute module.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-moduleparameters.html#cfn-rtbfabric-link-moduleparameters-openrtbattribute
             '''
             result = self._values.get("open_rtb_attribute")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.OpenRtbAttributeModuleParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.OpenRtbAttributeModuleParametersProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2138,8 +2141,8 @@ class CfnLink(
         def __init__(
             self,
             *,
-            action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
-            filter_configuration: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.FilterProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            filter_configuration: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.FilterProperty", typing.Dict[builtins.str, typing.Any]]]]],
             filter_type: builtins.str,
             holdback_percentage: jsii.Number,
         ) -> None:
@@ -2195,26 +2198,26 @@ class CfnLink(
         @builtins.property
         def action(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLink.ActionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnLink.ActionProperty"]:
             '''Describes a bid action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-openrtbattributemoduleparameters.html#cfn-rtbfabric-link-openrtbattributemoduleparameters-action
             '''
             result = self._values.get("action")
             assert result is not None, "Required property 'action' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLink.ActionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLink.ActionProperty"], result)
 
         @builtins.property
         def filter_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.FilterProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLink.FilterProperty"]]]:
             '''Describes the configuration of a filter.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-link-openrtbattributemoduleparameters.html#cfn-rtbfabric-link-openrtbattributemoduleparameters-filterconfiguration
             '''
             result = self._values.get("filter_configuration")
             assert result is not None, "Required property 'filter_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLink.FilterProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLink.FilterProperty"]]], result)
 
         @builtins.property
         def filter_type(self) -> builtins.str:
@@ -2374,12 +2377,12 @@ class CfnLinkProps:
         self,
         *,
         gateway_id: builtins.str,
-        link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.LinkLogSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
+        link_log_settings: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
         peer_gateway_id: builtins.str,
-        http_responder_allowed: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.LinkAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        module_configuration_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.ModuleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_responder_allowed: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        link_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        module_configuration_list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.ModuleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLink``.
 
@@ -2396,6 +2399,7 @@ class CfnLinkProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_rtbfabric as rtbfabric
@@ -2500,14 +2504,14 @@ class CfnLinkProps:
     @builtins.property
     def link_log_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnLink.LinkLogSettingsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLink.LinkLogSettingsProperty"]:
         '''Settings for the application logs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html#cfn-rtbfabric-link-linklogsettings
         '''
         result = self._values.get("link_log_settings")
         assert result is not None, "Required property 'link_log_settings' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnLink.LinkLogSettingsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLink.LinkLogSettingsProperty"], result)
 
     @builtins.property
     def peer_gateway_id(self) -> builtins.str:
@@ -2522,43 +2526,43 @@ class CfnLinkProps:
     @builtins.property
     def http_responder_allowed(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Boolean to specify if an HTTP responder is allowed.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html#cfn-rtbfabric-link-httpresponderallowed
         '''
         result = self._values.get("http_responder_allowed")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def link_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLink.LinkAttributesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkAttributesProperty"]]:
         '''Attributes of the link.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html#cfn-rtbfabric-link-linkattributes
         '''
         result = self._values.get("link_attributes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLink.LinkAttributesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkAttributesProperty"]], result)
 
     @builtins.property
     def module_configuration_list(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLink.ModuleConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLink.ModuleConfigurationProperty"]]]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html#cfn-rtbfabric-link-moduleconfigurationlist
         '''
         result = self._values.get("module_configuration_list")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLink.ModuleConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLink.ModuleConfigurationProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map of the key-value pairs of the tag or tags to assign to the resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-link.html#cfn-rtbfabric-link-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2586,6 +2590,7 @@ class CfnOutboundExternalLink(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_rtbfabric as rtbfabric
@@ -2623,14 +2628,14 @@ class CfnOutboundExternalLink(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         gateway_id: builtins.str,
-        link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOutboundExternalLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        link_log_settings: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOutboundExternalLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
         public_endpoint: builtins.str,
-        link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOutboundExternalLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        link_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOutboundExternalLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::RTBFabric::OutboundExternalLink``.
 
@@ -2660,7 +2665,7 @@ class CfnOutboundExternalLink(
     @builtins.classmethod
     def arn_for_outbound_external_link(
         cls,
-        resource: _IOutboundExternalLinkRef_06bb6289,
+        resource: "_IOutboundExternalLinkRef_06bb6289",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2683,7 +2688,7 @@ class CfnOutboundExternalLink(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOutboundExternalLink", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2754,9 +2759,9 @@ class CfnOutboundExternalLink(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2765,9 +2770,9 @@ class CfnOutboundExternalLink(
 
     @builtins.property
     @jsii.member(jsii_name="outboundExternalLinkRef")
-    def outbound_external_link_ref(self) -> _OutboundExternalLinkReference_b1d46069:
+    def outbound_external_link_ref(self) -> "_OutboundExternalLinkReference_b1d46069":
         '''A reference to a OutboundExternalLink resource.'''
-        return typing.cast(_OutboundExternalLinkReference_b1d46069, jsii.get(self, "outboundExternalLinkRef"))
+        return typing.cast("_OutboundExternalLinkReference_b1d46069", jsii.get(self, "outboundExternalLinkRef"))
 
     @builtins.property
     @jsii.member(jsii_name="gatewayId")
@@ -2785,13 +2790,13 @@ class CfnOutboundExternalLink(
     @jsii.member(jsii_name="linkLogSettings")
     def link_log_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkLogSettingsProperty"]:
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkLogSettingsProperty"], jsii.get(self, "linkLogSettings"))
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.LinkLogSettingsProperty"]:
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.LinkLogSettingsProperty"], jsii.get(self, "linkLogSettings"))
 
     @link_log_settings.setter
     def link_log_settings(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkLogSettingsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.LinkLogSettingsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__26f049e3b14063d70306af34d8e4502f4010b3af3beefbbccf55ef545809a845)
@@ -2814,13 +2819,13 @@ class CfnOutboundExternalLink(
     @jsii.member(jsii_name="linkAttributes")
     def link_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkAttributesProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkAttributesProperty"]], jsii.get(self, "linkAttributes"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.LinkAttributesProperty"]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.LinkAttributesProperty"]], jsii.get(self, "linkAttributes"))
 
     @link_attributes.setter
     def link_attributes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkAttributesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.LinkAttributesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6db7a26ace700bb14301fd54fb67deca8e1afc5000c0c296662435bef28b3372)
@@ -2829,12 +2834,12 @@ class CfnOutboundExternalLink(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Link.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__67ca7cd3c98009f70e07dfe4c683484c616d5a03de5ece23f5b3f87bdc80d986)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2849,7 +2854,7 @@ class CfnOutboundExternalLink(
         def __init__(
             self,
             *,
-            link_application_log_sampling: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOutboundExternalLink.LinkApplicationLogSamplingProperty", typing.Dict[builtins.str, typing.Any]]],
+            link_application_log_sampling: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOutboundExternalLink.LinkApplicationLogSamplingProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''
             :param link_application_log_sampling: 
@@ -2880,13 +2885,13 @@ class CfnOutboundExternalLink(
         @builtins.property
         def link_application_log_sampling(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkApplicationLogSamplingProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.LinkApplicationLogSamplingProperty"]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-applicationlogs.html#cfn-rtbfabric-outboundexternallink-applicationlogs-linkapplicationlogsampling
             '''
             result = self._values.get("link_application_log_sampling")
             assert result is not None, "Required property 'link_application_log_sampling' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkApplicationLogSamplingProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.LinkApplicationLogSamplingProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2975,7 +2980,7 @@ class CfnOutboundExternalLink(
             self,
             *,
             customer_provided_id: typing.Optional[builtins.str] = None,
-            responder_error_masking: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            responder_error_masking: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''
             :param customer_provided_id: 
@@ -3023,12 +3028,12 @@ class CfnOutboundExternalLink(
         @builtins.property
         def responder_error_masking(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty"]]]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-linkattributes.html#cfn-rtbfabric-outboundexternallink-linkattributes-respondererrormasking
             '''
             result = self._values.get("responder_error_masking")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3050,7 +3055,7 @@ class CfnOutboundExternalLink(
         def __init__(
             self,
             *,
-            application_logs: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOutboundExternalLink.ApplicationLogsProperty", typing.Dict[builtins.str, typing.Any]]],
+            application_logs: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOutboundExternalLink.ApplicationLogsProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''
             :param application_logs: 
@@ -3083,13 +3088,13 @@ class CfnOutboundExternalLink(
         @builtins.property
         def application_logs(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.ApplicationLogsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.ApplicationLogsProperty"]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-linklogsettings.html#cfn-rtbfabric-outboundexternallink-linklogsettings-applicationlogs
             '''
             result = self._values.get("application_logs")
             assert result is not None, "Required property 'application_logs' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.ApplicationLogsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.ApplicationLogsProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3222,10 +3227,10 @@ class CfnOutboundExternalLinkProps:
         self,
         *,
         gateway_id: builtins.str,
-        link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOutboundExternalLink.LinkLogSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
+        link_log_settings: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOutboundExternalLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
         public_endpoint: builtins.str,
-        link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOutboundExternalLink.LinkAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        link_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOutboundExternalLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnOutboundExternalLink``.
 
@@ -3240,6 +3245,7 @@ class CfnOutboundExternalLinkProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_rtbfabric as rtbfabric
@@ -3303,13 +3309,13 @@ class CfnOutboundExternalLinkProps:
     @builtins.property
     def link_log_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnOutboundExternalLink.LinkLogSettingsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.LinkLogSettingsProperty"]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-outboundexternallink.html#cfn-rtbfabric-outboundexternallink-linklogsettings
         '''
         result = self._values.get("link_log_settings")
         assert result is not None, "Required property 'link_log_settings' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnOutboundExternalLink.LinkLogSettingsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.LinkLogSettingsProperty"], result)
 
     @builtins.property
     def public_endpoint(self) -> builtins.str:
@@ -3323,21 +3329,21 @@ class CfnOutboundExternalLinkProps:
     @builtins.property
     def link_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOutboundExternalLink.LinkAttributesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.LinkAttributesProperty"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-outboundexternallink.html#cfn-rtbfabric-outboundexternallink-linkattributes
         '''
         result = self._values.get("link_attributes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOutboundExternalLink.LinkAttributesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOutboundExternalLink.LinkAttributesProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Link.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-outboundexternallink.html#cfn-rtbfabric-outboundexternallink-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3365,6 +3371,7 @@ class CfnRequesterGateway(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_rtbfabric as rtbfabric
@@ -3385,14 +3392,14 @@ class CfnRequesterGateway(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
-        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
-        vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
+        security_group_ids: typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
+        vpc_id: typing.Union[builtins.str, "_IVPCRef_f02a11df"],
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::RTBFabric::RequesterGateway``.
 
@@ -3422,7 +3429,7 @@ class CfnRequesterGateway(
     @builtins.classmethod
     def arn_for_requester_gateway(
         cls,
-        resource: _IRequesterGatewayRef_d92bcdf1,
+        resource: "_IRequesterGatewayRef_d92bcdf1",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3445,7 +3452,7 @@ class CfnRequesterGateway(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRequesterGateway", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3540,9 +3547,9 @@ class CfnRequesterGateway(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3551,9 +3558,9 @@ class CfnRequesterGateway(
 
     @builtins.property
     @jsii.member(jsii_name="requesterGatewayRef")
-    def requester_gateway_ref(self) -> _RequesterGatewayReference_37e2965b:
+    def requester_gateway_ref(self) -> "_RequesterGatewayReference_37e2965b":
         '''A reference to a RequesterGateway resource.'''
-        return typing.cast(_RequesterGatewayReference_37e2965b, jsii.get(self, "requesterGatewayRef"))
+        return typing.cast("_RequesterGatewayReference_37e2965b", jsii.get(self, "requesterGatewayRef"))
 
     @builtins.property
     @jsii.member(jsii_name="securityGroupIds")
@@ -3609,12 +3616,12 @@ class CfnRequesterGateway(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map of the key-value pairs of the tag or tags to assign to the resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__49d27ee86984f1ea979cd85d326d12ed9f60279e658da842a417dc4a27e2ba07)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3636,11 +3643,11 @@ class CfnRequesterGatewayProps:
     def __init__(
         self,
         *,
-        security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
-        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
-        vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
+        security_group_ids: typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
+        vpc_id: typing.Union[builtins.str, "_IVPCRef_f02a11df"],
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRequesterGateway``.
 
@@ -3655,6 +3662,7 @@ class CfnRequesterGatewayProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_rtbfabric as rtbfabric
@@ -3692,36 +3700,36 @@ class CfnRequesterGatewayProps:
     @builtins.property
     def security_group_ids(
         self,
-    ) -> typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]:
+    ) -> typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]:
         '''The unique identifiers of the security groups.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-securitygroupids
         '''
         result = self._values.get("security_group_ids")
         assert result is not None, "Required property 'security_group_ids' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]], result)
 
     @builtins.property
     def subnet_ids(
         self,
-    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
+    ) -> typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]]:
         '''The unique identifiers of the subnets.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-subnetids
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]], result)
 
     @builtins.property
-    def vpc_id(self) -> typing.Union[builtins.str, _IVPCRef_f02a11df]:
+    def vpc_id(self) -> typing.Union[builtins.str, "_IVPCRef_f02a11df"]:
         '''The unique identifier of the Virtual Private Cloud (VPC).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-vpcid
         '''
         result = self._values.get("vpc_id")
         assert result is not None, "Required property 'vpc_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IVPCRef_f02a11df], result)
+        return typing.cast(typing.Union[builtins.str, "_IVPCRef_f02a11df"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -3733,13 +3741,13 @@ class CfnRequesterGatewayProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map of the key-value pairs of the tag or tags to assign to the resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3771,6 +3779,7 @@ class CfnResponderGateway(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_rtbfabric as rtbfabric
@@ -3811,19 +3820,19 @@ class CfnResponderGateway(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         port: jsii.Number,
         protocol: builtins.str,
-        security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
-        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
-        vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
+        security_group_ids: typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
+        vpc_id: typing.Union[builtins.str, "_IVPCRef_f02a11df"],
         description: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
-        managed_endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponderGateway.ManagedEndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        trust_store_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponderGateway.TrustStoreConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        managed_endpoint_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponderGateway.ManagedEndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        trust_store_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponderGateway.TrustStoreConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::RTBFabric::ResponderGateway``.
 
@@ -3863,7 +3872,7 @@ class CfnResponderGateway(
     @builtins.classmethod
     def arn_for_responder_gateway(
         cls,
-        resource: _IResponderGatewayRef_2bdaa070,
+        resource: "_IResponderGatewayRef_2bdaa070",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3886,7 +3895,7 @@ class CfnResponderGateway(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResponderGateway", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3957,9 +3966,9 @@ class CfnResponderGateway(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3968,9 +3977,9 @@ class CfnResponderGateway(
 
     @builtins.property
     @jsii.member(jsii_name="responderGatewayRef")
-    def responder_gateway_ref(self) -> _ResponderGatewayReference_a8195bef:
+    def responder_gateway_ref(self) -> "_ResponderGatewayReference_a8195bef":
         '''A reference to a ResponderGateway resource.'''
-        return typing.cast(_ResponderGatewayReference_a8195bef, jsii.get(self, "responderGatewayRef"))
+        return typing.cast("_ResponderGatewayReference_a8195bef", jsii.get(self, "responderGatewayRef"))
 
     @builtins.property
     @jsii.member(jsii_name="port")
@@ -4067,14 +4076,14 @@ class CfnResponderGateway(
     @jsii.member(jsii_name="managedEndpointConfiguration")
     def managed_endpoint_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.ManagedEndpointConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.ManagedEndpointConfigurationProperty"]]:
         '''The configuration for the managed endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.ManagedEndpointConfigurationProperty"]], jsii.get(self, "managedEndpointConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.ManagedEndpointConfigurationProperty"]], jsii.get(self, "managedEndpointConfiguration"))
 
     @managed_endpoint_configuration.setter
     def managed_endpoint_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.ManagedEndpointConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.ManagedEndpointConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4c62d5b7a0422ed5598bd291abfbec31946d1749e58220bce6017e5e6847b5c1)
@@ -4083,12 +4092,12 @@ class CfnResponderGateway(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map of the key-value pairs of the tag or tags to assign to the resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__78481e43a5f64482056245022052cc21592112a8a52dc33921b1d7faf64c9cfe)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4098,14 +4107,14 @@ class CfnResponderGateway(
     @jsii.member(jsii_name="trustStoreConfiguration")
     def trust_store_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.TrustStoreConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.TrustStoreConfigurationProperty"]]:
         '''The configuration of the trust store.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.TrustStoreConfigurationProperty"]], jsii.get(self, "trustStoreConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.TrustStoreConfigurationProperty"]], jsii.get(self, "trustStoreConfiguration"))
 
     @trust_store_configuration.setter
     def trust_store_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.TrustStoreConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.TrustStoreConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1c35e12d72dbcce9576ddf9d51543995e06e6fe3b33fbd82dac8f968d6d8a2ce)
@@ -4336,8 +4345,8 @@ class CfnResponderGateway(
         def __init__(
             self,
             *,
-            auto_scaling_groups_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponderGateway.AutoScalingGroupsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            eks_endpoints_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponderGateway.EksEndpointsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            auto_scaling_groups_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponderGateway.AutoScalingGroupsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            eks_endpoints_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponderGateway.EksEndpointsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the configuration of a managed endpoint.
 
@@ -4381,24 +4390,24 @@ class CfnResponderGateway(
         @builtins.property
         def auto_scaling_groups_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.AutoScalingGroupsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.AutoScalingGroupsConfigurationProperty"]]:
             '''Describes the configuration of an auto scaling group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-managedendpointconfiguration.html#cfn-rtbfabric-respondergateway-managedendpointconfiguration-autoscalinggroupsconfiguration
             '''
             result = self._values.get("auto_scaling_groups_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.AutoScalingGroupsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.AutoScalingGroupsConfigurationProperty"]], result)
 
         @builtins.property
         def eks_endpoints_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.EksEndpointsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.EksEndpointsConfigurationProperty"]]:
             '''Describes the configuration of an Amazon Elastic Kubernetes Service endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-respondergateway-managedendpointconfiguration.html#cfn-rtbfabric-respondergateway-managedendpointconfiguration-eksendpointsconfiguration
             '''
             result = self._values.get("eks_endpoints_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponderGateway.EksEndpointsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.EksEndpointsConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4492,14 +4501,14 @@ class CfnResponderGatewayProps:
         *,
         port: jsii.Number,
         protocol: builtins.str,
-        security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
-        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
-        vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
+        security_group_ids: typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
+        vpc_id: typing.Union[builtins.str, "_IVPCRef_f02a11df"],
         description: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
-        managed_endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponderGateway.ManagedEndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        trust_store_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponderGateway.TrustStoreConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        managed_endpoint_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponderGateway.ManagedEndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        trust_store_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponderGateway.TrustStoreConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnResponderGateway``.
 
@@ -4519,6 +4528,7 @@ class CfnResponderGatewayProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_rtbfabric as rtbfabric
@@ -4609,36 +4619,36 @@ class CfnResponderGatewayProps:
     @builtins.property
     def security_group_ids(
         self,
-    ) -> typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]:
+    ) -> typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]:
         '''The unique identifiers of the security groups.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-securitygroupids
         '''
         result = self._values.get("security_group_ids")
         assert result is not None, "Required property 'security_group_ids' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]], result)
 
     @builtins.property
     def subnet_ids(
         self,
-    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
+    ) -> typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]]:
         '''The unique identifiers of the subnets.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-subnetids
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]], result)
 
     @builtins.property
-    def vpc_id(self) -> typing.Union[builtins.str, _IVPCRef_f02a11df]:
+    def vpc_id(self) -> typing.Union[builtins.str, "_IVPCRef_f02a11df"]:
         '''The unique identifier of the Virtual Private Cloud (VPC).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-vpcid
         '''
         result = self._values.get("vpc_id")
         assert result is not None, "Required property 'vpc_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IVPCRef_f02a11df], result)
+        return typing.cast(typing.Union[builtins.str, "_IVPCRef_f02a11df"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -4661,33 +4671,33 @@ class CfnResponderGatewayProps:
     @builtins.property
     def managed_endpoint_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResponderGateway.ManagedEndpointConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.ManagedEndpointConfigurationProperty"]]:
         '''The configuration for the managed endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-managedendpointconfiguration
         '''
         result = self._values.get("managed_endpoint_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResponderGateway.ManagedEndpointConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.ManagedEndpointConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map of the key-value pairs of the tag or tags to assign to the resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def trust_store_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResponderGateway.TrustStoreConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.TrustStoreConfigurationProperty"]]:
         '''The configuration of the trust store.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-truststoreconfiguration
         '''
         result = self._values.get("trust_store_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResponderGateway.TrustStoreConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponderGateway.TrustStoreConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

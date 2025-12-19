@@ -372,6 +372,87 @@ class DataTableAttributeReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_connect.DataTableRecordReference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "data_table_arn": "dataTableArn",
+        "instance_arn": "instanceArn",
+        "record_id": "recordId",
+    },
+)
+class DataTableRecordReference:
+    def __init__(
+        self,
+        *,
+        data_table_arn: builtins.str,
+        instance_arn: builtins.str,
+        record_id: builtins.str,
+    ) -> None:
+        '''A reference to a DataTableRecord resource.
+
+        :param data_table_arn: The DataTableArn of the DataTableRecord resource.
+        :param instance_arn: The InstanceArn of the DataTableRecord resource.
+        :param record_id: The RecordId of the DataTableRecord resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
+            
+            data_table_record_reference = interfaces_connect.DataTableRecordReference(
+                data_table_arn="dataTableArn",
+                instance_arn="instanceArn",
+                record_id="recordId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1a889d8714c4a728775a98ceba8c53a6fe42518e93b4afe450277d0437e88e7b)
+            check_type(argname="argument data_table_arn", value=data_table_arn, expected_type=type_hints["data_table_arn"])
+            check_type(argname="argument instance_arn", value=instance_arn, expected_type=type_hints["instance_arn"])
+            check_type(argname="argument record_id", value=record_id, expected_type=type_hints["record_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "data_table_arn": data_table_arn,
+            "instance_arn": instance_arn,
+            "record_id": record_id,
+        }
+
+    @builtins.property
+    def data_table_arn(self) -> builtins.str:
+        '''The DataTableArn of the DataTableRecord resource.'''
+        result = self._values.get("data_table_arn")
+        assert result is not None, "Required property 'data_table_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def instance_arn(self) -> builtins.str:
+        '''The InstanceArn of the DataTableRecord resource.'''
+        result = self._values.get("instance_arn")
+        assert result is not None, "Required property 'instance_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def record_id(self) -> builtins.str:
+        '''The RecordId of the DataTableRecord resource.'''
+        result = self._values.get("record_id")
+        assert result is not None, "Required property 'record_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "DataTableRecordReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_connect.DataTableReference",
     jsii_struct_bases=[],
     name_mapping={"data_table_arn": "dataTableArn", "instance_arn": "instanceArn"},
@@ -596,7 +677,7 @@ class IAgentStatusRef(
 
     @builtins.property
     @jsii.member(jsii_name="agentStatusRef")
-    def agent_status_ref(self) -> AgentStatusReference:
+    def agent_status_ref(self) -> "AgentStatusReference":
         '''(experimental) A reference to a AgentStatus resource.
 
         :stability: experimental
@@ -617,12 +698,12 @@ class _IAgentStatusRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="agentStatusRef")
-    def agent_status_ref(self) -> AgentStatusReference:
+    def agent_status_ref(self) -> "AgentStatusReference":
         '''(experimental) A reference to a AgentStatus resource.
 
         :stability: experimental
         '''
-        return typing.cast(AgentStatusReference, jsii.get(self, "agentStatusRef"))
+        return typing.cast("AgentStatusReference", jsii.get(self, "agentStatusRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAgentStatusRef).__jsii_proxy_class__ = lambda : _IAgentStatusRefProxy
@@ -641,7 +722,7 @@ class IApprovedOriginRef(
 
     @builtins.property
     @jsii.member(jsii_name="approvedOriginRef")
-    def approved_origin_ref(self) -> ApprovedOriginReference:
+    def approved_origin_ref(self) -> "ApprovedOriginReference":
         '''(experimental) A reference to a ApprovedOrigin resource.
 
         :stability: experimental
@@ -662,12 +743,12 @@ class _IApprovedOriginRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="approvedOriginRef")
-    def approved_origin_ref(self) -> ApprovedOriginReference:
+    def approved_origin_ref(self) -> "ApprovedOriginReference":
         '''(experimental) A reference to a ApprovedOrigin resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApprovedOriginReference, jsii.get(self, "approvedOriginRef"))
+        return typing.cast("ApprovedOriginReference", jsii.get(self, "approvedOriginRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApprovedOriginRef).__jsii_proxy_class__ = lambda : _IApprovedOriginRefProxy
@@ -686,7 +767,7 @@ class IContactFlowModuleRef(
 
     @builtins.property
     @jsii.member(jsii_name="contactFlowModuleRef")
-    def contact_flow_module_ref(self) -> ContactFlowModuleReference:
+    def contact_flow_module_ref(self) -> "ContactFlowModuleReference":
         '''(experimental) A reference to a ContactFlowModule resource.
 
         :stability: experimental
@@ -707,12 +788,12 @@ class _IContactFlowModuleRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="contactFlowModuleRef")
-    def contact_flow_module_ref(self) -> ContactFlowModuleReference:
+    def contact_flow_module_ref(self) -> "ContactFlowModuleReference":
         '''(experimental) A reference to a ContactFlowModule resource.
 
         :stability: experimental
         '''
-        return typing.cast(ContactFlowModuleReference, jsii.get(self, "contactFlowModuleRef"))
+        return typing.cast("ContactFlowModuleReference", jsii.get(self, "contactFlowModuleRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContactFlowModuleRef).__jsii_proxy_class__ = lambda : _IContactFlowModuleRefProxy
@@ -731,7 +812,7 @@ class IContactFlowRef(
 
     @builtins.property
     @jsii.member(jsii_name="contactFlowRef")
-    def contact_flow_ref(self) -> ContactFlowReference:
+    def contact_flow_ref(self) -> "ContactFlowReference":
         '''(experimental) A reference to a ContactFlow resource.
 
         :stability: experimental
@@ -752,12 +833,12 @@ class _IContactFlowRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="contactFlowRef")
-    def contact_flow_ref(self) -> ContactFlowReference:
+    def contact_flow_ref(self) -> "ContactFlowReference":
         '''(experimental) A reference to a ContactFlow resource.
 
         :stability: experimental
         '''
-        return typing.cast(ContactFlowReference, jsii.get(self, "contactFlowRef"))
+        return typing.cast("ContactFlowReference", jsii.get(self, "contactFlowRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContactFlowRef).__jsii_proxy_class__ = lambda : _IContactFlowRefProxy
@@ -776,7 +857,7 @@ class IContactFlowVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="contactFlowVersionRef")
-    def contact_flow_version_ref(self) -> ContactFlowVersionReference:
+    def contact_flow_version_ref(self) -> "ContactFlowVersionReference":
         '''(experimental) A reference to a ContactFlowVersion resource.
 
         :stability: experimental
@@ -797,12 +878,12 @@ class _IContactFlowVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="contactFlowVersionRef")
-    def contact_flow_version_ref(self) -> ContactFlowVersionReference:
+    def contact_flow_version_ref(self) -> "ContactFlowVersionReference":
         '''(experimental) A reference to a ContactFlowVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(ContactFlowVersionReference, jsii.get(self, "contactFlowVersionRef"))
+        return typing.cast("ContactFlowVersionReference", jsii.get(self, "contactFlowVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContactFlowVersionRef).__jsii_proxy_class__ = lambda : _IContactFlowVersionRefProxy
@@ -821,7 +902,7 @@ class IDataTableAttributeRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataTableAttributeRef")
-    def data_table_attribute_ref(self) -> DataTableAttributeReference:
+    def data_table_attribute_ref(self) -> "DataTableAttributeReference":
         '''(experimental) A reference to a DataTableAttribute resource.
 
         :stability: experimental
@@ -842,15 +923,60 @@ class _IDataTableAttributeRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataTableAttributeRef")
-    def data_table_attribute_ref(self) -> DataTableAttributeReference:
+    def data_table_attribute_ref(self) -> "DataTableAttributeReference":
         '''(experimental) A reference to a DataTableAttribute resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataTableAttributeReference, jsii.get(self, "dataTableAttributeRef"))
+        return typing.cast("DataTableAttributeReference", jsii.get(self, "dataTableAttributeRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataTableAttributeRef).__jsii_proxy_class__ = lambda : _IDataTableAttributeRefProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_connect.IDataTableRecordRef")
+class IDataTableRecordRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a DataTableRecord.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="dataTableRecordRef")
+    def data_table_record_ref(self) -> "DataTableRecordReference":
+        '''(experimental) A reference to a DataTableRecord resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IDataTableRecordRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a DataTableRecord.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_connect.IDataTableRecordRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="dataTableRecordRef")
+    def data_table_record_ref(self) -> "DataTableRecordReference":
+        '''(experimental) A reference to a DataTableRecord resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("DataTableRecordReference", jsii.get(self, "dataTableRecordRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IDataTableRecordRef).__jsii_proxy_class__ = lambda : _IDataTableRecordRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_connect.IDataTableRef")
@@ -866,7 +992,7 @@ class IDataTableRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataTableRef")
-    def data_table_ref(self) -> DataTableReference:
+    def data_table_ref(self) -> "DataTableReference":
         '''(experimental) A reference to a DataTable resource.
 
         :stability: experimental
@@ -887,12 +1013,12 @@ class _IDataTableRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataTableRef")
-    def data_table_ref(self) -> DataTableReference:
+    def data_table_ref(self) -> "DataTableReference":
         '''(experimental) A reference to a DataTable resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataTableReference, jsii.get(self, "dataTableRef"))
+        return typing.cast("DataTableReference", jsii.get(self, "dataTableRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataTableRef).__jsii_proxy_class__ = lambda : _IDataTableRefProxy
@@ -911,7 +1037,7 @@ class IEmailAddressRef(
 
     @builtins.property
     @jsii.member(jsii_name="emailAddressRef")
-    def email_address_ref(self) -> EmailAddressReference:
+    def email_address_ref(self) -> "EmailAddressReference":
         '''(experimental) A reference to a EmailAddress resource.
 
         :stability: experimental
@@ -932,12 +1058,12 @@ class _IEmailAddressRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="emailAddressRef")
-    def email_address_ref(self) -> EmailAddressReference:
+    def email_address_ref(self) -> "EmailAddressReference":
         '''(experimental) A reference to a EmailAddress resource.
 
         :stability: experimental
         '''
-        return typing.cast(EmailAddressReference, jsii.get(self, "emailAddressRef"))
+        return typing.cast("EmailAddressReference", jsii.get(self, "emailAddressRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEmailAddressRef).__jsii_proxy_class__ = lambda : _IEmailAddressRefProxy
@@ -956,7 +1082,7 @@ class IEvaluationFormRef(
 
     @builtins.property
     @jsii.member(jsii_name="evaluationFormRef")
-    def evaluation_form_ref(self) -> EvaluationFormReference:
+    def evaluation_form_ref(self) -> "EvaluationFormReference":
         '''(experimental) A reference to a EvaluationForm resource.
 
         :stability: experimental
@@ -977,12 +1103,12 @@ class _IEvaluationFormRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="evaluationFormRef")
-    def evaluation_form_ref(self) -> EvaluationFormReference:
+    def evaluation_form_ref(self) -> "EvaluationFormReference":
         '''(experimental) A reference to a EvaluationForm resource.
 
         :stability: experimental
         '''
-        return typing.cast(EvaluationFormReference, jsii.get(self, "evaluationFormRef"))
+        return typing.cast("EvaluationFormReference", jsii.get(self, "evaluationFormRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEvaluationFormRef).__jsii_proxy_class__ = lambda : _IEvaluationFormRefProxy
@@ -1001,7 +1127,7 @@ class IHoursOfOperationRef(
 
     @builtins.property
     @jsii.member(jsii_name="hoursOfOperationRef")
-    def hours_of_operation_ref(self) -> HoursOfOperationReference:
+    def hours_of_operation_ref(self) -> "HoursOfOperationReference":
         '''(experimental) A reference to a HoursOfOperation resource.
 
         :stability: experimental
@@ -1022,12 +1148,12 @@ class _IHoursOfOperationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="hoursOfOperationRef")
-    def hours_of_operation_ref(self) -> HoursOfOperationReference:
+    def hours_of_operation_ref(self) -> "HoursOfOperationReference":
         '''(experimental) A reference to a HoursOfOperation resource.
 
         :stability: experimental
         '''
-        return typing.cast(HoursOfOperationReference, jsii.get(self, "hoursOfOperationRef"))
+        return typing.cast("HoursOfOperationReference", jsii.get(self, "hoursOfOperationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHoursOfOperationRef).__jsii_proxy_class__ = lambda : _IHoursOfOperationRefProxy
@@ -1894,6 +2020,51 @@ class _IViewVersionRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IViewVersionRef).__jsii_proxy_class__ = lambda : _IViewVersionRefProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_connect.IWorkspaceRef")
+class IWorkspaceRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a Workspace.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="workspaceRef")
+    def workspace_ref(self) -> "WorkspaceReference":
+        '''(experimental) A reference to a Workspace resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IWorkspaceRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a Workspace.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_connect.IWorkspaceRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="workspaceRef")
+    def workspace_ref(self) -> "WorkspaceReference":
+        '''(experimental) A reference to a Workspace resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("WorkspaceReference", jsii.get(self, "workspaceRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IWorkspaceRef).__jsii_proxy_class__ = lambda : _IWorkspaceRefProxy
 
 
 @jsii.data_type(
@@ -2926,6 +3097,55 @@ class ViewVersionReference:
         )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_connect.WorkspaceReference",
+    jsii_struct_bases=[],
+    name_mapping={"workspace_arn": "workspaceArn"},
+)
+class WorkspaceReference:
+    def __init__(self, *, workspace_arn: builtins.str) -> None:
+        '''A reference to a Workspace resource.
+
+        :param workspace_arn: The Arn of the Workspace resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
+            
+            workspace_reference = interfaces_connect.WorkspaceReference(
+                workspace_arn="workspaceArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__59549022c53269d7289aa349f0070431eec816e9588f5cf8c4a4c8e463b0325a)
+            check_type(argname="argument workspace_arn", value=workspace_arn, expected_type=type_hints["workspace_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "workspace_arn": workspace_arn,
+        }
+
+    @builtins.property
+    def workspace_arn(self) -> builtins.str:
+        '''The Arn of the Workspace resource.'''
+        result = self._values.get("workspace_arn")
+        assert result is not None, "Required property 'workspace_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "WorkspaceReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "AgentStatusReference",
     "ApprovedOriginReference",
@@ -2933,6 +3153,7 @@ __all__ = [
     "ContactFlowReference",
     "ContactFlowVersionReference",
     "DataTableAttributeReference",
+    "DataTableRecordReference",
     "DataTableReference",
     "EmailAddressReference",
     "EvaluationFormReference",
@@ -2943,6 +3164,7 @@ __all__ = [
     "IContactFlowRef",
     "IContactFlowVersionRef",
     "IDataTableAttributeRef",
+    "IDataTableRecordRef",
     "IDataTableRef",
     "IEmailAddressRef",
     "IEvaluationFormRef",
@@ -2966,6 +3188,7 @@ __all__ = [
     "IUserRef",
     "IViewRef",
     "IViewVersionRef",
+    "IWorkspaceRef",
     "InstanceReference",
     "InstanceStorageConfigReference",
     "IntegrationAssociationReference",
@@ -2985,6 +3208,7 @@ __all__ = [
     "UserReference",
     "ViewReference",
     "ViewVersionReference",
+    "WorkspaceReference",
 ]
 
 publication.publish()
@@ -3030,6 +3254,15 @@ def _typecheckingstub__89e5c1d586322eb5f50ced0dfce17a7353fcfd770475aabc413e355fc
     attribute_id: builtins.str,
     data_table_arn: builtins.str,
     instance_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1a889d8714c4a728775a98ceba8c53a6fe42518e93b4afe450277d0437e88e7b(
+    *,
+    data_table_arn: builtins.str,
+    instance_arn: builtins.str,
+    record_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3202,5 +3435,12 @@ def _typecheckingstub__deae179674b96a536a16655001cf7da75f0dd842cd313daf145cd60cc
     """Type checking stubs"""
     pass
 
-for cls in [IAgentStatusRef, IApprovedOriginRef, IContactFlowModuleRef, IContactFlowRef, IContactFlowVersionRef, IDataTableAttributeRef, IDataTableRef, IEmailAddressRef, IEvaluationFormRef, IHoursOfOperationRef, IInstanceRef, IInstanceStorageConfigRef, IIntegrationAssociationRef, IPhoneNumberRef, IPredefinedAttributeRef, IPromptRef, IQueueRef, IQuickConnectRef, IRoutingProfileRef, IRuleRef, ISecurityKeyRef, ISecurityProfileRef, ITaskTemplateRef, ITrafficDistributionGroupRef, IUserHierarchyGroupRef, IUserHierarchyStructureRef, IUserRef, IViewRef, IViewVersionRef]:
+def _typecheckingstub__59549022c53269d7289aa349f0070431eec816e9588f5cf8c4a4c8e463b0325a(
+    *,
+    workspace_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+for cls in [IAgentStatusRef, IApprovedOriginRef, IContactFlowModuleRef, IContactFlowRef, IContactFlowVersionRef, IDataTableAttributeRef, IDataTableRecordRef, IDataTableRef, IEmailAddressRef, IEvaluationFormRef, IHoursOfOperationRef, IInstanceRef, IInstanceStorageConfigRef, IIntegrationAssociationRef, IPhoneNumberRef, IPredefinedAttributeRef, IPromptRef, IQueueRef, IQuickConnectRef, IRoutingProfileRef, IRuleRef, ISecurityKeyRef, ISecurityProfileRef, ITaskTemplateRef, ITrafficDistributionGroupRef, IUserHierarchyGroupRef, IUserHierarchyStructureRef, IUserRef, IViewRef, IViewVersionRef, IWorkspaceRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

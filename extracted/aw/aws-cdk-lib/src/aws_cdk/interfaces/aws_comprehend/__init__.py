@@ -147,7 +147,7 @@ class IDocumentClassifierRef(
 
     @builtins.property
     @jsii.member(jsii_name="documentClassifierRef")
-    def document_classifier_ref(self) -> DocumentClassifierReference:
+    def document_classifier_ref(self) -> "DocumentClassifierReference":
         '''(experimental) A reference to a DocumentClassifier resource.
 
         :stability: experimental
@@ -168,12 +168,12 @@ class _IDocumentClassifierRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="documentClassifierRef")
-    def document_classifier_ref(self) -> DocumentClassifierReference:
+    def document_classifier_ref(self) -> "DocumentClassifierReference":
         '''(experimental) A reference to a DocumentClassifier resource.
 
         :stability: experimental
         '''
-        return typing.cast(DocumentClassifierReference, jsii.get(self, "documentClassifierRef"))
+        return typing.cast("DocumentClassifierReference", jsii.get(self, "documentClassifierRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDocumentClassifierRef).__jsii_proxy_class__ = lambda : _IDocumentClassifierRefProxy
@@ -192,7 +192,7 @@ class IFlywheelRef(
 
     @builtins.property
     @jsii.member(jsii_name="flywheelRef")
-    def flywheel_ref(self) -> FlywheelReference:
+    def flywheel_ref(self) -> "FlywheelReference":
         '''(experimental) A reference to a Flywheel resource.
 
         :stability: experimental
@@ -213,12 +213,12 @@ class _IFlywheelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="flywheelRef")
-    def flywheel_ref(self) -> FlywheelReference:
+    def flywheel_ref(self) -> "FlywheelReference":
         '''(experimental) A reference to a Flywheel resource.
 
         :stability: experimental
         '''
-        return typing.cast(FlywheelReference, jsii.get(self, "flywheelRef"))
+        return typing.cast("FlywheelReference", jsii.get(self, "flywheelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFlywheelRef).__jsii_proxy_class__ = lambda : _IFlywheelRefProxy

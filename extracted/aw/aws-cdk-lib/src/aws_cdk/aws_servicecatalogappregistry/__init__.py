@@ -113,7 +113,7 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -138,7 +138,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_5ddf8623) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_5ddf8623") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -151,10 +151,10 @@ class CfnApplication(
     @builtins.classmethod
     def from_application_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IApplicationRef_5ddf8623:
+    ) -> "_IApplicationRef_5ddf8623":
         '''Creates a new IApplicationRef from an ARN.
 
         :param scope: -
@@ -166,16 +166,16 @@ class CfnApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IApplicationRef_5ddf8623, jsii.sinvoke(cls, "fromApplicationArn", [scope, id, arn]))
+        return typing.cast("_IApplicationRef_5ddf8623", jsii.sinvoke(cls, "fromApplicationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromApplicationId")
     @builtins.classmethod
     def from_application_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         application_id: builtins.str,
-    ) -> _IApplicationRef_5ddf8623:
+    ) -> "_IApplicationRef_5ddf8623":
         '''Creates a new IApplicationRef from a applicationId.
 
         :param scope: -
@@ -187,7 +187,7 @@ class CfnApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument application_id", value=application_id, expected_type=type_hints["application_id"])
-        return typing.cast(_IApplicationRef_5ddf8623, jsii.sinvoke(cls, "fromApplicationId", [scope, id, application_id]))
+        return typing.cast("_IApplicationRef_5ddf8623", jsii.sinvoke(cls, "fromApplicationId", [scope, id, application_id]))
 
     @jsii.member(jsii_name="isCfnApplication")
     @builtins.classmethod
@@ -202,7 +202,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -233,9 +233,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_24c0faac:
+    def application_ref(self) -> "_ApplicationReference_24c0faac":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_24c0faac, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_24c0faac", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrApplicationName")
@@ -295,9 +295,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -471,7 +471,7 @@ class CfnAttributeGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         attributes: typing.Any,
@@ -502,7 +502,7 @@ class CfnAttributeGroup(
     @builtins.classmethod
     def arn_for_attribute_group(
         cls,
-        resource: _IAttributeGroupRef_1973b6d2,
+        resource: "_IAttributeGroupRef_1973b6d2",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -516,10 +516,10 @@ class CfnAttributeGroup(
     @builtins.classmethod
     def from_attribute_group_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IAttributeGroupRef_1973b6d2:
+    ) -> "_IAttributeGroupRef_1973b6d2":
         '''Creates a new IAttributeGroupRef from an ARN.
 
         :param scope: -
@@ -531,16 +531,16 @@ class CfnAttributeGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IAttributeGroupRef_1973b6d2, jsii.sinvoke(cls, "fromAttributeGroupArn", [scope, id, arn]))
+        return typing.cast("_IAttributeGroupRef_1973b6d2", jsii.sinvoke(cls, "fromAttributeGroupArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromAttributeGroupId")
     @builtins.classmethod
     def from_attribute_group_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         attribute_group_id: builtins.str,
-    ) -> _IAttributeGroupRef_1973b6d2:
+    ) -> "_IAttributeGroupRef_1973b6d2":
         '''Creates a new IAttributeGroupRef from a attributeGroupId.
 
         :param scope: -
@@ -552,7 +552,7 @@ class CfnAttributeGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument attribute_group_id", value=attribute_group_id, expected_type=type_hints["attribute_group_id"])
-        return typing.cast(_IAttributeGroupRef_1973b6d2, jsii.sinvoke(cls, "fromAttributeGroupId", [scope, id, attribute_group_id]))
+        return typing.cast("_IAttributeGroupRef_1973b6d2", jsii.sinvoke(cls, "fromAttributeGroupId", [scope, id, attribute_group_id]))
 
     @jsii.member(jsii_name="isCfnAttributeGroup")
     @builtins.classmethod
@@ -567,7 +567,7 @@ class CfnAttributeGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAttributeGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -607,9 +607,9 @@ class CfnAttributeGroup(
 
     @builtins.property
     @jsii.member(jsii_name="attributeGroupRef")
-    def attribute_group_ref(self) -> _AttributeGroupReference_b27be7cf:
+    def attribute_group_ref(self) -> "_AttributeGroupReference_b27be7cf":
         '''A reference to a AttributeGroup resource.'''
-        return typing.cast(_AttributeGroupReference_b27be7cf, jsii.get(self, "attributeGroupRef"))
+        return typing.cast("_AttributeGroupReference_b27be7cf", jsii.get(self, "attributeGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -627,9 +627,9 @@ class CfnAttributeGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="attributes")
@@ -715,7 +715,7 @@ class CfnAttributeGroupAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application: builtins.str,
@@ -751,7 +751,7 @@ class CfnAttributeGroupAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAttributeGroupAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -802,9 +802,9 @@ class CfnAttributeGroupAssociation(
     @jsii.member(jsii_name="attributeGroupAssociationRef")
     def attribute_group_association_ref(
         self,
-    ) -> _AttributeGroupAssociationReference_263d8802:
+    ) -> "_AttributeGroupAssociationReference_263d8802":
         '''A reference to a AttributeGroupAssociation resource.'''
-        return typing.cast(_AttributeGroupAssociationReference_263d8802, jsii.get(self, "attributeGroupAssociationRef"))
+        return typing.cast("_AttributeGroupAssociationReference_263d8802", jsii.get(self, "attributeGroupAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -1062,7 +1062,7 @@ class CfnResourceAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application: builtins.str,
@@ -1100,7 +1100,7 @@ class CfnResourceAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourceAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1162,9 +1162,9 @@ class CfnResourceAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="resourceAssociationRef")
-    def resource_association_ref(self) -> _ResourceAssociationReference_0e9ec1ac:
+    def resource_association_ref(self) -> "_ResourceAssociationReference_0e9ec1ac":
         '''A reference to a ResourceAssociation resource.'''
-        return typing.cast(_ResourceAssociationReference_0e9ec1ac, jsii.get(self, "resourceAssociationRef"))
+        return typing.cast("_ResourceAssociationReference_0e9ec1ac", jsii.get(self, "resourceAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="application")

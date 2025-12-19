@@ -28,11 +28,10 @@ use std::{
     time::{Duration, Instant},
 };
 use temporalio_client::{
-    Client, ClientTlsConfig, GetWorkflowResultOpts, NamespacedClient, RetryClient, TlsConfig,
+    Client, ClientTlsOptions, GetWorkflowResultOptions, NamespacedClient, RetryClient, TlsOptions,
     WfClientExt, WorkflowClientTrait, WorkflowExecutionInfo, WorkflowExecutionResult,
     WorkflowHandle, WorkflowOptions,
 };
-use temporalio_common::worker::WorkerTaskTypes;
 use temporalio_common::{
     Worker as CoreWorker,
     protos::{
@@ -47,11 +46,10 @@ use temporalio_common::{
         },
     },
     telemetry::{
-        Logger, OtelCollectorOptionsBuilder, PrometheusExporterOptions,
-        PrometheusExporterOptionsBuilder, TelemetryOptions, TelemetryOptionsBuilder,
+        Logger, OtelCollectorOptions, PrometheusExporterOptions, TelemetryOptions,
         metrics::CoreMeter,
     },
-    worker::WorkerVersioningStrategy,
+    worker::{WorkerTaskTypes, WorkerVersioningStrategy},
 };
 use temporalio_sdk::{
     IntoActivityFunc, Worker, WorkflowFunction,
@@ -63,8 +61,7 @@ use temporalio_sdk::{
 #[cfg(any(feature = "test-utilities", test))]
 pub(crate) use temporalio_sdk_core::test_help::NAMESPACE;
 use temporalio_sdk_core::{
-    ClientOptions, ClientOptionsBuilder, CoreRuntime, RuntimeOptions, RuntimeOptionsBuilder,
-    WorkerConfig, WorkerConfigBuilder, init_replay_worker, init_worker,
+    ClientOptions, CoreRuntime, RuntimeOptions, WorkerConfig, init_replay_worker, init_worker,
     replay::{HistoryForReplay, ReplayWorkerInput},
     telemetry::{build_otlp_metric_exporter, start_prometheus_metric_exporter},
     test_help::{MockPollCfg, build_mock_pollers, mock_worker},
@@ -102,9 +99,9 @@ pub(crate) async fn init_core_and_create_wf(test_name: &str) -> CoreWfStarter {
     starter
 }
 
-pub(crate) fn integ_worker_config(tq: &str) -> WorkerConfigBuilder {
-    let mut b = WorkerConfigBuilder::default();
-    b.namespace(NAMESPACE)
+pub(crate) fn integ_worker_config(tq: &str) -> WorkerConfig {
+    WorkerConfig::builder()
+        .namespace(env::var(INTEG_NAMESPACE_ENV_VAR).unwrap_or(NAMESPACE.to_string()))
         .task_queue(tq)
         .max_outstanding_activities(100_usize)
         .max_outstanding_local_activities(100_usize)
@@ -113,8 +110,9 @@ pub(crate) fn integ_worker_config(tq: &str) -> WorkerConfigBuilder {
             build_id: "test_build_id".to_owned(),
         })
         .task_types(WorkerTaskTypes::all())
-        .skip_client_worker_set_check(true);
-    b
+        .skip_client_worker_set_check(true)
+        .build()
+        .expect("Configuration options construct properly")
 }
 
 /// Create a worker replay instance preloaded with provided histories. Returns the worker impl.
@@ -130,9 +128,7 @@ where
     I: Stream<Item = HistoryForReplay> + Send + 'static,
 {
     init_integ_telem();
-    let worker_cfg = integ_worker_config(test_name)
-        .build()
-        .expect("Configuration options construct properly");
+    let worker_cfg = integ_worker_config(test_name);
     let worker = init_replay_worker(ReplayWorkerInput::new(worker_cfg, histories))
         .expect("Replay worker must init properly");
     Arc::new(worker)
@@ -178,7 +174,7 @@ pub(crate) fn init_integ_telem() -> Option<&'static CoreRuntime> {
     }
     Some(INTEG_TESTS_RT.get_or_init(|| {
         let telemetry_options = get_integ_telem_options();
-        let runtime_options = RuntimeOptionsBuilder::default()
+        let runtime_options = RuntimeOptions::builder()
             .telemetry_options(telemetry_options)
             .build()
             .expect("Runtime options build cleanly");
@@ -200,20 +196,19 @@ pub(crate) async fn get_cloud_client() -> RetryClient<Client> {
         .replace("\\n", "\n")
         .into_bytes();
     let client_private_key = cloud_key.replace("\\n", "\n").into_bytes();
-    let sgo = ClientOptionsBuilder::default()
+    let sgo = ClientOptions::builder()
         .target_url(Url::from_str(&cloud_addr).unwrap())
         .client_name("sdk-core-integ-tests")
         .client_version("clientver")
         .identity("sdk-test-client")
-        .tls_cfg(TlsConfig {
-            client_tls_config: Some(ClientTlsConfig {
+        .tls_options(TlsOptions {
+            client_tls_options: Some(ClientTlsOptions {
                 client_cert,
                 client_private_key,
             }),
             ..Default::default()
         })
-        .build()
-        .unwrap();
+        .build();
     sgo.connect(
         env::var("TEMPORAL_NAMESPACE").expect("TEMPORAL_NAMESPACE must be set"),
         None,
@@ -226,7 +221,7 @@ pub(crate) async fn get_cloud_client() -> RetryClient<Client> {
 pub(crate) struct CoreWfStarter {
     /// Used for both the task queue and workflow id
     task_queue_name: String,
-    pub worker_config: WorkerConfigBuilder,
+    pub worker_config: WorkerConfig,
     /// Options to use when starting workflow(s)
     pub workflow_options: WorkflowOptions,
     initted_worker: OnceCell<InitializedWorker>,
@@ -301,9 +296,7 @@ impl CoreWfStarter {
         let task_q_salt = rand_6_chars();
         let task_queue = format!("{test_name}_{task_q_salt}");
         let mut worker_config = integ_worker_config(&task_queue);
-        worker_config
-            .namespace(env::var(INTEG_NAMESPACE_ENV_VAR).unwrap_or(NAMESPACE.to_string()))
-            .max_cached_workflows(1000_usize);
+        worker_config.max_cached_workflows = 1000_usize;
         Self {
             task_queue_name: task_queue,
             worker_config,
@@ -442,7 +435,7 @@ impl CoreWfStarter {
             .unwrap()
             .client
             .get_untyped_workflow_handle(self.get_wf_id().to_string(), "")
-            .get_workflow_result(GetWorkflowResultOpts { follow_runs: false })
+            .get_workflow_result(GetWorkflowResultOptions { follow_runs: false })
             .await
     }
 
@@ -454,10 +447,7 @@ impl CoreWfStarter {
                 } else {
                     init_integ_telem().unwrap()
                 };
-                let cfg = self
-                    .worker_config
-                    .build()
-                    .expect("Worker config must be valid");
+                let cfg = self.worker_config.clone();
                 let client = if let Some(client) = self.client_override.take() {
                     client
                 } else {
@@ -762,30 +752,30 @@ pub(crate) fn get_integ_server_options() -> ClientOptions {
     let temporal_server_address = env::var(INTEG_SERVER_TARGET_ENV_VAR)
         .unwrap_or_else(|_| "http://localhost:7233".to_owned());
     let url = Url::try_from(&*temporal_server_address).unwrap();
-    let mut cb = ClientOptionsBuilder::default();
-    cb.identity(INTEG_CLIENT_IDENTITY.to_string())
+    let api_key = env::var(INTEG_API_KEY)
+        .ok()
+        .map(|key_file| std::fs::read_to_string(key_file).unwrap());
+    let tls_cfg = get_integ_tls_config();
+
+    ClientOptions::builder()
+        .identity(INTEG_CLIENT_IDENTITY.to_string())
         .target_url(url)
         .client_name(INTEG_CLIENT_NAME.to_string())
-        .client_version(INTEG_CLIENT_VERSION.to_string());
-    if let Ok(key_file) = env::var(INTEG_API_KEY) {
-        let content = std::fs::read_to_string(key_file).unwrap();
-        cb.api_key(Some(content));
-    }
-    if let Some(tls) = get_integ_tls_config() {
-        cb.tls_cfg(tls);
-    };
-    cb.build().unwrap()
+        .client_version(INTEG_CLIENT_VERSION.to_string())
+        .maybe_api_key(api_key)
+        .maybe_tls_options(tls_cfg)
+        .build()
 }
 
-pub(crate) fn get_integ_tls_config() -> Option<TlsConfig> {
+pub(crate) fn get_integ_tls_config() -> Option<TlsOptions> {
     if env::var(INTEG_USE_TLS_ENV_VAR).is_ok() {
         let root = std::fs::read("../.cloud_certs/ca.pem").unwrap();
         let client_cert = std::fs::read("../.cloud_certs/client.pem").unwrap();
         let client_private_key = std::fs::read("../.cloud_certs/client.key").unwrap();
-        Some(TlsConfig {
+        Some(TlsOptions {
             server_root_ca_cert: Some(root),
             domain: None,
-            client_tls_config: Some(ClientTlsConfig {
+            client_tls_options: Some(ClientTlsOptions {
                 client_cert,
                 client_private_key,
             }),
@@ -796,41 +786,47 @@ pub(crate) fn get_integ_tls_config() -> Option<TlsConfig> {
 }
 
 pub(crate) fn get_integ_telem_options() -> TelemetryOptions {
-    let mut ob = TelemetryOptionsBuilder::default();
     let filter_string =
         env::var("RUST_LOG").unwrap_or_else(|_| "INFO,temporalio_sdk_core=INFO".to_string());
+
     if let Some(url) = env::var(OTEL_URL_ENV_VAR)
         .ok()
         .map(|x| x.parse::<Url>().unwrap())
     {
-        let opts = OtelCollectorOptionsBuilder::default()
-            .url(url)
+        let opts = OtelCollectorOptions::builder().url(url).build();
+        TelemetryOptions::builder()
+            .metrics(Arc::new(build_otlp_metric_exporter(opts).unwrap()) as Arc<dyn CoreMeter>)
+            .logging(Logger::Console {
+                filter: filter_string,
+            })
             .build()
-            .unwrap();
-        ob.metrics(Arc::new(build_otlp_metric_exporter(opts).unwrap()) as Arc<dyn CoreMeter>);
-    }
-    if let Some(addr) = env::var(PROM_ENABLE_ENV_VAR)
+    } else if let Some(addr) = env::var(PROM_ENABLE_ENV_VAR)
         .ok()
         .map(|x| SocketAddr::new([127, 0, 0, 1].into(), x.parse().unwrap()))
     {
         let prom_info = start_prometheus_metric_exporter(
-            PrometheusExporterOptionsBuilder::default()
+            PrometheusExporterOptions::builder()
                 .socket_addr(addr)
-                .build()
-                .unwrap(),
+                .build(),
         )
         .unwrap();
-        ob.metrics(prom_info.meter as Arc<dyn CoreMeter>);
+        TelemetryOptions::builder()
+            .metrics(prom_info.meter as Arc<dyn CoreMeter>)
+            .logging(Logger::Console {
+                filter: filter_string,
+            })
+            .build()
+    } else {
+        TelemetryOptions::builder()
+            .logging(Logger::Console {
+                filter: filter_string,
+            })
+            .build()
     }
-    ob.logging(Logger::Console {
-        filter: filter_string,
-    })
-    .build()
-    .unwrap()
 }
 
 pub(crate) fn get_integ_runtime_options(telemopts: TelemetryOptions) -> RuntimeOptions {
-    RuntimeOptionsBuilder::default()
+    RuntimeOptions::builder()
         .telemetry_options(telemopts)
         .build()
         .unwrap()
@@ -888,10 +884,9 @@ pub(crate) fn prom_metrics(
     options_override: Option<PrometheusExporterOptions>,
 ) -> (TelemetryOptions, SocketAddr, AbortOnDrop) {
     let prom_exp_opts = options_override.unwrap_or_else(|| {
-        PrometheusExporterOptionsBuilder::default()
+        PrometheusExporterOptions::builder()
             .socket_addr(ANY_PORT.parse().unwrap())
             .build()
-            .unwrap()
     });
     let mut telemopts = get_integ_telem_options();
     let prom_info = start_prometheus_metric_exporter(prom_exp_opts).unwrap();
@@ -1000,13 +995,14 @@ impl Drop for ActivationAssertionsInterceptor {
 
 #[cfg(feature = "ephemeral-server")]
 use temporalio_sdk_core::ephemeral_server::{
-    EphemeralExe, EphemeralExeVersion, TemporalDevServerConfigBuilder, default_cached_download,
+    EphemeralExe, EphemeralExeVersion, TemporalDevServerConfig, default_cached_download,
 };
 
 #[cfg(feature = "ephemeral-server")]
 pub(crate) fn integ_dev_server_config(
     mut extra_args: Vec<String>,
-) -> TemporalDevServerConfigBuilder {
+    ui: bool,
+) -> TemporalDevServerConfig {
     let cli_version = if let Ok(ver_override) = env::var(CLI_VERSION_OVERRIDE_ENV_VAR) {
         EphemeralExe::CachedDownload {
             version: EphemeralExeVersion::Fixed(ver_override.to_owned()),
@@ -1043,7 +1039,9 @@ pub(crate) fn integ_dev_server_config(
         .map(Into::into),
     );
 
-    let mut config = TemporalDevServerConfigBuilder::default();
-    config.exe(cli_version).extra_args(extra_args);
-    config
+    TemporalDevServerConfig::builder()
+        .exe(cli_version)
+        .extra_args(extra_args)
+        .ui(ui)
+        .build()
 }

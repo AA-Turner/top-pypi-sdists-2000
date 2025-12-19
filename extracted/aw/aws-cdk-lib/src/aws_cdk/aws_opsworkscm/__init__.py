@@ -88,6 +88,7 @@ class CfnServer(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_opsworkscm as opsworkscm
@@ -126,21 +127,21 @@ class CfnServer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         instance_profile_arn: builtins.str,
         instance_type: builtins.str,
         service_role_arn: builtins.str,
-        associate_public_ip_address: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        associate_public_ip_address: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         backup_id: typing.Optional[builtins.str] = None,
         backup_retention_count: typing.Optional[jsii.Number] = None,
         custom_certificate: typing.Optional[builtins.str] = None,
         custom_domain: typing.Optional[builtins.str] = None,
         custom_private_key: typing.Optional[builtins.str] = None,
-        disable_automated_backup: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        disable_automated_backup: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         engine: typing.Optional[builtins.str] = None,
-        engine_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServer.EngineAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        engine_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.EngineAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         engine_model: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
         key_pair: typing.Optional[builtins.str] = None,
@@ -148,7 +149,7 @@ class CfnServer(
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::OpsWorksCM::Server``.
 
@@ -206,7 +207,7 @@ class CfnServer(
 
     @jsii.member(jsii_name="arnForServer")
     @builtins.classmethod
-    def arn_for_server(cls, resource: _IServerRef_62338428) -> builtins.str:
+    def arn_for_server(cls, resource: "_IServerRef_62338428") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -228,7 +229,7 @@ class CfnServer(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServer", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -292,15 +293,15 @@ class CfnServer(
 
     @builtins.property
     @jsii.member(jsii_name="serverRef")
-    def server_ref(self) -> _ServerReference_8c1e5305:
+    def server_ref(self) -> "_ServerReference_8c1e5305":
         '''A reference to a Server resource.'''
-        return typing.cast(_ServerReference_8c1e5305, jsii.get(self, "serverRef"))
+        return typing.cast("_ServerReference_8c1e5305", jsii.get(self, "serverRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="instanceProfileArn")
@@ -345,14 +346,14 @@ class CfnServer(
     @jsii.member(jsii_name="associatePublicIpAddress")
     def associate_public_ip_address(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Associate a public IP address with a server that you are launching.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "associatePublicIpAddress"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "associatePublicIpAddress"))
 
     @associate_public_ip_address.setter
     def associate_public_ip_address(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a3c45f815d3ef6098f824925685877dd7c49f4e57de602dc79fe506c8adeab8a)
@@ -428,14 +429,14 @@ class CfnServer(
     @jsii.member(jsii_name="disableAutomatedBackup")
     def disable_automated_backup(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enable or disable scheduled backups.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "disableAutomatedBackup"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "disableAutomatedBackup"))
 
     @disable_automated_backup.setter
     def disable_automated_backup(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b46443fdafed279ac49545af3fa84aa00384aacb75e125ca14388f79d9cfb786)
@@ -459,14 +460,14 @@ class CfnServer(
     @jsii.member(jsii_name="engineAttributes")
     def engine_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServer.EngineAttributeProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServer.EngineAttributeProperty"]]]]:
         '''Optional engine attributes on a specified server.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServer.EngineAttributeProperty"]]]], jsii.get(self, "engineAttributes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServer.EngineAttributeProperty"]]]], jsii.get(self, "engineAttributes"))
 
     @engine_attributes.setter
     def engine_attributes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServer.EngineAttributeProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServer.EngineAttributeProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__348bb1528287c10d8bc70ea5676023d151054ec708b5c1cba5a2b8ec906b759b)
@@ -572,12 +573,12 @@ class CfnServer(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map that contains tag keys and tag values to attach to an AWS OpsWorks for Chef Automate or OpsWorks for Puppet Enterprise server.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7f1391da7f04a55c9f7f9adf16c4634190fb6dbb84aa6805530fa127a387881e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -713,15 +714,15 @@ class CfnServerProps:
         instance_profile_arn: builtins.str,
         instance_type: builtins.str,
         service_role_arn: builtins.str,
-        associate_public_ip_address: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        associate_public_ip_address: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         backup_id: typing.Optional[builtins.str] = None,
         backup_retention_count: typing.Optional[jsii.Number] = None,
         custom_certificate: typing.Optional[builtins.str] = None,
         custom_domain: typing.Optional[builtins.str] = None,
         custom_private_key: typing.Optional[builtins.str] = None,
-        disable_automated_backup: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        disable_automated_backup: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         engine: typing.Optional[builtins.str] = None,
-        engine_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServer.EngineAttributeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        engine_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.EngineAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         engine_model: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
         key_pair: typing.Optional[builtins.str] = None,
@@ -729,7 +730,7 @@ class CfnServerProps:
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnServer``.
 
@@ -759,6 +760,7 @@ class CfnServerProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_opsworkscm as opsworkscm
@@ -891,7 +893,7 @@ class CfnServerProps:
     @builtins.property
     def associate_public_ip_address(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Associate a public IP address with a server that you are launching.
 
         Valid values are ``true`` or ``false`` . The default value is ``true`` .
@@ -899,7 +901,7 @@ class CfnServerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworkscm-server.html#cfn-opsworkscm-server-associatepublicipaddress
         '''
         result = self._values.get("associate_public_ip_address")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def backup_id(self) -> typing.Optional[builtins.str]:
@@ -957,7 +959,7 @@ class CfnServerProps:
     @builtins.property
     def disable_automated_backup(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enable or disable scheduled backups.
 
         Valid values are ``true`` or ``false`` . The default value is ``true`` .
@@ -965,7 +967,7 @@ class CfnServerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworkscm-server.html#cfn-opsworkscm-server-disableautomatedbackup
         '''
         result = self._values.get("disable_automated_backup")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def engine(self) -> typing.Optional[builtins.str]:
@@ -981,7 +983,7 @@ class CfnServerProps:
     @builtins.property
     def engine_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnServer.EngineAttributeProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServer.EngineAttributeProperty"]]]]:
         '''Optional engine attributes on a specified server.
 
         **Attributes accepted in a Chef createServer request:** - ``CHEF_AUTOMATE_PIVOTAL_KEY`` : A base64-encoded RSA public key. The corresponding private key is required to access the Chef API. When no CHEF_AUTOMATE_PIVOTAL_KEY is set, a private key is generated and returned in the response. When you are specifying the value of CHEF_AUTOMATE_PIVOTAL_KEY as a parameter in the CloudFormation console, you must add newline ( ``\\n`` ) characters at the end of each line of the pivotal key value.
@@ -996,7 +998,7 @@ class CfnServerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworkscm-server.html#cfn-opsworkscm-server-engineattributes
         '''
         result = self._values.get("engine_attributes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnServer.EngineAttributeProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServer.EngineAttributeProperty"]]]], result)
 
     @builtins.property
     def engine_model(self) -> typing.Optional[builtins.str]:
@@ -1093,7 +1095,7 @@ class CfnServerProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map that contains tag keys and tag values to attach to an AWS OpsWorks for Chef Automate or OpsWorks for Puppet Enterprise server.
 
         - The key cannot be empty.
@@ -1109,7 +1111,7 @@ class CfnServerProps:
         - A maximum of 50 user-applied tags is allowed for any AWS OpsWorks CM server.
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

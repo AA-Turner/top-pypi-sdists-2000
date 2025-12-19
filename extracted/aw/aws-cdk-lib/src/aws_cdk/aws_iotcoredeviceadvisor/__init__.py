@@ -89,6 +89,7 @@ class CfnSuiteDefinition(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iotcoredeviceadvisor as iotcoredeviceadvisor
@@ -108,11 +109,11 @@ class CfnSuiteDefinition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         suite_definition_configuration: typing.Any,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IoTCoreDeviceAdvisor::SuiteDefinition``.
 
@@ -135,7 +136,7 @@ class CfnSuiteDefinition(
     @builtins.classmethod
     def arn_for_suite_definition(
         cls,
-        resource: _ISuiteDefinitionRef_45c0f8ee,
+        resource: "_ISuiteDefinitionRef_45c0f8ee",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -149,10 +150,10 @@ class CfnSuiteDefinition(
     @builtins.classmethod
     def from_suite_definition_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ISuiteDefinitionRef_45c0f8ee:
+    ) -> "_ISuiteDefinitionRef_45c0f8ee":
         '''Creates a new ISuiteDefinitionRef from an ARN.
 
         :param scope: -
@@ -164,16 +165,16 @@ class CfnSuiteDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ISuiteDefinitionRef_45c0f8ee, jsii.sinvoke(cls, "fromSuiteDefinitionArn", [scope, id, arn]))
+        return typing.cast("_ISuiteDefinitionRef_45c0f8ee", jsii.sinvoke(cls, "fromSuiteDefinitionArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromSuiteDefinitionId")
     @builtins.classmethod
     def from_suite_definition_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         suite_definition_id: builtins.str,
-    ) -> _ISuiteDefinitionRef_45c0f8ee:
+    ) -> "_ISuiteDefinitionRef_45c0f8ee":
         '''Creates a new ISuiteDefinitionRef from a suiteDefinitionId.
 
         :param scope: -
@@ -185,7 +186,7 @@ class CfnSuiteDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument suite_definition_id", value=suite_definition_id, expected_type=type_hints["suite_definition_id"])
-        return typing.cast(_ISuiteDefinitionRef_45c0f8ee, jsii.sinvoke(cls, "fromSuiteDefinitionId", [scope, id, suite_definition_id]))
+        return typing.cast("_ISuiteDefinitionRef_45c0f8ee", jsii.sinvoke(cls, "fromSuiteDefinitionId", [scope, id, suite_definition_id]))
 
     @jsii.member(jsii_name="isCfnSuiteDefinition")
     @builtins.classmethod
@@ -200,7 +201,7 @@ class CfnSuiteDefinition(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSuiteDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -263,15 +264,15 @@ class CfnSuiteDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="suiteDefinitionRef")
-    def suite_definition_ref(self) -> _SuiteDefinitionReference_f107a9a2:
+    def suite_definition_ref(self) -> "_SuiteDefinitionReference_f107a9a2":
         '''A reference to a SuiteDefinition resource.'''
-        return typing.cast(_SuiteDefinitionReference_f107a9a2, jsii.get(self, "suiteDefinitionRef"))
+        return typing.cast("_SuiteDefinitionReference_f107a9a2", jsii.get(self, "suiteDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="suiteDefinitionConfiguration")
@@ -288,12 +289,12 @@ class CfnSuiteDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the the Suite Definition.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0cbe94c4a5fef0228a9bbec1e1b5971dc30e57c5e6ab1bc763768655a7a6620f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -388,8 +389,8 @@ class CfnSuiteDefinition(
             *,
             device_permission_role_arn: builtins.str,
             root_group: builtins.str,
-            devices: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSuiteDefinition.DeviceUnderTestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            intended_for_qualification: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            devices: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSuiteDefinition.DeviceUnderTestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            intended_for_qualification: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             suite_definition_name: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The configuration of the Suite Definition. Listed below are the required elements of the ``SuiteDefinitionConfiguration`` .
@@ -499,24 +500,24 @@ class CfnSuiteDefinition(
         @builtins.property
         def devices(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSuiteDefinition.DeviceUnderTestProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSuiteDefinition.DeviceUnderTestProperty"]]]]:
             '''Gets the devices configured.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotcoredeviceadvisor-suitedefinition-suitedefinitionconfiguration.html#cfn-iotcoredeviceadvisor-suitedefinition-suitedefinitionconfiguration-devices
             '''
             result = self._values.get("devices")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSuiteDefinition.DeviceUnderTestProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSuiteDefinition.DeviceUnderTestProperty"]]]], result)
 
         @builtins.property
         def intended_for_qualification(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Gets the tests intended for qualification in a suite.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotcoredeviceadvisor-suitedefinition-suitedefinitionconfiguration.html#cfn-iotcoredeviceadvisor-suitedefinition-suitedefinitionconfiguration-intendedforqualification
             '''
             result = self._values.get("intended_for_qualification")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def suite_definition_name(self) -> typing.Optional[builtins.str]:
@@ -554,7 +555,7 @@ class CfnSuiteDefinitionProps:
         self,
         *,
         suite_definition_configuration: typing.Any,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSuiteDefinition``.
 
@@ -566,6 +567,7 @@ class CfnSuiteDefinitionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_iotcoredeviceadvisor as iotcoredeviceadvisor
@@ -603,13 +605,13 @@ class CfnSuiteDefinitionProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata that can be used to manage the the Suite Definition.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotcoredeviceadvisor-suitedefinition.html#cfn-iotcoredeviceadvisor-suitedefinition-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

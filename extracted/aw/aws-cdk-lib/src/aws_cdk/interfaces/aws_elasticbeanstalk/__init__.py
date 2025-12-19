@@ -283,7 +283,7 @@ class IApplicationRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
@@ -304,12 +304,12 @@ class _IApplicationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationReference, jsii.get(self, "applicationRef"))
+        return typing.cast("ApplicationReference", jsii.get(self, "applicationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IApplicationRefProxy
@@ -330,7 +330,7 @@ class IApplicationVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationVersionRef")
-    def application_version_ref(self) -> ApplicationVersionReference:
+    def application_version_ref(self) -> "ApplicationVersionReference":
         '''(experimental) A reference to a ApplicationVersion resource.
 
         :stability: experimental
@@ -351,12 +351,12 @@ class _IApplicationVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationVersionRef")
-    def application_version_ref(self) -> ApplicationVersionReference:
+    def application_version_ref(self) -> "ApplicationVersionReference":
         '''(experimental) A reference to a ApplicationVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationVersionReference, jsii.get(self, "applicationVersionRef"))
+        return typing.cast("ApplicationVersionReference", jsii.get(self, "applicationVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationVersionRef).__jsii_proxy_class__ = lambda : _IApplicationVersionRefProxy
@@ -377,7 +377,7 @@ class IConfigurationTemplateRef(
 
     @builtins.property
     @jsii.member(jsii_name="configurationTemplateRef")
-    def configuration_template_ref(self) -> ConfigurationTemplateReference:
+    def configuration_template_ref(self) -> "ConfigurationTemplateReference":
         '''(experimental) A reference to a ConfigurationTemplate resource.
 
         :stability: experimental
@@ -398,12 +398,12 @@ class _IConfigurationTemplateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configurationTemplateRef")
-    def configuration_template_ref(self) -> ConfigurationTemplateReference:
+    def configuration_template_ref(self) -> "ConfigurationTemplateReference":
         '''(experimental) A reference to a ConfigurationTemplate resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationTemplateReference, jsii.get(self, "configurationTemplateRef"))
+        return typing.cast("ConfigurationTemplateReference", jsii.get(self, "configurationTemplateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationTemplateRef).__jsii_proxy_class__ = lambda : _IConfigurationTemplateRefProxy
@@ -424,7 +424,7 @@ class IEnvironmentRef(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> EnvironmentReference:
+    def environment_ref(self) -> "EnvironmentReference":
         '''(experimental) A reference to a Environment resource.
 
         :stability: experimental
@@ -445,12 +445,12 @@ class _IEnvironmentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> EnvironmentReference:
+    def environment_ref(self) -> "EnvironmentReference":
         '''(experimental) A reference to a Environment resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnvironmentReference, jsii.get(self, "environmentRef"))
+        return typing.cast("EnvironmentReference", jsii.get(self, "environmentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnvironmentRef).__jsii_proxy_class__ = lambda : _IEnvironmentRefProxy

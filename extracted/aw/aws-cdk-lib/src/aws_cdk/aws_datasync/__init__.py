@@ -123,6 +123,7 @@ class CfnAgent(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -142,14 +143,14 @@ class CfnAgent(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         activation_key: typing.Optional[builtins.str] = None,
         agent_name: typing.Optional[builtins.str] = None,
         security_group_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         subnet_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_endpoint_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::Agent``.
@@ -180,7 +181,7 @@ class CfnAgent(
 
     @jsii.member(jsii_name="arnForAgent")
     @builtins.classmethod
-    def arn_for_agent(cls, resource: _IAgentRef_7dc116ab) -> builtins.str:
+    def arn_for_agent(cls, resource: "_IAgentRef_7dc116ab") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -202,7 +203,7 @@ class CfnAgent(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAgent", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -233,9 +234,9 @@ class CfnAgent(
 
     @builtins.property
     @jsii.member(jsii_name="agentRef")
-    def agent_ref(self) -> _AgentReference_4ce8de2b:
+    def agent_ref(self) -> "_AgentReference_4ce8de2b":
         '''A reference to a Agent resource.'''
-        return typing.cast(_AgentReference_4ce8de2b, jsii.get(self, "agentRef"))
+        return typing.cast("_AgentReference_4ce8de2b", jsii.get(self, "agentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAgentArn")
@@ -266,9 +267,9 @@ class CfnAgent(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="activationKey")
@@ -327,12 +328,12 @@ class CfnAgent(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ae8ff35f7c199f1e5218a6432dc5893a46003bc8921b159534e548343397b69c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -372,7 +373,7 @@ class CfnAgentProps:
         agent_name: typing.Optional[builtins.str] = None,
         security_group_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         subnet_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_endpoint_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnAgent``.
@@ -389,6 +390,7 @@ class CfnAgentProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -474,7 +476,7 @@ class CfnAgentProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.
 
         We recommend creating at least one tag for your agent.
@@ -482,7 +484,7 @@ class CfnAgentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-agent.html#cfn-datasync-agent-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def vpc_endpoint_id(self) -> typing.Optional[builtins.str]:
@@ -529,6 +531,7 @@ class CfnLocationAzureBlob(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -562,19 +565,19 @@ class CfnLocationAzureBlob(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         azure_blob_authentication_type: builtins.str,
         agent_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         azure_access_tier: typing.Optional[builtins.str] = None,
         azure_blob_container_url: typing.Optional[builtins.str] = None,
-        azure_blob_sas_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationAzureBlob.AzureBlobSasConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        azure_blob_sas_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationAzureBlob.AzureBlobSasConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         azure_blob_type: typing.Optional[builtins.str] = None,
-        cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationAzureBlob.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationAzureBlob.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cmk_secret_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationAzureBlob.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_secret_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationAzureBlob.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::LocationAzureBlob``.
 
@@ -623,7 +626,7 @@ class CfnLocationAzureBlob(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocationAzureBlob", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -683,20 +686,20 @@ class CfnLocationAzureBlob(
 
     @builtins.property
     @jsii.member(jsii_name="attrManagedSecretConfig")
-    def attr_managed_secret_config(self) -> _IResolvable_da3f097b:
+    def attr_managed_secret_config(self) -> "_IResolvable_da3f097b":
         '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location.
 
         DataSync uses the default AWS-managed KMS key to encrypt this secret in AWS Secrets Manager.
 
         :cloudformationAttribute: ManagedSecretConfig
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrManagedSecretConfig"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrManagedSecretConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -705,9 +708,9 @@ class CfnLocationAzureBlob(
 
     @builtins.property
     @jsii.member(jsii_name="locationAzureBlobRef")
-    def location_azure_blob_ref(self) -> _LocationAzureBlobReference_60bcd854:
+    def location_azure_blob_ref(self) -> "_LocationAzureBlobReference_60bcd854":
         '''A reference to a LocationAzureBlob resource.'''
-        return typing.cast(_LocationAzureBlobReference_60bcd854, jsii.get(self, "locationAzureBlobRef"))
+        return typing.cast("_LocationAzureBlobReference_60bcd854", jsii.get(self, "locationAzureBlobRef"))
 
     @builtins.property
     @jsii.member(jsii_name="azureBlobAuthenticationType")
@@ -765,14 +768,14 @@ class CfnLocationAzureBlob(
     @jsii.member(jsii_name="azureBlobSasConfiguration")
     def azure_blob_sas_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.AzureBlobSasConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.AzureBlobSasConfigurationProperty"]]:
         '''Specifies the SAS configuration that allows DataSync to access your Azure Blob Storage.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.AzureBlobSasConfigurationProperty"]], jsii.get(self, "azureBlobSasConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.AzureBlobSasConfigurationProperty"]], jsii.get(self, "azureBlobSasConfiguration"))
 
     @azure_blob_sas_configuration.setter
     def azure_blob_sas_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.AzureBlobSasConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.AzureBlobSasConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__60754be8cb63c6569b923d0c78a823449ddaa3c5aba51833aae257e02f1bd392)
@@ -796,14 +799,14 @@ class CfnLocationAzureBlob(
     @jsii.member(jsii_name="cmkSecretConfig")
     def cmk_secret_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.CmkSecretConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.CmkSecretConfigProperty"]]:
         '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or secret key that DataSync uses to access a specific storage location, with a customer-managed AWS KMS key .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.CmkSecretConfigProperty"]], jsii.get(self, "cmkSecretConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.CmkSecretConfigProperty"]], jsii.get(self, "cmkSecretConfig"))
 
     @cmk_secret_config.setter
     def cmk_secret_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.CmkSecretConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.CmkSecretConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bbe60c9e1409294412076468854254983957a988d2e0d53f2fa73767e4a48525)
@@ -814,14 +817,14 @@ class CfnLocationAzureBlob(
     @jsii.member(jsii_name="customSecretConfig")
     def custom_secret_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.CustomSecretConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.CustomSecretConfigProperty"]]:
         '''Specifies configuration information for a customer-managed Secrets Manager secret where a storage location authentication token or secret key is stored in plain text.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.CustomSecretConfigProperty"]], jsii.get(self, "customSecretConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.CustomSecretConfigProperty"]], jsii.get(self, "customSecretConfig"))
 
     @custom_secret_config.setter
     def custom_secret_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationAzureBlob.CustomSecretConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.CustomSecretConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3276084bb32edc8f06759cb50268fc7821cd740602d985f3b1b967d5267f90dc)
@@ -843,12 +846,12 @@ class CfnLocationAzureBlob(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__49f572b838ff9ece4d89d77403924adeec2030197b239758db39cea71436acfb)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1148,12 +1151,12 @@ class CfnLocationAzureBlobProps:
         agent_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         azure_access_tier: typing.Optional[builtins.str] = None,
         azure_blob_container_url: typing.Optional[builtins.str] = None,
-        azure_blob_sas_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationAzureBlob.AzureBlobSasConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        azure_blob_sas_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationAzureBlob.AzureBlobSasConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         azure_blob_type: typing.Optional[builtins.str] = None,
-        cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationAzureBlob.CmkSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationAzureBlob.CustomSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        cmk_secret_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationAzureBlob.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_secret_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationAzureBlob.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocationAzureBlob``.
 
@@ -1173,6 +1176,7 @@ class CfnLocationAzureBlobProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -1292,7 +1296,7 @@ class CfnLocationAzureBlobProps:
     @builtins.property
     def azure_blob_sas_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationAzureBlob.AzureBlobSasConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.AzureBlobSasConfigurationProperty"]]:
         '''Specifies the SAS configuration that allows DataSync to access your Azure Blob Storage.
 
         .. epigraph::
@@ -1302,7 +1306,7 @@ class CfnLocationAzureBlobProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationazureblob.html#cfn-datasync-locationazureblob-azureblobsasconfiguration
         '''
         result = self._values.get("azure_blob_sas_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationAzureBlob.AzureBlobSasConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.AzureBlobSasConfigurationProperty"]], result)
 
     @builtins.property
     def azure_blob_type(self) -> typing.Optional[builtins.str]:
@@ -1320,7 +1324,7 @@ class CfnLocationAzureBlobProps:
     @builtins.property
     def cmk_secret_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationAzureBlob.CmkSecretConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.CmkSecretConfigProperty"]]:
         '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or secret key that DataSync uses to access a specific storage location, with a customer-managed AWS KMS key .
 
         .. epigraph::
@@ -1330,12 +1334,12 @@ class CfnLocationAzureBlobProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationazureblob.html#cfn-datasync-locationazureblob-cmksecretconfig
         '''
         result = self._values.get("cmk_secret_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationAzureBlob.CmkSecretConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.CmkSecretConfigProperty"]], result)
 
     @builtins.property
     def custom_secret_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationAzureBlob.CustomSecretConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.CustomSecretConfigProperty"]]:
         '''Specifies configuration information for a customer-managed Secrets Manager secret where a storage location authentication token or secret key is stored in plain text.
 
         This configuration includes the secret ARN, and the ARN for an IAM role that provides access to the secret.
@@ -1346,7 +1350,7 @@ class CfnLocationAzureBlobProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationazureblob.html#cfn-datasync-locationazureblob-customsecretconfig
         '''
         result = self._values.get("custom_secret_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationAzureBlob.CustomSecretConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationAzureBlob.CustomSecretConfigProperty"]], result)
 
     @builtins.property
     def subdirectory(self) -> typing.Optional[builtins.str]:
@@ -1358,7 +1362,7 @@ class CfnLocationAzureBlobProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.
 
         We recommend creating at least a name tag for your transfer location.
@@ -1366,7 +1370,7 @@ class CfnLocationAzureBlobProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationazureblob.html#cfn-datasync-locationazureblob-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1396,6 +1400,7 @@ class CfnLocationEFS(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -1421,16 +1426,16 @@ class CfnLocationEFS(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        ec2_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationEFS.Ec2ConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        ec2_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationEFS.Ec2ConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         access_point_arn: typing.Optional[builtins.str] = None,
-        efs_filesystem_arn: typing.Optional[typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]] = None,
+        efs_filesystem_arn: typing.Optional[typing.Union[builtins.str, "_IFileSystemRef_3dcf8b98"]] = None,
         file_system_access_role_arn: typing.Optional[builtins.str] = None,
         in_transit_encryption: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::LocationEFS``.
 
@@ -1473,7 +1478,7 @@ class CfnLocationEFS(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocationEFS", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1527,28 +1532,28 @@ class CfnLocationEFS(
 
     @builtins.property
     @jsii.member(jsii_name="locationEfsRef")
-    def location_efs_ref(self) -> _LocationEFSReference_72d5c472:
+    def location_efs_ref(self) -> "_LocationEFSReference_72d5c472":
         '''A reference to a LocationEFS resource.'''
-        return typing.cast(_LocationEFSReference_72d5c472, jsii.get(self, "locationEfsRef"))
+        return typing.cast("_LocationEFSReference_72d5c472", jsii.get(self, "locationEfsRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="ec2Config")
     def ec2_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnLocationEFS.Ec2ConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLocationEFS.Ec2ConfigProperty"]:
         '''Specifies the subnet and security groups DataSync uses to connect to one of your Amazon EFS file system's `mount targets <https://docs.aws.amazon.com/efs/latest/ug/accessing-fs.html>`_ .'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLocationEFS.Ec2ConfigProperty"], jsii.get(self, "ec2Config"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLocationEFS.Ec2ConfigProperty"], jsii.get(self, "ec2Config"))
 
     @ec2_config.setter
     def ec2_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnLocationEFS.Ec2ConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnLocationEFS.Ec2ConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d49a9691cc648acec6401c31a8bd66d218ef81be6a8c7372287fd0137a541e69)
@@ -1622,12 +1627,12 @@ class CfnLocationEFS(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the key-value pair that represents a tag that you want to add to the resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e70a483245df685cb33e660b85ed2768354b191a41a3909b76b309f43c43c73e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1734,13 +1739,13 @@ class CfnLocationEFSProps:
     def __init__(
         self,
         *,
-        ec2_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationEFS.Ec2ConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        ec2_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationEFS.Ec2ConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         access_point_arn: typing.Optional[builtins.str] = None,
-        efs_filesystem_arn: typing.Optional[typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]] = None,
+        efs_filesystem_arn: typing.Optional[typing.Union[builtins.str, "_IFileSystemRef_3dcf8b98"]] = None,
         file_system_access_role_arn: typing.Optional[builtins.str] = None,
         in_transit_encryption: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocationEFS``.
 
@@ -1757,6 +1762,7 @@ class CfnLocationEFSProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -1807,14 +1813,14 @@ class CfnLocationEFSProps:
     @builtins.property
     def ec2_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnLocationEFS.Ec2ConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLocationEFS.Ec2ConfigProperty"]:
         '''Specifies the subnet and security groups DataSync uses to connect to one of your Amazon EFS file system's `mount targets <https://docs.aws.amazon.com/efs/latest/ug/accessing-fs.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationefs.html#cfn-datasync-locationefs-ec2config
         '''
         result = self._values.get("ec2_config")
         assert result is not None, "Required property 'ec2_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnLocationEFS.Ec2ConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLocationEFS.Ec2ConfigProperty"], result)
 
     @builtins.property
     def access_point_arn(self) -> typing.Optional[builtins.str]:
@@ -1830,13 +1836,13 @@ class CfnLocationEFSProps:
     @builtins.property
     def efs_filesystem_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IFileSystemRef_3dcf8b98"]]:
         '''Specifies the ARN for your Amazon EFS file system.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationefs.html#cfn-datasync-locationefs-efsfilesystemarn
         '''
         result = self._values.get("efs_filesystem_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IFileSystemRef_3dcf8b98"]], result)
 
     @builtins.property
     def file_system_access_role_arn(self) -> typing.Optional[builtins.str]:
@@ -1874,7 +1880,7 @@ class CfnLocationEFSProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the key-value pair that represents a tag that you want to add to the resource.
 
         The value can be an empty string. This value helps you manage, filter, and search for your resources. We recommend that you create a name tag for your location.
@@ -1882,7 +1888,7 @@ class CfnLocationEFSProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationefs.html#cfn-datasync-locationefs-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1910,6 +1916,7 @@ class CfnLocationFSxLustre(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -1929,13 +1936,13 @@ class CfnLocationFSxLustre(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         security_group_arns: typing.Sequence[builtins.str],
         fsx_filesystem_arn: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::LocationFSxLustre``.
 
@@ -1972,7 +1979,7 @@ class CfnLocationFSxLustre(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocationFSxLustre", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2026,15 +2033,15 @@ class CfnLocationFSxLustre(
 
     @builtins.property
     @jsii.member(jsii_name="locationFSxLustreRef")
-    def location_f_sx_lustre_ref(self) -> _LocationFSxLustreReference_4b4c8fcd:
+    def location_f_sx_lustre_ref(self) -> "_LocationFSxLustreReference_4b4c8fcd":
         '''A reference to a LocationFSxLustre resource.'''
-        return typing.cast(_LocationFSxLustreReference_4b4c8fcd, jsii.get(self, "locationFSxLustreRef"))
+        return typing.cast("_LocationFSxLustreReference_4b4c8fcd", jsii.get(self, "locationFSxLustreRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="securityGroupArns")
@@ -2080,12 +2087,12 @@ class CfnLocationFSxLustre(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a21025c45a3ae349b404b0660292a1df2a3f9dfb1668c68c70eaac990ad31495)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2109,7 +2116,7 @@ class CfnLocationFSxLustreProps:
         security_group_arns: typing.Sequence[builtins.str],
         fsx_filesystem_arn: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocationFSxLustre``.
 
@@ -2123,6 +2130,7 @@ class CfnLocationFSxLustreProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -2190,7 +2198,7 @@ class CfnLocationFSxLustreProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.
 
         We recommend creating at least a name tag for your location.
@@ -2198,7 +2206,7 @@ class CfnLocationFSxLustreProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationfsxlustre.html#cfn-datasync-locationfsxlustre-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2228,6 +2236,7 @@ class CfnLocationFSxONTAP(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -2264,14 +2273,14 @@ class CfnLocationFSxONTAP(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         security_group_arns: typing.Sequence[builtins.str],
         storage_virtual_machine_arn: builtins.str,
-        protocol: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationFSxONTAP.ProtocolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        protocol: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationFSxONTAP.ProtocolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::LocationFSxONTAP``.
 
@@ -2310,7 +2319,7 @@ class CfnLocationFSxONTAP(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocationFSxONTAP", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2373,15 +2382,15 @@ class CfnLocationFSxONTAP(
 
     @builtins.property
     @jsii.member(jsii_name="locationFSxOntapRef")
-    def location_f_sx_ontap_ref(self) -> _LocationFSxONTAPReference_696c1d88:
+    def location_f_sx_ontap_ref(self) -> "_LocationFSxONTAPReference_696c1d88":
         '''A reference to a LocationFSxONTAP resource.'''
-        return typing.cast(_LocationFSxONTAPReference_696c1d88, jsii.get(self, "locationFSxOntapRef"))
+        return typing.cast("_LocationFSxONTAPReference_696c1d88", jsii.get(self, "locationFSxOntapRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="securityGroupArns")
@@ -2413,14 +2422,14 @@ class CfnLocationFSxONTAP(
     @jsii.member(jsii_name="protocol")
     def protocol(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationFSxONTAP.ProtocolProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.ProtocolProperty"]]:
         '''Specifies the data transfer protocol that DataSync uses to access your Amazon FSx file system.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationFSxONTAP.ProtocolProperty"]], jsii.get(self, "protocol"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.ProtocolProperty"]], jsii.get(self, "protocol"))
 
     @protocol.setter
     def protocol(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationFSxONTAP.ProtocolProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.ProtocolProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5733cffea1e4acc30fa46f3869492191e577ff7fb19e3b0a0964257388c93711)
@@ -2442,12 +2451,12 @@ class CfnLocationFSxONTAP(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bf18f603ac473d61e4ddeeabdd924bdda3ada2926fd940579ba552851ac8e4a6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2462,7 +2471,7 @@ class CfnLocationFSxONTAP(
         def __init__(
             self,
             *,
-            mount_options: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationFSxONTAP.NfsMountOptionsProperty", typing.Dict[builtins.str, typing.Any]]],
+            mount_options: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationFSxONTAP.NfsMountOptionsProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Specifies the Network File System (NFS) protocol configuration that AWS DataSync uses to access a storage virtual machine (SVM) on your Amazon FSx for NetApp ONTAP file system.
 
@@ -2495,14 +2504,14 @@ class CfnLocationFSxONTAP(
         @builtins.property
         def mount_options(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLocationFSxONTAP.NfsMountOptionsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.NfsMountOptionsProperty"]:
             '''Specifies how DataSync can access a location using the NFS protocol.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationfsxontap-nfs.html#cfn-datasync-locationfsxontap-nfs-mountoptions
             '''
             result = self._values.get("mount_options")
             assert result is not None, "Required property 'mount_options' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLocationFSxONTAP.NfsMountOptionsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.NfsMountOptionsProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2588,8 +2597,8 @@ class CfnLocationFSxONTAP(
         def __init__(
             self,
             *,
-            nfs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationFSxONTAP.NFSProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            smb: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationFSxONTAP.SMBProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            nfs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationFSxONTAP.NFSProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            smb: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationFSxONTAP.SMBProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the data transfer protocol that AWS DataSync uses to access your Amazon FSx file system.
 
@@ -2636,24 +2645,24 @@ class CfnLocationFSxONTAP(
         @builtins.property
         def nfs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationFSxONTAP.NFSProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.NFSProperty"]]:
             '''Specifies the Network File System (NFS) protocol configuration that DataSync uses to access your FSx for ONTAP file system's storage virtual machine (SVM).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationfsxontap-protocol.html#cfn-datasync-locationfsxontap-protocol-nfs
             '''
             result = self._values.get("nfs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationFSxONTAP.NFSProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.NFSProperty"]], result)
 
         @builtins.property
         def smb(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationFSxONTAP.SMBProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.SMBProperty"]]:
             '''Specifies the Server Message Block (SMB) protocol configuration that DataSync uses to access your FSx for ONTAP file system's SVM.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationfsxontap-protocol.html#cfn-datasync-locationfsxontap-protocol-smb
             '''
             result = self._values.get("smb")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationFSxONTAP.SMBProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.SMBProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2680,7 +2689,7 @@ class CfnLocationFSxONTAP(
         def __init__(
             self,
             *,
-            mount_options: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationFSxONTAP.SmbMountOptionsProperty", typing.Dict[builtins.str, typing.Any]]],
+            mount_options: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationFSxONTAP.SmbMountOptionsProperty", typing.Dict[builtins.str, typing.Any]]],
             password: builtins.str,
             user: builtins.str,
             domain: typing.Optional[builtins.str] = None,
@@ -2731,14 +2740,14 @@ class CfnLocationFSxONTAP(
         @builtins.property
         def mount_options(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLocationFSxONTAP.SmbMountOptionsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.SmbMountOptionsProperty"]:
             '''Specifies how DataSync can access a location using the SMB protocol.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationfsxontap-smb.html#cfn-datasync-locationfsxontap-smb-mountoptions
             '''
             result = self._values.get("mount_options")
             assert result is not None, "Required property 'mount_options' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLocationFSxONTAP.SmbMountOptionsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.SmbMountOptionsProperty"], result)
 
         @builtins.property
         def password(self) -> builtins.str:
@@ -2880,9 +2889,9 @@ class CfnLocationFSxONTAPProps:
         *,
         security_group_arns: typing.Sequence[builtins.str],
         storage_virtual_machine_arn: builtins.str,
-        protocol: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationFSxONTAP.ProtocolProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        protocol: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationFSxONTAP.ProtocolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocationFSxONTAP``.
 
@@ -2897,6 +2906,7 @@ class CfnLocationFSxONTAPProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -2978,13 +2988,13 @@ class CfnLocationFSxONTAPProps:
     @builtins.property
     def protocol(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationFSxONTAP.ProtocolProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.ProtocolProperty"]]:
         '''Specifies the data transfer protocol that DataSync uses to access your Amazon FSx file system.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationfsxontap.html#cfn-datasync-locationfsxontap-protocol
         '''
         result = self._values.get("protocol")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationFSxONTAP.ProtocolProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationFSxONTAP.ProtocolProperty"]], result)
 
     @builtins.property
     def subdirectory(self) -> typing.Optional[builtins.str]:
@@ -3001,7 +3011,7 @@ class CfnLocationFSxONTAPProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.
 
         We recommend creating at least a name tag for your location.
@@ -3009,7 +3019,7 @@ class CfnLocationFSxONTAPProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationfsxontap.html#cfn-datasync-locationfsxontap-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3037,6 +3047,7 @@ class CfnLocationFSxOpenZFS(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -3063,14 +3074,14 @@ class CfnLocationFSxOpenZFS(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        protocol: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationFSxOpenZFS.ProtocolProperty", typing.Dict[builtins.str, typing.Any]]],
+        protocol: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationFSxOpenZFS.ProtocolProperty", typing.Dict[builtins.str, typing.Any]]],
         security_group_arns: typing.Sequence[builtins.str],
         fsx_filesystem_arn: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::LocationFSxOpenZFS``.
 
@@ -3109,7 +3120,7 @@ class CfnLocationFSxOpenZFS(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocationFSxOpenZFS", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3163,28 +3174,28 @@ class CfnLocationFSxOpenZFS(
 
     @builtins.property
     @jsii.member(jsii_name="locationFSxOpenZfsRef")
-    def location_f_sx_open_zfs_ref(self) -> _LocationFSxOpenZFSReference_ff06c64f:
+    def location_f_sx_open_zfs_ref(self) -> "_LocationFSxOpenZFSReference_ff06c64f":
         '''A reference to a LocationFSxOpenZFS resource.'''
-        return typing.cast(_LocationFSxOpenZFSReference_ff06c64f, jsii.get(self, "locationFSxOpenZfsRef"))
+        return typing.cast("_LocationFSxOpenZFSReference_ff06c64f", jsii.get(self, "locationFSxOpenZfsRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="protocol")
     def protocol(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnLocationFSxOpenZFS.ProtocolProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLocationFSxOpenZFS.ProtocolProperty"]:
         '''The type of protocol that AWS DataSync uses to access your file system.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLocationFSxOpenZFS.ProtocolProperty"], jsii.get(self, "protocol"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLocationFSxOpenZFS.ProtocolProperty"], jsii.get(self, "protocol"))
 
     @protocol.setter
     def protocol(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnLocationFSxOpenZFS.ProtocolProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnLocationFSxOpenZFS.ProtocolProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ddafc49b43359e47266c55b1856065646a5a0a4d1fee7e74184b46d0a9ea1323)
@@ -3232,12 +3243,12 @@ class CfnLocationFSxOpenZFS(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The key-value pair that represents a tag that you want to add to the resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1c49d460645d98663ac93a723deb6ca797169b9d9ede4cada79adec615c02492)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3311,7 +3322,7 @@ class CfnLocationFSxOpenZFS(
         def __init__(
             self,
             *,
-            mount_options: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationFSxOpenZFS.MountOptionsProperty", typing.Dict[builtins.str, typing.Any]]],
+            mount_options: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationFSxOpenZFS.MountOptionsProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Represents the Network File System (NFS) protocol that AWS DataSync uses to access your Amazon FSx for OpenZFS file system.
 
@@ -3342,14 +3353,14 @@ class CfnLocationFSxOpenZFS(
         @builtins.property
         def mount_options(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLocationFSxOpenZFS.MountOptionsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnLocationFSxOpenZFS.MountOptionsProperty"]:
             '''Represents the mount options that are available for DataSync to access an NFS location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationfsxopenzfs-nfs.html#cfn-datasync-locationfsxopenzfs-nfs-mountoptions
             '''
             result = self._values.get("mount_options")
             assert result is not None, "Required property 'mount_options' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLocationFSxOpenZFS.MountOptionsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLocationFSxOpenZFS.MountOptionsProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3371,7 +3382,7 @@ class CfnLocationFSxOpenZFS(
         def __init__(
             self,
             *,
-            nfs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationFSxOpenZFS.NFSProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            nfs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationFSxOpenZFS.NFSProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents the protocol that AWS DataSync uses to access your Amazon FSx for OpenZFS file system.
 
@@ -3404,13 +3415,13 @@ class CfnLocationFSxOpenZFS(
         @builtins.property
         def nfs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationFSxOpenZFS.NFSProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationFSxOpenZFS.NFSProperty"]]:
             '''Represents the Network File System (NFS) protocol that DataSync uses to access your FSx for OpenZFS file system.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-locationfsxopenzfs-protocol.html#cfn-datasync-locationfsxopenzfs-protocol-nfs
             '''
             result = self._values.get("nfs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationFSxOpenZFS.NFSProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationFSxOpenZFS.NFSProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3439,11 +3450,11 @@ class CfnLocationFSxOpenZFSProps:
     def __init__(
         self,
         *,
-        protocol: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationFSxOpenZFS.ProtocolProperty, typing.Dict[builtins.str, typing.Any]]],
+        protocol: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationFSxOpenZFS.ProtocolProperty", typing.Dict[builtins.str, typing.Any]]],
         security_group_arns: typing.Sequence[builtins.str],
         fsx_filesystem_arn: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocationFSxOpenZFS``.
 
@@ -3458,6 +3469,7 @@ class CfnLocationFSxOpenZFSProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -3502,14 +3514,14 @@ class CfnLocationFSxOpenZFSProps:
     @builtins.property
     def protocol(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnLocationFSxOpenZFS.ProtocolProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLocationFSxOpenZFS.ProtocolProperty"]:
         '''The type of protocol that AWS DataSync uses to access your file system.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationfsxopenzfs.html#cfn-datasync-locationfsxopenzfs-protocol
         '''
         result = self._values.get("protocol")
         assert result is not None, "Required property 'protocol' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnLocationFSxOpenZFS.ProtocolProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLocationFSxOpenZFS.ProtocolProperty"], result)
 
     @builtins.property
     def security_group_arns(self) -> typing.List[builtins.str]:
@@ -3546,7 +3558,7 @@ class CfnLocationFSxOpenZFSProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The key-value pair that represents a tag that you want to add to the resource.
 
         The value can be an empty string. This value helps you manage, filter, and search for your resources. We recommend that you create a name tag for your location.
@@ -3554,7 +3566,7 @@ class CfnLocationFSxOpenZFSProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationfsxopenzfs.html#cfn-datasync-locationfsxopenzfs-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3582,6 +3594,7 @@ class CfnLocationFSxWindows(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -3604,7 +3617,7 @@ class CfnLocationFSxWindows(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         security_group_arns: typing.Sequence[builtins.str],
@@ -3613,7 +3626,7 @@ class CfnLocationFSxWindows(
         fsx_filesystem_arn: typing.Optional[builtins.str] = None,
         password: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::LocationFSxWindows``.
 
@@ -3656,7 +3669,7 @@ class CfnLocationFSxWindows(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocationFSxWindows", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3710,15 +3723,15 @@ class CfnLocationFSxWindows(
 
     @builtins.property
     @jsii.member(jsii_name="locationFSxWindowsRef")
-    def location_f_sx_windows_ref(self) -> _LocationFSxWindowsReference_7de311b2:
+    def location_f_sx_windows_ref(self) -> "_LocationFSxWindowsReference_7de311b2":
         '''A reference to a LocationFSxWindows resource.'''
-        return typing.cast(_LocationFSxWindowsReference_7de311b2, jsii.get(self, "locationFSxWindowsRef"))
+        return typing.cast("_LocationFSxWindowsReference_7de311b2", jsii.get(self, "locationFSxWindowsRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="securityGroupArns")
@@ -3800,12 +3813,12 @@ class CfnLocationFSxWindows(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__602782cd2d11ed3007adaab1a6e7826b15d7a1236d0d2fa763c3a9b1471eda1a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3835,7 +3848,7 @@ class CfnLocationFSxWindowsProps:
         fsx_filesystem_arn: typing.Optional[builtins.str] = None,
         password: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocationFSxWindows``.
 
@@ -3852,6 +3865,7 @@ class CfnLocationFSxWindowsProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -3962,7 +3976,7 @@ class CfnLocationFSxWindowsProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.
 
         We recommend creating at least a name tag for your location.
@@ -3970,7 +3984,7 @@ class CfnLocationFSxWindowsProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationfsxwindows.html#cfn-datasync-locationfsxwindows-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3998,6 +4012,7 @@ class CfnLocationHDFS(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -4032,22 +4047,22 @@ class CfnLocationHDFS(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         agent_arns: typing.Sequence[builtins.str],
         authentication_type: builtins.str,
-        name_nodes: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationHDFS.NameNodeProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        name_nodes: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationHDFS.NameNodeProperty", typing.Dict[builtins.str, typing.Any]]]]],
         block_size: typing.Optional[jsii.Number] = None,
         kerberos_keytab: typing.Optional[builtins.str] = None,
         kerberos_krb5_conf: typing.Optional[builtins.str] = None,
         kerberos_principal: typing.Optional[builtins.str] = None,
         kms_key_provider_uri: typing.Optional[builtins.str] = None,
-        qop_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationHDFS.QopConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        qop_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationHDFS.QopConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         replication_factor: typing.Optional[jsii.Number] = None,
         simple_user: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::LocationHDFS``.
 
@@ -4102,7 +4117,7 @@ class CfnLocationHDFS(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocationHDFS", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4156,15 +4171,15 @@ class CfnLocationHDFS(
 
     @builtins.property
     @jsii.member(jsii_name="locationHdfsRef")
-    def location_hdfs_ref(self) -> _LocationHDFSReference_c3d0d6b5:
+    def location_hdfs_ref(self) -> "_LocationHDFSReference_c3d0d6b5":
         '''A reference to a LocationHDFS resource.'''
-        return typing.cast(_LocationHDFSReference_c3d0d6b5, jsii.get(self, "locationHdfsRef"))
+        return typing.cast("_LocationHDFSReference_c3d0d6b5", jsii.get(self, "locationHdfsRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="agentArns")
@@ -4196,14 +4211,14 @@ class CfnLocationHDFS(
     @jsii.member(jsii_name="nameNodes")
     def name_nodes(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLocationHDFS.NameNodeProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLocationHDFS.NameNodeProperty"]]]:
         '''The NameNode that manages the HDFS namespace.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLocationHDFS.NameNodeProperty"]]], jsii.get(self, "nameNodes"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLocationHDFS.NameNodeProperty"]]], jsii.get(self, "nameNodes"))
 
     @name_nodes.setter
     def name_nodes(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLocationHDFS.NameNodeProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLocationHDFS.NameNodeProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a76145fef05ad13cf6d623dec2e81ad7c19c154ecd30d8aae3a73e81c6576491)
@@ -4279,14 +4294,14 @@ class CfnLocationHDFS(
     @jsii.member(jsii_name="qopConfiguration")
     def qop_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationHDFS.QopConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationHDFS.QopConfigurationProperty"]]:
         '''The Quality of Protection (QOP) configuration specifies the Remote Procedure Call (RPC) and data transfer protection settings configured on the Hadoop Distributed File System (HDFS) cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationHDFS.QopConfigurationProperty"]], jsii.get(self, "qopConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationHDFS.QopConfigurationProperty"]], jsii.get(self, "qopConfiguration"))
 
     @qop_configuration.setter
     def qop_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationHDFS.QopConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationHDFS.QopConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4eada24423cf34a46defb2fb08ff49d30f58ea6d6486c0e6ccf15fc65da913ff)
@@ -4334,12 +4349,12 @@ class CfnLocationHDFS(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The key-value pair that represents the tag that you want to add to the location.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2aae452f9b71c01ce6062b4ea9224245a9cc1780c588d392319b30c53a0bc99d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4522,17 +4537,17 @@ class CfnLocationHDFSProps:
         *,
         agent_arns: typing.Sequence[builtins.str],
         authentication_type: builtins.str,
-        name_nodes: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationHDFS.NameNodeProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        name_nodes: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationHDFS.NameNodeProperty", typing.Dict[builtins.str, typing.Any]]]]],
         block_size: typing.Optional[jsii.Number] = None,
         kerberos_keytab: typing.Optional[builtins.str] = None,
         kerberos_krb5_conf: typing.Optional[builtins.str] = None,
         kerberos_principal: typing.Optional[builtins.str] = None,
         kms_key_provider_uri: typing.Optional[builtins.str] = None,
-        qop_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationHDFS.QopConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        qop_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationHDFS.QopConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         replication_factor: typing.Optional[jsii.Number] = None,
         simple_user: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocationHDFS``.
 
@@ -4555,6 +4570,7 @@ class CfnLocationHDFSProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -4650,7 +4666,7 @@ class CfnLocationHDFSProps:
     @builtins.property
     def name_nodes(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLocationHDFS.NameNodeProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLocationHDFS.NameNodeProperty"]]]:
         '''The NameNode that manages the HDFS namespace.
 
         The NameNode performs operations such as opening, closing, and renaming files and directories. The NameNode contains the information to map blocks of data to the DataNodes. You can use only one NameNode.
@@ -4659,7 +4675,7 @@ class CfnLocationHDFSProps:
         '''
         result = self._values.get("name_nodes")
         assert result is not None, "Required property 'name_nodes' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLocationHDFS.NameNodeProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLocationHDFS.NameNodeProperty"]]], result)
 
     @builtins.property
     def block_size(self) -> typing.Optional[jsii.Number]:
@@ -4717,7 +4733,7 @@ class CfnLocationHDFSProps:
     @builtins.property
     def qop_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationHDFS.QopConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationHDFS.QopConfigurationProperty"]]:
         '''The Quality of Protection (QOP) configuration specifies the Remote Procedure Call (RPC) and data transfer protection settings configured on the Hadoop Distributed File System (HDFS) cluster.
 
         If ``QopConfiguration`` isn't specified, ``RpcProtection`` and ``DataTransferProtection`` default to ``PRIVACY`` . If you set ``RpcProtection`` or ``DataTransferProtection`` , the other parameter assumes the same value.
@@ -4725,7 +4741,7 @@ class CfnLocationHDFSProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationhdfs.html#cfn-datasync-locationhdfs-qopconfiguration
         '''
         result = self._values.get("qop_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationHDFS.QopConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationHDFS.QopConfigurationProperty"]], result)
 
     @builtins.property
     def replication_factor(self) -> typing.Optional[jsii.Number]:
@@ -4765,7 +4781,7 @@ class CfnLocationHDFSProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The key-value pair that represents the tag that you want to add to the location.
 
         The value can be an empty string. We recommend using tags to name your resources.
@@ -4773,7 +4789,7 @@ class CfnLocationHDFSProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationhdfs.html#cfn-datasync-locationhdfs-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4801,6 +4817,7 @@ class CfnLocationNFS(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -4825,14 +4842,14 @@ class CfnLocationNFS(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        on_prem_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationNFS.OnPremConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        mount_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationNFS.MountOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        on_prem_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationNFS.OnPremConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        mount_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationNFS.MountOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         server_hostname: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::LocationNFS``.
 
@@ -4871,7 +4888,7 @@ class CfnLocationNFS(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocationNFS", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4925,28 +4942,28 @@ class CfnLocationNFS(
 
     @builtins.property
     @jsii.member(jsii_name="locationNfsRef")
-    def location_nfs_ref(self) -> _LocationNFSReference_163b2bab:
+    def location_nfs_ref(self) -> "_LocationNFSReference_163b2bab":
         '''A reference to a LocationNFS resource.'''
-        return typing.cast(_LocationNFSReference_163b2bab, jsii.get(self, "locationNfsRef"))
+        return typing.cast("_LocationNFSReference_163b2bab", jsii.get(self, "locationNfsRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="onPremConfig")
     def on_prem_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnLocationNFS.OnPremConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLocationNFS.OnPremConfigProperty"]:
         '''Specifies the Amazon Resource Name (ARN) of the DataSync agent that can connect to your NFS file server.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLocationNFS.OnPremConfigProperty"], jsii.get(self, "onPremConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLocationNFS.OnPremConfigProperty"], jsii.get(self, "onPremConfig"))
 
     @on_prem_config.setter
     def on_prem_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnLocationNFS.OnPremConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnLocationNFS.OnPremConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ef5244b8ff59527535d3ba0996f08c461f6affc766845b00ae3805171907b04c)
@@ -4957,14 +4974,14 @@ class CfnLocationNFS(
     @jsii.member(jsii_name="mountOptions")
     def mount_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationNFS.MountOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationNFS.MountOptionsProperty"]]:
         '''Specifies the options that DataSync can use to mount your NFS file server.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationNFS.MountOptionsProperty"]], jsii.get(self, "mountOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationNFS.MountOptionsProperty"]], jsii.get(self, "mountOptions"))
 
     @mount_options.setter
     def mount_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationNFS.MountOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationNFS.MountOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f53e27778ea596fd0d4e8ad60113269d0f0aac45137d89e2a99be7a5c30e4fb6)
@@ -4999,12 +5016,12 @@ class CfnLocationNFS(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6775dcca43d86f1ff2a8795efb1205f09fdcee773716c549b06acac462432bcd)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5144,11 +5161,11 @@ class CfnLocationNFSProps:
     def __init__(
         self,
         *,
-        on_prem_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationNFS.OnPremConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        mount_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationNFS.MountOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        on_prem_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationNFS.OnPremConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        mount_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationNFS.MountOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         server_hostname: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocationNFS``.
 
@@ -5163,6 +5180,7 @@ class CfnLocationNFSProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -5206,7 +5224,7 @@ class CfnLocationNFSProps:
     @builtins.property
     def on_prem_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnLocationNFS.OnPremConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLocationNFS.OnPremConfigProperty"]:
         '''Specifies the Amazon Resource Name (ARN) of the DataSync agent that can connect to your NFS file server.
 
         You can specify more than one agent. For more information, see `Using multiple DataSync agents <https://docs.aws.amazon.com/datasync/latest/userguide/do-i-need-datasync-agent.html#multiple-agents>`_ .
@@ -5215,18 +5233,18 @@ class CfnLocationNFSProps:
         '''
         result = self._values.get("on_prem_config")
         assert result is not None, "Required property 'on_prem_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnLocationNFS.OnPremConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLocationNFS.OnPremConfigProperty"], result)
 
     @builtins.property
     def mount_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationNFS.MountOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationNFS.MountOptionsProperty"]]:
         '''Specifies the options that DataSync can use to mount your NFS file server.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationnfs.html#cfn-datasync-locationnfs-mountoptions
         '''
         result = self._values.get("mount_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationNFS.MountOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationNFS.MountOptionsProperty"]], result)
 
     @builtins.property
     def server_hostname(self) -> typing.Optional[builtins.str]:
@@ -5249,7 +5267,7 @@ class CfnLocationNFSProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.
 
         We recommend creating at least a name tag for your location.
@@ -5257,7 +5275,7 @@ class CfnLocationNFSProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationnfs.html#cfn-datasync-locationnfs-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5287,6 +5305,7 @@ class CfnLocationObjectStorage(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -5318,21 +5337,21 @@ class CfnLocationObjectStorage(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         access_key: typing.Optional[builtins.str] = None,
         agent_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         bucket_name: typing.Optional[builtins.str] = None,
-        cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationObjectStorage.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationObjectStorage.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cmk_secret_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationObjectStorage.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_secret_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationObjectStorage.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         secret_key: typing.Optional[builtins.str] = None,
         server_certificate: typing.Optional[builtins.str] = None,
         server_hostname: typing.Optional[builtins.str] = None,
         server_port: typing.Optional[jsii.Number] = None,
         server_protocol: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::LocationObjectStorage``.
 
@@ -5385,7 +5404,7 @@ class CfnLocationObjectStorage(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocationObjectStorage", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5445,14 +5464,14 @@ class CfnLocationObjectStorage(
 
     @builtins.property
     @jsii.member(jsii_name="attrManagedSecretConfig")
-    def attr_managed_secret_config(self) -> _IResolvable_da3f097b:
+    def attr_managed_secret_config(self) -> "_IResolvable_da3f097b":
         '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or set of credentials that DataSync uses to access a specific transfer location.
 
         DataSync uses the default AWS-managed KMS key to encrypt this secret in AWS Secrets Manager.
 
         :cloudformationAttribute: ManagedSecretConfig
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrManagedSecretConfig"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrManagedSecretConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5461,15 +5480,15 @@ class CfnLocationObjectStorage(
 
     @builtins.property
     @jsii.member(jsii_name="locationObjectStorageRef")
-    def location_object_storage_ref(self) -> _LocationObjectStorageReference_5b3d36b8:
+    def location_object_storage_ref(self) -> "_LocationObjectStorageReference_5b3d36b8":
         '''A reference to a LocationObjectStorage resource.'''
-        return typing.cast(_LocationObjectStorageReference_5b3d36b8, jsii.get(self, "locationObjectStorageRef"))
+        return typing.cast("_LocationObjectStorageReference_5b3d36b8", jsii.get(self, "locationObjectStorageRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="accessKey")
@@ -5514,14 +5533,14 @@ class CfnLocationObjectStorage(
     @jsii.member(jsii_name="cmkSecretConfig")
     def cmk_secret_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationObjectStorage.CmkSecretConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationObjectStorage.CmkSecretConfigProperty"]]:
         '''Specifies configuration information for a DataSync-managed secret, which includes the ``SecretKey`` that DataSync uses to access a specific object storage location, with a customer-managed AWS KMS key .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationObjectStorage.CmkSecretConfigProperty"]], jsii.get(self, "cmkSecretConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationObjectStorage.CmkSecretConfigProperty"]], jsii.get(self, "cmkSecretConfig"))
 
     @cmk_secret_config.setter
     def cmk_secret_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationObjectStorage.CmkSecretConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationObjectStorage.CmkSecretConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__750d7a103b8b00f0ab06ca1128b92bb839b2b91e71e5a388ec467dacd0fb58b6)
@@ -5532,14 +5551,14 @@ class CfnLocationObjectStorage(
     @jsii.member(jsii_name="customSecretConfig")
     def custom_secret_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationObjectStorage.CustomSecretConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationObjectStorage.CustomSecretConfigProperty"]]:
         '''Specifies configuration information for a customer-managed Secrets Manager secret where the secret key for a specific object storage location is stored in plain text.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationObjectStorage.CustomSecretConfigProperty"]], jsii.get(self, "customSecretConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationObjectStorage.CustomSecretConfigProperty"]], jsii.get(self, "customSecretConfig"))
 
     @custom_secret_config.setter
     def custom_secret_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationObjectStorage.CustomSecretConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationObjectStorage.CustomSecretConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f8e807a4053a1cf75e73e9841ea082806de0e3097bc4b377492cf4268c03a8c5)
@@ -5626,12 +5645,12 @@ class CfnLocationObjectStorage(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the key-value pair that represents a tag that you want to add to the resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4c7a3d48757bffde04fd1015e50d6672207d2522eec04091eebdb3ac177fb39a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5874,15 +5893,15 @@ class CfnLocationObjectStorageProps:
         access_key: typing.Optional[builtins.str] = None,
         agent_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         bucket_name: typing.Optional[builtins.str] = None,
-        cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationObjectStorage.CmkSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationObjectStorage.CustomSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        cmk_secret_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationObjectStorage.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_secret_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationObjectStorage.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         secret_key: typing.Optional[builtins.str] = None,
         server_certificate: typing.Optional[builtins.str] = None,
         server_hostname: typing.Optional[builtins.str] = None,
         server_port: typing.Optional[jsii.Number] = None,
         server_protocol: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocationObjectStorage``.
 
@@ -5904,6 +5923,7 @@ class CfnLocationObjectStorageProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -6007,7 +6027,7 @@ class CfnLocationObjectStorageProps:
     @builtins.property
     def cmk_secret_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationObjectStorage.CmkSecretConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationObjectStorage.CmkSecretConfigProperty"]]:
         '''Specifies configuration information for a DataSync-managed secret, which includes the ``SecretKey`` that DataSync uses to access a specific object storage location, with a customer-managed AWS KMS key .
 
         When you include this paramater as part of a ``CreateLocationObjectStorage`` request, you provide only the KMS key ARN. DataSync uses this KMS key together with the value you specify for the ``SecretKey`` parameter to create a DataSync-managed secret to store the location access credentials.
@@ -6020,12 +6040,12 @@ class CfnLocationObjectStorageProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationobjectstorage.html#cfn-datasync-locationobjectstorage-cmksecretconfig
         '''
         result = self._values.get("cmk_secret_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationObjectStorage.CmkSecretConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationObjectStorage.CmkSecretConfigProperty"]], result)
 
     @builtins.property
     def custom_secret_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationObjectStorage.CustomSecretConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationObjectStorage.CustomSecretConfigProperty"]]:
         '''Specifies configuration information for a customer-managed Secrets Manager secret where the secret key for a specific object storage location is stored in plain text.
 
         This configuration includes the secret ARN, and the ARN for an IAM role that provides access to the secret.
@@ -6036,7 +6056,7 @@ class CfnLocationObjectStorageProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationobjectstorage.html#cfn-datasync-locationobjectstorage-customsecretconfig
         '''
         result = self._values.get("custom_secret_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationObjectStorage.CustomSecretConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationObjectStorage.CustomSecretConfigProperty"]], result)
 
     @builtins.property
     def secret_key(self) -> typing.Optional[builtins.str]:
@@ -6115,7 +6135,7 @@ class CfnLocationObjectStorageProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the key-value pair that represents a tag that you want to add to the resource.
 
         Tags can help you manage, filter, and search for your resources. We recommend creating a name tag for your location.
@@ -6123,7 +6143,7 @@ class CfnLocationObjectStorageProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationobjectstorage.html#cfn-datasync-locationobjectstorage-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6153,6 +6173,7 @@ class CfnLocationS3(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -6175,14 +6196,14 @@ class CfnLocationS3(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        s3_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationS3.S3ConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        s3_bucket_arn: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
+        s3_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationS3.S3ConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        s3_bucket_arn: typing.Optional[typing.Union[builtins.str, "_IBucketRef_3debe44e"]] = None,
         s3_storage_class: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::LocationS3``.
 
@@ -6221,7 +6242,7 @@ class CfnLocationS3(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocationS3", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6275,28 +6296,28 @@ class CfnLocationS3(
 
     @builtins.property
     @jsii.member(jsii_name="locationS3Ref")
-    def location_s3_ref(self) -> _LocationS3Reference_113b17ee:
+    def location_s3_ref(self) -> "_LocationS3Reference_113b17ee":
         '''A reference to a LocationS3 resource.'''
-        return typing.cast(_LocationS3Reference_113b17ee, jsii.get(self, "locationS3Ref"))
+        return typing.cast("_LocationS3Reference_113b17ee", jsii.get(self, "locationS3Ref"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="s3Config")
     def s3_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnLocationS3.S3ConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLocationS3.S3ConfigProperty"]:
         '''The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that is used to access an Amazon S3 bucket.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLocationS3.S3ConfigProperty"], jsii.get(self, "s3Config"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLocationS3.S3ConfigProperty"], jsii.get(self, "s3Config"))
 
     @s3_config.setter
     def s3_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnLocationS3.S3ConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnLocationS3.S3ConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__97a8e39b836dbbdb49d0bd113962d59b27158d2ab86e97500f5dda21fc6f2d70)
@@ -6344,12 +6365,12 @@ class CfnLocationS3(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6d6b2dd8b444ebab79ed4aae8987dfed0864cb4e3663bdfd36a643d72264608e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6425,11 +6446,11 @@ class CfnLocationS3Props:
     def __init__(
         self,
         *,
-        s3_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationS3.S3ConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        s3_bucket_arn: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
+        s3_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationS3.S3ConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        s3_bucket_arn: typing.Optional[typing.Union[builtins.str, "_IBucketRef_3debe44e"]] = None,
         s3_storage_class: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocationS3``.
 
@@ -6444,6 +6465,7 @@ class CfnLocationS3Props:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -6485,7 +6507,7 @@ class CfnLocationS3Props:
     @builtins.property
     def s3_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnLocationS3.S3ConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLocationS3.S3ConfigProperty"]:
         '''The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that is used to access an Amazon S3 bucket.
 
         For detailed information about using such a role, see `Creating a Location for Amazon S3 <https://docs.aws.amazon.com/datasync/latest/userguide/working-with-locations.html#create-s3-location>`_ in the *AWS DataSync User Guide* .
@@ -6494,18 +6516,18 @@ class CfnLocationS3Props:
         '''
         result = self._values.get("s3_config")
         assert result is not None, "Required property 's3_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnLocationS3.S3ConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLocationS3.S3ConfigProperty"], result)
 
     @builtins.property
     def s3_bucket_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IBucketRef_3debe44e"]]:
         '''The ARN of the Amazon S3 bucket.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locations3.html#cfn-datasync-locations3-s3bucketarn
         '''
         result = self._values.get("s3_bucket_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IBucketRef_3debe44e"]], result)
 
     @builtins.property
     def s3_storage_class(self) -> typing.Optional[builtins.str]:
@@ -6541,7 +6563,7 @@ class CfnLocationS3Props:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.
 
         We recommend creating at least a name tag for your transfer location.
@@ -6549,7 +6571,7 @@ class CfnLocationS3Props:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locations3.html#cfn-datasync-locations3-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6577,6 +6599,7 @@ class CfnLocationSMB(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -6615,23 +6638,23 @@ class CfnLocationSMB(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         agent_arns: typing.Sequence[builtins.str],
         authentication_type: typing.Optional[builtins.str] = None,
-        cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationSMB.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationSMB.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cmk_secret_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationSMB.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_secret_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationSMB.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         dns_ip_addresses: typing.Optional[typing.Sequence[builtins.str]] = None,
         domain: typing.Optional[builtins.str] = None,
         kerberos_keytab: typing.Optional[builtins.str] = None,
         kerberos_krb5_conf: typing.Optional[builtins.str] = None,
         kerberos_principal: typing.Optional[builtins.str] = None,
-        mount_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationSMB.MountOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        mount_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationSMB.MountOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         password: typing.Optional[builtins.str] = None,
         server_hostname: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         user: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::LocationSMB``.
@@ -6691,7 +6714,7 @@ class CfnLocationSMB(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocationSMB", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6751,14 +6774,14 @@ class CfnLocationSMB(
 
     @builtins.property
     @jsii.member(jsii_name="attrManagedSecretConfig")
-    def attr_managed_secret_config(self) -> _IResolvable_da3f097b:
+    def attr_managed_secret_config(self) -> "_IResolvable_da3f097b":
         '''Specifies configuration information for a DataSync-managed secret, such as a password or set of credentials that DataSync uses to access a specific transfer location.
 
         DataSync uses the default AWS-managed KMS key to encrypt this secret in AWS Secrets Manager.
 
         :cloudformationAttribute: ManagedSecretConfig
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrManagedSecretConfig"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrManagedSecretConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -6767,15 +6790,15 @@ class CfnLocationSMB(
 
     @builtins.property
     @jsii.member(jsii_name="locationSmbRef")
-    def location_smb_ref(self) -> _LocationSMBReference_9787936e:
+    def location_smb_ref(self) -> "_LocationSMBReference_9787936e":
         '''A reference to a LocationSMB resource.'''
-        return typing.cast(_LocationSMBReference_9787936e, jsii.get(self, "locationSmbRef"))
+        return typing.cast("_LocationSMBReference_9787936e", jsii.get(self, "locationSmbRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="agentArns")
@@ -6807,14 +6830,14 @@ class CfnLocationSMB(
     @jsii.member(jsii_name="cmkSecretConfig")
     def cmk_secret_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CmkSecretConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.CmkSecretConfigProperty"]]:
         '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or secret key that DataSync uses to access a specific storage location, with a customer-managed AWS KMS key .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CmkSecretConfigProperty"]], jsii.get(self, "cmkSecretConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.CmkSecretConfigProperty"]], jsii.get(self, "cmkSecretConfig"))
 
     @cmk_secret_config.setter
     def cmk_secret_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CmkSecretConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.CmkSecretConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e407ec55488adbc9f81891a5e15e237e234b987b6214eb331162a8b63f344324)
@@ -6825,14 +6848,14 @@ class CfnLocationSMB(
     @jsii.member(jsii_name="customSecretConfig")
     def custom_secret_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CustomSecretConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.CustomSecretConfigProperty"]]:
         '''Specifies configuration information for a customer-managed Secrets Manager secret where a storage location authentication token or secret key is stored in plain text.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CustomSecretConfigProperty"]], jsii.get(self, "customSecretConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.CustomSecretConfigProperty"]], jsii.get(self, "customSecretConfig"))
 
     @custom_secret_config.setter
     def custom_secret_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.CustomSecretConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.CustomSecretConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fde88b8f3a9b839e4f9087f93f80eb219e3a48609302336a5ed68bd2edec2ebb)
@@ -6911,14 +6934,14 @@ class CfnLocationSMB(
     @jsii.member(jsii_name="mountOptions")
     def mount_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.MountOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.MountOptionsProperty"]]:
         '''Specifies the version of the SMB protocol that DataSync uses to access your SMB file server.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.MountOptionsProperty"]], jsii.get(self, "mountOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.MountOptionsProperty"]], jsii.get(self, "mountOptions"))
 
     @mount_options.setter
     def mount_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLocationSMB.MountOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.MountOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b9983585f73509aeb431e7337689500eb00129c754b73a4ef4022bebcd1bbc1c)
@@ -6966,12 +6989,12 @@ class CfnLocationSMB(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b48314ac3635761aa21132da0f199200c2b741ddeca4e34176ee47fde9d19e47)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7297,18 +7320,18 @@ class CfnLocationSMBProps:
         *,
         agent_arns: typing.Sequence[builtins.str],
         authentication_type: typing.Optional[builtins.str] = None,
-        cmk_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationSMB.CmkSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        custom_secret_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationSMB.CustomSecretConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        cmk_secret_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationSMB.CmkSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_secret_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationSMB.CustomSecretConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         dns_ip_addresses: typing.Optional[typing.Sequence[builtins.str]] = None,
         domain: typing.Optional[builtins.str] = None,
         kerberos_keytab: typing.Optional[builtins.str] = None,
         kerberos_krb5_conf: typing.Optional[builtins.str] = None,
         kerberos_principal: typing.Optional[builtins.str] = None,
-        mount_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationSMB.MountOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        mount_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLocationSMB.MountOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         password: typing.Optional[builtins.str] = None,
         server_hostname: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         user: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnLocationSMB``.
@@ -7334,6 +7357,7 @@ class CfnLocationSMBProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -7442,7 +7466,7 @@ class CfnLocationSMBProps:
     @builtins.property
     def cmk_secret_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationSMB.CmkSecretConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.CmkSecretConfigProperty"]]:
         '''Specifies configuration information for a DataSync-managed secret, such as an authentication token or secret key that DataSync uses to access a specific storage location, with a customer-managed AWS KMS key .
 
         .. epigraph::
@@ -7452,12 +7476,12 @@ class CfnLocationSMBProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationsmb.html#cfn-datasync-locationsmb-cmksecretconfig
         '''
         result = self._values.get("cmk_secret_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationSMB.CmkSecretConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.CmkSecretConfigProperty"]], result)
 
     @builtins.property
     def custom_secret_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationSMB.CustomSecretConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.CustomSecretConfigProperty"]]:
         '''Specifies configuration information for a customer-managed Secrets Manager secret where a storage location authentication token or secret key is stored in plain text.
 
         This configuration includes the secret ARN, and the ARN for an IAM role that provides access to the secret.
@@ -7468,7 +7492,7 @@ class CfnLocationSMBProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationsmb.html#cfn-datasync-locationsmb-customsecretconfig
         '''
         result = self._values.get("custom_secret_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationSMB.CustomSecretConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.CustomSecretConfigProperty"]], result)
 
     @builtins.property
     def dns_ip_addresses(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -7528,13 +7552,13 @@ class CfnLocationSMBProps:
     @builtins.property
     def mount_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationSMB.MountOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.MountOptionsProperty"]]:
         '''Specifies the version of the SMB protocol that DataSync uses to access your SMB file server.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationsmb.html#cfn-datasync-locationsmb-mountoptions
         '''
         result = self._values.get("mount_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLocationSMB.MountOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLocationSMB.MountOptionsProperty"]], result)
 
     @builtins.property
     def password(self) -> typing.Optional[builtins.str]:
@@ -7574,7 +7598,7 @@ class CfnLocationSMBProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies labels that help you categorize, filter, and search for your AWS resources.
 
         We recommend creating at least a name tag for your location.
@@ -7582,7 +7606,7 @@ class CfnLocationSMBProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationsmb.html#cfn-datasync-locationsmb-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def user(self) -> typing.Optional[builtins.str]:
@@ -7625,6 +7649,7 @@ class CfnTask(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_datasync as datasync
@@ -7717,21 +7742,21 @@ class CfnTask(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        destination_location_arn: typing.Union[builtins.str, _ILocationEFSRef_6fba5e2e, _ILocationS3Ref_5240f1a4],
-        source_location_arn: typing.Union[builtins.str, _ILocationNFSRef_01d78c69, _ILocationS3Ref_5240f1a4],
-        cloud_watch_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
-        excludes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.FilterRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        includes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.FilterRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        manifest_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.ManifestConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        destination_location_arn: typing.Union[builtins.str, "_ILocationEFSRef_6fba5e2e", "_ILocationS3Ref_5240f1a4"],
+        source_location_arn: typing.Union[builtins.str, "_ILocationNFSRef_01d78c69", "_ILocationS3Ref_5240f1a4"],
+        cloud_watch_log_group_arn: typing.Optional[typing.Union[builtins.str, "_ILogGroupRef_874d025a"]] = None,
+        excludes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.FilterRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        includes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.FilterRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        manifest_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.ManifestConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.OptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        schedule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.TaskScheduleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.OptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        schedule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.TaskScheduleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         task_mode: typing.Optional[builtins.str] = None,
-        task_report_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.TaskReportConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        task_report_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.TaskReportConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataSync::Task``.
 
@@ -7773,7 +7798,7 @@ class CfnTask(
 
     @jsii.member(jsii_name="arnForTask")
     @builtins.classmethod
-    def arn_for_task(cls, resource: _ITaskRef_0571d67b) -> builtins.str:
+    def arn_for_task(cls, resource: "_ITaskRef_0571d67b") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -7795,7 +7820,7 @@ class CfnTask(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTask", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7867,15 +7892,15 @@ class CfnTask(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="taskRef")
-    def task_ref(self) -> _TaskReference_56755658:
+    def task_ref(self) -> "_TaskReference_56755658":
         '''A reference to a Task resource.'''
-        return typing.cast(_TaskReference_56755658, jsii.get(self, "taskRef"))
+        return typing.cast("_TaskReference_56755658", jsii.get(self, "taskRef"))
 
     @builtins.property
     @jsii.member(jsii_name="destinationLocationArn")
@@ -7920,14 +7945,14 @@ class CfnTask(
     @jsii.member(jsii_name="excludes")
     def excludes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTask.FilterRuleProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTask.FilterRuleProperty"]]]]:
         '''Specifies exclude filters that define the files, objects, and folders in your source location that you don't want DataSync to transfer.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTask.FilterRuleProperty"]]]], jsii.get(self, "excludes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTask.FilterRuleProperty"]]]], jsii.get(self, "excludes"))
 
     @excludes.setter
     def excludes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTask.FilterRuleProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTask.FilterRuleProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__acacc184cead1f95fccb09d6e2d3e2f3763099227a59edf6a76e8128856fc021)
@@ -7938,14 +7963,14 @@ class CfnTask(
     @jsii.member(jsii_name="includes")
     def includes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTask.FilterRuleProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTask.FilterRuleProperty"]]]]:
         '''Specifies include filters that define the files, objects, and folders in your source location that you want DataSync to transfer.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTask.FilterRuleProperty"]]]], jsii.get(self, "includes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTask.FilterRuleProperty"]]]], jsii.get(self, "includes"))
 
     @includes.setter
     def includes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTask.FilterRuleProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTask.FilterRuleProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b70b42cfb53e13801c9b46a0aeb316cf7696061c5b7fc11b20c7970679838adb)
@@ -7956,14 +7981,14 @@ class CfnTask(
     @jsii.member(jsii_name="manifestConfig")
     def manifest_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.ManifestConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.ManifestConfigProperty"]]:
         '''The configuration of the manifest that lists the files or objects that you want DataSync to transfer.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.ManifestConfigProperty"]], jsii.get(self, "manifestConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.ManifestConfigProperty"]], jsii.get(self, "manifestConfig"))
 
     @manifest_config.setter
     def manifest_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.ManifestConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.ManifestConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__adfc26e9a88359e12066dd2ec9b2a9e0a61fb79f73189fa8a39e637687c9fa9c)
@@ -7987,14 +8012,14 @@ class CfnTask(
     @jsii.member(jsii_name="options")
     def options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.OptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.OptionsProperty"]]:
         '''Specifies your task's settings, such as preserving file metadata, verifying data integrity, among other options.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.OptionsProperty"]], jsii.get(self, "options"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.OptionsProperty"]], jsii.get(self, "options"))
 
     @options.setter
     def options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.OptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.OptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__155643afb5f1ecdb689d1809d2d2388ec39615a2be33d1719f3b98ba2e76677d)
@@ -8005,14 +8030,14 @@ class CfnTask(
     @jsii.member(jsii_name="schedule")
     def schedule(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.TaskScheduleProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.TaskScheduleProperty"]]:
         '''Specifies a schedule for when you want your task to run.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.TaskScheduleProperty"]], jsii.get(self, "schedule"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.TaskScheduleProperty"]], jsii.get(self, "schedule"))
 
     @schedule.setter
     def schedule(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.TaskScheduleProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.TaskScheduleProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4bc267a8182541bd31db0c914ab3030d3b13f68b424b8e312a7b9267e3b0e4b4)
@@ -8021,12 +8046,12 @@ class CfnTask(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the tags that you want to apply to your task.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b6a7067dff337df84908e53f4652767faada60769f6c9d1eed4c84d05c1d5126)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -8049,14 +8074,14 @@ class CfnTask(
     @jsii.member(jsii_name="taskReportConfig")
     def task_report_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.TaskReportConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.TaskReportConfigProperty"]]:
         '''The configuration of your task report, which provides detailed information about your DataSync transfer.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.TaskReportConfigProperty"]], jsii.get(self, "taskReportConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.TaskReportConfigProperty"]], jsii.get(self, "taskReportConfig"))
 
     @task_report_config.setter
     def task_report_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.TaskReportConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.TaskReportConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__06ecaf368f7ae42942552393e7a68a01ddc8712caa5620400a489d0b07baae6e)
@@ -8129,7 +8154,7 @@ class CfnTask(
         def __init__(
             self,
             *,
-            s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.S3Property", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.S3Property", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies where DataSync uploads your task report.
 
@@ -8162,13 +8187,13 @@ class CfnTask(
         @builtins.property
         def s3(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.S3Property"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.S3Property"]]:
             '''Specifies the Amazon S3 bucket where DataSync uploads your task report.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-task-destination.html#cfn-datasync-task-destination-s3
             '''
             result = self._values.get("s3")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.S3Property"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.S3Property"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8264,7 +8289,7 @@ class CfnTask(
         def __init__(
             self,
             *,
-            source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
+            source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
             action: typing.Optional[builtins.str] = None,
             format: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -8316,7 +8341,7 @@ class CfnTask(
         @builtins.property
         def source(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTask.SourceProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTask.SourceProperty"]:
             '''Specifies the manifest that you want DataSync to use and where it's hosted.
 
             .. epigraph::
@@ -8329,7 +8354,7 @@ class CfnTask(
             '''
             result = self._values.get("source")
             assert result is not None, "Required property 'source' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTask.SourceProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTask.SourceProperty"], result)
 
         @builtins.property
         def action(self) -> typing.Optional[builtins.str]:
@@ -8887,10 +8912,10 @@ class CfnTask(
         def __init__(
             self,
             *,
-            deleted: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.DeletedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            skipped: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.SkippedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            transferred: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.TransferredProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            verified: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.VerifiedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            deleted: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.DeletedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            skipped: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.SkippedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            transferred: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.TransferredProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            verified: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.VerifiedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Customizes the reporting level for aspects of your task report.
 
@@ -8944,7 +8969,7 @@ class CfnTask(
         @builtins.property
         def deleted(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.DeletedProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.DeletedProperty"]]:
             '''Specifies the level of reporting for the files, objects, and directories that Datasync attempted to delete in your destination location.
 
             This only applies if you configure your task to delete data in the destination that isn't in the source.
@@ -8952,34 +8977,34 @@ class CfnTask(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-task-overrides.html#cfn-datasync-task-overrides-deleted
             '''
             result = self._values.get("deleted")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.DeletedProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.DeletedProperty"]], result)
 
         @builtins.property
         def skipped(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.SkippedProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.SkippedProperty"]]:
             '''Specifies the level of reporting for the files, objects, and directories that Datasync attempted to skip during your transfer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-task-overrides.html#cfn-datasync-task-overrides-skipped
             '''
             result = self._values.get("skipped")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.SkippedProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.SkippedProperty"]], result)
 
         @builtins.property
         def transferred(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.TransferredProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.TransferredProperty"]]:
             '''Specifies the level of reporting for the files, objects, and directories that Datasync attempted to transfer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-task-overrides.html#cfn-datasync-task-overrides-transferred
             '''
             result = self._values.get("transferred")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.TransferredProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.TransferredProperty"]], result)
 
         @builtins.property
         def verified(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.VerifiedProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.VerifiedProperty"]]:
             '''Specifies the level of reporting for the files, objects, and directories that Datasync attempted to verify at the end of your transfer.
 
             This only applies if you configure your task to verify data during and after the transfer (which Datasync does by default)
@@ -8987,7 +9012,7 @@ class CfnTask(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-task-overrides.html#cfn-datasync-task-overrides-verified
             '''
             result = self._values.get("verified")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.VerifiedProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.VerifiedProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9149,7 +9174,7 @@ class CfnTask(
         def __init__(
             self,
             *,
-            s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.ManifestConfigSourceS3Property", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.ManifestConfigSourceS3Property", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the manifest that you want DataSync to use and where it's hosted.
 
@@ -9183,13 +9208,13 @@ class CfnTask(
         @builtins.property
         def s3(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.ManifestConfigSourceS3Property"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.ManifestConfigSourceS3Property"]]:
             '''Specifies the S3 bucket where you're hosting the manifest that you want AWS DataSync to use.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-task-source.html#cfn-datasync-task-source-s3
             '''
             result = self._values.get("s3")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.ManifestConfigSourceS3Property"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.ManifestConfigSourceS3Property"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9217,10 +9242,10 @@ class CfnTask(
         def __init__(
             self,
             *,
-            destination: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.DestinationProperty", typing.Dict[builtins.str, typing.Any]]],
+            destination: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.DestinationProperty", typing.Dict[builtins.str, typing.Any]]],
             output_type: builtins.str,
             object_version_ids: typing.Optional[builtins.str] = None,
-            overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.OverridesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.OverridesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             report_level: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Specifies how you want to configure a task report, which provides detailed information about for your AWS DataSync transfer.
@@ -9292,7 +9317,7 @@ class CfnTask(
         @builtins.property
         def destination(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTask.DestinationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTask.DestinationProperty"]:
             '''Specifies the Amazon S3 bucket where DataSync uploads your task report.
 
             For more information, see `Task reports <https://docs.aws.amazon.com/datasync/latest/userguide/task-reports.html#task-report-access>`_ .
@@ -9301,7 +9326,7 @@ class CfnTask(
             '''
             result = self._values.get("destination")
             assert result is not None, "Required property 'destination' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTask.DestinationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTask.DestinationProperty"], result)
 
         @builtins.property
         def output_type(self) -> builtins.str:
@@ -9330,7 +9355,7 @@ class CfnTask(
         @builtins.property
         def overrides(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.OverridesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.OverridesProperty"]]:
             '''Customizes the reporting level for aspects of your task report.
 
             For example, your report might generally only include errors, but you could specify that you want a list of successes and errors just for the files that DataSync attempted to delete in your destination location.
@@ -9338,7 +9363,7 @@ class CfnTask(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datasync-task-taskreportconfig.html#cfn-datasync-task-taskreportconfig-overrides
             '''
             result = self._values.get("overrides")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTask.OverridesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.OverridesProperty"]], result)
 
         @builtins.property
         def report_level(self) -> typing.Optional[builtins.str]:
@@ -9582,18 +9607,18 @@ class CfnTaskProps:
     def __init__(
         self,
         *,
-        destination_location_arn: typing.Union[builtins.str, _ILocationEFSRef_6fba5e2e, _ILocationS3Ref_5240f1a4],
-        source_location_arn: typing.Union[builtins.str, _ILocationNFSRef_01d78c69, _ILocationS3Ref_5240f1a4],
-        cloud_watch_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
-        excludes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.FilterRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        includes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.FilterRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        manifest_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.ManifestConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        destination_location_arn: typing.Union[builtins.str, "_ILocationEFSRef_6fba5e2e", "_ILocationS3Ref_5240f1a4"],
+        source_location_arn: typing.Union[builtins.str, "_ILocationNFSRef_01d78c69", "_ILocationS3Ref_5240f1a4"],
+        cloud_watch_log_group_arn: typing.Optional[typing.Union[builtins.str, "_ILogGroupRef_874d025a"]] = None,
+        excludes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.FilterRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        includes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.FilterRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        manifest_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.ManifestConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.OptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        schedule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.TaskScheduleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.OptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        schedule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.TaskScheduleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         task_mode: typing.Optional[builtins.str] = None,
-        task_report_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.TaskReportConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        task_report_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTask.TaskReportConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTask``.
 
@@ -9615,6 +9640,7 @@ class CfnTaskProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_datasync as datasync
@@ -9746,31 +9772,31 @@ class CfnTaskProps:
     @builtins.property
     def destination_location_arn(
         self,
-    ) -> typing.Union[builtins.str, _ILocationEFSRef_6fba5e2e, _ILocationS3Ref_5240f1a4]:
+    ) -> typing.Union[builtins.str, "_ILocationEFSRef_6fba5e2e", "_ILocationS3Ref_5240f1a4"]:
         '''The Amazon Resource Name (ARN) of an AWS storage resource's location.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-destinationlocationarn
         '''
         result = self._values.get("destination_location_arn")
         assert result is not None, "Required property 'destination_location_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _ILocationEFSRef_6fba5e2e, _ILocationS3Ref_5240f1a4], result)
+        return typing.cast(typing.Union[builtins.str, "_ILocationEFSRef_6fba5e2e", "_ILocationS3Ref_5240f1a4"], result)
 
     @builtins.property
     def source_location_arn(
         self,
-    ) -> typing.Union[builtins.str, _ILocationNFSRef_01d78c69, _ILocationS3Ref_5240f1a4]:
+    ) -> typing.Union[builtins.str, "_ILocationNFSRef_01d78c69", "_ILocationS3Ref_5240f1a4"]:
         '''Specifies the ARN of your transfer's source location.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-sourcelocationarn
         '''
         result = self._values.get("source_location_arn")
         assert result is not None, "Required property 'source_location_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _ILocationNFSRef_01d78c69, _ILocationS3Ref_5240f1a4], result)
+        return typing.cast(typing.Union[builtins.str, "_ILocationNFSRef_01d78c69", "_ILocationS3Ref_5240f1a4"], result)
 
     @builtins.property
     def cloud_watch_log_group_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_ILogGroupRef_874d025a"]]:
         '''Specifies the Amazon Resource Name (ARN) of an Amazon CloudWatch log group for monitoring your task.
 
         For Enhanced mode tasks, you don't need to specify anything. DataSync automatically sends logs to a CloudWatch log group named ``/aws/datasync`` .
@@ -9780,12 +9806,12 @@ class CfnTaskProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-cloudwatchloggrouparn
         '''
         result = self._values.get("cloud_watch_log_group_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_ILogGroupRef_874d025a"]], result)
 
     @builtins.property
     def excludes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTask.FilterRuleProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTask.FilterRuleProperty"]]]]:
         '''Specifies exclude filters that define the files, objects, and folders in your source location that you don't want DataSync to transfer.
 
         For more information and examples, see `Specifying what DataSync transfers by using filters <https://docs.aws.amazon.com/datasync/latest/userguide/filtering.html>`_ .
@@ -9793,12 +9819,12 @@ class CfnTaskProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-excludes
         '''
         result = self._values.get("excludes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTask.FilterRuleProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTask.FilterRuleProperty"]]]], result)
 
     @builtins.property
     def includes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTask.FilterRuleProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTask.FilterRuleProperty"]]]]:
         '''Specifies include filters that define the files, objects, and folders in your source location that you want DataSync to transfer.
 
         For more information and examples, see `Specifying what DataSync transfers by using filters <https://docs.aws.amazon.com/datasync/latest/userguide/filtering.html>`_ .
@@ -9806,12 +9832,12 @@ class CfnTaskProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-includes
         '''
         result = self._values.get("includes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTask.FilterRuleProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTask.FilterRuleProperty"]]]], result)
 
     @builtins.property
     def manifest_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTask.ManifestConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.ManifestConfigProperty"]]:
         '''The configuration of the manifest that lists the files or objects that you want DataSync to transfer.
 
         For more information, see `Specifying what DataSync transfers by using a manifest <https://docs.aws.amazon.com/datasync/latest/userguide/transferring-with-manifest.html>`_ .
@@ -9819,7 +9845,7 @@ class CfnTaskProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-manifestconfig
         '''
         result = self._values.get("manifest_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTask.ManifestConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.ManifestConfigProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -9833,18 +9859,18 @@ class CfnTaskProps:
     @builtins.property
     def options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTask.OptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.OptionsProperty"]]:
         '''Specifies your task's settings, such as preserving file metadata, verifying data integrity, among other options.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-options
         '''
         result = self._values.get("options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTask.OptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.OptionsProperty"]], result)
 
     @builtins.property
     def schedule(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTask.TaskScheduleProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.TaskScheduleProperty"]]:
         '''Specifies a schedule for when you want your task to run.
 
         For more information, see `Scheduling your task <https://docs.aws.amazon.com/datasync/latest/userguide/task-scheduling.html>`_ .
@@ -9852,10 +9878,10 @@ class CfnTaskProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-schedule
         '''
         result = self._values.get("schedule")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTask.TaskScheduleProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.TaskScheduleProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the tags that you want to apply to your task.
 
         *Tags* are key-value pairs that help you manage, filter, and search for your DataSync resources.
@@ -9863,7 +9889,7 @@ class CfnTaskProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def task_mode(self) -> typing.Optional[builtins.str]:
@@ -9879,7 +9905,7 @@ class CfnTaskProps:
     @builtins.property
     def task_report_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTask.TaskReportConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.TaskReportConfigProperty"]]:
         '''The configuration of your task report, which provides detailed information about your DataSync transfer.
 
         For more information, see `Monitoring your DataSync transfers with task reports <https://docs.aws.amazon.com/datasync/latest/userguide/task-reports.html>`_ .
@@ -9887,7 +9913,7 @@ class CfnTaskProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-taskreportconfig
         '''
         result = self._values.get("task_report_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTask.TaskReportConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTask.TaskReportConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

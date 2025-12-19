@@ -112,7 +112,7 @@ class IAccessorRef(
 
     @builtins.property
     @jsii.member(jsii_name="accessorRef")
-    def accessor_ref(self) -> AccessorReference:
+    def accessor_ref(self) -> "AccessorReference":
         '''(experimental) A reference to a Accessor resource.
 
         :stability: experimental
@@ -133,12 +133,12 @@ class _IAccessorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accessorRef")
-    def accessor_ref(self) -> AccessorReference:
+    def accessor_ref(self) -> "AccessorReference":
         '''(experimental) A reference to a Accessor resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccessorReference, jsii.get(self, "accessorRef"))
+        return typing.cast("AccessorReference", jsii.get(self, "accessorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessorRef).__jsii_proxy_class__ = lambda : _IAccessorRefProxy

@@ -37,22 +37,13 @@ from .. import IEnvironmentAware as _IEnvironmentAware_f39049ee
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_iotfleethub.ApplicationReference",
     jsii_struct_bases=[],
-    name_mapping={
-        "application_arn": "applicationArn",
-        "application_id": "applicationId",
-    },
+    name_mapping={"application_arn": "applicationArn"},
 )
 class ApplicationReference:
-    def __init__(
-        self,
-        *,
-        application_arn: builtins.str,
-        application_id: builtins.str,
-    ) -> None:
+    def __init__(self, *, application_arn: builtins.str) -> None:
         '''A reference to a Application resource.
 
         :param application_arn: The ARN of the Application resource.
-        :param application_id: The ApplicationId of the Application resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -63,17 +54,14 @@ class ApplicationReference:
             from aws_cdk.interfaces import aws_iotfleethub as interfaces_iotfleethub
             
             application_reference = interfaces_iotfleethub.ApplicationReference(
-                application_arn="applicationArn",
-                application_id="applicationId"
+                application_arn="applicationArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__00995375b23956a66a2c2fcb9806442f494906c648a1b7a56cca2b8a8077ec8f)
             check_type(argname="argument application_arn", value=application_arn, expected_type=type_hints["application_arn"])
-            check_type(argname="argument application_id", value=application_id, expected_type=type_hints["application_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "application_arn": application_arn,
-            "application_id": application_id,
         }
 
     @builtins.property
@@ -81,13 +69,6 @@ class ApplicationReference:
         '''The ARN of the Application resource.'''
         result = self._values.get("application_arn")
         assert result is not None, "Required property 'application_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def application_id(self) -> builtins.str:
-        '''The ApplicationId of the Application resource.'''
-        result = self._values.get("application_id")
-        assert result is not None, "Required property 'application_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -115,7 +96,7 @@ class IApplicationRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
@@ -136,12 +117,12 @@ class _IApplicationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationReference, jsii.get(self, "applicationRef"))
+        return typing.cast("ApplicationReference", jsii.get(self, "applicationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IApplicationRefProxy
@@ -157,7 +138,6 @@ publication.publish()
 def _typecheckingstub__00995375b23956a66a2c2fcb9806442f494906c648a1b7a56cca2b8a8077ec8f(
     *,
     application_arn: builtins.str,
-    application_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

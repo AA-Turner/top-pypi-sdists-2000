@@ -147,7 +147,7 @@ class IBillingGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="billingGroupRef")
-    def billing_group_ref(self) -> BillingGroupReference:
+    def billing_group_ref(self) -> "BillingGroupReference":
         '''(experimental) A reference to a BillingGroup resource.
 
         :stability: experimental
@@ -168,12 +168,12 @@ class _IBillingGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="billingGroupRef")
-    def billing_group_ref(self) -> BillingGroupReference:
+    def billing_group_ref(self) -> "BillingGroupReference":
         '''(experimental) A reference to a BillingGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(BillingGroupReference, jsii.get(self, "billingGroupRef"))
+        return typing.cast("BillingGroupReference", jsii.get(self, "billingGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBillingGroupRef).__jsii_proxy_class__ = lambda : _IBillingGroupRefProxy
@@ -194,7 +194,7 @@ class ICustomLineItemRef(
 
     @builtins.property
     @jsii.member(jsii_name="customLineItemRef")
-    def custom_line_item_ref(self) -> CustomLineItemReference:
+    def custom_line_item_ref(self) -> "CustomLineItemReference":
         '''(experimental) A reference to a CustomLineItem resource.
 
         :stability: experimental
@@ -215,12 +215,12 @@ class _ICustomLineItemRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="customLineItemRef")
-    def custom_line_item_ref(self) -> CustomLineItemReference:
+    def custom_line_item_ref(self) -> "CustomLineItemReference":
         '''(experimental) A reference to a CustomLineItem resource.
 
         :stability: experimental
         '''
-        return typing.cast(CustomLineItemReference, jsii.get(self, "customLineItemRef"))
+        return typing.cast("CustomLineItemReference", jsii.get(self, "customLineItemRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICustomLineItemRef).__jsii_proxy_class__ = lambda : _ICustomLineItemRefProxy

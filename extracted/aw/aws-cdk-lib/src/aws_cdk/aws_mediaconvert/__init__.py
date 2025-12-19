@@ -125,14 +125,14 @@ class CfnJobTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         settings_json: typing.Any,
-        acceleration_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobTemplate.AccelerationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        acceleration_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJobTemplate.AccelerationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         category: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        hop_destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobTemplate.HopDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        hop_destinations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJobTemplate.HopDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         name: typing.Optional[builtins.str] = None,
         priority: typing.Optional[jsii.Number] = None,
         queue: typing.Optional[builtins.str] = None,
@@ -175,7 +175,10 @@ class CfnJobTemplate(
 
     @jsii.member(jsii_name="arnForJobTemplate")
     @builtins.classmethod
-    def arn_for_job_template(cls, resource: _IJobTemplateRef_427db06b) -> builtins.str:
+    def arn_for_job_template(
+        cls,
+        resource: "_IJobTemplateRef_427db06b",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -197,7 +200,7 @@ class CfnJobTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnJobTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -259,15 +262,15 @@ class CfnJobTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="jobTemplateRef")
-    def job_template_ref(self) -> _JobTemplateReference_f805d838:
+    def job_template_ref(self) -> "_JobTemplateReference_f805d838":
         '''A reference to a JobTemplate resource.'''
-        return typing.cast(_JobTemplateReference_f805d838, jsii.get(self, "jobTemplateRef"))
+        return typing.cast("_JobTemplateReference_f805d838", jsii.get(self, "jobTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="settingsJson")
@@ -286,14 +289,14 @@ class CfnJobTemplate(
     @jsii.member(jsii_name="accelerationSettings")
     def acceleration_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.AccelerationSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.AccelerationSettingsProperty"]]:
         '''Accelerated transcoding can significantly speed up jobs with long, visually complex content.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.AccelerationSettingsProperty"]], jsii.get(self, "accelerationSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.AccelerationSettingsProperty"]], jsii.get(self, "accelerationSettings"))
 
     @acceleration_settings.setter
     def acceleration_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.AccelerationSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.AccelerationSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__296e89e4fb7eab6d9c3e9ffb503c8e7d494b915aaf6ffbeb356846e5b1550dce)
@@ -330,14 +333,14 @@ class CfnJobTemplate(
     @jsii.member(jsii_name="hopDestinations")
     def hop_destinations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.HopDestinationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.HopDestinationProperty"]]]]:
         '''Optional.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.HopDestinationProperty"]]]], jsii.get(self, "hopDestinations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.HopDestinationProperty"]]]], jsii.get(self, "hopDestinations"))
 
     @hop_destinations.setter
     def hop_destinations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJobTemplate.HopDestinationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.HopDestinationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6d0fbb738f4409f521b0e8bc0586e0749bf26afe3de32a968ad27dd11e7b4fbf)
@@ -582,10 +585,10 @@ class CfnJobTemplateProps:
         self,
         *,
         settings_json: typing.Any,
-        acceleration_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobTemplate.AccelerationSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        acceleration_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJobTemplate.AccelerationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         category: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        hop_destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobTemplate.HopDestinationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        hop_destinations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJobTemplate.HopDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         name: typing.Optional[builtins.str] = None,
         priority: typing.Optional[jsii.Number] = None,
         queue: typing.Optional[builtins.str] = None,
@@ -689,7 +692,7 @@ class CfnJobTemplateProps:
     @builtins.property
     def acceleration_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJobTemplate.AccelerationSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.AccelerationSettingsProperty"]]:
         '''Accelerated transcoding can significantly speed up jobs with long, visually complex content.
 
         Outputs that use this feature incur pro-tier pricing. For information about feature limitations, For more information, see `Job Limitations for Accelerated Transcoding in AWS Elemental MediaConvert <https://docs.aws.amazon.com/mediaconvert/latest/ug/job-requirements.html>`_ in the *AWS Elemental MediaConvert User Guide* .
@@ -697,7 +700,7 @@ class CfnJobTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconvert-jobtemplate.html#cfn-mediaconvert-jobtemplate-accelerationsettings
         '''
         result = self._values.get("acceleration_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJobTemplate.AccelerationSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.AccelerationSettingsProperty"]], result)
 
     @builtins.property
     def category(self) -> typing.Optional[builtins.str]:
@@ -724,7 +727,7 @@ class CfnJobTemplateProps:
     @builtins.property
     def hop_destinations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJobTemplate.HopDestinationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.HopDestinationProperty"]]]]:
         '''Optional.
 
         Configuration for a destination queue to which the job can hop once a customer-defined minimum wait time has passed. For more information, see `Setting Up Queue Hopping to Avoid Long Waits <https://docs.aws.amazon.com/mediaconvert/latest/ug/setting-up-queue-hopping-to-avoid-long-waits.html>`_ in the *AWS Elemental MediaConvert User Guide* .
@@ -732,7 +735,7 @@ class CfnJobTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconvert-jobtemplate.html#cfn-mediaconvert-jobtemplate-hopdestinations
         '''
         result = self._values.get("hop_destinations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJobTemplate.HopDestinationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJobTemplate.HopDestinationProperty"]]]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -869,7 +872,7 @@ class CfnPreset(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         settings_json: typing.Any,
@@ -904,7 +907,7 @@ class CfnPreset(
 
     @jsii.member(jsii_name="arnForPreset")
     @builtins.classmethod
-    def arn_for_preset(cls, resource: _IPresetRef_e69b176f) -> builtins.str:
+    def arn_for_preset(cls, resource: "_IPresetRef_e69b176f") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -926,7 +929,7 @@ class CfnPreset(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPreset", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -988,15 +991,15 @@ class CfnPreset(
 
     @builtins.property
     @jsii.member(jsii_name="presetRef")
-    def preset_ref(self) -> _PresetReference_4047edf2:
+    def preset_ref(self) -> "_PresetReference_4047edf2":
         '''A reference to a Preset resource.'''
-        return typing.cast(_PresetReference_4047edf2, jsii.get(self, "presetRef"))
+        return typing.cast("_PresetReference_4047edf2", jsii.get(self, "presetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="settingsJson")
@@ -1232,7 +1235,7 @@ class CfnQueue(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         concurrent_jobs: typing.Optional[jsii.Number] = None,
@@ -1270,7 +1273,7 @@ class CfnQueue(
 
     @jsii.member(jsii_name="arnForQueue")
     @builtins.classmethod
-    def arn_for_queue(cls, resource: _IQueueRef_ef5dbb18) -> builtins.str:
+    def arn_for_queue(cls, resource: "_IQueueRef_ef5dbb18") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1292,7 +1295,7 @@ class CfnQueue(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueue", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1354,15 +1357,15 @@ class CfnQueue(
 
     @builtins.property
     @jsii.member(jsii_name="queueRef")
-    def queue_ref(self) -> _QueueReference_e4ca703e:
+    def queue_ref(self) -> "_QueueReference_e4ca703e":
         '''A reference to a Queue resource.'''
-        return typing.cast(_QueueReference_e4ca703e, jsii.get(self, "queueRef"))
+        return typing.cast("_QueueReference_e4ca703e", jsii.get(self, "queueRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="concurrentJobs")

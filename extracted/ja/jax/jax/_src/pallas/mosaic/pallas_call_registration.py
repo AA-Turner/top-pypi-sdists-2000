@@ -18,6 +18,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 import dataclasses
+import json
 from typing import cast
 
 import jax
@@ -46,8 +47,7 @@ def _maybe_cast_to_int(x: jax.Array | jax_core.AbstractValue):
   after loading from a memref inside of the kernel.
   """
   assert isinstance(
-      x, (jax.Array, jax_core.ShapedArray, jax_core.DShapedArray,
-          state_types.AbstractLinVal)
+      x, (jax.Array, jax_core.ShapedArray, state_types.AbstractLinVal)
   ), type(x)
   if isinstance(x, jax.Array):
     if dtypes.issubdtype(x.dtype, jax.numpy.bool_):
@@ -62,7 +62,7 @@ def _maybe_cast_to_int(x: jax.Array | jax_core.AbstractValue):
 
 
 def _get_memory_space_from_aval(
-    out_aval: jax_core.AbstractValue,
+    out_aval: jax_core.AbstractValue, kernel_type: tpu_core.KernelType
 ) -> tpu_custom_call.MemorySpace | None:
   if not isinstance(out_aval, jax_core.ShapedArray):
     raise ValueError("Memory spaces not defined for non-ShapedArrays")
@@ -73,10 +73,6 @@ def _get_memory_space_from_aval(
   # If we are passed an aval with an explicit memory space tag, we use it
   # to constrain the memory space.
   match out_aval.memory_space:
-    case None:
-      return None
-    case tpu_core.MemorySpace.ANY:
-      return None
     case tpu_core.MemorySpace.HBM:
       return tpu_custom_call.MemorySpace.HBM
     case tpu_core.MemorySpace.VMEM:
@@ -84,20 +80,29 @@ def _get_memory_space_from_aval(
     case tpu_core.MemorySpace.SMEM:
       return tpu_custom_call.MemorySpace.SMEM
     case tpu_core.MemorySpace.SEMAPHORE:
-      return tpu_custom_call.MemorySpace.SEMAPHORE_MEM
+      match kernel_type:
+        case tpu_core.KernelType.SC_SCALAR_SUBCORE:
+          return tpu_custom_call.MemorySpace.SC_SCALAR_SEMAPHORE_MEM
+        case tpu_core.KernelType.TC:
+          return tpu_custom_call.MemorySpace.SEMAPHORE_MEM
+        case _:
+          raise ValueError(f"Invalid kernel type for semaphore: {kernel_type}")
     case tpu_core.MemorySpace.HOST:
       return tpu_custom_call.MemorySpace.HOST
   return None
 
 
 def _get_memory_spaces_from_avals(
-    avals: Sequence[jax_core.AbstractValue],
+    avals: Sequence[jax_core.AbstractValue], kernel_type: tpu_core.KernelType
 ) -> tuple[tpu_custom_call.MemorySpace | None, ...] | None:
   memory_spaces = None
   if any(
       isinstance(aval, pallas_core.ShapedArrayWithMemorySpace) for aval in avals
   ):
-    memory_spaces = tuple(map(_get_memory_space_from_aval, avals))
+    memory_spaces = tuple(
+        _get_memory_space_from_aval(aval, kernel_type=kernel_type)
+        for aval in avals
+    )
   return memory_spaces
 
 
@@ -140,7 +145,7 @@ def pallas_call_tpu_lowering_rule(
   mlir_ctx.load_all_available_dialects()
   tpu.register_dialect(mlir_ctx)
 
-  match mosaic_params.kernel_type:
+  match (kernel_type := mosaic_params.kernel_type):
     case tpu_core.KernelType.TC:
       lower_jaxpr_to_module = lowering.lower_jaxpr_to_module
     case tpu_core.KernelType.SC_SCALAR_SUBCORE | tpu_core.KernelType.SC_VECTOR_SUBCORE:
@@ -156,7 +161,7 @@ def pallas_call_tpu_lowering_rule(
         grid_mapping,
         jaxpr,
         dimension_semantics=mosaic_params.dimension_semantics,
-        kernel_type=mosaic_params.kernel_type,
+        kernel_type=kernel_type,
         mesh=jax_mesh,
         dynamic_shape_replacement_enabled=pallas_core.dynamic_shapes_export_enabled(),
     )
@@ -191,18 +196,17 @@ def pallas_call_tpu_lowering_rule(
   # Dynamic grid bounds have to go at the front.
   dynamic_grid_args, args = in_nodes[:num_dyn_bounds], in_nodes[num_dyn_bounds:]
   kernel_ctx = ctx.replace(avals_in=kernel_in_avals, avals_out=kernel_out_avals)
-  output_memory_spaces = _get_memory_spaces_from_avals(out_avals)
+  output_memory_spaces = _get_memory_spaces_from_avals(
+      out_avals, kernel_type=kernel_type
+  )
   input_memory_spaces = None
   if any(
       isinstance(aval, pallas_core.ShapedArrayWithMemorySpace)
       for aval in ctx.avals_in
   ):
-    # TODO(sharadmv): Support dynamic grid bounds.
-    if num_dyn_bounds != 0:
-      raise NotImplementedError(
-          "Dynamic grid bounds are not supported when specifying memory spaces for inputs."
-      )
-    input_memory_spaces = _get_memory_spaces_from_avals(ctx.avals_in)
+    input_memory_spaces = _get_memory_spaces_from_avals(
+        ctx.avals_in, kernel_type=kernel_type
+    )
   if cost_estimate is not None:
     mosaic_cost_estimate = cast(
         tpu_custom_call.CostEstimate, dataclasses.asdict(cost_estimate)
@@ -246,6 +250,39 @@ def pallas_call_tpu_lowering_rule(
       has_side_effects = tpu_custom_call.TpuSideEffectType.SIDE_EFFECTING
     case _:
       raise ValueError(f"Invalid side effect type: {mosaic_params.has_side_effects}")
+  tiling: tpu_custom_call.Tiling | None = None
+  if mosaic_params.use_tc_tiling_on_sc is not None:
+    if kernel_type not in (
+        tpu_core.KernelType.SC_SCALAR_SUBCORE,
+        tpu_core.KernelType.SC_VECTOR_SUBCORE,
+    ):
+      raise ValueError(
+          "use_tc_tiling_on_sc= is only supported for SC_*_SUBCORE kernels"
+      )
+
+    tiling = (
+        tpu_custom_call.Tiling.COMPACT
+        if mosaic_params.use_tc_tiling_on_sc
+        else tpu_custom_call.Tiling.SPARSE_CORE
+    )
+  dict_metadata = dict(metadata) if metadata is not None else {}
+  del metadata
+  if jax_mesh is not None:
+    mesh_axes = {
+        e.name
+        for e in jaxpr.effects
+        if isinstance(e, jax_core.NamedAxisEffect)
+        # Filter for only device mesh axis name effects
+        and e.name in jax_mesh.axis_names
+    }
+    # Only put mesh axes in metadata if there are any.
+    if mesh_axes:
+      if "mesh_axes" in dict_metadata:
+        raise ValueError("Metadata already contains mesh axes.")
+      mesh_axes_list = list(mesh_axes)
+      if all(isinstance(a, str) for a in mesh_axes):
+        mesh_axes_list = sorted(mesh_axes)  # type: ignore
+      dict_metadata["mesh_axes"] = json.dumps(mesh_axes_list)
   out_nodes = mosaic.lower_module_to_custom_call(
       kernel_ctx,
       *dynamic_grid_args,
@@ -265,10 +302,11 @@ def pallas_call_tpu_lowering_rule(
       output_memory_spaces=output_memory_spaces,
       disable_bounds_checks=mosaic_params.disable_bounds_checks,
       input_memory_spaces=input_memory_spaces,
-      metadata=dict(metadata) if metadata is not None else None,
+      metadata=dict_metadata,
       skip_device_barrier=mosaic_params.skip_device_barrier,
       allow_collective_id_without_custom_barrier=mosaic_params.allow_collective_id_without_custom_barrier,
       shape_invariant_numerics=mosaic_params.shape_invariant_numerics,
+      tiling=tiling,
   )
   _maybe_cast_to_bool = (
       lambda x, aval: x.astype(jax.numpy.bool_)

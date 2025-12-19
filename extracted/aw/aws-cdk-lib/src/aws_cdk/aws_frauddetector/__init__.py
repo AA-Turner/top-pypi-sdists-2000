@@ -99,6 +99,7 @@ class CfnDetector(
 
     Example::
 
+        from aws_cdk import CfnTag, CfnTag, CfnTag, CfnTag, CfnTag, CfnTag, CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_frauddetector as frauddetector
@@ -201,17 +202,17 @@ class CfnDetector(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         detector_id: builtins.str,
-        event_type: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.EventTypeProperty", typing.Dict[builtins.str, typing.Any]]],
-        rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        associated_models: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.ModelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        event_type: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.EventTypeProperty", typing.Dict[builtins.str, typing.Any]]],
+        rules: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        associated_models: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.ModelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         detector_version_status: typing.Optional[builtins.str] = None,
         rule_execution_mode: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::FraudDetector::Detector``.
 
@@ -245,7 +246,7 @@ class CfnDetector(
 
     @jsii.member(jsii_name="arnForDetector")
     @builtins.classmethod
-    def arn_for_detector(cls, resource: _IDetectorRef_823ffdab) -> builtins.str:
+    def arn_for_detector(cls, resource: "_IDetectorRef_823ffdab") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -267,7 +268,7 @@ class CfnDetector(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDetector", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -366,15 +367,15 @@ class CfnDetector(
 
     @builtins.property
     @jsii.member(jsii_name="detectorRef")
-    def detector_ref(self) -> _DetectorReference_9eafba64:
+    def detector_ref(self) -> "_DetectorReference_9eafba64":
         '''A reference to a Detector resource.'''
-        return typing.cast(_DetectorReference_9eafba64, jsii.get(self, "detectorRef"))
+        return typing.cast("_DetectorReference_9eafba64", jsii.get(self, "detectorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="detectorId")
@@ -393,14 +394,14 @@ class CfnDetector(
     @jsii.member(jsii_name="eventType")
     def event_type(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnDetector.EventTypeProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDetector.EventTypeProperty"]:
         '''The event type associated with this detector.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDetector.EventTypeProperty"], jsii.get(self, "eventType"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDetector.EventTypeProperty"], jsii.get(self, "eventType"))
 
     @event_type.setter
     def event_type(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnDetector.EventTypeProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnDetector.EventTypeProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__93bd5757764ac87038d7f200cd3d8de7e8b2fe7c1672e6177be640824ba52ccf)
@@ -411,14 +412,14 @@ class CfnDetector(
     @jsii.member(jsii_name="rules")
     def rules(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.RuleProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.RuleProperty"]]]:
         '''The rules to include in the detector version.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.RuleProperty"]]], jsii.get(self, "rules"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.RuleProperty"]]], jsii.get(self, "rules"))
 
     @rules.setter
     def rules(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.RuleProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.RuleProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9fb8a2023ee1e11b475185f1ce6d40e0f9724e1f39f830efce457fec14d6e803)
@@ -429,14 +430,14 @@ class CfnDetector(
     @jsii.member(jsii_name="associatedModels")
     def associated_models(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.ModelProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.ModelProperty"]]]]:
         '''The models to associate with this detector.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.ModelProperty"]]]], jsii.get(self, "associatedModels"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.ModelProperty"]]]], jsii.get(self, "associatedModels"))
 
     @associated_models.setter
     def associated_models(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.ModelProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.ModelProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7fa17c6e2d7f7f459019fd5d15924131bdf90bb9a9137f9b0d489a3063bb0c57)
@@ -484,12 +485,12 @@ class CfnDetector(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__79bbcae57d55d3a1292ee375130b1ce78e88694b733f5018de1532c9840f2d00)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -515,10 +516,10 @@ class CfnDetector(
             arn: typing.Optional[builtins.str] = None,
             created_time: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
-            inline: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            inline: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             last_updated_time: typing.Optional[builtins.str] = None,
             name: typing.Optional[builtins.str] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The entity type details.
 
@@ -535,6 +536,7 @@ class CfnDetector(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_frauddetector as frauddetector
@@ -607,7 +609,7 @@ class CfnDetector(
         @builtins.property
         def inline(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the resource is defined within this CloudFormation template and impacts the create, update, and delete behavior of the stack.
 
             If the value is ``true`` , CloudFormation will create/update/delete the resource when creating/updating/deleting the stack. If the value is ``false`` , CloudFormation will validate that the object exists and then use it within the resource without making changes to the object.
@@ -617,7 +619,7 @@ class CfnDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-entitytype.html#cfn-frauddetector-detector-entitytype-inline
             '''
             result = self._values.get("inline")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def last_updated_time(self) -> typing.Optional[builtins.str]:
@@ -638,7 +640,7 @@ class CfnDetector(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''An array of key-value pairs to apply to this resource.
 
             For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -646,7 +648,7 @@ class CfnDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-entitytype.html#cfn-frauddetector-detector-entitytype-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -682,13 +684,13 @@ class CfnDetector(
             arn: typing.Optional[builtins.str] = None,
             created_time: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
-            entity_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.EntityTypeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            event_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.EventVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            inline: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.LabelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            entity_types: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.EntityTypeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            event_variables: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.EventVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            inline: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            labels: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.LabelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             last_updated_time: typing.Optional[builtins.str] = None,
             name: typing.Optional[builtins.str] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The event type details.
 
@@ -708,6 +710,7 @@ class CfnDetector(
 
             Example::
 
+                from aws_cdk import CfnTag, CfnTag, CfnTag, CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_frauddetector as frauddetector
@@ -829,29 +832,29 @@ class CfnDetector(
         @builtins.property
         def entity_types(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.EntityTypeProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.EntityTypeProperty"]]]]:
             '''The event type entity types.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-eventtype.html#cfn-frauddetector-detector-eventtype-entitytypes
             '''
             result = self._values.get("entity_types")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.EntityTypeProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.EntityTypeProperty"]]]], result)
 
         @builtins.property
         def event_variables(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.EventVariableProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.EventVariableProperty"]]]]:
             '''The event type event variables.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-eventtype.html#cfn-frauddetector-detector-eventtype-eventvariables
             '''
             result = self._values.get("event_variables")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.EventVariableProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.EventVariableProperty"]]]], result)
 
         @builtins.property
         def inline(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the resource is defined within this CloudFormation template and impacts the create, update, and delete behavior of the stack.
 
             If the value is ``true`` , CloudFormation will create/update/delete the resource when creating/updating/deleting the stack. If the value is ``false`` , CloudFormation will validate that the object exists and then use it within the resource without making changes to the object.
@@ -861,18 +864,18 @@ class CfnDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-eventtype.html#cfn-frauddetector-detector-eventtype-inline
             '''
             result = self._values.get("inline")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def labels(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.LabelProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.LabelProperty"]]]]:
             '''The event type labels.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-eventtype.html#cfn-frauddetector-detector-eventtype-labels
             '''
             result = self._values.get("labels")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.LabelProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.LabelProperty"]]]], result)
 
         @builtins.property
         def last_updated_time(self) -> typing.Optional[builtins.str]:
@@ -893,7 +896,7 @@ class CfnDetector(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''An array of key-value pairs to apply to this resource.
 
             For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -901,7 +904,7 @@ class CfnDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-eventtype.html#cfn-frauddetector-detector-eventtype-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -941,10 +944,10 @@ class CfnDetector(
             data_type: typing.Optional[builtins.str] = None,
             default_value: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
-            inline: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            inline: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             last_updated_time: typing.Optional[builtins.str] = None,
             name: typing.Optional[builtins.str] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
             variable_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The event type variable for the detector.
@@ -966,6 +969,7 @@ class CfnDetector(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_frauddetector as frauddetector
@@ -1089,7 +1093,7 @@ class CfnDetector(
         @builtins.property
         def inline(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the resource is defined within this CloudFormation template and impacts the create, update, and delete behavior of the stack.
 
             If the value is ``true`` , CloudFormation will create/update/delete the resource when creating/updating/deleting the stack. If the value is ``false`` , CloudFormation will validate that the object exists and then use it within the resource without making changes to the object.
@@ -1099,7 +1103,7 @@ class CfnDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-eventvariable.html#cfn-frauddetector-detector-eventvariable-inline
             '''
             result = self._values.get("inline")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def last_updated_time(self) -> typing.Optional[builtins.str]:
@@ -1120,7 +1124,7 @@ class CfnDetector(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''An array of key-value pairs to apply to this resource.
 
             For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -1128,7 +1132,7 @@ class CfnDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-eventvariable.html#cfn-frauddetector-detector-eventvariable-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         @builtins.property
         def variable_type(self) -> typing.Optional[builtins.str]:
@@ -1172,10 +1176,10 @@ class CfnDetector(
             arn: typing.Optional[builtins.str] = None,
             created_time: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
-            inline: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            inline: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             last_updated_time: typing.Optional[builtins.str] = None,
             name: typing.Optional[builtins.str] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The label details.
 
@@ -1192,6 +1196,7 @@ class CfnDetector(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_frauddetector as frauddetector
@@ -1264,7 +1269,7 @@ class CfnDetector(
         @builtins.property
         def inline(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the resource is defined within this CloudFormation template and impacts the create, update, and delete behavior of the stack.
 
             If the value is ``true`` , CloudFormation will create/update/delete the resource when creating/updating/deleting the stack. If the value is ``false`` , CloudFormation will validate that the object exists and then use it within the resource without making changes to the object.
@@ -1274,7 +1279,7 @@ class CfnDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-label.html#cfn-frauddetector-detector-label-inline
             '''
             result = self._values.get("inline")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def last_updated_time(self) -> typing.Optional[builtins.str]:
@@ -1295,7 +1300,7 @@ class CfnDetector(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''An array of key-value pairs to apply to this resource.
 
             For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -1303,7 +1308,7 @@ class CfnDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-label.html#cfn-frauddetector-detector-label-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1387,10 +1392,10 @@ class CfnDetector(
             arn: typing.Optional[builtins.str] = None,
             created_time: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
-            inline: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            inline: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             last_updated_time: typing.Optional[builtins.str] = None,
             name: typing.Optional[builtins.str] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The outcome.
 
@@ -1407,6 +1412,7 @@ class CfnDetector(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_frauddetector as frauddetector
@@ -1479,7 +1485,7 @@ class CfnDetector(
         @builtins.property
         def inline(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the resource is defined within this CloudFormation template and impacts the create, update, and delete behavior of the stack.
 
             If the value is ``true`` , CloudFormation will create/update/delete the resource when creating/updating/deleting the stack. If the value is ``false`` , CloudFormation will validate that the object exists and then use it within the resource without making changes to the object.
@@ -1489,7 +1495,7 @@ class CfnDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-outcome.html#cfn-frauddetector-detector-outcome-inline
             '''
             result = self._values.get("inline")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def last_updated_time(self) -> typing.Optional[builtins.str]:
@@ -1510,7 +1516,7 @@ class CfnDetector(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''An array of key-value pairs to apply to this resource.
 
             For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -1518,7 +1524,7 @@ class CfnDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-outcome.html#cfn-frauddetector-detector-outcome-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1559,10 +1565,10 @@ class CfnDetector(
             expression: typing.Optional[builtins.str] = None,
             language: typing.Optional[builtins.str] = None,
             last_updated_time: typing.Optional[builtins.str] = None,
-            outcomes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetector.OutcomeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            outcomes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.OutcomeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             rule_id: typing.Optional[builtins.str] = None,
             rule_version: typing.Optional[builtins.str] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A rule.
 
@@ -1583,6 +1589,7 @@ class CfnDetector(
 
             Example::
 
+                from aws_cdk import CfnTag, CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_frauddetector as frauddetector
@@ -1722,13 +1729,13 @@ class CfnDetector(
         @builtins.property
         def outcomes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.OutcomeProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.OutcomeProperty"]]]]:
             '''The rule outcome.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-rule.html#cfn-frauddetector-detector-rule-outcomes
             '''
             result = self._values.get("outcomes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDetector.OutcomeProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.OutcomeProperty"]]]], result)
 
         @builtins.property
         def rule_id(self) -> typing.Optional[builtins.str]:
@@ -1749,7 +1756,7 @@ class CfnDetector(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''An array of key-value pairs to apply to this resource.
 
             For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -1757,7 +1764,7 @@ class CfnDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-detector-rule.html#cfn-frauddetector-detector-rule-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1790,13 +1797,13 @@ class CfnDetectorProps:
         self,
         *,
         detector_id: builtins.str,
-        event_type: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDetector.EventTypeProperty, typing.Dict[builtins.str, typing.Any]]],
-        rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDetector.RuleProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        associated_models: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDetector.ModelProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        event_type: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.EventTypeProperty", typing.Dict[builtins.str, typing.Any]]],
+        rules: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        associated_models: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDetector.ModelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         detector_version_status: typing.Optional[builtins.str] = None,
         rule_execution_mode: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDetector``.
 
@@ -1814,6 +1821,7 @@ class CfnDetectorProps:
 
         Example::
 
+            from aws_cdk import CfnTag, CfnTag, CfnTag, CfnTag, CfnTag, CfnTag, CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_frauddetector as frauddetector
@@ -1952,31 +1960,31 @@ class CfnDetectorProps:
     @builtins.property
     def event_type(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnDetector.EventTypeProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDetector.EventTypeProperty"]:
         '''The event type associated with this detector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-detector.html#cfn-frauddetector-detector-eventtype
         '''
         result = self._values.get("event_type")
         assert result is not None, "Required property 'event_type' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnDetector.EventTypeProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDetector.EventTypeProperty"], result)
 
     @builtins.property
     def rules(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDetector.RuleProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.RuleProperty"]]]:
         '''The rules to include in the detector version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-detector.html#cfn-frauddetector-detector-rules
         '''
         result = self._values.get("rules")
         assert result is not None, "Required property 'rules' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDetector.RuleProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.RuleProperty"]]], result)
 
     @builtins.property
     def associated_models(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDetector.ModelProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.ModelProperty"]]]]:
         '''The models to associate with this detector.
 
         You must provide the ARNs of all the models you want to associate.
@@ -1984,7 +1992,7 @@ class CfnDetectorProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-detector.html#cfn-frauddetector-detector-associatedmodels
         '''
         result = self._values.get("associated_models")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDetector.ModelProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDetector.ModelProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -2026,7 +2034,7 @@ class CfnDetectorProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -2034,7 +2042,7 @@ class CfnDetectorProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-detector.html#cfn-frauddetector-detector-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2064,6 +2072,7 @@ class CfnEntityType(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_frauddetector as frauddetector
@@ -2082,12 +2091,12 @@ class CfnEntityType(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::FraudDetector::EntityType``.
 
@@ -2107,7 +2116,7 @@ class CfnEntityType(
 
     @jsii.member(jsii_name="arnForEntityType")
     @builtins.classmethod
-    def arn_for_entity_type(cls, resource: _IEntityTypeRef_2da68e08) -> builtins.str:
+    def arn_for_entity_type(cls, resource: "_IEntityTypeRef_2da68e08") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2129,7 +2138,7 @@ class CfnEntityType(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEntityType", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2192,15 +2201,15 @@ class CfnEntityType(
 
     @builtins.property
     @jsii.member(jsii_name="entityTypeRef")
-    def entity_type_ref(self) -> _EntityTypeReference_c0d379d2:
+    def entity_type_ref(self) -> "_EntityTypeReference_c0d379d2":
         '''A reference to a EntityType resource.'''
-        return typing.cast(_EntityTypeReference_c0d379d2, jsii.get(self, "entityTypeRef"))
+        return typing.cast("_EntityTypeReference_c0d379d2", jsii.get(self, "entityTypeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2230,12 +2239,12 @@ class CfnEntityType(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A key and value pair.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1c909dc2ea7c1434dc4017053808f37d5041edd5e473826f0152aff8c19dd4d5)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2253,7 +2262,7 @@ class CfnEntityTypeProps:
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEntityType``.
 
@@ -2266,6 +2275,7 @@ class CfnEntityTypeProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_frauddetector as frauddetector
@@ -2316,13 +2326,13 @@ class CfnEntityTypeProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A key and value pair.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-entitytype.html#cfn-frauddetector-entitytype-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2352,6 +2362,7 @@ class CfnEventType(
 
     Example::
 
+        from aws_cdk import CfnTag, CfnTag, CfnTag, CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_frauddetector as frauddetector
@@ -2410,15 +2421,15 @@ class CfnEventType(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        entity_types: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventType.EntityTypeProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        event_variables: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventType.EventVariableProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        labels: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventType.LabelProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        entity_types: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventType.EntityTypeProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        event_variables: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventType.EventVariableProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        labels: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventType.LabelProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::FraudDetector::EventType``.
 
@@ -2448,7 +2459,7 @@ class CfnEventType(
 
     @jsii.member(jsii_name="arnForEventType")
     @builtins.classmethod
-    def arn_for_event_type(cls, resource: _IEventTypeRef_918636db) -> builtins.str:
+    def arn_for_event_type(cls, resource: "_IEventTypeRef_918636db") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2470,7 +2481,7 @@ class CfnEventType(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventType", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2533,28 +2544,28 @@ class CfnEventType(
 
     @builtins.property
     @jsii.member(jsii_name="eventTypeRef")
-    def event_type_ref(self) -> _EventTypeReference_8cc3d4bd:
+    def event_type_ref(self) -> "_EventTypeReference_8cc3d4bd":
         '''A reference to a EventType resource.'''
-        return typing.cast(_EventTypeReference_8cc3d4bd, jsii.get(self, "eventTypeRef"))
+        return typing.cast("_EventTypeReference_8cc3d4bd", jsii.get(self, "eventTypeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="entityTypes")
     def entity_types(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventType.EntityTypeProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.EntityTypeProperty"]]]:
         '''The event type entity types.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventType.EntityTypeProperty"]]], jsii.get(self, "entityTypes"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.EntityTypeProperty"]]], jsii.get(self, "entityTypes"))
 
     @entity_types.setter
     def entity_types(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventType.EntityTypeProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.EntityTypeProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__53bb265a6c55aad83b33927c1087b3e8bc522ccd1d14bcfd6782272dff526d11)
@@ -2565,14 +2576,14 @@ class CfnEventType(
     @jsii.member(jsii_name="eventVariables")
     def event_variables(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventType.EventVariableProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.EventVariableProperty"]]]:
         '''The event type event variables.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventType.EventVariableProperty"]]], jsii.get(self, "eventVariables"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.EventVariableProperty"]]], jsii.get(self, "eventVariables"))
 
     @event_variables.setter
     def event_variables(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventType.EventVariableProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.EventVariableProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__069acb584ea2685e6dec07d73d0d6962da831960b0309eee686ac2523e72d972)
@@ -2583,14 +2594,14 @@ class CfnEventType(
     @jsii.member(jsii_name="labels")
     def labels(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventType.LabelProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.LabelProperty"]]]:
         '''The event type labels.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventType.LabelProperty"]]], jsii.get(self, "labels"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.LabelProperty"]]], jsii.get(self, "labels"))
 
     @labels.setter
     def labels(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventType.LabelProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.LabelProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__365faaa83e644ceabaa6459d7b1a94dc88c201e84990388c642c666254e5beb4)
@@ -2625,12 +2636,12 @@ class CfnEventType(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e5422e1150c24f0251536c92e0de44a7dd468b252c7e492f7885af852df4a03d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2656,10 +2667,10 @@ class CfnEventType(
             arn: typing.Optional[builtins.str] = None,
             created_time: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
-            inline: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            inline: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             last_updated_time: typing.Optional[builtins.str] = None,
             name: typing.Optional[builtins.str] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The entity type details.
 
@@ -2676,6 +2687,7 @@ class CfnEventType(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_frauddetector as frauddetector
@@ -2748,7 +2760,7 @@ class CfnEventType(
         @builtins.property
         def inline(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the resource is defined within this CloudFormation template and impacts the create, update, and delete behavior of the stack.
 
             If the value is ``true`` , CloudFormation will create/update/delete the resource when creating/updating/deleting the stack. If the value is ``false`` , CloudFormation will validate that the object exists and then use it within the resource without making changes to the object.
@@ -2758,7 +2770,7 @@ class CfnEventType(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-eventtype-entitytype.html#cfn-frauddetector-eventtype-entitytype-inline
             '''
             result = self._values.get("inline")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def last_updated_time(self) -> typing.Optional[builtins.str]:
@@ -2781,7 +2793,7 @@ class CfnEventType(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''An array of key-value pairs to apply to this resource.
 
             For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -2789,7 +2801,7 @@ class CfnEventType(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-eventtype-entitytype.html#cfn-frauddetector-eventtype-entitytype-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2829,10 +2841,10 @@ class CfnEventType(
             data_type: typing.Optional[builtins.str] = None,
             default_value: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
-            inline: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            inline: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             last_updated_time: typing.Optional[builtins.str] = None,
             name: typing.Optional[builtins.str] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
             variable_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The variables associated with this event type.
@@ -2854,6 +2866,7 @@ class CfnEventType(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_frauddetector as frauddetector
@@ -2975,7 +2988,7 @@ class CfnEventType(
         @builtins.property
         def inline(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the resource is defined within this CloudFormation template and impacts the create, update, and delete behavior of the stack.
 
             If the value is ``true`` , CloudFormation will create/update/delete the resource when creating/updating/deleting the stack. If the value is ``false`` , CloudFormation will validate that the object exists and then use it within the resource without making changes to the object.
@@ -2985,7 +2998,7 @@ class CfnEventType(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-eventtype-eventvariable.html#cfn-frauddetector-eventtype-eventvariable-inline
             '''
             result = self._values.get("inline")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def last_updated_time(self) -> typing.Optional[builtins.str]:
@@ -3006,7 +3019,7 @@ class CfnEventType(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''An array of key-value pairs to apply to this resource.
 
             For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -3014,7 +3027,7 @@ class CfnEventType(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-eventtype-eventvariable.html#cfn-frauddetector-eventtype-eventvariable-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         @builtins.property
         def variable_type(self) -> typing.Optional[builtins.str]:
@@ -3058,10 +3071,10 @@ class CfnEventType(
             arn: typing.Optional[builtins.str] = None,
             created_time: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
-            inline: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            inline: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             last_updated_time: typing.Optional[builtins.str] = None,
             name: typing.Optional[builtins.str] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The label associated with the event type.
 
@@ -3078,6 +3091,7 @@ class CfnEventType(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_frauddetector as frauddetector
@@ -3150,7 +3164,7 @@ class CfnEventType(
         @builtins.property
         def inline(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the resource is defined within this CloudFormation template and impacts the create, update, and delete behavior of the stack.
 
             If the value is ``true`` , CloudFormation will create/update/delete the resource when creating/updating/deleting the stack. If the value is ``false`` , CloudFormation will validate that the object exists and then use it within the resource without making changes to the object.
@@ -3160,7 +3174,7 @@ class CfnEventType(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-eventtype-label.html#cfn-frauddetector-eventtype-label-inline
             '''
             result = self._values.get("inline")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def last_updated_time(self) -> typing.Optional[builtins.str]:
@@ -3181,7 +3195,7 @@ class CfnEventType(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''An array of key-value pairs to apply to this resource.
 
             For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -3189,7 +3203,7 @@ class CfnEventType(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-frauddetector-eventtype-label.html#cfn-frauddetector-eventtype-label-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3219,12 +3233,12 @@ class CfnEventTypeProps:
     def __init__(
         self,
         *,
-        entity_types: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventType.EntityTypeProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        event_variables: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventType.EventVariableProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        labels: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventType.LabelProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        entity_types: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventType.EntityTypeProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        event_variables: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventType.EventVariableProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        labels: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventType.LabelProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEventType``.
 
@@ -3240,6 +3254,7 @@ class CfnEventTypeProps:
 
         Example::
 
+            from aws_cdk import CfnTag, CfnTag, CfnTag, CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_frauddetector as frauddetector
@@ -3317,38 +3332,38 @@ class CfnEventTypeProps:
     @builtins.property
     def entity_types(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEventType.EntityTypeProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.EntityTypeProperty"]]]:
         '''The event type entity types.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-eventtype.html#cfn-frauddetector-eventtype-entitytypes
         '''
         result = self._values.get("entity_types")
         assert result is not None, "Required property 'entity_types' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEventType.EntityTypeProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.EntityTypeProperty"]]], result)
 
     @builtins.property
     def event_variables(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEventType.EventVariableProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.EventVariableProperty"]]]:
         '''The event type event variables.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-eventtype.html#cfn-frauddetector-eventtype-eventvariables
         '''
         result = self._values.get("event_variables")
         assert result is not None, "Required property 'event_variables' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEventType.EventVariableProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.EventVariableProperty"]]], result)
 
     @builtins.property
     def labels(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEventType.LabelProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.LabelProperty"]]]:
         '''The event type labels.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-eventtype.html#cfn-frauddetector-eventtype-labels
         '''
         result = self._values.get("labels")
         assert result is not None, "Required property 'labels' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEventType.LabelProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventType.LabelProperty"]]], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -3372,7 +3387,7 @@ class CfnEventTypeProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -3380,7 +3395,7 @@ class CfnEventTypeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-eventtype.html#cfn-frauddetector-eventtype-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3410,6 +3425,7 @@ class CfnLabel(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_frauddetector as frauddetector
@@ -3428,12 +3444,12 @@ class CfnLabel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::FraudDetector::Label``.
 
@@ -3453,7 +3469,7 @@ class CfnLabel(
 
     @jsii.member(jsii_name="arnForLabel")
     @builtins.classmethod
-    def arn_for_label(cls, resource: _ILabelRef_f66a9f2f) -> builtins.str:
+    def arn_for_label(cls, resource: "_ILabelRef_f66a9f2f") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3475,7 +3491,7 @@ class CfnLabel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLabel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3538,15 +3554,15 @@ class CfnLabel(
 
     @builtins.property
     @jsii.member(jsii_name="labelRef")
-    def label_ref(self) -> _LabelReference_1e5d4450:
+    def label_ref(self) -> "_LabelReference_1e5d4450":
         '''A reference to a Label resource.'''
-        return typing.cast(_LabelReference_1e5d4450, jsii.get(self, "labelRef"))
+        return typing.cast("_LabelReference_1e5d4450", jsii.get(self, "labelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -3576,12 +3592,12 @@ class CfnLabel(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cefa25d3e293c90a44bfae875532dea0458ac7bfc5ab23042df6edd882e48f79)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3599,7 +3615,7 @@ class CfnLabelProps:
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLabel``.
 
@@ -3612,6 +3628,7 @@ class CfnLabelProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_frauddetector as frauddetector
@@ -3662,7 +3679,7 @@ class CfnLabelProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -3670,7 +3687,7 @@ class CfnLabelProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-label.html#cfn-frauddetector-label-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3700,6 +3717,7 @@ class CfnList(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_frauddetector as frauddetector
@@ -3720,13 +3738,13 @@ class CfnList(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         elements: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         variable_type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::FraudDetector::List``.
@@ -3755,7 +3773,7 @@ class CfnList(
 
     @jsii.member(jsii_name="arnForList")
     @builtins.classmethod
-    def arn_for_list(cls, resource: _IListRef_ff745030) -> builtins.str:
+    def arn_for_list(cls, resource: "_IListRef_ff745030") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3777,7 +3795,7 @@ class CfnList(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnList", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3840,15 +3858,15 @@ class CfnList(
 
     @builtins.property
     @jsii.member(jsii_name="listRef")
-    def list_ref(self) -> _ListReference_74880411:
+    def list_ref(self) -> "_ListReference_74880411":
         '''A reference to a List resource.'''
-        return typing.cast(_ListReference_74880411, jsii.get(self, "listRef"))
+        return typing.cast("_ListReference_74880411", jsii.get(self, "listRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -3891,12 +3909,12 @@ class CfnList(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0e6897c9c9c9ece04bb98a11be57f07b78009b82810f51bd21199eb3e2df3a82)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3934,7 +3952,7 @@ class CfnListProps:
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         elements: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         variable_type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnList``.
@@ -3950,6 +3968,7 @@ class CfnListProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_frauddetector as frauddetector
@@ -4015,7 +4034,7 @@ class CfnListProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -4023,7 +4042,7 @@ class CfnListProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-list.html#cfn-frauddetector-list-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def variable_type(self) -> typing.Optional[builtins.str]:
@@ -4062,6 +4081,7 @@ class CfnOutcome(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_frauddetector as frauddetector
@@ -4080,12 +4100,12 @@ class CfnOutcome(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::FraudDetector::Outcome``.
 
@@ -4105,7 +4125,7 @@ class CfnOutcome(
 
     @jsii.member(jsii_name="arnForOutcome")
     @builtins.classmethod
-    def arn_for_outcome(cls, resource: _IOutcomeRef_5d6969e7) -> builtins.str:
+    def arn_for_outcome(cls, resource: "_IOutcomeRef_5d6969e7") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4127,7 +4147,7 @@ class CfnOutcome(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOutcome", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4190,15 +4210,15 @@ class CfnOutcome(
 
     @builtins.property
     @jsii.member(jsii_name="outcomeRef")
-    def outcome_ref(self) -> _OutcomeReference_fa87b69d:
+    def outcome_ref(self) -> "_OutcomeReference_fa87b69d":
         '''A reference to a Outcome resource.'''
-        return typing.cast(_OutcomeReference_fa87b69d, jsii.get(self, "outcomeRef"))
+        return typing.cast("_OutcomeReference_fa87b69d", jsii.get(self, "outcomeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -4228,12 +4248,12 @@ class CfnOutcome(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2200712d63dfe736298ba3b837b2fedad3adac205c754484072f872ecb6a50c3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4251,7 +4271,7 @@ class CfnOutcomeProps:
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnOutcome``.
 
@@ -4264,6 +4284,7 @@ class CfnOutcomeProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_frauddetector as frauddetector
@@ -4312,7 +4333,7 @@ class CfnOutcomeProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -4320,7 +4341,7 @@ class CfnOutcomeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-outcome.html#cfn-frauddetector-outcome-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4348,6 +4369,7 @@ class CfnVariable(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_frauddetector as frauddetector
@@ -4370,7 +4392,7 @@ class CfnVariable(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         data_source: builtins.str,
@@ -4378,7 +4400,7 @@ class CfnVariable(
         default_value: builtins.str,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         variable_type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::FraudDetector::Variable``.
@@ -4411,7 +4433,7 @@ class CfnVariable(
 
     @jsii.member(jsii_name="arnForVariable")
     @builtins.classmethod
-    def arn_for_variable(cls, resource: _IVariableRef_b7979fec) -> builtins.str:
+    def arn_for_variable(cls, resource: "_IVariableRef_b7979fec") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4433,7 +4455,7 @@ class CfnVariable(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVariable", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4496,15 +4518,15 @@ class CfnVariable(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="variableRef")
-    def variable_ref(self) -> _VariableReference_9d64cd3b:
+    def variable_ref(self) -> "_VariableReference_9d64cd3b":
         '''A reference to a Variable resource.'''
-        return typing.cast(_VariableReference_9d64cd3b, jsii.get(self, "variableRef"))
+        return typing.cast("_VariableReference_9d64cd3b", jsii.get(self, "variableRef"))
 
     @builtins.property
     @jsii.member(jsii_name="dataSource")
@@ -4573,12 +4595,12 @@ class CfnVariable(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__79501842c44e1a5fd839a7c5b83f896477c1ba415b083913c0ab0b8ab0fd5d4a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4623,7 +4645,7 @@ class CfnVariableProps:
         default_value: builtins.str,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         variable_type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnVariable``.
@@ -4641,6 +4663,7 @@ class CfnVariableProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_frauddetector as frauddetector
@@ -4740,7 +4763,7 @@ class CfnVariableProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -4748,7 +4771,7 @@ class CfnVariableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-frauddetector-variable.html#cfn-frauddetector-variable-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def variable_type(self) -> typing.Optional[builtins.str]:

@@ -294,7 +294,7 @@ class ICustomResourceRef(
 
     @builtins.property
     @jsii.member(jsii_name="customResourceRef")
-    def custom_resource_ref(self) -> CustomResourceReference:
+    def custom_resource_ref(self) -> "CustomResourceReference":
         '''(experimental) A reference to a CustomResource resource.
 
         :stability: experimental
@@ -315,12 +315,12 @@ class _ICustomResourceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="customResourceRef")
-    def custom_resource_ref(self) -> CustomResourceReference:
+    def custom_resource_ref(self) -> "CustomResourceReference":
         '''(experimental) A reference to a CustomResource resource.
 
         :stability: experimental
         '''
-        return typing.cast(CustomResourceReference, jsii.get(self, "customResourceRef"))
+        return typing.cast("CustomResourceReference", jsii.get(self, "customResourceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICustomResourceRef).__jsii_proxy_class__ = lambda : _ICustomResourceRefProxy
@@ -339,7 +339,7 @@ class IGuardHookRef(
 
     @builtins.property
     @jsii.member(jsii_name="guardHookRef")
-    def guard_hook_ref(self) -> GuardHookReference:
+    def guard_hook_ref(self) -> "GuardHookReference":
         '''(experimental) A reference to a GuardHook resource.
 
         :stability: experimental
@@ -360,12 +360,12 @@ class _IGuardHookRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="guardHookRef")
-    def guard_hook_ref(self) -> GuardHookReference:
+    def guard_hook_ref(self) -> "GuardHookReference":
         '''(experimental) A reference to a GuardHook resource.
 
         :stability: experimental
         '''
-        return typing.cast(GuardHookReference, jsii.get(self, "guardHookRef"))
+        return typing.cast("GuardHookReference", jsii.get(self, "guardHookRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGuardHookRef).__jsii_proxy_class__ = lambda : _IGuardHookRefProxy
@@ -386,7 +386,7 @@ class IHookDefaultVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="hookDefaultVersionRef")
-    def hook_default_version_ref(self) -> HookDefaultVersionReference:
+    def hook_default_version_ref(self) -> "HookDefaultVersionReference":
         '''(experimental) A reference to a HookDefaultVersion resource.
 
         :stability: experimental
@@ -407,12 +407,12 @@ class _IHookDefaultVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="hookDefaultVersionRef")
-    def hook_default_version_ref(self) -> HookDefaultVersionReference:
+    def hook_default_version_ref(self) -> "HookDefaultVersionReference":
         '''(experimental) A reference to a HookDefaultVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(HookDefaultVersionReference, jsii.get(self, "hookDefaultVersionRef"))
+        return typing.cast("HookDefaultVersionReference", jsii.get(self, "hookDefaultVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHookDefaultVersionRef).__jsii_proxy_class__ = lambda : _IHookDefaultVersionRefProxy
@@ -433,7 +433,7 @@ class IHookTypeConfigRef(
 
     @builtins.property
     @jsii.member(jsii_name="hookTypeConfigRef")
-    def hook_type_config_ref(self) -> HookTypeConfigReference:
+    def hook_type_config_ref(self) -> "HookTypeConfigReference":
         '''(experimental) A reference to a HookTypeConfig resource.
 
         :stability: experimental
@@ -454,12 +454,12 @@ class _IHookTypeConfigRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="hookTypeConfigRef")
-    def hook_type_config_ref(self) -> HookTypeConfigReference:
+    def hook_type_config_ref(self) -> "HookTypeConfigReference":
         '''(experimental) A reference to a HookTypeConfig resource.
 
         :stability: experimental
         '''
-        return typing.cast(HookTypeConfigReference, jsii.get(self, "hookTypeConfigRef"))
+        return typing.cast("HookTypeConfigReference", jsii.get(self, "hookTypeConfigRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHookTypeConfigRef).__jsii_proxy_class__ = lambda : _IHookTypeConfigRefProxy
@@ -478,7 +478,7 @@ class IHookVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="hookVersionRef")
-    def hook_version_ref(self) -> HookVersionReference:
+    def hook_version_ref(self) -> "HookVersionReference":
         '''(experimental) A reference to a HookVersion resource.
 
         :stability: experimental
@@ -499,12 +499,12 @@ class _IHookVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="hookVersionRef")
-    def hook_version_ref(self) -> HookVersionReference:
+    def hook_version_ref(self) -> "HookVersionReference":
         '''(experimental) A reference to a HookVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(HookVersionReference, jsii.get(self, "hookVersionRef"))
+        return typing.cast("HookVersionReference", jsii.get(self, "hookVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHookVersionRef).__jsii_proxy_class__ = lambda : _IHookVersionRefProxy

@@ -10,7 +10,7 @@ use std::{
     io,
     path::{Path, PathBuf},
 };
-use temporalio_client::ClientOptionsBuilder;
+use temporalio_client::ClientOptions;
 use tokio::{
     task::spawn_blocking,
     time::{Duration, sleep},
@@ -24,30 +24,28 @@ use std::os::unix::fs::OpenOptionsExt;
 use std::process::Stdio;
 
 /// Configuration for Temporal CLI dev server.
-#[derive(Debug, Clone, derive_builder::Builder)]
+#[derive(Debug, Clone, bon::Builder)]
+#[builder(on(String, into))]
 pub struct TemporalDevServerConfig {
     /// Required path to executable or download info.
     pub exe: EphemeralExe,
     /// Namespace to use.
-    #[builder(default = "\"default\".to_owned()")]
+    #[builder(default = "default".to_owned())]
     pub namespace: String,
     /// IP to bind to.
-    #[builder(default = "\"127.0.0.1\".to_owned()")]
+    #[builder(default = "127.0.0.1".to_owned())]
     pub ip: String,
     /// Port to use or obtains a free one if none given.
-    #[builder(default)]
     pub port: Option<u16>,
     /// Port to use for the UI server or obtains a free one if none given.
-    #[builder(default)]
     pub ui_port: Option<u16>,
     /// Sqlite DB filename if persisting or non-persistent if none.
-    #[builder(default)]
     pub db_filename: Option<String>,
     /// Whether to enable the UI. If ui_port is set, assumes true.
     #[builder(default)]
     pub ui: bool,
     /// Log format and level
-    #[builder(default = "(\"pretty\".to_owned(), \"warn\".to_owned())")]
+    #[builder(default = ("pretty".to_owned(), "warn".to_owned()))]
     pub log: (String, String),
     /// Additional arguments to Temporal dev server.
     #[builder(default)]
@@ -131,12 +129,11 @@ impl TemporalDevServerConfig {
 }
 
 /// Configuration for the test server.
-#[derive(Debug, Clone, derive_builder::Builder)]
+#[derive(Debug, Clone, bon::Builder)]
 pub struct TestServerConfig {
     /// Required path to executable or download info.
     pub exe: EphemeralExe,
     /// Port to use or obtains a free one if none given.
-    #[builder(default)]
     pub port: Option<u16>,
     /// Additional arguments to the test server.
     #[builder(default)]
@@ -224,12 +221,12 @@ impl EphemeralServer {
         // Try to connect every 100ms for 5s
         // TODO(cretz): Some other way, e.g. via stdout, to know whether the
         // server is up?
-        let client_options = ClientOptionsBuilder::default()
+        let client_options = ClientOptions::builder()
             .identity("online_checker".to_owned())
             .target_url(Url::parse(&target_url)?)
             .client_name("online-checker".to_owned())
             .client_version("0.1.0".to_owned())
-            .build()?;
+            .build();
         let mut last_error = None;
         for _ in 0..50 {
             sleep(Duration::from_millis(100)).await;

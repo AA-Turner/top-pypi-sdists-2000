@@ -99,6 +99,7 @@ class CfnDeployment(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_launchwizard as launchwizard
@@ -121,14 +122,14 @@ class CfnDeployment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         deployment_pattern_name: builtins.str,
         name: builtins.str,
         workload_name: builtins.str,
-        specifications: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        specifications: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::LaunchWizard::Deployment``.
 
@@ -156,7 +157,7 @@ class CfnDeployment(
 
     @jsii.member(jsii_name="arnForDeployment")
     @builtins.classmethod
-    def arn_for_deployment(cls, resource: _IDeploymentRef_84f246b4) -> builtins.str:
+    def arn_for_deployment(cls, resource: "_IDeploymentRef_84f246b4") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -178,7 +179,7 @@ class CfnDeployment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeployment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -263,9 +264,9 @@ class CfnDeployment(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -274,9 +275,9 @@ class CfnDeployment(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentRef")
-    def deployment_ref(self) -> _DeploymentReference_da9fb3ea:
+    def deployment_ref(self) -> "_DeploymentReference_da9fb3ea":
         '''A reference to a Deployment resource.'''
-        return typing.cast(_DeploymentReference_da9fb3ea, jsii.get(self, "deploymentRef"))
+        return typing.cast("_DeploymentReference_da9fb3ea", jsii.get(self, "deploymentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentPatternName")
@@ -321,14 +322,14 @@ class CfnDeployment(
     @jsii.member(jsii_name="specifications")
     def specifications(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The settings specified for the deployment.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "specifications"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "specifications"))
 
     @specifications.setter
     def specifications(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6343321573b3c3c84666431fb123811dbd97cb11a86c65d6c6d7d4c669c25d86)
@@ -337,12 +338,12 @@ class CfnDeployment(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Information about the tags attached to a deployment.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__057665c8ffa5f5cdaedcf0301e727d15ee8b0244807853f59c72aadbb741357d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -367,8 +368,8 @@ class CfnDeploymentProps:
         deployment_pattern_name: builtins.str,
         name: builtins.str,
         workload_name: builtins.str,
-        specifications: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        specifications: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDeployment``.
 
@@ -383,6 +384,7 @@ class CfnDeploymentProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_launchwizard as launchwizard
@@ -452,7 +454,7 @@ class CfnDeploymentProps:
     @builtins.property
     def specifications(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The settings specified for the deployment.
 
         These settings define how to deploy and configure your resources created by the deployment. For more information about the specifications required for creating a deployment for a SAP workload, see `SAP deployment specifications <https://docs.aws.amazon.com/launchwizard/latest/APIReference/launch-wizard-specifications-sap.html>`_ . To retrieve the specifications required to create a deployment for other workloads, use the ```GetWorkloadDeploymentPattern`` <https://docs.aws.amazon.com/launchwizard/latest/APIReference/API_GetWorkloadDeploymentPattern.html>`_ operation.
@@ -460,16 +462,16 @@ class CfnDeploymentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-launchwizard-deployment.html#cfn-launchwizard-deployment-specifications
         '''
         result = self._values.get("specifications")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Information about the tags attached to a deployment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-launchwizard-deployment.html#cfn-launchwizard-deployment-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

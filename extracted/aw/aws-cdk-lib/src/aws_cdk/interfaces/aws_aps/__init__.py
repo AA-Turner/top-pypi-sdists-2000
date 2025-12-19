@@ -96,7 +96,7 @@ class IAnomalyDetectorRef(
 
     @builtins.property
     @jsii.member(jsii_name="anomalyDetectorRef")
-    def anomaly_detector_ref(self) -> AnomalyDetectorReference:
+    def anomaly_detector_ref(self) -> "AnomalyDetectorReference":
         '''(experimental) A reference to a AnomalyDetector resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IAnomalyDetectorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="anomalyDetectorRef")
-    def anomaly_detector_ref(self) -> AnomalyDetectorReference:
+    def anomaly_detector_ref(self) -> "AnomalyDetectorReference":
         '''(experimental) A reference to a AnomalyDetector resource.
 
         :stability: experimental
         '''
-        return typing.cast(AnomalyDetectorReference, jsii.get(self, "anomalyDetectorRef"))
+        return typing.cast("AnomalyDetectorReference", jsii.get(self, "anomalyDetectorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAnomalyDetectorRef).__jsii_proxy_class__ = lambda : _IAnomalyDetectorRefProxy

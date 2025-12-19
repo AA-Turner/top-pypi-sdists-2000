@@ -115,7 +115,7 @@ class IGatewayRouteRef(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayRouteRef")
-    def gateway_route_ref(self) -> GatewayRouteReference:
+    def gateway_route_ref(self) -> "GatewayRouteReference":
         '''(experimental) A reference to a GatewayRoute resource.
 
         :stability: experimental
@@ -136,12 +136,12 @@ class _IGatewayRouteRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayRouteRef")
-    def gateway_route_ref(self) -> GatewayRouteReference:
+    def gateway_route_ref(self) -> "GatewayRouteReference":
         '''(experimental) A reference to a GatewayRoute resource.
 
         :stability: experimental
         '''
-        return typing.cast(GatewayRouteReference, jsii.get(self, "gatewayRouteRef"))
+        return typing.cast("GatewayRouteReference", jsii.get(self, "gatewayRouteRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGatewayRouteRef).__jsii_proxy_class__ = lambda : _IGatewayRouteRefProxy

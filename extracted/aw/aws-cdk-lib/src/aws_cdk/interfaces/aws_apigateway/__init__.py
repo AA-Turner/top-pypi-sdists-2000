@@ -783,7 +783,7 @@ class IAccountRef(
 
     @builtins.property
     @jsii.member(jsii_name="accountRef")
-    def account_ref(self) -> AccountReference:
+    def account_ref(self) -> "AccountReference":
         '''(experimental) A reference to a Account resource.
 
         :stability: experimental
@@ -804,12 +804,12 @@ class _IAccountRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accountRef")
-    def account_ref(self) -> AccountReference:
+    def account_ref(self) -> "AccountReference":
         '''(experimental) A reference to a Account resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccountReference, jsii.get(self, "accountRef"))
+        return typing.cast("AccountReference", jsii.get(self, "accountRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccountRef).__jsii_proxy_class__ = lambda : _IAccountRefProxy
@@ -828,7 +828,7 @@ class IApiKeyRef(
 
     @builtins.property
     @jsii.member(jsii_name="apiKeyRef")
-    def api_key_ref(self) -> ApiKeyReference:
+    def api_key_ref(self) -> "ApiKeyReference":
         '''(experimental) A reference to a ApiKey resource.
 
         :stability: experimental
@@ -849,12 +849,12 @@ class _IApiKeyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="apiKeyRef")
-    def api_key_ref(self) -> ApiKeyReference:
+    def api_key_ref(self) -> "ApiKeyReference":
         '''(experimental) A reference to a ApiKey resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApiKeyReference, jsii.get(self, "apiKeyRef"))
+        return typing.cast("ApiKeyReference", jsii.get(self, "apiKeyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApiKeyRef).__jsii_proxy_class__ = lambda : _IApiKeyRefProxy
@@ -873,7 +873,7 @@ class IAuthorizerRef(
 
     @builtins.property
     @jsii.member(jsii_name="authorizerRef")
-    def authorizer_ref(self) -> AuthorizerReference:
+    def authorizer_ref(self) -> "AuthorizerReference":
         '''(experimental) A reference to a Authorizer resource.
 
         :stability: experimental
@@ -894,12 +894,12 @@ class _IAuthorizerRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="authorizerRef")
-    def authorizer_ref(self) -> AuthorizerReference:
+    def authorizer_ref(self) -> "AuthorizerReference":
         '''(experimental) A reference to a Authorizer resource.
 
         :stability: experimental
         '''
-        return typing.cast(AuthorizerReference, jsii.get(self, "authorizerRef"))
+        return typing.cast("AuthorizerReference", jsii.get(self, "authorizerRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAuthorizerRef).__jsii_proxy_class__ = lambda : _IAuthorizerRefProxy
@@ -918,7 +918,7 @@ class IBasePathMappingRef(
 
     @builtins.property
     @jsii.member(jsii_name="basePathMappingRef")
-    def base_path_mapping_ref(self) -> BasePathMappingReference:
+    def base_path_mapping_ref(self) -> "BasePathMappingReference":
         '''(experimental) A reference to a BasePathMapping resource.
 
         :stability: experimental
@@ -939,12 +939,12 @@ class _IBasePathMappingRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="basePathMappingRef")
-    def base_path_mapping_ref(self) -> BasePathMappingReference:
+    def base_path_mapping_ref(self) -> "BasePathMappingReference":
         '''(experimental) A reference to a BasePathMapping resource.
 
         :stability: experimental
         '''
-        return typing.cast(BasePathMappingReference, jsii.get(self, "basePathMappingRef"))
+        return typing.cast("BasePathMappingReference", jsii.get(self, "basePathMappingRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBasePathMappingRef).__jsii_proxy_class__ = lambda : _IBasePathMappingRefProxy
@@ -965,7 +965,7 @@ class IBasePathMappingV2Ref(
 
     @builtins.property
     @jsii.member(jsii_name="basePathMappingV2Ref")
-    def base_path_mapping_v2_ref(self) -> BasePathMappingV2Reference:
+    def base_path_mapping_v2_ref(self) -> "BasePathMappingV2Reference":
         '''(experimental) A reference to a BasePathMappingV2 resource.
 
         :stability: experimental
@@ -986,12 +986,12 @@ class _IBasePathMappingV2RefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="basePathMappingV2Ref")
-    def base_path_mapping_v2_ref(self) -> BasePathMappingV2Reference:
+    def base_path_mapping_v2_ref(self) -> "BasePathMappingV2Reference":
         '''(experimental) A reference to a BasePathMappingV2 resource.
 
         :stability: experimental
         '''
-        return typing.cast(BasePathMappingV2Reference, jsii.get(self, "basePathMappingV2Ref"))
+        return typing.cast("BasePathMappingV2Reference", jsii.get(self, "basePathMappingV2Ref"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBasePathMappingV2Ref).__jsii_proxy_class__ = lambda : _IBasePathMappingV2RefProxy
@@ -1012,7 +1012,7 @@ class IClientCertificateRef(
 
     @builtins.property
     @jsii.member(jsii_name="clientCertificateRef")
-    def client_certificate_ref(self) -> ClientCertificateReference:
+    def client_certificate_ref(self) -> "ClientCertificateReference":
         '''(experimental) A reference to a ClientCertificate resource.
 
         :stability: experimental
@@ -1033,12 +1033,12 @@ class _IClientCertificateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clientCertificateRef")
-    def client_certificate_ref(self) -> ClientCertificateReference:
+    def client_certificate_ref(self) -> "ClientCertificateReference":
         '''(experimental) A reference to a ClientCertificate resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClientCertificateReference, jsii.get(self, "clientCertificateRef"))
+        return typing.cast("ClientCertificateReference", jsii.get(self, "clientCertificateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClientCertificateRef).__jsii_proxy_class__ = lambda : _IClientCertificateRefProxy
@@ -1057,7 +1057,7 @@ class IDeploymentRef(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentRef")
-    def deployment_ref(self) -> DeploymentReference:
+    def deployment_ref(self) -> "DeploymentReference":
         '''(experimental) A reference to a Deployment resource.
 
         :stability: experimental
@@ -1078,12 +1078,12 @@ class _IDeploymentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentRef")
-    def deployment_ref(self) -> DeploymentReference:
+    def deployment_ref(self) -> "DeploymentReference":
         '''(experimental) A reference to a Deployment resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeploymentReference, jsii.get(self, "deploymentRef"))
+        return typing.cast("DeploymentReference", jsii.get(self, "deploymentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeploymentRef).__jsii_proxy_class__ = lambda : _IDeploymentRefProxy
@@ -1104,7 +1104,7 @@ class IDocumentationPartRef(
 
     @builtins.property
     @jsii.member(jsii_name="documentationPartRef")
-    def documentation_part_ref(self) -> DocumentationPartReference:
+    def documentation_part_ref(self) -> "DocumentationPartReference":
         '''(experimental) A reference to a DocumentationPart resource.
 
         :stability: experimental
@@ -1125,12 +1125,12 @@ class _IDocumentationPartRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="documentationPartRef")
-    def documentation_part_ref(self) -> DocumentationPartReference:
+    def documentation_part_ref(self) -> "DocumentationPartReference":
         '''(experimental) A reference to a DocumentationPart resource.
 
         :stability: experimental
         '''
-        return typing.cast(DocumentationPartReference, jsii.get(self, "documentationPartRef"))
+        return typing.cast("DocumentationPartReference", jsii.get(self, "documentationPartRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDocumentationPartRef).__jsii_proxy_class__ = lambda : _IDocumentationPartRefProxy
@@ -1151,7 +1151,7 @@ class IDocumentationVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="documentationVersionRef")
-    def documentation_version_ref(self) -> DocumentationVersionReference:
+    def documentation_version_ref(self) -> "DocumentationVersionReference":
         '''(experimental) A reference to a DocumentationVersion resource.
 
         :stability: experimental
@@ -1172,12 +1172,12 @@ class _IDocumentationVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="documentationVersionRef")
-    def documentation_version_ref(self) -> DocumentationVersionReference:
+    def documentation_version_ref(self) -> "DocumentationVersionReference":
         '''(experimental) A reference to a DocumentationVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(DocumentationVersionReference, jsii.get(self, "documentationVersionRef"))
+        return typing.cast("DocumentationVersionReference", jsii.get(self, "documentationVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDocumentationVersionRef).__jsii_proxy_class__ = lambda : _IDocumentationVersionRefProxy
@@ -1200,7 +1200,7 @@ class IDomainNameAccessAssociationRef(
     @jsii.member(jsii_name="domainNameAccessAssociationRef")
     def domain_name_access_association_ref(
         self,
-    ) -> DomainNameAccessAssociationReference:
+    ) -> "DomainNameAccessAssociationReference":
         '''(experimental) A reference to a DomainNameAccessAssociation resource.
 
         :stability: experimental
@@ -1223,12 +1223,12 @@ class _IDomainNameAccessAssociationRefProxy(
     @jsii.member(jsii_name="domainNameAccessAssociationRef")
     def domain_name_access_association_ref(
         self,
-    ) -> DomainNameAccessAssociationReference:
+    ) -> "DomainNameAccessAssociationReference":
         '''(experimental) A reference to a DomainNameAccessAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(DomainNameAccessAssociationReference, jsii.get(self, "domainNameAccessAssociationRef"))
+        return typing.cast("DomainNameAccessAssociationReference", jsii.get(self, "domainNameAccessAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDomainNameAccessAssociationRef).__jsii_proxy_class__ = lambda : _IDomainNameAccessAssociationRefProxy
@@ -1247,7 +1247,7 @@ class IDomainNameRef(
 
     @builtins.property
     @jsii.member(jsii_name="domainNameRef")
-    def domain_name_ref(self) -> DomainNameReference:
+    def domain_name_ref(self) -> "DomainNameReference":
         '''(experimental) A reference to a DomainName resource.
 
         :stability: experimental
@@ -1268,12 +1268,12 @@ class _IDomainNameRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="domainNameRef")
-    def domain_name_ref(self) -> DomainNameReference:
+    def domain_name_ref(self) -> "DomainNameReference":
         '''(experimental) A reference to a DomainName resource.
 
         :stability: experimental
         '''
-        return typing.cast(DomainNameReference, jsii.get(self, "domainNameRef"))
+        return typing.cast("DomainNameReference", jsii.get(self, "domainNameRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDomainNameRef).__jsii_proxy_class__ = lambda : _IDomainNameRefProxy
@@ -1292,7 +1292,7 @@ class IDomainNameV2Ref(
 
     @builtins.property
     @jsii.member(jsii_name="domainNameV2Ref")
-    def domain_name_v2_ref(self) -> DomainNameV2Reference:
+    def domain_name_v2_ref(self) -> "DomainNameV2Reference":
         '''(experimental) A reference to a DomainNameV2 resource.
 
         :stability: experimental
@@ -1313,12 +1313,12 @@ class _IDomainNameV2RefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="domainNameV2Ref")
-    def domain_name_v2_ref(self) -> DomainNameV2Reference:
+    def domain_name_v2_ref(self) -> "DomainNameV2Reference":
         '''(experimental) A reference to a DomainNameV2 resource.
 
         :stability: experimental
         '''
-        return typing.cast(DomainNameV2Reference, jsii.get(self, "domainNameV2Ref"))
+        return typing.cast("DomainNameV2Reference", jsii.get(self, "domainNameV2Ref"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDomainNameV2Ref).__jsii_proxy_class__ = lambda : _IDomainNameV2RefProxy
@@ -1337,7 +1337,7 @@ class IGatewayResponseRef(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayResponseRef")
-    def gateway_response_ref(self) -> GatewayResponseReference:
+    def gateway_response_ref(self) -> "GatewayResponseReference":
         '''(experimental) A reference to a GatewayResponse resource.
 
         :stability: experimental
@@ -1358,12 +1358,12 @@ class _IGatewayResponseRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayResponseRef")
-    def gateway_response_ref(self) -> GatewayResponseReference:
+    def gateway_response_ref(self) -> "GatewayResponseReference":
         '''(experimental) A reference to a GatewayResponse resource.
 
         :stability: experimental
         '''
-        return typing.cast(GatewayResponseReference, jsii.get(self, "gatewayResponseRef"))
+        return typing.cast("GatewayResponseReference", jsii.get(self, "gatewayResponseRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGatewayResponseRef).__jsii_proxy_class__ = lambda : _IGatewayResponseRefProxy

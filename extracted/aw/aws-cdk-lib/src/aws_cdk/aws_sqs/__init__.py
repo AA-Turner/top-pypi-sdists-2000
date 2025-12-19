@@ -213,6 +213,7 @@ class CfnQueue(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_sqs as sqs
@@ -245,24 +246,24 @@ class CfnQueue(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        content_based_deduplication: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        content_based_deduplication: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         deduplication_scope: typing.Optional[builtins.str] = None,
         delay_seconds: typing.Optional[jsii.Number] = None,
-        fifo_queue: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        fifo_queue: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         fifo_throughput_limit: typing.Optional[builtins.str] = None,
         kms_data_key_reuse_period_seconds: typing.Optional[jsii.Number] = None,
-        kms_master_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
+        kms_master_key_id: typing.Optional[typing.Union[builtins.str, "_IAliasRef_43fafabd", "_IKeyRef_d4fc6ef3"]] = None,
         maximum_message_size: typing.Optional[jsii.Number] = None,
         message_retention_period: typing.Optional[jsii.Number] = None,
         queue_name: typing.Optional[builtins.str] = None,
         receive_message_wait_time_seconds: typing.Optional[jsii.Number] = None,
         redrive_allow_policy: typing.Any = None,
         redrive_policy: typing.Any = None,
-        sqs_managed_sse_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sqs_managed_sse_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         visibility_timeout: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Create a new ``AWS::SQS::Queue``.
@@ -313,7 +314,7 @@ class CfnQueue(
 
     @jsii.member(jsii_name="arnForQueue")
     @builtins.classmethod
-    def arn_for_queue(cls, resource: _IQueueRef_fa8b2198) -> builtins.str:
+    def arn_for_queue(cls, resource: "_IQueueRef_fa8b2198") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -335,7 +336,7 @@ class CfnQueue(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueue", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -402,28 +403,28 @@ class CfnQueue(
 
     @builtins.property
     @jsii.member(jsii_name="queueRef")
-    def queue_ref(self) -> _QueueReference_f2e39de6:
+    def queue_ref(self) -> "_QueueReference_f2e39de6":
         '''A reference to a Queue resource.'''
-        return typing.cast(_QueueReference_f2e39de6, jsii.get(self, "queueRef"))
+        return typing.cast("_QueueReference_f2e39de6", jsii.get(self, "queueRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="contentBasedDeduplication")
     def content_based_deduplication(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''For first-in-first-out (FIFO) queues, specifies whether to enable content-based deduplication.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "contentBasedDeduplication"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "contentBasedDeduplication"))
 
     @content_based_deduplication.setter
     def content_based_deduplication(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3049bb9c4d3214ce412c7c75abae5ce0267cacc5d249bfb1aa4677d8a7828b5a)
@@ -460,14 +461,14 @@ class CfnQueue(
     @jsii.member(jsii_name="fifoQueue")
     def fifo_queue(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If set to true, creates a FIFO queue.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "fifoQueue"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "fifoQueue"))
 
     @fifo_queue.setter
     def fifo_queue(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dc4344270f8a41c838e3e17fb8711c5fac74d3b7bc6afe0c3cc59d729991c462)
@@ -601,14 +602,14 @@ class CfnQueue(
     @jsii.member(jsii_name="sqsManagedSseEnabled")
     def sqs_managed_sse_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables server-side queue encryption using SQS owned encryption keys.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "sqsManagedSseEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "sqsManagedSseEnabled"))
 
     @sqs_managed_sse_enabled.setter
     def sqs_managed_sse_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c325e89257312887b80703cae624c0bf91c30392ca66de341ef10a2b3bc33186)
@@ -617,12 +618,12 @@ class CfnQueue(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags that you attach to this queue.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ac13d08fe940e7974753ab1f7e2b85edd222dccf01f15a22bc0c94c558436a3b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -670,7 +671,7 @@ class CfnQueueInlinePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_document: typing.Any,
@@ -704,7 +705,7 @@ class CfnQueueInlinePolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueueInlinePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -740,9 +741,9 @@ class CfnQueueInlinePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="queueInlinePolicyRef")
-    def queue_inline_policy_ref(self) -> _QueueInlinePolicyReference_cb191fd1:
+    def queue_inline_policy_ref(self) -> "_QueueInlinePolicyReference_cb191fd1":
         '''A reference to a QueueInlinePolicy resource.'''
-        return typing.cast(_QueueInlinePolicyReference_cb191fd1, jsii.get(self, "queueInlinePolicyRef"))
+        return typing.cast("_QueueInlinePolicyReference_cb191fd1", jsii.get(self, "queueInlinePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
@@ -874,7 +875,7 @@ class CfnQueuePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_document: typing.Any,
@@ -908,7 +909,7 @@ class CfnQueuePolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueuePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -953,9 +954,9 @@ class CfnQueuePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="queuePolicyRef")
-    def queue_policy_ref(self) -> _QueuePolicyReference_358cc47f:
+    def queue_policy_ref(self) -> "_QueuePolicyReference_358cc47f":
         '''A reference to a QueuePolicy resource.'''
-        return typing.cast(_QueuePolicyReference_358cc47f, jsii.get(self, "queuePolicyRef"))
+        return typing.cast("_QueuePolicyReference_358cc47f", jsii.get(self, "queuePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
@@ -1088,21 +1089,21 @@ class CfnQueueProps:
     def __init__(
         self,
         *,
-        content_based_deduplication: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        content_based_deduplication: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         deduplication_scope: typing.Optional[builtins.str] = None,
         delay_seconds: typing.Optional[jsii.Number] = None,
-        fifo_queue: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        fifo_queue: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         fifo_throughput_limit: typing.Optional[builtins.str] = None,
         kms_data_key_reuse_period_seconds: typing.Optional[jsii.Number] = None,
-        kms_master_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
+        kms_master_key_id: typing.Optional[typing.Union[builtins.str, "_IAliasRef_43fafabd", "_IKeyRef_d4fc6ef3"]] = None,
         maximum_message_size: typing.Optional[jsii.Number] = None,
         message_retention_period: typing.Optional[jsii.Number] = None,
         queue_name: typing.Optional[builtins.str] = None,
         receive_message_wait_time_seconds: typing.Optional[jsii.Number] = None,
         redrive_allow_policy: typing.Any = None,
         redrive_policy: typing.Any = None,
-        sqs_managed_sse_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sqs_managed_sse_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         visibility_timeout: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties for defining a ``CfnQueue``.
@@ -1129,6 +1130,7 @@ class CfnQueueProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_sqs as sqs
@@ -1213,7 +1215,7 @@ class CfnQueueProps:
     @builtins.property
     def content_based_deduplication(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''For first-in-first-out (FIFO) queues, specifies whether to enable content-based deduplication.
 
         During the deduplication interval, Amazon SQS treats messages that are sent with identical content as duplicates and delivers only one copy of the message. For more information, see the ``ContentBasedDeduplication`` attribute for the ``[CreateQueue](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_CreateQueue.html)`` action in the *Amazon SQS API Reference* .
@@ -1221,7 +1223,7 @@ class CfnQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sqs-queue.html#cfn-sqs-queue-contentbaseddeduplication
         '''
         result = self._values.get("content_based_deduplication")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def deduplication_scope(self) -> typing.Optional[builtins.str]:
@@ -1250,7 +1252,7 @@ class CfnQueueProps:
     @builtins.property
     def fifo_queue(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If set to true, creates a FIFO queue.
 
         If you don't specify this property, Amazon SQS creates a standard queue. For more information, see `Amazon SQS FIFO queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fifo-queues.html>`_ in the *Amazon SQS Developer Guide* .
@@ -1258,7 +1260,7 @@ class CfnQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sqs-queue.html#cfn-sqs-queue-fifoqueue
         '''
         result = self._values.get("fifo_queue")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def fifo_throughput_limit(self) -> typing.Optional[builtins.str]:
@@ -1290,7 +1292,7 @@ class CfnQueueProps:
     @builtins.property
     def kms_master_key_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IAliasRef_43fafabd", "_IKeyRef_d4fc6ef3"]]:
         '''The ID of an AWS Key Management Service (KMS) for Amazon SQS , or a custom KMS.
 
         To use the AWS managed KMS for Amazon SQS , specify a (default) alias ARN, alias name (for example ``alias/aws/sqs`` ), key ARN, or key ID. For more information, see the following:
@@ -1303,7 +1305,7 @@ class CfnQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sqs-queue.html#cfn-sqs-queue-kmsmasterkeyid
         '''
         result = self._values.get("kms_master_key_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IAliasRef_43fafabd", "_IKeyRef_d4fc6ef3"]], result)
 
     @builtins.property
     def maximum_message_size(self) -> typing.Optional[jsii.Number]:
@@ -1403,7 +1405,7 @@ class CfnQueueProps:
     @builtins.property
     def sqs_managed_sse_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables server-side queue encryption using SQS owned encryption keys.
 
         Only one server-side encryption option is supported per queue (for example, `SSE-KMS <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-configure-sse-existing-queue.html>`_ or `SSE-SQS <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-configure-sqs-sse-queue.html>`_ ). When ``SqsManagedSseEnabled`` is not defined, ``SSE-SQS`` encryption is enabled by default.
@@ -1411,10 +1413,10 @@ class CfnQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sqs-queue.html#cfn-sqs-queue-sqsmanagedsseenabled
         '''
         result = self._values.get("sqs_managed_sse_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags that you attach to this queue.
 
         For more information, see `Resource tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *CloudFormation User Guide* .
@@ -1422,7 +1424,7 @@ class CfnQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sqs-queue.html#cfn-sqs-queue-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def visibility_timeout(self) -> typing.Optional[jsii.Number]:
@@ -1575,7 +1577,7 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
 
     @builtins.property
     @jsii.member(jsii_name="encryptionMasterKey")
-    def encryption_master_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_master_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''If this queue is server-side encrypted, this is the KMS encryption key.'''
         ...
 
@@ -1588,8 +1590,8 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this queue.
 
         If this queue was created in this stack (``new Queue``), a queue policy
@@ -1603,9 +1605,9 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *queue_actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the actions defined in queueActions to the identity Principal given on this SQS queue resource.
 
         :param grantee: Principal to grant right to.
@@ -1614,7 +1616,10 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         ...
 
     @jsii.member(jsii_name="grantConsumeMessages")
-    def grant_consume_messages(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_consume_messages(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant permissions to consume messages from a queue.
 
         This will grant the following permissions:
@@ -1630,7 +1635,7 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         ...
 
     @jsii.member(jsii_name="grantPurge")
-    def grant_purge(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_purge(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant an IAM principal permissions to purge all messages from the queue.
 
         This will grant the following permissions:
@@ -1644,7 +1649,7 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         ...
 
     @jsii.member(jsii_name="grantSendMessages")
-    def grant_send_messages(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_send_messages(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant access to send messages to a queue to the given identity.
 
         This will grant the following permissions:
@@ -1667,14 +1672,14 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Queue.
 
         :param metric_name: -
@@ -1702,14 +1707,14 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The approximate age of the oldest non-deleted message in the queue.
 
         Maximum over 5 minutes
@@ -1738,14 +1743,14 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages in the queue that are delayed and not available for reading immediately.
 
         Maximum over 5 minutes
@@ -1774,14 +1779,14 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that are in flight.
 
         Maximum over 5 minutes
@@ -1810,14 +1815,14 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages available for retrieval from the queue.
 
         Maximum over 5 minutes
@@ -1846,14 +1851,14 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of ReceiveMessage API calls that did not return a message.
 
         Sum over 5 minutes
@@ -1882,14 +1887,14 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages deleted from the queue.
 
         Sum over 5 minutes
@@ -1918,14 +1923,14 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages returned by calls to the ReceiveMessage action.
 
         Sum over 5 minutes
@@ -1954,14 +1959,14 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages added to a queue.
 
         Sum over 5 minutes
@@ -1990,14 +1995,14 @@ class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protoco
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The size of messages added to a queue.
 
         Average over 5 minutes
@@ -2064,9 +2069,9 @@ class _IQueueProxy(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionMasterKey")
-    def encryption_master_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_master_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''If this queue is server-side encrypted, this is the KMS encryption key.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionMasterKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionMasterKey"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionType")
@@ -2077,8 +2082,8 @@ class _IQueueProxy(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this queue.
 
         If this queue was created in this stack (``new Queue``), a queue policy
@@ -2090,14 +2095,14 @@ class _IQueueProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ea0451819e2455c6ee9b50f403e68931b5e90e379366b4341546882871994f5d)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *queue_actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the actions defined in queueActions to the identity Principal given on this SQS queue resource.
 
         :param grantee: Principal to grant right to.
@@ -2107,10 +2112,13 @@ class _IQueueProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__a27eed791bc165454bda377834d5e6dc523a1816052181a1d4e6edf424e7744f)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument queue_actions", value=queue_actions, expected_type=typing.Tuple[type_hints["queue_actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *queue_actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *queue_actions]))
 
     @jsii.member(jsii_name="grantConsumeMessages")
-    def grant_consume_messages(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_consume_messages(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant permissions to consume messages from a queue.
 
         This will grant the following permissions:
@@ -2126,10 +2134,10 @@ class _IQueueProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e5da94a52ae7998debd568a5368198659935145c2960a17f24cdcc61e106618b)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantConsumeMessages", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantConsumeMessages", [grantee]))
 
     @jsii.member(jsii_name="grantPurge")
-    def grant_purge(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_purge(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant an IAM principal permissions to purge all messages from the queue.
 
         This will grant the following permissions:
@@ -2143,10 +2151,10 @@ class _IQueueProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__259c1cbbca404fd7b306bfb8e05e77c1d36743bd55e1212ceecf383f245d6244)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPurge", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPurge", [grantee]))
 
     @jsii.member(jsii_name="grantSendMessages")
-    def grant_send_messages(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_send_messages(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant access to send messages to a queue to the given identity.
 
         This will grant the following permissions:
@@ -2160,7 +2168,7 @@ class _IQueueProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c96217067b025063a2c6673c914a427a61983f12646083c578096402bb248abb)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSendMessages", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSendMessages", [grantee]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -2172,14 +2180,14 @@ class _IQueueProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Queue.
 
         :param metric_name: -
@@ -2214,7 +2222,7 @@ class _IQueueProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricApproximateAgeOfOldestMessage")
     def metric_approximate_age_of_oldest_message(
@@ -2225,14 +2233,14 @@ class _IQueueProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The approximate age of the oldest non-deleted message in the queue.
 
         Maximum over 5 minutes
@@ -2265,7 +2273,7 @@ class _IQueueProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricApproximateAgeOfOldestMessage", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricApproximateAgeOfOldestMessage", [props]))
 
     @jsii.member(jsii_name="metricApproximateNumberOfMessagesDelayed")
     def metric_approximate_number_of_messages_delayed(
@@ -2276,14 +2284,14 @@ class _IQueueProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages in the queue that are delayed and not available for reading immediately.
 
         Maximum over 5 minutes
@@ -2316,7 +2324,7 @@ class _IQueueProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricApproximateNumberOfMessagesDelayed", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricApproximateNumberOfMessagesDelayed", [props]))
 
     @jsii.member(jsii_name="metricApproximateNumberOfMessagesNotVisible")
     def metric_approximate_number_of_messages_not_visible(
@@ -2327,14 +2335,14 @@ class _IQueueProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that are in flight.
 
         Maximum over 5 minutes
@@ -2367,7 +2375,7 @@ class _IQueueProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricApproximateNumberOfMessagesNotVisible", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricApproximateNumberOfMessagesNotVisible", [props]))
 
     @jsii.member(jsii_name="metricApproximateNumberOfMessagesVisible")
     def metric_approximate_number_of_messages_visible(
@@ -2378,14 +2386,14 @@ class _IQueueProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages available for retrieval from the queue.
 
         Maximum over 5 minutes
@@ -2418,7 +2426,7 @@ class _IQueueProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricApproximateNumberOfMessagesVisible", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricApproximateNumberOfMessagesVisible", [props]))
 
     @jsii.member(jsii_name="metricNumberOfEmptyReceives")
     def metric_number_of_empty_receives(
@@ -2429,14 +2437,14 @@ class _IQueueProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of ReceiveMessage API calls that did not return a message.
 
         Sum over 5 minutes
@@ -2469,7 +2477,7 @@ class _IQueueProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfEmptyReceives", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfEmptyReceives", [props]))
 
     @jsii.member(jsii_name="metricNumberOfMessagesDeleted")
     def metric_number_of_messages_deleted(
@@ -2480,14 +2488,14 @@ class _IQueueProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages deleted from the queue.
 
         Sum over 5 minutes
@@ -2520,7 +2528,7 @@ class _IQueueProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfMessagesDeleted", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfMessagesDeleted", [props]))
 
     @jsii.member(jsii_name="metricNumberOfMessagesReceived")
     def metric_number_of_messages_received(
@@ -2531,14 +2539,14 @@ class _IQueueProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages returned by calls to the ReceiveMessage action.
 
         Sum over 5 minutes
@@ -2571,7 +2579,7 @@ class _IQueueProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfMessagesReceived", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfMessagesReceived", [props]))
 
     @jsii.member(jsii_name="metricNumberOfMessagesSent")
     def metric_number_of_messages_sent(
@@ -2582,14 +2590,14 @@ class _IQueueProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages added to a queue.
 
         Sum over 5 minutes
@@ -2622,7 +2630,7 @@ class _IQueueProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfMessagesSent", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfMessagesSent", [props]))
 
     @jsii.member(jsii_name="metricSentMessageSize")
     def metric_sent_message_size(
@@ -2633,14 +2641,14 @@ class _IQueueProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The size of messages added to a queue.
 
         Average over 5 minutes
@@ -2673,7 +2681,7 @@ class _IQueueProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSentMessageSize", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSentMessageSize", [props]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IQueue).__jsii_proxy_class__ = lambda : _IQueueProxy
@@ -2814,7 +2822,7 @@ class QueueBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -2846,8 +2854,8 @@ class QueueBase(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this queue.
 
         If this queue was created in this stack (``new Queue``), a queue policy
@@ -2859,14 +2867,14 @@ class QueueBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f6c886fa7695bf0fd2e55e28767c6c53578faafa0492da24fadb1af9092075fa)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the actions defined in queueActions to the identity Principal given on this SQS queue resource.
 
         :param grantee: Principal to grant right to.
@@ -2876,10 +2884,13 @@ class QueueBase(
             type_hints = typing.get_type_hints(_typecheckingstub__6ccb1295772d7c42db85d59f3c6462ecdb405d599f31d6f5f2cfbab034371366)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantConsumeMessages")
-    def grant_consume_messages(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_consume_messages(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant permissions to consume messages from a queue.
 
         This will grant the following permissions:
@@ -2901,14 +2912,14 @@ class QueueBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e5a5ff7c810718528837ec11092f8e03040d6e612831c88a6e7076dbc91fefde)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantConsumeMessages", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantConsumeMessages", [grantee]))
 
     @jsii.member(jsii_name="grantOnKey")
     def grant_on_key(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _GrantOnKeyResult_35320c49:
+    ) -> "_GrantOnKeyResult_35320c49":
         '''Gives permissions to a grantable entity to perform actions on the encryption key.
 
         :param grantee: -
@@ -2918,10 +2929,10 @@ class QueueBase(
             type_hints = typing.get_type_hints(_typecheckingstub__0462575b26d9a0a6e126eea464f42b3c49cf8a5ce7d9a227dc46d6d4b4e52f6a)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_GrantOnKeyResult_35320c49, jsii.invoke(self, "grantOnKey", [grantee, *actions]))
+        return typing.cast("_GrantOnKeyResult_35320c49", jsii.invoke(self, "grantOnKey", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantPurge")
-    def grant_purge(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_purge(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant an IAM principal permissions to purge all messages from the queue.
 
         This will grant the following permissions:
@@ -2935,10 +2946,10 @@ class QueueBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bfd8b992fb1933e6301f1bd505a1e614230868a1ad14e16c1798998235c1918c)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPurge", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPurge", [grantee]))
 
     @jsii.member(jsii_name="grantSendMessages")
-    def grant_send_messages(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_send_messages(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant access to send messages to a queue to the given identity.
 
         This will grant the following permissions:
@@ -2961,7 +2972,7 @@ class QueueBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__000d6e6399155667ed0303df2ba4fb206e3ad9c268260ad60726c9690b5409e3)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSendMessages", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSendMessages", [grantee]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -2973,14 +2984,14 @@ class QueueBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Queue.
 
         :param metric_name: -
@@ -3015,7 +3026,7 @@ class QueueBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricApproximateAgeOfOldestMessage")
     def metric_approximate_age_of_oldest_message(
@@ -3026,14 +3037,14 @@ class QueueBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The approximate age of the oldest non-deleted message in the queue.
 
         Maximum over 5 minutes
@@ -3066,7 +3077,7 @@ class QueueBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricApproximateAgeOfOldestMessage", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricApproximateAgeOfOldestMessage", [props]))
 
     @jsii.member(jsii_name="metricApproximateNumberOfMessagesDelayed")
     def metric_approximate_number_of_messages_delayed(
@@ -3077,14 +3088,14 @@ class QueueBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages in the queue that are delayed and not available for reading immediately.
 
         Maximum over 5 minutes
@@ -3117,7 +3128,7 @@ class QueueBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricApproximateNumberOfMessagesDelayed", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricApproximateNumberOfMessagesDelayed", [props]))
 
     @jsii.member(jsii_name="metricApproximateNumberOfMessagesNotVisible")
     def metric_approximate_number_of_messages_not_visible(
@@ -3128,14 +3139,14 @@ class QueueBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that are in flight.
 
         Maximum over 5 minutes
@@ -3168,7 +3179,7 @@ class QueueBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricApproximateNumberOfMessagesNotVisible", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricApproximateNumberOfMessagesNotVisible", [props]))
 
     @jsii.member(jsii_name="metricApproximateNumberOfMessagesVisible")
     def metric_approximate_number_of_messages_visible(
@@ -3179,14 +3190,14 @@ class QueueBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages available for retrieval from the queue.
 
         Maximum over 5 minutes
@@ -3219,7 +3230,7 @@ class QueueBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricApproximateNumberOfMessagesVisible", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricApproximateNumberOfMessagesVisible", [props]))
 
     @jsii.member(jsii_name="metricNumberOfEmptyReceives")
     def metric_number_of_empty_receives(
@@ -3230,14 +3241,14 @@ class QueueBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of ReceiveMessage API calls that did not return a message.
 
         Sum over 5 minutes
@@ -3270,7 +3281,7 @@ class QueueBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfEmptyReceives", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfEmptyReceives", [props]))
 
     @jsii.member(jsii_name="metricNumberOfMessagesDeleted")
     def metric_number_of_messages_deleted(
@@ -3281,14 +3292,14 @@ class QueueBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages deleted from the queue.
 
         Sum over 5 minutes
@@ -3321,7 +3332,7 @@ class QueueBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfMessagesDeleted", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfMessagesDeleted", [props]))
 
     @jsii.member(jsii_name="metricNumberOfMessagesReceived")
     def metric_number_of_messages_received(
@@ -3332,14 +3343,14 @@ class QueueBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages returned by calls to the ReceiveMessage action.
 
         Sum over 5 minutes
@@ -3372,7 +3383,7 @@ class QueueBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfMessagesReceived", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfMessagesReceived", [props]))
 
     @jsii.member(jsii_name="metricNumberOfMessagesSent")
     def metric_number_of_messages_sent(
@@ -3383,14 +3394,14 @@ class QueueBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages added to a queue.
 
         Sum over 5 minutes
@@ -3423,7 +3434,7 @@ class QueueBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfMessagesSent", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfMessagesSent", [props]))
 
     @jsii.member(jsii_name="metricSentMessageSize")
     def metric_sent_message_size(
@@ -3434,14 +3445,14 @@ class QueueBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The size of messages added to a queue.
 
         Average over 5 minutes
@@ -3474,7 +3485,7 @@ class QueueBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSentMessageSize", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSentMessageSize", [props]))
 
     @builtins.property
     @jsii.member(jsii_name="autoCreatePolicy")
@@ -3518,9 +3529,9 @@ class QueueBase(
 
     @builtins.property
     @jsii.member(jsii_name="queueRef")
-    def queue_ref(self) -> _QueueReference_f2e39de6:
+    def queue_ref(self) -> "_QueueReference_f2e39de6":
         '''A reference to a Queue resource.'''
-        return typing.cast(_QueueReference_f2e39de6, jsii.get(self, "queueRef"))
+        return typing.cast("_QueueReference_f2e39de6", jsii.get(self, "queueRef"))
 
     @builtins.property
     @jsii.member(jsii_name="queueUrl")
@@ -3532,7 +3543,7 @@ class QueueBase(
     @builtins.property
     @jsii.member(jsii_name="encryptionMasterKey")
     @abc.abstractmethod
-    def encryption_master_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_master_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''If this queue is server-side encrypted, this is the KMS encryption key.'''
         ...
 
@@ -3586,9 +3597,9 @@ class _QueueBaseProxy(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionMasterKey")
-    def encryption_master_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_master_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''If this queue is server-side encrypted, this is the KMS encryption key.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionMasterKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionMasterKey"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionType")
@@ -3668,7 +3679,7 @@ class QueueGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.QueueG
 
     @jsii.member(jsii_name="fromQueue")
     @builtins.classmethod
-    def from_queue(cls, resource: _IQueueRef_fa8b2198) -> "QueueGrants":
+    def from_queue(cls, resource: "_IQueueRef_fa8b2198") -> "QueueGrants":
         '''Creates grants for QueueGrants.
 
         :param resource: -
@@ -3679,7 +3690,7 @@ class QueueGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.QueueG
         return typing.cast("QueueGrants", jsii.sinvoke(cls, "fromQueue", [resource]))
 
     @jsii.member(jsii_name="consumeMessages")
-    def consume_messages(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def consume_messages(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant permissions to consume messages from a queue.
 
         This will grant the following permissions:
@@ -3701,10 +3712,10 @@ class QueueGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.QueueG
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7e8dfe45bed9f0d42dd136c0b65cbd04007888a955edb2cc0e24c372e922668f)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "consumeMessages", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "consumeMessages", [grantee]))
 
     @jsii.member(jsii_name="purge")
-    def purge(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def purge(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants purge permissions.
 
         :param grantee: -
@@ -3712,10 +3723,10 @@ class QueueGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.QueueG
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e89108b582f144dc33eb6fadfda0d6f7453427c9bafe90a490ac1c210c32f461)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "purge", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "purge", [grantee]))
 
     @jsii.member(jsii_name="sendMessages")
-    def send_messages(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def send_messages(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant access to send messages to a queue to the given identity.
 
         This will grant the following permissions:
@@ -3738,22 +3749,22 @@ class QueueGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.QueueG
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c2d8d71ea37d7ec94c7e189585531197b71dc4c5af628d4a98ddfbdeb7d54766)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "sendMessages", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "sendMessages", [grantee]))
 
     @builtins.property
     @jsii.member(jsii_name="resource")
-    def _resource(self) -> _IQueueRef_fa8b2198:
-        return typing.cast(_IQueueRef_fa8b2198, jsii.get(self, "resource"))
+    def _resource(self) -> "_IQueueRef_fa8b2198":
+        return typing.cast("_IQueueRef_fa8b2198", jsii.get(self, "resource"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptedResource")
-    def _encrypted_resource(self) -> typing.Optional[_IEncryptedResource_8e9bf351]:
-        return typing.cast(typing.Optional[_IEncryptedResource_8e9bf351], jsii.get(self, "encryptedResource"))
+    def _encrypted_resource(self) -> typing.Optional["_IEncryptedResource_8e9bf351"]:
+        return typing.cast(typing.Optional["_IEncryptedResource_8e9bf351"], jsii.get(self, "encryptedResource"))
 
     @builtins.property
     @jsii.member(jsii_name="policyResource")
-    def _policy_resource(self) -> typing.Optional[_IResourceWithPolicyV2_01035ec6]:
-        return typing.cast(typing.Optional[_IResourceWithPolicyV2_01035ec6], jsii.get(self, "policyResource"))
+    def _policy_resource(self) -> typing.Optional["_IResourceWithPolicyV2_01035ec6"]:
+        return typing.cast(typing.Optional["_IResourceWithPolicyV2_01035ec6"], jsii.get(self, "policyResource"))
 
 
 class QueuePolicy(
@@ -3791,10 +3802,10 @@ class QueuePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        queues: typing.Sequence[IQueue],
+        queues: typing.Sequence["IQueue"],
     ) -> None:
         '''
         :param scope: -
@@ -3817,9 +3828,9 @@ class QueuePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="document")
-    def document(self) -> _PolicyDocument_3ac34393:
+    def document(self) -> "_PolicyDocument_3ac34393":
         '''The IAM policy document for this policy.'''
-        return typing.cast(_PolicyDocument_3ac34393, jsii.get(self, "document"))
+        return typing.cast("_PolicyDocument_3ac34393", jsii.get(self, "document"))
 
     @builtins.property
     @jsii.member(jsii_name="queuePolicyId")
@@ -3839,7 +3850,7 @@ class QueuePolicy(
     name_mapping={"queues": "queues"},
 )
 class QueuePolicyProps:
-    def __init__(self, *, queues: typing.Sequence[IQueue]) -> None:
+    def __init__(self, *, queues: typing.Sequence["IQueue"]) -> None:
         '''Properties to associate SQS queues with a policy.
 
         :param queues: The set of queues this policy applies to.
@@ -3866,11 +3877,11 @@ class QueuePolicyProps:
         }
 
     @builtins.property
-    def queues(self) -> typing.List[IQueue]:
+    def queues(self) -> typing.List["IQueue"]:
         '''The set of queues this policy applies to.'''
         result = self._values.get("queues")
         assert result is not None, "Required property 'queues' is missing"
-        return typing.cast(typing.List[IQueue], result)
+        return typing.cast(typing.List["IQueue"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3912,22 +3923,22 @@ class QueueProps:
         self,
         *,
         content_based_deduplication: typing.Optional[builtins.bool] = None,
-        data_key_reuse: typing.Optional[_Duration_4839e8c3] = None,
-        dead_letter_queue: typing.Optional[typing.Union[DeadLetterQueue, typing.Dict[builtins.str, typing.Any]]] = None,
-        deduplication_scope: typing.Optional[DeduplicationScope] = None,
-        delivery_delay: typing.Optional[_Duration_4839e8c3] = None,
-        encryption: typing.Optional[QueueEncryption] = None,
-        encryption_master_key: typing.Optional[_IKey_5f11635f] = None,
+        data_key_reuse: typing.Optional["_Duration_4839e8c3"] = None,
+        dead_letter_queue: typing.Optional[typing.Union["DeadLetterQueue", typing.Dict[builtins.str, typing.Any]]] = None,
+        deduplication_scope: typing.Optional["DeduplicationScope"] = None,
+        delivery_delay: typing.Optional["_Duration_4839e8c3"] = None,
+        encryption: typing.Optional["QueueEncryption"] = None,
+        encryption_master_key: typing.Optional["_IKey_5f11635f"] = None,
         enforce_ssl: typing.Optional[builtins.bool] = None,
         fifo: typing.Optional[builtins.bool] = None,
-        fifo_throughput_limit: typing.Optional[FifoThroughputLimit] = None,
+        fifo_throughput_limit: typing.Optional["FifoThroughputLimit"] = None,
         max_message_size_bytes: typing.Optional[jsii.Number] = None,
         queue_name: typing.Optional[builtins.str] = None,
-        receive_message_wait_time: typing.Optional[_Duration_4839e8c3] = None,
+        receive_message_wait_time: typing.Optional["_Duration_4839e8c3"] = None,
         redrive_allow_policy: typing.Optional[typing.Union["RedriveAllowPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        retention_period: typing.Optional[_Duration_4839e8c3] = None,
-        visibility_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        retention_period: typing.Optional["_Duration_4839e8c3"] = None,
+        visibility_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Properties for creating a new Queue.
 
@@ -4044,7 +4055,7 @@ class QueueProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def data_key_reuse(self) -> typing.Optional[_Duration_4839e8c3]:
+    def data_key_reuse(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The length of time that Amazon SQS reuses a data key before calling KMS again.
 
         The value must be an integer between 60 (1 minute) and 86,400 (24
@@ -4053,19 +4064,19 @@ class QueueProps:
         :default: Duration.minutes(5)
         '''
         result = self._values.get("data_key_reuse")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def dead_letter_queue(self) -> typing.Optional[DeadLetterQueue]:
+    def dead_letter_queue(self) -> typing.Optional["DeadLetterQueue"]:
         '''Send messages to this queue if they were unsuccessfully dequeued a number of times.
 
         :default: no dead-letter queue
         '''
         result = self._values.get("dead_letter_queue")
-        return typing.cast(typing.Optional[DeadLetterQueue], result)
+        return typing.cast(typing.Optional["DeadLetterQueue"], result)
 
     @builtins.property
-    def deduplication_scope(self) -> typing.Optional[DeduplicationScope]:
+    def deduplication_scope(self) -> typing.Optional["DeduplicationScope"]:
         '''For high throughput for FIFO queues, specifies whether message deduplication occurs at the message group or queue level.
 
         (Only applies to FIFO queues.)
@@ -4073,10 +4084,10 @@ class QueueProps:
         :default: DeduplicationScope.QUEUE
         '''
         result = self._values.get("deduplication_scope")
-        return typing.cast(typing.Optional[DeduplicationScope], result)
+        return typing.cast(typing.Optional["DeduplicationScope"], result)
 
     @builtins.property
-    def delivery_delay(self) -> typing.Optional[_Duration_4839e8c3]:
+    def delivery_delay(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time in seconds that the delivery of all messages in the queue is delayed.
 
         You can specify an integer value of 0 to 900 (15 minutes). The default
@@ -4085,10 +4096,10 @@ class QueueProps:
         :default: 0
         '''
         result = self._values.get("delivery_delay")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def encryption(self) -> typing.Optional[QueueEncryption]:
+    def encryption(self) -> typing.Optional["QueueEncryption"]:
         '''Whether the contents of the queue are encrypted, and by what type of key.
 
         Be aware that encryption is not available in all regions, please see the docs
@@ -4097,10 +4108,10 @@ class QueueProps:
         :default: SQS_MANAGED (SSE-SQS) for newly created queues
         '''
         result = self._values.get("encryption")
-        return typing.cast(typing.Optional[QueueEncryption], result)
+        return typing.cast(typing.Optional["QueueEncryption"], result)
 
     @builtins.property
-    def encryption_master_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_master_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''External KMS key to use for queue encryption.
 
         Individual messages will be encrypted using data keys. The data keys in
@@ -4113,7 +4124,7 @@ class QueueProps:
         :default: If encryption is set to KMS and not specified, a key will be created.
         '''
         result = self._values.get("encryption_master_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def enforce_ssl(self) -> typing.Optional[builtins.bool]:
@@ -4136,7 +4147,7 @@ class QueueProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def fifo_throughput_limit(self) -> typing.Optional[FifoThroughputLimit]:
+    def fifo_throughput_limit(self) -> typing.Optional["FifoThroughputLimit"]:
         '''For high throughput for FIFO queues, specifies whether the FIFO queue throughput quota applies to the entire queue or per message group.
 
         (Only applies to FIFO queues.)
@@ -4144,7 +4155,7 @@ class QueueProps:
         :default: FifoThroughputLimit.PER_QUEUE
         '''
         result = self._values.get("fifo_throughput_limit")
-        return typing.cast(typing.Optional[FifoThroughputLimit], result)
+        return typing.cast(typing.Optional["FifoThroughputLimit"], result)
 
     @builtins.property
     def max_message_size_bytes(self) -> typing.Optional[jsii.Number]:
@@ -4170,7 +4181,7 @@ class QueueProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def receive_message_wait_time(self) -> typing.Optional[_Duration_4839e8c3]:
+    def receive_message_wait_time(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Default wait time for ReceiveMessage calls.
 
         Does not wait if set to 0, otherwise waits this amount of seconds
@@ -4181,7 +4192,7 @@ class QueueProps:
         :default: 0
         '''
         result = self._values.get("receive_message_wait_time")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def redrive_allow_policy(self) -> typing.Optional["RedriveAllowPolicy"]:
@@ -4193,7 +4204,7 @@ class QueueProps:
         return typing.cast(typing.Optional["RedriveAllowPolicy"], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Policy to apply when the queue is removed from the stack.
 
         Even though queues are technically stateful, their contents are transient and it
@@ -4204,10 +4215,10 @@ class QueueProps:
         :default: RemovalPolicy.DESTROY
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def retention_period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def retention_period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that Amazon SQS retains a message.
 
         You can specify an integer value from 60 seconds (1 minute) to 1209600
@@ -4216,10 +4227,10 @@ class QueueProps:
         :default: Duration.days(4)
         '''
         result = self._values.get("retention_period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def visibility_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def visibility_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Timeout of processing a single message.
 
         After dequeuing, the processor has this much time to handle the message
@@ -4232,7 +4243,7 @@ class QueueProps:
         :default: Duration.seconds(30)
         '''
         result = self._values.get("visibility_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4259,7 +4270,7 @@ class RedriveAllowPolicy:
         self,
         *,
         redrive_permission: typing.Optional["RedrivePermission"] = None,
-        source_queues: typing.Optional[typing.Sequence[IQueue]] = None,
+        source_queues: typing.Optional[typing.Sequence["IQueue"]] = None,
     ) -> None:
         '''Permission settings for the dead letter source queue.
 
@@ -4307,7 +4318,7 @@ class RedriveAllowPolicy:
         return typing.cast(typing.Optional["RedrivePermission"], result)
 
     @builtins.property
-    def source_queues(self) -> typing.Optional[typing.List[IQueue]]:
+    def source_queues(self) -> typing.Optional[typing.List["IQueue"]]:
         '''Source queues that can designate this queue as their dead-letter queue.
 
         When ``redrivePermission`` is set to ``RedrivePermission.BY_QUEUE``, this parameter is required.
@@ -4322,7 +4333,7 @@ class RedriveAllowPolicy:
         :default: - Required when ``redrivePermission`` is ``RedrivePermission.BY_QUEUE``, cannot be defined otherwise.
         '''
         result = self._values.get("source_queues")
-        return typing.cast(typing.Optional[typing.List[IQueue]], result)
+        return typing.cast(typing.Optional[typing.List["IQueue"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4397,26 +4408,26 @@ class Queue(QueueBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.Q
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         content_based_deduplication: typing.Optional[builtins.bool] = None,
-        data_key_reuse: typing.Optional[_Duration_4839e8c3] = None,
-        dead_letter_queue: typing.Optional[typing.Union[DeadLetterQueue, typing.Dict[builtins.str, typing.Any]]] = None,
-        deduplication_scope: typing.Optional[DeduplicationScope] = None,
-        delivery_delay: typing.Optional[_Duration_4839e8c3] = None,
-        encryption: typing.Optional[QueueEncryption] = None,
-        encryption_master_key: typing.Optional[_IKey_5f11635f] = None,
+        data_key_reuse: typing.Optional["_Duration_4839e8c3"] = None,
+        dead_letter_queue: typing.Optional[typing.Union["DeadLetterQueue", typing.Dict[builtins.str, typing.Any]]] = None,
+        deduplication_scope: typing.Optional["DeduplicationScope"] = None,
+        delivery_delay: typing.Optional["_Duration_4839e8c3"] = None,
+        encryption: typing.Optional["QueueEncryption"] = None,
+        encryption_master_key: typing.Optional["_IKey_5f11635f"] = None,
         enforce_ssl: typing.Optional[builtins.bool] = None,
         fifo: typing.Optional[builtins.bool] = None,
-        fifo_throughput_limit: typing.Optional[FifoThroughputLimit] = None,
+        fifo_throughput_limit: typing.Optional["FifoThroughputLimit"] = None,
         max_message_size_bytes: typing.Optional[jsii.Number] = None,
         queue_name: typing.Optional[builtins.str] = None,
-        receive_message_wait_time: typing.Optional[_Duration_4839e8c3] = None,
-        redrive_allow_policy: typing.Optional[typing.Union[RedriveAllowPolicy, typing.Dict[builtins.str, typing.Any]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        retention_period: typing.Optional[_Duration_4839e8c3] = None,
-        visibility_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        receive_message_wait_time: typing.Optional["_Duration_4839e8c3"] = None,
+        redrive_allow_policy: typing.Optional[typing.Union["RedriveAllowPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        retention_period: typing.Optional["_Duration_4839e8c3"] = None,
+        visibility_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -4469,10 +4480,10 @@ class Queue(QueueBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.Q
     @builtins.classmethod
     def from_queue_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         queue_arn: builtins.str,
-    ) -> IQueue:
+    ) -> "IQueue":
         '''Import an existing SQS queue provided an ARN.
 
         :param scope: The parent creating construct.
@@ -4484,13 +4495,13 @@ class Queue(QueueBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.Q
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument queue_arn", value=queue_arn, expected_type=type_hints["queue_arn"])
-        return typing.cast(IQueue, jsii.sinvoke(cls, "fromQueueArn", [scope, id, queue_arn]))
+        return typing.cast("IQueue", jsii.sinvoke(cls, "fromQueueArn", [scope, id, queue_arn]))
 
     @jsii.member(jsii_name="fromQueueAttributes")
     @builtins.classmethod
     def from_queue_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         queue_arn: builtins.str,
@@ -4498,7 +4509,7 @@ class Queue(QueueBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.Q
         key_arn: typing.Optional[builtins.str] = None,
         queue_name: typing.Optional[builtins.str] = None,
         queue_url: typing.Optional[builtins.str] = None,
-    ) -> IQueue:
+    ) -> "IQueue":
         '''Import an existing queue.
 
         :param scope: -
@@ -4521,7 +4532,7 @@ class Queue(QueueBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.Q
             queue_url=queue_url,
         )
 
-        return typing.cast(IQueue, jsii.sinvoke(cls, "fromQueueAttributes", [scope, id, attrs]))
+        return typing.cast("IQueue", jsii.sinvoke(cls, "fromQueueAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -4567,21 +4578,21 @@ class Queue(QueueBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.Q
 
     @builtins.property
     @jsii.member(jsii_name="deadLetterQueue")
-    def dead_letter_queue(self) -> typing.Optional[DeadLetterQueue]:
+    def dead_letter_queue(self) -> typing.Optional["DeadLetterQueue"]:
         '''If this queue is configured with a dead-letter queue, this is the dead-letter queue settings.'''
-        return typing.cast(typing.Optional[DeadLetterQueue], jsii.get(self, "deadLetterQueue"))
+        return typing.cast(typing.Optional["DeadLetterQueue"], jsii.get(self, "deadLetterQueue"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionMasterKey")
-    def encryption_master_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_master_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''If this queue is encrypted, this is the KMS key.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionMasterKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionMasterKey"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionType")
-    def encryption_type(self) -> typing.Optional[QueueEncryption]:
+    def encryption_type(self) -> typing.Optional["QueueEncryption"]:
         '''Whether the contents of the queue are encrypted, and by what type of key.'''
-        return typing.cast(typing.Optional[QueueEncryption], jsii.get(self, "encryptionType"))
+        return typing.cast(typing.Optional["QueueEncryption"], jsii.get(self, "encryptionType"))
 
 
 __all__ = [

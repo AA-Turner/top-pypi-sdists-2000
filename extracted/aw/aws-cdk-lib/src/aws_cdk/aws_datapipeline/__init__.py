@@ -144,15 +144,15 @@ class CfnPipeline(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        activate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        activate: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
-        parameter_objects: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ParameterObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        parameter_values: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ParameterValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        pipeline_objects: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.PipelineObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        parameter_objects: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ParameterObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        parameter_values: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ParameterValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        pipeline_objects: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.PipelineObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         pipeline_tags: typing.Optional[typing.Sequence[typing.Union["CfnPipeline.PipelineTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataPipeline::Pipeline``.
@@ -185,7 +185,7 @@ class CfnPipeline(
 
     @jsii.member(jsii_name="arnForPipeline")
     @builtins.classmethod
-    def arn_for_pipeline(cls, resource: _IPipelineRef_5a3c7db8) -> builtins.str:
+    def arn_for_pipeline(cls, resource: "_IPipelineRef_5a3c7db8") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -198,10 +198,10 @@ class CfnPipeline(
     @builtins.classmethod
     def from_pipeline_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         pipeline_id: builtins.str,
-    ) -> _IPipelineRef_5a3c7db8:
+    ) -> "_IPipelineRef_5a3c7db8":
         '''Creates a new IPipelineRef from a pipelineId.
 
         :param scope: -
@@ -213,7 +213,7 @@ class CfnPipeline(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument pipeline_id", value=pipeline_id, expected_type=type_hints["pipeline_id"])
-        return typing.cast(_IPipelineRef_5a3c7db8, jsii.sinvoke(cls, "fromPipelineID", [scope, id, pipeline_id]))
+        return typing.cast("_IPipelineRef_5a3c7db8", jsii.sinvoke(cls, "fromPipelineID", [scope, id, pipeline_id]))
 
     @jsii.member(jsii_name="isCfnPipeline")
     @builtins.classmethod
@@ -228,7 +228,7 @@ class CfnPipeline(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPipeline", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -276,9 +276,9 @@ class CfnPipeline(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -287,9 +287,9 @@ class CfnPipeline(
 
     @builtins.property
     @jsii.member(jsii_name="pipelineRef")
-    def pipeline_ref(self) -> _PipelineReference_c4f6a4a9:
+    def pipeline_ref(self) -> "_PipelineReference_c4f6a4a9":
         '''A reference to a Pipeline resource.'''
-        return typing.cast(_PipelineReference_c4f6a4a9, jsii.get(self, "pipelineRef"))
+        return typing.cast("_PipelineReference_c4f6a4a9", jsii.get(self, "pipelineRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -308,14 +308,14 @@ class CfnPipeline(
     @jsii.member(jsii_name="activate")
     def activate(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to validate and start the pipeline or stop an active pipeline.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "activate"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "activate"))
 
     @activate.setter
     def activate(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__61574457e35fcb087e933d0c7a5add7cc264ecfbbcccea50440fb17b0936933c)
@@ -339,14 +339,14 @@ class CfnPipeline(
     @jsii.member(jsii_name="parameterObjects")
     def parameter_objects(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ParameterObjectProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ParameterObjectProperty"]]]]:
         '''The parameter objects used with the pipeline.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ParameterObjectProperty"]]]], jsii.get(self, "parameterObjects"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ParameterObjectProperty"]]]], jsii.get(self, "parameterObjects"))
 
     @parameter_objects.setter
     def parameter_objects(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ParameterObjectProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ParameterObjectProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ca1539f9bf53fedf5b0c8ac5e77a23f8870da2751b8f5ed2eae85811932dcc7c)
@@ -357,14 +357,14 @@ class CfnPipeline(
     @jsii.member(jsii_name="parameterValues")
     def parameter_values(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ParameterValueProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ParameterValueProperty"]]]]:
         '''The parameter values used with the pipeline.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ParameterValueProperty"]]]], jsii.get(self, "parameterValues"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ParameterValueProperty"]]]], jsii.get(self, "parameterValues"))
 
     @parameter_values.setter
     def parameter_values(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ParameterValueProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ParameterValueProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aaace3a946182334a617bcb941fa634768cfc260bacc2af2ee0401dbb23a36db)
@@ -375,14 +375,14 @@ class CfnPipeline(
     @jsii.member(jsii_name="pipelineObjects")
     def pipeline_objects(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.PipelineObjectProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.PipelineObjectProperty"]]]]:
         '''The objects that define the pipeline.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.PipelineObjectProperty"]]]], jsii.get(self, "pipelineObjects"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.PipelineObjectProperty"]]]], jsii.get(self, "pipelineObjects"))
 
     @pipeline_objects.setter
     def pipeline_objects(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.PipelineObjectProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.PipelineObjectProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__303ff38be40efb59439d8be9b488922db23d7f70ba23f6de2ae3877b9c164d37)
@@ -591,7 +591,7 @@ class CfnPipeline(
         def __init__(
             self,
             *,
-            attributes: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ParameterAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            attributes: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ParameterAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]],
             id: builtins.str,
         ) -> None:
             '''Contains information about a parameter object.
@@ -628,14 +628,14 @@ class CfnPipeline(
         @builtins.property
         def attributes(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ParameterAttributeProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ParameterAttributeProperty"]]]:
             '''The attributes of the parameter object.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datapipeline-pipeline-parameterobject.html#cfn-datapipeline-pipeline-parameterobject-attributes
             '''
             result = self._values.get("attributes")
             assert result is not None, "Required property 'attributes' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ParameterAttributeProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ParameterAttributeProperty"]]], result)
 
         @builtins.property
         def id(self) -> builtins.str:
@@ -733,7 +733,7 @@ class CfnPipeline(
         def __init__(
             self,
             *,
-            fields: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.FieldProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            fields: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.FieldProperty", typing.Dict[builtins.str, typing.Any]]]]],
             id: builtins.str,
             name: builtins.str,
         ) -> None:
@@ -780,14 +780,14 @@ class CfnPipeline(
         @builtins.property
         def fields(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.FieldProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.FieldProperty"]]]:
             '''Key-value pairs that define the properties of the object.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datapipeline-pipeline-pipelineobject.html#cfn-datapipeline-pipeline-pipelineobject-fields
             '''
             result = self._values.get("fields")
             assert result is not None, "Required property 'fields' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.FieldProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.FieldProperty"]]], result)
 
         @builtins.property
         def id(self) -> builtins.str:
@@ -907,12 +907,12 @@ class CfnPipelineProps:
         self,
         *,
         name: builtins.str,
-        activate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        activate: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
-        parameter_objects: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ParameterObjectProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        parameter_values: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ParameterValueProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        pipeline_objects: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.PipelineObjectProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        pipeline_tags: typing.Optional[typing.Sequence[typing.Union[CfnPipeline.PipelineTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        parameter_objects: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ParameterObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        parameter_values: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ParameterValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        pipeline_objects: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.PipelineObjectProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        pipeline_tags: typing.Optional[typing.Sequence[typing.Union["CfnPipeline.PipelineTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPipeline``.
 
@@ -1005,7 +1005,7 @@ class CfnPipelineProps:
     @builtins.property
     def activate(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to validate and start the pipeline or stop an active pipeline.
 
         By default, the value is set to ``true`` .
@@ -1013,7 +1013,7 @@ class CfnPipelineProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datapipeline-pipeline.html#cfn-datapipeline-pipeline-activate
         '''
         result = self._values.get("activate")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1027,29 +1027,29 @@ class CfnPipelineProps:
     @builtins.property
     def parameter_objects(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.ParameterObjectProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ParameterObjectProperty"]]]]:
         '''The parameter objects used with the pipeline.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datapipeline-pipeline.html#cfn-datapipeline-pipeline-parameterobjects
         '''
         result = self._values.get("parameter_objects")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.ParameterObjectProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ParameterObjectProperty"]]]], result)
 
     @builtins.property
     def parameter_values(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.ParameterValueProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ParameterValueProperty"]]]]:
         '''The parameter values used with the pipeline.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datapipeline-pipeline.html#cfn-datapipeline-pipeline-parametervalues
         '''
         result = self._values.get("parameter_values")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.ParameterValueProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ParameterValueProperty"]]]], result)
 
     @builtins.property
     def pipeline_objects(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.PipelineObjectProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.PipelineObjectProperty"]]]]:
         '''The objects that define the pipeline.
 
         These objects overwrite the existing pipeline definition. Not all objects, fields, and values can be updated. For information about restrictions, see `Editing Your Pipeline <https://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-manage-pipeline-modify-console.html>`_ in the *AWS Data Pipeline Developer Guide* .
@@ -1057,12 +1057,12 @@ class CfnPipelineProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datapipeline-pipeline.html#cfn-datapipeline-pipeline-pipelineobjects
         '''
         result = self._values.get("pipeline_objects")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.PipelineObjectProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.PipelineObjectProperty"]]]], result)
 
     @builtins.property
     def pipeline_tags(
         self,
-    ) -> typing.Optional[typing.List[CfnPipeline.PipelineTagProperty]]:
+    ) -> typing.Optional[typing.List["CfnPipeline.PipelineTagProperty"]]:
         '''A list of arbitrary tags (key-value pairs) to associate with the pipeline, which you can use to control permissions.
 
         For more information, see `Controlling Access to Pipelines and Resources <https://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-control-access.html>`_ in the *AWS Data Pipeline Developer Guide* .
@@ -1070,7 +1070,7 @@ class CfnPipelineProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datapipeline-pipeline.html#cfn-datapipeline-pipeline-pipelinetags
         '''
         result = self._values.get("pipeline_tags")
-        return typing.cast(typing.Optional[typing.List[CfnPipeline.PipelineTagProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnPipeline.PipelineTagProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

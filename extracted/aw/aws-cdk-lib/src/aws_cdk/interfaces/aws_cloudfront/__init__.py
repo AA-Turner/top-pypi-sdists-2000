@@ -547,7 +547,7 @@ class IAnycastIpListRef(
 
     @builtins.property
     @jsii.member(jsii_name="anycastIpListRef")
-    def anycast_ip_list_ref(self) -> AnycastIpListReference:
+    def anycast_ip_list_ref(self) -> "AnycastIpListReference":
         '''(experimental) A reference to a AnycastIpList resource.
 
         :stability: experimental
@@ -568,12 +568,12 @@ class _IAnycastIpListRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="anycastIpListRef")
-    def anycast_ip_list_ref(self) -> AnycastIpListReference:
+    def anycast_ip_list_ref(self) -> "AnycastIpListReference":
         '''(experimental) A reference to a AnycastIpList resource.
 
         :stability: experimental
         '''
-        return typing.cast(AnycastIpListReference, jsii.get(self, "anycastIpListRef"))
+        return typing.cast("AnycastIpListReference", jsii.get(self, "anycastIpListRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAnycastIpListRef).__jsii_proxy_class__ = lambda : _IAnycastIpListRefProxy
@@ -592,7 +592,7 @@ class ICachePolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="cachePolicyRef")
-    def cache_policy_ref(self) -> CachePolicyReference:
+    def cache_policy_ref(self) -> "CachePolicyReference":
         '''(experimental) A reference to a CachePolicy resource.
 
         :stability: experimental
@@ -613,12 +613,12 @@ class _ICachePolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="cachePolicyRef")
-    def cache_policy_ref(self) -> CachePolicyReference:
+    def cache_policy_ref(self) -> "CachePolicyReference":
         '''(experimental) A reference to a CachePolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(CachePolicyReference, jsii.get(self, "cachePolicyRef"))
+        return typing.cast("CachePolicyReference", jsii.get(self, "cachePolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICachePolicyRef).__jsii_proxy_class__ = lambda : _ICachePolicyRefProxy
@@ -641,7 +641,7 @@ class ICloudFrontOriginAccessIdentityRef(
     @jsii.member(jsii_name="cloudFrontOriginAccessIdentityRef")
     def cloud_front_origin_access_identity_ref(
         self,
-    ) -> CloudFrontOriginAccessIdentityReference:
+    ) -> "CloudFrontOriginAccessIdentityReference":
         '''(experimental) A reference to a CloudFrontOriginAccessIdentity resource.
 
         :stability: experimental
@@ -664,12 +664,12 @@ class _ICloudFrontOriginAccessIdentityRefProxy(
     @jsii.member(jsii_name="cloudFrontOriginAccessIdentityRef")
     def cloud_front_origin_access_identity_ref(
         self,
-    ) -> CloudFrontOriginAccessIdentityReference:
+    ) -> "CloudFrontOriginAccessIdentityReference":
         '''(experimental) A reference to a CloudFrontOriginAccessIdentity resource.
 
         :stability: experimental
         '''
-        return typing.cast(CloudFrontOriginAccessIdentityReference, jsii.get(self, "cloudFrontOriginAccessIdentityRef"))
+        return typing.cast("CloudFrontOriginAccessIdentityReference", jsii.get(self, "cloudFrontOriginAccessIdentityRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICloudFrontOriginAccessIdentityRef).__jsii_proxy_class__ = lambda : _ICloudFrontOriginAccessIdentityRefProxy
@@ -690,7 +690,7 @@ class IConnectionFunctionRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectionFunctionRef")
-    def connection_function_ref(self) -> ConnectionFunctionReference:
+    def connection_function_ref(self) -> "ConnectionFunctionReference":
         '''(experimental) A reference to a ConnectionFunction resource.
 
         :stability: experimental
@@ -711,12 +711,12 @@ class _IConnectionFunctionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectionFunctionRef")
-    def connection_function_ref(self) -> ConnectionFunctionReference:
+    def connection_function_ref(self) -> "ConnectionFunctionReference":
         '''(experimental) A reference to a ConnectionFunction resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectionFunctionReference, jsii.get(self, "connectionFunctionRef"))
+        return typing.cast("ConnectionFunctionReference", jsii.get(self, "connectionFunctionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectionFunctionRef).__jsii_proxy_class__ = lambda : _IConnectionFunctionRefProxy
@@ -735,7 +735,7 @@ class IConnectionGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectionGroupRef")
-    def connection_group_ref(self) -> ConnectionGroupReference:
+    def connection_group_ref(self) -> "ConnectionGroupReference":
         '''(experimental) A reference to a ConnectionGroup resource.
 
         :stability: experimental
@@ -756,12 +756,12 @@ class _IConnectionGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectionGroupRef")
-    def connection_group_ref(self) -> ConnectionGroupReference:
+    def connection_group_ref(self) -> "ConnectionGroupReference":
         '''(experimental) A reference to a ConnectionGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectionGroupReference, jsii.get(self, "connectionGroupRef"))
+        return typing.cast("ConnectionGroupReference", jsii.get(self, "connectionGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectionGroupRef).__jsii_proxy_class__ = lambda : _IConnectionGroupRefProxy
@@ -782,7 +782,7 @@ class IContinuousDeploymentPolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="continuousDeploymentPolicyRef")
-    def continuous_deployment_policy_ref(self) -> ContinuousDeploymentPolicyReference:
+    def continuous_deployment_policy_ref(self) -> "ContinuousDeploymentPolicyReference":
         '''(experimental) A reference to a ContinuousDeploymentPolicy resource.
 
         :stability: experimental
@@ -803,12 +803,12 @@ class _IContinuousDeploymentPolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="continuousDeploymentPolicyRef")
-    def continuous_deployment_policy_ref(self) -> ContinuousDeploymentPolicyReference:
+    def continuous_deployment_policy_ref(self) -> "ContinuousDeploymentPolicyReference":
         '''(experimental) A reference to a ContinuousDeploymentPolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(ContinuousDeploymentPolicyReference, jsii.get(self, "continuousDeploymentPolicyRef"))
+        return typing.cast("ContinuousDeploymentPolicyReference", jsii.get(self, "continuousDeploymentPolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContinuousDeploymentPolicyRef).__jsii_proxy_class__ = lambda : _IContinuousDeploymentPolicyRefProxy
@@ -827,7 +827,7 @@ class IDistributionRef(
 
     @builtins.property
     @jsii.member(jsii_name="distributionRef")
-    def distribution_ref(self) -> DistributionReference:
+    def distribution_ref(self) -> "DistributionReference":
         '''(experimental) A reference to a Distribution resource.
 
         :stability: experimental
@@ -848,12 +848,12 @@ class _IDistributionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="distributionRef")
-    def distribution_ref(self) -> DistributionReference:
+    def distribution_ref(self) -> "DistributionReference":
         '''(experimental) A reference to a Distribution resource.
 
         :stability: experimental
         '''
-        return typing.cast(DistributionReference, jsii.get(self, "distributionRef"))
+        return typing.cast("DistributionReference", jsii.get(self, "distributionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDistributionRef).__jsii_proxy_class__ = lambda : _IDistributionRefProxy
@@ -874,7 +874,7 @@ class IDistributionTenantRef(
 
     @builtins.property
     @jsii.member(jsii_name="distributionTenantRef")
-    def distribution_tenant_ref(self) -> DistributionTenantReference:
+    def distribution_tenant_ref(self) -> "DistributionTenantReference":
         '''(experimental) A reference to a DistributionTenant resource.
 
         :stability: experimental
@@ -895,12 +895,12 @@ class _IDistributionTenantRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="distributionTenantRef")
-    def distribution_tenant_ref(self) -> DistributionTenantReference:
+    def distribution_tenant_ref(self) -> "DistributionTenantReference":
         '''(experimental) A reference to a DistributionTenant resource.
 
         :stability: experimental
         '''
-        return typing.cast(DistributionTenantReference, jsii.get(self, "distributionTenantRef"))
+        return typing.cast("DistributionTenantReference", jsii.get(self, "distributionTenantRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDistributionTenantRef).__jsii_proxy_class__ = lambda : _IDistributionTenantRefProxy
@@ -919,7 +919,7 @@ class IFunctionRef(
 
     @builtins.property
     @jsii.member(jsii_name="functionRef")
-    def function_ref(self) -> FunctionReference:
+    def function_ref(self) -> "FunctionReference":
         '''(experimental) A reference to a Function resource.
 
         :stability: experimental
@@ -940,12 +940,12 @@ class _IFunctionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="functionRef")
-    def function_ref(self) -> FunctionReference:
+    def function_ref(self) -> "FunctionReference":
         '''(experimental) A reference to a Function resource.
 
         :stability: experimental
         '''
-        return typing.cast(FunctionReference, jsii.get(self, "functionRef"))
+        return typing.cast("FunctionReference", jsii.get(self, "functionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFunctionRef).__jsii_proxy_class__ = lambda : _IFunctionRefProxy

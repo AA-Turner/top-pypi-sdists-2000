@@ -194,7 +194,7 @@ class IChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="channelRef")
-    def channel_ref(self) -> ChannelReference:
+    def channel_ref(self) -> "ChannelReference":
         '''(experimental) A reference to a Channel resource.
 
         :stability: experimental
@@ -215,12 +215,12 @@ class _IChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="channelRef")
-    def channel_ref(self) -> ChannelReference:
+    def channel_ref(self) -> "ChannelReference":
         '''(experimental) A reference to a Channel resource.
 
         :stability: experimental
         '''
-        return typing.cast(ChannelReference, jsii.get(self, "channelRef"))
+        return typing.cast("ChannelReference", jsii.get(self, "channelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IChannelRef).__jsii_proxy_class__ = lambda : _IChannelRefProxy
@@ -239,7 +239,7 @@ class IDashboardRef(
 
     @builtins.property
     @jsii.member(jsii_name="dashboardRef")
-    def dashboard_ref(self) -> DashboardReference:
+    def dashboard_ref(self) -> "DashboardReference":
         '''(experimental) A reference to a Dashboard resource.
 
         :stability: experimental
@@ -260,12 +260,12 @@ class _IDashboardRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dashboardRef")
-    def dashboard_ref(self) -> DashboardReference:
+    def dashboard_ref(self) -> "DashboardReference":
         '''(experimental) A reference to a Dashboard resource.
 
         :stability: experimental
         '''
-        return typing.cast(DashboardReference, jsii.get(self, "dashboardRef"))
+        return typing.cast("DashboardReference", jsii.get(self, "dashboardRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDashboardRef).__jsii_proxy_class__ = lambda : _IDashboardRefProxy
@@ -284,7 +284,7 @@ class IEventDataStoreRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventDataStoreRef")
-    def event_data_store_ref(self) -> EventDataStoreReference:
+    def event_data_store_ref(self) -> "EventDataStoreReference":
         '''(experimental) A reference to a EventDataStore resource.
 
         :stability: experimental
@@ -305,12 +305,12 @@ class _IEventDataStoreRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventDataStoreRef")
-    def event_data_store_ref(self) -> EventDataStoreReference:
+    def event_data_store_ref(self) -> "EventDataStoreReference":
         '''(experimental) A reference to a EventDataStore resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventDataStoreReference, jsii.get(self, "eventDataStoreRef"))
+        return typing.cast("EventDataStoreReference", jsii.get(self, "eventDataStoreRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventDataStoreRef).__jsii_proxy_class__ = lambda : _IEventDataStoreRefProxy

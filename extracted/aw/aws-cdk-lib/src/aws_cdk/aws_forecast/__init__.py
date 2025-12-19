@@ -133,7 +133,7 @@ class CfnDataset(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         dataset_name: builtins.str,
@@ -174,7 +174,7 @@ class CfnDataset(
 
     @jsii.member(jsii_name="arnForDataset")
     @builtins.classmethod
-    def arn_for_dataset(cls, resource: _IDatasetRef_e339586a) -> builtins.str:
+    def arn_for_dataset(cls, resource: "_IDatasetRef_e339586a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -196,7 +196,7 @@ class CfnDataset(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataset", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -241,9 +241,9 @@ class CfnDataset(
 
     @builtins.property
     @jsii.member(jsii_name="datasetRef")
-    def dataset_ref(self) -> _DatasetReference_9a84d365:
+    def dataset_ref(self) -> "_DatasetReference_9a84d365":
         '''A reference to a Dataset resource.'''
-        return typing.cast(_DatasetReference_9a84d365, jsii.get(self, "datasetRef"))
+        return typing.cast("_DatasetReference_9a84d365", jsii.get(self, "datasetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="datasetName")
@@ -497,7 +497,7 @@ class CfnDataset(
         def __init__(
             self,
             *,
-            attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.AttributesItemsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.AttributesItemsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Defines the fields of a dataset.
 
@@ -529,13 +529,13 @@ class CfnDataset(
         @builtins.property
         def attributes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataset.AttributesItemsProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataset.AttributesItemsProperty"]]]]:
             '''An array of attributes specifying the name and type of each field in a dataset.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-forecast-dataset-schema.html#cfn-forecast-dataset-schema-attributes
             '''
             result = self._values.get("attributes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataset.AttributesItemsProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataset.AttributesItemsProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -645,6 +645,7 @@ class CfnDatasetGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_forecast as forecast
@@ -664,13 +665,13 @@ class CfnDatasetGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         dataset_group_name: builtins.str,
         domain: builtins.str,
         dataset_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Forecast::DatasetGroup``.
 
@@ -698,7 +699,7 @@ class CfnDatasetGroup(
     @builtins.classmethod
     def arn_for_dataset_group(
         cls,
-        resource: _IDatasetGroupRef_6d6b1f2e,
+        resource: "_IDatasetGroupRef_6d6b1f2e",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -721,7 +722,7 @@ class CfnDatasetGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDatasetGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -766,15 +767,15 @@ class CfnDatasetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="datasetGroupRef")
-    def dataset_group_ref(self) -> _DatasetGroupReference_4bec336c:
+    def dataset_group_ref(self) -> "_DatasetGroupReference_4bec336c":
         '''A reference to a DatasetGroup resource.'''
-        return typing.cast(_DatasetGroupReference_4bec336c, jsii.get(self, "datasetGroupRef"))
+        return typing.cast("_DatasetGroupReference_4bec336c", jsii.get(self, "datasetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="datasetGroupName")
@@ -817,12 +818,12 @@ class CfnDatasetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8ca2df71e9c6989cff46a364238fa01ea9289ca1eab6c0498f98d265444d51da)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -846,7 +847,7 @@ class CfnDatasetGroupProps:
         dataset_group_name: builtins.str,
         domain: builtins.str,
         dataset_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDatasetGroup``.
 
@@ -860,6 +861,7 @@ class CfnDatasetGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_forecast as forecast
@@ -925,7 +927,7 @@ class CfnDatasetGroupProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -933,7 +935,7 @@ class CfnDatasetGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-forecast-datasetgroup.html#cfn-forecast-datasetgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -970,7 +972,7 @@ class CfnDatasetProps:
         schema: typing.Any,
         data_frequency: typing.Optional[builtins.str] = None,
         encryption_config: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnDataset.TagsItemsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnDataset.TagsItemsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataset``.
 
@@ -1103,7 +1105,7 @@ class CfnDatasetProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[CfnDataset.TagsItemsProperty]]:
+    def tags(self) -> typing.Optional[typing.List["CfnDataset.TagsItemsProperty"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -1111,7 +1113,7 @@ class CfnDatasetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-forecast-dataset.html#cfn-forecast-dataset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnDataset.TagsItemsProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnDataset.TagsItemsProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

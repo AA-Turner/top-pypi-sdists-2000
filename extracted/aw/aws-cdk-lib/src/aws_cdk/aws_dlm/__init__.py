@@ -89,6 +89,7 @@ class CfnLifecyclePolicy(
 
     Example::
 
+        from aws_cdk import CfnTag, CfnTag, CfnTag, CfnTag, CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dlm as dlm
@@ -254,21 +255,21 @@ class CfnLifecyclePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        copy_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        copy_tags: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         create_interval: typing.Optional[jsii.Number] = None,
         cross_region_copy_targets: typing.Any = None,
         default_policy: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        exclusions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.ExclusionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        exclusions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.ExclusionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         execution_role_arn: typing.Optional[builtins.str] = None,
-        extend_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        policy_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.PolicyDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        extend_deletion: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        policy_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.PolicyDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         retain_interval: typing.Optional[jsii.Number] = None,
         state: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DLM::LifecyclePolicy``.
 
@@ -312,7 +313,7 @@ class CfnLifecyclePolicy(
     @builtins.classmethod
     def arn_for_lifecycle_policy(
         cls,
-        resource: _ILifecyclePolicyRef_4d3577bf,
+        resource: "_ILifecyclePolicyRef_4d3577bf",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -335,7 +336,7 @@ class CfnLifecyclePolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLifecyclePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -388,28 +389,28 @@ class CfnLifecyclePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="lifecyclePolicyRef")
-    def lifecycle_policy_ref(self) -> _LifecyclePolicyReference_4663246d:
+    def lifecycle_policy_ref(self) -> "_LifecyclePolicyReference_4663246d":
         '''A reference to a LifecyclePolicy resource.'''
-        return typing.cast(_LifecyclePolicyReference_4663246d, jsii.get(self, "lifecyclePolicyRef"))
+        return typing.cast("_LifecyclePolicyReference_4663246d", jsii.get(self, "lifecyclePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="copyTags")
     def copy_tags(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*[Default policies only]* Indicates whether the policy should copy tags from the source resource to the snapshot or AMI.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "copyTags"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "copyTags"))
 
     @copy_tags.setter
     def copy_tags(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4f66e06f3dd5f4f31da0050465d9d93ec64ce872a39b9831bba0678e14fa5fbc)
@@ -472,14 +473,14 @@ class CfnLifecyclePolicy(
     @jsii.member(jsii_name="exclusions")
     def exclusions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ExclusionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ExclusionsProperty"]]:
         '''*[Default policies only]* Specifies exclusion parameters for volumes or instances for which you do not want to create snapshots or AMIs.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ExclusionsProperty"]], jsii.get(self, "exclusions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ExclusionsProperty"]], jsii.get(self, "exclusions"))
 
     @exclusions.setter
     def exclusions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ExclusionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ExclusionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__697e92d466d31df6c2b785374b032b06ea49a5f0a5f4866b11f7a97c11bc27e5)
@@ -503,14 +504,14 @@ class CfnLifecyclePolicy(
     @jsii.member(jsii_name="extendDeletion")
     def extend_deletion(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*[Default policies only]* Defines the snapshot or AMI retention behavior for the policy if the source volume or instance is deleted, or if the policy enters the error, disabled, or deleted state.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "extendDeletion"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "extendDeletion"))
 
     @extend_deletion.setter
     def extend_deletion(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d5a72190a4691449f1542993dcce214b4e84f38189762057ccaccba7f456d683)
@@ -521,14 +522,14 @@ class CfnLifecyclePolicy(
     @jsii.member(jsii_name="policyDetails")
     def policy_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.PolicyDetailsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.PolicyDetailsProperty"]]:
         '''The configuration details of the lifecycle policy.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.PolicyDetailsProperty"]], jsii.get(self, "policyDetails"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.PolicyDetailsProperty"]], jsii.get(self, "policyDetails"))
 
     @policy_details.setter
     def policy_details(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.PolicyDetailsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.PolicyDetailsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__28d8dbca09903b09bcfda56929bc379ae4e79616a6e38d78042df2d24f6464a3)
@@ -563,12 +564,12 @@ class CfnLifecyclePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to apply to the lifecycle policy during creation.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b27e3373e59304017b144dff4d6d34a89b633c266e7a9c06230a117c457228b6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -583,7 +584,7 @@ class CfnLifecyclePolicy(
         def __init__(
             self,
             *,
-            cross_region_copy: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.CrossRegionCopyActionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            cross_region_copy: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.CrossRegionCopyActionProperty", typing.Dict[builtins.str, typing.Any]]]]],
             name: builtins.str,
         ) -> None:
             '''*[Event-based policies only]* Specifies an action for an event-based policy.
@@ -631,14 +632,14 @@ class CfnLifecyclePolicy(
         @builtins.property
         def cross_region_copy(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.CrossRegionCopyActionProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.CrossRegionCopyActionProperty"]]]:
             '''The rule for copying shared snapshots across Regions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-action.html#cfn-dlm-lifecyclepolicy-action-crossregioncopy
             '''
             result = self._values.get("cross_region_copy")
             assert result is not None, "Required property 'cross_region_copy' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.CrossRegionCopyActionProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.CrossRegionCopyActionProperty"]]], result)
 
         @builtins.property
         def name(self) -> builtins.str:
@@ -670,7 +671,7 @@ class CfnLifecyclePolicy(
         def __init__(
             self,
             *,
-            retention_archive_tier: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.RetentionArchiveTierProperty", typing.Dict[builtins.str, typing.Any]]],
+            retention_archive_tier: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.RetentionArchiveTierProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''*[Custom snapshot policies only]* Specifies information about the archive storage tier retention period.
 
@@ -703,7 +704,7 @@ class CfnLifecyclePolicy(
         @builtins.property
         def retention_archive_tier(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.RetentionArchiveTierProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.RetentionArchiveTierProperty"]:
             '''Information about retention period in the Amazon EBS Snapshots Archive.
 
             For more information, see `Archive Amazon EBS snapshots <https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/snapshot-archive.html>`_ .
@@ -712,7 +713,7 @@ class CfnLifecyclePolicy(
             '''
             result = self._values.get("retention_archive_tier")
             assert result is not None, "Required property 'retention_archive_tier' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.RetentionArchiveTierProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.RetentionArchiveTierProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -734,7 +735,7 @@ class CfnLifecyclePolicy(
         def __init__(
             self,
             *,
-            retain_rule: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.ArchiveRetainRuleProperty", typing.Dict[builtins.str, typing.Any]]],
+            retain_rule: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.ArchiveRetainRuleProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''*[Custom snapshot policies only]* Specifies a snapshot archiving rule for a schedule.
 
@@ -769,14 +770,14 @@ class CfnLifecyclePolicy(
         @builtins.property
         def retain_rule(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ArchiveRetainRuleProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ArchiveRetainRuleProperty"]:
             '''Information about the retention period for the snapshot archiving rule.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-archiverule.html#cfn-dlm-lifecyclepolicy-archiverule-retainrule
             '''
             result = self._values.get("retain_rule")
             assert result is not None, "Required property 'retain_rule' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ArchiveRetainRuleProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ArchiveRetainRuleProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -809,7 +810,7 @@ class CfnLifecyclePolicy(
             interval: typing.Optional[jsii.Number] = None,
             interval_unit: typing.Optional[builtins.str] = None,
             location: typing.Optional[builtins.str] = None,
-            scripts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.ScriptProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            scripts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.ScriptProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             times: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''*[Custom snapshot and AMI policies only]* Specifies when the policy should create snapshots or AMIs.
@@ -930,7 +931,7 @@ class CfnLifecyclePolicy(
         @builtins.property
         def scripts(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ScriptProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ScriptProperty"]]]]:
             '''*[Custom snapshot policies that target instances only]* Specifies pre and/or post scripts for a snapshot lifecycle policy that targets instances.
 
             This is useful for creating application-consistent snapshots, or for performing specific administrative tasks before or after Amazon Data Lifecycle Manager initiates snapshot creation.
@@ -940,7 +941,7 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-createrule.html#cfn-dlm-lifecyclepolicy-createrule-scripts
             '''
             result = self._values.get("scripts")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ScriptProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ScriptProperty"]]]], result)
 
         @builtins.property
         def times(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -977,9 +978,9 @@ class CfnLifecyclePolicy(
         def __init__(
             self,
             *,
-            encryption_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            encryption_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             target: builtins.str,
-            retain_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.CrossRegionCopyRetainRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retain_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.CrossRegionCopyRetainRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''*[Event-based policies only]* Specifies a cross-Region copy action for event-based policies.
 
@@ -1031,14 +1032,14 @@ class CfnLifecyclePolicy(
         @builtins.property
         def encryption_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.EncryptionConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.EncryptionConfigurationProperty"]:
             '''The encryption settings for the copied snapshot.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-crossregioncopyaction.html#cfn-dlm-lifecyclepolicy-crossregioncopyaction-encryptionconfiguration
             '''
             result = self._values.get("encryption_configuration")
             assert result is not None, "Required property 'encryption_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.EncryptionConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.EncryptionConfigurationProperty"], result)
 
         @builtins.property
         def target(self) -> builtins.str:
@@ -1053,7 +1054,7 @@ class CfnLifecyclePolicy(
         @builtins.property
         def retain_rule(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.CrossRegionCopyRetainRuleProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.CrossRegionCopyRetainRuleProperty"]]:
             '''Specifies a retention rule for cross-Region snapshot copies created by snapshot or event-based policies, or cross-Region AMI copies created by AMI policies.
 
             After the retention period expires, the cross-Region copy is deleted.
@@ -1061,7 +1062,7 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-crossregioncopyaction.html#cfn-dlm-lifecyclepolicy-crossregioncopyaction-retainrule
             '''
             result = self._values.get("retain_rule")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.CrossRegionCopyRetainRuleProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.CrossRegionCopyRetainRuleProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1243,11 +1244,11 @@ class CfnLifecyclePolicy(
         def __init__(
             self,
             *,
-            encrypted: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            encrypted: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             cmk_arn: typing.Optional[builtins.str] = None,
-            copy_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            deprecate_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.CrossRegionCopyDeprecateRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            retain_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.CrossRegionCopyRetainRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            copy_tags: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            deprecate_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.CrossRegionCopyDeprecateRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retain_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.CrossRegionCopyRetainRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             target: typing.Optional[builtins.str] = None,
             target_region: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -1318,7 +1319,7 @@ class CfnLifecyclePolicy(
                 self._values["target_region"] = target_region
 
         @builtins.property
-        def encrypted(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def encrypted(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''To encrypt a copy of an unencrypted snapshot if encryption by default is not enabled, enable encryption using this parameter.
 
             Copies of encrypted snapshots are encrypted, even if this parameter is false or if encryption by default is not enabled.
@@ -1327,7 +1328,7 @@ class CfnLifecyclePolicy(
             '''
             result = self._values.get("encrypted")
             assert result is not None, "Required property 'encrypted' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def cmk_arn(self) -> typing.Optional[builtins.str]:
@@ -1343,35 +1344,35 @@ class CfnLifecyclePolicy(
         @builtins.property
         def copy_tags(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether to copy all user-defined tags from the source snapshot or AMI to the cross-Region copy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-crossregioncopyrule.html#cfn-dlm-lifecyclepolicy-crossregioncopyrule-copytags
             '''
             result = self._values.get("copy_tags")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def deprecate_rule(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.CrossRegionCopyDeprecateRuleProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.CrossRegionCopyDeprecateRuleProperty"]]:
             '''*[Custom AMI policies only]* The AMI deprecation rule for cross-Region AMI copies created by the rule.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-crossregioncopyrule.html#cfn-dlm-lifecyclepolicy-crossregioncopyrule-deprecaterule
             '''
             result = self._values.get("deprecate_rule")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.CrossRegionCopyDeprecateRuleProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.CrossRegionCopyDeprecateRuleProperty"]], result)
 
         @builtins.property
         def retain_rule(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.CrossRegionCopyRetainRuleProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.CrossRegionCopyRetainRuleProperty"]]:
             '''The retention rule that indicates how long the cross-Region snapshot or AMI copies are to be retained in the destination Region.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-crossregioncopyrule.html#cfn-dlm-lifecyclepolicy-crossregioncopyrule-retainrule
             '''
             result = self._values.get("retain_rule")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.CrossRegionCopyRetainRuleProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.CrossRegionCopyRetainRuleProperty"]], result)
 
         @builtins.property
         def target(self) -> typing.Optional[builtins.str]:
@@ -1516,7 +1517,7 @@ class CfnLifecyclePolicy(
         def __init__(
             self,
             *,
-            encrypted: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            encrypted: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             cmk_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''*[Event-based policies only]* Specifies the encryption settings for cross-Region snapshot copies created by event-based policies.
@@ -1551,7 +1552,7 @@ class CfnLifecyclePolicy(
                 self._values["cmk_arn"] = cmk_arn
 
         @builtins.property
-        def encrypted(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def encrypted(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''To encrypt a copy of an unencrypted snapshot when encryption by default is not enabled, enable encryption using this parameter.
 
             Copies of encrypted snapshots are encrypted, even if this parameter is false or when encryption by default is not enabled.
@@ -1560,7 +1561,7 @@ class CfnLifecyclePolicy(
             '''
             result = self._values.get("encrypted")
             assert result is not None, "Required property 'encrypted' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def cmk_arn(self) -> typing.Optional[builtins.str]:
@@ -1694,7 +1695,7 @@ class CfnLifecyclePolicy(
             self,
             *,
             type: builtins.str,
-            parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.EventParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.EventParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''*[Event-based policies only]* Specifies an event that activates an event-based policy.
 
@@ -1748,13 +1749,13 @@ class CfnLifecyclePolicy(
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.EventParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.EventParametersProperty"]]:
             '''Information about the event.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-eventsource.html#cfn-dlm-lifecyclepolicy-eventsource-parameters
             '''
             result = self._values.get("parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.EventParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.EventParametersProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1780,7 +1781,7 @@ class CfnLifecyclePolicy(
         def __init__(
             self,
             *,
-            exclude_boot_volumes: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            exclude_boot_volumes: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             exclude_tags: typing.Any = None,
             exclude_volume_types: typing.Any = None,
         ) -> None:
@@ -1826,7 +1827,7 @@ class CfnLifecyclePolicy(
         @builtins.property
         def exclude_boot_volumes(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''*[Default policies for EBS snapshots only]* Indicates whether to exclude volumes that are attached to instances as the boot volume.
 
             If you exclude boot volumes, only volumes attached as data (non-boot) volumes will be backed up by the policy. To exclude boot volumes, specify ``true`` .
@@ -1834,7 +1835,7 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-exclusions.html#cfn-dlm-lifecyclepolicy-exclusions-excludebootvolumes
             '''
             result = self._values.get("exclude_boot_volumes")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def exclude_tags(self) -> typing.Any:
@@ -1989,9 +1990,9 @@ class CfnLifecyclePolicy(
         def __init__(
             self,
             *,
-            exclude_boot_volume: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            exclude_data_volume_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            no_reboot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            exclude_boot_volume: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            exclude_data_volume_tags: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            no_reboot: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''*[Custom snapshot and AMI policies only]* Specifies optional parameters for snapshot and AMI policies.
 
@@ -2008,6 +2009,7 @@ class CfnLifecyclePolicy(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_dlm as dlm
@@ -2037,7 +2039,7 @@ class CfnLifecyclePolicy(
         @builtins.property
         def exclude_boot_volume(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''*[Custom snapshot policies that target instances only]* Indicates whether to exclude the root volume from multi-volume snapshot sets.
 
             The default is ``false`` . If you specify ``true`` , then the root volumes attached to targeted instances will be excluded from the multi-volume snapshot sets created by the policy.
@@ -2045,12 +2047,12 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-parameters.html#cfn-dlm-lifecyclepolicy-parameters-excludebootvolume
             '''
             result = self._values.get("exclude_boot_volume")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def exclude_data_volume_tags(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]]:
             '''*[Custom snapshot policies that target instances only]* The tags used to identify data (non-root) volumes to exclude from multi-volume snapshot sets.
 
             If you create a snapshot lifecycle policy that targets instances and you specify tags for this parameter, then data volumes with the specified tags that are attached to targeted instances will be excluded from the multi-volume snapshot sets created by the policy.
@@ -2058,12 +2060,12 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-parameters.html#cfn-dlm-lifecyclepolicy-parameters-excludedatavolumetags
             '''
             result = self._values.get("exclude_data_volume_tags")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]], result)
 
         @builtins.property
         def no_reboot(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''*[Custom AMI policies only]* Indicates whether targeted instances are rebooted when the lifecycle policy runs.
 
             ``true`` indicates that targeted instances are not rebooted when the policy runs. ``false`` indicates that target instances are rebooted when the policy runs. The default is ``true`` (instances are not rebooted).
@@ -2071,7 +2073,7 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-parameters.html#cfn-dlm-lifecyclepolicy-parameters-noreboot
             '''
             result = self._values.get("no_reboot")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2110,22 +2112,22 @@ class CfnLifecyclePolicy(
         def __init__(
             self,
             *,
-            actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.ActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            copy_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            actions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.ActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            copy_tags: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             create_interval: typing.Optional[jsii.Number] = None,
             cross_region_copy_targets: typing.Any = None,
-            event_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.EventSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            exclusions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.ExclusionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            extend_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.ParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            event_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.EventSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            exclusions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.ExclusionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            extend_deletion: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.ParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             policy_language: typing.Optional[builtins.str] = None,
             policy_type: typing.Optional[builtins.str] = None,
             resource_locations: typing.Optional[typing.Sequence[builtins.str]] = None,
             resource_type: typing.Optional[builtins.str] = None,
             resource_types: typing.Optional[typing.Sequence[builtins.str]] = None,
             retain_interval: typing.Optional[jsii.Number] = None,
-            schedules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            target_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            schedules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            target_tags: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Specifies the configuration of a lifecycle policy.
 
@@ -2151,6 +2153,7 @@ class CfnLifecyclePolicy(
 
             Example::
 
+                from aws_cdk import CfnTag, CfnTag, CfnTag, CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_dlm as dlm
@@ -2348,7 +2351,7 @@ class CfnLifecyclePolicy(
         @builtins.property
         def actions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ActionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ActionProperty"]]]]:
             '''*[Event-based policies only]* The actions to be performed when the event-based policy is activated.
 
             You can specify only one action per policy.
@@ -2356,12 +2359,12 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-policydetails.html#cfn-dlm-lifecyclepolicy-policydetails-actions
             '''
             result = self._values.get("actions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ActionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ActionProperty"]]]], result)
 
         @builtins.property
         def copy_tags(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''*[Default policies only]* Indicates whether the policy should copy tags from the source resource to the snapshot or AMI.
 
             If you do not specify a value, the default is ``false`` .
@@ -2371,7 +2374,7 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-policydetails.html#cfn-dlm-lifecyclepolicy-policydetails-copytags
             '''
             result = self._values.get("copy_tags")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def create_interval(self) -> typing.Optional[jsii.Number]:
@@ -2400,18 +2403,18 @@ class CfnLifecyclePolicy(
         @builtins.property
         def event_source(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.EventSourceProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.EventSourceProperty"]]:
             '''*[Event-based policies only]* The event that activates the event-based policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-policydetails.html#cfn-dlm-lifecyclepolicy-policydetails-eventsource
             '''
             result = self._values.get("event_source")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.EventSourceProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.EventSourceProperty"]], result)
 
         @builtins.property
         def exclusions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ExclusionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ExclusionsProperty"]]:
             '''*[Default policies only]* Specifies exclusion parameters for volumes or instances for which you do not want to create snapshots or AMIs.
 
             The policy will not create snapshots or AMIs for target resources that match any of the specified exclusion parameters.
@@ -2419,12 +2422,12 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-policydetails.html#cfn-dlm-lifecyclepolicy-policydetails-exclusions
             '''
             result = self._values.get("exclusions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ExclusionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ExclusionsProperty"]], result)
 
         @builtins.property
         def extend_deletion(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''*[Default policies only]* Defines the snapshot or AMI retention behavior for the policy if the source volume or instance is deleted, or if the policy enters the error, disabled, or deleted state.
 
             By default ( *ExtendDeletion=false* ):
@@ -2441,12 +2444,12 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-policydetails.html#cfn-dlm-lifecyclepolicy-policydetails-extenddeletion
             '''
             result = self._values.get("extend_deletion")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ParametersProperty"]]:
             '''*[Custom snapshot and AMI policies only]* A set of optional parameters for snapshot and AMI lifecycle policies.
 
             .. epigraph::
@@ -2456,7 +2459,7 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-policydetails.html#cfn-dlm-lifecyclepolicy-policydetails-parameters
             '''
             result = self._values.get("parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ParametersProperty"]], result)
 
         @builtins.property
         def policy_language(self) -> typing.Optional[builtins.str]:
@@ -2535,7 +2538,7 @@ class CfnLifecyclePolicy(
         @builtins.property
         def schedules(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ScheduleProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ScheduleProperty"]]]]:
             '''*[Custom snapshot and AMI policies only]* The schedules of policy-defined actions for snapshot and AMI lifecycle policies.
 
             A policy can have up to four schedules—one mandatory schedule and up to three optional schedules.
@@ -2543,18 +2546,18 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-policydetails.html#cfn-dlm-lifecyclepolicy-policydetails-schedules
             '''
             result = self._values.get("schedules")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ScheduleProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ScheduleProperty"]]]], result)
 
         @builtins.property
         def target_tags(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]]:
             '''*[Custom snapshot and AMI policies only]* The single tag that identifies targeted resources for this policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-policydetails.html#cfn-dlm-lifecyclepolicy-policydetails-targettags
             '''
             result = self._values.get("target_tags")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2803,17 +2806,17 @@ class CfnLifecyclePolicy(
         def __init__(
             self,
             *,
-            archive_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.ArchiveRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            copy_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            create_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.CreateRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cross_region_copy_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.CrossRegionCopyRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            deprecate_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.DeprecateRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            fast_restore_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.FastRestoreRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            archive_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.ArchiveRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            copy_tags: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            create_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.CreateRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cross_region_copy_rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.CrossRegionCopyRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            deprecate_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.DeprecateRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            fast_restore_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.FastRestoreRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             name: typing.Optional[builtins.str] = None,
-            retain_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.RetainRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            share_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLifecyclePolicy.ShareRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            tags_to_add: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            variable_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            retain_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.RetainRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            share_rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.ShareRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            tags_to_add: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            variable_tags: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''*[Custom snapshot and AMI policies only]* Specifies a schedule for a snapshot or AMI lifecycle policy.
 
@@ -2834,6 +2837,7 @@ class CfnLifecyclePolicy(
 
             Example::
 
+                from aws_cdk import CfnTag, CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_dlm as dlm
@@ -2953,7 +2957,7 @@ class CfnLifecyclePolicy(
         @builtins.property
         def archive_rule(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ArchiveRuleProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ArchiveRuleProperty"]]:
             '''*[Custom snapshot policies that target volumes only]* The snapshot archiving rule for the schedule.
 
             When you specify an archiving rule, snapshots are automatically moved from the standard tier to the archive tier once the schedule's retention threshold is met. Snapshots are then retained in the archive tier for the archive retention period that you specify.
@@ -2963,34 +2967,34 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-schedule.html#cfn-dlm-lifecyclepolicy-schedule-archiverule
             '''
             result = self._values.get("archive_rule")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ArchiveRuleProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ArchiveRuleProperty"]], result)
 
         @builtins.property
         def copy_tags(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Copy all user-defined tags on a source volume to snapshots of the volume created by this policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-schedule.html#cfn-dlm-lifecyclepolicy-schedule-copytags
             '''
             result = self._values.get("copy_tags")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def create_rule(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.CreateRuleProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.CreateRuleProperty"]]:
             '''The creation rule.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-schedule.html#cfn-dlm-lifecyclepolicy-schedule-createrule
             '''
             result = self._values.get("create_rule")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.CreateRuleProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.CreateRuleProperty"]], result)
 
         @builtins.property
         def cross_region_copy_rules(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.CrossRegionCopyRuleProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.CrossRegionCopyRuleProperty"]]]]:
             '''Specifies a rule for copying snapshots or AMIs across Regions.
 
             .. epigraph::
@@ -3000,29 +3004,29 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-schedule.html#cfn-dlm-lifecyclepolicy-schedule-crossregioncopyrules
             '''
             result = self._values.get("cross_region_copy_rules")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.CrossRegionCopyRuleProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.CrossRegionCopyRuleProperty"]]]], result)
 
         @builtins.property
         def deprecate_rule(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.DeprecateRuleProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.DeprecateRuleProperty"]]:
             '''*[Custom AMI policies only]* The AMI deprecation rule for the schedule.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-schedule.html#cfn-dlm-lifecyclepolicy-schedule-deprecaterule
             '''
             result = self._values.get("deprecate_rule")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.DeprecateRuleProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.DeprecateRuleProperty"]], result)
 
         @builtins.property
         def fast_restore_rule(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.FastRestoreRuleProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.FastRestoreRuleProperty"]]:
             '''*[Custom snapshot policies only]* The rule for enabling fast snapshot restore.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-schedule.html#cfn-dlm-lifecyclepolicy-schedule-fastrestorerule
             '''
             result = self._values.get("fast_restore_rule")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.FastRestoreRuleProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.FastRestoreRuleProperty"]], result)
 
         @builtins.property
         def name(self) -> typing.Optional[builtins.str]:
@@ -3036,29 +3040,29 @@ class CfnLifecyclePolicy(
         @builtins.property
         def retain_rule(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.RetainRuleProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.RetainRuleProperty"]]:
             '''The retention rule for snapshots or AMIs created by the policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-schedule.html#cfn-dlm-lifecyclepolicy-schedule-retainrule
             '''
             result = self._values.get("retain_rule")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.RetainRuleProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.RetainRuleProperty"]], result)
 
         @builtins.property
         def share_rules(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ShareRuleProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ShareRuleProperty"]]]]:
             '''*[Custom snapshot policies only]* The rule for sharing snapshots with other AWS accounts .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-schedule.html#cfn-dlm-lifecyclepolicy-schedule-sharerules
             '''
             result = self._values.get("share_rules")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLifecyclePolicy.ShareRuleProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ShareRuleProperty"]]]], result)
 
         @builtins.property
         def tags_to_add(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]]:
             '''The tags to apply to policy-created resources.
 
             These user-defined tags are in addition to the AWS -added lifecycle tags.
@@ -3066,12 +3070,12 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-schedule.html#cfn-dlm-lifecyclepolicy-schedule-tagstoadd
             '''
             result = self._values.get("tags_to_add")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]], result)
 
         @builtins.property
         def variable_tags(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]]:
             '''*[AMI policies and snapshot policies that target instances only]* A collection of key/value pairs with values determined dynamically when the policy is executed.
 
             Keys may be any valid Amazon EC2 tag key. Values must be in one of the two following formats: ``$(instance-id)`` or ``$(timestamp)`` . Variable tags are only valid for EBS Snapshot Management – Instance policies.
@@ -3079,7 +3083,7 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-schedule.html#cfn-dlm-lifecyclepolicy-schedule-variabletags
             '''
             result = self._values.get("variable_tags")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3108,7 +3112,7 @@ class CfnLifecyclePolicy(
         def __init__(
             self,
             *,
-            execute_operation_on_script_failure: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            execute_operation_on_script_failure: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             execution_handler: typing.Optional[builtins.str] = None,
             execution_handler_service: typing.Optional[builtins.str] = None,
             execution_timeout: typing.Optional[jsii.Number] = None,
@@ -3169,7 +3173,7 @@ class CfnLifecyclePolicy(
         @builtins.property
         def execute_operation_on_script_failure(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether Amazon Data Lifecycle Manager should default to crash-consistent snapshots if the pre script fails.
 
             - To default to crash consistent snapshot if the pre script fails, specify ``true`` .
@@ -3182,7 +3186,7 @@ class CfnLifecyclePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dlm-lifecyclepolicy-script.html#cfn-dlm-lifecyclepolicy-script-executeoperationonscriptfailure
             '''
             result = self._values.get("execute_operation_on_script_failure")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def execution_handler(self) -> typing.Optional[builtins.str]:
@@ -3384,18 +3388,18 @@ class CfnLifecyclePolicyProps:
     def __init__(
         self,
         *,
-        copy_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        copy_tags: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         create_interval: typing.Optional[jsii.Number] = None,
         cross_region_copy_targets: typing.Any = None,
         default_policy: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        exclusions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLifecyclePolicy.ExclusionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        exclusions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.ExclusionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         execution_role_arn: typing.Optional[builtins.str] = None,
-        extend_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        policy_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLifecyclePolicy.PolicyDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        extend_deletion: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        policy_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLifecyclePolicy.PolicyDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         retain_interval: typing.Optional[jsii.Number] = None,
         state: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLifecyclePolicy``.
 
@@ -3417,6 +3421,7 @@ class CfnLifecyclePolicyProps:
 
         Example::
 
+            from aws_cdk import CfnTag, CfnTag, CfnTag, CfnTag, CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dlm as dlm
@@ -3622,7 +3627,7 @@ class CfnLifecyclePolicyProps:
     @builtins.property
     def copy_tags(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*[Default policies only]* Indicates whether the policy should copy tags from the source resource to the snapshot or AMI.
 
         If you do not specify a value, the default is ``false`` .
@@ -3632,7 +3637,7 @@ class CfnLifecyclePolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dlm-lifecyclepolicy.html#cfn-dlm-lifecyclepolicy-copytags
         '''
         result = self._values.get("copy_tags")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def create_interval(self) -> typing.Optional[jsii.Number]:
@@ -3684,7 +3689,7 @@ class CfnLifecyclePolicyProps:
     @builtins.property
     def exclusions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLifecyclePolicy.ExclusionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ExclusionsProperty"]]:
         '''*[Default policies only]* Specifies exclusion parameters for volumes or instances for which you do not want to create snapshots or AMIs.
 
         The policy will not create snapshots or AMIs for target resources that match any of the specified exclusion parameters.
@@ -3692,7 +3697,7 @@ class CfnLifecyclePolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dlm-lifecyclepolicy.html#cfn-dlm-lifecyclepolicy-exclusions
         '''
         result = self._values.get("exclusions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLifecyclePolicy.ExclusionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.ExclusionsProperty"]], result)
 
     @builtins.property
     def execution_role_arn(self) -> typing.Optional[builtins.str]:
@@ -3706,7 +3711,7 @@ class CfnLifecyclePolicyProps:
     @builtins.property
     def extend_deletion(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*[Default policies only]* Defines the snapshot or AMI retention behavior for the policy if the source volume or instance is deleted, or if the policy enters the error, disabled, or deleted state.
 
         By default ( *ExtendDeletion=false* ):
@@ -3723,12 +3728,12 @@ class CfnLifecyclePolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dlm-lifecyclepolicy.html#cfn-dlm-lifecyclepolicy-extenddeletion
         '''
         result = self._values.get("extend_deletion")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def policy_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLifecyclePolicy.PolicyDetailsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.PolicyDetailsProperty"]]:
         '''The configuration details of the lifecycle policy.
 
         .. epigraph::
@@ -3738,7 +3743,7 @@ class CfnLifecyclePolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dlm-lifecyclepolicy.html#cfn-dlm-lifecyclepolicy-policydetails
         '''
         result = self._values.get("policy_details")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLifecyclePolicy.PolicyDetailsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLifecyclePolicy.PolicyDetailsProperty"]], result)
 
     @builtins.property
     def retain_interval(self) -> typing.Optional[jsii.Number]:
@@ -3763,13 +3768,13 @@ class CfnLifecyclePolicyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to apply to the lifecycle policy during creation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dlm-lifecyclepolicy.html#cfn-dlm-lifecyclepolicy-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

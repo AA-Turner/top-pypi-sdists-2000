@@ -273,7 +273,7 @@ class IAlarmRef(
 
     @builtins.property
     @jsii.member(jsii_name="alarmRef")
-    def alarm_ref(self) -> AlarmReference:
+    def alarm_ref(self) -> "AlarmReference":
         '''(experimental) A reference to a Alarm resource.
 
         :stability: experimental
@@ -294,12 +294,12 @@ class _IAlarmRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="alarmRef")
-    def alarm_ref(self) -> AlarmReference:
+    def alarm_ref(self) -> "AlarmReference":
         '''(experimental) A reference to a Alarm resource.
 
         :stability: experimental
         '''
-        return typing.cast(AlarmReference, jsii.get(self, "alarmRef"))
+        return typing.cast("AlarmReference", jsii.get(self, "alarmRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAlarmRef).__jsii_proxy_class__ = lambda : _IAlarmRefProxy
@@ -318,7 +318,7 @@ class IAnomalyDetectorRef(
 
     @builtins.property
     @jsii.member(jsii_name="anomalyDetectorRef")
-    def anomaly_detector_ref(self) -> AnomalyDetectorReference:
+    def anomaly_detector_ref(self) -> "AnomalyDetectorReference":
         '''(experimental) A reference to a AnomalyDetector resource.
 
         :stability: experimental
@@ -339,12 +339,12 @@ class _IAnomalyDetectorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="anomalyDetectorRef")
-    def anomaly_detector_ref(self) -> AnomalyDetectorReference:
+    def anomaly_detector_ref(self) -> "AnomalyDetectorReference":
         '''(experimental) A reference to a AnomalyDetector resource.
 
         :stability: experimental
         '''
-        return typing.cast(AnomalyDetectorReference, jsii.get(self, "anomalyDetectorRef"))
+        return typing.cast("AnomalyDetectorReference", jsii.get(self, "anomalyDetectorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAnomalyDetectorRef).__jsii_proxy_class__ = lambda : _IAnomalyDetectorRefProxy
@@ -363,7 +363,7 @@ class ICompositeAlarmRef(
 
     @builtins.property
     @jsii.member(jsii_name="compositeAlarmRef")
-    def composite_alarm_ref(self) -> CompositeAlarmReference:
+    def composite_alarm_ref(self) -> "CompositeAlarmReference":
         '''(experimental) A reference to a CompositeAlarm resource.
 
         :stability: experimental
@@ -384,12 +384,12 @@ class _ICompositeAlarmRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="compositeAlarmRef")
-    def composite_alarm_ref(self) -> CompositeAlarmReference:
+    def composite_alarm_ref(self) -> "CompositeAlarmReference":
         '''(experimental) A reference to a CompositeAlarm resource.
 
         :stability: experimental
         '''
-        return typing.cast(CompositeAlarmReference, jsii.get(self, "compositeAlarmRef"))
+        return typing.cast("CompositeAlarmReference", jsii.get(self, "compositeAlarmRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICompositeAlarmRef).__jsii_proxy_class__ = lambda : _ICompositeAlarmRefProxy
@@ -408,7 +408,7 @@ class IDashboardRef(
 
     @builtins.property
     @jsii.member(jsii_name="dashboardRef")
-    def dashboard_ref(self) -> DashboardReference:
+    def dashboard_ref(self) -> "DashboardReference":
         '''(experimental) A reference to a Dashboard resource.
 
         :stability: experimental
@@ -429,12 +429,12 @@ class _IDashboardRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dashboardRef")
-    def dashboard_ref(self) -> DashboardReference:
+    def dashboard_ref(self) -> "DashboardReference":
         '''(experimental) A reference to a Dashboard resource.
 
         :stability: experimental
         '''
-        return typing.cast(DashboardReference, jsii.get(self, "dashboardRef"))
+        return typing.cast("DashboardReference", jsii.get(self, "dashboardRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDashboardRef).__jsii_proxy_class__ = lambda : _IDashboardRefProxy

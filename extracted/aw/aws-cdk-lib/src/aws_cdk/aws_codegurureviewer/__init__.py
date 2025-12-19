@@ -97,6 +97,7 @@ class CfnRepositoryAssociation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codegurureviewer as codegurureviewer
@@ -118,7 +119,7 @@ class CfnRepositoryAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -126,7 +127,7 @@ class CfnRepositoryAssociation(
         bucket_name: typing.Optional[builtins.str] = None,
         connection_arn: typing.Optional[builtins.str] = None,
         owner: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeGuruReviewer::RepositoryAssociation``.
 
@@ -167,7 +168,7 @@ class CfnRepositoryAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRepositoryAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -212,15 +213,15 @@ class CfnRepositoryAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="repositoryAssociationRef")
-    def repository_association_ref(self) -> _RepositoryAssociationReference_665a0f34:
+    def repository_association_ref(self) -> "_RepositoryAssociationReference_665a0f34":
         '''A reference to a RepositoryAssociation resource.'''
-        return typing.cast(_RepositoryAssociationReference_665a0f34, jsii.get(self, "repositoryAssociationRef"))
+        return typing.cast("_RepositoryAssociationReference_665a0f34", jsii.get(self, "repositoryAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -292,12 +293,12 @@ class CfnRepositoryAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs used to tag an associated repository.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a8a7019de50716e632f620fdc25a9002b3dd655fc191589f4a7e2eb2a4dd50d0)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -325,7 +326,7 @@ class CfnRepositoryAssociationProps:
         bucket_name: typing.Optional[builtins.str] = None,
         connection_arn: typing.Optional[builtins.str] = None,
         owner: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRepositoryAssociation``.
 
@@ -341,6 +342,7 @@ class CfnRepositoryAssociationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codegurureviewer as codegurureviewer
@@ -443,7 +445,7 @@ class CfnRepositoryAssociationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs used to tag an associated repository.
 
         A tag is a custom attribute label with two parts:
@@ -454,7 +456,7 @@ class CfnRepositoryAssociationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codegurureviewer-repositoryassociation.html#cfn-codegurureviewer-repositoryassociation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

@@ -96,7 +96,7 @@ class ICRLRef(
 
     @builtins.property
     @jsii.member(jsii_name="crlRef")
-    def crl_ref(self) -> CRLReference:
+    def crl_ref(self) -> "CRLReference":
         '''(experimental) A reference to a CRL resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _ICRLRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="crlRef")
-    def crl_ref(self) -> CRLReference:
+    def crl_ref(self) -> "CRLReference":
         '''(experimental) A reference to a CRL resource.
 
         :stability: experimental
         '''
-        return typing.cast(CRLReference, jsii.get(self, "crlRef"))
+        return typing.cast("CRLReference", jsii.get(self, "crlRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICRLRef).__jsii_proxy_class__ = lambda : _ICRLRefProxy

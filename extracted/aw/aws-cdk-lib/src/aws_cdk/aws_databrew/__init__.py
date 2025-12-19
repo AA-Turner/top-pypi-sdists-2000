@@ -97,6 +97,7 @@ class CfnDataset(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_databrew as databrew
@@ -208,16 +209,16 @@ class CfnDataset(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        input: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.InputProperty", typing.Dict[builtins.str, typing.Any]]],
+        input: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.InputProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
         format: typing.Optional[builtins.str] = None,
-        format_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.FormatOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        path_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.PathOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        format_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.FormatOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        path_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.PathOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         source: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataBrew::Dataset``.
 
@@ -260,7 +261,7 @@ class CfnDataset(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataset", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -296,26 +297,28 @@ class CfnDataset(
 
     @builtins.property
     @jsii.member(jsii_name="datasetRef")
-    def dataset_ref(self) -> _DatasetReference_5f5e0ff2:
+    def dataset_ref(self) -> "_DatasetReference_5f5e0ff2":
         '''A reference to a Dataset resource.'''
-        return typing.cast(_DatasetReference_5f5e0ff2, jsii.get(self, "datasetRef"))
+        return typing.cast("_DatasetReference_5f5e0ff2", jsii.get(self, "datasetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="input")
-    def input(self) -> typing.Union[_IResolvable_da3f097b, "CfnDataset.InputProperty"]:
+    def input(
+        self,
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDataset.InputProperty"]:
         '''Information on how DataBrew can find the dataset, in either the AWS Glue Data Catalog or Amazon S3 .'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDataset.InputProperty"], jsii.get(self, "input"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataset.InputProperty"], jsii.get(self, "input"))
 
     @input.setter
     def input(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnDataset.InputProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnDataset.InputProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__16f9e855a44716ad8f6d9b9c7b1af8843710280651440ececcdaca064840ee0e)
@@ -352,14 +355,14 @@ class CfnDataset(
     @jsii.member(jsii_name="formatOptions")
     def format_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.FormatOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.FormatOptionsProperty"]]:
         '''A set of options that define how DataBrew interprets the data in the dataset.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.FormatOptionsProperty"]], jsii.get(self, "formatOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.FormatOptionsProperty"]], jsii.get(self, "formatOptions"))
 
     @format_options.setter
     def format_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.FormatOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.FormatOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b242d61ad79b41d0fae90aa54927ce07d84950d71d245d156f9dc26b30cef9f1)
@@ -370,14 +373,14 @@ class CfnDataset(
     @jsii.member(jsii_name="pathOptions")
     def path_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.PathOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.PathOptionsProperty"]]:
         '''A set of options that defines how DataBrew interprets an Amazon S3 path of the dataset.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.PathOptionsProperty"]], jsii.get(self, "pathOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.PathOptionsProperty"]], jsii.get(self, "pathOptions"))
 
     @path_options.setter
     def path_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.PathOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.PathOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3e149fcab0a2123def59da0d9685b964ad6f0bbeb5260bbfc82fb03d38453b07)
@@ -399,12 +402,12 @@ class CfnDataset(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata tags that have been applied to the dataset.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2a44a1b4a5e7a1e6a2789710599b4999a6b1bf2e95d82741d51b8183e02b7faf)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -420,7 +423,7 @@ class CfnDataset(
             self,
             *,
             delimiter: typing.Optional[builtins.str] = None,
-            header_row: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            header_row: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Represents a set of options that define how DataBrew will read a comma-separated value (CSV) file when creating a dataset from that file.
 
@@ -463,7 +466,7 @@ class CfnDataset(
         @builtins.property
         def header_row(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A variable that specifies whether the first row in the file is parsed as the header.
 
             If this value is false, column names are auto-generated.
@@ -471,7 +474,7 @@ class CfnDataset(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-csvoptions.html#cfn-databrew-dataset-csvoptions-headerrow
             '''
             result = self._values.get("header_row")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -501,7 +504,7 @@ class CfnDataset(
             catalog_id: typing.Optional[builtins.str] = None,
             database_name: typing.Optional[builtins.str] = None,
             table_name: typing.Optional[builtins.str] = None,
-            temp_directory: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            temp_directory: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents how metadata stored in the AWS Glue Data Catalog is defined in a DataBrew dataset.
 
@@ -580,13 +583,13 @@ class CfnDataset(
         @builtins.property
         def temp_directory(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.S3LocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.S3LocationProperty"]]:
             '''An Amazon location that AWS Glue Data Catalog can use as a temporary directory.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-datacataloginputdefinition.html#cfn-databrew-dataset-datacataloginputdefinition-tempdirectory
             '''
             result = self._values.get("temp_directory")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.S3LocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.S3LocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -616,7 +619,7 @@ class CfnDataset(
             glue_connection_name: builtins.str,
             database_table_name: typing.Optional[builtins.str] = None,
             query_string: typing.Optional[builtins.str] = None,
-            temp_directory: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            temp_directory: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Connection information for dataset input files stored in a database.
 
@@ -698,13 +701,13 @@ class CfnDataset(
         @builtins.property
         def temp_directory(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.S3LocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.S3LocationProperty"]]:
             '''An Amazon location that AWS Glue Data Catalog can use as a temporary directory.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-databaseinputdefinition.html#cfn-databrew-dataset-databaseinputdefinition-tempdirectory
             '''
             result = self._values.get("temp_directory")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.S3LocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.S3LocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -734,9 +737,9 @@ class CfnDataset(
             *,
             name: builtins.str,
             type: builtins.str,
-            create_column: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            datetime_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.DatetimeOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            filter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.FilterExpressionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            create_column: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            datetime_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.DatetimeOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            filter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.FilterExpressionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents a dataset paramater that defines type and conditions for a parameter in the Amazon S3 path of the dataset.
 
@@ -818,18 +821,18 @@ class CfnDataset(
         @builtins.property
         def create_column(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Optional boolean value that defines whether the captured value of this parameter should be loaded as an additional column in the dataset.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-datasetparameter.html#cfn-databrew-dataset-datasetparameter-createcolumn
             '''
             result = self._values.get("create_column")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def datetime_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.DatetimeOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.DatetimeOptionsProperty"]]:
             '''Additional parameter options such as a format and a timezone.
 
             Required for datetime parameters.
@@ -837,18 +840,18 @@ class CfnDataset(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-datasetparameter.html#cfn-databrew-dataset-datasetparameter-datetimeoptions
             '''
             result = self._values.get("datetime_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.DatetimeOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.DatetimeOptionsProperty"]], result)
 
         @builtins.property
         def filter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.FilterExpressionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.FilterExpressionProperty"]]:
             '''The optional filter expression structure to apply additional matching criteria to the parameter.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-datasetparameter.html#cfn-databrew-dataset-datasetparameter-filter
             '''
             result = self._values.get("filter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.FilterExpressionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.FilterExpressionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -970,8 +973,8 @@ class CfnDataset(
         def __init__(
             self,
             *,
-            header_row: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            sheet_indexes: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+            header_row: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            sheet_indexes: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
             sheet_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Represents a set of options that define how DataBrew will interpret a Microsoft Excel file when creating a dataset from that file.
@@ -1011,7 +1014,7 @@ class CfnDataset(
         @builtins.property
         def header_row(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A variable that specifies whether the first row in the file is parsed as the header.
 
             If this value is false, column names are auto-generated.
@@ -1019,18 +1022,18 @@ class CfnDataset(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-exceloptions.html#cfn-databrew-dataset-exceloptions-headerrow
             '''
             result = self._values.get("header_row")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def sheet_indexes(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
             '''One or more sheet numbers in the Excel file that will be included in the dataset.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-exceloptions.html#cfn-databrew-dataset-exceloptions-sheetindexes
             '''
             result = self._values.get("sheet_indexes")
-            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def sheet_names(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1158,7 +1161,7 @@ class CfnDataset(
             self,
             *,
             expression: builtins.str,
-            values_map: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.FilterValueProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            values_map: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.FilterValueProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Represents a structure for defining parameter conditions.
 
@@ -1206,14 +1209,14 @@ class CfnDataset(
         @builtins.property
         def values_map(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataset.FilterValueProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataset.FilterValueProperty"]]]:
             '''The map of substitution variable names to their values used in this filter expression.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-filterexpression.html#cfn-databrew-dataset-filterexpression-valuesmap
             '''
             result = self._values.get("values_map")
             assert result is not None, "Required property 'values_map' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataset.FilterValueProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataset.FilterValueProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1308,9 +1311,9 @@ class CfnDataset(
         def __init__(
             self,
             *,
-            csv: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.CsvOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            excel: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.ExcelOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            json: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.JsonOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            csv: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.CsvOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            excel: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.ExcelOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            json: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.JsonOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents a set of options that define the structure of either comma-separated value (CSV), Excel, or JSON input.
 
@@ -1358,35 +1361,35 @@ class CfnDataset(
         @builtins.property
         def csv(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.CsvOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.CsvOptionsProperty"]]:
             '''Options that define how CSV input is to be interpreted by DataBrew.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-formatoptions.html#cfn-databrew-dataset-formatoptions-csv
             '''
             result = self._values.get("csv")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.CsvOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.CsvOptionsProperty"]], result)
 
         @builtins.property
         def excel(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.ExcelOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.ExcelOptionsProperty"]]:
             '''Options that define how Excel input is to be interpreted by DataBrew.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-formatoptions.html#cfn-databrew-dataset-formatoptions-excel
             '''
             result = self._values.get("excel")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.ExcelOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.ExcelOptionsProperty"]], result)
 
         @builtins.property
         def json(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.JsonOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.JsonOptionsProperty"]]:
             '''Options that define how JSON input is to be interpreted by DataBrew.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-formatoptions.html#cfn-databrew-dataset-formatoptions-json
             '''
             result = self._values.get("json")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.JsonOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.JsonOptionsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1413,10 +1416,10 @@ class CfnDataset(
         def __init__(
             self,
             *,
-            database_input_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.DatabaseInputDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            data_catalog_input_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.DataCatalogInputDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.MetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_input_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            database_input_definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.DatabaseInputDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            data_catalog_input_definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.DataCatalogInputDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.MetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_input_definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents information on how DataBrew can find data, in either the AWS Glue Data Catalog or Amazon S3.
 
@@ -1492,46 +1495,46 @@ class CfnDataset(
         @builtins.property
         def database_input_definition(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.DatabaseInputDefinitionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.DatabaseInputDefinitionProperty"]]:
             '''Connection information for dataset input files stored in a database.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-input.html#cfn-databrew-dataset-input-databaseinputdefinition
             '''
             result = self._values.get("database_input_definition")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.DatabaseInputDefinitionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.DatabaseInputDefinitionProperty"]], result)
 
         @builtins.property
         def data_catalog_input_definition(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.DataCatalogInputDefinitionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.DataCatalogInputDefinitionProperty"]]:
             '''The AWS Glue Data Catalog parameters for the data.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-input.html#cfn-databrew-dataset-input-datacataloginputdefinition
             '''
             result = self._values.get("data_catalog_input_definition")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.DataCatalogInputDefinitionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.DataCatalogInputDefinitionProperty"]], result)
 
         @builtins.property
         def metadata(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.MetadataProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.MetadataProperty"]]:
             '''Contains additional resource information needed for specific datasets.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-input.html#cfn-databrew-dataset-input-metadata
             '''
             result = self._values.get("metadata")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.MetadataProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.MetadataProperty"]], result)
 
         @builtins.property
         def s3_input_definition(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.S3LocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.S3LocationProperty"]]:
             '''The Amazon S3 location where the data is stored.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-input.html#cfn-databrew-dataset-input-s3inputdefinition
             '''
             result = self._values.get("s3_input_definition")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.S3LocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.S3LocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1553,7 +1556,7 @@ class CfnDataset(
         def __init__(
             self,
             *,
-            multi_line: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            multi_line: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Represents the JSON-specific options that define how input is to be interpreted by AWS Glue DataBrew .
 
@@ -1582,13 +1585,13 @@ class CfnDataset(
         @builtins.property
         def multi_line(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that specifies whether JSON input contains embedded new line characters.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-jsonoptions.html#cfn-databrew-dataset-jsonoptions-multiline
             '''
             result = self._values.get("multi_line")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1667,9 +1670,9 @@ class CfnDataset(
         def __init__(
             self,
             *,
-            files_limit: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.FilesLimitProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            last_modified_date_condition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.FilterExpressionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.PathParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            files_limit: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.FilesLimitProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            last_modified_date_condition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.FilterExpressionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.PathParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Represents a set of options that define how DataBrew selects files for a given Amazon S3 path in a dataset.
 
@@ -1743,35 +1746,35 @@ class CfnDataset(
         @builtins.property
         def files_limit(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.FilesLimitProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.FilesLimitProperty"]]:
             '''If provided, this structure imposes a limit on a number of files that should be selected.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-pathoptions.html#cfn-databrew-dataset-pathoptions-fileslimit
             '''
             result = self._values.get("files_limit")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.FilesLimitProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.FilesLimitProperty"]], result)
 
         @builtins.property
         def last_modified_date_condition(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.FilterExpressionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.FilterExpressionProperty"]]:
             '''If provided, this structure defines a date range for matching Amazon S3 objects based on their LastModifiedDate attribute in Amazon S3 .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-pathoptions.html#cfn-databrew-dataset-pathoptions-lastmodifieddatecondition
             '''
             result = self._values.get("last_modified_date_condition")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.FilterExpressionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.FilterExpressionProperty"]], result)
 
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataset.PathParameterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataset.PathParameterProperty"]]]]:
             '''A structure that maps names of parameters used in the Amazon S3 path of a dataset to their definitions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-pathoptions.html#cfn-databrew-dataset-pathoptions-parameters
             '''
             result = self._values.get("parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataset.PathParameterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataset.PathParameterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1796,7 +1799,7 @@ class CfnDataset(
         def __init__(
             self,
             *,
-            dataset_parameter: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.DatasetParameterProperty", typing.Dict[builtins.str, typing.Any]]],
+            dataset_parameter: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.DatasetParameterProperty", typing.Dict[builtins.str, typing.Any]]],
             path_parameter_name: builtins.str,
         ) -> None:
             '''Represents a single entry in the path parameters of a dataset.
@@ -1852,14 +1855,14 @@ class CfnDataset(
         @builtins.property
         def dataset_parameter(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDataset.DatasetParameterProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataset.DatasetParameterProperty"]:
             '''The path parameter definition.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-dataset-pathparameter.html#cfn-databrew-dataset-pathparameter-datasetparameter
             '''
             result = self._values.get("dataset_parameter")
             assert result is not None, "Required property 'dataset_parameter' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDataset.DatasetParameterProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataset.DatasetParameterProperty"], result)
 
         @builtins.property
         def path_parameter_name(self) -> builtins.str:
@@ -1988,13 +1991,13 @@ class CfnDatasetProps:
     def __init__(
         self,
         *,
-        input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataset.InputProperty, typing.Dict[builtins.str, typing.Any]]],
+        input: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.InputProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
         format: typing.Optional[builtins.str] = None,
-        format_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataset.FormatOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        path_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataset.PathOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        format_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.FormatOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        path_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.PathOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         source: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataset``.
 
@@ -2011,6 +2014,7 @@ class CfnDatasetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_databrew as databrew
@@ -2144,14 +2148,16 @@ class CfnDatasetProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def input(self) -> typing.Union[_IResolvable_da3f097b, CfnDataset.InputProperty]:
+    def input(
+        self,
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDataset.InputProperty"]:
         '''Information on how DataBrew can find the dataset, in either the AWS Glue Data Catalog or Amazon S3 .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-dataset.html#cfn-databrew-dataset-input
         '''
         result = self._values.get("input")
         assert result is not None, "Required property 'input' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnDataset.InputProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataset.InputProperty"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -2175,24 +2181,24 @@ class CfnDatasetProps:
     @builtins.property
     def format_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataset.FormatOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.FormatOptionsProperty"]]:
         '''A set of options that define how DataBrew interprets the data in the dataset.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-dataset.html#cfn-databrew-dataset-formatoptions
         '''
         result = self._values.get("format_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataset.FormatOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.FormatOptionsProperty"]], result)
 
     @builtins.property
     def path_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataset.PathOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.PathOptionsProperty"]]:
         '''A set of options that defines how DataBrew interprets an Amazon S3 path of the dataset.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-dataset.html#cfn-databrew-dataset-pathoptions
         '''
         result = self._values.get("path_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataset.PathOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.PathOptionsProperty"]], result)
 
     @builtins.property
     def source(self) -> typing.Optional[builtins.str]:
@@ -2204,13 +2210,13 @@ class CfnDatasetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata tags that have been applied to the dataset.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-dataset.html#cfn-databrew-dataset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2238,6 +2244,7 @@ class CfnJob(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_databrew as databrew
@@ -2396,29 +2403,29 @@ class CfnJob(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         role_arn: builtins.str,
         type: builtins.str,
-        database_outputs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.DatabaseOutputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        data_catalog_outputs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.DataCatalogOutputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        database_outputs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.DatabaseOutputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        data_catalog_outputs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.DataCatalogOutputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         dataset_name: typing.Optional[builtins.str] = None,
         encryption_key_arn: typing.Optional[builtins.str] = None,
         encryption_mode: typing.Optional[builtins.str] = None,
-        job_sample: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.JobSampleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        job_sample: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.JobSampleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         log_subscription: typing.Optional[builtins.str] = None,
         max_capacity: typing.Optional[jsii.Number] = None,
         max_retries: typing.Optional[jsii.Number] = None,
-        output_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.OutputLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        outputs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.OutputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        profile_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.ProfileConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        output_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.OutputLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        outputs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.OutputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        profile_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.ProfileConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         project_name: typing.Optional[builtins.str] = None,
-        recipe: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.RecipeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        recipe: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.RecipeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout: typing.Optional[jsii.Number] = None,
-        validation_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.ValidationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        validation_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.ValidationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataBrew::Job``.
 
@@ -2487,7 +2494,7 @@ class CfnJob(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnJob", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2523,15 +2530,15 @@ class CfnJob(
 
     @builtins.property
     @jsii.member(jsii_name="jobRef")
-    def job_ref(self) -> _JobReference_a81ca913:
+    def job_ref(self) -> "_JobReference_a81ca913":
         '''A reference to a Job resource.'''
-        return typing.cast(_JobReference_a81ca913, jsii.get(self, "jobRef"))
+        return typing.cast("_JobReference_a81ca913", jsii.get(self, "jobRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2576,14 +2583,14 @@ class CfnJob(
     @jsii.member(jsii_name="databaseOutputs")
     def database_outputs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.DatabaseOutputProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.DatabaseOutputProperty"]]]]:
         '''Represents a list of JDBC database output objects which defines the output destination for a DataBrew recipe job to write into.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.DatabaseOutputProperty"]]]], jsii.get(self, "databaseOutputs"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.DatabaseOutputProperty"]]]], jsii.get(self, "databaseOutputs"))
 
     @database_outputs.setter
     def database_outputs(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.DatabaseOutputProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.DatabaseOutputProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3e65cbf4987f10929f914cbe9a5aea2cdd85a4f13aea899a4bc8150270b9fe46)
@@ -2594,14 +2601,14 @@ class CfnJob(
     @jsii.member(jsii_name="dataCatalogOutputs")
     def data_catalog_outputs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.DataCatalogOutputProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.DataCatalogOutputProperty"]]]]:
         '''One or more artifacts that represent the AWS Glue Data Catalog output from running the job.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.DataCatalogOutputProperty"]]]], jsii.get(self, "dataCatalogOutputs"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.DataCatalogOutputProperty"]]]], jsii.get(self, "dataCatalogOutputs"))
 
     @data_catalog_outputs.setter
     def data_catalog_outputs(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.DataCatalogOutputProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.DataCatalogOutputProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1590af46884622ef0d170ed4923f48f99a50a6a1996d1ae3153bb9310e57e53c)
@@ -2651,14 +2658,14 @@ class CfnJob(
     @jsii.member(jsii_name="jobSample")
     def job_sample(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.JobSampleProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.JobSampleProperty"]]:
         '''A sample configuration for profile jobs only, which determines the number of rows on which the profile job is run.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.JobSampleProperty"]], jsii.get(self, "jobSample"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.JobSampleProperty"]], jsii.get(self, "jobSample"))
 
     @job_sample.setter
     def job_sample(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.JobSampleProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.JobSampleProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ca1c358251e13753cae9686260a1b9250092eb5d6dc9303ea2773eaab8fb9a5b)
@@ -2708,14 +2715,14 @@ class CfnJob(
     @jsii.member(jsii_name="outputLocation")
     def output_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.OutputLocationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.OutputLocationProperty"]]:
         '''The location in Amazon S3 where the job writes its output.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.OutputLocationProperty"]], jsii.get(self, "outputLocation"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.OutputLocationProperty"]], jsii.get(self, "outputLocation"))
 
     @output_location.setter
     def output_location(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.OutputLocationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.OutputLocationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2aaf1bb32f1af6d74ea2dea05db73ad47c8bdf84b91afd9c8e9d5017097b23b0)
@@ -2726,14 +2733,14 @@ class CfnJob(
     @jsii.member(jsii_name="outputs")
     def outputs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.OutputProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.OutputProperty"]]]]:
         '''One or more artifacts that represent output from running the job.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.OutputProperty"]]]], jsii.get(self, "outputs"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.OutputProperty"]]]], jsii.get(self, "outputs"))
 
     @outputs.setter
     def outputs(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.OutputProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.OutputProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4c8d7d1db6fb1376e30514c6106d11213e4bff8cc52e0f98b2a77f90730b5497)
@@ -2744,14 +2751,14 @@ class CfnJob(
     @jsii.member(jsii_name="profileConfiguration")
     def profile_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.ProfileConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.ProfileConfigurationProperty"]]:
         '''Configuration for profile jobs.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.ProfileConfigurationProperty"]], jsii.get(self, "profileConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.ProfileConfigurationProperty"]], jsii.get(self, "profileConfiguration"))
 
     @profile_configuration.setter
     def profile_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.ProfileConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.ProfileConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3b66071d6a3c6e8e5658421069a997464d44121e807925d715ae867ca02548df)
@@ -2775,14 +2782,14 @@ class CfnJob(
     @jsii.member(jsii_name="recipe")
     def recipe(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.RecipeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.RecipeProperty"]]:
         '''A series of data transformation steps that the job runs.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.RecipeProperty"]], jsii.get(self, "recipe"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.RecipeProperty"]], jsii.get(self, "recipe"))
 
     @recipe.setter
     def recipe(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.RecipeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.RecipeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f043cf0163f3a72f1828b10706ac423f8db7a566bfef0188030aa19f509071ea)
@@ -2791,12 +2798,12 @@ class CfnJob(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata tags that have been applied to the job.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ddec0fd68bf1e0f4c4d9b5c0abfc8aaaf8dcb9ba7107191008f015f1d4993f81)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2819,14 +2826,14 @@ class CfnJob(
     @jsii.member(jsii_name="validationConfigurations")
     def validation_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.ValidationConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.ValidationConfigurationProperty"]]]]:
         '''List of validation configurations that are applied to the profile job.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.ValidationConfigurationProperty"]]]], jsii.get(self, "validationConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.ValidationConfigurationProperty"]]]], jsii.get(self, "validationConfigurations"))
 
     @validation_configurations.setter
     def validation_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.ValidationConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.ValidationConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1ecd1916fb144c0cf75988dd8579ce8bd4f19e3b4c26bede4a61492275bd56dc)
@@ -2968,8 +2975,8 @@ class CfnJob(
         def __init__(
             self,
             *,
-            statistics: typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.StatisticsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.ColumnSelectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            statistics: typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.StatisticsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            selectors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.ColumnSelectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Configuration for column evaluations for a profile job.
 
@@ -3018,7 +3025,7 @@ class CfnJob(
         @builtins.property
         def statistics(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnJob.StatisticsConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnJob.StatisticsConfigurationProperty"]:
             '''Configuration for evaluations.
 
             Statistics can be used to select evaluations and override parameters of evaluations.
@@ -3027,12 +3034,12 @@ class CfnJob(
             '''
             result = self._values.get("statistics")
             assert result is not None, "Required property 'statistics' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnJob.StatisticsConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnJob.StatisticsConfigurationProperty"], result)
 
         @builtins.property
         def selectors(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.ColumnSelectorProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.ColumnSelectorProperty"]]]]:
             '''List of column selectors.
 
             Selectors can be used to select columns from the dataset. When selectors are undefined, configuration will be applied to all supported columns.
@@ -3040,7 +3047,7 @@ class CfnJob(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-columnstatisticsconfiguration.html#cfn-databrew-job-columnstatisticsconfiguration-selectors
             '''
             result = self._values.get("selectors")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.ColumnSelectorProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.ColumnSelectorProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3123,9 +3130,9 @@ class CfnJob(
             database_name: builtins.str,
             table_name: builtins.str,
             catalog_id: typing.Optional[builtins.str] = None,
-            database_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.DatabaseTableOutputOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            overwrite: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            s3_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.S3TableOutputOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            database_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.DatabaseTableOutputOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            overwrite: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            s3_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.S3TableOutputOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents options that specify how and where in the AWS Glue Data Catalog DataBrew writes the output generated by recipe jobs.
 
@@ -3228,18 +3235,18 @@ class CfnJob(
         @builtins.property
         def database_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.DatabaseTableOutputOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.DatabaseTableOutputOptionsProperty"]]:
             '''Represents options that specify how and where DataBrew writes the database output generated by recipe jobs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-datacatalogoutput.html#cfn-databrew-job-datacatalogoutput-databaseoptions
             '''
             result = self._values.get("database_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.DatabaseTableOutputOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.DatabaseTableOutputOptionsProperty"]], result)
 
         @builtins.property
         def overwrite(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that, if true, means that any data in the location specified for output is overwritten with new output.
 
             Not supported with DatabaseOptions.
@@ -3247,18 +3254,18 @@ class CfnJob(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-datacatalogoutput.html#cfn-databrew-job-datacatalogoutput-overwrite
             '''
             result = self._values.get("overwrite")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def s3_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.S3TableOutputOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.S3TableOutputOptionsProperty"]]:
             '''Represents options that specify how and where DataBrew writes the Amazon S3 output generated by recipe jobs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-datacatalogoutput.html#cfn-databrew-job-datacatalogoutput-s3options
             '''
             result = self._values.get("s3_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.S3TableOutputOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.S3TableOutputOptionsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3284,7 +3291,7 @@ class CfnJob(
         def __init__(
             self,
             *,
-            database_options: typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.DatabaseTableOutputOptionsProperty", typing.Dict[builtins.str, typing.Any]]],
+            database_options: typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.DatabaseTableOutputOptionsProperty", typing.Dict[builtins.str, typing.Any]]],
             glue_connection_name: builtins.str,
             database_output_mode: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -3337,14 +3344,14 @@ class CfnJob(
         @builtins.property
         def database_options(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnJob.DatabaseTableOutputOptionsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnJob.DatabaseTableOutputOptionsProperty"]:
             '''Represents options that specify how and where DataBrew writes the database output generated by recipe jobs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-databaseoutput.html#cfn-databrew-job-databaseoutput-databaseoptions
             '''
             result = self._values.get("database_options")
             assert result is not None, "Required property 'database_options' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnJob.DatabaseTableOutputOptionsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnJob.DatabaseTableOutputOptionsProperty"], result)
 
         @builtins.property
         def glue_connection_name(self) -> builtins.str:
@@ -3388,7 +3395,7 @@ class CfnJob(
             self,
             *,
             table_name: builtins.str,
-            temp_directory: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            temp_directory: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents options that specify how and where DataBrew writes the database output generated by recipe jobs.
 
@@ -3440,13 +3447,13 @@ class CfnJob(
         @builtins.property
         def temp_directory(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.S3LocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.S3LocationProperty"]]:
             '''Represents an Amazon S3 location (bucket name and object key) where DataBrew can store intermediate results.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-databasetableoutputoptions.html#cfn-databrew-job-databasetableoutputoptions-tempdirectory
             '''
             result = self._values.get("temp_directory")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.S3LocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.S3LocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3472,7 +3479,7 @@ class CfnJob(
             self,
             *,
             entity_types: typing.Sequence[builtins.str],
-            allowed_statistics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.AllowedStatisticsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            allowed_statistics: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.AllowedStatisticsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Configuration of entity detection for a profile job.
 
@@ -3544,7 +3551,7 @@ class CfnJob(
         @builtins.property
         def allowed_statistics(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.AllowedStatisticsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.AllowedStatisticsProperty"]]:
             '''Configuration of statistics that are allowed to be run on columns that contain detected entities.
 
             When undefined, no statistics will be computed on columns that contain detected entities.
@@ -3552,7 +3559,7 @@ class CfnJob(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-entitydetectorconfiguration.html#cfn-databrew-job-entitydetectorconfiguration-allowedstatistics
             '''
             result = self._values.get("allowed_statistics")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.AllowedStatisticsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.AllowedStatisticsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3655,7 +3662,7 @@ class CfnJob(
         def __init__(
             self,
             *,
-            csv: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.CsvOutputOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            csv: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.CsvOutputOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents a set of options that define the structure of comma-separated (CSV) job output.
 
@@ -3686,13 +3693,13 @@ class CfnJob(
         @builtins.property
         def csv(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.CsvOutputOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.CsvOutputOptionsProperty"]]:
             '''Represents a set of options that define the structure of comma-separated value (CSV) job output.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-outputformatoptions.html#cfn-databrew-job-outputformatoptions-csv
             '''
             result = self._values.get("csv")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.CsvOutputOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.CsvOutputOptionsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3809,12 +3816,12 @@ class CfnJob(
         def __init__(
             self,
             *,
-            location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+            location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
             compression_format: typing.Optional[builtins.str] = None,
             format: typing.Optional[builtins.str] = None,
-            format_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.OutputFormatOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            format_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.OutputFormatOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             max_output_files: typing.Optional[jsii.Number] = None,
-            overwrite: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            overwrite: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             partition_columns: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Represents options that specify how and where in Amazon S3 DataBrew writes the output generated by recipe jobs or profile jobs.
@@ -3886,14 +3893,14 @@ class CfnJob(
         @builtins.property
         def location(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnJob.S3LocationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnJob.S3LocationProperty"]:
             '''The location in Amazon S3 where the job writes its output.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-output.html#cfn-databrew-job-output-location
             '''
             result = self._values.get("location")
             assert result is not None, "Required property 'location' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnJob.S3LocationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnJob.S3LocationProperty"], result)
 
         @builtins.property
         def compression_format(self) -> typing.Optional[builtins.str]:
@@ -3916,13 +3923,13 @@ class CfnJob(
         @builtins.property
         def format_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.OutputFormatOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.OutputFormatOptionsProperty"]]:
             '''Represents options that define how DataBrew formats job output files.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-output.html#cfn-databrew-job-output-formatoptions
             '''
             result = self._values.get("format_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.OutputFormatOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.OutputFormatOptionsProperty"]], result)
 
         @builtins.property
         def max_output_files(self) -> typing.Optional[jsii.Number]:
@@ -3936,13 +3943,13 @@ class CfnJob(
         @builtins.property
         def overwrite(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that, if true, means that any data in the location specified for output is overwritten with new output.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-output.html#cfn-databrew-job-output-overwrite
             '''
             result = self._values.get("overwrite")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def partition_columns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3978,10 +3985,10 @@ class CfnJob(
         def __init__(
             self,
             *,
-            column_statistics_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.ColumnStatisticsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            dataset_statistics_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.StatisticsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            entity_detector_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.EntityDetectorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            profile_columns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.ColumnSelectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            column_statistics_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.ColumnStatisticsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            dataset_statistics_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.StatisticsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            entity_detector_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.EntityDetectorConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            profile_columns: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.ColumnSelectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Configuration for profile jobs.
 
@@ -4061,7 +4068,7 @@ class CfnJob(
         @builtins.property
         def column_statistics_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.ColumnStatisticsConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.ColumnStatisticsConfigurationProperty"]]]]:
             '''List of configurations for column evaluations.
 
             ColumnStatisticsConfigurations are used to select evaluations and override parameters of evaluations for particular columns. When ColumnStatisticsConfigurations is undefined, the profile job will profile all supported columns and run all supported evaluations.
@@ -4069,12 +4076,12 @@ class CfnJob(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-profileconfiguration.html#cfn-databrew-job-profileconfiguration-columnstatisticsconfigurations
             '''
             result = self._values.get("column_statistics_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.ColumnStatisticsConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.ColumnStatisticsConfigurationProperty"]]]], result)
 
         @builtins.property
         def dataset_statistics_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.StatisticsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.StatisticsConfigurationProperty"]]:
             '''Configuration for inter-column evaluations.
 
             Configuration can be used to select evaluations and override parameters of evaluations. When configuration is undefined, the profile job will run all supported inter-column evaluations.
@@ -4082,12 +4089,12 @@ class CfnJob(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-profileconfiguration.html#cfn-databrew-job-profileconfiguration-datasetstatisticsconfiguration
             '''
             result = self._values.get("dataset_statistics_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.StatisticsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.StatisticsConfigurationProperty"]], result)
 
         @builtins.property
         def entity_detector_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.EntityDetectorConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.EntityDetectorConfigurationProperty"]]:
             '''Configuration of entity detection for a profile job.
 
             When undefined, entity detection is disabled.
@@ -4095,12 +4102,12 @@ class CfnJob(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-profileconfiguration.html#cfn-databrew-job-profileconfiguration-entitydetectorconfiguration
             '''
             result = self._values.get("entity_detector_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnJob.EntityDetectorConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.EntityDetectorConfigurationProperty"]], result)
 
         @builtins.property
         def profile_columns(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.ColumnSelectorProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.ColumnSelectorProperty"]]]]:
             '''List of column selectors.
 
             ProfileColumns can be used to select columns from the dataset. When ProfileColumns is undefined, the profile job will profile all supported columns.
@@ -4108,7 +4115,7 @@ class CfnJob(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-profileconfiguration.html#cfn-databrew-job-profileconfiguration-profilecolumns
             '''
             result = self._values.get("profile_columns")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.ColumnSelectorProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.ColumnSelectorProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4291,7 +4298,7 @@ class CfnJob(
         def __init__(
             self,
             *,
-            location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+            location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Represents options that specify how and where DataBrew writes the Amazon S3 output generated by recipe jobs.
 
@@ -4326,14 +4333,14 @@ class CfnJob(
         @builtins.property
         def location(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnJob.S3LocationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnJob.S3LocationProperty"]:
             '''Represents an Amazon S3 location (bucket name and object key) where DataBrew can write output from a job.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-s3tableoutputoptions.html#cfn-databrew-job-s3tableoutputoptions-location
             '''
             result = self._values.get("location")
             assert result is not None, "Required property 'location' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnJob.S3LocationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnJob.S3LocationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4355,7 +4362,7 @@ class CfnJob(
         def __init__(
             self,
             *,
-            parameters: typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b],
+            parameters: typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"],
             statistic: builtins.str,
         ) -> None:
             '''Override of a particular evaluation for a profile job.
@@ -4391,14 +4398,14 @@ class CfnJob(
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]:
+        ) -> typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]:
             '''A map that includes overrides of an evaluation’s parameters.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-statisticoverride.html#cfn-databrew-job-statisticoverride-parameters
             '''
             result = self._values.get("parameters")
             assert result is not None, "Required property 'parameters' is missing"
-            return typing.cast(typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def statistic(self) -> builtins.str:
@@ -4434,7 +4441,7 @@ class CfnJob(
             self,
             *,
             included_statistics: typing.Optional[typing.Sequence[builtins.str]] = None,
-            overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.StatisticOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.StatisticOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Configuration of evaluations for a profile job.
 
@@ -4486,13 +4493,13 @@ class CfnJob(
         @builtins.property
         def overrides(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.StatisticOverrideProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.StatisticOverrideProperty"]]]]:
             '''List of overrides for evaluations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-job-statisticsconfiguration.html#cfn-databrew-job-statisticsconfiguration-overrides
             '''
             result = self._values.get("overrides")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnJob.StatisticOverrideProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.StatisticOverrideProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4621,23 +4628,23 @@ class CfnJobProps:
         name: builtins.str,
         role_arn: builtins.str,
         type: builtins.str,
-        database_outputs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.DatabaseOutputProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        data_catalog_outputs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.DataCatalogOutputProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        database_outputs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.DatabaseOutputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        data_catalog_outputs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.DataCatalogOutputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         dataset_name: typing.Optional[builtins.str] = None,
         encryption_key_arn: typing.Optional[builtins.str] = None,
         encryption_mode: typing.Optional[builtins.str] = None,
-        job_sample: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.JobSampleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        job_sample: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.JobSampleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         log_subscription: typing.Optional[builtins.str] = None,
         max_capacity: typing.Optional[jsii.Number] = None,
         max_retries: typing.Optional[jsii.Number] = None,
-        output_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.OutputLocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        outputs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.OutputProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        profile_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.ProfileConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        output_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.OutputLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        outputs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.OutputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        profile_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.ProfileConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         project_name: typing.Optional[builtins.str] = None,
-        recipe: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.RecipeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        recipe: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.RecipeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout: typing.Optional[jsii.Number] = None,
-        validation_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.ValidationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        validation_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnJob.ValidationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnJob``.
 
@@ -4667,6 +4674,7 @@ class CfnJobProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_databrew as databrew
@@ -4920,24 +4928,24 @@ class CfnJobProps:
     @builtins.property
     def database_outputs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJob.DatabaseOutputProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.DatabaseOutputProperty"]]]]:
         '''Represents a list of JDBC database output objects which defines the output destination for a DataBrew recipe job to write into.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-job.html#cfn-databrew-job-databaseoutputs
         '''
         result = self._values.get("database_outputs")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJob.DatabaseOutputProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.DatabaseOutputProperty"]]]], result)
 
     @builtins.property
     def data_catalog_outputs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJob.DataCatalogOutputProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.DataCatalogOutputProperty"]]]]:
         '''One or more artifacts that represent the AWS Glue Data Catalog output from running the job.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-job.html#cfn-databrew-job-datacatalogoutputs
         '''
         result = self._values.get("data_catalog_outputs")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJob.DataCatalogOutputProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.DataCatalogOutputProperty"]]]], result)
 
     @builtins.property
     def dataset_name(self) -> typing.Optional[builtins.str]:
@@ -4974,7 +4982,7 @@ class CfnJobProps:
     @builtins.property
     def job_sample(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJob.JobSampleProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.JobSampleProperty"]]:
         '''A sample configuration for profile jobs only, which determines the number of rows on which the profile job is run.
 
         If a ``JobSample`` value isn't provided, the default value is used. The default value is CUSTOM_ROWS for the mode parameter and 20,000 for the size parameter.
@@ -4982,7 +4990,7 @@ class CfnJobProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-job.html#cfn-databrew-job-jobsample
         '''
         result = self._values.get("job_sample")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJob.JobSampleProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.JobSampleProperty"]], result)
 
     @builtins.property
     def log_subscription(self) -> typing.Optional[builtins.str]:
@@ -5014,29 +5022,29 @@ class CfnJobProps:
     @builtins.property
     def output_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJob.OutputLocationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.OutputLocationProperty"]]:
         '''The location in Amazon S3 where the job writes its output.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-job.html#cfn-databrew-job-outputlocation
         '''
         result = self._values.get("output_location")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJob.OutputLocationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.OutputLocationProperty"]], result)
 
     @builtins.property
     def outputs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJob.OutputProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.OutputProperty"]]]]:
         '''One or more artifacts that represent output from running the job.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-job.html#cfn-databrew-job-outputs
         '''
         result = self._values.get("outputs")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJob.OutputProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.OutputProperty"]]]], result)
 
     @builtins.property
     def profile_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJob.ProfileConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.ProfileConfigurationProperty"]]:
         '''Configuration for profile jobs.
 
         Configuration can be used to select columns, do evaluations, and override default parameters of evaluations. When configuration is undefined, the profile job will apply default settings to all supported columns.
@@ -5044,7 +5052,7 @@ class CfnJobProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-job.html#cfn-databrew-job-profileconfiguration
         '''
         result = self._values.get("profile_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJob.ProfileConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.ProfileConfigurationProperty"]], result)
 
     @builtins.property
     def project_name(self) -> typing.Optional[builtins.str]:
@@ -5058,22 +5066,22 @@ class CfnJobProps:
     @builtins.property
     def recipe(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJob.RecipeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.RecipeProperty"]]:
         '''A series of data transformation steps that the job runs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-job.html#cfn-databrew-job-recipe
         '''
         result = self._values.get("recipe")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnJob.RecipeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnJob.RecipeProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata tags that have been applied to the job.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-job.html#cfn-databrew-job-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def timeout(self) -> typing.Optional[jsii.Number]:
@@ -5089,13 +5097,13 @@ class CfnJobProps:
     @builtins.property
     def validation_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJob.ValidationConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.ValidationConfigurationProperty"]]]]:
         '''List of validation configurations that are applied to the profile job.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-job.html#cfn-databrew-job-validationconfigurations
         '''
         result = self._values.get("validation_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJob.ValidationConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnJob.ValidationConfigurationProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5123,6 +5131,7 @@ class CfnProject(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_databrew as databrew
@@ -5149,15 +5158,15 @@ class CfnProject(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         dataset_name: builtins.str,
         name: builtins.str,
         recipe_name: builtins.str,
         role_arn: builtins.str,
-        sample: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.SampleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sample: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.SampleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataBrew::Project``.
 
@@ -5198,7 +5207,7 @@ class CfnProject(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProject", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5234,15 +5243,15 @@ class CfnProject(
 
     @builtins.property
     @jsii.member(jsii_name="projectRef")
-    def project_ref(self) -> _ProjectReference_4423c061:
+    def project_ref(self) -> "_ProjectReference_4423c061":
         '''A reference to a Project resource.'''
-        return typing.cast(_ProjectReference_4423c061, jsii.get(self, "projectRef"))
+        return typing.cast("_ProjectReference_4423c061", jsii.get(self, "projectRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="datasetName")
@@ -5300,14 +5309,14 @@ class CfnProject(
     @jsii.member(jsii_name="sample")
     def sample(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.SampleProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.SampleProperty"]]:
         '''The sample size and sampling type to apply to the data.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.SampleProperty"]], jsii.get(self, "sample"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.SampleProperty"]], jsii.get(self, "sample"))
 
     @sample.setter
     def sample(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.SampleProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.SampleProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f9435fb6d56540e192289978d7a1f1da70fcc12a1ca28464340d7b7dacb77ea4)
@@ -5316,12 +5325,12 @@ class CfnProject(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata tags that have been applied to the project.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f1d0a18e2c68dd76f033ccf881ced895b6e5b2dcdaf57d5c93679d5e1615f9a8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5421,8 +5430,8 @@ class CfnProjectProps:
         name: builtins.str,
         recipe_name: builtins.str,
         role_arn: builtins.str,
-        sample: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.SampleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sample: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.SampleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnProject``.
 
@@ -5438,6 +5447,7 @@ class CfnProjectProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_databrew as databrew
@@ -5523,7 +5533,7 @@ class CfnProjectProps:
     @builtins.property
     def sample(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.SampleProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.SampleProperty"]]:
         '''The sample size and sampling type to apply to the data.
 
         If this parameter isn't specified, then the sample consists of the first 500 rows from the dataset.
@@ -5531,16 +5541,16 @@ class CfnProjectProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-project.html#cfn-databrew-project-sample
         '''
         result = self._values.get("sample")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.SampleProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.SampleProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata tags that have been applied to the project.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-project.html#cfn-databrew-project-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5568,6 +5578,7 @@ class CfnRecipe(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_databrew as databrew
@@ -5605,13 +5616,13 @@ class CfnRecipe(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        steps: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecipe.RecipeStepProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        steps: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecipe.RecipeStepProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataBrew::Recipe``.
 
@@ -5645,7 +5656,7 @@ class CfnRecipe(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRecipe", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5681,15 +5692,15 @@ class CfnRecipe(
 
     @builtins.property
     @jsii.member(jsii_name="recipeRef")
-    def recipe_ref(self) -> _RecipeReference_ba03b894:
+    def recipe_ref(self) -> "_RecipeReference_ba03b894":
         '''A reference to a Recipe resource.'''
-        return typing.cast(_RecipeReference_ba03b894, jsii.get(self, "recipeRef"))
+        return typing.cast("_RecipeReference_ba03b894", jsii.get(self, "recipeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -5708,14 +5719,14 @@ class CfnRecipe(
     @jsii.member(jsii_name="steps")
     def steps(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRecipe.RecipeStepProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecipe.RecipeStepProperty"]]]:
         '''A list of steps that are defined by the recipe.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRecipe.RecipeStepProperty"]]], jsii.get(self, "steps"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecipe.RecipeStepProperty"]]], jsii.get(self, "steps"))
 
     @steps.setter
     def steps(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRecipe.RecipeStepProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecipe.RecipeStepProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aac5fd9dc8c66debcfa55dba23279394d09ee0da36a427806f600e26dd614c6e)
@@ -5737,12 +5748,12 @@ class CfnRecipe(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata tags that have been applied to the recipe.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2d21a60e57e66a69e507d7dba5c522976f57f8bb1bfe4305961694def9cd65ed)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5758,7 +5769,7 @@ class CfnRecipe(
             self,
             *,
             operation: builtins.str,
-            parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Represents a transformation and associated parameters that are used to apply a change to an AWS Glue DataBrew dataset.
 
@@ -5806,13 +5817,13 @@ class CfnRecipe(
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Contextual parameters for the transformation.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-recipe-action.html#cfn-databrew-recipe-action-parameters
             '''
             result = self._values.get("parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5940,7 +5951,7 @@ class CfnRecipe(
             catalog_id: typing.Optional[builtins.str] = None,
             database_name: typing.Optional[builtins.str] = None,
             table_name: typing.Optional[builtins.str] = None,
-            temp_directory: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecipe.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            temp_directory: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecipe.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents how metadata stored in the AWS Glue Data Catalog is defined in a DataBrew dataset.
 
@@ -6018,13 +6029,13 @@ class CfnRecipe(
         @builtins.property
         def temp_directory(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecipe.S3LocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecipe.S3LocationProperty"]]:
             '''Represents an Amazon location where DataBrew can store intermediate results.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-recipe-datacataloginputdefinition.html#cfn-databrew-recipe-datacataloginputdefinition-tempdirectory
             '''
             result = self._values.get("temp_directory")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecipe.S3LocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecipe.S3LocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6049,8 +6060,8 @@ class CfnRecipe(
         def __init__(
             self,
             *,
-            data_catalog_input_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecipe.DataCatalogInputDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_input_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecipe.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            data_catalog_input_definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecipe.DataCatalogInputDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_input_definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecipe.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents information on how DataBrew can find data, in either the AWS Glue Data Catalog or Amazon S3.
 
@@ -6099,24 +6110,24 @@ class CfnRecipe(
         @builtins.property
         def data_catalog_input_definition(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecipe.DataCatalogInputDefinitionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecipe.DataCatalogInputDefinitionProperty"]]:
             '''The AWS Glue Data Catalog parameters for the data.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-recipe-input.html#cfn-databrew-recipe-input-datacataloginputdefinition
             '''
             result = self._values.get("data_catalog_input_definition")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecipe.DataCatalogInputDefinitionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecipe.DataCatalogInputDefinitionProperty"]], result)
 
         @builtins.property
         def s3_input_definition(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecipe.S3LocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecipe.S3LocationProperty"]]:
             '''The Amazon S3 location where the data is stored.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-recipe-input.html#cfn-databrew-recipe-input-s3inputdefinition
             '''
             result = self._values.get("s3_input_definition")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecipe.S3LocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecipe.S3LocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6279,7 +6290,7 @@ class CfnRecipe(
             lower_bound: typing.Optional[builtins.str] = None,
             map_type: typing.Optional[builtins.str] = None,
             mode_type: typing.Optional[builtins.str] = None,
-            multi_line: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            multi_line: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             num_rows: typing.Optional[builtins.str] = None,
             num_rows_after: typing.Optional[builtins.str] = None,
             num_rows_before: typing.Optional[builtins.str] = None,
@@ -6307,9 +6318,9 @@ class CfnRecipe(
             right_columns: typing.Optional[builtins.str] = None,
             sample_size: typing.Optional[builtins.str] = None,
             sample_type: typing.Optional[builtins.str] = None,
-            secondary_inputs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecipe.SecondaryInputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            secondary_inputs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecipe.SecondaryInputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             second_input: typing.Optional[builtins.str] = None,
-            sheet_indexes: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+            sheet_indexes: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
             sheet_names: typing.Optional[typing.Sequence[builtins.str]] = None,
             source_column: typing.Optional[builtins.str] = None,
             source_column1: typing.Optional[builtins.str] = None,
@@ -7246,13 +7257,13 @@ class CfnRecipe(
         @builtins.property
         def multi_line(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether JSON input contains embedded new line characters.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-recipe-recipeparameters.html#cfn-databrew-recipe-recipeparameters-multiline
             '''
             result = self._values.get("multi_line")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def num_rows(self) -> typing.Optional[builtins.str]:
@@ -7514,13 +7525,13 @@ class CfnRecipe(
         @builtins.property
         def secondary_inputs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRecipe.SecondaryInputProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecipe.SecondaryInputProperty"]]]]:
             '''A list of secondary inputs in a UNION transform.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-recipe-recipeparameters.html#cfn-databrew-recipe-recipeparameters-secondaryinputs
             '''
             result = self._values.get("secondary_inputs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRecipe.SecondaryInputProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecipe.SecondaryInputProperty"]]]], result)
 
         @builtins.property
         def second_input(self) -> typing.Optional[builtins.str]:
@@ -7534,13 +7545,13 @@ class CfnRecipe(
         @builtins.property
         def sheet_indexes(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
             '''One or more sheet numbers in the Excel file, which will be included in a dataset.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-recipe-recipeparameters.html#cfn-databrew-recipe-recipeparameters-sheetindexes
             '''
             result = self._values.get("sheet_indexes")
-            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def sheet_names(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -7848,8 +7859,8 @@ class CfnRecipe(
         def __init__(
             self,
             *,
-            action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecipe.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
-            condition_expressions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecipe.ConditionExpressionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecipe.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            condition_expressions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecipe.ConditionExpressionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Represents a single step from a DataBrew recipe to be performed.
 
@@ -7898,19 +7909,19 @@ class CfnRecipe(
         @builtins.property
         def action(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRecipe.ActionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRecipe.ActionProperty"]:
             '''The particular action to be performed in the recipe step.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-recipe-recipestep.html#cfn-databrew-recipe-recipestep-action
             '''
             result = self._values.get("action")
             assert result is not None, "Required property 'action' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRecipe.ActionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRecipe.ActionProperty"], result)
 
         @builtins.property
         def condition_expressions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRecipe.ConditionExpressionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecipe.ConditionExpressionProperty"]]]]:
             '''One or more conditions that must be met for the recipe step to succeed.
 
             .. epigraph::
@@ -7920,7 +7931,7 @@ class CfnRecipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-recipe-recipestep.html#cfn-databrew-recipe-recipestep-conditionexpressions
             '''
             result = self._values.get("condition_expressions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRecipe.ConditionExpressionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecipe.ConditionExpressionProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8018,8 +8029,8 @@ class CfnRecipe(
         def __init__(
             self,
             *,
-            data_catalog_input_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecipe.DataCatalogInputDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_input_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecipe.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            data_catalog_input_definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecipe.DataCatalogInputDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_input_definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecipe.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents secondary inputs in a UNION transform.
 
@@ -8068,24 +8079,24 @@ class CfnRecipe(
         @builtins.property
         def data_catalog_input_definition(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecipe.DataCatalogInputDefinitionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecipe.DataCatalogInputDefinitionProperty"]]:
             '''The AWS Glue Data Catalog parameters for the data.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-recipe-secondaryinput.html#cfn-databrew-recipe-secondaryinput-datacataloginputdefinition
             '''
             result = self._values.get("data_catalog_input_definition")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecipe.DataCatalogInputDefinitionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecipe.DataCatalogInputDefinitionProperty"]], result)
 
         @builtins.property
         def s3_input_definition(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecipe.S3LocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecipe.S3LocationProperty"]]:
             '''The Amazon S3 location where the data is stored.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-recipe-secondaryinput.html#cfn-databrew-recipe-secondaryinput-s3inputdefinition
             '''
             result = self._values.get("s3_input_definition")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecipe.S3LocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecipe.S3LocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8114,9 +8125,9 @@ class CfnRecipeProps:
         self,
         *,
         name: builtins.str,
-        steps: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRecipe.RecipeStepProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        steps: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecipe.RecipeStepProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRecipe``.
 
@@ -8130,6 +8141,7 @@ class CfnRecipeProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_databrew as databrew
@@ -8192,14 +8204,14 @@ class CfnRecipeProps:
     @builtins.property
     def steps(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRecipe.RecipeStepProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecipe.RecipeStepProperty"]]]:
         '''A list of steps that are defined by the recipe.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-recipe.html#cfn-databrew-recipe-steps
         '''
         result = self._values.get("steps")
         assert result is not None, "Required property 'steps' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRecipe.RecipeStepProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecipe.RecipeStepProperty"]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -8211,13 +8223,13 @@ class CfnRecipeProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata tags that have been applied to the recipe.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-recipe.html#cfn-databrew-recipe-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8245,6 +8257,7 @@ class CfnRuleset(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_databrew as databrew
@@ -8286,14 +8299,14 @@ class CfnRuleset(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuleset.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        rules: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuleset.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
         target_arn: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataBrew::Ruleset``.
 
@@ -8332,7 +8345,7 @@ class CfnRuleset(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRuleset", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8368,15 +8381,15 @@ class CfnRuleset(
 
     @builtins.property
     @jsii.member(jsii_name="rulesetRef")
-    def ruleset_ref(self) -> _RulesetReference_5b5eefa3:
+    def ruleset_ref(self) -> "_RulesetReference_5b5eefa3":
         '''A reference to a Ruleset resource.'''
-        return typing.cast(_RulesetReference_5b5eefa3, jsii.get(self, "rulesetRef"))
+        return typing.cast("_RulesetReference_5b5eefa3", jsii.get(self, "rulesetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -8395,14 +8408,14 @@ class CfnRuleset(
     @jsii.member(jsii_name="rules")
     def rules(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRuleset.RuleProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRuleset.RuleProperty"]]]:
         '''Contains metadata about the ruleset.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRuleset.RuleProperty"]]], jsii.get(self, "rules"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRuleset.RuleProperty"]]], jsii.get(self, "rules"))
 
     @rules.setter
     def rules(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRuleset.RuleProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRuleset.RuleProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ff9d442ba62bc82e6880fe6d0a6fd87a9aed4b19da90d22fa71bab04a491987c)
@@ -8437,12 +8450,12 @@ class CfnRuleset(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e1444cc53816f9c7496fb52b1b8e2ba1dc2bcb412e9db1eab86051f5e05a4ce5)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -8538,10 +8551,10 @@ class CfnRuleset(
             *,
             check_expression: builtins.str,
             name: builtins.str,
-            column_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuleset.ColumnSelectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            disabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            substitution_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuleset.SubstitutionValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            threshold: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRuleset.ThresholdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            column_selectors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuleset.ColumnSelectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            disabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            substitution_map: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuleset.SubstitutionValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            threshold: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuleset.ThresholdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents a single data quality requirement that should be validated in the scope of this dataset.
 
@@ -8630,7 +8643,7 @@ class CfnRuleset(
         @builtins.property
         def column_selectors(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRuleset.ColumnSelectorProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRuleset.ColumnSelectorProperty"]]]]:
             '''List of column selectors.
 
             Selectors can be used to select columns using a name or regular expression from the dataset. Rule will be applied to selected columns.
@@ -8638,12 +8651,12 @@ class CfnRuleset(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-ruleset-rule.html#cfn-databrew-ruleset-rule-columnselectors
             '''
             result = self._values.get("column_selectors")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRuleset.ColumnSelectorProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRuleset.ColumnSelectorProperty"]]]], result)
 
         @builtins.property
         def disabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that specifies whether the rule is disabled.
 
             Once a rule is disabled, a profile job will not validate it during a job run. Default value is false.
@@ -8651,12 +8664,12 @@ class CfnRuleset(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-ruleset-rule.html#cfn-databrew-ruleset-rule-disabled
             '''
             result = self._values.get("disabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def substitution_map(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRuleset.SubstitutionValueProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRuleset.SubstitutionValueProperty"]]]]:
             '''The map of substitution variable names to their values used in a check expression.
 
             Variable names should start with a ':' (colon). Variable values can either be actual values or column names. To differentiate between the two, column names should be enclosed in backticks, for example, ``":col1": "``Column A``".``
@@ -8664,12 +8677,12 @@ class CfnRuleset(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-ruleset-rule.html#cfn-databrew-ruleset-rule-substitutionmap
             '''
             result = self._values.get("substitution_map")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRuleset.SubstitutionValueProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRuleset.SubstitutionValueProperty"]]]], result)
 
         @builtins.property
         def threshold(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuleset.ThresholdProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuleset.ThresholdProperty"]]:
             '''The threshold used with a non-aggregate check expression.
 
             Non-aggregate check expressions will be applied to each row in a specific column, and the threshold will be used to determine whether the validation succeeds.
@@ -8677,7 +8690,7 @@ class CfnRuleset(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-databrew-ruleset-rule.html#cfn-databrew-ruleset-rule-threshold
             '''
             result = self._values.get("threshold")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRuleset.ThresholdProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRuleset.ThresholdProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8872,10 +8885,10 @@ class CfnRulesetProps:
         self,
         *,
         name: builtins.str,
-        rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRuleset.RuleProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        rules: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRuleset.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
         target_arn: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRuleset``.
 
@@ -8890,6 +8903,7 @@ class CfnRulesetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_databrew as databrew
@@ -8958,14 +8972,14 @@ class CfnRulesetProps:
     @builtins.property
     def rules(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRuleset.RuleProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRuleset.RuleProperty"]]]:
         '''Contains metadata about the ruleset.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-ruleset.html#cfn-databrew-ruleset-rules
         '''
         result = self._values.get("rules")
         assert result is not None, "Required property 'rules' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRuleset.RuleProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRuleset.RuleProperty"]]], result)
 
     @builtins.property
     def target_arn(self) -> builtins.str:
@@ -8987,7 +9001,7 @@ class CfnRulesetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -8995,7 +9009,7 @@ class CfnRulesetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-ruleset.html#cfn-databrew-ruleset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9025,6 +9039,7 @@ class CfnSchedule(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_databrew as databrew
@@ -9044,13 +9059,13 @@ class CfnSchedule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cron_expression: builtins.str,
         name: builtins.str,
         job_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DataBrew::Schedule``.
 
@@ -9084,7 +9099,7 @@ class CfnSchedule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSchedule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9120,15 +9135,15 @@ class CfnSchedule(
 
     @builtins.property
     @jsii.member(jsii_name="scheduleRef")
-    def schedule_ref(self) -> _ScheduleReference_381f57d1:
+    def schedule_ref(self) -> "_ScheduleReference_381f57d1":
         '''A reference to a Schedule resource.'''
-        return typing.cast(_ScheduleReference_381f57d1, jsii.get(self, "scheduleRef"))
+        return typing.cast("_ScheduleReference_381f57d1", jsii.get(self, "scheduleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="cronExpression")
@@ -9171,12 +9186,12 @@ class CfnSchedule(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata tags that have been applied to the schedule.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__79383c848799327224f349abb72f78809321fc76317868c24f428dde973cb0e4)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9200,7 +9215,7 @@ class CfnScheduleProps:
         cron_expression: builtins.str,
         name: builtins.str,
         job_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSchedule``.
 
@@ -9214,6 +9229,7 @@ class CfnScheduleProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_databrew as databrew
@@ -9277,13 +9293,13 @@ class CfnScheduleProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata tags that have been applied to the schedule.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-schedule.html#cfn-databrew-schedule-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

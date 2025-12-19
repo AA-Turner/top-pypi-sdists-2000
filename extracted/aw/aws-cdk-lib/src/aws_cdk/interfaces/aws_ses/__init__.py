@@ -298,7 +298,7 @@ class IConfigurationSetEventDestinationRef(
     @jsii.member(jsii_name="configurationSetEventDestinationRef")
     def configuration_set_event_destination_ref(
         self,
-    ) -> ConfigurationSetEventDestinationReference:
+    ) -> "ConfigurationSetEventDestinationReference":
         '''(experimental) A reference to a ConfigurationSetEventDestination resource.
 
         :stability: experimental
@@ -321,12 +321,12 @@ class _IConfigurationSetEventDestinationRefProxy(
     @jsii.member(jsii_name="configurationSetEventDestinationRef")
     def configuration_set_event_destination_ref(
         self,
-    ) -> ConfigurationSetEventDestinationReference:
+    ) -> "ConfigurationSetEventDestinationReference":
         '''(experimental) A reference to a ConfigurationSetEventDestination resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationSetEventDestinationReference, jsii.get(self, "configurationSetEventDestinationRef"))
+        return typing.cast("ConfigurationSetEventDestinationReference", jsii.get(self, "configurationSetEventDestinationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationSetEventDestinationRef).__jsii_proxy_class__ = lambda : _IConfigurationSetEventDestinationRefProxy
@@ -345,7 +345,7 @@ class IConfigurationSetRef(
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetRef")
-    def configuration_set_ref(self) -> ConfigurationSetReference:
+    def configuration_set_ref(self) -> "ConfigurationSetReference":
         '''(experimental) A reference to a ConfigurationSet resource.
 
         :stability: experimental
@@ -366,12 +366,12 @@ class _IConfigurationSetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetRef")
-    def configuration_set_ref(self) -> ConfigurationSetReference:
+    def configuration_set_ref(self) -> "ConfigurationSetReference":
         '''(experimental) A reference to a ConfigurationSet resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationSetReference, jsii.get(self, "configurationSetRef"))
+        return typing.cast("ConfigurationSetReference", jsii.get(self, "configurationSetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationSetRef).__jsii_proxy_class__ = lambda : _IConfigurationSetRefProxy
@@ -390,7 +390,7 @@ class IContactListRef(
 
     @builtins.property
     @jsii.member(jsii_name="contactListRef")
-    def contact_list_ref(self) -> ContactListReference:
+    def contact_list_ref(self) -> "ContactListReference":
         '''(experimental) A reference to a ContactList resource.
 
         :stability: experimental
@@ -411,12 +411,12 @@ class _IContactListRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="contactListRef")
-    def contact_list_ref(self) -> ContactListReference:
+    def contact_list_ref(self) -> "ContactListReference":
         '''(experimental) A reference to a ContactList resource.
 
         :stability: experimental
         '''
-        return typing.cast(ContactListReference, jsii.get(self, "contactListRef"))
+        return typing.cast("ContactListReference", jsii.get(self, "contactListRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContactListRef).__jsii_proxy_class__ = lambda : _IContactListRefProxy
@@ -435,7 +435,7 @@ class IDedicatedIpPoolRef(
 
     @builtins.property
     @jsii.member(jsii_name="dedicatedIpPoolRef")
-    def dedicated_ip_pool_ref(self) -> DedicatedIpPoolReference:
+    def dedicated_ip_pool_ref(self) -> "DedicatedIpPoolReference":
         '''(experimental) A reference to a DedicatedIpPool resource.
 
         :stability: experimental
@@ -456,12 +456,12 @@ class _IDedicatedIpPoolRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dedicatedIpPoolRef")
-    def dedicated_ip_pool_ref(self) -> DedicatedIpPoolReference:
+    def dedicated_ip_pool_ref(self) -> "DedicatedIpPoolReference":
         '''(experimental) A reference to a DedicatedIpPool resource.
 
         :stability: experimental
         '''
-        return typing.cast(DedicatedIpPoolReference, jsii.get(self, "dedicatedIpPoolRef"))
+        return typing.cast("DedicatedIpPoolReference", jsii.get(self, "dedicatedIpPoolRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDedicatedIpPoolRef).__jsii_proxy_class__ = lambda : _IDedicatedIpPoolRefProxy
@@ -480,7 +480,7 @@ class IEmailIdentityRef(
 
     @builtins.property
     @jsii.member(jsii_name="emailIdentityRef")
-    def email_identity_ref(self) -> EmailIdentityReference:
+    def email_identity_ref(self) -> "EmailIdentityReference":
         '''(experimental) A reference to a EmailIdentity resource.
 
         :stability: experimental
@@ -501,12 +501,12 @@ class _IEmailIdentityRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="emailIdentityRef")
-    def email_identity_ref(self) -> EmailIdentityReference:
+    def email_identity_ref(self) -> "EmailIdentityReference":
         '''(experimental) A reference to a EmailIdentity resource.
 
         :stability: experimental
         '''
-        return typing.cast(EmailIdentityReference, jsii.get(self, "emailIdentityRef"))
+        return typing.cast("EmailIdentityReference", jsii.get(self, "emailIdentityRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEmailIdentityRef).__jsii_proxy_class__ = lambda : _IEmailIdentityRefProxy
@@ -1105,6 +1105,51 @@ class _ITemplateRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ITemplateRef).__jsii_proxy_class__ = lambda : _ITemplateRefProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_ses.ITenantRef")
+class ITenantRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a Tenant.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="tenantRef")
+    def tenant_ref(self) -> "TenantReference":
+        '''(experimental) A reference to a Tenant resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _ITenantRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a Tenant.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_ses.ITenantRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="tenantRef")
+    def tenant_ref(self) -> "TenantReference":
+        '''(experimental) A reference to a Tenant resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("TenantReference", jsii.get(self, "tenantRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, ITenantRef).__jsii_proxy_class__ = lambda : _ITenantRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_ses.IVdmAttributesRef")
@@ -1923,6 +1968,66 @@ class TemplateReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_ses.TenantReference",
+    jsii_struct_bases=[],
+    name_mapping={"tenant_arn": "tenantArn", "tenant_name": "tenantName"},
+)
+class TenantReference:
+    def __init__(self, *, tenant_arn: builtins.str, tenant_name: builtins.str) -> None:
+        '''A reference to a Tenant resource.
+
+        :param tenant_arn: The ARN of the Tenant resource.
+        :param tenant_name: The TenantName of the Tenant resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
+            
+            tenant_reference = interfaces_ses.TenantReference(
+                tenant_arn="tenantArn",
+                tenant_name="tenantName"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6fc549d98c71c6825704c4331407116c91f8bbba45ccba5c8e0a84c63f182d65)
+            check_type(argname="argument tenant_arn", value=tenant_arn, expected_type=type_hints["tenant_arn"])
+            check_type(argname="argument tenant_name", value=tenant_name, expected_type=type_hints["tenant_name"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "tenant_arn": tenant_arn,
+            "tenant_name": tenant_name,
+        }
+
+    @builtins.property
+    def tenant_arn(self) -> builtins.str:
+        '''The ARN of the Tenant resource.'''
+        result = self._values.get("tenant_arn")
+        assert result is not None, "Required property 'tenant_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def tenant_name(self) -> builtins.str:
+        '''The TenantName of the Tenant resource.'''
+        result = self._values.get("tenant_name")
+        assert result is not None, "Required property 'tenant_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "TenantReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ses.VdmAttributesReference",
     jsii_struct_bases=[],
     name_mapping={"vdm_attributes_resource_id": "vdmAttributesResourceId"},
@@ -1995,6 +2100,7 @@ __all__ = [
     "IReceiptRuleRef",
     "IReceiptRuleSetRef",
     "ITemplateRef",
+    "ITenantRef",
     "IVdmAttributesRef",
     "MailManagerAddonInstanceReference",
     "MailManagerAddonSubscriptionReference",
@@ -2009,6 +2115,7 @@ __all__ = [
     "ReceiptRuleReference",
     "ReceiptRuleSetReference",
     "TemplateReference",
+    "TenantReference",
     "VdmAttributesReference",
 ]
 
@@ -2148,6 +2255,14 @@ def _typecheckingstub__bff65c596a54ecb144242af79ad669ad596182afa21c0c8114c0d19eb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6fc549d98c71c6825704c4331407116c91f8bbba45ccba5c8e0a84c63f182d65(
+    *,
+    tenant_arn: builtins.str,
+    tenant_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__602c7efea7e375b6f852dbd10f664e586f718be768b824afd2b7d09c6f6d47af(
     *,
     vdm_attributes_resource_id: builtins.str,
@@ -2155,5 +2270,5 @@ def _typecheckingstub__602c7efea7e375b6f852dbd10f664e586f718be768b824afd2b7d09c6
     """Type checking stubs"""
     pass
 
-for cls in [IConfigurationSetEventDestinationRef, IConfigurationSetRef, IContactListRef, IDedicatedIpPoolRef, IEmailIdentityRef, IMailManagerAddonInstanceRef, IMailManagerAddonSubscriptionRef, IMailManagerAddressListRef, IMailManagerArchiveRef, IMailManagerIngressPointRef, IMailManagerRelayRef, IMailManagerRuleSetRef, IMailManagerTrafficPolicyRef, IMultiRegionEndpointRef, IReceiptFilterRef, IReceiptRuleRef, IReceiptRuleSetRef, ITemplateRef, IVdmAttributesRef]:
+for cls in [IConfigurationSetEventDestinationRef, IConfigurationSetRef, IContactListRef, IDedicatedIpPoolRef, IEmailIdentityRef, IMailManagerAddonInstanceRef, IMailManagerAddonSubscriptionRef, IMailManagerAddressListRef, IMailManagerArchiveRef, IMailManagerIngressPointRef, IMailManagerRelayRef, IMailManagerRuleSetRef, IMailManagerTrafficPolicyRef, IMultiRegionEndpointRef, IReceiptFilterRef, IReceiptRuleRef, IReceiptRuleSetRef, ITemplateRef, ITenantRef, IVdmAttributesRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

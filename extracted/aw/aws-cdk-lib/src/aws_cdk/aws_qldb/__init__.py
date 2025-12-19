@@ -94,6 +94,7 @@ class CfnLedger(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_qldb as qldb
@@ -114,14 +115,14 @@ class CfnLedger(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         permissions_mode: builtins.str,
-        deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        deletion_protection: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         kms_key: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::QLDB::Ledger``.
 
@@ -160,7 +161,7 @@ class CfnLedger(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLedger", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -204,15 +205,15 @@ class CfnLedger(
 
     @builtins.property
     @jsii.member(jsii_name="ledgerRef")
-    def ledger_ref(self) -> _LedgerReference_f24a0616:
+    def ledger_ref(self) -> "_LedgerReference_f24a0616":
         '''A reference to a Ledger resource.'''
-        return typing.cast(_LedgerReference_f24a0616, jsii.get(self, "ledgerRef"))
+        return typing.cast("_LedgerReference_f24a0616", jsii.get(self, "ledgerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="permissionsMode")
@@ -231,14 +232,14 @@ class CfnLedger(
     @jsii.member(jsii_name="deletionProtection")
     def deletion_protection(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the ledger is protected from being deleted by any user.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deletionProtection"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deletionProtection"))
 
     @deletion_protection.setter
     def deletion_protection(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2b3fe377f100037b9cde4aff29cf5c4b1fc32e83c4f45f03c00ecf702acfa3ec)
@@ -273,12 +274,12 @@ class CfnLedger(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__58e2cf9516bbbe2dc95bb5894175223984cbea74e4c177e3c5a7db64d7c625c6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -301,10 +302,10 @@ class CfnLedgerProps:
         self,
         *,
         permissions_mode: builtins.str,
-        deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        deletion_protection: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         kms_key: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLedger``.
 
@@ -319,6 +320,7 @@ class CfnLedgerProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_qldb as qldb
@@ -381,7 +383,7 @@ class CfnLedgerProps:
     @builtins.property
     def deletion_protection(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the ledger is protected from being deleted by any user.
 
         If not defined during ledger creation, this feature is enabled ( ``true`` ) by default.
@@ -391,7 +393,7 @@ class CfnLedgerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-qldb-ledger.html#cfn-qldb-ledger-deletionprotection
         '''
         result = self._values.get("deletion_protection")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def kms_key(self) -> typing.Optional[builtins.str]:
@@ -437,7 +439,7 @@ class CfnLedgerProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -445,7 +447,7 @@ class CfnLedgerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-qldb-ledger.html#cfn-qldb-ledger-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -477,6 +479,7 @@ class CfnStream(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_qldb as qldb
@@ -502,16 +505,16 @@ class CfnStream(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         inclusive_start_time: builtins.str,
-        kinesis_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnStream.KinesisConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        kinesis_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnStream.KinesisConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ledger_name: builtins.str,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         stream_name: builtins.str,
         exclusive_end_time: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::QLDB::Stream``.
 
@@ -543,7 +546,7 @@ class CfnStream(
 
     @jsii.member(jsii_name="arnForStream")
     @builtins.classmethod
-    def arn_for_stream(cls, resource: _IStreamRef_5720424a) -> builtins.str:
+    def arn_for_stream(cls, resource: "_IStreamRef_5720424a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -565,7 +568,7 @@ class CfnStream(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStream", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -623,15 +626,15 @@ class CfnStream(
 
     @builtins.property
     @jsii.member(jsii_name="streamRef")
-    def stream_ref(self) -> _StreamReference_d2818af6:
+    def stream_ref(self) -> "_StreamReference_d2818af6":
         '''A reference to a Stream resource.'''
-        return typing.cast(_StreamReference_d2818af6, jsii.get(self, "streamRef"))
+        return typing.cast("_StreamReference_d2818af6", jsii.get(self, "streamRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="inclusiveStartTime")
@@ -650,14 +653,14 @@ class CfnStream(
     @jsii.member(jsii_name="kinesisConfiguration")
     def kinesis_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnStream.KinesisConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnStream.KinesisConfigurationProperty"]:
         '''The configuration settings of the Kinesis Data Streams destination for your stream request.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnStream.KinesisConfigurationProperty"], jsii.get(self, "kinesisConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnStream.KinesisConfigurationProperty"], jsii.get(self, "kinesisConfiguration"))
 
     @kinesis_configuration.setter
     def kinesis_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnStream.KinesisConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnStream.KinesisConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bc6c4472587c14cb453d825bb83db5d8c8df52f82dc984a4b40efc1c0f286846)
@@ -718,12 +721,12 @@ class CfnStream(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3d506c15c7a106af08f12f6afdaa8ae0bdae79b69d9147fee716935cb73e72b1)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -741,7 +744,7 @@ class CfnStream(
         def __init__(
             self,
             *,
-            aggregation_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            aggregation_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             stream_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The configuration settings of the Amazon Kinesis Data Streams destination for an Amazon QLDB journal stream.
@@ -776,7 +779,7 @@ class CfnStream(
         @builtins.property
         def aggregation_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables QLDB to publish multiple data records in a single Kinesis Data Streams record, increasing the number of records sent per API call.
 
             Default: ``True``
@@ -787,7 +790,7 @@ class CfnStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-qldb-stream-kinesisconfiguration.html#cfn-qldb-stream-kinesisconfiguration-aggregationenabled
             '''
             result = self._values.get("aggregation_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def stream_arn(self) -> typing.Optional[builtins.str]:
@@ -828,12 +831,12 @@ class CfnStreamProps:
         self,
         *,
         inclusive_start_time: builtins.str,
-        kinesis_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.KinesisConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        kinesis_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnStream.KinesisConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ledger_name: builtins.str,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         stream_name: builtins.str,
         exclusive_end_time: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStream``.
 
@@ -850,6 +853,7 @@ class CfnStreamProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_qldb as qldb
@@ -912,14 +916,14 @@ class CfnStreamProps:
     @builtins.property
     def kinesis_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnStream.KinesisConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnStream.KinesisConfigurationProperty"]:
         '''The configuration settings of the Kinesis Data Streams destination for your stream request.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-qldb-stream.html#cfn-qldb-stream-kinesisconfiguration
         '''
         result = self._values.get("kinesis_configuration")
         assert result is not None, "Required property 'kinesis_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnStream.KinesisConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnStream.KinesisConfigurationProperty"], result)
 
     @builtins.property
     def ledger_name(self) -> builtins.str:
@@ -932,7 +936,7 @@ class CfnStreamProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The Amazon Resource Name (ARN) of the IAM role that grants QLDB permissions for a journal stream to write data records to a Kinesis Data Streams resource.
 
         To pass a role to QLDB when requesting a journal stream, you must have permissions to perform the ``iam:PassRole`` action on the IAM role resource. This is required for all journal stream requests.
@@ -941,7 +945,7 @@ class CfnStreamProps:
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def stream_name(self) -> builtins.str:
@@ -971,7 +975,7 @@ class CfnStreamProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -979,7 +983,7 @@ class CfnStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-qldb-stream.html#cfn-qldb-stream-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

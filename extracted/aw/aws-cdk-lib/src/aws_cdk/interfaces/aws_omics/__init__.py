@@ -96,7 +96,7 @@ class IAnnotationStoreRef(
 
     @builtins.property
     @jsii.member(jsii_name="annotationStoreRef")
-    def annotation_store_ref(self) -> AnnotationStoreReference:
+    def annotation_store_ref(self) -> "AnnotationStoreReference":
         '''(experimental) A reference to a AnnotationStore resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IAnnotationStoreRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="annotationStoreRef")
-    def annotation_store_ref(self) -> AnnotationStoreReference:
+    def annotation_store_ref(self) -> "AnnotationStoreReference":
         '''(experimental) A reference to a AnnotationStore resource.
 
         :stability: experimental
         '''
-        return typing.cast(AnnotationStoreReference, jsii.get(self, "annotationStoreRef"))
+        return typing.cast("AnnotationStoreReference", jsii.get(self, "annotationStoreRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAnnotationStoreRef).__jsii_proxy_class__ = lambda : _IAnnotationStoreRefProxy

@@ -8,7 +8,8 @@ import inspect
 import os
 import platform
 import time
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 from warnings import warn
 
 from airflow.models.dag import DAG
@@ -336,6 +337,7 @@ class DbtToAirflowConverter:
             on_warning_callback=on_warning_callback,
             render_config=render_config,
             async_py_requirements=execution_config.async_py_requirements,
+            execution_config=execution_config,
         )
 
         current_time = time.perf_counter()

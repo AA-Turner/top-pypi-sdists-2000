@@ -198,7 +198,7 @@ class IApplicationOutputRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationOutputRef")
-    def application_output_ref(self) -> ApplicationOutputReference:
+    def application_output_ref(self) -> "ApplicationOutputReference":
         '''(experimental) A reference to a ApplicationOutput resource.
 
         :stability: experimental
@@ -219,12 +219,12 @@ class _IApplicationOutputRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationOutputRef")
-    def application_output_ref(self) -> ApplicationOutputReference:
+    def application_output_ref(self) -> "ApplicationOutputReference":
         '''(experimental) A reference to a ApplicationOutput resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationOutputReference, jsii.get(self, "applicationOutputRef"))
+        return typing.cast("ApplicationOutputReference", jsii.get(self, "applicationOutputRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationOutputRef).__jsii_proxy_class__ = lambda : _IApplicationOutputRefProxy
@@ -245,7 +245,7 @@ class IApplicationRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
@@ -266,12 +266,12 @@ class _IApplicationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationReference, jsii.get(self, "applicationRef"))
+        return typing.cast("ApplicationReference", jsii.get(self, "applicationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IApplicationRefProxy
@@ -294,7 +294,7 @@ class IApplicationReferenceDataSourceRef(
     @jsii.member(jsii_name="applicationReferenceDataSourceRef")
     def application_reference_data_source_ref(
         self,
-    ) -> ApplicationReferenceDataSourceReference:
+    ) -> "ApplicationReferenceDataSourceReference":
         '''(experimental) A reference to a ApplicationReferenceDataSource resource.
 
         :stability: experimental
@@ -317,12 +317,12 @@ class _IApplicationReferenceDataSourceRefProxy(
     @jsii.member(jsii_name="applicationReferenceDataSourceRef")
     def application_reference_data_source_ref(
         self,
-    ) -> ApplicationReferenceDataSourceReference:
+    ) -> "ApplicationReferenceDataSourceReference":
         '''(experimental) A reference to a ApplicationReferenceDataSource resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationReferenceDataSourceReference, jsii.get(self, "applicationReferenceDataSourceRef"))
+        return typing.cast("ApplicationReferenceDataSourceReference", jsii.get(self, "applicationReferenceDataSourceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationReferenceDataSourceRef).__jsii_proxy_class__ = lambda : _IApplicationReferenceDataSourceRefProxy

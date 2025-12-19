@@ -37,8 +37,8 @@ from jax._src import deprecations
 from jax._src.lib import xla_client as xc
 from jax._src.lib.mlir.dialects import sdy
 from jax._src.named_sharding import (  # noqa: F401
-    SdyArray, SdyDim, UnspecifiedValue, AUTO,
-    _check_unique_resources, NamedSharding, UNSPECIFIED,
+    SdyArray, SdyDim, UnspecifiedValue, AUTO, flatten_spec, NamedSharding,
+    _check_unique_resources, UNSPECIFIED,
     ArrayMapping, ArrayMappingOrAutoOrUnspecified, get_array_mapping,
     array_mapping_to_axis_resources, named_sharding_to_xla_hlo_sharding,
     modify_sdy_sharding_wrt_axis_types)
@@ -181,6 +181,9 @@ class SingleDeviceSharding(jsharding.Sharding):
   def is_fully_addressable(self) -> bool:
     return xb.process_index(self._device.client) == self._device.process_index
 
+  def check_compatible_aval(self, aval_shape: Shape) -> None:
+    return
+
 SingleDeviceSharding.__module__ = 'jax.sharding'
 
 @util.cache(max_size=4096, trace_context_in_key=False)
@@ -193,7 +196,6 @@ def pmap_sharding_devices_indices_map(
 
 @use_cpp_class(xc.PmapSharding)
 class PmapSharding(jsharding.Sharding):
-  """Describes a sharding used by :func:`jax.pmap`."""
   devices: np.ndarray
   sharding_spec: sharding_specs.ShardingSpec
   _internal_device_list: xc.DeviceList
@@ -323,6 +325,9 @@ class PmapSharding(jsharding.Sharding):
   @functools.cached_property
   def is_fully_addressable(self) -> bool:
     return self._internal_device_list.is_fully_addressable
+
+  def check_compatible_aval(self, aval_shape: Shape) -> None:
+    return
 
   def shard_shape(self, global_shape: Shape) -> Shape:
     sharded_dim = None
@@ -472,7 +477,6 @@ MeshAxisName = Any
 
 def prepare_axis_resources(axis_resources, arg_name,
                            allow_unconstrained_dims=False):
-  # PyTrees don't treat None values as leaves, so we use an is_leaf function.
   entries, treedef = tree_util.tree_flatten(
       axis_resources, is_leaf=lambda x: x is None)
   what = f"{arg_name} leaf specifications"
@@ -485,6 +489,9 @@ def prepare_axis_resources(axis_resources, arg_name,
       if isinstance(entry, PmapSharding):
         raise ValueError(f'One of {what} got sharding {entry} which is not '
                          'allowed.')
+      if isinstance(entry, NamedSharding) and entry.mesh.empty:
+        raise ValueError(f'One of {what} got an empty NamedSharding: {entry} '
+                         'which is not allowed.')
       if (not allow_unconstrained_dims and isinstance(entry, NamedSharding) and
           PartitionSpec.UNCONSTRAINED in entry.spec):
         raise ValueError(
@@ -1054,16 +1061,6 @@ def _gspmd_to_named_sharding_via_mesh(
 ) -> NamedSharding:
   spec = parse_flatten_op_sharding(out_s._hlo_sharding, mesh)[0]
   return cached_named_sharding(mesh, spec, out_s.memory_kind)
-
-
-def flatten_spec(spec):
-  out = []
-  for s in spec:
-    if isinstance(s, tuple):
-      out.extend(s)
-    else:
-      out.append(s)
-  return out
 
 
 @util.cache()

@@ -817,7 +817,7 @@ class ICustomDBEngineVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="customDbEngineVersionRef")
-    def custom_db_engine_version_ref(self) -> CustomDBEngineVersionReference:
+    def custom_db_engine_version_ref(self) -> "CustomDBEngineVersionReference":
         '''(experimental) A reference to a CustomDBEngineVersion resource.
 
         :stability: experimental
@@ -838,12 +838,12 @@ class _ICustomDBEngineVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="customDbEngineVersionRef")
-    def custom_db_engine_version_ref(self) -> CustomDBEngineVersionReference:
+    def custom_db_engine_version_ref(self) -> "CustomDBEngineVersionReference":
         '''(experimental) A reference to a CustomDBEngineVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(CustomDBEngineVersionReference, jsii.get(self, "customDbEngineVersionRef"))
+        return typing.cast("CustomDBEngineVersionReference", jsii.get(self, "customDbEngineVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICustomDBEngineVersionRef).__jsii_proxy_class__ = lambda : _ICustomDBEngineVersionRefProxy
@@ -862,7 +862,7 @@ class IDBClusterParameterGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="dbClusterParameterGroupRef")
-    def db_cluster_parameter_group_ref(self) -> DBClusterParameterGroupReference:
+    def db_cluster_parameter_group_ref(self) -> "DBClusterParameterGroupReference":
         '''(experimental) A reference to a DBClusterParameterGroup resource.
 
         :stability: experimental
@@ -883,12 +883,12 @@ class _IDBClusterParameterGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dbClusterParameterGroupRef")
-    def db_cluster_parameter_group_ref(self) -> DBClusterParameterGroupReference:
+    def db_cluster_parameter_group_ref(self) -> "DBClusterParameterGroupReference":
         '''(experimental) A reference to a DBClusterParameterGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(DBClusterParameterGroupReference, jsii.get(self, "dbClusterParameterGroupRef"))
+        return typing.cast("DBClusterParameterGroupReference", jsii.get(self, "dbClusterParameterGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDBClusterParameterGroupRef).__jsii_proxy_class__ = lambda : _IDBClusterParameterGroupRefProxy
@@ -907,7 +907,7 @@ class IDBClusterRef(
 
     @builtins.property
     @jsii.member(jsii_name="dbClusterRef")
-    def db_cluster_ref(self) -> DBClusterReference:
+    def db_cluster_ref(self) -> "DBClusterReference":
         '''(experimental) A reference to a DBCluster resource.
 
         :stability: experimental
@@ -928,12 +928,12 @@ class _IDBClusterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dbClusterRef")
-    def db_cluster_ref(self) -> DBClusterReference:
+    def db_cluster_ref(self) -> "DBClusterReference":
         '''(experimental) A reference to a DBCluster resource.
 
         :stability: experimental
         '''
-        return typing.cast(DBClusterReference, jsii.get(self, "dbClusterRef"))
+        return typing.cast("DBClusterReference", jsii.get(self, "dbClusterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDBClusterRef).__jsii_proxy_class__ = lambda : _IDBClusterRefProxy
@@ -952,7 +952,7 @@ class IDBInstanceRef(
 
     @builtins.property
     @jsii.member(jsii_name="dbInstanceRef")
-    def db_instance_ref(self) -> DBInstanceReference:
+    def db_instance_ref(self) -> "DBInstanceReference":
         '''(experimental) A reference to a DBInstance resource.
 
         :stability: experimental
@@ -973,12 +973,12 @@ class _IDBInstanceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dbInstanceRef")
-    def db_instance_ref(self) -> DBInstanceReference:
+    def db_instance_ref(self) -> "DBInstanceReference":
         '''(experimental) A reference to a DBInstance resource.
 
         :stability: experimental
         '''
-        return typing.cast(DBInstanceReference, jsii.get(self, "dbInstanceRef"))
+        return typing.cast("DBInstanceReference", jsii.get(self, "dbInstanceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDBInstanceRef).__jsii_proxy_class__ = lambda : _IDBInstanceRefProxy
@@ -997,7 +997,7 @@ class IDBParameterGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="dbParameterGroupRef")
-    def db_parameter_group_ref(self) -> DBParameterGroupReference:
+    def db_parameter_group_ref(self) -> "DBParameterGroupReference":
         '''(experimental) A reference to a DBParameterGroup resource.
 
         :stability: experimental
@@ -1018,12 +1018,12 @@ class _IDBParameterGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dbParameterGroupRef")
-    def db_parameter_group_ref(self) -> DBParameterGroupReference:
+    def db_parameter_group_ref(self) -> "DBParameterGroupReference":
         '''(experimental) A reference to a DBParameterGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(DBParameterGroupReference, jsii.get(self, "dbParameterGroupRef"))
+        return typing.cast("DBParameterGroupReference", jsii.get(self, "dbParameterGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDBParameterGroupRef).__jsii_proxy_class__ = lambda : _IDBParameterGroupRefProxy
@@ -1042,7 +1042,7 @@ class IDBProxyEndpointRef(
 
     @builtins.property
     @jsii.member(jsii_name="dbProxyEndpointRef")
-    def db_proxy_endpoint_ref(self) -> DBProxyEndpointReference:
+    def db_proxy_endpoint_ref(self) -> "DBProxyEndpointReference":
         '''(experimental) A reference to a DBProxyEndpoint resource.
 
         :stability: experimental
@@ -1063,12 +1063,12 @@ class _IDBProxyEndpointRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dbProxyEndpointRef")
-    def db_proxy_endpoint_ref(self) -> DBProxyEndpointReference:
+    def db_proxy_endpoint_ref(self) -> "DBProxyEndpointReference":
         '''(experimental) A reference to a DBProxyEndpoint resource.
 
         :stability: experimental
         '''
-        return typing.cast(DBProxyEndpointReference, jsii.get(self, "dbProxyEndpointRef"))
+        return typing.cast("DBProxyEndpointReference", jsii.get(self, "dbProxyEndpointRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDBProxyEndpointRef).__jsii_proxy_class__ = lambda : _IDBProxyEndpointRefProxy
@@ -1087,7 +1087,7 @@ class IDBProxyRef(
 
     @builtins.property
     @jsii.member(jsii_name="dbProxyRef")
-    def db_proxy_ref(self) -> DBProxyReference:
+    def db_proxy_ref(self) -> "DBProxyReference":
         '''(experimental) A reference to a DBProxy resource.
 
         :stability: experimental
@@ -1108,12 +1108,12 @@ class _IDBProxyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dbProxyRef")
-    def db_proxy_ref(self) -> DBProxyReference:
+    def db_proxy_ref(self) -> "DBProxyReference":
         '''(experimental) A reference to a DBProxy resource.
 
         :stability: experimental
         '''
-        return typing.cast(DBProxyReference, jsii.get(self, "dbProxyRef"))
+        return typing.cast("DBProxyReference", jsii.get(self, "dbProxyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDBProxyRef).__jsii_proxy_class__ = lambda : _IDBProxyRefProxy
@@ -1132,7 +1132,7 @@ class IDBProxyTargetGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="dbProxyTargetGroupRef")
-    def db_proxy_target_group_ref(self) -> DBProxyTargetGroupReference:
+    def db_proxy_target_group_ref(self) -> "DBProxyTargetGroupReference":
         '''(experimental) A reference to a DBProxyTargetGroup resource.
 
         :stability: experimental
@@ -1153,12 +1153,12 @@ class _IDBProxyTargetGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dbProxyTargetGroupRef")
-    def db_proxy_target_group_ref(self) -> DBProxyTargetGroupReference:
+    def db_proxy_target_group_ref(self) -> "DBProxyTargetGroupReference":
         '''(experimental) A reference to a DBProxyTargetGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(DBProxyTargetGroupReference, jsii.get(self, "dbProxyTargetGroupRef"))
+        return typing.cast("DBProxyTargetGroupReference", jsii.get(self, "dbProxyTargetGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDBProxyTargetGroupRef).__jsii_proxy_class__ = lambda : _IDBProxyTargetGroupRefProxy
@@ -1177,7 +1177,7 @@ class IDBSecurityGroupIngressRef(
 
     @builtins.property
     @jsii.member(jsii_name="dbSecurityGroupIngressRef")
-    def db_security_group_ingress_ref(self) -> DBSecurityGroupIngressReference:
+    def db_security_group_ingress_ref(self) -> "DBSecurityGroupIngressReference":
         '''(experimental) A reference to a DBSecurityGroupIngress resource.
 
         :stability: experimental
@@ -1198,12 +1198,12 @@ class _IDBSecurityGroupIngressRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dbSecurityGroupIngressRef")
-    def db_security_group_ingress_ref(self) -> DBSecurityGroupIngressReference:
+    def db_security_group_ingress_ref(self) -> "DBSecurityGroupIngressReference":
         '''(experimental) A reference to a DBSecurityGroupIngress resource.
 
         :stability: experimental
         '''
-        return typing.cast(DBSecurityGroupIngressReference, jsii.get(self, "dbSecurityGroupIngressRef"))
+        return typing.cast("DBSecurityGroupIngressReference", jsii.get(self, "dbSecurityGroupIngressRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDBSecurityGroupIngressRef).__jsii_proxy_class__ = lambda : _IDBSecurityGroupIngressRefProxy
@@ -1222,7 +1222,7 @@ class IDBSecurityGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="dbSecurityGroupRef")
-    def db_security_group_ref(self) -> DBSecurityGroupReference:
+    def db_security_group_ref(self) -> "DBSecurityGroupReference":
         '''(experimental) A reference to a DBSecurityGroup resource.
 
         :stability: experimental
@@ -1243,12 +1243,12 @@ class _IDBSecurityGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dbSecurityGroupRef")
-    def db_security_group_ref(self) -> DBSecurityGroupReference:
+    def db_security_group_ref(self) -> "DBSecurityGroupReference":
         '''(experimental) A reference to a DBSecurityGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(DBSecurityGroupReference, jsii.get(self, "dbSecurityGroupRef"))
+        return typing.cast("DBSecurityGroupReference", jsii.get(self, "dbSecurityGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDBSecurityGroupRef).__jsii_proxy_class__ = lambda : _IDBSecurityGroupRefProxy
@@ -1267,7 +1267,7 @@ class IDBShardGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="dbShardGroupRef")
-    def db_shard_group_ref(self) -> DBShardGroupReference:
+    def db_shard_group_ref(self) -> "DBShardGroupReference":
         '''(experimental) A reference to a DBShardGroup resource.
 
         :stability: experimental
@@ -1288,12 +1288,12 @@ class _IDBShardGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dbShardGroupRef")
-    def db_shard_group_ref(self) -> DBShardGroupReference:
+    def db_shard_group_ref(self) -> "DBShardGroupReference":
         '''(experimental) A reference to a DBShardGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(DBShardGroupReference, jsii.get(self, "dbShardGroupRef"))
+        return typing.cast("DBShardGroupReference", jsii.get(self, "dbShardGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDBShardGroupRef).__jsii_proxy_class__ = lambda : _IDBShardGroupRefProxy
@@ -1312,7 +1312,7 @@ class IDBSubnetGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="dbSubnetGroupRef")
-    def db_subnet_group_ref(self) -> DBSubnetGroupReference:
+    def db_subnet_group_ref(self) -> "DBSubnetGroupReference":
         '''(experimental) A reference to a DBSubnetGroup resource.
 
         :stability: experimental
@@ -1333,12 +1333,12 @@ class _IDBSubnetGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dbSubnetGroupRef")
-    def db_subnet_group_ref(self) -> DBSubnetGroupReference:
+    def db_subnet_group_ref(self) -> "DBSubnetGroupReference":
         '''(experimental) A reference to a DBSubnetGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(DBSubnetGroupReference, jsii.get(self, "dbSubnetGroupRef"))
+        return typing.cast("DBSubnetGroupReference", jsii.get(self, "dbSubnetGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDBSubnetGroupRef).__jsii_proxy_class__ = lambda : _IDBSubnetGroupRefProxy
@@ -1357,7 +1357,7 @@ class IEventSubscriptionRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventSubscriptionRef")
-    def event_subscription_ref(self) -> EventSubscriptionReference:
+    def event_subscription_ref(self) -> "EventSubscriptionReference":
         '''(experimental) A reference to a EventSubscription resource.
 
         :stability: experimental
@@ -1378,12 +1378,12 @@ class _IEventSubscriptionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventSubscriptionRef")
-    def event_subscription_ref(self) -> EventSubscriptionReference:
+    def event_subscription_ref(self) -> "EventSubscriptionReference":
         '''(experimental) A reference to a EventSubscription resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventSubscriptionReference, jsii.get(self, "eventSubscriptionRef"))
+        return typing.cast("EventSubscriptionReference", jsii.get(self, "eventSubscriptionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventSubscriptionRef).__jsii_proxy_class__ = lambda : _IEventSubscriptionRefProxy
@@ -1402,7 +1402,7 @@ class IGlobalClusterRef(
 
     @builtins.property
     @jsii.member(jsii_name="globalClusterRef")
-    def global_cluster_ref(self) -> GlobalClusterReference:
+    def global_cluster_ref(self) -> "GlobalClusterReference":
         '''(experimental) A reference to a GlobalCluster resource.
 
         :stability: experimental
@@ -1423,12 +1423,12 @@ class _IGlobalClusterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="globalClusterRef")
-    def global_cluster_ref(self) -> GlobalClusterReference:
+    def global_cluster_ref(self) -> "GlobalClusterReference":
         '''(experimental) A reference to a GlobalCluster resource.
 
         :stability: experimental
         '''
-        return typing.cast(GlobalClusterReference, jsii.get(self, "globalClusterRef"))
+        return typing.cast("GlobalClusterReference", jsii.get(self, "globalClusterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGlobalClusterRef).__jsii_proxy_class__ = lambda : _IGlobalClusterRefProxy

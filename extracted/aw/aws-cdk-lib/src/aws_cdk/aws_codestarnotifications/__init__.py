@@ -162,14 +162,14 @@ class CfnNotificationRule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         detail_type: builtins.str,
         event_type_ids: typing.Sequence[builtins.str],
         name: builtins.str,
         resource: builtins.str,
-        targets: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnNotificationRule.TargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        targets: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNotificationRule.TargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
         created_by: typing.Optional[builtins.str] = None,
         event_type_id: typing.Optional[builtins.str] = None,
         status: typing.Optional[builtins.str] = None,
@@ -214,7 +214,7 @@ class CfnNotificationRule(
     @builtins.classmethod
     def arn_for_notification_rule(
         cls,
-        resource: _INotificationRuleRef_72554e3b,
+        resource: "_INotificationRuleRef_72554e3b",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -237,7 +237,7 @@ class CfnNotificationRule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnNotificationRule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -282,15 +282,15 @@ class CfnNotificationRule(
 
     @builtins.property
     @jsii.member(jsii_name="notificationRuleRef")
-    def notification_rule_ref(self) -> _NotificationRuleReference_9dbce4a4:
+    def notification_rule_ref(self) -> "_NotificationRuleReference_9dbce4a4":
         '''A reference to a NotificationRule resource.'''
-        return typing.cast(_NotificationRuleReference_9dbce4a4, jsii.get(self, "notificationRuleRef"))
+        return typing.cast("_NotificationRuleReference_9dbce4a4", jsii.get(self, "notificationRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="detailType")
@@ -348,14 +348,14 @@ class CfnNotificationRule(
     @jsii.member(jsii_name="targets")
     def targets(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnNotificationRule.TargetProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnNotificationRule.TargetProperty"]]]:
         '''A list of Amazon Resource Names (ARNs) of Amazon  topics and  clients to associate with the notification rule.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnNotificationRule.TargetProperty"]]], jsii.get(self, "targets"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnNotificationRule.TargetProperty"]]], jsii.get(self, "targets"))
 
     @targets.setter
     def targets(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnNotificationRule.TargetProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnNotificationRule.TargetProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4259d2e21a6aa16f5b382a6da87f39d19bce9c3ff108949185b9a52a0cdc3fb1)
@@ -530,7 +530,7 @@ class CfnNotificationRuleProps:
         event_type_ids: typing.Sequence[builtins.str],
         name: builtins.str,
         resource: builtins.str,
-        targets: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnNotificationRule.TargetProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        targets: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnNotificationRule.TargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
         created_by: typing.Optional[builtins.str] = None,
         event_type_id: typing.Optional[builtins.str] = None,
         status: typing.Optional[builtins.str] = None,
@@ -660,14 +660,14 @@ class CfnNotificationRuleProps:
     @builtins.property
     def targets(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnNotificationRule.TargetProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnNotificationRule.TargetProperty"]]]:
         '''A list of Amazon Resource Names (ARNs) of Amazon  topics and  clients to associate with the notification rule.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestarnotifications-notificationrule.html#cfn-codestarnotifications-notificationrule-targets
         '''
         result = self._values.get("targets")
         assert result is not None, "Required property 'targets' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnNotificationRule.TargetProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnNotificationRule.TargetProperty"]]], result)
 
     @builtins.property
     def created_by(self) -> typing.Optional[builtins.str]:
@@ -841,7 +841,7 @@ class INotificationRuleSource(typing_extensions.Protocol):
     @jsii.member(jsii_name="bindAsNotificationRuleSource")
     def bind_as_notification_rule_source(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "NotificationRuleSourceConfig":
         '''Returns a source configuration for notification rule.
 
@@ -858,7 +858,7 @@ class _INotificationRuleSourceProxy:
     @jsii.member(jsii_name="bindAsNotificationRuleSource")
     def bind_as_notification_rule_source(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "NotificationRuleSourceConfig":
         '''Returns a source configuration for notification rule.
 
@@ -882,7 +882,7 @@ class INotificationRuleTarget(typing_extensions.Protocol):
     @jsii.member(jsii_name="bindAsNotificationRuleTarget")
     def bind_as_notification_rule_target(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "NotificationRuleTargetConfig":
         '''Returns a target configuration for notification rule.
 
@@ -899,7 +899,7 @@ class _INotificationRuleTargetProxy:
     @jsii.member(jsii_name="bindAsNotificationRuleTarget")
     def bind_as_notification_rule_target(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "NotificationRuleTargetConfig":
         '''Returns a target configuration for notification rule.
 
@@ -958,14 +958,14 @@ class NotificationRule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         events: typing.Sequence[builtins.str],
-        source: INotificationRuleSource,
-        targets: typing.Optional[typing.Sequence[INotificationRuleTarget]] = None,
+        source: "INotificationRuleSource",
+        targets: typing.Optional[typing.Sequence["INotificationRuleTarget"]] = None,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[DetailType] = None,
+        detail_type: typing.Optional["DetailType"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -1000,10 +1000,10 @@ class NotificationRule(
     @builtins.classmethod
     def from_notification_rule_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         notification_rule_arn: builtins.str,
-    ) -> INotificationRule:
+    ) -> "INotificationRule":
         '''Import an existing notification rule provided an ARN.
 
         :param scope: The parent creating construct.
@@ -1015,10 +1015,10 @@ class NotificationRule(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument notification_rule_arn", value=notification_rule_arn, expected_type=type_hints["notification_rule_arn"])
-        return typing.cast(INotificationRule, jsii.sinvoke(cls, "fromNotificationRuleArn", [scope, id, notification_rule_arn]))
+        return typing.cast("INotificationRule", jsii.sinvoke(cls, "fromNotificationRuleArn", [scope, id, notification_rule_arn]))
 
     @jsii.member(jsii_name="addTarget")
-    def add_target(self, target: INotificationRuleTarget) -> builtins.bool:
+    def add_target(self, target: "INotificationRuleTarget") -> builtins.bool:
         '''Adds target to notification rule.
 
         :param target: The SNS topic or AWS Chatbot Slack target.
@@ -1059,7 +1059,7 @@ class NotificationRuleOptions:
         self,
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[DetailType] = None,
+        detail_type: typing.Optional["DetailType"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -1113,7 +1113,7 @@ class NotificationRuleOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def detail_type(self) -> typing.Optional[DetailType]:
+    def detail_type(self) -> typing.Optional["DetailType"]:
         '''The level of detail to include in the notifications for this resource.
 
         BASIC will include only the contents of the event as it would appear in AWS CloudWatch.
@@ -1122,7 +1122,7 @@ class NotificationRuleOptions:
         :default: DetailType.FULL
         '''
         result = self._values.get("detail_type")
-        return typing.cast(typing.Optional[DetailType], result)
+        return typing.cast(typing.Optional["DetailType"], result)
 
     @builtins.property
     def enabled(self) -> typing.Optional[builtins.bool]:
@@ -1176,12 +1176,12 @@ class NotificationRuleProps(NotificationRuleOptions):
         self,
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[DetailType] = None,
+        detail_type: typing.Optional["DetailType"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
         events: typing.Sequence[builtins.str],
-        source: INotificationRuleSource,
-        targets: typing.Optional[typing.Sequence[INotificationRuleTarget]] = None,
+        source: "INotificationRuleSource",
+        targets: typing.Optional[typing.Sequence["INotificationRuleTarget"]] = None,
     ) -> None:
         '''Properties for a new notification rule.
 
@@ -1261,7 +1261,7 @@ class NotificationRuleProps(NotificationRuleOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def detail_type(self) -> typing.Optional[DetailType]:
+    def detail_type(self) -> typing.Optional["DetailType"]:
         '''The level of detail to include in the notifications for this resource.
 
         BASIC will include only the contents of the event as it would appear in AWS CloudWatch.
@@ -1270,7 +1270,7 @@ class NotificationRuleProps(NotificationRuleOptions):
         :default: DetailType.FULL
         '''
         result = self._values.get("detail_type")
-        return typing.cast(typing.Optional[DetailType], result)
+        return typing.cast(typing.Optional["DetailType"], result)
 
     @builtins.property
     def enabled(self) -> typing.Optional[builtins.bool]:
@@ -1307,7 +1307,7 @@ class NotificationRuleProps(NotificationRuleOptions):
         return typing.cast(typing.List[builtins.str], result)
 
     @builtins.property
-    def source(self) -> INotificationRuleSource:
+    def source(self) -> "INotificationRuleSource":
         '''The Amazon Resource Name (ARN) of the resource to associate with the notification rule.
 
         Currently, Supported sources include pipelines in AWS CodePipeline, build projects in AWS CodeBuild, and repositories in AWS CodeCommit in this L2 constructor.
@@ -1316,16 +1316,16 @@ class NotificationRuleProps(NotificationRuleOptions):
         '''
         result = self._values.get("source")
         assert result is not None, "Required property 'source' is missing"
-        return typing.cast(INotificationRuleSource, result)
+        return typing.cast("INotificationRuleSource", result)
 
     @builtins.property
-    def targets(self) -> typing.Optional[typing.List[INotificationRuleTarget]]:
+    def targets(self) -> typing.Optional[typing.List["INotificationRuleTarget"]]:
         '''The targets to register for the notification destination.
 
         :default: - No targets are added to the rule. Use ``addTarget()`` to add a target.
         '''
         result = self._values.get("targets")
-        return typing.cast(typing.Optional[typing.List[INotificationRuleTarget]], result)
+        return typing.cast(typing.Optional[typing.List["INotificationRuleTarget"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

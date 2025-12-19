@@ -1,10 +1,10 @@
 use crate::common::{INTEG_CLIENT_IDENTITY, INTEG_CLIENT_NAME, INTEG_CLIENT_VERSION, NAMESPACE};
 use futures_util::{TryStreamExt, stream};
 use std::time::{SystemTime, UNIX_EPOCH};
-use temporalio_client::{ClientOptionsBuilder, TestService, WorkflowService};
+use temporalio_client::{ClientOptions, TestService, WorkflowService};
 use temporalio_common::protos::temporal::api::workflowservice::v1::DescribeNamespaceRequest;
 use temporalio_sdk_core::ephemeral_server::{
-    EphemeralExe, EphemeralExeVersion, EphemeralServer, TemporalDevServerConfigBuilder,
+    EphemeralExe, EphemeralExeVersion, EphemeralServer, TemporalDevServerConfig,
     default_cached_download,
 };
 use tonic::IntoRequest;
@@ -12,10 +12,9 @@ use url::Url;
 
 #[tokio::test]
 async fn temporal_cli_default() {
-    let config = TemporalDevServerConfigBuilder::default()
+    let config = TemporalDevServerConfig::builder()
         .exe(default_cached_download())
-        .build()
-        .unwrap();
+        .build();
     let mut server = config.start_server().await.unwrap();
     assert_ephemeral_server(&server).await;
 
@@ -28,10 +27,9 @@ async fn temporal_cli_default() {
 
 #[tokio::test]
 async fn temporal_cli_fixed() {
-    let config = TemporalDevServerConfigBuilder::default()
+    let config = TemporalDevServerConfig::builder()
         .exe(fixed_cached_download("v1.2.0"))
-        .build()
-        .unwrap();
+        .build();
     let mut server = config.start_server().await.unwrap();
     assert_ephemeral_server(&server).await;
     server.shutdown().await.unwrap();
@@ -41,11 +39,10 @@ async fn temporal_cli_fixed() {
 async fn temporal_cli_shutdown_port_reuse() {
     // Start, test shutdown, do again immediately on same port to ensure we can
     // reuse after shutdown
-    let config = TemporalDevServerConfigBuilder::default()
+    let config = TemporalDevServerConfig::builder()
         .exe(default_cached_download())
-        .port(Some(10123))
-        .build()
-        .unwrap();
+        .port(10123)
+        .build();
     let mut server = config.start_server().await.unwrap();
     assert_ephemeral_server(&server).await;
     server.shutdown().await.unwrap();
@@ -66,10 +63,11 @@ async fn temporal_cli_shutdown_port_reuse() {
 #[ignore]
 async fn temporal_cli_concurrent_starts() -> Result<(), Box<dyn std::error::Error>> {
     stream::iter((0..80).map(|_| {
-        TemporalDevServerConfigBuilder::default()
-            .exe(default_cached_download())
-            .build()
-            .map_err(anyhow::Error::from)
+        Ok::<TemporalDevServerConfig, Box<dyn std::error::Error>>(
+            TemporalDevServerConfig::builder()
+                .exe(default_cached_download())
+                .build(),
+        )
     }))
     .try_for_each_concurrent(8, |config| async move {
         let mut server = config.start_server().await?;
@@ -85,14 +83,13 @@ async fn temporal_cli_concurrent_starts() -> Result<(), Box<dyn std::error::Erro
 #[cfg(not(all(target_os = "linux", any(target_arch = "arm", target_arch = "aarch64"))))]
 mod test_server {
     use super::*;
-    use temporalio_sdk_core::ephemeral_server::TestServerConfigBuilder;
+    use temporalio_sdk_core::ephemeral_server::TestServerConfig;
 
     #[tokio::test]
     async fn test_server_default() {
-        let config = TestServerConfigBuilder::default()
+        let config = TestServerConfig::builder()
             .exe(default_cached_download())
-            .build()
-            .unwrap();
+            .build();
         let mut server = config.start_server().await.unwrap();
         assert_ephemeral_server(&server).await;
         server.shutdown().await.unwrap();
@@ -100,10 +97,9 @@ mod test_server {
 
     #[tokio::test]
     async fn test_server_fixed() {
-        let config = TestServerConfigBuilder::default()
+        let config = TestServerConfig::builder()
             .exe(fixed_cached_download("v1.16.0"))
-            .build()
-            .unwrap();
+            .build();
         let mut server = config.start_server().await.unwrap();
         assert_ephemeral_server(&server).await;
         server.shutdown().await.unwrap();
@@ -113,11 +109,10 @@ mod test_server {
     async fn test_server_shutdown_port_reuse() {
         // Start, test shutdown, do again immediately on same port to ensure we can
         // reuse after shutdown
-        let config = TestServerConfigBuilder::default()
+        let config = TestServerConfig::builder()
             .exe(default_cached_download())
-            .port(Some(10124))
-            .build()
-            .unwrap();
+            .port(10124)
+            .build();
         let mut server = config.start_server().await.unwrap();
         assert_ephemeral_server(&server).await;
         server.shutdown().await.unwrap();
@@ -137,13 +132,12 @@ fn fixed_cached_download(version: &str) -> EphemeralExe {
 
 async fn assert_ephemeral_server(server: &EphemeralServer) {
     // Connect and describe namespace
-    let mut client = ClientOptionsBuilder::default()
+    let mut client = ClientOptions::builder()
         .identity(INTEG_CLIENT_IDENTITY.to_string())
         .target_url(Url::try_from(&*format!("http://{}", server.target)).unwrap())
         .client_name(INTEG_CLIENT_NAME.to_string())
         .client_version(INTEG_CLIENT_VERSION.to_string())
         .build()
-        .unwrap()
         .connect_no_namespace(None)
         .await
         .unwrap();

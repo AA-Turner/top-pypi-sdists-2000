@@ -760,7 +760,7 @@ class AddKeysProperty:
     def __init__(
         self,
         *,
-        entries: typing.Sequence[typing.Union[AddKeyEntryProperty, typing.Dict[builtins.str, typing.Any]]],
+        entries: typing.Sequence[typing.Union["AddKeyEntryProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''This processor adds new key-value pairs to the log event.
 
@@ -806,11 +806,11 @@ class AddKeysProperty:
         }
 
     @builtins.property
-    def entries(self) -> typing.List[AddKeyEntryProperty]:
+    def entries(self) -> typing.List["AddKeyEntryProperty"]:
         '''An array of objects, where each object contains information about one key to add to the log event.'''
         result = self._values.get("entries")
         assert result is not None, "Required property 'entries' is missing"
-        return typing.cast(typing.List[AddKeyEntryProperty], result)
+        return typing.cast(typing.List["AddKeyEntryProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -944,7 +944,7 @@ class CfnAccountPolicy(
 
     def __init__(
         self,
-        scope_: _constructs_77d1e7e8.Construct,
+        scope_: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_document: builtins.str,
@@ -990,7 +990,7 @@ class CfnAccountPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccountPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1021,9 +1021,9 @@ class CfnAccountPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="accountPolicyRef")
-    def account_policy_ref(self) -> _AccountPolicyReference_b18a26c9:
+    def account_policy_ref(self) -> "_AccountPolicyReference_b18a26c9":
         '''A reference to a AccountPolicy resource.'''
-        return typing.cast(_AccountPolicyReference_b18a26c9, jsii.get(self, "accountPolicyRef"))
+        return typing.cast("_AccountPolicyReference_b18a26c9", jsii.get(self, "accountPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAccountId")
@@ -1312,6 +1312,7 @@ class CfnDelivery(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_logs as logs
@@ -1334,16 +1335,16 @@ class CfnDelivery(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         delivery_destination_arn: builtins.str,
         delivery_source_name: builtins.str,
         field_delimiter: typing.Optional[builtins.str] = None,
         record_fields: typing.Optional[typing.Sequence[builtins.str]] = None,
-        s3_enable_hive_compatible_path: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        s3_enable_hive_compatible_path: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         s3_suffix_path: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Logs::Delivery``.
 
@@ -1375,7 +1376,7 @@ class CfnDelivery(
 
     @jsii.member(jsii_name="arnForDelivery")
     @builtins.classmethod
-    def arn_for_delivery(cls, resource: _IDeliveryRef_787b083e) -> builtins.str:
+    def arn_for_delivery(cls, resource: "_IDeliveryRef_787b083e") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1397,7 +1398,7 @@ class CfnDelivery(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDelivery", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1455,9 +1456,9 @@ class CfnDelivery(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1466,9 +1467,9 @@ class CfnDelivery(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryRef")
-    def delivery_ref(self) -> _DeliveryReference_56c555fb:
+    def delivery_ref(self) -> "_DeliveryReference_56c555fb":
         '''A reference to a Delivery resource.'''
-        return typing.cast(_DeliveryReference_56c555fb, jsii.get(self, "deliveryRef"))
+        return typing.cast("_DeliveryReference_56c555fb", jsii.get(self, "deliveryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="deliveryDestinationArn")
@@ -1526,14 +1527,14 @@ class CfnDelivery(
     @jsii.member(jsii_name="s3EnableHiveCompatiblePath")
     def s3_enable_hive_compatible_path(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Use this parameter to cause the S3 objects that contain delivered logs to use a prefix structure that allows for integration with Apache Hive.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "s3EnableHiveCompatiblePath"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "s3EnableHiveCompatiblePath"))
 
     @s3_enable_hive_compatible_path.setter
     def s3_enable_hive_compatible_path(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__883ead422cb217bb6d7d85bba609b57a45ff8726f927790c48273417346f9faa)
@@ -1555,12 +1556,12 @@ class CfnDelivery(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the delivery.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__000a573f2c99f6b1460750af0c01cc2fc0278bcaf6f21b31ed533ebcf516c233)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1592,6 +1593,7 @@ class CfnDeliveryDestination(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_logs as logs
@@ -1618,15 +1620,15 @@ class CfnDeliveryDestination(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        delivery_destination_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryDestination.DestinationPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        delivery_destination_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryDestination.DestinationPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         delivery_destination_type: typing.Optional[builtins.str] = None,
         destination_resource_arn: typing.Optional[builtins.str] = None,
         output_format: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Logs::DeliveryDestination``.
 
@@ -1658,7 +1660,7 @@ class CfnDeliveryDestination(
     @builtins.classmethod
     def arn_for_delivery_destination(
         cls,
-        resource: _IDeliveryDestinationRef_74b5114a,
+        resource: "_IDeliveryDestinationRef_74b5114a",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1672,10 +1674,10 @@ class CfnDeliveryDestination(
     @builtins.classmethod
     def from_delivery_destination_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDeliveryDestinationRef_74b5114a:
+    ) -> "_IDeliveryDestinationRef_74b5114a":
         '''Creates a new IDeliveryDestinationRef from an ARN.
 
         :param scope: -
@@ -1687,16 +1689,16 @@ class CfnDeliveryDestination(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDeliveryDestinationRef_74b5114a, jsii.sinvoke(cls, "fromDeliveryDestinationArn", [scope, id, arn]))
+        return typing.cast("_IDeliveryDestinationRef_74b5114a", jsii.sinvoke(cls, "fromDeliveryDestinationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromDeliveryDestinationName")
     @builtins.classmethod
     def from_delivery_destination_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         delivery_destination_name: builtins.str,
-    ) -> _IDeliveryDestinationRef_74b5114a:
+    ) -> "_IDeliveryDestinationRef_74b5114a":
         '''Creates a new IDeliveryDestinationRef from a deliveryDestinationName.
 
         :param scope: -
@@ -1708,7 +1710,7 @@ class CfnDeliveryDestination(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument delivery_destination_name", value=delivery_destination_name, expected_type=type_hints["delivery_destination_name"])
-        return typing.cast(_IDeliveryDestinationRef_74b5114a, jsii.sinvoke(cls, "fromDeliveryDestinationName", [scope, id, delivery_destination_name]))
+        return typing.cast("_IDeliveryDestinationRef_74b5114a", jsii.sinvoke(cls, "fromDeliveryDestinationName", [scope, id, delivery_destination_name]))
 
     @jsii.member(jsii_name="isCfnDeliveryDestination")
     @builtins.classmethod
@@ -1723,7 +1725,7 @@ class CfnDeliveryDestination(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeliveryDestination", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1763,9 +1765,9 @@ class CfnDeliveryDestination(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1774,9 +1776,9 @@ class CfnDeliveryDestination(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryDestinationRef")
-    def delivery_destination_ref(self) -> _DeliveryDestinationReference_ea787d4a:
+    def delivery_destination_ref(self) -> "_DeliveryDestinationReference_ea787d4a":
         '''A reference to a DeliveryDestination resource.'''
-        return typing.cast(_DeliveryDestinationReference_ea787d4a, jsii.get(self, "deliveryDestinationRef"))
+        return typing.cast("_DeliveryDestinationReference_ea787d4a", jsii.get(self, "deliveryDestinationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1795,14 +1797,14 @@ class CfnDeliveryDestination(
     @jsii.member(jsii_name="deliveryDestinationPolicy")
     def delivery_destination_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryDestination.DestinationPolicyProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryDestination.DestinationPolicyProperty"]]:
         '''An IAM policy that grants permissions to CloudWatch Logs to deliver logs cross-account to a specified destination in this account.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryDestination.DestinationPolicyProperty"]], jsii.get(self, "deliveryDestinationPolicy"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryDestination.DestinationPolicyProperty"]], jsii.get(self, "deliveryDestinationPolicy"))
 
     @delivery_destination_policy.setter
     def delivery_destination_policy(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryDestination.DestinationPolicyProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryDestination.DestinationPolicyProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__318bc8d97cf7e7f129b83631444b5c478bd65a7e80725c9b3be7e3cc4a600b05)
@@ -1850,12 +1852,12 @@ class CfnDeliveryDestination(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the delivery destination.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e4f5227f043e0a8609b64c4a174886ba54b2825ada7e9a1dffe8fd35487fa5af)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1956,11 +1958,11 @@ class CfnDeliveryDestinationProps:
         self,
         *,
         name: builtins.str,
-        delivery_destination_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryDestination.DestinationPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        delivery_destination_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryDestination.DestinationPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         delivery_destination_type: typing.Optional[builtins.str] = None,
         destination_resource_arn: typing.Optional[builtins.str] = None,
         output_format: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDeliveryDestination``.
 
@@ -1976,6 +1978,7 @@ class CfnDeliveryDestinationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_logs as logs
@@ -2034,7 +2037,7 @@ class CfnDeliveryDestinationProps:
     @builtins.property
     def delivery_destination_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryDestination.DestinationPolicyProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryDestination.DestinationPolicyProperty"]]:
         '''An IAM policy that grants permissions to CloudWatch Logs to deliver logs cross-account to a specified destination in this account.
 
         For examples of this policy, see `Examples <https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutDeliveryDestinationPolicy.html#API_PutDeliveryDestinationPolicy_Examples>`_ in the CloudWatch Logs API Reference.
@@ -2042,7 +2045,7 @@ class CfnDeliveryDestinationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-deliverydestination.html#cfn-logs-deliverydestination-deliverydestinationpolicy
         '''
         result = self._values.get("delivery_destination_policy")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryDestination.DestinationPolicyProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryDestination.DestinationPolicyProperty"]], result)
 
     @builtins.property
     def delivery_destination_type(self) -> typing.Optional[builtins.str]:
@@ -2074,7 +2077,7 @@ class CfnDeliveryDestinationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the delivery destination.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -2082,7 +2085,7 @@ class CfnDeliveryDestinationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-deliverydestination.html#cfn-logs-deliverydestination-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2117,9 +2120,9 @@ class CfnDeliveryProps:
         delivery_source_name: builtins.str,
         field_delimiter: typing.Optional[builtins.str] = None,
         record_fields: typing.Optional[typing.Sequence[builtins.str]] = None,
-        s3_enable_hive_compatible_path: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        s3_enable_hive_compatible_path: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         s3_suffix_path: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDelivery``.
 
@@ -2136,6 +2139,7 @@ class CfnDeliveryProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_logs as logs
@@ -2222,13 +2226,13 @@ class CfnDeliveryProps:
     @builtins.property
     def s3_enable_hive_compatible_path(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Use this parameter to cause the S3 objects that contain delivered logs to use a prefix structure that allows for integration with Apache Hive.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-delivery.html#cfn-logs-delivery-s3enablehivecompatiblepath
         '''
         result = self._values.get("s3_enable_hive_compatible_path")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def s3_suffix_path(self) -> typing.Optional[builtins.str]:
@@ -2242,7 +2246,7 @@ class CfnDeliveryProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the delivery.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -2250,7 +2254,7 @@ class CfnDeliveryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-delivery.html#cfn-logs-delivery-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2290,6 +2294,7 @@ class CfnDeliverySource(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_logs as logs
@@ -2309,13 +2314,13 @@ class CfnDeliverySource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         log_type: typing.Optional[builtins.str] = None,
         resource_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Logs::DeliverySource``.
 
@@ -2340,7 +2345,7 @@ class CfnDeliverySource(
     @builtins.classmethod
     def arn_for_delivery_source(
         cls,
-        resource: _IDeliverySourceRef_81c0daa5,
+        resource: "_IDeliverySourceRef_81c0daa5",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2354,10 +2359,10 @@ class CfnDeliverySource(
     @builtins.classmethod
     def from_delivery_source_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDeliverySourceRef_81c0daa5:
+    ) -> "_IDeliverySourceRef_81c0daa5":
         '''Creates a new IDeliverySourceRef from an ARN.
 
         :param scope: -
@@ -2369,16 +2374,16 @@ class CfnDeliverySource(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDeliverySourceRef_81c0daa5, jsii.sinvoke(cls, "fromDeliverySourceArn", [scope, id, arn]))
+        return typing.cast("_IDeliverySourceRef_81c0daa5", jsii.sinvoke(cls, "fromDeliverySourceArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromDeliverySourceName")
     @builtins.classmethod
     def from_delivery_source_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         delivery_source_name: builtins.str,
-    ) -> _IDeliverySourceRef_81c0daa5:
+    ) -> "_IDeliverySourceRef_81c0daa5":
         '''Creates a new IDeliverySourceRef from a deliverySourceName.
 
         :param scope: -
@@ -2390,7 +2395,7 @@ class CfnDeliverySource(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument delivery_source_name", value=delivery_source_name, expected_type=type_hints["delivery_source_name"])
-        return typing.cast(_IDeliverySourceRef_81c0daa5, jsii.sinvoke(cls, "fromDeliverySourceName", [scope, id, delivery_source_name]))
+        return typing.cast("_IDeliverySourceRef_81c0daa5", jsii.sinvoke(cls, "fromDeliverySourceName", [scope, id, delivery_source_name]))
 
     @jsii.member(jsii_name="isCfnDeliverySource")
     @builtins.classmethod
@@ -2405,7 +2410,7 @@ class CfnDeliverySource(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeliverySource", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2465,9 +2470,9 @@ class CfnDeliverySource(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2476,9 +2481,9 @@ class CfnDeliverySource(
 
     @builtins.property
     @jsii.member(jsii_name="deliverySourceRef")
-    def delivery_source_ref(self) -> _DeliverySourceReference_ba587872:
+    def delivery_source_ref(self) -> "_DeliverySourceReference_ba587872":
         '''A reference to a DeliverySource resource.'''
-        return typing.cast(_DeliverySourceReference_ba587872, jsii.get(self, "deliverySourceRef"))
+        return typing.cast("_DeliverySourceReference_ba587872", jsii.get(self, "deliverySourceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2521,12 +2526,12 @@ class CfnDeliverySource(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the delivery source.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c56ccd3093218052492eee7c66b0cf9e8156a37606a1c8a35551c977444ed97e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2550,7 +2555,7 @@ class CfnDeliverySourceProps:
         name: builtins.str,
         log_type: typing.Optional[builtins.str] = None,
         resource_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDeliverySource``.
 
@@ -2564,6 +2569,7 @@ class CfnDeliverySourceProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_logs as logs
@@ -2629,7 +2635,7 @@ class CfnDeliverySourceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the delivery source.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -2637,7 +2643,7 @@ class CfnDeliverySourceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-deliverysource.html#cfn-logs-deliverysource-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2667,6 +2673,7 @@ class CfnDestination(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_logs as logs
@@ -2687,14 +2694,14 @@ class CfnDestination(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         destination_name: builtins.str,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        target_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        target_arn: typing.Union[builtins.str, "_IStreamRef_b484e253", "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33"],
         destination_policy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Logs::Destination``.
 
@@ -2722,7 +2729,7 @@ class CfnDestination(
 
     @jsii.member(jsii_name="arnForDestination")
     @builtins.classmethod
-    def arn_for_destination(cls, resource: _IDestinationRef_281936d4) -> builtins.str:
+    def arn_for_destination(cls, resource: "_IDestinationRef_281936d4") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2735,10 +2742,10 @@ class CfnDestination(
     @builtins.classmethod
     def from_destination_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDestinationRef_281936d4:
+    ) -> "_IDestinationRef_281936d4":
         '''Creates a new IDestinationRef from an ARN.
 
         :param scope: -
@@ -2750,16 +2757,16 @@ class CfnDestination(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDestinationRef_281936d4, jsii.sinvoke(cls, "fromDestinationArn", [scope, id, arn]))
+        return typing.cast("_IDestinationRef_281936d4", jsii.sinvoke(cls, "fromDestinationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromDestinationName")
     @builtins.classmethod
     def from_destination_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         destination_name: builtins.str,
-    ) -> _IDestinationRef_281936d4:
+    ) -> "_IDestinationRef_281936d4":
         '''Creates a new IDestinationRef from a destinationName.
 
         :param scope: -
@@ -2771,7 +2778,7 @@ class CfnDestination(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument destination_name", value=destination_name, expected_type=type_hints["destination_name"])
-        return typing.cast(_IDestinationRef_281936d4, jsii.sinvoke(cls, "fromDestinationName", [scope, id, destination_name]))
+        return typing.cast("_IDestinationRef_281936d4", jsii.sinvoke(cls, "fromDestinationName", [scope, id, destination_name]))
 
     @jsii.member(jsii_name="isCfnDestination")
     @builtins.classmethod
@@ -2786,7 +2793,7 @@ class CfnDestination(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDestination", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2826,9 +2833,9 @@ class CfnDestination(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2837,9 +2844,9 @@ class CfnDestination(
 
     @builtins.property
     @jsii.member(jsii_name="destinationRef")
-    def destination_ref(self) -> _DestinationReference_1ba25b20:
+    def destination_ref(self) -> "_DestinationReference_1ba25b20":
         '''A reference to a Destination resource.'''
-        return typing.cast(_DestinationReference_1ba25b20, jsii.get(self, "destinationRef"))
+        return typing.cast("_DestinationReference_1ba25b20", jsii.get(self, "destinationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="destinationName")
@@ -2895,12 +2902,12 @@ class CfnDestination(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags that have been assigned to this delivery destination.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5e2da427145601b64454ab268bb3be33f3c089ff53e25e2b9a66fd51a6d385db)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2923,10 +2930,10 @@ class CfnDestinationProps:
         self,
         *,
         destination_name: builtins.str,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        target_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        target_arn: typing.Union[builtins.str, "_IStreamRef_b484e253", "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33"],
         destination_policy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDestination``.
 
@@ -2941,6 +2948,7 @@ class CfnDestinationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_logs as logs
@@ -2986,26 +2994,26 @@ class CfnDestinationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The ARN of an IAM role that permits CloudWatch Logs to send data to the specified AWS resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-destination.html#cfn-logs-destination-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def target_arn(
         self,
-    ) -> typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33]:
+    ) -> typing.Union[builtins.str, "_IStreamRef_b484e253", "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33"]:
         '''The Amazon Resource Name (ARN) of the physical target where the log events are delivered (for example, a Kinesis stream).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-destination.html#cfn-logs-destination-targetarn
         '''
         result = self._values.get("target_arn")
         assert result is not None, "Required property 'target_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33], result)
+        return typing.cast(typing.Union[builtins.str, "_IStreamRef_b484e253", "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33"], result)
 
     @builtins.property
     def destination_policy(self) -> typing.Optional[builtins.str]:
@@ -3017,13 +3025,13 @@ class CfnDestinationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags that have been assigned to this delivery destination.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-destination.html#cfn-logs-destination-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3080,12 +3088,12 @@ class CfnIntegration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         integration_name: builtins.str,
         integration_type: builtins.str,
-        resource_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnIntegration.ResourceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        resource_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnIntegration.ResourceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::Logs::Integration``.
 
@@ -3120,7 +3128,7 @@ class CfnIntegration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIntegration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3165,9 +3173,9 @@ class CfnIntegration(
 
     @builtins.property
     @jsii.member(jsii_name="integrationRef")
-    def integration_ref(self) -> _IntegrationReference_77e719de:
+    def integration_ref(self) -> "_IntegrationReference_77e719de":
         '''A reference to a Integration resource.'''
-        return typing.cast(_IntegrationReference_77e719de, jsii.get(self, "integrationRef"))
+        return typing.cast("_IntegrationReference_77e719de", jsii.get(self, "integrationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="integrationName")
@@ -3199,14 +3207,14 @@ class CfnIntegration(
     @jsii.member(jsii_name="resourceConfig")
     def resource_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnIntegration.ResourceConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnIntegration.ResourceConfigProperty"]:
         '''This structure contains configuration details about an integration between CloudWatch Logs and another entity.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnIntegration.ResourceConfigProperty"], jsii.get(self, "resourceConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnIntegration.ResourceConfigProperty"], jsii.get(self, "resourceConfig"))
 
     @resource_config.setter
     def resource_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnIntegration.ResourceConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnIntegration.ResourceConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e70a870af94762893ff1564b472074d1ad1ea7d25c502af37606c4cce91a529a)
@@ -3356,7 +3364,7 @@ class CfnIntegration(
         def __init__(
             self,
             *,
-            open_search_resource_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIntegration.OpenSearchResourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            open_search_resource_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIntegration.OpenSearchResourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''This structure contains configuration details about an integration between CloudWatch Logs and another entity.
 
@@ -3393,13 +3401,13 @@ class CfnIntegration(
         @builtins.property
         def open_search_resource_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIntegration.OpenSearchResourceConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIntegration.OpenSearchResourceConfigProperty"]]:
             '''This structure contains configuration details about an integration between CloudWatch Logs and OpenSearch Service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-integration-resourceconfig.html#cfn-logs-integration-resourceconfig-opensearchresourceconfig
             '''
             result = self._values.get("open_search_resource_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIntegration.OpenSearchResourceConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIntegration.OpenSearchResourceConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3428,7 +3436,7 @@ class CfnIntegrationProps:
         *,
         integration_name: builtins.str,
         integration_type: builtins.str,
-        resource_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntegration.ResourceConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        resource_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnIntegration.ResourceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnIntegration``.
 
@@ -3497,14 +3505,14 @@ class CfnIntegrationProps:
     @builtins.property
     def resource_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnIntegration.ResourceConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnIntegration.ResourceConfigProperty"]:
         '''This structure contains configuration details about an integration between CloudWatch Logs and another entity.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-integration.html#cfn-logs-integration-resourceconfig
         '''
         result = self._values.get("resource_config")
         assert result is not None, "Required property 'resource_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnIntegration.ResourceConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnIntegration.ResourceConfigProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3557,7 +3565,7 @@ class CfnLogAnomalyDetector(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account_id: typing.Optional[builtins.str] = None,
@@ -3609,7 +3617,7 @@ class CfnLogAnomalyDetector(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLogAnomalyDetector", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3658,21 +3666,21 @@ class CfnLogAnomalyDetector(
 
     @builtins.property
     @jsii.member(jsii_name="attrCreationTimeStamp")
-    def attr_creation_time_stamp(self) -> _IResolvable_da3f097b:
+    def attr_creation_time_stamp(self) -> "_IResolvable_da3f097b":
         '''The time that the anomaly detector was created.
 
         :cloudformationAttribute: CreationTimeStamp
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrCreationTimeStamp"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrCreationTimeStamp"))
 
     @builtins.property
     @jsii.member(jsii_name="attrLastModifiedTimeStamp")
-    def attr_last_modified_time_stamp(self) -> _IResolvable_da3f097b:
+    def attr_last_modified_time_stamp(self) -> "_IResolvable_da3f097b":
         '''The time that the anomaly detector was most recently modified.
 
         :cloudformationAttribute: LastModifiedTimeStamp
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLastModifiedTimeStamp"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrLastModifiedTimeStamp"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3681,9 +3689,9 @@ class CfnLogAnomalyDetector(
 
     @builtins.property
     @jsii.member(jsii_name="logAnomalyDetectorRef")
-    def log_anomaly_detector_ref(self) -> _LogAnomalyDetectorReference_7efce2ad:
+    def log_anomaly_detector_ref(self) -> "_LogAnomalyDetectorReference_7efce2ad":
         '''A reference to a LogAnomalyDetector resource.'''
-        return typing.cast(_LogAnomalyDetectorReference_7efce2ad, jsii.get(self, "logAnomalyDetectorRef"))
+        return typing.cast("_LogAnomalyDetectorReference_7efce2ad", jsii.get(self, "logAnomalyDetectorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="accountId")
@@ -3978,17 +3986,17 @@ class CfnLogGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         data_protection_policy: typing.Any = None,
-        field_index_policies: typing.Optional[typing.Union[typing.Sequence[typing.Any], _IResolvable_da3f097b]] = None,
-        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        field_index_policies: typing.Optional[typing.Union[typing.Sequence[typing.Any], "_IResolvable_da3f097b"]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
         log_group_class: typing.Optional[builtins.str] = None,
-        log_group_name: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
+        log_group_name: typing.Optional[typing.Union[builtins.str, "_IFunctionRef_2601eb33"]] = None,
         resource_policy_document: typing.Any = None,
         retention_in_days: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Logs::LogGroup``.
 
@@ -4022,7 +4030,7 @@ class CfnLogGroup(
 
     @jsii.member(jsii_name="arnForLogGroup")
     @builtins.classmethod
-    def arn_for_log_group(cls, resource: _ILogGroupRef_874d025a) -> builtins.str:
+    def arn_for_log_group(cls, resource: "_ILogGroupRef_874d025a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4035,10 +4043,10 @@ class CfnLogGroup(
     @builtins.classmethod
     def from_log_group_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ILogGroupRef_874d025a:
+    ) -> "_ILogGroupRef_874d025a":
         '''Creates a new ILogGroupRef from an ARN.
 
         :param scope: -
@@ -4050,16 +4058,16 @@ class CfnLogGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ILogGroupRef_874d025a, jsii.sinvoke(cls, "fromLogGroupArn", [scope, id, arn]))
+        return typing.cast("_ILogGroupRef_874d025a", jsii.sinvoke(cls, "fromLogGroupArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromLogGroupName")
     @builtins.classmethod
     def from_log_group_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         log_group_name: builtins.str,
-    ) -> _ILogGroupRef_874d025a:
+    ) -> "_ILogGroupRef_874d025a":
         '''Creates a new ILogGroupRef from a logGroupName.
 
         :param scope: -
@@ -4071,7 +4079,7 @@ class CfnLogGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument log_group_name", value=log_group_name, expected_type=type_hints["log_group_name"])
-        return typing.cast(_ILogGroupRef_874d025a, jsii.sinvoke(cls, "fromLogGroupName", [scope, id, log_group_name]))
+        return typing.cast("_ILogGroupRef_874d025a", jsii.sinvoke(cls, "fromLogGroupName", [scope, id, log_group_name]))
 
     @jsii.member(jsii_name="isCfnLogGroup")
     @builtins.classmethod
@@ -4086,7 +4094,7 @@ class CfnLogGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLogGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4131,15 +4139,15 @@ class CfnLogGroup(
 
     @builtins.property
     @jsii.member(jsii_name="logGroupRef")
-    def log_group_ref(self) -> _LogGroupReference_fcef0083:
+    def log_group_ref(self) -> "_LogGroupReference_fcef0083":
         '''A reference to a LogGroup resource.'''
-        return typing.cast(_LogGroupReference_fcef0083, jsii.get(self, "logGroupRef"))
+        return typing.cast("_LogGroupReference_fcef0083", jsii.get(self, "logGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="dataProtectionPolicy")
@@ -4158,14 +4166,14 @@ class CfnLogGroup(
     @jsii.member(jsii_name="fieldIndexPolicies")
     def field_index_policies(
         self,
-    ) -> typing.Optional[typing.Union[typing.List[typing.Any], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.List[typing.Any], "_IResolvable_da3f097b"]]:
         '''Creates or updates a *field index policy* for the specified log group.'''
-        return typing.cast(typing.Optional[typing.Union[typing.List[typing.Any], _IResolvable_da3f097b]], jsii.get(self, "fieldIndexPolicies"))
+        return typing.cast(typing.Optional[typing.Union[typing.List[typing.Any], "_IResolvable_da3f097b"]], jsii.get(self, "fieldIndexPolicies"))
 
     @field_index_policies.setter
     def field_index_policies(
         self,
-        value: typing.Optional[typing.Union[typing.List[typing.Any], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.List[typing.Any], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0b4f37a255340908d68ce2d6149f1bb01ab5104c15a9b60474e51dde5b10d526)
@@ -4242,12 +4250,12 @@ class CfnLogGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the log group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9ea9a0a37724d334e68ee325d75e901df12c6765b4c229366a1cef4038c07187)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4273,13 +4281,13 @@ class CfnLogGroupProps:
         self,
         *,
         data_protection_policy: typing.Any = None,
-        field_index_policies: typing.Optional[typing.Union[typing.Sequence[typing.Any], _IResolvable_da3f097b]] = None,
-        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        field_index_policies: typing.Optional[typing.Union[typing.Sequence[typing.Any], "_IResolvable_da3f097b"]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
         log_group_class: typing.Optional[builtins.str] = None,
-        log_group_name: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
+        log_group_name: typing.Optional[typing.Union[builtins.str, "_IFunctionRef_2601eb33"]] = None,
         resource_policy_document: typing.Any = None,
         retention_in_days: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLogGroup``.
 
@@ -4297,6 +4305,7 @@ class CfnLogGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_logs as logs
@@ -4361,7 +4370,7 @@ class CfnLogGroupProps:
     @builtins.property
     def field_index_policies(
         self,
-    ) -> typing.Optional[typing.Union[typing.List[typing.Any], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.List[typing.Any], "_IResolvable_da3f097b"]]:
         '''Creates or updates a *field index policy* for the specified log group.
 
         Only log groups in the Standard log class support field index policies. For more information about log classes, see `Log classes <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html>`_ .
@@ -4373,12 +4382,12 @@ class CfnLogGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html#cfn-logs-loggroup-fieldindexpolicies
         '''
         result = self._values.get("field_index_policies")
-        return typing.cast(typing.Optional[typing.Union[typing.List[typing.Any], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.List[typing.Any], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def kms_key_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]]:
         '''The Amazon Resource Name (ARN) of the AWS  key to use when encrypting log data.
 
         To associate an AWS  key with the log group, specify the ARN of that KMS key here. If you do so, ingested data is encrypted using this key. This association is stored as long as the data encrypted with the KMS key is still within CloudWatch Logs . This enables CloudWatch Logs to decrypt this data whenever it is requested.
@@ -4390,7 +4399,7 @@ class CfnLogGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html#cfn-logs-loggroup-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]], result)
 
     @builtins.property
     def log_group_class(self) -> typing.Optional[builtins.str]:
@@ -4411,7 +4420,7 @@ class CfnLogGroupProps:
     @builtins.property
     def log_group_name(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IFunctionRef_2601eb33"]]:
         '''The name of the log group.
 
         If you don't specify a name, AWS CloudFormation generates a unique ID for the log group.
@@ -4419,7 +4428,7 @@ class CfnLogGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html#cfn-logs-loggroup-loggroupname
         '''
         result = self._values.get("log_group_name")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IFunctionRef_2601eb33"]], result)
 
     @builtins.property
     def resource_policy_document(self) -> typing.Any:
@@ -4446,7 +4455,7 @@ class CfnLogGroupProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the log group.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -4454,7 +4463,7 @@ class CfnLogGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html#cfn-logs-loggroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4506,10 +4515,10 @@ class CfnLogStream(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
+        log_group_name: typing.Union[builtins.str, "_ILogGroupRef_874d025a"],
         log_stream_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Logs::LogStream``.
@@ -4542,7 +4551,7 @@ class CfnLogStream(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLogStream", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4578,9 +4587,9 @@ class CfnLogStream(
 
     @builtins.property
     @jsii.member(jsii_name="logStreamRef")
-    def log_stream_ref(self) -> _LogStreamReference_66badb2c:
+    def log_stream_ref(self) -> "_LogStreamReference_66badb2c":
         '''A reference to a LogStream resource.'''
-        return typing.cast(_LogStreamReference_66badb2c, jsii.get(self, "logStreamRef"))
+        return typing.cast("_LogStreamReference_66badb2c", jsii.get(self, "logStreamRef"))
 
     @builtins.property
     @jsii.member(jsii_name="logGroupName")
@@ -4621,7 +4630,7 @@ class CfnLogStreamProps:
     def __init__(
         self,
         *,
-        log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
+        log_group_name: typing.Union[builtins.str, "_ILogGroupRef_874d025a"],
         log_stream_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnLogStream``.
@@ -4656,14 +4665,14 @@ class CfnLogStreamProps:
             self._values["log_stream_name"] = log_stream_name
 
     @builtins.property
-    def log_group_name(self) -> typing.Union[builtins.str, _ILogGroupRef_874d025a]:
+    def log_group_name(self) -> typing.Union[builtins.str, "_ILogGroupRef_874d025a"]:
         '''The name of the log group where the log stream is created.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-logstream.html#cfn-logs-logstream-loggroupname
         '''
         result = self._values.get("log_group_name")
         assert result is not None, "Required property 'log_group_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _ILogGroupRef_874d025a], result)
+        return typing.cast(typing.Union[builtins.str, "_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def log_stream_name(self) -> typing.Optional[builtins.str]:
@@ -4737,13 +4746,13 @@ class CfnMetricFilter(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         filter_pattern: builtins.str,
-        log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
-        metric_transformations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMetricFilter.MetricTransformationProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        log_group_name: typing.Union[builtins.str, "_ILogGroupRef_874d025a"],
+        metric_transformations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMetricFilter.MetricTransformationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         emit_system_field_dimensions: typing.Optional[typing.Sequence[builtins.str]] = None,
         field_selection_criteria: typing.Optional[builtins.str] = None,
         filter_name: typing.Optional[builtins.str] = None,
@@ -4789,7 +4798,7 @@ class CfnMetricFilter(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMetricFilter", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4825,9 +4834,9 @@ class CfnMetricFilter(
 
     @builtins.property
     @jsii.member(jsii_name="metricFilterRef")
-    def metric_filter_ref(self) -> _MetricFilterReference_d91b53f6:
+    def metric_filter_ref(self) -> "_MetricFilterReference_d91b53f6":
         '''A reference to a MetricFilter resource.'''
-        return typing.cast(_MetricFilterReference_d91b53f6, jsii.get(self, "metricFilterRef"))
+        return typing.cast("_MetricFilterReference_d91b53f6", jsii.get(self, "metricFilterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="filterPattern")
@@ -4859,14 +4868,14 @@ class CfnMetricFilter(
     @jsii.member(jsii_name="metricTransformations")
     def metric_transformations(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricFilter.MetricTransformationProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricFilter.MetricTransformationProperty"]]]:
         '''The metric transformations.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricFilter.MetricTransformationProperty"]]], jsii.get(self, "metricTransformations"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricFilter.MetricTransformationProperty"]]], jsii.get(self, "metricTransformations"))
 
     @metric_transformations.setter
     def metric_transformations(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricFilter.MetricTransformationProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricFilter.MetricTransformationProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e42e8a9e143351ba28d452f886abff3c46adff74b2c2fc8876dc18aabf51dcba)
@@ -4877,14 +4886,14 @@ class CfnMetricFilter(
     @jsii.member(jsii_name="applyOnTransformedLogs")
     def apply_on_transformed_logs(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''This parameter is valid only for log groups that have an active log transformer.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "applyOnTransformedLogs"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "applyOnTransformedLogs"))
 
     @apply_on_transformed_logs.setter
     def apply_on_transformed_logs(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ace95a6c73bb2a95ee90d8e4e4ad81a77108a607e59d44e12214965f5ebf9073)
@@ -5036,7 +5045,7 @@ class CfnMetricFilter(
             metric_namespace: builtins.str,
             metric_value: builtins.str,
             default_value: typing.Optional[jsii.Number] = None,
-            dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMetricFilter.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMetricFilter.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             unit: typing.Optional[builtins.str] = None,
         ) -> None:
             '''``MetricTransformation`` is a property of the ``AWS::Logs::MetricFilter`` resource that describes how to transform log streams into a CloudWatch metric.
@@ -5139,7 +5148,7 @@ class CfnMetricFilter(
         @builtins.property
         def dimensions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricFilter.DimensionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricFilter.DimensionProperty"]]]]:
             '''The fields to use as dimensions for the metric. One metric filter can include as many as three dimensions.
 
             .. epigraph::
@@ -5153,7 +5162,7 @@ class CfnMetricFilter(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-metricfilter-metrictransformation.html#cfn-logs-metricfilter-metrictransformation-dimensions
             '''
             result = self._values.get("dimensions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricFilter.DimensionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricFilter.DimensionProperty"]]]], result)
 
         @builtins.property
         def unit(self) -> typing.Optional[builtins.str]:
@@ -5196,9 +5205,9 @@ class CfnMetricFilterProps:
         self,
         *,
         filter_pattern: builtins.str,
-        log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
-        metric_transformations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricFilter.MetricTransformationProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        log_group_name: typing.Union[builtins.str, "_ILogGroupRef_874d025a"],
+        metric_transformations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMetricFilter.MetricTransformationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         emit_system_field_dimensions: typing.Optional[typing.Sequence[builtins.str]] = None,
         field_selection_criteria: typing.Optional[builtins.str] = None,
         filter_name: typing.Optional[builtins.str] = None,
@@ -5282,31 +5291,31 @@ class CfnMetricFilterProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def log_group_name(self) -> typing.Union[builtins.str, _ILogGroupRef_874d025a]:
+    def log_group_name(self) -> typing.Union[builtins.str, "_ILogGroupRef_874d025a"]:
         '''The name of an existing log group that you want to associate with this metric filter.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-metricfilter.html#cfn-logs-metricfilter-loggroupname
         '''
         result = self._values.get("log_group_name")
         assert result is not None, "Required property 'log_group_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _ILogGroupRef_874d025a], result)
+        return typing.cast(typing.Union[builtins.str, "_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def metric_transformations(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMetricFilter.MetricTransformationProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricFilter.MetricTransformationProperty"]]]:
         '''The metric transformations.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-metricfilter.html#cfn-logs-metricfilter-metrictransformations
         '''
         result = self._values.get("metric_transformations")
         assert result is not None, "Required property 'metric_transformations' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMetricFilter.MetricTransformationProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricFilter.MetricTransformationProperty"]]], result)
 
     @builtins.property
     def apply_on_transformed_logs(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''This parameter is valid only for log groups that have an active log transformer.
 
         For more information about log transformers, see `PutTransformer <https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutTransformer.html>`_ .
@@ -5316,7 +5325,7 @@ class CfnMetricFilterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-metricfilter.html#cfn-logs-metricfilter-applyontransformedlogs
         '''
         result = self._values.get("apply_on_transformed_logs")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def emit_system_field_dimensions(
@@ -5395,12 +5404,12 @@ class CfnQueryDefinition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         query_string: builtins.str,
-        log_group_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILogGroupRef_874d025a]]] = None,
+        log_group_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ILogGroupRef_874d025a"]]] = None,
         query_language: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Logs::QueryDefinition``.
@@ -5438,7 +5447,7 @@ class CfnQueryDefinition(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueryDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5483,9 +5492,9 @@ class CfnQueryDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="queryDefinitionRef")
-    def query_definition_ref(self) -> _QueryDefinitionReference_58fa2b65:
+    def query_definition_ref(self) -> "_QueryDefinitionReference_58fa2b65":
         '''A reference to a QueryDefinition resource.'''
-        return typing.cast(_QueryDefinitionReference_58fa2b65, jsii.get(self, "queryDefinitionRef"))
+        return typing.cast("_QueryDefinitionReference_58fa2b65", jsii.get(self, "queryDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -5559,7 +5568,7 @@ class CfnQueryDefinitionProps:
         *,
         name: builtins.str,
         query_string: builtins.str,
-        log_group_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILogGroupRef_874d025a]]] = None,
+        log_group_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ILogGroupRef_874d025a"]]] = None,
         query_language: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnQueryDefinition``.
@@ -5631,13 +5640,13 @@ class CfnQueryDefinitionProps:
     @builtins.property
     def log_group_names(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ILogGroupRef_874d025a]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ILogGroupRef_874d025a"]]]:
         '''Use this parameter if you want the query to query only certain log groups.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-querydefinition.html#cfn-logs-querydefinition-loggroupnames
         '''
         result = self._values.get("log_group_names")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ILogGroupRef_874d025a]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ILogGroupRef_874d025a"]]], result)
 
     @builtins.property
     def query_language(self) -> typing.Optional[builtins.str]:
@@ -5692,7 +5701,7 @@ class CfnResourcePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_document: builtins.str,
@@ -5728,7 +5737,7 @@ class CfnResourcePolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourcePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5764,9 +5773,9 @@ class CfnResourcePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicyRef")
-    def resource_policy_ref(self) -> _ResourcePolicyReference_85e7adfe:
+    def resource_policy_ref(self) -> "_ResourcePolicyReference_85e7adfe":
         '''A reference to a ResourcePolicy resource.'''
-        return typing.cast(_ResourcePolicyReference_85e7adfe, jsii.get(self, "resourcePolicyRef"))
+        return typing.cast("_ResourcePolicyReference_85e7adfe", jsii.get(self, "resourcePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
@@ -5913,18 +5922,18 @@ class CfnSubscriptionFilter(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        destination_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
+        destination_arn: typing.Union[builtins.str, "_IStreamRef_b484e253", "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33"],
         filter_pattern: builtins.str,
-        log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
-        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        log_group_name: typing.Union[builtins.str, "_ILogGroupRef_874d025a"],
+        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         distribution: typing.Optional[builtins.str] = None,
         emit_system_fields: typing.Optional[typing.Sequence[builtins.str]] = None,
         field_selection_criteria: typing.Optional[builtins.str] = None,
         filter_name: typing.Optional[builtins.str] = None,
-        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
     ) -> None:
         '''Create a new ``AWS::Logs::SubscriptionFilter``.
 
@@ -5971,7 +5980,7 @@ class CfnSubscriptionFilter(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSubscriptionFilter", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6007,9 +6016,9 @@ class CfnSubscriptionFilter(
 
     @builtins.property
     @jsii.member(jsii_name="subscriptionFilterRef")
-    def subscription_filter_ref(self) -> _SubscriptionFilterReference_afa178c8:
+    def subscription_filter_ref(self) -> "_SubscriptionFilterReference_afa178c8":
         '''A reference to a SubscriptionFilter resource.'''
-        return typing.cast(_SubscriptionFilterReference_afa178c8, jsii.get(self, "subscriptionFilterRef"))
+        return typing.cast("_SubscriptionFilterReference_afa178c8", jsii.get(self, "subscriptionFilterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="destinationArn")
@@ -6054,14 +6063,14 @@ class CfnSubscriptionFilter(
     @jsii.member(jsii_name="applyOnTransformedLogs")
     def apply_on_transformed_logs(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''This parameter is valid only for log groups that have an active log transformer.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "applyOnTransformedLogs"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "applyOnTransformedLogs"))
 
     @apply_on_transformed_logs.setter
     def apply_on_transformed_logs(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9575bfc33fe73bebe8b16e0496334b59edcb3f2b7fbf109199f2fc70d96487c5)
@@ -6156,15 +6165,15 @@ class CfnSubscriptionFilterProps:
     def __init__(
         self,
         *,
-        destination_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
+        destination_arn: typing.Union[builtins.str, "_IStreamRef_b484e253", "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33"],
         filter_pattern: builtins.str,
-        log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
-        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        log_group_name: typing.Union[builtins.str, "_ILogGroupRef_874d025a"],
+        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         distribution: typing.Optional[builtins.str] = None,
         emit_system_fields: typing.Optional[typing.Sequence[builtins.str]] = None,
         field_selection_criteria: typing.Optional[builtins.str] = None,
         filter_name: typing.Optional[builtins.str] = None,
-        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSubscriptionFilter``.
 
@@ -6233,14 +6242,14 @@ class CfnSubscriptionFilterProps:
     @builtins.property
     def destination_arn(
         self,
-    ) -> typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33]:
+    ) -> typing.Union[builtins.str, "_IStreamRef_b484e253", "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33"]:
         '''The Amazon Resource Name (ARN) of the destination.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-subscriptionfilter.html#cfn-logs-subscriptionfilter-destinationarn
         '''
         result = self._values.get("destination_arn")
         assert result is not None, "Required property 'destination_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33], result)
+        return typing.cast(typing.Union[builtins.str, "_IStreamRef_b484e253", "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33"], result)
 
     @builtins.property
     def filter_pattern(self) -> builtins.str:
@@ -6255,7 +6264,7 @@ class CfnSubscriptionFilterProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def log_group_name(self) -> typing.Union[builtins.str, _ILogGroupRef_874d025a]:
+    def log_group_name(self) -> typing.Union[builtins.str, "_ILogGroupRef_874d025a"]:
         '''The log group to associate with the subscription filter.
 
         All log events that are uploaded to this log group are filtered and delivered to the specified AWS resource if the filter pattern matches the log events.
@@ -6264,12 +6273,12 @@ class CfnSubscriptionFilterProps:
         '''
         result = self._values.get("log_group_name")
         assert result is not None, "Required property 'log_group_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _ILogGroupRef_874d025a], result)
+        return typing.cast(typing.Union[builtins.str, "_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def apply_on_transformed_logs(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''This parameter is valid only for log groups that have an active log transformer.
 
         For more information about log transformers, see `PutTransformer <https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutTransformer.html>`_ .
@@ -6279,7 +6288,7 @@ class CfnSubscriptionFilterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-subscriptionfilter.html#cfn-logs-subscriptionfilter-applyontransformedlogs
         '''
         result = self._values.get("apply_on_transformed_logs")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def distribution(self) -> typing.Optional[builtins.str]:
@@ -6324,7 +6333,7 @@ class CfnSubscriptionFilterProps:
     @builtins.property
     def role_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''The ARN of an IAM role that grants CloudWatch Logs permissions to deliver ingested log events to the destination stream.
 
         You don't need to provide the ARN when you are working with a logical destination for cross-account delivery.
@@ -6332,7 +6341,7 @@ class CfnSubscriptionFilterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-subscriptionfilter.html#cfn-logs-subscriptionfilter-rolearn
         '''
         result = self._values.get("role_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6474,6 +6483,7 @@ class CfnTransformer(
                     ocsf_version="ocsfVersion",
         
                     # the properties below are optional
+                    mapping_version="mappingVersion",
                     source="source"
                 ),
                 parse_vpc=logs.CfnTransformer.ParseVPCProperty(
@@ -6522,11 +6532,11 @@ class CfnTransformer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         log_group_identifier: builtins.str,
-        transformer_config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.ProcessorProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        transformer_config: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.ProcessorProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Create a new ``AWS::Logs::Transformer``.
 
@@ -6559,7 +6569,7 @@ class CfnTransformer(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTransformer", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6595,9 +6605,9 @@ class CfnTransformer(
 
     @builtins.property
     @jsii.member(jsii_name="transformerRef")
-    def transformer_ref(self) -> _TransformerReference_13f4f847:
+    def transformer_ref(self) -> "_TransformerReference_13f4f847":
         '''A reference to a Transformer resource.'''
-        return typing.cast(_TransformerReference_13f4f847, jsii.get(self, "transformerRef"))
+        return typing.cast("_TransformerReference_13f4f847", jsii.get(self, "transformerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="logGroupIdentifier")
@@ -6616,14 +6626,14 @@ class CfnTransformer(
     @jsii.member(jsii_name="transformerConfig")
     def transformer_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ProcessorProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ProcessorProperty"]]]:
         '''This structure is an array that contains the configuration of this log transformer.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ProcessorProperty"]]], jsii.get(self, "transformerConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ProcessorProperty"]]], jsii.get(self, "transformerConfig"))
 
     @transformer_config.setter
     def transformer_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ProcessorProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ProcessorProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__46991b9d950418a62c8d1284c385ff33c88585c1a5b8ba86a023f964716d83c5)
@@ -6645,7 +6655,7 @@ class CfnTransformer(
             *,
             key: builtins.str,
             value: builtins.str,
-            overwrite_if_exists: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            overwrite_if_exists: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''This object defines one key that will be added with the `addKeys <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-addKey>`_ processor.
 
@@ -6705,7 +6715,7 @@ class CfnTransformer(
         @builtins.property
         def overwrite_if_exists(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to overwrite the value if the key already exists in the log event.
 
             If you omit this, the default is ``false`` .
@@ -6713,7 +6723,7 @@ class CfnTransformer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-addkeyentry.html#cfn-logs-transformer-addkeyentry-overwriteifexists
             '''
             result = self._values.get("overwrite_if_exists")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6735,7 +6745,7 @@ class CfnTransformer(
         def __init__(
             self,
             *,
-            entries: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.AddKeyEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            entries: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.AddKeyEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''This processor adds new key-value pairs to the log event.
 
@@ -6772,14 +6782,14 @@ class CfnTransformer(
         @builtins.property
         def entries(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.AddKeyEntryProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.AddKeyEntryProperty"]]]:
             '''An array of objects, where each object contains the information about one key to add to the log event.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-addkeys.html#cfn-logs-transformer-addkeys-entries
             '''
             result = self._values.get("entries")
             assert result is not None, "Required property 'entries' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.AddKeyEntryProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.AddKeyEntryProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6807,7 +6817,7 @@ class CfnTransformer(
             *,
             source: builtins.str,
             target: builtins.str,
-            overwrite_if_exists: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            overwrite_if_exists: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''This object defines one value to be copied with the `copyValue <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-copyValue>`_ processor.
 
@@ -6867,7 +6877,7 @@ class CfnTransformer(
         @builtins.property
         def overwrite_if_exists(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to overwrite the value if the destination key already exists.
 
             If you omit this, the default is ``false`` .
@@ -6875,7 +6885,7 @@ class CfnTransformer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-copyvalueentry.html#cfn-logs-transformer-copyvalueentry-overwriteifexists
             '''
             result = self._values.get("overwrite_if_exists")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6897,7 +6907,7 @@ class CfnTransformer(
         def __init__(
             self,
             *,
-            entries: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.CopyValueEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            entries: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.CopyValueEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''This processor copies values within a log event.
 
@@ -6936,14 +6946,14 @@ class CfnTransformer(
         @builtins.property
         def entries(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.CopyValueEntryProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.CopyValueEntryProperty"]]]:
             '''An array of ``CopyValueEntry`` objects, where each object contains the information about one field value to copy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-copyvalue.html#cfn-logs-transformer-copyvalue-entries
             '''
             result = self._values.get("entries")
             assert result is not None, "Required property 'entries' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.CopyValueEntryProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.CopyValueEntryProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7390,7 +7400,7 @@ class CfnTransformer(
             *,
             key: builtins.str,
             source: builtins.str,
-            flatten: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            flatten: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             flattened_element: typing.Optional[builtins.str] = None,
             target: typing.Optional[builtins.str] = None,
             value_key: typing.Optional[builtins.str] = None,
@@ -7470,7 +7480,7 @@ class CfnTransformer(
         @builtins.property
         def flatten(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean value to indicate whether the list will be flattened into single items.
 
             Specify ``true`` to flatten the list. The default is ``false``
@@ -7478,7 +7488,7 @@ class CfnTransformer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-listtomap.html#cfn-logs-transformer-listtomap-flatten
             '''
             result = self._values.get("flatten")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def flattened_element(self) -> typing.Optional[builtins.str]:
@@ -7591,7 +7601,7 @@ class CfnTransformer(
             *,
             source: builtins.str,
             target: builtins.str,
-            overwrite_if_exists: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            overwrite_if_exists: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''This object defines one key that will be moved with the `moveKey <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation.html#CloudWatch-Logs-Transformation-moveKey>`_ processor.
 
@@ -7651,7 +7661,7 @@ class CfnTransformer(
         @builtins.property
         def overwrite_if_exists(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to overwrite the value if the destination key already exists.
 
             If you omit this, the default is ``false`` .
@@ -7659,7 +7669,7 @@ class CfnTransformer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-movekeyentry.html#cfn-logs-transformer-movekeyentry-overwriteifexists
             '''
             result = self._values.get("overwrite_if_exists")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7681,7 +7691,7 @@ class CfnTransformer(
         def __init__(
             self,
             *,
-            entries: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.MoveKeyEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            entries: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.MoveKeyEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''This processor moves a key from one field to another. The original key is deleted.
 
@@ -7718,14 +7728,14 @@ class CfnTransformer(
         @builtins.property
         def entries(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.MoveKeyEntryProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.MoveKeyEntryProperty"]]]:
             '''An array of objects, where each object contains the information about one key to move.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-movekeys.html#cfn-logs-transformer-movekeys-entries
             '''
             result = self._values.get("entries")
             assert result is not None, "Required property 'entries' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.MoveKeyEntryProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.MoveKeyEntryProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7899,7 +7909,7 @@ class CfnTransformer(
             key_prefix: typing.Optional[builtins.str] = None,
             key_value_delimiter: typing.Optional[builtins.str] = None,
             non_match_value: typing.Optional[builtins.str] = None,
-            overwrite_if_exists: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            overwrite_if_exists: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             source: typing.Optional[builtins.str] = None,
         ) -> None:
             '''This processor parses a specified field in the original log event into key-value pairs.
@@ -8010,7 +8020,7 @@ class CfnTransformer(
         @builtins.property
         def overwrite_if_exists(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to overwrite the value if the destination key already exists.
 
             If you omit this, the default is ``false`` .
@@ -8018,7 +8028,7 @@ class CfnTransformer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-parsekeyvalue.html#cfn-logs-transformer-parsekeyvalue-overwriteifexists
             '''
             result = self._values.get("overwrite_if_exists")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def source(self) -> typing.Optional[builtins.str]:
@@ -8166,6 +8176,7 @@ class CfnTransformer(
         name_mapping={
             "event_source": "eventSource",
             "ocsf_version": "ocsfVersion",
+            "mapping_version": "mappingVersion",
             "source": "source",
         },
     )
@@ -8175,6 +8186,7 @@ class CfnTransformer(
             *,
             event_source: builtins.str,
             ocsf_version: builtins.str,
+            mapping_version: typing.Optional[builtins.str] = None,
             source: typing.Optional[builtins.str] = None,
         ) -> None:
             '''This processor converts logs into `Open Cybersecurity Schema Framework (OCSF) <https://docs.aws.amazon.com/https://ocsf.io>`_ events.
@@ -8183,6 +8195,7 @@ class CfnTransformer(
 
             :param event_source: Specify the service or process that produces the log events that will be converted with this processor.
             :param ocsf_version: Specify which version of the OCSF schema to use for the transformed log events.
+            :param mapping_version: 
             :param source: The path to the field in the log event that you want to parse. If you omit this value, the whole log message is parsed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-parsetoocsf.html
@@ -8199,6 +8212,7 @@ class CfnTransformer(
                     ocsf_version="ocsfVersion",
                 
                     # the properties below are optional
+                    mapping_version="mappingVersion",
                     source="source"
                 )
             '''
@@ -8206,11 +8220,14 @@ class CfnTransformer(
                 type_hints = typing.get_type_hints(_typecheckingstub__6febe08cc73af735295ba9258de19bd6c4f1b389f2b1e4fd5e0d66977951c589)
                 check_type(argname="argument event_source", value=event_source, expected_type=type_hints["event_source"])
                 check_type(argname="argument ocsf_version", value=ocsf_version, expected_type=type_hints["ocsf_version"])
+                check_type(argname="argument mapping_version", value=mapping_version, expected_type=type_hints["mapping_version"])
                 check_type(argname="argument source", value=source, expected_type=type_hints["source"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "event_source": event_source,
                 "ocsf_version": ocsf_version,
             }
+            if mapping_version is not None:
+                self._values["mapping_version"] = mapping_version
             if source is not None:
                 self._values["source"] = source
 
@@ -8233,6 +8250,14 @@ class CfnTransformer(
             result = self._values.get("ocsf_version")
             assert result is not None, "Required property 'ocsf_version' is missing"
             return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def mapping_version(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-parsetoocsf.html#cfn-logs-transformer-parsetoocsf-mappingversion
+            '''
+            result = self._values.get("mapping_version")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def source(self) -> typing.Optional[builtins.str]:
@@ -8409,29 +8434,29 @@ class CfnTransformer(
         def __init__(
             self,
             *,
-            add_keys: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.AddKeysProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            copy_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.CopyValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            csv: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.CsvProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            date_time_converter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.DateTimeConverterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            delete_keys: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.DeleteKeysProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            grok: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.GrokProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            list_to_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.ListToMapProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            lower_case_string: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.LowerCaseStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            move_keys: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.MoveKeysProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            parse_cloudfront: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.ParseCloudfrontProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            parse_json: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.ParseJSONProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            parse_key_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.ParseKeyValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            parse_postgres: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.ParsePostgresProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            parse_route53: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.ParseRoute53Property", typing.Dict[builtins.str, typing.Any]]]] = None,
-            parse_to_ocsf: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.ParseToOCSFProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            parse_vpc: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.ParseVPCProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            parse_waf: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.ParseWAFProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            rename_keys: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.RenameKeysProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            split_string: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.SplitStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            substitute_string: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.SubstituteStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            trim_string: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.TrimStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            type_converter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.TypeConverterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            upper_case_string: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.UpperCaseStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            add_keys: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.AddKeysProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            copy_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.CopyValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            csv: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.CsvProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            date_time_converter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.DateTimeConverterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            delete_keys: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.DeleteKeysProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            grok: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.GrokProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            list_to_map: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.ListToMapProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lower_case_string: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.LowerCaseStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            move_keys: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.MoveKeysProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parse_cloudfront: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.ParseCloudfrontProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parse_json: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.ParseJSONProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parse_key_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.ParseKeyValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parse_postgres: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.ParsePostgresProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parse_route53: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.ParseRoute53Property", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parse_to_ocsf: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.ParseToOCSFProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parse_vpc: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.ParseVPCProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parse_waf: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.ParseWAFProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            rename_keys: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.RenameKeysProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            split_string: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.SplitStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            substitute_string: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.SubstituteStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            trim_string: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.TrimStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            type_converter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.TypeConverterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            upper_case_string: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.UpperCaseStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''This structure contains the information about one processor in a log transformer.
 
@@ -8562,6 +8587,7 @@ class CfnTransformer(
                         ocsf_version="ocsfVersion",
                 
                         # the properties below are optional
+                        mapping_version="mappingVersion",
                         source="source"
                     ),
                     parse_vpc=logs.CfnTransformer.ParseVPCProperty(
@@ -8682,106 +8708,106 @@ class CfnTransformer(
         @builtins.property
         def add_keys(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.AddKeysProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.AddKeysProperty"]]:
             '''Use this parameter to include the `addKeys <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation.html#CloudWatch-Logs-Transformation-addKeys>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-addkeys
             '''
             result = self._values.get("add_keys")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.AddKeysProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.AddKeysProperty"]], result)
 
         @builtins.property
         def copy_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.CopyValueProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.CopyValueProperty"]]:
             '''Use this parameter to include the `copyValue <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-copyValue>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-copyvalue
             '''
             result = self._values.get("copy_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.CopyValueProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.CopyValueProperty"]], result)
 
         @builtins.property
         def csv(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.CsvProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.CsvProperty"]]:
             '''Use this parameter to include the `CSV <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation.html#CloudWatch-Logs-Transformation-CSV>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-csv
             '''
             result = self._values.get("csv")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.CsvProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.CsvProperty"]], result)
 
         @builtins.property
         def date_time_converter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.DateTimeConverterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.DateTimeConverterProperty"]]:
             '''Use this parameter to include the `datetimeConverter <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-datetimeConverter>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-datetimeconverter
             '''
             result = self._values.get("date_time_converter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.DateTimeConverterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.DateTimeConverterProperty"]], result)
 
         @builtins.property
         def delete_keys(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.DeleteKeysProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.DeleteKeysProperty"]]:
             '''Use this parameter to include the `deleteKeys <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation.html#CloudWatch-Logs-Transformation-deleteKeys>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-deletekeys
             '''
             result = self._values.get("delete_keys")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.DeleteKeysProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.DeleteKeysProperty"]], result)
 
         @builtins.property
         def grok(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.GrokProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.GrokProperty"]]:
             '''Use this parameter to include the `grok <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-grok>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-grok
             '''
             result = self._values.get("grok")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.GrokProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.GrokProperty"]], result)
 
         @builtins.property
         def list_to_map(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ListToMapProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ListToMapProperty"]]:
             '''Use this parameter to include the `listToMap <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation.html#CloudWatch-Logs-Transformation-listToMap>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-listtomap
             '''
             result = self._values.get("list_to_map")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ListToMapProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ListToMapProperty"]], result)
 
         @builtins.property
         def lower_case_string(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.LowerCaseStringProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.LowerCaseStringProperty"]]:
             '''Use this parameter to include the `lowerCaseString <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-lowerCaseString>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-lowercasestring
             '''
             result = self._values.get("lower_case_string")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.LowerCaseStringProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.LowerCaseStringProperty"]], result)
 
         @builtins.property
         def move_keys(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.MoveKeysProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.MoveKeysProperty"]]:
             '''Use this parameter to include the `moveKeys <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-moveKeys>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-movekeys
             '''
             result = self._values.get("move_keys")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.MoveKeysProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.MoveKeysProperty"]], result)
 
         @builtins.property
         def parse_cloudfront(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseCloudfrontProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseCloudfrontProperty"]]:
             '''Use this parameter to include the `parseCloudfront <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-parseCloudfront>`_ processor in your transformer.
 
             If you use this processor, it must be the first processor in your transformer.
@@ -8789,34 +8815,34 @@ class CfnTransformer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-parsecloudfront
             '''
             result = self._values.get("parse_cloudfront")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseCloudfrontProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseCloudfrontProperty"]], result)
 
         @builtins.property
         def parse_json(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseJSONProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseJSONProperty"]]:
             '''Use this parameter to include the `parseJSON <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-parseJSON>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-parsejson
             '''
             result = self._values.get("parse_json")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseJSONProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseJSONProperty"]], result)
 
         @builtins.property
         def parse_key_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseKeyValueProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseKeyValueProperty"]]:
             '''Use this parameter to include the `parseKeyValue <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-parseKeyValue>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-parsekeyvalue
             '''
             result = self._values.get("parse_key_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseKeyValueProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseKeyValueProperty"]], result)
 
         @builtins.property
         def parse_postgres(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParsePostgresProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParsePostgresProperty"]]:
             '''Use this parameter to include the `parsePostGres <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation.html#CloudWatch-Logs-Transformation-parsePostGres>`_ processor in your transformer.
 
             If you use this processor, it must be the first processor in your transformer.
@@ -8824,12 +8850,12 @@ class CfnTransformer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-parsepostgres
             '''
             result = self._values.get("parse_postgres")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParsePostgresProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParsePostgresProperty"]], result)
 
         @builtins.property
         def parse_route53(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseRoute53Property"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseRoute53Property"]]:
             '''Use this parameter to include the `parseRoute53 <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-parseRoute53>`_ processor in your transformer.
 
             If you use this processor, it must be the first processor in your transformer.
@@ -8837,23 +8863,23 @@ class CfnTransformer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-parseroute53
             '''
             result = self._values.get("parse_route53")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseRoute53Property"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseRoute53Property"]], result)
 
         @builtins.property
         def parse_to_ocsf(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseToOCSFProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseToOCSFProperty"]]:
             '''Use this parameter to convert logs into Open Cybersecurity Schema (OCSF) format.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-parsetoocsf
             '''
             result = self._values.get("parse_to_ocsf")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseToOCSFProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseToOCSFProperty"]], result)
 
         @builtins.property
         def parse_vpc(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseVPCProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseVPCProperty"]]:
             '''Use this parameter to include the `parseVPC <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-parseVPC>`_ processor in your transformer.
 
             If you use this processor, it must be the first processor in your transformer.
@@ -8861,12 +8887,12 @@ class CfnTransformer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-parsevpc
             '''
             result = self._values.get("parse_vpc")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseVPCProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseVPCProperty"]], result)
 
         @builtins.property
         def parse_waf(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseWAFProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseWAFProperty"]]:
             '''Use this parameter to include the `parseWAF <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation.html#CloudWatch-Logs-Transformation-parseWAF>`_ processor in your transformer.
 
             If you use this processor, it must be the first processor in your transformer.
@@ -8874,73 +8900,73 @@ class CfnTransformer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-parsewaf
             '''
             result = self._values.get("parse_waf")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.ParseWAFProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ParseWAFProperty"]], result)
 
         @builtins.property
         def rename_keys(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.RenameKeysProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.RenameKeysProperty"]]:
             '''Use this parameter to include the `renameKeys <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation.html#CloudWatch-Logs-Transformation-renameKeys>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-renamekeys
             '''
             result = self._values.get("rename_keys")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.RenameKeysProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.RenameKeysProperty"]], result)
 
         @builtins.property
         def split_string(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.SplitStringProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.SplitStringProperty"]]:
             '''Use this parameter to include the `splitString <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-splitString>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-splitstring
             '''
             result = self._values.get("split_string")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.SplitStringProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.SplitStringProperty"]], result)
 
         @builtins.property
         def substitute_string(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.SubstituteStringProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.SubstituteStringProperty"]]:
             '''Use this parameter to include the `substituteString <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-substituteString>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-substitutestring
             '''
             result = self._values.get("substitute_string")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.SubstituteStringProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.SubstituteStringProperty"]], result)
 
         @builtins.property
         def trim_string(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.TrimStringProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.TrimStringProperty"]]:
             '''Use this parameter to include the `trimString <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-trimString>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-trimstring
             '''
             result = self._values.get("trim_string")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.TrimStringProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.TrimStringProperty"]], result)
 
         @builtins.property
         def type_converter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.TypeConverterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.TypeConverterProperty"]]:
             '''Use this parameter to include the `typeConverter <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-typeConverter>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-typeconverter
             '''
             result = self._values.get("type_converter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.TypeConverterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.TypeConverterProperty"]], result)
 
         @builtins.property
         def upper_case_string(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.UpperCaseStringProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.UpperCaseStringProperty"]]:
             '''Use this parameter to include the `upperCaseString <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-upperCaseString>`_ processor in your transformer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-processor.html#cfn-logs-transformer-processor-uppercasestring
             '''
             result = self._values.get("upper_case_string")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTransformer.UpperCaseStringProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTransformer.UpperCaseStringProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8968,7 +8994,7 @@ class CfnTransformer(
             *,
             key: builtins.str,
             rename_to: builtins.str,
-            overwrite_if_exists: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            overwrite_if_exists: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''This object defines one key that will be renamed with the `renameKey <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation-Processors.html#CloudWatch-Logs-Transformation-renameKey>`_ processor.
 
@@ -9028,7 +9054,7 @@ class CfnTransformer(
         @builtins.property
         def overwrite_if_exists(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to overwrite the existing value if the destination key already exists.
 
             The default is ``false``
@@ -9036,7 +9062,7 @@ class CfnTransformer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-renamekeyentry.html#cfn-logs-transformer-renamekeyentry-overwriteifexists
             '''
             result = self._values.get("overwrite_if_exists")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9058,7 +9084,7 @@ class CfnTransformer(
         def __init__(
             self,
             *,
-            entries: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.RenameKeyEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            entries: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.RenameKeyEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Use this processor to rename keys in a log event.
 
@@ -9095,14 +9121,14 @@ class CfnTransformer(
         @builtins.property
         def entries(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.RenameKeyEntryProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.RenameKeyEntryProperty"]]]:
             '''An array of ``RenameKeyEntry`` objects, where each object contains the information about a single key to rename.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-renamekeys.html#cfn-logs-transformer-renamekeys-entries
             '''
             result = self._values.get("entries")
             assert result is not None, "Required property 'entries' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.RenameKeyEntryProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.RenameKeyEntryProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9190,7 +9216,7 @@ class CfnTransformer(
         def __init__(
             self,
             *,
-            entries: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.SplitStringEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            entries: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.SplitStringEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Use this processor to split a field into an array of strings using a delimiting character.
 
@@ -9224,14 +9250,14 @@ class CfnTransformer(
         @builtins.property
         def entries(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.SplitStringEntryProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.SplitStringEntryProperty"]]]:
             '''An array of ``SplitStringEntry`` objects, where each object contains the information about one field to split.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-splitstring.html#cfn-logs-transformer-splitstring-entries
             '''
             result = self._values.get("entries")
             assert result is not None, "Required property 'entries' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.SplitStringEntryProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.SplitStringEntryProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9341,7 +9367,7 @@ class CfnTransformer(
         def __init__(
             self,
             *,
-            entries: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.SubstituteStringEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            entries: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.SubstituteStringEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''This processor matches a key’s value against a regular expression and replaces all matches with a replacement string.
 
@@ -9376,14 +9402,14 @@ class CfnTransformer(
         @builtins.property
         def entries(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.SubstituteStringEntryProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.SubstituteStringEntryProperty"]]]:
             '''An array of objects, where each object contains the information about one key to match and replace.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-substitutestring.html#cfn-logs-transformer-substitutestring-entries
             '''
             result = self._values.get("entries")
             assert result is not None, "Required property 'entries' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.SubstituteStringEntryProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.SubstituteStringEntryProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9527,7 +9553,7 @@ class CfnTransformer(
         def __init__(
             self,
             *,
-            entries: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTransformer.TypeConverterEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            entries: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.TypeConverterEntryProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Use this processor to convert a value type associated with the specified key to the specified type.
 
@@ -9563,14 +9589,14 @@ class CfnTransformer(
         @builtins.property
         def entries(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.TypeConverterEntryProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.TypeConverterEntryProperty"]]]:
             '''An array of ``TypeConverterEntry`` objects, where each object contains the information about one field to change the type of.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-typeconverter.html#cfn-logs-transformer-typeconverter-entries
             '''
             result = self._values.get("entries")
             assert result is not None, "Required property 'entries' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTransformer.TypeConverterEntryProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.TypeConverterEntryProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9651,7 +9677,7 @@ class CfnTransformerProps:
         self,
         *,
         log_group_identifier: builtins.str,
-        transformer_config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTransformer.ProcessorProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        transformer_config: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTransformer.ProcessorProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Properties for defining a ``CfnTransformer``.
 
@@ -9763,6 +9789,7 @@ class CfnTransformerProps:
                         ocsf_version="ocsfVersion",
             
                         # the properties below are optional
+                        mapping_version="mappingVersion",
                         source="source"
                     ),
                     parse_vpc=logs.CfnTransformer.ParseVPCProperty(
@@ -9830,7 +9857,7 @@ class CfnTransformerProps:
     @builtins.property
     def transformer_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTransformer.ProcessorProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ProcessorProperty"]]]:
         '''This structure is an array that contains the configuration of this log transformer.
 
         A log transformer is an array of processors, where each processor applies one type of transformation to the log events that are ingested.
@@ -9839,7 +9866,7 @@ class CfnTransformerProps:
         '''
         result = self._values.get("transformer_config")
         assert result is not None, "Required property 'transformer_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTransformer.ProcessorProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTransformer.ProcessorProperty"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10036,7 +10063,7 @@ class CopyValueProperty:
     def __init__(
         self,
         *,
-        entries: typing.Sequence[typing.Union[CopyValueEntryProperty, typing.Dict[builtins.str, typing.Any]]],
+        entries: typing.Sequence[typing.Union["CopyValueEntryProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Copy Value processor, copies values from source to target for each entry.
 
@@ -10072,14 +10099,14 @@ class CopyValueProperty:
         }
 
     @builtins.property
-    def entries(self) -> typing.List[CopyValueEntryProperty]:
+    def entries(self) -> typing.List["CopyValueEntryProperty"]:
         '''List of sources and target to copy.
 
         An array of CopyValueEntry objects, where each object contains information about one field value to copy.
         '''
         result = self._values.get("entries")
         assert result is not None, "Required property 'entries' is missing"
-        return typing.cast(typing.List[CopyValueEntryProperty], result)
+        return typing.cast(typing.List["CopyValueEntryProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10106,7 +10133,7 @@ class CrossAccountDestinationProps:
     def __init__(
         self,
         *,
-        role: _IRoleRef_8400221f,
+        role: "_IRoleRef_8400221f",
         target_arn: builtins.str,
         destination_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -10148,14 +10175,14 @@ class CrossAccountDestinationProps:
             self._values["destination_name"] = destination_name
 
     @builtins.property
-    def role(self) -> _IRoleRef_8400221f:
+    def role(self) -> "_IRoleRef_8400221f":
         '''The role to assume that grants permissions to write to 'target'.
 
         The role must be assumable by 'logs.{REGION}.amazonaws.com'.
         '''
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
-        return typing.cast(_IRoleRef_8400221f, result)
+        return typing.cast("_IRoleRef_8400221f", result)
 
     @builtins.property
     def target_arn(self) -> builtins.str:
@@ -11021,12 +11048,12 @@ class DataProtectionPolicy(
     def __init__(
         self,
         *,
-        identifiers: typing.Sequence[DataIdentifier],
+        identifiers: typing.Sequence["DataIdentifier"],
         delivery_stream_name_audit_destination: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         log_group_audit_destination: typing.Optional["ILogGroup"] = None,
         name: typing.Optional[builtins.str] = None,
-        s3_bucket_audit_destination: typing.Optional[_IBucketRef_3debe44e] = None,
+        s3_bucket_audit_destination: typing.Optional["_IBucketRef_3debe44e"] = None,
     ) -> None:
         '''
         :param identifiers: List of data protection identifiers. Managed data identifiers must be in the following list: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL-managed-data-identifiers.html Custom data identifiers must have a valid regex defined: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL-custom-data-identifiers.html#custom-data-identifiers-constraints
@@ -11064,12 +11091,12 @@ class DataProtectionPolicyProps:
     def __init__(
         self,
         *,
-        identifiers: typing.Sequence[DataIdentifier],
+        identifiers: typing.Sequence["DataIdentifier"],
         delivery_stream_name_audit_destination: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         log_group_audit_destination: typing.Optional["ILogGroup"] = None,
         name: typing.Optional[builtins.str] = None,
-        s3_bucket_audit_destination: typing.Optional[_IBucketRef_3debe44e] = None,
+        s3_bucket_audit_destination: typing.Optional["_IBucketRef_3debe44e"] = None,
     ) -> None:
         '''Properties for creating a data protection policy.
 
@@ -11138,7 +11165,7 @@ class DataProtectionPolicyProps:
             self._values["s3_bucket_audit_destination"] = s3_bucket_audit_destination
 
     @builtins.property
-    def identifiers(self) -> typing.List[DataIdentifier]:
+    def identifiers(self) -> typing.List["DataIdentifier"]:
         '''List of data protection identifiers.
 
         Managed data identifiers must be in the following list: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL-managed-data-identifiers.html
@@ -11146,7 +11173,7 @@ class DataProtectionPolicyProps:
         '''
         result = self._values.get("identifiers")
         assert result is not None, "Required property 'identifiers' is missing"
-        return typing.cast(typing.List[DataIdentifier], result)
+        return typing.cast(typing.List["DataIdentifier"], result)
 
     @builtins.property
     def delivery_stream_name_audit_destination(self) -> typing.Optional[builtins.str]:
@@ -11189,7 +11216,7 @@ class DataProtectionPolicyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def s3_bucket_audit_destination(self) -> typing.Optional[_IBucketRef_3debe44e]:
+    def s3_bucket_audit_destination(self) -> typing.Optional["_IBucketRef_3debe44e"]:
         '''S3 bucket to send audit findings to.
 
         The bucket must already exist.
@@ -11197,7 +11224,7 @@ class DataProtectionPolicyProps:
         :default: - no S3 bucket audit destination
         '''
         result = self._values.get("s3_bucket_audit_destination")
-        return typing.cast(typing.Optional[_IBucketRef_3debe44e], result)
+        return typing.cast(typing.Optional["_IBucketRef_3debe44e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11918,7 +11945,7 @@ class ILogGroup(
         self,
         id: builtins.str,
         *,
-        filter_pattern: IFilterPattern,
+        filter_pattern: "IFilterPattern",
         metric_name: builtins.str,
         metric_namespace: builtins.str,
         apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
@@ -11926,7 +11953,7 @@ class ILogGroup(
         dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         filter_name: typing.Optional[builtins.str] = None,
         metric_value: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
     ) -> "MetricFilter":
         '''Create a new Metric Filter on this Log Group.
 
@@ -11963,8 +11990,8 @@ class ILogGroup(
         id: builtins.str,
         *,
         destination: "ILogSubscriptionDestination",
-        filter_pattern: IFilterPattern,
-        distribution: typing.Optional[Distribution] = None,
+        filter_pattern: "IFilterPattern",
+        distribution: typing.Optional["Distribution"] = None,
         filter_name: typing.Optional[builtins.str] = None,
     ) -> "SubscriptionFilter":
         '''Create a new Subscription Filter on this Log Group.
@@ -11999,7 +12026,7 @@ class ILogGroup(
         json_field: builtins.str,
         metric_namespace: builtins.str,
         metric_name: builtins.str,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Extract a metric from structured log events in the LogGroup.
 
         Creates a MetricFilter on this LogGroup that will extract the value
@@ -12019,9 +12046,9 @@ class ILogGroup(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Give the indicated permissions on this log group and all streams.
 
         :param grantee: -
@@ -12030,7 +12057,7 @@ class ILogGroup(
         ...
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Give permissions to read from this log group and streams.
 
         :param grantee: -
@@ -12038,7 +12065,7 @@ class ILogGroup(
         ...
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Give permissions to write to create and write to streams in this log group.
 
         :param grantee: -
@@ -12060,14 +12087,14 @@ class ILogGroup(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Log Group.
 
         :param metric_name: The name of the metric.
@@ -12095,14 +12122,14 @@ class ILogGroup(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The volume of log events in uncompressed bytes uploaded to CloudWatch Logs.
 
         When used with the LogGroupName dimension, this is the volume of log events
@@ -12132,14 +12159,14 @@ class ILogGroup(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of log events uploaded to CloudWatch Logs.
 
         When used with the LogGroupName dimension, this is the number of
@@ -12190,7 +12217,7 @@ class _ILogGroupProxy(
         self,
         id: builtins.str,
         *,
-        filter_pattern: IFilterPattern,
+        filter_pattern: "IFilterPattern",
         metric_name: builtins.str,
         metric_namespace: builtins.str,
         apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
@@ -12198,7 +12225,7 @@ class _ILogGroupProxy(
         dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         filter_name: typing.Optional[builtins.str] = None,
         metric_value: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
     ) -> "MetricFilter":
         '''Create a new Metric Filter on this Log Group.
 
@@ -12255,8 +12282,8 @@ class _ILogGroupProxy(
         id: builtins.str,
         *,
         destination: "ILogSubscriptionDestination",
-        filter_pattern: IFilterPattern,
-        distribution: typing.Optional[Distribution] = None,
+        filter_pattern: "IFilterPattern",
+        distribution: typing.Optional["Distribution"] = None,
         filter_name: typing.Optional[builtins.str] = None,
     ) -> "SubscriptionFilter":
         '''Create a new Subscription Filter on this Log Group.
@@ -12308,7 +12335,7 @@ class _ILogGroupProxy(
         json_field: builtins.str,
         metric_namespace: builtins.str,
         metric_name: builtins.str,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Extract a metric from structured log events in the LogGroup.
 
         Creates a MetricFilter on this LogGroup that will extract the value
@@ -12328,14 +12355,14 @@ class _ILogGroupProxy(
             check_type(argname="argument json_field", value=json_field, expected_type=type_hints["json_field"])
             check_type(argname="argument metric_namespace", value=metric_namespace, expected_type=type_hints["metric_namespace"])
             check_type(argname="argument metric_name", value=metric_name, expected_type=type_hints["metric_name"])
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "extractMetric", [json_field, metric_namespace, metric_name]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "extractMetric", [json_field, metric_namespace, metric_name]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Give the indicated permissions on this log group and all streams.
 
         :param grantee: -
@@ -12345,10 +12372,10 @@ class _ILogGroupProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__3d45146324c9cc51983b9b92779906c83ea73e499386493771cdd256c131ca87)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Give permissions to read from this log group and streams.
 
         :param grantee: -
@@ -12356,10 +12383,10 @@ class _ILogGroupProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__10f2b216c33139da1022d0b7d73974166dcf17c508e30913421c9f89375a9bb0)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Give permissions to write to create and write to streams in this log group.
 
         :param grantee: -
@@ -12367,7 +12394,7 @@ class _ILogGroupProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__558c66823e9e8b21feeb1abd2b6534206c929fdf82184f3c0d1aff2942610538)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWrite", [grantee]))
 
     @jsii.member(jsii_name="logGroupPhysicalName")
     def log_group_physical_name(self) -> builtins.str:
@@ -12384,14 +12411,14 @@ class _ILogGroupProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Log Group.
 
         :param metric_name: The name of the metric.
@@ -12426,7 +12453,7 @@ class _ILogGroupProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricIncomingBytes")
     def metric_incoming_bytes(
@@ -12437,14 +12464,14 @@ class _ILogGroupProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The volume of log events in uncompressed bytes uploaded to CloudWatch Logs.
 
         When used with the LogGroupName dimension, this is the volume of log events
@@ -12478,7 +12505,7 @@ class _ILogGroupProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingBytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIncomingBytes", [props]))
 
     @jsii.member(jsii_name="metricIncomingLogEvents")
     def metric_incoming_log_events(
@@ -12489,14 +12516,14 @@ class _ILogGroupProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of log events uploaded to CloudWatch Logs.
 
         When used with the LogGroupName dimension, this is the number of
@@ -12530,7 +12557,7 @@ class _ILogGroupProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingLogEvents", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIncomingLogEvents", [props]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ILogGroup).__jsii_proxy_class__ = lambda : _ILogGroupProxy
@@ -12573,8 +12600,8 @@ class ILogSubscriptionDestination(typing_extensions.Protocol):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        source_log_group: ILogGroup,
+        scope: "_constructs_77d1e7e8.Construct",
+        source_log_group: "ILogGroup",
     ) -> "LogSubscriptionDestinationConfig":
         '''Return the properties required to send subscription events to this destination.
 
@@ -12599,8 +12626,8 @@ class _ILogSubscriptionDestinationProxy:
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        source_log_group: ILogGroup,
+        scope: "_constructs_77d1e7e8.Construct",
+        source_log_group: "ILogGroup",
     ) -> "LogSubscriptionDestinationConfig":
         '''Return the properties required to send subscription events to this destination.
 
@@ -12691,8 +12718,8 @@ class JsonMutatorProcessor(
         self,
         *,
         type: "JsonMutatorType",
-        add_keys_options: typing.Optional[typing.Union[AddKeysProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        copy_value_options: typing.Optional[typing.Union[CopyValueProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        add_keys_options: typing.Optional[typing.Union["AddKeysProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        copy_value_options: typing.Optional[typing.Union["CopyValueProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         delete_keys_options: typing.Optional[typing.Union["ProcessorDeleteKeysProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         list_to_map_options: typing.Optional[typing.Union["ListToMapProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         move_keys_options: typing.Optional[typing.Union["MoveKeysProperty", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -12752,8 +12779,8 @@ class JsonMutatorProps(BaseProcessorProps):
         self,
         *,
         type: "JsonMutatorType",
-        add_keys_options: typing.Optional[typing.Union[AddKeysProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        copy_value_options: typing.Optional[typing.Union[CopyValueProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        add_keys_options: typing.Optional[typing.Union["AddKeysProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        copy_value_options: typing.Optional[typing.Union["CopyValueProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         delete_keys_options: typing.Optional[typing.Union["ProcessorDeleteKeysProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         list_to_map_options: typing.Optional[typing.Union["ListToMapProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         move_keys_options: typing.Optional[typing.Union["MoveKeysProperty", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -12844,7 +12871,7 @@ class JsonMutatorProps(BaseProcessorProps):
         return typing.cast("JsonMutatorType", result)
 
     @builtins.property
-    def add_keys_options(self) -> typing.Optional[AddKeysProperty]:
+    def add_keys_options(self) -> typing.Optional["AddKeysProperty"]:
         '''Options for adding keys.
 
         Required when type is ADD_KEYS.
@@ -12852,10 +12879,10 @@ class JsonMutatorProps(BaseProcessorProps):
         :default: - No adding keys processor is created if props not set
         '''
         result = self._values.get("add_keys_options")
-        return typing.cast(typing.Optional[AddKeysProperty], result)
+        return typing.cast(typing.Optional["AddKeysProperty"], result)
 
     @builtins.property
-    def copy_value_options(self) -> typing.Optional[CopyValueProperty]:
+    def copy_value_options(self) -> typing.Optional["CopyValueProperty"]:
         '''Options for copying values.
 
         Required when type is COPY_VALUE.
@@ -12863,7 +12890,7 @@ class JsonMutatorProps(BaseProcessorProps):
         :default: - No copy value processor is created if props not set
         '''
         result = self._values.get("copy_value_options")
-        return typing.cast(typing.Optional[CopyValueProperty], result)
+        return typing.cast(typing.Optional["CopyValueProperty"], result)
 
     @builtins.property
     def delete_keys_options(self) -> typing.Optional["ProcessorDeleteKeysProperty"]:
@@ -13225,15 +13252,15 @@ class LogGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        data_protection_policy: typing.Optional[DataProtectionPolicy] = None,
-        encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        field_index_policies: typing.Optional[typing.Sequence[FieldIndexPolicy]] = None,
+        data_protection_policy: typing.Optional["DataProtectionPolicy"] = None,
+        encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        field_index_policies: typing.Optional[typing.Sequence["FieldIndexPolicy"]] = None,
         log_group_class: typing.Optional["LogGroupClass"] = None,
         log_group_name: typing.Optional[builtins.str] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         retention: typing.Optional["RetentionDays"] = None,
     ) -> None:
         '''
@@ -13267,10 +13294,10 @@ class LogGroup(
     @builtins.classmethod
     def from_log_group_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         log_group_arn: builtins.str,
-    ) -> ILogGroup:
+    ) -> "ILogGroup":
         '''Import an existing LogGroup given its ARN.
 
         :param scope: -
@@ -13282,16 +13309,16 @@ class LogGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument log_group_arn", value=log_group_arn, expected_type=type_hints["log_group_arn"])
-        return typing.cast(ILogGroup, jsii.sinvoke(cls, "fromLogGroupArn", [scope, id, log_group_arn]))
+        return typing.cast("ILogGroup", jsii.sinvoke(cls, "fromLogGroupArn", [scope, id, log_group_arn]))
 
     @jsii.member(jsii_name="fromLogGroupName")
     @builtins.classmethod
     def from_log_group_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         log_group_name: builtins.str,
-    ) -> ILogGroup:
+    ) -> "ILogGroup":
         '''Import an existing LogGroup given its name.
 
         :param scope: -
@@ -13303,14 +13330,14 @@ class LogGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument log_group_name", value=log_group_name, expected_type=type_hints["log_group_name"])
-        return typing.cast(ILogGroup, jsii.sinvoke(cls, "fromLogGroupName", [scope, id, log_group_name]))
+        return typing.cast("ILogGroup", jsii.sinvoke(cls, "fromLogGroupName", [scope, id, log_group_name]))
 
     @jsii.member(jsii_name="addMetricFilter")
     def add_metric_filter(
         self,
         id: builtins.str,
         *,
-        filter_pattern: IFilterPattern,
+        filter_pattern: "IFilterPattern",
         metric_name: builtins.str,
         metric_namespace: builtins.str,
         apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
@@ -13318,7 +13345,7 @@ class LogGroup(
         dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         filter_name: typing.Optional[builtins.str] = None,
         metric_value: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
     ) -> "MetricFilter":
         '''Create a new Metric Filter on this Log Group.
 
@@ -13374,9 +13401,9 @@ class LogGroup(
         self,
         id: builtins.str,
         *,
-        destination: ILogSubscriptionDestination,
-        filter_pattern: IFilterPattern,
-        distribution: typing.Optional[Distribution] = None,
+        destination: "ILogSubscriptionDestination",
+        filter_pattern: "IFilterPattern",
+        distribution: typing.Optional["Distribution"] = None,
         filter_name: typing.Optional[builtins.str] = None,
     ) -> "SubscriptionFilter":
         '''Create a new Subscription Filter on this Log Group.
@@ -13402,8 +13429,8 @@ class LogGroup(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the resource policy associated with this log group.
 
         A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
@@ -13416,14 +13443,14 @@ class LogGroup(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6f61b70f15ff76b195297fc3fa75909dc7046483a164b76160596773157f547f)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="addTransformer")
     def add_transformer(
         self,
         id: builtins.str,
         *,
-        transformer_config: typing.Sequence[IProcessor],
+        transformer_config: typing.Sequence["IProcessor"],
         transformer_name: builtins.str,
     ) -> "Transformer":
         '''Create a new Transformer on this Log Group.
@@ -13447,7 +13474,7 @@ class LogGroup(
         json_field: builtins.str,
         metric_namespace: builtins.str,
         metric_name: builtins.str,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Extract a metric from structured log events in the LogGroup.
 
         Creates a MetricFilter on this LogGroup that will extract the value
@@ -13467,14 +13494,14 @@ class LogGroup(
             check_type(argname="argument json_field", value=json_field, expected_type=type_hints["json_field"])
             check_type(argname="argument metric_namespace", value=metric_namespace, expected_type=type_hints["metric_namespace"])
             check_type(argname="argument metric_name", value=metric_name, expected_type=type_hints["metric_name"])
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "extractMetric", [json_field, metric_namespace, metric_name]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "extractMetric", [json_field, metric_namespace, metric_name]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Give the indicated permissions on this log group and all streams.
 
         :param grantee: -
@@ -13484,10 +13511,10 @@ class LogGroup(
             type_hints = typing.get_type_hints(_typecheckingstub__e9a9cb0e1cec11a01408a7a448100c7b05edddf5bb005abd006a834d3c923bb7)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Give permissions to read and filter events from this log group.
 
         :param grantee: -
@@ -13495,10 +13522,10 @@ class LogGroup(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__049a7f93ec71ef52ad5919516c695afd1e3f1185bfaadbf66b872fe23abae4db)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Give permissions to create and write to streams in this log group.
 
         :param grantee: -
@@ -13506,7 +13533,7 @@ class LogGroup(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c97b414675dc468df60a1d999b2ddb74ddf42567d0d8ac3af19bb44f4022b1b0)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWrite", [grantee]))
 
     @jsii.member(jsii_name="logGroupPhysicalName")
     def log_group_physical_name(self) -> builtins.str:
@@ -13526,14 +13553,14 @@ class LogGroup(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Creates a CloudWatch metric for this log group.
 
         :param metric_name: - The name of the metric to create.
@@ -13584,7 +13611,7 @@ class LogGroup(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricIncomingBytes")
     def metric_incoming_bytes(
@@ -13595,14 +13622,14 @@ class LogGroup(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Creates a CloudWatch metric for the volume of incoming log data in bytes to this log group.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -13649,7 +13676,7 @@ class LogGroup(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingBytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIncomingBytes", [props]))
 
     @jsii.member(jsii_name="metricIncomingLogEvents")
     def metric_incoming_log_events(
@@ -13660,14 +13687,14 @@ class LogGroup(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Creates a CloudWatch metric for the number of incoming log events to this log group.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -13714,7 +13741,7 @@ class LogGroup(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingLogEvents", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIncomingLogEvents", [props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -13742,9 +13769,9 @@ class LogGroup(
 
     @builtins.property
     @jsii.member(jsii_name="logGroupRef")
-    def log_group_ref(self) -> _LogGroupReference_fcef0083:
+    def log_group_ref(self) -> "_LogGroupReference_fcef0083":
         '''A reference to a LogGroup resource.'''
-        return typing.cast(_LogGroupReference_fcef0083, jsii.get(self, "logGroupRef"))
+        return typing.cast("_LogGroupReference_fcef0083", jsii.get(self, "logGroupRef"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_logs.LogGroupClass")
@@ -13779,7 +13806,7 @@ class LogGroupGrants(
 
     @jsii.member(jsii_name="fromLogGroup")
     @builtins.classmethod
-    def from_log_group(cls, resource: _ILogGroupRef_874d025a) -> "LogGroupGrants":
+    def from_log_group(cls, resource: "_ILogGroupRef_874d025a") -> "LogGroupGrants":
         '''Creates grants for LogGroupGrants.
 
         :param resource: -
@@ -13790,7 +13817,7 @@ class LogGroupGrants(
         return typing.cast("LogGroupGrants", jsii.sinvoke(cls, "fromLogGroup", [resource]))
 
     @jsii.member(jsii_name="read")
-    def read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Give permissions to read and filter events from this log group.
 
         :param grantee: -
@@ -13798,10 +13825,10 @@ class LogGroupGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__607338f203b242ba450629a7b68c619609b6f99b75ebf09c1503cf78f54f544e)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "read", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "read", [grantee]))
 
     @jsii.member(jsii_name="write")
-    def write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Give permissions to create and write to streams in this log group.
 
         :param grantee: -
@@ -13809,17 +13836,17 @@ class LogGroupGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d7b9c220ded57ef7105f24fef958f2bad5a42c4417f83bd42464ecc96acdf2b5)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "write", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "write", [grantee]))
 
     @builtins.property
     @jsii.member(jsii_name="resource")
-    def _resource(self) -> _ILogGroupRef_874d025a:
-        return typing.cast(_ILogGroupRef_874d025a, jsii.get(self, "resource"))
+    def _resource(self) -> "_ILogGroupRef_874d025a":
+        return typing.cast("_ILogGroupRef_874d025a", jsii.get(self, "resource"))
 
     @builtins.property
     @jsii.member(jsii_name="policyResource")
-    def _policy_resource(self) -> typing.Optional[_IResourceWithPolicyV2_01035ec6]:
-        return typing.cast(typing.Optional[_IResourceWithPolicyV2_01035ec6], jsii.get(self, "policyResource"))
+    def _policy_resource(self) -> typing.Optional["_IResourceWithPolicyV2_01035ec6"]:
+        return typing.cast(typing.Optional["_IResourceWithPolicyV2_01035ec6"], jsii.get(self, "policyResource"))
 
 
 @jsii.data_type(
@@ -13839,12 +13866,12 @@ class LogGroupProps:
     def __init__(
         self,
         *,
-        data_protection_policy: typing.Optional[DataProtectionPolicy] = None,
-        encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        field_index_policies: typing.Optional[typing.Sequence[FieldIndexPolicy]] = None,
-        log_group_class: typing.Optional[LogGroupClass] = None,
+        data_protection_policy: typing.Optional["DataProtectionPolicy"] = None,
+        encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        field_index_policies: typing.Optional[typing.Sequence["FieldIndexPolicy"]] = None,
+        log_group_class: typing.Optional["LogGroupClass"] = None,
         log_group_name: typing.Optional[builtins.str] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         retention: typing.Optional["RetentionDays"] = None,
     ) -> None:
         '''Properties for a LogGroup.
@@ -13918,34 +13945,34 @@ class LogGroupProps:
             self._values["retention"] = retention
 
     @builtins.property
-    def data_protection_policy(self) -> typing.Optional[DataProtectionPolicy]:
+    def data_protection_policy(self) -> typing.Optional["DataProtectionPolicy"]:
         '''Data Protection Policy for this log group.
 
         :default: - no data protection policy
         '''
         result = self._values.get("data_protection_policy")
-        return typing.cast(typing.Optional[DataProtectionPolicy], result)
+        return typing.cast(typing.Optional["DataProtectionPolicy"], result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def encryption_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The KMS customer managed key to encrypt the log group with.
 
         :default: Server-side encryption managed by the CloudWatch Logs service
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
-    def field_index_policies(self) -> typing.Optional[typing.List[FieldIndexPolicy]]:
+    def field_index_policies(self) -> typing.Optional[typing.List["FieldIndexPolicy"]]:
         '''Field Index Policies for this log group.
 
         :default: - no field index policies for this log group.
         '''
         result = self._values.get("field_index_policies")
-        return typing.cast(typing.Optional[typing.List[FieldIndexPolicy]], result)
+        return typing.cast(typing.Optional[typing.List["FieldIndexPolicy"]], result)
 
     @builtins.property
-    def log_group_class(self) -> typing.Optional[LogGroupClass]:
+    def log_group_class(self) -> typing.Optional["LogGroupClass"]:
         '''The class of the log group. Possible values are: STANDARD and INFREQUENT_ACCESS.
 
         INFREQUENT_ACCESS class provides customers a cost-effective way to consolidate
@@ -13955,7 +13982,7 @@ class LogGroupProps:
         :default: LogGroupClass.STANDARD
         '''
         result = self._values.get("log_group_class")
-        return typing.cast(typing.Optional[LogGroupClass], result)
+        return typing.cast(typing.Optional["LogGroupClass"], result)
 
     @builtins.property
     def log_group_name(self) -> typing.Optional[builtins.str]:
@@ -13967,7 +13994,7 @@ class LogGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Determine the removal policy of this log group.
 
         Normally you want to retain the log group so you can diagnose issues
@@ -13978,7 +14005,7 @@ class LogGroupProps:
         :default: RemovalPolicy.Retain
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
     def retention(self) -> typing.Optional["RetentionDays"]:
@@ -14044,15 +14071,15 @@ class LogRetention(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         log_group_name: builtins.str,
         retention: "RetentionDays",
         log_group_region: typing.Optional[builtins.str] = None,
         log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -14112,8 +14139,8 @@ class LogRetentionProps:
         retention: "RetentionDays",
         log_group_region: typing.Optional[builtins.str] = None,
         log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''Construction properties for a LogRetention.
 
@@ -14208,22 +14235,22 @@ class LogRetentionProps:
         return typing.cast(typing.Optional["LogRetentionRetryOptions"], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removalPolicy for the log group when the stack is deleted.
 
         :default: RemovalPolicy.RETAIN
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role for the Lambda function associated with the custom resource.
 
         :default: - A new role is created
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14246,7 +14273,7 @@ class LogRetentionRetryOptions:
     def __init__(
         self,
         *,
-        base: typing.Optional[_Duration_4839e8c3] = None,
+        base: typing.Optional["_Duration_4839e8c3"] = None,
         max_retries: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Retry options for all AWS API calls.
@@ -14279,7 +14306,7 @@ class LogRetentionRetryOptions:
             self._values["max_retries"] = max_retries
 
     @builtins.property
-    def base(self) -> typing.Optional[_Duration_4839e8c3]:
+    def base(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''(deprecated) The base duration to use in the exponential backoff for operation retries.
 
         :default: - none, not used anymore
@@ -14289,7 +14316,7 @@ class LogRetentionRetryOptions:
         :stability: deprecated
         '''
         result = self._values.get("base")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def max_retries(self) -> typing.Optional[jsii.Number]:
@@ -14342,12 +14369,12 @@ class LogStream(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        log_group: ILogGroup,
+        log_group: "ILogGroup",
         log_stream_name: typing.Optional[builtins.str] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -14372,10 +14399,10 @@ class LogStream(
     @builtins.classmethod
     def from_log_stream_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         log_stream_name: builtins.str,
-    ) -> ILogStream:
+    ) -> "ILogStream":
         '''Import an existing LogGroup.
 
         :param scope: -
@@ -14387,7 +14414,7 @@ class LogStream(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument log_stream_name", value=log_stream_name, expected_type=type_hints["log_stream_name"])
-        return typing.cast(ILogStream, jsii.sinvoke(cls, "fromLogStreamName", [scope, id, log_stream_name]))
+        return typing.cast("ILogStream", jsii.sinvoke(cls, "fromLogStreamName", [scope, id, log_stream_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -14415,9 +14442,9 @@ class LogStreamProps:
     def __init__(
         self,
         *,
-        log_group: ILogGroup,
+        log_group: "ILogGroup",
         log_stream_name: typing.Optional[builtins.str] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
     ) -> None:
         '''Properties for a LogStream.
 
@@ -14458,11 +14485,11 @@ class LogStreamProps:
             self._values["removal_policy"] = removal_policy
 
     @builtins.property
-    def log_group(self) -> ILogGroup:
+    def log_group(self) -> "ILogGroup":
         '''The log group to create a log stream for.'''
         result = self._values.get("log_group")
         assert result is not None, "Required property 'log_group' is missing"
-        return typing.cast(ILogGroup, result)
+        return typing.cast("ILogGroup", result)
 
     @builtins.property
     def log_stream_name(self) -> typing.Optional[builtins.str]:
@@ -14476,7 +14503,7 @@ class LogStreamProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Determine what happens when the log stream resource is removed from the app.
 
         Normally you want to retain the log stream so you can diagnose issues from
@@ -14488,7 +14515,7 @@ class LogStreamProps:
         :default: RemovalPolicy.Retain
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14512,7 +14539,7 @@ class LogSubscriptionDestinationConfig:
         self,
         *,
         arn: builtins.str,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''Properties returned by a Subscription destination.
 
@@ -14555,13 +14582,13 @@ class LogSubscriptionDestinationConfig:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The role to assume to write log events to the destination.
 
         :default: No role assumed
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14599,11 +14626,11 @@ class MetricFilter(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        log_group: ILogGroup,
-        filter_pattern: IFilterPattern,
+        log_group: "ILogGroup",
+        filter_pattern: "IFilterPattern",
         metric_name: builtins.str,
         metric_namespace: builtins.str,
         apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
@@ -14611,7 +14638,7 @@ class MetricFilter(
         dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         filter_name: typing.Optional[builtins.str] = None,
         metric_value: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -14655,14 +14682,14 @@ class MetricFilter(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Metric Filter.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -14695,7 +14722,7 @@ class MetricFilter(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -14723,7 +14750,7 @@ class MetricFilterOptions:
     def __init__(
         self,
         *,
-        filter_pattern: IFilterPattern,
+        filter_pattern: "IFilterPattern",
         metric_name: builtins.str,
         metric_namespace: builtins.str,
         apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
@@ -14731,7 +14758,7 @@ class MetricFilterOptions:
         dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         filter_name: typing.Optional[builtins.str] = None,
         metric_value: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
     ) -> None:
         '''Properties for a MetricFilter created from a LogGroup.
 
@@ -14802,11 +14829,11 @@ class MetricFilterOptions:
             self._values["unit"] = unit
 
     @builtins.property
-    def filter_pattern(self) -> IFilterPattern:
+    def filter_pattern(self) -> "IFilterPattern":
         '''Pattern to search for log events.'''
         result = self._values.get("filter_pattern")
         assert result is not None, "Required property 'filter_pattern' is missing"
-        return typing.cast(IFilterPattern, result)
+        return typing.cast("IFilterPattern", result)
 
     @builtins.property
     def metric_name(self) -> builtins.str:
@@ -14885,7 +14912,7 @@ class MetricFilterOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def unit(self) -> typing.Optional[_Unit_61bc6f70]:
+    def unit(self) -> typing.Optional["_Unit_61bc6f70"]:
         '''The unit to assign to the metric.
 
         :default: - No unit attached to metrics.
@@ -14893,7 +14920,7 @@ class MetricFilterOptions:
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-metricfilter-metrictransformation.html#cfn-logs-metricfilter-metrictransformation-unit
         '''
         result = self._values.get("unit")
-        return typing.cast(typing.Optional[_Unit_61bc6f70], result)
+        return typing.cast(typing.Optional["_Unit_61bc6f70"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14927,7 +14954,7 @@ class MetricFilterProps(MetricFilterOptions):
     def __init__(
         self,
         *,
-        filter_pattern: IFilterPattern,
+        filter_pattern: "IFilterPattern",
         metric_name: builtins.str,
         metric_namespace: builtins.str,
         apply_on_transformed_logs: typing.Optional[builtins.bool] = None,
@@ -14935,8 +14962,8 @@ class MetricFilterProps(MetricFilterOptions):
         dimensions: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         filter_name: typing.Optional[builtins.str] = None,
         metric_value: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
-        log_group: ILogGroup,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        log_group: "ILogGroup",
     ) -> None:
         '''Properties for a MetricFilter.
 
@@ -14997,11 +15024,11 @@ class MetricFilterProps(MetricFilterOptions):
             self._values["unit"] = unit
 
     @builtins.property
-    def filter_pattern(self) -> IFilterPattern:
+    def filter_pattern(self) -> "IFilterPattern":
         '''Pattern to search for log events.'''
         result = self._values.get("filter_pattern")
         assert result is not None, "Required property 'filter_pattern' is missing"
-        return typing.cast(IFilterPattern, result)
+        return typing.cast("IFilterPattern", result)
 
     @builtins.property
     def metric_name(self) -> builtins.str:
@@ -15080,7 +15107,7 @@ class MetricFilterProps(MetricFilterOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def unit(self) -> typing.Optional[_Unit_61bc6f70]:
+    def unit(self) -> typing.Optional["_Unit_61bc6f70"]:
         '''The unit to assign to the metric.
 
         :default: - No unit attached to metrics.
@@ -15088,14 +15115,14 @@ class MetricFilterProps(MetricFilterOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-metricfilter-metrictransformation.html#cfn-logs-metricfilter-metrictransformation-unit
         '''
         result = self._values.get("unit")
-        return typing.cast(typing.Optional[_Unit_61bc6f70], result)
+        return typing.cast(typing.Optional["_Unit_61bc6f70"], result)
 
     @builtins.property
-    def log_group(self) -> ILogGroup:
+    def log_group(self) -> "ILogGroup":
         '''The log group to create the filter on.'''
         result = self._values.get("log_group")
         assert result is not None, "Required property 'log_group' is missing"
-        return typing.cast(ILogGroup, result)
+        return typing.cast("ILogGroup", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15204,7 +15231,7 @@ class MoveKeysProperty:
     def __init__(
         self,
         *,
-        entries: typing.Sequence[typing.Union[MoveKeyEntryProperty, typing.Dict[builtins.str, typing.Any]]],
+        entries: typing.Sequence[typing.Union["MoveKeyEntryProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''This processor moves a key from one field to another.
 
@@ -15239,11 +15266,11 @@ class MoveKeysProperty:
         }
 
     @builtins.property
-    def entries(self) -> typing.List[MoveKeyEntryProperty]:
+    def entries(self) -> typing.List["MoveKeyEntryProperty"]:
         '''An array of objects, where each object contains information about one key to move.'''
         result = self._values.get("entries")
         assert result is not None, "Required property 'entries' is missing"
-        return typing.cast(typing.List[MoveKeyEntryProperty], result)
+        return typing.cast(typing.List["MoveKeyEntryProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15380,9 +15407,9 @@ class ParseKeyValueProperty:
         self,
         *,
         destination: typing.Optional[builtins.str] = None,
-        field_delimiter: typing.Optional[KeyValuePairDelimiter] = None,
+        field_delimiter: typing.Optional["KeyValuePairDelimiter"] = None,
         key_prefix: typing.Optional[builtins.str] = None,
-        key_value_delimiter: typing.Optional[KeyValueDelimiter] = None,
+        key_value_delimiter: typing.Optional["KeyValueDelimiter"] = None,
         non_match_value: typing.Optional[builtins.str] = None,
         overwrite_if_exists: typing.Optional[builtins.bool] = None,
         source: typing.Optional[builtins.str] = None,
@@ -15452,13 +15479,13 @@ class ParseKeyValueProperty:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def field_delimiter(self) -> typing.Optional[KeyValuePairDelimiter]:
+    def field_delimiter(self) -> typing.Optional["KeyValuePairDelimiter"]:
         '''The field delimiter string that is used between key-value pairs in the original log events.
 
         :default: KeyValuePairDelimiter.AMPERSAND
         '''
         result = self._values.get("field_delimiter")
-        return typing.cast(typing.Optional[KeyValuePairDelimiter], result)
+        return typing.cast(typing.Optional["KeyValuePairDelimiter"], result)
 
     @builtins.property
     def key_prefix(self) -> typing.Optional[builtins.str]:
@@ -15470,13 +15497,13 @@ class ParseKeyValueProperty:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def key_value_delimiter(self) -> typing.Optional[KeyValueDelimiter]:
+    def key_value_delimiter(self) -> typing.Optional["KeyValueDelimiter"]:
         '''The delimiter string to use between the key and value in each pair in the transformed log event.
 
         :default: KeyValueDelimiter.EQUAL
         '''
         result = self._values.get("key_value_delimiter")
-        return typing.cast(typing.Optional[KeyValueDelimiter], result)
+        return typing.cast(typing.Optional["KeyValueDelimiter"], result)
 
     @builtins.property
     def non_match_value(self) -> typing.Optional[builtins.str]:
@@ -15532,8 +15559,8 @@ class ParseToOCSFProperty:
     def __init__(
         self,
         *,
-        event_source: OCSFSourceType,
-        ocsf_version: OCSFVersion,
+        event_source: "OCSFSourceType",
+        ocsf_version: "OCSFVersion",
         source: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Processor to parse events from CloudTrail, Route53Resolver, VPCFlow, EKSAudit and AWSWAF into OCSF V1.1 format.
@@ -15571,18 +15598,18 @@ class ParseToOCSFProperty:
             self._values["source"] = source
 
     @builtins.property
-    def event_source(self) -> OCSFSourceType:
+    def event_source(self) -> "OCSFSourceType":
         '''Type of input log event source to convert to OCSF format.'''
         result = self._values.get("event_source")
         assert result is not None, "Required property 'event_source' is missing"
-        return typing.cast(OCSFSourceType, result)
+        return typing.cast("OCSFSourceType", result)
 
     @builtins.property
-    def ocsf_version(self) -> OCSFVersion:
+    def ocsf_version(self) -> "OCSFVersion":
         '''Version of OCSF schema to convert to.'''
         result = self._values.get("ocsf_version")
         assert result is not None, "Required property 'ocsf_version' is missing"
-        return typing.cast(OCSFVersion, result)
+        return typing.cast("OCSFVersion", result)
 
     @builtins.property
     def source(self) -> typing.Optional[builtins.str]:
@@ -15649,11 +15676,11 @@ class ParserProcessor(
         self,
         *,
         type: "ParserProcessorType",
-        csv_options: typing.Optional[typing.Union[CsvProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        grok_options: typing.Optional[typing.Union[GrokProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        json_options: typing.Optional[typing.Union[ParseJSONProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        key_value_options: typing.Optional[typing.Union[ParseKeyValueProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        parse_to_ocsf_options: typing.Optional[typing.Union[ParseToOCSFProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        csv_options: typing.Optional[typing.Union["CsvProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        grok_options: typing.Optional[typing.Union["GrokProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        json_options: typing.Optional[typing.Union["ParseJSONProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        key_value_options: typing.Optional[typing.Union["ParseKeyValueProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        parse_to_ocsf_options: typing.Optional[typing.Union["ParseToOCSFProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Creates a new parser processor.
 
@@ -15706,11 +15733,11 @@ class ParserProcessorProps(BaseProcessorProps):
         self,
         *,
         type: "ParserProcessorType",
-        csv_options: typing.Optional[typing.Union[CsvProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        grok_options: typing.Optional[typing.Union[GrokProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        json_options: typing.Optional[typing.Union[ParseJSONProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        key_value_options: typing.Optional[typing.Union[ParseKeyValueProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        parse_to_ocsf_options: typing.Optional[typing.Union[ParseToOCSFProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        csv_options: typing.Optional[typing.Union["CsvProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        grok_options: typing.Optional[typing.Union["GrokProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        json_options: typing.Optional[typing.Union["ParseJSONProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        key_value_options: typing.Optional[typing.Union["ParseKeyValueProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        parse_to_ocsf_options: typing.Optional[typing.Union["ParseToOCSFProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties for creating configurable parser processors.
 
@@ -15791,7 +15818,7 @@ class ParserProcessorProps(BaseProcessorProps):
         return typing.cast("ParserProcessorType", result)
 
     @builtins.property
-    def csv_options(self) -> typing.Optional[CsvProperty]:
+    def csv_options(self) -> typing.Optional["CsvProperty"]:
         '''Options for CSV parser.
 
         Required when type is CSV.
@@ -15799,10 +15826,10 @@ class ParserProcessorProps(BaseProcessorProps):
         :default: - No CSV parser is created if props not set
         '''
         result = self._values.get("csv_options")
-        return typing.cast(typing.Optional[CsvProperty], result)
+        return typing.cast(typing.Optional["CsvProperty"], result)
 
     @builtins.property
-    def grok_options(self) -> typing.Optional[GrokProperty]:
+    def grok_options(self) -> typing.Optional["GrokProperty"]:
         '''Options for Grok parser.
 
         Required when type is GROK.
@@ -15810,10 +15837,10 @@ class ParserProcessorProps(BaseProcessorProps):
         :default: - No Grok parser is created if props not set
         '''
         result = self._values.get("grok_options")
-        return typing.cast(typing.Optional[GrokProperty], result)
+        return typing.cast(typing.Optional["GrokProperty"], result)
 
     @builtins.property
-    def json_options(self) -> typing.Optional[ParseJSONProperty]:
+    def json_options(self) -> typing.Optional["ParseJSONProperty"]:
         '''Options for JSON parser.
 
         Required when type is JSON.
@@ -15821,10 +15848,10 @@ class ParserProcessorProps(BaseProcessorProps):
         :default: - No JSON parser is created if props not set
         '''
         result = self._values.get("json_options")
-        return typing.cast(typing.Optional[ParseJSONProperty], result)
+        return typing.cast(typing.Optional["ParseJSONProperty"], result)
 
     @builtins.property
-    def key_value_options(self) -> typing.Optional[ParseKeyValueProperty]:
+    def key_value_options(self) -> typing.Optional["ParseKeyValueProperty"]:
         '''Options for key-value parser.
 
         Required when type is KEY_VALUE.
@@ -15832,10 +15859,10 @@ class ParserProcessorProps(BaseProcessorProps):
         :default: - No key-value parser is created if props not set
         '''
         result = self._values.get("key_value_options")
-        return typing.cast(typing.Optional[ParseKeyValueProperty], result)
+        return typing.cast(typing.Optional["ParseKeyValueProperty"], result)
 
     @builtins.property
-    def parse_to_ocsf_options(self) -> typing.Optional[ParseToOCSFProperty]:
+    def parse_to_ocsf_options(self) -> typing.Optional["ParseToOCSFProperty"]:
         '''Options for ParseToOCSF parser.
 
         Required when type is set to OCSF
@@ -15843,7 +15870,7 @@ class ParserProcessorProps(BaseProcessorProps):
         :default: - no OCSF parser is created.
         '''
         result = self._values.get("parse_to_ocsf_options")
-        return typing.cast(typing.Optional[ParseToOCSFProperty], result)
+        return typing.cast(typing.Optional["ParseToOCSFProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15986,12 +16013,12 @@ class QueryDefinition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         query_definition_name: builtins.str,
         query_string: "QueryString",
-        log_groups: typing.Optional[typing.Sequence[ILogGroup]] = None,
+        log_groups: typing.Optional[typing.Sequence["ILogGroup"]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -16043,7 +16070,7 @@ class QueryDefinitionProps:
         *,
         query_definition_name: builtins.str,
         query_string: "QueryString",
-        log_groups: typing.Optional[typing.Sequence[ILogGroup]] = None,
+        log_groups: typing.Optional[typing.Sequence["ILogGroup"]] = None,
     ) -> None:
         '''Properties for a QueryDefinition.
 
@@ -16097,13 +16124,13 @@ class QueryDefinitionProps:
         return typing.cast("QueryString", result)
 
     @builtins.property
-    def log_groups(self) -> typing.Optional[typing.List[ILogGroup]]:
+    def log_groups(self) -> typing.Optional[typing.List["ILogGroup"]]:
         '''Specify certain log groups for the query definition.
 
         :default: - no specified log groups
         '''
         result = self._values.get("log_groups")
-        return typing.cast(typing.Optional[typing.List[ILogGroup]], result)
+        return typing.cast(typing.Optional[typing.List["ILogGroup"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16535,7 +16562,7 @@ class RenameKeysProperty:
     def __init__(
         self,
         *,
-        entries: typing.Sequence[typing.Union[RenameKeyEntryProperty, typing.Dict[builtins.str, typing.Any]]],
+        entries: typing.Sequence[typing.Union["RenameKeyEntryProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Use this processor to rename keys in a log event.
 
@@ -16569,11 +16596,11 @@ class RenameKeysProperty:
         }
 
     @builtins.property
-    def entries(self) -> typing.List[RenameKeyEntryProperty]:
+    def entries(self) -> typing.List["RenameKeyEntryProperty"]:
         '''An array of RenameKeyEntry objects, where each object contains information about one key to rename.'''
         result = self._values.get("entries")
         assert result is not None, "Required property 'entries' is missing"
-        return typing.cast(typing.List[RenameKeyEntryProperty], result)
+        return typing.cast(typing.List["RenameKeyEntryProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16624,10 +16651,10 @@ class ResourcePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        policy_statements: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
+        policy_statements: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
         resource_policy_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -16655,9 +16682,9 @@ class ResourcePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="document")
-    def document(self) -> _PolicyDocument_3ac34393:
+    def document(self) -> "_PolicyDocument_3ac34393":
         '''The IAM policy document for this resource policy.'''
-        return typing.cast(_PolicyDocument_3ac34393, jsii.get(self, "document"))
+        return typing.cast("_PolicyDocument_3ac34393", jsii.get(self, "document"))
 
 
 @jsii.data_type(
@@ -16672,7 +16699,7 @@ class ResourcePolicyProps:
     def __init__(
         self,
         *,
-        policy_statements: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
+        policy_statements: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
         resource_policy_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties to define Cloudwatch log group resource policy.
@@ -16709,13 +16736,13 @@ class ResourcePolicyProps:
     @builtins.property
     def policy_statements(
         self,
-    ) -> typing.Optional[typing.List[_PolicyStatement_0fe33853]]:
+    ) -> typing.Optional[typing.List["_PolicyStatement_0fe33853"]]:
         '''Initial statements to add to the resource policy.
 
         :default: - No statements
         '''
         result = self._values.get("policy_statements")
-        return typing.cast(typing.Optional[typing.List[_PolicyStatement_0fe33853]], result)
+        return typing.cast(typing.Optional[typing.List["_PolicyStatement_0fe33853"]], result)
 
     @builtins.property
     def resource_policy_name(self) -> typing.Optional[builtins.str]:
@@ -16842,7 +16869,7 @@ class SpaceDelimitedTextPattern(
     def __init__(
         self,
         columns: typing.Sequence[builtins.str],
-        restrictions: typing.Mapping[builtins.str, typing.Sequence[typing.Union[ColumnRestriction, typing.Dict[builtins.str, typing.Any]]]],
+        restrictions: typing.Mapping[builtins.str, typing.Sequence[typing.Union["ColumnRestriction", typing.Dict[builtins.str, typing.Any]]]],
     ) -> None:
         '''
         :param columns: -
@@ -16927,7 +16954,12 @@ class SpaceDelimitedTextPattern(
     name_mapping={"delimiter": "delimiter", "source": "source"},
 )
 class SplitStringEntryProperty:
-    def __init__(self, *, delimiter: DelimiterCharacter, source: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        delimiter: "DelimiterCharacter",
+        source: builtins.str,
+    ) -> None:
         '''This object defines one log field that will be split with the splitString processor.
 
         :param delimiter: The separator character to split the string on.
@@ -16956,11 +16988,11 @@ class SplitStringEntryProperty:
         }
 
     @builtins.property
-    def delimiter(self) -> DelimiterCharacter:
+    def delimiter(self) -> "DelimiterCharacter":
         '''The separator character to split the string on.'''
         result = self._values.get("delimiter")
         assert result is not None, "Required property 'delimiter' is missing"
-        return typing.cast(DelimiterCharacter, result)
+        return typing.cast("DelimiterCharacter", result)
 
     @builtins.property
     def source(self) -> builtins.str:
@@ -16990,7 +17022,7 @@ class SplitStringProperty:
     def __init__(
         self,
         *,
-        entries: typing.Sequence[typing.Union[SplitStringEntryProperty, typing.Dict[builtins.str, typing.Any]]],
+        entries: typing.Sequence[typing.Union["SplitStringEntryProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Use this processor to split a field into an array of strings using a delimiting character.
 
@@ -17021,11 +17053,11 @@ class SplitStringProperty:
         }
 
     @builtins.property
-    def entries(self) -> typing.List[SplitStringEntryProperty]:
+    def entries(self) -> typing.List["SplitStringEntryProperty"]:
         '''An array of SplitStringEntry objects, where each object contains information about one field to split.'''
         result = self._values.get("entries")
         assert result is not None, "Required property 'entries' is missing"
-        return typing.cast(typing.List[SplitStringEntryProperty], result)
+        return typing.cast(typing.List["SplitStringEntryProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17139,7 +17171,7 @@ class StringMutatorProcessor(
         *,
         type: "StringMutatorType",
         lower_case_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
-        split_options: typing.Optional[typing.Union[SplitStringProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        split_options: typing.Optional[typing.Union["SplitStringProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         substitute_options: typing.Optional[typing.Union["SubstituteStringProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         trim_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
         upper_case_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -17196,7 +17228,7 @@ class StringMutatorProps(BaseProcessorProps):
         *,
         type: "StringMutatorType",
         lower_case_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
-        split_options: typing.Optional[typing.Union[SplitStringProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        split_options: typing.Optional[typing.Union["SplitStringProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         substitute_options: typing.Optional[typing.Union["SubstituteStringProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         trim_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
         upper_case_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -17285,7 +17317,7 @@ class StringMutatorProps(BaseProcessorProps):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def split_options(self) -> typing.Optional[SplitStringProperty]:
+    def split_options(self) -> typing.Optional["SplitStringProperty"]:
         '''Options for string splitting.
 
         Required when type is SPLIT.
@@ -17293,7 +17325,7 @@ class StringMutatorProps(BaseProcessorProps):
         :default: - No string splitting processor is created if props not set
         '''
         result = self._values.get("split_options")
-        return typing.cast(typing.Optional[SplitStringProperty], result)
+        return typing.cast(typing.Optional["SplitStringProperty"], result)
 
     @builtins.property
     def substitute_options(self) -> typing.Optional["SubstituteStringProperty"]:
@@ -17386,13 +17418,13 @@ class SubscriptionFilter(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        log_group: ILogGroup,
-        destination: ILogSubscriptionDestination,
-        filter_pattern: IFilterPattern,
-        distribution: typing.Optional[Distribution] = None,
+        log_group: "ILogGroup",
+        destination: "ILogSubscriptionDestination",
+        filter_pattern: "IFilterPattern",
+        distribution: typing.Optional["Distribution"] = None,
         filter_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -17439,9 +17471,9 @@ class SubscriptionFilterOptions:
     def __init__(
         self,
         *,
-        destination: ILogSubscriptionDestination,
-        filter_pattern: IFilterPattern,
-        distribution: typing.Optional[Distribution] = None,
+        destination: "ILogSubscriptionDestination",
+        filter_pattern: "IFilterPattern",
+        distribution: typing.Optional["Distribution"] = None,
         filter_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for a new SubscriptionFilter created from a LogGroup.
@@ -17487,24 +17519,24 @@ class SubscriptionFilterOptions:
             self._values["filter_name"] = filter_name
 
     @builtins.property
-    def destination(self) -> ILogSubscriptionDestination:
+    def destination(self) -> "ILogSubscriptionDestination":
         '''The destination to send the filtered events to.
 
         For example, a Kinesis stream or a Lambda function.
         '''
         result = self._values.get("destination")
         assert result is not None, "Required property 'destination' is missing"
-        return typing.cast(ILogSubscriptionDestination, result)
+        return typing.cast("ILogSubscriptionDestination", result)
 
     @builtins.property
-    def filter_pattern(self) -> IFilterPattern:
+    def filter_pattern(self) -> "IFilterPattern":
         '''Log events matching this pattern will be sent to the destination.'''
         result = self._values.get("filter_pattern")
         assert result is not None, "Required property 'filter_pattern' is missing"
-        return typing.cast(IFilterPattern, result)
+        return typing.cast("IFilterPattern", result)
 
     @builtins.property
-    def distribution(self) -> typing.Optional[Distribution]:
+    def distribution(self) -> typing.Optional["Distribution"]:
         '''The method used to distribute log data to the destination.
 
         This property can only be used with KinesisDestination.
@@ -17512,7 +17544,7 @@ class SubscriptionFilterOptions:
         :default: Distribution.BY_LOG_STREAM
         '''
         result = self._values.get("distribution")
-        return typing.cast(typing.Optional[Distribution], result)
+        return typing.cast(typing.Optional["Distribution"], result)
 
     @builtins.property
     def filter_name(self) -> typing.Optional[builtins.str]:
@@ -17550,11 +17582,11 @@ class SubscriptionFilterProps(SubscriptionFilterOptions):
     def __init__(
         self,
         *,
-        destination: ILogSubscriptionDestination,
-        filter_pattern: IFilterPattern,
-        distribution: typing.Optional[Distribution] = None,
+        destination: "ILogSubscriptionDestination",
+        filter_pattern: "IFilterPattern",
+        distribution: typing.Optional["Distribution"] = None,
         filter_name: typing.Optional[builtins.str] = None,
-        log_group: ILogGroup,
+        log_group: "ILogGroup",
     ) -> None:
         '''Properties for a SubscriptionFilter.
 
@@ -17599,24 +17631,24 @@ class SubscriptionFilterProps(SubscriptionFilterOptions):
             self._values["filter_name"] = filter_name
 
     @builtins.property
-    def destination(self) -> ILogSubscriptionDestination:
+    def destination(self) -> "ILogSubscriptionDestination":
         '''The destination to send the filtered events to.
 
         For example, a Kinesis stream or a Lambda function.
         '''
         result = self._values.get("destination")
         assert result is not None, "Required property 'destination' is missing"
-        return typing.cast(ILogSubscriptionDestination, result)
+        return typing.cast("ILogSubscriptionDestination", result)
 
     @builtins.property
-    def filter_pattern(self) -> IFilterPattern:
+    def filter_pattern(self) -> "IFilterPattern":
         '''Log events matching this pattern will be sent to the destination.'''
         result = self._values.get("filter_pattern")
         assert result is not None, "Required property 'filter_pattern' is missing"
-        return typing.cast(IFilterPattern, result)
+        return typing.cast("IFilterPattern", result)
 
     @builtins.property
-    def distribution(self) -> typing.Optional[Distribution]:
+    def distribution(self) -> typing.Optional["Distribution"]:
         '''The method used to distribute log data to the destination.
 
         This property can only be used with KinesisDestination.
@@ -17624,7 +17656,7 @@ class SubscriptionFilterProps(SubscriptionFilterOptions):
         :default: Distribution.BY_LOG_STREAM
         '''
         result = self._values.get("distribution")
-        return typing.cast(typing.Optional[Distribution], result)
+        return typing.cast(typing.Optional["Distribution"], result)
 
     @builtins.property
     def filter_name(self) -> typing.Optional[builtins.str]:
@@ -17636,11 +17668,11 @@ class SubscriptionFilterProps(SubscriptionFilterOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def log_group(self) -> ILogGroup:
+    def log_group(self) -> "ILogGroup":
         '''The log group to create the subscription on.'''
         result = self._values.get("log_group")
         assert result is not None, "Required property 'log_group' is missing"
-        return typing.cast(ILogGroup, result)
+        return typing.cast("ILogGroup", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17740,7 +17772,7 @@ class SubstituteStringProperty:
     def __init__(
         self,
         *,
-        entries: typing.Sequence[typing.Union[SubstituteStringEntryProperty, typing.Dict[builtins.str, typing.Any]]],
+        entries: typing.Sequence[typing.Union["SubstituteStringEntryProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''This processor matches a key's value against a regular expression and replaces all matches with a replacement string.
 
@@ -17772,11 +17804,11 @@ class SubstituteStringProperty:
         }
 
     @builtins.property
-    def entries(self) -> typing.List[SubstituteStringEntryProperty]:
+    def entries(self) -> typing.List["SubstituteStringEntryProperty"]:
         '''An array of objects, where each object contains information about one key to match and replace.'''
         result = self._values.get("entries")
         assert result is not None, "Required property 'entries' is missing"
-        return typing.cast(typing.List[SubstituteStringEntryProperty], result)
+        return typing.cast(typing.List["SubstituteStringEntryProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17830,11 +17862,11 @@ class Transformer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        log_group: ILogGroup,
-        transformer_config: typing.Sequence[IProcessor],
+        log_group: "ILogGroup",
+        transformer_config: typing.Sequence["IProcessor"],
         transformer_name: builtins.str,
     ) -> None:
         '''The Transformer L2 construct that represents AWS::Logs::Transformer CFN resource.
@@ -17879,7 +17911,7 @@ class TransformerOptions:
     def __init__(
         self,
         *,
-        transformer_config: typing.Sequence[IProcessor],
+        transformer_config: typing.Sequence["IProcessor"],
         transformer_name: builtins.str,
     ) -> None:
         '''Properties for Transformer created from LogGroup.
@@ -17912,11 +17944,11 @@ class TransformerOptions:
         }
 
     @builtins.property
-    def transformer_config(self) -> typing.List[IProcessor]:
+    def transformer_config(self) -> typing.List["IProcessor"]:
         '''List of processors in a transformer.'''
         result = self._values.get("transformer_config")
         assert result is not None, "Required property 'transformer_config' is missing"
-        return typing.cast(typing.List[IProcessor], result)
+        return typing.cast(typing.List["IProcessor"], result)
 
     @builtins.property
     def transformer_name(self) -> builtins.str:
@@ -17950,8 +17982,8 @@ class TransformerProps:
     def __init__(
         self,
         *,
-        log_group: ILogGroup,
-        transformer_config: typing.Sequence[IProcessor],
+        log_group: "ILogGroup",
+        transformer_config: typing.Sequence["IProcessor"],
         transformer_name: builtins.str,
     ) -> None:
         '''The Resource properties for AWS::Logs::Transformer resource.
@@ -18005,18 +18037,18 @@ class TransformerProps:
         }
 
     @builtins.property
-    def log_group(self) -> ILogGroup:
+    def log_group(self) -> "ILogGroup":
         '''Existing log group that you want to associate with this transformer.'''
         result = self._values.get("log_group")
         assert result is not None, "Required property 'log_group' is missing"
-        return typing.cast(ILogGroup, result)
+        return typing.cast("ILogGroup", result)
 
     @builtins.property
-    def transformer_config(self) -> typing.List[IProcessor]:
+    def transformer_config(self) -> typing.List["IProcessor"]:
         '''List of processors in a transformer.'''
         result = self._values.get("transformer_config")
         assert result is not None, "Required property 'transformer_config' is missing"
-        return typing.cast(typing.List[IProcessor], result)
+        return typing.cast(typing.List["IProcessor"], result)
 
     @builtins.property
     def transformer_name(self) -> builtins.str:
@@ -18106,7 +18138,7 @@ class TypeConverterProperty:
     def __init__(
         self,
         *,
-        entries: typing.Sequence[typing.Union[TypeConverterEntryProperty, typing.Dict[builtins.str, typing.Any]]],
+        entries: typing.Sequence[typing.Union["TypeConverterEntryProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Use this processor to convert a value type associated with the specified key to the specified type.
 
@@ -18138,11 +18170,11 @@ class TypeConverterProperty:
         }
 
     @builtins.property
-    def entries(self) -> typing.List[TypeConverterEntryProperty]:
+    def entries(self) -> typing.List["TypeConverterEntryProperty"]:
         '''An array of TypeConverterEntry objects, where each object contains information about one field to change the type of.'''
         result = self._values.get("entries")
         assert result is not None, "Required property 'entries' is missing"
-        return typing.cast(typing.List[TypeConverterEntryProperty], result)
+        return typing.cast(typing.List["TypeConverterEntryProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18353,10 +18385,10 @@ class CrossAccountDestination(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        role: _IRoleRef_8400221f,
+        role: "_IRoleRef_8400221f",
         target_arn: builtins.str,
         destination_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -18378,7 +18410,7 @@ class CrossAccountDestination(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="addToPolicy")
-    def add_to_policy(self, statement: _PolicyStatement_0fe33853) -> None:
+    def add_to_policy(self, statement: "_PolicyStatement_0fe33853") -> None:
         '''
         :param statement: -
         '''
@@ -18390,9 +18422,9 @@ class CrossAccountDestination(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
-        _source_log_group: ILogGroup,
-    ) -> LogSubscriptionDestinationConfig:
+        _scope: "_constructs_77d1e7e8.Construct",
+        _source_log_group: "ILogGroup",
+    ) -> "LogSubscriptionDestinationConfig":
         '''Return the properties required to send subscription events to this destination.
 
         If necessary, the destination can use the properties of the SubscriptionFilter
@@ -18409,7 +18441,7 @@ class CrossAccountDestination(
             type_hints = typing.get_type_hints(_typecheckingstub__901846e19d9ba5beee9ef4784401b7413f0b32b2034ea5700b5fa8a30a1c0394)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
             check_type(argname="argument _source_log_group", value=_source_log_group, expected_type=type_hints["_source_log_group"])
-        return typing.cast(LogSubscriptionDestinationConfig, jsii.invoke(self, "bind", [_scope, _source_log_group]))
+        return typing.cast("LogSubscriptionDestinationConfig", jsii.invoke(self, "bind", [_scope, _source_log_group]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -18437,9 +18469,9 @@ class CrossAccountDestination(
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
-    def policy_document(self) -> _PolicyDocument_3ac34393:
+    def policy_document(self) -> "_PolicyDocument_3ac34393":
         '''Policy object of this CrossAccountDestination object.'''
-        return typing.cast(_PolicyDocument_3ac34393, jsii.get(self, "policyDocument"))
+        return typing.cast("_PolicyDocument_3ac34393", jsii.get(self, "policyDocument"))
 
 
 class CustomDataIdentifier(
@@ -18565,9 +18597,9 @@ class DataConverterProcessor(
     def __init__(
         self,
         *,
-        type: DataConverterType,
-        date_time_converter_options: typing.Optional[typing.Union[DateTimeConverterProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        type_converter_options: typing.Optional[typing.Union[TypeConverterProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        type: "DataConverterType",
+        date_time_converter_options: typing.Optional[typing.Union["DateTimeConverterProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        type_converter_options: typing.Optional[typing.Union["TypeConverterProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Creates a new data converter processor.
 
@@ -18585,12 +18617,12 @@ class DataConverterProcessor(
 
     @builtins.property
     @jsii.member(jsii_name="type")
-    def type(self) -> DataConverterType:
+    def type(self) -> "DataConverterType":
         '''The type of data conversion operation.'''
-        return typing.cast(DataConverterType, jsii.get(self, "type"))
+        return typing.cast("DataConverterType", jsii.get(self, "type"))
 
     @type.setter
-    def type(self, value: DataConverterType) -> None:
+    def type(self, value: "DataConverterType") -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bea2654ebc88ef45acb691425a17897e52198e8f268040b952558fccd601704e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -19105,7 +19137,7 @@ def _typecheckingstub__44e37c6c2772abdacfbcd01df5c5418fca8937b435df3890a5a5cb343
     *,
     destination_name: builtins.str,
     role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-    target_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
+    target_arn: typing.Union[builtins.str, _IStreamRef_b484e253, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33],
     destination_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -19186,7 +19218,7 @@ def _typecheckingstub__faf2f9f88fd096e79a2445aab3efdc3a85509df7ba06ffc305c9faf39
     *,
     destination_name: builtins.str,
     role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-    target_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
+    target_arn: typing.Union[builtins.str, _IStreamRef_b484e253, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33],
     destination_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -19745,7 +19777,7 @@ def _typecheckingstub__6c7a154450656ee0f7e524d596c7e140faad893a71a7c8b9b8a85fe73
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    destination_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
+    destination_arn: typing.Union[builtins.str, _IStreamRef_b484e253, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33],
     filter_pattern: builtins.str,
     log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
     apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -19832,7 +19864,7 @@ def _typecheckingstub__1cdca0b99d7b39060b314b323073c0a48e25972ff085f24a455a00339
 
 def _typecheckingstub__1250ecc947a5eb57e428cd8fedeb9ae0f6da4eb03c22d674fa019a076ee8b507(
     *,
-    destination_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
+    destination_arn: typing.Union[builtins.str, _IStreamRef_b484e253, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33],
     filter_pattern: builtins.str,
     log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
     apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -20036,6 +20068,7 @@ def _typecheckingstub__6febe08cc73af735295ba9258de19bd6c4f1b389f2b1e4fd5e0d66977
     *,
     event_source: builtins.str,
     ocsf_version: builtins.str,
+    mapping_version: typing.Optional[builtins.str] = None,
     source: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""

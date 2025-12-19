@@ -96,7 +96,7 @@ class IApprovalTeamRef(
 
     @builtins.property
     @jsii.member(jsii_name="approvalTeamRef")
-    def approval_team_ref(self) -> ApprovalTeamReference:
+    def approval_team_ref(self) -> "ApprovalTeamReference":
         '''(experimental) A reference to a ApprovalTeam resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IApprovalTeamRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="approvalTeamRef")
-    def approval_team_ref(self) -> ApprovalTeamReference:
+    def approval_team_ref(self) -> "ApprovalTeamReference":
         '''(experimental) A reference to a ApprovalTeam resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApprovalTeamReference, jsii.get(self, "approvalTeamRef"))
+        return typing.cast("ApprovalTeamReference", jsii.get(self, "approvalTeamRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApprovalTeamRef).__jsii_proxy_class__ = lambda : _IApprovalTeamRefProxy

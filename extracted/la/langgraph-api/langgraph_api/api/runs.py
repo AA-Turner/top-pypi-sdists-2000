@@ -179,6 +179,7 @@ async def create_run(request: ApiRequest):
             request.headers,
             request_start_time=request.scope.get("request_start_time_ms"),
         )
+    run = await decrypt_response(run, "run", RUN_ENCRYPTION_FIELDS)
     return ApiResponse(
         run,
         headers={"Content-Location": f"/threads/{thread_id}/runs/{run['run_id']}"},
@@ -198,6 +199,7 @@ async def create_stateless_run(request: ApiRequest):
             request.headers,
             request_start_time=request.scope.get("request_start_time_ms"),
         )
+    run = await decrypt_response(run, "run", RUN_ENCRYPTION_FIELDS)
     return ApiResponse(
         run,
         headers={"Content-Location": f"/runs/{run['run_id']}"},
@@ -222,6 +224,7 @@ async def create_stateless_run_batch(request: ApiRequest):
             for payload in batch_payload
         ]
         runs = await asyncio.gather(*coros)
+    runs = await decrypt_responses(list(runs), "run", RUN_ENCRYPTION_FIELDS)
     return ApiResponse(runs)
 
 

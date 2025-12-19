@@ -110,7 +110,7 @@ class CfnDatastore(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         datastore_name: typing.Optional[builtins.str] = None,
@@ -137,7 +137,7 @@ class CfnDatastore(
 
     @jsii.member(jsii_name="arnForDatastore")
     @builtins.classmethod
-    def arn_for_datastore(cls, resource: _IDatastoreRef_15dedc0d) -> builtins.str:
+    def arn_for_datastore(cls, resource: "_IDatastoreRef_15dedc0d") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -150,10 +150,10 @@ class CfnDatastore(
     @builtins.classmethod
     def from_datastore_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDatastoreRef_15dedc0d:
+    ) -> "_IDatastoreRef_15dedc0d":
         '''Creates a new IDatastoreRef from an ARN.
 
         :param scope: -
@@ -165,16 +165,16 @@ class CfnDatastore(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDatastoreRef_15dedc0d, jsii.sinvoke(cls, "fromDatastoreArn", [scope, id, arn]))
+        return typing.cast("_IDatastoreRef_15dedc0d", jsii.sinvoke(cls, "fromDatastoreArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromDatastoreId")
     @builtins.classmethod
     def from_datastore_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         datastore_id: builtins.str,
-    ) -> _IDatastoreRef_15dedc0d:
+    ) -> "_IDatastoreRef_15dedc0d":
         '''Creates a new IDatastoreRef from a datastoreId.
 
         :param scope: -
@@ -186,7 +186,7 @@ class CfnDatastore(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument datastore_id", value=datastore_id, expected_type=type_hints["datastore_id"])
-        return typing.cast(_IDatastoreRef_15dedc0d, jsii.sinvoke(cls, "fromDatastoreId", [scope, id, datastore_id]))
+        return typing.cast("_IDatastoreRef_15dedc0d", jsii.sinvoke(cls, "fromDatastoreId", [scope, id, datastore_id]))
 
     @jsii.member(jsii_name="isCfnDatastore")
     @builtins.classmethod
@@ -201,7 +201,7 @@ class CfnDatastore(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDatastore", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -277,9 +277,9 @@ class CfnDatastore(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -288,9 +288,9 @@ class CfnDatastore(
 
     @builtins.property
     @jsii.member(jsii_name="datastoreRef")
-    def datastore_ref(self) -> _DatastoreReference_666caae8:
+    def datastore_ref(self) -> "_DatastoreReference_666caae8":
         '''A reference to a Datastore resource.'''
-        return typing.cast(_DatastoreReference_666caae8, jsii.get(self, "datastoreRef"))
+        return typing.cast("_DatastoreReference_666caae8", jsii.get(self, "datastoreRef"))
 
     @builtins.property
     @jsii.member(jsii_name="datastoreName")

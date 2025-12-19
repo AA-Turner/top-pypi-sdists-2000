@@ -261,7 +261,7 @@ class IAgreementRef(
 
     @builtins.property
     @jsii.member(jsii_name="agreementRef")
-    def agreement_ref(self) -> AgreementReference:
+    def agreement_ref(self) -> "AgreementReference":
         '''(experimental) A reference to a Agreement resource.
 
         :stability: experimental
@@ -282,12 +282,12 @@ class _IAgreementRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="agreementRef")
-    def agreement_ref(self) -> AgreementReference:
+    def agreement_ref(self) -> "AgreementReference":
         '''(experimental) A reference to a Agreement resource.
 
         :stability: experimental
         '''
-        return typing.cast(AgreementReference, jsii.get(self, "agreementRef"))
+        return typing.cast("AgreementReference", jsii.get(self, "agreementRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAgreementRef).__jsii_proxy_class__ = lambda : _IAgreementRefProxy
@@ -306,7 +306,7 @@ class ICertificateRef(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> CertificateReference:
+    def certificate_ref(self) -> "CertificateReference":
         '''(experimental) A reference to a Certificate resource.
 
         :stability: experimental
@@ -327,12 +327,12 @@ class _ICertificateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> CertificateReference:
+    def certificate_ref(self) -> "CertificateReference":
         '''(experimental) A reference to a Certificate resource.
 
         :stability: experimental
         '''
-        return typing.cast(CertificateReference, jsii.get(self, "certificateRef"))
+        return typing.cast("CertificateReference", jsii.get(self, "certificateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICertificateRef).__jsii_proxy_class__ = lambda : _ICertificateRefProxy
@@ -351,7 +351,7 @@ class IConnectorRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> ConnectorReference:
+    def connector_ref(self) -> "ConnectorReference":
         '''(experimental) A reference to a Connector resource.
 
         :stability: experimental
@@ -372,12 +372,12 @@ class _IConnectorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> ConnectorReference:
+    def connector_ref(self) -> "ConnectorReference":
         '''(experimental) A reference to a Connector resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectorReference, jsii.get(self, "connectorRef"))
+        return typing.cast("ConnectorReference", jsii.get(self, "connectorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectorRef).__jsii_proxy_class__ = lambda : _IConnectorRefProxy

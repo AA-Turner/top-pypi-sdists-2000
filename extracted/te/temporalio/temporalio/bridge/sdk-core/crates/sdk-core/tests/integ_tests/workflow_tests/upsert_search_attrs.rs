@@ -2,19 +2,21 @@ use crate::common::{CoreWfStarter, SEARCH_ATTR_INT, SEARCH_ATTR_TXT, build_fake_
 use assert_matches::assert_matches;
 use std::{collections::HashMap, time::Duration};
 use temporalio_client::{
-    GetWorkflowResultOpts, WfClientExt, WorkflowClientTrait, WorkflowExecutionResult,
+    GetWorkflowResultOptions, WfClientExt, WorkflowClientTrait, WorkflowExecutionResult,
     WorkflowOptions,
 };
-use temporalio_common::protos::{
-    DEFAULT_WORKFLOW_TYPE, TestHistoryBuilder,
-    coresdk::{AsJsonPayloadExt, FromJsonPayloadExt},
-    temporal::api::{
-        command::v1::{Command, command},
-        common::v1::Payload,
-        enums::v1::EventType,
+use temporalio_common::{
+    protos::{
+        DEFAULT_WORKFLOW_TYPE, TestHistoryBuilder,
+        coresdk::{AsJsonPayloadExt, FromJsonPayloadExt},
+        temporal::api::{
+            command::v1::{Command, command},
+            common::v1::Payload,
+            enums::v1::EventType,
+        },
     },
+    worker::WorkerTaskTypes,
 };
-use temporalio_common::worker::WorkerTaskTypes;
 use temporalio_sdk::{WfContext, WfExitValue, WorkflowResult};
 use temporalio_sdk_core::test_help::MockPollCfg;
 use uuid::Uuid;
@@ -45,9 +47,7 @@ async fn sends_upsert() {
     let wf_name = "sends_upsert_search_attrs";
     let wf_id = Uuid::new_v4();
     let mut starter = CoreWfStarter::new(wf_name);
-    starter
-        .worker_config
-        .task_types(WorkerTaskTypes::workflow_only());
+    starter.worker_config.task_types = WorkerTaskTypes::workflow_only();
     let mut worker = starter.worker().await;
 
     worker.register_wf(wf_name, search_attr_updater);
@@ -94,7 +94,7 @@ async fn sends_upsert() {
     assert_eq!(3, usize::from_json_payload(int_attr_payload).unwrap());
     let handle = client.get_untyped_workflow_handle(wf_id.to_string(), "");
     let res = handle
-        .get_workflow_result(GetWorkflowResultOpts::default())
+        .get_workflow_result(GetWorkflowResultOptions::default())
         .await
         .unwrap();
     assert_matches!(res, WorkflowExecutionResult::Succeeded(_));

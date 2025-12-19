@@ -485,7 +485,7 @@ class IAccessPolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="accessPolicyRef")
-    def access_policy_ref(self) -> AccessPolicyReference:
+    def access_policy_ref(self) -> "AccessPolicyReference":
         '''(experimental) A reference to a AccessPolicy resource.
 
         :stability: experimental
@@ -506,12 +506,12 @@ class _IAccessPolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accessPolicyRef")
-    def access_policy_ref(self) -> AccessPolicyReference:
+    def access_policy_ref(self) -> "AccessPolicyReference":
         '''(experimental) A reference to a AccessPolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccessPolicyReference, jsii.get(self, "accessPolicyRef"))
+        return typing.cast("AccessPolicyReference", jsii.get(self, "accessPolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessPolicyRef).__jsii_proxy_class__ = lambda : _IAccessPolicyRefProxy
@@ -530,7 +530,7 @@ class IAssetModelRef(
 
     @builtins.property
     @jsii.member(jsii_name="assetModelRef")
-    def asset_model_ref(self) -> AssetModelReference:
+    def asset_model_ref(self) -> "AssetModelReference":
         '''(experimental) A reference to a AssetModel resource.
 
         :stability: experimental
@@ -551,12 +551,12 @@ class _IAssetModelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="assetModelRef")
-    def asset_model_ref(self) -> AssetModelReference:
+    def asset_model_ref(self) -> "AssetModelReference":
         '''(experimental) A reference to a AssetModel resource.
 
         :stability: experimental
         '''
-        return typing.cast(AssetModelReference, jsii.get(self, "assetModelRef"))
+        return typing.cast("AssetModelReference", jsii.get(self, "assetModelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAssetModelRef).__jsii_proxy_class__ = lambda : _IAssetModelRefProxy
@@ -575,7 +575,7 @@ class IAssetRef(
 
     @builtins.property
     @jsii.member(jsii_name="assetRef")
-    def asset_ref(self) -> AssetReference:
+    def asset_ref(self) -> "AssetReference":
         '''(experimental) A reference to a Asset resource.
 
         :stability: experimental
@@ -596,12 +596,12 @@ class _IAssetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="assetRef")
-    def asset_ref(self) -> AssetReference:
+    def asset_ref(self) -> "AssetReference":
         '''(experimental) A reference to a Asset resource.
 
         :stability: experimental
         '''
-        return typing.cast(AssetReference, jsii.get(self, "assetRef"))
+        return typing.cast("AssetReference", jsii.get(self, "assetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAssetRef).__jsii_proxy_class__ = lambda : _IAssetRefProxy
@@ -622,7 +622,7 @@ class IComputationModelRef(
 
     @builtins.property
     @jsii.member(jsii_name="computationModelRef")
-    def computation_model_ref(self) -> ComputationModelReference:
+    def computation_model_ref(self) -> "ComputationModelReference":
         '''(experimental) A reference to a ComputationModel resource.
 
         :stability: experimental
@@ -643,12 +643,12 @@ class _IComputationModelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="computationModelRef")
-    def computation_model_ref(self) -> ComputationModelReference:
+    def computation_model_ref(self) -> "ComputationModelReference":
         '''(experimental) A reference to a ComputationModel resource.
 
         :stability: experimental
         '''
-        return typing.cast(ComputationModelReference, jsii.get(self, "computationModelRef"))
+        return typing.cast("ComputationModelReference", jsii.get(self, "computationModelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IComputationModelRef).__jsii_proxy_class__ = lambda : _IComputationModelRefProxy
@@ -667,7 +667,7 @@ class IDashboardRef(
 
     @builtins.property
     @jsii.member(jsii_name="dashboardRef")
-    def dashboard_ref(self) -> DashboardReference:
+    def dashboard_ref(self) -> "DashboardReference":
         '''(experimental) A reference to a Dashboard resource.
 
         :stability: experimental
@@ -688,12 +688,12 @@ class _IDashboardRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dashboardRef")
-    def dashboard_ref(self) -> DashboardReference:
+    def dashboard_ref(self) -> "DashboardReference":
         '''(experimental) A reference to a Dashboard resource.
 
         :stability: experimental
         '''
-        return typing.cast(DashboardReference, jsii.get(self, "dashboardRef"))
+        return typing.cast("DashboardReference", jsii.get(self, "dashboardRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDashboardRef).__jsii_proxy_class__ = lambda : _IDashboardRefProxy
@@ -712,7 +712,7 @@ class IDatasetRef(
 
     @builtins.property
     @jsii.member(jsii_name="datasetRef")
-    def dataset_ref(self) -> DatasetReference:
+    def dataset_ref(self) -> "DatasetReference":
         '''(experimental) A reference to a Dataset resource.
 
         :stability: experimental
@@ -733,12 +733,12 @@ class _IDatasetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="datasetRef")
-    def dataset_ref(self) -> DatasetReference:
+    def dataset_ref(self) -> "DatasetReference":
         '''(experimental) A reference to a Dataset resource.
 
         :stability: experimental
         '''
-        return typing.cast(DatasetReference, jsii.get(self, "datasetRef"))
+        return typing.cast("DatasetReference", jsii.get(self, "datasetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDatasetRef).__jsii_proxy_class__ = lambda : _IDatasetRefProxy
@@ -757,7 +757,7 @@ class IGatewayRef(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayRef")
-    def gateway_ref(self) -> GatewayReference:
+    def gateway_ref(self) -> "GatewayReference":
         '''(experimental) A reference to a Gateway resource.
 
         :stability: experimental
@@ -778,12 +778,12 @@ class _IGatewayRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayRef")
-    def gateway_ref(self) -> GatewayReference:
+    def gateway_ref(self) -> "GatewayReference":
         '''(experimental) A reference to a Gateway resource.
 
         :stability: experimental
         '''
-        return typing.cast(GatewayReference, jsii.get(self, "gatewayRef"))
+        return typing.cast("GatewayReference", jsii.get(self, "gatewayRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGatewayRef).__jsii_proxy_class__ = lambda : _IGatewayRefProxy

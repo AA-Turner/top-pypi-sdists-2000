@@ -147,7 +147,7 @@ class IDataRepositoryAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataRepositoryAssociationRef")
-    def data_repository_association_ref(self) -> DataRepositoryAssociationReference:
+    def data_repository_association_ref(self) -> "DataRepositoryAssociationReference":
         '''(experimental) A reference to a DataRepositoryAssociation resource.
 
         :stability: experimental
@@ -168,12 +168,12 @@ class _IDataRepositoryAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataRepositoryAssociationRef")
-    def data_repository_association_ref(self) -> DataRepositoryAssociationReference:
+    def data_repository_association_ref(self) -> "DataRepositoryAssociationReference":
         '''(experimental) A reference to a DataRepositoryAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataRepositoryAssociationReference, jsii.get(self, "dataRepositoryAssociationRef"))
+        return typing.cast("DataRepositoryAssociationReference", jsii.get(self, "dataRepositoryAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataRepositoryAssociationRef).__jsii_proxy_class__ = lambda : _IDataRepositoryAssociationRefProxy
@@ -192,7 +192,7 @@ class IFileSystemRef(
 
     @builtins.property
     @jsii.member(jsii_name="fileSystemRef")
-    def file_system_ref(self) -> FileSystemReference:
+    def file_system_ref(self) -> "FileSystemReference":
         '''(experimental) A reference to a FileSystem resource.
 
         :stability: experimental
@@ -213,12 +213,12 @@ class _IFileSystemRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="fileSystemRef")
-    def file_system_ref(self) -> FileSystemReference:
+    def file_system_ref(self) -> "FileSystemReference":
         '''(experimental) A reference to a FileSystem resource.
 
         :stability: experimental
         '''
-        return typing.cast(FileSystemReference, jsii.get(self, "fileSystemRef"))
+        return typing.cast("FileSystemReference", jsii.get(self, "fileSystemRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFileSystemRef).__jsii_proxy_class__ = lambda : _IFileSystemRefProxy

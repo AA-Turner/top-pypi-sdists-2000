@@ -114,6 +114,7 @@ class CfnInvestigationGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_aiops as aiops
@@ -147,19 +148,19 @@ class CfnInvestigationGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        chatbot_notification_channels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInvestigationGroup.ChatbotNotificationChannelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        cross_account_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInvestigationGroup.CrossAccountConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInvestigationGroup.EncryptionConfigMapProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        chatbot_notification_channels: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInvestigationGroup.ChatbotNotificationChannelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        cross_account_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInvestigationGroup.CrossAccountConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        encryption_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInvestigationGroup.EncryptionConfigMapProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         investigation_group_policy: typing.Optional[builtins.str] = None,
-        is_cloud_trail_event_history_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        is_cloud_trail_event_history_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         retention_in_days: typing.Optional[jsii.Number] = None,
         role_arn: typing.Optional[builtins.str] = None,
         tag_key_boundaries: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AIOps::InvestigationGroup``.
 
@@ -199,7 +200,7 @@ class CfnInvestigationGroup(
     @builtins.classmethod
     def arn_for_investigation_group(
         cls,
-        resource: _IInvestigationGroupRef_717b970b,
+        resource: "_IInvestigationGroupRef_717b970b",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -222,7 +223,7 @@ class CfnInvestigationGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInvestigationGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -298,9 +299,9 @@ class CfnInvestigationGroup(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -309,9 +310,9 @@ class CfnInvestigationGroup(
 
     @builtins.property
     @jsii.member(jsii_name="investigationGroupRef")
-    def investigation_group_ref(self) -> _InvestigationGroupReference_53553eea:
+    def investigation_group_ref(self) -> "_InvestigationGroupReference_53553eea":
         '''A reference to a InvestigationGroup resource.'''
-        return typing.cast(_InvestigationGroupReference_53553eea, jsii.get(self, "investigationGroupRef"))
+        return typing.cast("_InvestigationGroupReference_53553eea", jsii.get(self, "investigationGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -330,14 +331,14 @@ class CfnInvestigationGroup(
     @jsii.member(jsii_name="chatbotNotificationChannels")
     def chatbot_notification_channels(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInvestigationGroup.ChatbotNotificationChannelProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.ChatbotNotificationChannelProperty"]]]]:
         '''Use this property to integrate CloudWatch investigations with chat applications.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInvestigationGroup.ChatbotNotificationChannelProperty"]]]], jsii.get(self, "chatbotNotificationChannels"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.ChatbotNotificationChannelProperty"]]]], jsii.get(self, "chatbotNotificationChannels"))
 
     @chatbot_notification_channels.setter
     def chatbot_notification_channels(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInvestigationGroup.ChatbotNotificationChannelProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.ChatbotNotificationChannelProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5db4331534a87e764a8534aad930983f78144efc39dc99f450b39b9adabfe898)
@@ -348,14 +349,14 @@ class CfnInvestigationGroup(
     @jsii.member(jsii_name="crossAccountConfigurations")
     def cross_account_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInvestigationGroup.CrossAccountConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.CrossAccountConfigurationProperty"]]]]:
         '''List of ``sourceRoleArn`` values that have been configured for cross-account access.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInvestigationGroup.CrossAccountConfigurationProperty"]]]], jsii.get(self, "crossAccountConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.CrossAccountConfigurationProperty"]]]], jsii.get(self, "crossAccountConfigurations"))
 
     @cross_account_configurations.setter
     def cross_account_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInvestigationGroup.CrossAccountConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.CrossAccountConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cab3f68c7637d356559913c4b9be139738c64bd676003ea2810dd4ddafef47e5)
@@ -366,14 +367,14 @@ class CfnInvestigationGroup(
     @jsii.member(jsii_name="encryptionConfig")
     def encryption_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInvestigationGroup.EncryptionConfigMapProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.EncryptionConfigMapProperty"]]:
         '''Specifies the customer managed AWS  key that the investigation group uses to encrypt data, if there is one.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInvestigationGroup.EncryptionConfigMapProperty"]], jsii.get(self, "encryptionConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.EncryptionConfigMapProperty"]], jsii.get(self, "encryptionConfig"))
 
     @encryption_config.setter
     def encryption_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInvestigationGroup.EncryptionConfigMapProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.EncryptionConfigMapProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7f51c34e4f09d967ae3c411a2743d3d857ce2c925f1d1b67c9152dd736522694)
@@ -397,14 +398,14 @@ class CfnInvestigationGroup(
     @jsii.member(jsii_name="isCloudTrailEventHistoryEnabled")
     def is_cloud_trail_event_history_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specify ``true`` to enable CloudWatch investigations to have access to change events that are recorded by CloudTrail.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "isCloudTrailEventHistoryEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "isCloudTrailEventHistoryEnabled"))
 
     @is_cloud_trail_event_history_enabled.setter
     def is_cloud_trail_event_history_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8fc3a119f870dceec4d1a3ba5b4f84971973ad9c990d3aa7c5bb5e2ff0005cba)
@@ -455,12 +456,12 @@ class CfnInvestigationGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of key-value pairs to associate with the resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__58e4b2d8c71fc2670bc24a5f274e0134fae9ffd7aeca95db0fed9e2d974499f7)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -693,15 +694,15 @@ class CfnInvestigationGroupProps:
         self,
         *,
         name: builtins.str,
-        chatbot_notification_channels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInvestigationGroup.ChatbotNotificationChannelProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        cross_account_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInvestigationGroup.CrossAccountConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInvestigationGroup.EncryptionConfigMapProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        chatbot_notification_channels: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInvestigationGroup.ChatbotNotificationChannelProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        cross_account_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInvestigationGroup.CrossAccountConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        encryption_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInvestigationGroup.EncryptionConfigMapProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         investigation_group_policy: typing.Optional[builtins.str] = None,
-        is_cloud_trail_event_history_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        is_cloud_trail_event_history_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         retention_in_days: typing.Optional[jsii.Number] = None,
         role_arn: typing.Optional[builtins.str] = None,
         tag_key_boundaries: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnInvestigationGroup``.
 
@@ -721,6 +722,7 @@ class CfnInvestigationGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_aiops as aiops
@@ -800,7 +802,7 @@ class CfnInvestigationGroupProps:
     @builtins.property
     def chatbot_notification_channels(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInvestigationGroup.ChatbotNotificationChannelProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.ChatbotNotificationChannelProperty"]]]]:
         '''Use this property to integrate CloudWatch investigations with chat applications.
 
         This property is an array. For the first string, specify the ARN of an Amazon  topic. For the array of strings, specify the ARNs of one or more chat applications configurations that you want to associate with that topic. For more information about these configuration ARNs, see `Getting started with Amazon Q in chat applications <https://docs.aws.amazon.com/chatbot/latest/adminguide/getting-started.html>`_ and `Resource type defined by AWS Chatbot <https://docs.aws.amazon.com/service-authorization/latest/reference/list_awschatbot.html#awschatbot-resources-for-iam-policies>`_ .
@@ -808,23 +810,23 @@ class CfnInvestigationGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aiops-investigationgroup.html#cfn-aiops-investigationgroup-chatbotnotificationchannels
         '''
         result = self._values.get("chatbot_notification_channels")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInvestigationGroup.ChatbotNotificationChannelProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.ChatbotNotificationChannelProperty"]]]], result)
 
     @builtins.property
     def cross_account_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInvestigationGroup.CrossAccountConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.CrossAccountConfigurationProperty"]]]]:
         '''List of ``sourceRoleArn`` values that have been configured for cross-account access.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aiops-investigationgroup.html#cfn-aiops-investigationgroup-crossaccountconfigurations
         '''
         result = self._values.get("cross_account_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInvestigationGroup.CrossAccountConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.CrossAccountConfigurationProperty"]]]], result)
 
     @builtins.property
     def encryption_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInvestigationGroup.EncryptionConfigMapProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.EncryptionConfigMapProperty"]]:
         '''Specifies the customer managed AWS  key that the investigation group uses to encrypt data, if there is one.
 
         If not, the investigation group uses an AWS key to encrypt the data.
@@ -832,7 +834,7 @@ class CfnInvestigationGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aiops-investigationgroup.html#cfn-aiops-investigationgroup-encryptionconfig
         '''
         result = self._values.get("encryption_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInvestigationGroup.EncryptionConfigMapProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInvestigationGroup.EncryptionConfigMapProperty"]], result)
 
     @builtins.property
     def investigation_group_policy(self) -> typing.Optional[builtins.str]:
@@ -848,7 +850,7 @@ class CfnInvestigationGroupProps:
     @builtins.property
     def is_cloud_trail_event_history_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specify ``true`` to enable CloudWatch investigations to have access to change events that are recorded by CloudTrail.
 
         The default is ``true`` .
@@ -856,7 +858,7 @@ class CfnInvestigationGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aiops-investigationgroup.html#cfn-aiops-investigationgroup-iscloudtraileventhistoryenabled
         '''
         result = self._values.get("is_cloud_trail_event_history_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def retention_in_days(self) -> typing.Optional[jsii.Number]:
@@ -888,13 +890,13 @@ class CfnInvestigationGroupProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of key-value pairs to associate with the resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aiops-investigationgroup.html#cfn-aiops-investigationgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

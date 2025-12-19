@@ -194,7 +194,7 @@ class IDetectorRef(
 
     @builtins.property
     @jsii.member(jsii_name="detectorRef")
-    def detector_ref(self) -> DetectorReference:
+    def detector_ref(self) -> "DetectorReference":
         '''(experimental) A reference to a Detector resource.
 
         :stability: experimental
@@ -215,12 +215,12 @@ class _IDetectorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="detectorRef")
-    def detector_ref(self) -> DetectorReference:
+    def detector_ref(self) -> "DetectorReference":
         '''(experimental) A reference to a Detector resource.
 
         :stability: experimental
         '''
-        return typing.cast(DetectorReference, jsii.get(self, "detectorRef"))
+        return typing.cast("DetectorReference", jsii.get(self, "detectorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDetectorRef).__jsii_proxy_class__ = lambda : _IDetectorRefProxy
@@ -239,7 +239,7 @@ class IEntityTypeRef(
 
     @builtins.property
     @jsii.member(jsii_name="entityTypeRef")
-    def entity_type_ref(self) -> EntityTypeReference:
+    def entity_type_ref(self) -> "EntityTypeReference":
         '''(experimental) A reference to a EntityType resource.
 
         :stability: experimental
@@ -260,12 +260,12 @@ class _IEntityTypeRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="entityTypeRef")
-    def entity_type_ref(self) -> EntityTypeReference:
+    def entity_type_ref(self) -> "EntityTypeReference":
         '''(experimental) A reference to a EntityType resource.
 
         :stability: experimental
         '''
-        return typing.cast(EntityTypeReference, jsii.get(self, "entityTypeRef"))
+        return typing.cast("EntityTypeReference", jsii.get(self, "entityTypeRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEntityTypeRef).__jsii_proxy_class__ = lambda : _IEntityTypeRefProxy
@@ -284,7 +284,7 @@ class IEventTypeRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventTypeRef")
-    def event_type_ref(self) -> EventTypeReference:
+    def event_type_ref(self) -> "EventTypeReference":
         '''(experimental) A reference to a EventType resource.
 
         :stability: experimental
@@ -305,12 +305,12 @@ class _IEventTypeRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventTypeRef")
-    def event_type_ref(self) -> EventTypeReference:
+    def event_type_ref(self) -> "EventTypeReference":
         '''(experimental) A reference to a EventType resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventTypeReference, jsii.get(self, "eventTypeRef"))
+        return typing.cast("EventTypeReference", jsii.get(self, "eventTypeRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventTypeRef).__jsii_proxy_class__ = lambda : _IEventTypeRefProxy

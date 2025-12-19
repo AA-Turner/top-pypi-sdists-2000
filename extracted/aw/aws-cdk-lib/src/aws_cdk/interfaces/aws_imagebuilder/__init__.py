@@ -194,7 +194,7 @@ class IComponentRef(
 
     @builtins.property
     @jsii.member(jsii_name="componentRef")
-    def component_ref(self) -> ComponentReference:
+    def component_ref(self) -> "ComponentReference":
         '''(experimental) A reference to a Component resource.
 
         :stability: experimental
@@ -215,12 +215,12 @@ class _IComponentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="componentRef")
-    def component_ref(self) -> ComponentReference:
+    def component_ref(self) -> "ComponentReference":
         '''(experimental) A reference to a Component resource.
 
         :stability: experimental
         '''
-        return typing.cast(ComponentReference, jsii.get(self, "componentRef"))
+        return typing.cast("ComponentReference", jsii.get(self, "componentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IComponentRef).__jsii_proxy_class__ = lambda : _IComponentRefProxy
@@ -241,7 +241,7 @@ class IContainerRecipeRef(
 
     @builtins.property
     @jsii.member(jsii_name="containerRecipeRef")
-    def container_recipe_ref(self) -> ContainerRecipeReference:
+    def container_recipe_ref(self) -> "ContainerRecipeReference":
         '''(experimental) A reference to a ContainerRecipe resource.
 
         :stability: experimental
@@ -262,12 +262,12 @@ class _IContainerRecipeRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="containerRecipeRef")
-    def container_recipe_ref(self) -> ContainerRecipeReference:
+    def container_recipe_ref(self) -> "ContainerRecipeReference":
         '''(experimental) A reference to a ContainerRecipe resource.
 
         :stability: experimental
         '''
-        return typing.cast(ContainerRecipeReference, jsii.get(self, "containerRecipeRef"))
+        return typing.cast("ContainerRecipeReference", jsii.get(self, "containerRecipeRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContainerRecipeRef).__jsii_proxy_class__ = lambda : _IContainerRecipeRefProxy
@@ -288,7 +288,7 @@ class IDistributionConfigurationRef(
 
     @builtins.property
     @jsii.member(jsii_name="distributionConfigurationRef")
-    def distribution_configuration_ref(self) -> DistributionConfigurationReference:
+    def distribution_configuration_ref(self) -> "DistributionConfigurationReference":
         '''(experimental) A reference to a DistributionConfiguration resource.
 
         :stability: experimental
@@ -309,12 +309,12 @@ class _IDistributionConfigurationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="distributionConfigurationRef")
-    def distribution_configuration_ref(self) -> DistributionConfigurationReference:
+    def distribution_configuration_ref(self) -> "DistributionConfigurationReference":
         '''(experimental) A reference to a DistributionConfiguration resource.
 
         :stability: experimental
         '''
-        return typing.cast(DistributionConfigurationReference, jsii.get(self, "distributionConfigurationRef"))
+        return typing.cast("DistributionConfigurationReference", jsii.get(self, "distributionConfigurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDistributionConfigurationRef).__jsii_proxy_class__ = lambda : _IDistributionConfigurationRefProxy

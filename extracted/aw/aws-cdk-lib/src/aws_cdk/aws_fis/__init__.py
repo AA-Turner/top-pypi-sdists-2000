@@ -187,17 +187,17 @@ class CfnExperimentTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: builtins.str,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        stop_conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.ExperimentTemplateStopConditionProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        targets: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.ExperimentTemplateTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.ExperimentTemplateActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        experiment_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        experiment_report_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        stop_conditions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateStopConditionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        targets: typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        actions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        experiment_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        experiment_report_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        log_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::FIS::ExperimentTemplate``.
@@ -236,7 +236,7 @@ class CfnExperimentTemplate(
     @builtins.classmethod
     def arn_for_experiment_template(
         cls,
-        resource: _IExperimentTemplateRef_6e2c390d,
+        resource: "_IExperimentTemplateRef_6e2c390d",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -259,7 +259,7 @@ class CfnExperimentTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnExperimentTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -304,15 +304,15 @@ class CfnExperimentTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="experimentTemplateRef")
-    def experiment_template_ref(self) -> _ExperimentTemplateReference_260ed172:
+    def experiment_template_ref(self) -> "_ExperimentTemplateReference_260ed172":
         '''A reference to a ExperimentTemplate resource.'''
-        return typing.cast(_ExperimentTemplateReference_260ed172, jsii.get(self, "experimentTemplateRef"))
+        return typing.cast("_ExperimentTemplateReference_260ed172", jsii.get(self, "experimentTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -344,14 +344,14 @@ class CfnExperimentTemplate(
     @jsii.member(jsii_name="stopConditions")
     def stop_conditions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateStopConditionProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateStopConditionProperty"]]]:
         '''The stop conditions for the experiment.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateStopConditionProperty"]]], jsii.get(self, "stopConditions"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateStopConditionProperty"]]], jsii.get(self, "stopConditions"))
 
     @stop_conditions.setter
     def stop_conditions(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateStopConditionProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateStopConditionProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__142405036f77c255adeabb319e306abfa65cdbd3b2016980204e79e63040b12e)
@@ -362,14 +362,14 @@ class CfnExperimentTemplate(
     @jsii.member(jsii_name="targets")
     def targets(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateTargetProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateTargetProperty"]]]:
         '''The targets for the experiment.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateTargetProperty"]]], jsii.get(self, "targets"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateTargetProperty"]]], jsii.get(self, "targets"))
 
     @targets.setter
     def targets(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateTargetProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateTargetProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8681aeeb5b584b99663ff49736587f280e4b33e6198ae4ab4cdb5bcce6f1b57d)
@@ -380,14 +380,14 @@ class CfnExperimentTemplate(
     @jsii.member(jsii_name="actions")
     def actions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateActionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateActionProperty"]]]]:
         '''The actions for the experiment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateActionProperty"]]]], jsii.get(self, "actions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateActionProperty"]]]], jsii.get(self, "actions"))
 
     @actions.setter
     def actions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateActionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateActionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__22aee6a5f24a3b5f7703cdc58296037efae82a62ae6fa0d1015d70f5d5cd8d8b)
@@ -398,14 +398,14 @@ class CfnExperimentTemplate(
     @jsii.member(jsii_name="experimentOptions")
     def experiment_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty"]]:
         '''The experiment options for an experiment template.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty"]], jsii.get(self, "experimentOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty"]], jsii.get(self, "experimentOptions"))
 
     @experiment_options.setter
     def experiment_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2251459b83052b3128b2130de1f378662da3a8fc2b39b8c1132616a0a918cb23)
@@ -416,14 +416,14 @@ class CfnExperimentTemplate(
     @jsii.member(jsii_name="experimentReportConfiguration")
     def experiment_report_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty"]]:
         '''Describes the report configuration for the experiment template.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty"]], jsii.get(self, "experimentReportConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty"]], jsii.get(self, "experimentReportConfiguration"))
 
     @experiment_report_configuration.setter
     def experiment_report_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7aae9e4e099c63044c507cbddecd23f06b25f8a7f0f62a7d2ed6e602a50d775c)
@@ -434,14 +434,14 @@ class CfnExperimentTemplate(
     @jsii.member(jsii_name="logConfiguration")
     def log_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty"]]:
         '''The configuration for experiment logging.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty"]], jsii.get(self, "logConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty"]], jsii.get(self, "logConfiguration"))
 
     @log_configuration.setter
     def log_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2b371aaef4be3b5a571bd0e430ed72ecd5f188dc9132824cf152f2c7540ec6ba)
@@ -577,7 +577,7 @@ class CfnExperimentTemplate(
         def __init__(
             self,
             *,
-            cloud_watch_dashboards: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.CloudWatchDashboardProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            cloud_watch_dashboards: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.CloudWatchDashboardProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Describes the data sources for the experiment report.
 
@@ -608,13 +608,13 @@ class CfnExperimentTemplate(
         @builtins.property
         def cloud_watch_dashboards(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.CloudWatchDashboardProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.CloudWatchDashboardProperty"]]]]:
             '''The CloudWatch dashboards to include as data sources in the experiment report.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fis-experimenttemplate-datasources.html#cfn-fis-experimenttemplate-datasources-cloudwatchdashboards
             '''
             result = self._values.get("cloud_watch_dashboards")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.CloudWatchDashboardProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.CloudWatchDashboardProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -717,9 +717,9 @@ class CfnExperimentTemplate(
             *,
             action_id: builtins.str,
             description: typing.Optional[builtins.str] = None,
-            parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             start_after: typing.Optional[typing.Sequence[builtins.str]] = None,
-            targets: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            targets: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Specifies an action for an experiment template.
 
@@ -795,13 +795,13 @@ class CfnExperimentTemplate(
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The parameters for the action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fis-experimenttemplate-experimenttemplateaction.html#cfn-fis-experimenttemplate-experimenttemplateaction-parameters
             '''
             result = self._values.get("parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def start_after(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -815,13 +815,13 @@ class CfnExperimentTemplate(
         @builtins.property
         def targets(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The targets for the action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fis-experimenttemplate-experimenttemplateaction.html#cfn-fis-experimenttemplate-experimenttemplateaction-targets
             '''
             result = self._values.get("targets")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -921,8 +921,8 @@ class CfnExperimentTemplate(
         def __init__(
             self,
             *,
-            outputs: typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.OutputsProperty", typing.Dict[builtins.str, typing.Any]]],
-            data_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.DataSourcesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            outputs: typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.OutputsProperty", typing.Dict[builtins.str, typing.Any]]],
+            data_sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.DataSourcesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             post_experiment_duration: typing.Optional[builtins.str] = None,
             pre_experiment_duration: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -981,25 +981,25 @@ class CfnExperimentTemplate(
         @builtins.property
         def outputs(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.OutputsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.OutputsProperty"]:
             '''The output destinations of the experiment report.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fis-experimenttemplate-experimenttemplateexperimentreportconfiguration.html#cfn-fis-experimenttemplate-experimenttemplateexperimentreportconfiguration-outputs
             '''
             result = self._values.get("outputs")
             assert result is not None, "Required property 'outputs' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.OutputsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.OutputsProperty"], result)
 
         @builtins.property
         def data_sources(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.DataSourcesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.DataSourcesProperty"]]:
             '''The data sources for the experiment report.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fis-experimenttemplate-experimenttemplateexperimentreportconfiguration.html#cfn-fis-experimenttemplate-experimenttemplateexperimentreportconfiguration-datasources
             '''
             result = self._values.get("data_sources")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.DataSourcesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.DataSourcesProperty"]], result)
 
         @builtins.property
         def post_experiment_duration(self) -> typing.Optional[builtins.str]:
@@ -1293,10 +1293,10 @@ class CfnExperimentTemplate(
             *,
             resource_type: builtins.str,
             selection_mode: builtins.str,
-            filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.ExperimentTemplateTargetFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateTargetFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             resource_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-            resource_tags: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            resource_tags: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Specifies a target for an experiment.
 
@@ -1382,24 +1382,24 @@ class CfnExperimentTemplate(
         @builtins.property
         def filters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateTargetFilterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateTargetFilterProperty"]]]]:
             '''The filters to apply to identify target resources using specific attributes.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fis-experimenttemplate-experimenttemplatetarget.html#cfn-fis-experimenttemplate-experimenttemplatetarget-filters
             '''
             result = self._values.get("filters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentTemplateTargetFilterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateTargetFilterProperty"]]]], result)
 
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The parameters for the resource type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fis-experimenttemplate-experimenttemplatetarget.html#cfn-fis-experimenttemplate-experimenttemplatetarget-parameters
             '''
             result = self._values.get("parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def resource_arns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1413,13 +1413,13 @@ class CfnExperimentTemplate(
         @builtins.property
         def resource_tags(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The tags for the target resources.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fis-experimenttemplate-experimenttemplatetarget.html#cfn-fis-experimenttemplate-experimenttemplatetarget-resourcetags
             '''
             result = self._values.get("resource_tags")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1443,7 +1443,7 @@ class CfnExperimentTemplate(
         def __init__(
             self,
             *,
-            experiment_report_s3_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.ExperimentReportS3ConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            experiment_report_s3_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentReportS3ConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Describes the output destinations of the experiment report.
 
@@ -1477,14 +1477,14 @@ class CfnExperimentTemplate(
         @builtins.property
         def experiment_report_s3_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentReportS3ConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentReportS3ConfigurationProperty"]:
             '''The S3 destination for the experiment report.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fis-experimenttemplate-outputs.html#cfn-fis-experimenttemplate-outputs-experimentreports3configuration
             '''
             result = self._values.get("experiment_report_s3_configuration")
             assert result is not None, "Required property 'experiment_report_s3_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnExperimentTemplate.ExperimentReportS3ConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentReportS3ConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1591,13 +1591,13 @@ class CfnExperimentTemplateProps:
         self,
         *,
         description: builtins.str,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        stop_conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateStopConditionProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        targets: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateTargetProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateActionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        experiment_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        experiment_report_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        stop_conditions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateStopConditionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        targets: typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        actions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        experiment_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        experiment_report_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        log_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnExperimentTemplate``.
@@ -1743,82 +1743,82 @@ class CfnExperimentTemplateProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The Amazon Resource Name (ARN) of an IAM role.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fis-experimenttemplate.html#cfn-fis-experimenttemplate-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def stop_conditions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnExperimentTemplate.ExperimentTemplateStopConditionProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateStopConditionProperty"]]]:
         '''The stop conditions for the experiment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fis-experimenttemplate.html#cfn-fis-experimenttemplate-stopconditions
         '''
         result = self._values.get("stop_conditions")
         assert result is not None, "Required property 'stop_conditions' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnExperimentTemplate.ExperimentTemplateStopConditionProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateStopConditionProperty"]]], result)
 
     @builtins.property
     def targets(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnExperimentTemplate.ExperimentTemplateTargetProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateTargetProperty"]]]:
         '''The targets for the experiment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fis-experimenttemplate.html#cfn-fis-experimenttemplate-targets
         '''
         result = self._values.get("targets")
         assert result is not None, "Required property 'targets' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnExperimentTemplate.ExperimentTemplateTargetProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateTargetProperty"]]], result)
 
     @builtins.property
     def actions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnExperimentTemplate.ExperimentTemplateActionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateActionProperty"]]]]:
         '''The actions for the experiment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fis-experimenttemplate.html#cfn-fis-experimenttemplate-actions
         '''
         result = self._values.get("actions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnExperimentTemplate.ExperimentTemplateActionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateActionProperty"]]]], result)
 
     @builtins.property
     def experiment_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty"]]:
         '''The experiment options for an experiment template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fis-experimenttemplate.html#cfn-fis-experimenttemplate-experimentoptions
         '''
         result = self._values.get("experiment_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateExperimentOptionsProperty"]], result)
 
     @builtins.property
     def experiment_report_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty"]]:
         '''Describes the report configuration for the experiment template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fis-experimenttemplate.html#cfn-fis-experimenttemplate-experimentreportconfiguration
         '''
         result = self._values.get("experiment_report_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateExperimentReportConfigurationProperty"]], result)
 
     @builtins.property
     def log_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty"]]:
         '''The configuration for experiment logging.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fis-experimenttemplate.html#cfn-fis-experimenttemplate-logconfiguration
         '''
         result = self._values.get("log_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExperimentTemplate.ExperimentTemplateLogConfigurationProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -1873,7 +1873,7 @@ class CfnTargetAccountConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account_id: builtins.str,
@@ -1916,7 +1916,7 @@ class CfnTargetAccountConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTargetAccountConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1954,9 +1954,9 @@ class CfnTargetAccountConfiguration(
     @jsii.member(jsii_name="targetAccountConfigurationRef")
     def target_account_configuration_ref(
         self,
-    ) -> _TargetAccountConfigurationReference_684997f0:
+    ) -> "_TargetAccountConfigurationReference_684997f0":
         '''A reference to a TargetAccountConfiguration resource.'''
-        return typing.cast(_TargetAccountConfigurationReference_684997f0, jsii.get(self, "targetAccountConfigurationRef"))
+        return typing.cast("_TargetAccountConfigurationReference_684997f0", jsii.get(self, "targetAccountConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="accountId")

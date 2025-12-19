@@ -15,6 +15,7 @@ import structlog
 
 from langgraph_api import timing
 from langgraph_api.config import LANGGRAPH_ENCRYPTION
+from langgraph_api.timing import profiled_import
 
 if TYPE_CHECKING:
     from langgraph_sdk import Encryption
@@ -98,16 +99,17 @@ def _load_encryption_obj(path: str) -> Encryption:
         )
 
     try:
-        if "/" in module_name or ".py" in module_name:
-            modname = f"dynamic_module_{hash(module_name)}"
-            modspec = importlib.util.spec_from_file_location(modname, module_name)
-            if modspec is None or modspec.loader is None:
-                raise ValueError(f"Could not load file: {module_name}")
-            module = importlib.util.module_from_spec(modspec)
-            sys.modules[modname] = module
-            modspec.loader.exec_module(module)
-        else:
-            module = importlib.import_module(module_name)
+        with profiled_import(path):
+            if "/" in module_name or ".py" in module_name:
+                modname = f"dynamic_module_{hash(module_name)}"
+                modspec = importlib.util.spec_from_file_location(modname, module_name)
+                if modspec is None or modspec.loader is None:
+                    raise ValueError(f"Could not load file: {module_name}")
+                module = importlib.util.module_from_spec(modspec)
+                sys.modules[modname] = module
+                modspec.loader.exec_module(module)
+            else:
+                module = importlib.import_module(module_name)
 
         loaded_encrypt = getattr(module, callable_name, None)
         if loaded_encrypt is None:
@@ -122,7 +124,6 @@ def _load_encryption_obj(path: str) -> Encryption:
                 f"Expected an Encryption instance, got {type(loaded_encrypt)}"
             )
 
-        _validate_encryption_models(loaded_encrypt)
         return loaded_encrypt
 
     except ImportError as e:
@@ -130,26 +131,3 @@ def _load_encryption_obj(path: str) -> Encryption:
         raise
     except FileNotFoundError as e:
         raise ValueError(f"Could not find file: {module_name}") from e
-
-
-def _validate_encryption_models(encryption_instance: Encryption) -> None:
-    """Validate that all registered model-specific handlers use supported models.
-
-    Args:
-        encryption_instance: The loaded Encryption instance to validate.
-
-    Raises:
-        ValueError: If any registered model names are not in SUPPORTED_ENCRYPTION_MODELS.
-    """
-    registered_encryptor_models = set(encryption_instance._json_encryptors.keys())
-    registered_decryptor_models = set(encryption_instance._json_decryptors.keys())
-
-    invalid_encryptor_models = registered_encryptor_models - SUPPORTED_ENCRYPTION_MODELS
-    invalid_decryptor_models = registered_decryptor_models - SUPPORTED_ENCRYPTION_MODELS
-
-    invalid_models = invalid_encryptor_models | invalid_decryptor_models
-    if invalid_models:
-        raise ValueError(
-            f"Invalid encryption model(s) configured: {sorted(invalid_models)}. "
-            f"Supported models are: {sorted(SUPPORTED_ENCRYPTION_MODELS)}"
-        )

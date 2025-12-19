@@ -699,7 +699,7 @@ class CfnAcceptedPortfolioShare(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         portfolio_id: builtins.str,
@@ -735,7 +735,7 @@ class CfnAcceptedPortfolioShare(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAcceptedPortfolioShare", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -766,9 +766,11 @@ class CfnAcceptedPortfolioShare(
 
     @builtins.property
     @jsii.member(jsii_name="acceptedPortfolioShareRef")
-    def accepted_portfolio_share_ref(self) -> _AcceptedPortfolioShareReference_5a5fad2c:
+    def accepted_portfolio_share_ref(
+        self,
+    ) -> "_AcceptedPortfolioShareReference_5a5fad2c":
         '''A reference to a AcceptedPortfolioShare resource.'''
-        return typing.cast(_AcceptedPortfolioShareReference_5a5fad2c, jsii.get(self, "acceptedPortfolioShareRef"))
+        return typing.cast("_AcceptedPortfolioShareReference_5a5fad2c", jsii.get(self, "acceptedPortfolioShareRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -901,6 +903,7 @@ class CfnCloudFormationProduct(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_servicecatalog as servicecatalog
@@ -949,7 +952,7 @@ class CfnCloudFormationProduct(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -958,13 +961,13 @@ class CfnCloudFormationProduct(
         description: typing.Optional[builtins.str] = None,
         distributor: typing.Optional[builtins.str] = None,
         product_type: typing.Optional[builtins.str] = None,
-        provisioning_artifact_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        replace_provisioning_artifacts: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        source_connection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudFormationProduct.SourceConnectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        provisioning_artifact_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        replace_provisioning_artifacts: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        source_connection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudFormationProduct.SourceConnectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         support_description: typing.Optional[builtins.str] = None,
         support_email: typing.Optional[builtins.str] = None,
         support_url: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ServiceCatalog::CloudFormationProduct``.
 
@@ -1019,7 +1022,7 @@ class CfnCloudFormationProduct(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCloudFormationProduct", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1090,15 +1093,15 @@ class CfnCloudFormationProduct(
 
     @builtins.property
     @jsii.member(jsii_name="cloudFormationProductRef")
-    def cloud_formation_product_ref(self) -> _CloudFormationProductReference_a9bb7050:
+    def cloud_formation_product_ref(self) -> "_CloudFormationProductReference_a9bb7050":
         '''A reference to a CloudFormationProduct resource.'''
-        return typing.cast(_CloudFormationProductReference_a9bb7050, jsii.get(self, "cloudFormationProductRef"))
+        return typing.cast("_CloudFormationProductReference_a9bb7050", jsii.get(self, "cloudFormationProductRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1182,14 +1185,14 @@ class CfnCloudFormationProduct(
     @jsii.member(jsii_name="provisioningArtifactParameters")
     def provisioning_artifact_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty"]]]]:
         '''The configuration of the provisioning artifact (also known as a version).'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty"]]]], jsii.get(self, "provisioningArtifactParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty"]]]], jsii.get(self, "provisioningArtifactParameters"))
 
     @provisioning_artifact_parameters.setter
     def provisioning_artifact_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__46bdfff1360506ade40e04d18d81d060b0a0f0601a08269c6aa5658e66289ddd)
@@ -1200,14 +1203,14 @@ class CfnCloudFormationProduct(
     @jsii.member(jsii_name="replaceProvisioningArtifacts")
     def replace_provisioning_artifacts(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''This property is turned off by default.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "replaceProvisioningArtifacts"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "replaceProvisioningArtifacts"))
 
     @replace_provisioning_artifacts.setter
     def replace_provisioning_artifacts(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3860e4645114c1e719f71c5207cb37518d5cb1aa225903719679d05f030de4f6)
@@ -1218,14 +1221,14 @@ class CfnCloudFormationProduct(
     @jsii.member(jsii_name="sourceConnection")
     def source_connection(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProduct.SourceConnectionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.SourceConnectionProperty"]]:
         '''A top level ``ProductViewDetail`` response containing details about the product’s connection.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProduct.SourceConnectionProperty"]], jsii.get(self, "sourceConnection"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.SourceConnectionProperty"]], jsii.get(self, "sourceConnection"))
 
     @source_connection.setter
     def source_connection(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProduct.SourceConnectionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.SourceConnectionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__12635a42c5ebd2e19b46cf3bb9134e21232e501fed70f86af7f0207bf93441c9)
@@ -1273,12 +1276,12 @@ class CfnCloudFormationProduct(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a776b3ba720cdf81828e7a6506e99d00a8a3b051bb5ed0d24ea2b8fdad3d0cf3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1399,7 +1402,7 @@ class CfnCloudFormationProduct(
         def __init__(
             self,
             *,
-            code_star: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudFormationProduct.CodeStarParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            code_star: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudFormationProduct.CodeStarParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides connection details.
 
@@ -1433,13 +1436,13 @@ class CfnCloudFormationProduct(
         @builtins.property
         def code_star(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProduct.CodeStarParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.CodeStarParametersProperty"]]:
             '''Provides ``ConnectionType`` details.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-servicecatalog-cloudformationproduct-connectionparameters.html#cfn-servicecatalog-cloudformationproduct-connectionparameters-codestar
             '''
             result = self._values.get("code_star")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProduct.CodeStarParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.CodeStarParametersProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1469,7 +1472,7 @@ class CfnCloudFormationProduct(
             *,
             info: typing.Any,
             description: typing.Optional[builtins.str] = None,
-            disable_template_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            disable_template_validation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             name: typing.Optional[builtins.str] = None,
             type: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -1551,13 +1554,13 @@ class CfnCloudFormationProduct(
         @builtins.property
         def disable_template_validation(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If set to true, AWS Service Catalog stops validating the specified provisioning artifact even if it is invalid.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-servicecatalog-cloudformationproduct-provisioningartifactproperties.html#cfn-servicecatalog-cloudformationproduct-provisioningartifactproperties-disabletemplatevalidation
             '''
             result = self._values.get("disable_template_validation")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def name(self) -> typing.Optional[builtins.str]:
@@ -1604,7 +1607,7 @@ class CfnCloudFormationProduct(
         def __init__(
             self,
             *,
-            connection_parameters: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudFormationProduct.ConnectionParametersProperty", typing.Dict[builtins.str, typing.Any]]],
+            connection_parameters: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudFormationProduct.ConnectionParametersProperty", typing.Dict[builtins.str, typing.Any]]],
             type: builtins.str,
         ) -> None:
             '''A top level ``ProductViewDetail`` response containing details about the product’s connection.
@@ -1647,14 +1650,14 @@ class CfnCloudFormationProduct(
         @builtins.property
         def connection_parameters(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProduct.ConnectionParametersProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.ConnectionParametersProperty"]:
             '''The connection details based on the connection ``Type`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-servicecatalog-cloudformationproduct-sourceconnection.html#cfn-servicecatalog-cloudformationproduct-sourceconnection-connectionparameters
             '''
             result = self._values.get("connection_parameters")
             assert result is not None, "Required property 'connection_parameters' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProduct.ConnectionParametersProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.ConnectionParametersProperty"], result)
 
         @builtins.property
         def type(self) -> builtins.str:
@@ -1707,13 +1710,13 @@ class CfnCloudFormationProductProps:
         description: typing.Optional[builtins.str] = None,
         distributor: typing.Optional[builtins.str] = None,
         product_type: typing.Optional[builtins.str] = None,
-        provisioning_artifact_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        replace_provisioning_artifacts: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        source_connection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudFormationProduct.SourceConnectionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        provisioning_artifact_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        replace_provisioning_artifacts: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        source_connection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudFormationProduct.SourceConnectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         support_description: typing.Optional[builtins.str] = None,
         support_email: typing.Optional[builtins.str] = None,
         support_url: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCloudFormationProduct``.
 
@@ -1736,6 +1739,7 @@ class CfnCloudFormationProductProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_servicecatalog as servicecatalog
@@ -1885,18 +1889,18 @@ class CfnCloudFormationProductProps:
     @builtins.property
     def provisioning_artifact_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty"]]]]:
         '''The configuration of the provisioning artifact (also known as a version).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationproduct.html#cfn-servicecatalog-cloudformationproduct-provisioningartifactparameters
         '''
         result = self._values.get("provisioning_artifact_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.ProvisioningArtifactPropertiesProperty"]]]], result)
 
     @builtins.property
     def replace_provisioning_artifacts(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''This property is turned off by default.
 
         If turned off, you can update provisioning artifacts or product attributes (such as description, distributor, name, owner, and more) and the associated provisioning artifacts will retain the same unique identifier. Provisioning artifacts are matched within the CloudFormationProduct resource, and only those that have been updated will be changed. Provisioning artifacts are matched by a combinaton of provisioning artifact template URL and name.
@@ -1906,12 +1910,12 @@ class CfnCloudFormationProductProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationproduct.html#cfn-servicecatalog-cloudformationproduct-replaceprovisioningartifacts
         '''
         result = self._values.get("replace_provisioning_artifacts")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def source_connection(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCloudFormationProduct.SourceConnectionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.SourceConnectionProperty"]]:
         '''A top level ``ProductViewDetail`` response containing details about the product’s connection.
 
         AWS Service Catalog returns this field for the ``CreateProduct`` , ``UpdateProduct`` , ``DescribeProductAsAdmin`` , and ``SearchProductAsAdmin`` APIs. This response contains the same fields as the ``ConnectionParameters`` request, with the addition of the ``LastSync`` response.
@@ -1919,7 +1923,7 @@ class CfnCloudFormationProductProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationproduct.html#cfn-servicecatalog-cloudformationproduct-sourceconnection
         '''
         result = self._values.get("source_connection")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCloudFormationProduct.SourceConnectionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProduct.SourceConnectionProperty"]], result)
 
     @builtins.property
     def support_description(self) -> typing.Optional[builtins.str]:
@@ -1951,13 +1955,13 @@ class CfnCloudFormationProductProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationproduct.html#cfn-servicecatalog-cloudformationproduct-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1989,6 +1993,7 @@ class CfnCloudFormationProvisionedProduct(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_servicecatalog as servicecatalog
@@ -2025,7 +2030,7 @@ class CfnCloudFormationProvisionedProduct(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         accept_language: typing.Optional[builtins.str] = None,
@@ -2037,9 +2042,9 @@ class CfnCloudFormationProvisionedProduct(
         provisioned_product_name: typing.Optional[builtins.str] = None,
         provisioning_artifact_id: typing.Optional[builtins.str] = None,
         provisioning_artifact_name: typing.Optional[builtins.str] = None,
-        provisioning_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        provisioning_preferences: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        provisioning_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        provisioning_preferences: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ServiceCatalog::CloudFormationProvisionedProduct``.
 
@@ -2092,7 +2097,7 @@ class CfnCloudFormationProvisionedProduct(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCloudFormationProvisionedProduct", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2131,12 +2136,12 @@ class CfnCloudFormationProvisionedProduct(
 
     @builtins.property
     @jsii.member(jsii_name="attrOutputs")
-    def attr_outputs(self) -> _IResolvable_da3f097b:
+    def attr_outputs(self) -> "_IResolvable_da3f097b":
         '''List of key-value pair outputs.
 
         :cloudformationAttribute: Outputs
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrOutputs"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrOutputs"))
 
     @builtins.property
     @jsii.member(jsii_name="attrProvisionedProductId")
@@ -2165,15 +2170,15 @@ class CfnCloudFormationProvisionedProduct(
     @jsii.member(jsii_name="cloudFormationProvisionedProductRef")
     def cloud_formation_provisioned_product_ref(
         self,
-    ) -> _CloudFormationProvisionedProductReference_cc99c3e1:
+    ) -> "_CloudFormationProvisionedProductReference_cc99c3e1":
         '''A reference to a CloudFormationProvisionedProduct resource.'''
-        return typing.cast(_CloudFormationProvisionedProductReference_cc99c3e1, jsii.get(self, "cloudFormationProvisionedProductRef"))
+        return typing.cast("_CloudFormationProvisionedProductReference_cc99c3e1", jsii.get(self, "cloudFormationProvisionedProductRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="acceptLanguage")
@@ -2299,14 +2304,14 @@ class CfnCloudFormationProvisionedProduct(
     @jsii.member(jsii_name="provisioningParameters")
     def provisioning_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty"]]]]:
         '''Parameters specified by the administrator that are required for provisioning the product.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty"]]]], jsii.get(self, "provisioningParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty"]]]], jsii.get(self, "provisioningParameters"))
 
     @provisioning_parameters.setter
     def provisioning_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e88a998f430a92c61e57f583a56a5dba25a39affc9ad60288815a7e40e5b7910)
@@ -2317,14 +2322,14 @@ class CfnCloudFormationProvisionedProduct(
     @jsii.member(jsii_name="provisioningPreferences")
     def provisioning_preferences(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty"]]:
         '''StackSet preferences that are required for provisioning the product or updating a provisioned product.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty"]], jsii.get(self, "provisioningPreferences"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty"]], jsii.get(self, "provisioningPreferences"))
 
     @provisioning_preferences.setter
     def provisioning_preferences(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3edc25f754a0be5ecf6302ae2b15ba8648d89a1d12ceb865ff5c7d628c62bc97)
@@ -2333,12 +2338,12 @@ class CfnCloudFormationProvisionedProduct(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d149fdbb55c6e7459d592eaaf72483e5df84625da19408ebc06188a171d334d1)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2659,9 +2664,9 @@ class CfnCloudFormationProvisionedProductProps:
         provisioned_product_name: typing.Optional[builtins.str] = None,
         provisioning_artifact_id: typing.Optional[builtins.str] = None,
         provisioning_artifact_name: typing.Optional[builtins.str] = None,
-        provisioning_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        provisioning_preferences: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        provisioning_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        provisioning_preferences: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCloudFormationProvisionedProduct``.
 
@@ -2683,6 +2688,7 @@ class CfnCloudFormationProvisionedProductProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_servicecatalog as servicecatalog
@@ -2875,27 +2881,27 @@ class CfnCloudFormationProvisionedProductProps:
     @builtins.property
     def provisioning_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty"]]]]:
         '''Parameters specified by the administrator that are required for provisioning the product.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html#cfn-servicecatalog-cloudformationprovisionedproduct-provisioningparameters
         '''
         result = self._values.get("provisioning_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProvisionedProduct.ProvisioningParameterProperty"]]]], result)
 
     @builtins.property
     def provisioning_preferences(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty"]]:
         '''StackSet preferences that are required for provisioning the product or updating a provisioned product.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html#cfn-servicecatalog-cloudformationprovisionedproduct-provisioningpreferences
         '''
         result = self._values.get("provisioning_preferences")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudFormationProvisionedProduct.ProvisioningPreferencesProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags.
 
         .. epigraph::
@@ -2905,7 +2911,7 @@ class CfnCloudFormationProvisionedProductProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html#cfn-servicecatalog-cloudformationprovisionedproduct-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2950,7 +2956,7 @@ class CfnLaunchNotificationConstraint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         notification_arns: typing.Sequence[builtins.str],
@@ -2996,7 +3002,7 @@ class CfnLaunchNotificationConstraint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLaunchNotificationConstraint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3043,9 +3049,9 @@ class CfnLaunchNotificationConstraint(
     @jsii.member(jsii_name="launchNotificationConstraintRef")
     def launch_notification_constraint_ref(
         self,
-    ) -> _LaunchNotificationConstraintReference_bb0fbb25:
+    ) -> "_LaunchNotificationConstraintReference_bb0fbb25":
         '''A reference to a LaunchNotificationConstraint resource.'''
-        return typing.cast(_LaunchNotificationConstraintReference_bb0fbb25, jsii.get(self, "launchNotificationConstraintRef"))
+        return typing.cast("_LaunchNotificationConstraintReference_bb0fbb25", jsii.get(self, "launchNotificationConstraintRef"))
 
     @builtins.property
     @jsii.member(jsii_name="notificationArns")
@@ -3273,7 +3279,7 @@ class CfnLaunchRoleConstraint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         portfolio_id: builtins.str,
@@ -3322,7 +3328,7 @@ class CfnLaunchRoleConstraint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLaunchRoleConstraint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3366,9 +3372,9 @@ class CfnLaunchRoleConstraint(
 
     @builtins.property
     @jsii.member(jsii_name="launchRoleConstraintRef")
-    def launch_role_constraint_ref(self) -> _LaunchRoleConstraintReference_81c64491:
+    def launch_role_constraint_ref(self) -> "_LaunchRoleConstraintReference_81c64491":
         '''A reference to a LaunchRoleConstraint resource.'''
-        return typing.cast(_LaunchRoleConstraintReference_81c64491, jsii.get(self, "launchRoleConstraintRef"))
+        return typing.cast("_LaunchRoleConstraintReference_81c64491", jsii.get(self, "launchRoleConstraintRef"))
 
     @builtins.property
     @jsii.member(jsii_name="portfolioId")
@@ -3630,7 +3636,7 @@ class CfnLaunchTemplateConstraint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         portfolio_id: builtins.str,
@@ -3676,7 +3682,7 @@ class CfnLaunchTemplateConstraint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLaunchTemplateConstraint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3723,9 +3729,9 @@ class CfnLaunchTemplateConstraint(
     @jsii.member(jsii_name="launchTemplateConstraintRef")
     def launch_template_constraint_ref(
         self,
-    ) -> _LaunchTemplateConstraintReference_ec83b407:
+    ) -> "_LaunchTemplateConstraintReference_ec83b407":
         '''A reference to a LaunchTemplateConstraint resource.'''
-        return typing.cast(_LaunchTemplateConstraintReference_ec83b407, jsii.get(self, "launchTemplateConstraintRef"))
+        return typing.cast("_LaunchTemplateConstraintReference_ec83b407", jsii.get(self, "launchTemplateConstraintRef"))
 
     @builtins.property
     @jsii.member(jsii_name="portfolioId")
@@ -3935,6 +3941,7 @@ class CfnPortfolio(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_servicecatalog as servicecatalog
@@ -3955,14 +3962,14 @@ class CfnPortfolio(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         display_name: builtins.str,
         provider_name: builtins.str,
         accept_language: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ServiceCatalog::Portfolio``.
 
@@ -3990,7 +3997,7 @@ class CfnPortfolio(
 
     @jsii.member(jsii_name="arnForPortfolio")
     @builtins.classmethod
-    def arn_for_portfolio(cls, resource: _IPortfolioRef_a19e4bd0) -> builtins.str:
+    def arn_for_portfolio(cls, resource: "_IPortfolioRef_a19e4bd0") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4003,10 +4010,10 @@ class CfnPortfolio(
     @builtins.classmethod
     def from_portfolio_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         portfolio_id: builtins.str,
-    ) -> _IPortfolioRef_a19e4bd0:
+    ) -> "_IPortfolioRef_a19e4bd0":
         '''Creates a new IPortfolioRef from a portfolioId.
 
         :param scope: -
@@ -4018,7 +4025,7 @@ class CfnPortfolio(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument portfolio_id", value=portfolio_id, expected_type=type_hints["portfolio_id"])
-        return typing.cast(_IPortfolioRef_a19e4bd0, jsii.sinvoke(cls, "fromPortfolioId", [scope, id, portfolio_id]))
+        return typing.cast("_IPortfolioRef_a19e4bd0", jsii.sinvoke(cls, "fromPortfolioId", [scope, id, portfolio_id]))
 
     @jsii.member(jsii_name="isCfnPortfolio")
     @builtins.classmethod
@@ -4033,7 +4040,7 @@ class CfnPortfolio(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPortfolio", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4087,15 +4094,15 @@ class CfnPortfolio(
 
     @builtins.property
     @jsii.member(jsii_name="portfolioRef")
-    def portfolio_ref(self) -> _PortfolioReference_7a849941:
+    def portfolio_ref(self) -> "_PortfolioReference_7a849941":
         '''A reference to a Portfolio resource.'''
-        return typing.cast(_PortfolioReference_7a849941, jsii.get(self, "portfolioRef"))
+        return typing.cast("_PortfolioReference_7a849941", jsii.get(self, "portfolioRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="displayName")
@@ -4151,12 +4158,12 @@ class CfnPortfolio(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__637efc1b0f4cccf3bb52a483d866a3597e5d240e45fd12080d02606cae18fdb8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4193,7 +4200,7 @@ class CfnPortfolioPrincipalAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         principal_type: builtins.str,
@@ -4236,7 +4243,7 @@ class CfnPortfolioPrincipalAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPortfolioPrincipalAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4274,9 +4281,9 @@ class CfnPortfolioPrincipalAssociation(
     @jsii.member(jsii_name="portfolioPrincipalAssociationRef")
     def portfolio_principal_association_ref(
         self,
-    ) -> _PortfolioPrincipalAssociationReference_94cd9217:
+    ) -> "_PortfolioPrincipalAssociationReference_94cd9217":
         '''A reference to a PortfolioPrincipalAssociation resource.'''
-        return typing.cast(_PortfolioPrincipalAssociationReference_94cd9217, jsii.get(self, "portfolioPrincipalAssociationRef"))
+        return typing.cast("_PortfolioPrincipalAssociationReference_94cd9217", jsii.get(self, "portfolioPrincipalAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="principalType")
@@ -4475,7 +4482,7 @@ class CfnPortfolioProductAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         accept_language: typing.Optional[builtins.str] = None,
@@ -4518,7 +4525,7 @@ class CfnPortfolioProductAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPortfolioProductAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4556,9 +4563,9 @@ class CfnPortfolioProductAssociation(
     @jsii.member(jsii_name="portfolioProductAssociationRef")
     def portfolio_product_association_ref(
         self,
-    ) -> _PortfolioProductAssociationReference_92cc7707:
+    ) -> "_PortfolioProductAssociationReference_92cc7707":
         '''A reference to a PortfolioProductAssociation resource.'''
-        return typing.cast(_PortfolioProductAssociationReference_92cc7707, jsii.get(self, "portfolioProductAssociationRef"))
+        return typing.cast("_PortfolioProductAssociationReference_92cc7707", jsii.get(self, "portfolioProductAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="acceptLanguage")
@@ -4741,7 +4748,7 @@ class CfnPortfolioProps:
         provider_name: builtins.str,
         accept_language: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPortfolio``.
 
@@ -4756,6 +4763,7 @@ class CfnPortfolioProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_servicecatalog as servicecatalog
@@ -4833,13 +4841,13 @@ class CfnPortfolioProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolio.html#cfn-servicecatalog-portfolio-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4883,13 +4891,13 @@ class CfnPortfolioShare(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account_id: builtins.str,
         portfolio_id: builtins.str,
         accept_language: typing.Optional[builtins.str] = None,
-        share_tag_options: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        share_tag_options: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::ServiceCatalog::PortfolioShare``.
 
@@ -4926,7 +4934,7 @@ class CfnPortfolioShare(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPortfolioShare", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4962,9 +4970,9 @@ class CfnPortfolioShare(
 
     @builtins.property
     @jsii.member(jsii_name="portfolioShareRef")
-    def portfolio_share_ref(self) -> _PortfolioShareReference_b73c7783:
+    def portfolio_share_ref(self) -> "_PortfolioShareReference_b73c7783":
         '''A reference to a PortfolioShare resource.'''
-        return typing.cast(_PortfolioShareReference_b73c7783, jsii.get(self, "portfolioShareRef"))
+        return typing.cast("_PortfolioShareReference_b73c7783", jsii.get(self, "portfolioShareRef"))
 
     @builtins.property
     @jsii.member(jsii_name="accountId")
@@ -5009,14 +5017,14 @@ class CfnPortfolioShare(
     @jsii.member(jsii_name="shareTagOptions")
     def share_tag_options(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether TagOptions sharing is enabled or disabled for the portfolio share.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "shareTagOptions"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "shareTagOptions"))
 
     @share_tag_options.setter
     def share_tag_options(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__235193413772119d9c84298309200ae18891e9be3ace13193c53075df6152693)
@@ -5041,7 +5049,7 @@ class CfnPortfolioShareProps:
         account_id: builtins.str,
         portfolio_id: builtins.str,
         accept_language: typing.Optional[builtins.str] = None,
-        share_tag_options: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        share_tag_options: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPortfolioShare``.
 
@@ -5120,13 +5128,13 @@ class CfnPortfolioShareProps:
     @builtins.property
     def share_tag_options(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether TagOptions sharing is enabled or disabled for the portfolio share.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioshare.html#cfn-servicecatalog-portfolioshare-sharetagoptions
         '''
         result = self._values.get("share_tag_options")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5171,7 +5179,7 @@ class CfnResourceUpdateConstraint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         portfolio_id: builtins.str,
@@ -5217,7 +5225,7 @@ class CfnResourceUpdateConstraint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourceUpdateConstraint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5264,9 +5272,9 @@ class CfnResourceUpdateConstraint(
     @jsii.member(jsii_name="resourceUpdateConstraintRef")
     def resource_update_constraint_ref(
         self,
-    ) -> _ResourceUpdateConstraintReference_7c332e17:
+    ) -> "_ResourceUpdateConstraintReference_7c332e17":
         '''A reference to a ResourceUpdateConstraint resource.'''
-        return typing.cast(_ResourceUpdateConstraintReference_7c332e17, jsii.get(self, "resourceUpdateConstraintRef"))
+        return typing.cast("_ResourceUpdateConstraintReference_7c332e17", jsii.get(self, "resourceUpdateConstraintRef"))
 
     @builtins.property
     @jsii.member(jsii_name="portfolioId")
@@ -5498,10 +5506,10 @@ class CfnServiceAction(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        definition: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServiceAction.DefinitionParameterProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        definition: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServiceAction.DefinitionParameterProperty", typing.Dict[builtins.str, typing.Any]]]]],
         definition_type: builtins.str,
         name: builtins.str,
         accept_language: typing.Optional[builtins.str] = None,
@@ -5544,7 +5552,7 @@ class CfnServiceAction(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServiceAction", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5591,22 +5599,22 @@ class CfnServiceAction(
 
     @builtins.property
     @jsii.member(jsii_name="serviceActionRef")
-    def service_action_ref(self) -> _ServiceActionReference_eb2df408:
+    def service_action_ref(self) -> "_ServiceActionReference_eb2df408":
         '''A reference to a ServiceAction resource.'''
-        return typing.cast(_ServiceActionReference_eb2df408, jsii.get(self, "serviceActionRef"))
+        return typing.cast("_ServiceActionReference_eb2df408", jsii.get(self, "serviceActionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="definition")
     def definition(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServiceAction.DefinitionParameterProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServiceAction.DefinitionParameterProperty"]]]:
         '''A map that defines the self-service action.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServiceAction.DefinitionParameterProperty"]]], jsii.get(self, "definition"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServiceAction.DefinitionParameterProperty"]]], jsii.get(self, "definition"))
 
     @definition.setter
     def definition(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServiceAction.DefinitionParameterProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServiceAction.DefinitionParameterProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ce59df90f00d540603f4ac3e5bf794dcc8ba05e89c05ad33d1289ab60d236f4a)
@@ -5761,12 +5769,12 @@ class CfnServiceActionAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         product_id: builtins.str,
         provisioning_artifact_id: builtins.str,
-        service_action_id: typing.Union[builtins.str, _IServiceActionRef_ab991e2b],
+        service_action_id: typing.Union[builtins.str, "_IServiceActionRef_ab991e2b"],
     ) -> None:
         '''Create a new ``AWS::ServiceCatalog::ServiceActionAssociation``.
 
@@ -5801,7 +5809,7 @@ class CfnServiceActionAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServiceActionAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5839,9 +5847,9 @@ class CfnServiceActionAssociation(
     @jsii.member(jsii_name="serviceActionAssociationRef")
     def service_action_association_ref(
         self,
-    ) -> _ServiceActionAssociationReference_b0ac9c14:
+    ) -> "_ServiceActionAssociationReference_b0ac9c14":
         '''A reference to a ServiceActionAssociation resource.'''
-        return typing.cast(_ServiceActionAssociationReference_b0ac9c14, jsii.get(self, "serviceActionAssociationRef"))
+        return typing.cast("_ServiceActionAssociationReference_b0ac9c14", jsii.get(self, "serviceActionAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="productId")
@@ -5898,7 +5906,7 @@ class CfnServiceActionAssociationProps:
         *,
         product_id: builtins.str,
         provisioning_artifact_id: builtins.str,
-        service_action_id: typing.Union[builtins.str, _IServiceActionRef_ab991e2b],
+        service_action_id: typing.Union[builtins.str, "_IServiceActionRef_ab991e2b"],
     ) -> None:
         '''Properties for defining a ``CfnServiceActionAssociation``.
 
@@ -5959,7 +5967,7 @@ class CfnServiceActionAssociationProps:
     @builtins.property
     def service_action_id(
         self,
-    ) -> typing.Union[builtins.str, _IServiceActionRef_ab991e2b]:
+    ) -> typing.Union[builtins.str, "_IServiceActionRef_ab991e2b"]:
         '''The self-service action identifier.
 
         For example, ``act-fs7abcd89wxyz`` .
@@ -5968,7 +5976,7 @@ class CfnServiceActionAssociationProps:
         '''
         result = self._values.get("service_action_id")
         assert result is not None, "Required property 'service_action_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IServiceActionRef_ab991e2b], result)
+        return typing.cast(typing.Union[builtins.str, "_IServiceActionRef_ab991e2b"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5997,7 +6005,7 @@ class CfnServiceActionProps:
     def __init__(
         self,
         *,
-        definition: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceAction.DefinitionParameterProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        definition: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServiceAction.DefinitionParameterProperty", typing.Dict[builtins.str, typing.Any]]]]],
         definition_type: builtins.str,
         name: builtins.str,
         accept_language: typing.Optional[builtins.str] = None,
@@ -6053,14 +6061,14 @@ class CfnServiceActionProps:
     @builtins.property
     def definition(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnServiceAction.DefinitionParameterProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServiceAction.DefinitionParameterProperty"]]]:
         '''A map that defines the self-service action.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-serviceaction.html#cfn-servicecatalog-serviceaction-definition
         '''
         result = self._values.get("definition")
         assert result is not None, "Required property 'definition' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnServiceAction.DefinitionParameterProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServiceAction.DefinitionParameterProperty"]]], result)
 
     @builtins.property
     def definition_type(self) -> builtins.str:
@@ -6153,7 +6161,7 @@ class CfnStackSetConstraint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account_list: typing.Sequence[builtins.str],
@@ -6211,7 +6219,7 @@ class CfnStackSetConstraint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStackSetConstraint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6255,9 +6263,9 @@ class CfnStackSetConstraint(
 
     @builtins.property
     @jsii.member(jsii_name="stackSetConstraintRef")
-    def stack_set_constraint_ref(self) -> _StackSetConstraintReference_378fddb5:
+    def stack_set_constraint_ref(self) -> "_StackSetConstraintReference_378fddb5":
         '''A reference to a StackSetConstraint resource.'''
-        return typing.cast(_StackSetConstraintReference_378fddb5, jsii.get(self, "stackSetConstraintRef"))
+        return typing.cast("_StackSetConstraintReference_378fddb5", jsii.get(self, "stackSetConstraintRef"))
 
     @builtins.property
     @jsii.member(jsii_name="accountList")
@@ -6608,12 +6616,12 @@ class CfnTagOption(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         key: builtins.str,
         value: builtins.str,
-        active: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        active: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::ServiceCatalog::TagOption``.
 
@@ -6644,7 +6652,7 @@ class CfnTagOption(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTagOption", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6689,9 +6697,9 @@ class CfnTagOption(
 
     @builtins.property
     @jsii.member(jsii_name="tagOptionRef")
-    def tag_option_ref(self) -> _TagOptionReference_ef49ef9d:
+    def tag_option_ref(self) -> "_TagOptionReference_ef49ef9d":
         '''A reference to a TagOption resource.'''
-        return typing.cast(_TagOptionReference_ef49ef9d, jsii.get(self, "tagOptionRef"))
+        return typing.cast("_TagOptionReference_ef49ef9d", jsii.get(self, "tagOptionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="key")
@@ -6723,14 +6731,14 @@ class CfnTagOption(
     @jsii.member(jsii_name="active")
     def active(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The TagOption active state.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "active"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "active"))
 
     @active.setter
     def active(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__89787874a9ebb4d4f8f779d0b1fe32ea722a2cc59e0dabe83bbaa1c0ed0f605b)
@@ -6764,7 +6772,7 @@ class CfnTagOptionAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         resource_id: typing.Optional[builtins.str] = None,
@@ -6800,7 +6808,7 @@ class CfnTagOptionAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTagOptionAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6836,9 +6844,9 @@ class CfnTagOptionAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tagOptionAssociationRef")
-    def tag_option_association_ref(self) -> _TagOptionAssociationReference_0801788b:
+    def tag_option_association_ref(self) -> "_TagOptionAssociationReference_0801788b":
         '''A reference to a TagOptionAssociation resource.'''
-        return typing.cast(_TagOptionAssociationReference_0801788b, jsii.get(self, "tagOptionAssociationRef"))
+        return typing.cast("_TagOptionAssociationReference_0801788b", jsii.get(self, "tagOptionAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="resourceId")
@@ -6949,7 +6957,7 @@ class CfnTagOptionProps:
         *,
         key: builtins.str,
         value: builtins.str,
-        active: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        active: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTagOption``.
 
@@ -7009,13 +7017,13 @@ class CfnTagOptionProps:
     @builtins.property
     def active(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The TagOption active state.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-tagoption.html#cfn-servicecatalog-tagoption-active
         '''
         result = self._values.get("active")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7391,14 +7399,14 @@ class CloudFormationTemplate(
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> "CloudFormationTemplate":
         '''Loads the provisioning artifacts template from a local disk path.
 
@@ -7463,7 +7471,7 @@ class CloudFormationTemplate(
     @abc.abstractmethod
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "CloudFormationTemplateConfig":
         '''Called when the product is initialized to allow this object to bind to the stack, add resources and have fun.
 
@@ -7476,7 +7484,7 @@ class _CloudFormationTemplateProxy(CloudFormationTemplate):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "CloudFormationTemplateConfig":
         '''Called when the product is initialized to allow this object to bind to the stack, add resources and have fun.
 
@@ -7501,7 +7509,7 @@ class CloudFormationTemplateConfig:
         self,
         *,
         http_url: builtins.str,
-        asset_bucket: typing.Optional[_IBucket_42e086fd] = None,
+        asset_bucket: typing.Optional["_IBucket_42e086fd"] = None,
     ) -> None:
         '''Result of binding ``Template`` into a ``Product``.
 
@@ -7544,13 +7552,13 @@ class CloudFormationTemplateConfig:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def asset_bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def asset_bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''The S3 bucket containing product stack assets.
 
         :default: - None - no assets are used in this product
         '''
         result = self._values.get("asset_bucket")
-        return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7724,7 +7732,7 @@ class IPortfolio(_IResource_c80c4260, typing_extensions.Protocol):
         product: "IProduct",
         *,
         accounts: typing.Sequence[builtins.str],
-        admin_role: _IRoleRef_8400221f,
+        admin_role: "_IRoleRef_8400221f",
         execution_role_name: builtins.str,
         regions: typing.Sequence[builtins.str],
         allow_stack_set_instance_operations: typing.Optional[builtins.bool] = None,
@@ -7745,7 +7753,7 @@ class IPortfolio(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="giveAccessToGroup")
-    def give_access_to_group(self, group: _IGroup_96daf542) -> None:
+    def give_access_to_group(self, group: "_IGroup_96daf542") -> None:
         '''Associate portfolio with an IAM Group.
 
         :param group: an IAM Group.
@@ -7753,7 +7761,7 @@ class IPortfolio(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="giveAccessToRole")
-    def give_access_to_role(self, role: _IRole_235f5d8e) -> None:
+    def give_access_to_role(self, role: "_IRole_235f5d8e") -> None:
         '''Associate portfolio with an IAM Role.
 
         :param role: an IAM role.
@@ -7761,7 +7769,7 @@ class IPortfolio(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="giveAccessToUser")
-    def give_access_to_user(self, user: _IUser_c32311f7) -> None:
+    def give_access_to_user(self, user: "_IUser_c32311f7") -> None:
         '''Associate portfolio with an IAM User.
 
         :param user: an IAM user.
@@ -7772,7 +7780,7 @@ class IPortfolio(_IResource_c80c4260, typing_extensions.Protocol):
     def notify_on_stack_events(
         self,
         product: "IProduct",
-        topic: _ITopic_9eca4852,
+        topic: "_ITopic_9eca4852",
         *,
         description: typing.Optional[builtins.str] = None,
         message_language: typing.Optional["MessageLanguage"] = None,
@@ -7790,7 +7798,7 @@ class IPortfolio(_IResource_c80c4260, typing_extensions.Protocol):
     def set_launch_role(
         self,
         product: "IProduct",
-        launch_role: _IRole_235f5d8e,
+        launch_role: "_IRole_235f5d8e",
         *,
         description: typing.Optional[builtins.str] = None,
         message_language: typing.Optional["MessageLanguage"] = None,
@@ -7812,7 +7820,7 @@ class IPortfolio(_IResource_c80c4260, typing_extensions.Protocol):
     def set_local_launch_role(
         self,
         product: "IProduct",
-        launch_role: _IRole_235f5d8e,
+        launch_role: "_IRole_235f5d8e",
         *,
         description: typing.Optional[builtins.str] = None,
         message_language: typing.Optional["MessageLanguage"] = None,
@@ -7837,7 +7845,7 @@ class IPortfolio(_IResource_c80c4260, typing_extensions.Protocol):
         *,
         description: typing.Optional[builtins.str] = None,
         message_language: typing.Optional["MessageLanguage"] = None,
-    ) -> _IRole_235f5d8e:
+    ) -> "_IRole_235f5d8e":
         '''Force users to assume a certain role when launching a product.
 
         The role will be referenced by name in the local account instead of a static role arn.
@@ -7974,7 +7982,7 @@ class _IPortfolioProxy(
         product: "IProduct",
         *,
         accounts: typing.Sequence[builtins.str],
-        admin_role: _IRoleRef_8400221f,
+        admin_role: "_IRoleRef_8400221f",
         execution_role_name: builtins.str,
         regions: typing.Sequence[builtins.str],
         allow_stack_set_instance_operations: typing.Optional[builtins.bool] = None,
@@ -8008,7 +8016,7 @@ class _IPortfolioProxy(
         return typing.cast(None, jsii.invoke(self, "deployWithStackSets", [product, options]))
 
     @jsii.member(jsii_name="giveAccessToGroup")
-    def give_access_to_group(self, group: _IGroup_96daf542) -> None:
+    def give_access_to_group(self, group: "_IGroup_96daf542") -> None:
         '''Associate portfolio with an IAM Group.
 
         :param group: an IAM Group.
@@ -8019,7 +8027,7 @@ class _IPortfolioProxy(
         return typing.cast(None, jsii.invoke(self, "giveAccessToGroup", [group]))
 
     @jsii.member(jsii_name="giveAccessToRole")
-    def give_access_to_role(self, role: _IRole_235f5d8e) -> None:
+    def give_access_to_role(self, role: "_IRole_235f5d8e") -> None:
         '''Associate portfolio with an IAM Role.
 
         :param role: an IAM role.
@@ -8030,7 +8038,7 @@ class _IPortfolioProxy(
         return typing.cast(None, jsii.invoke(self, "giveAccessToRole", [role]))
 
     @jsii.member(jsii_name="giveAccessToUser")
-    def give_access_to_user(self, user: _IUser_c32311f7) -> None:
+    def give_access_to_user(self, user: "_IUser_c32311f7") -> None:
         '''Associate portfolio with an IAM User.
 
         :param user: an IAM user.
@@ -8044,7 +8052,7 @@ class _IPortfolioProxy(
     def notify_on_stack_events(
         self,
         product: "IProduct",
-        topic: _ITopic_9eca4852,
+        topic: "_ITopic_9eca4852",
         *,
         description: typing.Optional[builtins.str] = None,
         message_language: typing.Optional["MessageLanguage"] = None,
@@ -8070,7 +8078,7 @@ class _IPortfolioProxy(
     def set_launch_role(
         self,
         product: "IProduct",
-        launch_role: _IRole_235f5d8e,
+        launch_role: "_IRole_235f5d8e",
         *,
         description: typing.Optional[builtins.str] = None,
         message_language: typing.Optional["MessageLanguage"] = None,
@@ -8100,7 +8108,7 @@ class _IPortfolioProxy(
     def set_local_launch_role(
         self,
         product: "IProduct",
-        launch_role: _IRole_235f5d8e,
+        launch_role: "_IRole_235f5d8e",
         *,
         description: typing.Optional[builtins.str] = None,
         message_language: typing.Optional["MessageLanguage"] = None,
@@ -8133,7 +8141,7 @@ class _IPortfolioProxy(
         *,
         description: typing.Optional[builtins.str] = None,
         message_language: typing.Optional["MessageLanguage"] = None,
-    ) -> _IRole_235f5d8e:
+    ) -> "_IRole_235f5d8e":
         '''Force users to assume a certain role when launching a product.
 
         The role will be referenced by name in the local account instead of a static role arn.
@@ -8153,7 +8161,7 @@ class _IPortfolioProxy(
             description=description, message_language=message_language
         )
 
-        return typing.cast(_IRole_235f5d8e, jsii.invoke(self, "setLocalLaunchRoleName", [product, launch_role_name, options]))
+        return typing.cast("_IRole_235f5d8e", jsii.invoke(self, "setLocalLaunchRoleName", [product, launch_role_name, options]))
 
     @jsii.member(jsii_name="shareWithAccount")
     def share_with_account(
@@ -8188,7 +8196,7 @@ class IProduct(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="assetBuckets")
-    def asset_buckets(self) -> typing.List[_IBucket_42e086fd]:
+    def asset_buckets(self) -> typing.List["_IBucket_42e086fd"]:
         '''The asset buckets of a product created via product stack.
 
         :attribute: true
@@ -8234,12 +8242,12 @@ class _IProductProxy(
 
     @builtins.property
     @jsii.member(jsii_name="assetBuckets")
-    def asset_buckets(self) -> typing.List[_IBucket_42e086fd]:
+    def asset_buckets(self) -> typing.List["_IBucket_42e086fd"]:
         '''The asset buckets of a product created via product stack.
 
         :attribute: true
         '''
-        return typing.cast(typing.List[_IBucket_42e086fd], jsii.get(self, "assetBuckets"))
+        return typing.cast(typing.List["_IBucket_42e086fd"], jsii.get(self, "assetBuckets"))
 
     @builtins.property
     @jsii.member(jsii_name="productArn")
@@ -8324,13 +8332,13 @@ class Portfolio(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         display_name: builtins.str,
         provider_name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
         tag_options: typing.Optional["TagOptions"] = None,
     ) -> None:
         '''
@@ -8360,10 +8368,10 @@ class Portfolio(
     @builtins.classmethod
     def from_portfolio_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         portfolio_arn: builtins.str,
-    ) -> IPortfolio:
+    ) -> "IPortfolio":
         '''Creates a Portfolio construct that represents an external portfolio.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -8375,7 +8383,7 @@ class Portfolio(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument portfolio_arn", value=portfolio_arn, expected_type=type_hints["portfolio_arn"])
-        return typing.cast(IPortfolio, jsii.sinvoke(cls, "fromPortfolioArn", [scope, id, portfolio_arn]))
+        return typing.cast("IPortfolio", jsii.sinvoke(cls, "fromPortfolioArn", [scope, id, portfolio_arn]))
 
     @jsii.member(jsii_name="addBucketPermissionsToSharedAccounts")
     def _add_bucket_permissions_to_shared_accounts(self) -> None:
@@ -8383,7 +8391,7 @@ class Portfolio(
         return typing.cast(None, jsii.invoke(self, "addBucketPermissionsToSharedAccounts", []))
 
     @jsii.member(jsii_name="addProduct")
-    def add_product(self, product: IProduct) -> None:
+    def add_product(self, product: "IProduct") -> None:
         '''Associate portfolio with the given product.
 
         :param product: -
@@ -8410,11 +8418,11 @@ class Portfolio(
     @jsii.member(jsii_name="constrainCloudFormationParameters")
     def constrain_cloud_formation_parameters(
         self,
-        product: IProduct,
+        product: "IProduct",
         *,
         rule: typing.Union["TemplateRule", typing.Dict[builtins.str, typing.Any]],
         description: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
     ) -> None:
         '''Set provisioning rules for the product.
 
@@ -8435,11 +8443,11 @@ class Portfolio(
     @jsii.member(jsii_name="constrainTagUpdates")
     def constrain_tag_updates(
         self,
-        product: IProduct,
+        product: "IProduct",
         *,
         allow: typing.Optional[builtins.bool] = None,
         description: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
     ) -> None:
         '''Add a Resource Update Constraint.
 
@@ -8460,15 +8468,15 @@ class Portfolio(
     @jsii.member(jsii_name="deployWithStackSets")
     def deploy_with_stack_sets(
         self,
-        product: IProduct,
+        product: "IProduct",
         *,
         accounts: typing.Sequence[builtins.str],
-        admin_role: _IRoleRef_8400221f,
+        admin_role: "_IRoleRef_8400221f",
         execution_role_name: builtins.str,
         regions: typing.Sequence[builtins.str],
         allow_stack_set_instance_operations: typing.Optional[builtins.bool] = None,
         description: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
     ) -> None:
         '''Configure deployment options using AWS Cloudformation StackSets.
 
@@ -8508,7 +8516,7 @@ class Portfolio(
         return typing.cast(builtins.str, jsii.invoke(self, "generateUniqueHash", [value]))
 
     @jsii.member(jsii_name="giveAccessToGroup")
-    def give_access_to_group(self, group: _IGroup_96daf542) -> None:
+    def give_access_to_group(self, group: "_IGroup_96daf542") -> None:
         '''Associate portfolio with an IAM Group.
 
         :param group: -
@@ -8519,7 +8527,7 @@ class Portfolio(
         return typing.cast(None, jsii.invoke(self, "giveAccessToGroup", [group]))
 
     @jsii.member(jsii_name="giveAccessToRole")
-    def give_access_to_role(self, role: _IRole_235f5d8e) -> None:
+    def give_access_to_role(self, role: "_IRole_235f5d8e") -> None:
         '''Associate portfolio with an IAM Role.
 
         :param role: -
@@ -8530,7 +8538,7 @@ class Portfolio(
         return typing.cast(None, jsii.invoke(self, "giveAccessToRole", [role]))
 
     @jsii.member(jsii_name="giveAccessToUser")
-    def give_access_to_user(self, user: _IUser_c32311f7) -> None:
+    def give_access_to_user(self, user: "_IUser_c32311f7") -> None:
         '''Associate portfolio with an IAM User.
 
         :param user: -
@@ -8543,11 +8551,11 @@ class Portfolio(
     @jsii.member(jsii_name="notifyOnStackEvents")
     def notify_on_stack_events(
         self,
-        product: IProduct,
-        topic: _ITopic_9eca4852,
+        product: "IProduct",
+        topic: "_ITopic_9eca4852",
         *,
         description: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
     ) -> None:
         '''Add notifications for supplied topics on the provisioned product.
 
@@ -8569,11 +8577,11 @@ class Portfolio(
     @jsii.member(jsii_name="setLaunchRole")
     def set_launch_role(
         self,
-        product: IProduct,
-        launch_role: _IRole_235f5d8e,
+        product: "IProduct",
+        launch_role: "_IRole_235f5d8e",
         *,
         description: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
     ) -> None:
         '''Force users to assume a certain role when launching a product.
 
@@ -8599,11 +8607,11 @@ class Portfolio(
     @jsii.member(jsii_name="setLocalLaunchRole")
     def set_local_launch_role(
         self,
-        product: IProduct,
-        launch_role: _IRole_235f5d8e,
+        product: "IProduct",
+        launch_role: "_IRole_235f5d8e",
         *,
         description: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
     ) -> None:
         '''Force users to assume a certain role when launching a product.
 
@@ -8628,12 +8636,12 @@ class Portfolio(
     @jsii.member(jsii_name="setLocalLaunchRoleName")
     def set_local_launch_role_name(
         self,
-        product: IProduct,
+        product: "IProduct",
         launch_role_name: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
-    ) -> _IRole_235f5d8e:
+        message_language: typing.Optional["MessageLanguage"] = None,
+    ) -> "_IRole_235f5d8e":
         '''Force users to assume a certain role when launching a product.
 
         The role will be referenced by name in the local account instead of a static role arn.
@@ -8653,14 +8661,14 @@ class Portfolio(
             description=description, message_language=message_language
         )
 
-        return typing.cast(_IRole_235f5d8e, jsii.invoke(self, "setLocalLaunchRoleName", [product, launch_role_name, options]))
+        return typing.cast("_IRole_235f5d8e", jsii.invoke(self, "setLocalLaunchRoleName", [product, launch_role_name, options]))
 
     @jsii.member(jsii_name="shareWithAccount")
     def share_with_account(
         self,
         account_id: builtins.str,
         *,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
         share_tag_options: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Initiate a portfolio share with another account.
@@ -8715,7 +8723,7 @@ class PortfolioProps:
         display_name: builtins.str,
         provider_name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
         tag_options: typing.Optional["TagOptions"] = None,
     ) -> None:
         '''Properties for a Portfolio.
@@ -8777,7 +8785,7 @@ class PortfolioProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def message_language(self) -> typing.Optional[MessageLanguage]:
+    def message_language(self) -> typing.Optional["MessageLanguage"]:
         '''The message language.
 
         Controls language for
@@ -8786,7 +8794,7 @@ class PortfolioProps:
         :default: - English
         '''
         result = self._values.get("message_language")
-        return typing.cast(typing.Optional[MessageLanguage], result)
+        return typing.cast(typing.Optional["MessageLanguage"], result)
 
     @builtins.property
     def tag_options(self) -> typing.Optional["TagOptions"]:
@@ -8821,7 +8829,7 @@ class PortfolioShareOptions:
     def __init__(
         self,
         *,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
         share_tag_options: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Options for portfolio share.
@@ -8853,7 +8861,7 @@ class PortfolioShareOptions:
             self._values["share_tag_options"] = share_tag_options
 
     @builtins.property
-    def message_language(self) -> typing.Optional[MessageLanguage]:
+    def message_language(self) -> typing.Optional["MessageLanguage"]:
         '''The message language of the share.
 
         Controls status and error message language for share.
@@ -8861,7 +8869,7 @@ class PortfolioShareOptions:
         :default: - English
         '''
         result = self._values.get("message_language")
-        return typing.cast(typing.Optional[MessageLanguage], result)
+        return typing.cast(typing.Optional["MessageLanguage"], result)
 
     @builtins.property
     def share_tag_options(self) -> typing.Optional[builtins.bool]:
@@ -8905,7 +8913,7 @@ class Product(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -8938,10 +8946,10 @@ class Product(
     @builtins.classmethod
     def from_product_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         product_arn: builtins.str,
-    ) -> IProduct:
+    ) -> "IProduct":
         '''Creates a Product construct that represents an external product.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -8953,7 +8961,7 @@ class Product(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument product_arn", value=product_arn, expected_type=type_hints["product_arn"])
-        return typing.cast(IProduct, jsii.sinvoke(cls, "fromProductArn", [scope, id, product_arn]))
+        return typing.cast("IProduct", jsii.sinvoke(cls, "fromProductArn", [scope, id, product_arn]))
 
     @jsii.member(jsii_name="associateTagOptions")
     def associate_tag_options(self, tag_options: "TagOptions") -> None:
@@ -8972,7 +8980,7 @@ class Product(
     @builtins.property
     @jsii.member(jsii_name="assetBuckets")
     @abc.abstractmethod
-    def asset_buckets(self) -> typing.List[_IBucket_42e086fd]:
+    def asset_buckets(self) -> typing.List["_IBucket_42e086fd"]:
         '''The asset buckets of a product created via product stack.'''
         ...
 
@@ -8997,9 +9005,9 @@ class _ProductProxy(
 ):
     @builtins.property
     @jsii.member(jsii_name="assetBuckets")
-    def asset_buckets(self) -> typing.List[_IBucket_42e086fd]:
+    def asset_buckets(self) -> typing.List["_IBucket_42e086fd"]:
         '''The asset buckets of a product created via product stack.'''
-        return typing.cast(typing.List[_IBucket_42e086fd], jsii.get(self, "assetBuckets"))
+        return typing.cast(typing.List["_IBucket_42e086fd"], jsii.get(self, "assetBuckets"))
 
     @builtins.property
     @jsii.member(jsii_name="productArn")
@@ -9058,14 +9066,14 @@ class ProductStack(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         analytics_reporting: typing.Optional[builtins.bool] = None,
-        asset_bucket: typing.Optional[_IBucket_42e086fd] = None,
+        asset_bucket: typing.Optional["_IBucket_42e086fd"] = None,
         description: typing.Optional[builtins.str] = None,
         memory_limit: typing.Optional[jsii.Number] = None,
-        server_side_encryption: typing.Optional[_ServerSideEncryption_50ddf705] = None,
+        server_side_encryption: typing.Optional["_ServerSideEncryption_50ddf705"] = None,
         server_side_encryption_aws_kms_key_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -9137,12 +9145,12 @@ class ProductStackHistory(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         current_version_locked: builtins.bool,
         current_version_name: builtins.str,
-        product_stack: ProductStack,
+        product_stack: "ProductStack",
         description: typing.Optional[builtins.str] = None,
         directory: typing.Optional[builtins.str] = None,
         validate_template: typing.Optional[builtins.bool] = None,
@@ -9173,15 +9181,15 @@ class ProductStackHistory(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="currentVersion")
-    def current_version(self) -> CloudFormationProductVersion:
+    def current_version(self) -> "CloudFormationProductVersion":
         '''Retains product stack template as a snapshot when deployed and retrieves a CloudFormationProductVersion for the current product version.'''
-        return typing.cast(CloudFormationProductVersion, jsii.invoke(self, "currentVersion", []))
+        return typing.cast("CloudFormationProductVersion", jsii.invoke(self, "currentVersion", []))
 
     @jsii.member(jsii_name="versionFromSnapshot")
     def version_from_snapshot(
         self,
         product_version_name: builtins.str,
-    ) -> CloudFormationProductVersion:
+    ) -> "CloudFormationProductVersion":
         '''Retrieves a CloudFormationProductVersion from a previously deployed productVersionName.
 
         :param product_version_name: -
@@ -9189,7 +9197,7 @@ class ProductStackHistory(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2e798fec42d429d97aa53ac4883c29b729ae861e8ee96a752fec47032e75b058)
             check_type(argname="argument product_version_name", value=product_version_name, expected_type=type_hints["product_version_name"])
-        return typing.cast(CloudFormationProductVersion, jsii.invoke(self, "versionFromSnapshot", [product_version_name]))
+        return typing.cast("CloudFormationProductVersion", jsii.invoke(self, "versionFromSnapshot", [product_version_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -9216,7 +9224,7 @@ class ProductStackHistoryProps:
         *,
         current_version_locked: builtins.bool,
         current_version_name: builtins.str,
-        product_stack: ProductStack,
+        product_stack: "ProductStack",
         description: typing.Optional[builtins.str] = None,
         directory: typing.Optional[builtins.str] = None,
         validate_template: typing.Optional[builtins.bool] = None,
@@ -9289,11 +9297,11 @@ class ProductStackHistoryProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def product_stack(self) -> ProductStack:
+    def product_stack(self) -> "ProductStack":
         '''The ProductStack whose history will be retained as a snapshot.'''
         result = self._values.get("product_stack")
         assert result is not None, "Required property 'product_stack' is missing"
-        return typing.cast(ProductStack, result)
+        return typing.cast("ProductStack", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -9353,10 +9361,10 @@ class ProductStackProps:
         self,
         *,
         analytics_reporting: typing.Optional[builtins.bool] = None,
-        asset_bucket: typing.Optional[_IBucket_42e086fd] = None,
+        asset_bucket: typing.Optional["_IBucket_42e086fd"] = None,
         description: typing.Optional[builtins.str] = None,
         memory_limit: typing.Optional[jsii.Number] = None,
-        server_side_encryption: typing.Optional[_ServerSideEncryption_50ddf705] = None,
+        server_side_encryption: typing.Optional["_ServerSideEncryption_50ddf705"] = None,
         server_side_encryption_aws_kms_key_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Product stack props.
@@ -9438,13 +9446,13 @@ class ProductStackProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def asset_bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def asset_bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''A Bucket can be passed to store assets, enabling ProductStack Asset support.
 
         :default: - No Bucket provided and Assets will not be supported.
         '''
         result = self._values.get("asset_bucket")
-        return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -9468,13 +9476,15 @@ class ProductStackProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def server_side_encryption(self) -> typing.Optional[_ServerSideEncryption_50ddf705]:
+    def server_side_encryption(
+        self,
+    ) -> typing.Optional["_ServerSideEncryption_50ddf705"]:
         '''A ServerSideEncryption can be enabled to encrypt assets that are put into assetBucket.
 
         :default: - No encryption is used
         '''
         result = self._values.get("server_side_encryption")
-        return typing.cast(typing.Optional[_ServerSideEncryption_50ddf705], result)
+        return typing.cast(typing.Optional["_ServerSideEncryption_50ddf705"], result)
 
     @builtins.property
     def server_side_encryption_aws_kms_key_id(self) -> typing.Optional[builtins.str]:
@@ -9515,9 +9525,9 @@ class StackSetsConstraintOptions(CommonConstraintOptions):
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
         accounts: typing.Sequence[builtins.str],
-        admin_role: _IRoleRef_8400221f,
+        admin_role: "_IRoleRef_8400221f",
         execution_role_name: builtins.str,
         regions: typing.Sequence[builtins.str],
         allow_stack_set_instance_operations: typing.Optional[builtins.bool] = None,
@@ -9584,7 +9594,7 @@ class StackSetsConstraintOptions(CommonConstraintOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def message_language(self) -> typing.Optional[MessageLanguage]:
+    def message_language(self) -> typing.Optional["MessageLanguage"]:
         '''The language code.
 
         Configures the language for error messages from service catalog.
@@ -9592,7 +9602,7 @@ class StackSetsConstraintOptions(CommonConstraintOptions):
         :default: - English
         '''
         result = self._values.get("message_language")
-        return typing.cast(typing.Optional[MessageLanguage], result)
+        return typing.cast(typing.Optional["MessageLanguage"], result)
 
     @builtins.property
     def accounts(self) -> typing.List[builtins.str]:
@@ -9602,11 +9612,11 @@ class StackSetsConstraintOptions(CommonConstraintOptions):
         return typing.cast(typing.List[builtins.str], result)
 
     @builtins.property
-    def admin_role(self) -> _IRoleRef_8400221f:
+    def admin_role(self) -> "_IRoleRef_8400221f":
         '''IAM role used to administer the StackSets configuration.'''
         result = self._values.get("admin_role")
         assert result is not None, "Required property 'admin_role' is missing"
-        return typing.cast(_IRoleRef_8400221f, result)
+        return typing.cast("_IRoleRef_8400221f", result)
 
     @builtins.property
     def execution_role_name(self) -> builtins.str:
@@ -9680,7 +9690,7 @@ class TagOptions(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         allowed_values_for_tags: typing.Mapping[builtins.str, typing.Sequence[builtins.str]],
@@ -9789,7 +9799,7 @@ class TagUpdateConstraintOptions(CommonConstraintOptions):
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
         allow: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Properties for ResourceUpdateConstraint.
@@ -9834,7 +9844,7 @@ class TagUpdateConstraintOptions(CommonConstraintOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def message_language(self) -> typing.Optional[MessageLanguage]:
+    def message_language(self) -> typing.Optional["MessageLanguage"]:
         '''The language code.
 
         Configures the language for error messages from service catalog.
@@ -9842,7 +9852,7 @@ class TagUpdateConstraintOptions(CommonConstraintOptions):
         :default: - English
         '''
         result = self._values.get("message_language")
-        return typing.cast(typing.Optional[MessageLanguage], result)
+        return typing.cast(typing.Optional["MessageLanguage"], result)
 
     @builtins.property
     def allow(self) -> typing.Optional[builtins.bool]:
@@ -9880,7 +9890,7 @@ class TemplateRule:
         *,
         assertions: typing.Sequence[typing.Union["TemplateRuleAssertion", typing.Dict[builtins.str, typing.Any]]],
         rule_name: builtins.str,
-        condition: typing.Optional[_ICfnRuleConditionExpression_9aca991b] = None,
+        condition: typing.Optional["_ICfnRuleConditionExpression_9aca991b"] = None,
     ) -> None:
         '''Defines the provisioning template constraints.
 
@@ -9936,13 +9946,13 @@ class TemplateRule:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def condition(self) -> typing.Optional[_ICfnRuleConditionExpression_9aca991b]:
+    def condition(self) -> typing.Optional["_ICfnRuleConditionExpression_9aca991b"]:
         '''Specify when to apply rule with a rule-specific intrinsic function.
 
         :default: - no rule condition provided
         '''
         result = self._values.get("condition")
-        return typing.cast(typing.Optional[_ICfnRuleConditionExpression_9aca991b], result)
+        return typing.cast(typing.Optional["_ICfnRuleConditionExpression_9aca991b"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9965,7 +9975,7 @@ class TemplateRuleAssertion:
     def __init__(
         self,
         *,
-        assert_: _ICfnRuleConditionExpression_9aca991b,
+        assert_: "_ICfnRuleConditionExpression_9aca991b",
         description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''An assertion within a template rule, defined by intrinsic functions.
@@ -10002,11 +10012,11 @@ class TemplateRuleAssertion:
             self._values["description"] = description
 
     @builtins.property
-    def assert_(self) -> _ICfnRuleConditionExpression_9aca991b:
+    def assert_(self) -> "_ICfnRuleConditionExpression_9aca991b":
         '''The assertion condition.'''
         result = self._values.get("assert_")
         assert result is not None, "Required property 'assert_' is missing"
-        return typing.cast(_ICfnRuleConditionExpression_9aca991b, result)
+        return typing.cast("_ICfnRuleConditionExpression_9aca991b", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -10062,20 +10072,20 @@ class CloudFormationProduct(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         owner: builtins.str,
         product_name: builtins.str,
-        product_versions: typing.Sequence[typing.Union[CloudFormationProductVersion, typing.Dict[builtins.str, typing.Any]]],
+        product_versions: typing.Sequence[typing.Union["CloudFormationProductVersion", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
         distributor: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
+        message_language: typing.Optional["MessageLanguage"] = None,
         replace_product_version_ids: typing.Optional[builtins.bool] = None,
         support_description: typing.Optional[builtins.str] = None,
         support_email: typing.Optional[builtins.str] = None,
         support_url: typing.Optional[builtins.str] = None,
-        tag_options: typing.Optional[TagOptions] = None,
+        tag_options: typing.Optional["TagOptions"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -10120,12 +10130,12 @@ class CloudFormationProduct(
 
     @builtins.property
     @jsii.member(jsii_name="assetBuckets")
-    def asset_buckets(self) -> typing.List[_IBucket_42e086fd]:
+    def asset_buckets(self) -> typing.List["_IBucket_42e086fd"]:
         '''The asset bucket of a product created via product stack.
 
         :default: - Empty - no assets are used in this product
         '''
-        return typing.cast(typing.List[_IBucket_42e086fd], jsii.get(self, "assetBuckets"))
+        return typing.cast(typing.List["_IBucket_42e086fd"], jsii.get(self, "assetBuckets"))
 
     @builtins.property
     @jsii.member(jsii_name="productArn")
@@ -10154,8 +10164,8 @@ class CloudFormationRuleConstraintOptions(CommonConstraintOptions):
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        message_language: typing.Optional[MessageLanguage] = None,
-        rule: typing.Union[TemplateRule, typing.Dict[builtins.str, typing.Any]],
+        message_language: typing.Optional["MessageLanguage"] = None,
+        rule: typing.Union["TemplateRule", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''Properties for provisoning rule constraint.
 
@@ -10209,7 +10219,7 @@ class CloudFormationRuleConstraintOptions(CommonConstraintOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def message_language(self) -> typing.Optional[MessageLanguage]:
+    def message_language(self) -> typing.Optional["MessageLanguage"]:
         '''The language code.
 
         Configures the language for error messages from service catalog.
@@ -10217,14 +10227,14 @@ class CloudFormationRuleConstraintOptions(CommonConstraintOptions):
         :default: - English
         '''
         result = self._values.get("message_language")
-        return typing.cast(typing.Optional[MessageLanguage], result)
+        return typing.cast(typing.Optional["MessageLanguage"], result)
 
     @builtins.property
-    def rule(self) -> TemplateRule:
+    def rule(self) -> "TemplateRule":
         '''The rule with condition and assertions to apply to template.'''
         result = self._values.get("rule")
         assert result is not None, "Required property 'rule' is missing"
-        return typing.cast(TemplateRule, result)
+        return typing.cast("TemplateRule", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

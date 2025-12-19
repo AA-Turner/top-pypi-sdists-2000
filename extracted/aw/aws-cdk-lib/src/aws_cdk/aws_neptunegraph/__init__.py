@@ -103,6 +103,7 @@ class CfnGraph(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_neptunegraph as neptunegraph
@@ -127,16 +128,16 @@ class CfnGraph(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         provisioned_memory: jsii.Number,
-        deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        deletion_protection: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         graph_name: typing.Optional[builtins.str] = None,
-        public_connectivity: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        public_connectivity: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         replica_count: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vector_search_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGraph.VectorSearchConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vector_search_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraph.VectorSearchConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::NeptuneGraph::Graph``.
 
@@ -168,7 +169,7 @@ class CfnGraph(
 
     @jsii.member(jsii_name="arnForGraph")
     @builtins.classmethod
-    def arn_for_graph(cls, resource: _IGraphRef_799f5749) -> builtins.str:
+    def arn_for_graph(cls, resource: "_IGraphRef_799f5749") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -190,7 +191,7 @@ class CfnGraph(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGraph", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -254,9 +255,9 @@ class CfnGraph(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -265,9 +266,9 @@ class CfnGraph(
 
     @builtins.property
     @jsii.member(jsii_name="graphRef")
-    def graph_ref(self) -> _GraphReference_cf154cc8:
+    def graph_ref(self) -> "_GraphReference_cf154cc8":
         '''A reference to a Graph resource.'''
-        return typing.cast(_GraphReference_cf154cc8, jsii.get(self, "graphRef"))
+        return typing.cast("_GraphReference_cf154cc8", jsii.get(self, "graphRef"))
 
     @builtins.property
     @jsii.member(jsii_name="provisionedMemory")
@@ -286,14 +287,14 @@ class CfnGraph(
     @jsii.member(jsii_name="deletionProtection")
     def deletion_protection(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A value that indicates whether the graph has deletion protection enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deletionProtection"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deletionProtection"))
 
     @deletion_protection.setter
     def deletion_protection(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8d4dc803566213a64093ff7c2e80aeb4a54bbf259b51aa0f56875846630453c9)
@@ -320,17 +321,17 @@ class CfnGraph(
     @jsii.member(jsii_name="publicConnectivity")
     def public_connectivity(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether or not the graph can be reachable over the internet.
 
         All access to graphs is IAM authenticated.
         '''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "publicConnectivity"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "publicConnectivity"))
 
     @public_connectivity.setter
     def public_connectivity(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9704e1ee452151e117b8f45f27e9257936bf4012fb73bd4445e9f623dce33af6)
@@ -352,12 +353,12 @@ class CfnGraph(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Adds metadata tags to the new graph.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__49f939472207baf1bb12ed3155e6d6c9c7b0a5427a254d271f09e144b617f439)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -367,14 +368,14 @@ class CfnGraph(
     @jsii.member(jsii_name="vectorSearchConfiguration")
     def vector_search_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraph.VectorSearchConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraph.VectorSearchConfigurationProperty"]]:
         '''Specifies the number of dimensions for vector embeddings that will be loaded into the graph.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraph.VectorSearchConfigurationProperty"]], jsii.get(self, "vectorSearchConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraph.VectorSearchConfigurationProperty"]], jsii.get(self, "vectorSearchConfiguration"))
 
     @vector_search_configuration.setter
     def vector_search_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraph.VectorSearchConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraph.VectorSearchConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f52f361f4f645382b2e53faccee1b1e685b8665ddcc9f188eae9dec9c26ae9af)
@@ -452,12 +453,12 @@ class CfnGraphProps:
         self,
         *,
         provisioned_memory: jsii.Number,
-        deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        deletion_protection: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         graph_name: typing.Optional[builtins.str] = None,
-        public_connectivity: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        public_connectivity: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         replica_count: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vector_search_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGraph.VectorSearchConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vector_search_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraph.VectorSearchConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnGraph``.
 
@@ -474,6 +475,7 @@ class CfnGraphProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_neptunegraph as neptunegraph
@@ -535,7 +537,7 @@ class CfnGraphProps:
     @builtins.property
     def deletion_protection(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A value that indicates whether the graph has deletion protection enabled.
 
         The graph can't be deleted when deletion protection is enabled.
@@ -543,7 +545,7 @@ class CfnGraphProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptunegraph-graph.html#cfn-neptunegraph-graph-deletionprotection
         '''
         result = self._values.get("deletion_protection")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def graph_name(self) -> typing.Optional[builtins.str]:
@@ -561,7 +563,7 @@ class CfnGraphProps:
     @builtins.property
     def public_connectivity(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether or not the graph can be reachable over the internet. All access to graphs is IAM authenticated.
 
         When the graph is publicly available, its domain name system (DNS) endpoint resolves to the public IP address from the internet. When the graph isn't publicly available, you need to create a ``PrivateGraphEndpoint`` in a given VPC to ensure the DNS name resolves to a private IP address that is reachable from the VPC.
@@ -574,7 +576,7 @@ class CfnGraphProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptunegraph-graph.html#cfn-neptunegraph-graph-publicconnectivity
         '''
         result = self._values.get("public_connectivity")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def replica_count(self) -> typing.Optional[jsii.Number]:
@@ -588,7 +590,7 @@ class CfnGraphProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Adds metadata tags to the new graph.
 
         These tags can also be used with cost allocation reporting, or used in a Condition statement in an IAM policy.
@@ -596,12 +598,12 @@ class CfnGraphProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptunegraph-graph.html#cfn-neptunegraph-graph-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def vector_search_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGraph.VectorSearchConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraph.VectorSearchConfigurationProperty"]]:
         '''Specifies the number of dimensions for vector embeddings that will be loaded into the graph.
 
         The value is specified as ``dimension=`` value. Max = 65,535
@@ -609,7 +611,7 @@ class CfnGraphProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptunegraph-graph.html#cfn-neptunegraph-graph-vectorsearchconfiguration
         '''
         result = self._values.get("vector_search_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGraph.VectorSearchConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraph.VectorSearchConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -658,7 +660,7 @@ class CfnPrivateGraphEndpoint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         graph_identifier: builtins.str,
@@ -701,7 +703,7 @@ class CfnPrivateGraphEndpoint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPrivateGraphEndpoint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -759,9 +761,9 @@ class CfnPrivateGraphEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="privateGraphEndpointRef")
-    def private_graph_endpoint_ref(self) -> _PrivateGraphEndpointReference_1f09acbb:
+    def private_graph_endpoint_ref(self) -> "_PrivateGraphEndpointReference_1f09acbb":
         '''A reference to a PrivateGraphEndpoint resource.'''
-        return typing.cast(_PrivateGraphEndpointReference_1f09acbb, jsii.get(self, "privateGraphEndpointRef"))
+        return typing.cast("_PrivateGraphEndpointReference_1f09acbb", jsii.get(self, "privateGraphEndpointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="graphIdentifier")

@@ -100,6 +100,7 @@ class CfnProfile(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_route53profiles as route53profiles
@@ -117,11 +118,11 @@ class CfnProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Route53Profiles::Profile``.
 
@@ -140,7 +141,7 @@ class CfnProfile(
 
     @jsii.member(jsii_name="arnForProfile")
     @builtins.classmethod
-    def arn_for_profile(cls, resource: _IProfileRef_8fd1b1e8) -> builtins.str:
+    def arn_for_profile(cls, resource: "_IProfileRef_8fd1b1e8") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -162,7 +163,7 @@ class CfnProfile(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -219,10 +220,19 @@ class CfnProfile(
         return typing.cast(builtins.str, jsii.get(self, "attrId"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrShareStatus")
+    def attr_share_status(self) -> builtins.str:
+        '''The sharing status of the profile.
+
+        :cloudformationAttribute: ShareStatus
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrShareStatus"))
+
+    @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -231,9 +241,9 @@ class CfnProfile(
 
     @builtins.property
     @jsii.member(jsii_name="profileRef")
-    def profile_ref(self) -> _ProfileReference_4adbea45:
+    def profile_ref(self) -> "_ProfileReference_4adbea45":
         '''A reference to a Profile resource.'''
-        return typing.cast(_ProfileReference_4adbea45, jsii.get(self, "profileRef"))
+        return typing.cast("_ProfileReference_4adbea45", jsii.get(self, "profileRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -250,12 +260,12 @@ class CfnProfile(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of the tag keys and values that you want to associate with the profile.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1c969507a00c93e8a8b7637d952f3cf0cff3a4955296198e407c611f9eebfc0c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -276,6 +286,7 @@ class CfnProfileAssociation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_route53profiles as route53profiles
@@ -296,14 +307,14 @@ class CfnProfileAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         profile_id: builtins.str,
         resource_id: builtins.str,
         arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Route53Profiles::ProfileAssociation``.
 
@@ -333,7 +344,7 @@ class CfnProfileAssociation(
     @builtins.classmethod
     def arn_for_profile_association(
         cls,
-        resource: _IProfileAssociationRef_f325171d,
+        resource: "_IProfileAssociationRef_f325171d",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -356,7 +367,7 @@ class CfnProfileAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProfileAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -396,9 +407,9 @@ class CfnProfileAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -407,9 +418,9 @@ class CfnProfileAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="profileAssociationRef")
-    def profile_association_ref(self) -> _ProfileAssociationReference_508dcf14:
+    def profile_association_ref(self) -> "_ProfileAssociationReference_508dcf14":
         '''A reference to a ProfileAssociation resource.'''
-        return typing.cast(_ProfileAssociationReference_508dcf14, jsii.get(self, "profileAssociationRef"))
+        return typing.cast("_ProfileAssociationReference_508dcf14", jsii.get(self, "profileAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -465,12 +476,12 @@ class CfnProfileAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__931a5eb93acc9ea331b6c7a804aa50f9c8645e820b985c1e8c3b0338897b0758)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -496,7 +507,7 @@ class CfnProfileAssociationProps:
         profile_id: builtins.str,
         resource_id: builtins.str,
         arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnProfileAssociation``.
 
@@ -511,6 +522,7 @@ class CfnProfileAssociationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_route53profiles as route53profiles
@@ -587,13 +599,13 @@ class CfnProfileAssociationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53profiles-profileassociation.html#cfn-route53profiles-profileassociation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -617,7 +629,7 @@ class CfnProfileProps:
         self,
         *,
         name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnProfile``.
 
@@ -629,6 +641,7 @@ class CfnProfileProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_route53profiles as route53profiles
@@ -664,13 +677,13 @@ class CfnProfileProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of the tag keys and values that you want to associate with the profile.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53profiles-profile.html#cfn-route53profiles-profile-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -714,7 +727,7 @@ class CfnProfileResourceAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -757,7 +770,7 @@ class CfnProfileResourceAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProfileResourceAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -813,9 +826,9 @@ class CfnProfileResourceAssociation(
     @jsii.member(jsii_name="profileResourceAssociationRef")
     def profile_resource_association_ref(
         self,
-    ) -> _ProfileResourceAssociationReference_d052f790:
+    ) -> "_ProfileResourceAssociationReference_d052f790":
         '''A reference to a ProfileResourceAssociation resource.'''
-        return typing.cast(_ProfileResourceAssociationReference_d052f790, jsii.get(self, "profileResourceAssociationRef"))
+        return typing.cast("_ProfileResourceAssociationReference_d052f790", jsii.get(self, "profileResourceAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")

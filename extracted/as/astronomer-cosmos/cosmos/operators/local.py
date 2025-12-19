@@ -10,16 +10,17 @@ import urllib.parse
 import warnings
 import zlib
 from abc import ABC, abstractmethod
+from collections.abc import Callable, Sequence
 from functools import cached_property
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable, Literal, Sequence
+from typing import TYPE_CHECKING, Any, Literal
 from urllib.parse import urlparse
 
-import airflow
 import jinja2
 from airflow import DAG
 from airflow.exceptions import AirflowException, AirflowSkipException
 from airflow.models.taskinstance import TaskInstance
+from packaging.version import Version
 
 if TYPE_CHECKING:  # pragma: no cover
     try:
@@ -27,9 +28,7 @@ if TYPE_CHECKING:  # pragma: no cover
     except ImportError:
         from airflow.utils.context import Context  # type: ignore[attr-defined]
 
-from airflow.version import version as airflow_version
 from attrs import define
-from packaging.version import Version
 
 from cosmos import cache, settings
 
@@ -46,6 +45,7 @@ from cosmos.cache import (
 )
 from cosmos.constants import (
     _AIRFLOW3_MAJOR_VERSION,
+    AIRFLOW_VERSION,
     DBT_DEPENDENCIES_FILE_NAMES,
     FILE_SCHEME_AIRFLOW_DEFAULT_CONN_ID_MAP,
     InvocationMode,
@@ -117,8 +117,6 @@ from cosmos.operators.base import (
     _sanitize_xcom_key,
 )
 
-AIRFLOW_VERSION = Version(airflow.__version__)
-
 logger = get_logger(__name__)
 
 
@@ -184,6 +182,7 @@ class AbstractDbtLocalBase(AbstractDbtBase):
         "compiled_sql": "sql",
         "freshness": "json",
     }
+    _process_log_line_callable: Callable[[str, Any], None] | None = None
 
     def __init__(
         self,
@@ -323,7 +322,7 @@ class AbstractDbtLocalBase(AbstractDbtBase):
         if not settings.AIRFLOW_IO_AVAILABLE:
             raise CosmosValueError(
                 f"You're trying to specify remote target path {target_path_str}, but the required "
-                f"Object Storage feature is unavailable in Airflow version {airflow_version}. Please upgrade to "
+                f"Object Storage feature is unavailable in Airflow version {AIRFLOW_VERSION}. Please upgrade to "
                 "Airflow 2.8 or later."
             )
 
@@ -460,27 +459,31 @@ class AbstractDbtLocalBase(AbstractDbtBase):
 
         _override_rtif_airflow_2_x()
 
-    def run_subprocess(self, command: list[str], env: dict[str, str], cwd: str) -> FullOutputSubprocessResult:
+    def run_subprocess(
+        self, command: list[str], env: dict[str, str], cwd: str, **kwargs: Any
+    ) -> FullOutputSubprocessResult:
         logger.info("Trying to run the command:\n %s\nFrom %s", command, cwd)
         subprocess_result: FullOutputSubprocessResult = self.subprocess_hook.run_command(
             command=command,
             env=env,
             cwd=cwd,
             output_encoding=self.output_encoding,
+            process_log_line=self._process_log_line_callable,
+            **kwargs,
         )
         # Logging changed in Airflow 3.1 and we needed to replace the output by the full output:
         output = "".join(subprocess_result.full_output)
         logger.info(output)
         return subprocess_result
 
-    def run_dbt_runner(self, command: list[str], env: dict[str, str], cwd: str) -> dbtRunnerResult:
+    def run_dbt_runner(self, command: list[str], env: dict[str, str], cwd: str, **kwargs: Any) -> dbtRunnerResult:
         """Invokes the dbt command programmatically."""
         if not dbt_runner.is_available():
             raise CosmosDbtRunError(
                 "Could not import dbt core. Ensure that dbt-core >= v1.5 is installed and available in the environment where the operator is running."
             )
 
-        return dbt_runner.run_command(command, env, cwd, callbacks=self._dbt_runner_callbacks)
+        return dbt_runner.run_command(command, env, cwd, callbacks=self._dbt_runner_callbacks, **kwargs)
 
     def _cache_package_lockfile(self, tmp_project_dir: Path) -> None:
         project_dir = Path(self.project_dir)
@@ -687,6 +690,7 @@ class AbstractDbtLocalBase(AbstractDbtBase):
                     command=full_cmd,
                     env=env,
                     cwd=tmp_project_dir,
+                    context=context,
                 )
                 if is_openlineage_common_available:
                     self.calculate_openlineage_events_completes(env, tmp_dir_path)

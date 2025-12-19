@@ -96,7 +96,7 @@ class IConnectionAliasRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectionAliasRef")
-    def connection_alias_ref(self) -> ConnectionAliasReference:
+    def connection_alias_ref(self) -> "ConnectionAliasReference":
         '''(experimental) A reference to a ConnectionAlias resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IConnectionAliasRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectionAliasRef")
-    def connection_alias_ref(self) -> ConnectionAliasReference:
+    def connection_alias_ref(self) -> "ConnectionAliasReference":
         '''(experimental) A reference to a ConnectionAlias resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectionAliasReference, jsii.get(self, "connectionAliasRef"))
+        return typing.cast("ConnectionAliasReference", jsii.get(self, "connectionAliasRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectionAliasRef).__jsii_proxy_class__ = lambda : _IConnectionAliasRefProxy

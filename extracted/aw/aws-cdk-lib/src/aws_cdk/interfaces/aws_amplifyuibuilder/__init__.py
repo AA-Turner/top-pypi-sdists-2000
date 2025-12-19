@@ -209,7 +209,7 @@ class IComponentRef(
 
     @builtins.property
     @jsii.member(jsii_name="componentRef")
-    def component_ref(self) -> ComponentReference:
+    def component_ref(self) -> "ComponentReference":
         '''(experimental) A reference to a Component resource.
 
         :stability: experimental
@@ -230,12 +230,12 @@ class _IComponentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="componentRef")
-    def component_ref(self) -> ComponentReference:
+    def component_ref(self) -> "ComponentReference":
         '''(experimental) A reference to a Component resource.
 
         :stability: experimental
         '''
-        return typing.cast(ComponentReference, jsii.get(self, "componentRef"))
+        return typing.cast("ComponentReference", jsii.get(self, "componentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IComponentRef).__jsii_proxy_class__ = lambda : _IComponentRefProxy
@@ -254,7 +254,7 @@ class IFormRef(
 
     @builtins.property
     @jsii.member(jsii_name="formRef")
-    def form_ref(self) -> FormReference:
+    def form_ref(self) -> "FormReference":
         '''(experimental) A reference to a Form resource.
 
         :stability: experimental
@@ -275,12 +275,12 @@ class _IFormRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="formRef")
-    def form_ref(self) -> FormReference:
+    def form_ref(self) -> "FormReference":
         '''(experimental) A reference to a Form resource.
 
         :stability: experimental
         '''
-        return typing.cast(FormReference, jsii.get(self, "formRef"))
+        return typing.cast("FormReference", jsii.get(self, "formRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFormRef).__jsii_proxy_class__ = lambda : _IFormRefProxy

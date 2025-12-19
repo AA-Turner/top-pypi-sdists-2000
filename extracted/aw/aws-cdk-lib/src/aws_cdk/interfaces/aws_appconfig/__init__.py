@@ -576,7 +576,7 @@ class IApplicationRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
@@ -597,12 +597,12 @@ class _IApplicationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationReference, jsii.get(self, "applicationRef"))
+        return typing.cast("ApplicationReference", jsii.get(self, "applicationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IApplicationRefProxy
@@ -623,7 +623,7 @@ class IConfigurationProfileRef(
 
     @builtins.property
     @jsii.member(jsii_name="configurationProfileRef")
-    def configuration_profile_ref(self) -> ConfigurationProfileReference:
+    def configuration_profile_ref(self) -> "ConfigurationProfileReference":
         '''(experimental) A reference to a ConfigurationProfile resource.
 
         :stability: experimental
@@ -644,12 +644,12 @@ class _IConfigurationProfileRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configurationProfileRef")
-    def configuration_profile_ref(self) -> ConfigurationProfileReference:
+    def configuration_profile_ref(self) -> "ConfigurationProfileReference":
         '''(experimental) A reference to a ConfigurationProfile resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationProfileReference, jsii.get(self, "configurationProfileRef"))
+        return typing.cast("ConfigurationProfileReference", jsii.get(self, "configurationProfileRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationProfileRef).__jsii_proxy_class__ = lambda : _IConfigurationProfileRefProxy
@@ -668,7 +668,7 @@ class IDeploymentRef(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentRef")
-    def deployment_ref(self) -> DeploymentReference:
+    def deployment_ref(self) -> "DeploymentReference":
         '''(experimental) A reference to a Deployment resource.
 
         :stability: experimental
@@ -689,12 +689,12 @@ class _IDeploymentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentRef")
-    def deployment_ref(self) -> DeploymentReference:
+    def deployment_ref(self) -> "DeploymentReference":
         '''(experimental) A reference to a Deployment resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeploymentReference, jsii.get(self, "deploymentRef"))
+        return typing.cast("DeploymentReference", jsii.get(self, "deploymentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeploymentRef).__jsii_proxy_class__ = lambda : _IDeploymentRefProxy
@@ -715,7 +715,7 @@ class IDeploymentStrategyRef(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentStrategyRef")
-    def deployment_strategy_ref(self) -> DeploymentStrategyReference:
+    def deployment_strategy_ref(self) -> "DeploymentStrategyReference":
         '''(experimental) A reference to a DeploymentStrategy resource.
 
         :stability: experimental
@@ -736,12 +736,12 @@ class _IDeploymentStrategyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentStrategyRef")
-    def deployment_strategy_ref(self) -> DeploymentStrategyReference:
+    def deployment_strategy_ref(self) -> "DeploymentStrategyReference":
         '''(experimental) A reference to a DeploymentStrategy resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeploymentStrategyReference, jsii.get(self, "deploymentStrategyRef"))
+        return typing.cast("DeploymentStrategyReference", jsii.get(self, "deploymentStrategyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeploymentStrategyRef).__jsii_proxy_class__ = lambda : _IDeploymentStrategyRefProxy
@@ -760,7 +760,7 @@ class IEnvironmentRef(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> EnvironmentReference:
+    def environment_ref(self) -> "EnvironmentReference":
         '''(experimental) A reference to a Environment resource.
 
         :stability: experimental
@@ -781,12 +781,12 @@ class _IEnvironmentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> EnvironmentReference:
+    def environment_ref(self) -> "EnvironmentReference":
         '''(experimental) A reference to a Environment resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnvironmentReference, jsii.get(self, "environmentRef"))
+        return typing.cast("EnvironmentReference", jsii.get(self, "environmentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnvironmentRef).__jsii_proxy_class__ = lambda : _IEnvironmentRefProxy
@@ -807,7 +807,7 @@ class IExtensionAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="extensionAssociationRef")
-    def extension_association_ref(self) -> ExtensionAssociationReference:
+    def extension_association_ref(self) -> "ExtensionAssociationReference":
         '''(experimental) A reference to a ExtensionAssociation resource.
 
         :stability: experimental
@@ -828,12 +828,12 @@ class _IExtensionAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="extensionAssociationRef")
-    def extension_association_ref(self) -> ExtensionAssociationReference:
+    def extension_association_ref(self) -> "ExtensionAssociationReference":
         '''(experimental) A reference to a ExtensionAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(ExtensionAssociationReference, jsii.get(self, "extensionAssociationRef"))
+        return typing.cast("ExtensionAssociationReference", jsii.get(self, "extensionAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IExtensionAssociationRef).__jsii_proxy_class__ = lambda : _IExtensionAssociationRefProxy
@@ -852,7 +852,7 @@ class IExtensionRef(
 
     @builtins.property
     @jsii.member(jsii_name="extensionRef")
-    def extension_ref(self) -> ExtensionReference:
+    def extension_ref(self) -> "ExtensionReference":
         '''(experimental) A reference to a Extension resource.
 
         :stability: experimental
@@ -873,12 +873,12 @@ class _IExtensionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="extensionRef")
-    def extension_ref(self) -> ExtensionReference:
+    def extension_ref(self) -> "ExtensionReference":
         '''(experimental) A reference to a Extension resource.
 
         :stability: experimental
         '''
-        return typing.cast(ExtensionReference, jsii.get(self, "extensionRef"))
+        return typing.cast("ExtensionReference", jsii.get(self, "extensionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IExtensionRef).__jsii_proxy_class__ = lambda : _IExtensionRefProxy
@@ -899,7 +899,7 @@ class IHostedConfigurationVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="hostedConfigurationVersionRef")
-    def hosted_configuration_version_ref(self) -> HostedConfigurationVersionReference:
+    def hosted_configuration_version_ref(self) -> "HostedConfigurationVersionReference":
         '''(experimental) A reference to a HostedConfigurationVersion resource.
 
         :stability: experimental
@@ -920,12 +920,12 @@ class _IHostedConfigurationVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="hostedConfigurationVersionRef")
-    def hosted_configuration_version_ref(self) -> HostedConfigurationVersionReference:
+    def hosted_configuration_version_ref(self) -> "HostedConfigurationVersionReference":
         '''(experimental) A reference to a HostedConfigurationVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(HostedConfigurationVersionReference, jsii.get(self, "hostedConfigurationVersionRef"))
+        return typing.cast("HostedConfigurationVersionReference", jsii.get(self, "hostedConfigurationVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHostedConfigurationVersionRef).__jsii_proxy_class__ = lambda : _IHostedConfigurationVersionRefProxy

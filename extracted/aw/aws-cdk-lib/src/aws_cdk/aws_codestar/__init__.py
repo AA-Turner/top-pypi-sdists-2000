@@ -119,15 +119,15 @@ class CfnGitHubRepository(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         repository_name: builtins.str,
         repository_owner: builtins.str,
-        code: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGitHubRepository.CodeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        code: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGitHubRepository.CodeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         connection_arn: typing.Optional[builtins.str] = None,
-        enable_issues: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        is_private: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_issues: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        is_private: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         repository_access_token: typing.Optional[builtins.str] = None,
         repository_description: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -174,7 +174,7 @@ class CfnGitHubRepository(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGitHubRepository", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -219,9 +219,9 @@ class CfnGitHubRepository(
 
     @builtins.property
     @jsii.member(jsii_name="gitHubRepositoryRef")
-    def git_hub_repository_ref(self) -> _GitHubRepositoryReference_72f5bf4c:
+    def git_hub_repository_ref(self) -> "_GitHubRepositoryReference_72f5bf4c":
         '''A reference to a GitHubRepository resource.'''
-        return typing.cast(_GitHubRepositoryReference_72f5bf4c, jsii.get(self, "gitHubRepositoryRef"))
+        return typing.cast("_GitHubRepositoryReference_72f5bf4c", jsii.get(self, "gitHubRepositoryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="repositoryName")
@@ -253,14 +253,14 @@ class CfnGitHubRepository(
     @jsii.member(jsii_name="code")
     def code(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGitHubRepository.CodeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGitHubRepository.CodeProperty"]]:
         '''Information about code to be committed to a repository after it is created in an CloudFormation stack.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGitHubRepository.CodeProperty"]], jsii.get(self, "code"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGitHubRepository.CodeProperty"]], jsii.get(self, "code"))
 
     @code.setter
     def code(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGitHubRepository.CodeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGitHubRepository.CodeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6c0889c4a593a141a6cb7467ebd1f42de66b0efb11fb84c85fe540d22116d660)
@@ -283,14 +283,14 @@ class CfnGitHubRepository(
     @jsii.member(jsii_name="enableIssues")
     def enable_issues(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to enable issues for the GitHub repository.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableIssues"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enableIssues"))
 
     @enable_issues.setter
     def enable_issues(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a79ceb918a835c4943c7e5b1adac2d4bddd5012f1f982dcab4b466109451a7d3)
@@ -301,14 +301,14 @@ class CfnGitHubRepository(
     @jsii.member(jsii_name="isPrivate")
     def is_private(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the GitHub repository is a private repository.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "isPrivate"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "isPrivate"))
 
     @is_private.setter
     def is_private(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ba584dda4e5123d3df0ff330b816c7ba97e7623d76da94664700730a76d46c15)
@@ -350,7 +350,7 @@ class CfnGitHubRepository(
         def __init__(
             self,
             *,
-            s3: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGitHubRepository.S3Property", typing.Dict[builtins.str, typing.Any]]],
+            s3: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGitHubRepository.S3Property", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The ``Code`` property type specifies information about code to be committed.
 
@@ -387,14 +387,14 @@ class CfnGitHubRepository(
         @builtins.property
         def s3(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGitHubRepository.S3Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGitHubRepository.S3Property"]:
             '''Information about the Amazon S3 bucket that contains a ZIP file of code to be committed to the repository.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codestar-githubrepository-code.html#cfn-codestar-githubrepository-code-s3
             '''
             result = self._values.get("s3")
             assert result is not None, "Required property 's3' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGitHubRepository.S3Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGitHubRepository.S3Property"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -522,10 +522,10 @@ class CfnGitHubRepositoryProps:
         *,
         repository_name: builtins.str,
         repository_owner: builtins.str,
-        code: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGitHubRepository.CodeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        code: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGitHubRepository.CodeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         connection_arn: typing.Optional[builtins.str] = None,
-        enable_issues: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        is_private: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_issues: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        is_private: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         repository_access_token: typing.Optional[builtins.str] = None,
         repository_description: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -622,13 +622,13 @@ class CfnGitHubRepositoryProps:
     @builtins.property
     def code(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGitHubRepository.CodeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGitHubRepository.CodeProperty"]]:
         '''Information about code to be committed to a repository after it is created in an CloudFormation stack.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestar-githubrepository.html#cfn-codestar-githubrepository-code
         '''
         result = self._values.get("code")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGitHubRepository.CodeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGitHubRepository.CodeProperty"]], result)
 
     @builtins.property
     def connection_arn(self) -> typing.Optional[builtins.str]:
@@ -641,7 +641,7 @@ class CfnGitHubRepositoryProps:
     @builtins.property
     def enable_issues(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to enable issues for the GitHub repository.
 
         You can use GitHub issues to track information and bugs for your repository.
@@ -649,12 +649,12 @@ class CfnGitHubRepositoryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestar-githubrepository.html#cfn-codestar-githubrepository-enableissues
         '''
         result = self._values.get("enable_issues")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def is_private(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the GitHub repository is a private repository.
 
         If so, you choose who can see and commit to this repository.
@@ -662,7 +662,7 @@ class CfnGitHubRepositoryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestar-githubrepository.html#cfn-codestar-githubrepository-isprivate
         '''
         result = self._values.get("is_private")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def repository_access_token(self) -> typing.Optional[builtins.str]:

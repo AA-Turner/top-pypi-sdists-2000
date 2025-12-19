@@ -884,14 +884,14 @@ class CfnAccessPoint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        file_system_id: typing.Union[builtins.str, _IFileSystemRef_3dcf8b98],
+        file_system_id: typing.Union[builtins.str, "_IFileSystemRef_3dcf8b98"],
         access_point_tags: typing.Optional[typing.Sequence[typing.Union["CfnAccessPoint.AccessPointTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         client_token: typing.Optional[builtins.str] = None,
-        posix_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.PosixUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        root_directory: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.RootDirectoryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        posix_user: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.PosixUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        root_directory: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.RootDirectoryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::EFS::AccessPoint``.
 
@@ -919,7 +919,10 @@ class CfnAccessPoint(
 
     @jsii.member(jsii_name="arnForAccessPoint")
     @builtins.classmethod
-    def arn_for_access_point(cls, resource: _IAccessPointRef_437d4bf7) -> builtins.str:
+    def arn_for_access_point(
+        cls,
+        resource: "_IAccessPointRef_437d4bf7",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -932,10 +935,10 @@ class CfnAccessPoint(
     @builtins.classmethod
     def from_access_point_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IAccessPointRef_437d4bf7:
+    ) -> "_IAccessPointRef_437d4bf7":
         '''Creates a new IAccessPointRef from an ARN.
 
         :param scope: -
@@ -947,16 +950,16 @@ class CfnAccessPoint(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IAccessPointRef_437d4bf7, jsii.sinvoke(cls, "fromAccessPointArn", [scope, id, arn]))
+        return typing.cast("_IAccessPointRef_437d4bf7", jsii.sinvoke(cls, "fromAccessPointArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromAccessPointId")
     @builtins.classmethod
     def from_access_point_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         access_point_id: builtins.str,
-    ) -> _IAccessPointRef_437d4bf7:
+    ) -> "_IAccessPointRef_437d4bf7":
         '''Creates a new IAccessPointRef from a accessPointId.
 
         :param scope: -
@@ -968,7 +971,7 @@ class CfnAccessPoint(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument access_point_id", value=access_point_id, expected_type=type_hints["access_point_id"])
-        return typing.cast(_IAccessPointRef_437d4bf7, jsii.sinvoke(cls, "fromAccessPointId", [scope, id, access_point_id]))
+        return typing.cast("_IAccessPointRef_437d4bf7", jsii.sinvoke(cls, "fromAccessPointId", [scope, id, access_point_id]))
 
     @jsii.member(jsii_name="isCfnAccessPoint")
     @builtins.classmethod
@@ -983,7 +986,7 @@ class CfnAccessPoint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessPoint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1014,9 +1017,9 @@ class CfnAccessPoint(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointRef")
-    def access_point_ref(self) -> _AccessPointReference_4b264f5d:
+    def access_point_ref(self) -> "_AccessPointReference_4b264f5d":
         '''A reference to a AccessPoint resource.'''
-        return typing.cast(_AccessPointReference_4b264f5d, jsii.get(self, "accessPointRef"))
+        return typing.cast("_AccessPointReference_4b264f5d", jsii.get(self, "accessPointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAccessPointId")
@@ -1043,9 +1046,9 @@ class CfnAccessPoint(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="fileSystemId")
@@ -1095,14 +1098,14 @@ class CfnAccessPoint(
     @jsii.member(jsii_name="posixUser")
     def posix_user(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.PosixUserProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.PosixUserProperty"]]:
         '''The full POSIX identity, including the user ID, group ID, and secondary group IDs on the access point that is used for all file operations by NFS clients using the access point.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.PosixUserProperty"]], jsii.get(self, "posixUser"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.PosixUserProperty"]], jsii.get(self, "posixUser"))
 
     @posix_user.setter
     def posix_user(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.PosixUserProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.PosixUserProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2cc245c2e53318bdc7d3164c462d6e8a52bf82fb7fe49247d2231ef329a53d87)
@@ -1113,14 +1116,14 @@ class CfnAccessPoint(
     @jsii.member(jsii_name="rootDirectory")
     def root_directory(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.RootDirectoryProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.RootDirectoryProperty"]]:
         '''The directory on the EFS file system that the access point exposes as the root directory to NFS clients using the access point.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.RootDirectoryProperty"]], jsii.get(self, "rootDirectory"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.RootDirectoryProperty"]], jsii.get(self, "rootDirectory"))
 
     @root_directory.setter
     def root_directory(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.RootDirectoryProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.RootDirectoryProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9667e2e350935a923b952abf9558fa66f4e1917b4233a4c26c0b65c8fd475e03)
@@ -1399,7 +1402,7 @@ class CfnAccessPoint(
         def __init__(
             self,
             *,
-            creation_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.CreationInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            creation_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.CreationInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             path: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Specifies the directory on the Amazon EFS file system that the access point provides access to.
@@ -1440,7 +1443,7 @@ class CfnAccessPoint(
         @builtins.property
         def creation_info(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.CreationInfoProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.CreationInfoProperty"]]:
             '''(Optional) Specifies the POSIX IDs and permissions to apply to the access point's ``RootDirectory`` .
 
             If the ``RootDirectory`` > ``Path`` specified does not exist, EFS creates the root directory using the ``CreationInfo`` settings when a client connects to an access point. When specifying the ``CreationInfo`` , you must provide values for all properties.
@@ -1451,7 +1454,7 @@ class CfnAccessPoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-efs-accesspoint-rootdirectory.html#cfn-efs-accesspoint-rootdirectory-creationinfo
             '''
             result = self._values.get("creation_info")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.CreationInfoProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.CreationInfoProperty"]], result)
 
         @builtins.property
         def path(self) -> typing.Optional[builtins.str]:
@@ -1491,11 +1494,11 @@ class CfnAccessPointProps:
     def __init__(
         self,
         *,
-        file_system_id: typing.Union[builtins.str, _IFileSystemRef_3dcf8b98],
-        access_point_tags: typing.Optional[typing.Sequence[typing.Union[CfnAccessPoint.AccessPointTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_system_id: typing.Union[builtins.str, "_IFileSystemRef_3dcf8b98"],
+        access_point_tags: typing.Optional[typing.Sequence[typing.Union["CfnAccessPoint.AccessPointTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         client_token: typing.Optional[builtins.str] = None,
-        posix_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.PosixUserProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        root_directory: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.RootDirectoryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        posix_user: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.PosixUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        root_directory: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.RootDirectoryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAccessPoint``.
 
@@ -1560,7 +1563,7 @@ class CfnAccessPointProps:
             self._values["root_directory"] = root_directory
 
     @builtins.property
-    def file_system_id(self) -> typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]:
+    def file_system_id(self) -> typing.Union[builtins.str, "_IFileSystemRef_3dcf8b98"]:
         '''The ID of the EFS file system that the access point applies to.
 
         Accepts only the ID format for input when specifying a file system, for example ``fs-0123456789abcedf2`` .
@@ -1569,12 +1572,12 @@ class CfnAccessPointProps:
         '''
         result = self._values.get("file_system_id")
         assert result is not None, "Required property 'file_system_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IFileSystemRef_3dcf8b98], result)
+        return typing.cast(typing.Union[builtins.str, "_IFileSystemRef_3dcf8b98"], result)
 
     @builtins.property
     def access_point_tags(
         self,
-    ) -> typing.Optional[typing.List[CfnAccessPoint.AccessPointTagProperty]]:
+    ) -> typing.Optional[typing.List["CfnAccessPoint.AccessPointTagProperty"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -1582,7 +1585,7 @@ class CfnAccessPointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-accesspoint.html#cfn-efs-accesspoint-accesspointtags
         '''
         result = self._values.get("access_point_tags")
-        return typing.cast(typing.Optional[typing.List[CfnAccessPoint.AccessPointTagProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnAccessPoint.AccessPointTagProperty"]], result)
 
     @builtins.property
     def client_token(self) -> typing.Optional[builtins.str]:
@@ -1596,24 +1599,24 @@ class CfnAccessPointProps:
     @builtins.property
     def posix_user(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.PosixUserProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.PosixUserProperty"]]:
         '''The full POSIX identity, including the user ID, group ID, and secondary group IDs on the access point that is used for all file operations by NFS clients using the access point.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-accesspoint.html#cfn-efs-accesspoint-posixuser
         '''
         result = self._values.get("posix_user")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.PosixUserProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.PosixUserProperty"]], result)
 
     @builtins.property
     def root_directory(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.RootDirectoryProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.RootDirectoryProperty"]]:
         '''The directory on the EFS file system that the access point exposes as the root directory to NFS clients using the access point.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-accesspoint.html#cfn-efs-accesspoint-rootdirectory
         '''
         result = self._values.get("root_directory")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.RootDirectoryProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.RootDirectoryProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1689,21 +1692,21 @@ class CfnFileSystem(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         availability_zone_name: typing.Optional[builtins.str] = None,
-        backup_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.BackupPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        bypass_policy_lockout_safety_check: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        backup_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.BackupPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        bypass_policy_lockout_safety_check: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        encrypted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         file_system_policy: typing.Any = None,
-        file_system_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.FileSystemProtectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_system_protection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.FileSystemProtectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         file_system_tags: typing.Optional[typing.Sequence[typing.Union["CfnFileSystem.ElasticFileSystemTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
-        lifecycle_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.LifecyclePolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
+        lifecycle_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.LifecyclePolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         performance_mode: typing.Optional[builtins.str] = None,
         provisioned_throughput_in_mibps: typing.Optional[jsii.Number] = None,
-        replication_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.ReplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        replication_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.ReplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         throughput_mode: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::EFS::FileSystem``.
@@ -1748,7 +1751,7 @@ class CfnFileSystem(
 
     @jsii.member(jsii_name="arnForFileSystem")
     @builtins.classmethod
-    def arn_for_file_system(cls, resource: _IFileSystemRef_3dcf8b98) -> builtins.str:
+    def arn_for_file_system(cls, resource: "_IFileSystemRef_3dcf8b98") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1761,10 +1764,10 @@ class CfnFileSystem(
     @builtins.classmethod
     def from_file_system_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IFileSystemRef_3dcf8b98:
+    ) -> "_IFileSystemRef_3dcf8b98":
         '''Creates a new IFileSystemRef from an ARN.
 
         :param scope: -
@@ -1776,16 +1779,16 @@ class CfnFileSystem(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IFileSystemRef_3dcf8b98, jsii.sinvoke(cls, "fromFileSystemArn", [scope, id, arn]))
+        return typing.cast("_IFileSystemRef_3dcf8b98", jsii.sinvoke(cls, "fromFileSystemArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromFileSystemId")
     @builtins.classmethod
     def from_file_system_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         file_system_id: builtins.str,
-    ) -> _IFileSystemRef_3dcf8b98:
+    ) -> "_IFileSystemRef_3dcf8b98":
         '''Creates a new IFileSystemRef from a fileSystemId.
 
         :param scope: -
@@ -1797,7 +1800,7 @@ class CfnFileSystem(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument file_system_id", value=file_system_id, expected_type=type_hints["file_system_id"])
-        return typing.cast(_IFileSystemRef_3dcf8b98, jsii.sinvoke(cls, "fromFileSystemId", [scope, id, file_system_id]))
+        return typing.cast("_IFileSystemRef_3dcf8b98", jsii.sinvoke(cls, "fromFileSystemId", [scope, id, file_system_id]))
 
     @jsii.member(jsii_name="isCfnFileSystem")
     @builtins.classmethod
@@ -1812,7 +1815,7 @@ class CfnFileSystem(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFileSystem", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1870,15 +1873,15 @@ class CfnFileSystem(
 
     @builtins.property
     @jsii.member(jsii_name="fileSystemRef")
-    def file_system_ref(self) -> _FileSystemReference_4a6f4058:
+    def file_system_ref(self) -> "_FileSystemReference_4a6f4058":
         '''A reference to a FileSystem resource.'''
-        return typing.cast(_FileSystemReference_4a6f4058, jsii.get(self, "fileSystemRef"))
+        return typing.cast("_FileSystemReference_4a6f4058", jsii.get(self, "fileSystemRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="availabilityZoneName")
@@ -1897,14 +1900,14 @@ class CfnFileSystem(
     @jsii.member(jsii_name="backupPolicy")
     def backup_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.BackupPolicyProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.BackupPolicyProperty"]]:
         '''Use the ``BackupPolicy`` to turn automatic backups on or off for the file system.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.BackupPolicyProperty"]], jsii.get(self, "backupPolicy"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.BackupPolicyProperty"]], jsii.get(self, "backupPolicy"))
 
     @backup_policy.setter
     def backup_policy(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.BackupPolicyProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.BackupPolicyProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__53fc5b9ed624a6fc84a03901041ea70dcde091bbcc6330be8fa5cf3fdf8c38b9)
@@ -1915,14 +1918,14 @@ class CfnFileSystem(
     @jsii.member(jsii_name="bypassPolicyLockoutSafetyCheck")
     def bypass_policy_lockout_safety_check(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''(Optional) A boolean that specifies whether or not to bypass the ``FileSystemPolicy`` lockout safety check.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "bypassPolicyLockoutSafetyCheck"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "bypassPolicyLockoutSafetyCheck"))
 
     @bypass_policy_lockout_safety_check.setter
     def bypass_policy_lockout_safety_check(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bbd68d0f7f29b58d297e40085872ecac516d0817c15d9490f68a92f7aa0b8ea5)
@@ -1933,14 +1936,14 @@ class CfnFileSystem(
     @jsii.member(jsii_name="encrypted")
     def encrypted(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value that, if true, creates an encrypted file system.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "encrypted"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "encrypted"))
 
     @encrypted.setter
     def encrypted(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9501af5a47c0d34d9710df284e85c94248a9579987a05605e729328fa911ff46)
@@ -1964,14 +1967,14 @@ class CfnFileSystem(
     @jsii.member(jsii_name="fileSystemProtection")
     def file_system_protection(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.FileSystemProtectionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.FileSystemProtectionProperty"]]:
         '''Describes the protection on the file system.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.FileSystemProtectionProperty"]], jsii.get(self, "fileSystemProtection"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.FileSystemProtectionProperty"]], jsii.get(self, "fileSystemProtection"))
 
     @file_system_protection.setter
     def file_system_protection(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.FileSystemProtectionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.FileSystemProtectionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3dfa0b455744e99013c3bde7c075b730ed45dae3640221fef3eb401b1799170c)
@@ -2013,14 +2016,14 @@ class CfnFileSystem(
     @jsii.member(jsii_name="lifecyclePolicies")
     def lifecycle_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.LifecyclePolicyProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.LifecyclePolicyProperty"]]]]:
         '''An array of ``LifecyclePolicy`` objects that define the file system's ``LifecycleConfiguration`` object.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.LifecyclePolicyProperty"]]]], jsii.get(self, "lifecyclePolicies"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.LifecyclePolicyProperty"]]]], jsii.get(self, "lifecyclePolicies"))
 
     @lifecycle_policies.setter
     def lifecycle_policies(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.LifecyclePolicyProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.LifecyclePolicyProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cd864e190d9a9b64a7046d9259a257368e4b66a44f4da384a9b88751c2a5271d)
@@ -2060,14 +2063,14 @@ class CfnFileSystem(
     @jsii.member(jsii_name="replicationConfiguration")
     def replication_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.ReplicationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.ReplicationConfigurationProperty"]]:
         '''Describes the replication configuration for a specific file system.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.ReplicationConfigurationProperty"]], jsii.get(self, "replicationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.ReplicationConfigurationProperty"]], jsii.get(self, "replicationConfiguration"))
 
     @replication_configuration.setter
     def replication_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.ReplicationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.ReplicationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__347d61f8314b360fd5ea2b9e78a59732996a9f709552db01521d8d0aaf0ece70)
@@ -2385,7 +2388,7 @@ class CfnFileSystem(
         def __init__(
             self,
             *,
-            destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.ReplicationDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            destinations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.ReplicationDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Describes the replication configuration for a specific file system.
 
@@ -2422,7 +2425,7 @@ class CfnFileSystem(
         @builtins.property
         def destinations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.ReplicationDestinationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.ReplicationDestinationProperty"]]]]:
             '''An array of destination objects.
 
             Only one destination object is supported.
@@ -2430,7 +2433,7 @@ class CfnFileSystem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-efs-filesystem-replicationconfiguration.html#cfn-efs-filesystem-replicationconfiguration-destinations
             '''
             result = self._values.get("destinations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFileSystem.ReplicationDestinationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.ReplicationDestinationProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2634,17 +2637,17 @@ class CfnFileSystemProps:
         self,
         *,
         availability_zone_name: typing.Optional[builtins.str] = None,
-        backup_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.BackupPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        bypass_policy_lockout_safety_check: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        backup_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.BackupPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        bypass_policy_lockout_safety_check: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        encrypted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         file_system_policy: typing.Any = None,
-        file_system_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.FileSystemProtectionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        file_system_tags: typing.Optional[typing.Sequence[typing.Union[CfnFileSystem.ElasticFileSystemTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
-        lifecycle_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.LifecyclePolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        file_system_protection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.FileSystemProtectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_system_tags: typing.Optional[typing.Sequence[typing.Union["CfnFileSystem.ElasticFileSystemTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
+        lifecycle_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.LifecyclePolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         performance_mode: typing.Optional[builtins.str] = None,
         provisioned_throughput_in_mibps: typing.Optional[jsii.Number] = None,
-        replication_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.ReplicationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        replication_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFileSystem.ReplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         throughput_mode: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnFileSystem``.
@@ -2771,18 +2774,18 @@ class CfnFileSystemProps:
     @builtins.property
     def backup_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.BackupPolicyProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.BackupPolicyProperty"]]:
         '''Use the ``BackupPolicy`` to turn automatic backups on or off for the file system.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-filesystem.html#cfn-efs-filesystem-backuppolicy
         '''
         result = self._values.get("backup_policy")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.BackupPolicyProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.BackupPolicyProperty"]], result)
 
     @builtins.property
     def bypass_policy_lockout_safety_check(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''(Optional) A boolean that specifies whether or not to bypass the ``FileSystemPolicy`` lockout safety check.
 
         The lockout safety check determines whether the policy in the request will lock out, or prevent, the IAM principal that is making the request from making future ``PutFileSystemPolicy`` requests on this file system. Set ``BypassPolicyLockoutSafetyCheck`` to ``True`` only when you intend to prevent the IAM principal that is making the request from making subsequent ``PutFileSystemPolicy`` requests on this file system. The default value is ``False`` .
@@ -2790,12 +2793,12 @@ class CfnFileSystemProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-filesystem.html#cfn-efs-filesystem-bypasspolicylockoutsafetycheck
         '''
         result = self._values.get("bypass_policy_lockout_safety_check")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def encrypted(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value that, if true, creates an encrypted file system.
 
         When creating an encrypted file system, you have the option of specifying a KmsKeyId for an existing AWS KMS key . If you don't specify a KMS key , then the default KMS key for Amazon EFS , ``/aws/elasticfilesystem`` , is used to protect the encrypted file system.
@@ -2803,7 +2806,7 @@ class CfnFileSystemProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-filesystem.html#cfn-efs-filesystem-encrypted
         '''
         result = self._values.get("encrypted")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def file_system_policy(self) -> typing.Any:
@@ -2819,18 +2822,18 @@ class CfnFileSystemProps:
     @builtins.property
     def file_system_protection(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.FileSystemProtectionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.FileSystemProtectionProperty"]]:
         '''Describes the protection on the file system.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-filesystem.html#cfn-efs-filesystem-filesystemprotection
         '''
         result = self._values.get("file_system_protection")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.FileSystemProtectionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.FileSystemProtectionProperty"]], result)
 
     @builtins.property
     def file_system_tags(
         self,
-    ) -> typing.Optional[typing.List[CfnFileSystem.ElasticFileSystemTagProperty]]:
+    ) -> typing.Optional[typing.List["CfnFileSystem.ElasticFileSystemTagProperty"]]:
         '''Use to create one or more tags associated with the file system.
 
         Each tag is a user-defined key-value pair. Name your file system on creation by including a ``"Key":"Name","Value":"{value}"`` key-value pair. Each key must be unique. For more information, see `Tagging AWS resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ in the *AWS General Reference Guide* .
@@ -2838,12 +2841,12 @@ class CfnFileSystemProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-filesystem.html#cfn-efs-filesystem-filesystemtags
         '''
         result = self._values.get("file_system_tags")
-        return typing.cast(typing.Optional[typing.List[CfnFileSystem.ElasticFileSystemTagProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnFileSystem.ElasticFileSystemTagProperty"]], result)
 
     @builtins.property
     def kms_key_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]]:
         '''The ID of the AWS KMS key to be used to protect the encrypted file system.
 
         This parameter is only required if you want to use a nondefault KMS key . If this parameter is not specified, the default KMS key for Amazon EFS is used. This ID can be in one of the following formats:
@@ -2858,12 +2861,12 @@ class CfnFileSystemProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-filesystem.html#cfn-efs-filesystem-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]], result)
 
     @builtins.property
     def lifecycle_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFileSystem.LifecyclePolicyProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.LifecyclePolicyProperty"]]]]:
         '''An array of ``LifecyclePolicy`` objects that define the file system's ``LifecycleConfiguration`` object.
 
         A ``LifecycleConfiguration`` object informs Lifecycle management of the following:
@@ -2879,7 +2882,7 @@ class CfnFileSystemProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-filesystem.html#cfn-efs-filesystem-lifecyclepolicies
         '''
         result = self._values.get("lifecycle_policies")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFileSystem.LifecyclePolicyProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.LifecyclePolicyProperty"]]]], result)
 
     @builtins.property
     def performance_mode(self) -> typing.Optional[builtins.str]:
@@ -2911,13 +2914,13 @@ class CfnFileSystemProps:
     @builtins.property
     def replication_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.ReplicationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.ReplicationConfigurationProperty"]]:
         '''Describes the replication configuration for a specific file system.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-filesystem.html#cfn-efs-filesystem-replicationconfiguration
         '''
         result = self._values.get("replication_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFileSystem.ReplicationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFileSystem.ReplicationConfigurationProperty"]], result)
 
     @builtins.property
     def throughput_mode(self) -> typing.Optional[builtins.str]:
@@ -2978,12 +2981,12 @@ class CfnMountTarget(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        file_system_id: typing.Union[builtins.str, _IFileSystemRef_3dcf8b98],
-        security_groups: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
-        subnet_id: typing.Union[builtins.str, _ISubnetRef_ac31e361],
+        file_system_id: typing.Union[builtins.str, "_IFileSystemRef_3dcf8b98"],
+        security_groups: typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]],
+        subnet_id: typing.Union[builtins.str, "_ISubnetRef_ac31e361"],
         ip_address: typing.Optional[builtins.str] = None,
         ip_address_type: typing.Optional[builtins.str] = None,
         ipv6_address: typing.Optional[builtins.str] = None,
@@ -3027,7 +3030,7 @@ class CfnMountTarget(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMountTarget", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3085,9 +3088,9 @@ class CfnMountTarget(
 
     @builtins.property
     @jsii.member(jsii_name="mountTargetRef")
-    def mount_target_ref(self) -> _MountTargetReference_498e181c:
+    def mount_target_ref(self) -> "_MountTargetReference_498e181c":
         '''A reference to a MountTarget resource.'''
-        return typing.cast(_MountTargetReference_498e181c, jsii.get(self, "mountTargetRef"))
+        return typing.cast("_MountTargetReference_498e181c", jsii.get(self, "mountTargetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="fileSystemId")
@@ -3184,9 +3187,9 @@ class CfnMountTargetProps:
     def __init__(
         self,
         *,
-        file_system_id: typing.Union[builtins.str, _IFileSystemRef_3dcf8b98],
-        security_groups: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
-        subnet_id: typing.Union[builtins.str, _ISubnetRef_ac31e361],
+        file_system_id: typing.Union[builtins.str, "_IFileSystemRef_3dcf8b98"],
+        security_groups: typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]],
+        subnet_id: typing.Union[builtins.str, "_ISubnetRef_ac31e361"],
         ip_address: typing.Optional[builtins.str] = None,
         ip_address_type: typing.Optional[builtins.str] = None,
         ipv6_address: typing.Optional[builtins.str] = None,
@@ -3241,19 +3244,19 @@ class CfnMountTargetProps:
             self._values["ipv6_address"] = ipv6_address
 
     @builtins.property
-    def file_system_id(self) -> typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]:
+    def file_system_id(self) -> typing.Union[builtins.str, "_IFileSystemRef_3dcf8b98"]:
         '''The ID of the file system for which to create the mount target.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-mounttarget.html#cfn-efs-mounttarget-filesystemid
         '''
         result = self._values.get("file_system_id")
         assert result is not None, "Required property 'file_system_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IFileSystemRef_3dcf8b98], result)
+        return typing.cast(typing.Union[builtins.str, "_IFileSystemRef_3dcf8b98"], result)
 
     @builtins.property
     def security_groups(
         self,
-    ) -> typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]:
+    ) -> typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]:
         '''VPC security group IDs, of the form ``sg-xxxxxxxx`` .
 
         These must be for the same VPC as the subnet specified. The maximum number of security groups depends on account quota. For more information, see `Amazon VPC Quotas <https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html>`_ in the *Amazon VPC User Guide* (see the *Security Groups* table). If you don't specify a security group, then Amazon EFS uses the default security group for the subnet's VPC.
@@ -3262,10 +3265,10 @@ class CfnMountTargetProps:
         '''
         result = self._values.get("security_groups")
         assert result is not None, "Required property 'security_groups' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]], result)
 
     @builtins.property
-    def subnet_id(self) -> typing.Union[builtins.str, _ISubnetRef_ac31e361]:
+    def subnet_id(self) -> typing.Union[builtins.str, "_ISubnetRef_ac31e361"]:
         '''The ID of the subnet to add the mount target in.
 
         For One Zone file systems, use the subnet that is associated with the file system's Availability Zone. The subnet type must be the same type as the ``IpAddressType`` .
@@ -3274,7 +3277,7 @@ class CfnMountTargetProps:
         '''
         result = self._values.get("subnet_id")
         assert result is not None, "Required property 'subnet_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _ISubnetRef_ac31e361], result)
+        return typing.cast(typing.Union[builtins.str, "_ISubnetRef_ac31e361"], result)
 
     @builtins.property
     def ip_address(self) -> typing.Optional[builtins.str]:
@@ -3388,7 +3391,7 @@ class FileSystemAttributes:
     def __init__(
         self,
         *,
-        security_group: _ISecurityGroup_acf8a799,
+        security_group: "_ISecurityGroup_acf8a799",
         file_system_arn: typing.Optional[builtins.str] = None,
         file_system_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -3426,11 +3429,11 @@ class FileSystemAttributes:
             self._values["file_system_id"] = file_system_id
 
     @builtins.property
-    def security_group(self) -> _ISecurityGroup_acf8a799:
+    def security_group(self) -> "_ISecurityGroup_acf8a799":
         '''The security group of the file system.'''
         result = self._values.get("security_group")
         assert result is not None, "Required property 'security_group' is missing"
-        return typing.cast(_ISecurityGroup_acf8a799, result)
+        return typing.cast("_ISecurityGroup_acf8a799", result)
 
     @builtins.property
     def file_system_arn(self) -> typing.Optional[builtins.str]:
@@ -3491,25 +3494,25 @@ class FileSystemProps:
     def __init__(
         self,
         *,
-        vpc: _IVpc_f30d5663,
+        vpc: "_IVpc_f30d5663",
         allow_anonymous_access: typing.Optional[builtins.bool] = None,
         enable_automatic_backups: typing.Optional[builtins.bool] = None,
         encrypted: typing.Optional[builtins.bool] = None,
         file_system_name: typing.Optional[builtins.str] = None,
-        file_system_policy: typing.Optional[_PolicyDocument_3ac34393] = None,
-        kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        file_system_policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         lifecycle_policy: typing.Optional["LifecyclePolicy"] = None,
         one_zone: typing.Optional[builtins.bool] = None,
         out_of_infrequent_access_policy: typing.Optional["OutOfInfrequentAccessPolicy"] = None,
         performance_mode: typing.Optional["PerformanceMode"] = None,
-        provisioned_throughput_per_second: typing.Optional[_Size_7b441c34] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        provisioned_throughput_per_second: typing.Optional["_Size_7b441c34"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         replication_configuration: typing.Optional["ReplicationConfiguration"] = None,
         replication_overwrite_protection: typing.Optional["ReplicationOverwriteProtection"] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
         throughput_mode: typing.Optional["ThroughputMode"] = None,
         transition_to_archive_policy: typing.Optional["LifecyclePolicy"] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties of EFS FileSystem.
 
@@ -3614,11 +3617,11 @@ class FileSystemProps:
             self._values["vpc_subnets"] = vpc_subnets
 
     @builtins.property
-    def vpc(self) -> _IVpc_f30d5663:
+    def vpc(self) -> "_IVpc_f30d5663":
         '''VPC to launch the file system in.'''
         result = self._values.get("vpc")
         assert result is not None, "Required property 'vpc' is missing"
-        return typing.cast(_IVpc_f30d5663, result)
+        return typing.cast("_IVpc_f30d5663", result)
 
     @builtins.property
     def allow_anonymous_access(self) -> typing.Optional[builtins.bool]:
@@ -3662,16 +3665,16 @@ class FileSystemProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def file_system_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def file_system_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''File system policy is an IAM resource policy used to control NFS access to an EFS file system.
 
         :default: none
         '''
         result = self._values.get("file_system_policy")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
-    def kms_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def kms_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The KMS key used for encryption.
 
         This is required to encrypt the data at rest if
@@ -3681,7 +3684,7 @@ class FileSystemProps:
         :encrypted: is set to true.
         '''
         result = self._values.get("kms_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
     def lifecycle_policy(self) -> typing.Optional["LifecyclePolicy"]:
@@ -3729,7 +3732,7 @@ class FileSystemProps:
         return typing.cast(typing.Optional["PerformanceMode"], result)
 
     @builtins.property
-    def provisioned_throughput_per_second(self) -> typing.Optional[_Size_7b441c34]:
+    def provisioned_throughput_per_second(self) -> typing.Optional["_Size_7b441c34"]:
         '''Provisioned throughput for the file system.
 
         This is a required property if the throughput mode is set to PROVISIONED.
@@ -3738,16 +3741,16 @@ class FileSystemProps:
         :default: - none, errors out
         '''
         result = self._values.get("provisioned_throughput_per_second")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy to apply to the file system.
 
         :default: RemovalPolicy.RETAIN
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
     def replication_configuration(self) -> typing.Optional["ReplicationConfiguration"]:
@@ -3774,13 +3777,13 @@ class FileSystemProps:
         return typing.cast(typing.Optional["ReplicationOverwriteProtection"], result)
 
     @builtins.property
-    def security_group(self) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    def security_group(self) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''Security Group to assign to this file system.
 
         :default: - creates new security group which allows all outbound traffic
         '''
         result = self._values.get("security_group")
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
     def throughput_mode(self) -> typing.Optional["ThroughputMode"]:
@@ -3803,13 +3806,13 @@ class FileSystemProps:
         return typing.cast(typing.Optional["LifecyclePolicy"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Which subnets to place the mount target in the VPC.
 
         :default: - the Vpc default strategy if not specified
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3915,16 +3918,16 @@ class IFileSystem(
 
     @builtins.property
     @jsii.member(jsii_name="mountTargetsAvailable")
-    def mount_targets_available(self) -> _constructs_77d1e7e8.IDependable:
+    def mount_targets_available(self) -> "_constructs_77d1e7e8.IDependable":
         '''Dependable that can be depended upon to ensure the mount targets of the filesystem are ready.'''
         ...
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the actions defined in actions to the given grantee on this File System resource.
 
         :param grantee: -
@@ -3933,7 +3936,7 @@ class IFileSystem(
         ...
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this file system to an IAM principal.
 
         :param grantee: The principal to grant read to.
@@ -3941,7 +3944,7 @@ class IFileSystem(
         ...
 
     @jsii.member(jsii_name="grantReadWrite")
-    def grant_read_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read and write permissions for this file system to an IAM principal.
 
         :param grantee: The principal to grant read and write to.
@@ -3949,7 +3952,7 @@ class IFileSystem(
         ...
 
     @jsii.member(jsii_name="grantRootAccess")
-    def grant_root_access(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_root_access(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''As root user, grant read and write permissions for this file system to an IAM principal.
 
         :param grantee: The principal to grant root access to.
@@ -3985,16 +3988,16 @@ class _IFileSystemProxy(
 
     @builtins.property
     @jsii.member(jsii_name="mountTargetsAvailable")
-    def mount_targets_available(self) -> _constructs_77d1e7e8.IDependable:
+    def mount_targets_available(self) -> "_constructs_77d1e7e8.IDependable":
         '''Dependable that can be depended upon to ensure the mount targets of the filesystem are ready.'''
-        return typing.cast(_constructs_77d1e7e8.IDependable, jsii.get(self, "mountTargetsAvailable"))
+        return typing.cast("_constructs_77d1e7e8.IDependable", jsii.get(self, "mountTargetsAvailable"))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the actions defined in actions to the given grantee on this File System resource.
 
         :param grantee: -
@@ -4004,10 +4007,10 @@ class _IFileSystemProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__d30690bfc35cb7c7060f6f609a976e22081bcba7be3b93da3b5b3a122eae8ece)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this file system to an IAM principal.
 
         :param grantee: The principal to grant read to.
@@ -4015,10 +4018,10 @@ class _IFileSystemProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3c2dbc073f2730428da685a94a8b3efa873dbea606d4e59f097c99bdbed00583)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.member(jsii_name="grantReadWrite")
-    def grant_read_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read and write permissions for this file system to an IAM principal.
 
         :param grantee: The principal to grant read and write to.
@@ -4026,10 +4029,10 @@ class _IFileSystemProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d09ff1ba59a54cb51aa933437bae2cfc14db28a596791ed1cf6e5a11bd0e6f01)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadWrite", [grantee]))
 
     @jsii.member(jsii_name="grantRootAccess")
-    def grant_root_access(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_root_access(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''As root user, grant read and write permissions for this file system to an IAM principal.
 
         :param grantee: The principal to grant root access to.
@@ -4037,7 +4040,7 @@ class _IFileSystemProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4057ba12ffe92e9bfbd1c90bf8a78538a6b12163670d7d94114f464417e60cf4)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRootAccess", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRootAccess", [grantee]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFileSystem).__jsii_proxy_class__ = lambda : _IFileSystemProxy
@@ -4097,7 +4100,7 @@ class OneZoneFileSystemProps:
         *,
         availability_zone: builtins.str,
         region: builtins.str,
-        kms_key: typing.Optional[_IKey_5f11635f] = None,
+        kms_key: typing.Optional["_IKey_5f11635f"] = None,
     ) -> None:
         '''Properties for configuring ReplicationConfiguration to replicate to a new One Zone file system.
 
@@ -4154,13 +4157,13 @@ class OneZoneFileSystemProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def kms_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def kms_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''AWS KMS key used to protect the encrypted file system.
 
         :default: - use service-managed KMS key for Amazon EFS
         '''
         result = self._values.get("kms_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4346,7 +4349,7 @@ class RegionalFileSystemProps:
     def __init__(
         self,
         *,
-        kms_key: typing.Optional[_IKey_5f11635f] = None,
+        kms_key: typing.Optional["_IKey_5f11635f"] = None,
         region: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for configuring ReplicationConfiguration to replicate to a new Regional file system.
@@ -4381,13 +4384,13 @@ class RegionalFileSystemProps:
             self._values["region"] = region
 
     @builtins.property
-    def kms_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def kms_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''AWS KMS key used to protect the encrypted file system.
 
         :default: - use service-managed KMS key for Amazon EFS
         '''
         result = self._values.get("kms_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def region(self) -> typing.Optional[builtins.str]:
@@ -4451,8 +4454,8 @@ class ReplicationConfiguration(
         self,
         *,
         availability_zone: typing.Optional[builtins.str] = None,
-        destination_file_system: typing.Optional[IFileSystem] = None,
-        kms_key: typing.Optional[_IKey_5f11635f] = None,
+        destination_file_system: typing.Optional["IFileSystem"] = None,
+        kms_key: typing.Optional["_IKey_5f11635f"] = None,
         region: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -4474,7 +4477,7 @@ class ReplicationConfiguration(
     @builtins.classmethod
     def existing_file_system(
         cls,
-        destination_file_system: IFileSystem,
+        destination_file_system: "IFileSystem",
     ) -> "ReplicationConfiguration":
         '''Specify the existing destination file system for the replication.
 
@@ -4491,7 +4494,7 @@ class ReplicationConfiguration(
         cls,
         region: builtins.str,
         availability_zone: builtins.str,
-        kms_key: typing.Optional[_IKey_5f11635f] = None,
+        kms_key: typing.Optional["_IKey_5f11635f"] = None,
     ) -> "ReplicationConfiguration":
         '''Create a new one zone destination file system for the replication.
 
@@ -4511,7 +4514,7 @@ class ReplicationConfiguration(
     def regional_file_system(
         cls,
         region: typing.Optional[builtins.str] = None,
-        kms_key: typing.Optional[_IKey_5f11635f] = None,
+        kms_key: typing.Optional["_IKey_5f11635f"] = None,
     ) -> "ReplicationConfiguration":
         '''Create a new regional destination file system for the replication.
 
@@ -4535,15 +4538,15 @@ class ReplicationConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="destinationFileSystem")
-    def destination_file_system(self) -> typing.Optional[IFileSystem]:
+    def destination_file_system(self) -> typing.Optional["IFileSystem"]:
         '''The existing destination file system for the replication.'''
-        return typing.cast(typing.Optional[IFileSystem], jsii.get(self, "destinationFileSystem"))
+        return typing.cast(typing.Optional["IFileSystem"], jsii.get(self, "destinationFileSystem"))
 
     @builtins.property
     @jsii.member(jsii_name="kmsKey")
-    def kms_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def kms_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''AWS KMS key used to protect the encrypted file system.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "kmsKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "kmsKey"))
 
     @builtins.property
     @jsii.member(jsii_name="region")
@@ -4574,8 +4577,8 @@ class ReplicationConfigurationProps:
         self,
         *,
         availability_zone: typing.Optional[builtins.str] = None,
-        destination_file_system: typing.Optional[IFileSystem] = None,
-        kms_key: typing.Optional[_IKey_5f11635f] = None,
+        destination_file_system: typing.Optional["IFileSystem"] = None,
+        kms_key: typing.Optional["_IKey_5f11635f"] = None,
         region: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for the ReplicationConfiguration.
@@ -4632,22 +4635,22 @@ class ReplicationConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def destination_file_system(self) -> typing.Optional[IFileSystem]:
+    def destination_file_system(self) -> typing.Optional["IFileSystem"]:
         '''The existing destination file system for the replication.
 
         :default: - None
         '''
         result = self._values.get("destination_file_system")
-        return typing.cast(typing.Optional[IFileSystem], result)
+        return typing.cast(typing.Optional["IFileSystem"], result)
 
     @builtins.property
-    def kms_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def kms_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''AWS KMS key used to protect the encrypted file system.
 
         :default: - use service-managed KMS key for Amazon EFS
         '''
         result = self._values.get("kms_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def region(self) -> typing.Optional[builtins.str]:
@@ -4733,14 +4736,14 @@ class AccessPoint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        file_system: IFileSystem,
+        file_system: "IFileSystem",
         client_token: typing.Optional[builtins.str] = None,
-        create_acl: typing.Optional[typing.Union[Acl, typing.Dict[builtins.str, typing.Any]]] = None,
+        create_acl: typing.Optional[typing.Union["Acl", typing.Dict[builtins.str, typing.Any]]] = None,
         path: typing.Optional[builtins.str] = None,
-        posix_user: typing.Optional[typing.Union[PosixUser, typing.Dict[builtins.str, typing.Any]]] = None,
+        posix_user: typing.Optional[typing.Union["PosixUser", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -4769,13 +4772,13 @@ class AccessPoint(
     @builtins.classmethod
     def from_access_point_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         access_point_arn: typing.Optional[builtins.str] = None,
         access_point_id: typing.Optional[builtins.str] = None,
-        file_system: typing.Optional[IFileSystem] = None,
-    ) -> IAccessPoint:
+        file_system: typing.Optional["IFileSystem"] = None,
+    ) -> "IAccessPoint":
         '''Import an existing Access Point by attributes.
 
         :param scope: -
@@ -4794,16 +4797,16 @@ class AccessPoint(
             file_system=file_system,
         )
 
-        return typing.cast(IAccessPoint, jsii.sinvoke(cls, "fromAccessPointAttributes", [scope, id, attrs]))
+        return typing.cast("IAccessPoint", jsii.sinvoke(cls, "fromAccessPointAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromAccessPointId")
     @builtins.classmethod
     def from_access_point_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         access_point_id: builtins.str,
-    ) -> IAccessPoint:
+    ) -> "IAccessPoint":
         '''Import an existing Access Point by id.
 
         :param scope: -
@@ -4815,7 +4818,7 @@ class AccessPoint(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument access_point_id", value=access_point_id, expected_type=type_hints["access_point_id"])
-        return typing.cast(IAccessPoint, jsii.sinvoke(cls, "fromAccessPointId", [scope, id, access_point_id]))
+        return typing.cast("IAccessPoint", jsii.sinvoke(cls, "fromAccessPointId", [scope, id, access_point_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -4843,9 +4846,9 @@ class AccessPoint(
 
     @builtins.property
     @jsii.member(jsii_name="fileSystem")
-    def file_system(self) -> IFileSystem:
+    def file_system(self) -> "IFileSystem":
         '''The file system of the access point.'''
-        return typing.cast(IFileSystem, jsii.get(self, "fileSystem"))
+        return typing.cast("IFileSystem", jsii.get(self, "fileSystem"))
 
 
 @jsii.implements(IFileSystem)
@@ -4882,28 +4885,28 @@ class FileSystem(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        vpc: _IVpc_f30d5663,
+        vpc: "_IVpc_f30d5663",
         allow_anonymous_access: typing.Optional[builtins.bool] = None,
         enable_automatic_backups: typing.Optional[builtins.bool] = None,
         encrypted: typing.Optional[builtins.bool] = None,
         file_system_name: typing.Optional[builtins.str] = None,
-        file_system_policy: typing.Optional[_PolicyDocument_3ac34393] = None,
-        kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        lifecycle_policy: typing.Optional[LifecyclePolicy] = None,
+        file_system_policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        lifecycle_policy: typing.Optional["LifecyclePolicy"] = None,
         one_zone: typing.Optional[builtins.bool] = None,
-        out_of_infrequent_access_policy: typing.Optional[OutOfInfrequentAccessPolicy] = None,
-        performance_mode: typing.Optional[PerformanceMode] = None,
-        provisioned_throughput_per_second: typing.Optional[_Size_7b441c34] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        replication_configuration: typing.Optional[ReplicationConfiguration] = None,
-        replication_overwrite_protection: typing.Optional[ReplicationOverwriteProtection] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
-        throughput_mode: typing.Optional[ThroughputMode] = None,
-        transition_to_archive_policy: typing.Optional[LifecyclePolicy] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        out_of_infrequent_access_policy: typing.Optional["OutOfInfrequentAccessPolicy"] = None,
+        performance_mode: typing.Optional["PerformanceMode"] = None,
+        provisioned_throughput_per_second: typing.Optional["_Size_7b441c34"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        replication_configuration: typing.Optional["ReplicationConfiguration"] = None,
+        replication_overwrite_protection: typing.Optional["ReplicationOverwriteProtection"] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
+        throughput_mode: typing.Optional["ThroughputMode"] = None,
+        transition_to_archive_policy: typing.Optional["LifecyclePolicy"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Constructor for creating a new EFS FileSystem.
 
@@ -4961,13 +4964,13 @@ class FileSystem(
     @builtins.classmethod
     def from_file_system_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        security_group: _ISecurityGroup_acf8a799,
+        security_group: "_ISecurityGroup_acf8a799",
         file_system_arn: typing.Optional[builtins.str] = None,
         file_system_id: typing.Optional[builtins.str] = None,
-    ) -> IFileSystem:
+    ) -> "IFileSystem":
         '''Import an existing File System from the given properties.
 
         :param scope: -
@@ -4986,7 +4989,7 @@ class FileSystem(
             file_system_id=file_system_id,
         )
 
-        return typing.cast(IFileSystem, jsii.sinvoke(cls, "fromFileSystemAttributes", [scope, id, attrs]))
+        return typing.cast("IFileSystem", jsii.sinvoke(cls, "fromFileSystemAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addAccessPoint")
     def add_access_point(
@@ -4994,10 +4997,10 @@ class FileSystem(
         id: builtins.str,
         *,
         client_token: typing.Optional[builtins.str] = None,
-        create_acl: typing.Optional[typing.Union[Acl, typing.Dict[builtins.str, typing.Any]]] = None,
+        create_acl: typing.Optional[typing.Union["Acl", typing.Dict[builtins.str, typing.Any]]] = None,
         path: typing.Optional[builtins.str] = None,
-        posix_user: typing.Optional[typing.Union[PosixUser, typing.Dict[builtins.str, typing.Any]]] = None,
-    ) -> AccessPoint:
+        posix_user: typing.Optional[typing.Union["PosixUser", typing.Dict[builtins.str, typing.Any]]] = None,
+    ) -> "AccessPoint":
         '''create access point from this filesystem.
 
         :param id: -
@@ -5016,13 +5019,13 @@ class FileSystem(
             posix_user=posix_user,
         )
 
-        return typing.cast(AccessPoint, jsii.invoke(self, "addAccessPoint", [id, access_point_options]))
+        return typing.cast("AccessPoint", jsii.invoke(self, "addAccessPoint", [id, access_point_options]))
 
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the resource policy associated with this file system.
 
         A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
@@ -5034,14 +5037,14 @@ class FileSystem(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1eff11f92ecb28f1cedf7f1f5bd707e2f23777bb0f90efb50e5454827f766dd7)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the actions defined in actions to the given grantee on this File System resource.
 
         :param grantee: Principal to grant right to.
@@ -5051,10 +5054,10 @@ class FileSystem(
             type_hints = typing.get_type_hints(_typecheckingstub__1d469ca5d09698c2cd0c0b2ce1f4112950cbc13abe1c176ec39092c058940a48)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this file system to an IAM principal.
 
         :param grantee: The principal to grant read to.
@@ -5062,10 +5065,10 @@ class FileSystem(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__09ce9ba839c1f8582411cf3761fe12ed54c6bc01df3b90e4a53db34130d499ad)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.member(jsii_name="grantReadWrite")
-    def grant_read_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read and write permissions for this file system to an IAM principal.
 
         :param grantee: The principal to grant read and write to.
@@ -5073,10 +5076,10 @@ class FileSystem(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d564c352bb1ac176733073fbd6db863945e8d2891b14267f160786b62ab94e97)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadWrite", [grantee]))
 
     @jsii.member(jsii_name="grantRootAccess")
-    def grant_root_access(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_root_access(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''As root user, grant read and write permissions for this file system to an IAM principal.
 
         :param grantee: The principal to grant root access to.
@@ -5084,7 +5087,7 @@ class FileSystem(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__020e1ad6a612ae3b94c3b53afd9ca3e8710c6a621174024a66a4889b08812106)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRootAccess", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRootAccess", [grantee]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DEFAULT_PORT")
@@ -5100,9 +5103,9 @@ class FileSystem(
 
     @builtins.property
     @jsii.member(jsii_name="connections")
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''The security groups/rules used to allow network connections to the file system.'''
-        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
     @jsii.member(jsii_name="fileSystemArn")
@@ -5124,9 +5127,9 @@ class FileSystem(
 
     @builtins.property
     @jsii.member(jsii_name="mountTargetsAvailable")
-    def mount_targets_available(self) -> _constructs_77d1e7e8.IDependable:
+    def mount_targets_available(self) -> "_constructs_77d1e7e8.IDependable":
         '''Dependable that can be depended upon to ensure the mount targets of the filesystem are ready.'''
-        return typing.cast(_constructs_77d1e7e8.IDependable, jsii.get(self, "mountTargetsAvailable"))
+        return typing.cast("_constructs_77d1e7e8.IDependable", jsii.get(self, "mountTargetsAvailable"))
 
 
 __all__ = [

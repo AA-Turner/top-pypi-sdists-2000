@@ -26,6 +26,7 @@ from langgraph_api import timing
 from langgraph_api.feature_flags import FF_USE_CORE_API, USE_RUNTIME_CONTEXT_API
 from langgraph_api.js.base import BaseRemotePregel, is_js_path
 from langgraph_api.schema import Config
+from langgraph_api.timing import profiled_import
 from langgraph_api.utils.config import run_in_executor, var_child_runnable_config
 from langgraph_api.utils.errors import GraphLoadError
 
@@ -466,39 +467,41 @@ def _metadata_fn(spec: GraphSpec) -> dict[str, Any]:
 def _graph_from_spec(spec: GraphSpec) -> GraphValue:
     """Return a graph from a spec."""
     # import the graph module
-    if spec.module:
-        module = importlib.import_module(spec.module)
-    elif spec.path:
-        try:
-            modname = (
-                spec.path.replace("/", "__")
-                .replace(".py", "")
-                .replace(" ", "_")
-                .lstrip(".")
-            )
-            modspec = importlib.util.spec_from_file_location(modname, spec.path)
-            if modspec is None:
-                raise ValueError(f"Could not find python file for graph: {spec}")
-            module = importlib.util.module_from_spec(modspec)
-            sys.modules[modname] = module
-            modspec.loader.exec_module(module)  # type: ignore[possibly-unbound-attribute]
-        except ImportError as e:
-            e.add_note(f"Could not import python module for graph:\n{spec}")
-            if lg_api_config.API_VARIANT == "local_dev":
-                e.add_note(
-                    "This error likely means you haven't installed your project and its dependencies yet. Before running the server, install your project:\n\n"
-                    "If you are using requirements.txt:\n"
-                    "python -m pip install -r requirements.txt\n\n"
-                    "If you are using pyproject.toml or setuptools:\n"
-                    "python -m pip install -e .\n\n"
-                    "Make sure to run this command from your project's root directory (where your setup.py or pyproject.toml is located)"
+    import_path = f"{spec.module or spec.path}:{spec.variable or '<auto>'}"
+    with profiled_import(import_path):
+        if spec.module:
+            module = importlib.import_module(spec.module)
+        elif spec.path:
+            try:
+                modname = (
+                    spec.path.replace("/", "__")
+                    .replace(".py", "")
+                    .replace(" ", "_")
+                    .lstrip(".")
                 )
-            raise
-        except FileNotFoundError as e:
-            e.add_note(f"Could not find python file for graph: {spec}")
-            raise
-    else:
-        raise ValueError("Graph specification must have a path or module")
+                modspec = importlib.util.spec_from_file_location(modname, spec.path)
+                if modspec is None:
+                    raise ValueError(f"Could not find python file for graph: {spec}")
+                module = importlib.util.module_from_spec(modspec)
+                sys.modules[modname] = module
+                modspec.loader.exec_module(module)  # type: ignore[possibly-unbound-attribute]
+            except ImportError as e:
+                e.add_note(f"Could not import python module for graph:\n{spec}")
+                if lg_api_config.API_VARIANT == "local_dev":
+                    e.add_note(
+                        "This error likely means you haven't installed your project and its dependencies yet. Before running the server, install your project:\n\n"
+                        "If you are using requirements.txt:\n"
+                        "python -m pip install -r requirements.txt\n\n"
+                        "If you are using pyproject.toml or setuptools:\n"
+                        "python -m pip install -e .\n\n"
+                        "Make sure to run this command from your project's root directory (where your setup.py or pyproject.toml is located)"
+                    )
+                raise
+            except FileNotFoundError as e:
+                e.add_note(f"Could not find python file for graph: {spec}")
+                raise
+        else:
+            raise ValueError("Graph specification must have a path or module")
 
     if spec.variable:
         try:
@@ -635,20 +638,27 @@ def resolve_embeddings(index_config: dict) -> "Embeddings":
         module_name = module_name.rstrip(":")
 
         try:
-            if "/" in module_name:
-                # Load from file path
-                modname = (
-                    module_name.replace("/", "__").replace(".py", "").replace(" ", "_")
-                )
-                modspec = importlib.util.spec_from_file_location(modname, module_name)
-                if modspec is None:
-                    raise ValueError(f"Could not find embeddings file: {module_name}")
-                module = importlib.util.module_from_spec(modspec)
-                sys.modules[modname] = module
-                modspec.loader.exec_module(module)  # type: ignore[possibly-unbound-attribute]
-            else:
-                # Load from Python module
-                module = importlib.import_module(module_name)
+            with profiled_import(embed):
+                if "/" in module_name:
+                    # Load from file path
+                    modname = (
+                        module_name.replace("/", "__")
+                        .replace(".py", "")
+                        .replace(" ", "_")
+                    )
+                    modspec = importlib.util.spec_from_file_location(
+                        modname, module_name
+                    )
+                    if modspec is None:
+                        raise ValueError(
+                            f"Could not find embeddings file: {module_name}"
+                        )
+                    module = importlib.util.module_from_spec(modspec)
+                    sys.modules[modname] = module
+                    modspec.loader.exec_module(module)  # type: ignore[possibly-unbound-attribute]
+                else:
+                    # Load from Python module
+                    module = importlib.import_module(module_name)
 
             embedding_fn = getattr(module, function, None)
             if embedding_fn is None:

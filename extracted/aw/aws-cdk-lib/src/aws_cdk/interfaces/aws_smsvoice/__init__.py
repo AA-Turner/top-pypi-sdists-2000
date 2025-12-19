@@ -115,7 +115,7 @@ class IConfigurationSetRef(
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetRef")
-    def configuration_set_ref(self) -> ConfigurationSetReference:
+    def configuration_set_ref(self) -> "ConfigurationSetReference":
         '''(experimental) A reference to a ConfigurationSet resource.
 
         :stability: experimental
@@ -136,12 +136,12 @@ class _IConfigurationSetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetRef")
-    def configuration_set_ref(self) -> ConfigurationSetReference:
+    def configuration_set_ref(self) -> "ConfigurationSetReference":
         '''(experimental) A reference to a ConfigurationSet resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationSetReference, jsii.get(self, "configurationSetRef"))
+        return typing.cast("ConfigurationSetReference", jsii.get(self, "configurationSetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationSetRef).__jsii_proxy_class__ = lambda : _IConfigurationSetRefProxy

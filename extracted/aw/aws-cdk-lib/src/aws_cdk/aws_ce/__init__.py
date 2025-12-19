@@ -112,7 +112,7 @@ class CfnAnomalyMonitor(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         monitor_name: builtins.str,
@@ -158,7 +158,7 @@ class CfnAnomalyMonitor(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAnomalyMonitor", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -189,9 +189,9 @@ class CfnAnomalyMonitor(
 
     @builtins.property
     @jsii.member(jsii_name="anomalyMonitorRef")
-    def anomaly_monitor_ref(self) -> _AnomalyMonitorReference_06d4852f:
+    def anomaly_monitor_ref(self) -> "_AnomalyMonitorReference_06d4852f":
         '''A reference to a AnomalyMonitor resource.'''
-        return typing.cast(_AnomalyMonitorReference_06d4852f, jsii.get(self, "anomalyMonitorRef"))
+        return typing.cast("_AnomalyMonitorReference_06d4852f", jsii.get(self, "anomalyMonitorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrCreationDate")
@@ -240,9 +240,9 @@ class CfnAnomalyMonitor(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -409,7 +409,7 @@ class CfnAnomalyMonitorProps:
         monitor_type: builtins.str,
         monitor_dimension: typing.Optional[builtins.str] = None,
         monitor_specification: typing.Optional[builtins.str] = None,
-        resource_tags: typing.Optional[typing.Sequence[typing.Union[CfnAnomalyMonitor.ResourceTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        resource_tags: typing.Optional[typing.Sequence[typing.Union["CfnAnomalyMonitor.ResourceTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAnomalyMonitor``.
 
@@ -510,13 +510,13 @@ class CfnAnomalyMonitorProps:
     @builtins.property
     def resource_tags(
         self,
-    ) -> typing.Optional[typing.List[CfnAnomalyMonitor.ResourceTagProperty]]:
+    ) -> typing.Optional[typing.List["CfnAnomalyMonitor.ResourceTagProperty"]]:
         '''Tags to assign to monitor.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ce-anomalymonitor.html#cfn-ce-anomalymonitor-resourcetags
         '''
         result = self._values.get("resource_tags")
-        return typing.cast(typing.Optional[typing.List[CfnAnomalyMonitor.ResourceTagProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnAnomalyMonitor.ResourceTagProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -578,12 +578,12 @@ class CfnAnomalySubscription(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         frequency: builtins.str,
-        monitor_arn_list: typing.Sequence[typing.Union[builtins.str, _IAnomalyMonitorRef_5865dcc9]],
-        subscribers: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalySubscription.SubscriberProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        monitor_arn_list: typing.Sequence[typing.Union[builtins.str, "_IAnomalyMonitorRef_5865dcc9"]],
+        subscribers: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalySubscription.SubscriberProperty", typing.Dict[builtins.str, typing.Any]]]]],
         subscription_name: builtins.str,
         resource_tags: typing.Optional[typing.Sequence[typing.Union["CfnAnomalySubscription.ResourceTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         threshold: typing.Optional[jsii.Number] = None,
@@ -630,7 +630,7 @@ class CfnAnomalySubscription(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAnomalySubscription", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -661,9 +661,9 @@ class CfnAnomalySubscription(
 
     @builtins.property
     @jsii.member(jsii_name="anomalySubscriptionRef")
-    def anomaly_subscription_ref(self) -> _AnomalySubscriptionReference_2f0aee6f:
+    def anomaly_subscription_ref(self) -> "_AnomalySubscriptionReference_2f0aee6f":
         '''A reference to a AnomalySubscription resource.'''
-        return typing.cast(_AnomalySubscriptionReference_2f0aee6f, jsii.get(self, "anomalySubscriptionRef"))
+        return typing.cast("_AnomalySubscriptionReference_2f0aee6f", jsii.get(self, "anomalySubscriptionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAccountId")
@@ -685,9 +685,9 @@ class CfnAnomalySubscription(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -724,14 +724,14 @@ class CfnAnomalySubscription(
     @jsii.member(jsii_name="subscribers")
     def subscribers(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalySubscription.SubscriberProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalySubscription.SubscriberProperty"]]]:
         '''A list of subscribers to notify.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalySubscription.SubscriberProperty"]]], jsii.get(self, "subscribers"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalySubscription.SubscriberProperty"]]], jsii.get(self, "subscribers"))
 
     @subscribers.setter
     def subscribers(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalySubscription.SubscriberProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalySubscription.SubscriberProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5656753df5f64fe42e45494608ada7acc3f3ea8f09a108fc5083bce855ae7242)
@@ -972,10 +972,10 @@ class CfnAnomalySubscriptionProps:
         self,
         *,
         frequency: builtins.str,
-        monitor_arn_list: typing.Sequence[typing.Union[builtins.str, _IAnomalyMonitorRef_5865dcc9]],
-        subscribers: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalySubscription.SubscriberProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        monitor_arn_list: typing.Sequence[typing.Union[builtins.str, "_IAnomalyMonitorRef_5865dcc9"]],
+        subscribers: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalySubscription.SubscriberProperty", typing.Dict[builtins.str, typing.Any]]]]],
         subscription_name: builtins.str,
-        resource_tags: typing.Optional[typing.Sequence[typing.Union[CfnAnomalySubscription.ResourceTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        resource_tags: typing.Optional[typing.Sequence[typing.Union["CfnAnomalySubscription.ResourceTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         threshold: typing.Optional[jsii.Number] = None,
         threshold_expression: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -1056,26 +1056,26 @@ class CfnAnomalySubscriptionProps:
     @builtins.property
     def monitor_arn_list(
         self,
-    ) -> typing.List[typing.Union[builtins.str, _IAnomalyMonitorRef_5865dcc9]]:
+    ) -> typing.List[typing.Union[builtins.str, "_IAnomalyMonitorRef_5865dcc9"]]:
         '''A list of cost anomaly monitors.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ce-anomalysubscription.html#cfn-ce-anomalysubscription-monitorarnlist
         '''
         result = self._values.get("monitor_arn_list")
         assert result is not None, "Required property 'monitor_arn_list' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _IAnomalyMonitorRef_5865dcc9]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_IAnomalyMonitorRef_5865dcc9"]], result)
 
     @builtins.property
     def subscribers(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAnomalySubscription.SubscriberProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalySubscription.SubscriberProperty"]]]:
         '''A list of subscribers to notify.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ce-anomalysubscription.html#cfn-ce-anomalysubscription-subscribers
         '''
         result = self._values.get("subscribers")
         assert result is not None, "Required property 'subscribers' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAnomalySubscription.SubscriberProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalySubscription.SubscriberProperty"]]], result)
 
     @builtins.property
     def subscription_name(self) -> builtins.str:
@@ -1090,13 +1090,13 @@ class CfnAnomalySubscriptionProps:
     @builtins.property
     def resource_tags(
         self,
-    ) -> typing.Optional[typing.List[CfnAnomalySubscription.ResourceTagProperty]]:
+    ) -> typing.Optional[typing.List["CfnAnomalySubscription.ResourceTagProperty"]]:
         '''Tags to assign to subscription.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ce-anomalysubscription.html#cfn-ce-anomalysubscription-resourcetags
         '''
         result = self._values.get("resource_tags")
-        return typing.cast(typing.Optional[typing.List[CfnAnomalySubscription.ResourceTagProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnAnomalySubscription.ResourceTagProperty"]], result)
 
     @builtins.property
     def threshold(self) -> typing.Optional[jsii.Number]:
@@ -1175,7 +1175,7 @@ class CfnCostCategory(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -1193,7 +1193,7 @@ class CfnCostCategory(
         :param rules: The array of CostCategoryRule in JSON array format. .. epigraph:: Rules are processed in order. If there are multiple rules that match the line item, then the first rule to match is used to determine that Cost Category value.
         :param rule_version: The rule schema version in this particular Cost Category.
         :param default_value: The default value for the cost category.
-        :param split_charge_rules: The split charge rules that are used to allocate your charges between your Cost Category values.
+        :param split_charge_rules: The split charge rules that are used to allocate your charges between your cost category values.
         :param tags: Tags to assign to the cost category.
         '''
         if __debug__:
@@ -1215,7 +1215,7 @@ class CfnCostCategory(
     @builtins.classmethod
     def arn_for_cost_category(
         cls,
-        resource: _ICostCategoryRef_65c8e6b4,
+        resource: "_ICostCategoryRef_65c8e6b4",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1238,7 +1238,7 @@ class CfnCostCategory(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCostCategory", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1287,9 +1287,9 @@ class CfnCostCategory(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1298,9 +1298,9 @@ class CfnCostCategory(
 
     @builtins.property
     @jsii.member(jsii_name="costCategoryRef")
-    def cost_category_ref(self) -> _CostCategoryReference_4e0a3418:
+    def cost_category_ref(self) -> "_CostCategoryReference_4e0a3418":
         '''A reference to a CostCategory resource.'''
-        return typing.cast(_CostCategoryReference_4e0a3418, jsii.get(self, "costCategoryRef"))
+        return typing.cast("_CostCategoryReference_4e0a3418", jsii.get(self, "costCategoryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1357,7 +1357,7 @@ class CfnCostCategory(
     @builtins.property
     @jsii.member(jsii_name="splitChargeRules")
     def split_charge_rules(self) -> typing.Optional[builtins.str]:
-        '''The split charge rules that are used to allocate your charges between your Cost Category values.'''
+        '''The split charge rules that are used to allocate your charges between your cost category values.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "splitChargeRules"))
 
     @split_charge_rules.setter
@@ -1477,7 +1477,7 @@ class CfnCostCategoryProps:
         rule_version: builtins.str,
         default_value: typing.Optional[builtins.str] = None,
         split_charge_rules: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnCostCategory.ResourceTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnCostCategory.ResourceTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCostCategory``.
 
@@ -1485,7 +1485,7 @@ class CfnCostCategoryProps:
         :param rules: The array of CostCategoryRule in JSON array format. .. epigraph:: Rules are processed in order. If there are multiple rules that match the line item, then the first rule to match is used to determine that Cost Category value.
         :param rule_version: The rule schema version in this particular Cost Category.
         :param default_value: The default value for the cost category.
-        :param split_charge_rules: The split charge rules that are used to allocate your charges between your Cost Category values.
+        :param split_charge_rules: The split charge rules that are used to allocate your charges between your cost category values.
         :param tags: Tags to assign to the cost category.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ce-costcategory.html
@@ -1576,7 +1576,7 @@ class CfnCostCategoryProps:
 
     @builtins.property
     def split_charge_rules(self) -> typing.Optional[builtins.str]:
-        '''The split charge rules that are used to allocate your charges between your Cost Category values.
+        '''The split charge rules that are used to allocate your charges between your cost category values.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ce-costcategory.html#cfn-ce-costcategory-splitchargerules
         '''
@@ -1584,13 +1584,15 @@ class CfnCostCategoryProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[CfnCostCategory.ResourceTagProperty]]:
+    def tags(
+        self,
+    ) -> typing.Optional[typing.List["CfnCostCategory.ResourceTagProperty"]]:
         '''Tags to assign to the cost category.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ce-costcategory.html#cfn-ce-costcategory-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnCostCategory.ResourceTagProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnCostCategory.ResourceTagProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

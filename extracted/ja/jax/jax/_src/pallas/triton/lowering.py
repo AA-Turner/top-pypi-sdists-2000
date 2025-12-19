@@ -1443,6 +1443,7 @@ def _integer_pow_rule(ctx: LoweringRuleContext, x, *, y: int):
 _JAX_FN_MAPPING = {
     lax.clamp_p: lambda min, a, max: jnp.minimum(jnp.maximum(min, a), max),
     lax.logistic_p: lambda a, accuracy: 1 / (1 + jnp.exp(-a)),
+    lax.is_finite_p: lambda x: jnp.logical_and(~jnp.isnan(x), ~jnp.isinf(x)),
 }
 
 for prim, fn in _JAX_FN_MAPPING.items():
@@ -2536,7 +2537,7 @@ def _pjit_lowering_rule(ctx: LoweringRuleContext, *args, jaxpr, **_):
 
 
 @register_lowering(pjit.reshard_p)
-def _reshard_lowering_rule(ctx, x, dst_sharding):
+def _reshard_lowering_rule(ctx, x, *, dst_sharding, concrete_mesh):
   return x
 
 

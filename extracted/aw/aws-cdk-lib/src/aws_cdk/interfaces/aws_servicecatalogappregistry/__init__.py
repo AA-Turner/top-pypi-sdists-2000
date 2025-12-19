@@ -253,7 +253,7 @@ class IApplicationRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
@@ -274,12 +274,12 @@ class _IApplicationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationReference, jsii.get(self, "applicationRef"))
+        return typing.cast("ApplicationReference", jsii.get(self, "applicationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IApplicationRefProxy
@@ -300,7 +300,7 @@ class IAttributeGroupAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="attributeGroupAssociationRef")
-    def attribute_group_association_ref(self) -> AttributeGroupAssociationReference:
+    def attribute_group_association_ref(self) -> "AttributeGroupAssociationReference":
         '''(experimental) A reference to a AttributeGroupAssociation resource.
 
         :stability: experimental
@@ -321,12 +321,12 @@ class _IAttributeGroupAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="attributeGroupAssociationRef")
-    def attribute_group_association_ref(self) -> AttributeGroupAssociationReference:
+    def attribute_group_association_ref(self) -> "AttributeGroupAssociationReference":
         '''(experimental) A reference to a AttributeGroupAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(AttributeGroupAssociationReference, jsii.get(self, "attributeGroupAssociationRef"))
+        return typing.cast("AttributeGroupAssociationReference", jsii.get(self, "attributeGroupAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAttributeGroupAssociationRef).__jsii_proxy_class__ = lambda : _IAttributeGroupAssociationRefProxy
@@ -347,7 +347,7 @@ class IAttributeGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="attributeGroupRef")
-    def attribute_group_ref(self) -> AttributeGroupReference:
+    def attribute_group_ref(self) -> "AttributeGroupReference":
         '''(experimental) A reference to a AttributeGroup resource.
 
         :stability: experimental
@@ -368,12 +368,12 @@ class _IAttributeGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="attributeGroupRef")
-    def attribute_group_ref(self) -> AttributeGroupReference:
+    def attribute_group_ref(self) -> "AttributeGroupReference":
         '''(experimental) A reference to a AttributeGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(AttributeGroupReference, jsii.get(self, "attributeGroupRef"))
+        return typing.cast("AttributeGroupReference", jsii.get(self, "attributeGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAttributeGroupRef).__jsii_proxy_class__ = lambda : _IAttributeGroupRefProxy

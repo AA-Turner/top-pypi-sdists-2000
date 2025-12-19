@@ -132,11 +132,11 @@ class CfnByteMatchSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        byte_match_tuples: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnByteMatchSet.ByteMatchTupleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        byte_match_tuples: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnByteMatchSet.ByteMatchTupleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::WAF::ByteMatchSet``.
 
@@ -157,7 +157,7 @@ class CfnByteMatchSet(
     @builtins.classmethod
     def arn_for_byte_match_set(
         cls,
-        resource: _IByteMatchSetRef_da566f9b,
+        resource: "_IByteMatchSetRef_da566f9b",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -180,7 +180,7 @@ class CfnByteMatchSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnByteMatchSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -219,9 +219,9 @@ class CfnByteMatchSet(
 
     @builtins.property
     @jsii.member(jsii_name="byteMatchSetRef")
-    def byte_match_set_ref(self) -> _ByteMatchSetReference_32d58382:
+    def byte_match_set_ref(self) -> "_ByteMatchSetReference_32d58382":
         '''A reference to a ByteMatchSet resource.'''
-        return typing.cast(_ByteMatchSetReference_32d58382, jsii.get(self, "byteMatchSetRef"))
+        return typing.cast("_ByteMatchSetReference_32d58382", jsii.get(self, "byteMatchSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -245,14 +245,14 @@ class CfnByteMatchSet(
     @jsii.member(jsii_name="byteMatchTuples")
     def byte_match_tuples(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnByteMatchSet.ByteMatchTupleProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnByteMatchSet.ByteMatchTupleProperty"]]]]:
         '''Specifies the bytes (typically a string that corresponds with ASCII characters) that you want AWS WAF to search for in web requests, the location in requests that you want AWS WAF to search, and other settings.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnByteMatchSet.ByteMatchTupleProperty"]]]], jsii.get(self, "byteMatchTuples"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnByteMatchSet.ByteMatchTupleProperty"]]]], jsii.get(self, "byteMatchTuples"))
 
     @byte_match_tuples.setter
     def byte_match_tuples(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnByteMatchSet.ByteMatchTupleProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnByteMatchSet.ByteMatchTupleProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__38cddc571283445976a4c44160553b6f4451eb0f269d8ed67aa4c95fe876378b)
@@ -274,7 +274,7 @@ class CfnByteMatchSet(
         def __init__(
             self,
             *,
-            field_to_match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnByteMatchSet.FieldToMatchProperty", typing.Dict[builtins.str, typing.Any]]],
+            field_to_match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnByteMatchSet.FieldToMatchProperty", typing.Dict[builtins.str, typing.Any]]],
             positional_constraint: builtins.str,
             text_transformation: builtins.str,
             target_string: typing.Optional[builtins.str] = None,
@@ -342,14 +342,14 @@ class CfnByteMatchSet(
         @builtins.property
         def field_to_match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnByteMatchSet.FieldToMatchProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnByteMatchSet.FieldToMatchProperty"]:
             '''The part of a web request that you want to inspect, such as a specified header or a query string.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-waf-bytematchset-bytematchtuple.html#cfn-waf-bytematchset-bytematchtuple-fieldtomatch
             '''
             result = self._values.get("field_to_match")
             assert result is not None, "Required property 'field_to_match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnByteMatchSet.FieldToMatchProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnByteMatchSet.FieldToMatchProperty"], result)
 
         @builtins.property
         def positional_constraint(self) -> builtins.str:
@@ -609,7 +609,7 @@ class CfnByteMatchSetProps:
         self,
         *,
         name: builtins.str,
-        byte_match_tuples: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnByteMatchSet.ByteMatchTupleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        byte_match_tuples: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnByteMatchSet.ByteMatchTupleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnByteMatchSet``.
 
@@ -670,13 +670,13 @@ class CfnByteMatchSetProps:
     @builtins.property
     def byte_match_tuples(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnByteMatchSet.ByteMatchTupleProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnByteMatchSet.ByteMatchTupleProperty"]]]]:
         '''Specifies the bytes (typically a string that corresponds with ASCII characters) that you want AWS WAF to search for in web requests, the location in requests that you want AWS WAF to search, and other settings.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-waf-bytematchset.html#cfn-waf-bytematchset-bytematchtuples
         '''
         result = self._values.get("byte_match_tuples")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnByteMatchSet.ByteMatchTupleProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnByteMatchSet.ByteMatchTupleProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -733,11 +733,11 @@ class CfnIPSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        ip_set_descriptors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIPSet.IPSetDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ip_set_descriptors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIPSet.IPSetDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::WAF::IPSet``.
 
@@ -756,7 +756,7 @@ class CfnIPSet(
 
     @jsii.member(jsii_name="arnForIPSet")
     @builtins.classmethod
-    def arn_for_ip_set(cls, resource: _IIPSetRef_daf96c98) -> builtins.str:
+    def arn_for_ip_set(cls, resource: "_IIPSetRef_daf96c98") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -778,7 +778,7 @@ class CfnIPSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIPSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -822,9 +822,9 @@ class CfnIPSet(
 
     @builtins.property
     @jsii.member(jsii_name="ipSetRef")
-    def ip_set_ref(self) -> _IPSetReference_44e9af16:
+    def ip_set_ref(self) -> "_IPSetReference_44e9af16":
         '''A reference to a IPSet resource.'''
-        return typing.cast(_IPSetReference_44e9af16, jsii.get(self, "ipSetRef"))
+        return typing.cast("_IPSetReference_44e9af16", jsii.get(self, "ipSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -843,14 +843,14 @@ class CfnIPSet(
     @jsii.member(jsii_name="ipSetDescriptors")
     def ip_set_descriptors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIPSet.IPSetDescriptorProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIPSet.IPSetDescriptorProperty"]]]]:
         '''The IP address type ( ``IPV4`` or ``IPV6`` ) and the IP address range (in CIDR notation) that web requests originate from.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIPSet.IPSetDescriptorProperty"]]]], jsii.get(self, "ipSetDescriptors"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIPSet.IPSetDescriptorProperty"]]]], jsii.get(self, "ipSetDescriptors"))
 
     @ip_set_descriptors.setter
     def ip_set_descriptors(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIPSet.IPSetDescriptorProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIPSet.IPSetDescriptorProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8ae21436c1ceef6df85fa9b2c6cb46ef635222d7f82d4b601c4e4917039f713e)
@@ -954,7 +954,7 @@ class CfnIPSetProps:
         self,
         *,
         name: builtins.str,
-        ip_set_descriptors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIPSet.IPSetDescriptorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ip_set_descriptors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIPSet.IPSetDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnIPSet``.
 
@@ -1005,7 +1005,7 @@ class CfnIPSetProps:
     @builtins.property
     def ip_set_descriptors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnIPSet.IPSetDescriptorProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIPSet.IPSetDescriptorProperty"]]]]:
         '''The IP address type ( ``IPV4`` or ``IPV6`` ) and the IP address range (in CIDR notation) that web requests originate from.
 
         If the ``WebACL`` is associated with an Amazon CloudFront distribution and the viewer did not use an HTTP proxy or a load balancer to send the request, this is the value of the c-ip field in the CloudFront access logs.
@@ -1013,7 +1013,7 @@ class CfnIPSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-waf-ipset.html#cfn-waf-ipset-ipsetdescriptors
         '''
         result = self._values.get("ip_set_descriptors")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnIPSet.IPSetDescriptorProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIPSet.IPSetDescriptorProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1074,12 +1074,12 @@ class CfnRule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         metric_name: builtins.str,
         name: builtins.str,
-        predicates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRule.PredicateProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        predicates: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.PredicateProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::WAF::Rule``.
 
@@ -1099,7 +1099,7 @@ class CfnRule(
 
     @jsii.member(jsii_name="arnForRule")
     @builtins.classmethod
-    def arn_for_rule(cls, resource: _IRuleRef_1eeb9646) -> builtins.str:
+    def arn_for_rule(cls, resource: "_IRuleRef_1eeb9646") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1121,7 +1121,7 @@ class CfnRule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1165,9 +1165,9 @@ class CfnRule(
 
     @builtins.property
     @jsii.member(jsii_name="ruleRef")
-    def rule_ref(self) -> _RuleReference_9a37643a:
+    def rule_ref(self) -> "_RuleReference_9a37643a":
         '''A reference to a Rule resource.'''
-        return typing.cast(_RuleReference_9a37643a, jsii.get(self, "ruleRef"))
+        return typing.cast("_RuleReference_9a37643a", jsii.get(self, "ruleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="metricName")
@@ -1199,14 +1199,14 @@ class CfnRule(
     @jsii.member(jsii_name="predicates")
     def predicates(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRule.PredicateProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRule.PredicateProperty"]]]]:
         '''The ``Predicates`` object contains one ``Predicate`` element for each ``ByteMatchSet`` , ``IPSet`` , or ``SqlInjectionMatchSet`` object that you want to include in a ``Rule`` .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRule.PredicateProperty"]]]], jsii.get(self, "predicates"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRule.PredicateProperty"]]]], jsii.get(self, "predicates"))
 
     @predicates.setter
     def predicates(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRule.PredicateProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRule.PredicateProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6fe8f94ea24dfef83c4e04e7936145570ac6b1cabe4c2646ae859402d2943652)
@@ -1223,7 +1223,7 @@ class CfnRule(
             self,
             *,
             data_id: builtins.str,
-            negated: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            negated: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             type: builtins.str,
         ) -> None:
             '''Specifies the ``ByteMatchSet`` , ``IPSet`` , ``SqlInjectionMatchSet`` , ``XssMatchSet`` , ``RegexMatchSet`` , ``GeoMatchSet`` , and ``SizeConstraintSet`` objects that you want to add to a ``Rule`` and, for each object, indicates whether you want to negate the settings, for example, requests that do NOT originate from the IP address 192.0.2.44.
@@ -1271,7 +1271,7 @@ class CfnRule(
             return typing.cast(builtins.str, result)
 
         @builtins.property
-        def negated(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def negated(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Set ``Negated`` to ``False`` if you want AWS WAF to allow, block, or count requests based on the settings in the specified ``ByteMatchSet`` , ``IPSet`` , ``SqlInjectionMatchSet`` , ``XssMatchSet`` , ``RegexMatchSet`` , ``GeoMatchSet`` , or ``SizeConstraintSet`` .
 
             For example, if an ``IPSet`` includes the IP address ``192.0.2.44`` , AWS WAF will allow or block requests based on that IP address.
@@ -1282,7 +1282,7 @@ class CfnRule(
             '''
             result = self._values.get("negated")
             assert result is not None, "Required property 'negated' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def type(self) -> builtins.str:
@@ -1321,7 +1321,7 @@ class CfnRuleProps:
         *,
         metric_name: builtins.str,
         name: builtins.str,
-        predicates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRule.PredicateProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        predicates: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.PredicateProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRule``.
 
@@ -1389,13 +1389,13 @@ class CfnRuleProps:
     @builtins.property
     def predicates(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRule.PredicateProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRule.PredicateProperty"]]]]:
         '''The ``Predicates`` object contains one ``Predicate`` element for each ``ByteMatchSet`` , ``IPSet`` , or ``SqlInjectionMatchSet`` object that you want to include in a ``Rule`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-waf-rule.html#cfn-waf-rule-predicates
         '''
         result = self._values.get("predicates")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRule.PredicateProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRule.PredicateProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1455,11 +1455,11 @@ class CfnSizeConstraintSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        size_constraints: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSizeConstraintSet.SizeConstraintProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        size_constraints: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSizeConstraintSet.SizeConstraintProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Create a new ``AWS::WAF::SizeConstraintSet``.
 
@@ -1480,7 +1480,7 @@ class CfnSizeConstraintSet(
     @builtins.classmethod
     def arn_for_size_constraint_set(
         cls,
-        resource: _ISizeConstraintSetRef_55b3b762,
+        resource: "_ISizeConstraintSetRef_55b3b762",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1503,7 +1503,7 @@ class CfnSizeConstraintSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSizeConstraintSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1547,9 +1547,9 @@ class CfnSizeConstraintSet(
 
     @builtins.property
     @jsii.member(jsii_name="sizeConstraintSetRef")
-    def size_constraint_set_ref(self) -> _SizeConstraintSetReference_e52c5521:
+    def size_constraint_set_ref(self) -> "_SizeConstraintSetReference_e52c5521":
         '''A reference to a SizeConstraintSet resource.'''
-        return typing.cast(_SizeConstraintSetReference_e52c5521, jsii.get(self, "sizeConstraintSetRef"))
+        return typing.cast("_SizeConstraintSetReference_e52c5521", jsii.get(self, "sizeConstraintSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1568,14 +1568,14 @@ class CfnSizeConstraintSet(
     @jsii.member(jsii_name="sizeConstraints")
     def size_constraints(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSizeConstraintSet.SizeConstraintProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSizeConstraintSet.SizeConstraintProperty"]]]:
         '''The size constraint and the part of the web request to check.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSizeConstraintSet.SizeConstraintProperty"]]], jsii.get(self, "sizeConstraints"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSizeConstraintSet.SizeConstraintProperty"]]], jsii.get(self, "sizeConstraints"))
 
     @size_constraints.setter
     def size_constraints(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSizeConstraintSet.SizeConstraintProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSizeConstraintSet.SizeConstraintProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4c2146adeb04010f1c7b71243b8e39949fef1610481d921373278f9a687bb710)
@@ -1686,7 +1686,7 @@ class CfnSizeConstraintSet(
             self,
             *,
             comparison_operator: builtins.str,
-            field_to_match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSizeConstraintSet.FieldToMatchProperty", typing.Dict[builtins.str, typing.Any]]],
+            field_to_match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSizeConstraintSet.FieldToMatchProperty", typing.Dict[builtins.str, typing.Any]]],
             size: jsii.Number,
             text_transformation: builtins.str,
         ) -> None:
@@ -1768,14 +1768,14 @@ class CfnSizeConstraintSet(
         @builtins.property
         def field_to_match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnSizeConstraintSet.FieldToMatchProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnSizeConstraintSet.FieldToMatchProperty"]:
             '''The part of a web request that you want to inspect, such as a specified header or a query string.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-waf-sizeconstraintset-sizeconstraint.html#cfn-waf-sizeconstraintset-sizeconstraint-fieldtomatch
             '''
             result = self._values.get("field_to_match")
             assert result is not None, "Required property 'field_to_match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSizeConstraintSet.FieldToMatchProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSizeConstraintSet.FieldToMatchProperty"], result)
 
         @builtins.property
         def size(self) -> jsii.Number:
@@ -1877,7 +1877,7 @@ class CfnSizeConstraintSetProps:
         self,
         *,
         name: builtins.str,
-        size_constraints: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSizeConstraintSet.SizeConstraintProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        size_constraints: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSizeConstraintSet.SizeConstraintProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Properties for defining a ``CfnSizeConstraintSet``.
 
@@ -1930,14 +1930,14 @@ class CfnSizeConstraintSetProps:
     @builtins.property
     def size_constraints(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSizeConstraintSet.SizeConstraintProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSizeConstraintSet.SizeConstraintProperty"]]]:
         '''The size constraint and the part of the web request to check.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-waf-sizeconstraintset.html#cfn-waf-sizeconstraintset-sizeconstraints
         '''
         result = self._values.get("size_constraints")
         assert result is not None, "Required property 'size_constraints' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSizeConstraintSet.SizeConstraintProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSizeConstraintSet.SizeConstraintProperty"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1997,11 +1997,11 @@ class CfnSqlInjectionMatchSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        sql_injection_match_tuples: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        sql_injection_match_tuples: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::WAF::SqlInjectionMatchSet``.
 
@@ -2024,7 +2024,7 @@ class CfnSqlInjectionMatchSet(
     @builtins.classmethod
     def arn_for_sql_injection_match_set(
         cls,
-        resource: _ISqlInjectionMatchSetRef_f21faa9b,
+        resource: "_ISqlInjectionMatchSetRef_f21faa9b",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2047,7 +2047,7 @@ class CfnSqlInjectionMatchSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSqlInjectionMatchSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2091,9 +2091,9 @@ class CfnSqlInjectionMatchSet(
 
     @builtins.property
     @jsii.member(jsii_name="sqlInjectionMatchSetRef")
-    def sql_injection_match_set_ref(self) -> _SqlInjectionMatchSetReference_d9d37dda:
+    def sql_injection_match_set_ref(self) -> "_SqlInjectionMatchSetReference_d9d37dda":
         '''A reference to a SqlInjectionMatchSet resource.'''
-        return typing.cast(_SqlInjectionMatchSetReference_d9d37dda, jsii.get(self, "sqlInjectionMatchSetRef"))
+        return typing.cast("_SqlInjectionMatchSetReference_d9d37dda", jsii.get(self, "sqlInjectionMatchSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2112,14 +2112,14 @@ class CfnSqlInjectionMatchSet(
     @jsii.member(jsii_name="sqlInjectionMatchTuples")
     def sql_injection_match_tuples(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty"]]]]:
         '''Specifies the parts of web requests that you want to inspect for snippets of malicious SQL code.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty"]]]], jsii.get(self, "sqlInjectionMatchTuples"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty"]]]], jsii.get(self, "sqlInjectionMatchTuples"))
 
     @sql_injection_match_tuples.setter
     def sql_injection_match_tuples(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__77ea8275da693e2f3e7a1dc9893ac26d01ffd3e9696fe87cf0ccc13256275b24)
@@ -2227,7 +2227,7 @@ class CfnSqlInjectionMatchSet(
         def __init__(
             self,
             *,
-            field_to_match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSqlInjectionMatchSet.FieldToMatchProperty", typing.Dict[builtins.str, typing.Any]]],
+            field_to_match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSqlInjectionMatchSet.FieldToMatchProperty", typing.Dict[builtins.str, typing.Any]]],
             text_transformation: builtins.str,
         ) -> None:
             '''.. epigraph::
@@ -2276,14 +2276,14 @@ class CfnSqlInjectionMatchSet(
         @builtins.property
         def field_to_match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnSqlInjectionMatchSet.FieldToMatchProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnSqlInjectionMatchSet.FieldToMatchProperty"]:
             '''The part of a web request that you want to inspect, such as a specified header or a query string.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-waf-sqlinjectionmatchset-sqlinjectionmatchtuple.html#cfn-waf-sqlinjectionmatchset-sqlinjectionmatchtuple-fieldtomatch
             '''
             result = self._values.get("field_to_match")
             assert result is not None, "Required property 'field_to_match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSqlInjectionMatchSet.FieldToMatchProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSqlInjectionMatchSet.FieldToMatchProperty"], result)
 
         @builtins.property
         def text_transformation(self) -> builtins.str:
@@ -2370,7 +2370,7 @@ class CfnSqlInjectionMatchSetProps:
         self,
         *,
         name: builtins.str,
-        sql_injection_match_tuples: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        sql_injection_match_tuples: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSqlInjectionMatchSet``.
 
@@ -2424,13 +2424,13 @@ class CfnSqlInjectionMatchSetProps:
     @builtins.property
     def sql_injection_match_tuples(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty"]]]]:
         '''Specifies the parts of web requests that you want to inspect for snippets of malicious SQL code.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-waf-sqlinjectionmatchset.html#cfn-waf-sqlinjectionmatchset-sqlinjectionmatchtuples
         '''
         result = self._values.get("sql_injection_match_tuples")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSqlInjectionMatchSet.SqlInjectionMatchTupleProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2493,13 +2493,13 @@ class CfnWebACL(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        default_action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnWebACL.WafActionProperty", typing.Dict[builtins.str, typing.Any]]],
+        default_action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebACL.WafActionProperty", typing.Dict[builtins.str, typing.Any]]],
         metric_name: builtins.str,
         name: builtins.str,
-        rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWebACL.ActivatedRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebACL.ActivatedRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::WAF::WebACL``.
 
@@ -2525,7 +2525,7 @@ class CfnWebACL(
 
     @jsii.member(jsii_name="arnForWebACL")
     @builtins.classmethod
-    def arn_for_web_acl(cls, resource: _IWebACLRef_4edd511c) -> builtins.str:
+    def arn_for_web_acl(cls, resource: "_IWebACLRef_4edd511c") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2547,7 +2547,7 @@ class CfnWebACL(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWebACL", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2591,22 +2591,22 @@ class CfnWebACL(
 
     @builtins.property
     @jsii.member(jsii_name="webAclRef")
-    def web_acl_ref(self) -> _WebACLReference_efbb1750:
+    def web_acl_ref(self) -> "_WebACLReference_efbb1750":
         '''A reference to a WebACL resource.'''
-        return typing.cast(_WebACLReference_efbb1750, jsii.get(self, "webAclRef"))
+        return typing.cast("_WebACLReference_efbb1750", jsii.get(self, "webAclRef"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultAction")
     def default_action(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnWebACL.WafActionProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnWebACL.WafActionProperty"]:
         '''The action to perform if none of the ``Rules`` contained in the ``WebACL`` match.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnWebACL.WafActionProperty"], jsii.get(self, "defaultAction"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnWebACL.WafActionProperty"], jsii.get(self, "defaultAction"))
 
     @default_action.setter
     def default_action(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnWebACL.WafActionProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnWebACL.WafActionProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__52266bb34978087cbb2d4836a08bb254d7158d8b92a950c506b3d45990a0fe77)
@@ -2643,14 +2643,14 @@ class CfnWebACL(
     @jsii.member(jsii_name="rules")
     def rules(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWebACL.ActivatedRuleProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWebACL.ActivatedRuleProperty"]]]]:
         '''An array that contains the action for each ``Rule`` in a ``WebACL`` , the priority of the ``Rule`` , and the ID of the ``Rule`` .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWebACL.ActivatedRuleProperty"]]]], jsii.get(self, "rules"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWebACL.ActivatedRuleProperty"]]]], jsii.get(self, "rules"))
 
     @rules.setter
     def rules(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWebACL.ActivatedRuleProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWebACL.ActivatedRuleProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ad794dee9ca743d9926eaae6f7e4f4676a08672333f2e0b1cb9f4311bbc61bdf)
@@ -2668,7 +2668,7 @@ class CfnWebACL(
             *,
             priority: jsii.Number,
             rule_id: builtins.str,
-            action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWebACL.WafActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            action: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebACL.WafActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The ``ActivatedRule`` object in an ``UpdateWebACL`` request specifies a ``Rule`` that you want to insert or delete, the priority of the ``Rule`` in the ``WebACL`` , and the action that you want AWS WAF to take when a web request matches the ``Rule`` ( ``ALLOW`` , ``BLOCK`` , or ``COUNT`` ).
 
@@ -2738,7 +2738,7 @@ class CfnWebACL(
         @builtins.property
         def action(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWebACL.WafActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWebACL.WafActionProperty"]]:
             '''Specifies the action that Amazon CloudFront or AWS WAF takes when a web request matches the conditions in the ``Rule`` .
 
             Valid values for ``Action`` include the following:
@@ -2752,7 +2752,7 @@ class CfnWebACL(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-waf-webacl-activatedrule.html#cfn-waf-webacl-activatedrule-action
             '''
             result = self._values.get("action")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWebACL.WafActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWebACL.WafActionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2848,10 +2848,10 @@ class CfnWebACLProps:
     def __init__(
         self,
         *,
-        default_action: typing.Union[_IResolvable_da3f097b, typing.Union[CfnWebACL.WafActionProperty, typing.Dict[builtins.str, typing.Any]]],
+        default_action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebACL.WafActionProperty", typing.Dict[builtins.str, typing.Any]]],
         metric_name: builtins.str,
         name: builtins.str,
-        rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWebACL.ActivatedRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebACL.ActivatedRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnWebACL``.
 
@@ -2905,7 +2905,7 @@ class CfnWebACLProps:
     @builtins.property
     def default_action(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnWebACL.WafActionProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnWebACL.WafActionProperty"]:
         '''The action to perform if none of the ``Rules`` contained in the ``WebACL`` match.
 
         The action is specified by the ``WafAction`` object.
@@ -2914,7 +2914,7 @@ class CfnWebACLProps:
         '''
         result = self._values.get("default_action")
         assert result is not None, "Required property 'default_action' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnWebACL.WafActionProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnWebACL.WafActionProperty"], result)
 
     @builtins.property
     def metric_name(self) -> builtins.str:
@@ -2943,13 +2943,13 @@ class CfnWebACLProps:
     @builtins.property
     def rules(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnWebACL.ActivatedRuleProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWebACL.ActivatedRuleProperty"]]]]:
         '''An array that contains the action for each ``Rule`` in a ``WebACL`` , the priority of the ``Rule`` , and the ID of the ``Rule`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-waf-webacl.html#cfn-waf-webacl-rules
         '''
         result = self._values.get("rules")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnWebACL.ActivatedRuleProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWebACL.ActivatedRuleProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3007,11 +3007,11 @@ class CfnXssMatchSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        xss_match_tuples: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnXssMatchSet.XssMatchTupleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        xss_match_tuples: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnXssMatchSet.XssMatchTupleProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Create a new ``AWS::WAF::XssMatchSet``.
 
@@ -3030,7 +3030,10 @@ class CfnXssMatchSet(
 
     @jsii.member(jsii_name="arnForXssMatchSet")
     @builtins.classmethod
-    def arn_for_xss_match_set(cls, resource: _IXssMatchSetRef_3fe7532c) -> builtins.str:
+    def arn_for_xss_match_set(
+        cls,
+        resource: "_IXssMatchSetRef_3fe7532c",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3052,7 +3055,7 @@ class CfnXssMatchSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnXssMatchSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3096,9 +3099,9 @@ class CfnXssMatchSet(
 
     @builtins.property
     @jsii.member(jsii_name="xssMatchSetRef")
-    def xss_match_set_ref(self) -> _XssMatchSetReference_c1f2f9ab:
+    def xss_match_set_ref(self) -> "_XssMatchSetReference_c1f2f9ab":
         '''A reference to a XssMatchSet resource.'''
-        return typing.cast(_XssMatchSetReference_c1f2f9ab, jsii.get(self, "xssMatchSetRef"))
+        return typing.cast("_XssMatchSetReference_c1f2f9ab", jsii.get(self, "xssMatchSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -3117,14 +3120,14 @@ class CfnXssMatchSet(
     @jsii.member(jsii_name="xssMatchTuples")
     def xss_match_tuples(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnXssMatchSet.XssMatchTupleProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnXssMatchSet.XssMatchTupleProperty"]]]:
         '''Specifies the parts of web requests that you want to inspect for cross-site scripting attacks.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnXssMatchSet.XssMatchTupleProperty"]]], jsii.get(self, "xssMatchTuples"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnXssMatchSet.XssMatchTupleProperty"]]], jsii.get(self, "xssMatchTuples"))
 
     @xss_match_tuples.setter
     def xss_match_tuples(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnXssMatchSet.XssMatchTupleProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnXssMatchSet.XssMatchTupleProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6d7007b605981f06615fd476379f0fcfbf9338683d256515aa4555d0ed5efff1)
@@ -3232,7 +3235,7 @@ class CfnXssMatchSet(
         def __init__(
             self,
             *,
-            field_to_match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnXssMatchSet.FieldToMatchProperty", typing.Dict[builtins.str, typing.Any]]],
+            field_to_match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnXssMatchSet.FieldToMatchProperty", typing.Dict[builtins.str, typing.Any]]],
             text_transformation: builtins.str,
         ) -> None:
             '''.. epigraph::
@@ -3281,14 +3284,14 @@ class CfnXssMatchSet(
         @builtins.property
         def field_to_match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnXssMatchSet.FieldToMatchProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnXssMatchSet.FieldToMatchProperty"]:
             '''The part of a web request that you want to inspect, such as a specified header or a query string.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-waf-xssmatchset-xssmatchtuple.html#cfn-waf-xssmatchset-xssmatchtuple-fieldtomatch
             '''
             result = self._values.get("field_to_match")
             assert result is not None, "Required property 'field_to_match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnXssMatchSet.FieldToMatchProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnXssMatchSet.FieldToMatchProperty"], result)
 
         @builtins.property
         def text_transformation(self) -> builtins.str:
@@ -3372,7 +3375,7 @@ class CfnXssMatchSetProps:
         self,
         *,
         name: builtins.str,
-        xss_match_tuples: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnXssMatchSet.XssMatchTupleProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        xss_match_tuples: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnXssMatchSet.XssMatchTupleProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Properties for defining a ``CfnXssMatchSet``.
 
@@ -3423,14 +3426,14 @@ class CfnXssMatchSetProps:
     @builtins.property
     def xss_match_tuples(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnXssMatchSet.XssMatchTupleProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnXssMatchSet.XssMatchTupleProperty"]]]:
         '''Specifies the parts of web requests that you want to inspect for cross-site scripting attacks.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-waf-xssmatchset.html#cfn-waf-xssmatchset-xssmatchtuples
         '''
         result = self._values.get("xss_match_tuples")
         assert result is not None, "Required property 'xss_match_tuples' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnXssMatchSet.XssMatchTupleProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnXssMatchSet.XssMatchTupleProperty"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

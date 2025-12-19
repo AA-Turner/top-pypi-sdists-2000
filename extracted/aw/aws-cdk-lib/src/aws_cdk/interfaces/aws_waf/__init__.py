@@ -96,7 +96,7 @@ class IByteMatchSetRef(
 
     @builtins.property
     @jsii.member(jsii_name="byteMatchSetRef")
-    def byte_match_set_ref(self) -> ByteMatchSetReference:
+    def byte_match_set_ref(self) -> "ByteMatchSetReference":
         '''(experimental) A reference to a ByteMatchSet resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IByteMatchSetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="byteMatchSetRef")
-    def byte_match_set_ref(self) -> ByteMatchSetReference:
+    def byte_match_set_ref(self) -> "ByteMatchSetReference":
         '''(experimental) A reference to a ByteMatchSet resource.
 
         :stability: experimental
         '''
-        return typing.cast(ByteMatchSetReference, jsii.get(self, "byteMatchSetRef"))
+        return typing.cast("ByteMatchSetReference", jsii.get(self, "byteMatchSetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IByteMatchSetRef).__jsii_proxy_class__ = lambda : _IByteMatchSetRefProxy

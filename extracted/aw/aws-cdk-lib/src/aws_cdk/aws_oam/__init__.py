@@ -122,13 +122,13 @@ class CfnLink(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         resource_types: typing.Sequence[builtins.str],
         sink_identifier: builtins.str,
         label_template: typing.Optional[builtins.str] = None,
-        link_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        link_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.LinkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::Oam::Link``.
@@ -157,7 +157,7 @@ class CfnLink(
 
     @jsii.member(jsii_name="arnForLink")
     @builtins.classmethod
-    def arn_for_link(cls, resource: _ILinkRef_912f3726) -> builtins.str:
+    def arn_for_link(cls, resource: "_ILinkRef_912f3726") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -179,7 +179,7 @@ class CfnLink(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLink", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -237,15 +237,15 @@ class CfnLink(
 
     @builtins.property
     @jsii.member(jsii_name="linkRef")
-    def link_ref(self) -> _LinkReference_fbac1058:
+    def link_ref(self) -> "_LinkReference_fbac1058":
         '''A reference to a Link resource.'''
-        return typing.cast(_LinkReference_fbac1058, jsii.get(self, "linkRef"))
+        return typing.cast("_LinkReference_fbac1058", jsii.get(self, "linkRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="resourceTypes")
@@ -290,14 +290,14 @@ class CfnLink(
     @jsii.member(jsii_name="linkConfiguration")
     def link_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkConfigurationProperty"]]:
         '''Use this structure to optionally create filters that specify that only some metric namespaces or log groups are to be shared from the source account to the monitoring account.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkConfigurationProperty"]], jsii.get(self, "linkConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkConfigurationProperty"]], jsii.get(self, "linkConfiguration"))
 
     @link_configuration.setter
     def link_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__27fdc6d36999b24ee51a7ee604dfe60c82600027c0449d54ba66cc13499ab90c)
@@ -332,8 +332,8 @@ class CfnLink(
         def __init__(
             self,
             *,
-            log_group_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkFilterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            metric_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLink.LinkFilterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            log_group_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.LinkFilterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            metric_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.LinkFilterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Use this structure to optionally create filters that specify that only some metric namespaces or log groups are to be shared from the source account to the monitoring account.
 
@@ -371,24 +371,24 @@ class CfnLink(
         @builtins.property
         def log_group_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkFilterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkFilterProperty"]]:
             '''Use this structure to filter which log groups are to share log events from this source account to the monitoring account.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-oam-link-linkconfiguration.html#cfn-oam-link-linkconfiguration-loggroupconfiguration
             '''
             result = self._values.get("log_group_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkFilterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkFilterProperty"]], result)
 
         @builtins.property
         def metric_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkFilterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkFilterProperty"]]:
             '''Use this structure to filter which metric namespaces are to be shared from the source account to the monitoring account.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-oam-link-linkconfiguration.html#cfn-oam-link-linkconfiguration-metricconfiguration
             '''
             result = self._values.get("metric_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLink.LinkFilterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkFilterProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -499,7 +499,7 @@ class CfnLinkProps:
         resource_types: typing.Sequence[builtins.str],
         sink_identifier: builtins.str,
         label_template: typing.Optional[builtins.str] = None,
-        link_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.LinkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        link_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLink.LinkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLink``.
@@ -602,13 +602,13 @@ class CfnLinkProps:
     @builtins.property
     def link_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLink.LinkConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkConfigurationProperty"]]:
         '''Use this structure to optionally create filters that specify that only some metric namespaces or log groups are to be shared from the source account to the monitoring account.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-oam-link.html#cfn-oam-link-linkconfiguration
         '''
         result = self._values.get("link_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLink.LinkConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLink.LinkConfigurationProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -672,7 +672,7 @@ class CfnSink(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -697,7 +697,7 @@ class CfnSink(
 
     @jsii.member(jsii_name="arnForSink")
     @builtins.classmethod
-    def arn_for_sink(cls, resource: _ISinkRef_52a08f4c) -> builtins.str:
+    def arn_for_sink(cls, resource: "_ISinkRef_52a08f4c") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -719,7 +719,7 @@ class CfnSink(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSink", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -766,15 +766,15 @@ class CfnSink(
 
     @builtins.property
     @jsii.member(jsii_name="sinkRef")
-    def sink_ref(self) -> _SinkReference_9bb22cf4:
+    def sink_ref(self) -> "_SinkReference_9bb22cf4":
         '''A reference to a Sink resource.'''
-        return typing.cast(_SinkReference_9bb22cf4, jsii.get(self, "sinkRef"))
+        return typing.cast("_SinkReference_9bb22cf4", jsii.get(self, "sinkRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")

@@ -145,7 +145,7 @@ class IConnectorRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> ConnectorReference:
+    def connector_ref(self) -> "ConnectorReference":
         '''(experimental) A reference to a Connector resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IConnectorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> ConnectorReference:
+    def connector_ref(self) -> "ConnectorReference":
         '''(experimental) A reference to a Connector resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectorReference, jsii.get(self, "connectorRef"))
+        return typing.cast("ConnectorReference", jsii.get(self, "connectorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectorRef).__jsii_proxy_class__ = lambda : _IConnectorRefProxy
@@ -190,7 +190,7 @@ class ICustomPluginRef(
 
     @builtins.property
     @jsii.member(jsii_name="customPluginRef")
-    def custom_plugin_ref(self) -> CustomPluginReference:
+    def custom_plugin_ref(self) -> "CustomPluginReference":
         '''(experimental) A reference to a CustomPlugin resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _ICustomPluginRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="customPluginRef")
-    def custom_plugin_ref(self) -> CustomPluginReference:
+    def custom_plugin_ref(self) -> "CustomPluginReference":
         '''(experimental) A reference to a CustomPlugin resource.
 
         :stability: experimental
         '''
-        return typing.cast(CustomPluginReference, jsii.get(self, "customPluginRef"))
+        return typing.cast("CustomPluginReference", jsii.get(self, "customPluginRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICustomPluginRef).__jsii_proxy_class__ = lambda : _ICustomPluginRefProxy

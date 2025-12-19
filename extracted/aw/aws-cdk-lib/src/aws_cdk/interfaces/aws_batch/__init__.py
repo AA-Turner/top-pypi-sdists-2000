@@ -145,7 +145,7 @@ class IComputeEnvironmentRef(
 
     @builtins.property
     @jsii.member(jsii_name="computeEnvironmentRef")
-    def compute_environment_ref(self) -> ComputeEnvironmentReference:
+    def compute_environment_ref(self) -> "ComputeEnvironmentReference":
         '''(experimental) A reference to a ComputeEnvironment resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IComputeEnvironmentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="computeEnvironmentRef")
-    def compute_environment_ref(self) -> ComputeEnvironmentReference:
+    def compute_environment_ref(self) -> "ComputeEnvironmentReference":
         '''(experimental) A reference to a ComputeEnvironment resource.
 
         :stability: experimental
         '''
-        return typing.cast(ComputeEnvironmentReference, jsii.get(self, "computeEnvironmentRef"))
+        return typing.cast("ComputeEnvironmentReference", jsii.get(self, "computeEnvironmentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IComputeEnvironmentRef).__jsii_proxy_class__ = lambda : _IComputeEnvironmentRefProxy
@@ -190,7 +190,7 @@ class IConsumableResourceRef(
 
     @builtins.property
     @jsii.member(jsii_name="consumableResourceRef")
-    def consumable_resource_ref(self) -> ConsumableResourceReference:
+    def consumable_resource_ref(self) -> "ConsumableResourceReference":
         '''(experimental) A reference to a ConsumableResource resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IConsumableResourceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="consumableResourceRef")
-    def consumable_resource_ref(self) -> ConsumableResourceReference:
+    def consumable_resource_ref(self) -> "ConsumableResourceReference":
         '''(experimental) A reference to a ConsumableResource resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConsumableResourceReference, jsii.get(self, "consumableResourceRef"))
+        return typing.cast("ConsumableResourceReference", jsii.get(self, "consumableResourceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConsumableResourceRef).__jsii_proxy_class__ = lambda : _IConsumableResourceRefProxy

@@ -94,6 +94,7 @@ class CfnDomain(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codeartifact as codeartifact
@@ -115,13 +116,13 @@ class CfnDomain(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name: builtins.str,
         encryption_key: typing.Optional[builtins.str] = None,
         permissions_policy_document: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeArtifact::Domain``.
 
@@ -147,7 +148,7 @@ class CfnDomain(
 
     @jsii.member(jsii_name="arnForDomain")
     @builtins.classmethod
-    def arn_for_domain(cls, resource: _IDomainRef_aef09168) -> builtins.str:
+    def arn_for_domain(cls, resource: "_IDomainRef_aef09168") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -169,7 +170,7 @@ class CfnDomain(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomain", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -241,15 +242,15 @@ class CfnDomain(
 
     @builtins.property
     @jsii.member(jsii_name="domainRef")
-    def domain_ref(self) -> _DomainReference_849dc1a8:
+    def domain_ref(self) -> "_DomainReference_849dc1a8":
         '''A reference to a Domain resource.'''
-        return typing.cast(_DomainReference_849dc1a8, jsii.get(self, "domainRef"))
+        return typing.cast("_DomainReference_849dc1a8", jsii.get(self, "domainRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="domainName")
@@ -292,12 +293,12 @@ class CfnDomain(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to be applied to the domain.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c3d141e3a88261a459532756257673073502431714e2b0bae8c140a9b055f07b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -321,7 +322,7 @@ class CfnDomainProps:
         domain_name: builtins.str,
         encryption_key: typing.Optional[builtins.str] = None,
         permissions_policy_document: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDomain``.
 
@@ -335,6 +336,7 @@ class CfnDomainProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codeartifact as codeartifact
@@ -398,13 +400,13 @@ class CfnDomainProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to be applied to the domain.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codeartifact-domain.html#cfn-codeartifact-domain-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -434,6 +436,7 @@ class CfnPackageGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codeartifact as codeartifact
@@ -477,7 +480,7 @@ class CfnPackageGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name: builtins.str,
@@ -485,8 +488,8 @@ class CfnPackageGroup(
         contact_info: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         domain_owner: typing.Optional[builtins.str] = None,
-        origin_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackageGroup.OriginConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        origin_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackageGroup.OriginConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeArtifact::PackageGroup``.
 
@@ -520,7 +523,7 @@ class CfnPackageGroup(
     @builtins.classmethod
     def arn_for_package_group(
         cls,
-        resource: _IPackageGroupRef_40192e09,
+        resource: "_IPackageGroupRef_40192e09",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -543,7 +546,7 @@ class CfnPackageGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPackageGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -583,9 +586,9 @@ class CfnPackageGroup(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -594,9 +597,9 @@ class CfnPackageGroup(
 
     @builtins.property
     @jsii.member(jsii_name="packageGroupRef")
-    def package_group_ref(self) -> _PackageGroupReference_5209cebc:
+    def package_group_ref(self) -> "_PackageGroupReference_5209cebc":
         '''A reference to a PackageGroup resource.'''
-        return typing.cast(_PackageGroupReference_5209cebc, jsii.get(self, "packageGroupRef"))
+        return typing.cast("_PackageGroupReference_5209cebc", jsii.get(self, "packageGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="domainName")
@@ -667,14 +670,14 @@ class CfnPackageGroup(
     @jsii.member(jsii_name="originConfiguration")
     def origin_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackageGroup.OriginConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.OriginConfigurationProperty"]]:
         '''Details about the package origin configuration of a package group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackageGroup.OriginConfigurationProperty"]], jsii.get(self, "originConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.OriginConfigurationProperty"]], jsii.get(self, "originConfiguration"))
 
     @origin_configuration.setter
     def origin_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackageGroup.OriginConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.OriginConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__63bcaafc797c7b557351ce8e1bfa571001310be1e41896261bec63105e81cae6)
@@ -683,12 +686,12 @@ class CfnPackageGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the package group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e756db6ce537f9d80da313912b16eef0c2a610ee05772d30b4df98a4ddebee96)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -703,7 +706,7 @@ class CfnPackageGroup(
         def __init__(
             self,
             *,
-            restrictions: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackageGroup.RestrictionsProperty", typing.Dict[builtins.str, typing.Any]]],
+            restrictions: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackageGroup.RestrictionsProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''
             :param restrictions: 
@@ -750,13 +753,13 @@ class CfnPackageGroup(
         @builtins.property
         def restrictions(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPackageGroup.RestrictionsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.RestrictionsProperty"]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codeartifact-packagegroup-originconfiguration.html#cfn-codeartifact-packagegroup-originconfiguration-restrictions
             '''
             result = self._values.get("restrictions")
             assert result is not None, "Required property 'restrictions' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPackageGroup.RestrictionsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.RestrictionsProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -855,9 +858,9 @@ class CfnPackageGroup(
         def __init__(
             self,
             *,
-            external_upstream: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackageGroup.RestrictionTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            internal_upstream: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackageGroup.RestrictionTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            publish: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackageGroup.RestrictionTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            external_upstream: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackageGroup.RestrictionTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            internal_upstream: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackageGroup.RestrictionTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            publish: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackageGroup.RestrictionTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''
             :param external_upstream: 
@@ -910,32 +913,32 @@ class CfnPackageGroup(
         @builtins.property
         def external_upstream(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackageGroup.RestrictionTypeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.RestrictionTypeProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codeartifact-packagegroup-restrictions.html#cfn-codeartifact-packagegroup-restrictions-externalupstream
             '''
             result = self._values.get("external_upstream")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackageGroup.RestrictionTypeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.RestrictionTypeProperty"]], result)
 
         @builtins.property
         def internal_upstream(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackageGroup.RestrictionTypeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.RestrictionTypeProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codeartifact-packagegroup-restrictions.html#cfn-codeartifact-packagegroup-restrictions-internalupstream
             '''
             result = self._values.get("internal_upstream")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackageGroup.RestrictionTypeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.RestrictionTypeProperty"]], result)
 
         @builtins.property
         def publish(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackageGroup.RestrictionTypeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.RestrictionTypeProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codeartifact-packagegroup-restrictions.html#cfn-codeartifact-packagegroup-restrictions-publish
             '''
             result = self._values.get("publish")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackageGroup.RestrictionTypeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.RestrictionTypeProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -971,8 +974,8 @@ class CfnPackageGroupProps:
         contact_info: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         domain_owner: typing.Optional[builtins.str] = None,
-        origin_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPackageGroup.OriginConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        origin_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackageGroup.OriginConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPackageGroup``.
 
@@ -989,6 +992,7 @@ class CfnPackageGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codeartifact as codeartifact
@@ -1107,22 +1111,22 @@ class CfnPackageGroupProps:
     @builtins.property
     def origin_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackageGroup.OriginConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.OriginConfigurationProperty"]]:
         '''Details about the package origin configuration of a package group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codeartifact-packagegroup.html#cfn-codeartifact-packagegroup-originconfiguration
         '''
         result = self._values.get("origin_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackageGroup.OriginConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackageGroup.OriginConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the package group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codeartifact-packagegroup.html#cfn-codeartifact-packagegroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1152,6 +1156,7 @@ class CfnRepository(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codeartifact as codeartifact
@@ -1177,7 +1182,7 @@ class CfnRepository(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name: builtins.str,
@@ -1186,7 +1191,7 @@ class CfnRepository(
         domain_owner: typing.Optional[builtins.str] = None,
         external_connections: typing.Optional[typing.Sequence[builtins.str]] = None,
         permissions_policy_document: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         upstreams: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeArtifact::Repository``.
@@ -1221,7 +1226,7 @@ class CfnRepository(
 
     @jsii.member(jsii_name="arnForRepository")
     @builtins.classmethod
-    def arn_for_repository(cls, resource: _IRepositoryRef_1a1f36b6) -> builtins.str:
+    def arn_for_repository(cls, resource: "_IRepositoryRef_1a1f36b6") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1243,7 +1248,7 @@ class CfnRepository(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRepository", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1315,15 +1320,15 @@ class CfnRepository(
 
     @builtins.property
     @jsii.member(jsii_name="repositoryRef")
-    def repository_ref(self) -> _RepositoryReference_9f961dc0:
+    def repository_ref(self) -> "_RepositoryReference_9f961dc0":
         '''A reference to a Repository resource.'''
-        return typing.cast(_RepositoryReference_9f961dc0, jsii.get(self, "repositoryRef"))
+        return typing.cast("_RepositoryReference_9f961dc0", jsii.get(self, "repositoryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="domainName")
@@ -1408,12 +1413,12 @@ class CfnRepository(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to be applied to the repository.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__de95686b67ad4abe694cdd668a988205994b9ad92dcd587a4ebff7a0ceac3e74)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1457,7 +1462,7 @@ class CfnRepositoryProps:
         domain_owner: typing.Optional[builtins.str] = None,
         external_connections: typing.Optional[typing.Sequence[builtins.str]] = None,
         permissions_policy_document: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         upstreams: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRepository``.
@@ -1476,6 +1481,7 @@ class CfnRepositoryProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codeartifact as codeartifact
@@ -1586,13 +1592,13 @@ class CfnRepositoryProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to be applied to the repository.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codeartifact-repository.html#cfn-codeartifact-repository-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def upstreams(self) -> typing.Optional[typing.List[builtins.str]]:

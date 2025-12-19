@@ -90,6 +90,7 @@ class CfnReportDefinition(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cur as cur
@@ -118,22 +119,22 @@ class CfnReportDefinition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         compression: builtins.str,
         format: builtins.str,
-        refresh_closed_reports: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        refresh_closed_reports: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         report_name: builtins.str,
         report_versioning: builtins.str,
-        s3_bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
+        s3_bucket: typing.Union[builtins.str, "_IBucketRef_3debe44e"],
         s3_prefix: builtins.str,
         s3_region: builtins.str,
         time_unit: builtins.str,
         additional_artifacts: typing.Optional[typing.Sequence[builtins.str]] = None,
         additional_schema_elements: typing.Optional[typing.Sequence[builtins.str]] = None,
         billing_view_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CUR::ReportDefinition``.
 
@@ -179,7 +180,7 @@ class CfnReportDefinition(
     @builtins.classmethod
     def arn_for_report_definition(
         cls,
-        resource: _IReportDefinitionRef_76887e50,
+        resource: "_IReportDefinitionRef_76887e50",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -193,10 +194,10 @@ class CfnReportDefinition(
     @builtins.classmethod
     def from_report_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         report_name: builtins.str,
-    ) -> _IReportDefinitionRef_76887e50:
+    ) -> "_IReportDefinitionRef_76887e50":
         '''Creates a new IReportDefinitionRef from a reportName.
 
         :param scope: -
@@ -208,7 +209,7 @@ class CfnReportDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument report_name", value=report_name, expected_type=type_hints["report_name"])
-        return typing.cast(_IReportDefinitionRef_76887e50, jsii.sinvoke(cls, "fromReportName", [scope, id, report_name]))
+        return typing.cast("_IReportDefinitionRef_76887e50", jsii.sinvoke(cls, "fromReportName", [scope, id, report_name]))
 
     @jsii.member(jsii_name="isCfnReportDefinition")
     @builtins.classmethod
@@ -223,7 +224,7 @@ class CfnReportDefinition(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReportDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -254,9 +255,9 @@ class CfnReportDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -265,9 +266,9 @@ class CfnReportDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="reportDefinitionRef")
-    def report_definition_ref(self) -> _ReportDefinitionReference_735c508b:
+    def report_definition_ref(self) -> "_ReportDefinitionReference_735c508b":
         '''A reference to a ReportDefinition resource.'''
-        return typing.cast(_ReportDefinitionReference_735c508b, jsii.get(self, "reportDefinitionRef"))
+        return typing.cast("_ReportDefinitionReference_735c508b", jsii.get(self, "reportDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="compression")
@@ -299,14 +300,14 @@ class CfnReportDefinition(
     @jsii.member(jsii_name="refreshClosedReports")
     def refresh_closed_reports(
         self,
-    ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''Whether you want AWS to update your reports after they have been finalized if AWS detects charges related to previous months.'''
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], jsii.get(self, "refreshClosedReports"))
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], jsii.get(self, "refreshClosedReports"))
 
     @refresh_closed_reports.setter
     def refresh_closed_reports(
         self,
-        value: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        value: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7ccec559f362c0e5cc75f65e0abbd93286b4e471ccf2c07bd050c10afc226d26)
@@ -438,12 +439,12 @@ class CfnReportDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to be assigned to the report definition resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2c3a6bd4b3d8e5bf2caff9ee149924611c25e8417d8ee48a520417fd900c1f71)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -475,17 +476,17 @@ class CfnReportDefinitionProps:
         *,
         compression: builtins.str,
         format: builtins.str,
-        refresh_closed_reports: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        refresh_closed_reports: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         report_name: builtins.str,
         report_versioning: builtins.str,
-        s3_bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
+        s3_bucket: typing.Union[builtins.str, "_IBucketRef_3debe44e"],
         s3_prefix: builtins.str,
         s3_region: builtins.str,
         time_unit: builtins.str,
         additional_artifacts: typing.Optional[typing.Sequence[builtins.str]] = None,
         additional_schema_elements: typing.Optional[typing.Sequence[builtins.str]] = None,
         billing_view_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnReportDefinition``.
 
@@ -508,6 +509,7 @@ class CfnReportDefinitionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cur as cur
@@ -591,7 +593,7 @@ class CfnReportDefinitionProps:
     @builtins.property
     def refresh_closed_reports(
         self,
-    ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''Whether you want AWS to update your reports after they have been finalized if AWS detects charges related to previous months.
 
         These charges can include refunds, credits, or support fees.
@@ -600,7 +602,7 @@ class CfnReportDefinitionProps:
         '''
         result = self._values.get("refresh_closed_reports")
         assert result is not None, "Required property 'refresh_closed_reports' is missing"
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
     @builtins.property
     def report_name(self) -> builtins.str:
@@ -625,14 +627,14 @@ class CfnReportDefinitionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def s3_bucket(self) -> typing.Union[builtins.str, _IBucketRef_3debe44e]:
+    def s3_bucket(self) -> typing.Union[builtins.str, "_IBucketRef_3debe44e"]:
         '''The S3 bucket where Amazon Web Services delivers the report.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cur-reportdefinition.html#cfn-cur-reportdefinition-s3bucket
         '''
         result = self._values.get("s3_bucket")
         assert result is not None, "Required property 's3_bucket' is missing"
-        return typing.cast(typing.Union[builtins.str, _IBucketRef_3debe44e], result)
+        return typing.cast(typing.Union[builtins.str, "_IBucketRef_3debe44e"], result)
 
     @builtins.property
     def s3_prefix(self) -> builtins.str:
@@ -696,13 +698,13 @@ class CfnReportDefinitionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to be assigned to the report definition resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cur-reportdefinition.html#cfn-cur-reportdefinition-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

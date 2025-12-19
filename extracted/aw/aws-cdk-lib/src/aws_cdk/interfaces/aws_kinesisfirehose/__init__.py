@@ -117,7 +117,7 @@ class IDeliveryStreamRef(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryStreamRef")
-    def delivery_stream_ref(self) -> DeliveryStreamReference:
+    def delivery_stream_ref(self) -> "DeliveryStreamReference":
         '''(experimental) A reference to a DeliveryStream resource.
 
         :stability: experimental
@@ -138,12 +138,12 @@ class _IDeliveryStreamRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryStreamRef")
-    def delivery_stream_ref(self) -> DeliveryStreamReference:
+    def delivery_stream_ref(self) -> "DeliveryStreamReference":
         '''(experimental) A reference to a DeliveryStream resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeliveryStreamReference, jsii.get(self, "deliveryStreamRef"))
+        return typing.cast("DeliveryStreamReference", jsii.get(self, "deliveryStreamRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeliveryStreamRef).__jsii_proxy_class__ = lambda : _IDeliveryStreamRefProxy

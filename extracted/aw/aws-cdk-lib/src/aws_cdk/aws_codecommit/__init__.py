@@ -192,6 +192,7 @@ class CfnRepository(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codecommit as codecommit
@@ -232,15 +233,15 @@ class CfnRepository(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         repository_name: builtins.str,
-        code: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRepository.CodeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        code: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.CodeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
         repository_description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        triggers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRepository.RepositoryTriggerProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        triggers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.RepositoryTriggerProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeCommit::Repository``.
 
@@ -270,7 +271,7 @@ class CfnRepository(
 
     @jsii.member(jsii_name="arnForRepository")
     @builtins.classmethod
-    def arn_for_repository(cls, resource: _IRepositoryRef_f6c56413) -> builtins.str:
+    def arn_for_repository(cls, resource: "_IRepositoryRef_f6c56413") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -292,7 +293,7 @@ class CfnRepository(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRepository", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -372,15 +373,15 @@ class CfnRepository(
 
     @builtins.property
     @jsii.member(jsii_name="repositoryRef")
-    def repository_ref(self) -> _RepositoryReference_6e315ada:
+    def repository_ref(self) -> "_RepositoryReference_6e315ada":
         '''A reference to a Repository resource.'''
-        return typing.cast(_RepositoryReference_6e315ada, jsii.get(self, "repositoryRef"))
+        return typing.cast("_RepositoryReference_6e315ada", jsii.get(self, "repositoryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="repositoryName")
@@ -399,14 +400,14 @@ class CfnRepository(
     @jsii.member(jsii_name="code")
     def code(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.CodeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.CodeProperty"]]:
         '''Information about code to be committed to a repository after it is created in an AWS CloudFormation stack.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.CodeProperty"]], jsii.get(self, "code"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.CodeProperty"]], jsii.get(self, "code"))
 
     @code.setter
     def code(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.CodeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.CodeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e2d9aa151db0306c7144ac1b558b3e0c05b6ba724aad48d7d1cc2dd97531376f)
@@ -441,12 +442,12 @@ class CfnRepository(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tag key-value pairs to use when tagging this repository.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8d0a6e36f693d4cc2a11babc985e1e5d85042ffad99b950a29a50f501027166d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -456,14 +457,14 @@ class CfnRepository(
     @jsii.member(jsii_name="triggers")
     def triggers(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepository.RepositoryTriggerProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepository.RepositoryTriggerProperty"]]]]:
         '''The JSON block of configuration information for each trigger.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepository.RepositoryTriggerProperty"]]]], jsii.get(self, "triggers"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepository.RepositoryTriggerProperty"]]]], jsii.get(self, "triggers"))
 
     @triggers.setter
     def triggers(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepository.RepositoryTriggerProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepository.RepositoryTriggerProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aefad5f1e3f33a8892a077db431acd9bec95241245fd5d972238256b13e99377)
@@ -479,7 +480,7 @@ class CfnRepository(
         def __init__(
             self,
             *,
-            s3: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRepository.S3Property", typing.Dict[builtins.str, typing.Any]]],
+            s3: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.S3Property", typing.Dict[builtins.str, typing.Any]]],
             branch_name: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Information about code to be committed.
@@ -520,7 +521,9 @@ class CfnRepository(
                 self._values["branch_name"] = branch_name
 
         @builtins.property
-        def s3(self) -> typing.Union[_IResolvable_da3f097b, "CfnRepository.S3Property"]:
+        def s3(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRepository.S3Property"]:
             '''Information about the Amazon S3 bucket that contains a ZIP file of code to be committed to the repository.
 
             Changes to this property are ignored after initial resource creation.
@@ -529,7 +532,7 @@ class CfnRepository(
             '''
             result = self._values.get("s3")
             assert result is not None, "Required property 's3' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRepository.S3Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRepository.S3Property"], result)
 
         @builtins.property
         def branch_name(self) -> typing.Optional[builtins.str]:
@@ -808,11 +811,11 @@ class CfnRepositoryProps:
         self,
         *,
         repository_name: builtins.str,
-        code: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRepository.CodeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        code: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.CodeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
         repository_description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        triggers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRepository.RepositoryTriggerProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        triggers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.RepositoryTriggerProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRepository``.
 
@@ -828,6 +831,7 @@ class CfnRepositoryProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codecommit as codecommit
@@ -904,7 +908,7 @@ class CfnRepositoryProps:
     @builtins.property
     def code(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRepository.CodeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.CodeProperty"]]:
         '''Information about code to be committed to a repository after it is created in an AWS CloudFormation stack.
 
         Information about code is only used in resource creation. Updates to a stack will not reflect changes made to code properties after initial resource creation.
@@ -915,7 +919,7 @@ class CfnRepositoryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codecommit-repository.html#cfn-codecommit-repository-code
         '''
         result = self._values.get("code")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRepository.CodeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.CodeProperty"]], result)
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
@@ -944,24 +948,24 @@ class CfnRepositoryProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tag key-value pairs to use when tagging this repository.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codecommit-repository.html#cfn-codecommit-repository-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def triggers(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRepository.RepositoryTriggerProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepository.RepositoryTriggerProperty"]]]]:
         '''The JSON block of configuration information for each trigger.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codecommit-repository.html#cfn-codecommit-repository-triggers
         '''
         result = self._values.get("triggers")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRepository.RepositoryTriggerProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepository.RepositoryTriggerProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -998,7 +1002,7 @@ class Code(
     @builtins.classmethod
     def from_asset(
         cls,
-        asset: _Asset_ac2a7e61,
+        asset: "_Asset_ac2a7e61",
         branch: typing.Optional[builtins.str] = None,
     ) -> "Code":
         '''Code from user-supplied asset.
@@ -1050,7 +1054,7 @@ class Code(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "CodeConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''This method is called after a repository is passed this instance of Code in its 'code' property.
 
         :param scope: the binding scope.
@@ -1060,7 +1064,7 @@ class Code(
 
 class _CodeProxy(Code):
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "CodeConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''This method is called after a repository is passed this instance of Code in its 'code' property.
 
         :param scope: the binding scope.
@@ -1083,7 +1087,7 @@ class CodeConfig:
     def __init__(
         self,
         *,
-        code: typing.Union[CfnRepository.CodeProperty, typing.Dict[builtins.str, typing.Any]],
+        code: typing.Union["CfnRepository.CodeProperty", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''Represents the structure to pass into the underlying CfnRepository class.
 
@@ -1122,11 +1126,11 @@ class CodeConfig:
         }
 
     @builtins.property
-    def code(self) -> CfnRepository.CodeProperty:
+    def code(self) -> "CfnRepository.CodeProperty":
         '''represents the underlying code structure.'''
         result = self._values.get("code")
         assert result is not None, "Required property 'code' is missing"
-        return typing.cast(CfnRepository.CodeProperty, result)
+        return typing.cast("CfnRepository.CodeProperty", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1200,9 +1204,9 @@ class IRepository(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given principal identity permissions to perform the actions on this repository.
 
         :param grantee: -
@@ -1211,7 +1215,7 @@ class IRepository(
         ...
 
     @jsii.member(jsii_name="grantPull")
-    def grant_pull(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_pull(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to pull this repository.
 
         :param grantee: -
@@ -1219,7 +1223,7 @@ class IRepository(
         ...
 
     @jsii.member(jsii_name="grantPullPush")
-    def grant_pull_push(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_pull_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to pull and push this repository.
 
         :param grantee: -
@@ -1227,7 +1231,7 @@ class IRepository(
         ...
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to read this repository.
 
         :param grantee: -
@@ -1238,14 +1242,14 @@ class IRepository(
     def notify_on(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         events: typing.Sequence["RepositoryNotificationEvents"],
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule triggered when the project events specified by you are emitted. Similar to ``onEvent`` API.
 
         You can also use the methods to define rules for the specific event emitted.
@@ -1267,13 +1271,13 @@ class IRepository(
     def notify_on_approval_rule_overridden(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when an approval rule is overridden.
 
         :param id: -
@@ -1289,13 +1293,13 @@ class IRepository(
     def notify_on_approval_status_changed(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when an approval status is changed.
 
         :param id: -
@@ -1311,13 +1315,13 @@ class IRepository(
     def notify_on_branch_or_tag_created(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a new branch or tag is created.
 
         :param id: -
@@ -1333,13 +1337,13 @@ class IRepository(
     def notify_on_branch_or_tag_deleted(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a branch or tag is deleted.
 
         :param id: -
@@ -1355,13 +1359,13 @@ class IRepository(
     def notify_on_pull_request_comment(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a comment is made on a pull request.
 
         :param id: -
@@ -1377,13 +1381,13 @@ class IRepository(
     def notify_on_pull_request_created(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a pull request is created.
 
         :param id: -
@@ -1399,13 +1403,13 @@ class IRepository(
     def notify_on_pull_request_merged(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a pull request is merged.
 
         :param id: -
@@ -1422,12 +1426,12 @@ class IRepository(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a comment is made on a commit.
 
         :param id: -
@@ -1444,12 +1448,12 @@ class IRepository(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a comment is made on a pull request.
 
         :param id: -
@@ -1467,12 +1471,12 @@ class IRepository(
         id: builtins.str,
         *,
         branches: typing.Optional[typing.Sequence[builtins.str]] = None,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a commit is pushed to a branch.
 
         :param id: -
@@ -1490,12 +1494,12 @@ class IRepository(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers for repository events.
 
         Use
@@ -1515,12 +1519,12 @@ class IRepository(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a pull request state is changed.
 
         :param id: -
@@ -1537,12 +1541,12 @@ class IRepository(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a reference is created (i.e. a new branch/tag is created) to the repository.
 
         :param id: -
@@ -1559,12 +1563,12 @@ class IRepository(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a reference is delete (i.e. a branch/tag is deleted) from the repository.
 
         :param id: -
@@ -1581,12 +1585,12 @@ class IRepository(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a reference is updated (i.e. a commit is pushed to an existing or new branch) from the repository.
 
         :param id: -
@@ -1603,12 +1607,12 @@ class IRepository(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a "CodeCommit Repository State Change" event occurs.
 
         :param id: -
@@ -1681,9 +1685,9 @@ class _IRepositoryProxy(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given principal identity permissions to perform the actions on this repository.
 
         :param grantee: -
@@ -1693,10 +1697,10 @@ class _IRepositoryProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__365c5593ff83cf972d077b7c5a84fbc1b5a0265992dc07d9c11fc0b29a29216a)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantPull")
-    def grant_pull(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_pull(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to pull this repository.
 
         :param grantee: -
@@ -1704,10 +1708,10 @@ class _IRepositoryProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7d9e6b243e05b7c6eba91182b9bd7adabc3f071225b4e3a50df8e001d1f4fa37)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPull", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPull", [grantee]))
 
     @jsii.member(jsii_name="grantPullPush")
-    def grant_pull_push(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_pull_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to pull and push this repository.
 
         :param grantee: -
@@ -1715,10 +1719,10 @@ class _IRepositoryProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2a6febdc5d7cf9c0ad4956ce1b01c3943a10e93da55708f00ece4f2eb5e3afb7)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPullPush", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPullPush", [grantee]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to read this repository.
 
         :param grantee: -
@@ -1726,20 +1730,20 @@ class _IRepositoryProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6a3b246d79233ee846d1ea5d76eae3faed1da036177a20d699700bc19f4718f7)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.member(jsii_name="notifyOn")
     def notify_on(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         events: typing.Sequence["RepositoryNotificationEvents"],
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule triggered when the project events specified by you are emitted. Similar to ``onEvent`` API.
 
         You can also use the methods to define rules for the specific event emitted.
@@ -1767,19 +1771,19 @@ class _IRepositoryProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOn", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOn", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnApprovalRuleOverridden")
     def notify_on_approval_rule_overridden(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when an approval rule is overridden.
 
         :param id: -
@@ -1800,19 +1804,19 @@ class _IRepositoryProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnApprovalRuleOverridden", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnApprovalRuleOverridden", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnApprovalStatusChanged")
     def notify_on_approval_status_changed(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when an approval status is changed.
 
         :param id: -
@@ -1833,19 +1837,19 @@ class _IRepositoryProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnApprovalStatusChanged", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnApprovalStatusChanged", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnBranchOrTagCreated")
     def notify_on_branch_or_tag_created(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a new branch or tag is created.
 
         :param id: -
@@ -1866,19 +1870,19 @@ class _IRepositoryProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnBranchOrTagCreated", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnBranchOrTagCreated", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnBranchOrTagDeleted")
     def notify_on_branch_or_tag_deleted(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a branch or tag is deleted.
 
         :param id: -
@@ -1899,19 +1903,19 @@ class _IRepositoryProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnBranchOrTagDeleted", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnBranchOrTagDeleted", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnPullRequestComment")
     def notify_on_pull_request_comment(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a comment is made on a pull request.
 
         :param id: -
@@ -1932,19 +1936,19 @@ class _IRepositoryProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnPullRequestComment", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnPullRequestComment", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnPullRequestCreated")
     def notify_on_pull_request_created(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a pull request is created.
 
         :param id: -
@@ -1965,19 +1969,19 @@ class _IRepositoryProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnPullRequestCreated", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnPullRequestCreated", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnPullRequestMerged")
     def notify_on_pull_request_merged(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a pull request is merged.
 
         :param id: -
@@ -1998,19 +2002,19 @@ class _IRepositoryProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnPullRequestMerged", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnPullRequestMerged", [id, target, options]))
 
     @jsii.member(jsii_name="onCommentOnCommit")
     def on_comment_on_commit(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a comment is made on a commit.
 
         :param id: -
@@ -2031,19 +2035,19 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onCommentOnCommit", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onCommentOnCommit", [id, options]))
 
     @jsii.member(jsii_name="onCommentOnPullRequest")
     def on_comment_on_pull_request(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a comment is made on a pull request.
 
         :param id: -
@@ -2064,7 +2068,7 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onCommentOnPullRequest", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onCommentOnPullRequest", [id, options]))
 
     @jsii.member(jsii_name="onCommit")
     def on_commit(
@@ -2072,12 +2076,12 @@ class _IRepositoryProxy(
         id: builtins.str,
         *,
         branches: typing.Optional[typing.Sequence[builtins.str]] = None,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a commit is pushed to a branch.
 
         :param id: -
@@ -2100,19 +2104,19 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onCommit", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onCommit", [id, options]))
 
     @jsii.member(jsii_name="onEvent")
     def on_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers for repository events.
 
         Use
@@ -2136,19 +2140,19 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onEvent", [id, options]))
 
     @jsii.member(jsii_name="onPullRequestStateChange")
     def on_pull_request_state_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a pull request state is changed.
 
         :param id: -
@@ -2169,19 +2173,19 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onPullRequestStateChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onPullRequestStateChange", [id, options]))
 
     @jsii.member(jsii_name="onReferenceCreated")
     def on_reference_created(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a reference is created (i.e. a new branch/tag is created) to the repository.
 
         :param id: -
@@ -2202,19 +2206,19 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReferenceCreated", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onReferenceCreated", [id, options]))
 
     @jsii.member(jsii_name="onReferenceDeleted")
     def on_reference_deleted(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a reference is delete (i.e. a branch/tag is deleted) from the repository.
 
         :param id: -
@@ -2235,19 +2239,19 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReferenceDeleted", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onReferenceDeleted", [id, options]))
 
     @jsii.member(jsii_name="onReferenceUpdated")
     def on_reference_updated(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a reference is updated (i.e. a commit is pushed to an existing or new branch) from the repository.
 
         :param id: -
@@ -2268,19 +2272,19 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReferenceUpdated", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onReferenceUpdated", [id, options]))
 
     @jsii.member(jsii_name="onStateChange")
     def on_state_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a "CodeCommit Repository State Change" event occurs.
 
         :param id: -
@@ -2301,7 +2305,7 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onStateChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onStateChange", [id, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IRepository).__jsii_proxy_class__ = lambda : _IRepositoryProxy
@@ -2323,11 +2327,11 @@ class OnCommitOptions(_OnEventOptions_8711b8b3):
     def __init__(
         self,
         *,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         branches: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Options for the onCommit() method.
@@ -2379,7 +2383,7 @@ class OnCommitOptions(_OnEventOptions_8711b8b3):
             self._values["branches"] = branches
 
     @builtins.property
-    def cross_stack_scope(self) -> typing.Optional[_constructs_77d1e7e8.Construct]:
+    def cross_stack_scope(self) -> typing.Optional["_constructs_77d1e7e8.Construct"]:
         '''The scope to use if the source of the rule and its target are in different Stacks (but in the same account & region).
 
         This helps dealing with cycles that often arise in these situations.
@@ -2387,7 +2391,7 @@ class OnCommitOptions(_OnEventOptions_8711b8b3):
         :default: - none (the main scope will be used, even for cross-stack Events)
         '''
         result = self._values.get("cross_stack_scope")
-        return typing.cast(typing.Optional[_constructs_77d1e7e8.Construct], result)
+        return typing.cast(typing.Optional["_constructs_77d1e7e8.Construct"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -2399,7 +2403,7 @@ class OnCommitOptions(_OnEventOptions_8711b8b3):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def event_pattern(self) -> typing.Optional[_EventPattern_fe557901]:
+    def event_pattern(self) -> typing.Optional["_EventPattern_fe557901"]:
         '''Additional restrictions for the event to route to the specified target.
 
         The method that generates the rule probably imposes some type of event
@@ -2411,7 +2415,7 @@ class OnCommitOptions(_OnEventOptions_8711b8b3):
         :see: https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html
         '''
         result = self._values.get("event_pattern")
-        return typing.cast(typing.Optional[_EventPattern_fe557901], result)
+        return typing.cast(typing.Optional["_EventPattern_fe557901"], result)
 
     @builtins.property
     def rule_name(self) -> typing.Optional[builtins.str]:
@@ -2423,13 +2427,13 @@ class OnCommitOptions(_OnEventOptions_8711b8b3):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def target(self) -> typing.Optional[_IRuleTarget_7a91f454]:
+    def target(self) -> typing.Optional["_IRuleTarget_7a91f454"]:
         '''The target to register for the event.
 
         :default: - No target is added to the rule. Use ``addTarget()`` to add a target.
         '''
         result = self._values.get("target")
-        return typing.cast(typing.Optional[_IRuleTarget_7a91f454], result)
+        return typing.cast(typing.Optional["_IRuleTarget_7a91f454"], result)
 
     @builtins.property
     def branches(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2561,13 +2565,13 @@ class Repository(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         repository_name: builtins.str,
-        code: typing.Optional[Code] = None,
+        code: typing.Optional["Code"] = None,
         description: typing.Optional[builtins.str] = None,
-        kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -2594,10 +2598,10 @@ class Repository(
     @builtins.classmethod
     def from_repository_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         repository_arn: builtins.str,
-    ) -> IRepository:
+    ) -> "IRepository":
         '''Imports a codecommit repository.
 
         :param scope: -
@@ -2609,16 +2613,16 @@ class Repository(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument repository_arn", value=repository_arn, expected_type=type_hints["repository_arn"])
-        return typing.cast(IRepository, jsii.sinvoke(cls, "fromRepositoryArn", [scope, id, repository_arn]))
+        return typing.cast("IRepository", jsii.sinvoke(cls, "fromRepositoryArn", [scope, id, repository_arn]))
 
     @jsii.member(jsii_name="fromRepositoryName")
     @builtins.classmethod
     def from_repository_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         repository_name: builtins.str,
-    ) -> IRepository:
+    ) -> "IRepository":
         '''
         :param scope: -
         :param id: -
@@ -2629,13 +2633,13 @@ class Repository(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument repository_name", value=repository_name, expected_type=type_hints["repository_name"])
-        return typing.cast(IRepository, jsii.sinvoke(cls, "fromRepositoryName", [scope, id, repository_name]))
+        return typing.cast("IRepository", jsii.sinvoke(cls, "fromRepositoryName", [scope, id, repository_name]))
 
     @jsii.member(jsii_name="bindAsNotificationRuleSource")
     def bind_as_notification_rule_source(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
-    ) -> _NotificationRuleSourceConfig_20189a3e:
+        _scope: "_constructs_77d1e7e8.Construct",
+    ) -> "_NotificationRuleSourceConfig_20189a3e":
         '''Returns a source configuration for notification rule.
 
         :param _scope: -
@@ -2643,14 +2647,14 @@ class Repository(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bce1acfc9824ad93658ba014d62079e398555716fd9c87708b05022831b1b038)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(_NotificationRuleSourceConfig_20189a3e, jsii.invoke(self, "bindAsNotificationRuleSource", [_scope]))
+        return typing.cast("_NotificationRuleSourceConfig_20189a3e", jsii.invoke(self, "bindAsNotificationRuleSource", [_scope]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given principal identity permissions to perform the actions on this repository.
 
         :param grantee: -
@@ -2660,10 +2664,10 @@ class Repository(
             type_hints = typing.get_type_hints(_typecheckingstub__f7402788e4dbfde5dc7ec7b32089dea4a8dc1cb74bc501e6fa6508c70c4d8ded)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantPull")
-    def grant_pull(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_pull(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to pull this repository.
 
         :param grantee: -
@@ -2671,10 +2675,10 @@ class Repository(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cbbcecbc7faeddbda99d49cffd055e8154005631aa698172977c6e4db28ac599)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPull", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPull", [grantee]))
 
     @jsii.member(jsii_name="grantPullPush")
-    def grant_pull_push(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_pull_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to pull and push this repository.
 
         :param grantee: -
@@ -2682,10 +2686,10 @@ class Repository(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__79efe60503b55cc3a5f2df365dc0093da149f058148cc261dc626ddfc9d2f4df)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPullPush", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPullPush", [grantee]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to read this repository.
 
         :param grantee: -
@@ -2693,19 +2697,19 @@ class Repository(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3458cc082e7e4e18874ae54159c1143c8d40951328feef885af0a725811c1938)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.member(jsii_name="notifiyOnPullRequestMerged")
     def notifiy_on_pull_request_merged(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a pull request is merged.
 
         :param id: -
@@ -2726,7 +2730,7 @@ class Repository(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifiyOnPullRequestMerged", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifiyOnPullRequestMerged", [id, target, options]))
 
     @jsii.member(jsii_name="notify")
     def notify(
@@ -2759,14 +2763,14 @@ class Repository(
     def notify_on(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         events: typing.Sequence["RepositoryNotificationEvents"],
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule triggered when the project events specified by you are emitted. Similar to ``onEvent`` API.
 
         You can also use the methods to define rules for the specific event emitted.
@@ -2792,19 +2796,19 @@ class Repository(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOn", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOn", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnApprovalRuleOverridden")
     def notify_on_approval_rule_overridden(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when an approval rule is overridden.
 
         :param id: -
@@ -2825,19 +2829,19 @@ class Repository(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnApprovalRuleOverridden", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnApprovalRuleOverridden", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnApprovalStatusChanged")
     def notify_on_approval_status_changed(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when an approval status is changed.
 
         :param id: -
@@ -2858,19 +2862,19 @@ class Repository(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnApprovalStatusChanged", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnApprovalStatusChanged", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnBranchOrTagCreated")
     def notify_on_branch_or_tag_created(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a new branch or tag is created.
 
         :param id: -
@@ -2891,19 +2895,19 @@ class Repository(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnBranchOrTagCreated", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnBranchOrTagCreated", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnBranchOrTagDeleted")
     def notify_on_branch_or_tag_deleted(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a branch or tag is deleted.
 
         :param id: -
@@ -2924,19 +2928,19 @@ class Repository(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnBranchOrTagDeleted", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnBranchOrTagDeleted", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnPullRequestComment")
     def notify_on_pull_request_comment(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a comment is made on a pull request.
 
         :param id: -
@@ -2957,19 +2961,19 @@ class Repository(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnPullRequestComment", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnPullRequestComment", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnPullRequestCreated")
     def notify_on_pull_request_created(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a pull request is created.
 
         :param id: -
@@ -2990,19 +2994,19 @@ class Repository(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnPullRequestCreated", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnPullRequestCreated", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnPullRequestMerged")
     def notify_on_pull_request_merged(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule which triggers when a pull request is merged.
 
         :param id: -
@@ -3023,19 +3027,19 @@ class Repository(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnPullRequestMerged", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnPullRequestMerged", [id, target, options]))
 
     @jsii.member(jsii_name="onCommentOnCommit")
     def on_comment_on_commit(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a comment is made on a commit.
 
         :param id: -
@@ -3056,19 +3060,19 @@ class Repository(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onCommentOnCommit", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onCommentOnCommit", [id, options]))
 
     @jsii.member(jsii_name="onCommentOnPullRequest")
     def on_comment_on_pull_request(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a comment is made on a pull request.
 
         :param id: -
@@ -3089,7 +3093,7 @@ class Repository(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onCommentOnPullRequest", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onCommentOnPullRequest", [id, options]))
 
     @jsii.member(jsii_name="onCommit")
     def on_commit(
@@ -3097,12 +3101,12 @@ class Repository(
         id: builtins.str,
         *,
         branches: typing.Optional[typing.Sequence[builtins.str]] = None,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a commit is pushed to a branch.
 
         :param id: -
@@ -3125,19 +3129,19 @@ class Repository(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onCommit", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onCommit", [id, options]))
 
     @jsii.member(jsii_name="onEvent")
     def on_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers for repository events.
 
         Use
@@ -3161,19 +3165,19 @@ class Repository(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onEvent", [id, options]))
 
     @jsii.member(jsii_name="onPullRequestStateChange")
     def on_pull_request_state_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a pull request state is changed.
 
         :param id: -
@@ -3194,19 +3198,19 @@ class Repository(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onPullRequestStateChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onPullRequestStateChange", [id, options]))
 
     @jsii.member(jsii_name="onReferenceCreated")
     def on_reference_created(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a reference is created (i.e. a new branch/tag is created) to the repository.
 
         :param id: -
@@ -3227,19 +3231,19 @@ class Repository(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReferenceCreated", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onReferenceCreated", [id, options]))
 
     @jsii.member(jsii_name="onReferenceDeleted")
     def on_reference_deleted(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a reference is delete (i.e. a branch/tag is deleted) from the repository.
 
         :param id: -
@@ -3260,19 +3264,19 @@ class Repository(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReferenceDeleted", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onReferenceDeleted", [id, options]))
 
     @jsii.member(jsii_name="onReferenceUpdated")
     def on_reference_updated(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a reference is updated (i.e. a commit is pushed to an existing or new branch) from the repository.
 
         :param id: -
@@ -3293,19 +3297,19 @@ class Repository(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReferenceUpdated", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onReferenceUpdated", [id, options]))
 
     @jsii.member(jsii_name="onStateChange")
     def on_state_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers when a "CodeCommit Repository State Change" event occurs.
 
         :param id: -
@@ -3326,7 +3330,7 @@ class Repository(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onStateChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onStateChange", [id, options]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -3378,9 +3382,9 @@ class Repository(
 
     @builtins.property
     @jsii.member(jsii_name="repositoryRef")
-    def repository_ref(self) -> _RepositoryReference_6e315ada:
+    def repository_ref(self) -> "_RepositoryReference_6e315ada":
         '''A reference to a Repository resource.'''
-        return typing.cast(_RepositoryReference_6e315ada, jsii.get(self, "repositoryRef"))
+        return typing.cast("_RepositoryReference_6e315ada", jsii.get(self, "repositoryRef"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_codecommit.RepositoryEventTrigger")
@@ -3415,7 +3419,10 @@ class RepositoryGrants(
 
     @jsii.member(jsii_name="fromRepository")
     @builtins.classmethod
-    def from_repository(cls, resource: _IRepositoryRef_f6c56413) -> "RepositoryGrants":
+    def from_repository(
+        cls,
+        resource: "_IRepositoryRef_f6c56413",
+    ) -> "RepositoryGrants":
         '''Creates grants for RepositoryGrants.
 
         :param resource: -
@@ -3426,7 +3433,7 @@ class RepositoryGrants(
         return typing.cast("RepositoryGrants", jsii.sinvoke(cls, "fromRepository", [resource]))
 
     @jsii.member(jsii_name="pull")
-    def pull(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def pull(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants pull permissions.
 
         :param grantee: -
@@ -3434,10 +3441,10 @@ class RepositoryGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5422e4dd85825f4007826cab5651a65fe793cfa5049957e959b6dd4671570a41)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "pull", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "pull", [grantee]))
 
     @jsii.member(jsii_name="pullPush")
-    def pull_push(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def pull_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants pullPush permissions.
 
         :param grantee: -
@@ -3445,10 +3452,10 @@ class RepositoryGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8ed87a8233d2b25dd036f841fb4a36753c25c207d91c0131044211408d35148b)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "pullPush", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "pullPush", [grantee]))
 
     @jsii.member(jsii_name="read")
-    def read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants read permissions.
 
         :param grantee: -
@@ -3456,12 +3463,12 @@ class RepositoryGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1b52f08c2d087381cc5106a36a39bb3dd4d12526e1f9f3b9102e5624499ecfdd)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "read", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "read", [grantee]))
 
     @builtins.property
     @jsii.member(jsii_name="resource")
-    def _resource(self) -> _IRepositoryRef_f6c56413:
-        return typing.cast(_IRepositoryRef_f6c56413, jsii.get(self, "resource"))
+    def _resource(self) -> "_IRepositoryRef_f6c56413":
+        return typing.cast("_IRepositoryRef_f6c56413", jsii.get(self, "resource"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_codecommit.RepositoryNotificationEvents")
@@ -3511,10 +3518,10 @@ class RepositoryNotifyOnOptions(_NotificationRuleOptions_dff73281):
         self,
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-        events: typing.Sequence[RepositoryNotificationEvents],
+        events: typing.Sequence["RepositoryNotificationEvents"],
     ) -> None:
         '''Additional options to pass to the notification rule.
 
@@ -3574,7 +3581,7 @@ class RepositoryNotifyOnOptions(_NotificationRuleOptions_dff73281):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def detail_type(self) -> typing.Optional[_DetailType_cf8135e7]:
+    def detail_type(self) -> typing.Optional["_DetailType_cf8135e7"]:
         '''The level of detail to include in the notifications for this resource.
 
         BASIC will include only the contents of the event as it would appear in AWS CloudWatch.
@@ -3583,7 +3590,7 @@ class RepositoryNotifyOnOptions(_NotificationRuleOptions_dff73281):
         :default: DetailType.FULL
         '''
         result = self._values.get("detail_type")
-        return typing.cast(typing.Optional[_DetailType_cf8135e7], result)
+        return typing.cast(typing.Optional["_DetailType_cf8135e7"], result)
 
     @builtins.property
     def enabled(self) -> typing.Optional[builtins.bool]:
@@ -3608,7 +3615,7 @@ class RepositoryNotifyOnOptions(_NotificationRuleOptions_dff73281):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def events(self) -> typing.List[RepositoryNotificationEvents]:
+    def events(self) -> typing.List["RepositoryNotificationEvents"]:
         '''A list of event types associated with this notification rule for CodeCommit repositories.
 
         For a complete list of event types and IDs, see Notification concepts in the Developer Tools Console User Guide.
@@ -3617,7 +3624,7 @@ class RepositoryNotifyOnOptions(_NotificationRuleOptions_dff73281):
         '''
         result = self._values.get("events")
         assert result is not None, "Required property 'events' is missing"
-        return typing.cast(typing.List[RepositoryNotificationEvents], result)
+        return typing.cast(typing.List["RepositoryNotificationEvents"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3646,9 +3653,9 @@ class RepositoryProps:
         self,
         *,
         repository_name: builtins.str,
-        code: typing.Optional[Code] = None,
+        code: typing.Optional["Code"] = None,
         description: typing.Optional[builtins.str] = None,
-        kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
     ) -> None:
         '''
         :param repository_name: Name of the repository. This property is required for all CodeCommit repositories.
@@ -3720,13 +3727,13 @@ class RepositoryProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def code(self) -> typing.Optional[Code]:
+    def code(self) -> typing.Optional["Code"]:
         '''The contents with which to initialize the repository after it has been created.
 
         :default: - No initialization (create empty repo)
         '''
         result = self._values.get("code")
-        return typing.cast(typing.Optional[Code], result)
+        return typing.cast(typing.Optional["Code"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -3741,13 +3748,13 @@ class RepositoryProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def kms_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def kms_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The customer managed key used to encrypt and decrypt the data in repository.
 
         :default: - Use an AWS managed key
         '''
         result = self._values.get("kms_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3777,7 +3784,7 @@ class RepositoryTriggerOptions:
         *,
         branches: typing.Optional[typing.Sequence[builtins.str]] = None,
         custom_data: typing.Optional[builtins.str] = None,
-        events: typing.Optional[typing.Sequence[RepositoryEventTrigger]] = None,
+        events: typing.Optional[typing.Sequence["RepositoryEventTrigger"]] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Creates for a repository trigger to an SNS topic or Lambda function.
@@ -3835,10 +3842,10 @@ class RepositoryTriggerOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def events(self) -> typing.Optional[typing.List[RepositoryEventTrigger]]:
+    def events(self) -> typing.Optional[typing.List["RepositoryEventTrigger"]]:
         '''The repository events for which AWS CodeCommit sends information to the target, which you specified in the DestinationArn property.If you don't specify events, the trigger runs for all repository events.'''
         result = self._values.get("events")
-        return typing.cast(typing.Optional[typing.List[RepositoryEventTrigger]], result)
+        return typing.cast(typing.Optional[typing.List["RepositoryEventTrigger"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:

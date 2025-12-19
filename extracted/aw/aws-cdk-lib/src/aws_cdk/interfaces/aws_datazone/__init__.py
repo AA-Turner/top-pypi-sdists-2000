@@ -712,7 +712,7 @@ class IConnectionRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectionRef")
-    def connection_ref(self) -> ConnectionReference:
+    def connection_ref(self) -> "ConnectionReference":
         '''(experimental) A reference to a Connection resource.
 
         :stability: experimental
@@ -733,12 +733,12 @@ class _IConnectionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectionRef")
-    def connection_ref(self) -> ConnectionReference:
+    def connection_ref(self) -> "ConnectionReference":
         '''(experimental) A reference to a Connection resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectionReference, jsii.get(self, "connectionRef"))
+        return typing.cast("ConnectionReference", jsii.get(self, "connectionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectionRef).__jsii_proxy_class__ = lambda : _IConnectionRefProxy
@@ -757,7 +757,7 @@ class IDataSourceRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataSourceRef")
-    def data_source_ref(self) -> DataSourceReference:
+    def data_source_ref(self) -> "DataSourceReference":
         '''(experimental) A reference to a DataSource resource.
 
         :stability: experimental
@@ -778,12 +778,12 @@ class _IDataSourceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataSourceRef")
-    def data_source_ref(self) -> DataSourceReference:
+    def data_source_ref(self) -> "DataSourceReference":
         '''(experimental) A reference to a DataSource resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataSourceReference, jsii.get(self, "dataSourceRef"))
+        return typing.cast("DataSourceReference", jsii.get(self, "dataSourceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataSourceRef).__jsii_proxy_class__ = lambda : _IDataSourceRefProxy
@@ -802,7 +802,7 @@ class IDomainRef(
 
     @builtins.property
     @jsii.member(jsii_name="domainRef")
-    def domain_ref(self) -> DomainReference:
+    def domain_ref(self) -> "DomainReference":
         '''(experimental) A reference to a Domain resource.
 
         :stability: experimental
@@ -823,12 +823,12 @@ class _IDomainRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="domainRef")
-    def domain_ref(self) -> DomainReference:
+    def domain_ref(self) -> "DomainReference":
         '''(experimental) A reference to a Domain resource.
 
         :stability: experimental
         '''
-        return typing.cast(DomainReference, jsii.get(self, "domainRef"))
+        return typing.cast("DomainReference", jsii.get(self, "domainRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDomainRef).__jsii_proxy_class__ = lambda : _IDomainRefProxy
@@ -847,7 +847,7 @@ class IDomainUnitRef(
 
     @builtins.property
     @jsii.member(jsii_name="domainUnitRef")
-    def domain_unit_ref(self) -> DomainUnitReference:
+    def domain_unit_ref(self) -> "DomainUnitReference":
         '''(experimental) A reference to a DomainUnit resource.
 
         :stability: experimental
@@ -868,12 +868,12 @@ class _IDomainUnitRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="domainUnitRef")
-    def domain_unit_ref(self) -> DomainUnitReference:
+    def domain_unit_ref(self) -> "DomainUnitReference":
         '''(experimental) A reference to a DomainUnit resource.
 
         :stability: experimental
         '''
-        return typing.cast(DomainUnitReference, jsii.get(self, "domainUnitRef"))
+        return typing.cast("DomainUnitReference", jsii.get(self, "domainUnitRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDomainUnitRef).__jsii_proxy_class__ = lambda : _IDomainUnitRefProxy
@@ -892,7 +892,7 @@ class IEnvironmentActionsRef(
 
     @builtins.property
     @jsii.member(jsii_name="environmentActionsRef")
-    def environment_actions_ref(self) -> EnvironmentActionsReference:
+    def environment_actions_ref(self) -> "EnvironmentActionsReference":
         '''(experimental) A reference to a EnvironmentActions resource.
 
         :stability: experimental
@@ -913,12 +913,12 @@ class _IEnvironmentActionsRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="environmentActionsRef")
-    def environment_actions_ref(self) -> EnvironmentActionsReference:
+    def environment_actions_ref(self) -> "EnvironmentActionsReference":
         '''(experimental) A reference to a EnvironmentActions resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnvironmentActionsReference, jsii.get(self, "environmentActionsRef"))
+        return typing.cast("EnvironmentActionsReference", jsii.get(self, "environmentActionsRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnvironmentActionsRef).__jsii_proxy_class__ = lambda : _IEnvironmentActionsRefProxy
@@ -941,7 +941,7 @@ class IEnvironmentBlueprintConfigurationRef(
     @jsii.member(jsii_name="environmentBlueprintConfigurationRef")
     def environment_blueprint_configuration_ref(
         self,
-    ) -> EnvironmentBlueprintConfigurationReference:
+    ) -> "EnvironmentBlueprintConfigurationReference":
         '''(experimental) A reference to a EnvironmentBlueprintConfiguration resource.
 
         :stability: experimental
@@ -964,12 +964,12 @@ class _IEnvironmentBlueprintConfigurationRefProxy(
     @jsii.member(jsii_name="environmentBlueprintConfigurationRef")
     def environment_blueprint_configuration_ref(
         self,
-    ) -> EnvironmentBlueprintConfigurationReference:
+    ) -> "EnvironmentBlueprintConfigurationReference":
         '''(experimental) A reference to a EnvironmentBlueprintConfiguration resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnvironmentBlueprintConfigurationReference, jsii.get(self, "environmentBlueprintConfigurationRef"))
+        return typing.cast("EnvironmentBlueprintConfigurationReference", jsii.get(self, "environmentBlueprintConfigurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnvironmentBlueprintConfigurationRef).__jsii_proxy_class__ = lambda : _IEnvironmentBlueprintConfigurationRefProxy
@@ -988,7 +988,7 @@ class IEnvironmentProfileRef(
 
     @builtins.property
     @jsii.member(jsii_name="environmentProfileRef")
-    def environment_profile_ref(self) -> EnvironmentProfileReference:
+    def environment_profile_ref(self) -> "EnvironmentProfileReference":
         '''(experimental) A reference to a EnvironmentProfile resource.
 
         :stability: experimental
@@ -1009,12 +1009,12 @@ class _IEnvironmentProfileRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="environmentProfileRef")
-    def environment_profile_ref(self) -> EnvironmentProfileReference:
+    def environment_profile_ref(self) -> "EnvironmentProfileReference":
         '''(experimental) A reference to a EnvironmentProfile resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnvironmentProfileReference, jsii.get(self, "environmentProfileRef"))
+        return typing.cast("EnvironmentProfileReference", jsii.get(self, "environmentProfileRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnvironmentProfileRef).__jsii_proxy_class__ = lambda : _IEnvironmentProfileRefProxy
@@ -1033,7 +1033,7 @@ class IEnvironmentRef(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> EnvironmentReference:
+    def environment_ref(self) -> "EnvironmentReference":
         '''(experimental) A reference to a Environment resource.
 
         :stability: experimental
@@ -1054,12 +1054,12 @@ class _IEnvironmentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> EnvironmentReference:
+    def environment_ref(self) -> "EnvironmentReference":
         '''(experimental) A reference to a Environment resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnvironmentReference, jsii.get(self, "environmentRef"))
+        return typing.cast("EnvironmentReference", jsii.get(self, "environmentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnvironmentRef).__jsii_proxy_class__ = lambda : _IEnvironmentRefProxy
@@ -1078,7 +1078,7 @@ class IFormTypeRef(
 
     @builtins.property
     @jsii.member(jsii_name="formTypeRef")
-    def form_type_ref(self) -> FormTypeReference:
+    def form_type_ref(self) -> "FormTypeReference":
         '''(experimental) A reference to a FormType resource.
 
         :stability: experimental
@@ -1099,12 +1099,12 @@ class _IFormTypeRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="formTypeRef")
-    def form_type_ref(self) -> FormTypeReference:
+    def form_type_ref(self) -> "FormTypeReference":
         '''(experimental) A reference to a FormType resource.
 
         :stability: experimental
         '''
-        return typing.cast(FormTypeReference, jsii.get(self, "formTypeRef"))
+        return typing.cast("FormTypeReference", jsii.get(self, "formTypeRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFormTypeRef).__jsii_proxy_class__ = lambda : _IFormTypeRefProxy
@@ -1123,7 +1123,7 @@ class IGroupProfileRef(
 
     @builtins.property
     @jsii.member(jsii_name="groupProfileRef")
-    def group_profile_ref(self) -> GroupProfileReference:
+    def group_profile_ref(self) -> "GroupProfileReference":
         '''(experimental) A reference to a GroupProfile resource.
 
         :stability: experimental
@@ -1144,12 +1144,12 @@ class _IGroupProfileRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="groupProfileRef")
-    def group_profile_ref(self) -> GroupProfileReference:
+    def group_profile_ref(self) -> "GroupProfileReference":
         '''(experimental) A reference to a GroupProfile resource.
 
         :stability: experimental
         '''
-        return typing.cast(GroupProfileReference, jsii.get(self, "groupProfileRef"))
+        return typing.cast("GroupProfileReference", jsii.get(self, "groupProfileRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGroupProfileRef).__jsii_proxy_class__ = lambda : _IGroupProfileRefProxy

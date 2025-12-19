@@ -11,17 +11,21 @@ from starlette.exceptions import HTTPException
 from typing_extensions import TypedDict
 
 import langgraph_api.logging as lg_logging
-from langgraph_api.api.encryption_middleware import decrypt_response
+from langgraph_api.api.encryption_middleware import (
+    decrypt_response,
+    extract_encryption_context_from_data,
+)
 from langgraph_api.auth.custom import SimpleUser, normalize_user
 from langgraph_api.config import (
     BG_JOB_ISOLATED_LOOPS,
     BG_JOB_MAX_RETRIES,
     BG_JOB_TIMEOUT_SECS,
 )
+from langgraph_api.encryption.context import set_encryption_context
 from langgraph_api.errors import UserInterrupt, UserRollback, UserTimeout
 from langgraph_api.js.errors import RemoteException
 from langgraph_api.metadata import incr_runs
-from langgraph_api.schema import Run, StreamMode
+from langgraph_api.schema import RUN_KWARGS_ENCRYPTION_SUBFIELDS, Run, StreamMode
 from langgraph_api.state import state_snapshot_to_thread_state
 from langgraph_api.stream import AnyStream, astream_state, consume
 from langgraph_api.utils import with_user
@@ -65,25 +69,6 @@ async def set_auth_ctx_for_run(
         yield None
 
 
-@asynccontextmanager
-async def set_encryption_ctx_for_run(
-    run_kwargs: dict,
-) -> AsyncGenerator[None, None]:
-    """Set encryption context from run config for checkpoint blob encryption."""
-    try:
-        from langgraph_api.encryption.context import set_encryption_context
-
-        encryption_context = run_kwargs.get("config", {}).get("__encryption_context__")
-        if encryption_context:
-            set_encryption_context(encryption_context)
-            await logger.adebug(
-                "Set encryption context for run", encryption_context=encryption_context
-            )
-    except Exception as e:
-        await logger.awarning("Failed to set encryption context for run", error=str(e))
-    yield None
-
-
 async def worker(
     run: Run,
     attempt: int,
@@ -92,6 +77,19 @@ async def worker(
     run_id = run["run_id"]
     if attempt == 1:
         incr_runs()
+
+    # Extract and set encryption context BEFORE decryption (decrypt_response strips this key)
+    encryption_context = extract_encryption_context_from_data(
+        run["kwargs"].get("config")
+    )
+    if encryption_context:
+        set_encryption_context(encryption_context)
+
+    # Decrypt kwargs fields FIRST, before any access to run["kwargs"]
+    run["kwargs"] = await decrypt_response(
+        run["kwargs"], "run", RUN_KWARGS_ENCRYPTION_SUBFIELDS
+    )
+
     checkpoint: CheckpointPayload | None = None
     exception: Exception | asyncio.CancelledError | None = None
     status: str | None = None
@@ -202,14 +200,7 @@ async def worker(
                     )
 
                 raise RuntimeError(error_message)
-            async with (
-                set_auth_ctx_for_run(run["kwargs"]),
-                set_encryption_ctx_for_run(run["kwargs"]),
-            ):
-                # Decrypt kwargs fields (input, config, context) before streaming
-                run["kwargs"] = await decrypt_response(
-                    run["kwargs"], "run", ["input", "config", "context"]
-                )
+            async with set_auth_ctx_for_run(run["kwargs"]):
                 if temporary:
                     stream = astream_state(run, attempt, done)
                 else:

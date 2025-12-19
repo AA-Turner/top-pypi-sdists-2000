@@ -145,7 +145,7 @@ class IChallengeRef(
 
     @builtins.property
     @jsii.member(jsii_name="challengeRef")
-    def challenge_ref(self) -> ChallengeReference:
+    def challenge_ref(self) -> "ChallengeReference":
         '''(experimental) A reference to a Challenge resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IChallengeRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="challengeRef")
-    def challenge_ref(self) -> ChallengeReference:
+    def challenge_ref(self) -> "ChallengeReference":
         '''(experimental) A reference to a Challenge resource.
 
         :stability: experimental
         '''
-        return typing.cast(ChallengeReference, jsii.get(self, "challengeRef"))
+        return typing.cast("ChallengeReference", jsii.get(self, "challengeRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IChallengeRef).__jsii_proxy_class__ = lambda : _IChallengeRefProxy
@@ -190,7 +190,7 @@ class IConnectorRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> ConnectorReference:
+    def connector_ref(self) -> "ConnectorReference":
         '''(experimental) A reference to a Connector resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IConnectorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> ConnectorReference:
+    def connector_ref(self) -> "ConnectorReference":
         '''(experimental) A reference to a Connector resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectorReference, jsii.get(self, "connectorRef"))
+        return typing.cast("ConnectorReference", jsii.get(self, "connectorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectorRef).__jsii_proxy_class__ = lambda : _IConnectorRefProxy

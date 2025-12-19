@@ -13,26 +13,30 @@
 # limitations under the License.
 """Lowering for Pallas TPU SparseCore."""
 
+from typing import Any, NoReturn, cast
 from collections.abc import Sequence
 import contextlib
 import dataclasses
 import functools
-from typing import Any, NoReturn, cast
 
-import jax
 from jax._src import api_util
 from jax._src import core as jax_core
 from jax._src import debugging
+from jax._src import lax
 from jax._src import linear_util as lu
 from jax._src import mesh as mesh_lib
+from jax._src import numpy as jnp
 from jax._src import source_info_util
 from jax._src import state
 from jax._src import util
+from jax._src import tree_util
 from jax._src.interpreters import mlir
 from jax._src.interpreters import partial_eval as pe
 from jax._src.lib.mlir import ir
+from jax._src.lib.mlir.dialects import arith
 from jax._src.lib.mlir.dialects import func
 from jax._src.lib.mlir.dialects import memref
+from jax._src.lib.mlir.dialects import vector
 from jax._src.pallas import core as pallas_core
 from jax._src.pallas import primitives as pallas_primitives
 from jax._src.pallas.mosaic import core as tpu_core
@@ -43,7 +47,6 @@ from jax._src.state import discharge as state_discharge
 from jax._src.state import indexing
 from jax._src.state import primitives as state_primitives
 from jax.experimental.mosaic.dialects import tpu
-import jax.numpy as jnp
 
 
 map, unsafe_map = util.safe_map, map
@@ -55,7 +58,7 @@ MemorySpace = tpu_core.MemorySpace
 
 class GlobalAllocations:
   """Hands out global allocations sequentially during lowering."""
-  def __init__(self, allocations: dict[pallas_core.MemoryRef, list[Any]]):
+  def __init__(self, allocations: dict[pallas_core.MemoryRef, list[ir.Value]]):
     self._allocations = {k: list(v) for k, v in allocations.items()}
 
   def next_allocation(self, what: state.AbstractRef | pallas_core.TransformedRef) -> Any:
@@ -111,7 +114,7 @@ def lower_jaxpr_to_module(
         "Dynamic shape replacement is not supported for SparseCore."
     )
   if not grid_mapping.grid:
-    index_map_avals, index_map_tree = jax.tree.flatten(
+    index_map_avals, index_map_tree = tree_util.tree_flatten(
         ((jax_core.ShapedArray((), jnp.int32),), {})
     )
     if grid_mapping.num_index_operands:
@@ -289,7 +292,7 @@ def lower_jaxpr_to_func(
     )
 
     allocations = sc_core.gather_global_allocations(jaxpr)
-    flat_allocations, allocations_tree = jax.tree.flatten(allocations)
+    flat_allocations, allocations_tree = tree_util.tree_flatten(allocations)
     allocation_operands = operands_and_scratch[
         len(operands_and_scratch) - len(flat_allocations):]
     allocations = allocations_tree.unflatten(allocation_operands)
@@ -327,7 +330,10 @@ def lower_jaxpr_to_func(
       mosaic_grid_mapping.block_mappings,
   ):
     d = {}
-    if str(arg.type.memory_space) == "#tpu.memory_space<hbm>":
+    if (
+        str(arg.type.memory_space) == "#tpu.memory_space<hbm>"
+        or str(arg.type.memory_space) == "#tpu.memory_space<semaphore_mem>"
+    ):
       d["sc.persistent"] = ir.UnitAttr.get()
     if isinstance(bm, sc_core.BlockMapping) and bm.indexed_by is not None:
       d["sc.indexed_by"] = mlir.i32_attr(bm.indexed_by)
@@ -385,7 +391,7 @@ def _load_lowering_rule(
         " via `pltpu.async_copy`."
     )
 
-  transforms = list(jax.tree.unflatten(tree, flat_transforms))
+  transforms = list(tree_util.tree_unflatten(tree, flat_transforms))
   if not transforms or not isinstance(transforms[-1], indexing.NDIndexer):
     ref_shape = state.get_transforms_shape(transforms, ref_aval.shape)
     transforms.append(indexing.NDIndexer.make_trivial_indexer(ref_shape))
@@ -446,7 +452,7 @@ def _store_lowering_rule(
         " via `pltpu.async_copy`."
     )
 
-  transforms = list(jax.tree.unflatten(tree, flat_transforms))
+  transforms = list(tree_util.tree_unflatten(tree, flat_transforms))
   if not transforms or not isinstance(transforms[-1], indexing.NDIndexer):
     ref_shape = state.get_transforms_shape(transforms, ref_aval.shape)
     transforms.append(indexing.NDIndexer.make_trivial_indexer(ref_shape))
@@ -488,7 +494,7 @@ def _store_lowering_rule(
   return old_val
 
 
-@register_lowering_rule(jax.lax.iota_p,
+@register_lowering_rule(lax.iota_p,
                         kernel_types=[tpu_core.KernelType.SC_VECTOR_SUBCORE])
 def _iota_lowering_rule_sc(ctx: LoweringRuleContext, dtype, shape, dimension,
                            sharding):
@@ -858,6 +864,115 @@ def _run_scoped_lowering_rule(
       jaxpr=jaxpr,
       collective_axes=collective_axes,
       alloc_fn=_alloc_value,
+  )
+
+
+@register_lowering_rule(
+    lax.sort_p, kernel_types=[tpu_core.KernelType.SC_VECTOR_SUBCORE]
+)
+def _sort_lowering_rule(
+    ctx: LoweringRuleContext, *xs, dimension, is_stable, num_keys
+):
+  del is_stable  # Unused, always stable.
+  if dimension not in (0, -1):
+    raise ValueError(f"Unsupported dimension: {dimension}")
+  if num_keys != 1:
+    raise NotImplementedError("Multiple sort keys not supported")
+  sc_info = sc_core.get_sparse_core_info()
+  supported_shape = (sc_info.num_lanes,)
+  for i, aval in enumerate(ctx.avals_in):
+    if aval.shape != supported_shape:
+      raise NotImplementedError(
+          f"Unsupported shape for operand {i} of SC sort: Got {aval.shape}, "
+          f"expected {supported_shape}"
+      )
+  keys = xs[0]
+  values = xs[1:]
+  mask_type = ir.VectorType.get(
+      [sc_info.num_lanes], ir.IntegerType.get_signless(1))
+  mask = arith.constant(mask_type, ir.DenseElementsAttr.get_splat(
+      mask_type, ir.BoolAttr.get(True)))
+  if not values:
+    _, sorted_keys, _ = tpu.sort(
+        mask_type, keys.type, keys.type, keys, keys, mask=mask
+    )
+    return (sorted_keys,)
+  results: list[ir.Value] = []
+  for value in values:
+    _, sorted_keys, sorted_value = tpu.sort(
+        mask_type, keys.type, value.type, keys, value, mask=mask
+    )
+    if not results:
+      results.append(sorted_keys)
+    results.append(sorted_value)
+  return tuple(results)
+
+
+@register_lowering_rule(
+    lax.gather_p, kernel_types=[tpu_core.KernelType.SC_VECTOR_SUBCORE]
+)
+def _gather_lowering_rule(
+    ctx: LoweringRuleContext,
+    x,
+    indices,
+    *,
+    dimension_numbers,
+    slice_sizes,
+    unique_indices,
+    indices_are_sorted,
+    mode,
+    fill_value,
+):
+
+  in_aval, indices_aval = ctx.avals_in
+  out_aval, = ctx.avals_out
+
+  if len(in_aval.shape) != 1:
+    raise NotImplementedError("Only 1D gather is supported")
+  if in_aval.shape != indices_aval.shape[:-1] != out_aval.shape:
+    raise ValueError(
+        "Shape mismatch in input, indices and output:"
+        f" {in_aval.shape}, {indices_aval.shape[:-1]}, {out_aval.shape}"
+    )
+
+  # During lowering jnp.take_along_axis to lax.gather, we append extra dimension
+  # to the end of the indices array. We should reshape it back to the original
+  # shape before lowering to Mosaic and rely on MLIR canonicalization to remove
+  # the reshapes.
+  assert indices_aval.shape == in_aval.shape + (1,)
+  recovered_indices = vector.shape_cast(
+      ir.VectorType.get(in_aval.shape, indices.type.element_type),
+      indices,
+  )
+  # Note: current support for lax.gather is still very limited.
+  del fill_value
+  if slice_sizes == (1,) and mode == lax.GatherScatterMode.PROMISE_IN_BOUNDS:
+    if dimension_numbers == lax.GatherDimensionNumbers(
+        offset_dims=(),
+        collapsed_slice_dims=(0,),
+        start_index_map=(0,),
+        operand_batching_dims=(),
+        start_indices_batching_dims=(),
+    ):
+      return tpu.dynamic_gather(x, recovered_indices, [0])
+  raise NotImplementedError("Unsupported gather")
+
+
+@register_lowering_rule(
+    lax.rev_p, kernel_types=[tpu_core.KernelType.SC_VECTOR_SUBCORE]
+)
+def _rev_lowering_rule(ctx: LoweringRuleContext, x, dimensions):
+  del ctx  # Unused.
+  if dimensions != (0,):
+    raise NotImplementedError(f"Invalid dimensions for SC lax.rev: {dimensions}")
+  i32 = ir.IntegerType.get_signless(32)
+  vec_dim = sc_core.get_sparse_core_info().num_lanes
+  cdim = arith.constant(i32, ir.IntegerAttr.get(i32, vec_dim - 1))
+  cdim_vec = vector.broadcast(ir.VectorType.get((vec_dim,), cdim.type), cdim)
+  return tpu.dynamic_gather(
+      x,
+      arith.subi(cdim_vec, tpu.iota(cdim_vec.type, dimensions=[0])),
+      dimensions=[0],
   )
 
 

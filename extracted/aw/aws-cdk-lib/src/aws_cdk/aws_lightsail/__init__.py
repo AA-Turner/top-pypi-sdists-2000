@@ -137,7 +137,7 @@ class CfnAlarm(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         alarm_name: builtins.str,
@@ -148,7 +148,7 @@ class CfnAlarm(
         threshold: jsii.Number,
         contact_protocols: typing.Optional[typing.Sequence[builtins.str]] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
-        notification_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        notification_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         notification_triggers: typing.Optional[typing.Sequence[builtins.str]] = None,
         treat_missing_data: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -190,7 +190,7 @@ class CfnAlarm(
 
     @jsii.member(jsii_name="arnForAlarm")
     @builtins.classmethod
-    def arn_for_alarm(cls, resource: _IAlarmRef_6cd14bfe) -> builtins.str:
+    def arn_for_alarm(cls, resource: "_IAlarmRef_6cd14bfe") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -212,7 +212,7 @@ class CfnAlarm(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAlarm", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -243,9 +243,9 @@ class CfnAlarm(
 
     @builtins.property
     @jsii.member(jsii_name="alarmRef")
-    def alarm_ref(self) -> _AlarmReference_e2b0ffc0:
+    def alarm_ref(self) -> "_AlarmReference_e2b0ffc0":
         '''A reference to a Alarm resource.'''
-        return typing.cast(_AlarmReference_e2b0ffc0, jsii.get(self, "alarmRef"))
+        return typing.cast("_AlarmReference_e2b0ffc0", jsii.get(self, "alarmRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAlarmArn")
@@ -387,14 +387,14 @@ class CfnAlarm(
     @jsii.member(jsii_name="notificationEnabled")
     def notification_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether the alarm is enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "notificationEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "notificationEnabled"))
 
     @notification_enabled.setter
     def notification_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6d1f7e50126b8dc4c73aad55d44ca47c64d1aaa42863a2071146240e12b7fff9)
@@ -460,7 +460,7 @@ class CfnAlarmProps:
         threshold: jsii.Number,
         contact_protocols: typing.Optional[typing.Sequence[builtins.str]] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
-        notification_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        notification_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         notification_triggers: typing.Optional[typing.Sequence[builtins.str]] = None,
         treat_missing_data: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -618,13 +618,13 @@ class CfnAlarmProps:
     @builtins.property
     def notification_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether the alarm is enabled.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-alarm.html#cfn-lightsail-alarm-notificationenabled
         '''
         result = self._values.get("notification_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def notification_triggers(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -683,6 +683,7 @@ class CfnBucket(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lightsail as lightsail
@@ -708,16 +709,16 @@ class CfnBucket(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         bucket_name: builtins.str,
         bundle_id: builtins.str,
-        access_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBucket.AccessRulesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        object_versioning: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        access_rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBucket.AccessRulesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        object_versioning: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         read_only_access_accounts: typing.Optional[typing.Sequence[builtins.str]] = None,
         resources_receiving_access: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lightsail::Bucket``.
 
@@ -749,7 +750,7 @@ class CfnBucket(
 
     @jsii.member(jsii_name="arnForBucket")
     @builtins.classmethod
-    def arn_for_bucket(cls, resource: _IBucketRef_94b2e9c2) -> builtins.str:
+    def arn_for_bucket(cls, resource: "_IBucketRef_94b2e9c2") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -771,7 +772,7 @@ class CfnBucket(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBucket", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -802,12 +803,12 @@ class CfnBucket(
 
     @builtins.property
     @jsii.member(jsii_name="attrAbleToUpdateBundle")
-    def attr_able_to_update_bundle(self) -> _IResolvable_da3f097b:
+    def attr_able_to_update_bundle(self) -> "_IResolvable_da3f097b":
         '''A Boolean value indicating whether the bundle that is currently applied to your distribution can be changed to another bundle.
 
         :cloudformationAttribute: AbleToUpdateBundle
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrAbleToUpdateBundle"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrAbleToUpdateBundle"))
 
     @builtins.property
     @jsii.member(jsii_name="attrBucketArn")
@@ -829,9 +830,9 @@ class CfnBucket(
 
     @builtins.property
     @jsii.member(jsii_name="bucketRef")
-    def bucket_ref(self) -> _BucketReference_6e1aaf5c:
+    def bucket_ref(self) -> "_BucketReference_6e1aaf5c":
         '''A reference to a Bucket resource.'''
-        return typing.cast(_BucketReference_6e1aaf5c, jsii.get(self, "bucketRef"))
+        return typing.cast("_BucketReference_6e1aaf5c", jsii.get(self, "bucketRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -840,9 +841,9 @@ class CfnBucket(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="bucketName")
@@ -874,14 +875,14 @@ class CfnBucket(
     @jsii.member(jsii_name="accessRules")
     def access_rules(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.AccessRulesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.AccessRulesProperty"]]:
         '''An object that describes the access rules for the bucket.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.AccessRulesProperty"]], jsii.get(self, "accessRules"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.AccessRulesProperty"]], jsii.get(self, "accessRules"))
 
     @access_rules.setter
     def access_rules(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.AccessRulesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.AccessRulesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__911a5ab074c6c9182d436d48523575a61c00e4566f9a555177936f1964f07641)
@@ -892,14 +893,14 @@ class CfnBucket(
     @jsii.member(jsii_name="objectVersioning")
     def object_versioning(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether object versioning is enabled for the bucket.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "objectVersioning"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "objectVersioning"))
 
     @object_versioning.setter
     def object_versioning(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6191661c271e19e8e8cac9d23703e7a3bcbba2dc5b15936dc4e3f080e7e234af)
@@ -940,12 +941,12 @@ class CfnBucket(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__52cc8a8b4e5b6b3a8d087b3ae8257283509372b0fe52e0e90dc9c520fd5f8e34)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -963,7 +964,7 @@ class CfnBucket(
         def __init__(
             self,
             *,
-            allow_public_overrides: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            allow_public_overrides: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             object_access: typing.Optional[builtins.str] = None,
         ) -> None:
             '''``AccessRules`` is a property of the `AWS::Lightsail::Bucket <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-bucket.html>`_ resource. It describes access rules for a bucket.
@@ -998,7 +999,7 @@ class CfnBucket(
         @builtins.property
         def allow_public_overrides(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean value indicating whether the access control list (ACL) permissions that are applied to individual objects override the ``GetObject`` option that is currently specified.
 
             When this is true, you can use the `PutObjectAcl <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectAcl.html>`_ Amazon S3 API operation to set individual objects to public (read-only) or private, using either the ``public-read`` ACL or the ``private`` ACL.
@@ -1006,7 +1007,7 @@ class CfnBucket(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-bucket-accessrules.html#cfn-lightsail-bucket-accessrules-allowpublicoverrides
             '''
             result = self._values.get("allow_public_overrides")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def object_access(self) -> typing.Optional[builtins.str]:
@@ -1058,11 +1059,11 @@ class CfnBucketProps:
         *,
         bucket_name: builtins.str,
         bundle_id: builtins.str,
-        access_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.AccessRulesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        object_versioning: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        access_rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBucket.AccessRulesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        object_versioning: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         read_only_access_accounts: typing.Optional[typing.Sequence[builtins.str]] = None,
         resources_receiving_access: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnBucket``.
 
@@ -1079,6 +1080,7 @@ class CfnBucketProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lightsail as lightsail
@@ -1150,18 +1152,18 @@ class CfnBucketProps:
     @builtins.property
     def access_rules(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBucket.AccessRulesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.AccessRulesProperty"]]:
         '''An object that describes the access rules for the bucket.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-bucket.html#cfn-lightsail-bucket-accessrules
         '''
         result = self._values.get("access_rules")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBucket.AccessRulesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.AccessRulesProperty"]], result)
 
     @builtins.property
     def object_versioning(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether object versioning is enabled for the bucket.
 
         The following options can be configured:
@@ -1173,7 +1175,7 @@ class CfnBucketProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-bucket.html#cfn-lightsail-bucket-objectversioning
         '''
         result = self._values.get("object_versioning")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def read_only_access_accounts(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1194,7 +1196,7 @@ class CfnBucketProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* .
@@ -1205,7 +1207,7 @@ class CfnBucketProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-bucket.html#cfn-lightsail-bucket-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1237,6 +1239,7 @@ class CfnCertificate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lightsail as lightsail
@@ -1256,13 +1259,13 @@ class CfnCertificate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         certificate_name: builtins.str,
         domain_name: builtins.str,
         subject_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lightsail::Certificate``.
 
@@ -1288,7 +1291,7 @@ class CfnCertificate(
 
     @jsii.member(jsii_name="arnForCertificate")
     @builtins.classmethod
-    def arn_for_certificate(cls, resource: _ICertificateRef_a38eb928) -> builtins.str:
+    def arn_for_certificate(cls, resource: "_ICertificateRef_a38eb928") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1310,7 +1313,7 @@ class CfnCertificate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCertificate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1359,9 +1362,9 @@ class CfnCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> _CertificateReference_8d2426bb:
+    def certificate_ref(self) -> "_CertificateReference_8d2426bb":
         '''A reference to a Certificate resource.'''
-        return typing.cast(_CertificateReference_8d2426bb, jsii.get(self, "certificateRef"))
+        return typing.cast("_CertificateReference_8d2426bb", jsii.get(self, "certificateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1370,9 +1373,9 @@ class CfnCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="certificateName")
@@ -1418,12 +1421,12 @@ class CfnCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aa0e2472d9d23da3ec2ce0c96320254278721ae808d47271138b62d6684a75b8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1447,7 +1450,7 @@ class CfnCertificateProps:
         certificate_name: builtins.str,
         domain_name: builtins.str,
         subject_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCertificate``.
 
@@ -1461,6 +1464,7 @@ class CfnCertificateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lightsail as lightsail
@@ -1522,7 +1526,7 @@ class CfnCertificateProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* .
@@ -1533,7 +1537,7 @@ class CfnCertificateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-certificate.html#cfn-lightsail-certificate-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1563,6 +1567,7 @@ class CfnContainer(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lightsail as lightsail
@@ -1620,17 +1625,17 @@ class CfnContainer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         power: builtins.str,
         scale: jsii.Number,
         service_name: builtins.str,
-        container_service_deployment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.ContainerServiceDeploymentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        is_disabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        private_registry_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.PrivateRegistryAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        public_domain_names: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.PublicDomainNameProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        container_service_deployment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.ContainerServiceDeploymentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        is_disabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        private_registry_access: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.PrivateRegistryAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        public_domain_names: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.PublicDomainNameProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lightsail::Container``.
 
@@ -1664,7 +1669,7 @@ class CfnContainer(
 
     @jsii.member(jsii_name="arnForContainer")
     @builtins.classmethod
-    def arn_for_container(cls, resource: _IContainerRef_448c22ea) -> builtins.str:
+    def arn_for_container(cls, resource: "_IContainerRef_448c22ea") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1686,7 +1691,7 @@ class CfnContainer(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContainer", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1762,15 +1767,15 @@ class CfnContainer(
 
     @builtins.property
     @jsii.member(jsii_name="containerRef")
-    def container_ref(self) -> _ContainerReference_57cb0931:
+    def container_ref(self) -> "_ContainerReference_57cb0931":
         '''A reference to a Container resource.'''
-        return typing.cast(_ContainerReference_57cb0931, jsii.get(self, "containerRef"))
+        return typing.cast("_ContainerReference_57cb0931", jsii.get(self, "containerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="power")
@@ -1815,14 +1820,14 @@ class CfnContainer(
     @jsii.member(jsii_name="containerServiceDeployment")
     def container_service_deployment(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.ContainerServiceDeploymentProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.ContainerServiceDeploymentProperty"]]:
         '''An object that describes the current container deployment of the container service.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.ContainerServiceDeploymentProperty"]], jsii.get(self, "containerServiceDeployment"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.ContainerServiceDeploymentProperty"]], jsii.get(self, "containerServiceDeployment"))
 
     @container_service_deployment.setter
     def container_service_deployment(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.ContainerServiceDeploymentProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.ContainerServiceDeploymentProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1e8ef0ed2b23c56026e0da66efb4213ed90af7b6dfea05d5bbce033060cc7e43)
@@ -1833,14 +1838,14 @@ class CfnContainer(
     @jsii.member(jsii_name="isDisabled")
     def is_disabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether the container service is disabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "isDisabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "isDisabled"))
 
     @is_disabled.setter
     def is_disabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a52d8c870a181dac72ac9809ac930672df1d327079dcac65e47b7e2aadcd54ed)
@@ -1851,14 +1856,14 @@ class CfnContainer(
     @jsii.member(jsii_name="privateRegistryAccess")
     def private_registry_access(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.PrivateRegistryAccessProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.PrivateRegistryAccessProperty"]]:
         '''An object that describes the configuration for the container service to access private container image repositories, such as  ( Amazon ECR ) private repositories.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.PrivateRegistryAccessProperty"]], jsii.get(self, "privateRegistryAccess"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.PrivateRegistryAccessProperty"]], jsii.get(self, "privateRegistryAccess"))
 
     @private_registry_access.setter
     def private_registry_access(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.PrivateRegistryAccessProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.PrivateRegistryAccessProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0c8f23478268198f6150b0633220a6dd883cc13c21830872cee9bf2a65a6acfa)
@@ -1869,14 +1874,14 @@ class CfnContainer(
     @jsii.member(jsii_name="publicDomainNames")
     def public_domain_names(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.PublicDomainNameProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.PublicDomainNameProperty"]]]]:
         '''The public domain name of the container service, such as ``example.com`` and ``www.example.com`` .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.PublicDomainNameProperty"]]]], jsii.get(self, "publicDomainNames"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.PublicDomainNameProperty"]]]], jsii.get(self, "publicDomainNames"))
 
     @public_domain_names.setter
     def public_domain_names(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.PublicDomainNameProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.PublicDomainNameProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fa200bad90bddaf505b39b733612869b17dd2e87cd1aaa81d1cfedde46e1bb8e)
@@ -1885,12 +1890,12 @@ class CfnContainer(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7eef525fca5f562f87e3ac9c6423f561f56721f252309711cf942b6679b0ed6e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1913,9 +1918,9 @@ class CfnContainer(
             *,
             command: typing.Optional[typing.Sequence[builtins.str]] = None,
             container_name: typing.Optional[builtins.str] = None,
-            environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            environment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             image: typing.Optional[builtins.str] = None,
-            ports: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.PortInfoProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            ports: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.PortInfoProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''``Container`` is a property of the `ContainerServiceDeployment <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-container-containerservicedeployment.html>`_ property. It describes the settings of a container that will be launched, or that is launched, to an Amazon Lightsail container service.
 
@@ -1988,13 +1993,13 @@ class CfnContainer(
         @builtins.property
         def environment(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.EnvironmentVariableProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.EnvironmentVariableProperty"]]]]:
             '''The environment variables of the container.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-container-container.html#cfn-lightsail-container-container-environment
             '''
             result = self._values.get("environment")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.EnvironmentVariableProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.EnvironmentVariableProperty"]]]], result)
 
         @builtins.property
         def image(self) -> typing.Optional[builtins.str]:
@@ -2012,13 +2017,13 @@ class CfnContainer(
         @builtins.property
         def ports(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.PortInfoProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.PortInfoProperty"]]]]:
             '''An object that describes the open firewall ports and protocols of the container.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-container-container.html#cfn-lightsail-container-container-ports
             '''
             result = self._values.get("ports")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.PortInfoProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.PortInfoProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2040,8 +2045,8 @@ class CfnContainer(
         def __init__(
             self,
             *,
-            containers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.ContainerProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            public_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.PublicEndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            containers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.ContainerProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            public_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.PublicEndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''``ContainerServiceDeployment`` is a property of the `AWS::Lightsail::Container <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-container.html>`_ resource. It describes a container deployment configuration of a container service.
 
@@ -2100,24 +2105,24 @@ class CfnContainer(
         @builtins.property
         def containers(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.ContainerProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.ContainerProperty"]]]]:
             '''An object that describes the configuration for the containers of the deployment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-container-containerservicedeployment.html#cfn-lightsail-container-containerservicedeployment-containers
             '''
             result = self._values.get("containers")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.ContainerProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.ContainerProperty"]]]], result)
 
         @builtins.property
         def public_endpoint(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.PublicEndpointProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.PublicEndpointProperty"]]:
             '''An object that describes the endpoint of the deployment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-container-containerservicedeployment.html#cfn-lightsail-container-containerservicedeployment-publicendpoint
             '''
             result = self._values.get("public_endpoint")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.PublicEndpointProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.PublicEndpointProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2139,7 +2144,7 @@ class CfnContainer(
         def __init__(
             self,
             *,
-            is_active: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            is_active: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             principal_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Describes the IAM role that you can use to grant a Lightsail container service access to Amazon ECR private repositories.
@@ -2174,13 +2179,13 @@ class CfnContainer(
         @builtins.property
         def is_active(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A boolean value that indicates whether the ``ECRImagePullerRole`` is active.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-container-ecrimagepullerrole.html#cfn-lightsail-container-ecrimagepullerrole-isactive
             '''
             result = self._values.get("is_active")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def principal_arn(self) -> typing.Optional[builtins.str]:
@@ -2504,7 +2509,7 @@ class CfnContainer(
         def __init__(
             self,
             *,
-            ecr_image_puller_role: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.EcrImagePullerRoleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ecr_image_puller_role: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.EcrImagePullerRoleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the configuration for an Amazon Lightsail container service to access private container image repositories, such as  ( Amazon ECR ) private repositories.
 
@@ -2538,7 +2543,7 @@ class CfnContainer(
         @builtins.property
         def ecr_image_puller_role(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.EcrImagePullerRoleProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.EcrImagePullerRoleProperty"]]:
             '''An object that describes the activation status of the role that you can use to grant a Lightsail container service access to Amazon ECR private repositories.
 
             If the role is activated, the Amazon Resource Name (ARN) of the role is also listed.
@@ -2546,7 +2551,7 @@ class CfnContainer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-container-privateregistryaccess.html#cfn-lightsail-container-privateregistryaccess-ecrimagepullerrole
             '''
             result = self._values.get("ecr_image_puller_role")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.EcrImagePullerRoleProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.EcrImagePullerRoleProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2647,7 +2652,7 @@ class CfnContainer(
             *,
             container_name: typing.Optional[builtins.str] = None,
             container_port: typing.Optional[jsii.Number] = None,
-            health_check_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.HealthCheckConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            health_check_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.HealthCheckConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''``PublicEndpoint`` is a property of the `ContainerServiceDeployment <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-container-containerservicedeployment.html>`_ property. It describes describes the settings of the public endpoint of a container on a container service.
 
@@ -2711,13 +2716,13 @@ class CfnContainer(
         @builtins.property
         def health_check_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.HealthCheckConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.HealthCheckConfigProperty"]]:
             '''An object that describes the health check configuration of the container.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-container-publicendpoint.html#cfn-lightsail-container-publicendpoint-healthcheckconfig
             '''
             result = self._values.get("health_check_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.HealthCheckConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.HealthCheckConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2752,11 +2757,11 @@ class CfnContainerProps:
         power: builtins.str,
         scale: jsii.Number,
         service_name: builtins.str,
-        container_service_deployment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainer.ContainerServiceDeploymentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        is_disabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        private_registry_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainer.PrivateRegistryAccessProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        public_domain_names: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainer.PublicDomainNameProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        container_service_deployment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.ContainerServiceDeploymentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        is_disabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        private_registry_access: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.PrivateRegistryAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        public_domain_names: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.PublicDomainNameProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnContainer``.
 
@@ -2774,6 +2779,7 @@ class CfnContainerProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lightsail as lightsail
@@ -2891,29 +2897,29 @@ class CfnContainerProps:
     @builtins.property
     def container_service_deployment(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainer.ContainerServiceDeploymentProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.ContainerServiceDeploymentProperty"]]:
         '''An object that describes the current container deployment of the container service.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-container.html#cfn-lightsail-container-containerservicedeployment
         '''
         result = self._values.get("container_service_deployment")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainer.ContainerServiceDeploymentProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.ContainerServiceDeploymentProperty"]], result)
 
     @builtins.property
     def is_disabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether the container service is disabled.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-container.html#cfn-lightsail-container-isdisabled
         '''
         result = self._values.get("is_disabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def private_registry_access(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainer.PrivateRegistryAccessProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.PrivateRegistryAccessProperty"]]:
         '''An object that describes the configuration for the container service to access private container image repositories, such as  ( Amazon ECR ) private repositories.
 
         For more information, see `Configuring access to an Amazon ECR private repository for an Amazon Lightsail container service <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-container-service-ecr-private-repo-access>`_ in the *Amazon Lightsail Developer Guide* .
@@ -2921,12 +2927,12 @@ class CfnContainerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-container.html#cfn-lightsail-container-privateregistryaccess
         '''
         result = self._values.get("private_registry_access")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainer.PrivateRegistryAccessProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.PrivateRegistryAccessProperty"]], result)
 
     @builtins.property
     def public_domain_names(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContainer.PublicDomainNameProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.PublicDomainNameProperty"]]]]:
         '''The public domain name of the container service, such as ``example.com`` and ``www.example.com`` .
 
         You can specify up to four public domain names for a container service. The domain names that you specify are used when you create a deployment with a container that is configured as the public endpoint of your container service.
@@ -2939,10 +2945,10 @@ class CfnContainerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-container.html#cfn-lightsail-container-publicdomainnames
         '''
         result = self._values.get("public_domain_names")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContainer.PublicDomainNameProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.PublicDomainNameProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* .
@@ -2953,7 +2959,7 @@ class CfnContainerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-container.html#cfn-lightsail-container-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2981,6 +2987,7 @@ class CfnDatabase(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lightsail as lightsail
@@ -3020,7 +3027,7 @@ class CfnDatabase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         master_database_name: builtins.str,
@@ -3029,15 +3036,15 @@ class CfnDatabase(
         relational_database_bundle_id: builtins.str,
         relational_database_name: builtins.str,
         availability_zone: typing.Optional[builtins.str] = None,
-        backup_retention: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        backup_retention: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ca_certificate_identifier: typing.Optional[builtins.str] = None,
         master_user_password: typing.Optional[builtins.str] = None,
         preferred_backup_window: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        relational_database_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDatabase.RelationalDatabaseParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        rotate_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        relational_database_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDatabase.RelationalDatabaseParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        rotate_master_user_password: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lightsail::Database``.
 
@@ -3085,7 +3092,7 @@ class CfnDatabase(
 
     @jsii.member(jsii_name="arnForDatabase")
     @builtins.classmethod
-    def arn_for_database(cls, resource: _IDatabaseRef_3bb9625f) -> builtins.str:
+    def arn_for_database(cls, resource: "_IDatabaseRef_3bb9625f") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3107,7 +3114,7 @@ class CfnDatabase(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDatabase", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3152,15 +3159,15 @@ class CfnDatabase(
 
     @builtins.property
     @jsii.member(jsii_name="databaseRef")
-    def database_ref(self) -> _DatabaseReference_57470afa:
+    def database_ref(self) -> "_DatabaseReference_57470afa":
         '''A reference to a Database resource.'''
-        return typing.cast(_DatabaseReference_57470afa, jsii.get(self, "databaseRef"))
+        return typing.cast("_DatabaseReference_57470afa", jsii.get(self, "databaseRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="masterDatabaseName")
@@ -3244,14 +3251,14 @@ class CfnDatabase(
     @jsii.member(jsii_name="backupRetention")
     def backup_retention(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether automated backup retention is enabled for the database.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "backupRetention"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "backupRetention"))
 
     @backup_retention.setter
     def backup_retention(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f06245bb04a19656eaedd55d945ba9fc771b141ebea294c5f2e46a5a301a9620)
@@ -3317,14 +3324,14 @@ class CfnDatabase(
     @jsii.member(jsii_name="publiclyAccessible")
     def publicly_accessible(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether the database is accessible to anyone on the internet.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "publiclyAccessible"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "publiclyAccessible"))
 
     @publicly_accessible.setter
     def publicly_accessible(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8197f292fce266aba628a142dec258c98e7a25fed22896e06e1a90c24a7ba544)
@@ -3335,14 +3342,14 @@ class CfnDatabase(
     @jsii.member(jsii_name="relationalDatabaseParameters")
     def relational_database_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDatabase.RelationalDatabaseParameterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDatabase.RelationalDatabaseParameterProperty"]]]]:
         '''An array of parameters for the database.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDatabase.RelationalDatabaseParameterProperty"]]]], jsii.get(self, "relationalDatabaseParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDatabase.RelationalDatabaseParameterProperty"]]]], jsii.get(self, "relationalDatabaseParameters"))
 
     @relational_database_parameters.setter
     def relational_database_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDatabase.RelationalDatabaseParameterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDatabase.RelationalDatabaseParameterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c96ad668b58f33187ed56194efffce27de109fd0767bcd5c1f2484c5bee18d56)
@@ -3353,14 +3360,14 @@ class CfnDatabase(
     @jsii.member(jsii_name="rotateMasterUserPassword")
     def rotate_master_user_password(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether to change the primary user password to a new, strong password generated by Lightsail .'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "rotateMasterUserPassword"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "rotateMasterUserPassword"))
 
     @rotate_master_user_password.setter
     def rotate_master_user_password(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__091d540f8b782064900c5e22fafb94086a4be8e774d1ca1e28d1034f980c1e78)
@@ -3369,12 +3376,12 @@ class CfnDatabase(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__742edfcb29bb69911299a631b46a0f26a5025e76d10c496b6e66e28bb86874ec)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3403,7 +3410,7 @@ class CfnDatabase(
             apply_type: typing.Optional[builtins.str] = None,
             data_type: typing.Optional[builtins.str] = None,
             description: typing.Optional[builtins.str] = None,
-            is_modifiable: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            is_modifiable: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             parameter_name: typing.Optional[builtins.str] = None,
             parameter_value: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -3516,13 +3523,13 @@ class CfnDatabase(
         @builtins.property
         def is_modifiable(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean value indicating whether the parameter can be modified.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-database-relationaldatabaseparameter.html#cfn-lightsail-database-relationaldatabaseparameter-ismodifiable
             '''
             result = self._values.get("is_modifiable")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def parameter_name(self) -> typing.Optional[builtins.str]:
@@ -3585,15 +3592,15 @@ class CfnDatabaseProps:
         relational_database_bundle_id: builtins.str,
         relational_database_name: builtins.str,
         availability_zone: typing.Optional[builtins.str] = None,
-        backup_retention: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        backup_retention: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ca_certificate_identifier: typing.Optional[builtins.str] = None,
         master_user_password: typing.Optional[builtins.str] = None,
         preferred_backup_window: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        relational_database_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDatabase.RelationalDatabaseParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        rotate_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        relational_database_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDatabase.RelationalDatabaseParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        rotate_master_user_password: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDatabase``.
 
@@ -3618,6 +3625,7 @@ class CfnDatabaseProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lightsail as lightsail
@@ -3807,7 +3815,7 @@ class CfnDatabaseProps:
     @builtins.property
     def backup_retention(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether automated backup retention is enabled for the database.
 
         Data Import Mode is enabled when ``BackupRetention`` is set to ``false`` , and is disabled when ``BackupRetention`` is set to ``true`` .
@@ -3815,7 +3823,7 @@ class CfnDatabaseProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-database.html#cfn-lightsail-database-backupretention
         '''
         result = self._values.get("backup_retention")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def ca_certificate_identifier(self) -> typing.Optional[builtins.str]:
@@ -3874,29 +3882,29 @@ class CfnDatabaseProps:
     @builtins.property
     def publicly_accessible(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether the database is accessible to anyone on the internet.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-database.html#cfn-lightsail-database-publiclyaccessible
         '''
         result = self._values.get("publicly_accessible")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def relational_database_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDatabase.RelationalDatabaseParameterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDatabase.RelationalDatabaseParameterProperty"]]]]:
         '''An array of parameters for the database.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-database.html#cfn-lightsail-database-relationaldatabaseparameters
         '''
         result = self._values.get("relational_database_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDatabase.RelationalDatabaseParameterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDatabase.RelationalDatabaseParameterProperty"]]]], result)
 
     @builtins.property
     def rotate_master_user_password(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether to change the primary user password to a new, strong password generated by Lightsail .
 
         .. epigraph::
@@ -3906,10 +3914,10 @@ class CfnDatabaseProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-database.html#cfn-lightsail-database-rotatemasteruserpassword
         '''
         result = self._values.get("rotate_master_user_password")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* .
@@ -3920,7 +3928,7 @@ class CfnDatabaseProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-database.html#cfn-lightsail-database-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3948,6 +3956,7 @@ class CfnDisk(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lightsail as lightsail
@@ -3980,15 +3989,15 @@ class CfnDisk(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         disk_name: builtins.str,
         size_in_gb: jsii.Number,
-        add_ons: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDisk.AddOnProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        add_ons: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDisk.AddOnProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         availability_zone: typing.Optional[builtins.str] = None,
-        location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDisk.LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDisk.LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lightsail::Disk``.
 
@@ -4018,7 +4027,7 @@ class CfnDisk(
 
     @jsii.member(jsii_name="arnForDisk")
     @builtins.classmethod
-    def arn_for_disk(cls, resource: _IDiskRef_07664287) -> builtins.str:
+    def arn_for_disk(cls, resource: "_IDiskRef_07664287") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4040,7 +4049,7 @@ class CfnDisk(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDisk", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4111,12 +4120,12 @@ class CfnDisk(
 
     @builtins.property
     @jsii.member(jsii_name="attrIsAttached")
-    def attr_is_attached(self) -> _IResolvable_da3f097b:
+    def attr_is_attached(self) -> "_IResolvable_da3f097b":
         '''A Boolean value indicating whether the disk is attached.
 
         :cloudformationAttribute: IsAttached
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrIsAttached"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrIsAttached"))
 
     @builtins.property
     @jsii.member(jsii_name="attrLocationAvailabilityZone")
@@ -4181,15 +4190,15 @@ class CfnDisk(
 
     @builtins.property
     @jsii.member(jsii_name="diskRef")
-    def disk_ref(self) -> _DiskReference_f2afb242:
+    def disk_ref(self) -> "_DiskReference_f2afb242":
         '''A reference to a Disk resource.'''
-        return typing.cast(_DiskReference_f2afb242, jsii.get(self, "diskRef"))
+        return typing.cast("_DiskReference_f2afb242", jsii.get(self, "diskRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="diskName")
@@ -4221,14 +4230,14 @@ class CfnDisk(
     @jsii.member(jsii_name="addOns")
     def add_ons(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDisk.AddOnProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDisk.AddOnProperty"]]]]:
         '''An array of add-ons for the disk.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDisk.AddOnProperty"]]]], jsii.get(self, "addOns"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDisk.AddOnProperty"]]]], jsii.get(self, "addOns"))
 
     @add_ons.setter
     def add_ons(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDisk.AddOnProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDisk.AddOnProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6bb18dc1c40065ba9615024ffd4c8a5bba5665cf77f22e9fe23067d7b1e0269b)
@@ -4252,14 +4261,14 @@ class CfnDisk(
     @jsii.member(jsii_name="location")
     def location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDisk.LocationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDisk.LocationProperty"]]:
         '''The AWS Region and Availability Zone where the disk is located.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDisk.LocationProperty"]], jsii.get(self, "location"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDisk.LocationProperty"]], jsii.get(self, "location"))
 
     @location.setter
     def location(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDisk.LocationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDisk.LocationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3ad247d59530c9822b391b02d714793c6faf5b661335e33a60f755e84cac854e)
@@ -4268,12 +4277,12 @@ class CfnDisk(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c8d9f7c7c9bb1fcb533d5c13ea1040c3fcc188448ff6c785a662ccf8e4342f96)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4293,7 +4302,7 @@ class CfnDisk(
             self,
             *,
             add_on_type: builtins.str,
-            auto_snapshot_add_on_request: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDisk.AutoSnapshotAddOnProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            auto_snapshot_add_on_request: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDisk.AutoSnapshotAddOnProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             status: typing.Optional[builtins.str] = None,
         ) -> None:
             '''``AddOn`` is a property of the `AWS::Lightsail::Disk <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-disk.html>`_ resource. It describes the add-ons for a disk.
@@ -4351,13 +4360,13 @@ class CfnDisk(
         @builtins.property
         def auto_snapshot_add_on_request(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDisk.AutoSnapshotAddOnProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDisk.AutoSnapshotAddOnProperty"]]:
             '''The parameters for the automatic snapshot add-on, such as the daily time when an automatic snapshot will be created.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-disk-addon.html#cfn-lightsail-disk-addon-autosnapshotaddonrequest
             '''
             result = self._values.get("auto_snapshot_add_on_request")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDisk.AutoSnapshotAddOnProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDisk.AutoSnapshotAddOnProperty"]], result)
 
         @builtins.property
         def status(self) -> typing.Optional[builtins.str]:
@@ -4534,10 +4543,10 @@ class CfnDiskProps:
         *,
         disk_name: builtins.str,
         size_in_gb: jsii.Number,
-        add_ons: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDisk.AddOnProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        add_ons: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDisk.AddOnProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         availability_zone: typing.Optional[builtins.str] = None,
-        location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDisk.LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDisk.LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDisk``.
 
@@ -4553,6 +4562,7 @@ class CfnDiskProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lightsail as lightsail
@@ -4626,7 +4636,7 @@ class CfnDiskProps:
     @builtins.property
     def add_ons(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDisk.AddOnProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDisk.AddOnProperty"]]]]:
         '''An array of add-ons for the disk.
 
         .. epigraph::
@@ -4636,7 +4646,7 @@ class CfnDiskProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-disk.html#cfn-lightsail-disk-addons
         '''
         result = self._values.get("add_ons")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDisk.AddOnProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDisk.AddOnProperty"]]]], result)
 
     @builtins.property
     def availability_zone(self) -> typing.Optional[builtins.str]:
@@ -4650,16 +4660,16 @@ class CfnDiskProps:
     @builtins.property
     def location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDisk.LocationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDisk.LocationProperty"]]:
         '''The AWS Region and Availability Zone where the disk is located.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-disk.html#cfn-lightsail-disk-location
         '''
         result = self._values.get("location")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDisk.LocationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDisk.LocationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* .
@@ -4670,7 +4680,7 @@ class CfnDiskProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-disk.html#cfn-lightsail-disk-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4698,6 +4708,7 @@ class CfnDiskSnapshot(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lightsail as lightsail
@@ -4716,12 +4727,12 @@ class CfnDiskSnapshot(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         disk_name: builtins.str,
         disk_snapshot_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lightsail::DiskSnapshot``.
 
@@ -4745,7 +4756,7 @@ class CfnDiskSnapshot(
     @builtins.classmethod
     def arn_for_disk_snapshot(
         cls,
-        resource: _IDiskSnapshotRef_954b35e1,
+        resource: "_IDiskSnapshotRef_954b35e1",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -4768,7 +4779,7 @@ class CfnDiskSnapshot(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDiskSnapshot", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4826,21 +4837,21 @@ class CfnDiskSnapshot(
 
     @builtins.property
     @jsii.member(jsii_name="attrIsFromAutoSnapshot")
-    def attr_is_from_auto_snapshot(self) -> _IResolvable_da3f097b:
+    def attr_is_from_auto_snapshot(self) -> "_IResolvable_da3f097b":
         '''A Boolean value indicating whether the snapshot was created from an automatic snapshot.
 
         :cloudformationAttribute: IsFromAutoSnapshot
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrIsFromAutoSnapshot"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrIsFromAutoSnapshot"))
 
     @builtins.property
     @jsii.member(jsii_name="attrLocation")
-    def attr_location(self) -> _IResolvable_da3f097b:
+    def attr_location(self) -> "_IResolvable_da3f097b":
         '''The AWS Region and Availability Zone where the disk snapshot was created.
 
         :cloudformationAttribute: Location
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLocation"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrLocation"))
 
     @builtins.property
     @jsii.member(jsii_name="attrProgress")
@@ -4891,9 +4902,9 @@ class CfnDiskSnapshot(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4902,9 +4913,9 @@ class CfnDiskSnapshot(
 
     @builtins.property
     @jsii.member(jsii_name="diskSnapshotRef")
-    def disk_snapshot_ref(self) -> _DiskSnapshotReference_61ae524e:
+    def disk_snapshot_ref(self) -> "_DiskSnapshotReference_61ae524e":
         '''A reference to a DiskSnapshot resource.'''
-        return typing.cast(_DiskSnapshotReference_61ae524e, jsii.get(self, "diskSnapshotRef"))
+        return typing.cast("_DiskSnapshotReference_61ae524e", jsii.get(self, "diskSnapshotRef"))
 
     @builtins.property
     @jsii.member(jsii_name="diskName")
@@ -4934,12 +4945,12 @@ class CfnDiskSnapshot(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tag keys and optional values for the resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9132cbc1b1f3a90290073917b7b4c55b2c748bfade6bc8f30bf990e4d617be32)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5034,7 +5045,7 @@ class CfnDiskSnapshotProps:
         *,
         disk_name: builtins.str,
         disk_snapshot_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDiskSnapshot``.
 
@@ -5047,6 +5058,7 @@ class CfnDiskSnapshotProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lightsail as lightsail
@@ -5095,7 +5107,7 @@ class CfnDiskSnapshotProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tag keys and optional values for the resource.
 
         For more information about tags in Lightsail, see the `Amazon Lightsail Developer Guide <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-tags>`_ .
@@ -5103,7 +5115,7 @@ class CfnDiskSnapshotProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-disksnapshot.html#cfn-lightsail-disksnapshot-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5135,6 +5147,7 @@ class CfnDistribution(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lightsail as lightsail
@@ -5187,19 +5200,19 @@ class CfnDistribution(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         bundle_id: builtins.str,
-        default_cache_behavior: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.CacheBehaviorProperty", typing.Dict[builtins.str, typing.Any]]],
+        default_cache_behavior: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.CacheBehaviorProperty", typing.Dict[builtins.str, typing.Any]]],
         distribution_name: builtins.str,
-        origin: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.InputOriginProperty", typing.Dict[builtins.str, typing.Any]]],
-        cache_behaviors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.CacheBehaviorPerPathProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        cache_behavior_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.CacheSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        origin: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.InputOriginProperty", typing.Dict[builtins.str, typing.Any]]],
+        cache_behaviors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.CacheBehaviorPerPathProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        cache_behavior_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.CacheSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         certificate_name: typing.Optional[builtins.str] = None,
         ip_address_type: typing.Optional[builtins.str] = None,
-        is_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        is_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lightsail::Distribution``.
 
@@ -5237,7 +5250,10 @@ class CfnDistribution(
 
     @jsii.member(jsii_name="arnForDistribution")
     @builtins.classmethod
-    def arn_for_distribution(cls, resource: _IDistributionRef_512dbafd) -> builtins.str:
+    def arn_for_distribution(
+        cls,
+        resource: "_IDistributionRef_512dbafd",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5259,7 +5275,7 @@ class CfnDistribution(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDistribution", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5290,12 +5306,12 @@ class CfnDistribution(
 
     @builtins.property
     @jsii.member(jsii_name="attrAbleToUpdateBundle")
-    def attr_able_to_update_bundle(self) -> _IResolvable_da3f097b:
+    def attr_able_to_update_bundle(self) -> "_IResolvable_da3f097b":
         '''Indicates whether you can update the distribution’s current bundle to another bundle.
 
         :cloudformationAttribute: AbleToUpdateBundle
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrAbleToUpdateBundle"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrAbleToUpdateBundle"))
 
     @builtins.property
     @jsii.member(jsii_name="attrDistributionArn")
@@ -5322,15 +5338,15 @@ class CfnDistribution(
 
     @builtins.property
     @jsii.member(jsii_name="distributionRef")
-    def distribution_ref(self) -> _DistributionReference_1f46b65d:
+    def distribution_ref(self) -> "_DistributionReference_1f46b65d":
         '''A reference to a Distribution resource.'''
-        return typing.cast(_DistributionReference_1f46b65d, jsii.get(self, "distributionRef"))
+        return typing.cast("_DistributionReference_1f46b65d", jsii.get(self, "distributionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="bundleId")
@@ -5349,14 +5365,14 @@ class CfnDistribution(
     @jsii.member(jsii_name="defaultCacheBehavior")
     def default_cache_behavior(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnDistribution.CacheBehaviorProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheBehaviorProperty"]:
         '''An object that describes the default cache behavior of the distribution.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDistribution.CacheBehaviorProperty"], jsii.get(self, "defaultCacheBehavior"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheBehaviorProperty"], jsii.get(self, "defaultCacheBehavior"))
 
     @default_cache_behavior.setter
     def default_cache_behavior(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnDistribution.CacheBehaviorProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheBehaviorProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__60f134014dad7eff652ae9a0a8f31d075d567a38120fb79b22fc79b66ef4afbf)
@@ -5380,14 +5396,14 @@ class CfnDistribution(
     @jsii.member(jsii_name="origin")
     def origin(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnDistribution.InputOriginProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDistribution.InputOriginProperty"]:
         '''An object that describes the origin resource of the distribution, such as a Lightsail instance, bucket, or load balancer.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDistribution.InputOriginProperty"], jsii.get(self, "origin"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDistribution.InputOriginProperty"], jsii.get(self, "origin"))
 
     @origin.setter
     def origin(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnDistribution.InputOriginProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnDistribution.InputOriginProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7aef6fbf79a3b5e2f5250752a43b5ce48241a88650e2ca85121c71c9eff2e8db)
@@ -5398,14 +5414,14 @@ class CfnDistribution(
     @jsii.member(jsii_name="cacheBehaviors")
     def cache_behaviors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CacheBehaviorPerPathProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheBehaviorPerPathProperty"]]]]:
         '''An array of objects that describe the per-path cache behavior of the distribution.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CacheBehaviorPerPathProperty"]]]], jsii.get(self, "cacheBehaviors"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheBehaviorPerPathProperty"]]]], jsii.get(self, "cacheBehaviors"))
 
     @cache_behaviors.setter
     def cache_behaviors(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CacheBehaviorPerPathProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheBehaviorPerPathProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fa33d1002424823136283db85abedb68f706cfe801b8cdda97985832959b3635)
@@ -5416,14 +5432,14 @@ class CfnDistribution(
     @jsii.member(jsii_name="cacheBehaviorSettings")
     def cache_behavior_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CacheSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheSettingsProperty"]]:
         '''An object that describes the cache behavior settings of the distribution.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CacheSettingsProperty"]], jsii.get(self, "cacheBehaviorSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheSettingsProperty"]], jsii.get(self, "cacheBehaviorSettings"))
 
     @cache_behavior_settings.setter
     def cache_behavior_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CacheSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__760802ef8ce7a6adca268629830855308c05a61f03a8580e810b0493e8340ff0)
@@ -5460,14 +5476,14 @@ class CfnDistribution(
     @jsii.member(jsii_name="isEnabled")
     def is_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether the distribution is enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "isEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "isEnabled"))
 
     @is_enabled.setter
     def is_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__45ad4bf8bbe0e7c8404bc88c174e7fc60ea632f80e1214c05127c076aa76106d)
@@ -5476,12 +5492,12 @@ class CfnDistribution(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__908b31b9ccd34cec50f1719ac43f4d386695ad72d71eff4b6177f5f0cbae1d41)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5669,9 +5685,9 @@ class CfnDistribution(
             allowed_http_methods: typing.Optional[builtins.str] = None,
             cached_http_methods: typing.Optional[builtins.str] = None,
             default_ttl: typing.Optional[jsii.Number] = None,
-            forwarded_cookies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.CookieObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            forwarded_headers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.HeaderObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            forwarded_query_strings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.QueryStringObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            forwarded_cookies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.CookieObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            forwarded_headers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.HeaderObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            forwarded_query_strings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.QueryStringObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             maximum_ttl: typing.Optional[jsii.Number] = None,
             minimum_ttl: typing.Optional[jsii.Number] = None,
         ) -> None:
@@ -5792,7 +5808,7 @@ class CfnDistribution(
         @builtins.property
         def forwarded_cookies(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CookieObjectProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CookieObjectProperty"]]:
             '''An object that describes the cookies that are forwarded to the origin.
 
             Your content is cached based on the cookies that are forwarded.
@@ -5800,12 +5816,12 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-distribution-cachesettings.html#cfn-lightsail-distribution-cachesettings-forwardedcookies
             '''
             result = self._values.get("forwarded_cookies")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CookieObjectProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CookieObjectProperty"]], result)
 
         @builtins.property
         def forwarded_headers(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.HeaderObjectProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.HeaderObjectProperty"]]:
             '''An object that describes the headers that are forwarded to the origin.
 
             Your content is cached based on the headers that are forwarded.
@@ -5813,12 +5829,12 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-distribution-cachesettings.html#cfn-lightsail-distribution-cachesettings-forwardedheaders
             '''
             result = self._values.get("forwarded_headers")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.HeaderObjectProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.HeaderObjectProperty"]], result)
 
         @builtins.property
         def forwarded_query_strings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.QueryStringObjectProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.QueryStringObjectProperty"]]:
             '''An object that describes the query strings that are forwarded to the origin.
 
             Your content is cached based on the query strings that are forwarded.
@@ -5826,7 +5842,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-distribution-cachesettings.html#cfn-lightsail-distribution-cachesettings-forwardedquerystrings
             '''
             result = self._values.get("forwarded_query_strings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.QueryStringObjectProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.QueryStringObjectProperty"]], result)
 
         @builtins.property
         def maximum_ttl(self) -> typing.Optional[jsii.Number]:
@@ -6122,7 +6138,7 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            option: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            option: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             query_strings_allow_list: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''``QueryStringObject`` is a property of the `CacheSettings <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-distribution-cachesettings.html>`_ property. It describes the query string parameters that an Amazon Lightsail content delivery network (CDN) distribution to bases caching on.
@@ -6159,13 +6175,13 @@ class CfnDistribution(
         @builtins.property
         def option(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the distribution forwards and caches based on query strings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-distribution-querystringobject.html#cfn-lightsail-distribution-querystringobject-option
             '''
             result = self._values.get("option")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def query_strings_allow_list(
@@ -6215,15 +6231,15 @@ class CfnDistributionProps:
         self,
         *,
         bundle_id: builtins.str,
-        default_cache_behavior: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.CacheBehaviorProperty, typing.Dict[builtins.str, typing.Any]]],
+        default_cache_behavior: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.CacheBehaviorProperty", typing.Dict[builtins.str, typing.Any]]],
         distribution_name: builtins.str,
-        origin: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.InputOriginProperty, typing.Dict[builtins.str, typing.Any]]],
-        cache_behaviors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.CacheBehaviorPerPathProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        cache_behavior_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.CacheSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        origin: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.InputOriginProperty", typing.Dict[builtins.str, typing.Any]]],
+        cache_behaviors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.CacheBehaviorPerPathProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        cache_behavior_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.CacheSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         certificate_name: typing.Optional[builtins.str] = None,
         ip_address_type: typing.Optional[builtins.str] = None,
-        is_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        is_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDistribution``.
 
@@ -6243,6 +6259,7 @@ class CfnDistributionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lightsail as lightsail
@@ -6336,14 +6353,14 @@ class CfnDistributionProps:
     @builtins.property
     def default_cache_behavior(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnDistribution.CacheBehaviorProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheBehaviorProperty"]:
         '''An object that describes the default cache behavior of the distribution.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-distribution.html#cfn-lightsail-distribution-defaultcachebehavior
         '''
         result = self._values.get("default_cache_behavior")
         assert result is not None, "Required property 'default_cache_behavior' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnDistribution.CacheBehaviorProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheBehaviorProperty"], result)
 
     @builtins.property
     def distribution_name(self) -> builtins.str:
@@ -6358,7 +6375,7 @@ class CfnDistributionProps:
     @builtins.property
     def origin(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnDistribution.InputOriginProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDistribution.InputOriginProperty"]:
         '''An object that describes the origin resource of the distribution, such as a Lightsail instance, bucket, or load balancer.
 
         The distribution pulls, caches, and serves content from the origin.
@@ -6367,29 +6384,29 @@ class CfnDistributionProps:
         '''
         result = self._values.get("origin")
         assert result is not None, "Required property 'origin' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnDistribution.InputOriginProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDistribution.InputOriginProperty"], result)
 
     @builtins.property
     def cache_behaviors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDistribution.CacheBehaviorPerPathProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheBehaviorPerPathProperty"]]]]:
         '''An array of objects that describe the per-path cache behavior of the distribution.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-distribution.html#cfn-lightsail-distribution-cachebehaviors
         '''
         result = self._values.get("cache_behaviors")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDistribution.CacheBehaviorPerPathProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheBehaviorPerPathProperty"]]]], result)
 
     @builtins.property
     def cache_behavior_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDistribution.CacheSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheSettingsProperty"]]:
         '''An object that describes the cache behavior settings of the distribution.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-distribution.html#cfn-lightsail-distribution-cachebehaviorsettings
         '''
         result = self._values.get("cache_behavior_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDistribution.CacheSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheSettingsProperty"]], result)
 
     @builtins.property
     def certificate_name(self) -> typing.Optional[builtins.str]:
@@ -6414,16 +6431,16 @@ class CfnDistributionProps:
     @builtins.property
     def is_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether the distribution is enabled.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-distribution.html#cfn-lightsail-distribution-isenabled
         '''
         result = self._values.get("is_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* .
@@ -6434,7 +6451,7 @@ class CfnDistributionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-distribution.html#cfn-lightsail-distribution-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6462,6 +6479,7 @@ class CfnDomain(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lightsail as lightsail
@@ -6488,12 +6506,12 @@ class CfnDomain(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name: builtins.str,
-        domain_entries: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.DomainEntryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        domain_entries: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomain.DomainEntryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lightsail::Domain``.
 
@@ -6515,7 +6533,7 @@ class CfnDomain(
 
     @jsii.member(jsii_name="arnForDomain")
     @builtins.classmethod
-    def arn_for_domain(cls, resource: _IDomainRef_3b81a960) -> builtins.str:
+    def arn_for_domain(cls, resource: "_IDomainRef_3b81a960") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -6537,7 +6555,7 @@ class CfnDomain(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomain", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6586,12 +6604,12 @@ class CfnDomain(
 
     @builtins.property
     @jsii.member(jsii_name="attrLocation")
-    def attr_location(self) -> _IResolvable_da3f097b:
+    def attr_location(self) -> "_IResolvable_da3f097b":
         '''The AWS Region and Availability Zone where the domain was created (read-only).
 
         :cloudformationAttribute: Location
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLocation"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrLocation"))
 
     @builtins.property
     @jsii.member(jsii_name="attrResourceType")
@@ -6615,9 +6633,9 @@ class CfnDomain(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -6626,9 +6644,9 @@ class CfnDomain(
 
     @builtins.property
     @jsii.member(jsii_name="domainRef")
-    def domain_ref(self) -> _DomainReference_8cd3277c:
+    def domain_ref(self) -> "_DomainReference_8cd3277c":
         '''A reference to a Domain resource.'''
-        return typing.cast(_DomainReference_8cd3277c, jsii.get(self, "domainRef"))
+        return typing.cast("_DomainReference_8cd3277c", jsii.get(self, "domainRef"))
 
     @builtins.property
     @jsii.member(jsii_name="domainName")
@@ -6647,14 +6665,14 @@ class CfnDomain(
     @jsii.member(jsii_name="domainEntries")
     def domain_entries(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDomain.DomainEntryProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDomain.DomainEntryProperty"]]]]:
         '''An array of key-value pairs containing information about the domain entries.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDomain.DomainEntryProperty"]]]], jsii.get(self, "domainEntries"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDomain.DomainEntryProperty"]]]], jsii.get(self, "domainEntries"))
 
     @domain_entries.setter
     def domain_entries(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDomain.DomainEntryProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDomain.DomainEntryProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__751d0aaf99cc70b85edb0ece306cc421fe3ebfd62efaace5ee34838f421756e1)
@@ -6663,12 +6681,12 @@ class CfnDomain(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tag keys and optional values for the resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0d269539a28b4197d92a71ab41d2713cc83b7c390022d51ef6b28f0b7f9757b8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6693,7 +6711,7 @@ class CfnDomain(
             target: builtins.str,
             type: builtins.str,
             id: typing.Optional[builtins.str] = None,
-            is_alias: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            is_alias: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Describes a domain recordset entry.
 
@@ -6794,7 +6812,7 @@ class CfnDomain(
         @builtins.property
         def is_alias(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When ``true`` , specifies whether the domain entry is an alias used by the Lightsail load balancer, Lightsail container service, Lightsail content delivery network (CDN) distribution, or another AWS resource.
 
             You can include an alias (A type) record in your request, which points to the DNS name of a load balancer, container service, CDN distribution, or other AWS resource and routes traffic to that resource.
@@ -6802,7 +6820,7 @@ class CfnDomain(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-domain-domainentry.html#cfn-lightsail-domain-domainentry-isalias
             '''
             result = self._values.get("is_alias")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6903,8 +6921,8 @@ class CfnDomainProps:
         self,
         *,
         domain_name: builtins.str,
-        domain_entries: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.DomainEntryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        domain_entries: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomain.DomainEntryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDomain``.
 
@@ -6917,6 +6935,7 @@ class CfnDomainProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lightsail as lightsail
@@ -6966,16 +6985,16 @@ class CfnDomainProps:
     @builtins.property
     def domain_entries(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDomain.DomainEntryProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDomain.DomainEntryProperty"]]]]:
         '''An array of key-value pairs containing information about the domain entries.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-domain.html#cfn-lightsail-domain-domainentries
         '''
         result = self._values.get("domain_entries")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDomain.DomainEntryProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDomain.DomainEntryProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tag keys and optional values for the resource.
 
         For more information about tags in Lightsail, see the `Amazon Lightsail Developer Guide <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-tags>`_ .
@@ -6983,7 +7002,7 @@ class CfnDomainProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-domain.html#cfn-lightsail-domain-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7011,6 +7030,7 @@ class CfnInstance(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lightsail as lightsail
@@ -7084,20 +7104,20 @@ class CfnInstance(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         blueprint_id: builtins.str,
         bundle_id: builtins.str,
         instance_name: builtins.str,
-        add_ons: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstance.AddOnProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        add_ons: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.AddOnProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         availability_zone: typing.Optional[builtins.str] = None,
-        hardware: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstance.HardwareProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        hardware: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.HardwareProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         key_pair_name: typing.Optional[builtins.str] = None,
-        location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstance.LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        networking: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstance.NetworkingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        state: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstance.StateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        networking: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.NetworkingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        state: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.StateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         user_data: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Lightsail::Instance``.
@@ -7140,7 +7160,7 @@ class CfnInstance(
 
     @jsii.member(jsii_name="arnForInstance")
     @builtins.classmethod
-    def arn_for_instance(cls, resource: _IInstanceRef_f1c05940) -> builtins.str:
+    def arn_for_instance(cls, resource: "_IInstanceRef_f1c05940") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -7162,7 +7182,7 @@ class CfnInstance(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInstance", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7229,12 +7249,12 @@ class CfnInstance(
 
     @builtins.property
     @jsii.member(jsii_name="attrIsStaticIp")
-    def attr_is_static_ip(self) -> _IResolvable_da3f097b:
+    def attr_is_static_ip(self) -> "_IResolvable_da3f097b":
         '''A Boolean value indicating whether the instance has a static IP assigned to it.
 
         :cloudformationAttribute: IsStaticIp
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrIsStaticIp"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrIsStaticIp"))
 
     @builtins.property
     @jsii.member(jsii_name="attrLocationAvailabilityZone")
@@ -7344,15 +7364,15 @@ class CfnInstance(
 
     @builtins.property
     @jsii.member(jsii_name="instanceRef")
-    def instance_ref(self) -> _InstanceReference_f3b82c18:
+    def instance_ref(self) -> "_InstanceReference_f3b82c18":
         '''A reference to a Instance resource.'''
-        return typing.cast(_InstanceReference_f3b82c18, jsii.get(self, "instanceRef"))
+        return typing.cast("_InstanceReference_f3b82c18", jsii.get(self, "instanceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="blueprintId")
@@ -7397,14 +7417,14 @@ class CfnInstance(
     @jsii.member(jsii_name="addOns")
     def add_ons(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstance.AddOnProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.AddOnProperty"]]]]:
         '''An array of add-ons for the instance.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstance.AddOnProperty"]]]], jsii.get(self, "addOns"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.AddOnProperty"]]]], jsii.get(self, "addOns"))
 
     @add_ons.setter
     def add_ons(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstance.AddOnProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.AddOnProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a099dffb98d8133f25aa3f4894f04b7838ec68531bc89457bc7ca10ffe65fe77)
@@ -7428,14 +7448,14 @@ class CfnInstance(
     @jsii.member(jsii_name="hardware")
     def hardware(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.HardwareProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.HardwareProperty"]]:
         '''The hardware properties for the instance, such as the vCPU count, attached disks, and amount of RAM.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.HardwareProperty"]], jsii.get(self, "hardware"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.HardwareProperty"]], jsii.get(self, "hardware"))
 
     @hardware.setter
     def hardware(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.HardwareProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.HardwareProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__918e77b58ce707e3fd0fe417aa8b0279b976fecbc63c99bf33fb6c34fb56e06f)
@@ -7459,14 +7479,14 @@ class CfnInstance(
     @jsii.member(jsii_name="location")
     def location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.LocationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.LocationProperty"]]:
         '''The location for the instance, such as the AWS Region and Availability Zone.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.LocationProperty"]], jsii.get(self, "location"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.LocationProperty"]], jsii.get(self, "location"))
 
     @location.setter
     def location(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.LocationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.LocationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1796032b802331052ff1dc453b46bc6f3d89e44ed47ae0a3b75c51d5f4ec330f)
@@ -7477,14 +7497,14 @@ class CfnInstance(
     @jsii.member(jsii_name="networking")
     def networking(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.NetworkingProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.NetworkingProperty"]]:
         '''The public ports and the monthly amount of data transfer allocated for the instance.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.NetworkingProperty"]], jsii.get(self, "networking"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.NetworkingProperty"]], jsii.get(self, "networking"))
 
     @networking.setter
     def networking(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.NetworkingProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.NetworkingProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3ae0605c3ecf986c476ae405f626b73a0ead2ba85a44089e88662ab1e59b4436)
@@ -7495,14 +7515,14 @@ class CfnInstance(
     @jsii.member(jsii_name="state")
     def state(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.StateProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.StateProperty"]]:
         '''The status code and the state (for example, ``running`` ) of the instance.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.StateProperty"]], jsii.get(self, "state"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.StateProperty"]], jsii.get(self, "state"))
 
     @state.setter
     def state(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.StateProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.StateProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8016843d96a81bf84ad05c8259de853033dbbd7a359485955cea3d46de80c536)
@@ -7511,12 +7531,12 @@ class CfnInstance(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__af09458d52eaea13266eac32d46975c0c7fb0afae18d4af7c41cdbda91b257f5)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7549,7 +7569,7 @@ class CfnInstance(
             self,
             *,
             add_on_type: builtins.str,
-            auto_snapshot_add_on_request: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstance.AutoSnapshotAddOnProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            auto_snapshot_add_on_request: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.AutoSnapshotAddOnProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             status: typing.Optional[builtins.str] = None,
         ) -> None:
             '''``AddOn`` is a property of the `AWS::Lightsail::Instance <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instance.html>`_ resource. It describes the add-ons for an instance.
@@ -7607,13 +7627,13 @@ class CfnInstance(
         @builtins.property
         def auto_snapshot_add_on_request(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.AutoSnapshotAddOnProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.AutoSnapshotAddOnProperty"]]:
             '''The parameters for the automatic snapshot add-on, such as the daily time when an automatic snapshot will be created.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-instance-addon.html#cfn-lightsail-instance-addon-autosnapshotaddonrequest
             '''
             result = self._values.get("auto_snapshot_add_on_request")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.AutoSnapshotAddOnProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.AutoSnapshotAddOnProperty"]], result)
 
         @builtins.property
         def status(self) -> typing.Optional[builtins.str]:
@@ -7720,7 +7740,7 @@ class CfnInstance(
             attached_to: typing.Optional[builtins.str] = None,
             attachment_state: typing.Optional[builtins.str] = None,
             iops: typing.Optional[jsii.Number] = None,
-            is_system_disk: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            is_system_disk: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             size_in_gb: typing.Optional[builtins.str] = None,
         ) -> None:
             '''``Disk`` is a property of the `Hardware <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-instance-hardware.html>`_ property. It describes a disk attached to an instance.
@@ -7832,13 +7852,13 @@ class CfnInstance(
         @builtins.property
         def is_system_disk(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean value indicating whether this disk is a system disk (has an operating system loaded on it).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-instance-disk.html#cfn-lightsail-instance-disk-issystemdisk
             '''
             result = self._values.get("is_system_disk")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def size_in_gb(self) -> typing.Optional[builtins.str]:
@@ -7874,7 +7894,7 @@ class CfnInstance(
             self,
             *,
             cpu_count: typing.Optional[jsii.Number] = None,
-            disks: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstance.DiskProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            disks: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.DiskProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             ram_size_in_gb: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''``Hardware`` is a property of the `AWS::Lightsail::Instance <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instance.html>`_ resource. It describes the hardware properties for the instance, such as the vCPU count, attached disks, and amount of RAM.
@@ -7937,7 +7957,7 @@ class CfnInstance(
         @builtins.property
         def disks(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstance.DiskProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.DiskProperty"]]]]:
             '''The disks attached to the instance.
 
             The instance restarts when performing an attach disk or detach disk request. This resets the public IP address of your instance if a static IP isn't attached to it.
@@ -7945,7 +7965,7 @@ class CfnInstance(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-instance-hardware.html#cfn-lightsail-instance-hardware-disks
             '''
             result = self._values.get("disks")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstance.DiskProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.DiskProperty"]]]], result)
 
         @builtins.property
         def ram_size_in_gb(self) -> typing.Optional[jsii.Number]:
@@ -8108,8 +8128,8 @@ class CfnInstance(
         def __init__(
             self,
             *,
-            ports: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstance.PortProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            monthly_transfer: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstance.MonthlyTransferProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ports: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.PortProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            monthly_transfer: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.MonthlyTransferProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''``Networking`` is a property of the `AWS::Lightsail::Instance <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instance.html>`_ resource. It describes the public ports and the monthly amount of data transfer allocated for the instance.
 
@@ -8158,25 +8178,25 @@ class CfnInstance(
         @builtins.property
         def ports(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstance.PortProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.PortProperty"]]]:
             '''An array of ports to open on the instance.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-instance-networking.html#cfn-lightsail-instance-networking-ports
             '''
             result = self._values.get("ports")
             assert result is not None, "Required property 'ports' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstance.PortProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.PortProperty"]]], result)
 
         @builtins.property
         def monthly_transfer(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.MonthlyTransferProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.MonthlyTransferProperty"]]:
             '''The monthly amount of data transfer, in GB, allocated for the instance.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lightsail-instance-networking.html#cfn-lightsail-instance-networking-monthlytransfer
             '''
             result = self._values.get("monthly_transfer")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.MonthlyTransferProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.MonthlyTransferProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8527,14 +8547,14 @@ class CfnInstanceProps:
         blueprint_id: builtins.str,
         bundle_id: builtins.str,
         instance_name: builtins.str,
-        add_ons: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstance.AddOnProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        add_ons: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.AddOnProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         availability_zone: typing.Optional[builtins.str] = None,
-        hardware: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstance.HardwareProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        hardware: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.HardwareProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         key_pair_name: typing.Optional[builtins.str] = None,
-        location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstance.LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        networking: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstance.NetworkingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        state: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstance.StateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        networking: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.NetworkingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        state: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.StateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         user_data: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnInstance``.
@@ -8557,6 +8577,7 @@ class CfnInstanceProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lightsail as lightsail
@@ -8698,7 +8719,7 @@ class CfnInstanceProps:
     @builtins.property
     def add_ons(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInstance.AddOnProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.AddOnProperty"]]]]:
         '''An array of add-ons for the instance.
 
         .. epigraph::
@@ -8708,7 +8729,7 @@ class CfnInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instance.html#cfn-lightsail-instance-addons
         '''
         result = self._values.get("add_ons")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInstance.AddOnProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.AddOnProperty"]]]], result)
 
     @builtins.property
     def availability_zone(self) -> typing.Optional[builtins.str]:
@@ -8722,7 +8743,7 @@ class CfnInstanceProps:
     @builtins.property
     def hardware(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInstance.HardwareProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.HardwareProperty"]]:
         '''The hardware properties for the instance, such as the vCPU count, attached disks, and amount of RAM.
 
         .. epigraph::
@@ -8732,7 +8753,7 @@ class CfnInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instance.html#cfn-lightsail-instance-hardware
         '''
         result = self._values.get("hardware")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInstance.HardwareProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.HardwareProperty"]], result)
 
     @builtins.property
     def key_pair_name(self) -> typing.Optional[builtins.str]:
@@ -8748,7 +8769,7 @@ class CfnInstanceProps:
     @builtins.property
     def location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInstance.LocationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.LocationProperty"]]:
         '''The location for the instance, such as the AWS Region and Availability Zone.
 
         .. epigraph::
@@ -8758,23 +8779,23 @@ class CfnInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instance.html#cfn-lightsail-instance-location
         '''
         result = self._values.get("location")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInstance.LocationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.LocationProperty"]], result)
 
     @builtins.property
     def networking(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInstance.NetworkingProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.NetworkingProperty"]]:
         '''The public ports and the monthly amount of data transfer allocated for the instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instance.html#cfn-lightsail-instance-networking
         '''
         result = self._values.get("networking")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInstance.NetworkingProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.NetworkingProperty"]], result)
 
     @builtins.property
     def state(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInstance.StateProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.StateProperty"]]:
         '''The status code and the state (for example, ``running`` ) of the instance.
 
         .. epigraph::
@@ -8784,10 +8805,10 @@ class CfnInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instance.html#cfn-lightsail-instance-state
         '''
         result = self._values.get("state")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInstance.StateProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.StateProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* .
@@ -8798,7 +8819,7 @@ class CfnInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instance.html#cfn-lightsail-instance-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def user_data(self) -> typing.Optional[builtins.str]:
@@ -8840,6 +8861,7 @@ class CfnInstanceSnapshot(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lightsail as lightsail
@@ -8858,12 +8880,12 @@ class CfnInstanceSnapshot(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         instance_name: builtins.str,
         instance_snapshot_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lightsail::InstanceSnapshot``.
 
@@ -8889,7 +8911,7 @@ class CfnInstanceSnapshot(
     @builtins.classmethod
     def arn_for_instance_snapshot(
         cls,
-        resource: _IInstanceSnapshotRef_c18fd10c,
+        resource: "_IInstanceSnapshotRef_c18fd10c",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -8912,7 +8934,7 @@ class CfnInstanceSnapshot(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInstanceSnapshot", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8970,21 +8992,21 @@ class CfnInstanceSnapshot(
 
     @builtins.property
     @jsii.member(jsii_name="attrIsFromAutoSnapshot")
-    def attr_is_from_auto_snapshot(self) -> _IResolvable_da3f097b:
+    def attr_is_from_auto_snapshot(self) -> "_IResolvable_da3f097b":
         '''A Boolean value indicating whether the snapshot was created from an automatic snapshot.
 
         :cloudformationAttribute: IsFromAutoSnapshot
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrIsFromAutoSnapshot"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrIsFromAutoSnapshot"))
 
     @builtins.property
     @jsii.member(jsii_name="attrLocation")
-    def attr_location(self) -> _IResolvable_da3f097b:
+    def attr_location(self) -> "_IResolvable_da3f097b":
         '''The region name and Availability Zone where you created the snapshot.
 
         :cloudformationAttribute: Location
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLocation"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrLocation"))
 
     @builtins.property
     @jsii.member(jsii_name="attrResourceType")
@@ -9026,9 +9048,9 @@ class CfnInstanceSnapshot(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -9037,9 +9059,9 @@ class CfnInstanceSnapshot(
 
     @builtins.property
     @jsii.member(jsii_name="instanceSnapshotRef")
-    def instance_snapshot_ref(self) -> _InstanceSnapshotReference_90d3b17d:
+    def instance_snapshot_ref(self) -> "_InstanceSnapshotReference_90d3b17d":
         '''A reference to a InstanceSnapshot resource.'''
-        return typing.cast(_InstanceSnapshotReference_90d3b17d, jsii.get(self, "instanceSnapshotRef"))
+        return typing.cast("_InstanceSnapshotReference_90d3b17d", jsii.get(self, "instanceSnapshotRef"))
 
     @builtins.property
     @jsii.member(jsii_name="instanceName")
@@ -9069,12 +9091,12 @@ class CfnInstanceSnapshot(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tag keys and optional values for the resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__898443da7c4202ed939a55cb32add087c6d691980a2787732cd68cb7696ab8cd)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9171,7 +9193,7 @@ class CfnInstanceSnapshotProps:
         *,
         instance_name: builtins.str,
         instance_snapshot_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnInstanceSnapshot``.
 
@@ -9184,6 +9206,7 @@ class CfnInstanceSnapshotProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lightsail as lightsail
@@ -9232,7 +9255,7 @@ class CfnInstanceSnapshotProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tag keys and optional values for the resource.
 
         For more information about tags in Lightsail, see the `Amazon Lightsail Developer Guide <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-tags>`_ .
@@ -9240,7 +9263,7 @@ class CfnInstanceSnapshotProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-instancesnapshot.html#cfn-lightsail-instancesnapshot-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9272,6 +9295,7 @@ class CfnLoadBalancer(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lightsail as lightsail
@@ -9296,7 +9320,7 @@ class CfnLoadBalancer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         instance_port: jsii.Number,
@@ -9304,9 +9328,9 @@ class CfnLoadBalancer(
         attached_instances: typing.Optional[typing.Sequence[builtins.str]] = None,
         health_check_path: typing.Optional[builtins.str] = None,
         ip_address_type: typing.Optional[builtins.str] = None,
-        session_stickiness_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        session_stickiness_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         session_stickiness_lb_cookie_duration_seconds: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         tls_policy_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Lightsail::LoadBalancer``.
@@ -9345,7 +9369,7 @@ class CfnLoadBalancer(
     @builtins.classmethod
     def arn_for_load_balancer(
         cls,
-        resource: _ILoadBalancerRef_7b5a1371,
+        resource: "_ILoadBalancerRef_7b5a1371",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -9368,7 +9392,7 @@ class CfnLoadBalancer(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLoadBalancer", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9413,15 +9437,15 @@ class CfnLoadBalancer(
 
     @builtins.property
     @jsii.member(jsii_name="loadBalancerRef")
-    def load_balancer_ref(self) -> _LoadBalancerReference_c8dab726:
+    def load_balancer_ref(self) -> "_LoadBalancerReference_c8dab726":
         '''A reference to a LoadBalancer resource.'''
-        return typing.cast(_LoadBalancerReference_c8dab726, jsii.get(self, "loadBalancerRef"))
+        return typing.cast("_LoadBalancerReference_c8dab726", jsii.get(self, "loadBalancerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="instancePort")
@@ -9495,14 +9519,14 @@ class CfnLoadBalancer(
     @jsii.member(jsii_name="sessionStickinessEnabled")
     def session_stickiness_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether session stickiness is enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "sessionStickinessEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "sessionStickinessEnabled"))
 
     @session_stickiness_enabled.setter
     def session_stickiness_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__60d3bde218d3bcb6c355f873dd0255f6432fda15433610cbd8c4755bbdabed21)
@@ -9529,12 +9553,12 @@ class CfnLoadBalancer(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__afc022f5045d5ea7f789cb66d1e19f0beb665d810659027059f4ceb4cf6599b6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9578,9 +9602,9 @@ class CfnLoadBalancerProps:
         attached_instances: typing.Optional[typing.Sequence[builtins.str]] = None,
         health_check_path: typing.Optional[builtins.str] = None,
         ip_address_type: typing.Optional[builtins.str] = None,
-        session_stickiness_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        session_stickiness_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         session_stickiness_lb_cookie_duration_seconds: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         tls_policy_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnLoadBalancer``.
@@ -9600,6 +9624,7 @@ class CfnLoadBalancerProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lightsail as lightsail
@@ -9707,7 +9732,7 @@ class CfnLoadBalancerProps:
     @builtins.property
     def session_stickiness_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether session stickiness is enabled.
 
         Enable session stickiness (also known as *session affinity* ) to bind a user's session to a specific instance. This ensures that all requests from the user during the session are sent to the same instance.
@@ -9715,7 +9740,7 @@ class CfnLoadBalancerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-loadbalancer.html#cfn-lightsail-loadbalancer-sessionstickinessenabled
         '''
         result = self._values.get("session_stickiness_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def session_stickiness_lb_cookie_duration_seconds(
@@ -9731,7 +9756,7 @@ class CfnLoadBalancerProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* .
@@ -9742,7 +9767,7 @@ class CfnLoadBalancerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-loadbalancer.html#cfn-lightsail-loadbalancer-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def tls_policy_name(self) -> typing.Optional[builtins.str]:
@@ -9797,15 +9822,15 @@ class CfnLoadBalancerTlsCertificate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         certificate_domain_name: builtins.str,
         certificate_name: builtins.str,
         load_balancer_name: builtins.str,
         certificate_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-        https_redirection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        is_attached: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        https_redirection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        is_attached: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::Lightsail::LoadBalancerTlsCertificate``.
 
@@ -9837,7 +9862,7 @@ class CfnLoadBalancerTlsCertificate(
     @builtins.classmethod
     def arn_for_load_balancer_tls_certificate(
         cls,
-        resource: _ILoadBalancerTlsCertificateRef_c1bbdf26,
+        resource: "_ILoadBalancerTlsCertificateRef_c1bbdf26",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -9860,7 +9885,7 @@ class CfnLoadBalancerTlsCertificate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLoadBalancerTlsCertificate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9918,9 +9943,9 @@ class CfnLoadBalancerTlsCertificate(
     @jsii.member(jsii_name="loadBalancerTlsCertificateRef")
     def load_balancer_tls_certificate_ref(
         self,
-    ) -> _LoadBalancerTlsCertificateReference_7a33f29e:
+    ) -> "_LoadBalancerTlsCertificateReference_7a33f29e":
         '''A reference to a LoadBalancerTlsCertificate resource.'''
-        return typing.cast(_LoadBalancerTlsCertificateReference_7a33f29e, jsii.get(self, "loadBalancerTlsCertificateRef"))
+        return typing.cast("_LoadBalancerTlsCertificateReference_7a33f29e", jsii.get(self, "loadBalancerTlsCertificateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="certificateDomainName")
@@ -9983,14 +10008,14 @@ class CfnLoadBalancerTlsCertificate(
     @jsii.member(jsii_name="httpsRedirectionEnabled")
     def https_redirection_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether HTTPS redirection is enabled for the load balancer that the TLS certificate is attached to.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "httpsRedirectionEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "httpsRedirectionEnabled"))
 
     @https_redirection_enabled.setter
     def https_redirection_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__49793fdda64b6efcd50edc14b8d59ea6317d02a33455daea3c5f0340008da31c)
@@ -10001,14 +10026,14 @@ class CfnLoadBalancerTlsCertificate(
     @jsii.member(jsii_name="isAttached")
     def is_attached(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether the SSL/TLS certificate is attached to a Lightsail load balancer.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "isAttached"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "isAttached"))
 
     @is_attached.setter
     def is_attached(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__acab8637e92a20e3ce530799832a4d75e98bf630ea28f6276cce2b5ad63208b8)
@@ -10036,8 +10061,8 @@ class CfnLoadBalancerTlsCertificateProps:
         certificate_name: builtins.str,
         load_balancer_name: builtins.str,
         certificate_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-        https_redirection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        is_attached: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        https_redirection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        is_attached: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLoadBalancerTlsCertificate``.
 
@@ -10136,24 +10161,24 @@ class CfnLoadBalancerTlsCertificateProps:
     @builtins.property
     def https_redirection_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether HTTPS redirection is enabled for the load balancer that the TLS certificate is attached to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-loadbalancertlscertificate.html#cfn-lightsail-loadbalancertlscertificate-httpsredirectionenabled
         '''
         result = self._values.get("https_redirection_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def is_attached(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating whether the SSL/TLS certificate is attached to a Lightsail load balancer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-loadbalancertlscertificate.html#cfn-lightsail-loadbalancertlscertificate-isattached
         '''
         result = self._values.get("is_attached")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10195,7 +10220,7 @@ class CfnStaticIp(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         static_ip_name: builtins.str,
@@ -10220,7 +10245,7 @@ class CfnStaticIp(
 
     @jsii.member(jsii_name="arnForStaticIp")
     @builtins.classmethod
-    def arn_for_static_ip(cls, resource: _IStaticIpRef_8b78d790) -> builtins.str:
+    def arn_for_static_ip(cls, resource: "_IStaticIpRef_8b78d790") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -10242,7 +10267,7 @@ class CfnStaticIp(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStaticIp", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10282,12 +10307,12 @@ class CfnStaticIp(
 
     @builtins.property
     @jsii.member(jsii_name="attrIsAttached")
-    def attr_is_attached(self) -> _IResolvable_da3f097b:
+    def attr_is_attached(self) -> "_IResolvable_da3f097b":
         '''A Boolean value indicating whether the static IP is attached to an instance.
 
         :cloudformationAttribute: IsAttached
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrIsAttached"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrIsAttached"))
 
     @builtins.property
     @jsii.member(jsii_name="attrStaticIpArn")
@@ -10305,9 +10330,9 @@ class CfnStaticIp(
 
     @builtins.property
     @jsii.member(jsii_name="staticIpRef")
-    def static_ip_ref(self) -> _StaticIpReference_8e2e0ed9:
+    def static_ip_ref(self) -> "_StaticIpReference_8e2e0ed9":
         '''A reference to a StaticIp resource.'''
-        return typing.cast(_StaticIpReference_8e2e0ed9, jsii.get(self, "staticIpRef"))
+        return typing.cast("_StaticIpReference_8e2e0ed9", jsii.get(self, "staticIpRef"))
 
     @builtins.property
     @jsii.member(jsii_name="staticIpName")

@@ -999,10 +999,12 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_acmpca import ICertificateAuthority as _ICertificateAuthority_26727cab
 from ..aws_certificatemanager import ICertificate as _ICertificate_c194c70b
 from ..aws_iam import Grant as _Grant_a7ae64f8, IGrantable as _IGrantable_71c4f5de
 from ..aws_servicediscovery import IService as _IService_46860ae1
+from ..interfaces.aws_acmpca import (
+    ICertificateAuthorityRef as _ICertificateAuthorityRef_240f71c8
+)
 from ..interfaces.aws_appmesh import (
     GatewayRouteReference as _GatewayRouteReference_89558e9e,
     IGatewayRouteRef as _IGatewayRouteRef_d8d24af4,
@@ -1079,7 +1081,7 @@ class AccessLog(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "AccessLogConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "AccessLogConfig":
         '''Called when the AccessLog type is initialized.
 
         Can be used to enforce
@@ -1092,7 +1094,7 @@ class AccessLog(
 
 class _AccessLogProxy(AccessLog):
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "AccessLogConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "AccessLogConfig":
         '''Called when the AccessLog type is initialized.
 
         Can be used to enforce
@@ -1283,7 +1285,7 @@ class Backend(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> "BackendConfig":
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "BackendConfig":
         '''Return backend config.
 
         :param _scope: -
@@ -1293,7 +1295,7 @@ class Backend(
 
 class _BackendProxy(Backend):
     @jsii.member(jsii_name="bind")
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> "BackendConfig":
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "BackendConfig":
         '''Return backend config.
 
         :param _scope: -
@@ -1504,6 +1506,7 @@ class CfnGatewayRoute(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appmesh as appmesh
@@ -1696,15 +1699,15 @@ class CfnGatewayRoute(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         mesh_name: builtins.str,
-        spec: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GatewayRouteSpecProperty", typing.Dict[builtins.str, typing.Any]]],
+        spec: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GatewayRouteSpecProperty", typing.Dict[builtins.str, typing.Any]]],
         virtual_gateway_name: builtins.str,
         gateway_route_name: typing.Optional[builtins.str] = None,
         mesh_owner: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppMesh::GatewayRoute``.
 
@@ -1736,7 +1739,7 @@ class CfnGatewayRoute(
     @builtins.classmethod
     def arn_for_gateway_route(
         cls,
-        resource: _IGatewayRouteRef_d8d24af4,
+        resource: "_IGatewayRouteRef_d8d24af4",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1759,7 +1762,7 @@ class CfnGatewayRoute(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGatewayRoute", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1870,15 +1873,15 @@ class CfnGatewayRoute(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayRouteRef")
-    def gateway_route_ref(self) -> _GatewayRouteReference_89558e9e:
+    def gateway_route_ref(self) -> "_GatewayRouteReference_89558e9e":
         '''A reference to a GatewayRoute resource.'''
-        return typing.cast(_GatewayRouteReference_89558e9e, jsii.get(self, "gatewayRouteRef"))
+        return typing.cast("_GatewayRouteReference_89558e9e", jsii.get(self, "gatewayRouteRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="meshName")
@@ -1897,14 +1900,14 @@ class CfnGatewayRoute(
     @jsii.member(jsii_name="spec")
     def spec(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteSpecProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteSpecProperty"]:
         '''The specifications of the gateway route.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteSpecProperty"], jsii.get(self, "spec"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteSpecProperty"], jsii.get(self, "spec"))
 
     @spec.setter
     def spec(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteSpecProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteSpecProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ecd94785d11414db5b7dcf386baf559cf717a94fb135c1cfaa9a0c840828d82d)
@@ -1952,12 +1955,12 @@ class CfnGatewayRoute(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the gateway route to assist with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__440ced421bc9c4c53f7541195b1044c884ee26ef796da1dc28d65cfb6bc8953f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2105,7 +2108,7 @@ class CfnGatewayRoute(
             *,
             exact: typing.Optional[builtins.str] = None,
             prefix: typing.Optional[builtins.str] = None,
-            range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GatewayRouteRangeMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            range: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GatewayRouteRangeMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             regex: typing.Optional[builtins.str] = None,
             suffix: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -2177,13 +2180,13 @@ class CfnGatewayRoute(
         @builtins.property
         def range(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteRangeMatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteRangeMatchProperty"]]:
             '''An object that represents the range of values to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-gatewayroutemetadatamatch.html#cfn-appmesh-gatewayroute-gatewayroutemetadatamatch-range
             '''
             result = self._values.get("range")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteRangeMatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteRangeMatchProperty"]], result)
 
         @builtins.property
         def regex(self) -> typing.Optional[builtins.str]:
@@ -2296,9 +2299,9 @@ class CfnGatewayRoute(
         def __init__(
             self,
             *,
-            grpc_route: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GrpcGatewayRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            http2_route: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.HttpGatewayRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            http_route: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.HttpGatewayRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            grpc_route: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GrpcGatewayRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http2_route: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.HttpGatewayRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http_route: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.HttpGatewayRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             priority: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''An object that represents a gateway route specification.
@@ -2511,35 +2514,35 @@ class CfnGatewayRoute(
         @builtins.property
         def grpc_route(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GrpcGatewayRouteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GrpcGatewayRouteProperty"]]:
             '''An object that represents the specification of a gRPC gateway route.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-gatewayroutespec.html#cfn-appmesh-gatewayroute-gatewayroutespec-grpcroute
             '''
             result = self._values.get("grpc_route")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GrpcGatewayRouteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GrpcGatewayRouteProperty"]], result)
 
         @builtins.property
         def http2_route(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteProperty"]]:
             '''An object that represents the specification of an HTTP/2 gateway route.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-gatewayroutespec.html#cfn-appmesh-gatewayroute-gatewayroutespec-http2route
             '''
             result = self._values.get("http2_route")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteProperty"]], result)
 
         @builtins.property
         def http_route(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteProperty"]]:
             '''An object that represents the specification of an HTTP gateway route.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-gatewayroutespec.html#cfn-appmesh-gatewayroute-gatewayroutespec-httproute
             '''
             result = self._values.get("http_route")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteProperty"]], result)
 
         @builtins.property
         def priority(self) -> typing.Optional[jsii.Number]:
@@ -2570,7 +2573,7 @@ class CfnGatewayRoute(
         def __init__(
             self,
             *,
-            virtual_service: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GatewayRouteVirtualServiceProperty", typing.Dict[builtins.str, typing.Any]]],
+            virtual_service: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GatewayRouteVirtualServiceProperty", typing.Dict[builtins.str, typing.Any]]],
             port: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''An object that represents a gateway route target.
@@ -2609,14 +2612,14 @@ class CfnGatewayRoute(
         @builtins.property
         def virtual_service(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteVirtualServiceProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteVirtualServiceProperty"]:
             '''An object that represents a virtual service gateway route target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-gatewayroutetarget.html#cfn-appmesh-gatewayroute-gatewayroutetarget-virtualservice
             '''
             result = self._values.get("virtual_service")
             assert result is not None, "Required property 'virtual_service' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteVirtualServiceProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteVirtualServiceProperty"], result)
 
         @builtins.property
         def port(self) -> typing.Optional[jsii.Number]:
@@ -2699,8 +2702,8 @@ class CfnGatewayRoute(
         def __init__(
             self,
             *,
-            target: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GatewayRouteTargetProperty", typing.Dict[builtins.str, typing.Any]]],
-            rewrite: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GrpcGatewayRouteRewriteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            target: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GatewayRouteTargetProperty", typing.Dict[builtins.str, typing.Any]]],
+            rewrite: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GrpcGatewayRouteRewriteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the action to take if a match is determined.
 
@@ -2747,25 +2750,25 @@ class CfnGatewayRoute(
         @builtins.property
         def target(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteTargetProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteTargetProperty"]:
             '''An object that represents the target that traffic is routed to when a request matches the gateway route.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-grpcgatewayrouteaction.html#cfn-appmesh-gatewayroute-grpcgatewayrouteaction-target
             '''
             result = self._values.get("target")
             assert result is not None, "Required property 'target' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteTargetProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteTargetProperty"], result)
 
         @builtins.property
         def rewrite(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GrpcGatewayRouteRewriteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GrpcGatewayRouteRewriteProperty"]]:
             '''The gateway route action to rewrite.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-grpcgatewayrouteaction.html#cfn-appmesh-gatewayroute-grpcgatewayrouteaction-rewrite
             '''
             result = self._values.get("rewrite")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GrpcGatewayRouteRewriteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GrpcGatewayRouteRewriteProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2792,8 +2795,8 @@ class CfnGatewayRoute(
         def __init__(
             self,
             *,
-            hostname: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GatewayRouteHostnameMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GrpcGatewayRouteMetadataProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            hostname: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GatewayRouteHostnameMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GrpcGatewayRouteMetadataProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             port: typing.Optional[jsii.Number] = None,
             service_name: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -2857,24 +2860,24 @@ class CfnGatewayRoute(
         @builtins.property
         def hostname(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteHostnameMatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteHostnameMatchProperty"]]:
             '''The gateway route host name to be matched on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-grpcgatewayroutematch.html#cfn-appmesh-gatewayroute-grpcgatewayroutematch-hostname
             '''
             result = self._values.get("hostname")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteHostnameMatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteHostnameMatchProperty"]], result)
 
         @builtins.property
         def metadata(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GrpcGatewayRouteMetadataProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GrpcGatewayRouteMetadataProperty"]]]]:
             '''The gateway route metadata to be matched on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-grpcgatewayroutematch.html#cfn-appmesh-gatewayroute-grpcgatewayroutematch-metadata
             '''
             result = self._values.get("metadata")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GrpcGatewayRouteMetadataProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GrpcGatewayRouteMetadataProperty"]]]], result)
 
         @builtins.property
         def port(self) -> typing.Optional[jsii.Number]:
@@ -2915,8 +2918,8 @@ class CfnGatewayRoute(
             self,
             *,
             name: builtins.str,
-            invert: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            match: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GatewayRouteMetadataMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            invert: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            match: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GatewayRouteMetadataMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object representing the metadata of the gateway route.
 
@@ -2976,7 +2979,7 @@ class CfnGatewayRoute(
         @builtins.property
         def invert(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specify ``True`` to match anything except the match criteria.
 
             The default value is ``False`` .
@@ -2984,18 +2987,18 @@ class CfnGatewayRoute(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-grpcgatewayroutemetadata.html#cfn-appmesh-gatewayroute-grpcgatewayroutemetadata-invert
             '''
             result = self._values.get("invert")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def match(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteMetadataMatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteMetadataMatchProperty"]]:
             '''The criteria for determining a metadata match.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-grpcgatewayroutemetadata.html#cfn-appmesh-gatewayroute-grpcgatewayroutemetadata-match
             '''
             result = self._values.get("match")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteMetadataMatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteMetadataMatchProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3017,8 +3020,8 @@ class CfnGatewayRoute(
         def __init__(
             self,
             *,
-            action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GrpcGatewayRouteActionProperty", typing.Dict[builtins.str, typing.Any]]],
-            match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GrpcGatewayRouteMatchProperty", typing.Dict[builtins.str, typing.Any]]],
+            action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GrpcGatewayRouteActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GrpcGatewayRouteMatchProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''An object that represents a gRPC gateway route.
 
@@ -3090,26 +3093,26 @@ class CfnGatewayRoute(
         @builtins.property
         def action(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GrpcGatewayRouteActionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GrpcGatewayRouteActionProperty"]:
             '''An object that represents the action to take if a match is determined.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-grpcgatewayroute.html#cfn-appmesh-gatewayroute-grpcgatewayroute-action
             '''
             result = self._values.get("action")
             assert result is not None, "Required property 'action' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GrpcGatewayRouteActionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GrpcGatewayRouteActionProperty"], result)
 
         @builtins.property
         def match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GrpcGatewayRouteMatchProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GrpcGatewayRouteMatchProperty"]:
             '''An object that represents the criteria for determining a request match.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-grpcgatewayroute.html#cfn-appmesh-gatewayroute-grpcgatewayroute-match
             '''
             result = self._values.get("match")
             assert result is not None, "Required property 'match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GrpcGatewayRouteMatchProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GrpcGatewayRouteMatchProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3131,7 +3134,7 @@ class CfnGatewayRoute(
         def __init__(
             self,
             *,
-            hostname: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GatewayRouteHostnameRewriteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            hostname: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GatewayRouteHostnameRewriteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the gateway route to rewrite.
 
@@ -3162,13 +3165,13 @@ class CfnGatewayRoute(
         @builtins.property
         def hostname(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteHostnameRewriteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteHostnameRewriteProperty"]]:
             '''The host name of the gateway route to rewrite.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-grpcgatewayrouterewrite.html#cfn-appmesh-gatewayroute-grpcgatewayrouterewrite-hostname
             '''
             result = self._values.get("hostname")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteHostnameRewriteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteHostnameRewriteProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3190,8 +3193,8 @@ class CfnGatewayRoute(
         def __init__(
             self,
             *,
-            target: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GatewayRouteTargetProperty", typing.Dict[builtins.str, typing.Any]]],
-            rewrite: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.HttpGatewayRouteRewriteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            target: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GatewayRouteTargetProperty", typing.Dict[builtins.str, typing.Any]]],
+            rewrite: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.HttpGatewayRouteRewriteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the action to take if a match is determined.
 
@@ -3245,25 +3248,25 @@ class CfnGatewayRoute(
         @builtins.property
         def target(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteTargetProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteTargetProperty"]:
             '''An object that represents the target that traffic is routed to when a request matches the gateway route.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayrouteaction.html#cfn-appmesh-gatewayroute-httpgatewayrouteaction-target
             '''
             result = self._values.get("target")
             assert result is not None, "Required property 'target' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteTargetProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteTargetProperty"], result)
 
         @builtins.property
         def rewrite(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteRewriteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteRewriteProperty"]]:
             '''The gateway route action to rewrite.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayrouteaction.html#cfn-appmesh-gatewayroute-httpgatewayrouteaction-rewrite
             '''
             result = self._values.get("rewrite")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteRewriteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteRewriteProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3293,7 +3296,7 @@ class CfnGatewayRoute(
             *,
             exact: typing.Optional[builtins.str] = None,
             prefix: typing.Optional[builtins.str] = None,
-            range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GatewayRouteRangeMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            range: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GatewayRouteRangeMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             regex: typing.Optional[builtins.str] = None,
             suffix: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -3367,13 +3370,13 @@ class CfnGatewayRoute(
         @builtins.property
         def range(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteRangeMatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteRangeMatchProperty"]]:
             '''An object that represents the range of values to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayrouteheadermatch.html#cfn-appmesh-gatewayroute-httpgatewayrouteheadermatch-range
             '''
             result = self._values.get("range")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteRangeMatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteRangeMatchProperty"]], result)
 
         @builtins.property
         def regex(self) -> typing.Optional[builtins.str]:
@@ -3414,8 +3417,8 @@ class CfnGatewayRoute(
             self,
             *,
             name: builtins.str,
-            invert: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            match: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.HttpGatewayRouteHeaderMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            invert: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            match: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.HttpGatewayRouteHeaderMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the HTTP header in the gateway route.
 
@@ -3475,7 +3478,7 @@ class CfnGatewayRoute(
         @builtins.property
         def invert(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specify ``True`` to match anything except the match criteria.
 
             The default value is ``False`` .
@@ -3483,12 +3486,12 @@ class CfnGatewayRoute(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayrouteheader.html#cfn-appmesh-gatewayroute-httpgatewayrouteheader-invert
             '''
             result = self._values.get("invert")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def match(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteHeaderMatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteHeaderMatchProperty"]]:
             '''An object that represents the method and value to match with the header value sent in a request.
 
             Specify one match method.
@@ -3496,7 +3499,7 @@ class CfnGatewayRoute(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayrouteheader.html#cfn-appmesh-gatewayroute-httpgatewayrouteheader-match
             '''
             result = self._values.get("match")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteHeaderMatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteHeaderMatchProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3526,13 +3529,13 @@ class CfnGatewayRoute(
         def __init__(
             self,
             *,
-            headers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.HttpGatewayRouteHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            hostname: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GatewayRouteHostnameMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            headers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.HttpGatewayRouteHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            hostname: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GatewayRouteHostnameMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             method: typing.Optional[builtins.str] = None,
-            path: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.HttpPathMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            path: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.HttpPathMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             port: typing.Optional[jsii.Number] = None,
             prefix: typing.Optional[builtins.str] = None,
-            query_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.QueryParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            query_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.QueryParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''An object that represents the criteria for determining a request match.
 
@@ -3619,24 +3622,24 @@ class CfnGatewayRoute(
         @builtins.property
         def headers(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteHeaderProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteHeaderProperty"]]]]:
             '''The client request headers to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayroutematch.html#cfn-appmesh-gatewayroute-httpgatewayroutematch-headers
             '''
             result = self._values.get("headers")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteHeaderProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteHeaderProperty"]]]], result)
 
         @builtins.property
         def hostname(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteHostnameMatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteHostnameMatchProperty"]]:
             '''The host name to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayroutematch.html#cfn-appmesh-gatewayroute-httpgatewayroutematch-hostname
             '''
             result = self._values.get("hostname")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteHostnameMatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteHostnameMatchProperty"]], result)
 
         @builtins.property
         def method(self) -> typing.Optional[builtins.str]:
@@ -3650,13 +3653,13 @@ class CfnGatewayRoute(
         @builtins.property
         def path(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpPathMatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpPathMatchProperty"]]:
             '''The path to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayroutematch.html#cfn-appmesh-gatewayroute-httpgatewayroutematch-path
             '''
             result = self._values.get("path")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpPathMatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpPathMatchProperty"]], result)
 
         @builtins.property
         def port(self) -> typing.Optional[jsii.Number]:
@@ -3681,13 +3684,13 @@ class CfnGatewayRoute(
         @builtins.property
         def query_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.QueryParameterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.QueryParameterProperty"]]]]:
             '''The query parameter to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayroutematch.html#cfn-appmesh-gatewayroute-httpgatewayroutematch-queryparameters
             '''
             result = self._values.get("query_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.QueryParameterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.QueryParameterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3830,8 +3833,8 @@ class CfnGatewayRoute(
         def __init__(
             self,
             *,
-            action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.HttpGatewayRouteActionProperty", typing.Dict[builtins.str, typing.Any]]],
-            match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.HttpGatewayRouteMatchProperty", typing.Dict[builtins.str, typing.Any]]],
+            action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.HttpGatewayRouteActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.HttpGatewayRouteMatchProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''An object that represents an HTTP gateway route.
 
@@ -3923,26 +3926,26 @@ class CfnGatewayRoute(
         @builtins.property
         def action(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteActionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteActionProperty"]:
             '''An object that represents the action to take if a match is determined.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayroute.html#cfn-appmesh-gatewayroute-httpgatewayroute-action
             '''
             result = self._values.get("action")
             assert result is not None, "Required property 'action' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteActionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteActionProperty"], result)
 
         @builtins.property
         def match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteMatchProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteMatchProperty"]:
             '''An object that represents the criteria for determining a request match.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayroute.html#cfn-appmesh-gatewayroute-httpgatewayroute-match
             '''
             result = self._values.get("match")
             assert result is not None, "Required property 'match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRouteMatchProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRouteMatchProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3964,9 +3967,9 @@ class CfnGatewayRoute(
         def __init__(
             self,
             *,
-            hostname: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.GatewayRouteHostnameRewriteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            path: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.HttpGatewayRoutePathRewriteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            prefix: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.HttpGatewayRoutePrefixRewriteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            hostname: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GatewayRouteHostnameRewriteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            path: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.HttpGatewayRoutePathRewriteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            prefix: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.HttpGatewayRoutePrefixRewriteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object representing the gateway route to rewrite.
 
@@ -4012,35 +4015,35 @@ class CfnGatewayRoute(
         @builtins.property
         def hostname(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteHostnameRewriteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteHostnameRewriteProperty"]]:
             '''The host name to rewrite.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayrouterewrite.html#cfn-appmesh-gatewayroute-httpgatewayrouterewrite-hostname
             '''
             result = self._values.get("hostname")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.GatewayRouteHostnameRewriteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteHostnameRewriteProperty"]], result)
 
         @builtins.property
         def path(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRoutePathRewriteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRoutePathRewriteProperty"]]:
             '''The path to rewrite.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayrouterewrite.html#cfn-appmesh-gatewayroute-httpgatewayrouterewrite-path
             '''
             result = self._values.get("path")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRoutePathRewriteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRoutePathRewriteProperty"]], result)
 
         @builtins.property
         def prefix(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRoutePrefixRewriteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRoutePrefixRewriteProperty"]]:
             '''The specified beginning characters to rewrite.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-httpgatewayrouterewrite.html#cfn-appmesh-gatewayroute-httpgatewayrouterewrite-prefix
             '''
             result = self._values.get("prefix")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpGatewayRoutePrefixRewriteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpGatewayRoutePrefixRewriteProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4184,7 +4187,7 @@ class CfnGatewayRoute(
             self,
             *,
             name: builtins.str,
-            match: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGatewayRoute.HttpQueryParameterMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            match: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.HttpQueryParameterMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the query parameter in the request.
 
@@ -4232,13 +4235,13 @@ class CfnGatewayRoute(
         @builtins.property
         def match(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpQueryParameterMatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpQueryParameterMatchProperty"]]:
             '''The query parameter to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-gatewayroute-queryparameter.html#cfn-appmesh-gatewayroute-queryparameter-match
             '''
             result = self._values.get("match")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGatewayRoute.HttpQueryParameterMatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.HttpQueryParameterMatchProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4269,11 +4272,11 @@ class CfnGatewayRouteProps:
         self,
         *,
         mesh_name: builtins.str,
-        spec: typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayRoute.GatewayRouteSpecProperty, typing.Dict[builtins.str, typing.Any]]],
+        spec: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayRoute.GatewayRouteSpecProperty", typing.Dict[builtins.str, typing.Any]]],
         virtual_gateway_name: builtins.str,
         gateway_route_name: typing.Optional[builtins.str] = None,
         mesh_owner: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnGatewayRoute``.
 
@@ -4289,6 +4292,7 @@ class CfnGatewayRouteProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appmesh as appmesh
@@ -4511,14 +4515,14 @@ class CfnGatewayRouteProps:
     @builtins.property
     def spec(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnGatewayRoute.GatewayRouteSpecProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteSpecProperty"]:
         '''The specifications of the gateway route.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-gatewayroute.html#cfn-appmesh-gatewayroute-spec
         '''
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnGatewayRoute.GatewayRouteSpecProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayRoute.GatewayRouteSpecProperty"], result)
 
     @builtins.property
     def virtual_gateway_name(self) -> builtins.str:
@@ -4551,7 +4555,7 @@ class CfnGatewayRouteProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the gateway route to assist with categorization and organization.
 
         Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.
@@ -4559,7 +4563,7 @@ class CfnGatewayRouteProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-gatewayroute.html#cfn-appmesh-gatewayroute-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4591,6 +4595,7 @@ class CfnMesh(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appmesh as appmesh
@@ -4614,12 +4619,12 @@ class CfnMesh(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         mesh_name: typing.Optional[builtins.str] = None,
-        spec: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMesh.MeshSpecProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        spec: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMesh.MeshSpecProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppMesh::Mesh``.
 
@@ -4639,7 +4644,7 @@ class CfnMesh(
 
     @jsii.member(jsii_name="arnForMesh")
     @builtins.classmethod
-    def arn_for_mesh(cls, resource: _IMeshRef_1eeeb336) -> builtins.str:
+    def arn_for_mesh(cls, resource: "_IMeshRef_1eeeb336") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4661,7 +4666,7 @@ class CfnMesh(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMesh", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4754,15 +4759,15 @@ class CfnMesh(
 
     @builtins.property
     @jsii.member(jsii_name="meshRef")
-    def mesh_ref(self) -> _MeshReference_dbc186f5:
+    def mesh_ref(self) -> "_MeshReference_dbc186f5":
         '''A reference to a Mesh resource.'''
-        return typing.cast(_MeshReference_dbc186f5, jsii.get(self, "meshRef"))
+        return typing.cast("_MeshReference_dbc186f5", jsii.get(self, "meshRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="meshName")
@@ -4781,14 +4786,14 @@ class CfnMesh(
     @jsii.member(jsii_name="spec")
     def spec(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMesh.MeshSpecProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMesh.MeshSpecProperty"]]:
         '''The service mesh specification to apply.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMesh.MeshSpecProperty"]], jsii.get(self, "spec"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMesh.MeshSpecProperty"]], jsii.get(self, "spec"))
 
     @spec.setter
     def spec(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMesh.MeshSpecProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMesh.MeshSpecProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__afc49cca6925a830455139b546c836096f2990d4491a963a6d558b8b5c8fa965)
@@ -4797,12 +4802,12 @@ class CfnMesh(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the service mesh to assist with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__16f54ab69e4f9713eaf7ebcb9b1d182cb3f7826f0ef5fff8a2208d6a21829862)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4932,8 +4937,8 @@ class CfnMesh(
         def __init__(
             self,
             *,
-            egress_filter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMesh.EgressFilterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            service_discovery: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMesh.MeshServiceDiscoveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            egress_filter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMesh.EgressFilterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            service_discovery: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMesh.MeshServiceDiscoveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the specification of a service mesh.
 
@@ -4971,24 +4976,24 @@ class CfnMesh(
         @builtins.property
         def egress_filter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMesh.EgressFilterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMesh.EgressFilterProperty"]]:
             '''The egress filter rules for the service mesh.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-mesh-meshspec.html#cfn-appmesh-mesh-meshspec-egressfilter
             '''
             result = self._values.get("egress_filter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMesh.EgressFilterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMesh.EgressFilterProperty"]], result)
 
         @builtins.property
         def service_discovery(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMesh.MeshServiceDiscoveryProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMesh.MeshServiceDiscoveryProperty"]]:
             '''An object that represents the service discovery information for a service mesh.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-mesh-meshspec.html#cfn-appmesh-mesh-meshspec-servicediscovery
             '''
             result = self._values.get("service_discovery")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMesh.MeshServiceDiscoveryProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMesh.MeshServiceDiscoveryProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5012,8 +5017,8 @@ class CfnMeshProps:
         self,
         *,
         mesh_name: typing.Optional[builtins.str] = None,
-        spec: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMesh.MeshSpecProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        spec: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMesh.MeshSpecProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMesh``.
 
@@ -5026,6 +5031,7 @@ class CfnMeshProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appmesh as appmesh
@@ -5071,16 +5077,16 @@ class CfnMeshProps:
     @builtins.property
     def spec(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMesh.MeshSpecProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMesh.MeshSpecProperty"]]:
         '''The service mesh specification to apply.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-mesh.html#cfn-appmesh-mesh-spec
         '''
         result = self._values.get("spec")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMesh.MeshSpecProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMesh.MeshSpecProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the service mesh to assist with categorization and organization.
 
         Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.
@@ -5088,7 +5094,7 @@ class CfnMeshProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-mesh.html#cfn-appmesh-mesh-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5120,6 +5126,7 @@ class CfnRoute(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appmesh as appmesh
@@ -5357,15 +5364,15 @@ class CfnRoute(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         mesh_name: builtins.str,
-        spec: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.RouteSpecProperty", typing.Dict[builtins.str, typing.Any]]],
+        spec: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.RouteSpecProperty", typing.Dict[builtins.str, typing.Any]]],
         virtual_router_name: builtins.str,
         mesh_owner: typing.Optional[builtins.str] = None,
         route_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppMesh::Route``.
 
@@ -5395,7 +5402,7 @@ class CfnRoute(
 
     @jsii.member(jsii_name="arnForRoute")
     @builtins.classmethod
-    def arn_for_route(cls, resource: _IRouteRef_c5013f61) -> builtins.str:
+    def arn_for_route(cls, resource: "_IRouteRef_c5013f61") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5417,7 +5424,7 @@ class CfnRoute(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRoute", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5528,15 +5535,15 @@ class CfnRoute(
 
     @builtins.property
     @jsii.member(jsii_name="routeRef")
-    def route_ref(self) -> _RouteReference_1c57e2c9:
+    def route_ref(self) -> "_RouteReference_1c57e2c9":
         '''A reference to a Route resource.'''
-        return typing.cast(_RouteReference_1c57e2c9, jsii.get(self, "routeRef"))
+        return typing.cast("_RouteReference_1c57e2c9", jsii.get(self, "routeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="meshName")
@@ -5553,14 +5560,16 @@ class CfnRoute(
 
     @builtins.property
     @jsii.member(jsii_name="spec")
-    def spec(self) -> typing.Union[_IResolvable_da3f097b, "CfnRoute.RouteSpecProperty"]:
+    def spec(
+        self,
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnRoute.RouteSpecProperty"]:
         '''The route specification to apply.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRoute.RouteSpecProperty"], jsii.get(self, "spec"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRoute.RouteSpecProperty"], jsii.get(self, "spec"))
 
     @spec.setter
     def spec(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnRoute.RouteSpecProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnRoute.RouteSpecProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1c183b00026b4ff39c5e60f6b1b9fa79d1adc1d9535899638934407176e54bf5)
@@ -5608,12 +5617,12 @@ class CfnRoute(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the route to assist with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a5df50b837c215e10cf3c9902ca654ddda9fb16c71399945b58961d5ad138ee8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5701,7 +5710,7 @@ class CfnRoute(
             self,
             *,
             max_retries: jsii.Number,
-            per_retry_timeout: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            per_retry_timeout: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]],
             grpc_retry_events: typing.Optional[typing.Sequence[builtins.str]] = None,
             http_retry_events: typing.Optional[typing.Sequence[builtins.str]] = None,
             tcp_retry_events: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -5769,14 +5778,14 @@ class CfnRoute(
         @builtins.property
         def per_retry_timeout(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"]:
             '''The timeout for each retry attempt.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-grpcretrypolicy.html#cfn-appmesh-route-grpcretrypolicy-perretrytimeout
             '''
             result = self._values.get("per_retry_timeout")
             assert result is not None, "Required property 'per_retry_timeout' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"], result)
 
         @builtins.property
         def grpc_retry_events(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5832,7 +5841,7 @@ class CfnRoute(
         def __init__(
             self,
             *,
-            weighted_targets: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.WeightedTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            weighted_targets: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.WeightedTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''An object that represents the action to take if a match is determined.
 
@@ -5867,14 +5876,14 @@ class CfnRoute(
         @builtins.property
         def weighted_targets(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoute.WeightedTargetProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRoute.WeightedTargetProperty"]]]:
             '''An object that represents the targets that traffic is routed to when a request matches the route.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-grpcrouteaction.html#cfn-appmesh-route-grpcrouteaction-weightedtargets
             '''
             result = self._values.get("weighted_targets")
             assert result is not None, "Required property 'weighted_targets' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoute.WeightedTargetProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRoute.WeightedTargetProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5901,7 +5910,7 @@ class CfnRoute(
         def __init__(
             self,
             *,
-            metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.GrpcRouteMetadataProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.GrpcRouteMetadataProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             method_name: typing.Optional[builtins.str] = None,
             port: typing.Optional[jsii.Number] = None,
             service_name: typing.Optional[builtins.str] = None,
@@ -5963,13 +5972,13 @@ class CfnRoute(
         @builtins.property
         def metadata(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcRouteMetadataProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcRouteMetadataProperty"]]]]:
             '''An object that represents the data to match from the request.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-grpcroutematch.html#cfn-appmesh-route-grpcroutematch-metadata
             '''
             result = self._values.get("metadata")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcRouteMetadataProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcRouteMetadataProperty"]]]], result)
 
         @builtins.property
         def method_name(self) -> typing.Optional[builtins.str]:
@@ -6028,7 +6037,7 @@ class CfnRoute(
             *,
             exact: typing.Optional[builtins.str] = None,
             prefix: typing.Optional[builtins.str] = None,
-            range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.MatchRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            range: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.MatchRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             regex: typing.Optional[builtins.str] = None,
             suffix: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -6102,13 +6111,13 @@ class CfnRoute(
         @builtins.property
         def range(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.MatchRangeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.MatchRangeProperty"]]:
             '''An object that represents the range of values to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-grpcroutemetadatamatchmethod.html#cfn-appmesh-route-grpcroutemetadatamatchmethod-range
             '''
             result = self._values.get("range")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.MatchRangeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.MatchRangeProperty"]], result)
 
         @builtins.property
         def regex(self) -> typing.Optional[builtins.str]:
@@ -6149,8 +6158,8 @@ class CfnRoute(
             self,
             *,
             name: builtins.str,
-            invert: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            match: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.GrpcRouteMetadataMatchMethodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            invert: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            match: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.GrpcRouteMetadataMatchMethodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the match metadata for the route.
 
@@ -6210,7 +6219,7 @@ class CfnRoute(
         @builtins.property
         def invert(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specify ``True`` to match anything except the match criteria.
 
             The default value is ``False`` .
@@ -6218,18 +6227,18 @@ class CfnRoute(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-grpcroutemetadata.html#cfn-appmesh-route-grpcroutemetadata-invert
             '''
             result = self._values.get("invert")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def match(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcRouteMetadataMatchMethodProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcRouteMetadataMatchMethodProperty"]]:
             '''An object that represents the data to match from the request.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-grpcroutemetadata.html#cfn-appmesh-route-grpcroutemetadata-match
             '''
             result = self._values.get("match")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcRouteMetadataMatchMethodProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcRouteMetadataMatchMethodProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6256,10 +6265,10 @@ class CfnRoute(
         def __init__(
             self,
             *,
-            action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.GrpcRouteActionProperty", typing.Dict[builtins.str, typing.Any]]],
-            match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.GrpcRouteMatchProperty", typing.Dict[builtins.str, typing.Any]]],
-            retry_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.GrpcRetryPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            timeout: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.GrpcTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.GrpcRouteActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.GrpcRouteMatchProperty", typing.Dict[builtins.str, typing.Any]]],
+            retry_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.GrpcRetryPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            timeout: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.GrpcTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a gRPC route type.
 
@@ -6352,48 +6361,48 @@ class CfnRoute(
         @builtins.property
         def action(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcRouteActionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcRouteActionProperty"]:
             '''An object that represents the action to take if a match is determined.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-grpcroute.html#cfn-appmesh-route-grpcroute-action
             '''
             result = self._values.get("action")
             assert result is not None, "Required property 'action' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcRouteActionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcRouteActionProperty"], result)
 
         @builtins.property
         def match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcRouteMatchProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcRouteMatchProperty"]:
             '''An object that represents the criteria for determining a request match.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-grpcroute.html#cfn-appmesh-route-grpcroute-match
             '''
             result = self._values.get("match")
             assert result is not None, "Required property 'match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcRouteMatchProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcRouteMatchProperty"], result)
 
         @builtins.property
         def retry_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcRetryPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcRetryPolicyProperty"]]:
             '''An object that represents a retry policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-grpcroute.html#cfn-appmesh-route-grpcroute-retrypolicy
             '''
             result = self._values.get("retry_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcRetryPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcRetryPolicyProperty"]], result)
 
         @builtins.property
         def timeout(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcTimeoutProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcTimeoutProperty"]]:
             '''An object that represents types of timeouts.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-grpcroute.html#cfn-appmesh-route-grpcroute-timeout
             '''
             result = self._values.get("timeout")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcTimeoutProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcTimeoutProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6415,8 +6424,8 @@ class CfnRoute(
         def __init__(
             self,
             *,
-            idle: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            per_request: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            idle: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            per_request: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents types of timeouts.
 
@@ -6456,7 +6465,7 @@ class CfnRoute(
         @builtins.property
         def idle(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"]]:
             '''An object that represents an idle timeout.
 
             An idle timeout bounds the amount of time that a connection may be idle. The default value is none.
@@ -6464,12 +6473,12 @@ class CfnRoute(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-grpctimeout.html#cfn-appmesh-route-grpctimeout-idle
             '''
             result = self._values.get("idle")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"]], result)
 
         @builtins.property
         def per_request(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"]]:
             '''An object that represents a per request timeout.
 
             The default value is 15 seconds. If you set a higher timeout, then make sure that the higher value is set for each App Mesh resource in a conversation. For example, if a virtual node backend uses a virtual router provider to route to another virtual node, then the timeout should be greater than 15 seconds for the source and destination virtual node and the route.
@@ -6477,7 +6486,7 @@ class CfnRoute(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-grpctimeout.html#cfn-appmesh-route-grpctimeout-perrequest
             '''
             result = self._values.get("per_request")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6507,7 +6516,7 @@ class CfnRoute(
             *,
             exact: typing.Optional[builtins.str] = None,
             prefix: typing.Optional[builtins.str] = None,
-            range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.MatchRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            range: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.MatchRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             regex: typing.Optional[builtins.str] = None,
             suffix: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -6581,13 +6590,13 @@ class CfnRoute(
         @builtins.property
         def range(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.MatchRangeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.MatchRangeProperty"]]:
             '''An object that represents the range of values to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-headermatchmethod.html#cfn-appmesh-route-headermatchmethod-range
             '''
             result = self._values.get("range")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.MatchRangeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.MatchRangeProperty"]], result)
 
         @builtins.property
         def regex(self) -> typing.Optional[builtins.str]:
@@ -6754,7 +6763,7 @@ class CfnRoute(
             self,
             *,
             max_retries: jsii.Number,
-            per_retry_timeout: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            per_retry_timeout: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]],
             http_retry_events: typing.Optional[typing.Sequence[builtins.str]] = None,
             tcp_retry_events: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -6816,14 +6825,14 @@ class CfnRoute(
         @builtins.property
         def per_retry_timeout(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"]:
             '''The timeout for each retry attempt.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httpretrypolicy.html#cfn-appmesh-route-httpretrypolicy-perretrytimeout
             '''
             result = self._values.get("per_retry_timeout")
             assert result is not None, "Required property 'per_retry_timeout' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"], result)
 
         @builtins.property
         def http_retry_events(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -6870,7 +6879,7 @@ class CfnRoute(
         def __init__(
             self,
             *,
-            weighted_targets: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.WeightedTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            weighted_targets: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.WeightedTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''An object that represents the action to take if a match is determined.
 
@@ -6905,14 +6914,14 @@ class CfnRoute(
         @builtins.property
         def weighted_targets(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoute.WeightedTargetProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRoute.WeightedTargetProperty"]]]:
             '''An object that represents the targets that traffic is routed to when a request matches the route.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httprouteaction.html#cfn-appmesh-route-httprouteaction-weightedtargets
             '''
             result = self._values.get("weighted_targets")
             assert result is not None, "Required property 'weighted_targets' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoute.WeightedTargetProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRoute.WeightedTargetProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6935,8 +6944,8 @@ class CfnRoute(
             self,
             *,
             name: builtins.str,
-            invert: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            match: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.HeaderMatchMethodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            invert: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            match: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.HeaderMatchMethodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the HTTP header in the request.
 
@@ -6996,7 +7005,7 @@ class CfnRoute(
         @builtins.property
         def invert(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specify ``True`` to match anything except the match criteria.
 
             The default value is ``False`` .
@@ -7004,18 +7013,18 @@ class CfnRoute(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httprouteheader.html#cfn-appmesh-route-httprouteheader-invert
             '''
             result = self._values.get("invert")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def match(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HeaderMatchMethodProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HeaderMatchMethodProperty"]]:
             '''The ``HeaderMatchMethod`` object.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httprouteheader.html#cfn-appmesh-route-httprouteheader-match
             '''
             result = self._values.get("match")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HeaderMatchMethodProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HeaderMatchMethodProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7045,12 +7054,12 @@ class CfnRoute(
         def __init__(
             self,
             *,
-            headers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.HttpRouteHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            headers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.HttpRouteHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             method: typing.Optional[builtins.str] = None,
-            path: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.HttpPathMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            path: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.HttpPathMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             port: typing.Optional[jsii.Number] = None,
             prefix: typing.Optional[builtins.str] = None,
-            query_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.QueryParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            query_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.QueryParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             scheme: typing.Optional[builtins.str] = None,
         ) -> None:
             '''An object that represents the requirements for a route to match HTTP requests for a virtual router.
@@ -7135,13 +7144,13 @@ class CfnRoute(
         @builtins.property
         def headers(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpRouteHeaderProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpRouteHeaderProperty"]]]]:
             '''The client request headers to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httproutematch.html#cfn-appmesh-route-httproutematch-headers
             '''
             result = self._values.get("headers")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpRouteHeaderProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpRouteHeaderProperty"]]]], result)
 
         @builtins.property
         def method(self) -> typing.Optional[builtins.str]:
@@ -7157,13 +7166,13 @@ class CfnRoute(
         @builtins.property
         def path(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpPathMatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpPathMatchProperty"]]:
             '''The client request path to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httproutematch.html#cfn-appmesh-route-httproutematch-path
             '''
             result = self._values.get("path")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpPathMatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpPathMatchProperty"]], result)
 
         @builtins.property
         def port(self) -> typing.Optional[jsii.Number]:
@@ -7188,13 +7197,13 @@ class CfnRoute(
         @builtins.property
         def query_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoute.QueryParameterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRoute.QueryParameterProperty"]]]]:
             '''The client request query parameters to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httproutematch.html#cfn-appmesh-route-httproutematch-queryparameters
             '''
             result = self._values.get("query_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoute.QueryParameterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRoute.QueryParameterProperty"]]]], result)
 
         @builtins.property
         def scheme(self) -> typing.Optional[builtins.str]:
@@ -7232,10 +7241,10 @@ class CfnRoute(
         def __init__(
             self,
             *,
-            action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.HttpRouteActionProperty", typing.Dict[builtins.str, typing.Any]]],
-            match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.HttpRouteMatchProperty", typing.Dict[builtins.str, typing.Any]]],
-            retry_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.HttpRetryPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            timeout: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.HttpTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.HttpRouteActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.HttpRouteMatchProperty", typing.Dict[builtins.str, typing.Any]]],
+            retry_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.HttpRetryPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            timeout: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.HttpTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents an HTTP or HTTP/2 route type.
 
@@ -7340,48 +7349,48 @@ class CfnRoute(
         @builtins.property
         def action(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpRouteActionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpRouteActionProperty"]:
             '''An object that represents the action to take if a match is determined.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httproute.html#cfn-appmesh-route-httproute-action
             '''
             result = self._values.get("action")
             assert result is not None, "Required property 'action' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpRouteActionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpRouteActionProperty"], result)
 
         @builtins.property
         def match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpRouteMatchProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpRouteMatchProperty"]:
             '''An object that represents the criteria for determining a request match.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httproute.html#cfn-appmesh-route-httproute-match
             '''
             result = self._values.get("match")
             assert result is not None, "Required property 'match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpRouteMatchProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpRouteMatchProperty"], result)
 
         @builtins.property
         def retry_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpRetryPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpRetryPolicyProperty"]]:
             '''An object that represents a retry policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httproute.html#cfn-appmesh-route-httproute-retrypolicy
             '''
             result = self._values.get("retry_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpRetryPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpRetryPolicyProperty"]], result)
 
         @builtins.property
         def timeout(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpTimeoutProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpTimeoutProperty"]]:
             '''An object that represents types of timeouts.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httproute.html#cfn-appmesh-route-httproute-timeout
             '''
             result = self._values.get("timeout")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpTimeoutProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpTimeoutProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7403,8 +7412,8 @@ class CfnRoute(
         def __init__(
             self,
             *,
-            idle: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            per_request: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            idle: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            per_request: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents types of timeouts.
 
@@ -7444,7 +7453,7 @@ class CfnRoute(
         @builtins.property
         def idle(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"]]:
             '''An object that represents an idle timeout.
 
             An idle timeout bounds the amount of time that a connection may be idle. The default value is none.
@@ -7452,12 +7461,12 @@ class CfnRoute(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httptimeout.html#cfn-appmesh-route-httptimeout-idle
             '''
             result = self._values.get("idle")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"]], result)
 
         @builtins.property
         def per_request(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"]]:
             '''An object that represents a per request timeout.
 
             The default value is 15 seconds. If you set a higher timeout, then make sure that the higher value is set for each App Mesh resource in a conversation. For example, if a virtual node backend uses a virtual router provider to route to another virtual node, then the timeout should be greater than 15 seconds for the source and destination virtual node and the route.
@@ -7465,7 +7474,7 @@ class CfnRoute(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-httptimeout.html#cfn-appmesh-route-httptimeout-perrequest
             '''
             result = self._values.get("per_request")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7556,7 +7565,7 @@ class CfnRoute(
             self,
             *,
             name: builtins.str,
-            match: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.HttpQueryParameterMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            match: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.HttpQueryParameterMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the query parameter in the request.
 
@@ -7604,13 +7613,13 @@ class CfnRoute(
         @builtins.property
         def match(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpQueryParameterMatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpQueryParameterMatchProperty"]]:
             '''The query parameter to match on.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-queryparameter.html#cfn-appmesh-route-queryparameter-match
             '''
             result = self._values.get("match")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpQueryParameterMatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpQueryParameterMatchProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7638,11 +7647,11 @@ class CfnRoute(
         def __init__(
             self,
             *,
-            grpc_route: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.GrpcRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            http2_route: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.HttpRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            http_route: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.HttpRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            grpc_route: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.GrpcRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http2_route: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.HttpRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http_route: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.HttpRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             priority: typing.Optional[jsii.Number] = None,
-            tcp_route: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.TcpRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tcp_route: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.TcpRouteProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a route specification.
 
@@ -7903,35 +7912,35 @@ class CfnRoute(
         @builtins.property
         def grpc_route(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcRouteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcRouteProperty"]]:
             '''An object that represents the specification of a gRPC route.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-routespec.html#cfn-appmesh-route-routespec-grpcroute
             '''
             result = self._values.get("grpc_route")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.GrpcRouteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.GrpcRouteProperty"]], result)
 
         @builtins.property
         def http2_route(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpRouteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpRouteProperty"]]:
             '''An object that represents the specification of an HTTP/2 route.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-routespec.html#cfn-appmesh-route-routespec-http2route
             '''
             result = self._values.get("http2_route")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpRouteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpRouteProperty"]], result)
 
         @builtins.property
         def http_route(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpRouteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpRouteProperty"]]:
             '''An object that represents the specification of an HTTP route.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-routespec.html#cfn-appmesh-route-routespec-httproute
             '''
             result = self._values.get("http_route")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.HttpRouteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.HttpRouteProperty"]], result)
 
         @builtins.property
         def priority(self) -> typing.Optional[jsii.Number]:
@@ -7947,13 +7956,13 @@ class CfnRoute(
         @builtins.property
         def tcp_route(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.TcpRouteProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.TcpRouteProperty"]]:
             '''An object that represents the specification of a TCP route.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-routespec.html#cfn-appmesh-route-routespec-tcproute
             '''
             result = self._values.get("tcp_route")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.TcpRouteProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.TcpRouteProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7975,7 +7984,7 @@ class CfnRoute(
         def __init__(
             self,
             *,
-            weighted_targets: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.WeightedTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            weighted_targets: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.WeightedTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''An object that represents the action to take if a match is determined.
 
@@ -8010,14 +8019,14 @@ class CfnRoute(
         @builtins.property
         def weighted_targets(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoute.WeightedTargetProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRoute.WeightedTargetProperty"]]]:
             '''An object that represents the targets that traffic is routed to when a request matches the route.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-tcprouteaction.html#cfn-appmesh-route-tcprouteaction-weightedtargets
             '''
             result = self._values.get("weighted_targets")
             assert result is not None, "Required property 'weighted_targets' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRoute.WeightedTargetProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRoute.WeightedTargetProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8090,9 +8099,9 @@ class CfnRoute(
         def __init__(
             self,
             *,
-            action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.TcpRouteActionProperty", typing.Dict[builtins.str, typing.Any]]],
-            match: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.TcpRouteMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            timeout: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.TcpTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.TcpRouteActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            match: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.TcpRouteMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            timeout: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.TcpTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a TCP route type.
 
@@ -8148,36 +8157,36 @@ class CfnRoute(
         @builtins.property
         def action(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRoute.TcpRouteActionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRoute.TcpRouteActionProperty"]:
             '''The action to take if a match is determined.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-tcproute.html#cfn-appmesh-route-tcproute-action
             '''
             result = self._values.get("action")
             assert result is not None, "Required property 'action' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRoute.TcpRouteActionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRoute.TcpRouteActionProperty"], result)
 
         @builtins.property
         def match(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.TcpRouteMatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.TcpRouteMatchProperty"]]:
             '''An object that represents the criteria for determining a request match.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-tcproute.html#cfn-appmesh-route-tcproute-match
             '''
             result = self._values.get("match")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.TcpRouteMatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.TcpRouteMatchProperty"]], result)
 
         @builtins.property
         def timeout(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.TcpTimeoutProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.TcpTimeoutProperty"]]:
             '''An object that represents types of timeouts.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-tcproute.html#cfn-appmesh-route-tcproute-timeout
             '''
             result = self._values.get("timeout")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.TcpTimeoutProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.TcpTimeoutProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8199,7 +8208,7 @@ class CfnRoute(
         def __init__(
             self,
             *,
-            idle: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            idle: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents types of timeouts.
 
@@ -8231,7 +8240,7 @@ class CfnRoute(
         @builtins.property
         def idle(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"]]:
             '''An object that represents an idle timeout.
 
             An idle timeout bounds the amount of time that a connection may be idle. The default value is none.
@@ -8239,7 +8248,7 @@ class CfnRoute(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-route-tcptimeout.html#cfn-appmesh-route-tcptimeout-idle
             '''
             result = self._values.get("idle")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoute.DurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoute.DurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8364,11 +8373,11 @@ class CfnRouteProps:
         self,
         *,
         mesh_name: builtins.str,
-        spec: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoute.RouteSpecProperty, typing.Dict[builtins.str, typing.Any]]],
+        spec: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoute.RouteSpecProperty", typing.Dict[builtins.str, typing.Any]]],
         virtual_router_name: builtins.str,
         mesh_owner: typing.Optional[builtins.str] = None,
         route_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRoute``.
 
@@ -8384,6 +8393,7 @@ class CfnRouteProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appmesh as appmesh
@@ -8649,14 +8659,16 @@ class CfnRouteProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def spec(self) -> typing.Union[_IResolvable_da3f097b, CfnRoute.RouteSpecProperty]:
+    def spec(
+        self,
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnRoute.RouteSpecProperty"]:
         '''The route specification to apply.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-route.html#cfn-appmesh-route-spec
         '''
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnRoute.RouteSpecProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRoute.RouteSpecProperty"], result)
 
     @builtins.property
     def virtual_router_name(self) -> builtins.str:
@@ -8691,7 +8703,7 @@ class CfnRouteProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the route to assist with categorization and organization.
 
         Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.
@@ -8699,7 +8711,7 @@ class CfnRouteProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-route.html#cfn-appmesh-route-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8731,6 +8743,7 @@ class CfnVirtualGateway(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appmesh as appmesh
@@ -8876,13 +8889,13 @@ class CfnVirtualGateway(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         mesh_name: builtins.str,
-        spec: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewaySpecProperty", typing.Dict[builtins.str, typing.Any]]],
+        spec: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewaySpecProperty", typing.Dict[builtins.str, typing.Any]]],
         mesh_owner: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         virtual_gateway_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::AppMesh::VirtualGateway``.
@@ -8913,7 +8926,7 @@ class CfnVirtualGateway(
     @builtins.classmethod
     def arn_for_virtual_gateway(
         cls,
-        resource: _IVirtualGatewayRef_63265943,
+        resource: "_IVirtualGatewayRef_63265943",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -8936,7 +8949,7 @@ class CfnVirtualGateway(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVirtualGateway", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9038,15 +9051,15 @@ class CfnVirtualGateway(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualGatewayRef")
-    def virtual_gateway_ref(self) -> _VirtualGatewayReference_29f6f326:
+    def virtual_gateway_ref(self) -> "_VirtualGatewayReference_29f6f326":
         '''A reference to a VirtualGateway resource.'''
-        return typing.cast(_VirtualGatewayReference_29f6f326, jsii.get(self, "virtualGatewayRef"))
+        return typing.cast("_VirtualGatewayReference_29f6f326", jsii.get(self, "virtualGatewayRef"))
 
     @builtins.property
     @jsii.member(jsii_name="meshName")
@@ -9065,14 +9078,14 @@ class CfnVirtualGateway(
     @jsii.member(jsii_name="spec")
     def spec(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewaySpecProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewaySpecProperty"]:
         '''The specifications of the virtual gateway.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewaySpecProperty"], jsii.get(self, "spec"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewaySpecProperty"], jsii.get(self, "spec"))
 
     @spec.setter
     def spec(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewaySpecProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewaySpecProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__510b3d42a651bf6471450f27f03fe5c67f00152d5a0e35e3627c4fcfb8921d36)
@@ -9094,12 +9107,12 @@ class CfnVirtualGateway(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the virtual gateway to assist with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3f36904ee813091921f0a5d19544f2321ffe82ff49dbbd2a8b6c304dbcb00701)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9193,7 +9206,7 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            json: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.JsonFormatRefProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            json: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.JsonFormatRefProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             text: typing.Optional[builtins.str] = None,
         ) -> None:
             '''An object that represents the format for the logs.
@@ -9231,13 +9244,13 @@ class CfnVirtualGateway(
         @builtins.property
         def json(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.JsonFormatRefProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.JsonFormatRefProperty"]]]]:
             '''The logging format for JSON.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-loggingformat.html#cfn-appmesh-virtualgateway-loggingformat-json
             '''
             result = self._values.get("json")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.JsonFormatRefProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.JsonFormatRefProperty"]]]], result)
 
         @builtins.property
         def text(self) -> typing.Optional[builtins.str]:
@@ -9323,7 +9336,7 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.SubjectAlternativeNameMatchersProperty", typing.Dict[builtins.str, typing.Any]]],
+            match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.SubjectAlternativeNameMatchersProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''An object that represents the subject alternative names secured by the certificate.
 
@@ -9354,14 +9367,14 @@ class CfnVirtualGateway(
         @builtins.property
         def match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.SubjectAlternativeNameMatchersProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.SubjectAlternativeNameMatchersProperty"]:
             '''An object that represents the criteria for determining a SANs match.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-subjectalternativenames.html#cfn-appmesh-virtualgateway-subjectalternativenames-match
             '''
             result = self._values.get("match")
             assert result is not None, "Required property 'match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.SubjectAlternativeNameMatchersProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.SubjectAlternativeNameMatchersProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9383,7 +9396,7 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            file: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayFileAccessLogProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            file: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayFileAccessLogProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The access log configuration for a virtual gateway.
 
@@ -9423,13 +9436,13 @@ class CfnVirtualGateway(
         @builtins.property
         def file(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayFileAccessLogProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayFileAccessLogProperty"]]:
             '''The file object to send virtual gateway access logs to.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayaccesslog.html#cfn-appmesh-virtualgateway-virtualgatewayaccesslog-file
             '''
             result = self._values.get("file")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayFileAccessLogProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayFileAccessLogProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9451,7 +9464,7 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            client_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayClientPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            client_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayClientPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the default properties for a backend.
 
@@ -9516,13 +9529,13 @@ class CfnVirtualGateway(
         @builtins.property
         def client_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayClientPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayClientPolicyProperty"]]:
             '''A reference to an object that represents a client policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaybackenddefaults.html#cfn-appmesh-virtualgateway-virtualgatewaybackenddefaults-clientpolicy
             '''
             result = self._values.get("client_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayClientPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayClientPolicyProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9544,7 +9557,7 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            tls: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayClientPolicyTlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tls: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayClientPolicyTlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a client policy.
 
@@ -9607,13 +9620,13 @@ class CfnVirtualGateway(
         @builtins.property
         def tls(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayClientPolicyTlsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayClientPolicyTlsProperty"]]:
             '''A reference to an object that represents a Transport Layer Security (TLS) client policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayclientpolicy.html#cfn-appmesh-virtualgateway-virtualgatewayclientpolicy-tls
             '''
             result = self._values.get("tls")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayClientPolicyTlsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayClientPolicyTlsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9640,10 +9653,10 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            validation: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextProperty", typing.Dict[builtins.str, typing.Any]]],
-            certificate: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayClientTlsCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            enforce: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            ports: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+            validation: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextProperty", typing.Dict[builtins.str, typing.Any]]],
+            certificate: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayClientTlsCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            enforce: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            ports: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''An object that represents a Transport Layer Security (TLS) client policy.
 
@@ -9716,30 +9729,30 @@ class CfnVirtualGateway(
         @builtins.property
         def validation(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextProperty"]:
             '''A reference to an object that represents a Transport Layer Security (TLS) validation context.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayclientpolicytls.html#cfn-appmesh-virtualgateway-virtualgatewayclientpolicytls-validation
             '''
             result = self._values.get("validation")
             assert result is not None, "Required property 'validation' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextProperty"], result)
 
         @builtins.property
         def certificate(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayClientTlsCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayClientTlsCertificateProperty"]]:
             '''A reference to an object that represents a virtual gateway's client's Transport Layer Security (TLS) certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayclientpolicytls.html#cfn-appmesh-virtualgateway-virtualgatewayclientpolicytls-certificate
             '''
             result = self._values.get("certificate")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayClientTlsCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayClientTlsCertificateProperty"]], result)
 
         @builtins.property
         def enforce(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether the policy is enforced.
 
             The default is ``True`` , if a value isn't specified.
@@ -9747,18 +9760,18 @@ class CfnVirtualGateway(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayclientpolicytls.html#cfn-appmesh-virtualgateway-virtualgatewayclientpolicytls-enforce
             '''
             result = self._values.get("enforce")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def ports(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
             '''One or more ports that the policy is enforced for.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayclientpolicytls.html#cfn-appmesh-virtualgateway-virtualgatewayclientpolicytls-ports
             '''
             result = self._values.get("ports")
-            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9780,8 +9793,8 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            file: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsFileCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sds: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsSdsCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            file: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsFileCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sds: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsSdsCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the virtual gateway's client's Transport Layer Security (TLS) certificate.
 
@@ -9820,7 +9833,7 @@ class CfnVirtualGateway(
         @builtins.property
         def file(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsFileCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsFileCertificateProperty"]]:
             '''An object that represents a local file certificate.
 
             The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see `Transport Layer Security (TLS) <https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html>`_ .
@@ -9828,18 +9841,18 @@ class CfnVirtualGateway(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayclienttlscertificate.html#cfn-appmesh-virtualgateway-virtualgatewayclienttlscertificate-file
             '''
             result = self._values.get("file")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsFileCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsFileCertificateProperty"]], result)
 
         @builtins.property
         def sds(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsSdsCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsSdsCertificateProperty"]]:
             '''A reference to an object that represents a virtual gateway's client's Secret Discovery Service certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayclienttlscertificate.html#cfn-appmesh-virtualgateway-virtualgatewayclienttlscertificate-sds
             '''
             result = self._values.get("sds")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsSdsCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsSdsCertificateProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9861,9 +9874,9 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            grpc: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayGrpcConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            http: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayHttpConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            http2: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayHttp2ConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            grpc: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayGrpcConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayHttpConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http2: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayHttp2ConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the type of virtual gateway connection pool.
 
@@ -9915,35 +9928,35 @@ class CfnVirtualGateway(
         @builtins.property
         def grpc(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayGrpcConnectionPoolProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayGrpcConnectionPoolProperty"]]:
             '''An object that represents a type of connection pool.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayconnectionpool.html#cfn-appmesh-virtualgateway-virtualgatewayconnectionpool-grpc
             '''
             result = self._values.get("grpc")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayGrpcConnectionPoolProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayGrpcConnectionPoolProperty"]], result)
 
         @builtins.property
         def http(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayHttpConnectionPoolProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayHttpConnectionPoolProperty"]]:
             '''An object that represents a type of connection pool.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayconnectionpool.html#cfn-appmesh-virtualgateway-virtualgatewayconnectionpool-http
             '''
             result = self._values.get("http")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayHttpConnectionPoolProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayHttpConnectionPoolProperty"]], result)
 
         @builtins.property
         def http2(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayHttp2ConnectionPoolProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayHttp2ConnectionPoolProperty"]]:
             '''An object that represents a type of connection pool.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayconnectionpool.html#cfn-appmesh-virtualgateway-virtualgatewayconnectionpool-http2
             '''
             result = self._values.get("http2")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayHttp2ConnectionPoolProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayHttp2ConnectionPoolProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9966,7 +9979,7 @@ class CfnVirtualGateway(
             self,
             *,
             path: builtins.str,
-            format: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.LoggingFormatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            format: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.LoggingFormatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents an access log file.
 
@@ -10020,7 +10033,7 @@ class CfnVirtualGateway(
         @builtins.property
         def format(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.LoggingFormatProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.LoggingFormatProperty"]]:
             '''The specified format for the virtual gateway access logs.
 
             It can be either ``json_format`` or ``text_format`` .
@@ -10028,7 +10041,7 @@ class CfnVirtualGateway(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayfileaccesslog.html#cfn-appmesh-virtualgateway-virtualgatewayfileaccesslog-format
             '''
             result = self._values.get("format")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.LoggingFormatProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.LoggingFormatProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10397,10 +10410,10 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            port_mapping: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayPortMappingProperty", typing.Dict[builtins.str, typing.Any]]],
-            connection_pool: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            health_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayHealthCheckPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            tls: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            port_mapping: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayPortMappingProperty", typing.Dict[builtins.str, typing.Any]]],
+            connection_pool: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            health_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayHealthCheckPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tls: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a listener for a virtual gateway.
 
@@ -10505,47 +10518,47 @@ class CfnVirtualGateway(
         @builtins.property
         def port_mapping(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayPortMappingProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayPortMappingProperty"]:
             '''The port mapping information for the listener.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistener.html#cfn-appmesh-virtualgateway-virtualgatewaylistener-portmapping
             '''
             result = self._values.get("port_mapping")
             assert result is not None, "Required property 'port_mapping' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayPortMappingProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayPortMappingProperty"], result)
 
         @builtins.property
         def connection_pool(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayConnectionPoolProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayConnectionPoolProperty"]]:
             '''The connection pool information for the listener.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistener.html#cfn-appmesh-virtualgateway-virtualgatewaylistener-connectionpool
             '''
             result = self._values.get("connection_pool")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayConnectionPoolProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayConnectionPoolProperty"]], result)
 
         @builtins.property
         def health_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayHealthCheckPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayHealthCheckPolicyProperty"]]:
             '''The health check information for the listener.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistener.html#cfn-appmesh-virtualgateway-virtualgatewaylistener-healthcheck
             '''
             result = self._values.get("health_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayHealthCheckPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayHealthCheckPolicyProperty"]], result)
 
         @builtins.property
         def tls(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsProperty"]]:
             '''A reference to an object that represents the Transport Layer Security (TLS) properties for the listener.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistener.html#cfn-appmesh-virtualgateway-virtualgatewaylistener-tls
             '''
             result = self._values.get("tls")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10621,9 +10634,9 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            acm: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsAcmCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            file: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsFileCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sds: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsSdsCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            acm: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsAcmCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            file: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsFileCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sds: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsSdsCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a listener's Transport Layer Security (TLS) certificate.
 
@@ -10669,35 +10682,35 @@ class CfnVirtualGateway(
         @builtins.property
         def acm(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsAcmCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsAcmCertificateProperty"]]:
             '''A reference to an object that represents an Certificate Manager certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistenertlscertificate.html#cfn-appmesh-virtualgateway-virtualgatewaylistenertlscertificate-acm
             '''
             result = self._values.get("acm")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsAcmCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsAcmCertificateProperty"]], result)
 
         @builtins.property
         def file(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsFileCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsFileCertificateProperty"]]:
             '''A reference to an object that represents a local file certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistenertlscertificate.html#cfn-appmesh-virtualgateway-virtualgatewaylistenertlscertificate-file
             '''
             result = self._values.get("file")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsFileCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsFileCertificateProperty"]], result)
 
         @builtins.property
         def sds(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsSdsCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsSdsCertificateProperty"]]:
             '''A reference to an object that represents a virtual gateway's listener's Secret Discovery Service certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistenertlscertificate.html#cfn-appmesh-virtualgateway-virtualgatewaylistenertlscertificate-sds
             '''
             result = self._values.get("sds")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsSdsCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsSdsCertificateProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10799,9 +10812,9 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            certificate: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsCertificateProperty", typing.Dict[builtins.str, typing.Any]]],
+            certificate: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsCertificateProperty", typing.Dict[builtins.str, typing.Any]]],
             mode: builtins.str,
-            validation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsValidationContextProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            validation: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsValidationContextProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the Transport Layer Security (TLS) properties for a listener.
 
@@ -10868,14 +10881,14 @@ class CfnVirtualGateway(
         @builtins.property
         def certificate(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsCertificateProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsCertificateProperty"]:
             '''An object that represents a Transport Layer Security (TLS) certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistenertls.html#cfn-appmesh-virtualgateway-virtualgatewaylistenertls-certificate
             '''
             result = self._values.get("certificate")
             assert result is not None, "Required property 'certificate' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsCertificateProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsCertificateProperty"], result)
 
         @builtins.property
         def mode(self) -> builtins.str:
@@ -10894,13 +10907,13 @@ class CfnVirtualGateway(
         @builtins.property
         def validation(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsValidationContextProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsValidationContextProperty"]]:
             '''A reference to an object that represents a virtual gateway's listener's Transport Layer Security (TLS) validation context.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistenertls.html#cfn-appmesh-virtualgateway-virtualgatewaylistenertls-validation
             '''
             result = self._values.get("validation")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsValidationContextProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsValidationContextProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10977,8 +10990,8 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            trust: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsValidationContextTrustProperty", typing.Dict[builtins.str, typing.Any]]],
-            subject_alternative_names: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.SubjectAlternativeNamesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            trust: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayListenerTlsValidationContextTrustProperty", typing.Dict[builtins.str, typing.Any]]],
+            subject_alternative_names: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.SubjectAlternativeNamesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a virtual gateway's listener's Transport Layer Security (TLS) validation context.
 
@@ -11025,25 +11038,25 @@ class CfnVirtualGateway(
         @builtins.property
         def trust(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsValidationContextTrustProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsValidationContextTrustProperty"]:
             '''A reference to where to retrieve the trust chain when validating a peer’s Transport Layer Security (TLS) certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistenertlsvalidationcontext.html#cfn-appmesh-virtualgateway-virtualgatewaylistenertlsvalidationcontext-trust
             '''
             result = self._values.get("trust")
             assert result is not None, "Required property 'trust' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerTlsValidationContextTrustProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerTlsValidationContextTrustProperty"], result)
 
         @builtins.property
         def subject_alternative_names(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.SubjectAlternativeNamesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.SubjectAlternativeNamesProperty"]]:
             '''A reference to an object that represents the SANs for a virtual gateway listener's Transport Layer Security (TLS) validation context.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistenertlsvalidationcontext.html#cfn-appmesh-virtualgateway-virtualgatewaylistenertlsvalidationcontext-subjectalternativenames
             '''
             result = self._values.get("subject_alternative_names")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.SubjectAlternativeNamesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.SubjectAlternativeNamesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11065,8 +11078,8 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            file: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextFileTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sds: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextSdsTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            file: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextFileTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sds: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextSdsTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a virtual gateway's listener's Transport Layer Security (TLS) validation context trust.
 
@@ -11104,24 +11117,24 @@ class CfnVirtualGateway(
         @builtins.property
         def file(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextFileTrustProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextFileTrustProperty"]]:
             '''An object that represents a Transport Layer Security (TLS) validation context trust for a local file.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistenertlsvalidationcontexttrust.html#cfn-appmesh-virtualgateway-virtualgatewaylistenertlsvalidationcontexttrust-file
             '''
             result = self._values.get("file")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextFileTrustProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextFileTrustProperty"]], result)
 
         @builtins.property
         def sds(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextSdsTrustProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextSdsTrustProperty"]]:
             '''A reference to an object that represents a virtual gateway's listener's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylistenertlsvalidationcontexttrust.html#cfn-appmesh-virtualgateway-virtualgatewaylistenertlsvalidationcontexttrust-sds
             '''
             result = self._values.get("sds")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextSdsTrustProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextSdsTrustProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11143,7 +11156,7 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            access_log: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayAccessLogProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            access_log: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayAccessLogProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents logging information.
 
@@ -11185,13 +11198,13 @@ class CfnVirtualGateway(
         @builtins.property
         def access_log(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayAccessLogProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayAccessLogProperty"]]:
             '''The access log configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaylogging.html#cfn-appmesh-virtualgateway-virtualgatewaylogging-accesslog
             '''
             result = self._values.get("access_log")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayAccessLogProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayAccessLogProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11285,9 +11298,9 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            listeners: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayListenerProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            backend_defaults: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayBackendDefaultsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            logging: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayLoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            listeners: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayListenerProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            backend_defaults: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayBackendDefaultsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            logging: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayLoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the specification of a service mesh resource.
 
@@ -11447,7 +11460,7 @@ class CfnVirtualGateway(
         @builtins.property
         def listeners(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerProperty"]]]:
             '''The listeners that the mesh endpoint is expected to receive inbound traffic from.
 
             You can specify one listener.
@@ -11456,29 +11469,29 @@ class CfnVirtualGateway(
             '''
             result = self._values.get("listeners")
             assert result is not None, "Required property 'listeners' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayListenerProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayListenerProperty"]]], result)
 
         @builtins.property
         def backend_defaults(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayBackendDefaultsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayBackendDefaultsProperty"]]:
             '''A reference to an object that represents the defaults for backends.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayspec.html#cfn-appmesh-virtualgateway-virtualgatewayspec-backenddefaults
             '''
             result = self._values.get("backend_defaults")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayBackendDefaultsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayBackendDefaultsProperty"]], result)
 
         @builtins.property
         def logging(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayLoggingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayLoggingProperty"]]:
             '''An object that represents logging information.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewayspec.html#cfn-appmesh-virtualgateway-virtualgatewayspec-logging
             '''
             result = self._values.get("logging")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayLoggingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayLoggingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11611,8 +11624,8 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            trust: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextTrustProperty", typing.Dict[builtins.str, typing.Any]]],
-            subject_alternative_names: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.SubjectAlternativeNamesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            trust: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextTrustProperty", typing.Dict[builtins.str, typing.Any]]],
+            subject_alternative_names: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.SubjectAlternativeNamesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a Transport Layer Security (TLS) validation context.
 
@@ -11662,25 +11675,25 @@ class CfnVirtualGateway(
         @builtins.property
         def trust(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextTrustProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextTrustProperty"]:
             '''A reference to where to retrieve the trust chain when validating a peer’s Transport Layer Security (TLS) certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaytlsvalidationcontext.html#cfn-appmesh-virtualgateway-virtualgatewaytlsvalidationcontext-trust
             '''
             result = self._values.get("trust")
             assert result is not None, "Required property 'trust' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextTrustProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextTrustProperty"], result)
 
         @builtins.property
         def subject_alternative_names(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.SubjectAlternativeNamesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.SubjectAlternativeNamesProperty"]]:
             '''A reference to an object that represents the SANs for a virtual gateway's listener's Transport Layer Security (TLS) validation context.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaytlsvalidationcontext.html#cfn-appmesh-virtualgateway-virtualgatewaytlsvalidationcontext-subjectalternativenames
             '''
             result = self._values.get("subject_alternative_names")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.SubjectAlternativeNamesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.SubjectAlternativeNamesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11756,9 +11769,9 @@ class CfnVirtualGateway(
         def __init__(
             self,
             *,
-            acm: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextAcmTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            file: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextFileTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sds: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextSdsTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            acm: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextAcmTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            file: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextFileTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sds: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewayTlsValidationContextSdsTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a Transport Layer Security (TLS) validation context trust.
 
@@ -11803,35 +11816,35 @@ class CfnVirtualGateway(
         @builtins.property
         def acm(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextAcmTrustProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextAcmTrustProperty"]]:
             '''A reference to an object that represents a Transport Layer Security (TLS) validation context trust for an Certificate Manager certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaytlsvalidationcontexttrust.html#cfn-appmesh-virtualgateway-virtualgatewaytlsvalidationcontexttrust-acm
             '''
             result = self._values.get("acm")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextAcmTrustProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextAcmTrustProperty"]], result)
 
         @builtins.property
         def file(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextFileTrustProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextFileTrustProperty"]]:
             '''An object that represents a Transport Layer Security (TLS) validation context trust for a local file.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaytlsvalidationcontexttrust.html#cfn-appmesh-virtualgateway-virtualgatewaytlsvalidationcontexttrust-file
             '''
             result = self._values.get("file")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextFileTrustProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextFileTrustProperty"]], result)
 
         @builtins.property
         def sds(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextSdsTrustProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextSdsTrustProperty"]]:
             '''A reference to an object that represents a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualgateway-virtualgatewaytlsvalidationcontexttrust.html#cfn-appmesh-virtualgateway-virtualgatewaytlsvalidationcontexttrust-sds
             '''
             result = self._values.get("sds")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualGateway.VirtualGatewayTlsValidationContextSdsTrustProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewayTlsValidationContextSdsTrustProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11861,9 +11874,9 @@ class CfnVirtualGatewayProps:
         self,
         *,
         mesh_name: builtins.str,
-        spec: typing.Union[_IResolvable_da3f097b, typing.Union[CfnVirtualGateway.VirtualGatewaySpecProperty, typing.Dict[builtins.str, typing.Any]]],
+        spec: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualGateway.VirtualGatewaySpecProperty", typing.Dict[builtins.str, typing.Any]]],
         mesh_owner: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         virtual_gateway_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnVirtualGateway``.
@@ -11879,6 +11892,7 @@ class CfnVirtualGatewayProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appmesh as appmesh
@@ -12052,14 +12066,14 @@ class CfnVirtualGatewayProps:
     @builtins.property
     def spec(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnVirtualGateway.VirtualGatewaySpecProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewaySpecProperty"]:
         '''The specifications of the virtual gateway.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-virtualgateway.html#cfn-appmesh-virtualgateway-spec
         '''
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnVirtualGateway.VirtualGatewaySpecProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualGateway.VirtualGatewaySpecProperty"], result)
 
     @builtins.property
     def mesh_owner(self) -> typing.Optional[builtins.str]:
@@ -12073,7 +12087,7 @@ class CfnVirtualGatewayProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the virtual gateway to assist with categorization and organization.
 
         Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.
@@ -12081,7 +12095,7 @@ class CfnVirtualGatewayProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-virtualgateway.html#cfn-appmesh-virtualgateway-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def virtual_gateway_name(self) -> typing.Optional[builtins.str]:
@@ -12129,6 +12143,7 @@ class CfnVirtualNode(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appmesh as appmesh
@@ -12389,13 +12404,13 @@ class CfnVirtualNode(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         mesh_name: builtins.str,
-        spec: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.VirtualNodeSpecProperty", typing.Dict[builtins.str, typing.Any]]],
+        spec: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.VirtualNodeSpecProperty", typing.Dict[builtins.str, typing.Any]]],
         mesh_owner: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         virtual_node_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::AppMesh::VirtualNode``.
@@ -12424,7 +12439,10 @@ class CfnVirtualNode(
 
     @jsii.member(jsii_name="arnForVirtualNode")
     @builtins.classmethod
-    def arn_for_virtual_node(cls, resource: _IVirtualNodeRef_5162bf48) -> builtins.str:
+    def arn_for_virtual_node(
+        cls,
+        resource: "_IVirtualNodeRef_5162bf48",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -12446,7 +12464,7 @@ class CfnVirtualNode(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVirtualNode", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12548,15 +12566,15 @@ class CfnVirtualNode(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualNodeRef")
-    def virtual_node_ref(self) -> _VirtualNodeReference_668c47b3:
+    def virtual_node_ref(self) -> "_VirtualNodeReference_668c47b3":
         '''A reference to a VirtualNode resource.'''
-        return typing.cast(_VirtualNodeReference_668c47b3, jsii.get(self, "virtualNodeRef"))
+        return typing.cast("_VirtualNodeReference_668c47b3", jsii.get(self, "virtualNodeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="meshName")
@@ -12575,14 +12593,14 @@ class CfnVirtualNode(
     @jsii.member(jsii_name="spec")
     def spec(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeSpecProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeSpecProperty"]:
         '''The virtual node specification to apply.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeSpecProperty"], jsii.get(self, "spec"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeSpecProperty"], jsii.get(self, "spec"))
 
     @spec.setter
     def spec(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeSpecProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeSpecProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__69101b3af439f3968821270efdfaa2b33a95944f88e8ef8ffbce3a7e03334fb6)
@@ -12604,12 +12622,12 @@ class CfnVirtualNode(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the virtual node to assist with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__10d8ee0411eb92c3301d69fbdb5b3d0fa2159134bb2831cfbf085d8334c0f3c3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -12637,7 +12655,7 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            file: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.FileAccessLogProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            file: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.FileAccessLogProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the access logging information for a virtual node.
 
@@ -12677,13 +12695,13 @@ class CfnVirtualNode(
         @builtins.property
         def file(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.FileAccessLogProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.FileAccessLogProperty"]]:
             '''The file object to send virtual node access logs to.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-accesslog.html#cfn-appmesh-virtualnode-accesslog-file
             '''
             result = self._values.get("file")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.FileAccessLogProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.FileAccessLogProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12786,7 +12804,7 @@ class CfnVirtualNode(
             *,
             namespace_name: builtins.str,
             service_name: builtins.str,
-            attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.AwsCloudMapInstanceAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.AwsCloudMapInstanceAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             ip_preference: typing.Optional[builtins.str] = None,
         ) -> None:
             '''An object that represents the AWS Cloud Map service discovery information for your virtual node.
@@ -12859,7 +12877,7 @@ class CfnVirtualNode(
         @builtins.property
         def attributes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.AwsCloudMapInstanceAttributeProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.AwsCloudMapInstanceAttributeProperty"]]]]:
             '''A string map that contains attributes with values that you can use to filter instances by any custom attribute that you specified when you registered the instance.
 
             Only instances that match all of the specified key/value pairs will be returned.
@@ -12867,7 +12885,7 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-awscloudmapservicediscovery.html#cfn-appmesh-virtualnode-awscloudmapservicediscovery-attributes
             '''
             result = self._values.get("attributes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.AwsCloudMapInstanceAttributeProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.AwsCloudMapInstanceAttributeProperty"]]]], result)
 
         @builtins.property
         def ip_preference(self) -> typing.Optional[builtins.str]:
@@ -12900,7 +12918,7 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            client_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ClientPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            client_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ClientPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the default properties for a backend.
 
@@ -12965,13 +12983,13 @@ class CfnVirtualNode(
         @builtins.property
         def client_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ClientPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ClientPolicyProperty"]]:
             '''A reference to an object that represents a client policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-backenddefaults.html#cfn-appmesh-virtualnode-backenddefaults-clientpolicy
             '''
             result = self._values.get("client_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ClientPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ClientPolicyProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12993,7 +13011,7 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            virtual_service: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.VirtualServiceBackendProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            virtual_service: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.VirtualServiceBackendProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the backends that a virtual node is expected to send outbound traffic to.
 
@@ -13063,13 +13081,13 @@ class CfnVirtualNode(
         @builtins.property
         def virtual_service(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualServiceBackendProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualServiceBackendProperty"]]:
             '''Specifies a virtual service to use as a backend.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-backend.html#cfn-appmesh-virtualnode-backend-virtualservice
             '''
             result = self._values.get("virtual_service")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualServiceBackendProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualServiceBackendProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13091,7 +13109,7 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            tls: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ClientPolicyTlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tls: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ClientPolicyTlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a client policy.
 
@@ -13154,13 +13172,13 @@ class CfnVirtualNode(
         @builtins.property
         def tls(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ClientPolicyTlsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ClientPolicyTlsProperty"]]:
             '''A reference to an object that represents a Transport Layer Security (TLS) client policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-clientpolicy.html#cfn-appmesh-virtualnode-clientpolicy-tls
             '''
             result = self._values.get("tls")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ClientPolicyTlsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ClientPolicyTlsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13187,10 +13205,10 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            validation: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.TlsValidationContextProperty", typing.Dict[builtins.str, typing.Any]]],
-            certificate: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ClientTlsCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            enforce: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            ports: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+            validation: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.TlsValidationContextProperty", typing.Dict[builtins.str, typing.Any]]],
+            certificate: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ClientTlsCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            enforce: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            ports: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''A reference to an object that represents a Transport Layer Security (TLS) client policy.
 
@@ -13263,30 +13281,30 @@ class CfnVirtualNode(
         @builtins.property
         def validation(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextProperty"]:
             '''A reference to an object that represents a TLS validation context.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-clientpolicytls.html#cfn-appmesh-virtualnode-clientpolicytls-validation
             '''
             result = self._values.get("validation")
             assert result is not None, "Required property 'validation' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextProperty"], result)
 
         @builtins.property
         def certificate(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ClientTlsCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ClientTlsCertificateProperty"]]:
             '''A reference to an object that represents a client's TLS certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-clientpolicytls.html#cfn-appmesh-virtualnode-clientpolicytls-certificate
             '''
             result = self._values.get("certificate")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ClientTlsCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ClientTlsCertificateProperty"]], result)
 
         @builtins.property
         def enforce(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether the policy is enforced.
 
             The default is ``True`` , if a value isn't specified.
@@ -13294,18 +13312,18 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-clientpolicytls.html#cfn-appmesh-virtualnode-clientpolicytls-enforce
             '''
             result = self._values.get("enforce")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def ports(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
             '''One or more ports that the policy is enforced for.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-clientpolicytls.html#cfn-appmesh-virtualnode-clientpolicytls-ports
             '''
             result = self._values.get("ports")
-            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13327,8 +13345,8 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            file: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ListenerTlsFileCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sds: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ListenerTlsSdsCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            file: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ListenerTlsFileCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sds: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ListenerTlsSdsCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the client's certificate.
 
@@ -13367,7 +13385,7 @@ class CfnVirtualNode(
         @builtins.property
         def file(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsFileCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsFileCertificateProperty"]]:
             '''An object that represents a local file certificate.
 
             The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see `Transport Layer Security (TLS) <https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html>`_ .
@@ -13375,18 +13393,18 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-clienttlscertificate.html#cfn-appmesh-virtualnode-clienttlscertificate-file
             '''
             result = self._values.get("file")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsFileCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsFileCertificateProperty"]], result)
 
         @builtins.property
         def sds(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsSdsCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsSdsCertificateProperty"]]:
             '''A reference to an object that represents a client's TLS Secret Discovery Service certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-clienttlscertificate.html#cfn-appmesh-virtualnode-clienttlscertificate-sds
             '''
             result = self._values.get("sds")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsSdsCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsSdsCertificateProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13569,7 +13587,7 @@ class CfnVirtualNode(
             self,
             *,
             path: builtins.str,
-            format: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.LoggingFormatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            format: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.LoggingFormatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents an access log file.
 
@@ -13626,7 +13644,7 @@ class CfnVirtualNode(
         @builtins.property
         def format(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.LoggingFormatProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.LoggingFormatProperty"]]:
             '''The specified format for the logs.
 
             The format is either ``json_format`` or ``text_format`` .
@@ -13634,7 +13652,7 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-fileaccesslog.html#cfn-appmesh-virtualnode-fileaccesslog-format
             '''
             result = self._values.get("format")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.LoggingFormatProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.LoggingFormatProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13656,8 +13674,8 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            idle: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            per_request: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            idle: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            per_request: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents types of timeouts.
 
@@ -13697,7 +13715,7 @@ class CfnVirtualNode(
         @builtins.property
         def idle(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"]]:
             '''An object that represents an idle timeout.
 
             An idle timeout bounds the amount of time that a connection may be idle. The default value is none.
@@ -13705,12 +13723,12 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-grpctimeout.html#cfn-appmesh-virtualnode-grpctimeout-idle
             '''
             result = self._values.get("idle")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"]], result)
 
         @builtins.property
         def per_request(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"]]:
             '''An object that represents a per request timeout.
 
             The default value is 15 seconds. If you set a higher timeout, then make sure that the higher value is set for each App Mesh resource in a conversation. For example, if a virtual node backend uses a virtual router provider to route to another virtual node, then the timeout should be greater than 15 seconds for the source and destination virtual node and the route.
@@ -13718,7 +13736,7 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-grpctimeout.html#cfn-appmesh-virtualnode-grpctimeout-perrequest
             '''
             result = self._values.get("per_request")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13902,8 +13920,8 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            idle: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            per_request: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            idle: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            per_request: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents types of timeouts.
 
@@ -13943,7 +13961,7 @@ class CfnVirtualNode(
         @builtins.property
         def idle(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"]]:
             '''An object that represents an idle timeout.
 
             An idle timeout bounds the amount of time that a connection may be idle. The default value is none.
@@ -13951,12 +13969,12 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-httptimeout.html#cfn-appmesh-virtualnode-httptimeout-idle
             '''
             result = self._values.get("idle")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"]], result)
 
         @builtins.property
         def per_request(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"]]:
             '''An object that represents a per request timeout.
 
             The default value is 15 seconds. If you set a higher timeout, then make sure that the higher value is set for each App Mesh resource in a conversation. For example, if a virtual node backend uses a virtual router provider to route to another virtual node, then the timeout should be greater than 15 seconds for the source and destination virtual node and the route.
@@ -13964,7 +13982,7 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-httptimeout.html#cfn-appmesh-virtualnode-httptimeout-perrequest
             '''
             result = self._values.get("per_request")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14059,12 +14077,12 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            port_mapping: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.PortMappingProperty", typing.Dict[builtins.str, typing.Any]]],
-            connection_pool: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.VirtualNodeConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            health_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.HealthCheckProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            outlier_detection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.OutlierDetectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            timeout: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ListenerTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            tls: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ListenerTlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            port_mapping: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.PortMappingProperty", typing.Dict[builtins.str, typing.Any]]],
+            connection_pool: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.VirtualNodeConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            health_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.HealthCheckProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            outlier_detection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.OutlierDetectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            timeout: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ListenerTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tls: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ListenerTlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a listener for a virtual node.
 
@@ -14230,69 +14248,69 @@ class CfnVirtualNode(
         @builtins.property
         def port_mapping(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.PortMappingProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.PortMappingProperty"]:
             '''The port mapping information for the listener.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listener.html#cfn-appmesh-virtualnode-listener-portmapping
             '''
             result = self._values.get("port_mapping")
             assert result is not None, "Required property 'port_mapping' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.PortMappingProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.PortMappingProperty"], result)
 
         @builtins.property
         def connection_pool(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeConnectionPoolProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeConnectionPoolProperty"]]:
             '''The connection pool information for the listener.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listener.html#cfn-appmesh-virtualnode-listener-connectionpool
             '''
             result = self._values.get("connection_pool")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeConnectionPoolProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeConnectionPoolProperty"]], result)
 
         @builtins.property
         def health_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.HealthCheckProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.HealthCheckProperty"]]:
             '''The health check information for the listener.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listener.html#cfn-appmesh-virtualnode-listener-healthcheck
             '''
             result = self._values.get("health_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.HealthCheckProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.HealthCheckProperty"]], result)
 
         @builtins.property
         def outlier_detection(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.OutlierDetectionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.OutlierDetectionProperty"]]:
             '''The outlier detection information for the listener.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listener.html#cfn-appmesh-virtualnode-listener-outlierdetection
             '''
             result = self._values.get("outlier_detection")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.OutlierDetectionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.OutlierDetectionProperty"]], result)
 
         @builtins.property
         def timeout(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTimeoutProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTimeoutProperty"]]:
             '''An object that represents timeouts for different protocols.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listener.html#cfn-appmesh-virtualnode-listener-timeout
             '''
             result = self._values.get("timeout")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTimeoutProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTimeoutProperty"]], result)
 
         @builtins.property
         def tls(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsProperty"]]:
             '''A reference to an object that represents the Transport Layer Security (TLS) properties for a listener.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listener.html#cfn-appmesh-virtualnode-listener-tls
             '''
             result = self._values.get("tls")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14314,10 +14332,10 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            grpc: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.GrpcTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            http: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.HttpTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            http2: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.HttpTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            tcp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.TcpTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            grpc: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.GrpcTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.HttpTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http2: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.HttpTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tcp: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.TcpTimeoutProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents timeouts for different protocols.
 
@@ -14393,46 +14411,46 @@ class CfnVirtualNode(
         @builtins.property
         def grpc(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.GrpcTimeoutProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.GrpcTimeoutProperty"]]:
             '''An object that represents types of timeouts.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertimeout.html#cfn-appmesh-virtualnode-listenertimeout-grpc
             '''
             result = self._values.get("grpc")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.GrpcTimeoutProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.GrpcTimeoutProperty"]], result)
 
         @builtins.property
         def http(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.HttpTimeoutProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.HttpTimeoutProperty"]]:
             '''An object that represents types of timeouts.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertimeout.html#cfn-appmesh-virtualnode-listenertimeout-http
             '''
             result = self._values.get("http")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.HttpTimeoutProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.HttpTimeoutProperty"]], result)
 
         @builtins.property
         def http2(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.HttpTimeoutProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.HttpTimeoutProperty"]]:
             '''An object that represents types of timeouts.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertimeout.html#cfn-appmesh-virtualnode-listenertimeout-http2
             '''
             result = self._values.get("http2")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.HttpTimeoutProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.HttpTimeoutProperty"]], result)
 
         @builtins.property
         def tcp(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TcpTimeoutProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TcpTimeoutProperty"]]:
             '''An object that represents types of timeouts.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertimeout.html#cfn-appmesh-virtualnode-listenertimeout-tcp
             '''
             result = self._values.get("tcp")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TcpTimeoutProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TcpTimeoutProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14508,9 +14526,9 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            acm: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ListenerTlsAcmCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            file: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ListenerTlsFileCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sds: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ListenerTlsSdsCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            acm: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ListenerTlsAcmCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            file: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ListenerTlsFileCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sds: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ListenerTlsSdsCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a listener's Transport Layer Security (TLS) certificate.
 
@@ -14556,35 +14574,35 @@ class CfnVirtualNode(
         @builtins.property
         def acm(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsAcmCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsAcmCertificateProperty"]]:
             '''A reference to an object that represents an Certificate Manager certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertlscertificate.html#cfn-appmesh-virtualnode-listenertlscertificate-acm
             '''
             result = self._values.get("acm")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsAcmCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsAcmCertificateProperty"]], result)
 
         @builtins.property
         def file(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsFileCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsFileCertificateProperty"]]:
             '''A reference to an object that represents a local file certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertlscertificate.html#cfn-appmesh-virtualnode-listenertlscertificate-file
             '''
             result = self._values.get("file")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsFileCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsFileCertificateProperty"]], result)
 
         @builtins.property
         def sds(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsSdsCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsSdsCertificateProperty"]]:
             '''A reference to an object that represents a listener's Secret Discovery Service certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertlscertificate.html#cfn-appmesh-virtualnode-listenertlscertificate-sds
             '''
             result = self._values.get("sds")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsSdsCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsSdsCertificateProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14686,9 +14704,9 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            certificate: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ListenerTlsCertificateProperty", typing.Dict[builtins.str, typing.Any]]],
+            certificate: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ListenerTlsCertificateProperty", typing.Dict[builtins.str, typing.Any]]],
             mode: builtins.str,
-            validation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ListenerTlsValidationContextProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            validation: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ListenerTlsValidationContextProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the Transport Layer Security (TLS) properties for a listener.
 
@@ -14755,14 +14773,14 @@ class CfnVirtualNode(
         @builtins.property
         def certificate(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsCertificateProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsCertificateProperty"]:
             '''A reference to an object that represents a listener's Transport Layer Security (TLS) certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertls.html#cfn-appmesh-virtualnode-listenertls-certificate
             '''
             result = self._values.get("certificate")
             assert result is not None, "Required property 'certificate' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsCertificateProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsCertificateProperty"], result)
 
         @builtins.property
         def mode(self) -> builtins.str:
@@ -14781,13 +14799,13 @@ class CfnVirtualNode(
         @builtins.property
         def validation(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsValidationContextProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsValidationContextProperty"]]:
             '''A reference to an object that represents a listener's Transport Layer Security (TLS) validation context.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertls.html#cfn-appmesh-virtualnode-listenertls-validation
             '''
             result = self._values.get("validation")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsValidationContextProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsValidationContextProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14866,8 +14884,8 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            trust: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ListenerTlsValidationContextTrustProperty", typing.Dict[builtins.str, typing.Any]]],
-            subject_alternative_names: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.SubjectAlternativeNamesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            trust: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ListenerTlsValidationContextTrustProperty", typing.Dict[builtins.str, typing.Any]]],
+            subject_alternative_names: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.SubjectAlternativeNamesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a listener's Transport Layer Security (TLS) validation context.
 
@@ -14914,25 +14932,25 @@ class CfnVirtualNode(
         @builtins.property
         def trust(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsValidationContextTrustProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsValidationContextTrustProperty"]:
             '''A reference to where to retrieve the trust chain when validating a peer’s Transport Layer Security (TLS) certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertlsvalidationcontext.html#cfn-appmesh-virtualnode-listenertlsvalidationcontext-trust
             '''
             result = self._values.get("trust")
             assert result is not None, "Required property 'trust' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerTlsValidationContextTrustProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerTlsValidationContextTrustProperty"], result)
 
         @builtins.property
         def subject_alternative_names(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.SubjectAlternativeNamesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.SubjectAlternativeNamesProperty"]]:
             '''A reference to an object that represents the SANs for a listener's Transport Layer Security (TLS) validation context.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertlsvalidationcontext.html#cfn-appmesh-virtualnode-listenertlsvalidationcontext-subjectalternativenames
             '''
             result = self._values.get("subject_alternative_names")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.SubjectAlternativeNamesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.SubjectAlternativeNamesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14954,8 +14972,8 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            file: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.TlsValidationContextFileTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sds: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.TlsValidationContextSdsTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            file: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.TlsValidationContextFileTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sds: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.TlsValidationContextSdsTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a listener's Transport Layer Security (TLS) validation context trust.
 
@@ -14993,24 +15011,24 @@ class CfnVirtualNode(
         @builtins.property
         def file(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextFileTrustProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextFileTrustProperty"]]:
             '''An object that represents a Transport Layer Security (TLS) validation context trust for a local file.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertlsvalidationcontexttrust.html#cfn-appmesh-virtualnode-listenertlsvalidationcontexttrust-file
             '''
             result = self._values.get("file")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextFileTrustProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextFileTrustProperty"]], result)
 
         @builtins.property
         def sds(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextSdsTrustProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextSdsTrustProperty"]]:
             '''A reference to an object that represents a listener's Transport Layer Security (TLS) Secret Discovery Service validation context trust.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-listenertlsvalidationcontexttrust.html#cfn-appmesh-virtualnode-listenertlsvalidationcontexttrust-sds
             '''
             result = self._values.get("sds")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextSdsTrustProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextSdsTrustProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15032,7 +15050,7 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            json: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.JsonFormatRefProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            json: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.JsonFormatRefProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             text: typing.Optional[builtins.str] = None,
         ) -> None:
             '''An object that represents the format for the logs.
@@ -15070,13 +15088,13 @@ class CfnVirtualNode(
         @builtins.property
         def json(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.JsonFormatRefProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.JsonFormatRefProperty"]]]]:
             '''The logging format for JSON.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-loggingformat.html#cfn-appmesh-virtualnode-loggingformat-json
             '''
             result = self._values.get("json")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.JsonFormatRefProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.JsonFormatRefProperty"]]]], result)
 
         @builtins.property
         def text(self) -> typing.Optional[builtins.str]:
@@ -15107,7 +15125,7 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            access_log: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.AccessLogProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            access_log: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.AccessLogProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the logging information for a virtual node.
 
@@ -15149,13 +15167,13 @@ class CfnVirtualNode(
         @builtins.property
         def access_log(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.AccessLogProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.AccessLogProperty"]]:
             '''The access log configuration for a virtual node.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-logging.html#cfn-appmesh-virtualnode-logging-accesslog
             '''
             result = self._values.get("access_log")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.AccessLogProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.AccessLogProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15182,8 +15200,8 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            base_ejection_duration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            interval: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            base_ejection_duration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            interval: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]],
             max_ejection_percent: jsii.Number,
             max_server_errors: jsii.Number,
         ) -> None:
@@ -15232,26 +15250,26 @@ class CfnVirtualNode(
         @builtins.property
         def base_ejection_duration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"]:
             '''The base amount of time for which a host is ejected.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-outlierdetection.html#cfn-appmesh-virtualnode-outlierdetection-baseejectionduration
             '''
             result = self._values.get("base_ejection_duration")
             assert result is not None, "Required property 'base_ejection_duration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"], result)
 
         @builtins.property
         def interval(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"]:
             '''The time interval between ejection sweep analysis.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-outlierdetection.html#cfn-appmesh-virtualnode-outlierdetection-interval
             '''
             result = self._values.get("interval")
             assert result is not None, "Required property 'interval' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"], result)
 
         @builtins.property
         def max_ejection_percent(self) -> jsii.Number:
@@ -15363,8 +15381,8 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            aws_cloud_map: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.AwsCloudMapServiceDiscoveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            dns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.DnsServiceDiscoveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            aws_cloud_map: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.AwsCloudMapServiceDiscoveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            dns: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.DnsServiceDiscoveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the service discovery information for a virtual node.
 
@@ -15414,24 +15432,24 @@ class CfnVirtualNode(
         @builtins.property
         def aws_cloud_map(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.AwsCloudMapServiceDiscoveryProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.AwsCloudMapServiceDiscoveryProperty"]]:
             '''Specifies any AWS Cloud Map information for the virtual node.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-servicediscovery.html#cfn-appmesh-virtualnode-servicediscovery-awscloudmap
             '''
             result = self._values.get("aws_cloud_map")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.AwsCloudMapServiceDiscoveryProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.AwsCloudMapServiceDiscoveryProperty"]], result)
 
         @builtins.property
         def dns(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DnsServiceDiscoveryProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DnsServiceDiscoveryProperty"]]:
             '''Specifies the DNS information for the virtual node.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-servicediscovery.html#cfn-appmesh-virtualnode-servicediscovery-dns
             '''
             result = self._values.get("dns")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DnsServiceDiscoveryProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DnsServiceDiscoveryProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15508,7 +15526,7 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.SubjectAlternativeNameMatchersProperty", typing.Dict[builtins.str, typing.Any]]],
+            match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.SubjectAlternativeNameMatchersProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''An object that represents the subject alternative names secured by the certificate.
 
@@ -15539,14 +15557,14 @@ class CfnVirtualNode(
         @builtins.property
         def match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.SubjectAlternativeNameMatchersProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.SubjectAlternativeNameMatchersProperty"]:
             '''An object that represents the criteria for determining a SANs match.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-subjectalternativenames.html#cfn-appmesh-virtualnode-subjectalternativenames-match
             '''
             result = self._values.get("match")
             assert result is not None, "Required property 'match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.SubjectAlternativeNameMatchersProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.SubjectAlternativeNameMatchersProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15568,7 +15586,7 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            idle: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            idle: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.DurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents types of timeouts.
 
@@ -15600,7 +15618,7 @@ class CfnVirtualNode(
         @builtins.property
         def idle(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"]]:
             '''An object that represents an idle timeout.
 
             An idle timeout bounds the amount of time that a connection may be idle. The default value is none.
@@ -15608,7 +15626,7 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-tcptimeout.html#cfn-appmesh-virtualnode-tcptimeout-idle
             '''
             result = self._values.get("idle")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.DurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.DurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15741,8 +15759,8 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            trust: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.TlsValidationContextTrustProperty", typing.Dict[builtins.str, typing.Any]]],
-            subject_alternative_names: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.SubjectAlternativeNamesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            trust: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.TlsValidationContextTrustProperty", typing.Dict[builtins.str, typing.Any]]],
+            subject_alternative_names: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.SubjectAlternativeNamesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents how the proxy will validate its peer during Transport Layer Security (TLS) negotiation.
 
@@ -15792,19 +15810,19 @@ class CfnVirtualNode(
         @builtins.property
         def trust(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextTrustProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextTrustProperty"]:
             '''A reference to where to retrieve the trust chain when validating a peer’s Transport Layer Security (TLS) certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-tlsvalidationcontext.html#cfn-appmesh-virtualnode-tlsvalidationcontext-trust
             '''
             result = self._values.get("trust")
             assert result is not None, "Required property 'trust' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextTrustProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextTrustProperty"], result)
 
         @builtins.property
         def subject_alternative_names(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.SubjectAlternativeNamesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.SubjectAlternativeNamesProperty"]]:
             '''A reference to an object that represents the SANs for a Transport Layer Security (TLS) validation context.
 
             If you don't specify SANs on the *terminating* mesh endpoint, the Envoy proxy for that node doesn't verify the SAN on a peer client certificate. If you don't specify SANs on the *originating* mesh endpoint, the SAN on the certificate provided by the terminating endpoint must match the mesh endpoint service discovery configuration. Since SPIRE vended certificates have a SPIFFE ID as a name, you must set the SAN since the name doesn't match the service discovery name.
@@ -15812,7 +15830,7 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-tlsvalidationcontext.html#cfn-appmesh-virtualnode-tlsvalidationcontext-subjectalternativenames
             '''
             result = self._values.get("subject_alternative_names")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.SubjectAlternativeNamesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.SubjectAlternativeNamesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15888,9 +15906,9 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            acm: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.TlsValidationContextAcmTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            file: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.TlsValidationContextFileTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sds: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.TlsValidationContextSdsTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            acm: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.TlsValidationContextAcmTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            file: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.TlsValidationContextFileTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sds: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.TlsValidationContextSdsTrustProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a Transport Layer Security (TLS) validation context trust.
 
@@ -15935,35 +15953,35 @@ class CfnVirtualNode(
         @builtins.property
         def acm(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextAcmTrustProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextAcmTrustProperty"]]:
             '''A reference to an object that represents a Transport Layer Security (TLS) validation context trust for an Certificate Manager certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-tlsvalidationcontexttrust.html#cfn-appmesh-virtualnode-tlsvalidationcontexttrust-acm
             '''
             result = self._values.get("acm")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextAcmTrustProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextAcmTrustProperty"]], result)
 
         @builtins.property
         def file(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextFileTrustProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextFileTrustProperty"]]:
             '''An object that represents a Transport Layer Security (TLS) validation context trust for a local file.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-tlsvalidationcontexttrust.html#cfn-appmesh-virtualnode-tlsvalidationcontexttrust-file
             '''
             result = self._values.get("file")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextFileTrustProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextFileTrustProperty"]], result)
 
         @builtins.property
         def sds(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextSdsTrustProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextSdsTrustProperty"]]:
             '''A reference to an object that represents a Transport Layer Security (TLS) Secret Discovery Service validation context trust.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-tlsvalidationcontexttrust.html#cfn-appmesh-virtualnode-tlsvalidationcontexttrust-sds
             '''
             result = self._values.get("sds")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.TlsValidationContextSdsTrustProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.TlsValidationContextSdsTrustProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15985,10 +16003,10 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            grpc: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.VirtualNodeGrpcConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            http: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.VirtualNodeHttpConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            http2: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.VirtualNodeHttp2ConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            tcp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.VirtualNodeTcpConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            grpc: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.VirtualNodeGrpcConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.VirtualNodeHttpConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http2: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.VirtualNodeHttp2ConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tcp: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.VirtualNodeTcpConnectionPoolProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the type of virtual node connection pool.
 
@@ -16047,46 +16065,46 @@ class CfnVirtualNode(
         @builtins.property
         def grpc(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeGrpcConnectionPoolProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeGrpcConnectionPoolProperty"]]:
             '''An object that represents a type of connection pool.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-virtualnodeconnectionpool.html#cfn-appmesh-virtualnode-virtualnodeconnectionpool-grpc
             '''
             result = self._values.get("grpc")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeGrpcConnectionPoolProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeGrpcConnectionPoolProperty"]], result)
 
         @builtins.property
         def http(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeHttpConnectionPoolProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeHttpConnectionPoolProperty"]]:
             '''An object that represents a type of connection pool.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-virtualnodeconnectionpool.html#cfn-appmesh-virtualnode-virtualnodeconnectionpool-http
             '''
             result = self._values.get("http")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeHttpConnectionPoolProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeHttpConnectionPoolProperty"]], result)
 
         @builtins.property
         def http2(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeHttp2ConnectionPoolProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeHttp2ConnectionPoolProperty"]]:
             '''An object that represents a type of connection pool.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-virtualnodeconnectionpool.html#cfn-appmesh-virtualnode-virtualnodeconnectionpool-http2
             '''
             result = self._values.get("http2")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeHttp2ConnectionPoolProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeHttp2ConnectionPoolProperty"]], result)
 
         @builtins.property
         def tcp(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeTcpConnectionPoolProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeTcpConnectionPoolProperty"]]:
             '''An object that represents a type of connection pool.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-virtualnodeconnectionpool.html#cfn-appmesh-virtualnode-virtualnodeconnectionpool-tcp
             '''
             result = self._values.get("tcp")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.VirtualNodeTcpConnectionPoolProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeTcpConnectionPoolProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16294,11 +16312,11 @@ class CfnVirtualNode(
         def __init__(
             self,
             *,
-            backend_defaults: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.BackendDefaultsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            backends: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.BackendProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            listeners: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ListenerProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            logging: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.LoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            service_discovery: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ServiceDiscoveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            backend_defaults: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.BackendDefaultsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            backends: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.BackendProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            listeners: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ListenerProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            logging: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.LoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            service_discovery: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ServiceDiscoveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the specification of a virtual node.
 
@@ -16581,18 +16599,18 @@ class CfnVirtualNode(
         @builtins.property
         def backend_defaults(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.BackendDefaultsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.BackendDefaultsProperty"]]:
             '''A reference to an object that represents the defaults for backends.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-virtualnodespec.html#cfn-appmesh-virtualnode-virtualnodespec-backenddefaults
             '''
             result = self._values.get("backend_defaults")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.BackendDefaultsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.BackendDefaultsProperty"]], result)
 
         @builtins.property
         def backends(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.BackendProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.BackendProperty"]]]]:
             '''The backends that the virtual node is expected to send outbound traffic to.
 
             .. epigraph::
@@ -16602,12 +16620,12 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-virtualnodespec.html#cfn-appmesh-virtualnode-virtualnodespec-backends
             '''
             result = self._values.get("backends")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.BackendProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.BackendProperty"]]]], result)
 
         @builtins.property
         def listeners(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerProperty"]]]]:
             '''The listener that the virtual node is expected to receive inbound traffic from.
 
             You can specify one listener.
@@ -16615,23 +16633,23 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-virtualnodespec.html#cfn-appmesh-virtualnode-virtualnodespec-listeners
             '''
             result = self._values.get("listeners")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ListenerProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ListenerProperty"]]]], result)
 
         @builtins.property
         def logging(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.LoggingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.LoggingProperty"]]:
             '''The inbound and outbound access logging information for the virtual node.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-virtualnodespec.html#cfn-appmesh-virtualnode-virtualnodespec-logging
             '''
             result = self._values.get("logging")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.LoggingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.LoggingProperty"]], result)
 
         @builtins.property
         def service_discovery(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ServiceDiscoveryProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ServiceDiscoveryProperty"]]:
             '''The service discovery information for the virtual node.
 
             If your virtual node does not expect ingress traffic, you can omit this parameter. If you specify a ``listener`` , then you must specify service discovery information.
@@ -16639,7 +16657,7 @@ class CfnVirtualNode(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-virtualnodespec.html#cfn-appmesh-virtualnode-virtualnodespec-servicediscovery
             '''
             result = self._values.get("service_discovery")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ServiceDiscoveryProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ServiceDiscoveryProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16717,7 +16735,7 @@ class CfnVirtualNode(
             self,
             *,
             virtual_service_name: builtins.str,
-            client_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualNode.ClientPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            client_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.ClientPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents a virtual service backend for a virtual node.
 
@@ -16803,13 +16821,13 @@ class CfnVirtualNode(
         @builtins.property
         def client_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ClientPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ClientPolicyProperty"]]:
             '''A reference to an object that represents the client policy for a backend.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualnode-virtualservicebackend.html#cfn-appmesh-virtualnode-virtualservicebackend-clientpolicy
             '''
             result = self._values.get("client_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualNode.ClientPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.ClientPolicyProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16839,9 +16857,9 @@ class CfnVirtualNodeProps:
         self,
         *,
         mesh_name: builtins.str,
-        spec: typing.Union[_IResolvable_da3f097b, typing.Union[CfnVirtualNode.VirtualNodeSpecProperty, typing.Dict[builtins.str, typing.Any]]],
+        spec: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualNode.VirtualNodeSpecProperty", typing.Dict[builtins.str, typing.Any]]],
         mesh_owner: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         virtual_node_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnVirtualNode``.
@@ -16857,6 +16875,7 @@ class CfnVirtualNodeProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appmesh as appmesh
@@ -17145,14 +17164,14 @@ class CfnVirtualNodeProps:
     @builtins.property
     def spec(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnVirtualNode.VirtualNodeSpecProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeSpecProperty"]:
         '''The virtual node specification to apply.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-virtualnode.html#cfn-appmesh-virtualnode-spec
         '''
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnVirtualNode.VirtualNodeSpecProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualNode.VirtualNodeSpecProperty"], result)
 
     @builtins.property
     def mesh_owner(self) -> typing.Optional[builtins.str]:
@@ -17166,7 +17185,7 @@ class CfnVirtualNodeProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the virtual node to assist with categorization and organization.
 
         Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.
@@ -17174,7 +17193,7 @@ class CfnVirtualNodeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-virtualnode.html#cfn-appmesh-virtualnode-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def virtual_node_name(self) -> typing.Optional[builtins.str]:
@@ -17215,6 +17234,7 @@ class CfnVirtualRouter(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appmesh as appmesh
@@ -17242,13 +17262,13 @@ class CfnVirtualRouter(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         mesh_name: builtins.str,
-        spec: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualRouter.VirtualRouterSpecProperty", typing.Dict[builtins.str, typing.Any]]],
+        spec: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualRouter.VirtualRouterSpecProperty", typing.Dict[builtins.str, typing.Any]]],
         mesh_owner: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         virtual_router_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::AppMesh::VirtualRouter``.
@@ -17279,7 +17299,7 @@ class CfnVirtualRouter(
     @builtins.classmethod
     def arn_for_virtual_router(
         cls,
-        resource: _IVirtualRouterRef_ff2b1aff,
+        resource: "_IVirtualRouterRef_ff2b1aff",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -17302,7 +17322,7 @@ class CfnVirtualRouter(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVirtualRouter", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -17404,15 +17424,15 @@ class CfnVirtualRouter(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualRouterRef")
-    def virtual_router_ref(self) -> _VirtualRouterReference_e8341579:
+    def virtual_router_ref(self) -> "_VirtualRouterReference_e8341579":
         '''A reference to a VirtualRouter resource.'''
-        return typing.cast(_VirtualRouterReference_e8341579, jsii.get(self, "virtualRouterRef"))
+        return typing.cast("_VirtualRouterReference_e8341579", jsii.get(self, "virtualRouterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="meshName")
@@ -17431,14 +17451,14 @@ class CfnVirtualRouter(
     @jsii.member(jsii_name="spec")
     def spec(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualRouter.VirtualRouterSpecProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualRouter.VirtualRouterSpecProperty"]:
         '''The virtual router specification to apply.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualRouter.VirtualRouterSpecProperty"], jsii.get(self, "spec"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualRouter.VirtualRouterSpecProperty"], jsii.get(self, "spec"))
 
     @spec.setter
     def spec(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnVirtualRouter.VirtualRouterSpecProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnVirtualRouter.VirtualRouterSpecProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b54baf62ad2c86c92d6b933af45c34eab5feed616d8eb1f26d654a471d9d5227)
@@ -17460,12 +17480,12 @@ class CfnVirtualRouter(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the virtual router to assist with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0085d8ee8bb71ad1569243bbeaf036f25378944d65bf336d669c73071521c32e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -17561,7 +17581,7 @@ class CfnVirtualRouter(
         def __init__(
             self,
             *,
-            port_mapping: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualRouter.PortMappingProperty", typing.Dict[builtins.str, typing.Any]]],
+            port_mapping: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualRouter.PortMappingProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''An object that represents a virtual router listener.
 
@@ -17593,14 +17613,14 @@ class CfnVirtualRouter(
         @builtins.property
         def port_mapping(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualRouter.PortMappingProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualRouter.PortMappingProperty"]:
             '''The port mapping information for the listener.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualrouter-virtualrouterlistener.html#cfn-appmesh-virtualrouter-virtualrouterlistener-portmapping
             '''
             result = self._values.get("port_mapping")
             assert result is not None, "Required property 'port_mapping' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualRouter.PortMappingProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualRouter.PortMappingProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17622,7 +17642,7 @@ class CfnVirtualRouter(
         def __init__(
             self,
             *,
-            listeners: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualRouter.VirtualRouterListenerProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            listeners: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualRouter.VirtualRouterListenerProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''An object that represents the specification of a virtual router.
 
@@ -17656,14 +17676,14 @@ class CfnVirtualRouter(
         @builtins.property
         def listeners(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualRouter.VirtualRouterListenerProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualRouter.VirtualRouterListenerProperty"]]]:
             '''The listeners that the virtual router is expected to receive inbound traffic from.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualrouter-virtualrouterspec.html#cfn-appmesh-virtualrouter-virtualrouterspec-listeners
             '''
             result = self._values.get("listeners")
             assert result is not None, "Required property 'listeners' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnVirtualRouter.VirtualRouterListenerProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnVirtualRouter.VirtualRouterListenerProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17693,9 +17713,9 @@ class CfnVirtualRouterProps:
         self,
         *,
         mesh_name: builtins.str,
-        spec: typing.Union[_IResolvable_da3f097b, typing.Union[CfnVirtualRouter.VirtualRouterSpecProperty, typing.Dict[builtins.str, typing.Any]]],
+        spec: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualRouter.VirtualRouterSpecProperty", typing.Dict[builtins.str, typing.Any]]],
         mesh_owner: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         virtual_router_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnVirtualRouter``.
@@ -17711,6 +17731,7 @@ class CfnVirtualRouterProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appmesh as appmesh
@@ -17766,14 +17787,14 @@ class CfnVirtualRouterProps:
     @builtins.property
     def spec(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnVirtualRouter.VirtualRouterSpecProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualRouter.VirtualRouterSpecProperty"]:
         '''The virtual router specification to apply.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-virtualrouter.html#cfn-appmesh-virtualrouter-spec
         '''
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnVirtualRouter.VirtualRouterSpecProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualRouter.VirtualRouterSpecProperty"], result)
 
     @builtins.property
     def mesh_owner(self) -> typing.Optional[builtins.str]:
@@ -17787,7 +17808,7 @@ class CfnVirtualRouterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the virtual router to assist with categorization and organization.
 
         Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.
@@ -17795,7 +17816,7 @@ class CfnVirtualRouterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-virtualrouter.html#cfn-appmesh-virtualrouter-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def virtual_router_name(self) -> typing.Optional[builtins.str]:
@@ -17836,6 +17857,7 @@ class CfnVirtualService(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appmesh as appmesh
@@ -17865,14 +17887,14 @@ class CfnVirtualService(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         mesh_name: builtins.str,
-        spec: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualService.VirtualServiceSpecProperty", typing.Dict[builtins.str, typing.Any]]],
+        spec: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualService.VirtualServiceSpecProperty", typing.Dict[builtins.str, typing.Any]]],
         virtual_service_name: builtins.str,
         mesh_owner: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppMesh::VirtualService``.
 
@@ -17902,7 +17924,7 @@ class CfnVirtualService(
     @builtins.classmethod
     def arn_for_virtual_service(
         cls,
-        resource: _IVirtualServiceRef_828d7b93,
+        resource: "_IVirtualServiceRef_828d7b93",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -17925,7 +17947,7 @@ class CfnVirtualService(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVirtualService", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -18027,15 +18049,15 @@ class CfnVirtualService(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualServiceRef")
-    def virtual_service_ref(self) -> _VirtualServiceReference_a0686b6e:
+    def virtual_service_ref(self) -> "_VirtualServiceReference_a0686b6e":
         '''A reference to a VirtualService resource.'''
-        return typing.cast(_VirtualServiceReference_a0686b6e, jsii.get(self, "virtualServiceRef"))
+        return typing.cast("_VirtualServiceReference_a0686b6e", jsii.get(self, "virtualServiceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="meshName")
@@ -18054,14 +18076,14 @@ class CfnVirtualService(
     @jsii.member(jsii_name="spec")
     def spec(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnVirtualService.VirtualServiceSpecProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualService.VirtualServiceSpecProperty"]:
         '''The virtual service specification to apply.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVirtualService.VirtualServiceSpecProperty"], jsii.get(self, "spec"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualService.VirtualServiceSpecProperty"], jsii.get(self, "spec"))
 
     @spec.setter
     def spec(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnVirtualService.VirtualServiceSpecProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnVirtualService.VirtualServiceSpecProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1590c9a74aaae27ee831b796176b2620ec5f8b1a2df0e6d39a41ddc0cd2c9b58)
@@ -18096,12 +18118,12 @@ class CfnVirtualService(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the virtual service to assist with categorization and organization.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6c59e67a81903720d425b53745d00a109956c7d771772d047188cbb76a4532ae)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -18223,8 +18245,8 @@ class CfnVirtualService(
         def __init__(
             self,
             *,
-            virtual_node: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualService.VirtualNodeServiceProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            virtual_router: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualService.VirtualRouterServiceProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            virtual_node: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualService.VirtualNodeServiceProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            virtual_router: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualService.VirtualRouterServiceProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the provider for a virtual service.
 
@@ -18262,24 +18284,24 @@ class CfnVirtualService(
         @builtins.property
         def virtual_node(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualService.VirtualNodeServiceProviderProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualService.VirtualNodeServiceProviderProperty"]]:
             '''The virtual node associated with a virtual service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualservice-virtualserviceprovider.html#cfn-appmesh-virtualservice-virtualserviceprovider-virtualnode
             '''
             result = self._values.get("virtual_node")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualService.VirtualNodeServiceProviderProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualService.VirtualNodeServiceProviderProperty"]], result)
 
         @builtins.property
         def virtual_router(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualService.VirtualRouterServiceProviderProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualService.VirtualRouterServiceProviderProperty"]]:
             '''The virtual router associated with a virtual service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualservice-virtualserviceprovider.html#cfn-appmesh-virtualservice-virtualserviceprovider-virtualrouter
             '''
             result = self._values.get("virtual_router")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualService.VirtualRouterServiceProviderProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualService.VirtualRouterServiceProviderProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18301,7 +18323,7 @@ class CfnVirtualService(
         def __init__(
             self,
             *,
-            provider: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVirtualService.VirtualServiceProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            provider: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualService.VirtualServiceProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that represents the specification of a virtual service.
 
@@ -18337,7 +18359,7 @@ class CfnVirtualService(
         @builtins.property
         def provider(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualService.VirtualServiceProviderProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualService.VirtualServiceProviderProperty"]]:
             '''The App Mesh object that is acting as the provider for a virtual service.
 
             You can specify a single virtual node or virtual router.
@@ -18345,7 +18367,7 @@ class CfnVirtualService(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appmesh-virtualservice-virtualservicespec.html#cfn-appmesh-virtualservice-virtualservicespec-provider
             '''
             result = self._values.get("provider")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVirtualService.VirtualServiceProviderProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVirtualService.VirtualServiceProviderProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18375,10 +18397,10 @@ class CfnVirtualServiceProps:
         self,
         *,
         mesh_name: builtins.str,
-        spec: typing.Union[_IResolvable_da3f097b, typing.Union[CfnVirtualService.VirtualServiceSpecProperty, typing.Dict[builtins.str, typing.Any]]],
+        spec: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVirtualService.VirtualServiceSpecProperty", typing.Dict[builtins.str, typing.Any]]],
         virtual_service_name: builtins.str,
         mesh_owner: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnVirtualService``.
 
@@ -18393,6 +18415,7 @@ class CfnVirtualServiceProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appmesh as appmesh
@@ -18449,14 +18472,14 @@ class CfnVirtualServiceProps:
     @builtins.property
     def spec(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnVirtualService.VirtualServiceSpecProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnVirtualService.VirtualServiceSpecProperty"]:
         '''The virtual service specification to apply.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-virtualservice.html#cfn-appmesh-virtualservice-spec
         '''
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnVirtualService.VirtualServiceSpecProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVirtualService.VirtualServiceSpecProperty"], result)
 
     @builtins.property
     def virtual_service_name(self) -> builtins.str:
@@ -18480,7 +18503,7 @@ class CfnVirtualServiceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata that you can apply to the virtual service to assist with categorization and organization.
 
         Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.
@@ -18488,7 +18511,7 @@ class CfnVirtualServiceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appmesh-virtualservice.html#cfn-appmesh-virtualservice-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18808,7 +18831,7 @@ class GatewayRouteHostnameMatch(
     @abc.abstractmethod
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "GatewayRouteHostnameMatchConfig":
         '''Returns the gateway route host name match configuration.
 
@@ -18821,7 +18844,7 @@ class _GatewayRouteHostnameMatchProxy(GatewayRouteHostnameMatch):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "GatewayRouteHostnameMatchConfig":
         '''Returns the gateway route host name match configuration.
 
@@ -18845,7 +18868,7 @@ class GatewayRouteHostnameMatchConfig:
     def __init__(
         self,
         *,
-        hostname_match: typing.Union[CfnGatewayRoute.GatewayRouteHostnameMatchProperty, typing.Dict[builtins.str, typing.Any]],
+        hostname_match: typing.Union["CfnGatewayRoute.GatewayRouteHostnameMatchProperty", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''Configuration for gateway route host name match.
 
@@ -18876,11 +18899,11 @@ class GatewayRouteHostnameMatchConfig:
         }
 
     @builtins.property
-    def hostname_match(self) -> CfnGatewayRoute.GatewayRouteHostnameMatchProperty:
+    def hostname_match(self) -> "CfnGatewayRoute.GatewayRouteHostnameMatchProperty":
         '''GatewayRoute CFN configuration for host name match.'''
         result = self._values.get("hostname_match")
         assert result is not None, "Required property 'hostname_match' is missing"
-        return typing.cast(CfnGatewayRoute.GatewayRouteHostnameMatchProperty, result)
+        return typing.cast("CfnGatewayRoute.GatewayRouteHostnameMatchProperty", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19077,7 +19100,7 @@ class GatewayRouteSpec(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "GatewayRouteSpecConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "GatewayRouteSpecConfig":
         '''Called when the GatewayRouteSpec type is initialized.
 
         Can be used to enforce
@@ -19090,7 +19113,7 @@ class GatewayRouteSpec(
 
 class _GatewayRouteSpecProxy(GatewayRouteSpec):
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "GatewayRouteSpecConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "GatewayRouteSpecConfig":
         '''Called when the GatewayRouteSpec type is initialized.
 
         Can be used to enforce
@@ -19121,9 +19144,9 @@ class GatewayRouteSpecConfig:
     def __init__(
         self,
         *,
-        grpc_spec_config: typing.Optional[typing.Union[CfnGatewayRoute.GrpcGatewayRouteProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        http2_spec_config: typing.Optional[typing.Union[CfnGatewayRoute.HttpGatewayRouteProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        http_spec_config: typing.Optional[typing.Union[CfnGatewayRoute.HttpGatewayRouteProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        grpc_spec_config: typing.Optional[typing.Union["CfnGatewayRoute.GrpcGatewayRouteProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        http2_spec_config: typing.Optional[typing.Union["CfnGatewayRoute.HttpGatewayRouteProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        http_spec_config: typing.Optional[typing.Union["CfnGatewayRoute.HttpGatewayRouteProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         priority: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''All Properties for GatewayRoute Specs.
@@ -19339,35 +19362,35 @@ class GatewayRouteSpecConfig:
     @builtins.property
     def grpc_spec_config(
         self,
-    ) -> typing.Optional[CfnGatewayRoute.GrpcGatewayRouteProperty]:
+    ) -> typing.Optional["CfnGatewayRoute.GrpcGatewayRouteProperty"]:
         '''The spec for a grpc gateway route.
 
         :default: - no grpc spec
         '''
         result = self._values.get("grpc_spec_config")
-        return typing.cast(typing.Optional[CfnGatewayRoute.GrpcGatewayRouteProperty], result)
+        return typing.cast(typing.Optional["CfnGatewayRoute.GrpcGatewayRouteProperty"], result)
 
     @builtins.property
     def http2_spec_config(
         self,
-    ) -> typing.Optional[CfnGatewayRoute.HttpGatewayRouteProperty]:
+    ) -> typing.Optional["CfnGatewayRoute.HttpGatewayRouteProperty"]:
         '''The spec for an http2 gateway route.
 
         :default: - no http2 spec
         '''
         result = self._values.get("http2_spec_config")
-        return typing.cast(typing.Optional[CfnGatewayRoute.HttpGatewayRouteProperty], result)
+        return typing.cast(typing.Optional["CfnGatewayRoute.HttpGatewayRouteProperty"], result)
 
     @builtins.property
     def http_spec_config(
         self,
-    ) -> typing.Optional[CfnGatewayRoute.HttpGatewayRouteProperty]:
+    ) -> typing.Optional["CfnGatewayRoute.HttpGatewayRouteProperty"]:
         '''The spec for an http gateway route.
 
         :default: - no http spec
         '''
         result = self._values.get("http_spec_config")
-        return typing.cast(typing.Optional[CfnGatewayRoute.HttpGatewayRouteProperty], result)
+        return typing.cast(typing.Optional["CfnGatewayRoute.HttpGatewayRouteProperty"], result)
 
     @builtins.property
     def priority(self) -> typing.Optional[jsii.Number]:
@@ -19483,7 +19506,7 @@ class GrpcGatewayListenerOptions:
     def __init__(
         self,
         *,
-        connection_pool: typing.Optional[typing.Union[GrpcConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
+        connection_pool: typing.Optional[typing.Union["GrpcConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
         health_check: typing.Optional["HealthCheck"] = None,
         port: typing.Optional[jsii.Number] = None,
         tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -19563,13 +19586,13 @@ class GrpcGatewayListenerOptions:
             self._values["tls"] = tls
 
     @builtins.property
-    def connection_pool(self) -> typing.Optional[GrpcConnectionPool]:
+    def connection_pool(self) -> typing.Optional["GrpcConnectionPool"]:
         '''Connection pool for http listeners.
 
         :default: - None
         '''
         result = self._values.get("connection_pool")
-        return typing.cast(typing.Optional[GrpcConnectionPool], result)
+        return typing.cast(typing.Optional["GrpcConnectionPool"], result)
 
     @builtins.property
     def health_check(self) -> typing.Optional["HealthCheck"]:
@@ -19625,7 +19648,7 @@ class GrpcGatewayRouteMatch:
     def __init__(
         self,
         *,
-        hostname: typing.Optional[GatewayRouteHostnameMatch] = None,
+        hostname: typing.Optional["GatewayRouteHostnameMatch"] = None,
         metadata: typing.Optional[typing.Sequence["HeaderMatch"]] = None,
         port: typing.Optional[jsii.Number] = None,
         rewrite_request_hostname: typing.Optional[builtins.bool] = None,
@@ -19676,13 +19699,13 @@ class GrpcGatewayRouteMatch:
             self._values["service_name"] = service_name
 
     @builtins.property
-    def hostname(self) -> typing.Optional[GatewayRouteHostnameMatch]:
+    def hostname(self) -> typing.Optional["GatewayRouteHostnameMatch"]:
         '''Create host name based gRPC gateway route match.
 
         :default: - no matching on host name
         '''
         result = self._values.get("hostname")
-        return typing.cast(typing.Optional[GatewayRouteHostnameMatch], result)
+        return typing.cast(typing.Optional["GatewayRouteHostnameMatch"], result)
 
     @builtins.property
     def metadata(self) -> typing.Optional[typing.List["HeaderMatch"]]:
@@ -19750,7 +19773,7 @@ class GrpcGatewayRouteSpecOptions(CommonGatewayRouteSpecOptions):
         self,
         *,
         priority: typing.Optional[jsii.Number] = None,
-        match: typing.Union[GrpcGatewayRouteMatch, typing.Dict[builtins.str, typing.Any]],
+        match: typing.Union["GrpcGatewayRouteMatch", typing.Dict[builtins.str, typing.Any]],
         route_target: "IVirtualService",
     ) -> None:
         '''Properties specific for a gRPC GatewayRoute.
@@ -19804,11 +19827,11 @@ class GrpcGatewayRouteSpecOptions(CommonGatewayRouteSpecOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def match(self) -> GrpcGatewayRouteMatch:
+    def match(self) -> "GrpcGatewayRouteMatch":
         '''The criterion for determining a request match for this GatewayRoute.'''
         result = self._values.get("match")
         assert result is not None, "Required property 'match' is missing"
-        return typing.cast(GrpcGatewayRouteMatch, result)
+        return typing.cast("GrpcGatewayRouteMatch", result)
 
     @builtins.property
     def route_target(self) -> "IVirtualService":
@@ -19844,8 +19867,8 @@ class GrpcHealthCheckOptions:
         self,
         *,
         healthy_threshold: typing.Optional[jsii.Number] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         unhealthy_threshold: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties used to define GRPC Based healthchecks.
@@ -19897,22 +19920,22 @@ class GrpcHealthCheckOptions:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def interval(self) -> typing.Optional[_Duration_4839e8c3]:
+    def interval(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time period between each health check execution.
 
         :default: Duration.seconds(5)
         '''
         result = self._values.get("interval")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The amount of time to wait when receiving a response from the health check.
 
         :default: Duration.seconds(2)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def unhealthy_threshold(self) -> typing.Optional[jsii.Number]:
@@ -20121,8 +20144,8 @@ class GrpcTimeout:
     def __init__(
         self,
         *,
-        idle: typing.Optional[_Duration_4839e8c3] = None,
-        per_request: typing.Optional[_Duration_4839e8c3] = None,
+        idle: typing.Optional["_Duration_4839e8c3"] = None,
+        per_request: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Represents timeouts for GRPC protocols.
 
@@ -20164,7 +20187,7 @@ class GrpcTimeout:
             self._values["per_request"] = per_request
 
     @builtins.property
-    def idle(self) -> typing.Optional[_Duration_4839e8c3]:
+    def idle(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Represents an idle timeout.
 
         The amount of time that a connection may be idle.
@@ -20172,16 +20195,16 @@ class GrpcTimeout:
         :default: - none
         '''
         result = self._values.get("idle")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def per_request(self) -> typing.Optional[_Duration_4839e8c3]:
+    def per_request(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Represents per request timeout.
 
         :default: - 15 s
         '''
         result = self._values.get("per_request")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20211,11 +20234,11 @@ class GrpcVirtualNodeListenerOptions:
     def __init__(
         self,
         *,
-        connection_pool: typing.Optional[typing.Union[GrpcConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
+        connection_pool: typing.Optional[typing.Union["GrpcConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
         health_check: typing.Optional["HealthCheck"] = None,
         outlier_detection: typing.Optional[typing.Union["OutlierDetection", typing.Dict[builtins.str, typing.Any]]] = None,
         port: typing.Optional[jsii.Number] = None,
-        timeout: typing.Optional[typing.Union[GrpcTimeout, typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional[typing.Union["GrpcTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
         tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Represent the GRPC Node Listener property.
@@ -20305,13 +20328,13 @@ class GrpcVirtualNodeListenerOptions:
             self._values["tls"] = tls
 
     @builtins.property
-    def connection_pool(self) -> typing.Optional[GrpcConnectionPool]:
+    def connection_pool(self) -> typing.Optional["GrpcConnectionPool"]:
         '''Connection pool for http listeners.
 
         :default: - None
         '''
         result = self._values.get("connection_pool")
-        return typing.cast(typing.Optional[GrpcConnectionPool], result)
+        return typing.cast(typing.Optional["GrpcConnectionPool"], result)
 
     @builtins.property
     def health_check(self) -> typing.Optional["HealthCheck"]:
@@ -20341,13 +20364,13 @@ class GrpcVirtualNodeListenerOptions:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[GrpcTimeout]:
+    def timeout(self) -> typing.Optional["GrpcTimeout"]:
         '''Timeout for GRPC protocol.
 
         :default: - None
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[GrpcTimeout], result)
+        return typing.cast(typing.Optional["GrpcTimeout"], result)
 
     @builtins.property
     def tls(self) -> typing.Optional["ListenerTlsOptions"]:
@@ -20599,7 +20622,7 @@ class HeaderMatch(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "HeaderMatchConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "HeaderMatchConfig":
         '''Returns the header match configuration.
 
         :param scope: -
@@ -20609,7 +20632,7 @@ class HeaderMatch(
 
 class _HeaderMatchProxy(HeaderMatch):
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "HeaderMatchConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "HeaderMatchConfig":
         '''Returns the header match configuration.
 
         :param scope: -
@@ -20632,7 +20655,7 @@ class HeaderMatchConfig:
     def __init__(
         self,
         *,
-        header_match: typing.Union[CfnRoute.HttpRouteHeaderProperty, typing.Dict[builtins.str, typing.Any]],
+        header_match: typing.Union["CfnRoute.HttpRouteHeaderProperty", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''Configuration for ``HeaderMatch``.
 
@@ -20675,11 +20698,11 @@ class HeaderMatchConfig:
         }
 
     @builtins.property
-    def header_match(self) -> CfnRoute.HttpRouteHeaderProperty:
+    def header_match(self) -> "CfnRoute.HttpRouteHeaderProperty":
         '''Route CFN configuration for the route header match.'''
         result = self._values.get("header_match")
         assert result is not None, "Required property 'header_match' is missing"
-        return typing.cast(CfnRoute.HttpRouteHeaderProperty, result)
+        return typing.cast("CfnRoute.HttpRouteHeaderProperty", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20735,8 +20758,8 @@ class HealthCheck(
         cls,
         *,
         healthy_threshold: typing.Optional[jsii.Number] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         unhealthy_threshold: typing.Optional[jsii.Number] = None,
     ) -> "HealthCheck":
         '''Construct a GRPC health check.
@@ -20761,9 +20784,9 @@ class HealthCheck(
         cls,
         *,
         healthy_threshold: typing.Optional[jsii.Number] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
         path: typing.Optional[builtins.str] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         unhealthy_threshold: typing.Optional[jsii.Number] = None,
     ) -> "HealthCheck":
         '''Construct a HTTP health check.
@@ -20790,9 +20813,9 @@ class HealthCheck(
         cls,
         *,
         healthy_threshold: typing.Optional[jsii.Number] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
         path: typing.Optional[builtins.str] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         unhealthy_threshold: typing.Optional[jsii.Number] = None,
     ) -> "HealthCheck":
         '''Construct a HTTP2 health check.
@@ -20819,8 +20842,8 @@ class HealthCheck(
         cls,
         *,
         healthy_threshold: typing.Optional[jsii.Number] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         unhealthy_threshold: typing.Optional[jsii.Number] = None,
     ) -> "HealthCheck":
         '''Construct a TCP health check.
@@ -20843,7 +20866,7 @@ class HealthCheck(
     @abc.abstractmethod
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
         default_port: typing.Optional[jsii.Number] = None,
     ) -> "HealthCheckConfig":
@@ -20862,7 +20885,7 @@ class _HealthCheckProxy(HealthCheck):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
         default_port: typing.Optional[jsii.Number] = None,
     ) -> "HealthCheckConfig":
@@ -20948,8 +20971,8 @@ class HealthCheckConfig:
     def __init__(
         self,
         *,
-        virtual_gateway_health_check: typing.Optional[typing.Union[CfnVirtualGateway.VirtualGatewayHealthCheckPolicyProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        virtual_node_health_check: typing.Optional[typing.Union[CfnVirtualNode.HealthCheckProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        virtual_gateway_health_check: typing.Optional[typing.Union["CfnVirtualGateway.VirtualGatewayHealthCheckPolicyProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        virtual_node_health_check: typing.Optional[typing.Union["CfnVirtualNode.HealthCheckProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''All Properties for Health Checks for mesh endpoints.
 
@@ -21006,24 +21029,24 @@ class HealthCheckConfig:
     @builtins.property
     def virtual_gateway_health_check(
         self,
-    ) -> typing.Optional[CfnVirtualGateway.VirtualGatewayHealthCheckPolicyProperty]:
+    ) -> typing.Optional["CfnVirtualGateway.VirtualGatewayHealthCheckPolicyProperty"]:
         '''VirtualGateway CFN configuration for Health Checks.
 
         :default: - no health checks
         '''
         result = self._values.get("virtual_gateway_health_check")
-        return typing.cast(typing.Optional[CfnVirtualGateway.VirtualGatewayHealthCheckPolicyProperty], result)
+        return typing.cast(typing.Optional["CfnVirtualGateway.VirtualGatewayHealthCheckPolicyProperty"], result)
 
     @builtins.property
     def virtual_node_health_check(
         self,
-    ) -> typing.Optional[CfnVirtualNode.HealthCheckProperty]:
+    ) -> typing.Optional["CfnVirtualNode.HealthCheckProperty"]:
         '''VirtualNode CFN configuration for Health Checks.
 
         :default: - no health checks
         '''
         result = self._values.get("virtual_node_health_check")
-        return typing.cast(typing.Optional[CfnVirtualNode.HealthCheckProperty], result)
+        return typing.cast(typing.Optional["CfnVirtualNode.HealthCheckProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -21103,8 +21126,8 @@ class Http2GatewayListenerOptions:
     def __init__(
         self,
         *,
-        connection_pool: typing.Optional[typing.Union[Http2ConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
-        health_check: typing.Optional[HealthCheck] = None,
+        connection_pool: typing.Optional[typing.Union["Http2ConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check: typing.Optional["HealthCheck"] = None,
         port: typing.Optional[jsii.Number] = None,
         tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
@@ -21183,22 +21206,22 @@ class Http2GatewayListenerOptions:
             self._values["tls"] = tls
 
     @builtins.property
-    def connection_pool(self) -> typing.Optional[Http2ConnectionPool]:
+    def connection_pool(self) -> typing.Optional["Http2ConnectionPool"]:
         '''Connection pool for http listeners.
 
         :default: - None
         '''
         result = self._values.get("connection_pool")
-        return typing.cast(typing.Optional[Http2ConnectionPool], result)
+        return typing.cast(typing.Optional["Http2ConnectionPool"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[HealthCheck]:
+    def health_check(self) -> typing.Optional["HealthCheck"]:
         '''The health check information for the listener.
 
         :default: - no healthcheck
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[HealthCheck], result)
+        return typing.cast(typing.Optional["HealthCheck"], result)
 
     @builtins.property
     def port(self) -> typing.Optional[jsii.Number]:
@@ -21246,8 +21269,8 @@ class Http2VirtualNodeListenerOptions:
     def __init__(
         self,
         *,
-        connection_pool: typing.Optional[typing.Union[Http2ConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
-        health_check: typing.Optional[HealthCheck] = None,
+        connection_pool: typing.Optional[typing.Union["Http2ConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check: typing.Optional["HealthCheck"] = None,
         outlier_detection: typing.Optional[typing.Union["OutlierDetection", typing.Dict[builtins.str, typing.Any]]] = None,
         port: typing.Optional[jsii.Number] = None,
         timeout: typing.Optional[typing.Union["HttpTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -21337,22 +21360,22 @@ class Http2VirtualNodeListenerOptions:
             self._values["tls"] = tls
 
     @builtins.property
-    def connection_pool(self) -> typing.Optional[Http2ConnectionPool]:
+    def connection_pool(self) -> typing.Optional["Http2ConnectionPool"]:
         '''Connection pool for http2 listeners.
 
         :default: - None
         '''
         result = self._values.get("connection_pool")
-        return typing.cast(typing.Optional[Http2ConnectionPool], result)
+        return typing.cast(typing.Optional["Http2ConnectionPool"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[HealthCheck]:
+    def health_check(self) -> typing.Optional["HealthCheck"]:
         '''The health check information for the listener.
 
         :default: - no healthcheck
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[HealthCheck], result)
+        return typing.cast(typing.Optional["HealthCheck"], result)
 
     @builtins.property
     def outlier_detection(self) -> typing.Optional["OutlierDetection"]:
@@ -21512,8 +21535,8 @@ class HttpGatewayListenerOptions:
     def __init__(
         self,
         *,
-        connection_pool: typing.Optional[typing.Union[HttpConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
-        health_check: typing.Optional[HealthCheck] = None,
+        connection_pool: typing.Optional[typing.Union["HttpConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check: typing.Optional["HealthCheck"] = None,
         port: typing.Optional[jsii.Number] = None,
         tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
@@ -21575,22 +21598,22 @@ class HttpGatewayListenerOptions:
             self._values["tls"] = tls
 
     @builtins.property
-    def connection_pool(self) -> typing.Optional[HttpConnectionPool]:
+    def connection_pool(self) -> typing.Optional["HttpConnectionPool"]:
         '''Connection pool for http listeners.
 
         :default: - None
         '''
         result = self._values.get("connection_pool")
-        return typing.cast(typing.Optional[HttpConnectionPool], result)
+        return typing.cast(typing.Optional["HttpConnectionPool"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[HealthCheck]:
+    def health_check(self) -> typing.Optional["HealthCheck"]:
         '''The health check information for the listener.
 
         :default: - no healthcheck
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[HealthCheck], result)
+        return typing.cast(typing.Optional["HealthCheck"], result)
 
     @builtins.property
     def port(self) -> typing.Optional[jsii.Number]:
@@ -21639,8 +21662,8 @@ class HttpGatewayRouteMatch:
     def __init__(
         self,
         *,
-        headers: typing.Optional[typing.Sequence[HeaderMatch]] = None,
-        hostname: typing.Optional[GatewayRouteHostnameMatch] = None,
+        headers: typing.Optional[typing.Sequence["HeaderMatch"]] = None,
+        hostname: typing.Optional["GatewayRouteHostnameMatch"] = None,
         method: typing.Optional["HttpRouteMethod"] = None,
         path: typing.Optional["HttpGatewayRoutePathMatch"] = None,
         port: typing.Optional[jsii.Number] = None,
@@ -21701,7 +21724,7 @@ class HttpGatewayRouteMatch:
             self._values["rewrite_request_hostname"] = rewrite_request_hostname
 
     @builtins.property
-    def headers(self) -> typing.Optional[typing.List[HeaderMatch]]:
+    def headers(self) -> typing.Optional[typing.List["HeaderMatch"]]:
         '''Specifies the client request headers to match on.
 
         All specified headers
@@ -21710,16 +21733,16 @@ class HttpGatewayRouteMatch:
         :default: - do not match on headers
         '''
         result = self._values.get("headers")
-        return typing.cast(typing.Optional[typing.List[HeaderMatch]], result)
+        return typing.cast(typing.Optional[typing.List["HeaderMatch"]], result)
 
     @builtins.property
-    def hostname(self) -> typing.Optional[GatewayRouteHostnameMatch]:
+    def hostname(self) -> typing.Optional["GatewayRouteHostnameMatch"]:
         '''The gateway route host name to be matched on.
 
         :default: - do not match on host name
         '''
         result = self._values.get("hostname")
-        return typing.cast(typing.Optional[GatewayRouteHostnameMatch], result)
+        return typing.cast(typing.Optional["GatewayRouteHostnameMatch"], result)
 
     @builtins.property
     def method(self) -> typing.Optional["HttpRouteMethod"]:
@@ -21870,7 +21893,7 @@ class HttpGatewayRoutePathMatch(
     @abc.abstractmethod
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "HttpGatewayRoutePathMatchConfig":
         '''Returns the gateway route path match configuration.
 
@@ -21883,7 +21906,7 @@ class _HttpGatewayRoutePathMatchProxy(HttpGatewayRoutePathMatch):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "HttpGatewayRoutePathMatchConfig":
         '''Returns the gateway route path match configuration.
 
@@ -21913,9 +21936,9 @@ class HttpGatewayRoutePathMatchConfig:
         self,
         *,
         prefix_path_match: typing.Optional[builtins.str] = None,
-        prefix_path_rewrite: typing.Optional[typing.Union[CfnGatewayRoute.HttpGatewayRoutePrefixRewriteProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        whole_path_match: typing.Optional[typing.Union[CfnGatewayRoute.HttpPathMatchProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        whole_path_rewrite: typing.Optional[typing.Union[CfnGatewayRoute.HttpGatewayRoutePathRewriteProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        prefix_path_rewrite: typing.Optional[typing.Union["CfnGatewayRoute.HttpGatewayRoutePrefixRewriteProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        whole_path_match: typing.Optional[typing.Union["CfnGatewayRoute.HttpPathMatchProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        whole_path_rewrite: typing.Optional[typing.Union["CfnGatewayRoute.HttpGatewayRoutePathRewriteProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''The type returned from the ``bind()`` method in ``HttpGatewayRoutePathMatch``.
 
@@ -21981,35 +22004,35 @@ class HttpGatewayRoutePathMatchConfig:
     @builtins.property
     def prefix_path_rewrite(
         self,
-    ) -> typing.Optional[CfnGatewayRoute.HttpGatewayRoutePrefixRewriteProperty]:
+    ) -> typing.Optional["CfnGatewayRoute.HttpGatewayRoutePrefixRewriteProperty"]:
         '''Gateway route configuration for rewriting the prefix of the URL path of the request.
 
         :default: - rewrites the request's URL path to '/'
         '''
         result = self._values.get("prefix_path_rewrite")
-        return typing.cast(typing.Optional[CfnGatewayRoute.HttpGatewayRoutePrefixRewriteProperty], result)
+        return typing.cast(typing.Optional["CfnGatewayRoute.HttpGatewayRoutePrefixRewriteProperty"], result)
 
     @builtins.property
     def whole_path_match(
         self,
-    ) -> typing.Optional[CfnGatewayRoute.HttpPathMatchProperty]:
+    ) -> typing.Optional["CfnGatewayRoute.HttpPathMatchProperty"]:
         '''Gateway route configuration for matching on the complete URL path of the request.
 
         :default: - no matching will be performed on the complete URL path
         '''
         result = self._values.get("whole_path_match")
-        return typing.cast(typing.Optional[CfnGatewayRoute.HttpPathMatchProperty], result)
+        return typing.cast(typing.Optional["CfnGatewayRoute.HttpPathMatchProperty"], result)
 
     @builtins.property
     def whole_path_rewrite(
         self,
-    ) -> typing.Optional[CfnGatewayRoute.HttpGatewayRoutePathRewriteProperty]:
+    ) -> typing.Optional["CfnGatewayRoute.HttpGatewayRoutePathRewriteProperty"]:
         '''Gateway route configuration for rewriting the complete URL path of the request..
 
         :default: - no rewrite will be performed on the request's complete URL path
         '''
         result = self._values.get("whole_path_rewrite")
-        return typing.cast(typing.Optional[CfnGatewayRoute.HttpGatewayRoutePathRewriteProperty], result)
+        return typing.cast(typing.Optional["CfnGatewayRoute.HttpGatewayRoutePathRewriteProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22038,7 +22061,7 @@ class HttpGatewayRouteSpecOptions(CommonGatewayRouteSpecOptions):
         *,
         priority: typing.Optional[jsii.Number] = None,
         route_target: "IVirtualService",
-        match: typing.Optional[typing.Union[HttpGatewayRouteMatch, typing.Dict[builtins.str, typing.Any]]] = None,
+        match: typing.Optional[typing.Union["HttpGatewayRouteMatch", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties specific for HTTP Based GatewayRoutes.
 
@@ -22100,7 +22123,7 @@ class HttpGatewayRouteSpecOptions(CommonGatewayRouteSpecOptions):
         return typing.cast("IVirtualService", result)
 
     @builtins.property
-    def match(self) -> typing.Optional[HttpGatewayRouteMatch]:
+    def match(self) -> typing.Optional["HttpGatewayRouteMatch"]:
         '''The criterion for determining a request match for this GatewayRoute.
 
         When path match is defined, this may optionally determine the path rewrite configuration.
@@ -22108,7 +22131,7 @@ class HttpGatewayRouteSpecOptions(CommonGatewayRouteSpecOptions):
         :default: - matches any path and automatically rewrites the path to '/'
         '''
         result = self._values.get("match")
-        return typing.cast(typing.Optional[HttpGatewayRouteMatch], result)
+        return typing.cast(typing.Optional["HttpGatewayRouteMatch"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22138,9 +22161,9 @@ class HttpHealthCheckOptions:
         self,
         *,
         healthy_threshold: typing.Optional[jsii.Number] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
         path: typing.Optional[builtins.str] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         unhealthy_threshold: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties used to define HTTP Based healthchecks.
@@ -22206,13 +22229,13 @@ class HttpHealthCheckOptions:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def interval(self) -> typing.Optional[_Duration_4839e8c3]:
+    def interval(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time period between each health check execution.
 
         :default: Duration.seconds(5)
         '''
         result = self._values.get("interval")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def path(self) -> typing.Optional[builtins.str]:
@@ -22224,13 +22247,13 @@ class HttpHealthCheckOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The amount of time to wait when receiving a response from the health check.
 
         :default: Duration.seconds(2)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def unhealthy_threshold(self) -> typing.Optional[jsii.Number]:
@@ -22307,8 +22330,8 @@ class HttpRetryPolicy:
         self,
         *,
         retry_attempts: jsii.Number,
-        retry_timeout: _Duration_4839e8c3,
-        http_retry_events: typing.Optional[typing.Sequence[HttpRetryEvent]] = None,
+        retry_timeout: "_Duration_4839e8c3",
+        http_retry_events: typing.Optional[typing.Sequence["HttpRetryEvent"]] = None,
         tcp_retry_events: typing.Optional[typing.Sequence["TcpRetryEvent"]] = None,
     ) -> None:
         '''HTTP retry policy.
@@ -22365,14 +22388,14 @@ class HttpRetryPolicy:
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def retry_timeout(self) -> _Duration_4839e8c3:
+    def retry_timeout(self) -> "_Duration_4839e8c3":
         '''The timeout for each retry attempt.'''
         result = self._values.get("retry_timeout")
         assert result is not None, "Required property 'retry_timeout' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
-    def http_retry_events(self) -> typing.Optional[typing.List[HttpRetryEvent]]:
+    def http_retry_events(self) -> typing.Optional[typing.List["HttpRetryEvent"]]:
         '''Specify HTTP events on which to retry.
 
         You must specify at least one value
@@ -22381,7 +22404,7 @@ class HttpRetryPolicy:
         :default: - no retries for http events
         '''
         result = self._values.get("http_retry_events")
-        return typing.cast(typing.Optional[typing.List[HttpRetryEvent]], result)
+        return typing.cast(typing.Optional[typing.List["HttpRetryEvent"]], result)
 
     @builtins.property
     def tcp_retry_events(self) -> typing.Optional[typing.List["TcpRetryEvent"]]:
@@ -22425,7 +22448,7 @@ class HttpRouteMatch:
     def __init__(
         self,
         *,
-        headers: typing.Optional[typing.Sequence[HeaderMatch]] = None,
+        headers: typing.Optional[typing.Sequence["HeaderMatch"]] = None,
         method: typing.Optional["HttpRouteMethod"] = None,
         path: typing.Optional["HttpRoutePathMatch"] = None,
         port: typing.Optional[jsii.Number] = None,
@@ -22488,7 +22511,7 @@ class HttpRouteMatch:
             self._values["query_parameters"] = query_parameters
 
     @builtins.property
-    def headers(self) -> typing.Optional[typing.List[HeaderMatch]]:
+    def headers(self) -> typing.Optional[typing.List["HeaderMatch"]]:
         '''Specifies the client request headers to match on.
 
         All specified headers
@@ -22497,7 +22520,7 @@ class HttpRouteMatch:
         :default: - do not match on headers
         '''
         result = self._values.get("headers")
-        return typing.cast(typing.Optional[typing.List[HeaderMatch]], result)
+        return typing.cast(typing.Optional[typing.List["HeaderMatch"]], result)
 
     @builtins.property
     def method(self) -> typing.Optional["HttpRouteMethod"]:
@@ -22690,7 +22713,10 @@ class HttpRoutePathMatch(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "HttpRoutePathMatchConfig":
+    def bind(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+    ) -> "HttpRoutePathMatchConfig":
         '''Returns the route path match configuration.
 
         :param scope: -
@@ -22700,7 +22726,10 @@ class HttpRoutePathMatch(
 
 class _HttpRoutePathMatchProxy(HttpRoutePathMatch):
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "HttpRoutePathMatchConfig":
+    def bind(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+    ) -> "HttpRoutePathMatchConfig":
         '''Returns the route path match configuration.
 
         :param scope: -
@@ -22727,7 +22756,7 @@ class HttpRoutePathMatchConfig:
         self,
         *,
         prefix_path_match: typing.Optional[builtins.str] = None,
-        whole_path_match: typing.Optional[typing.Union[CfnRoute.HttpPathMatchProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        whole_path_match: typing.Optional[typing.Union["CfnRoute.HttpPathMatchProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''The type returned from the ``bind()`` method in ``HttpRoutePathMatch``.
 
@@ -22772,13 +22801,13 @@ class HttpRoutePathMatchConfig:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def whole_path_match(self) -> typing.Optional[CfnRoute.HttpPathMatchProperty]:
+    def whole_path_match(self) -> typing.Optional["CfnRoute.HttpPathMatchProperty"]:
         '''Route configuration for matching on the complete URL path of the request.
 
         :default: - no matching will be performed on the complete URL path
         '''
         result = self._values.get("whole_path_match")
-        return typing.cast(typing.Optional[CfnRoute.HttpPathMatchProperty], result)
+        return typing.cast(typing.Optional["CfnRoute.HttpPathMatchProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22843,8 +22872,8 @@ class HttpTimeout:
     def __init__(
         self,
         *,
-        idle: typing.Optional[_Duration_4839e8c3] = None,
-        per_request: typing.Optional[_Duration_4839e8c3] = None,
+        idle: typing.Optional["_Duration_4839e8c3"] = None,
+        per_request: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Represents timeouts for HTTP protocols.
 
@@ -22898,7 +22927,7 @@ class HttpTimeout:
             self._values["per_request"] = per_request
 
     @builtins.property
-    def idle(self) -> typing.Optional[_Duration_4839e8c3]:
+    def idle(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Represents an idle timeout.
 
         The amount of time that a connection may be idle.
@@ -22906,16 +22935,16 @@ class HttpTimeout:
         :default: - none
         '''
         result = self._values.get("idle")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def per_request(self) -> typing.Optional[_Duration_4839e8c3]:
+    def per_request(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Represents per request timeout.
 
         :default: - 15 s
         '''
         result = self._values.get("per_request")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22945,11 +22974,11 @@ class HttpVirtualNodeListenerOptions:
     def __init__(
         self,
         *,
-        connection_pool: typing.Optional[typing.Union[HttpConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
-        health_check: typing.Optional[HealthCheck] = None,
+        connection_pool: typing.Optional[typing.Union["HttpConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check: typing.Optional["HealthCheck"] = None,
         outlier_detection: typing.Optional[typing.Union["OutlierDetection", typing.Dict[builtins.str, typing.Any]]] = None,
         port: typing.Optional[jsii.Number] = None,
-        timeout: typing.Optional[typing.Union[HttpTimeout, typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional[typing.Union["HttpTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
         tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Represent the HTTP Node Listener property.
@@ -23018,22 +23047,22 @@ class HttpVirtualNodeListenerOptions:
             self._values["tls"] = tls
 
     @builtins.property
-    def connection_pool(self) -> typing.Optional[HttpConnectionPool]:
+    def connection_pool(self) -> typing.Optional["HttpConnectionPool"]:
         '''Connection pool for http listeners.
 
         :default: - None
         '''
         result = self._values.get("connection_pool")
-        return typing.cast(typing.Optional[HttpConnectionPool], result)
+        return typing.cast(typing.Optional["HttpConnectionPool"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[HealthCheck]:
+    def health_check(self) -> typing.Optional["HealthCheck"]:
         '''The health check information for the listener.
 
         :default: - no healthcheck
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[HealthCheck], result)
+        return typing.cast(typing.Optional["HealthCheck"], result)
 
     @builtins.property
     def outlier_detection(self) -> typing.Optional["OutlierDetection"]:
@@ -23054,13 +23083,13 @@ class HttpVirtualNodeListenerOptions:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[HttpTimeout]:
+    def timeout(self) -> typing.Optional["HttpTimeout"]:
         '''Timeout for HTTP protocol.
 
         :default: - None
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[HttpTimeout], result)
+        return typing.cast(typing.Optional["HttpTimeout"], result)
 
     @builtins.property
     def tls(self) -> typing.Optional["ListenerTlsOptions"]:
@@ -23174,8 +23203,8 @@ class IMesh(_IResource_c80c4260, typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        access_log: typing.Optional[AccessLog] = None,
-        backend_defaults: typing.Optional[typing.Union[BackendDefaults, typing.Dict[builtins.str, typing.Any]]] = None,
+        access_log: typing.Optional["AccessLog"] = None,
+        backend_defaults: typing.Optional[typing.Union["BackendDefaults", typing.Dict[builtins.str, typing.Any]]] = None,
         listeners: typing.Optional[typing.Sequence["VirtualGatewayListener"]] = None,
         virtual_gateway_name: typing.Optional[builtins.str] = None,
     ) -> "VirtualGateway":
@@ -23197,9 +23226,9 @@ class IMesh(_IResource_c80c4260, typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        access_log: typing.Optional[AccessLog] = None,
-        backend_defaults: typing.Optional[typing.Union[BackendDefaults, typing.Dict[builtins.str, typing.Any]]] = None,
-        backends: typing.Optional[typing.Sequence[Backend]] = None,
+        access_log: typing.Optional["AccessLog"] = None,
+        backend_defaults: typing.Optional[typing.Union["BackendDefaults", typing.Dict[builtins.str, typing.Any]]] = None,
+        backends: typing.Optional[typing.Sequence["Backend"]] = None,
         listeners: typing.Optional[typing.Sequence["VirtualNodeListener"]] = None,
         service_discovery: typing.Optional["ServiceDiscovery"] = None,
         virtual_node_name: typing.Optional[builtins.str] = None,
@@ -23269,8 +23298,8 @@ class _IMeshProxy(
         self,
         id: builtins.str,
         *,
-        access_log: typing.Optional[AccessLog] = None,
-        backend_defaults: typing.Optional[typing.Union[BackendDefaults, typing.Dict[builtins.str, typing.Any]]] = None,
+        access_log: typing.Optional["AccessLog"] = None,
+        backend_defaults: typing.Optional[typing.Union["BackendDefaults", typing.Dict[builtins.str, typing.Any]]] = None,
         listeners: typing.Optional[typing.Sequence["VirtualGatewayListener"]] = None,
         virtual_gateway_name: typing.Optional[builtins.str] = None,
     ) -> "VirtualGateway":
@@ -23302,9 +23331,9 @@ class _IMeshProxy(
         self,
         id: builtins.str,
         *,
-        access_log: typing.Optional[AccessLog] = None,
-        backend_defaults: typing.Optional[typing.Union[BackendDefaults, typing.Dict[builtins.str, typing.Any]]] = None,
-        backends: typing.Optional[typing.Sequence[Backend]] = None,
+        access_log: typing.Optional["AccessLog"] = None,
+        backend_defaults: typing.Optional[typing.Union["BackendDefaults", typing.Dict[builtins.str, typing.Any]]] = None,
+        backends: typing.Optional[typing.Sequence["Backend"]] = None,
         listeners: typing.Optional[typing.Sequence["VirtualNodeListener"]] = None,
         service_discovery: typing.Optional["ServiceDiscovery"] = None,
         virtual_node_name: typing.Optional[builtins.str] = None,
@@ -23440,7 +23469,7 @@ class IVirtualGateway(
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualGateway belongs to.'''
         ...
 
@@ -23467,7 +23496,7 @@ class IVirtualGateway(
         self,
         id: builtins.str,
         *,
-        route_spec: GatewayRouteSpec,
+        route_spec: "GatewayRouteSpec",
         gateway_route_name: typing.Optional[builtins.str] = None,
     ) -> "GatewayRoute":
         '''Utility method to add a new GatewayRoute to the VirtualGateway.
@@ -23481,8 +23510,8 @@ class IVirtualGateway(
     @jsii.member(jsii_name="grantStreamAggregatedResources")
     def grant_stream_aggregated_resources(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grants the given entity ``appmesh:StreamAggregatedResources``.
 
         :param identity: -
@@ -23500,9 +23529,9 @@ class _IVirtualGatewayProxy(
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualGateway belongs to.'''
-        return typing.cast(IMesh, jsii.get(self, "mesh"))
+        return typing.cast("IMesh", jsii.get(self, "mesh"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualGatewayArn")
@@ -23527,7 +23556,7 @@ class _IVirtualGatewayProxy(
         self,
         id: builtins.str,
         *,
-        route_spec: GatewayRouteSpec,
+        route_spec: "GatewayRouteSpec",
         gateway_route_name: typing.Optional[builtins.str] = None,
     ) -> "GatewayRoute":
         '''Utility method to add a new GatewayRoute to the VirtualGateway.
@@ -23548,8 +23577,8 @@ class _IVirtualGatewayProxy(
     @jsii.member(jsii_name="grantStreamAggregatedResources")
     def grant_stream_aggregated_resources(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grants the given entity ``appmesh:StreamAggregatedResources``.
 
         :param identity: -
@@ -23557,7 +23586,7 @@ class _IVirtualGatewayProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__df6b4e8e4bd2a5c0b61aa4b780f74375143e50849e13cea9ecb17a4060044312)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStreamAggregatedResources", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStreamAggregatedResources", [identity]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IVirtualGateway).__jsii_proxy_class__ = lambda : _IVirtualGatewayProxy
@@ -23573,7 +23602,7 @@ class IVirtualNode(
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualNode belongs to.'''
         ...
 
@@ -23602,8 +23631,8 @@ class IVirtualNode(
     @jsii.member(jsii_name="grantStreamAggregatedResources")
     def grant_stream_aggregated_resources(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grants the given entity ``appmesh:StreamAggregatedResources``.
 
         :param identity: -
@@ -23621,9 +23650,9 @@ class _IVirtualNodeProxy(
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualNode belongs to.'''
-        return typing.cast(IMesh, jsii.get(self, "mesh"))
+        return typing.cast("IMesh", jsii.get(self, "mesh"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualNodeArn")
@@ -23650,8 +23679,8 @@ class _IVirtualNodeProxy(
     @jsii.member(jsii_name="grantStreamAggregatedResources")
     def grant_stream_aggregated_resources(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grants the given entity ``appmesh:StreamAggregatedResources``.
 
         :param identity: -
@@ -23659,7 +23688,7 @@ class _IVirtualNodeProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__43bcc6ad8b21471be51ae6e6211454f750d6ba5bd6176c17bbf2009adfc8e4d2)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStreamAggregatedResources", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStreamAggregatedResources", [identity]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IVirtualNode).__jsii_proxy_class__ = lambda : _IVirtualNodeProxy
@@ -23671,7 +23700,7 @@ class IVirtualRouter(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualRouter belongs to.'''
         ...
 
@@ -23719,9 +23748,9 @@ class _IVirtualRouterProxy(
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualRouter belongs to.'''
-        return typing.cast(IMesh, jsii.get(self, "mesh"))
+        return typing.cast("IMesh", jsii.get(self, "mesh"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualRouterArn")
@@ -23772,7 +23801,7 @@ class IVirtualService(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualService belongs to.'''
         ...
 
@@ -23804,9 +23833,9 @@ class _IVirtualServiceProxy(
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualService belongs to.'''
-        return typing.cast(IMesh, jsii.get(self, "mesh"))
+        return typing.cast("IMesh", jsii.get(self, "mesh"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualServiceArn")
@@ -24097,7 +24126,7 @@ class LoggingFormatConfig:
     def __init__(
         self,
         *,
-        format_config: typing.Optional[typing.Union[CfnVirtualNode.LoggingFormatProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        format_config: typing.Optional[typing.Union["CfnVirtualNode.LoggingFormatProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''All Properties for Envoy Access Logging Format for mesh endpoints.
 
@@ -24131,13 +24160,13 @@ class LoggingFormatConfig:
             self._values["format_config"] = format_config
 
     @builtins.property
-    def format_config(self) -> typing.Optional[CfnVirtualNode.LoggingFormatProperty]:
+    def format_config(self) -> typing.Optional["CfnVirtualNode.LoggingFormatProperty"]:
         '''CFN configuration for Access Logging Format.
 
         :default: - no access logging format
         '''
         result = self._values.get("format_config")
-        return typing.cast(typing.Optional[CfnVirtualNode.LoggingFormatProperty], result)
+        return typing.cast(typing.Optional["CfnVirtualNode.LoggingFormatProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24177,7 +24206,7 @@ class Mesh(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         egress_filter: typing.Optional["MeshFilterType"] = None,
@@ -24207,10 +24236,10 @@ class Mesh(
     @builtins.classmethod
     def from_mesh_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         mesh_arn: builtins.str,
-    ) -> IMesh:
+    ) -> "IMesh":
         '''Import an existing mesh by arn.
 
         :param scope: -
@@ -24222,16 +24251,16 @@ class Mesh(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument mesh_arn", value=mesh_arn, expected_type=type_hints["mesh_arn"])
-        return typing.cast(IMesh, jsii.sinvoke(cls, "fromMeshArn", [scope, id, mesh_arn]))
+        return typing.cast("IMesh", jsii.sinvoke(cls, "fromMeshArn", [scope, id, mesh_arn]))
 
     @jsii.member(jsii_name="fromMeshName")
     @builtins.classmethod
     def from_mesh_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         mesh_name: builtins.str,
-    ) -> IMesh:
+    ) -> "IMesh":
         '''Import an existing mesh by name.
 
         :param scope: -
@@ -24243,15 +24272,15 @@ class Mesh(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument mesh_name", value=mesh_name, expected_type=type_hints["mesh_name"])
-        return typing.cast(IMesh, jsii.sinvoke(cls, "fromMeshName", [scope, id, mesh_name]))
+        return typing.cast("IMesh", jsii.sinvoke(cls, "fromMeshName", [scope, id, mesh_name]))
 
     @jsii.member(jsii_name="addVirtualGateway")
     def add_virtual_gateway(
         self,
         id: builtins.str,
         *,
-        access_log: typing.Optional[AccessLog] = None,
-        backend_defaults: typing.Optional[typing.Union[BackendDefaults, typing.Dict[builtins.str, typing.Any]]] = None,
+        access_log: typing.Optional["AccessLog"] = None,
+        backend_defaults: typing.Optional[typing.Union["BackendDefaults", typing.Dict[builtins.str, typing.Any]]] = None,
         listeners: typing.Optional[typing.Sequence["VirtualGatewayListener"]] = None,
         virtual_gateway_name: typing.Optional[builtins.str] = None,
     ) -> "VirtualGateway":
@@ -24280,9 +24309,9 @@ class Mesh(
         self,
         id: builtins.str,
         *,
-        access_log: typing.Optional[AccessLog] = None,
-        backend_defaults: typing.Optional[typing.Union[BackendDefaults, typing.Dict[builtins.str, typing.Any]]] = None,
-        backends: typing.Optional[typing.Sequence[Backend]] = None,
+        access_log: typing.Optional["AccessLog"] = None,
+        backend_defaults: typing.Optional[typing.Union["BackendDefaults", typing.Dict[builtins.str, typing.Any]]] = None,
+        backends: typing.Optional[typing.Sequence["Backend"]] = None,
         listeners: typing.Optional[typing.Sequence["VirtualNodeListener"]] = None,
         service_discovery: typing.Optional["ServiceDiscovery"] = None,
         virtual_node_name: typing.Optional[builtins.str] = None,
@@ -24388,7 +24417,7 @@ class MeshProps:
     def __init__(
         self,
         *,
-        egress_filter: typing.Optional[MeshFilterType] = None,
+        egress_filter: typing.Optional["MeshFilterType"] = None,
         mesh_name: typing.Optional[builtins.str] = None,
         service_discovery: typing.Optional[typing.Union["MeshServiceDiscovery", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
@@ -24434,13 +24463,13 @@ class MeshProps:
             self._values["service_discovery"] = service_discovery
 
     @builtins.property
-    def egress_filter(self) -> typing.Optional[MeshFilterType]:
+    def egress_filter(self) -> typing.Optional["MeshFilterType"]:
         '''Egress filter to be applied to the Mesh.
 
         :default: DROP_ALL
         '''
         result = self._values.get("egress_filter")
-        return typing.cast(typing.Optional[MeshFilterType], result)
+        return typing.cast(typing.Optional["MeshFilterType"], result)
 
     @builtins.property
     def mesh_name(self) -> typing.Optional[builtins.str]:
@@ -24478,7 +24507,11 @@ class MeshProps:
     name_mapping={"ip_preference": "ipPreference"},
 )
 class MeshServiceDiscovery:
-    def __init__(self, *, ip_preference: typing.Optional[IpPreference] = None) -> None:
+    def __init__(
+        self,
+        *,
+        ip_preference: typing.Optional["IpPreference"] = None,
+    ) -> None:
         '''Properties for Mesh Service Discovery.
 
         :param ip_preference: IP preference applied to all Virtual Nodes in the Mesh. Default: - No IP preference is applied to any of the Virtual Nodes in the Mesh. Virtual Nodes without an IP preference will have the following configured. Envoy listeners are configured to bind only to IPv4. Envoy will use IPv4 when sending traffic to a local application. For DNS service discovery, the Envoy DNS resolver to prefer using IPv6 and fall back to IPv4. For CloudMap service discovery, App Mesh will prefer using IPv4 and fall back to IPv6 for IPs returned by CloudMap.
@@ -24502,7 +24535,7 @@ class MeshServiceDiscovery:
             self._values["ip_preference"] = ip_preference
 
     @builtins.property
-    def ip_preference(self) -> typing.Optional[IpPreference]:
+    def ip_preference(self) -> typing.Optional["IpPreference"]:
         '''IP preference applied to all Virtual Nodes in the Mesh.
 
         :default:
@@ -24515,7 +24548,7 @@ class MeshServiceDiscovery:
         For CloudMap service discovery, App Mesh will prefer using IPv4 and fall back to IPv6 for IPs returned by CloudMap.
         '''
         result = self._values.get("ip_preference")
-        return typing.cast(typing.Optional[IpPreference], result)
+        return typing.cast(typing.Optional["IpPreference"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24650,8 +24683,8 @@ class OutlierDetection:
     def __init__(
         self,
         *,
-        base_ejection_duration: _Duration_4839e8c3,
-        interval: _Duration_4839e8c3,
+        base_ejection_duration: "_Duration_4839e8c3",
+        interval: "_Duration_4839e8c3",
         max_ejection_percent: jsii.Number,
         max_server_errors: jsii.Number,
     ) -> None:
@@ -24700,18 +24733,18 @@ class OutlierDetection:
         }
 
     @builtins.property
-    def base_ejection_duration(self) -> _Duration_4839e8c3:
+    def base_ejection_duration(self) -> "_Duration_4839e8c3":
         '''The base amount of time for which a host is ejected.'''
         result = self._values.get("base_ejection_duration")
         assert result is not None, "Required property 'base_ejection_duration' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
-    def interval(self) -> _Duration_4839e8c3:
+    def interval(self) -> "_Duration_4839e8c3":
         '''The time interval between ejection sweep analysis.'''
         result = self._values.get("interval")
         assert result is not None, "Required property 'interval' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
     def max_ejection_percent(self) -> jsii.Number:
@@ -24806,7 +24839,7 @@ class QueryParameterMatch(
     @abc.abstractmethod
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "QueryParameterMatchConfig":
         '''Returns the query parameter match configuration.
 
@@ -24819,7 +24852,7 @@ class _QueryParameterMatchProxy(QueryParameterMatch):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "QueryParameterMatchConfig":
         '''Returns the query parameter match configuration.
 
@@ -24843,7 +24876,7 @@ class QueryParameterMatchConfig:
     def __init__(
         self,
         *,
-        query_parameter_match: typing.Union[CfnRoute.QueryParameterProperty, typing.Dict[builtins.str, typing.Any]],
+        query_parameter_match: typing.Union["CfnRoute.QueryParameterProperty", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''Configuration for ``QueryParameterMatch``.
 
@@ -24878,11 +24911,11 @@ class QueryParameterMatchConfig:
         }
 
     @builtins.property
-    def query_parameter_match(self) -> CfnRoute.QueryParameterProperty:
+    def query_parameter_match(self) -> "CfnRoute.QueryParameterProperty":
         '''Route CFN configuration for route query parameter match.'''
         result = self._values.get("query_parameter_match")
         assert result is not None, "Required property 'query_parameter_match' is missing"
-        return typing.cast(CfnRoute.QueryParameterProperty, result)
+        return typing.cast("CfnRoute.QueryParameterProperty", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24929,11 +24962,11 @@ class Route(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        mesh: IMesh,
-        virtual_router: IVirtualRouter,
+        mesh: "IMesh",
+        virtual_router: "IVirtualRouter",
         route_spec: "RouteSpec",
         route_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -24962,10 +24995,10 @@ class Route(
     @builtins.classmethod
     def from_route_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         route_arn: builtins.str,
-    ) -> IRoute:
+    ) -> "IRoute":
         '''Import an existing Route given an ARN.
 
         :param scope: -
@@ -24977,18 +25010,18 @@ class Route(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument route_arn", value=route_arn, expected_type=type_hints["route_arn"])
-        return typing.cast(IRoute, jsii.sinvoke(cls, "fromRouteArn", [scope, id, route_arn]))
+        return typing.cast("IRoute", jsii.sinvoke(cls, "fromRouteArn", [scope, id, route_arn]))
 
     @jsii.member(jsii_name="fromRouteAttributes")
     @builtins.classmethod
     def from_route_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         route_name: builtins.str,
-        virtual_router: IVirtualRouter,
-    ) -> IRoute:
+        virtual_router: "IVirtualRouter",
+    ) -> "IRoute":
         '''Import an existing Route given attributes.
 
         :param scope: -
@@ -25002,7 +25035,7 @@ class Route(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         attrs = RouteAttributes(route_name=route_name, virtual_router=virtual_router)
 
-        return typing.cast(IRoute, jsii.sinvoke(cls, "fromRouteAttributes", [scope, id, attrs]))
+        return typing.cast("IRoute", jsii.sinvoke(cls, "fromRouteAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -25024,9 +25057,9 @@ class Route(
 
     @builtins.property
     @jsii.member(jsii_name="virtualRouter")
-    def virtual_router(self) -> IVirtualRouter:
+    def virtual_router(self) -> "IVirtualRouter":
         '''The VirtualRouter the Route belongs to.'''
-        return typing.cast(IVirtualRouter, jsii.get(self, "virtualRouter"))
+        return typing.cast("IVirtualRouter", jsii.get(self, "virtualRouter"))
 
 
 @jsii.data_type(
@@ -25039,7 +25072,7 @@ class RouteAttributes:
         self,
         *,
         route_name: builtins.str,
-        virtual_router: IVirtualRouter,
+        virtual_router: "IVirtualRouter",
     ) -> None:
         '''Interface with properties ncecessary to import a reusable Route.
 
@@ -25078,11 +25111,11 @@ class RouteAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def virtual_router(self) -> IVirtualRouter:
+    def virtual_router(self) -> "IVirtualRouter":
         '''The VirtualRouter the Route belongs to.'''
         result = self._values.get("virtual_router")
         assert result is not None, "Required property 'virtual_router' is missing"
-        return typing.cast(IVirtualRouter, result)
+        return typing.cast("IVirtualRouter", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -25191,8 +25224,8 @@ class RouteProps(RouteBaseProps):
         *,
         route_spec: "RouteSpec",
         route_name: typing.Optional[builtins.str] = None,
-        mesh: IMesh,
-        virtual_router: IVirtualRouter,
+        mesh: "IMesh",
+        virtual_router: "IVirtualRouter",
     ) -> None:
         '''Properties to define new Routes.
 
@@ -25253,18 +25286,18 @@ class RouteProps(RouteBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The service mesh to define the route in.'''
         result = self._values.get("mesh")
         assert result is not None, "Required property 'mesh' is missing"
-        return typing.cast(IMesh, result)
+        return typing.cast("IMesh", result)
 
     @builtins.property
-    def virtual_router(self) -> IVirtualRouter:
+    def virtual_router(self) -> "IVirtualRouter":
         '''The VirtualRouter the Route belongs to.'''
         result = self._values.get("virtual_router")
         assert result is not None, "Required property 'virtual_router' is missing"
-        return typing.cast(IVirtualRouter, result)
+        return typing.cast("IVirtualRouter", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -25317,10 +25350,10 @@ class RouteSpec(
     def grpc(
         cls,
         *,
-        match: typing.Union[GrpcRouteMatch, typing.Dict[builtins.str, typing.Any]],
+        match: typing.Union["GrpcRouteMatch", typing.Dict[builtins.str, typing.Any]],
         weighted_targets: typing.Sequence[typing.Union["WeightedTarget", typing.Dict[builtins.str, typing.Any]]],
         retry_policy: typing.Optional[typing.Union["GrpcRetryPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
-        timeout: typing.Optional[typing.Union[GrpcTimeout, typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional[typing.Union["GrpcTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
         priority: typing.Optional[jsii.Number] = None,
     ) -> "RouteSpec":
         '''Creates a GRPC Based RouteSpec.
@@ -25347,9 +25380,9 @@ class RouteSpec(
         cls,
         *,
         weighted_targets: typing.Sequence[typing.Union["WeightedTarget", typing.Dict[builtins.str, typing.Any]]],
-        match: typing.Optional[typing.Union[HttpRouteMatch, typing.Dict[builtins.str, typing.Any]]] = None,
-        retry_policy: typing.Optional[typing.Union[HttpRetryPolicy, typing.Dict[builtins.str, typing.Any]]] = None,
-        timeout: typing.Optional[typing.Union[HttpTimeout, typing.Dict[builtins.str, typing.Any]]] = None,
+        match: typing.Optional[typing.Union["HttpRouteMatch", typing.Dict[builtins.str, typing.Any]]] = None,
+        retry_policy: typing.Optional[typing.Union["HttpRetryPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional[typing.Union["HttpTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
         priority: typing.Optional[jsii.Number] = None,
     ) -> "RouteSpec":
         '''Creates an HTTP Based RouteSpec.
@@ -25376,9 +25409,9 @@ class RouteSpec(
         cls,
         *,
         weighted_targets: typing.Sequence[typing.Union["WeightedTarget", typing.Dict[builtins.str, typing.Any]]],
-        match: typing.Optional[typing.Union[HttpRouteMatch, typing.Dict[builtins.str, typing.Any]]] = None,
-        retry_policy: typing.Optional[typing.Union[HttpRetryPolicy, typing.Dict[builtins.str, typing.Any]]] = None,
-        timeout: typing.Optional[typing.Union[HttpTimeout, typing.Dict[builtins.str, typing.Any]]] = None,
+        match: typing.Optional[typing.Union["HttpRouteMatch", typing.Dict[builtins.str, typing.Any]]] = None,
+        retry_policy: typing.Optional[typing.Union["HttpRetryPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional[typing.Union["HttpTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
         priority: typing.Optional[jsii.Number] = None,
     ) -> "RouteSpec":
         '''Creates an HTTP2 Based RouteSpec.
@@ -25422,7 +25455,7 @@ class RouteSpec(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "RouteSpecConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "RouteSpecConfig":
         '''Called when the RouteSpec type is initialized.
 
         Can be used to enforce
@@ -25435,7 +25468,7 @@ class RouteSpec(
 
 class _RouteSpecProxy(RouteSpec):
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "RouteSpecConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "RouteSpecConfig":
         '''Called when the RouteSpec type is initialized.
 
         Can be used to enforce
@@ -25467,11 +25500,11 @@ class RouteSpecConfig:
     def __init__(
         self,
         *,
-        grpc_route_spec: typing.Optional[typing.Union[CfnRoute.GrpcRouteProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        http2_route_spec: typing.Optional[typing.Union[CfnRoute.HttpRouteProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        http_route_spec: typing.Optional[typing.Union[CfnRoute.HttpRouteProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        grpc_route_spec: typing.Optional[typing.Union["CfnRoute.GrpcRouteProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        http2_route_spec: typing.Optional[typing.Union["CfnRoute.HttpRouteProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        http_route_spec: typing.Optional[typing.Union["CfnRoute.HttpRouteProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         priority: typing.Optional[jsii.Number] = None,
-        tcp_route_spec: typing.Optional[typing.Union[CfnRoute.TcpRouteProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        tcp_route_spec: typing.Optional[typing.Union["CfnRoute.TcpRouteProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''All Properties for Route Specs.
 
@@ -25735,31 +25768,31 @@ class RouteSpecConfig:
             self._values["tcp_route_spec"] = tcp_route_spec
 
     @builtins.property
-    def grpc_route_spec(self) -> typing.Optional[CfnRoute.GrpcRouteProperty]:
+    def grpc_route_spec(self) -> typing.Optional["CfnRoute.GrpcRouteProperty"]:
         '''The spec for a grpc route.
 
         :default: - no grpc spec
         '''
         result = self._values.get("grpc_route_spec")
-        return typing.cast(typing.Optional[CfnRoute.GrpcRouteProperty], result)
+        return typing.cast(typing.Optional["CfnRoute.GrpcRouteProperty"], result)
 
     @builtins.property
-    def http2_route_spec(self) -> typing.Optional[CfnRoute.HttpRouteProperty]:
+    def http2_route_spec(self) -> typing.Optional["CfnRoute.HttpRouteProperty"]:
         '''The spec for an http2 route.
 
         :default: - no http2 spec
         '''
         result = self._values.get("http2_route_spec")
-        return typing.cast(typing.Optional[CfnRoute.HttpRouteProperty], result)
+        return typing.cast(typing.Optional["CfnRoute.HttpRouteProperty"], result)
 
     @builtins.property
-    def http_route_spec(self) -> typing.Optional[CfnRoute.HttpRouteProperty]:
+    def http_route_spec(self) -> typing.Optional["CfnRoute.HttpRouteProperty"]:
         '''The spec for an http route.
 
         :default: - no http spec
         '''
         result = self._values.get("http_route_spec")
-        return typing.cast(typing.Optional[CfnRoute.HttpRouteProperty], result)
+        return typing.cast(typing.Optional["CfnRoute.HttpRouteProperty"], result)
 
     @builtins.property
     def priority(self) -> typing.Optional[jsii.Number]:
@@ -25774,13 +25807,13 @@ class RouteSpecConfig:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tcp_route_spec(self) -> typing.Optional[CfnRoute.TcpRouteProperty]:
+    def tcp_route_spec(self) -> typing.Optional["CfnRoute.TcpRouteProperty"]:
         '''The spec for a tcp route.
 
         :default: - no tcp spec
         '''
         result = self._values.get("tcp_route_spec")
-        return typing.cast(typing.Optional[CfnRoute.TcpRouteProperty], result)
+        return typing.cast(typing.Optional["CfnRoute.TcpRouteProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -25888,9 +25921,9 @@ class ServiceDiscovery(
     @builtins.classmethod
     def cloud_map(
         cls,
-        service: _IService_46860ae1,
+        service: "_IService_46860ae1",
         instance_attributes: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        ip_preference: typing.Optional[IpPreference] = None,
+        ip_preference: typing.Optional["IpPreference"] = None,
     ) -> "ServiceDiscovery":
         '''Returns Cloud Map based service discovery.
 
@@ -25910,8 +25943,8 @@ class ServiceDiscovery(
     def dns(
         cls,
         hostname: builtins.str,
-        response_type: typing.Optional[DnsResponseType] = None,
-        ip_preference: typing.Optional[IpPreference] = None,
+        response_type: typing.Optional["DnsResponseType"] = None,
+        ip_preference: typing.Optional["IpPreference"] = None,
     ) -> "ServiceDiscovery":
         '''Returns DNS based service discovery.
 
@@ -25928,7 +25961,7 @@ class ServiceDiscovery(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "ServiceDiscoveryConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "ServiceDiscoveryConfig":
         '''Binds the current object when adding Service Discovery to a VirtualNode.
 
         :param scope: -
@@ -25938,7 +25971,7 @@ class ServiceDiscovery(
 
 class _ServiceDiscoveryProxy(ServiceDiscovery):
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "ServiceDiscoveryConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "ServiceDiscoveryConfig":
         '''Binds the current object when adding Service Discovery to a VirtualNode.
 
         :param scope: -
@@ -25961,8 +25994,8 @@ class ServiceDiscoveryConfig:
     def __init__(
         self,
         *,
-        cloudmap: typing.Optional[typing.Union[CfnVirtualNode.AwsCloudMapServiceDiscoveryProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        dns: typing.Optional[typing.Union[CfnVirtualNode.DnsServiceDiscoveryProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        cloudmap: typing.Optional[typing.Union["CfnVirtualNode.AwsCloudMapServiceDiscoveryProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        dns: typing.Optional[typing.Union["CfnVirtualNode.DnsServiceDiscoveryProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties for VirtualNode Service Discovery.
 
@@ -26015,22 +26048,22 @@ class ServiceDiscoveryConfig:
     @builtins.property
     def cloudmap(
         self,
-    ) -> typing.Optional[CfnVirtualNode.AwsCloudMapServiceDiscoveryProperty]:
+    ) -> typing.Optional["CfnVirtualNode.AwsCloudMapServiceDiscoveryProperty"]:
         '''Cloud Map based Service Discovery.
 
         :default: - no Cloud Map based service discovery
         '''
         result = self._values.get("cloudmap")
-        return typing.cast(typing.Optional[CfnVirtualNode.AwsCloudMapServiceDiscoveryProperty], result)
+        return typing.cast(typing.Optional["CfnVirtualNode.AwsCloudMapServiceDiscoveryProperty"], result)
 
     @builtins.property
-    def dns(self) -> typing.Optional[CfnVirtualNode.DnsServiceDiscoveryProperty]:
+    def dns(self) -> typing.Optional["CfnVirtualNode.DnsServiceDiscoveryProperty"]:
         '''DNS based Service Discovery.
 
         :default: - no DNS based service discovery
         '''
         result = self._values.get("dns")
-        return typing.cast(typing.Optional[CfnVirtualNode.DnsServiceDiscoveryProperty], result)
+        return typing.cast(typing.Optional["CfnVirtualNode.DnsServiceDiscoveryProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -26112,7 +26145,7 @@ class SubjectAlternativeNames(
     @abc.abstractmethod
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "SubjectAlternativeNamesMatcherConfig":
         '''Returns Subject Alternative Names Matcher based on method type.
 
@@ -26125,7 +26158,7 @@ class _SubjectAlternativeNamesProxy(SubjectAlternativeNames):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "SubjectAlternativeNamesMatcherConfig":
         '''Returns Subject Alternative Names Matcher based on method type.
 
@@ -26149,7 +26182,7 @@ class SubjectAlternativeNamesMatcherConfig:
     def __init__(
         self,
         *,
-        subject_alternative_names_match: typing.Union[CfnVirtualNode.SubjectAlternativeNameMatchersProperty, typing.Dict[builtins.str, typing.Any]],
+        subject_alternative_names_match: typing.Union["CfnVirtualNode.SubjectAlternativeNameMatchersProperty", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''All Properties for Subject Alternative Names Matcher for both Client Policy and Listener.
 
@@ -26181,11 +26214,11 @@ class SubjectAlternativeNamesMatcherConfig:
     @builtins.property
     def subject_alternative_names_match(
         self,
-    ) -> CfnVirtualNode.SubjectAlternativeNameMatchersProperty:
+    ) -> "CfnVirtualNode.SubjectAlternativeNameMatchersProperty":
         '''VirtualNode CFN configuration for subject alternative names secured by the certificate.'''
         result = self._values.get("subject_alternative_names_match")
         assert result is not None, "Required property 'subject_alternative_names_match' is missing"
-        return typing.cast(CfnVirtualNode.SubjectAlternativeNameMatchersProperty, result)
+        return typing.cast("CfnVirtualNode.SubjectAlternativeNameMatchersProperty", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -26266,8 +26299,8 @@ class TcpHealthCheckOptions:
         self,
         *,
         healthy_threshold: typing.Optional[jsii.Number] = None,
-        interval: typing.Optional[_Duration_4839e8c3] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        interval: typing.Optional["_Duration_4839e8c3"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         unhealthy_threshold: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties used to define TCP Based healthchecks.
@@ -26319,22 +26352,22 @@ class TcpHealthCheckOptions:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def interval(self) -> typing.Optional[_Duration_4839e8c3]:
+    def interval(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time period between each health check execution.
 
         :default: Duration.seconds(5)
         '''
         result = self._values.get("interval")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The amount of time to wait when receiving a response from the health check.
 
         :default: Duration.seconds(2)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def unhealthy_threshold(self) -> typing.Optional[jsii.Number]:
@@ -26501,7 +26534,7 @@ class TcpRouteSpecOptions(RouteSpecOptionsBase):
     name_mapping={"idle": "idle"},
 )
 class TcpTimeout:
-    def __init__(self, *, idle: typing.Optional[_Duration_4839e8c3] = None) -> None:
+    def __init__(self, *, idle: typing.Optional["_Duration_4839e8c3"] = None) -> None:
         '''Represents timeouts for TCP protocols.
 
         :param idle: Represents an idle timeout. The amount of time that a connection may be idle. Default: - none
@@ -26527,7 +26560,7 @@ class TcpTimeout:
             self._values["idle"] = idle
 
     @builtins.property
-    def idle(self) -> typing.Optional[_Duration_4839e8c3]:
+    def idle(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Represents an idle timeout.
 
         The amount of time that a connection may be idle.
@@ -26535,7 +26568,7 @@ class TcpTimeout:
         :default: - none
         '''
         result = self._values.get("idle")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -26565,12 +26598,12 @@ class TcpVirtualNodeListenerOptions:
     def __init__(
         self,
         *,
-        connection_pool: typing.Optional[typing.Union[TcpConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
-        health_check: typing.Optional[HealthCheck] = None,
-        outlier_detection: typing.Optional[typing.Union[OutlierDetection, typing.Dict[builtins.str, typing.Any]]] = None,
+        connection_pool: typing.Optional[typing.Union["TcpConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check: typing.Optional["HealthCheck"] = None,
+        outlier_detection: typing.Optional[typing.Union["OutlierDetection", typing.Dict[builtins.str, typing.Any]]] = None,
         port: typing.Optional[jsii.Number] = None,
-        timeout: typing.Optional[typing.Union[TcpTimeout, typing.Dict[builtins.str, typing.Any]]] = None,
-        tls: typing.Optional[typing.Union[ListenerTlsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional[typing.Union["TcpTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
+        tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Represent the TCP Node Listener property.
 
@@ -26655,31 +26688,31 @@ class TcpVirtualNodeListenerOptions:
             self._values["tls"] = tls
 
     @builtins.property
-    def connection_pool(self) -> typing.Optional[TcpConnectionPool]:
+    def connection_pool(self) -> typing.Optional["TcpConnectionPool"]:
         '''Connection pool for http listeners.
 
         :default: - None
         '''
         result = self._values.get("connection_pool")
-        return typing.cast(typing.Optional[TcpConnectionPool], result)
+        return typing.cast(typing.Optional["TcpConnectionPool"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[HealthCheck]:
+    def health_check(self) -> typing.Optional["HealthCheck"]:
         '''The health check information for the listener.
 
         :default: - no healthcheck
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[HealthCheck], result)
+        return typing.cast(typing.Optional["HealthCheck"], result)
 
     @builtins.property
-    def outlier_detection(self) -> typing.Optional[OutlierDetection]:
+    def outlier_detection(self) -> typing.Optional["OutlierDetection"]:
         '''Represents the configuration for enabling outlier detection.
 
         :default: - none
         '''
         result = self._values.get("outlier_detection")
-        return typing.cast(typing.Optional[OutlierDetection], result)
+        return typing.cast(typing.Optional["OutlierDetection"], result)
 
     @builtins.property
     def port(self) -> typing.Optional[jsii.Number]:
@@ -26691,22 +26724,22 @@ class TcpVirtualNodeListenerOptions:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[TcpTimeout]:
+    def timeout(self) -> typing.Optional["TcpTimeout"]:
         '''Timeout for TCP protocol.
 
         :default: - None
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[TcpTimeout], result)
+        return typing.cast(typing.Optional["TcpTimeout"], result)
 
     @builtins.property
-    def tls(self) -> typing.Optional[ListenerTlsOptions]:
+    def tls(self) -> typing.Optional["ListenerTlsOptions"]:
         '''Represents the configuration for enabling TLS on a listener.
 
         :default: - none
         '''
         result = self._values.get("tls")
-        return typing.cast(typing.Optional[ListenerTlsOptions], result)
+        return typing.cast(typing.Optional["ListenerTlsOptions"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -26779,7 +26812,7 @@ class TlsCertificate(
 
     @jsii.member(jsii_name="acm")
     @builtins.classmethod
-    def acm(cls, certificate: _ICertificate_c194c70b) -> "TlsCertificate":
+    def acm(cls, certificate: "_ICertificate_c194c70b") -> "TlsCertificate":
         '''Returns an ACM TLS Certificate.
 
         :param certificate: -
@@ -26821,7 +26854,7 @@ class TlsCertificate(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> "TlsCertificateConfig":
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "TlsCertificateConfig":
         '''Returns TLS certificate based provider.
 
         :param _scope: -
@@ -26831,7 +26864,7 @@ class TlsCertificate(
 
 class _TlsCertificateProxy(TlsCertificate):
     @jsii.member(jsii_name="bind")
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> "TlsCertificateConfig":
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "TlsCertificateConfig":
         '''Returns TLS certificate based provider.
 
         :param _scope: -
@@ -26854,7 +26887,7 @@ class TlsCertificateConfig:
     def __init__(
         self,
         *,
-        tls_certificate: typing.Union[CfnVirtualNode.ListenerTlsCertificateProperty, typing.Dict[builtins.str, typing.Any]],
+        tls_certificate: typing.Union["CfnVirtualNode.ListenerTlsCertificateProperty", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''A wrapper for the tls config returned by ``TlsCertificate.bind``.
 
@@ -26893,11 +26926,11 @@ class TlsCertificateConfig:
         }
 
     @builtins.property
-    def tls_certificate(self) -> CfnVirtualNode.ListenerTlsCertificateProperty:
+    def tls_certificate(self) -> "CfnVirtualNode.ListenerTlsCertificateProperty":
         '''The CFN shape for a TLS certificate.'''
         result = self._values.get("tls_certificate")
         assert result is not None, "Required property 'tls_certificate' is missing"
-        return typing.cast(CfnVirtualNode.ListenerTlsCertificateProperty, result)
+        return typing.cast("CfnVirtualNode.ListenerTlsCertificateProperty", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -27114,7 +27147,7 @@ class TlsValidation:
         self,
         *,
         trust: "TlsValidationTrust",
-        subject_alternative_names: typing.Optional[SubjectAlternativeNames] = None,
+        subject_alternative_names: typing.Optional["SubjectAlternativeNames"] = None,
     ) -> None:
         '''Represents the properties needed to define TLS Validation context.
 
@@ -27175,7 +27208,7 @@ class TlsValidation:
         return typing.cast("TlsValidationTrust", result)
 
     @builtins.property
-    def subject_alternative_names(self) -> typing.Optional[SubjectAlternativeNames]:
+    def subject_alternative_names(self) -> typing.Optional["SubjectAlternativeNames"]:
         '''Represents the subject alternative names (SANs) secured by the certificate.
 
         SANs must be in the FQDN or URI format.
@@ -27188,7 +27221,7 @@ class TlsValidation:
         the SAN on the certificate provided by the terminating endpoint must match the mesh endpoint service discovery configuration.
         '''
         result = self._values.get("subject_alternative_names")
-        return typing.cast(typing.Optional[SubjectAlternativeNames], result)
+        return typing.cast(typing.Optional["SubjectAlternativeNames"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -27252,7 +27285,7 @@ class TlsValidationTrust(
     @builtins.classmethod
     def acm(
         cls,
-        certificate_authorities: typing.Sequence[_ICertificateAuthority_26727cab],
+        certificate_authorities: typing.Sequence["_ICertificateAuthorityRef_240f71c8"],
     ) -> "TlsValidationTrust":
         '''TLS Validation Context Trust for ACM Private Certificate Authority (CA).
 
@@ -27289,7 +27322,10 @@ class TlsValidationTrust(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "TlsValidationTrustConfig":
+    def bind(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+    ) -> "TlsValidationTrustConfig":
         '''Returns Trust context based on trust type.
 
         :param scope: -
@@ -27299,7 +27335,10 @@ class TlsValidationTrust(
 
 class _TlsValidationTrustProxy(TlsValidationTrust):
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "TlsValidationTrustConfig":
+    def bind(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+    ) -> "TlsValidationTrustConfig":
         '''Returns Trust context based on trust type.
 
         :param scope: -
@@ -27322,7 +27361,7 @@ class TlsValidationTrustConfig:
     def __init__(
         self,
         *,
-        tls_validation_trust: typing.Union[CfnVirtualNode.TlsValidationContextTrustProperty, typing.Dict[builtins.str, typing.Any]],
+        tls_validation_trust: typing.Union["CfnVirtualNode.TlsValidationContextTrustProperty", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''All Properties for TLS Validation Trusts for both Client Policy and Listener.
 
@@ -27360,11 +27399,13 @@ class TlsValidationTrustConfig:
         }
 
     @builtins.property
-    def tls_validation_trust(self) -> CfnVirtualNode.TlsValidationContextTrustProperty:
+    def tls_validation_trust(
+        self,
+    ) -> "CfnVirtualNode.TlsValidationContextTrustProperty":
         '''VirtualNode CFN configuration for client policy's TLS Validation Trust.'''
         result = self._values.get("tls_validation_trust")
         assert result is not None, "Required property 'tls_validation_trust' is missing"
-        return typing.cast(CfnVirtualNode.TlsValidationContextTrustProperty, result)
+        return typing.cast("CfnVirtualNode.TlsValidationContextTrustProperty", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -27428,12 +27469,12 @@ class VirtualGateway(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        mesh: IMesh,
-        access_log: typing.Optional[AccessLog] = None,
-        backend_defaults: typing.Optional[typing.Union[BackendDefaults, typing.Dict[builtins.str, typing.Any]]] = None,
+        mesh: "IMesh",
+        access_log: typing.Optional["AccessLog"] = None,
+        backend_defaults: typing.Optional[typing.Union["BackendDefaults", typing.Dict[builtins.str, typing.Any]]] = None,
         listeners: typing.Optional[typing.Sequence["VirtualGatewayListener"]] = None,
         virtual_gateway_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -27464,10 +27505,10 @@ class VirtualGateway(
     @builtins.classmethod
     def from_virtual_gateway_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         virtual_gateway_arn: builtins.str,
-    ) -> IVirtualGateway:
+    ) -> "IVirtualGateway":
         '''Import an existing VirtualGateway given an ARN.
 
         :param scope: -
@@ -27479,18 +27520,18 @@ class VirtualGateway(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument virtual_gateway_arn", value=virtual_gateway_arn, expected_type=type_hints["virtual_gateway_arn"])
-        return typing.cast(IVirtualGateway, jsii.sinvoke(cls, "fromVirtualGatewayArn", [scope, id, virtual_gateway_arn]))
+        return typing.cast("IVirtualGateway", jsii.sinvoke(cls, "fromVirtualGatewayArn", [scope, id, virtual_gateway_arn]))
 
     @jsii.member(jsii_name="fromVirtualGatewayAttributes")
     @builtins.classmethod
     def from_virtual_gateway_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        mesh: IMesh,
+        mesh: "IMesh",
         virtual_gateway_name: builtins.str,
-    ) -> IVirtualGateway:
+    ) -> "IVirtualGateway":
         '''Import an existing VirtualGateway given its attributes.
 
         :param scope: -
@@ -27506,14 +27547,14 @@ class VirtualGateway(
             mesh=mesh, virtual_gateway_name=virtual_gateway_name
         )
 
-        return typing.cast(IVirtualGateway, jsii.sinvoke(cls, "fromVirtualGatewayAttributes", [scope, id, attrs]))
+        return typing.cast("IVirtualGateway", jsii.sinvoke(cls, "fromVirtualGatewayAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addGatewayRoute")
     def add_gateway_route(
         self,
         id: builtins.str,
         *,
-        route_spec: GatewayRouteSpec,
+        route_spec: "GatewayRouteSpec",
         gateway_route_name: typing.Optional[builtins.str] = None,
     ) -> "GatewayRoute":
         '''Utility method to add a new GatewayRoute to the VirtualGateway.
@@ -27534,8 +27575,8 @@ class VirtualGateway(
     @jsii.member(jsii_name="grantStreamAggregatedResources")
     def grant_stream_aggregated_resources(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grants the given entity ``appmesh:StreamAggregatedResources``.
 
         :param identity: -
@@ -27543,7 +27584,7 @@ class VirtualGateway(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ac0bfc84b988ea9ce23a4150300436641426fa55bc1b25111c2066076ab95e85)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStreamAggregatedResources", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStreamAggregatedResources", [identity]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -27564,9 +27605,9 @@ class VirtualGateway(
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh that the VirtualGateway belongs to.'''
-        return typing.cast(IMesh, jsii.get(self, "mesh"))
+        return typing.cast("IMesh", jsii.get(self, "mesh"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualGatewayArn")
@@ -27582,9 +27623,9 @@ class VirtualGateway(
 
     @builtins.property
     @jsii.member(jsii_name="virtualGatewayRef")
-    def virtual_gateway_ref(self) -> _VirtualGatewayReference_29f6f326:
+    def virtual_gateway_ref(self) -> "_VirtualGatewayReference_29f6f326":
         '''A reference to a VirtualGateway resource.'''
-        return typing.cast(_VirtualGatewayReference_29f6f326, jsii.get(self, "virtualGatewayRef"))
+        return typing.cast("_VirtualGatewayReference_29f6f326", jsii.get(self, "virtualGatewayRef"))
 
 
 @jsii.data_type(
@@ -27593,7 +27634,7 @@ class VirtualGateway(
     name_mapping={"mesh": "mesh", "virtual_gateway_name": "virtualGatewayName"},
 )
 class VirtualGatewayAttributes:
-    def __init__(self, *, mesh: IMesh, virtual_gateway_name: builtins.str) -> None:
+    def __init__(self, *, mesh: "IMesh", virtual_gateway_name: builtins.str) -> None:
         '''Unterface with properties necessary to import a reusable VirtualGateway.
 
         :param mesh: The Mesh that the VirtualGateway belongs to.
@@ -27624,11 +27665,11 @@ class VirtualGatewayAttributes:
         }
 
     @builtins.property
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh that the VirtualGateway belongs to.'''
         result = self._values.get("mesh")
         assert result is not None, "Required property 'mesh' is missing"
-        return typing.cast(IMesh, result)
+        return typing.cast("IMesh", result)
 
     @builtins.property
     def virtual_gateway_name(self) -> builtins.str:
@@ -27663,8 +27704,8 @@ class VirtualGatewayBaseProps:
     def __init__(
         self,
         *,
-        access_log: typing.Optional[AccessLog] = None,
-        backend_defaults: typing.Optional[typing.Union[BackendDefaults, typing.Dict[builtins.str, typing.Any]]] = None,
+        access_log: typing.Optional["AccessLog"] = None,
+        backend_defaults: typing.Optional[typing.Union["BackendDefaults", typing.Dict[builtins.str, typing.Any]]] = None,
         listeners: typing.Optional[typing.Sequence["VirtualGatewayListener"]] = None,
         virtual_gateway_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -27712,22 +27753,22 @@ class VirtualGatewayBaseProps:
             self._values["virtual_gateway_name"] = virtual_gateway_name
 
     @builtins.property
-    def access_log(self) -> typing.Optional[AccessLog]:
+    def access_log(self) -> typing.Optional["AccessLog"]:
         '''Access Logging Configuration for the VirtualGateway.
 
         :default: - no access logging
         '''
         result = self._values.get("access_log")
-        return typing.cast(typing.Optional[AccessLog], result)
+        return typing.cast(typing.Optional["AccessLog"], result)
 
     @builtins.property
-    def backend_defaults(self) -> typing.Optional[BackendDefaults]:
+    def backend_defaults(self) -> typing.Optional["BackendDefaults"]:
         '''Default Configuration Virtual Node uses to communicate with Virtual Service.
 
         :default: - No Config
         '''
         result = self._values.get("backend_defaults")
-        return typing.cast(typing.Optional[BackendDefaults], result)
+        return typing.cast(typing.Optional["BackendDefaults"], result)
 
     @builtins.property
     def listeners(self) -> typing.Optional[typing.List["VirtualGatewayListener"]]:
@@ -27785,7 +27826,7 @@ class VirtualGatewayGrants(
     @builtins.classmethod
     def from_virtual_gateway(
         cls,
-        resource: _IVirtualGatewayRef_63265943,
+        resource: "_IVirtualGatewayRef_63265943",
     ) -> "VirtualGatewayGrants":
         '''Creates grants for VirtualGatewayGrants.
 
@@ -27799,8 +27840,8 @@ class VirtualGatewayGrants(
     @jsii.member(jsii_name="streamAggregatedResources")
     def stream_aggregated_resources(
         self,
-        grantee: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grants the given entity ``appmesh:StreamAggregatedResources``.
 
         :param grantee: -
@@ -27808,12 +27849,12 @@ class VirtualGatewayGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__842cffde7813c7f79cac957edd6daf3b93b11b2ebec34fbb36a1b8aff765620b)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "streamAggregatedResources", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "streamAggregatedResources", [grantee]))
 
     @builtins.property
     @jsii.member(jsii_name="resource")
-    def _resource(self) -> _IVirtualGatewayRef_63265943:
-        return typing.cast(_IVirtualGatewayRef_63265943, jsii.get(self, "resource"))
+    def _resource(self) -> "_IVirtualGatewayRef_63265943":
+        return typing.cast("_IVirtualGatewayRef_63265943", jsii.get(self, "resource"))
 
 
 class VirtualGatewayListener(
@@ -27861,10 +27902,10 @@ class VirtualGatewayListener(
     def grpc(
         cls,
         *,
-        connection_pool: typing.Optional[typing.Union[GrpcConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
-        health_check: typing.Optional[HealthCheck] = None,
+        connection_pool: typing.Optional[typing.Union["GrpcConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check: typing.Optional["HealthCheck"] = None,
         port: typing.Optional[jsii.Number] = None,
-        tls: typing.Optional[typing.Union[ListenerTlsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "VirtualGatewayListener":
         '''Returns a GRPC Listener for a VirtualGateway.
 
@@ -27887,10 +27928,10 @@ class VirtualGatewayListener(
     def http(
         cls,
         *,
-        connection_pool: typing.Optional[typing.Union[HttpConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
-        health_check: typing.Optional[HealthCheck] = None,
+        connection_pool: typing.Optional[typing.Union["HttpConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check: typing.Optional["HealthCheck"] = None,
         port: typing.Optional[jsii.Number] = None,
-        tls: typing.Optional[typing.Union[ListenerTlsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "VirtualGatewayListener":
         '''Returns an HTTP Listener for a VirtualGateway.
 
@@ -27913,10 +27954,10 @@ class VirtualGatewayListener(
     def http2(
         cls,
         *,
-        connection_pool: typing.Optional[typing.Union[Http2ConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
-        health_check: typing.Optional[HealthCheck] = None,
+        connection_pool: typing.Optional[typing.Union["Http2ConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check: typing.Optional["HealthCheck"] = None,
         port: typing.Optional[jsii.Number] = None,
-        tls: typing.Optional[typing.Union[ListenerTlsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "VirtualGatewayListener":
         '''Returns an HTTP2 Listener for a VirtualGateway.
 
@@ -27938,7 +27979,7 @@ class VirtualGatewayListener(
     @abc.abstractmethod
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "VirtualGatewayListenerConfig":
         '''Called when the GatewayListener type is initialized.
 
@@ -27954,7 +27995,7 @@ class _VirtualGatewayListenerProxy(VirtualGatewayListener):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "VirtualGatewayListenerConfig":
         '''Called when the GatewayListener type is initialized.
 
@@ -27981,7 +28022,7 @@ class VirtualGatewayListenerConfig:
     def __init__(
         self,
         *,
-        listener: typing.Union[CfnVirtualGateway.VirtualGatewayListenerProperty, typing.Dict[builtins.str, typing.Any]],
+        listener: typing.Union["CfnVirtualGateway.VirtualGatewayListenerProperty", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''Properties for a VirtualGateway listener.
 
@@ -28075,11 +28116,11 @@ class VirtualGatewayListenerConfig:
         }
 
     @builtins.property
-    def listener(self) -> CfnVirtualGateway.VirtualGatewayListenerProperty:
+    def listener(self) -> "CfnVirtualGateway.VirtualGatewayListenerProperty":
         '''Single listener config for a VirtualGateway.'''
         result = self._values.get("listener")
         assert result is not None, "Required property 'listener' is missing"
-        return typing.cast(CfnVirtualGateway.VirtualGatewayListenerProperty, result)
+        return typing.cast("CfnVirtualGateway.VirtualGatewayListenerProperty", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -28108,11 +28149,11 @@ class VirtualGatewayProps(VirtualGatewayBaseProps):
     def __init__(
         self,
         *,
-        access_log: typing.Optional[AccessLog] = None,
-        backend_defaults: typing.Optional[typing.Union[BackendDefaults, typing.Dict[builtins.str, typing.Any]]] = None,
-        listeners: typing.Optional[typing.Sequence[VirtualGatewayListener]] = None,
+        access_log: typing.Optional["AccessLog"] = None,
+        backend_defaults: typing.Optional[typing.Union["BackendDefaults", typing.Dict[builtins.str, typing.Any]]] = None,
+        listeners: typing.Optional[typing.Sequence["VirtualGatewayListener"]] = None,
         virtual_gateway_name: typing.Optional[builtins.str] = None,
-        mesh: IMesh,
+        mesh: "IMesh",
     ) -> None:
         '''Properties used when creating a new VirtualGateway.
 
@@ -28174,25 +28215,25 @@ class VirtualGatewayProps(VirtualGatewayBaseProps):
             self._values["virtual_gateway_name"] = virtual_gateway_name
 
     @builtins.property
-    def access_log(self) -> typing.Optional[AccessLog]:
+    def access_log(self) -> typing.Optional["AccessLog"]:
         '''Access Logging Configuration for the VirtualGateway.
 
         :default: - no access logging
         '''
         result = self._values.get("access_log")
-        return typing.cast(typing.Optional[AccessLog], result)
+        return typing.cast(typing.Optional["AccessLog"], result)
 
     @builtins.property
-    def backend_defaults(self) -> typing.Optional[BackendDefaults]:
+    def backend_defaults(self) -> typing.Optional["BackendDefaults"]:
         '''Default Configuration Virtual Node uses to communicate with Virtual Service.
 
         :default: - No Config
         '''
         result = self._values.get("backend_defaults")
-        return typing.cast(typing.Optional[BackendDefaults], result)
+        return typing.cast(typing.Optional["BackendDefaults"], result)
 
     @builtins.property
-    def listeners(self) -> typing.Optional[typing.List[VirtualGatewayListener]]:
+    def listeners(self) -> typing.Optional[typing.List["VirtualGatewayListener"]]:
         '''Listeners for the VirtualGateway.
 
         Only one is supported.
@@ -28200,7 +28241,7 @@ class VirtualGatewayProps(VirtualGatewayBaseProps):
         :default: - Single HTTP listener on port 8080
         '''
         result = self._values.get("listeners")
-        return typing.cast(typing.Optional[typing.List[VirtualGatewayListener]], result)
+        return typing.cast(typing.Optional[typing.List["VirtualGatewayListener"]], result)
 
     @builtins.property
     def virtual_gateway_name(self) -> typing.Optional[builtins.str]:
@@ -28212,11 +28253,11 @@ class VirtualGatewayProps(VirtualGatewayBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualGateway belongs to.'''
         result = self._values.get("mesh")
         assert result is not None, "Required property 'mesh' is missing"
-        return typing.cast(IMesh, result)
+        return typing.cast("IMesh", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -28270,15 +28311,15 @@ class VirtualNode(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        mesh: IMesh,
-        access_log: typing.Optional[AccessLog] = None,
-        backend_defaults: typing.Optional[typing.Union[BackendDefaults, typing.Dict[builtins.str, typing.Any]]] = None,
-        backends: typing.Optional[typing.Sequence[Backend]] = None,
+        mesh: "IMesh",
+        access_log: typing.Optional["AccessLog"] = None,
+        backend_defaults: typing.Optional[typing.Union["BackendDefaults", typing.Dict[builtins.str, typing.Any]]] = None,
+        backends: typing.Optional[typing.Sequence["Backend"]] = None,
         listeners: typing.Optional[typing.Sequence["VirtualNodeListener"]] = None,
-        service_discovery: typing.Optional[ServiceDiscovery] = None,
+        service_discovery: typing.Optional["ServiceDiscovery"] = None,
         virtual_node_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -28312,10 +28353,10 @@ class VirtualNode(
     @builtins.classmethod
     def from_virtual_node_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         virtual_node_arn: builtins.str,
-    ) -> IVirtualNode:
+    ) -> "IVirtualNode":
         '''Import an existing VirtualNode given an ARN.
 
         :param scope: -
@@ -28327,18 +28368,18 @@ class VirtualNode(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument virtual_node_arn", value=virtual_node_arn, expected_type=type_hints["virtual_node_arn"])
-        return typing.cast(IVirtualNode, jsii.sinvoke(cls, "fromVirtualNodeArn", [scope, id, virtual_node_arn]))
+        return typing.cast("IVirtualNode", jsii.sinvoke(cls, "fromVirtualNodeArn", [scope, id, virtual_node_arn]))
 
     @jsii.member(jsii_name="fromVirtualNodeAttributes")
     @builtins.classmethod
     def from_virtual_node_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        mesh: IMesh,
+        mesh: "IMesh",
         virtual_node_name: builtins.str,
-    ) -> IVirtualNode:
+    ) -> "IVirtualNode":
         '''Import an existing VirtualNode given its name.
 
         :param scope: -
@@ -28352,10 +28393,10 @@ class VirtualNode(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         attrs = VirtualNodeAttributes(mesh=mesh, virtual_node_name=virtual_node_name)
 
-        return typing.cast(IVirtualNode, jsii.sinvoke(cls, "fromVirtualNodeAttributes", [scope, id, attrs]))
+        return typing.cast("IVirtualNode", jsii.sinvoke(cls, "fromVirtualNodeAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addBackend")
-    def add_backend(self, backend: Backend) -> None:
+    def add_backend(self, backend: "Backend") -> None:
         '''Add a Virtual Services that this node is expected to send outbound traffic to.
 
         :param backend: -
@@ -28386,8 +28427,8 @@ class VirtualNode(
     @jsii.member(jsii_name="grantStreamAggregatedResources")
     def grant_stream_aggregated_resources(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grants the given entity ``appmesh:StreamAggregatedResources``.
 
         :param identity: -
@@ -28395,7 +28436,7 @@ class VirtualNode(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c0ff8dcf17a0238a0826fbb4018d029f54a14597066df5cc2dd221fba9033419)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStreamAggregatedResources", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStreamAggregatedResources", [identity]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -28411,9 +28452,9 @@ class VirtualNode(
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualNode belongs to.'''
-        return typing.cast(IMesh, jsii.get(self, "mesh"))
+        return typing.cast("IMesh", jsii.get(self, "mesh"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualNodeArn")
@@ -28429,9 +28470,9 @@ class VirtualNode(
 
     @builtins.property
     @jsii.member(jsii_name="virtualNodeRef")
-    def virtual_node_ref(self) -> _VirtualNodeReference_668c47b3:
+    def virtual_node_ref(self) -> "_VirtualNodeReference_668c47b3":
         '''A reference to a VirtualNode resource.'''
-        return typing.cast(_VirtualNodeReference_668c47b3, jsii.get(self, "virtualNodeRef"))
+        return typing.cast("_VirtualNodeReference_668c47b3", jsii.get(self, "virtualNodeRef"))
 
 
 @jsii.data_type(
@@ -28440,7 +28481,7 @@ class VirtualNode(
     name_mapping={"mesh": "mesh", "virtual_node_name": "virtualNodeName"},
 )
 class VirtualNodeAttributes:
-    def __init__(self, *, mesh: IMesh, virtual_node_name: builtins.str) -> None:
+    def __init__(self, *, mesh: "IMesh", virtual_node_name: builtins.str) -> None:
         '''Interface with properties necessary to import a reusable VirtualNode.
 
         :param mesh: The Mesh that the VirtualNode belongs to.
@@ -28466,11 +28507,11 @@ class VirtualNodeAttributes:
         }
 
     @builtins.property
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh that the VirtualNode belongs to.'''
         result = self._values.get("mesh")
         assert result is not None, "Required property 'mesh' is missing"
-        return typing.cast(IMesh, result)
+        return typing.cast("IMesh", result)
 
     @builtins.property
     def virtual_node_name(self) -> builtins.str:
@@ -28507,11 +28548,11 @@ class VirtualNodeBaseProps:
     def __init__(
         self,
         *,
-        access_log: typing.Optional[AccessLog] = None,
-        backend_defaults: typing.Optional[typing.Union[BackendDefaults, typing.Dict[builtins.str, typing.Any]]] = None,
-        backends: typing.Optional[typing.Sequence[Backend]] = None,
+        access_log: typing.Optional["AccessLog"] = None,
+        backend_defaults: typing.Optional[typing.Union["BackendDefaults", typing.Dict[builtins.str, typing.Any]]] = None,
+        backends: typing.Optional[typing.Sequence["Backend"]] = None,
         listeners: typing.Optional[typing.Sequence["VirtualNodeListener"]] = None,
-        service_discovery: typing.Optional[ServiceDiscovery] = None,
+        service_discovery: typing.Optional["ServiceDiscovery"] = None,
         virtual_node_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Basic configuration properties for a VirtualNode.
@@ -28574,31 +28615,31 @@ class VirtualNodeBaseProps:
             self._values["virtual_node_name"] = virtual_node_name
 
     @builtins.property
-    def access_log(self) -> typing.Optional[AccessLog]:
+    def access_log(self) -> typing.Optional["AccessLog"]:
         '''Access Logging Configuration for the virtual node.
 
         :default: - No access logging
         '''
         result = self._values.get("access_log")
-        return typing.cast(typing.Optional[AccessLog], result)
+        return typing.cast(typing.Optional["AccessLog"], result)
 
     @builtins.property
-    def backend_defaults(self) -> typing.Optional[BackendDefaults]:
+    def backend_defaults(self) -> typing.Optional["BackendDefaults"]:
         '''Default Configuration Virtual Node uses to communicate with Virtual Service.
 
         :default: - No Config
         '''
         result = self._values.get("backend_defaults")
-        return typing.cast(typing.Optional[BackendDefaults], result)
+        return typing.cast(typing.Optional["BackendDefaults"], result)
 
     @builtins.property
-    def backends(self) -> typing.Optional[typing.List[Backend]]:
+    def backends(self) -> typing.Optional[typing.List["Backend"]]:
         '''Virtual Services that this is node expected to send outbound traffic to.
 
         :default: - No backends
         '''
         result = self._values.get("backends")
-        return typing.cast(typing.Optional[typing.List[Backend]], result)
+        return typing.cast(typing.Optional[typing.List["Backend"]], result)
 
     @builtins.property
     def listeners(self) -> typing.Optional[typing.List["VirtualNodeListener"]]:
@@ -28610,13 +28651,13 @@ class VirtualNodeBaseProps:
         return typing.cast(typing.Optional[typing.List["VirtualNodeListener"]], result)
 
     @builtins.property
-    def service_discovery(self) -> typing.Optional[ServiceDiscovery]:
+    def service_discovery(self) -> typing.Optional["ServiceDiscovery"]:
         '''Defines how upstream clients will discover this VirtualNode.
 
         :default: - No Service Discovery
         '''
         result = self._values.get("service_discovery")
-        return typing.cast(typing.Optional[ServiceDiscovery], result)
+        return typing.cast(typing.Optional["ServiceDiscovery"], result)
 
     @builtins.property
     def virtual_node_name(self) -> typing.Optional[builtins.str]:
@@ -28663,7 +28704,7 @@ class VirtualNodeGrants(
     @builtins.classmethod
     def from_virtual_node(
         cls,
-        resource: _IVirtualNodeRef_5162bf48,
+        resource: "_IVirtualNodeRef_5162bf48",
     ) -> "VirtualNodeGrants":
         '''Creates grants for VirtualNodeGrants.
 
@@ -28677,8 +28718,8 @@ class VirtualNodeGrants(
     @jsii.member(jsii_name="streamAggregatedResources")
     def stream_aggregated_resources(
         self,
-        grantee: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grants streamAggregatedResources permissions.
 
         :param grantee: -
@@ -28686,12 +28727,12 @@ class VirtualNodeGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__03be759d754b77024006423b70ac047304e37a47648fe5fb17b1212001250298)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "streamAggregatedResources", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "streamAggregatedResources", [grantee]))
 
     @builtins.property
     @jsii.member(jsii_name="resource")
-    def _resource(self) -> _IVirtualNodeRef_5162bf48:
-        return typing.cast(_IVirtualNodeRef_5162bf48, jsii.get(self, "resource"))
+    def _resource(self) -> "_IVirtualNodeRef_5162bf48":
+        return typing.cast("_IVirtualNodeRef_5162bf48", jsii.get(self, "resource"))
 
 
 class VirtualNodeListener(
@@ -28745,12 +28786,12 @@ class VirtualNodeListener(
     def grpc(
         cls,
         *,
-        connection_pool: typing.Optional[typing.Union[GrpcConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
-        health_check: typing.Optional[HealthCheck] = None,
-        outlier_detection: typing.Optional[typing.Union[OutlierDetection, typing.Dict[builtins.str, typing.Any]]] = None,
+        connection_pool: typing.Optional[typing.Union["GrpcConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check: typing.Optional["HealthCheck"] = None,
+        outlier_detection: typing.Optional[typing.Union["OutlierDetection", typing.Dict[builtins.str, typing.Any]]] = None,
         port: typing.Optional[jsii.Number] = None,
-        timeout: typing.Optional[typing.Union[GrpcTimeout, typing.Dict[builtins.str, typing.Any]]] = None,
-        tls: typing.Optional[typing.Union[ListenerTlsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional[typing.Union["GrpcTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
+        tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "VirtualNodeListener":
         '''Returns an GRPC Listener for a VirtualNode.
 
@@ -28777,12 +28818,12 @@ class VirtualNodeListener(
     def http(
         cls,
         *,
-        connection_pool: typing.Optional[typing.Union[HttpConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
-        health_check: typing.Optional[HealthCheck] = None,
-        outlier_detection: typing.Optional[typing.Union[OutlierDetection, typing.Dict[builtins.str, typing.Any]]] = None,
+        connection_pool: typing.Optional[typing.Union["HttpConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check: typing.Optional["HealthCheck"] = None,
+        outlier_detection: typing.Optional[typing.Union["OutlierDetection", typing.Dict[builtins.str, typing.Any]]] = None,
         port: typing.Optional[jsii.Number] = None,
-        timeout: typing.Optional[typing.Union[HttpTimeout, typing.Dict[builtins.str, typing.Any]]] = None,
-        tls: typing.Optional[typing.Union[ListenerTlsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional[typing.Union["HttpTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
+        tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "VirtualNodeListener":
         '''Returns an HTTP Listener for a VirtualNode.
 
@@ -28809,12 +28850,12 @@ class VirtualNodeListener(
     def http2(
         cls,
         *,
-        connection_pool: typing.Optional[typing.Union[Http2ConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
-        health_check: typing.Optional[HealthCheck] = None,
-        outlier_detection: typing.Optional[typing.Union[OutlierDetection, typing.Dict[builtins.str, typing.Any]]] = None,
+        connection_pool: typing.Optional[typing.Union["Http2ConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check: typing.Optional["HealthCheck"] = None,
+        outlier_detection: typing.Optional[typing.Union["OutlierDetection", typing.Dict[builtins.str, typing.Any]]] = None,
         port: typing.Optional[jsii.Number] = None,
-        timeout: typing.Optional[typing.Union[HttpTimeout, typing.Dict[builtins.str, typing.Any]]] = None,
-        tls: typing.Optional[typing.Union[ListenerTlsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional[typing.Union["HttpTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
+        tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "VirtualNodeListener":
         '''Returns an HTTP2 Listener for a VirtualNode.
 
@@ -28841,12 +28882,12 @@ class VirtualNodeListener(
     def tcp(
         cls,
         *,
-        connection_pool: typing.Optional[typing.Union[TcpConnectionPool, typing.Dict[builtins.str, typing.Any]]] = None,
-        health_check: typing.Optional[HealthCheck] = None,
-        outlier_detection: typing.Optional[typing.Union[OutlierDetection, typing.Dict[builtins.str, typing.Any]]] = None,
+        connection_pool: typing.Optional[typing.Union["TcpConnectionPool", typing.Dict[builtins.str, typing.Any]]] = None,
+        health_check: typing.Optional["HealthCheck"] = None,
+        outlier_detection: typing.Optional[typing.Union["OutlierDetection", typing.Dict[builtins.str, typing.Any]]] = None,
         port: typing.Optional[jsii.Number] = None,
-        timeout: typing.Optional[typing.Union[TcpTimeout, typing.Dict[builtins.str, typing.Any]]] = None,
-        tls: typing.Optional[typing.Union[ListenerTlsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional[typing.Union["TcpTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
+        tls: typing.Optional[typing.Union["ListenerTlsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "VirtualNodeListener":
         '''Returns an TCP Listener for a VirtualNode.
 
@@ -28872,7 +28913,7 @@ class VirtualNodeListener(
     @abc.abstractmethod
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "VirtualNodeListenerConfig":
         '''Binds the current object when adding Listener to a VirtualNode.
 
@@ -28885,7 +28926,7 @@ class _VirtualNodeListenerProxy(VirtualNodeListener):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "VirtualNodeListenerConfig":
         '''Binds the current object when adding Listener to a VirtualNode.
 
@@ -28909,7 +28950,7 @@ class VirtualNodeListenerConfig:
     def __init__(
         self,
         *,
-        listener: typing.Union[CfnVirtualNode.ListenerProperty, typing.Dict[builtins.str, typing.Any]],
+        listener: typing.Union["CfnVirtualNode.ListenerProperty", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''Properties for a VirtualNode listener.
 
@@ -29056,11 +29097,11 @@ class VirtualNodeListenerConfig:
         }
 
     @builtins.property
-    def listener(self) -> CfnVirtualNode.ListenerProperty:
+    def listener(self) -> "CfnVirtualNode.ListenerProperty":
         '''Single listener config for a VirtualNode.'''
         result = self._values.get("listener")
         assert result is not None, "Required property 'listener' is missing"
-        return typing.cast(CfnVirtualNode.ListenerProperty, result)
+        return typing.cast("CfnVirtualNode.ListenerProperty", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -29091,13 +29132,13 @@ class VirtualNodeProps(VirtualNodeBaseProps):
     def __init__(
         self,
         *,
-        access_log: typing.Optional[AccessLog] = None,
-        backend_defaults: typing.Optional[typing.Union[BackendDefaults, typing.Dict[builtins.str, typing.Any]]] = None,
-        backends: typing.Optional[typing.Sequence[Backend]] = None,
-        listeners: typing.Optional[typing.Sequence[VirtualNodeListener]] = None,
-        service_discovery: typing.Optional[ServiceDiscovery] = None,
+        access_log: typing.Optional["AccessLog"] = None,
+        backend_defaults: typing.Optional[typing.Union["BackendDefaults", typing.Dict[builtins.str, typing.Any]]] = None,
+        backends: typing.Optional[typing.Sequence["Backend"]] = None,
+        listeners: typing.Optional[typing.Sequence["VirtualNodeListener"]] = None,
+        service_discovery: typing.Optional["ServiceDiscovery"] = None,
         virtual_node_name: typing.Optional[builtins.str] = None,
-        mesh: IMesh,
+        mesh: "IMesh",
     ) -> None:
         '''The properties used when creating a new VirtualNode.
 
@@ -29173,49 +29214,49 @@ class VirtualNodeProps(VirtualNodeBaseProps):
             self._values["virtual_node_name"] = virtual_node_name
 
     @builtins.property
-    def access_log(self) -> typing.Optional[AccessLog]:
+    def access_log(self) -> typing.Optional["AccessLog"]:
         '''Access Logging Configuration for the virtual node.
 
         :default: - No access logging
         '''
         result = self._values.get("access_log")
-        return typing.cast(typing.Optional[AccessLog], result)
+        return typing.cast(typing.Optional["AccessLog"], result)
 
     @builtins.property
-    def backend_defaults(self) -> typing.Optional[BackendDefaults]:
+    def backend_defaults(self) -> typing.Optional["BackendDefaults"]:
         '''Default Configuration Virtual Node uses to communicate with Virtual Service.
 
         :default: - No Config
         '''
         result = self._values.get("backend_defaults")
-        return typing.cast(typing.Optional[BackendDefaults], result)
+        return typing.cast(typing.Optional["BackendDefaults"], result)
 
     @builtins.property
-    def backends(self) -> typing.Optional[typing.List[Backend]]:
+    def backends(self) -> typing.Optional[typing.List["Backend"]]:
         '''Virtual Services that this is node expected to send outbound traffic to.
 
         :default: - No backends
         '''
         result = self._values.get("backends")
-        return typing.cast(typing.Optional[typing.List[Backend]], result)
+        return typing.cast(typing.Optional[typing.List["Backend"]], result)
 
     @builtins.property
-    def listeners(self) -> typing.Optional[typing.List[VirtualNodeListener]]:
+    def listeners(self) -> typing.Optional[typing.List["VirtualNodeListener"]]:
         '''Initial listener for the virtual node.
 
         :default: - No listeners
         '''
         result = self._values.get("listeners")
-        return typing.cast(typing.Optional[typing.List[VirtualNodeListener]], result)
+        return typing.cast(typing.Optional[typing.List["VirtualNodeListener"]], result)
 
     @builtins.property
-    def service_discovery(self) -> typing.Optional[ServiceDiscovery]:
+    def service_discovery(self) -> typing.Optional["ServiceDiscovery"]:
         '''Defines how upstream clients will discover this VirtualNode.
 
         :default: - No Service Discovery
         '''
         result = self._values.get("service_discovery")
-        return typing.cast(typing.Optional[ServiceDiscovery], result)
+        return typing.cast(typing.Optional["ServiceDiscovery"], result)
 
     @builtins.property
     def virtual_node_name(self) -> typing.Optional[builtins.str]:
@@ -29227,11 +29268,11 @@ class VirtualNodeProps(VirtualNodeBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualNode belongs to.'''
         result = self._values.get("mesh")
         assert result is not None, "Required property 'mesh' is missing"
-        return typing.cast(IMesh, result)
+        return typing.cast("IMesh", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -29265,10 +29306,10 @@ class VirtualRouter(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        mesh: IMesh,
+        mesh: "IMesh",
         listeners: typing.Optional[typing.Sequence["VirtualRouterListener"]] = None,
         virtual_router_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -29293,10 +29334,10 @@ class VirtualRouter(
     @builtins.classmethod
     def from_virtual_router_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         virtual_router_arn: builtins.str,
-    ) -> IVirtualRouter:
+    ) -> "IVirtualRouter":
         '''Import an existing VirtualRouter given an ARN.
 
         :param scope: -
@@ -29308,18 +29349,18 @@ class VirtualRouter(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument virtual_router_arn", value=virtual_router_arn, expected_type=type_hints["virtual_router_arn"])
-        return typing.cast(IVirtualRouter, jsii.sinvoke(cls, "fromVirtualRouterArn", [scope, id, virtual_router_arn]))
+        return typing.cast("IVirtualRouter", jsii.sinvoke(cls, "fromVirtualRouterArn", [scope, id, virtual_router_arn]))
 
     @jsii.member(jsii_name="fromVirtualRouterAttributes")
     @builtins.classmethod
     def from_virtual_router_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        mesh: IMesh,
+        mesh: "IMesh",
         virtual_router_name: builtins.str,
-    ) -> IVirtualRouter:
+    ) -> "IVirtualRouter":
         '''Import an existing VirtualRouter given attributes.
 
         :param scope: -
@@ -29335,16 +29376,16 @@ class VirtualRouter(
             mesh=mesh, virtual_router_name=virtual_router_name
         )
 
-        return typing.cast(IVirtualRouter, jsii.sinvoke(cls, "fromVirtualRouterAttributes", [scope, id, attrs]))
+        return typing.cast("IVirtualRouter", jsii.sinvoke(cls, "fromVirtualRouterAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addRoute")
     def add_route(
         self,
         id: builtins.str,
         *,
-        route_spec: RouteSpec,
+        route_spec: "RouteSpec",
         route_name: typing.Optional[builtins.str] = None,
-    ) -> Route:
+    ) -> "Route":
         '''Add a single route to the router.
 
         :param id: -
@@ -29356,7 +29397,7 @@ class VirtualRouter(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = RouteBaseProps(route_spec=route_spec, route_name=route_name)
 
-        return typing.cast(Route, jsii.invoke(self, "addRoute", [id, props]))
+        return typing.cast("Route", jsii.invoke(self, "addRoute", [id, props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -29366,9 +29407,9 @@ class VirtualRouter(
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualRouter belongs to.'''
-        return typing.cast(IMesh, jsii.get(self, "mesh"))
+        return typing.cast("IMesh", jsii.get(self, "mesh"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualRouterArn")
@@ -29389,7 +29430,7 @@ class VirtualRouter(
     name_mapping={"mesh": "mesh", "virtual_router_name": "virtualRouterName"},
 )
 class VirtualRouterAttributes:
-    def __init__(self, *, mesh: IMesh, virtual_router_name: builtins.str) -> None:
+    def __init__(self, *, mesh: "IMesh", virtual_router_name: builtins.str) -> None:
         '''Interface with properties ncecessary to import a reusable VirtualRouter.
 
         :param mesh: The Mesh which the VirtualRouter belongs to.
@@ -29420,11 +29461,11 @@ class VirtualRouterAttributes:
         }
 
     @builtins.property
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualRouter belongs to.'''
         result = self._values.get("mesh")
         assert result is not None, "Required property 'mesh' is missing"
-        return typing.cast(IMesh, result)
+        return typing.cast("IMesh", result)
 
     @builtins.property
     def virtual_router_name(self) -> builtins.str:
@@ -29590,7 +29631,7 @@ class VirtualRouterListener(
     @abc.abstractmethod
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "VirtualRouterListenerConfig":
         '''Called when the VirtualRouterListener type is initialized.
 
@@ -29606,7 +29647,7 @@ class _VirtualRouterListenerProxy(VirtualRouterListener):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "VirtualRouterListenerConfig":
         '''Called when the VirtualRouterListener type is initialized.
 
@@ -29633,7 +29674,7 @@ class VirtualRouterListenerConfig:
     def __init__(
         self,
         *,
-        listener: typing.Union[CfnVirtualRouter.VirtualRouterListenerProperty, typing.Dict[builtins.str, typing.Any]],
+        listener: typing.Union["CfnVirtualRouter.VirtualRouterListenerProperty", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''Properties for a VirtualRouter listener.
 
@@ -29666,11 +29707,11 @@ class VirtualRouterListenerConfig:
         }
 
     @builtins.property
-    def listener(self) -> CfnVirtualRouter.VirtualRouterListenerProperty:
+    def listener(self) -> "CfnVirtualRouter.VirtualRouterListenerProperty":
         '''Single listener config for a VirtualRouter.'''
         result = self._values.get("listener")
         assert result is not None, "Required property 'listener' is missing"
-        return typing.cast(CfnVirtualRouter.VirtualRouterListenerProperty, result)
+        return typing.cast("CfnVirtualRouter.VirtualRouterListenerProperty", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -29697,9 +29738,9 @@ class VirtualRouterProps(VirtualRouterBaseProps):
     def __init__(
         self,
         *,
-        listeners: typing.Optional[typing.Sequence[VirtualRouterListener]] = None,
+        listeners: typing.Optional[typing.Sequence["VirtualRouterListener"]] = None,
         virtual_router_name: typing.Optional[builtins.str] = None,
-        mesh: IMesh,
+        mesh: "IMesh",
     ) -> None:
         '''The properties used when creating a new VirtualRouter.
 
@@ -29741,13 +29782,13 @@ class VirtualRouterProps(VirtualRouterBaseProps):
             self._values["virtual_router_name"] = virtual_router_name
 
     @builtins.property
-    def listeners(self) -> typing.Optional[typing.List[VirtualRouterListener]]:
+    def listeners(self) -> typing.Optional[typing.List["VirtualRouterListener"]]:
         '''Listener specification for the VirtualRouter.
 
         :default: - A listener on HTTP port 8080
         '''
         result = self._values.get("listeners")
-        return typing.cast(typing.Optional[typing.List[VirtualRouterListener]], result)
+        return typing.cast(typing.Optional[typing.List["VirtualRouterListener"]], result)
 
     @builtins.property
     def virtual_router_name(self) -> typing.Optional[builtins.str]:
@@ -29759,11 +29800,11 @@ class VirtualRouterProps(VirtualRouterBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualRouter belongs to.'''
         result = self._values.get("mesh")
         assert result is not None, "Required property 'mesh' is missing"
-        return typing.cast(IMesh, result)
+        return typing.cast("IMesh", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -29810,7 +29851,7 @@ class VirtualService(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         virtual_service_provider: "VirtualServiceProvider",
@@ -29837,10 +29878,10 @@ class VirtualService(
     @builtins.classmethod
     def from_virtual_service_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         virtual_service_arn: builtins.str,
-    ) -> IVirtualService:
+    ) -> "IVirtualService":
         '''Import an existing VirtualService given an ARN.
 
         :param scope: -
@@ -29852,18 +29893,18 @@ class VirtualService(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument virtual_service_arn", value=virtual_service_arn, expected_type=type_hints["virtual_service_arn"])
-        return typing.cast(IVirtualService, jsii.sinvoke(cls, "fromVirtualServiceArn", [scope, id, virtual_service_arn]))
+        return typing.cast("IVirtualService", jsii.sinvoke(cls, "fromVirtualServiceArn", [scope, id, virtual_service_arn]))
 
     @jsii.member(jsii_name="fromVirtualServiceAttributes")
     @builtins.classmethod
     def from_virtual_service_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        mesh: IMesh,
+        mesh: "IMesh",
         virtual_service_name: builtins.str,
-    ) -> IVirtualService:
+    ) -> "IVirtualService":
         '''Import an existing VirtualService given its attributes.
 
         :param scope: -
@@ -29879,7 +29920,7 @@ class VirtualService(
             mesh=mesh, virtual_service_name=virtual_service_name
         )
 
-        return typing.cast(IVirtualService, jsii.sinvoke(cls, "fromVirtualServiceAttributes", [scope, id, attrs]))
+        return typing.cast("IVirtualService", jsii.sinvoke(cls, "fromVirtualServiceAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -29889,9 +29930,9 @@ class VirtualService(
 
     @builtins.property
     @jsii.member(jsii_name="mesh")
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualService belongs to.'''
-        return typing.cast(IMesh, jsii.get(self, "mesh"))
+        return typing.cast("IMesh", jsii.get(self, "mesh"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualServiceArn")
@@ -29912,7 +29953,7 @@ class VirtualService(
     name_mapping={"mesh": "mesh", "virtual_service_name": "virtualServiceName"},
 )
 class VirtualServiceAttributes:
-    def __init__(self, *, mesh: IMesh, virtual_service_name: builtins.str) -> None:
+    def __init__(self, *, mesh: "IMesh", virtual_service_name: builtins.str) -> None:
         '''Interface with properties ncecessary to import a reusable VirtualService.
 
         :param mesh: The Mesh which the VirtualService belongs to.
@@ -29943,11 +29984,11 @@ class VirtualServiceAttributes:
         }
 
     @builtins.property
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''The Mesh which the VirtualService belongs to.'''
         result = self._values.get("mesh")
         assert result is not None, "Required property 'mesh' is missing"
-        return typing.cast(IMesh, result)
+        return typing.cast("IMesh", result)
 
     @builtins.property
     def virtual_service_name(self) -> builtins.str:
@@ -29977,7 +30018,7 @@ class VirtualServiceBackendOptions:
     def __init__(
         self,
         *,
-        tls_client_policy: typing.Optional[typing.Union[TlsClientPolicy, typing.Dict[builtins.str, typing.Any]]] = None,
+        tls_client_policy: typing.Optional[typing.Union["TlsClientPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Represents the properties needed to define a Virtual Service backend.
 
@@ -30021,13 +30062,13 @@ class VirtualServiceBackendOptions:
             self._values["tls_client_policy"] = tls_client_policy
 
     @builtins.property
-    def tls_client_policy(self) -> typing.Optional[TlsClientPolicy]:
+    def tls_client_policy(self) -> typing.Optional["TlsClientPolicy"]:
         '''TLS properties for  Client policy for the backend.
 
         :default: - none
         '''
         result = self._values.get("tls_client_policy")
-        return typing.cast(typing.Optional[TlsClientPolicy], result)
+        return typing.cast(typing.Optional["TlsClientPolicy"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -30154,7 +30195,7 @@ class VirtualServiceProvider(
 
     @jsii.member(jsii_name="none")
     @builtins.classmethod
-    def none(cls, mesh: IMesh) -> "VirtualServiceProvider":
+    def none(cls, mesh: "IMesh") -> "VirtualServiceProvider":
         '''Returns an Empty Provider for a VirtualService.
 
         This provides no routing capabilities
@@ -30169,7 +30210,7 @@ class VirtualServiceProvider(
 
     @jsii.member(jsii_name="virtualNode")
     @builtins.classmethod
-    def virtual_node(cls, virtual_node: IVirtualNode) -> "VirtualServiceProvider":
+    def virtual_node(cls, virtual_node: "IVirtualNode") -> "VirtualServiceProvider":
         '''Returns a VirtualNode based Provider for a VirtualService.
 
         :param virtual_node: -
@@ -30181,7 +30222,10 @@ class VirtualServiceProvider(
 
     @jsii.member(jsii_name="virtualRouter")
     @builtins.classmethod
-    def virtual_router(cls, virtual_router: IVirtualRouter) -> "VirtualServiceProvider":
+    def virtual_router(
+        cls,
+        virtual_router: "IVirtualRouter",
+    ) -> "VirtualServiceProvider":
         '''Returns a VirtualRouter based Provider for a VirtualService.
 
         :param virtual_router: -
@@ -30195,7 +30239,7 @@ class VirtualServiceProvider(
     @abc.abstractmethod
     def bind(
         self,
-        _construct: _constructs_77d1e7e8.Construct,
+        _construct: "_constructs_77d1e7e8.Construct",
     ) -> "VirtualServiceProviderConfig":
         '''Enforces mutual exclusivity for VirtualService provider types.
 
@@ -30208,7 +30252,7 @@ class _VirtualServiceProviderProxy(VirtualServiceProvider):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _construct: _constructs_77d1e7e8.Construct,
+        _construct: "_constructs_77d1e7e8.Construct",
     ) -> "VirtualServiceProviderConfig":
         '''Enforces mutual exclusivity for VirtualService provider types.
 
@@ -30236,9 +30280,9 @@ class VirtualServiceProviderConfig:
     def __init__(
         self,
         *,
-        mesh: IMesh,
-        virtual_node_provider: typing.Optional[typing.Union[CfnVirtualService.VirtualNodeServiceProviderProperty, typing.Dict[builtins.str, typing.Any]]] = None,
-        virtual_router_provider: typing.Optional[typing.Union[CfnVirtualService.VirtualRouterServiceProviderProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        mesh: "IMesh",
+        virtual_node_provider: typing.Optional[typing.Union["CfnVirtualService.VirtualNodeServiceProviderProperty", typing.Dict[builtins.str, typing.Any]]] = None,
+        virtual_router_provider: typing.Optional[typing.Union["CfnVirtualService.VirtualRouterServiceProviderProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties for a VirtualService provider.
 
@@ -30286,36 +30330,36 @@ class VirtualServiceProviderConfig:
             self._values["virtual_router_provider"] = virtual_router_provider
 
     @builtins.property
-    def mesh(self) -> IMesh:
+    def mesh(self) -> "IMesh":
         '''Mesh the Provider is using.
 
         :default: - none
         '''
         result = self._values.get("mesh")
         assert result is not None, "Required property 'mesh' is missing"
-        return typing.cast(IMesh, result)
+        return typing.cast("IMesh", result)
 
     @builtins.property
     def virtual_node_provider(
         self,
-    ) -> typing.Optional[CfnVirtualService.VirtualNodeServiceProviderProperty]:
+    ) -> typing.Optional["CfnVirtualService.VirtualNodeServiceProviderProperty"]:
         '''Virtual Node based provider.
 
         :default: - none
         '''
         result = self._values.get("virtual_node_provider")
-        return typing.cast(typing.Optional[CfnVirtualService.VirtualNodeServiceProviderProperty], result)
+        return typing.cast(typing.Optional["CfnVirtualService.VirtualNodeServiceProviderProperty"], result)
 
     @builtins.property
     def virtual_router_provider(
         self,
-    ) -> typing.Optional[CfnVirtualService.VirtualRouterServiceProviderProperty]:
+    ) -> typing.Optional["CfnVirtualService.VirtualRouterServiceProviderProperty"]:
         '''Virtual Router based provider.
 
         :default: - none
         '''
         result = self._values.get("virtual_router_provider")
-        return typing.cast(typing.Optional[CfnVirtualService.VirtualRouterServiceProviderProperty], result)
+        return typing.cast(typing.Optional["CfnVirtualService.VirtualRouterServiceProviderProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -30338,7 +30382,7 @@ class WeightedTarget:
     def __init__(
         self,
         *,
-        virtual_node: IVirtualNode,
+        virtual_node: "IVirtualNode",
         port: typing.Optional[jsii.Number] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -30380,11 +30424,11 @@ class WeightedTarget:
             self._values["weight"] = weight
 
     @builtins.property
-    def virtual_node(self) -> IVirtualNode:
+    def virtual_node(self) -> "IVirtualNode":
         '''The VirtualNode the route points to.'''
         result = self._values.get("virtual_node")
         assert result is not None, "Required property 'virtual_node' is missing"
-        return typing.cast(IVirtualNode, result)
+        return typing.cast("IVirtualNode", result)
 
     @builtins.property
     def port(self) -> typing.Optional[jsii.Number]:
@@ -30447,11 +30491,11 @@ class GatewayRoute(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        virtual_gateway: IVirtualGateway,
-        route_spec: GatewayRouteSpec,
+        virtual_gateway: "IVirtualGateway",
+        route_spec: "GatewayRouteSpec",
         gateway_route_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -30477,10 +30521,10 @@ class GatewayRoute(
     @builtins.classmethod
     def from_gateway_route_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         gateway_route_arn: builtins.str,
-    ) -> IGatewayRoute:
+    ) -> "IGatewayRoute":
         '''Import an existing GatewayRoute given an ARN.
 
         :param scope: -
@@ -30492,18 +30536,18 @@ class GatewayRoute(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument gateway_route_arn", value=gateway_route_arn, expected_type=type_hints["gateway_route_arn"])
-        return typing.cast(IGatewayRoute, jsii.sinvoke(cls, "fromGatewayRouteArn", [scope, id, gateway_route_arn]))
+        return typing.cast("IGatewayRoute", jsii.sinvoke(cls, "fromGatewayRouteArn", [scope, id, gateway_route_arn]))
 
     @jsii.member(jsii_name="fromGatewayRouteAttributes")
     @builtins.classmethod
     def from_gateway_route_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         gateway_route_name: builtins.str,
-        virtual_gateway: IVirtualGateway,
-    ) -> IGatewayRoute:
+        virtual_gateway: "IVirtualGateway",
+    ) -> "IGatewayRoute":
         '''Import an existing GatewayRoute given attributes.
 
         :param scope: -
@@ -30519,7 +30563,7 @@ class GatewayRoute(
             gateway_route_name=gateway_route_name, virtual_gateway=virtual_gateway
         )
 
-        return typing.cast(IGatewayRoute, jsii.sinvoke(cls, "fromGatewayRouteAttributes", [scope, id, attrs]))
+        return typing.cast("IGatewayRoute", jsii.sinvoke(cls, "fromGatewayRouteAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -30541,9 +30585,9 @@ class GatewayRoute(
 
     @builtins.property
     @jsii.member(jsii_name="virtualGateway")
-    def virtual_gateway(self) -> IVirtualGateway:
+    def virtual_gateway(self) -> "IVirtualGateway":
         '''The VirtualGateway this GatewayRoute is a part of.'''
-        return typing.cast(IVirtualGateway, jsii.get(self, "virtualGateway"))
+        return typing.cast("IVirtualGateway", jsii.get(self, "virtualGateway"))
 
 
 @jsii.data_type(
@@ -30562,10 +30606,10 @@ class GrpcRetryPolicy(HttpRetryPolicy):
         self,
         *,
         retry_attempts: jsii.Number,
-        retry_timeout: _Duration_4839e8c3,
-        http_retry_events: typing.Optional[typing.Sequence[HttpRetryEvent]] = None,
-        tcp_retry_events: typing.Optional[typing.Sequence[TcpRetryEvent]] = None,
-        grpc_retry_events: typing.Optional[typing.Sequence[GrpcRetryEvent]] = None,
+        retry_timeout: "_Duration_4839e8c3",
+        http_retry_events: typing.Optional[typing.Sequence["HttpRetryEvent"]] = None,
+        tcp_retry_events: typing.Optional[typing.Sequence["TcpRetryEvent"]] = None,
+        grpc_retry_events: typing.Optional[typing.Sequence["GrpcRetryEvent"]] = None,
     ) -> None:
         '''gRPC retry policy.
 
@@ -30626,14 +30670,14 @@ class GrpcRetryPolicy(HttpRetryPolicy):
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def retry_timeout(self) -> _Duration_4839e8c3:
+    def retry_timeout(self) -> "_Duration_4839e8c3":
         '''The timeout for each retry attempt.'''
         result = self._values.get("retry_timeout")
         assert result is not None, "Required property 'retry_timeout' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
-    def http_retry_events(self) -> typing.Optional[typing.List[HttpRetryEvent]]:
+    def http_retry_events(self) -> typing.Optional[typing.List["HttpRetryEvent"]]:
         '''Specify HTTP events on which to retry.
 
         You must specify at least one value
@@ -30642,10 +30686,10 @@ class GrpcRetryPolicy(HttpRetryPolicy):
         :default: - no retries for http events
         '''
         result = self._values.get("http_retry_events")
-        return typing.cast(typing.Optional[typing.List[HttpRetryEvent]], result)
+        return typing.cast(typing.Optional[typing.List["HttpRetryEvent"]], result)
 
     @builtins.property
-    def tcp_retry_events(self) -> typing.Optional[typing.List[TcpRetryEvent]]:
+    def tcp_retry_events(self) -> typing.Optional[typing.List["TcpRetryEvent"]]:
         '''TCP events on which to retry.
 
         The event occurs before any processing of a
@@ -30656,10 +30700,10 @@ class GrpcRetryPolicy(HttpRetryPolicy):
         :default: - no retries for tcp events
         '''
         result = self._values.get("tcp_retry_events")
-        return typing.cast(typing.Optional[typing.List[TcpRetryEvent]], result)
+        return typing.cast(typing.Optional[typing.List["TcpRetryEvent"]], result)
 
     @builtins.property
-    def grpc_retry_events(self) -> typing.Optional[typing.List[GrpcRetryEvent]]:
+    def grpc_retry_events(self) -> typing.Optional[typing.List["GrpcRetryEvent"]]:
         '''gRPC events on which to retry.
 
         You must specify at least one value
@@ -30668,7 +30712,7 @@ class GrpcRetryPolicy(HttpRetryPolicy):
         :default: - no retries for gRPC events
         '''
         result = self._values.get("grpc_retry_events")
-        return typing.cast(typing.Optional[typing.List[GrpcRetryEvent]], result)
+        return typing.cast(typing.Optional[typing.List["GrpcRetryEvent"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -30698,10 +30742,10 @@ class GrpcRouteSpecOptions(RouteSpecOptionsBase):
         self,
         *,
         priority: typing.Optional[jsii.Number] = None,
-        match: typing.Union[GrpcRouteMatch, typing.Dict[builtins.str, typing.Any]],
-        weighted_targets: typing.Sequence[typing.Union[WeightedTarget, typing.Dict[builtins.str, typing.Any]]],
-        retry_policy: typing.Optional[typing.Union[GrpcRetryPolicy, typing.Dict[builtins.str, typing.Any]]] = None,
-        timeout: typing.Optional[typing.Union[GrpcTimeout, typing.Dict[builtins.str, typing.Any]]] = None,
+        match: typing.Union["GrpcRouteMatch", typing.Dict[builtins.str, typing.Any]],
+        weighted_targets: typing.Sequence[typing.Union["WeightedTarget", typing.Dict[builtins.str, typing.Any]]],
+        retry_policy: typing.Optional[typing.Union["GrpcRetryPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional[typing.Union["GrpcTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties specific for a GRPC Based Routes.
 
@@ -30772,36 +30816,36 @@ class GrpcRouteSpecOptions(RouteSpecOptionsBase):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def match(self) -> GrpcRouteMatch:
+    def match(self) -> "GrpcRouteMatch":
         '''The criterion for determining a request match for this Route.'''
         result = self._values.get("match")
         assert result is not None, "Required property 'match' is missing"
-        return typing.cast(GrpcRouteMatch, result)
+        return typing.cast("GrpcRouteMatch", result)
 
     @builtins.property
-    def weighted_targets(self) -> typing.List[WeightedTarget]:
+    def weighted_targets(self) -> typing.List["WeightedTarget"]:
         '''List of targets that traffic is routed to when a request matches the route.'''
         result = self._values.get("weighted_targets")
         assert result is not None, "Required property 'weighted_targets' is missing"
-        return typing.cast(typing.List[WeightedTarget], result)
+        return typing.cast(typing.List["WeightedTarget"], result)
 
     @builtins.property
-    def retry_policy(self) -> typing.Optional[GrpcRetryPolicy]:
+    def retry_policy(self) -> typing.Optional["GrpcRetryPolicy"]:
         '''The retry policy.
 
         :default: - no retry policy
         '''
         result = self._values.get("retry_policy")
-        return typing.cast(typing.Optional[GrpcRetryPolicy], result)
+        return typing.cast(typing.Optional["GrpcRetryPolicy"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[GrpcTimeout]:
+    def timeout(self) -> typing.Optional["GrpcTimeout"]:
         '''An object that represents a grpc timeout.
 
         :default: - None
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[GrpcTimeout], result)
+        return typing.cast(typing.Optional["GrpcTimeout"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -30831,10 +30875,10 @@ class HttpRouteSpecOptions(RouteSpecOptionsBase):
         self,
         *,
         priority: typing.Optional[jsii.Number] = None,
-        weighted_targets: typing.Sequence[typing.Union[WeightedTarget, typing.Dict[builtins.str, typing.Any]]],
-        match: typing.Optional[typing.Union[HttpRouteMatch, typing.Dict[builtins.str, typing.Any]]] = None,
-        retry_policy: typing.Optional[typing.Union[HttpRetryPolicy, typing.Dict[builtins.str, typing.Any]]] = None,
-        timeout: typing.Optional[typing.Union[HttpTimeout, typing.Dict[builtins.str, typing.Any]]] = None,
+        weighted_targets: typing.Sequence[typing.Union["WeightedTarget", typing.Dict[builtins.str, typing.Any]]],
+        match: typing.Optional[typing.Union["HttpRouteMatch", typing.Dict[builtins.str, typing.Any]]] = None,
+        retry_policy: typing.Optional[typing.Union["HttpRetryPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional[typing.Union["HttpTimeout", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties specific for HTTP Based Routes.
 
@@ -30906,38 +30950,38 @@ class HttpRouteSpecOptions(RouteSpecOptionsBase):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def weighted_targets(self) -> typing.List[WeightedTarget]:
+    def weighted_targets(self) -> typing.List["WeightedTarget"]:
         '''List of targets that traffic is routed to when a request matches the route.'''
         result = self._values.get("weighted_targets")
         assert result is not None, "Required property 'weighted_targets' is missing"
-        return typing.cast(typing.List[WeightedTarget], result)
+        return typing.cast(typing.List["WeightedTarget"], result)
 
     @builtins.property
-    def match(self) -> typing.Optional[HttpRouteMatch]:
+    def match(self) -> typing.Optional["HttpRouteMatch"]:
         '''The criterion for determining a request match for this Route.
 
         :default: - matches on '/'
         '''
         result = self._values.get("match")
-        return typing.cast(typing.Optional[HttpRouteMatch], result)
+        return typing.cast(typing.Optional["HttpRouteMatch"], result)
 
     @builtins.property
-    def retry_policy(self) -> typing.Optional[HttpRetryPolicy]:
+    def retry_policy(self) -> typing.Optional["HttpRetryPolicy"]:
         '''The retry policy.
 
         :default: - no retry policy
         '''
         result = self._values.get("retry_policy")
-        return typing.cast(typing.Optional[HttpRetryPolicy], result)
+        return typing.cast(typing.Optional["HttpRetryPolicy"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[HttpTimeout]:
+    def timeout(self) -> typing.Optional["HttpTimeout"]:
         '''An object that represents a http timeout.
 
         :default: - None
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[HttpTimeout], result)
+        return typing.cast(typing.Optional["HttpTimeout"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -33809,7 +33853,7 @@ def _typecheckingstub__6cebd762971cd891f4b27950cf31aa4edafcc5ae7cbcaf079bdebf1f8
     pass
 
 def _typecheckingstub__37bb3c97c0a4e5632b0e85bac3b9587eb7d7aeee3e78848a39bcd44b7daa7ccf(
-    certificate_authorities: typing.Sequence[_ICertificateAuthority_26727cab],
+    certificate_authorities: typing.Sequence[_ICertificateAuthorityRef_240f71c8],
 ) -> None:
     """Type checking stubs"""
     pass

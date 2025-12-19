@@ -145,7 +145,7 @@ class IExperimentRef(
 
     @builtins.property
     @jsii.member(jsii_name="experimentRef")
-    def experiment_ref(self) -> ExperimentReference:
+    def experiment_ref(self) -> "ExperimentReference":
         '''(experimental) A reference to a Experiment resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IExperimentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="experimentRef")
-    def experiment_ref(self) -> ExperimentReference:
+    def experiment_ref(self) -> "ExperimentReference":
         '''(experimental) A reference to a Experiment resource.
 
         :stability: experimental
         '''
-        return typing.cast(ExperimentReference, jsii.get(self, "experimentRef"))
+        return typing.cast("ExperimentReference", jsii.get(self, "experimentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IExperimentRef).__jsii_proxy_class__ = lambda : _IExperimentRefProxy
@@ -190,7 +190,7 @@ class IFeatureRef(
 
     @builtins.property
     @jsii.member(jsii_name="featureRef")
-    def feature_ref(self) -> FeatureReference:
+    def feature_ref(self) -> "FeatureReference":
         '''(experimental) A reference to a Feature resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IFeatureRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="featureRef")
-    def feature_ref(self) -> FeatureReference:
+    def feature_ref(self) -> "FeatureReference":
         '''(experimental) A reference to a Feature resource.
 
         :stability: experimental
         '''
-        return typing.cast(FeatureReference, jsii.get(self, "featureRef"))
+        return typing.cast("FeatureReference", jsii.get(self, "featureRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFeatureRef).__jsii_proxy_class__ = lambda : _IFeatureRefProxy

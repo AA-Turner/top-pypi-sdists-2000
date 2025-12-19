@@ -95,6 +95,7 @@ class CfnCluster(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_route53recoverycontrol as route53recoverycontrol
@@ -113,12 +114,12 @@ class CfnCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         network_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Route53RecoveryControl::Cluster``.
 
@@ -138,7 +139,7 @@ class CfnCluster(
 
     @jsii.member(jsii_name="arnForCluster")
     @builtins.classmethod
-    def arn_for_cluster(cls, resource: _IClusterRef_ba4d90ac) -> builtins.str:
+    def arn_for_cluster(cls, resource: "_IClusterRef_ba4d90ac") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -160,7 +161,7 @@ class CfnCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -200,14 +201,14 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="attrClusterEndpoints")
-    def attr_cluster_endpoints(self) -> _IResolvable_da3f097b:
+    def attr_cluster_endpoints(self) -> "_IResolvable_da3f097b":
         '''An array of endpoints for the cluster.
 
         You specify one of these endpoints when you want to set or retrieve a routing control state in the cluster.
 
         :cloudformationAttribute: ClusterEndpoints
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrClusterEndpoints"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrClusterEndpoints"))
 
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
@@ -227,15 +228,15 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> _ClusterReference_f5a83c88:
+    def cluster_ref(self) -> "_ClusterReference_f5a83c88":
         '''A reference to a Cluster resource.'''
-        return typing.cast(_ClusterReference_f5a83c88, jsii.get(self, "clusterRef"))
+        return typing.cast("_ClusterReference_f5a83c88", jsii.get(self, "clusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -265,12 +266,12 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags associated with the cluster.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__07baed78448e49810892cf249edb0e6836f52fd39d85bd39a03b4d9a5c018f83)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -362,7 +363,7 @@ class CfnClusterProps:
         *,
         name: builtins.str,
         network_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCluster``.
 
@@ -375,6 +376,7 @@ class CfnClusterProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_route53recoverycontrol as route53recoverycontrol
@@ -425,13 +427,13 @@ class CfnClusterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags associated with the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-cluster.html#cfn-route53recoverycontrol-cluster-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -461,6 +463,7 @@ class CfnControlPanel(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_route53recoverycontrol as route53recoverycontrol
@@ -479,12 +482,12 @@ class CfnControlPanel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        cluster_arn: typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        cluster_arn: typing.Optional[typing.Union[builtins.str, "_IClusterRef_ba4d90ac"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Route53RecoveryControl::ControlPanel``.
 
@@ -506,7 +509,7 @@ class CfnControlPanel(
     @builtins.classmethod
     def arn_for_control_panel(
         cls,
-        resource: _IControlPanelRef_064cd10b,
+        resource: "_IControlPanelRef_064cd10b",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -529,7 +532,7 @@ class CfnControlPanel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnControlPanel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -569,12 +572,12 @@ class CfnControlPanel(
 
     @builtins.property
     @jsii.member(jsii_name="attrDefaultControlPanel")
-    def attr_default_control_panel(self) -> _IResolvable_da3f097b:
+    def attr_default_control_panel(self) -> "_IResolvable_da3f097b":
         '''The boolean flag that is set to true for the default control panel in the cluster.
 
         :cloudformationAttribute: DefaultControlPanel
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrDefaultControlPanel"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrDefaultControlPanel"))
 
     @builtins.property
     @jsii.member(jsii_name="attrRoutingControlCount")
@@ -603,15 +606,15 @@ class CfnControlPanel(
 
     @builtins.property
     @jsii.member(jsii_name="controlPanelRef")
-    def control_panel_ref(self) -> _ControlPanelReference_7bbd7885:
+    def control_panel_ref(self) -> "_ControlPanelReference_7bbd7885":
         '''A reference to a ControlPanel resource.'''
-        return typing.cast(_ControlPanelReference_7bbd7885, jsii.get(self, "controlPanelRef"))
+        return typing.cast("_ControlPanelReference_7bbd7885", jsii.get(self, "controlPanelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -641,12 +644,12 @@ class CfnControlPanel(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags associated with the control panel.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3e918a49aa511684305e6f0fb7fb172abe97ec14120062a0a7055abb8d3b11df)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -663,8 +666,8 @@ class CfnControlPanelProps:
         self,
         *,
         name: builtins.str,
-        cluster_arn: typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        cluster_arn: typing.Optional[typing.Union[builtins.str, "_IClusterRef_ba4d90ac"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnControlPanel``.
 
@@ -677,6 +680,7 @@ class CfnControlPanelProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_route53recoverycontrol as route53recoverycontrol
@@ -720,22 +724,22 @@ class CfnControlPanelProps:
     @builtins.property
     def cluster_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IClusterRef_ba4d90ac"]]:
         '''The Amazon Resource Name (ARN) of the cluster for the control panel.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-controlpanel.html#cfn-route53recoverycontrol-controlpanel-clusterarn
         '''
         result = self._values.get("cluster_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IClusterRef_ba4d90ac"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags associated with the control panel.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-controlpanel.html#cfn-route53recoverycontrol-controlpanel-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -782,12 +786,12 @@ class CfnRoutingControl(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        cluster_arn: typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]] = None,
-        control_panel_arn: typing.Optional[typing.Union[builtins.str, _IControlPanelRef_064cd10b]] = None,
+        cluster_arn: typing.Optional[typing.Union[builtins.str, "_IClusterRef_ba4d90ac"]] = None,
+        control_panel_arn: typing.Optional[typing.Union[builtins.str, "_IControlPanelRef_064cd10b"]] = None,
     ) -> None:
         '''Create a new ``AWS::Route53RecoveryControl::RoutingControl``.
 
@@ -811,7 +815,7 @@ class CfnRoutingControl(
     @builtins.classmethod
     def arn_for_routing_control(
         cls,
-        resource: _IRoutingControlRef_af956175,
+        resource: "_IRoutingControlRef_af956175",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -834,7 +838,7 @@ class CfnRoutingControl(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRoutingControl", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -890,9 +894,9 @@ class CfnRoutingControl(
 
     @builtins.property
     @jsii.member(jsii_name="routingControlRef")
-    def routing_control_ref(self) -> _RoutingControlReference_ba2b464e:
+    def routing_control_ref(self) -> "_RoutingControlReference_ba2b464e":
         '''A reference to a RoutingControl resource.'''
-        return typing.cast(_RoutingControlReference_ba2b464e, jsii.get(self, "routingControlRef"))
+        return typing.cast("_RoutingControlReference_ba2b464e", jsii.get(self, "routingControlRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -948,8 +952,8 @@ class CfnRoutingControlProps:
         self,
         *,
         name: builtins.str,
-        cluster_arn: typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]] = None,
-        control_panel_arn: typing.Optional[typing.Union[builtins.str, _IControlPanelRef_064cd10b]] = None,
+        cluster_arn: typing.Optional[typing.Union[builtins.str, "_IClusterRef_ba4d90ac"]] = None,
+        control_panel_arn: typing.Optional[typing.Union[builtins.str, "_IControlPanelRef_064cd10b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRoutingControl``.
 
@@ -1002,24 +1006,24 @@ class CfnRoutingControlProps:
     @builtins.property
     def cluster_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IClusterRef_ba4d90ac"]]:
         '''The Amazon Resource Name (ARN) of the cluster that hosts the routing control.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-routingcontrol.html#cfn-route53recoverycontrol-routingcontrol-clusterarn
         '''
         result = self._values.get("cluster_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IClusterRef_ba4d90ac"]], result)
 
     @builtins.property
     def control_panel_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IControlPanelRef_064cd10b]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IControlPanelRef_064cd10b"]]:
         '''The Amazon Resource Name (ARN) of the control panel that includes the routing control.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-routingcontrol.html#cfn-route53recoverycontrol-routingcontrol-controlpanelarn
         '''
         result = self._values.get("control_panel_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IControlPanelRef_064cd10b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IControlPanelRef_064cd10b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1057,6 +1061,7 @@ class CfnSafetyRule(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_route53recoverycontrol as route53recoverycontrol
@@ -1089,15 +1094,15 @@ class CfnSafetyRule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        control_panel_arn: typing.Union[builtins.str, _IControlPanelRef_064cd10b],
+        control_panel_arn: typing.Union[builtins.str, "_IControlPanelRef_064cd10b"],
         name: builtins.str,
-        rule_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSafetyRule.RuleConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        assertion_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSafetyRule.AssertionRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        gating_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSafetyRule.GatingRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        rule_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSafetyRule.RuleConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        assertion_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSafetyRule.AssertionRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        gating_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSafetyRule.GatingRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Route53RecoveryControl::SafetyRule``.
 
@@ -1127,7 +1132,7 @@ class CfnSafetyRule(
 
     @jsii.member(jsii_name="arnForSafetyRule")
     @builtins.classmethod
-    def arn_for_safety_rule(cls, resource: _ISafetyRuleRef_ba2607a5) -> builtins.str:
+    def arn_for_safety_rule(cls, resource: "_ISafetyRuleRef_ba2607a5") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1149,7 +1154,7 @@ class CfnSafetyRule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSafetyRule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1205,15 +1210,15 @@ class CfnSafetyRule(
 
     @builtins.property
     @jsii.member(jsii_name="safetyRuleRef")
-    def safety_rule_ref(self) -> _SafetyRuleReference_11d22628:
+    def safety_rule_ref(self) -> "_SafetyRuleReference_11d22628":
         '''A reference to a SafetyRule resource.'''
-        return typing.cast(_SafetyRuleReference_11d22628, jsii.get(self, "safetyRuleRef"))
+        return typing.cast("_SafetyRuleReference_11d22628", jsii.get(self, "safetyRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="controlPanelArn")
@@ -1245,14 +1250,14 @@ class CfnSafetyRule(
     @jsii.member(jsii_name="ruleConfig")
     def rule_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSafetyRule.RuleConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.RuleConfigProperty"]:
         '''The criteria that you set for specific assertion controls (routing controls) that designate how many control states must be ``ON`` as the result of a transaction.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSafetyRule.RuleConfigProperty"], jsii.get(self, "ruleConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.RuleConfigProperty"], jsii.get(self, "ruleConfig"))
 
     @rule_config.setter
     def rule_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnSafetyRule.RuleConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.RuleConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a7aad314d51748eb191ea9b0e9889d83df03cd198fc13eed992ee56efe980963)
@@ -1263,14 +1268,14 @@ class CfnSafetyRule(
     @jsii.member(jsii_name="assertionRule")
     def assertion_rule(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSafetyRule.AssertionRuleProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.AssertionRuleProperty"]]:
         '''An assertion rule enforces that, when you change a routing control state, that the criteria that you set in the rule configuration is met.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSafetyRule.AssertionRuleProperty"]], jsii.get(self, "assertionRule"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.AssertionRuleProperty"]], jsii.get(self, "assertionRule"))
 
     @assertion_rule.setter
     def assertion_rule(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSafetyRule.AssertionRuleProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.AssertionRuleProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__19b243601ac621ff529a9f1e0672f5662b990b3a10fa6c3709439314ee34ea4d)
@@ -1281,14 +1286,14 @@ class CfnSafetyRule(
     @jsii.member(jsii_name="gatingRule")
     def gating_rule(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSafetyRule.GatingRuleProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.GatingRuleProperty"]]:
         '''A gating rule verifies that a gating routing control or set of gating routing controls, evaluates as true, based on a rule configuration that you specify, which allows a set of routing control state changes to complete.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSafetyRule.GatingRuleProperty"]], jsii.get(self, "gatingRule"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.GatingRuleProperty"]], jsii.get(self, "gatingRule"))
 
     @gating_rule.setter
     def gating_rule(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSafetyRule.GatingRuleProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.GatingRuleProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8620a5842adbe4ff4519c97bca27014d017f98e271369a1d1e6cef3f4026c19a)
@@ -1297,12 +1302,12 @@ class CfnSafetyRule(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags associated with the safety rule.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7bd1e26d09f647010d0e1f98f3c76cc6cdcae0897c20573ffc9e57371f980308)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1499,7 +1504,7 @@ class CfnSafetyRule(
         def __init__(
             self,
             *,
-            inverted: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            inverted: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             threshold: jsii.Number,
             type: builtins.str,
         ) -> None:
@@ -1538,7 +1543,7 @@ class CfnSafetyRule(
             }
 
         @builtins.property
-        def inverted(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def inverted(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Logical negation of the rule.
 
             If the rule would usually evaluate true, it's evaluated as false, and vice versa.
@@ -1547,7 +1552,7 @@ class CfnSafetyRule(
             '''
             result = self._values.get("inverted")
             assert result is not None, "Required property 'inverted' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def threshold(self) -> jsii.Number:
@@ -1599,12 +1604,12 @@ class CfnSafetyRuleProps:
     def __init__(
         self,
         *,
-        control_panel_arn: typing.Union[builtins.str, _IControlPanelRef_064cd10b],
+        control_panel_arn: typing.Union[builtins.str, "_IControlPanelRef_064cd10b"],
         name: builtins.str,
-        rule_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSafetyRule.RuleConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        assertion_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSafetyRule.AssertionRuleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        gating_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSafetyRule.GatingRuleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        rule_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSafetyRule.RuleConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        assertion_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSafetyRule.AssertionRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        gating_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSafetyRule.GatingRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSafetyRule``.
 
@@ -1620,6 +1625,7 @@ class CfnSafetyRuleProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_route53recoverycontrol as route53recoverycontrol
@@ -1672,14 +1678,14 @@ class CfnSafetyRuleProps:
     @builtins.property
     def control_panel_arn(
         self,
-    ) -> typing.Union[builtins.str, _IControlPanelRef_064cd10b]:
+    ) -> typing.Union[builtins.str, "_IControlPanelRef_064cd10b"]:
         '''The Amazon Resource Name (ARN) of the control panel.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-safetyrule.html#cfn-route53recoverycontrol-safetyrule-controlpanelarn
         '''
         result = self._values.get("control_panel_arn")
         assert result is not None, "Required property 'control_panel_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IControlPanelRef_064cd10b], result)
+        return typing.cast(typing.Union[builtins.str, "_IControlPanelRef_064cd10b"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -1696,7 +1702,7 @@ class CfnSafetyRuleProps:
     @builtins.property
     def rule_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnSafetyRule.RuleConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.RuleConfigProperty"]:
         '''The criteria that you set for specific assertion controls (routing controls) that designate how many control states must be ``ON`` as the result of a transaction.
 
         For example, if you have three assertion controls, you might specify ``ATLEAST 2`` for your rule configuration. This means that at least two assertion controls must be ``ON`` , so that at least two AWS Regions have traffic flowing to them.
@@ -1705,12 +1711,12 @@ class CfnSafetyRuleProps:
         '''
         result = self._values.get("rule_config")
         assert result is not None, "Required property 'rule_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSafetyRule.RuleConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.RuleConfigProperty"], result)
 
     @builtins.property
     def assertion_rule(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSafetyRule.AssertionRuleProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.AssertionRuleProperty"]]:
         '''An assertion rule enforces that, when you change a routing control state, that the criteria that you set in the rule configuration is met.
 
         Otherwise, the change to the routing control is not accepted. For example, the criteria might be that at least one routing control state is ``On`` after the transaction so that traffic continues to flow to at least one cell for the application. This ensures that you avoid a fail-open scenario.
@@ -1718,12 +1724,12 @@ class CfnSafetyRuleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-safetyrule.html#cfn-route53recoverycontrol-safetyrule-assertionrule
         '''
         result = self._values.get("assertion_rule")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSafetyRule.AssertionRuleProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.AssertionRuleProperty"]], result)
 
     @builtins.property
     def gating_rule(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSafetyRule.GatingRuleProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.GatingRuleProperty"]]:
         '''A gating rule verifies that a gating routing control or set of gating routing controls, evaluates as true, based on a rule configuration that you specify, which allows a set of routing control state changes to complete.
 
         For example, if you specify one gating routing control and you set the ``Type`` in the rule configuration to ``OR`` , that indicates that you must set the gating routing control to ``On`` for the rule to evaluate as true; that is, for the gating control switch to be On. When you do that, then you can update the routing control states for the target routing controls that you specify in the gating rule.
@@ -1731,16 +1737,16 @@ class CfnSafetyRuleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-safetyrule.html#cfn-route53recoverycontrol-safetyrule-gatingrule
         '''
         result = self._values.get("gating_rule")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSafetyRule.GatingRuleProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSafetyRule.GatingRuleProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags associated with the safety rule.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-safetyrule.html#cfn-route53recoverycontrol-safetyrule-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

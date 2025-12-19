@@ -147,7 +147,7 @@ class IClusterRef(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
@@ -168,12 +168,12 @@ class _IClusterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClusterReference, jsii.get(self, "clusterRef"))
+        return typing.cast("ClusterReference", jsii.get(self, "clusterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRefProxy
@@ -194,7 +194,7 @@ class IControlPanelRef(
 
     @builtins.property
     @jsii.member(jsii_name="controlPanelRef")
-    def control_panel_ref(self) -> ControlPanelReference:
+    def control_panel_ref(self) -> "ControlPanelReference":
         '''(experimental) A reference to a ControlPanel resource.
 
         :stability: experimental
@@ -215,12 +215,12 @@ class _IControlPanelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="controlPanelRef")
-    def control_panel_ref(self) -> ControlPanelReference:
+    def control_panel_ref(self) -> "ControlPanelReference":
         '''(experimental) A reference to a ControlPanel resource.
 
         :stability: experimental
         '''
-        return typing.cast(ControlPanelReference, jsii.get(self, "controlPanelRef"))
+        return typing.cast("ControlPanelReference", jsii.get(self, "controlPanelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IControlPanelRef).__jsii_proxy_class__ = lambda : _IControlPanelRefProxy

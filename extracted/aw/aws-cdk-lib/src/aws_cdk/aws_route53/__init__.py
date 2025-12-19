@@ -222,6 +222,37 @@ route53.ARecord(self, "ARecordLatency1",
 )
 ```
 
+To enable [failover routing](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html), use the `failover` parameter:
+
+```python
+# my_zone: route53.HostedZone
+
+
+health_check = route53.HealthCheck(self, "HealthCheck",
+    type=route53.HealthCheckType.HTTP,
+    fqdn="example.com",
+    port=80,
+    resource_path="/health",
+    failure_threshold=3,
+    request_interval=Duration.seconds(30)
+)
+
+route53.ARecord(self, "ARecordFailoverPrimary",
+    zone=my_zone,
+    target=route53.RecordTarget.from_ip_addresses("1.2.3.4"),
+    failover=route53.Failover.PRIMARY,
+    health_check=health_check,
+    set_identifier="failover-primary"
+)
+
+route53.ARecord(self, "ARecordFailoverSecondary",
+    zone=my_zone,
+    target=route53.RecordTarget.from_ip_addresses("5.6.7.8"),
+    failover=route53.Failover.SECONDARY,
+    set_identifier="failover-secondary"
+)
+```
+
 To enable [multivalue answer routing](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-multivalue.html), use the `multivalueAnswer` parameter:
 
 ```python
@@ -1065,11 +1096,11 @@ class CfnCidrCollection(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        locations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCidrCollection.LocationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        locations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCidrCollection.LocationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Route53::CidrCollection``.
 
@@ -1090,7 +1121,7 @@ class CfnCidrCollection(
     @builtins.classmethod
     def arn_for_cidr_collection(
         cls,
-        resource: _ICidrCollectionRef_dedbf3b6,
+        resource: "_ICidrCollectionRef_dedbf3b6",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1113,7 +1144,7 @@ class CfnCidrCollection(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCidrCollection", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1167,9 +1198,9 @@ class CfnCidrCollection(
 
     @builtins.property
     @jsii.member(jsii_name="cidrCollectionRef")
-    def cidr_collection_ref(self) -> _CidrCollectionReference_227b26e4:
+    def cidr_collection_ref(self) -> "_CidrCollectionReference_227b26e4":
         '''A reference to a CidrCollection resource.'''
-        return typing.cast(_CidrCollectionReference_227b26e4, jsii.get(self, "cidrCollectionRef"))
+        return typing.cast("_CidrCollectionReference_227b26e4", jsii.get(self, "cidrCollectionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1188,14 +1219,14 @@ class CfnCidrCollection(
     @jsii.member(jsii_name="locations")
     def locations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCidrCollection.LocationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCidrCollection.LocationProperty"]]]]:
         '''A complex type that contains information about the list of CIDR locations.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCidrCollection.LocationProperty"]]]], jsii.get(self, "locations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCidrCollection.LocationProperty"]]]], jsii.get(self, "locations"))
 
     @locations.setter
     def locations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCidrCollection.LocationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCidrCollection.LocationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7d1ed42461528e34721c33b3493a2297bae3e47c0fe29589882e2a685605d968)
@@ -1284,7 +1315,7 @@ class CfnCidrCollectionProps:
         self,
         *,
         name: builtins.str,
-        locations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCidrCollection.LocationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        locations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCidrCollection.LocationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCidrCollection``.
 
@@ -1340,13 +1371,13 @@ class CfnCidrCollectionProps:
     @builtins.property
     def locations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCidrCollection.LocationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCidrCollection.LocationProperty"]]]]:
         '''A complex type that contains information about the list of CIDR locations.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-cidrcollection.html#cfn-route53-cidrcollection-locations
         '''
         result = self._values.get("locations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCidrCollection.LocationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCidrCollection.LocationProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1385,7 +1416,7 @@ class CfnDNSSEC(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         hosted_zone_id: builtins.str,
@@ -1417,7 +1448,7 @@ class CfnDNSSEC(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDNSSEC", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1453,9 +1484,9 @@ class CfnDNSSEC(
 
     @builtins.property
     @jsii.member(jsii_name="dnssecRef")
-    def dnssec_ref(self) -> _DNSSECReference_ef806ce9:
+    def dnssec_ref(self) -> "_DNSSECReference_ef806ce9":
         '''A reference to a DNSSEC resource.'''
-        return typing.cast(_DNSSECReference_ef806ce9, jsii.get(self, "dnssecRef"))
+        return typing.cast("_DNSSECReference_ef806ce9", jsii.get(self, "dnssecRef"))
 
     @builtins.property
     @jsii.member(jsii_name="hostedZoneId")
@@ -1597,10 +1628,10 @@ class CfnHealthCheck(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        health_check_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnHealthCheck.HealthCheckConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        health_check_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnHealthCheck.HealthCheckConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         health_check_tags: typing.Optional[typing.Sequence[typing.Union["CfnHealthCheck.HealthCheckTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Route53::HealthCheck``.
@@ -1623,7 +1654,10 @@ class CfnHealthCheck(
 
     @jsii.member(jsii_name="arnForHealthCheck")
     @builtins.classmethod
-    def arn_for_health_check(cls, resource: _IHealthCheckRef_0389fb93) -> builtins.str:
+    def arn_for_health_check(
+        cls,
+        resource: "_IHealthCheckRef_0389fb93",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1645,7 +1679,7 @@ class CfnHealthCheck(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnHealthCheck", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1687,9 +1721,9 @@ class CfnHealthCheck(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1698,22 +1732,22 @@ class CfnHealthCheck(
 
     @builtins.property
     @jsii.member(jsii_name="healthCheckRef")
-    def health_check_ref(self) -> _HealthCheckReference_95ea67d3:
+    def health_check_ref(self) -> "_HealthCheckReference_95ea67d3":
         '''A reference to a HealthCheck resource.'''
-        return typing.cast(_HealthCheckReference_95ea67d3, jsii.get(self, "healthCheckRef"))
+        return typing.cast("_HealthCheckReference_95ea67d3", jsii.get(self, "healthCheckRef"))
 
     @builtins.property
     @jsii.member(jsii_name="healthCheckConfig")
     def health_check_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnHealthCheck.HealthCheckConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnHealthCheck.HealthCheckConfigProperty"]:
         '''A complex type that contains detailed information about one health check.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnHealthCheck.HealthCheckConfigProperty"], jsii.get(self, "healthCheckConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnHealthCheck.HealthCheckConfigProperty"], jsii.get(self, "healthCheckConfig"))
 
     @health_check_config.setter
     def health_check_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnHealthCheck.HealthCheckConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnHealthCheck.HealthCheckConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8b0df7baae49dfed1fb95576ba5c0e5d51660f268bef2a4d82fca32324f94689)
@@ -1841,16 +1875,16 @@ class CfnHealthCheck(
             self,
             *,
             type: builtins.str,
-            alarm_identifier: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnHealthCheck.AlarmIdentifierProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            alarm_identifier: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHealthCheck.AlarmIdentifierProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             child_health_checks: typing.Optional[typing.Sequence[builtins.str]] = None,
-            enable_sni: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_sni: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             failure_threshold: typing.Optional[jsii.Number] = None,
             fully_qualified_domain_name: typing.Optional[builtins.str] = None,
             health_threshold: typing.Optional[jsii.Number] = None,
             insufficient_data_health_status: typing.Optional[builtins.str] = None,
-            inverted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            inverted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             ip_address: typing.Optional[builtins.str] = None,
-            measure_latency: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            measure_latency: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             port: typing.Optional[jsii.Number] = None,
             regions: typing.Optional[typing.Sequence[builtins.str]] = None,
             request_interval: typing.Optional[jsii.Number] = None,
@@ -2010,13 +2044,13 @@ class CfnHealthCheck(
         @builtins.property
         def alarm_identifier(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnHealthCheck.AlarmIdentifierProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHealthCheck.AlarmIdentifierProperty"]]:
             '''A complex type that identifies the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether the specified health check is healthy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-alarmidentifier
             '''
             result = self._values.get("alarm_identifier")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnHealthCheck.AlarmIdentifierProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHealthCheck.AlarmIdentifierProperty"]], result)
 
         @builtins.property
         def child_health_checks(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2030,7 +2064,7 @@ class CfnHealthCheck(
         @builtins.property
         def enable_sni(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specify whether you want Amazon Route 53 to send the value of ``FullyQualifiedDomainName`` to the endpoint in the ``client_hello`` message during TLS negotiation.
 
             This allows the endpoint to respond to ``HTTPS`` health check requests with the applicable SSL/TLS certificate.
@@ -2042,7 +2076,7 @@ class CfnHealthCheck(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-enablesni
             '''
             result = self._values.get("enable_sni")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def failure_threshold(self) -> typing.Optional[jsii.Number]:
@@ -2125,13 +2159,13 @@ class CfnHealthCheck(
         @builtins.property
         def inverted(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specify whether you want Amazon Route 53 to invert the status of a health check, for example, to consider a health check unhealthy when it otherwise would be considered healthy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-inverted
             '''
             result = self._values.get("inverted")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def ip_address(self) -> typing.Optional[builtins.str]:
@@ -2164,7 +2198,7 @@ class CfnHealthCheck(
         @builtins.property
         def measure_latency(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specify whether you want Amazon Route 53 to measure the latency between health checkers in multiple AWS regions and your endpoint, and to display CloudWatch latency graphs on the *Health Checks* page in the Route 53 console.
 
             ``MeasureLatency`` is not supported when you specify a value for ``Type`` of ``RECOVERY_CONTROL`` .
@@ -2175,7 +2209,7 @@ class CfnHealthCheck(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-measurelatency
             '''
             result = self._values.get("measure_latency")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def port(self) -> typing.Optional[jsii.Number]:
@@ -2354,8 +2388,8 @@ class CfnHealthCheckProps:
     def __init__(
         self,
         *,
-        health_check_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnHealthCheck.HealthCheckConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        health_check_tags: typing.Optional[typing.Sequence[typing.Union[CfnHealthCheck.HealthCheckTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        health_check_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnHealthCheck.HealthCheckConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        health_check_tags: typing.Optional[typing.Sequence[typing.Union["CfnHealthCheck.HealthCheckTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnHealthCheck``.
 
@@ -2417,7 +2451,7 @@ class CfnHealthCheckProps:
     @builtins.property
     def health_check_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnHealthCheck.HealthCheckConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnHealthCheck.HealthCheckConfigProperty"]:
         '''A complex type that contains detailed information about one health check.
 
         For the values to enter for ``HealthCheckConfig`` , see `HealthCheckConfig <https://docs.aws.amazon.com/Route53/latest/APIReference/API_HealthCheckConfig.html>`_
@@ -2426,18 +2460,18 @@ class CfnHealthCheckProps:
         '''
         result = self._values.get("health_check_config")
         assert result is not None, "Required property 'health_check_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnHealthCheck.HealthCheckConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnHealthCheck.HealthCheckConfigProperty"], result)
 
     @builtins.property
     def health_check_tags(
         self,
-    ) -> typing.Optional[typing.List[CfnHealthCheck.HealthCheckTagProperty]]:
+    ) -> typing.Optional[typing.List["CfnHealthCheck.HealthCheckTagProperty"]]:
         '''The ``HealthCheckTags`` property describes key-value pairs that are associated with an ``AWS::Route53::HealthCheck`` resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-healthcheck.html#cfn-route53-healthcheck-healthchecktags
         '''
         result = self._values.get("health_check_tags")
-        return typing.cast(typing.Optional[typing.List[CfnHealthCheck.HealthCheckTagProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnHealthCheck.HealthCheckTagProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2500,6 +2534,9 @@ class CfnHostedZone(
             hosted_zone_config=route53.CfnHostedZone.HostedZoneConfigProperty(
                 comment="comment"
             ),
+            hosted_zone_features=route53.CfnHostedZone.HostedZoneFeaturesProperty(
+                enable_accelerated_recovery=False
+            ),
             hosted_zone_tags=[route53.CfnHostedZone.HostedZoneTagProperty(
                 key="key",
                 value="value"
@@ -2517,20 +2554,22 @@ class CfnHostedZone(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        hosted_zone_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnHostedZone.HostedZoneConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        hosted_zone_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHostedZone.HostedZoneConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        hosted_zone_features: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHostedZone.HostedZoneFeaturesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         hosted_zone_tags: typing.Optional[typing.Sequence[typing.Union["CfnHostedZone.HostedZoneTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        query_logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnHostedZone.QueryLoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpcs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnHostedZone.VPCProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        query_logging_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHostedZone.QueryLoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpcs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHostedZone.VPCProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Route53::HostedZone``.
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param hosted_zone_config: A complex type that contains an optional comment. If you don't want to specify a comment, omit the ``HostedZoneConfig`` and ``Comment`` elements.
+        :param hosted_zone_features: The features configuration for the hosted zone, including accelerated recovery settings and status information.
         :param hosted_zone_tags: Adds, edits, or deletes tags for a health check or a hosted zone. For information about using tags for cost allocation, see `Using Cost Allocation Tags <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html>`_ in the *Billing and Cost Management User Guide* .
         :param name: The name of the domain. Specify a fully qualified domain name, for example, *www.example.com* . The trailing dot is optional; Amazon Route 53 assumes that the domain name is fully qualified. This means that Route 53 treats *www.example.com* (without a trailing dot) and *www.example.com.* (with a trailing dot) as identical. If you're creating a public hosted zone, this is the name you have registered with your DNS registrar. If your domain name is registered with a registrar other than Route 53, change the name servers for your domain to the set of ``NameServers`` that are returned by the ``Fn::GetAtt`` intrinsic function.
         :param query_logging_config: Creates a configuration for DNS query logging. After you create a query logging configuration, Amazon Route 53 begins to publish log data to an Amazon CloudWatch Logs log group. DNS query logs contain information about the queries that Route 53 receives for a specified public hosted zone, such as the following: - Route 53 edge location that responded to the DNS query - Domain or subdomain that was requested - DNS record type, such as A or AAAA - DNS response code, such as ``NoError`` or ``ServFail`` - **Log Group and Resource Policy** - Before you create a query logging configuration, perform the following operations. .. epigraph:: If you create a query logging configuration using the Route 53 console, Route 53 performs these operations automatically. - Create a CloudWatch Logs log group, and make note of the ARN, which you specify when you create a query logging configuration. Note the following: - You must create the log group in the us-east-1 region. - You must use the same AWS account to create the log group and the hosted zone that you want to configure query logging for. - When you create log groups for query logging, we recommend that you use a consistent prefix, for example: ``/aws/route53/ *hosted zone name*`` In the next step, you'll create a resource policy, which controls access to one or more log groups and the associated AWS resources, such as Route 53 hosted zones. There's a limit on the number of resource policies that you can create, so we recommend that you use a consistent prefix so you can use the same resource policy for all the log groups that you create for query logging. - Create a CloudWatch Logs resource policy, and give it the permissions that Route 53 needs to create log streams and to send query logs to log streams. You must create the CloudWatch Logs resource policy in the us-east-1 region. For the value of ``Resource`` , specify the ARN for the log group that you created in the previous step. To use the same resource policy for all the CloudWatch Logs log groups that you created for query logging configurations, replace the hosted zone name with ``*`` , for example: ``arn:aws:logs:us-east-1:123412341234:log-group:/aws/route53/*`` To avoid the confused deputy problem, a security issue where an entity without a permission for an action can coerce a more-privileged entity to perform it, you can optionally limit the permissions that a service has to a resource in a resource-based policy by supplying the following values: - For ``aws:SourceArn`` , supply the hosted zone ARN used in creating the query logging configuration. For example, ``aws:SourceArn: arn:aws:route53:::hostedzone/hosted zone ID`` . - For ``aws:SourceAccount`` , supply the account ID for the account that creates the query logging configuration. For example, ``aws:SourceAccount:111111111111`` . For more information, see `The confused deputy problem <https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html>`_ in the *AWS IAM User Guide* . .. epigraph:: You can't use the CloudWatch console to create or edit a resource policy. You must use the CloudWatch API, one of the AWS SDKs, or the AWS CLI . - **Log Streams and Edge Locations** - When Route 53 finishes creating the configuration for DNS query logging, it does the following: - Creates a log stream for an edge location the first time that the edge location responds to DNS queries for the specified hosted zone. That log stream is used to log all queries that Route 53 responds to for that edge location. - Begins to send query logs to the applicable log stream. The name of each log stream is in the following format: ``*hosted zone ID* / *edge location code*`` The edge location code is a three-letter code and an arbitrarily assigned number, for example, DFW3. The three-letter code typically corresponds with the International Air Transport Association airport code for an airport near the edge location. (These abbreviations might change in the future.) For a list of edge locations, see "The Route 53 Global Network" on the `Route 53 Product Details <https://docs.aws.amazon.com/route53/details/>`_ page. - **Queries That Are Logged** - Query logs contain only the queries that DNS resolvers forward to Route 53. If a DNS resolver has already cached the response to a query (such as the IP address for a load balancer for example.com), the resolver will continue to return the cached response. It doesn't forward another query to Route 53 until the TTL for the corresponding resource record set expires. Depending on how many DNS queries are submitted for a resource record set, and depending on the TTL for that resource record set, query logs might contain information about only one query out of every several thousand queries that are submitted to DNS. For more information about how DNS works, see `Routing Internet Traffic to Your Website or Web Application <https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/welcome-dns-service.html>`_ in the *Amazon Route 53 Developer Guide* . - **Log File Format** - For a list of the values in each query log and the format of each value, see `Logging DNS Queries <https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html>`_ in the *Amazon Route 53 Developer Guide* . - **Pricing** - For information about charges for query logs, see `Amazon CloudWatch Pricing <https://docs.aws.amazon.com/cloudwatch/pricing/>`_ . - **How to Stop Logging** - If you want Route 53 to stop sending query logs to CloudWatch Logs, delete the query logging configuration. For more information, see `DeleteQueryLoggingConfig <https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteQueryLoggingConfig.html>`_ .
@@ -2542,6 +2581,7 @@ class CfnHostedZone(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnHostedZoneProps(
             hosted_zone_config=hosted_zone_config,
+            hosted_zone_features=hosted_zone_features,
             hosted_zone_tags=hosted_zone_tags,
             name=name,
             query_logging_config=query_logging_config,
@@ -2552,7 +2592,7 @@ class CfnHostedZone(
 
     @jsii.member(jsii_name="arnForHostedZone")
     @builtins.classmethod
-    def arn_for_hosted_zone(cls, resource: _IHostedZoneRef_156b310f) -> builtins.str:
+    def arn_for_hosted_zone(cls, resource: "_IHostedZoneRef_156b310f") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2574,7 +2614,7 @@ class CfnHostedZone(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnHostedZone", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2630,33 +2670,51 @@ class CfnHostedZone(
 
     @builtins.property
     @jsii.member(jsii_name="hostedZoneRef")
-    def hosted_zone_ref(self) -> _HostedZoneReference_1c756d37:
+    def hosted_zone_ref(self) -> "_HostedZoneReference_1c756d37":
         '''A reference to a HostedZone resource.'''
-        return typing.cast(_HostedZoneReference_1c756d37, jsii.get(self, "hostedZoneRef"))
+        return typing.cast("_HostedZoneReference_1c756d37", jsii.get(self, "hostedZoneRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="hostedZoneConfig")
     def hosted_zone_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnHostedZone.HostedZoneConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.HostedZoneConfigProperty"]]:
         '''A complex type that contains an optional comment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnHostedZone.HostedZoneConfigProperty"]], jsii.get(self, "hostedZoneConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.HostedZoneConfigProperty"]], jsii.get(self, "hostedZoneConfig"))
 
     @hosted_zone_config.setter
     def hosted_zone_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnHostedZone.HostedZoneConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.HostedZoneConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e764c4ae257c91c5d5b032fbe4eb718b4851ccc5750ef5bd3b5214ef2b4684fd)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "hostedZoneConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="hostedZoneFeatures")
+    def hosted_zone_features(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.HostedZoneFeaturesProperty"]]:
+        '''The features configuration for the hosted zone, including accelerated recovery settings and status information.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.HostedZoneFeaturesProperty"]], jsii.get(self, "hostedZoneFeatures"))
+
+    @hosted_zone_features.setter
+    def hosted_zone_features(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.HostedZoneFeaturesProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__103df913d9dc30b8a72229c8397bf39942dc00698e6ee32c9e98ec8f10e62aea)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "hostedZoneFeatures", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="hostedZoneTagsRaw")
@@ -2693,14 +2751,14 @@ class CfnHostedZone(
     @jsii.member(jsii_name="queryLoggingConfig")
     def query_logging_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnHostedZone.QueryLoggingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.QueryLoggingConfigProperty"]]:
         '''Creates a configuration for DNS query logging.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnHostedZone.QueryLoggingConfigProperty"]], jsii.get(self, "queryLoggingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.QueryLoggingConfigProperty"]], jsii.get(self, "queryLoggingConfig"))
 
     @query_logging_config.setter
     def query_logging_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnHostedZone.QueryLoggingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.QueryLoggingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__02d1784db152ce69ef63512574d41672ddd53e2038e23c71ff72325772d8b489)
@@ -2711,14 +2769,14 @@ class CfnHostedZone(
     @jsii.member(jsii_name="vpcs")
     def vpcs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnHostedZone.VPCProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.VPCProperty"]]]]:
         '''*Private hosted zones:* A complex type that contains information about the VPCs that are associated with the specified hosted zone.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnHostedZone.VPCProperty"]]]], jsii.get(self, "vpcs"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.VPCProperty"]]]], jsii.get(self, "vpcs"))
 
     @vpcs.setter
     def vpcs(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnHostedZone.VPCProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.VPCProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__45fa6589ea7645f299a1666ba66ea7f49172916fae56fe49b48ee2d8bfa87241)
@@ -2775,6 +2833,63 @@ class CfnHostedZone(
 
         def __repr__(self) -> str:
             return "HostedZoneConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_route53.CfnHostedZone.HostedZoneFeaturesProperty",
+        jsii_struct_bases=[],
+        name_mapping={"enable_accelerated_recovery": "enableAcceleratedRecovery"},
+    )
+    class HostedZoneFeaturesProperty:
+        def __init__(
+            self,
+            *,
+            enable_accelerated_recovery: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        ) -> None:
+            '''Represents the features configuration for a hosted zone, including the status of various features and any associated failure reasons.
+
+            :param enable_accelerated_recovery: Enable accelerated recovery on your public hosted zone to gain the ability to make changes to DNS records in the event of us-east-1 unavailability.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-hostedzone-hostedzonefeatures.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_route53 as route53
+                
+                hosted_zone_features_property = route53.CfnHostedZone.HostedZoneFeaturesProperty(
+                    enable_accelerated_recovery=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__65b7e3792574e39c38d03eccca85840878de51f8638bf7e3eefde06b18ec6134)
+                check_type(argname="argument enable_accelerated_recovery", value=enable_accelerated_recovery, expected_type=type_hints["enable_accelerated_recovery"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if enable_accelerated_recovery is not None:
+                self._values["enable_accelerated_recovery"] = enable_accelerated_recovery
+
+        @builtins.property
+        def enable_accelerated_recovery(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+            '''Enable accelerated recovery on your public hosted zone to gain the ability to make changes to DNS records in the event of us-east-1 unavailability.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-hostedzone-hostedzonefeatures.html#cfn-route53-hostedzone-hostedzonefeatures-enableacceleratedrecovery
+            '''
+            result = self._values.get("enable_accelerated_recovery")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "HostedZoneFeaturesProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2989,6 +3104,7 @@ class CfnHostedZone(
     jsii_struct_bases=[],
     name_mapping={
         "hosted_zone_config": "hostedZoneConfig",
+        "hosted_zone_features": "hostedZoneFeatures",
         "hosted_zone_tags": "hostedZoneTags",
         "name": "name",
         "query_logging_config": "queryLoggingConfig",
@@ -2999,15 +3115,17 @@ class CfnHostedZoneProps:
     def __init__(
         self,
         *,
-        hosted_zone_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHostedZone.HostedZoneConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        hosted_zone_tags: typing.Optional[typing.Sequence[typing.Union[CfnHostedZone.HostedZoneTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        hosted_zone_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHostedZone.HostedZoneConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        hosted_zone_features: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHostedZone.HostedZoneFeaturesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        hosted_zone_tags: typing.Optional[typing.Sequence[typing.Union["CfnHostedZone.HostedZoneTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        query_logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHostedZone.QueryLoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpcs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHostedZone.VPCProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        query_logging_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHostedZone.QueryLoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpcs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHostedZone.VPCProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnHostedZone``.
 
         :param hosted_zone_config: A complex type that contains an optional comment. If you don't want to specify a comment, omit the ``HostedZoneConfig`` and ``Comment`` elements.
+        :param hosted_zone_features: The features configuration for the hosted zone, including accelerated recovery settings and status information.
         :param hosted_zone_tags: Adds, edits, or deletes tags for a health check or a hosted zone. For information about using tags for cost allocation, see `Using Cost Allocation Tags <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html>`_ in the *Billing and Cost Management User Guide* .
         :param name: The name of the domain. Specify a fully qualified domain name, for example, *www.example.com* . The trailing dot is optional; Amazon Route 53 assumes that the domain name is fully qualified. This means that Route 53 treats *www.example.com* (without a trailing dot) and *www.example.com.* (with a trailing dot) as identical. If you're creating a public hosted zone, this is the name you have registered with your DNS registrar. If your domain name is registered with a registrar other than Route 53, change the name servers for your domain to the set of ``NameServers`` that are returned by the ``Fn::GetAtt`` intrinsic function.
         :param query_logging_config: Creates a configuration for DNS query logging. After you create a query logging configuration, Amazon Route 53 begins to publish log data to an Amazon CloudWatch Logs log group. DNS query logs contain information about the queries that Route 53 receives for a specified public hosted zone, such as the following: - Route 53 edge location that responded to the DNS query - Domain or subdomain that was requested - DNS record type, such as A or AAAA - DNS response code, such as ``NoError`` or ``ServFail`` - **Log Group and Resource Policy** - Before you create a query logging configuration, perform the following operations. .. epigraph:: If you create a query logging configuration using the Route 53 console, Route 53 performs these operations automatically. - Create a CloudWatch Logs log group, and make note of the ARN, which you specify when you create a query logging configuration. Note the following: - You must create the log group in the us-east-1 region. - You must use the same AWS account to create the log group and the hosted zone that you want to configure query logging for. - When you create log groups for query logging, we recommend that you use a consistent prefix, for example: ``/aws/route53/ *hosted zone name*`` In the next step, you'll create a resource policy, which controls access to one or more log groups and the associated AWS resources, such as Route 53 hosted zones. There's a limit on the number of resource policies that you can create, so we recommend that you use a consistent prefix so you can use the same resource policy for all the log groups that you create for query logging. - Create a CloudWatch Logs resource policy, and give it the permissions that Route 53 needs to create log streams and to send query logs to log streams. You must create the CloudWatch Logs resource policy in the us-east-1 region. For the value of ``Resource`` , specify the ARN for the log group that you created in the previous step. To use the same resource policy for all the CloudWatch Logs log groups that you created for query logging configurations, replace the hosted zone name with ``*`` , for example: ``arn:aws:logs:us-east-1:123412341234:log-group:/aws/route53/*`` To avoid the confused deputy problem, a security issue where an entity without a permission for an action can coerce a more-privileged entity to perform it, you can optionally limit the permissions that a service has to a resource in a resource-based policy by supplying the following values: - For ``aws:SourceArn`` , supply the hosted zone ARN used in creating the query logging configuration. For example, ``aws:SourceArn: arn:aws:route53:::hostedzone/hosted zone ID`` . - For ``aws:SourceAccount`` , supply the account ID for the account that creates the query logging configuration. For example, ``aws:SourceAccount:111111111111`` . For more information, see `The confused deputy problem <https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html>`_ in the *AWS IAM User Guide* . .. epigraph:: You can't use the CloudWatch console to create or edit a resource policy. You must use the CloudWatch API, one of the AWS SDKs, or the AWS CLI . - **Log Streams and Edge Locations** - When Route 53 finishes creating the configuration for DNS query logging, it does the following: - Creates a log stream for an edge location the first time that the edge location responds to DNS queries for the specified hosted zone. That log stream is used to log all queries that Route 53 responds to for that edge location. - Begins to send query logs to the applicable log stream. The name of each log stream is in the following format: ``*hosted zone ID* / *edge location code*`` The edge location code is a three-letter code and an arbitrarily assigned number, for example, DFW3. The three-letter code typically corresponds with the International Air Transport Association airport code for an airport near the edge location. (These abbreviations might change in the future.) For a list of edge locations, see "The Route 53 Global Network" on the `Route 53 Product Details <https://docs.aws.amazon.com/route53/details/>`_ page. - **Queries That Are Logged** - Query logs contain only the queries that DNS resolvers forward to Route 53. If a DNS resolver has already cached the response to a query (such as the IP address for a load balancer for example.com), the resolver will continue to return the cached response. It doesn't forward another query to Route 53 until the TTL for the corresponding resource record set expires. Depending on how many DNS queries are submitted for a resource record set, and depending on the TTL for that resource record set, query logs might contain information about only one query out of every several thousand queries that are submitted to DNS. For more information about how DNS works, see `Routing Internet Traffic to Your Website or Web Application <https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/welcome-dns-service.html>`_ in the *Amazon Route 53 Developer Guide* . - **Log File Format** - For a list of the values in each query log and the format of each value, see `Logging DNS Queries <https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html>`_ in the *Amazon Route 53 Developer Guide* . - **Pricing** - For information about charges for query logs, see `Amazon CloudWatch Pricing <https://docs.aws.amazon.com/cloudwatch/pricing/>`_ . - **How to Stop Logging** - If you want Route 53 to stop sending query logs to CloudWatch Logs, delete the query logging configuration. For more information, see `DeleteQueryLoggingConfig <https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteQueryLoggingConfig.html>`_ .
@@ -3026,6 +3144,9 @@ class CfnHostedZoneProps:
                 hosted_zone_config=route53.CfnHostedZone.HostedZoneConfigProperty(
                     comment="comment"
                 ),
+                hosted_zone_features=route53.CfnHostedZone.HostedZoneFeaturesProperty(
+                    enable_accelerated_recovery=False
+                ),
                 hosted_zone_tags=[route53.CfnHostedZone.HostedZoneTagProperty(
                     key="key",
                     value="value"
@@ -3043,6 +3164,7 @@ class CfnHostedZoneProps:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__490d21becaf73ea78f8b34688d2d62e4e21d941f510e74d0a5acce1c9a8a35c3)
             check_type(argname="argument hosted_zone_config", value=hosted_zone_config, expected_type=type_hints["hosted_zone_config"])
+            check_type(argname="argument hosted_zone_features", value=hosted_zone_features, expected_type=type_hints["hosted_zone_features"])
             check_type(argname="argument hosted_zone_tags", value=hosted_zone_tags, expected_type=type_hints["hosted_zone_tags"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument query_logging_config", value=query_logging_config, expected_type=type_hints["query_logging_config"])
@@ -3050,6 +3172,8 @@ class CfnHostedZoneProps:
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if hosted_zone_config is not None:
             self._values["hosted_zone_config"] = hosted_zone_config
+        if hosted_zone_features is not None:
+            self._values["hosted_zone_features"] = hosted_zone_features
         if hosted_zone_tags is not None:
             self._values["hosted_zone_tags"] = hosted_zone_tags
         if name is not None:
@@ -3062,7 +3186,7 @@ class CfnHostedZoneProps:
     @builtins.property
     def hosted_zone_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnHostedZone.HostedZoneConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.HostedZoneConfigProperty"]]:
         '''A complex type that contains an optional comment.
 
         If you don't want to specify a comment, omit the ``HostedZoneConfig`` and ``Comment`` elements.
@@ -3070,12 +3194,23 @@ class CfnHostedZoneProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-hostedzone.html#cfn-route53-hostedzone-hostedzoneconfig
         '''
         result = self._values.get("hosted_zone_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnHostedZone.HostedZoneConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.HostedZoneConfigProperty"]], result)
+
+    @builtins.property
+    def hosted_zone_features(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.HostedZoneFeaturesProperty"]]:
+        '''The features configuration for the hosted zone, including accelerated recovery settings and status information.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-hostedzone.html#cfn-route53-hostedzone-hostedzonefeatures
+        '''
+        result = self._values.get("hosted_zone_features")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.HostedZoneFeaturesProperty"]], result)
 
     @builtins.property
     def hosted_zone_tags(
         self,
-    ) -> typing.Optional[typing.List[CfnHostedZone.HostedZoneTagProperty]]:
+    ) -> typing.Optional[typing.List["CfnHostedZone.HostedZoneTagProperty"]]:
         '''Adds, edits, or deletes tags for a health check or a hosted zone.
 
         For information about using tags for cost allocation, see `Using Cost Allocation Tags <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html>`_ in the *Billing and Cost Management User Guide* .
@@ -3083,7 +3218,7 @@ class CfnHostedZoneProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-hostedzone.html#cfn-route53-hostedzone-hostedzonetags
         '''
         result = self._values.get("hosted_zone_tags")
-        return typing.cast(typing.Optional[typing.List[CfnHostedZone.HostedZoneTagProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnHostedZone.HostedZoneTagProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -3101,7 +3236,7 @@ class CfnHostedZoneProps:
     @builtins.property
     def query_logging_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnHostedZone.QueryLoggingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.QueryLoggingConfigProperty"]]:
         '''Creates a configuration for DNS query logging.
 
         After you create a query logging configuration, Amazon Route 53 begins to publish log data to an Amazon CloudWatch Logs log group.
@@ -3159,12 +3294,12 @@ class CfnHostedZoneProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-hostedzone.html#cfn-route53-hostedzone-queryloggingconfig
         '''
         result = self._values.get("query_logging_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnHostedZone.QueryLoggingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.QueryLoggingConfigProperty"]], result)
 
     @builtins.property
     def vpcs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnHostedZone.VPCProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.VPCProperty"]]]]:
         '''*Private hosted zones:* A complex type that contains information about the VPCs that are associated with the specified hosted zone.
 
         .. epigraph::
@@ -3174,7 +3309,7 @@ class CfnHostedZoneProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-hostedzone.html#cfn-route53-hostedzone-vpcs
         '''
         result = self._values.get("vpcs")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnHostedZone.VPCProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHostedZone.VPCProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3218,7 +3353,7 @@ class CfnKeySigningKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         hosted_zone_id: builtins.str,
@@ -3261,7 +3396,7 @@ class CfnKeySigningKey(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnKeySigningKey", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3297,9 +3432,9 @@ class CfnKeySigningKey(
 
     @builtins.property
     @jsii.member(jsii_name="keySigningKeyRef")
-    def key_signing_key_ref(self) -> _KeySigningKeyReference_6697db63:
+    def key_signing_key_ref(self) -> "_KeySigningKeyReference_6697db63":
         '''A reference to a KeySigningKey resource.'''
-        return typing.cast(_KeySigningKeyReference_6697db63, jsii.get(self, "keySigningKeyRef"))
+        return typing.cast("_KeySigningKeyReference_6697db63", jsii.get(self, "keySigningKeyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="hostedZoneId")
@@ -3543,21 +3678,21 @@ class CfnRecordSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         type: builtins.str,
-        alias_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordSet.AliasTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        cidr_routing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordSet.CidrRoutingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        alias_target: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSet.AliasTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cidr_routing_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSet.CidrRoutingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         comment: typing.Optional[builtins.str] = None,
         failover: typing.Optional[builtins.str] = None,
-        geo_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordSet.GeoLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        geo_proximity_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordSet.GeoProximityLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        geo_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSet.GeoLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        geo_proximity_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSet.GeoProximityLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         health_check_id: typing.Optional[builtins.str] = None,
         hosted_zone_id: typing.Optional[builtins.str] = None,
         hosted_zone_name: typing.Optional[builtins.str] = None,
-        multi_value_answer: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        multi_value_answer: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         region: typing.Optional[builtins.str] = None,
         resource_records: typing.Optional[typing.Sequence[builtins.str]] = None,
         set_identifier: typing.Optional[builtins.str] = None,
@@ -3625,7 +3760,7 @@ class CfnRecordSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRecordSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3670,9 +3805,9 @@ class CfnRecordSet(
 
     @builtins.property
     @jsii.member(jsii_name="recordSetRef")
-    def record_set_ref(self) -> _RecordSetReference_9c3693d0:
+    def record_set_ref(self) -> "_RecordSetReference_9c3693d0":
         '''A reference to a RecordSet resource.'''
-        return typing.cast(_RecordSetReference_9c3693d0, jsii.get(self, "recordSetRef"))
+        return typing.cast("_RecordSetReference_9c3693d0", jsii.get(self, "recordSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -3704,14 +3839,14 @@ class CfnRecordSet(
     @jsii.member(jsii_name="aliasTarget")
     def alias_target(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.AliasTargetProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.AliasTargetProperty"]]:
         '''*Alias resource record sets only:* Information about the AWS resource, such as a CloudFront distribution or an Amazon S3 bucket, that you want to route traffic to.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.AliasTargetProperty"]], jsii.get(self, "aliasTarget"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.AliasTargetProperty"]], jsii.get(self, "aliasTarget"))
 
     @alias_target.setter
     def alias_target(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.AliasTargetProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.AliasTargetProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b0a16cf391736226a70d1a59be2ffd652193be54e61b33e07b2b502b7444ebc0)
@@ -3722,14 +3857,14 @@ class CfnRecordSet(
     @jsii.member(jsii_name="cidrRoutingConfig")
     def cidr_routing_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.CidrRoutingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.CidrRoutingConfigProperty"]]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.CidrRoutingConfigProperty"]], jsii.get(self, "cidrRoutingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.CidrRoutingConfigProperty"]], jsii.get(self, "cidrRoutingConfig"))
 
     @cidr_routing_config.setter
     def cidr_routing_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.CidrRoutingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.CidrRoutingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9573d618d7f59fad50ecf9e676d892ccfe65d8be595e465b068eec35f7931458)
@@ -3766,14 +3901,14 @@ class CfnRecordSet(
     @jsii.member(jsii_name="geoLocation")
     def geo_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.GeoLocationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.GeoLocationProperty"]]:
         '''*Geolocation resource record sets only:* A complex type that lets you control how Amazon Route 53 responds to DNS queries based on the geographic origin of the query.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.GeoLocationProperty"]], jsii.get(self, "geoLocation"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.GeoLocationProperty"]], jsii.get(self, "geoLocation"))
 
     @geo_location.setter
     def geo_location(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.GeoLocationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.GeoLocationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e7b257b8973ecbc1eff717cef5d9e9a86a7e93521a1f67acf22b2e8461e1b642)
@@ -3784,14 +3919,14 @@ class CfnRecordSet(
     @jsii.member(jsii_name="geoProximityLocation")
     def geo_proximity_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.GeoProximityLocationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.GeoProximityLocationProperty"]]:
         '''*GeoproximityLocation resource record sets only:* A complex type that lets you control how Route 53 responds to DNS queries based on the geographic origin of the query and your resources.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.GeoProximityLocationProperty"]], jsii.get(self, "geoProximityLocation"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.GeoProximityLocationProperty"]], jsii.get(self, "geoProximityLocation"))
 
     @geo_proximity_location.setter
     def geo_proximity_location(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.GeoProximityLocationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.GeoProximityLocationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ac8d1aee0fc5c4e2eba653391bb8b61826a08b6708db398bae5b22b4e13fcf05)
@@ -3841,14 +3976,14 @@ class CfnRecordSet(
     @jsii.member(jsii_name="multiValueAnswer")
     def multi_value_answer(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*Multivalue answer resource record sets only* : To route traffic approximately randomly to multiple resources, such as web servers, create one multivalue answer record for each resource and specify ``true`` for ``MultiValueAnswer`` .'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "multiValueAnswer"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "multiValueAnswer"))
 
     @multi_value_answer.setter
     def multi_value_answer(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cc829fb8c432409e77ff577c111238c3b8554f78a040b7ecdffeb62edb27cf24)
@@ -3941,7 +4076,7 @@ class CfnRecordSet(
             *,
             dns_name: builtins.str,
             hosted_zone_id: builtins.str,
-            evaluate_target_health: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            evaluate_target_health: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''*Alias records only:* Information about the AWS resource, such as a CloudFront distribution or an Amazon S3 bucket, that you want to route traffic to.
 
@@ -4086,7 +4221,7 @@ class CfnRecordSet(
         @builtins.property
         def evaluate_target_health(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''*Applies only to alias, failover alias, geolocation alias, latency alias, and weighted alias resource record sets:* When ``EvaluateTargetHealth`` is ``true`` , an alias resource record set inherits the health of the referenced AWS resource, such as an ELB load balancer or another resource record set in the hosted zone.
 
             Note the following:
@@ -4120,7 +4255,7 @@ class CfnRecordSet(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset-aliastarget.html#cfn-route53-recordset-aliastarget-evaluatetargethealth
             '''
             result = self._values.get("evaluate_target_health")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4396,7 +4531,7 @@ class CfnRecordSet(
             *,
             aws_region: typing.Optional[builtins.str] = None,
             bias: typing.Optional[jsii.Number] = None,
-            coordinates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordSet.CoordinatesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            coordinates: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSet.CoordinatesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             local_zone_group: typing.Optional[builtins.str] = None,
         ) -> None:
             '''(Resource record sets only): A complex type that lets you specify where your resources are located.
@@ -4471,13 +4606,13 @@ class CfnRecordSet(
         @builtins.property
         def coordinates(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.CoordinatesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.CoordinatesProperty"]]:
             '''Contains the longitude and latitude for a geographic region.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset-geoproximitylocation.html#cfn-route53-recordset-geoproximitylocation-coordinates
             '''
             result = self._values.get("coordinates")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSet.CoordinatesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.CoordinatesProperty"]], result)
 
         @builtins.property
         def local_zone_group(self) -> typing.Optional[builtins.str]:
@@ -4574,13 +4709,13 @@ class CfnRecordSetGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
         hosted_zone_id: typing.Optional[builtins.str] = None,
         hosted_zone_name: typing.Optional[builtins.str] = None,
-        record_sets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordSetGroup.RecordSetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        record_sets: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSetGroup.RecordSetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Route53::RecordSetGroup``.
 
@@ -4617,7 +4752,7 @@ class CfnRecordSetGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRecordSetGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4662,9 +4797,9 @@ class CfnRecordSetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="recordSetGroupRef")
-    def record_set_group_ref(self) -> _RecordSetGroupReference_82a32fca:
+    def record_set_group_ref(self) -> "_RecordSetGroupReference_82a32fca":
         '''A reference to a RecordSetGroup resource.'''
-        return typing.cast(_RecordSetGroupReference_82a32fca, jsii.get(self, "recordSetGroupRef"))
+        return typing.cast("_RecordSetGroupReference_82a32fca", jsii.get(self, "recordSetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="comment")
@@ -4709,14 +4844,14 @@ class CfnRecordSetGroup(
     @jsii.member(jsii_name="recordSets")
     def record_sets(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.RecordSetProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.RecordSetProperty"]]]]:
         '''A complex type that contains one ``RecordSet`` element for each record that you want to create.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.RecordSetProperty"]]]], jsii.get(self, "recordSets"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.RecordSetProperty"]]]], jsii.get(self, "recordSets"))
 
     @record_sets.setter
     def record_sets(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.RecordSetProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.RecordSetProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9fb00744f239be86927ab07333f9aa97d44af1dbaabd6b50dc186a5a6f344824)
@@ -4738,7 +4873,7 @@ class CfnRecordSetGroup(
             *,
             dns_name: builtins.str,
             hosted_zone_id: builtins.str,
-            evaluate_target_health: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            evaluate_target_health: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''*Alias records only:* Information about the AWS resource, such as a CloudFront distribution or an Amazon S3 bucket, that you want to route traffic to.
 
@@ -4883,7 +5018,7 @@ class CfnRecordSetGroup(
         @builtins.property
         def evaluate_target_health(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''*Applies only to alias records with any routing policy:* When ``EvaluateTargetHealth`` is ``true`` , an alias record inherits the health of the referenced AWS resource, such as an ELB load balancer or another record in the hosted zone.
 
             Note the following:
@@ -4911,7 +5046,7 @@ class CfnRecordSetGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordsetgroup-aliastarget.html#cfn-route53-recordsetgroup-aliastarget-evaluatetargethealth
             '''
             result = self._values.get("evaluate_target_health")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5187,7 +5322,7 @@ class CfnRecordSetGroup(
             *,
             aws_region: typing.Optional[builtins.str] = None,
             bias: typing.Optional[jsii.Number] = None,
-            coordinates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordSetGroup.CoordinatesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            coordinates: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSetGroup.CoordinatesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             local_zone_group: typing.Optional[builtins.str] = None,
         ) -> None:
             '''(Resource record sets only): A complex type that lets you specify where your resources are located.
@@ -5262,13 +5397,13 @@ class CfnRecordSetGroup(
         @builtins.property
         def coordinates(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.CoordinatesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.CoordinatesProperty"]]:
             '''Contains the longitude and latitude for a geographic region.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordsetgroup-geoproximitylocation.html#cfn-route53-recordsetgroup-geoproximitylocation-coordinates
             '''
             result = self._values.get("coordinates")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.CoordinatesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.CoordinatesProperty"]], result)
 
         @builtins.property
         def local_zone_group(self) -> typing.Optional[builtins.str]:
@@ -5324,15 +5459,15 @@ class CfnRecordSetGroup(
             *,
             name: builtins.str,
             type: builtins.str,
-            alias_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordSetGroup.AliasTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cidr_routing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordSetGroup.CidrRoutingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            alias_target: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSetGroup.AliasTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cidr_routing_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSetGroup.CidrRoutingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             failover: typing.Optional[builtins.str] = None,
-            geo_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordSetGroup.GeoLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            geo_proximity_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordSetGroup.GeoProximityLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            geo_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSetGroup.GeoLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            geo_proximity_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSetGroup.GeoProximityLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             health_check_id: typing.Optional[builtins.str] = None,
             hosted_zone_id: typing.Optional[builtins.str] = None,
             hosted_zone_name: typing.Optional[builtins.str] = None,
-            multi_value_answer: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            multi_value_answer: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             region: typing.Optional[builtins.str] = None,
             resource_records: typing.Optional[typing.Sequence[builtins.str]] = None,
             set_identifier: typing.Optional[builtins.str] = None,
@@ -5525,7 +5660,7 @@ class CfnRecordSetGroup(
         @builtins.property
         def alias_target(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.AliasTargetProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.AliasTargetProperty"]]:
             '''*Alias resource record sets only:* Information about the AWS resource, such as a CloudFront distribution or an Amazon S3 bucket, that you want to route traffic to.
 
             If you're creating resource records sets for a private hosted zone, note the following:
@@ -5536,17 +5671,17 @@ class CfnRecordSetGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordsetgroup-recordset.html#cfn-route53-recordsetgroup-recordset-aliastarget
             '''
             result = self._values.get("alias_target")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.AliasTargetProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.AliasTargetProperty"]], result)
 
         @builtins.property
         def cidr_routing_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.CidrRoutingConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.CidrRoutingConfigProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordsetgroup-recordset.html#cfn-route53-recordsetgroup-recordset-cidrroutingconfig
             '''
             result = self._values.get("cidr_routing_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.CidrRoutingConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.CidrRoutingConfigProperty"]], result)
 
         @builtins.property
         def failover(self) -> typing.Optional[builtins.str]:
@@ -5578,7 +5713,7 @@ class CfnRecordSetGroup(
         @builtins.property
         def geo_location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.GeoLocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.GeoLocationProperty"]]:
             '''*Geolocation resource record sets only:* A complex type that lets you control how Amazon Route 53 responds to DNS queries based on the geographic origin of the query.
 
             For example, if you want all queries from Africa to be routed to a web server with an IP address of ``192.0.2.111`` , create a resource record set with a ``Type`` of ``A`` and a ``ContinentCode`` of ``AF`` .
@@ -5597,18 +5732,18 @@ class CfnRecordSetGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordsetgroup-recordset.html#cfn-route53-recordsetgroup-recordset-geolocation
             '''
             result = self._values.get("geo_location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.GeoLocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.GeoLocationProperty"]], result)
 
         @builtins.property
         def geo_proximity_location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.GeoProximityLocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.GeoProximityLocationProperty"]]:
             '''A complex type that contains information about a geographic location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordsetgroup-recordset.html#cfn-route53-recordsetgroup-recordset-geoproximitylocation
             '''
             result = self._values.get("geo_proximity_location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordSetGroup.GeoProximityLocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.GeoProximityLocationProperty"]], result)
 
         @builtins.property
         def health_check_id(self) -> typing.Optional[builtins.str]:
@@ -5708,7 +5843,7 @@ class CfnRecordSetGroup(
         @builtins.property
         def multi_value_answer(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''*Multivalue answer resource record sets only* : To route traffic approximately randomly to multiple resources, such as web servers, create one multivalue answer record for each resource and specify ``true`` for ``MultiValueAnswer`` .
 
             Note the following:
@@ -5725,7 +5860,7 @@ class CfnRecordSetGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordsetgroup-recordset.html#cfn-route53-recordsetgroup-recordset-multivalueanswer
             '''
             result = self._values.get("multi_value_answer")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def region(self) -> typing.Optional[builtins.str]:
@@ -5831,7 +5966,7 @@ class CfnRecordSetGroupProps:
         comment: typing.Optional[builtins.str] = None,
         hosted_zone_id: typing.Optional[builtins.str] = None,
         hosted_zone_name: typing.Optional[builtins.str] = None,
-        record_sets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRecordSetGroup.RecordSetProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        record_sets: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSetGroup.RecordSetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRecordSetGroup``.
 
@@ -5950,13 +6085,13 @@ class CfnRecordSetGroupProps:
     @builtins.property
     def record_sets(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRecordSetGroup.RecordSetProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.RecordSetProperty"]]]]:
         '''A complex type that contains one ``RecordSet`` element for each record that you want to create.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordsetgroup.html#cfn-route53-recordsetgroup-recordsets
         '''
         result = self._values.get("record_sets")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRecordSetGroup.RecordSetProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRecordSetGroup.RecordSetProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5999,16 +6134,16 @@ class CfnRecordSetProps:
         *,
         name: builtins.str,
         type: builtins.str,
-        alias_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRecordSet.AliasTargetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cidr_routing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRecordSet.CidrRoutingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        alias_target: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSet.AliasTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cidr_routing_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSet.CidrRoutingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         comment: typing.Optional[builtins.str] = None,
         failover: typing.Optional[builtins.str] = None,
-        geo_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRecordSet.GeoLocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        geo_proximity_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRecordSet.GeoProximityLocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        geo_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSet.GeoLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        geo_proximity_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordSet.GeoProximityLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         health_check_id: typing.Optional[builtins.str] = None,
         hosted_zone_id: typing.Optional[builtins.str] = None,
         hosted_zone_name: typing.Optional[builtins.str] = None,
-        multi_value_answer: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        multi_value_answer: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         region: typing.Optional[builtins.str] = None,
         resource_records: typing.Optional[typing.Sequence[builtins.str]] = None,
         set_identifier: typing.Optional[builtins.str] = None,
@@ -6206,7 +6341,7 @@ class CfnRecordSetProps:
     @builtins.property
     def alias_target(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRecordSet.AliasTargetProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.AliasTargetProperty"]]:
         '''*Alias resource record sets only:* Information about the AWS resource, such as a CloudFront distribution or an Amazon S3 bucket, that you want to route traffic to.
 
         If you're creating resource records sets for a private hosted zone, note the following:
@@ -6217,12 +6352,12 @@ class CfnRecordSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-aliastarget
         '''
         result = self._values.get("alias_target")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRecordSet.AliasTargetProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.AliasTargetProperty"]], result)
 
     @builtins.property
     def cidr_routing_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRecordSet.CidrRoutingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.CidrRoutingConfigProperty"]]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A ``LocationName`` with an asterisk “*” can be used to create a default CIDR record. ``CollectionId`` is still required for default record.
@@ -6230,7 +6365,7 @@ class CfnRecordSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRecordSet.CidrRoutingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.CidrRoutingConfigProperty"]], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -6271,7 +6406,7 @@ class CfnRecordSetProps:
     @builtins.property
     def geo_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRecordSet.GeoLocationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.GeoLocationProperty"]]:
         '''*Geolocation resource record sets only:* A complex type that lets you control how Amazon Route 53 responds to DNS queries based on the geographic origin of the query.
 
         For example, if you want all queries from Africa to be routed to a web server with an IP address of ``192.0.2.111`` , create a resource record set with a ``Type`` of ``A`` and a ``ContinentCode`` of ``AF`` .
@@ -6290,18 +6425,18 @@ class CfnRecordSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-geolocation
         '''
         result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRecordSet.GeoLocationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.GeoLocationProperty"]], result)
 
     @builtins.property
     def geo_proximity_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRecordSet.GeoProximityLocationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.GeoProximityLocationProperty"]]:
         '''*GeoproximityLocation resource record sets only:* A complex type that lets you control how Route 53 responds to DNS queries based on the geographic origin of the query and your resources.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-geoproximitylocation
         '''
         result = self._values.get("geo_proximity_location")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRecordSet.GeoProximityLocationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordSet.GeoProximityLocationProperty"]], result)
 
     @builtins.property
     def health_check_id(self) -> typing.Optional[builtins.str]:
@@ -6399,7 +6534,7 @@ class CfnRecordSetProps:
     @builtins.property
     def multi_value_answer(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*Multivalue answer resource record sets only* : To route traffic approximately randomly to multiple resources, such as web servers, create one multivalue answer record for each resource and specify ``true`` for ``MultiValueAnswer`` .
 
         Note the following:
@@ -6416,7 +6551,7 @@ class CfnRecordSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-multivalueanswer
         '''
         result = self._values.get("multi_value_answer")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def region(self) -> typing.Optional[builtins.str]:
@@ -6881,16 +7016,16 @@ class CrossAccountZoneDelegationRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         delegated_zone: "IHostedZone",
-        delegation_role: _IRoleRef_8400221f,
+        delegation_role: "_IRoleRef_8400221f",
         assume_role_region: typing.Optional[builtins.str] = None,
         parent_hosted_zone_id: typing.Optional[builtins.str] = None,
         parent_hosted_zone_name: typing.Optional[builtins.str] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -6938,12 +7073,12 @@ class CrossAccountZoneDelegationRecordProps:
         self,
         *,
         delegated_zone: "IHostedZone",
-        delegation_role: _IRoleRef_8400221f,
+        delegation_role: "_IRoleRef_8400221f",
         assume_role_region: typing.Optional[builtins.str] = None,
         parent_hosted_zone_id: typing.Optional[builtins.str] = None,
         parent_hosted_zone_name: typing.Optional[builtins.str] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Construction properties for a CrossAccountZoneDelegationRecord.
 
@@ -7012,11 +7147,11 @@ class CrossAccountZoneDelegationRecordProps:
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def delegation_role(self) -> _IRoleRef_8400221f:
+    def delegation_role(self) -> "_IRoleRef_8400221f":
         '''The delegation role in the parent account.'''
         result = self._values.get("delegation_role")
         assert result is not None, "Required property 'delegation_role' is missing"
-        return typing.cast(_IRoleRef_8400221f, result)
+        return typing.cast("_IRoleRef_8400221f", result)
 
     @builtins.property
     def assume_role_region(self) -> typing.Optional[builtins.str]:
@@ -7046,22 +7181,22 @@ class CrossAccountZoneDelegationRecordProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy to apply to the record set.
 
         :default: RemovalPolicy.DESTROY
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.days(2)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7073,6 +7208,49 @@ class CrossAccountZoneDelegationRecordProps:
         return "CrossAccountZoneDelegationRecordProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+@jsii.enum(jsii_type="aws-cdk-lib.aws_route53.Failover")
+class Failover(enum.Enum):
+    '''The failover policy.
+
+    :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+    :exampleMetadata: infused
+
+    Example::
+
+        # my_zone: route53.HostedZone
+        
+        
+        health_check = route53.HealthCheck(self, "HealthCheck",
+            type=route53.HealthCheckType.HTTP,
+            fqdn="example.com",
+            port=80,
+            resource_path="/health",
+            failure_threshold=3,
+            request_interval=Duration.seconds(30)
+        )
+        
+        route53.ARecord(self, "ARecordFailoverPrimary",
+            zone=my_zone,
+            target=route53.RecordTarget.from_ip_addresses("1.2.3.4"),
+            failover=route53.Failover.PRIMARY,
+            health_check=health_check,
+            set_identifier="failover-primary"
+        )
+        
+        route53.ARecord(self, "ARecordFailoverSecondary",
+            zone=my_zone,
+            target=route53.RecordTarget.from_ip_addresses("5.6.7.8"),
+            failover=route53.Failover.SECONDARY,
+            set_identifier="failover-secondary"
+        )
+    '''
+
+    PRIMARY = "PRIMARY"
+    '''The primary resource record set determines how Route 53 responds to DNS queries when the primary resource is healthy.'''
+    SECONDARY = "SECONDARY"
+    '''The secondary resource record set determines how Route 53 responds to DNS queries when the primary resource is unhealthy.'''
 
 
 class GeoLocation(
@@ -7119,7 +7297,7 @@ class GeoLocation(
 
     @jsii.member(jsii_name="continent")
     @builtins.classmethod
-    def continent(cls, continent_code: Continent) -> "GeoLocation":
+    def continent(cls, continent_code: "Continent") -> "GeoLocation":
         '''Geolocation resource record based on continent code.
 
         :param continent_code: Continent.
@@ -7178,8 +7356,8 @@ class GeoLocation(
 
     @builtins.property
     @jsii.member(jsii_name="continentCode")
-    def continent_code(self) -> typing.Optional[Continent]:
-        return typing.cast(typing.Optional[Continent], jsii.get(self, "continentCode"))
+    def continent_code(self) -> typing.Optional["Continent"]:
+        return typing.cast(typing.Optional["Continent"], jsii.get(self, "continentCode"))
 
     @builtins.property
     @jsii.member(jsii_name="countryCode")
@@ -7289,7 +7467,7 @@ class HealthCheckProps:
         self,
         *,
         type: "HealthCheckType",
-        alarm_identifier: typing.Optional[typing.Union[AlarmIdentifier, typing.Dict[builtins.str, typing.Any]]] = None,
+        alarm_identifier: typing.Optional[typing.Union["AlarmIdentifier", typing.Dict[builtins.str, typing.Any]]] = None,
         child_health_checks: typing.Optional[typing.Sequence["IHealthCheck"]] = None,
         enable_sni: typing.Optional[builtins.bool] = None,
         failure_threshold: typing.Optional[jsii.Number] = None,
@@ -7301,7 +7479,7 @@ class HealthCheckProps:
         measure_latency: typing.Optional[builtins.bool] = None,
         port: typing.Optional[jsii.Number] = None,
         regions: typing.Optional[typing.Sequence[builtins.str]] = None,
-        request_interval: typing.Optional[_Duration_4839e8c3] = None,
+        request_interval: typing.Optional["_Duration_4839e8c3"] = None,
         resource_path: typing.Optional[builtins.str] = None,
         routing_control: typing.Optional[builtins.str] = None,
         search_string: typing.Optional[builtins.str] = None,
@@ -7342,16 +7520,19 @@ class HealthCheckProps:
                 request_interval=Duration.seconds(30)
             )
             
-            route53.ARecord(self, "ARecord",
+            route53.ARecord(self, "ARecordFailoverPrimary",
                 zone=my_zone,
                 target=route53.RecordTarget.from_ip_addresses("1.2.3.4"),
+                failover=route53.Failover.PRIMARY,
                 health_check=health_check,
-                weight=100
+                set_identifier="failover-primary"
             )
-            route53.ARecord(self, "ARecord2",
+            
+            route53.ARecord(self, "ARecordFailoverSecondary",
                 zone=my_zone,
                 target=route53.RecordTarget.from_ip_addresses("5.6.7.8"),
-                weight=0
+                failover=route53.Failover.SECONDARY,
+                set_identifier="failover-secondary"
             )
         '''
         if isinstance(alarm_identifier, dict):
@@ -7419,13 +7600,13 @@ class HealthCheckProps:
         return typing.cast("HealthCheckType", result)
 
     @builtins.property
-    def alarm_identifier(self) -> typing.Optional[AlarmIdentifier]:
+    def alarm_identifier(self) -> typing.Optional["AlarmIdentifier"]:
         '''CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether the specified health check is healthy.
 
         :default: - if the type is CLOUDWATCH_METRIC, this property is required. Otherwise, it is not configured.
         '''
         result = self._values.get("alarm_identifier")
-        return typing.cast(typing.Optional[AlarmIdentifier], result)
+        return typing.cast(typing.Optional["AlarmIdentifier"], result)
 
     @builtins.property
     def child_health_checks(self) -> typing.Optional[typing.List["IHealthCheck"]]:
@@ -7565,7 +7746,7 @@ class HealthCheckProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def request_interval(self) -> typing.Optional[_Duration_4839e8c3]:
+    def request_interval(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The duration between the time that Amazon Route 53 gets a response from your endpoint and the time that it sends the next health check request.
 
         Each Route 53 health checker makes requests at this interval.
@@ -7577,7 +7758,7 @@ class HealthCheckProps:
         - otherwise, the default value is 30 seconds.
         '''
         result = self._values.get("request_interval")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def resource_path(self) -> typing.Optional[builtins.str]:
@@ -7647,16 +7828,19 @@ class HealthCheckType(enum.Enum):
             request_interval=Duration.seconds(30)
         )
         
-        route53.ARecord(self, "ARecord",
+        route53.ARecord(self, "ARecordFailoverPrimary",
             zone=my_zone,
             target=route53.RecordTarget.from_ip_addresses("1.2.3.4"),
+            failover=route53.Failover.PRIMARY,
             health_check=health_check,
-            weight=100
+            set_identifier="failover-primary"
         )
-        route53.ARecord(self, "ARecord2",
+        
+        route53.ARecord(self, "ARecordFailoverSecondary",
             zone=my_zone,
             target=route53.RecordTarget.from_ip_addresses("5.6.7.8"),
-            weight=0
+            failover=route53.Failover.SECONDARY,
+            set_identifier="failover-secondary"
         )
     '''
 
@@ -7825,10 +8009,10 @@ class HostedZoneGrants(
     @jsii.member(jsii_name="delegation")
     def delegation(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *,
         delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant permissions to add delegation records to this zone.
 
         :param grantee: -
@@ -7841,7 +8025,7 @@ class HostedZoneGrants(
             delegated_zone_names=delegated_zone_names
         )
 
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "delegation", [grantee, delegation_options]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "delegation", [grantee, delegation_options]))
 
 
 @jsii.data_type(
@@ -7863,7 +8047,7 @@ class HostedZoneProps(CommonHostedZoneProps):
         add_trailing_dot: typing.Optional[builtins.bool] = None,
         comment: typing.Optional[builtins.str] = None,
         query_logs_log_group_arn: typing.Optional[builtins.str] = None,
-        vpcs: typing.Optional[typing.Sequence[_IVpc_f30d5663]] = None,
+        vpcs: typing.Optional[typing.Sequence["_IVpc_f30d5663"]] = None,
     ) -> None:
         '''Properties of a new hosted zone.
 
@@ -7944,7 +8128,7 @@ class HostedZoneProps(CommonHostedZoneProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def vpcs(self) -> typing.Optional[typing.List[_IVpc_f30d5663]]:
+    def vpcs(self) -> typing.Optional[typing.List["_IVpc_f30d5663"]]:
         '''A VPC that you want to associate with this hosted zone.
 
         When you specify
@@ -7955,7 +8139,7 @@ class HostedZoneProps(CommonHostedZoneProps):
         :default: public (no VPCs associated)
         '''
         result = self._values.get("vpcs")
-        return typing.cast(typing.Optional[typing.List[_IVpc_f30d5663]], result)
+        return typing.cast(typing.Optional[typing.List["_IVpc_f30d5663"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8121,7 +8305,7 @@ class HttpsRecordValue(
     def service(
         cls,
         *,
-        alpn: typing.Optional[typing.Sequence[Alpn]] = None,
+        alpn: typing.Optional[typing.Sequence["Alpn"]] = None,
         ipv4hint: typing.Optional[typing.Sequence[builtins.str]] = None,
         ipv6hint: typing.Optional[typing.Sequence[builtins.str]] = None,
         mandatory: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -8169,7 +8353,7 @@ class IAliasRecordTarget(typing_extensions.Protocol):
         self,
         record: "IRecordSet",
         zone: typing.Optional["IHostedZone"] = None,
-    ) -> AliasRecordTargetConfig:
+    ) -> "AliasRecordTargetConfig":
         '''Return hosted zone ID and DNS name, usable for Route53 alias targets.
 
         :param record: -
@@ -8188,7 +8372,7 @@ class _IAliasRecordTargetProxy:
         self,
         record: "IRecordSet",
         zone: typing.Optional["IHostedZone"] = None,
-    ) -> AliasRecordTargetConfig:
+    ) -> "AliasRecordTargetConfig":
         '''Return hosted zone ID and DNS name, usable for Route53 alias targets.
 
         :param record: -
@@ -8198,7 +8382,7 @@ class _IAliasRecordTargetProxy:
             type_hints = typing.get_type_hints(_typecheckingstub__162b54c0ae9f493edc12c5cba6aa323333c184d03d9332edaab8e4f75c7f74cd)
             check_type(argname="argument record", value=record, expected_type=type_hints["record"])
             check_type(argname="argument zone", value=zone, expected_type=type_hints["zone"])
-        return typing.cast(AliasRecordTargetConfig, jsii.invoke(self, "bind", [record, zone]))
+        return typing.cast("AliasRecordTargetConfig", jsii.invoke(self, "bind", [record, zone]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAliasRecordTarget).__jsii_proxy_class__ = lambda : _IAliasRecordTargetProxy
@@ -8396,11 +8580,11 @@ class KeySigningKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         hosted_zone: "IHostedZone",
-        kms_key: _IKey_5f11635f,
+        kms_key: "_IKey_5f11635f",
         key_signing_key_name: typing.Optional[builtins.str] = None,
         status: typing.Optional["KeySigningKeyStatus"] = None,
     ) -> None:
@@ -8429,12 +8613,12 @@ class KeySigningKey(
     @builtins.classmethod
     def from_key_signing_key_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         hosted_zone: "IHostedZone",
         key_signing_key_name: builtins.str,
-    ) -> IKeySigningKey:
+    ) -> "IKeySigningKey":
         '''Imports a key signing key from its attributes.
 
         :param scope: -
@@ -8450,7 +8634,7 @@ class KeySigningKey(
             hosted_zone=hosted_zone, key_signing_key_name=key_signing_key_name
         )
 
-        return typing.cast(IKeySigningKey, jsii.sinvoke(cls, "fromKeySigningKeyAttributes", [scope, id, attrs]))
+        return typing.cast("IKeySigningKey", jsii.sinvoke(cls, "fromKeySigningKeyAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -8568,7 +8752,7 @@ class KeySigningKeyProps:
         self,
         *,
         hosted_zone: "IHostedZone",
-        kms_key: _IKey_5f11635f,
+        kms_key: "_IKey_5f11635f",
         key_signing_key_name: typing.Optional[builtins.str] = None,
         status: typing.Optional["KeySigningKeyStatus"] = None,
     ) -> None:
@@ -8616,7 +8800,7 @@ class KeySigningKeyProps:
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def kms_key(self) -> _IKey_5f11635f:
+    def kms_key(self) -> "_IKey_5f11635f":
         '''The customer-managed KMS key that that will be used to sign the records.
 
         The KMS Key must be unique for each KSK within a hosted zone. Additionally, the
@@ -8626,7 +8810,7 @@ class KeySigningKeyProps:
         '''
         result = self._values.get("kms_key")
         assert result is not None, "Required property 'kms_key' is missing"
-        return typing.cast(_IKey_5f11635f, result)
+        return typing.cast("_IKey_5f11635f", result)
 
     @builtins.property
     def key_signing_key_name(self) -> typing.Optional[builtins.str]:
@@ -8828,7 +9012,7 @@ class PrivateHostedZoneProps(CommonHostedZoneProps):
         add_trailing_dot: typing.Optional[builtins.bool] = None,
         comment: typing.Optional[builtins.str] = None,
         query_logs_log_group_arn: typing.Optional[builtins.str] = None,
-        vpc: _IVpc_f30d5663,
+        vpc: "_IVpc_f30d5663",
     ) -> None:
         '''Properties to create a Route 53 private hosted zone.
 
@@ -8907,7 +9091,7 @@ class PrivateHostedZoneProps(CommonHostedZoneProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def vpc(self) -> _IVpc_f30d5663:
+    def vpc(self) -> "_IVpc_f30d5663":
         '''A VPC that you want to associate with this hosted zone.
 
         Private hosted zones must be associated with at least one VPC. You can
@@ -8915,7 +9099,7 @@ class PrivateHostedZoneProps(CommonHostedZoneProps):
         '''
         result = self._values.get("vpc")
         assert result is not None, "Required property 'vpc' is missing"
-        return typing.cast(_IVpc_f30d5663, result)
+        return typing.cast("_IVpc_f30d5663", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9015,7 +9199,7 @@ class PublicHostedZoneProps(CommonHostedZoneProps):
         comment: typing.Optional[builtins.str] = None,
         query_logs_log_group_arn: typing.Optional[builtins.str] = None,
         caa_amazon: typing.Optional[builtins.bool] = None,
-        cross_account_zone_delegation_principal: typing.Optional[_IPrincipal_539bb2fd] = None,
+        cross_account_zone_delegation_principal: typing.Optional["_IPrincipal_539bb2fd"] = None,
         cross_account_zone_delegation_role_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Construction properties for a PublicHostedZone.
@@ -9128,7 +9312,7 @@ class PublicHostedZoneProps(CommonHostedZoneProps):
     @builtins.property
     def cross_account_zone_delegation_principal(
         self,
-    ) -> typing.Optional[_IPrincipal_539bb2fd]:
+    ) -> typing.Optional["_IPrincipal_539bb2fd"]:
         '''(deprecated) A principal which is trusted to assume a role for zone delegation.
 
         If supplied, this will create a Role in the same account as the Hosted
@@ -9150,7 +9334,7 @@ class PublicHostedZoneProps(CommonHostedZoneProps):
         :stability: deprecated
         '''
         result = self._values.get("cross_account_zone_delegation_principal")
-        return typing.cast(typing.Optional[_IPrincipal_539bb2fd], result)
+        return typing.cast(typing.Optional["_IPrincipal_539bb2fd"], result)
 
     @builtins.property
     def cross_account_zone_delegation_role_name(self) -> typing.Optional[builtins.str]:
@@ -9209,6 +9393,7 @@ class RecordSet(
             cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
+            failover=route53.Failover.PRIMARY,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=False,
@@ -9222,22 +9407,23 @@ class RecordSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         record_type: "RecordType",
         target: "RecordTarget",
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -9249,6 +9435,7 @@ class RecordSet(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -9269,6 +9456,7 @@ class RecordSet(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -9302,6 +9490,7 @@ class RecordSet(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -9317,16 +9506,17 @@ class RecordSetOptions:
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Options for a RecordSet.
@@ -9335,6 +9525,7 @@ class RecordSetOptions:
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -9365,6 +9556,7 @@ class RecordSetOptions:
                 cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
+                failover=route53.Failover.PRIMARY,
                 geo_location=geo_location,
                 health_check=health_check,
                 multi_value_answer=False,
@@ -9381,6 +9573,7 @@ class RecordSetOptions:
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -9398,6 +9591,8 @@ class RecordSetOptions:
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -9423,7 +9618,7 @@ class RecordSetOptions:
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -9433,7 +9628,7 @@ class RecordSetOptions:
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -9468,13 +9663,30 @@ class RecordSetOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -9482,7 +9694,7 @@ class RecordSetOptions:
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -9540,13 +9752,13 @@ class RecordSetOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -9584,6 +9796,7 @@ class RecordSetOptions:
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -9601,16 +9814,17 @@ class RecordSetProps(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
         record_type: "RecordType",
         target: "RecordTarget",
@@ -9621,6 +9835,7 @@ class RecordSetProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -9656,6 +9871,7 @@ class RecordSetProps(RecordSetOptions):
                 cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
+                failover=route53.Failover.PRIMARY,
                 geo_location=geo_location,
                 health_check=health_check,
                 multi_value_answer=False,
@@ -9672,6 +9888,7 @@ class RecordSetProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -9693,6 +9910,8 @@ class RecordSetProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -9718,7 +9937,7 @@ class RecordSetProps(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -9728,7 +9947,7 @@ class RecordSetProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -9763,13 +9982,30 @@ class RecordSetProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -9777,7 +10013,7 @@ class RecordSetProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -9835,13 +10071,13 @@ class RecordSetProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -9895,22 +10131,25 @@ class RecordTarget(
 
     Example::
 
-        import aws_cdk.aws_apigatewayv2 as apigwv2
+        # instance: ec2.Instance
         
-        # zone: route53.HostedZone
-        # domain_name: apigwv2.DomainName
+        # my_zone: route53.HostedZone
         
         
-        route53.ARecord(self, "AliasRecord",
-            zone=zone,
-            target=route53.RecordTarget.from_alias(targets.ApiGatewayv2DomainProperties(domain_name.regional_domain_name, domain_name.regional_hosted_zone_id))
+        elastic_ip = ec2.CfnEIP(self, "EIP",
+            domain="vpc",
+            instance_id=instance.instance_id
+        )
+        route53.ARecord(self, "ARecord",
+            zone=my_zone,
+            target=route53.RecordTarget.from_ip_addresses(elastic_ip.ref)
         )
     '''
 
     def __init__(
         self,
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
-        alias_target: typing.Optional[IAliasRecordTarget] = None,
+        alias_target: typing.Optional["IAliasRecordTarget"] = None,
     ) -> None:
         '''
         :param values: correspond with the chosen record type (e.g. for 'A' Type, specify one or more IP addresses).
@@ -9924,7 +10163,7 @@ class RecordTarget(
 
     @jsii.member(jsii_name="fromAlias")
     @builtins.classmethod
-    def from_alias(cls, alias_target: IAliasRecordTarget) -> "RecordTarget":
+    def from_alias(cls, alias_target: "IAliasRecordTarget") -> "RecordTarget":
         '''Use an alias as target.
 
         :param alias_target: -
@@ -9960,9 +10199,9 @@ class RecordTarget(
 
     @builtins.property
     @jsii.member(jsii_name="aliasTarget")
-    def alias_target(self) -> typing.Optional[IAliasRecordTarget]:
+    def alias_target(self) -> typing.Optional["IAliasRecordTarget"]:
         '''alias for targets such as CloudFront distribution to route traffic to.'''
-        return typing.cast(typing.Optional[IAliasRecordTarget], jsii.get(self, "aliasTarget"))
+        return typing.cast(typing.Optional["IAliasRecordTarget"], jsii.get(self, "aliasTarget"))
 
     @builtins.property
     @jsii.member(jsii_name="values")
@@ -10112,6 +10351,7 @@ class SrvRecord(
             cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
+            failover=route53.Failover.PRIMARY,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=False,
@@ -10125,21 +10365,22 @@ class SrvRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         values: typing.Sequence[typing.Union["SrvRecordValue", typing.Dict[builtins.str, typing.Any]]],
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -10150,6 +10391,7 @@ class SrvRecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -10169,6 +10411,7 @@ class SrvRecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -10196,6 +10439,7 @@ class SrvRecord(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -10212,16 +10456,17 @@ class SrvRecordProps(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
         values: typing.Sequence[typing.Union["SrvRecordValue", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
@@ -10231,6 +10476,7 @@ class SrvRecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -10268,6 +10514,7 @@ class SrvRecordProps(RecordSetOptions):
                 cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
+                failover=route53.Failover.PRIMARY,
                 geo_location=geo_location,
                 health_check=health_check,
                 multi_value_answer=False,
@@ -10284,6 +10531,7 @@ class SrvRecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -10303,6 +10551,8 @@ class SrvRecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -10328,7 +10578,7 @@ class SrvRecordProps(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -10338,7 +10588,7 @@ class SrvRecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -10373,13 +10623,30 @@ class SrvRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -10387,7 +10654,7 @@ class SrvRecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -10445,13 +10712,13 @@ class SrvRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -10613,6 +10880,7 @@ class SvcbRecord(
             cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
+            failover=route53.Failover.PRIMARY,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=False,
@@ -10626,21 +10894,22 @@ class SvcbRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         values: typing.Sequence["SvcbRecordValue"],
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -10651,6 +10920,7 @@ class SvcbRecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -10670,6 +10940,7 @@ class SvcbRecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -10697,6 +10968,7 @@ class SvcbRecord(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -10713,16 +10985,17 @@ class SvcbRecordProps(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
         values: typing.Sequence["SvcbRecordValue"],
     ) -> None:
@@ -10732,6 +11005,7 @@ class SvcbRecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -10765,6 +11039,7 @@ class SvcbRecordProps(RecordSetOptions):
                 cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
+                failover=route53.Failover.PRIMARY,
                 geo_location=geo_location,
                 health_check=health_check,
                 multi_value_answer=False,
@@ -10781,6 +11056,7 @@ class SvcbRecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -10800,6 +11076,8 @@ class SvcbRecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -10825,7 +11103,7 @@ class SvcbRecordProps(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -10835,7 +11113,7 @@ class SvcbRecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -10870,13 +11148,30 @@ class SvcbRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -10884,7 +11179,7 @@ class SvcbRecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -10942,13 +11237,13 @@ class SvcbRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -11003,7 +11298,7 @@ class SvcbRecordServiceModeProps:
     def __init__(
         self,
         *,
-        alpn: typing.Optional[typing.Sequence[Alpn]] = None,
+        alpn: typing.Optional[typing.Sequence["Alpn"]] = None,
         ipv4hint: typing.Optional[typing.Sequence[builtins.str]] = None,
         ipv6hint: typing.Optional[typing.Sequence[builtins.str]] = None,
         mandatory: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -11073,13 +11368,13 @@ class SvcbRecordServiceModeProps:
             self._values["target_name"] = target_name
 
     @builtins.property
-    def alpn(self) -> typing.Optional[typing.List[Alpn]]:
+    def alpn(self) -> typing.Optional[typing.List["Alpn"]]:
         '''Indicates the set of Application-Layer Protocol Negotiation (ALPN) protocol identifiers and associated transport protocols supported by this service endpoint.
 
         :default: - No ALPN protocol identifiers
         '''
         result = self._values.get("alpn")
-        return typing.cast(typing.Optional[typing.List[Alpn]], result)
+        return typing.cast(typing.Optional[typing.List["Alpn"]], result)
 
     @builtins.property
     def ipv4hint(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -11192,7 +11487,7 @@ class SvcbRecordValue(
     def service(
         cls,
         *,
-        alpn: typing.Optional[typing.Sequence[Alpn]] = None,
+        alpn: typing.Optional[typing.Sequence["Alpn"]] = None,
         ipv4hint: typing.Optional[typing.Sequence[builtins.str]] = None,
         ipv6hint: typing.Optional[typing.Sequence[builtins.str]] = None,
         mandatory: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -11259,21 +11554,22 @@ class TxtRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         values: typing.Sequence[builtins.str],
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -11284,6 +11580,7 @@ class TxtRecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -11303,6 +11600,7 @@ class TxtRecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -11330,6 +11628,7 @@ class TxtRecord(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -11346,16 +11645,17 @@ class TxtRecordProps(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
         values: typing.Sequence[builtins.str],
     ) -> None:
@@ -11365,6 +11665,7 @@ class TxtRecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -11398,6 +11699,7 @@ class TxtRecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -11417,6 +11719,8 @@ class TxtRecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -11442,7 +11746,7 @@ class TxtRecordProps(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -11452,7 +11756,7 @@ class TxtRecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -11487,13 +11791,30 @@ class TxtRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -11501,7 +11822,7 @@ class TxtRecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -11559,13 +11880,13 @@ class TxtRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -11627,11 +11948,11 @@ class VpcEndpointServiceDomainName(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name: builtins.str,
-        endpoint_service: _IVPCEndpointServiceRef_90edcb87,
+        endpoint_service: "_IVPCEndpointServiceRef_90edcb87",
         public_hosted_zone: "IPublicHostedZone",
     ) -> None:
         '''
@@ -11681,7 +12002,7 @@ class VpcEndpointServiceDomainNameProps:
         self,
         *,
         domain_name: builtins.str,
-        endpoint_service: _IVPCEndpointServiceRef_90edcb87,
+        endpoint_service: "_IVPCEndpointServiceRef_90edcb87",
         public_hosted_zone: "IPublicHostedZone",
     ) -> None:
         '''Properties to configure a VPC Endpoint Service domain name.
@@ -11731,11 +12052,11 @@ class VpcEndpointServiceDomainNameProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def endpoint_service(self) -> _IVPCEndpointServiceRef_90edcb87:
+    def endpoint_service(self) -> "_IVPCEndpointServiceRef_90edcb87":
         '''The VPC Endpoint Service to configure Private DNS for.'''
         result = self._values.get("endpoint_service")
         assert result is not None, "Required property 'endpoint_service' is missing"
-        return typing.cast(_IVPCEndpointServiceRef_90edcb87, result)
+        return typing.cast("_IVPCEndpointServiceRef_90edcb87", result)
 
     @builtins.property
     def public_hosted_zone(self) -> "IPublicHostedZone":
@@ -11766,7 +12087,7 @@ class ZoneDelegationOptions:
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Options available when creating a delegation relationship from one PublicHostedZone to another.
 
@@ -11807,13 +12128,13 @@ class ZoneDelegationOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The TTL (Time To Live) of the DNS delegation record in DNS caches.
 
         :default: 172800
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11856,6 +12177,7 @@ class ZoneDelegationRecord(
             cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
+            failover=route53.Failover.PRIMARY,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=False,
@@ -11869,21 +12191,22 @@ class ZoneDelegationRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name_servers: typing.Sequence[builtins.str],
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -11894,6 +12217,7 @@ class ZoneDelegationRecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -11913,6 +12237,7 @@ class ZoneDelegationRecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -11940,6 +12265,7 @@ class ZoneDelegationRecord(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -11956,16 +12282,17 @@ class ZoneDelegationRecordProps(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
         name_servers: typing.Sequence[builtins.str],
     ) -> None:
@@ -11975,6 +12302,7 @@ class ZoneDelegationRecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -12007,6 +12335,7 @@ class ZoneDelegationRecordProps(RecordSetOptions):
                 cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
+                failover=route53.Failover.PRIMARY,
                 geo_location=geo_location,
                 health_check=health_check,
                 multi_value_answer=False,
@@ -12023,6 +12352,7 @@ class ZoneDelegationRecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -12042,6 +12372,8 @@ class ZoneDelegationRecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -12067,7 +12399,7 @@ class ZoneDelegationRecordProps(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -12077,7 +12409,7 @@ class ZoneDelegationRecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -12112,13 +12444,30 @@ class ZoneDelegationRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -12126,7 +12475,7 @@ class ZoneDelegationRecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -12184,13 +12533,13 @@ class ZoneDelegationRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -12236,7 +12585,7 @@ class ZoneSigningOptions:
     def __init__(
         self,
         *,
-        kms_key: _IKey_5f11635f,
+        kms_key: "_IKey_5f11635f",
         key_signing_key_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Options for enabling key signing from a hosted zone.
@@ -12269,7 +12618,7 @@ class ZoneSigningOptions:
             self._values["key_signing_key_name"] = key_signing_key_name
 
     @builtins.property
-    def kms_key(self) -> _IKey_5f11635f:
+    def kms_key(self) -> "_IKey_5f11635f":
         '''The customer-managed KMS key that that will be used to sign the records.
 
         The KMS Key must be unique for each KSK within a hosted zone. Additionally, the
@@ -12279,7 +12628,7 @@ class ZoneSigningOptions:
         '''
         result = self._values.get("kms_key")
         assert result is not None, "Required property 'kms_key' is missing"
-        return typing.cast(_IKey_5f11635f, result)
+        return typing.cast("_IKey_5f11635f", result)
 
     @builtins.property
     def key_signing_key_name(self) -> typing.Optional[builtins.str]:
@@ -12316,38 +12665,36 @@ class ARecord(
 
     Example::
 
-        from aws_cdk.region_info import RegionInfo
+        import aws_cdk.aws_apigatewayv2 as apigwv2
         
         # zone: route53.HostedZone
-        # ebs_environment_url: str
+        # domain_name: apigwv2.DomainName
         
         
         route53.ARecord(self, "AliasRecord",
             zone=zone,
-            target=route53.RecordTarget.from_alias(
-                targets.ElasticBeanstalkEnvironmentEndpointTarget(ebs_environment_url, {
-                    "hosted_zone_id": RegionInfo.get("us-east-1").ebs_env_endpoint_hosted_zone_id
-                }))
+            target=route53.RecordTarget.from_alias(targets.ApiGatewayv2DomainProperties(domain_name.regional_domain_name, domain_name.regional_hosted_zone_id))
         )
     '''
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        target: RecordTarget,
+        target: "RecordTarget",
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -12358,6 +12705,7 @@ class ARecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -12377,6 +12725,7 @@ class ARecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -12393,21 +12742,22 @@ class ARecord(
     @builtins.classmethod
     def from_a_record_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         target_dns: builtins.str,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> "ARecord":
         '''Creates new A record of type alias with target set to an existing A Record DNS.
@@ -12422,6 +12772,7 @@ class ARecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -12445,6 +12796,7 @@ class ARecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -12472,6 +12824,7 @@ class ARecord(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -12488,16 +12841,17 @@ class ARecordAttrs(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
         target_dns: builtins.str,
     ) -> None:
@@ -12507,6 +12861,7 @@ class ARecordAttrs(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -12537,6 +12892,7 @@ class ARecordAttrs(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -12556,6 +12912,8 @@ class ARecordAttrs(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -12581,7 +12939,7 @@ class ARecordAttrs(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -12591,7 +12949,7 @@ class ARecordAttrs(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -12626,13 +12984,30 @@ class ARecordAttrs(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -12640,7 +13015,7 @@ class ARecordAttrs(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -12698,13 +13073,13 @@ class ARecordAttrs(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -12749,6 +13124,7 @@ class ARecordAttrs(RecordSetOptions):
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -12765,18 +13141,19 @@ class ARecordProps(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
-        target: RecordTarget,
+        target: "RecordTarget",
     ) -> None:
         '''Construction properties for a ARecord.
 
@@ -12784,6 +13161,7 @@ class ARecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -12798,18 +13176,15 @@ class ARecordProps(RecordSetOptions):
 
         Example::
 
-            from aws_cdk.region_info import RegionInfo
+            import aws_cdk.aws_apigatewayv2 as apigwv2
             
             # zone: route53.HostedZone
-            # ebs_environment_url: str
+            # domain_name: apigwv2.DomainName
             
             
             route53.ARecord(self, "AliasRecord",
                 zone=zone,
-                target=route53.RecordTarget.from_alias(
-                    targets.ElasticBeanstalkEnvironmentEndpointTarget(ebs_environment_url, {
-                        "hosted_zone_id": RegionInfo.get("us-east-1").ebs_env_endpoint_hosted_zone_id
-                    }))
+                target=route53.RecordTarget.from_alias(targets.ApiGatewayv2DomainProperties(domain_name.regional_domain_name, domain_name.regional_hosted_zone_id))
             )
         '''
         if __debug__:
@@ -12818,6 +13193,7 @@ class ARecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -12837,6 +13213,8 @@ class ARecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -12862,7 +13240,7 @@ class ARecordProps(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -12872,7 +13250,7 @@ class ARecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -12907,13 +13285,30 @@ class ARecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -12921,7 +13316,7 @@ class ARecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -12979,13 +13374,13 @@ class ARecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -13004,11 +13399,11 @@ class ARecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def target(self) -> RecordTarget:
+    def target(self) -> "RecordTarget":
         '''The target.'''
         result = self._values.get("target")
         assert result is not None, "Required property 'target' is missing"
-        return typing.cast(RecordTarget, result)
+        return typing.cast("RecordTarget", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13047,21 +13442,22 @@ class AaaaRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        target: RecordTarget,
+        target: "RecordTarget",
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -13072,6 +13468,7 @@ class AaaaRecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -13091,6 +13488,7 @@ class AaaaRecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -13118,6 +13516,7 @@ class AaaaRecord(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -13134,18 +13533,19 @@ class AaaaRecordProps(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
-        target: RecordTarget,
+        target: "RecordTarget",
     ) -> None:
         '''Construction properties for a AaaaRecord.
 
@@ -13153,6 +13553,7 @@ class AaaaRecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -13183,6 +13584,7 @@ class AaaaRecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -13202,6 +13604,8 @@ class AaaaRecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -13227,7 +13631,7 @@ class AaaaRecordProps(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -13237,7 +13641,7 @@ class AaaaRecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -13272,13 +13676,30 @@ class AaaaRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -13286,7 +13707,7 @@ class AaaaRecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -13344,13 +13765,13 @@ class AaaaRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -13369,11 +13790,11 @@ class AaaaRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def target(self) -> RecordTarget:
+    def target(self) -> "RecordTarget":
         '''The target.'''
         result = self._values.get("target")
         assert result is not None, "Required property 'target' is missing"
-        return typing.cast(RecordTarget, result)
+        return typing.cast("RecordTarget", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13395,6 +13816,7 @@ class AaaaRecordProps(RecordSetOptions):
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -13410,16 +13832,17 @@ class CaaAmazonRecordProps(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Construction properties for a CaaAmazonRecord.
@@ -13428,6 +13851,7 @@ class CaaAmazonRecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -13458,6 +13882,7 @@ class CaaAmazonRecordProps(RecordSetOptions):
                 cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
+                failover=route53.Failover.PRIMARY,
                 geo_location=geo_location,
                 health_check=health_check,
                 multi_value_answer=False,
@@ -13474,6 +13899,7 @@ class CaaAmazonRecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -13491,6 +13917,8 @@ class CaaAmazonRecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -13516,7 +13944,7 @@ class CaaAmazonRecordProps(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -13526,7 +13954,7 @@ class CaaAmazonRecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -13561,13 +13989,30 @@ class CaaAmazonRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -13575,7 +14020,7 @@ class CaaAmazonRecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -13633,13 +14078,13 @@ class CaaAmazonRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -13703,6 +14148,7 @@ class CaaRecord(
             cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
+            failover=route53.Failover.PRIMARY,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=False,
@@ -13716,21 +14162,22 @@ class CaaRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        values: typing.Sequence[typing.Union[CaaRecordValue, typing.Dict[builtins.str, typing.Any]]],
+        values: typing.Sequence[typing.Union["CaaRecordValue", typing.Dict[builtins.str, typing.Any]]],
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -13741,6 +14188,7 @@ class CaaRecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -13760,6 +14208,7 @@ class CaaRecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -13787,6 +14236,7 @@ class CaaRecord(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -13803,18 +14253,19 @@ class CaaRecordProps(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
-        values: typing.Sequence[typing.Union[CaaRecordValue, typing.Dict[builtins.str, typing.Any]]],
+        values: typing.Sequence[typing.Union["CaaRecordValue", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Construction properties for a CaaRecord.
 
@@ -13822,6 +14273,7 @@ class CaaRecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -13858,6 +14310,7 @@ class CaaRecordProps(RecordSetOptions):
                 cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
+                failover=route53.Failover.PRIMARY,
                 geo_location=geo_location,
                 health_check=health_check,
                 multi_value_answer=False,
@@ -13874,6 +14327,7 @@ class CaaRecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -13893,6 +14347,8 @@ class CaaRecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -13918,7 +14374,7 @@ class CaaRecordProps(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -13928,7 +14384,7 @@ class CaaRecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -13963,13 +14419,30 @@ class CaaRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -13977,7 +14450,7 @@ class CaaRecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -14035,13 +14508,13 @@ class CaaRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -14060,11 +14533,11 @@ class CaaRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def values(self) -> typing.List[CaaRecordValue]:
+    def values(self) -> typing.List["CaaRecordValue"]:
         '''The values.'''
         result = self._values.get("values")
         assert result is not None, "Required property 'values' is missing"
-        return typing.cast(typing.List[CaaRecordValue], result)
+        return typing.cast(typing.List["CaaRecordValue"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14126,21 +14599,22 @@ class CnameRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name: builtins.str,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -14151,6 +14625,7 @@ class CnameRecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -14170,6 +14645,7 @@ class CnameRecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -14197,6 +14673,7 @@ class CnameRecord(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -14213,16 +14690,17 @@ class CnameRecordProps(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
         domain_name: builtins.str,
     ) -> None:
@@ -14232,6 +14710,7 @@ class CnameRecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -14285,6 +14764,7 @@ class CnameRecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -14304,6 +14784,8 @@ class CnameRecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -14329,7 +14811,7 @@ class CnameRecordProps(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -14339,7 +14821,7 @@ class CnameRecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -14374,13 +14856,30 @@ class CnameRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -14388,7 +14887,7 @@ class CnameRecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -14446,13 +14945,13 @@ class CnameRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -14515,21 +15014,22 @@ class DsRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         values: typing.Sequence[builtins.str],
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -14540,6 +15040,7 @@ class DsRecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -14559,6 +15060,7 @@ class DsRecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -14586,6 +15088,7 @@ class DsRecord(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -14602,16 +15105,17 @@ class DsRecordProps(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
         values: typing.Sequence[builtins.str],
     ) -> None:
@@ -14621,6 +15125,7 @@ class DsRecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -14652,6 +15157,7 @@ class DsRecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -14671,6 +15177,8 @@ class DsRecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -14696,7 +15204,7 @@ class DsRecordProps(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -14706,7 +15214,7 @@ class DsRecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -14741,13 +15249,30 @@ class DsRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -14755,7 +15280,7 @@ class DsRecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -14813,13 +15338,13 @@ class DsRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -14887,38 +15412,41 @@ class HealthCheck(
             request_interval=Duration.seconds(30)
         )
         
-        route53.ARecord(self, "ARecord",
+        route53.ARecord(self, "ARecordFailoverPrimary",
             zone=my_zone,
             target=route53.RecordTarget.from_ip_addresses("1.2.3.4"),
+            failover=route53.Failover.PRIMARY,
             health_check=health_check,
-            weight=100
+            set_identifier="failover-primary"
         )
-        route53.ARecord(self, "ARecord2",
+        
+        route53.ARecord(self, "ARecordFailoverSecondary",
             zone=my_zone,
             target=route53.RecordTarget.from_ip_addresses("5.6.7.8"),
-            weight=0
+            failover=route53.Failover.SECONDARY,
+            set_identifier="failover-secondary"
         )
     '''
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        type: HealthCheckType,
-        alarm_identifier: typing.Optional[typing.Union[AlarmIdentifier, typing.Dict[builtins.str, typing.Any]]] = None,
-        child_health_checks: typing.Optional[typing.Sequence[IHealthCheck]] = None,
+        type: "HealthCheckType",
+        alarm_identifier: typing.Optional[typing.Union["AlarmIdentifier", typing.Dict[builtins.str, typing.Any]]] = None,
+        child_health_checks: typing.Optional[typing.Sequence["IHealthCheck"]] = None,
         enable_sni: typing.Optional[builtins.bool] = None,
         failure_threshold: typing.Optional[jsii.Number] = None,
         fqdn: typing.Optional[builtins.str] = None,
         health_threshold: typing.Optional[jsii.Number] = None,
-        insufficient_data_health_status: typing.Optional[InsufficientDataHealthStatusEnum] = None,
+        insufficient_data_health_status: typing.Optional["InsufficientDataHealthStatusEnum"] = None,
         inverted: typing.Optional[builtins.bool] = None,
         ip_address: typing.Optional[builtins.str] = None,
         measure_latency: typing.Optional[builtins.bool] = None,
         port: typing.Optional[jsii.Number] = None,
         regions: typing.Optional[typing.Sequence[builtins.str]] = None,
-        request_interval: typing.Optional[_Duration_4839e8c3] = None,
+        request_interval: typing.Optional["_Duration_4839e8c3"] = None,
         resource_path: typing.Optional[builtins.str] = None,
         routing_control: typing.Optional[builtins.str] = None,
         search_string: typing.Optional[builtins.str] = None,
@@ -14977,10 +15505,10 @@ class HealthCheck(
     @builtins.classmethod
     def from_health_check_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         health_check_id: builtins.str,
-    ) -> IHealthCheck:
+    ) -> "IHealthCheck":
         '''Import an existing health check into this CDK app.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -14994,7 +15522,7 @@ class HealthCheck(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument health_check_id", value=health_check_id, expected_type=type_hints["health_check_id"])
-        return typing.cast(IHealthCheck, jsii.sinvoke(cls, "fromHealthCheckId", [scope, id, health_check_id]))
+        return typing.cast("IHealthCheck", jsii.sinvoke(cls, "fromHealthCheckId", [scope, id, health_check_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -15045,22 +15573,23 @@ class HttpsRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        target: typing.Optional[RecordTarget] = None,
-        values: typing.Optional[typing.Sequence[HttpsRecordValue]] = None,
+        target: typing.Optional["RecordTarget"] = None,
+        values: typing.Optional[typing.Sequence["HttpsRecordValue"]] = None,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -15072,6 +15601,7 @@ class HttpsRecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -15092,6 +15622,7 @@ class HttpsRecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -15119,6 +15650,7 @@ class HttpsRecord(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -15136,19 +15668,20 @@ class HttpsRecordProps(RecordSetOptions):
         self,
         *,
         zone: "IHostedZone",
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
-        target: typing.Optional[RecordTarget] = None,
-        values: typing.Optional[typing.Sequence[HttpsRecordValue]] = None,
+        target: typing.Optional["RecordTarget"] = None,
+        values: typing.Optional[typing.Sequence["HttpsRecordValue"]] = None,
     ) -> None:
         '''Construction properties for an HttpsRecord.
 
@@ -15156,6 +15689,7 @@ class HttpsRecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -15198,6 +15732,7 @@ class HttpsRecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -15217,6 +15752,8 @@ class HttpsRecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -15246,7 +15783,7 @@ class HttpsRecordProps(RecordSetOptions):
         return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -15256,7 +15793,7 @@ class HttpsRecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -15291,13 +15828,30 @@ class HttpsRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -15305,7 +15859,7 @@ class HttpsRecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -15363,13 +15917,13 @@ class HttpsRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -15388,22 +15942,22 @@ class HttpsRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def target(self) -> typing.Optional[RecordTarget]:
+    def target(self) -> typing.Optional["RecordTarget"]:
         '''The target (mostly used as an alias target to CloudFront).
 
         :default: - Specify exactly one of either ``values`` or ``target``.
         '''
         result = self._values.get("target")
-        return typing.cast(typing.Optional[RecordTarget], result)
+        return typing.cast(typing.Optional["RecordTarget"], result)
 
     @builtins.property
-    def values(self) -> typing.Optional[typing.List[HttpsRecordValue]]:
+    def values(self) -> typing.Optional[typing.List["HttpsRecordValue"]]:
         '''The values.
 
         :default: - Specify exactly one of either ``values`` or ``target``.
         '''
         result = self._values.get("values")
-        return typing.cast(typing.Optional[typing.List[HttpsRecordValue]], result)
+        return typing.cast(typing.Optional[typing.List["HttpsRecordValue"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15435,7 +15989,7 @@ class HttpsRecordServiceModeProps(SvcbRecordServiceModeProps):
     def __init__(
         self,
         *,
-        alpn: typing.Optional[typing.Sequence[Alpn]] = None,
+        alpn: typing.Optional[typing.Sequence["Alpn"]] = None,
         ipv4hint: typing.Optional[typing.Sequence[builtins.str]] = None,
         ipv6hint: typing.Optional[typing.Sequence[builtins.str]] = None,
         mandatory: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -15509,13 +16063,13 @@ class HttpsRecordServiceModeProps(SvcbRecordServiceModeProps):
             self._values["target_name"] = target_name
 
     @builtins.property
-    def alpn(self) -> typing.Optional[typing.List[Alpn]]:
+    def alpn(self) -> typing.Optional[typing.List["Alpn"]]:
         '''Indicates the set of Application-Layer Protocol Negotiation (ALPN) protocol identifiers and associated transport protocols supported by this service endpoint.
 
         :default: - No ALPN protocol identifiers
         '''
         result = self._values.get("alpn")
-        return typing.cast(typing.Optional[typing.List[Alpn]], result)
+        return typing.cast(typing.Optional[typing.List["Alpn"]], result)
 
     @builtins.property
     def ipv4hint(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -15636,10 +16190,10 @@ class IHostedZone(_IResource_c80c4260, INamedHostedZoneRef, typing_extensions.Pr
     @jsii.member(jsii_name="grantDelegation")
     def grant_delegation(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *,
         delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant permissions to add delegation records to this zone.
 
         :param grantee: -
@@ -15694,10 +16248,10 @@ class _IHostedZoneProxy(
     @jsii.member(jsii_name="grantDelegation")
     def grant_delegation(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *,
         delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant permissions to add delegation records to this zone.
 
         :param grantee: -
@@ -15708,7 +16262,7 @@ class _IHostedZoneProxy(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         options = GrantDelegationOptions(delegated_zone_names=delegated_zone_names)
 
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDelegation", [grantee, options]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantDelegation", [grantee, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHostedZone).__jsii_proxy_class__ = lambda : _IHostedZoneProxy
@@ -15785,6 +16339,7 @@ class MxRecord(
             cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
+            failover=route53.Failover.PRIMARY,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=False,
@@ -15798,21 +16353,22 @@ class MxRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        values: typing.Sequence[typing.Union[MxRecordValue, typing.Dict[builtins.str, typing.Any]]],
-        zone: IHostedZone,
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        values: typing.Sequence[typing.Union["MxRecordValue", typing.Dict[builtins.str, typing.Any]]],
+        zone: "IHostedZone",
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -15823,6 +16379,7 @@ class MxRecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -15842,6 +16399,7 @@ class MxRecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -15869,6 +16427,7 @@ class MxRecord(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -15884,19 +16443,20 @@ class MxRecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        zone: "IHostedZone",
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
-        values: typing.Sequence[typing.Union[MxRecordValue, typing.Dict[builtins.str, typing.Any]]],
+        values: typing.Sequence[typing.Union["MxRecordValue", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Construction properties for a MxRecord.
 
@@ -15904,6 +16464,7 @@ class MxRecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -15939,6 +16500,7 @@ class MxRecordProps(RecordSetOptions):
                 cidr_routing_config=cidr_routing_config,
                 comment="comment",
                 delete_existing=False,
+                failover=route53.Failover.PRIMARY,
                 geo_location=geo_location,
                 health_check=health_check,
                 multi_value_answer=False,
@@ -15955,6 +16517,7 @@ class MxRecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -15974,6 +16537,8 @@ class MxRecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -15992,14 +16557,14 @@ class MxRecordProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -16009,7 +16574,7 @@ class MxRecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -16044,13 +16609,30 @@ class MxRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -16058,7 +16640,7 @@ class MxRecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -16116,13 +16698,13 @@ class MxRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -16141,11 +16723,11 @@ class MxRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def values(self) -> typing.List[MxRecordValue]:
+    def values(self) -> typing.List["MxRecordValue"]:
         '''The values.'''
         result = self._values.get("values")
         assert result is not None, "Required property 'values' is missing"
-        return typing.cast(typing.List[MxRecordValue], result)
+        return typing.cast(typing.List["MxRecordValue"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16185,21 +16767,22 @@ class NsRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         values: typing.Sequence[builtins.str],
-        zone: IHostedZone,
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        zone: "IHostedZone",
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -16210,6 +16793,7 @@ class NsRecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -16229,6 +16813,7 @@ class NsRecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -16256,6 +16841,7 @@ class NsRecord(
         "cidr_routing_config": "cidrRoutingConfig",
         "comment": "comment",
         "delete_existing": "deleteExisting",
+        "failover": "failover",
         "geo_location": "geoLocation",
         "health_check": "healthCheck",
         "multi_value_answer": "multiValueAnswer",
@@ -16271,17 +16857,18 @@ class NsRecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        zone: "IHostedZone",
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
         values: typing.Sequence[builtins.str],
     ) -> None:
@@ -16291,6 +16878,7 @@ class NsRecordProps(RecordSetOptions):
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -16322,6 +16910,7 @@ class NsRecordProps(RecordSetOptions):
             check_type(argname="argument cidr_routing_config", value=cidr_routing_config, expected_type=type_hints["cidr_routing_config"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument delete_existing", value=delete_existing, expected_type=type_hints["delete_existing"])
+            check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
             check_type(argname="argument geo_location", value=geo_location, expected_type=type_hints["geo_location"])
             check_type(argname="argument health_check", value=health_check, expected_type=type_hints["health_check"])
             check_type(argname="argument multi_value_answer", value=multi_value_answer, expected_type=type_hints["multi_value_answer"])
@@ -16341,6 +16930,8 @@ class NsRecordProps(RecordSetOptions):
             self._values["comment"] = comment
         if delete_existing is not None:
             self._values["delete_existing"] = delete_existing
+        if failover is not None:
+            self._values["failover"] = failover
         if geo_location is not None:
             self._values["geo_location"] = geo_location
         if health_check is not None:
@@ -16359,14 +16950,14 @@ class NsRecordProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
-    def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
+    def cidr_routing_config(self) -> typing.Optional["CidrRoutingConfig"]:
         '''The object that is specified in resource record set object when you are linking a resource record set to a CIDR location.
 
         A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record.
@@ -16376,7 +16967,7 @@ class NsRecordProps(RecordSetOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html#cfn-route53-recordset-cidrroutingconfig
         '''
         result = self._values.get("cidr_routing_config")
-        return typing.cast(typing.Optional[CidrRoutingConfig], result)
+        return typing.cast(typing.Optional["CidrRoutingConfig"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -16411,13 +17002,30 @@ class NsRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def geo_location(self) -> typing.Optional[GeoLocation]:
-        '''The geographical origin for this record to return DNS records based on the user's location.'''
-        result = self._values.get("geo_location")
-        return typing.cast(typing.Optional[GeoLocation], result)
+    def failover(self) -> typing.Optional["Failover"]:
+        '''Failover configuration for the record set.
+
+        To configure failover, you add the Failover element to two resource record sets.
+        For one resource record set, you specify PRIMARY as the value for Failover;
+        for the other resource record set, you specify SECONDARY.
+
+        You must also include the HealthCheckId element for PRIMARY configurations.
+
+        :default: - No failover configuration
+
+        :see: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html
+        '''
+        result = self._values.get("failover")
+        return typing.cast(typing.Optional["Failover"], result)
 
     @builtins.property
-    def health_check(self) -> typing.Optional[IHealthCheck]:
+    def geo_location(self) -> typing.Optional["GeoLocation"]:
+        '''The geographical origin for this record to return DNS records based on the user's location.'''
+        result = self._values.get("geo_location")
+        return typing.cast(typing.Optional["GeoLocation"], result)
+
+    @builtins.property
+    def health_check(self) -> typing.Optional["IHealthCheck"]:
         '''The health check to associate with the record set.
 
         Route53 will return this record set in response to DNS queries only if the health check is passing.
@@ -16425,7 +17033,7 @@ class NsRecordProps(RecordSetOptions):
         :default: - No health check configured
         '''
         result = self._values.get("health_check")
-        return typing.cast(typing.Optional[IHealthCheck], result)
+        return typing.cast(typing.Optional["IHealthCheck"], result)
 
     @builtins.property
     def multi_value_answer(self) -> typing.Optional[builtins.bool]:
@@ -16483,13 +17091,13 @@ class NsRecordProps(RecordSetOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The resource record cache time to live (TTL).
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def weight(self) -> typing.Optional[jsii.Number]:
@@ -16558,6 +17166,7 @@ class CaaAmazonRecord(
             cidr_routing_config=cidr_routing_config,
             comment="comment",
             delete_existing=False,
+            failover=route53.Failover.PRIMARY,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=False,
@@ -16571,20 +17180,21 @@ class CaaAmazonRecord(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        zone: IHostedZone,
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        zone: "IHostedZone",
+        cidr_routing_config: typing.Optional["CidrRoutingConfig"] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
+        failover: typing.Optional["Failover"] = None,
+        geo_location: typing.Optional["GeoLocation"] = None,
+        health_check: typing.Optional["IHealthCheck"] = None,
         multi_value_answer: typing.Optional[builtins.bool] = None,
         record_name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
         weight: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -16594,6 +17204,7 @@ class CaaAmazonRecord(
         :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
         :param comment: A comment to add on the record. Default: no comment
         :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param failover: Failover configuration for the record set. To configure failover, you add the Failover element to two resource record sets. For one resource record set, you specify PRIMARY as the value for Failover; for the other resource record set, you specify SECONDARY. You must also include the HealthCheckId element for PRIMARY configurations. Default: - No failover configuration
         :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
         :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
         :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
@@ -16612,6 +17223,7 @@ class CaaAmazonRecord(
             cidr_routing_config=cidr_routing_config,
             comment=comment,
             delete_existing=delete_existing,
+            failover=failover,
             geo_location=geo_location,
             health_check=health_check,
             multi_value_answer=multi_value_answer,
@@ -16663,10 +17275,10 @@ class HostedZone(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        vpcs: typing.Optional[typing.Sequence[_IVpc_f30d5663]] = None,
+        vpcs: typing.Optional[typing.Sequence["_IVpc_f30d5663"]] = None,
         zone_name: builtins.str,
         add_trailing_dot: typing.Optional[builtins.bool] = None,
         comment: typing.Optional[builtins.str] = None,
@@ -16699,12 +17311,12 @@ class HostedZone(
     @builtins.classmethod
     def from_hosted_zone_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         hosted_zone_id: builtins.str,
         zone_name: builtins.str,
-    ) -> IHostedZone:
+    ) -> "IHostedZone":
         '''Imports a hosted zone from another stack.
 
         Use when both hosted zone ID and hosted zone name are known.
@@ -16722,16 +17334,16 @@ class HostedZone(
             hosted_zone_id=hosted_zone_id, zone_name=zone_name
         )
 
-        return typing.cast(IHostedZone, jsii.sinvoke(cls, "fromHostedZoneAttributes", [scope, id, attrs]))
+        return typing.cast("IHostedZone", jsii.sinvoke(cls, "fromHostedZoneAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromHostedZoneId")
     @builtins.classmethod
     def from_hosted_zone_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         hosted_zone_id: builtins.str,
-    ) -> IHostedZone:
+    ) -> "IHostedZone":
         '''Import a Route 53 hosted zone defined either outside the CDK, or in a different CDK stack.
 
         Use when hosted zone ID is known. If a HostedZone is imported with this method the zoneName cannot be referenced.
@@ -16746,19 +17358,19 @@ class HostedZone(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument hosted_zone_id", value=hosted_zone_id, expected_type=type_hints["hosted_zone_id"])
-        return typing.cast(IHostedZone, jsii.sinvoke(cls, "fromHostedZoneId", [scope, id, hosted_zone_id]))
+        return typing.cast("IHostedZone", jsii.sinvoke(cls, "fromHostedZoneId", [scope, id, hosted_zone_id]))
 
     @jsii.member(jsii_name="fromLookup")
     @builtins.classmethod
     def from_lookup(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name: builtins.str,
         private_zone: typing.Optional[builtins.bool] = None,
         vpc_id: typing.Optional[builtins.str] = None,
-    ) -> IHostedZone:
+    ) -> "IHostedZone":
         '''Lookup a hosted zone in the current account/region based on query parameters.
 
         Requires environment, you must specify env for the stack.
@@ -16781,10 +17393,10 @@ class HostedZone(
             domain_name=domain_name, private_zone=private_zone, vpc_id=vpc_id
         )
 
-        return typing.cast(IHostedZone, jsii.sinvoke(cls, "fromLookup", [scope, id, query]))
+        return typing.cast("IHostedZone", jsii.sinvoke(cls, "fromLookup", [scope, id, query]))
 
     @jsii.member(jsii_name="addVpc")
-    def add_vpc(self, vpc: _IVpc_f30d5663) -> None:
+    def add_vpc(self, vpc: "_IVpc_f30d5663") -> None:
         '''Add another VPC to this private hosted zone.
 
         :param vpc: the other VPC to add.
@@ -16798,9 +17410,9 @@ class HostedZone(
     def enable_dnssec(
         self,
         *,
-        kms_key: _IKey_5f11635f,
+        kms_key: "_IKey_5f11635f",
         key_signing_key_name: typing.Optional[builtins.str] = None,
-    ) -> IKeySigningKey:
+    ) -> "IKeySigningKey":
         '''Enable DNSSEC for this hosted zone.
 
         This will create a key signing key with the given options and enable DNSSEC signing
@@ -16813,15 +17425,15 @@ class HostedZone(
             kms_key=kms_key, key_signing_key_name=key_signing_key_name
         )
 
-        return typing.cast(IKeySigningKey, jsii.invoke(self, "enableDnssec", [options]))
+        return typing.cast("IKeySigningKey", jsii.invoke(self, "enableDnssec", [options]))
 
     @jsii.member(jsii_name="grantDelegation")
     def grant_delegation(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *,
         delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant permissions to add delegation records to this zone.
 
         :param grantee: -
@@ -16832,7 +17444,7 @@ class HostedZone(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         options = GrantDelegationOptions(delegated_zone_names=delegated_zone_names)
 
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDelegation", [grantee, options]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantDelegation", [grantee, options]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -16842,9 +17454,9 @@ class HostedZone(
 
     @builtins.property
     @jsii.member(jsii_name="grants")
-    def grants(self) -> HostedZoneGrants:
+    def grants(self) -> "HostedZoneGrants":
         '''Grants helper for this hosted zone.'''
-        return typing.cast(HostedZoneGrants, jsii.get(self, "grants"))
+        return typing.cast("HostedZoneGrants", jsii.get(self, "grants"))
 
     @builtins.property
     @jsii.member(jsii_name="hostedZoneArn")
@@ -16860,9 +17472,9 @@ class HostedZone(
 
     @builtins.property
     @jsii.member(jsii_name="hostedZoneRef")
-    def hosted_zone_ref(self) -> _HostedZoneReference_1c756d37:
+    def hosted_zone_ref(self) -> "_HostedZoneReference_1c756d37":
         '''A reference to a HostedZone resource.'''
-        return typing.cast(_HostedZoneReference_1c756d37, jsii.get(self, "hostedZoneRef"))
+        return typing.cast("_HostedZoneReference_1c756d37", jsii.get(self, "hostedZoneRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -16872,9 +17484,9 @@ class HostedZone(
 
     @builtins.property
     @jsii.member(jsii_name="vpcs")
-    def _vpcs(self) -> typing.List[CfnHostedZone.VPCProperty]:
+    def _vpcs(self) -> typing.List["CfnHostedZone.VPCProperty"]:
         '''VPCs to which this hosted zone will be added.'''
-        return typing.cast(typing.List[CfnHostedZone.VPCProperty], jsii.get(self, "vpcs"))
+        return typing.cast(typing.List["CfnHostedZone.VPCProperty"], jsii.get(self, "vpcs"))
 
     @builtins.property
     @jsii.member(jsii_name="zoneName")
@@ -16919,10 +17531,10 @@ class PrivateHostedZone(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        vpc: _IVpc_f30d5663,
+        vpc: "_IVpc_f30d5663",
         zone_name: builtins.str,
         add_trailing_dot: typing.Optional[builtins.bool] = None,
         comment: typing.Optional[builtins.str] = None,
@@ -16955,12 +17567,12 @@ class PrivateHostedZone(
     @builtins.classmethod
     def from_private_hosted_zone_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         hosted_zone_id: builtins.str,
         zone_name: builtins.str,
-    ) -> IPrivateHostedZone:
+    ) -> "IPrivateHostedZone":
         '''Imports a private hosted zone from another stack.
 
         Use when both hosted zone ID and hosted zone name are known.
@@ -16978,16 +17590,16 @@ class PrivateHostedZone(
             hosted_zone_id=hosted_zone_id, zone_name=zone_name
         )
 
-        return typing.cast(IPrivateHostedZone, jsii.sinvoke(cls, "fromPrivateHostedZoneAttributes", [scope, id, attrs]))
+        return typing.cast("IPrivateHostedZone", jsii.sinvoke(cls, "fromPrivateHostedZoneAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromPrivateHostedZoneId")
     @builtins.classmethod
     def from_private_hosted_zone_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         private_hosted_zone_id: builtins.str,
-    ) -> IPrivateHostedZone:
+    ) -> "IPrivateHostedZone":
         '''Import a Route 53 private hosted zone defined either outside the CDK, or in a different CDK stack.
 
         Use when hosted zone ID is known. If a HostedZone is imported with this method the zoneName cannot be referenced.
@@ -17002,7 +17614,7 @@ class PrivateHostedZone(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument private_hosted_zone_id", value=private_hosted_zone_id, expected_type=type_hints["private_hosted_zone_id"])
-        return typing.cast(IPrivateHostedZone, jsii.sinvoke(cls, "fromPrivateHostedZoneId", [scope, id, private_hosted_zone_id]))
+        return typing.cast("IPrivateHostedZone", jsii.sinvoke(cls, "fromPrivateHostedZoneId", [scope, id, private_hosted_zone_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -17024,6 +17636,7 @@ class PublicHostedZone(
 
     Example::
 
+        from aws_cdk import Environment, Environment
         stack1 = Stack(app, "Stack1",
             env=Environment(
                 region="us-east-1"
@@ -17052,11 +17665,11 @@ class PublicHostedZone(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         caa_amazon: typing.Optional[builtins.bool] = None,
-        cross_account_zone_delegation_principal: typing.Optional[_IPrincipal_539bb2fd] = None,
+        cross_account_zone_delegation_principal: typing.Optional["_IPrincipal_539bb2fd"] = None,
         cross_account_zone_delegation_role_name: typing.Optional[builtins.str] = None,
         zone_name: builtins.str,
         add_trailing_dot: typing.Optional[builtins.bool] = None,
@@ -17094,12 +17707,12 @@ class PublicHostedZone(
     @builtins.classmethod
     def from_public_hosted_zone_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         hosted_zone_id: builtins.str,
         zone_name: builtins.str,
-    ) -> IPublicHostedZone:
+    ) -> "IPublicHostedZone":
         '''Imports a public hosted zone from another stack.
 
         Use when both hosted zone ID and hosted zone name are known.
@@ -17117,16 +17730,16 @@ class PublicHostedZone(
             hosted_zone_id=hosted_zone_id, zone_name=zone_name
         )
 
-        return typing.cast(IPublicHostedZone, jsii.sinvoke(cls, "fromPublicHostedZoneAttributes", [scope, id, attrs]))
+        return typing.cast("IPublicHostedZone", jsii.sinvoke(cls, "fromPublicHostedZoneAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromPublicHostedZoneId")
     @builtins.classmethod
     def from_public_hosted_zone_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         public_hosted_zone_id: builtins.str,
-    ) -> IPublicHostedZone:
+    ) -> "IPublicHostedZone":
         '''Import a Route 53 public hosted zone defined either outside the CDK, or in a different CDK stack.
 
         Use when hosted zone ID is known. If a PublicHostedZone is imported with this method the zoneName cannot be referenced.
@@ -17141,15 +17754,15 @@ class PublicHostedZone(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument public_hosted_zone_id", value=public_hosted_zone_id, expected_type=type_hints["public_hosted_zone_id"])
-        return typing.cast(IPublicHostedZone, jsii.sinvoke(cls, "fromPublicHostedZoneId", [scope, id, public_hosted_zone_id]))
+        return typing.cast("IPublicHostedZone", jsii.sinvoke(cls, "fromPublicHostedZoneId", [scope, id, public_hosted_zone_id]))
 
     @jsii.member(jsii_name="addDelegation")
     def add_delegation(
         self,
-        delegate: IPublicHostedZone,
+        delegate: "IPublicHostedZone",
         *,
         comment: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Adds a delegation from this zone to a designated zone.
 
@@ -17165,7 +17778,7 @@ class PublicHostedZone(
         return typing.cast(None, jsii.invoke(self, "addDelegation", [delegate, opts]))
 
     @jsii.member(jsii_name="addVpc")
-    def add_vpc(self, _vpc: _IVpc_f30d5663) -> None:
+    def add_vpc(self, _vpc: "_IVpc_f30d5663") -> None:
         '''Add another VPC to this private hosted zone.
 
         :param _vpc: -
@@ -17183,9 +17796,9 @@ class PublicHostedZone(
 
     @builtins.property
     @jsii.member(jsii_name="crossAccountZoneDelegationRole")
-    def cross_account_zone_delegation_role(self) -> typing.Optional[_Role_e8c6e11f]:
+    def cross_account_zone_delegation_role(self) -> typing.Optional["_Role_e8c6e11f"]:
         '''Role for cross account zone delegation.'''
-        return typing.cast(typing.Optional[_Role_e8c6e11f], jsii.get(self, "crossAccountZoneDelegationRole"))
+        return typing.cast(typing.Optional["_Role_e8c6e11f"], jsii.get(self, "crossAccountZoneDelegationRole"))
 
 
 __all__ = [
@@ -17227,6 +17840,7 @@ __all__ = [
     "CrossAccountZoneDelegationRecordProps",
     "DsRecord",
     "DsRecordProps",
+    "Failover",
     "GeoLocation",
     "GrantDelegationOptions",
     "HealthCheck",
@@ -17521,6 +18135,7 @@ def _typecheckingstub__07dce28bc78bd7a648e7920a0cb1bee52b579eae30c6d32918696dd2f
     id: builtins.str,
     *,
     hosted_zone_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHostedZone.HostedZoneConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    hosted_zone_features: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHostedZone.HostedZoneFeaturesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     hosted_zone_tags: typing.Optional[typing.Sequence[typing.Union[CfnHostedZone.HostedZoneTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     query_logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHostedZone.QueryLoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -17559,6 +18174,12 @@ def _typecheckingstub__e764c4ae257c91c5d5b032fbe4eb718b4851ccc5750ef5bd3b5214ef2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__103df913d9dc30b8a72229c8397bf39942dc00698e6ee32c9e98ec8f10e62aea(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnHostedZone.HostedZoneFeaturesProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__93e68861780d2e75a54677985f3c250e924418dc9e1ac1cc200b770e633acbb6(
     value: typing.Optional[typing.List[CfnHostedZone.HostedZoneTagProperty]],
 ) -> None:
@@ -17590,6 +18211,13 @@ def _typecheckingstub__b9b576716f26dcf7d2edeb0bc854e42f45e229b4fdb03469e0a6e4aa9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__65b7e3792574e39c38d03eccca85840878de51f8638bf7e3eefde06b18ec6134(
+    *,
+    enable_accelerated_recovery: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2ab436cec7f17cd6450fc80b9013e4f05f3f7a983561430595251215b5aedec6(
     *,
     key: builtins.str,
@@ -17616,6 +18244,7 @@ def _typecheckingstub__c68e5afe07b3a7edc63a606f85f787c4486a2bfba1793f83271989294
 def _typecheckingstub__490d21becaf73ea78f8b34688d2d62e4e21d941f510e74d0a5acce1c9a8a35c3(
     *,
     hosted_zone_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHostedZone.HostedZoneConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    hosted_zone_features: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHostedZone.HostedZoneFeaturesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     hosted_zone_tags: typing.Optional[typing.Sequence[typing.Union[CfnHostedZone.HostedZoneTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     query_logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHostedZone.QueryLoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -18284,6 +18913,7 @@ def _typecheckingstub__b92f4bc0484ad6fe8cce3c7e37b4ee3cd051b8f325d16efd23f924767
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18302,6 +18932,7 @@ def _typecheckingstub__c44f39638a001e90bc1175667e4764c4cbde27cade202d52a4f4d8724
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18320,6 +18951,7 @@ def _typecheckingstub__038200686c47ef30f81bc5289a6235e766372281295129670053b793d
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18368,6 +19000,7 @@ def _typecheckingstub__d52a70fbe22ca5e13acce72254719ea0dd37b436de0640b65774aadd9
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18386,6 +19019,7 @@ def _typecheckingstub__803828161f541995c058596dab53102f2eccd14ba565bbe715a5ac293
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18418,6 +19052,7 @@ def _typecheckingstub__9061fb94be4da039b0429a165062a427f90914b268a3f15ef9424a458
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18436,6 +19071,7 @@ def _typecheckingstub__1f178a06653341a87070700e1fbb7000faa1c8b33ac5fae5287b9cf8e
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18478,6 +19114,7 @@ def _typecheckingstub__df1e0c1447d860a09246a7ec54507ca123346e57365df024460258839
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18496,6 +19133,7 @@ def _typecheckingstub__1925dd23d881cbbf99625b9a5fe0ef65b92a92359376c46e49b6690f1
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18552,6 +19190,7 @@ def _typecheckingstub__1f8360676c13e2167bb58d36e1b6384ba70f036979aa9c80cac046e12
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18570,6 +19209,7 @@ def _typecheckingstub__240a965753acb9488d02c120074027364f5e85a8ec585205a863174fe
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18600,6 +19240,7 @@ def _typecheckingstub__ca2e60ba6b2baeeff2cc875c86af94b4b26d6f11c1cfcca09280ac533
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18621,6 +19262,7 @@ def _typecheckingstub__c76ad72e64542d58d5e33c28ccaca560dac09b21c920d094b7a0c2386
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18639,6 +19281,7 @@ def _typecheckingstub__514d7eccc21be019febe80e121fd7d979162668b63cb99051c629ef08
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18658,6 +19301,7 @@ def _typecheckingstub__a73a5c86411a0d853fcfad820ed58f5a5c19df65a7b2756560958db5c
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18680,6 +19324,7 @@ def _typecheckingstub__4d5345c027ebd51f32f58fdeb055904a5c4dd3f5523f55954f8a191ae
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18698,6 +19343,7 @@ def _typecheckingstub__c051ff70083b2ae68889d3f02be8344125acf64b4768d5f5df3298ba8
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18717,6 +19363,7 @@ def _typecheckingstub__14055fdb7d9f4b55091295996ec92db8d73fa789a21fca2664da1242a
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18738,6 +19385,7 @@ def _typecheckingstub__3a2502cdc1fe021e837217ab0d96b9fa6ea450a68c089482935b695f7
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18756,6 +19404,7 @@ def _typecheckingstub__349a94b990ddb833b270dc692692a8b37187c6f17114e02514f44accf
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18778,6 +19427,7 @@ def _typecheckingstub__e8dfccd8504bb3c0a779b42a665f362282b1083fe52a95b450d1ac1eb
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18796,6 +19446,7 @@ def _typecheckingstub__43b5fc8ccb719e2580c804225e8258b57b1700a701203416558eb2d76
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18818,6 +19469,7 @@ def _typecheckingstub__24205d1a44dcefb992b7bd9b6d91d8b6396f8498224c30876fe8a0673
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18836,6 +19488,7 @@ def _typecheckingstub__f86f16d9f2de8fe03cc1189a56a86c4888d20f69dc0f241aa21b50fdf
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18892,6 +19545,7 @@ def _typecheckingstub__ff083afb33933cff325e491e0f1834d5f30a115ee1b13b2886599061e
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18910,6 +19564,7 @@ def _typecheckingstub__1cf6861ea84fe14136ab579991edb5a69203a95df9329264fb29805dc
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18955,6 +19610,7 @@ def _typecheckingstub__615153e942ef5cdcb0022d4565e0ec8b8c5554594bfe7221366ad5c83
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18973,6 +19629,7 @@ def _typecheckingstub__b259122626a3ba94eebff0b5f692944df4aa55dc550b7d113eec491e1
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -18995,6 +19652,7 @@ def _typecheckingstub__7f3bbcb4bd5bcd8978ae60eaac5ea2c6ab0bb8357a389e9b981e63291
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -19013,6 +19671,7 @@ def _typecheckingstub__33cda5fac8572316158161da713e2ceea9d3f7f56b5ee9a2a25acf331
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,
@@ -19034,6 +19693,7 @@ def _typecheckingstub__f189380057459afbeff6d38749625e3756c4572dec90f74ca7a400dcb
     cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
     comment: typing.Optional[builtins.str] = None,
     delete_existing: typing.Optional[builtins.bool] = None,
+    failover: typing.Optional[Failover] = None,
     geo_location: typing.Optional[GeoLocation] = None,
     health_check: typing.Optional[IHealthCheck] = None,
     multi_value_answer: typing.Optional[builtins.bool] = None,

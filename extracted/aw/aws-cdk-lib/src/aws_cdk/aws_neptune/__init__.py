@@ -113,6 +113,7 @@ class CfnDBCluster(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_neptune as neptune
@@ -159,34 +160,34 @@ class CfnDBCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        associated_roles: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBCluster.DBClusterRoleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        associated_roles: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDBCluster.DBClusterRoleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         availability_zones: typing.Optional[typing.Sequence[builtins.str]] = None,
         backup_retention_period: typing.Optional[jsii.Number] = None,
-        copy_tags_to_snapshot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        copy_tags_to_snapshot: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         db_cluster_identifier: typing.Optional[builtins.str] = None,
         db_cluster_parameter_group_name: typing.Optional[builtins.str] = None,
         db_instance_parameter_group_name: typing.Optional[builtins.str] = None,
         db_port: typing.Optional[jsii.Number] = None,
         db_subnet_group_name: typing.Optional[builtins.str] = None,
-        deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        deletion_protection: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         enable_cloudwatch_logs_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
         engine_version: typing.Optional[builtins.str] = None,
-        iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
         preferred_backup_window: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
         restore_to_time: typing.Optional[builtins.str] = None,
         restore_type: typing.Optional[builtins.str] = None,
-        serverless_scaling_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBCluster.ServerlessScalingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        serverless_scaling_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDBCluster.ServerlessScalingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         snapshot_identifier: typing.Optional[builtins.str] = None,
         source_db_cluster_identifier: typing.Optional[builtins.str] = None,
-        storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+        storage_encrypted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]] = None,
     ) -> None:
         '''Create a new ``AWS::Neptune::DBCluster``.
 
@@ -265,7 +266,7 @@ class CfnDBCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDBCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -343,28 +344,28 @@ class CfnDBCluster(
 
     @builtins.property
     @jsii.member(jsii_name="dbClusterRef")
-    def db_cluster_ref(self) -> _DBClusterReference_46880dce:
+    def db_cluster_ref(self) -> "_DBClusterReference_46880dce":
         '''A reference to a DBCluster resource.'''
-        return typing.cast(_DBClusterReference_46880dce, jsii.get(self, "dbClusterRef"))
+        return typing.cast("_DBClusterReference_46880dce", jsii.get(self, "dbClusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="associatedRoles")
     def associated_roles(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBCluster.DBClusterRoleProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDBCluster.DBClusterRoleProperty"]]]]:
         '''Provides a list of the Amazon Identity and Access Management (IAM) roles that are associated with the DB cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBCluster.DBClusterRoleProperty"]]]], jsii.get(self, "associatedRoles"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDBCluster.DBClusterRoleProperty"]]]], jsii.get(self, "associatedRoles"))
 
     @associated_roles.setter
     def associated_roles(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDBCluster.DBClusterRoleProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDBCluster.DBClusterRoleProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d3b457abeb7b755eacbe5a947e982353faa8aad9de6cbe4e8f6f61fc27055d61)
@@ -404,14 +405,14 @@ class CfnDBCluster(
     @jsii.member(jsii_name="copyTagsToSnapshot")
     def copy_tags_to_snapshot(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*If set to ``true`` , tags are copied to any snapshot of the DB cluster that is created.*.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "copyTagsToSnapshot"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "copyTagsToSnapshot"))
 
     @copy_tags_to_snapshot.setter
     def copy_tags_to_snapshot(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__435b1da4ea01388f9eb362da8fb7659b3188f26c2238e1bd435d44894cec896f)
@@ -493,14 +494,14 @@ class CfnDBCluster(
     @jsii.member(jsii_name="deletionProtection")
     def deletion_protection(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether or not the DB cluster has deletion protection enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deletionProtection"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deletionProtection"))
 
     @deletion_protection.setter
     def deletion_protection(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9d7e2c20b2fd6ab62f2ed52fcb7e1f68aed8c6f570dc8c6923be3f8f26244964)
@@ -542,14 +543,14 @@ class CfnDBCluster(
     @jsii.member(jsii_name="iamAuthEnabled")
     def iam_auth_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''True if mapping of Amazon Identity and Access Management (IAM) accounts to database accounts is enabled, and otherwise false.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "iamAuthEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "iamAuthEnabled"))
 
     @iam_auth_enabled.setter
     def iam_auth_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__09c179ddac73df63b3357ed10cb368f7009ffc4f4639e0086cdec01ad3f89c08)
@@ -628,14 +629,14 @@ class CfnDBCluster(
     @jsii.member(jsii_name="serverlessScalingConfiguration")
     def serverless_scaling_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDBCluster.ServerlessScalingConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDBCluster.ServerlessScalingConfigurationProperty"]]:
         '''Contains the scaling configuration of an Neptune Serverless DB cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDBCluster.ServerlessScalingConfigurationProperty"]], jsii.get(self, "serverlessScalingConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDBCluster.ServerlessScalingConfigurationProperty"]], jsii.get(self, "serverlessScalingConfiguration"))
 
     @serverless_scaling_configuration.setter
     def serverless_scaling_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDBCluster.ServerlessScalingConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDBCluster.ServerlessScalingConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__abd209f57c97ae7f622bfdf39a49771d36bd97272ef4be86c30d09889cb8b5de)
@@ -678,14 +679,14 @@ class CfnDBCluster(
     @jsii.member(jsii_name="storageEncrypted")
     def storage_encrypted(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the DB cluster is encrypted.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "storageEncrypted"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "storageEncrypted"))
 
     @storage_encrypted.setter
     def storage_encrypted(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2b1b1b75d306738921d00a793b4a471baf44bacf0ead3cd17c183ebfe2fb8a0b)
@@ -694,12 +695,12 @@ class CfnDBCluster(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags assigned to this cluster.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bfb671f2b6489e81719b1e566b9755387dec28cd67be89a233894ba1cb79f0b0)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -709,14 +710,14 @@ class CfnDBCluster(
     @jsii.member(jsii_name="useLatestRestorableTime")
     def use_latest_restorable_time(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Creates a new DB cluster from a DB snapshot or DB cluster snapshot.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "useLatestRestorableTime"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "useLatestRestorableTime"))
 
     @use_latest_restorable_time.setter
     def use_latest_restorable_time(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e00a2f7f2634085f716d41accde2cdb2f52bf48c2395fed790a5eacd58c46579)
@@ -908,6 +909,7 @@ class CfnDBClusterParameterGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_neptune as neptune
@@ -930,14 +932,14 @@ class CfnDBClusterParameterGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: builtins.str,
         family: builtins.str,
         parameters: typing.Any,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Neptune::DBClusterParameterGroup``.
 
@@ -976,7 +978,7 @@ class CfnDBClusterParameterGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDBClusterParameterGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1014,15 +1016,15 @@ class CfnDBClusterParameterGroup(
     @jsii.member(jsii_name="dbClusterParameterGroupRef")
     def db_cluster_parameter_group_ref(
         self,
-    ) -> _DBClusterParameterGroupReference_da7b4f10:
+    ) -> "_DBClusterParameterGroupReference_da7b4f10":
         '''A reference to a DBClusterParameterGroup resource.'''
-        return typing.cast(_DBClusterParameterGroupReference_da7b4f10, jsii.get(self, "dbClusterParameterGroupRef"))
+        return typing.cast("_DBClusterParameterGroupReference_da7b4f10", jsii.get(self, "dbClusterParameterGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -1078,12 +1080,12 @@ class CfnDBClusterParameterGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags that you want to attach to this parameter group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c29faf1f531f72a61ec9694e6feb38a23abca37795aed924c4b84c9c5b7cef3f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1109,7 +1111,7 @@ class CfnDBClusterParameterGroupProps:
         family: builtins.str,
         parameters: typing.Any,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBClusterParameterGroup``.
 
@@ -1124,6 +1126,7 @@ class CfnDBClusterParameterGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_neptune as neptune
@@ -1204,13 +1207,13 @@ class CfnDBClusterParameterGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags that you want to attach to this parameter group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbclusterparametergroup.html#cfn-neptune-dbclusterparametergroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1259,31 +1262,31 @@ class CfnDBClusterProps:
     def __init__(
         self,
         *,
-        associated_roles: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBCluster.DBClusterRoleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        associated_roles: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDBCluster.DBClusterRoleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         availability_zones: typing.Optional[typing.Sequence[builtins.str]] = None,
         backup_retention_period: typing.Optional[jsii.Number] = None,
-        copy_tags_to_snapshot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        copy_tags_to_snapshot: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         db_cluster_identifier: typing.Optional[builtins.str] = None,
         db_cluster_parameter_group_name: typing.Optional[builtins.str] = None,
         db_instance_parameter_group_name: typing.Optional[builtins.str] = None,
         db_port: typing.Optional[jsii.Number] = None,
         db_subnet_group_name: typing.Optional[builtins.str] = None,
-        deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        deletion_protection: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         enable_cloudwatch_logs_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
         engine_version: typing.Optional[builtins.str] = None,
-        iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
         preferred_backup_window: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
         restore_to_time: typing.Optional[builtins.str] = None,
         restore_type: typing.Optional[builtins.str] = None,
-        serverless_scaling_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBCluster.ServerlessScalingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        serverless_scaling_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDBCluster.ServerlessScalingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         snapshot_identifier: typing.Optional[builtins.str] = None,
         source_db_cluster_identifier: typing.Optional[builtins.str] = None,
-        storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+        storage_encrypted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBCluster``.
 
@@ -1318,6 +1321,7 @@ class CfnDBClusterProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_neptune as neptune
@@ -1443,7 +1447,7 @@ class CfnDBClusterProps:
     @builtins.property
     def associated_roles(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDBCluster.DBClusterRoleProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDBCluster.DBClusterRoleProperty"]]]]:
         '''Provides a list of the Amazon Identity and Access Management (IAM) roles that are associated with the DB cluster.
 
         IAM roles that are associated with a DB cluster grant permission for the DB cluster to access other Amazon services on your behalf.
@@ -1451,7 +1455,7 @@ class CfnDBClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-associatedroles
         '''
         result = self._values.get("associated_roles")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDBCluster.DBClusterRoleProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDBCluster.DBClusterRoleProperty"]]]], result)
 
     @builtins.property
     def availability_zones(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1478,13 +1482,13 @@ class CfnDBClusterProps:
     @builtins.property
     def copy_tags_to_snapshot(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*If set to ``true`` , tags are copied to any snapshot of the DB cluster that is created.*.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-copytagstosnapshot
         '''
         result = self._values.get("copy_tags_to_snapshot")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def db_cluster_identifier(self) -> typing.Optional[builtins.str]:
@@ -1551,7 +1555,7 @@ class CfnDBClusterProps:
     @builtins.property
     def deletion_protection(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether or not the DB cluster has deletion protection enabled.
 
         The database can't be deleted when deletion protection is enabled.
@@ -1559,7 +1563,7 @@ class CfnDBClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-deletionprotection
         '''
         result = self._values.get("deletion_protection")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def enable_cloudwatch_logs_exports(
@@ -1584,18 +1588,18 @@ class CfnDBClusterProps:
     @builtins.property
     def iam_auth_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''True if mapping of Amazon Identity and Access Management (IAM) accounts to database accounts is enabled, and otherwise false.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-iamauthenabled
         '''
         result = self._values.get("iam_auth_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def kms_key_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]]:
         '''The Amazon Resource Name (ARN) of the KMS key that is used to encrypt the database instances in the DB cluster, such as ``arn:aws:kms:us-east-1:012345678910:key/abcd1234-a123-456a-a12b-a123b4cd56ef`` .
 
         If you enable the ``StorageEncrypted`` property but don't specify this property, the default KMS key is used. If you specify this property, you must set the ``StorageEncrypted`` property to ``true`` .
@@ -1603,7 +1607,7 @@ class CfnDBClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]], result)
 
     @builtins.property
     def preferred_backup_window(self) -> typing.Optional[builtins.str]:
@@ -1656,13 +1660,13 @@ class CfnDBClusterProps:
     @builtins.property
     def serverless_scaling_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDBCluster.ServerlessScalingConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDBCluster.ServerlessScalingConfigurationProperty"]]:
         '''Contains the scaling configuration of an Neptune Serverless DB cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-serverlessscalingconfiguration
         '''
         result = self._values.get("serverless_scaling_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDBCluster.ServerlessScalingConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDBCluster.ServerlessScalingConfigurationProperty"]], result)
 
     @builtins.property
     def snapshot_identifier(self) -> typing.Optional[builtins.str]:
@@ -1693,7 +1697,7 @@ class CfnDBClusterProps:
     @builtins.property
     def storage_encrypted(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the DB cluster is encrypted.
 
         If you specify the ``KmsKeyId`` property, then you must enable encryption and set this property to ``true`` .
@@ -1707,21 +1711,21 @@ class CfnDBClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-storageencrypted
         '''
         result = self._values.get("storage_encrypted")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags assigned to this cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def use_latest_restorable_time(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Creates a new DB cluster from a DB snapshot or DB cluster snapshot.
 
         If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.
@@ -1731,18 +1735,18 @@ class CfnDBClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-uselatestrestorabletime
         '''
         result = self._values.get("use_latest_restorable_time")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def vpc_security_group_ids(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]]:
         '''Provides a list of VPC security groups that the DB cluster belongs to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-vpcsecuritygroupids
         '''
         result = self._values.get("vpc_security_group_ids")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1792,6 +1796,7 @@ class CfnDBInstance(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_neptune as neptune
@@ -1819,12 +1824,12 @@ class CfnDBInstance(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         db_instance_class: builtins.str,
-        allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         availability_zone: typing.Optional[builtins.str] = None,
         db_cluster_identifier: typing.Optional[builtins.str] = None,
         db_instance_identifier: typing.Optional[builtins.str] = None,
@@ -1832,8 +1837,8 @@ class CfnDBInstance(
         db_snapshot_identifier: typing.Optional[builtins.str] = None,
         db_subnet_group_name: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Neptune::DBInstance``.
 
@@ -1886,7 +1891,7 @@ class CfnDBInstance(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDBInstance", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1944,15 +1949,15 @@ class CfnDBInstance(
 
     @builtins.property
     @jsii.member(jsii_name="dbInstanceRef")
-    def db_instance_ref(self) -> _DBInstanceReference_84c4879a:
+    def db_instance_ref(self) -> "_DBInstanceReference_84c4879a":
         '''A reference to a DBInstance resource.'''
-        return typing.cast(_DBInstanceReference_84c4879a, jsii.get(self, "dbInstanceRef"))
+        return typing.cast("_DBInstanceReference_84c4879a", jsii.get(self, "dbInstanceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="dbInstanceClass")
@@ -1971,14 +1976,14 @@ class CfnDBInstance(
     @jsii.member(jsii_name="allowMajorVersionUpgrade")
     def allow_major_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates that major version upgrades are allowed.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "allowMajorVersionUpgrade"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "allowMajorVersionUpgrade"))
 
     @allow_major_version_upgrade.setter
     def allow_major_version_upgrade(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a2f05810bb63a0c1902d09acb543e88f126fd57967e023939e7210a0c9fde18b)
@@ -1989,14 +1994,14 @@ class CfnDBInstance(
     @jsii.member(jsii_name="autoMinorVersionUpgrade")
     def auto_minor_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates that minor version patches are applied automatically.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "autoMinorVersionUpgrade"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "autoMinorVersionUpgrade"))
 
     @auto_minor_version_upgrade.setter
     def auto_minor_version_upgrade(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1a8e387d6fa74e3755374bdf2d7e688b4c0a6208c1a47e5afcca2b424d4c767c)
@@ -2106,14 +2111,14 @@ class CfnDBInstance(
     @jsii.member(jsii_name="publiclyAccessible")
     def publicly_accessible(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the DB instance is publicly accessible.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "publiclyAccessible"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "publiclyAccessible"))
 
     @publicly_accessible.setter
     def publicly_accessible(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b67e50f3b4a51cbbe6d8beb4e55dcbb888cd70ccbf3854e7be69ae66ee18267d)
@@ -2122,12 +2127,12 @@ class CfnDBInstance(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An arbitrary set of tags (key-value pairs) for this DB instance.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__804ae68d35a8f4acf9b250c8866d8f27b0ea5aaabf0c9991c5e12b4c5414d569)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2157,8 +2162,8 @@ class CfnDBInstanceProps:
         self,
         *,
         db_instance_class: builtins.str,
-        allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         availability_zone: typing.Optional[builtins.str] = None,
         db_cluster_identifier: typing.Optional[builtins.str] = None,
         db_instance_identifier: typing.Optional[builtins.str] = None,
@@ -2166,8 +2171,8 @@ class CfnDBInstanceProps:
         db_snapshot_identifier: typing.Optional[builtins.str] = None,
         db_subnet_group_name: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBInstance``.
 
@@ -2189,6 +2194,7 @@ class CfnDBInstanceProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_neptune as neptune
@@ -2268,7 +2274,7 @@ class CfnDBInstanceProps:
     @builtins.property
     def allow_major_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates that major version upgrades are allowed.
 
         Changing this parameter doesn't result in an outage and the change is asynchronously applied as soon as possible. This parameter must be set to true when specifying a value for the EngineVersion parameter that is a different major version than the DB instance's current version.
@@ -2278,12 +2284,12 @@ class CfnDBInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-allowmajorversionupgrade
         '''
         result = self._values.get("allow_major_version_upgrade")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def auto_minor_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates that minor version patches are applied automatically.
 
         When updating this property, some interruptions may occur.
@@ -2291,7 +2297,7 @@ class CfnDBInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-autominorversionupgrade
         '''
         result = self._values.get("auto_minor_version_upgrade")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def availability_zone(self) -> typing.Optional[builtins.str]:
@@ -2372,7 +2378,7 @@ class CfnDBInstanceProps:
     @builtins.property
     def publicly_accessible(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the DB instance is publicly accessible.
 
         When the DB instance is publicly accessible and you connect from outside of the DB instance's virtual private cloud (VPC), its Domain Name System (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB instance, the endpoint resolves to the private IP address. Access to the DB instance is ultimately controlled by the security group it uses. That public access isn't permitted if the security group assigned to the DB cluster doesn't permit it.
@@ -2382,16 +2388,16 @@ class CfnDBInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-publiclyaccessible
         '''
         result = self._values.get("publicly_accessible")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An arbitrary set of tags (key-value pairs) for this DB instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbinstance.html#cfn-neptune-dbinstance-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2429,6 +2435,7 @@ class CfnDBParameterGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_neptune as neptune
@@ -2451,14 +2458,14 @@ class CfnDBParameterGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: builtins.str,
         family: builtins.str,
         parameters: typing.Any,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Neptune::DBParameterGroup``.
 
@@ -2497,7 +2504,7 @@ class CfnDBParameterGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDBParameterGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2533,15 +2540,15 @@ class CfnDBParameterGroup(
 
     @builtins.property
     @jsii.member(jsii_name="dbParameterGroupRef")
-    def db_parameter_group_ref(self) -> _DBParameterGroupReference_9bb44206:
+    def db_parameter_group_ref(self) -> "_DBParameterGroupReference_9bb44206":
         '''A reference to a DBParameterGroup resource.'''
-        return typing.cast(_DBParameterGroupReference_9bb44206, jsii.get(self, "dbParameterGroupRef"))
+        return typing.cast("_DBParameterGroupReference_9bb44206", jsii.get(self, "dbParameterGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -2597,12 +2604,12 @@ class CfnDBParameterGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags that you want to attach to this parameter group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4565e9cd6c53cc12b47f6133e2edbd92122f0e138c69b79efef04ecdb9796aa3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2628,7 +2635,7 @@ class CfnDBParameterGroupProps:
         family: builtins.str,
         parameters: typing.Any,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBParameterGroup``.
 
@@ -2643,6 +2650,7 @@ class CfnDBParameterGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_neptune as neptune
@@ -2723,13 +2731,13 @@ class CfnDBParameterGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags that you want to attach to this parameter group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html#cfn-neptune-dbparametergroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2759,6 +2767,7 @@ class CfnDBSubnetGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_neptune as neptune
@@ -2778,13 +2787,13 @@ class CfnDBSubnetGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         db_subnet_group_description: builtins.str,
         subnet_ids: typing.Sequence[builtins.str],
         db_subnet_group_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Neptune::DBSubnetGroup``.
 
@@ -2821,7 +2830,7 @@ class CfnDBSubnetGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDBSubnetGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2857,15 +2866,15 @@ class CfnDBSubnetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="dbSubnetGroupRef")
-    def db_subnet_group_ref(self) -> _DBSubnetGroupReference_27cd8411:
+    def db_subnet_group_ref(self) -> "_DBSubnetGroupReference_27cd8411":
         '''A reference to a DBSubnetGroup resource.'''
-        return typing.cast(_DBSubnetGroupReference_27cd8411, jsii.get(self, "dbSubnetGroupRef"))
+        return typing.cast("_DBSubnetGroupReference_27cd8411", jsii.get(self, "dbSubnetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="dbSubnetGroupDescription")
@@ -2908,12 +2917,12 @@ class CfnDBSubnetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags that you want to attach to the DB subnet group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__47e524d624c00c2dc0cd8a58308fa7a64cba3e3ed0a485d442c4bf7b4bed23cd)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2937,7 +2946,7 @@ class CfnDBSubnetGroupProps:
         db_subnet_group_description: builtins.str,
         subnet_ids: typing.Sequence[builtins.str],
         db_subnet_group_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBSubnetGroup``.
 
@@ -2951,6 +2960,7 @@ class CfnDBSubnetGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_neptune as neptune
@@ -3012,13 +3022,13 @@ class CfnDBSubnetGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags that you want to attach to the DB subnet group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbsubnetgroup.html#cfn-neptune-dbsubnetgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3052,6 +3062,7 @@ class CfnEventSubscription(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_neptune as neptune
@@ -3074,16 +3085,16 @@ class CfnEventSubscription(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         sns_topic_arn: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
         source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         source_type: typing.Optional[builtins.str] = None,
         subscription_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Neptune::EventSubscription``.
 
@@ -3126,7 +3137,7 @@ class CfnEventSubscription(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventSubscription", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3157,9 +3168,9 @@ class CfnEventSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3168,9 +3179,9 @@ class CfnEventSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="eventSubscriptionRef")
-    def event_subscription_ref(self) -> _EventSubscriptionReference_8038a89c:
+    def event_subscription_ref(self) -> "_EventSubscriptionReference_8038a89c":
         '''A reference to a EventSubscription resource.'''
-        return typing.cast(_EventSubscriptionReference_8038a89c, jsii.get(self, "eventSubscriptionRef"))
+        return typing.cast("_EventSubscriptionReference_8038a89c", jsii.get(self, "eventSubscriptionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="snsTopicArn")
@@ -3189,14 +3200,14 @@ class CfnEventSubscription(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating if the subscription is enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2ef5fdcd4988a6fa95d4be96d80a0234938bc2612ec11dbfcc406afee49f7d89)
@@ -3260,12 +3271,12 @@ class CfnEventSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1a2214e33715f7b8a810325132d1442eca1b2f768a72caf683442503561e8b4c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3290,12 +3301,12 @@ class CfnEventSubscriptionProps:
         self,
         *,
         sns_topic_arn: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
         source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         source_type: typing.Optional[builtins.str] = None,
         subscription_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEventSubscription``.
 
@@ -3312,6 +3323,7 @@ class CfnEventSubscriptionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_neptune as neptune
@@ -3369,7 +3381,7 @@ class CfnEventSubscriptionProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean value indicating if the subscription is enabled.
 
         True indicates the subscription is enabled.
@@ -3379,7 +3391,7 @@ class CfnEventSubscriptionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def event_categories(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3422,13 +3434,13 @@ class CfnEventSubscriptionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

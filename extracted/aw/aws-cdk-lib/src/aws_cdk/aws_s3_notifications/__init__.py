@@ -114,7 +114,7 @@ class LambdaDestination(
         )
     '''
 
-    def __init__(self, fn: _IFunction_6adb0ab8) -> None:
+    def __init__(self, fn: "_IFunction_6adb0ab8") -> None:
         '''
         :param fn: -
         '''
@@ -126,9 +126,9 @@ class LambdaDestination(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        bucket: _IBucketRef_3debe44e,
-    ) -> _BucketNotificationDestinationConfig_a4c4f83d:
+        scope: "_constructs_77d1e7e8.Construct",
+        bucket: "_IBucketRef_3debe44e",
+    ) -> "_BucketNotificationDestinationConfig_a4c4f83d":
         '''Registers this resource to receive notifications for the specified bucket.
 
         This method will only be called once for each destination/bucket
@@ -142,7 +142,7 @@ class LambdaDestination(
             type_hints = typing.get_type_hints(_typecheckingstub__72fb0e43c5d0bdebbc9b643b327c5cd42f851dbe4c4a6ac53bb2849787b3adec)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument bucket", value=bucket, expected_type=type_hints["bucket"])
-        return typing.cast(_BucketNotificationDestinationConfig_a4c4f83d, jsii.invoke(self, "bind", [scope, bucket]))
+        return typing.cast("_BucketNotificationDestinationConfig_a4c4f83d", jsii.invoke(self, "bind", [scope, bucket]))
 
 
 @jsii.implements(_IBucketNotificationDestination_ae5ca51a)
@@ -161,7 +161,7 @@ class SnsDestination(
         bucket.add_event_notification(s3.EventType.OBJECT_CREATED, s3n.SnsDestination(topic))
     '''
 
-    def __init__(self, topic: _ITopic_9eca4852) -> None:
+    def __init__(self, topic: "_ITopic_9eca4852") -> None:
         '''
         :param topic: -
         '''
@@ -173,9 +173,9 @@ class SnsDestination(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        bucket: _IBucketRef_3debe44e,
-    ) -> _BucketNotificationDestinationConfig_a4c4f83d:
+        scope: "_constructs_77d1e7e8.Construct",
+        bucket: "_IBucketRef_3debe44e",
+    ) -> "_BucketNotificationDestinationConfig_a4c4f83d":
         '''Registers this resource to receive notifications for the specified bucket.
 
         This method will only be called once for each destination/bucket
@@ -189,7 +189,7 @@ class SnsDestination(
             type_hints = typing.get_type_hints(_typecheckingstub__3553ece4b599ce7e526b55722477cb04771e1907840471521f08a9dbdea726a1)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument bucket", value=bucket, expected_type=type_hints["bucket"])
-        return typing.cast(_BucketNotificationDestinationConfig_a4c4f83d, jsii.invoke(self, "bind", [scope, bucket]))
+        return typing.cast("_BucketNotificationDestinationConfig_a4c4f83d", jsii.invoke(self, "bind", [scope, bucket]))
 
 
 @jsii.implements(_IBucketNotificationDestination_ae5ca51a)
@@ -211,7 +211,7 @@ class SqsDestination(
         bucket.add_event_notification(s3.EventType.OBJECT_REMOVED, s3n.SqsDestination(my_queue))
     '''
 
-    def __init__(self, queue: _IQueue_7ed6f679) -> None:
+    def __init__(self, queue: "_IQueue_7ed6f679") -> None:
         '''
         :param queue: -
         '''
@@ -223,9 +223,9 @@ class SqsDestination(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
-        bucket: _IBucketRef_3debe44e,
-    ) -> _BucketNotificationDestinationConfig_a4c4f83d:
+        _scope: "_constructs_77d1e7e8.Construct",
+        bucket: "_IBucketRef_3debe44e",
+    ) -> "_BucketNotificationDestinationConfig_a4c4f83d":
         '''Allows using SQS queues as destinations for bucket notifications.
 
         Use ``bucket.onEvent(event, queue)`` to subscribe.
@@ -237,7 +237,7 @@ class SqsDestination(
             type_hints = typing.get_type_hints(_typecheckingstub__e60900d91c64bba2d0ee8f8b0ace07ff0ee2d07e518d7b03941ed5bb85044f8b)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
             check_type(argname="argument bucket", value=bucket, expected_type=type_hints["bucket"])
-        return typing.cast(_BucketNotificationDestinationConfig_a4c4f83d, jsii.invoke(self, "bind", [_scope, bucket]))
+        return typing.cast("_BucketNotificationDestinationConfig_a4c4f83d", jsii.invoke(self, "bind", [_scope, bucket]))
 
 
 __all__ = [

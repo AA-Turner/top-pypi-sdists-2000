@@ -116,6 +116,7 @@ class CfnChannel(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ivs as ivs
@@ -143,18 +144,18 @@ class CfnChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        authorized: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        authorized: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         container_format: typing.Optional[builtins.str] = None,
-        insecure_ingest: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        insecure_ingest: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         latency_mode: typing.Optional[builtins.str] = None,
-        multitrack_input_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.MultitrackInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        multitrack_input_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.MultitrackInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         preset: typing.Optional[builtins.str] = None,
-        recording_configuration_arn: typing.Optional[typing.Union[builtins.str, _IRecordingConfigurationRef_fa8c07f5]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        recording_configuration_arn: typing.Optional[typing.Union[builtins.str, "_IRecordingConfigurationRef_fa8c07f5"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::IVS::Channel``.
@@ -193,7 +194,7 @@ class CfnChannel(
 
     @jsii.member(jsii_name="arnForChannel")
     @builtins.classmethod
-    def arn_for_channel(cls, resource: _IChannelRef_cc7fc646) -> builtins.str:
+    def arn_for_channel(cls, resource: "_IChannelRef_cc7fc646") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -215,7 +216,7 @@ class CfnChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -284,28 +285,28 @@ class CfnChannel(
 
     @builtins.property
     @jsii.member(jsii_name="channelRef")
-    def channel_ref(self) -> _ChannelReference_7af0deaa:
+    def channel_ref(self) -> "_ChannelReference_7af0deaa":
         '''A reference to a Channel resource.'''
-        return typing.cast(_ChannelReference_7af0deaa, jsii.get(self, "channelRef"))
+        return typing.cast("_ChannelReference_7af0deaa", jsii.get(self, "channelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="authorized")
     def authorized(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether the channel is authorized.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "authorized"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "authorized"))
 
     @authorized.setter
     def authorized(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9e83b3a70b60de37a8aabc9c019b31db83c549e80f9c9c88a5b74fde72ecb20e)
@@ -329,14 +330,14 @@ class CfnChannel(
     @jsii.member(jsii_name="insecureIngest")
     def insecure_ingest(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether the channel allows insecure RTMP ingest.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "insecureIngest"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "insecureIngest"))
 
     @insecure_ingest.setter
     def insecure_ingest(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__734c5e1f9cdeabe74fb1ade992399b475d1594cbcdfd026823e8984eaa2d4eab)
@@ -363,14 +364,14 @@ class CfnChannel(
     @jsii.member(jsii_name="multitrackInputConfiguration")
     def multitrack_input_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.MultitrackInputConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.MultitrackInputConfigurationProperty"]]:
         '''Object specifying multitrack input configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.MultitrackInputConfigurationProperty"]], jsii.get(self, "multitrackInputConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.MultitrackInputConfigurationProperty"]], jsii.get(self, "multitrackInputConfiguration"))
 
     @multitrack_input_configuration.setter
     def multitrack_input_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.MultitrackInputConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.MultitrackInputConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__012c045fd3860567ed6aa28435a35d575d1dc0a881855d124b21f2d76102ba73)
@@ -418,12 +419,12 @@ class CfnChannel(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__da42cce1a703989106b1844fef6f10d0a57f43c733d171564b16f83c208e7196)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -455,7 +456,7 @@ class CfnChannel(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             maximum_resolution: typing.Optional[builtins.str] = None,
             policy: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -496,7 +497,7 @@ class CfnChannel(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether multitrack input is enabled.
 
             Can be set to ``true`` only if channel type is ``STANDARD`` . Setting ``enabled`` to ``true`` with any other channel type will cause an exception. If ``true`` , then ``policy`` , ``maximumResolution`` , and ``containerFormat`` are required, and ``containerFormat`` must be set to ``FRAGMENTED_MP4`` . Default: ``false`` .
@@ -506,7 +507,7 @@ class CfnChannel(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-channel-multitrackinputconfiguration.html#cfn-ivs-channel-multitrackinputconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def maximum_resolution(self) -> typing.Optional[builtins.str]:
@@ -562,15 +563,15 @@ class CfnChannelProps:
     def __init__(
         self,
         *,
-        authorized: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        authorized: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         container_format: typing.Optional[builtins.str] = None,
-        insecure_ingest: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        insecure_ingest: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         latency_mode: typing.Optional[builtins.str] = None,
-        multitrack_input_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.MultitrackInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        multitrack_input_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.MultitrackInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         preset: typing.Optional[builtins.str] = None,
-        recording_configuration_arn: typing.Optional[typing.Union[builtins.str, _IRecordingConfigurationRef_fa8c07f5]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        recording_configuration_arn: typing.Optional[typing.Union[builtins.str, "_IRecordingConfigurationRef_fa8c07f5"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnChannel``.
@@ -591,6 +592,7 @@ class CfnChannelProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ivs as ivs
@@ -652,7 +654,7 @@ class CfnChannelProps:
     @builtins.property
     def authorized(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether the channel is authorized.
 
         *Default* : ``false``
@@ -662,7 +664,7 @@ class CfnChannelProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-channel.html#cfn-ivs-channel-authorized
         '''
         result = self._values.get("authorized")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def container_format(self) -> typing.Optional[builtins.str]:
@@ -680,7 +682,7 @@ class CfnChannelProps:
     @builtins.property
     def insecure_ingest(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether the channel allows insecure RTMP ingest.
 
         *Default* : ``false``
@@ -690,7 +692,7 @@ class CfnChannelProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-channel.html#cfn-ivs-channel-insecureingest
         '''
         result = self._values.get("insecure_ingest")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def latency_mode(self) -> typing.Optional[builtins.str]:
@@ -715,7 +717,7 @@ class CfnChannelProps:
     @builtins.property
     def multitrack_input_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannel.MultitrackInputConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.MultitrackInputConfigurationProperty"]]:
         '''Object specifying multitrack input configuration.
 
         Default: no multitrack input configuration is specified.
@@ -723,7 +725,7 @@ class CfnChannelProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-channel.html#cfn-ivs-channel-multitrackinputconfiguration
         '''
         result = self._values.get("multitrack_input_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannel.MultitrackInputConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.MultitrackInputConfigurationProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -750,7 +752,7 @@ class CfnChannelProps:
     @builtins.property
     def recording_configuration_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRecordingConfigurationRef_fa8c07f5]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRecordingConfigurationRef_fa8c07f5"]]:
         '''The ARN of a RecordingConfiguration resource.
 
         An empty string indicates that recording is disabled for the channel. A RecordingConfiguration ARN indicates that recording is enabled using the specified recording configuration. See the `RecordingConfiguration <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-recordingconfiguration.html>`_ resource for more information and an example.
@@ -762,10 +764,10 @@ class CfnChannelProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-channel.html#cfn-ivs-channel-recordingconfigurationarn
         '''
         result = self._values.get("recording_configuration_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRecordingConfigurationRef_fa8c07f5]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRecordingConfigurationRef_fa8c07f5"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-channel-tag.html>`_ .
@@ -773,7 +775,7 @@ class CfnChannelProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-channel.html#cfn-ivs-channel-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def type(self) -> typing.Optional[builtins.str]:
@@ -818,6 +820,7 @@ class CfnEncoderConfiguration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ivs as ivs
@@ -839,12 +842,12 @@ class CfnEncoderConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        video: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEncoderConfiguration.VideoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        video: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEncoderConfiguration.VideoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IVS::EncoderConfiguration``.
 
@@ -866,7 +869,7 @@ class CfnEncoderConfiguration(
     @builtins.classmethod
     def arn_for_encoder_configuration(
         cls,
-        resource: _IEncoderConfigurationRef_00f2e402,
+        resource: "_IEncoderConfigurationRef_00f2e402",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -889,7 +892,7 @@ class CfnEncoderConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEncoderConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -931,9 +934,9 @@ class CfnEncoderConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -942,9 +945,9 @@ class CfnEncoderConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="encoderConfigurationRef")
-    def encoder_configuration_ref(self) -> _EncoderConfigurationReference_88cd6f4f:
+    def encoder_configuration_ref(self) -> "_EncoderConfigurationReference_88cd6f4f":
         '''A reference to a EncoderConfiguration resource.'''
-        return typing.cast(_EncoderConfigurationReference_88cd6f4f, jsii.get(self, "encoderConfigurationRef"))
+        return typing.cast("_EncoderConfigurationReference_88cd6f4f", jsii.get(self, "encoderConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -961,12 +964,12 @@ class CfnEncoderConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__43c7ff5eb70740ddcbf72fae725c27870249dfb23fdbca3df5963221ac9c132f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -976,14 +979,14 @@ class CfnEncoderConfiguration(
     @jsii.member(jsii_name="video")
     def video(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEncoderConfiguration.VideoProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEncoderConfiguration.VideoProperty"]]:
         '''Video configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEncoderConfiguration.VideoProperty"]], jsii.get(self, "video"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEncoderConfiguration.VideoProperty"]], jsii.get(self, "video"))
 
     @video.setter
     def video(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEncoderConfiguration.VideoProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEncoderConfiguration.VideoProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f165a00a101e72d860585d7255e3d0ae733a51dcec3ea6dd3e616d27778b3415)
@@ -1122,8 +1125,8 @@ class CfnEncoderConfigurationProps:
         self,
         *,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        video: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEncoderConfiguration.VideoProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        video: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEncoderConfiguration.VideoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEncoderConfiguration``.
 
@@ -1136,6 +1139,7 @@ class CfnEncoderConfigurationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ivs as ivs
@@ -1177,7 +1181,7 @@ class CfnEncoderConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-encoderconfiguration-tag.html>`_ .
@@ -1185,12 +1189,12 @@ class CfnEncoderConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-encoderconfiguration.html#cfn-ivs-encoderconfiguration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def video(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEncoderConfiguration.VideoProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEncoderConfiguration.VideoProperty"]]:
         '''Video configuration.
 
         Default: video resolution 1280x720, bitrate 2500 kbps, 30 fps. See the `Video <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-encoderconfiguration-video.html>`_ property type for more information.
@@ -1198,7 +1202,7 @@ class CfnEncoderConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-encoderconfiguration.html#cfn-ivs-encoderconfiguration-video
         '''
         result = self._values.get("video")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEncoderConfiguration.VideoProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEncoderConfiguration.VideoProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1228,6 +1232,7 @@ class CfnIngestConfiguration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ivs as ivs
@@ -1247,14 +1252,14 @@ class CfnIngestConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         ingest_protocol: typing.Optional[builtins.str] = None,
-        insecure_ingest: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        insecure_ingest: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         name: typing.Optional[builtins.str] = None,
         stage_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         user_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::IVS::IngestConfiguration``.
@@ -1287,7 +1292,7 @@ class CfnIngestConfiguration(
     @builtins.classmethod
     def arn_for_ingest_configuration(
         cls,
-        resource: _IIngestConfigurationRef_9f389f4d,
+        resource: "_IIngestConfigurationRef_9f389f4d",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1310,7 +1315,7 @@ class CfnIngestConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIngestConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1385,9 +1390,9 @@ class CfnIngestConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1396,9 +1401,9 @@ class CfnIngestConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="ingestConfigurationRef")
-    def ingest_configuration_ref(self) -> _IngestConfigurationReference_4e415278:
+    def ingest_configuration_ref(self) -> "_IngestConfigurationReference_4e415278":
         '''A reference to a IngestConfiguration resource.'''
-        return typing.cast(_IngestConfigurationReference_4e415278, jsii.get(self, "ingestConfigurationRef"))
+        return typing.cast("_IngestConfigurationReference_4e415278", jsii.get(self, "ingestConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="ingestProtocol")
@@ -1417,14 +1422,14 @@ class CfnIngestConfiguration(
     @jsii.member(jsii_name="insecureIngest")
     def insecure_ingest(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether the channel allows insecure RTMP ingest.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "insecureIngest"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "insecureIngest"))
 
     @insecure_ingest.setter
     def insecure_ingest(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8d0984e439ef9b3c25fe01666d92f1599a4bb2f408cc94a9bac3809e4fb8c00c)
@@ -1459,12 +1464,12 @@ class CfnIngestConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__87601b6a8bacd8fefd6cc75f708d5009dad0f359e9544422e980fffade00bb04)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1501,10 +1506,10 @@ class CfnIngestConfigurationProps:
         self,
         *,
         ingest_protocol: typing.Optional[builtins.str] = None,
-        insecure_ingest: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        insecure_ingest: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         name: typing.Optional[builtins.str] = None,
         stage_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         user_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnIngestConfiguration``.
@@ -1521,6 +1526,7 @@ class CfnIngestConfigurationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ivs as ivs
@@ -1573,7 +1579,7 @@ class CfnIngestConfigurationProps:
     @builtins.property
     def insecure_ingest(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether the channel allows insecure RTMP ingest.
 
         Default: ``false`` .
@@ -1583,7 +1589,7 @@ class CfnIngestConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-ingestconfiguration.html#cfn-ivs-ingestconfiguration-insecureingest
         '''
         result = self._values.get("insecure_ingest")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -1608,13 +1614,13 @@ class CfnIngestConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-ingestconfiguration.html#cfn-ivs-ingestconfiguration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def user_id(self) -> typing.Optional[builtins.str]:
@@ -1655,6 +1661,7 @@ class CfnPlaybackKeyPair(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ivs as ivs
@@ -1671,12 +1678,12 @@ class CfnPlaybackKeyPair(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: typing.Optional[builtins.str] = None,
         public_key_material: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IVS::PlaybackKeyPair``.
 
@@ -1700,7 +1707,7 @@ class CfnPlaybackKeyPair(
     @builtins.classmethod
     def arn_for_playback_key_pair(
         cls,
-        resource: _IPlaybackKeyPairRef_a644b8dc,
+        resource: "_IPlaybackKeyPairRef_a644b8dc",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1723,7 +1730,7 @@ class CfnPlaybackKeyPair(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPlaybackKeyPair", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1781,15 +1788,15 @@ class CfnPlaybackKeyPair(
 
     @builtins.property
     @jsii.member(jsii_name="playbackKeyPairRef")
-    def playback_key_pair_ref(self) -> _PlaybackKeyPairReference_ee2a3aca:
+    def playback_key_pair_ref(self) -> "_PlaybackKeyPairReference_ee2a3aca":
         '''A reference to a PlaybackKeyPair resource.'''
-        return typing.cast(_PlaybackKeyPairReference_ee2a3aca, jsii.get(self, "playbackKeyPairRef"))
+        return typing.cast("_PlaybackKeyPairReference_ee2a3aca", jsii.get(self, "playbackKeyPairRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1819,12 +1826,12 @@ class CfnPlaybackKeyPair(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__74338171e55e9802fbeae4e8f45a4f31375c3a5730c487b0609b721a4660ce32)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1846,7 +1853,7 @@ class CfnPlaybackKeyPairProps:
         *,
         name: typing.Optional[builtins.str] = None,
         public_key_material: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPlaybackKeyPair``.
 
@@ -1859,6 +1866,7 @@ class CfnPlaybackKeyPairProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ivs as ivs
@@ -1908,7 +1916,7 @@ class CfnPlaybackKeyPairProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-playbackkeypair-tag.html>`_ .
@@ -1916,7 +1924,7 @@ class CfnPlaybackKeyPairProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-playbackkeypair.html#cfn-ivs-playbackkeypair-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1946,6 +1954,7 @@ class CfnPlaybackRestrictionPolicy(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ivs as ivs
@@ -1964,14 +1973,14 @@ class CfnPlaybackRestrictionPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         allowed_countries: typing.Optional[typing.Sequence[builtins.str]] = None,
         allowed_origins: typing.Optional[typing.Sequence[builtins.str]] = None,
-        enable_strict_origin_enforcement: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_strict_origin_enforcement: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IVS::PlaybackRestrictionPolicy``.
 
@@ -2001,7 +2010,7 @@ class CfnPlaybackRestrictionPolicy(
     @builtins.classmethod
     def arn_for_playback_restriction_policy(
         cls,
-        resource: _IPlaybackRestrictionPolicyRef_56ec82fb,
+        resource: "_IPlaybackRestrictionPolicyRef_56ec82fb",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2024,7 +2033,7 @@ class CfnPlaybackRestrictionPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPlaybackRestrictionPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2066,9 +2075,9 @@ class CfnPlaybackRestrictionPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2079,9 +2088,9 @@ class CfnPlaybackRestrictionPolicy(
     @jsii.member(jsii_name="playbackRestrictionPolicyRef")
     def playback_restriction_policy_ref(
         self,
-    ) -> _PlaybackRestrictionPolicyReference_5646da02:
+    ) -> "_PlaybackRestrictionPolicyReference_5646da02":
         '''A reference to a PlaybackRestrictionPolicy resource.'''
-        return typing.cast(_PlaybackRestrictionPolicyReference_5646da02, jsii.get(self, "playbackRestrictionPolicyRef"))
+        return typing.cast("_PlaybackRestrictionPolicyReference_5646da02", jsii.get(self, "playbackRestrictionPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="allowedCountries")
@@ -2119,14 +2128,14 @@ class CfnPlaybackRestrictionPolicy(
     @jsii.member(jsii_name="enableStrictOriginEnforcement")
     def enable_strict_origin_enforcement(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether channel playback is constrained by the origin site.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableStrictOriginEnforcement"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enableStrictOriginEnforcement"))
 
     @enable_strict_origin_enforcement.setter
     def enable_strict_origin_enforcement(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__67d34a00cb21cb2e87b091d21364ddc0afcd5ff11075db95ae750d23e62e2808)
@@ -2148,12 +2157,12 @@ class CfnPlaybackRestrictionPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__72c43ae8ddd92a7ae402fb8cc1729052bd0d141f4f2106265c702c75bd0b9369)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2177,9 +2186,9 @@ class CfnPlaybackRestrictionPolicyProps:
         *,
         allowed_countries: typing.Optional[typing.Sequence[builtins.str]] = None,
         allowed_origins: typing.Optional[typing.Sequence[builtins.str]] = None,
-        enable_strict_origin_enforcement: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_strict_origin_enforcement: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPlaybackRestrictionPolicy``.
 
@@ -2194,6 +2203,7 @@ class CfnPlaybackRestrictionPolicyProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ivs as ivs
@@ -2253,7 +2263,7 @@ class CfnPlaybackRestrictionPolicyProps:
     @builtins.property
     def enable_strict_origin_enforcement(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether channel playback is constrained by the origin site.
 
         :default: - false
@@ -2261,7 +2271,7 @@ class CfnPlaybackRestrictionPolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-playbackrestrictionpolicy.html#cfn-ivs-playbackrestrictionpolicy-enablestrictoriginenforcement
         '''
         result = self._values.get("enable_strict_origin_enforcement")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -2273,7 +2283,7 @@ class CfnPlaybackRestrictionPolicyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-playbackrestrictionpolicy-tag.html>`_ .
@@ -2281,7 +2291,7 @@ class CfnPlaybackRestrictionPolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-playbackrestrictionpolicy.html#cfn-ivs-playbackrestrictionpolicy-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2311,6 +2321,7 @@ class CfnPublicKey(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ivs as ivs
@@ -2327,12 +2338,12 @@ class CfnPublicKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: typing.Optional[builtins.str] = None,
         public_key_material: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IVS::PublicKey``.
 
@@ -2354,7 +2365,7 @@ class CfnPublicKey(
 
     @jsii.member(jsii_name="arnForPublicKey")
     @builtins.classmethod
-    def arn_for_public_key(cls, resource: _IPublicKeyRef_52b601a8) -> builtins.str:
+    def arn_for_public_key(cls, resource: "_IPublicKeyRef_52b601a8") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2376,7 +2387,7 @@ class CfnPublicKey(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPublicKey", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2429,9 +2440,9 @@ class CfnPublicKey(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2440,9 +2451,9 @@ class CfnPublicKey(
 
     @builtins.property
     @jsii.member(jsii_name="publicKeyRef")
-    def public_key_ref(self) -> _PublicKeyReference_090fdfe0:
+    def public_key_ref(self) -> "_PublicKeyReference_090fdfe0":
         '''A reference to a PublicKey resource.'''
-        return typing.cast(_PublicKeyReference_090fdfe0, jsii.get(self, "publicKeyRef"))
+        return typing.cast("_PublicKeyReference_090fdfe0", jsii.get(self, "publicKeyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2472,12 +2483,12 @@ class CfnPublicKey(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c5f083992aecb52530dd61b06308422142992ddce014c2eca8bd7e50b14a98e3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2499,7 +2510,7 @@ class CfnPublicKeyProps:
         *,
         name: typing.Optional[builtins.str] = None,
         public_key_material: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPublicKey``.
 
@@ -2512,6 +2523,7 @@ class CfnPublicKeyProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ivs as ivs
@@ -2561,13 +2573,13 @@ class CfnPublicKeyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-publickey.html#cfn-ivs-publickey-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2597,6 +2609,7 @@ class CfnRecordingConfiguration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ivs as ivs
@@ -2630,15 +2643,15 @@ class CfnRecordingConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        destination_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordingConfiguration.DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        destination_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordingConfiguration.DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: typing.Optional[builtins.str] = None,
         recording_reconnect_window_seconds: typing.Optional[jsii.Number] = None,
-        rendition_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordingConfiguration.RenditionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        thumbnail_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordingConfiguration.ThumbnailConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        rendition_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordingConfiguration.RenditionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        thumbnail_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordingConfiguration.ThumbnailConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IVS::RecordingConfiguration``.
 
@@ -2670,7 +2683,7 @@ class CfnRecordingConfiguration(
     @builtins.classmethod
     def arn_for_recording_configuration(
         cls,
-        resource: _IRecordingConfigurationRef_fa8c07f5,
+        resource: "_IRecordingConfigurationRef_fa8c07f5",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2693,7 +2706,7 @@ class CfnRecordingConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRecordingConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2751,28 +2764,30 @@ class CfnRecordingConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="recordingConfigurationRef")
-    def recording_configuration_ref(self) -> _RecordingConfigurationReference_9537c359:
+    def recording_configuration_ref(
+        self,
+    ) -> "_RecordingConfigurationReference_9537c359":
         '''A reference to a RecordingConfiguration resource.'''
-        return typing.cast(_RecordingConfigurationReference_9537c359, jsii.get(self, "recordingConfigurationRef"))
+        return typing.cast("_RecordingConfigurationReference_9537c359", jsii.get(self, "recordingConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="destinationConfiguration")
     def destination_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnRecordingConfiguration.DestinationConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.DestinationConfigurationProperty"]:
         '''A destination configuration describes an S3 bucket where recorded video will be stored.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRecordingConfiguration.DestinationConfigurationProperty"], jsii.get(self, "destinationConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.DestinationConfigurationProperty"], jsii.get(self, "destinationConfiguration"))
 
     @destination_configuration.setter
     def destination_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnRecordingConfiguration.DestinationConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.DestinationConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a98f37a00ab2b8c5a3413e54b7f022ac0bdf7ee44225243da737d75b9412595a)
@@ -2812,14 +2827,14 @@ class CfnRecordingConfiguration(
     @jsii.member(jsii_name="renditionConfiguration")
     def rendition_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordingConfiguration.RenditionConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.RenditionConfigurationProperty"]]:
         '''A rendition configuration describes which renditions should be recorded for a stream.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordingConfiguration.RenditionConfigurationProperty"]], jsii.get(self, "renditionConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.RenditionConfigurationProperty"]], jsii.get(self, "renditionConfiguration"))
 
     @rendition_configuration.setter
     def rendition_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordingConfiguration.RenditionConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.RenditionConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__607bfa50f9dd6b9828bada1c2c536f7277619bb3020e56c415227efdb3ba1fa9)
@@ -2828,12 +2843,12 @@ class CfnRecordingConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__980f42185f1f8239b1f7d72b3f84be9a9c93c5d02f84695a71964c0630115230)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2843,14 +2858,14 @@ class CfnRecordingConfiguration(
     @jsii.member(jsii_name="thumbnailConfiguration")
     def thumbnail_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordingConfiguration.ThumbnailConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.ThumbnailConfigurationProperty"]]:
         '''A thumbnail configuration enables/disables the recording of thumbnails for a live session and controls the interval at which thumbnails are generated for the live session.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordingConfiguration.ThumbnailConfigurationProperty"]], jsii.get(self, "thumbnailConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.ThumbnailConfigurationProperty"]], jsii.get(self, "thumbnailConfiguration"))
 
     @thumbnail_configuration.setter
     def thumbnail_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordingConfiguration.ThumbnailConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.ThumbnailConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c5cda01e5b9f5edb6a6ec7c5dce6ad1cecc2b7ce8727dd09a38d4b2b04befd3c)
@@ -2866,7 +2881,7 @@ class CfnRecordingConfiguration(
         def __init__(
             self,
             *,
-            s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRecordingConfiguration.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordingConfiguration.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The DestinationConfiguration property type describes the location where recorded videos will be stored.
 
@@ -2899,7 +2914,7 @@ class CfnRecordingConfiguration(
         @builtins.property
         def s3(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordingConfiguration.S3DestinationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.S3DestinationConfigurationProperty"]]:
             '''An S3 destination configuration where recorded videos will be stored.
 
             See the `S3DestinationConfiguration <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-recordingconfiguration-s3destinationconfiguration.html>`_ property type for more information.
@@ -2907,7 +2922,7 @@ class CfnRecordingConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-recordingconfiguration-destinationconfiguration.html#cfn-ivs-recordingconfiguration-destinationconfiguration-s3
             '''
             result = self._values.get("s3")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRecordingConfiguration.S3DestinationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.S3DestinationConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3192,12 +3207,12 @@ class CfnRecordingConfigurationProps:
     def __init__(
         self,
         *,
-        destination_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRecordingConfiguration.DestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        destination_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordingConfiguration.DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: typing.Optional[builtins.str] = None,
         recording_reconnect_window_seconds: typing.Optional[jsii.Number] = None,
-        rendition_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRecordingConfiguration.RenditionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        thumbnail_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRecordingConfiguration.ThumbnailConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        rendition_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordingConfiguration.RenditionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        thumbnail_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRecordingConfiguration.ThumbnailConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRecordingConfiguration``.
 
@@ -3213,6 +3228,7 @@ class CfnRecordingConfigurationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ivs as ivs
@@ -3268,7 +3284,7 @@ class CfnRecordingConfigurationProps:
     @builtins.property
     def destination_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnRecordingConfiguration.DestinationConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.DestinationConfigurationProperty"]:
         '''A destination configuration describes an S3 bucket where recorded video will be stored.
 
         See the DestinationConfiguration property type for more information.
@@ -3277,7 +3293,7 @@ class CfnRecordingConfigurationProps:
         '''
         result = self._values.get("destination_configuration")
         assert result is not None, "Required property 'destination_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnRecordingConfiguration.DestinationConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.DestinationConfigurationProperty"], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -3306,7 +3322,7 @@ class CfnRecordingConfigurationProps:
     @builtins.property
     def rendition_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRecordingConfiguration.RenditionConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.RenditionConfigurationProperty"]]:
         '''A rendition configuration describes which renditions should be recorded for a stream.
 
         See the RenditionConfiguration property type for more information.
@@ -3314,10 +3330,10 @@ class CfnRecordingConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-recordingconfiguration.html#cfn-ivs-recordingconfiguration-renditionconfiguration
         '''
         result = self._values.get("rendition_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRecordingConfiguration.RenditionConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.RenditionConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-recordingconfiguration-tag.html>`_ .
@@ -3325,12 +3341,12 @@ class CfnRecordingConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-recordingconfiguration.html#cfn-ivs-recordingconfiguration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def thumbnail_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRecordingConfiguration.ThumbnailConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.ThumbnailConfigurationProperty"]]:
         '''A thumbnail configuration enables/disables the recording of thumbnails for a live session and controls the interval at which thumbnails are generated for the live session.
 
         See the ThumbnailConfiguration property type for more information.
@@ -3338,7 +3354,7 @@ class CfnRecordingConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-recordingconfiguration.html#cfn-ivs-recordingconfiguration-thumbnailconfiguration
         '''
         result = self._values.get("thumbnail_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRecordingConfiguration.ThumbnailConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRecordingConfiguration.ThumbnailConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3368,6 +3384,7 @@ class CfnStage(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ivs as ivs
@@ -3402,12 +3419,12 @@ class CfnStage(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        auto_participant_recording_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStage.AutoParticipantRecordingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_participant_recording_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStage.AutoParticipantRecordingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IVS::Stage``.
 
@@ -3431,7 +3448,7 @@ class CfnStage(
 
     @jsii.member(jsii_name="arnForStage")
     @builtins.classmethod
-    def arn_for_stage(cls, resource: _IStageRef_5fb7397f) -> builtins.str:
+    def arn_for_stage(cls, resource: "_IStageRef_5fb7397f") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3453,7 +3470,7 @@ class CfnStage(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStage", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3506,9 +3523,9 @@ class CfnStage(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3517,22 +3534,22 @@ class CfnStage(
 
     @builtins.property
     @jsii.member(jsii_name="stageRef")
-    def stage_ref(self) -> _StageReference_82738c53:
+    def stage_ref(self) -> "_StageReference_82738c53":
         '''A reference to a Stage resource.'''
-        return typing.cast(_StageReference_82738c53, jsii.get(self, "stageRef"))
+        return typing.cast("_StageReference_82738c53", jsii.get(self, "stageRef"))
 
     @builtins.property
     @jsii.member(jsii_name="autoParticipantRecordingConfiguration")
     def auto_participant_recording_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.AutoParticipantRecordingConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.AutoParticipantRecordingConfigurationProperty"]]:
         '''Configuration object for individual participant recording.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.AutoParticipantRecordingConfigurationProperty"]], jsii.get(self, "autoParticipantRecordingConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.AutoParticipantRecordingConfigurationProperty"]], jsii.get(self, "autoParticipantRecordingConfiguration"))
 
     @auto_participant_recording_configuration.setter
     def auto_participant_recording_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.AutoParticipantRecordingConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.AutoParticipantRecordingConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__288ad5976e299bf3facf5812af603311b1780e61570d5cc88abb63f8e5ce0757)
@@ -3554,12 +3571,12 @@ class CfnStage(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6a345b4498f1ee0487e9359886004162443d2310aa5159615d98ad8d30ecf6f7)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3581,10 +3598,10 @@ class CfnStage(
             self,
             *,
             storage_configuration_arn: builtins.str,
-            hls_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStage.HlsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            hls_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStage.HlsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
             recording_reconnect_window_seconds: typing.Optional[jsii.Number] = None,
-            thumbnail_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStage.ThumbnailConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            thumbnail_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStage.ThumbnailConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The ``AWS::IVS::AutoParticipantRecordingConfiguration`` property type describes a configuration for individual participant recording.
 
@@ -3657,13 +3674,13 @@ class CfnStage(
         @builtins.property
         def hls_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.HlsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.HlsConfigurationProperty"]]:
             '''HLS configuration object for individual participant recording.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-stage-autoparticipantrecordingconfiguration.html#cfn-ivs-stage-autoparticipantrecordingconfiguration-hlsconfiguration
             '''
             result = self._values.get("hls_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.HlsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.HlsConfigurationProperty"]], result)
 
         @builtins.property
         def media_types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3692,13 +3709,13 @@ class CfnStage(
         @builtins.property
         def thumbnail_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.ThumbnailConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.ThumbnailConfigurationProperty"]]:
             '''A complex type that allows you to enable/disable the recording of thumbnails for individual participant recording and modify the interval at which thumbnails are generated for the live session.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-stage-autoparticipantrecordingconfiguration.html#cfn-ivs-stage-autoparticipantrecordingconfiguration-thumbnailconfiguration
             '''
             result = self._values.get("thumbnail_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.ThumbnailConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.ThumbnailConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3722,7 +3739,7 @@ class CfnStage(
         def __init__(
             self,
             *,
-            participant_recording_hls_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStage.ParticipantRecordingHlsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            participant_recording_hls_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStage.ParticipantRecordingHlsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Object specifying an HLS configuration for individual participant recording.
 
@@ -3753,13 +3770,13 @@ class CfnStage(
         @builtins.property
         def participant_recording_hls_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.ParticipantRecordingHlsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.ParticipantRecordingHlsConfigurationProperty"]]:
             '''Object specifying a configuration of participant HLS recordings for individual participant recording.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-stage-hlsconfiguration.html#cfn-ivs-stage-hlsconfiguration-participantrecordinghlsconfiguration
             '''
             result = self._values.get("participant_recording_hls_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.ParticipantRecordingHlsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.ParticipantRecordingHlsConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3943,7 +3960,7 @@ class CfnStage(
         def __init__(
             self,
             *,
-            participant_thumbnail_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStage.ParticipantThumbnailConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            participant_thumbnail_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStage.ParticipantThumbnailConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object representing a configuration of thumbnails for recorded video.
 
@@ -3976,13 +3993,13 @@ class CfnStage(
         @builtins.property
         def participant_thumbnail_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.ParticipantThumbnailConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.ParticipantThumbnailConfigurationProperty"]]:
             '''Object specifying a configuration of thumbnails for recorded video from an individual participant.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-stage-thumbnailconfiguration.html#cfn-ivs-stage-thumbnailconfiguration-participantthumbnailconfiguration
             '''
             result = self._values.get("participant_thumbnail_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.ParticipantThumbnailConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.ParticipantThumbnailConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4009,9 +4026,9 @@ class CfnStageProps:
     def __init__(
         self,
         *,
-        auto_participant_recording_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.AutoParticipantRecordingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_participant_recording_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStage.AutoParticipantRecordingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStage``.
 
@@ -4024,6 +4041,7 @@ class CfnStageProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ivs as ivs
@@ -4071,13 +4089,13 @@ class CfnStageProps:
     @builtins.property
     def auto_participant_recording_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStage.AutoParticipantRecordingConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.AutoParticipantRecordingConfigurationProperty"]]:
         '''Configuration object for individual participant recording.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-stage.html#cfn-ivs-stage-autoparticipantrecordingconfiguration
         '''
         result = self._values.get("auto_participant_recording_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStage.AutoParticipantRecordingConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.AutoParticipantRecordingConfigurationProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -4089,7 +4107,7 @@ class CfnStageProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-stage-tag.html>`_ .
@@ -4097,7 +4115,7 @@ class CfnStageProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-stage.html#cfn-ivs-stage-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4127,6 +4145,7 @@ class CfnStorageConfiguration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ivs as ivs
@@ -4147,12 +4166,12 @@ class CfnStorageConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        s3: typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageConfiguration.S3StorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        s3: typing.Union["_IResolvable_da3f097b", typing.Union["CfnStorageConfiguration.S3StorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IVS::StorageConfiguration``.
 
@@ -4174,7 +4193,7 @@ class CfnStorageConfiguration(
     @builtins.classmethod
     def arn_for_storage_configuration(
         cls,
-        resource: _IStorageConfigurationRef_1c6c220a,
+        resource: "_IStorageConfigurationRef_1c6c220a",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -4197,7 +4216,7 @@ class CfnStorageConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStorageConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4239,9 +4258,9 @@ class CfnStorageConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4250,22 +4269,22 @@ class CfnStorageConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="storageConfigurationRef")
-    def storage_configuration_ref(self) -> _StorageConfigurationReference_f18e0901:
+    def storage_configuration_ref(self) -> "_StorageConfigurationReference_f18e0901":
         '''A reference to a StorageConfiguration resource.'''
-        return typing.cast(_StorageConfigurationReference_f18e0901, jsii.get(self, "storageConfigurationRef"))
+        return typing.cast("_StorageConfigurationReference_f18e0901", jsii.get(self, "storageConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="s3")
     def s3(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnStorageConfiguration.S3StorageConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnStorageConfiguration.S3StorageConfigurationProperty"]:
         '''An S3 storage configuration contains information about where recorded video will be stored.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnStorageConfiguration.S3StorageConfigurationProperty"], jsii.get(self, "s3"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnStorageConfiguration.S3StorageConfigurationProperty"], jsii.get(self, "s3"))
 
     @s3.setter
     def s3(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnStorageConfiguration.S3StorageConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnStorageConfiguration.S3StorageConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a41e5161b80f9addb1b0e4316f4d2265340c959af7b1d4c11af686d0a7447cac)
@@ -4287,12 +4306,12 @@ class CfnStorageConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ac4f224a45d80fb7934ebfc58d4a23ea231aeab0929608af10892ba63ba4e79b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4360,9 +4379,9 @@ class CfnStorageConfigurationProps:
     def __init__(
         self,
         *,
-        s3: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageConfiguration.S3StorageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        s3: typing.Union["_IResolvable_da3f097b", typing.Union["CfnStorageConfiguration.S3StorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStorageConfiguration``.
 
@@ -4375,6 +4394,7 @@ class CfnStorageConfigurationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ivs as ivs
@@ -4408,7 +4428,7 @@ class CfnStorageConfigurationProps:
     @builtins.property
     def s3(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnStorageConfiguration.S3StorageConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnStorageConfiguration.S3StorageConfigurationProperty"]:
         '''An S3 storage configuration contains information about where recorded video will be stored.
 
         See the `S3StorageConfiguration <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-storageconfiguration-s3storageconfiguration.html>`_ property type for more information.
@@ -4417,7 +4437,7 @@ class CfnStorageConfigurationProps:
         '''
         result = self._values.get("s3")
         assert result is not None, "Required property 's3' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnStorageConfiguration.S3StorageConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnStorageConfiguration.S3StorageConfigurationProperty"], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -4429,7 +4449,7 @@ class CfnStorageConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-storageconfiguration-tag.html>`_ .
@@ -4437,7 +4457,7 @@ class CfnStorageConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-storageconfiguration.html#cfn-ivs-storageconfiguration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4467,6 +4487,7 @@ class CfnStreamKey(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ivs as ivs
@@ -4484,11 +4505,11 @@ class CfnStreamKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        channel_arn: typing.Union[builtins.str, _IChannelRef_cc7fc646],
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        channel_arn: typing.Union[builtins.str, "_IChannelRef_cc7fc646"],
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IVS::StreamKey``.
 
@@ -4507,7 +4528,7 @@ class CfnStreamKey(
 
     @jsii.member(jsii_name="arnForStreamKey")
     @builtins.classmethod
-    def arn_for_stream_key(cls, resource: _IStreamKeyRef_3bc5de47) -> builtins.str:
+    def arn_for_stream_key(cls, resource: "_IStreamKeyRef_3bc5de47") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4529,7 +4550,7 @@ class CfnStreamKey(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStreamKey", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4587,15 +4608,15 @@ class CfnStreamKey(
 
     @builtins.property
     @jsii.member(jsii_name="streamKeyRef")
-    def stream_key_ref(self) -> _StreamKeyReference_d336e553:
+    def stream_key_ref(self) -> "_StreamKeyReference_d336e553":
         '''A reference to a StreamKey resource.'''
-        return typing.cast(_StreamKeyReference_d336e553, jsii.get(self, "streamKeyRef"))
+        return typing.cast("_StreamKeyReference_d336e553", jsii.get(self, "streamKeyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="channelArn")
@@ -4612,12 +4633,12 @@ class CfnStreamKey(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9b966c0532d39deb26a3bd43a45365e1ee3edf5d3158d0a479134abca9f6f9d2)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4633,8 +4654,8 @@ class CfnStreamKeyProps:
     def __init__(
         self,
         *,
-        channel_arn: typing.Union[builtins.str, _IChannelRef_cc7fc646],
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        channel_arn: typing.Union[builtins.str, "_IChannelRef_cc7fc646"],
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStreamKey``.
 
@@ -4646,6 +4667,7 @@ class CfnStreamKeyProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ivs as ivs
@@ -4671,17 +4693,17 @@ class CfnStreamKeyProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def channel_arn(self) -> typing.Union[builtins.str, _IChannelRef_cc7fc646]:
+    def channel_arn(self) -> typing.Union[builtins.str, "_IChannelRef_cc7fc646"]:
         '''Channel ARN for the stream.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-streamkey.html#cfn-ivs-streamkey-channelarn
         '''
         result = self._values.get("channel_arn")
         assert result is not None, "Required property 'channel_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IChannelRef_cc7fc646], result)
+        return typing.cast(typing.Union[builtins.str, "_IChannelRef_cc7fc646"], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-streamkey-tag.html>`_ .
@@ -4689,7 +4711,7 @@ class CfnStreamKeyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-streamkey.html#cfn-ivs-streamkey-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

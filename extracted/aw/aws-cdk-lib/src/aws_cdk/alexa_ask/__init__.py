@@ -114,11 +114,11 @@ class CfnSkill(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        authentication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSkill.AuthenticationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-        skill_package: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSkill.SkillPackageProperty", typing.Dict[builtins.str, typing.Any]]],
+        authentication_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSkill.AuthenticationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        skill_package: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSkill.SkillPackageProperty", typing.Dict[builtins.str, typing.Any]]],
         vendor_id: builtins.str,
     ) -> None:
         '''Create a new ``Alexa::ASK::Skill``.
@@ -154,7 +154,7 @@ class CfnSkill(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSkill", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -198,22 +198,22 @@ class CfnSkill(
 
     @builtins.property
     @jsii.member(jsii_name="skillRef")
-    def skill_ref(self) -> _SkillReference_eb5d54fa:
+    def skill_ref(self) -> "_SkillReference_eb5d54fa":
         '''A reference to a Skill resource.'''
-        return typing.cast(_SkillReference_eb5d54fa, jsii.get(self, "skillRef"))
+        return typing.cast("_SkillReference_eb5d54fa", jsii.get(self, "skillRef"))
 
     @builtins.property
     @jsii.member(jsii_name="authenticationConfiguration")
     def authentication_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSkill.AuthenticationConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSkill.AuthenticationConfigurationProperty"]:
         '''Login with Amazon (LWA) configuration used to authenticate with the Alexa service.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSkill.AuthenticationConfigurationProperty"], jsii.get(self, "authenticationConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSkill.AuthenticationConfigurationProperty"], jsii.get(self, "authenticationConfiguration"))
 
     @authentication_configuration.setter
     def authentication_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnSkill.AuthenticationConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnSkill.AuthenticationConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7f79ad56de5a233709bfa180b3886229464b9d28a88416bdaabab40400468843)
@@ -224,14 +224,14 @@ class CfnSkill(
     @jsii.member(jsii_name="skillPackage")
     def skill_package(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSkill.SkillPackageProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSkill.SkillPackageProperty"]:
         '''Configuration for the skill package that contains the components of the Alexa skill.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSkill.SkillPackageProperty"], jsii.get(self, "skillPackage"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSkill.SkillPackageProperty"], jsii.get(self, "skillPackage"))
 
     @skill_package.setter
     def skill_package(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnSkill.SkillPackageProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnSkill.SkillPackageProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1160f84c06aa4769b57c3cf0e89867f1c310c0c73387afad6e0e174defac367a)
@@ -423,7 +423,7 @@ class CfnSkill(
             *,
             s3_bucket: builtins.str,
             s3_key: builtins.str,
-            overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSkill.OverridesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSkill.OverridesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             s3_bucket_role: typing.Optional[builtins.str] = None,
             s3_object_version: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -503,7 +503,7 @@ class CfnSkill(
         @builtins.property
         def overrides(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSkill.OverridesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSkill.OverridesProperty"]]:
             '''Overrides to the skill package to apply when creating or updating the skill.
 
             Values provided here do not modify the contents of the original skill package. Currently, only overriding values inside of the skill manifest component of the package is supported.
@@ -511,7 +511,7 @@ class CfnSkill(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ask-skill-skillpackage.html#cfn-ask-skill-skillpackage-overrides
             '''
             result = self._values.get("overrides")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSkill.OverridesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSkill.OverridesProperty"]], result)
 
         @builtins.property
         def s3_bucket_role(self) -> typing.Optional[builtins.str]:
@@ -556,8 +556,8 @@ class CfnSkillProps:
     def __init__(
         self,
         *,
-        authentication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSkill.AuthenticationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-        skill_package: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSkill.SkillPackageProperty, typing.Dict[builtins.str, typing.Any]]],
+        authentication_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSkill.AuthenticationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        skill_package: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSkill.SkillPackageProperty", typing.Dict[builtins.str, typing.Any]]],
         vendor_id: builtins.str,
     ) -> None:
         '''Properties for defining a ``CfnSkill``.
@@ -611,7 +611,7 @@ class CfnSkillProps:
     @builtins.property
     def authentication_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnSkill.AuthenticationConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSkill.AuthenticationConfigurationProperty"]:
         '''Login with Amazon (LWA) configuration used to authenticate with the Alexa service.
 
         Only Login with Amazon clients created through the  are supported. The client ID, client secret, and refresh token are required.
@@ -620,12 +620,12 @@ class CfnSkillProps:
         '''
         result = self._values.get("authentication_configuration")
         assert result is not None, "Required property 'authentication_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSkill.AuthenticationConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSkill.AuthenticationConfigurationProperty"], result)
 
     @builtins.property
     def skill_package(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnSkill.SkillPackageProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSkill.SkillPackageProperty"]:
         '''Configuration for the skill package that contains the components of the Alexa skill.
 
         Skill packages are retrieved from an Amazon S3 bucket and key and used to create and update the skill. For more information about the skill package format, see the  .
@@ -634,7 +634,7 @@ class CfnSkillProps:
         '''
         result = self._values.get("skill_package")
         assert result is not None, "Required property 'skill_package' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSkill.SkillPackageProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSkill.SkillPackageProperty"], result)
 
     @builtins.property
     def vendor_id(self) -> builtins.str:

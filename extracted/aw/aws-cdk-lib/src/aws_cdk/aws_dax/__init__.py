@@ -123,7 +123,7 @@ class CfnCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         iam_role_arn: builtins.str,
@@ -138,7 +138,7 @@ class CfnCluster(
         parameter_group_name: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        sse_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.SSESpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sse_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.SSESpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         subnet_group_name: typing.Optional[builtins.str] = None,
         tags: typing.Any = None,
     ) -> None:
@@ -188,7 +188,7 @@ class CfnCluster(
 
     @jsii.member(jsii_name="arnForCluster")
     @builtins.classmethod
-    def arn_for_cluster(cls, resource: _IClusterRef_6a4f1a29) -> builtins.str:
+    def arn_for_cluster(cls, resource: "_IClusterRef_6a4f1a29") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -210,7 +210,7 @@ class CfnCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -293,15 +293,15 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> _ClusterReference_debf9d57:
+    def cluster_ref(self) -> "_ClusterReference_debf9d57":
         '''A reference to a Cluster resource.'''
-        return typing.cast(_ClusterReference_debf9d57, jsii.get(self, "clusterRef"))
+        return typing.cast("_ClusterReference_debf9d57", jsii.get(self, "clusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="iamRoleArn")
@@ -481,14 +481,14 @@ class CfnCluster(
     @jsii.member(jsii_name="sseSpecification")
     def sse_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SSESpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SSESpecificationProperty"]]:
         '''Represents the settings used to enable server-side encryption on the cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SSESpecificationProperty"]], jsii.get(self, "sseSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SSESpecificationProperty"]], jsii.get(self, "sseSpecification"))
 
     @sse_specification.setter
     def sse_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SSESpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SSESpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2dd943a79f12c83e70343df7b142a7c0aba1cf9f88daa8f114a18686cd12b7c2)
@@ -530,7 +530,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            sse_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            sse_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Represents the settings used to enable server-side encryption.
 
@@ -559,13 +559,13 @@ class CfnCluster(
         @builtins.property
         def sse_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether server-side encryption is enabled (true) or disabled (false) on the cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dax-cluster-ssespecification.html#cfn-dax-cluster-ssespecification-sseenabled
             '''
             result = self._values.get("sse_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -616,7 +616,7 @@ class CfnClusterProps:
         parameter_group_name: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        sse_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.SSESpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sse_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.SSESpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         subnet_group_name: typing.Optional[builtins.str] = None,
         tags: typing.Any = None,
     ) -> None:
@@ -862,13 +862,13 @@ class CfnClusterProps:
     @builtins.property
     def sse_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.SSESpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SSESpecificationProperty"]]:
         '''Represents the settings used to enable server-side encryption on the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dax-cluster.html#cfn-dax-cluster-ssespecification
         '''
         result = self._values.get("sse_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.SSESpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SSESpecificationProperty"]], result)
 
     @builtins.property
     def subnet_group_name(self) -> typing.Optional[builtins.str]:
@@ -933,7 +933,7 @@ class CfnParameterGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -973,7 +973,7 @@ class CfnParameterGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnParameterGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1017,9 +1017,9 @@ class CfnParameterGroup(
 
     @builtins.property
     @jsii.member(jsii_name="parameterGroupRef")
-    def parameter_group_ref(self) -> _ParameterGroupReference_4800ac94:
+    def parameter_group_ref(self) -> "_ParameterGroupReference_4800ac94":
         '''A reference to a ParameterGroup resource.'''
-        return typing.cast(_ParameterGroupReference_4800ac94, jsii.get(self, "parameterGroupRef"))
+        return typing.cast("_ParameterGroupReference_4800ac94", jsii.get(self, "parameterGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -1187,7 +1187,7 @@ class CfnSubnetGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         subnet_ids: typing.Sequence[builtins.str],
@@ -1227,7 +1227,7 @@ class CfnSubnetGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSubnetGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1271,9 +1271,9 @@ class CfnSubnetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="subnetGroupRef")
-    def subnet_group_ref(self) -> _SubnetGroupReference_f6dcbc1f:
+    def subnet_group_ref(self) -> "_SubnetGroupReference_f6dcbc1f":
         '''A reference to a SubnetGroup resource.'''
-        return typing.cast(_SubnetGroupReference_f6dcbc1f, jsii.get(self, "subnetGroupRef"))
+        return typing.cast("_SubnetGroupReference_f6dcbc1f", jsii.get(self, "subnetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="subnetIds")

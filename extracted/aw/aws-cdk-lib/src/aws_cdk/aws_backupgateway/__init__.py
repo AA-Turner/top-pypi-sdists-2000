@@ -98,6 +98,7 @@ class CfnHypervisor(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_backupgateway as backupgateway
@@ -118,7 +119,7 @@ class CfnHypervisor(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         host: typing.Optional[builtins.str] = None,
@@ -126,7 +127,7 @@ class CfnHypervisor(
         log_group_arn: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         password: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         username: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::BackupGateway::Hypervisor``.
@@ -159,7 +160,7 @@ class CfnHypervisor(
 
     @jsii.member(jsii_name="arnForHypervisor")
     @builtins.classmethod
-    def arn_for_hypervisor(cls, resource: _IHypervisorRef_a8d4b5cc) -> builtins.str:
+    def arn_for_hypervisor(cls, resource: "_IHypervisorRef_a8d4b5cc") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -181,7 +182,7 @@ class CfnHypervisor(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnHypervisor", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -228,15 +229,15 @@ class CfnHypervisor(
 
     @builtins.property
     @jsii.member(jsii_name="hypervisorRef")
-    def hypervisor_ref(self) -> _HypervisorReference_8e45f85c:
+    def hypervisor_ref(self) -> "_HypervisorReference_8e45f85c":
         '''A reference to a Hypervisor resource.'''
-        return typing.cast(_HypervisorReference_8e45f85c, jsii.get(self, "hypervisorRef"))
+        return typing.cast("_HypervisorReference_8e45f85c", jsii.get(self, "hypervisorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="host")
@@ -305,12 +306,12 @@ class CfnHypervisor(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags of the hypervisor configuration to import.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dde24d2859009b6347e276635d0a0359b4dcc8299b84c2afd330e475d26093c1)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -352,7 +353,7 @@ class CfnHypervisorProps:
         log_group_arn: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         password: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         username: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnHypervisor``.
@@ -370,6 +371,7 @@ class CfnHypervisorProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_backupgateway as backupgateway
@@ -460,13 +462,13 @@ class CfnHypervisorProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags of the hypervisor configuration to import.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backupgateway-hypervisor.html#cfn-backupgateway-hypervisor-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def username(self) -> typing.Optional[builtins.str]:

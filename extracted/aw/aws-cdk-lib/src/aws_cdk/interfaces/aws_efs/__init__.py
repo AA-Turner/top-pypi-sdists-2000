@@ -183,7 +183,7 @@ class IAccessPointRef(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointRef")
-    def access_point_ref(self) -> AccessPointReference:
+    def access_point_ref(self) -> "AccessPointReference":
         '''(experimental) A reference to a AccessPoint resource.
 
         :stability: experimental
@@ -204,12 +204,12 @@ class _IAccessPointRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointRef")
-    def access_point_ref(self) -> AccessPointReference:
+    def access_point_ref(self) -> "AccessPointReference":
         '''(experimental) A reference to a AccessPoint resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccessPointReference, jsii.get(self, "accessPointRef"))
+        return typing.cast("AccessPointReference", jsii.get(self, "accessPointRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessPointRef).__jsii_proxy_class__ = lambda : _IAccessPointRefProxy
@@ -228,7 +228,7 @@ class IFileSystemRef(
 
     @builtins.property
     @jsii.member(jsii_name="fileSystemRef")
-    def file_system_ref(self) -> FileSystemReference:
+    def file_system_ref(self) -> "FileSystemReference":
         '''(experimental) A reference to a FileSystem resource.
 
         :stability: experimental
@@ -249,12 +249,12 @@ class _IFileSystemRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="fileSystemRef")
-    def file_system_ref(self) -> FileSystemReference:
+    def file_system_ref(self) -> "FileSystemReference":
         '''(experimental) A reference to a FileSystem resource.
 
         :stability: experimental
         '''
-        return typing.cast(FileSystemReference, jsii.get(self, "fileSystemRef"))
+        return typing.cast("FileSystemReference", jsii.get(self, "fileSystemRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFileSystemRef).__jsii_proxy_class__ = lambda : _IFileSystemRefProxy

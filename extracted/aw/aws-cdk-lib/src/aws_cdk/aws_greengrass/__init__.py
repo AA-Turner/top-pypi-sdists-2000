@@ -151,11 +151,11 @@ class CfnConnectorDefinition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnectorDefinition.ConnectorDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnectorDefinition.ConnectorDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Create a new ``AWS::Greengrass::ConnectorDefinition``.
@@ -180,7 +180,7 @@ class CfnConnectorDefinition(
     @builtins.classmethod
     def arn_for_connector_definition(
         cls,
-        resource: _IConnectorDefinitionRef_07e220d3,
+        resource: "_IConnectorDefinitionRef_07e220d3",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -194,10 +194,10 @@ class CfnConnectorDefinition(
     @builtins.classmethod
     def from_connector_definition_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IConnectorDefinitionRef_07e220d3:
+    ) -> "_IConnectorDefinitionRef_07e220d3":
         '''Creates a new IConnectorDefinitionRef from an ARN.
 
         :param scope: -
@@ -209,16 +209,16 @@ class CfnConnectorDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IConnectorDefinitionRef_07e220d3, jsii.sinvoke(cls, "fromConnectorDefinitionArn", [scope, id, arn]))
+        return typing.cast("_IConnectorDefinitionRef_07e220d3", jsii.sinvoke(cls, "fromConnectorDefinitionArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromConnectorDefinitionId")
     @builtins.classmethod
     def from_connector_definition_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         connector_definition_id: builtins.str,
-    ) -> _IConnectorDefinitionRef_07e220d3:
+    ) -> "_IConnectorDefinitionRef_07e220d3":
         '''Creates a new IConnectorDefinitionRef from a connectorDefinitionId.
 
         :param scope: -
@@ -230,7 +230,7 @@ class CfnConnectorDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument connector_definition_id", value=connector_definition_id, expected_type=type_hints["connector_definition_id"])
-        return typing.cast(_IConnectorDefinitionRef_07e220d3, jsii.sinvoke(cls, "fromConnectorDefinitionId", [scope, id, connector_definition_id]))
+        return typing.cast("_IConnectorDefinitionRef_07e220d3", jsii.sinvoke(cls, "fromConnectorDefinitionId", [scope, id, connector_definition_id]))
 
     @jsii.member(jsii_name="isCfnConnectorDefinition")
     @builtins.classmethod
@@ -245,7 +245,7 @@ class CfnConnectorDefinition(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnectorDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -317,15 +317,15 @@ class CfnConnectorDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="connectorDefinitionRef")
-    def connector_definition_ref(self) -> _ConnectorDefinitionReference_972bd9f9:
+    def connector_definition_ref(self) -> "_ConnectorDefinitionReference_972bd9f9":
         '''A reference to a ConnectorDefinition resource.'''
-        return typing.cast(_ConnectorDefinitionReference_972bd9f9, jsii.get(self, "connectorDefinitionRef"))
+        return typing.cast("_ConnectorDefinitionReference_972bd9f9", jsii.get(self, "connectorDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -344,14 +344,14 @@ class CfnConnectorDefinition(
     @jsii.member(jsii_name="initialVersion")
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnectorDefinition.ConnectorDefinitionVersionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnectorDefinition.ConnectorDefinitionVersionProperty"]]:
         '''The connector definition version to include when the connector definition is created.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnectorDefinition.ConnectorDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnectorDefinition.ConnectorDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
 
     @initial_version.setter
     def initial_version(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnectorDefinition.ConnectorDefinitionVersionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnectorDefinition.ConnectorDefinitionVersionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0415a38346fbe03d6f5624bc1964761ae159cabc533cd2810f1187fb94a9e76e)
@@ -380,7 +380,7 @@ class CfnConnectorDefinition(
         def __init__(
             self,
             *,
-            connectors: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnectorDefinition.ConnectorProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            connectors: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnectorDefinition.ConnectorProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''A connector definition version contains a list of connectors.
 
@@ -423,7 +423,7 @@ class CfnConnectorDefinition(
         @builtins.property
         def connectors(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConnectorDefinition.ConnectorProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnectorDefinition.ConnectorProperty"]]]:
             '''The connectors in this version.
 
             Only one instance of a given connector can be added to a connector definition version at a time.
@@ -432,7 +432,7 @@ class CfnConnectorDefinition(
             '''
             result = self._values.get("connectors")
             assert result is not None, "Required property 'connectors' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConnectorDefinition.ConnectorProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnectorDefinition.ConnectorProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -560,7 +560,7 @@ class CfnConnectorDefinitionProps:
         self,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnectorDefinition.ConnectorDefinitionVersionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnectorDefinition.ConnectorDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Properties for defining a ``CfnConnectorDefinition``.
@@ -623,7 +623,7 @@ class CfnConnectorDefinitionProps:
     @builtins.property
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnectorDefinition.ConnectorDefinitionVersionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnectorDefinition.ConnectorDefinitionVersionProperty"]]:
         '''The connector definition version to include when the connector definition is created.
 
         A connector definition version contains a list of ```connector`` <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-connectordefinition-connector.html>`_ property types.
@@ -634,7 +634,7 @@ class CfnConnectorDefinitionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-connectordefinition.html#cfn-greengrass-connectordefinition-initialversion
         '''
         result = self._values.get("initial_version")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnectorDefinition.ConnectorDefinitionVersionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnectorDefinition.ConnectorDefinitionVersionProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Any:
@@ -705,11 +705,11 @@ class CfnConnectorDefinitionVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         connector_definition_id: builtins.str,
-        connectors: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnectorDefinitionVersion.ConnectorProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        connectors: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnectorDefinitionVersion.ConnectorProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Create a new ``AWS::Greengrass::ConnectorDefinitionVersion``.
 
@@ -741,7 +741,7 @@ class CfnConnectorDefinitionVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnectorDefinitionVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -787,9 +787,9 @@ class CfnConnectorDefinitionVersion(
     @jsii.member(jsii_name="connectorDefinitionVersionRef")
     def connector_definition_version_ref(
         self,
-    ) -> _ConnectorDefinitionVersionReference_f2013ce7:
+    ) -> "_ConnectorDefinitionVersionReference_f2013ce7":
         '''A reference to a ConnectorDefinitionVersion resource.'''
-        return typing.cast(_ConnectorDefinitionVersionReference_f2013ce7, jsii.get(self, "connectorDefinitionVersionRef"))
+        return typing.cast("_ConnectorDefinitionVersionReference_f2013ce7", jsii.get(self, "connectorDefinitionVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connectorDefinitionId")
@@ -808,14 +808,14 @@ class CfnConnectorDefinitionVersion(
     @jsii.member(jsii_name="connectors")
     def connectors(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConnectorDefinitionVersion.ConnectorProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnectorDefinitionVersion.ConnectorProperty"]]]:
         '''The connectors in this version.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConnectorDefinitionVersion.ConnectorProperty"]]], jsii.get(self, "connectors"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnectorDefinitionVersion.ConnectorProperty"]]], jsii.get(self, "connectors"))
 
     @connectors.setter
     def connectors(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConnectorDefinitionVersion.ConnectorProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnectorDefinitionVersion.ConnectorProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5ed3abea511a407254df28d178fbfb71f43dee9315c0aeca3095f062663236ce)
@@ -940,7 +940,7 @@ class CfnConnectorDefinitionVersionProps:
         self,
         *,
         connector_definition_id: builtins.str,
-        connectors: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnectorDefinitionVersion.ConnectorProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        connectors: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnectorDefinitionVersion.ConnectorProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Properties for defining a ``CfnConnectorDefinitionVersion``.
 
@@ -993,7 +993,7 @@ class CfnConnectorDefinitionVersionProps:
     @builtins.property
     def connectors(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConnectorDefinitionVersion.ConnectorProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnectorDefinitionVersion.ConnectorProperty"]]]:
         '''The connectors in this version.
 
         Only one instance of a given connector can be added to the connector definition version at a time.
@@ -1002,7 +1002,7 @@ class CfnConnectorDefinitionVersionProps:
         '''
         result = self._values.get("connectors")
         assert result is not None, "Required property 'connectors' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConnectorDefinitionVersion.ConnectorProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnectorDefinitionVersion.ConnectorProperty"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1065,11 +1065,11 @@ class CfnCoreDefinition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCoreDefinition.CoreDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCoreDefinition.CoreDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Create a new ``AWS::Greengrass::CoreDefinition``.
@@ -1094,7 +1094,7 @@ class CfnCoreDefinition(
     @builtins.classmethod
     def arn_for_core_definition(
         cls,
-        resource: _ICoreDefinitionRef_4183d6fb,
+        resource: "_ICoreDefinitionRef_4183d6fb",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1108,10 +1108,10 @@ class CfnCoreDefinition(
     @builtins.classmethod
     def from_core_definition_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ICoreDefinitionRef_4183d6fb:
+    ) -> "_ICoreDefinitionRef_4183d6fb":
         '''Creates a new ICoreDefinitionRef from an ARN.
 
         :param scope: -
@@ -1123,16 +1123,16 @@ class CfnCoreDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ICoreDefinitionRef_4183d6fb, jsii.sinvoke(cls, "fromCoreDefinitionArn", [scope, id, arn]))
+        return typing.cast("_ICoreDefinitionRef_4183d6fb", jsii.sinvoke(cls, "fromCoreDefinitionArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromCoreDefinitionId")
     @builtins.classmethod
     def from_core_definition_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         core_definition_id: builtins.str,
-    ) -> _ICoreDefinitionRef_4183d6fb:
+    ) -> "_ICoreDefinitionRef_4183d6fb":
         '''Creates a new ICoreDefinitionRef from a coreDefinitionId.
 
         :param scope: -
@@ -1144,7 +1144,7 @@ class CfnCoreDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument core_definition_id", value=core_definition_id, expected_type=type_hints["core_definition_id"])
-        return typing.cast(_ICoreDefinitionRef_4183d6fb, jsii.sinvoke(cls, "fromCoreDefinitionId", [scope, id, core_definition_id]))
+        return typing.cast("_ICoreDefinitionRef_4183d6fb", jsii.sinvoke(cls, "fromCoreDefinitionId", [scope, id, core_definition_id]))
 
     @jsii.member(jsii_name="isCfnCoreDefinition")
     @builtins.classmethod
@@ -1159,7 +1159,7 @@ class CfnCoreDefinition(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCoreDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1231,15 +1231,15 @@ class CfnCoreDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="coreDefinitionRef")
-    def core_definition_ref(self) -> _CoreDefinitionReference_738d37b1:
+    def core_definition_ref(self) -> "_CoreDefinitionReference_738d37b1":
         '''A reference to a CoreDefinition resource.'''
-        return typing.cast(_CoreDefinitionReference_738d37b1, jsii.get(self, "coreDefinitionRef"))
+        return typing.cast("_CoreDefinitionReference_738d37b1", jsii.get(self, "coreDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1258,14 +1258,14 @@ class CfnCoreDefinition(
     @jsii.member(jsii_name="initialVersion")
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCoreDefinition.CoreDefinitionVersionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCoreDefinition.CoreDefinitionVersionProperty"]]:
         '''The core definition version to include when the core definition is created.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCoreDefinition.CoreDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCoreDefinition.CoreDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
 
     @initial_version.setter
     def initial_version(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCoreDefinition.CoreDefinitionVersionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCoreDefinition.CoreDefinitionVersionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__92abb907cfcf9216f792b317f8eb26a0b6c421a027b2e96eefee9e1fd17d6fc7)
@@ -1294,7 +1294,7 @@ class CfnCoreDefinition(
         def __init__(
             self,
             *,
-            cores: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCoreDefinition.CoreProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            cores: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCoreDefinition.CoreProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''A core definition version contains a Greengrass `core <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-coredefinition-core.html>`_ .
 
@@ -1336,7 +1336,7 @@ class CfnCoreDefinition(
         @builtins.property
         def cores(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCoreDefinition.CoreProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCoreDefinition.CoreProperty"]]]:
             '''The Greengrass core in this version.
 
             Currently, the ``Cores`` property for a core definition version can contain only one core.
@@ -1345,7 +1345,7 @@ class CfnCoreDefinition(
             '''
             result = self._values.get("cores")
             assert result is not None, "Required property 'cores' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCoreDefinition.CoreProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCoreDefinition.CoreProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1375,7 +1375,7 @@ class CfnCoreDefinition(
             certificate_arn: builtins.str,
             id: builtins.str,
             thing_arn: builtins.str,
-            sync_shadow: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            sync_shadow: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''A core is an AWS IoT device that runs the AWS IoT Greengrass core software and manages local processes for a Greengrass group.
 
@@ -1457,7 +1457,7 @@ class CfnCoreDefinition(
         @builtins.property
         def sync_shadow(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the core's local shadow is synced with the cloud automatically.
 
             The default is false.
@@ -1465,7 +1465,7 @@ class CfnCoreDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-coredefinition-core.html#cfn-greengrass-coredefinition-core-syncshadow
             '''
             result = self._values.get("sync_shadow")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1489,7 +1489,7 @@ class CfnCoreDefinitionProps:
         self,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCoreDefinition.CoreDefinitionVersionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCoreDefinition.CoreDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Properties for defining a ``CfnCoreDefinition``.
@@ -1552,7 +1552,7 @@ class CfnCoreDefinitionProps:
     @builtins.property
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCoreDefinition.CoreDefinitionVersionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCoreDefinition.CoreDefinitionVersionProperty"]]:
         '''The core definition version to include when the core definition is created.
 
         Currently, a core definition version can contain only one ```core`` <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-coredefinition-core.html>`_ .
@@ -1563,7 +1563,7 @@ class CfnCoreDefinitionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-coredefinition.html#cfn-greengrass-coredefinition-initialversion
         '''
         result = self._values.get("initial_version")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCoreDefinition.CoreDefinitionVersionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCoreDefinition.CoreDefinitionVersionProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Any:
@@ -1633,11 +1633,11 @@ class CfnCoreDefinitionVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         core_definition_id: builtins.str,
-        cores: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCoreDefinitionVersion.CoreProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        cores: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCoreDefinitionVersion.CoreProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Create a new ``AWS::Greengrass::CoreDefinitionVersion``.
 
@@ -1669,7 +1669,7 @@ class CfnCoreDefinitionVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCoreDefinitionVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1713,9 +1713,9 @@ class CfnCoreDefinitionVersion(
 
     @builtins.property
     @jsii.member(jsii_name="coreDefinitionVersionRef")
-    def core_definition_version_ref(self) -> _CoreDefinitionVersionReference_7207f70e:
+    def core_definition_version_ref(self) -> "_CoreDefinitionVersionReference_7207f70e":
         '''A reference to a CoreDefinitionVersion resource.'''
-        return typing.cast(_CoreDefinitionVersionReference_7207f70e, jsii.get(self, "coreDefinitionVersionRef"))
+        return typing.cast("_CoreDefinitionVersionReference_7207f70e", jsii.get(self, "coreDefinitionVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="coreDefinitionId")
@@ -1734,14 +1734,14 @@ class CfnCoreDefinitionVersion(
     @jsii.member(jsii_name="cores")
     def cores(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCoreDefinitionVersion.CoreProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCoreDefinitionVersion.CoreProperty"]]]:
         '''The Greengrass core in this version.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCoreDefinitionVersion.CoreProperty"]]], jsii.get(self, "cores"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCoreDefinitionVersion.CoreProperty"]]], jsii.get(self, "cores"))
 
     @cores.setter
     def cores(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCoreDefinitionVersion.CoreProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCoreDefinitionVersion.CoreProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a1bffbbd7f9c7ce8f8528729042b02d09f335ab5562e19bf5da873a4a6ae6b05)
@@ -1765,7 +1765,7 @@ class CfnCoreDefinitionVersion(
             certificate_arn: builtins.str,
             id: builtins.str,
             thing_arn: builtins.str,
-            sync_shadow: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            sync_shadow: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''A core is an AWS IoT device that runs the AWS IoT Greengrass core software and manages local processes for a Greengrass group.
 
@@ -1847,7 +1847,7 @@ class CfnCoreDefinitionVersion(
         @builtins.property
         def sync_shadow(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the core's local shadow is synced with the cloud automatically.
 
             The default is false.
@@ -1855,7 +1855,7 @@ class CfnCoreDefinitionVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-coredefinitionversion-core.html#cfn-greengrass-coredefinitionversion-core-syncshadow
             '''
             result = self._values.get("sync_shadow")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1879,7 +1879,7 @@ class CfnCoreDefinitionVersionProps:
         self,
         *,
         core_definition_id: builtins.str,
-        cores: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCoreDefinitionVersion.CoreProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        cores: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCoreDefinitionVersion.CoreProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Properties for defining a ``CfnCoreDefinitionVersion``.
 
@@ -1931,7 +1931,7 @@ class CfnCoreDefinitionVersionProps:
     @builtins.property
     def cores(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCoreDefinitionVersion.CoreProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCoreDefinitionVersion.CoreProperty"]]]:
         '''The Greengrass core in this version.
 
         Currently, the ``Cores`` property for a core definition version can contain only one core.
@@ -1940,7 +1940,7 @@ class CfnCoreDefinitionVersionProps:
         '''
         result = self._values.get("cores")
         assert result is not None, "Required property 'cores' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCoreDefinitionVersion.CoreProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCoreDefinitionVersion.CoreProperty"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2003,11 +2003,11 @@ class CfnDeviceDefinition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeviceDefinition.DeviceDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeviceDefinition.DeviceDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Create a new ``AWS::Greengrass::DeviceDefinition``.
@@ -2032,7 +2032,7 @@ class CfnDeviceDefinition(
     @builtins.classmethod
     def arn_for_device_definition(
         cls,
-        resource: _IDeviceDefinitionRef_24aad2cb,
+        resource: "_IDeviceDefinitionRef_24aad2cb",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2046,10 +2046,10 @@ class CfnDeviceDefinition(
     @builtins.classmethod
     def from_device_definition_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDeviceDefinitionRef_24aad2cb:
+    ) -> "_IDeviceDefinitionRef_24aad2cb":
         '''Creates a new IDeviceDefinitionRef from an ARN.
 
         :param scope: -
@@ -2061,16 +2061,16 @@ class CfnDeviceDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDeviceDefinitionRef_24aad2cb, jsii.sinvoke(cls, "fromDeviceDefinitionArn", [scope, id, arn]))
+        return typing.cast("_IDeviceDefinitionRef_24aad2cb", jsii.sinvoke(cls, "fromDeviceDefinitionArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromDeviceDefinitionId")
     @builtins.classmethod
     def from_device_definition_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         device_definition_id: builtins.str,
-    ) -> _IDeviceDefinitionRef_24aad2cb:
+    ) -> "_IDeviceDefinitionRef_24aad2cb":
         '''Creates a new IDeviceDefinitionRef from a deviceDefinitionId.
 
         :param scope: -
@@ -2082,7 +2082,7 @@ class CfnDeviceDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument device_definition_id", value=device_definition_id, expected_type=type_hints["device_definition_id"])
-        return typing.cast(_IDeviceDefinitionRef_24aad2cb, jsii.sinvoke(cls, "fromDeviceDefinitionId", [scope, id, device_definition_id]))
+        return typing.cast("_IDeviceDefinitionRef_24aad2cb", jsii.sinvoke(cls, "fromDeviceDefinitionId", [scope, id, device_definition_id]))
 
     @jsii.member(jsii_name="isCfnDeviceDefinition")
     @builtins.classmethod
@@ -2097,7 +2097,7 @@ class CfnDeviceDefinition(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeviceDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2169,15 +2169,15 @@ class CfnDeviceDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="deviceDefinitionRef")
-    def device_definition_ref(self) -> _DeviceDefinitionReference_dc019c8a:
+    def device_definition_ref(self) -> "_DeviceDefinitionReference_dc019c8a":
         '''A reference to a DeviceDefinition resource.'''
-        return typing.cast(_DeviceDefinitionReference_dc019c8a, jsii.get(self, "deviceDefinitionRef"))
+        return typing.cast("_DeviceDefinitionReference_dc019c8a", jsii.get(self, "deviceDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2196,14 +2196,14 @@ class CfnDeviceDefinition(
     @jsii.member(jsii_name="initialVersion")
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeviceDefinition.DeviceDefinitionVersionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeviceDefinition.DeviceDefinitionVersionProperty"]]:
         '''The device definition version to include when the device definition is created.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeviceDefinition.DeviceDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeviceDefinition.DeviceDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
 
     @initial_version.setter
     def initial_version(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeviceDefinition.DeviceDefinitionVersionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeviceDefinition.DeviceDefinitionVersionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__860ed955c6c53de09524817b41d262c302d0a99f94c5e829c77f1df83b034260)
@@ -2232,7 +2232,7 @@ class CfnDeviceDefinition(
         def __init__(
             self,
             *,
-            devices: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeviceDefinition.DeviceProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            devices: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeviceDefinition.DeviceProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''A device definition version contains a list of `devices <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-devicedefinition-device.html>`_ .
 
@@ -2274,14 +2274,14 @@ class CfnDeviceDefinition(
         @builtins.property
         def devices(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeviceDefinition.DeviceProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeviceDefinition.DeviceProperty"]]]:
             '''The devices in this version.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-devicedefinition-devicedefinitionversion.html#cfn-greengrass-devicedefinition-devicedefinitionversion-devices
             '''
             result = self._values.get("devices")
             assert result is not None, "Required property 'devices' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeviceDefinition.DeviceProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeviceDefinition.DeviceProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2311,7 +2311,7 @@ class CfnDeviceDefinition(
             certificate_arn: builtins.str,
             id: builtins.str,
             thing_arn: builtins.str,
-            sync_shadow: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            sync_shadow: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''A device is an AWS IoT device (thing) that's added to a Greengrass group.
 
@@ -2393,13 +2393,13 @@ class CfnDeviceDefinition(
         @builtins.property
         def sync_shadow(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the device's local shadow is synced with the cloud automatically.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-devicedefinition-device.html#cfn-greengrass-devicedefinition-device-syncshadow
             '''
             result = self._values.get("sync_shadow")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2423,7 +2423,7 @@ class CfnDeviceDefinitionProps:
         self,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeviceDefinition.DeviceDefinitionVersionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeviceDefinition.DeviceDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Properties for defining a ``CfnDeviceDefinition``.
@@ -2486,7 +2486,7 @@ class CfnDeviceDefinitionProps:
     @builtins.property
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeviceDefinition.DeviceDefinitionVersionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeviceDefinition.DeviceDefinitionVersionProperty"]]:
         '''The device definition version to include when the device definition is created.
 
         A device definition version contains a list of ```device`` <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-devicedefinition-device.html>`_ property types.
@@ -2497,7 +2497,7 @@ class CfnDeviceDefinitionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-devicedefinition.html#cfn-greengrass-devicedefinition-initialversion
         '''
         result = self._values.get("initial_version")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeviceDefinition.DeviceDefinitionVersionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeviceDefinition.DeviceDefinitionVersionProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Any:
@@ -2567,11 +2567,11 @@ class CfnDeviceDefinitionVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         device_definition_id: builtins.str,
-        devices: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeviceDefinitionVersion.DeviceProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        devices: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeviceDefinitionVersion.DeviceProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Create a new ``AWS::Greengrass::DeviceDefinitionVersion``.
 
@@ -2603,7 +2603,7 @@ class CfnDeviceDefinitionVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeviceDefinitionVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2649,9 +2649,9 @@ class CfnDeviceDefinitionVersion(
     @jsii.member(jsii_name="deviceDefinitionVersionRef")
     def device_definition_version_ref(
         self,
-    ) -> _DeviceDefinitionVersionReference_6f18a846:
+    ) -> "_DeviceDefinitionVersionReference_6f18a846":
         '''A reference to a DeviceDefinitionVersion resource.'''
-        return typing.cast(_DeviceDefinitionVersionReference_6f18a846, jsii.get(self, "deviceDefinitionVersionRef"))
+        return typing.cast("_DeviceDefinitionVersionReference_6f18a846", jsii.get(self, "deviceDefinitionVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="deviceDefinitionId")
@@ -2670,14 +2670,14 @@ class CfnDeviceDefinitionVersion(
     @jsii.member(jsii_name="devices")
     def devices(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeviceDefinitionVersion.DeviceProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeviceDefinitionVersion.DeviceProperty"]]]:
         '''The devices in this version.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeviceDefinitionVersion.DeviceProperty"]]], jsii.get(self, "devices"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeviceDefinitionVersion.DeviceProperty"]]], jsii.get(self, "devices"))
 
     @devices.setter
     def devices(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeviceDefinitionVersion.DeviceProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeviceDefinitionVersion.DeviceProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a0aabdafe61d8e2100f8e9a731798871a20d7438db750e894f114287763994f9)
@@ -2701,7 +2701,7 @@ class CfnDeviceDefinitionVersion(
             certificate_arn: builtins.str,
             id: builtins.str,
             thing_arn: builtins.str,
-            sync_shadow: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            sync_shadow: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''A device is an AWS IoT device (thing) that's added to a Greengrass group.
 
@@ -2783,13 +2783,13 @@ class CfnDeviceDefinitionVersion(
         @builtins.property
         def sync_shadow(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the device's local shadow is synced with the cloud automatically.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-devicedefinitionversion-device.html#cfn-greengrass-devicedefinitionversion-device-syncshadow
             '''
             result = self._values.get("sync_shadow")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2813,7 +2813,7 @@ class CfnDeviceDefinitionVersionProps:
         self,
         *,
         device_definition_id: builtins.str,
-        devices: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeviceDefinitionVersion.DeviceProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        devices: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeviceDefinitionVersion.DeviceProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Properties for defining a ``CfnDeviceDefinitionVersion``.
 
@@ -2865,14 +2865,14 @@ class CfnDeviceDefinitionVersionProps:
     @builtins.property
     def devices(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDeviceDefinitionVersion.DeviceProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeviceDefinitionVersion.DeviceProperty"]]]:
         '''The devices in this version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-devicedefinitionversion.html#cfn-greengrass-devicedefinitionversion-devices
         '''
         result = self._values.get("devices")
         assert result is not None, "Required property 'devices' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDeviceDefinitionVersion.DeviceProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeviceDefinitionVersion.DeviceProperty"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2968,11 +2968,11 @@ class CfnFunctionDefinition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinition.FunctionDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinition.FunctionDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Create a new ``AWS::Greengrass::FunctionDefinition``.
@@ -2997,7 +2997,7 @@ class CfnFunctionDefinition(
     @builtins.classmethod
     def arn_for_function_definition(
         cls,
-        resource: _IFunctionDefinitionRef_06f82201,
+        resource: "_IFunctionDefinitionRef_06f82201",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3011,10 +3011,10 @@ class CfnFunctionDefinition(
     @builtins.classmethod
     def from_function_definition_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IFunctionDefinitionRef_06f82201:
+    ) -> "_IFunctionDefinitionRef_06f82201":
         '''Creates a new IFunctionDefinitionRef from an ARN.
 
         :param scope: -
@@ -3026,16 +3026,16 @@ class CfnFunctionDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IFunctionDefinitionRef_06f82201, jsii.sinvoke(cls, "fromFunctionDefinitionArn", [scope, id, arn]))
+        return typing.cast("_IFunctionDefinitionRef_06f82201", jsii.sinvoke(cls, "fromFunctionDefinitionArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromFunctionDefinitionId")
     @builtins.classmethod
     def from_function_definition_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         function_definition_id: builtins.str,
-    ) -> _IFunctionDefinitionRef_06f82201:
+    ) -> "_IFunctionDefinitionRef_06f82201":
         '''Creates a new IFunctionDefinitionRef from a functionDefinitionId.
 
         :param scope: -
@@ -3047,7 +3047,7 @@ class CfnFunctionDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument function_definition_id", value=function_definition_id, expected_type=type_hints["function_definition_id"])
-        return typing.cast(_IFunctionDefinitionRef_06f82201, jsii.sinvoke(cls, "fromFunctionDefinitionId", [scope, id, function_definition_id]))
+        return typing.cast("_IFunctionDefinitionRef_06f82201", jsii.sinvoke(cls, "fromFunctionDefinitionId", [scope, id, function_definition_id]))
 
     @jsii.member(jsii_name="isCfnFunctionDefinition")
     @builtins.classmethod
@@ -3062,7 +3062,7 @@ class CfnFunctionDefinition(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFunctionDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3134,15 +3134,15 @@ class CfnFunctionDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="functionDefinitionRef")
-    def function_definition_ref(self) -> _FunctionDefinitionReference_1088ab15:
+    def function_definition_ref(self) -> "_FunctionDefinitionReference_1088ab15":
         '''A reference to a FunctionDefinition resource.'''
-        return typing.cast(_FunctionDefinitionReference_1088ab15, jsii.get(self, "functionDefinitionRef"))
+        return typing.cast("_FunctionDefinitionReference_1088ab15", jsii.get(self, "functionDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -3161,14 +3161,14 @@ class CfnFunctionDefinition(
     @jsii.member(jsii_name="initialVersion")
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.FunctionDefinitionVersionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.FunctionDefinitionVersionProperty"]]:
         '''The function definition version to include when the function definition is created.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.FunctionDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.FunctionDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
 
     @initial_version.setter
     def initial_version(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.FunctionDefinitionVersionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.FunctionDefinitionVersionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__09ef946c280aa3fe299d97090ecfb5dfa4af0a16702b75c593ec39701a3cb62b)
@@ -3197,7 +3197,7 @@ class CfnFunctionDefinition(
         def __init__(
             self,
             *,
-            execution: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinition.ExecutionProperty", typing.Dict[builtins.str, typing.Any]]],
+            execution: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinition.ExecutionProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The default configuration that applies to all Lambda functions in the function definition version.
 
@@ -3236,14 +3236,14 @@ class CfnFunctionDefinition(
         @builtins.property
         def execution(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.ExecutionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.ExecutionProperty"]:
             '''Configuration settings for the Lambda execution environment on the AWS IoT Greengrass core.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinition-defaultconfig.html#cfn-greengrass-functiondefinition-defaultconfig-execution
             '''
             result = self._values.get("execution")
             assert result is not None, "Required property 'execution' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.ExecutionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.ExecutionProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3270,9 +3270,9 @@ class CfnFunctionDefinition(
         def __init__(
             self,
             *,
-            access_sysfs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            execution: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinition.ExecutionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            resource_access_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinition.ResourceAccessPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            access_sysfs: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            execution: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinition.ExecutionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            resource_access_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinition.ResourceAccessPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             variables: typing.Any = None,
         ) -> None:
             '''The environment configuration for a Lambda function on the AWS IoT Greengrass core.
@@ -3332,7 +3332,7 @@ class CfnFunctionDefinition(
         @builtins.property
         def access_sysfs(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the function is allowed to access the ``/sys`` directory on the core device, which allows the read device information from ``/sys`` .
 
             .. epigraph::
@@ -3342,23 +3342,23 @@ class CfnFunctionDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinition-environment.html#cfn-greengrass-functiondefinition-environment-accesssysfs
             '''
             result = self._values.get("access_sysfs")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def execution(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.ExecutionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.ExecutionProperty"]]:
             '''Settings for the Lambda execution environment in AWS IoT Greengrass .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinition-environment.html#cfn-greengrass-functiondefinition-environment-execution
             '''
             result = self._values.get("execution")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.ExecutionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.ExecutionProperty"]], result)
 
         @builtins.property
         def resource_access_policies(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.ResourceAccessPolicyProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.ResourceAccessPolicyProperty"]]]]:
             '''A list of the `resources <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinitionversion-resourceinstance.html>`_ in the group that the function can access, with the corresponding read-only or read-write permissions. The maximum is 10 resources.
 
             .. epigraph::
@@ -3368,7 +3368,7 @@ class CfnFunctionDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinition-environment.html#cfn-greengrass-functiondefinition-environment-resourceaccesspolicies
             '''
             result = self._values.get("resource_access_policies")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.ResourceAccessPolicyProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.ResourceAccessPolicyProperty"]]]], result)
 
         @builtins.property
         def variables(self) -> typing.Any:
@@ -3400,7 +3400,7 @@ class CfnFunctionDefinition(
             self,
             *,
             isolation_mode: typing.Optional[builtins.str] = None,
-            run_as: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinition.RunAsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            run_as: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinition.RunAsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Configuration settings for the Lambda execution environment on the AWS IoT Greengrass core.
 
@@ -3457,7 +3457,7 @@ class CfnFunctionDefinition(
         @builtins.property
         def run_as(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.RunAsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.RunAsProperty"]]:
             '''The user and group permissions used to run the Lambda function.
 
             Typically, this is the ggc_user and ggc_group. For more information, see `Run as <https://docs.aws.amazon.com/greengrass/v1/developerguide/lambda-group-config.html#lambda-access-identity.html>`_ in the *Developer Guide* .
@@ -3472,7 +3472,7 @@ class CfnFunctionDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinition-execution.html#cfn-greengrass-functiondefinition-execution-runas
             '''
             result = self._values.get("run_as")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.RunAsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.RunAsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3503,11 +3503,11 @@ class CfnFunctionDefinition(
             self,
             *,
             encoding_type: typing.Optional[builtins.str] = None,
-            environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinition.EnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            environment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinition.EnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             exec_args: typing.Optional[builtins.str] = None,
             executable: typing.Optional[builtins.str] = None,
             memory_size: typing.Optional[jsii.Number] = None,
-            pinned: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            pinned: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             timeout: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''The group-specific configuration settings for a Lambda function.
@@ -3600,13 +3600,13 @@ class CfnFunctionDefinition(
         @builtins.property
         def environment(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.EnvironmentProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.EnvironmentProperty"]]:
             '''The environment configuration of the function.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinition-functionconfiguration.html#cfn-greengrass-functiondefinition-functionconfiguration-environment
             '''
             result = self._values.get("environment")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.EnvironmentProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.EnvironmentProperty"]], result)
 
         @builtins.property
         def exec_args(self) -> typing.Optional[builtins.str]:
@@ -3642,7 +3642,7 @@ class CfnFunctionDefinition(
         @builtins.property
         def pinned(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the function is pinned (or *long-lived* ).
 
             Pinned functions start when the core starts and process all requests in the same container. The default value is false.
@@ -3650,7 +3650,7 @@ class CfnFunctionDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinition-functionconfiguration.html#cfn-greengrass-functiondefinition-functionconfiguration-pinned
             '''
             result = self._values.get("pinned")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def timeout(self) -> typing.Optional[jsii.Number]:
@@ -3683,8 +3683,8 @@ class CfnFunctionDefinition(
         def __init__(
             self,
             *,
-            functions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinition.FunctionProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            default_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinition.DefaultConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            functions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinition.FunctionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            default_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinition.DefaultConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A function definition version contains a list of functions.
 
@@ -3764,19 +3764,19 @@ class CfnFunctionDefinition(
         @builtins.property
         def functions(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.FunctionProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.FunctionProperty"]]]:
             '''The functions in this version.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinition-functiondefinitionversion.html#cfn-greengrass-functiondefinition-functiondefinitionversion-functions
             '''
             result = self._values.get("functions")
             assert result is not None, "Required property 'functions' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.FunctionProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.FunctionProperty"]]], result)
 
         @builtins.property
         def default_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.DefaultConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.DefaultConfigProperty"]]:
             '''The default configuration that applies to all Lambda functions in the group.
 
             Individual Lambda functions can override these settings.
@@ -3784,7 +3784,7 @@ class CfnFunctionDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinition-functiondefinitionversion.html#cfn-greengrass-functiondefinition-functiondefinitionversion-defaultconfig
             '''
             result = self._values.get("default_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.DefaultConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.DefaultConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3811,7 +3811,7 @@ class CfnFunctionDefinition(
             self,
             *,
             function_arn: builtins.str,
-            function_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinition.FunctionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            function_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinition.FunctionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             id: builtins.str,
         ) -> None:
             '''A function is a Lambda function that's referenced from an AWS IoT Greengrass group.
@@ -3889,7 +3889,7 @@ class CfnFunctionDefinition(
         @builtins.property
         def function_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.FunctionConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.FunctionConfigurationProperty"]:
             '''The group-specific settings of the Lambda function.
 
             These settings configure the function's behavior in the Greengrass group.
@@ -3898,7 +3898,7 @@ class CfnFunctionDefinition(
             '''
             result = self._values.get("function_configuration")
             assert result is not None, "Required property 'function_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinition.FunctionConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.FunctionConfigurationProperty"], result)
 
         @builtins.property
         def id(self) -> builtins.str:
@@ -4098,7 +4098,7 @@ class CfnFunctionDefinitionProps:
         self,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunctionDefinition.FunctionDefinitionVersionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinition.FunctionDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Properties for defining a ``CfnFunctionDefinition``.
@@ -4194,7 +4194,7 @@ class CfnFunctionDefinitionProps:
     @builtins.property
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunctionDefinition.FunctionDefinitionVersionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.FunctionDefinitionVersionProperty"]]:
         '''The function definition version to include when the function definition is created.
 
         A function definition version contains a list of ```function`` <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinition-function.html>`_ property types.
@@ -4205,7 +4205,7 @@ class CfnFunctionDefinitionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-functiondefinition.html#cfn-greengrass-functiondefinition-initialversion
         '''
         result = self._values.get("initial_version")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunctionDefinition.FunctionDefinitionVersionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinition.FunctionDefinitionVersionProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Any:
@@ -4309,12 +4309,12 @@ class CfnFunctionDefinitionVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         function_definition_id: builtins.str,
-        functions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinitionVersion.FunctionProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        default_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinitionVersion.DefaultConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        functions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinitionVersion.FunctionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        default_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinitionVersion.DefaultConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Greengrass::FunctionDefinitionVersion``.
 
@@ -4349,7 +4349,7 @@ class CfnFunctionDefinitionVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFunctionDefinitionVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4395,9 +4395,9 @@ class CfnFunctionDefinitionVersion(
     @jsii.member(jsii_name="functionDefinitionVersionRef")
     def function_definition_version_ref(
         self,
-    ) -> _FunctionDefinitionVersionReference_70e6e367:
+    ) -> "_FunctionDefinitionVersionReference_70e6e367":
         '''A reference to a FunctionDefinitionVersion resource.'''
-        return typing.cast(_FunctionDefinitionVersionReference_70e6e367, jsii.get(self, "functionDefinitionVersionRef"))
+        return typing.cast("_FunctionDefinitionVersionReference_70e6e367", jsii.get(self, "functionDefinitionVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="functionDefinitionId")
@@ -4416,14 +4416,14 @@ class CfnFunctionDefinitionVersion(
     @jsii.member(jsii_name="functions")
     def functions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.FunctionProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.FunctionProperty"]]]:
         '''The functions in this version.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.FunctionProperty"]]], jsii.get(self, "functions"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.FunctionProperty"]]], jsii.get(self, "functions"))
 
     @functions.setter
     def functions(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.FunctionProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.FunctionProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__793cfd87f23bbd9bf6e301d174c974540fcb771743c65e05c1a0a4025bf87005)
@@ -4434,14 +4434,14 @@ class CfnFunctionDefinitionVersion(
     @jsii.member(jsii_name="defaultConfig")
     def default_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.DefaultConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.DefaultConfigProperty"]]:
         '''The default configuration that applies to all Lambda functions in the group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.DefaultConfigProperty"]], jsii.get(self, "defaultConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.DefaultConfigProperty"]], jsii.get(self, "defaultConfig"))
 
     @default_config.setter
     def default_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.DefaultConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.DefaultConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0390fd3aa93f9d9e878e662d53c38486d861c310d7e93ad7f1c0f86c70cee20c)
@@ -4457,7 +4457,7 @@ class CfnFunctionDefinitionVersion(
         def __init__(
             self,
             *,
-            execution: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinitionVersion.ExecutionProperty", typing.Dict[builtins.str, typing.Any]]],
+            execution: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinitionVersion.ExecutionProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The default configuration that applies to all Lambda functions in the function definition version.
 
@@ -4496,14 +4496,14 @@ class CfnFunctionDefinitionVersion(
         @builtins.property
         def execution(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.ExecutionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.ExecutionProperty"]:
             '''Configuration settings for the Lambda execution environment on the AWS IoT Greengrass core.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinitionversion-defaultconfig.html#cfn-greengrass-functiondefinitionversion-defaultconfig-execution
             '''
             result = self._values.get("execution")
             assert result is not None, "Required property 'execution' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.ExecutionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.ExecutionProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4530,9 +4530,9 @@ class CfnFunctionDefinitionVersion(
         def __init__(
             self,
             *,
-            access_sysfs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            execution: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinitionVersion.ExecutionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            resource_access_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinitionVersion.ResourceAccessPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            access_sysfs: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            execution: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinitionVersion.ExecutionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            resource_access_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinitionVersion.ResourceAccessPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             variables: typing.Any = None,
         ) -> None:
             '''The environment configuration for a Lambda function on the AWS IoT Greengrass core.
@@ -4592,7 +4592,7 @@ class CfnFunctionDefinitionVersion(
         @builtins.property
         def access_sysfs(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the function is allowed to access the ``/sys`` directory on the core device, which allows the read device information from ``/sys`` .
 
             .. epigraph::
@@ -4602,23 +4602,23 @@ class CfnFunctionDefinitionVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinitionversion-environment.html#cfn-greengrass-functiondefinitionversion-environment-accesssysfs
             '''
             result = self._values.get("access_sysfs")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def execution(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.ExecutionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.ExecutionProperty"]]:
             '''Settings for the Lambda execution environment in AWS IoT Greengrass .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinitionversion-environment.html#cfn-greengrass-functiondefinitionversion-environment-execution
             '''
             result = self._values.get("execution")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.ExecutionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.ExecutionProperty"]], result)
 
         @builtins.property
         def resource_access_policies(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.ResourceAccessPolicyProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.ResourceAccessPolicyProperty"]]]]:
             '''A list of the `resources <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinitionversion-resourceinstance.html>`_ in the group that the function can access, with the corresponding read-only or read-write permissions. The maximum is 10 resources.
 
             .. epigraph::
@@ -4628,7 +4628,7 @@ class CfnFunctionDefinitionVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinitionversion-environment.html#cfn-greengrass-functiondefinitionversion-environment-resourceaccesspolicies
             '''
             result = self._values.get("resource_access_policies")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.ResourceAccessPolicyProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.ResourceAccessPolicyProperty"]]]], result)
 
         @builtins.property
         def variables(self) -> typing.Any:
@@ -4660,7 +4660,7 @@ class CfnFunctionDefinitionVersion(
             self,
             *,
             isolation_mode: typing.Optional[builtins.str] = None,
-            run_as: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinitionVersion.RunAsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            run_as: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinitionVersion.RunAsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Configuration settings for the Lambda execution environment on the AWS IoT Greengrass core.
 
@@ -4717,7 +4717,7 @@ class CfnFunctionDefinitionVersion(
         @builtins.property
         def run_as(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.RunAsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.RunAsProperty"]]:
             '''The user and group permissions used to run the Lambda function.
 
             Typically, this is the ggc_user and ggc_group. For more information, see `Run as <https://docs.aws.amazon.com/greengrass/v1/developerguide/lambda-group-config.html#lambda-access-identity.html>`_ in the *Developer Guide* .
@@ -4732,7 +4732,7 @@ class CfnFunctionDefinitionVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinitionversion-execution.html#cfn-greengrass-functiondefinitionversion-execution-runas
             '''
             result = self._values.get("run_as")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.RunAsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.RunAsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4763,11 +4763,11 @@ class CfnFunctionDefinitionVersion(
             self,
             *,
             encoding_type: typing.Optional[builtins.str] = None,
-            environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinitionVersion.EnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            environment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinitionVersion.EnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             exec_args: typing.Optional[builtins.str] = None,
             executable: typing.Optional[builtins.str] = None,
             memory_size: typing.Optional[jsii.Number] = None,
-            pinned: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            pinned: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             timeout: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''The group-specific configuration settings for a Lambda function.
@@ -4860,13 +4860,13 @@ class CfnFunctionDefinitionVersion(
         @builtins.property
         def environment(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.EnvironmentProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.EnvironmentProperty"]]:
             '''The environment configuration of the function.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinitionversion-functionconfiguration.html#cfn-greengrass-functiondefinitionversion-functionconfiguration-environment
             '''
             result = self._values.get("environment")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.EnvironmentProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.EnvironmentProperty"]], result)
 
         @builtins.property
         def exec_args(self) -> typing.Optional[builtins.str]:
@@ -4902,7 +4902,7 @@ class CfnFunctionDefinitionVersion(
         @builtins.property
         def pinned(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the function is pinned (or *long-lived* ).
 
             Pinned functions start when the core starts and process all requests in the same container. The default value is false.
@@ -4910,7 +4910,7 @@ class CfnFunctionDefinitionVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-functiondefinitionversion-functionconfiguration.html#cfn-greengrass-functiondefinitionversion-functionconfiguration-pinned
             '''
             result = self._values.get("pinned")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def timeout(self) -> typing.Optional[jsii.Number]:
@@ -4948,7 +4948,7 @@ class CfnFunctionDefinitionVersion(
             self,
             *,
             function_arn: builtins.str,
-            function_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionDefinitionVersion.FunctionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            function_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinitionVersion.FunctionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             id: builtins.str,
         ) -> None:
             '''A function is a Lambda function that's referenced from an AWS IoT Greengrass group.
@@ -5026,7 +5026,7 @@ class CfnFunctionDefinitionVersion(
         @builtins.property
         def function_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.FunctionConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.FunctionConfigurationProperty"]:
             '''The group-specific settings of the Lambda function.
 
             These settings configure the function's behavior in the Greengrass group.
@@ -5035,7 +5035,7 @@ class CfnFunctionDefinitionVersion(
             '''
             result = self._values.get("function_configuration")
             assert result is not None, "Required property 'function_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFunctionDefinitionVersion.FunctionConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.FunctionConfigurationProperty"], result)
 
         @builtins.property
         def id(self) -> builtins.str:
@@ -5239,8 +5239,8 @@ class CfnFunctionDefinitionVersionProps:
         self,
         *,
         function_definition_id: builtins.str,
-        functions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunctionDefinitionVersion.FunctionProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        default_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunctionDefinitionVersion.DefaultConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        functions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinitionVersion.FunctionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        default_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionDefinitionVersion.DefaultConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFunctionDefinitionVersion``.
 
@@ -5330,19 +5330,19 @@ class CfnFunctionDefinitionVersionProps:
     @builtins.property
     def functions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFunctionDefinitionVersion.FunctionProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.FunctionProperty"]]]:
         '''The functions in this version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-functiondefinitionversion.html#cfn-greengrass-functiondefinitionversion-functions
         '''
         result = self._values.get("functions")
         assert result is not None, "Required property 'functions' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFunctionDefinitionVersion.FunctionProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.FunctionProperty"]]], result)
 
     @builtins.property
     def default_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunctionDefinitionVersion.DefaultConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.DefaultConfigProperty"]]:
         '''The default configuration that applies to all Lambda functions in the group.
 
         Individual Lambda functions can override these settings.
@@ -5350,7 +5350,7 @@ class CfnFunctionDefinitionVersionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-functiondefinitionversion.html#cfn-greengrass-functiondefinitionversion-defaultconfig
         '''
         result = self._values.get("default_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunctionDefinitionVersion.DefaultConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionDefinitionVersion.DefaultConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5424,11 +5424,11 @@ class CfnGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGroup.GroupVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGroup.GroupVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         role_arn: typing.Optional[builtins.str] = None,
         tags: typing.Any = None,
     ) -> None:
@@ -5453,7 +5453,7 @@ class CfnGroup(
 
     @jsii.member(jsii_name="arnForGroup")
     @builtins.classmethod
-    def arn_for_group(cls, resource: _IGroupRef_b9515ae3) -> builtins.str:
+    def arn_for_group(cls, resource: "_IGroupRef_b9515ae3") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5466,10 +5466,10 @@ class CfnGroup(
     @builtins.classmethod
     def from_group_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IGroupRef_b9515ae3:
+    ) -> "_IGroupRef_b9515ae3":
         '''Creates a new IGroupRef from an ARN.
 
         :param scope: -
@@ -5481,16 +5481,16 @@ class CfnGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IGroupRef_b9515ae3, jsii.sinvoke(cls, "fromGroupArn", [scope, id, arn]))
+        return typing.cast("_IGroupRef_b9515ae3", jsii.sinvoke(cls, "fromGroupArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromGroupId")
     @builtins.classmethod
     def from_group_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         group_id: builtins.str,
-    ) -> _IGroupRef_b9515ae3:
+    ) -> "_IGroupRef_b9515ae3":
         '''Creates a new IGroupRef from a groupId.
 
         :param scope: -
@@ -5502,7 +5502,7 @@ class CfnGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument group_id", value=group_id, expected_type=type_hints["group_id"])
-        return typing.cast(_IGroupRef_b9515ae3, jsii.sinvoke(cls, "fromGroupId", [scope, id, group_id]))
+        return typing.cast("_IGroupRef_b9515ae3", jsii.sinvoke(cls, "fromGroupId", [scope, id, group_id]))
 
     @jsii.member(jsii_name="isCfnGroup")
     @builtins.classmethod
@@ -5517,7 +5517,7 @@ class CfnGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5607,15 +5607,15 @@ class CfnGroup(
 
     @builtins.property
     @jsii.member(jsii_name="groupRef")
-    def group_ref(self) -> _GroupReference_945f41ac:
+    def group_ref(self) -> "_GroupReference_945f41ac":
         '''A reference to a Group resource.'''
-        return typing.cast(_GroupReference_945f41ac, jsii.get(self, "groupRef"))
+        return typing.cast("_GroupReference_945f41ac", jsii.get(self, "groupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -5634,14 +5634,14 @@ class CfnGroup(
     @jsii.member(jsii_name="initialVersion")
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGroup.GroupVersionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGroup.GroupVersionProperty"]]:
         '''The group version to include when the group is created.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGroup.GroupVersionProperty"]], jsii.get(self, "initialVersion"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGroup.GroupVersionProperty"]], jsii.get(self, "initialVersion"))
 
     @initial_version.setter
     def initial_version(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGroup.GroupVersionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGroup.GroupVersionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7a38b6bf42dcdd50e398f34bf87a366c206fb7d56a14edcfa088d38beb0169bc)
@@ -5849,7 +5849,7 @@ class CfnGroupProps:
         self,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroup.GroupVersionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGroup.GroupVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         role_arn: typing.Optional[builtins.str] = None,
         tags: typing.Any = None,
     ) -> None:
@@ -5917,7 +5917,7 @@ class CfnGroupProps:
     @builtins.property
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGroup.GroupVersionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGroup.GroupVersionProperty"]]:
         '''The group version to include when the group is created.
 
         A group version references the Amazon Resource Name (ARN) of a core definition version, device definition version, subscription definition version, and other version types. The group version must reference a core definition version that contains one core. Other version types are optionally included, depending on your business need.
@@ -5928,7 +5928,7 @@ class CfnGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-group.html#cfn-greengrass-group-initialversion
         '''
         result = self._values.get("initial_version")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGroup.GroupVersionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGroup.GroupVersionProperty"]], result)
 
     @builtins.property
     def role_arn(self) -> typing.Optional[builtins.str]:
@@ -6008,7 +6008,7 @@ class CfnGroupVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         group_id: builtins.str,
@@ -6063,7 +6063,7 @@ class CfnGroupVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGroupVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6107,9 +6107,9 @@ class CfnGroupVersion(
 
     @builtins.property
     @jsii.member(jsii_name="groupVersionRef")
-    def group_version_ref(self) -> _GroupVersionReference_ec8143a5:
+    def group_version_ref(self) -> "_GroupVersionReference_ec8143a5":
         '''A reference to a GroupVersion resource.'''
-        return typing.cast(_GroupVersionReference_ec8143a5, jsii.get(self, "groupVersionRef"))
+        return typing.cast("_GroupVersionReference_ec8143a5", jsii.get(self, "groupVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="groupId")
@@ -6461,11 +6461,11 @@ class CfnLoggerDefinition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoggerDefinition.LoggerDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLoggerDefinition.LoggerDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Create a new ``AWS::Greengrass::LoggerDefinition``.
@@ -6490,7 +6490,7 @@ class CfnLoggerDefinition(
     @builtins.classmethod
     def arn_for_logger_definition(
         cls,
-        resource: _ILoggerDefinitionRef_c2baf8f3,
+        resource: "_ILoggerDefinitionRef_c2baf8f3",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6504,10 +6504,10 @@ class CfnLoggerDefinition(
     @builtins.classmethod
     def from_logger_definition_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ILoggerDefinitionRef_c2baf8f3:
+    ) -> "_ILoggerDefinitionRef_c2baf8f3":
         '''Creates a new ILoggerDefinitionRef from an ARN.
 
         :param scope: -
@@ -6519,16 +6519,16 @@ class CfnLoggerDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ILoggerDefinitionRef_c2baf8f3, jsii.sinvoke(cls, "fromLoggerDefinitionArn", [scope, id, arn]))
+        return typing.cast("_ILoggerDefinitionRef_c2baf8f3", jsii.sinvoke(cls, "fromLoggerDefinitionArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromLoggerDefinitionId")
     @builtins.classmethod
     def from_logger_definition_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         logger_definition_id: builtins.str,
-    ) -> _ILoggerDefinitionRef_c2baf8f3:
+    ) -> "_ILoggerDefinitionRef_c2baf8f3":
         '''Creates a new ILoggerDefinitionRef from a loggerDefinitionId.
 
         :param scope: -
@@ -6540,7 +6540,7 @@ class CfnLoggerDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument logger_definition_id", value=logger_definition_id, expected_type=type_hints["logger_definition_id"])
-        return typing.cast(_ILoggerDefinitionRef_c2baf8f3, jsii.sinvoke(cls, "fromLoggerDefinitionId", [scope, id, logger_definition_id]))
+        return typing.cast("_ILoggerDefinitionRef_c2baf8f3", jsii.sinvoke(cls, "fromLoggerDefinitionId", [scope, id, logger_definition_id]))
 
     @jsii.member(jsii_name="isCfnLoggerDefinition")
     @builtins.classmethod
@@ -6555,7 +6555,7 @@ class CfnLoggerDefinition(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLoggerDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6627,15 +6627,15 @@ class CfnLoggerDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="loggerDefinitionRef")
-    def logger_definition_ref(self) -> _LoggerDefinitionReference_6ca7a459:
+    def logger_definition_ref(self) -> "_LoggerDefinitionReference_6ca7a459":
         '''A reference to a LoggerDefinition resource.'''
-        return typing.cast(_LoggerDefinitionReference_6ca7a459, jsii.get(self, "loggerDefinitionRef"))
+        return typing.cast("_LoggerDefinitionReference_6ca7a459", jsii.get(self, "loggerDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -6654,14 +6654,14 @@ class CfnLoggerDefinition(
     @jsii.member(jsii_name="initialVersion")
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLoggerDefinition.LoggerDefinitionVersionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLoggerDefinition.LoggerDefinitionVersionProperty"]]:
         '''The logger definition version to include when the logger definition is created.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLoggerDefinition.LoggerDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLoggerDefinition.LoggerDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
 
     @initial_version.setter
     def initial_version(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLoggerDefinition.LoggerDefinitionVersionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLoggerDefinition.LoggerDefinitionVersionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d933992b8def94152adabe1624210ae1c6c2ac626a5a9fd2af376a7f9128d123)
@@ -6690,7 +6690,7 @@ class CfnLoggerDefinition(
         def __init__(
             self,
             *,
-            loggers: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoggerDefinition.LoggerProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            loggers: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLoggerDefinition.LoggerProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''A logger definition version contains a list of `loggers <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-loggerdefinition-logger.html>`_ .
 
@@ -6733,14 +6733,14 @@ class CfnLoggerDefinition(
         @builtins.property
         def loggers(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLoggerDefinition.LoggerProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLoggerDefinition.LoggerProperty"]]]:
             '''The loggers in this version.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-loggerdefinition-loggerdefinitionversion.html#cfn-greengrass-loggerdefinition-loggerdefinitionversion-loggers
             '''
             result = self._values.get("loggers")
             assert result is not None, "Required property 'loggers' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLoggerDefinition.LoggerProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLoggerDefinition.LoggerProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6902,7 +6902,7 @@ class CfnLoggerDefinitionProps:
         self,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoggerDefinition.LoggerDefinitionVersionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLoggerDefinition.LoggerDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Properties for defining a ``CfnLoggerDefinition``.
@@ -6966,7 +6966,7 @@ class CfnLoggerDefinitionProps:
     @builtins.property
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLoggerDefinition.LoggerDefinitionVersionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLoggerDefinition.LoggerDefinitionVersionProperty"]]:
         '''The logger definition version to include when the logger definition is created.
 
         A logger definition version contains a list of ```logger`` <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-loggerdefinition-logger.html>`_ property types.
@@ -6977,7 +6977,7 @@ class CfnLoggerDefinitionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-loggerdefinition.html#cfn-greengrass-loggerdefinition-initialversion
         '''
         result = self._values.get("initial_version")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLoggerDefinition.LoggerDefinitionVersionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLoggerDefinition.LoggerDefinitionVersionProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Any:
@@ -7048,11 +7048,11 @@ class CfnLoggerDefinitionVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         logger_definition_id: builtins.str,
-        loggers: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoggerDefinitionVersion.LoggerProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        loggers: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLoggerDefinitionVersion.LoggerProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Create a new ``AWS::Greengrass::LoggerDefinitionVersion``.
 
@@ -7084,7 +7084,7 @@ class CfnLoggerDefinitionVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLoggerDefinitionVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7130,9 +7130,9 @@ class CfnLoggerDefinitionVersion(
     @jsii.member(jsii_name="loggerDefinitionVersionRef")
     def logger_definition_version_ref(
         self,
-    ) -> _LoggerDefinitionVersionReference_8df439cc:
+    ) -> "_LoggerDefinitionVersionReference_8df439cc":
         '''A reference to a LoggerDefinitionVersion resource.'''
-        return typing.cast(_LoggerDefinitionVersionReference_8df439cc, jsii.get(self, "loggerDefinitionVersionRef"))
+        return typing.cast("_LoggerDefinitionVersionReference_8df439cc", jsii.get(self, "loggerDefinitionVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="loggerDefinitionId")
@@ -7151,14 +7151,14 @@ class CfnLoggerDefinitionVersion(
     @jsii.member(jsii_name="loggers")
     def loggers(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLoggerDefinitionVersion.LoggerProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLoggerDefinitionVersion.LoggerProperty"]]]:
         '''The loggers in this version.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLoggerDefinitionVersion.LoggerProperty"]]], jsii.get(self, "loggers"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLoggerDefinitionVersion.LoggerProperty"]]], jsii.get(self, "loggers"))
 
     @loggers.setter
     def loggers(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLoggerDefinitionVersion.LoggerProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLoggerDefinitionVersion.LoggerProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__935a7882eea62e6e59dbe2f8f1f89290502193c1dc3234cdc82edf49948aac83)
@@ -7314,7 +7314,7 @@ class CfnLoggerDefinitionVersionProps:
         self,
         *,
         logger_definition_id: builtins.str,
-        loggers: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoggerDefinitionVersion.LoggerProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        loggers: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLoggerDefinitionVersion.LoggerProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Properties for defining a ``CfnLoggerDefinitionVersion``.
 
@@ -7367,14 +7367,14 @@ class CfnLoggerDefinitionVersionProps:
     @builtins.property
     def loggers(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLoggerDefinitionVersion.LoggerProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLoggerDefinitionVersion.LoggerProperty"]]]:
         '''The loggers in this version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-loggerdefinitionversion.html#cfn-greengrass-loggerdefinitionversion-loggers
         '''
         result = self._values.get("loggers")
         assert result is not None, "Required property 'loggers' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLoggerDefinitionVersion.LoggerProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLoggerDefinitionVersion.LoggerProperty"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7484,11 +7484,11 @@ class CfnResourceDefinition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinition.ResourceDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.ResourceDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Create a new ``AWS::Greengrass::ResourceDefinition``.
@@ -7513,7 +7513,7 @@ class CfnResourceDefinition(
     @builtins.classmethod
     def arn_for_resource_definition(
         cls,
-        resource: _IResourceDefinitionRef_17d6c7ff,
+        resource: "_IResourceDefinitionRef_17d6c7ff",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -7527,10 +7527,10 @@ class CfnResourceDefinition(
     @builtins.classmethod
     def from_resource_definition_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IResourceDefinitionRef_17d6c7ff:
+    ) -> "_IResourceDefinitionRef_17d6c7ff":
         '''Creates a new IResourceDefinitionRef from an ARN.
 
         :param scope: -
@@ -7542,16 +7542,16 @@ class CfnResourceDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IResourceDefinitionRef_17d6c7ff, jsii.sinvoke(cls, "fromResourceDefinitionArn", [scope, id, arn]))
+        return typing.cast("_IResourceDefinitionRef_17d6c7ff", jsii.sinvoke(cls, "fromResourceDefinitionArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromResourceDefinitionId")
     @builtins.classmethod
     def from_resource_definition_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         resource_definition_id: builtins.str,
-    ) -> _IResourceDefinitionRef_17d6c7ff:
+    ) -> "_IResourceDefinitionRef_17d6c7ff":
         '''Creates a new IResourceDefinitionRef from a resourceDefinitionId.
 
         :param scope: -
@@ -7563,7 +7563,7 @@ class CfnResourceDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument resource_definition_id", value=resource_definition_id, expected_type=type_hints["resource_definition_id"])
-        return typing.cast(_IResourceDefinitionRef_17d6c7ff, jsii.sinvoke(cls, "fromResourceDefinitionId", [scope, id, resource_definition_id]))
+        return typing.cast("_IResourceDefinitionRef_17d6c7ff", jsii.sinvoke(cls, "fromResourceDefinitionId", [scope, id, resource_definition_id]))
 
     @jsii.member(jsii_name="isCfnResourceDefinition")
     @builtins.classmethod
@@ -7578,7 +7578,7 @@ class CfnResourceDefinition(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourceDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7650,15 +7650,15 @@ class CfnResourceDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="resourceDefinitionRef")
-    def resource_definition_ref(self) -> _ResourceDefinitionReference_3c5e0e00:
+    def resource_definition_ref(self) -> "_ResourceDefinitionReference_3c5e0e00":
         '''A reference to a ResourceDefinition resource.'''
-        return typing.cast(_ResourceDefinitionReference_3c5e0e00, jsii.get(self, "resourceDefinitionRef"))
+        return typing.cast("_ResourceDefinitionReference_3c5e0e00", jsii.get(self, "resourceDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -7677,14 +7677,14 @@ class CfnResourceDefinition(
     @jsii.member(jsii_name="initialVersion")
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.ResourceDefinitionVersionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceDefinitionVersionProperty"]]:
         '''The resource definition version to include when the resource definition is created.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.ResourceDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
 
     @initial_version.setter
     def initial_version(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.ResourceDefinitionVersionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceDefinitionVersionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0e477611b342531c61501bce71bad63149180465d67fa02234b702f1d04ed88e)
@@ -7716,7 +7716,7 @@ class CfnResourceDefinition(
         def __init__(
             self,
             *,
-            auto_add_group_owner: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            auto_add_group_owner: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             group_owner: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Settings that define additional Linux OS group permissions to give to the Lambda function process.
@@ -7757,7 +7757,7 @@ class CfnResourceDefinition(
         @builtins.property
         def auto_add_group_owner(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether to give the privileges of the Linux group that owns the resource to the Lambda process.
 
             This gives the Lambda process the file access permissions of the Linux group.
@@ -7766,7 +7766,7 @@ class CfnResourceDefinition(
             '''
             result = self._values.get("auto_add_group_owner")
             assert result is not None, "Required property 'auto_add_group_owner' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def group_owner(self) -> typing.Optional[builtins.str]:
@@ -7803,7 +7803,7 @@ class CfnResourceDefinition(
             self,
             *,
             source_path: builtins.str,
-            group_owner_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinition.GroupOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            group_owner_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.GroupOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Settings for a local device resource, which represents a file under ``/dev`` .
 
@@ -7860,13 +7860,13 @@ class CfnResourceDefinition(
         @builtins.property
         def group_owner_setting(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.GroupOwnerSettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.GroupOwnerSettingProperty"]]:
             '''Settings that define additional Linux OS group permissions to give to the Lambda function process.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinition-localdeviceresourcedata.html#cfn-greengrass-resourcedefinition-localdeviceresourcedata-groupownersetting
             '''
             result = self._values.get("group_owner_setting")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.GroupOwnerSettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.GroupOwnerSettingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7894,7 +7894,7 @@ class CfnResourceDefinition(
             *,
             destination_path: builtins.str,
             source_path: builtins.str,
-            group_owner_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinition.GroupOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            group_owner_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.GroupOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Settings for a local volume resource, which represents a file or directory on the root file system.
 
@@ -7965,13 +7965,13 @@ class CfnResourceDefinition(
         @builtins.property
         def group_owner_setting(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.GroupOwnerSettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.GroupOwnerSettingProperty"]]:
             '''Settings that define additional Linux OS group permissions to give to the Lambda function process.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinition-localvolumeresourcedata.html#cfn-greengrass-resourcedefinition-localvolumeresourcedata-groupownersetting
             '''
             result = self._values.get("group_owner_setting")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.GroupOwnerSettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.GroupOwnerSettingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7999,11 +7999,11 @@ class CfnResourceDefinition(
         def __init__(
             self,
             *,
-            local_device_resource_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinition.LocalDeviceResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            local_volume_resource_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinition.LocalVolumeResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_machine_learning_model_resource_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinition.S3MachineLearningModelResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sage_maker_machine_learning_model_resource_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinition.SageMakerMachineLearningModelResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            secrets_manager_secret_resource_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinition.SecretsManagerSecretResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            local_device_resource_data: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.LocalDeviceResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            local_volume_resource_data: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.LocalVolumeResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_machine_learning_model_resource_data: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.S3MachineLearningModelResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sage_maker_machine_learning_model_resource_data: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.SageMakerMachineLearningModelResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            secrets_manager_secret_resource_data: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.SecretsManagerSecretResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A container for resource data, which defines the resource type.
 
@@ -8103,57 +8103,57 @@ class CfnResourceDefinition(
         @builtins.property
         def local_device_resource_data(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.LocalDeviceResourceDataProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.LocalDeviceResourceDataProperty"]]:
             '''Settings for a local device resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinition-resourcedatacontainer.html#cfn-greengrass-resourcedefinition-resourcedatacontainer-localdeviceresourcedata
             '''
             result = self._values.get("local_device_resource_data")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.LocalDeviceResourceDataProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.LocalDeviceResourceDataProperty"]], result)
 
         @builtins.property
         def local_volume_resource_data(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.LocalVolumeResourceDataProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.LocalVolumeResourceDataProperty"]]:
             '''Settings for a local volume resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinition-resourcedatacontainer.html#cfn-greengrass-resourcedefinition-resourcedatacontainer-localvolumeresourcedata
             '''
             result = self._values.get("local_volume_resource_data")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.LocalVolumeResourceDataProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.LocalVolumeResourceDataProperty"]], result)
 
         @builtins.property
         def s3_machine_learning_model_resource_data(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.S3MachineLearningModelResourceDataProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.S3MachineLearningModelResourceDataProperty"]]:
             '''Settings for a machine learning resource stored in Amazon S3 .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinition-resourcedatacontainer.html#cfn-greengrass-resourcedefinition-resourcedatacontainer-s3machinelearningmodelresourcedata
             '''
             result = self._values.get("s3_machine_learning_model_resource_data")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.S3MachineLearningModelResourceDataProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.S3MachineLearningModelResourceDataProperty"]], result)
 
         @builtins.property
         def sage_maker_machine_learning_model_resource_data(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.SageMakerMachineLearningModelResourceDataProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.SageMakerMachineLearningModelResourceDataProperty"]]:
             '''Settings for a machine learning resource saved as an SageMaker AI training job.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinition-resourcedatacontainer.html#cfn-greengrass-resourcedefinition-resourcedatacontainer-sagemakermachinelearningmodelresourcedata
             '''
             result = self._values.get("sage_maker_machine_learning_model_resource_data")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.SageMakerMachineLearningModelResourceDataProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.SageMakerMachineLearningModelResourceDataProperty"]], result)
 
         @builtins.property
         def secrets_manager_secret_resource_data(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.SecretsManagerSecretResourceDataProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.SecretsManagerSecretResourceDataProperty"]]:
             '''Settings for a secret resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinition-resourcedatacontainer.html#cfn-greengrass-resourcedefinition-resourcedatacontainer-secretsmanagersecretresourcedata
             '''
             result = self._values.get("secrets_manager_secret_resource_data")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.SecretsManagerSecretResourceDataProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.SecretsManagerSecretResourceDataProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8175,7 +8175,7 @@ class CfnResourceDefinition(
         def __init__(
             self,
             *,
-            resources: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinition.ResourceInstanceProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            resources: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.ResourceInstanceProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''A resource definition version contains a list of resources. (In CloudFormation , resources are named *resource instances* .).
 
@@ -8264,14 +8264,14 @@ class CfnResourceDefinition(
         @builtins.property
         def resources(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.ResourceInstanceProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceInstanceProperty"]]]:
             '''The resources in this version.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinition-resourcedefinitionversion.html#cfn-greengrass-resourcedefinition-resourcedefinitionversion-resources
             '''
             result = self._values.get("resources")
             assert result is not None, "Required property 'resources' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.ResourceInstanceProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceInstanceProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8381,7 +8381,7 @@ class CfnResourceDefinition(
             *,
             id: builtins.str,
             name: builtins.str,
-            resource_data_container: typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinition.ResourceDataContainerProperty", typing.Dict[builtins.str, typing.Any]]],
+            resource_data_container: typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.ResourceDataContainerProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''A local resource, machine learning resource, or secret resource.
 
@@ -8496,7 +8496,7 @@ class CfnResourceDefinition(
         @builtins.property
         def resource_data_container(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.ResourceDataContainerProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceDataContainerProperty"]:
             '''A container for resource data.
 
             The container takes only one of the following supported resource data types: ``LocalDeviceResourceData`` , ``LocalVolumeResourceData`` , ``SageMakerMachineLearningModelResourceData`` , ``S3MachineLearningModelResourceData`` , or ``SecretsManagerSecretResourceData`` .
@@ -8508,7 +8508,7 @@ class CfnResourceDefinition(
             '''
             result = self._values.get("resource_data_container")
             assert result is not None, "Required property 'resource_data_container' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.ResourceDataContainerProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceDataContainerProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8536,7 +8536,7 @@ class CfnResourceDefinition(
             *,
             destination_path: builtins.str,
             s3_uri: builtins.str,
-            owner_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinition.ResourceDownloadOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            owner_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.ResourceDownloadOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Settings for an Amazon S3 machine learning resource.
 
@@ -8605,7 +8605,7 @@ class CfnResourceDefinition(
         @builtins.property
         def owner_setting(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.ResourceDownloadOwnerSettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceDownloadOwnerSettingProperty"]]:
             '''The owner setting for the downloaded machine learning resource.
 
             For more information, see `Access Machine Learning Resources from Lambda Functions <https://docs.aws.amazon.com/greengrass/v1/developerguide/access-ml-resources.html>`_ in the *Developer Guide* .
@@ -8613,7 +8613,7 @@ class CfnResourceDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinition-s3machinelearningmodelresourcedata.html#cfn-greengrass-resourcedefinition-s3machinelearningmodelresourcedata-ownersetting
             '''
             result = self._values.get("owner_setting")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.ResourceDownloadOwnerSettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceDownloadOwnerSettingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8641,7 +8641,7 @@ class CfnResourceDefinition(
             *,
             destination_path: builtins.str,
             sage_maker_job_arn: builtins.str,
-            owner_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinition.ResourceDownloadOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            owner_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.ResourceDownloadOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Settings for an Secrets Manager machine learning resource.
 
@@ -8708,7 +8708,7 @@ class CfnResourceDefinition(
         @builtins.property
         def owner_setting(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.ResourceDownloadOwnerSettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceDownloadOwnerSettingProperty"]]:
             '''The owner setting for the downloaded machine learning resource.
 
             For more information, see `Access Machine Learning Resources from Lambda Functions <https://docs.aws.amazon.com/greengrass/v1/developerguide/access-ml-resources.html>`_ in the *Developer Guide* .
@@ -8716,7 +8716,7 @@ class CfnResourceDefinition(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinition-sagemakermachinelearningmodelresourcedata.html#cfn-greengrass-resourcedefinition-sagemakermachinelearningmodelresourcedata-ownersetting
             '''
             result = self._values.get("owner_setting")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinition.ResourceDownloadOwnerSettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceDownloadOwnerSettingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8824,7 +8824,7 @@ class CfnResourceDefinitionProps:
         self,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResourceDefinition.ResourceDefinitionVersionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinition.ResourceDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Properties for defining a ``CfnResourceDefinition``.
@@ -8934,7 +8934,7 @@ class CfnResourceDefinitionProps:
     @builtins.property
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResourceDefinition.ResourceDefinitionVersionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceDefinitionVersionProperty"]]:
         '''The resource definition version to include when the resource definition is created.
 
         A resource definition version contains a list of ```resource instance`` <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinition-resourceinstance.html>`_ property types.
@@ -8945,7 +8945,7 @@ class CfnResourceDefinitionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-resourcedefinition.html#cfn-greengrass-resourcedefinition-initialversion
         '''
         result = self._values.get("initial_version")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResourceDefinition.ResourceDefinitionVersionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinition.ResourceDefinitionVersionProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Any:
@@ -9062,11 +9062,11 @@ class CfnResourceDefinitionVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         resource_definition_id: builtins.str,
-        resources: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinitionVersion.ResourceInstanceProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        resources: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinitionVersion.ResourceInstanceProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Create a new ``AWS::Greengrass::ResourceDefinitionVersion``.
 
@@ -9098,7 +9098,7 @@ class CfnResourceDefinitionVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourceDefinitionVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9144,9 +9144,9 @@ class CfnResourceDefinitionVersion(
     @jsii.member(jsii_name="resourceDefinitionVersionRef")
     def resource_definition_version_ref(
         self,
-    ) -> _ResourceDefinitionVersionReference_1a87c34e:
+    ) -> "_ResourceDefinitionVersionReference_1a87c34e":
         '''A reference to a ResourceDefinitionVersion resource.'''
-        return typing.cast(_ResourceDefinitionVersionReference_1a87c34e, jsii.get(self, "resourceDefinitionVersionRef"))
+        return typing.cast("_ResourceDefinitionVersionReference_1a87c34e", jsii.get(self, "resourceDefinitionVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="resourceDefinitionId")
@@ -9165,14 +9165,14 @@ class CfnResourceDefinitionVersion(
     @jsii.member(jsii_name="resources")
     def resources(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.ResourceInstanceProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.ResourceInstanceProperty"]]]:
         '''The resources in this version.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.ResourceInstanceProperty"]]], jsii.get(self, "resources"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.ResourceInstanceProperty"]]], jsii.get(self, "resources"))
 
     @resources.setter
     def resources(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.ResourceInstanceProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.ResourceInstanceProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__74096283c52a878723fa8ea3375fb7a3d8f6b1924db6d17a865bc7f6ab31cce8)
@@ -9191,7 +9191,7 @@ class CfnResourceDefinitionVersion(
         def __init__(
             self,
             *,
-            auto_add_group_owner: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            auto_add_group_owner: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             group_owner: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Settings that define additional Linux OS group permissions to give to the Lambda function process.
@@ -9232,7 +9232,7 @@ class CfnResourceDefinitionVersion(
         @builtins.property
         def auto_add_group_owner(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether to give the privileges of the Linux group that owns the resource to the Lambda process.
 
             This gives the Lambda process the file access permissions of the Linux group.
@@ -9241,7 +9241,7 @@ class CfnResourceDefinitionVersion(
             '''
             result = self._values.get("auto_add_group_owner")
             assert result is not None, "Required property 'auto_add_group_owner' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def group_owner(self) -> typing.Optional[builtins.str]:
@@ -9278,7 +9278,7 @@ class CfnResourceDefinitionVersion(
             self,
             *,
             source_path: builtins.str,
-            group_owner_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinitionVersion.GroupOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            group_owner_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinitionVersion.GroupOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Settings for a local device resource, which represents a file under ``/dev`` .
 
@@ -9335,13 +9335,13 @@ class CfnResourceDefinitionVersion(
         @builtins.property
         def group_owner_setting(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.GroupOwnerSettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.GroupOwnerSettingProperty"]]:
             '''Settings that define additional Linux OS group permissions to give to the Lambda function process.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinitionversion-localdeviceresourcedata.html#cfn-greengrass-resourcedefinitionversion-localdeviceresourcedata-groupownersetting
             '''
             result = self._values.get("group_owner_setting")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.GroupOwnerSettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.GroupOwnerSettingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9369,7 +9369,7 @@ class CfnResourceDefinitionVersion(
             *,
             destination_path: builtins.str,
             source_path: builtins.str,
-            group_owner_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinitionVersion.GroupOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            group_owner_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinitionVersion.GroupOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Settings for a local volume resource, which represents a file or directory on the root file system.
 
@@ -9440,13 +9440,13 @@ class CfnResourceDefinitionVersion(
         @builtins.property
         def group_owner_setting(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.GroupOwnerSettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.GroupOwnerSettingProperty"]]:
             '''Settings that define additional Linux OS group permissions to give to the Lambda function process.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinitionversion-localvolumeresourcedata.html#cfn-greengrass-resourcedefinitionversion-localvolumeresourcedata-groupownersetting
             '''
             result = self._values.get("group_owner_setting")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.GroupOwnerSettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.GroupOwnerSettingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9474,11 +9474,11 @@ class CfnResourceDefinitionVersion(
         def __init__(
             self,
             *,
-            local_device_resource_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinitionVersion.LocalDeviceResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            local_volume_resource_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinitionVersion.LocalVolumeResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_machine_learning_model_resource_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinitionVersion.S3MachineLearningModelResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sage_maker_machine_learning_model_resource_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinitionVersion.SageMakerMachineLearningModelResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            secrets_manager_secret_resource_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinitionVersion.SecretsManagerSecretResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            local_device_resource_data: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinitionVersion.LocalDeviceResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            local_volume_resource_data: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinitionVersion.LocalVolumeResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_machine_learning_model_resource_data: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinitionVersion.S3MachineLearningModelResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sage_maker_machine_learning_model_resource_data: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinitionVersion.SageMakerMachineLearningModelResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            secrets_manager_secret_resource_data: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinitionVersion.SecretsManagerSecretResourceDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A container for resource data, which defines the resource type.
 
@@ -9578,57 +9578,57 @@ class CfnResourceDefinitionVersion(
         @builtins.property
         def local_device_resource_data(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.LocalDeviceResourceDataProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.LocalDeviceResourceDataProperty"]]:
             '''Settings for a local device resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinitionversion-resourcedatacontainer.html#cfn-greengrass-resourcedefinitionversion-resourcedatacontainer-localdeviceresourcedata
             '''
             result = self._values.get("local_device_resource_data")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.LocalDeviceResourceDataProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.LocalDeviceResourceDataProperty"]], result)
 
         @builtins.property
         def local_volume_resource_data(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.LocalVolumeResourceDataProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.LocalVolumeResourceDataProperty"]]:
             '''Settings for a local volume resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinitionversion-resourcedatacontainer.html#cfn-greengrass-resourcedefinitionversion-resourcedatacontainer-localvolumeresourcedata
             '''
             result = self._values.get("local_volume_resource_data")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.LocalVolumeResourceDataProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.LocalVolumeResourceDataProperty"]], result)
 
         @builtins.property
         def s3_machine_learning_model_resource_data(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.S3MachineLearningModelResourceDataProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.S3MachineLearningModelResourceDataProperty"]]:
             '''Settings for a machine learning resource stored in Amazon S3 .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinitionversion-resourcedatacontainer.html#cfn-greengrass-resourcedefinitionversion-resourcedatacontainer-s3machinelearningmodelresourcedata
             '''
             result = self._values.get("s3_machine_learning_model_resource_data")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.S3MachineLearningModelResourceDataProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.S3MachineLearningModelResourceDataProperty"]], result)
 
         @builtins.property
         def sage_maker_machine_learning_model_resource_data(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.SageMakerMachineLearningModelResourceDataProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.SageMakerMachineLearningModelResourceDataProperty"]]:
             '''Settings for a machine learning resource saved as an SageMaker AI training job.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinitionversion-resourcedatacontainer.html#cfn-greengrass-resourcedefinitionversion-resourcedatacontainer-sagemakermachinelearningmodelresourcedata
             '''
             result = self._values.get("sage_maker_machine_learning_model_resource_data")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.SageMakerMachineLearningModelResourceDataProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.SageMakerMachineLearningModelResourceDataProperty"]], result)
 
         @builtins.property
         def secrets_manager_secret_resource_data(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.SecretsManagerSecretResourceDataProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.SecretsManagerSecretResourceDataProperty"]]:
             '''Settings for a secret resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinitionversion-resourcedatacontainer.html#cfn-greengrass-resourcedefinitionversion-resourcedatacontainer-secretsmanagersecretresourcedata
             '''
             result = self._values.get("secrets_manager_secret_resource_data")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.SecretsManagerSecretResourceDataProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.SecretsManagerSecretResourceDataProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9738,7 +9738,7 @@ class CfnResourceDefinitionVersion(
             *,
             id: builtins.str,
             name: builtins.str,
-            resource_data_container: typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinitionVersion.ResourceDataContainerProperty", typing.Dict[builtins.str, typing.Any]]],
+            resource_data_container: typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinitionVersion.ResourceDataContainerProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''A local resource, machine learning resource, or secret resource.
 
@@ -9853,7 +9853,7 @@ class CfnResourceDefinitionVersion(
         @builtins.property
         def resource_data_container(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.ResourceDataContainerProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.ResourceDataContainerProperty"]:
             '''A container for resource data.
 
             The container takes only one of the following supported resource data types: ``LocalDeviceResourceData`` , ``LocalVolumeResourceData`` , ``SageMakerMachineLearningModelResourceData`` , ``S3MachineLearningModelResourceData`` , or ``SecretsManagerSecretResourceData`` .
@@ -9865,7 +9865,7 @@ class CfnResourceDefinitionVersion(
             '''
             result = self._values.get("resource_data_container")
             assert result is not None, "Required property 'resource_data_container' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.ResourceDataContainerProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.ResourceDataContainerProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9893,7 +9893,7 @@ class CfnResourceDefinitionVersion(
             *,
             destination_path: builtins.str,
             s3_uri: builtins.str,
-            owner_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinitionVersion.ResourceDownloadOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            owner_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinitionVersion.ResourceDownloadOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Settings for an Amazon S3 machine learning resource.
 
@@ -9962,7 +9962,7 @@ class CfnResourceDefinitionVersion(
         @builtins.property
         def owner_setting(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.ResourceDownloadOwnerSettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.ResourceDownloadOwnerSettingProperty"]]:
             '''The owner setting for the downloaded machine learning resource.
 
             For more information, see `Access Machine Learning Resources from Lambda Functions <https://docs.aws.amazon.com/greengrass/v1/developerguide/access-ml-resources.html>`_ in the *Developer Guide* .
@@ -9970,7 +9970,7 @@ class CfnResourceDefinitionVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinitionversion-s3machinelearningmodelresourcedata.html#cfn-greengrass-resourcedefinitionversion-s3machinelearningmodelresourcedata-ownersetting
             '''
             result = self._values.get("owner_setting")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.ResourceDownloadOwnerSettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.ResourceDownloadOwnerSettingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9998,7 +9998,7 @@ class CfnResourceDefinitionVersion(
             *,
             destination_path: builtins.str,
             sage_maker_job_arn: builtins.str,
-            owner_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceDefinitionVersion.ResourceDownloadOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            owner_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinitionVersion.ResourceDownloadOwnerSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Settings for an Secrets Manager machine learning resource.
 
@@ -10065,7 +10065,7 @@ class CfnResourceDefinitionVersion(
         @builtins.property
         def owner_setting(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.ResourceDownloadOwnerSettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.ResourceDownloadOwnerSettingProperty"]]:
             '''The owner setting for the downloaded machine learning resource.
 
             For more information, see `Access Machine Learning Resources from Lambda Functions <https://docs.aws.amazon.com/greengrass/v1/developerguide/access-ml-resources.html>`_ in the *Developer Guide* .
@@ -10073,7 +10073,7 @@ class CfnResourceDefinitionVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-resourcedefinitionversion-sagemakermachinelearningmodelresourcedata.html#cfn-greengrass-resourcedefinitionversion-sagemakermachinelearningmodelresourcedata-ownersetting
             '''
             result = self._values.get("owner_setting")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceDefinitionVersion.ResourceDownloadOwnerSettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.ResourceDownloadOwnerSettingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10184,7 +10184,7 @@ class CfnResourceDefinitionVersionProps:
         self,
         *,
         resource_definition_id: builtins.str,
-        resources: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResourceDefinitionVersion.ResourceInstanceProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        resources: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceDefinitionVersion.ResourceInstanceProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Properties for defining a ``CfnResourceDefinitionVersion``.
 
@@ -10283,14 +10283,14 @@ class CfnResourceDefinitionVersionProps:
     @builtins.property
     def resources(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnResourceDefinitionVersion.ResourceInstanceProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.ResourceInstanceProperty"]]]:
         '''The resources in this version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-resourcedefinitionversion.html#cfn-greengrass-resourcedefinitionversion-resources
         '''
         result = self._values.get("resources")
         assert result is not None, "Required property 'resources' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnResourceDefinitionVersion.ResourceInstanceProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResourceDefinitionVersion.ResourceInstanceProperty"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10351,11 +10351,11 @@ class CfnSubscriptionDefinition(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Create a new ``AWS::Greengrass::SubscriptionDefinition``.
@@ -10380,7 +10380,7 @@ class CfnSubscriptionDefinition(
     @builtins.classmethod
     def arn_for_subscription_definition(
         cls,
-        resource: _ISubscriptionDefinitionRef_e341c654,
+        resource: "_ISubscriptionDefinitionRef_e341c654",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -10394,10 +10394,10 @@ class CfnSubscriptionDefinition(
     @builtins.classmethod
     def from_subscription_definition_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ISubscriptionDefinitionRef_e341c654:
+    ) -> "_ISubscriptionDefinitionRef_e341c654":
         '''Creates a new ISubscriptionDefinitionRef from an ARN.
 
         :param scope: -
@@ -10409,16 +10409,16 @@ class CfnSubscriptionDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ISubscriptionDefinitionRef_e341c654, jsii.sinvoke(cls, "fromSubscriptionDefinitionArn", [scope, id, arn]))
+        return typing.cast("_ISubscriptionDefinitionRef_e341c654", jsii.sinvoke(cls, "fromSubscriptionDefinitionArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromSubscriptionDefinitionId")
     @builtins.classmethod
     def from_subscription_definition_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         subscription_definition_id: builtins.str,
-    ) -> _ISubscriptionDefinitionRef_e341c654:
+    ) -> "_ISubscriptionDefinitionRef_e341c654":
         '''Creates a new ISubscriptionDefinitionRef from a subscriptionDefinitionId.
 
         :param scope: -
@@ -10430,7 +10430,7 @@ class CfnSubscriptionDefinition(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument subscription_definition_id", value=subscription_definition_id, expected_type=type_hints["subscription_definition_id"])
-        return typing.cast(_ISubscriptionDefinitionRef_e341c654, jsii.sinvoke(cls, "fromSubscriptionDefinitionId", [scope, id, subscription_definition_id]))
+        return typing.cast("_ISubscriptionDefinitionRef_e341c654", jsii.sinvoke(cls, "fromSubscriptionDefinitionId", [scope, id, subscription_definition_id]))
 
     @jsii.member(jsii_name="isCfnSubscriptionDefinition")
     @builtins.classmethod
@@ -10445,7 +10445,7 @@ class CfnSubscriptionDefinition(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSubscriptionDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10517,15 +10517,17 @@ class CfnSubscriptionDefinition(
 
     @builtins.property
     @jsii.member(jsii_name="subscriptionDefinitionRef")
-    def subscription_definition_ref(self) -> _SubscriptionDefinitionReference_7d3dba0c:
+    def subscription_definition_ref(
+        self,
+    ) -> "_SubscriptionDefinitionReference_7d3dba0c":
         '''A reference to a SubscriptionDefinition resource.'''
-        return typing.cast(_SubscriptionDefinitionReference_7d3dba0c, jsii.get(self, "subscriptionDefinitionRef"))
+        return typing.cast("_SubscriptionDefinitionReference_7d3dba0c", jsii.get(self, "subscriptionDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -10544,14 +10546,14 @@ class CfnSubscriptionDefinition(
     @jsii.member(jsii_name="initialVersion")
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty"]]:
         '''The subscription definition version to include when the subscription definition is created.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty"]], jsii.get(self, "initialVersion"))
 
     @initial_version.setter
     def initial_version(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bb5bd9630745b54bebd6a65c27d16ed4621705d8b40d785efc3fcf8eda69d66a)
@@ -10580,7 +10582,7 @@ class CfnSubscriptionDefinition(
         def __init__(
             self,
             *,
-            subscriptions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSubscriptionDefinition.SubscriptionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            subscriptions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriptionDefinition.SubscriptionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''A subscription definition version contains a list of `subscriptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-subscriptiondefinition-subscription.html>`_ .
 
@@ -10620,14 +10622,14 @@ class CfnSubscriptionDefinition(
         @builtins.property
         def subscriptions(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSubscriptionDefinition.SubscriptionProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSubscriptionDefinition.SubscriptionProperty"]]]:
             '''The subscriptions in this version.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-subscriptiondefinition-subscriptiondefinitionversion.html#cfn-greengrass-subscriptiondefinition-subscriptiondefinitionversion-subscriptions
             '''
             result = self._values.get("subscriptions")
             assert result is not None, "Required property 'subscriptions' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSubscriptionDefinition.SubscriptionProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSubscriptionDefinition.SubscriptionProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10767,7 +10769,7 @@ class CfnSubscriptionDefinitionProps:
         self,
         *,
         name: builtins.str,
-        initial_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        initial_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Properties for defining a ``CfnSubscriptionDefinition``.
@@ -10828,7 +10830,7 @@ class CfnSubscriptionDefinitionProps:
     @builtins.property
     def initial_version(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty"]]:
         '''The subscription definition version to include when the subscription definition is created.
 
         A subscription definition version contains a list of ```subscription`` <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrass-subscriptiondefinition-subscription.html>`_ property types.
@@ -10839,7 +10841,7 @@ class CfnSubscriptionDefinitionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-subscriptiondefinition.html#cfn-greengrass-subscriptiondefinition-initialversion
         '''
         result = self._values.get("initial_version")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSubscriptionDefinition.SubscriptionDefinitionVersionProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Any:
@@ -10907,11 +10909,11 @@ class CfnSubscriptionDefinitionVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         subscription_definition_id: builtins.str,
-        subscriptions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSubscriptionDefinitionVersion.SubscriptionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        subscriptions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriptionDefinitionVersion.SubscriptionProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Create a new ``AWS::Greengrass::SubscriptionDefinitionVersion``.
 
@@ -10944,7 +10946,7 @@ class CfnSubscriptionDefinitionVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSubscriptionDefinitionVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10990,9 +10992,9 @@ class CfnSubscriptionDefinitionVersion(
     @jsii.member(jsii_name="subscriptionDefinitionVersionRef")
     def subscription_definition_version_ref(
         self,
-    ) -> _SubscriptionDefinitionVersionReference_05af159d:
+    ) -> "_SubscriptionDefinitionVersionReference_05af159d":
         '''A reference to a SubscriptionDefinitionVersion resource.'''
-        return typing.cast(_SubscriptionDefinitionVersionReference_05af159d, jsii.get(self, "subscriptionDefinitionVersionRef"))
+        return typing.cast("_SubscriptionDefinitionVersionReference_05af159d", jsii.get(self, "subscriptionDefinitionVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="subscriptionDefinitionId")
@@ -11011,14 +11013,14 @@ class CfnSubscriptionDefinitionVersion(
     @jsii.member(jsii_name="subscriptions")
     def subscriptions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSubscriptionDefinitionVersion.SubscriptionProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSubscriptionDefinitionVersion.SubscriptionProperty"]]]:
         '''The subscriptions in this version.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSubscriptionDefinitionVersion.SubscriptionProperty"]]], jsii.get(self, "subscriptions"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSubscriptionDefinitionVersion.SubscriptionProperty"]]], jsii.get(self, "subscriptions"))
 
     @subscriptions.setter
     def subscriptions(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSubscriptionDefinitionVersion.SubscriptionProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSubscriptionDefinitionVersion.SubscriptionProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9ba4cd67c8807aa76b5b15f0cc7031c8c93e9db957d1dcbe2f07f9d22c3d9b57)
@@ -11155,7 +11157,7 @@ class CfnSubscriptionDefinitionVersionProps:
         self,
         *,
         subscription_definition_id: builtins.str,
-        subscriptions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSubscriptionDefinitionVersion.SubscriptionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        subscriptions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriptionDefinitionVersion.SubscriptionProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Properties for defining a ``CfnSubscriptionDefinitionVersion``.
 
@@ -11205,14 +11207,14 @@ class CfnSubscriptionDefinitionVersionProps:
     @builtins.property
     def subscriptions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSubscriptionDefinitionVersion.SubscriptionProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSubscriptionDefinitionVersion.SubscriptionProperty"]]]:
         '''The subscriptions in this version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrass-subscriptiondefinitionversion.html#cfn-greengrass-subscriptiondefinitionversion-subscriptions
         '''
         result = self._values.get("subscriptions")
         assert result is not None, "Required property 'subscriptions' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSubscriptionDefinitionVersion.SubscriptionProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSubscriptionDefinitionVersion.SubscriptionProperty"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

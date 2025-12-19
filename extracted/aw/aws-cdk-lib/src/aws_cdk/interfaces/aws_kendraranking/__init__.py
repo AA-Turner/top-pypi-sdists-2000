@@ -115,7 +115,7 @@ class IExecutionPlanRef(
 
     @builtins.property
     @jsii.member(jsii_name="executionPlanRef")
-    def execution_plan_ref(self) -> ExecutionPlanReference:
+    def execution_plan_ref(self) -> "ExecutionPlanReference":
         '''(experimental) A reference to a ExecutionPlan resource.
 
         :stability: experimental
@@ -136,12 +136,12 @@ class _IExecutionPlanRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="executionPlanRef")
-    def execution_plan_ref(self) -> ExecutionPlanReference:
+    def execution_plan_ref(self) -> "ExecutionPlanReference":
         '''(experimental) A reference to a ExecutionPlan resource.
 
         :stability: experimental
         '''
-        return typing.cast(ExecutionPlanReference, jsii.get(self, "executionPlanRef"))
+        return typing.cast("ExecutionPlanReference", jsii.get(self, "executionPlanRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IExecutionPlanRef).__jsii_proxy_class__ = lambda : _IExecutionPlanRefProxy

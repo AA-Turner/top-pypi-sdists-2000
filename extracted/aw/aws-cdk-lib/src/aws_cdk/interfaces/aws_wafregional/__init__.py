@@ -145,7 +145,7 @@ class IByteMatchSetRef(
 
     @builtins.property
     @jsii.member(jsii_name="byteMatchSetRef")
-    def byte_match_set_ref(self) -> ByteMatchSetReference:
+    def byte_match_set_ref(self) -> "ByteMatchSetReference":
         '''(experimental) A reference to a ByteMatchSet resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IByteMatchSetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="byteMatchSetRef")
-    def byte_match_set_ref(self) -> ByteMatchSetReference:
+    def byte_match_set_ref(self) -> "ByteMatchSetReference":
         '''(experimental) A reference to a ByteMatchSet resource.
 
         :stability: experimental
         '''
-        return typing.cast(ByteMatchSetReference, jsii.get(self, "byteMatchSetRef"))
+        return typing.cast("ByteMatchSetReference", jsii.get(self, "byteMatchSetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IByteMatchSetRef).__jsii_proxy_class__ = lambda : _IByteMatchSetRefProxy
@@ -190,7 +190,7 @@ class IGeoMatchSetRef(
 
     @builtins.property
     @jsii.member(jsii_name="geoMatchSetRef")
-    def geo_match_set_ref(self) -> GeoMatchSetReference:
+    def geo_match_set_ref(self) -> "GeoMatchSetReference":
         '''(experimental) A reference to a GeoMatchSet resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IGeoMatchSetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="geoMatchSetRef")
-    def geo_match_set_ref(self) -> GeoMatchSetReference:
+    def geo_match_set_ref(self) -> "GeoMatchSetReference":
         '''(experimental) A reference to a GeoMatchSet resource.
 
         :stability: experimental
         '''
-        return typing.cast(GeoMatchSetReference, jsii.get(self, "geoMatchSetRef"))
+        return typing.cast("GeoMatchSetReference", jsii.get(self, "geoMatchSetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGeoMatchSetRef).__jsii_proxy_class__ = lambda : _IGeoMatchSetRefProxy

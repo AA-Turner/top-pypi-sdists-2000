@@ -87,6 +87,7 @@ class CfnApplication(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_applicationinsights as applicationinsights
@@ -321,21 +322,21 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         resource_group_name: builtins.str,
-        attach_missing_permission: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        auto_configuration_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        component_monitoring_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ComponentMonitoringSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        custom_components: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.CustomComponentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        cwe_monitor_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        attach_missing_permission: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        auto_configuration_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        component_monitoring_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ComponentMonitoringSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        custom_components: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.CustomComponentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        cwe_monitor_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         grouping_type: typing.Optional[builtins.str] = None,
-        log_pattern_sets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.LogPatternSetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        ops_center_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        log_pattern_sets: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.LogPatternSetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ops_center_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ops_item_sns_topic_arn: typing.Optional[builtins.str] = None,
         sns_notification_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ApplicationInsights::Application``.
 
@@ -377,7 +378,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_5a716db2) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_5a716db2") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -399,7 +400,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -430,9 +431,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_7b5ad5f4:
+    def application_ref(self) -> "_ApplicationReference_7b5ad5f4":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_7b5ad5f4, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_7b5ad5f4", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrApplicationArn")
@@ -450,9 +451,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="resourceGroupName")
@@ -471,14 +472,14 @@ class CfnApplication(
     @jsii.member(jsii_name="attachMissingPermission")
     def attach_missing_permission(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If set to true, the managed policies for SSM and CW will be attached to the instance roles if they are missing.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "attachMissingPermission"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "attachMissingPermission"))
 
     @attach_missing_permission.setter
     def attach_missing_permission(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4aef364aded2cdbe349e8e55974301cc2fa82ac926c14d0946c016694102e2c2)
@@ -489,14 +490,14 @@ class CfnApplication(
     @jsii.member(jsii_name="autoConfigurationEnabled")
     def auto_configuration_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If set to ``true`` , the application components will be configured with the monitoring configuration recommended by Application Insights.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "autoConfigurationEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "autoConfigurationEnabled"))
 
     @auto_configuration_enabled.setter
     def auto_configuration_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__39427db0f519fa35b3fc1248a299d56faac8ae0db9d2a5713a7857038543feee)
@@ -507,14 +508,14 @@ class CfnApplication(
     @jsii.member(jsii_name="componentMonitoringSettings")
     def component_monitoring_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.ComponentMonitoringSettingProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ComponentMonitoringSettingProperty"]]]]:
         '''The monitoring settings of the components.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.ComponentMonitoringSettingProperty"]]]], jsii.get(self, "componentMonitoringSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ComponentMonitoringSettingProperty"]]]], jsii.get(self, "componentMonitoringSettings"))
 
     @component_monitoring_settings.setter
     def component_monitoring_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.ComponentMonitoringSettingProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ComponentMonitoringSettingProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6b71d9508b86ac21f214543e79579cf34a2d12642dd715c8ef1a2d74a0275920)
@@ -525,14 +526,14 @@ class CfnApplication(
     @jsii.member(jsii_name="customComponents")
     def custom_components(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.CustomComponentProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.CustomComponentProperty"]]]]:
         '''Describes a custom component by grouping similar standalone instances to monitor.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.CustomComponentProperty"]]]], jsii.get(self, "customComponents"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.CustomComponentProperty"]]]], jsii.get(self, "customComponents"))
 
     @custom_components.setter
     def custom_components(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.CustomComponentProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.CustomComponentProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ef9d691c5bfcc7870f109aa46eaab8c19b43b59d739ff84973919636421b6f3c)
@@ -543,14 +544,14 @@ class CfnApplication(
     @jsii.member(jsii_name="cweMonitorEnabled")
     def cwe_monitor_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether Application Insights can listen to CloudWatch events for the application resources, such as ``instance terminated`` , ``failed deployment`` , and others.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "cweMonitorEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "cweMonitorEnabled"))
 
     @cwe_monitor_enabled.setter
     def cwe_monitor_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cb7ba4e65d4ce4e70fa961b26f899c2bdc9ea5fda59b88f7ec5b41b6dfaf2b9f)
@@ -574,14 +575,14 @@ class CfnApplication(
     @jsii.member(jsii_name="logPatternSets")
     def log_pattern_sets(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.LogPatternSetProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogPatternSetProperty"]]]]:
         '''The log pattern sets.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.LogPatternSetProperty"]]]], jsii.get(self, "logPatternSets"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogPatternSetProperty"]]]], jsii.get(self, "logPatternSets"))
 
     @log_pattern_sets.setter
     def log_pattern_sets(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.LogPatternSetProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogPatternSetProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aecedf5391ae9c472f5b4efa1ab92cd2a73a731a19790dd3b914289585d9a239)
@@ -592,14 +593,14 @@ class CfnApplication(
     @jsii.member(jsii_name="opsCenterEnabled")
     def ops_center_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether Application Insights will create OpsItems for any problem that is detected by Application Insights for an application.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "opsCenterEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "opsCenterEnabled"))
 
     @ops_center_enabled.setter
     def ops_center_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bc667852c12396c292274984e86ae45686a9d71bbe1d2301fb37891bf56a406a)
@@ -634,12 +635,12 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of ``Tags`` .'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d3968f9830f62362b22c2014663f1301019810cda56a0b7635f533d5603aa304)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -784,8 +785,8 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            configuration_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ConfigurationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sub_component_type_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.SubComponentTypeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            configuration_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ConfigurationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sub_component_type_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.SubComponentTypeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The ``AWS::ApplicationInsights::Application ComponentConfiguration`` property type defines the configuration settings of the component.
 
@@ -910,24 +911,24 @@ class CfnApplication(
         @builtins.property
         def configuration_details(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ConfigurationDetailsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ConfigurationDetailsProperty"]]:
             '''The configuration settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-componentconfiguration.html#cfn-applicationinsights-application-componentconfiguration-configurationdetails
             '''
             result = self._values.get("configuration_details")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ConfigurationDetailsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ConfigurationDetailsProperty"]], result)
 
         @builtins.property
         def sub_component_type_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.SubComponentTypeConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.SubComponentTypeConfigurationProperty"]]]]:
             '''Sub-component configurations of the component.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-componentconfiguration.html#cfn-applicationinsights-application-componentconfiguration-subcomponenttypeconfigurations
             '''
             result = self._values.get("sub_component_type_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.SubComponentTypeConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.SubComponentTypeConfigurationProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -960,8 +961,8 @@ class CfnApplication(
             tier: builtins.str,
             component_arn: typing.Optional[builtins.str] = None,
             component_name: typing.Optional[builtins.str] = None,
-            custom_component_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ComponentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            default_overwrite_component_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ComponentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom_component_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ComponentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            default_overwrite_component_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ComponentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The ``AWS::ApplicationInsights::Application ComponentMonitoringSetting`` property type defines the monitoring setting of the component.
 
@@ -1252,7 +1253,7 @@ class CfnApplication(
         @builtins.property
         def custom_component_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ComponentConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ComponentConfigurationProperty"]]:
             '''Customized monitoring settings.
 
             Required if CUSTOM mode is configured in ``ComponentConfigurationMode`` .
@@ -1260,12 +1261,12 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-componentmonitoringsetting.html#cfn-applicationinsights-application-componentmonitoringsetting-customcomponentconfiguration
             '''
             result = self._values.get("custom_component_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ComponentConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ComponentConfigurationProperty"]], result)
 
         @builtins.property
         def default_overwrite_component_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ComponentConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ComponentConfigurationProperty"]]:
             '''Customized overwrite monitoring settings.
 
             Required if CUSTOM mode is configured in ``ComponentConfigurationMode`` .
@@ -1273,7 +1274,7 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-componentmonitoringsetting.html#cfn-applicationinsights-application-componentmonitoringsetting-defaultoverwritecomponentconfiguration
             '''
             result = self._values.get("default_overwrite_component_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ComponentConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ComponentConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1306,16 +1307,16 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            alarm_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.AlarmMetricProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            alarms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.AlarmProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            ha_cluster_prometheus_exporter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.HAClusterPrometheusExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            hana_prometheus_exporter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.HANAPrometheusExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            jmx_prometheus_exporter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.JMXPrometheusExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.LogProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            net_weaver_prometheus_exporter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.NetWeaverPrometheusExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            processes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ProcessProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            sql_server_prometheus_exporter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.SQLServerPrometheusExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            windows_events: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.WindowsEventProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            alarm_metrics: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.AlarmMetricProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            alarms: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.AlarmProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            ha_cluster_prometheus_exporter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.HAClusterPrometheusExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            hana_prometheus_exporter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.HANAPrometheusExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            jmx_prometheus_exporter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.JMXPrometheusExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.LogProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            net_weaver_prometheus_exporter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.NetWeaverPrometheusExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            processes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ProcessProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            sql_server_prometheus_exporter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.SQLServerPrometheusExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            windows_events: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.WindowsEventProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The ``AWS::ApplicationInsights::Application ConfigurationDetails`` property type specifies the configuration settings.
 
@@ -1439,7 +1440,7 @@ class CfnApplication(
         @builtins.property
         def alarm_metrics(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.AlarmMetricProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.AlarmMetricProperty"]]]]:
             '''A list of metrics to monitor for the component.
 
             All component types can use ``AlarmMetrics`` .
@@ -1447,12 +1448,12 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-configurationdetails.html#cfn-applicationinsights-application-configurationdetails-alarmmetrics
             '''
             result = self._values.get("alarm_metrics")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.AlarmMetricProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.AlarmMetricProperty"]]]], result)
 
         @builtins.property
         def alarms(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.AlarmProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.AlarmProperty"]]]]:
             '''A list of alarms to monitor for the component.
 
             All component types can use ``Alarm`` .
@@ -1460,45 +1461,45 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-configurationdetails.html#cfn-applicationinsights-application-configurationdetails-alarms
             '''
             result = self._values.get("alarms")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.AlarmProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.AlarmProperty"]]]], result)
 
         @builtins.property
         def ha_cluster_prometheus_exporter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.HAClusterPrometheusExporterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.HAClusterPrometheusExporterProperty"]]:
             '''The HA cluster Prometheus Exporter settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-configurationdetails.html#cfn-applicationinsights-application-configurationdetails-haclusterprometheusexporter
             '''
             result = self._values.get("ha_cluster_prometheus_exporter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.HAClusterPrometheusExporterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.HAClusterPrometheusExporterProperty"]], result)
 
         @builtins.property
         def hana_prometheus_exporter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.HANAPrometheusExporterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.HANAPrometheusExporterProperty"]]:
             '''The HANA DB Prometheus Exporter settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-configurationdetails.html#cfn-applicationinsights-application-configurationdetails-hanaprometheusexporter
             '''
             result = self._values.get("hana_prometheus_exporter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.HANAPrometheusExporterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.HANAPrometheusExporterProperty"]], result)
 
         @builtins.property
         def jmx_prometheus_exporter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.JMXPrometheusExporterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.JMXPrometheusExporterProperty"]]:
             '''A list of Java metrics to monitor for the component.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-configurationdetails.html#cfn-applicationinsights-application-configurationdetails-jmxprometheusexporter
             '''
             result = self._values.get("jmx_prometheus_exporter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.JMXPrometheusExporterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.JMXPrometheusExporterProperty"]], result)
 
         @builtins.property
         def logs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.LogProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogProperty"]]]]:
             '''A list of logs to monitor for the component.
 
             Only Amazon EC2 instances can use ``Logs`` .
@@ -1506,23 +1507,23 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-configurationdetails.html#cfn-applicationinsights-application-configurationdetails-logs
             '''
             result = self._values.get("logs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.LogProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogProperty"]]]], result)
 
         @builtins.property
         def net_weaver_prometheus_exporter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.NetWeaverPrometheusExporterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.NetWeaverPrometheusExporterProperty"]]:
             '''The NetWeaver Prometheus Exporter Settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-configurationdetails.html#cfn-applicationinsights-application-configurationdetails-netweaverprometheusexporter
             '''
             result = self._values.get("net_weaver_prometheus_exporter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.NetWeaverPrometheusExporterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.NetWeaverPrometheusExporterProperty"]], result)
 
         @builtins.property
         def processes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.ProcessProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ProcessProperty"]]]]:
             '''A list of processes to monitor for the component.
 
             Only Windows EC2 instances can have a processes section.
@@ -1530,23 +1531,23 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-configurationdetails.html#cfn-applicationinsights-application-configurationdetails-processes
             '''
             result = self._values.get("processes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.ProcessProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ProcessProperty"]]]], result)
 
         @builtins.property
         def sql_server_prometheus_exporter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.SQLServerPrometheusExporterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.SQLServerPrometheusExporterProperty"]]:
             '''The SQL prometheus exporter settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-configurationdetails.html#cfn-applicationinsights-application-configurationdetails-sqlserverprometheusexporter
             '''
             result = self._values.get("sql_server_prometheus_exporter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.SQLServerPrometheusExporterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.SQLServerPrometheusExporterProperty"]], result)
 
         @builtins.property
         def windows_events(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.WindowsEventProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.WindowsEventProperty"]]]]:
             '''A list of Windows Events to monitor for the component.
 
             Only Amazon EC2 instances running on Windows can use ``WindowsEvents`` .
@@ -1554,7 +1555,7 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-configurationdetails.html#cfn-applicationinsights-application-configurationdetails-windowsevents
             '''
             result = self._values.get("windows_events")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.WindowsEventProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.WindowsEventProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1715,7 +1716,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            agree_to_install_hanadb_client: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            agree_to_install_hanadb_client: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             hana_port: builtins.str,
             hana_secret_name: builtins.str,
             hanasid: builtins.str,
@@ -1769,14 +1770,14 @@ class CfnApplication(
         @builtins.property
         def agree_to_install_hanadb_client(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Designates whether you agree to install the HANA DB client.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-hanaprometheusexporter.html#cfn-applicationinsights-application-hanaprometheusexporter-agreetoinstallhanadbclient
             '''
             result = self._values.get("agree_to_install_hanadb_client")
             assert result is not None, "Required property 'agree_to_install_hanadb_client' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def hana_port(self) -> builtins.str:
@@ -2033,7 +2034,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            log_patterns: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.LogPatternProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            log_patterns: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.LogPatternProperty", typing.Dict[builtins.str, typing.Any]]]]],
             pattern_set_name: builtins.str,
         ) -> None:
             '''The ``AWS::ApplicationInsights::Application LogPatternSet`` property type specifies the log pattern set.
@@ -2071,14 +2072,14 @@ class CfnApplication(
         @builtins.property
         def log_patterns(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.LogPatternProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogPatternProperty"]]]:
             '''A list of objects that define the log patterns that belong to ``LogPatternSet`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-logpatternset.html#cfn-applicationinsights-application-logpatternset-logpatterns
             '''
             result = self._values.get("log_patterns")
             assert result is not None, "Required property 'log_patterns' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.LogPatternProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogPatternProperty"]]], result)
 
         @builtins.property
         def pattern_set_name(self) -> builtins.str:
@@ -2338,7 +2339,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            alarm_metrics: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.AlarmMetricProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            alarm_metrics: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.AlarmMetricProperty", typing.Dict[builtins.str, typing.Any]]]]],
             process_name: builtins.str,
         ) -> None:
             '''A process to be monitored for the component.
@@ -2374,14 +2375,14 @@ class CfnApplication(
         @builtins.property
         def alarm_metrics(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.AlarmMetricProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.AlarmMetricProperty"]]]:
             '''A list of metrics to monitor for the component.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-process.html#cfn-applicationinsights-application-process-alarmmetrics
             '''
             result = self._values.get("alarm_metrics")
             assert result is not None, "Required property 'alarm_metrics' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.AlarmMetricProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.AlarmMetricProperty"]]], result)
 
         @builtins.property
         def process_name(self) -> builtins.str:
@@ -2494,10 +2495,10 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            alarm_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.AlarmMetricProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.LogProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            processes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ProcessProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            windows_events: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.WindowsEventProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            alarm_metrics: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.AlarmMetricProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.LogProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            processes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ProcessProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            windows_events: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.WindowsEventProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The ``AWS::ApplicationInsights::Application SubComponentConfigurationDetails`` property type specifies the configuration settings of the sub-components.
 
@@ -2563,7 +2564,7 @@ class CfnApplication(
         @builtins.property
         def alarm_metrics(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.AlarmMetricProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.AlarmMetricProperty"]]]]:
             '''A list of metrics to monitor for the component.
 
             All component types can use ``AlarmMetrics`` .
@@ -2571,12 +2572,12 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-subcomponentconfigurationdetails.html#cfn-applicationinsights-application-subcomponentconfigurationdetails-alarmmetrics
             '''
             result = self._values.get("alarm_metrics")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.AlarmMetricProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.AlarmMetricProperty"]]]], result)
 
         @builtins.property
         def logs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.LogProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogProperty"]]]]:
             '''A list of logs to monitor for the component.
 
             Only Amazon EC2 instances can use ``Logs`` .
@@ -2584,12 +2585,12 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-subcomponentconfigurationdetails.html#cfn-applicationinsights-application-subcomponentconfigurationdetails-logs
             '''
             result = self._values.get("logs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.LogProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogProperty"]]]], result)
 
         @builtins.property
         def processes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.ProcessProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ProcessProperty"]]]]:
             '''A list of processes to monitor for the component.
 
             Only Windows EC2 instances can have a processes section.
@@ -2597,12 +2598,12 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-subcomponentconfigurationdetails.html#cfn-applicationinsights-application-subcomponentconfigurationdetails-processes
             '''
             result = self._values.get("processes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.ProcessProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ProcessProperty"]]]], result)
 
         @builtins.property
         def windows_events(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.WindowsEventProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.WindowsEventProperty"]]]]:
             '''A list of Windows Events to monitor for the component.
 
             Only Amazon EC2 instances running on Windows can use ``WindowsEvents`` .
@@ -2610,7 +2611,7 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-subcomponentconfigurationdetails.html#cfn-applicationinsights-application-subcomponentconfigurationdetails-windowsevents
             '''
             result = self._values.get("windows_events")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.WindowsEventProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.WindowsEventProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2635,7 +2636,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            sub_component_configuration_details: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.SubComponentConfigurationDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+            sub_component_configuration_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.SubComponentConfigurationDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
             sub_component_type: builtins.str,
         ) -> None:
             '''The ``AWS::ApplicationInsights::Application SubComponentTypeConfiguration`` property type specifies the sub-component configurations for a component.
@@ -2696,14 +2697,14 @@ class CfnApplication(
         @builtins.property
         def sub_component_configuration_details(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnApplication.SubComponentConfigurationDetailsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.SubComponentConfigurationDetailsProperty"]:
             '''The configuration settings of the sub-components.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationinsights-application-subcomponenttypeconfiguration.html#cfn-applicationinsights-application-subcomponenttypeconfiguration-subcomponentconfigurationdetails
             '''
             result = self._values.get("sub_component_configuration_details")
             assert result is not None, "Required property 'sub_component_configuration_details' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplication.SubComponentConfigurationDetailsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.SubComponentConfigurationDetailsProperty"], result)
 
         @builtins.property
         def sub_component_type(self) -> builtins.str:
@@ -2862,17 +2863,17 @@ class CfnApplicationProps:
         self,
         *,
         resource_group_name: builtins.str,
-        attach_missing_permission: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        auto_configuration_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        component_monitoring_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ComponentMonitoringSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        custom_components: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.CustomComponentProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        cwe_monitor_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        attach_missing_permission: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        auto_configuration_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        component_monitoring_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ComponentMonitoringSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        custom_components: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.CustomComponentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        cwe_monitor_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         grouping_type: typing.Optional[builtins.str] = None,
-        log_pattern_sets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.LogPatternSetProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        ops_center_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        log_pattern_sets: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.LogPatternSetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ops_center_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ops_item_sns_topic_arn: typing.Optional[builtins.str] = None,
         sns_notification_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplication``.
 
@@ -2894,6 +2895,7 @@ class CfnApplicationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_applicationinsights as applicationinsights
@@ -3178,29 +3180,29 @@ class CfnApplicationProps:
     @builtins.property
     def attach_missing_permission(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If set to true, the managed policies for SSM and CW will be attached to the instance roles if they are missing.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationinsights-application.html#cfn-applicationinsights-application-attachmissingpermission
         '''
         result = self._values.get("attach_missing_permission")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def auto_configuration_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If set to ``true`` , the application components will be configured with the monitoring configuration recommended by Application Insights.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationinsights-application.html#cfn-applicationinsights-application-autoconfigurationenabled
         '''
         result = self._values.get("auto_configuration_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def component_monitoring_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApplication.ComponentMonitoringSettingProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ComponentMonitoringSettingProperty"]]]]:
         '''The monitoring settings of the components.
 
         Not required to set up default monitoring for all components. To set up default monitoring for all components, set ``AutoConfigurationEnabled`` to ``true`` .
@@ -3208,29 +3210,29 @@ class CfnApplicationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationinsights-application.html#cfn-applicationinsights-application-componentmonitoringsettings
         '''
         result = self._values.get("component_monitoring_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApplication.ComponentMonitoringSettingProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.ComponentMonitoringSettingProperty"]]]], result)
 
     @builtins.property
     def custom_components(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApplication.CustomComponentProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.CustomComponentProperty"]]]]:
         '''Describes a custom component by grouping similar standalone instances to monitor.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationinsights-application.html#cfn-applicationinsights-application-customcomponents
         '''
         result = self._values.get("custom_components")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApplication.CustomComponentProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.CustomComponentProperty"]]]], result)
 
     @builtins.property
     def cwe_monitor_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether Application Insights can listen to CloudWatch events for the application resources, such as ``instance terminated`` , ``failed deployment`` , and others.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationinsights-application.html#cfn-applicationinsights-application-cwemonitorenabled
         '''
         result = self._values.get("cwe_monitor_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def grouping_type(self) -> typing.Optional[builtins.str]:
@@ -3246,24 +3248,24 @@ class CfnApplicationProps:
     @builtins.property
     def log_pattern_sets(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApplication.LogPatternSetProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogPatternSetProperty"]]]]:
         '''The log pattern sets.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationinsights-application.html#cfn-applicationinsights-application-logpatternsets
         '''
         result = self._values.get("log_pattern_sets")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApplication.LogPatternSetProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.LogPatternSetProperty"]]]], result)
 
     @builtins.property
     def ops_center_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether Application Insights will create OpsItems for any problem that is detected by Application Insights for an application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationinsights-application.html#cfn-applicationinsights-application-opscenterenabled
         '''
         result = self._values.get("ops_center_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def ops_item_sns_topic_arn(self) -> typing.Optional[builtins.str]:
@@ -3284,13 +3286,13 @@ class CfnApplicationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of ``Tags`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationinsights-application.html#cfn-applicationinsights-application-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

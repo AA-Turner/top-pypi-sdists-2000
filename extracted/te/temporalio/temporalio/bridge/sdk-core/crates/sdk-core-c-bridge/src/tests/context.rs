@@ -1,8 +1,8 @@
 use crate::{
     client::{
         Client, ClientHttpConnectProxyOptions, ClientKeepAliveOptions, ClientRetryOptions,
-        ClientTlsOptions, RpcCallOptions, temporal_core_client_connect, temporal_core_client_free,
-        temporal_core_client_rpc_call,
+        ClientTlsOptions, GrpcMetadataHolder, RpcCallOptions, temporal_core_client_connect,
+        temporal_core_client_free, temporal_core_client_rpc_call,
     },
     runtime::{
         Runtime, RuntimeOptions, RuntimeOrFail, temporal_core_byte_array_free,
@@ -17,13 +17,13 @@ use crate::{
 use crate::{
     ByteArray, ByteArrayRef,
     tests::utils::{
-        MetadataMap, OwnedRpcCallOptions, RpcCallError, byte_array_to_string, byte_array_to_vec,
-        pointer_or_null,
+        OwnedRpcCallOptions, RpcCallError, byte_array_to_string, byte_array_to_vec, pointer_or_null,
     },
 };
 use anyhow::anyhow;
 use std::{
     any::Any,
+    collections::HashMap,
     panic::{AssertUnwindSafe, UnwindSafe},
     ptr::NonNull,
     sync::{Arc, Condvar, Mutex, MutexGuard, PoisonError, Weak},
@@ -153,7 +153,7 @@ impl Context {
 
         let RuntimeOrFail { runtime, fail } = temporal_core_runtime_new(&RuntimeOptions {
             telemetry: std::ptr::null(),
-            worker_heartbeat_duration_millis: 0,
+            worker_heartbeat_interval_millis: 0,
         });
 
         if let Some(fail) = byte_array_to_string(runtime, fail) {
@@ -289,13 +289,13 @@ impl Context {
         grpc_override_callback: crate::client::ClientGrpcOverrideCallback,
         grpc_override_callback_user_data: *mut libc::c_void,
     ) -> anyhow::Result<()> {
-        let metadata = options
-            .headers
-            .as_ref()
-            .map(MetadataMap::serialize_from_map);
+        let metadata: Option<GrpcMetadataHolder> = options.headers.as_ref().map(Into::into);
 
-        let tls_options = options.tls_cfg.as_ref().map(|tls_cfg| {
-            let client_tls_cfg = tls_cfg.client_tls_config.as_ref();
+        let binary_metadata: Option<GrpcMetadataHolder> =
+            options.binary_headers.as_ref().map(Into::into);
+
+        let tls_options = options.tls_options.as_ref().map(|tls_cfg| {
+            let client_tls_cfg = tls_cfg.client_tls_options.as_ref();
             Box::new(ClientTlsOptions {
                 server_root_ca_cert: tls_cfg.server_root_ca_cert.as_deref().into(),
                 domain: tls_cfg.domain.as_deref().into(),
@@ -307,17 +307,17 @@ impl Context {
         });
 
         let retry_options = Box::new(ClientRetryOptions {
-            initial_interval_millis: options.retry_config.initial_interval.as_millis() as u64,
-            randomization_factor: options.retry_config.randomization_factor,
-            multiplier: options.retry_config.multiplier,
-            max_interval_millis: options.retry_config.max_interval.as_millis() as u64,
+            initial_interval_millis: options.retry_options.initial_interval.as_millis() as u64,
+            randomization_factor: options.retry_options.randomization_factor,
+            multiplier: options.retry_options.multiplier,
+            max_interval_millis: options.retry_options.max_interval.as_millis() as u64,
             max_elapsed_time_millis: options
-                .retry_config
+                .retry_options
                 .max_elapsed_time
                 .as_ref()
                 .map(Duration::as_millis)
                 .unwrap_or(0) as u64,
-            max_retries: options.retry_config.max_retries,
+            max_retries: options.retry_options.max_retries,
         });
 
         let keep_alive_options = options.keep_alive.as_ref().map(|keep_alive| {
@@ -344,7 +344,8 @@ impl Context {
             target_url: options.target_url.as_str().into(),
             client_name: options.client_name.as_str().into(),
             client_version: options.client_version.as_str().into(),
-            metadata: metadata.as_deref().into(),
+            metadata: metadata.as_ref().into(),
+            binary_metadata: binary_metadata.as_ref().into(),
             api_key: options.api_key.as_deref().into(),
             identity: options.identity.as_str().into(),
             tls_options: pointer_or_null(tls_options.as_deref()),
@@ -362,6 +363,7 @@ impl Context {
             _allocations: Box::new((
                 options,
                 metadata,
+                binary_metadata,
                 tls_options,
                 retry_options,
                 keep_alive_options,
@@ -390,14 +392,15 @@ impl Context {
 
     pub fn rpc_call(
         self: &Arc<Self>,
-        mut options: Box<OwnedRpcCallOptions>,
+        options: Box<OwnedRpcCallOptions>,
     ) -> anyhow::Result<Vec<u8>> {
         let c_options = Box::new(RpcCallOptions {
             service: options.service,
             rpc: options.rpc.as_str().into(),
             req: options.req.as_slice().into(),
             retry: options.retry,
-            metadata: options.metadata.as_mut().map(MetadataMap::as_str).into(),
+            metadata: options.metadata.as_ref().into(),
+            binary_metadata: options.binary_metadata.as_ref().into(),
             timeout_millis: options.timeout_millis,
             cancellation_token: options
                 .cancellation_token
@@ -652,5 +655,37 @@ extern "C" fn rpc_call_callback(
     }
     if !failure_details.is_null() {
         temporal_core_byte_array_free(std::ptr::null_mut(), failure_details);
+    }
+}
+
+impl From<&HashMap<String, String>> for GrpcMetadataHolder {
+    fn from(value: &HashMap<String, String>) -> GrpcMetadataHolder {
+        let refs: Vec<Vec<u8>> = value
+            .iter()
+            .map(|(k, v)| format!("{k}\n{v}").into_bytes())
+            .collect();
+
+        GrpcMetadataHolder {
+            data: refs.iter().map(ByteArrayRef::from).collect(),
+            _allocations: refs,
+        }
+    }
+}
+
+impl From<&HashMap<String, Vec<u8>>> for GrpcMetadataHolder {
+    fn from(value: &HashMap<String, Vec<u8>>) -> GrpcMetadataHolder {
+        let refs: Vec<Vec<u8>> = value
+            .iter()
+            .map(|(k, v)| {
+                let mut nv = format!("{k}\n").into_bytes();
+                nv.extend(v);
+                nv
+            })
+            .collect();
+
+        GrpcMetadataHolder {
+            data: refs.iter().map(ByteArrayRef::from).collect(),
+            _allocations: refs,
+        }
     }
 }

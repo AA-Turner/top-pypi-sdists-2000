@@ -124,7 +124,7 @@ class CfnProfilePermission(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         action: builtins.str,
@@ -170,7 +170,7 @@ class CfnProfilePermission(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProfilePermission", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -206,9 +206,9 @@ class CfnProfilePermission(
 
     @builtins.property
     @jsii.member(jsii_name="profilePermissionRef")
-    def profile_permission_ref(self) -> _ProfilePermissionReference_df1b4f98:
+    def profile_permission_ref(self) -> "_ProfilePermissionReference_df1b4f98":
         '''A reference to a ProfilePermission resource.'''
-        return typing.cast(_ProfilePermissionReference_df1b4f98, jsii.get(self, "profilePermissionRef"))
+        return typing.cast("_ProfilePermissionReference_df1b4f98", jsii.get(self, "profilePermissionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="action")
@@ -419,6 +419,7 @@ class CfnSigningProfile(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_signer as signer
@@ -441,13 +442,13 @@ class CfnSigningProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         platform_id: builtins.str,
         profile_name: typing.Optional[builtins.str] = None,
-        signature_validity_period: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSigningProfile.SignatureValidityPeriodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        signature_validity_period: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSigningProfile.SignatureValidityPeriodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Signer::SigningProfile``.
 
@@ -475,7 +476,7 @@ class CfnSigningProfile(
     @builtins.classmethod
     def arn_for_signing_profile(
         cls,
-        resource: _ISigningProfileRef_80e46916,
+        resource: "_ISigningProfileRef_80e46916",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -498,7 +499,7 @@ class CfnSigningProfile(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSigningProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -570,15 +571,15 @@ class CfnSigningProfile(
 
     @builtins.property
     @jsii.member(jsii_name="signingProfileRef")
-    def signing_profile_ref(self) -> _SigningProfileReference_9219187c:
+    def signing_profile_ref(self) -> "_SigningProfileReference_9219187c":
         '''A reference to a SigningProfile resource.'''
-        return typing.cast(_SigningProfileReference_9219187c, jsii.get(self, "signingProfileRef"))
+        return typing.cast("_SigningProfileReference_9219187c", jsii.get(self, "signingProfileRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="platformId")
@@ -610,14 +611,14 @@ class CfnSigningProfile(
     @jsii.member(jsii_name="signatureValidityPeriod")
     def signature_validity_period(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSigningProfile.SignatureValidityPeriodProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSigningProfile.SignatureValidityPeriodProperty"]]:
         '''The validity period override for any signature generated using this signing profile.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSigningProfile.SignatureValidityPeriodProperty"]], jsii.get(self, "signatureValidityPeriod"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSigningProfile.SignatureValidityPeriodProperty"]], jsii.get(self, "signatureValidityPeriod"))
 
     @signature_validity_period.setter
     def signature_validity_period(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSigningProfile.SignatureValidityPeriodProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSigningProfile.SignatureValidityPeriodProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d3142352951a0c8c38151f31fb1da21f644b00a82a7383e211cfa3feb49aaea8)
@@ -626,12 +627,12 @@ class CfnSigningProfile(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags associated with the signing profile.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__580ec6652b4c39cad7404de2ec2116ee0ba26fab741371a13d0201ad7c60ad0c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -724,8 +725,8 @@ class CfnSigningProfileProps:
         *,
         platform_id: builtins.str,
         profile_name: typing.Optional[builtins.str] = None,
-        signature_validity_period: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSigningProfile.SignatureValidityPeriodProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        signature_validity_period: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSigningProfile.SignatureValidityPeriodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSigningProfile``.
 
@@ -739,6 +740,7 @@ class CfnSigningProfileProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_signer as signer
@@ -796,7 +798,7 @@ class CfnSigningProfileProps:
     @builtins.property
     def signature_validity_period(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSigningProfile.SignatureValidityPeriodProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSigningProfile.SignatureValidityPeriodProperty"]]:
         '''The validity period override for any signature generated using this signing profile.
 
         If unspecified, the default is 135 months.
@@ -804,16 +806,16 @@ class CfnSigningProfileProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-signer-signingprofile.html#cfn-signer-signingprofile-signaturevalidityperiod
         '''
         result = self._values.get("signature_validity_period")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSigningProfile.SignatureValidityPeriodProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSigningProfile.SignatureValidityPeriodProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags associated with the signing profile.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-signer-signingprofile.html#cfn-signer-signingprofile-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1027,11 +1029,11 @@ class SigningProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        platform: Platform,
-        signature_validity: typing.Optional[_Duration_4839e8c3] = None,
+        platform: "Platform",
+        signature_validity: typing.Optional["_Duration_4839e8c3"] = None,
         signing_profile_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -1057,12 +1059,12 @@ class SigningProfile(
     @builtins.classmethod
     def from_signing_profile_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         signing_profile_name: builtins.str,
         signing_profile_version: builtins.str,
-    ) -> ISigningProfile:
+    ) -> "ISigningProfile":
         '''Creates a Signing Profile construct that represents an external Signing Profile.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -1079,7 +1081,7 @@ class SigningProfile(
             signing_profile_version=signing_profile_version,
         )
 
-        return typing.cast(ISigningProfile, jsii.sinvoke(cls, "fromSigningProfileAttributes", [scope, id, attrs]))
+        return typing.cast("ISigningProfile", jsii.sinvoke(cls, "fromSigningProfileAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -1193,8 +1195,8 @@ class SigningProfileProps:
     def __init__(
         self,
         *,
-        platform: Platform,
-        signature_validity: typing.Optional[_Duration_4839e8c3] = None,
+        platform: "Platform",
+        signature_validity: typing.Optional["_Duration_4839e8c3"] = None,
         signing_profile_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Construction properties for a Signing Profile object.
@@ -1239,23 +1241,23 @@ class SigningProfileProps:
             self._values["signing_profile_name"] = signing_profile_name
 
     @builtins.property
-    def platform(self) -> Platform:
+    def platform(self) -> "Platform":
         '''The Signing Platform available for signing profile.
 
         :see: https://docs.aws.amazon.com/signer/latest/developerguide/gs-platform.html
         '''
         result = self._values.get("platform")
         assert result is not None, "Required property 'platform' is missing"
-        return typing.cast(Platform, result)
+        return typing.cast("Platform", result)
 
     @builtins.property
-    def signature_validity(self) -> typing.Optional[_Duration_4839e8c3]:
+    def signature_validity(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The validity period for signatures generated using this signing profile.
 
         :default: - 135 months
         '''
         result = self._values.get("signature_validity")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def signing_profile_name(self) -> typing.Optional[builtins.str]:

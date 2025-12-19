@@ -145,7 +145,7 @@ class IAssessmentTargetRef(
 
     @builtins.property
     @jsii.member(jsii_name="assessmentTargetRef")
-    def assessment_target_ref(self) -> AssessmentTargetReference:
+    def assessment_target_ref(self) -> "AssessmentTargetReference":
         '''(experimental) A reference to a AssessmentTarget resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IAssessmentTargetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="assessmentTargetRef")
-    def assessment_target_ref(self) -> AssessmentTargetReference:
+    def assessment_target_ref(self) -> "AssessmentTargetReference":
         '''(experimental) A reference to a AssessmentTarget resource.
 
         :stability: experimental
         '''
-        return typing.cast(AssessmentTargetReference, jsii.get(self, "assessmentTargetRef"))
+        return typing.cast("AssessmentTargetReference", jsii.get(self, "assessmentTargetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAssessmentTargetRef).__jsii_proxy_class__ = lambda : _IAssessmentTargetRefProxy
@@ -192,7 +192,7 @@ class IAssessmentTemplateRef(
 
     @builtins.property
     @jsii.member(jsii_name="assessmentTemplateRef")
-    def assessment_template_ref(self) -> AssessmentTemplateReference:
+    def assessment_template_ref(self) -> "AssessmentTemplateReference":
         '''(experimental) A reference to a AssessmentTemplate resource.
 
         :stability: experimental
@@ -213,12 +213,12 @@ class _IAssessmentTemplateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="assessmentTemplateRef")
-    def assessment_template_ref(self) -> AssessmentTemplateReference:
+    def assessment_template_ref(self) -> "AssessmentTemplateReference":
         '''(experimental) A reference to a AssessmentTemplate resource.
 
         :stability: experimental
         '''
-        return typing.cast(AssessmentTemplateReference, jsii.get(self, "assessmentTemplateRef"))
+        return typing.cast("AssessmentTemplateReference", jsii.get(self, "assessmentTemplateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAssessmentTemplateRef).__jsii_proxy_class__ = lambda : _IAssessmentTemplateRefProxy

@@ -205,7 +205,7 @@ class IDataSourceRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataSourceRef")
-    def data_source_ref(self) -> DataSourceReference:
+    def data_source_ref(self) -> "DataSourceReference":
         '''(experimental) A reference to a DataSource resource.
 
         :stability: experimental
@@ -226,12 +226,12 @@ class _IDataSourceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataSourceRef")
-    def data_source_ref(self) -> DataSourceReference:
+    def data_source_ref(self) -> "DataSourceReference":
         '''(experimental) A reference to a DataSource resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataSourceReference, jsii.get(self, "dataSourceRef"))
+        return typing.cast("DataSourceReference", jsii.get(self, "dataSourceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataSourceRef).__jsii_proxy_class__ = lambda : _IDataSourceRefProxy
@@ -250,7 +250,7 @@ class IFaqRef(
 
     @builtins.property
     @jsii.member(jsii_name="faqRef")
-    def faq_ref(self) -> FaqReference:
+    def faq_ref(self) -> "FaqReference":
         '''(experimental) A reference to a Faq resource.
 
         :stability: experimental
@@ -271,12 +271,12 @@ class _IFaqRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="faqRef")
-    def faq_ref(self) -> FaqReference:
+    def faq_ref(self) -> "FaqReference":
         '''(experimental) A reference to a Faq resource.
 
         :stability: experimental
         '''
-        return typing.cast(FaqReference, jsii.get(self, "faqRef"))
+        return typing.cast("FaqReference", jsii.get(self, "faqRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFaqRef).__jsii_proxy_class__ = lambda : _IFaqRefProxy

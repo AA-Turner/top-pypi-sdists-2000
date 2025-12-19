@@ -145,7 +145,7 @@ class IAlarmModelRef(
 
     @builtins.property
     @jsii.member(jsii_name="alarmModelRef")
-    def alarm_model_ref(self) -> AlarmModelReference:
+    def alarm_model_ref(self) -> "AlarmModelReference":
         '''(experimental) A reference to a AlarmModel resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IAlarmModelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="alarmModelRef")
-    def alarm_model_ref(self) -> AlarmModelReference:
+    def alarm_model_ref(self) -> "AlarmModelReference":
         '''(experimental) A reference to a AlarmModel resource.
 
         :stability: experimental
         '''
-        return typing.cast(AlarmModelReference, jsii.get(self, "alarmModelRef"))
+        return typing.cast("AlarmModelReference", jsii.get(self, "alarmModelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAlarmModelRef).__jsii_proxy_class__ = lambda : _IAlarmModelRefProxy
@@ -190,7 +190,7 @@ class IDetectorModelRef(
 
     @builtins.property
     @jsii.member(jsii_name="detectorModelRef")
-    def detector_model_ref(self) -> DetectorModelReference:
+    def detector_model_ref(self) -> "DetectorModelReference":
         '''(experimental) A reference to a DetectorModel resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IDetectorModelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="detectorModelRef")
-    def detector_model_ref(self) -> DetectorModelReference:
+    def detector_model_ref(self) -> "DetectorModelReference":
         '''(experimental) A reference to a DetectorModel resource.
 
         :stability: experimental
         '''
-        return typing.cast(DetectorModelReference, jsii.get(self, "detectorModelRef"))
+        return typing.cast("DetectorModelReference", jsii.get(self, "detectorModelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDetectorModelRef).__jsii_proxy_class__ = lambda : _IDetectorModelRefProxy

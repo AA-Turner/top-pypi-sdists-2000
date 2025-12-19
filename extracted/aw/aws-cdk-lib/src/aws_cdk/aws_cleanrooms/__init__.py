@@ -111,6 +111,7 @@ class CfnAnalysisTemplate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cleanrooms as cleanrooms
@@ -167,6 +168,19 @@ class CfnAnalysisTemplate(
                     )]
                 )
             ),
+            synthetic_data_parameters=cleanrooms.CfnAnalysisTemplate.SyntheticDataParametersProperty(
+                ml_synthetic_data_parameters=cleanrooms.CfnAnalysisTemplate.MLSyntheticDataParametersProperty(
+                    column_classification=cleanrooms.CfnAnalysisTemplate.ColumnClassificationDetailsProperty(
+                        column_mapping=[cleanrooms.CfnAnalysisTemplate.SyntheticDataColumnPropertiesProperty(
+                            column_name="columnName",
+                            column_type="columnType",
+                            is_predictive_value=False
+                        )]
+                    ),
+                    epsilon=123,
+                    max_membership_inference_attack_score=123
+                )
+            ),
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -176,19 +190,20 @@ class CfnAnalysisTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         format: builtins.str,
         membership_identifier: builtins.str,
         name: builtins.str,
-        source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisSourceProperty", typing.Dict[builtins.str, typing.Any]]],
-        analysis_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.AnalysisSourceProperty", typing.Dict[builtins.str, typing.Any]]],
+        analysis_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.AnalysisParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        error_message_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.ErrorMessageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisSchemaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        source_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisSourceMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        error_message_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.ErrorMessageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        schema: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.AnalysisSchemaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.AnalysisSourceMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        synthetic_data_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.SyntheticDataParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CleanRooms::AnalysisTemplate``.
 
@@ -203,6 +218,7 @@ class CfnAnalysisTemplate(
         :param error_message_configuration: The configuration that specifies the level of detail in error messages returned by analyses using this template. When set to ``DETAILED`` , error messages include more information to help troubleshoot issues with PySpark jobs. Detailed error messages may expose underlying data, including sensitive information. Recommended for faster troubleshooting in development and testing environments.
         :param schema: The entire schema object.
         :param source_metadata: The source metadata for the analysis template.
+        :param synthetic_data_parameters: The parameters used to generate synthetic data for this analysis template.
         :param tags: An optional label that you can assign to a resource when you create it. Each tag consists of a key and an optional value, both of which you define. When you use tagging, you can also use tag-based access control in IAM policies to control access to this resource.
         '''
         if __debug__:
@@ -219,6 +235,7 @@ class CfnAnalysisTemplate(
             error_message_configuration=error_message_configuration,
             schema=schema,
             source_metadata=source_metadata,
+            synthetic_data_parameters=synthetic_data_parameters,
             tags=tags,
         )
 
@@ -228,7 +245,7 @@ class CfnAnalysisTemplate(
     @builtins.classmethod
     def arn_for_analysis_template(
         cls,
-        resource: _IAnalysisTemplateRef_f5016d5a,
+        resource: "_IAnalysisTemplateRef_f5016d5a",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -251,7 +268,7 @@ class CfnAnalysisTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAnalysisTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -282,9 +299,9 @@ class CfnAnalysisTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="analysisTemplateRef")
-    def analysis_template_ref(self) -> _AnalysisTemplateReference_ce70a75f:
+    def analysis_template_ref(self) -> "_AnalysisTemplateReference_ce70a75f":
         '''A reference to a AnalysisTemplate resource.'''
-        return typing.cast(_AnalysisTemplateReference_ce70a75f, jsii.get(self, "analysisTemplateRef"))
+        return typing.cast("_AnalysisTemplateReference_ce70a75f", jsii.get(self, "analysisTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAnalysisTemplateIdentifier")
@@ -343,11 +360,11 @@ class CfnAnalysisTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="attrSchema")
-    def attr_schema(self) -> _IResolvable_da3f097b:
+    def attr_schema(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: Schema
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrSchema"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrSchema"))
 
     @builtins.property
     @jsii.member(jsii_name="attrSchemaReferencedTables")
@@ -359,9 +376,9 @@ class CfnAnalysisTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -411,14 +428,14 @@ class CfnAnalysisTemplate(
     @jsii.member(jsii_name="source")
     def source(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisSourceProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSourceProperty"]:
         '''The source of the analysis template.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisSourceProperty"], jsii.get(self, "source"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSourceProperty"], jsii.get(self, "source"))
 
     @source.setter
     def source(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisSourceProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSourceProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__53060281bd9759f7bd4026827422f1a24050a030c7c5574430af50f44bcdc81f)
@@ -429,14 +446,14 @@ class CfnAnalysisTemplate(
     @jsii.member(jsii_name="analysisParameters")
     def analysis_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisParameterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisParameterProperty"]]]]:
         '''The parameters of the analysis template.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisParameterProperty"]]]], jsii.get(self, "analysisParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisParameterProperty"]]]], jsii.get(self, "analysisParameters"))
 
     @analysis_parameters.setter
     def analysis_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisParameterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisParameterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e1b12f58b0c5fa25bf8c085bcbec4d711cdcbcd2bcea3e5137ba027e35f34c9f)
@@ -460,14 +477,14 @@ class CfnAnalysisTemplate(
     @jsii.member(jsii_name="errorMessageConfiguration")
     def error_message_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]]:
         '''The configuration that specifies the level of detail in error messages returned by analyses using this template.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]], jsii.get(self, "errorMessageConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]], jsii.get(self, "errorMessageConfiguration"))
 
     @error_message_configuration.setter
     def error_message_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__34831cf7179b15aa74fb46a0ab1a549fbfe4b6acc73cf2a5eabf79947604e497)
@@ -478,14 +495,14 @@ class CfnAnalysisTemplate(
     @jsii.member(jsii_name="schema")
     def schema(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisSchemaProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSchemaProperty"]]:
         '''The entire schema object.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisSchemaProperty"]], jsii.get(self, "schema"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSchemaProperty"]], jsii.get(self, "schema"))
 
     @schema.setter
     def schema(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisSchemaProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSchemaProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b08707b577f4e2e4847fc726614c034787b0608c33e3b6db3ed058d8262f49f5)
@@ -496,14 +513,14 @@ class CfnAnalysisTemplate(
     @jsii.member(jsii_name="sourceMetadata")
     def source_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisSourceMetadataProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSourceMetadataProperty"]]:
         '''The source metadata for the analysis template.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisSourceMetadataProperty"]], jsii.get(self, "sourceMetadata"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSourceMetadataProperty"]], jsii.get(self, "sourceMetadata"))
 
     @source_metadata.setter
     def source_metadata(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisSourceMetadataProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSourceMetadataProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9971674aa89ce0d927eab26c4a51b41fc5fd99b53e08ed11b02d3b3b8d184899)
@@ -511,13 +528,31 @@ class CfnAnalysisTemplate(
         jsii.set(self, "sourceMetadata", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="syntheticDataParameters")
+    def synthetic_data_parameters(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.SyntheticDataParametersProperty"]]:
+        '''The parameters used to generate synthetic data for this analysis template.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.SyntheticDataParametersProperty"]], jsii.get(self, "syntheticDataParameters"))
+
+    @synthetic_data_parameters.setter
+    def synthetic_data_parameters(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.SyntheticDataParametersProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4f57153ccd88420227e59b7532c25298ffb4ea1e29b313956dac44f2a6f424ac)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "syntheticDataParameters", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b6d8c0e267965c3e8d9449c75e721dc4e1bccb98212af3c5be762ebb7322d8e8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -678,7 +713,7 @@ class CfnAnalysisTemplate(
         def __init__(
             self,
             *,
-            artifacts: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisTemplateArtifactMetadataProperty", typing.Dict[builtins.str, typing.Any]]],
+            artifacts: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.AnalysisTemplateArtifactMetadataProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The analysis source metadata.
 
@@ -716,14 +751,14 @@ class CfnAnalysisTemplate(
         @builtins.property
         def artifacts(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisTemplateArtifactMetadataProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisTemplateArtifactMetadataProperty"]:
             '''The artifacts of the analysis source metadata.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-analysissourcemetadata.html#cfn-cleanrooms-analysistemplate-analysissourcemetadata-artifacts
             '''
             result = self._values.get("artifacts")
             assert result is not None, "Required property 'artifacts' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisTemplateArtifactMetadataProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisTemplateArtifactMetadataProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -745,7 +780,7 @@ class CfnAnalysisTemplate(
         def __init__(
             self,
             *,
-            artifacts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisTemplateArtifactsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            artifacts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.AnalysisTemplateArtifactsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             text: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The structure that defines the body of the analysis template.
@@ -796,13 +831,13 @@ class CfnAnalysisTemplate(
         @builtins.property
         def artifacts(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisTemplateArtifactsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisTemplateArtifactsProperty"]]:
             '''The artifacts of the analysis source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-analysissource.html#cfn-cleanrooms-analysistemplate-analysissource-artifacts
             '''
             result = self._values.get("artifacts")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisTemplateArtifactsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisTemplateArtifactsProperty"]], result)
 
         @builtins.property
         def text(self) -> typing.Optional[builtins.str]:
@@ -836,8 +871,8 @@ class CfnAnalysisTemplate(
         def __init__(
             self,
             *,
-            entry_point_hash: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.HashProperty", typing.Dict[builtins.str, typing.Any]]],
-            additional_artifact_hashes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.HashProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            entry_point_hash: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.HashProperty", typing.Dict[builtins.str, typing.Any]]],
+            additional_artifact_hashes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.HashProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The analysis template artifact metadata.
 
@@ -877,25 +912,25 @@ class CfnAnalysisTemplate(
         @builtins.property
         def entry_point_hash(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.HashProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.HashProperty"]:
             '''The hash of the entry point for the analysis template artifact metadata.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-analysistemplateartifactmetadata.html#cfn-cleanrooms-analysistemplate-analysistemplateartifactmetadata-entrypointhash
             '''
             result = self._values.get("entry_point_hash")
             assert result is not None, "Required property 'entry_point_hash' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.HashProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.HashProperty"], result)
 
         @builtins.property
         def additional_artifact_hashes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.HashProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.HashProperty"]]]]:
             '''Additional artifact hashes for the analysis template.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-analysistemplateartifactmetadata.html#cfn-cleanrooms-analysistemplate-analysistemplateartifactmetadata-additionalartifacthashes
             '''
             result = self._values.get("additional_artifact_hashes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.HashProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.HashProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -917,7 +952,7 @@ class CfnAnalysisTemplate(
         def __init__(
             self,
             *,
-            location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+            location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The analysis template artifact.
 
@@ -949,14 +984,14 @@ class CfnAnalysisTemplate(
         @builtins.property
         def location(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.S3LocationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.S3LocationProperty"]:
             '''The artifact location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-analysistemplateartifact.html#cfn-cleanrooms-analysistemplate-analysistemplateartifact-location
             '''
             result = self._values.get("location")
             assert result is not None, "Required property 'location' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.S3LocationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.S3LocationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -982,9 +1017,9 @@ class CfnAnalysisTemplate(
         def __init__(
             self,
             *,
-            entry_point: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisTemplateArtifactProperty", typing.Dict[builtins.str, typing.Any]]],
+            entry_point: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.AnalysisTemplateArtifactProperty", typing.Dict[builtins.str, typing.Any]]],
             role_arn: builtins.str,
-            additional_artifacts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnalysisTemplate.AnalysisTemplateArtifactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            additional_artifacts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.AnalysisTemplateArtifactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The analysis template artifacts.
 
@@ -1034,14 +1069,14 @@ class CfnAnalysisTemplate(
         @builtins.property
         def entry_point(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisTemplateArtifactProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisTemplateArtifactProperty"]:
             '''The entry point for the analysis template artifacts.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-analysistemplateartifacts.html#cfn-cleanrooms-analysistemplate-analysistemplateartifacts-entrypoint
             '''
             result = self._values.get("entry_point")
             assert result is not None, "Required property 'entry_point' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisTemplateArtifactProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisTemplateArtifactProperty"], result)
 
         @builtins.property
         def role_arn(self) -> builtins.str:
@@ -1056,13 +1091,13 @@ class CfnAnalysisTemplate(
         @builtins.property
         def additional_artifacts(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisTemplateArtifactProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisTemplateArtifactProperty"]]]]:
             '''Additional artifacts for the analysis template.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-analysistemplateartifacts.html#cfn-cleanrooms-analysistemplate-analysistemplateartifacts-additionalartifacts
             '''
             result = self._values.get("additional_artifacts")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnalysisTemplate.AnalysisTemplateArtifactProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisTemplateArtifactProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1072,6 +1107,68 @@ class CfnAnalysisTemplate(
 
         def __repr__(self) -> str:
             return "AnalysisTemplateArtifactsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cleanrooms.CfnAnalysisTemplate.ColumnClassificationDetailsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"column_mapping": "columnMapping"},
+    )
+    class ColumnClassificationDetailsProperty:
+        def __init__(
+            self,
+            *,
+            column_mapping: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.SyntheticDataColumnPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        ) -> None:
+            '''Contains classification information for data columns, including mappings that specify how columns should be handled during synthetic data generation and privacy analysis.
+
+            :param column_mapping: A mapping that defines the classification of data columns for synthetic data generation and specifies how each column should be handled during the privacy-preserving data synthesis process.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-columnclassificationdetails.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cleanrooms as cleanrooms
+                
+                column_classification_details_property = cleanrooms.CfnAnalysisTemplate.ColumnClassificationDetailsProperty(
+                    column_mapping=[cleanrooms.CfnAnalysisTemplate.SyntheticDataColumnPropertiesProperty(
+                        column_name="columnName",
+                        column_type="columnType",
+                        is_predictive_value=False
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__5482a78923549e684ec37261eda05902be934d3414f97fcb4d06f1c5cc055746)
+                check_type(argname="argument column_mapping", value=column_mapping, expected_type=type_hints["column_mapping"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "column_mapping": column_mapping,
+            }
+
+        @builtins.property
+        def column_mapping(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.SyntheticDataColumnPropertiesProperty"]]]:
+            '''A mapping that defines the classification of data columns for synthetic data generation and specifies how each column should be handled during the privacy-preserving data synthesis process.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-columnclassificationdetails.html#cfn-cleanrooms-analysistemplate-columnclassificationdetails-columnmapping
+            '''
+            result = self._values.get("column_mapping")
+            assert result is not None, "Required property 'column_mapping' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.SyntheticDataColumnPropertiesProperty"]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ColumnClassificationDetailsProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -1185,6 +1282,108 @@ class CfnAnalysisTemplate(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cleanrooms.CfnAnalysisTemplate.MLSyntheticDataParametersProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "column_classification": "columnClassification",
+            "epsilon": "epsilon",
+            "max_membership_inference_attack_score": "maxMembershipInferenceAttackScore",
+        },
+    )
+    class MLSyntheticDataParametersProperty:
+        def __init__(
+            self,
+            *,
+            column_classification: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.ColumnClassificationDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+            epsilon: jsii.Number,
+            max_membership_inference_attack_score: jsii.Number,
+        ) -> None:
+            '''Parameters that control the generation of synthetic data for machine learning, including privacy settings and column classification details.
+
+            :param column_classification: Classification details for data columns that specify how each column should be treated during synthetic data generation.
+            :param epsilon: The epsilon value for differential privacy when generating synthetic data. Lower values provide stronger privacy guarantees but may reduce data utility.
+            :param max_membership_inference_attack_score: The maximum acceptable score for membership inference attack vulnerability. Synthetic data generation fails if the score for the resulting data exceeds this threshold.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-mlsyntheticdataparameters.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cleanrooms as cleanrooms
+                
+                m_lSynthetic_data_parameters_property = cleanrooms.CfnAnalysisTemplate.MLSyntheticDataParametersProperty(
+                    column_classification=cleanrooms.CfnAnalysisTemplate.ColumnClassificationDetailsProperty(
+                        column_mapping=[cleanrooms.CfnAnalysisTemplate.SyntheticDataColumnPropertiesProperty(
+                            column_name="columnName",
+                            column_type="columnType",
+                            is_predictive_value=False
+                        )]
+                    ),
+                    epsilon=123,
+                    max_membership_inference_attack_score=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__21ada170d130ebdce8bce3b56e27e97fb2ea8b709baa382a3b9c1f98dae7d210)
+                check_type(argname="argument column_classification", value=column_classification, expected_type=type_hints["column_classification"])
+                check_type(argname="argument epsilon", value=epsilon, expected_type=type_hints["epsilon"])
+                check_type(argname="argument max_membership_inference_attack_score", value=max_membership_inference_attack_score, expected_type=type_hints["max_membership_inference_attack_score"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "column_classification": column_classification,
+                "epsilon": epsilon,
+                "max_membership_inference_attack_score": max_membership_inference_attack_score,
+            }
+
+        @builtins.property
+        def column_classification(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.ColumnClassificationDetailsProperty"]:
+            '''Classification details for data columns that specify how each column should be treated during synthetic data generation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-mlsyntheticdataparameters.html#cfn-cleanrooms-analysistemplate-mlsyntheticdataparameters-columnclassification
+            '''
+            result = self._values.get("column_classification")
+            assert result is not None, "Required property 'column_classification' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.ColumnClassificationDetailsProperty"], result)
+
+        @builtins.property
+        def epsilon(self) -> jsii.Number:
+            '''The epsilon value for differential privacy when generating synthetic data.
+
+            Lower values provide stronger privacy guarantees but may reduce data utility.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-mlsyntheticdataparameters.html#cfn-cleanrooms-analysistemplate-mlsyntheticdataparameters-epsilon
+            '''
+            result = self._values.get("epsilon")
+            assert result is not None, "Required property 'epsilon' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def max_membership_inference_attack_score(self) -> jsii.Number:
+            '''The maximum acceptable score for membership inference attack vulnerability.
+
+            Synthetic data generation fails if the score for the resulting data exceeds this threshold.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-mlsyntheticdataparameters.html#cfn-cleanrooms-analysistemplate-mlsyntheticdataparameters-maxmembershipinferenceattackscore
+            '''
+            result = self._values.get("max_membership_inference_attack_score")
+            assert result is not None, "Required property 'max_membership_inference_attack_score' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MLSyntheticDataParametersProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_cleanrooms.CfnAnalysisTemplate.S3LocationProperty",
         jsii_struct_bases=[],
         name_mapping={"bucket": "bucket", "key": "key"},
@@ -1250,6 +1449,168 @@ class CfnAnalysisTemplate(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cleanrooms.CfnAnalysisTemplate.SyntheticDataColumnPropertiesProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "column_name": "columnName",
+            "column_type": "columnType",
+            "is_predictive_value": "isPredictiveValue",
+        },
+    )
+    class SyntheticDataColumnPropertiesProperty:
+        def __init__(
+            self,
+            *,
+            column_name: builtins.str,
+            column_type: builtins.str,
+            is_predictive_value: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+        ) -> None:
+            '''Properties that define how a specific data column should be handled during synthetic data generation, including its name, type, and role in predictive modeling.
+
+            :param column_name: The name of the data column as it appears in the dataset.
+            :param column_type: The data type of the column, which determines how the synthetic data generation algorithm processes and synthesizes values for this column.
+            :param is_predictive_value: Indicates if this column contains predictive values that should be treated as target variables in machine learning models. This affects how the synthetic data generation preserves statistical relationships.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-syntheticdatacolumnproperties.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cleanrooms as cleanrooms
+                
+                synthetic_data_column_properties_property = cleanrooms.CfnAnalysisTemplate.SyntheticDataColumnPropertiesProperty(
+                    column_name="columnName",
+                    column_type="columnType",
+                    is_predictive_value=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__667c1ccaf9713070e08de9e8737d40d2f237652e25e08f7a3dbc3deeb1a1335f)
+                check_type(argname="argument column_name", value=column_name, expected_type=type_hints["column_name"])
+                check_type(argname="argument column_type", value=column_type, expected_type=type_hints["column_type"])
+                check_type(argname="argument is_predictive_value", value=is_predictive_value, expected_type=type_hints["is_predictive_value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "column_name": column_name,
+                "column_type": column_type,
+                "is_predictive_value": is_predictive_value,
+            }
+
+        @builtins.property
+        def column_name(self) -> builtins.str:
+            '''The name of the data column as it appears in the dataset.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-syntheticdatacolumnproperties.html#cfn-cleanrooms-analysistemplate-syntheticdatacolumnproperties-columnname
+            '''
+            result = self._values.get("column_name")
+            assert result is not None, "Required property 'column_name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def column_type(self) -> builtins.str:
+            '''The data type of the column, which determines how the synthetic data generation algorithm processes and synthesizes values for this column.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-syntheticdatacolumnproperties.html#cfn-cleanrooms-analysistemplate-syntheticdatacolumnproperties-columntype
+            '''
+            result = self._values.get("column_type")
+            assert result is not None, "Required property 'column_type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def is_predictive_value(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
+            '''Indicates if this column contains predictive values that should be treated as target variables in machine learning models.
+
+            This affects how the synthetic data generation preserves statistical relationships.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-syntheticdatacolumnproperties.html#cfn-cleanrooms-analysistemplate-syntheticdatacolumnproperties-ispredictivevalue
+            '''
+            result = self._values.get("is_predictive_value")
+            assert result is not None, "Required property 'is_predictive_value' is missing"
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SyntheticDataColumnPropertiesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cleanrooms.CfnAnalysisTemplate.SyntheticDataParametersProperty",
+        jsii_struct_bases=[],
+        name_mapping={"ml_synthetic_data_parameters": "mlSyntheticDataParameters"},
+    )
+    class SyntheticDataParametersProperty:
+        def __init__(
+            self,
+            *,
+            ml_synthetic_data_parameters: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.MLSyntheticDataParametersProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''The parameters that control how synthetic data is generated, including privacy settings, column classifications, and other configuration options that affect the data synthesis process.
+
+            :param ml_synthetic_data_parameters: The machine learning-specific parameters for synthetic data generation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-syntheticdataparameters.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cleanrooms as cleanrooms
+                
+                synthetic_data_parameters_property = cleanrooms.CfnAnalysisTemplate.SyntheticDataParametersProperty(
+                    ml_synthetic_data_parameters=cleanrooms.CfnAnalysisTemplate.MLSyntheticDataParametersProperty(
+                        column_classification=cleanrooms.CfnAnalysisTemplate.ColumnClassificationDetailsProperty(
+                            column_mapping=[cleanrooms.CfnAnalysisTemplate.SyntheticDataColumnPropertiesProperty(
+                                column_name="columnName",
+                                column_type="columnType",
+                                is_predictive_value=False
+                            )]
+                        ),
+                        epsilon=123,
+                        max_membership_inference_attack_score=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c7ed1563410528929822ae28a28636375977aed058516a30df4f7c79bbb34ed0)
+                check_type(argname="argument ml_synthetic_data_parameters", value=ml_synthetic_data_parameters, expected_type=type_hints["ml_synthetic_data_parameters"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "ml_synthetic_data_parameters": ml_synthetic_data_parameters,
+            }
+
+        @builtins.property
+        def ml_synthetic_data_parameters(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.MLSyntheticDataParametersProperty"]:
+            '''The machine learning-specific parameters for synthetic data generation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-analysistemplate-syntheticdataparameters.html#cfn-cleanrooms-analysistemplate-syntheticdataparameters-mlsyntheticdataparameters
+            '''
+            result = self._values.get("ml_synthetic_data_parameters")
+            assert result is not None, "Required property 'ml_synthetic_data_parameters' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.MLSyntheticDataParametersProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SyntheticDataParametersProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_cleanrooms.CfnAnalysisTemplateProps",
@@ -1264,6 +1625,7 @@ class CfnAnalysisTemplate(
         "error_message_configuration": "errorMessageConfiguration",
         "schema": "schema",
         "source_metadata": "sourceMetadata",
+        "synthetic_data_parameters": "syntheticDataParameters",
         "tags": "tags",
     },
 )
@@ -1274,13 +1636,14 @@ class CfnAnalysisTemplateProps:
         format: builtins.str,
         membership_identifier: builtins.str,
         name: builtins.str,
-        source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSourceProperty, typing.Dict[builtins.str, typing.Any]]],
-        analysis_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.AnalysisSourceProperty", typing.Dict[builtins.str, typing.Any]]],
+        analysis_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.AnalysisParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        error_message_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.ErrorMessageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSchemaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        source_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSourceMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        error_message_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.ErrorMessageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        schema: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.AnalysisSchemaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.AnalysisSourceMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        synthetic_data_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnalysisTemplate.SyntheticDataParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAnalysisTemplate``.
 
@@ -1293,6 +1656,7 @@ class CfnAnalysisTemplateProps:
         :param error_message_configuration: The configuration that specifies the level of detail in error messages returned by analyses using this template. When set to ``DETAILED`` , error messages include more information to help troubleshoot issues with PySpark jobs. Detailed error messages may expose underlying data, including sensitive information. Recommended for faster troubleshooting in development and testing environments.
         :param schema: The entire schema object.
         :param source_metadata: The source metadata for the analysis template.
+        :param synthetic_data_parameters: The parameters used to generate synthetic data for this analysis template.
         :param tags: An optional label that you can assign to a resource when you create it. Each tag consists of a key and an optional value, both of which you define. When you use tagging, you can also use tag-based access control in IAM policies to control access to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-analysistemplate.html
@@ -1300,6 +1664,7 @@ class CfnAnalysisTemplateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cleanrooms as cleanrooms
@@ -1356,6 +1721,19 @@ class CfnAnalysisTemplateProps:
                         )]
                     )
                 ),
+                synthetic_data_parameters=cleanrooms.CfnAnalysisTemplate.SyntheticDataParametersProperty(
+                    ml_synthetic_data_parameters=cleanrooms.CfnAnalysisTemplate.MLSyntheticDataParametersProperty(
+                        column_classification=cleanrooms.CfnAnalysisTemplate.ColumnClassificationDetailsProperty(
+                            column_mapping=[cleanrooms.CfnAnalysisTemplate.SyntheticDataColumnPropertiesProperty(
+                                column_name="columnName",
+                                column_type="columnType",
+                                is_predictive_value=False
+                            )]
+                        ),
+                        epsilon=123,
+                        max_membership_inference_attack_score=123
+                    )
+                ),
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -1373,6 +1751,7 @@ class CfnAnalysisTemplateProps:
             check_type(argname="argument error_message_configuration", value=error_message_configuration, expected_type=type_hints["error_message_configuration"])
             check_type(argname="argument schema", value=schema, expected_type=type_hints["schema"])
             check_type(argname="argument source_metadata", value=source_metadata, expected_type=type_hints["source_metadata"])
+            check_type(argname="argument synthetic_data_parameters", value=synthetic_data_parameters, expected_type=type_hints["synthetic_data_parameters"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "format": format,
@@ -1390,6 +1769,8 @@ class CfnAnalysisTemplateProps:
             self._values["schema"] = schema
         if source_metadata is not None:
             self._values["source_metadata"] = source_metadata
+        if synthetic_data_parameters is not None:
+            self._values["synthetic_data_parameters"] = synthetic_data_parameters
         if tags is not None:
             self._values["tags"] = tags
 
@@ -1426,25 +1807,25 @@ class CfnAnalysisTemplateProps:
     @builtins.property
     def source(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAnalysisTemplate.AnalysisSourceProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSourceProperty"]:
         '''The source of the analysis template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-analysistemplate.html#cfn-cleanrooms-analysistemplate-source
         '''
         result = self._values.get("source")
         assert result is not None, "Required property 'source' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAnalysisTemplate.AnalysisSourceProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSourceProperty"], result)
 
     @builtins.property
     def analysis_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAnalysisTemplate.AnalysisParameterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisParameterProperty"]]]]:
         '''The parameters of the analysis template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-analysistemplate.html#cfn-cleanrooms-analysistemplate-analysisparameters
         '''
         result = self._values.get("analysis_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAnalysisTemplate.AnalysisParameterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisParameterProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1458,7 +1839,7 @@ class CfnAnalysisTemplateProps:
     @builtins.property
     def error_message_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnalysisTemplate.ErrorMessageConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]]:
         '''The configuration that specifies the level of detail in error messages returned by analyses using this template.
 
         When set to ``DETAILED`` , error messages include more information to help troubleshoot issues with PySpark jobs. Detailed error messages may expose underlying data, including sensitive information. Recommended for faster troubleshooting in development and testing environments.
@@ -1466,32 +1847,43 @@ class CfnAnalysisTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-analysistemplate.html#cfn-cleanrooms-analysistemplate-errormessageconfiguration
         '''
         result = self._values.get("error_message_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnalysisTemplate.ErrorMessageConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.ErrorMessageConfigurationProperty"]], result)
 
     @builtins.property
     def schema(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnalysisTemplate.AnalysisSchemaProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSchemaProperty"]]:
         '''The entire schema object.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-analysistemplate.html#cfn-cleanrooms-analysistemplate-schema
         '''
         result = self._values.get("schema")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnalysisTemplate.AnalysisSchemaProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSchemaProperty"]], result)
 
     @builtins.property
     def source_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnalysisTemplate.AnalysisSourceMetadataProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSourceMetadataProperty"]]:
         '''The source metadata for the analysis template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-analysistemplate.html#cfn-cleanrooms-analysistemplate-sourcemetadata
         '''
         result = self._values.get("source_metadata")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnalysisTemplate.AnalysisSourceMetadataProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.AnalysisSourceMetadataProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def synthetic_data_parameters(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.SyntheticDataParametersProperty"]]:
+        '''The parameters used to generate synthetic data for this analysis template.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-analysistemplate.html#cfn-cleanrooms-analysistemplate-syntheticdataparameters
+        '''
+        result = self._values.get("synthetic_data_parameters")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnalysisTemplate.SyntheticDataParametersProperty"]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.
 
         Each tag consists of a key and an optional value, both of which you define. When you use tagging, you can also use tag-based access control in IAM policies to control access to this resource.
@@ -1499,7 +1891,7 @@ class CfnAnalysisTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-analysistemplate.html#cfn-cleanrooms-analysistemplate-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1527,6 +1919,7 @@ class CfnCollaboration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cleanrooms as cleanrooms
@@ -1559,6 +1952,9 @@ class CfnCollaboration(
                         is_responsible=False
                     ),
                     model_training=cleanrooms.CfnCollaboration.ModelTrainingPaymentConfigProperty(
+                        is_responsible=False
+                    ),
+                    synthetic_data_generation=cleanrooms.CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty(
                         is_responsible=False
                     )
                 )
@@ -1594,6 +1990,9 @@ class CfnCollaboration(
                         ),
                         model_training=cleanrooms.CfnCollaboration.ModelTrainingPaymentConfigProperty(
                             is_responsible=False
+                        ),
+                        synthetic_data_generation=cleanrooms.CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty(
+                            is_responsible=False
                         )
                     )
                 )
@@ -1607,7 +2006,7 @@ class CfnCollaboration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         creator_display_name: builtins.str,
@@ -1618,12 +2017,12 @@ class CfnCollaboration(
         analytics_engine: typing.Optional[builtins.str] = None,
         auto_approved_change_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         creator_member_abilities: typing.Optional[typing.Sequence[builtins.str]] = None,
-        creator_ml_member_abilities: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.MLMemberAbilitiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        creator_payment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.PaymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        data_encryption_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.DataEncryptionMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        creator_ml_member_abilities: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.MLMemberAbilitiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        creator_payment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.PaymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        data_encryption_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.DataEncryptionMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         job_log_status: typing.Optional[builtins.str] = None,
-        members: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.MemberSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        members: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.MemberSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CleanRooms::Collaboration``.
 
@@ -1671,7 +2070,7 @@ class CfnCollaboration(
     @builtins.classmethod
     def arn_for_collaboration(
         cls,
-        resource: _ICollaborationRef_f9a0aa13,
+        resource: "_ICollaborationRef_f9a0aa13",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1694,7 +2093,7 @@ class CfnCollaboration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCollaboration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1747,9 +2146,9 @@ class CfnCollaboration(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1758,9 +2157,9 @@ class CfnCollaboration(
 
     @builtins.property
     @jsii.member(jsii_name="collaborationRef")
-    def collaboration_ref(self) -> _CollaborationReference_c1412182:
+    def collaboration_ref(self) -> "_CollaborationReference_c1412182":
         '''A reference to a Collaboration resource.'''
-        return typing.cast(_CollaborationReference_c1412182, jsii.get(self, "collaborationRef"))
+        return typing.cast("_CollaborationReference_c1412182", jsii.get(self, "collaborationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="creatorDisplayName")
@@ -1879,14 +2278,14 @@ class CfnCollaboration(
     @jsii.member(jsii_name="creatorMlMemberAbilities")
     def creator_ml_member_abilities(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.MLMemberAbilitiesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MLMemberAbilitiesProperty"]]:
         '''The ML member abilities for a collaboration member.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.MLMemberAbilitiesProperty"]], jsii.get(self, "creatorMlMemberAbilities"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MLMemberAbilitiesProperty"]], jsii.get(self, "creatorMlMemberAbilities"))
 
     @creator_ml_member_abilities.setter
     def creator_ml_member_abilities(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.MLMemberAbilitiesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MLMemberAbilitiesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__97c0d0f6cb32a0cbf54c04b4f619c67713dd848075c944908bc62665b42284a9)
@@ -1897,14 +2296,14 @@ class CfnCollaboration(
     @jsii.member(jsii_name="creatorPaymentConfiguration")
     def creator_payment_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.PaymentConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.PaymentConfigurationProperty"]]:
         '''An object representing the collaboration member's payment responsibilities set by the collaboration creator.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.PaymentConfigurationProperty"]], jsii.get(self, "creatorPaymentConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.PaymentConfigurationProperty"]], jsii.get(self, "creatorPaymentConfiguration"))
 
     @creator_payment_configuration.setter
     def creator_payment_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.PaymentConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.PaymentConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__991360bdd6af4d5b428da7f242ab1cc46f2a619a380ffdff6e2434a3e7541e84)
@@ -1915,14 +2314,14 @@ class CfnCollaboration(
     @jsii.member(jsii_name="dataEncryptionMetadata")
     def data_encryption_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.DataEncryptionMetadataProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.DataEncryptionMetadataProperty"]]:
         '''The settings for client-side encryption for cryptographic computing.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.DataEncryptionMetadataProperty"]], jsii.get(self, "dataEncryptionMetadata"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.DataEncryptionMetadataProperty"]], jsii.get(self, "dataEncryptionMetadata"))
 
     @data_encryption_metadata.setter
     def data_encryption_metadata(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.DataEncryptionMetadataProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.DataEncryptionMetadataProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a86b18a30aac6a5afc1830c4adb282d4f0f3199f7c3d3ce99ffb24dad829a6eb)
@@ -1946,14 +2345,14 @@ class CfnCollaboration(
     @jsii.member(jsii_name="members")
     def members(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.MemberSpecificationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MemberSpecificationProperty"]]]]:
         '''A list of initial members, not including the creator.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.MemberSpecificationProperty"]]]], jsii.get(self, "members"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MemberSpecificationProperty"]]]], jsii.get(self, "members"))
 
     @members.setter
     def members(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.MemberSpecificationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MemberSpecificationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e816963af09a7c3bdf0ca05211222f43d66929e9fa8216fe82e8fb6e27493bdc)
@@ -1962,12 +2361,12 @@ class CfnCollaboration(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__06877122efbe5bc41c92999ba727597f48590c383378ee73a94c91fe43305e60)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1987,10 +2386,10 @@ class CfnCollaboration(
         def __init__(
             self,
             *,
-            allow_cleartext: typing.Union[builtins.bool, _IResolvable_da3f097b],
-            allow_duplicates: typing.Union[builtins.bool, _IResolvable_da3f097b],
-            allow_joins_on_columns_with_different_names: typing.Union[builtins.bool, _IResolvable_da3f097b],
-            preserve_nulls: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            allow_cleartext: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+            allow_duplicates: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+            allow_joins_on_columns_with_different_names: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+            preserve_nulls: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''The settings for client-side encryption for cryptographic computing.
 
@@ -2029,48 +2428,52 @@ class CfnCollaboration(
             }
 
         @builtins.property
-        def allow_cleartext(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def allow_cleartext(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether encrypted tables can contain cleartext data ( ``TRUE`` ) or are to cryptographically process every column ( ``FALSE`` ).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-dataencryptionmetadata.html#cfn-cleanrooms-collaboration-dataencryptionmetadata-allowcleartext
             '''
             result = self._values.get("allow_cleartext")
             assert result is not None, "Required property 'allow_cleartext' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def allow_duplicates(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether Fingerprint columns can contain duplicate entries ( ``TRUE`` ) or are to contain only non-repeated values ( ``FALSE`` ).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-dataencryptionmetadata.html#cfn-cleanrooms-collaboration-dataencryptionmetadata-allowduplicates
             '''
             result = self._values.get("allow_duplicates")
             assert result is not None, "Required property 'allow_duplicates' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def allow_joins_on_columns_with_different_names(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether Fingerprint columns can be joined on any other Fingerprint column with a different name ( ``TRUE`` ) or can only be joined on Fingerprint columns of the same name ( ``FALSE`` ).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-dataencryptionmetadata.html#cfn-cleanrooms-collaboration-dataencryptionmetadata-allowjoinsoncolumnswithdifferentnames
             '''
             result = self._values.get("allow_joins_on_columns_with_different_names")
             assert result is not None, "Required property 'allow_joins_on_columns_with_different_names' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
-        def preserve_nulls(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def preserve_nulls(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether NULL values are to be copied as NULL to encrypted tables ( ``TRUE`` ) or cryptographically processed ( ``FALSE`` ).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-dataencryptionmetadata.html#cfn-cleanrooms-collaboration-dataencryptionmetadata-preservenulls
             '''
             result = self._values.get("preserve_nulls")
             assert result is not None, "Required property 'preserve_nulls' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2092,7 +2495,7 @@ class CfnCollaboration(
         def __init__(
             self,
             *,
-            is_responsible: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            is_responsible: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''An object representing the collaboration member's payment responsibilities set by the collaboration creator for query and job compute costs.
 
@@ -2119,7 +2522,9 @@ class CfnCollaboration(
             }
 
         @builtins.property
-        def is_responsible(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def is_responsible(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether the collaboration creator has configured the collaboration member to pay for query and job compute costs ( ``TRUE`` ) or has not configured the collaboration member to pay for query and job compute costs ( ``FALSE`` ).
 
             Exactly one member can be configured to pay for query and job compute costs. An error is returned if the collaboration creator sets a ``TRUE`` value for more than one member in the collaboration.
@@ -2130,7 +2535,7 @@ class CfnCollaboration(
             '''
             result = self._values.get("is_responsible")
             assert result is not None, "Required property 'is_responsible' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2205,19 +2610,22 @@ class CfnCollaboration(
         name_mapping={
             "model_inference": "modelInference",
             "model_training": "modelTraining",
+            "synthetic_data_generation": "syntheticDataGeneration",
         },
     )
     class MLPaymentConfigProperty:
         def __init__(
             self,
             *,
-            model_inference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.ModelInferencePaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            model_training: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.ModelTrainingPaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            model_inference: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.ModelInferencePaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            model_training: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.ModelTrainingPaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            synthetic_data_generation: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object representing the collaboration member's machine learning payment responsibilities set by the collaboration creator.
 
             :param model_inference: The payment responsibilities accepted by the member for model inference.
             :param model_training: The payment responsibilities accepted by the member for model training.
+            :param synthetic_data_generation: The payment configuration for machine learning synthetic data generation.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-mlpaymentconfig.html
             :exampleMetadata: fixture=_generated
@@ -2234,6 +2642,9 @@ class CfnCollaboration(
                     ),
                     model_training=cleanrooms.CfnCollaboration.ModelTrainingPaymentConfigProperty(
                         is_responsible=False
+                    ),
+                    synthetic_data_generation=cleanrooms.CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty(
+                        is_responsible=False
                     )
                 )
             '''
@@ -2241,33 +2652,47 @@ class CfnCollaboration(
                 type_hints = typing.get_type_hints(_typecheckingstub__271514c890ff476984844077519496f6cd7107081ee5259613350b060c9bb355)
                 check_type(argname="argument model_inference", value=model_inference, expected_type=type_hints["model_inference"])
                 check_type(argname="argument model_training", value=model_training, expected_type=type_hints["model_training"])
+                check_type(argname="argument synthetic_data_generation", value=synthetic_data_generation, expected_type=type_hints["synthetic_data_generation"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if model_inference is not None:
                 self._values["model_inference"] = model_inference
             if model_training is not None:
                 self._values["model_training"] = model_training
+            if synthetic_data_generation is not None:
+                self._values["synthetic_data_generation"] = synthetic_data_generation
 
         @builtins.property
         def model_inference(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.ModelInferencePaymentConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.ModelInferencePaymentConfigProperty"]]:
             '''The payment responsibilities accepted by the member for model inference.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-mlpaymentconfig.html#cfn-cleanrooms-collaboration-mlpaymentconfig-modelinference
             '''
             result = self._values.get("model_inference")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.ModelInferencePaymentConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.ModelInferencePaymentConfigProperty"]], result)
 
         @builtins.property
         def model_training(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.ModelTrainingPaymentConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.ModelTrainingPaymentConfigProperty"]]:
             '''The payment responsibilities accepted by the member for model training.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-mlpaymentconfig.html#cfn-cleanrooms-collaboration-mlpaymentconfig-modeltraining
             '''
             result = self._values.get("model_training")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.ModelTrainingPaymentConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.ModelTrainingPaymentConfigProperty"]], result)
+
+        @builtins.property
+        def synthetic_data_generation(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty"]]:
+            '''The payment configuration for machine learning synthetic data generation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-mlpaymentconfig.html#cfn-cleanrooms-collaboration-mlpaymentconfig-syntheticdatageneration
+            '''
+            result = self._values.get("synthetic_data_generation")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2298,8 +2723,8 @@ class CfnCollaboration(
             account_id: builtins.str,
             display_name: builtins.str,
             member_abilities: typing.Optional[typing.Sequence[builtins.str]] = None,
-            ml_member_abilities: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.MLMemberAbilitiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            payment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.PaymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ml_member_abilities: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.MLMemberAbilitiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            payment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.PaymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Basic metadata used to construct a new member.
 
@@ -2341,6 +2766,9 @@ class CfnCollaboration(
                                 is_responsible=False
                             ),
                             model_training=cleanrooms.CfnCollaboration.ModelTrainingPaymentConfigProperty(
+                                is_responsible=False
+                            ),
+                            synthetic_data_generation=cleanrooms.CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty(
                                 is_responsible=False
                             )
                         )
@@ -2401,18 +2829,18 @@ class CfnCollaboration(
         @builtins.property
         def ml_member_abilities(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.MLMemberAbilitiesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MLMemberAbilitiesProperty"]]:
             '''The ML abilities granted to the collaboration member.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-memberspecification.html#cfn-cleanrooms-collaboration-memberspecification-mlmemberabilities
             '''
             result = self._values.get("ml_member_abilities")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.MLMemberAbilitiesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MLMemberAbilitiesProperty"]], result)
 
         @builtins.property
         def payment_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.PaymentConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.PaymentConfigurationProperty"]]:
             '''The collaboration member's payment responsibilities set by the collaboration creator.
 
             If the collaboration creator hasn't speciﬁed anyone as the member paying for query compute costs, then the member who can query is the default payer.
@@ -2420,7 +2848,7 @@ class CfnCollaboration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-memberspecification.html#cfn-cleanrooms-collaboration-memberspecification-paymentconfiguration
             '''
             result = self._values.get("payment_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.PaymentConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.PaymentConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2442,7 +2870,7 @@ class CfnCollaboration(
         def __init__(
             self,
             *,
-            is_responsible: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            is_responsible: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''An object representing the collaboration member's model inference payment responsibilities set by the collaboration creator.
 
@@ -2469,7 +2897,9 @@ class CfnCollaboration(
             }
 
         @builtins.property
-        def is_responsible(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def is_responsible(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether the collaboration creator has configured the collaboration member to pay for model inference costs ( ``TRUE`` ) or has not configured the collaboration member to pay for model inference costs ( ``FALSE`` ).
 
             Exactly one member can be configured to pay for model inference costs. An error is returned if the collaboration creator sets a ``TRUE`` value for more than one member in the collaboration.
@@ -2480,7 +2910,7 @@ class CfnCollaboration(
             '''
             result = self._values.get("is_responsible")
             assert result is not None, "Required property 'is_responsible' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2502,7 +2932,7 @@ class CfnCollaboration(
         def __init__(
             self,
             *,
-            is_responsible: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            is_responsible: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''An object representing the collaboration member's model training payment responsibilities set by the collaboration creator.
 
@@ -2529,7 +2959,9 @@ class CfnCollaboration(
             }
 
         @builtins.property
-        def is_responsible(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def is_responsible(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether the collaboration creator has configured the collaboration member to pay for model training costs ( ``TRUE`` ) or has not configured the collaboration member to pay for model training costs ( ``FALSE`` ).
 
             Exactly one member can be configured to pay for model training costs. An error is returned if the collaboration creator sets a ``TRUE`` value for more than one member in the collaboration.
@@ -2540,7 +2972,7 @@ class CfnCollaboration(
             '''
             result = self._values.get("is_responsible")
             assert result is not None, "Required property 'is_responsible' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2566,9 +2998,9 @@ class CfnCollaboration(
         def __init__(
             self,
             *,
-            query_compute: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.QueryComputePaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-            job_compute: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.JobComputePaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            machine_learning: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollaboration.MLPaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            query_compute: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.QueryComputePaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            job_compute: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.JobComputePaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            machine_learning: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.MLPaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object representing the collaboration member's payment responsibilities set by the collaboration creator.
 
@@ -2600,6 +3032,9 @@ class CfnCollaboration(
                         ),
                         model_training=cleanrooms.CfnCollaboration.ModelTrainingPaymentConfigProperty(
                             is_responsible=False
+                        ),
+                        synthetic_data_generation=cleanrooms.CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty(
+                            is_responsible=False
                         )
                     )
                 )
@@ -2620,36 +3055,36 @@ class CfnCollaboration(
         @builtins.property
         def query_compute(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnCollaboration.QueryComputePaymentConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnCollaboration.QueryComputePaymentConfigProperty"]:
             '''The collaboration member's payment responsibilities set by the collaboration creator for query compute costs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-paymentconfiguration.html#cfn-cleanrooms-collaboration-paymentconfiguration-querycompute
             '''
             result = self._values.get("query_compute")
             assert result is not None, "Required property 'query_compute' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCollaboration.QueryComputePaymentConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCollaboration.QueryComputePaymentConfigProperty"], result)
 
         @builtins.property
         def job_compute(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.JobComputePaymentConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.JobComputePaymentConfigProperty"]]:
             '''The compute configuration for the job.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-paymentconfiguration.html#cfn-cleanrooms-collaboration-paymentconfiguration-jobcompute
             '''
             result = self._values.get("job_compute")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.JobComputePaymentConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.JobComputePaymentConfigProperty"]], result)
 
         @builtins.property
         def machine_learning(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.MLPaymentConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MLPaymentConfigProperty"]]:
             '''An object representing the collaboration member's machine learning payment responsibilities set by the collaboration creator.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-paymentconfiguration.html#cfn-cleanrooms-collaboration-paymentconfiguration-machinelearning
             '''
             result = self._values.get("machine_learning")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollaboration.MLPaymentConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MLPaymentConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2671,7 +3106,7 @@ class CfnCollaboration(
         def __init__(
             self,
             *,
-            is_responsible: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            is_responsible: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''An object representing the collaboration member's payment responsibilities set by the collaboration creator for query compute costs.
 
@@ -2698,7 +3133,9 @@ class CfnCollaboration(
             }
 
         @builtins.property
-        def is_responsible(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def is_responsible(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether the collaboration creator has configured the collaboration member to pay for query compute costs ( ``TRUE`` ) or has not configured the collaboration member to pay for query compute costs ( ``FALSE`` ).
 
             Exactly one member can be configured to pay for query compute costs. An error is returned if the collaboration creator sets a ``TRUE`` value for more than one member in the collaboration.
@@ -2709,7 +3146,7 @@ class CfnCollaboration(
             '''
             result = self._values.get("is_responsible")
             assert result is not None, "Required property 'is_responsible' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2719,6 +3156,64 @@ class CfnCollaboration(
 
         def __repr__(self) -> str:
             return "QueryComputePaymentConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cleanrooms.CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"is_responsible": "isResponsible"},
+    )
+    class SyntheticDataGenerationPaymentConfigProperty:
+        def __init__(
+            self,
+            *,
+            is_responsible: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+        ) -> None:
+            '''Payment configuration for synthetic data generation.
+
+            :param is_responsible: Indicates who is responsible for paying for synthetic data generation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-syntheticdatagenerationpaymentconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cleanrooms as cleanrooms
+                
+                synthetic_data_generation_payment_config_property = cleanrooms.CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty(
+                    is_responsible=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__695891f65d2ccd070bdd6ba73805070d511f624acafcd9f03b861fe6fb88a9ac)
+                check_type(argname="argument is_responsible", value=is_responsible, expected_type=type_hints["is_responsible"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "is_responsible": is_responsible,
+            }
+
+        @builtins.property
+        def is_responsible(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
+            '''Indicates who is responsible for paying for synthetic data generation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-collaboration-syntheticdatagenerationpaymentconfig.html#cfn-cleanrooms-collaboration-syntheticdatagenerationpaymentconfig-isresponsible
+            '''
+            result = self._values.get("is_responsible")
+            assert result is not None, "Required property 'is_responsible' is missing"
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SyntheticDataGenerationPaymentConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2755,12 +3250,12 @@ class CfnCollaborationProps:
         analytics_engine: typing.Optional[builtins.str] = None,
         auto_approved_change_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         creator_member_abilities: typing.Optional[typing.Sequence[builtins.str]] = None,
-        creator_ml_member_abilities: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollaboration.MLMemberAbilitiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        creator_payment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollaboration.PaymentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        data_encryption_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollaboration.DataEncryptionMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        creator_ml_member_abilities: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.MLMemberAbilitiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        creator_payment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.PaymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        data_encryption_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.DataEncryptionMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         job_log_status: typing.Optional[builtins.str] = None,
-        members: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollaboration.MemberSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        members: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCollaboration.MemberSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCollaboration``.
 
@@ -2784,6 +3279,7 @@ class CfnCollaborationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cleanrooms as cleanrooms
@@ -2816,6 +3312,9 @@ class CfnCollaborationProps:
                             is_responsible=False
                         ),
                         model_training=cleanrooms.CfnCollaboration.ModelTrainingPaymentConfigProperty(
+                            is_responsible=False
+                        ),
+                        synthetic_data_generation=cleanrooms.CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty(
                             is_responsible=False
                         )
                     )
@@ -2850,6 +3349,9 @@ class CfnCollaborationProps:
                                 is_responsible=False
                             ),
                             model_training=cleanrooms.CfnCollaboration.ModelTrainingPaymentConfigProperty(
+                                is_responsible=False
+                            ),
+                            synthetic_data_generation=cleanrooms.CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty(
                                 is_responsible=False
                             )
                         )
@@ -2995,35 +3497,35 @@ class CfnCollaborationProps:
     @builtins.property
     def creator_ml_member_abilities(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCollaboration.MLMemberAbilitiesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MLMemberAbilitiesProperty"]]:
         '''The ML member abilities for a collaboration member.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-collaboration.html#cfn-cleanrooms-collaboration-creatormlmemberabilities
         '''
         result = self._values.get("creator_ml_member_abilities")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCollaboration.MLMemberAbilitiesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MLMemberAbilitiesProperty"]], result)
 
     @builtins.property
     def creator_payment_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCollaboration.PaymentConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.PaymentConfigurationProperty"]]:
         '''An object representing the collaboration member's payment responsibilities set by the collaboration creator.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-collaboration.html#cfn-cleanrooms-collaboration-creatorpaymentconfiguration
         '''
         result = self._values.get("creator_payment_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCollaboration.PaymentConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.PaymentConfigurationProperty"]], result)
 
     @builtins.property
     def data_encryption_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCollaboration.DataEncryptionMetadataProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.DataEncryptionMetadataProperty"]]:
         '''The settings for client-side encryption for cryptographic computing.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-collaboration.html#cfn-cleanrooms-collaboration-dataencryptionmetadata
         '''
         result = self._values.get("data_encryption_metadata")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCollaboration.DataEncryptionMetadataProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.DataEncryptionMetadataProperty"]], result)
 
     @builtins.property
     def job_log_status(self) -> typing.Optional[builtins.str]:
@@ -3039,7 +3541,7 @@ class CfnCollaborationProps:
     @builtins.property
     def members(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCollaboration.MemberSpecificationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MemberSpecificationProperty"]]]]:
         '''A list of initial members, not including the creator.
 
         This list is immutable.
@@ -3047,10 +3549,10 @@ class CfnCollaborationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-collaboration.html#cfn-cleanrooms-collaboration-members
         '''
         result = self._values.get("members")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCollaboration.MemberSpecificationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCollaboration.MemberSpecificationProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.
 
         Each tag consists of a key and an optional value, both of which you define. When you use tagging, you can also use tag-based access control in IAM policies to control access to this resource.
@@ -3058,7 +3560,7 @@ class CfnCollaborationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-collaboration.html#cfn-cleanrooms-collaboration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3086,6 +3588,7 @@ class CfnConfiguredTable(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cleanrooms as cleanrooms
@@ -3185,17 +3688,17 @@ class CfnConfiguredTable(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         allowed_columns: typing.Sequence[builtins.str],
         analysis_method: builtins.str,
         name: builtins.str,
-        table_reference: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.TableReferenceProperty", typing.Dict[builtins.str, typing.Any]]],
-        analysis_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.AnalysisRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        table_reference: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.TableReferenceProperty", typing.Dict[builtins.str, typing.Any]]],
+        analysis_rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.AnalysisRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         selected_analysis_methods: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CleanRooms::ConfiguredTable``.
 
@@ -3231,7 +3734,7 @@ class CfnConfiguredTable(
     @builtins.classmethod
     def arn_for_configured_table(
         cls,
-        resource: _IConfiguredTableRef_a9bb66b4,
+        resource: "_IConfiguredTableRef_a9bb66b4",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3254,7 +3757,7 @@ class CfnConfiguredTable(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfiguredTable", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3307,9 +3810,9 @@ class CfnConfiguredTable(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3318,9 +3821,9 @@ class CfnConfiguredTable(
 
     @builtins.property
     @jsii.member(jsii_name="configuredTableRef")
-    def configured_table_ref(self) -> _ConfiguredTableReference_535e544a:
+    def configured_table_ref(self) -> "_ConfiguredTableReference_535e544a":
         '''A reference to a ConfiguredTable resource.'''
-        return typing.cast(_ConfiguredTableReference_535e544a, jsii.get(self, "configuredTableRef"))
+        return typing.cast("_ConfiguredTableReference_535e544a", jsii.get(self, "configuredTableRef"))
 
     @builtins.property
     @jsii.member(jsii_name="allowedColumns")
@@ -3365,14 +3868,14 @@ class CfnConfiguredTable(
     @jsii.member(jsii_name="tableReference")
     def table_reference(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.TableReferenceProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.TableReferenceProperty"]:
         '''The table that this configured table represents.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.TableReferenceProperty"], jsii.get(self, "tableReference"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.TableReferenceProperty"], jsii.get(self, "tableReference"))
 
     @table_reference.setter
     def table_reference(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.TableReferenceProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.TableReferenceProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__81f7eaa704c6766bfee1be9d2d2b0c8cc4751fd3eb996d6d9902238bdc710232)
@@ -3383,14 +3886,14 @@ class CfnConfiguredTable(
     @jsii.member(jsii_name="analysisRules")
     def analysis_rules(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AnalysisRuleProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AnalysisRuleProperty"]]]]:
         '''The analysis rule that was created for the configured table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AnalysisRuleProperty"]]]], jsii.get(self, "analysisRules"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AnalysisRuleProperty"]]]], jsii.get(self, "analysisRules"))
 
     @analysis_rules.setter
     def analysis_rules(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AnalysisRuleProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AnalysisRuleProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__26267c9443103a44d253b803cbd021f980a5d2b9c34ee95ca6dfc809fab0f1e0)
@@ -3428,12 +3931,12 @@ class CfnConfiguredTable(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b3a9395564381a20388411d14ffd2bda7a4d604b2cf7bf643f5e5bd129bdd0f0)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3622,10 +4125,10 @@ class CfnConfiguredTable(
         def __init__(
             self,
             *,
-            aggregate_columns: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.AggregateColumnProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            aggregate_columns: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.AggregateColumnProperty", typing.Dict[builtins.str, typing.Any]]]]],
             dimension_columns: typing.Sequence[builtins.str],
             join_columns: typing.Sequence[builtins.str],
-            output_constraints: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.AggregationConstraintProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            output_constraints: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.AggregationConstraintProperty", typing.Dict[builtins.str, typing.Any]]]]],
             scalar_functions: typing.Sequence[builtins.str],
             additional_analyses: typing.Optional[builtins.str] = None,
             allowed_join_operators: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -3698,14 +4201,14 @@ class CfnConfiguredTable(
         @builtins.property
         def aggregate_columns(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AggregateColumnProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AggregateColumnProperty"]]]:
             '''The columns that query runners are allowed to use in aggregation queries.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-analysisruleaggregation.html#cfn-cleanrooms-configuredtable-analysisruleaggregation-aggregatecolumns
             '''
             result = self._values.get("aggregate_columns")
             assert result is not None, "Required property 'aggregate_columns' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AggregateColumnProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AggregateColumnProperty"]]], result)
 
         @builtins.property
         def dimension_columns(self) -> typing.List[builtins.str]:
@@ -3732,14 +4235,14 @@ class CfnConfiguredTable(
         @builtins.property
         def output_constraints(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AggregationConstraintProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AggregationConstraintProperty"]]]:
             '''Columns that must meet a specific threshold value (after an aggregation function is applied to it) for each output row to be returned.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-analysisruleaggregation.html#cfn-cleanrooms-configuredtable-analysisruleaggregation-outputconstraints
             '''
             result = self._values.get("output_constraints")
             assert result is not None, "Required property 'output_constraints' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AggregationConstraintProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AggregationConstraintProperty"]]], result)
 
         @builtins.property
         def scalar_functions(self) -> typing.List[builtins.str]:
@@ -3811,7 +4314,7 @@ class CfnConfiguredTable(
             allowed_analyses: typing.Sequence[builtins.str],
             additional_analyses: typing.Optional[builtins.str] = None,
             allowed_analysis_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
-            differential_privacy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.DifferentialPrivacyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            differential_privacy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.DifferentialPrivacyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             disallowed_output_columns: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''A type of analysis rule that enables the table owner to approve custom SQL queries on their configured tables.
@@ -3901,13 +4404,13 @@ class CfnConfiguredTable(
         @builtins.property
         def differential_privacy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.DifferentialPrivacyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.DifferentialPrivacyProperty"]]:
             '''The differential privacy configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-analysisrulecustom.html#cfn-cleanrooms-configuredtable-analysisrulecustom-differentialprivacy
             '''
             result = self._values.get("differential_privacy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.DifferentialPrivacyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.DifferentialPrivacyProperty"]], result)
 
         @builtins.property
         def disallowed_output_columns(
@@ -4050,7 +4553,7 @@ class CfnConfiguredTable(
         def __init__(
             self,
             *,
-            policy: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.ConfiguredTableAnalysisRulePolicyProperty", typing.Dict[builtins.str, typing.Any]]],
+            policy: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.ConfiguredTableAnalysisRulePolicyProperty", typing.Dict[builtins.str, typing.Any]]],
             type: builtins.str,
         ) -> None:
             '''A specification about how data from the configured table can be used in a query.
@@ -4127,14 +4630,14 @@ class CfnConfiguredTable(
         @builtins.property
         def policy(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.ConfiguredTableAnalysisRulePolicyProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.ConfiguredTableAnalysisRulePolicyProperty"]:
             '''A policy that describes the associated data usage limitations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-analysisrule.html#cfn-cleanrooms-configuredtable-analysisrule-policy
             '''
             result = self._values.get("policy")
             assert result is not None, "Required property 'policy' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.ConfiguredTableAnalysisRulePolicyProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.ConfiguredTableAnalysisRulePolicyProperty"], result)
 
         @builtins.property
         def type(self) -> builtins.str:
@@ -4292,7 +4795,7 @@ class CfnConfiguredTable(
         def __init__(
             self,
             *,
-            v1: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.ConfiguredTableAnalysisRulePolicyV1Property", typing.Dict[builtins.str, typing.Any]]],
+            v1: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.ConfiguredTableAnalysisRulePolicyV1Property", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Controls on the query specifications that can be run on a configured table.
 
@@ -4362,14 +4865,14 @@ class CfnConfiguredTable(
         @builtins.property
         def v1(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.ConfiguredTableAnalysisRulePolicyV1Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.ConfiguredTableAnalysisRulePolicyV1Property"]:
             '''Controls on the query specifications that can be run on a configured table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-configuredtableanalysisrulepolicy.html#cfn-cleanrooms-configuredtable-configuredtableanalysisrulepolicy-v1
             '''
             result = self._values.get("v1")
             assert result is not None, "Required property 'v1' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.ConfiguredTableAnalysisRulePolicyV1Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.ConfiguredTableAnalysisRulePolicyV1Property"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4395,9 +4898,9 @@ class CfnConfiguredTable(
         def __init__(
             self,
             *,
-            aggregation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.AnalysisRuleAggregationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            custom: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.AnalysisRuleCustomProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.AnalysisRuleListProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            aggregation: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.AnalysisRuleAggregationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.AnalysisRuleCustomProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.AnalysisRuleListProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Controls on the query specifications that can be run on a configured table.
 
@@ -4473,35 +4976,35 @@ class CfnConfiguredTable(
         @builtins.property
         def aggregation(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AnalysisRuleAggregationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AnalysisRuleAggregationProperty"]]:
             '''Analysis rule type that enables only aggregation queries on a configured table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-configuredtableanalysisrulepolicyv1.html#cfn-cleanrooms-configuredtable-configuredtableanalysisrulepolicyv1-aggregation
             '''
             result = self._values.get("aggregation")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AnalysisRuleAggregationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AnalysisRuleAggregationProperty"]], result)
 
         @builtins.property
         def custom(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AnalysisRuleCustomProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AnalysisRuleCustomProperty"]]:
             '''Analysis rule type that enables custom SQL queries on a configured table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-configuredtableanalysisrulepolicyv1.html#cfn-cleanrooms-configuredtable-configuredtableanalysisrulepolicyv1-custom
             '''
             result = self._values.get("custom")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AnalysisRuleCustomProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AnalysisRuleCustomProperty"]], result)
 
         @builtins.property
         def list(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AnalysisRuleListProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AnalysisRuleListProperty"]]:
             '''Analysis rule type that enables only list queries on a configured table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-configuredtableanalysisrulepolicyv1.html#cfn-cleanrooms-configuredtable-configuredtableanalysisrulepolicyv1-list
             '''
             result = self._values.get("list")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AnalysisRuleListProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AnalysisRuleListProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4577,7 +5080,7 @@ class CfnConfiguredTable(
         def __init__(
             self,
             *,
-            columns: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.DifferentialPrivacyColumnProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            columns: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.DifferentialPrivacyColumnProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''The analysis method allowed for the configured tables.
 
@@ -4614,7 +5117,7 @@ class CfnConfiguredTable(
         @builtins.property
         def columns(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.DifferentialPrivacyColumnProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.DifferentialPrivacyColumnProperty"]]]:
             '''The name of the column, such as user_id, that contains the unique identifier of your users, whose privacy you want to protect.
 
             If you want to turn on differential privacy for two or more tables in a collaboration, you must configure the same column as the user identifier column in both analysis rules.
@@ -4623,7 +5126,7 @@ class CfnConfiguredTable(
             '''
             result = self._values.get("columns")
             assert result is not None, "Required property 'columns' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.DifferentialPrivacyColumnProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.DifferentialPrivacyColumnProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4751,7 +5254,7 @@ class CfnConfiguredTable(
             schema_name: builtins.str,
             secret_arn: builtins.str,
             table_name: builtins.str,
-            table_schema: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.SnowflakeTableSchemaProperty", typing.Dict[builtins.str, typing.Any]]],
+            table_schema: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.SnowflakeTableSchemaProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''A reference to a table within Snowflake.
 
@@ -4855,14 +5358,14 @@ class CfnConfiguredTable(
         @builtins.property
         def table_schema(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.SnowflakeTableSchemaProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.SnowflakeTableSchemaProperty"]:
             '''The schema of the Snowflake table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-snowflaketablereference.html#cfn-cleanrooms-configuredtable-snowflaketablereference-tableschema
             '''
             result = self._values.get("table_schema")
             assert result is not None, "Required property 'table_schema' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.SnowflakeTableSchemaProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.SnowflakeTableSchemaProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4884,7 +5387,7 @@ class CfnConfiguredTable(
         def __init__(
             self,
             *,
-            v1: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.SnowflakeTableSchemaV1Property", typing.Dict[builtins.str, typing.Any]]]]],
+            v1: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.SnowflakeTableSchemaV1Property", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''The schema of a Snowflake table.
 
@@ -4916,14 +5419,14 @@ class CfnConfiguredTable(
         @builtins.property
         def v1(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.SnowflakeTableSchemaV1Property"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.SnowflakeTableSchemaV1Property"]]]:
             '''The schema of a Snowflake table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-snowflaketableschema.html#cfn-cleanrooms-configuredtable-snowflaketableschema-v1
             '''
             result = self._values.get("v1")
             assert result is not None, "Required property 'v1' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.SnowflakeTableSchemaV1Property"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.SnowflakeTableSchemaV1Property"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5018,9 +5521,9 @@ class CfnConfiguredTable(
         def __init__(
             self,
             *,
-            athena: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.AthenaTableReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            glue: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.GlueTableReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            snowflake: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTable.SnowflakeTableReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            athena: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.AthenaTableReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            glue: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.GlueTableReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            snowflake: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.SnowflakeTableReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A pointer to the dataset that underlies this table.
 
@@ -5085,35 +5588,35 @@ class CfnConfiguredTable(
         @builtins.property
         def athena(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AthenaTableReferenceProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AthenaTableReferenceProperty"]]:
             '''If present, a reference to the Athena table referred to by this table reference.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-tablereference.html#cfn-cleanrooms-configuredtable-tablereference-athena
             '''
             result = self._values.get("athena")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.AthenaTableReferenceProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AthenaTableReferenceProperty"]], result)
 
         @builtins.property
         def glue(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.GlueTableReferenceProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.GlueTableReferenceProperty"]]:
             '''If present, a reference to the AWS Glue table referred to by this table reference.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-tablereference.html#cfn-cleanrooms-configuredtable-tablereference-glue
             '''
             result = self._values.get("glue")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.GlueTableReferenceProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.GlueTableReferenceProperty"]], result)
 
         @builtins.property
         def snowflake(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.SnowflakeTableReferenceProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.SnowflakeTableReferenceProperty"]]:
             '''If present, a reference to the Snowflake table referred to by this table reference.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtable-tablereference.html#cfn-cleanrooms-configuredtable-tablereference-snowflake
             '''
             result = self._values.get("snowflake")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTable.SnowflakeTableReferenceProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.SnowflakeTableReferenceProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5143,6 +5646,7 @@ class CfnConfiguredTableAssociation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cleanrooms as cleanrooms
@@ -5183,16 +5687,16 @@ class CfnConfiguredTableAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         configured_table_identifier: builtins.str,
         membership_identifier: builtins.str,
         name: builtins.str,
         role_arn: builtins.str,
-        configured_table_association_analysis_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        configured_table_association_analysis_rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CleanRooms::ConfiguredTableAssociation``.
 
@@ -5226,7 +5730,7 @@ class CfnConfiguredTableAssociation(
     @builtins.classmethod
     def arn_for_configured_table_association(
         cls,
-        resource: _IConfiguredTableAssociationRef_1ca59736,
+        resource: "_IConfiguredTableAssociationRef_1ca59736",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -5249,7 +5753,7 @@ class CfnConfiguredTableAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfiguredTableAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5302,9 +5806,9 @@ class CfnConfiguredTableAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5315,9 +5819,9 @@ class CfnConfiguredTableAssociation(
     @jsii.member(jsii_name="configuredTableAssociationRef")
     def configured_table_association_ref(
         self,
-    ) -> _ConfiguredTableAssociationReference_894e07ef:
+    ) -> "_ConfiguredTableAssociationReference_894e07ef":
         '''A reference to a ConfiguredTableAssociation resource.'''
-        return typing.cast(_ConfiguredTableAssociationReference_894e07ef, jsii.get(self, "configuredTableAssociationRef"))
+        return typing.cast("_ConfiguredTableAssociationReference_894e07ef", jsii.get(self, "configuredTableAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="configuredTableIdentifier")
@@ -5375,14 +5879,14 @@ class CfnConfiguredTableAssociation(
     @jsii.member(jsii_name="configuredTableAssociationAnalysisRules")
     def configured_table_association_analysis_rules(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty"]]]]:
         '''An analysis rule for a configured table association.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty"]]]], jsii.get(self, "configuredTableAssociationAnalysisRules"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty"]]]], jsii.get(self, "configuredTableAssociationAnalysisRules"))
 
     @configured_table_association_analysis_rules.setter
     def configured_table_association_analysis_rules(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e0d0ff28b0fb4873494693033feac4f811d803307eb2eaf6b27473cd93db2ef0)
@@ -5404,12 +5908,12 @@ class CfnConfiguredTableAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ab43f7456a874349f59a592b725dc266f2d215b76da6fc373e63e5999b3ce75e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5657,7 +6161,7 @@ class CfnConfiguredTableAssociation(
         def __init__(
             self,
             *,
-            v1: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRulePolicyV1Property", typing.Dict[builtins.str, typing.Any]]],
+            v1: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRulePolicyV1Property", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Controls on the query specifications that can be run on an associated configured table.
 
@@ -5699,14 +6203,14 @@ class CfnConfiguredTableAssociation(
         @builtins.property
         def v1(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRulePolicyV1Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRulePolicyV1Property"]:
             '''The policy for the configured table association analysis rule.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtableassociation-configuredtableassociationanalysisrulepolicy.html#cfn-cleanrooms-configuredtableassociation-configuredtableassociationanalysisrulepolicy-v1
             '''
             result = self._values.get("v1")
             assert result is not None, "Required property 'v1' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRulePolicyV1Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRulePolicyV1Property"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5732,9 +6236,9 @@ class CfnConfiguredTableAssociation(
         def __init__(
             self,
             *,
-            aggregation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleAggregationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            custom: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleCustomProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleListProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            aggregation: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleAggregationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleCustomProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleListProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Controls on the query specifications that can be run on an associated configured table.
 
@@ -5782,18 +6286,18 @@ class CfnConfiguredTableAssociation(
         @builtins.property
         def aggregation(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleAggregationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleAggregationProperty"]]:
             '''Analysis rule type that enables only aggregation queries on a configured table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtableassociation-configuredtableassociationanalysisrulepolicyv1.html#cfn-cleanrooms-configuredtableassociation-configuredtableassociationanalysisrulepolicyv1-aggregation
             '''
             result = self._values.get("aggregation")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleAggregationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleAggregationProperty"]], result)
 
         @builtins.property
         def custom(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleCustomProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleCustomProperty"]]:
             '''Analysis rule type that enables the table owner to approve custom SQL queries on their configured tables.
 
             It supports differential privacy.
@@ -5801,18 +6305,18 @@ class CfnConfiguredTableAssociation(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtableassociation-configuredtableassociationanalysisrulepolicyv1.html#cfn-cleanrooms-configuredtableassociation-configuredtableassociationanalysisrulepolicyv1-custom
             '''
             result = self._values.get("custom")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleCustomProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleCustomProperty"]], result)
 
         @builtins.property
         def list(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleListProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleListProperty"]]:
             '''Analysis rule type that enables only list queries on a configured table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtableassociation-configuredtableassociationanalysisrulepolicyv1.html#cfn-cleanrooms-configuredtableassociation-configuredtableassociationanalysisrulepolicyv1-list
             '''
             result = self._values.get("list")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleListProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleListProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5834,7 +6338,7 @@ class CfnConfiguredTableAssociation(
         def __init__(
             self,
             *,
-            policy: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRulePolicyProperty", typing.Dict[builtins.str, typing.Any]]],
+            policy: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRulePolicyProperty", typing.Dict[builtins.str, typing.Any]]],
             type: builtins.str,
         ) -> None:
             '''An analysis rule for a configured table association.
@@ -5885,14 +6389,14 @@ class CfnConfiguredTableAssociation(
         @builtins.property
         def policy(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRulePolicyProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRulePolicyProperty"]:
             '''The policy of the configured table association analysis rule.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-configuredtableassociation-configuredtableassociationanalysisrule.html#cfn-cleanrooms-configuredtableassociation-configuredtableassociationanalysisrule-policy
             '''
             result = self._values.get("policy")
             assert result is not None, "Required property 'policy' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRulePolicyProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRulePolicyProperty"], result)
 
         @builtins.property
         def type(self) -> builtins.str:
@@ -5937,9 +6441,9 @@ class CfnConfiguredTableAssociationProps:
         membership_identifier: builtins.str,
         name: builtins.str,
         role_arn: builtins.str,
-        configured_table_association_analysis_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        configured_table_association_analysis_rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfiguredTableAssociation``.
 
@@ -5956,6 +6460,7 @@ class CfnConfiguredTableAssociationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cleanrooms as cleanrooms
@@ -6062,7 +6567,7 @@ class CfnConfiguredTableAssociationProps:
     @builtins.property
     def configured_table_association_analysis_rules(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty"]]]]:
         '''An analysis rule for a configured table association.
 
         This analysis rule specifies how data from the table can be used within its associated collaboration. In the console, the ``ConfiguredTableAssociationAnalysisRule`` is referred to as the *collaboration analysis rule* .
@@ -6070,7 +6575,7 @@ class CfnConfiguredTableAssociationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-configuredtableassociation.html#cfn-cleanrooms-configuredtableassociation-configuredtableassociationanalysisrules
         '''
         result = self._values.get("configured_table_association_analysis_rules")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTableAssociation.ConfiguredTableAssociationAnalysisRuleProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -6082,7 +6587,7 @@ class CfnConfiguredTableAssociationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.
 
         Each tag consists of a key and an optional value, both of which you define. When you use tagging, you can also use tag-based access control in IAM policies to control access to this resource.
@@ -6090,7 +6595,7 @@ class CfnConfiguredTableAssociationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-configuredtableassociation.html#cfn-cleanrooms-configuredtableassociation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6125,11 +6630,11 @@ class CfnConfiguredTableProps:
         allowed_columns: typing.Sequence[builtins.str],
         analysis_method: builtins.str,
         name: builtins.str,
-        table_reference: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfiguredTable.TableReferenceProperty, typing.Dict[builtins.str, typing.Any]]],
-        analysis_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfiguredTable.AnalysisRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        table_reference: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.TableReferenceProperty", typing.Dict[builtins.str, typing.Any]]],
+        analysis_rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguredTable.AnalysisRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         selected_analysis_methods: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfiguredTable``.
 
@@ -6147,6 +6652,7 @@ class CfnConfiguredTableProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cleanrooms as cleanrooms
@@ -6307,25 +6813,25 @@ class CfnConfiguredTableProps:
     @builtins.property
     def table_reference(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnConfiguredTable.TableReferenceProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.TableReferenceProperty"]:
         '''The table that this configured table represents.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-configuredtable.html#cfn-cleanrooms-configuredtable-tablereference
         '''
         result = self._values.get("table_reference")
         assert result is not None, "Required property 'table_reference' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnConfiguredTable.TableReferenceProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.TableReferenceProperty"], result)
 
     @builtins.property
     def analysis_rules(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfiguredTable.AnalysisRuleProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AnalysisRuleProperty"]]]]:
         '''The analysis rule that was created for the configured table.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-configuredtable.html#cfn-cleanrooms-configuredtable-analysisrules
         '''
         result = self._values.get("analysis_rules")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfiguredTable.AnalysisRuleProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfiguredTable.AnalysisRuleProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -6346,7 +6852,7 @@ class CfnConfiguredTableProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.
 
         Each tag consists of a key and an optional value, both of which you define. When you use tagging, you can also use tag-based access control in IAM policies to control access to this resource.
@@ -6354,7 +6860,7 @@ class CfnConfiguredTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-configuredtable.html#cfn-cleanrooms-configuredtable-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6382,6 +6888,7 @@ class CfnIdMappingTable(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cleanrooms as cleanrooms
@@ -6406,15 +6913,15 @@ class CfnIdMappingTable(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        input_reference_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        input_reference_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         membership_identifier: builtins.str,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CleanRooms::IdMappingTable``.
 
@@ -6446,7 +6953,7 @@ class CfnIdMappingTable(
     @builtins.classmethod
     def arn_for_id_mapping_table(
         cls,
-        resource: _IIdMappingTableRef_49cfd2b7,
+        resource: "_IIdMappingTableRef_49cfd2b7",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6469,7 +6976,7 @@ class CfnIdMappingTable(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIdMappingTable", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6536,11 +7043,11 @@ class CfnIdMappingTable(
 
     @builtins.property
     @jsii.member(jsii_name="attrInputReferenceProperties")
-    def attr_input_reference_properties(self) -> _IResolvable_da3f097b:
+    def attr_input_reference_properties(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: InputReferenceProperties
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrInputReferenceProperties"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrInputReferenceProperties"))
 
     @builtins.property
     @jsii.member(jsii_name="attrMembershipArn")
@@ -6553,9 +7060,9 @@ class CfnIdMappingTable(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -6564,22 +7071,22 @@ class CfnIdMappingTable(
 
     @builtins.property
     @jsii.member(jsii_name="idMappingTableRef")
-    def id_mapping_table_ref(self) -> _IdMappingTableReference_b726f09d:
+    def id_mapping_table_ref(self) -> "_IdMappingTableReference_b726f09d":
         '''A reference to a IdMappingTable resource.'''
-        return typing.cast(_IdMappingTableReference_b726f09d, jsii.get(self, "idMappingTableRef"))
+        return typing.cast("_IdMappingTableReference_b726f09d", jsii.get(self, "idMappingTableRef"))
 
     @builtins.property
     @jsii.member(jsii_name="inputReferenceConfig")
     def input_reference_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty"]:
         '''The input reference configuration for the ID mapping table.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty"], jsii.get(self, "inputReferenceConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty"], jsii.get(self, "inputReferenceConfig"))
 
     @input_reference_config.setter
     def input_reference_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__80a1443fefffd729ef997de9fb9306db15cfda0ecccaa0f348c3f55a13fc2f6b)
@@ -6640,12 +7147,12 @@ class CfnIdMappingTable(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5d6b9b9f29a25fa84794d9a566af8e18597086eba6792ac31fe185d0f74a9ff5)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6664,7 +7171,7 @@ class CfnIdMappingTable(
             self,
             *,
             input_reference_arn: builtins.str,
-            manage_resource_policies: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            manage_resource_policies: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Provides the input reference configuration for the ID mapping table.
 
@@ -6709,7 +7216,7 @@ class CfnIdMappingTable(
         @builtins.property
         def manage_resource_policies(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''When ``TRUE`` , AWS Clean Rooms manages permissions for the ID mapping table resource.
 
             When ``FALSE`` , the resource owner manages permissions for the ID mapping table resource.
@@ -6718,7 +7225,7 @@ class CfnIdMappingTable(
             '''
             result = self._values.get("manage_resource_policies")
             assert result is not None, "Required property 'manage_resource_policies' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6740,7 +7247,7 @@ class CfnIdMappingTable(
         def __init__(
             self,
             *,
-            id_mapping_table_input_source: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdMappingTable.IdMappingTableInputSourceProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            id_mapping_table_input_source: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdMappingTable.IdMappingTableInputSourceProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''The input reference properties for the ID mapping table.
 
@@ -6772,14 +7279,14 @@ class CfnIdMappingTable(
         @builtins.property
         def id_mapping_table_input_source(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIdMappingTable.IdMappingTableInputSourceProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIdMappingTable.IdMappingTableInputSourceProperty"]]]:
             '''The input source of the ID mapping table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-idmappingtable-idmappingtableinputreferenceproperties.html#cfn-cleanrooms-idmappingtable-idmappingtableinputreferenceproperties-idmappingtableinputsource
             '''
             result = self._values.get("id_mapping_table_input_source")
             assert result is not None, "Required property 'id_mapping_table_input_source' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIdMappingTable.IdMappingTableInputSourceProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIdMappingTable.IdMappingTableInputSourceProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6883,12 +7390,12 @@ class CfnIdMappingTableProps:
     def __init__(
         self,
         *,
-        input_reference_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        input_reference_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         membership_identifier: builtins.str,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnIdMappingTable``.
 
@@ -6904,6 +7411,7 @@ class CfnIdMappingTableProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cleanrooms as cleanrooms
@@ -6948,14 +7456,14 @@ class CfnIdMappingTableProps:
     @builtins.property
     def input_reference_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty"]:
         '''The input reference configuration for the ID mapping table.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-idmappingtable.html#cfn-cleanrooms-idmappingtable-inputreferenceconfig
         '''
         result = self._values.get("input_reference_config")
         assert result is not None, "Required property 'input_reference_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnIdMappingTable.IdMappingTableInputReferenceConfigProperty"], result)
 
     @builtins.property
     def membership_identifier(self) -> builtins.str:
@@ -6996,7 +7504,7 @@ class CfnIdMappingTableProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.
 
         Each tag consists of a key and an optional value, both of which you define. When you use tagging, you can also use tag-based access control in IAM policies to control access to this resource.
@@ -7004,7 +7512,7 @@ class CfnIdMappingTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-idmappingtable.html#cfn-cleanrooms-idmappingtable-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7032,6 +7540,7 @@ class CfnIdNamespaceAssociation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cleanrooms as cleanrooms
@@ -7058,15 +7567,15 @@ class CfnIdNamespaceAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        input_reference_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        input_reference_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         membership_identifier: builtins.str,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        id_mapping_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdNamespaceAssociation.IdMappingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        id_mapping_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdNamespaceAssociation.IdMappingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CleanRooms::IdNamespaceAssociation``.
 
@@ -7098,7 +7607,7 @@ class CfnIdNamespaceAssociation(
     @builtins.classmethod
     def arn_for_id_namespace_association(
         cls,
-        resource: _IIdNamespaceAssociationRef_9966aeba,
+        resource: "_IIdNamespaceAssociationRef_9966aeba",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -7121,7 +7630,7 @@ class CfnIdNamespaceAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIdNamespaceAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7188,11 +7697,11 @@ class CfnIdNamespaceAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="attrInputReferenceProperties")
-    def attr_input_reference_properties(self) -> _IResolvable_da3f097b:
+    def attr_input_reference_properties(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: InputReferenceProperties
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrInputReferenceProperties"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrInputReferenceProperties"))
 
     @builtins.property
     @jsii.member(jsii_name="attrMembershipArn")
@@ -7205,9 +7714,9 @@ class CfnIdNamespaceAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -7216,22 +7725,24 @@ class CfnIdNamespaceAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="idNamespaceAssociationRef")
-    def id_namespace_association_ref(self) -> _IdNamespaceAssociationReference_79b675a0:
+    def id_namespace_association_ref(
+        self,
+    ) -> "_IdNamespaceAssociationReference_79b675a0":
         '''A reference to a IdNamespaceAssociation resource.'''
-        return typing.cast(_IdNamespaceAssociationReference_79b675a0, jsii.get(self, "idNamespaceAssociationRef"))
+        return typing.cast("_IdNamespaceAssociationReference_79b675a0", jsii.get(self, "idNamespaceAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="inputReferenceConfig")
     def input_reference_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty"]:
         '''The input reference configuration for the ID namespace association.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty"], jsii.get(self, "inputReferenceConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty"], jsii.get(self, "inputReferenceConfig"))
 
     @input_reference_config.setter
     def input_reference_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__314c1541c8ce4234c2ada25e682a151d92fd93edbed1b4fd9105dcda931dc8dc)
@@ -7281,14 +7792,14 @@ class CfnIdNamespaceAssociation(
     @jsii.member(jsii_name="idMappingConfig")
     def id_mapping_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdNamespaceAssociation.IdMappingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdNamespaceAssociation.IdMappingConfigProperty"]]:
         '''The configuration settings for the ID mapping table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdNamespaceAssociation.IdMappingConfigProperty"]], jsii.get(self, "idMappingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdNamespaceAssociation.IdMappingConfigProperty"]], jsii.get(self, "idMappingConfig"))
 
     @id_mapping_config.setter
     def id_mapping_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIdNamespaceAssociation.IdMappingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdNamespaceAssociation.IdMappingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__18b505cc42cf359a69612005213707ca66c0c1daa7090899390265f4b2a5aa3b)
@@ -7297,12 +7808,12 @@ class CfnIdNamespaceAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bb75b574b07bea6c872486b6d13e8f81b7b3304807da45e45a041c11f1b4a84d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7317,7 +7828,7 @@ class CfnIdNamespaceAssociation(
         def __init__(
             self,
             *,
-            allow_use_as_dimension_column: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            allow_use_as_dimension_column: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''The configuration settings for the ID mapping table.
 
@@ -7346,7 +7857,7 @@ class CfnIdNamespaceAssociation(
         @builtins.property
         def allow_use_as_dimension_column(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''An indicator as to whether you can use your column as a dimension column in the ID mapping table ( ``TRUE`` ) or not ( ``FALSE`` ).
 
             Default is ``FALSE`` .
@@ -7355,7 +7866,7 @@ class CfnIdNamespaceAssociation(
             '''
             result = self._values.get("allow_use_as_dimension_column")
             assert result is not None, "Required property 'allow_use_as_dimension_column' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7381,7 +7892,7 @@ class CfnIdNamespaceAssociation(
             self,
             *,
             input_reference_arn: builtins.str,
-            manage_resource_policies: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            manage_resource_policies: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Provides the information for the ID namespace association input reference configuration.
 
@@ -7426,7 +7937,7 @@ class CfnIdNamespaceAssociation(
         @builtins.property
         def manage_resource_policies(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''When ``TRUE`` , AWS Clean Rooms manages permissions for the ID namespace association resource.
 
             When ``FALSE`` , the resource owner manages permissions for the ID namespace association resource.
@@ -7435,7 +7946,7 @@ class CfnIdNamespaceAssociation(
             '''
             result = self._values.get("manage_resource_policies")
             assert result is not None, "Required property 'manage_resource_policies' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7460,7 +7971,7 @@ class CfnIdNamespaceAssociation(
         def __init__(
             self,
             *,
-            id_mapping_workflows_supported: typing.Optional[typing.Union[typing.Sequence[typing.Any], _IResolvable_da3f097b]] = None,
+            id_mapping_workflows_supported: typing.Optional[typing.Union[typing.Sequence[typing.Any], "_IResolvable_da3f097b"]] = None,
             id_namespace_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Provides the information for the ID namespace association input reference properties.
@@ -7497,13 +8008,13 @@ class CfnIdNamespaceAssociation(
         @builtins.property
         def id_mapping_workflows_supported(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[typing.Any], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[typing.Any], "_IResolvable_da3f097b"]]:
             '''Defines how ID mapping workflows are supported for this ID namespace association.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-idnamespaceassociation-idnamespaceassociationinputreferenceproperties.html#cfn-cleanrooms-idnamespaceassociation-idnamespaceassociationinputreferenceproperties-idmappingworkflowssupported
             '''
             result = self._values.get("id_mapping_workflows_supported")
-            return typing.cast(typing.Optional[typing.Union[typing.List[typing.Any], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[typing.Any], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def id_namespace_type(self) -> typing.Optional[builtins.str]:
@@ -7542,12 +8053,12 @@ class CfnIdNamespaceAssociationProps:
     def __init__(
         self,
         *,
-        input_reference_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        input_reference_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         membership_identifier: builtins.str,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        id_mapping_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdNamespaceAssociation.IdMappingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        id_mapping_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIdNamespaceAssociation.IdMappingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnIdNamespaceAssociation``.
 
@@ -7563,6 +8074,7 @@ class CfnIdNamespaceAssociationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cleanrooms as cleanrooms
@@ -7609,14 +8121,14 @@ class CfnIdNamespaceAssociationProps:
     @builtins.property
     def input_reference_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty"]:
         '''The input reference configuration for the ID namespace association.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-idnamespaceassociation.html#cfn-cleanrooms-idnamespaceassociation-inputreferenceconfig
         '''
         result = self._values.get("input_reference_config")
         assert result is not None, "Required property 'input_reference_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnIdNamespaceAssociation.IdNamespaceAssociationInputReferenceConfigProperty"], result)
 
     @builtins.property
     def membership_identifier(self) -> builtins.str:
@@ -7650,16 +8162,16 @@ class CfnIdNamespaceAssociationProps:
     @builtins.property
     def id_mapping_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIdNamespaceAssociation.IdMappingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdNamespaceAssociation.IdMappingConfigProperty"]]:
         '''The configuration settings for the ID mapping table.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-idnamespaceassociation.html#cfn-cleanrooms-idnamespaceassociation-idmappingconfig
         '''
         result = self._values.get("id_mapping_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIdNamespaceAssociation.IdMappingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIdNamespaceAssociation.IdMappingConfigProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.
 
         Each tag consists of a key and an optional value, both of which you define. When you use tagging, you can also use tag-based access control in IAM policies to control access to this resource.
@@ -7667,7 +8179,7 @@ class CfnIdNamespaceAssociationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-idnamespaceassociation.html#cfn-cleanrooms-idnamespaceassociation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7695,6 +8207,7 @@ class CfnMembership(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cleanrooms as cleanrooms
@@ -7746,6 +8259,9 @@ class CfnMembership(
                     ),
                     model_training=cleanrooms.CfnMembership.MembershipModelTrainingPaymentConfigProperty(
                         is_responsible=False
+                    ),
+                    synthetic_data_generation=cleanrooms.CfnMembership.MembershipSyntheticDataGenerationPaymentConfigProperty(
+                        is_responsible=False
                     )
                 )
             ),
@@ -7758,16 +8274,16 @@ class CfnMembership(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         collaboration_identifier: builtins.str,
         query_log_status: builtins.str,
-        default_job_result_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMembership.MembershipProtectedJobResultConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        default_result_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMembership.MembershipProtectedQueryResultConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        default_job_result_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipProtectedJobResultConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        default_result_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipProtectedQueryResultConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         job_log_status: typing.Optional[builtins.str] = None,
-        payment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMembership.MembershipPaymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        payment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipPaymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CleanRooms::Membership``.
 
@@ -7799,7 +8315,7 @@ class CfnMembership(
 
     @jsii.member(jsii_name="arnForMembership")
     @builtins.classmethod
-    def arn_for_membership(cls, resource: _IMembershipRef_a79fefcb) -> builtins.str:
+    def arn_for_membership(cls, resource: "_IMembershipRef_a79fefcb") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -7821,7 +8337,7 @@ class CfnMembership(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMembership", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7896,9 +8412,9 @@ class CfnMembership(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -7907,9 +8423,9 @@ class CfnMembership(
 
     @builtins.property
     @jsii.member(jsii_name="membershipRef")
-    def membership_ref(self) -> _MembershipReference_af495d41:
+    def membership_ref(self) -> "_MembershipReference_af495d41":
         '''A reference to a Membership resource.'''
-        return typing.cast(_MembershipReference_af495d41, jsii.get(self, "membershipRef"))
+        return typing.cast("_MembershipReference_af495d41", jsii.get(self, "membershipRef"))
 
     @builtins.property
     @jsii.member(jsii_name="collaborationIdentifier")
@@ -7941,14 +8457,14 @@ class CfnMembership(
     @jsii.member(jsii_name="defaultJobResultConfiguration")
     def default_job_result_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipProtectedJobResultConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedJobResultConfigurationProperty"]]:
         '''The default job result configuration for the membership.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipProtectedJobResultConfigurationProperty"]], jsii.get(self, "defaultJobResultConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedJobResultConfigurationProperty"]], jsii.get(self, "defaultJobResultConfiguration"))
 
     @default_job_result_configuration.setter
     def default_job_result_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipProtectedJobResultConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedJobResultConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fae73e4481dcc5cfeba1d7ce37a48095412d812d6a76939d24017d3e50e600fb)
@@ -7959,14 +8475,14 @@ class CfnMembership(
     @jsii.member(jsii_name="defaultResultConfiguration")
     def default_result_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipProtectedQueryResultConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedQueryResultConfigurationProperty"]]:
         '''The default protected query result configuration as specified by the member who can receive results.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipProtectedQueryResultConfigurationProperty"]], jsii.get(self, "defaultResultConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedQueryResultConfigurationProperty"]], jsii.get(self, "defaultResultConfiguration"))
 
     @default_result_configuration.setter
     def default_result_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipProtectedQueryResultConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedQueryResultConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ad055649202ffbf3de067877d88fa96b564e1efb0b59d9afaceb04f351ce0c65)
@@ -7990,14 +8506,14 @@ class CfnMembership(
     @jsii.member(jsii_name="paymentConfiguration")
     def payment_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipPaymentConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipPaymentConfigurationProperty"]]:
         '''The payment responsibilities accepted by the collaboration member.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipPaymentConfigurationProperty"]], jsii.get(self, "paymentConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipPaymentConfigurationProperty"]], jsii.get(self, "paymentConfiguration"))
 
     @payment_configuration.setter
     def payment_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipPaymentConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipPaymentConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8f2d4b43043fdc1c0f794c725e0fa34d3d42d2b231edc34464fcc237ea7aa6d6)
@@ -8006,12 +8522,12 @@ class CfnMembership(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__efad84033de32d67e94b9ac23a8d3176e7fc904203e000dac066b28793fec68b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -8026,7 +8542,7 @@ class CfnMembership(
         def __init__(
             self,
             *,
-            is_responsible: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            is_responsible: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''An object representing the payment responsibilities accepted by the collaboration member for query and job compute costs.
 
@@ -8053,7 +8569,9 @@ class CfnMembership(
             }
 
         @builtins.property
-        def is_responsible(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def is_responsible(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether the collaboration member has accepted to pay for job compute costs ( ``TRUE`` ) or has not accepted to pay for query and job compute costs ( ``FALSE`` ).
 
             There is only one member who pays for queries and jobs.
@@ -8067,7 +8585,7 @@ class CfnMembership(
             '''
             result = self._values.get("is_responsible")
             assert result is not None, "Required property 'is_responsible' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8086,19 +8604,22 @@ class CfnMembership(
         name_mapping={
             "model_inference": "modelInference",
             "model_training": "modelTraining",
+            "synthetic_data_generation": "syntheticDataGeneration",
         },
     )
     class MembershipMLPaymentConfigProperty:
         def __init__(
             self,
             *,
-            model_inference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMembership.MembershipModelInferencePaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            model_training: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMembership.MembershipModelTrainingPaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            model_inference: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipModelInferencePaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            model_training: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipModelTrainingPaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            synthetic_data_generation: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipSyntheticDataGenerationPaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object representing the collaboration member's machine learning payment responsibilities set by the collaboration creator.
 
             :param model_inference: The payment responsibilities accepted by the member for model inference.
             :param model_training: The payment responsibilities accepted by the member for model training.
+            :param synthetic_data_generation: The payment configuration for synthetic data generation for this machine learning membership.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershipmlpaymentconfig.html
             :exampleMetadata: fixture=_generated
@@ -8115,6 +8636,9 @@ class CfnMembership(
                     ),
                     model_training=cleanrooms.CfnMembership.MembershipModelTrainingPaymentConfigProperty(
                         is_responsible=False
+                    ),
+                    synthetic_data_generation=cleanrooms.CfnMembership.MembershipSyntheticDataGenerationPaymentConfigProperty(
+                        is_responsible=False
                     )
                 )
             '''
@@ -8122,33 +8646,47 @@ class CfnMembership(
                 type_hints = typing.get_type_hints(_typecheckingstub__13dd2d08b2612b2890adb3362ea4e5bebe48abd3cfb27c026a48fcd95bd347dd)
                 check_type(argname="argument model_inference", value=model_inference, expected_type=type_hints["model_inference"])
                 check_type(argname="argument model_training", value=model_training, expected_type=type_hints["model_training"])
+                check_type(argname="argument synthetic_data_generation", value=synthetic_data_generation, expected_type=type_hints["synthetic_data_generation"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if model_inference is not None:
                 self._values["model_inference"] = model_inference
             if model_training is not None:
                 self._values["model_training"] = model_training
+            if synthetic_data_generation is not None:
+                self._values["synthetic_data_generation"] = synthetic_data_generation
 
         @builtins.property
         def model_inference(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipModelInferencePaymentConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipModelInferencePaymentConfigProperty"]]:
             '''The payment responsibilities accepted by the member for model inference.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershipmlpaymentconfig.html#cfn-cleanrooms-membership-membershipmlpaymentconfig-modelinference
             '''
             result = self._values.get("model_inference")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipModelInferencePaymentConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipModelInferencePaymentConfigProperty"]], result)
 
         @builtins.property
         def model_training(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipModelTrainingPaymentConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipModelTrainingPaymentConfigProperty"]]:
             '''The payment responsibilities accepted by the member for model training.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershipmlpaymentconfig.html#cfn-cleanrooms-membership-membershipmlpaymentconfig-modeltraining
             '''
             result = self._values.get("model_training")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipModelTrainingPaymentConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipModelTrainingPaymentConfigProperty"]], result)
+
+        @builtins.property
+        def synthetic_data_generation(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipSyntheticDataGenerationPaymentConfigProperty"]]:
+            '''The payment configuration for synthetic data generation for this machine learning membership.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershipmlpaymentconfig.html#cfn-cleanrooms-membership-membershipmlpaymentconfig-syntheticdatageneration
+            '''
+            result = self._values.get("synthetic_data_generation")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipSyntheticDataGenerationPaymentConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8170,7 +8708,7 @@ class CfnMembership(
         def __init__(
             self,
             *,
-            is_responsible: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            is_responsible: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''An object representing the collaboration member's model inference payment responsibilities set by the collaboration creator.
 
@@ -8197,7 +8735,9 @@ class CfnMembership(
             }
 
         @builtins.property
-        def is_responsible(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def is_responsible(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether the collaboration member has accepted to pay for model inference costs ( ``TRUE`` ) or has not accepted to pay for model inference costs ( ``FALSE`` ).
 
             If the collaboration creator has not specified anyone to pay for model inference costs, then the member who can query is the default payer.
@@ -8211,7 +8751,7 @@ class CfnMembership(
             '''
             result = self._values.get("is_responsible")
             assert result is not None, "Required property 'is_responsible' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8233,7 +8773,7 @@ class CfnMembership(
         def __init__(
             self,
             *,
-            is_responsible: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            is_responsible: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''An object representing the collaboration member's model training payment responsibilities set by the collaboration creator.
 
@@ -8260,7 +8800,9 @@ class CfnMembership(
             }
 
         @builtins.property
-        def is_responsible(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def is_responsible(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether the collaboration member has accepted to pay for model training costs ( ``TRUE`` ) or has not accepted to pay for model training costs ( ``FALSE`` ).
 
             If the collaboration creator has not specified anyone to pay for model training costs, then the member who can query is the default payer.
@@ -8274,7 +8816,7 @@ class CfnMembership(
             '''
             result = self._values.get("is_responsible")
             assert result is not None, "Required property 'is_responsible' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8300,9 +8842,9 @@ class CfnMembership(
         def __init__(
             self,
             *,
-            query_compute: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMembership.MembershipQueryComputePaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-            job_compute: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMembership.MembershipJobComputePaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            machine_learning: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMembership.MembershipMLPaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            query_compute: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipQueryComputePaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            job_compute: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipJobComputePaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            machine_learning: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipMLPaymentConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object representing the payment responsibilities accepted by the collaboration member.
 
@@ -8334,6 +8876,9 @@ class CfnMembership(
                         ),
                         model_training=cleanrooms.CfnMembership.MembershipModelTrainingPaymentConfigProperty(
                             is_responsible=False
+                        ),
+                        synthetic_data_generation=cleanrooms.CfnMembership.MembershipSyntheticDataGenerationPaymentConfigProperty(
+                            is_responsible=False
                         )
                     )
                 )
@@ -8354,36 +8899,36 @@ class CfnMembership(
         @builtins.property
         def query_compute(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipQueryComputePaymentConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipQueryComputePaymentConfigProperty"]:
             '''The payment responsibilities accepted by the collaboration member for query compute costs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershippaymentconfiguration.html#cfn-cleanrooms-membership-membershippaymentconfiguration-querycompute
             '''
             result = self._values.get("query_compute")
             assert result is not None, "Required property 'query_compute' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipQueryComputePaymentConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipQueryComputePaymentConfigProperty"], result)
 
         @builtins.property
         def job_compute(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipJobComputePaymentConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipJobComputePaymentConfigProperty"]]:
             '''The payment responsibilities accepted by the collaboration member for job compute costs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershippaymentconfiguration.html#cfn-cleanrooms-membership-membershippaymentconfiguration-jobcompute
             '''
             result = self._values.get("job_compute")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipJobComputePaymentConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipJobComputePaymentConfigProperty"]], result)
 
         @builtins.property
         def machine_learning(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipMLPaymentConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipMLPaymentConfigProperty"]]:
             '''The payment responsibilities accepted by the collaboration member for machine learning costs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershippaymentconfiguration.html#cfn-cleanrooms-membership-membershippaymentconfiguration-machinelearning
             '''
             result = self._values.get("machine_learning")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipMLPaymentConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipMLPaymentConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8405,7 +8950,7 @@ class CfnMembership(
         def __init__(
             self,
             *,
-            s3: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMembership.ProtectedJobS3OutputConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]],
+            s3: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.ProtectedJobS3OutputConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Contains configurations for protected job results.
 
@@ -8439,14 +8984,14 @@ class CfnMembership(
         @builtins.property
         def s3(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnMembership.ProtectedJobS3OutputConfigurationInputProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnMembership.ProtectedJobS3OutputConfigurationInputProperty"]:
             '''Contains the configuration to write the job results to S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershipprotectedjoboutputconfiguration.html#cfn-cleanrooms-membership-membershipprotectedjoboutputconfiguration-s3
             '''
             result = self._values.get("s3")
             assert result is not None, "Required property 's3' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMembership.ProtectedJobS3OutputConfigurationInputProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMembership.ProtectedJobS3OutputConfigurationInputProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8471,7 +9016,7 @@ class CfnMembership(
         def __init__(
             self,
             *,
-            output_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMembership.MembershipProtectedJobOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            output_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipProtectedJobOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             role_arn: builtins.str,
         ) -> None:
             '''Contains configurations for protected job results.
@@ -8512,14 +9057,14 @@ class CfnMembership(
         @builtins.property
         def output_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipProtectedJobOutputConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedJobOutputConfigurationProperty"]:
             '''The output configuration for a protected job result.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershipprotectedjobresultconfiguration.html#cfn-cleanrooms-membership-membershipprotectedjobresultconfiguration-outputconfiguration
             '''
             result = self._values.get("output_configuration")
             assert result is not None, "Required property 'output_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipProtectedJobOutputConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedJobOutputConfigurationProperty"], result)
 
         @builtins.property
         def role_arn(self) -> builtins.str:
@@ -8551,7 +9096,7 @@ class CfnMembership(
         def __init__(
             self,
             *,
-            s3: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMembership.ProtectedQueryS3OutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            s3: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.ProtectedQueryS3OutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Contains configurations for protected query results.
 
@@ -8587,14 +9132,14 @@ class CfnMembership(
         @builtins.property
         def s3(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnMembership.ProtectedQueryS3OutputConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnMembership.ProtectedQueryS3OutputConfigurationProperty"]:
             '''Required configuration for a protected query with an ``s3`` output type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershipprotectedqueryoutputconfiguration.html#cfn-cleanrooms-membership-membershipprotectedqueryoutputconfiguration-s3
             '''
             result = self._values.get("s3")
             assert result is not None, "Required property 's3' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMembership.ProtectedQueryS3OutputConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMembership.ProtectedQueryS3OutputConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8619,7 +9164,7 @@ class CfnMembership(
         def __init__(
             self,
             *,
-            output_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMembership.MembershipProtectedQueryOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            output_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipProtectedQueryOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             role_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Contains configurations for protected query results.
@@ -8665,14 +9210,14 @@ class CfnMembership(
         @builtins.property
         def output_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipProtectedQueryOutputConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedQueryOutputConfigurationProperty"]:
             '''Configuration for protected query results.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershipprotectedqueryresultconfiguration.html#cfn-cleanrooms-membership-membershipprotectedqueryresultconfiguration-outputconfiguration
             '''
             result = self._values.get("output_configuration")
             assert result is not None, "Required property 'output_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMembership.MembershipProtectedQueryOutputConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedQueryOutputConfigurationProperty"], result)
 
         @builtins.property
         def role_arn(self) -> typing.Optional[builtins.str]:
@@ -8703,7 +9248,7 @@ class CfnMembership(
         def __init__(
             self,
             *,
-            is_responsible: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            is_responsible: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''An object representing the payment responsibilities accepted by the collaboration member for query compute costs.
 
@@ -8730,7 +9275,9 @@ class CfnMembership(
             }
 
         @builtins.property
-        def is_responsible(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def is_responsible(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether the collaboration member has accepted to pay for query compute costs ( ``TRUE`` ) or has not accepted to pay for query compute costs ( ``FALSE`` ).
 
             If the collaboration creator has not specified anyone to pay for query compute costs, then the member who can query is the default payer.
@@ -8744,7 +9291,7 @@ class CfnMembership(
             '''
             result = self._values.get("is_responsible")
             assert result is not None, "Required property 'is_responsible' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8754,6 +9301,64 @@ class CfnMembership(
 
         def __repr__(self) -> str:
             return "MembershipQueryComputePaymentConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cleanrooms.CfnMembership.MembershipSyntheticDataGenerationPaymentConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"is_responsible": "isResponsible"},
+    )
+    class MembershipSyntheticDataGenerationPaymentConfigProperty:
+        def __init__(
+            self,
+            *,
+            is_responsible: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+        ) -> None:
+            '''Configuration for payment for synthetic data generation in a membership.
+
+            :param is_responsible: Indicates if this membership is responsible for paying for synthetic data generation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershipsyntheticdatagenerationpaymentconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cleanrooms as cleanrooms
+                
+                membership_synthetic_data_generation_payment_config_property = cleanrooms.CfnMembership.MembershipSyntheticDataGenerationPaymentConfigProperty(
+                    is_responsible=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__6a6f521e523ad1c96cc951abdbd6781260d8b79f10ac1e3029dfc877b7e5601c)
+                check_type(argname="argument is_responsible", value=is_responsible, expected_type=type_hints["is_responsible"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "is_responsible": is_responsible,
+            }
+
+        @builtins.property
+        def is_responsible(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
+            '''Indicates if this membership is responsible for paying for synthetic data generation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-membershipsyntheticdatagenerationpaymentconfig.html#cfn-cleanrooms-membership-membershipsyntheticdatagenerationpaymentconfig-isresponsible
+            '''
+            result = self._values.get("is_responsible")
+            assert result is not None, "Required property 'is_responsible' is missing"
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MembershipSyntheticDataGenerationPaymentConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -8847,7 +9452,7 @@ class CfnMembership(
             bucket: builtins.str,
             result_format: builtins.str,
             key_prefix: typing.Optional[builtins.str] = None,
-            single_file_output: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            single_file_output: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Contains the configuration to write the query results to S3.
 
@@ -8921,7 +9526,7 @@ class CfnMembership(
         @builtins.property
         def single_file_output(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether files should be output as a single file ( ``TRUE`` ) or output as multiple files ( ``FALSE`` ).
 
             This parameter is only supported for analyses with the Spark analytics engine.
@@ -8929,7 +9534,7 @@ class CfnMembership(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-membership-protectedquerys3outputconfiguration.html#cfn-cleanrooms-membership-protectedquerys3outputconfiguration-singlefileoutput
             '''
             result = self._values.get("single_file_output")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8962,11 +9567,11 @@ class CfnMembershipProps:
         *,
         collaboration_identifier: builtins.str,
         query_log_status: builtins.str,
-        default_job_result_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMembership.MembershipProtectedJobResultConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        default_result_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMembership.MembershipProtectedQueryResultConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        default_job_result_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipProtectedJobResultConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        default_result_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipProtectedQueryResultConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         job_log_status: typing.Optional[builtins.str] = None,
-        payment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMembership.MembershipPaymentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        payment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMembership.MembershipPaymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMembership``.
 
@@ -8983,6 +9588,7 @@ class CfnMembershipProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cleanrooms as cleanrooms
@@ -9033,6 +9639,9 @@ class CfnMembershipProps:
                             is_responsible=False
                         ),
                         model_training=cleanrooms.CfnMembership.MembershipModelTrainingPaymentConfigProperty(
+                            is_responsible=False
+                        ),
+                        synthetic_data_generation=cleanrooms.CfnMembership.MembershipSyntheticDataGenerationPaymentConfigProperty(
                             is_responsible=False
                         )
                     )
@@ -9092,24 +9701,24 @@ class CfnMembershipProps:
     @builtins.property
     def default_job_result_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMembership.MembershipProtectedJobResultConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedJobResultConfigurationProperty"]]:
         '''The default job result configuration for the membership.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-membership.html#cfn-cleanrooms-membership-defaultjobresultconfiguration
         '''
         result = self._values.get("default_job_result_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMembership.MembershipProtectedJobResultConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedJobResultConfigurationProperty"]], result)
 
     @builtins.property
     def default_result_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMembership.MembershipProtectedQueryResultConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedQueryResultConfigurationProperty"]]:
         '''The default protected query result configuration as specified by the member who can receive results.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-membership.html#cfn-cleanrooms-membership-defaultresultconfiguration
         '''
         result = self._values.get("default_result_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMembership.MembershipProtectedQueryResultConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipProtectedQueryResultConfigurationProperty"]], result)
 
     @builtins.property
     def job_log_status(self) -> typing.Optional[builtins.str]:
@@ -9125,16 +9734,16 @@ class CfnMembershipProps:
     @builtins.property
     def payment_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMembership.MembershipPaymentConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipPaymentConfigurationProperty"]]:
         '''The payment responsibilities accepted by the collaboration member.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-membership.html#cfn-cleanrooms-membership-paymentconfiguration
         '''
         result = self._values.get("payment_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMembership.MembershipPaymentConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMembership.MembershipPaymentConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.
 
         Each tag consists of a key and an optional value, both of which you define. When you use tagging, you can also use tag-based access control in IAM policies to control access to this resource.
@@ -9142,7 +9751,7 @@ class CfnMembershipProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-membership.html#cfn-cleanrooms-membership-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9170,6 +9779,7 @@ class CfnPrivacyBudgetTemplate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cleanrooms as cleanrooms
@@ -9201,14 +9811,14 @@ class CfnPrivacyBudgetTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         auto_refresh: builtins.str,
         membership_identifier: builtins.str,
-        parameters: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPrivacyBudgetTemplate.ParametersProperty", typing.Dict[builtins.str, typing.Any]]],
+        parameters: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPrivacyBudgetTemplate.ParametersProperty", typing.Dict[builtins.str, typing.Any]]],
         privacy_budget_type: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CleanRooms::PrivacyBudgetTemplate``.
 
@@ -9238,7 +9848,7 @@ class CfnPrivacyBudgetTemplate(
     @builtins.classmethod
     def arn_for_privacy_budget_template(
         cls,
-        resource: _IPrivacyBudgetTemplateRef_1c139de9,
+        resource: "_IPrivacyBudgetTemplateRef_1c139de9",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -9261,7 +9871,7 @@ class CfnPrivacyBudgetTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPrivacyBudgetTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9339,9 +9949,9 @@ class CfnPrivacyBudgetTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -9350,9 +9960,9 @@ class CfnPrivacyBudgetTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="privacyBudgetTemplateRef")
-    def privacy_budget_template_ref(self) -> _PrivacyBudgetTemplateReference_c9307a0d:
+    def privacy_budget_template_ref(self) -> "_PrivacyBudgetTemplateReference_c9307a0d":
         '''A reference to a PrivacyBudgetTemplate resource.'''
-        return typing.cast(_PrivacyBudgetTemplateReference_c9307a0d, jsii.get(self, "privacyBudgetTemplateRef"))
+        return typing.cast("_PrivacyBudgetTemplateReference_c9307a0d", jsii.get(self, "privacyBudgetTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="autoRefresh")
@@ -9384,14 +9994,14 @@ class CfnPrivacyBudgetTemplate(
     @jsii.member(jsii_name="parameters")
     def parameters(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnPrivacyBudgetTemplate.ParametersProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPrivacyBudgetTemplate.ParametersProperty"]:
         '''Specifies the epsilon and noise parameters for the privacy budget template.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPrivacyBudgetTemplate.ParametersProperty"], jsii.get(self, "parameters"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPrivacyBudgetTemplate.ParametersProperty"], jsii.get(self, "parameters"))
 
     @parameters.setter
     def parameters(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnPrivacyBudgetTemplate.ParametersProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnPrivacyBudgetTemplate.ParametersProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2f392867d1a4c1fee75cc8b48d97f801894a657d907a13d4d2a21ce8f8e5aeb9)
@@ -9413,12 +10023,12 @@ class CfnPrivacyBudgetTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b6baec6343b79fd0bf9b81122904ed3d87c0dfb35be66cc64d471a7a08ddc00f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9530,7 +10140,7 @@ class CfnPrivacyBudgetTemplate(
         def __init__(
             self,
             *,
-            budget_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPrivacyBudgetTemplate.BudgetParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            budget_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPrivacyBudgetTemplate.BudgetParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             epsilon: typing.Optional[jsii.Number] = None,
             resource_arn: typing.Optional[builtins.str] = None,
             users_noise_per_query: typing.Optional[jsii.Number] = None,
@@ -9583,12 +10193,12 @@ class CfnPrivacyBudgetTemplate(
         @builtins.property
         def budget_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPrivacyBudgetTemplate.BudgetParameterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPrivacyBudgetTemplate.BudgetParameterProperty"]]]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cleanrooms-privacybudgettemplate-parameters.html#cfn-cleanrooms-privacybudgettemplate-parameters-budgetparameters
             '''
             result = self._values.get("budget_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPrivacyBudgetTemplate.BudgetParameterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPrivacyBudgetTemplate.BudgetParameterProperty"]]]], result)
 
         @builtins.property
         def epsilon(self) -> typing.Optional[jsii.Number]:
@@ -9647,9 +10257,9 @@ class CfnPrivacyBudgetTemplateProps:
         *,
         auto_refresh: builtins.str,
         membership_identifier: builtins.str,
-        parameters: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPrivacyBudgetTemplate.ParametersProperty, typing.Dict[builtins.str, typing.Any]]],
+        parameters: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPrivacyBudgetTemplate.ParametersProperty", typing.Dict[builtins.str, typing.Any]]],
         privacy_budget_type: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPrivacyBudgetTemplate``.
 
@@ -9664,6 +10274,7 @@ class CfnPrivacyBudgetTemplateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cleanrooms as cleanrooms
@@ -9735,14 +10346,14 @@ class CfnPrivacyBudgetTemplateProps:
     @builtins.property
     def parameters(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnPrivacyBudgetTemplate.ParametersProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPrivacyBudgetTemplate.ParametersProperty"]:
         '''Specifies the epsilon and noise parameters for the privacy budget template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-privacybudgettemplate.html#cfn-cleanrooms-privacybudgettemplate-parameters
         '''
         result = self._values.get("parameters")
         assert result is not None, "Required property 'parameters' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnPrivacyBudgetTemplate.ParametersProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPrivacyBudgetTemplate.ParametersProperty"], result)
 
     @builtins.property
     def privacy_budget_type(self) -> builtins.str:
@@ -9755,7 +10366,7 @@ class CfnPrivacyBudgetTemplateProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional label that you can assign to a resource when you create it.
 
         Each tag consists of a key and an optional value, both of which you define. When you use tagging, you can also use tag-based access control in IAM policies to control access to this resource.
@@ -9763,7 +10374,7 @@ class CfnPrivacyBudgetTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-privacybudgettemplate.html#cfn-cleanrooms-privacybudgettemplate-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9811,6 +10422,7 @@ def _typecheckingstub__0e650aead4f74afeaf90193249293bee92f9a4eb687f4f9678e1a1368
     error_message_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.ErrorMessageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSchemaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     source_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSourceMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    synthetic_data_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.SyntheticDataParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -9894,6 +10506,12 @@ def _typecheckingstub__9971674aa89ce0d927eab26c4a51b41fc5fd99b53e08ed11b02d3b3b8
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4f57153ccd88420227e59b7532c25298ffb4ea1e29b313956dac44f2a6f424ac(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnalysisTemplate.SyntheticDataParametersProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b6d8c0e267965c3e8d9449c75e721dc4e1bccb98212af3c5be762ebb7322d8e8(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
@@ -9955,6 +10573,13 @@ def _typecheckingstub__de78ae9ecad686157204e702611c0cf015331e3aa099f1e87ab18d5cd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5482a78923549e684ec37261eda05902be934d3414f97fcb4d06f1c5cc055746(
+    *,
+    column_mapping: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.SyntheticDataColumnPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__99300f4ea5e5ce616768e3b03748c2f91f6e99c88a31ea4331c5d105bb2a1544(
     *,
     type: builtins.str,
@@ -9969,10 +10594,35 @@ def _typecheckingstub__43be85fff22ad377febb791857a9bfd90b262e37e83d363df6adfb578
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__21ada170d130ebdce8bce3b56e27e97fb2ea8b709baa382a3b9c1f98dae7d210(
+    *,
+    column_classification: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.ColumnClassificationDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+    epsilon: jsii.Number,
+    max_membership_inference_attack_score: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7bb4aaebbf6530b26619974d56993c72a085bd8e9326904d3e54412c155e81e3(
     *,
     bucket: builtins.str,
     key: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__667c1ccaf9713070e08de9e8737d40d2f237652e25e08f7a3dbc3deeb1a1335f(
+    *,
+    column_name: builtins.str,
+    column_type: builtins.str,
+    is_predictive_value: typing.Union[builtins.bool, _IResolvable_da3f097b],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c7ed1563410528929822ae28a28636375977aed058516a30df4f7c79bbb34ed0(
+    *,
+    ml_synthetic_data_parameters: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.MLSyntheticDataParametersProperty, typing.Dict[builtins.str, typing.Any]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9988,6 +10638,7 @@ def _typecheckingstub__e1c797e3fa5f8683aa0eb66424f00b6b29c5014d5c45e7771fe0c5b1e
     error_message_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.ErrorMessageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSchemaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     source_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.AnalysisSourceMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    synthetic_data_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalysisTemplate.SyntheticDataParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -10151,6 +10802,7 @@ def _typecheckingstub__271514c890ff476984844077519496f6cd7107081ee5259613350b060
     *,
     model_inference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollaboration.ModelInferencePaymentConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     model_training: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollaboration.ModelTrainingPaymentConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    synthetic_data_generation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollaboration.SyntheticDataGenerationPaymentConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10190,6 +10842,13 @@ def _typecheckingstub__4bb111eda28dfc76cbd93dac49286726320cc654bfb530550f97b9ec4
     pass
 
 def _typecheckingstub__691566df57f98e85a0cab7f982a0bb63684a2747f18e19d599214bacc63437b2(
+    *,
+    is_responsible: typing.Union[builtins.bool, _IResolvable_da3f097b],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__695891f65d2ccd070bdd6ba73805070d511f624acafcd9f03b861fe6fb88a9ac(
     *,
     is_responsible: typing.Union[builtins.bool, _IResolvable_da3f097b],
 ) -> None:
@@ -10916,6 +11575,7 @@ def _typecheckingstub__13dd2d08b2612b2890adb3362ea4e5bebe48abd3cfb27c026a48fcd95
     *,
     model_inference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMembership.MembershipModelInferencePaymentConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     model_training: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMembership.MembershipModelTrainingPaymentConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    synthetic_data_generation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMembership.MembershipSyntheticDataGenerationPaymentConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10974,6 +11634,13 @@ def _typecheckingstub__5ac8c4043e48c89672053a73e33884a2912eeea08d43d7abf8e69c928
     pass
 
 def _typecheckingstub__3a0b18d278e5a5581d13248fe664b26d08f194e496fc961110d71d330026e192(
+    *,
+    is_responsible: typing.Union[builtins.bool, _IResolvable_da3f097b],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6a6f521e523ad1c96cc951abdbd6781260d8b79f10ac1e3029dfc877b7e5601c(
     *,
     is_responsible: typing.Union[builtins.bool, _IResolvable_da3f097b],
 ) -> None:

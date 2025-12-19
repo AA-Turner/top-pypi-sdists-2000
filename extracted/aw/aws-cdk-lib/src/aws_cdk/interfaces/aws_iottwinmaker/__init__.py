@@ -209,7 +209,7 @@ class IComponentTypeRef(
 
     @builtins.property
     @jsii.member(jsii_name="componentTypeRef")
-    def component_type_ref(self) -> ComponentTypeReference:
+    def component_type_ref(self) -> "ComponentTypeReference":
         '''(experimental) A reference to a ComponentType resource.
 
         :stability: experimental
@@ -230,12 +230,12 @@ class _IComponentTypeRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="componentTypeRef")
-    def component_type_ref(self) -> ComponentTypeReference:
+    def component_type_ref(self) -> "ComponentTypeReference":
         '''(experimental) A reference to a ComponentType resource.
 
         :stability: experimental
         '''
-        return typing.cast(ComponentTypeReference, jsii.get(self, "componentTypeRef"))
+        return typing.cast("ComponentTypeReference", jsii.get(self, "componentTypeRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IComponentTypeRef).__jsii_proxy_class__ = lambda : _IComponentTypeRefProxy
@@ -254,7 +254,7 @@ class IEntityRef(
 
     @builtins.property
     @jsii.member(jsii_name="entityRef")
-    def entity_ref(self) -> EntityReference:
+    def entity_ref(self) -> "EntityReference":
         '''(experimental) A reference to a Entity resource.
 
         :stability: experimental
@@ -275,12 +275,12 @@ class _IEntityRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="entityRef")
-    def entity_ref(self) -> EntityReference:
+    def entity_ref(self) -> "EntityReference":
         '''(experimental) A reference to a Entity resource.
 
         :stability: experimental
         '''
-        return typing.cast(EntityReference, jsii.get(self, "entityRef"))
+        return typing.cast("EntityReference", jsii.get(self, "entityRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEntityRef).__jsii_proxy_class__ = lambda : _IEntityRefProxy

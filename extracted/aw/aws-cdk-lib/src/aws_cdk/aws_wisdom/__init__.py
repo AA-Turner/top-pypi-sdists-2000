@@ -352,11 +352,11 @@ class CfnAIAgent(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         assistant_id: builtins.str,
-        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.AIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.AIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -390,7 +390,7 @@ class CfnAIAgent(
 
     @jsii.member(jsii_name="arnForAIAgent")
     @builtins.classmethod
-    def arn_for_ai_agent(cls, resource: _IAIAgentRef_e0a197e0) -> builtins.str:
+    def arn_for_ai_agent(cls, resource: "_IAIAgentRef_e0a197e0") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -412,7 +412,7 @@ class CfnAIAgent(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAIAgent", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -443,9 +443,9 @@ class CfnAIAgent(
 
     @builtins.property
     @jsii.member(jsii_name="aiAgentRef")
-    def ai_agent_ref(self) -> _AIAgentReference_3cc2e175:
+    def ai_agent_ref(self) -> "_AIAgentReference_3cc2e175":
         '''A reference to a AIAgent resource.'''
-        return typing.cast(_AIAgentReference_3cc2e175, jsii.get(self, "aiAgentRef"))
+        return typing.cast("_AIAgentReference_3cc2e175", jsii.get(self, "aiAgentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAiAgentArn")
@@ -476,17 +476,17 @@ class CfnAIAgent(
 
     @builtins.property
     @jsii.member(jsii_name="attrModifiedTimeSeconds")
-    def attr_modified_time_seconds(self) -> _IResolvable_da3f097b:
+    def attr_modified_time_seconds(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: ModifiedTimeSeconds
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrModifiedTimeSeconds"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrModifiedTimeSeconds"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -510,14 +510,14 @@ class CfnAIAgent(
     @jsii.member(jsii_name="configuration")
     def configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AIAgentConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AIAgentConfigurationProperty"]:
         '''Configuration for the AI Agent.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AIAgentConfigurationProperty"], jsii.get(self, "configuration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AIAgentConfigurationProperty"], jsii.get(self, "configuration"))
 
     @configuration.setter
     def configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AIAgentConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AIAgentConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2d07c289ddb2abe8b14c5f581386f3377fb7266b5b099c89c1b142b4bbd9d769)
@@ -595,19 +595,19 @@ class CfnAIAgent(
         def __init__(
             self,
             *,
-            answer_recommendation_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            email_generative_answer_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            email_overview_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.EmailOverviewAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            email_response_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.EmailResponseAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            manual_search_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.ManualSearchAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            self_service_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.SelfServiceAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            answer_recommendation_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            email_generative_answer_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            email_overview_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.EmailOverviewAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            email_response_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.EmailResponseAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            manual_search_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.ManualSearchAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            self_service_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.SelfServiceAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A typed union that specifies the configuration based on the type of AI Agent.
 
             :param answer_recommendation_ai_agent_configuration: The configuration for AI Agents of type ``ANSWER_RECOMMENDATION`` .
-            :param email_generative_answer_ai_agent_configuration: 
-            :param email_overview_ai_agent_configuration: 
-            :param email_response_ai_agent_configuration: 
+            :param email_generative_answer_ai_agent_configuration: Configuration for the EMAIL_GENERATIVE_ANSWER AI agent that provides comprehensive knowledge-based answers for customer queries.
+            :param email_overview_ai_agent_configuration: Configuration for the EMAIL_OVERVIEW AI agent that generates structured overview of email conversations.
+            :param email_response_ai_agent_configuration: Configuration for the EMAIL_RESPONSE AI agent that generates professional email responses using knowledge base content.
             :param manual_search_ai_agent_configuration: The configuration for AI Agents of type ``MANUAL_SEARCH`` .
             :param self_service_ai_agent_configuration: The self-service AI agent configuration.
 
@@ -869,65 +869,68 @@ class CfnAIAgent(
         @builtins.property
         def answer_recommendation_ai_agent_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty"]]:
             '''The configuration for AI Agents of type ``ANSWER_RECOMMENDATION`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html#cfn-wisdom-aiagent-aiagentconfiguration-answerrecommendationaiagentconfiguration
             '''
             result = self._values.get("answer_recommendation_ai_agent_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty"]], result)
 
         @builtins.property
         def email_generative_answer_ai_agent_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty"]]:
-            '''
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty"]]:
+            '''Configuration for the EMAIL_GENERATIVE_ANSWER AI agent that provides comprehensive knowledge-based answers for customer queries.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html#cfn-wisdom-aiagent-aiagentconfiguration-emailgenerativeansweraiagentconfiguration
             '''
             result = self._values.get("email_generative_answer_ai_agent_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty"]], result)
 
         @builtins.property
         def email_overview_ai_agent_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.EmailOverviewAIAgentConfigurationProperty"]]:
-            '''
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.EmailOverviewAIAgentConfigurationProperty"]]:
+            '''Configuration for the EMAIL_OVERVIEW AI agent that generates structured overview of email conversations.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html#cfn-wisdom-aiagent-aiagentconfiguration-emailoverviewaiagentconfiguration
             '''
             result = self._values.get("email_overview_ai_agent_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.EmailOverviewAIAgentConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.EmailOverviewAIAgentConfigurationProperty"]], result)
 
         @builtins.property
         def email_response_ai_agent_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.EmailResponseAIAgentConfigurationProperty"]]:
-            '''
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.EmailResponseAIAgentConfigurationProperty"]]:
+            '''Configuration for the EMAIL_RESPONSE AI agent that generates professional email responses using knowledge base content.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html#cfn-wisdom-aiagent-aiagentconfiguration-emailresponseaiagentconfiguration
             '''
             result = self._values.get("email_response_ai_agent_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.EmailResponseAIAgentConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.EmailResponseAIAgentConfigurationProperty"]], result)
 
         @builtins.property
         def manual_search_ai_agent_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.ManualSearchAIAgentConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ManualSearchAIAgentConfigurationProperty"]]:
             '''The configuration for AI Agents of type ``MANUAL_SEARCH`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html#cfn-wisdom-aiagent-aiagentconfiguration-manualsearchaiagentconfiguration
             '''
             result = self._values.get("manual_search_ai_agent_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.ManualSearchAIAgentConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ManualSearchAIAgentConfigurationProperty"]], result)
 
         @builtins.property
         def self_service_ai_agent_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.SelfServiceAIAgentConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.SelfServiceAIAgentConfigurationProperty"]]:
             '''The self-service AI agent configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html#cfn-wisdom-aiagent-aiagentconfiguration-selfserviceaiagentconfiguration
             '''
             result = self._values.get("self_service_ai_agent_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.SelfServiceAIAgentConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.SelfServiceAIAgentConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -958,7 +961,7 @@ class CfnAIAgent(
             *,
             answer_generation_ai_guardrail_id: typing.Optional[builtins.str] = None,
             answer_generation_ai_prompt_id: typing.Optional[builtins.str] = None,
-            association_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.AssociationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            association_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.AssociationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             intent_labeling_generation_ai_prompt_id: typing.Optional[builtins.str] = None,
             locale: typing.Optional[builtins.str] = None,
             query_reformulation_ai_prompt_id: typing.Optional[builtins.str] = None,
@@ -1070,13 +1073,13 @@ class CfnAIAgent(
         @builtins.property
         def association_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AssociationConfigurationProperty"]]]]:
             '''The association configurations for overriding behavior on this AI Agent.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-answerrecommendationaiagentconfiguration.html#cfn-wisdom-aiagent-answerrecommendationaiagentconfiguration-associationconfigurations
             '''
             result = self._values.get("association_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AssociationConfigurationProperty"]]]], result)
 
         @builtins.property
         def intent_labeling_generation_ai_prompt_id(
@@ -1129,7 +1132,7 @@ class CfnAIAgent(
         def __init__(
             self,
             *,
-            knowledge_base_association_configuration_data: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty", typing.Dict[builtins.str, typing.Any]]],
+            knowledge_base_association_configuration_data: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''A typed union of the data of the configuration for an Amazon Q in Connect Assistant Association.
 
@@ -1189,14 +1192,14 @@ class CfnAIAgent(
         @builtins.property
         def knowledge_base_association_configuration_data(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty"]:
             '''The data of the configuration for a ``KNOWLEDGE_BASE`` type Amazon Q in Connect Assistant Association.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-associationconfigurationdata.html#cfn-wisdom-aiagent-associationconfigurationdata-knowledgebaseassociationconfigurationdata
             '''
             result = self._values.get("knowledge_base_association_configuration_data")
             assert result is not None, "Required property 'knowledge_base_association_configuration_data' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1222,7 +1225,7 @@ class CfnAIAgent(
         def __init__(
             self,
             *,
-            association_configuration_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.AssociationConfigurationDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            association_configuration_data: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.AssociationConfigurationDataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             association_id: typing.Optional[builtins.str] = None,
             association_type: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -1296,13 +1299,13 @@ class CfnAIAgent(
         @builtins.property
         def association_configuration_data(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationDataProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AssociationConfigurationDataProperty"]]:
             '''A typed union of the data of the configuration for an Amazon Q in Connect Assistant Association.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-associationconfiguration.html#cfn-wisdom-aiagent-associationconfiguration-associationconfigurationdata
             '''
             result = self._values.get("association_configuration_data")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationDataProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AssociationConfigurationDataProperty"]], result)
 
         @builtins.property
         def association_id(self) -> typing.Optional[builtins.str]:
@@ -1347,16 +1350,17 @@ class CfnAIAgent(
         def __init__(
             self,
             *,
-            association_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.AssociationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            association_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.AssociationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             email_generative_answer_ai_prompt_id: typing.Optional[builtins.str] = None,
             email_query_reformulation_ai_prompt_id: typing.Optional[builtins.str] = None,
             locale: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param association_configurations: 
-            :param email_generative_answer_ai_prompt_id: 
-            :param email_query_reformulation_ai_prompt_id: 
-            :param locale: 
+            '''Configuration settings for the EMAIL_GENERATIVE_ANSWER AI agent including prompts, locale, and knowledge base associations.
+
+            :param association_configurations: Configuration settings for knowledge base associations used by the email generative answer agent.
+            :param email_generative_answer_ai_prompt_id: The ID of the System AI prompt used for generating comprehensive knowledge-based answers from email queries.
+            :param email_query_reformulation_ai_prompt_id: The ID of the System AI prompt used for reformulating email queries to optimize knowledge base search results.
+            :param locale: The locale setting for language-specific email processing and response generation (for example, en_US, es_ES).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailgenerativeansweraiagentconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1430,16 +1434,18 @@ class CfnAIAgent(
         @builtins.property
         def association_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]]:
-            '''
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AssociationConfigurationProperty"]]]]:
+            '''Configuration settings for knowledge base associations used by the email generative answer agent.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailgenerativeansweraiagentconfiguration.html#cfn-wisdom-aiagent-emailgenerativeansweraiagentconfiguration-associationconfigurations
             '''
             result = self._values.get("association_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AssociationConfigurationProperty"]]]], result)
 
         @builtins.property
         def email_generative_answer_ai_prompt_id(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The ID of the System AI prompt used for generating comprehensive knowledge-based answers from email queries.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailgenerativeansweraiagentconfiguration.html#cfn-wisdom-aiagent-emailgenerativeansweraiagentconfiguration-emailgenerativeansweraipromptid
             '''
             result = self._values.get("email_generative_answer_ai_prompt_id")
@@ -1449,7 +1455,8 @@ class CfnAIAgent(
         def email_query_reformulation_ai_prompt_id(
             self,
         ) -> typing.Optional[builtins.str]:
-            '''
+            '''The ID of the System AI prompt used for reformulating email queries to optimize knowledge base search results.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailgenerativeansweraiagentconfiguration.html#cfn-wisdom-aiagent-emailgenerativeansweraiagentconfiguration-emailqueryreformulationaipromptid
             '''
             result = self._values.get("email_query_reformulation_ai_prompt_id")
@@ -1457,7 +1464,8 @@ class CfnAIAgent(
 
         @builtins.property
         def locale(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The locale setting for language-specific email processing and response generation (for example, en_US, es_ES).
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailgenerativeansweraiagentconfiguration.html#cfn-wisdom-aiagent-emailgenerativeansweraiagentconfiguration-locale
             '''
             result = self._values.get("locale")
@@ -1489,9 +1497,10 @@ class CfnAIAgent(
             email_overview_ai_prompt_id: typing.Optional[builtins.str] = None,
             locale: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param email_overview_ai_prompt_id: 
-            :param locale: 
+            '''Configuration settings for the EMAIL_OVERVIEW AI agent including prompt ID and locale settings.
+
+            :param email_overview_ai_prompt_id: The ID of the System AI prompt used for generating structured email conversation summaries.
+            :param locale: The locale setting for language-specific email overview processing (for example, en_US, es_ES).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailoverviewaiagentconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1519,7 +1528,8 @@ class CfnAIAgent(
 
         @builtins.property
         def email_overview_ai_prompt_id(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The ID of the System AI prompt used for generating structured email conversation summaries.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailoverviewaiagentconfiguration.html#cfn-wisdom-aiagent-emailoverviewaiagentconfiguration-emailoverviewaipromptid
             '''
             result = self._values.get("email_overview_ai_prompt_id")
@@ -1527,7 +1537,8 @@ class CfnAIAgent(
 
         @builtins.property
         def locale(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The locale setting for language-specific email overview processing (for example, en_US, es_ES).
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailoverviewaiagentconfiguration.html#cfn-wisdom-aiagent-emailoverviewaiagentconfiguration-locale
             '''
             result = self._values.get("locale")
@@ -1558,16 +1569,17 @@ class CfnAIAgent(
         def __init__(
             self,
             *,
-            association_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.AssociationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            association_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.AssociationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             email_query_reformulation_ai_prompt_id: typing.Optional[builtins.str] = None,
             email_response_ai_prompt_id: typing.Optional[builtins.str] = None,
             locale: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param association_configurations: 
-            :param email_query_reformulation_ai_prompt_id: 
-            :param email_response_ai_prompt_id: 
-            :param locale: 
+            '''Configuration settings for the EMAIL_RESPONSE AI agent including prompts, locale, and knowledge base associations.
+
+            :param association_configurations: Configuration settings for knowledge base associations used by the email response agent.
+            :param email_query_reformulation_ai_prompt_id: The ID of the System AI prompt used for reformulating email queries to optimize knowledge base search for response generation.
+            :param email_response_ai_prompt_id: The ID of the System AI prompt used for generating professional email responses based on knowledge base content.
+            :param locale: The locale setting for language-specific email response generation (for example, en_US, es_ES).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailresponseaiagentconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1641,18 +1653,20 @@ class CfnAIAgent(
         @builtins.property
         def association_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]]:
-            '''
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AssociationConfigurationProperty"]]]]:
+            '''Configuration settings for knowledge base associations used by the email response agent.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailresponseaiagentconfiguration.html#cfn-wisdom-aiagent-emailresponseaiagentconfiguration-associationconfigurations
             '''
             result = self._values.get("association_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AssociationConfigurationProperty"]]]], result)
 
         @builtins.property
         def email_query_reformulation_ai_prompt_id(
             self,
         ) -> typing.Optional[builtins.str]:
-            '''
+            '''The ID of the System AI prompt used for reformulating email queries to optimize knowledge base search for response generation.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailresponseaiagentconfiguration.html#cfn-wisdom-aiagent-emailresponseaiagentconfiguration-emailqueryreformulationaipromptid
             '''
             result = self._values.get("email_query_reformulation_ai_prompt_id")
@@ -1660,7 +1674,8 @@ class CfnAIAgent(
 
         @builtins.property
         def email_response_ai_prompt_id(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The ID of the System AI prompt used for generating professional email responses based on knowledge base content.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailresponseaiagentconfiguration.html#cfn-wisdom-aiagent-emailresponseaiagentconfiguration-emailresponseaipromptid
             '''
             result = self._values.get("email_response_ai_prompt_id")
@@ -1668,7 +1683,8 @@ class CfnAIAgent(
 
         @builtins.property
         def locale(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The locale setting for language-specific email response generation (for example, en_US, es_ES).
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailresponseaiagentconfiguration.html#cfn-wisdom-aiagent-emailresponseaiagentconfiguration-locale
             '''
             result = self._values.get("locale")
@@ -1698,7 +1714,7 @@ class CfnAIAgent(
         def __init__(
             self,
             *,
-            content_tag_filter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            content_tag_filter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.TagFilterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             max_results: typing.Optional[jsii.Number] = None,
             override_knowledge_base_search_type: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -1706,7 +1722,7 @@ class CfnAIAgent(
 
             :param content_tag_filter: An object that can be used to specify Tag conditions.
             :param max_results: The maximum number of results to return per page.
-            :param override_knowledge_base_search_type: 
+            :param override_knowledge_base_search_type: The search type to be used against the Knowledge Base for this request. The values can be ``SEMANTIC`` which uses vector embeddings or ``HYBRID`` which use vector embeddings and raw text
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-knowledgebaseassociationconfigurationdata.html
             :exampleMetadata: fixture=_generated
@@ -1766,13 +1782,13 @@ class CfnAIAgent(
         @builtins.property
         def content_tag_filter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.TagFilterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.TagFilterProperty"]]:
             '''An object that can be used to specify Tag conditions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-knowledgebaseassociationconfigurationdata.html#cfn-wisdom-aiagent-knowledgebaseassociationconfigurationdata-contenttagfilter
             '''
             result = self._values.get("content_tag_filter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.TagFilterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.TagFilterProperty"]], result)
 
         @builtins.property
         def max_results(self) -> typing.Optional[jsii.Number]:
@@ -1785,7 +1801,10 @@ class CfnAIAgent(
 
         @builtins.property
         def override_knowledge_base_search_type(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The search type to be used against the Knowledge Base for this request.
+
+            The values can be ``SEMANTIC`` which uses vector embeddings or ``HYBRID`` which use vector embeddings and raw text
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-knowledgebaseassociationconfigurationdata.html#cfn-wisdom-aiagent-knowledgebaseassociationconfigurationdata-overrideknowledgebasesearchtype
             '''
             result = self._values.get("override_knowledge_base_search_type")
@@ -1818,7 +1837,7 @@ class CfnAIAgent(
             *,
             answer_generation_ai_guardrail_id: typing.Optional[builtins.str] = None,
             answer_generation_ai_prompt_id: typing.Optional[builtins.str] = None,
-            association_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.AssociationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            association_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.AssociationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             locale: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The configuration for AI Agents of type ``MANUAL_SEARCH`` .
@@ -1918,13 +1937,13 @@ class CfnAIAgent(
         @builtins.property
         def association_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AssociationConfigurationProperty"]]]]:
             '''The association configurations for overriding behavior on this AI Agent.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-manualsearchaiagentconfiguration.html#cfn-wisdom-aiagent-manualsearchaiagentconfiguration-associationconfigurations
             '''
             result = self._values.get("association_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AssociationConfigurationProperty"]]]], result)
 
         @builtins.property
         def locale(self) -> typing.Optional[builtins.str]:
@@ -1958,11 +1977,12 @@ class CfnAIAgent(
         def __init__(
             self,
             *,
-            and_conditions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.TagConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            tag_condition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.TagConditionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            and_conditions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.TagConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            tag_condition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.TagConditionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param and_conditions: 
+            '''A list of conditions which would be applied together with an ``OR`` condition.
+
+            :param and_conditions: A list of conditions which would be applied together with an ``AND`` condition.
             :param tag_condition: A leaf node condition which can be used to specify a tag condition.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-orcondition.html
@@ -2002,23 +2022,24 @@ class CfnAIAgent(
         @builtins.property
         def and_conditions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.TagConditionProperty"]]]]:
-            '''
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.TagConditionProperty"]]]]:
+            '''A list of conditions which would be applied together with an ``AND`` condition.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-orcondition.html#cfn-wisdom-aiagent-orcondition-andconditions
             '''
             result = self._values.get("and_conditions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.TagConditionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.TagConditionProperty"]]]], result)
 
         @builtins.property
         def tag_condition(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.TagConditionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.TagConditionProperty"]]:
             '''A leaf node condition which can be used to specify a tag condition.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-orcondition.html#cfn-wisdom-aiagent-orcondition-tagcondition
             '''
             result = self._values.get("tag_condition")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.TagConditionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.TagConditionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2045,7 +2066,7 @@ class CfnAIAgent(
         def __init__(
             self,
             *,
-            association_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.AssociationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            association_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.AssociationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             self_service_ai_guardrail_id: typing.Optional[builtins.str] = None,
             self_service_answer_generation_ai_prompt_id: typing.Optional[builtins.str] = None,
             self_service_pre_processing_ai_prompt_id: typing.Optional[builtins.str] = None,
@@ -2129,13 +2150,13 @@ class CfnAIAgent(
         @builtins.property
         def association_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AssociationConfigurationProperty"]]]]:
             '''The association configuration of the self-service AI agent.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-selfserviceaiagentconfiguration.html#cfn-wisdom-aiagent-selfserviceaiagentconfiguration-associationconfigurations
             '''
             result = self._values.get("association_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AssociationConfigurationProperty"]]]], result)
 
         @builtins.property
         def self_service_ai_guardrail_id(self) -> typing.Optional[builtins.str]:
@@ -2265,9 +2286,9 @@ class CfnAIAgent(
         def __init__(
             self,
             *,
-            and_conditions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.TagConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            or_conditions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.OrConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            tag_condition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.TagConditionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            and_conditions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.TagConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            or_conditions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.OrConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            tag_condition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.TagConditionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that can be used to specify tag conditions.
 
@@ -2329,35 +2350,35 @@ class CfnAIAgent(
         @builtins.property
         def and_conditions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.TagConditionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.TagConditionProperty"]]]]:
             '''A list of conditions which would be applied together with an ``AND`` condition.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tagfilter.html#cfn-wisdom-aiagent-tagfilter-andconditions
             '''
             result = self._values.get("and_conditions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.TagConditionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.TagConditionProperty"]]]], result)
 
         @builtins.property
         def or_conditions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.OrConditionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.OrConditionProperty"]]]]:
             '''A list of conditions which would be applied together with an ``OR`` condition.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tagfilter.html#cfn-wisdom-aiagent-tagfilter-orconditions
             '''
             result = self._values.get("or_conditions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.OrConditionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.OrConditionProperty"]]]], result)
 
         @builtins.property
         def tag_condition(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.TagConditionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.TagConditionProperty"]]:
             '''A leaf node condition which can be used to specify a tag condition.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tagfilter.html#cfn-wisdom-aiagent-tagfilter-tagcondition
             '''
             result = self._values.get("tag_condition")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.TagConditionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.TagConditionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2388,7 +2409,7 @@ class CfnAIAgentProps:
         self,
         *,
         assistant_id: builtins.str,
-        configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.AIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.AIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -2682,14 +2703,14 @@ class CfnAIAgentProps:
     @builtins.property
     def configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAIAgent.AIAgentConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AIAgentConfigurationProperty"]:
         '''Configuration for the AI Agent.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-aiagent.html#cfn-wisdom-aiagent-configuration
         '''
         result = self._values.get("configuration")
         assert result is not None, "Required property 'configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAIAgent.AIAgentConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AIAgentConfigurationProperty"], result)
 
     @builtins.property
     def type(self) -> builtins.str:
@@ -2769,7 +2790,7 @@ class CfnAIAgentVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         ai_agent_id: builtins.str,
@@ -2809,7 +2830,7 @@ class CfnAIAgentVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAIAgentVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2840,9 +2861,9 @@ class CfnAIAgentVersion(
 
     @builtins.property
     @jsii.member(jsii_name="aiAgentVersionRef")
-    def ai_agent_version_ref(self) -> _AIAgentVersionReference_f2a18357:
+    def ai_agent_version_ref(self) -> "_AIAgentVersionReference_f2a18357":
         '''A reference to a AIAgentVersion resource.'''
-        return typing.cast(_AIAgentVersionReference_f2a18357, jsii.get(self, "aiAgentVersionRef"))
+        return typing.cast("_AIAgentVersionReference_f2a18357", jsii.get(self, "aiAgentVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAiAgentArn")
@@ -2870,12 +2891,12 @@ class CfnAIAgentVersion(
 
     @builtins.property
     @jsii.member(jsii_name="attrVersionNumber")
-    def attr_version_number(self) -> _IResolvable_da3f097b:
+    def attr_version_number(self) -> "_IResolvable_da3f097b":
         '''The version number for this AI Agent version.
 
         :cloudformationAttribute: VersionNumber
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrVersionNumber"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrVersionNumber"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3092,20 +3113,20 @@ class CfnAIGuardrail(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         assistant_id: builtins.str,
         blocked_input_messaging: builtins.str,
         blocked_outputs_messaging: builtins.str,
-        content_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        contextual_grounding_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        content_policy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        contextual_grounding_policy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        sensitive_information_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sensitive_information_policy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        topic_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        word_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        topic_policy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        word_policy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Wisdom::AIGuardrail``.
 
@@ -3145,7 +3166,10 @@ class CfnAIGuardrail(
 
     @jsii.member(jsii_name="arnForAIGuardrail")
     @builtins.classmethod
-    def arn_for_ai_guardrail(cls, resource: _IAIGuardrailRef_c054fef5) -> builtins.str:
+    def arn_for_ai_guardrail(
+        cls,
+        resource: "_IAIGuardrailRef_c054fef5",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3167,7 +3191,7 @@ class CfnAIGuardrail(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAIGuardrail", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3198,9 +3222,9 @@ class CfnAIGuardrail(
 
     @builtins.property
     @jsii.member(jsii_name="aiGuardrailRef")
-    def ai_guardrail_ref(self) -> _AIGuardrailReference_e80d5e6b:
+    def ai_guardrail_ref(self) -> "_AIGuardrailReference_e80d5e6b":
         '''A reference to a AIGuardrail resource.'''
-        return typing.cast(_AIGuardrailReference_e80d5e6b, jsii.get(self, "aiGuardrailRef"))
+        return typing.cast("_AIGuardrailReference_e80d5e6b", jsii.get(self, "aiGuardrailRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAiGuardrailArn")
@@ -3231,9 +3255,9 @@ class CfnAIGuardrail(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3283,14 +3307,14 @@ class CfnAIGuardrail(
     @jsii.member(jsii_name="contentPolicyConfig")
     def content_policy_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty"]]:
         '''Contains details about how to handle harmful content.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty"]], jsii.get(self, "contentPolicyConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty"]], jsii.get(self, "contentPolicyConfig"))
 
     @content_policy_config.setter
     def content_policy_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__af0b681055aef2365d977a2adefd9d9d8538dd4e7497bed81a040c4d3e6d1013)
@@ -3301,14 +3325,14 @@ class CfnAIGuardrail(
     @jsii.member(jsii_name="contextualGroundingPolicyConfig")
     def contextual_grounding_policy_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty"]]:
         '''The policy configuration details for the AI Guardrail's contextual grounding policy.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty"]], jsii.get(self, "contextualGroundingPolicyConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty"]], jsii.get(self, "contextualGroundingPolicyConfig"))
 
     @contextual_grounding_policy_config.setter
     def contextual_grounding_policy_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e6f963ab8c2eace9b626eca75747edc1eef5302cb2ca185e3c17ef190404aa68)
@@ -3345,14 +3369,14 @@ class CfnAIGuardrail(
     @jsii.member(jsii_name="sensitiveInformationPolicyConfig")
     def sensitive_information_policy_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty"]]:
         '''Contains details about PII entities and regular expressions to configure for the AI Guardrail.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty"]], jsii.get(self, "sensitiveInformationPolicyConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty"]], jsii.get(self, "sensitiveInformationPolicyConfig"))
 
     @sensitive_information_policy_config.setter
     def sensitive_information_policy_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e94179fb829e66c40130c72071c91ec85dbd64f5e3e9cbe35c4966a40c3fefda)
@@ -3379,14 +3403,14 @@ class CfnAIGuardrail(
     @jsii.member(jsii_name="topicPolicyConfig")
     def topic_policy_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty"]]:
         '''Contains details about topics that the AI Guardrail should identify and deny.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty"]], jsii.get(self, "topicPolicyConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty"]], jsii.get(self, "topicPolicyConfig"))
 
     @topic_policy_config.setter
     def topic_policy_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a8bb338f6da5f73bdb4820c73ee887f612953bf85b2d8bd54e7541ea081f4f53)
@@ -3397,14 +3421,14 @@ class CfnAIGuardrail(
     @jsii.member(jsii_name="wordPolicyConfig")
     def word_policy_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty"]]:
         '''Contains details about the word policy to configured for the AI Guardrail.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty"]], jsii.get(self, "wordPolicyConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty"]], jsii.get(self, "wordPolicyConfig"))
 
     @word_policy_config.setter
     def word_policy_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f41825c818a79784ab378059125875eeee0524136b34267aa4caca170457da14)
@@ -3420,7 +3444,7 @@ class CfnAIGuardrail(
         def __init__(
             self,
             *,
-            filters_config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIGuardrail.GuardrailContentFilterConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            filters_config: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.GuardrailContentFilterConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Content policy config for a guardrail.
 
@@ -3453,14 +3477,14 @@ class CfnAIGuardrail(
         @builtins.property
         def filters_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailContentFilterConfigProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailContentFilterConfigProperty"]]]:
             '''List of content filter configurations in a content policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiguardrail-aiguardrailcontentpolicyconfig.html#cfn-wisdom-aiguardrail-aiguardrailcontentpolicyconfig-filtersconfig
             '''
             result = self._values.get("filters_config")
             assert result is not None, "Required property 'filters_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailContentFilterConfigProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailContentFilterConfigProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3482,7 +3506,7 @@ class CfnAIGuardrail(
         def __init__(
             self,
             *,
-            filters_config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIGuardrail.GuardrailContextualGroundingFilterConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            filters_config: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.GuardrailContextualGroundingFilterConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Contextual grounding policy config for a guardrail.
 
@@ -3514,14 +3538,14 @@ class CfnAIGuardrail(
         @builtins.property
         def filters_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailContextualGroundingFilterConfigProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailContextualGroundingFilterConfigProperty"]]]:
             '''List of contextual grounding filter configs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiguardrail-aiguardrailcontextualgroundingpolicyconfig.html#cfn-wisdom-aiguardrail-aiguardrailcontextualgroundingpolicyconfig-filtersconfig
             '''
             result = self._values.get("filters_config")
             assert result is not None, "Required property 'filters_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailContextualGroundingFilterConfigProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailContextualGroundingFilterConfigProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3546,8 +3570,8 @@ class CfnAIGuardrail(
         def __init__(
             self,
             *,
-            pii_entities_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIGuardrail.GuardrailPiiEntityConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            regexes_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIGuardrail.GuardrailRegexConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            pii_entities_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.GuardrailPiiEntityConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            regexes_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.GuardrailRegexConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Sensitive information policy configuration for a guardrail.
 
@@ -3591,24 +3615,24 @@ class CfnAIGuardrail(
         @builtins.property
         def pii_entities_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailPiiEntityConfigProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailPiiEntityConfigProperty"]]]]:
             '''List of entities.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiguardrail-aiguardrailsensitiveinformationpolicyconfig.html#cfn-wisdom-aiguardrail-aiguardrailsensitiveinformationpolicyconfig-piientitiesconfig
             '''
             result = self._values.get("pii_entities_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailPiiEntityConfigProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailPiiEntityConfigProperty"]]]], result)
 
         @builtins.property
         def regexes_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailRegexConfigProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailRegexConfigProperty"]]]]:
             '''List of regex.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiguardrail-aiguardrailsensitiveinformationpolicyconfig.html#cfn-wisdom-aiguardrail-aiguardrailsensitiveinformationpolicyconfig-regexesconfig
             '''
             result = self._values.get("regexes_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailRegexConfigProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailRegexConfigProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3630,7 +3654,7 @@ class CfnAIGuardrail(
         def __init__(
             self,
             *,
-            topics_config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIGuardrail.GuardrailTopicConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            topics_config: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.GuardrailTopicConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Topic policy configuration for a guardrail.
 
@@ -3666,14 +3690,14 @@ class CfnAIGuardrail(
         @builtins.property
         def topics_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailTopicConfigProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailTopicConfigProperty"]]]:
             '''List of topic configs in topic policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiguardrail-aiguardrailtopicpolicyconfig.html#cfn-wisdom-aiguardrail-aiguardrailtopicpolicyconfig-topicsconfig
             '''
             result = self._values.get("topics_config")
             assert result is not None, "Required property 'topics_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailTopicConfigProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailTopicConfigProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3698,8 +3722,8 @@ class CfnAIGuardrail(
         def __init__(
             self,
             *,
-            managed_word_lists_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIGuardrail.GuardrailManagedWordsConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            words_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIGuardrail.GuardrailWordConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            managed_word_lists_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.GuardrailManagedWordsConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            words_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.GuardrailWordConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Word policy config for a guardrail.
 
@@ -3737,24 +3761,24 @@ class CfnAIGuardrail(
         @builtins.property
         def managed_word_lists_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailManagedWordsConfigProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailManagedWordsConfigProperty"]]]]:
             '''A config for the list of managed words.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiguardrail-aiguardrailwordpolicyconfig.html#cfn-wisdom-aiguardrail-aiguardrailwordpolicyconfig-managedwordlistsconfig
             '''
             result = self._values.get("managed_word_lists_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailManagedWordsConfigProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailManagedWordsConfigProperty"]]]], result)
 
         @builtins.property
         def words_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailWordConfigProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailWordConfigProperty"]]]]:
             '''List of custom word configurations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiguardrail-aiguardrailwordpolicyconfig.html#cfn-wisdom-aiguardrail-aiguardrailwordpolicyconfig-wordsconfig
             '''
             result = self._values.get("words_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIGuardrail.GuardrailWordConfigProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.GuardrailWordConfigProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3987,7 +4011,7 @@ class CfnAIGuardrail(
             '''PII entity configuration.
 
             :param action: The action of guardrail PII entity configuration.
-            :param type: The currently supported PII entities.
+            :param type: Configure AI Guardrail type when the PII entity is detected. The following PIIs are used to block or mask sensitive information: - *General* - *ADDRESS* A physical address, such as "100 Main Street, Anytown, USA" or "Suite #12, Building 123". An address can include information such as the street, building, location, city, state, country, county, zip code, precinct, and neighborhood. - *AGE* An individual's age, including the quantity and unit of time. For example, in the phrase "I am 40 years old," Guarrails recognizes "40 years" as an age. - *NAME* An individual's name. This entity type does not include titles, such as Dr., Mr., Mrs., or Miss. AI Guardrail doesn't apply this entity type to names that are part of organizations or addresses. For example, AI Guardrail recognizes the "John Doe Organization" as an organization, and it recognizes "Jane Doe Street" as an address. - *EMAIL* An email address, such as *marymajor@email.com* . - *PHONE* A phone number. This entity type also includes fax and pager numbers. - *USERNAME* A user name that identifies an account, such as a login name, screen name, nick name, or handle. - *PASSWORD* An alphanumeric string that is used as a password, such as "* *very20special#pass** ". - *DRIVER_ID* The number assigned to a driver's license, which is an official document permitting an individual to operate one or more motorized vehicles on a public road. A driver's license number consists of alphanumeric characters. - *LICENSE_PLATE* A license plate for a vehicle is issued by the state or country where the vehicle is registered. The format for passenger vehicles is typically five to eight digits, consisting of upper-case letters and numbers. The format varies depending on the location of the issuing state or country. - *VEHICLE_IDENTIFICATION_NUMBER* A Vehicle Identification Number (VIN) uniquely identifies a vehicle. VIN content and format are defined in the *ISO 3779* specification. Each country has specific codes and formats for VINs. - *Finance* - *CREDIT_DEBIT_CARD_CVV* A three-digit card verification code (CVV) that is present on VISA, MasterCard, and Discover credit and debit cards. For American Express credit or debit cards, the CVV is a four-digit numeric code. - *CREDIT_DEBIT_CARD_EXPIRY* The expiration date for a credit or debit card. This number is usually four digits long and is often formatted as *month/year* or *MM/YY* . AI Guardrail recognizes expiration dates such as *01/21* , *01/2021* , and *Jan 2021* . - *CREDIT_DEBIT_CARD_NUMBER* The number for a credit or debit card. These numbers can vary from 13 to 16 digits in length. However, Amazon Comprehend also recognizes credit or debit card numbers when only the last four digits are present. - *PIN* A four-digit personal identification number (PIN) with which you can access your bank account. - *INTERNATIONAL_BANK_ACCOUNT_NUMBER* An International Bank Account Number has specific formats in each country. For more information, see `www.iban.com/structure <https://docs.aws.amazon.com/https://www.iban.com/structure>`_ . - *SWIFT_CODE* A SWIFT code is a standard format of Bank Identifier Code (BIC) used to specify a particular bank or branch. Banks use these codes for money transfers such as international wire transfers. SWIFT codes consist of eight or 11 characters. The 11-digit codes refer to specific branches, while eight-digit codes (or 11-digit codes ending in 'XXX') refer to the head or primary office. - *IT* - *IP_ADDRESS* An IPv4 address, such as *198.51.100.0* . - *MAC_ADDRESS* A *media access control* (MAC) address is a unique identifier assigned to a network interface controller (NIC). - *URL* A web address, such as *www.example.com* . - *AWS_ACCESS_KEY* A unique identifier that's associated with a secret access key; you use the access key ID and secret access key to sign programmatic AWS requests cryptographically. - *AWS_SECRET_KEY* A unique identifier that's associated with an access key. You use the access key ID and secret access key to sign programmatic AWS requests cryptographically. - *USA specific* - *US_BANK_ACCOUNT_NUMBER* A US bank account number, which is typically 10 to 12 digits long. - *US_BANK_ROUTING_NUMBER* A US bank account routing number. These are typically nine digits long, - *US_INDIVIDUAL_TAX_IDENTIFICATION_NUMBER* A US Individual Taxpayer Identification Number (ITIN) is a nine-digit number that starts with a "9" and contain a "7" or "8" as the fourth digit. An ITIN can be formatted with a space or a dash after the third and forth digits. - *US_PASSPORT_NUMBER* A US passport number. Passport numbers range from six to nine alphanumeric characters. - *US_SOCIAL_SECURITY_NUMBER* A US Social Security Number (SSN) is a nine-digit number that is issued to US citizens, permanent residents, and temporary working residents. - *Canada specific* - *CA_HEALTH_NUMBER* A Canadian Health Service Number is a 10-digit unique identifier, required for individuals to access healthcare benefits. - *CA_SOCIAL_INSURANCE_NUMBER* A Canadian Social Insurance Number (SIN) is a nine-digit unique identifier, required for individuals to access government programs and benefits. The SIN is formatted as three groups of three digits, such as *123-456-789* . A SIN can be validated through a simple check-digit process called the `Luhn algorithm <https://docs.aws.amazon.com/https://www.wikipedia.org/wiki/Luhn_algorithm>`_ . - *UK Specific* - *UK_NATIONAL_HEALTH_SERVICE_NUMBER* A UK National Health Service Number is a 10-17 digit number, such as *485 555 3456* . The current system formats the 10-digit number with spaces after the third and sixth digits. The final digit is an error-detecting checksum. - *UK_NATIONAL_INSURANCE_NUMBER* A UK National Insurance Number (NINO) provides individuals with access to National Insurance (social security) benefits. It is also used for some purposes in the UK tax system. The number is nine digits long and starts with two letters, followed by six numbers and one letter. A NINO can be formatted with a space or a dash after the two letters and after the second, forth, and sixth digits. - *UK_UNIQUE_TAXPAYER_REFERENCE_NUMBER* A UK Unique Taxpayer Reference (UTR) is a 10-digit number that identifies a taxpayer or a business. - *Custom* - *Regex filter* - You can use a regular expressions to define patterns for an AI Guardrail to recognize and act upon such as serial number, booking ID etc..
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiguardrail-guardrailpiientityconfig.html
             :exampleMetadata: fixture=_generated
@@ -4024,7 +4048,148 @@ class CfnAIGuardrail(
 
         @builtins.property
         def type(self) -> builtins.str:
-            '''The currently supported PII entities.
+            '''Configure AI Guardrail type when the PII entity is detected.
+
+            The following PIIs are used to block or mask sensitive information:
+
+            - *General*
+            - *ADDRESS*
+
+            A physical address, such as "100 Main Street, Anytown, USA" or "Suite #12, Building 123". An address can include information such as the street, building, location, city, state, country, county, zip code, precinct, and neighborhood.
+
+            - *AGE*
+
+            An individual's age, including the quantity and unit of time. For example, in the phrase "I am 40 years old," Guarrails recognizes "40 years" as an age.
+
+            - *NAME*
+
+            An individual's name. This entity type does not include titles, such as Dr., Mr., Mrs., or Miss. AI Guardrail doesn't apply this entity type to names that are part of organizations or addresses. For example, AI Guardrail recognizes the "John Doe Organization" as an organization, and it recognizes "Jane Doe Street" as an address.
+
+            - *EMAIL*
+
+            An email address, such as *marymajor@email.com* .
+
+            - *PHONE*
+
+            A phone number. This entity type also includes fax and pager numbers.
+
+            - *USERNAME*
+
+            A user name that identifies an account, such as a login name, screen name, nick name, or handle.
+
+            - *PASSWORD*
+
+            An alphanumeric string that is used as a password, such as "* *very20special#pass** ".
+
+            - *DRIVER_ID*
+
+            The number assigned to a driver's license, which is an official document permitting an individual to operate one or more motorized vehicles on a public road. A driver's license number consists of alphanumeric characters.
+
+            - *LICENSE_PLATE*
+
+            A license plate for a vehicle is issued by the state or country where the vehicle is registered. The format for passenger vehicles is typically five to eight digits, consisting of upper-case letters and numbers. The format varies depending on the location of the issuing state or country.
+
+            - *VEHICLE_IDENTIFICATION_NUMBER*
+
+            A Vehicle Identification Number (VIN) uniquely identifies a vehicle. VIN content and format are defined in the *ISO 3779* specification. Each country has specific codes and formats for VINs.
+
+            - *Finance*
+            - *CREDIT_DEBIT_CARD_CVV*
+
+            A three-digit card verification code (CVV) that is present on VISA, MasterCard, and Discover credit and debit cards. For American Express credit or debit cards, the CVV is a four-digit numeric code.
+
+            - *CREDIT_DEBIT_CARD_EXPIRY*
+
+            The expiration date for a credit or debit card. This number is usually four digits long and is often formatted as *month/year* or *MM/YY* . AI Guardrail recognizes expiration dates such as *01/21* , *01/2021* , and *Jan 2021* .
+
+            - *CREDIT_DEBIT_CARD_NUMBER*
+
+            The number for a credit or debit card. These numbers can vary from 13 to 16 digits in length. However, Amazon Comprehend also recognizes credit or debit card numbers when only the last four digits are present.
+
+            - *PIN*
+
+            A four-digit personal identification number (PIN) with which you can access your bank account.
+
+            - *INTERNATIONAL_BANK_ACCOUNT_NUMBER*
+
+            An International Bank Account Number has specific formats in each country. For more information, see `www.iban.com/structure <https://docs.aws.amazon.com/https://www.iban.com/structure>`_ .
+
+            - *SWIFT_CODE*
+
+            A SWIFT code is a standard format of Bank Identifier Code (BIC) used to specify a particular bank or branch. Banks use these codes for money transfers such as international wire transfers.
+
+            SWIFT codes consist of eight or 11 characters. The 11-digit codes refer to specific branches, while eight-digit codes (or 11-digit codes ending in 'XXX') refer to the head or primary office.
+
+            - *IT*
+            - *IP_ADDRESS*
+
+            An IPv4 address, such as *198.51.100.0* .
+
+            - *MAC_ADDRESS*
+
+            A *media access control* (MAC) address is a unique identifier assigned to a network interface controller (NIC).
+
+            - *URL*
+
+            A web address, such as *www.example.com* .
+
+            - *AWS_ACCESS_KEY*
+
+            A unique identifier that's associated with a secret access key; you use the access key ID and secret access key to sign programmatic AWS requests cryptographically.
+
+            - *AWS_SECRET_KEY*
+
+            A unique identifier that's associated with an access key. You use the access key ID and secret access key to sign programmatic AWS requests cryptographically.
+
+            - *USA specific*
+            - *US_BANK_ACCOUNT_NUMBER*
+
+            A US bank account number, which is typically 10 to 12 digits long.
+
+            - *US_BANK_ROUTING_NUMBER*
+
+            A US bank account routing number. These are typically nine digits long,
+
+            - *US_INDIVIDUAL_TAX_IDENTIFICATION_NUMBER*
+
+            A US Individual Taxpayer Identification Number (ITIN) is a nine-digit number that starts with a "9" and contain a "7" or "8" as the fourth digit. An ITIN can be formatted with a space or a dash after the third and forth digits.
+
+            - *US_PASSPORT_NUMBER*
+
+            A US passport number. Passport numbers range from six to nine alphanumeric characters.
+
+            - *US_SOCIAL_SECURITY_NUMBER*
+
+            A US Social Security Number (SSN) is a nine-digit number that is issued to US citizens, permanent residents, and temporary working residents.
+
+            - *Canada specific*
+            - *CA_HEALTH_NUMBER*
+
+            A Canadian Health Service Number is a 10-digit unique identifier, required for individuals to access healthcare benefits.
+
+            - *CA_SOCIAL_INSURANCE_NUMBER*
+
+            A Canadian Social Insurance Number (SIN) is a nine-digit unique identifier, required for individuals to access government programs and benefits.
+
+            The SIN is formatted as three groups of three digits, such as *123-456-789* . A SIN can be validated through a simple check-digit process called the `Luhn algorithm <https://docs.aws.amazon.com/https://www.wikipedia.org/wiki/Luhn_algorithm>`_ .
+
+            - *UK Specific*
+            - *UK_NATIONAL_HEALTH_SERVICE_NUMBER*
+
+            A UK National Health Service Number is a 10-17 digit number, such as *485 555 3456* . The current system formats the 10-digit number with spaces after the third and sixth digits. The final digit is an error-detecting checksum.
+
+            - *UK_NATIONAL_INSURANCE_NUMBER*
+
+            A UK National Insurance Number (NINO) provides individuals with access to National Insurance (social security) benefits. It is also used for some purposes in the UK tax system.
+
+            The number is nine digits long and starts with two letters, followed by six numbers and one letter. A NINO can be formatted with a space or a dash after the two letters and after the second, forth, and sixth digits.
+
+            - *UK_UNIQUE_TAXPAYER_REFERENCE_NUMBER*
+
+            A UK Unique Taxpayer Reference (UTR) is a 10-digit number that identifies a taxpayer or a business.
+
+            - *Custom*
+            - *Regex filter* - You can use a regular expressions to define patterns for an AI Guardrail to recognize and act upon such as serial number, booking ID etc..
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiguardrail-guardrailpiientityconfig.html#cfn-wisdom-aiguardrail-guardrailpiientityconfig-type
             '''
@@ -4336,14 +4501,14 @@ class CfnAIGuardrailProps:
         assistant_id: builtins.str,
         blocked_input_messaging: builtins.str,
         blocked_outputs_messaging: builtins.str,
-        content_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        contextual_grounding_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        content_policy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        contextual_grounding_policy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        sensitive_information_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sensitive_information_policy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        topic_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        word_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        topic_policy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        word_policy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAIGuardrail``.
 
@@ -4496,24 +4661,24 @@ class CfnAIGuardrailProps:
     @builtins.property
     def content_policy_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty"]]:
         '''Contains details about how to handle harmful content.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-aiguardrail.html#cfn-wisdom-aiguardrail-contentpolicyconfig
         '''
         result = self._values.get("content_policy_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailContentPolicyConfigProperty"]], result)
 
     @builtins.property
     def contextual_grounding_policy_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty"]]:
         '''The policy configuration details for the AI Guardrail's contextual grounding policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-aiguardrail.html#cfn-wisdom-aiguardrail-contextualgroundingpolicyconfig
         '''
         result = self._values.get("contextual_grounding_policy_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailContextualGroundingPolicyConfigProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -4536,13 +4701,13 @@ class CfnAIGuardrailProps:
     @builtins.property
     def sensitive_information_policy_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty"]]:
         '''Contains details about PII entities and regular expressions to configure for the AI Guardrail.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-aiguardrail.html#cfn-wisdom-aiguardrail-sensitiveinformationpolicyconfig
         '''
         result = self._values.get("sensitive_information_policy_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailSensitiveInformationPolicyConfigProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -4556,24 +4721,24 @@ class CfnAIGuardrailProps:
     @builtins.property
     def topic_policy_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty"]]:
         '''Contains details about topics that the AI Guardrail should identify and deny.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-aiguardrail.html#cfn-wisdom-aiguardrail-topicpolicyconfig
         '''
         result = self._values.get("topic_policy_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty"]], result)
 
     @builtins.property
     def word_policy_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty"]]:
         '''Contains details about the word policy to configured for the AI Guardrail.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-aiguardrail.html#cfn-wisdom-aiguardrail-wordpolicyconfig
         '''
         result = self._values.get("word_policy_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4616,7 +4781,7 @@ class CfnAIGuardrailVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         ai_guardrail_id: builtins.str,
@@ -4656,7 +4821,7 @@ class CfnAIGuardrailVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAIGuardrailVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4687,9 +4852,9 @@ class CfnAIGuardrailVersion(
 
     @builtins.property
     @jsii.member(jsii_name="aiGuardrailVersionRef")
-    def ai_guardrail_version_ref(self) -> _AIGuardrailVersionReference_831f138e:
+    def ai_guardrail_version_ref(self) -> "_AIGuardrailVersionReference_831f138e":
         '''A reference to a AIGuardrailVersion resource.'''
-        return typing.cast(_AIGuardrailVersionReference_831f138e, jsii.get(self, "aiGuardrailVersionRef"))
+        return typing.cast("_AIGuardrailVersionReference_831f138e", jsii.get(self, "aiGuardrailVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAiGuardrailArn")
@@ -4720,12 +4885,12 @@ class CfnAIGuardrailVersion(
 
     @builtins.property
     @jsii.member(jsii_name="attrVersionNumber")
-    def attr_version_number(self) -> _IResolvable_da3f097b:
+    def attr_version_number(self) -> "_IResolvable_da3f097b":
         '''The version number for this AI Guardrail version.
 
         :cloudformationAttribute: VersionNumber
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrVersionNumber"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrVersionNumber"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4906,12 +5071,12 @@ class CfnAIPrompt(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         api_format: builtins.str,
         model_id: builtins.str,
-        template_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIPrompt.AIPromptTemplateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        template_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIPrompt.AIPromptTemplateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         template_type: builtins.str,
         type: builtins.str,
         assistant_id: typing.Optional[builtins.str] = None,
@@ -4953,7 +5118,7 @@ class CfnAIPrompt(
 
     @jsii.member(jsii_name="arnForAIPrompt")
     @builtins.classmethod
-    def arn_for_ai_prompt(cls, resource: _IAIPromptRef_2afc9b84) -> builtins.str:
+    def arn_for_ai_prompt(cls, resource: "_IAIPromptRef_2afc9b84") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4975,7 +5140,7 @@ class CfnAIPrompt(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAIPrompt", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5006,9 +5171,9 @@ class CfnAIPrompt(
 
     @builtins.property
     @jsii.member(jsii_name="aiPromptRef")
-    def ai_prompt_ref(self) -> _AIPromptReference_a61cdb19:
+    def ai_prompt_ref(self) -> "_AIPromptReference_a61cdb19":
         '''A reference to a AIPrompt resource.'''
-        return typing.cast(_AIPromptReference_a61cdb19, jsii.get(self, "aiPromptRef"))
+        return typing.cast("_AIPromptReference_a61cdb19", jsii.get(self, "aiPromptRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAiPromptArn")
@@ -5039,17 +5204,17 @@ class CfnAIPrompt(
 
     @builtins.property
     @jsii.member(jsii_name="attrModifiedTimeSeconds")
-    def attr_modified_time_seconds(self) -> _IResolvable_da3f097b:
+    def attr_modified_time_seconds(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: ModifiedTimeSeconds
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrModifiedTimeSeconds"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrModifiedTimeSeconds"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5089,14 +5254,14 @@ class CfnAIPrompt(
     @jsii.member(jsii_name="templateConfiguration")
     def template_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAIPrompt.AIPromptTemplateConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAIPrompt.AIPromptTemplateConfigurationProperty"]:
         '''The configuration of the prompt template for this AI Prompt.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAIPrompt.AIPromptTemplateConfigurationProperty"], jsii.get(self, "templateConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAIPrompt.AIPromptTemplateConfigurationProperty"], jsii.get(self, "templateConfiguration"))
 
     @template_configuration.setter
     def template_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAIPrompt.AIPromptTemplateConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAIPrompt.AIPromptTemplateConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5419aa0c5422844ff34f9fc9a194021532fa6ada449722bb2aa4b846530445ba)
@@ -5195,7 +5360,7 @@ class CfnAIPrompt(
         def __init__(
             self,
             *,
-            text_full_ai_prompt_edit_template_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIPrompt.TextFullAIPromptEditTemplateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            text_full_ai_prompt_edit_template_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIPrompt.TextFullAIPromptEditTemplateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''A typed union that specifies the configuration for a prompt template based on its type.
 
@@ -5226,14 +5391,14 @@ class CfnAIPrompt(
         @builtins.property
         def text_full_ai_prompt_edit_template_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAIPrompt.TextFullAIPromptEditTemplateConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAIPrompt.TextFullAIPromptEditTemplateConfigurationProperty"]:
             '''The configuration for a prompt template that supports full textual prompt configuration using a YAML prompt.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiprompt-aiprompttemplateconfiguration.html#cfn-wisdom-aiprompt-aiprompttemplateconfiguration-textfullaipromptedittemplateconfiguration
             '''
             result = self._values.get("text_full_ai_prompt_edit_template_configuration")
             assert result is not None, "Required property 'text_full_ai_prompt_edit_template_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAIPrompt.TextFullAIPromptEditTemplateConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAIPrompt.TextFullAIPromptEditTemplateConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5320,7 +5485,7 @@ class CfnAIPromptProps:
         *,
         api_format: builtins.str,
         model_id: builtins.str,
-        template_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIPrompt.AIPromptTemplateConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        template_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIPrompt.AIPromptTemplateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         template_type: builtins.str,
         type: builtins.str,
         assistant_id: typing.Optional[builtins.str] = None,
@@ -5437,14 +5602,14 @@ class CfnAIPromptProps:
     @builtins.property
     def template_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAIPrompt.AIPromptTemplateConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAIPrompt.AIPromptTemplateConfigurationProperty"]:
         '''The configuration of the prompt template for this AI Prompt.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-aiprompt.html#cfn-wisdom-aiprompt-templateconfiguration
         '''
         result = self._values.get("template_configuration")
         assert result is not None, "Required property 'template_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAIPrompt.AIPromptTemplateConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAIPrompt.AIPromptTemplateConfigurationProperty"], result)
 
     @builtins.property
     def template_type(self) -> builtins.str:
@@ -5545,7 +5710,7 @@ class CfnAIPromptVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         ai_prompt_id: builtins.str,
@@ -5585,7 +5750,7 @@ class CfnAIPromptVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAIPromptVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5616,9 +5781,9 @@ class CfnAIPromptVersion(
 
     @builtins.property
     @jsii.member(jsii_name="aiPromptVersionRef")
-    def ai_prompt_version_ref(self) -> _AIPromptVersionReference_6f2b00b7:
+    def ai_prompt_version_ref(self) -> "_AIPromptVersionReference_6f2b00b7":
         '''A reference to a AIPromptVersion resource.'''
-        return typing.cast(_AIPromptVersionReference_6f2b00b7, jsii.get(self, "aiPromptVersionRef"))
+        return typing.cast("_AIPromptVersionReference_6f2b00b7", jsii.get(self, "aiPromptVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAiPromptArn")
@@ -5647,12 +5812,12 @@ class CfnAIPromptVersion(
 
     @builtins.property
     @jsii.member(jsii_name="attrVersionNumber")
-    def attr_version_number(self) -> _IResolvable_da3f097b:
+    def attr_version_number(self) -> "_IResolvable_da3f097b":
         '''The version number for this AI Prompt version.
 
         :cloudformationAttribute: VersionNumber
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrVersionNumber"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrVersionNumber"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5808,6 +5973,7 @@ class CfnAssistant(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_wisdom as wisdom
@@ -5830,14 +5996,14 @@ class CfnAssistant(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        server_side_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssistant.ServerSideEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        server_side_encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssistant.ServerSideEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Wisdom::Assistant``.
 
@@ -5865,7 +6031,7 @@ class CfnAssistant(
 
     @jsii.member(jsii_name="arnForAssistant")
     @builtins.classmethod
-    def arn_for_assistant(cls, resource: _IAssistantRef_253a4920) -> builtins.str:
+    def arn_for_assistant(cls, resource: "_IAssistantRef_253a4920") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5878,10 +6044,10 @@ class CfnAssistant(
     @builtins.classmethod
     def from_assistant_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IAssistantRef_253a4920:
+    ) -> "_IAssistantRef_253a4920":
         '''Creates a new IAssistantRef from an ARN.
 
         :param scope: -
@@ -5893,16 +6059,16 @@ class CfnAssistant(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IAssistantRef_253a4920, jsii.sinvoke(cls, "fromAssistantArn", [scope, id, arn]))
+        return typing.cast("_IAssistantRef_253a4920", jsii.sinvoke(cls, "fromAssistantArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromAssistantId")
     @builtins.classmethod
     def from_assistant_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         assistant_id: builtins.str,
-    ) -> _IAssistantRef_253a4920:
+    ) -> "_IAssistantRef_253a4920":
         '''Creates a new IAssistantRef from a assistantId.
 
         :param scope: -
@@ -5914,7 +6080,7 @@ class CfnAssistant(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument assistant_id", value=assistant_id, expected_type=type_hints["assistant_id"])
-        return typing.cast(_IAssistantRef_253a4920, jsii.sinvoke(cls, "fromAssistantId", [scope, id, assistant_id]))
+        return typing.cast("_IAssistantRef_253a4920", jsii.sinvoke(cls, "fromAssistantId", [scope, id, assistant_id]))
 
     @jsii.member(jsii_name="isCfnAssistant")
     @builtins.classmethod
@@ -5929,7 +6095,7 @@ class CfnAssistant(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAssistant", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5960,9 +6126,9 @@ class CfnAssistant(
 
     @builtins.property
     @jsii.member(jsii_name="assistantRef")
-    def assistant_ref(self) -> _AssistantReference_32665e48:
+    def assistant_ref(self) -> "_AssistantReference_32665e48":
         '''A reference to a Assistant resource.'''
-        return typing.cast(_AssistantReference_32665e48, jsii.get(self, "assistantRef"))
+        return typing.cast("_AssistantReference_32665e48", jsii.get(self, "assistantRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAssistantArn")
@@ -5989,9 +6155,9 @@ class CfnAssistant(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -6036,14 +6202,14 @@ class CfnAssistant(
     @jsii.member(jsii_name="serverSideEncryptionConfiguration")
     def server_side_encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssistant.ServerSideEncryptionConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssistant.ServerSideEncryptionConfigurationProperty"]]:
         '''The configuration information for the customer managed key used for encryption.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssistant.ServerSideEncryptionConfigurationProperty"]], jsii.get(self, "serverSideEncryptionConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssistant.ServerSideEncryptionConfigurationProperty"]], jsii.get(self, "serverSideEncryptionConfiguration"))
 
     @server_side_encryption_configuration.setter
     def server_side_encryption_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssistant.ServerSideEncryptionConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssistant.ServerSideEncryptionConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fb8470e364668ea9060baa4a3306507e0ded02773f75cc435d33474d30577d1b)
@@ -6052,12 +6218,12 @@ class CfnAssistant(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags used to organize, track, or control access for this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3a82c89946835215b7304a7033eacc23c202ee6ae8e17e73d0ba34f1dbaf1416)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6133,6 +6299,7 @@ class CfnAssistantAssociation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_wisdom as wisdom
@@ -6154,13 +6321,13 @@ class CfnAssistantAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         assistant_id: builtins.str,
-        association: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssistantAssociation.AssociationDataProperty", typing.Dict[builtins.str, typing.Any]]],
+        association: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssistantAssociation.AssociationDataProperty", typing.Dict[builtins.str, typing.Any]]],
         association_type: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Wisdom::AssistantAssociation``.
 
@@ -6188,7 +6355,7 @@ class CfnAssistantAssociation(
     @builtins.classmethod
     def arn_for_assistant_association(
         cls,
-        resource: _IAssistantAssociationRef_2e883ba1,
+        resource: "_IAssistantAssociationRef_2e883ba1",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6211,7 +6378,7 @@ class CfnAssistantAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAssistantAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6242,9 +6409,9 @@ class CfnAssistantAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="assistantAssociationRef")
-    def assistant_association_ref(self) -> _AssistantAssociationReference_d8a4551d:
+    def assistant_association_ref(self) -> "_AssistantAssociationReference_d8a4551d":
         '''A reference to a AssistantAssociation resource.'''
-        return typing.cast(_AssistantAssociationReference_d8a4551d, jsii.get(self, "assistantAssociationRef"))
+        return typing.cast("_AssistantAssociationReference_d8a4551d", jsii.get(self, "assistantAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAssistantArn")
@@ -6280,9 +6447,9 @@ class CfnAssistantAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="assistantId")
@@ -6301,14 +6468,14 @@ class CfnAssistantAssociation(
     @jsii.member(jsii_name="association")
     def association(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAssistantAssociation.AssociationDataProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAssistantAssociation.AssociationDataProperty"]:
         '''The identifier of the associated resource.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAssistantAssociation.AssociationDataProperty"], jsii.get(self, "association"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAssistantAssociation.AssociationDataProperty"], jsii.get(self, "association"))
 
     @association.setter
     def association(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAssistantAssociation.AssociationDataProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAssistantAssociation.AssociationDataProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e46eeb6364ccf0b8f92618927437f56df6248417cb401c056b83fe5692feb0f8)
@@ -6330,12 +6497,12 @@ class CfnAssistantAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags used to organize, track, or control access for this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ea3d3cb4fe1048c256fc8719ac3d18f47cb21ef29730dd9d1f53a9304ccd4030)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6409,9 +6576,9 @@ class CfnAssistantAssociationProps:
         self,
         *,
         assistant_id: builtins.str,
-        association: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssistantAssociation.AssociationDataProperty, typing.Dict[builtins.str, typing.Any]]],
+        association: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssistantAssociation.AssociationDataProperty", typing.Dict[builtins.str, typing.Any]]],
         association_type: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAssistantAssociation``.
 
@@ -6425,6 +6592,7 @@ class CfnAssistantAssociationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_wisdom as wisdom
@@ -6470,14 +6638,14 @@ class CfnAssistantAssociationProps:
     @builtins.property
     def association(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAssistantAssociation.AssociationDataProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAssistantAssociation.AssociationDataProperty"]:
         '''The identifier of the associated resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-assistantassociation.html#cfn-wisdom-assistantassociation-association
         '''
         result = self._values.get("association")
         assert result is not None, "Required property 'association' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAssistantAssociation.AssociationDataProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAssistantAssociation.AssociationDataProperty"], result)
 
     @builtins.property
     def association_type(self) -> builtins.str:
@@ -6490,13 +6658,13 @@ class CfnAssistantAssociationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags used to organize, track, or control access for this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-assistantassociation.html#cfn-wisdom-assistantassociation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6528,8 +6696,8 @@ class CfnAssistantProps:
         name: builtins.str,
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        server_side_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssistant.ServerSideEncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        server_side_encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssistant.ServerSideEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAssistant``.
 
@@ -6544,6 +6712,7 @@ class CfnAssistantProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_wisdom as wisdom
@@ -6613,7 +6782,7 @@ class CfnAssistantProps:
     @builtins.property
     def server_side_encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAssistant.ServerSideEncryptionConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssistant.ServerSideEncryptionConfigurationProperty"]]:
         '''The configuration information for the customer managed key used for encryption.
 
         The customer managed key must have a policy that allows ``kms:CreateGrant`` and ``kms:DescribeKey`` permissions to the IAM identity using the key to invoke Wisdom. To use Wisdom with chat, the key policy must also allow ``kms:Decrypt`` , ``kms:GenerateDataKey*`` , and ``kms:DescribeKey`` permissions to the ``connect.amazonaws.com`` service principal. For more information about setting up a customer managed key for Wisdom, see `Enable Amazon Connect Wisdom for your instance <https://docs.aws.amazon.com/connect/latest/adminguide/enable-wisdom.html>`_ .
@@ -6621,16 +6790,16 @@ class CfnAssistantProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-assistant.html#cfn-wisdom-assistant-serversideencryptionconfiguration
         '''
         result = self._values.get("server_side_encryption_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAssistant.ServerSideEncryptionConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssistant.ServerSideEncryptionConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags used to organize, track, or control access for this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-assistant.html#cfn-wisdom-assistant-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6658,6 +6827,7 @@ class CfnKnowledgeBase(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_wisdom as wisdom
@@ -6743,17 +6913,17 @@ class CfnKnowledgeBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         knowledge_base_type: builtins.str,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        rendering_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.RenderingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        server_side_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.SourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vector_ingestion_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.VectorIngestionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        rendering_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.RenderingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        server_side_encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.SourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vector_ingestion_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.VectorIngestionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Wisdom::KnowledgeBase``.
 
@@ -6789,7 +6959,7 @@ class CfnKnowledgeBase(
     @builtins.classmethod
     def arn_for_knowledge_base(
         cls,
-        resource: _IKnowledgeBaseRef_846dfcfb,
+        resource: "_IKnowledgeBaseRef_846dfcfb",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6803,10 +6973,10 @@ class CfnKnowledgeBase(
     @builtins.classmethod
     def from_knowledge_base_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IKnowledgeBaseRef_846dfcfb:
+    ) -> "_IKnowledgeBaseRef_846dfcfb":
         '''Creates a new IKnowledgeBaseRef from an ARN.
 
         :param scope: -
@@ -6818,16 +6988,16 @@ class CfnKnowledgeBase(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IKnowledgeBaseRef_846dfcfb, jsii.sinvoke(cls, "fromKnowledgeBaseArn", [scope, id, arn]))
+        return typing.cast("_IKnowledgeBaseRef_846dfcfb", jsii.sinvoke(cls, "fromKnowledgeBaseArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromKnowledgeBaseId")
     @builtins.classmethod
     def from_knowledge_base_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         knowledge_base_id: builtins.str,
-    ) -> _IKnowledgeBaseRef_846dfcfb:
+    ) -> "_IKnowledgeBaseRef_846dfcfb":
         '''Creates a new IKnowledgeBaseRef from a knowledgeBaseId.
 
         :param scope: -
@@ -6839,7 +7009,7 @@ class CfnKnowledgeBase(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument knowledge_base_id", value=knowledge_base_id, expected_type=type_hints["knowledge_base_id"])
-        return typing.cast(_IKnowledgeBaseRef_846dfcfb, jsii.sinvoke(cls, "fromKnowledgeBaseId", [scope, id, knowledge_base_id]))
+        return typing.cast("_IKnowledgeBaseRef_846dfcfb", jsii.sinvoke(cls, "fromKnowledgeBaseId", [scope, id, knowledge_base_id]))
 
     @jsii.member(jsii_name="isCfnKnowledgeBase")
     @builtins.classmethod
@@ -6854,7 +7024,7 @@ class CfnKnowledgeBase(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnKnowledgeBase", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6908,15 +7078,15 @@ class CfnKnowledgeBase(
 
     @builtins.property
     @jsii.member(jsii_name="knowledgeBaseRef")
-    def knowledge_base_ref(self) -> _KnowledgeBaseReference_9085f3fb:
+    def knowledge_base_ref(self) -> "_KnowledgeBaseReference_9085f3fb":
         '''A reference to a KnowledgeBase resource.'''
-        return typing.cast(_KnowledgeBaseReference_9085f3fb, jsii.get(self, "knowledgeBaseRef"))
+        return typing.cast("_KnowledgeBaseReference_9085f3fb", jsii.get(self, "knowledgeBaseRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="knowledgeBaseType")
@@ -6961,14 +7131,14 @@ class CfnKnowledgeBase(
     @jsii.member(jsii_name="renderingConfiguration")
     def rendering_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.RenderingConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.RenderingConfigurationProperty"]]:
         '''Information about how to render the content.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.RenderingConfigurationProperty"]], jsii.get(self, "renderingConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.RenderingConfigurationProperty"]], jsii.get(self, "renderingConfiguration"))
 
     @rendering_configuration.setter
     def rendering_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.RenderingConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.RenderingConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3dbfe6a279891a574d7128da28db41ca74ec109e76fb61b5b9db27b1ee815fba)
@@ -6979,14 +7149,14 @@ class CfnKnowledgeBase(
     @jsii.member(jsii_name="serverSideEncryptionConfiguration")
     def server_side_encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty"]]:
         '''This customer managed key must have a policy that allows ``kms:CreateGrant`` and ``kms:DescribeKey`` permissions to the IAM identity using the key to invoke Wisdom.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty"]], jsii.get(self, "serverSideEncryptionConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty"]], jsii.get(self, "serverSideEncryptionConfiguration"))
 
     @server_side_encryption_configuration.setter
     def server_side_encryption_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__221e4b62cf601d8c0e6300aceb9f7a7bfe38ac19093345137be6abb3f22756d8)
@@ -6997,14 +7167,14 @@ class CfnKnowledgeBase(
     @jsii.member(jsii_name="sourceConfiguration")
     def source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.SourceConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.SourceConfigurationProperty"]]:
         '''The source of the knowledge base content.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.SourceConfigurationProperty"]], jsii.get(self, "sourceConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.SourceConfigurationProperty"]], jsii.get(self, "sourceConfiguration"))
 
     @source_configuration.setter
     def source_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.SourceConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.SourceConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0ab7292e64b294c529dec00a33cfb2da96ff80581b3e1376c67027a944849691)
@@ -7013,12 +7183,12 @@ class CfnKnowledgeBase(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags used to organize, track, or control access for this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b654968450798e9434ae157e80b0efdde965d3d9cf517c41c4fcdcfa66e910f8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7028,14 +7198,14 @@ class CfnKnowledgeBase(
     @jsii.member(jsii_name="vectorIngestionConfiguration")
     def vector_ingestion_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.VectorIngestionConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.VectorIngestionConfigurationProperty"]]:
         '''Contains details about how to ingest the documents in a data source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.VectorIngestionConfigurationProperty"]], jsii.get(self, "vectorIngestionConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.VectorIngestionConfigurationProperty"]], jsii.get(self, "vectorIngestionConfiguration"))
 
     @vector_ingestion_configuration.setter
     def vector_ingestion_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.VectorIngestionConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.VectorIngestionConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__841ed99c710bd0f2748a34efe9978e0d2cadafde4697b94a4cfbf0d401c23ee2)
@@ -7146,7 +7316,7 @@ class CfnKnowledgeBase(
             self,
             *,
             model_arn: builtins.str,
-            parsing_prompt: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.ParsingPromptProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parsing_prompt: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.ParsingPromptProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration of the Bedrock foundation model.
 
@@ -7194,13 +7364,13 @@ class CfnKnowledgeBase(
         @builtins.property
         def parsing_prompt(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.ParsingPromptProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ParsingPromptProperty"]]:
             '''The parsing prompt of the Bedrock foundation model configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-bedrockfoundationmodelconfiguration.html#cfn-wisdom-knowledgebase-bedrockfoundationmodelconfiguration-parsingprompt
             '''
             result = self._values.get("parsing_prompt")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.ParsingPromptProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ParsingPromptProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7228,9 +7398,9 @@ class CfnKnowledgeBase(
             self,
             *,
             chunking_strategy: builtins.str,
-            fixed_size_chunking_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.FixedSizeChunkingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            hierarchical_chunking_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.HierarchicalChunkingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            semantic_chunking_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.SemanticChunkingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            fixed_size_chunking_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.FixedSizeChunkingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            hierarchical_chunking_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.HierarchicalChunkingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            semantic_chunking_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.SemanticChunkingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Details about how to chunk the documents in the data source.
 
@@ -7302,7 +7472,7 @@ class CfnKnowledgeBase(
         @builtins.property
         def fixed_size_chunking_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.FixedSizeChunkingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.FixedSizeChunkingConfigurationProperty"]]:
             '''Configurations for when you choose fixed-size chunking.
 
             If you set the ``chunkingStrategy`` as ``NONE`` , exclude this field.
@@ -7310,12 +7480,12 @@ class CfnKnowledgeBase(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-chunkingconfiguration.html#cfn-wisdom-knowledgebase-chunkingconfiguration-fixedsizechunkingconfiguration
             '''
             result = self._values.get("fixed_size_chunking_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.FixedSizeChunkingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.FixedSizeChunkingConfigurationProperty"]], result)
 
         @builtins.property
         def hierarchical_chunking_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.HierarchicalChunkingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.HierarchicalChunkingConfigurationProperty"]]:
             '''Settings for hierarchical document chunking for a data source.
 
             Hierarchical chunking splits documents into layers of chunks where the first layer contains large chunks, and the second layer contains smaller chunks derived from the first layer.
@@ -7323,12 +7493,12 @@ class CfnKnowledgeBase(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-chunkingconfiguration.html#cfn-wisdom-knowledgebase-chunkingconfiguration-hierarchicalchunkingconfiguration
             '''
             result = self._values.get("hierarchical_chunking_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.HierarchicalChunkingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.HierarchicalChunkingConfigurationProperty"]], result)
 
         @builtins.property
         def semantic_chunking_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.SemanticChunkingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.SemanticChunkingConfigurationProperty"]]:
             '''Settings for semantic document chunking for a data source.
 
             Semantic chunking splits a document into smaller documents based on groups of similar content derived from the text with natural language processing.
@@ -7336,7 +7506,7 @@ class CfnKnowledgeBase(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-chunkingconfiguration.html#cfn-wisdom-knowledgebase-chunkingconfiguration-semanticchunkingconfiguration
             '''
             result = self._values.get("semantic_chunking_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.SemanticChunkingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.SemanticChunkingConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7488,7 +7658,7 @@ class CfnKnowledgeBase(
         def __init__(
             self,
             *,
-            level_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.HierarchicalChunkingLevelConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            level_configurations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.HierarchicalChunkingLevelConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
             overlap_tokens: jsii.Number,
         ) -> None:
             '''Settings for hierarchical document chunking for a data source.
@@ -7526,14 +7696,14 @@ class CfnKnowledgeBase(
         @builtins.property
         def level_configurations(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.HierarchicalChunkingLevelConfigurationProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.HierarchicalChunkingLevelConfigurationProperty"]]]:
             '''Token settings for each layer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-hierarchicalchunkingconfiguration.html#cfn-wisdom-knowledgebase-hierarchicalchunkingconfiguration-levelconfigurations
             '''
             result = self._values.get("level_configurations")
             assert result is not None, "Required property 'level_configurations' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.HierarchicalChunkingLevelConfigurationProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.HierarchicalChunkingLevelConfigurationProperty"]]], result)
 
         @builtins.property
         def overlap_tokens(self) -> jsii.Number:
@@ -7617,7 +7787,7 @@ class CfnKnowledgeBase(
         def __init__(
             self,
             *,
-            web_crawler_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.WebCrawlerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            web_crawler_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.WebCrawlerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Source configuration for managed resources.
 
@@ -7660,14 +7830,14 @@ class CfnKnowledgeBase(
         @builtins.property
         def web_crawler_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.WebCrawlerConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.WebCrawlerConfigurationProperty"]:
             '''Configuration data for web crawler data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-managedsourceconfiguration.html#cfn-wisdom-knowledgebase-managedsourceconfiguration-webcrawlerconfiguration
             '''
             result = self._values.get("web_crawler_configuration")
             assert result is not None, "Required property 'web_crawler_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.WebCrawlerConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.WebCrawlerConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7693,7 +7863,7 @@ class CfnKnowledgeBase(
             self,
             *,
             parsing_strategy: builtins.str,
-            bedrock_foundation_model_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.BedrockFoundationModelConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            bedrock_foundation_model_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.BedrockFoundationModelConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Settings for parsing document contents.
 
@@ -7748,13 +7918,13 @@ class CfnKnowledgeBase(
         @builtins.property
         def bedrock_foundation_model_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.BedrockFoundationModelConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.BedrockFoundationModelConfigurationProperty"]]:
             '''Settings for a foundation model used to parse documents for a data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-parsingconfiguration.html#cfn-wisdom-knowledgebase-parsingconfiguration-bedrockfoundationmodelconfiguration
             '''
             result = self._values.get("bedrock_foundation_model_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.BedrockFoundationModelConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.BedrockFoundationModelConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8092,8 +8262,8 @@ class CfnKnowledgeBase(
         def __init__(
             self,
             *,
-            app_integrations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.AppIntegrationsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            managed_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.ManagedSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            app_integrations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.AppIntegrationsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            managed_source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.ManagedSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Configuration information about the external data source.
 
@@ -8148,24 +8318,24 @@ class CfnKnowledgeBase(
         @builtins.property
         def app_integrations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.AppIntegrationsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.AppIntegrationsConfigurationProperty"]]:
             '''Configuration information for Amazon AppIntegrations to automatically ingest content.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-sourceconfiguration.html#cfn-wisdom-knowledgebase-sourceconfiguration-appintegrations
             '''
             result = self._values.get("app_integrations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.AppIntegrationsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.AppIntegrationsConfigurationProperty"]], result)
 
         @builtins.property
         def managed_source_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.ManagedSourceConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ManagedSourceConfigurationProperty"]]:
             '''Source configuration for managed resources.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-sourceconfiguration.html#cfn-wisdom-knowledgebase-sourceconfiguration-managedsourceconfiguration
             '''
             result = self._values.get("managed_source_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.ManagedSourceConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ManagedSourceConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8187,7 +8357,7 @@ class CfnKnowledgeBase(
         def __init__(
             self,
             *,
-            seed_urls: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.SeedUrlProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            seed_urls: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.SeedUrlProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The configuration of the URL/URLs for the web content that you want to crawl.
 
@@ -8220,13 +8390,13 @@ class CfnKnowledgeBase(
         @builtins.property
         def seed_urls(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.SeedUrlProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.SeedUrlProperty"]]]]:
             '''List of URLs for crawling.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-urlconfiguration.html#cfn-wisdom-knowledgebase-urlconfiguration-seedurls
             '''
             result = self._values.get("seed_urls")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.SeedUrlProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.SeedUrlProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8251,8 +8421,8 @@ class CfnKnowledgeBase(
         def __init__(
             self,
             *,
-            chunking_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.ChunkingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            parsing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.ParsingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            chunking_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.ChunkingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parsing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.ParsingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Contains details about how to ingest the documents in a data source.
 
@@ -8317,7 +8487,7 @@ class CfnKnowledgeBase(
         @builtins.property
         def chunking_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.ChunkingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ChunkingConfigurationProperty"]]:
             '''Details about how to chunk the documents in the data source.
 
             A chunk refers to an excerpt from a data source that is returned when the knowledge base that it belongs to is queried.
@@ -8325,18 +8495,18 @@ class CfnKnowledgeBase(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-vectoringestionconfiguration.html#cfn-wisdom-knowledgebase-vectoringestionconfiguration-chunkingconfiguration
             '''
             result = self._values.get("chunking_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.ChunkingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ChunkingConfigurationProperty"]], result)
 
         @builtins.property
         def parsing_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.ParsingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ParsingConfigurationProperty"]]:
             '''A custom parser for data source documents.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-vectoringestionconfiguration.html#cfn-wisdom-knowledgebase-vectoringestionconfiguration-parsingconfiguration
             '''
             result = self._values.get("parsing_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.ParsingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ParsingConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8364,8 +8534,8 @@ class CfnKnowledgeBase(
         def __init__(
             self,
             *,
-            url_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.UrlConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            crawler_limits: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.CrawlerLimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            url_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.UrlConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            crawler_limits: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.CrawlerLimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             exclusion_filters: typing.Optional[typing.Sequence[builtins.str]] = None,
             inclusion_filters: typing.Optional[typing.Sequence[builtins.str]] = None,
             scope: typing.Optional[builtins.str] = None,
@@ -8425,7 +8595,7 @@ class CfnKnowledgeBase(
         @builtins.property
         def url_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.UrlConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.UrlConfigurationProperty"]:
             '''The configuration of the URL/URLs for the web content that you want to crawl.
 
             You should be authorized to crawl the URLs.
@@ -8434,18 +8604,18 @@ class CfnKnowledgeBase(
             '''
             result = self._values.get("url_configuration")
             assert result is not None, "Required property 'url_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.UrlConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.UrlConfigurationProperty"], result)
 
         @builtins.property
         def crawler_limits(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.CrawlerLimitsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.CrawlerLimitsProperty"]]:
             '''The configuration of crawl limits for the web URLs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-knowledgebase-webcrawlerconfiguration.html#cfn-wisdom-knowledgebase-webcrawlerconfiguration-crawlerlimits
             '''
             result = self._values.get("crawler_limits")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.CrawlerLimitsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.CrawlerLimitsProperty"]], result)
 
         @builtins.property
         def exclusion_filters(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -8513,11 +8683,11 @@ class CfnKnowledgeBaseProps:
         knowledge_base_type: builtins.str,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        rendering_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKnowledgeBase.RenderingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        server_side_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKnowledgeBase.SourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vector_ingestion_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKnowledgeBase.VectorIngestionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        rendering_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.RenderingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        server_side_encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.SourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vector_ingestion_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKnowledgeBase.VectorIngestionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnKnowledgeBase``.
 
@@ -8535,6 +8705,7 @@ class CfnKnowledgeBaseProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_wisdom as wisdom
@@ -8678,18 +8849,18 @@ class CfnKnowledgeBaseProps:
     @builtins.property
     def rendering_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnKnowledgeBase.RenderingConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.RenderingConfigurationProperty"]]:
         '''Information about how to render the content.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-knowledgebase.html#cfn-wisdom-knowledgebase-renderingconfiguration
         '''
         result = self._values.get("rendering_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnKnowledgeBase.RenderingConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.RenderingConfigurationProperty"]], result)
 
     @builtins.property
     def server_side_encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty"]]:
         '''This customer managed key must have a policy that allows ``kms:CreateGrant`` and ``kms:DescribeKey`` permissions to the IAM identity using the key to invoke Wisdom.
 
         For more information about setting up a customer managed key for Wisdom, see `Enable Amazon Connect Wisdom for your instance <https://docs.aws.amazon.com/connect/latest/adminguide/enable-wisdom.html>`_ . For information about valid ID values, see `Key identifiers (KeyId) <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id>`_ in the *AWS Key Management Service Developer Guide* .
@@ -8697,12 +8868,12 @@ class CfnKnowledgeBaseProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-knowledgebase.html#cfn-wisdom-knowledgebase-serversideencryptionconfiguration
         '''
         result = self._values.get("server_side_encryption_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.ServerSideEncryptionConfigurationProperty"]], result)
 
     @builtins.property
     def source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnKnowledgeBase.SourceConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.SourceConfigurationProperty"]]:
         '''The source of the knowledge base content.
 
         Only set this argument for EXTERNAL or Managed knowledge bases.
@@ -8710,27 +8881,27 @@ class CfnKnowledgeBaseProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-knowledgebase.html#cfn-wisdom-knowledgebase-sourceconfiguration
         '''
         result = self._values.get("source_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnKnowledgeBase.SourceConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.SourceConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags used to organize, track, or control access for this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-knowledgebase.html#cfn-wisdom-knowledgebase-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def vector_ingestion_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnKnowledgeBase.VectorIngestionConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.VectorIngestionConfigurationProperty"]]:
         '''Contains details about how to ingest the documents in a data source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-knowledgebase.html#cfn-wisdom-knowledgebase-vectoringestionconfiguration
         '''
         result = self._values.get("vector_ingestion_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnKnowledgeBase.VectorIngestionConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKnowledgeBase.VectorIngestionConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8760,6 +8931,7 @@ class CfnMessageTemplate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_wisdom as wisdom
@@ -8896,19 +9068,19 @@ class CfnMessageTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         channel_subtype: builtins.str,
-        content: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.ContentProperty", typing.Dict[builtins.str, typing.Any]]],
+        content: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.ContentProperty", typing.Dict[builtins.str, typing.Any]]],
         knowledge_base_arn: builtins.str,
         name: builtins.str,
-        default_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.MessageTemplateAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        default_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.MessageTemplateAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        grouping_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.GroupingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        grouping_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.GroupingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         language: typing.Optional[builtins.str] = None,
-        message_template_attachments: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.MessageTemplateAttachmentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        message_template_attachments: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.MessageTemplateAttachmentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Wisdom::MessageTemplate``.
 
@@ -8948,7 +9120,7 @@ class CfnMessageTemplate(
     @builtins.classmethod
     def arn_for_message_template(
         cls,
-        resource: _IMessageTemplateRef_33cb5cda,
+        resource: "_IMessageTemplateRef_33cb5cda",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -8971,7 +9143,7 @@ class CfnMessageTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMessageTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9031,9 +9203,9 @@ class CfnMessageTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -9042,9 +9214,9 @@ class CfnMessageTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="messageTemplateRef")
-    def message_template_ref(self) -> _MessageTemplateReference_c248ed47:
+    def message_template_ref(self) -> "_MessageTemplateReference_c248ed47":
         '''A reference to a MessageTemplate resource.'''
-        return typing.cast(_MessageTemplateReference_c248ed47, jsii.get(self, "messageTemplateRef"))
+        return typing.cast("_MessageTemplateReference_c248ed47", jsii.get(self, "messageTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="channelSubtype")
@@ -9063,14 +9235,14 @@ class CfnMessageTemplate(
     @jsii.member(jsii_name="content")
     def content(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.ContentProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.ContentProperty"]:
         '''The content of the message template.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.ContentProperty"], jsii.get(self, "content"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.ContentProperty"], jsii.get(self, "content"))
 
     @content.setter
     def content(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.ContentProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.ContentProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1ee7a5f3ae13619e783db2bde4848cd5e3d84a6c38e5cf0e040a3d6810a2b619)
@@ -9107,14 +9279,14 @@ class CfnMessageTemplate(
     @jsii.member(jsii_name="defaultAttributes")
     def default_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.MessageTemplateAttributesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateAttributesProperty"]]:
         '''An object that specifies the default values to use for variables in the message template.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.MessageTemplateAttributesProperty"]], jsii.get(self, "defaultAttributes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateAttributesProperty"]], jsii.get(self, "defaultAttributes"))
 
     @default_attributes.setter
     def default_attributes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.MessageTemplateAttributesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateAttributesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9c90c4e95d1b7bc695fb4935b1c99d447bbd24e9da4bc0367c93bcfe1269fbe2)
@@ -9138,14 +9310,14 @@ class CfnMessageTemplate(
     @jsii.member(jsii_name="groupingConfiguration")
     def grouping_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.GroupingConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.GroupingConfigurationProperty"]]:
         '''The configuration information of the external data source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.GroupingConfigurationProperty"]], jsii.get(self, "groupingConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.GroupingConfigurationProperty"]], jsii.get(self, "groupingConfiguration"))
 
     @grouping_configuration.setter
     def grouping_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.GroupingConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.GroupingConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a293700b704f958a326ada96bec14e09605f0a2af76a1972e28306ecd1c0bea9)
@@ -9169,14 +9341,14 @@ class CfnMessageTemplate(
     @jsii.member(jsii_name="messageTemplateAttachments")
     def message_template_attachments(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.MessageTemplateAttachmentProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateAttachmentProperty"]]]]:
         '''List of message template attachments.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.MessageTemplateAttachmentProperty"]]]], jsii.get(self, "messageTemplateAttachments"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateAttachmentProperty"]]]], jsii.get(self, "messageTemplateAttachments"))
 
     @message_template_attachments.setter
     def message_template_attachments(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.MessageTemplateAttachmentProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateAttachmentProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__99e58f577d070d3c392b7519e6ec169337ff707d8d0fbec1d5b147b3eb27b11a)
@@ -9185,12 +9357,12 @@ class CfnMessageTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags used to organize, track, or control access for this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2a8749d4385c7e2fd758f8b86ee5b36af0b25c3e531a4c7936791aa080a35421)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9278,8 +9450,8 @@ class CfnMessageTemplate(
         def __init__(
             self,
             *,
-            email_message_template_content: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.EmailMessageTemplateContentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sms_message_template_content: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.SmsMessageTemplateContentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            email_message_template_content: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.EmailMessageTemplateContentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sms_message_template_content: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.SmsMessageTemplateContentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The content of the message template.
 
@@ -9333,24 +9505,24 @@ class CfnMessageTemplate(
         @builtins.property
         def email_message_template_content(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.EmailMessageTemplateContentProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.EmailMessageTemplateContentProperty"]]:
             '''The content of the message template that applies to the email channel subtype.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-content.html#cfn-wisdom-messagetemplate-content-emailmessagetemplatecontent
             '''
             result = self._values.get("email_message_template_content")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.EmailMessageTemplateContentProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.EmailMessageTemplateContentProperty"]], result)
 
         @builtins.property
         def sms_message_template_content(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.SmsMessageTemplateContentProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.SmsMessageTemplateContentProperty"]]:
             '''The content of message template that applies to SMS channel subtype.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-content.html#cfn-wisdom-messagetemplate-content-smsmessagetemplatecontent
             '''
             result = self._values.get("sms_message_template_content")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.SmsMessageTemplateContentProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.SmsMessageTemplateContentProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9454,7 +9626,7 @@ class CfnMessageTemplate(
             city: typing.Optional[builtins.str] = None,
             country: typing.Optional[builtins.str] = None,
             county: typing.Optional[builtins.str] = None,
-            custom: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            custom: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             email_address: typing.Optional[builtins.str] = None,
             first_name: typing.Optional[builtins.str] = None,
             gender: typing.Optional[builtins.str] = None,
@@ -10011,13 +10183,13 @@ class CfnMessageTemplate(
         @builtins.property
         def custom(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The custom attributes in customer profile attributes.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-customerprofileattributes.html#cfn-wisdom-messagetemplate-customerprofileattributes-custom
             '''
             result = self._values.get("custom")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def email_address(self) -> typing.Optional[builtins.str]:
@@ -10345,8 +10517,8 @@ class CfnMessageTemplate(
         def __init__(
             self,
             *,
-            html: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.MessageTemplateBodyContentProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            plain_text: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.MessageTemplateBodyContentProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            html: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.MessageTemplateBodyContentProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            plain_text: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.MessageTemplateBodyContentProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The body to use in email messages.
 
@@ -10384,7 +10556,7 @@ class CfnMessageTemplate(
         @builtins.property
         def html(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.MessageTemplateBodyContentProviderProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateBodyContentProviderProperty"]]:
             '''The message body, in HTML format, to use in email messages that are based on the message template.
 
             We recommend using HTML format for email clients that render HTML content. You can include links, formatted text, and more in an HTML message.
@@ -10392,12 +10564,12 @@ class CfnMessageTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-emailmessagetemplatecontentbody.html#cfn-wisdom-messagetemplate-emailmessagetemplatecontentbody-html
             '''
             result = self._values.get("html")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.MessageTemplateBodyContentProviderProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateBodyContentProviderProperty"]], result)
 
         @builtins.property
         def plain_text(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.MessageTemplateBodyContentProviderProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateBodyContentProviderProperty"]]:
             '''The message body, in plain text format, to use in email messages that are based on the message template.
 
             We recommend using plain text format for email clients that don't render HTML content and clients that are connected to high-latency networks, such as mobile devices.
@@ -10405,7 +10577,7 @@ class CfnMessageTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-emailmessagetemplatecontentbody.html#cfn-wisdom-messagetemplate-emailmessagetemplatecontentbody-plaintext
             '''
             result = self._values.get("plain_text")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.MessageTemplateBodyContentProviderProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateBodyContentProviderProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10427,8 +10599,8 @@ class CfnMessageTemplate(
         def __init__(
             self,
             *,
-            body: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.EmailMessageTemplateContentBodyProperty", typing.Dict[builtins.str, typing.Any]]],
-            headers: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.EmailMessageTemplateHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            body: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.EmailMessageTemplateContentBodyProperty", typing.Dict[builtins.str, typing.Any]]],
+            headers: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.EmailMessageTemplateHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]],
             subject: builtins.str,
         ) -> None:
             '''The content of the message template that applies to the email channel subtype.
@@ -10476,26 +10648,26 @@ class CfnMessageTemplate(
         @builtins.property
         def body(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.EmailMessageTemplateContentBodyProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.EmailMessageTemplateContentBodyProperty"]:
             '''The body to use in email messages.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-emailmessagetemplatecontent.html#cfn-wisdom-messagetemplate-emailmessagetemplatecontent-body
             '''
             result = self._values.get("body")
             assert result is not None, "Required property 'body' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.EmailMessageTemplateContentBodyProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.EmailMessageTemplateContentBodyProperty"], result)
 
         @builtins.property
         def headers(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.EmailMessageTemplateHeaderProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.EmailMessageTemplateHeaderProperty"]]]:
             '''The email headers to include in email messages.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-emailmessagetemplatecontent.html#cfn-wisdom-messagetemplate-emailmessagetemplatecontent-headers
             '''
             result = self._values.get("headers")
             assert result is not None, "Required property 'headers' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.EmailMessageTemplateHeaderProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.EmailMessageTemplateHeaderProperty"]]], result)
 
         @builtins.property
         def subject(self) -> builtins.str:
@@ -10775,10 +10947,10 @@ class CfnMessageTemplate(
         def __init__(
             self,
             *,
-            agent_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.AgentAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            custom_attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            customer_profile_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.CustomerProfileAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            system_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.SystemAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            agent_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.AgentAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom_attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            customer_profile_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.CustomerProfileAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            system_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.SystemAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The attributes that are used with the message template.
 
@@ -10896,46 +11068,46 @@ class CfnMessageTemplate(
         @builtins.property
         def agent_attributes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.AgentAttributesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.AgentAttributesProperty"]]:
             '''The agent attributes that are used with the message template.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-messagetemplateattributes.html#cfn-wisdom-messagetemplate-messagetemplateattributes-agentattributes
             '''
             result = self._values.get("agent_attributes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.AgentAttributesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.AgentAttributesProperty"]], result)
 
         @builtins.property
         def custom_attributes(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The custom attributes that are used with the message template.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-messagetemplateattributes.html#cfn-wisdom-messagetemplate-messagetemplateattributes-customattributes
             '''
             result = self._values.get("custom_attributes")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def customer_profile_attributes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.CustomerProfileAttributesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.CustomerProfileAttributesProperty"]]:
             '''The customer profile attributes that are used with the message template.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-messagetemplateattributes.html#cfn-wisdom-messagetemplate-messagetemplateattributes-customerprofileattributes
             '''
             result = self._values.get("customer_profile_attributes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.CustomerProfileAttributesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.CustomerProfileAttributesProperty"]], result)
 
         @builtins.property
         def system_attributes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.SystemAttributesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.SystemAttributesProperty"]]:
             '''The system attributes that are used with the message template.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-messagetemplateattributes.html#cfn-wisdom-messagetemplate-messagetemplateattributes-systemattributes
             '''
             result = self._values.get("system_attributes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.SystemAttributesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.SystemAttributesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11008,7 +11180,7 @@ class CfnMessageTemplate(
         def __init__(
             self,
             *,
-            plain_text: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.MessageTemplateBodyContentProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            plain_text: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.MessageTemplateBodyContentProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The body to use in SMS messages.
 
@@ -11039,13 +11211,13 @@ class CfnMessageTemplate(
         @builtins.property
         def plain_text(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.MessageTemplateBodyContentProviderProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateBodyContentProviderProperty"]]:
             '''The message body to use in SMS messages.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-smsmessagetemplatecontentbody.html#cfn-wisdom-messagetemplate-smsmessagetemplatecontentbody-plaintext
             '''
             result = self._values.get("plain_text")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.MessageTemplateBodyContentProviderProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateBodyContentProviderProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11067,7 +11239,7 @@ class CfnMessageTemplate(
         def __init__(
             self,
             *,
-            body: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.SmsMessageTemplateContentBodyProperty", typing.Dict[builtins.str, typing.Any]]],
+            body: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.SmsMessageTemplateContentBodyProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The content of the message template that applies to the SMS channel subtype.
 
@@ -11100,14 +11272,14 @@ class CfnMessageTemplate(
         @builtins.property
         def body(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.SmsMessageTemplateContentBodyProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.SmsMessageTemplateContentBodyProperty"]:
             '''The body to use in SMS messages.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-smsmessagetemplatecontent.html#cfn-wisdom-messagetemplate-smsmessagetemplatecontent-body
             '''
             result = self._values.get("body")
             assert result is not None, "Required property 'body' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.SmsMessageTemplateContentBodyProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.SmsMessageTemplateContentBodyProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11133,9 +11305,9 @@ class CfnMessageTemplate(
         def __init__(
             self,
             *,
-            customer_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.SystemEndpointAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            customer_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.SystemEndpointAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             name: typing.Optional[builtins.str] = None,
-            system_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMessageTemplate.SystemEndpointAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            system_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.SystemEndpointAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The system attributes that are used with the message template.
 
@@ -11178,13 +11350,13 @@ class CfnMessageTemplate(
         @builtins.property
         def customer_endpoint(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.SystemEndpointAttributesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.SystemEndpointAttributesProperty"]]:
             '''The CustomerEndpoint attribute.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-systemattributes.html#cfn-wisdom-messagetemplate-systemattributes-customerendpoint
             '''
             result = self._values.get("customer_endpoint")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.SystemEndpointAttributesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.SystemEndpointAttributesProperty"]], result)
 
         @builtins.property
         def name(self) -> typing.Optional[builtins.str]:
@@ -11198,13 +11370,13 @@ class CfnMessageTemplate(
         @builtins.property
         def system_endpoint(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.SystemEndpointAttributesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.SystemEndpointAttributesProperty"]]:
             '''The SystemEndpoint attribute.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-messagetemplate-systemattributes.html#cfn-wisdom-messagetemplate-systemattributes-systemendpoint
             '''
             result = self._values.get("system_endpoint")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMessageTemplate.SystemEndpointAttributesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.SystemEndpointAttributesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11290,15 +11462,15 @@ class CfnMessageTemplateProps:
         self,
         *,
         channel_subtype: builtins.str,
-        content: typing.Union[_IResolvable_da3f097b, typing.Union[CfnMessageTemplate.ContentProperty, typing.Dict[builtins.str, typing.Any]]],
+        content: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.ContentProperty", typing.Dict[builtins.str, typing.Any]]],
         knowledge_base_arn: builtins.str,
         name: builtins.str,
-        default_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMessageTemplate.MessageTemplateAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        default_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.MessageTemplateAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        grouping_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMessageTemplate.GroupingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        grouping_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.GroupingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         language: typing.Optional[builtins.str] = None,
-        message_template_attachments: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMessageTemplate.MessageTemplateAttachmentProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        message_template_attachments: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMessageTemplate.MessageTemplateAttachmentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMessageTemplate``.
 
@@ -11318,6 +11490,7 @@ class CfnMessageTemplateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_wisdom as wisdom
@@ -11495,14 +11668,14 @@ class CfnMessageTemplateProps:
     @builtins.property
     def content(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnMessageTemplate.ContentProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.ContentProperty"]:
         '''The content of the message template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-messagetemplate.html#cfn-wisdom-messagetemplate-content
         '''
         result = self._values.get("content")
         assert result is not None, "Required property 'content' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnMessageTemplate.ContentProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.ContentProperty"], result)
 
     @builtins.property
     def knowledge_base_arn(self) -> builtins.str:
@@ -11527,7 +11700,7 @@ class CfnMessageTemplateProps:
     @builtins.property
     def default_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMessageTemplate.MessageTemplateAttributesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateAttributesProperty"]]:
         '''An object that specifies the default values to use for variables in the message template.
 
         This object contains different categories of key-value pairs. Each key defines a variable or placeholder in the message template. The corresponding value defines the default value for that variable.
@@ -11535,7 +11708,7 @@ class CfnMessageTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-messagetemplate.html#cfn-wisdom-messagetemplate-defaultattributes
         '''
         result = self._values.get("default_attributes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMessageTemplate.MessageTemplateAttributesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateAttributesProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -11549,13 +11722,13 @@ class CfnMessageTemplateProps:
     @builtins.property
     def grouping_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMessageTemplate.GroupingConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.GroupingConfigurationProperty"]]:
         '''The configuration information of the external data source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-messagetemplate.html#cfn-wisdom-messagetemplate-groupingconfiguration
         '''
         result = self._values.get("grouping_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMessageTemplate.GroupingConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.GroupingConfigurationProperty"]], result)
 
     @builtins.property
     def language(self) -> typing.Optional[builtins.str]:
@@ -11571,22 +11744,22 @@ class CfnMessageTemplateProps:
     @builtins.property
     def message_template_attachments(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMessageTemplate.MessageTemplateAttachmentProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateAttachmentProperty"]]]]:
         '''List of message template attachments.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-messagetemplate.html#cfn-wisdom-messagetemplate-messagetemplateattachments
         '''
         result = self._values.get("message_template_attachments")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMessageTemplate.MessageTemplateAttachmentProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMessageTemplate.MessageTemplateAttachmentProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags used to organize, track, or control access for this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-messagetemplate.html#cfn-wisdom-messagetemplate-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11630,7 +11803,7 @@ class CfnMessageTemplateVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         message_template_arn: builtins.str,
@@ -11658,7 +11831,7 @@ class CfnMessageTemplateVersion(
     @builtins.classmethod
     def arn_for_message_template_version(
         cls,
-        resource: _IMessageTemplateVersionRef_a8d8bbb4,
+        resource: "_IMessageTemplateVersionRef_a8d8bbb4",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -11681,7 +11854,7 @@ class CfnMessageTemplateVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMessageTemplateVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -11721,12 +11894,12 @@ class CfnMessageTemplateVersion(
 
     @builtins.property
     @jsii.member(jsii_name="attrMessageTemplateVersionNumber")
-    def attr_message_template_version_number(self) -> _IResolvable_da3f097b:
+    def attr_message_template_version_number(self) -> "_IResolvable_da3f097b":
         '''The version number for this Message Template Version.
 
         :cloudformationAttribute: MessageTemplateVersionNumber
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrMessageTemplateVersionNumber"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrMessageTemplateVersionNumber"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -11735,9 +11908,11 @@ class CfnMessageTemplateVersion(
 
     @builtins.property
     @jsii.member(jsii_name="messageTemplateVersionRef")
-    def message_template_version_ref(self) -> _MessageTemplateVersionReference_ce6119ac:
+    def message_template_version_ref(
+        self,
+    ) -> "_MessageTemplateVersionReference_ce6119ac":
         '''A reference to a MessageTemplateVersion resource.'''
-        return typing.cast(_MessageTemplateVersionReference_ce6119ac, jsii.get(self, "messageTemplateVersionRef"))
+        return typing.cast("_MessageTemplateVersionReference_ce6119ac", jsii.get(self, "messageTemplateVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="messageTemplateArn")
@@ -11860,6 +12035,7 @@ class CfnQuickResponse(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_wisdom as wisdom
@@ -11891,20 +12067,20 @@ class CfnQuickResponse(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        content: typing.Union[_IResolvable_da3f097b, typing.Union["CfnQuickResponse.QuickResponseContentProviderProperty", typing.Dict[builtins.str, typing.Any]]],
+        content: typing.Union["_IResolvable_da3f097b", typing.Union["CfnQuickResponse.QuickResponseContentProviderProperty", typing.Dict[builtins.str, typing.Any]]],
         knowledge_base_arn: builtins.str,
         name: builtins.str,
         channels: typing.Optional[typing.Sequence[builtins.str]] = None,
         content_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        grouping_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQuickResponse.GroupingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        is_active: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        grouping_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQuickResponse.GroupingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        is_active: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         language: typing.Optional[builtins.str] = None,
         shortcut_key: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Wisdom::QuickResponse``.
 
@@ -11946,7 +12122,7 @@ class CfnQuickResponse(
     @builtins.classmethod
     def arn_for_quick_response(
         cls,
-        resource: _IQuickResponseRef_d5eda766,
+        resource: "_IQuickResponseRef_d5eda766",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -11969,7 +12145,7 @@ class CfnQuickResponse(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQuickResponse", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12000,12 +12176,12 @@ class CfnQuickResponse(
 
     @builtins.property
     @jsii.member(jsii_name="attrContents")
-    def attr_contents(self) -> _IResolvable_da3f097b:
+    def attr_contents(self) -> "_IResolvable_da3f097b":
         '''The content of the quick response stored in different media types.
 
         :cloudformationAttribute: Contents
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrContents"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrContents"))
 
     @builtins.property
     @jsii.member(jsii_name="attrQuickResponseArn")
@@ -12036,9 +12212,9 @@ class CfnQuickResponse(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -12047,22 +12223,22 @@ class CfnQuickResponse(
 
     @builtins.property
     @jsii.member(jsii_name="quickResponseRef")
-    def quick_response_ref(self) -> _QuickResponseReference_1a8a32ff:
+    def quick_response_ref(self) -> "_QuickResponseReference_1a8a32ff":
         '''A reference to a QuickResponse resource.'''
-        return typing.cast(_QuickResponseReference_1a8a32ff, jsii.get(self, "quickResponseRef"))
+        return typing.cast("_QuickResponseReference_1a8a32ff", jsii.get(self, "quickResponseRef"))
 
     @builtins.property
     @jsii.member(jsii_name="content")
     def content(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnQuickResponse.QuickResponseContentProviderProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.QuickResponseContentProviderProperty"]:
         '''The content of the quick response.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnQuickResponse.QuickResponseContentProviderProperty"], jsii.get(self, "content"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.QuickResponseContentProviderProperty"], jsii.get(self, "content"))
 
     @content.setter
     def content(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnQuickResponse.QuickResponseContentProviderProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.QuickResponseContentProviderProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f9dfed0b86363ddee2b73b59a4f8b9559cdd5914e6289f92f15feac8409c416b)
@@ -12138,14 +12314,14 @@ class CfnQuickResponse(
     @jsii.member(jsii_name="groupingConfiguration")
     def grouping_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQuickResponse.GroupingConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.GroupingConfigurationProperty"]]:
         '''The configuration information of the user groups that the quick response is accessible to.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQuickResponse.GroupingConfigurationProperty"]], jsii.get(self, "groupingConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.GroupingConfigurationProperty"]], jsii.get(self, "groupingConfiguration"))
 
     @grouping_configuration.setter
     def grouping_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQuickResponse.GroupingConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.GroupingConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2ec3f31a69e16fce2ffc00474e1f2852bd0e753c6a3e973b7255a9d4d7f64a45)
@@ -12156,14 +12332,14 @@ class CfnQuickResponse(
     @jsii.member(jsii_name="isActive")
     def is_active(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether the quick response is active.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "isActive"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "isActive"))
 
     @is_active.setter
     def is_active(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5d8198e1c8f2c5b8c3703976122f2d1b18fe79607316aa0a9b449b4cd01026e9)
@@ -12198,12 +12374,12 @@ class CfnQuickResponse(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags used to organize, track, or control access for this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2727d6beae8f791672bb80625961e3def8262f5b47864ede2817419f60527d6a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -12346,8 +12522,8 @@ class CfnQuickResponse(
         def __init__(
             self,
             *,
-            markdown: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQuickResponse.QuickResponseContentProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            plain_text: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQuickResponse.QuickResponseContentProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            markdown: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQuickResponse.QuickResponseContentProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            plain_text: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQuickResponse.QuickResponseContentProviderProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The content of the quick response stored in different media types.
 
@@ -12385,24 +12561,24 @@ class CfnQuickResponse(
         @builtins.property
         def markdown(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQuickResponse.QuickResponseContentProviderProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.QuickResponseContentProviderProperty"]]:
             '''The quick response content in markdown format.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-quickresponse-quickresponsecontents.html#cfn-wisdom-quickresponse-quickresponsecontents-markdown
             '''
             result = self._values.get("markdown")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQuickResponse.QuickResponseContentProviderProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.QuickResponseContentProviderProperty"]], result)
 
         @builtins.property
         def plain_text(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQuickResponse.QuickResponseContentProviderProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.QuickResponseContentProviderProperty"]]:
             '''The quick response content in plaintext format.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-quickresponse-quickresponsecontents.html#cfn-wisdom-quickresponse-quickresponsecontents-plaintext
             '''
             result = self._values.get("plain_text")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQuickResponse.QuickResponseContentProviderProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.QuickResponseContentProviderProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12437,17 +12613,17 @@ class CfnQuickResponseProps:
     def __init__(
         self,
         *,
-        content: typing.Union[_IResolvable_da3f097b, typing.Union[CfnQuickResponse.QuickResponseContentProviderProperty, typing.Dict[builtins.str, typing.Any]]],
+        content: typing.Union["_IResolvable_da3f097b", typing.Union["CfnQuickResponse.QuickResponseContentProviderProperty", typing.Dict[builtins.str, typing.Any]]],
         knowledge_base_arn: builtins.str,
         name: builtins.str,
         channels: typing.Optional[typing.Sequence[builtins.str]] = None,
         content_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        grouping_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnQuickResponse.GroupingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        is_active: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        grouping_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQuickResponse.GroupingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        is_active: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         language: typing.Optional[builtins.str] = None,
         shortcut_key: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnQuickResponse``.
 
@@ -12468,6 +12644,7 @@ class CfnQuickResponseProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_wisdom as wisdom
@@ -12534,14 +12711,14 @@ class CfnQuickResponseProps:
     @builtins.property
     def content(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnQuickResponse.QuickResponseContentProviderProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.QuickResponseContentProviderProperty"]:
         '''The content of the quick response.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-quickresponse.html#cfn-wisdom-quickresponse-content
         '''
         result = self._values.get("content")
         assert result is not None, "Required property 'content' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnQuickResponse.QuickResponseContentProviderProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.QuickResponseContentProviderProperty"], result)
 
     @builtins.property
     def knowledge_base_arn(self) -> builtins.str:
@@ -12598,24 +12775,24 @@ class CfnQuickResponseProps:
     @builtins.property
     def grouping_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnQuickResponse.GroupingConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.GroupingConfigurationProperty"]]:
         '''The configuration information of the user groups that the quick response is accessible to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-quickresponse.html#cfn-wisdom-quickresponse-groupingconfiguration
         '''
         result = self._values.get("grouping_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnQuickResponse.GroupingConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQuickResponse.GroupingConfigurationProperty"]], result)
 
     @builtins.property
     def is_active(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether the quick response is active.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-quickresponse.html#cfn-wisdom-quickresponse-isactive
         '''
         result = self._values.get("is_active")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def language(self) -> typing.Optional[builtins.str]:
@@ -12640,13 +12817,13 @@ class CfnQuickResponseProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags used to organize, track, or control access for this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wisdom-quickresponse.html#cfn-wisdom-quickresponse-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

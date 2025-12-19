@@ -156,64 +156,64 @@ class EdgeFunction(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         stack_id: typing.Optional[builtins.str] = None,
-        code: _Code_7848f942,
+        code: "_Code_7848f942",
         handler: builtins.str,
-        runtime: _Runtime_b4eaa844,
-        adot_instrumentation: typing.Optional[typing.Union[_AdotInstrumentationConfig_7c38d65d, typing.Dict[builtins.str, typing.Any]]] = None,
+        runtime: "_Runtime_b4eaa844",
+        adot_instrumentation: typing.Optional[typing.Union["_AdotInstrumentationConfig_7c38d65d", typing.Dict[builtins.str, typing.Any]]] = None,
         allow_all_ipv6_outbound: typing.Optional[builtins.bool] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         allow_public_subnet: typing.Optional[builtins.bool] = None,
         application_log_level: typing.Optional[builtins.str] = None,
-        application_log_level_v2: typing.Optional[_ApplicationLogLevel_cd92660a] = None,
-        architecture: typing.Optional[_Architecture_12d5a53f] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
-        current_version_options: typing.Optional[typing.Union[_VersionOptions_981bb3c0, typing.Dict[builtins.str, typing.Any]]] = None,
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        application_log_level_v2: typing.Optional["_ApplicationLogLevel_cd92660a"] = None,
+        architecture: typing.Optional["_Architecture_12d5a53f"] = None,
+        code_signing_config: typing.Optional["_ICodeSigningConfigRef_1d909622"] = None,
+        current_version_options: typing.Optional[typing.Union["_VersionOptions_981bb3c0", typing.Dict[builtins.str, typing.Any]]] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
-        dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
+        dead_letter_topic: typing.Optional["_ITopic_9eca4852"] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[_DurableConfig_05b238fa, typing.Dict[builtins.str, typing.Any]]] = None,
+        durable_config: typing.Optional[typing.Union["_DurableConfig_05b238fa", typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
-        events: typing.Optional[typing.Sequence[_IEventSource_3686b3f8]] = None,
-        filesystem: typing.Optional[_FileSystem_a5fa005d] = None,
+        environment_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
+        events: typing.Optional[typing.Sequence["_IEventSource_3686b3f8"]] = None,
+        filesystem: typing.Optional["_FileSystem_a5fa005d"] = None,
         function_name: typing.Optional[builtins.str] = None,
-        initial_policy: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
-        insights_version: typing.Optional[_LambdaInsightsVersion_9dfbfef9] = None,
+        initial_policy: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
+        insights_version: typing.Optional["_LambdaInsightsVersion_9dfbfef9"] = None,
         ipv6_allowed_for_dual_stack: typing.Optional[builtins.bool] = None,
-        layers: typing.Optional[typing.Sequence[_ILayerVersion_5ac127c8]] = None,
+        layers: typing.Optional[typing.Sequence["_ILayerVersion_5ac127c8"]] = None,
         log_format: typing.Optional[builtins.str] = None,
-        logging_format: typing.Optional[_LoggingFormat_30be8e01] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
-        log_retention_retry_options: typing.Optional[typing.Union[_LogRetentionRetryOptions_ad797a7a, typing.Dict[builtins.str, typing.Any]]] = None,
-        log_retention_role: typing.Optional[_IRole_235f5d8e] = None,
+        logging_format: typing.Optional["_LoggingFormat_30be8e01"] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
+        log_retention_retry_options: typing.Optional[typing.Union["_LogRetentionRetryOptions_ad797a7a", typing.Dict[builtins.str, typing.Any]]] = None,
+        log_retention_role: typing.Optional["_IRole_235f5d8e"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
-        params_and_secrets: typing.Optional[_ParamsAndSecretsLayerVersion_dce97f06] = None,
+        params_and_secrets: typing.Optional["_ParamsAndSecretsLayerVersion_dce97f06"] = None,
         profiling: typing.Optional[builtins.bool] = None,
-        profiling_group: typing.Optional[_IProfilingGroup_0bba72c4] = None,
-        recursive_loop: typing.Optional[_RecursiveLoop_fc293827] = None,
+        profiling_group: typing.Optional["_IProfilingGroup_0bba72c4"] = None,
+        recursive_loop: typing.Optional["_RecursiveLoop_fc293827"] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        runtime_management_mode: typing.Optional[_RuntimeManagementMode_688c173b] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        snap_start: typing.Optional[_SnapStartConf_2ffaa769] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        runtime_management_mode: typing.Optional["_RuntimeManagementMode_688c173b"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        snap_start: typing.Optional["_SnapStartConf_2ffaa769"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
-        system_log_level_v2: typing.Optional[_SystemLogLevel_aea49dc2] = None,
-        tenancy_config: typing.Optional[_TenancyConfig_9e2f75ea] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        tracing: typing.Optional[_Tracing_9fe8e2bb] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[_IDestination_40f19de4] = None,
-        on_success: typing.Optional[_IDestination_40f19de4] = None,
+        system_log_level_v2: typing.Optional["_SystemLogLevel_aea49dc2"] = None,
+        tenancy_config: typing.Optional["_TenancyConfig_9e2f75ea"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        tracing: typing.Optional["_Tracing_9fe8e2bb"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["_IDestination_40f19de4"] = None,
+        on_success: typing.Optional["_IDestination_40f19de4"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -346,14 +346,14 @@ class EdgeFunction(
         self,
         alias_name: builtins.str,
         *,
-        additional_versions: typing.Optional[typing.Sequence[typing.Union[_VersionWeight_64df085b, typing.Dict[builtins.str, typing.Any]]]] = None,
+        additional_versions: typing.Optional[typing.Sequence[typing.Union["_VersionWeight_64df085b", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[_IDestination_40f19de4] = None,
-        on_success: typing.Optional[_IDestination_40f19de4] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["_IDestination_40f19de4"] = None,
+        on_success: typing.Optional["_IDestination_40f19de4"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-    ) -> _Alias_55be8873:
+    ) -> "_Alias_55be8873":
         '''Defines an alias for this version.
 
         :param alias_name: -
@@ -378,10 +378,10 @@ class EdgeFunction(
             retry_attempts=retry_attempts,
         )
 
-        return typing.cast(_Alias_55be8873, jsii.invoke(self, "addAlias", [alias_name, options]))
+        return typing.cast("_Alias_55be8873", jsii.invoke(self, "addAlias", [alias_name, options]))
 
     @jsii.member(jsii_name="addEventSource")
-    def add_event_source(self, source: _IEventSource_3686b3f8) -> None:
+    def add_event_source(self, source: "_IEventSource_3686b3f8") -> None:
         '''Adds an event source to this function.
 
         :param source: -
@@ -400,27 +400,27 @@ class EdgeFunction(
         bisect_batch_on_error: typing.Optional[builtins.bool] = None,
         enabled: typing.Optional[builtins.bool] = None,
         event_source_arn: typing.Optional[builtins.str] = None,
-        filter_encryption: typing.Optional[_IKey_5f11635f] = None,
+        filter_encryption: typing.Optional["_IKey_5f11635f"] = None,
         filters: typing.Optional[typing.Sequence[typing.Mapping[builtins.str, typing.Any]]] = None,
         kafka_bootstrap_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         kafka_consumer_group_id: typing.Optional[builtins.str] = None,
         kafka_topic: typing.Optional[builtins.str] = None,
-        max_batching_window: typing.Optional[_Duration_4839e8c3] = None,
+        max_batching_window: typing.Optional["_Duration_4839e8c3"] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
-        max_record_age: typing.Optional[_Duration_4839e8c3] = None,
-        metrics_config: typing.Optional[typing.Union[_MetricsConfig_48ab59c4, typing.Dict[builtins.str, typing.Any]]] = None,
-        on_failure: typing.Optional[_IEventSourceDlq_5e2c6ad9] = None,
+        max_record_age: typing.Optional["_Duration_4839e8c3"] = None,
+        metrics_config: typing.Optional[typing.Union["_MetricsConfig_48ab59c4", typing.Dict[builtins.str, typing.Any]]] = None,
+        on_failure: typing.Optional["_IEventSourceDlq_5e2c6ad9"] = None,
         parallelization_factor: typing.Optional[jsii.Number] = None,
-        provisioned_poller_config: typing.Optional[typing.Union[_ProvisionedPollerConfig_1025e063, typing.Dict[builtins.str, typing.Any]]] = None,
+        provisioned_poller_config: typing.Optional[typing.Union["_ProvisionedPollerConfig_1025e063", typing.Dict[builtins.str, typing.Any]]] = None,
         report_batch_item_failures: typing.Optional[builtins.bool] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-        schema_registry_config: typing.Optional[_ISchemaRegistry_7e66a87f] = None,
-        source_access_configurations: typing.Optional[typing.Sequence[typing.Union[_SourceAccessConfiguration_1926ff89, typing.Dict[builtins.str, typing.Any]]]] = None,
-        starting_position: typing.Optional[_StartingPosition_c0a4852c] = None,
+        schema_registry_config: typing.Optional["_ISchemaRegistry_7e66a87f"] = None,
+        source_access_configurations: typing.Optional[typing.Sequence[typing.Union["_SourceAccessConfiguration_1926ff89", typing.Dict[builtins.str, typing.Any]]]] = None,
+        starting_position: typing.Optional["_StartingPosition_c0a4852c"] = None,
         starting_position_timestamp: typing.Optional[jsii.Number] = None,
         support_s3_on_failure_destination: typing.Optional[builtins.bool] = None,
-        tumbling_window: typing.Optional[_Duration_4839e8c3] = None,
-    ) -> _EventSourceMapping_556828d7:
+        tumbling_window: typing.Optional["_Duration_4839e8c3"] = None,
+    ) -> "_EventSourceMapping_556828d7":
         '''Adds an event source that maps to this AWS Lambda function.
 
         :param id: -
@@ -479,16 +479,16 @@ class EdgeFunction(
             tumbling_window=tumbling_window,
         )
 
-        return typing.cast(_EventSourceMapping_556828d7, jsii.invoke(self, "addEventSourceMapping", [id, options]))
+        return typing.cast("_EventSourceMapping_556828d7", jsii.invoke(self, "addEventSourceMapping", [id, options]))
 
     @jsii.member(jsii_name="addFunctionUrl")
     def add_function_url(
         self,
         *,
-        auth_type: typing.Optional[_FunctionUrlAuthType_9c7b2c86] = None,
-        cors: typing.Optional[typing.Union[_FunctionUrlCorsOptions_ca855cc0, typing.Dict[builtins.str, typing.Any]]] = None,
-        invoke_mode: typing.Optional[_InvokeMode_e7b50559] = None,
-    ) -> _FunctionUrl_aff26443:
+        auth_type: typing.Optional["_FunctionUrlAuthType_9c7b2c86"] = None,
+        cors: typing.Optional[typing.Union["_FunctionUrlCorsOptions_ca855cc0", typing.Dict[builtins.str, typing.Any]]] = None,
+        invoke_mode: typing.Optional["_InvokeMode_e7b50559"] = None,
+    ) -> "_FunctionUrl_aff26443":
         '''Adds a url to this lambda function.
 
         :param auth_type: The type of authentication that your function URL uses. Default: FunctionUrlAuthType.AWS_IAM
@@ -499,20 +499,20 @@ class EdgeFunction(
             auth_type=auth_type, cors=cors, invoke_mode=invoke_mode
         )
 
-        return typing.cast(_FunctionUrl_aff26443, jsii.invoke(self, "addFunctionUrl", [options]))
+        return typing.cast("_FunctionUrl_aff26443", jsii.invoke(self, "addFunctionUrl", [options]))
 
     @jsii.member(jsii_name="addPermission")
     def add_permission(
         self,
         id: builtins.str,
         *,
-        principal: _IPrincipal_539bb2fd,
+        principal: "_IPrincipal_539bb2fd",
         action: typing.Optional[builtins.str] = None,
         event_source_token: typing.Optional[builtins.str] = None,
-        function_url_auth_type: typing.Optional[_FunctionUrlAuthType_9c7b2c86] = None,
+        function_url_auth_type: typing.Optional["_FunctionUrlAuthType_9c7b2c86"] = None,
         invoked_via_function_url: typing.Optional[builtins.bool] = None,
         organization_id: typing.Optional[builtins.str] = None,
-        scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         source_account: typing.Optional[builtins.str] = None,
         source_arn: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -547,7 +547,7 @@ class EdgeFunction(
         return typing.cast(None, jsii.invoke(self, "addPermission", [id, permission]))
 
     @jsii.member(jsii_name="addToRolePolicy")
-    def add_to_role_policy(self, statement: _PolicyStatement_0fe33853) -> None:
+    def add_to_role_policy(self, statement: "_PolicyStatement_0fe33853") -> None:
         '''Adds a statement to the IAM role assumed by the instance.
 
         :param statement: -
@@ -561,9 +561,9 @@ class EdgeFunction(
     def configure_async_invoke(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[_IDestination_40f19de4] = None,
-        on_success: typing.Optional[_IDestination_40f19de4] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["_IDestination_40f19de4"] = None,
+        on_success: typing.Optional["_IDestination_40f19de4"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Configures options for asynchronous invocation.
@@ -583,7 +583,7 @@ class EdgeFunction(
         return typing.cast(None, jsii.invoke(self, "configureAsyncInvoke", [options]))
 
     @jsii.member(jsii_name="grantInvoke")
-    def grant_invoke(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_invoke(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda.
 
         :param identity: -
@@ -591,13 +591,13 @@ class EdgeFunction(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__81021b991bbfca05164e4a606b5779ba5971abb7854ae9893435653d6d5421e0)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvoke", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvoke", [identity]))
 
     @jsii.member(jsii_name="grantInvokeCompositePrincipal")
     def grant_invoke_composite_principal(
         self,
-        composite_principal: _CompositePrincipal_c2fe180a,
-    ) -> typing.List[_Grant_a7ae64f8]:
+        composite_principal: "_CompositePrincipal_c2fe180a",
+    ) -> typing.List["_Grant_a7ae64f8"]:
         '''Grant multiple principals the ability to invoke this Lambda via CompositePrincipal.
 
         :param composite_principal: -
@@ -605,13 +605,13 @@ class EdgeFunction(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__64c93d4b313937d0690e557edc94df44e1df66523bdc2a85384cfe3105eda0cb)
             check_type(argname="argument composite_principal", value=composite_principal, expected_type=type_hints["composite_principal"])
-        return typing.cast(typing.List[_Grant_a7ae64f8], jsii.invoke(self, "grantInvokeCompositePrincipal", [composite_principal]))
+        return typing.cast(typing.List["_Grant_a7ae64f8"], jsii.invoke(self, "grantInvokeCompositePrincipal", [composite_principal]))
 
     @jsii.member(jsii_name="grantInvokeLatestVersion")
     def grant_invoke_latest_version(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke the $LATEST version or unqualified version of this Lambda.
 
         :param identity: -
@@ -619,10 +619,10 @@ class EdgeFunction(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9b6e8fe291f0469edae68b1b4c1d48a71aec5c50f760d822915b7c8c7d6ad3e4)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvokeLatestVersion", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvokeLatestVersion", [identity]))
 
     @jsii.member(jsii_name="grantInvokeUrl")
-    def grant_invoke_url(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_invoke_url(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda Function URL.
 
         :param identity: -
@@ -630,14 +630,14 @@ class EdgeFunction(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d96b6feda81e352ac9cf655dd7c949f0071932768ea9b423e4bcc49841ebce16)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvokeUrl", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvokeUrl", [identity]))
 
     @jsii.member(jsii_name="grantInvokeVersion")
     def grant_invoke_version(
         self,
-        identity: _IGrantable_71c4f5de,
-        version: _IVersion_faf7234e,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+        version: "_IVersion_faf7234e",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke the given version of this Lambda.
 
         :param identity: -
@@ -647,7 +647,7 @@ class EdgeFunction(
             type_hints = typing.get_type_hints(_typecheckingstub__8e00b9f9033876bc1295887075ef1ce7aa929db4e9dc7d0d7162aa9ee6d4508e)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument version", value=version, expected_type=type_hints["version"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvokeVersion", [identity, version]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvokeVersion", [identity, version]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -659,14 +659,14 @@ class EdgeFunction(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Lambda Return the given named metric for this Function.
 
         :param metric_name: -
@@ -701,7 +701,7 @@ class EdgeFunction(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricDuration")
     def metric_duration(
@@ -712,14 +712,14 @@ class EdgeFunction(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the Duration of this Lambda How long execution of this Lambda takes.
 
         Average over 5 minutes
@@ -752,7 +752,7 @@ class EdgeFunction(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDuration", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDuration", [props]))
 
     @jsii.member(jsii_name="metricErrors")
     def metric_errors(
@@ -763,14 +763,14 @@ class EdgeFunction(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''How many invocations of this Lambda fail.
 
         Sum over 5 minutes
@@ -803,7 +803,7 @@ class EdgeFunction(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricErrors", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricErrors", [props]))
 
     @jsii.member(jsii_name="metricInvocations")
     def metric_invocations(
@@ -814,14 +814,14 @@ class EdgeFunction(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of invocations of this Lambda How often this Lambda is invoked.
 
         Sum over 5 minutes
@@ -854,7 +854,7 @@ class EdgeFunction(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricInvocations", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricInvocations", [props]))
 
     @jsii.member(jsii_name="metricThrottles")
     def metric_throttles(
@@ -865,14 +865,14 @@ class EdgeFunction(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of throttled invocations of this Lambda How often this Lambda is throttled.
 
         Sum over 5 minutes
@@ -905,7 +905,7 @@ class EdgeFunction(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricThrottles", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricThrottles", [props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -915,24 +915,24 @@ class EdgeFunction(
 
     @builtins.property
     @jsii.member(jsii_name="architecture")
-    def architecture(self) -> _Architecture_12d5a53f:
+    def architecture(self) -> "_Architecture_12d5a53f":
         '''The system architectures compatible with this lambda function.'''
-        return typing.cast(_Architecture_12d5a53f, jsii.get(self, "architecture"))
+        return typing.cast("_Architecture_12d5a53f", jsii.get(self, "architecture"))
 
     @builtins.property
     @jsii.member(jsii_name="connections")
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''Not supported.
 
         Connections are only applicable to VPC-enabled functions.
         '''
-        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
     @jsii.member(jsii_name="currentVersion")
-    def current_version(self) -> _IVersion_faf7234e:
+    def current_version(self) -> "_IVersion_faf7234e":
         '''Convenience method to make ``EdgeFunction`` conform to the same interface as ``Function``.'''
-        return typing.cast(_IVersion_faf7234e, jsii.get(self, "currentVersion"))
+        return typing.cast("_IVersion_faf7234e", jsii.get(self, "currentVersion"))
 
     @builtins.property
     @jsii.member(jsii_name="edgeArn")
@@ -954,15 +954,15 @@ class EdgeFunction(
 
     @builtins.property
     @jsii.member(jsii_name="functionRef")
-    def function_ref(self) -> _FunctionReference_82f2efe9:
+    def function_ref(self) -> "_FunctionReference_82f2efe9":
         '''A reference to a Function resource.'''
-        return typing.cast(_FunctionReference_82f2efe9, jsii.get(self, "functionRef"))
+        return typing.cast("_FunctionReference_82f2efe9", jsii.get(self, "functionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The principal to grant permissions to.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
     @builtins.property
     @jsii.member(jsii_name="isBoundToVpc")
@@ -975,13 +975,13 @@ class EdgeFunction(
 
     @builtins.property
     @jsii.member(jsii_name="lambda")
-    def lambda_(self) -> _IFunction_6adb0ab8:
+    def lambda_(self) -> "_IFunction_6adb0ab8":
         '''The underlying AWS Lambda function.'''
-        return typing.cast(_IFunction_6adb0ab8, jsii.get(self, "lambda"))
+        return typing.cast("_IFunction_6adb0ab8", jsii.get(self, "lambda"))
 
     @builtins.property
     @jsii.member(jsii_name="latestVersion")
-    def latest_version(self) -> _IVersion_faf7234e:
+    def latest_version(self) -> "_IVersion_faf7234e":
         '''The ``$LATEST`` version of this function.
 
         Note that this is reference to a non-specific AWS Lambda version, which
@@ -991,13 +991,13 @@ class EdgeFunction(
         To obtain a reference to an explicit version which references the current
         function configuration, use ``lambdaFunction.currentVersion`` instead.
         '''
-        return typing.cast(_IVersion_faf7234e, jsii.get(self, "latestVersion"))
+        return typing.cast("_IVersion_faf7234e", jsii.get(self, "latestVersion"))
 
     @builtins.property
     @jsii.member(jsii_name="permissionsNode")
-    def permissions_node(self) -> _constructs_77d1e7e8.Node:
+    def permissions_node(self) -> "_constructs_77d1e7e8.Node":
         '''The construct node where permissions are attached.'''
-        return typing.cast(_constructs_77d1e7e8.Node, jsii.get(self, "permissionsNode"))
+        return typing.cast("_constructs_77d1e7e8.Node", jsii.get(self, "permissionsNode"))
 
     @builtins.property
     @jsii.member(jsii_name="resourceArnsForGrantInvoke")
@@ -1017,15 +1017,15 @@ class EdgeFunction(
 
     @builtins.property
     @jsii.member(jsii_name="versionRef")
-    def version_ref(self) -> _VersionReference_91666182:
+    def version_ref(self) -> "_VersionReference_91666182":
         '''A reference to a Version resource.'''
-        return typing.cast(_VersionReference_91666182, jsii.get(self, "versionRef"))
+        return typing.cast("_VersionReference_91666182", jsii.get(self, "versionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role associated with this function.'''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
 
 @jsii.data_type(
@@ -1094,61 +1094,61 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
     def __init__(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[_IDestination_40f19de4] = None,
-        on_success: typing.Optional[_IDestination_40f19de4] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["_IDestination_40f19de4"] = None,
+        on_success: typing.Optional["_IDestination_40f19de4"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-        adot_instrumentation: typing.Optional[typing.Union[_AdotInstrumentationConfig_7c38d65d, typing.Dict[builtins.str, typing.Any]]] = None,
+        adot_instrumentation: typing.Optional[typing.Union["_AdotInstrumentationConfig_7c38d65d", typing.Dict[builtins.str, typing.Any]]] = None,
         allow_all_ipv6_outbound: typing.Optional[builtins.bool] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         allow_public_subnet: typing.Optional[builtins.bool] = None,
         application_log_level: typing.Optional[builtins.str] = None,
-        application_log_level_v2: typing.Optional[_ApplicationLogLevel_cd92660a] = None,
-        architecture: typing.Optional[_Architecture_12d5a53f] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
-        current_version_options: typing.Optional[typing.Union[_VersionOptions_981bb3c0, typing.Dict[builtins.str, typing.Any]]] = None,
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        application_log_level_v2: typing.Optional["_ApplicationLogLevel_cd92660a"] = None,
+        architecture: typing.Optional["_Architecture_12d5a53f"] = None,
+        code_signing_config: typing.Optional["_ICodeSigningConfigRef_1d909622"] = None,
+        current_version_options: typing.Optional[typing.Union["_VersionOptions_981bb3c0", typing.Dict[builtins.str, typing.Any]]] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
-        dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
+        dead_letter_topic: typing.Optional["_ITopic_9eca4852"] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[_DurableConfig_05b238fa, typing.Dict[builtins.str, typing.Any]]] = None,
+        durable_config: typing.Optional[typing.Union["_DurableConfig_05b238fa", typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
-        events: typing.Optional[typing.Sequence[_IEventSource_3686b3f8]] = None,
-        filesystem: typing.Optional[_FileSystem_a5fa005d] = None,
+        environment_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
+        events: typing.Optional[typing.Sequence["_IEventSource_3686b3f8"]] = None,
+        filesystem: typing.Optional["_FileSystem_a5fa005d"] = None,
         function_name: typing.Optional[builtins.str] = None,
-        initial_policy: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
-        insights_version: typing.Optional[_LambdaInsightsVersion_9dfbfef9] = None,
+        initial_policy: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
+        insights_version: typing.Optional["_LambdaInsightsVersion_9dfbfef9"] = None,
         ipv6_allowed_for_dual_stack: typing.Optional[builtins.bool] = None,
-        layers: typing.Optional[typing.Sequence[_ILayerVersion_5ac127c8]] = None,
+        layers: typing.Optional[typing.Sequence["_ILayerVersion_5ac127c8"]] = None,
         log_format: typing.Optional[builtins.str] = None,
-        logging_format: typing.Optional[_LoggingFormat_30be8e01] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
-        log_retention_retry_options: typing.Optional[typing.Union[_LogRetentionRetryOptions_ad797a7a, typing.Dict[builtins.str, typing.Any]]] = None,
-        log_retention_role: typing.Optional[_IRole_235f5d8e] = None,
+        logging_format: typing.Optional["_LoggingFormat_30be8e01"] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
+        log_retention_retry_options: typing.Optional[typing.Union["_LogRetentionRetryOptions_ad797a7a", typing.Dict[builtins.str, typing.Any]]] = None,
+        log_retention_role: typing.Optional["_IRole_235f5d8e"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
-        params_and_secrets: typing.Optional[_ParamsAndSecretsLayerVersion_dce97f06] = None,
+        params_and_secrets: typing.Optional["_ParamsAndSecretsLayerVersion_dce97f06"] = None,
         profiling: typing.Optional[builtins.bool] = None,
-        profiling_group: typing.Optional[_IProfilingGroup_0bba72c4] = None,
-        recursive_loop: typing.Optional[_RecursiveLoop_fc293827] = None,
+        profiling_group: typing.Optional["_IProfilingGroup_0bba72c4"] = None,
+        recursive_loop: typing.Optional["_RecursiveLoop_fc293827"] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        runtime_management_mode: typing.Optional[_RuntimeManagementMode_688c173b] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        snap_start: typing.Optional[_SnapStartConf_2ffaa769] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        runtime_management_mode: typing.Optional["_RuntimeManagementMode_688c173b"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        snap_start: typing.Optional["_SnapStartConf_2ffaa769"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
-        system_log_level_v2: typing.Optional[_SystemLogLevel_aea49dc2] = None,
-        tenancy_config: typing.Optional[_TenancyConfig_9e2f75ea] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        tracing: typing.Optional[_Tracing_9fe8e2bb] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        code: _Code_7848f942,
+        system_log_level_v2: typing.Optional["_SystemLogLevel_aea49dc2"] = None,
+        tenancy_config: typing.Optional["_TenancyConfig_9e2f75ea"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        tracing: typing.Optional["_Tracing_9fe8e2bb"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        code: "_Code_7848f942",
         handler: builtins.str,
-        runtime: _Runtime_b4eaa844,
+        runtime: "_Runtime_b4eaa844",
         stack_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for creating a Lambda@Edge function.
@@ -1414,7 +1414,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
             self._values["stack_id"] = stack_id
 
     @builtins.property
-    def max_event_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_event_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a request that Lambda sends to a function for processing.
 
         Minimum: 60 seconds
@@ -1423,25 +1423,25 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: Duration.hours(6)
         '''
         result = self._values.get("max_event_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def on_failure(self) -> typing.Optional[_IDestination_40f19de4]:
+    def on_failure(self) -> typing.Optional["_IDestination_40f19de4"]:
         '''The destination for failed invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_failure")
-        return typing.cast(typing.Optional[_IDestination_40f19de4], result)
+        return typing.cast(typing.Optional["_IDestination_40f19de4"], result)
 
     @builtins.property
-    def on_success(self) -> typing.Optional[_IDestination_40f19de4]:
+    def on_success(self) -> typing.Optional["_IDestination_40f19de4"]:
         '''The destination for successful invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_success")
-        return typing.cast(typing.Optional[_IDestination_40f19de4], result)
+        return typing.cast(typing.Optional["_IDestination_40f19de4"], result)
 
     @builtins.property
     def retry_attempts(self) -> typing.Optional[jsii.Number]:
@@ -1458,7 +1458,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
     @builtins.property
     def adot_instrumentation(
         self,
-    ) -> typing.Optional[_AdotInstrumentationConfig_7c38d65d]:
+    ) -> typing.Optional["_AdotInstrumentationConfig_7c38d65d"]:
         '''Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation.
 
         :default: - No ADOT instrumentation
@@ -1466,7 +1466,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :see: https://aws-otel.github.io/docs/getting-started/lambda
         '''
         result = self._values.get("adot_instrumentation")
-        return typing.cast(typing.Optional[_AdotInstrumentationConfig_7c38d65d], result)
+        return typing.cast(typing.Optional["_AdotInstrumentationConfig_7c38d65d"], result)
 
     @builtins.property
     def allow_all_ipv6_outbound(self) -> typing.Optional[builtins.bool]:
@@ -1528,43 +1528,43 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
     @builtins.property
     def application_log_level_v2(
         self,
-    ) -> typing.Optional[_ApplicationLogLevel_cd92660a]:
+    ) -> typing.Optional["_ApplicationLogLevel_cd92660a"]:
         '''Sets the application log level for the function.
 
         :default: ApplicationLogLevel.INFO
         '''
         result = self._values.get("application_log_level_v2")
-        return typing.cast(typing.Optional[_ApplicationLogLevel_cd92660a], result)
+        return typing.cast(typing.Optional["_ApplicationLogLevel_cd92660a"], result)
 
     @builtins.property
-    def architecture(self) -> typing.Optional[_Architecture_12d5a53f]:
+    def architecture(self) -> typing.Optional["_Architecture_12d5a53f"]:
         '''The system architectures compatible with this lambda function.
 
         :default: Architecture.X86_64
         '''
         result = self._values.get("architecture")
-        return typing.cast(typing.Optional[_Architecture_12d5a53f], result)
+        return typing.cast(typing.Optional["_Architecture_12d5a53f"], result)
 
     @builtins.property
-    def code_signing_config(self) -> typing.Optional[_ICodeSigningConfigRef_1d909622]:
+    def code_signing_config(self) -> typing.Optional["_ICodeSigningConfigRef_1d909622"]:
         '''Code signing config associated with this function.
 
         :default: - Not Sign the Code
         '''
         result = self._values.get("code_signing_config")
-        return typing.cast(typing.Optional[_ICodeSigningConfigRef_1d909622], result)
+        return typing.cast(typing.Optional["_ICodeSigningConfigRef_1d909622"], result)
 
     @builtins.property
-    def current_version_options(self) -> typing.Optional[_VersionOptions_981bb3c0]:
+    def current_version_options(self) -> typing.Optional["_VersionOptions_981bb3c0"]:
         '''Options for the ``lambda.Version`` resource automatically created by the ``fn.currentVersion`` method.
 
         :default: - default options as described in ``VersionOptions``
         '''
         result = self._values.get("current_version_options")
-        return typing.cast(typing.Optional[_VersionOptions_981bb3c0], result)
+        return typing.cast(typing.Optional["_VersionOptions_981bb3c0"], result)
 
     @builtins.property
-    def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
+    def dead_letter_queue(self) -> typing.Optional["_IQueue_7ed6f679"]:
         '''The SQS queue to use if DLQ is enabled.
 
         If SNS topic is desired, specify ``deadLetterTopic`` property instead.
@@ -1572,7 +1572,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: - SQS queue with 14 day retention period if ``deadLetterQueueEnabled`` is ``true``
         '''
         result = self._values.get("dead_letter_queue")
-        return typing.cast(typing.Optional[_IQueue_7ed6f679], result)
+        return typing.cast(typing.Optional["_IQueue_7ed6f679"], result)
 
     @builtins.property
     def dead_letter_queue_enabled(self) -> typing.Optional[builtins.bool]:
@@ -1587,7 +1587,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def dead_letter_topic(self) -> typing.Optional[_ITopic_9eca4852]:
+    def dead_letter_topic(self) -> typing.Optional["_ITopic_9eca4852"]:
         '''The SNS topic to use as a DLQ.
 
         Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created
@@ -1596,7 +1596,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: - no SNS topic
         '''
         result = self._values.get("dead_letter_topic")
-        return typing.cast(typing.Optional[_ITopic_9eca4852], result)
+        return typing.cast(typing.Optional["_ITopic_9eca4852"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1608,7 +1608,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def durable_config(self) -> typing.Optional[_DurableConfig_05b238fa]:
+    def durable_config(self) -> typing.Optional["_DurableConfig_05b238fa"]:
         '''The durable configuration for the function.
 
         If durability is added to an existing function, a resource replacement will be triggered.
@@ -1617,7 +1617,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: - No durable configuration
         '''
         result = self._values.get("durable_config")
-        return typing.cast(typing.Optional[_DurableConfig_05b238fa], result)
+        return typing.cast(typing.Optional["_DurableConfig_05b238fa"], result)
 
     @builtins.property
     def environment(
@@ -1635,25 +1635,25 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def environment_encryption(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def environment_encryption(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The AWS KMS key that's used to encrypt your function's environment variables.
 
         :default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         '''
         result = self._values.get("environment_encryption")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
-    def ephemeral_storage_size(self) -> typing.Optional[_Size_7b441c34]:
+    def ephemeral_storage_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The size of the function’s /tmp directory in MiB.
 
         :default: 512 MiB
         '''
         result = self._values.get("ephemeral_storage_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def events(self) -> typing.Optional[typing.List[_IEventSource_3686b3f8]]:
+    def events(self) -> typing.Optional[typing.List["_IEventSource_3686b3f8"]]:
         '''Event sources for this function.
 
         You can also add event sources using ``addEventSource``.
@@ -1661,16 +1661,16 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: - No event sources.
         '''
         result = self._values.get("events")
-        return typing.cast(typing.Optional[typing.List[_IEventSource_3686b3f8]], result)
+        return typing.cast(typing.Optional[typing.List["_IEventSource_3686b3f8"]], result)
 
     @builtins.property
-    def filesystem(self) -> typing.Optional[_FileSystem_a5fa005d]:
+    def filesystem(self) -> typing.Optional["_FileSystem_a5fa005d"]:
         '''The filesystem configuration for the lambda function.
 
         :default: - will not mount any filesystem
         '''
         result = self._values.get("filesystem")
-        return typing.cast(typing.Optional[_FileSystem_a5fa005d], result)
+        return typing.cast(typing.Optional["_FileSystem_a5fa005d"], result)
 
     @builtins.property
     def function_name(self) -> typing.Optional[builtins.str]:
@@ -1685,7 +1685,9 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def initial_policy(self) -> typing.Optional[typing.List[_PolicyStatement_0fe33853]]:
+    def initial_policy(
+        self,
+    ) -> typing.Optional[typing.List["_PolicyStatement_0fe33853"]]:
         '''Initial policy statements to add to the created Lambda Role.
 
         You can call ``addToRolePolicy`` to the created lambda to add statements post creation.
@@ -1693,10 +1695,10 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: - No policy statements are added to the created Lambda role.
         '''
         result = self._values.get("initial_policy")
-        return typing.cast(typing.Optional[typing.List[_PolicyStatement_0fe33853]], result)
+        return typing.cast(typing.Optional[typing.List["_PolicyStatement_0fe33853"]], result)
 
     @builtins.property
-    def insights_version(self) -> typing.Optional[_LambdaInsightsVersion_9dfbfef9]:
+    def insights_version(self) -> typing.Optional["_LambdaInsightsVersion_9dfbfef9"]:
         '''Specify the version of CloudWatch Lambda insights to use for monitoring.
 
         :default: - No Lambda Insights
@@ -1704,7 +1706,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-Getting-Started-docker.html
         '''
         result = self._values.get("insights_version")
-        return typing.cast(typing.Optional[_LambdaInsightsVersion_9dfbfef9], result)
+        return typing.cast(typing.Optional["_LambdaInsightsVersion_9dfbfef9"], result)
 
     @builtins.property
     def ipv6_allowed_for_dual_stack(self) -> typing.Optional[builtins.bool]:
@@ -1718,7 +1720,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def layers(self) -> typing.Optional[typing.List[_ILayerVersion_5ac127c8]]:
+    def layers(self) -> typing.Optional[typing.List["_ILayerVersion_5ac127c8"]]:
         '''A list of layers to add to the function's execution environment.
 
         You can configure your Lambda function to pull in
@@ -1728,7 +1730,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: - No layers.
         '''
         result = self._values.get("layers")
-        return typing.cast(typing.Optional[typing.List[_ILayerVersion_5ac127c8]], result)
+        return typing.cast(typing.Optional[typing.List["_ILayerVersion_5ac127c8"]], result)
 
     @builtins.property
     def log_format(self) -> typing.Optional[builtins.str]:
@@ -1744,16 +1746,16 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def logging_format(self) -> typing.Optional[_LoggingFormat_30be8e01]:
+    def logging_format(self) -> typing.Optional["_LoggingFormat_30be8e01"]:
         '''Sets the loggingFormat for the function.
 
         :default: LoggingFormat.TEXT
         '''
         result = self._values.get("logging_format")
-        return typing.cast(typing.Optional[_LoggingFormat_30be8e01], result)
+        return typing.cast(typing.Optional["_LoggingFormat_30be8e01"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
+    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
         '''The log group the function sends logs to.
 
         By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/.
@@ -1767,10 +1769,10 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: ``/aws/lambda/${this.functionName}`` - default log group created by Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional[_ILogGroup_3c4fa718], result)
+        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
 
     @builtins.property
-    def log_removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def log_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''(deprecated) Determine the removal policy of the log group that is auto-created by this construct.
 
         Normally you want to retain the log group so you can diagnose issues
@@ -1785,10 +1787,10 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :stability: deprecated
         '''
         result = self._values.get("log_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def log_retention(self) -> typing.Optional[_RetentionDays_070f99f0]:
+    def log_retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
         '''(deprecated) The number of days log events are kept in CloudWatch Logs.
 
         When updating
@@ -1816,12 +1818,12 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :stability: deprecated
         '''
         result = self._values.get("log_retention")
-        return typing.cast(typing.Optional[_RetentionDays_070f99f0], result)
+        return typing.cast(typing.Optional["_RetentionDays_070f99f0"], result)
 
     @builtins.property
     def log_retention_retry_options(
         self,
-    ) -> typing.Optional[_LogRetentionRetryOptions_ad797a7a]:
+    ) -> typing.Optional["_LogRetentionRetryOptions_ad797a7a"]:
         '''When log retention is specified, a custom resource attempts to create the CloudWatch log group.
 
         These options control the retry policy when interacting with CloudWatch APIs.
@@ -1832,10 +1834,10 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: - Default AWS SDK retry options.
         '''
         result = self._values.get("log_retention_retry_options")
-        return typing.cast(typing.Optional[_LogRetentionRetryOptions_ad797a7a], result)
+        return typing.cast(typing.Optional["_LogRetentionRetryOptions_ad797a7a"], result)
 
     @builtins.property
-    def log_retention_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def log_retention_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role for the Lambda function associated with the custom resource that sets the retention policy.
 
         This is a legacy API and we strongly recommend you migrate to ``logGroup`` if you can.
@@ -1844,7 +1846,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: - A new role is created.
         '''
         result = self._values.get("log_retention_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def memory_size(self) -> typing.Optional[jsii.Number]:
@@ -1862,7 +1864,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
     @builtins.property
     def params_and_secrets(
         self,
-    ) -> typing.Optional[_ParamsAndSecretsLayerVersion_dce97f06]:
+    ) -> typing.Optional["_ParamsAndSecretsLayerVersion_dce97f06"]:
         '''Specify the configuration of Parameters and Secrets Extension.
 
         :default: - No Parameters and Secrets Extension
@@ -1870,7 +1872,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :see: https://docs.aws.amazon.com/systems-manager/latest/userguide/ps-integration-lambda-extensions.html
         '''
         result = self._values.get("params_and_secrets")
-        return typing.cast(typing.Optional[_ParamsAndSecretsLayerVersion_dce97f06], result)
+        return typing.cast(typing.Optional["_ParamsAndSecretsLayerVersion_dce97f06"], result)
 
     @builtins.property
     def profiling(self) -> typing.Optional[builtins.bool]:
@@ -1884,7 +1886,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def profiling_group(self) -> typing.Optional[_IProfilingGroup_0bba72c4]:
+    def profiling_group(self) -> typing.Optional["_IProfilingGroup_0bba72c4"]:
         '''Profiling Group.
 
         :default: - A new profiling group will be created if ``profiling`` is set.
@@ -1892,10 +1894,10 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :see: https://docs.aws.amazon.com/codeguru/latest/profiler-ug/setting-up-lambda.html
         '''
         result = self._values.get("profiling_group")
-        return typing.cast(typing.Optional[_IProfilingGroup_0bba72c4], result)
+        return typing.cast(typing.Optional["_IProfilingGroup_0bba72c4"], result)
 
     @builtins.property
-    def recursive_loop(self) -> typing.Optional[_RecursiveLoop_fc293827]:
+    def recursive_loop(self) -> typing.Optional["_RecursiveLoop_fc293827"]:
         '''Sets the Recursive Loop Protection for Lambda Function.
 
         It lets Lambda detect and terminate unintended recursive loops.
@@ -1903,7 +1905,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: RecursiveLoop.Terminate
         '''
         result = self._values.get("recursive_loop")
-        return typing.cast(typing.Optional[_RecursiveLoop_fc293827], result)
+        return typing.cast(typing.Optional["_RecursiveLoop_fc293827"], result)
 
     @builtins.property
     def reserved_concurrent_executions(self) -> typing.Optional[jsii.Number]:
@@ -1917,7 +1919,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Lambda execution role.
 
         This is the role that will be assumed by the function upon execution.
@@ -1936,21 +1938,23 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         Both supplied and generated roles can always be changed by calling ``addToRolePolicy``.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def runtime_management_mode(
         self,
-    ) -> typing.Optional[_RuntimeManagementMode_688c173b]:
+    ) -> typing.Optional["_RuntimeManagementMode_688c173b"]:
         '''Sets the runtime management configuration for a function's version.
 
         :default: Auto
         '''
         result = self._values.get("runtime_management_mode")
-        return typing.cast(typing.Optional[_RuntimeManagementMode_688c173b], result)
+        return typing.cast(typing.Optional["_RuntimeManagementMode_688c173b"], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''The list of security groups to associate with the Lambda's network interfaces.
 
         Only used if 'vpc' is supplied.
@@ -1962,10 +1966,10 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         group will be created for this function.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
-    def snap_start(self) -> typing.Optional[_SnapStartConf_2ffaa769]:
+    def snap_start(self) -> typing.Optional["_SnapStartConf_2ffaa769"]:
         '''Enable SnapStart for Lambda Function.
 
         SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13, and .NET 8 runtime
@@ -1973,7 +1977,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: - No snapstart
         '''
         result = self._values.get("snap_start")
-        return typing.cast(typing.Optional[_SnapStartConf_2ffaa769], result)
+        return typing.cast(typing.Optional["_SnapStartConf_2ffaa769"], result)
 
     @builtins.property
     def system_log_level(self) -> typing.Optional[builtins.str]:
@@ -1989,25 +1993,25 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def system_log_level_v2(self) -> typing.Optional[_SystemLogLevel_aea49dc2]:
+    def system_log_level_v2(self) -> typing.Optional["_SystemLogLevel_aea49dc2"]:
         '''Sets the system log level for the function.
 
         :default: SystemLogLevel.INFO
         '''
         result = self._values.get("system_log_level_v2")
-        return typing.cast(typing.Optional[_SystemLogLevel_aea49dc2], result)
+        return typing.cast(typing.Optional["_SystemLogLevel_aea49dc2"], result)
 
     @builtins.property
-    def tenancy_config(self) -> typing.Optional[_TenancyConfig_9e2f75ea]:
+    def tenancy_config(self) -> typing.Optional["_TenancyConfig_9e2f75ea"]:
         '''The tenancy configuration for the function.
 
         :default: - Tenant isolation is not enabled
         '''
         result = self._values.get("tenancy_config")
-        return typing.cast(typing.Optional[_TenancyConfig_9e2f75ea], result)
+        return typing.cast(typing.Optional["_TenancyConfig_9e2f75ea"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The function execution time (in seconds) after which Lambda terminates the function.
 
         Because the execution time affects cost, set this value
@@ -2016,19 +2020,19 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: Duration.seconds(3)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def tracing(self) -> typing.Optional[_Tracing_9fe8e2bb]:
+    def tracing(self) -> typing.Optional["_Tracing_9fe8e2bb"]:
         '''Enable AWS X-Ray Tracing for Lambda Function.
 
         :default: Tracing.Disabled
         '''
         result = self._values.get("tracing")
-        return typing.cast(typing.Optional[_Tracing_9fe8e2bb], result)
+        return typing.cast(typing.Optional["_Tracing_9fe8e2bb"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''VPC network to place Lambda network interfaces.
 
         Specify this if the Lambda function needs to access resources in a VPC.
@@ -2037,10 +2041,10 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: - Function is not placed within a VPC.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where to place the network interfaces within the VPC.
 
         This requires ``vpc`` to be specified in order for interfaces to actually be
@@ -2052,10 +2056,10 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: - the Vpc default strategy if not specified
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def code(self) -> _Code_7848f942:
+    def code(self) -> "_Code_7848f942":
         '''The source code of your Lambda function.
 
         You can point to a file in an
@@ -2064,7 +2068,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         '''
         result = self._values.get("code")
         assert result is not None, "Required property 'code' is missing"
-        return typing.cast(_Code_7848f942, result)
+        return typing.cast("_Code_7848f942", result)
 
     @builtins.property
     def handler(self) -> builtins.str:
@@ -2085,7 +2089,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def runtime(self) -> _Runtime_b4eaa844:
+    def runtime(self) -> "_Runtime_b4eaa844":
         '''The runtime environment for the Lambda function that you are uploading.
 
         For valid values, see the Runtime property in the AWS Lambda Developer
@@ -2095,7 +2099,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         '''
         result = self._values.get("runtime")
         assert result is not None, "Required property 'runtime' is missing"
-        return typing.cast(_Runtime_b4eaa844, result)
+        return typing.cast("_Runtime_b4eaa844", result)
 
     @builtins.property
     def stack_id(self) -> typing.Optional[builtins.str]:

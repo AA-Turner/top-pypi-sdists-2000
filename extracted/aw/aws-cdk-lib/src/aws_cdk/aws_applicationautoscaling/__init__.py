@@ -476,12 +476,12 @@ class BaseScalableAttribute(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         dimension: builtins.str,
         resource_id: builtins.str,
-        role: _IRole_235f5d8e,
+        role: "_IRole_235f5d8e",
         service_namespace: "ServiceNamespace",
         max_capacity: jsii.Number,
         min_capacity: typing.Optional[jsii.Number] = None,
@@ -516,10 +516,10 @@ class BaseScalableAttribute(
         self,
         id: builtins.str,
         *,
-        metric: _IMetric_c7fd29de,
+        metric: "_IMetric_c7fd29de",
         scaling_steps: typing.Sequence[typing.Union["ScalingInterval", typing.Dict[builtins.str, typing.Any]]],
-        adjustment_type: typing.Optional[AdjustmentType] = None,
-        cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        adjustment_type: typing.Optional["AdjustmentType"] = None,
+        cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         evaluation_periods: typing.Optional[jsii.Number] = None,
         metric_aggregation_type: typing.Optional["MetricAggregationType"] = None,
@@ -563,7 +563,7 @@ class BaseScalableAttribute(
         max_capacity: typing.Optional[jsii.Number] = None,
         min_capacity: typing.Optional[jsii.Number] = None,
         start_time: typing.Optional[datetime.datetime] = None,
-        time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
+        time_zone: typing.Optional["_TimeZone_cdd72ac9"] = None,
     ) -> None:
         '''Scale out or in based on time.
 
@@ -595,13 +595,13 @@ class BaseScalableAttribute(
         id: builtins.str,
         *,
         target_value: jsii.Number,
-        custom_metric: typing.Optional[_IMetric_c7fd29de] = None,
+        custom_metric: typing.Optional["_IMetric_c7fd29de"] = None,
         predefined_metric: typing.Optional["PredefinedMetric"] = None,
         resource_label: typing.Optional[builtins.str] = None,
         disable_scale_in: typing.Optional[builtins.bool] = None,
         policy_name: typing.Optional[builtins.str] = None,
-        scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scale_in_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        scale_out_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Scale out or in in order to keep a metric around a target value.
 
@@ -660,8 +660,8 @@ class BaseTargetTrackingProps:
         *,
         disable_scale_in: typing.Optional[builtins.bool] = None,
         policy_name: typing.Optional[builtins.str] = None,
-        scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scale_in_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        scale_out_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Base interface for target tracking props.
 
@@ -732,7 +732,7 @@ class BaseTargetTrackingProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def scale_in_cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def scale_in_cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Period after a scale in activity completes before another scale in activity can start.
 
         :default:
@@ -745,10 +745,10 @@ class BaseTargetTrackingProps:
         Lambda provisioned concurrency
         '''
         result = self._values.get("scale_in_cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def scale_out_cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def scale_out_cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Period after a scale out activity completes before another scale out activity can start.
 
         :default:
@@ -761,7 +761,7 @@ class BaseTargetTrackingProps:
         Lambda provisioned concurrency
         '''
         result = self._values.get("scale_out_cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -793,10 +793,10 @@ class BasicStepScalingPolicyProps:
     def __init__(
         self,
         *,
-        metric: _IMetric_c7fd29de,
+        metric: "_IMetric_c7fd29de",
         scaling_steps: typing.Sequence[typing.Union["ScalingInterval", typing.Dict[builtins.str, typing.Any]]],
-        adjustment_type: typing.Optional[AdjustmentType] = None,
-        cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        adjustment_type: typing.Optional["AdjustmentType"] = None,
+        cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         evaluation_periods: typing.Optional[jsii.Number] = None,
         metric_aggregation_type: typing.Optional["MetricAggregationType"] = None,
@@ -858,11 +858,11 @@ class BasicStepScalingPolicyProps:
             self._values["min_adjustment_magnitude"] = min_adjustment_magnitude
 
     @builtins.property
-    def metric(self) -> _IMetric_c7fd29de:
+    def metric(self) -> "_IMetric_c7fd29de":
         '''Metric to scale on.'''
         result = self._values.get("metric")
         assert result is not None, "Required property 'metric' is missing"
-        return typing.cast(_IMetric_c7fd29de, result)
+        return typing.cast("_IMetric_c7fd29de", result)
 
     @builtins.property
     def scaling_steps(self) -> typing.List["ScalingInterval"]:
@@ -877,16 +877,16 @@ class BasicStepScalingPolicyProps:
         return typing.cast(typing.List["ScalingInterval"], result)
 
     @builtins.property
-    def adjustment_type(self) -> typing.Optional[AdjustmentType]:
+    def adjustment_type(self) -> typing.Optional["AdjustmentType"]:
         '''How the adjustment numbers inside 'intervals' are interpreted.
 
         :default: ChangeInCapacity
         '''
         result = self._values.get("adjustment_type")
-        return typing.cast(typing.Optional[AdjustmentType], result)
+        return typing.cast(typing.Optional["AdjustmentType"], result)
 
     @builtins.property
-    def cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Grace period after scaling activity.
 
         Subsequent scale outs during the cooldown period are squashed so that only
@@ -899,7 +899,7 @@ class BasicStepScalingPolicyProps:
         :see: https://docs.aws.amazon.com/autoscaling/application/APIReference/API_StepScalingPolicyConfiguration.html
         '''
         result = self._values.get("cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def datapoints_to_alarm(self) -> typing.Optional[jsii.Number]:
@@ -985,10 +985,10 @@ class BasicTargetTrackingScalingPolicyProps(BaseTargetTrackingProps):
         *,
         disable_scale_in: typing.Optional[builtins.bool] = None,
         policy_name: typing.Optional[builtins.str] = None,
-        scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scale_in_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        scale_out_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         target_value: jsii.Number,
-        custom_metric: typing.Optional[_IMetric_c7fd29de] = None,
+        custom_metric: typing.Optional["_IMetric_c7fd29de"] = None,
         predefined_metric: typing.Optional["PredefinedMetric"] = None,
         resource_label: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -1072,7 +1072,7 @@ class BasicTargetTrackingScalingPolicyProps(BaseTargetTrackingProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def scale_in_cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def scale_in_cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Period after a scale in activity completes before another scale in activity can start.
 
         :default:
@@ -1085,10 +1085,10 @@ class BasicTargetTrackingScalingPolicyProps(BaseTargetTrackingProps):
         Lambda provisioned concurrency
         '''
         result = self._values.get("scale_in_cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def scale_out_cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def scale_out_cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Period after a scale out activity completes before another scale out activity can start.
 
         :default:
@@ -1101,7 +1101,7 @@ class BasicTargetTrackingScalingPolicyProps(BaseTargetTrackingProps):
         Lambda provisioned concurrency
         '''
         result = self._values.get("scale_out_cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def target_value(self) -> jsii.Number:
@@ -1111,7 +1111,7 @@ class BasicTargetTrackingScalingPolicyProps(BaseTargetTrackingProps):
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def custom_metric(self) -> typing.Optional[_IMetric_c7fd29de]:
+    def custom_metric(self) -> typing.Optional["_IMetric_c7fd29de"]:
         '''A custom metric for application autoscaling.
 
         The metric must track utilization. Scaling out will happen if the metric is higher than
@@ -1122,7 +1122,7 @@ class BasicTargetTrackingScalingPolicyProps(BaseTargetTrackingProps):
         :default: - No custom metric.
         '''
         result = self._values.get("custom_metric")
-        return typing.cast(typing.Optional[_IMetric_c7fd29de], result)
+        return typing.cast(typing.Optional["_IMetric_c7fd29de"], result)
 
     @builtins.property
     def predefined_metric(self) -> typing.Optional["PredefinedMetric"]:
@@ -1218,17 +1218,17 @@ class CfnScalableTarget(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         max_capacity: jsii.Number,
         min_capacity: jsii.Number,
-        resource_id: typing.Union[builtins.str, _IClusterRef_c904150a],
+        resource_id: typing.Union[builtins.str, "_IClusterRef_c904150a"],
         scalable_dimension: builtins.str,
         service_namespace: builtins.str,
-        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
-        scheduled_actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalableTarget.ScheduledActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        suspended_state: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalableTarget.SuspendedStateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
+        scheduled_actions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalableTarget.ScheduledActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        suspended_state: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalableTarget.SuspendedStateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ApplicationAutoScaling::ScalableTarget``.
 
@@ -1264,7 +1264,7 @@ class CfnScalableTarget(
     @builtins.classmethod
     def arn_for_scalable_target(
         cls,
-        resource: _IScalableTargetRef_c773595e,
+        resource: "_IScalableTargetRef_c773595e",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1287,7 +1287,7 @@ class CfnScalableTarget(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnScalableTarget", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1331,9 +1331,9 @@ class CfnScalableTarget(
 
     @builtins.property
     @jsii.member(jsii_name="scalableTargetRef")
-    def scalable_target_ref(self) -> _ScalableTargetReference_febd2a49:
+    def scalable_target_ref(self) -> "_ScalableTargetReference_febd2a49":
         '''A reference to a ScalableTarget resource.'''
-        return typing.cast(_ScalableTargetReference_febd2a49, jsii.get(self, "scalableTargetRef"))
+        return typing.cast("_ScalableTargetReference_febd2a49", jsii.get(self, "scalableTargetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="maxCapacity")
@@ -1417,14 +1417,14 @@ class CfnScalableTarget(
     @jsii.member(jsii_name="scheduledActions")
     def scheduled_actions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalableTarget.ScheduledActionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalableTarget.ScheduledActionProperty"]]]]:
         '''The scheduled actions for the scalable target.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalableTarget.ScheduledActionProperty"]]]], jsii.get(self, "scheduledActions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalableTarget.ScheduledActionProperty"]]]], jsii.get(self, "scheduledActions"))
 
     @scheduled_actions.setter
     def scheduled_actions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalableTarget.ScheduledActionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalableTarget.ScheduledActionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f1adb9fa5e86479f2f4514b089b4fcee3b8718c5f7874ca0fe66105630e3636f)
@@ -1435,14 +1435,14 @@ class CfnScalableTarget(
     @jsii.member(jsii_name="suspendedState")
     def suspended_state(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalableTarget.SuspendedStateProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalableTarget.SuspendedStateProperty"]]:
         '''An embedded object that contains attributes and attribute values that are used to suspend and resume automatic scaling.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalableTarget.SuspendedStateProperty"]], jsii.get(self, "suspendedState"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalableTarget.SuspendedStateProperty"]], jsii.get(self, "suspendedState"))
 
     @suspended_state.setter
     def suspended_state(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalableTarget.SuspendedStateProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalableTarget.SuspendedStateProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0bbb1dcd1d81de0e4c36de9ea045348b3724df3d549254eef9a20300325fc117)
@@ -1537,9 +1537,9 @@ class CfnScalableTarget(
             *,
             schedule: builtins.str,
             scheduled_action_name: builtins.str,
-            end_time: typing.Optional[typing.Union[datetime.datetime, _IResolvable_da3f097b]] = None,
-            scalable_target_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalableTarget.ScalableTargetActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            start_time: typing.Optional[typing.Union[datetime.datetime, _IResolvable_da3f097b]] = None,
+            end_time: typing.Optional[typing.Union[datetime.datetime, "_IResolvable_da3f097b"]] = None,
+            scalable_target_action: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalableTarget.ScalableTargetActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            start_time: typing.Optional[typing.Union[datetime.datetime, "_IResolvable_da3f097b"]] = None,
             timezone: typing.Optional[builtins.str] = None,
         ) -> None:
             '''``ScheduledAction`` is a property of the `AWS::ApplicationAutoScaling::ScalableTarget <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html>`_ resource that specifies a scheduled action for a scalable target.
@@ -1634,18 +1634,18 @@ class CfnScalableTarget(
         @builtins.property
         def end_time(
             self,
-        ) -> typing.Optional[typing.Union[datetime.datetime, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[datetime.datetime, "_IResolvable_da3f097b"]]:
             '''The date and time that the action is scheduled to end, in UTC.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalabletarget-scheduledaction.html#cfn-applicationautoscaling-scalabletarget-scheduledaction-endtime
             '''
             result = self._values.get("end_time")
-            return typing.cast(typing.Optional[typing.Union[datetime.datetime, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[datetime.datetime, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def scalable_target_action(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalableTarget.ScalableTargetActionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalableTarget.ScalableTargetActionProperty"]]:
             '''The new minimum and maximum capacity.
 
             You can set both values or just one. At the scheduled time, if the current capacity is below the minimum capacity, Application Auto Scaling scales out to the minimum capacity. If the current capacity is above the maximum capacity, Application Auto Scaling scales in to the maximum capacity.
@@ -1653,18 +1653,18 @@ class CfnScalableTarget(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalabletarget-scheduledaction.html#cfn-applicationautoscaling-scalabletarget-scheduledaction-scalabletargetaction
             '''
             result = self._values.get("scalable_target_action")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalableTarget.ScalableTargetActionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalableTarget.ScalableTargetActionProperty"]], result)
 
         @builtins.property
         def start_time(
             self,
-        ) -> typing.Optional[typing.Union[datetime.datetime, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[datetime.datetime, "_IResolvable_da3f097b"]]:
             '''The date and time that the action is scheduled to begin, in UTC.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalabletarget-scheduledaction.html#cfn-applicationautoscaling-scalabletarget-scheduledaction-starttime
             '''
             result = self._values.get("start_time")
-            return typing.cast(typing.Optional[typing.Union[datetime.datetime, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[datetime.datetime, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def timezone(self) -> typing.Optional[builtins.str]:
@@ -1699,9 +1699,9 @@ class CfnScalableTarget(
         def __init__(
             self,
             *,
-            dynamic_scaling_in_suspended: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            dynamic_scaling_out_suspended: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            scheduled_scaling_suspended: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            dynamic_scaling_in_suspended: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            dynamic_scaling_out_suspended: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            scheduled_scaling_suspended: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''``SuspendedState`` is a property of the `AWS::ApplicationAutoScaling::ScalableTarget <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html>`_ resource that specifies whether the scaling activities for a scalable target are in a suspended state.
 
@@ -1742,7 +1742,7 @@ class CfnScalableTarget(
         @builtins.property
         def dynamic_scaling_in_suspended(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether scale in by a target tracking scaling policy or a step scaling policy is suspended.
 
             Set the value to ``true`` if you don't want Application Auto Scaling to remove capacity when a scaling policy is triggered. The default is ``false`` .
@@ -1750,12 +1750,12 @@ class CfnScalableTarget(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalabletarget-suspendedstate.html#cfn-applicationautoscaling-scalabletarget-suspendedstate-dynamicscalinginsuspended
             '''
             result = self._values.get("dynamic_scaling_in_suspended")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def dynamic_scaling_out_suspended(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether scale out by a target tracking scaling policy or a step scaling policy is suspended.
 
             Set the value to ``true`` if you don't want Application Auto Scaling to add capacity when a scaling policy is triggered. The default is ``false`` .
@@ -1763,12 +1763,12 @@ class CfnScalableTarget(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalabletarget-suspendedstate.html#cfn-applicationautoscaling-scalabletarget-suspendedstate-dynamicscalingoutsuspended
             '''
             result = self._values.get("dynamic_scaling_out_suspended")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def scheduled_scaling_suspended(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether scheduled scaling is suspended.
 
             Set the value to ``true`` if you don't want Application Auto Scaling to add or remove capacity by initiating scheduled actions. The default is ``false`` .
@@ -1776,7 +1776,7 @@ class CfnScalableTarget(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalabletarget-suspendedstate.html#cfn-applicationautoscaling-scalabletarget-suspendedstate-scheduledscalingsuspended
             '''
             result = self._values.get("scheduled_scaling_suspended")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1810,12 +1810,12 @@ class CfnScalableTargetProps:
         *,
         max_capacity: jsii.Number,
         min_capacity: jsii.Number,
-        resource_id: typing.Union[builtins.str, _IClusterRef_c904150a],
+        resource_id: typing.Union[builtins.str, "_IClusterRef_c904150a"],
         scalable_dimension: builtins.str,
         service_namespace: builtins.str,
-        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
-        scheduled_actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalableTarget.ScheduledActionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        suspended_state: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalableTarget.SuspendedStateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
+        scheduled_actions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalableTarget.ScheduledActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        suspended_state: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalableTarget.SuspendedStateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnScalableTarget``.
 
@@ -1915,7 +1915,7 @@ class CfnScalableTargetProps:
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def resource_id(self) -> typing.Union[builtins.str, _IClusterRef_c904150a]:
+    def resource_id(self) -> typing.Union[builtins.str, "_IClusterRef_c904150a"]:
         '''The identifier of the resource associated with the scalable target.
 
         This string consists of the resource type and unique identifier.
@@ -1945,7 +1945,7 @@ class CfnScalableTargetProps:
         '''
         result = self._values.get("resource_id")
         assert result is not None, "Required property 'resource_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IClusterRef_c904150a], result)
+        return typing.cast(typing.Union[builtins.str, "_IClusterRef_c904150a"], result)
 
     @builtins.property
     def scalable_dimension(self) -> builtins.str:
@@ -1997,7 +1997,7 @@ class CfnScalableTargetProps:
     @builtins.property
     def role_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''Specify the Amazon Resource Name (ARN) of an Identity and Access Management (IAM) role that allows Application Auto Scaling to modify the scalable target on your behalf.
 
         This can be either an IAM service role that Application Auto Scaling can assume to make calls to other AWS resources on your behalf, or a service-linked role for the specified service. For more information, see `How Application Auto Scaling works with IAM <https://docs.aws.amazon.com/autoscaling/application/userguide/security_iam_service-with-iam.html>`_ in the *Application Auto Scaling User Guide* .
@@ -2007,12 +2007,12 @@ class CfnScalableTargetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html#cfn-applicationautoscaling-scalabletarget-rolearn
         '''
         result = self._values.get("role_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     @builtins.property
     def scheduled_actions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnScalableTarget.ScheduledActionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalableTarget.ScheduledActionProperty"]]]]:
         '''The scheduled actions for the scalable target.
 
         Duplicates aren't allowed.
@@ -2020,12 +2020,12 @@ class CfnScalableTargetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html#cfn-applicationautoscaling-scalabletarget-scheduledactions
         '''
         result = self._values.get("scheduled_actions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnScalableTarget.ScheduledActionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalableTarget.ScheduledActionProperty"]]]], result)
 
     @builtins.property
     def suspended_state(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScalableTarget.SuspendedStateProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalableTarget.SuspendedStateProperty"]]:
         '''An embedded object that contains attributes and attribute values that are used to suspend and resume automatic scaling.
 
         Setting the value of an attribute to ``true`` suspends the specified scaling activities. Setting it to ``false`` (default) resumes the specified scaling activities.
@@ -2039,7 +2039,7 @@ class CfnScalableTargetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html#cfn-applicationautoscaling-scalabletarget-suspendedstate
         '''
         result = self._values.get("suspended_state")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScalableTarget.SuspendedStateProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalableTarget.SuspendedStateProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2233,18 +2233,18 @@ class CfnScalingPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_name: builtins.str,
         policy_type: builtins.str,
-        predictive_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        predictive_scaling_policy_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resource_id: typing.Optional[builtins.str] = None,
         scalable_dimension: typing.Optional[builtins.str] = None,
-        scaling_target_id: typing.Optional[typing.Union[builtins.str, _IScalableTargetRef_c773595e]] = None,
+        scaling_target_id: typing.Optional[typing.Union[builtins.str, "_IScalableTargetRef_c773595e"]] = None,
         service_namespace: typing.Optional[builtins.str] = None,
-        step_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.StepScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        target_tracking_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        step_scaling_policy_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.StepScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_tracking_scaling_policy_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ApplicationAutoScaling::ScalingPolicy``.
 
@@ -2282,7 +2282,7 @@ class CfnScalingPolicy(
     @builtins.classmethod
     def arn_for_scaling_policy(
         cls,
-        resource: _IScalingPolicyRef_50de02c0,
+        resource: "_IScalingPolicyRef_50de02c0",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2305,7 +2305,7 @@ class CfnScalingPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnScalingPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2350,9 +2350,9 @@ class CfnScalingPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="scalingPolicyRef")
-    def scaling_policy_ref(self) -> _ScalingPolicyReference_77ddf4b6:
+    def scaling_policy_ref(self) -> "_ScalingPolicyReference_77ddf4b6":
         '''A reference to a ScalingPolicy resource.'''
-        return typing.cast(_ScalingPolicyReference_77ddf4b6, jsii.get(self, "scalingPolicyRef"))
+        return typing.cast("_ScalingPolicyReference_77ddf4b6", jsii.get(self, "scalingPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policyName")
@@ -2384,14 +2384,14 @@ class CfnScalingPolicy(
     @jsii.member(jsii_name="predictiveScalingPolicyConfiguration")
     def predictive_scaling_policy_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty"]]:
         '''The predictive scaling policy configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty"]], jsii.get(self, "predictiveScalingPolicyConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty"]], jsii.get(self, "predictiveScalingPolicyConfiguration"))
 
     @predictive_scaling_policy_configuration.setter
     def predictive_scaling_policy_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a8ff4907f03a84bc381a0bf64cc7a5454e5ac237c8f91eef6a31a3bb7ccceabb)
@@ -2457,14 +2457,14 @@ class CfnScalingPolicy(
     @jsii.member(jsii_name="stepScalingPolicyConfiguration")
     def step_scaling_policy_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.StepScalingPolicyConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.StepScalingPolicyConfigurationProperty"]]:
         '''A step scaling policy.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.StepScalingPolicyConfigurationProperty"]], jsii.get(self, "stepScalingPolicyConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.StepScalingPolicyConfigurationProperty"]], jsii.get(self, "stepScalingPolicyConfiguration"))
 
     @step_scaling_policy_configuration.setter
     def step_scaling_policy_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.StepScalingPolicyConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.StepScalingPolicyConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ccee10df2369c02f2415d65418aa22f9f91b2dd5fab0700a4a452b640ae5db54)
@@ -2475,14 +2475,14 @@ class CfnScalingPolicy(
     @jsii.member(jsii_name="targetTrackingScalingPolicyConfiguration")
     def target_tracking_scaling_policy_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty"]]:
         '''A target tracking scaling policy.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty"]], jsii.get(self, "targetTrackingScalingPolicyConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty"]], jsii.get(self, "targetTrackingScalingPolicyConfiguration"))
 
     @target_tracking_scaling_policy_configuration.setter
     def target_tracking_scaling_policy_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d48220f9b4b78b76a3e0525fb18dc4772f5f73ecb26256ee41a09fa710c8be3a)
@@ -2505,9 +2505,9 @@ class CfnScalingPolicy(
         def __init__(
             self,
             *,
-            dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.MetricDimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.MetricDimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             metric_name: typing.Optional[builtins.str] = None,
-            metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.TargetTrackingMetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            metrics: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.TargetTrackingMetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             namespace: typing.Optional[builtins.str] = None,
             statistic: typing.Optional[builtins.str] = None,
             unit: typing.Optional[builtins.str] = None,
@@ -2597,7 +2597,7 @@ class CfnScalingPolicy(
         @builtins.property
         def dimensions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.MetricDimensionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.MetricDimensionProperty"]]]]:
             '''The dimensions of the metric.
 
             Conditional: If you published your metric with dimensions, you must specify the same dimensions in your scaling policy.
@@ -2605,7 +2605,7 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-customizedmetricspecification.html#cfn-applicationautoscaling-scalingpolicy-customizedmetricspecification-dimensions
             '''
             result = self._values.get("dimensions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.MetricDimensionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.MetricDimensionProperty"]]]], result)
 
         @builtins.property
         def metric_name(self) -> typing.Optional[builtins.str]:
@@ -2621,7 +2621,7 @@ class CfnScalingPolicy(
         @builtins.property
         def metrics(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.TargetTrackingMetricDataQueryProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingMetricDataQueryProperty"]]]]:
             '''The metrics to include in the target tracking scaling policy, as a metric data query.
 
             This can include both raw metric and metric math expressions.
@@ -2629,7 +2629,7 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-customizedmetricspecification.html#cfn-applicationautoscaling-scalingpolicy-customizedmetricspecification-metrics
             '''
             result = self._values.get("metrics")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.TargetTrackingMetricDataQueryProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingMetricDataQueryProperty"]]]], result)
 
         @builtins.property
         def namespace(self) -> typing.Optional[builtins.str]:
@@ -2839,7 +2839,7 @@ class CfnScalingPolicy(
         def __init__(
             self,
             *,
-            metric_data_queries: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            metric_data_queries: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Represents a CloudWatch metric of your choosing for a predictive scaling policy.
 
@@ -2885,14 +2885,14 @@ class CfnScalingPolicy(
         @builtins.property
         def metric_data_queries(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty"]]]:
             '''One or more metric data queries to provide data points for a metric specification.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingcustomizedcapacitymetric.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingcustomizedcapacitymetric-metricdataqueries
             '''
             result = self._values.get("metric_data_queries")
             assert result is not None, "Required property 'metric_data_queries' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2914,7 +2914,7 @@ class CfnScalingPolicy(
         def __init__(
             self,
             *,
-            metric_data_queries: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            metric_data_queries: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''The customized load metric specification.
 
@@ -2960,13 +2960,13 @@ class CfnScalingPolicy(
         @builtins.property
         def metric_data_queries(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty"]]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingcustomizedloadmetric.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingcustomizedloadmetric-metricdataqueries
             '''
             result = self._values.get("metric_data_queries")
             assert result is not None, "Required property 'metric_data_queries' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2988,7 +2988,7 @@ class CfnScalingPolicy(
         def __init__(
             self,
             *,
-            metric_data_queries: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            metric_data_queries: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''One or more metric data queries to provide data points for a metric specification.
 
@@ -3034,14 +3034,14 @@ class CfnScalingPolicy(
         @builtins.property
         def metric_data_queries(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty"]]]:
             '''One or more metric data queries to provide data points for a metric specification.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingcustomizedscalingmetric.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingcustomizedscalingmetric-metricdataqueries
             '''
             result = self._values.get("metric_data_queries")
             assert result is not None, "Required property 'metric_data_queries' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricDataQueryProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3072,8 +3072,8 @@ class CfnScalingPolicy(
             expression: typing.Optional[builtins.str] = None,
             id: typing.Optional[builtins.str] = None,
             label: typing.Optional[builtins.str] = None,
-            metric_stat: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingMetricStatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            return_data: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            metric_stat: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingMetricStatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            return_data: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The metric data to return.
 
@@ -3170,7 +3170,7 @@ class CfnScalingPolicy(
         @builtins.property
         def metric_stat(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricStatProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricStatProperty"]]:
             '''Information about the metric data to return.
 
             Conditional: Within each ``MetricDataQuery`` object, you must specify either ``Expression`` or ``MetricStat`` , but not both.
@@ -3178,12 +3178,12 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingmetricdataquery.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingmetricdataquery-metricstat
             '''
             result = self._values.get("metric_stat")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricStatProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricStatProperty"]], result)
 
         @builtins.property
         def return_data(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether to return the timestamps and raw data values of this metric.
 
             If you use any math expressions, specify ``true`` for this value for only the final math expression that the metric specification is based on. You must specify ``false`` for ``ReturnData`` for all the other metrics and expressions used in the metric specification.
@@ -3193,7 +3193,7 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingmetricdataquery.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingmetricdataquery-returndata
             '''
             result = self._values.get("return_data")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3289,7 +3289,7 @@ class CfnScalingPolicy(
         def __init__(
             self,
             *,
-            dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingMetricDimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingMetricDimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             metric_name: typing.Optional[builtins.str] = None,
             namespace: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -3333,13 +3333,13 @@ class CfnScalingPolicy(
         @builtins.property
         def dimensions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricDimensionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricDimensionProperty"]]]]:
             '''Describes the dimensions of the metric.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingmetric.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingmetric-dimensions
             '''
             result = self._values.get("dimensions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricDimensionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricDimensionProperty"]]]], result)
 
         @builtins.property
         def metric_name(self) -> typing.Optional[builtins.str]:
@@ -3388,12 +3388,12 @@ class CfnScalingPolicy(
             self,
             *,
             target_value: jsii.Number,
-            customized_capacity_metric_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingCustomizedCapacityMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            customized_load_metric_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingCustomizedLoadMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            customized_scaling_metric_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingCustomizedScalingMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            predefined_load_metric_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingPredefinedLoadMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            predefined_metric_pair_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingPredefinedMetricPairProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            predefined_scaling_metric_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingPredefinedScalingMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            customized_capacity_metric_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingCustomizedCapacityMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            customized_load_metric_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingCustomizedLoadMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            customized_scaling_metric_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingCustomizedScalingMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            predefined_load_metric_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingPredefinedLoadMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            predefined_metric_pair_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingPredefinedMetricPairProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            predefined_scaling_metric_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingPredefinedScalingMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''This structure specifies the metrics and target utilization settings for a predictive scaling policy.
 
@@ -3538,68 +3538,68 @@ class CfnScalingPolicy(
         @builtins.property
         def customized_capacity_metric_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingCustomizedCapacityMetricProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingCustomizedCapacityMetricProperty"]]:
             '''The customized capacity metric specification.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingmetricspecification.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingmetricspecification-customizedcapacitymetricspecification
             '''
             result = self._values.get("customized_capacity_metric_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingCustomizedCapacityMetricProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingCustomizedCapacityMetricProperty"]], result)
 
         @builtins.property
         def customized_load_metric_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingCustomizedLoadMetricProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingCustomizedLoadMetricProperty"]]:
             '''The customized load metric specification.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingmetricspecification.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingmetricspecification-customizedloadmetricspecification
             '''
             result = self._values.get("customized_load_metric_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingCustomizedLoadMetricProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingCustomizedLoadMetricProperty"]], result)
 
         @builtins.property
         def customized_scaling_metric_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingCustomizedScalingMetricProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingCustomizedScalingMetricProperty"]]:
             '''The customized scaling metric specification.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingmetricspecification.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingmetricspecification-customizedscalingmetricspecification
             '''
             result = self._values.get("customized_scaling_metric_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingCustomizedScalingMetricProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingCustomizedScalingMetricProperty"]], result)
 
         @builtins.property
         def predefined_load_metric_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingPredefinedLoadMetricProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingPredefinedLoadMetricProperty"]]:
             '''The predefined load metric specification.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingmetricspecification.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingmetricspecification-predefinedloadmetricspecification
             '''
             result = self._values.get("predefined_load_metric_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingPredefinedLoadMetricProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingPredefinedLoadMetricProperty"]], result)
 
         @builtins.property
         def predefined_metric_pair_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingPredefinedMetricPairProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingPredefinedMetricPairProperty"]]:
             '''The predefined metric pair specification that determines the appropriate scaling metric and load metric to use.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingmetricspecification.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingmetricspecification-predefinedmetricpairspecification
             '''
             result = self._values.get("predefined_metric_pair_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingPredefinedMetricPairProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingPredefinedMetricPairProperty"]], result)
 
         @builtins.property
         def predefined_scaling_metric_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingPredefinedScalingMetricProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingPredefinedScalingMetricProperty"]]:
             '''The predefined scaling metric specification.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingmetricspecification.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingmetricspecification-predefinedscalingmetricspecification
             '''
             result = self._values.get("predefined_scaling_metric_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingPredefinedScalingMetricProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingPredefinedScalingMetricProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3621,7 +3621,7 @@ class CfnScalingPolicy(
         def __init__(
             self,
             *,
-            metric: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            metric: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             stat: typing.Optional[builtins.str] = None,
             unit: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -3669,7 +3669,7 @@ class CfnScalingPolicy(
         @builtins.property
         def metric(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricProperty"]]:
             '''The CloudWatch metric to return, including the metric name, namespace, and dimensions.
 
             To get the exact metric name, namespace, and dimensions, inspect the `Metric <https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_Metric.html>`_ object that is returned by a call to `ListMetrics <https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_ListMetrics.html>`_ .
@@ -3677,7 +3677,7 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predictivescalingmetricstat.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingmetricstat-metric
             '''
             result = self._values.get("metric")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricProperty"]], result)
 
         @builtins.property
         def stat(self) -> typing.Optional[builtins.str]:
@@ -3729,7 +3729,7 @@ class CfnScalingPolicy(
         def __init__(
             self,
             *,
-            metric_specifications: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingMetricSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            metric_specifications: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingMetricSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]],
             max_capacity_breach_behavior: typing.Optional[builtins.str] = None,
             max_capacity_buffer: typing.Optional[jsii.Number] = None,
             mode: typing.Optional[builtins.str] = None,
@@ -3868,7 +3868,7 @@ class CfnScalingPolicy(
         @builtins.property
         def metric_specifications(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricSpecificationProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricSpecificationProperty"]]]:
             '''This structure includes the metrics and target utilization to use for predictive scaling.
 
             This is an array, but we currently only support a single metric specification. That is, you can specify a target value and a single metric pair, or a target value and one scaling metric and one load metric.
@@ -3877,7 +3877,7 @@ class CfnScalingPolicy(
             '''
             result = self._values.get("metric_specifications")
             assert result is not None, "Required property 'metric_specifications' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredictiveScalingMetricSpecificationProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingMetricSpecificationProperty"]]], result)
 
         @builtins.property
         def max_capacity_breach_behavior(self) -> typing.Optional[builtins.str]:
@@ -4336,7 +4336,7 @@ class CfnScalingPolicy(
             cooldown: typing.Optional[jsii.Number] = None,
             metric_aggregation_type: typing.Optional[builtins.str] = None,
             min_adjustment_magnitude: typing.Optional[jsii.Number] = None,
-            step_adjustments: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.StepAdjustmentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            step_adjustments: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.StepAdjustmentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''``StepScalingPolicyConfiguration`` is a property of the `AWS::ApplicationAutoScaling::ScalingPolicy <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html>`_ resource that specifies a step scaling policy configuration for Application Auto Scaling.
 
@@ -4435,7 +4435,7 @@ class CfnScalingPolicy(
         @builtins.property
         def step_adjustments(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.StepAdjustmentProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.StepAdjustmentProperty"]]]]:
             '''A set of adjustments that enable you to scale based on the size of the alarm breach.
 
             At least one step adjustment is required if you are adding a new step scaling policy configuration.
@@ -4443,7 +4443,7 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-stepscalingpolicyconfiguration.html#cfn-applicationautoscaling-scalingpolicy-stepscalingpolicyconfiguration-stepadjustments
             '''
             result = self._values.get("step_adjustments")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.StepAdjustmentProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.StepAdjustmentProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4474,8 +4474,8 @@ class CfnScalingPolicy(
             expression: typing.Optional[builtins.str] = None,
             id: typing.Optional[builtins.str] = None,
             label: typing.Optional[builtins.str] = None,
-            metric_stat: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.TargetTrackingMetricStatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            return_data: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            metric_stat: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.TargetTrackingMetricStatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            return_data: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The metric data to return.
 
@@ -4578,7 +4578,7 @@ class CfnScalingPolicy(
         @builtins.property
         def metric_stat(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.TargetTrackingMetricStatProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingMetricStatProperty"]]:
             '''Information about the metric data to return.
 
             Conditional: Within each ``MetricDataQuery`` object, you must specify either ``Expression`` or ``MetricStat`` , but not both.
@@ -4586,12 +4586,12 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-targettrackingmetricdataquery.html#cfn-applicationautoscaling-scalingpolicy-targettrackingmetricdataquery-metricstat
             '''
             result = self._values.get("metric_stat")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.TargetTrackingMetricStatProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingMetricStatProperty"]], result)
 
         @builtins.property
         def return_data(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether to return the timestamps and raw data values of this metric.
 
             If you use any math expressions, specify ``true`` for this value for only the final math expression that the metric specification is based on. You must specify ``false`` for ``ReturnData`` for all the other metrics and expressions used in the metric specification.
@@ -4601,7 +4601,7 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-targettrackingmetricdataquery.html#cfn-applicationautoscaling-scalingpolicy-targettrackingmetricdataquery-returndata
             '''
             result = self._values.get("return_data")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4697,7 +4697,7 @@ class CfnScalingPolicy(
         def __init__(
             self,
             *,
-            dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.TargetTrackingMetricDimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.TargetTrackingMetricDimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             metric_name: typing.Optional[builtins.str] = None,
             namespace: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -4743,7 +4743,7 @@ class CfnScalingPolicy(
         @builtins.property
         def dimensions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.TargetTrackingMetricDimensionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingMetricDimensionProperty"]]]]:
             '''The dimensions for the metric.
 
             For the list of available dimensions, see the AWS documentation available from the table in `AWS services that publish CloudWatch metrics <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/aws-services-cloudwatch-metrics.html>`_ in the *Amazon CloudWatch User Guide* .
@@ -4753,7 +4753,7 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-targettrackingmetric.html#cfn-applicationautoscaling-scalingpolicy-targettrackingmetric-dimensions
             '''
             result = self._values.get("dimensions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.TargetTrackingMetricDimensionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingMetricDimensionProperty"]]]], result)
 
         @builtins.property
         def metric_name(self) -> typing.Optional[builtins.str]:
@@ -4795,7 +4795,7 @@ class CfnScalingPolicy(
         def __init__(
             self,
             *,
-            metric: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.TargetTrackingMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            metric: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.TargetTrackingMetricProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             stat: typing.Optional[builtins.str] = None,
             unit: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -4847,7 +4847,7 @@ class CfnScalingPolicy(
         @builtins.property
         def metric(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.TargetTrackingMetricProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingMetricProperty"]]:
             '''The CloudWatch metric to return, including the metric name, namespace, and dimensions.
 
             To get the exact metric name, namespace, and dimensions, inspect the `Metric <https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_Metric.html>`_ object that is returned by a call to `ListMetrics <https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_ListMetrics.html>`_ .
@@ -4855,7 +4855,7 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-targettrackingmetricstat.html#cfn-applicationautoscaling-scalingpolicy-targettrackingmetricstat-metric
             '''
             result = self._values.get("metric")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.TargetTrackingMetricProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingMetricProperty"]], result)
 
         @builtins.property
         def stat(self) -> typing.Optional[builtins.str]:
@@ -4909,9 +4909,9 @@ class CfnScalingPolicy(
             self,
             *,
             target_value: jsii.Number,
-            customized_metric_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.CustomizedMetricSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            disable_scale_in: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            predefined_metric_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredefinedMetricSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            customized_metric_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.CustomizedMetricSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            disable_scale_in: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            predefined_metric_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredefinedMetricSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             scale_in_cooldown: typing.Optional[jsii.Number] = None,
             scale_out_cooldown: typing.Optional[jsii.Number] = None,
         ) -> None:
@@ -5015,7 +5015,7 @@ class CfnScalingPolicy(
         @builtins.property
         def customized_metric_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.CustomizedMetricSpecificationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.CustomizedMetricSpecificationProperty"]]:
             '''A customized metric.
 
             You can specify either a predefined metric or a customized metric.
@@ -5023,12 +5023,12 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-targettrackingscalingpolicyconfiguration.html#cfn-applicationautoscaling-scalingpolicy-targettrackingscalingpolicyconfiguration-customizedmetricspecification
             '''
             result = self._values.get("customized_metric_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.CustomizedMetricSpecificationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.CustomizedMetricSpecificationProperty"]], result)
 
         @builtins.property
         def disable_scale_in(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether scale in by the target tracking scaling policy is disabled.
 
             If the value is ``true`` , scale in is disabled and the target tracking scaling policy won't remove capacity from the scalable target. Otherwise, scale in is enabled and the target tracking scaling policy can remove capacity from the scalable target. The default value is ``false`` .
@@ -5036,12 +5036,12 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-targettrackingscalingpolicyconfiguration.html#cfn-applicationautoscaling-scalingpolicy-targettrackingscalingpolicyconfiguration-disablescalein
             '''
             result = self._values.get("disable_scale_in")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def predefined_metric_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredefinedMetricSpecificationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredefinedMetricSpecificationProperty"]]:
             '''A predefined metric.
 
             You can specify either a predefined metric or a customized metric.
@@ -5049,7 +5049,7 @@ class CfnScalingPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-targettrackingscalingpolicyconfiguration.html#cfn-applicationautoscaling-scalingpolicy-targettrackingscalingpolicyconfiguration-predefinedmetricspecification
             '''
             result = self._values.get("predefined_metric_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScalingPolicy.PredefinedMetricSpecificationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredefinedMetricSpecificationProperty"]], result)
 
         @builtins.property
         def scale_in_cooldown(self) -> typing.Optional[jsii.Number]:
@@ -5106,13 +5106,13 @@ class CfnScalingPolicyProps:
         *,
         policy_name: builtins.str,
         policy_type: builtins.str,
-        predictive_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        predictive_scaling_policy_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resource_id: typing.Optional[builtins.str] = None,
         scalable_dimension: typing.Optional[builtins.str] = None,
-        scaling_target_id: typing.Optional[typing.Union[builtins.str, _IScalableTargetRef_c773595e]] = None,
+        scaling_target_id: typing.Optional[typing.Union[builtins.str, "_IScalableTargetRef_c773595e"]] = None,
         service_namespace: typing.Optional[builtins.str] = None,
-        step_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.StepScalingPolicyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        target_tracking_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        step_scaling_policy_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.StepScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_tracking_scaling_policy_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnScalingPolicy``.
 
@@ -5355,13 +5355,13 @@ class CfnScalingPolicyProps:
     @builtins.property
     def predictive_scaling_policy_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty"]]:
         '''The predictive scaling policy configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html#cfn-applicationautoscaling-scalingpolicy-predictivescalingpolicyconfiguration
         '''
         result = self._values.get("predictive_scaling_policy_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty"]], result)
 
     @builtins.property
     def resource_id(self) -> typing.Optional[builtins.str]:
@@ -5432,7 +5432,7 @@ class CfnScalingPolicyProps:
     @builtins.property
     def scaling_target_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IScalableTargetRef_c773595e]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IScalableTargetRef_c773595e"]]:
         '''The CloudFormation-generated ID of an Application Auto Scaling scalable target.
 
         For more information about the ID, see the Return Value section of the ``AWS::ApplicationAutoScaling::ScalableTarget`` resource.
@@ -5443,7 +5443,7 @@ class CfnScalingPolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html#cfn-applicationautoscaling-scalingpolicy-scalingtargetid
         '''
         result = self._values.get("scaling_target_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IScalableTargetRef_c773595e]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IScalableTargetRef_c773595e"]], result)
 
     @builtins.property
     def service_namespace(self) -> typing.Optional[builtins.str]:
@@ -5457,24 +5457,24 @@ class CfnScalingPolicyProps:
     @builtins.property
     def step_scaling_policy_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScalingPolicy.StepScalingPolicyConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.StepScalingPolicyConfigurationProperty"]]:
         '''A step scaling policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html#cfn-applicationautoscaling-scalingpolicy-stepscalingpolicyconfiguration
         '''
         result = self._values.get("step_scaling_policy_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScalingPolicy.StepScalingPolicyConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.StepScalingPolicyConfigurationProperty"]], result)
 
     @builtins.property
     def target_tracking_scaling_policy_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty"]]:
         '''A target tracking scaling policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html#cfn-applicationautoscaling-scalingpolicy-targettrackingscalingpolicyconfiguration
         '''
         result = self._values.get("target_tracking_scaling_policy_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5950,7 +5950,7 @@ class ScalableTarget(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         max_capacity: jsii.Number,
@@ -5958,7 +5958,7 @@ class ScalableTarget(
         resource_id: builtins.str,
         scalable_dimension: builtins.str,
         service_namespace: "ServiceNamespace",
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -5989,10 +5989,10 @@ class ScalableTarget(
     @builtins.classmethod
     def from_scalable_target_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         scalable_target_id: builtins.str,
-    ) -> IScalableTarget:
+    ) -> "IScalableTarget":
         '''
         :param scope: -
         :param id: -
@@ -6003,10 +6003,10 @@ class ScalableTarget(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument scalable_target_id", value=scalable_target_id, expected_type=type_hints["scalable_target_id"])
-        return typing.cast(IScalableTarget, jsii.sinvoke(cls, "fromScalableTargetId", [scope, id, scalable_target_id]))
+        return typing.cast("IScalableTarget", jsii.sinvoke(cls, "fromScalableTargetId", [scope, id, scalable_target_id]))
 
     @jsii.member(jsii_name="addToRolePolicy")
-    def add_to_role_policy(self, statement: _PolicyStatement_0fe33853) -> None:
+    def add_to_role_policy(self, statement: "_PolicyStatement_0fe33853") -> None:
         '''Add a policy statement to the role's policy.
 
         :param statement: -
@@ -6021,13 +6021,13 @@ class ScalableTarget(
         self,
         id: builtins.str,
         *,
-        metric: _IMetric_c7fd29de,
+        metric: "_IMetric_c7fd29de",
         scaling_steps: typing.Sequence[typing.Union["ScalingInterval", typing.Dict[builtins.str, typing.Any]]],
-        adjustment_type: typing.Optional[AdjustmentType] = None,
-        cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        adjustment_type: typing.Optional["AdjustmentType"] = None,
+        cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         evaluation_periods: typing.Optional[jsii.Number] = None,
-        metric_aggregation_type: typing.Optional[MetricAggregationType] = None,
+        metric_aggregation_type: typing.Optional["MetricAggregationType"] = None,
         min_adjustment_magnitude: typing.Optional[jsii.Number] = None,
     ) -> "StepScalingPolicy":
         '''Scale out or in, in response to a metric.
@@ -6068,7 +6068,7 @@ class ScalableTarget(
         max_capacity: typing.Optional[jsii.Number] = None,
         min_capacity: typing.Optional[jsii.Number] = None,
         start_time: typing.Optional[datetime.datetime] = None,
-        time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
+        time_zone: typing.Optional["_TimeZone_cdd72ac9"] = None,
     ) -> None:
         '''Scale out or in based on time.
 
@@ -6100,13 +6100,13 @@ class ScalableTarget(
         id: builtins.str,
         *,
         target_value: jsii.Number,
-        custom_metric: typing.Optional[_IMetric_c7fd29de] = None,
-        predefined_metric: typing.Optional[PredefinedMetric] = None,
+        custom_metric: typing.Optional["_IMetric_c7fd29de"] = None,
+        predefined_metric: typing.Optional["PredefinedMetric"] = None,
         resource_label: typing.Optional[builtins.str] = None,
         disable_scale_in: typing.Optional[builtins.bool] = None,
         policy_name: typing.Optional[builtins.str] = None,
-        scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scale_in_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        scale_out_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "TargetTrackingScalingPolicy":
         '''Scale out or in in order to keep a metric around a target value.
 
@@ -6144,9 +6144,9 @@ class ScalableTarget(
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''The role used to give AutoScaling permissions to your resource.'''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "role"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "role"))
 
     @builtins.property
     @jsii.member(jsii_name="scalableTargetId")
@@ -6181,7 +6181,7 @@ class ScalableTargetProps:
         resource_id: builtins.str,
         scalable_dimension: builtins.str,
         service_namespace: "ServiceNamespace",
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''Properties for a scalable target.
 
@@ -6283,13 +6283,13 @@ class ScalableTargetProps:
         return typing.cast("ServiceNamespace", result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Role that allows Application Auto Scaling to modify your scalable target.
 
         :default: A role is automatically created
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6423,7 +6423,7 @@ class ScalingSchedule:
         max_capacity: typing.Optional[jsii.Number] = None,
         min_capacity: typing.Optional[jsii.Number] = None,
         start_time: typing.Optional[datetime.datetime] = None,
-        time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
+        time_zone: typing.Optional["_TimeZone_cdd72ac9"] = None,
     ) -> None:
         '''A scheduled scaling action.
 
@@ -6542,13 +6542,13 @@ class ScalingSchedule:
         return typing.cast(typing.Optional[datetime.datetime], result)
 
     @builtins.property
-    def time_zone(self) -> typing.Optional[_TimeZone_cdd72ac9]:
+    def time_zone(self) -> typing.Optional["_TimeZone_cdd72ac9"]:
         '''The time zone used when referring to the date and time of a scheduled action, when the scheduled action uses an at or cron expression.
 
         :default: - UTC
         '''
         result = self._values.get("time_zone")
-        return typing.cast(typing.Optional[_TimeZone_cdd72ac9], result)
+        return typing.cast(typing.Optional["_TimeZone_cdd72ac9"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6655,7 +6655,7 @@ class Schedule(
 
     @jsii.member(jsii_name="rate")
     @builtins.classmethod
-    def rate(cls, duration: _Duration_4839e8c3) -> "Schedule":
+    def rate(cls, duration: "_Duration_4839e8c3") -> "Schedule":
         '''Construct a schedule from an interval and a time unit.
 
         :param duration: -
@@ -6776,13 +6776,13 @@ class StepScalingAction(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        scaling_target: IScalableTarget,
-        adjustment_type: typing.Optional[AdjustmentType] = None,
-        cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        metric_aggregation_type: typing.Optional[MetricAggregationType] = None,
+        scaling_target: "IScalableTarget",
+        adjustment_type: typing.Optional["AdjustmentType"] = None,
+        cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        metric_aggregation_type: typing.Optional["MetricAggregationType"] = None,
         min_adjustment_magnitude: typing.Optional[jsii.Number] = None,
         policy_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -6854,10 +6854,10 @@ class StepScalingActionProps:
     def __init__(
         self,
         *,
-        scaling_target: IScalableTarget,
-        adjustment_type: typing.Optional[AdjustmentType] = None,
-        cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        metric_aggregation_type: typing.Optional[MetricAggregationType] = None,
+        scaling_target: "IScalableTarget",
+        adjustment_type: typing.Optional["AdjustmentType"] = None,
+        cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        metric_aggregation_type: typing.Optional["MetricAggregationType"] = None,
         min_adjustment_magnitude: typing.Optional[jsii.Number] = None,
         policy_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -6915,23 +6915,23 @@ class StepScalingActionProps:
             self._values["policy_name"] = policy_name
 
     @builtins.property
-    def scaling_target(self) -> IScalableTarget:
+    def scaling_target(self) -> "IScalableTarget":
         '''The scalable target.'''
         result = self._values.get("scaling_target")
         assert result is not None, "Required property 'scaling_target' is missing"
-        return typing.cast(IScalableTarget, result)
+        return typing.cast("IScalableTarget", result)
 
     @builtins.property
-    def adjustment_type(self) -> typing.Optional[AdjustmentType]:
+    def adjustment_type(self) -> typing.Optional["AdjustmentType"]:
         '''How the adjustment numbers are interpreted.
 
         :default: ChangeInCapacity
         '''
         result = self._values.get("adjustment_type")
-        return typing.cast(typing.Optional[AdjustmentType], result)
+        return typing.cast(typing.Optional["AdjustmentType"], result)
 
     @builtins.property
-    def cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Grace period after scaling activity.
 
         For scale out policies, multiple scale outs during the cooldown period are
@@ -6945,16 +6945,16 @@ class StepScalingActionProps:
         :see: https://docs.aws.amazon.com/autoscaling/application/APIReference/API_StepScalingPolicyConfiguration.html
         '''
         result = self._values.get("cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def metric_aggregation_type(self) -> typing.Optional[MetricAggregationType]:
+    def metric_aggregation_type(self) -> typing.Optional["MetricAggregationType"]:
         '''The aggregation type for the CloudWatch metrics.
 
         :default: Average
         '''
         result = self._values.get("metric_aggregation_type")
-        return typing.cast(typing.Optional[MetricAggregationType], result)
+        return typing.cast(typing.Optional["MetricAggregationType"], result)
 
     @builtins.property
     def min_adjustment_magnitude(self) -> typing.Optional[jsii.Number]:
@@ -7036,17 +7036,17 @@ class StepScalingPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        scaling_target: IScalableTarget,
-        metric: _IMetric_c7fd29de,
-        scaling_steps: typing.Sequence[typing.Union[ScalingInterval, typing.Dict[builtins.str, typing.Any]]],
-        adjustment_type: typing.Optional[AdjustmentType] = None,
-        cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scaling_target: "IScalableTarget",
+        metric: "_IMetric_c7fd29de",
+        scaling_steps: typing.Sequence[typing.Union["ScalingInterval", typing.Dict[builtins.str, typing.Any]]],
+        adjustment_type: typing.Optional["AdjustmentType"] = None,
+        cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         evaluation_periods: typing.Optional[jsii.Number] = None,
-        metric_aggregation_type: typing.Optional[MetricAggregationType] = None,
+        metric_aggregation_type: typing.Optional["MetricAggregationType"] = None,
         min_adjustment_magnitude: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -7082,23 +7082,23 @@ class StepScalingPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="lowerAction")
-    def lower_action(self) -> typing.Optional[StepScalingAction]:
-        return typing.cast(typing.Optional[StepScalingAction], jsii.get(self, "lowerAction"))
+    def lower_action(self) -> typing.Optional["StepScalingAction"]:
+        return typing.cast(typing.Optional["StepScalingAction"], jsii.get(self, "lowerAction"))
 
     @builtins.property
     @jsii.member(jsii_name="lowerAlarm")
-    def lower_alarm(self) -> typing.Optional[_Alarm_9fbab1f1]:
-        return typing.cast(typing.Optional[_Alarm_9fbab1f1], jsii.get(self, "lowerAlarm"))
+    def lower_alarm(self) -> typing.Optional["_Alarm_9fbab1f1"]:
+        return typing.cast(typing.Optional["_Alarm_9fbab1f1"], jsii.get(self, "lowerAlarm"))
 
     @builtins.property
     @jsii.member(jsii_name="upperAction")
-    def upper_action(self) -> typing.Optional[StepScalingAction]:
-        return typing.cast(typing.Optional[StepScalingAction], jsii.get(self, "upperAction"))
+    def upper_action(self) -> typing.Optional["StepScalingAction"]:
+        return typing.cast(typing.Optional["StepScalingAction"], jsii.get(self, "upperAction"))
 
     @builtins.property
     @jsii.member(jsii_name="upperAlarm")
-    def upper_alarm(self) -> typing.Optional[_Alarm_9fbab1f1]:
-        return typing.cast(typing.Optional[_Alarm_9fbab1f1], jsii.get(self, "upperAlarm"))
+    def upper_alarm(self) -> typing.Optional["_Alarm_9fbab1f1"]:
+        return typing.cast(typing.Optional["_Alarm_9fbab1f1"], jsii.get(self, "upperAlarm"))
 
 
 @jsii.data_type(
@@ -7120,15 +7120,15 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
     def __init__(
         self,
         *,
-        metric: _IMetric_c7fd29de,
-        scaling_steps: typing.Sequence[typing.Union[ScalingInterval, typing.Dict[builtins.str, typing.Any]]],
-        adjustment_type: typing.Optional[AdjustmentType] = None,
-        cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        metric: "_IMetric_c7fd29de",
+        scaling_steps: typing.Sequence[typing.Union["ScalingInterval", typing.Dict[builtins.str, typing.Any]]],
+        adjustment_type: typing.Optional["AdjustmentType"] = None,
+        cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         evaluation_periods: typing.Optional[jsii.Number] = None,
-        metric_aggregation_type: typing.Optional[MetricAggregationType] = None,
+        metric_aggregation_type: typing.Optional["MetricAggregationType"] = None,
         min_adjustment_magnitude: typing.Optional[jsii.Number] = None,
-        scaling_target: IScalableTarget,
+        scaling_target: "IScalableTarget",
     ) -> None:
         '''
         :param metric: Metric to scale on.
@@ -7204,14 +7204,14 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
             self._values["min_adjustment_magnitude"] = min_adjustment_magnitude
 
     @builtins.property
-    def metric(self) -> _IMetric_c7fd29de:
+    def metric(self) -> "_IMetric_c7fd29de":
         '''Metric to scale on.'''
         result = self._values.get("metric")
         assert result is not None, "Required property 'metric' is missing"
-        return typing.cast(_IMetric_c7fd29de, result)
+        return typing.cast("_IMetric_c7fd29de", result)
 
     @builtins.property
-    def scaling_steps(self) -> typing.List[ScalingInterval]:
+    def scaling_steps(self) -> typing.List["ScalingInterval"]:
         '''The intervals for scaling.
 
         Maps a range of metric values to a particular scaling behavior.
@@ -7220,19 +7220,19 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
         '''
         result = self._values.get("scaling_steps")
         assert result is not None, "Required property 'scaling_steps' is missing"
-        return typing.cast(typing.List[ScalingInterval], result)
+        return typing.cast(typing.List["ScalingInterval"], result)
 
     @builtins.property
-    def adjustment_type(self) -> typing.Optional[AdjustmentType]:
+    def adjustment_type(self) -> typing.Optional["AdjustmentType"]:
         '''How the adjustment numbers inside 'intervals' are interpreted.
 
         :default: ChangeInCapacity
         '''
         result = self._values.get("adjustment_type")
-        return typing.cast(typing.Optional[AdjustmentType], result)
+        return typing.cast(typing.Optional["AdjustmentType"], result)
 
     @builtins.property
-    def cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Grace period after scaling activity.
 
         Subsequent scale outs during the cooldown period are squashed so that only
@@ -7245,7 +7245,7 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
         :see: https://docs.aws.amazon.com/autoscaling/application/APIReference/API_StepScalingPolicyConfiguration.html
         '''
         result = self._values.get("cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def datapoints_to_alarm(self) -> typing.Optional[jsii.Number]:
@@ -7277,7 +7277,7 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def metric_aggregation_type(self) -> typing.Optional[MetricAggregationType]:
+    def metric_aggregation_type(self) -> typing.Optional["MetricAggregationType"]:
         '''Aggregation to apply to all data points over the evaluation periods.
 
         Only has meaning if ``evaluationPeriods != 1``.
@@ -7285,7 +7285,7 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
         :default: - The statistic from the metric if applicable (MIN, MAX, AVERAGE), otherwise AVERAGE.
         '''
         result = self._values.get("metric_aggregation_type")
-        return typing.cast(typing.Optional[MetricAggregationType], result)
+        return typing.cast(typing.Optional["MetricAggregationType"], result)
 
     @builtins.property
     def min_adjustment_magnitude(self) -> typing.Optional[jsii.Number]:
@@ -7300,11 +7300,11 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def scaling_target(self) -> IScalableTarget:
+    def scaling_target(self) -> "IScalableTarget":
         '''The scaling target.'''
         result = self._values.get("scaling_target")
         assert result is not None, "Required property 'scaling_target' is missing"
-        return typing.cast(IScalableTarget, result)
+        return typing.cast("IScalableTarget", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7354,18 +7354,18 @@ class TargetTrackingScalingPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        scaling_target: IScalableTarget,
+        scaling_target: "IScalableTarget",
         target_value: jsii.Number,
-        custom_metric: typing.Optional[_IMetric_c7fd29de] = None,
-        predefined_metric: typing.Optional[PredefinedMetric] = None,
+        custom_metric: typing.Optional["_IMetric_c7fd29de"] = None,
+        predefined_metric: typing.Optional["PredefinedMetric"] = None,
         resource_label: typing.Optional[builtins.str] = None,
         disable_scale_in: typing.Optional[builtins.bool] = None,
         policy_name: typing.Optional[builtins.str] = None,
-        scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scale_in_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        scale_out_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -7426,13 +7426,13 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
         *,
         disable_scale_in: typing.Optional[builtins.bool] = None,
         policy_name: typing.Optional[builtins.str] = None,
-        scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scale_in_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        scale_out_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         target_value: jsii.Number,
-        custom_metric: typing.Optional[_IMetric_c7fd29de] = None,
-        predefined_metric: typing.Optional[PredefinedMetric] = None,
+        custom_metric: typing.Optional["_IMetric_c7fd29de"] = None,
+        predefined_metric: typing.Optional["PredefinedMetric"] = None,
         resource_label: typing.Optional[builtins.str] = None,
-        scaling_target: IScalableTarget,
+        scaling_target: "IScalableTarget",
     ) -> None:
         '''Properties for a concrete TargetTrackingPolicy.
 
@@ -7529,7 +7529,7 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def scale_in_cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def scale_in_cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Period after a scale in activity completes before another scale in activity can start.
 
         :default:
@@ -7542,10 +7542,10 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
         Lambda provisioned concurrency
         '''
         result = self._values.get("scale_in_cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def scale_out_cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def scale_out_cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Period after a scale out activity completes before another scale out activity can start.
 
         :default:
@@ -7558,7 +7558,7 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
         Lambda provisioned concurrency
         '''
         result = self._values.get("scale_out_cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def target_value(self) -> jsii.Number:
@@ -7568,7 +7568,7 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def custom_metric(self) -> typing.Optional[_IMetric_c7fd29de]:
+    def custom_metric(self) -> typing.Optional["_IMetric_c7fd29de"]:
         '''A custom metric for application autoscaling.
 
         The metric must track utilization. Scaling out will happen if the metric is higher than
@@ -7579,10 +7579,10 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
         :default: - No custom metric.
         '''
         result = self._values.get("custom_metric")
-        return typing.cast(typing.Optional[_IMetric_c7fd29de], result)
+        return typing.cast(typing.Optional["_IMetric_c7fd29de"], result)
 
     @builtins.property
-    def predefined_metric(self) -> typing.Optional[PredefinedMetric]:
+    def predefined_metric(self) -> typing.Optional["PredefinedMetric"]:
         '''A predefined metric for application autoscaling.
 
         The metric must track utilization. Scaling out will happen if the metric is higher than
@@ -7593,7 +7593,7 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
         :default: - No predefined metrics.
         '''
         result = self._values.get("predefined_metric")
-        return typing.cast(typing.Optional[PredefinedMetric], result)
+        return typing.cast(typing.Optional["PredefinedMetric"], result)
 
     @builtins.property
     def resource_label(self) -> typing.Optional[builtins.str]:
@@ -7609,10 +7609,10 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def scaling_target(self) -> IScalableTarget:
+    def scaling_target(self) -> "IScalableTarget":
         result = self._values.get("scaling_target")
         assert result is not None, "Required property 'scaling_target' is missing"
-        return typing.cast(IScalableTarget, result)
+        return typing.cast("IScalableTarget", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7646,8 +7646,8 @@ class BaseScalableAttributeProps(EnableScalingProps):
         min_capacity: typing.Optional[jsii.Number] = None,
         dimension: builtins.str,
         resource_id: builtins.str,
-        role: _IRole_235f5d8e,
-        service_namespace: ServiceNamespace,
+        role: "_IRole_235f5d8e",
+        service_namespace: "ServiceNamespace",
     ) -> None:
         '''Properties for a ScalableTableAttribute.
 
@@ -7729,18 +7729,18 @@ class BaseScalableAttributeProps(EnableScalingProps):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''Role to use for scaling.'''
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
-        return typing.cast(_IRole_235f5d8e, result)
+        return typing.cast("_IRole_235f5d8e", result)
 
     @builtins.property
-    def service_namespace(self) -> ServiceNamespace:
+    def service_namespace(self) -> "ServiceNamespace":
         '''Service namespace of the scalable attribute.'''
         result = self._values.get("service_namespace")
         assert result is not None, "Required property 'service_namespace' is missing"
-        return typing.cast(ServiceNamespace, result)
+        return typing.cast("ServiceNamespace", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

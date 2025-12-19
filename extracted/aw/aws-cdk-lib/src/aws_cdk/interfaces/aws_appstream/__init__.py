@@ -522,7 +522,7 @@ class IAppBlockBuilderRef(
 
     @builtins.property
     @jsii.member(jsii_name="appBlockBuilderRef")
-    def app_block_builder_ref(self) -> AppBlockBuilderReference:
+    def app_block_builder_ref(self) -> "AppBlockBuilderReference":
         '''(experimental) A reference to a AppBlockBuilder resource.
 
         :stability: experimental
@@ -543,12 +543,12 @@ class _IAppBlockBuilderRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="appBlockBuilderRef")
-    def app_block_builder_ref(self) -> AppBlockBuilderReference:
+    def app_block_builder_ref(self) -> "AppBlockBuilderReference":
         '''(experimental) A reference to a AppBlockBuilder resource.
 
         :stability: experimental
         '''
-        return typing.cast(AppBlockBuilderReference, jsii.get(self, "appBlockBuilderRef"))
+        return typing.cast("AppBlockBuilderReference", jsii.get(self, "appBlockBuilderRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAppBlockBuilderRef).__jsii_proxy_class__ = lambda : _IAppBlockBuilderRefProxy
@@ -567,7 +567,7 @@ class IAppBlockRef(
 
     @builtins.property
     @jsii.member(jsii_name="appBlockRef")
-    def app_block_ref(self) -> AppBlockReference:
+    def app_block_ref(self) -> "AppBlockReference":
         '''(experimental) A reference to a AppBlock resource.
 
         :stability: experimental
@@ -588,12 +588,12 @@ class _IAppBlockRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="appBlockRef")
-    def app_block_ref(self) -> AppBlockReference:
+    def app_block_ref(self) -> "AppBlockReference":
         '''(experimental) A reference to a AppBlock resource.
 
         :stability: experimental
         '''
-        return typing.cast(AppBlockReference, jsii.get(self, "appBlockRef"))
+        return typing.cast("AppBlockReference", jsii.get(self, "appBlockRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAppBlockRef).__jsii_proxy_class__ = lambda : _IAppBlockRefProxy
@@ -616,7 +616,7 @@ class IApplicationEntitlementAssociationRef(
     @jsii.member(jsii_name="applicationEntitlementAssociationRef")
     def application_entitlement_association_ref(
         self,
-    ) -> ApplicationEntitlementAssociationReference:
+    ) -> "ApplicationEntitlementAssociationReference":
         '''(experimental) A reference to a ApplicationEntitlementAssociation resource.
 
         :stability: experimental
@@ -639,12 +639,12 @@ class _IApplicationEntitlementAssociationRefProxy(
     @jsii.member(jsii_name="applicationEntitlementAssociationRef")
     def application_entitlement_association_ref(
         self,
-    ) -> ApplicationEntitlementAssociationReference:
+    ) -> "ApplicationEntitlementAssociationReference":
         '''(experimental) A reference to a ApplicationEntitlementAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationEntitlementAssociationReference, jsii.get(self, "applicationEntitlementAssociationRef"))
+        return typing.cast("ApplicationEntitlementAssociationReference", jsii.get(self, "applicationEntitlementAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationEntitlementAssociationRef).__jsii_proxy_class__ = lambda : _IApplicationEntitlementAssociationRefProxy
@@ -665,7 +665,9 @@ class IApplicationFleetAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationFleetAssociationRef")
-    def application_fleet_association_ref(self) -> ApplicationFleetAssociationReference:
+    def application_fleet_association_ref(
+        self,
+    ) -> "ApplicationFleetAssociationReference":
         '''(experimental) A reference to a ApplicationFleetAssociation resource.
 
         :stability: experimental
@@ -686,12 +688,14 @@ class _IApplicationFleetAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationFleetAssociationRef")
-    def application_fleet_association_ref(self) -> ApplicationFleetAssociationReference:
+    def application_fleet_association_ref(
+        self,
+    ) -> "ApplicationFleetAssociationReference":
         '''(experimental) A reference to a ApplicationFleetAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationFleetAssociationReference, jsii.get(self, "applicationFleetAssociationRef"))
+        return typing.cast("ApplicationFleetAssociationReference", jsii.get(self, "applicationFleetAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationFleetAssociationRef).__jsii_proxy_class__ = lambda : _IApplicationFleetAssociationRefProxy
@@ -710,7 +714,7 @@ class IApplicationRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
@@ -731,12 +735,12 @@ class _IApplicationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationReference, jsii.get(self, "applicationRef"))
+        return typing.cast("ApplicationReference", jsii.get(self, "applicationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IApplicationRefProxy
@@ -755,7 +759,7 @@ class IDirectoryConfigRef(
 
     @builtins.property
     @jsii.member(jsii_name="directoryConfigRef")
-    def directory_config_ref(self) -> DirectoryConfigReference:
+    def directory_config_ref(self) -> "DirectoryConfigReference":
         '''(experimental) A reference to a DirectoryConfig resource.
 
         :stability: experimental
@@ -776,12 +780,12 @@ class _IDirectoryConfigRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="directoryConfigRef")
-    def directory_config_ref(self) -> DirectoryConfigReference:
+    def directory_config_ref(self) -> "DirectoryConfigReference":
         '''(experimental) A reference to a DirectoryConfig resource.
 
         :stability: experimental
         '''
-        return typing.cast(DirectoryConfigReference, jsii.get(self, "directoryConfigRef"))
+        return typing.cast("DirectoryConfigReference", jsii.get(self, "directoryConfigRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDirectoryConfigRef).__jsii_proxy_class__ = lambda : _IDirectoryConfigRefProxy
@@ -800,7 +804,7 @@ class IEntitlementRef(
 
     @builtins.property
     @jsii.member(jsii_name="entitlementRef")
-    def entitlement_ref(self) -> EntitlementReference:
+    def entitlement_ref(self) -> "EntitlementReference":
         '''(experimental) A reference to a Entitlement resource.
 
         :stability: experimental
@@ -821,12 +825,12 @@ class _IEntitlementRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="entitlementRef")
-    def entitlement_ref(self) -> EntitlementReference:
+    def entitlement_ref(self) -> "EntitlementReference":
         '''(experimental) A reference to a Entitlement resource.
 
         :stability: experimental
         '''
-        return typing.cast(EntitlementReference, jsii.get(self, "entitlementRef"))
+        return typing.cast("EntitlementReference", jsii.get(self, "entitlementRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEntitlementRef).__jsii_proxy_class__ = lambda : _IEntitlementRefProxy
@@ -845,7 +849,7 @@ class IFleetRef(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> FleetReference:
+    def fleet_ref(self) -> "FleetReference":
         '''(experimental) A reference to a Fleet resource.
 
         :stability: experimental
@@ -866,12 +870,12 @@ class _IFleetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> FleetReference:
+    def fleet_ref(self) -> "FleetReference":
         '''(experimental) A reference to a Fleet resource.
 
         :stability: experimental
         '''
-        return typing.cast(FleetReference, jsii.get(self, "fleetRef"))
+        return typing.cast("FleetReference", jsii.get(self, "fleetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFleetRef).__jsii_proxy_class__ = lambda : _IFleetRefProxy

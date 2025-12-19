@@ -166,7 +166,7 @@ class IChannelAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="channelAssociationRef")
-    def channel_association_ref(self) -> ChannelAssociationReference:
+    def channel_association_ref(self) -> "ChannelAssociationReference":
         '''(experimental) A reference to a ChannelAssociation resource.
 
         :stability: experimental
@@ -187,12 +187,12 @@ class _IChannelAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="channelAssociationRef")
-    def channel_association_ref(self) -> ChannelAssociationReference:
+    def channel_association_ref(self) -> "ChannelAssociationReference":
         '''(experimental) A reference to a ChannelAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(ChannelAssociationReference, jsii.get(self, "channelAssociationRef"))
+        return typing.cast("ChannelAssociationReference", jsii.get(self, "channelAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IChannelAssociationRef).__jsii_proxy_class__ = lambda : _IChannelAssociationRefProxy
@@ -211,7 +211,7 @@ class IEventRuleRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventRuleRef")
-    def event_rule_ref(self) -> EventRuleReference:
+    def event_rule_ref(self) -> "EventRuleReference":
         '''(experimental) A reference to a EventRule resource.
 
         :stability: experimental
@@ -232,12 +232,12 @@ class _IEventRuleRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventRuleRef")
-    def event_rule_ref(self) -> EventRuleReference:
+    def event_rule_ref(self) -> "EventRuleReference":
         '''(experimental) A reference to a EventRule resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventRuleReference, jsii.get(self, "eventRuleRef"))
+        return typing.cast("EventRuleReference", jsii.get(self, "eventRuleRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventRuleRef).__jsii_proxy_class__ = lambda : _IEventRuleRefProxy

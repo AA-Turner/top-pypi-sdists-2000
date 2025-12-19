@@ -443,7 +443,7 @@ class IApiDestinationRef(
 
     @builtins.property
     @jsii.member(jsii_name="apiDestinationRef")
-    def api_destination_ref(self) -> ApiDestinationReference:
+    def api_destination_ref(self) -> "ApiDestinationReference":
         '''(experimental) A reference to a ApiDestination resource.
 
         :stability: experimental
@@ -464,12 +464,12 @@ class _IApiDestinationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="apiDestinationRef")
-    def api_destination_ref(self) -> ApiDestinationReference:
+    def api_destination_ref(self) -> "ApiDestinationReference":
         '''(experimental) A reference to a ApiDestination resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApiDestinationReference, jsii.get(self, "apiDestinationRef"))
+        return typing.cast("ApiDestinationReference", jsii.get(self, "apiDestinationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApiDestinationRef).__jsii_proxy_class__ = lambda : _IApiDestinationRefProxy
@@ -488,7 +488,7 @@ class IArchiveRef(
 
     @builtins.property
     @jsii.member(jsii_name="archiveRef")
-    def archive_ref(self) -> ArchiveReference:
+    def archive_ref(self) -> "ArchiveReference":
         '''(experimental) A reference to a Archive resource.
 
         :stability: experimental
@@ -509,12 +509,12 @@ class _IArchiveRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="archiveRef")
-    def archive_ref(self) -> ArchiveReference:
+    def archive_ref(self) -> "ArchiveReference":
         '''(experimental) A reference to a Archive resource.
 
         :stability: experimental
         '''
-        return typing.cast(ArchiveReference, jsii.get(self, "archiveRef"))
+        return typing.cast("ArchiveReference", jsii.get(self, "archiveRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IArchiveRef).__jsii_proxy_class__ = lambda : _IArchiveRefProxy
@@ -533,7 +533,7 @@ class IConnectionRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectionRef")
-    def connection_ref(self) -> ConnectionReference:
+    def connection_ref(self) -> "ConnectionReference":
         '''(experimental) A reference to a Connection resource.
 
         :stability: experimental
@@ -554,12 +554,12 @@ class _IConnectionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectionRef")
-    def connection_ref(self) -> ConnectionReference:
+    def connection_ref(self) -> "ConnectionReference":
         '''(experimental) A reference to a Connection resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectionReference, jsii.get(self, "connectionRef"))
+        return typing.cast("ConnectionReference", jsii.get(self, "connectionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectionRef).__jsii_proxy_class__ = lambda : _IConnectionRefProxy
@@ -578,7 +578,7 @@ class IEndpointRef(
 
     @builtins.property
     @jsii.member(jsii_name="endpointRef")
-    def endpoint_ref(self) -> EndpointReference:
+    def endpoint_ref(self) -> "EndpointReference":
         '''(experimental) A reference to a Endpoint resource.
 
         :stability: experimental
@@ -599,12 +599,12 @@ class _IEndpointRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="endpointRef")
-    def endpoint_ref(self) -> EndpointReference:
+    def endpoint_ref(self) -> "EndpointReference":
         '''(experimental) A reference to a Endpoint resource.
 
         :stability: experimental
         '''
-        return typing.cast(EndpointReference, jsii.get(self, "endpointRef"))
+        return typing.cast("EndpointReference", jsii.get(self, "endpointRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEndpointRef).__jsii_proxy_class__ = lambda : _IEndpointRefProxy
@@ -623,7 +623,7 @@ class IEventBusPolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventBusPolicyRef")
-    def event_bus_policy_ref(self) -> EventBusPolicyReference:
+    def event_bus_policy_ref(self) -> "EventBusPolicyReference":
         '''(experimental) A reference to a EventBusPolicy resource.
 
         :stability: experimental
@@ -644,12 +644,12 @@ class _IEventBusPolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventBusPolicyRef")
-    def event_bus_policy_ref(self) -> EventBusPolicyReference:
+    def event_bus_policy_ref(self) -> "EventBusPolicyReference":
         '''(experimental) A reference to a EventBusPolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventBusPolicyReference, jsii.get(self, "eventBusPolicyRef"))
+        return typing.cast("EventBusPolicyReference", jsii.get(self, "eventBusPolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventBusPolicyRef).__jsii_proxy_class__ = lambda : _IEventBusPolicyRefProxy
@@ -668,7 +668,7 @@ class IEventBusRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventBusRef")
-    def event_bus_ref(self) -> EventBusReference:
+    def event_bus_ref(self) -> "EventBusReference":
         '''(experimental) A reference to a EventBus resource.
 
         :stability: experimental
@@ -689,12 +689,12 @@ class _IEventBusRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventBusRef")
-    def event_bus_ref(self) -> EventBusReference:
+    def event_bus_ref(self) -> "EventBusReference":
         '''(experimental) A reference to a EventBus resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventBusReference, jsii.get(self, "eventBusRef"))
+        return typing.cast("EventBusReference", jsii.get(self, "eventBusRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventBusRef).__jsii_proxy_class__ = lambda : _IEventBusRefProxy

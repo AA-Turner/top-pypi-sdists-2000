@@ -283,9 +283,6 @@ def itemsize_bits(dtype: DTypeLike) -> int:
   else:
     raise ValueError(f"unexpected input: {dtype=}")
 
-# TODO(justinfu): Rename all instances of bit_width to itemsize_bits
-bit_width = itemsize_bits
-
 # Trivial vectorspace datatype needed for tangent values of int/bool primals
 float0: np.dtype = np.dtype([('float0', np.void, 0)])
 
@@ -998,7 +995,11 @@ def dtype(x: Any) -> DType:
     dt = x.dtype
   else:
     try:
-      dt = np.result_type(x)
+      with warnings.catch_warnings():
+        # Ignore warning associated with __numpy_dtype__ change in NumPy 2.4.
+        # TODO(jakevdp): remove this warning context after change is finalized.
+        warnings.simplefilter("ignore", DeprecationWarning)
+        dt = np.result_type(x)
     except TypeError as err:
       raise TypeError(f"Cannot determine dtype of {x}") from err
   if dt not in _jax_dtype_set and not issubdtype(dt, extended):

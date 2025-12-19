@@ -96,7 +96,7 @@ class IExperimentTemplateRef(
 
     @builtins.property
     @jsii.member(jsii_name="experimentTemplateRef")
-    def experiment_template_ref(self) -> ExperimentTemplateReference:
+    def experiment_template_ref(self) -> "ExperimentTemplateReference":
         '''(experimental) A reference to a ExperimentTemplate resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IExperimentTemplateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="experimentTemplateRef")
-    def experiment_template_ref(self) -> ExperimentTemplateReference:
+    def experiment_template_ref(self) -> "ExperimentTemplateReference":
         '''(experimental) A reference to a ExperimentTemplate resource.
 
         :stability: experimental
         '''
-        return typing.cast(ExperimentTemplateReference, jsii.get(self, "experimentTemplateRef"))
+        return typing.cast("ExperimentTemplateReference", jsii.get(self, "experimentTemplateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IExperimentTemplateRef).__jsii_proxy_class__ = lambda : _IExperimentTemplateRefProxy

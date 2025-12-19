@@ -194,7 +194,7 @@ class IApplicationRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
@@ -215,12 +215,12 @@ class _IApplicationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationReference, jsii.get(self, "applicationRef"))
+        return typing.cast("ApplicationReference", jsii.get(self, "applicationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IApplicationRefProxy
@@ -239,7 +239,7 @@ class IDeploymentConfigRef(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfigRef")
-    def deployment_config_ref(self) -> DeploymentConfigReference:
+    def deployment_config_ref(self) -> "DeploymentConfigReference":
         '''(experimental) A reference to a DeploymentConfig resource.
 
         :stability: experimental
@@ -260,12 +260,12 @@ class _IDeploymentConfigRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfigRef")
-    def deployment_config_ref(self) -> DeploymentConfigReference:
+    def deployment_config_ref(self) -> "DeploymentConfigReference":
         '''(experimental) A reference to a DeploymentConfig resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeploymentConfigReference, jsii.get(self, "deploymentConfigRef"))
+        return typing.cast("DeploymentConfigReference", jsii.get(self, "deploymentConfigRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeploymentConfigRef).__jsii_proxy_class__ = lambda : _IDeploymentConfigRefProxy
@@ -284,7 +284,7 @@ class IDeploymentGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentGroupRef")
-    def deployment_group_ref(self) -> DeploymentGroupReference:
+    def deployment_group_ref(self) -> "DeploymentGroupReference":
         '''(experimental) A reference to a DeploymentGroup resource.
 
         :stability: experimental
@@ -305,12 +305,12 @@ class _IDeploymentGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentGroupRef")
-    def deployment_group_ref(self) -> DeploymentGroupReference:
+    def deployment_group_ref(self) -> "DeploymentGroupReference":
         '''(experimental) A reference to a DeploymentGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeploymentGroupReference, jsii.get(self, "deploymentGroupRef"))
+        return typing.cast("DeploymentGroupReference", jsii.get(self, "deploymentGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeploymentGroupRef).__jsii_proxy_class__ = lambda : _IDeploymentGroupRefProxy

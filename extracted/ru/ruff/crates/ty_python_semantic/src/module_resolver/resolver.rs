@@ -50,6 +50,7 @@ use ruff_python_ast::{
 use crate::db::Db;
 use crate::module_name::ModuleName;
 use crate::module_resolver::typeshed::{TypeshedVersions, vendored_typeshed_versions};
+use crate::program::MisconfigurationMode;
 use crate::{Program, SearchPathSettings};
 
 use super::module::{Module, ModuleKind};
@@ -336,7 +337,14 @@ pub(crate) fn file_to_module(db: &dyn Db, file: File) -> Option<Module<'_>> {
         path,
         search_paths(db, ModuleResolveMode::StubsAllowed),
     )
-    .or_else(|| file_to_module_impl(db, file, path, desperate_search_paths(db, file).iter()))
+    .or_else(|| {
+        file_to_module_impl(
+            db,
+            file,
+            path,
+            relative_desperate_search_paths(db, file).iter(),
+        )
+    })
 }
 
 fn file_to_module_impl<'db, 'a>(
@@ -388,11 +396,81 @@ pub(crate) fn search_paths(db: &dyn Db, resolve_mode: ModuleResolveMode) -> Sear
     Program::get(db).search_paths(db).iter(db, resolve_mode)
 }
 
-/// Get the search-paths that should be used for desperate resolution of imports in this file
+/// Get the search-paths for desperate resolution of absolute imports in this file.
 ///
-/// Currently this is "the closest ancestor dir that contains a pyproject.toml", which is
-/// a completely arbitrary decision. We could potentially change this to return an iterator
-/// of every ancestor with a pyproject.toml or every ancestor.
+/// Currently this is "all ancestor directories that don't contain an `__init__.py(i)`"
+/// (from closest-to-importing-file to farthest).
+///
+/// (For paranoia purposes, all relative desperate search-paths are also absolute
+/// valid desperate search-paths, but don't worry about that.)
+///
+/// We exclude `__init__.py(i)` dirs to avoid truncating packages.
+#[salsa::tracked(heap_size=ruff_memory_usage::heap_size)]
+fn absolute_desperate_search_paths(db: &dyn Db, importing_file: File) -> Option<Vec<SearchPath>> {
+    let system = db.system();
+    let importing_path = importing_file.path(db).as_system_path()?;
+
+    // Only allow this if the importing_file is under the first-party search path
+    let (base_path, rel_path) =
+        search_paths(db, ModuleResolveMode::StubsAllowed).find_map(|search_path| {
+            if !search_path.is_first_party() {
+                return None;
+            }
+            Some((
+                search_path.as_system_path()?,
+                search_path.relativize_system_path_only(importing_path)?,
+            ))
+        })?;
+
+    // Read the revision on the corresponding file root to
+    // register an explicit dependency on this directory. When
+    // the revision gets bumped, the cache that Salsa creates
+    // for this routine will be invalidated.
+    //
+    // (This is conditional because ruff uses this code too and doesn't set roots)
+    if let Some(root) = db.files().root(db, base_path) {
+        let _ = root.revision(db);
+    }
+
+    // Only allow searching up to the first-party path's root
+    let mut search_paths = Vec::new();
+    for rel_dir in rel_path.ancestors() {
+        let candidate_path = base_path.join(rel_dir);
+        if !system.is_directory(&candidate_path) {
+            continue;
+        }
+        // Any dir that isn't a proper package is plausibly some test/script dir that could be
+        // added as a search-path at runtime. Notably this reflects pytest's default mode where
+        // it adds every dir with a .py to the search-paths (making all test files root modules),
+        // unless they see an `__init__.py`, in which case they assume you don't want that.
+        let isnt_regular_package = !system.is_file(&candidate_path.join("__init__.py"))
+            && !system.is_file(&candidate_path.join("__init__.pyi"));
+        // Any dir with a pyproject.toml or ty.toml is a valid relative desperate search-path and
+        // we want all of those to also be valid absolute desperate search-paths. It doesn't
+        // make any sense for a folder to have `pyproject.toml` and `__init__.py` but let's
+        // not let something cursed and spooky happen, ok? d
+        if isnt_regular_package
+            || system.is_file(&candidate_path.join("pyproject.toml"))
+            || system.is_file(&candidate_path.join("ty.toml"))
+        {
+            let search_path = SearchPath::first_party(system, candidate_path).ok()?;
+            search_paths.push(search_path);
+        }
+    }
+
+    if search_paths.is_empty() {
+        None
+    } else {
+        Some(search_paths)
+    }
+}
+
+/// Get the search-paths for desperate resolution of relative imports in this file.
+///
+/// Currently this is "the closest ancestor dir that contains a pyproject.toml (or ty.toml)",
+/// which is a completely arbitrary decision. However it's farily important that relative
+/// desperate search-paths pick a single "best" answer because every one is *valid* but one
+/// that's too long or too short may cause problems.
 ///
 /// For now this works well in common cases where we have some larger workspace that contains
 /// one or more python projects in sub-directories, and those python projects assume that
@@ -402,7 +480,7 @@ pub(crate) fn search_paths(db: &dyn Db, resolve_mode: ModuleResolveMode) -> Sear
 /// chaotic things. In particular, all files under a given pyproject.toml will currently
 /// agree on this being their desperate search-path, which is really nice.
 #[salsa::tracked(heap_size=ruff_memory_usage::heap_size)]
-fn desperate_search_paths(db: &dyn Db, importing_file: File) -> Option<SearchPath> {
+fn relative_desperate_search_paths(db: &dyn Db, importing_file: File) -> Option<SearchPath> {
     let system = db.system();
     let importing_path = importing_file.path(db).as_system_path()?;
 
@@ -431,13 +509,15 @@ fn desperate_search_paths(db: &dyn Db, importing_file: File) -> Option<SearchPat
     // Only allow searching up to the first-party path's root
     for rel_dir in rel_path.ancestors() {
         let candidate_path = base_path.join(rel_dir);
-        if system.path_exists(&candidate_path.join("pyproject.toml"))
-            || system.path_exists(&candidate_path.join("ty.toml"))
+        // Any dir with a pyproject.toml or ty.toml might be a project root
+        if system.is_file(&candidate_path.join("pyproject.toml"))
+            || system.is_file(&candidate_path.join("ty.toml"))
         {
             let search_path = SearchPath::first_party(system, candidate_path).ok()?;
             return Some(search_path);
         }
     }
+
     None
 }
 #[derive(Clone, Debug, PartialEq, Eq, get_size2::GetSize)]
@@ -491,6 +571,7 @@ impl SearchPaths {
             custom_typeshed: typeshed,
             site_packages_paths,
             real_stdlib_path,
+            misconfiguration_mode,
         } = settings;
 
         let mut static_paths = vec![];
@@ -499,12 +580,30 @@ impl SearchPaths {
             let path = canonicalize(path, system);
             tracing::debug!("Adding extra search-path `{path}`");
 
-            static_paths.push(SearchPath::extra(system, path)?);
+            match SearchPath::extra(system, path) {
+                Ok(path) => static_paths.push(path),
+                Err(err) => {
+                    if *misconfiguration_mode == MisconfigurationMode::UseDefault {
+                        tracing::debug!("Skipping invalid extra search-path: {err}");
+                    } else {
+                        return Err(err);
+                    }
+                }
+            }
         }
 
         for src_root in src_roots {
             tracing::debug!("Adding first-party search path `{src_root}`");
-            static_paths.push(SearchPath::first_party(system, src_root.to_path_buf())?);
+            match SearchPath::first_party(system, src_root.to_path_buf()) {
+                Ok(path) => static_paths.push(path),
+                Err(err) => {
+                    if *misconfiguration_mode == MisconfigurationMode::UseDefault {
+                        tracing::debug!("Skipping invalid first-party search-path: {err}");
+                    } else {
+                        return Err(err);
+                    }
+                }
+            }
         }
 
         let (typeshed_versions, stdlib_path) = if let Some(typeshed) = typeshed {
@@ -513,18 +612,31 @@ impl SearchPaths {
 
             let versions_path = typeshed.join("stdlib/VERSIONS");
 
-            let versions_content = system.read_to_string(&versions_path).map_err(|error| {
-                SearchPathValidationError::FailedToReadVersionsFile {
-                    path: versions_path,
-                    error,
+            let results = system
+                .read_to_string(&versions_path)
+                .map_err(
+                    |error| SearchPathValidationError::FailedToReadVersionsFile {
+                        path: versions_path,
+                        error,
+                    },
+                )
+                .and_then(|versions_content| Ok(versions_content.parse()?))
+                .and_then(|parsed| Ok((parsed, SearchPath::custom_stdlib(system, &typeshed)?)));
+
+            match results {
+                Ok(results) => results,
+                Err(err) => {
+                    if settings.misconfiguration_mode == MisconfigurationMode::UseDefault {
+                        tracing::debug!("Skipping custom-stdlib search-path: {err}");
+                        (
+                            vendored_typeshed_versions(vendored),
+                            SearchPath::vendored_stdlib(),
+                        )
+                    } else {
+                        return Err(err);
+                    }
                 }
-            })?;
-
-            let parsed: TypeshedVersions = versions_content.parse()?;
-
-            let search_path = SearchPath::custom_stdlib(system, &typeshed)?;
-
-            (parsed, search_path)
+            }
         } else {
             tracing::debug!("Using vendored stdlib");
             (
@@ -534,7 +646,17 @@ impl SearchPaths {
         };
 
         let real_stdlib_path = if let Some(path) = real_stdlib_path {
-            Some(SearchPath::real_stdlib(system, path.clone())?)
+            match SearchPath::real_stdlib(system, path.clone()) {
+                Ok(path) => Some(path),
+                Err(err) => {
+                    if *misconfiguration_mode == MisconfigurationMode::UseDefault {
+                        tracing::debug!("Skipping invalid real-stdlib search-path: {err}");
+                        None
+                    } else {
+                        return Err(err);
+                    }
+                }
+            }
         } else {
             None
         };
@@ -543,7 +665,16 @@ impl SearchPaths {
 
         for path in site_packages_paths {
             tracing::debug!("Adding site-packages search path `{path}`");
-            site_packages.push(SearchPath::site_packages(system, path.clone())?);
+            match SearchPath::site_packages(system, path.clone()) {
+                Ok(path) => site_packages.push(path),
+                Err(err) => {
+                    if settings.misconfiguration_mode == MisconfigurationMode::UseDefault {
+                        tracing::debug!("Skipping invalid real-stdlib search-path: {err}");
+                    } else {
+                        return Err(err);
+                    }
+                }
+            }
         }
 
         // TODO vendor typeshed's third-party stubs as well as the stdlib and
@@ -960,8 +1091,8 @@ fn desperately_resolve_name(
     name: &ModuleName,
     mode: ModuleResolveMode,
 ) -> Option<ResolvedName> {
-    let search_paths = desperate_search_paths(db, importing_file);
-    resolve_name_impl(db, name, mode, search_paths.iter())
+    let search_paths = absolute_desperate_search_paths(db, importing_file);
+    resolve_name_impl(db, name, mode, search_paths.iter().flatten())
 }
 
 fn resolve_name_impl<'a>(

@@ -32,6 +32,7 @@ from langgraph_api.config import (
 )
 from langgraph_api.graph import js_bg_tasks
 from langgraph_api.js.base import is_js_path
+from langgraph_api.timing import profiled_import
 from langgraph_api.validation import DOCS_HTML
 from langgraph_runtime.database import connect, healthcheck
 
@@ -138,16 +139,19 @@ def load_custom_app(app_import: str) -> Starlette | None:
 
     try:
         os.environ["__LANGGRAPH_DEFER_LOOPBACK_TRANSPORT"] = "true"
-        if os.path.isfile(path) or path.endswith(".py"):
-            # Import from file path using a unique module name.
-            spec = importlib.util.spec_from_file_location("user_router_module", path)
-            if spec is None or spec.loader is None:
-                raise ImportError(f"Cannot load spec from {path}")
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-        else:
-            # Import as a normal module.
-            module = importlib.import_module(path)
+        with profiled_import(app_import):
+            if os.path.isfile(path) or path.endswith(".py"):
+                # Import from file path using a unique module name.
+                spec = importlib.util.spec_from_file_location(
+                    "user_router_module", path
+                )
+                if spec is None or spec.loader is None:
+                    raise ImportError(f"Cannot load spec from {path}")
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+            else:
+                # Import as a normal module.
+                module = importlib.import_module(path)
         user_router = getattr(module, name)
         if not isinstance(user_router, Starlette):
             raise TypeError(

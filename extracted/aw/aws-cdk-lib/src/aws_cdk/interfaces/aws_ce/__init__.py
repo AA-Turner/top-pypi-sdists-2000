@@ -194,7 +194,7 @@ class IAnomalyMonitorRef(
 
     @builtins.property
     @jsii.member(jsii_name="anomalyMonitorRef")
-    def anomaly_monitor_ref(self) -> AnomalyMonitorReference:
+    def anomaly_monitor_ref(self) -> "AnomalyMonitorReference":
         '''(experimental) A reference to a AnomalyMonitor resource.
 
         :stability: experimental
@@ -215,12 +215,12 @@ class _IAnomalyMonitorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="anomalyMonitorRef")
-    def anomaly_monitor_ref(self) -> AnomalyMonitorReference:
+    def anomaly_monitor_ref(self) -> "AnomalyMonitorReference":
         '''(experimental) A reference to a AnomalyMonitor resource.
 
         :stability: experimental
         '''
-        return typing.cast(AnomalyMonitorReference, jsii.get(self, "anomalyMonitorRef"))
+        return typing.cast("AnomalyMonitorReference", jsii.get(self, "anomalyMonitorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAnomalyMonitorRef).__jsii_proxy_class__ = lambda : _IAnomalyMonitorRefProxy
@@ -239,7 +239,7 @@ class IAnomalySubscriptionRef(
 
     @builtins.property
     @jsii.member(jsii_name="anomalySubscriptionRef")
-    def anomaly_subscription_ref(self) -> AnomalySubscriptionReference:
+    def anomaly_subscription_ref(self) -> "AnomalySubscriptionReference":
         '''(experimental) A reference to a AnomalySubscription resource.
 
         :stability: experimental
@@ -260,12 +260,12 @@ class _IAnomalySubscriptionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="anomalySubscriptionRef")
-    def anomaly_subscription_ref(self) -> AnomalySubscriptionReference:
+    def anomaly_subscription_ref(self) -> "AnomalySubscriptionReference":
         '''(experimental) A reference to a AnomalySubscription resource.
 
         :stability: experimental
         '''
-        return typing.cast(AnomalySubscriptionReference, jsii.get(self, "anomalySubscriptionRef"))
+        return typing.cast("AnomalySubscriptionReference", jsii.get(self, "anomalySubscriptionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAnomalySubscriptionRef).__jsii_proxy_class__ = lambda : _IAnomalySubscriptionRefProxy
@@ -284,7 +284,7 @@ class ICostCategoryRef(
 
     @builtins.property
     @jsii.member(jsii_name="costCategoryRef")
-    def cost_category_ref(self) -> CostCategoryReference:
+    def cost_category_ref(self) -> "CostCategoryReference":
         '''(experimental) A reference to a CostCategory resource.
 
         :stability: experimental
@@ -305,12 +305,12 @@ class _ICostCategoryRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="costCategoryRef")
-    def cost_category_ref(self) -> CostCategoryReference:
+    def cost_category_ref(self) -> "CostCategoryReference":
         '''(experimental) A reference to a CostCategory resource.
 
         :stability: experimental
         '''
-        return typing.cast(CostCategoryReference, jsii.get(self, "costCategoryRef"))
+        return typing.cast("CostCategoryReference", jsii.get(self, "costCategoryRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICostCategoryRef).__jsii_proxy_class__ = lambda : _ICostCategoryRefProxy

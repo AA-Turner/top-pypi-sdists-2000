@@ -109,7 +109,7 @@ class ICellRef(
 
     @builtins.property
     @jsii.member(jsii_name="cellRef")
-    def cell_ref(self) -> CellReference:
+    def cell_ref(self) -> "CellReference":
         '''(experimental) A reference to a Cell resource.
 
         :stability: experimental
@@ -130,12 +130,12 @@ class _ICellRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="cellRef")
-    def cell_ref(self) -> CellReference:
+    def cell_ref(self) -> "CellReference":
         '''(experimental) A reference to a Cell resource.
 
         :stability: experimental
         '''
-        return typing.cast(CellReference, jsii.get(self, "cellRef"))
+        return typing.cast("CellReference", jsii.get(self, "cellRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICellRef).__jsii_proxy_class__ = lambda : _ICellRefProxy

@@ -96,7 +96,7 @@ class ICustomActionRef(
 
     @builtins.property
     @jsii.member(jsii_name="customActionRef")
-    def custom_action_ref(self) -> CustomActionReference:
+    def custom_action_ref(self) -> "CustomActionReference":
         '''(experimental) A reference to a CustomAction resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _ICustomActionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="customActionRef")
-    def custom_action_ref(self) -> CustomActionReference:
+    def custom_action_ref(self) -> "CustomActionReference":
         '''(experimental) A reference to a CustomAction resource.
 
         :stability: experimental
         '''
-        return typing.cast(CustomActionReference, jsii.get(self, "customActionRef"))
+        return typing.cast("CustomActionReference", jsii.get(self, "customActionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICustomActionRef).__jsii_proxy_class__ = lambda : _ICustomActionRefProxy

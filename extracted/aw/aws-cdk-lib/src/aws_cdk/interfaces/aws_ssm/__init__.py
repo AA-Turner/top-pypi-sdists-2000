@@ -145,7 +145,7 @@ class IAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="associationRef")
-    def association_ref(self) -> AssociationReference:
+    def association_ref(self) -> "AssociationReference":
         '''(experimental) A reference to a Association resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="associationRef")
-    def association_ref(self) -> AssociationReference:
+    def association_ref(self) -> "AssociationReference":
         '''(experimental) A reference to a Association resource.
 
         :stability: experimental
         '''
-        return typing.cast(AssociationReference, jsii.get(self, "associationRef"))
+        return typing.cast("AssociationReference", jsii.get(self, "associationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAssociationRef).__jsii_proxy_class__ = lambda : _IAssociationRefProxy
@@ -190,7 +190,7 @@ class IDocumentRef(
 
     @builtins.property
     @jsii.member(jsii_name="documentRef")
-    def document_ref(self) -> DocumentReference:
+    def document_ref(self) -> "DocumentReference":
         '''(experimental) A reference to a Document resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IDocumentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="documentRef")
-    def document_ref(self) -> DocumentReference:
+    def document_ref(self) -> "DocumentReference":
         '''(experimental) A reference to a Document resource.
 
         :stability: experimental
         '''
-        return typing.cast(DocumentReference, jsii.get(self, "documentRef"))
+        return typing.cast("DocumentReference", jsii.get(self, "documentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDocumentRef).__jsii_proxy_class__ = lambda : _IDocumentRefProxy
@@ -589,13 +589,19 @@ class MaintenanceWindowReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ssm.MaintenanceWindowTargetReference",
     jsii_struct_bases=[],
-    name_mapping={"maintenance_window_target_id": "maintenanceWindowTargetId"},
+    name_mapping={"window_id": "windowId", "window_target_id": "windowTargetId"},
 )
 class MaintenanceWindowTargetReference:
-    def __init__(self, *, maintenance_window_target_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        window_id: builtins.str,
+        window_target_id: builtins.str,
+    ) -> None:
         '''A reference to a MaintenanceWindowTarget resource.
 
-        :param maintenance_window_target_id: The Id of the MaintenanceWindowTarget resource.
+        :param window_id: The WindowId of the MaintenanceWindowTarget resource.
+        :param window_target_id: The WindowTargetId of the MaintenanceWindowTarget resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -606,21 +612,31 @@ class MaintenanceWindowTargetReference:
             from aws_cdk.interfaces import aws_ssm as interfaces_ssm
             
             maintenance_window_target_reference = interfaces_ssm.MaintenanceWindowTargetReference(
-                maintenance_window_target_id="maintenanceWindowTargetId"
+                window_id="windowId",
+                window_target_id="windowTargetId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bc7aececd4d9fd7cb0a70989a13064463485da38e07d1eaa1206e9cd8f73d5d2)
-            check_type(argname="argument maintenance_window_target_id", value=maintenance_window_target_id, expected_type=type_hints["maintenance_window_target_id"])
+            check_type(argname="argument window_id", value=window_id, expected_type=type_hints["window_id"])
+            check_type(argname="argument window_target_id", value=window_target_id, expected_type=type_hints["window_target_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "maintenance_window_target_id": maintenance_window_target_id,
+            "window_id": window_id,
+            "window_target_id": window_target_id,
         }
 
     @builtins.property
-    def maintenance_window_target_id(self) -> builtins.str:
-        '''The Id of the MaintenanceWindowTarget resource.'''
-        result = self._values.get("maintenance_window_target_id")
-        assert result is not None, "Required property 'maintenance_window_target_id' is missing"
+    def window_id(self) -> builtins.str:
+        '''The WindowId of the MaintenanceWindowTarget resource.'''
+        result = self._values.get("window_id")
+        assert result is not None, "Required property 'window_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def window_target_id(self) -> builtins.str:
+        '''The WindowTargetId of the MaintenanceWindowTarget resource.'''
+        result = self._values.get("window_target_id")
+        assert result is not None, "Required property 'window_target_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -638,13 +654,22 @@ class MaintenanceWindowTargetReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ssm.MaintenanceWindowTaskReference",
     jsii_struct_bases=[],
-    name_mapping={"maintenance_window_task_id": "maintenanceWindowTaskId"},
+    name_mapping={
+        "maintenance_window_task_id": "maintenanceWindowTaskId",
+        "window_task_id": "windowTaskId",
+    },
 )
 class MaintenanceWindowTaskReference:
-    def __init__(self, *, maintenance_window_task_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        maintenance_window_task_id: builtins.str,
+        window_task_id: builtins.str,
+    ) -> None:
         '''A reference to a MaintenanceWindowTask resource.
 
         :param maintenance_window_task_id: The Id of the MaintenanceWindowTask resource.
+        :param window_task_id: The WindowTaskId of the MaintenanceWindowTask resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -655,14 +680,17 @@ class MaintenanceWindowTaskReference:
             from aws_cdk.interfaces import aws_ssm as interfaces_ssm
             
             maintenance_window_task_reference = interfaces_ssm.MaintenanceWindowTaskReference(
-                maintenance_window_task_id="maintenanceWindowTaskId"
+                maintenance_window_task_id="maintenanceWindowTaskId",
+                window_task_id="windowTaskId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a84f17a335bbe7c6ba37477bd79adba76a951afd9da1ec43ae2a7499c062733f)
             check_type(argname="argument maintenance_window_task_id", value=maintenance_window_task_id, expected_type=type_hints["maintenance_window_task_id"])
+            check_type(argname="argument window_task_id", value=window_task_id, expected_type=type_hints["window_task_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "maintenance_window_task_id": maintenance_window_task_id,
+            "window_task_id": window_task_id,
         }
 
     @builtins.property
@@ -670,6 +698,13 @@ class MaintenanceWindowTaskReference:
         '''The Id of the MaintenanceWindowTask resource.'''
         result = self._values.get("maintenance_window_task_id")
         assert result is not None, "Required property 'maintenance_window_task_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def window_task_id(self) -> builtins.str:
+        '''The WindowTaskId of the MaintenanceWindowTask resource.'''
+        result = self._values.get("window_task_id")
+        assert result is not None, "Required property 'window_task_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -937,7 +972,8 @@ def _typecheckingstub__2cb33a09c3dfc7973432d718faac07715f6677b4083711351d04c3307
 
 def _typecheckingstub__bc7aececd4d9fd7cb0a70989a13064463485da38e07d1eaa1206e9cd8f73d5d2(
     *,
-    maintenance_window_target_id: builtins.str,
+    window_id: builtins.str,
+    window_target_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -945,6 +981,7 @@ def _typecheckingstub__bc7aececd4d9fd7cb0a70989a13064463485da38e07d1eaa1206e9cd8
 def _typecheckingstub__a84f17a335bbe7c6ba37477bd79adba76a951afd9da1ec43ae2a7499c062733f(
     *,
     maintenance_window_task_id: builtins.str,
+    window_task_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

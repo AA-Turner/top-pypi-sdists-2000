@@ -98,7 +98,7 @@ class IAutoScalingConfigurationRef(
 
     @builtins.property
     @jsii.member(jsii_name="autoScalingConfigurationRef")
-    def auto_scaling_configuration_ref(self) -> AutoScalingConfigurationReference:
+    def auto_scaling_configuration_ref(self) -> "AutoScalingConfigurationReference":
         '''(experimental) A reference to a AutoScalingConfiguration resource.
 
         :stability: experimental
@@ -119,12 +119,12 @@ class _IAutoScalingConfigurationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="autoScalingConfigurationRef")
-    def auto_scaling_configuration_ref(self) -> AutoScalingConfigurationReference:
+    def auto_scaling_configuration_ref(self) -> "AutoScalingConfigurationReference":
         '''(experimental) A reference to a AutoScalingConfiguration resource.
 
         :stability: experimental
         '''
-        return typing.cast(AutoScalingConfigurationReference, jsii.get(self, "autoScalingConfigurationRef"))
+        return typing.cast("AutoScalingConfigurationReference", jsii.get(self, "autoScalingConfigurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAutoScalingConfigurationRef).__jsii_proxy_class__ = lambda : _IAutoScalingConfigurationRefProxy

@@ -117,10 +117,10 @@ class CfnAccessPoint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        object_lambda_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.ObjectLambdaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        object_lambda_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.ObjectLambdaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::S3ObjectLambda::AccessPoint``.
@@ -142,7 +142,10 @@ class CfnAccessPoint(
 
     @jsii.member(jsii_name="arnForAccessPoint")
     @builtins.classmethod
-    def arn_for_access_point(cls, resource: _IAccessPointRef_22b02bce) -> builtins.str:
+    def arn_for_access_point(
+        cls,
+        resource: "_IAccessPointRef_22b02bce",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -164,7 +167,7 @@ class CfnAccessPoint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessPoint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -195,17 +198,17 @@ class CfnAccessPoint(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointRef")
-    def access_point_ref(self) -> _AccessPointReference_3f210be9:
+    def access_point_ref(self) -> "_AccessPointReference_3f210be9":
         '''A reference to a AccessPoint resource.'''
-        return typing.cast(_AccessPointReference_3f210be9, jsii.get(self, "accessPointRef"))
+        return typing.cast("_AccessPointReference_3f210be9", jsii.get(self, "accessPointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAlias")
-    def attr_alias(self) -> _IResolvable_da3f097b:
+    def attr_alias(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: Alias
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrAlias"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrAlias"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAliasStatus")
@@ -249,73 +252,73 @@ class CfnAccessPoint(
 
     @builtins.property
     @jsii.member(jsii_name="attrPolicyStatus")
-    def attr_policy_status(self) -> _IResolvable_da3f097b:
+    def attr_policy_status(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: PolicyStatus
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrPolicyStatus"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrPolicyStatus"))
 
     @builtins.property
     @jsii.member(jsii_name="attrPolicyStatusIsPublic")
-    def attr_policy_status_is_public(self) -> _IResolvable_da3f097b:
+    def attr_policy_status_is_public(self) -> "_IResolvable_da3f097b":
         '''Specifies whether the Object lambda Access Point Policy is Public or not.
 
         Object lambda Access Points are private by default.
 
         :cloudformationAttribute: PolicyStatus.IsPublic
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrPolicyStatusIsPublic"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrPolicyStatusIsPublic"))
 
     @builtins.property
     @jsii.member(jsii_name="attrPublicAccessBlockConfiguration")
-    def attr_public_access_block_configuration(self) -> _IResolvable_da3f097b:
+    def attr_public_access_block_configuration(self) -> "_IResolvable_da3f097b":
         '''The Public Access Block Configuration is used to block policies that would allow public access to this Object lambda Access Point.
 
         All public access to Object lambda Access Points are blocked by default, and any policy that would give public access to them will be also blocked. This behavior cannot be changed for Object lambda Access Points.
 
         :cloudformationAttribute: PublicAccessBlockConfiguration
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrPublicAccessBlockConfiguration"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrPublicAccessBlockConfiguration"))
 
     @builtins.property
     @jsii.member(jsii_name="attrPublicAccessBlockConfigurationBlockPublicAcls")
     def attr_public_access_block_configuration_block_public_acls(
         self,
-    ) -> _IResolvable_da3f097b:
+    ) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: PublicAccessBlockConfiguration.BlockPublicAcls
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrPublicAccessBlockConfigurationBlockPublicAcls"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrPublicAccessBlockConfigurationBlockPublicAcls"))
 
     @builtins.property
     @jsii.member(jsii_name="attrPublicAccessBlockConfigurationBlockPublicPolicy")
     def attr_public_access_block_configuration_block_public_policy(
         self,
-    ) -> _IResolvable_da3f097b:
+    ) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: PublicAccessBlockConfiguration.BlockPublicPolicy
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrPublicAccessBlockConfigurationBlockPublicPolicy"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrPublicAccessBlockConfigurationBlockPublicPolicy"))
 
     @builtins.property
     @jsii.member(jsii_name="attrPublicAccessBlockConfigurationIgnorePublicAcls")
     def attr_public_access_block_configuration_ignore_public_acls(
         self,
-    ) -> _IResolvable_da3f097b:
+    ) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: PublicAccessBlockConfiguration.IgnorePublicAcls
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrPublicAccessBlockConfigurationIgnorePublicAcls"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrPublicAccessBlockConfigurationIgnorePublicAcls"))
 
     @builtins.property
     @jsii.member(jsii_name="attrPublicAccessBlockConfigurationRestrictPublicBuckets")
     def attr_public_access_block_configuration_restrict_public_buckets(
         self,
-    ) -> _IResolvable_da3f097b:
+    ) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: PublicAccessBlockConfiguration.RestrictPublicBuckets
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrPublicAccessBlockConfigurationRestrictPublicBuckets"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrPublicAccessBlockConfigurationRestrictPublicBuckets"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -326,14 +329,14 @@ class CfnAccessPoint(
     @jsii.member(jsii_name="objectLambdaConfiguration")
     def object_lambda_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.ObjectLambdaConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.ObjectLambdaConfigurationProperty"]:
         '''A configuration used when creating an Object Lambda Access Point.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.ObjectLambdaConfigurationProperty"], jsii.get(self, "objectLambdaConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.ObjectLambdaConfigurationProperty"], jsii.get(self, "objectLambdaConfiguration"))
 
     @object_lambda_configuration.setter
     def object_lambda_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.ObjectLambdaConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.ObjectLambdaConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__72235765a4ddbec3dfa520018313ca825a0eee0d6620fbbc57d8d6942cd266e1)
@@ -512,7 +515,7 @@ class CfnAccessPoint(
         def __init__(
             self,
             *,
-            aws_lambda: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.AwsLambdaProperty", typing.Dict[builtins.str, typing.Any]]],
+            aws_lambda: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.AwsLambdaProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''
             :param aws_lambda: 
@@ -545,13 +548,13 @@ class CfnAccessPoint(
         @builtins.property
         def aws_lambda(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.AwsLambdaProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.AwsLambdaProperty"]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3objectlambda-accesspoint-contenttransformation.html#cfn-s3objectlambda-accesspoint-contenttransformation-awslambda
             '''
             result = self._values.get("aws_lambda")
             assert result is not None, "Required property 'aws_lambda' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.AwsLambdaProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.AwsLambdaProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -579,9 +582,9 @@ class CfnAccessPoint(
             self,
             *,
             supporting_access_point: builtins.str,
-            transformation_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.TransformationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            transformation_configurations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.TransformationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
             allowed_features: typing.Optional[typing.Sequence[builtins.str]] = None,
-            cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''A configuration used when creating an Object Lambda Access Point.
 
@@ -641,14 +644,14 @@ class CfnAccessPoint(
         @builtins.property
         def transformation_configurations(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.TransformationConfigurationProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.TransformationConfigurationProperty"]]]:
             '''A container for transformation configurations for an Object Lambda Access Point.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3objectlambda-accesspoint-objectlambdaconfiguration.html#cfn-s3objectlambda-accesspoint-objectlambdaconfiguration-transformationconfigurations
             '''
             result = self._values.get("transformation_configurations")
             assert result is not None, "Required property 'transformation_configurations' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.TransformationConfigurationProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.TransformationConfigurationProperty"]]], result)
 
         @builtins.property
         def allowed_features(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -664,13 +667,13 @@ class CfnAccessPoint(
         @builtins.property
         def cloud_watch_metrics_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A container for whether the CloudWatch metrics configuration is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3objectlambda-accesspoint-objectlambdaconfiguration.html#cfn-s3objectlambda-accesspoint-objectlambdaconfiguration-cloudwatchmetricsenabled
             '''
             result = self._values.get("cloud_watch_metrics_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -692,7 +695,7 @@ class CfnAccessPoint(
         def __init__(
             self,
             *,
-            is_public: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            is_public: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''
             :param is_public: Specifies whether the Object lambda Access Point Policy is Public or not. Object lambda Access Points are private by default.
@@ -720,7 +723,7 @@ class CfnAccessPoint(
         @builtins.property
         def is_public(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether the Object lambda Access Point Policy is Public or not.
 
             Object lambda Access Points are private by default.
@@ -728,7 +731,7 @@ class CfnAccessPoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3objectlambda-accesspoint-policystatus.html#cfn-s3objectlambda-accesspoint-policystatus-ispublic
             '''
             result = self._values.get("is_public")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -755,10 +758,10 @@ class CfnAccessPoint(
         def __init__(
             self,
             *,
-            block_public_acls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            block_public_policy: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            ignore_public_acls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            restrict_public_buckets: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            block_public_acls: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            block_public_policy: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            ignore_public_acls: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            restrict_public_buckets: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The ``PublicAccessBlock`` configuration that you want to apply to this Amazon S3 account.
 
@@ -806,7 +809,7 @@ class CfnAccessPoint(
         @builtins.property
         def block_public_acls(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether Amazon S3 should block public access control lists (ACLs) for buckets in this account.
 
             Setting this element to ``TRUE`` causes the following behavior:
@@ -822,12 +825,12 @@ class CfnAccessPoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3objectlambda-accesspoint-publicaccessblockconfiguration.html#cfn-s3objectlambda-accesspoint-publicaccessblockconfiguration-blockpublicacls
             '''
             result = self._values.get("block_public_acls")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def block_public_policy(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether Amazon S3 should block public bucket policies for buckets in this account.
 
             Setting this element to ``TRUE`` causes Amazon S3 to reject calls to PUT Bucket policy if the specified bucket policy allows public access.
@@ -839,12 +842,12 @@ class CfnAccessPoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3objectlambda-accesspoint-publicaccessblockconfiguration.html#cfn-s3objectlambda-accesspoint-publicaccessblockconfiguration-blockpublicpolicy
             '''
             result = self._values.get("block_public_policy")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def ignore_public_acls(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether Amazon S3 should ignore public ACLs for buckets in this account.
 
             Setting this element to ``TRUE`` causes Amazon S3 to ignore all public ACLs on buckets in this account and any objects that they contain.
@@ -856,12 +859,12 @@ class CfnAccessPoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3objectlambda-accesspoint-publicaccessblockconfiguration.html#cfn-s3objectlambda-accesspoint-publicaccessblockconfiguration-ignorepublicacls
             '''
             result = self._values.get("ignore_public_acls")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def restrict_public_buckets(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether Amazon S3 should restrict public bucket policies for buckets in this account.
 
             Setting this element to ``TRUE`` restricts access to buckets with public policies to only AWS service principals and authorized users within this account.
@@ -873,7 +876,7 @@ class CfnAccessPoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3objectlambda-accesspoint-publicaccessblockconfiguration.html#cfn-s3objectlambda-accesspoint-publicaccessblockconfiguration-restrictpublicbuckets
             '''
             result = self._values.get("restrict_public_buckets")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -995,7 +998,7 @@ class CfnAccessPointPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         object_lambda_access_point: builtins.str,
@@ -1032,7 +1035,7 @@ class CfnAccessPointPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessPointPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1063,9 +1066,9 @@ class CfnAccessPointPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointPolicyRef")
-    def access_point_policy_ref(self) -> _AccessPointPolicyReference_e35949d7:
+    def access_point_policy_ref(self) -> "_AccessPointPolicyReference_e35949d7":
         '''A reference to a AccessPointPolicy resource.'''
-        return typing.cast(_AccessPointPolicyReference_e35949d7, jsii.get(self, "accessPointPolicyRef"))
+        return typing.cast("_AccessPointPolicyReference_e35949d7", jsii.get(self, "accessPointPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1188,7 +1191,7 @@ class CfnAccessPointProps:
     def __init__(
         self,
         *,
-        object_lambda_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.ObjectLambdaConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        object_lambda_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.ObjectLambdaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnAccessPoint``.
@@ -1237,14 +1240,14 @@ class CfnAccessPointProps:
     @builtins.property
     def object_lambda_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAccessPoint.ObjectLambdaConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.ObjectLambdaConfigurationProperty"]:
         '''A configuration used when creating an Object Lambda Access Point.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3objectlambda-accesspoint.html#cfn-s3objectlambda-accesspoint-objectlambdaconfiguration
         '''
         result = self._values.get("object_lambda_configuration")
         assert result is not None, "Required property 'object_lambda_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAccessPoint.ObjectLambdaConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.ObjectLambdaConfigurationProperty"], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:

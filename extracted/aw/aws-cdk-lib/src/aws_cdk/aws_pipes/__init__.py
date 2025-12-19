@@ -101,6 +101,7 @@ class CfnPipe(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_pipes as pipes
@@ -430,22 +431,22 @@ class CfnPipe(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        source: typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198],
-        target: typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IEventBusRef_aa86e9b4, _IQueueRef_fa8b2198, _ILogGroupRef_874d025a, _IStateMachineRef_65490661],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        source: typing.Union[builtins.str, "_IStreamRef_b484e253", "_IQueueRef_fa8b2198"],
+        target: typing.Union[builtins.str, "_IEventBusRef_aa86e9b4", "_IFunctionRef_2601eb33", "_ILogGroupRef_874d025a", "_ITopicRef_29aa9a88", "_IQueueRef_fa8b2198", "_IStateMachineRef_65490661"],
         description: typing.Optional[builtins.str] = None,
         desired_state: typing.Optional[builtins.str] = None,
-        enrichment: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
-        enrichment_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeEnrichmentParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        enrichment: typing.Optional[typing.Union[builtins.str, "_IFunctionRef_2601eb33"]] = None,
+        enrichment_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeEnrichmentParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_identifier: typing.Optional[builtins.str] = None,
-        log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeLogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        log_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeLogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        source_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeSourceParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeSourceParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        target_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Pipes::Pipe``.
 
@@ -489,7 +490,7 @@ class CfnPipe(
 
     @jsii.member(jsii_name="arnForPipe")
     @builtins.classmethod
-    def arn_for_pipe(cls, resource: _IPipeRef_ab8f7bb0) -> builtins.str:
+    def arn_for_pipe(cls, resource: "_IPipeRef_ab8f7bb0") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -511,7 +512,7 @@ class CfnPipe(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPipe", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -592,15 +593,15 @@ class CfnPipe(
 
     @builtins.property
     @jsii.member(jsii_name="pipeRef")
-    def pipe_ref(self) -> _PipeReference_92f1927d:
+    def pipe_ref(self) -> "_PipeReference_92f1927d":
         '''A reference to a Pipe resource.'''
-        return typing.cast(_PipeReference_92f1927d, jsii.get(self, "pipeRef"))
+        return typing.cast("_PipeReference_92f1927d", jsii.get(self, "pipeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="roleArn")
@@ -684,14 +685,14 @@ class CfnPipe(
     @jsii.member(jsii_name="enrichmentParameters")
     def enrichment_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeEnrichmentParametersProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeEnrichmentParametersProperty"]]:
         '''The parameters required to set up enrichment on your pipe.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeEnrichmentParametersProperty"]], jsii.get(self, "enrichmentParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeEnrichmentParametersProperty"]], jsii.get(self, "enrichmentParameters"))
 
     @enrichment_parameters.setter
     def enrichment_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeEnrichmentParametersProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeEnrichmentParametersProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__75aa67d8831c93b78f85f7319ad758289b207fec83baf9b92034cab4451f63d2)
@@ -715,14 +716,14 @@ class CfnPipe(
     @jsii.member(jsii_name="logConfiguration")
     def log_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeLogConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeLogConfigurationProperty"]]:
         '''The logging configuration settings for the pipe.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeLogConfigurationProperty"]], jsii.get(self, "logConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeLogConfigurationProperty"]], jsii.get(self, "logConfiguration"))
 
     @log_configuration.setter
     def log_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeLogConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeLogConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3975e792335934f36dcb66bc10ba0ab93afe079dae88c2011a2bacc35a8fe756)
@@ -746,14 +747,14 @@ class CfnPipe(
     @jsii.member(jsii_name="sourceParameters")
     def source_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceParametersProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceParametersProperty"]]:
         '''The parameters required to set up a source for your pipe.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceParametersProperty"]], jsii.get(self, "sourceParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceParametersProperty"]], jsii.get(self, "sourceParameters"))
 
     @source_parameters.setter
     def source_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceParametersProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceParametersProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ef7a2d44f21af0c5ebeb25368be2b069abd76c8c64ba1cef587c3e219c88bec1)
@@ -780,14 +781,14 @@ class CfnPipe(
     @jsii.member(jsii_name="targetParameters")
     def target_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetParametersProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetParametersProperty"]]:
         '''The parameters required to set up a target for your pipe.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetParametersProperty"]], jsii.get(self, "targetParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetParametersProperty"]], jsii.get(self, "targetParameters"))
 
     @target_parameters.setter
     def target_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetParametersProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetParametersProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d6b5bbabe5f41fcd217d39a2fe0a41e5a7dcac510b412ddae1d12e74d71a1995)
@@ -964,9 +965,9 @@ class CfnPipe(
             self,
             *,
             command: typing.Optional[typing.Sequence[builtins.str]] = None,
-            environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.BatchEnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            environment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.BatchEnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             instance_type: typing.Optional[builtins.str] = None,
-            resource_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.BatchResourceRequirementProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            resource_requirements: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.BatchResourceRequirementProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The overrides that are sent to a container.
 
@@ -1025,7 +1026,7 @@ class CfnPipe(
         @builtins.property
         def environment(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.BatchEnvironmentVariableProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.BatchEnvironmentVariableProperty"]]]]:
             '''The environment variables to send to the container.
 
             You can add new environment variables, which are added to the container at launch, or you can override the existing environment variables from the Docker image or the task definition.
@@ -1036,7 +1037,7 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-batchcontaineroverrides.html#cfn-pipes-pipe-batchcontaineroverrides-environment
             '''
             result = self._values.get("environment")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.BatchEnvironmentVariableProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.BatchEnvironmentVariableProperty"]]]], result)
 
         @builtins.property
         def instance_type(self) -> typing.Optional[builtins.str]:
@@ -1054,7 +1055,7 @@ class CfnPipe(
         @builtins.property
         def resource_requirements(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.BatchResourceRequirementProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.BatchResourceRequirementProperty"]]]]:
             '''The type and amount of resources to assign to a container.
 
             This overrides the settings in the job definition. The supported resources include ``GPU`` , ``MEMORY`` , and ``VCPU`` .
@@ -1062,7 +1063,7 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-batchcontaineroverrides.html#cfn-pipes-pipe-batchcontaineroverrides-resourcerequirements
             '''
             result = self._values.get("resource_requirements")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.BatchResourceRequirementProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.BatchResourceRequirementProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1717,12 +1718,12 @@ class CfnPipe(
             *,
             command: typing.Optional[typing.Sequence[builtins.str]] = None,
             cpu: typing.Optional[jsii.Number] = None,
-            environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.EcsEnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            environment_files: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.EcsEnvironmentFileProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            environment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.EcsEnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            environment_files: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.EcsEnvironmentFileProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             memory: typing.Optional[jsii.Number] = None,
             memory_reservation: typing.Optional[jsii.Number] = None,
             name: typing.Optional[builtins.str] = None,
-            resource_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.EcsResourceRequirementProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            resource_requirements: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.EcsResourceRequirementProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The overrides that are sent to a container.
 
@@ -1819,7 +1820,7 @@ class CfnPipe(
         @builtins.property
         def environment(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsEnvironmentVariableProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsEnvironmentVariableProperty"]]]]:
             '''The environment variables to send to the container.
 
             You can add new environment variables, which are added to the container at launch, or you can override the existing environment variables from the Docker image or the task definition. You must also specify a container name.
@@ -1827,18 +1828,18 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-ecscontaineroverride.html#cfn-pipes-pipe-ecscontaineroverride-environment
             '''
             result = self._values.get("environment")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsEnvironmentVariableProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsEnvironmentVariableProperty"]]]], result)
 
         @builtins.property
         def environment_files(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsEnvironmentFileProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsEnvironmentFileProperty"]]]]:
             '''A list of files containing the environment variables to pass to a container, instead of the value from the container definition.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-ecscontaineroverride.html#cfn-pipes-pipe-ecscontaineroverride-environmentfiles
             '''
             result = self._values.get("environment_files")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsEnvironmentFileProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsEnvironmentFileProperty"]]]], result)
 
         @builtins.property
         def memory(self) -> typing.Optional[jsii.Number]:
@@ -1876,7 +1877,7 @@ class CfnPipe(
         @builtins.property
         def resource_requirements(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsResourceRequirementProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsResourceRequirementProperty"]]]]:
             '''The type and amount of a resource to assign to a container, instead of the default value from the task definition.
 
             The only supported resource is a GPU.
@@ -1884,7 +1885,7 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-ecscontaineroverride.html#cfn-pipes-pipe-ecscontaineroverride-resourcerequirements
             '''
             result = self._values.get("resource_requirements")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsResourceRequirementProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsResourceRequirementProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2276,11 +2277,11 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            container_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.EcsContainerOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            container_overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.EcsContainerOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             cpu: typing.Optional[builtins.str] = None,
-            ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.EcsEphemeralStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ephemeral_storage: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.EcsEphemeralStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             execution_role_arn: typing.Optional[builtins.str] = None,
-            inference_accelerator_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.EcsInferenceAcceleratorOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            inference_accelerator_overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.EcsInferenceAcceleratorOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             memory: typing.Optional[builtins.str] = None,
             task_role_arn: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -2364,13 +2365,13 @@ class CfnPipe(
         @builtins.property
         def container_overrides(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsContainerOverrideProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsContainerOverrideProperty"]]]]:
             '''One or more container overrides that are sent to a task.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-ecstaskoverride.html#cfn-pipes-pipe-ecstaskoverride-containeroverrides
             '''
             result = self._values.get("container_overrides")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsContainerOverrideProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsContainerOverrideProperty"]]]], result)
 
         @builtins.property
         def cpu(self) -> typing.Optional[builtins.str]:
@@ -2384,7 +2385,7 @@ class CfnPipe(
         @builtins.property
         def ephemeral_storage(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsEphemeralStorageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsEphemeralStorageProperty"]]:
             '''The ephemeral storage setting override for the task.
 
             .. epigraph::
@@ -2397,7 +2398,7 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-ecstaskoverride.html#cfn-pipes-pipe-ecstaskoverride-ephemeralstorage
             '''
             result = self._values.get("ephemeral_storage")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsEphemeralStorageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsEphemeralStorageProperty"]], result)
 
         @builtins.property
         def execution_role_arn(self) -> typing.Optional[builtins.str]:
@@ -2413,13 +2414,13 @@ class CfnPipe(
         @builtins.property
         def inference_accelerator_overrides(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsInferenceAcceleratorOverrideProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsInferenceAcceleratorOverrideProperty"]]]]:
             '''The Elastic Inference accelerator override for the task.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-ecstaskoverride.html#cfn-pipes-pipe-ecstaskoverride-inferenceacceleratoroverrides
             '''
             result = self._values.get("inference_accelerator_overrides")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsInferenceAcceleratorOverrideProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsInferenceAcceleratorOverrideProperty"]]]], result)
 
         @builtins.property
         def memory(self) -> typing.Optional[builtins.str]:
@@ -2461,7 +2462,7 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.FilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.FilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The collection of event patterns used to filter events.
 
@@ -2496,13 +2497,13 @@ class CfnPipe(
         @builtins.property
         def filters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.FilterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.FilterProperty"]]]]:
             '''The event patterns.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-filtercriteria.html#cfn-pipes-pipe-filtercriteria-filters
             '''
             result = self._values.get("filters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.FilterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.FilterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2850,7 +2851,7 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            multi_measure_attribute_mappings: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.MultiMeasureAttributeMappingProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            multi_measure_attribute_mappings: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.MultiMeasureAttributeMappingProperty", typing.Dict[builtins.str, typing.Any]]]]],
             multi_measure_name: builtins.str,
         ) -> None:
             '''Maps multiple measures from the source event to the same Timestream for LiveAnalytics record.
@@ -2890,14 +2891,14 @@ class CfnPipe(
         @builtins.property
         def multi_measure_attribute_mappings(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.MultiMeasureAttributeMappingProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.MultiMeasureAttributeMappingProperty"]]]:
             '''Mappings that represent multiple source event fields mapped to measures in the same Timestream for LiveAnalytics record.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-multimeasuremapping.html#cfn-pipes-pipe-multimeasuremapping-multimeasureattributemappings
             '''
             result = self._values.get("multi_measure_attribute_mappings")
             assert result is not None, "Required property 'multi_measure_attribute_mappings' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.MultiMeasureAttributeMappingProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.MultiMeasureAttributeMappingProperty"]]], result)
 
         @builtins.property
         def multi_measure_name(self) -> builtins.str:
@@ -2929,7 +2930,7 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            awsvpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.AwsVpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            awsvpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.AwsVpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''This structure specifies the network configuration for an Amazon ECS task.
 
@@ -2964,7 +2965,7 @@ class CfnPipe(
         @builtins.property
         def awsvpc_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.AwsVpcConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.AwsVpcConfigurationProperty"]]:
             '''Use this structure to specify the VPC subnets and security groups for the task, and whether a public IP address is to be used.
 
             This structure is relevant only for ECS tasks that use the ``awsvpc`` network mode.
@@ -2972,7 +2973,7 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-networkconfiguration.html#cfn-pipes-pipe-networkconfiguration-awsvpcconfiguration
             '''
             result = self._values.get("awsvpc_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.AwsVpcConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.AwsVpcConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2998,9 +2999,9 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            header_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            header_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             path_parameter_values: typing.Optional[typing.Sequence[builtins.str]] = None,
-            query_string_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            query_string_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''These are custom parameter to be used when the target is an API Gateway REST APIs or EventBridge ApiDestinations.
 
@@ -3045,13 +3046,13 @@ class CfnPipe(
         @builtins.property
         def header_parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The headers that need to be sent as part of request invoking the API Gateway REST API or EventBridge ApiDestination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipeenrichmenthttpparameters.html#cfn-pipes-pipe-pipeenrichmenthttpparameters-headerparameters
             '''
             result = self._values.get("header_parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def path_parameter_values(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3065,13 +3066,13 @@ class CfnPipe(
         @builtins.property
         def query_string_parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The query string keys/values that need to be sent as part of request invoking the API Gateway REST API or EventBridge ApiDestination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipeenrichmenthttpparameters.html#cfn-pipes-pipe-pipeenrichmenthttpparameters-querystringparameters
             '''
             result = self._values.get("query_string_parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3096,7 +3097,7 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            http_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeEnrichmentHttpParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeEnrichmentHttpParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             input_template: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The parameters required to set up enrichment on your pipe.
@@ -3135,7 +3136,7 @@ class CfnPipe(
         @builtins.property
         def http_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeEnrichmentHttpParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeEnrichmentHttpParametersProperty"]]:
             '''Contains the HTTP parameters to use when the target is a API Gateway REST endpoint or EventBridge ApiDestination.
 
             If you specify an API Gateway REST API or EventBridge ApiDestination as a target, you can use this parameter to specify headers, path parameters, and query string keys/values as part of your target invoking request. If you're using ApiDestinations, the corresponding Connection can also have these values configured. In case of any conflicting keys, values from the Connection take precedence.
@@ -3143,7 +3144,7 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipeenrichmentparameters.html#cfn-pipes-pipe-pipeenrichmentparameters-httpparameters
             '''
             result = self._values.get("http_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeEnrichmentHttpParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeEnrichmentHttpParametersProperty"]], result)
 
         @builtins.property
         def input_template(self) -> typing.Optional[builtins.str]:
@@ -3184,11 +3185,11 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            cloudwatch_logs_log_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.CloudwatchLogsLogDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            firehose_log_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.FirehoseLogDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloudwatch_logs_log_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.CloudwatchLogsLogDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            firehose_log_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.FirehoseLogDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             include_execution_data: typing.Optional[typing.Sequence[builtins.str]] = None,
             level: typing.Optional[builtins.str] = None,
-            s3_log_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.S3LogDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_log_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.S3LogDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents the configuration settings for the logs to which this pipe should report events.
 
@@ -3246,24 +3247,24 @@ class CfnPipe(
         @builtins.property
         def cloudwatch_logs_log_destination(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.CloudwatchLogsLogDestinationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.CloudwatchLogsLogDestinationProperty"]]:
             '''The logging configuration settings for the pipe.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipelogconfiguration.html#cfn-pipes-pipe-pipelogconfiguration-cloudwatchlogslogdestination
             '''
             result = self._values.get("cloudwatch_logs_log_destination")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.CloudwatchLogsLogDestinationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.CloudwatchLogsLogDestinationProperty"]], result)
 
         @builtins.property
         def firehose_log_destination(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.FirehoseLogDestinationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.FirehoseLogDestinationProperty"]]:
             '''The Amazon Data Firehose logging configuration settings for the pipe.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipelogconfiguration.html#cfn-pipes-pipe-pipelogconfiguration-firehoselogdestination
             '''
             result = self._values.get("firehose_log_destination")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.FirehoseLogDestinationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.FirehoseLogDestinationProperty"]], result)
 
         @builtins.property
         def include_execution_data(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3294,13 +3295,13 @@ class CfnPipe(
         @builtins.property
         def s3_log_destination(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.S3LogDestinationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.S3LogDestinationProperty"]]:
             '''The Amazon S3 logging configuration settings for the pipe.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipelogconfiguration.html#cfn-pipes-pipe-pipelogconfiguration-s3logdestination
             '''
             result = self._values.get("s3_log_destination")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.S3LogDestinationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.S3LogDestinationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3327,7 +3328,7 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            credentials: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.MQBrokerAccessCredentialsProperty", typing.Dict[builtins.str, typing.Any]]],
+            credentials: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.MQBrokerAccessCredentialsProperty", typing.Dict[builtins.str, typing.Any]]],
             queue_name: builtins.str,
             batch_size: typing.Optional[jsii.Number] = None,
             maximum_batching_window_in_seconds: typing.Optional[jsii.Number] = None,
@@ -3377,14 +3378,14 @@ class CfnPipe(
         @builtins.property
         def credentials(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPipe.MQBrokerAccessCredentialsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPipe.MQBrokerAccessCredentialsProperty"]:
             '''The credentials needed to access the resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourceactivemqbrokerparameters.html#cfn-pipes-pipe-pipesourceactivemqbrokerparameters-credentials
             '''
             result = self._values.get("credentials")
             assert result is not None, "Required property 'credentials' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPipe.MQBrokerAccessCredentialsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPipe.MQBrokerAccessCredentialsProperty"], result)
 
         @builtins.property
         def queue_name(self) -> builtins.str:
@@ -3445,7 +3446,7 @@ class CfnPipe(
             *,
             starting_position: builtins.str,
             batch_size: typing.Optional[jsii.Number] = None,
-            dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.DeadLetterConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            dead_letter_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.DeadLetterConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             maximum_batching_window_in_seconds: typing.Optional[jsii.Number] = None,
             maximum_record_age_in_seconds: typing.Optional[jsii.Number] = None,
             maximum_retry_attempts: typing.Optional[jsii.Number] = None,
@@ -3539,13 +3540,13 @@ class CfnPipe(
         @builtins.property
         def dead_letter_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.DeadLetterConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.DeadLetterConfigProperty"]]:
             '''Define the target queue to send dead-letter queue events to.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourcedynamodbstreamparameters.html#cfn-pipes-pipe-pipesourcedynamodbstreamparameters-deadletterconfig
             '''
             result = self._values.get("dead_letter_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.DeadLetterConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.DeadLetterConfigProperty"]], result)
 
         @builtins.property
         def maximum_batching_window_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -3632,7 +3633,7 @@ class CfnPipe(
             *,
             starting_position: builtins.str,
             batch_size: typing.Optional[jsii.Number] = None,
-            dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.DeadLetterConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            dead_letter_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.DeadLetterConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             maximum_batching_window_in_seconds: typing.Optional[jsii.Number] = None,
             maximum_record_age_in_seconds: typing.Optional[jsii.Number] = None,
             maximum_retry_attempts: typing.Optional[jsii.Number] = None,
@@ -3730,13 +3731,13 @@ class CfnPipe(
         @builtins.property
         def dead_letter_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.DeadLetterConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.DeadLetterConfigProperty"]]:
             '''Define the target queue to send dead-letter queue events to.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourcekinesisstreamparameters.html#cfn-pipes-pipe-pipesourcekinesisstreamparameters-deadletterconfig
             '''
             result = self._values.get("dead_letter_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.DeadLetterConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.DeadLetterConfigProperty"]], result)
 
         @builtins.property
         def maximum_batching_window_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -3830,7 +3831,7 @@ class CfnPipe(
             topic_name: builtins.str,
             batch_size: typing.Optional[jsii.Number] = None,
             consumer_group_id: typing.Optional[builtins.str] = None,
-            credentials: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.MSKAccessCredentialsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            credentials: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.MSKAccessCredentialsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             maximum_batching_window_in_seconds: typing.Optional[jsii.Number] = None,
             starting_position: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -3919,13 +3920,13 @@ class CfnPipe(
         @builtins.property
         def credentials(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.MSKAccessCredentialsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.MSKAccessCredentialsProperty"]]:
             '''The credentials needed to access the resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourcemanagedstreamingkafkaparameters.html#cfn-pipes-pipe-pipesourcemanagedstreamingkafkaparameters-credentials
             '''
             result = self._values.get("credentials")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.MSKAccessCredentialsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.MSKAccessCredentialsProperty"]], result)
 
         @builtins.property
         def maximum_batching_window_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -3974,14 +3975,14 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            active_mq_broker_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeSourceActiveMQBrokerParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            dynamo_db_stream_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeSourceDynamoDBStreamParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            filter_criteria: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.FilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            kinesis_stream_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeSourceKinesisStreamParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            managed_streaming_kafka_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeSourceManagedStreamingKafkaParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            rabbit_mq_broker_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeSourceRabbitMQBrokerParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            self_managed_kafka_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeSourceSelfManagedKafkaParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sqs_queue_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeSourceSqsQueueParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            active_mq_broker_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeSourceActiveMQBrokerParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            dynamo_db_stream_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeSourceDynamoDBStreamParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            filter_criteria: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.FilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            kinesis_stream_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeSourceKinesisStreamParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            managed_streaming_kafka_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeSourceManagedStreamingKafkaParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            rabbit_mq_broker_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeSourceRabbitMQBrokerParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            self_managed_kafka_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeSourceSelfManagedKafkaParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sqs_queue_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeSourceSqsQueueParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The parameters required to set up a source for your pipe.
 
@@ -4130,29 +4131,29 @@ class CfnPipe(
         @builtins.property
         def active_mq_broker_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceActiveMQBrokerParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceActiveMQBrokerParametersProperty"]]:
             '''The parameters for using an Active MQ broker as a source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourceparameters.html#cfn-pipes-pipe-pipesourceparameters-activemqbrokerparameters
             '''
             result = self._values.get("active_mq_broker_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceActiveMQBrokerParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceActiveMQBrokerParametersProperty"]], result)
 
         @builtins.property
         def dynamo_db_stream_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceDynamoDBStreamParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceDynamoDBStreamParametersProperty"]]:
             '''The parameters for using a DynamoDB stream as a source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourceparameters.html#cfn-pipes-pipe-pipesourceparameters-dynamodbstreamparameters
             '''
             result = self._values.get("dynamo_db_stream_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceDynamoDBStreamParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceDynamoDBStreamParametersProperty"]], result)
 
         @builtins.property
         def filter_criteria(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.FilterCriteriaProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.FilterCriteriaProperty"]]:
             '''The collection of event patterns used to filter events.
 
             To remove a filter, specify a ``FilterCriteria`` object with an empty array of ``Filter`` objects.
@@ -4162,45 +4163,45 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourceparameters.html#cfn-pipes-pipe-pipesourceparameters-filtercriteria
             '''
             result = self._values.get("filter_criteria")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.FilterCriteriaProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.FilterCriteriaProperty"]], result)
 
         @builtins.property
         def kinesis_stream_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceKinesisStreamParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceKinesisStreamParametersProperty"]]:
             '''The parameters for using a Kinesis stream as a source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourceparameters.html#cfn-pipes-pipe-pipesourceparameters-kinesisstreamparameters
             '''
             result = self._values.get("kinesis_stream_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceKinesisStreamParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceKinesisStreamParametersProperty"]], result)
 
         @builtins.property
         def managed_streaming_kafka_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceManagedStreamingKafkaParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceManagedStreamingKafkaParametersProperty"]]:
             '''The parameters for using an MSK stream as a source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourceparameters.html#cfn-pipes-pipe-pipesourceparameters-managedstreamingkafkaparameters
             '''
             result = self._values.get("managed_streaming_kafka_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceManagedStreamingKafkaParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceManagedStreamingKafkaParametersProperty"]], result)
 
         @builtins.property
         def rabbit_mq_broker_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceRabbitMQBrokerParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceRabbitMQBrokerParametersProperty"]]:
             '''The parameters for using a Rabbit MQ broker as a source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourceparameters.html#cfn-pipes-pipe-pipesourceparameters-rabbitmqbrokerparameters
             '''
             result = self._values.get("rabbit_mq_broker_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceRabbitMQBrokerParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceRabbitMQBrokerParametersProperty"]], result)
 
         @builtins.property
         def self_managed_kafka_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceSelfManagedKafkaParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceSelfManagedKafkaParametersProperty"]]:
             '''The parameters for using a self-managed Apache Kafka stream as a source.
 
             A *self managed* cluster refers to any Apache Kafka cluster not hosted by AWS . This includes both clusters you manage yourself, as well as those hosted by a third-party provider, such as `Confluent Cloud <https://docs.aws.amazon.com/https://www.confluent.io/>`_ , `CloudKarafka <https://docs.aws.amazon.com/https://www.cloudkarafka.com/>`_ , or `Redpanda <https://docs.aws.amazon.com/https://redpanda.com/>`_ . For more information, see `Apache Kafka streams as a source <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-pipes-kafka.html>`_ in the *Amazon EventBridge User Guide* .
@@ -4208,18 +4209,18 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourceparameters.html#cfn-pipes-pipe-pipesourceparameters-selfmanagedkafkaparameters
             '''
             result = self._values.get("self_managed_kafka_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceSelfManagedKafkaParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceSelfManagedKafkaParametersProperty"]], result)
 
         @builtins.property
         def sqs_queue_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceSqsQueueParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceSqsQueueParametersProperty"]]:
             '''The parameters for using a Amazon SQS stream as a source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourceparameters.html#cfn-pipes-pipe-pipesourceparameters-sqsqueueparameters
             '''
             result = self._values.get("sqs_queue_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeSourceSqsQueueParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceSqsQueueParametersProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4247,7 +4248,7 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            credentials: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.MQBrokerAccessCredentialsProperty", typing.Dict[builtins.str, typing.Any]]],
+            credentials: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.MQBrokerAccessCredentialsProperty", typing.Dict[builtins.str, typing.Any]]],
             queue_name: builtins.str,
             batch_size: typing.Optional[jsii.Number] = None,
             maximum_batching_window_in_seconds: typing.Optional[jsii.Number] = None,
@@ -4303,14 +4304,14 @@ class CfnPipe(
         @builtins.property
         def credentials(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPipe.MQBrokerAccessCredentialsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPipe.MQBrokerAccessCredentialsProperty"]:
             '''The credentials needed to access the resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourcerabbitmqbrokerparameters.html#cfn-pipes-pipe-pipesourcerabbitmqbrokerparameters-credentials
             '''
             result = self._values.get("credentials")
             assert result is not None, "Required property 'credentials' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPipe.MQBrokerAccessCredentialsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPipe.MQBrokerAccessCredentialsProperty"], result)
 
         @builtins.property
         def queue_name(self) -> builtins.str:
@@ -4383,11 +4384,11 @@ class CfnPipe(
             additional_bootstrap_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
             batch_size: typing.Optional[jsii.Number] = None,
             consumer_group_id: typing.Optional[builtins.str] = None,
-            credentials: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.SelfManagedKafkaAccessConfigurationCredentialsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            credentials: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.SelfManagedKafkaAccessConfigurationCredentialsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             maximum_batching_window_in_seconds: typing.Optional[jsii.Number] = None,
             server_root_ca_certificate: typing.Optional[builtins.str] = None,
             starting_position: typing.Optional[builtins.str] = None,
-            vpc: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.SelfManagedKafkaAccessConfigurationVpcProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.SelfManagedKafkaAccessConfigurationVpcProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The parameters for using a self-managed Apache Kafka stream as a source.
 
@@ -4507,13 +4508,13 @@ class CfnPipe(
         @builtins.property
         def credentials(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.SelfManagedKafkaAccessConfigurationCredentialsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.SelfManagedKafkaAccessConfigurationCredentialsProperty"]]:
             '''The credentials needed to access the resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourceselfmanagedkafkaparameters.html#cfn-pipes-pipe-pipesourceselfmanagedkafkaparameters-credentials
             '''
             result = self._values.get("credentials")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.SelfManagedKafkaAccessConfigurationCredentialsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.SelfManagedKafkaAccessConfigurationCredentialsProperty"]], result)
 
         @builtins.property
         def maximum_batching_window_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -4545,13 +4546,13 @@ class CfnPipe(
         @builtins.property
         def vpc(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.SelfManagedKafkaAccessConfigurationVpcProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.SelfManagedKafkaAccessConfigurationVpcProperty"]]:
             '''This structure specifies the VPC subnets and security groups for the stream, and whether a public IP address is to be used.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipesourceselfmanagedkafkaparameters.html#cfn-pipes-pipe-pipesourceselfmanagedkafkaparameters-vpc
             '''
             result = self._values.get("vpc")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.SelfManagedKafkaAccessConfigurationVpcProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.SelfManagedKafkaAccessConfigurationVpcProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4656,11 +4657,11 @@ class CfnPipe(
             *,
             job_definition: builtins.str,
             job_name: builtins.str,
-            array_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.BatchArrayPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            container_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.BatchContainerOverridesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            depends_on: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.BatchJobDependencyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            retry_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.BatchRetryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            array_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.BatchArrayPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            container_overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.BatchContainerOverridesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            depends_on: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.BatchJobDependencyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            retry_strategy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.BatchRetryStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The parameters for using an AWS Batch job as a target.
 
@@ -4764,7 +4765,7 @@ class CfnPipe(
         @builtins.property
         def array_properties(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.BatchArrayPropertiesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.BatchArrayPropertiesProperty"]]:
             '''The array properties for the submitted job, such as the size of the array.
 
             The array size can be between 2 and 10,000. If you specify array properties for a job, it becomes an array job. This parameter is used only if the target is an AWS Batch job.
@@ -4772,23 +4773,23 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetbatchjobparameters.html#cfn-pipes-pipe-pipetargetbatchjobparameters-arrayproperties
             '''
             result = self._values.get("array_properties")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.BatchArrayPropertiesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.BatchArrayPropertiesProperty"]], result)
 
         @builtins.property
         def container_overrides(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.BatchContainerOverridesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.BatchContainerOverridesProperty"]]:
             '''The overrides that are sent to a container.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetbatchjobparameters.html#cfn-pipes-pipe-pipetargetbatchjobparameters-containeroverrides
             '''
             result = self._values.get("container_overrides")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.BatchContainerOverridesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.BatchContainerOverridesProperty"]], result)
 
         @builtins.property
         def depends_on(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.BatchJobDependencyProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.BatchJobDependencyProperty"]]]]:
             '''A list of dependencies for the job.
 
             A job can depend upon a maximum of 20 jobs. You can specify a ``SEQUENTIAL`` type dependency without specifying a job ID for array jobs so that each child array job completes sequentially, starting at index 0. You can also specify an ``N_TO_N`` type dependency with a job ID for array jobs. In that case, each index child of this job must wait for the corresponding index child of each dependency to complete before it can begin.
@@ -4796,12 +4797,12 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetbatchjobparameters.html#cfn-pipes-pipe-pipetargetbatchjobparameters-dependson
             '''
             result = self._values.get("depends_on")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.BatchJobDependencyProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.BatchJobDependencyProperty"]]]], result)
 
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Additional parameters passed to the job that replace parameter substitution placeholders that are set in the job definition.
 
             Parameters are specified as a key and value pair mapping. Parameters included here override any corresponding parameter defaults from the job definition.
@@ -4809,12 +4810,12 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetbatchjobparameters.html#cfn-pipes-pipe-pipetargetbatchjobparameters-parameters
             '''
             result = self._values.get("parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def retry_strategy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.BatchRetryStrategyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.BatchRetryStrategyProperty"]]:
             '''The retry strategy to use for failed jobs.
 
             When a retry strategy is specified here, it overrides the retry strategy defined in the job definition.
@@ -4822,7 +4823,7 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetbatchjobparameters.html#cfn-pipes-pipe-pipetargetbatchjobparameters-retrystrategy
             '''
             result = self._values.get("retry_strategy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.BatchRetryStrategyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.BatchRetryStrategyProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4935,19 +4936,19 @@ class CfnPipe(
             self,
             *,
             task_definition_arn: builtins.str,
-            capacity_provider_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.CapacityProviderStrategyItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            enable_ecs_managed_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            enable_execute_command: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            capacity_provider_strategy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.CapacityProviderStrategyItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            enable_ecs_managed_tags: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            enable_execute_command: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             group: typing.Optional[builtins.str] = None,
             launch_type: typing.Optional[builtins.str] = None,
-            network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.NetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.EcsTaskOverrideProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            placement_constraints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PlacementConstraintProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            placement_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PlacementStrategyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            network_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.NetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.EcsTaskOverrideProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            placement_constraints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PlacementConstraintProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            placement_strategy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PlacementStrategyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             platform_version: typing.Optional[builtins.str] = None,
             propagate_tags: typing.Optional[builtins.str] = None,
             reference_id: typing.Optional[builtins.str] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
             task_count: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''The parameters for using an Amazon ECS task as a target.
@@ -4973,6 +4974,7 @@ class CfnPipe(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_pipes as pipes
@@ -5113,7 +5115,7 @@ class CfnPipe(
         @builtins.property
         def capacity_provider_strategy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.CapacityProviderStrategyItemProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.CapacityProviderStrategyItemProperty"]]]]:
             '''The capacity provider strategy to use for the task.
 
             If a ``capacityProviderStrategy`` is specified, the ``launchType`` parameter must be omitted. If no ``capacityProviderStrategy`` or launchType is specified, the ``defaultCapacityProviderStrategy`` for the cluster is used.
@@ -5121,12 +5123,12 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetecstaskparameters.html#cfn-pipes-pipe-pipetargetecstaskparameters-capacityproviderstrategy
             '''
             result = self._values.get("capacity_provider_strategy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.CapacityProviderStrategyItemProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.CapacityProviderStrategyItemProperty"]]]], result)
 
         @builtins.property
         def enable_ecs_managed_tags(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether to enable Amazon ECS managed tags for the task.
 
             For more information, see `Tagging Your Amazon ECS Resources <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-using-tags.html>`_ in the Amazon Elastic Container Service Developer Guide.
@@ -5136,12 +5138,12 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetecstaskparameters.html#cfn-pipes-pipe-pipetargetecstaskparameters-enableecsmanagedtags
             '''
             result = self._values.get("enable_ecs_managed_tags")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def enable_execute_command(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether or not to enable the execute command functionality for the containers in this task.
 
             If true, this enables execute command functionality on all containers in the task.
@@ -5151,7 +5153,7 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetecstaskparameters.html#cfn-pipes-pipe-pipetargetecstaskparameters-enableexecutecommand
             '''
             result = self._values.get("enable_execute_command")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def group(self) -> typing.Optional[builtins.str]:
@@ -5178,7 +5180,7 @@ class CfnPipe(
         @builtins.property
         def network_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.NetworkConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.NetworkConfigurationProperty"]]:
             '''Use this structure if the Amazon ECS task uses the ``awsvpc`` network mode.
 
             This structure specifies the VPC subnets and security groups associated with the task, and whether a public IP address is to be used. This structure is required if ``LaunchType`` is ``FARGATE`` because the ``awsvpc`` mode is required for Fargate tasks.
@@ -5188,23 +5190,23 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetecstaskparameters.html#cfn-pipes-pipe-pipetargetecstaskparameters-networkconfiguration
             '''
             result = self._values.get("network_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.NetworkConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.NetworkConfigurationProperty"]], result)
 
         @builtins.property
         def overrides(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsTaskOverrideProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsTaskOverrideProperty"]]:
             '''The overrides that are associated with a task.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetecstaskparameters.html#cfn-pipes-pipe-pipetargetecstaskparameters-overrides
             '''
             result = self._values.get("overrides")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.EcsTaskOverrideProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.EcsTaskOverrideProperty"]], result)
 
         @builtins.property
         def placement_constraints(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.PlacementConstraintProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.PlacementConstraintProperty"]]]]:
             '''An array of placement constraint objects to use for the task.
 
             You can specify up to 10 constraints per task (including constraints in the task definition and those specified at runtime).
@@ -5212,12 +5214,12 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetecstaskparameters.html#cfn-pipes-pipe-pipetargetecstaskparameters-placementconstraints
             '''
             result = self._values.get("placement_constraints")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.PlacementConstraintProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.PlacementConstraintProperty"]]]], result)
 
         @builtins.property
         def placement_strategy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.PlacementStrategyProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.PlacementStrategyProperty"]]]]:
             '''The placement strategy objects to use for the task.
 
             You can specify a maximum of five strategy rules per task.
@@ -5225,7 +5227,7 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetecstaskparameters.html#cfn-pipes-pipe-pipetargetecstaskparameters-placementstrategy
             '''
             result = self._values.get("placement_strategy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.PlacementStrategyProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.PlacementStrategyProperty"]]]], result)
 
         @builtins.property
         def platform_version(self) -> typing.Optional[builtins.str]:
@@ -5261,7 +5263,7 @@ class CfnPipe(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''The metadata that you apply to the task to help you categorize and organize them.
 
             Each tag consists of a key and an optional value, both of which you define. To learn more, see `RunTask <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RunTask.html#ECS-RunTask-request-tags>`_ in the Amazon ECS API Reference.
@@ -5269,7 +5271,7 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetecstaskparameters.html#cfn-pipes-pipe-pipetargetecstaskparameters-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         @builtins.property
         def task_count(self) -> typing.Optional[jsii.Number]:
@@ -5431,9 +5433,9 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            header_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            header_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             path_parameter_values: typing.Optional[typing.Sequence[builtins.str]] = None,
-            query_string_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            query_string_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''These are custom parameter to be used when the target is an API Gateway REST APIs or EventBridge ApiDestinations.
 
@@ -5476,13 +5478,13 @@ class CfnPipe(
         @builtins.property
         def header_parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The headers that need to be sent as part of request invoking the API Gateway REST API or EventBridge ApiDestination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargethttpparameters.html#cfn-pipes-pipe-pipetargethttpparameters-headerparameters
             '''
             result = self._values.get("header_parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def path_parameter_values(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5496,13 +5498,13 @@ class CfnPipe(
         @builtins.property
         def query_string_parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The query string keys/values that need to be sent as part of request invoking the API Gateway REST API or EventBridge ApiDestination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargethttpparameters.html#cfn-pipes-pipe-pipetargethttpparameters-querystringparameters
             '''
             result = self._values.get("query_string_parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5652,19 +5654,19 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            batch_job_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetBatchJobParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloud_watch_logs_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetCloudWatchLogsParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            ecs_task_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetEcsTaskParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            event_bridge_event_bus_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetEventBridgeEventBusParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            http_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetHttpParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            batch_job_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetBatchJobParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logs_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetCloudWatchLogsParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ecs_task_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetEcsTaskParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            event_bridge_event_bus_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetEventBridgeEventBusParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            http_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetHttpParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             input_template: typing.Optional[builtins.str] = None,
-            kinesis_stream_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetKinesisStreamParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            lambda_function_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetLambdaFunctionParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            redshift_data_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetRedshiftDataParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sage_maker_pipeline_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetSageMakerPipelineParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sqs_queue_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetSqsQueueParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            step_function_state_machine_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetStateMachineParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            timestream_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeTargetTimestreamParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            kinesis_stream_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetKinesisStreamParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lambda_function_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetLambdaFunctionParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            redshift_data_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetRedshiftDataParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sage_maker_pipeline_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetSageMakerPipelineParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sqs_queue_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetSqsQueueParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            step_function_state_machine_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetStateMachineParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            timestream_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetTimestreamParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The parameters required to set up a target for your pipe.
 
@@ -5748,57 +5750,57 @@ class CfnPipe(
         @builtins.property
         def batch_job_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetBatchJobParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetBatchJobParametersProperty"]]:
             '''The parameters for using an AWS Batch job as a target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetparameters.html#cfn-pipes-pipe-pipetargetparameters-batchjobparameters
             '''
             result = self._values.get("batch_job_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetBatchJobParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetBatchJobParametersProperty"]], result)
 
         @builtins.property
         def cloud_watch_logs_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetCloudWatchLogsParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetCloudWatchLogsParametersProperty"]]:
             '''The parameters for using an CloudWatch Logs log stream as a target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetparameters.html#cfn-pipes-pipe-pipetargetparameters-cloudwatchlogsparameters
             '''
             result = self._values.get("cloud_watch_logs_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetCloudWatchLogsParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetCloudWatchLogsParametersProperty"]], result)
 
         @builtins.property
         def ecs_task_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetEcsTaskParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetEcsTaskParametersProperty"]]:
             '''The parameters for using an Amazon ECS task as a target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetparameters.html#cfn-pipes-pipe-pipetargetparameters-ecstaskparameters
             '''
             result = self._values.get("ecs_task_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetEcsTaskParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetEcsTaskParametersProperty"]], result)
 
         @builtins.property
         def event_bridge_event_bus_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetEventBridgeEventBusParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetEventBridgeEventBusParametersProperty"]]:
             '''The parameters for using an EventBridge event bus as a target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetparameters.html#cfn-pipes-pipe-pipetargetparameters-eventbridgeeventbusparameters
             '''
             result = self._values.get("event_bridge_event_bus_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetEventBridgeEventBusParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetEventBridgeEventBusParametersProperty"]], result)
 
         @builtins.property
         def http_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetHttpParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetHttpParametersProperty"]]:
             '''These are custom parameter to be used when the target is an API Gateway REST APIs or EventBridge ApiDestinations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetparameters.html#cfn-pipes-pipe-pipetargetparameters-httpparameters
             '''
             result = self._values.get("http_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetHttpParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetHttpParametersProperty"]], result)
 
         @builtins.property
         def input_template(self) -> typing.Optional[builtins.str]:
@@ -5816,79 +5818,79 @@ class CfnPipe(
         @builtins.property
         def kinesis_stream_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetKinesisStreamParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetKinesisStreamParametersProperty"]]:
             '''The parameters for using a Kinesis stream as a target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetparameters.html#cfn-pipes-pipe-pipetargetparameters-kinesisstreamparameters
             '''
             result = self._values.get("kinesis_stream_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetKinesisStreamParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetKinesisStreamParametersProperty"]], result)
 
         @builtins.property
         def lambda_function_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetLambdaFunctionParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetLambdaFunctionParametersProperty"]]:
             '''The parameters for using a Lambda function as a target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetparameters.html#cfn-pipes-pipe-pipetargetparameters-lambdafunctionparameters
             '''
             result = self._values.get("lambda_function_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetLambdaFunctionParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetLambdaFunctionParametersProperty"]], result)
 
         @builtins.property
         def redshift_data_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetRedshiftDataParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetRedshiftDataParametersProperty"]]:
             '''These are custom parameters to be used when the target is a Amazon Redshift cluster to invoke the Amazon Redshift Data API BatchExecuteStatement.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetparameters.html#cfn-pipes-pipe-pipetargetparameters-redshiftdataparameters
             '''
             result = self._values.get("redshift_data_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetRedshiftDataParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetRedshiftDataParametersProperty"]], result)
 
         @builtins.property
         def sage_maker_pipeline_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetSageMakerPipelineParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetSageMakerPipelineParametersProperty"]]:
             '''The parameters for using a SageMaker AI pipeline as a target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetparameters.html#cfn-pipes-pipe-pipetargetparameters-sagemakerpipelineparameters
             '''
             result = self._values.get("sage_maker_pipeline_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetSageMakerPipelineParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetSageMakerPipelineParametersProperty"]], result)
 
         @builtins.property
         def sqs_queue_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetSqsQueueParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetSqsQueueParametersProperty"]]:
             '''The parameters for using a Amazon SQS stream as a target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetparameters.html#cfn-pipes-pipe-pipetargetparameters-sqsqueueparameters
             '''
             result = self._values.get("sqs_queue_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetSqsQueueParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetSqsQueueParametersProperty"]], result)
 
         @builtins.property
         def step_function_state_machine_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetStateMachineParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetStateMachineParametersProperty"]]:
             '''The parameters for using a Step Functions state machine as a target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetparameters.html#cfn-pipes-pipe-pipetargetparameters-stepfunctionstatemachineparameters
             '''
             result = self._values.get("step_function_state_machine_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetStateMachineParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetStateMachineParametersProperty"]], result)
 
         @builtins.property
         def timestream_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetTimestreamParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetTimestreamParametersProperty"]]:
             '''The parameters for using a Timestream for LiveAnalytics table as a target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetparameters.html#cfn-pipes-pipe-pipetargetparameters-timestreamparameters
             '''
             result = self._values.get("timestream_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipe.PipeTargetTimestreamParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetTimestreamParametersProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5922,7 +5924,7 @@ class CfnPipe(
             db_user: typing.Optional[builtins.str] = None,
             secret_manager_arn: typing.Optional[builtins.str] = None,
             statement_name: typing.Optional[builtins.str] = None,
-            with_event: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            with_event: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''These are custom parameters to be used when the target is a Amazon Redshift cluster to invoke the Amazon Redshift Data API BatchExecuteStatement.
 
@@ -6032,7 +6034,7 @@ class CfnPipe(
         @builtins.property
         def with_event(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether to send an event back to EventBridge after the SQL statement runs.
 
             :default: - false
@@ -6040,7 +6042,7 @@ class CfnPipe(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetredshiftdataparameters.html#cfn-pipes-pipe-pipetargetredshiftdataparameters-withevent
             '''
             result = self._values.get("with_event")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6062,7 +6064,7 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            pipeline_parameter_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.SageMakerPipelineParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            pipeline_parameter_list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.SageMakerPipelineParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The parameters for using a SageMaker AI pipeline as a target.
 
@@ -6094,13 +6096,13 @@ class CfnPipe(
         @builtins.property
         def pipeline_parameter_list(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.SageMakerPipelineParameterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.SageMakerPipelineParameterProperty"]]]]:
             '''List of Parameter names and values for SageMaker AI Model Building Pipeline execution.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargetsagemakerpipelineparameters.html#cfn-pipes-pipe-pipetargetsagemakerpipelineparameters-pipelineparameterlist
             '''
             result = self._values.get("pipeline_parameter_list")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.SageMakerPipelineParameterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.SageMakerPipelineParameterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6271,12 +6273,12 @@ class CfnPipe(
         def __init__(
             self,
             *,
-            dimension_mappings: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.DimensionMappingProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            dimension_mappings: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.DimensionMappingProperty", typing.Dict[builtins.str, typing.Any]]]]],
             time_value: builtins.str,
             version_value: builtins.str,
             epoch_time_unit: typing.Optional[builtins.str] = None,
-            multi_measure_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.MultiMeasureMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            single_measure_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.SingleMeasureMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            multi_measure_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.MultiMeasureMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            single_measure_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.SingleMeasureMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             time_field_type: typing.Optional[builtins.str] = None,
             timestamp_format: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -6357,7 +6359,7 @@ class CfnPipe(
         @builtins.property
         def dimension_mappings(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.DimensionMappingProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.DimensionMappingProperty"]]]:
             '''Map source data to dimensions in the target Timestream for LiveAnalytics table.
 
             For more information, see `Amazon Timestream for LiveAnalytics concepts <https://docs.aws.amazon.com/timestream/latest/developerguide/concepts.html>`_
@@ -6366,7 +6368,7 @@ class CfnPipe(
             '''
             result = self._values.get("dimension_mappings")
             assert result is not None, "Required property 'dimension_mappings' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.DimensionMappingProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.DimensionMappingProperty"]]], result)
 
         @builtins.property
         def time_value(self) -> builtins.str:
@@ -6413,24 +6415,24 @@ class CfnPipe(
         @builtins.property
         def multi_measure_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.MultiMeasureMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.MultiMeasureMappingProperty"]]]]:
             '''Maps multiple measures from the source event to the same record in the specified Timestream for LiveAnalytics table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargettimestreamparameters.html#cfn-pipes-pipe-pipetargettimestreamparameters-multimeasuremappings
             '''
             result = self._values.get("multi_measure_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.MultiMeasureMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.MultiMeasureMappingProperty"]]]], result)
 
         @builtins.property
         def single_measure_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.SingleMeasureMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.SingleMeasureMappingProperty"]]]]:
             '''Mappings of single source data fields to individual records in the specified Timestream for LiveAnalytics table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pipes-pipe-pipetargettimestreamparameters.html#cfn-pipes-pipe-pipetargettimestreamparameters-singlemeasuremappings
             '''
             result = self._values.get("single_measure_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipe.SingleMeasureMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipe.SingleMeasureMappingProperty"]]]], result)
 
         @builtins.property
         def time_field_type(self) -> typing.Optional[builtins.str]:
@@ -7087,19 +7089,19 @@ class CfnPipeProps:
     def __init__(
         self,
         *,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        source: typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198],
-        target: typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IEventBusRef_aa86e9b4, _IQueueRef_fa8b2198, _ILogGroupRef_874d025a, _IStateMachineRef_65490661],
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        source: typing.Union[builtins.str, "_IStreamRef_b484e253", "_IQueueRef_fa8b2198"],
+        target: typing.Union[builtins.str, "_IEventBusRef_aa86e9b4", "_IFunctionRef_2601eb33", "_ILogGroupRef_874d025a", "_ITopicRef_29aa9a88", "_IQueueRef_fa8b2198", "_IStateMachineRef_65490661"],
         description: typing.Optional[builtins.str] = None,
         desired_state: typing.Optional[builtins.str] = None,
-        enrichment: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
-        enrichment_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipe.PipeEnrichmentParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        enrichment: typing.Optional[typing.Union[builtins.str, "_IFunctionRef_2601eb33"]] = None,
+        enrichment_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeEnrichmentParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_identifier: typing.Optional[builtins.str] = None,
-        log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipe.PipeLogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        log_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeLogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        source_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipe.PipeSourceParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeSourceParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        target_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipe.PipeTargetParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipe.PipeTargetParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPipe``.
 
@@ -7122,6 +7124,7 @@ class CfnPipeProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_pipes as pipes
@@ -7490,38 +7493,38 @@ class CfnPipeProps:
             self._values["target_parameters"] = target_parameters
 
     @builtins.property
-    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The ARN of the role that allows the pipe to send data to the target.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pipes-pipe.html#cfn-pipes-pipe-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def source(
         self,
-    ) -> typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198]:
+    ) -> typing.Union[builtins.str, "_IStreamRef_b484e253", "_IQueueRef_fa8b2198"]:
         '''The ARN of the source resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pipes-pipe.html#cfn-pipes-pipe-source
         '''
         result = self._values.get("source")
         assert result is not None, "Required property 'source' is missing"
-        return typing.cast(typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198], result)
+        return typing.cast(typing.Union[builtins.str, "_IStreamRef_b484e253", "_IQueueRef_fa8b2198"], result)
 
     @builtins.property
     def target(
         self,
-    ) -> typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IEventBusRef_aa86e9b4, _IQueueRef_fa8b2198, _ILogGroupRef_874d025a, _IStateMachineRef_65490661]:
+    ) -> typing.Union[builtins.str, "_IEventBusRef_aa86e9b4", "_IFunctionRef_2601eb33", "_ILogGroupRef_874d025a", "_ITopicRef_29aa9a88", "_IQueueRef_fa8b2198", "_IStateMachineRef_65490661"]:
         '''The ARN of the target resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pipes-pipe.html#cfn-pipes-pipe-target
         '''
         result = self._values.get("target")
         assert result is not None, "Required property 'target' is missing"
-        return typing.cast(typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IEventBusRef_aa86e9b4, _IQueueRef_fa8b2198, _ILogGroupRef_874d025a, _IStateMachineRef_65490661], result)
+        return typing.cast(typing.Union[builtins.str, "_IEventBusRef_aa86e9b4", "_IFunctionRef_2601eb33", "_ILogGroupRef_874d025a", "_ITopicRef_29aa9a88", "_IQueueRef_fa8b2198", "_IStateMachineRef_65490661"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -7544,24 +7547,24 @@ class CfnPipeProps:
     @builtins.property
     def enrichment(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IFunctionRef_2601eb33"]]:
         '''The ARN of the enrichment resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pipes-pipe.html#cfn-pipes-pipe-enrichment
         '''
         result = self._values.get("enrichment")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IFunctionRef_2601eb33"]], result)
 
     @builtins.property
     def enrichment_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPipe.PipeEnrichmentParametersProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeEnrichmentParametersProperty"]]:
         '''The parameters required to set up enrichment on your pipe.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pipes-pipe.html#cfn-pipes-pipe-enrichmentparameters
         '''
         result = self._values.get("enrichment_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPipe.PipeEnrichmentParametersProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeEnrichmentParametersProperty"]], result)
 
     @builtins.property
     def kms_key_identifier(self) -> typing.Optional[builtins.str]:
@@ -7583,13 +7586,13 @@ class CfnPipeProps:
     @builtins.property
     def log_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPipe.PipeLogConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeLogConfigurationProperty"]]:
         '''The logging configuration settings for the pipe.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pipes-pipe.html#cfn-pipes-pipe-logconfiguration
         '''
         result = self._values.get("log_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPipe.PipeLogConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeLogConfigurationProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -7603,13 +7606,13 @@ class CfnPipeProps:
     @builtins.property
     def source_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPipe.PipeSourceParametersProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceParametersProperty"]]:
         '''The parameters required to set up a source for your pipe.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pipes-pipe.html#cfn-pipes-pipe-sourceparameters
         '''
         result = self._values.get("source_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPipe.PipeSourceParametersProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeSourceParametersProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -7623,7 +7626,7 @@ class CfnPipeProps:
     @builtins.property
     def target_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPipe.PipeTargetParametersProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetParametersProperty"]]:
         '''The parameters required to set up a target for your pipe.
 
         For more information about pipe target parameters, including how to use dynamic path parameters, see `Target parameters <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-pipes-event-target.html>`_ in the *Amazon EventBridge User Guide* .
@@ -7631,7 +7634,7 @@ class CfnPipeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pipes-pipe.html#cfn-pipes-pipe-targetparameters
         '''
         result = self._values.get("target_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPipe.PipeTargetParametersProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipe.PipeTargetParametersProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7658,7 +7661,7 @@ def _typecheckingstub__2590746a77e697feb25a71ec367eb957a7632f9fe5a46ae7e30476068
     *,
     role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     source: typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198],
-    target: typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IEventBusRef_aa86e9b4, _IQueueRef_fa8b2198, _ILogGroupRef_874d025a, _IStateMachineRef_65490661],
+    target: typing.Union[builtins.str, _IEventBusRef_aa86e9b4, _IFunctionRef_2601eb33, _ILogGroupRef_874d025a, _ITopicRef_29aa9a88, _IQueueRef_fa8b2198, _IStateMachineRef_65490661],
     description: typing.Optional[builtins.str] = None,
     desired_state: typing.Optional[builtins.str] = None,
     enrichment: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
@@ -8325,7 +8328,7 @@ def _typecheckingstub__f6a6720db1bd2e7acc178f6bd481fd8e3e740405a24c01b669c4c4595
     *,
     role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     source: typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198],
-    target: typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IEventBusRef_aa86e9b4, _IQueueRef_fa8b2198, _ILogGroupRef_874d025a, _IStateMachineRef_65490661],
+    target: typing.Union[builtins.str, _IEventBusRef_aa86e9b4, _IFunctionRef_2601eb33, _ILogGroupRef_874d025a, _ITopicRef_29aa9a88, _IQueueRef_fa8b2198, _IStateMachineRef_65490661],
     description: typing.Optional[builtins.str] = None,
     desired_state: typing.Optional[builtins.str] = None,
     enrichment: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,

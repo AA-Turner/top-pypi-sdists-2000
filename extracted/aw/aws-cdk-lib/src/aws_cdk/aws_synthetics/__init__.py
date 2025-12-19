@@ -401,6 +401,7 @@ one will be auto-generated when the canary is created. You may add
 to the auto-generated bucket.
 
 ```python
+from aws_cdk.aws_s3 import LifecycleRule
 canary = synthetics.Canary(self, "MyCanary",
     schedule=synthetics.Schedule.rate(Duration.minutes(5)),
     test=synthetics.Test.custom(
@@ -421,6 +422,7 @@ You can choose the encryption options SSE-S3 or SSE-KMS by setting the `artifact
 When you use SSE-KMS, you can also supply your own external KMS key by specifying the `kmsKey` property. If you don't, a KMS key will be automatically created and associated with the canary.
 
 ```python
+from aws_cdk.aws_s3 import LifecycleRule
 import aws_cdk.aws_kms as kms
 
 
@@ -548,7 +550,7 @@ class ArtifactsBucketLocation:
     def __init__(
         self,
         *,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         prefix: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Options for specifying the s3 location that stores the data of each canary run.
@@ -588,11 +590,11 @@ class ArtifactsBucketLocation:
             self._values["prefix"] = prefix
 
     @builtins.property
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''The s3 location that stores the data of each run.'''
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
     def prefix(self) -> typing.Optional[builtins.str]:
@@ -625,6 +627,7 @@ class ArtifactsEncryptionMode(enum.Enum):
 
     Example::
 
+        from aws_cdk.aws_s3 import LifecycleRule
         import aws_cdk.aws_kms as kms
         
         
@@ -702,35 +705,35 @@ class Canary(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         runtime: "Runtime",
         test: "Test",
         active_tracing: typing.Optional[builtins.bool] = None,
-        artifact_s3_encryption_mode: typing.Optional[ArtifactsEncryptionMode] = None,
-        artifact_s3_kms_key: typing.Optional[_IKey_5f11635f] = None,
-        artifacts_bucket_lifecycle_rules: typing.Optional[typing.Sequence[typing.Union[_LifecycleRule_bb74e6ff, typing.Dict[builtins.str, typing.Any]]]] = None,
-        artifacts_bucket_location: typing.Optional[typing.Union[ArtifactsBucketLocation, typing.Dict[builtins.str, typing.Any]]] = None,
-        browser_configs: typing.Optional[typing.Sequence[BrowserType]] = None,
+        artifact_s3_encryption_mode: typing.Optional["ArtifactsEncryptionMode"] = None,
+        artifact_s3_kms_key: typing.Optional["_IKey_5f11635f"] = None,
+        artifacts_bucket_lifecycle_rules: typing.Optional[typing.Sequence[typing.Union["_LifecycleRule_bb74e6ff", typing.Dict[builtins.str, typing.Any]]]] = None,
+        artifacts_bucket_location: typing.Optional[typing.Union["ArtifactsBucketLocation", typing.Dict[builtins.str, typing.Any]]] = None,
+        browser_configs: typing.Optional[typing.Sequence["BrowserType"]] = None,
         canary_name: typing.Optional[builtins.str] = None,
         cleanup: typing.Optional["Cleanup"] = None,
         dry_run_and_update: typing.Optional[builtins.bool] = None,
         environment_variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        failure_retention_period: typing.Optional[_Duration_4839e8c3] = None,
+        failure_retention_period: typing.Optional["_Duration_4839e8c3"] = None,
         max_retries: typing.Optional[jsii.Number] = None,
-        memory: typing.Optional[_Size_7b441c34] = None,
+        memory: typing.Optional["_Size_7b441c34"] = None,
         provisioned_resource_cleanup: typing.Optional[builtins.bool] = None,
         resources_to_replicate_tags: typing.Optional[typing.Sequence["ResourceToReplicateTags"]] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         schedule: typing.Optional["Schedule"] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         start_after_creation: typing.Optional[builtins.bool] = None,
-        success_retention_period: typing.Optional[_Duration_4839e8c3] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        time_to_live: typing.Optional[_Duration_4839e8c3] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        success_retention_period: typing.Optional["_Duration_4839e8c3"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        time_to_live: typing.Optional["_Duration_4839e8c3"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -806,14 +809,14 @@ class Canary(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measure the Duration of a single canary run, in seconds.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -846,7 +849,7 @@ class Canary(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDuration", [options]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDuration", [options]))
 
     @jsii.member(jsii_name="metricFailed")
     def metric_failed(
@@ -857,14 +860,14 @@ class Canary(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measure the number of failed canary runs over a given time period.
 
         Default: sum over 5 minutes
@@ -897,7 +900,7 @@ class Canary(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricFailed", [options]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricFailed", [options]))
 
     @jsii.member(jsii_name="metricSuccessPercent")
     def metric_success_percent(
@@ -908,14 +911,14 @@ class Canary(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measure the percentage of successful canary runs.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -948,7 +951,7 @@ class Canary(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSuccessPercent", [options]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSuccessPercent", [options]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -958,9 +961,9 @@ class Canary(
 
     @builtins.property
     @jsii.member(jsii_name="artifactsBucket")
-    def artifacts_bucket(self) -> _IBucket_42e086fd:
+    def artifacts_bucket(self) -> "_IBucket_42e086fd":
         '''Bucket where data from each canary run is stored.'''
-        return typing.cast(_IBucket_42e086fd, jsii.get(self, "artifactsBucket"))
+        return typing.cast("_IBucket_42e086fd", jsii.get(self, "artifactsBucket"))
 
     @builtins.property
     @jsii.member(jsii_name="canaryId")
@@ -993,18 +996,18 @@ class Canary(
 
     @builtins.property
     @jsii.member(jsii_name="connections")
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''Access the Connections object.
 
         Will fail if not a VPC-enabled Canary
         '''
-        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''Execution role associated with this Canary.'''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "role"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "role"))
 
 
 @jsii.data_type(
@@ -1046,29 +1049,29 @@ class CanaryProps:
         runtime: "Runtime",
         test: "Test",
         active_tracing: typing.Optional[builtins.bool] = None,
-        artifact_s3_encryption_mode: typing.Optional[ArtifactsEncryptionMode] = None,
-        artifact_s3_kms_key: typing.Optional[_IKey_5f11635f] = None,
-        artifacts_bucket_lifecycle_rules: typing.Optional[typing.Sequence[typing.Union[_LifecycleRule_bb74e6ff, typing.Dict[builtins.str, typing.Any]]]] = None,
-        artifacts_bucket_location: typing.Optional[typing.Union[ArtifactsBucketLocation, typing.Dict[builtins.str, typing.Any]]] = None,
-        browser_configs: typing.Optional[typing.Sequence[BrowserType]] = None,
+        artifact_s3_encryption_mode: typing.Optional["ArtifactsEncryptionMode"] = None,
+        artifact_s3_kms_key: typing.Optional["_IKey_5f11635f"] = None,
+        artifacts_bucket_lifecycle_rules: typing.Optional[typing.Sequence[typing.Union["_LifecycleRule_bb74e6ff", typing.Dict[builtins.str, typing.Any]]]] = None,
+        artifacts_bucket_location: typing.Optional[typing.Union["ArtifactsBucketLocation", typing.Dict[builtins.str, typing.Any]]] = None,
+        browser_configs: typing.Optional[typing.Sequence["BrowserType"]] = None,
         canary_name: typing.Optional[builtins.str] = None,
         cleanup: typing.Optional["Cleanup"] = None,
         dry_run_and_update: typing.Optional[builtins.bool] = None,
         environment_variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        failure_retention_period: typing.Optional[_Duration_4839e8c3] = None,
+        failure_retention_period: typing.Optional["_Duration_4839e8c3"] = None,
         max_retries: typing.Optional[jsii.Number] = None,
-        memory: typing.Optional[_Size_7b441c34] = None,
+        memory: typing.Optional["_Size_7b441c34"] = None,
         provisioned_resource_cleanup: typing.Optional[builtins.bool] = None,
         resources_to_replicate_tags: typing.Optional[typing.Sequence["ResourceToReplicateTags"]] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         schedule: typing.Optional["Schedule"] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         start_after_creation: typing.Optional[builtins.bool] = None,
-        success_retention_period: typing.Optional[_Duration_4839e8c3] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        time_to_live: typing.Optional[_Duration_4839e8c3] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        success_retention_period: typing.Optional["_Duration_4839e8c3"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        time_to_live: typing.Optional["_Duration_4839e8c3"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties for a canary.
 
@@ -1235,7 +1238,7 @@ class CanaryProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def artifact_s3_encryption_mode(self) -> typing.Optional[ArtifactsEncryptionMode]:
+    def artifact_s3_encryption_mode(self) -> typing.Optional["ArtifactsEncryptionMode"]:
         '''Canary Artifacts in S3 encryption mode.
 
         Artifact encryption is only supported for canaries that use Synthetics runtime
@@ -1246,21 +1249,21 @@ class CanaryProps:
         :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_artifact_encryption.html
         '''
         result = self._values.get("artifact_s3_encryption_mode")
-        return typing.cast(typing.Optional[ArtifactsEncryptionMode], result)
+        return typing.cast(typing.Optional["ArtifactsEncryptionMode"], result)
 
     @builtins.property
-    def artifact_s3_kms_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def artifact_s3_kms_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The KMS key used to encrypt canary artifacts.
 
         :default: - no kms key if ``artifactS3EncryptionMode`` is set to ``S3_MANAGED``. A key will be created if one is not provided and ``artifactS3EncryptionMode`` is set to ``KMS``.
         '''
         result = self._values.get("artifact_s3_kms_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def artifacts_bucket_lifecycle_rules(
         self,
-    ) -> typing.Optional[typing.List[_LifecycleRule_bb74e6ff]]:
+    ) -> typing.Optional[typing.List["_LifecycleRule_bb74e6ff"]]:
         '''Lifecycle rules for the generated canary artifact bucket.
 
         Has no effect
@@ -1271,19 +1274,19 @@ class CanaryProps:
         :default: - no rules applied to the generated bucket.
         '''
         result = self._values.get("artifacts_bucket_lifecycle_rules")
-        return typing.cast(typing.Optional[typing.List[_LifecycleRule_bb74e6ff]], result)
+        return typing.cast(typing.Optional[typing.List["_LifecycleRule_bb74e6ff"]], result)
 
     @builtins.property
-    def artifacts_bucket_location(self) -> typing.Optional[ArtifactsBucketLocation]:
+    def artifacts_bucket_location(self) -> typing.Optional["ArtifactsBucketLocation"]:
         '''The s3 location that stores the data of the canary runs.
 
         :default: - A new s3 bucket will be created without a prefix.
         '''
         result = self._values.get("artifacts_bucket_location")
-        return typing.cast(typing.Optional[ArtifactsBucketLocation], result)
+        return typing.cast(typing.Optional["ArtifactsBucketLocation"], result)
 
     @builtins.property
-    def browser_configs(self) -> typing.Optional[typing.List[BrowserType]]:
+    def browser_configs(self) -> typing.Optional[typing.List["BrowserType"]]:
         '''Browser configurations for the canary.
 
         Specifies which browser(s) to use for running the canary tests.
@@ -1297,7 +1300,7 @@ class CanaryProps:
         :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html
         '''
         result = self._values.get("browser_configs")
-        return typing.cast(typing.Optional[typing.List[BrowserType]], result)
+        return typing.cast(typing.Optional[typing.List["BrowserType"]], result)
 
     @builtins.property
     def canary_name(self) -> typing.Optional[builtins.str]:
@@ -1364,13 +1367,13 @@ class CanaryProps:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def failure_retention_period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def failure_retention_period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''How many days should failed runs be retained.
 
         :default: Duration.days(31)
         '''
         result = self._values.get("failure_retention_period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def max_retries(self) -> typing.Optional[jsii.Number]:
@@ -1387,7 +1390,7 @@ class CanaryProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def memory(self) -> typing.Optional[_Size_7b441c34]:
+    def memory(self) -> typing.Optional["_Size_7b441c34"]:
         '''The maximum amount of memory that the canary can use while running.
 
         This value must be a multiple of 64 Mib.
@@ -1396,7 +1399,7 @@ class CanaryProps:
         :default: Size.mebibytes(1024)
         '''
         result = self._values.get("memory")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def provisioned_resource_cleanup(self) -> typing.Optional[builtins.bool]:
@@ -1425,7 +1428,7 @@ class CanaryProps:
         return typing.cast(typing.Optional[typing.List["ResourceToReplicateTags"]], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Canary execution role.
 
         This is the role that will be assumed by the canary upon execution.
@@ -1443,7 +1446,7 @@ class CanaryProps:
         :see: required permissions: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-executionrolearn
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def schedule(self) -> typing.Optional["Schedule"]:
@@ -1458,7 +1461,9 @@ class CanaryProps:
         return typing.cast(typing.Optional["Schedule"], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''The list of security groups to associate with the canary's network interfaces.
 
         You must provide ``vpc`` when using this prop.
@@ -1469,7 +1474,7 @@ class CanaryProps:
         not specified a dedicated security group will be created for this canary.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
     def start_after_creation(self) -> typing.Optional[builtins.bool]:
@@ -1481,16 +1486,16 @@ class CanaryProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def success_retention_period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def success_retention_period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''How many days should successful runs be retained.
 
         :default: Duration.days(31)
         '''
         result = self._values.get("success_retention_period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''How long the canary is allowed to run before it must stop.
 
         You can't set this time to be longer than the frequency of the runs of this canary.
@@ -1501,10 +1506,10 @@ class CanaryProps:
         :default: - the frequency of the canary is used as this value, up to a maximum of 900 seconds.
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def time_to_live(self) -> typing.Optional[_Duration_4839e8c3]:
+    def time_to_live(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''How long the canary will be in a 'RUNNING' state.
 
         For example, if you set ``timeToLive`` to be 1 hour and ``schedule`` to be ``rate(10 minutes)``,
@@ -1513,10 +1518,10 @@ class CanaryProps:
         :default: - no limit
         '''
         result = self._values.get("time_to_live")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''The VPC where this canary is run.
 
         Specify this if the canary needs to access resources in a VPC.
@@ -1524,10 +1529,10 @@ class CanaryProps:
         :default: - Not in VPC
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where to place the network interfaces within the VPC.
 
         You must provide ``vpc`` when using this prop.
@@ -1535,7 +1540,7 @@ class CanaryProps:
         :default: - the Vpc default strategy if not specified
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1571,6 +1576,7 @@ class CfnCanary(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_synthetics as synthetics
@@ -1672,29 +1678,29 @@ class CfnCanary(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         artifact_s3_location: builtins.str,
-        code: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.CodeProperty", typing.Dict[builtins.str, typing.Any]]],
-        execution_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        code: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.CodeProperty", typing.Dict[builtins.str, typing.Any]]],
+        execution_role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         name: builtins.str,
         runtime_version: builtins.str,
-        schedule: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]],
-        artifact_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.ArtifactConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        browser_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.BrowserConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        delete_lambda_resources_on_canary_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        dry_run_and_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        schedule: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]],
+        artifact_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.ArtifactConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        browser_configs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.BrowserConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        delete_lambda_resources_on_canary_deletion: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        dry_run_and_update: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         failure_retention_period: typing.Optional[jsii.Number] = None,
         provisioned_resource_cleanup: typing.Optional[builtins.str] = None,
         resources_to_replicate_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-        run_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.RunConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        start_canary_after_creation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        run_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.RunConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        start_canary_after_creation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         success_retention_period: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        visual_reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.VisualReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        visual_references: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.VisualReferenceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.VPCConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        visual_reference: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.VisualReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        visual_references: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.VisualReferenceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.VPCConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Synthetics::Canary``.
 
@@ -1752,7 +1758,7 @@ class CfnCanary(
 
     @jsii.member(jsii_name="arnForCanary")
     @builtins.classmethod
-    def arn_for_canary(cls, resource: _ICanaryRef_cf407e49) -> builtins.str:
+    def arn_for_canary(cls, resource: "_ICanaryRef_cf407e49") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1765,10 +1771,10 @@ class CfnCanary(
     @builtins.classmethod
     def from_canary_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         canary_name: builtins.str,
-    ) -> _ICanaryRef_cf407e49:
+    ) -> "_ICanaryRef_cf407e49":
         '''Creates a new ICanaryRef from a canaryName.
 
         :param scope: -
@@ -1780,7 +1786,7 @@ class CfnCanary(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument canary_name", value=canary_name, expected_type=type_hints["canary_name"])
-        return typing.cast(_ICanaryRef_cf407e49, jsii.sinvoke(cls, "fromCanaryName", [scope, id, canary_name]))
+        return typing.cast("_ICanaryRef_cf407e49", jsii.sinvoke(cls, "fromCanaryName", [scope, id, canary_name]))
 
     @jsii.member(jsii_name="isCfnCanary")
     @builtins.classmethod
@@ -1795,7 +1801,7 @@ class CfnCanary(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCanary", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1855,9 +1861,9 @@ class CfnCanary(
 
     @builtins.property
     @jsii.member(jsii_name="canaryRef")
-    def canary_ref(self) -> _CanaryReference_fbbe85ce:
+    def canary_ref(self) -> "_CanaryReference_fbbe85ce":
         '''A reference to a Canary resource.'''
-        return typing.cast(_CanaryReference_fbbe85ce, jsii.get(self, "canaryRef"))
+        return typing.cast("_CanaryReference_fbbe85ce", jsii.get(self, "canaryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1866,9 +1872,9 @@ class CfnCanary(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="artifactS3Location")
@@ -1885,14 +1891,14 @@ class CfnCanary(
 
     @builtins.property
     @jsii.member(jsii_name="code")
-    def code(self) -> typing.Union[_IResolvable_da3f097b, "CfnCanary.CodeProperty"]:
+    def code(self) -> typing.Union["_IResolvable_da3f097b", "CfnCanary.CodeProperty"]:
         '''Use this structure to input your script code for the canary.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCanary.CodeProperty"], jsii.get(self, "code"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCanary.CodeProperty"], jsii.get(self, "code"))
 
     @code.setter
     def code(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCanary.CodeProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCanary.CodeProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__940d05df3a63f7ad05e985fa05317d4b896a6a845409a8d700cbf186fd8e49d5)
@@ -1942,14 +1948,14 @@ class CfnCanary(
     @jsii.member(jsii_name="schedule")
     def schedule(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCanary.ScheduleProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCanary.ScheduleProperty"]:
         '''A structure that contains information about how often the canary is to run, and when these runs are to stop.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCanary.ScheduleProperty"], jsii.get(self, "schedule"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCanary.ScheduleProperty"], jsii.get(self, "schedule"))
 
     @schedule.setter
     def schedule(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCanary.ScheduleProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCanary.ScheduleProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e387628a17b84461f77d8fdc851f2b16bcda58e50d8e9279d02062270a5516f0)
@@ -1960,14 +1966,14 @@ class CfnCanary(
     @jsii.member(jsii_name="artifactConfig")
     def artifact_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.ArtifactConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.ArtifactConfigProperty"]]:
         '''A structure that contains the configuration for canary artifacts, including the encryption-at-rest settings for artifacts that the canary uploads to Amazon S3.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.ArtifactConfigProperty"]], jsii.get(self, "artifactConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.ArtifactConfigProperty"]], jsii.get(self, "artifactConfig"))
 
     @artifact_config.setter
     def artifact_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.ArtifactConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.ArtifactConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5946ee35eff32e4581a6d2e3e0c69d62cdc3c17f079123211f7251bc1a10d878)
@@ -1978,14 +1984,14 @@ class CfnCanary(
     @jsii.member(jsii_name="browserConfigs")
     def browser_configs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCanary.BrowserConfigProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.BrowserConfigProperty"]]]]:
         '''A structure that specifies the browser type to use for a canary run.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCanary.BrowserConfigProperty"]]]], jsii.get(self, "browserConfigs"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.BrowserConfigProperty"]]]], jsii.get(self, "browserConfigs"))
 
     @browser_configs.setter
     def browser_configs(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCanary.BrowserConfigProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.BrowserConfigProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__91233a90f3d4d918352b4597b2dee50c3da02176501744c2dc696dbd8a735b68)
@@ -1996,19 +2002,19 @@ class CfnCanary(
     @jsii.member(jsii_name="deleteLambdaResourcesOnCanaryDeletion")
     def delete_lambda_resources_on_canary_deletion(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''(deprecated) Deletes associated lambda resources created by Synthetics if set to True.
 
         :deprecated: this property has been deprecated
 
         :stability: deprecated
         '''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deleteLambdaResourcesOnCanaryDeletion"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deleteLambdaResourcesOnCanaryDeletion"))
 
     @delete_lambda_resources_on_canary_deletion.setter
     def delete_lambda_resources_on_canary_deletion(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__442577c2c36e4274dca25b3d866e1aeec3f4ffc18732e01050131a31f768f2b3)
@@ -2019,14 +2025,14 @@ class CfnCanary(
     @jsii.member(jsii_name="dryRunAndUpdate")
     def dry_run_and_update(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to perform a dry run before updating the canary.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "dryRunAndUpdate"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "dryRunAndUpdate"))
 
     @dry_run_and_update.setter
     def dry_run_and_update(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__59860e5fb72da4da1108545c9e0b8f706d34cf83eb363fda05f04cbb14baf1fe)
@@ -2082,14 +2088,14 @@ class CfnCanary(
     @jsii.member(jsii_name="runConfig")
     def run_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.RunConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.RunConfigProperty"]]:
         '''A structure that contains input information for a canary run.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.RunConfigProperty"]], jsii.get(self, "runConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.RunConfigProperty"]], jsii.get(self, "runConfig"))
 
     @run_config.setter
     def run_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.RunConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.RunConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e65fb80249e43aebfe46950832be73ed0795003be5d74ca1ef7cd12bb2408557)
@@ -2100,14 +2106,14 @@ class CfnCanary(
     @jsii.member(jsii_name="startCanaryAfterCreation")
     def start_canary_after_creation(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specify TRUE to have the canary start making runs immediately after it is created.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "startCanaryAfterCreation"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "startCanaryAfterCreation"))
 
     @start_canary_after_creation.setter
     def start_canary_after_creation(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5a98feaf45022b36ef5c9888f87b978029d5e1fde70599e1972543b1778adfad)
@@ -2129,12 +2135,12 @@ class CfnCanary(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of key-value pairs that are associated with the canary.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__212d1e59a4bd96a18f447b1c742abcfeb7c668063c8e1670fa0770e339ac4077)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2144,18 +2150,18 @@ class CfnCanary(
     @jsii.member(jsii_name="visualReference")
     def visual_reference(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.VisualReferenceProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.VisualReferenceProperty"]]:
         '''
         :deprecated: this property has been deprecated
 
         :stability: deprecated
         '''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.VisualReferenceProperty"]], jsii.get(self, "visualReference"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.VisualReferenceProperty"]], jsii.get(self, "visualReference"))
 
     @visual_reference.setter
     def visual_reference(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.VisualReferenceProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.VisualReferenceProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__21e93a70969fa03a3f0aa85f6b1615a26d9a0afef8a0cf27f0888fc59aef420b)
@@ -2166,14 +2172,14 @@ class CfnCanary(
     @jsii.member(jsii_name="visualReferences")
     def visual_references(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCanary.VisualReferenceProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.VisualReferenceProperty"]]]]:
         '''A list of visual reference configurations for the canary, one for each browser type that the canary is configured to run on.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCanary.VisualReferenceProperty"]]]], jsii.get(self, "visualReferences"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.VisualReferenceProperty"]]]], jsii.get(self, "visualReferences"))
 
     @visual_references.setter
     def visual_references(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCanary.VisualReferenceProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.VisualReferenceProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__004341f5a58c9e6e190c4bc518ea476aac62201a1708bb1650a22fbf74c64b52)
@@ -2184,14 +2190,14 @@ class CfnCanary(
     @jsii.member(jsii_name="vpcConfig")
     def vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.VPCConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.VPCConfigProperty"]]:
         '''If this canary is to test an endpoint in a VPC, this structure contains information about the subnet and security groups of the VPC endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.VPCConfigProperty"]], jsii.get(self, "vpcConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.VPCConfigProperty"]], jsii.get(self, "vpcConfig"))
 
     @vpc_config.setter
     def vpc_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.VPCConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.VPCConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__be63ed6816e3043aef63f6e7c0d0dfcc35f1249735acd4eff8530f8c2253b747)
@@ -2207,7 +2213,7 @@ class CfnCanary(
         def __init__(
             self,
             *,
-            s3_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.S3EncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.S3EncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A structure that contains the configuration for canary artifacts, including the encryption-at-rest settings for artifacts that the canary uploads to Amazon S3 .
 
@@ -2239,7 +2245,7 @@ class CfnCanary(
         @builtins.property
         def s3_encryption(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.S3EncryptionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.S3EncryptionProperty"]]:
             '''A structure that contains the configuration of the encryption-at-rest settings for artifacts that the canary uploads to Amazon S3 .
 
             Artifact encryption functionality is available only for canaries that use Synthetics runtime version syn-nodejs-puppeteer-3.3 or later. For more information, see `Encrypting canary artifacts <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_artifact_encryption.html>`_ .
@@ -2247,7 +2253,7 @@ class CfnCanary(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-artifactconfig.html#cfn-synthetics-canary-artifactconfig-s3encryption
             '''
             result = self._values.get("s3_encryption")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.S3EncryptionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.S3EncryptionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2411,7 +2417,7 @@ class CfnCanary(
             self,
             *,
             blueprint_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-            dependencies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.DependencyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            dependencies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.DependencyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             handler: typing.Optional[builtins.str] = None,
             s3_bucket: typing.Optional[builtins.str] = None,
             s3_key: typing.Optional[builtins.str] = None,
@@ -2501,13 +2507,13 @@ class CfnCanary(
         @builtins.property
         def dependencies(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCanary.DependencyProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.DependencyProperty"]]]]:
             '''List of Lambda layers to attach to the canary.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-code.html#cfn-synthetics-canary-code-dependencies
             '''
             result = self._values.get("dependencies")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCanary.DependencyProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.DependencyProperty"]]]], result)
 
         @builtins.property
         def handler(self) -> typing.Optional[builtins.str]:
@@ -2730,8 +2736,8 @@ class CfnCanary(
         def __init__(
             self,
             *,
-            active_tracing: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            environment_variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            active_tracing: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            environment_variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             ephemeral_storage: typing.Optional[jsii.Number] = None,
             memory_in_mb: typing.Optional[jsii.Number] = None,
             timeout_in_seconds: typing.Optional[jsii.Number] = None,
@@ -2787,7 +2793,7 @@ class CfnCanary(
         @builtins.property
         def active_tracing(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether this canary is to use active AWS X-Ray tracing when it runs.
 
             Active tracing enables this canary run to be displayed in the ServiceLens and X-Ray service maps even if the canary does not hit an endpoint that has X-Ray tracing enabled. Using X-Ray tracing incurs charges. For more information, see `Canaries and X-Ray tracing <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_tracing.html>`_ .
@@ -2797,12 +2803,12 @@ class CfnCanary(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-runconfig.html#cfn-synthetics-canary-runconfig-activetracing
             '''
             result = self._values.get("active_tracing")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def environment_variables(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Specifies the keys and values to use for any environment variables used in the canary script.
 
             Use the following format:
@@ -2814,7 +2820,7 @@ class CfnCanary(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-runconfig.html#cfn-synthetics-canary-runconfig-environmentvariables
             '''
             result = self._values.get("environment_variables")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def ephemeral_storage(self) -> typing.Optional[jsii.Number]:
@@ -2953,7 +2959,7 @@ class CfnCanary(
             *,
             expression: builtins.str,
             duration_in_seconds: typing.Optional[builtins.str] = None,
-            retry_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.RetryConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retry_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.RetryConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''This structure specifies how often a canary is to make runs and the date and time when it should stop making runs.
 
@@ -3025,13 +3031,13 @@ class CfnCanary(
         @builtins.property
         def retry_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.RetryConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.RetryConfigProperty"]]:
             '''The canary's retry configuration information.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-schedule.html#cfn-synthetics-canary-schedule-retryconfig
             '''
             result = self._values.get("retry_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCanary.RetryConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.RetryConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3060,7 +3066,7 @@ class CfnCanary(
             *,
             security_group_ids: typing.Sequence[builtins.str],
             subnet_ids: typing.Sequence[builtins.str],
-            ipv6_allowed_for_dual_stack: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            ipv6_allowed_for_dual_stack: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             vpc_id: typing.Optional[builtins.str] = None,
         ) -> None:
             '''If this canary is to test an endpoint in a VPC, this structure contains information about the subnet and security groups of the VPC endpoint.
@@ -3128,7 +3134,7 @@ class CfnCanary(
         @builtins.property
         def ipv6_allowed_for_dual_stack(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this to ``true`` to allow outbound IPv6 traffic on VPC canaries that are connected to dual-stack subnets.
 
             The default is ``false`` .
@@ -3136,7 +3142,7 @@ class CfnCanary(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-vpcconfig.html#cfn-synthetics-canary-vpcconfig-ipv6allowedfordualstack
             '''
             result = self._values.get("ipv6_allowed_for_dual_stack")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def vpc_id(self) -> typing.Optional[builtins.str]:
@@ -3172,7 +3178,7 @@ class CfnCanary(
             self,
             *,
             base_canary_run_id: builtins.str,
-            base_screenshots: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.BaseScreenshotProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            base_screenshots: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.BaseScreenshotProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             browser_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Defines the screenshots to use as the baseline for comparisons during visual monitoring comparisons during future runs of this canary.
@@ -3235,13 +3241,13 @@ class CfnCanary(
         @builtins.property
         def base_screenshots(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCanary.BaseScreenshotProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.BaseScreenshotProperty"]]]]:
             '''An array of screenshots that are used as the baseline for comparisons during visual monitoring.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-visualreference.html#cfn-synthetics-canary-visualreference-basescreenshots
             '''
             result = self._values.get("base_screenshots")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCanary.BaseScreenshotProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.BaseScreenshotProperty"]]]], result)
 
         @builtins.property
         def browser_type(self) -> typing.Optional[builtins.str]:
@@ -3297,25 +3303,25 @@ class CfnCanaryProps:
         self,
         *,
         artifact_s3_location: builtins.str,
-        code: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.CodeProperty, typing.Dict[builtins.str, typing.Any]]],
-        execution_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        code: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.CodeProperty", typing.Dict[builtins.str, typing.Any]]],
+        execution_role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         name: builtins.str,
         runtime_version: builtins.str,
-        schedule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]],
-        artifact_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.ArtifactConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        browser_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.BrowserConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        delete_lambda_resources_on_canary_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        dry_run_and_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        schedule: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]],
+        artifact_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.ArtifactConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        browser_configs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.BrowserConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        delete_lambda_resources_on_canary_deletion: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        dry_run_and_update: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         failure_retention_period: typing.Optional[jsii.Number] = None,
         provisioned_resource_cleanup: typing.Optional[builtins.str] = None,
         resources_to_replicate_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-        run_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.RunConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        start_canary_after_creation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        run_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.RunConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        start_canary_after_creation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         success_retention_period: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        visual_reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.VisualReferenceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        visual_references: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.VisualReferenceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.VPCConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        visual_reference: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.VisualReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        visual_references: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.VisualReferenceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCanary.VPCConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCanary``.
 
@@ -3345,6 +3351,7 @@ class CfnCanaryProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_synthetics as synthetics
@@ -3515,7 +3522,7 @@ class CfnCanaryProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def code(self) -> typing.Union[_IResolvable_da3f097b, CfnCanary.CodeProperty]:
+    def code(self) -> typing.Union["_IResolvable_da3f097b", "CfnCanary.CodeProperty"]:
         '''Use this structure to input your script code for the canary.
 
         This structure contains the Lambda handler with the location where the canary should start running the script. If the script is stored in an S3 bucket, the bucket name, key, and version are also included. If the script is passed into the canary directly, the script code is contained in the value of ``Script`` .
@@ -3524,10 +3531,10 @@ class CfnCanaryProps:
         '''
         result = self._values.get("code")
         assert result is not None, "Required property 'code' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCanary.CodeProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCanary.CodeProperty"], result)
 
     @builtins.property
-    def execution_role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def execution_role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The ARN of the IAM role to be used to run the canary.
 
         This role must already exist, and must include ``lambda.amazonaws.com`` as a principal in the trust policy. The role must also have the following permissions:
@@ -3544,7 +3551,7 @@ class CfnCanaryProps:
         '''
         result = self._values.get("execution_role_arn")
         assert result is not None, "Required property 'execution_role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -3575,30 +3582,30 @@ class CfnCanaryProps:
     @builtins.property
     def schedule(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCanary.ScheduleProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCanary.ScheduleProperty"]:
         '''A structure that contains information about how often the canary is to run, and when these runs are to stop.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-schedule
         '''
         result = self._values.get("schedule")
         assert result is not None, "Required property 'schedule' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCanary.ScheduleProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCanary.ScheduleProperty"], result)
 
     @builtins.property
     def artifact_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCanary.ArtifactConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.ArtifactConfigProperty"]]:
         '''A structure that contains the configuration for canary artifacts, including the encryption-at-rest settings for artifacts that the canary uploads to Amazon S3.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-artifactconfig
         '''
         result = self._values.get("artifact_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCanary.ArtifactConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.ArtifactConfigProperty"]], result)
 
     @builtins.property
     def browser_configs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCanary.BrowserConfigProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.BrowserConfigProperty"]]]]:
         '''A structure that specifies the browser type to use for a canary run.
 
         CloudWatch Synthetics supports running canaries on both ``CHROME`` and ``FIREFOX`` browsers.
@@ -3609,12 +3616,12 @@ class CfnCanaryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-browserconfigs
         '''
         result = self._values.get("browser_configs")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCanary.BrowserConfigProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.BrowserConfigProperty"]]]], result)
 
     @builtins.property
     def delete_lambda_resources_on_canary_deletion(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''(deprecated) Deletes associated lambda resources created by Synthetics if set to True.
 
         Default is False
@@ -3625,12 +3632,12 @@ class CfnCanaryProps:
         :stability: deprecated
         '''
         result = self._values.get("delete_lambda_resources_on_canary_deletion")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def dry_run_and_update(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to perform a dry run before updating the canary.
 
         If set to ``true`` , CloudFormation will execute a dry run to validate the changes before applying them to the canary. If the dry run succeeds, the canary will be updated with the changes. If the dry run fails, the CloudFormation deployment will fail with the dry run’s failure reason.
@@ -3642,7 +3649,7 @@ class CfnCanaryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-dryrunandupdate
         '''
         result = self._values.get("dry_run_and_update")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def failure_retention_period(self) -> typing.Optional[jsii.Number]:
@@ -3684,7 +3691,7 @@ class CfnCanaryProps:
     @builtins.property
     def run_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCanary.RunConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.RunConfigProperty"]]:
         '''A structure that contains input information for a canary run.
 
         If you omit this structure, the frequency of the canary is used as canary's timeout value, up to a maximum of 900 seconds.
@@ -3692,12 +3699,12 @@ class CfnCanaryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-runconfig
         '''
         result = self._values.get("run_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCanary.RunConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.RunConfigProperty"]], result)
 
     @builtins.property
     def start_canary_after_creation(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specify TRUE to have the canary start making runs immediately after it is created.
 
         A canary that you create using CloudFormation can't be used to monitor the CloudFormation stack that creates the canary or to roll back that stack if there is a failure.
@@ -3705,7 +3712,7 @@ class CfnCanaryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-startcanaryaftercreation
         '''
         result = self._values.get("start_canary_after_creation")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def success_retention_period(self) -> typing.Optional[jsii.Number]:
@@ -3721,18 +3728,18 @@ class CfnCanaryProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of key-value pairs that are associated with the canary.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def visual_reference(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCanary.VisualReferenceProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.VisualReferenceProperty"]]:
         '''
         :deprecated: this property has been deprecated
 
@@ -3740,12 +3747,12 @@ class CfnCanaryProps:
         :stability: deprecated
         '''
         result = self._values.get("visual_reference")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCanary.VisualReferenceProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.VisualReferenceProperty"]], result)
 
     @builtins.property
     def visual_references(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCanary.VisualReferenceProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.VisualReferenceProperty"]]]]:
         '''A list of visual reference configurations for the canary, one for each browser type that the canary is configured to run on.
 
         Visual references are used for visual monitoring comparisons.
@@ -3757,12 +3764,12 @@ class CfnCanaryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-visualreferences
         '''
         result = self._values.get("visual_references")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCanary.VisualReferenceProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCanary.VisualReferenceProperty"]]]], result)
 
     @builtins.property
     def vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCanary.VPCConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.VPCConfigProperty"]]:
         '''If this canary is to test an endpoint in a VPC, this structure contains information about the subnet and security groups of the VPC endpoint.
 
         For more information, see `Running a Canary in a VPC <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_VPC.html>`_ .
@@ -3770,7 +3777,7 @@ class CfnCanaryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-vpcconfig
         '''
         result = self._values.get("vpc_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCanary.VPCConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCanary.VPCConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3804,6 +3811,7 @@ class CfnGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_synthetics as synthetics
@@ -3822,12 +3830,12 @@ class CfnGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         resource_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Synthetics::Group``.
 
@@ -3858,7 +3866,7 @@ class CfnGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3903,15 +3911,15 @@ class CfnGroup(
 
     @builtins.property
     @jsii.member(jsii_name="groupRef")
-    def group_ref(self) -> _GroupReference_37835a7e:
+    def group_ref(self) -> "_GroupReference_37835a7e":
         '''A reference to a Group resource.'''
-        return typing.cast(_GroupReference_37835a7e, jsii.get(self, "groupRef"))
+        return typing.cast("_GroupReference_37835a7e", jsii.get(self, "groupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -3944,12 +3952,12 @@ class CfnGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of key-value pairs that are associated with the group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0d85cd0ddf465884c3990e0492b92e22606ecfb33b8127bf42d0c344b78427aa)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3967,7 +3975,7 @@ class CfnGroupProps:
         *,
         name: builtins.str,
         resource_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnGroup``.
 
@@ -3980,6 +3988,7 @@ class CfnGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_synthetics as synthetics
@@ -4030,13 +4039,13 @@ class CfnGroupProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of key-value pairs that are associated with the group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-group.html#cfn-synthetics-group-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4101,14 +4110,14 @@ class Code(
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> "AssetCode":
         '''Specify code from a local path.
 
@@ -4152,7 +4161,7 @@ class Code(
     @builtins.classmethod
     def from_bucket(
         cls,
-        bucket: _IBucketRef_3debe44e,
+        bucket: "_IBucketRef_3debe44e",
         key: builtins.str,
         object_version: typing.Optional[builtins.str] = None,
     ) -> "S3Code":
@@ -4194,7 +4203,7 @@ class Code(
     @abc.abstractmethod
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         handler: builtins.str,
         family: "RuntimeFamily",
         runtime_name: typing.Optional[builtins.str] = None,
@@ -4215,7 +4224,7 @@ class _CodeProxy(Code):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         handler: builtins.str,
         family: "RuntimeFamily",
         runtime_name: typing.Optional[builtins.str] = None,
@@ -4251,7 +4260,7 @@ class CodeConfig:
         self,
         *,
         inline_code: typing.Optional[builtins.str] = None,
-        s3_location: typing.Optional[typing.Union[_Location_0948fa7f, typing.Dict[builtins.str, typing.Any]]] = None,
+        s3_location: typing.Optional[typing.Union["_Location_0948fa7f", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Configuration of the code class.
 
@@ -4262,6 +4271,7 @@ class CodeConfig:
 
         Example::
 
+            from aws_cdk.aws_s3 import Location
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_synthetics as synthetics
@@ -4299,13 +4309,13 @@ class CodeConfig:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def s3_location(self) -> typing.Optional[_Location_0948fa7f]:
+    def s3_location(self) -> typing.Optional["_Location_0948fa7f"]:
         '''The location of the code in S3 (mutually exclusive with ``inlineCode``).
 
         :default: - none
         '''
         result = self._values.get("s3_location")
-        return typing.cast(typing.Optional[_Location_0948fa7f], result)
+        return typing.cast(typing.Optional["_Location_0948fa7f"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4442,7 +4452,7 @@ class CronOptions:
     name_mapping={"code": "code", "handler": "handler"},
 )
 class CustomTestOptions:
-    def __init__(self, *, code: Code, handler: builtins.str) -> None:
+    def __init__(self, *, code: "Code", handler: builtins.str) -> None:
         '''Properties for specifying a test.
 
         :param code: The code of the canary script.
@@ -4472,11 +4482,11 @@ class CustomTestOptions:
         }
 
     @builtins.property
-    def code(self) -> Code:
+    def code(self) -> "Code":
         '''The code of the canary script.'''
         result = self._values.get("code")
         assert result is not None, "Required property 'code' is missing"
-        return typing.cast(Code, result)
+        return typing.cast("Code", result)
 
     @builtins.property
     def handler(self) -> builtins.str:
@@ -4530,11 +4540,11 @@ class InlineCode(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         handler: builtins.str,
         _family: "RuntimeFamily",
         _runtime_name: typing.Optional[builtins.str] = None,
-    ) -> CodeConfig:
+    ) -> "CodeConfig":
         '''Called when the canary is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param scope: -
@@ -4548,7 +4558,7 @@ class InlineCode(
             check_type(argname="argument handler", value=handler, expected_type=type_hints["handler"])
             check_type(argname="argument _family", value=_family, expected_type=type_hints["_family"])
             check_type(argname="argument _runtime_name", value=_runtime_name, expected_type=type_hints["_runtime_name"])
-        return typing.cast(CodeConfig, jsii.invoke(self, "bind", [scope, handler, _family, _runtime_name]))
+        return typing.cast("CodeConfig", jsii.invoke(self, "bind", [scope, handler, _family, _runtime_name]))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_synthetics.ResourceToReplicateTags")
@@ -5165,7 +5175,7 @@ class S3Code(
 
     def __init__(
         self,
-        bucket: _IBucketRef_3debe44e,
+        bucket: "_IBucketRef_3debe44e",
         key: builtins.str,
         object_version: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -5184,11 +5194,11 @@ class S3Code(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
+        _scope: "_constructs_77d1e7e8.Construct",
         _handler: builtins.str,
-        _family: RuntimeFamily,
+        _family: "RuntimeFamily",
         _runtime_name: typing.Optional[builtins.str] = None,
-    ) -> CodeConfig:
+    ) -> "CodeConfig":
         '''Called when the canary is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param _scope: -
@@ -5202,7 +5212,7 @@ class S3Code(
             check_type(argname="argument _handler", value=_handler, expected_type=type_hints["_handler"])
             check_type(argname="argument _family", value=_family, expected_type=type_hints["_family"])
             check_type(argname="argument _runtime_name", value=_runtime_name, expected_type=type_hints["_runtime_name"])
-        return typing.cast(CodeConfig, jsii.invoke(self, "bind", [_scope, _handler, _family, _runtime_name]))
+        return typing.cast("CodeConfig", jsii.invoke(self, "bind", [_scope, _handler, _family, _runtime_name]))
 
 
 class Schedule(
@@ -5274,7 +5284,7 @@ class Schedule(
 
     @jsii.member(jsii_name="rate")
     @builtins.classmethod
-    def rate(cls, interval: _Duration_4839e8c3) -> "Schedule":
+    def rate(cls, interval: "_Duration_4839e8c3") -> "Schedule":
         '''Construct a schedule from an interval.
 
         Allowed values: 0 (for a single run) or between 1 and 60 minutes.
@@ -5314,7 +5324,7 @@ class Test(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_synthetics.Test")
 
     @jsii.member(jsii_name="custom")
     @builtins.classmethod
-    def custom(cls, *, code: Code, handler: builtins.str) -> "Test":
+    def custom(cls, *, code: "Code", handler: builtins.str) -> "Test":
         '''Specify a custom test with your own code.
 
         :param code: The code of the canary script.
@@ -5328,9 +5338,9 @@ class Test(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_synthetics.Test")
 
     @builtins.property
     @jsii.member(jsii_name="code")
-    def code(self) -> Code:
+    def code(self) -> "Code":
         '''The code that the canary should run.'''
-        return typing.cast(Code, jsii.get(self, "code"))
+        return typing.cast("Code", jsii.get(self, "code"))
 
     @builtins.property
     @jsii.member(jsii_name="handler")
@@ -5407,14 +5417,14 @@ class AssetCode(
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> None:
         '''
         :param asset_path: The path to the asset file or directory.
@@ -5450,11 +5460,11 @@ class AssetCode(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         handler: builtins.str,
-        family: RuntimeFamily,
+        family: "RuntimeFamily",
         runtime_name: typing.Optional[builtins.str] = None,
-    ) -> CodeConfig:
+    ) -> "CodeConfig":
         '''Called when the canary is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param scope: -
@@ -5468,7 +5478,7 @@ class AssetCode(
             check_type(argname="argument handler", value=handler, expected_type=type_hints["handler"])
             check_type(argname="argument family", value=family, expected_type=type_hints["family"])
             check_type(argname="argument runtime_name", value=runtime_name, expected_type=type_hints["runtime_name"])
-        return typing.cast(CodeConfig, jsii.invoke(self, "bind", [scope, handler, family, runtime_name]))
+        return typing.cast("CodeConfig", jsii.invoke(self, "bind", [scope, handler, family, runtime_name]))
 
 
 __all__ = [

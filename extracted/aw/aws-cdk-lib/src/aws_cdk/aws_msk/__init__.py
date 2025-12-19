@@ -119,7 +119,7 @@ class CfnBatchScramSecret(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster_arn: builtins.str,
@@ -155,7 +155,7 @@ class CfnBatchScramSecret(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBatchScramSecret", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -186,9 +186,9 @@ class CfnBatchScramSecret(
 
     @builtins.property
     @jsii.member(jsii_name="batchScramSecretRef")
-    def batch_scram_secret_ref(self) -> _BatchScramSecretReference_dbb2b465:
+    def batch_scram_secret_ref(self) -> "_BatchScramSecretReference_dbb2b465":
         '''A reference to a BatchScramSecret resource.'''
-        return typing.cast(_BatchScramSecretReference_dbb2b465, jsii.get(self, "batchScramSecretRef"))
+        return typing.cast("_BatchScramSecretReference_dbb2b465", jsii.get(self, "batchScramSecretRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -325,6 +325,7 @@ class CfnCluster(
                 # the properties below are optional
                 broker_az_distribution="brokerAzDistribution",
                 connectivity_info=msk.CfnCluster.ConnectivityInfoProperty(
+                    network_type="networkType",
                     public_access=msk.CfnCluster.PublicAccessProperty(
                         type="type"
                     ),
@@ -437,21 +438,21 @@ class CfnCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        broker_node_group_info: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.BrokerNodeGroupInfoProperty", typing.Dict[builtins.str, typing.Any]]],
+        broker_node_group_info: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.BrokerNodeGroupInfoProperty", typing.Dict[builtins.str, typing.Any]]],
         cluster_name: builtins.str,
         kafka_version: builtins.str,
         number_of_broker_nodes: jsii.Number,
-        client_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClientAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        configuration_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ConfigurationInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        client_authentication: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ClientAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        configuration_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ConfigurationInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         current_version: typing.Optional[builtins.str] = None,
-        encryption_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.EncryptionInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.EncryptionInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         enhanced_monitoring: typing.Optional[builtins.str] = None,
-        logging_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.LoggingInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_monitoring: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.OpenMonitoringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        rebalancing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.RebalancingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.LoggingInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_monitoring: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.OpenMonitoringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        rebalancing: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.RebalancingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         storage_mode: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -499,7 +500,7 @@ class CfnCluster(
 
     @jsii.member(jsii_name="arnForCluster")
     @builtins.classmethod
-    def arn_for_cluster(cls, resource: _IClusterRef_c904150a) -> builtins.str:
+    def arn_for_cluster(cls, resource: "_IClusterRef_c904150a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -521,7 +522,7 @@ class CfnCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -575,28 +576,28 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> _ClusterReference_f30274ab:
+    def cluster_ref(self) -> "_ClusterReference_f30274ab":
         '''A reference to a Cluster resource.'''
-        return typing.cast(_ClusterReference_f30274ab, jsii.get(self, "clusterRef"))
+        return typing.cast("_ClusterReference_f30274ab", jsii.get(self, "clusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="brokerNodeGroupInfo")
     def broker_node_group_info(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCluster.BrokerNodeGroupInfoProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCluster.BrokerNodeGroupInfoProperty"]:
         '''Information about the broker nodes in the cluster.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCluster.BrokerNodeGroupInfoProperty"], jsii.get(self, "brokerNodeGroupInfo"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCluster.BrokerNodeGroupInfoProperty"], jsii.get(self, "brokerNodeGroupInfo"))
 
     @broker_node_group_info.setter
     def broker_node_group_info(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCluster.BrokerNodeGroupInfoProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCluster.BrokerNodeGroupInfoProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aeca16d7c9434917e084167a4ad53ae5c40e801a27aef3671a5877ed561da8a0)
@@ -646,14 +647,14 @@ class CfnCluster(
     @jsii.member(jsii_name="clientAuthentication")
     def client_authentication(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClientAuthenticationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ClientAuthenticationProperty"]]:
         '''Includes all client authentication related information.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClientAuthenticationProperty"]], jsii.get(self, "clientAuthentication"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ClientAuthenticationProperty"]], jsii.get(self, "clientAuthentication"))
 
     @client_authentication.setter
     def client_authentication(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClientAuthenticationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ClientAuthenticationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__999b897b28c870a68a155dbce687b5d48e1be0223338cc26b1ccdaa28b955337)
@@ -664,14 +665,14 @@ class CfnCluster(
     @jsii.member(jsii_name="configurationInfo")
     def configuration_info(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ConfigurationInfoProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ConfigurationInfoProperty"]]:
         '''Represents the configuration that you want MSK to use for the cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ConfigurationInfoProperty"]], jsii.get(self, "configurationInfo"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ConfigurationInfoProperty"]], jsii.get(self, "configurationInfo"))
 
     @configuration_info.setter
     def configuration_info(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ConfigurationInfoProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ConfigurationInfoProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__68aea3aaba18dee8b678c7f7677ecae9ed107f4b596657a2f2b8f07f997fd4b9)
@@ -694,14 +695,14 @@ class CfnCluster(
     @jsii.member(jsii_name="encryptionInfo")
     def encryption_info(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EncryptionInfoProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionInfoProperty"]]:
         '''Includes all encryption-related information.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EncryptionInfoProperty"]], jsii.get(self, "encryptionInfo"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionInfoProperty"]], jsii.get(self, "encryptionInfo"))
 
     @encryption_info.setter
     def encryption_info(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EncryptionInfoProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionInfoProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4cf20bb9e6c8edb93f172bf898cbe430e546eddc2d98fe341b62587d35bfcc26)
@@ -725,14 +726,14 @@ class CfnCluster(
     @jsii.member(jsii_name="loggingInfo")
     def logging_info(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.LoggingInfoProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingInfoProperty"]]:
         '''Logging info details for the cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.LoggingInfoProperty"]], jsii.get(self, "loggingInfo"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingInfoProperty"]], jsii.get(self, "loggingInfo"))
 
     @logging_info.setter
     def logging_info(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.LoggingInfoProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingInfoProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9d382c4554000521a60f4a1e25f292506a5889f9f704479e32e61cccc944357e)
@@ -743,14 +744,14 @@ class CfnCluster(
     @jsii.member(jsii_name="openMonitoring")
     def open_monitoring(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.OpenMonitoringProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.OpenMonitoringProperty"]]:
         '''The settings for open monitoring.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.OpenMonitoringProperty"]], jsii.get(self, "openMonitoring"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.OpenMonitoringProperty"]], jsii.get(self, "openMonitoring"))
 
     @open_monitoring.setter
     def open_monitoring(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.OpenMonitoringProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.OpenMonitoringProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__75fe28c1f9a57617ff0d6a9ccd61b13cd12fe2b29f73cace2349bfc4cd46f2d8)
@@ -761,13 +762,13 @@ class CfnCluster(
     @jsii.member(jsii_name="rebalancing")
     def rebalancing(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.RebalancingProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.RebalancingProperty"]], jsii.get(self, "rebalancing"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.RebalancingProperty"]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.RebalancingProperty"]], jsii.get(self, "rebalancing"))
 
     @rebalancing.setter
     def rebalancing(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.RebalancingProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.RebalancingProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__de57b95bdc87767afb6b2668a14135769e16c5f132982acd14f9d8223313a9b8)
@@ -816,9 +817,9 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            cloud_watch_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.CloudWatchLogsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            firehose: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.FirehoseProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.S3Property", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.CloudWatchLogsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            firehose: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.FirehoseProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.S3Property", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The broker logs configuration for this MSK cluster.
 
@@ -873,34 +874,34 @@ class CfnCluster(
         @builtins.property
         def cloud_watch_logs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.CloudWatchLogsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.CloudWatchLogsProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-brokerlogs.html#cfn-msk-cluster-brokerlogs-cloudwatchlogs
             '''
             result = self._values.get("cloud_watch_logs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.CloudWatchLogsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.CloudWatchLogsProperty"]], result)
 
         @builtins.property
         def firehose(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.FirehoseProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.FirehoseProperty"]]:
             '''Details of the Kinesis Data Firehose delivery stream that is the destination for broker logs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-brokerlogs.html#cfn-msk-cluster-brokerlogs-firehose
             '''
             result = self._values.get("firehose")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.FirehoseProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.FirehoseProperty"]], result)
 
         @builtins.property
         def s3(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.S3Property"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.S3Property"]]:
             '''Details of the Amazon S3 destination for broker logs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-brokerlogs.html#cfn-msk-cluster-brokerlogs-s3
             '''
             result = self._values.get("s3")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.S3Property"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.S3Property"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -932,9 +933,9 @@ class CfnCluster(
             client_subnets: typing.Sequence[builtins.str],
             instance_type: builtins.str,
             broker_az_distribution: typing.Optional[builtins.str] = None,
-            connectivity_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ConnectivityInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            connectivity_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ConnectivityInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-            storage_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.StorageInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            storage_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.StorageInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the setup to be used for the broker nodes in the cluster.
 
@@ -961,6 +962,7 @@ class CfnCluster(
                     # the properties below are optional
                     broker_az_distribution="brokerAzDistribution",
                     connectivity_info=msk.CfnCluster.ConnectivityInfoProperty(
+                        network_type="networkType",
                         public_access=msk.CfnCluster.PublicAccessProperty(
                             type="type"
                         ),
@@ -1072,13 +1074,13 @@ class CfnCluster(
         @builtins.property
         def connectivity_info(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ConnectivityInfoProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ConnectivityInfoProperty"]]:
             '''Information about the cluster's connectivity setting.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-brokernodegroupinfo.html#cfn-msk-cluster-brokernodegroupinfo-connectivityinfo
             '''
             result = self._values.get("connectivity_info")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ConnectivityInfoProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ConnectivityInfoProperty"]], result)
 
         @builtins.property
         def security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1094,13 +1096,13 @@ class CfnCluster(
         @builtins.property
         def storage_info(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.StorageInfoProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.StorageInfoProperty"]]:
             '''Contains information about storage volumes attached to Amazon MSK broker nodes.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-brokernodegroupinfo.html#cfn-msk-cluster-brokernodegroupinfo-storageinfo
             '''
             result = self._values.get("storage_info")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.StorageInfoProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.StorageInfoProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1126,9 +1128,9 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            sasl: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.SaslProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            tls: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.TlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            unauthenticated: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.UnauthenticatedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sasl: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.SaslProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tls: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.TlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            unauthenticated: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.UnauthenticatedProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''
             :param sasl: Details for client authentication using SASL. To turn on SASL, you must also turn on ``EncryptionInTransit`` by setting ``inCluster`` to true. You must set ``clientBroker`` to either ``TLS`` or ``TLS_PLAINTEXT`` . If you choose ``TLS_PLAINTEXT`` , then you must also set ``unauthenticated`` to true.
@@ -1178,7 +1180,7 @@ class CfnCluster(
         @builtins.property
         def sasl(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SaslProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SaslProperty"]]:
             '''Details for client authentication using SASL.
 
             To turn on SASL, you must also turn on ``EncryptionInTransit`` by setting ``inCluster`` to true. You must set ``clientBroker`` to either ``TLS`` or ``TLS_PLAINTEXT`` . If you choose ``TLS_PLAINTEXT`` , then you must also set ``unauthenticated`` to true.
@@ -1186,12 +1188,12 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-clientauthentication.html#cfn-msk-cluster-clientauthentication-sasl
             '''
             result = self._values.get("sasl")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SaslProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SaslProperty"]], result)
 
         @builtins.property
         def tls(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.TlsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.TlsProperty"]]:
             '''Details for ClientAuthentication using TLS.
 
             To turn on TLS access control, you must also turn on ``EncryptionInTransit`` by setting ``inCluster`` to true and ``clientBroker`` to ``TLS`` .
@@ -1199,18 +1201,18 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-clientauthentication.html#cfn-msk-cluster-clientauthentication-tls
             '''
             result = self._values.get("tls")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.TlsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.TlsProperty"]], result)
 
         @builtins.property
         def unauthenticated(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.UnauthenticatedProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.UnauthenticatedProperty"]]:
             '''Details for ClientAuthentication using no authentication.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-clientauthentication.html#cfn-msk-cluster-clientauthentication-unauthenticated
             '''
             result = self._values.get("unauthenticated")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.UnauthenticatedProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.UnauthenticatedProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1232,7 +1234,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             log_group: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Details of the CloudWatch Logs destination for broker logs.
@@ -1267,14 +1269,14 @@ class CfnCluster(
                 self._values["log_group"] = log_group
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Specifies whether broker logs get sent to the specified CloudWatch Logs destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-cloudwatchlogs.html#cfn-msk-cluster-cloudwatchlogs-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def log_group(self) -> typing.Optional[builtins.str]:
@@ -1366,6 +1368,7 @@ class CfnCluster(
         jsii_type="aws-cdk-lib.aws_msk.CfnCluster.ConnectivityInfoProperty",
         jsii_struct_bases=[],
         name_mapping={
+            "network_type": "networkType",
             "public_access": "publicAccess",
             "vpc_connectivity": "vpcConnectivity",
         },
@@ -1374,11 +1377,13 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            public_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.PublicAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            vpc_connectivity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.VpcConnectivityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            network_type: typing.Optional[builtins.str] = None,
+            public_access: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.PublicAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_connectivity: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.VpcConnectivityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Broker access controls.
 
+            :param network_type: 
             :param public_access: Access control settings for the cluster's brokers.
             :param vpc_connectivity: VPC connection control settings for brokers.
 
@@ -1392,6 +1397,7 @@ class CfnCluster(
                 from aws_cdk import aws_msk as msk
                 
                 connectivity_info_property = msk.CfnCluster.ConnectivityInfoProperty(
+                    network_type="networkType",
                     public_access=msk.CfnCluster.PublicAccessProperty(
                         type="type"
                     ),
@@ -1414,35 +1420,46 @@ class CfnCluster(
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__d1ba9dbd3fe54fc52707e8245c99f4e132a975a1ea7784a9e8d49cfc50fc4d71)
+                check_type(argname="argument network_type", value=network_type, expected_type=type_hints["network_type"])
                 check_type(argname="argument public_access", value=public_access, expected_type=type_hints["public_access"])
                 check_type(argname="argument vpc_connectivity", value=vpc_connectivity, expected_type=type_hints["vpc_connectivity"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if network_type is not None:
+                self._values["network_type"] = network_type
             if public_access is not None:
                 self._values["public_access"] = public_access
             if vpc_connectivity is not None:
                 self._values["vpc_connectivity"] = vpc_connectivity
 
         @builtins.property
+        def network_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-connectivityinfo.html#cfn-msk-cluster-connectivityinfo-networktype
+            '''
+            result = self._values.get("network_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
         def public_access(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.PublicAccessProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.PublicAccessProperty"]]:
             '''Access control settings for the cluster's brokers.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-connectivityinfo.html#cfn-msk-cluster-connectivityinfo-publicaccess
             '''
             result = self._values.get("public_access")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.PublicAccessProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.PublicAccessProperty"]], result)
 
         @builtins.property
         def vpc_connectivity(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.VpcConnectivityProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.VpcConnectivityProperty"]]:
             '''VPC connection control settings for brokers.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-connectivityinfo.html#cfn-msk-cluster-connectivityinfo-vpcconnectivity
             '''
             result = self._values.get("vpc_connectivity")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.VpcConnectivityProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.VpcConnectivityProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1467,7 +1484,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            provisioned_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ProvisionedThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            provisioned_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ProvisionedThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             volume_size: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Contains information about the EBS storage volumes attached to the broker nodes.
@@ -1505,13 +1522,13 @@ class CfnCluster(
         @builtins.property
         def provisioned_throughput(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ProvisionedThroughputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ProvisionedThroughputProperty"]]:
             '''EBS volume provisioned throughput information.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-ebsstorageinfo.html#cfn-msk-cluster-ebsstorageinfo-provisionedthroughput
             '''
             result = self._values.get("provisioned_throughput")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ProvisionedThroughputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ProvisionedThroughputProperty"]], result)
 
         @builtins.property
         def volume_size(self) -> typing.Optional[jsii.Number]:
@@ -1599,7 +1616,7 @@ class CfnCluster(
             self,
             *,
             client_broker: typing.Optional[builtins.str] = None,
-            in_cluster: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            in_cluster: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The settings for encrypting data in transit.
 
@@ -1650,7 +1667,7 @@ class CfnCluster(
         @builtins.property
         def in_cluster(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to true, it indicates that data communication among the broker nodes of the cluster is encrypted.
 
             When set to false, the communication happens in plaintext.
@@ -1660,7 +1677,7 @@ class CfnCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-encryptionintransit.html#cfn-msk-cluster-encryptionintransit-incluster
             '''
             result = self._values.get("in_cluster")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1685,8 +1702,8 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            encryption_at_rest: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.EncryptionAtRestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            encryption_in_transit: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.EncryptionInTransitProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            encryption_at_rest: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.EncryptionAtRestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            encryption_in_transit: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.EncryptionInTransitProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Includes encryption-related information, such as the Amazon KMS key used for encrypting data at rest and whether you want MSK to encrypt your data in transit.
 
@@ -1725,24 +1742,24 @@ class CfnCluster(
         @builtins.property
         def encryption_at_rest(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EncryptionAtRestProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionAtRestProperty"]]:
             '''The data-volume encryption details.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-encryptioninfo.html#cfn-msk-cluster-encryptioninfo-encryptionatrest
             '''
             result = self._values.get("encryption_at_rest")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EncryptionAtRestProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionAtRestProperty"]], result)
 
         @builtins.property
         def encryption_in_transit(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EncryptionInTransitProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionInTransitProperty"]]:
             '''The details for encryption in transit.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-encryptioninfo.html#cfn-msk-cluster-encryptioninfo-encryptionintransit
             '''
             result = self._values.get("encryption_in_transit")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EncryptionInTransitProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionInTransitProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1764,7 +1781,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             delivery_stream: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Firehose details for BrokerLogs.
@@ -1799,14 +1816,14 @@ class CfnCluster(
                 self._values["delivery_stream"] = delivery_stream
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Specifies whether broker logs get send to the specified Kinesis Data Firehose delivery stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-firehose.html#cfn-msk-cluster-firehose-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def delivery_stream(self) -> typing.Optional[builtins.str]:
@@ -1837,7 +1854,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Details for SASL/IAM client authentication.
 
@@ -1864,14 +1881,14 @@ class CfnCluster(
             }
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''SASL/IAM authentication is enabled or not.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-iam.html#cfn-msk-cluster-iam-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1893,7 +1910,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled_in_broker: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled_in_broker: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Indicates whether you want to enable or disable the JMX Exporter.
 
@@ -1922,14 +1939,14 @@ class CfnCluster(
         @builtins.property
         def enabled_in_broker(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether you want to enable or disable the JMX Exporter.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-jmxexporter.html#cfn-msk-cluster-jmxexporter-enabledinbroker
             '''
             result = self._values.get("enabled_in_broker")
             assert result is not None, "Required property 'enabled_in_broker' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1951,7 +1968,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            broker_logs: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.BrokerLogsProperty", typing.Dict[builtins.str, typing.Any]]],
+            broker_logs: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.BrokerLogsProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''You can configure your MSK cluster to send broker logs to different destination types.
 
@@ -2002,7 +2019,7 @@ class CfnCluster(
         @builtins.property
         def broker_logs(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnCluster.BrokerLogsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnCluster.BrokerLogsProperty"]:
             '''You can configure your MSK cluster to send broker logs to different destination types.
 
             This configuration specifies the details of these destinations.
@@ -2011,7 +2028,7 @@ class CfnCluster(
             '''
             result = self._values.get("broker_logs")
             assert result is not None, "Required property 'broker_logs' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCluster.BrokerLogsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCluster.BrokerLogsProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2033,7 +2050,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled_in_broker: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled_in_broker: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Indicates whether you want to enable or disable the Node Exporter.
 
@@ -2062,14 +2079,14 @@ class CfnCluster(
         @builtins.property
         def enabled_in_broker(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether you want to enable or disable the Node Exporter.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-nodeexporter.html#cfn-msk-cluster-nodeexporter-enabledinbroker
             '''
             result = self._values.get("enabled_in_broker")
             assert result is not None, "Required property 'enabled_in_broker' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2091,7 +2108,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            prometheus: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.PrometheusProperty", typing.Dict[builtins.str, typing.Any]]],
+            prometheus: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.PrometheusProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''JMX and Node monitoring for the MSK cluster.
 
@@ -2127,14 +2144,14 @@ class CfnCluster(
         @builtins.property
         def prometheus(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnCluster.PrometheusProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnCluster.PrometheusProperty"]:
             '''Prometheus exporter settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-openmonitoring.html#cfn-msk-cluster-openmonitoring-prometheus
             '''
             result = self._values.get("prometheus")
             assert result is not None, "Required property 'prometheus' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCluster.PrometheusProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCluster.PrometheusProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2156,8 +2173,8 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            jmx_exporter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.JmxExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            node_exporter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.NodeExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            jmx_exporter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.JmxExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            node_exporter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.NodeExporterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Prometheus settings for open monitoring.
 
@@ -2195,24 +2212,24 @@ class CfnCluster(
         @builtins.property
         def jmx_exporter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.JmxExporterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.JmxExporterProperty"]]:
             '''Indicates whether you want to enable or disable the JMX Exporter.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-prometheus.html#cfn-msk-cluster-prometheus-jmxexporter
             '''
             result = self._values.get("jmx_exporter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.JmxExporterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.JmxExporterProperty"]], result)
 
         @builtins.property
         def node_exporter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.NodeExporterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.NodeExporterProperty"]]:
             '''Indicates whether you want to enable or disable the Node Exporter.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-prometheus.html#cfn-msk-cluster-prometheus-nodeexporter
             '''
             result = self._values.get("node_exporter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.NodeExporterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.NodeExporterProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2234,7 +2251,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             volume_throughput: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Contains information about provisioned throughput for EBS storage volumes attached to kafka broker nodes.
@@ -2269,13 +2286,13 @@ class CfnCluster(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Provisioned throughput is on or off.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-provisionedthroughput.html#cfn-msk-cluster-provisionedthroughput-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def volume_throughput(self) -> typing.Optional[jsii.Number]:
@@ -2409,7 +2426,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             bucket: typing.Optional[builtins.str] = None,
             prefix: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -2450,14 +2467,14 @@ class CfnCluster(
                 self._values["prefix"] = prefix
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Specifies whether broker logs get sent to the specified Amazon S3 destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-s3.html#cfn-msk-cluster-s3-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def bucket(self) -> typing.Optional[builtins.str]:
@@ -2497,8 +2514,8 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            iam: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.IamProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            scram: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ScramProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            iam: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.IamProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            scram: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ScramProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Details for client authentication using SASL.
 
@@ -2538,24 +2555,24 @@ class CfnCluster(
         @builtins.property
         def iam(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.IamProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.IamProperty"]]:
             '''Details for ClientAuthentication using IAM.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-sasl.html#cfn-msk-cluster-sasl-iam
             '''
             result = self._values.get("iam")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.IamProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.IamProperty"]], result)
 
         @builtins.property
         def scram(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ScramProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ScramProperty"]]:
             '''Details for SASL/SCRAM client authentication.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-sasl.html#cfn-msk-cluster-sasl-scram
             '''
             result = self._values.get("scram")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ScramProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ScramProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2577,7 +2594,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Details for SASL/SCRAM client authentication.
 
@@ -2604,14 +2621,14 @@ class CfnCluster(
             }
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''SASL/SCRAM authentication is enabled or not.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-scram.html#cfn-msk-cluster-scram-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2633,7 +2650,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            ebs_storage_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.EBSStorageInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ebs_storage_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.EBSStorageInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Contains information about storage volumes attached to Amazon MSK broker nodes.
 
@@ -2668,13 +2685,13 @@ class CfnCluster(
         @builtins.property
         def ebs_storage_info(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EBSStorageInfoProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EBSStorageInfoProperty"]]:
             '''EBS volume information.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-storageinfo.html#cfn-msk-cluster-storageinfo-ebsstorageinfo
             '''
             result = self._values.get("ebs_storage_info")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EBSStorageInfoProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EBSStorageInfoProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2700,7 +2717,7 @@ class CfnCluster(
             self,
             *,
             certificate_authority_arn_list: typing.Optional[typing.Sequence[builtins.str]] = None,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Details for client authentication using TLS.
 
@@ -2745,13 +2762,13 @@ class CfnCluster(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''TLS authentication is enabled or not.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-tls.html#cfn-msk-cluster-tls-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2773,7 +2790,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Details for allowing no client authentication.
 
@@ -2800,14 +2817,14 @@ class CfnCluster(
             }
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Unauthenticated is enabled or not.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-unauthenticated.html#cfn-msk-cluster-unauthenticated-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2829,8 +2846,8 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            sasl: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.VpcConnectivitySaslProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            tls: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.VpcConnectivityTlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sasl: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.VpcConnectivitySaslProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tls: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.VpcConnectivityTlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Includes all client authentication information for VpcConnectivity.
 
@@ -2873,24 +2890,24 @@ class CfnCluster(
         @builtins.property
         def sasl(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.VpcConnectivitySaslProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.VpcConnectivitySaslProperty"]]:
             '''Details for VpcConnectivity ClientAuthentication using SASL.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-vpcconnectivityclientauthentication.html#cfn-msk-cluster-vpcconnectivityclientauthentication-sasl
             '''
             result = self._values.get("sasl")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.VpcConnectivitySaslProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.VpcConnectivitySaslProperty"]], result)
 
         @builtins.property
         def tls(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.VpcConnectivityTlsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.VpcConnectivityTlsProperty"]]:
             '''Details for VpcConnectivity ClientAuthentication using TLS.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-vpcconnectivityclientauthentication.html#cfn-msk-cluster-vpcconnectivityclientauthentication-tls
             '''
             result = self._values.get("tls")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.VpcConnectivityTlsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.VpcConnectivityTlsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2912,7 +2929,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Details for SASL/IAM client authentication for VpcConnectivity.
 
@@ -2939,14 +2956,14 @@ class CfnCluster(
             }
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''SASL/IAM authentication is enabled or not.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-vpcconnectivityiam.html#cfn-msk-cluster-vpcconnectivityiam-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2968,7 +2985,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            client_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.VpcConnectivityClientAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            client_authentication: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.VpcConnectivityClientAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''VPC connection control settings for brokers.
 
@@ -3009,13 +3026,13 @@ class CfnCluster(
         @builtins.property
         def client_authentication(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.VpcConnectivityClientAuthenticationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.VpcConnectivityClientAuthenticationProperty"]]:
             '''VPC connection control settings for brokers.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-vpcconnectivity.html#cfn-msk-cluster-vpcconnectivity-clientauthentication
             '''
             result = self._values.get("client_authentication")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.VpcConnectivityClientAuthenticationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.VpcConnectivityClientAuthenticationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3037,8 +3054,8 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            iam: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.VpcConnectivityIamProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            scram: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.VpcConnectivityScramProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            iam: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.VpcConnectivityIamProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            scram: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.VpcConnectivityScramProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Details for client authentication using SASL for VpcConnectivity.
 
@@ -3076,24 +3093,24 @@ class CfnCluster(
         @builtins.property
         def iam(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.VpcConnectivityIamProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.VpcConnectivityIamProperty"]]:
             '''Details for ClientAuthentication using IAM for VpcConnectivity.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-vpcconnectivitysasl.html#cfn-msk-cluster-vpcconnectivitysasl-iam
             '''
             result = self._values.get("iam")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.VpcConnectivityIamProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.VpcConnectivityIamProperty"]], result)
 
         @builtins.property
         def scram(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.VpcConnectivityScramProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.VpcConnectivityScramProperty"]]:
             '''Details for SASL/SCRAM client authentication for VpcConnectivity.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-vpcconnectivitysasl.html#cfn-msk-cluster-vpcconnectivitysasl-scram
             '''
             result = self._values.get("scram")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.VpcConnectivityScramProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.VpcConnectivityScramProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3115,7 +3132,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Details for SASL/SCRAM client authentication for VpcConnectivity.
 
@@ -3142,14 +3159,14 @@ class CfnCluster(
             }
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''SASL/SCRAM authentication is enabled or not.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-vpcconnectivityscram.html#cfn-msk-cluster-vpcconnectivityscram-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3171,7 +3188,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Details for client authentication using TLS for VpcConnectivity.
 
@@ -3198,14 +3215,14 @@ class CfnCluster(
             }
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''TLS authentication is enabled or not.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-cluster-vpcconnectivitytls.html#cfn-msk-cluster-vpcconnectivitytls-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3247,7 +3264,7 @@ class CfnClusterPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster_arn: builtins.str,
@@ -3281,7 +3298,7 @@ class CfnClusterPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnClusterPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3326,9 +3343,9 @@ class CfnClusterPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterPolicyRef")
-    def cluster_policy_ref(self) -> _ClusterPolicyReference_ec5aa960:
+    def cluster_policy_ref(self) -> "_ClusterPolicyReference_ec5aa960":
         '''A reference to a ClusterPolicy resource.'''
-        return typing.cast(_ClusterPolicyReference_ec5aa960, jsii.get(self, "clusterPolicyRef"))
+        return typing.cast("_ClusterPolicyReference_ec5aa960", jsii.get(self, "clusterPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterArn")
@@ -3452,18 +3469,18 @@ class CfnClusterProps:
     def __init__(
         self,
         *,
-        broker_node_group_info: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.BrokerNodeGroupInfoProperty, typing.Dict[builtins.str, typing.Any]]],
+        broker_node_group_info: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.BrokerNodeGroupInfoProperty", typing.Dict[builtins.str, typing.Any]]],
         cluster_name: builtins.str,
         kafka_version: builtins.str,
         number_of_broker_nodes: jsii.Number,
-        client_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClientAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        configuration_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ConfigurationInfoProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        client_authentication: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ClientAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        configuration_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.ConfigurationInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         current_version: typing.Optional[builtins.str] = None,
-        encryption_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.EncryptionInfoProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.EncryptionInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         enhanced_monitoring: typing.Optional[builtins.str] = None,
-        logging_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.LoggingInfoProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_monitoring: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.OpenMonitoringProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        rebalancing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.RebalancingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.LoggingInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_monitoring: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.OpenMonitoringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        rebalancing: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.RebalancingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         storage_mode: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -3501,6 +3518,7 @@ class CfnClusterProps:
                     # the properties below are optional
                     broker_az_distribution="brokerAzDistribution",
                     connectivity_info=msk.CfnCluster.ConnectivityInfoProperty(
+                        network_type="networkType",
                         public_access=msk.CfnCluster.PublicAccessProperty(
                             type="type"
                         ),
@@ -3656,14 +3674,14 @@ class CfnClusterProps:
     @builtins.property
     def broker_node_group_info(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCluster.BrokerNodeGroupInfoProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCluster.BrokerNodeGroupInfoProperty"]:
         '''Information about the broker nodes in the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-cluster.html#cfn-msk-cluster-brokernodegroupinfo
         '''
         result = self._values.get("broker_node_group_info")
         assert result is not None, "Required property 'broker_node_group_info' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCluster.BrokerNodeGroupInfoProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCluster.BrokerNodeGroupInfoProperty"], result)
 
     @builtins.property
     def cluster_name(self) -> builtins.str:
@@ -3700,24 +3718,24 @@ class CfnClusterProps:
     @builtins.property
     def client_authentication(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ClientAuthenticationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ClientAuthenticationProperty"]]:
         '''Includes all client authentication related information.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-cluster.html#cfn-msk-cluster-clientauthentication
         '''
         result = self._values.get("client_authentication")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ClientAuthenticationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ClientAuthenticationProperty"]], result)
 
     @builtins.property
     def configuration_info(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ConfigurationInfoProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ConfigurationInfoProperty"]]:
         '''Represents the configuration that you want MSK to use for the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-cluster.html#cfn-msk-cluster-configurationinfo
         '''
         result = self._values.get("configuration_info")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ConfigurationInfoProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.ConfigurationInfoProperty"]], result)
 
     @builtins.property
     def current_version(self) -> typing.Optional[builtins.str]:
@@ -3730,13 +3748,13 @@ class CfnClusterProps:
     @builtins.property
     def encryption_info(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.EncryptionInfoProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionInfoProperty"]]:
         '''Includes all encryption-related information.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-cluster.html#cfn-msk-cluster-encryptioninfo
         '''
         result = self._values.get("encryption_info")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.EncryptionInfoProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EncryptionInfoProperty"]], result)
 
     @builtins.property
     def enhanced_monitoring(self) -> typing.Optional[builtins.str]:
@@ -3750,34 +3768,34 @@ class CfnClusterProps:
     @builtins.property
     def logging_info(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.LoggingInfoProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingInfoProperty"]]:
         '''Logging info details for the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-cluster.html#cfn-msk-cluster-logginginfo
         '''
         result = self._values.get("logging_info")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.LoggingInfoProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingInfoProperty"]], result)
 
     @builtins.property
     def open_monitoring(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.OpenMonitoringProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.OpenMonitoringProperty"]]:
         '''The settings for open monitoring.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-cluster.html#cfn-msk-cluster-openmonitoring
         '''
         result = self._values.get("open_monitoring")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.OpenMonitoringProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.OpenMonitoringProperty"]], result)
 
     @builtins.property
     def rebalancing(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.RebalancingProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.RebalancingProperty"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-cluster.html#cfn-msk-cluster-rebalancing
         '''
         result = self._values.get("rebalancing")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.RebalancingProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.RebalancingProperty"]], result)
 
     @builtins.property
     def storage_mode(self) -> typing.Optional[builtins.str]:
@@ -3853,14 +3871,14 @@ class CfnConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         server_properties: builtins.str,
         description: typing.Optional[builtins.str] = None,
         kafka_versions_list: typing.Optional[typing.Sequence[builtins.str]] = None,
-        latest_revision: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfiguration.LatestRevisionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        latest_revision: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguration.LatestRevisionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::MSK::Configuration``.
 
@@ -3890,7 +3908,7 @@ class CfnConfiguration(
     @builtins.classmethod
     def arn_for_configuration(
         cls,
-        resource: _IConfigurationRef_69565de0,
+        resource: "_IConfigurationRef_69565de0",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3913,7 +3931,7 @@ class CfnConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3985,9 +4003,9 @@ class CfnConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="configurationRef")
-    def configuration_ref(self) -> _ConfigurationReference_fa1581ee:
+    def configuration_ref(self) -> "_ConfigurationReference_fa1581ee":
         '''A reference to a Configuration resource.'''
-        return typing.cast(_ConfigurationReference_fa1581ee, jsii.get(self, "configurationRef"))
+        return typing.cast("_ConfigurationReference_fa1581ee", jsii.get(self, "configurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -4048,14 +4066,14 @@ class CfnConfiguration(
     @jsii.member(jsii_name="latestRevision")
     def latest_revision(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguration.LatestRevisionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguration.LatestRevisionProperty"]]:
         '''Latest revision of the MSK configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguration.LatestRevisionProperty"]], jsii.get(self, "latestRevision"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguration.LatestRevisionProperty"]], jsii.get(self, "latestRevision"))
 
     @latest_revision.setter
     def latest_revision(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfiguration.LatestRevisionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguration.LatestRevisionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4beae79e12a98801242cbb2e47fafad8c377e868290a976298e39468f18cc003)
@@ -4171,7 +4189,7 @@ class CfnConfigurationProps:
         server_properties: builtins.str,
         description: typing.Optional[builtins.str] = None,
         kafka_versions_list: typing.Optional[typing.Sequence[builtins.str]] = None,
-        latest_revision: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfiguration.LatestRevisionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        latest_revision: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfiguration.LatestRevisionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfiguration``.
 
@@ -4271,13 +4289,13 @@ class CfnConfigurationProps:
     @builtins.property
     def latest_revision(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfiguration.LatestRevisionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguration.LatestRevisionProperty"]]:
         '''Latest revision of the MSK configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-configuration.html#cfn-msk-configuration-latestrevision
         '''
         result = self._values.get("latest_revision")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfiguration.LatestRevisionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfiguration.LatestRevisionProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4305,6 +4323,7 @@ class CfnReplicator(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_msk as msk
@@ -4363,15 +4382,15 @@ class CfnReplicator(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        kafka_clusters: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicator.KafkaClusterProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        replication_info_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicator.ReplicationInfoProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        kafka_clusters: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicator.KafkaClusterProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        replication_info_list: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicator.ReplicationInfoProperty", typing.Dict[builtins.str, typing.Any]]]]],
         replicator_name: builtins.str,
         service_execution_role_arn: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::MSK::Replicator``.
 
@@ -4401,7 +4420,7 @@ class CfnReplicator(
 
     @jsii.member(jsii_name="arnForReplicator")
     @builtins.classmethod
-    def arn_for_replicator(cls, resource: _IReplicatorRef_ba6501db) -> builtins.str:
+    def arn_for_replicator(cls, resource: "_IReplicatorRef_ba6501db") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4423,7 +4442,7 @@ class CfnReplicator(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReplicator", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4472,9 +4491,9 @@ class CfnReplicator(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4483,22 +4502,22 @@ class CfnReplicator(
 
     @builtins.property
     @jsii.member(jsii_name="replicatorRef")
-    def replicator_ref(self) -> _ReplicatorReference_d24fd028:
+    def replicator_ref(self) -> "_ReplicatorReference_d24fd028":
         '''A reference to a Replicator resource.'''
-        return typing.cast(_ReplicatorReference_d24fd028, jsii.get(self, "replicatorRef"))
+        return typing.cast("_ReplicatorReference_d24fd028", jsii.get(self, "replicatorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="kafkaClusters")
     def kafka_clusters(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicator.KafkaClusterProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicator.KafkaClusterProperty"]]]:
         '''Kafka Clusters to use in setting up sources / targets for replication.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicator.KafkaClusterProperty"]]], jsii.get(self, "kafkaClusters"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicator.KafkaClusterProperty"]]], jsii.get(self, "kafkaClusters"))
 
     @kafka_clusters.setter
     def kafka_clusters(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicator.KafkaClusterProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicator.KafkaClusterProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ee134ae196fcf56ff140cd1c560b79dda91e179efbe21840f1d86c4660d98db5)
@@ -4509,14 +4528,14 @@ class CfnReplicator(
     @jsii.member(jsii_name="replicationInfoList")
     def replication_info_list(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicator.ReplicationInfoProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicator.ReplicationInfoProperty"]]]:
         '''A list of replication configurations, where each configuration targets a given source cluster to target cluster replication flow.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicator.ReplicationInfoProperty"]]], jsii.get(self, "replicationInfoList"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicator.ReplicationInfoProperty"]]], jsii.get(self, "replicationInfoList"))
 
     @replication_info_list.setter
     def replication_info_list(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicator.ReplicationInfoProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicator.ReplicationInfoProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__56152cb302a79a267b13766e2b5e7c766263b8d69f6ee91cf037b2768210d1fa)
@@ -4564,12 +4583,12 @@ class CfnReplicator(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''List of tags to attach to created Replicator.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bc354f2be8b1c9d39ac22542641d1fa2b82dfe634bd35bb8c6672b45284a864d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4643,8 +4662,8 @@ class CfnReplicator(
             *,
             consumer_groups_to_replicate: typing.Sequence[builtins.str],
             consumer_groups_to_exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-            detect_and_copy_new_consumer_groups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            synchronise_consumer_group_offsets: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            detect_and_copy_new_consumer_groups: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            synchronise_consumer_group_offsets: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Details about consumer group replication.
 
@@ -4711,18 +4730,18 @@ class CfnReplicator(
         @builtins.property
         def detect_and_copy_new_consumer_groups(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables synchronization of consumer groups to target cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-replicator-consumergroupreplication.html#cfn-msk-replicator-consumergroupreplication-detectandcopynewconsumergroups
             '''
             result = self._values.get("detect_and_copy_new_consumer_groups")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def synchronise_consumer_group_offsets(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables synchronization of consumer group offsets to target cluster.
 
             The translated offsets will be written to topic __consumer_offsets.
@@ -4730,7 +4749,7 @@ class CfnReplicator(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-replicator-consumergroupreplication.html#cfn-msk-replicator-consumergroupreplication-synchroniseconsumergroupoffsets
             '''
             result = self._values.get("synchronise_consumer_group_offsets")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4831,8 +4850,8 @@ class CfnReplicator(
         def __init__(
             self,
             *,
-            amazon_msk_cluster: typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicator.AmazonMskClusterProperty", typing.Dict[builtins.str, typing.Any]]],
-            vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicator.KafkaClusterClientVpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            amazon_msk_cluster: typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicator.AmazonMskClusterProperty", typing.Dict[builtins.str, typing.Any]]],
+            vpc_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicator.KafkaClusterClientVpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Information about Kafka Cluster to be used as source / target for replication.
 
@@ -4872,26 +4891,26 @@ class CfnReplicator(
         @builtins.property
         def amazon_msk_cluster(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnReplicator.AmazonMskClusterProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnReplicator.AmazonMskClusterProperty"]:
             '''Details of an Amazon MSK Cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-replicator-kafkacluster.html#cfn-msk-replicator-kafkacluster-amazonmskcluster
             '''
             result = self._values.get("amazon_msk_cluster")
             assert result is not None, "Required property 'amazon_msk_cluster' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnReplicator.AmazonMskClusterProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnReplicator.AmazonMskClusterProperty"], result)
 
         @builtins.property
         def vpc_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnReplicator.KafkaClusterClientVpcConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnReplicator.KafkaClusterClientVpcConfigProperty"]:
             '''Details of an Amazon VPC which has network connectivity to the Apache Kafka cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-replicator-kafkacluster.html#cfn-msk-replicator-kafkacluster-vpcconfig
             '''
             result = self._values.get("vpc_config")
             assert result is not None, "Required property 'vpc_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnReplicator.KafkaClusterClientVpcConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnReplicator.KafkaClusterClientVpcConfigProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4919,11 +4938,11 @@ class CfnReplicator(
         def __init__(
             self,
             *,
-            consumer_group_replication: typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicator.ConsumerGroupReplicationProperty", typing.Dict[builtins.str, typing.Any]]],
+            consumer_group_replication: typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicator.ConsumerGroupReplicationProperty", typing.Dict[builtins.str, typing.Any]]],
             source_kafka_cluster_arn: builtins.str,
             target_compression_type: builtins.str,
             target_kafka_cluster_arn: builtins.str,
-            topic_replication: typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicator.TopicReplicationProperty", typing.Dict[builtins.str, typing.Any]]],
+            topic_replication: typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicator.TopicReplicationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Specifies configuration for replication between a source and target Kafka cluster.
 
@@ -4989,14 +5008,14 @@ class CfnReplicator(
         @builtins.property
         def consumer_group_replication(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnReplicator.ConsumerGroupReplicationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnReplicator.ConsumerGroupReplicationProperty"]:
             '''Configuration relating to consumer group replication.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-replicator-replicationinfo.html#cfn-msk-replicator-replicationinfo-consumergroupreplication
             '''
             result = self._values.get("consumer_group_replication")
             assert result is not None, "Required property 'consumer_group_replication' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnReplicator.ConsumerGroupReplicationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnReplicator.ConsumerGroupReplicationProperty"], result)
 
         @builtins.property
         def source_kafka_cluster_arn(self) -> builtins.str:
@@ -5031,14 +5050,14 @@ class CfnReplicator(
         @builtins.property
         def topic_replication(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnReplicator.TopicReplicationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnReplicator.TopicReplicationProperty"]:
             '''Configuration relating to topic replication.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-replicator-replicationinfo.html#cfn-msk-replicator-replicationinfo-topicreplication
             '''
             result = self._values.get("topic_replication")
             assert result is not None, "Required property 'topic_replication' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnReplicator.TopicReplicationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnReplicator.TopicReplicationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5171,11 +5190,11 @@ class CfnReplicator(
             self,
             *,
             topics_to_replicate: typing.Sequence[builtins.str],
-            copy_access_control_lists_for_topics: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            copy_topic_configurations: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            detect_and_copy_new_topics: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            starting_position: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicator.ReplicationStartingPositionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            topic_name_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicator.ReplicationTopicNameConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            copy_access_control_lists_for_topics: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            copy_topic_configurations: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            detect_and_copy_new_topics: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            starting_position: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicator.ReplicationStartingPositionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            topic_name_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicator.ReplicationTopicNameConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             topics_to_exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Details about topic replication.
@@ -5251,57 +5270,57 @@ class CfnReplicator(
         @builtins.property
         def copy_access_control_lists_for_topics(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether to periodically configure remote topic ACLs to match their corresponding upstream topics.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-replicator-topicreplication.html#cfn-msk-replicator-topicreplication-copyaccesscontrollistsfortopics
             '''
             result = self._values.get("copy_access_control_lists_for_topics")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def copy_topic_configurations(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether to periodically configure remote topics to match their corresponding upstream topics.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-replicator-topicreplication.html#cfn-msk-replicator-topicreplication-copytopicconfigurations
             '''
             result = self._values.get("copy_topic_configurations")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def detect_and_copy_new_topics(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether to periodically check for new topics and partitions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-replicator-topicreplication.html#cfn-msk-replicator-topicreplication-detectandcopynewtopics
             '''
             result = self._values.get("detect_and_copy_new_topics")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def starting_position(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReplicator.ReplicationStartingPositionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnReplicator.ReplicationStartingPositionProperty"]]:
             '''Specifies the position in the topics to start replicating from.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-replicator-topicreplication.html#cfn-msk-replicator-topicreplication-startingposition
             '''
             result = self._values.get("starting_position")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReplicator.ReplicationStartingPositionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnReplicator.ReplicationStartingPositionProperty"]], result)
 
         @builtins.property
         def topic_name_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReplicator.ReplicationTopicNameConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnReplicator.ReplicationTopicNameConfigurationProperty"]]:
             '''Configuration for specifying replicated topic names will be the same as their corresponding upstream topics or prefixed with source cluster alias.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-replicator-topicreplication.html#cfn-msk-replicator-topicreplication-topicnameconfiguration
             '''
             result = self._values.get("topic_name_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReplicator.ReplicationTopicNameConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnReplicator.ReplicationTopicNameConfigurationProperty"]], result)
 
         @builtins.property
         def topics_to_exclude(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5340,12 +5359,12 @@ class CfnReplicatorProps:
     def __init__(
         self,
         *,
-        kafka_clusters: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnReplicator.KafkaClusterProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        replication_info_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnReplicator.ReplicationInfoProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        kafka_clusters: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicator.KafkaClusterProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        replication_info_list: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicator.ReplicationInfoProperty", typing.Dict[builtins.str, typing.Any]]]]],
         replicator_name: builtins.str,
         service_execution_role_arn: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnReplicator``.
 
@@ -5361,6 +5380,7 @@ class CfnReplicatorProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_msk as msk
@@ -5438,26 +5458,26 @@ class CfnReplicatorProps:
     @builtins.property
     def kafka_clusters(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnReplicator.KafkaClusterProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicator.KafkaClusterProperty"]]]:
         '''Kafka Clusters to use in setting up sources / targets for replication.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-replicator.html#cfn-msk-replicator-kafkaclusters
         '''
         result = self._values.get("kafka_clusters")
         assert result is not None, "Required property 'kafka_clusters' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnReplicator.KafkaClusterProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicator.KafkaClusterProperty"]]], result)
 
     @builtins.property
     def replication_info_list(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnReplicator.ReplicationInfoProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicator.ReplicationInfoProperty"]]]:
         '''A list of replication configurations, where each configuration targets a given source cluster to target cluster replication flow.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-replicator.html#cfn-msk-replicator-replicationinfolist
         '''
         result = self._values.get("replication_info_list")
         assert result is not None, "Required property 'replication_info_list' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnReplicator.ReplicationInfoProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicator.ReplicationInfoProperty"]]], result)
 
     @builtins.property
     def replicator_name(self) -> builtins.str:
@@ -5491,13 +5511,13 @@ class CfnReplicatorProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''List of tags to attach to created Replicator.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-replicator.html#cfn-msk-replicator-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5554,12 +5574,12 @@ class CfnServerlessCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        client_authentication: typing.Union[_IResolvable_da3f097b, typing.Union["CfnServerlessCluster.ClientAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]],
+        client_authentication: typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCluster.ClientAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]],
         cluster_name: builtins.str,
-        vpc_configs: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServerlessCluster.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        vpc_configs: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCluster.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::MSK::ServerlessCluster``.
@@ -5588,7 +5608,7 @@ class CfnServerlessCluster(
     @builtins.classmethod
     def arn_for_serverless_cluster(
         cls,
-        resource: _IServerlessClusterRef_d48e2d5f,
+        resource: "_IServerlessClusterRef_d48e2d5f",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -5611,7 +5631,7 @@ class CfnServerlessCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServerlessCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5656,28 +5676,28 @@ class CfnServerlessCluster(
 
     @builtins.property
     @jsii.member(jsii_name="serverlessClusterRef")
-    def serverless_cluster_ref(self) -> _ServerlessClusterReference_591ff7ca:
+    def serverless_cluster_ref(self) -> "_ServerlessClusterReference_591ff7ca":
         '''A reference to a ServerlessCluster resource.'''
-        return typing.cast(_ServerlessClusterReference_591ff7ca, jsii.get(self, "serverlessClusterRef"))
+        return typing.cast("_ServerlessClusterReference_591ff7ca", jsii.get(self, "serverlessClusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="clientAuthentication")
     def client_authentication(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnServerlessCluster.ClientAuthenticationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.ClientAuthenticationProperty"]:
         '''Includes all client authentication related information.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnServerlessCluster.ClientAuthenticationProperty"], jsii.get(self, "clientAuthentication"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.ClientAuthenticationProperty"], jsii.get(self, "clientAuthentication"))
 
     @client_authentication.setter
     def client_authentication(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnServerlessCluster.ClientAuthenticationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.ClientAuthenticationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fa89ccfc74c544ca6be404bf89aba0bb0165e1448da8fe2625fe0b16b1233007)
@@ -5701,14 +5721,14 @@ class CfnServerlessCluster(
     @jsii.member(jsii_name="vpcConfigs")
     def vpc_configs(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServerlessCluster.VpcConfigProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.VpcConfigProperty"]]]:
         '''VPC configuration information for the serverless cluster.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServerlessCluster.VpcConfigProperty"]]], jsii.get(self, "vpcConfigs"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.VpcConfigProperty"]]], jsii.get(self, "vpcConfigs"))
 
     @vpc_configs.setter
     def vpc_configs(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServerlessCluster.VpcConfigProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.VpcConfigProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bb1ce933052056e6636b2d8196e831285d5d488108aa04cd5e5edf99126c9ae4)
@@ -5740,7 +5760,7 @@ class CfnServerlessCluster(
         def __init__(
             self,
             *,
-            sasl: typing.Union[_IResolvable_da3f097b, typing.Union["CfnServerlessCluster.SaslProperty", typing.Dict[builtins.str, typing.Any]]],
+            sasl: typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCluster.SaslProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Includes all client authentication information.
 
@@ -5773,7 +5793,7 @@ class CfnServerlessCluster(
         @builtins.property
         def sasl(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnServerlessCluster.SaslProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.SaslProperty"]:
             '''Details for client authentication using SASL.
 
             To turn on SASL, you must also turn on ``EncryptionInTransit`` by setting ``inCluster`` to true. You must set ``clientBroker`` to either ``TLS`` or ``TLS_PLAINTEXT`` . If you choose ``TLS_PLAINTEXT`` , then you must also set ``unauthenticated`` to true.
@@ -5782,7 +5802,7 @@ class CfnServerlessCluster(
             '''
             result = self._values.get("sasl")
             assert result is not None, "Required property 'sasl' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnServerlessCluster.SaslProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.SaslProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5804,7 +5824,7 @@ class CfnServerlessCluster(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Details for SASL/IAM client authentication.
 
@@ -5831,14 +5851,14 @@ class CfnServerlessCluster(
             }
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''SASL/IAM authentication is enabled or not.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-serverlesscluster-iam.html#cfn-msk-serverlesscluster-iam-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5860,7 +5880,7 @@ class CfnServerlessCluster(
         def __init__(
             self,
             *,
-            iam: typing.Union[_IResolvable_da3f097b, typing.Union["CfnServerlessCluster.IamProperty", typing.Dict[builtins.str, typing.Any]]],
+            iam: typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCluster.IamProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Details for client authentication using SASL.
 
@@ -5893,14 +5913,14 @@ class CfnServerlessCluster(
         @builtins.property
         def iam(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnServerlessCluster.IamProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.IamProperty"]:
             '''Details for ClientAuthentication using IAM.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-msk-serverlesscluster-sasl.html#cfn-msk-serverlesscluster-sasl-iam
             '''
             result = self._values.get("iam")
             assert result is not None, "Required property 'iam' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnServerlessCluster.IamProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.IamProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5998,9 +6018,9 @@ class CfnServerlessClusterProps:
     def __init__(
         self,
         *,
-        client_authentication: typing.Union[_IResolvable_da3f097b, typing.Union[CfnServerlessCluster.ClientAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]],
+        client_authentication: typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCluster.ClientAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]],
         cluster_name: builtins.str,
-        vpc_configs: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServerlessCluster.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        vpc_configs: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCluster.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnServerlessCluster``.
@@ -6058,14 +6078,14 @@ class CfnServerlessClusterProps:
     @builtins.property
     def client_authentication(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnServerlessCluster.ClientAuthenticationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.ClientAuthenticationProperty"]:
         '''Includes all client authentication related information.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-serverlesscluster.html#cfn-msk-serverlesscluster-clientauthentication
         '''
         result = self._values.get("client_authentication")
         assert result is not None, "Required property 'client_authentication' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnServerlessCluster.ClientAuthenticationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.ClientAuthenticationProperty"], result)
 
     @builtins.property
     def cluster_name(self) -> builtins.str:
@@ -6080,14 +6100,14 @@ class CfnServerlessClusterProps:
     @builtins.property
     def vpc_configs(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnServerlessCluster.VpcConfigProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.VpcConfigProperty"]]]:
         '''VPC configuration information for the serverless cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-serverlesscluster.html#cfn-msk-serverlesscluster-vpcconfigs
         '''
         result = self._values.get("vpc_configs")
         assert result is not None, "Required property 'vpc_configs' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnServerlessCluster.VpcConfigProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServerlessCluster.VpcConfigProperty"]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -6144,7 +6164,7 @@ class CfnVpcConnection(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         authentication: builtins.str,
@@ -6184,7 +6204,7 @@ class CfnVpcConnection(
     @builtins.classmethod
     def arn_for_vpc_connection(
         cls,
-        resource: _IVpcConnectionRef_08dbabf3,
+        resource: "_IVpcConnectionRef_08dbabf3",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6207,7 +6227,7 @@ class CfnVpcConnection(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVpcConnection", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6252,15 +6272,15 @@ class CfnVpcConnection(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="vpcConnectionRef")
-    def vpc_connection_ref(self) -> _VpcConnectionReference_c5ff3bd2:
+    def vpc_connection_ref(self) -> "_VpcConnectionReference_c5ff3bd2":
         '''A reference to a VpcConnection resource.'''
-        return typing.cast(_VpcConnectionReference_c5ff3bd2, jsii.get(self, "vpcConnectionRef"))
+        return typing.cast("_VpcConnectionReference_c5ff3bd2", jsii.get(self, "vpcConnectionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="authentication")
@@ -6732,6 +6752,7 @@ def _typecheckingstub__978657c9cf18466215b38a251ae4816196dcec1b76c8a82c67f970ce4
 
 def _typecheckingstub__d1ba9dbd3fe54fc52707e8245c99f4e132a975a1ea7784a9e8d49cfc50fc4d71(
     *,
+    network_type: typing.Optional[builtins.str] = None,
     public_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.PublicAccessProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_connectivity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.VpcConnectivityProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

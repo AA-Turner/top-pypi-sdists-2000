@@ -114,11 +114,11 @@ class CfnDiscoverer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        source_arn: typing.Union[builtins.str, _IEventBusRef_aa86e9b4],
-        cross_account: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        source_arn: typing.Union[builtins.str, "_IEventBusRef_aa86e9b4"],
+        cross_account: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnDiscoverer.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -146,7 +146,7 @@ class CfnDiscoverer(
 
     @jsii.member(jsii_name="arnForDiscoverer")
     @builtins.classmethod
-    def arn_for_discoverer(cls, resource: _IDiscovererRef_40eee464) -> builtins.str:
+    def arn_for_discoverer(cls, resource: "_IDiscovererRef_40eee464") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -168,7 +168,7 @@ class CfnDiscoverer(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDiscoverer", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -199,11 +199,11 @@ class CfnDiscoverer(
 
     @builtins.property
     @jsii.member(jsii_name="attrCrossAccount")
-    def attr_cross_account(self) -> _IResolvable_da3f097b:
+    def attr_cross_account(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: CrossAccount
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrCrossAccount"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrCrossAccount"))
 
     @builtins.property
     @jsii.member(jsii_name="attrDiscovererArn")
@@ -239,15 +239,15 @@ class CfnDiscoverer(
 
     @builtins.property
     @jsii.member(jsii_name="discovererRef")
-    def discoverer_ref(self) -> _DiscovererReference_52fd091c:
+    def discoverer_ref(self) -> "_DiscovererReference_52fd091c":
         '''A reference to a Discoverer resource.'''
-        return typing.cast(_DiscovererReference_52fd091c, jsii.get(self, "discovererRef"))
+        return typing.cast("_DiscovererReference_52fd091c", jsii.get(self, "discovererRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="sourceArn")
@@ -266,14 +266,14 @@ class CfnDiscoverer(
     @jsii.member(jsii_name="crossAccount")
     def cross_account(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Allows for the discovery of the event schemas that are sent to the event bus from another account.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "crossAccount"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "crossAccount"))
 
     @cross_account.setter
     def cross_account(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ecb4a06e541deb6c8dda40cd09befd814af0290af78146808d35ff87851560c3)
@@ -392,10 +392,10 @@ class CfnDiscovererProps:
     def __init__(
         self,
         *,
-        source_arn: typing.Union[builtins.str, _IEventBusRef_aa86e9b4],
-        cross_account: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        source_arn: typing.Union[builtins.str, "_IEventBusRef_aa86e9b4"],
+        cross_account: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnDiscoverer.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnDiscoverer.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDiscoverer``.
 
@@ -442,19 +442,19 @@ class CfnDiscovererProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def source_arn(self) -> typing.Union[builtins.str, _IEventBusRef_aa86e9b4]:
+    def source_arn(self) -> typing.Union[builtins.str, "_IEventBusRef_aa86e9b4"]:
         '''The ARN of the event bus.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eventschemas-discoverer.html#cfn-eventschemas-discoverer-sourcearn
         '''
         result = self._values.get("source_arn")
         assert result is not None, "Required property 'source_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IEventBusRef_aa86e9b4], result)
+        return typing.cast(typing.Union[builtins.str, "_IEventBusRef_aa86e9b4"], result)
 
     @builtins.property
     def cross_account(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Allows for the discovery of the event schemas that are sent to the event bus from another account.
 
         :default: - true
@@ -462,7 +462,7 @@ class CfnDiscovererProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eventschemas-discoverer.html#cfn-eventschemas-discoverer-crossaccount
         '''
         result = self._values.get("cross_account")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -474,13 +474,13 @@ class CfnDiscovererProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[CfnDiscoverer.TagsEntryProperty]]:
+    def tags(self) -> typing.Optional[typing.List["CfnDiscoverer.TagsEntryProperty"]]:
         '''Tags associated with the resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eventschemas-discoverer.html#cfn-eventschemas-discoverer-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnDiscoverer.TagsEntryProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnDiscoverer.TagsEntryProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -526,7 +526,7 @@ class CfnRegistry(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -553,7 +553,7 @@ class CfnRegistry(
 
     @jsii.member(jsii_name="arnForRegistry")
     @builtins.classmethod
-    def arn_for_registry(cls, resource: _IRegistryRef_007bdb40) -> builtins.str:
+    def arn_for_registry(cls, resource: "_IRegistryRef_007bdb40") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -575,7 +575,7 @@ class CfnRegistry(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRegistry", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -629,15 +629,15 @@ class CfnRegistry(
 
     @builtins.property
     @jsii.member(jsii_name="registryRef")
-    def registry_ref(self) -> _RegistryReference_9f962fb0:
+    def registry_ref(self) -> "_RegistryReference_9f962fb0":
         '''A reference to a Registry resource.'''
-        return typing.cast(_RegistryReference_9f962fb0, jsii.get(self, "registryRef"))
+        return typing.cast("_RegistryReference_9f962fb0", jsii.get(self, "registryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -779,7 +779,7 @@ class CfnRegistryPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy: typing.Any,
@@ -817,7 +817,7 @@ class CfnRegistryPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRegistryPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -862,9 +862,9 @@ class CfnRegistryPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="registryPolicyRef")
-    def registry_policy_ref(self) -> _RegistryPolicyReference_788dde78:
+    def registry_policy_ref(self) -> "_RegistryPolicyReference_788dde78":
         '''A reference to a RegistryPolicy resource.'''
-        return typing.cast(_RegistryPolicyReference_788dde78, jsii.get(self, "registryPolicyRef"))
+        return typing.cast("_RegistryPolicyReference_788dde78", jsii.get(self, "registryPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policy")
@@ -1016,7 +1016,7 @@ class CfnRegistryProps:
         *,
         description: typing.Optional[builtins.str] = None,
         registry_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnRegistry.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnRegistry.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRegistry``.
 
@@ -1074,13 +1074,13 @@ class CfnRegistryProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[CfnRegistry.TagsEntryProperty]]:
+    def tags(self) -> typing.Optional[typing.List["CfnRegistry.TagsEntryProperty"]]:
         '''Tags to associate with the registry.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eventschemas-registry.html#cfn-eventschemas-registry-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnRegistry.TagsEntryProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnRegistry.TagsEntryProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1129,7 +1129,7 @@ class CfnSchema(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         content: builtins.str,
@@ -1167,7 +1167,7 @@ class CfnSchema(
 
     @jsii.member(jsii_name="arnForSchema")
     @builtins.classmethod
-    def arn_for_schema(cls, resource: _ISchemaRef_85adc95a) -> builtins.str:
+    def arn_for_schema(cls, resource: "_ISchemaRef_85adc95a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1189,7 +1189,7 @@ class CfnSchema(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSchema", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1270,15 +1270,15 @@ class CfnSchema(
 
     @builtins.property
     @jsii.member(jsii_name="schemaRef")
-    def schema_ref(self) -> _SchemaReference_3c1ea018:
+    def schema_ref(self) -> "_SchemaReference_3c1ea018":
         '''A reference to a Schema resource.'''
-        return typing.cast(_SchemaReference_3c1ea018, jsii.get(self, "schemaRef"))
+        return typing.cast("_SchemaReference_3c1ea018", jsii.get(self, "schemaRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="content")
@@ -1449,7 +1449,7 @@ class CfnSchemaProps:
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
         schema_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[CfnSchema.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["CfnSchema.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSchema``.
 
@@ -1554,13 +1554,13 @@ class CfnSchemaProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[CfnSchema.TagsEntryProperty]]:
+    def tags(self) -> typing.Optional[typing.List["CfnSchema.TagsEntryProperty"]]:
         '''Tags associated with the schema.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eventschemas-schema.html#cfn-eventschemas-schema-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[CfnSchema.TagsEntryProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnSchema.TagsEntryProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

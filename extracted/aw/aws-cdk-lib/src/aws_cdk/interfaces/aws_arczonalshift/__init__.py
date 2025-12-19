@@ -111,7 +111,7 @@ class IAutoshiftObserverNotificationStatusRef(
     @jsii.member(jsii_name="autoshiftObserverNotificationStatusRef")
     def autoshift_observer_notification_status_ref(
         self,
-    ) -> AutoshiftObserverNotificationStatusReference:
+    ) -> "AutoshiftObserverNotificationStatusReference":
         '''(experimental) A reference to a AutoshiftObserverNotificationStatus resource.
 
         :stability: experimental
@@ -134,12 +134,12 @@ class _IAutoshiftObserverNotificationStatusRefProxy(
     @jsii.member(jsii_name="autoshiftObserverNotificationStatusRef")
     def autoshift_observer_notification_status_ref(
         self,
-    ) -> AutoshiftObserverNotificationStatusReference:
+    ) -> "AutoshiftObserverNotificationStatusReference":
         '''(experimental) A reference to a AutoshiftObserverNotificationStatus resource.
 
         :stability: experimental
         '''
-        return typing.cast(AutoshiftObserverNotificationStatusReference, jsii.get(self, "autoshiftObserverNotificationStatusRef"))
+        return typing.cast("AutoshiftObserverNotificationStatusReference", jsii.get(self, "autoshiftObserverNotificationStatusRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAutoshiftObserverNotificationStatusRef).__jsii_proxy_class__ = lambda : _IAutoshiftObserverNotificationStatusRefProxy

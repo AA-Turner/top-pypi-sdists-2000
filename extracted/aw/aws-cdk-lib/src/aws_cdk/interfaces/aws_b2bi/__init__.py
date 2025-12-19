@@ -112,7 +112,7 @@ class ICapabilityRef(
 
     @builtins.property
     @jsii.member(jsii_name="capabilityRef")
-    def capability_ref(self) -> CapabilityReference:
+    def capability_ref(self) -> "CapabilityReference":
         '''(experimental) A reference to a Capability resource.
 
         :stability: experimental
@@ -133,12 +133,12 @@ class _ICapabilityRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="capabilityRef")
-    def capability_ref(self) -> CapabilityReference:
+    def capability_ref(self) -> "CapabilityReference":
         '''(experimental) A reference to a Capability resource.
 
         :stability: experimental
         '''
-        return typing.cast(CapabilityReference, jsii.get(self, "capabilityRef"))
+        return typing.cast("CapabilityReference", jsii.get(self, "capabilityRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICapabilityRef).__jsii_proxy_class__ = lambda : _ICapabilityRefProxy

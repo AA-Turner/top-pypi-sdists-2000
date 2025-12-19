@@ -98,7 +98,7 @@ class CfnDomain(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -130,7 +130,7 @@ class CfnDomain(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomain", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -174,9 +174,9 @@ class CfnDomain(
 
     @builtins.property
     @jsii.member(jsii_name="domainRef")
-    def domain_ref(self) -> _DomainReference_5952a7dd:
+    def domain_ref(self) -> "_DomainReference_5952a7dd":
         '''A reference to a Domain resource.'''
-        return typing.cast(_DomainReference_5952a7dd, jsii.get(self, "domainRef"))
+        return typing.cast("_DomainReference_5952a7dd", jsii.get(self, "domainRef"))
 
     @builtins.property
     @jsii.member(jsii_name="description")

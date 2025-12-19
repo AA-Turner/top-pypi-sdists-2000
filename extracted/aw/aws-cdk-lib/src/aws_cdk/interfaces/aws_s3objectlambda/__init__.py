@@ -166,7 +166,7 @@ class IAccessPointPolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointPolicyRef")
-    def access_point_policy_ref(self) -> AccessPointPolicyReference:
+    def access_point_policy_ref(self) -> "AccessPointPolicyReference":
         '''(experimental) A reference to a AccessPointPolicy resource.
 
         :stability: experimental
@@ -187,12 +187,12 @@ class _IAccessPointPolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointPolicyRef")
-    def access_point_policy_ref(self) -> AccessPointPolicyReference:
+    def access_point_policy_ref(self) -> "AccessPointPolicyReference":
         '''(experimental) A reference to a AccessPointPolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccessPointPolicyReference, jsii.get(self, "accessPointPolicyRef"))
+        return typing.cast("AccessPointPolicyReference", jsii.get(self, "accessPointPolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessPointPolicyRef).__jsii_proxy_class__ = lambda : _IAccessPointPolicyRefProxy
@@ -211,7 +211,7 @@ class IAccessPointRef(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointRef")
-    def access_point_ref(self) -> AccessPointReference:
+    def access_point_ref(self) -> "AccessPointReference":
         '''(experimental) A reference to a AccessPoint resource.
 
         :stability: experimental
@@ -232,12 +232,12 @@ class _IAccessPointRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointRef")
-    def access_point_ref(self) -> AccessPointReference:
+    def access_point_ref(self) -> "AccessPointReference":
         '''(experimental) A reference to a AccessPoint resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccessPointReference, jsii.get(self, "accessPointRef"))
+        return typing.cast("AccessPointReference", jsii.get(self, "accessPointRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessPointRef).__jsii_proxy_class__ = lambda : _IAccessPointRefProxy

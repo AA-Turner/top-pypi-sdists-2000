@@ -413,7 +413,7 @@ class IAggregationAuthorizationRef(
 
     @builtins.property
     @jsii.member(jsii_name="aggregationAuthorizationRef")
-    def aggregation_authorization_ref(self) -> AggregationAuthorizationReference:
+    def aggregation_authorization_ref(self) -> "AggregationAuthorizationReference":
         '''(experimental) A reference to a AggregationAuthorization resource.
 
         :stability: experimental
@@ -434,12 +434,12 @@ class _IAggregationAuthorizationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aggregationAuthorizationRef")
-    def aggregation_authorization_ref(self) -> AggregationAuthorizationReference:
+    def aggregation_authorization_ref(self) -> "AggregationAuthorizationReference":
         '''(experimental) A reference to a AggregationAuthorization resource.
 
         :stability: experimental
         '''
-        return typing.cast(AggregationAuthorizationReference, jsii.get(self, "aggregationAuthorizationRef"))
+        return typing.cast("AggregationAuthorizationReference", jsii.get(self, "aggregationAuthorizationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAggregationAuthorizationRef).__jsii_proxy_class__ = lambda : _IAggregationAuthorizationRefProxy
@@ -458,7 +458,7 @@ class IConfigRuleRef(
 
     @builtins.property
     @jsii.member(jsii_name="configRuleRef")
-    def config_rule_ref(self) -> ConfigRuleReference:
+    def config_rule_ref(self) -> "ConfigRuleReference":
         '''(experimental) A reference to a ConfigRule resource.
 
         :stability: experimental
@@ -479,12 +479,12 @@ class _IConfigRuleRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configRuleRef")
-    def config_rule_ref(self) -> ConfigRuleReference:
+    def config_rule_ref(self) -> "ConfigRuleReference":
         '''(experimental) A reference to a ConfigRule resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigRuleReference, jsii.get(self, "configRuleRef"))
+        return typing.cast("ConfigRuleReference", jsii.get(self, "configRuleRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigRuleRef).__jsii_proxy_class__ = lambda : _IConfigRuleRefProxy
@@ -505,7 +505,7 @@ class IConfigurationAggregatorRef(
 
     @builtins.property
     @jsii.member(jsii_name="configurationAggregatorRef")
-    def configuration_aggregator_ref(self) -> ConfigurationAggregatorReference:
+    def configuration_aggregator_ref(self) -> "ConfigurationAggregatorReference":
         '''(experimental) A reference to a ConfigurationAggregator resource.
 
         :stability: experimental
@@ -526,12 +526,12 @@ class _IConfigurationAggregatorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configurationAggregatorRef")
-    def configuration_aggregator_ref(self) -> ConfigurationAggregatorReference:
+    def configuration_aggregator_ref(self) -> "ConfigurationAggregatorReference":
         '''(experimental) A reference to a ConfigurationAggregator resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationAggregatorReference, jsii.get(self, "configurationAggregatorRef"))
+        return typing.cast("ConfigurationAggregatorReference", jsii.get(self, "configurationAggregatorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationAggregatorRef).__jsii_proxy_class__ = lambda : _IConfigurationAggregatorRefProxy
@@ -552,7 +552,7 @@ class IConfigurationRecorderRef(
 
     @builtins.property
     @jsii.member(jsii_name="configurationRecorderRef")
-    def configuration_recorder_ref(self) -> ConfigurationRecorderReference:
+    def configuration_recorder_ref(self) -> "ConfigurationRecorderReference":
         '''(experimental) A reference to a ConfigurationRecorder resource.
 
         :stability: experimental
@@ -573,12 +573,12 @@ class _IConfigurationRecorderRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configurationRecorderRef")
-    def configuration_recorder_ref(self) -> ConfigurationRecorderReference:
+    def configuration_recorder_ref(self) -> "ConfigurationRecorderReference":
         '''(experimental) A reference to a ConfigurationRecorder resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationRecorderReference, jsii.get(self, "configurationRecorderRef"))
+        return typing.cast("ConfigurationRecorderReference", jsii.get(self, "configurationRecorderRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationRecorderRef).__jsii_proxy_class__ = lambda : _IConfigurationRecorderRefProxy
@@ -597,7 +597,7 @@ class IConformancePackRef(
 
     @builtins.property
     @jsii.member(jsii_name="conformancePackRef")
-    def conformance_pack_ref(self) -> ConformancePackReference:
+    def conformance_pack_ref(self) -> "ConformancePackReference":
         '''(experimental) A reference to a ConformancePack resource.
 
         :stability: experimental
@@ -618,12 +618,12 @@ class _IConformancePackRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="conformancePackRef")
-    def conformance_pack_ref(self) -> ConformancePackReference:
+    def conformance_pack_ref(self) -> "ConformancePackReference":
         '''(experimental) A reference to a ConformancePack resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConformancePackReference, jsii.get(self, "conformancePackRef"))
+        return typing.cast("ConformancePackReference", jsii.get(self, "conformancePackRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConformancePackRef).__jsii_proxy_class__ = lambda : _IConformancePackRefProxy
@@ -642,7 +642,7 @@ class IDeliveryChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryChannelRef")
-    def delivery_channel_ref(self) -> DeliveryChannelReference:
+    def delivery_channel_ref(self) -> "DeliveryChannelReference":
         '''(experimental) A reference to a DeliveryChannel resource.
 
         :stability: experimental
@@ -663,12 +663,12 @@ class _IDeliveryChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryChannelRef")
-    def delivery_channel_ref(self) -> DeliveryChannelReference:
+    def delivery_channel_ref(self) -> "DeliveryChannelReference":
         '''(experimental) A reference to a DeliveryChannel resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeliveryChannelReference, jsii.get(self, "deliveryChannelRef"))
+        return typing.cast("DeliveryChannelReference", jsii.get(self, "deliveryChannelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeliveryChannelRef).__jsii_proxy_class__ = lambda : _IDeliveryChannelRefProxy

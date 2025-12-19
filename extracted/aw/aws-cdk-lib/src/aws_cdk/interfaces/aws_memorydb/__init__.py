@@ -172,7 +172,7 @@ class IACLRef(
 
     @builtins.property
     @jsii.member(jsii_name="aclRef")
-    def acl_ref(self) -> ACLReference:
+    def acl_ref(self) -> "ACLReference":
         '''(experimental) A reference to a ACL resource.
 
         :stability: experimental
@@ -193,12 +193,12 @@ class _IACLRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aclRef")
-    def acl_ref(self) -> ACLReference:
+    def acl_ref(self) -> "ACLReference":
         '''(experimental) A reference to a ACL resource.
 
         :stability: experimental
         '''
-        return typing.cast(ACLReference, jsii.get(self, "aclRef"))
+        return typing.cast("ACLReference", jsii.get(self, "aclRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IACLRef).__jsii_proxy_class__ = lambda : _IACLRefProxy
@@ -217,7 +217,7 @@ class IClusterRef(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
@@ -238,12 +238,12 @@ class _IClusterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClusterReference, jsii.get(self, "clusterRef"))
+        return typing.cast("ClusterReference", jsii.get(self, "clusterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRefProxy

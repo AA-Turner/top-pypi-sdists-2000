@@ -126,6 +126,10 @@ class CfnIndex(
             distance_metric="distanceMetric",
         
             # the properties below are optional
+            encryption_configuration=s3vectors.CfnIndex.EncryptionConfigurationProperty(
+                kms_key_arn="kmsKeyArn",
+                sse_type="sseType"
+            ),
             index_name="indexName",
             metadata_configuration=s3vectors.CfnIndex.MetadataConfigurationProperty(
                 non_filterable_metadata_keys=["nonFilterableMetadataKeys"]
@@ -137,14 +141,15 @@ class CfnIndex(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         data_type: builtins.str,
         dimension: jsii.Number,
         distance_metric: builtins.str,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         index_name: typing.Optional[builtins.str] = None,
-        metadata_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.MetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        metadata_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.MetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         vector_bucket_arn: typing.Optional[builtins.str] = None,
         vector_bucket_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -155,6 +160,7 @@ class CfnIndex(
         :param data_type: The data type of the vectors to be inserted into the vector index. Currently, only ``float32`` is supported, which represents 32-bit floating-point numbers.
         :param dimension: The dimensions of the vectors to be inserted into the vector index. This value must be between 1 and 4096, inclusive. All vectors stored in the index must have the same number of dimensions. The dimension value affects the storage requirements and search performance. Higher dimensions require more storage space and may impact search latency.
         :param distance_metric: The distance metric to be used for similarity search. Valid values are:. - ``cosine`` - Measures the cosine of the angle between two vectors. - ``euclidean`` - Measures the straight-line distance between two points in multi-dimensional space. Lower values indicate greater similarity.
+        :param encryption_configuration: The encryption configuration for a vector index. By default, if you don't specify, all new vectors in the vector index will use the encryption configuration of the vector bucket.
         :param index_name: The name of the vector index to create. The index name must be between 3 and 63 characters long and can contain only lowercase letters, numbers, hyphens (-), and dots (.). The index name must be unique within the vector bucket. If you don't specify a name, AWS CloudFormation generates a unique ID and uses that ID for the index name. .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you need to replace the resource, specify a new name.
         :param metadata_configuration: The metadata configuration for the vector index.
         :param vector_bucket_arn: The Amazon Resource Name (ARN) of the vector bucket that contains the vector index.
@@ -168,6 +174,7 @@ class CfnIndex(
             data_type=data_type,
             dimension=dimension,
             distance_metric=distance_metric,
+            encryption_configuration=encryption_configuration,
             index_name=index_name,
             metadata_configuration=metadata_configuration,
             vector_bucket_arn=vector_bucket_arn,
@@ -178,7 +185,7 @@ class CfnIndex(
 
     @jsii.member(jsii_name="arnForIndex")
     @builtins.classmethod
-    def arn_for_index(cls, resource: _IIndexRef_4272045e) -> builtins.str:
+    def arn_for_index(cls, resource: "_IIndexRef_4272045e") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -200,7 +207,7 @@ class CfnIndex(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIndex", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -258,9 +265,9 @@ class CfnIndex(
 
     @builtins.property
     @jsii.member(jsii_name="indexRef")
-    def index_ref(self) -> _IndexReference_f8041417:
+    def index_ref(self) -> "_IndexReference_f8041417":
         '''A reference to a Index resource.'''
-        return typing.cast(_IndexReference_f8041417, jsii.get(self, "indexRef"))
+        return typing.cast("_IndexReference_f8041417", jsii.get(self, "indexRef"))
 
     @builtins.property
     @jsii.member(jsii_name="dataType")
@@ -305,6 +312,24 @@ class CfnIndex(
         jsii.set(self, "distanceMetric", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="encryptionConfiguration")
+    def encryption_configuration(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.EncryptionConfigurationProperty"]]:
+        '''The encryption configuration for a vector index.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
+
+    @encryption_configuration.setter
+    def encryption_configuration(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.EncryptionConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3562181b475724860644b029c5aa0b0da6ef36ffc910f5b75f4a2ca99b0ad526)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "encryptionConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="indexName")
     def index_name(self) -> typing.Optional[builtins.str]:
         '''The name of the vector index to create.'''
@@ -321,14 +346,14 @@ class CfnIndex(
     @jsii.member(jsii_name="metadataConfiguration")
     def metadata_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.MetadataConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.MetadataConfigurationProperty"]]:
         '''The metadata configuration for the vector index.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.MetadataConfigurationProperty"]], jsii.get(self, "metadataConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.MetadataConfigurationProperty"]], jsii.get(self, "metadataConfiguration"))
 
     @metadata_configuration.setter
     def metadata_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.MetadataConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.MetadataConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__adf0789238c3ff54ec752516d17506a5dc3025daf5543ed37b3703a9638c6ce3)
@@ -360,6 +385,86 @@ class CfnIndex(
             type_hints = typing.get_type_hints(_typecheckingstub__626d4bf5143365f338c97aea670a95f8c1fbfa0ad3a9cc00928821e5edb04014)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "vectorBucketName", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_s3vectors.CfnIndex.EncryptionConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"kms_key_arn": "kmsKeyArn", "sse_type": "sseType"},
+    )
+    class EncryptionConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            kms_key_arn: typing.Optional[builtins.str] = None,
+            sse_type: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The encryption configuration for a vector bucket or index.
+
+            By default, if you don't specify, all new vectors in Amazon S3 vector buckets use server-side encryption with Amazon S3 managed keys (SSE-S3), specifically ``AES256`` . You can optionally override bucket level encryption settings, and set a specific encryption configuration for a vector index at the time of index creation.
+
+            :param kms_key_arn: AWS Key Management Service (KMS) customer managed key ID to use for the encryption configuration. This parameter is allowed if and only if ``sseType`` is set to ``aws:kms`` . To specify the KMS key, you must use the format of the KMS key Amazon Resource Name (ARN). For example, specify Key ARN in the following format: ``arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab``
+            :param sse_type: The server-side encryption type to use for the encryption configuration of the vector bucket. By default, if you don't specify, all new vectors in Amazon S3 vector buckets use server-side encryption with Amazon S3 managed keys (SSE-S3), specifically ``AES256`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3vectors-index-encryptionconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_s3vectors as s3vectors
+                
+                encryption_configuration_property = s3vectors.CfnIndex.EncryptionConfigurationProperty(
+                    kms_key_arn="kmsKeyArn",
+                    sse_type="sseType"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f9165e9fb93aff2add01bdd93a7038addf5ef28b5c63327f886cde432f32daca)
+                check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
+                check_type(argname="argument sse_type", value=sse_type, expected_type=type_hints["sse_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if kms_key_arn is not None:
+                self._values["kms_key_arn"] = kms_key_arn
+            if sse_type is not None:
+                self._values["sse_type"] = sse_type
+
+        @builtins.property
+        def kms_key_arn(self) -> typing.Optional[builtins.str]:
+            '''AWS Key Management Service (KMS) customer managed key ID to use for the encryption configuration.
+
+            This parameter is allowed if and only if ``sseType`` is set to ``aws:kms`` .
+
+            To specify the KMS key, you must use the format of the KMS key Amazon Resource Name (ARN).
+
+            For example, specify Key ARN in the following format: ``arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab``
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3vectors-index-encryptionconfiguration.html#cfn-s3vectors-index-encryptionconfiguration-kmskeyarn
+            '''
+            result = self._values.get("kms_key_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def sse_type(self) -> typing.Optional[builtins.str]:
+            '''The server-side encryption type to use for the encryption configuration of the vector bucket.
+
+            By default, if you don't specify, all new vectors in Amazon S3 vector buckets use server-side encryption with Amazon S3 managed keys (SSE-S3), specifically ``AES256`` .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3vectors-index-encryptionconfiguration.html#cfn-s3vectors-index-encryptionconfiguration-ssetype
+            '''
+            result = self._values.get("sse_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EncryptionConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_s3vectors.CfnIndex.MetadataConfigurationProperty",
@@ -432,6 +537,7 @@ class CfnIndex(
         "data_type": "dataType",
         "dimension": "dimension",
         "distance_metric": "distanceMetric",
+        "encryption_configuration": "encryptionConfiguration",
         "index_name": "indexName",
         "metadata_configuration": "metadataConfiguration",
         "vector_bucket_arn": "vectorBucketArn",
@@ -445,8 +551,9 @@ class CfnIndexProps:
         data_type: builtins.str,
         dimension: jsii.Number,
         distance_metric: builtins.str,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         index_name: typing.Optional[builtins.str] = None,
-        metadata_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.MetadataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        metadata_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.MetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         vector_bucket_arn: typing.Optional[builtins.str] = None,
         vector_bucket_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -455,6 +562,7 @@ class CfnIndexProps:
         :param data_type: The data type of the vectors to be inserted into the vector index. Currently, only ``float32`` is supported, which represents 32-bit floating-point numbers.
         :param dimension: The dimensions of the vectors to be inserted into the vector index. This value must be between 1 and 4096, inclusive. All vectors stored in the index must have the same number of dimensions. The dimension value affects the storage requirements and search performance. Higher dimensions require more storage space and may impact search latency.
         :param distance_metric: The distance metric to be used for similarity search. Valid values are:. - ``cosine`` - Measures the cosine of the angle between two vectors. - ``euclidean`` - Measures the straight-line distance between two points in multi-dimensional space. Lower values indicate greater similarity.
+        :param encryption_configuration: The encryption configuration for a vector index. By default, if you don't specify, all new vectors in the vector index will use the encryption configuration of the vector bucket.
         :param index_name: The name of the vector index to create. The index name must be between 3 and 63 characters long and can contain only lowercase letters, numbers, hyphens (-), and dots (.). The index name must be unique within the vector bucket. If you don't specify a name, AWS CloudFormation generates a unique ID and uses that ID for the index name. .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you need to replace the resource, specify a new name.
         :param metadata_configuration: The metadata configuration for the vector index.
         :param vector_bucket_arn: The Amazon Resource Name (ARN) of the vector bucket that contains the vector index.
@@ -475,6 +583,10 @@ class CfnIndexProps:
                 distance_metric="distanceMetric",
             
                 # the properties below are optional
+                encryption_configuration=s3vectors.CfnIndex.EncryptionConfigurationProperty(
+                    kms_key_arn="kmsKeyArn",
+                    sse_type="sseType"
+                ),
                 index_name="indexName",
                 metadata_configuration=s3vectors.CfnIndex.MetadataConfigurationProperty(
                     non_filterable_metadata_keys=["nonFilterableMetadataKeys"]
@@ -488,6 +600,7 @@ class CfnIndexProps:
             check_type(argname="argument data_type", value=data_type, expected_type=type_hints["data_type"])
             check_type(argname="argument dimension", value=dimension, expected_type=type_hints["dimension"])
             check_type(argname="argument distance_metric", value=distance_metric, expected_type=type_hints["distance_metric"])
+            check_type(argname="argument encryption_configuration", value=encryption_configuration, expected_type=type_hints["encryption_configuration"])
             check_type(argname="argument index_name", value=index_name, expected_type=type_hints["index_name"])
             check_type(argname="argument metadata_configuration", value=metadata_configuration, expected_type=type_hints["metadata_configuration"])
             check_type(argname="argument vector_bucket_arn", value=vector_bucket_arn, expected_type=type_hints["vector_bucket_arn"])
@@ -497,6 +610,8 @@ class CfnIndexProps:
             "dimension": dimension,
             "distance_metric": distance_metric,
         }
+        if encryption_configuration is not None:
+            self._values["encryption_configuration"] = encryption_configuration
         if index_name is not None:
             self._values["index_name"] = index_name
         if metadata_configuration is not None:
@@ -546,6 +661,19 @@ class CfnIndexProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
+    def encryption_configuration(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.EncryptionConfigurationProperty"]]:
+        '''The encryption configuration for a vector index.
+
+        By default, if you don't specify, all new vectors in the vector index will use the encryption configuration of the vector bucket.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3vectors-index.html#cfn-s3vectors-index-encryptionconfiguration
+        '''
+        result = self._values.get("encryption_configuration")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.EncryptionConfigurationProperty"]], result)
+
+    @builtins.property
     def index_name(self) -> typing.Optional[builtins.str]:
         '''The name of the vector index to create.
 
@@ -564,13 +692,13 @@ class CfnIndexProps:
     @builtins.property
     def metadata_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIndex.MetadataConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.MetadataConfigurationProperty"]]:
         '''The metadata configuration for the vector index.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3vectors-index.html#cfn-s3vectors-index-metadataconfiguration
         '''
         result = self._values.get("metadata_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIndex.MetadataConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.MetadataConfigurationProperty"]], result)
 
     @builtins.property
     def vector_bucket_arn(self) -> typing.Optional[builtins.str]:
@@ -654,10 +782,10 @@ class CfnVectorBucket(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVectorBucket.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVectorBucket.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         vector_bucket_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::S3Vectors::VectorBucket``.
@@ -682,7 +810,7 @@ class CfnVectorBucket(
     @builtins.classmethod
     def arn_for_vector_bucket(
         cls,
-        resource: _IVectorBucketRef_238bcb24,
+        resource: "_IVectorBucketRef_238bcb24",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -705,7 +833,7 @@ class CfnVectorBucket(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVectorBucket", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -763,22 +891,22 @@ class CfnVectorBucket(
 
     @builtins.property
     @jsii.member(jsii_name="vectorBucketRef")
-    def vector_bucket_ref(self) -> _VectorBucketReference_62393c93:
+    def vector_bucket_ref(self) -> "_VectorBucketReference_62393c93":
         '''A reference to a VectorBucket resource.'''
-        return typing.cast(_VectorBucketReference_62393c93, jsii.get(self, "vectorBucketRef"))
+        return typing.cast("_VectorBucketReference_62393c93", jsii.get(self, "vectorBucketRef"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionConfiguration")
     def encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVectorBucket.EncryptionConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVectorBucket.EncryptionConfigurationProperty"]]:
         '''The encryption configuration for the vector bucket.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVectorBucket.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVectorBucket.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
 
     @encryption_configuration.setter
     def encryption_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVectorBucket.EncryptionConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVectorBucket.EncryptionConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__476996e4c3089c3364c3345d4c51c4d606b950b97248fc4afa1b8517c670f8f6)
@@ -935,7 +1063,7 @@ class CfnVectorBucketPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy: typing.Any,
@@ -975,7 +1103,7 @@ class CfnVectorBucketPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVectorBucketPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1011,9 +1139,9 @@ class CfnVectorBucketPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="vectorBucketPolicyRef")
-    def vector_bucket_policy_ref(self) -> _VectorBucketPolicyReference_3f2d6cbc:
+    def vector_bucket_policy_ref(self) -> "_VectorBucketPolicyReference_3f2d6cbc":
         '''A reference to a VectorBucketPolicy resource.'''
-        return typing.cast(_VectorBucketPolicyReference_3f2d6cbc, jsii.get(self, "vectorBucketPolicyRef"))
+        return typing.cast("_VectorBucketPolicyReference_3f2d6cbc", jsii.get(self, "vectorBucketPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policy")
@@ -1164,7 +1292,7 @@ class CfnVectorBucketProps:
     def __init__(
         self,
         *,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVectorBucket.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVectorBucket.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         vector_bucket_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnVectorBucket``.
@@ -1202,13 +1330,13 @@ class CfnVectorBucketProps:
     @builtins.property
     def encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVectorBucket.EncryptionConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVectorBucket.EncryptionConfigurationProperty"]]:
         '''The encryption configuration for the vector bucket.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3vectors-vectorbucket.html#cfn-s3vectors-vectorbucket-encryptionconfiguration
         '''
         result = self._values.get("encryption_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVectorBucket.EncryptionConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVectorBucket.EncryptionConfigurationProperty"]], result)
 
     @builtins.property
     def vector_bucket_name(self) -> typing.Optional[builtins.str]:
@@ -1256,6 +1384,7 @@ def _typecheckingstub__87bd43a194666dd054aecee5dc42b978d33dae31b98b1bacec49341d4
     data_type: builtins.str,
     dimension: jsii.Number,
     distance_metric: builtins.str,
+    encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     index_name: typing.Optional[builtins.str] = None,
     metadata_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.MetadataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     vector_bucket_arn: typing.Optional[builtins.str] = None,
@@ -1306,6 +1435,12 @@ def _typecheckingstub__fd2e189f3b0010c6a77fa4f43ad73f492b5e1099536bd12a0ebe077c0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3562181b475724860644b029c5aa0b0da6ef36ffc910f5b75f4a2ca99b0ad526(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIndex.EncryptionConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2aff851423be8566880565e79db1928638490e19822427a39ecb4692fac23aba(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -1330,6 +1465,14 @@ def _typecheckingstub__626d4bf5143365f338c97aea670a95f8c1fbfa0ad3a9cc00928821e5e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f9165e9fb93aff2add01bdd93a7038addf5ef28b5c63327f886cde432f32daca(
+    *,
+    kms_key_arn: typing.Optional[builtins.str] = None,
+    sse_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__02647dc0f92f11b90c5132d15f87d8d903be3aad20d526f7d8a526c8d3fc1268(
     *,
     non_filterable_metadata_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -1342,6 +1485,7 @@ def _typecheckingstub__1ea84a5df8ebf668282b156128f8a09e7618a68ade5fffdf6ff86d391
     data_type: builtins.str,
     dimension: jsii.Number,
     distance_metric: builtins.str,
+    encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     index_name: typing.Optional[builtins.str] = None,
     metadata_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.MetadataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     vector_bucket_arn: typing.Optional[builtins.str] = None,

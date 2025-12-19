@@ -82,7 +82,7 @@ class CfnApp(
 ):
     '''Creates an AWS Resilience Hub application.
 
-    An AWS Resilience Hub application is a collection of AWS resources structured to prevent and recover AWS application disruptions. To describe a AWS Resilience Hub application, you provide an application name, resources from one or more AWS CloudFormation stacks, AWS Resource Groups , Terraform state files, AppRegistry applications, and an appropriate resiliency policy. In addition, you can also add resources that are located on Amazon Elastic Kubernetes Service (Amazon EKS) clusters as optional resources. For more information about the number of resources supported per application, see `Service quotas <https://docs.aws.amazon.com/general/latest/gr/resiliencehub.html#limits_resiliencehub>`_ .
+    An AWS Resilience Hub application is a collection of AWS resources structured to prevent and recover AWS application disruptions. To describe a AWS Resilience Hub application, you provide an application name, resources from one or more AWS CloudFormation stacks, Resource Groups , Terraform state files, AppRegistry applications, and an appropriate resiliency policy. In addition, you can also add resources that are located on Amazon Elastic Kubernetes Service (Amazon EKS) clusters as optional resources. For more information about the number of resources supported per application, see `Service quotas <https://docs.aws.amazon.com/general/latest/gr/resiliencehub.html#limits_resiliencehub>`_ .
 
     After you create an AWS Resilience Hub application, you publish it so that you can run a resiliency assessment on it. You can then use recommendations from the assessment to improve resiliency by running another assessment, comparing results, and then iterating the process until you achieve your goals for recovery time objective (RTO) and recovery point objective (RPO).
 
@@ -143,16 +143,16 @@ class CfnApp(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         app_template_body: builtins.str,
         name: builtins.str,
-        resource_mappings: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApp.ResourceMappingProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        resource_mappings: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.ResourceMappingProperty", typing.Dict[builtins.str, typing.Any]]]]],
         app_assessment_schedule: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        event_subscriptions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApp.EventSubscriptionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        permission_model: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApp.PermissionModelProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_subscriptions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.EventSubscriptionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        permission_model: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.PermissionModelProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resiliency_policy_arn: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -190,7 +190,7 @@ class CfnApp(
 
     @jsii.member(jsii_name="arnForApp")
     @builtins.classmethod
-    def arn_for_app(cls, resource: _IAppRef_b94999c1) -> builtins.str:
+    def arn_for_app(cls, resource: "_IAppRef_b94999c1") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -212,7 +212,7 @@ class CfnApp(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApp", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -243,9 +243,9 @@ class CfnApp(
 
     @builtins.property
     @jsii.member(jsii_name="appRef")
-    def app_ref(self) -> _AppReference_ee989556:
+    def app_ref(self) -> "_AppReference_ee989556":
         '''A reference to a App resource.'''
-        return typing.cast(_AppReference_ee989556, jsii.get(self, "appRef"))
+        return typing.cast("_AppReference_ee989556", jsii.get(self, "appRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAppArn")
@@ -272,9 +272,9 @@ class CfnApp(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="appTemplateBody")
@@ -306,14 +306,14 @@ class CfnApp(
     @jsii.member(jsii_name="resourceMappings")
     def resource_mappings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApp.ResourceMappingProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.ResourceMappingProperty"]]]:
         '''An array of ``ResourceMapping`` objects.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApp.ResourceMappingProperty"]]], jsii.get(self, "resourceMappings"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.ResourceMappingProperty"]]], jsii.get(self, "resourceMappings"))
 
     @resource_mappings.setter
     def resource_mappings(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApp.ResourceMappingProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.ResourceMappingProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7be56e25078fc8e2aedbbef7b1762fc9e3fdb0096405151631ffaeb94832cc34)
@@ -350,14 +350,14 @@ class CfnApp(
     @jsii.member(jsii_name="eventSubscriptions")
     def event_subscriptions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApp.EventSubscriptionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.EventSubscriptionProperty"]]]]:
         '''The list of events you would like to subscribe and get notification for.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApp.EventSubscriptionProperty"]]]], jsii.get(self, "eventSubscriptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.EventSubscriptionProperty"]]]], jsii.get(self, "eventSubscriptions"))
 
     @event_subscriptions.setter
     def event_subscriptions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApp.EventSubscriptionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.EventSubscriptionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__64d302607b7a1dfbffee8d2ab82e294e1d08c27584331ec9bea2e75add9db5b6)
@@ -368,14 +368,14 @@ class CfnApp(
     @jsii.member(jsii_name="permissionModel")
     def permission_model(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApp.PermissionModelProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.PermissionModelProperty"]]:
         '''Defines the roles and credentials that AWS Resilience Hub would use while creating the application, importing its resources, and running an assessment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApp.PermissionModelProperty"]], jsii.get(self, "permissionModel"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.PermissionModelProperty"]], jsii.get(self, "permissionModel"))
 
     @permission_model.setter
     def permission_model(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApp.PermissionModelProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.PermissionModelProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2e15df41e400e8a9cff1ec67cfe4cdb6224b7e0faa1f84a7164a3aff0b0462f9)
@@ -767,7 +767,7 @@ class CfnApp(
             self,
             *,
             mapping_type: builtins.str,
-            physical_resource_id: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApp.PhysicalResourceIdProperty", typing.Dict[builtins.str, typing.Any]]],
+            physical_resource_id: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.PhysicalResourceIdProperty", typing.Dict[builtins.str, typing.Any]]],
             eks_source_name: typing.Optional[builtins.str] = None,
             logical_stack_name: typing.Optional[builtins.str] = None,
             resource_name: typing.Optional[builtins.str] = None,
@@ -843,14 +843,14 @@ class CfnApp(
         @builtins.property
         def physical_resource_id(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnApp.PhysicalResourceIdProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnApp.PhysicalResourceIdProperty"]:
             '''Identifier of the physical resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resiliencehub-app-resourcemapping.html#cfn-resiliencehub-app-resourcemapping-physicalresourceid
             '''
             result = self._values.get("physical_resource_id")
             assert result is not None, "Required property 'physical_resource_id' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApp.PhysicalResourceIdProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApp.PhysicalResourceIdProperty"], result)
 
         @builtins.property
         def eks_source_name(self) -> typing.Optional[builtins.str]:
@@ -925,11 +925,11 @@ class CfnAppProps:
         *,
         app_template_body: builtins.str,
         name: builtins.str,
-        resource_mappings: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.ResourceMappingProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        resource_mappings: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.ResourceMappingProperty", typing.Dict[builtins.str, typing.Any]]]]],
         app_assessment_schedule: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        event_subscriptions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.EventSubscriptionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        permission_model: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.PermissionModelProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_subscriptions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.EventSubscriptionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        permission_model: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.PermissionModelProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resiliency_policy_arn: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -1241,14 +1241,14 @@ class CfnAppProps:
     @builtins.property
     def resource_mappings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApp.ResourceMappingProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.ResourceMappingProperty"]]]:
         '''An array of ``ResourceMapping`` objects.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehub-app.html#cfn-resiliencehub-app-resourcemappings
         '''
         result = self._values.get("resource_mappings")
         assert result is not None, "Required property 'resource_mappings' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApp.ResourceMappingProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.ResourceMappingProperty"]]], result)
 
     @builtins.property
     def app_assessment_schedule(self) -> typing.Optional[builtins.str]:
@@ -1271,7 +1271,7 @@ class CfnAppProps:
     @builtins.property
     def event_subscriptions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApp.EventSubscriptionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.EventSubscriptionProperty"]]]]:
         '''The list of events you would like to subscribe and get notification for.
 
         Currently, AWS Resilience Hub supports notifications only for *Drift detected* and *Scheduled assessment failure* events.
@@ -1279,18 +1279,18 @@ class CfnAppProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehub-app.html#cfn-resiliencehub-app-eventsubscriptions
         '''
         result = self._values.get("event_subscriptions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApp.EventSubscriptionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.EventSubscriptionProperty"]]]], result)
 
     @builtins.property
     def permission_model(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApp.PermissionModelProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.PermissionModelProperty"]]:
         '''Defines the roles and credentials that AWS Resilience Hub would use while creating the application, importing its resources, and running an assessment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehub-app.html#cfn-resiliencehub-app-permissionmodel
         '''
         result = self._values.get("permission_model")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApp.PermissionModelProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.PermissionModelProperty"]], result)
 
     @builtins.property
     def resiliency_policy_arn(self) -> typing.Optional[builtins.str]:
@@ -1367,10 +1367,10 @@ class CfnResiliencyPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        policy: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnResiliencyPolicy.FailurePolicyProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        policy: typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnResiliencyPolicy.FailurePolicyProperty", typing.Dict[builtins.str, typing.Any]]]]],
         policy_name: builtins.str,
         tier: builtins.str,
         data_location_constraint: typing.Optional[builtins.str] = None,
@@ -1416,7 +1416,7 @@ class CfnResiliencyPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResiliencyPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1461,28 +1461,28 @@ class CfnResiliencyPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="resiliencyPolicyRef")
-    def resiliency_policy_ref(self) -> _ResiliencyPolicyReference_c0a99625:
+    def resiliency_policy_ref(self) -> "_ResiliencyPolicyReference_c0a99625":
         '''A reference to a ResiliencyPolicy resource.'''
-        return typing.cast(_ResiliencyPolicyReference_c0a99625, jsii.get(self, "resiliencyPolicyRef"))
+        return typing.cast("_ResiliencyPolicyReference_c0a99625", jsii.get(self, "resiliencyPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="policy")
     def policy(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnResiliencyPolicy.FailurePolicyProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnResiliencyPolicy.FailurePolicyProperty"]]]:
         '''The resiliency policy.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnResiliencyPolicy.FailurePolicyProperty"]]], jsii.get(self, "policy"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnResiliencyPolicy.FailurePolicyProperty"]]], jsii.get(self, "policy"))
 
     @policy.setter
     def policy(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnResiliencyPolicy.FailurePolicyProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnResiliencyPolicy.FailurePolicyProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2c81f492b83bee694a01e4aa4ae84bc7903a84252105f01380996bcf77119a83)
@@ -1645,7 +1645,7 @@ class CfnResiliencyPolicyProps:
     def __init__(
         self,
         *,
-        policy: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnResiliencyPolicy.FailurePolicyProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        policy: typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnResiliencyPolicy.FailurePolicyProperty", typing.Dict[builtins.str, typing.Any]]]]],
         policy_name: builtins.str,
         tier: builtins.str,
         data_location_constraint: typing.Optional[builtins.str] = None,
@@ -1711,14 +1711,14 @@ class CfnResiliencyPolicyProps:
     @builtins.property
     def policy(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnResiliencyPolicy.FailurePolicyProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnResiliencyPolicy.FailurePolicyProperty"]]]:
         '''The resiliency policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehub-resiliencypolicy.html#cfn-resiliencehub-resiliencypolicy-policy
         '''
         result = self._values.get("policy")
         assert result is not None, "Required property 'policy' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnResiliencyPolicy.FailurePolicyProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnResiliencyPolicy.FailurePolicyProperty"]]], result)
 
     @builtins.property
     def policy_name(self) -> builtins.str:

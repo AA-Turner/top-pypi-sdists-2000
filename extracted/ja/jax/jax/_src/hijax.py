@@ -92,9 +92,16 @@ class HiType(core.AbstractValue):
   # autodiff interface
   def to_tangent_aval(self) -> HiType:
     assert False, "must override"
+
+  # Subclasses should override if the cotangent type is a function of primal
+  # type. For example, CT unreduced = reduced and vice-versa.
+  def to_cotangent_aval(self) -> HiType:
+    return self.to_tangent_aval()
+
   # the next two are required if this type is itself a tangent type
   def vspace_zero(self) -> HiVal:
     assert False, "must override"
+
   def vspace_add(self, x: HiVal, y: HiVal) -> HiVal:
     assert False, "must override"
 
@@ -126,6 +133,11 @@ class MutableHiType(core.AbstractValue):
   # autodiff interface
   def to_tangent_aval(self) -> HiType:
     assert False, "must override"
+
+  # Subclasses should override if the cotangent type is a function of primal
+  # type. For example, CT unreduced = reduced and vice-versa.
+  def to_cotangent_aval(self) -> HiType:
+    return self.to_tangent_aval()
 
 def register_hitype(val_cls, typeof_fn) -> None:
   core.pytype_aval_mappings[val_cls] = typeof_fn
@@ -414,8 +426,7 @@ def _call_hi_primitive_batcher(axis_data, args_flat, dims_flat, prim):
   return ans_flat, dims_flat
 batching.fancy_primitive_batchers[call_hi_primitive_p] = _call_hi_primitive_batcher
 
-def _call_hi_primitive_linearize(nz_in, *args_flat, prim):
-  assert all(nz_in)
+def _call_hi_primitive_linearize(nz_in_flat, *args_flat, prim):
   args = tree_unflatten(prim.in_tree, args_flat)
   ans, residuals = prim.vjp_fwd(*args)
   # TODO(dougalm): does the fwd/bwd API force us to assume the nzs_out are all False
@@ -423,25 +434,30 @@ def _call_hi_primitive_linearize(nz_in, *args_flat, prim):
   # LinearizeTrace.ProcessPrimitive)?
   ans_flat = tree_leaves_checked(prim.out_tree, ans)
   nzs_out = [True for _ in ans_flat]
-  return (ans_flat, nzs_out, residuals, partial(fake_linear_op, prim))
+  return (ans_flat, nzs_out, residuals, partial(fake_linear_op, prim, nz_in_flat))
 
-def fake_linear_op(prim, rs, *tangents):
+def fake_linear_op(prim, nz_in_flat, rs, *tangents):
   residuals_flat, residuals_tree = tree_flatten(rs)
-  return call_hi_primitive_linearized_p.bind(*residuals_flat, *tangents,
-                                             residuals_tree=residuals_tree, prim=prim)
+  tangents_flat, _ = tree_flatten(tangents)  # prune symbolic zeros
+  return call_hi_primitive_linearized_p.bind(
+      *residuals_flat, *tangents_flat,
+      residuals_tree=residuals_tree, nz_in_flat=tuple(nz_in_flat), prim=prim)
 
 ad.primitive_linearizations[call_hi_primitive_p] = _call_hi_primitive_linearize
 
 call_hi_primitive_linearized_p = core.Primitive("call_hi_primitive_linearized")
 call_hi_primitive_linearized_p.multiple_results = True
-call_hi_primitive_linearized_p.is_high = lambda *args, prim, residuals_tree: True  # type: ignore
+call_hi_primitive_linearized_p.is_high = lambda *args, prim, **_: True  # type: ignore
 @call_hi_primitive_linearized_p.def_abstract_eval
-def _call_hi_primitive_linearized_abstract_eval(*_args, prim, residuals_tree):
+def _call_hi_primitive_linearized_abstract_eval(*_args, prim, residuals_tree, nz_in_flat):
   return [t.to_tangent_aval() for t in prim.out_avals_flat]  # TODO(dougalm): handle nonzeros
 
-def _call_hi_primitive_linearized_transpose(cts_flat, *args, prim, residuals_tree):
+def _call_hi_primitive_linearized_transpose(cts_flat, *args, prim, residuals_tree, nz_in_flat):
   residuals_flat, accums_flat = split_list(args, [residuals_tree.num_leaves])
   residuals = tree_unflatten(residuals_tree, residuals_flat)
+  accums_flat_ = iter(accums_flat)
+  accums_flat = [next(accums_flat_) if nz else ad.NullAccum() for nz in nz_in_flat]
+  assert next(accums_flat_, None) is None
   accums = tree_unflatten(prim.in_tree, accums_flat)
   cts = tree_unflatten(prim.out_tree, cts_flat)
   none = prim.vjp_bwd(residuals, cts, *accums)

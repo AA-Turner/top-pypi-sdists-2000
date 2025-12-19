@@ -92,6 +92,7 @@ class CfnDocumentClassifier(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_comprehend as comprehend
@@ -151,21 +152,21 @@ class CfnDocumentClassifier(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         data_access_role_arn: builtins.str,
         document_classifier_name: builtins.str,
-        input_data_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        input_data_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         language_code: builtins.str,
         mode: typing.Optional[builtins.str] = None,
         model_kms_key_id: typing.Optional[builtins.str] = None,
         model_policy: typing.Optional[builtins.str] = None,
-        output_data_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        output_data_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         version_name: typing.Optional[builtins.str] = None,
         volume_kms_key_id: typing.Optional[builtins.str] = None,
-        vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDocumentClassifier.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDocumentClassifier.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Comprehend::DocumentClassifier``.
 
@@ -209,7 +210,7 @@ class CfnDocumentClassifier(
     @builtins.classmethod
     def arn_for_document_classifier(
         cls,
-        resource: _IDocumentClassifierRef_5d01dd5d,
+        resource: "_IDocumentClassifierRef_5d01dd5d",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -232,7 +233,7 @@ class CfnDocumentClassifier(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDocumentClassifier", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -272,9 +273,9 @@ class CfnDocumentClassifier(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -283,9 +284,9 @@ class CfnDocumentClassifier(
 
     @builtins.property
     @jsii.member(jsii_name="documentClassifierRef")
-    def document_classifier_ref(self) -> _DocumentClassifierReference_033e677b:
+    def document_classifier_ref(self) -> "_DocumentClassifierReference_033e677b":
         '''A reference to a DocumentClassifier resource.'''
-        return typing.cast(_DocumentClassifierReference_033e677b, jsii.get(self, "documentClassifierRef"))
+        return typing.cast("_DocumentClassifierReference_033e677b", jsii.get(self, "documentClassifierRef"))
 
     @builtins.property
     @jsii.member(jsii_name="dataAccessRoleArn")
@@ -317,14 +318,14 @@ class CfnDocumentClassifier(
     @jsii.member(jsii_name="inputDataConfig")
     def input_data_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty"]:
         '''Specifies the format and location of the input data for the job.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty"], jsii.get(self, "inputDataConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty"], jsii.get(self, "inputDataConfig"))
 
     @input_data_config.setter
     def input_data_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__72e4443e99a7ca079c78d2d3e95ad08de986276725c191c60fe4bb9c079cb943)
@@ -387,14 +388,14 @@ class CfnDocumentClassifier(
     @jsii.member(jsii_name="outputDataConfig")
     def output_data_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty"]]:
         '''Provides output results configuration parameters for custom classifier jobs.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty"]], jsii.get(self, "outputDataConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty"]], jsii.get(self, "outputDataConfig"))
 
     @output_data_config.setter
     def output_data_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__77e41c78333ebb35c2df89407137e02c535908d5a9507232b4191645cf0b545b)
@@ -403,12 +404,12 @@ class CfnDocumentClassifier(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to associate with the document classifier.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c98bb6f280f6bbf3f16d43daf50dcb88973e23a7318af37a5a3b1abcea57d5c5)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -444,14 +445,14 @@ class CfnDocumentClassifier(
     @jsii.member(jsii_name="vpcConfig")
     def vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.VpcConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.VpcConfigProperty"]]:
         '''Configuration parameters for a private Virtual Private Cloud (VPC) containing the resources you are using for your custom classifier.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.VpcConfigProperty"]], jsii.get(self, "vpcConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.VpcConfigProperty"]], jsii.get(self, "vpcConfig"))
 
     @vpc_config.setter
     def vpc_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.VpcConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.VpcConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__abdfe2fb65b1015aa13bcd7af0d9989b0bf86879cf9af256182e344894204fd3)
@@ -659,10 +660,10 @@ class CfnDocumentClassifier(
         def __init__(
             self,
             *,
-            augmented_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDocumentClassifier.AugmentedManifestsListItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            augmented_manifests: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDocumentClassifier.AugmentedManifestsListItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             data_format: typing.Optional[builtins.str] = None,
-            document_reader_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDocumentClassifier.DocumentReaderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            documents: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDocumentClassifier.DocumentClassifierDocumentsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            document_reader_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDocumentClassifier.DocumentReaderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            documents: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDocumentClassifier.DocumentClassifierDocumentsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             document_type: typing.Optional[builtins.str] = None,
             label_delimiter: typing.Optional[builtins.str] = None,
             s3_uri: typing.Optional[builtins.str] = None,
@@ -749,7 +750,7 @@ class CfnDocumentClassifier(
         @builtins.property
         def augmented_manifests(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.AugmentedManifestsListItemProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.AugmentedManifestsListItemProperty"]]]]:
             '''A list of augmented manifest files that provide training data for your custom model.
 
             An augmented manifest file is a labeled dataset that is produced by Amazon SageMaker Ground Truth.
@@ -759,7 +760,7 @@ class CfnDocumentClassifier(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-comprehend-documentclassifier-documentclassifierinputdataconfig.html#cfn-comprehend-documentclassifier-documentclassifierinputdataconfig-augmentedmanifests
             '''
             result = self._values.get("augmented_manifests")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.AugmentedManifestsListItemProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.AugmentedManifestsListItemProperty"]]]], result)
 
         @builtins.property
         def data_format(self) -> typing.Optional[builtins.str]:
@@ -780,17 +781,17 @@ class CfnDocumentClassifier(
         @builtins.property
         def document_reader_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.DocumentReaderConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentReaderConfigProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-comprehend-documentclassifier-documentclassifierinputdataconfig.html#cfn-comprehend-documentclassifier-documentclassifierinputdataconfig-documentreaderconfig
             '''
             result = self._values.get("document_reader_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.DocumentReaderConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentReaderConfigProperty"]], result)
 
         @builtins.property
         def documents(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.DocumentClassifierDocumentsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentClassifierDocumentsProperty"]]:
             '''The S3 location of the training documents.
 
             This parameter is required in a request to create a native document model.
@@ -798,7 +799,7 @@ class CfnDocumentClassifier(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-comprehend-documentclassifier-documentclassifierinputdataconfig.html#cfn-comprehend-documentclassifier-documentclassifierinputdataconfig-documents
             '''
             result = self._values.get("documents")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDocumentClassifier.DocumentClassifierDocumentsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentClassifierDocumentsProperty"]], result)
 
         @builtins.property
         def document_type(self) -> typing.Optional[builtins.str]:
@@ -1159,16 +1160,16 @@ class CfnDocumentClassifierProps:
         *,
         data_access_role_arn: builtins.str,
         document_classifier_name: builtins.str,
-        input_data_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        input_data_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         language_code: builtins.str,
         mode: typing.Optional[builtins.str] = None,
         model_kms_key_id: typing.Optional[builtins.str] = None,
         model_policy: typing.Optional[builtins.str] = None,
-        output_data_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        output_data_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         version_name: typing.Optional[builtins.str] = None,
         volume_kms_key_id: typing.Optional[builtins.str] = None,
-        vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDocumentClassifier.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDocumentClassifier.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDocumentClassifier``.
 
@@ -1190,6 +1191,7 @@ class CfnDocumentClassifierProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_comprehend as comprehend
@@ -1306,14 +1308,14 @@ class CfnDocumentClassifierProps:
     @builtins.property
     def input_data_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty"]:
         '''Specifies the format and location of the input data for the job.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-documentclassifier.html#cfn-comprehend-documentclassifier-inputdataconfig
         '''
         result = self._values.get("input_data_config")
         assert result is not None, "Required property 'input_data_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentClassifierInputDataConfigProperty"], result)
 
     @builtins.property
     def language_code(self) -> builtins.str:
@@ -1374,16 +1376,16 @@ class CfnDocumentClassifierProps:
     @builtins.property
     def output_data_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty"]]:
         '''Provides output results configuration parameters for custom classifier jobs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-documentclassifier.html#cfn-comprehend-documentclassifier-outputdataconfig
         '''
         result = self._values.get("output_data_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.DocumentClassifierOutputDataConfigProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to associate with the document classifier.
 
         A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department.
@@ -1391,7 +1393,7 @@ class CfnDocumentClassifierProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-documentclassifier.html#cfn-comprehend-documentclassifier-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def version_name(self) -> typing.Optional[builtins.str]:
@@ -1421,7 +1423,7 @@ class CfnDocumentClassifierProps:
     @builtins.property
     def vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDocumentClassifier.VpcConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.VpcConfigProperty"]]:
         '''Configuration parameters for a private Virtual Private Cloud (VPC) containing the resources you are using for your custom classifier.
 
         For more information, see `Amazon VPC <https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html>`_ .
@@ -1429,7 +1431,7 @@ class CfnDocumentClassifierProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-documentclassifier.html#cfn-comprehend-documentclassifier-vpcconfig
         '''
         result = self._values.get("vpc_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDocumentClassifier.VpcConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDocumentClassifier.VpcConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1467,6 +1469,7 @@ class CfnFlywheel(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_comprehend as comprehend
@@ -1513,17 +1516,17 @@ class CfnFlywheel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         data_access_role_arn: builtins.str,
         data_lake_s3_uri: builtins.str,
         flywheel_name: builtins.str,
         active_model_arn: typing.Optional[builtins.str] = None,
-        data_security_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlywheel.DataSecurityConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        data_security_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFlywheel.DataSecurityConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         model_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        task_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlywheel.TaskConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        task_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFlywheel.TaskConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Comprehend::Flywheel``.
 
@@ -1557,7 +1560,7 @@ class CfnFlywheel(
 
     @jsii.member(jsii_name="arnForFlywheel")
     @builtins.classmethod
-    def arn_for_flywheel(cls, resource: _IFlywheelRef_9ce9ef1d) -> builtins.str:
+    def arn_for_flywheel(cls, resource: "_IFlywheelRef_9ce9ef1d") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1579,7 +1582,7 @@ class CfnFlywheel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFlywheel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1624,15 +1627,15 @@ class CfnFlywheel(
 
     @builtins.property
     @jsii.member(jsii_name="flywheelRef")
-    def flywheel_ref(self) -> _FlywheelReference_2beb1e46:
+    def flywheel_ref(self) -> "_FlywheelReference_2beb1e46":
         '''A reference to a Flywheel resource.'''
-        return typing.cast(_FlywheelReference_2beb1e46, jsii.get(self, "flywheelRef"))
+        return typing.cast("_FlywheelReference_2beb1e46", jsii.get(self, "flywheelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="dataAccessRoleArn")
@@ -1690,14 +1693,14 @@ class CfnFlywheel(
     @jsii.member(jsii_name="dataSecurityConfig")
     def data_security_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.DataSecurityConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.DataSecurityConfigProperty"]]:
         '''Data security configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.DataSecurityConfigProperty"]], jsii.get(self, "dataSecurityConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.DataSecurityConfigProperty"]], jsii.get(self, "dataSecurityConfig"))
 
     @data_security_config.setter
     def data_security_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.DataSecurityConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.DataSecurityConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0fd6d966515c5a7a9a270dde08d7f0431bd24b3c8ab2bf5c260c0fdd300d5b85)
@@ -1719,12 +1722,12 @@ class CfnFlywheel(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags associated with the endpoint being created.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__41a3b218c7e1174bfadbab052fd5bed02876b76b6078e4d6558275409d43b5ee)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1734,14 +1737,14 @@ class CfnFlywheel(
     @jsii.member(jsii_name="taskConfig")
     def task_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.TaskConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.TaskConfigProperty"]]:
         '''Configuration about the model associated with a flywheel.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.TaskConfigProperty"]], jsii.get(self, "taskConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.TaskConfigProperty"]], jsii.get(self, "taskConfig"))
 
     @task_config.setter
     def task_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.TaskConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.TaskConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0986d76e0fdf3e18c2b4c799702f67afa8cf1195e0284e9e6d264962d96deda0)
@@ -1765,7 +1768,7 @@ class CfnFlywheel(
             data_lake_kms_key_id: typing.Optional[builtins.str] = None,
             model_kms_key_id: typing.Optional[builtins.str] = None,
             volume_kms_key_id: typing.Optional[builtins.str] = None,
-            vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlywheel.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFlywheel.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Data security configuration.
 
@@ -1844,7 +1847,7 @@ class CfnFlywheel(
         @builtins.property
         def vpc_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.VpcConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.VpcConfigProperty"]]:
             '''Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for the job.
 
             For more information, see `Amazon VPC <https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html>`_ .
@@ -1852,7 +1855,7 @@ class CfnFlywheel(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-comprehend-flywheel-datasecurityconfig.html#cfn-comprehend-flywheel-datasecurityconfig-vpcconfig
             '''
             result = self._values.get("vpc_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.VpcConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.VpcConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1947,7 +1950,7 @@ class CfnFlywheel(
         def __init__(
             self,
             *,
-            entity_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlywheel.EntityTypesListItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            entity_types: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFlywheel.EntityTypesListItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Configuration required for an entity recognition model.
 
@@ -1978,13 +1981,13 @@ class CfnFlywheel(
         @builtins.property
         def entity_types(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.EntityTypesListItemProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.EntityTypesListItemProperty"]]]]:
             '''Up to 25 entity types that the model is trained to recognize.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-comprehend-flywheel-entityrecognitionconfig.html#cfn-comprehend-flywheel-entityrecognitionconfig-entitytypes
             '''
             result = self._values.get("entity_types")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.EntityTypesListItemProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.EntityTypesListItemProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2065,8 +2068,8 @@ class CfnFlywheel(
             self,
             *,
             language_code: builtins.str,
-            document_classification_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlywheel.DocumentClassificationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            entity_recognition_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlywheel.EntityRecognitionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            document_classification_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFlywheel.DocumentClassificationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            entity_recognition_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFlywheel.EntityRecognitionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Configuration about the model associated with a flywheel.
 
@@ -2126,24 +2129,24 @@ class CfnFlywheel(
         @builtins.property
         def document_classification_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.DocumentClassificationConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.DocumentClassificationConfigProperty"]]:
             '''Configuration required for a document classification model.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-comprehend-flywheel-taskconfig.html#cfn-comprehend-flywheel-taskconfig-documentclassificationconfig
             '''
             result = self._values.get("document_classification_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.DocumentClassificationConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.DocumentClassificationConfigProperty"]], result)
 
         @builtins.property
         def entity_recognition_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.EntityRecognitionConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.EntityRecognitionConfigProperty"]]:
             '''Configuration required for an entity recognition model.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-comprehend-flywheel-taskconfig.html#cfn-comprehend-flywheel-taskconfig-entityrecognitionconfig
             '''
             result = self._values.get("entity_recognition_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlywheel.EntityRecognitionConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.EntityRecognitionConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2256,10 +2259,10 @@ class CfnFlywheelProps:
         data_lake_s3_uri: builtins.str,
         flywheel_name: builtins.str,
         active_model_arn: typing.Optional[builtins.str] = None,
-        data_security_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlywheel.DataSecurityConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        data_security_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFlywheel.DataSecurityConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         model_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        task_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlywheel.TaskConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        task_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFlywheel.TaskConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFlywheel``.
 
@@ -2277,6 +2280,7 @@ class CfnFlywheelProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_comprehend as comprehend
@@ -2388,13 +2392,13 @@ class CfnFlywheelProps:
     @builtins.property
     def data_security_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFlywheel.DataSecurityConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.DataSecurityConfigProperty"]]:
         '''Data security configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-flywheel.html#cfn-comprehend-flywheel-datasecurityconfig
         '''
         result = self._values.get("data_security_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFlywheel.DataSecurityConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.DataSecurityConfigProperty"]], result)
 
     @builtins.property
     def model_type(self) -> typing.Optional[builtins.str]:
@@ -2406,7 +2410,7 @@ class CfnFlywheelProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags associated with the endpoint being created.
 
         A tag is a key-value pair that adds metadata to the endpoint. For example, a tag with "Sales" as the key might be added to an endpoint to indicate its use by the sales department.
@@ -2414,18 +2418,18 @@ class CfnFlywheelProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-flywheel.html#cfn-comprehend-flywheel-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def task_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFlywheel.TaskConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.TaskConfigProperty"]]:
         '''Configuration about the model associated with a flywheel.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-flywheel.html#cfn-comprehend-flywheel-taskconfig
         '''
         result = self._values.get("task_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFlywheel.TaskConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFlywheel.TaskConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

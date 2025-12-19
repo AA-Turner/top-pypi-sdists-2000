@@ -101,10 +101,10 @@ class CfnFlowTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        definition: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlowTemplate.DefinitionDocumentProperty", typing.Dict[builtins.str, typing.Any]]],
+        definition: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFlowTemplate.DefinitionDocumentProperty", typing.Dict[builtins.str, typing.Any]]],
         compatible_namespace_version: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Create a new ``AWS::IoTThingsGraph::FlowTemplate``.
@@ -138,7 +138,7 @@ class CfnFlowTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFlowTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -182,21 +182,21 @@ class CfnFlowTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="flowTemplateRef")
-    def flow_template_ref(self) -> _FlowTemplateReference_1be0c054:
+    def flow_template_ref(self) -> "_FlowTemplateReference_1be0c054":
         '''A reference to a FlowTemplate resource.'''
-        return typing.cast(_FlowTemplateReference_1be0c054, jsii.get(self, "flowTemplateRef"))
+        return typing.cast("_FlowTemplateReference_1be0c054", jsii.get(self, "flowTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="definition")
     def definition(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnFlowTemplate.DefinitionDocumentProperty"]:
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFlowTemplate.DefinitionDocumentProperty"], jsii.get(self, "definition"))
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnFlowTemplate.DefinitionDocumentProperty"]:
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFlowTemplate.DefinitionDocumentProperty"], jsii.get(self, "definition"))
 
     @definition.setter
     def definition(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnFlowTemplate.DefinitionDocumentProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnFlowTemplate.DefinitionDocumentProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b3d77d08462d8eb61965d76c3c2dd11f46f35cba1f68eb28985b929707f6e006)
@@ -291,7 +291,7 @@ class CfnFlowTemplateProps:
     def __init__(
         self,
         *,
-        definition: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowTemplate.DefinitionDocumentProperty, typing.Dict[builtins.str, typing.Any]]],
+        definition: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFlowTemplate.DefinitionDocumentProperty", typing.Dict[builtins.str, typing.Any]]],
         compatible_namespace_version: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties for defining a ``CfnFlowTemplate``.
@@ -331,13 +331,13 @@ class CfnFlowTemplateProps:
     @builtins.property
     def definition(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnFlowTemplate.DefinitionDocumentProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnFlowTemplate.DefinitionDocumentProperty"]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotthingsgraph-flowtemplate.html#cfn-iotthingsgraph-flowtemplate-definition
         '''
         result = self._values.get("definition")
         assert result is not None, "Required property 'definition' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnFlowTemplate.DefinitionDocumentProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFlowTemplate.DefinitionDocumentProperty"], result)
 
     @builtins.property
     def compatible_namespace_version(self) -> typing.Optional[jsii.Number]:

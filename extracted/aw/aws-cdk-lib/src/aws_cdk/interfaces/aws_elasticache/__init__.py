@@ -145,7 +145,7 @@ class ICacheClusterRef(
 
     @builtins.property
     @jsii.member(jsii_name="cacheClusterRef")
-    def cache_cluster_ref(self) -> CacheClusterReference:
+    def cache_cluster_ref(self) -> "CacheClusterReference":
         '''(experimental) A reference to a CacheCluster resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _ICacheClusterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="cacheClusterRef")
-    def cache_cluster_ref(self) -> CacheClusterReference:
+    def cache_cluster_ref(self) -> "CacheClusterReference":
         '''(experimental) A reference to a CacheCluster resource.
 
         :stability: experimental
         '''
-        return typing.cast(CacheClusterReference, jsii.get(self, "cacheClusterRef"))
+        return typing.cast("CacheClusterReference", jsii.get(self, "cacheClusterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICacheClusterRef).__jsii_proxy_class__ = lambda : _ICacheClusterRefProxy
@@ -192,7 +192,7 @@ class IGlobalReplicationGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="globalReplicationGroupRef")
-    def global_replication_group_ref(self) -> GlobalReplicationGroupReference:
+    def global_replication_group_ref(self) -> "GlobalReplicationGroupReference":
         '''(experimental) A reference to a GlobalReplicationGroup resource.
 
         :stability: experimental
@@ -213,12 +213,12 @@ class _IGlobalReplicationGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="globalReplicationGroupRef")
-    def global_replication_group_ref(self) -> GlobalReplicationGroupReference:
+    def global_replication_group_ref(self) -> "GlobalReplicationGroupReference":
         '''(experimental) A reference to a GlobalReplicationGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(GlobalReplicationGroupReference, jsii.get(self, "globalReplicationGroupRef"))
+        return typing.cast("GlobalReplicationGroupReference", jsii.get(self, "globalReplicationGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGlobalReplicationGroupRef).__jsii_proxy_class__ = lambda : _IGlobalReplicationGroupRefProxy

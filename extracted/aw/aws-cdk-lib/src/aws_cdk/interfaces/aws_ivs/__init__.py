@@ -145,7 +145,7 @@ class IChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="channelRef")
-    def channel_ref(self) -> ChannelReference:
+    def channel_ref(self) -> "ChannelReference":
         '''(experimental) A reference to a Channel resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="channelRef")
-    def channel_ref(self) -> ChannelReference:
+    def channel_ref(self) -> "ChannelReference":
         '''(experimental) A reference to a Channel resource.
 
         :stability: experimental
         '''
-        return typing.cast(ChannelReference, jsii.get(self, "channelRef"))
+        return typing.cast("ChannelReference", jsii.get(self, "channelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IChannelRef).__jsii_proxy_class__ = lambda : _IChannelRefProxy
@@ -190,7 +190,7 @@ class IEncoderConfigurationRef(
 
     @builtins.property
     @jsii.member(jsii_name="encoderConfigurationRef")
-    def encoder_configuration_ref(self) -> EncoderConfigurationReference:
+    def encoder_configuration_ref(self) -> "EncoderConfigurationReference":
         '''(experimental) A reference to a EncoderConfiguration resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IEncoderConfigurationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="encoderConfigurationRef")
-    def encoder_configuration_ref(self) -> EncoderConfigurationReference:
+    def encoder_configuration_ref(self) -> "EncoderConfigurationReference":
         '''(experimental) A reference to a EncoderConfiguration resource.
 
         :stability: experimental
         '''
-        return typing.cast(EncoderConfigurationReference, jsii.get(self, "encoderConfigurationRef"))
+        return typing.cast("EncoderConfigurationReference", jsii.get(self, "encoderConfigurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEncoderConfigurationRef).__jsii_proxy_class__ = lambda : _IEncoderConfigurationRefProxy

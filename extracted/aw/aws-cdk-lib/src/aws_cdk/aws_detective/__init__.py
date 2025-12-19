@@ -93,6 +93,7 @@ class CfnGraph(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_detective as detective
@@ -108,11 +109,11 @@ class CfnGraph(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        auto_enable_members: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_enable_members: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Detective::Graph``.
 
@@ -131,7 +132,7 @@ class CfnGraph(
 
     @jsii.member(jsii_name="arnForGraph")
     @builtins.classmethod
-    def arn_for_graph(cls, resource: _IGraphRef_fe0a6bfe) -> builtins.str:
+    def arn_for_graph(cls, resource: "_IGraphRef_fe0a6bfe") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -153,7 +154,7 @@ class CfnGraph(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGraph", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -198,28 +199,28 @@ class CfnGraph(
 
     @builtins.property
     @jsii.member(jsii_name="graphRef")
-    def graph_ref(self) -> _GraphReference_ff4b8011:
+    def graph_ref(self) -> "_GraphReference_ff4b8011":
         '''A reference to a Graph resource.'''
-        return typing.cast(_GraphReference_ff4b8011, jsii.get(self, "graphRef"))
+        return typing.cast("_GraphReference_ff4b8011", jsii.get(self, "graphRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="autoEnableMembers")
     def auto_enable_members(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to automatically enable new organization accounts as member accounts in the organization behavior graph.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "autoEnableMembers"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "autoEnableMembers"))
 
     @auto_enable_members.setter
     def auto_enable_members(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__017213db557533db476b11d3395ad002c1c77bc8cc9e28bdee567c8e34fc6ae0)
@@ -228,12 +229,12 @@ class CfnGraph(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tag values to assign to the new behavior graph.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__eeb800de7e2138cfe98794158b6d6acc2871d2831f80f41887f5118e20ddcba7)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -249,8 +250,8 @@ class CfnGraphProps:
     def __init__(
         self,
         *,
-        auto_enable_members: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_enable_members: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnGraph``.
 
@@ -262,6 +263,7 @@ class CfnGraphProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_detective as detective
@@ -287,7 +289,7 @@ class CfnGraphProps:
     @builtins.property
     def auto_enable_members(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to automatically enable new organization accounts as member accounts in the organization behavior graph.
 
         By default, this property is set to ``false`` . If you want to change the value of this property, you must be the Detective administrator for the organization. For more information on setting a Detective administrator account, see `AWS::Detective::OrganizationAdmin <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-detective-organizationadmin.html>`_ .
@@ -297,16 +299,16 @@ class CfnGraphProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-detective-graph.html#cfn-detective-graph-autoenablemembers
         '''
         result = self._values.get("auto_enable_members")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tag values to assign to the new behavior graph.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-detective-graph.html#cfn-detective-graph-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -353,13 +355,13 @@ class CfnMemberInvitation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         graph_arn: builtins.str,
         member_email_address: builtins.str,
         member_id: builtins.str,
-        disable_email_notification: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        disable_email_notification: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         message: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Detective::MemberInvitation``.
@@ -399,7 +401,7 @@ class CfnMemberInvitation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMemberInvitation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -435,9 +437,9 @@ class CfnMemberInvitation(
 
     @builtins.property
     @jsii.member(jsii_name="memberInvitationRef")
-    def member_invitation_ref(self) -> _MemberInvitationReference_c4afb4a1:
+    def member_invitation_ref(self) -> "_MemberInvitationReference_c4afb4a1":
         '''A reference to a MemberInvitation resource.'''
-        return typing.cast(_MemberInvitationReference_c4afb4a1, jsii.get(self, "memberInvitationRef"))
+        return typing.cast("_MemberInvitationReference_c4afb4a1", jsii.get(self, "memberInvitationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="graphArn")
@@ -482,14 +484,14 @@ class CfnMemberInvitation(
     @jsii.member(jsii_name="disableEmailNotification")
     def disable_email_notification(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to send an invitation email to the member account.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "disableEmailNotification"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "disableEmailNotification"))
 
     @disable_email_notification.setter
     def disable_email_notification(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__660e62f59a214a78dff16da1b8a2a68e2f58419729f3c700cdee6f7697a65eaf)
@@ -528,7 +530,7 @@ class CfnMemberInvitationProps:
         graph_arn: builtins.str,
         member_email_address: builtins.str,
         member_id: builtins.str,
-        disable_email_notification: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        disable_email_notification: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         message: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnMemberInvitation``.
@@ -610,7 +612,7 @@ class CfnMemberInvitationProps:
     @builtins.property
     def disable_email_notification(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to send an invitation email to the member account.
 
         If set to true, the member account does not receive an invitation email.
@@ -620,7 +622,7 @@ class CfnMemberInvitationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-detective-memberinvitation.html#cfn-detective-memberinvitation-disableemailnotification
         '''
         result = self._values.get("disable_email_notification")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def message(self) -> typing.Optional[builtins.str]:
@@ -670,7 +672,7 @@ class CfnOrganizationAdmin(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account_id: builtins.str,
@@ -702,7 +704,7 @@ class CfnOrganizationAdmin(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOrganizationAdmin", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -747,9 +749,9 @@ class CfnOrganizationAdmin(
 
     @builtins.property
     @jsii.member(jsii_name="organizationAdminRef")
-    def organization_admin_ref(self) -> _OrganizationAdminReference_217a72d9:
+    def organization_admin_ref(self) -> "_OrganizationAdminReference_217a72d9":
         '''A reference to a OrganizationAdmin resource.'''
-        return typing.cast(_OrganizationAdminReference_217a72d9, jsii.get(self, "organizationAdminRef"))
+        return typing.cast("_OrganizationAdminReference_217a72d9", jsii.get(self, "organizationAdminRef"))
 
     @builtins.property
     @jsii.member(jsii_name="accountId")

@@ -121,7 +121,7 @@ class CfnCertificate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         certificate_identifier: typing.Optional[builtins.str] = None,
@@ -150,7 +150,7 @@ class CfnCertificate(
 
     @jsii.member(jsii_name="arnForCertificate")
     @builtins.classmethod
-    def arn_for_certificate(cls, resource: _ICertificateRef_4762cd8c) -> builtins.str:
+    def arn_for_certificate(cls, resource: "_ICertificateRef_4762cd8c") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -163,10 +163,10 @@ class CfnCertificate(
     @builtins.classmethod
     def from_certificate_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         certificate_id: builtins.str,
-    ) -> _ICertificateRef_4762cd8c:
+    ) -> "_ICertificateRef_4762cd8c":
         '''Creates a new ICertificateRef from a certificateId.
 
         :param scope: -
@@ -178,7 +178,7 @@ class CfnCertificate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument certificate_id", value=certificate_id, expected_type=type_hints["certificate_id"])
-        return typing.cast(_ICertificateRef_4762cd8c, jsii.sinvoke(cls, "fromCertificateId", [scope, id, certificate_id]))
+        return typing.cast("_ICertificateRef_4762cd8c", jsii.sinvoke(cls, "fromCertificateId", [scope, id, certificate_id]))
 
     @jsii.member(jsii_name="isCfnCertificate")
     @builtins.classmethod
@@ -193,7 +193,7 @@ class CfnCertificate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCertificate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -232,9 +232,9 @@ class CfnCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> _CertificateReference_c1da6163:
+    def certificate_ref(self) -> "_CertificateReference_c1da6163":
         '''A reference to a Certificate resource.'''
-        return typing.cast(_CertificateReference_c1da6163, jsii.get(self, "certificateRef"))
+        return typing.cast("_CertificateReference_c1da6163", jsii.get(self, "certificateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -389,6 +389,7 @@ class CfnDataMigration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dms as dms
@@ -421,7 +422,7 @@ class CfnDataMigration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         data_migration_type: builtins.str,
@@ -429,9 +430,9 @@ class CfnDataMigration(
         service_access_role_arn: builtins.str,
         data_migration_identifier: typing.Optional[builtins.str] = None,
         data_migration_name: typing.Optional[builtins.str] = None,
-        data_migration_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataMigration.DataMigrationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        source_data_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataMigration.SourceDataSettingsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        data_migration_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataMigration.DataMigrationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_data_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataMigration.SourceDataSettingsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DMS::DataMigration``.
 
@@ -467,7 +468,7 @@ class CfnDataMigration(
     @builtins.classmethod
     def arn_for_data_migration(
         cls,
-        resource: _IDataMigrationRef_bc862062,
+        resource: "_IDataMigrationRef_bc862062",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -490,7 +491,7 @@ class CfnDataMigration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataMigration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -539,9 +540,9 @@ class CfnDataMigration(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -550,9 +551,9 @@ class CfnDataMigration(
 
     @builtins.property
     @jsii.member(jsii_name="dataMigrationRef")
-    def data_migration_ref(self) -> _DataMigrationReference_edcb340f:
+    def data_migration_ref(self) -> "_DataMigrationReference_edcb340f":
         '''A reference to a DataMigration resource.'''
-        return typing.cast(_DataMigrationReference_edcb340f, jsii.get(self, "dataMigrationRef"))
+        return typing.cast("_DataMigrationReference_edcb340f", jsii.get(self, "dataMigrationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="dataMigrationType")
@@ -623,14 +624,14 @@ class CfnDataMigration(
     @jsii.member(jsii_name="dataMigrationSettings")
     def data_migration_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataMigration.DataMigrationSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataMigration.DataMigrationSettingsProperty"]]:
         '''Specifies CloudWatch settings and selection rules for the data migration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataMigration.DataMigrationSettingsProperty"]], jsii.get(self, "dataMigrationSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataMigration.DataMigrationSettingsProperty"]], jsii.get(self, "dataMigrationSettings"))
 
     @data_migration_settings.setter
     def data_migration_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataMigration.DataMigrationSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataMigration.DataMigrationSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8963c8356a27c7982ca33e6c61a728ed5628c22df8d37124d8007103f7a2e57f)
@@ -641,14 +642,14 @@ class CfnDataMigration(
     @jsii.member(jsii_name="sourceDataSettings")
     def source_data_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataMigration.SourceDataSettingsProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataMigration.SourceDataSettingsProperty"]]]]:
         '''Specifies information about the data migration's source data provider.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataMigration.SourceDataSettingsProperty"]]]], jsii.get(self, "sourceDataSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataMigration.SourceDataSettingsProperty"]]]], jsii.get(self, "sourceDataSettings"))
 
     @source_data_settings.setter
     def source_data_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataMigration.SourceDataSettingsProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataMigration.SourceDataSettingsProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8edddc5cd2d125d456740b8fb13a6358f11fe2a40c4307f5c82a16f3ccf8a0b7)
@@ -657,12 +658,12 @@ class CfnDataMigration(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0950ec3898888a28762ad7e52f4cb398a8e6388944b4239f9863d6eb7a1dfbfb)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -681,7 +682,7 @@ class CfnDataMigration(
         def __init__(
             self,
             *,
-            cloudwatch_logs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            cloudwatch_logs_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             number_of_jobs: typing.Optional[jsii.Number] = None,
             selection_rules: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -722,13 +723,13 @@ class CfnDataMigration(
         @builtins.property
         def cloudwatch_logs_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether to enable CloudWatch logging for the data migration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-datamigration-datamigrationsettings.html#cfn-dms-datamigration-datamigrationsettings-cloudwatchlogsenabled
             '''
             result = self._values.get("cloudwatch_logs_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def number_of_jobs(self) -> typing.Optional[jsii.Number]:
@@ -891,9 +892,9 @@ class CfnDataMigrationProps:
         service_access_role_arn: builtins.str,
         data_migration_identifier: typing.Optional[builtins.str] = None,
         data_migration_name: typing.Optional[builtins.str] = None,
-        data_migration_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataMigration.DataMigrationSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        source_data_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataMigration.SourceDataSettingsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        data_migration_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataMigration.DataMigrationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_data_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataMigration.SourceDataSettingsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataMigration``.
 
@@ -911,6 +912,7 @@ class CfnDataMigrationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dms as dms
@@ -1019,33 +1021,33 @@ class CfnDataMigrationProps:
     @builtins.property
     def data_migration_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataMigration.DataMigrationSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataMigration.DataMigrationSettingsProperty"]]:
         '''Specifies CloudWatch settings and selection rules for the data migration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-datamigration.html#cfn-dms-datamigration-datamigrationsettings
         '''
         result = self._values.get("data_migration_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataMigration.DataMigrationSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataMigration.DataMigrationSettingsProperty"]], result)
 
     @builtins.property
     def source_data_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDataMigration.SourceDataSettingsProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataMigration.SourceDataSettingsProperty"]]]]:
         '''Specifies information about the data migration's source data provider.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-datamigration.html#cfn-dms-datamigration-sourcedatasettings
         '''
         result = self._values.get("source_data_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDataMigration.SourceDataSettingsProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataMigration.SourceDataSettingsProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-datamigration.html#cfn-dms-datamigration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1073,6 +1075,7 @@ class CfnDataProvider(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dms as dms
@@ -1188,16 +1191,16 @@ class CfnDataProvider(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         engine: builtins.str,
         data_provider_identifier: typing.Optional[builtins.str] = None,
         data_provider_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        exact_settings: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataProvider.SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        exact_settings: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DMS::DataProvider``.
 
@@ -1231,7 +1234,7 @@ class CfnDataProvider(
     @builtins.classmethod
     def arn_for_data_provider(
         cls,
-        resource: _IDataProviderRef_5ca5bf2b,
+        resource: "_IDataProviderRef_5ca5bf2b",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1254,7 +1257,7 @@ class CfnDataProvider(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataProvider", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1303,9 +1306,9 @@ class CfnDataProvider(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1314,9 +1317,9 @@ class CfnDataProvider(
 
     @builtins.property
     @jsii.member(jsii_name="dataProviderRef")
-    def data_provider_ref(self) -> _DataProviderReference_98a5de02:
+    def data_provider_ref(self) -> "_DataProviderReference_98a5de02":
         '''A reference to a DataProvider resource.'''
-        return typing.cast(_DataProviderReference_98a5de02, jsii.get(self, "dataProviderRef"))
+        return typing.cast("_DataProviderReference_98a5de02", jsii.get(self, "dataProviderRef"))
 
     @builtins.property
     @jsii.member(jsii_name="engine")
@@ -1374,14 +1377,14 @@ class CfnDataProvider(
     @jsii.member(jsii_name="exactSettings")
     def exact_settings(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The property describes the exact settings which can be modified.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "exactSettings"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "exactSettings"))
 
     @exact_settings.setter
     def exact_settings(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f4d016d92a836fecec39275d37ba39e9b434aac43e0b8d6b9a644a15bfff4ef8)
@@ -1392,14 +1395,14 @@ class CfnDataProvider(
     @jsii.member(jsii_name="settings")
     def settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.SettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.SettingsProperty"]]:
         '''The settings in JSON format for a data provider.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.SettingsProperty"]], jsii.get(self, "settings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.SettingsProperty"]], jsii.get(self, "settings"))
 
     @settings.setter
     def settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.SettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.SettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e759668e5454c7b728515ac0c320d568f1fc6f406c7ed4f0c45e830f497f443e)
@@ -1408,12 +1411,12 @@ class CfnDataProvider(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__15d6e40a485e85376660625e14969b38fc293c419cb77e7880107c25ae376134)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2752,16 +2755,16 @@ class CfnDataProvider(
         def __init__(
             self,
             *,
-            doc_db_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataProvider.DocDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            ibm_db2_luw_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataProvider.IbmDb2LuwSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            ibm_db2_z_os_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataProvider.IbmDb2zOsSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            maria_db_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataProvider.MariaDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            microsoft_sql_server_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataProvider.MicrosoftSqlServerSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            mongo_db_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataProvider.MongoDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            my_sql_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataProvider.MySqlSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            oracle_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataProvider.OracleSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            postgre_sql_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataProvider.PostgreSqlSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            redshift_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataProvider.RedshiftSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            doc_db_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.DocDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ibm_db2_luw_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.IbmDb2LuwSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ibm_db2_z_os_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.IbmDb2zOsSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            maria_db_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.MariaDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            microsoft_sql_server_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.MicrosoftSqlServerSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mongo_db_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.MongoDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            my_sql_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.MySqlSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            oracle_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.OracleSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            postgre_sql_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.PostgreSqlSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            redshift_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.RedshiftSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The property identifies the exact type of settings for the data provider.
 
@@ -2917,112 +2920,112 @@ class CfnDataProvider(
         @builtins.property
         def doc_db_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.DocDbSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.DocDbSettingsProperty"]]:
             '''DocDbSettings property identifier.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-settings.html#cfn-dms-dataprovider-settings-docdbsettings
             '''
             result = self._values.get("doc_db_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.DocDbSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.DocDbSettingsProperty"]], result)
 
         @builtins.property
         def ibm_db2_luw_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.IbmDb2LuwSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.IbmDb2LuwSettingsProperty"]]:
             '''IbmDb2LuwSettings property identifier.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-settings.html#cfn-dms-dataprovider-settings-ibmdb2luwsettings
             '''
             result = self._values.get("ibm_db2_luw_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.IbmDb2LuwSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.IbmDb2LuwSettingsProperty"]], result)
 
         @builtins.property
         def ibm_db2_z_os_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.IbmDb2zOsSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.IbmDb2zOsSettingsProperty"]]:
             '''IbmDb2zOsSettings property identifier.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-settings.html#cfn-dms-dataprovider-settings-ibmdb2zossettings
             '''
             result = self._values.get("ibm_db2_z_os_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.IbmDb2zOsSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.IbmDb2zOsSettingsProperty"]], result)
 
         @builtins.property
         def maria_db_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.MariaDbSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.MariaDbSettingsProperty"]]:
             '''MariaDbSettings property identifier.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-settings.html#cfn-dms-dataprovider-settings-mariadbsettings
             '''
             result = self._values.get("maria_db_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.MariaDbSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.MariaDbSettingsProperty"]], result)
 
         @builtins.property
         def microsoft_sql_server_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.MicrosoftSqlServerSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.MicrosoftSqlServerSettingsProperty"]]:
             '''MicrosoftSqlServerSettings property identifier.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-settings.html#cfn-dms-dataprovider-settings-microsoftsqlserversettings
             '''
             result = self._values.get("microsoft_sql_server_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.MicrosoftSqlServerSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.MicrosoftSqlServerSettingsProperty"]], result)
 
         @builtins.property
         def mongo_db_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.MongoDbSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.MongoDbSettingsProperty"]]:
             '''MongoDbSettings property identifier.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-settings.html#cfn-dms-dataprovider-settings-mongodbsettings
             '''
             result = self._values.get("mongo_db_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.MongoDbSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.MongoDbSettingsProperty"]], result)
 
         @builtins.property
         def my_sql_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.MySqlSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.MySqlSettingsProperty"]]:
             '''MySqlSettings property identifier.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-settings.html#cfn-dms-dataprovider-settings-mysqlsettings
             '''
             result = self._values.get("my_sql_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.MySqlSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.MySqlSettingsProperty"]], result)
 
         @builtins.property
         def oracle_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.OracleSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.OracleSettingsProperty"]]:
             '''OracleSettings property identifier.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-settings.html#cfn-dms-dataprovider-settings-oraclesettings
             '''
             result = self._values.get("oracle_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.OracleSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.OracleSettingsProperty"]], result)
 
         @builtins.property
         def postgre_sql_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.PostgreSqlSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.PostgreSqlSettingsProperty"]]:
             '''PostgreSqlSettings property identifier.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-settings.html#cfn-dms-dataprovider-settings-postgresqlsettings
             '''
             result = self._values.get("postgre_sql_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.PostgreSqlSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.PostgreSqlSettingsProperty"]], result)
 
         @builtins.property
         def redshift_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.RedshiftSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.RedshiftSettingsProperty"]]:
             '''RedshiftSettings property identifier.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-settings.html#cfn-dms-dataprovider-settings-redshiftsettings
             '''
             result = self._values.get("redshift_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataProvider.RedshiftSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.RedshiftSettingsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3057,9 +3060,9 @@ class CfnDataProviderProps:
         data_provider_identifier: typing.Optional[builtins.str] = None,
         data_provider_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        exact_settings: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataProvider.SettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        exact_settings: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataProvider``.
 
@@ -3076,6 +3079,7 @@ class CfnDataProviderProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dms as dms
@@ -3259,7 +3263,7 @@ class CfnDataProviderProps:
     @builtins.property
     def exact_settings(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The property describes the exact settings which can be modified.
 
         :default: - false
@@ -3267,27 +3271,27 @@ class CfnDataProviderProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-dataprovider.html#cfn-dms-dataprovider-exactsettings
         '''
         result = self._values.get("exact_settings")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataProvider.SettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.SettingsProperty"]]:
         '''The settings in JSON format for a data provider.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-dataprovider.html#cfn-dms-dataprovider-settings
         '''
         result = self._values.get("settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataProvider.SettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.SettingsProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-dataprovider.html#cfn-dms-dataprovider-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3317,6 +3321,7 @@ class CfnEndpoint(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dms as dms
@@ -3613,39 +3618,39 @@ class CfnEndpoint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         endpoint_type: builtins.str,
         engine_name: builtins.str,
         certificate_arn: typing.Optional[builtins.str] = None,
         database_name: typing.Optional[builtins.str] = None,
-        doc_db_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.DocDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        dynamo_db_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.DynamoDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        elasticsearch_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.ElasticsearchSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        doc_db_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.DocDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dynamo_db_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.DynamoDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        elasticsearch_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.ElasticsearchSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         endpoint_identifier: typing.Optional[builtins.str] = None,
         extra_connection_attributes: typing.Optional[builtins.str] = None,
-        gcp_my_sql_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.GcpMySQLSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        ibm_db2_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.IbmDb2SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        kafka_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.KafkaSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        kinesis_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.KinesisSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        gcp_my_sql_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.GcpMySQLSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ibm_db2_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.IbmDb2SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kafka_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.KafkaSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kinesis_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.KinesisSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        microsoft_sql_server_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.MicrosoftSqlServerSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        mongo_db_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.MongoDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        my_sql_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.MySqlSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        neptune_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.NeptuneSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        oracle_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.OracleSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        microsoft_sql_server_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.MicrosoftSqlServerSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        mongo_db_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.MongoDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        my_sql_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.MySqlSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        neptune_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.NeptuneSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        oracle_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.OracleSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         password: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
-        postgre_sql_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.PostgreSqlSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        redis_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.RedisSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        redshift_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.RedshiftSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        postgre_sql_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.PostgreSqlSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        redis_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.RedisSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        redshift_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.RedshiftSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resource_identifier: typing.Optional[builtins.str] = None,
-        s3_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.S3SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        s3_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.S3SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         server_name: typing.Optional[builtins.str] = None,
         ssl_mode: typing.Optional[builtins.str] = None,
-        sybase_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.SybaseSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sybase_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.SybaseSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         username: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::DMS::Endpoint``.
@@ -3726,7 +3731,7 @@ class CfnEndpoint(
 
     @jsii.member(jsii_name="arnForEndpoint")
     @builtins.classmethod
-    def arn_for_endpoint(cls, resource: _IEndpointRef_132726f5) -> builtins.str:
+    def arn_for_endpoint(cls, resource: "_IEndpointRef_132726f5") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3739,10 +3744,10 @@ class CfnEndpoint(
     @builtins.classmethod
     def from_endpoint_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         endpoint_id: builtins.str,
-    ) -> _IEndpointRef_132726f5:
+    ) -> "_IEndpointRef_132726f5":
         '''Creates a new IEndpointRef from a endpointId.
 
         :param scope: -
@@ -3754,7 +3759,7 @@ class CfnEndpoint(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument endpoint_id", value=endpoint_id, expected_type=type_hints["endpoint_id"])
-        return typing.cast(_IEndpointRef_132726f5, jsii.sinvoke(cls, "fromEndpointId", [scope, id, endpoint_id]))
+        return typing.cast("_IEndpointRef_132726f5", jsii.sinvoke(cls, "fromEndpointId", [scope, id, endpoint_id]))
 
     @jsii.member(jsii_name="isCfnEndpoint")
     @builtins.classmethod
@@ -3769,7 +3774,7 @@ class CfnEndpoint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEndpoint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3822,15 +3827,15 @@ class CfnEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="endpointRef")
-    def endpoint_ref(self) -> _EndpointReference_98005b5c:
+    def endpoint_ref(self) -> "_EndpointReference_98005b5c":
         '''A reference to a Endpoint resource.'''
-        return typing.cast(_EndpointReference_98005b5c, jsii.get(self, "endpointRef"))
+        return typing.cast("_EndpointReference_98005b5c", jsii.get(self, "endpointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="endpointType")
@@ -3888,14 +3893,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="docDbSettings")
     def doc_db_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.DocDbSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.DocDbSettingsProperty"]]:
         '''Settings in JSON format for the source and target DocumentDB endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.DocDbSettingsProperty"]], jsii.get(self, "docDbSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.DocDbSettingsProperty"]], jsii.get(self, "docDbSettings"))
 
     @doc_db_settings.setter
     def doc_db_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.DocDbSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.DocDbSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__964181ee2a910015024cb3f101a00f9f8185212a583fc0880419c4b8f4665704)
@@ -3906,14 +3911,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="dynamoDbSettings")
     def dynamo_db_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.DynamoDbSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.DynamoDbSettingsProperty"]]:
         '''Settings in JSON format for the target Amazon DynamoDB endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.DynamoDbSettingsProperty"]], jsii.get(self, "dynamoDbSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.DynamoDbSettingsProperty"]], jsii.get(self, "dynamoDbSettings"))
 
     @dynamo_db_settings.setter
     def dynamo_db_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.DynamoDbSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.DynamoDbSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d1e66bdb10c14f72319011edd2b4677a0c649392f33602507802cb167a5121d5)
@@ -3924,14 +3929,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="elasticsearchSettings")
     def elasticsearch_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.ElasticsearchSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.ElasticsearchSettingsProperty"]]:
         '''Settings in JSON format for the target OpenSearch endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.ElasticsearchSettingsProperty"]], jsii.get(self, "elasticsearchSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.ElasticsearchSettingsProperty"]], jsii.get(self, "elasticsearchSettings"))
 
     @elasticsearch_settings.setter
     def elasticsearch_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.ElasticsearchSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.ElasticsearchSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7a06f40e1959e428f7f5c27f542081cd85f979ba31209ebc3fe63da010fddb64)
@@ -3968,14 +3973,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="gcpMySqlSettings")
     def gcp_my_sql_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.GcpMySQLSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.GcpMySQLSettingsProperty"]]:
         '''Settings in JSON format for the source GCP MySQL endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.GcpMySQLSettingsProperty"]], jsii.get(self, "gcpMySqlSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.GcpMySQLSettingsProperty"]], jsii.get(self, "gcpMySqlSettings"))
 
     @gcp_my_sql_settings.setter
     def gcp_my_sql_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.GcpMySQLSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.GcpMySQLSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4c3a8d92e577dbc9df7cec45318f33c1e0fcbdf463cc7dfd5569ea58f1d00c06)
@@ -3986,14 +3991,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="ibmDb2Settings")
     def ibm_db2_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.IbmDb2SettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.IbmDb2SettingsProperty"]]:
         '''Settings in JSON format for the source IBM Db2 LUW endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.IbmDb2SettingsProperty"]], jsii.get(self, "ibmDb2Settings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.IbmDb2SettingsProperty"]], jsii.get(self, "ibmDb2Settings"))
 
     @ibm_db2_settings.setter
     def ibm_db2_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.IbmDb2SettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.IbmDb2SettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__44fef44c81ef6b8da87158243f0ccbedc43e7299d8652a35b098afa7a04a61c3)
@@ -4004,14 +4009,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="kafkaSettings")
     def kafka_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.KafkaSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.KafkaSettingsProperty"]]:
         '''Settings in JSON format for the target Apache Kafka endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.KafkaSettingsProperty"]], jsii.get(self, "kafkaSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.KafkaSettingsProperty"]], jsii.get(self, "kafkaSettings"))
 
     @kafka_settings.setter
     def kafka_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.KafkaSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.KafkaSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5b7582d27225e5fe52e2294251941bf9c566610655a620a14039a2b6f9e42b21)
@@ -4022,14 +4027,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="kinesisSettings")
     def kinesis_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.KinesisSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.KinesisSettingsProperty"]]:
         '''Settings in JSON format for the target endpoint for Amazon Kinesis Data Streams.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.KinesisSettingsProperty"]], jsii.get(self, "kinesisSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.KinesisSettingsProperty"]], jsii.get(self, "kinesisSettings"))
 
     @kinesis_settings.setter
     def kinesis_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.KinesisSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.KinesisSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ceccea684f95f5083095044bdbf739f8871dcf9b280587dfc9f741fad0e19969)
@@ -4053,14 +4058,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="microsoftSqlServerSettings")
     def microsoft_sql_server_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.MicrosoftSqlServerSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MicrosoftSqlServerSettingsProperty"]]:
         '''Settings in JSON format for the source and target Microsoft SQL Server endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.MicrosoftSqlServerSettingsProperty"]], jsii.get(self, "microsoftSqlServerSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MicrosoftSqlServerSettingsProperty"]], jsii.get(self, "microsoftSqlServerSettings"))
 
     @microsoft_sql_server_settings.setter
     def microsoft_sql_server_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.MicrosoftSqlServerSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MicrosoftSqlServerSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f0d6650a04db2e7248a94227234af24d3685774adf590b885acf6d9a8e46f33c)
@@ -4071,14 +4076,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="mongoDbSettings")
     def mongo_db_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.MongoDbSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MongoDbSettingsProperty"]]:
         '''Settings in JSON format for the source MongoDB endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.MongoDbSettingsProperty"]], jsii.get(self, "mongoDbSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MongoDbSettingsProperty"]], jsii.get(self, "mongoDbSettings"))
 
     @mongo_db_settings.setter
     def mongo_db_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.MongoDbSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MongoDbSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7c34d02d08d15c9c23ee3acd69fc24c805faf00f28977c15fc4904ad2240ff59)
@@ -4089,14 +4094,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="mySqlSettings")
     def my_sql_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.MySqlSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MySqlSettingsProperty"]]:
         '''Settings in JSON format for the source and target MySQL endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.MySqlSettingsProperty"]], jsii.get(self, "mySqlSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MySqlSettingsProperty"]], jsii.get(self, "mySqlSettings"))
 
     @my_sql_settings.setter
     def my_sql_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.MySqlSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MySqlSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__33dc654f9976a21468a898b3a1a83eab0b9827d20b4050ca617ac942a51a2bc3)
@@ -4107,14 +4112,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="neptuneSettings")
     def neptune_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.NeptuneSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.NeptuneSettingsProperty"]]:
         '''Settings in JSON format for the target Amazon Neptune endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.NeptuneSettingsProperty"]], jsii.get(self, "neptuneSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.NeptuneSettingsProperty"]], jsii.get(self, "neptuneSettings"))
 
     @neptune_settings.setter
     def neptune_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.NeptuneSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.NeptuneSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4bf2bf255501ef1ab216d754bda1b21fd5c2d7fa8b9eb7aef6710a3a3486ac0e)
@@ -4125,14 +4130,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="oracleSettings")
     def oracle_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.OracleSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.OracleSettingsProperty"]]:
         '''Settings in JSON format for the source and target Oracle endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.OracleSettingsProperty"]], jsii.get(self, "oracleSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.OracleSettingsProperty"]], jsii.get(self, "oracleSettings"))
 
     @oracle_settings.setter
     def oracle_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.OracleSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.OracleSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6b582a457202f3791a344c9af49ce79ffaf942cd191b44898b2f3c01b25dcc73)
@@ -4169,14 +4174,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="postgreSqlSettings")
     def postgre_sql_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.PostgreSqlSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.PostgreSqlSettingsProperty"]]:
         '''Settings in JSON format for the source and target PostgreSQL endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.PostgreSqlSettingsProperty"]], jsii.get(self, "postgreSqlSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.PostgreSqlSettingsProperty"]], jsii.get(self, "postgreSqlSettings"))
 
     @postgre_sql_settings.setter
     def postgre_sql_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.PostgreSqlSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.PostgreSqlSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5ae50808797b6c50dc9996fead375c4ab91f2b93a7e63dfb0f24b0eda9b51f9e)
@@ -4187,14 +4192,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="redisSettings")
     def redis_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.RedisSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.RedisSettingsProperty"]]:
         '''Settings in JSON format for the target Redis endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.RedisSettingsProperty"]], jsii.get(self, "redisSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.RedisSettingsProperty"]], jsii.get(self, "redisSettings"))
 
     @redis_settings.setter
     def redis_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.RedisSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.RedisSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__804bbb4ffca52155c93eb3b6c86a39edc8f1c8e0f7285eed7a57484757768a01)
@@ -4205,14 +4210,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="redshiftSettings")
     def redshift_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.RedshiftSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.RedshiftSettingsProperty"]]:
         '''Settings in JSON format for the Amazon Redshift endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.RedshiftSettingsProperty"]], jsii.get(self, "redshiftSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.RedshiftSettingsProperty"]], jsii.get(self, "redshiftSettings"))
 
     @redshift_settings.setter
     def redshift_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.RedshiftSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.RedshiftSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__29371f2c2b4a796793306172c888eba1b4d13b9962006ea4ea55d37fd5168a89)
@@ -4236,14 +4241,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="s3Settings")
     def s3_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.S3SettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.S3SettingsProperty"]]:
         '''Settings in JSON format for the source and target Amazon S3 endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.S3SettingsProperty"]], jsii.get(self, "s3Settings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.S3SettingsProperty"]], jsii.get(self, "s3Settings"))
 
     @s3_settings.setter
     def s3_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.S3SettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.S3SettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__beebfa648d87c594a19d4f5008c375d047ed33feb9cda485735fdfbdf6778832)
@@ -4283,14 +4288,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="sybaseSettings")
     def sybase_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.SybaseSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.SybaseSettingsProperty"]]:
         '''Settings in JSON format for the source and target SAP ASE endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.SybaseSettingsProperty"]], jsii.get(self, "sybaseSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.SybaseSettingsProperty"]], jsii.get(self, "sybaseSettings"))
 
     @sybase_settings.setter
     def sybase_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.SybaseSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.SybaseSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8233892017699d61eafcea4f1e10c7e0569b5267219badd590e4c1371d4b6fad)
@@ -4299,12 +4304,12 @@ class CfnEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags to be assigned to the endpoint.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b8deb35cf3c053bed3738b0ba1313a78b00c19fe30ee591619e0da0e7a7a4be5)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4339,7 +4344,7 @@ class CfnEndpoint(
             self,
             *,
             docs_to_investigate: typing.Optional[jsii.Number] = None,
-            extract_doc_id: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            extract_doc_id: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             nesting_level: typing.Optional[builtins.str] = None,
             secrets_manager_access_role_arn: typing.Optional[builtins.str] = None,
             secrets_manager_secret_id: typing.Optional[builtins.str] = None,
@@ -4406,7 +4411,7 @@ class CfnEndpoint(
         @builtins.property
         def extract_doc_id(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies the document ID. Use this setting when ``NestingLevel`` is set to ``"none"`` .
 
             Default value is ``"false"`` .
@@ -4414,7 +4419,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-docdbsettings.html#cfn-dms-endpoint-docdbsettings-extractdocid
             '''
             result = self._values.get("extract_doc_id")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def nesting_level(self) -> typing.Optional[builtins.str]:
@@ -4659,7 +4664,7 @@ class CfnEndpoint(
             self,
             *,
             after_connect_script: typing.Optional[builtins.str] = None,
-            clean_source_metadata_on_mismatch: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            clean_source_metadata_on_mismatch: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             database_name: typing.Optional[builtins.str] = None,
             events_poll_interval: typing.Optional[jsii.Number] = None,
             max_file_size: typing.Optional[jsii.Number] = None,
@@ -4774,7 +4779,7 @@ class CfnEndpoint(
         @builtins.property
         def clean_source_metadata_on_mismatch(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Adjusts the behavior of AWS DMS when migrating from an SQL Server source database that is hosted as part of an Always On availability group cluster.
 
             If you need AWS DMS to poll all the nodes in the Always On cluster for transaction backups, set this attribute to ``false`` .
@@ -4782,7 +4787,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-gcpmysqlsettings.html#cfn-dms-endpoint-gcpmysqlsettings-cleansourcemetadataonmismatch
             '''
             result = self._values.get("clean_source_metadata_on_mismatch")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def database_name(self) -> typing.Optional[builtins.str]:
@@ -4936,13 +4941,13 @@ class CfnEndpoint(
             self,
             *,
             current_lsn: typing.Optional[builtins.str] = None,
-            keep_csv_files: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            keep_csv_files: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             load_timeout: typing.Optional[jsii.Number] = None,
             max_file_size: typing.Optional[jsii.Number] = None,
             max_k_bytes_per_read: typing.Optional[jsii.Number] = None,
             secrets_manager_access_role_arn: typing.Optional[builtins.str] = None,
             secrets_manager_secret_id: typing.Optional[builtins.str] = None,
-            set_data_capture_changes: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            set_data_capture_changes: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             write_buffer_size: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Provides information that defines an IBMDB2 endpoint.
@@ -5023,7 +5028,7 @@ class CfnEndpoint(
         @builtins.property
         def keep_csv_files(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If true, AWS DMS saves any .csv files to the Db2 LUW target that were used to replicate data. DMS uses these files for analysis and troubleshooting.
 
             The default value is false.
@@ -5031,7 +5036,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-ibmdb2settings.html#cfn-dms-endpoint-ibmdb2settings-keepcsvfiles
             '''
             result = self._values.get("keep_csv_files")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def load_timeout(self) -> typing.Optional[jsii.Number]:
@@ -5092,7 +5097,7 @@ class CfnEndpoint(
         @builtins.property
         def set_data_capture_changes(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables ongoing replication (CDC) as a BOOLEAN value.
 
             The default is true.
@@ -5100,7 +5105,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-ibmdb2settings.html#cfn-dms-endpoint-ibmdb2settings-setdatacapturechanges
             '''
             result = self._values.get("set_data_capture_changes")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def write_buffer_size(self) -> typing.Optional[jsii.Number]:
@@ -5151,15 +5156,15 @@ class CfnEndpoint(
             self,
             *,
             broker: typing.Optional[builtins.str] = None,
-            include_control_details: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_null_and_empty: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_partition_value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_table_alter_operations: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_transaction_details: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            include_control_details: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_null_and_empty: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_partition_value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_table_alter_operations: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_transaction_details: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             message_format: typing.Optional[builtins.str] = None,
             message_max_bytes: typing.Optional[jsii.Number] = None,
-            no_hex_prefix: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            partition_include_schema_table: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            no_hex_prefix: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            partition_include_schema_table: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             sasl_password: typing.Optional[builtins.str] = None,
             sasl_user_name: typing.Optional[builtins.str] = None,
             security_protocol: typing.Optional[builtins.str] = None,
@@ -5294,7 +5299,7 @@ class CfnEndpoint(
         @builtins.property
         def include_control_details(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Shows detailed control information for table definition, column definition, and table and column changes in the Kafka message output.
 
             The default is ``false`` .
@@ -5302,12 +5307,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kafkasettings.html#cfn-dms-endpoint-kafkasettings-includecontroldetails
             '''
             result = self._values.get("include_control_details")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_null_and_empty(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include NULL and empty columns for records migrated to the endpoint.
 
             The default is ``false`` .
@@ -5315,12 +5320,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kafkasettings.html#cfn-dms-endpoint-kafkasettings-includenullandempty
             '''
             result = self._values.get("include_null_and_empty")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_partition_value(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Shows the partition value within the Kafka message output unless the partition type is ``schema-table-type`` .
 
             The default is ``false`` .
@@ -5328,12 +5333,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kafkasettings.html#cfn-dms-endpoint-kafkasettings-includepartitionvalue
             '''
             result = self._values.get("include_partition_value")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_table_alter_operations(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Includes any data definition language (DDL) operations that change the table in the control data, such as ``rename-table`` , ``drop-table`` , ``add-column`` , ``drop-column`` , and ``rename-column`` .
 
             The default is ``false`` .
@@ -5341,12 +5346,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kafkasettings.html#cfn-dms-endpoint-kafkasettings-includetablealteroperations
             '''
             result = self._values.get("include_table_alter_operations")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_transaction_details(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Provides detailed transaction information from the source database.
 
             This information includes a commit timestamp, a log position, and values for ``transaction_id`` , previous ``transaction_id`` , and ``transaction_record_id`` (the record offset within a transaction). The default is ``false`` .
@@ -5354,7 +5359,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kafkasettings.html#cfn-dms-endpoint-kafkasettings-includetransactiondetails
             '''
             result = self._values.get("include_transaction_details")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def message_format(self) -> typing.Optional[builtins.str]:
@@ -5379,7 +5384,7 @@ class CfnEndpoint(
         @builtins.property
         def no_hex_prefix(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this optional parameter to ``true`` to avoid adding a '0x' prefix to raw data in hexadecimal format.
 
             For example, by default, AWS DMS adds a '0x' prefix to the LOB column type in hexadecimal format moving from an Oracle source to a Kafka target. Use the ``NoHexPrefix`` endpoint setting to enable migration of RAW data type columns without adding the '0x' prefix.
@@ -5387,12 +5392,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kafkasettings.html#cfn-dms-endpoint-kafkasettings-nohexprefix
             '''
             result = self._values.get("no_hex_prefix")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def partition_include_schema_table(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Prefixes schema and table names to partition values, when the partition type is ``primary-key-type`` .
 
             Doing this increases data distribution among Kafka partitions. For example, suppose that a SysBench schema has thousands of tables and each table has only limited range for a primary key. In this case, the same primary key is sent from thousands of tables to the same partition, which causes throttling. The default is ``false`` .
@@ -5400,7 +5405,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kafkasettings.html#cfn-dms-endpoint-kafkasettings-partitionincludeschematable
             '''
             result = self._values.get("partition_include_schema_table")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def sasl_password(self) -> typing.Optional[builtins.str]:
@@ -5509,14 +5514,14 @@ class CfnEndpoint(
         def __init__(
             self,
             *,
-            include_control_details: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_null_and_empty: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_partition_value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_table_alter_operations: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_transaction_details: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            include_control_details: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_null_and_empty: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_partition_value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_table_alter_operations: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_transaction_details: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             message_format: typing.Optional[builtins.str] = None,
-            no_hex_prefix: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            partition_include_schema_table: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            no_hex_prefix: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            partition_include_schema_table: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             service_access_role_arn: typing.Optional[builtins.str] = None,
             stream_arn: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -5594,7 +5599,7 @@ class CfnEndpoint(
         @builtins.property
         def include_control_details(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Shows detailed control information for table definition, column definition, and table and column changes in the Kinesis message output.
 
             The default is ``false`` .
@@ -5602,12 +5607,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kinesissettings.html#cfn-dms-endpoint-kinesissettings-includecontroldetails
             '''
             result = self._values.get("include_control_details")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_null_and_empty(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include NULL and empty columns for records migrated to the endpoint.
 
             The default is ``false`` .
@@ -5615,12 +5620,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kinesissettings.html#cfn-dms-endpoint-kinesissettings-includenullandempty
             '''
             result = self._values.get("include_null_and_empty")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_partition_value(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Shows the partition value within the Kinesis message output, unless the partition type is ``schema-table-type`` .
 
             The default is ``false`` .
@@ -5628,12 +5633,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kinesissettings.html#cfn-dms-endpoint-kinesissettings-includepartitionvalue
             '''
             result = self._values.get("include_partition_value")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_table_alter_operations(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Includes any data definition language (DDL) operations that change the table in the control data, such as ``rename-table`` , ``drop-table`` , ``add-column`` , ``drop-column`` , and ``rename-column`` .
 
             The default is ``false`` .
@@ -5641,12 +5646,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kinesissettings.html#cfn-dms-endpoint-kinesissettings-includetablealteroperations
             '''
             result = self._values.get("include_table_alter_operations")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_transaction_details(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Provides detailed transaction information from the source database.
 
             This information includes a commit timestamp, a log position, and values for ``transaction_id`` , previous ``transaction_id`` , and ``transaction_record_id`` (the record offset within a transaction). The default is ``false`` .
@@ -5654,7 +5659,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kinesissettings.html#cfn-dms-endpoint-kinesissettings-includetransactiondetails
             '''
             result = self._values.get("include_transaction_details")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def message_format(self) -> typing.Optional[builtins.str]:
@@ -5670,7 +5675,7 @@ class CfnEndpoint(
         @builtins.property
         def no_hex_prefix(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this optional parameter to ``true`` to avoid adding a '0x' prefix to raw data in hexadecimal format.
 
             For example, by default, AWS DMS adds a '0x' prefix to the LOB column type in hexadecimal format moving from an Oracle source to an Amazon Kinesis target. Use the ``NoHexPrefix`` endpoint setting to enable migration of RAW data type columns without adding the '0x' prefix.
@@ -5678,12 +5683,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kinesissettings.html#cfn-dms-endpoint-kinesissettings-nohexprefix
             '''
             result = self._values.get("no_hex_prefix")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def partition_include_schema_table(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Prefixes schema and table names to partition values, when the partition type is ``primary-key-type`` .
 
             Doing this increases data distribution among Kinesis shards. For example, suppose that a SysBench schema has thousands of tables and each table has only limited range for a primary key. In this case, the same primary key is sent from thousands of tables to the same shard, which causes throttling. The default is ``false`` .
@@ -5691,7 +5696,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-kinesissettings.html#cfn-dms-endpoint-kinesissettings-partitionincludeschematable
             '''
             result = self._values.get("partition_include_schema_table")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def service_access_role_arn(self) -> typing.Optional[builtins.str]:
@@ -5754,20 +5759,20 @@ class CfnEndpoint(
             bcp_packet_size: typing.Optional[jsii.Number] = None,
             control_tables_file_group: typing.Optional[builtins.str] = None,
             database_name: typing.Optional[builtins.str] = None,
-            force_lob_lookup: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            force_lob_lookup: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             password: typing.Optional[builtins.str] = None,
             port: typing.Optional[jsii.Number] = None,
-            query_single_always_on_node: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            read_backup_only: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            query_single_always_on_node: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            read_backup_only: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             safeguard_policy: typing.Optional[builtins.str] = None,
             secrets_manager_access_role_arn: typing.Optional[builtins.str] = None,
             secrets_manager_secret_id: typing.Optional[builtins.str] = None,
             server_name: typing.Optional[builtins.str] = None,
             tlog_access_mode: typing.Optional[builtins.str] = None,
-            trim_space_in_char: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            use_bcp_full_load: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            trim_space_in_char: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            use_bcp_full_load: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             username: typing.Optional[builtins.str] = None,
-            use_third_party_backup_device: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            use_third_party_backup_device: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Provides information that defines a Microsoft SQL Server endpoint.
 
@@ -5907,13 +5912,13 @@ class CfnEndpoint(
         @builtins.property
         def force_lob_lookup(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Forces LOB lookup on inline LOB.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-microsoftsqlserversettings.html#cfn-dms-endpoint-microsoftsqlserversettings-forceloblookup
             '''
             result = self._values.get("force_lob_lookup")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def password(self) -> typing.Optional[builtins.str]:
@@ -5936,7 +5941,7 @@ class CfnEndpoint(
         @builtins.property
         def query_single_always_on_node(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Cleans and recreates table metadata information on the replication instance when a mismatch occurs.
 
             An example is a situation where running an alter DDL statement on a table might result in different information about the table cached in the replication instance.
@@ -5944,12 +5949,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-microsoftsqlserversettings.html#cfn-dms-endpoint-microsoftsqlserversettings-querysinglealwaysonnode
             '''
             result = self._values.get("query_single_always_on_node")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def read_backup_only(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When this attribute is set to ``Y`` , AWS DMS only reads changes from transaction log backups and doesn't read from the active transaction log file during ongoing replication.
 
             Setting this parameter to ``Y`` enables you to control active transaction log file growth during full load and ongoing replication tasks. However, it can add some source latency to ongoing replication.
@@ -5957,7 +5962,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-microsoftsqlserversettings.html#cfn-dms-endpoint-microsoftsqlserversettings-readbackuponly
             '''
             result = self._values.get("read_backup_only")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def safeguard_policy(self) -> typing.Optional[builtins.str]:
@@ -6020,7 +6025,7 @@ class CfnEndpoint(
         @builtins.property
         def trim_space_in_char(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Use the ``TrimSpaceInChar`` source endpoint setting to right-trim data on CHAR and NCHAR data types during migration.
 
             Setting ``TrimSpaceInChar`` does not left-trim data. The default value is ``true`` .
@@ -6028,12 +6033,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-microsoftsqlserversettings.html#cfn-dms-endpoint-microsoftsqlserversettings-trimspaceinchar
             '''
             result = self._values.get("trim_space_in_char")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def use_bcp_full_load(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Use this to attribute to transfer data for full-load operations using BCP.
 
             When the target table contains an identity column that does not exist in the source table, you must disable the use BCP for loading table option.
@@ -6041,7 +6046,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-microsoftsqlserversettings.html#cfn-dms-endpoint-microsoftsqlserversettings-usebcpfullload
             '''
             result = self._values.get("use_bcp_full_load")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def username(self) -> typing.Optional[builtins.str]:
@@ -6055,13 +6060,13 @@ class CfnEndpoint(
         @builtins.property
         def use_third_party_backup_device(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When this attribute is set to ``Y`` , DMS processes third-party transaction log backups if they are created in native format.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-microsoftsqlserversettings.html#cfn-dms-endpoint-microsoftsqlserversettings-usethirdpartybackupdevice
             '''
             result = self._values.get("use_third_party_backup_device")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6366,7 +6371,7 @@ class CfnEndpoint(
             self,
             *,
             after_connect_script: typing.Optional[builtins.str] = None,
-            clean_source_metadata_on_mismatch: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            clean_source_metadata_on_mismatch: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             events_poll_interval: typing.Optional[jsii.Number] = None,
             max_file_size: typing.Optional[jsii.Number] = None,
             parallel_load_threads: typing.Optional[jsii.Number] = None,
@@ -6457,7 +6462,7 @@ class CfnEndpoint(
         @builtins.property
         def clean_source_metadata_on_mismatch(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Cleans and recreates table metadata information on the replication instance when a mismatch occurs.
 
             For example, in a situation where running an alter DDL on the table could result in different information about the table cached in the replication instance.
@@ -6465,7 +6470,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-mysqlsettings.html#cfn-dms-endpoint-mysqlsettings-cleansourcemetadataonmismatch
             '''
             result = self._values.get("clean_source_metadata_on_mismatch")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def events_poll_interval(self) -> typing.Optional[jsii.Number]:
@@ -6586,7 +6591,7 @@ class CfnEndpoint(
             self,
             *,
             error_retry_duration: typing.Optional[jsii.Number] = None,
-            iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             max_file_size: typing.Optional[jsii.Number] = None,
             max_retry_count: typing.Optional[jsii.Number] = None,
             s3_bucket_folder: typing.Optional[builtins.str] = None,
@@ -6663,7 +6668,7 @@ class CfnEndpoint(
         @builtins.property
         def iam_auth_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If you want IAM authorization enabled for this endpoint, set this parameter to ``true`` .
 
             Then attach the appropriate IAM policy document to your service role specified by ``ServiceAccessRoleArn`` . The default is ``false`` .
@@ -6671,7 +6676,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-neptunesettings.html#cfn-dms-endpoint-neptunesettings-iamauthenabled
             '''
             result = self._values.get("iam_auth_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def max_file_size(self) -> typing.Optional[jsii.Number]:
@@ -6780,27 +6785,27 @@ class CfnEndpoint(
         def __init__(
             self,
             *,
-            access_alternate_directly: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            access_alternate_directly: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             additional_archived_log_dest_id: typing.Optional[jsii.Number] = None,
-            add_supplemental_logging: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            allow_select_nested_tables: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            add_supplemental_logging: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            allow_select_nested_tables: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             archived_log_dest_id: typing.Optional[jsii.Number] = None,
-            archived_logs_only: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            archived_logs_only: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             asm_password: typing.Optional[builtins.str] = None,
             asm_server: typing.Optional[builtins.str] = None,
             asm_user: typing.Optional[builtins.str] = None,
             char_length_semantics: typing.Optional[builtins.str] = None,
-            direct_path_no_log: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            direct_path_parallel_load: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            enable_homogenous_tablespace: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            extra_archived_log_dest_ids: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
-            fail_tasks_on_lob_truncation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            direct_path_no_log: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            direct_path_parallel_load: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            enable_homogenous_tablespace: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            extra_archived_log_dest_ids: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
+            fail_tasks_on_lob_truncation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             number_datatype_scale: typing.Optional[jsii.Number] = None,
             oracle_path_prefix: typing.Optional[builtins.str] = None,
             parallel_asm_read_threads: typing.Optional[jsii.Number] = None,
             read_ahead_blocks: typing.Optional[jsii.Number] = None,
-            read_table_space_name: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            replace_path_prefix: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            read_table_space_name: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            replace_path_prefix: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             retry_interval: typing.Optional[jsii.Number] = None,
             secrets_manager_access_role_arn: typing.Optional[builtins.str] = None,
             secrets_manager_oracle_asm_access_role_arn: typing.Optional[builtins.str] = None,
@@ -6810,10 +6815,10 @@ class CfnEndpoint(
             security_db_encryption_name: typing.Optional[builtins.str] = None,
             spatial_data_option_to_geo_json_function_name: typing.Optional[builtins.str] = None,
             standby_delay_time: typing.Optional[jsii.Number] = None,
-            use_alternate_folder_for_online: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            use_b_file: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            use_direct_path_full_load: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            use_logminer_reader: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            use_alternate_folder_for_online: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            use_b_file: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            use_direct_path_full_load: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            use_logminer_reader: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             use_path_prefix: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Provides information that defines an Oracle endpoint.
@@ -7015,7 +7020,7 @@ class CfnEndpoint(
         @builtins.property
         def access_alternate_directly(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this attribute to ``false`` in order to use the Binary Reader to capture change data for an Amazon RDS for Oracle as the source.
 
             This tells the DMS instance to not access redo logs through any specified path prefix replacement using direct file access.
@@ -7023,7 +7028,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-accessalternatedirectly
             '''
             result = self._values.get("access_alternate_directly")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def additional_archived_log_dest_id(self) -> typing.Optional[jsii.Number]:
@@ -7041,7 +7046,7 @@ class CfnEndpoint(
         @builtins.property
         def add_supplemental_logging(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this attribute to set up table-level supplemental logging for the Oracle database.
 
             This attribute enables PRIMARY KEY supplemental logging on all tables selected for a migration task.
@@ -7051,18 +7056,18 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-addsupplementallogging
             '''
             result = self._values.get("add_supplemental_logging")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def allow_select_nested_tables(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this attribute to ``true`` to enable replication of Oracle tables containing columns that are nested tables or defined types.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-allowselectnestedtables
             '''
             result = self._values.get("allow_select_nested_tables")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def archived_log_dest_id(self) -> typing.Optional[jsii.Number]:
@@ -7078,7 +7083,7 @@ class CfnEndpoint(
         @builtins.property
         def archived_logs_only(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When this field is set to ``True`` , AWS DMS only accesses the archived redo logs.
 
             If the archived redo logs are stored on Automatic Storage Management (ASM) only, the AWS DMS user account needs to be granted ASM privileges.
@@ -7086,7 +7091,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-archivedlogsonly
             '''
             result = self._values.get("archived_logs_only")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def asm_password(self) -> typing.Optional[builtins.str]:
@@ -7137,18 +7142,18 @@ class CfnEndpoint(
         @builtins.property
         def direct_path_no_log(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to ``true`` , this attribute helps to increase the commit rate on the Oracle target database by writing directly to tables and not writing a trail to database logs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-directpathnolog
             '''
             result = self._values.get("direct_path_no_log")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def direct_path_parallel_load(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to ``true`` , this attribute specifies a parallel load when ``useDirectPathFullLoad`` is set to ``Y`` .
 
             This attribute also only applies when you use the AWS DMS parallel load feature. Note that the target table cannot have any constraints or indexes.
@@ -7156,23 +7161,23 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-directpathparallelload
             '''
             result = self._values.get("direct_path_parallel_load")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def enable_homogenous_tablespace(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this attribute to enable homogenous tablespace replication and create existing tables or indexes under the same tablespace on the target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-enablehomogenoustablespace
             '''
             result = self._values.get("enable_homogenous_tablespace")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def extra_archived_log_dest_ids(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
             '''Specifies the IDs of one more destinations for one or more archived redo logs.
 
             These IDs are the values of the ``dest_id`` column in the ``v$archived_log`` view. Use this setting with the ``archivedLogDestId`` extra connection attribute in a primary-to-single setup or a primary-to-multiple-standby setup.
@@ -7190,12 +7195,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-extraarchivedlogdestids
             '''
             result = self._values.get("extra_archived_log_dest_ids")
-            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def fail_tasks_on_lob_truncation(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to ``true`` , this attribute causes a task to fail if the actual size of an LOB column is greater than the specified ``LobMaxSize`` .
 
             If a task is set to limited LOB mode and this option is set to ``true`` , the task fails instead of truncating the LOB data.
@@ -7203,7 +7208,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-failtasksonlobtruncation
             '''
             result = self._values.get("fail_tasks_on_lob_truncation")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def number_datatype_scale(self) -> typing.Optional[jsii.Number]:
@@ -7254,18 +7259,18 @@ class CfnEndpoint(
         @builtins.property
         def read_table_space_name(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to ``true`` , this attribute supports tablespace replication.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-readtablespacename
             '''
             result = self._values.get("read_table_space_name")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def replace_path_prefix(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this attribute to true in order to use the Binary Reader to capture change data for an Amazon RDS for Oracle as the source.
 
             This setting tells DMS instance to replace the default Oracle root with the specified ``usePathPrefix`` setting to access the redo logs.
@@ -7273,7 +7278,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-replacepathprefix
             '''
             result = self._values.get("replace_path_prefix")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def retry_interval(self) -> typing.Optional[jsii.Number]:
@@ -7391,7 +7396,7 @@ class CfnEndpoint(
         @builtins.property
         def use_alternate_folder_for_online(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this attribute to ``true`` in order to use the Binary Reader to capture change data for an Amazon RDS for Oracle as the source.
 
             This tells the DMS instance to use any specified prefix replacement to access all online redo logs.
@@ -7399,12 +7404,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-usealternatefolderforonline
             '''
             result = self._values.get("use_alternate_folder_for_online")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def use_b_file(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this attribute to True to capture change data using the Binary Reader utility.
 
             Set ``UseLogminerReader`` to False to set this attribute to True. To use Binary Reader with Amazon RDS for Oracle as the source, you set additional attributes. For more information about using this setting with Oracle Automatic Storage Management (ASM), see `Using Oracle LogMiner or AWS DMS Binary Reader for CDC <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.Oracle.html#CHAP_Source.Oracle.CDC>`_ .
@@ -7412,12 +7417,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-usebfile
             '''
             result = self._values.get("use_b_file")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def use_direct_path_full_load(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this attribute to True to have AWS DMS use a direct path full load.
 
             Specify this value to use the direct path protocol in the Oracle Call Interface (OCI). By using this OCI protocol, you can bulk-load Oracle target tables during a full load.
@@ -7425,12 +7430,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-usedirectpathfullload
             '''
             result = self._values.get("use_direct_path_full_load")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def use_logminer_reader(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this attribute to True to capture change data using the Oracle LogMiner utility (the default).
 
             Set this attribute to False if you want to access the redo logs as a binary file. When you set ``UseLogminerReader`` to False, also set ``UseBfile`` to True. For more information on this setting and using Oracle ASM, see `Using Oracle LogMiner or AWS DMS Binary Reader for CDC <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.Oracle.html#CHAP_Source.Oracle.CDC>`_ in the *AWS DMS User Guide* .
@@ -7438,7 +7443,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-oraclesettings.html#cfn-dms-endpoint-oraclesettings-uselogminerreader
             '''
             result = self._values.get("use_logminer_reader")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def use_path_prefix(self) -> typing.Optional[builtins.str]:
@@ -7490,15 +7495,15 @@ class CfnEndpoint(
             *,
             after_connect_script: typing.Optional[builtins.str] = None,
             babelfish_database_name: typing.Optional[builtins.str] = None,
-            capture_ddls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            capture_ddls: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             database_mode: typing.Optional[builtins.str] = None,
             ddl_artifacts_schema: typing.Optional[builtins.str] = None,
             execute_timeout: typing.Optional[jsii.Number] = None,
-            fail_tasks_on_lob_truncation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            heartbeat_enable: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            fail_tasks_on_lob_truncation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            heartbeat_enable: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             heartbeat_frequency: typing.Optional[jsii.Number] = None,
             heartbeat_schema: typing.Optional[builtins.str] = None,
-            map_boolean_as_boolean: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            map_boolean_as_boolean: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             max_file_size: typing.Optional[jsii.Number] = None,
             plugin_name: typing.Optional[builtins.str] = None,
             secrets_manager_access_role_arn: typing.Optional[builtins.str] = None,
@@ -7629,7 +7634,7 @@ class CfnEndpoint(
         @builtins.property
         def capture_ddls(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''To capture DDL events, AWS DMS creates various artifacts in the PostgreSQL database when the task starts.
 
             You can later remove these artifacts.
@@ -7639,7 +7644,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-postgresqlsettings.html#cfn-dms-endpoint-postgresqlsettings-captureddls
             '''
             result = self._values.get("capture_ddls")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def database_mode(self) -> typing.Optional[builtins.str]:
@@ -7677,7 +7682,7 @@ class CfnEndpoint(
         @builtins.property
         def fail_tasks_on_lob_truncation(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to ``true`` , this value causes a task to fail if the actual size of a LOB column is greater than the specified ``LobMaxSize`` .
 
             The default value is ``false`` .
@@ -7687,12 +7692,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-postgresqlsettings.html#cfn-dms-endpoint-postgresqlsettings-failtasksonlobtruncation
             '''
             result = self._values.get("fail_tasks_on_lob_truncation")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def heartbeat_enable(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''The write-ahead log (WAL) heartbeat feature mimics a dummy transaction.
 
             By doing this, it prevents idle logical replication slots from holding onto old WAL logs, which can result in storage full situations on the source. This heartbeat keeps ``restart_lsn`` moving and prevents storage full scenarios.
@@ -7702,7 +7707,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-postgresqlsettings.html#cfn-dms-endpoint-postgresqlsettings-heartbeatenable
             '''
             result = self._values.get("heartbeat_enable")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def heartbeat_frequency(self) -> typing.Optional[jsii.Number]:
@@ -7729,7 +7734,7 @@ class CfnEndpoint(
         @builtins.property
         def map_boolean_as_boolean(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When true, lets PostgreSQL migrate the boolean type as boolean.
 
             By default, PostgreSQL migrates booleans as ``varchar(5)`` . You must set this setting on both the source and target endpoints for it to take effect.
@@ -7739,7 +7744,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-postgresqlsettings.html#cfn-dms-endpoint-postgresqlsettings-mapbooleanasboolean
             '''
             result = self._values.get("map_boolean_as_boolean")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def max_file_size(self) -> typing.Optional[jsii.Number]:
@@ -8011,22 +8016,22 @@ class CfnEndpoint(
         def __init__(
             self,
             *,
-            accept_any_date: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            accept_any_date: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             after_connect_script: typing.Optional[builtins.str] = None,
             bucket_folder: typing.Optional[builtins.str] = None,
             bucket_name: typing.Optional[builtins.str] = None,
-            case_sensitive_names: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            comp_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            case_sensitive_names: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            comp_update: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             connection_timeout: typing.Optional[jsii.Number] = None,
             date_format: typing.Optional[builtins.str] = None,
-            empty_as_null: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            empty_as_null: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             encryption_mode: typing.Optional[builtins.str] = None,
-            explicit_ids: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            explicit_ids: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             file_transfer_upload_streams: typing.Optional[jsii.Number] = None,
             load_timeout: typing.Optional[jsii.Number] = None,
-            map_boolean_as_boolean: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            map_boolean_as_boolean: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             max_file_size: typing.Optional[jsii.Number] = None,
-            remove_quotes: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            remove_quotes: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             replace_chars: typing.Optional[builtins.str] = None,
             replace_invalid_chars: typing.Optional[builtins.str] = None,
             secrets_manager_access_role_arn: typing.Optional[builtins.str] = None,
@@ -8034,8 +8039,8 @@ class CfnEndpoint(
             server_side_encryption_kms_key_id: typing.Optional[builtins.str] = None,
             service_access_role_arn: typing.Optional[builtins.str] = None,
             time_format: typing.Optional[builtins.str] = None,
-            trim_blanks: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            truncate_columns: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            trim_blanks: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            truncate_columns: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             write_buffer_size: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Provides information that defines an Amazon Redshift endpoint.
@@ -8192,7 +8197,7 @@ class CfnEndpoint(
         @builtins.property
         def accept_any_date(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that indicates to allow any date format, including invalid formats such as 00/00/00 00:00:00, to be loaded without generating an error.
 
             You can choose ``true`` or ``false`` (the default).
@@ -8202,7 +8207,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-redshiftsettings.html#cfn-dms-endpoint-redshiftsettings-acceptanydate
             '''
             result = self._values.get("accept_any_date")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def after_connect_script(self) -> typing.Optional[builtins.str]:
@@ -8240,7 +8245,7 @@ class CfnEndpoint(
         @builtins.property
         def case_sensitive_names(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If Amazon Redshift is configured to support case sensitive schema names, set ``CaseSensitiveNames`` to ``true`` .
 
             The default is ``false`` .
@@ -8248,12 +8253,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-redshiftsettings.html#cfn-dms-endpoint-redshiftsettings-casesensitivenames
             '''
             result = self._values.get("case_sensitive_names")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def comp_update(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If you set ``CompUpdate`` to ``true`` Amazon Redshift applies automatic compression if the table is empty.
 
             This applies even if the table columns already have encodings other than ``RAW`` . If you set ``CompUpdate`` to ``false`` , automatic compression is disabled and existing column encodings aren't changed. The default is ``true`` .
@@ -8261,7 +8266,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-redshiftsettings.html#cfn-dms-endpoint-redshiftsettings-compupdate
             '''
             result = self._values.get("comp_update")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def connection_timeout(self) -> typing.Optional[jsii.Number]:
@@ -8288,7 +8293,7 @@ class CfnEndpoint(
         @builtins.property
         def empty_as_null(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that specifies whether AWS DMS should migrate empty CHAR and VARCHAR fields as NULL.
 
             A value of ``true`` sets empty CHAR and VARCHAR fields to null. The default is ``false`` .
@@ -8296,7 +8301,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-redshiftsettings.html#cfn-dms-endpoint-redshiftsettings-emptyasnull
             '''
             result = self._values.get("empty_as_null")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def encryption_mode(self) -> typing.Optional[builtins.str]:
@@ -8317,7 +8322,7 @@ class CfnEndpoint(
         @builtins.property
         def explicit_ids(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''This setting is only valid for a full-load migration task.
 
             Set ``ExplicitIds`` to ``true`` to have tables with ``IDENTITY`` columns override their auto-generated values with explicit values loaded from the source data files used to populate the tables. The default is ``false`` .
@@ -8325,7 +8330,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-redshiftsettings.html#cfn-dms-endpoint-redshiftsettings-explicitids
             '''
             result = self._values.get("explicit_ids")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def file_transfer_upload_streams(self) -> typing.Optional[jsii.Number]:
@@ -8354,7 +8359,7 @@ class CfnEndpoint(
         @builtins.property
         def map_boolean_as_boolean(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When true, lets Redshift migrate the boolean type as boolean.
 
             By default, Redshift migrates booleans as ``varchar(1)`` . You must set this setting on both the source and target endpoints for it to take effect.
@@ -8362,7 +8367,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-redshiftsettings.html#cfn-dms-endpoint-redshiftsettings-mapbooleanasboolean
             '''
             result = self._values.get("map_boolean_as_boolean")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def max_file_size(self) -> typing.Optional[jsii.Number]:
@@ -8376,7 +8381,7 @@ class CfnEndpoint(
         @builtins.property
         def remove_quotes(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that specifies to remove surrounding quotation marks from strings in the incoming data.
 
             All characters within the quotation marks, including delimiters, are retained. Choose ``true`` to remove quotation marks. The default is ``false`` .
@@ -8384,7 +8389,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-redshiftsettings.html#cfn-dms-endpoint-redshiftsettings-removequotes
             '''
             result = self._values.get("remove_quotes")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def replace_chars(self) -> typing.Optional[builtins.str]:
@@ -8471,7 +8476,7 @@ class CfnEndpoint(
         @builtins.property
         def trim_blanks(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that specifies to remove the trailing white space characters from a VARCHAR string.
 
             This parameter applies only to columns with a VARCHAR data type. Choose ``true`` to remove unneeded white space. The default is ``false`` .
@@ -8479,12 +8484,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-redshiftsettings.html#cfn-dms-endpoint-redshiftsettings-trimblanks
             '''
             result = self._values.get("trim_blanks")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def truncate_columns(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that specifies to truncate data in columns to the appropriate number of characters, so that the data fits in the column.
 
             This parameter applies only to columns with a VARCHAR or CHAR data type, and rows with a size of 4 MB or less. Choose ``true`` to truncate data. The default is ``false`` .
@@ -8492,7 +8497,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-redshiftsettings.html#cfn-dms-endpoint-redshiftsettings-truncatecolumns
             '''
             result = self._values.get("truncate_columns")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def write_buffer_size(self) -> typing.Optional[jsii.Number]:
@@ -8565,13 +8570,13 @@ class CfnEndpoint(
         def __init__(
             self,
             *,
-            add_column_name: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            add_trailing_padding_character: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            add_column_name: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            add_trailing_padding_character: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             bucket_folder: typing.Optional[builtins.str] = None,
             bucket_name: typing.Optional[builtins.str] = None,
             canned_acl_for_objects: typing.Optional[builtins.str] = None,
-            cdc_inserts_and_updates: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            cdc_inserts_only: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            cdc_inserts_and_updates: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            cdc_inserts_only: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             cdc_max_batch_interval: typing.Optional[jsii.Number] = None,
             cdc_min_file_size: typing.Optional[jsii.Number] = None,
             cdc_path: typing.Optional[builtins.str] = None,
@@ -8583,29 +8588,29 @@ class CfnEndpoint(
             data_format: typing.Optional[builtins.str] = None,
             data_page_size: typing.Optional[jsii.Number] = None,
             date_partition_delimiter: typing.Optional[builtins.str] = None,
-            date_partition_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            date_partition_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             date_partition_sequence: typing.Optional[builtins.str] = None,
             date_partition_timezone: typing.Optional[builtins.str] = None,
             dict_page_size_limit: typing.Optional[jsii.Number] = None,
-            enable_statistics: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_statistics: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             encoding_type: typing.Optional[builtins.str] = None,
             encryption_mode: typing.Optional[builtins.str] = None,
             expected_bucket_owner: typing.Optional[builtins.str] = None,
             external_table_definition: typing.Optional[builtins.str] = None,
-            glue_catalog_generation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            glue_catalog_generation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             ignore_header_rows: typing.Optional[jsii.Number] = None,
-            include_op_for_full_load: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            include_op_for_full_load: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             max_file_size: typing.Optional[jsii.Number] = None,
-            parquet_timestamp_in_millisecond: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            parquet_timestamp_in_millisecond: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             parquet_version: typing.Optional[builtins.str] = None,
-            preserve_transactions: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            rfc4180: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            preserve_transactions: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            rfc4180: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             row_group_length: typing.Optional[jsii.Number] = None,
             server_side_encryption_kms_key_id: typing.Optional[builtins.str] = None,
             service_access_role_arn: typing.Optional[builtins.str] = None,
             timestamp_column_name: typing.Optional[builtins.str] = None,
-            use_csv_no_sup_value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            use_task_start_time_for_full_load_timestamp: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            use_csv_no_sup_value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            use_task_start_time_for_full_load_timestamp: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Provides information that defines an Amazon S3 endpoint.
 
@@ -8836,7 +8841,7 @@ class CfnEndpoint(
         @builtins.property
         def add_column_name(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''An optional parameter that, when set to ``true`` or ``y`` , you can use to add column name information to the .csv output file.
 
             The default value is ``false`` . Valid values are ``true`` , ``false`` , ``y`` , and ``n`` .
@@ -8844,12 +8849,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-addcolumnname
             '''
             result = self._values.get("add_column_name")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def add_trailing_padding_character(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Use the S3 target endpoint setting ``AddTrailingPaddingCharacter`` to add padding on string data.
 
             The default value is ``false`` .
@@ -8857,7 +8862,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-addtrailingpaddingcharacter
             '''
             result = self._values.get("add_trailing_padding_character")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def bucket_folder(self) -> typing.Optional[builtins.str]:
@@ -8893,7 +8898,7 @@ class CfnEndpoint(
         @builtins.property
         def cdc_inserts_and_updates(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that enables a change data capture (CDC) load to write INSERT and UPDATE operations to .csv or .parquet (columnar storage) output files. The default setting is ``false`` , but when ``CdcInsertsAndUpdates`` is set to ``true`` or ``y`` , only INSERTs and UPDATEs from the source database are migrated to the .csv or .parquet file.
 
             For .csv file format only, how these INSERTs and UPDATEs are recorded depends on the value of the ``IncludeOpForFullLoad`` parameter. If ``IncludeOpForFullLoad`` is set to ``true`` , the first field of every CDC record is set to either ``I`` or ``U`` to indicate INSERT and UPDATE operations at the source. But if ``IncludeOpForFullLoad`` is set to ``false`` , CDC records are written without an indication of INSERT or UPDATE operations at the source. For more information about how these settings work together, see `Indicating Source DB Operations in Migrated S3 Data <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps>`_ in the *AWS Database Migration Service User Guide* .
@@ -8906,12 +8911,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-cdcinsertsandupdates
             '''
             result = self._values.get("cdc_inserts_and_updates")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def cdc_inserts_only(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that enables a change data capture (CDC) load to write only INSERT operations to .csv or columnar storage (.parquet) output files. By default (the ``false`` setting), the first field in a .csv or .parquet record contains the letter I (INSERT), U (UPDATE), or D (DELETE). These values indicate whether the row was inserted, updated, or deleted at the source database for a CDC load to the target.
 
             If ``CdcInsertsOnly`` is set to ``true`` or ``y`` , only INSERTs from the source database are migrated to the .csv or .parquet file. For .csv format only, how these INSERTs are recorded depends on the value of ``IncludeOpForFullLoad`` . If ``IncludeOpForFullLoad`` is set to ``true`` , the first field of every CDC record is set to I to indicate the INSERT operation at the source. If ``IncludeOpForFullLoad`` is set to ``false`` , every CDC record is written without a first field to indicate the INSERT operation at the source. For more information about how these settings work together, see `Indicating Source DB Operations in Migrated S3 Data <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring.InsertOps>`_ in the *AWS Database Migration Service User Guide* .
@@ -8924,7 +8929,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-cdcinsertsonly
             '''
             result = self._values.get("cdc_inserts_only")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def cdc_max_batch_interval(self) -> typing.Optional[jsii.Number]:
@@ -9066,7 +9071,7 @@ class CfnEndpoint(
         @builtins.property
         def date_partition_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to ``true`` , this parameter partitions S3 bucket folders based on transaction commit dates.
 
             The default value is ``false`` . For more information about date-based folder partitioning, see `Using date-based folder partitioning <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.DatePartitioning>`_ .
@@ -9074,7 +9079,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-datepartitionenabled
             '''
             result = self._values.get("date_partition_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def date_partition_sequence(self) -> typing.Optional[builtins.str]:
@@ -9114,7 +9119,7 @@ class CfnEndpoint(
         @builtins.property
         def enable_statistics(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that enables statistics for Parquet pages and row groups.
 
             Choose ``true`` to enable statistics, ``false`` to disable. Statistics include ``NULL`` , ``DISTINCT`` , ``MAX`` , and ``MIN`` values. This parameter defaults to ``true`` . This value is used for .parquet file format only.
@@ -9122,7 +9127,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-enablestatistics
             '''
             result = self._values.get("enable_statistics")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def encoding_type(self) -> typing.Optional[builtins.str]:
@@ -9192,7 +9197,7 @@ class CfnEndpoint(
         @builtins.property
         def glue_catalog_generation(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When true, allows AWS Glue to catalog your S3 bucket.
 
             Creating an AWS Glue catalog lets you use Athena to query your data.
@@ -9200,7 +9205,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-gluecataloggeneration
             '''
             result = self._values.get("glue_catalog_generation")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def ignore_header_rows(self) -> typing.Optional[jsii.Number]:
@@ -9216,7 +9221,7 @@ class CfnEndpoint(
         @builtins.property
         def include_op_for_full_load(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that enables a full load to write INSERT operations to the comma-separated value (.csv) output files only to indicate how the rows were added to the source database.
 
             .. epigraph::
@@ -9231,7 +9236,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-includeopforfullload
             '''
             result = self._values.get("include_op_for_full_load")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def max_file_size(self) -> typing.Optional[jsii.Number]:
@@ -9247,7 +9252,7 @@ class CfnEndpoint(
         @builtins.property
         def parquet_timestamp_in_millisecond(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A value that specifies the precision of any ``TIMESTAMP`` column values that are written to an Amazon S3 object file in .parquet format.
 
             .. epigraph::
@@ -9266,7 +9271,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-parquettimestampinmillisecond
             '''
             result = self._values.get("parquet_timestamp_in_millisecond")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def parquet_version(self) -> typing.Optional[builtins.str]:
@@ -9280,7 +9285,7 @@ class CfnEndpoint(
         @builtins.property
         def preserve_transactions(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If this setting is set to ``true`` , AWS DMS saves the transaction order for a change data capture (CDC) load on the Amazon S3 target specified by ```CdcPath`` <https://docs.aws.amazon.com/dms/latest/APIReference/API_S3Settings.html#DMS-Type-S3Settings-CdcPath>`_ . For more information, see `Capturing data changes (CDC) including transaction order on the S3 target <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.EndpointSettings.CdcPath>`_ .
 
             .. epigraph::
@@ -9290,12 +9295,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-preservetransactions
             '''
             result = self._values.get("preserve_transactions")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def rfc4180(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''For an S3 source, when this value is set to ``true`` or ``y`` , each leading double quotation mark has to be followed by an ending double quotation mark.
 
             This formatting complies with RFC 4180. When this value is set to ``false`` or ``n`` , string literals are copied to the target as is. In this case, a delimiter (row or column) signals the end of the field. Thus, you can't use a delimiter as part of the string, because it signals the end of the value.
@@ -9307,7 +9312,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-rfc4180
             '''
             result = self._values.get("rfc4180")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def row_group_length(self) -> typing.Optional[jsii.Number]:
@@ -9372,7 +9377,7 @@ class CfnEndpoint(
         @builtins.property
         def use_csv_no_sup_value(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''This setting applies if the S3 output files during a change data capture (CDC) load are written in .csv format. If this setting is set to ``true`` for columns not included in the supplemental log, AWS DMS uses the value specified by ```CsvNoSupValue`` <https://docs.aws.amazon.com/dms/latest/APIReference/API_S3Settings.html#DMS-Type-S3Settings-CsvNoSupValue>`_ . If this setting isn't set or is set to ``false`` , AWS DMS uses the null value for these columns.
 
             .. epigraph::
@@ -9382,12 +9387,12 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-usecsvnosupvalue
             '''
             result = self._values.get("use_csv_no_sup_value")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def use_task_start_time_for_full_load_timestamp(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to true, this parameter uses the task start time as the timestamp column value instead of the time data is written to target.
 
             For full load, when ``useTaskStartTimeForFullLoadTimestamp`` is set to ``true`` , each row of the timestamp column contains the task start time. For CDC loads, each row of the timestamp column contains the transaction commit time.
@@ -9397,7 +9402,7 @@ class CfnEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-endpoint-s3settings.html#cfn-dms-endpoint-s3settings-usetaskstarttimeforfullloadtimestamp
             '''
             result = self._values.get("use_task_start_time_for_full_load_timestamp")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9538,32 +9543,32 @@ class CfnEndpointProps:
         engine_name: builtins.str,
         certificate_arn: typing.Optional[builtins.str] = None,
         database_name: typing.Optional[builtins.str] = None,
-        doc_db_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.DocDbSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        dynamo_db_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.DynamoDbSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        elasticsearch_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.ElasticsearchSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        doc_db_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.DocDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dynamo_db_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.DynamoDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        elasticsearch_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.ElasticsearchSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         endpoint_identifier: typing.Optional[builtins.str] = None,
         extra_connection_attributes: typing.Optional[builtins.str] = None,
-        gcp_my_sql_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.GcpMySQLSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        ibm_db2_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.IbmDb2SettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kafka_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.KafkaSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kinesis_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.KinesisSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        gcp_my_sql_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.GcpMySQLSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ibm_db2_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.IbmDb2SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kafka_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.KafkaSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kinesis_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.KinesisSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        microsoft_sql_server_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.MicrosoftSqlServerSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        mongo_db_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.MongoDbSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        my_sql_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.MySqlSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        neptune_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.NeptuneSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        oracle_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.OracleSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        microsoft_sql_server_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.MicrosoftSqlServerSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        mongo_db_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.MongoDbSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        my_sql_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.MySqlSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        neptune_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.NeptuneSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        oracle_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.OracleSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         password: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
-        postgre_sql_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.PostgreSqlSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        redis_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.RedisSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        redshift_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.RedshiftSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        postgre_sql_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.PostgreSqlSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        redis_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.RedisSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        redshift_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.RedshiftSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resource_identifier: typing.Optional[builtins.str] = None,
-        s3_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.S3SettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        s3_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.S3SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         server_name: typing.Optional[builtins.str] = None,
         ssl_mode: typing.Optional[builtins.str] = None,
-        sybase_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.SybaseSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sybase_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.SybaseSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         username: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnEndpoint``.
@@ -9605,6 +9610,7 @@ class CfnEndpointProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dms as dms
@@ -10041,7 +10047,7 @@ class CfnEndpointProps:
     @builtins.property
     def doc_db_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.DocDbSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.DocDbSettingsProperty"]]:
         '''Settings in JSON format for the source and target DocumentDB endpoint.
 
         For more information about other available settings, see `Using extra connections attributes with Amazon DocumentDB as a source <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.DocumentDB.html#CHAP_Source.DocumentDB.ECAs>`_ and `Using Amazon DocumentDB as a target for AWS Database Migration Service <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DocumentDB.html>`_ in the *AWS Database Migration Service User Guide* .
@@ -10049,12 +10055,12 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-docdbsettings
         '''
         result = self._values.get("doc_db_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.DocDbSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.DocDbSettingsProperty"]], result)
 
     @builtins.property
     def dynamo_db_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.DynamoDbSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.DynamoDbSettingsProperty"]]:
         '''Settings in JSON format for the target Amazon DynamoDB endpoint.
 
         For information about other available settings, see `Using object mapping to migrate data to DynamoDB <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html#CHAP_Target.DynamoDB.ObjectMapping>`_ in the *AWS Database Migration Service User Guide* .
@@ -10062,12 +10068,12 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-dynamodbsettings
         '''
         result = self._values.get("dynamo_db_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.DynamoDbSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.DynamoDbSettingsProperty"]], result)
 
     @builtins.property
     def elasticsearch_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.ElasticsearchSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.ElasticsearchSettingsProperty"]]:
         '''Settings in JSON format for the target OpenSearch endpoint.
 
         For more information about the available settings, see `Extra connection attributes when using OpenSearch as a target for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Elasticsearch.html#CHAP_Target.Elasticsearch.Configuration>`_ in the *AWS Database Migration Service User Guide* .
@@ -10075,7 +10081,7 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-elasticsearchsettings
         '''
         result = self._values.get("elasticsearch_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.ElasticsearchSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.ElasticsearchSettingsProperty"]], result)
 
     @builtins.property
     def endpoint_identifier(self) -> typing.Optional[builtins.str]:
@@ -10102,7 +10108,7 @@ class CfnEndpointProps:
     @builtins.property
     def gcp_my_sql_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.GcpMySQLSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.GcpMySQLSettingsProperty"]]:
         '''Settings in JSON format for the source GCP MySQL endpoint.
 
         These settings are much the same as the settings for any MySQL-compatible endpoint. For more information, see `Extra connection attributes when using MySQL as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MySQL.html#CHAP_Source.MySQL.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
@@ -10110,12 +10116,12 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-gcpmysqlsettings
         '''
         result = self._values.get("gcp_my_sql_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.GcpMySQLSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.GcpMySQLSettingsProperty"]], result)
 
     @builtins.property
     def ibm_db2_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.IbmDb2SettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.IbmDb2SettingsProperty"]]:
         '''Settings in JSON format for the source IBM Db2 LUW endpoint.
 
         For information about other available settings, see `Extra connection attributes when using Db2 LUW as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.DB2.html#CHAP_Source.DB2.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
@@ -10123,12 +10129,12 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-ibmdb2settings
         '''
         result = self._values.get("ibm_db2_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.IbmDb2SettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.IbmDb2SettingsProperty"]], result)
 
     @builtins.property
     def kafka_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.KafkaSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.KafkaSettingsProperty"]]:
         '''Settings in JSON format for the target Apache Kafka endpoint.
 
         For more information about other available settings, see `Using object mapping to migrate data to a Kafka topic <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kafka.html#CHAP_Target.Kafka.ObjectMapping>`_ in the *AWS Database Migration Service User Guide* .
@@ -10136,12 +10142,12 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-kafkasettings
         '''
         result = self._values.get("kafka_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.KafkaSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.KafkaSettingsProperty"]], result)
 
     @builtins.property
     def kinesis_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.KinesisSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.KinesisSettingsProperty"]]:
         '''Settings in JSON format for the target endpoint for Amazon Kinesis Data Streams.
 
         For more information about other available settings, see `Using object mapping to migrate data to a Kinesis data stream <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping>`_ in the *AWS Database Migration Service User Guide* .
@@ -10149,7 +10155,7 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-kinesissettings
         '''
         result = self._values.get("kinesis_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.KinesisSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.KinesisSettingsProperty"]], result)
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
@@ -10167,7 +10173,7 @@ class CfnEndpointProps:
     @builtins.property
     def microsoft_sql_server_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.MicrosoftSqlServerSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MicrosoftSqlServerSettingsProperty"]]:
         '''Settings in JSON format for the source and target Microsoft SQL Server endpoint.
 
         For information about other available settings, see `Extra connection attributes when using SQL Server as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.SQLServer.html#CHAP_Source.SQLServer.ConnectionAttrib>`_ and `Extra connection attributes when using SQL Server as a target for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.SQLServer.html#CHAP_Target.SQLServer.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
@@ -10175,12 +10181,12 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-microsoftsqlserversettings
         '''
         result = self._values.get("microsoft_sql_server_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.MicrosoftSqlServerSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MicrosoftSqlServerSettingsProperty"]], result)
 
     @builtins.property
     def mongo_db_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.MongoDbSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MongoDbSettingsProperty"]]:
         '''Settings in JSON format for the source MongoDB endpoint.
 
         For more information about the available settings, see `Using MongoDB as a target for AWS Database Migration Service <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html#CHAP_Source.MongoDB.Configuration>`_ in the *AWS Database Migration Service User Guide* .
@@ -10188,12 +10194,12 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-mongodbsettings
         '''
         result = self._values.get("mongo_db_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.MongoDbSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MongoDbSettingsProperty"]], result)
 
     @builtins.property
     def my_sql_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.MySqlSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MySqlSettingsProperty"]]:
         '''Settings in JSON format for the source and target MySQL endpoint.
 
         For information about other available settings, see `Extra connection attributes when using MySQL as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MySQL.html#CHAP_Source.MySQL.ConnectionAttrib>`_ and `Extra connection attributes when using a MySQL-compatible database as a target for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.MySQL.html#CHAP_Target.MySQL.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
@@ -10201,12 +10207,12 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-mysqlsettings
         '''
         result = self._values.get("my_sql_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.MySqlSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.MySqlSettingsProperty"]], result)
 
     @builtins.property
     def neptune_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.NeptuneSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.NeptuneSettingsProperty"]]:
         '''Settings in JSON format for the target Amazon Neptune endpoint.
 
         For more information about the available settings, see `Specifying endpoint settings for Amazon Neptune as a target <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Neptune.html#CHAP_Target.Neptune.EndpointSettings>`_ in the *AWS Database Migration Service User Guide* .
@@ -10214,12 +10220,12 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-neptunesettings
         '''
         result = self._values.get("neptune_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.NeptuneSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.NeptuneSettingsProperty"]], result)
 
     @builtins.property
     def oracle_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.OracleSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.OracleSettingsProperty"]]:
         '''Settings in JSON format for the source and target Oracle endpoint.
 
         For information about other available settings, see `Extra connection attributes when using Oracle as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.Oracle.html#CHAP_Source.Oracle.ConnectionAttrib>`_ and `Extra connection attributes when using Oracle as a target for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Oracle.html#CHAP_Target.Oracle.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
@@ -10227,7 +10233,7 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-oraclesettings
         '''
         result = self._values.get("oracle_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.OracleSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.OracleSettingsProperty"]], result)
 
     @builtins.property
     def password(self) -> typing.Optional[builtins.str]:
@@ -10250,7 +10256,7 @@ class CfnEndpointProps:
     @builtins.property
     def postgre_sql_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.PostgreSqlSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.PostgreSqlSettingsProperty"]]:
         '''Settings in JSON format for the source and target PostgreSQL endpoint.
 
         For information about other available settings, see `Extra connection attributes when using PostgreSQL as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib>`_ and `Extra connection attributes when using PostgreSQL as a target for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.PostgreSQL.html#CHAP_Target.PostgreSQL.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
@@ -10258,12 +10264,12 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-postgresqlsettings
         '''
         result = self._values.get("postgre_sql_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.PostgreSqlSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.PostgreSqlSettingsProperty"]], result)
 
     @builtins.property
     def redis_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.RedisSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.RedisSettingsProperty"]]:
         '''Settings in JSON format for the target Redis endpoint.
 
         For information about other available settings, see `Specifying endpoint settings for Redis as a target <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Redis.html#CHAP_Target.Redis.EndpointSettings>`_ in the *AWS Database Migration Service User Guide* .
@@ -10271,12 +10277,12 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-redissettings
         '''
         result = self._values.get("redis_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.RedisSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.RedisSettingsProperty"]], result)
 
     @builtins.property
     def redshift_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.RedshiftSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.RedshiftSettingsProperty"]]:
         '''Settings in JSON format for the Amazon Redshift endpoint.
 
         For more information about other available settings, see `Extra connection attributes when using Amazon Redshift as a target for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Redshift.html#CHAP_Target.Redshift.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
@@ -10284,7 +10290,7 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-redshiftsettings
         '''
         result = self._values.get("redshift_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.RedshiftSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.RedshiftSettingsProperty"]], result)
 
     @builtins.property
     def resource_identifier(self) -> typing.Optional[builtins.str]:
@@ -10302,7 +10308,7 @@ class CfnEndpointProps:
     @builtins.property
     def s3_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.S3SettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.S3SettingsProperty"]]:
         '''Settings in JSON format for the source and target Amazon S3 endpoint.
 
         For more information about other available settings, see `Extra connection attributes when using Amazon S3 as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.S3.html#CHAP_Source.S3.Configuring>`_ and `Extra connection attributes when using Amazon S3 as a target for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring>`_ in the *AWS Database Migration Service User Guide* .
@@ -10310,7 +10316,7 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-s3settings
         '''
         result = self._values.get("s3_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.S3SettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.S3SettingsProperty"]], result)
 
     @builtins.property
     def server_name(self) -> typing.Optional[builtins.str]:
@@ -10337,7 +10343,7 @@ class CfnEndpointProps:
     @builtins.property
     def sybase_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.SybaseSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.SybaseSettingsProperty"]]:
         '''Settings in JSON format for the source and target SAP ASE endpoint.
 
         For information about other available settings, see `Extra connection attributes when using SAP ASE as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.SAP.html#CHAP_Source.SAP.ConnectionAttrib>`_ and `Extra connection attributes when using SAP ASE as a target for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.SAP.html#CHAP_Target.SAP.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
@@ -10345,16 +10351,16 @@ class CfnEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-sybasesettings
         '''
         result = self._values.get("sybase_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.SybaseSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.SybaseSettingsProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags to be assigned to the endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def username(self) -> typing.Optional[builtins.str]:
@@ -10393,6 +10399,7 @@ class CfnEventSubscription(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dms as dms
@@ -10415,16 +10422,16 @@ class CfnEventSubscription(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         sns_topic_arn: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
         source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         source_type: typing.Optional[builtins.str] = None,
         subscription_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DMS::EventSubscription``.
 
@@ -10467,7 +10474,7 @@ class CfnEventSubscription(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventSubscription", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10511,15 +10518,15 @@ class CfnEventSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="eventSubscriptionRef")
-    def event_subscription_ref(self) -> _EventSubscriptionReference_d17cc145:
+    def event_subscription_ref(self) -> "_EventSubscriptionReference_d17cc145":
         '''A reference to a EventSubscription resource.'''
-        return typing.cast(_EventSubscriptionReference_d17cc145, jsii.get(self, "eventSubscriptionRef"))
+        return typing.cast("_EventSubscriptionReference_d17cc145", jsii.get(self, "eventSubscriptionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="snsTopicArn")
@@ -10538,14 +10545,14 @@ class CfnEventSubscription(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to activate the subscription.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3f9e6185bdbcfc8331ed5d83bf2fbaa37dd9cb811c4e70a7c8fa3cf2a9f73604)
@@ -10609,12 +10616,12 @@ class CfnEventSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags to be assigned to the event subscription.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__80baa3035b4fe50b1e5040583141b0b892965c1bceea423668eba59b6a4693e0)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -10639,12 +10646,12 @@ class CfnEventSubscriptionProps:
         self,
         *,
         sns_topic_arn: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
         source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         source_type: typing.Optional[builtins.str] = None,
         subscription_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEventSubscription``.
 
@@ -10661,6 +10668,7 @@ class CfnEventSubscriptionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dms as dms
@@ -10720,7 +10728,7 @@ class CfnEventSubscriptionProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to activate the subscription.
 
         If you don't specify this property, CloudFormation activates the subscription.
@@ -10728,7 +10736,7 @@ class CfnEventSubscriptionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-eventsubscription.html#cfn-dms-eventsubscription-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def event_categories(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -10779,13 +10787,13 @@ class CfnEventSubscriptionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags to be assigned to the event subscription.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-eventsubscription.html#cfn-dms-eventsubscription-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10813,6 +10821,7 @@ class CfnInstanceProfile(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dms as dms
@@ -10836,7 +10845,7 @@ class CfnInstanceProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         availability_zone: typing.Optional[builtins.str] = None,
@@ -10845,9 +10854,9 @@ class CfnInstanceProfile(
         instance_profile_name: typing.Optional[builtins.str] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
         network_type: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         subnet_group_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::DMS::InstanceProfile``.
@@ -10888,7 +10897,7 @@ class CfnInstanceProfile(
     @builtins.classmethod
     def arn_for_instance_profile(
         cls,
-        resource: _IInstanceProfileRef_2a55b923,
+        resource: "_IInstanceProfileRef_2a55b923",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -10911,7 +10920,7 @@ class CfnInstanceProfile(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInstanceProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10960,9 +10969,9 @@ class CfnInstanceProfile(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -10971,9 +10980,9 @@ class CfnInstanceProfile(
 
     @builtins.property
     @jsii.member(jsii_name="instanceProfileRef")
-    def instance_profile_ref(self) -> _InstanceProfileReference_e4469b64:
+    def instance_profile_ref(self) -> "_InstanceProfileReference_e4469b64":
         '''A reference to a InstanceProfile resource.'''
-        return typing.cast(_InstanceProfileReference_e4469b64, jsii.get(self, "instanceProfileRef"))
+        return typing.cast("_InstanceProfileReference_e4469b64", jsii.get(self, "instanceProfileRef"))
 
     @builtins.property
     @jsii.member(jsii_name="availabilityZone")
@@ -11057,14 +11066,14 @@ class CfnInstanceProfile(
     @jsii.member(jsii_name="publiclyAccessible")
     def publicly_accessible(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies the accessibility options for the instance profile.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "publiclyAccessible"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "publiclyAccessible"))
 
     @publicly_accessible.setter
     def publicly_accessible(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bab01c20133942c669cfa6364b41fe2f0884195135cdb484b907cd1d017de096)
@@ -11086,12 +11095,12 @@ class CfnInstanceProfile(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__18cb1326620745b811df71b6f775ffff322b6d7a24cc629d76bd1a938e4e1e10)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -11140,9 +11149,9 @@ class CfnInstanceProfileProps:
         instance_profile_name: typing.Optional[builtins.str] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
         network_type: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         subnet_group_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnInstanceProfile``.
@@ -11163,6 +11172,7 @@ class CfnInstanceProfileProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dms as dms
@@ -11282,7 +11292,7 @@ class CfnInstanceProfileProps:
     @builtins.property
     def publicly_accessible(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies the accessibility options for the instance profile.
 
         A value of ``true`` represents an instance profile with a public IP address. A value of ``false`` represents an instance profile with a private IP address. The default value is ``true`` .
@@ -11292,7 +11302,7 @@ class CfnInstanceProfileProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-instanceprofile.html#cfn-dms-instanceprofile-publiclyaccessible
         '''
         result = self._values.get("publicly_accessible")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def subnet_group_identifier(self) -> typing.Optional[builtins.str]:
@@ -11304,13 +11314,13 @@ class CfnInstanceProfileProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-instanceprofile.html#cfn-dms-instanceprofile-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def vpc_security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -11349,6 +11359,7 @@ class CfnMigrationProject(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dms as dms
@@ -11389,7 +11400,7 @@ class CfnMigrationProject(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -11399,10 +11410,10 @@ class CfnMigrationProject(
         migration_project_creation_time: typing.Optional[builtins.str] = None,
         migration_project_identifier: typing.Optional[builtins.str] = None,
         migration_project_name: typing.Optional[builtins.str] = None,
-        schema_conversion_application_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMigrationProject.SchemaConversionApplicationAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        source_data_provider_descriptors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMigrationProject.DataProviderDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        target_data_provider_descriptors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMigrationProject.DataProviderDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        schema_conversion_application_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMigrationProject.SchemaConversionApplicationAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_data_provider_descriptors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMigrationProject.DataProviderDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_data_provider_descriptors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMigrationProject.DataProviderDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         transformation_rules: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::DMS::MigrationProject``.
@@ -11447,7 +11458,7 @@ class CfnMigrationProject(
     @builtins.classmethod
     def arn_for_migration_project(
         cls,
-        resource: _IMigrationProjectRef_e8e0eb77,
+        resource: "_IMigrationProjectRef_e8e0eb77",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -11470,7 +11481,7 @@ class CfnMigrationProject(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMigrationProject", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -11510,9 +11521,9 @@ class CfnMigrationProject(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -11521,9 +11532,9 @@ class CfnMigrationProject(
 
     @builtins.property
     @jsii.member(jsii_name="migrationProjectRef")
-    def migration_project_ref(self) -> _MigrationProjectReference_b53b5f6c:
+    def migration_project_ref(self) -> "_MigrationProjectReference_b53b5f6c":
         '''A reference to a MigrationProject resource.'''
-        return typing.cast(_MigrationProjectReference_b53b5f6c, jsii.get(self, "migrationProjectRef"))
+        return typing.cast("_MigrationProjectReference_b53b5f6c", jsii.get(self, "migrationProjectRef"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -11631,14 +11642,14 @@ class CfnMigrationProject(
     @jsii.member(jsii_name="schemaConversionApplicationAttributes")
     def schema_conversion_application_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMigrationProject.SchemaConversionApplicationAttributesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.SchemaConversionApplicationAttributesProperty"]]:
         '''The schema conversion application attributes, including the Amazon S3 bucket name and Amazon S3 role ARN.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMigrationProject.SchemaConversionApplicationAttributesProperty"]], jsii.get(self, "schemaConversionApplicationAttributes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.SchemaConversionApplicationAttributesProperty"]], jsii.get(self, "schemaConversionApplicationAttributes"))
 
     @schema_conversion_application_attributes.setter
     def schema_conversion_application_attributes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMigrationProject.SchemaConversionApplicationAttributesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.SchemaConversionApplicationAttributesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8248f02c8a28507c6fd7b69d9078ece62cf902113b4922ac2c3b1eb1efe99e47)
@@ -11649,14 +11660,14 @@ class CfnMigrationProject(
     @jsii.member(jsii_name="sourceDataProviderDescriptors")
     def source_data_provider_descriptors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMigrationProject.DataProviderDescriptorProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.DataProviderDescriptorProperty"]]]]:
         '''Information about the source data provider, including the name or ARN, and AWS Secrets Manager parameters.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMigrationProject.DataProviderDescriptorProperty"]]]], jsii.get(self, "sourceDataProviderDescriptors"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.DataProviderDescriptorProperty"]]]], jsii.get(self, "sourceDataProviderDescriptors"))
 
     @source_data_provider_descriptors.setter
     def source_data_provider_descriptors(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMigrationProject.DataProviderDescriptorProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.DataProviderDescriptorProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a00bd941d6a9f753e2588061a187fa267a4026e4ad4481a8223f35bfb06bc87c)
@@ -11665,12 +11676,12 @@ class CfnMigrationProject(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ac8af1fc70b174a366c98ab2a01a5b731e43ae5aea452d554ac059c8709dc325)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -11680,14 +11691,14 @@ class CfnMigrationProject(
     @jsii.member(jsii_name="targetDataProviderDescriptors")
     def target_data_provider_descriptors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMigrationProject.DataProviderDescriptorProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.DataProviderDescriptorProperty"]]]]:
         '''Information about the target data provider, including the name or ARN, and AWS Secrets Manager parameters.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMigrationProject.DataProviderDescriptorProperty"]]]], jsii.get(self, "targetDataProviderDescriptors"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.DataProviderDescriptorProperty"]]]], jsii.get(self, "targetDataProviderDescriptors"))
 
     @target_data_provider_descriptors.setter
     def target_data_provider_descriptors(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMigrationProject.DataProviderDescriptorProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.DataProviderDescriptorProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e70fa24655fe3ca5e620c8a935fd467925c600296ae5d6c563060ae2bd7b8ebb)
@@ -11928,10 +11939,10 @@ class CfnMigrationProjectProps:
         migration_project_creation_time: typing.Optional[builtins.str] = None,
         migration_project_identifier: typing.Optional[builtins.str] = None,
         migration_project_name: typing.Optional[builtins.str] = None,
-        schema_conversion_application_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMigrationProject.SchemaConversionApplicationAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        source_data_provider_descriptors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMigrationProject.DataProviderDescriptorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        target_data_provider_descriptors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMigrationProject.DataProviderDescriptorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        schema_conversion_application_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMigrationProject.SchemaConversionApplicationAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_data_provider_descriptors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMigrationProject.DataProviderDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_data_provider_descriptors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMigrationProject.DataProviderDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         transformation_rules: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnMigrationProject``.
@@ -11954,6 +11965,7 @@ class CfnMigrationProjectProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dms as dms
@@ -12102,44 +12114,44 @@ class CfnMigrationProjectProps:
     @builtins.property
     def schema_conversion_application_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMigrationProject.SchemaConversionApplicationAttributesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.SchemaConversionApplicationAttributesProperty"]]:
         '''The schema conversion application attributes, including the Amazon S3 bucket name and Amazon S3 role ARN.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-migrationproject.html#cfn-dms-migrationproject-schemaconversionapplicationattributes
         '''
         result = self._values.get("schema_conversion_application_attributes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMigrationProject.SchemaConversionApplicationAttributesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.SchemaConversionApplicationAttributesProperty"]], result)
 
     @builtins.property
     def source_data_provider_descriptors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMigrationProject.DataProviderDescriptorProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.DataProviderDescriptorProperty"]]]]:
         '''Information about the source data provider, including the name or ARN, and AWS Secrets Manager parameters.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-migrationproject.html#cfn-dms-migrationproject-sourcedataproviderdescriptors
         '''
         result = self._values.get("source_data_provider_descriptors")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMigrationProject.DataProviderDescriptorProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.DataProviderDescriptorProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-migrationproject.html#cfn-dms-migrationproject-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def target_data_provider_descriptors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMigrationProject.DataProviderDescriptorProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.DataProviderDescriptorProperty"]]]]:
         '''Information about the target data provider, including the name or ARN, and AWS Secrets Manager parameters.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-migrationproject.html#cfn-dms-migrationproject-targetdataproviderdescriptors
         '''
         result = self._values.get("target_data_provider_descriptors")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMigrationProject.DataProviderDescriptorProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMigrationProject.DataProviderDescriptorProperty"]]]], result)
 
     @builtins.property
     def transformation_rules(self) -> typing.Optional[builtins.str]:
@@ -12178,6 +12190,7 @@ class CfnReplicationConfig(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dms as dms
@@ -12219,10 +12232,10 @@ class CfnReplicationConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        compute_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicationConfig.ComputeConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        compute_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationConfig.ComputeConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         replication_config_identifier: builtins.str,
         replication_type: builtins.str,
         source_endpoint_arn: builtins.str,
@@ -12231,7 +12244,7 @@ class CfnReplicationConfig(
         replication_settings: typing.Any = None,
         resource_identifier: typing.Optional[builtins.str] = None,
         supplemental_settings: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DMS::ReplicationConfig``.
 
@@ -12271,7 +12284,7 @@ class CfnReplicationConfig(
     @builtins.classmethod
     def arn_for_replication_config(
         cls,
-        resource: _IReplicationConfigRef_cd698554,
+        resource: "_IReplicationConfigRef_cd698554",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -12294,7 +12307,7 @@ class CfnReplicationConfig(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReplicationConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12334,9 +12347,9 @@ class CfnReplicationConfig(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -12345,22 +12358,22 @@ class CfnReplicationConfig(
 
     @builtins.property
     @jsii.member(jsii_name="replicationConfigRef")
-    def replication_config_ref(self) -> _ReplicationConfigReference_cac8b4fd:
+    def replication_config_ref(self) -> "_ReplicationConfigReference_cac8b4fd":
         '''A reference to a ReplicationConfig resource.'''
-        return typing.cast(_ReplicationConfigReference_cac8b4fd, jsii.get(self, "replicationConfigRef"))
+        return typing.cast("_ReplicationConfigReference_cac8b4fd", jsii.get(self, "replicationConfigRef"))
 
     @builtins.property
     @jsii.member(jsii_name="computeConfig")
     def compute_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnReplicationConfig.ComputeConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnReplicationConfig.ComputeConfigProperty"]:
         '''Configuration parameters for provisioning an AWS DMS Serverless replication.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnReplicationConfig.ComputeConfigProperty"], jsii.get(self, "computeConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnReplicationConfig.ComputeConfigProperty"], jsii.get(self, "computeConfig"))
 
     @compute_config.setter
     def compute_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnReplicationConfig.ComputeConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnReplicationConfig.ComputeConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__32966575e9a17251f77f3c3fd9f0bb4f54a2ab6b20a6253bb2e3f97654887c8e)
@@ -12473,12 +12486,12 @@ class CfnReplicationConfig(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more optional tags associated with resources used by the AWS DMS Serverless replication.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2f7a00e90f9a69724097ed67b1c9d994575c88df02b8ab67e96b098dd2bb1aea)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -12508,7 +12521,7 @@ class CfnReplicationConfig(
             dns_name_servers: typing.Optional[builtins.str] = None,
             kms_key_id: typing.Optional[builtins.str] = None,
             min_capacity_units: typing.Optional[jsii.Number] = None,
-            multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            multi_az: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             preferred_maintenance_window: typing.Optional[builtins.str] = None,
             replication_subnet_group_id: typing.Optional[builtins.str] = None,
             vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -12640,7 +12653,7 @@ class CfnReplicationConfig(
         @builtins.property
         def multi_az(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether the AWS DMS Serverless replication is a Multi-AZ deployment.
 
             You can't set the ``AvailabilityZone`` parameter if the ``MultiAZ`` parameter is set to ``true`` .
@@ -12648,7 +12661,7 @@ class CfnReplicationConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-replicationconfig-computeconfig.html#cfn-dms-replicationconfig-computeconfig-multiaz
             '''
             result = self._values.get("multi_az")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def preferred_maintenance_window(self) -> typing.Optional[builtins.str]:
@@ -12717,7 +12730,7 @@ class CfnReplicationConfigProps:
     def __init__(
         self,
         *,
-        compute_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnReplicationConfig.ComputeConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        compute_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationConfig.ComputeConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         replication_config_identifier: builtins.str,
         replication_type: builtins.str,
         source_endpoint_arn: builtins.str,
@@ -12726,7 +12739,7 @@ class CfnReplicationConfigProps:
         replication_settings: typing.Any = None,
         resource_identifier: typing.Optional[builtins.str] = None,
         supplemental_settings: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnReplicationConfig``.
 
@@ -12746,6 +12759,7 @@ class CfnReplicationConfigProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dms as dms
@@ -12816,14 +12830,14 @@ class CfnReplicationConfigProps:
     @builtins.property
     def compute_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnReplicationConfig.ComputeConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnReplicationConfig.ComputeConfigProperty"]:
         '''Configuration parameters for provisioning an AWS DMS Serverless replication.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationconfig.html#cfn-dms-replicationconfig-computeconfig
         '''
         result = self._values.get("compute_config")
         assert result is not None, "Required property 'compute_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnReplicationConfig.ComputeConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnReplicationConfig.ComputeConfigProperty"], result)
 
     @builtins.property
     def replication_config_identifier(self) -> builtins.str:
@@ -12919,7 +12933,7 @@ class CfnReplicationConfigProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more optional tags associated with resources used by the AWS DMS Serverless replication.
 
         For more information, see `Tagging resources in AWS Database Migration Service <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tagging.html>`_ .
@@ -12927,7 +12941,7 @@ class CfnReplicationConfigProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationconfig.html#cfn-dms-replicationconfig-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12957,6 +12971,7 @@ class CfnReplicationInstance(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dms as dms
@@ -12989,25 +13004,25 @@ class CfnReplicationInstance(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         replication_instance_class: builtins.str,
         allocated_storage: typing.Optional[jsii.Number] = None,
-        allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         availability_zone: typing.Optional[builtins.str] = None,
         dns_name_servers: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        multi_az: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         network_type: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         replication_instance_identifier: typing.Optional[builtins.str] = None,
         replication_subnet_group_identifier: typing.Optional[builtins.str] = None,
         resource_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::DMS::ReplicationInstance``.
@@ -13071,7 +13086,7 @@ class CfnReplicationInstance(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReplicationInstance", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -13133,15 +13148,15 @@ class CfnReplicationInstance(
 
     @builtins.property
     @jsii.member(jsii_name="replicationInstanceRef")
-    def replication_instance_ref(self) -> _ReplicationInstanceReference_408be100:
+    def replication_instance_ref(self) -> "_ReplicationInstanceReference_408be100":
         '''A reference to a ReplicationInstance resource.'''
-        return typing.cast(_ReplicationInstanceReference_408be100, jsii.get(self, "replicationInstanceRef"))
+        return typing.cast("_ReplicationInstanceReference_408be100", jsii.get(self, "replicationInstanceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="replicationInstanceClass")
@@ -13173,14 +13188,14 @@ class CfnReplicationInstance(
     @jsii.member(jsii_name="allowMajorVersionUpgrade")
     def allow_major_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates that major version upgrades are allowed.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "allowMajorVersionUpgrade"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "allowMajorVersionUpgrade"))
 
     @allow_major_version_upgrade.setter
     def allow_major_version_upgrade(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d542d7160e59f9611ad93908e6070b4d58a40287b9bb64428b6c6fdfd564831b)
@@ -13191,14 +13206,14 @@ class CfnReplicationInstance(
     @jsii.member(jsii_name="autoMinorVersionUpgrade")
     def auto_minor_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A value that indicates whether minor engine upgrades are applied automatically to the replication instance during the maintenance window.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "autoMinorVersionUpgrade"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "autoMinorVersionUpgrade"))
 
     @auto_minor_version_upgrade.setter
     def auto_minor_version_upgrade(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a670c3f6412303c20ee8b484b6db57b09d69fe3bfd90a5002f50a95211ae920d)
@@ -13261,14 +13276,14 @@ class CfnReplicationInstance(
     @jsii.member(jsii_name="multiAz")
     def multi_az(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the replication instance is a Multi-AZ deployment.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "multiAz"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "multiAz"))
 
     @multi_az.setter
     def multi_az(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__15cd762d24a89b64d936fd024f99a77b04a531719743e2b8fc0fe1101c056518)
@@ -13308,14 +13323,14 @@ class CfnReplicationInstance(
     @jsii.member(jsii_name="publiclyAccessible")
     def publicly_accessible(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies the accessibility options for the replication instance.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "publiclyAccessible"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "publiclyAccessible"))
 
     @publicly_accessible.setter
     def publicly_accessible(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__47cab327863ed0bd5c6846fe9c62673d11bac796afa3f7043664bf2daed7b5af)
@@ -13372,12 +13387,12 @@ class CfnReplicationInstance(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags to be assigned to the replication instance.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4e9b076e4deeb27025899867a8af58f94e0b718991df1032113865eea27810a7)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -13429,20 +13444,20 @@ class CfnReplicationInstanceProps:
         *,
         replication_instance_class: builtins.str,
         allocated_storage: typing.Optional[jsii.Number] = None,
-        allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         availability_zone: typing.Optional[builtins.str] = None,
         dns_name_servers: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        multi_az: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         network_type: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         replication_instance_identifier: typing.Optional[builtins.str] = None,
         replication_subnet_group_identifier: typing.Optional[builtins.str] = None,
         resource_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnReplicationInstance``.
@@ -13470,6 +13485,7 @@ class CfnReplicationInstanceProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dms as dms
@@ -13578,7 +13594,7 @@ class CfnReplicationInstanceProps:
     @builtins.property
     def allow_major_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates that major version upgrades are allowed.
 
         Changing this parameter does not result in an outage, and the change is asynchronously applied as soon as possible.
@@ -13588,12 +13604,12 @@ class CfnReplicationInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-allowmajorversionupgrade
         '''
         result = self._values.get("allow_major_version_upgrade")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def auto_minor_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A value that indicates whether minor engine upgrades are applied automatically to the replication instance during the maintenance window.
 
         This parameter defaults to ``true`` .
@@ -13603,7 +13619,7 @@ class CfnReplicationInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-autominorversionupgrade
         '''
         result = self._values.get("auto_minor_version_upgrade")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def availability_zone(self) -> typing.Optional[builtins.str]:
@@ -13654,7 +13670,7 @@ class CfnReplicationInstanceProps:
     @builtins.property
     def multi_az(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the replication instance is a Multi-AZ deployment.
 
         You can't set the ``AvailabilityZone`` parameter if the Multi-AZ parameter is set to ``true`` .
@@ -13662,7 +13678,7 @@ class CfnReplicationInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-multiaz
         '''
         result = self._values.get("multi_az")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def network_type(self) -> typing.Optional[builtins.str]:
@@ -13695,7 +13711,7 @@ class CfnReplicationInstanceProps:
     @builtins.property
     def publicly_accessible(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies the accessibility options for the replication instance.
 
         A value of ``true`` represents an instance with a public IP address. A value of ``false`` represents an instance with a private IP address. The default value is ``true`` .
@@ -13703,7 +13719,7 @@ class CfnReplicationInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-publiclyaccessible
         '''
         result = self._values.get("publicly_accessible")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def replication_instance_identifier(self) -> typing.Optional[builtins.str]:
@@ -13743,13 +13759,13 @@ class CfnReplicationInstanceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags to be assigned to the replication instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def vpc_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -13793,6 +13809,7 @@ class CfnReplicationSubnetGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dms as dms
@@ -13812,13 +13829,13 @@ class CfnReplicationSubnetGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         replication_subnet_group_description: builtins.str,
         subnet_ids: typing.Sequence[builtins.str],
         replication_subnet_group_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DMS::ReplicationSubnetGroup``.
 
@@ -13855,7 +13872,7 @@ class CfnReplicationSubnetGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReplicationSubnetGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -13899,15 +13916,17 @@ class CfnReplicationSubnetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="replicationSubnetGroupRef")
-    def replication_subnet_group_ref(self) -> _ReplicationSubnetGroupReference_fa0eeb14:
+    def replication_subnet_group_ref(
+        self,
+    ) -> "_ReplicationSubnetGroupReference_fa0eeb14":
         '''A reference to a ReplicationSubnetGroup resource.'''
-        return typing.cast(_ReplicationSubnetGroupReference_fa0eeb14, jsii.get(self, "replicationSubnetGroupRef"))
+        return typing.cast("_ReplicationSubnetGroupReference_fa0eeb14", jsii.get(self, "replicationSubnetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="replicationSubnetGroupDescription")
@@ -13953,12 +13972,12 @@ class CfnReplicationSubnetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags to be assigned to the subnet group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a2c3c4e17f3d3ba3275fed9a1aab23448ad30fccd5e22c0ae03edd65bc8ff2e7)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -13982,7 +14001,7 @@ class CfnReplicationSubnetGroupProps:
         replication_subnet_group_description: builtins.str,
         subnet_ids: typing.Sequence[builtins.str],
         replication_subnet_group_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnReplicationSubnetGroup``.
 
@@ -13996,6 +14015,7 @@ class CfnReplicationSubnetGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dms as dms
@@ -14059,13 +14079,13 @@ class CfnReplicationSubnetGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags to be assigned to the subnet group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationsubnetgroup.html#cfn-dms-replicationsubnetgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14093,6 +14113,7 @@ class CfnReplicationTask(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dms as dms
@@ -14121,7 +14142,7 @@ class CfnReplicationTask(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         migration_type: builtins.str,
@@ -14135,7 +14156,7 @@ class CfnReplicationTask(
         replication_task_identifier: typing.Optional[builtins.str] = None,
         replication_task_settings: typing.Optional[builtins.str] = None,
         resource_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         task_data: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::DMS::ReplicationTask``.
@@ -14191,7 +14212,7 @@ class CfnReplicationTask(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReplicationTask", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -14235,15 +14256,15 @@ class CfnReplicationTask(
 
     @builtins.property
     @jsii.member(jsii_name="replicationTaskRef")
-    def replication_task_ref(self) -> _ReplicationTaskReference_d73d9e7e:
+    def replication_task_ref(self) -> "_ReplicationTaskReference_d73d9e7e":
         '''A reference to a ReplicationTask resource.'''
-        return typing.cast(_ReplicationTaskReference_d73d9e7e, jsii.get(self, "replicationTaskRef"))
+        return typing.cast("_ReplicationTaskReference_d73d9e7e", jsii.get(self, "replicationTaskRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="migrationType")
@@ -14390,12 +14411,12 @@ class CfnReplicationTask(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags to be assigned to the replication task.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6a8fadfeae4645d0ebd875d4c0285d22d91319e75b8c434882a51c7205d677cb)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -14449,7 +14470,7 @@ class CfnReplicationTaskProps:
         replication_task_identifier: typing.Optional[builtins.str] = None,
         replication_task_settings: typing.Optional[builtins.str] = None,
         resource_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         task_data: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnReplicationTask``.
@@ -14473,6 +14494,7 @@ class CfnReplicationTaskProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dms as dms
@@ -14677,13 +14699,13 @@ class CfnReplicationTaskProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''One or more tags to be assigned to the replication task.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationtask.html#cfn-dms-replicationtask-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def task_data(self) -> typing.Optional[builtins.str]:

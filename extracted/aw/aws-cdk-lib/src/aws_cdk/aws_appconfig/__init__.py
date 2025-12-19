@@ -840,7 +840,7 @@ class Action(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_appconfig.Actio
         action_points: typing.Sequence["ActionPoint"],
         event_destination: "IEventDestination",
         description: typing.Optional[builtins.str] = None,
-        execution_role: typing.Optional[_IRole_235f5d8e] = None,
+        execution_role: typing.Optional["_IRole_235f5d8e"] = None,
         invoke_without_execution_role: typing.Optional[builtins.bool] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -883,9 +883,9 @@ class Action(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_appconfig.Actio
 
     @builtins.property
     @jsii.member(jsii_name="executionRole")
-    def execution_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def execution_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The execution role for the action.'''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "executionRole"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "executionRole"))
 
     @builtins.property
     @jsii.member(jsii_name="invokeWithoutExecutionRole")
@@ -948,10 +948,10 @@ class ActionProps:
     def __init__(
         self,
         *,
-        action_points: typing.Sequence[ActionPoint],
+        action_points: typing.Sequence["ActionPoint"],
         event_destination: "IEventDestination",
         description: typing.Optional[builtins.str] = None,
-        execution_role: typing.Optional[_IRole_235f5d8e] = None,
+        execution_role: typing.Optional["_IRole_235f5d8e"] = None,
         invoke_without_execution_role: typing.Optional[builtins.bool] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -1002,11 +1002,11 @@ class ActionProps:
             self._values["name"] = name
 
     @builtins.property
-    def action_points(self) -> typing.List[ActionPoint]:
+    def action_points(self) -> typing.List["ActionPoint"]:
         '''The action points that will trigger the extension action.'''
         result = self._values.get("action_points")
         assert result is not None, "Required property 'action_points' is missing"
-        return typing.cast(typing.List[ActionPoint], result)
+        return typing.cast(typing.List["ActionPoint"], result)
 
     @builtins.property
     def event_destination(self) -> "IEventDestination":
@@ -1025,13 +1025,13 @@ class ActionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def execution_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def execution_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The execution role for the action.
 
         :default: - A role is generated.
         '''
         result = self._values.get("execution_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def invoke_without_execution_role(self) -> typing.Optional[builtins.bool]:
@@ -1163,6 +1163,7 @@ class CfnApplication(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appconfig as appconfig
@@ -1181,12 +1182,12 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppConfig::Application``.
 
@@ -1206,7 +1207,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_768db227) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_768db227") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1219,10 +1220,10 @@ class CfnApplication(
     @builtins.classmethod
     def from_application_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         application_id: builtins.str,
-    ) -> _IApplicationRef_768db227:
+    ) -> "_IApplicationRef_768db227":
         '''Creates a new IApplicationRef from a applicationId.
 
         :param scope: -
@@ -1234,7 +1235,7 @@ class CfnApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument application_id", value=application_id, expected_type=type_hints["application_id"])
-        return typing.cast(_IApplicationRef_768db227, jsii.sinvoke(cls, "fromApplicationId", [scope, id, application_id]))
+        return typing.cast("_IApplicationRef_768db227", jsii.sinvoke(cls, "fromApplicationId", [scope, id, application_id]))
 
     @jsii.member(jsii_name="isCfnApplication")
     @builtins.classmethod
@@ -1249,7 +1250,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1280,9 +1281,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_2b7c5bb6:
+    def application_ref(self) -> "_ApplicationReference_2b7c5bb6":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_2b7c5bb6, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_2b7c5bb6", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrApplicationId")
@@ -1295,9 +1296,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1332,12 +1333,12 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata to assign to the application.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e1c6b2136fb3c6e3eba293e5878e147b18261e888036e9d04f50ade7f12363e3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1355,7 +1356,7 @@ class CfnApplicationProps:
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplication``.
 
@@ -1368,6 +1369,7 @@ class CfnApplicationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appconfig as appconfig
@@ -1416,7 +1418,7 @@ class CfnApplicationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata to assign to the application.
 
         Tags help organize and categorize your AWS AppConfig resources. Each tag consists of a key and an optional value, both of which you define.
@@ -1424,7 +1426,7 @@ class CfnApplicationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-application.html#cfn-appconfig-application-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1468,6 +1470,7 @@ class CfnConfigurationProfile(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appconfig as appconfig
@@ -1496,19 +1499,19 @@ class CfnConfigurationProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
+        application_id: typing.Union[builtins.str, "_IApplicationRef_768db227"],
         location_uri: builtins.str,
         name: builtins.str,
         deletion_protection_check: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         kms_key_identifier: typing.Optional[builtins.str] = None,
-        retrieval_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        retrieval_role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
-        validators: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationProfile.ValidatorsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        validators: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationProfile.ValidatorsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppConfig::ConfigurationProfile``.
 
@@ -1557,7 +1560,7 @@ class CfnConfigurationProfile(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigurationProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1608,9 +1611,9 @@ class CfnConfigurationProfile(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1619,9 +1622,9 @@ class CfnConfigurationProfile(
 
     @builtins.property
     @jsii.member(jsii_name="configurationProfileRef")
-    def configuration_profile_ref(self) -> _ConfigurationProfileReference_c0821f22:
+    def configuration_profile_ref(self) -> "_ConfigurationProfileReference_c0821f22":
         '''A reference to a ConfigurationProfile resource.'''
-        return typing.cast(_ConfigurationProfileReference_c0821f22, jsii.get(self, "configurationProfileRef"))
+        return typing.cast("_ConfigurationProfileReference_c0821f22", jsii.get(self, "configurationProfileRef"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -1719,12 +1722,12 @@ class CfnConfigurationProfile(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata to assign to the configuration profile.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ebd94616157773a4ab3988775ff92592f3cda9938c8625e395d1dbbf8406354b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1747,14 +1750,14 @@ class CfnConfigurationProfile(
     @jsii.member(jsii_name="validators")
     def validators(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationProfile.ValidatorsProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationProfile.ValidatorsProperty"]]]]:
         '''A list of methods for validating the configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationProfile.ValidatorsProperty"]]]], jsii.get(self, "validators"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationProfile.ValidatorsProperty"]]]], jsii.get(self, "validators"))
 
     @validators.setter
     def validators(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationProfile.ValidatorsProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationProfile.ValidatorsProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__11ba2acd464e5613cd96989e3516592dcd5684d8452b3028698e0549f5d5fafb)
@@ -1854,16 +1857,16 @@ class CfnConfigurationProfileProps:
     def __init__(
         self,
         *,
-        application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
+        application_id: typing.Union[builtins.str, "_IApplicationRef_768db227"],
         location_uri: builtins.str,
         name: builtins.str,
         deletion_protection_check: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         kms_key_identifier: typing.Optional[builtins.str] = None,
-        retrieval_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        retrieval_role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
-        validators: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationProfile.ValidatorsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        validators: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationProfile.ValidatorsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfigurationProfile``.
 
@@ -1883,6 +1886,7 @@ class CfnConfigurationProfileProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appconfig as appconfig
@@ -1941,14 +1945,14 @@ class CfnConfigurationProfileProps:
             self._values["validators"] = validators
 
     @builtins.property
-    def application_id(self) -> typing.Union[builtins.str, _IApplicationRef_768db227]:
+    def application_id(self) -> typing.Union[builtins.str, "_IApplicationRef_768db227"]:
         '''The application ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-configurationprofile.html#cfn-appconfig-configurationprofile-applicationid
         '''
         result = self._values.get("application_id")
         assert result is not None, "Required property 'application_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IApplicationRef_768db227], result)
+        return typing.cast(typing.Union[builtins.str, "_IApplicationRef_768db227"], result)
 
     @builtins.property
     def location_uri(self) -> builtins.str:
@@ -2015,7 +2019,7 @@ class CfnConfigurationProfileProps:
     @builtins.property
     def retrieval_role_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''The ARN of an IAM role with permission to access the configuration at the specified ``LocationUri`` .
 
         .. epigraph::
@@ -2025,10 +2029,10 @@ class CfnConfigurationProfileProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-configurationprofile.html#cfn-appconfig-configurationprofile-retrievalrolearn
         '''
         result = self._values.get("retrieval_role_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata to assign to the configuration profile.
 
         Tags help organize and categorize your AWS AppConfig resources. Each tag consists of a key and an optional value, both of which you define.
@@ -2036,7 +2040,7 @@ class CfnConfigurationProfileProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-configurationprofile.html#cfn-appconfig-configurationprofile-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def type(self) -> typing.Optional[builtins.str]:
@@ -2056,13 +2060,13 @@ class CfnConfigurationProfileProps:
     @builtins.property
     def validators(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationProfile.ValidatorsProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationProfile.ValidatorsProperty"]]]]:
         '''A list of methods for validating the configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-configurationprofile.html#cfn-appconfig-configurationprofile-validators
         '''
         result = self._values.get("validators")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationProfile.ValidatorsProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationProfile.ValidatorsProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2104,6 +2108,7 @@ class CfnDeployment(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appconfig as appconfig
@@ -2132,7 +2137,7 @@ class CfnDeployment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
@@ -2141,9 +2146,9 @@ class CfnDeployment(
         deployment_strategy_id: builtins.str,
         environment_id: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        dynamic_extension_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.DynamicExtensionParametersProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        dynamic_extension_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.DynamicExtensionParametersProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         kms_key_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppConfig::Deployment``.
 
@@ -2190,7 +2195,7 @@ class CfnDeployment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeployment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2239,9 +2244,9 @@ class CfnDeployment(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2250,9 +2255,9 @@ class CfnDeployment(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentRef")
-    def deployment_ref(self) -> _DeploymentReference_5ef418d1:
+    def deployment_ref(self) -> "_DeploymentReference_5ef418d1":
         '''A reference to a Deployment resource.'''
-        return typing.cast(_DeploymentReference_5ef418d1, jsii.get(self, "deploymentRef"))
+        return typing.cast("_DeploymentReference_5ef418d1", jsii.get(self, "deploymentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -2336,14 +2341,14 @@ class CfnDeployment(
     @jsii.member(jsii_name="dynamicExtensionParameters")
     def dynamic_extension_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DynamicExtensionParametersProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DynamicExtensionParametersProperty"]]]]:
         '''A map of dynamic extension parameter names to values to pass to associated extensions with ``PRE_START_DEPLOYMENT`` actions.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DynamicExtensionParametersProperty"]]]], jsii.get(self, "dynamicExtensionParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DynamicExtensionParametersProperty"]]]], jsii.get(self, "dynamicExtensionParameters"))
 
     @dynamic_extension_parameters.setter
     def dynamic_extension_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DynamicExtensionParametersProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DynamicExtensionParametersProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e5a4416b6ac2f6fbc5dd497fd6aafe41844d2e927bc75ce571b37c2f1b805bfb)
@@ -2365,12 +2370,12 @@ class CfnDeployment(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata to assign to the deployment.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__12211b05040a4e1a62df97a0128f266db1c0380eba8db0726824e99ad7241551)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2491,9 +2496,9 @@ class CfnDeploymentProps:
         deployment_strategy_id: builtins.str,
         environment_id: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        dynamic_extension_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.DynamicExtensionParametersProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        dynamic_extension_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.DynamicExtensionParametersProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         kms_key_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDeployment``.
 
@@ -2512,6 +2517,7 @@ class CfnDeploymentProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appconfig as appconfig
@@ -2628,13 +2634,13 @@ class CfnDeploymentProps:
     @builtins.property
     def dynamic_extension_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDeployment.DynamicExtensionParametersProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DynamicExtensionParametersProperty"]]]]:
         '''A map of dynamic extension parameter names to values to pass to associated extensions with ``PRE_START_DEPLOYMENT`` actions.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-deployment.html#cfn-appconfig-deployment-dynamicextensionparameters
         '''
         result = self._values.get("dynamic_extension_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDeployment.DynamicExtensionParametersProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DynamicExtensionParametersProperty"]]]], result)
 
     @builtins.property
     def kms_key_identifier(self) -> typing.Optional[builtins.str]:
@@ -2646,7 +2652,7 @@ class CfnDeploymentProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata to assign to the deployment.
 
         Tags help organize and categorize your AWS AppConfig resources. Each tag consists of a key and an optional value, both of which you define.
@@ -2654,7 +2660,7 @@ class CfnDeploymentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-deployment.html#cfn-appconfig-deployment-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2694,6 +2700,7 @@ class CfnDeploymentStrategy(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appconfig as appconfig
@@ -2717,7 +2724,7 @@ class CfnDeploymentStrategy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         deployment_duration_in_minutes: jsii.Number,
@@ -2727,7 +2734,7 @@ class CfnDeploymentStrategy(
         description: typing.Optional[builtins.str] = None,
         final_bake_time_in_minutes: typing.Optional[jsii.Number] = None,
         growth_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppConfig::DeploymentStrategy``.
 
@@ -2763,7 +2770,7 @@ class CfnDeploymentStrategy(
     @builtins.classmethod
     def arn_for_deployment_strategy(
         cls,
-        resource: _IDeploymentStrategyRef_2cd4ca44,
+        resource: "_IDeploymentStrategyRef_2cd4ca44",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2777,10 +2784,10 @@ class CfnDeploymentStrategy(
     @builtins.classmethod
     def from_deployment_strategy_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         deployment_strategy_id: builtins.str,
-    ) -> _IDeploymentStrategyRef_2cd4ca44:
+    ) -> "_IDeploymentStrategyRef_2cd4ca44":
         '''Creates a new IDeploymentStrategyRef from a deploymentStrategyId.
 
         :param scope: -
@@ -2792,7 +2799,7 @@ class CfnDeploymentStrategy(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument deployment_strategy_id", value=deployment_strategy_id, expected_type=type_hints["deployment_strategy_id"])
-        return typing.cast(_IDeploymentStrategyRef_2cd4ca44, jsii.sinvoke(cls, "fromDeploymentStrategyId", [scope, id, deployment_strategy_id]))
+        return typing.cast("_IDeploymentStrategyRef_2cd4ca44", jsii.sinvoke(cls, "fromDeploymentStrategyId", [scope, id, deployment_strategy_id]))
 
     @jsii.member(jsii_name="isCfnDeploymentStrategy")
     @builtins.classmethod
@@ -2807,7 +2814,7 @@ class CfnDeploymentStrategy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeploymentStrategy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2847,9 +2854,9 @@ class CfnDeploymentStrategy(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2858,9 +2865,9 @@ class CfnDeploymentStrategy(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentStrategyRef")
-    def deployment_strategy_ref(self) -> _DeploymentStrategyReference_e1908020:
+    def deployment_strategy_ref(self) -> "_DeploymentStrategyReference_e1908020":
         '''A reference to a DeploymentStrategy resource.'''
-        return typing.cast(_DeploymentStrategyReference_e1908020, jsii.get(self, "deploymentStrategyRef"))
+        return typing.cast("_DeploymentStrategyReference_e1908020", jsii.get(self, "deploymentStrategyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentDurationInMinutes")
@@ -2958,12 +2965,12 @@ class CfnDeploymentStrategy(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns metadata to an AWS AppConfig resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2b0c7e44af284b89d6923411489d05fa28350784f8d88a837a0d019a1d575e65)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2995,7 +3002,7 @@ class CfnDeploymentStrategyProps:
         description: typing.Optional[builtins.str] = None,
         final_bake_time_in_minutes: typing.Optional[jsii.Number] = None,
         growth_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDeploymentStrategy``.
 
@@ -3013,6 +3020,7 @@ class CfnDeploymentStrategyProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appconfig as appconfig
@@ -3140,7 +3148,7 @@ class CfnDeploymentStrategyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns metadata to an AWS AppConfig resource.
 
         Tags help organize and categorize your AWS AppConfig resources. Each tag consists of a key and an optional value, both of which you define. You can specify a maximum of 50 tags for a resource.
@@ -3148,7 +3156,7 @@ class CfnDeploymentStrategyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-deploymentstrategy.html#cfn-appconfig-deploymentstrategy-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3188,6 +3196,7 @@ class CfnEnvironment(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appconfig as appconfig
@@ -3212,15 +3221,15 @@ class CfnEnvironment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
+        application_id: typing.Union[builtins.str, "_IApplicationRef_768db227"],
         name: builtins.str,
         deletion_protection_check: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        monitors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.MonitorsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        monitors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.MonitorsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppConfig::Environment``.
 
@@ -3261,7 +3270,7 @@ class CfnEnvironment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEnvironment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3301,9 +3310,9 @@ class CfnEnvironment(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3312,9 +3321,9 @@ class CfnEnvironment(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> _EnvironmentReference_610ea6de:
+    def environment_ref(self) -> "_EnvironmentReference_610ea6de":
         '''A reference to a Environment resource.'''
-        return typing.cast(_EnvironmentReference_610ea6de, jsii.get(self, "environmentRef"))
+        return typing.cast("_EnvironmentReference_610ea6de", jsii.get(self, "environmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -3372,14 +3381,14 @@ class CfnEnvironment(
     @jsii.member(jsii_name="monitors")
     def monitors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.MonitorsProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.MonitorsProperty"]]]]:
         '''Amazon CloudWatch alarms to monitor during the deployment process.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.MonitorsProperty"]]]], jsii.get(self, "monitors"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.MonitorsProperty"]]]], jsii.get(self, "monitors"))
 
     @monitors.setter
     def monitors(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.MonitorsProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.MonitorsProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d8d099ead34dfe7be9eb945722b31207889d993d21d927e1eeba6592c7f8fd44)
@@ -3388,12 +3397,12 @@ class CfnEnvironment(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata to assign to the environment.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__60701727c0b2b8f0404d231ccc24899f35678bacc781ed4c6443de1b14432f68)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3556,12 +3565,12 @@ class CfnEnvironmentProps:
     def __init__(
         self,
         *,
-        application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
+        application_id: typing.Union[builtins.str, "_IApplicationRef_768db227"],
         name: builtins.str,
         deletion_protection_check: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        monitors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.MonitorsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        monitors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.MonitorsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEnvironment``.
 
@@ -3577,6 +3586,7 @@ class CfnEnvironmentProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appconfig as appconfig
@@ -3620,14 +3630,14 @@ class CfnEnvironmentProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def application_id(self) -> typing.Union[builtins.str, _IApplicationRef_768db227]:
+    def application_id(self) -> typing.Union[builtins.str, "_IApplicationRef_768db227"]:
         '''The application ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-environment.html#cfn-appconfig-environment-applicationid
         '''
         result = self._values.get("application_id")
         assert result is not None, "Required property 'application_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IApplicationRef_768db227], result)
+        return typing.cast(typing.Union[builtins.str, "_IApplicationRef_768db227"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -3668,16 +3678,16 @@ class CfnEnvironmentProps:
     @builtins.property
     def monitors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEnvironment.MonitorsProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.MonitorsProperty"]]]]:
         '''Amazon CloudWatch alarms to monitor during the deployment process.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-environment.html#cfn-appconfig-environment-monitors
         '''
         result = self._values.get("monitors")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEnvironment.MonitorsProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.MonitorsProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Metadata to assign to the environment.
 
         Tags help organize and categorize your AWS AppConfig resources. Each tag consists of a key and an optional value, both of which you define.
@@ -3685,7 +3695,7 @@ class CfnEnvironmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-environment.html#cfn-appconfig-environment-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3723,6 +3733,7 @@ class CfnExtension(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appconfig as appconfig
@@ -3754,15 +3765,15 @@ class CfnExtension(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         actions: typing.Any,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnExtension.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnExtension.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppConfig::Extension``.
 
@@ -3792,7 +3803,7 @@ class CfnExtension(
 
     @jsii.member(jsii_name="arnForExtension")
     @builtins.classmethod
-    def arn_for_extension(cls, resource: _IExtensionRef_abba29c3) -> builtins.str:
+    def arn_for_extension(cls, resource: "_IExtensionRef_abba29c3") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3814,7 +3825,7 @@ class CfnExtension(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnExtension", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3877,15 +3888,15 @@ class CfnExtension(
 
     @builtins.property
     @jsii.member(jsii_name="extensionRef")
-    def extension_ref(self) -> _ExtensionReference_a0aef309:
+    def extension_ref(self) -> "_ExtensionReference_a0aef309":
         '''A reference to a Extension resource.'''
-        return typing.cast(_ExtensionReference_a0aef309, jsii.get(self, "extensionRef"))
+        return typing.cast("_ExtensionReference_a0aef309", jsii.get(self, "extensionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="actions")
@@ -3943,14 +3954,14 @@ class CfnExtension(
     @jsii.member(jsii_name="parameters")
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnExtension.ParameterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExtension.ParameterProperty"]]]]:
         '''The parameters accepted by the extension.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnExtension.ParameterProperty"]]]], jsii.get(self, "parameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExtension.ParameterProperty"]]]], jsii.get(self, "parameters"))
 
     @parameters.setter
     def parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnExtension.ParameterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExtension.ParameterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9ad5fbf78cb34accb172520e561c08795fbca80280af2dcc78243ceb84841d07)
@@ -3959,12 +3970,12 @@ class CfnExtension(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Adds one or more tags for the specified extension.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9e6cc683bfd791a6ddfdc2295e58057279b3a19bc4adc7a11fbff993fe64fe37)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4093,9 +4104,9 @@ class CfnExtension(
         def __init__(
             self,
             *,
-            required: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            required: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             description: typing.Optional[builtins.str] = None,
-            dynamic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            dynamic: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''A value such as an Amazon Resource Name (ARN) or an Amazon Simple Notification Service topic entered in an extension when invoked.
 
@@ -4136,14 +4147,14 @@ class CfnExtension(
                 self._values["dynamic"] = dynamic
 
         @builtins.property
-        def required(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def required(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A parameter value must be specified in the extension association.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appconfig-extension-parameter.html#cfn-appconfig-extension-parameter-required
             '''
             result = self._values.get("required")
             assert result is not None, "Required property 'required' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def description(self) -> typing.Optional[builtins.str]:
@@ -4157,7 +4168,7 @@ class CfnExtension(
         @builtins.property
         def dynamic(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether this parameter's value can be supplied at the extension's action point instead of during extension association.
 
             Dynamic parameters can't be marked ``Required`` .
@@ -4165,7 +4176,7 @@ class CfnExtension(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appconfig-extension-parameter.html#cfn-appconfig-extension-parameter-dynamic
             '''
             result = self._values.get("dynamic")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4195,6 +4206,7 @@ class CfnExtensionAssociation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appconfig as appconfig
@@ -4215,14 +4227,14 @@ class CfnExtensionAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         extension_identifier: typing.Optional[builtins.str] = None,
         extension_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         resource_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppConfig::ExtensionAssociation``.
 
@@ -4252,7 +4264,7 @@ class CfnExtensionAssociation(
     @builtins.classmethod
     def arn_for_extension_association(
         cls,
-        resource: _IExtensionAssociationRef_1b672c9b,
+        resource: "_IExtensionAssociationRef_1b672c9b",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -4266,10 +4278,10 @@ class CfnExtensionAssociation(
     @builtins.classmethod
     def from_extension_association_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IExtensionAssociationRef_1b672c9b:
+    ) -> "_IExtensionAssociationRef_1b672c9b":
         '''Creates a new IExtensionAssociationRef from an ARN.
 
         :param scope: -
@@ -4281,16 +4293,16 @@ class CfnExtensionAssociation(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IExtensionAssociationRef_1b672c9b, jsii.sinvoke(cls, "fromExtensionAssociationArn", [scope, id, arn]))
+        return typing.cast("_IExtensionAssociationRef_1b672c9b", jsii.sinvoke(cls, "fromExtensionAssociationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromExtensionAssociationId")
     @builtins.classmethod
     def from_extension_association_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         extension_association_id: builtins.str,
-    ) -> _IExtensionAssociationRef_1b672c9b:
+    ) -> "_IExtensionAssociationRef_1b672c9b":
         '''Creates a new IExtensionAssociationRef from a extensionAssociationId.
 
         :param scope: -
@@ -4302,7 +4314,7 @@ class CfnExtensionAssociation(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument extension_association_id", value=extension_association_id, expected_type=type_hints["extension_association_id"])
-        return typing.cast(_IExtensionAssociationRef_1b672c9b, jsii.sinvoke(cls, "fromExtensionAssociationId", [scope, id, extension_association_id]))
+        return typing.cast("_IExtensionAssociationRef_1b672c9b", jsii.sinvoke(cls, "fromExtensionAssociationId", [scope, id, extension_association_id]))
 
     @jsii.member(jsii_name="isCfnExtensionAssociation")
     @builtins.classmethod
@@ -4317,7 +4329,7 @@ class CfnExtensionAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnExtensionAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4389,15 +4401,15 @@ class CfnExtensionAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="extensionAssociationRef")
-    def extension_association_ref(self) -> _ExtensionAssociationReference_35a869f1:
+    def extension_association_ref(self) -> "_ExtensionAssociationReference_35a869f1":
         '''A reference to a ExtensionAssociation resource.'''
-        return typing.cast(_ExtensionAssociationReference_35a869f1, jsii.get(self, "extensionAssociationRef"))
+        return typing.cast("_ExtensionAssociationReference_35a869f1", jsii.get(self, "extensionAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="extensionIdentifier")
@@ -4429,14 +4441,14 @@ class CfnExtensionAssociation(
     @jsii.member(jsii_name="parameters")
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The parameter names and values defined in the extensions.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "parameters"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "parameters"))
 
     @parameters.setter
     def parameters(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bc72677d37ba0fe5b56dcbee5b8705c9e4e30a75b5d3b051bc792305dfd3deda)
@@ -4458,12 +4470,12 @@ class CfnExtensionAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Adds one or more tags for the specified extension association.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d31c336e3843162aab44371392cbb25a2b62fcd270c6fc472b3f2819a21b9ea1)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4487,9 +4499,9 @@ class CfnExtensionAssociationProps:
         *,
         extension_identifier: typing.Optional[builtins.str] = None,
         extension_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         resource_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnExtensionAssociation``.
 
@@ -4504,6 +4516,7 @@ class CfnExtensionAssociationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appconfig as appconfig
@@ -4563,7 +4576,7 @@ class CfnExtensionAssociationProps:
     @builtins.property
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The parameter names and values defined in the extensions.
 
         Extension parameters marked ``Required`` must be entered for this field.
@@ -4571,7 +4584,7 @@ class CfnExtensionAssociationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-extensionassociation.html#cfn-appconfig-extensionassociation-parameters
         '''
         result = self._values.get("parameters")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def resource_identifier(self) -> typing.Optional[builtins.str]:
@@ -4583,7 +4596,7 @@ class CfnExtensionAssociationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Adds one or more tags for the specified extension association.
 
         Tags are metadata that help you categorize resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define.
@@ -4591,7 +4604,7 @@ class CfnExtensionAssociationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-extensionassociation.html#cfn-appconfig-extensionassociation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4625,8 +4638,8 @@ class CfnExtensionProps:
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnExtension.ParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnExtension.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnExtension``.
 
@@ -4642,6 +4655,7 @@ class CfnExtensionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appconfig as appconfig
@@ -4736,7 +4750,7 @@ class CfnExtensionProps:
     @builtins.property
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnExtension.ParameterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExtension.ParameterProperty"]]]]:
         '''The parameters accepted by the extension.
 
         You specify parameter values when you associate the extension to an AWS AppConfig resource by using the ``CreateExtensionAssociation`` API action. For AWS Lambda extension actions, these parameters are included in the Lambda request object.
@@ -4744,10 +4758,10 @@ class CfnExtensionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-extension.html#cfn-appconfig-extension-parameters
         '''
         result = self._values.get("parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnExtension.ParameterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnExtension.ParameterProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Adds one or more tags for the specified extension.
 
         Tags are metadata that help you categorize resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define.
@@ -4755,7 +4769,7 @@ class CfnExtensionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-extension.html#cfn-appconfig-extension-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4810,11 +4824,11 @@ class CfnHostedConfigurationVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
-        configuration_profile_id: typing.Union[builtins.str, _IConfigurationProfileRef_3e332cf9],
+        application_id: typing.Union[builtins.str, "_IApplicationRef_768db227"],
+        configuration_profile_id: typing.Union[builtins.str, "_IConfigurationProfileRef_3e332cf9"],
         content: builtins.str,
         content_type: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -4862,7 +4876,7 @@ class CfnHostedConfigurationVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnHostedConfigurationVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4909,9 +4923,9 @@ class CfnHostedConfigurationVersion(
     @jsii.member(jsii_name="hostedConfigurationVersionRef")
     def hosted_configuration_version_ref(
         self,
-    ) -> _HostedConfigurationVersionReference_6f730fe8:
+    ) -> "_HostedConfigurationVersionReference_6f730fe8":
         '''A reference to a HostedConfigurationVersion resource.'''
-        return typing.cast(_HostedConfigurationVersionReference_6f730fe8, jsii.get(self, "hostedConfigurationVersionRef"))
+        return typing.cast("_HostedConfigurationVersionReference_6f730fe8", jsii.get(self, "hostedConfigurationVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -5022,8 +5036,8 @@ class CfnHostedConfigurationVersionProps:
     def __init__(
         self,
         *,
-        application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
-        configuration_profile_id: typing.Union[builtins.str, _IConfigurationProfileRef_3e332cf9],
+        application_id: typing.Union[builtins.str, "_IApplicationRef_768db227"],
+        configuration_profile_id: typing.Union[builtins.str, "_IConfigurationProfileRef_3e332cf9"],
         content: builtins.str,
         content_type: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -5084,26 +5098,26 @@ class CfnHostedConfigurationVersionProps:
             self._values["version_label"] = version_label
 
     @builtins.property
-    def application_id(self) -> typing.Union[builtins.str, _IApplicationRef_768db227]:
+    def application_id(self) -> typing.Union[builtins.str, "_IApplicationRef_768db227"]:
         '''The application ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-hostedconfigurationversion.html#cfn-appconfig-hostedconfigurationversion-applicationid
         '''
         result = self._values.get("application_id")
         assert result is not None, "Required property 'application_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IApplicationRef_768db227], result)
+        return typing.cast(typing.Union[builtins.str, "_IApplicationRef_768db227"], result)
 
     @builtins.property
     def configuration_profile_id(
         self,
-    ) -> typing.Union[builtins.str, _IConfigurationProfileRef_3e332cf9]:
+    ) -> typing.Union[builtins.str, "_IConfigurationProfileRef_3e332cf9"]:
         '''The configuration profile ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-hostedconfigurationversion.html#cfn-appconfig-hostedconfigurationversion-configurationprofileid
         '''
         result = self._values.get("configuration_profile_id")
         assert result is not None, "Required property 'configuration_profile_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IConfigurationProfileRef_3e332cf9], result)
+        return typing.cast(typing.Union[builtins.str, "_IConfigurationProfileRef_3e332cf9"], result)
 
     @builtins.property
     def content(self) -> builtins.str:
@@ -5340,8 +5354,8 @@ class ConfigurationOptions:
         self,
         *,
         deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -5367,8 +5381,9 @@ class ConfigurationOptions:
             # The values are placeholders you should change.
             from aws_cdk import aws_appconfig as appconfig
             from aws_cdk import aws_kms as kms
+            from aws_cdk.interfaces import aws_appconfig as interfaces_appconfig
             
-            # deployment_strategy: appconfig.DeploymentStrategy
+            # deployment_strategy_ref: interfaces_appconfig.IDeploymentStrategyRef
             # environment: appconfig.Environment
             # key: kms.Key
             # validator: appconfig.IValidator
@@ -5376,7 +5391,7 @@ class ConfigurationOptions:
             configuration_options = appconfig.ConfigurationOptions(
                 deletion_protection_check=appconfig.DeletionProtectionCheck.ACCOUNT_DEFAULT,
                 deployment_key=key,
-                deployment_strategy=deployment_strategy,
+                deployment_strategy=deployment_strategy_ref,
                 deploy_to=[environment],
                 description="description",
                 name="name",
@@ -5427,16 +5442,18 @@ class ConfigurationOptions:
         return typing.cast(typing.Optional["DeletionProtectionCheck"], result)
 
     @builtins.property
-    def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def deployment_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The deployment key of the configuration.
 
         :default: - None.
         '''
         result = self._values.get("deployment_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def deployment_strategy(self) -> typing.Optional["IDeploymentStrategy"]:
+    def deployment_strategy(
+        self,
+    ) -> typing.Optional["_IDeploymentStrategyRef_2cd4ca44"]:
         '''The deployment strategy for the configuration.
 
         :default:
@@ -5445,7 +5462,7 @@ class ConfigurationOptions:
         RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         '''
         result = self._values.get("deployment_strategy")
-        return typing.cast(typing.Optional["IDeploymentStrategy"], result)
+        return typing.cast(typing.Optional["_IDeploymentStrategyRef_2cd4ca44"], result)
 
     @builtins.property
     def deploy_to(self) -> typing.Optional[typing.List["IEnvironment"]]:
@@ -5530,8 +5547,8 @@ class ConfigurationProps(ConfigurationOptions):
         self,
         *,
         deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -5559,9 +5576,10 @@ class ConfigurationProps(ConfigurationOptions):
             # The values are placeholders you should change.
             from aws_cdk import aws_appconfig as appconfig
             from aws_cdk import aws_kms as kms
+            from aws_cdk.interfaces import aws_appconfig as interfaces_appconfig
             
             # application: appconfig.Application
-            # deployment_strategy: appconfig.DeploymentStrategy
+            # deployment_strategy_ref: interfaces_appconfig.IDeploymentStrategyRef
             # environment: appconfig.Environment
             # key: kms.Key
             # validator: appconfig.IValidator
@@ -5572,7 +5590,7 @@ class ConfigurationProps(ConfigurationOptions):
                 # the properties below are optional
                 deletion_protection_check=appconfig.DeletionProtectionCheck.ACCOUNT_DEFAULT,
                 deployment_key=key,
-                deployment_strategy=deployment_strategy,
+                deployment_strategy=deployment_strategy_ref,
                 deploy_to=[environment],
                 description="description",
                 name="name",
@@ -5626,16 +5644,18 @@ class ConfigurationProps(ConfigurationOptions):
         return typing.cast(typing.Optional["DeletionProtectionCheck"], result)
 
     @builtins.property
-    def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def deployment_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The deployment key of the configuration.
 
         :default: - None.
         '''
         result = self._values.get("deployment_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def deployment_strategy(self) -> typing.Optional["IDeploymentStrategy"]:
+    def deployment_strategy(
+        self,
+    ) -> typing.Optional["_IDeploymentStrategyRef_2cd4ca44"]:
         '''The deployment strategy for the configuration.
 
         :default:
@@ -5644,7 +5664,7 @@ class ConfigurationProps(ConfigurationOptions):
         RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         '''
         result = self._values.get("deployment_strategy")
-        return typing.cast(typing.Optional["IDeploymentStrategy"], result)
+        return typing.cast(typing.Optional["_IDeploymentStrategyRef_2cd4ca44"], result)
 
     @builtins.property
     def deploy_to(self) -> typing.Optional[typing.List["IEnvironment"]]:
@@ -5746,9 +5766,9 @@ class ConfigurationSource(
     @builtins.classmethod
     def from_bucket(
         cls,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         object_key: builtins.str,
-        key: typing.Optional[_IKey_5f11635f] = None,
+        key: typing.Optional["_IKey_5f11635f"] = None,
     ) -> "ConfigurationSource":
         '''Defines configuration content from an Amazon S3 bucket.
 
@@ -5767,7 +5787,7 @@ class ConfigurationSource(
     @builtins.classmethod
     def from_cfn_document(
         cls,
-        document: _CfnDocument_8b177f00,
+        document: "_CfnDocument_8b177f00",
     ) -> "ConfigurationSource":
         '''Defines configuration content from a Systems Manager (SSM) document.
 
@@ -5782,8 +5802,8 @@ class ConfigurationSource(
     @builtins.classmethod
     def from_parameter(
         cls,
-        parameter: _IParameter_509a0f80,
-        key: typing.Optional[_IKey_5f11635f] = None,
+        parameter: "_IParameter_509a0f80",
+        key: typing.Optional["_IKey_5f11635f"] = None,
     ) -> "ConfigurationSource":
         '''Defines configuration content from a Systems Manager (SSM) Parameter Store parameter.
 
@@ -5798,7 +5818,7 @@ class ConfigurationSource(
 
     @jsii.member(jsii_name="fromPipeline")
     @builtins.classmethod
-    def from_pipeline(cls, pipeline: _IPipeline_0931f838) -> "ConfigurationSource":
+    def from_pipeline(cls, pipeline: "_IPipeline_0931f838") -> "ConfigurationSource":
         '''Defines configuration content from AWS CodePipeline.
 
         :param pipeline: The pipeline where the configuration is stored.
@@ -5810,7 +5830,7 @@ class ConfigurationSource(
 
     @jsii.member(jsii_name="fromSecret")
     @builtins.classmethod
-    def from_secret(cls, secret: _ISecret_6e020e6a) -> "ConfigurationSource":
+    def from_secret(cls, secret: "_ISecret_6e020e6a") -> "ConfigurationSource":
         '''Defines configuration content from an AWS Secrets Manager secret.
 
         :param secret: The secret where the configuration is stored.
@@ -5837,7 +5857,7 @@ class ConfigurationSource(
     @builtins.property
     @jsii.member(jsii_name="key")
     @abc.abstractmethod
-    def key(self) -> typing.Optional[_IKey_5f11635f]:
+    def key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The KMS Key that encrypts the configuration.'''
         ...
 
@@ -5857,9 +5877,9 @@ class _ConfigurationSourceProxy(ConfigurationSource):
 
     @builtins.property
     @jsii.member(jsii_name="key")
-    def key(self) -> typing.Optional[_IKey_5f11635f]:
+    def key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The KMS Key that encrypts the configuration.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "key"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "key"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, ConfigurationSource).__jsii_proxy_class__ = lambda : _ConfigurationSourceProxy
@@ -6280,7 +6300,7 @@ class EnvironmentOptions:
     def __init__(
         self,
         *,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
         description: typing.Optional[builtins.str] = None,
         environment_name: typing.Optional[builtins.str] = None,
         monitors: typing.Optional[typing.Sequence["Monitor"]] = None,
@@ -6326,13 +6346,13 @@ class EnvironmentOptions:
             self._values["monitors"] = monitors
 
     @builtins.property
-    def deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
+    def deletion_protection_check(self) -> typing.Optional["DeletionProtectionCheck"]:
         '''A property to prevent accidental deletion of active environments.
 
         :default: undefined - AppConfig default is ACCOUNT_DEFAULT
         '''
         result = self._values.get("deletion_protection_check")
-        return typing.cast(typing.Optional[DeletionProtectionCheck], result)
+        return typing.cast(typing.Optional["DeletionProtectionCheck"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -6388,7 +6408,7 @@ class EnvironmentProps(EnvironmentOptions):
     def __init__(
         self,
         *,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
         description: typing.Optional[builtins.str] = None,
         environment_name: typing.Optional[builtins.str] = None,
         monitors: typing.Optional[typing.Sequence["Monitor"]] = None,
@@ -6443,13 +6463,13 @@ class EnvironmentProps(EnvironmentOptions):
             self._values["monitors"] = monitors
 
     @builtins.property
-    def deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
+    def deletion_protection_check(self) -> typing.Optional["DeletionProtectionCheck"]:
         '''A property to prevent accidental deletion of active environments.
 
         :default: undefined - AppConfig default is ACCOUNT_DEFAULT
         '''
         result = self._values.get("deletion_protection_check")
-        return typing.cast(typing.Optional[DeletionProtectionCheck], result)
+        return typing.cast(typing.Optional["DeletionProtectionCheck"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -6515,7 +6535,7 @@ class ExtensionAttributes:
         *,
         extension_id: builtins.str,
         extension_version_number: jsii.Number,
-        actions: typing.Optional[typing.Sequence[Action]] = None,
+        actions: typing.Optional[typing.Sequence["Action"]] = None,
         description: typing.Optional[builtins.str] = None,
         extension_arn: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -6586,13 +6606,13 @@ class ExtensionAttributes:
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def actions(self) -> typing.Optional[typing.List[Action]]:
+    def actions(self) -> typing.Optional[typing.List["Action"]]:
         '''The actions of the extension.
 
         :default: - None.
         '''
         result = self._values.get("actions")
-        return typing.cast(typing.Optional[typing.List[Action]], result)
+        return typing.cast(typing.Optional[typing.List["Action"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -6763,7 +6783,7 @@ class ExtensionProps(ExtensionOptions):
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
         parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
-        actions: typing.Sequence[Action],
+        actions: typing.Sequence["Action"],
     ) -> None:
         '''Properties for the Extension construct.
 
@@ -6849,11 +6869,11 @@ class ExtensionProps(ExtensionOptions):
         return typing.cast(typing.Optional[typing.List["Parameter"]], result)
 
     @builtins.property
-    def actions(self) -> typing.List[Action]:
+    def actions(self) -> typing.List["Action"]:
         '''The actions for the extension.'''
         result = self._values.get("actions")
         assert result is not None, "Required property 'actions' is missing"
-        return typing.cast(typing.List[Action], result)
+        return typing.cast(typing.List["Action"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6902,15 +6922,15 @@ class HostedConfigurationOptions(ConfigurationOptions):
     def __init__(
         self,
         *,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        type: typing.Optional[ConfigurationType] = None,
+        type: typing.Optional["ConfigurationType"] = None,
         validators: typing.Optional[typing.Sequence["IValidator"]] = None,
-        content: ConfigurationContent,
+        content: "ConfigurationContent",
         latest_version_number: typing.Optional[jsii.Number] = None,
         version_label: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -6936,9 +6956,10 @@ class HostedConfigurationOptions(ConfigurationOptions):
             # The values are placeholders you should change.
             from aws_cdk import aws_appconfig as appconfig
             from aws_cdk import aws_kms as kms
+            from aws_cdk.interfaces import aws_appconfig as interfaces_appconfig
             
             # configuration_content: appconfig.ConfigurationContent
-            # deployment_strategy: appconfig.DeploymentStrategy
+            # deployment_strategy_ref: interfaces_appconfig.IDeploymentStrategyRef
             # environment: appconfig.Environment
             # key: kms.Key
             # validator: appconfig.IValidator
@@ -6949,7 +6970,7 @@ class HostedConfigurationOptions(ConfigurationOptions):
                 # the properties below are optional
                 deletion_protection_check=appconfig.DeletionProtectionCheck.ACCOUNT_DEFAULT,
                 deployment_key=key,
-                deployment_strategy=deployment_strategy,
+                deployment_strategy=deployment_strategy_ref,
                 deploy_to=[environment],
                 description="description",
                 latest_version_number=123,
@@ -6997,7 +7018,7 @@ class HostedConfigurationOptions(ConfigurationOptions):
             self._values["version_label"] = version_label
 
     @builtins.property
-    def deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
+    def deletion_protection_check(self) -> typing.Optional["DeletionProtectionCheck"]:
         '''A parameter to configure deletion protection.
 
         Deletion protection prevents a user from deleting a configuration profile if your application has called
@@ -7008,19 +7029,21 @@ class HostedConfigurationOptions(ConfigurationOptions):
         :see: https://docs.aws.amazon.com/appconfig/latest/userguide/deletion-protection.html
         '''
         result = self._values.get("deletion_protection_check")
-        return typing.cast(typing.Optional[DeletionProtectionCheck], result)
+        return typing.cast(typing.Optional["DeletionProtectionCheck"], result)
 
     @builtins.property
-    def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def deployment_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The deployment key of the configuration.
 
         :default: - None.
         '''
         result = self._values.get("deployment_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def deployment_strategy(self) -> typing.Optional["IDeploymentStrategy"]:
+    def deployment_strategy(
+        self,
+    ) -> typing.Optional["_IDeploymentStrategyRef_2cd4ca44"]:
         '''The deployment strategy for the configuration.
 
         :default:
@@ -7029,7 +7052,7 @@ class HostedConfigurationOptions(ConfigurationOptions):
         RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         '''
         result = self._values.get("deployment_strategy")
-        return typing.cast(typing.Optional["IDeploymentStrategy"], result)
+        return typing.cast(typing.Optional["_IDeploymentStrategyRef_2cd4ca44"], result)
 
     @builtins.property
     def deploy_to(self) -> typing.Optional[typing.List["IEnvironment"]]:
@@ -7065,13 +7088,13 @@ class HostedConfigurationOptions(ConfigurationOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def type(self) -> typing.Optional[ConfigurationType]:
+    def type(self) -> typing.Optional["ConfigurationType"]:
         '''The type of configuration.
 
         :default: ConfigurationType.FREEFORM
         '''
         result = self._values.get("type")
-        return typing.cast(typing.Optional[ConfigurationType], result)
+        return typing.cast(typing.Optional["ConfigurationType"], result)
 
     @builtins.property
     def validators(self) -> typing.Optional[typing.List["IValidator"]]:
@@ -7083,11 +7106,11 @@ class HostedConfigurationOptions(ConfigurationOptions):
         return typing.cast(typing.Optional[typing.List["IValidator"]], result)
 
     @builtins.property
-    def content(self) -> ConfigurationContent:
+    def content(self) -> "ConfigurationContent":
         '''The content of the hosted configuration.'''
         result = self._values.get("content")
         assert result is not None, "Required property 'content' is missing"
-        return typing.cast(ConfigurationContent, result)
+        return typing.cast("ConfigurationContent", result)
 
     @builtins.property
     def latest_version_number(self) -> typing.Optional[jsii.Number]:
@@ -7142,17 +7165,17 @@ class HostedConfigurationProps(ConfigurationProps):
     def __init__(
         self,
         *,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        type: typing.Optional[ConfigurationType] = None,
+        type: typing.Optional["ConfigurationType"] = None,
         validators: typing.Optional[typing.Sequence["IValidator"]] = None,
         application: "IApplication",
-        content: ConfigurationContent,
-        kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        content: "ConfigurationContent",
+        kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
         version_label: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -7232,7 +7255,7 @@ class HostedConfigurationProps(ConfigurationProps):
             self._values["version_label"] = version_label
 
     @builtins.property
-    def deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
+    def deletion_protection_check(self) -> typing.Optional["DeletionProtectionCheck"]:
         '''A parameter to configure deletion protection.
 
         Deletion protection prevents a user from deleting a configuration profile if your application has called
@@ -7243,19 +7266,21 @@ class HostedConfigurationProps(ConfigurationProps):
         :see: https://docs.aws.amazon.com/appconfig/latest/userguide/deletion-protection.html
         '''
         result = self._values.get("deletion_protection_check")
-        return typing.cast(typing.Optional[DeletionProtectionCheck], result)
+        return typing.cast(typing.Optional["DeletionProtectionCheck"], result)
 
     @builtins.property
-    def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def deployment_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The deployment key of the configuration.
 
         :default: - None.
         '''
         result = self._values.get("deployment_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def deployment_strategy(self) -> typing.Optional["IDeploymentStrategy"]:
+    def deployment_strategy(
+        self,
+    ) -> typing.Optional["_IDeploymentStrategyRef_2cd4ca44"]:
         '''The deployment strategy for the configuration.
 
         :default:
@@ -7264,7 +7289,7 @@ class HostedConfigurationProps(ConfigurationProps):
         RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         '''
         result = self._values.get("deployment_strategy")
-        return typing.cast(typing.Optional["IDeploymentStrategy"], result)
+        return typing.cast(typing.Optional["_IDeploymentStrategyRef_2cd4ca44"], result)
 
     @builtins.property
     def deploy_to(self) -> typing.Optional[typing.List["IEnvironment"]]:
@@ -7300,13 +7325,13 @@ class HostedConfigurationProps(ConfigurationProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def type(self) -> typing.Optional[ConfigurationType]:
+    def type(self) -> typing.Optional["ConfigurationType"]:
         '''The type of configuration.
 
         :default: ConfigurationType.FREEFORM
         '''
         result = self._values.get("type")
-        return typing.cast(typing.Optional[ConfigurationType], result)
+        return typing.cast(typing.Optional["ConfigurationType"], result)
 
     @builtins.property
     def validators(self) -> typing.Optional[typing.List["IValidator"]]:
@@ -7325,20 +7350,20 @@ class HostedConfigurationProps(ConfigurationProps):
         return typing.cast("IApplication", result)
 
     @builtins.property
-    def content(self) -> ConfigurationContent:
+    def content(self) -> "ConfigurationContent":
         '''The content of the hosted configuration.'''
         result = self._values.get("content")
         assert result is not None, "Required property 'content' is missing"
-        return typing.cast(ConfigurationContent, result)
+        return typing.cast("ConfigurationContent", result)
 
     @builtins.property
-    def kms_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def kms_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The customer managed key to encrypt hosted configuration.
 
         :default: None
         '''
         result = self._values.get("kms_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
     def latest_version_number(self) -> typing.Optional[jsii.Number]:
@@ -7371,7 +7396,11 @@ class HostedConfigurationProps(ConfigurationProps):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appconfig.IApplication")
-class IApplication(_IResource_c80c4260, typing_extensions.Protocol):
+class IApplication(
+    _IResource_c80c4260,
+    _IApplicationRef_768db227,
+    typing_extensions.Protocol,
+):
     @builtins.property
     @jsii.member(jsii_name="applicationArn")
     def application_arn(self) -> builtins.str:
@@ -7407,7 +7436,7 @@ class IApplication(_IResource_c80c4260, typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
         description: typing.Optional[builtins.str] = None,
         environment_name: typing.Optional[builtins.str] = None,
         monitors: typing.Optional[typing.Sequence["Monitor"]] = None,
@@ -7423,7 +7452,10 @@ class IApplication(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="addExistingEnvironment")
-    def add_existing_environment(self, environment: "IEnvironment") -> None:
+    def add_existing_environment(
+        self,
+        environment: "_IEnvironmentRef_5f5c3f67",
+    ) -> None:
         '''Adds an existing environment.
 
         :param environment: The environment.
@@ -7443,16 +7475,16 @@ class IApplication(_IResource_c80c4260, typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        content: ConfigurationContent,
+        content: "ConfigurationContent",
         latest_version_number: typing.Optional[jsii.Number] = None,
         version_label: typing.Optional[builtins.str] = None,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        type: typing.Optional[ConfigurationType] = None,
+        type: typing.Optional["ConfigurationType"] = None,
         validators: typing.Optional[typing.Sequence["IValidator"]] = None,
     ) -> "HostedConfiguration":
         '''Adds a hosted configuration.
@@ -7477,16 +7509,16 @@ class IApplication(_IResource_c80c4260, typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        location: ConfigurationSource,
-        retrieval_role: typing.Optional[_IRoleRef_8400221f] = None,
+        location: "ConfigurationSource",
+        retrieval_role: typing.Optional["_IRoleRef_8400221f"] = None,
         version_number: typing.Optional[builtins.str] = None,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        type: typing.Optional[ConfigurationType] = None,
+        type: typing.Optional["ConfigurationType"] = None,
         validators: typing.Optional[typing.Sequence["IValidator"]] = None,
     ) -> "SourcedConfiguration":
         '''Adds a sourced configuration.
@@ -7534,7 +7566,7 @@ class IApplication(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="on")
     def on(
         self,
-        action_point: ActionPoint,
+        action_point: "ActionPoint",
         event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
@@ -7696,6 +7728,7 @@ class IApplication(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IApplicationProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IApplicationRef_768db227), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_appconfig.IApplication"
 
@@ -7734,7 +7767,7 @@ class _IApplicationProxy(
         self,
         id: builtins.str,
         *,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
         description: typing.Optional[builtins.str] = None,
         environment_name: typing.Optional[builtins.str] = None,
         monitors: typing.Optional[typing.Sequence["Monitor"]] = None,
@@ -7760,7 +7793,10 @@ class _IApplicationProxy(
         return typing.cast("IEnvironment", jsii.invoke(self, "addEnvironment", [id, options]))
 
     @jsii.member(jsii_name="addExistingEnvironment")
-    def add_existing_environment(self, environment: "IEnvironment") -> None:
+    def add_existing_environment(
+        self,
+        environment: "_IEnvironmentRef_5f5c3f67",
+    ) -> None:
         '''Adds an existing environment.
 
         :param environment: The environment.
@@ -7786,16 +7822,16 @@ class _IApplicationProxy(
         self,
         id: builtins.str,
         *,
-        content: ConfigurationContent,
+        content: "ConfigurationContent",
         latest_version_number: typing.Optional[jsii.Number] = None,
         version_label: typing.Optional[builtins.str] = None,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        type: typing.Optional[ConfigurationType] = None,
+        type: typing.Optional["ConfigurationType"] = None,
         validators: typing.Optional[typing.Sequence["IValidator"]] = None,
     ) -> "HostedConfiguration":
         '''Adds a hosted configuration.
@@ -7837,16 +7873,16 @@ class _IApplicationProxy(
         self,
         id: builtins.str,
         *,
-        location: ConfigurationSource,
-        retrieval_role: typing.Optional[_IRoleRef_8400221f] = None,
+        location: "ConfigurationSource",
+        retrieval_role: typing.Optional["_IRoleRef_8400221f"] = None,
         version_number: typing.Optional[builtins.str] = None,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional["IDeploymentStrategy"] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
         deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        type: typing.Optional[ConfigurationType] = None,
+        type: typing.Optional["ConfigurationType"] = None,
         validators: typing.Optional[typing.Sequence["IValidator"]] = None,
     ) -> "SourcedConfiguration":
         '''Adds a sourced configuration.
@@ -7921,7 +7957,7 @@ class _IApplicationProxy(
     @jsii.member(jsii_name="on")
     def on(
         self,
-        action_point: ActionPoint,
+        action_point: "ActionPoint",
         event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
@@ -8169,7 +8205,7 @@ typing.cast(typing.Any, IApplication).__jsii_proxy_class__ = lambda : _IApplicat
 class IConfiguration(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> IApplication:
+    def application(self) -> "IApplication":
         '''The application associated with the configuration.'''
         ...
 
@@ -8181,7 +8217,7 @@ class IConfiguration(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
     @builtins.property
     @jsii.member(jsii_name="deploymentKey")
-    def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def deployment_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The deployment key for the configuration.'''
         ...
 
@@ -8211,7 +8247,7 @@ class IConfiguration(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol
 
     @builtins.property
     @jsii.member(jsii_name="type")
-    def type(self) -> typing.Optional[ConfigurationType]:
+    def type(self) -> typing.Optional["ConfigurationType"]:
         '''The configuration type.'''
         ...
 
@@ -8235,9 +8271,9 @@ class _IConfigurationProxy(
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> IApplication:
+    def application(self) -> "IApplication":
         '''The application associated with the configuration.'''
-        return typing.cast(IApplication, jsii.get(self, "application"))
+        return typing.cast("IApplication", jsii.get(self, "application"))
 
     @builtins.property
     @jsii.member(jsii_name="configurationProfileId")
@@ -8247,9 +8283,9 @@ class _IConfigurationProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentKey")
-    def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def deployment_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The deployment key for the configuration.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "deploymentKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "deploymentKey"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentStrategy")
@@ -8277,9 +8313,9 @@ class _IConfigurationProxy(
 
     @builtins.property
     @jsii.member(jsii_name="type")
-    def type(self) -> typing.Optional[ConfigurationType]:
+    def type(self) -> typing.Optional["ConfigurationType"]:
         '''The configuration type.'''
-        return typing.cast(typing.Optional[ConfigurationType], jsii.get(self, "type"))
+        return typing.cast(typing.Optional["ConfigurationType"], jsii.get(self, "type"))
 
     @builtins.property
     @jsii.member(jsii_name="validators")
@@ -8298,7 +8334,11 @@ typing.cast(typing.Any, IConfiguration).__jsii_proxy_class__ = lambda : _IConfig
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appconfig.IDeploymentStrategy")
-class IDeploymentStrategy(_IResource_c80c4260, typing_extensions.Protocol):
+class IDeploymentStrategy(
+    _IResource_c80c4260,
+    _IDeploymentStrategyRef_2cd4ca44,
+    typing_extensions.Protocol,
+):
     @builtins.property
     @jsii.member(jsii_name="deploymentStrategyArn")
     def deployment_strategy_arn(self) -> builtins.str:
@@ -8343,7 +8383,7 @@ class IDeploymentStrategy(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="growthType")
-    def growth_type(self) -> typing.Optional[GrowthType]:
+    def growth_type(self) -> typing.Optional["GrowthType"]:
         '''The growth type of the deployment strategy.'''
         ...
 
@@ -8356,6 +8396,7 @@ class IDeploymentStrategy(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IDeploymentStrategyProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDeploymentStrategyRef_2cd4ca44), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_appconfig.IDeploymentStrategy"
 
@@ -8403,9 +8444,9 @@ class _IDeploymentStrategyProxy(
 
     @builtins.property
     @jsii.member(jsii_name="growthType")
-    def growth_type(self) -> typing.Optional[GrowthType]:
+    def growth_type(self) -> typing.Optional["GrowthType"]:
         '''The growth type of the deployment strategy.'''
-        return typing.cast(typing.Optional[GrowthType], jsii.get(self, "growthType"))
+        return typing.cast(typing.Optional["GrowthType"], jsii.get(self, "growthType"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -8418,7 +8459,11 @@ typing.cast(typing.Any, IDeploymentStrategy).__jsii_proxy_class__ = lambda : _ID
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appconfig.IEnvironment")
-class IEnvironment(_IResource_c80c4260, typing_extensions.Protocol):
+class IEnvironment(
+    _IResource_c80c4260,
+    _IEnvironmentRef_5f5c3f67,
+    typing_extensions.Protocol,
+):
     @builtins.property
     @jsii.member(jsii_name="applicationId")
     def application_id(self) -> builtins.str:
@@ -8445,7 +8490,7 @@ class IEnvironment(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> typing.Optional[IApplication]:
+    def application(self) -> typing.Optional["IApplication"]:
         '''The application associated with the environment.'''
         ...
 
@@ -8468,7 +8513,7 @@ class IEnvironment(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="addDeployment")
-    def add_deployment(self, configuration: IConfiguration) -> None:
+    def add_deployment(self, configuration: "IConfiguration") -> None:
         '''Creates a deployment of the supplied configuration to this environment.
 
         Note that you can only deploy one configuration at a time to an environment.
@@ -8480,7 +8525,7 @@ class IEnvironment(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="addDeployments")
-    def add_deployments(self, *configurations: IConfiguration) -> None:
+    def add_deployments(self, *configurations: "IConfiguration") -> None:
         '''Creates a deployment for each of the supplied configurations to this environment.
 
         These configurations will be deployed in the same order as the input array.
@@ -8520,9 +8565,9 @@ class IEnvironment(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this environment to an IAM principal's policy.
 
         :param grantee: the principal (no-op if undefined).
@@ -8531,7 +8576,7 @@ class IEnvironment(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantReadConfig")
-    def grant_read_config(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_config(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal to perform read operations on this environment's configurations.
 
         Actions: GetLatestConfiguration, StartConfigurationSession.
@@ -8543,7 +8588,7 @@ class IEnvironment(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="on")
     def on(
         self,
-        action_point: ActionPoint,
+        action_point: "ActionPoint",
         event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
@@ -8705,6 +8750,7 @@ class IEnvironment(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IEnvironmentProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentRef_5f5c3f67), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_appconfig.IEnvironment"
 
@@ -8734,9 +8780,9 @@ class _IEnvironmentProxy(
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> typing.Optional[IApplication]:
+    def application(self) -> typing.Optional["IApplication"]:
         '''The application associated with the environment.'''
-        return typing.cast(typing.Optional[IApplication], jsii.get(self, "application"))
+        return typing.cast(typing.Optional["IApplication"], jsii.get(self, "application"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -8757,7 +8803,7 @@ class _IEnvironmentProxy(
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
 
     @jsii.member(jsii_name="addDeployment")
-    def add_deployment(self, configuration: IConfiguration) -> None:
+    def add_deployment(self, configuration: "IConfiguration") -> None:
         '''Creates a deployment of the supplied configuration to this environment.
 
         Note that you can only deploy one configuration at a time to an environment.
@@ -8772,7 +8818,7 @@ class _IEnvironmentProxy(
         return typing.cast(None, jsii.invoke(self, "addDeployment", [configuration]))
 
     @jsii.member(jsii_name="addDeployments")
-    def add_deployments(self, *configurations: IConfiguration) -> None:
+    def add_deployments(self, *configurations: "IConfiguration") -> None:
         '''Creates a deployment for each of the supplied configurations to this environment.
 
         These configurations will be deployed in the same order as the input array.
@@ -8828,9 +8874,9 @@ class _IEnvironmentProxy(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this environment to an IAM principal's policy.
 
         :param grantee: the principal (no-op if undefined).
@@ -8840,10 +8886,10 @@ class _IEnvironmentProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__f223f0108afb5683d5788fc1fb9f93cbd4c76cb5698d6aae016951683e8148ee)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantReadConfig")
-    def grant_read_config(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_config(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal to perform read operations on this environment's configurations.
 
         Actions: GetLatestConfiguration, StartConfigurationSession.
@@ -8853,12 +8899,12 @@ class _IEnvironmentProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9980f2056195344785f7b36a405e0d1227ad963e409c454217caf9b0e4ab2c9d)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadConfig", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadConfig", [grantee]))
 
     @jsii.member(jsii_name="on")
     def on(
         self,
-        action_point: ActionPoint,
+        action_point: "ActionPoint",
         event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
@@ -9120,7 +9166,7 @@ class IEventDestination(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
-    def policy_document(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy_document(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''The IAM policy document to invoke the event destination.'''
         ...
 
@@ -9144,9 +9190,9 @@ class _IEventDestinationProxy:
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
-    def policy_document(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy_document(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''The IAM policy document to invoke the event destination.'''
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], jsii.get(self, "policyDocument"))
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], jsii.get(self, "policyDocument"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventDestination).__jsii_proxy_class__ = lambda : _IEventDestinationProxy
@@ -9167,7 +9213,7 @@ class IExtensible(typing_extensions.Protocol):
     @jsii.member(jsii_name="atDeploymentTick")
     def at_deployment_tick(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9187,8 +9233,8 @@ class IExtensible(typing_extensions.Protocol):
     @jsii.member(jsii_name="on")
     def on(
         self,
-        action_point: ActionPoint,
-        event_destination: IEventDestination,
+        action_point: "ActionPoint",
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9209,7 +9255,7 @@ class IExtensible(typing_extensions.Protocol):
     @jsii.member(jsii_name="onDeploymentBaking")
     def on_deployment_baking(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9229,7 +9275,7 @@ class IExtensible(typing_extensions.Protocol):
     @jsii.member(jsii_name="onDeploymentComplete")
     def on_deployment_complete(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9249,7 +9295,7 @@ class IExtensible(typing_extensions.Protocol):
     @jsii.member(jsii_name="onDeploymentRolledBack")
     def on_deployment_rolled_back(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9269,7 +9315,7 @@ class IExtensible(typing_extensions.Protocol):
     @jsii.member(jsii_name="onDeploymentStart")
     def on_deployment_start(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9289,7 +9335,7 @@ class IExtensible(typing_extensions.Protocol):
     @jsii.member(jsii_name="onDeploymentStep")
     def on_deployment_step(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9309,7 +9355,7 @@ class IExtensible(typing_extensions.Protocol):
     @jsii.member(jsii_name="preCreateHostedConfigurationVersion")
     def pre_create_hosted_configuration_version(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9329,7 +9375,7 @@ class IExtensible(typing_extensions.Protocol):
     @jsii.member(jsii_name="preStartDeployment")
     def pre_start_deployment(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9366,7 +9412,7 @@ class _IExtensibleProxy:
     @jsii.member(jsii_name="atDeploymentTick")
     def at_deployment_tick(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9396,8 +9442,8 @@ class _IExtensibleProxy:
     @jsii.member(jsii_name="on")
     def on(
         self,
-        action_point: ActionPoint,
-        event_destination: IEventDestination,
+        action_point: "ActionPoint",
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9429,7 +9475,7 @@ class _IExtensibleProxy:
     @jsii.member(jsii_name="onDeploymentBaking")
     def on_deployment_baking(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9459,7 +9505,7 @@ class _IExtensibleProxy:
     @jsii.member(jsii_name="onDeploymentComplete")
     def on_deployment_complete(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9489,7 +9535,7 @@ class _IExtensibleProxy:
     @jsii.member(jsii_name="onDeploymentRolledBack")
     def on_deployment_rolled_back(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9519,7 +9565,7 @@ class _IExtensibleProxy:
     @jsii.member(jsii_name="onDeploymentStart")
     def on_deployment_start(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9549,7 +9595,7 @@ class _IExtensibleProxy:
     @jsii.member(jsii_name="onDeploymentStep")
     def on_deployment_step(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9579,7 +9625,7 @@ class _IExtensibleProxy:
     @jsii.member(jsii_name="preCreateHostedConfigurationVersion")
     def pre_create_hosted_configuration_version(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9609,7 +9655,7 @@ class _IExtensibleProxy:
     @jsii.member(jsii_name="preStartDeployment")
     def pre_start_deployment(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
@@ -9641,7 +9687,11 @@ typing.cast(typing.Any, IExtensible).__jsii_proxy_class__ = lambda : _IExtensibl
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appconfig.IExtension")
-class IExtension(_IResource_c80c4260, typing_extensions.Protocol):
+class IExtension(
+    _IResource_c80c4260,
+    _IExtensionRef_abba29c3,
+    typing_extensions.Protocol,
+):
     @builtins.property
     @jsii.member(jsii_name="extensionArn")
     def extension_arn(self) -> builtins.str:
@@ -9671,7 +9721,7 @@ class IExtension(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="actions")
-    def actions(self) -> typing.Optional[typing.List[Action]]:
+    def actions(self) -> typing.Optional[typing.List["Action"]]:
         '''The actions for the extension.'''
         ...
 
@@ -9702,6 +9752,7 @@ class IExtension(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IExtensionProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IExtensionRef_abba29c3), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_appconfig.IExtension"
 
@@ -9734,9 +9785,9 @@ class _IExtensionProxy(
 
     @builtins.property
     @jsii.member(jsii_name="actions")
-    def actions(self) -> typing.Optional[typing.List[Action]]:
+    def actions(self) -> typing.Optional[typing.List["Action"]]:
         '''The actions for the extension.'''
-        return typing.cast(typing.Optional[typing.List[Action]], jsii.get(self, "actions"))
+        return typing.cast(typing.Optional[typing.List["Action"]], jsii.get(self, "actions"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -9908,7 +9959,7 @@ class LambdaDestination(
         )
     '''
 
-    def __init__(self, func: _IFunction_6adb0ab8) -> None:
+    def __init__(self, func: "_IFunction_6adb0ab8") -> None:
         '''
         :param func: -
         '''
@@ -9931,9 +9982,9 @@ class LambdaDestination(
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
-    def policy_document(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy_document(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''The IAM policy document to invoke the event destination.'''
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], jsii.get(self, "policyDocument"))
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], jsii.get(self, "policyDocument"))
 
 
 @jsii.implements(IValidator)
@@ -9966,7 +10017,7 @@ class LambdaValidator(
 
     @jsii.member(jsii_name="fromFunction")
     @builtins.classmethod
-    def from_function(cls, func: _Function_244f85d8) -> "LambdaValidator":
+    def from_function(cls, func: "_Function_244f85d8") -> "LambdaValidator":
         '''Defines an AWS Lambda validator from a Lambda function.
 
         This will call
@@ -10061,8 +10112,8 @@ class Monitor(
     @builtins.classmethod
     def from_cloud_watch_alarm(
         cls,
-        alarm: _IAlarm_ff3eabc0,
-        alarm_role: typing.Optional[_IRoleRef_8400221f] = None,
+        alarm: "_IAlarm_ff3eabc0",
+        alarm_role: typing.Optional["_IRoleRef_8400221f"] = None,
     ) -> "Monitor":
         '''Creates a Monitor from a CloudWatch alarm.
 
@@ -10276,9 +10327,9 @@ class RolloutStrategy(
     def exponential(
         cls,
         *,
-        deployment_duration: _Duration_4839e8c3,
+        deployment_duration: "_Duration_4839e8c3",
         growth_factor: jsii.Number,
-        final_bake_time: typing.Optional[_Duration_4839e8c3] = None,
+        final_bake_time: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "RolloutStrategy":
         '''Build your own exponential rollout strategy.
 
@@ -10299,9 +10350,9 @@ class RolloutStrategy(
     def linear(
         cls,
         *,
-        deployment_duration: _Duration_4839e8c3,
+        deployment_duration: "_Duration_4839e8c3",
         growth_factor: jsii.Number,
-        final_bake_time: typing.Optional[_Duration_4839e8c3] = None,
+        final_bake_time: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "RolloutStrategy":
         '''Build your own linear rollout strategy.
 
@@ -10362,7 +10413,7 @@ class RolloutStrategy(
     @builtins.property
     @jsii.member(jsii_name="deploymentDuration")
     @abc.abstractmethod
-    def deployment_duration(self) -> _Duration_4839e8c3:
+    def deployment_duration(self) -> "_Duration_4839e8c3":
         '''The deployment duration of the rollout strategy.'''
         ...
 
@@ -10376,14 +10427,14 @@ class RolloutStrategy(
     @builtins.property
     @jsii.member(jsii_name="finalBakeTime")
     @abc.abstractmethod
-    def final_bake_time(self) -> typing.Optional[_Duration_4839e8c3]:
+    def final_bake_time(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The final bake time of the deployment strategy.'''
         ...
 
     @builtins.property
     @jsii.member(jsii_name="growthType")
     @abc.abstractmethod
-    def growth_type(self) -> typing.Optional[GrowthType]:
+    def growth_type(self) -> typing.Optional["GrowthType"]:
         '''The growth type of the rollout strategy.'''
         ...
 
@@ -10391,9 +10442,9 @@ class RolloutStrategy(
 class _RolloutStrategyProxy(RolloutStrategy):
     @builtins.property
     @jsii.member(jsii_name="deploymentDuration")
-    def deployment_duration(self) -> _Duration_4839e8c3:
+    def deployment_duration(self) -> "_Duration_4839e8c3":
         '''The deployment duration of the rollout strategy.'''
-        return typing.cast(_Duration_4839e8c3, jsii.get(self, "deploymentDuration"))
+        return typing.cast("_Duration_4839e8c3", jsii.get(self, "deploymentDuration"))
 
     @builtins.property
     @jsii.member(jsii_name="growthFactor")
@@ -10403,15 +10454,15 @@ class _RolloutStrategyProxy(RolloutStrategy):
 
     @builtins.property
     @jsii.member(jsii_name="finalBakeTime")
-    def final_bake_time(self) -> typing.Optional[_Duration_4839e8c3]:
+    def final_bake_time(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The final bake time of the deployment strategy.'''
-        return typing.cast(typing.Optional[_Duration_4839e8c3], jsii.get(self, "finalBakeTime"))
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], jsii.get(self, "finalBakeTime"))
 
     @builtins.property
     @jsii.member(jsii_name="growthType")
-    def growth_type(self) -> typing.Optional[GrowthType]:
+    def growth_type(self) -> typing.Optional["GrowthType"]:
         '''The growth type of the rollout strategy.'''
-        return typing.cast(typing.Optional[GrowthType], jsii.get(self, "growthType"))
+        return typing.cast(typing.Optional["GrowthType"], jsii.get(self, "growthType"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, RolloutStrategy).__jsii_proxy_class__ = lambda : _RolloutStrategyProxy
@@ -10430,9 +10481,9 @@ class RolloutStrategyProps:
     def __init__(
         self,
         *,
-        deployment_duration: _Duration_4839e8c3,
+        deployment_duration: "_Duration_4839e8c3",
         growth_factor: jsii.Number,
-        final_bake_time: typing.Optional[_Duration_4839e8c3] = None,
+        final_bake_time: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Properties for the Rollout Strategy.
 
@@ -10472,7 +10523,7 @@ class RolloutStrategyProps:
             self._values["final_bake_time"] = final_bake_time
 
     @builtins.property
-    def deployment_duration(self) -> _Duration_4839e8c3:
+    def deployment_duration(self) -> "_Duration_4839e8c3":
         '''The deployment duration of the deployment strategy.
 
         This defines
@@ -10480,7 +10531,7 @@ class RolloutStrategyProps:
         '''
         result = self._values.get("deployment_duration")
         assert result is not None, "Required property 'deployment_duration' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
     def growth_factor(self) -> jsii.Number:
@@ -10495,7 +10546,7 @@ class RolloutStrategyProps:
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def final_bake_time(self) -> typing.Optional[_Duration_4839e8c3]:
+    def final_bake_time(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The final bake time of the deployment strategy.
 
         This setting specifies the amount of time AWS AppConfig monitors for Amazon
@@ -10507,7 +10558,7 @@ class RolloutStrategyProps:
         :default: Duration.minutes(0)
         '''
         result = self._values.get("final_bake_time")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10545,7 +10596,7 @@ class SnsDestination(
         )
     '''
 
-    def __init__(self, topic: _ITopic_9eca4852) -> None:
+    def __init__(self, topic: "_ITopic_9eca4852") -> None:
         '''
         :param topic: -
         '''
@@ -10568,9 +10619,9 @@ class SnsDestination(
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
-    def policy_document(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy_document(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''The IAM policy document to invoke the event destination.'''
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], jsii.get(self, "policyDocument"))
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], jsii.get(self, "policyDocument"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_appconfig.SourceType")
@@ -10610,21 +10661,21 @@ class SourcedConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        location: ConfigurationSource,
-        retrieval_role: typing.Optional[_IRoleRef_8400221f] = None,
+        location: "ConfigurationSource",
+        retrieval_role: typing.Optional["_IRoleRef_8400221f"] = None,
         version_number: typing.Optional[builtins.str] = None,
-        application: IApplication,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
-        deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
+        application: "IApplication",
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
+        deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        type: typing.Optional[ConfigurationType] = None,
-        validators: typing.Optional[typing.Sequence[IValidator]] = None,
+        type: typing.Optional["ConfigurationType"] = None,
+        validators: typing.Optional[typing.Sequence["IValidator"]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -10668,7 +10719,7 @@ class SourcedConfiguration(
         return typing.cast(None, jsii.invoke(self, "addExistingEnvironmentsToApplication", []))
 
     @jsii.member(jsii_name="addExtension")
-    def add_extension(self, extension: IExtension) -> None:
+    def add_extension(self, extension: "IExtension") -> None:
         '''Adds an extension association to the configuration profile.
 
         :param extension: The extension to create an association for.
@@ -10681,12 +10732,12 @@ class SourcedConfiguration(
     @jsii.member(jsii_name="atDeploymentTick")
     def at_deployment_tick(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an AT_DEPLOYMENT_TICK extension with the provided event destination and also creates an extension association to an application.
 
@@ -10715,13 +10766,13 @@ class SourcedConfiguration(
     @jsii.member(jsii_name="on")
     def on(
         self,
-        action_point: ActionPoint,
-        event_destination: IEventDestination,
+        action_point: "ActionPoint",
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an extension defined by the action point and event destination and also creates an extension association to the configuration profile.
 
@@ -10748,12 +10799,12 @@ class SourcedConfiguration(
     @jsii.member(jsii_name="onDeploymentBaking")
     def on_deployment_baking(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_BAKING extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -10778,12 +10829,12 @@ class SourcedConfiguration(
     @jsii.member(jsii_name="onDeploymentComplete")
     def on_deployment_complete(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_COMPLETE extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -10808,12 +10859,12 @@ class SourcedConfiguration(
     @jsii.member(jsii_name="onDeploymentRolledBack")
     def on_deployment_rolled_back(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_ROLLED_BACK extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -10838,12 +10889,12 @@ class SourcedConfiguration(
     @jsii.member(jsii_name="onDeploymentStart")
     def on_deployment_start(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_START extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -10868,12 +10919,12 @@ class SourcedConfiguration(
     @jsii.member(jsii_name="onDeploymentStep")
     def on_deployment_step(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_STEP extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -10898,12 +10949,12 @@ class SourcedConfiguration(
     @jsii.member(jsii_name="preCreateHostedConfigurationVersion")
     def pre_create_hosted_configuration_version(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds a PRE_CREATE_HOSTED_CONFIGURATION_VERSION extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -10928,12 +10979,12 @@ class SourcedConfiguration(
     @jsii.member(jsii_name="preStartDeployment")
     def pre_start_deployment(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds a PRE_START_DEPLOYMENT extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -10957,9 +11008,9 @@ class SourcedConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> IApplication:
+    def application(self) -> "IApplication":
         '''The application associated with the configuration.'''
-        return typing.cast(IApplication, jsii.get(self, "application"))
+        return typing.cast("IApplication", jsii.get(self, "application"))
 
     @builtins.property
     @jsii.member(jsii_name="configurationProfileArn")
@@ -10975,27 +11026,27 @@ class SourcedConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="location")
-    def location(self) -> ConfigurationSource:
+    def location(self) -> "ConfigurationSource":
         '''The location where the configuration is stored.'''
-        return typing.cast(ConfigurationSource, jsii.get(self, "location"))
+        return typing.cast("ConfigurationSource", jsii.get(self, "location"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentKey")
-    def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def deployment_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The deployment key for the configuration.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "deploymentKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "deploymentKey"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentStrategy")
-    def deployment_strategy(self) -> typing.Optional[IDeploymentStrategy]:
+    def deployment_strategy(self) -> typing.Optional["IDeploymentStrategy"]:
         '''The deployment strategy for the configuration.'''
-        return typing.cast(typing.Optional[IDeploymentStrategy], jsii.get(self, "deploymentStrategy"))
+        return typing.cast(typing.Optional["IDeploymentStrategy"], jsii.get(self, "deploymentStrategy"))
 
     @builtins.property
     @jsii.member(jsii_name="deployTo")
-    def deploy_to(self) -> typing.Optional[typing.List[IEnvironment]]:
+    def deploy_to(self) -> typing.Optional[typing.List["IEnvironment"]]:
         '''The environments to deploy to.'''
-        return typing.cast(typing.Optional[typing.List[IEnvironment]], jsii.get(self, "deployTo"))
+        return typing.cast(typing.Optional[typing.List["IEnvironment"]], jsii.get(self, "deployTo"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -11011,32 +11062,32 @@ class SourcedConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="retrievalRole")
-    def retrieval_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def retrieval_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role to retrieve the configuration.'''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "retrievalRole"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "retrievalRole"))
 
     @builtins.property
     @jsii.member(jsii_name="sourceKey")
-    def source_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def source_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The key to decrypt the configuration if applicable.
 
         This key
         can be used when storing configuration in AWS Secrets Manager, Systems Manager Parameter Store,
         or Amazon S3.
         '''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "sourceKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "sourceKey"))
 
     @builtins.property
     @jsii.member(jsii_name="type")
-    def type(self) -> typing.Optional[ConfigurationType]:
+    def type(self) -> typing.Optional["ConfigurationType"]:
         '''The configuration type.'''
-        return typing.cast(typing.Optional[ConfigurationType], jsii.get(self, "type"))
+        return typing.cast(typing.Optional["ConfigurationType"], jsii.get(self, "type"))
 
     @builtins.property
     @jsii.member(jsii_name="validators")
-    def validators(self) -> typing.Optional[typing.List[IValidator]]:
+    def validators(self) -> typing.Optional[typing.List["IValidator"]]:
         '''The validators for the configuration.'''
-        return typing.cast(typing.Optional[typing.List[IValidator]], jsii.get(self, "validators"))
+        return typing.cast(typing.Optional[typing.List["IValidator"]], jsii.get(self, "validators"))
 
     @builtins.property
     @jsii.member(jsii_name="versionNumber")
@@ -11070,13 +11121,13 @@ class SourcedConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="deletionProtectionCheck")
-    def _deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
-        return typing.cast(typing.Optional[DeletionProtectionCheck], jsii.get(self, "deletionProtectionCheck"))
+    def _deletion_protection_check(self) -> typing.Optional["DeletionProtectionCheck"]:
+        return typing.cast(typing.Optional["DeletionProtectionCheck"], jsii.get(self, "deletionProtectionCheck"))
 
     @_deletion_protection_check.setter
     def _deletion_protection_check(
         self,
-        value: typing.Optional[DeletionProtectionCheck],
+        value: typing.Optional["DeletionProtectionCheck"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ff7730984215a53f88ccb3e1915941985bedc75f6b24a06eae12d583d8f4bca9)
@@ -11105,16 +11156,16 @@ class SourcedConfigurationOptions(ConfigurationOptions):
     def __init__(
         self,
         *,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
-        deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
+        deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        type: typing.Optional[ConfigurationType] = None,
-        validators: typing.Optional[typing.Sequence[IValidator]] = None,
-        location: ConfigurationSource,
-        retrieval_role: typing.Optional[_IRoleRef_8400221f] = None,
+        type: typing.Optional["ConfigurationType"] = None,
+        validators: typing.Optional[typing.Sequence["IValidator"]] = None,
+        location: "ConfigurationSource",
+        retrieval_role: typing.Optional["_IRoleRef_8400221f"] = None,
         version_number: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Options for SourcedConfiguration.
@@ -11139,10 +11190,11 @@ class SourcedConfigurationOptions(ConfigurationOptions):
             # The values are placeholders you should change.
             from aws_cdk import aws_appconfig as appconfig
             from aws_cdk import aws_kms as kms
+            from aws_cdk.interfaces import aws_appconfig as interfaces_appconfig
             from aws_cdk.interfaces import aws_iam as interfaces_iam
             
             # configuration_source: appconfig.ConfigurationSource
-            # deployment_strategy: appconfig.DeploymentStrategy
+            # deployment_strategy_ref: interfaces_appconfig.IDeploymentStrategyRef
             # environment: appconfig.Environment
             # key: kms.Key
             # role_ref: interfaces_iam.IRoleRef
@@ -11154,7 +11206,7 @@ class SourcedConfigurationOptions(ConfigurationOptions):
                 # the properties below are optional
                 deletion_protection_check=appconfig.DeletionProtectionCheck.ACCOUNT_DEFAULT,
                 deployment_key=key,
-                deployment_strategy=deployment_strategy,
+                deployment_strategy=deployment_strategy_ref,
                 deploy_to=[environment],
                 description="description",
                 name="name",
@@ -11202,7 +11254,7 @@ class SourcedConfigurationOptions(ConfigurationOptions):
             self._values["version_number"] = version_number
 
     @builtins.property
-    def deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
+    def deletion_protection_check(self) -> typing.Optional["DeletionProtectionCheck"]:
         '''A parameter to configure deletion protection.
 
         Deletion protection prevents a user from deleting a configuration profile if your application has called
@@ -11213,19 +11265,21 @@ class SourcedConfigurationOptions(ConfigurationOptions):
         :see: https://docs.aws.amazon.com/appconfig/latest/userguide/deletion-protection.html
         '''
         result = self._values.get("deletion_protection_check")
-        return typing.cast(typing.Optional[DeletionProtectionCheck], result)
+        return typing.cast(typing.Optional["DeletionProtectionCheck"], result)
 
     @builtins.property
-    def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def deployment_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The deployment key of the configuration.
 
         :default: - None.
         '''
         result = self._values.get("deployment_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def deployment_strategy(self) -> typing.Optional[IDeploymentStrategy]:
+    def deployment_strategy(
+        self,
+    ) -> typing.Optional["_IDeploymentStrategyRef_2cd4ca44"]:
         '''The deployment strategy for the configuration.
 
         :default:
@@ -11234,10 +11288,10 @@ class SourcedConfigurationOptions(ConfigurationOptions):
         RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         '''
         result = self._values.get("deployment_strategy")
-        return typing.cast(typing.Optional[IDeploymentStrategy], result)
+        return typing.cast(typing.Optional["_IDeploymentStrategyRef_2cd4ca44"], result)
 
     @builtins.property
-    def deploy_to(self) -> typing.Optional[typing.List[IEnvironment]]:
+    def deploy_to(self) -> typing.Optional[typing.List["IEnvironment"]]:
         '''The list of environments to deploy the configuration to.
 
         If this parameter is not specified, then there will be no
@@ -11249,7 +11303,7 @@ class SourcedConfigurationOptions(ConfigurationOptions):
         :default: - None.
         '''
         result = self._values.get("deploy_to")
-        return typing.cast(typing.Optional[typing.List[IEnvironment]], result)
+        return typing.cast(typing.Optional[typing.List["IEnvironment"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -11270,38 +11324,38 @@ class SourcedConfigurationOptions(ConfigurationOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def type(self) -> typing.Optional[ConfigurationType]:
+    def type(self) -> typing.Optional["ConfigurationType"]:
         '''The type of configuration.
 
         :default: ConfigurationType.FREEFORM
         '''
         result = self._values.get("type")
-        return typing.cast(typing.Optional[ConfigurationType], result)
+        return typing.cast(typing.Optional["ConfigurationType"], result)
 
     @builtins.property
-    def validators(self) -> typing.Optional[typing.List[IValidator]]:
+    def validators(self) -> typing.Optional[typing.List["IValidator"]]:
         '''The validators for the configuration.
 
         :default: - No validators.
         '''
         result = self._values.get("validators")
-        return typing.cast(typing.Optional[typing.List[IValidator]], result)
+        return typing.cast(typing.Optional[typing.List["IValidator"]], result)
 
     @builtins.property
-    def location(self) -> ConfigurationSource:
+    def location(self) -> "ConfigurationSource":
         '''The location where the configuration is stored.'''
         result = self._values.get("location")
         assert result is not None, "Required property 'location' is missing"
-        return typing.cast(ConfigurationSource, result)
+        return typing.cast("ConfigurationSource", result)
 
     @builtins.property
-    def retrieval_role(self) -> typing.Optional[_IRoleRef_8400221f]:
+    def retrieval_role(self) -> typing.Optional["_IRoleRef_8400221f"]:
         '''The IAM role to retrieve the configuration.
 
         :default: - A role is generated.
         '''
         result = self._values.get("retrieval_role")
-        return typing.cast(typing.Optional[_IRoleRef_8400221f], result)
+        return typing.cast(typing.Optional["_IRoleRef_8400221f"], result)
 
     @builtins.property
     def version_number(self) -> typing.Optional[builtins.str]:
@@ -11349,17 +11403,17 @@ class SourcedConfigurationProps(ConfigurationProps):
     def __init__(
         self,
         *,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
-        deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
+        deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        type: typing.Optional[ConfigurationType] = None,
-        validators: typing.Optional[typing.Sequence[IValidator]] = None,
-        application: IApplication,
-        location: ConfigurationSource,
-        retrieval_role: typing.Optional[_IRoleRef_8400221f] = None,
+        type: typing.Optional["ConfigurationType"] = None,
+        validators: typing.Optional[typing.Sequence["IValidator"]] = None,
+        application: "IApplication",
+        location: "ConfigurationSource",
+        retrieval_role: typing.Optional["_IRoleRef_8400221f"] = None,
         version_number: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for SourcedConfiguration.
@@ -11433,7 +11487,7 @@ class SourcedConfigurationProps(ConfigurationProps):
             self._values["version_number"] = version_number
 
     @builtins.property
-    def deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
+    def deletion_protection_check(self) -> typing.Optional["DeletionProtectionCheck"]:
         '''A parameter to configure deletion protection.
 
         Deletion protection prevents a user from deleting a configuration profile if your application has called
@@ -11444,19 +11498,21 @@ class SourcedConfigurationProps(ConfigurationProps):
         :see: https://docs.aws.amazon.com/appconfig/latest/userguide/deletion-protection.html
         '''
         result = self._values.get("deletion_protection_check")
-        return typing.cast(typing.Optional[DeletionProtectionCheck], result)
+        return typing.cast(typing.Optional["DeletionProtectionCheck"], result)
 
     @builtins.property
-    def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def deployment_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The deployment key of the configuration.
 
         :default: - None.
         '''
         result = self._values.get("deployment_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def deployment_strategy(self) -> typing.Optional[IDeploymentStrategy]:
+    def deployment_strategy(
+        self,
+    ) -> typing.Optional["_IDeploymentStrategyRef_2cd4ca44"]:
         '''The deployment strategy for the configuration.
 
         :default:
@@ -11465,10 +11521,10 @@ class SourcedConfigurationProps(ConfigurationProps):
         RolloutStrategy.CANARY_10_PERCENT_20_MINUTES
         '''
         result = self._values.get("deployment_strategy")
-        return typing.cast(typing.Optional[IDeploymentStrategy], result)
+        return typing.cast(typing.Optional["_IDeploymentStrategyRef_2cd4ca44"], result)
 
     @builtins.property
-    def deploy_to(self) -> typing.Optional[typing.List[IEnvironment]]:
+    def deploy_to(self) -> typing.Optional[typing.List["IEnvironment"]]:
         '''The list of environments to deploy the configuration to.
 
         If this parameter is not specified, then there will be no
@@ -11480,7 +11536,7 @@ class SourcedConfigurationProps(ConfigurationProps):
         :default: - None.
         '''
         result = self._values.get("deploy_to")
-        return typing.cast(typing.Optional[typing.List[IEnvironment]], result)
+        return typing.cast(typing.Optional[typing.List["IEnvironment"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -11501,45 +11557,45 @@ class SourcedConfigurationProps(ConfigurationProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def type(self) -> typing.Optional[ConfigurationType]:
+    def type(self) -> typing.Optional["ConfigurationType"]:
         '''The type of configuration.
 
         :default: ConfigurationType.FREEFORM
         '''
         result = self._values.get("type")
-        return typing.cast(typing.Optional[ConfigurationType], result)
+        return typing.cast(typing.Optional["ConfigurationType"], result)
 
     @builtins.property
-    def validators(self) -> typing.Optional[typing.List[IValidator]]:
+    def validators(self) -> typing.Optional[typing.List["IValidator"]]:
         '''The validators for the configuration.
 
         :default: - No validators.
         '''
         result = self._values.get("validators")
-        return typing.cast(typing.Optional[typing.List[IValidator]], result)
+        return typing.cast(typing.Optional[typing.List["IValidator"]], result)
 
     @builtins.property
-    def application(self) -> IApplication:
+    def application(self) -> "IApplication":
         '''The application associated with the configuration.'''
         result = self._values.get("application")
         assert result is not None, "Required property 'application' is missing"
-        return typing.cast(IApplication, result)
+        return typing.cast("IApplication", result)
 
     @builtins.property
-    def location(self) -> ConfigurationSource:
+    def location(self) -> "ConfigurationSource":
         '''The location where the configuration is stored.'''
         result = self._values.get("location")
         assert result is not None, "Required property 'location' is missing"
-        return typing.cast(ConfigurationSource, result)
+        return typing.cast("ConfigurationSource", result)
 
     @builtins.property
-    def retrieval_role(self) -> typing.Optional[_IRoleRef_8400221f]:
+    def retrieval_role(self) -> typing.Optional["_IRoleRef_8400221f"]:
         '''The IAM role to retrieve the configuration.
 
         :default: - Auto generated if location type is not ConfigurationSourceType.CODE_PIPELINE otherwise no role specified.
         '''
         result = self._values.get("retrieval_role")
-        return typing.cast(typing.Optional[_IRoleRef_8400221f], result)
+        return typing.cast(typing.Optional["_IRoleRef_8400221f"], result)
 
     @builtins.property
     def version_number(self) -> typing.Optional[builtins.str]:
@@ -11589,7 +11645,7 @@ class SqsDestination(
         )
     '''
 
-    def __init__(self, queue: _IQueue_7ed6f679) -> None:
+    def __init__(self, queue: "_IQueue_7ed6f679") -> None:
         '''
         :param queue: -
         '''
@@ -11606,15 +11662,15 @@ class SqsDestination(
 
     @builtins.property
     @jsii.member(jsii_name="type")
-    def type(self) -> SourceType:
+    def type(self) -> "SourceType":
         '''The type of the extension event destination.'''
-        return typing.cast(SourceType, jsii.get(self, "type"))
+        return typing.cast("SourceType", jsii.get(self, "type"))
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
-    def policy_document(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy_document(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''The IAM policy document to invoke the event destination.'''
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], jsii.get(self, "policyDocument"))
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], jsii.get(self, "policyDocument"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_appconfig.ValidatorType")
@@ -11655,7 +11711,7 @@ class Application(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_name: typing.Optional[builtins.str] = None,
@@ -11679,7 +11735,7 @@ class Application(
 
     @jsii.member(jsii_name="addAgentToEcs")
     @builtins.classmethod
-    def add_agent_to_ecs(cls, task_def: _TaskDefinition_a541a103) -> None:
+    def add_agent_to_ecs(cls, task_def: "_TaskDefinition_a541a103") -> None:
         '''Adds the AWS AppConfig Agent as a container to the provided ECS task definition.
 
         :param task_def: The ECS task definition [disable-awslint:ref-via-interface].
@@ -11693,10 +11749,10 @@ class Application(
     @builtins.classmethod
     def from_application_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         application_arn: builtins.str,
-    ) -> IApplication:
+    ) -> "IApplication":
         '''Imports an AWS AppConfig application into the CDK using its Amazon Resource Name (ARN).
 
         :param scope: The parent construct.
@@ -11708,16 +11764,16 @@ class Application(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument application_arn", value=application_arn, expected_type=type_hints["application_arn"])
-        return typing.cast(IApplication, jsii.sinvoke(cls, "fromApplicationArn", [scope, id, application_arn]))
+        return typing.cast("IApplication", jsii.sinvoke(cls, "fromApplicationArn", [scope, id, application_arn]))
 
     @jsii.member(jsii_name="fromApplicationId")
     @builtins.classmethod
     def from_application_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         application_id: builtins.str,
-    ) -> IApplication:
+    ) -> "IApplication":
         '''Imports an AWS AppConfig application into the CDK using its ID.
 
         :param scope: The parent construct.
@@ -11729,14 +11785,14 @@ class Application(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument application_id", value=application_id, expected_type=type_hints["application_id"])
-        return typing.cast(IApplication, jsii.sinvoke(cls, "fromApplicationId", [scope, id, application_id]))
+        return typing.cast("IApplication", jsii.sinvoke(cls, "fromApplicationId", [scope, id, application_id]))
 
     @jsii.member(jsii_name="getLambdaLayerVersionArn")
     @builtins.classmethod
     def get_lambda_layer_version_arn(
         cls,
         region: builtins.str,
-        platform: typing.Optional[Platform] = None,
+        platform: typing.Optional["Platform"] = None,
     ) -> builtins.str:
         '''Retrieves the Lambda layer version Amazon Resource Name (ARN) for the AWS AppConfig Lambda extension.
 
@@ -11756,11 +11812,11 @@ class Application(
         self,
         id: builtins.str,
         *,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
         description: typing.Optional[builtins.str] = None,
         environment_name: typing.Optional[builtins.str] = None,
-        monitors: typing.Optional[typing.Sequence[Monitor]] = None,
-    ) -> IEnvironment:
+        monitors: typing.Optional[typing.Sequence["Monitor"]] = None,
+    ) -> "IEnvironment":
         '''Adds an environment.
 
         :param id: -
@@ -11779,10 +11835,13 @@ class Application(
             monitors=monitors,
         )
 
-        return typing.cast(IEnvironment, jsii.invoke(self, "addEnvironment", [id, options]))
+        return typing.cast("IEnvironment", jsii.invoke(self, "addEnvironment", [id, options]))
 
     @jsii.member(jsii_name="addExistingEnvironment")
-    def add_existing_environment(self, environment: IEnvironment) -> None:
+    def add_existing_environment(
+        self,
+        environment: "_IEnvironmentRef_5f5c3f67",
+    ) -> None:
         '''Adds an existing environment.
 
         :param environment: -
@@ -11793,7 +11852,7 @@ class Application(
         return typing.cast(None, jsii.invoke(self, "addExistingEnvironment", [environment]))
 
     @jsii.member(jsii_name="addExtension")
-    def add_extension(self, extension: IExtension) -> None:
+    def add_extension(self, extension: "IExtension") -> None:
         '''Adds an extension association to the application.
 
         :param extension: The extension to create an association for.
@@ -11808,17 +11867,17 @@ class Application(
         self,
         id: builtins.str,
         *,
-        content: ConfigurationContent,
+        content: "ConfigurationContent",
         latest_version_number: typing.Optional[jsii.Number] = None,
         version_label: typing.Optional[builtins.str] = None,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
-        deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
+        deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        type: typing.Optional[ConfigurationType] = None,
-        validators: typing.Optional[typing.Sequence[IValidator]] = None,
+        type: typing.Optional["ConfigurationType"] = None,
+        validators: typing.Optional[typing.Sequence["IValidator"]] = None,
     ) -> "HostedConfiguration":
         '''Adds a hosted configuration.
 
@@ -11859,18 +11918,18 @@ class Application(
         self,
         id: builtins.str,
         *,
-        location: ConfigurationSource,
-        retrieval_role: typing.Optional[_IRoleRef_8400221f] = None,
+        location: "ConfigurationSource",
+        retrieval_role: typing.Optional["_IRoleRef_8400221f"] = None,
         version_number: typing.Optional[builtins.str] = None,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
-        deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
+        deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        type: typing.Optional[ConfigurationType] = None,
-        validators: typing.Optional[typing.Sequence[IValidator]] = None,
-    ) -> SourcedConfiguration:
+        type: typing.Optional["ConfigurationType"] = None,
+        validators: typing.Optional[typing.Sequence["IValidator"]] = None,
+    ) -> "SourcedConfiguration":
         '''Adds a sourced configuration.
 
         :param id: -
@@ -11903,17 +11962,17 @@ class Application(
             validators=validators,
         )
 
-        return typing.cast(SourcedConfiguration, jsii.invoke(self, "addSourcedConfiguration", [id, options]))
+        return typing.cast("SourcedConfiguration", jsii.invoke(self, "addSourcedConfiguration", [id, options]))
 
     @jsii.member(jsii_name="atDeploymentTick")
     def at_deployment_tick(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an AT_DEPLOYMENT_TICK extension with the provided event destination and also creates an extension association to an application.
 
@@ -11936,20 +11995,20 @@ class Application(
         return typing.cast(None, jsii.invoke(self, "atDeploymentTick", [event_destination, options]))
 
     @jsii.member(jsii_name="environments")
-    def environments(self) -> typing.List[IEnvironment]:
+    def environments(self) -> typing.List["IEnvironment"]:
         '''Returns the list of associated environments.'''
-        return typing.cast(typing.List[IEnvironment], jsii.invoke(self, "environments", []))
+        return typing.cast(typing.List["IEnvironment"], jsii.invoke(self, "environments", []))
 
     @jsii.member(jsii_name="on")
     def on(
         self,
-        action_point: ActionPoint,
-        event_destination: IEventDestination,
+        action_point: "ActionPoint",
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an extension defined by the action point and event destination and also creates an extension association to an application.
 
@@ -11976,12 +12035,12 @@ class Application(
     @jsii.member(jsii_name="onDeploymentBaking")
     def on_deployment_baking(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_BAKING extension with the provided event destination and also creates an extension association to an application.
 
@@ -12006,12 +12065,12 @@ class Application(
     @jsii.member(jsii_name="onDeploymentComplete")
     def on_deployment_complete(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_COMPLETE extension with the provided event destination and also creates an extension association to an application.
 
@@ -12036,12 +12095,12 @@ class Application(
     @jsii.member(jsii_name="onDeploymentRolledBack")
     def on_deployment_rolled_back(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_ROLLED_BACK extension with the provided event destination and also creates an extension association to an application.
 
@@ -12066,12 +12125,12 @@ class Application(
     @jsii.member(jsii_name="onDeploymentStart")
     def on_deployment_start(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_START extension with the provided event destination and also creates an extension association to an application.
 
@@ -12096,12 +12155,12 @@ class Application(
     @jsii.member(jsii_name="onDeploymentStep")
     def on_deployment_step(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_STEP extension with the provided event destination and also creates an extension association to an application.
 
@@ -12126,12 +12185,12 @@ class Application(
     @jsii.member(jsii_name="preCreateHostedConfigurationVersion")
     def pre_create_hosted_configuration_version(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds a PRE_CREATE_HOSTED_CONFIGURATION_VERSION extension with the provided event destination and also creates an extension association to an application.
 
@@ -12156,12 +12215,12 @@ class Application(
     @jsii.member(jsii_name="preStartDeployment")
     def pre_start_deployment(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds a PRE_START_DEPLOYMENT extension with the provided event destination and also creates an extension association to an application.
 
@@ -12206,6 +12265,12 @@ class Application(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "applicationId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="applicationRef")
+    def application_ref(self) -> "_ApplicationReference_2b7c5bb6":
+        '''A reference to a Application resource.'''
+        return typing.cast("_ApplicationReference_2b7c5bb6", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -12257,10 +12322,10 @@ class DeploymentStrategy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rollout_strategy: RolloutStrategy,
+        rollout_strategy: "RolloutStrategy",
         deployment_strategy_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -12287,10 +12352,10 @@ class DeploymentStrategy(
     @builtins.classmethod
     def from_deployment_strategy_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         deployment_strategy_arn: builtins.str,
-    ) -> IDeploymentStrategy:
+    ) -> "IDeploymentStrategy":
         '''Imports a deployment strategy into the CDK using its Amazon Resource Name (ARN).
 
         :param scope: The parent construct.
@@ -12302,16 +12367,16 @@ class DeploymentStrategy(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument deployment_strategy_arn", value=deployment_strategy_arn, expected_type=type_hints["deployment_strategy_arn"])
-        return typing.cast(IDeploymentStrategy, jsii.sinvoke(cls, "fromDeploymentStrategyArn", [scope, id, deployment_strategy_arn]))
+        return typing.cast("IDeploymentStrategy", jsii.sinvoke(cls, "fromDeploymentStrategyArn", [scope, id, deployment_strategy_arn]))
 
     @jsii.member(jsii_name="fromDeploymentStrategyId")
     @builtins.classmethod
     def from_deployment_strategy_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
-        deployment_strategy_id: DeploymentStrategyId,
-    ) -> IDeploymentStrategy:
+        deployment_strategy_id: "DeploymentStrategyId",
+    ) -> "IDeploymentStrategy":
         '''Imports a deployment strategy into the CDK using its ID.
 
         :param scope: The parent construct.
@@ -12323,7 +12388,7 @@ class DeploymentStrategy(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument deployment_strategy_id", value=deployment_strategy_id, expected_type=type_hints["deployment_strategy_id"])
-        return typing.cast(IDeploymentStrategy, jsii.sinvoke(cls, "fromDeploymentStrategyId", [scope, id, deployment_strategy_id]))
+        return typing.cast("IDeploymentStrategy", jsii.sinvoke(cls, "fromDeploymentStrategyId", [scope, id, deployment_strategy_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -12345,6 +12410,12 @@ class DeploymentStrategy(
     def deployment_strategy_id(self) -> builtins.str:
         '''The ID of the deployment strategy.'''
         return typing.cast(builtins.str, jsii.get(self, "deploymentStrategyId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="deploymentStrategyRef")
+    def deployment_strategy_ref(self) -> "_DeploymentStrategyReference_e1908020":
+        '''A reference to a DeploymentStrategy resource.'''
+        return typing.cast("_DeploymentStrategyReference_e1908020", jsii.get(self, "deploymentStrategyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentDurationInMinutes")
@@ -12372,9 +12443,9 @@ class DeploymentStrategy(
 
     @builtins.property
     @jsii.member(jsii_name="growthType")
-    def growth_type(self) -> typing.Optional[GrowthType]:
+    def growth_type(self) -> typing.Optional["GrowthType"]:
         '''The growth type of the deployment strategy.'''
-        return typing.cast(typing.Optional[GrowthType], jsii.get(self, "growthType"))
+        return typing.cast(typing.Optional["GrowthType"], jsii.get(self, "growthType"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -12417,14 +12488,14 @@ class Environment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application: IApplication,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
+        application: "IApplication",
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
         description: typing.Optional[builtins.str] = None,
         environment_name: typing.Optional[builtins.str] = None,
-        monitors: typing.Optional[typing.Sequence[Monitor]] = None,
+        monitors: typing.Optional[typing.Sequence["Monitor"]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -12453,10 +12524,10 @@ class Environment(
     @builtins.classmethod
     def from_environment_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         environment_arn: builtins.str,
-    ) -> IEnvironment:
+    ) -> "IEnvironment":
         '''Imports an environment into the CDK using its Amazon Resource Name (ARN).
 
         :param scope: The parent construct.
@@ -12468,21 +12539,21 @@ class Environment(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument environment_arn", value=environment_arn, expected_type=type_hints["environment_arn"])
-        return typing.cast(IEnvironment, jsii.sinvoke(cls, "fromEnvironmentArn", [scope, id, environment_arn]))
+        return typing.cast("IEnvironment", jsii.sinvoke(cls, "fromEnvironmentArn", [scope, id, environment_arn]))
 
     @jsii.member(jsii_name="fromEnvironmentAttributes")
     @builtins.classmethod
     def from_environment_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application: IApplication,
+        application: "IApplication",
         environment_id: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        monitors: typing.Optional[typing.Sequence[Monitor]] = None,
+        monitors: typing.Optional[typing.Sequence["Monitor"]] = None,
         name: typing.Optional[builtins.str] = None,
-    ) -> IEnvironment:
+    ) -> "IEnvironment":
         '''Imports an environment into the CDK from its attributes.
 
         :param scope: The parent construct.
@@ -12505,10 +12576,10 @@ class Environment(
             name=name,
         )
 
-        return typing.cast(IEnvironment, jsii.sinvoke(cls, "fromEnvironmentAttributes", [scope, id, attrs]))
+        return typing.cast("IEnvironment", jsii.sinvoke(cls, "fromEnvironmentAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addDeployment")
-    def add_deployment(self, configuration: IConfiguration) -> None:
+    def add_deployment(self, configuration: "IConfiguration") -> None:
         '''Creates a deployment of the supplied configuration to this environment.
 
         Note that you can only deploy one configuration at a time to an environment.
@@ -12523,7 +12594,7 @@ class Environment(
         return typing.cast(None, jsii.invoke(self, "addDeployment", [configuration]))
 
     @jsii.member(jsii_name="addDeployments")
-    def add_deployments(self, *configurations: IConfiguration) -> None:
+    def add_deployments(self, *configurations: "IConfiguration") -> None:
         '''Creates a deployment for each of the supplied configurations to this environment.
 
         These configurations will be deployed in the same order as the input array.
@@ -12536,7 +12607,7 @@ class Environment(
         return typing.cast(None, jsii.invoke(self, "addDeployments", [*configurations]))
 
     @jsii.member(jsii_name="addExtension")
-    def add_extension(self, extension: IExtension) -> None:
+    def add_extension(self, extension: "IExtension") -> None:
         '''Adds an extension association to the environment.
 
         :param extension: -
@@ -12549,12 +12620,12 @@ class Environment(
     @jsii.member(jsii_name="atDeploymentTick")
     def at_deployment_tick(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an AT_DEPLOYMENT_TICK extension with the provided event destination and also creates an extension association to an application.
 
@@ -12579,9 +12650,9 @@ class Environment(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this environment to an IAM principal's policy.
 
         :param grantee: -
@@ -12591,10 +12662,10 @@ class Environment(
             type_hints = typing.get_type_hints(_typecheckingstub__9c65f9ec077d5abb2638f74671e3f2d65ef4fed80c0e32561b7b807b917e7d53)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantReadConfig")
-    def grant_read_config(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_config(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal to perform read operations on this environment's configurations.
 
         Actions: GetLatestConfiguration, StartConfigurationSession.
@@ -12604,18 +12675,18 @@ class Environment(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__790a777ba7325eb4b088cf4fe3be2b4fdcc0c100050d537316abc7125c7f326f)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadConfig", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadConfig", [identity]))
 
     @jsii.member(jsii_name="on")
     def on(
         self,
-        action_point: ActionPoint,
-        event_destination: IEventDestination,
+        action_point: "ActionPoint",
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an extension defined by the action point and event destination and also creates an extension association to the environment.
 
@@ -12642,12 +12713,12 @@ class Environment(
     @jsii.member(jsii_name="onDeploymentBaking")
     def on_deployment_baking(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_BAKING extension with the provided event destination and also creates an extension association to the environment.
 
@@ -12672,12 +12743,12 @@ class Environment(
     @jsii.member(jsii_name="onDeploymentComplete")
     def on_deployment_complete(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_COMPLETE extension with the provided event destination and also creates an extension association to the environment.
 
@@ -12702,12 +12773,12 @@ class Environment(
     @jsii.member(jsii_name="onDeploymentRolledBack")
     def on_deployment_rolled_back(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_ROLLED_BACK extension with the provided event destination and also creates an extension association to the environment.
 
@@ -12732,12 +12803,12 @@ class Environment(
     @jsii.member(jsii_name="onDeploymentStart")
     def on_deployment_start(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_START extension with the provided event destination and also creates an extension association to the environment.
 
@@ -12762,12 +12833,12 @@ class Environment(
     @jsii.member(jsii_name="onDeploymentStep")
     def on_deployment_step(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_STEP extension with the provided event destination and also creates an extension association to the environment.
 
@@ -12792,12 +12863,12 @@ class Environment(
     @jsii.member(jsii_name="preCreateHostedConfigurationVersion")
     def pre_create_hosted_configuration_version(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds a PRE_CREATE_HOSTED_CONFIGURATION_VERSION extension with the provided event destination and also creates an extension association to the environment.
 
@@ -12822,12 +12893,12 @@ class Environment(
     @jsii.member(jsii_name="preStartDeployment")
     def pre_start_deployment(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds a PRE_START_DEPLOYMENT extension with the provided event destination and also creates an extension association to the environment.
 
@@ -12880,10 +12951,16 @@ class Environment(
         return typing.cast(builtins.str, jsii.get(self, "environmentId"))
 
     @builtins.property
+    @jsii.member(jsii_name="environmentRef")
+    def environment_ref(self) -> "_EnvironmentReference_610ea6de":
+        '''A reference to a Environment resource.'''
+        return typing.cast("_EnvironmentReference_610ea6de", jsii.get(self, "environmentRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> typing.Optional[IApplication]:
+    def application(self) -> typing.Optional["IApplication"]:
         '''The application associated with the environment.'''
-        return typing.cast(typing.Optional[IApplication], jsii.get(self, "application"))
+        return typing.cast(typing.Optional["IApplication"], jsii.get(self, "application"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -12893,9 +12970,9 @@ class Environment(
 
     @builtins.property
     @jsii.member(jsii_name="monitors")
-    def monitors(self) -> typing.Optional[typing.List[Monitor]]:
+    def monitors(self) -> typing.Optional[typing.List["Monitor"]]:
         '''The monitors for the environment.'''
-        return typing.cast(typing.Optional[typing.List[Monitor]], jsii.get(self, "monitors"))
+        return typing.cast(typing.Optional[typing.List["Monitor"]], jsii.get(self, "monitors"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -12905,11 +12982,11 @@ class Environment(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentQueue")
-    def _deployment_queue(self) -> typing.List[CfnDeployment]:
-        return typing.cast(typing.List[CfnDeployment], jsii.get(self, "deploymentQueue"))
+    def _deployment_queue(self) -> typing.List["CfnDeployment"]:
+        return typing.cast(typing.List["CfnDeployment"], jsii.get(self, "deploymentQueue"))
 
     @_deployment_queue.setter
-    def _deployment_queue(self, value: typing.List[CfnDeployment]) -> None:
+    def _deployment_queue(self, value: typing.List["CfnDeployment"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bd39d7b7b77c944582e5f7fabeb3e37717eaa470540d764633f9ce909058030a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -12951,7 +13028,7 @@ class EventBridgeDestination(
         )
     '''
 
-    def __init__(self, bus: _IEventBus_88d13111) -> None:
+    def __init__(self, bus: "_IEventBus_88d13111") -> None:
         '''
         :param bus: -
         '''
@@ -12968,9 +13045,9 @@ class EventBridgeDestination(
 
     @builtins.property
     @jsii.member(jsii_name="type")
-    def type(self) -> SourceType:
+    def type(self) -> "SourceType":
         '''The type of the extension event destination.'''
-        return typing.cast(SourceType, jsii.get(self, "type"))
+        return typing.cast("SourceType", jsii.get(self, "type"))
 
 
 @jsii.implements(IExtensible)
@@ -12998,7 +13075,7 @@ class ExtensibleBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         resource_arn: builtins.str,
         resource_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -13015,7 +13092,7 @@ class ExtensibleBase(
         jsii.create(self.__class__, self, [scope, resource_arn, resource_name])
 
     @jsii.member(jsii_name="addExtension")
-    def add_extension(self, extension: IExtension) -> None:
+    def add_extension(self, extension: "IExtension") -> None:
         '''Adds an extension association to the derived resource.
 
         :param extension: -
@@ -13028,12 +13105,12 @@ class ExtensibleBase(
     @jsii.member(jsii_name="atDeploymentTick")
     def at_deployment_tick(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an AT_DEPLOYMENT_TICK extension with the provided event destination and also creates an extension association to the derived resource.
 
@@ -13058,13 +13135,13 @@ class ExtensibleBase(
     @jsii.member(jsii_name="on")
     def on(
         self,
-        action_point: ActionPoint,
-        event_destination: IEventDestination,
+        action_point: "ActionPoint",
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an extension defined by the action point and event destination and also creates an extension association to the derived resource.
 
@@ -13091,12 +13168,12 @@ class ExtensibleBase(
     @jsii.member(jsii_name="onDeploymentBaking")
     def on_deployment_baking(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_BAKING extension with the provided event destination and also creates an extension association to the derived resource.
 
@@ -13121,12 +13198,12 @@ class ExtensibleBase(
     @jsii.member(jsii_name="onDeploymentComplete")
     def on_deployment_complete(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_COMPLETE extension with the provided event destination and also creates an extension association to the derived resource.
 
@@ -13151,12 +13228,12 @@ class ExtensibleBase(
     @jsii.member(jsii_name="onDeploymentRolledBack")
     def on_deployment_rolled_back(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_ROLLED_BACK extension with the provided event destination and also creates an extension association to the derived resource.
 
@@ -13181,12 +13258,12 @@ class ExtensibleBase(
     @jsii.member(jsii_name="onDeploymentStart")
     def on_deployment_start(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_START extension with the provided event destination and also creates an extension association to the derived resource.
 
@@ -13211,12 +13288,12 @@ class ExtensibleBase(
     @jsii.member(jsii_name="onDeploymentStep")
     def on_deployment_step(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_STEP extension with the provided event destination and also creates an extension association to the derived resource.
 
@@ -13241,12 +13318,12 @@ class ExtensibleBase(
     @jsii.member(jsii_name="preCreateHostedConfigurationVersion")
     def pre_create_hosted_configuration_version(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds a PRE_CREATE_HOSTED_CONFIGURATION_VERSION extension with the provided event destination and also creates an extension association to the derived resource.
 
@@ -13271,12 +13348,12 @@ class ExtensibleBase(
     @jsii.member(jsii_name="preStartDeployment")
     def pre_start_deployment(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds a PRE_START_DEPLOYMENT extension with the provided event destination and also creates an extension association to the derived resource.
 
@@ -13328,14 +13405,14 @@ class Extension(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        actions: typing.Sequence[Action],
+        actions: typing.Sequence["Action"],
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -13364,10 +13441,10 @@ class Extension(
     @builtins.classmethod
     def from_extension_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         extension_arn: builtins.str,
-    ) -> IExtension:
+    ) -> "IExtension":
         '''Imports an extension into the CDK using its Amazon Resource Name (ARN).
 
         :param scope: The parent construct.
@@ -13379,22 +13456,22 @@ class Extension(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument extension_arn", value=extension_arn, expected_type=type_hints["extension_arn"])
-        return typing.cast(IExtension, jsii.sinvoke(cls, "fromExtensionArn", [scope, id, extension_arn]))
+        return typing.cast("IExtension", jsii.sinvoke(cls, "fromExtensionArn", [scope, id, extension_arn]))
 
     @jsii.member(jsii_name="fromExtensionAttributes")
     @builtins.classmethod
     def from_extension_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         extension_id: builtins.str,
         extension_version_number: jsii.Number,
-        actions: typing.Optional[typing.Sequence[Action]] = None,
+        actions: typing.Optional[typing.Sequence["Action"]] = None,
         description: typing.Optional[builtins.str] = None,
         extension_arn: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-    ) -> IExtension:
+    ) -> "IExtension":
         '''Imports an extension into the CDK using its attributes.
 
         :param scope: The parent construct.
@@ -13419,7 +13496,7 @@ class Extension(
             name=name,
         )
 
-        return typing.cast(IExtension, jsii.sinvoke(cls, "fromExtensionAttributes", [scope, id, attrs]))
+        return typing.cast("IExtension", jsii.sinvoke(cls, "fromExtensionAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -13446,6 +13523,12 @@ class Extension(
         return typing.cast(builtins.str, jsii.get(self, "extensionId"))
 
     @builtins.property
+    @jsii.member(jsii_name="extensionRef")
+    def extension_ref(self) -> "_ExtensionReference_a0aef309":
+        '''A reference to a Extension resource.'''
+        return typing.cast("_ExtensionReference_a0aef309", jsii.get(self, "extensionRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="extensionVersionNumber")
     def extension_version_number(self) -> jsii.Number:
         '''The version number of the extension.
@@ -13456,9 +13539,9 @@ class Extension(
 
     @builtins.property
     @jsii.member(jsii_name="actions")
-    def actions(self) -> typing.Optional[typing.List[Action]]:
+    def actions(self) -> typing.Optional[typing.List["Action"]]:
         '''The actions for the extension.'''
-        return typing.cast(typing.Optional[typing.List[Action]], jsii.get(self, "actions"))
+        return typing.cast(typing.Optional[typing.List["Action"]], jsii.get(self, "actions"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -13480,9 +13563,9 @@ class Extension(
 
     @builtins.property
     @jsii.member(jsii_name="parameters")
-    def parameters(self) -> typing.Optional[typing.List[Parameter]]:
+    def parameters(self) -> typing.Optional[typing.List["Parameter"]]:
         '''The parameters of the extension.'''
-        return typing.cast(typing.Optional[typing.List[Parameter]], jsii.get(self, "parameters"))
+        return typing.cast(typing.Optional[typing.List["Parameter"]], jsii.get(self, "parameters"))
 
 
 @jsii.implements(IConfiguration, IExtensible)
@@ -13513,22 +13596,22 @@ class HostedConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        content: ConfigurationContent,
-        kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        content: "ConfigurationContent",
+        kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
         version_label: typing.Optional[builtins.str] = None,
-        application: IApplication,
-        deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
-        deployment_key: typing.Optional[_IKey_5f11635f] = None,
-        deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
-        deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
+        application: "IApplication",
+        deletion_protection_check: typing.Optional["DeletionProtectionCheck"] = None,
+        deployment_key: typing.Optional["_IKey_5f11635f"] = None,
+        deployment_strategy: typing.Optional["_IDeploymentStrategyRef_2cd4ca44"] = None,
+        deploy_to: typing.Optional[typing.Sequence["IEnvironment"]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        type: typing.Optional[ConfigurationType] = None,
-        validators: typing.Optional[typing.Sequence[IValidator]] = None,
+        type: typing.Optional["ConfigurationType"] = None,
+        validators: typing.Optional[typing.Sequence["IValidator"]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -13574,7 +13657,7 @@ class HostedConfiguration(
         return typing.cast(None, jsii.invoke(self, "addExistingEnvironmentsToApplication", []))
 
     @jsii.member(jsii_name="addExtension")
-    def add_extension(self, extension: IExtension) -> None:
+    def add_extension(self, extension: "IExtension") -> None:
         '''Adds an extension association to the configuration profile.
 
         :param extension: The extension to create an association for.
@@ -13587,12 +13670,12 @@ class HostedConfiguration(
     @jsii.member(jsii_name="atDeploymentTick")
     def at_deployment_tick(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an AT_DEPLOYMENT_TICK extension with the provided event destination and also creates an extension association to an application.
 
@@ -13621,13 +13704,13 @@ class HostedConfiguration(
     @jsii.member(jsii_name="on")
     def on(
         self,
-        action_point: ActionPoint,
-        event_destination: IEventDestination,
+        action_point: "ActionPoint",
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an extension defined by the action point and event destination and also creates an extension association to the configuration profile.
 
@@ -13654,12 +13737,12 @@ class HostedConfiguration(
     @jsii.member(jsii_name="onDeploymentBaking")
     def on_deployment_baking(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_BAKING extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -13684,12 +13767,12 @@ class HostedConfiguration(
     @jsii.member(jsii_name="onDeploymentComplete")
     def on_deployment_complete(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_COMPLETE extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -13714,12 +13797,12 @@ class HostedConfiguration(
     @jsii.member(jsii_name="onDeploymentRolledBack")
     def on_deployment_rolled_back(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_ROLLED_BACK extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -13744,12 +13827,12 @@ class HostedConfiguration(
     @jsii.member(jsii_name="onDeploymentStart")
     def on_deployment_start(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_START extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -13774,12 +13857,12 @@ class HostedConfiguration(
     @jsii.member(jsii_name="onDeploymentStep")
     def on_deployment_step(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds an ON_DEPLOYMENT_STEP extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -13804,12 +13887,12 @@ class HostedConfiguration(
     @jsii.member(jsii_name="preCreateHostedConfigurationVersion")
     def pre_create_hosted_configuration_version(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds a PRE_CREATE_HOSTED_CONFIGURATION_VERSION extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -13834,12 +13917,12 @@ class HostedConfiguration(
     @jsii.member(jsii_name="preStartDeployment")
     def pre_start_deployment(
         self,
-        event_destination: IEventDestination,
+        event_destination: "IEventDestination",
         *,
         description: typing.Optional[builtins.str] = None,
         extension_name: typing.Optional[builtins.str] = None,
         latest_version_number: typing.Optional[jsii.Number] = None,
-        parameters: typing.Optional[typing.Sequence[Parameter]] = None,
+        parameters: typing.Optional[typing.Sequence["Parameter"]] = None,
     ) -> None:
         '''Adds a PRE_START_DEPLOYMENT extension with the provided event destination and also creates an extension association to the configuration profile.
 
@@ -13863,9 +13946,9 @@ class HostedConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="application")
-    def application(self) -> IApplication:
+    def application(self) -> "IApplication":
         '''The application associated with the configuration.'''
-        return typing.cast(IApplication, jsii.get(self, "application"))
+        return typing.cast("IApplication", jsii.get(self, "application"))
 
     @builtins.property
     @jsii.member(jsii_name="configurationProfileArn")
@@ -13903,21 +13986,21 @@ class HostedConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentKey")
-    def deployment_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def deployment_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The deployment key for the configuration.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "deploymentKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "deploymentKey"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentStrategy")
-    def deployment_strategy(self) -> typing.Optional[IDeploymentStrategy]:
+    def deployment_strategy(self) -> typing.Optional["IDeploymentStrategy"]:
         '''The deployment strategy for the configuration.'''
-        return typing.cast(typing.Optional[IDeploymentStrategy], jsii.get(self, "deploymentStrategy"))
+        return typing.cast(typing.Optional["IDeploymentStrategy"], jsii.get(self, "deploymentStrategy"))
 
     @builtins.property
     @jsii.member(jsii_name="deployTo")
-    def deploy_to(self) -> typing.Optional[typing.List[IEnvironment]]:
+    def deploy_to(self) -> typing.Optional[typing.List["IEnvironment"]]:
         '''The environments to deploy to.'''
-        return typing.cast(typing.Optional[typing.List[IEnvironment]], jsii.get(self, "deployTo"))
+        return typing.cast(typing.Optional[typing.List["IEnvironment"]], jsii.get(self, "deployTo"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -13939,15 +14022,15 @@ class HostedConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="type")
-    def type(self) -> typing.Optional[ConfigurationType]:
+    def type(self) -> typing.Optional["ConfigurationType"]:
         '''The configuration type.'''
-        return typing.cast(typing.Optional[ConfigurationType], jsii.get(self, "type"))
+        return typing.cast(typing.Optional["ConfigurationType"], jsii.get(self, "type"))
 
     @builtins.property
     @jsii.member(jsii_name="validators")
-    def validators(self) -> typing.Optional[typing.List[IValidator]]:
+    def validators(self) -> typing.Optional[typing.List["IValidator"]]:
         '''The validators for the configuration.'''
-        return typing.cast(typing.Optional[typing.List[IValidator]], jsii.get(self, "validators"))
+        return typing.cast(typing.Optional[typing.List["IValidator"]], jsii.get(self, "validators"))
 
     @builtins.property
     @jsii.member(jsii_name="versionLabel")
@@ -13975,11 +14058,11 @@ class HostedConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="extensible")
-    def _extensible(self) -> ExtensibleBase:
-        return typing.cast(ExtensibleBase, jsii.get(self, "extensible"))
+    def _extensible(self) -> "ExtensibleBase":
+        return typing.cast("ExtensibleBase", jsii.get(self, "extensible"))
 
     @_extensible.setter
-    def _extensible(self, value: ExtensibleBase) -> None:
+    def _extensible(self, value: "ExtensibleBase") -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__27c25acd80a9bdc9870365bad92556272569854dc957ad7cdf2b6e5a2c29c2ce)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -13987,13 +14070,13 @@ class HostedConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="deletionProtectionCheck")
-    def _deletion_protection_check(self) -> typing.Optional[DeletionProtectionCheck]:
-        return typing.cast(typing.Optional[DeletionProtectionCheck], jsii.get(self, "deletionProtectionCheck"))
+    def _deletion_protection_check(self) -> typing.Optional["DeletionProtectionCheck"]:
+        return typing.cast(typing.Optional["DeletionProtectionCheck"], jsii.get(self, "deletionProtectionCheck"))
 
     @_deletion_protection_check.setter
     def _deletion_protection_check(
         self,
-        value: typing.Optional[DeletionProtectionCheck],
+        value: typing.Optional["DeletionProtectionCheck"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0a1e6913f9293558fa6d2222b6d11c3af6b25866b966dd6319551117306cf272)
@@ -14928,7 +15011,7 @@ def _typecheckingstub__7d8aafff2e2f314c1c4bef6e213f0aaef56ff294051b33fee835ad571
     *,
     deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
-    deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
+    deployment_strategy: typing.Optional[_IDeploymentStrategyRef_2cd4ca44] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -14942,7 +15025,7 @@ def _typecheckingstub__fde28a86ff967e860849eabd5d00b00f1f841ba2ded09e00655f2b7d4
     *,
     deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
-    deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
+    deployment_strategy: typing.Optional[_IDeploymentStrategyRef_2cd4ca44] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -15070,7 +15153,7 @@ def _typecheckingstub__4c4d8fda2e4860630073eda40d5a32347248e82c24127624ef93e735b
     *,
     deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
-    deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
+    deployment_strategy: typing.Optional[_IDeploymentStrategyRef_2cd4ca44] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -15087,7 +15170,7 @@ def _typecheckingstub__7cba9d5464f3f4cbc208d892995245e5078fc2cc794651c71942035a9
     *,
     deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
-    deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
+    deployment_strategy: typing.Optional[_IDeploymentStrategyRef_2cd4ca44] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -15114,7 +15197,7 @@ def _typecheckingstub__eb165be70f31f79374053f908981a5e02c37cbdefd4d2123a7e32165f
     pass
 
 def _typecheckingstub__51863d25dd80b6b2aec3914f4049011443f202b08c7c800cd559c58ed15cc0d7(
-    environment: IEnvironment,
+    environment: _IEnvironmentRef_5f5c3f67,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -15133,7 +15216,7 @@ def _typecheckingstub__3bd9df804b6975de3426c197a45965f129649a986f5cd9a03f0a4ee6f
     version_label: typing.Optional[builtins.str] = None,
     deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
-    deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
+    deployment_strategy: typing.Optional[_IDeploymentStrategyRef_2cd4ca44] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -15151,7 +15234,7 @@ def _typecheckingstub__652068ebd01467de1bc3159a4c8fef165c1053fe6662fcbb6e0b8cb9f
     version_number: typing.Optional[builtins.str] = None,
     deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
-    deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
+    deployment_strategy: typing.Optional[_IDeploymentStrategyRef_2cd4ca44] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -15570,7 +15653,7 @@ def _typecheckingstub__61200a738f2584e5d86190492c99ded9cebb5cc41d230eec1c74f7130
     application: IApplication,
     deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
-    deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
+    deployment_strategy: typing.Optional[_IDeploymentStrategyRef_2cd4ca44] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -15708,7 +15791,7 @@ def _typecheckingstub__115deabe7a02ce295c431e7d9a99bcbe112bc017436380d80181c5db4
     *,
     deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
-    deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
+    deployment_strategy: typing.Optional[_IDeploymentStrategyRef_2cd4ca44] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -15725,7 +15808,7 @@ def _typecheckingstub__d41101d1b0f699a52d44a2b86fe3e9dcd0e6f1487f088908464eb49cb
     *,
     deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
-    deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
+    deployment_strategy: typing.Optional[_IDeploymentStrategyRef_2cd4ca44] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -15796,7 +15879,7 @@ def _typecheckingstub__fbd38f9aba7df4d45f96d0029239a2f96f2fcad218a295b86c260e75c
     pass
 
 def _typecheckingstub__16233ddf7a1e42dc23f4bda96b70ec9417da6d3fedfafeec39f99b911d35656e(
-    environment: IEnvironment,
+    environment: _IEnvironmentRef_5f5c3f67,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -15815,7 +15898,7 @@ def _typecheckingstub__7b18310538532e3e3e53af99bb5da0c248186673a38a5175633a0149c
     version_label: typing.Optional[builtins.str] = None,
     deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
-    deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
+    deployment_strategy: typing.Optional[_IDeploymentStrategyRef_2cd4ca44] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -15833,7 +15916,7 @@ def _typecheckingstub__8c0399b30aac3a09a4a5e9f3f33f358c90afa60099a7dd6cfc1f1b40f
     version_number: typing.Optional[builtins.str] = None,
     deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
-    deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
+    deployment_strategy: typing.Optional[_IDeploymentStrategyRef_2cd4ca44] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -16319,7 +16402,7 @@ def _typecheckingstub__8e7eecc550d3d689f07534db869c7be67f00e08dcbf880bbb2656d019
     application: IApplication,
     deletion_protection_check: typing.Optional[DeletionProtectionCheck] = None,
     deployment_key: typing.Optional[_IKey_5f11635f] = None,
-    deployment_strategy: typing.Optional[IDeploymentStrategy] = None,
+    deployment_strategy: typing.Optional[_IDeploymentStrategyRef_2cd4ca44] = None,
     deploy_to: typing.Optional[typing.Sequence[IEnvironment]] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,

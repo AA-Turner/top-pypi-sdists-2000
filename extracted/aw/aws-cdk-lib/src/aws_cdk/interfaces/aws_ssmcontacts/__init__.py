@@ -145,7 +145,7 @@ class IContactChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="contactChannelRef")
-    def contact_channel_ref(self) -> ContactChannelReference:
+    def contact_channel_ref(self) -> "ContactChannelReference":
         '''(experimental) A reference to a ContactChannel resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IContactChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="contactChannelRef")
-    def contact_channel_ref(self) -> ContactChannelReference:
+    def contact_channel_ref(self) -> "ContactChannelReference":
         '''(experimental) A reference to a ContactChannel resource.
 
         :stability: experimental
         '''
-        return typing.cast(ContactChannelReference, jsii.get(self, "contactChannelRef"))
+        return typing.cast("ContactChannelReference", jsii.get(self, "contactChannelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContactChannelRef).__jsii_proxy_class__ = lambda : _IContactChannelRefProxy
@@ -190,7 +190,7 @@ class IContactRef(
 
     @builtins.property
     @jsii.member(jsii_name="contactRef")
-    def contact_ref(self) -> ContactReference:
+    def contact_ref(self) -> "ContactReference":
         '''(experimental) A reference to a Contact resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IContactRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="contactRef")
-    def contact_ref(self) -> ContactReference:
+    def contact_ref(self) -> "ContactReference":
         '''(experimental) A reference to a Contact resource.
 
         :stability: experimental
         '''
-        return typing.cast(ContactReference, jsii.get(self, "contactRef"))
+        return typing.cast("ContactReference", jsii.get(self, "contactRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContactRef).__jsii_proxy_class__ = lambda : _IContactRefProxy

@@ -766,6 +766,7 @@ You can add tags to a `TableV2` in several ways. By adding the tags to the const
 primary table.
 
 ```python
+from aws_cdk import CfnTag
 table = dynamodb.TableV2(self, "Table",
     partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING),
     tags=[CfnTag(key="primaryTableTagKey", value="primaryTableTagValue")]
@@ -775,6 +776,7 @@ table = dynamodb.TableV2(self, "Table",
 You can also add tags to replica tables by specifying them within the replica table properties.
 
 ```python
+from aws_cdk import CfnTag
 table = dynamodb.TableV2(self, "Table",
     partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING),
     replicas=[dynamodb.ReplicaTableProps(
@@ -1714,6 +1716,7 @@ class CfnGlobalTable(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dynamodb as dynamodb
@@ -1920,24 +1923,24 @@ class CfnGlobalTable(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        attribute_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.AttributeDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        key_schema: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        replicas: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ReplicaSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        attribute_definitions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.AttributeDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        key_schema: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        replicas: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ReplicaSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         billing_mode: typing.Optional[builtins.str] = None,
-        global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.GlobalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        global_table_witnesses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.GlobalTableWitnessProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        local_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.LocalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        global_secondary_indexes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.GlobalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        global_table_witnesses: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.GlobalTableWitnessProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        local_secondary_indexes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.LocalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         multi_region_consistency: typing.Optional[builtins.str] = None,
-        sse_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.SSESpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        stream_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.StreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sse_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.SSESpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        stream_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.StreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         table_name: typing.Optional[builtins.str] = None,
-        time_to_live_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.TimeToLiveSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        write_on_demand_throughput_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.WriteOnDemandThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        write_provisioned_throughput_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.WriteProvisionedThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        time_to_live_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.TimeToLiveSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        write_on_demand_throughput_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.WriteOnDemandThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        write_provisioned_throughput_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.WriteProvisionedThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DynamoDB::GlobalTable``.
 
@@ -1985,7 +1988,10 @@ class CfnGlobalTable(
 
     @jsii.member(jsii_name="arnForGlobalTable")
     @builtins.classmethod
-    def arn_for_global_table(cls, resource: _IGlobalTableRef_596046fc) -> builtins.str:
+    def arn_for_global_table(
+        cls,
+        resource: "_IGlobalTableRef_596046fc",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2007,7 +2013,7 @@ class CfnGlobalTable(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGlobalTable", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2078,22 +2084,22 @@ class CfnGlobalTable(
 
     @builtins.property
     @jsii.member(jsii_name="globalTableRef")
-    def global_table_ref(self) -> _GlobalTableReference_7ca912b6:
+    def global_table_ref(self) -> "_GlobalTableReference_7ca912b6":
         '''A reference to a GlobalTable resource.'''
-        return typing.cast(_GlobalTableReference_7ca912b6, jsii.get(self, "globalTableRef"))
+        return typing.cast("_GlobalTableReference_7ca912b6", jsii.get(self, "globalTableRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attributeDefinitions")
     def attribute_definitions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.AttributeDefinitionProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.AttributeDefinitionProperty"]]]:
         '''A list of attributes that describe the key schema for the global table and indexes.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.AttributeDefinitionProperty"]]], jsii.get(self, "attributeDefinitions"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.AttributeDefinitionProperty"]]], jsii.get(self, "attributeDefinitions"))
 
     @attribute_definitions.setter
     def attribute_definitions(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.AttributeDefinitionProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.AttributeDefinitionProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f732bb8272361b5800f36f0c389121597f9a72868d0f90932b3744684600e75e)
@@ -2104,14 +2110,14 @@ class CfnGlobalTable(
     @jsii.member(jsii_name="keySchema")
     def key_schema(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.KeySchemaProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.KeySchemaProperty"]]]:
         '''Specifies the attributes that make up the primary key for the table.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.KeySchemaProperty"]]], jsii.get(self, "keySchema"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.KeySchemaProperty"]]], jsii.get(self, "keySchema"))
 
     @key_schema.setter
     def key_schema(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.KeySchemaProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.KeySchemaProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6ef890475efd870bf55df50bbfa6efc88da22eca84273a283f67749593f5b884)
@@ -2122,14 +2128,14 @@ class CfnGlobalTable(
     @jsii.member(jsii_name="replicas")
     def replicas(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReplicaSpecificationProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReplicaSpecificationProperty"]]]:
         '''Specifies the list of replicas for your global table.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReplicaSpecificationProperty"]]], jsii.get(self, "replicas"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReplicaSpecificationProperty"]]], jsii.get(self, "replicas"))
 
     @replicas.setter
     def replicas(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReplicaSpecificationProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReplicaSpecificationProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a097f89adcd67d171d1cf0c2f82a8189f354dac15e39c6b6cc82e65b8e315806)
@@ -2156,14 +2162,14 @@ class CfnGlobalTable(
     @jsii.member(jsii_name="globalSecondaryIndexes")
     def global_secondary_indexes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.GlobalSecondaryIndexProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.GlobalSecondaryIndexProperty"]]]]:
         '''Global secondary indexes to be created on the global table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.GlobalSecondaryIndexProperty"]]]], jsii.get(self, "globalSecondaryIndexes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.GlobalSecondaryIndexProperty"]]]], jsii.get(self, "globalSecondaryIndexes"))
 
     @global_secondary_indexes.setter
     def global_secondary_indexes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.GlobalSecondaryIndexProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.GlobalSecondaryIndexProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__484436e7e1867a9d477f3fa0bdee0dfdfb2646ba7497c71d398076d9872d332b)
@@ -2174,14 +2180,14 @@ class CfnGlobalTable(
     @jsii.member(jsii_name="globalTableWitnesses")
     def global_table_witnesses(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.GlobalTableWitnessProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.GlobalTableWitnessProperty"]]]]:
         '''The list of witnesses of the MRSC global table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.GlobalTableWitnessProperty"]]]], jsii.get(self, "globalTableWitnesses"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.GlobalTableWitnessProperty"]]]], jsii.get(self, "globalTableWitnesses"))
 
     @global_table_witnesses.setter
     def global_table_witnesses(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.GlobalTableWitnessProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.GlobalTableWitnessProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__12c424a307d05c5f02c5d3df3ad420cd4151741010ad7531cd1fdc24fa467f2a)
@@ -2192,14 +2198,14 @@ class CfnGlobalTable(
     @jsii.member(jsii_name="localSecondaryIndexes")
     def local_secondary_indexes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.LocalSecondaryIndexProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.LocalSecondaryIndexProperty"]]]]:
         '''Local secondary indexes to be created on the table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.LocalSecondaryIndexProperty"]]]], jsii.get(self, "localSecondaryIndexes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.LocalSecondaryIndexProperty"]]]], jsii.get(self, "localSecondaryIndexes"))
 
     @local_secondary_indexes.setter
     def local_secondary_indexes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.LocalSecondaryIndexProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.LocalSecondaryIndexProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a0b3191b7117186bc41f62e22fff4e4f50d0835a5f174dde9b2b8188ceee5162)
@@ -2223,14 +2229,14 @@ class CfnGlobalTable(
     @jsii.member(jsii_name="sseSpecification")
     def sse_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.SSESpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.SSESpecificationProperty"]]:
         '''Specifies the settings to enable server-side encryption.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.SSESpecificationProperty"]], jsii.get(self, "sseSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.SSESpecificationProperty"]], jsii.get(self, "sseSpecification"))
 
     @sse_specification.setter
     def sse_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.SSESpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.SSESpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ccb739aac1de1ded207a80b782298c972ccf113dd96de224fea60f9ce1b43833)
@@ -2241,14 +2247,14 @@ class CfnGlobalTable(
     @jsii.member(jsii_name="streamSpecification")
     def stream_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.StreamSpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.StreamSpecificationProperty"]]:
         '''Specifies the streams settings on your global table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.StreamSpecificationProperty"]], jsii.get(self, "streamSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.StreamSpecificationProperty"]], jsii.get(self, "streamSpecification"))
 
     @stream_specification.setter
     def stream_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.StreamSpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.StreamSpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0b312fc3bf6b9413081bae5b2557691650d4bf70fd047bf867dd8ce608971cd7)
@@ -2272,14 +2278,14 @@ class CfnGlobalTable(
     @jsii.member(jsii_name="timeToLiveSpecification")
     def time_to_live_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.TimeToLiveSpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.TimeToLiveSpecificationProperty"]]:
         '''Specifies the time to live (TTL) settings for the table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.TimeToLiveSpecificationProperty"]], jsii.get(self, "timeToLiveSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.TimeToLiveSpecificationProperty"]], jsii.get(self, "timeToLiveSpecification"))
 
     @time_to_live_specification.setter
     def time_to_live_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.TimeToLiveSpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.TimeToLiveSpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0b2a71693eba1f1adfbaa4a2d1968a10f7e914f3714a169453fb5831d2b159f7)
@@ -2290,14 +2296,14 @@ class CfnGlobalTable(
     @jsii.member(jsii_name="warmThroughput")
     def warm_throughput(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WarmThroughputProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WarmThroughputProperty"]]:
         '''Provides visibility into the number of read and write operations your table or secondary index can instantaneously support.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WarmThroughputProperty"]], jsii.get(self, "warmThroughput"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WarmThroughputProperty"]], jsii.get(self, "warmThroughput"))
 
     @warm_throughput.setter
     def warm_throughput(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WarmThroughputProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WarmThroughputProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5cffa71e41723d2cc6240a56e0993116de480cb2c21c1c9bb92de9599718c4b2)
@@ -2308,14 +2314,14 @@ class CfnGlobalTable(
     @jsii.member(jsii_name="writeOnDemandThroughputSettings")
     def write_on_demand_throughput_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WriteOnDemandThroughputSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteOnDemandThroughputSettingsProperty"]]:
         '''Sets the write request settings for a global table or a global secondary index.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WriteOnDemandThroughputSettingsProperty"]], jsii.get(self, "writeOnDemandThroughputSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteOnDemandThroughputSettingsProperty"]], jsii.get(self, "writeOnDemandThroughputSettings"))
 
     @write_on_demand_throughput_settings.setter
     def write_on_demand_throughput_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WriteOnDemandThroughputSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteOnDemandThroughputSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e9e1941bc70970aa12bf29b98d00fed94dd701aea1acb0d4280e0f96ab3ca8bc)
@@ -2326,14 +2332,14 @@ class CfnGlobalTable(
     @jsii.member(jsii_name="writeProvisionedThroughputSettings")
     def write_provisioned_throughput_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WriteProvisionedThroughputSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteProvisionedThroughputSettingsProperty"]]:
         '''Specifies an auto scaling policy for write capacity.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WriteProvisionedThroughputSettingsProperty"]], jsii.get(self, "writeProvisionedThroughputSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteProvisionedThroughputSettingsProperty"]], jsii.get(self, "writeProvisionedThroughputSettings"))
 
     @write_provisioned_throughput_settings.setter
     def write_provisioned_throughput_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WriteProvisionedThroughputSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteProvisionedThroughputSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__575a6fcd8e2e451f04b5c40c3e6da53aad798e3089f98afaa25d709c7d291a10)
@@ -2434,7 +2440,7 @@ class CfnGlobalTable(
             *,
             max_capacity: jsii.Number,
             min_capacity: jsii.Number,
-            target_tracking_scaling_policy_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.TargetTrackingScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            target_tracking_scaling_policy_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.TargetTrackingScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             seed_capacity: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Configures a scalable target and an autoscaling policy for a table or global secondary index's read or write capacity.
@@ -2506,14 +2512,14 @@ class CfnGlobalTable(
         @builtins.property
         def target_tracking_scaling_policy_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.TargetTrackingScalingPolicyConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.TargetTrackingScalingPolicyConfigurationProperty"]:
             '''Defines a target tracking scaling policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-capacityautoscalingsettings.html#cfn-dynamodb-globaltable-capacityautoscalingsettings-targettrackingscalingpolicyconfiguration
             '''
             result = self._values.get("target_tracking_scaling_policy_configuration")
             assert result is not None, "Required property 'target_tracking_scaling_policy_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.TargetTrackingScalingPolicyConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.TargetTrackingScalingPolicyConfigurationProperty"], result)
 
         @builtins.property
         def seed_capacity(self) -> typing.Optional[jsii.Number]:
@@ -2550,7 +2556,7 @@ class CfnGlobalTable(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             mode: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Configures contributor insights settings for a replica or one of its indexes.
@@ -2585,14 +2591,14 @@ class CfnGlobalTable(
                 self._values["mode"] = mode
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether CloudWatch Contributor Insights are to be enabled (true) or disabled (false).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-contributorinsightsspecification.html#cfn-dynamodb-globaltable-contributorinsightsspecification-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def mode(self) -> typing.Optional[builtins.str]:
@@ -2633,11 +2639,11 @@ class CfnGlobalTable(
             self,
             *,
             index_name: builtins.str,
-            key_schema: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            projection: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ProjectionProperty", typing.Dict[builtins.str, typing.Any]]],
-            warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            write_on_demand_throughput_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.WriteOnDemandThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            write_provisioned_throughput_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.WriteProvisionedThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            key_schema: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            projection: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ProjectionProperty", typing.Dict[builtins.str, typing.Any]]],
+            warm_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            write_on_demand_throughput_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.WriteOnDemandThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            write_provisioned_throughput_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.WriteProvisionedThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Allows you to specify a global secondary index for the global table.
 
@@ -2732,7 +2738,7 @@ class CfnGlobalTable(
         @builtins.property
         def key_schema(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.KeySchemaProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.KeySchemaProperty"]]]:
             '''The complete key schema for a global secondary index, which consists of one or more pairs of attribute names and key types:  - ``HASH`` - partition key - ``RANGE`` - sort key  > The partition key of an item is also known as its *hash attribute* .
 
             The term "hash attribute" derives from DynamoDB's usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.
@@ -2744,12 +2750,12 @@ class CfnGlobalTable(
             '''
             result = self._values.get("key_schema")
             assert result is not None, "Required property 'key_schema' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.KeySchemaProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.KeySchemaProperty"]]], result)
 
         @builtins.property
         def projection(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ProjectionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ProjectionProperty"]:
             '''Represents attributes that are copied (projected) from the table into the global secondary index.
 
             These are in addition to the primary key attributes and index key attributes, which are automatically projected.
@@ -2758,12 +2764,12 @@ class CfnGlobalTable(
             '''
             result = self._values.get("projection")
             assert result is not None, "Required property 'projection' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ProjectionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ProjectionProperty"], result)
 
         @builtins.property
         def warm_throughput(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WarmThroughputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WarmThroughputProperty"]]:
             '''Represents the warm throughput value (in read units per second and write units per second) for the specified secondary index.
 
             If you use this parameter, you must specify ``ReadUnitsPerSecond`` , ``WriteUnitsPerSecond`` , or both.
@@ -2771,12 +2777,12 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-globalsecondaryindex.html#cfn-dynamodb-globaltable-globalsecondaryindex-warmthroughput
             '''
             result = self._values.get("warm_throughput")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WarmThroughputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WarmThroughputProperty"]], result)
 
         @builtins.property
         def write_on_demand_throughput_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WriteOnDemandThroughputSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteOnDemandThroughputSettingsProperty"]]:
             '''Sets the write request settings for a global table or a global secondary index.
 
             You can only specify this setting if your resource uses the ``PAY_PER_REQUEST`` ``BillingMode`` .
@@ -2784,12 +2790,12 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-globalsecondaryindex.html#cfn-dynamodb-globaltable-globalsecondaryindex-writeondemandthroughputsettings
             '''
             result = self._values.get("write_on_demand_throughput_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WriteOnDemandThroughputSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteOnDemandThroughputSettingsProperty"]], result)
 
         @builtins.property
         def write_provisioned_throughput_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WriteProvisionedThroughputSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteProvisionedThroughputSettingsProperty"]]:
             '''Defines write capacity settings for the global secondary index.
 
             You must specify a value for this property if the table's ``BillingMode`` is ``PROVISIONED`` . All replicas will have the same write capacity settings for this global secondary index.
@@ -2797,7 +2803,7 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-globalsecondaryindex.html#cfn-dynamodb-globaltable-globalsecondaryindex-writeprovisionedthroughputsettings
             '''
             result = self._values.get("write_provisioned_throughput_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.WriteProvisionedThroughputSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteProvisionedThroughputSettingsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3047,8 +3053,8 @@ class CfnGlobalTable(
             self,
             *,
             index_name: builtins.str,
-            key_schema: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            projection: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ProjectionProperty", typing.Dict[builtins.str, typing.Any]]],
+            key_schema: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            projection: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ProjectionProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Represents the properties of a local secondary index.
 
@@ -3105,7 +3111,7 @@ class CfnGlobalTable(
         @builtins.property
         def key_schema(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.KeySchemaProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.KeySchemaProperty"]]]:
             '''The complete key schema for the local secondary index, consisting of one or more pairs of attribute names and key types:  - ``HASH`` - partition key - ``RANGE`` - sort key  > The partition key of an item is also known as its *hash attribute* .
 
             The term "hash attribute" derives from DynamoDB's usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.
@@ -3117,12 +3123,12 @@ class CfnGlobalTable(
             '''
             result = self._values.get("key_schema")
             assert result is not None, "Required property 'key_schema' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.KeySchemaProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.KeySchemaProperty"]]], result)
 
         @builtins.property
         def projection(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ProjectionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ProjectionProperty"]:
             '''Represents attributes that are copied (projected) from the table into the local secondary index.
 
             These are in addition to the primary key attributes and index key attributes, which are automatically projected.
@@ -3131,7 +3137,7 @@ class CfnGlobalTable(
             '''
             result = self._values.get("projection")
             assert result is not None, "Required property 'projection' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ProjectionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ProjectionProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3156,7 +3162,7 @@ class CfnGlobalTable(
         def __init__(
             self,
             *,
-            point_in_time_recovery_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            point_in_time_recovery_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             recovery_period_in_days: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Represents the settings used to enable point in time recovery.
@@ -3191,13 +3197,13 @@ class CfnGlobalTable(
         @builtins.property
         def point_in_time_recovery_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether point in time recovery is enabled (true) or disabled (false) on the table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-pointintimerecoveryspecification.html#cfn-dynamodb-globaltable-pointintimerecoveryspecification-pointintimerecoveryenabled
             '''
             result = self._values.get("point_in_time_recovery_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def recovery_period_in_days(self) -> typing.Optional[jsii.Number]:
@@ -3373,7 +3379,7 @@ class CfnGlobalTable(
         def __init__(
             self,
             *,
-            read_capacity_auto_scaling_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.CapacityAutoScalingSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            read_capacity_auto_scaling_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.CapacityAutoScalingSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             read_capacity_units: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Allows you to specify the read capacity settings for a replica table or a replica global secondary index when the ``BillingMode`` is set to ``PROVISIONED`` .
@@ -3424,13 +3430,13 @@ class CfnGlobalTable(
         @builtins.property
         def read_capacity_auto_scaling_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.CapacityAutoScalingSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.CapacityAutoScalingSettingsProperty"]]:
             '''Specifies auto scaling settings for the replica table or global secondary index.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-readprovisionedthroughputsettings.html#cfn-dynamodb-globaltable-readprovisionedthroughputsettings-readcapacityautoscalingsettings
             '''
             result = self._values.get("read_capacity_auto_scaling_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.CapacityAutoScalingSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.CapacityAutoScalingSettingsProperty"]], result)
 
         @builtins.property
         def read_capacity_units(self) -> typing.Optional[jsii.Number]:
@@ -3467,9 +3473,9 @@ class CfnGlobalTable(
             self,
             *,
             index_name: builtins.str,
-            contributor_insights_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ContributorInsightsSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            read_on_demand_throughput_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ReadOnDemandThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            read_provisioned_throughput_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ReadProvisionedThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            contributor_insights_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ContributorInsightsSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            read_on_demand_throughput_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ReadOnDemandThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            read_provisioned_throughput_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ReadProvisionedThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents the properties of a global secondary index that can be set on a per-replica basis.
 
@@ -3551,7 +3557,7 @@ class CfnGlobalTable(
         @builtins.property
         def contributor_insights_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ContributorInsightsSpecificationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ContributorInsightsSpecificationProperty"]]:
             '''Updates the status for contributor insights for a specific table or index.
 
             CloudWatch Contributor Insights for DynamoDB graphs display the partition key and (if applicable) sort key of frequently accessed items and frequently throttled items in plaintext. If you require the use of AWS Key Management Service (KMS) to encrypt this table’s partition key and sort key data with an AWS managed key or customer managed key, you should not enable CloudWatch Contributor Insights for DynamoDB for this table.
@@ -3559,12 +3565,12 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaglobalsecondaryindexspecification.html#cfn-dynamodb-globaltable-replicaglobalsecondaryindexspecification-contributorinsightsspecification
             '''
             result = self._values.get("contributor_insights_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ContributorInsightsSpecificationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ContributorInsightsSpecificationProperty"]], result)
 
         @builtins.property
         def read_on_demand_throughput_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReadOnDemandThroughputSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReadOnDemandThroughputSettingsProperty"]]:
             '''Sets the read request settings for a replica global secondary index.
 
             You can only specify this setting if your resource uses the ``PAY_PER_REQUEST`` ``BillingMode`` .
@@ -3572,18 +3578,18 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaglobalsecondaryindexspecification.html#cfn-dynamodb-globaltable-replicaglobalsecondaryindexspecification-readondemandthroughputsettings
             '''
             result = self._values.get("read_on_demand_throughput_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReadOnDemandThroughputSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReadOnDemandThroughputSettingsProperty"]], result)
 
         @builtins.property
         def read_provisioned_throughput_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReadProvisionedThroughputSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReadProvisionedThroughputSettingsProperty"]]:
             '''Allows you to specify the read capacity settings for a replica global secondary index when the ``BillingMode`` is set to ``PROVISIONED`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaglobalsecondaryindexspecification.html#cfn-dynamodb-globaltable-replicaglobalsecondaryindexspecification-readprovisionedthroughputsettings
             '''
             result = self._values.get("read_provisioned_throughput_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReadProvisionedThroughputSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReadProvisionedThroughputSettingsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3676,18 +3682,18 @@ class CfnGlobalTable(
             self,
             *,
             region: builtins.str,
-            contributor_insights_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ContributorInsightsSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ReplicaGlobalSecondaryIndexSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            kinesis_stream_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.KinesisStreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            point_in_time_recovery_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.PointInTimeRecoverySpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            read_on_demand_throughput_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ReadOnDemandThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            read_provisioned_throughput_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ReadProvisionedThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            replica_stream_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ReplicaStreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sse_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ReplicaSSESpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            contributor_insights_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ContributorInsightsSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            global_secondary_indexes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ReplicaGlobalSecondaryIndexSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            kinesis_stream_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.KinesisStreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            point_in_time_recovery_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.PointInTimeRecoverySpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            read_on_demand_throughput_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ReadOnDemandThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            read_provisioned_throughput_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ReadProvisionedThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            replica_stream_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ReplicaStreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            resource_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sse_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ReplicaSSESpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             table_class: typing.Optional[builtins.str] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Defines settings specific to a single replica of a global table.
 
@@ -3710,6 +3716,7 @@ class CfnGlobalTable(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_dynamodb as dynamodb
@@ -3864,7 +3871,7 @@ class CfnGlobalTable(
         @builtins.property
         def contributor_insights_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ContributorInsightsSpecificationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ContributorInsightsSpecificationProperty"]]:
             '''The settings used to enable or disable CloudWatch Contributor Insights for the specified replica.
 
             When not specified, defaults to contributor insights disabled for the replica.
@@ -3872,12 +3879,12 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-contributorinsightsspecification
             '''
             result = self._values.get("contributor_insights_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ContributorInsightsSpecificationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ContributorInsightsSpecificationProperty"]], result)
 
         @builtins.property
         def deletion_protection_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Determines if a replica is protected from deletion.
 
             When enabled, the table cannot be deleted by any user or process. This setting is disabled by default. For more information, see `Using deletion protection <https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html#WorkingWithTables.Basics.DeletionProtection>`_ in the *Amazon DynamoDB Developer Guide* .
@@ -3885,34 +3892,34 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-deletionprotectionenabled
             '''
             result = self._values.get("deletion_protection_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def global_secondary_indexes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReplicaGlobalSecondaryIndexSpecificationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReplicaGlobalSecondaryIndexSpecificationProperty"]]]]:
             '''Defines additional settings for the global secondary indexes of this replica.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-globalsecondaryindexes
             '''
             result = self._values.get("global_secondary_indexes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReplicaGlobalSecondaryIndexSpecificationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReplicaGlobalSecondaryIndexSpecificationProperty"]]]], result)
 
         @builtins.property
         def kinesis_stream_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.KinesisStreamSpecificationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.KinesisStreamSpecificationProperty"]]:
             '''Defines the Kinesis Data Streams configuration for the specified replica.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-kinesisstreamspecification
             '''
             result = self._values.get("kinesis_stream_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.KinesisStreamSpecificationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.KinesisStreamSpecificationProperty"]], result)
 
         @builtins.property
         def point_in_time_recovery_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.PointInTimeRecoverySpecificationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.PointInTimeRecoverySpecificationProperty"]]:
             '''The settings used to enable point in time recovery.
 
             When not specified, defaults to point in time recovery disabled for the replica.
@@ -3920,45 +3927,45 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-pointintimerecoveryspecification
             '''
             result = self._values.get("point_in_time_recovery_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.PointInTimeRecoverySpecificationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.PointInTimeRecoverySpecificationProperty"]], result)
 
         @builtins.property
         def read_on_demand_throughput_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReadOnDemandThroughputSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReadOnDemandThroughputSettingsProperty"]]:
             '''Sets read request settings for the replica table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-readondemandthroughputsettings
             '''
             result = self._values.get("read_on_demand_throughput_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReadOnDemandThroughputSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReadOnDemandThroughputSettingsProperty"]], result)
 
         @builtins.property
         def read_provisioned_throughput_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReadProvisionedThroughputSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReadProvisionedThroughputSettingsProperty"]]:
             '''Defines read capacity settings for the replica table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-readprovisionedthroughputsettings
             '''
             result = self._values.get("read_provisioned_throughput_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReadProvisionedThroughputSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReadProvisionedThroughputSettingsProperty"]], result)
 
         @builtins.property
         def replica_stream_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReplicaStreamSpecificationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReplicaStreamSpecificationProperty"]]:
             '''Represents the DynamoDB Streams configuration for a global table replica.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-replicastreamspecification
             '''
             result = self._values.get("replica_stream_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReplicaStreamSpecificationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReplicaStreamSpecificationProperty"]], result)
 
         @builtins.property
         def resource_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ResourcePolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ResourcePolicyProperty"]]:
             '''A resource-based policy document that contains permissions to add to the specified replica of a DynamoDB global table.
 
             Resource-based policies let you define access permissions by specifying who has access to each resource, and the actions they are allowed to perform on each resource.
@@ -3968,12 +3975,12 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-resourcepolicy
             '''
             result = self._values.get("resource_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ResourcePolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ResourcePolicyProperty"]], result)
 
         @builtins.property
         def sse_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReplicaSSESpecificationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReplicaSSESpecificationProperty"]]:
             '''Allows you to specify a customer-managed key for the replica.
 
             When using customer-managed keys for server-side encryption, this property must have a value in all replicas.
@@ -3981,7 +3988,7 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-ssespecification
             '''
             result = self._values.get("sse_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ReplicaSSESpecificationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReplicaSSESpecificationProperty"]], result)
 
         @builtins.property
         def table_class(self) -> typing.Optional[builtins.str]:
@@ -3995,7 +4002,7 @@ class CfnGlobalTable(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''An array of key-value pairs to apply to this replica.
 
             For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -4003,7 +4010,7 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4025,7 +4032,7 @@ class CfnGlobalTable(
         def __init__(
             self,
             *,
-            resource_policy: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]],
+            resource_policy: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Represents the DynamoDB Streams configuration for a global table replica.
 
@@ -4058,7 +4065,7 @@ class CfnGlobalTable(
         @builtins.property
         def resource_policy(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ResourcePolicyProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ResourcePolicyProperty"]:
             '''A resource-based policy document that contains the permissions for the specified stream of a DynamoDB global table replica.
 
             Resource-based policies let you define access permissions by specifying who has access to each resource, and the actions they are allowed to perform on each resource.
@@ -4071,7 +4078,7 @@ class CfnGlobalTable(
             '''
             result = self._values.get("resource_policy")
             assert result is not None, "Required property 'resource_policy' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.ResourcePolicyProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ResourcePolicyProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4168,7 +4175,7 @@ class CfnGlobalTable(
         def __init__(
             self,
             *,
-            sse_enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            sse_enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             sse_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Represents the settings used to enable server-side encryption.
@@ -4203,7 +4210,7 @@ class CfnGlobalTable(
                 self._values["sse_type"] = sse_type
 
         @builtins.property
-        def sse_enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def sse_enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether server-side encryption is performed using an AWS managed key or an AWS owned key.
 
             If enabled (true), server-side encryption type is set to KMS and an AWS managed key is used ( AWS  charges apply). If disabled (false) or not specified,server-side encryption is set to an AWS owned key. If you choose to use KMS encryption, you can also use customer managed KMS keys by specifying them in the ``ReplicaSpecification.SSESpecification`` object. You cannot mix AWS managed and customer managed KMS keys.
@@ -4212,7 +4219,7 @@ class CfnGlobalTable(
             '''
             result = self._values.get("sse_enabled")
             assert result is not None, "Required property 'sse_enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def sse_type(self) -> typing.Optional[builtins.str]:
@@ -4312,7 +4319,7 @@ class CfnGlobalTable(
             self,
             *,
             target_value: jsii.Number,
-            disable_scale_in: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            disable_scale_in: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             scale_in_cooldown: typing.Optional[jsii.Number] = None,
             scale_out_cooldown: typing.Optional[jsii.Number] = None,
         ) -> None:
@@ -4370,7 +4377,7 @@ class CfnGlobalTable(
         @builtins.property
         def disable_scale_in(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether scale in by the target tracking scaling policy is disabled.
 
             The default value is ``false`` .
@@ -4378,7 +4385,7 @@ class CfnGlobalTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-targettrackingscalingpolicyconfiguration.html#cfn-dynamodb-globaltable-targettrackingscalingpolicyconfiguration-disablescalein
             '''
             result = self._values.get("disable_scale_in")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def scale_in_cooldown(self) -> typing.Optional[jsii.Number]:
@@ -4418,7 +4425,7 @@ class CfnGlobalTable(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             attribute_name: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Represents the settings used to enable or disable Time to Live (TTL) for the specified table.
@@ -4455,14 +4462,14 @@ class CfnGlobalTable(
                 self._values["attribute_name"] = attribute_name
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether TTL is to be enabled (true) or disabled (false) on the table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-timetolivespecification.html#cfn-dynamodb-globaltable-timetolivespecification-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def attribute_name(self) -> typing.Optional[builtins.str]:
@@ -4629,7 +4636,7 @@ class CfnGlobalTable(
         def __init__(
             self,
             *,
-            write_capacity_auto_scaling_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalTable.CapacityAutoScalingSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            write_capacity_auto_scaling_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.CapacityAutoScalingSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies an auto scaling policy for write capacity.
 
@@ -4674,13 +4681,13 @@ class CfnGlobalTable(
         @builtins.property
         def write_capacity_auto_scaling_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.CapacityAutoScalingSettingsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.CapacityAutoScalingSettingsProperty"]]:
             '''Specifies auto scaling settings for the replica table or global secondary index.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-writeprovisionedthroughputsettings.html#cfn-dynamodb-globaltable-writeprovisionedthroughputsettings-writecapacityautoscalingsettings
             '''
             result = self._values.get("write_capacity_auto_scaling_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGlobalTable.CapacityAutoScalingSettingsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.CapacityAutoScalingSettingsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4719,21 +4726,21 @@ class CfnGlobalTableProps:
     def __init__(
         self,
         *,
-        attribute_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.AttributeDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        key_schema: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.KeySchemaProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        replicas: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.ReplicaSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        attribute_definitions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.AttributeDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        key_schema: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        replicas: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.ReplicaSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         billing_mode: typing.Optional[builtins.str] = None,
-        global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.GlobalSecondaryIndexProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        global_table_witnesses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.GlobalTableWitnessProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        local_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.LocalSecondaryIndexProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        global_secondary_indexes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.GlobalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        global_table_witnesses: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.GlobalTableWitnessProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        local_secondary_indexes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.LocalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         multi_region_consistency: typing.Optional[builtins.str] = None,
-        sse_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.SSESpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        stream_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.StreamSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sse_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.SSESpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        stream_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.StreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         table_name: typing.Optional[builtins.str] = None,
-        time_to_live_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.TimeToLiveSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.WarmThroughputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        write_on_demand_throughput_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.WriteOnDemandThroughputSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        write_provisioned_throughput_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.WriteProvisionedThroughputSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        time_to_live_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.TimeToLiveSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        write_on_demand_throughput_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.WriteOnDemandThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        write_provisioned_throughput_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalTable.WriteProvisionedThroughputSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnGlobalTable``.
 
@@ -4758,6 +4765,7 @@ class CfnGlobalTableProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dynamodb as dynamodb
@@ -5011,19 +5019,19 @@ class CfnGlobalTableProps:
     @builtins.property
     def attribute_definitions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.AttributeDefinitionProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.AttributeDefinitionProperty"]]]:
         '''A list of attributes that describe the key schema for the global table and indexes.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-globaltable.html#cfn-dynamodb-globaltable-attributedefinitions
         '''
         result = self._values.get("attribute_definitions")
         assert result is not None, "Required property 'attribute_definitions' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.AttributeDefinitionProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.AttributeDefinitionProperty"]]], result)
 
     @builtins.property
     def key_schema(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.KeySchemaProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.KeySchemaProperty"]]]:
         '''Specifies the attributes that make up the primary key for the table.
 
         The attributes in the ``KeySchema`` property must also be defined in the ``AttributeDefinitions`` property.
@@ -5032,12 +5040,12 @@ class CfnGlobalTableProps:
         '''
         result = self._values.get("key_schema")
         assert result is not None, "Required property 'key_schema' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.KeySchemaProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.KeySchemaProperty"]]], result)
 
     @builtins.property
     def replicas(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.ReplicaSpecificationProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReplicaSpecificationProperty"]]]:
         '''Specifies the list of replicas for your global table.
 
         The list must contain at least one element, the region where the stack defining the global table is deployed. For example, if you define your table in a stack deployed to us-east-1, you must have an entry in ``Replicas`` with the region us-east-1. You cannot remove the replica in the stack region.
@@ -5053,7 +5061,7 @@ class CfnGlobalTableProps:
         '''
         result = self._values.get("replicas")
         assert result is not None, "Required property 'replicas' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.ReplicaSpecificationProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.ReplicaSpecificationProperty"]]], result)
 
     @builtins.property
     def billing_mode(self) -> typing.Optional[builtins.str]:
@@ -5072,7 +5080,7 @@ class CfnGlobalTableProps:
     @builtins.property
     def global_secondary_indexes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.GlobalSecondaryIndexProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.GlobalSecondaryIndexProperty"]]]]:
         '''Global secondary indexes to be created on the global table.
 
         You can create up to 20 global secondary indexes. Each replica in your global table will have the same global secondary index settings. You can only create or delete one global secondary index in a single stack operation.
@@ -5082,12 +5090,12 @@ class CfnGlobalTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-globaltable.html#cfn-dynamodb-globaltable-globalsecondaryindexes
         '''
         result = self._values.get("global_secondary_indexes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.GlobalSecondaryIndexProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.GlobalSecondaryIndexProperty"]]]], result)
 
     @builtins.property
     def global_table_witnesses(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.GlobalTableWitnessProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.GlobalTableWitnessProperty"]]]]:
         '''The list of witnesses of the MRSC global table.
 
         Only one witness Region can be configured per MRSC global table.
@@ -5095,12 +5103,12 @@ class CfnGlobalTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-globaltable.html#cfn-dynamodb-globaltable-globaltablewitnesses
         '''
         result = self._values.get("global_table_witnesses")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.GlobalTableWitnessProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.GlobalTableWitnessProperty"]]]], result)
 
     @builtins.property
     def local_secondary_indexes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.LocalSecondaryIndexProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.LocalSecondaryIndexProperty"]]]]:
         '''Local secondary indexes to be created on the table.
 
         You can create up to five local secondary indexes. Each index is scoped to a given hash key value. The size of each hash key can be up to 10 gigabytes. Each replica in your global table will have the same local secondary index settings.
@@ -5108,7 +5116,7 @@ class CfnGlobalTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-globaltable.html#cfn-dynamodb-globaltable-localsecondaryindexes
         '''
         result = self._values.get("local_secondary_indexes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.LocalSecondaryIndexProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.LocalSecondaryIndexProperty"]]]], result)
 
     @builtins.property
     def multi_region_consistency(self) -> typing.Optional[builtins.str]:
@@ -5129,7 +5137,7 @@ class CfnGlobalTableProps:
     @builtins.property
     def sse_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.SSESpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.SSESpecificationProperty"]]:
         '''Specifies the settings to enable server-side encryption.
 
         These settings will be applied to all replicas. If you plan to use customer-managed KMS keys, you must provide a key for each replica using the ``ReplicaSpecification.ReplicaSSESpecification`` property.
@@ -5137,12 +5145,12 @@ class CfnGlobalTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-globaltable.html#cfn-dynamodb-globaltable-ssespecification
         '''
         result = self._values.get("sse_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.SSESpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.SSESpecificationProperty"]], result)
 
     @builtins.property
     def stream_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.StreamSpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.StreamSpecificationProperty"]]:
         '''Specifies the streams settings on your global table.
 
         You must provide a value for this property if your global table contains more than one replica. You can only change the streams settings if your global table has only one replica. For Multi-Region Strong Consistency (MRSC), you do not need to provide a value for this property and can change the settings at any time.
@@ -5150,7 +5158,7 @@ class CfnGlobalTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-globaltable.html#cfn-dynamodb-globaltable-streamspecification
         '''
         result = self._values.get("stream_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.StreamSpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.StreamSpecificationProperty"]], result)
 
     @builtins.property
     def table_name(self) -> typing.Optional[builtins.str]:
@@ -5169,7 +5177,7 @@ class CfnGlobalTableProps:
     @builtins.property
     def time_to_live_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.TimeToLiveSpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.TimeToLiveSpecificationProperty"]]:
         '''Specifies the time to live (TTL) settings for the table.
 
         This setting will be applied to all replicas.
@@ -5177,12 +5185,12 @@ class CfnGlobalTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-globaltable.html#cfn-dynamodb-globaltable-timetolivespecification
         '''
         result = self._values.get("time_to_live_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.TimeToLiveSpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.TimeToLiveSpecificationProperty"]], result)
 
     @builtins.property
     def warm_throughput(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.WarmThroughputProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WarmThroughputProperty"]]:
         '''Provides visibility into the number of read and write operations your table or secondary index can instantaneously support.
 
         The settings can be modified using the ``UpdateTable`` operation to meet the throughput requirements of an upcoming peak event.
@@ -5190,12 +5198,12 @@ class CfnGlobalTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-globaltable.html#cfn-dynamodb-globaltable-warmthroughput
         '''
         result = self._values.get("warm_throughput")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.WarmThroughputProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WarmThroughputProperty"]], result)
 
     @builtins.property
     def write_on_demand_throughput_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.WriteOnDemandThroughputSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteOnDemandThroughputSettingsProperty"]]:
         '''Sets the write request settings for a global table or a global secondary index.
 
         You can only specify this setting if your resource uses the ``PAY_PER_REQUEST`` ``BillingMode`` .
@@ -5203,12 +5211,12 @@ class CfnGlobalTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-globaltable.html#cfn-dynamodb-globaltable-writeondemandthroughputsettings
         '''
         result = self._values.get("write_on_demand_throughput_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.WriteOnDemandThroughputSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteOnDemandThroughputSettingsProperty"]], result)
 
     @builtins.property
     def write_provisioned_throughput_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.WriteProvisionedThroughputSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteProvisionedThroughputSettingsProperty"]]:
         '''Specifies an auto scaling policy for write capacity.
 
         This policy will be applied to all replicas. This setting must be specified if ``BillingMode`` is set to ``PROVISIONED`` .
@@ -5216,7 +5224,7 @@ class CfnGlobalTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-globaltable.html#cfn-dynamodb-globaltable-writeprovisionedthroughputsettings
         '''
         result = self._values.get("write_provisioned_throughput_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGlobalTable.WriteProvisionedThroughputSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGlobalTable.WriteProvisionedThroughputSettingsProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5252,6 +5260,7 @@ class CfnTable(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_dynamodb as dynamodb
@@ -5395,29 +5404,29 @@ class CfnTable(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        key_schema: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        attribute_definitions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.AttributeDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        key_schema: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        attribute_definitions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.AttributeDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         billing_mode: typing.Optional[builtins.str] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ContributorInsightsSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.GlobalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        import_source_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ImportSourceSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        kinesis_stream_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.KinesisStreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        local_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.LocalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        on_demand_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.OnDemandThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        point_in_time_recovery_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.PointInTimeRecoverySpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        provisioned_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ProvisionedThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        sse_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.SSESpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        stream_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.StreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ContributorInsightsSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        global_secondary_indexes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.GlobalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        import_source_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ImportSourceSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kinesis_stream_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.KinesisStreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        local_secondary_indexes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.LocalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        on_demand_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.OnDemandThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        point_in_time_recovery_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.PointInTimeRecoverySpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        provisioned_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ProvisionedThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        resource_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sse_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.SSESpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        stream_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.StreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         table_class: typing.Optional[builtins.str] = None,
         table_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        time_to_live_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.TimeToLiveSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        time_to_live_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.TimeToLiveSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::DynamoDB::Table``.
 
@@ -5475,7 +5484,7 @@ class CfnTable(
 
     @jsii.member(jsii_name="arnForTable")
     @builtins.classmethod
-    def arn_for_table(cls, resource: _ITableRef_4478f0ad) -> builtins.str:
+    def arn_for_table(cls, resource: "_ITableRef_4478f0ad") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5488,10 +5497,10 @@ class CfnTable(
     @builtins.classmethod
     def from_table_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ITableRef_4478f0ad:
+    ) -> "_ITableRef_4478f0ad":
         '''Creates a new ITableRef from an ARN.
 
         :param scope: -
@@ -5503,16 +5512,16 @@ class CfnTable(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ITableRef_4478f0ad, jsii.sinvoke(cls, "fromTableArn", [scope, id, arn]))
+        return typing.cast("_ITableRef_4478f0ad", jsii.sinvoke(cls, "fromTableArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromTableName")
     @builtins.classmethod
     def from_table_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         table_name: builtins.str,
-    ) -> _ITableRef_4478f0ad:
+    ) -> "_ITableRef_4478f0ad":
         '''Creates a new ITableRef from a tableName.
 
         :param scope: -
@@ -5524,7 +5533,7 @@ class CfnTable(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument table_name", value=table_name, expected_type=type_hints["table_name"])
-        return typing.cast(_ITableRef_4478f0ad, jsii.sinvoke(cls, "fromTableName", [scope, id, table_name]))
+        return typing.cast("_ITableRef_4478f0ad", jsii.sinvoke(cls, "fromTableName", [scope, id, table_name]))
 
     @jsii.member(jsii_name="isCfnTable")
     @builtins.classmethod
@@ -5539,7 +5548,7 @@ class CfnTable(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTable", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5597,28 +5606,28 @@ class CfnTable(
 
     @builtins.property
     @jsii.member(jsii_name="tableRef")
-    def table_ref(self) -> _TableReference_642dbaf9:
+    def table_ref(self) -> "_TableReference_642dbaf9":
         '''A reference to a Table resource.'''
-        return typing.cast(_TableReference_642dbaf9, jsii.get(self, "tableRef"))
+        return typing.cast("_TableReference_642dbaf9", jsii.get(self, "tableRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="keySchema")
     def key_schema(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.KeySchemaProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.KeySchemaProperty"]]]:
         '''Specifies the attributes that make up the primary key for the table.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.KeySchemaProperty"]]], jsii.get(self, "keySchema"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.KeySchemaProperty"]]], jsii.get(self, "keySchema"))
 
     @key_schema.setter
     def key_schema(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.KeySchemaProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.KeySchemaProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b23ffa0600490aa85e7d7d78bfa21eab76ec61e446848fa311842ae651fa9836)
@@ -5629,14 +5638,14 @@ class CfnTable(
     @jsii.member(jsii_name="attributeDefinitions")
     def attribute_definitions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.AttributeDefinitionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.AttributeDefinitionProperty"]]]]:
         '''A list of attributes that describe the key schema for the table and indexes.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.AttributeDefinitionProperty"]]]], jsii.get(self, "attributeDefinitions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.AttributeDefinitionProperty"]]]], jsii.get(self, "attributeDefinitions"))
 
     @attribute_definitions.setter
     def attribute_definitions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.AttributeDefinitionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.AttributeDefinitionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5daf5ddc396c2de639d9ab720b24bd4802cb6b1935c3acaabde5b29c25732fd7)
@@ -5660,14 +5669,14 @@ class CfnTable(
     @jsii.member(jsii_name="contributorInsightsSpecification")
     def contributor_insights_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ContributorInsightsSpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ContributorInsightsSpecificationProperty"]]:
         '''The settings used to specify whether to enable CloudWatch Contributor Insights for the table and define which events to monitor.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ContributorInsightsSpecificationProperty"]], jsii.get(self, "contributorInsightsSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ContributorInsightsSpecificationProperty"]], jsii.get(self, "contributorInsightsSpecification"))
 
     @contributor_insights_specification.setter
     def contributor_insights_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ContributorInsightsSpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ContributorInsightsSpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4418562f8958ca4e57cc994ee87a0b27423f94d0f99284b5f04311b9e61b238f)
@@ -5678,14 +5687,14 @@ class CfnTable(
     @jsii.member(jsii_name="deletionProtectionEnabled")
     def deletion_protection_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Determines if a table is protected from deletion.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deletionProtectionEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deletionProtectionEnabled"))
 
     @deletion_protection_enabled.setter
     def deletion_protection_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d91900a3abfeb455a4849c52c7f1d034e09b1b0ceb4a50b598d8c938f15c012b)
@@ -5696,17 +5705,17 @@ class CfnTable(
     @jsii.member(jsii_name="globalSecondaryIndexes")
     def global_secondary_indexes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.GlobalSecondaryIndexProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.GlobalSecondaryIndexProperty"]]]]:
         '''Global secondary indexes to be created on the table.
 
         You can create up to 20 global secondary indexes.
         '''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.GlobalSecondaryIndexProperty"]]]], jsii.get(self, "globalSecondaryIndexes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.GlobalSecondaryIndexProperty"]]]], jsii.get(self, "globalSecondaryIndexes"))
 
     @global_secondary_indexes.setter
     def global_secondary_indexes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.GlobalSecondaryIndexProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.GlobalSecondaryIndexProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__97df696d6ba063acb98f58f09adb6516d0fc1d41d4d4a37c39f7ffac09e0d5cd)
@@ -5717,14 +5726,14 @@ class CfnTable(
     @jsii.member(jsii_name="importSourceSpecification")
     def import_source_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ImportSourceSpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ImportSourceSpecificationProperty"]]:
         '''Specifies the properties of data being imported from the S3 bucket source to the" table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ImportSourceSpecificationProperty"]], jsii.get(self, "importSourceSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ImportSourceSpecificationProperty"]], jsii.get(self, "importSourceSpecification"))
 
     @import_source_specification.setter
     def import_source_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ImportSourceSpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ImportSourceSpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__61eb67e9e79c54ed8659ffe201d838bdf08b6b20da8fa03693734f4336da76c2)
@@ -5735,14 +5744,14 @@ class CfnTable(
     @jsii.member(jsii_name="kinesisStreamSpecification")
     def kinesis_stream_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.KinesisStreamSpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.KinesisStreamSpecificationProperty"]]:
         '''The Kinesis Data Streams configuration for the specified table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.KinesisStreamSpecificationProperty"]], jsii.get(self, "kinesisStreamSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.KinesisStreamSpecificationProperty"]], jsii.get(self, "kinesisStreamSpecification"))
 
     @kinesis_stream_specification.setter
     def kinesis_stream_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.KinesisStreamSpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.KinesisStreamSpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5d983fc83d1717d6aa76c247a0250e28278e9d16c940822fa16986ff229e9043)
@@ -5753,14 +5762,14 @@ class CfnTable(
     @jsii.member(jsii_name="localSecondaryIndexes")
     def local_secondary_indexes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.LocalSecondaryIndexProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.LocalSecondaryIndexProperty"]]]]:
         '''Local secondary indexes to be created on the table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.LocalSecondaryIndexProperty"]]]], jsii.get(self, "localSecondaryIndexes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.LocalSecondaryIndexProperty"]]]], jsii.get(self, "localSecondaryIndexes"))
 
     @local_secondary_indexes.setter
     def local_secondary_indexes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.LocalSecondaryIndexProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.LocalSecondaryIndexProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__45185c524451628b623abf4663f9427843c4d4a709a2cf82b14f8d2b3a9a7ffd)
@@ -5771,14 +5780,14 @@ class CfnTable(
     @jsii.member(jsii_name="onDemandThroughput")
     def on_demand_throughput(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.OnDemandThroughputProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.OnDemandThroughputProperty"]]:
         '''Sets the maximum number of read and write units for the specified on-demand table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.OnDemandThroughputProperty"]], jsii.get(self, "onDemandThroughput"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.OnDemandThroughputProperty"]], jsii.get(self, "onDemandThroughput"))
 
     @on_demand_throughput.setter
     def on_demand_throughput(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.OnDemandThroughputProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.OnDemandThroughputProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__510f5c7d4293f98a55434a588a20db69cf20ac7b409105b7335eb2699ba8c570)
@@ -5789,14 +5798,14 @@ class CfnTable(
     @jsii.member(jsii_name="pointInTimeRecoverySpecification")
     def point_in_time_recovery_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.PointInTimeRecoverySpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.PointInTimeRecoverySpecificationProperty"]]:
         '''The settings used to enable point in time recovery.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.PointInTimeRecoverySpecificationProperty"]], jsii.get(self, "pointInTimeRecoverySpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.PointInTimeRecoverySpecificationProperty"]], jsii.get(self, "pointInTimeRecoverySpecification"))
 
     @point_in_time_recovery_specification.setter
     def point_in_time_recovery_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.PointInTimeRecoverySpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.PointInTimeRecoverySpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__06f7cca9d14af75b709b53e94a6fb51bba6dfa0cb31a23e0b70f506be9551e8d)
@@ -5807,14 +5816,14 @@ class CfnTable(
     @jsii.member(jsii_name="provisionedThroughput")
     def provisioned_throughput(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ProvisionedThroughputProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ProvisionedThroughputProperty"]]:
         '''Throughput for the specified table, which consists of values for ``ReadCapacityUnits`` and ``WriteCapacityUnits`` .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ProvisionedThroughputProperty"]], jsii.get(self, "provisionedThroughput"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ProvisionedThroughputProperty"]], jsii.get(self, "provisionedThroughput"))
 
     @provisioned_throughput.setter
     def provisioned_throughput(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ProvisionedThroughputProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ProvisionedThroughputProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6fa8ca064a9e23781245ca2f3d32d36a2324726abba76565a2e12ac5e399a599)
@@ -5825,14 +5834,14 @@ class CfnTable(
     @jsii.member(jsii_name="resourcePolicy")
     def resource_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ResourcePolicyProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ResourcePolicyProperty"]]:
         '''An AWS resource-based policy document in JSON format that will be attached to the table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ResourcePolicyProperty"]], jsii.get(self, "resourcePolicy"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ResourcePolicyProperty"]], jsii.get(self, "resourcePolicy"))
 
     @resource_policy.setter
     def resource_policy(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ResourcePolicyProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ResourcePolicyProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4166d9b0a925b24598927de15ecb1935d22d14f9a49469ba893db8d18421bf02)
@@ -5843,14 +5852,14 @@ class CfnTable(
     @jsii.member(jsii_name="sseSpecification")
     def sse_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.SSESpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.SSESpecificationProperty"]]:
         '''Specifies the settings to enable server-side encryption.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.SSESpecificationProperty"]], jsii.get(self, "sseSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.SSESpecificationProperty"]], jsii.get(self, "sseSpecification"))
 
     @sse_specification.setter
     def sse_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.SSESpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.SSESpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bc5e50032964d91e0cf5ec36aba75b6ae325bfe6129ad9f55764353e645b28c6)
@@ -5861,14 +5870,14 @@ class CfnTable(
     @jsii.member(jsii_name="streamSpecification")
     def stream_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.StreamSpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.StreamSpecificationProperty"]]:
         '''The settings for the DynamoDB table stream, which captures changes to items stored in the table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.StreamSpecificationProperty"]], jsii.get(self, "streamSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.StreamSpecificationProperty"]], jsii.get(self, "streamSpecification"))
 
     @stream_specification.setter
     def stream_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.StreamSpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.StreamSpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c4ba4ef955ba0e9ac6474c62ea545a637752c92fffc5fe0868d55987f8b593ba)
@@ -5903,12 +5912,12 @@ class CfnTable(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ae8c7d0ef496e4ff46af1a1db46d7b3840fc5e44d90dd5539a886f2d9ef19658)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5918,14 +5927,14 @@ class CfnTable(
     @jsii.member(jsii_name="timeToLiveSpecification")
     def time_to_live_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.TimeToLiveSpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.TimeToLiveSpecificationProperty"]]:
         '''Specifies the Time to Live (TTL) settings for the table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.TimeToLiveSpecificationProperty"]], jsii.get(self, "timeToLiveSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.TimeToLiveSpecificationProperty"]], jsii.get(self, "timeToLiveSpecification"))
 
     @time_to_live_specification.setter
     def time_to_live_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.TimeToLiveSpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.TimeToLiveSpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__13f09e3b5bed84728f44ababaa84b1754ef531ec7fc1a8800692ac3ee9bba9a0)
@@ -5936,14 +5945,14 @@ class CfnTable(
     @jsii.member(jsii_name="warmThroughput")
     def warm_throughput(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.WarmThroughputProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.WarmThroughputProperty"]]:
         '''Represents the warm throughput (in read units per second and write units per second) for creating a table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.WarmThroughputProperty"]], jsii.get(self, "warmThroughput"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.WarmThroughputProperty"]], jsii.get(self, "warmThroughput"))
 
     @warm_throughput.setter
     def warm_throughput(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.WarmThroughputProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.WarmThroughputProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8eb093514d81ccb0743d4c6abe13c5421f3570760fac0d429feb8eb70cd70401)
@@ -6037,7 +6046,7 @@ class CfnTable(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             mode: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Configures contributor insights settings for a table or one of its indexes.
@@ -6072,14 +6081,14 @@ class CfnTable(
                 self._values["mode"] = mode
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether CloudWatch Contributor Insights are to be enabled (true) or disabled (false).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-contributorinsightsspecification.html#cfn-dynamodb-table-contributorinsightsspecification-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def mode(self) -> typing.Optional[builtins.str]:
@@ -6195,12 +6204,12 @@ class CfnTable(
             self,
             *,
             index_name: builtins.str,
-            key_schema: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            projection: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ProjectionProperty", typing.Dict[builtins.str, typing.Any]]],
-            contributor_insights_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ContributorInsightsSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            on_demand_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.OnDemandThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            provisioned_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ProvisionedThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            key_schema: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            projection: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ProjectionProperty", typing.Dict[builtins.str, typing.Any]]],
+            contributor_insights_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ContributorInsightsSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            on_demand_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.OnDemandThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            provisioned_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ProvisionedThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            warm_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents the properties of a global secondary index.
 
@@ -6291,7 +6300,7 @@ class CfnTable(
         @builtins.property
         def key_schema(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.KeySchemaProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.KeySchemaProperty"]]]:
             '''The complete key schema for a global secondary index, which consists of one or more pairs of attribute names and key types:  - ``HASH`` - partition key - ``RANGE`` - sort key  > The partition key of an item is also known as its *hash attribute* .
 
             The term "hash attribute" derives from DynamoDB's usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.
@@ -6303,12 +6312,12 @@ class CfnTable(
             '''
             result = self._values.get("key_schema")
             assert result is not None, "Required property 'key_schema' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.KeySchemaProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.KeySchemaProperty"]]], result)
 
         @builtins.property
         def projection(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTable.ProjectionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTable.ProjectionProperty"]:
             '''Represents attributes that are copied (projected) from the table into the global secondary index.
 
             These are in addition to the primary key attributes and index key attributes, which are automatically projected.
@@ -6317,23 +6326,23 @@ class CfnTable(
             '''
             result = self._values.get("projection")
             assert result is not None, "Required property 'projection' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTable.ProjectionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTable.ProjectionProperty"], result)
 
         @builtins.property
         def contributor_insights_specification(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ContributorInsightsSpecificationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ContributorInsightsSpecificationProperty"]]:
             '''The settings used to specify whether to enable CloudWatch Contributor Insights for the global table and define which events to monitor.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-globalsecondaryindex.html#cfn-dynamodb-table-globalsecondaryindex-contributorinsightsspecification
             '''
             result = self._values.get("contributor_insights_specification")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ContributorInsightsSpecificationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ContributorInsightsSpecificationProperty"]], result)
 
         @builtins.property
         def on_demand_throughput(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.OnDemandThroughputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.OnDemandThroughputProperty"]]:
             '''The maximum number of read and write units for the specified global secondary index.
 
             If you use this parameter, you must specify ``MaxReadRequestUnits`` , ``MaxWriteRequestUnits`` , or both. You must use either ``OnDemandThroughput`` or ``ProvisionedThroughput`` based on your table's capacity mode.
@@ -6341,12 +6350,12 @@ class CfnTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-globalsecondaryindex.html#cfn-dynamodb-table-globalsecondaryindex-ondemandthroughput
             '''
             result = self._values.get("on_demand_throughput")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.OnDemandThroughputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.OnDemandThroughputProperty"]], result)
 
         @builtins.property
         def provisioned_throughput(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ProvisionedThroughputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ProvisionedThroughputProperty"]]:
             '''Represents the provisioned throughput settings for the specified global secondary index.
 
             You must use either ``OnDemandThroughput`` or ``ProvisionedThroughput`` based on your table's capacity mode.
@@ -6356,12 +6365,12 @@ class CfnTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-globalsecondaryindex.html#cfn-dynamodb-table-globalsecondaryindex-provisionedthroughput
             '''
             result = self._values.get("provisioned_throughput")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ProvisionedThroughputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ProvisionedThroughputProperty"]], result)
 
         @builtins.property
         def warm_throughput(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.WarmThroughputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.WarmThroughputProperty"]]:
             '''Represents the warm throughput value (in read units per second and write units per second) for the specified secondary index.
 
             If you use this parameter, you must specify ``ReadUnitsPerSecond`` , ``WriteUnitsPerSecond`` , or both.
@@ -6369,7 +6378,7 @@ class CfnTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-globalsecondaryindex.html#cfn-dynamodb-table-globalsecondaryindex-warmthroughput
             '''
             result = self._values.get("warm_throughput")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.WarmThroughputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.WarmThroughputProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6397,9 +6406,9 @@ class CfnTable(
             self,
             *,
             input_format: builtins.str,
-            s3_bucket_source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.S3BucketSourceProperty", typing.Dict[builtins.str, typing.Any]]],
+            s3_bucket_source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.S3BucketSourceProperty", typing.Dict[builtins.str, typing.Any]]],
             input_compression_type: typing.Optional[builtins.str] = None,
-            input_format_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.InputFormatOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            input_format_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.InputFormatOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the properties of data being imported from the S3 bucket source to the table.
 
@@ -6467,14 +6476,14 @@ class CfnTable(
         @builtins.property
         def s3_bucket_source(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTable.S3BucketSourceProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTable.S3BucketSourceProperty"]:
             '''The S3 bucket that provides the source for the import.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-importsourcespecification.html#cfn-dynamodb-table-importsourcespecification-s3bucketsource
             '''
             result = self._values.get("s3_bucket_source")
             assert result is not None, "Required property 's3_bucket_source' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTable.S3BucketSourceProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTable.S3BucketSourceProperty"], result)
 
         @builtins.property
         def input_compression_type(self) -> typing.Optional[builtins.str]:
@@ -6488,13 +6497,13 @@ class CfnTable(
         @builtins.property
         def input_format_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.InputFormatOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.InputFormatOptionsProperty"]]:
             '''Additional properties that specify how the input is formatted,.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-importsourcespecification.html#cfn-dynamodb-table-importsourcespecification-inputformatoptions
             '''
             result = self._values.get("input_format_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.InputFormatOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.InputFormatOptionsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6516,7 +6525,7 @@ class CfnTable(
         def __init__(
             self,
             *,
-            csv: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.CsvProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            csv: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.CsvProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The format options for the data that was imported into the target table.
 
@@ -6550,7 +6559,7 @@ class CfnTable(
         @builtins.property
         def csv(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.CsvProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.CsvProperty"]]:
             '''The options for imported source files in CSV format.
 
             The values are Delimiter and HeaderList.
@@ -6558,7 +6567,7 @@ class CfnTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-inputformatoptions.html#cfn-dynamodb-table-inputformatoptions-csv
             '''
             result = self._values.get("csv")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.CsvProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.CsvProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6751,8 +6760,8 @@ class CfnTable(
             self,
             *,
             index_name: builtins.str,
-            key_schema: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            projection: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ProjectionProperty", typing.Dict[builtins.str, typing.Any]]],
+            key_schema: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            projection: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ProjectionProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Represents the properties of a local secondary index.
 
@@ -6809,7 +6818,7 @@ class CfnTable(
         @builtins.property
         def key_schema(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.KeySchemaProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.KeySchemaProperty"]]]:
             '''The complete key schema for the local secondary index, consisting of one or more pairs of attribute names and key types:  - ``HASH`` - partition key - ``RANGE`` - sort key  > The partition key of an item is also known as its *hash attribute* .
 
             The term "hash attribute" derives from DynamoDB's usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.
@@ -6821,12 +6830,12 @@ class CfnTable(
             '''
             result = self._values.get("key_schema")
             assert result is not None, "Required property 'key_schema' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.KeySchemaProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.KeySchemaProperty"]]], result)
 
         @builtins.property
         def projection(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTable.ProjectionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTable.ProjectionProperty"]:
             '''Represents attributes that are copied (projected) from the table into the local secondary index.
 
             These are in addition to the primary key attributes and index key attributes, which are automatically projected.
@@ -6835,7 +6844,7 @@ class CfnTable(
             '''
             result = self._values.get("projection")
             assert result is not None, "Required property 'projection' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTable.ProjectionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTable.ProjectionProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6939,7 +6948,7 @@ class CfnTable(
         def __init__(
             self,
             *,
-            point_in_time_recovery_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            point_in_time_recovery_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             recovery_period_in_days: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''The settings used to enable point in time recovery.
@@ -6974,13 +6983,13 @@ class CfnTable(
         @builtins.property
         def point_in_time_recovery_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether point in time recovery is enabled (true) or disabled (false) on the table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-pointintimerecoveryspecification.html#cfn-dynamodb-table-pointintimerecoveryspecification-pointintimerecoveryenabled
             '''
             result = self._values.get("point_in_time_recovery_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def recovery_period_in_days(self) -> typing.Optional[jsii.Number]:
@@ -7350,7 +7359,7 @@ class CfnTable(
         def __init__(
             self,
             *,
-            sse_enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            sse_enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             kms_master_key_id: typing.Optional[builtins.str] = None,
             sse_type: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -7391,7 +7400,7 @@ class CfnTable(
                 self._values["sse_type"] = sse_type
 
         @builtins.property
-        def sse_enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def sse_enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether server-side encryption is done using an AWS managed key or an AWS owned key.
 
             If enabled (true), server-side encryption type is set to ``KMS`` and an AWS managed key is used ( AWS  charges apply). If disabled (false) or not specified, server-side encryption is set to AWS owned key.
@@ -7400,7 +7409,7 @@ class CfnTable(
             '''
             result = self._values.get("sse_enabled")
             assert result is not None, "Required property 'sse_enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def kms_master_key_id(self) -> typing.Optional[builtins.str]:
@@ -7448,7 +7457,7 @@ class CfnTable(
             self,
             *,
             stream_view_type: builtins.str,
-            resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            resource_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents the DynamoDB Streams configuration for a table in DynamoDB.
 
@@ -7505,7 +7514,7 @@ class CfnTable(
         @builtins.property
         def resource_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ResourcePolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ResourcePolicyProperty"]]:
             '''Creates or updates a resource-based policy document that contains the permissions for DynamoDB resources, such as a table's streams.
 
             Resource-based policies let you define access permissions by specifying who has access to each resource, and the actions they are allowed to perform on each resource.
@@ -7518,7 +7527,7 @@ class CfnTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-streamspecification.html#cfn-dynamodb-table-streamspecification-resourcepolicy
             '''
             result = self._values.get("resource_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ResourcePolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ResourcePolicyProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7540,7 +7549,7 @@ class CfnTable(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             attribute_name: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Represents the settings used to enable or disable Time to Live (TTL) for the specified table.
@@ -7575,14 +7584,14 @@ class CfnTable(
                 self._values["attribute_name"] = attribute_name
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether TTL is to be enabled (true) or disabled (false) on the table.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-timetolivespecification.html#cfn-dynamodb-table-timetolivespecification-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def attribute_name(self) -> typing.Optional[builtins.str]:
@@ -7715,26 +7724,26 @@ class CfnTableProps:
     def __init__(
         self,
         *,
-        key_schema: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.KeySchemaProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        attribute_definitions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.AttributeDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        key_schema: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.KeySchemaProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        attribute_definitions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.AttributeDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         billing_mode: typing.Optional[builtins.str] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ContributorInsightsSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        global_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.GlobalSecondaryIndexProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        import_source_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ImportSourceSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kinesis_stream_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.KinesisStreamSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        local_secondary_indexes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.LocalSecondaryIndexProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        on_demand_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.OnDemandThroughputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        point_in_time_recovery_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.PointInTimeRecoverySpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        provisioned_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ProvisionedThroughputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ResourcePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        sse_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.SSESpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        stream_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.StreamSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ContributorInsightsSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        global_secondary_indexes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.GlobalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        import_source_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ImportSourceSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kinesis_stream_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.KinesisStreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        local_secondary_indexes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.LocalSecondaryIndexProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        on_demand_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.OnDemandThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        point_in_time_recovery_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.PointInTimeRecoverySpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        provisioned_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ProvisionedThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        resource_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sse_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.SSESpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        stream_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.StreamSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         table_class: typing.Optional[builtins.str] = None,
         table_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        time_to_live_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.TimeToLiveSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.WarmThroughputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        time_to_live_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.TimeToLiveSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTable``.
 
@@ -7764,6 +7773,7 @@ class CfnTableProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dynamodb as dynamodb
@@ -7971,7 +7981,7 @@ class CfnTableProps:
     @builtins.property
     def key_schema(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.KeySchemaProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.KeySchemaProperty"]]]:
         '''Specifies the attributes that make up the primary key for the table.
 
         The attributes in the ``KeySchema`` property must also be defined in the ``AttributeDefinitions`` property.
@@ -7980,12 +7990,12 @@ class CfnTableProps:
         '''
         result = self._values.get("key_schema")
         assert result is not None, "Required property 'key_schema' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.KeySchemaProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.KeySchemaProperty"]]], result)
 
     @builtins.property
     def attribute_definitions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.AttributeDefinitionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.AttributeDefinitionProperty"]]]]:
         '''A list of attributes that describe the key schema for the table and indexes.
 
         This property is required to create a DynamoDB table.
@@ -7995,7 +8005,7 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-attributedefinitions
         '''
         result = self._values.get("attribute_definitions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.AttributeDefinitionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.AttributeDefinitionProperty"]]]], result)
 
     @builtins.property
     def billing_mode(self) -> typing.Optional[builtins.str]:
@@ -8016,18 +8026,18 @@ class CfnTableProps:
     @builtins.property
     def contributor_insights_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.ContributorInsightsSpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ContributorInsightsSpecificationProperty"]]:
         '''The settings used to specify whether to enable CloudWatch Contributor Insights for the table and define which events to monitor.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-contributorinsightsspecification
         '''
         result = self._values.get("contributor_insights_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.ContributorInsightsSpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ContributorInsightsSpecificationProperty"]], result)
 
     @builtins.property
     def deletion_protection_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Determines if a table is protected from deletion.
 
         When enabled, the table cannot be deleted by any user or process. This setting is disabled by default. For more information, see `Using deletion protection <https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html#WorkingWithTables.Basics.DeletionProtection>`_ in the *Amazon DynamoDB Developer Guide* .
@@ -8035,12 +8045,12 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-deletionprotectionenabled
         '''
         result = self._values.get("deletion_protection_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def global_secondary_indexes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.GlobalSecondaryIndexProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.GlobalSecondaryIndexProperty"]]]]:
         '''Global secondary indexes to be created on the table. You can create up to 20 global secondary indexes.
 
         .. epigraph::
@@ -8057,12 +8067,12 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-globalsecondaryindexes
         '''
         result = self._values.get("global_secondary_indexes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.GlobalSecondaryIndexProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.GlobalSecondaryIndexProperty"]]]], result)
 
     @builtins.property
     def import_source_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.ImportSourceSpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ImportSourceSpecificationProperty"]]:
         '''Specifies the properties of data being imported from the S3 bucket source to the" table.
 
         .. epigraph::
@@ -8072,23 +8082,23 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-importsourcespecification
         '''
         result = self._values.get("import_source_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.ImportSourceSpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ImportSourceSpecificationProperty"]], result)
 
     @builtins.property
     def kinesis_stream_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.KinesisStreamSpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.KinesisStreamSpecificationProperty"]]:
         '''The Kinesis Data Streams configuration for the specified table.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-kinesisstreamspecification
         '''
         result = self._values.get("kinesis_stream_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.KinesisStreamSpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.KinesisStreamSpecificationProperty"]], result)
 
     @builtins.property
     def local_secondary_indexes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.LocalSecondaryIndexProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.LocalSecondaryIndexProperty"]]]]:
         '''Local secondary indexes to be created on the table.
 
         You can create up to 5 local secondary indexes. Each index is scoped to a given hash key value. The size of each hash key can be up to 10 gigabytes.
@@ -8096,12 +8106,12 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-localsecondaryindexes
         '''
         result = self._values.get("local_secondary_indexes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.LocalSecondaryIndexProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.LocalSecondaryIndexProperty"]]]], result)
 
     @builtins.property
     def on_demand_throughput(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.OnDemandThroughputProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.OnDemandThroughputProperty"]]:
         '''Sets the maximum number of read and write units for the specified on-demand table.
 
         If you use this property, you must specify ``MaxReadRequestUnits`` , ``MaxWriteRequestUnits`` , or both.
@@ -8109,23 +8119,23 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-ondemandthroughput
         '''
         result = self._values.get("on_demand_throughput")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.OnDemandThroughputProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.OnDemandThroughputProperty"]], result)
 
     @builtins.property
     def point_in_time_recovery_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.PointInTimeRecoverySpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.PointInTimeRecoverySpecificationProperty"]]:
         '''The settings used to enable point in time recovery.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-pointintimerecoveryspecification
         '''
         result = self._values.get("point_in_time_recovery_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.PointInTimeRecoverySpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.PointInTimeRecoverySpecificationProperty"]], result)
 
     @builtins.property
     def provisioned_throughput(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.ProvisionedThroughputProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ProvisionedThroughputProperty"]]:
         '''Throughput for the specified table, which consists of values for ``ReadCapacityUnits`` and ``WriteCapacityUnits`` .
 
         For more information about the contents of a provisioned throughput structure, see `Amazon DynamoDB Table ProvisionedThroughput <https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ProvisionedThroughput.html>`_ .
@@ -8135,12 +8145,12 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-provisionedthroughput
         '''
         result = self._values.get("provisioned_throughput")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.ProvisionedThroughputProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ProvisionedThroughputProperty"]], result)
 
     @builtins.property
     def resource_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.ResourcePolicyProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ResourcePolicyProperty"]]:
         '''An AWS resource-based policy document in JSON format that will be attached to the table.
 
         When you attach a resource-based policy while creating a table, the policy application is *strongly consistent* .
@@ -8153,23 +8163,23 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-resourcepolicy
         '''
         result = self._values.get("resource_policy")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.ResourcePolicyProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ResourcePolicyProperty"]], result)
 
     @builtins.property
     def sse_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.SSESpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.SSESpecificationProperty"]]:
         '''Specifies the settings to enable server-side encryption.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-ssespecification
         '''
         result = self._values.get("sse_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.SSESpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.SSESpecificationProperty"]], result)
 
     @builtins.property
     def stream_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.StreamSpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.StreamSpecificationProperty"]]:
         '''The settings for the DynamoDB table stream, which captures changes to items stored in the table.
 
         Including this property in your AWS CloudFormation template automatically enables streaming.
@@ -8177,7 +8187,7 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-streamspecification
         '''
         result = self._values.get("stream_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.StreamSpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.StreamSpecificationProperty"]], result)
 
     @builtins.property
     def table_class(self) -> typing.Optional[builtins.str]:
@@ -8205,7 +8215,7 @@ class CfnTableProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -8213,12 +8223,12 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def time_to_live_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.TimeToLiveSpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.TimeToLiveSpecificationProperty"]]:
         '''Specifies the Time to Live (TTL) settings for the table.
 
         .. epigraph::
@@ -8228,18 +8238,18 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-timetolivespecification
         '''
         result = self._values.get("time_to_live_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.TimeToLiveSpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.TimeToLiveSpecificationProperty"]], result)
 
     @builtins.property
     def warm_throughput(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.WarmThroughputProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.WarmThroughputProperty"]]:
         '''Represents the warm throughput (in read units per second and write units per second) for creating a table.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-warmthroughput
         '''
         result = self._values.get("warm_throughput")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.WarmThroughputProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.WarmThroughputProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8287,7 +8297,7 @@ class ContributorInsightsSpecification:
         self,
         *,
         enabled: builtins.bool,
-        mode: typing.Optional[ContributorInsightsMode] = None,
+        mode: typing.Optional["ContributorInsightsMode"] = None,
     ) -> None:
         '''Reference to ContributorInsightsSpecification.
 
@@ -8348,13 +8358,13 @@ class ContributorInsightsSpecification:
         return typing.cast(builtins.bool, result)
 
     @builtins.property
-    def mode(self) -> typing.Optional[ContributorInsightsMode]:
+    def mode(self) -> typing.Optional["ContributorInsightsMode"]:
         '''Indicates the type of metrics captured by contributor insights.
 
         :default: ACCESSED_AND_THROTTLED_KEYS
         '''
         result = self._values.get("mode")
-        return typing.cast(typing.Optional[ContributorInsightsMode], result)
+        return typing.cast(typing.Optional["ContributorInsightsMode"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8539,12 +8549,12 @@ class IScalableTableAttribute(typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        schedule: _Schedule_e93ba733,
+        schedule: "_Schedule_e93ba733",
         end_time: typing.Optional[datetime.datetime] = None,
         max_capacity: typing.Optional[jsii.Number] = None,
         min_capacity: typing.Optional[jsii.Number] = None,
         start_time: typing.Optional[datetime.datetime] = None,
-        time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
+        time_zone: typing.Optional["_TimeZone_cdd72ac9"] = None,
     ) -> None:
         '''Add scheduled scaling for this scaling attribute.
 
@@ -8565,8 +8575,8 @@ class IScalableTableAttribute(typing_extensions.Protocol):
         target_utilization_percent: jsii.Number,
         disable_scale_in: typing.Optional[builtins.bool] = None,
         policy_name: typing.Optional[builtins.str] = None,
-        scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scale_in_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        scale_out_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Scale out or in to keep utilization at a given level.
 
@@ -8589,12 +8599,12 @@ class _IScalableTableAttributeProxy:
         self,
         id: builtins.str,
         *,
-        schedule: _Schedule_e93ba733,
+        schedule: "_Schedule_e93ba733",
         end_time: typing.Optional[datetime.datetime] = None,
         max_capacity: typing.Optional[jsii.Number] = None,
         min_capacity: typing.Optional[jsii.Number] = None,
         start_time: typing.Optional[datetime.datetime] = None,
-        time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
+        time_zone: typing.Optional["_TimeZone_cdd72ac9"] = None,
     ) -> None:
         '''Add scheduled scaling for this scaling attribute.
 
@@ -8627,8 +8637,8 @@ class _IScalableTableAttributeProxy:
         target_utilization_percent: jsii.Number,
         disable_scale_in: typing.Optional[builtins.bool] = None,
         policy_name: typing.Optional[builtins.str] = None,
-        scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scale_in_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        scale_out_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Scale out or in to keep utilization at a given level.
 
@@ -8676,7 +8686,7 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''Optional KMS encryption key associated with this table.'''
         ...
 
@@ -8692,9 +8702,9 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this table to an IAM principal's policy.
 
         If ``encryptionKey`` is present, appropriate grants to the key needs to be added
@@ -8706,7 +8716,7 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantFullAccess")
-    def grant_full_access(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_full_access(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits all DynamoDB operations ("dynamodb:*") to an IAM principal.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -8717,7 +8727,7 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantReadData")
-    def grant_read_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_data(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all data read operations from this table: BatchGetItem, GetRecords, GetShardIterator, Query, GetItem, Scan.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -8728,7 +8738,10 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantReadWriteData")
-    def grant_read_write_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_write_data(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Permits an IAM principal to all data read/write operations to this table.
 
         BatchGetItem, GetRecords, GetShardIterator, Query, GetItem, Scan,
@@ -8744,9 +8757,9 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="grantStream")
     def grant_stream(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this table's stream to an IAM principal's policy.
 
         If ``encryptionKey`` is present, appropriate grants to the key needs to be added
@@ -8758,7 +8771,7 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantStreamRead")
-    def grant_stream_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_stream_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all stream data read operations for this table's stream: DescribeStream, GetRecords, GetShardIterator, ListStreams.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -8771,8 +8784,8 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="grantTableListStreams")
     def grant_table_list_streams(
         self,
-        grantee: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Permits an IAM Principal to list streams attached to current dynamodb table.
 
         :param grantee: The principal (no-op if undefined).
@@ -8780,7 +8793,7 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantWriteData")
-    def grant_write_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write_data(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all data write operations to this table: BatchWriteItem, PutItem, UpdateItem, DeleteItem.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -8800,14 +8813,14 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of Errors executing all Lambdas.
 
         :param metric_name: -
@@ -8835,14 +8848,14 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the conditional check failed requests.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -8869,14 +8882,14 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the consumed read capacity units.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -8903,14 +8916,14 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the consumed write capacity units.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -8937,14 +8950,14 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the successful request latency.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -8972,14 +8985,14 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _IMetric_c7fd29de:
+    ) -> "_IMetric_c7fd29de":
         '''Metric for the system errors this table.
 
         :param operations: The operations to apply the metric to. Default: - All operations available by DynamoDB tables will be considered.
@@ -9007,14 +9020,14 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''(deprecated) Metric for throttled requests.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -9046,14 +9059,14 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _IMetric_c7fd29de:
+    ) -> "_IMetric_c7fd29de":
         '''Metric for throttled requests.
 
         :param operations: The operations to apply the metric to. Default: - All operations available by DynamoDB tables will be considered.
@@ -9081,14 +9094,14 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the user errors.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -9134,9 +9147,9 @@ class _ITableProxy(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''Optional KMS encryption key associated with this table.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionKey"))
 
     @builtins.property
     @jsii.member(jsii_name="tableStreamArn")
@@ -9150,9 +9163,9 @@ class _ITableProxy(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this table to an IAM principal's policy.
 
         If ``encryptionKey`` is present, appropriate grants to the key needs to be added
@@ -9165,10 +9178,10 @@ class _ITableProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__9b494d2e2c869c4f85b46b52e96f5370693a41f312494df137b4e2fc167667b8)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantFullAccess")
-    def grant_full_access(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_full_access(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits all DynamoDB operations ("dynamodb:*") to an IAM principal.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -9179,10 +9192,10 @@ class _ITableProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__795899e2dd6f3ae613e4e96044950e561490ebd2799bf21127438a57ade1e33b)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantFullAccess", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantFullAccess", [grantee]))
 
     @jsii.member(jsii_name="grantReadData")
-    def grant_read_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_data(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all data read operations from this table: BatchGetItem, GetRecords, GetShardIterator, Query, GetItem, Scan.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -9193,10 +9206,13 @@ class _ITableProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__00bf2c695617438cc81daa77e3b504bd3c57ff153ecd830a0b033176d640ff81)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadData", [grantee]))
 
     @jsii.member(jsii_name="grantReadWriteData")
-    def grant_read_write_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_write_data(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Permits an IAM principal to all data read/write operations to this table.
 
         BatchGetItem, GetRecords, GetShardIterator, Query, GetItem, Scan,
@@ -9210,14 +9226,14 @@ class _ITableProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3b63751e3d21b257a62015c67b89b90c50ab28ee234ffd1e51cf08bd8a5e6bf1)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadWriteData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadWriteData", [grantee]))
 
     @jsii.member(jsii_name="grantStream")
     def grant_stream(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this table's stream to an IAM principal's policy.
 
         If ``encryptionKey`` is present, appropriate grants to the key needs to be added
@@ -9230,10 +9246,10 @@ class _ITableProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__f3003eaf312e073b533e131536d0c1527d9ea96715beacc16a1e770cf59d1524)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStream", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStream", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantStreamRead")
-    def grant_stream_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_stream_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all stream data read operations for this table's stream: DescribeStream, GetRecords, GetShardIterator, ListStreams.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -9244,13 +9260,13 @@ class _ITableProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5f5a2e5d2164d1a1fc15a0e5dbfd83ef2f1def03f9eab2d4cb01f11c79658612)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStreamRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStreamRead", [grantee]))
 
     @jsii.member(jsii_name="grantTableListStreams")
     def grant_table_list_streams(
         self,
-        grantee: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Permits an IAM Principal to list streams attached to current dynamodb table.
 
         :param grantee: The principal (no-op if undefined).
@@ -9258,10 +9274,10 @@ class _ITableProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3a21391d4c59dd9ec48acd487a15591ad9cf2bd5e0cd79fdba24db8fa9579d28)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantTableListStreams", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantTableListStreams", [grantee]))
 
     @jsii.member(jsii_name="grantWriteData")
-    def grant_write_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write_data(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all data write operations to this table: BatchWriteItem, PutItem, UpdateItem, DeleteItem.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -9272,7 +9288,7 @@ class _ITableProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aaafe7eb30564decc5152d15d88e793c95c0fb9d55577e60d248e4fa1cad9fcc)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWriteData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWriteData", [grantee]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -9284,14 +9300,14 @@ class _ITableProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of Errors executing all Lambdas.
 
         :param metric_name: -
@@ -9326,7 +9342,7 @@ class _ITableProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricConditionalCheckFailedRequests")
     def metric_conditional_check_failed_requests(
@@ -9337,14 +9353,14 @@ class _ITableProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the conditional check failed requests.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -9375,7 +9391,7 @@ class _ITableProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricConditionalCheckFailedRequests", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricConditionalCheckFailedRequests", [props]))
 
     @jsii.member(jsii_name="metricConsumedReadCapacityUnits")
     def metric_consumed_read_capacity_units(
@@ -9386,14 +9402,14 @@ class _ITableProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the consumed read capacity units.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -9424,7 +9440,7 @@ class _ITableProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricConsumedReadCapacityUnits", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricConsumedReadCapacityUnits", [props]))
 
     @jsii.member(jsii_name="metricConsumedWriteCapacityUnits")
     def metric_consumed_write_capacity_units(
@@ -9435,14 +9451,14 @@ class _ITableProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the consumed write capacity units.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -9473,7 +9489,7 @@ class _ITableProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricConsumedWriteCapacityUnits", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricConsumedWriteCapacityUnits", [props]))
 
     @jsii.member(jsii_name="metricSuccessfulRequestLatency")
     def metric_successful_request_latency(
@@ -9484,14 +9500,14 @@ class _ITableProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the successful request latency.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -9522,7 +9538,7 @@ class _ITableProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSuccessfulRequestLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSuccessfulRequestLatency", [props]))
 
     @jsii.member(jsii_name="metricSystemErrorsForOperations")
     def metric_system_errors_for_operations(
@@ -9534,14 +9550,14 @@ class _ITableProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _IMetric_c7fd29de:
+    ) -> "_IMetric_c7fd29de":
         '''Metric for the system errors this table.
 
         :param operations: The operations to apply the metric to. Default: - All operations available by DynamoDB tables will be considered.
@@ -9574,7 +9590,7 @@ class _ITableProxy(
             visible=visible,
         )
 
-        return typing.cast(_IMetric_c7fd29de, jsii.invoke(self, "metricSystemErrorsForOperations", [props]))
+        return typing.cast("_IMetric_c7fd29de", jsii.invoke(self, "metricSystemErrorsForOperations", [props]))
 
     @jsii.member(jsii_name="metricThrottledRequests")
     def metric_throttled_requests(
@@ -9585,14 +9601,14 @@ class _ITableProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''(deprecated) Metric for throttled requests.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -9627,7 +9643,7 @@ class _ITableProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricThrottledRequests", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricThrottledRequests", [props]))
 
     @jsii.member(jsii_name="metricThrottledRequestsForOperations")
     def metric_throttled_requests_for_operations(
@@ -9639,14 +9655,14 @@ class _ITableProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _IMetric_c7fd29de:
+    ) -> "_IMetric_c7fd29de":
         '''Metric for throttled requests.
 
         :param operations: The operations to apply the metric to. Default: - All operations available by DynamoDB tables will be considered.
@@ -9679,7 +9695,7 @@ class _ITableProxy(
             visible=visible,
         )
 
-        return typing.cast(_IMetric_c7fd29de, jsii.invoke(self, "metricThrottledRequestsForOperations", [props]))
+        return typing.cast("_IMetric_c7fd29de", jsii.invoke(self, "metricThrottledRequestsForOperations", [props]))
 
     @jsii.member(jsii_name="metricUserErrors")
     def metric_user_errors(
@@ -9690,14 +9706,14 @@ class _ITableProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the user errors.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -9728,7 +9744,7 @@ class _ITableProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricUserErrors", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricUserErrors", [props]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ITable).__jsii_proxy_class__ = lambda : _ITableProxy
@@ -9783,7 +9799,7 @@ class ImportSourceSpecification:
     def __init__(
         self,
         *,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         input_format: "InputFormat",
         bucket_owner: typing.Optional[builtins.str] = None,
         compression_type: typing.Optional["InputCompressionType"] = None,
@@ -9842,11 +9858,11 @@ class ImportSourceSpecification:
             self._values["key_prefix"] = key_prefix
 
     @builtins.property
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''The S3 bucket that is being imported from.'''
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
     def input_format(self) -> "InputFormat":
@@ -10015,8 +10031,8 @@ class KeySchema:
     def __init__(
         self,
         *,
-        partition_keys: typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]],
-        sort_keys: typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]],
+        partition_keys: typing.Sequence[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]],
+        sort_keys: typing.Sequence[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''A description of a key schema of an LSI, GSI or Table.
 
@@ -10052,7 +10068,7 @@ class KeySchema:
         }
 
     @builtins.property
-    def partition_keys(self) -> typing.List[Attribute]:
+    def partition_keys(self) -> typing.List["Attribute"]:
         '''Partition key definition.
 
         This array has at least one, but potentially multiple entries.  Together,
@@ -10060,17 +10076,17 @@ class KeySchema:
         '''
         result = self._values.get("partition_keys")
         assert result is not None, "Required property 'partition_keys' is missing"
-        return typing.cast(typing.List[Attribute], result)
+        return typing.cast(typing.List["Attribute"], result)
 
     @builtins.property
-    def sort_keys(self) -> typing.List[Attribute]:
+    def sort_keys(self) -> typing.List["Attribute"]:
         '''Sort key definition.
 
         This array has zero or more entries. Together, they form the sort key.
         '''
         result = self._values.get("sort_keys")
         assert result is not None, "Required property 'sort_keys' is missing"
-        return typing.cast(typing.List[Attribute], result)
+        return typing.cast(typing.List["Attribute"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10343,9 +10359,9 @@ class ReplicaGlobalSecondaryIndexOptions:
         self,
         *,
         contributor_insights: typing.Optional[builtins.bool] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["ContributorInsightsSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         max_read_request_units: typing.Optional[jsii.Number] = None,
-        read_capacity: typing.Optional[Capacity] = None,
+        read_capacity: typing.Optional["Capacity"] = None,
     ) -> None:
         '''Options used to configure global secondary indexes on a replica table.
 
@@ -10438,13 +10454,13 @@ class ReplicaGlobalSecondaryIndexOptions:
     @builtins.property
     def contributor_insights_specification(
         self,
-    ) -> typing.Optional[ContributorInsightsSpecification]:
+    ) -> typing.Optional["ContributorInsightsSpecification"]:
         '''Whether CloudWatch contributor insights is enabled and what mode is selected for a specific global secondary index on a replica table.
 
         :default: - contributor insights is not enabled
         '''
         result = self._values.get("contributor_insights_specification")
-        return typing.cast(typing.Optional[ContributorInsightsSpecification], result)
+        return typing.cast(typing.Optional["ContributorInsightsSpecification"], result)
 
     @builtins.property
     def max_read_request_units(self) -> typing.Optional[jsii.Number]:
@@ -10458,7 +10474,7 @@ class ReplicaGlobalSecondaryIndexOptions:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def read_capacity(self) -> typing.Optional[Capacity]:
+    def read_capacity(self) -> typing.Optional["Capacity"]:
         '''The read capacity for a specific global secondary index on a replica table.
 
         Note: This can only be configured if primary table billing is provisioned.
@@ -10466,7 +10482,7 @@ class ReplicaGlobalSecondaryIndexOptions:
         :default: - inherited from the primary table
         '''
         result = self._values.get("read_capacity")
-        return typing.cast(typing.Optional[Capacity], result)
+        return typing.cast(typing.Optional["Capacity"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10489,8 +10505,8 @@ class SchemaOptions:
     def __init__(
         self,
         *,
-        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
-        sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
+        partition_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Represents the table schema attributes.
 
@@ -10531,7 +10547,7 @@ class SchemaOptions:
             self._values["sort_key"] = sort_key
 
     @builtins.property
-    def partition_key(self) -> typing.Optional[Attribute]:
+    def partition_key(self) -> typing.Optional["Attribute"]:
         '''Partition key attribute definition.
 
         If a single field forms the partition key, you can use this field.  Use the
@@ -10541,10 +10557,10 @@ class SchemaOptions:
         :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         '''
         result = self._values.get("partition_key")
-        return typing.cast(typing.Optional[Attribute], result)
+        return typing.cast(typing.Optional["Attribute"], result)
 
     @builtins.property
-    def sort_key(self) -> typing.Optional[Attribute]:
+    def sort_key(self) -> typing.Optional["Attribute"]:
         '''Sort key attribute definition.
 
         If a single field forms the sort key, you can use this field.  Use the
@@ -10554,7 +10570,7 @@ class SchemaOptions:
         :default: - no sort key
         '''
         result = self._values.get("sort_key")
-        return typing.cast(typing.Optional[Attribute], result)
+        return typing.cast(typing.Optional["Attribute"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10583,7 +10599,7 @@ class SecondaryIndexProps:
         *,
         index_name: builtins.str,
         non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        projection_type: typing.Optional[ProjectionType] = None,
+        projection_type: typing.Optional["ProjectionType"] = None,
     ) -> None:
         '''Properties for a secondary index.
 
@@ -10637,13 +10653,13 @@ class SecondaryIndexProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def projection_type(self) -> typing.Optional[ProjectionType]:
+    def projection_type(self) -> typing.Optional["ProjectionType"]:
         '''The set of attributes that are projected into the secondary index.
 
         :default: ALL
         '''
         result = self._values.get("projection_type")
-        return typing.cast(typing.Optional[ProjectionType], result)
+        return typing.cast(typing.Optional["ProjectionType"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10688,9 +10704,9 @@ class StreamGrants(
     def __init__(
         self,
         *,
-        table: _ITableRef_4478f0ad,
+        table: "_ITableRef_4478f0ad",
         table_stream_arn: builtins.str,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
     ) -> None:
         '''
         :param table: The table this stream is for.
@@ -10708,9 +10724,9 @@ class StreamGrants(
     @jsii.member(jsii_name="actions")
     def actions(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this table's stream to an IAM principal's policy.
 
         If ``encryptionKey`` is present, appropriate grants to the key needs to be added
@@ -10723,10 +10739,10 @@ class StreamGrants(
             type_hints = typing.get_type_hints(_typecheckingstub__86101d3f0287f68991c02f6c20a0754d64904c99b1cb38be4ccd0bbc474dbab0)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "actions", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "actions", [grantee, *actions]))
 
     @jsii.member(jsii_name="list")
-    def list(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def list(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM Principal to list streams attached to current dynamodb table.
 
         :param grantee: The principal (no-op if undefined).
@@ -10734,10 +10750,10 @@ class StreamGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0bdba1228d2493dddfb0b5dfbceb197a9690e4c90874407cb08a3c60e81e489c)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "list", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "list", [grantee]))
 
     @jsii.member(jsii_name="read")
-    def read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all stream data read operations for this table's stream: DescribeStream, GetRecords, GetShardIterator, ListStreams.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -10748,7 +10764,7 @@ class StreamGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__01b8ff1aba3f9dd3ce7997b6402e6cc41ec1d0cf91555c4a83dab59b0375b804)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "read", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "read", [grantee]))
 
 
 @jsii.data_type(
@@ -10764,9 +10780,9 @@ class StreamGrantsProps:
     def __init__(
         self,
         *,
-        table: _ITableRef_4478f0ad,
+        table: "_ITableRef_4478f0ad",
         table_stream_arn: builtins.str,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
     ) -> None:
         '''Construction properties for StreamGrants.
 
@@ -10808,11 +10824,11 @@ class StreamGrantsProps:
             self._values["encryption_key"] = encryption_key
 
     @builtins.property
-    def table(self) -> _ITableRef_4478f0ad:
+    def table(self) -> "_ITableRef_4478f0ad":
         '''The table this stream is for.'''
         result = self._values.get("table")
         assert result is not None, "Required property 'table' is missing"
-        return typing.cast(_ITableRef_4478f0ad, result)
+        return typing.cast("_ITableRef_4478f0ad", result)
 
     @builtins.property
     def table_stream_arn(self) -> builtins.str:
@@ -10822,7 +10838,7 @@ class StreamGrantsProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The encryption key of the table.
 
         Required permissions will be added to the key as well.
@@ -10830,7 +10846,7 @@ class StreamGrantsProps:
         :default: - No key
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10912,14 +10928,14 @@ class SystemErrorsForOperationsMetricOptions(_MetricOptions_1788b62f):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-        operations: typing.Optional[typing.Sequence[Operation]] = None,
+        operations: typing.Optional[typing.Sequence["Operation"]] = None,
     ) -> None:
         '''Options for configuring a system errors metric that considers multiple operations.
 
@@ -11069,13 +11085,13 @@ class SystemErrorsForOperationsMetricOptions(_MetricOptions_1788b62f):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period over which the specified statistic is applied.
 
         :default: Duration.minutes(5)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def region(self) -> typing.Optional[builtins.str]:
@@ -11130,7 +11146,7 @@ class SystemErrorsForOperationsMetricOptions(_MetricOptions_1788b62f):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def unit(self) -> typing.Optional[_Unit_61bc6f70]:
+    def unit(self) -> typing.Optional["_Unit_61bc6f70"]:
         '''Unit used to filter the metric stream.
 
         Only refer to datums emitted to the metric stream with the given unit and
@@ -11145,7 +11161,7 @@ class SystemErrorsForOperationsMetricOptions(_MetricOptions_1788b62f):
         :default: - All metric datums in the given metric stream
         '''
         result = self._values.get("unit")
-        return typing.cast(typing.Optional[_Unit_61bc6f70], result)
+        return typing.cast(typing.Optional["_Unit_61bc6f70"], result)
 
     @builtins.property
     def visible(self) -> typing.Optional[builtins.bool]:
@@ -11160,13 +11176,13 @@ class SystemErrorsForOperationsMetricOptions(_MetricOptions_1788b62f):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def operations(self) -> typing.Optional[typing.List[Operation]]:
+    def operations(self) -> typing.Optional[typing.List["Operation"]]:
         '''The operations to apply the metric to.
 
         :default: - All operations available by DynamoDB tables will be considered.
         '''
         result = self._values.get("operations")
-        return typing.cast(typing.Optional[typing.List[Operation]], result)
+        return typing.cast(typing.Optional[typing.List["Operation"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11197,7 +11213,7 @@ class TableAttributes:
     def __init__(
         self,
         *,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
         global_indexes: typing.Optional[typing.Sequence[builtins.str]] = None,
         grant_index_permissions: typing.Optional[builtins.bool] = None,
         local_indexes: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -11262,13 +11278,13 @@ class TableAttributes:
             self._values["table_stream_arn"] = table_stream_arn
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''KMS encryption key, if this table uses a customer-managed encryption key.
 
         :default: - no key
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def global_indexes(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -11371,7 +11387,7 @@ class TableAttributesV2:
     def __init__(
         self,
         *,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
         global_indexes: typing.Optional[typing.Sequence[builtins.str]] = None,
         grant_index_permissions: typing.Optional[builtins.bool] = None,
         local_indexes: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -11442,13 +11458,13 @@ class TableAttributesV2:
             self._values["table_stream_arn"] = table_stream_arn
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''KMS encryption key for the table.
 
         :default: - no KMS encryption key
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def global_indexes(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -11546,7 +11562,7 @@ class TableBase(
 ):
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -11579,8 +11595,8 @@ class TableBase(
     @abc.abstractmethod
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the resource policy associated with this table.
 
         :param statement: -
@@ -11590,9 +11606,9 @@ class TableBase(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this table to an IAM principal's policy.
 
         If ``encryptionKey`` is present, appropriate grants to the key needs to be added
@@ -11605,10 +11621,10 @@ class TableBase(
             type_hints = typing.get_type_hints(_typecheckingstub__ad55d8fd00d859ce3132dc1316888fe9f09c2a3381b167ac699e89edb96ec936)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantFullAccess")
-    def grant_full_access(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_full_access(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits all DynamoDB operations ("dynamodb:*") to an IAM principal.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -11619,14 +11635,14 @@ class TableBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e97fcb5dff02c5a258c5d607074ab3d37182a2524e41f9575dbd34f5bddd553f)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantFullAccess", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantFullAccess", [grantee]))
 
     @jsii.member(jsii_name="grantOnKey")
     def grant_on_key(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _GrantOnKeyResult_35320c49:
+    ) -> "_GrantOnKeyResult_35320c49":
         '''Gives permissions to a grantable entity to perform actions on the encryption key.
 
         :param grantee: -
@@ -11636,10 +11652,10 @@ class TableBase(
             type_hints = typing.get_type_hints(_typecheckingstub__c47709cbc47672ad2e5764a22d5e15738380d62396d6d6a6fe3c7c88dbe2cc04)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_GrantOnKeyResult_35320c49, jsii.invoke(self, "grantOnKey", [grantee, *actions]))
+        return typing.cast("_GrantOnKeyResult_35320c49", jsii.invoke(self, "grantOnKey", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantReadData")
-    def grant_read_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_data(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all data read operations from this table: BatchGetItem, GetRecords, GetShardIterator, Query, GetItem, Scan, DescribeTable.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -11650,10 +11666,13 @@ class TableBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7a70481ed359637d1060f01d6776a1cc99d5ce872734b1de7e608e21e21b0090)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadData", [grantee]))
 
     @jsii.member(jsii_name="grantReadWriteData")
-    def grant_read_write_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_write_data(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Permits an IAM principal to all data read/write operations to this table.
 
         BatchGetItem, GetRecords, GetShardIterator, Query, GetItem, Scan,
@@ -11667,14 +11686,14 @@ class TableBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f6d25e52c30b0b7286abf36f2a6ee60a02e862fb6df8e82b71d9b90cee502be0)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadWriteData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadWriteData", [grantee]))
 
     @jsii.member(jsii_name="grantStream")
     def grant_stream(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this table's stream to an IAM principal's policy.
 
         If ``encryptionKey`` is present, appropriate grants to the key needs to be added
@@ -11687,10 +11706,10 @@ class TableBase(
             type_hints = typing.get_type_hints(_typecheckingstub__a4b6b38ba420844c8815b78957e2d5e7e45d3f2a55affcd2a0769f0a121fe9b7)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStream", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStream", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantStreamRead")
-    def grant_stream_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_stream_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all stream data read operations for this table's stream: DescribeStream, GetRecords, GetShardIterator, ListStreams.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -11701,13 +11720,13 @@ class TableBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2b62b80f4b58b80077ac342b0c913249cf058ab84b0e54384e137c3edb89b03c)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStreamRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStreamRead", [grantee]))
 
     @jsii.member(jsii_name="grantTableListStreams")
     def grant_table_list_streams(
         self,
-        grantee: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Permits an IAM Principal to list streams attached to current dynamodb table.
 
         :param grantee: The principal (no-op if undefined).
@@ -11715,10 +11734,10 @@ class TableBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4e48bf8be7a8169ede94feb210d74931365032365d988dbee88d6106f7289ea5)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantTableListStreams", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantTableListStreams", [grantee]))
 
     @jsii.member(jsii_name="grantWriteData")
-    def grant_write_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write_data(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all data write operations to this table: BatchWriteItem, PutItem, UpdateItem, DeleteItem, DescribeTable.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -11729,7 +11748,7 @@ class TableBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3ebe1219e4b4d04b2759efb860954891bed9d9e70a242de97db85ab2b40911a5)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWriteData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWriteData", [grantee]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -11741,14 +11760,14 @@ class TableBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Table.
 
         By default, the metric will be calculated as a sum over a period of 5 minutes.
@@ -11786,7 +11805,7 @@ class TableBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricConditionalCheckFailedRequests")
     def metric_conditional_check_failed_requests(
@@ -11797,14 +11816,14 @@ class TableBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the conditional check failed requests this table.
 
         By default, the metric will be calculated as a sum over a period of 5 minutes.
@@ -11838,7 +11857,7 @@ class TableBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricConditionalCheckFailedRequests", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricConditionalCheckFailedRequests", [props]))
 
     @jsii.member(jsii_name="metricConsumedReadCapacityUnits")
     def metric_consumed_read_capacity_units(
@@ -11849,14 +11868,14 @@ class TableBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the consumed read capacity units this table.
 
         By default, the metric will be calculated as a sum over a period of 5 minutes.
@@ -11890,7 +11909,7 @@ class TableBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricConsumedReadCapacityUnits", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricConsumedReadCapacityUnits", [props]))
 
     @jsii.member(jsii_name="metricConsumedWriteCapacityUnits")
     def metric_consumed_write_capacity_units(
@@ -11901,14 +11920,14 @@ class TableBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the consumed write capacity units this table.
 
         By default, the metric will be calculated as a sum over a period of 5 minutes.
@@ -11942,7 +11961,7 @@ class TableBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricConsumedWriteCapacityUnits", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricConsumedWriteCapacityUnits", [props]))
 
     @jsii.member(jsii_name="metricSuccessfulRequestLatency")
     def metric_successful_request_latency(
@@ -11953,14 +11972,14 @@ class TableBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the successful request latency this table.
 
         By default, the metric will be calculated as an average over a period of 5 minutes.
@@ -11994,7 +12013,7 @@ class TableBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSuccessfulRequestLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSuccessfulRequestLatency", [props]))
 
     @jsii.member(jsii_name="metricSystemErrors")
     def metric_system_errors(
@@ -12005,14 +12024,14 @@ class TableBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''(deprecated) Metric for the system errors this table.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -12047,26 +12066,26 @@ class TableBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSystemErrors", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSystemErrors", [props]))
 
     @jsii.member(jsii_name="metricSystemErrorsForOperations")
     def metric_system_errors_for_operations(
         self,
         *,
-        operations: typing.Optional[typing.Sequence[Operation]] = None,
+        operations: typing.Optional[typing.Sequence["Operation"]] = None,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _IMetric_c7fd29de:
+    ) -> "_IMetric_c7fd29de":
         '''Metric for the system errors this table.
 
         This will sum errors across all possible operations.
@@ -12103,7 +12122,7 @@ class TableBase(
             visible=visible,
         )
 
-        return typing.cast(_IMetric_c7fd29de, jsii.invoke(self, "metricSystemErrorsForOperations", [props]))
+        return typing.cast("_IMetric_c7fd29de", jsii.invoke(self, "metricSystemErrorsForOperations", [props]))
 
     @jsii.member(jsii_name="metricThrottledRequests")
     def metric_throttled_requests(
@@ -12114,14 +12133,14 @@ class TableBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''(deprecated) How many requests are throttled on this table.
 
         Default: sum over 5 minutes
@@ -12158,7 +12177,7 @@ class TableBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricThrottledRequests", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricThrottledRequests", [props]))
 
     @jsii.member(jsii_name="metricThrottledRequestsForOperation")
     def metric_throttled_requests_for_operation(
@@ -12170,14 +12189,14 @@ class TableBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''How many requests are throttled on this table, for the given operation.
 
         Default: sum over 5 minutes
@@ -12214,26 +12233,26 @@ class TableBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricThrottledRequestsForOperation", [operation, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricThrottledRequestsForOperation", [operation, props]))
 
     @jsii.member(jsii_name="metricThrottledRequestsForOperations")
     def metric_throttled_requests_for_operations(
         self,
         *,
-        operations: typing.Optional[typing.Sequence[Operation]] = None,
+        operations: typing.Optional[typing.Sequence["Operation"]] = None,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _IMetric_c7fd29de:
+    ) -> "_IMetric_c7fd29de":
         '''How many requests are throttled on this table.
 
         This will sum errors across all possible operations.
@@ -12270,7 +12289,7 @@ class TableBase(
             visible=visible,
         )
 
-        return typing.cast(_IMetric_c7fd29de, jsii.invoke(self, "metricThrottledRequestsForOperations", [props]))
+        return typing.cast("_IMetric_c7fd29de", jsii.invoke(self, "metricThrottledRequestsForOperations", [props]))
 
     @jsii.member(jsii_name="metricUserErrors")
     def metric_user_errors(
@@ -12281,14 +12300,14 @@ class TableBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the user errors.
 
         Note that this metric reports user errors across all
@@ -12325,7 +12344,7 @@ class TableBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricUserErrors", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricUserErrors", [props]))
 
     @builtins.property
     @jsii.member(jsii_name="grants")
@@ -12351,12 +12370,12 @@ class TableBase(
 
     @builtins.property
     @jsii.member(jsii_name="streamGrants")
-    def stream_grants(self) -> StreamGrants:
+    def stream_grants(self) -> "StreamGrants":
         '''Grant a predefined set of permissions on this Table's Stream, if present.
 
         Will throw if the Table has not been configured for streaming.
         '''
-        return typing.cast(StreamGrants, jsii.get(self, "streamGrants"))
+        return typing.cast("StreamGrants", jsii.get(self, "streamGrants"))
 
     @builtins.property
     @jsii.member(jsii_name="tableArn")
@@ -12380,14 +12399,14 @@ class TableBase(
 
     @builtins.property
     @jsii.member(jsii_name="tableRef")
-    def table_ref(self) -> _TableReference_642dbaf9:
+    def table_ref(self) -> "_TableReference_642dbaf9":
         '''A reference to a Table resource.'''
-        return typing.cast(_TableReference_642dbaf9, jsii.get(self, "tableRef"))
+        return typing.cast("_TableReference_642dbaf9", jsii.get(self, "tableRef"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
     @abc.abstractmethod
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''KMS encryption key, if this table uses a customer-managed encryption key.'''
         ...
 
@@ -12411,7 +12430,7 @@ class TableBase(
     @builtins.property
     @jsii.member(jsii_name="resourcePolicy")
     @abc.abstractmethod
-    def resource_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def resource_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''Resource policy to assign to table.
 
         :attribute: true
@@ -12420,7 +12439,10 @@ class TableBase(
 
     @resource_policy.setter
     @abc.abstractmethod
-    def resource_policy(self, value: typing.Optional[_PolicyDocument_3ac34393]) -> None:
+    def resource_policy(
+        self,
+        value: typing.Optional["_PolicyDocument_3ac34393"],
+    ) -> None:
         ...
 
 
@@ -12431,8 +12453,8 @@ class _TableBaseProxy(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the resource policy associated with this table.
 
         :param statement: -
@@ -12440,7 +12462,7 @@ class _TableBaseProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9998fbfc8fdb03f3fe5356d84b9b9390d26bd73efb0eab172a4c638aeae5fc01)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @builtins.property
     @jsii.member(jsii_name="hasIndex")
@@ -12467,9 +12489,9 @@ class _TableBaseProxy(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''KMS encryption key, if this table uses a customer-managed encryption key.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionKey"))
 
     @builtins.property
     @jsii.member(jsii_name="regions")
@@ -12488,15 +12510,18 @@ class _TableBaseProxy(
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicy")
-    def resource_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def resource_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''Resource policy to assign to table.
 
         :attribute: true
         '''
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], jsii.get(self, "resourcePolicy"))
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], jsii.get(self, "resourcePolicy"))
 
     @resource_policy.setter
-    def resource_policy(self, value: typing.Optional[_PolicyDocument_3ac34393]) -> None:
+    def resource_policy(
+        self,
+        value: typing.Optional["_PolicyDocument_3ac34393"],
+    ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__385df27fafa61fd6d1e8ebb872e4af26b3119795ee6bb9684e56f891cd86ba94)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -12516,7 +12541,7 @@ class TableBaseV2(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -12549,8 +12574,8 @@ class TableBaseV2(
     @abc.abstractmethod
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the resource policy associated with this table.
 
         A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
@@ -12564,9 +12589,9 @@ class TableBaseV2(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this table to an IAM principal's policy.
 
         Note: If ``encryptionKey`` is present, appropriate grants to the key needs to be added
@@ -12579,10 +12604,10 @@ class TableBaseV2(
             type_hints = typing.get_type_hints(_typecheckingstub__8c13e6b8a6a1b9f8e195999afa23db9ba994042dcd37d7e98faab10cbfd364e6)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantFullAccess")
-    def grant_full_access(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_full_access(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal to all DynamoDB operations ('dynamodb:*') on this table.
 
         Note: Appropriate grants will also be added to the customer-managed KMS keys associated with this
@@ -12593,10 +12618,10 @@ class TableBaseV2(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6479d8e2629b5f6ff6b152daddcdaca216fe257a46e39a5e869a873b4ad97125)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantFullAccess", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantFullAccess", [grantee]))
 
     @jsii.member(jsii_name="grantReadData")
-    def grant_read_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_data(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all data read operations on this table.
 
         Actions: BatchGetItem, GetRecords, GetShardIterator, Query, GetItem, Scan, DescribeTable.
@@ -12609,10 +12634,13 @@ class TableBaseV2(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__395eb24481890a472d62b610e201fea67ad0777657640defd186e1e13ec2db95)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadData", [grantee]))
 
     @jsii.member(jsii_name="grantReadWriteData")
-    def grant_read_write_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_write_data(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Permits an IAM principal to all data read/write operations on this table.
 
         Actions: BatchGetItem, GetRecords, GetShardIterator, Query, GetItem, Scan, BatchWriteItem, PutItem, UpdateItem,
@@ -12626,14 +12654,14 @@ class TableBaseV2(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d231b7ad32b7cb877aaf023856284d4f5fa9d26aace79fceedcd1f88aff5f629)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadWriteData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadWriteData", [grantee]))
 
     @jsii.member(jsii_name="grantStream")
     def grant_stream(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this table to an IAM principal's policy.
 
         Note: If ``encryptionKey`` is present, appropriate grants to the key needs to be added
@@ -12646,10 +12674,10 @@ class TableBaseV2(
             type_hints = typing.get_type_hints(_typecheckingstub__6ab4ea68ea8129f19c83a48ebd226f802bce38ea3f9173f8e93fcd4648de660c)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStream", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStream", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantStreamRead")
-    def grant_stream_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_stream_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this table to an IAM principal's policy.
 
         Actions: DescribeStream, GetRecords, GetShardIterator, ListStreams.
@@ -12662,13 +12690,13 @@ class TableBaseV2(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__eb0b88e88d18cfcb35e6996770573f775f19e85717b53d9d8262199419d594c5)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantStreamRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantStreamRead", [grantee]))
 
     @jsii.member(jsii_name="grantTableListStreams")
     def grant_table_list_streams(
         self,
-        grantee: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Permits an IAM principal to list streams attached to this table.
 
         :param grantee: the principal to grant access to.
@@ -12676,10 +12704,10 @@ class TableBaseV2(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cacdac7a1267c83dc569633bbce44b177fb08e29d3d58beca724b3950d997b2b)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantTableListStreams", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantTableListStreams", [grantee]))
 
     @jsii.member(jsii_name="grantWriteData")
-    def grant_write_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write_data(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all data write operations on this table.
 
         Actions: BatchWriteItem, PutItem, UpdateItem, DeleteItem, DescribeTable.
@@ -12692,7 +12720,7 @@ class TableBaseV2(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6322d35f914af18be6e6fc859584f54bb1c978a75ca691803397727f06769c0b)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWriteData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWriteData", [grantee]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -12704,14 +12732,14 @@ class TableBaseV2(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this table.
 
         By default, the metric will be calculated as a sum over a period of 5 minutes.
@@ -12749,7 +12777,7 @@ class TableBaseV2(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricConditionalCheckFailedRequests")
     def metric_conditional_check_failed_requests(
@@ -12760,14 +12788,14 @@ class TableBaseV2(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the conditional check failed requests for this table.
 
         By default, the metric will be calculated as a sum over a period of 5 minutes.
@@ -12801,7 +12829,7 @@ class TableBaseV2(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricConditionalCheckFailedRequests", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricConditionalCheckFailedRequests", [props]))
 
     @jsii.member(jsii_name="metricConsumedReadCapacityUnits")
     def metric_consumed_read_capacity_units(
@@ -12812,14 +12840,14 @@ class TableBaseV2(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the consumed read capacity units for this table.
 
         By default, the metric will be calculated as a sum over a period of 5 minutes.
@@ -12853,7 +12881,7 @@ class TableBaseV2(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricConsumedReadCapacityUnits", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricConsumedReadCapacityUnits", [props]))
 
     @jsii.member(jsii_name="metricConsumedWriteCapacityUnits")
     def metric_consumed_write_capacity_units(
@@ -12864,14 +12892,14 @@ class TableBaseV2(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the consumed write capacity units for this table.
 
         By default, the metric will be calculated as a sum over a period of 5 minutes.
@@ -12905,7 +12933,7 @@ class TableBaseV2(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricConsumedWriteCapacityUnits", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricConsumedWriteCapacityUnits", [props]))
 
     @jsii.member(jsii_name="metricSuccessfulRequestLatency")
     def metric_successful_request_latency(
@@ -12916,14 +12944,14 @@ class TableBaseV2(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the successful request latency for this table.
 
         By default, the metric will be calculated as an average over a period of 5 minutes.
@@ -12957,7 +12985,7 @@ class TableBaseV2(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSuccessfulRequestLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSuccessfulRequestLatency", [props]))
 
     @jsii.member(jsii_name="metricSystemErrors")
     def metric_system_errors(
@@ -12968,14 +12996,14 @@ class TableBaseV2(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''(deprecated) Metric for the system errors this table.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -13010,26 +13038,26 @@ class TableBaseV2(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSystemErrors", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSystemErrors", [props]))
 
     @jsii.member(jsii_name="metricSystemErrorsForOperations")
     def metric_system_errors_for_operations(
         self,
         *,
-        operations: typing.Optional[typing.Sequence[Operation]] = None,
+        operations: typing.Optional[typing.Sequence["Operation"]] = None,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _IMetric_c7fd29de:
+    ) -> "_IMetric_c7fd29de":
         '''Metric for the system errors for this table. This will sum errors across all possible operations.
 
         By default, each individual metric will be calculated as a sum over a period of 5 minutes.
@@ -13065,7 +13093,7 @@ class TableBaseV2(
             visible=visible,
         )
 
-        return typing.cast(_IMetric_c7fd29de, jsii.invoke(self, "metricSystemErrorsForOperations", [props]))
+        return typing.cast("_IMetric_c7fd29de", jsii.invoke(self, "metricSystemErrorsForOperations", [props]))
 
     @jsii.member(jsii_name="metricThrottledRequests")
     def metric_throttled_requests(
@@ -13076,14 +13104,14 @@ class TableBaseV2(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''(deprecated) How many requests are throttled on this table.
 
         By default, each individual metric will be calculated as a sum over a period of 5 minutes.
@@ -13121,27 +13149,27 @@ class TableBaseV2(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricThrottledRequests", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricThrottledRequests", [props]))
 
     @jsii.member(jsii_name="metricThrottledRequestsForOperation")
     def metric_throttled_requests_for_operation(
         self,
         operation: builtins.str,
         *,
-        operations: typing.Optional[typing.Sequence[Operation]] = None,
+        operations: typing.Optional[typing.Sequence["Operation"]] = None,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _IMetric_c7fd29de:
+    ) -> "_IMetric_c7fd29de":
         '''How many requests are throttled on this table for the given operation.
 
         By default, the metric will be calculated as an average over a period of 5 minutes.
@@ -13181,26 +13209,26 @@ class TableBaseV2(
             visible=visible,
         )
 
-        return typing.cast(_IMetric_c7fd29de, jsii.invoke(self, "metricThrottledRequestsForOperation", [operation, props]))
+        return typing.cast("_IMetric_c7fd29de", jsii.invoke(self, "metricThrottledRequestsForOperation", [operation, props]))
 
     @jsii.member(jsii_name="metricThrottledRequestsForOperations")
     def metric_throttled_requests_for_operations(
         self,
         *,
-        operations: typing.Optional[typing.Sequence[Operation]] = None,
+        operations: typing.Optional[typing.Sequence["Operation"]] = None,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _IMetric_c7fd29de:
+    ) -> "_IMetric_c7fd29de":
         '''How many requests are throttled on this table. This will sum errors across all possible operations.
 
         By default, each individual metric will be calculated as a sum over a period of 5 minutes.
@@ -13236,7 +13264,7 @@ class TableBaseV2(
             visible=visible,
         )
 
-        return typing.cast(_IMetric_c7fd29de, jsii.invoke(self, "metricThrottledRequestsForOperations", [props]))
+        return typing.cast("_IMetric_c7fd29de", jsii.invoke(self, "metricThrottledRequestsForOperations", [props]))
 
     @jsii.member(jsii_name="metricUserErrors")
     def metric_user_errors(
@@ -13247,14 +13275,14 @@ class TableBaseV2(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the user errors for this table.
 
         Note: This metric reports user errors across all the tables in the account and region the table
@@ -13291,7 +13319,7 @@ class TableBaseV2(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricUserErrors", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricUserErrors", [props]))
 
     @builtins.property
     @jsii.member(jsii_name="hasIndex")
@@ -13328,7 +13356,7 @@ class TableBaseV2(
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
     @abc.abstractmethod
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The KMS encryption key for the table.'''
         ...
 
@@ -13355,13 +13383,16 @@ class TableBaseV2(
     @builtins.property
     @jsii.member(jsii_name="resourcePolicy")
     @abc.abstractmethod
-    def resource_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def resource_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''The resource policy for the table.'''
         ...
 
     @resource_policy.setter
     @abc.abstractmethod
-    def resource_policy(self, value: typing.Optional[_PolicyDocument_3ac34393]) -> None:
+    def resource_policy(
+        self,
+        value: typing.Optional["_PolicyDocument_3ac34393"],
+    ) -> None:
         ...
 
 
@@ -13372,8 +13403,8 @@ class _TableBaseV2Proxy(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the resource policy associated with this table.
 
         A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
@@ -13385,7 +13416,7 @@ class _TableBaseV2Proxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8ddb2818dbfcaf1b52fed7edb8ce145b274541d665df431c417e676bd4f69dec)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @builtins.property
     @jsii.member(jsii_name="hasIndex")
@@ -13417,9 +13448,9 @@ class _TableBaseV2Proxy(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The KMS encryption key for the table.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionKey"))
 
     @builtins.property
     @jsii.member(jsii_name="tableId")
@@ -13441,12 +13472,15 @@ class _TableBaseV2Proxy(
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicy")
-    def resource_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def resource_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''The resource policy for the table.'''
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], jsii.get(self, "resourcePolicy"))
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], jsii.get(self, "resourcePolicy"))
 
     @resource_policy.setter
-    def resource_policy(self, value: typing.Optional[_PolicyDocument_3ac34393]) -> None:
+    def resource_policy(
+        self,
+        value: typing.Optional["_PolicyDocument_3ac34393"],
+    ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cb944fe3dd5a924cda3570a3226b526ff95d46099b3de4b4ab2a005c34091870)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -13546,7 +13580,7 @@ class TableEncryptionV2(
     @builtins.classmethod
     def customer_managed_key(
         cls,
-        table_key: _IKey_5f11635f,
+        table_key: "_IKey_5f11635f",
         replica_key_arns: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> "TableEncryptionV2":
         '''Configure server-side encryption using customer managed keys.
@@ -13568,8 +13602,8 @@ class TableEncryptionV2(
 
     @builtins.property
     @jsii.member(jsii_name="type")
-    def type(self) -> TableEncryption:
-        return typing.cast(TableEncryption, jsii.get(self, "type"))
+    def type(self) -> "TableEncryption":
+        return typing.cast("TableEncryption", jsii.get(self, "type"))
 
     @builtins.property
     @jsii.member(jsii_name="replicaKeyArns")
@@ -13580,8 +13614,8 @@ class TableEncryptionV2(
 
     @builtins.property
     @jsii.member(jsii_name="tableKey")
-    def table_key(self) -> typing.Optional[_IKey_5f11635f]:
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "tableKey"))
+    def table_key(self) -> typing.Optional["_IKey_5f11635f"]:
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "tableKey"))
 
 
 class _TableEncryptionV2Proxy(TableEncryptionV2):
@@ -13625,10 +13659,10 @@ class TableGrants(
     def __init__(
         self,
         *,
-        table: _ITableRef_4478f0ad,
-        encrypted_resource: typing.Optional[_IEncryptedResource_8e9bf351] = None,
+        table: "_ITableRef_4478f0ad",
+        encrypted_resource: typing.Optional["_IEncryptedResource_8e9bf351"] = None,
         has_index: typing.Optional[builtins.bool] = None,
-        policy_resource: typing.Optional[_IResourceWithPolicyV2_01035ec6] = None,
+        policy_resource: typing.Optional["_IResourceWithPolicyV2_01035ec6"] = None,
         regions: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
@@ -13651,9 +13685,9 @@ class TableGrants(
     @jsii.member(jsii_name="actions")
     def actions(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this table to an IAM principal's policy.
 
         If ``encryptionKey`` is present, appropriate grants to the key needs to be added
@@ -13666,10 +13700,10 @@ class TableGrants(
             type_hints = typing.get_type_hints(_typecheckingstub__0d339dc811423411a2156ea2385fb10952440a923804b6266277865c54dec04c)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "actions", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "actions", [grantee, *actions]))
 
     @jsii.member(jsii_name="fullAccess")
-    def full_access(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def full_access(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits all DynamoDB operations ("dynamodb:*") to an IAM principal.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -13680,10 +13714,10 @@ class TableGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8209d22b6b16878519d0c5c26e15333f972b2616be79096021721c67b66a8968)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "fullAccess", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "fullAccess", [grantee]))
 
     @jsii.member(jsii_name="readData")
-    def read_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def read_data(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all data read operations from this table: BatchGetItem, GetRecords, GetShardIterator, Query, GetItem, Scan, DescribeTable.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -13694,10 +13728,10 @@ class TableGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6c9c1a85fb738d4c8207a98c3da430616ec8b930c7a222722c3880f7e1c96c5e)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "readData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "readData", [grantee]))
 
     @jsii.member(jsii_name="readWriteData")
-    def read_write_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def read_write_data(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal to all data read/write operations to this table.
 
         BatchGetItem, GetRecords, GetShardIterator, Query, GetItem, Scan,
@@ -13711,10 +13745,10 @@ class TableGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4184f792e842150aa560b761ea606add307e9e3aeb3ec9385d46abe654fbce6e)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "readWriteData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "readWriteData", [grantee]))
 
     @jsii.member(jsii_name="writeData")
-    def write_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def write_data(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits an IAM principal all data write operations to this table: BatchWriteItem, PutItem, UpdateItem, DeleteItem, DescribeTable.
 
         Appropriate grants will also be added to the customer-managed KMS key
@@ -13725,7 +13759,7 @@ class TableGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5ceb76b87b50120af36678b706fd047c95ddee4ef26415e89dc6db0167e3aae2)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "writeData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "writeData", [grantee]))
 
 
 @jsii.data_type(
@@ -13743,10 +13777,10 @@ class TableGrantsProps:
     def __init__(
         self,
         *,
-        table: _ITableRef_4478f0ad,
-        encrypted_resource: typing.Optional[_IEncryptedResource_8e9bf351] = None,
+        table: "_ITableRef_4478f0ad",
+        encrypted_resource: typing.Optional["_IEncryptedResource_8e9bf351"] = None,
         has_index: typing.Optional[builtins.bool] = None,
-        policy_resource: typing.Optional[_IResourceWithPolicyV2_01035ec6] = None,
+        policy_resource: typing.Optional["_IResourceWithPolicyV2_01035ec6"] = None,
         regions: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Construction properties for TableGrants.
@@ -13801,20 +13835,20 @@ class TableGrantsProps:
             self._values["regions"] = regions
 
     @builtins.property
-    def table(self) -> _ITableRef_4478f0ad:
+    def table(self) -> "_ITableRef_4478f0ad":
         '''The table to grant permissions on.'''
         result = self._values.get("table")
         assert result is not None, "Required property 'table' is missing"
-        return typing.cast(_ITableRef_4478f0ad, result)
+        return typing.cast("_ITableRef_4478f0ad", result)
 
     @builtins.property
-    def encrypted_resource(self) -> typing.Optional[_IEncryptedResource_8e9bf351]:
+    def encrypted_resource(self) -> typing.Optional["_IEncryptedResource_8e9bf351"]:
         '''The encrypted resource on which actions will be allowed.
 
         :default: - No permission is added to the KMS key, even if it exists
         '''
         result = self._values.get("encrypted_resource")
-        return typing.cast(typing.Optional[_IEncryptedResource_8e9bf351], result)
+        return typing.cast(typing.Optional["_IEncryptedResource_8e9bf351"], result)
 
     @builtins.property
     def has_index(self) -> typing.Optional[builtins.bool]:
@@ -13828,13 +13862,13 @@ class TableGrantsProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def policy_resource(self) -> typing.Optional[_IResourceWithPolicyV2_01035ec6]:
+    def policy_resource(self) -> typing.Optional["_IResourceWithPolicyV2_01035ec6"]:
         '''The resource with policy on which actions will be allowed.
 
         :default: - No resource policy is created
         '''
         result = self._values.get("policy_resource")
-        return typing.cast(typing.Optional[_IResourceWithPolicyV2_01035ec6], result)
+        return typing.cast(typing.Optional["_IResourceWithPolicyV2_01035ec6"], result)
 
     @builtins.property
     def regions(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -13892,27 +13926,27 @@ class TableOptions(SchemaOptions):
     def __init__(
         self,
         *,
-        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
-        sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
-        billing_mode: typing.Optional[BillingMode] = None,
+        partition_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
+        billing_mode: typing.Optional["BillingMode"] = None,
         contributor_insights_enabled: typing.Optional[builtins.bool] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["ContributorInsightsSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         deletion_protection: typing.Optional[builtins.bool] = None,
-        encryption: typing.Optional[TableEncryption] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
-        import_source: typing.Optional[typing.Union[ImportSourceSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        encryption: typing.Optional["TableEncryption"] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
+        import_source: typing.Optional[typing.Union["ImportSourceSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         max_read_request_units: typing.Optional[jsii.Number] = None,
         max_write_request_units: typing.Optional[jsii.Number] = None,
         point_in_time_recovery: typing.Optional[builtins.bool] = None,
-        point_in_time_recovery_specification: typing.Optional[typing.Union[PointInTimeRecoverySpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        point_in_time_recovery_specification: typing.Optional[typing.Union["PointInTimeRecoverySpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         read_capacity: typing.Optional[jsii.Number] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        replica_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        replica_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         replication_regions: typing.Optional[typing.Sequence[builtins.str]] = None,
-        replication_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        resource_policy: typing.Optional[_PolicyDocument_3ac34393] = None,
-        stream: typing.Optional[StreamViewType] = None,
-        table_class: typing.Optional[TableClass] = None,
+        replication_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        resource_policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        stream: typing.Optional["StreamViewType"] = None,
+        table_class: typing.Optional["TableClass"] = None,
         time_to_live_attribute: typing.Optional[builtins.str] = None,
         wait_for_replication_to_finish: typing.Optional[builtins.bool] = None,
         warm_throughput: typing.Optional[typing.Union["WarmThroughput", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -14112,7 +14146,7 @@ class TableOptions(SchemaOptions):
             self._values["write_capacity"] = write_capacity
 
     @builtins.property
-    def partition_key(self) -> typing.Optional[Attribute]:
+    def partition_key(self) -> typing.Optional["Attribute"]:
         '''Partition key attribute definition.
 
         If a single field forms the partition key, you can use this field.  Use the
@@ -14122,10 +14156,10 @@ class TableOptions(SchemaOptions):
         :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         '''
         result = self._values.get("partition_key")
-        return typing.cast(typing.Optional[Attribute], result)
+        return typing.cast(typing.Optional["Attribute"], result)
 
     @builtins.property
-    def sort_key(self) -> typing.Optional[Attribute]:
+    def sort_key(self) -> typing.Optional["Attribute"]:
         '''Sort key attribute definition.
 
         If a single field forms the sort key, you can use this field.  Use the
@@ -14135,16 +14169,16 @@ class TableOptions(SchemaOptions):
         :default: - no sort key
         '''
         result = self._values.get("sort_key")
-        return typing.cast(typing.Optional[Attribute], result)
+        return typing.cast(typing.Optional["Attribute"], result)
 
     @builtins.property
-    def billing_mode(self) -> typing.Optional[BillingMode]:
+    def billing_mode(self) -> typing.Optional["BillingMode"]:
         '''Specify how you are charged for read and write throughput and how you manage capacity.
 
         :default: PROVISIONED if ``replicationRegions`` is not specified, PAY_PER_REQUEST otherwise
         '''
         result = self._values.get("billing_mode")
-        return typing.cast(typing.Optional[BillingMode], result)
+        return typing.cast(typing.Optional["BillingMode"], result)
 
     @builtins.property
     def contributor_insights_enabled(self) -> typing.Optional[builtins.bool]:
@@ -14162,13 +14196,13 @@ class TableOptions(SchemaOptions):
     @builtins.property
     def contributor_insights_specification(
         self,
-    ) -> typing.Optional[ContributorInsightsSpecification]:
+    ) -> typing.Optional["ContributorInsightsSpecification"]:
         '''Whether CloudWatch contributor insights is enabled and what mode is selected.
 
         :default: - contributor insights is not enabled
         '''
         result = self._values.get("contributor_insights_specification")
-        return typing.cast(typing.Optional[ContributorInsightsSpecification], result)
+        return typing.cast(typing.Optional["ContributorInsightsSpecification"], result)
 
     @builtins.property
     def deletion_protection(self) -> typing.Optional[builtins.bool]:
@@ -14180,7 +14214,7 @@ class TableOptions(SchemaOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def encryption(self) -> typing.Optional[TableEncryption]:
+    def encryption(self) -> typing.Optional["TableEncryption"]:
         '''Whether server-side encryption with an AWS managed customer master key is enabled.
 
         This property cannot be set if ``serverSideEncryption`` is set.
@@ -14196,10 +14230,10 @@ class TableOptions(SchemaOptions):
         :default: - The table is encrypted with an encryption key managed by DynamoDB, and you are not charged any fee for using it.
         '''
         result = self._values.get("encryption")
-        return typing.cast(typing.Optional[TableEncryption], result)
+        return typing.cast(typing.Optional["TableEncryption"], result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''External KMS key to use for table encryption.
 
         This property can only be set if ``encryption`` is set to ``TableEncryption.CUSTOMER_MANAGED``.
@@ -14212,16 +14246,16 @@ class TableOptions(SchemaOptions):
         an encryption key managed by DynamoDB, and you are not charged any fee for using it.
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def import_source(self) -> typing.Optional[ImportSourceSpecification]:
+    def import_source(self) -> typing.Optional["ImportSourceSpecification"]:
         '''The properties of data being imported from the S3 bucket source to the table.
 
         :default: - no data import from the S3 bucket
         '''
         result = self._values.get("import_source")
-        return typing.cast(typing.Optional[ImportSourceSpecification], result)
+        return typing.cast(typing.Optional["ImportSourceSpecification"], result)
 
     @builtins.property
     def max_read_request_units(self) -> typing.Optional[jsii.Number]:
@@ -14267,13 +14301,13 @@ class TableOptions(SchemaOptions):
     @builtins.property
     def point_in_time_recovery_specification(
         self,
-    ) -> typing.Optional[PointInTimeRecoverySpecification]:
+    ) -> typing.Optional["PointInTimeRecoverySpecification"]:
         '''Whether point-in-time recovery is enabled and recoveryPeriodInDays is set.
 
         :default: - point in time recovery is not enabled.
         '''
         result = self._values.get("point_in_time_recovery_specification")
-        return typing.cast(typing.Optional[PointInTimeRecoverySpecification], result)
+        return typing.cast(typing.Optional["PointInTimeRecoverySpecification"], result)
 
     @builtins.property
     def read_capacity(self) -> typing.Optional[jsii.Number]:
@@ -14290,22 +14324,22 @@ class TableOptions(SchemaOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy to apply to the DynamoDB Table.
 
         :default: RemovalPolicy.RETAIN
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def replica_removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def replica_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy to apply to the DynamoDB replica tables.
 
         :default: undefined - use DynamoDB Table's removal policy
         '''
         result = self._values.get("replica_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
     def replication_regions(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -14317,16 +14351,16 @@ class TableOptions(SchemaOptions):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def replication_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def replication_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The timeout for a table replication operation in a single region.
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("replication_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def resource_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def resource_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''Resource policy to assign to table.
 
         :default: - No resource policy statement
@@ -14334,25 +14368,25 @@ class TableOptions(SchemaOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-resourcepolicy
         '''
         result = self._values.get("resource_policy")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
-    def stream(self) -> typing.Optional[StreamViewType]:
+    def stream(self) -> typing.Optional["StreamViewType"]:
         '''When an item in the table is modified, StreamViewType determines what information is written to the stream for this table.
 
         :default: - streams are disabled unless ``replicationRegions`` is specified
         '''
         result = self._values.get("stream")
-        return typing.cast(typing.Optional[StreamViewType], result)
+        return typing.cast(typing.Optional["StreamViewType"], result)
 
     @builtins.property
-    def table_class(self) -> typing.Optional[TableClass]:
+    def table_class(self) -> typing.Optional["TableClass"]:
         '''Specify the table class.
 
         :default: STANDARD
         '''
         result = self._values.get("table_class")
-        return typing.cast(typing.Optional[TableClass], result)
+        return typing.cast(typing.Optional["TableClass"], result)
 
     @builtins.property
     def time_to_live_attribute(self) -> typing.Optional[builtins.str]:
@@ -14449,14 +14483,14 @@ class TableOptionsV2:
         self,
         *,
         contributor_insights: typing.Optional[builtins.bool] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["ContributorInsightsSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         deletion_protection: typing.Optional[builtins.bool] = None,
-        kinesis_stream: typing.Optional[_IStream_4e2457d2] = None,
+        kinesis_stream: typing.Optional["_IStream_4e2457d2"] = None,
         point_in_time_recovery: typing.Optional[builtins.bool] = None,
-        point_in_time_recovery_specification: typing.Optional[typing.Union[PointInTimeRecoverySpecification, typing.Dict[builtins.str, typing.Any]]] = None,
-        resource_policy: typing.Optional[_PolicyDocument_3ac34393] = None,
-        table_class: typing.Optional[TableClass] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        point_in_time_recovery_specification: typing.Optional[typing.Union["PointInTimeRecoverySpecification", typing.Dict[builtins.str, typing.Any]]] = None,
+        resource_policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        table_class: typing.Optional["TableClass"] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Options used to configure a DynamoDB table.
 
@@ -14474,6 +14508,7 @@ class TableOptionsV2:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_dynamodb as dynamodb
@@ -14559,13 +14594,13 @@ class TableOptionsV2:
     @builtins.property
     def contributor_insights_specification(
         self,
-    ) -> typing.Optional[ContributorInsightsSpecification]:
+    ) -> typing.Optional["ContributorInsightsSpecification"]:
         '''Whether CloudWatch contributor insights is enabled and what mode is selected.
 
         :default: - contributor insights is not enabled
         '''
         result = self._values.get("contributor_insights_specification")
-        return typing.cast(typing.Optional[ContributorInsightsSpecification], result)
+        return typing.cast(typing.Optional["ContributorInsightsSpecification"], result)
 
     @builtins.property
     def deletion_protection(self) -> typing.Optional[builtins.bool]:
@@ -14577,13 +14612,13 @@ class TableOptionsV2:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def kinesis_stream(self) -> typing.Optional[_IStream_4e2457d2]:
+    def kinesis_stream(self) -> typing.Optional["_IStream_4e2457d2"]:
         '''Kinesis Data Stream to capture item level changes.
 
         :default: - no Kinesis Data Stream
         '''
         result = self._values.get("kinesis_stream")
-        return typing.cast(typing.Optional[_IStream_4e2457d2], result)
+        return typing.cast(typing.Optional["_IStream_4e2457d2"], result)
 
     @builtins.property
     def point_in_time_recovery(self) -> typing.Optional[builtins.bool]:
@@ -14601,16 +14636,16 @@ class TableOptionsV2:
     @builtins.property
     def point_in_time_recovery_specification(
         self,
-    ) -> typing.Optional[PointInTimeRecoverySpecification]:
+    ) -> typing.Optional["PointInTimeRecoverySpecification"]:
         '''Whether point-in-time recovery is enabled and recoveryPeriodInDays is set.
 
         :default: - point in time recovery is not enabled.
         '''
         result = self._values.get("point_in_time_recovery_specification")
-        return typing.cast(typing.Optional[PointInTimeRecoverySpecification], result)
+        return typing.cast(typing.Optional["PointInTimeRecoverySpecification"], result)
 
     @builtins.property
-    def resource_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def resource_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''Resource policy to assign to DynamoDB Table.
 
         :default: - No resource policy statements are added to the created table.
@@ -14618,25 +14653,25 @@ class TableOptionsV2:
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-resourcepolicy
         '''
         result = self._values.get("resource_policy")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
-    def table_class(self) -> typing.Optional[TableClass]:
+    def table_class(self) -> typing.Optional["TableClass"]:
         '''The table class.
 
         :default: TableClass.STANDARD
         '''
         result = self._values.get("table_class")
-        return typing.cast(typing.Optional[TableClass], result)
+        return typing.cast(typing.Optional["TableClass"], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to be applied to the primary table (default replica table).
 
         :default: - no tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14688,33 +14723,33 @@ class TableProps(TableOptions):
     def __init__(
         self,
         *,
-        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
-        sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
-        billing_mode: typing.Optional[BillingMode] = None,
+        partition_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
+        billing_mode: typing.Optional["BillingMode"] = None,
         contributor_insights_enabled: typing.Optional[builtins.bool] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["ContributorInsightsSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         deletion_protection: typing.Optional[builtins.bool] = None,
-        encryption: typing.Optional[TableEncryption] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
-        import_source: typing.Optional[typing.Union[ImportSourceSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        encryption: typing.Optional["TableEncryption"] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
+        import_source: typing.Optional[typing.Union["ImportSourceSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         max_read_request_units: typing.Optional[jsii.Number] = None,
         max_write_request_units: typing.Optional[jsii.Number] = None,
         point_in_time_recovery: typing.Optional[builtins.bool] = None,
-        point_in_time_recovery_specification: typing.Optional[typing.Union[PointInTimeRecoverySpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        point_in_time_recovery_specification: typing.Optional[typing.Union["PointInTimeRecoverySpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         read_capacity: typing.Optional[jsii.Number] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        replica_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        replica_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         replication_regions: typing.Optional[typing.Sequence[builtins.str]] = None,
-        replication_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        resource_policy: typing.Optional[_PolicyDocument_3ac34393] = None,
-        stream: typing.Optional[StreamViewType] = None,
-        table_class: typing.Optional[TableClass] = None,
+        replication_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        resource_policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        stream: typing.Optional["StreamViewType"] = None,
+        table_class: typing.Optional["TableClass"] = None,
         time_to_live_attribute: typing.Optional[builtins.str] = None,
         wait_for_replication_to_finish: typing.Optional[builtins.bool] = None,
         warm_throughput: typing.Optional[typing.Union["WarmThroughput", typing.Dict[builtins.str, typing.Any]]] = None,
         write_capacity: typing.Optional[jsii.Number] = None,
-        kinesis_precision_timestamp: typing.Optional[ApproximateCreationDateTimePrecision] = None,
-        kinesis_stream: typing.Optional[_IStream_4e2457d2] = None,
+        kinesis_precision_timestamp: typing.Optional["ApproximateCreationDateTimePrecision"] = None,
+        kinesis_stream: typing.Optional["_IStream_4e2457d2"] = None,
         table_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for a DynamoDB Table.
@@ -14875,7 +14910,7 @@ class TableProps(TableOptions):
             self._values["table_name"] = table_name
 
     @builtins.property
-    def partition_key(self) -> typing.Optional[Attribute]:
+    def partition_key(self) -> typing.Optional["Attribute"]:
         '''Partition key attribute definition.
 
         If a single field forms the partition key, you can use this field.  Use the
@@ -14885,10 +14920,10 @@ class TableProps(TableOptions):
         :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         '''
         result = self._values.get("partition_key")
-        return typing.cast(typing.Optional[Attribute], result)
+        return typing.cast(typing.Optional["Attribute"], result)
 
     @builtins.property
-    def sort_key(self) -> typing.Optional[Attribute]:
+    def sort_key(self) -> typing.Optional["Attribute"]:
         '''Sort key attribute definition.
 
         If a single field forms the sort key, you can use this field.  Use the
@@ -14898,16 +14933,16 @@ class TableProps(TableOptions):
         :default: - no sort key
         '''
         result = self._values.get("sort_key")
-        return typing.cast(typing.Optional[Attribute], result)
+        return typing.cast(typing.Optional["Attribute"], result)
 
     @builtins.property
-    def billing_mode(self) -> typing.Optional[BillingMode]:
+    def billing_mode(self) -> typing.Optional["BillingMode"]:
         '''Specify how you are charged for read and write throughput and how you manage capacity.
 
         :default: PROVISIONED if ``replicationRegions`` is not specified, PAY_PER_REQUEST otherwise
         '''
         result = self._values.get("billing_mode")
-        return typing.cast(typing.Optional[BillingMode], result)
+        return typing.cast(typing.Optional["BillingMode"], result)
 
     @builtins.property
     def contributor_insights_enabled(self) -> typing.Optional[builtins.bool]:
@@ -14925,13 +14960,13 @@ class TableProps(TableOptions):
     @builtins.property
     def contributor_insights_specification(
         self,
-    ) -> typing.Optional[ContributorInsightsSpecification]:
+    ) -> typing.Optional["ContributorInsightsSpecification"]:
         '''Whether CloudWatch contributor insights is enabled and what mode is selected.
 
         :default: - contributor insights is not enabled
         '''
         result = self._values.get("contributor_insights_specification")
-        return typing.cast(typing.Optional[ContributorInsightsSpecification], result)
+        return typing.cast(typing.Optional["ContributorInsightsSpecification"], result)
 
     @builtins.property
     def deletion_protection(self) -> typing.Optional[builtins.bool]:
@@ -14943,7 +14978,7 @@ class TableProps(TableOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def encryption(self) -> typing.Optional[TableEncryption]:
+    def encryption(self) -> typing.Optional["TableEncryption"]:
         '''Whether server-side encryption with an AWS managed customer master key is enabled.
 
         This property cannot be set if ``serverSideEncryption`` is set.
@@ -14959,10 +14994,10 @@ class TableProps(TableOptions):
         :default: - The table is encrypted with an encryption key managed by DynamoDB, and you are not charged any fee for using it.
         '''
         result = self._values.get("encryption")
-        return typing.cast(typing.Optional[TableEncryption], result)
+        return typing.cast(typing.Optional["TableEncryption"], result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''External KMS key to use for table encryption.
 
         This property can only be set if ``encryption`` is set to ``TableEncryption.CUSTOMER_MANAGED``.
@@ -14975,16 +15010,16 @@ class TableProps(TableOptions):
         an encryption key managed by DynamoDB, and you are not charged any fee for using it.
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def import_source(self) -> typing.Optional[ImportSourceSpecification]:
+    def import_source(self) -> typing.Optional["ImportSourceSpecification"]:
         '''The properties of data being imported from the S3 bucket source to the table.
 
         :default: - no data import from the S3 bucket
         '''
         result = self._values.get("import_source")
-        return typing.cast(typing.Optional[ImportSourceSpecification], result)
+        return typing.cast(typing.Optional["ImportSourceSpecification"], result)
 
     @builtins.property
     def max_read_request_units(self) -> typing.Optional[jsii.Number]:
@@ -15030,13 +15065,13 @@ class TableProps(TableOptions):
     @builtins.property
     def point_in_time_recovery_specification(
         self,
-    ) -> typing.Optional[PointInTimeRecoverySpecification]:
+    ) -> typing.Optional["PointInTimeRecoverySpecification"]:
         '''Whether point-in-time recovery is enabled and recoveryPeriodInDays is set.
 
         :default: - point in time recovery is not enabled.
         '''
         result = self._values.get("point_in_time_recovery_specification")
-        return typing.cast(typing.Optional[PointInTimeRecoverySpecification], result)
+        return typing.cast(typing.Optional["PointInTimeRecoverySpecification"], result)
 
     @builtins.property
     def read_capacity(self) -> typing.Optional[jsii.Number]:
@@ -15053,22 +15088,22 @@ class TableProps(TableOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy to apply to the DynamoDB Table.
 
         :default: RemovalPolicy.RETAIN
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def replica_removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def replica_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy to apply to the DynamoDB replica tables.
 
         :default: undefined - use DynamoDB Table's removal policy
         '''
         result = self._values.get("replica_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
     def replication_regions(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -15080,16 +15115,16 @@ class TableProps(TableOptions):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def replication_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def replication_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The timeout for a table replication operation in a single region.
 
         :default: Duration.minutes(30)
         '''
         result = self._values.get("replication_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def resource_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def resource_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''Resource policy to assign to table.
 
         :default: - No resource policy statement
@@ -15097,25 +15132,25 @@ class TableProps(TableOptions):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-resourcepolicy
         '''
         result = self._values.get("resource_policy")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
-    def stream(self) -> typing.Optional[StreamViewType]:
+    def stream(self) -> typing.Optional["StreamViewType"]:
         '''When an item in the table is modified, StreamViewType determines what information is written to the stream for this table.
 
         :default: - streams are disabled unless ``replicationRegions`` is specified
         '''
         result = self._values.get("stream")
-        return typing.cast(typing.Optional[StreamViewType], result)
+        return typing.cast(typing.Optional["StreamViewType"], result)
 
     @builtins.property
-    def table_class(self) -> typing.Optional[TableClass]:
+    def table_class(self) -> typing.Optional["TableClass"]:
         '''Specify the table class.
 
         :default: STANDARD
         '''
         result = self._values.get("table_class")
-        return typing.cast(typing.Optional[TableClass], result)
+        return typing.cast(typing.Optional["TableClass"], result)
 
     @builtins.property
     def time_to_live_attribute(self) -> typing.Optional[builtins.str]:
@@ -15183,22 +15218,22 @@ class TableProps(TableOptions):
     @builtins.property
     def kinesis_precision_timestamp(
         self,
-    ) -> typing.Optional[ApproximateCreationDateTimePrecision]:
+    ) -> typing.Optional["ApproximateCreationDateTimePrecision"]:
         '''Kinesis Data Stream approximate creation timestamp precision.
 
         :default: ApproximateCreationDateTimePrecision.MICROSECOND
         '''
         result = self._values.get("kinesis_precision_timestamp")
-        return typing.cast(typing.Optional[ApproximateCreationDateTimePrecision], result)
+        return typing.cast(typing.Optional["ApproximateCreationDateTimePrecision"], result)
 
     @builtins.property
-    def kinesis_stream(self) -> typing.Optional[_IStream_4e2457d2]:
+    def kinesis_stream(self) -> typing.Optional["_IStream_4e2457d2"]:
         '''Kinesis Data Stream to capture item-level changes for the table.
 
         :default: - no Kinesis Data Stream
         '''
         result = self._values.get("kinesis_stream")
-        return typing.cast(typing.Optional[_IStream_4e2457d2], result)
+        return typing.cast(typing.Optional["_IStream_4e2457d2"], result)
 
     @builtins.property
     def table_name(self) -> typing.Optional[builtins.str]:
@@ -15255,24 +15290,24 @@ class TablePropsV2(TableOptionsV2):
         self,
         *,
         contributor_insights: typing.Optional[builtins.bool] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["ContributorInsightsSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         deletion_protection: typing.Optional[builtins.bool] = None,
-        kinesis_stream: typing.Optional[_IStream_4e2457d2] = None,
+        kinesis_stream: typing.Optional["_IStream_4e2457d2"] = None,
         point_in_time_recovery: typing.Optional[builtins.bool] = None,
-        point_in_time_recovery_specification: typing.Optional[typing.Union[PointInTimeRecoverySpecification, typing.Dict[builtins.str, typing.Any]]] = None,
-        resource_policy: typing.Optional[_PolicyDocument_3ac34393] = None,
-        table_class: typing.Optional[TableClass] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
-        billing: typing.Optional[Billing] = None,
-        dynamo_stream: typing.Optional[StreamViewType] = None,
-        encryption: typing.Optional[TableEncryptionV2] = None,
+        point_in_time_recovery_specification: typing.Optional[typing.Union["PointInTimeRecoverySpecification", typing.Dict[builtins.str, typing.Any]]] = None,
+        resource_policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        table_class: typing.Optional["TableClass"] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        partition_key: typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]],
+        billing: typing.Optional["Billing"] = None,
+        dynamo_stream: typing.Optional["StreamViewType"] = None,
+        encryption: typing.Optional["TableEncryptionV2"] = None,
         global_secondary_indexes: typing.Optional[typing.Sequence[typing.Union["GlobalSecondaryIndexPropsV2", typing.Dict[builtins.str, typing.Any]]]] = None,
         local_secondary_indexes: typing.Optional[typing.Sequence[typing.Union["LocalSecondaryIndexProps", typing.Dict[builtins.str, typing.Any]]]] = None,
-        multi_region_consistency: typing.Optional[MultiRegionConsistency] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        multi_region_consistency: typing.Optional["MultiRegionConsistency"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         replicas: typing.Optional[typing.Sequence[typing.Union["ReplicaTableProps", typing.Dict[builtins.str, typing.Any]]]] = None,
-        sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
         table_name: typing.Optional[builtins.str] = None,
         time_to_live_attribute: typing.Optional[builtins.str] = None,
         warm_throughput: typing.Optional[typing.Union["WarmThroughput", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -15420,13 +15455,13 @@ class TablePropsV2(TableOptionsV2):
     @builtins.property
     def contributor_insights_specification(
         self,
-    ) -> typing.Optional[ContributorInsightsSpecification]:
+    ) -> typing.Optional["ContributorInsightsSpecification"]:
         '''Whether CloudWatch contributor insights is enabled and what mode is selected.
 
         :default: - contributor insights is not enabled
         '''
         result = self._values.get("contributor_insights_specification")
-        return typing.cast(typing.Optional[ContributorInsightsSpecification], result)
+        return typing.cast(typing.Optional["ContributorInsightsSpecification"], result)
 
     @builtins.property
     def deletion_protection(self) -> typing.Optional[builtins.bool]:
@@ -15438,13 +15473,13 @@ class TablePropsV2(TableOptionsV2):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def kinesis_stream(self) -> typing.Optional[_IStream_4e2457d2]:
+    def kinesis_stream(self) -> typing.Optional["_IStream_4e2457d2"]:
         '''Kinesis Data Stream to capture item level changes.
 
         :default: - no Kinesis Data Stream
         '''
         result = self._values.get("kinesis_stream")
-        return typing.cast(typing.Optional[_IStream_4e2457d2], result)
+        return typing.cast(typing.Optional["_IStream_4e2457d2"], result)
 
     @builtins.property
     def point_in_time_recovery(self) -> typing.Optional[builtins.bool]:
@@ -15462,16 +15497,16 @@ class TablePropsV2(TableOptionsV2):
     @builtins.property
     def point_in_time_recovery_specification(
         self,
-    ) -> typing.Optional[PointInTimeRecoverySpecification]:
+    ) -> typing.Optional["PointInTimeRecoverySpecification"]:
         '''Whether point-in-time recovery is enabled and recoveryPeriodInDays is set.
 
         :default: - point in time recovery is not enabled.
         '''
         result = self._values.get("point_in_time_recovery_specification")
-        return typing.cast(typing.Optional[PointInTimeRecoverySpecification], result)
+        return typing.cast(typing.Optional["PointInTimeRecoverySpecification"], result)
 
     @builtins.property
-    def resource_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def resource_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''Resource policy to assign to DynamoDB Table.
 
         :default: - No resource policy statements are added to the created table.
@@ -15479,44 +15514,44 @@ class TablePropsV2(TableOptionsV2):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-resourcepolicy
         '''
         result = self._values.get("resource_policy")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
-    def table_class(self) -> typing.Optional[TableClass]:
+    def table_class(self) -> typing.Optional["TableClass"]:
         '''The table class.
 
         :default: TableClass.STANDARD
         '''
         result = self._values.get("table_class")
-        return typing.cast(typing.Optional[TableClass], result)
+        return typing.cast(typing.Optional["TableClass"], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to be applied to the primary table (default replica table).
 
         :default: - no tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
-    def partition_key(self) -> Attribute:
+    def partition_key(self) -> "Attribute":
         '''Partition key attribute definition.'''
         result = self._values.get("partition_key")
         assert result is not None, "Required property 'partition_key' is missing"
-        return typing.cast(Attribute, result)
+        return typing.cast("Attribute", result)
 
     @builtins.property
-    def billing(self) -> typing.Optional[Billing]:
+    def billing(self) -> typing.Optional["Billing"]:
         '''The billing mode and capacity settings to apply to the table.
 
         :default: Billing.onDemand()
         '''
         result = self._values.get("billing")
-        return typing.cast(typing.Optional[Billing], result)
+        return typing.cast(typing.Optional["Billing"], result)
 
     @builtins.property
-    def dynamo_stream(self) -> typing.Optional[StreamViewType]:
+    def dynamo_stream(self) -> typing.Optional["StreamViewType"]:
         '''When an item in the table is modified, StreamViewType determines what information is written to the stream.
 
         :default:
@@ -15526,16 +15561,16 @@ class TablePropsV2(TableOptionsV2):
         NEW_AND_OLD_IMAGES will be the StreamViewType for all replicas
         '''
         result = self._values.get("dynamo_stream")
-        return typing.cast(typing.Optional[StreamViewType], result)
+        return typing.cast(typing.Optional["StreamViewType"], result)
 
     @builtins.property
-    def encryption(self) -> typing.Optional[TableEncryptionV2]:
+    def encryption(self) -> typing.Optional["TableEncryptionV2"]:
         '''The server-side encryption.
 
         :default: TableEncryptionV2.dynamoOwnedKey()
         '''
         result = self._values.get("encryption")
-        return typing.cast(typing.Optional[TableEncryptionV2], result)
+        return typing.cast(typing.Optional["TableEncryptionV2"], result)
 
     @builtins.property
     def global_secondary_indexes(
@@ -15564,22 +15599,22 @@ class TablePropsV2(TableOptionsV2):
         return typing.cast(typing.Optional[typing.List["LocalSecondaryIndexProps"]], result)
 
     @builtins.property
-    def multi_region_consistency(self) -> typing.Optional[MultiRegionConsistency]:
+    def multi_region_consistency(self) -> typing.Optional["MultiRegionConsistency"]:
         '''Specifies the consistency mode for a new global table.
 
         :default: MultiRegionConsistency.EVENTUAL
         '''
         result = self._values.get("multi_region_consistency")
-        return typing.cast(typing.Optional[MultiRegionConsistency], result)
+        return typing.cast(typing.Optional["MultiRegionConsistency"], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy applied to the table.
 
         :default: RemovalPolicy.RETAIN
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
     def replicas(self) -> typing.Optional[typing.List["ReplicaTableProps"]]:
@@ -15595,13 +15630,13 @@ class TablePropsV2(TableOptionsV2):
         return typing.cast(typing.Optional[typing.List["ReplicaTableProps"]], result)
 
     @builtins.property
-    def sort_key(self) -> typing.Optional[Attribute]:
+    def sort_key(self) -> typing.Optional["Attribute"]:
         '''Sort key attribute definition.
 
         :default: - no sort key
         '''
         result = self._values.get("sort_key")
-        return typing.cast(typing.Optional[Attribute], result)
+        return typing.cast(typing.Optional["Attribute"], result)
 
     @builtins.property
     def table_name(self) -> typing.Optional[builtins.str]:
@@ -15684,32 +15719,32 @@ class TableV2(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
-        billing: typing.Optional[Billing] = None,
-        dynamo_stream: typing.Optional[StreamViewType] = None,
-        encryption: typing.Optional[TableEncryptionV2] = None,
+        partition_key: typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]],
+        billing: typing.Optional["Billing"] = None,
+        dynamo_stream: typing.Optional["StreamViewType"] = None,
+        encryption: typing.Optional["TableEncryptionV2"] = None,
         global_secondary_indexes: typing.Optional[typing.Sequence[typing.Union["GlobalSecondaryIndexPropsV2", typing.Dict[builtins.str, typing.Any]]]] = None,
         local_secondary_indexes: typing.Optional[typing.Sequence[typing.Union["LocalSecondaryIndexProps", typing.Dict[builtins.str, typing.Any]]]] = None,
-        multi_region_consistency: typing.Optional[MultiRegionConsistency] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        multi_region_consistency: typing.Optional["MultiRegionConsistency"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         replicas: typing.Optional[typing.Sequence[typing.Union["ReplicaTableProps", typing.Dict[builtins.str, typing.Any]]]] = None,
-        sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
         table_name: typing.Optional[builtins.str] = None,
         time_to_live_attribute: typing.Optional[builtins.str] = None,
         warm_throughput: typing.Optional[typing.Union["WarmThroughput", typing.Dict[builtins.str, typing.Any]]] = None,
         witness_region: typing.Optional[builtins.str] = None,
         contributor_insights: typing.Optional[builtins.bool] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["ContributorInsightsSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         deletion_protection: typing.Optional[builtins.bool] = None,
-        kinesis_stream: typing.Optional[_IStream_4e2457d2] = None,
+        kinesis_stream: typing.Optional["_IStream_4e2457d2"] = None,
         point_in_time_recovery: typing.Optional[builtins.bool] = None,
-        point_in_time_recovery_specification: typing.Optional[typing.Union[PointInTimeRecoverySpecification, typing.Dict[builtins.str, typing.Any]]] = None,
-        resource_policy: typing.Optional[_PolicyDocument_3ac34393] = None,
-        table_class: typing.Optional[TableClass] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        point_in_time_recovery_specification: typing.Optional[typing.Union["PointInTimeRecoverySpecification", typing.Dict[builtins.str, typing.Any]]] = None,
+        resource_policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        table_class: typing.Optional["TableClass"] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -15774,10 +15809,10 @@ class TableV2(
     @builtins.classmethod
     def from_table_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         table_arn: builtins.str,
-    ) -> ITableV2:
+    ) -> "ITableV2":
         '''Creates a Table construct that represents an external table via table ARN.
 
         :param scope: the parent creating construct (usually ``this``).
@@ -15789,16 +15824,16 @@ class TableV2(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument table_arn", value=table_arn, expected_type=type_hints["table_arn"])
-        return typing.cast(ITableV2, jsii.sinvoke(cls, "fromTableArn", [scope, id, table_arn]))
+        return typing.cast("ITableV2", jsii.sinvoke(cls, "fromTableArn", [scope, id, table_arn]))
 
     @jsii.member(jsii_name="fromTableAttributes")
     @builtins.classmethod
     def from_table_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
         global_indexes: typing.Optional[typing.Sequence[builtins.str]] = None,
         grant_index_permissions: typing.Optional[builtins.bool] = None,
         local_indexes: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -15806,7 +15841,7 @@ class TableV2(
         table_id: typing.Optional[builtins.str] = None,
         table_name: typing.Optional[builtins.str] = None,
         table_stream_arn: typing.Optional[builtins.str] = None,
-    ) -> ITableV2:
+    ) -> "ITableV2":
         '''Creates a Table construct that represents an external table.
 
         :param scope: the parent creating construct (usually ``this``).
@@ -15835,16 +15870,16 @@ class TableV2(
             table_stream_arn=table_stream_arn,
         )
 
-        return typing.cast(ITableV2, jsii.sinvoke(cls, "fromTableAttributes", [scope, id, attrs]))
+        return typing.cast("ITableV2", jsii.sinvoke(cls, "fromTableAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromTableName")
     @builtins.classmethod
     def from_table_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         table_name: builtins.str,
-    ) -> ITableV2:
+    ) -> "ITableV2":
         '''Creates a Table construct that represents an external table via table name.
 
         :param scope: the parent creating construct (usually ``this``).
@@ -15856,7 +15891,7 @@ class TableV2(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument table_name", value=table_name, expected_type=type_hints["table_name"])
-        return typing.cast(ITableV2, jsii.sinvoke(cls, "fromTableName", [scope, id, table_name]))
+        return typing.cast("ITableV2", jsii.sinvoke(cls, "fromTableName", [scope, id, table_name]))
 
     @jsii.member(jsii_name="addGlobalSecondaryIndex")
     def add_global_secondary_index(
@@ -15864,16 +15899,16 @@ class TableV2(
         *,
         max_read_request_units: typing.Optional[jsii.Number] = None,
         max_write_request_units: typing.Optional[jsii.Number] = None,
-        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
-        partition_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
-        read_capacity: typing.Optional[Capacity] = None,
-        sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
-        sort_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
+        partition_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
+        partition_keys: typing.Optional[typing.Sequence[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]]] = None,
+        read_capacity: typing.Optional["Capacity"] = None,
+        sort_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_keys: typing.Optional[typing.Sequence[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]]] = None,
         warm_throughput: typing.Optional[typing.Union["WarmThroughput", typing.Dict[builtins.str, typing.Any]]] = None,
-        write_capacity: typing.Optional[Capacity] = None,
+        write_capacity: typing.Optional["Capacity"] = None,
         index_name: builtins.str,
         non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        projection_type: typing.Optional[ProjectionType] = None,
+        projection_type: typing.Optional["ProjectionType"] = None,
     ) -> None:
         '''Add a global secondary index to the table.
 
@@ -15913,10 +15948,10 @@ class TableV2(
     def add_local_secondary_index(
         self,
         *,
-        sort_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+        sort_key: typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]],
         index_name: builtins.str,
         non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        projection_type: typing.Optional[ProjectionType] = None,
+        projection_type: typing.Optional["ProjectionType"] = None,
     ) -> None:
         '''Add a local secondary index to the table.
 
@@ -15941,18 +15976,18 @@ class TableV2(
         self,
         *,
         region: builtins.str,
-        global_secondary_index_options: typing.Optional[typing.Mapping[builtins.str, typing.Union[ReplicaGlobalSecondaryIndexOptions, typing.Dict[builtins.str, typing.Any]]]] = None,
+        global_secondary_index_options: typing.Optional[typing.Mapping[builtins.str, typing.Union["ReplicaGlobalSecondaryIndexOptions", typing.Dict[builtins.str, typing.Any]]]] = None,
         max_read_request_units: typing.Optional[jsii.Number] = None,
-        read_capacity: typing.Optional[Capacity] = None,
+        read_capacity: typing.Optional["Capacity"] = None,
         contributor_insights: typing.Optional[builtins.bool] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["ContributorInsightsSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         deletion_protection: typing.Optional[builtins.bool] = None,
-        kinesis_stream: typing.Optional[_IStream_4e2457d2] = None,
+        kinesis_stream: typing.Optional["_IStream_4e2457d2"] = None,
         point_in_time_recovery: typing.Optional[builtins.bool] = None,
-        point_in_time_recovery_specification: typing.Optional[typing.Union[PointInTimeRecoverySpecification, typing.Dict[builtins.str, typing.Any]]] = None,
-        resource_policy: typing.Optional[_PolicyDocument_3ac34393] = None,
-        table_class: typing.Optional[TableClass] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        point_in_time_recovery_specification: typing.Optional[typing.Union["PointInTimeRecoverySpecification", typing.Dict[builtins.str, typing.Any]]] = None,
+        resource_policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        table_class: typing.Optional["TableClass"] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Add a replica table.
 
@@ -15993,8 +16028,8 @@ class TableV2(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the resource policy associated with this table.
 
         A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
@@ -16006,10 +16041,10 @@ class TableV2(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3b1216d49044543b59bb31b8cbf4866b8c803b0f0801c1170ed12229f1643c37)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="replica")
-    def replica(self, region: builtins.str) -> ITableV2:
+    def replica(self, region: builtins.str) -> "ITableV2":
         '''Retrieve a replica table.
 
         Note: Replica tables are not supported in a region agnostic stack.
@@ -16019,7 +16054,7 @@ class TableV2(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7cb08c3fe1f7c7db5d9459ba46cc1e0bd7ab496a45ecca2bb34f276862672708)
             check_type(argname="argument region", value=region, expected_type=type_hints["region"])
-        return typing.cast(ITableV2, jsii.invoke(self, "replica", [region]))
+        return typing.cast("ITableV2", jsii.invoke(self, "replica", [region]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -16057,14 +16092,14 @@ class TableV2(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def _tags(self) -> _TagManager_0a598cb3:
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+    def _tags(self) -> "_TagManager_0a598cb3":
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The KMS encryption key for the table.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionKey"))
 
     @builtins.property
     @jsii.member(jsii_name="tableId")
@@ -16086,15 +16121,18 @@ class TableV2(
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicy")
-    def resource_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def resource_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''The resource policy for the table.
 
         :attribute: true
         '''
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], jsii.get(self, "resourcePolicy"))
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], jsii.get(self, "resourcePolicy"))
 
     @resource_policy.setter
-    def resource_policy(self, value: typing.Optional[_PolicyDocument_3ac34393]) -> None:
+    def resource_policy(
+        self,
+        value: typing.Optional["_PolicyDocument_3ac34393"],
+    ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7c681fc6a08524e2909b1c97c77ad38edec11b1f8bd3f666a073a61c09638e19)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -16107,7 +16145,12 @@ class TableV2(
     name_mapping={"read_capacity": "readCapacity", "write_capacity": "writeCapacity"},
 )
 class ThroughputProps:
-    def __init__(self, *, read_capacity: Capacity, write_capacity: Capacity) -> None:
+    def __init__(
+        self,
+        *,
+        read_capacity: "Capacity",
+        write_capacity: "Capacity",
+    ) -> None:
         '''Properties used to configure provisioned throughput for a DynamoDB table.
 
         :param read_capacity: The read capacity.
@@ -16148,18 +16191,18 @@ class ThroughputProps:
         }
 
     @builtins.property
-    def read_capacity(self) -> Capacity:
+    def read_capacity(self) -> "Capacity":
         '''The read capacity.'''
         result = self._values.get("read_capacity")
         assert result is not None, "Required property 'read_capacity' is missing"
-        return typing.cast(Capacity, result)
+        return typing.cast("Capacity", result)
 
     @builtins.property
-    def write_capacity(self) -> Capacity:
+    def write_capacity(self) -> "Capacity":
         '''The write capacity.'''
         result = self._values.get("write_capacity")
         assert result is not None, "Required property 'write_capacity' is missing"
-        return typing.cast(Capacity, result)
+        return typing.cast("Capacity", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16190,8 +16233,8 @@ class UtilizationScalingProps(_BaseTargetTrackingProps_540ba713):
         *,
         disable_scale_in: typing.Optional[builtins.bool] = None,
         policy_name: typing.Optional[builtins.str] = None,
-        scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scale_in_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        scale_out_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         target_utilization_percent: jsii.Number,
     ) -> None:
         '''Properties for enabling DynamoDB utilization tracking.
@@ -16262,7 +16305,7 @@ class UtilizationScalingProps(_BaseTargetTrackingProps_540ba713):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def scale_in_cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def scale_in_cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Period after a scale in activity completes before another scale in activity can start.
 
         :default:
@@ -16275,10 +16318,10 @@ class UtilizationScalingProps(_BaseTargetTrackingProps_540ba713):
         Lambda provisioned concurrency
         '''
         result = self._values.get("scale_in_cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def scale_out_cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def scale_out_cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Period after a scale out activity completes before another scale out activity can start.
 
         :default:
@@ -16291,7 +16334,7 @@ class UtilizationScalingProps(_BaseTargetTrackingProps_540ba713):
         Lambda provisioned concurrency
         '''
         result = self._values.get("scale_out_cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def target_utilization_percent(self) -> jsii.Number:
@@ -16410,17 +16453,17 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         *,
         index_name: builtins.str,
         non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        projection_type: typing.Optional[ProjectionType] = None,
-        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
-        sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
+        projection_type: typing.Optional["ProjectionType"] = None,
+        partition_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
         contributor_insights_enabled: typing.Optional[builtins.bool] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["ContributorInsightsSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         max_read_request_units: typing.Optional[jsii.Number] = None,
         max_write_request_units: typing.Optional[jsii.Number] = None,
-        partition_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
+        partition_keys: typing.Optional[typing.Sequence[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]]] = None,
         read_capacity: typing.Optional[jsii.Number] = None,
-        sort_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
-        warm_throughput: typing.Optional[typing.Union[WarmThroughput, typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_keys: typing.Optional[typing.Sequence[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput: typing.Optional[typing.Union["WarmThroughput", typing.Dict[builtins.str, typing.Any]]] = None,
         write_capacity: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties for a global secondary index.
@@ -16529,16 +16572,16 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def projection_type(self) -> typing.Optional[ProjectionType]:
+    def projection_type(self) -> typing.Optional["ProjectionType"]:
         '''The set of attributes that are projected into the secondary index.
 
         :default: ALL
         '''
         result = self._values.get("projection_type")
-        return typing.cast(typing.Optional[ProjectionType], result)
+        return typing.cast(typing.Optional["ProjectionType"], result)
 
     @builtins.property
-    def partition_key(self) -> typing.Optional[Attribute]:
+    def partition_key(self) -> typing.Optional["Attribute"]:
         '''Partition key attribute definition.
 
         If a single field forms the partition key, you can use this field.  Use the
@@ -16548,10 +16591,10 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         '''
         result = self._values.get("partition_key")
-        return typing.cast(typing.Optional[Attribute], result)
+        return typing.cast(typing.Optional["Attribute"], result)
 
     @builtins.property
-    def sort_key(self) -> typing.Optional[Attribute]:
+    def sort_key(self) -> typing.Optional["Attribute"]:
         '''Sort key attribute definition.
 
         If a single field forms the sort key, you can use this field.  Use the
@@ -16561,7 +16604,7 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         :default: - no sort key
         '''
         result = self._values.get("sort_key")
-        return typing.cast(typing.Optional[Attribute], result)
+        return typing.cast(typing.Optional["Attribute"], result)
 
     @builtins.property
     def contributor_insights_enabled(self) -> typing.Optional[builtins.bool]:
@@ -16579,13 +16622,13 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
     @builtins.property
     def contributor_insights_specification(
         self,
-    ) -> typing.Optional[ContributorInsightsSpecification]:
+    ) -> typing.Optional["ContributorInsightsSpecification"]:
         '''Whether CloudWatch contributor insights is enabled and what mode is selected.
 
         :default: - contributor insights is not enabled
         '''
         result = self._values.get("contributor_insights_specification")
-        return typing.cast(typing.Optional[ContributorInsightsSpecification], result)
+        return typing.cast(typing.Optional["ContributorInsightsSpecification"], result)
 
     @builtins.property
     def max_read_request_units(self) -> typing.Optional[jsii.Number]:
@@ -16610,7 +16653,7 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def partition_keys(self) -> typing.Optional[typing.List[Attribute]]:
+    def partition_keys(self) -> typing.Optional[typing.List["Attribute"]]:
         '''Multi-attribute partition key.
 
         If a single field forms the partition key, you can use either
@@ -16629,7 +16672,7 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         '''
         result = self._values.get("partition_keys")
-        return typing.cast(typing.Optional[typing.List[Attribute]], result)
+        return typing.cast(typing.Optional[typing.List["Attribute"]], result)
 
     @builtins.property
     def read_capacity(self) -> typing.Optional[jsii.Number]:
@@ -16643,7 +16686,7 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def sort_keys(self) -> typing.Optional[typing.List[Attribute]]:
+    def sort_keys(self) -> typing.Optional[typing.List["Attribute"]]:
         '''Multi-attribute sort key.
 
         If a single field forms the sort key, you can use either
@@ -16662,16 +16705,16 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         :default: - no sort key
         '''
         result = self._values.get("sort_keys")
-        return typing.cast(typing.Optional[typing.List[Attribute]], result)
+        return typing.cast(typing.Optional[typing.List["Attribute"]], result)
 
     @builtins.property
-    def warm_throughput(self) -> typing.Optional[WarmThroughput]:
+    def warm_throughput(self) -> typing.Optional["WarmThroughput"]:
         '''The warm throughput configuration for the global secondary index.
 
         :default: - no warm throughput is configured
         '''
         result = self._values.get("warm_throughput")
-        return typing.cast(typing.Optional[WarmThroughput], result)
+        return typing.cast(typing.Optional["WarmThroughput"], result)
 
     @builtins.property
     def write_capacity(self) -> typing.Optional[jsii.Number]:
@@ -16720,16 +16763,16 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         *,
         index_name: builtins.str,
         non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        projection_type: typing.Optional[ProjectionType] = None,
+        projection_type: typing.Optional["ProjectionType"] = None,
         max_read_request_units: typing.Optional[jsii.Number] = None,
         max_write_request_units: typing.Optional[jsii.Number] = None,
-        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
-        partition_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
-        read_capacity: typing.Optional[Capacity] = None,
-        sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
-        sort_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
-        warm_throughput: typing.Optional[typing.Union[WarmThroughput, typing.Dict[builtins.str, typing.Any]]] = None,
-        write_capacity: typing.Optional[Capacity] = None,
+        partition_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
+        partition_keys: typing.Optional[typing.Sequence[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]]] = None,
+        read_capacity: typing.Optional["Capacity"] = None,
+        sort_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_keys: typing.Optional[typing.Sequence[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput: typing.Optional[typing.Union["WarmThroughput", typing.Dict[builtins.str, typing.Any]]] = None,
+        write_capacity: typing.Optional["Capacity"] = None,
     ) -> None:
         '''Properties used to configure a global secondary index.
 
@@ -16835,13 +16878,13 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def projection_type(self) -> typing.Optional[ProjectionType]:
+    def projection_type(self) -> typing.Optional["ProjectionType"]:
         '''The set of attributes that are projected into the secondary index.
 
         :default: ALL
         '''
         result = self._values.get("projection_type")
-        return typing.cast(typing.Optional[ProjectionType], result)
+        return typing.cast(typing.Optional["ProjectionType"], result)
 
     @builtins.property
     def max_read_request_units(self) -> typing.Optional[jsii.Number]:
@@ -16866,7 +16909,7 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def partition_key(self) -> typing.Optional[Attribute]:
+    def partition_key(self) -> typing.Optional["Attribute"]:
         '''Partition key attribute definition.
 
         If a single field forms the partition key, you can use this field.  Use the
@@ -16876,10 +16919,10 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         '''
         result = self._values.get("partition_key")
-        return typing.cast(typing.Optional[Attribute], result)
+        return typing.cast(typing.Optional["Attribute"], result)
 
     @builtins.property
-    def partition_keys(self) -> typing.Optional[typing.List[Attribute]]:
+    def partition_keys(self) -> typing.Optional[typing.List["Attribute"]]:
         '''Multi-attribute partition key.
 
         If a single field forms the partition key, you can use either
@@ -16898,10 +16941,10 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         '''
         result = self._values.get("partition_keys")
-        return typing.cast(typing.Optional[typing.List[Attribute]], result)
+        return typing.cast(typing.Optional[typing.List["Attribute"]], result)
 
     @builtins.property
-    def read_capacity(self) -> typing.Optional[Capacity]:
+    def read_capacity(self) -> typing.Optional["Capacity"]:
         '''The read capacity.
 
         Note: This can only be configured if the primary table billing is provisioned.
@@ -16909,10 +16952,10 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         :default: - inherited from the primary table.
         '''
         result = self._values.get("read_capacity")
-        return typing.cast(typing.Optional[Capacity], result)
+        return typing.cast(typing.Optional["Capacity"], result)
 
     @builtins.property
-    def sort_key(self) -> typing.Optional[Attribute]:
+    def sort_key(self) -> typing.Optional["Attribute"]:
         '''Sort key attribute definition.
 
         If a single field forms the sort key, you can use this field.  Use the
@@ -16922,10 +16965,10 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         :default: - no sort key
         '''
         result = self._values.get("sort_key")
-        return typing.cast(typing.Optional[Attribute], result)
+        return typing.cast(typing.Optional["Attribute"], result)
 
     @builtins.property
-    def sort_keys(self) -> typing.Optional[typing.List[Attribute]]:
+    def sort_keys(self) -> typing.Optional[typing.List["Attribute"]]:
         '''Multi-attribute sort key.
 
         If a single field forms the sort key, you can use either
@@ -16944,19 +16987,19 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         :default: - no sort key
         '''
         result = self._values.get("sort_keys")
-        return typing.cast(typing.Optional[typing.List[Attribute]], result)
+        return typing.cast(typing.Optional[typing.List["Attribute"]], result)
 
     @builtins.property
-    def warm_throughput(self) -> typing.Optional[WarmThroughput]:
+    def warm_throughput(self) -> typing.Optional["WarmThroughput"]:
         '''The warm throughput configuration for the global secondary index.
 
         :default: - no warm throughput is configured
         '''
         result = self._values.get("warm_throughput")
-        return typing.cast(typing.Optional[WarmThroughput], result)
+        return typing.cast(typing.Optional["WarmThroughput"], result)
 
     @builtins.property
-    def write_capacity(self) -> typing.Optional[Capacity]:
+    def write_capacity(self) -> typing.Optional["Capacity"]:
         '''The write capacity.
 
         Note: This can only be configured if the primary table billing is provisioned.
@@ -16964,7 +17007,7 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         :default: - inherited from the primary table.
         '''
         result = self._values.get("write_capacity")
-        return typing.cast(typing.Optional[Capacity], result)
+        return typing.cast(typing.Optional["Capacity"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16994,8 +17037,8 @@ class LocalSecondaryIndexProps(SecondaryIndexProps):
         *,
         index_name: builtins.str,
         non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        projection_type: typing.Optional[ProjectionType] = None,
-        sort_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+        projection_type: typing.Optional["ProjectionType"] = None,
+        sort_key: typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''Properties for a local secondary index.
 
@@ -17057,20 +17100,20 @@ class LocalSecondaryIndexProps(SecondaryIndexProps):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def projection_type(self) -> typing.Optional[ProjectionType]:
+    def projection_type(self) -> typing.Optional["ProjectionType"]:
         '''The set of attributes that are projected into the secondary index.
 
         :default: ALL
         '''
         result = self._values.get("projection_type")
-        return typing.cast(typing.Optional[ProjectionType], result)
+        return typing.cast(typing.Optional["ProjectionType"], result)
 
     @builtins.property
-    def sort_key(self) -> Attribute:
+    def sort_key(self) -> "Attribute":
         '''The attribute of a sort key for the local secondary index.'''
         result = self._values.get("sort_key")
         assert result is not None, "Required property 'sort_key' is missing"
-        return typing.cast(Attribute, result)
+        return typing.cast("Attribute", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17112,14 +17155,14 @@ class OperationsMetricOptions(SystemErrorsForOperationsMetricOptions):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-        operations: typing.Optional[typing.Sequence[Operation]] = None,
+        operations: typing.Optional[typing.Sequence["Operation"]] = None,
     ) -> None:
         '''Options for configuring metrics that considers multiple operations.
 
@@ -17269,13 +17312,13 @@ class OperationsMetricOptions(SystemErrorsForOperationsMetricOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period over which the specified statistic is applied.
 
         :default: Duration.minutes(5)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def region(self) -> typing.Optional[builtins.str]:
@@ -17330,7 +17373,7 @@ class OperationsMetricOptions(SystemErrorsForOperationsMetricOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def unit(self) -> typing.Optional[_Unit_61bc6f70]:
+    def unit(self) -> typing.Optional["_Unit_61bc6f70"]:
         '''Unit used to filter the metric stream.
 
         Only refer to datums emitted to the metric stream with the given unit and
@@ -17345,7 +17388,7 @@ class OperationsMetricOptions(SystemErrorsForOperationsMetricOptions):
         :default: - All metric datums in the given metric stream
         '''
         result = self._values.get("unit")
-        return typing.cast(typing.Optional[_Unit_61bc6f70], result)
+        return typing.cast(typing.Optional["_Unit_61bc6f70"], result)
 
     @builtins.property
     def visible(self) -> typing.Optional[builtins.bool]:
@@ -17360,13 +17403,13 @@ class OperationsMetricOptions(SystemErrorsForOperationsMetricOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def operations(self) -> typing.Optional[typing.List[Operation]]:
+    def operations(self) -> typing.Optional[typing.List["Operation"]]:
         '''The operations to apply the metric to.
 
         :default: - All operations available by DynamoDB tables will be considered.
         '''
         result = self._values.get("operations")
-        return typing.cast(typing.Optional[typing.List[Operation]], result)
+        return typing.cast(typing.Optional[typing.List["Operation"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17404,18 +17447,18 @@ class ReplicaTableProps(TableOptionsV2):
         self,
         *,
         contributor_insights: typing.Optional[builtins.bool] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["ContributorInsightsSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         deletion_protection: typing.Optional[builtins.bool] = None,
-        kinesis_stream: typing.Optional[_IStream_4e2457d2] = None,
+        kinesis_stream: typing.Optional["_IStream_4e2457d2"] = None,
         point_in_time_recovery: typing.Optional[builtins.bool] = None,
-        point_in_time_recovery_specification: typing.Optional[typing.Union[PointInTimeRecoverySpecification, typing.Dict[builtins.str, typing.Any]]] = None,
-        resource_policy: typing.Optional[_PolicyDocument_3ac34393] = None,
-        table_class: typing.Optional[TableClass] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        point_in_time_recovery_specification: typing.Optional[typing.Union["PointInTimeRecoverySpecification", typing.Dict[builtins.str, typing.Any]]] = None,
+        resource_policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        table_class: typing.Optional["TableClass"] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         region: builtins.str,
-        global_secondary_index_options: typing.Optional[typing.Mapping[builtins.str, typing.Union[ReplicaGlobalSecondaryIndexOptions, typing.Dict[builtins.str, typing.Any]]]] = None,
+        global_secondary_index_options: typing.Optional[typing.Mapping[builtins.str, typing.Union["ReplicaGlobalSecondaryIndexOptions", typing.Dict[builtins.str, typing.Any]]]] = None,
         max_read_request_units: typing.Optional[jsii.Number] = None,
-        read_capacity: typing.Optional[Capacity] = None,
+        read_capacity: typing.Optional["Capacity"] = None,
     ) -> None:
         '''Properties used to configure a replica table.
 
@@ -17513,13 +17556,13 @@ class ReplicaTableProps(TableOptionsV2):
     @builtins.property
     def contributor_insights_specification(
         self,
-    ) -> typing.Optional[ContributorInsightsSpecification]:
+    ) -> typing.Optional["ContributorInsightsSpecification"]:
         '''Whether CloudWatch contributor insights is enabled and what mode is selected.
 
         :default: - contributor insights is not enabled
         '''
         result = self._values.get("contributor_insights_specification")
-        return typing.cast(typing.Optional[ContributorInsightsSpecification], result)
+        return typing.cast(typing.Optional["ContributorInsightsSpecification"], result)
 
     @builtins.property
     def deletion_protection(self) -> typing.Optional[builtins.bool]:
@@ -17531,13 +17574,13 @@ class ReplicaTableProps(TableOptionsV2):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def kinesis_stream(self) -> typing.Optional[_IStream_4e2457d2]:
+    def kinesis_stream(self) -> typing.Optional["_IStream_4e2457d2"]:
         '''Kinesis Data Stream to capture item level changes.
 
         :default: - no Kinesis Data Stream
         '''
         result = self._values.get("kinesis_stream")
-        return typing.cast(typing.Optional[_IStream_4e2457d2], result)
+        return typing.cast(typing.Optional["_IStream_4e2457d2"], result)
 
     @builtins.property
     def point_in_time_recovery(self) -> typing.Optional[builtins.bool]:
@@ -17555,16 +17598,16 @@ class ReplicaTableProps(TableOptionsV2):
     @builtins.property
     def point_in_time_recovery_specification(
         self,
-    ) -> typing.Optional[PointInTimeRecoverySpecification]:
+    ) -> typing.Optional["PointInTimeRecoverySpecification"]:
         '''Whether point-in-time recovery is enabled and recoveryPeriodInDays is set.
 
         :default: - point in time recovery is not enabled.
         '''
         result = self._values.get("point_in_time_recovery_specification")
-        return typing.cast(typing.Optional[PointInTimeRecoverySpecification], result)
+        return typing.cast(typing.Optional["PointInTimeRecoverySpecification"], result)
 
     @builtins.property
-    def resource_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def resource_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''Resource policy to assign to DynamoDB Table.
 
         :default: - No resource policy statements are added to the created table.
@@ -17572,25 +17615,25 @@ class ReplicaTableProps(TableOptionsV2):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicaspecification.html#cfn-dynamodb-globaltable-replicaspecification-resourcepolicy
         '''
         result = self._values.get("resource_policy")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
-    def table_class(self) -> typing.Optional[TableClass]:
+    def table_class(self) -> typing.Optional["TableClass"]:
         '''The table class.
 
         :default: TableClass.STANDARD
         '''
         result = self._values.get("table_class")
-        return typing.cast(typing.Optional[TableClass], result)
+        return typing.cast(typing.Optional["TableClass"], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to be applied to the primary table (default replica table).
 
         :default: - no tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def region(self) -> builtins.str:
@@ -17602,13 +17645,13 @@ class ReplicaTableProps(TableOptionsV2):
     @builtins.property
     def global_secondary_index_options(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, ReplicaGlobalSecondaryIndexOptions]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "ReplicaGlobalSecondaryIndexOptions"]]:
         '''Options used to configure global secondary index properties.
 
         :default: - inherited from the primary table
         '''
         result = self._values.get("global_secondary_index_options")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, ReplicaGlobalSecondaryIndexOptions]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "ReplicaGlobalSecondaryIndexOptions"]], result)
 
     @builtins.property
     def max_read_request_units(self) -> typing.Optional[jsii.Number]:
@@ -17622,7 +17665,7 @@ class ReplicaTableProps(TableOptionsV2):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def read_capacity(self) -> typing.Optional[Capacity]:
+    def read_capacity(self) -> typing.Optional["Capacity"]:
         '''The read capacity.
 
         Note: This can only be configured if the primary table billing is provisioned.
@@ -17630,7 +17673,7 @@ class ReplicaTableProps(TableOptionsV2):
         :default: - inherited from the primary table
         '''
         result = self._values.get("read_capacity")
-        return typing.cast(typing.Optional[Capacity], result)
+        return typing.cast(typing.Optional["Capacity"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17680,37 +17723,37 @@ class Table(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        kinesis_precision_timestamp: typing.Optional[ApproximateCreationDateTimePrecision] = None,
-        kinesis_stream: typing.Optional[_IStream_4e2457d2] = None,
+        kinesis_precision_timestamp: typing.Optional["ApproximateCreationDateTimePrecision"] = None,
+        kinesis_stream: typing.Optional["_IStream_4e2457d2"] = None,
         table_name: typing.Optional[builtins.str] = None,
-        billing_mode: typing.Optional[BillingMode] = None,
+        billing_mode: typing.Optional["BillingMode"] = None,
         contributor_insights_enabled: typing.Optional[builtins.bool] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["ContributorInsightsSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         deletion_protection: typing.Optional[builtins.bool] = None,
-        encryption: typing.Optional[TableEncryption] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
-        import_source: typing.Optional[typing.Union[ImportSourceSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        encryption: typing.Optional["TableEncryption"] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
+        import_source: typing.Optional[typing.Union["ImportSourceSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         max_read_request_units: typing.Optional[jsii.Number] = None,
         max_write_request_units: typing.Optional[jsii.Number] = None,
         point_in_time_recovery: typing.Optional[builtins.bool] = None,
-        point_in_time_recovery_specification: typing.Optional[typing.Union[PointInTimeRecoverySpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        point_in_time_recovery_specification: typing.Optional[typing.Union["PointInTimeRecoverySpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         read_capacity: typing.Optional[jsii.Number] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        replica_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        replica_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         replication_regions: typing.Optional[typing.Sequence[builtins.str]] = None,
-        replication_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        resource_policy: typing.Optional[_PolicyDocument_3ac34393] = None,
-        stream: typing.Optional[StreamViewType] = None,
-        table_class: typing.Optional[TableClass] = None,
+        replication_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        resource_policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        stream: typing.Optional["StreamViewType"] = None,
+        table_class: typing.Optional["TableClass"] = None,
         time_to_live_attribute: typing.Optional[builtins.str] = None,
         wait_for_replication_to_finish: typing.Optional[builtins.bool] = None,
-        warm_throughput: typing.Optional[typing.Union[WarmThroughput, typing.Dict[builtins.str, typing.Any]]] = None,
+        warm_throughput: typing.Optional[typing.Union["WarmThroughput", typing.Dict[builtins.str, typing.Any]]] = None,
         write_capacity: typing.Optional[jsii.Number] = None,
-        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
-        sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
+        partition_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -17785,10 +17828,10 @@ class Table(
     @builtins.classmethod
     def from_table_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         table_arn: builtins.str,
-    ) -> ITable:
+    ) -> "ITable":
         '''Creates a Table construct that represents an external table via table arn.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -17800,23 +17843,23 @@ class Table(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument table_arn", value=table_arn, expected_type=type_hints["table_arn"])
-        return typing.cast(ITable, jsii.sinvoke(cls, "fromTableArn", [scope, id, table_arn]))
+        return typing.cast("ITable", jsii.sinvoke(cls, "fromTableArn", [scope, id, table_arn]))
 
     @jsii.member(jsii_name="fromTableAttributes")
     @builtins.classmethod
     def from_table_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
         global_indexes: typing.Optional[typing.Sequence[builtins.str]] = None,
         grant_index_permissions: typing.Optional[builtins.bool] = None,
         local_indexes: typing.Optional[typing.Sequence[builtins.str]] = None,
         table_arn: typing.Optional[builtins.str] = None,
         table_name: typing.Optional[builtins.str] = None,
         table_stream_arn: typing.Optional[builtins.str] = None,
-    ) -> ITable:
+    ) -> "ITable":
         '''Creates a Table construct that represents an external table.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -17843,16 +17886,16 @@ class Table(
             table_stream_arn=table_stream_arn,
         )
 
-        return typing.cast(ITable, jsii.sinvoke(cls, "fromTableAttributes", [scope, id, attrs]))
+        return typing.cast("ITable", jsii.sinvoke(cls, "fromTableAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromTableName")
     @builtins.classmethod
     def from_table_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         table_name: builtins.str,
-    ) -> ITable:
+    ) -> "ITable":
         '''Creates a Table construct that represents an external table via table name.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -17864,26 +17907,26 @@ class Table(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument table_name", value=table_name, expected_type=type_hints["table_name"])
-        return typing.cast(ITable, jsii.sinvoke(cls, "fromTableName", [scope, id, table_name]))
+        return typing.cast("ITable", jsii.sinvoke(cls, "fromTableName", [scope, id, table_name]))
 
     @jsii.member(jsii_name="addGlobalSecondaryIndex")
     def add_global_secondary_index(
         self,
         *,
         contributor_insights_enabled: typing.Optional[builtins.bool] = None,
-        contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
+        contributor_insights_specification: typing.Optional[typing.Union["ContributorInsightsSpecification", typing.Dict[builtins.str, typing.Any]]] = None,
         max_read_request_units: typing.Optional[jsii.Number] = None,
         max_write_request_units: typing.Optional[jsii.Number] = None,
-        partition_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
+        partition_keys: typing.Optional[typing.Sequence[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]]] = None,
         read_capacity: typing.Optional[jsii.Number] = None,
-        sort_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
-        warm_throughput: typing.Optional[typing.Union[WarmThroughput, typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_keys: typing.Optional[typing.Sequence[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput: typing.Optional[typing.Union["WarmThroughput", typing.Dict[builtins.str, typing.Any]]] = None,
         write_capacity: typing.Optional[jsii.Number] = None,
         index_name: builtins.str,
         non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        projection_type: typing.Optional[ProjectionType] = None,
-        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
-        sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
+        projection_type: typing.Optional["ProjectionType"] = None,
+        partition_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_key: typing.Optional[typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Add a global secondary index of table.
 
@@ -17925,10 +17968,10 @@ class Table(
     def add_local_secondary_index(
         self,
         *,
-        sort_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+        sort_key: typing.Union["Attribute", typing.Dict[builtins.str, typing.Any]],
         index_name: builtins.str,
         non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        projection_type: typing.Optional[ProjectionType] = None,
+        projection_type: typing.Optional["ProjectionType"] = None,
     ) -> None:
         '''Add a local secondary index of table.
 
@@ -17949,8 +17992,8 @@ class Table(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the resource policy associated with this table.
 
         A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
@@ -17962,7 +18005,7 @@ class Table(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e7e0b5f266fee7a609687021ddb2ebd8d86220f25b39cf2c61b10e2127fad929)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="autoScaleGlobalSecondaryIndexReadCapacity")
     def auto_scale_global_secondary_index_read_capacity(
@@ -17971,7 +18014,7 @@ class Table(
         *,
         max_capacity: jsii.Number,
         min_capacity: jsii.Number,
-    ) -> IScalableTableAttribute:
+    ) -> "IScalableTableAttribute":
         '''Enable read capacity scaling for the given GSI.
 
         :param index_name: -
@@ -17987,7 +18030,7 @@ class Table(
             max_capacity=max_capacity, min_capacity=min_capacity
         )
 
-        return typing.cast(IScalableTableAttribute, jsii.invoke(self, "autoScaleGlobalSecondaryIndexReadCapacity", [index_name, props]))
+        return typing.cast("IScalableTableAttribute", jsii.invoke(self, "autoScaleGlobalSecondaryIndexReadCapacity", [index_name, props]))
 
     @jsii.member(jsii_name="autoScaleGlobalSecondaryIndexWriteCapacity")
     def auto_scale_global_secondary_index_write_capacity(
@@ -17996,7 +18039,7 @@ class Table(
         *,
         max_capacity: jsii.Number,
         min_capacity: jsii.Number,
-    ) -> IScalableTableAttribute:
+    ) -> "IScalableTableAttribute":
         '''Enable write capacity scaling for the given GSI.
 
         :param index_name: -
@@ -18012,7 +18055,7 @@ class Table(
             max_capacity=max_capacity, min_capacity=min_capacity
         )
 
-        return typing.cast(IScalableTableAttribute, jsii.invoke(self, "autoScaleGlobalSecondaryIndexWriteCapacity", [index_name, props]))
+        return typing.cast("IScalableTableAttribute", jsii.invoke(self, "autoScaleGlobalSecondaryIndexWriteCapacity", [index_name, props]))
 
     @jsii.member(jsii_name="autoScaleReadCapacity")
     def auto_scale_read_capacity(
@@ -18020,7 +18063,7 @@ class Table(
         *,
         max_capacity: jsii.Number,
         min_capacity: jsii.Number,
-    ) -> IScalableTableAttribute:
+    ) -> "IScalableTableAttribute":
         '''Enable read capacity scaling for this table.
 
         :param max_capacity: Maximum capacity to scale to.
@@ -18032,7 +18075,7 @@ class Table(
             max_capacity=max_capacity, min_capacity=min_capacity
         )
 
-        return typing.cast(IScalableTableAttribute, jsii.invoke(self, "autoScaleReadCapacity", [props]))
+        return typing.cast("IScalableTableAttribute", jsii.invoke(self, "autoScaleReadCapacity", [props]))
 
     @jsii.member(jsii_name="autoScaleWriteCapacity")
     def auto_scale_write_capacity(
@@ -18040,7 +18083,7 @@ class Table(
         *,
         max_capacity: jsii.Number,
         min_capacity: jsii.Number,
-    ) -> IScalableTableAttribute:
+    ) -> "IScalableTableAttribute":
         '''Enable write capacity scaling for this table.
 
         :param max_capacity: Maximum capacity to scale to.
@@ -18052,10 +18095,13 @@ class Table(
             max_capacity=max_capacity, min_capacity=min_capacity
         )
 
-        return typing.cast(IScalableTableAttribute, jsii.invoke(self, "autoScaleWriteCapacity", [props]))
+        return typing.cast("IScalableTableAttribute", jsii.invoke(self, "autoScaleWriteCapacity", [props]))
 
     @jsii.member(jsii_name="schema")
-    def schema(self, index_name: typing.Optional[builtins.str] = None) -> SchemaOptions:
+    def schema(
+        self,
+        index_name: typing.Optional[builtins.str] = None,
+    ) -> "SchemaOptions":
         '''(deprecated) Get schema attributes of table or index.
 
         :param index_name: -
@@ -18069,10 +18115,13 @@ class Table(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9bf5dafcde17b7b65610795b8d251399ace67acb6de4e8ea9af3afe7b588b341)
             check_type(argname="argument index_name", value=index_name, expected_type=type_hints["index_name"])
-        return typing.cast(SchemaOptions, jsii.invoke(self, "schema", [index_name]))
+        return typing.cast("SchemaOptions", jsii.invoke(self, "schema", [index_name]))
 
     @jsii.member(jsii_name="schemaV2")
-    def schema_v2(self, index_name: typing.Optional[builtins.str] = None) -> KeySchema:
+    def schema_v2(
+        self,
+        index_name: typing.Optional[builtins.str] = None,
+    ) -> "KeySchema":
         '''Get schema attributes of table or index.
 
         :param index_name: -
@@ -18082,7 +18131,7 @@ class Table(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ce60713843c9ba98c49e78d227cb9f0c137cbed88da3487ae831559f68e684fb)
             check_type(argname="argument index_name", value=index_name, expected_type=type_hints["index_name"])
-        return typing.cast(KeySchema, jsii.invoke(self, "schemaV2", [index_name]))
+        return typing.cast("KeySchema", jsii.invoke(self, "schemaV2", [index_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -18116,9 +18165,9 @@ class Table(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''KMS encryption key, if this table uses a customer-managed encryption key.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionKey"))
 
     @builtins.property
     @jsii.member(jsii_name="regions")
@@ -18137,17 +18186,20 @@ class Table(
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicy")
-    def resource_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def resource_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''Resource policy to assign to DynamoDB Table.
 
         :default: - No resource policy statements are added to the created table.
 
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-resourcepolicy.html
         '''
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], jsii.get(self, "resourcePolicy"))
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], jsii.get(self, "resourcePolicy"))
 
     @resource_policy.setter
-    def resource_policy(self, value: typing.Optional[_PolicyDocument_3ac34393]) -> None:
+    def resource_policy(
+        self,
+        value: typing.Optional["_PolicyDocument_3ac34393"],
+    ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b85333b9f4a3ca55431a35f4006c1aeb1fcd34f68dee45d5355498d8a1b77806)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])

@@ -488,7 +488,7 @@ class IAggregatorV2Ref(
 
     @builtins.property
     @jsii.member(jsii_name="aggregatorV2Ref")
-    def aggregator_v2_ref(self) -> AggregatorV2Reference:
+    def aggregator_v2_ref(self) -> "AggregatorV2Reference":
         '''(experimental) A reference to a AggregatorV2 resource.
 
         :stability: experimental
@@ -509,12 +509,12 @@ class _IAggregatorV2RefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aggregatorV2Ref")
-    def aggregator_v2_ref(self) -> AggregatorV2Reference:
+    def aggregator_v2_ref(self) -> "AggregatorV2Reference":
         '''(experimental) A reference to a AggregatorV2 resource.
 
         :stability: experimental
         '''
-        return typing.cast(AggregatorV2Reference, jsii.get(self, "aggregatorV2Ref"))
+        return typing.cast("AggregatorV2Reference", jsii.get(self, "aggregatorV2Ref"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAggregatorV2Ref).__jsii_proxy_class__ = lambda : _IAggregatorV2RefProxy
@@ -533,7 +533,7 @@ class IAutomationRuleRef(
 
     @builtins.property
     @jsii.member(jsii_name="automationRuleRef")
-    def automation_rule_ref(self) -> AutomationRuleReference:
+    def automation_rule_ref(self) -> "AutomationRuleReference":
         '''(experimental) A reference to a AutomationRule resource.
 
         :stability: experimental
@@ -554,12 +554,12 @@ class _IAutomationRuleRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="automationRuleRef")
-    def automation_rule_ref(self) -> AutomationRuleReference:
+    def automation_rule_ref(self) -> "AutomationRuleReference":
         '''(experimental) A reference to a AutomationRule resource.
 
         :stability: experimental
         '''
-        return typing.cast(AutomationRuleReference, jsii.get(self, "automationRuleRef"))
+        return typing.cast("AutomationRuleReference", jsii.get(self, "automationRuleRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAutomationRuleRef).__jsii_proxy_class__ = lambda : _IAutomationRuleRefProxy
@@ -580,7 +580,7 @@ class IAutomationRuleV2Ref(
 
     @builtins.property
     @jsii.member(jsii_name="automationRuleV2Ref")
-    def automation_rule_v2_ref(self) -> AutomationRuleV2Reference:
+    def automation_rule_v2_ref(self) -> "AutomationRuleV2Reference":
         '''(experimental) A reference to a AutomationRuleV2 resource.
 
         :stability: experimental
@@ -601,12 +601,12 @@ class _IAutomationRuleV2RefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="automationRuleV2Ref")
-    def automation_rule_v2_ref(self) -> AutomationRuleV2Reference:
+    def automation_rule_v2_ref(self) -> "AutomationRuleV2Reference":
         '''(experimental) A reference to a AutomationRuleV2 resource.
 
         :stability: experimental
         '''
-        return typing.cast(AutomationRuleV2Reference, jsii.get(self, "automationRuleV2Ref"))
+        return typing.cast("AutomationRuleV2Reference", jsii.get(self, "automationRuleV2Ref"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAutomationRuleV2Ref).__jsii_proxy_class__ = lambda : _IAutomationRuleV2RefProxy
@@ -627,7 +627,7 @@ class IConfigurationPolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="configurationPolicyRef")
-    def configuration_policy_ref(self) -> ConfigurationPolicyReference:
+    def configuration_policy_ref(self) -> "ConfigurationPolicyReference":
         '''(experimental) A reference to a ConfigurationPolicy resource.
 
         :stability: experimental
@@ -648,12 +648,12 @@ class _IConfigurationPolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configurationPolicyRef")
-    def configuration_policy_ref(self) -> ConfigurationPolicyReference:
+    def configuration_policy_ref(self) -> "ConfigurationPolicyReference":
         '''(experimental) A reference to a ConfigurationPolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationPolicyReference, jsii.get(self, "configurationPolicyRef"))
+        return typing.cast("ConfigurationPolicyReference", jsii.get(self, "configurationPolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationPolicyRef).__jsii_proxy_class__ = lambda : _IConfigurationPolicyRefProxy
@@ -672,7 +672,7 @@ class IConnectorV2Ref(
 
     @builtins.property
     @jsii.member(jsii_name="connectorV2Ref")
-    def connector_v2_ref(self) -> ConnectorV2Reference:
+    def connector_v2_ref(self) -> "ConnectorV2Reference":
         '''(experimental) A reference to a ConnectorV2 resource.
 
         :stability: experimental
@@ -693,12 +693,12 @@ class _IConnectorV2RefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectorV2Ref")
-    def connector_v2_ref(self) -> ConnectorV2Reference:
+    def connector_v2_ref(self) -> "ConnectorV2Reference":
         '''(experimental) A reference to a ConnectorV2 resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectorV2Reference, jsii.get(self, "connectorV2Ref"))
+        return typing.cast("ConnectorV2Reference", jsii.get(self, "connectorV2Ref"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectorV2Ref).__jsii_proxy_class__ = lambda : _IConnectorV2RefProxy
@@ -717,7 +717,7 @@ class IDelegatedAdminRef(
 
     @builtins.property
     @jsii.member(jsii_name="delegatedAdminRef")
-    def delegated_admin_ref(self) -> DelegatedAdminReference:
+    def delegated_admin_ref(self) -> "DelegatedAdminReference":
         '''(experimental) A reference to a DelegatedAdmin resource.
 
         :stability: experimental
@@ -738,12 +738,12 @@ class _IDelegatedAdminRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="delegatedAdminRef")
-    def delegated_admin_ref(self) -> DelegatedAdminReference:
+    def delegated_admin_ref(self) -> "DelegatedAdminReference":
         '''(experimental) A reference to a DelegatedAdmin resource.
 
         :stability: experimental
         '''
-        return typing.cast(DelegatedAdminReference, jsii.get(self, "delegatedAdminRef"))
+        return typing.cast("DelegatedAdminReference", jsii.get(self, "delegatedAdminRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDelegatedAdminRef).__jsii_proxy_class__ = lambda : _IDelegatedAdminRefProxy
@@ -764,7 +764,7 @@ class IFindingAggregatorRef(
 
     @builtins.property
     @jsii.member(jsii_name="findingAggregatorRef")
-    def finding_aggregator_ref(self) -> FindingAggregatorReference:
+    def finding_aggregator_ref(self) -> "FindingAggregatorReference":
         '''(experimental) A reference to a FindingAggregator resource.
 
         :stability: experimental
@@ -785,12 +785,12 @@ class _IFindingAggregatorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="findingAggregatorRef")
-    def finding_aggregator_ref(self) -> FindingAggregatorReference:
+    def finding_aggregator_ref(self) -> "FindingAggregatorReference":
         '''(experimental) A reference to a FindingAggregator resource.
 
         :stability: experimental
         '''
-        return typing.cast(FindingAggregatorReference, jsii.get(self, "findingAggregatorRef"))
+        return typing.cast("FindingAggregatorReference", jsii.get(self, "findingAggregatorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFindingAggregatorRef).__jsii_proxy_class__ = lambda : _IFindingAggregatorRefProxy
@@ -809,7 +809,7 @@ class IHubRef(
 
     @builtins.property
     @jsii.member(jsii_name="hubRef")
-    def hub_ref(self) -> HubReference:
+    def hub_ref(self) -> "HubReference":
         '''(experimental) A reference to a Hub resource.
 
         :stability: experimental
@@ -830,12 +830,12 @@ class _IHubRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="hubRef")
-    def hub_ref(self) -> HubReference:
+    def hub_ref(self) -> "HubReference":
         '''(experimental) A reference to a Hub resource.
 
         :stability: experimental
         '''
-        return typing.cast(HubReference, jsii.get(self, "hubRef"))
+        return typing.cast("HubReference", jsii.get(self, "hubRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHubRef).__jsii_proxy_class__ = lambda : _IHubRefProxy
@@ -854,7 +854,7 @@ class IHubV2Ref(
 
     @builtins.property
     @jsii.member(jsii_name="hubV2Ref")
-    def hub_v2_ref(self) -> HubV2Reference:
+    def hub_v2_ref(self) -> "HubV2Reference":
         '''(experimental) A reference to a HubV2 resource.
 
         :stability: experimental
@@ -875,12 +875,12 @@ class _IHubV2RefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="hubV2Ref")
-    def hub_v2_ref(self) -> HubV2Reference:
+    def hub_v2_ref(self) -> "HubV2Reference":
         '''(experimental) A reference to a HubV2 resource.
 
         :stability: experimental
         '''
-        return typing.cast(HubV2Reference, jsii.get(self, "hubV2Ref"))
+        return typing.cast("HubV2Reference", jsii.get(self, "hubV2Ref"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHubV2Ref).__jsii_proxy_class__ = lambda : _IHubV2RefProxy

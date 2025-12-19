@@ -437,6 +437,7 @@ enabled it is possible to do something like creating a CloudFront distribution i
 an ACM certificate in `us-east-1`.
 
 ```python
+from aws_cdk import Environment, Environment
 import aws_cdk.aws_certificatemanager as acm
 import aws_cdk.aws_route53 as route53
 
@@ -1848,16 +1849,16 @@ class AddBehaviorOptions:
         *,
         allowed_methods: typing.Optional["AllowedMethods"] = None,
         cached_methods: typing.Optional["CachedMethods"] = None,
-        cache_policy: typing.Optional[_ICachePolicyRef_4d6ba2ea] = None,
+        cache_policy: typing.Optional["_ICachePolicyRef_4d6ba2ea"] = None,
         compress: typing.Optional[builtins.bool] = None,
         edge_lambdas: typing.Optional[typing.Sequence[typing.Union["EdgeLambda", typing.Dict[builtins.str, typing.Any]]]] = None,
         enable_grpc: typing.Optional[builtins.bool] = None,
         function_associations: typing.Optional[typing.Sequence[typing.Union["FunctionAssociation", typing.Dict[builtins.str, typing.Any]]]] = None,
-        origin_request_policy: typing.Optional[_IOriginRequestPolicyRef_affb6d7f] = None,
-        realtime_log_config: typing.Optional[_IRealtimeLogConfigRef_83cc214a] = None,
-        response_headers_policy: typing.Optional[_IResponseHeadersPolicyRef_25ee5061] = None,
+        origin_request_policy: typing.Optional["_IOriginRequestPolicyRef_affb6d7f"] = None,
+        realtime_log_config: typing.Optional["_IRealtimeLogConfigRef_83cc214a"] = None,
+        response_headers_policy: typing.Optional["_IResponseHeadersPolicyRef_25ee5061"] = None,
         smooth_streaming: typing.Optional[builtins.bool] = None,
-        trusted_key_groups: typing.Optional[typing.Sequence[_IKeyGroupRef_44670bc7]] = None,
+        trusted_key_groups: typing.Optional[typing.Sequence["_IKeyGroupRef_44670bc7"]] = None,
         viewer_protocol_policy: typing.Optional["ViewerProtocolPolicy"] = None,
     ) -> None:
         '''Options for adding a new behavior to a Distribution.
@@ -1950,7 +1951,7 @@ class AddBehaviorOptions:
         return typing.cast(typing.Optional["CachedMethods"], result)
 
     @builtins.property
-    def cache_policy(self) -> typing.Optional[_ICachePolicyRef_4d6ba2ea]:
+    def cache_policy(self) -> typing.Optional["_ICachePolicyRef_4d6ba2ea"]:
         '''The cache policy for this behavior.
 
         The cache policy determines what values are included in the cache key,
@@ -1961,7 +1962,7 @@ class AddBehaviorOptions:
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html.
         '''
         result = self._values.get("cache_policy")
-        return typing.cast(typing.Optional[_ICachePolicyRef_4d6ba2ea], result)
+        return typing.cast(typing.Optional["_ICachePolicyRef_4d6ba2ea"], result)
 
     @builtins.property
     def compress(self) -> typing.Optional[builtins.bool]:
@@ -2017,7 +2018,7 @@ class AddBehaviorOptions:
     @builtins.property
     def origin_request_policy(
         self,
-    ) -> typing.Optional[_IOriginRequestPolicyRef_affb6d7f]:
+    ) -> typing.Optional["_IOriginRequestPolicyRef_affb6d7f"]:
         '''The origin request policy for this behavior.
 
         The origin request policy determines which values (e.g., headers, cookies)
@@ -2026,21 +2027,21 @@ class AddBehaviorOptions:
         :default: - none
         '''
         result = self._values.get("origin_request_policy")
-        return typing.cast(typing.Optional[_IOriginRequestPolicyRef_affb6d7f], result)
+        return typing.cast(typing.Optional["_IOriginRequestPolicyRef_affb6d7f"], result)
 
     @builtins.property
-    def realtime_log_config(self) -> typing.Optional[_IRealtimeLogConfigRef_83cc214a]:
+    def realtime_log_config(self) -> typing.Optional["_IRealtimeLogConfigRef_83cc214a"]:
         '''The real-time log configuration to be attached to this cache behavior.
 
         :default: - none
         '''
         result = self._values.get("realtime_log_config")
-        return typing.cast(typing.Optional[_IRealtimeLogConfigRef_83cc214a], result)
+        return typing.cast(typing.Optional["_IRealtimeLogConfigRef_83cc214a"], result)
 
     @builtins.property
     def response_headers_policy(
         self,
-    ) -> typing.Optional[_IResponseHeadersPolicyRef_25ee5061]:
+    ) -> typing.Optional["_IResponseHeadersPolicyRef_25ee5061"]:
         '''The response headers policy for this behavior.
 
         The response headers policy determines which headers are included in responses
@@ -2048,7 +2049,7 @@ class AddBehaviorOptions:
         :default: - none
         '''
         result = self._values.get("response_headers_policy")
-        return typing.cast(typing.Optional[_IResponseHeadersPolicyRef_25ee5061], result)
+        return typing.cast(typing.Optional["_IResponseHeadersPolicyRef_25ee5061"], result)
 
     @builtins.property
     def smooth_streaming(self) -> typing.Optional[builtins.bool]:
@@ -2062,7 +2063,7 @@ class AddBehaviorOptions:
     @builtins.property
     def trusted_key_groups(
         self,
-    ) -> typing.Optional[typing.List[_IKeyGroupRef_44670bc7]]:
+    ) -> typing.Optional[typing.List["_IKeyGroupRef_44670bc7"]]:
         '''A list of Key Groups that CloudFront can use to validate signed URLs or signed cookies.
 
         :default: - no KeyGroups are associated with cache behavior
@@ -2070,7 +2071,7 @@ class AddBehaviorOptions:
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html
         '''
         result = self._values.get("trusted_key_groups")
-        return typing.cast(typing.Optional[typing.List[_IKeyGroupRef_44670bc7]], result)
+        return typing.cast(typing.Optional[typing.List["_IKeyGroupRef_44670bc7"]], result)
 
     @builtins.property
     def viewer_protocol_policy(self) -> typing.Optional["ViewerProtocolPolicy"]:
@@ -2167,13 +2168,13 @@ class Behavior:
         allowed_methods: typing.Optional["CloudFrontAllowedMethods"] = None,
         cached_methods: typing.Optional["CloudFrontAllowedCachedMethods"] = None,
         compress: typing.Optional[builtins.bool] = None,
-        default_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        default_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         forwarded_values: typing.Optional[typing.Union["CfnDistribution.ForwardedValuesProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         function_associations: typing.Optional[typing.Sequence[typing.Union["FunctionAssociation", typing.Dict[builtins.str, typing.Any]]]] = None,
         is_default_behavior: typing.Optional[builtins.bool] = None,
         lambda_function_associations: typing.Optional[typing.Sequence[typing.Union["LambdaFunctionAssociation", typing.Dict[builtins.str, typing.Any]]]] = None,
-        max_ttl: typing.Optional[_Duration_4839e8c3] = None,
-        min_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        max_ttl: typing.Optional["_Duration_4839e8c3"] = None,
+        min_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         path_pattern: typing.Optional[builtins.str] = None,
         trusted_key_groups: typing.Optional[typing.Sequence["IKeyGroup"]] = None,
         trusted_signers: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -2325,7 +2326,7 @@ class Behavior:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def default_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def default_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The default amount of time CloudFront will cache an object.
 
         This value applies only when your custom origin does not add HTTP headers,
@@ -2334,7 +2335,7 @@ class Behavior:
         :default: 86400 (1 day)
         '''
         result = self._values.get("default_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def forwarded_values(
@@ -2380,19 +2381,19 @@ class Behavior:
         return typing.cast(typing.Optional[typing.List["LambdaFunctionAssociation"]], result)
 
     @builtins.property
-    def max_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The max amount of time you want objects to stay in the cache before CloudFront queries your origin.
 
         :default: Duration.seconds(31536000) (one year)
         '''
         result = self._values.get("max_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def min_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def min_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The minimum amount of time that you want objects to stay in the cache before CloudFront queries your origin.'''
         result = self._values.get("min_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def path_pattern(self) -> typing.Optional[builtins.str]:
@@ -2474,18 +2475,18 @@ class BehaviorOptions(AddBehaviorOptions):
     def __init__(
         self,
         *,
-        allowed_methods: typing.Optional[AllowedMethods] = None,
+        allowed_methods: typing.Optional["AllowedMethods"] = None,
         cached_methods: typing.Optional["CachedMethods"] = None,
-        cache_policy: typing.Optional[_ICachePolicyRef_4d6ba2ea] = None,
+        cache_policy: typing.Optional["_ICachePolicyRef_4d6ba2ea"] = None,
         compress: typing.Optional[builtins.bool] = None,
         edge_lambdas: typing.Optional[typing.Sequence[typing.Union["EdgeLambda", typing.Dict[builtins.str, typing.Any]]]] = None,
         enable_grpc: typing.Optional[builtins.bool] = None,
         function_associations: typing.Optional[typing.Sequence[typing.Union["FunctionAssociation", typing.Dict[builtins.str, typing.Any]]]] = None,
-        origin_request_policy: typing.Optional[_IOriginRequestPolicyRef_affb6d7f] = None,
-        realtime_log_config: typing.Optional[_IRealtimeLogConfigRef_83cc214a] = None,
-        response_headers_policy: typing.Optional[_IResponseHeadersPolicyRef_25ee5061] = None,
+        origin_request_policy: typing.Optional["_IOriginRequestPolicyRef_affb6d7f"] = None,
+        realtime_log_config: typing.Optional["_IRealtimeLogConfigRef_83cc214a"] = None,
+        response_headers_policy: typing.Optional["_IResponseHeadersPolicyRef_25ee5061"] = None,
         smooth_streaming: typing.Optional[builtins.bool] = None,
-        trusted_key_groups: typing.Optional[typing.Sequence[_IKeyGroupRef_44670bc7]] = None,
+        trusted_key_groups: typing.Optional[typing.Sequence["_IKeyGroupRef_44670bc7"]] = None,
         viewer_protocol_policy: typing.Optional["ViewerProtocolPolicy"] = None,
         origin: "IOrigin",
     ) -> None:
@@ -2573,13 +2574,13 @@ class BehaviorOptions(AddBehaviorOptions):
             self._values["viewer_protocol_policy"] = viewer_protocol_policy
 
     @builtins.property
-    def allowed_methods(self) -> typing.Optional[AllowedMethods]:
+    def allowed_methods(self) -> typing.Optional["AllowedMethods"]:
         '''HTTP methods to allow for this behavior.
 
         :default: AllowedMethods.ALLOW_GET_HEAD
         '''
         result = self._values.get("allowed_methods")
-        return typing.cast(typing.Optional[AllowedMethods], result)
+        return typing.cast(typing.Optional["AllowedMethods"], result)
 
     @builtins.property
     def cached_methods(self) -> typing.Optional["CachedMethods"]:
@@ -2591,7 +2592,7 @@ class BehaviorOptions(AddBehaviorOptions):
         return typing.cast(typing.Optional["CachedMethods"], result)
 
     @builtins.property
-    def cache_policy(self) -> typing.Optional[_ICachePolicyRef_4d6ba2ea]:
+    def cache_policy(self) -> typing.Optional["_ICachePolicyRef_4d6ba2ea"]:
         '''The cache policy for this behavior.
 
         The cache policy determines what values are included in the cache key,
@@ -2602,7 +2603,7 @@ class BehaviorOptions(AddBehaviorOptions):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html.
         '''
         result = self._values.get("cache_policy")
-        return typing.cast(typing.Optional[_ICachePolicyRef_4d6ba2ea], result)
+        return typing.cast(typing.Optional["_ICachePolicyRef_4d6ba2ea"], result)
 
     @builtins.property
     def compress(self) -> typing.Optional[builtins.bool]:
@@ -2658,7 +2659,7 @@ class BehaviorOptions(AddBehaviorOptions):
     @builtins.property
     def origin_request_policy(
         self,
-    ) -> typing.Optional[_IOriginRequestPolicyRef_affb6d7f]:
+    ) -> typing.Optional["_IOriginRequestPolicyRef_affb6d7f"]:
         '''The origin request policy for this behavior.
 
         The origin request policy determines which values (e.g., headers, cookies)
@@ -2667,21 +2668,21 @@ class BehaviorOptions(AddBehaviorOptions):
         :default: - none
         '''
         result = self._values.get("origin_request_policy")
-        return typing.cast(typing.Optional[_IOriginRequestPolicyRef_affb6d7f], result)
+        return typing.cast(typing.Optional["_IOriginRequestPolicyRef_affb6d7f"], result)
 
     @builtins.property
-    def realtime_log_config(self) -> typing.Optional[_IRealtimeLogConfigRef_83cc214a]:
+    def realtime_log_config(self) -> typing.Optional["_IRealtimeLogConfigRef_83cc214a"]:
         '''The real-time log configuration to be attached to this cache behavior.
 
         :default: - none
         '''
         result = self._values.get("realtime_log_config")
-        return typing.cast(typing.Optional[_IRealtimeLogConfigRef_83cc214a], result)
+        return typing.cast(typing.Optional["_IRealtimeLogConfigRef_83cc214a"], result)
 
     @builtins.property
     def response_headers_policy(
         self,
-    ) -> typing.Optional[_IResponseHeadersPolicyRef_25ee5061]:
+    ) -> typing.Optional["_IResponseHeadersPolicyRef_25ee5061"]:
         '''The response headers policy for this behavior.
 
         The response headers policy determines which headers are included in responses
@@ -2689,7 +2690,7 @@ class BehaviorOptions(AddBehaviorOptions):
         :default: - none
         '''
         result = self._values.get("response_headers_policy")
-        return typing.cast(typing.Optional[_IResponseHeadersPolicyRef_25ee5061], result)
+        return typing.cast(typing.Optional["_IResponseHeadersPolicyRef_25ee5061"], result)
 
     @builtins.property
     def smooth_streaming(self) -> typing.Optional[builtins.bool]:
@@ -2703,7 +2704,7 @@ class BehaviorOptions(AddBehaviorOptions):
     @builtins.property
     def trusted_key_groups(
         self,
-    ) -> typing.Optional[typing.List[_IKeyGroupRef_44670bc7]]:
+    ) -> typing.Optional[typing.List["_IKeyGroupRef_44670bc7"]]:
         '''A list of Key Groups that CloudFront can use to validate signed URLs or signed cookies.
 
         :default: - no KeyGroups are associated with cache behavior
@@ -2711,7 +2712,7 @@ class BehaviorOptions(AddBehaviorOptions):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html
         '''
         result = self._values.get("trusted_key_groups")
-        return typing.cast(typing.Optional[typing.List[_IKeyGroupRef_44670bc7]], result)
+        return typing.cast(typing.Optional[typing.List["_IKeyGroupRef_44670bc7"]], result)
 
     @builtins.property
     def viewer_protocol_policy(self) -> typing.Optional["ViewerProtocolPolicy"]:
@@ -2909,13 +2910,13 @@ class CachePolicyProps:
         *,
         cache_policy_name: typing.Optional[builtins.str] = None,
         comment: typing.Optional[builtins.str] = None,
-        cookie_behavior: typing.Optional[CacheCookieBehavior] = None,
-        default_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        cookie_behavior: typing.Optional["CacheCookieBehavior"] = None,
+        default_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         enable_accept_encoding_brotli: typing.Optional[builtins.bool] = None,
         enable_accept_encoding_gzip: typing.Optional[builtins.bool] = None,
-        header_behavior: typing.Optional[CacheHeaderBehavior] = None,
-        max_ttl: typing.Optional[_Duration_4839e8c3] = None,
-        min_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        header_behavior: typing.Optional["CacheHeaderBehavior"] = None,
+        max_ttl: typing.Optional["_Duration_4839e8c3"] = None,
+        min_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         query_string_behavior: typing.Optional["CacheQueryStringBehavior"] = None,
     ) -> None:
         '''Properties for creating a Cache Policy.
@@ -3014,16 +3015,16 @@ class CachePolicyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def cookie_behavior(self) -> typing.Optional[CacheCookieBehavior]:
+    def cookie_behavior(self) -> typing.Optional["CacheCookieBehavior"]:
         '''Determines whether any cookies in viewer requests are included in the cache key and automatically included in requests that CloudFront sends to the origin.
 
         :default: CacheCookieBehavior.none()
         '''
         result = self._values.get("cookie_behavior")
-        return typing.cast(typing.Optional[CacheCookieBehavior], result)
+        return typing.cast(typing.Optional["CacheCookieBehavior"], result)
 
     @builtins.property
-    def default_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def default_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The default amount of time for objects to stay in the CloudFront cache.
 
         Only used when the origin does not send Cache-Control or Expires headers with the object.
@@ -3031,7 +3032,7 @@ class CachePolicyProps:
         :default: - The greater of 1 day and ``minTtl``
         '''
         result = self._values.get("default_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def enable_accept_encoding_brotli(self) -> typing.Optional[builtins.bool]:
@@ -3052,16 +3053,16 @@ class CachePolicyProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def header_behavior(self) -> typing.Optional[CacheHeaderBehavior]:
+    def header_behavior(self) -> typing.Optional["CacheHeaderBehavior"]:
         '''Determines whether any HTTP headers are included in the cache key and automatically included in requests that CloudFront sends to the origin.
 
         :default: CacheHeaderBehavior.none()
         '''
         result = self._values.get("header_behavior")
-        return typing.cast(typing.Optional[CacheHeaderBehavior], result)
+        return typing.cast(typing.Optional["CacheHeaderBehavior"], result)
 
     @builtins.property
-    def max_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum amount of time for objects to stay in the CloudFront cache.
 
         CloudFront uses this value only when the origin sends Cache-Control or Expires headers with the object.
@@ -3069,16 +3070,16 @@ class CachePolicyProps:
         :default: - The greater of 1 year and ``defaultTtl``
         '''
         result = self._values.get("max_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def min_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def min_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The minimum amount of time for objects to stay in the CloudFront cache.
 
         :default: Duration.seconds(0)
         '''
         result = self._values.get("min_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def query_string_behavior(self) -> typing.Optional["CacheQueryStringBehavior"]:
@@ -3235,6 +3236,7 @@ class CfnAnycastIpList(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cloudfront as cloudfront
@@ -3245,6 +3247,10 @@ class CfnAnycastIpList(
         
             # the properties below are optional
             ip_address_type="ipAddressType",
+            ipam_cidr_configs=[cloudfront.CfnAnycastIpList.IpamCidrConfigProperty(
+                cidr="cidr",
+                ipam_pool_arn="ipamPoolArn"
+            )],
             tags=cloudfront.CfnAnycastIpList.TagsProperty(
                 items=[CfnTag(
                     key="key",
@@ -3256,12 +3262,13 @@ class CfnAnycastIpList(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         ip_count: jsii.Number,
         name: builtins.str,
         ip_address_type: typing.Optional[builtins.str] = None,
+        ipam_cidr_configs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnycastIpList.IpamCidrConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Union["CfnAnycastIpList.TagsProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFront::AnycastIpList``.
@@ -3271,6 +3278,7 @@ class CfnAnycastIpList(
         :param ip_count: The number of IP addresses in the Anycast static IP list.
         :param name: The name of the Anycast static IP list.
         :param ip_address_type: The IP address type for the Anycast static IP list.
+        :param ipam_cidr_configs: 
         :param tags: A complex type that contains zero or more ``Tag`` elements.
         '''
         if __debug__:
@@ -3278,7 +3286,11 @@ class CfnAnycastIpList(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnAnycastIpListProps(
-            ip_count=ip_count, name=name, ip_address_type=ip_address_type, tags=tags
+            ip_count=ip_count,
+            name=name,
+            ip_address_type=ip_address_type,
+            ipam_cidr_configs=ipam_cidr_configs,
+            tags=tags,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -3287,7 +3299,7 @@ class CfnAnycastIpList(
     @builtins.classmethod
     def arn_for_anycast_ip_list(
         cls,
-        resource: _IAnycastIpListRef_e7af96ce,
+        resource: "_IAnycastIpListRef_e7af96ce",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3310,7 +3322,7 @@ class CfnAnycastIpList(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAnycastIpList", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3341,20 +3353,20 @@ class CfnAnycastIpList(
 
     @builtins.property
     @jsii.member(jsii_name="anycastIpListRef")
-    def anycast_ip_list_ref(self) -> _AnycastIpListReference_dcca9827:
+    def anycast_ip_list_ref(self) -> "_AnycastIpListReference_dcca9827":
         '''A reference to a AnycastIpList resource.'''
-        return typing.cast(_AnycastIpListReference_dcca9827, jsii.get(self, "anycastIpListRef"))
+        return typing.cast("_AnycastIpListReference_dcca9827", jsii.get(self, "anycastIpListRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAnycastIpList")
-    def attr_anycast_ip_list(self) -> _IResolvable_da3f097b:
+    def attr_anycast_ip_list(self) -> "_IResolvable_da3f097b":
         '''An Anycast static IP list.
 
         For more information, see `Request Anycast static IPs to use for allowlisting <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/request-static-ips.html>`_ in the *Amazon CloudFront Developer Guide*.
 
         :cloudformationAttribute: AnycastIpList
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrAnycastIpList"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrAnycastIpList"))
 
     @builtins.property
     @jsii.member(jsii_name="attrETag")
@@ -3375,10 +3387,18 @@ class CfnAnycastIpList(
         return typing.cast(builtins.str, jsii.get(self, "attrId"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrIpamCidrConfigResults")
+    def attr_ipam_cidr_config_results(self) -> "_IResolvable_da3f097b":
+        '''
+        :cloudformationAttribute: IpamCidrConfigResults
+        '''
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrIpamCidrConfigResults"))
+
+    @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3425,6 +3445,23 @@ class CfnAnycastIpList(
         jsii.set(self, "ipAddressType", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="ipamCidrConfigs")
+    def ipam_cidr_configs(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnycastIpList.IpamCidrConfigProperty"]]]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnycastIpList.IpamCidrConfigProperty"]]]], jsii.get(self, "ipamCidrConfigs"))
+
+    @ipam_cidr_configs.setter
+    def ipam_cidr_configs(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnycastIpList.IpamCidrConfigProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bb8862dea2d5fd91e3c6f5ebd9a93fb04ff09f68785beb38891d47f54af027a3)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "ipamCidrConfigs", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional["CfnAnycastIpList.TagsProperty"]:
         '''A complex type that contains zero or more ``Tag`` elements.'''
@@ -3449,6 +3486,7 @@ class CfnAnycastIpList(
             "name": "name",
             "status": "status",
             "ip_address_type": "ipAddressType",
+            "ipam_cidr_config_results": "ipamCidrConfigResults",
         },
     )
     class AnycastIpListProperty:
@@ -3463,6 +3501,7 @@ class CfnAnycastIpList(
             name: builtins.str,
             status: builtins.str,
             ip_address_type: typing.Optional[builtins.str] = None,
+            ipam_cidr_config_results: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnycastIpList.IpamCidrConfigResultProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''An Anycast static IP list.
 
@@ -3476,6 +3515,7 @@ class CfnAnycastIpList(
             :param name: The name of the Anycast static IP list.
             :param status: The status of the Anycast static IP list. Valid values: ``Deployed`` , ``Deploying`` , or ``Failed`` .
             :param ip_address_type: The IP address type for the Anycast static IP list.
+            :param ipam_cidr_config_results: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-anycastiplist.html
             :exampleMetadata: fixture=_generated
@@ -3496,7 +3536,13 @@ class CfnAnycastIpList(
                     status="status",
                 
                     # the properties below are optional
-                    ip_address_type="ipAddressType"
+                    ip_address_type="ipAddressType",
+                    ipam_cidr_config_results=[cloudfront.CfnAnycastIpList.IpamCidrConfigResultProperty(
+                        anycast_ip="anycastIp",
+                        cidr="cidr",
+                        ipam_pool_arn="ipamPoolArn",
+                        status="status"
+                    )]
                 )
             '''
             if __debug__:
@@ -3509,6 +3555,7 @@ class CfnAnycastIpList(
                 check_type(argname="argument name", value=name, expected_type=type_hints["name"])
                 check_type(argname="argument status", value=status, expected_type=type_hints["status"])
                 check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
+                check_type(argname="argument ipam_cidr_config_results", value=ipam_cidr_config_results, expected_type=type_hints["ipam_cidr_config_results"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "anycast_ips": anycast_ips,
                 "arn": arn,
@@ -3520,6 +3567,8 @@ class CfnAnycastIpList(
             }
             if ip_address_type is not None:
                 self._values["ip_address_type"] = ip_address_type
+            if ipam_cidr_config_results is not None:
+                self._values["ipam_cidr_config_results"] = ipam_cidr_config_results
 
         @builtins.property
         def anycast_ips(self) -> typing.List[builtins.str]:
@@ -3602,6 +3651,16 @@ class CfnAnycastIpList(
             result = self._values.get("ip_address_type")
             return typing.cast(typing.Optional[builtins.str], result)
 
+        @builtins.property
+        def ipam_cidr_config_results(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnycastIpList.IpamCidrConfigResultProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-anycastiplist.html#cfn-cloudfront-anycastiplist-anycastiplist-ipamcidrconfigresults
+            '''
+            result = self._values.get("ipam_cidr_config_results")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnycastIpList.IpamCidrConfigResultProperty"]]]], result)
+
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
 
@@ -3614,6 +3673,172 @@ class CfnAnycastIpList(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cloudfront.CfnAnycastIpList.IpamCidrConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"cidr": "cidr", "ipam_pool_arn": "ipamPoolArn"},
+    )
+    class IpamCidrConfigProperty:
+        def __init__(self, *, cidr: builtins.str, ipam_pool_arn: builtins.str) -> None:
+            '''Configuration for an IPAM CIDR that defines a specific IP address range, IPAM pool, and associated Anycast IP address.
+
+            :param cidr: The CIDR that specifies the IP address range for this IPAM configuration.
+            :param ipam_pool_arn: The Amazon Resource Name (ARN) of the IPAM pool that the CIDR block is assigned to.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cloudfront as cloudfront
+                
+                ipam_cidr_config_property = cloudfront.CfnAnycastIpList.IpamCidrConfigProperty(
+                    cidr="cidr",
+                    ipam_pool_arn="ipamPoolArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__16a7c7bfed6e1c5f4bcea8bc3ed2c19688078cdeaa61ccee2b09693c132ee246)
+                check_type(argname="argument cidr", value=cidr, expected_type=type_hints["cidr"])
+                check_type(argname="argument ipam_pool_arn", value=ipam_pool_arn, expected_type=type_hints["ipam_pool_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "cidr": cidr,
+                "ipam_pool_arn": ipam_pool_arn,
+            }
+
+        @builtins.property
+        def cidr(self) -> builtins.str:
+            '''The CIDR that specifies the IP address range for this IPAM configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfig.html#cfn-cloudfront-anycastiplist-ipamcidrconfig-cidr
+            '''
+            result = self._values.get("cidr")
+            assert result is not None, "Required property 'cidr' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def ipam_pool_arn(self) -> builtins.str:
+            '''The Amazon Resource Name (ARN) of the IPAM pool that the CIDR block is assigned to.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfig.html#cfn-cloudfront-anycastiplist-ipamcidrconfig-ipampoolarn
+            '''
+            result = self._values.get("ipam_pool_arn")
+            assert result is not None, "Required property 'ipam_pool_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "IpamCidrConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cloudfront.CfnAnycastIpList.IpamCidrConfigResultProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "anycast_ip": "anycastIp",
+            "cidr": "cidr",
+            "ipam_pool_arn": "ipamPoolArn",
+            "status": "status",
+        },
+    )
+    class IpamCidrConfigResultProperty:
+        def __init__(
+            self,
+            *,
+            anycast_ip: typing.Optional[builtins.str] = None,
+            cidr: typing.Optional[builtins.str] = None,
+            ipam_pool_arn: typing.Optional[builtins.str] = None,
+            status: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param anycast_ip: 
+            :param cidr: 
+            :param ipam_pool_arn: 
+            :param status: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfigresult.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cloudfront as cloudfront
+                
+                ipam_cidr_config_result_property = cloudfront.CfnAnycastIpList.IpamCidrConfigResultProperty(
+                    anycast_ip="anycastIp",
+                    cidr="cidr",
+                    ipam_pool_arn="ipamPoolArn",
+                    status="status"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__936c44014ebfbc575bde100f27807c744ec9bd81e86a4aeef0b31260437f0bec)
+                check_type(argname="argument anycast_ip", value=anycast_ip, expected_type=type_hints["anycast_ip"])
+                check_type(argname="argument cidr", value=cidr, expected_type=type_hints["cidr"])
+                check_type(argname="argument ipam_pool_arn", value=ipam_pool_arn, expected_type=type_hints["ipam_pool_arn"])
+                check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if anycast_ip is not None:
+                self._values["anycast_ip"] = anycast_ip
+            if cidr is not None:
+                self._values["cidr"] = cidr
+            if ipam_pool_arn is not None:
+                self._values["ipam_pool_arn"] = ipam_pool_arn
+            if status is not None:
+                self._values["status"] = status
+
+        @builtins.property
+        def anycast_ip(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfigresult.html#cfn-cloudfront-anycastiplist-ipamcidrconfigresult-anycastip
+            '''
+            result = self._values.get("anycast_ip")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def cidr(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfigresult.html#cfn-cloudfront-anycastiplist-ipamcidrconfigresult-cidr
+            '''
+            result = self._values.get("cidr")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def ipam_pool_arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfigresult.html#cfn-cloudfront-anycastiplist-ipamcidrconfigresult-ipampoolarn
+            '''
+            result = self._values.get("ipam_pool_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def status(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfigresult.html#cfn-cloudfront-anycastiplist-ipamcidrconfigresult-status
+            '''
+            result = self._values.get("status")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "IpamCidrConfigResultProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_cloudfront.CfnAnycastIpList.TagsProperty",
         jsii_struct_bases=[],
         name_mapping={"items": "items"},
@@ -3622,7 +3847,7 @@ class CfnAnycastIpList(
         def __init__(
             self,
             *,
-            items: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            items: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''A complex type that contains zero or more ``Tag`` elements.
 
@@ -3633,6 +3858,7 @@ class CfnAnycastIpList(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_cloudfront as cloudfront
@@ -3654,13 +3880,13 @@ class CfnAnycastIpList(
         @builtins.property
         def items(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]]:
             '''A complex type that contains ``Tag`` elements.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-tags.html#cfn-cloudfront-anycastiplist-tags-items
             '''
             result = self._values.get("items")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3681,6 +3907,7 @@ class CfnAnycastIpList(
         "ip_count": "ipCount",
         "name": "name",
         "ip_address_type": "ipAddressType",
+        "ipam_cidr_configs": "ipamCidrConfigs",
         "tags": "tags",
     },
 )
@@ -3691,13 +3918,15 @@ class CfnAnycastIpListProps:
         ip_count: jsii.Number,
         name: builtins.str,
         ip_address_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Union[CfnAnycastIpList.TagsProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        ipam_cidr_configs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnycastIpList.IpamCidrConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Union["CfnAnycastIpList.TagsProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAnycastIpList``.
 
         :param ip_count: The number of IP addresses in the Anycast static IP list.
         :param name: The name of the Anycast static IP list.
         :param ip_address_type: The IP address type for the Anycast static IP list.
+        :param ipam_cidr_configs: 
         :param tags: A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-anycastiplist.html
@@ -3705,6 +3934,7 @@ class CfnAnycastIpListProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloudfront as cloudfront
@@ -3715,6 +3945,10 @@ class CfnAnycastIpListProps:
             
                 # the properties below are optional
                 ip_address_type="ipAddressType",
+                ipam_cidr_configs=[cloudfront.CfnAnycastIpList.IpamCidrConfigProperty(
+                    cidr="cidr",
+                    ipam_pool_arn="ipamPoolArn"
+                )],
                 tags=cloudfront.CfnAnycastIpList.TagsProperty(
                     items=[CfnTag(
                         key="key",
@@ -3730,6 +3964,7 @@ class CfnAnycastIpListProps:
             check_type(argname="argument ip_count", value=ip_count, expected_type=type_hints["ip_count"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
+            check_type(argname="argument ipam_cidr_configs", value=ipam_cidr_configs, expected_type=type_hints["ipam_cidr_configs"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "ip_count": ip_count,
@@ -3737,6 +3972,8 @@ class CfnAnycastIpListProps:
         }
         if ip_address_type is not None:
             self._values["ip_address_type"] = ip_address_type
+        if ipam_cidr_configs is not None:
+            self._values["ipam_cidr_configs"] = ipam_cidr_configs
         if tags is not None:
             self._values["tags"] = tags
 
@@ -3770,13 +4007,23 @@ class CfnAnycastIpListProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[CfnAnycastIpList.TagsProperty]:
+    def ipam_cidr_configs(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnycastIpList.IpamCidrConfigProperty"]]]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-anycastiplist.html#cfn-cloudfront-anycastiplist-ipamcidrconfigs
+        '''
+        result = self._values.get("ipam_cidr_configs")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnycastIpList.IpamCidrConfigProperty"]]]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional["CfnAnycastIpList.TagsProperty"]:
         '''A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-anycastiplist.html#cfn-cloudfront-anycastiplist-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[CfnAnycastIpList.TagsProperty], result)
+        return typing.cast(typing.Optional["CfnAnycastIpList.TagsProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3854,10 +4101,10 @@ class CfnCachePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        cache_policy_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCachePolicy.CachePolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        cache_policy_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCachePolicy.CachePolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::CloudFront::CachePolicy``.
 
@@ -3875,7 +4122,10 @@ class CfnCachePolicy(
 
     @jsii.member(jsii_name="arnForCachePolicy")
     @builtins.classmethod
-    def arn_for_cache_policy(cls, resource: _ICachePolicyRef_4d6ba2ea) -> builtins.str:
+    def arn_for_cache_policy(
+        cls,
+        resource: "_ICachePolicyRef_4d6ba2ea",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3897,7 +4147,7 @@ class CfnCachePolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCachePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3948,9 +4198,9 @@ class CfnCachePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="cachePolicyRef")
-    def cache_policy_ref(self) -> _CachePolicyReference_3d9838b6:
+    def cache_policy_ref(self) -> "_CachePolicyReference_3d9838b6":
         '''A reference to a CachePolicy resource.'''
-        return typing.cast(_CachePolicyReference_3d9838b6, jsii.get(self, "cachePolicyRef"))
+        return typing.cast("_CachePolicyReference_3d9838b6", jsii.get(self, "cachePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3961,14 +4211,14 @@ class CfnCachePolicy(
     @jsii.member(jsii_name="cachePolicyConfig")
     def cache_policy_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCachePolicy.CachePolicyConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.CachePolicyConfigProperty"]:
         '''The cache policy configuration.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCachePolicy.CachePolicyConfigProperty"], jsii.get(self, "cachePolicyConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.CachePolicyConfigProperty"], jsii.get(self, "cachePolicyConfig"))
 
     @cache_policy_config.setter
     def cache_policy_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCachePolicy.CachePolicyConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.CachePolicyConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__368f0f7bddba18df11229a8928c7cef7fa894a962c8f2f2c356a58aafc898f60)
@@ -3995,7 +4245,7 @@ class CfnCachePolicy(
             max_ttl: jsii.Number,
             min_ttl: jsii.Number,
             name: builtins.str,
-            parameters_in_cache_key_and_forwarded_to_origin: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCachePolicy.ParametersInCacheKeyAndForwardedToOriginProperty", typing.Dict[builtins.str, typing.Any]]],
+            parameters_in_cache_key_and_forwarded_to_origin: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCachePolicy.ParametersInCacheKeyAndForwardedToOriginProperty", typing.Dict[builtins.str, typing.Any]]],
             comment: typing.Optional[builtins.str] = None,
         ) -> None:
             '''A cache policy configuration.
@@ -4132,7 +4382,7 @@ class CfnCachePolicy(
         @builtins.property
         def parameters_in_cache_key_and_forwarded_to_origin(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnCachePolicy.ParametersInCacheKeyAndForwardedToOriginProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.ParametersInCacheKeyAndForwardedToOriginProperty"]:
             '''The HTTP headers, cookies, and URL query strings to include in the cache key.
 
             The values included in the cache key are also included in requests that CloudFront sends to the origin.
@@ -4141,7 +4391,7 @@ class CfnCachePolicy(
             '''
             result = self._values.get("parameters_in_cache_key_and_forwarded_to_origin")
             assert result is not None, "Required property 'parameters_in_cache_key_and_forwarded_to_origin' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCachePolicy.ParametersInCacheKeyAndForwardedToOriginProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.ParametersInCacheKeyAndForwardedToOriginProperty"], result)
 
         @builtins.property
         def comment(self) -> typing.Optional[builtins.str]:
@@ -4338,11 +4588,11 @@ class CfnCachePolicy(
         def __init__(
             self,
             *,
-            cookies_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCachePolicy.CookiesConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-            enable_accept_encoding_gzip: typing.Union[builtins.bool, _IResolvable_da3f097b],
-            headers_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCachePolicy.HeadersConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-            query_strings_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCachePolicy.QueryStringsConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-            enable_accept_encoding_brotli: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            cookies_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCachePolicy.CookiesConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            enable_accept_encoding_gzip: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+            headers_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCachePolicy.HeadersConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            query_strings_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCachePolicy.QueryStringsConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            enable_accept_encoding_brotli: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''This object determines the values that CloudFront includes in the cache key.
 
@@ -4409,19 +4659,19 @@ class CfnCachePolicy(
         @builtins.property
         def cookies_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnCachePolicy.CookiesConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.CookiesConfigProperty"]:
             '''An object that determines whether any cookies in viewer requests (and if so, which cookies) are included in the cache key and in requests that CloudFront sends to the origin.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-cachepolicy-parametersincachekeyandforwardedtoorigin.html#cfn-cloudfront-cachepolicy-parametersincachekeyandforwardedtoorigin-cookiesconfig
             '''
             result = self._values.get("cookies_config")
             assert result is not None, "Required property 'cookies_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCachePolicy.CookiesConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.CookiesConfigProperty"], result)
 
         @builtins.property
         def enable_accept_encoding_gzip(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A flag that can affect whether the ``Accept-Encoding`` HTTP header is included in the cache key and included in requests that CloudFront sends to the origin.
 
             This field is related to the ``EnableAcceptEncodingBrotli`` field. If one or both of these fields is ``true`` *and* the viewer request includes the ``Accept-Encoding`` header, then CloudFront does the following:
@@ -4440,36 +4690,36 @@ class CfnCachePolicy(
             '''
             result = self._values.get("enable_accept_encoding_gzip")
             assert result is not None, "Required property 'enable_accept_encoding_gzip' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def headers_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnCachePolicy.HeadersConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.HeadersConfigProperty"]:
             '''An object that determines whether any HTTP headers (and if so, which headers) are included in the cache key and in requests that CloudFront sends to the origin.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-cachepolicy-parametersincachekeyandforwardedtoorigin.html#cfn-cloudfront-cachepolicy-parametersincachekeyandforwardedtoorigin-headersconfig
             '''
             result = self._values.get("headers_config")
             assert result is not None, "Required property 'headers_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCachePolicy.HeadersConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.HeadersConfigProperty"], result)
 
         @builtins.property
         def query_strings_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnCachePolicy.QueryStringsConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.QueryStringsConfigProperty"]:
             '''An object that determines whether any URL query strings in viewer requests (and if so, which query strings) are included in the cache key and in requests that CloudFront sends to the origin.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-cachepolicy-parametersincachekeyandforwardedtoorigin.html#cfn-cloudfront-cachepolicy-parametersincachekeyandforwardedtoorigin-querystringsconfig
             '''
             result = self._values.get("query_strings_config")
             assert result is not None, "Required property 'query_strings_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCachePolicy.QueryStringsConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.QueryStringsConfigProperty"], result)
 
         @builtins.property
         def enable_accept_encoding_brotli(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A flag that can affect whether the ``Accept-Encoding`` HTTP header is included in the cache key and included in requests that CloudFront sends to the origin.
 
             This field is related to the ``EnableAcceptEncodingGzip`` field. If one or both of these fields is ``true`` *and* the viewer request includes the ``Accept-Encoding`` header, then CloudFront does the following:
@@ -4487,7 +4737,7 @@ class CfnCachePolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-cachepolicy-parametersincachekeyandforwardedtoorigin.html#cfn-cloudfront-cachepolicy-parametersincachekeyandforwardedtoorigin-enableacceptencodingbrotli
             '''
             result = self._values.get("enable_accept_encoding_brotli")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4593,7 +4843,7 @@ class CfnCachePolicyProps:
     def __init__(
         self,
         *,
-        cache_policy_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCachePolicy.CachePolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        cache_policy_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCachePolicy.CachePolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnCachePolicy``.
 
@@ -4654,14 +4904,14 @@ class CfnCachePolicyProps:
     @builtins.property
     def cache_policy_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCachePolicy.CachePolicyConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.CachePolicyConfigProperty"]:
         '''The cache policy configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-cachepolicy.html#cfn-cloudfront-cachepolicy-cachepolicyconfig
         '''
         result = self._values.get("cache_policy_config")
         assert result is not None, "Required property 'cache_policy_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCachePolicy.CachePolicyConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCachePolicy.CachePolicyConfigProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4704,10 +4954,10 @@ class CfnCloudFrontOriginAccessIdentity(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        cloud_front_origin_access_identity_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        cloud_front_origin_access_identity_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::CloudFront::CloudFrontOriginAccessIdentity``.
 
@@ -4729,7 +4979,7 @@ class CfnCloudFrontOriginAccessIdentity(
     @builtins.classmethod
     def arn_for_cloud_front_origin_access_identity(
         cls,
-        resource: _ICloudFrontOriginAccessIdentityRef_a078bb8b,
+        resource: "_ICloudFrontOriginAccessIdentityRef_a078bb8b",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -4752,7 +5002,7 @@ class CfnCloudFrontOriginAccessIdentity(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCloudFrontOriginAccessIdentity", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4810,22 +5060,22 @@ class CfnCloudFrontOriginAccessIdentity(
     @jsii.member(jsii_name="cloudFrontOriginAccessIdentityRef")
     def cloud_front_origin_access_identity_ref(
         self,
-    ) -> _CloudFrontOriginAccessIdentityReference_cc6fe072:
+    ) -> "_CloudFrontOriginAccessIdentityReference_cc6fe072":
         '''A reference to a CloudFrontOriginAccessIdentity resource.'''
-        return typing.cast(_CloudFrontOriginAccessIdentityReference_cc6fe072, jsii.get(self, "cloudFrontOriginAccessIdentityRef"))
+        return typing.cast("_CloudFrontOriginAccessIdentityReference_cc6fe072", jsii.get(self, "cloudFrontOriginAccessIdentityRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cloudFrontOriginAccessIdentityConfig")
     def cloud_front_origin_access_identity_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty"]:
         '''The current configuration information for the identity.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty"], jsii.get(self, "cloudFrontOriginAccessIdentityConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty"], jsii.get(self, "cloudFrontOriginAccessIdentityConfig"))
 
     @cloud_front_origin_access_identity_config.setter
     def cloud_front_origin_access_identity_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dbd0afebd21ffa009f133a600072844fc5616264b7a1829c3dea492b21c75315)
@@ -4900,7 +5150,7 @@ class CfnCloudFrontOriginAccessIdentityProps:
     def __init__(
         self,
         *,
-        cloud_front_origin_access_identity_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        cloud_front_origin_access_identity_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnCloudFrontOriginAccessIdentity``.
 
@@ -4931,14 +5181,14 @@ class CfnCloudFrontOriginAccessIdentityProps:
     @builtins.property
     def cloud_front_origin_access_identity_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty"]:
         '''The current configuration information for the identity.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-cloudfrontoriginaccessidentity.html#cfn-cloudfront-cloudfrontoriginaccessidentity-cloudfrontoriginaccessidentityconfig
         '''
         result = self._values.get("cloud_front_origin_access_identity_config")
         assert result is not None, "Required property 'cloud_front_origin_access_identity_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCloudFrontOriginAccessIdentity.CloudFrontOriginAccessIdentityConfigProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4966,6 +5216,7 @@ class CfnConnectionFunction(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cloudfront as cloudfront
@@ -4994,14 +5245,14 @@ class CfnConnectionFunction(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         connection_function_code: builtins.str,
-        connection_function_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnectionFunction.ConnectionFunctionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        connection_function_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnectionFunction.ConnectionFunctionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
-        auto_publish: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_publish: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFront::ConnectionFunction``.
 
@@ -5031,7 +5282,7 @@ class CfnConnectionFunction(
     @builtins.classmethod
     def arn_for_connection_function(
         cls,
-        resource: _IConnectionFunctionRef_e329c080,
+        resource: "_IConnectionFunctionRef_e329c080",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -5054,7 +5305,7 @@ class CfnConnectionFunction(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnectionFunction", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5148,9 +5399,9 @@ class CfnConnectionFunction(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5159,9 +5410,9 @@ class CfnConnectionFunction(
 
     @builtins.property
     @jsii.member(jsii_name="connectionFunctionRef")
-    def connection_function_ref(self) -> _ConnectionFunctionReference_f57bdbd8:
+    def connection_function_ref(self) -> "_ConnectionFunctionReference_f57bdbd8":
         '''A reference to a ConnectionFunction resource.'''
-        return typing.cast(_ConnectionFunctionReference_f57bdbd8, jsii.get(self, "connectionFunctionRef"))
+        return typing.cast("_ConnectionFunctionReference_f57bdbd8", jsii.get(self, "connectionFunctionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connectionFunctionCode")
@@ -5180,14 +5431,14 @@ class CfnConnectionFunction(
     @jsii.member(jsii_name="connectionFunctionConfig")
     def connection_function_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnConnectionFunction.ConnectionFunctionConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConnectionFunction.ConnectionFunctionConfigProperty"]:
         '''Contains configuration information about a CloudFront function.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnectionFunction.ConnectionFunctionConfigProperty"], jsii.get(self, "connectionFunctionConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnectionFunction.ConnectionFunctionConfigProperty"], jsii.get(self, "connectionFunctionConfig"))
 
     @connection_function_config.setter
     def connection_function_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnConnectionFunction.ConnectionFunctionConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnConnectionFunction.ConnectionFunctionConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a190bc553d27810667604241932472662bc3d435d87fa496b0cfe37d3ec226f2)
@@ -5211,14 +5462,14 @@ class CfnConnectionFunction(
     @jsii.member(jsii_name="autoPublish")
     def auto_publish(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag that determines whether to automatically publish the function to the ``LIVE`` stage when it’s created.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "autoPublish"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "autoPublish"))
 
     @auto_publish.setter
     def auto_publish(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fd7af04b6b8fb3353601d7578802317d6edea2e95afc52a8e61c68731b0181c2)
@@ -5227,12 +5478,12 @@ class CfnConnectionFunction(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__be5848ec2c27bb1e627996d0449bee0b0681f66da99e0c56dc637aea36e004ea)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5253,7 +5504,7 @@ class CfnConnectionFunction(
             *,
             comment: builtins.str,
             runtime: builtins.str,
-            key_value_store_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnectionFunction.KeyValueStoreAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            key_value_store_associations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnectionFunction.KeyValueStoreAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Contains configuration information about a CloudFront function.
 
@@ -5315,13 +5566,13 @@ class CfnConnectionFunction(
         @builtins.property
         def key_value_store_associations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConnectionFunction.KeyValueStoreAssociationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnectionFunction.KeyValueStoreAssociationProperty"]]]]:
             '''The configuration for the key value store associations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-connectionfunction-connectionfunctionconfig.html#cfn-cloudfront-connectionfunction-connectionfunctionconfig-keyvaluestoreassociations
             '''
             result = self._values.get("key_value_store_associations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConnectionFunction.KeyValueStoreAssociationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConnectionFunction.KeyValueStoreAssociationProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5403,10 +5654,10 @@ class CfnConnectionFunctionProps:
         self,
         *,
         connection_function_code: builtins.str,
-        connection_function_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnectionFunction.ConnectionFunctionConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        connection_function_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnectionFunction.ConnectionFunctionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
-        auto_publish: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_publish: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConnectionFunction``.
 
@@ -5421,6 +5672,7 @@ class CfnConnectionFunctionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloudfront as cloudfront
@@ -5476,14 +5728,14 @@ class CfnConnectionFunctionProps:
     @builtins.property
     def connection_function_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnConnectionFunction.ConnectionFunctionConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConnectionFunction.ConnectionFunctionConfigProperty"]:
         '''Contains configuration information about a CloudFront function.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectionfunction.html#cfn-cloudfront-connectionfunction-connectionfunctionconfig
         '''
         result = self._values.get("connection_function_config")
         assert result is not None, "Required property 'connection_function_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnConnectionFunction.ConnectionFunctionConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnectionFunction.ConnectionFunctionConfigProperty"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -5498,7 +5750,7 @@ class CfnConnectionFunctionProps:
     @builtins.property
     def auto_publish(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag that determines whether to automatically publish the function to the ``LIVE`` stage when it’s created.
 
         To automatically publish to the ``LIVE`` stage, set this property to ``true`` .
@@ -5508,16 +5760,16 @@ class CfnConnectionFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectionfunction.html#cfn-cloudfront-connectionfunction-autopublish
         '''
         result = self._values.get("auto_publish")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectionfunction.html#cfn-cloudfront-connectionfunction-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5642,14 +5894,14 @@ class CfnConnectionGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         anycast_ip_list_id: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        ipv6_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        ipv6_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFront::ConnectionGroup``.
 
@@ -5679,7 +5931,7 @@ class CfnConnectionGroup(
     @builtins.classmethod
     def arn_for_connection_group(
         cls,
-        resource: _IConnectionGroupRef_296c4e31,
+        resource: "_IConnectionGroupRef_296c4e31",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -5702,7 +5954,7 @@ class CfnConnectionGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnectionGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5769,12 +6021,12 @@ class CfnConnectionGroup(
 
     @builtins.property
     @jsii.member(jsii_name="attrIsDefault")
-    def attr_is_default(self) -> _IResolvable_da3f097b:
+    def attr_is_default(self) -> "_IResolvable_da3f097b":
         '''Whether the connection group is the default connection group for the distribution tenants.
 
         :cloudformationAttribute: IsDefault
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrIsDefault"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrIsDefault"))
 
     @builtins.property
     @jsii.member(jsii_name="attrLastModifiedTime")
@@ -5805,9 +6057,9 @@ class CfnConnectionGroup(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5816,9 +6068,9 @@ class CfnConnectionGroup(
 
     @builtins.property
     @jsii.member(jsii_name="connectionGroupRef")
-    def connection_group_ref(self) -> _ConnectionGroupReference_606f1e46:
+    def connection_group_ref(self) -> "_ConnectionGroupReference_606f1e46":
         '''A reference to a ConnectionGroup resource.'''
-        return typing.cast(_ConnectionGroupReference_606f1e46, jsii.get(self, "connectionGroupRef"))
+        return typing.cast("_ConnectionGroupReference_606f1e46", jsii.get(self, "connectionGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -5850,14 +6102,14 @@ class CfnConnectionGroup(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether the connection group is enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__41addbff9b29ce6c4465d1d973785d727f6742a1723e79dcdce59a1087df694f)
@@ -5868,14 +6120,14 @@ class CfnConnectionGroup(
     @jsii.member(jsii_name="ipv6Enabled")
     def ipv6_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''IPv6 is enabled for the connection group.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "ipv6Enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "ipv6Enabled"))
 
     @ipv6_enabled.setter
     def ipv6_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2678e60f75fc9c3a75819708e1b8cda159dd49a5c52a78d805d37bb94bd0efa5)
@@ -5884,12 +6136,12 @@ class CfnConnectionGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f9f02fbda8fa97b38f114c9910b9d9cef69228aa69dfe80217e98e1707226ce0)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5913,9 +6165,9 @@ class CfnConnectionGroupProps:
         *,
         name: builtins.str,
         anycast_ip_list_id: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        ipv6_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        ipv6_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConnectionGroup``.
 
@@ -6063,33 +6315,33 @@ class CfnConnectionGroupProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether the connection group is enabled.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectiongroup.html#cfn-cloudfront-connectiongroup-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def ipv6_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''IPv6 is enabled for the connection group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectiongroup.html#cfn-cloudfront-connectiongroup-ipv6enabled
         '''
         result = self._values.get("ipv6_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectiongroup.html#cfn-cloudfront-connectiongroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6169,10 +6421,10 @@ class CfnContinuousDeploymentPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        continuous_deployment_policy_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        continuous_deployment_policy_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::CloudFront::ContinuousDeploymentPolicy``.
 
@@ -6194,7 +6446,7 @@ class CfnContinuousDeploymentPolicy(
     @builtins.classmethod
     def arn_for_continuous_deployment_policy(
         cls,
-        resource: _IContinuousDeploymentPolicyRef_6e9263e9,
+        resource: "_IContinuousDeploymentPolicyRef_6e9263e9",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6217,7 +6469,7 @@ class CfnContinuousDeploymentPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContinuousDeploymentPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6273,22 +6525,22 @@ class CfnContinuousDeploymentPolicy(
     @jsii.member(jsii_name="continuousDeploymentPolicyRef")
     def continuous_deployment_policy_ref(
         self,
-    ) -> _ContinuousDeploymentPolicyReference_f2220dcb:
+    ) -> "_ContinuousDeploymentPolicyReference_f2220dcb":
         '''A reference to a ContinuousDeploymentPolicy resource.'''
-        return typing.cast(_ContinuousDeploymentPolicyReference_f2220dcb, jsii.get(self, "continuousDeploymentPolicyRef"))
+        return typing.cast("_ContinuousDeploymentPolicyReference_f2220dcb", jsii.get(self, "continuousDeploymentPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="continuousDeploymentPolicyConfig")
     def continuous_deployment_policy_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty"]:
         '''Contains the configuration for a continuous deployment policy.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty"], jsii.get(self, "continuousDeploymentPolicyConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty"], jsii.get(self, "continuousDeploymentPolicyConfig"))
 
     @continuous_deployment_policy_config.setter
     def continuous_deployment_policy_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f4581f42e1117e6de93836f594986c28a2378e8200e2f4a535cce028879382c9)
@@ -6311,11 +6563,11 @@ class CfnContinuousDeploymentPolicy(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             staging_distribution_dns_names: typing.Sequence[builtins.str],
-            single_header_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContinuousDeploymentPolicy.SingleHeaderPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            single_weight_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContinuousDeploymentPolicy.SingleWeightPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            traffic_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContinuousDeploymentPolicy.TrafficConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            single_header_policy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContinuousDeploymentPolicy.SingleHeaderPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            single_weight_policy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContinuousDeploymentPolicy.SingleWeightPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            traffic_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContinuousDeploymentPolicy.TrafficConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Contains the configuration for a continuous deployment policy.
@@ -6397,7 +6649,7 @@ class CfnContinuousDeploymentPolicy(
                 self._values["type"] = type
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean that indicates whether this continuous deployment policy is enabled (in effect).
 
             When this value is ``true`` , this policy is enabled and in effect. When this value is ``false`` , this policy is not enabled and has no effect.
@@ -6406,7 +6658,7 @@ class CfnContinuousDeploymentPolicy(
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def staging_distribution_dns_names(self) -> typing.List[builtins.str]:
@@ -6423,7 +6675,7 @@ class CfnContinuousDeploymentPolicy(
         @builtins.property
         def single_header_policy_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.SingleHeaderPolicyConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.SingleHeaderPolicyConfigProperty"]]:
             '''This configuration determines which HTTP requests are sent to the staging distribution.
 
             If the HTTP request contains a header and value that matches what you specify here, the request is sent to the staging distribution. Otherwise the request is sent to the primary distribution.
@@ -6431,29 +6683,29 @@ class CfnContinuousDeploymentPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-continuousdeploymentpolicy-continuousdeploymentpolicyconfig.html#cfn-cloudfront-continuousdeploymentpolicy-continuousdeploymentpolicyconfig-singleheaderpolicyconfig
             '''
             result = self._values.get("single_header_policy_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.SingleHeaderPolicyConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.SingleHeaderPolicyConfigProperty"]], result)
 
         @builtins.property
         def single_weight_policy_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.SingleWeightPolicyConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.SingleWeightPolicyConfigProperty"]]:
             '''This configuration determines the percentage of HTTP requests that are sent to the staging distribution.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-continuousdeploymentpolicy-continuousdeploymentpolicyconfig.html#cfn-cloudfront-continuousdeploymentpolicy-continuousdeploymentpolicyconfig-singleweightpolicyconfig
             '''
             result = self._values.get("single_weight_policy_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.SingleWeightPolicyConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.SingleWeightPolicyConfigProperty"]], result)
 
         @builtins.property
         def traffic_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.TrafficConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.TrafficConfigProperty"]]:
             '''Contains the parameters for routing production traffic from your primary to staging distributions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-continuousdeploymentpolicy-continuousdeploymentpolicyconfig.html#cfn-cloudfront-continuousdeploymentpolicy-continuousdeploymentpolicyconfig-trafficconfig
             '''
             result = self._values.get("traffic_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.TrafficConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.TrafficConfigProperty"]], result)
 
         @builtins.property
         def type(self) -> typing.Optional[builtins.str]:
@@ -6698,7 +6950,7 @@ class CfnContinuousDeploymentPolicy(
             self,
             *,
             weight: jsii.Number,
-            session_stickiness_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContinuousDeploymentPolicy.SessionStickinessConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            session_stickiness_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContinuousDeploymentPolicy.SessionStickinessConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''This configuration determines the percentage of HTTP requests that are sent to the staging distribution.
 
@@ -6747,7 +6999,7 @@ class CfnContinuousDeploymentPolicy(
         @builtins.property
         def session_stickiness_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.SessionStickinessConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.SessionStickinessConfigProperty"]]:
             '''Session stickiness provides the ability to define multiple requests from a single viewer as a single session.
 
             This prevents the potentially inconsistent experience of sending some of a given user's requests to your staging distribution, while others are sent to your primary distribution. Define the session duration using TTL values.
@@ -6755,7 +7007,7 @@ class CfnContinuousDeploymentPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-continuousdeploymentpolicy-singleweightconfig.html#cfn-cloudfront-continuousdeploymentpolicy-singleweightconfig-sessionstickinessconfig
             '''
             result = self._values.get("session_stickiness_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.SessionStickinessConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.SessionStickinessConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6781,7 +7033,7 @@ class CfnContinuousDeploymentPolicy(
             self,
             *,
             weight: jsii.Number,
-            session_stickiness_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContinuousDeploymentPolicy.SessionStickinessConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            session_stickiness_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContinuousDeploymentPolicy.SessionStickinessConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Configure a policy that CloudFront uses to route requests to different origins or use different cache settings, based on the weight assigned to each option.
 
@@ -6834,13 +7086,13 @@ class CfnContinuousDeploymentPolicy(
         @builtins.property
         def session_stickiness_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.SessionStickinessConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.SessionStickinessConfigProperty"]]:
             '''Enable session stickiness for the associated origin or cache settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-continuousdeploymentpolicy-singleweightpolicyconfig.html#cfn-cloudfront-continuousdeploymentpolicy-singleweightpolicyconfig-sessionstickinessconfig
             '''
             result = self._values.get("session_stickiness_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.SessionStickinessConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.SessionStickinessConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6867,8 +7119,8 @@ class CfnContinuousDeploymentPolicy(
             self,
             *,
             type: builtins.str,
-            single_header_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContinuousDeploymentPolicy.SingleHeaderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            single_weight_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContinuousDeploymentPolicy.SingleWeightConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            single_header_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContinuousDeploymentPolicy.SingleHeaderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            single_weight_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContinuousDeploymentPolicy.SingleWeightConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The traffic configuration of your continuous deployment.
 
@@ -6930,24 +7182,24 @@ class CfnContinuousDeploymentPolicy(
         @builtins.property
         def single_header_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.SingleHeaderConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.SingleHeaderConfigProperty"]]:
             '''Determines which HTTP requests are sent to the staging distribution.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-continuousdeploymentpolicy-trafficconfig.html#cfn-cloudfront-continuousdeploymentpolicy-trafficconfig-singleheaderconfig
             '''
             result = self._values.get("single_header_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.SingleHeaderConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.SingleHeaderConfigProperty"]], result)
 
         @builtins.property
         def single_weight_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.SingleWeightConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.SingleWeightConfigProperty"]]:
             '''Contains the percentage of traffic to send to the staging distribution.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-continuousdeploymentpolicy-trafficconfig.html#cfn-cloudfront-continuousdeploymentpolicy-trafficconfig-singleweightconfig
             '''
             result = self._values.get("single_weight_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContinuousDeploymentPolicy.SingleWeightConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.SingleWeightConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6972,7 +7224,7 @@ class CfnContinuousDeploymentPolicyProps:
     def __init__(
         self,
         *,
-        continuous_deployment_policy_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        continuous_deployment_policy_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnContinuousDeploymentPolicy``.
 
@@ -7038,14 +7290,14 @@ class CfnContinuousDeploymentPolicyProps:
     @builtins.property
     def continuous_deployment_policy_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty"]:
         '''Contains the configuration for a continuous deployment policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-continuousdeploymentpolicy.html#cfn-cloudfront-continuousdeploymentpolicy-continuousdeploymentpolicyconfig
         '''
         result = self._values.get("continuous_deployment_policy_config")
         assert result is not None, "Required property 'continuous_deployment_policy_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7149,11 +7401,11 @@ class CfnDistribution(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        distribution_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.DistributionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        distribution_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.DistributionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFront::Distribution``.
 
@@ -7174,7 +7426,10 @@ class CfnDistribution(
 
     @jsii.member(jsii_name="arnForDistribution")
     @builtins.classmethod
-    def arn_for_distribution(cls, resource: _IDistributionRef_36fd2094) -> builtins.str:
+    def arn_for_distribution(
+        cls,
+        resource: "_IDistributionRef_36fd2094",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -7187,10 +7442,10 @@ class CfnDistribution(
     @builtins.classmethod
     def from_distribution_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         distribution_id: builtins.str,
-    ) -> _IDistributionRef_36fd2094:
+    ) -> "_IDistributionRef_36fd2094":
         '''Creates a new IDistributionRef from a distributionId.
 
         :param scope: -
@@ -7202,7 +7457,7 @@ class CfnDistribution(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument distribution_id", value=distribution_id, expected_type=type_hints["distribution_id"])
-        return typing.cast(_IDistributionRef_36fd2094, jsii.sinvoke(cls, "fromDistributionId", [scope, id, distribution_id]))
+        return typing.cast("_IDistributionRef_36fd2094", jsii.sinvoke(cls, "fromDistributionId", [scope, id, distribution_id]))
 
     @jsii.member(jsii_name="isCfnDistribution")
     @builtins.classmethod
@@ -7217,7 +7472,7 @@ class CfnDistribution(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDistribution", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7273,28 +7528,28 @@ class CfnDistribution(
 
     @builtins.property
     @jsii.member(jsii_name="distributionRef")
-    def distribution_ref(self) -> _DistributionReference_dd610139:
+    def distribution_ref(self) -> "_DistributionReference_dd610139":
         '''A reference to a Distribution resource.'''
-        return typing.cast(_DistributionReference_dd610139, jsii.get(self, "distributionRef"))
+        return typing.cast("_DistributionReference_dd610139", jsii.get(self, "distributionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="distributionConfig")
     def distribution_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnDistribution.DistributionConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDistribution.DistributionConfigProperty"]:
         '''The distribution's configuration.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDistribution.DistributionConfigProperty"], jsii.get(self, "distributionConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDistribution.DistributionConfigProperty"], jsii.get(self, "distributionConfig"))
 
     @distribution_config.setter
     def distribution_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnDistribution.DistributionConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnDistribution.DistributionConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5e8ff8a9cdfd4490d2e3cfaa371fe6e07d1dd8cd413e3d3ac95e589565d9ed0c)
@@ -7303,12 +7558,12 @@ class CfnDistribution(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__56e2d827e2f2ba5a0841aa9995f521ce75ad3be3fba3d8a6a555ca39d319d2f4)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7351,19 +7606,19 @@ class CfnDistribution(
             allowed_methods: typing.Optional[typing.Sequence[builtins.str]] = None,
             cached_methods: typing.Optional[typing.Sequence[builtins.str]] = None,
             cache_policy_id: typing.Optional[builtins.str] = None,
-            compress: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            compress: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             default_ttl: typing.Optional[jsii.Number] = None,
             field_level_encryption_id: typing.Optional[builtins.str] = None,
-            forwarded_values: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.ForwardedValuesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            function_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.FunctionAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            grpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.GrpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            lambda_function_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.LambdaFunctionAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            forwarded_values: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.ForwardedValuesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            function_associations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.FunctionAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            grpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.GrpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lambda_function_associations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.LambdaFunctionAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             max_ttl: typing.Optional[jsii.Number] = None,
             min_ttl: typing.Optional[jsii.Number] = None,
             origin_request_policy_id: typing.Optional[builtins.str] = None,
             realtime_log_config_arn: typing.Optional[builtins.str] = None,
             response_headers_policy_id: typing.Optional[builtins.str] = None,
-            smooth_streaming: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            smooth_streaming: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             trusted_key_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
             trusted_signers: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -7625,7 +7880,7 @@ class CfnDistribution(
         @builtins.property
         def compress(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether you want CloudFront to automatically compress certain files for this cache behavior.
 
             If so, specify true; if not, specify false. For more information, see `Serving Compressed Files <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html>`_ in the *Amazon CloudFront Developer Guide* .
@@ -7635,7 +7890,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-cachebehavior.html#cfn-cloudfront-distribution-cachebehavior-compress
             '''
             result = self._values.get("compress")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def default_ttl(self) -> typing.Optional[jsii.Number]:
@@ -7670,7 +7925,7 @@ class CfnDistribution(
         @builtins.property
         def forwarded_values(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ForwardedValuesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.ForwardedValuesProperty"]]:
             '''This field is deprecated.
 
             We recommend that you use a cache policy or an origin request policy instead of this field. For more information, see `Working with policies <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/working-with-policies.html>`_ in the *Amazon CloudFront Developer Guide* .
@@ -7686,12 +7941,12 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-cachebehavior.html#cfn-cloudfront-distribution-cachebehavior-forwardedvalues
             '''
             result = self._values.get("forwarded_values")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ForwardedValuesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.ForwardedValuesProperty"]], result)
 
         @builtins.property
         def function_associations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.FunctionAssociationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.FunctionAssociationProperty"]]]]:
             '''A list of CloudFront functions that are associated with this cache behavior.
 
             CloudFront functions must be published to the ``LIVE`` stage to associate them with a cache behavior.
@@ -7699,29 +7954,29 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-cachebehavior.html#cfn-cloudfront-distribution-cachebehavior-functionassociations
             '''
             result = self._values.get("function_associations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.FunctionAssociationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.FunctionAssociationProperty"]]]], result)
 
         @builtins.property
         def grpc_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.GrpcConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.GrpcConfigProperty"]]:
             '''The gRPC configuration for your cache behavior.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-cachebehavior.html#cfn-cloudfront-distribution-cachebehavior-grpcconfig
             '''
             result = self._values.get("grpc_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.GrpcConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.GrpcConfigProperty"]], result)
 
         @builtins.property
         def lambda_function_associations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.LambdaFunctionAssociationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.LambdaFunctionAssociationProperty"]]]]:
             '''A complex type that contains zero or more Lambda@Edge function associations for a cache behavior.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-cachebehavior.html#cfn-cloudfront-distribution-cachebehavior-lambdafunctionassociations
             '''
             result = self._values.get("lambda_function_associations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.LambdaFunctionAssociationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.LambdaFunctionAssociationProperty"]]]], result)
 
         @builtins.property
         def max_ttl(self) -> typing.Optional[jsii.Number]:
@@ -7797,7 +8052,7 @@ class CfnDistribution(
         @builtins.property
         def smooth_streaming(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''.. epigraph::
 
    This field only supports standard distributions.
@@ -7811,7 +8066,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-cachebehavior.html#cfn-cloudfront-distribution-cachebehavior-smoothstreaming
             '''
             result = self._values.get("smooth_streaming")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def trusted_key_groups(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -8366,19 +8621,19 @@ class CfnDistribution(
             allowed_methods: typing.Optional[typing.Sequence[builtins.str]] = None,
             cached_methods: typing.Optional[typing.Sequence[builtins.str]] = None,
             cache_policy_id: typing.Optional[builtins.str] = None,
-            compress: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            compress: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             default_ttl: typing.Optional[jsii.Number] = None,
             field_level_encryption_id: typing.Optional[builtins.str] = None,
-            forwarded_values: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.ForwardedValuesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            function_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.FunctionAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            grpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.GrpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            lambda_function_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.LambdaFunctionAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            forwarded_values: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.ForwardedValuesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            function_associations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.FunctionAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            grpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.GrpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lambda_function_associations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.LambdaFunctionAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             max_ttl: typing.Optional[jsii.Number] = None,
             min_ttl: typing.Optional[jsii.Number] = None,
             origin_request_policy_id: typing.Optional[builtins.str] = None,
             realtime_log_config_arn: typing.Optional[builtins.str] = None,
             response_headers_policy_id: typing.Optional[builtins.str] = None,
-            smooth_streaming: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            smooth_streaming: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             trusted_key_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
             trusted_signers: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -8642,7 +8897,7 @@ class CfnDistribution(
         @builtins.property
         def compress(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether you want CloudFront to automatically compress certain files for this cache behavior.
 
             If so, specify ``true`` ; if not, specify ``false`` . For more information, see `Serving Compressed Files <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html>`_ in the *Amazon CloudFront Developer Guide* .
@@ -8652,7 +8907,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-defaultcachebehavior.html#cfn-cloudfront-distribution-defaultcachebehavior-compress
             '''
             result = self._values.get("compress")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def default_ttl(self) -> typing.Optional[jsii.Number]:
@@ -8687,7 +8942,7 @@ class CfnDistribution(
         @builtins.property
         def forwarded_values(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ForwardedValuesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.ForwardedValuesProperty"]]:
             '''This field is deprecated.
 
             We recommend that you use a cache policy or an origin request policy instead of this field. For more information, see `Working with policies <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/working-with-policies.html>`_ in the *Amazon CloudFront Developer Guide* .
@@ -8703,12 +8958,12 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-defaultcachebehavior.html#cfn-cloudfront-distribution-defaultcachebehavior-forwardedvalues
             '''
             result = self._values.get("forwarded_values")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ForwardedValuesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.ForwardedValuesProperty"]], result)
 
         @builtins.property
         def function_associations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.FunctionAssociationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.FunctionAssociationProperty"]]]]:
             '''A list of CloudFront functions that are associated with this cache behavior.
 
             Your functions must be published to the ``LIVE`` stage to associate them with a cache behavior.
@@ -8716,29 +8971,29 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-defaultcachebehavior.html#cfn-cloudfront-distribution-defaultcachebehavior-functionassociations
             '''
             result = self._values.get("function_associations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.FunctionAssociationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.FunctionAssociationProperty"]]]], result)
 
         @builtins.property
         def grpc_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.GrpcConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.GrpcConfigProperty"]]:
             '''The gRPC configuration for your cache behavior.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-defaultcachebehavior.html#cfn-cloudfront-distribution-defaultcachebehavior-grpcconfig
             '''
             result = self._values.get("grpc_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.GrpcConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.GrpcConfigProperty"]], result)
 
         @builtins.property
         def lambda_function_associations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.LambdaFunctionAssociationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.LambdaFunctionAssociationProperty"]]]]:
             '''A complex type that contains zero or more Lambda@Edge function associations for a cache behavior.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-defaultcachebehavior.html#cfn-cloudfront-distribution-defaultcachebehavior-lambdafunctionassociations
             '''
             result = self._values.get("lambda_function_associations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.LambdaFunctionAssociationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.LambdaFunctionAssociationProperty"]]]], result)
 
         @builtins.property
         def max_ttl(self) -> typing.Optional[jsii.Number]:
@@ -8820,7 +9075,7 @@ class CfnDistribution(
         @builtins.property
         def smooth_streaming(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''.. epigraph::
 
    This field only supports standard distributions.
@@ -8834,7 +9089,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-defaultcachebehavior.html#cfn-cloudfront-distribution-defaultcachebehavior-smoothstreaming
             '''
             result = self._values.get("smooth_streaming")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def trusted_key_groups(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -8886,7 +9141,7 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            string_schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.StringSchemaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            string_schema: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.StringSchemaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The value that you assigned to the parameter.
 
@@ -8921,12 +9176,12 @@ class CfnDistribution(
         @builtins.property
         def string_schema(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.StringSchemaProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.StringSchemaProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-definition.html#cfn-cloudfront-distribution-definition-stringschema
             '''
             result = self._values.get("string_schema")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.StringSchemaProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.StringSchemaProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8975,31 +9230,31 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            default_cache_behavior: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.DefaultCacheBehaviorProperty", typing.Dict[builtins.str, typing.Any]]],
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            default_cache_behavior: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.DefaultCacheBehaviorProperty", typing.Dict[builtins.str, typing.Any]]],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             aliases: typing.Optional[typing.Sequence[builtins.str]] = None,
             anycast_ip_list_id: typing.Optional[builtins.str] = None,
-            cache_behaviors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.CacheBehaviorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            cache_behaviors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.CacheBehaviorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             cnam_es: typing.Optional[typing.Sequence[builtins.str]] = None,
             comment: typing.Optional[builtins.str] = None,
-            connection_function_association: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.ConnectionFunctionAssociationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            connection_function_association: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.ConnectionFunctionAssociationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             connection_mode: typing.Optional[builtins.str] = None,
             continuous_deployment_policy_id: typing.Optional[builtins.str] = None,
-            custom_error_responses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.CustomErrorResponseProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            custom_origin: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.LegacyCustomOriginProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom_error_responses: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.CustomErrorResponseProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            custom_origin: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.LegacyCustomOriginProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             default_root_object: typing.Optional[builtins.str] = None,
             http_version: typing.Optional[builtins.str] = None,
-            ipv6_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            logging: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.LoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            origin_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.OriginGroupsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            origins: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.OriginProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            ipv6_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            logging: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.LoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            origin_groups: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.OriginGroupsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            origins: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.OriginProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             price_class: typing.Optional[builtins.str] = None,
-            restrictions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.RestrictionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_origin: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.LegacyS3OriginProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            staging: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            tenant_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.TenantConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            viewer_certificate: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.ViewerCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            viewer_mtls_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.ViewerMtlsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            restrictions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.RestrictionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_origin: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.LegacyS3OriginProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            staging: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            tenant_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.TenantConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            viewer_certificate: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.ViewerCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            viewer_mtls_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.ViewerMtlsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             web_acl_id: typing.Optional[builtins.str] = None,
         ) -> None:
             '''A distribution configuration.
@@ -9202,7 +9457,7 @@ class CfnDistribution(
         @builtins.property
         def default_cache_behavior(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDistribution.DefaultCacheBehaviorProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDistribution.DefaultCacheBehaviorProperty"]:
             '''A complex type that describes the default cache behavior if you don't specify a ``CacheBehavior`` element or if files don't match any of the values of ``PathPattern`` in ``CacheBehavior`` elements.
 
             You must create exactly one default cache behavior.
@@ -9211,17 +9466,17 @@ class CfnDistribution(
             '''
             result = self._values.get("default_cache_behavior")
             assert result is not None, "Required property 'default_cache_behavior' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDistribution.DefaultCacheBehaviorProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDistribution.DefaultCacheBehaviorProperty"], result)
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''From this field, you can enable or disable the selected distribution.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def aliases(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -9256,13 +9511,13 @@ class CfnDistribution(
         @builtins.property
         def cache_behaviors(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CacheBehaviorProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheBehaviorProperty"]]]]:
             '''A complex type that contains zero or more ``CacheBehavior`` elements.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-cachebehaviors
             '''
             result = self._values.get("cache_behaviors")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CacheBehaviorProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CacheBehaviorProperty"]]]], result)
 
         @builtins.property
         def cnam_es(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -9293,13 +9548,13 @@ class CfnDistribution(
         @builtins.property
         def connection_function_association(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ConnectionFunctionAssociationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.ConnectionFunctionAssociationProperty"]]:
             '''The distribution's connection function association.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-connectionfunctionassociation
             '''
             result = self._values.get("connection_function_association")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ConnectionFunctionAssociationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.ConnectionFunctionAssociationProperty"]], result)
 
         @builtins.property
         def connection_mode(self) -> typing.Optional[builtins.str]:
@@ -9328,7 +9583,7 @@ class CfnDistribution(
         @builtins.property
         def custom_error_responses(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CustomErrorResponseProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CustomErrorResponseProperty"]]]]:
             '''A complex type that controls the following:.
 
             - Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer.
@@ -9339,12 +9594,12 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-customerrorresponses
             '''
             result = self._values.get("custom_error_responses")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CustomErrorResponseProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CustomErrorResponseProperty"]]]], result)
 
         @builtins.property
         def custom_origin(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.LegacyCustomOriginProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.LegacyCustomOriginProperty"]]:
             '''The user-defined HTTP server that serves as the origin for content that CloudFront distributes.
 
             .. epigraph::
@@ -9354,7 +9609,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-customorigin
             '''
             result = self._values.get("custom_origin")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.LegacyCustomOriginProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.LegacyCustomOriginProperty"]], result)
 
         @builtins.property
         def default_root_object(self) -> typing.Optional[builtins.str]:
@@ -9399,7 +9654,7 @@ class CfnDistribution(
         @builtins.property
         def ipv6_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''.. epigraph::
 
    To use this field for a multi-tenant distribution, use a connection group instead.
@@ -9422,12 +9677,12 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-ipv6enabled
             '''
             result = self._values.get("ipv6_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def logging(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.LoggingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.LoggingProperty"]]:
             '''A complex type that controls whether access logs are written for the distribution.
 
             For more information about logging, see `Access Logs <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html>`_ in the *Amazon CloudFront Developer Guide* .
@@ -9435,12 +9690,12 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-logging
             '''
             result = self._values.get("logging")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.LoggingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.LoggingProperty"]], result)
 
         @builtins.property
         def origin_groups(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginGroupsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginGroupsProperty"]]:
             '''A complex type that contains information about origin groups for this distribution.
 
             Specify a value for either the ``Origins`` or ``OriginGroups`` property.
@@ -9448,12 +9703,12 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-origingroups
             '''
             result = self._values.get("origin_groups")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginGroupsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginGroupsProperty"]], result)
 
         @builtins.property
         def origins(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginProperty"]]]]:
             '''A complex type that contains information about origins for this distribution.
 
             Specify a value for either the ``Origins`` or ``OriginGroups`` property.
@@ -9461,7 +9716,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-origins
             '''
             result = self._values.get("origins")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginProperty"]]]], result)
 
         @builtins.property
         def price_class(self) -> typing.Optional[builtins.str]:
@@ -9487,18 +9742,18 @@ class CfnDistribution(
         @builtins.property
         def restrictions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.RestrictionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.RestrictionsProperty"]]:
             '''A complex type that identifies ways in which you want to restrict distribution of your content.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-restrictions
             '''
             result = self._values.get("restrictions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.RestrictionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.RestrictionsProperty"]], result)
 
         @builtins.property
         def s3_origin(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.LegacyS3OriginProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.LegacyS3OriginProperty"]]:
             '''The origin as an Amazon S3 bucket.
 
             .. epigraph::
@@ -9508,12 +9763,12 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-s3origin
             '''
             result = self._values.get("s3_origin")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.LegacyS3OriginProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.LegacyS3OriginProperty"]], result)
 
         @builtins.property
         def staging(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''.. epigraph::
 
    This field only supports standard distributions.
@@ -9525,12 +9780,12 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-staging
             '''
             result = self._values.get("staging")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def tenant_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.TenantConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.TenantConfigProperty"]]:
             '''.. epigraph::
 
    This field only supports multi-tenant distributions.
@@ -9542,29 +9797,29 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-tenantconfig
             '''
             result = self._values.get("tenant_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.TenantConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.TenantConfigProperty"]], result)
 
         @builtins.property
         def viewer_certificate(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ViewerCertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.ViewerCertificateProperty"]]:
             '''A complex type that determines the distribution's SSL/TLS configuration for communicating with viewers.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-viewercertificate
             '''
             result = self._values.get("viewer_certificate")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ViewerCertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.ViewerCertificateProperty"]], result)
 
         @builtins.property
         def viewer_mtls_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ViewerMtlsConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.ViewerMtlsConfigProperty"]]:
             '''The distribution's viewer mTLS configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-viewermtlsconfig
             '''
             result = self._values.get("viewer_mtls_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ViewerMtlsConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.ViewerMtlsConfigProperty"]], result)
 
         @builtins.property
         def web_acl_id(self) -> typing.Optional[builtins.str]:
@@ -9608,8 +9863,8 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            query_string: typing.Union[builtins.bool, _IResolvable_da3f097b],
-            cookies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.CookiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            query_string: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+            cookies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.CookiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             headers: typing.Optional[typing.Sequence[builtins.str]] = None,
             query_string_cache_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -9672,7 +9927,7 @@ class CfnDistribution(
                 self._values["query_string_cache_keys"] = query_string_cache_keys
 
         @builtins.property
-        def query_string(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def query_string(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''This field is deprecated.
 
             We recommend that you use a cache policy or an origin request policy instead of this field.
@@ -9695,12 +9950,12 @@ class CfnDistribution(
             '''
             result = self._values.get("query_string")
             assert result is not None, "Required property 'query_string' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def cookies(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CookiesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CookiesProperty"]]:
             '''This field is deprecated.
 
             We recommend that you use a cache policy or an origin request policy instead of this field.
@@ -9714,7 +9969,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-forwardedvalues.html#cfn-cloudfront-distribution-forwardedvalues-cookies
             '''
             result = self._values.get("cookies")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CookiesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CookiesProperty"]], result)
 
         @builtins.property
         def headers(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -9927,7 +10182,7 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Amazon CloudFront supports gRPC, an open-source remote procedure call (RPC) framework built on HTTP/2.
 
@@ -9960,14 +10215,14 @@ class CfnDistribution(
             }
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Enables your CloudFront distribution to receive gRPC requests and to proxy them directly to your origins.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-grpcconfig.html#cfn-cloudfront-distribution-grpcconfig-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9994,7 +10249,7 @@ class CfnDistribution(
             self,
             *,
             event_type: typing.Optional[builtins.str] = None,
-            include_body: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            include_body: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             lambda_function_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''A complex type that contains a Lambda@Edge function association.
@@ -10050,7 +10305,7 @@ class CfnDistribution(
         @builtins.property
         def include_body(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A flag that allows a Lambda@Edge function to have read access to the body content.
 
             For more information, see `Accessing the Request Body by Choosing the Include Body Option <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-include-body-access.html>`_ in the Amazon CloudFront Developer Guide.
@@ -10058,7 +10313,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-lambdafunctionassociation.html#cfn-cloudfront-distribution-lambdafunctionassociation-includebody
             '''
             result = self._values.get("include_body")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def lambda_function_arn(self) -> typing.Optional[builtins.str]:
@@ -10322,7 +10577,7 @@ class CfnDistribution(
             self,
             *,
             bucket: typing.Optional[builtins.str] = None,
-            include_cookies: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            include_cookies: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             prefix: typing.Optional[builtins.str] = None,
         ) -> None:
             '''A complex type that specifies whether access logs are written for the distribution.
@@ -10375,7 +10630,7 @@ class CfnDistribution(
         @builtins.property
         def include_cookies(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether you want CloudFront to include cookies in access logs, specify ``true`` for ``IncludeCookies`` .
 
             If you choose to include cookies in logs, CloudFront logs all cookies regardless of how you configure the cache behaviors for this distribution. If you don't want to include cookies when you create a distribution or if you want to disable include cookies for an existing distribution, specify ``false`` for ``IncludeCookies`` .
@@ -10385,7 +10640,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-logging.html#cfn-cloudfront-distribution-logging-includecookies
             '''
             result = self._values.get("include_cookies")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def prefix(self) -> typing.Optional[builtins.str]:
@@ -10493,7 +10748,7 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            status_codes: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.StatusCodesProperty", typing.Dict[builtins.str, typing.Any]]],
+            status_codes: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.StatusCodesProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''A complex data type that includes information about the failover criteria for an origin group, including the status codes for which CloudFront will failover from the primary origin to the second origin.
 
@@ -10525,14 +10780,14 @@ class CfnDistribution(
         @builtins.property
         def status_codes(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDistribution.StatusCodesProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDistribution.StatusCodesProperty"]:
             '''The status codes that, when returned from the primary origin, will trigger CloudFront to failover to the second origin.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-origingroupfailovercriteria.html#cfn-cloudfront-distribution-origingroupfailovercriteria-statuscodes
             '''
             result = self._values.get("status_codes")
             assert result is not None, "Required property 'status_codes' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDistribution.StatusCodesProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDistribution.StatusCodesProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10606,7 +10861,7 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            items: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.OriginGroupMemberProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            items: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.OriginGroupMemberProperty", typing.Dict[builtins.str, typing.Any]]]]],
             quantity: jsii.Number,
         ) -> None:
             '''A complex data type for the origins included in an origin group.
@@ -10642,14 +10897,14 @@ class CfnDistribution(
         @builtins.property
         def items(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginGroupMemberProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginGroupMemberProperty"]]]:
             '''Items (origins) in an origin group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-origingroupmembers.html#cfn-cloudfront-distribution-origingroupmembers-items
             '''
             result = self._values.get("items")
             assert result is not None, "Required property 'items' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginGroupMemberProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginGroupMemberProperty"]]], result)
 
         @builtins.property
         def quantity(self) -> jsii.Number:
@@ -10686,9 +10941,9 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            failover_criteria: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.OriginGroupFailoverCriteriaProperty", typing.Dict[builtins.str, typing.Any]]],
+            failover_criteria: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.OriginGroupFailoverCriteriaProperty", typing.Dict[builtins.str, typing.Any]]],
             id: builtins.str,
-            members: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.OriginGroupMembersProperty", typing.Dict[builtins.str, typing.Any]]],
+            members: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.OriginGroupMembersProperty", typing.Dict[builtins.str, typing.Any]]],
             selection_criteria: typing.Optional[builtins.str] = None,
         ) -> None:
             '''An origin group includes two origins (a primary origin and a secondary origin to failover to) and a failover criteria that you specify.
@@ -10747,14 +11002,14 @@ class CfnDistribution(
         @builtins.property
         def failover_criteria(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginGroupFailoverCriteriaProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginGroupFailoverCriteriaProperty"]:
             '''A complex type that contains information about the failover criteria for an origin group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-origingroup.html#cfn-cloudfront-distribution-origingroup-failovercriteria
             '''
             result = self._values.get("failover_criteria")
             assert result is not None, "Required property 'failover_criteria' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginGroupFailoverCriteriaProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginGroupFailoverCriteriaProperty"], result)
 
         @builtins.property
         def id(self) -> builtins.str:
@@ -10769,14 +11024,14 @@ class CfnDistribution(
         @builtins.property
         def members(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginGroupMembersProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginGroupMembersProperty"]:
             '''A complex type that contains information about the origins in an origin group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-origingroup.html#cfn-cloudfront-distribution-origingroup-members
             '''
             result = self._values.get("members")
             assert result is not None, "Required property 'members' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginGroupMembersProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginGroupMembersProperty"], result)
 
         @builtins.property
         def selection_criteria(self) -> typing.Optional[builtins.str]:
@@ -10810,7 +11065,7 @@ class CfnDistribution(
             self,
             *,
             quantity: jsii.Number,
-            items: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.OriginGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            items: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.OriginGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''A complex data type for the origin groups specified for a distribution.
 
@@ -10873,13 +11128,13 @@ class CfnDistribution(
         @builtins.property
         def items(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginGroupProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginGroupProperty"]]]]:
             '''The items (origin groups) in a distribution.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-origingroups.html#cfn-cloudfront-distribution-origingroups-items
             '''
             result = self._values.get("items")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginGroupProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginGroupProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10918,14 +11173,14 @@ class CfnDistribution(
             id: builtins.str,
             connection_attempts: typing.Optional[jsii.Number] = None,
             connection_timeout: typing.Optional[jsii.Number] = None,
-            custom_origin_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.CustomOriginConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom_origin_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.CustomOriginConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             origin_access_control_id: typing.Optional[builtins.str] = None,
-            origin_custom_headers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.OriginCustomHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            origin_custom_headers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.OriginCustomHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             origin_path: typing.Optional[builtins.str] = None,
-            origin_shield: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.OriginShieldProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            origin_shield: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.OriginShieldProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             response_completion_timeout: typing.Optional[jsii.Number] = None,
-            s3_origin_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.S3OriginConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            vpc_origin_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.VpcOriginConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_origin_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.S3OriginConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_origin_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.VpcOriginConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An origin.
 
@@ -11101,7 +11356,7 @@ class CfnDistribution(
         @builtins.property
         def custom_origin_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CustomOriginConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CustomOriginConfigProperty"]]:
             '''Use this type to specify an origin that is not an Amazon S3 bucket, with one exception.
 
             If the Amazon S3 bucket is configured with static website hosting, use this type. If the Amazon S3 bucket is not configured with static website hosting, use the ``S3OriginConfig`` type instead.
@@ -11109,7 +11364,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-origin.html#cfn-cloudfront-distribution-origin-customoriginconfig
             '''
             result = self._values.get("custom_origin_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.CustomOriginConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.CustomOriginConfigProperty"]], result)
 
         @builtins.property
         def origin_access_control_id(self) -> typing.Optional[builtins.str]:
@@ -11125,7 +11380,7 @@ class CfnDistribution(
         @builtins.property
         def origin_custom_headers(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginCustomHeaderProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginCustomHeaderProperty"]]]]:
             '''A list of HTTP header names and values that CloudFront adds to the requests that it sends to the origin.
 
             For more information, see `Adding Custom Headers to Origin Requests <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/add-origin-custom-headers.html>`_ in the *Amazon CloudFront Developer Guide* .
@@ -11133,7 +11388,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-origin.html#cfn-cloudfront-distribution-origin-origincustomheaders
             '''
             result = self._values.get("origin_custom_headers")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginCustomHeaderProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginCustomHeaderProperty"]]]], result)
 
         @builtins.property
         def origin_path(self) -> typing.Optional[builtins.str]:
@@ -11151,7 +11406,7 @@ class CfnDistribution(
         @builtins.property
         def origin_shield(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginShieldProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginShieldProperty"]]:
             '''CloudFront Origin Shield. Using Origin Shield can help reduce the load on your origin.
 
             For more information, see `Using Origin Shield <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/origin-shield.html>`_ in the *Amazon CloudFront Developer Guide* .
@@ -11159,7 +11414,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-origin.html#cfn-cloudfront-distribution-origin-originshield
             '''
             result = self._values.get("origin_shield")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.OriginShieldProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginShieldProperty"]], result)
 
         @builtins.property
         def response_completion_timeout(self) -> typing.Optional[jsii.Number]:
@@ -11179,7 +11434,7 @@ class CfnDistribution(
         @builtins.property
         def s3_origin_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.S3OriginConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.S3OriginConfigProperty"]]:
             '''Use this type to specify an origin that is an Amazon S3 bucket that is not configured with static website hosting.
 
             To specify any other type of origin, including an Amazon S3 bucket that is configured with static website hosting, use the ``CustomOriginConfig`` type instead.
@@ -11187,18 +11442,18 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-origin.html#cfn-cloudfront-distribution-origin-s3originconfig
             '''
             result = self._values.get("s3_origin_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.S3OriginConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.S3OriginConfigProperty"]], result)
 
         @builtins.property
         def vpc_origin_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.VpcOriginConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.VpcOriginConfigProperty"]]:
             '''The VPC origin configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-origin.html#cfn-cloudfront-distribution-origin-vpcoriginconfig
             '''
             result = self._values.get("vpc_origin_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.VpcOriginConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.VpcOriginConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11223,7 +11478,7 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             origin_shield_region: typing.Optional[builtins.str] = None,
         ) -> None:
             '''CloudFront Origin Shield.
@@ -11260,7 +11515,7 @@ class CfnDistribution(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A flag that specifies whether Origin Shield is enabled.
 
             When it's enabled, CloudFront routes all requests through Origin Shield, which can help protect your origin. When it's disabled, CloudFront might send requests directly to your origin from multiple edge locations or regional edge caches.
@@ -11268,7 +11523,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-originshield.html#cfn-cloudfront-distribution-originshield-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def origin_shield_region(self) -> typing.Optional[builtins.str]:
@@ -11303,7 +11558,7 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            definition: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.DefinitionProperty", typing.Dict[builtins.str, typing.Any]]],
+            definition: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.DefinitionProperty", typing.Dict[builtins.str, typing.Any]]],
             name: builtins.str,
         ) -> None:
             '''A list of parameter values to add to the resource.
@@ -11347,14 +11602,14 @@ class CfnDistribution(
         @builtins.property
         def definition(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDistribution.DefinitionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDistribution.DefinitionProperty"]:
             '''The value that you assigned to the parameter.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-parameterdefinition.html#cfn-cloudfront-distribution-parameterdefinition-definition
             '''
             result = self._values.get("definition")
             assert result is not None, "Required property 'definition' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDistribution.DefinitionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDistribution.DefinitionProperty"], result)
 
         @builtins.property
         def name(self) -> builtins.str:
@@ -11386,7 +11641,7 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            geo_restriction: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.GeoRestrictionProperty", typing.Dict[builtins.str, typing.Any]]],
+            geo_restriction: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.GeoRestrictionProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''A complex type that identifies ways in which you want to restrict distribution of your content.
 
@@ -11420,7 +11675,7 @@ class CfnDistribution(
         @builtins.property
         def geo_restriction(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDistribution.GeoRestrictionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDistribution.GeoRestrictionProperty"]:
             '''A complex type that controls the countries in which your content is distributed.
 
             CloudFront determines the location of your users using ``MaxMind`` GeoIP databases. To disable geo restriction, remove the `Restrictions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-restrictions>`_ property from your stack template.
@@ -11429,7 +11684,7 @@ class CfnDistribution(
             '''
             result = self._values.get("geo_restriction")
             assert result is not None, "Required property 'geo_restriction' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDistribution.GeoRestrictionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDistribution.GeoRestrictionProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11552,7 +11807,7 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            items: typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b],
+            items: typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"],
             quantity: jsii.Number,
         ) -> None:
             '''A complex data type for the status codes that you specify that, when returned by a primary origin, trigger CloudFront to failover to a second origin.
@@ -11586,14 +11841,14 @@ class CfnDistribution(
         @builtins.property
         def items(
             self,
-        ) -> typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]:
+        ) -> typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]:
             '''The items (status codes) for an origin group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-statuscodes.html#cfn-cloudfront-distribution-statuscodes-items
             '''
             result = self._values.get("items")
             assert result is not None, "Required property 'items' is missing"
-            return typing.cast(typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def quantity(self) -> jsii.Number:
@@ -11629,7 +11884,7 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            required: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            required: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             comment: typing.Optional[builtins.str] = None,
             default_value: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -11669,13 +11924,13 @@ class CfnDistribution(
                 self._values["default_value"] = default_value
 
         @builtins.property
-        def required(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def required(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-stringschema.html#cfn-cloudfront-distribution-stringschema-required
             '''
             result = self._values.get("required")
             assert result is not None, "Required property 'required' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def comment(self) -> typing.Optional[builtins.str]:
@@ -11713,7 +11968,7 @@ class CfnDistribution(
         def __init__(
             self,
             *,
-            parameter_definitions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.ParameterDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            parameter_definitions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.ParameterDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''.. epigraph::
 
@@ -11759,13 +12014,13 @@ class CfnDistribution(
         @builtins.property
         def parameter_definitions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ParameterDefinitionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.ParameterDefinitionProperty"]]]]:
             '''The parameters that you specify for a distribution tenant.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-tenantconfig.html#cfn-cloudfront-distribution-tenantconfig-parameterdefinitions
             '''
             result = self._values.get("parameter_definitions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ParameterDefinitionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistribution.ParameterDefinitionProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11792,8 +12047,8 @@ class CfnDistribution(
             self,
             *,
             trust_store_id: builtins.str,
-            advertise_trust_store_ca_names: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            ignore_certificate_expiry: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            advertise_trust_store_ca_names: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            ignore_certificate_expiry: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''A trust store configuration.
 
@@ -11844,24 +12099,24 @@ class CfnDistribution(
         @builtins.property
         def advertise_trust_store_ca_names(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''The configuration to use to advertise trust store CA names.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-truststoreconfig.html#cfn-cloudfront-distribution-truststoreconfig-advertisetruststorecanames
             '''
             result = self._values.get("advertise_trust_store_ca_names")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def ignore_certificate_expiry(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''The configuration to use to ignore certificate expiration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-truststoreconfig.html#cfn-cloudfront-distribution-truststoreconfig-ignorecertificateexpiry
             '''
             result = self._values.get("ignore_certificate_expiry")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11890,7 +12145,7 @@ class CfnDistribution(
             self,
             *,
             acm_certificate_arn: typing.Optional[builtins.str] = None,
-            cloud_front_default_certificate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            cloud_front_default_certificate: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             iam_certificate_id: typing.Optional[builtins.str] = None,
             minimum_protocol_version: typing.Optional[builtins.str] = None,
             ssl_support_method: typing.Optional[builtins.str] = None,
@@ -11973,7 +12228,7 @@ class CfnDistribution(
         @builtins.property
         def cloud_front_default_certificate(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If the distribution uses the CloudFront domain name such as ``d111111abcdef8.cloudfront.net`` , set this field to ``true`` .
 
             If the distribution uses ``Aliases`` (alternate domain names or CNAMEs), omit this field and specify values for the following fields:
@@ -11985,7 +12240,7 @@ class CfnDistribution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewercertificate.html#cfn-cloudfront-distribution-viewercertificate-cloudfrontdefaultcertificate
             '''
             result = self._values.get("cloud_front_default_certificate")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def iam_certificate_id(self) -> typing.Optional[builtins.str]:
@@ -12067,7 +12322,7 @@ class CfnDistribution(
             self,
             *,
             mode: typing.Optional[builtins.str] = None,
-            trust_store_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.TrustStoreConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            trust_store_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.TrustStoreConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A viewer mTLS configuration.
 
@@ -12116,13 +12371,13 @@ class CfnDistribution(
         @builtins.property
         def trust_store_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.TrustStoreConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.TrustStoreConfigProperty"]]:
             '''The trust store configuration associated with the viewer mTLS configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewermtlsconfig.html#cfn-cloudfront-distribution-viewermtlsconfig-truststoreconfig
             '''
             result = self._values.get("trust_store_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.TrustStoreConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.TrustStoreConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12265,8 +12520,8 @@ class CfnDistributionProps:
     def __init__(
         self,
         *,
-        distribution_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.DistributionConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        distribution_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.DistributionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDistribution``.
 
@@ -12278,6 +12533,7 @@ class CfnDistributionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloudfront as cloudfront
@@ -12547,23 +12803,23 @@ class CfnDistributionProps:
     @builtins.property
     def distribution_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnDistribution.DistributionConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDistribution.DistributionConfigProperty"]:
         '''The distribution's configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distribution.html#cfn-cloudfront-distribution-distributionconfig
         '''
         result = self._values.get("distribution_config")
         assert result is not None, "Required property 'distribution_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnDistribution.DistributionConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDistribution.DistributionConfigProperty"], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distribution.html#cfn-cloudfront-distribution-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12676,18 +12932,18 @@ class CfnDistributionTenant(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         distribution_id: builtins.str,
         domains: typing.Sequence[builtins.str],
         name: builtins.str,
         connection_group_id: typing.Optional[builtins.str] = None,
-        customizations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistributionTenant.CustomizationsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        managed_certificate_request: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistributionTenant.ManagedCertificateRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistributionTenant.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        customizations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistributionTenant.CustomizationsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        managed_certificate_request: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistributionTenant.ManagedCertificateRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistributionTenant.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFront::DistributionTenant``.
 
@@ -12725,7 +12981,7 @@ class CfnDistributionTenant(
     @builtins.classmethod
     def arn_for_distribution_tenant(
         cls,
-        resource: _IDistributionTenantRef_ed51601d,
+        resource: "_IDistributionTenantRef_ed51601d",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -12748,7 +13004,7 @@ class CfnDistributionTenant(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDistributionTenant", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12797,11 +13053,11 @@ class CfnDistributionTenant(
 
     @builtins.property
     @jsii.member(jsii_name="attrDomainResults")
-    def attr_domain_results(self) -> _IResolvable_da3f097b:
+    def attr_domain_results(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: DomainResults
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrDomainResults"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrDomainResults"))
 
     @builtins.property
     @jsii.member(jsii_name="attrETag")
@@ -12841,9 +13097,9 @@ class CfnDistributionTenant(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -12852,9 +13108,9 @@ class CfnDistributionTenant(
 
     @builtins.property
     @jsii.member(jsii_name="distributionTenantRef")
-    def distribution_tenant_ref(self) -> _DistributionTenantReference_647cfa9c:
+    def distribution_tenant_ref(self) -> "_DistributionTenantReference_647cfa9c":
         '''A reference to a DistributionTenant resource.'''
-        return typing.cast(_DistributionTenantReference_647cfa9c, jsii.get(self, "distributionTenantRef"))
+        return typing.cast("_DistributionTenantReference_647cfa9c", jsii.get(self, "distributionTenantRef"))
 
     @builtins.property
     @jsii.member(jsii_name="distributionId")
@@ -12912,14 +13168,14 @@ class CfnDistributionTenant(
     @jsii.member(jsii_name="customizations")
     def customizations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.CustomizationsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.CustomizationsProperty"]]:
         '''Customizations for the distribution tenant.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.CustomizationsProperty"]], jsii.get(self, "customizations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.CustomizationsProperty"]], jsii.get(self, "customizations"))
 
     @customizations.setter
     def customizations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.CustomizationsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.CustomizationsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1ecc1c2d6ca5ed07f9220424e298d73ccc2d9ff84388993cacf60c02fc6431d2)
@@ -12930,14 +13186,14 @@ class CfnDistributionTenant(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the distribution tenant is in an enabled state.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4faa42cfcdbcfaf7031a5ad328e3b92614cc4b898e43367bd53e66b4edb53dd8)
@@ -12948,14 +13204,14 @@ class CfnDistributionTenant(
     @jsii.member(jsii_name="managedCertificateRequest")
     def managed_certificate_request(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.ManagedCertificateRequestProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.ManagedCertificateRequestProperty"]]:
         '''An object that represents the request for the Amazon CloudFront managed ACM certificate.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.ManagedCertificateRequestProperty"]], jsii.get(self, "managedCertificateRequest"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.ManagedCertificateRequestProperty"]], jsii.get(self, "managedCertificateRequest"))
 
     @managed_certificate_request.setter
     def managed_certificate_request(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.ManagedCertificateRequestProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.ManagedCertificateRequestProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5137481a2aef0ac0e79363b8e827531e762d17f59cfa3b092f770cb0813fedc0)
@@ -12966,14 +13222,14 @@ class CfnDistributionTenant(
     @jsii.member(jsii_name="parameters")
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.ParameterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.ParameterProperty"]]]]:
         '''A list of parameter values to add to the resource.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.ParameterProperty"]]]], jsii.get(self, "parameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.ParameterProperty"]]]], jsii.get(self, "parameters"))
 
     @parameters.setter
     def parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.ParameterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.ParameterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c5ac60c7274f522196384c452007fc5b615ae79ffad1520970925978b4606156)
@@ -12982,12 +13238,12 @@ class CfnDistributionTenant(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2cea18d7ff4ed5a97170964e15f6e2d6e58a5f394ede6d8f1dd4c80f19f719e2)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -13057,9 +13313,9 @@ class CfnDistributionTenant(
         def __init__(
             self,
             *,
-            certificate: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistributionTenant.CertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            geo_restrictions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistributionTenant.GeoRestrictionCustomizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            web_acl: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistributionTenant.WebAclCustomizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            certificate: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistributionTenant.CertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            geo_restrictions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistributionTenant.GeoRestrictionCustomizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            web_acl: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistributionTenant.WebAclCustomizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Customizations for the distribution tenant.
 
@@ -13108,35 +13364,35 @@ class CfnDistributionTenant(
         @builtins.property
         def certificate(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.CertificateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.CertificateProperty"]]:
             '''The Certificate Manager (ACM) certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributiontenant-customizations.html#cfn-cloudfront-distributiontenant-customizations-certificate
             '''
             result = self._values.get("certificate")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.CertificateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.CertificateProperty"]], result)
 
         @builtins.property
         def geo_restrictions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.GeoRestrictionCustomizationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.GeoRestrictionCustomizationProperty"]]:
             '''The geographic restrictions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributiontenant-customizations.html#cfn-cloudfront-distributiontenant-customizations-georestrictions
             '''
             result = self._values.get("geo_restrictions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.GeoRestrictionCustomizationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.GeoRestrictionCustomizationProperty"]], result)
 
         @builtins.property
         def web_acl(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.WebAclCustomizationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.WebAclCustomizationProperty"]]:
             '''The AWS WAF web ACL.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distributiontenant-customizations.html#cfn-cloudfront-distributiontenant-customizations-webacl
             '''
             result = self._values.get("web_acl")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistributionTenant.WebAclCustomizationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.WebAclCustomizationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13557,11 +13813,11 @@ class CfnDistributionTenantProps:
         domains: typing.Sequence[builtins.str],
         name: builtins.str,
         connection_group_id: typing.Optional[builtins.str] = None,
-        customizations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistributionTenant.CustomizationsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        managed_certificate_request: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistributionTenant.ManagedCertificateRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistributionTenant.ParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        customizations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistributionTenant.CustomizationsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        managed_certificate_request: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistributionTenant.ManagedCertificateRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistributionTenant.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDistributionTenant``.
 
@@ -13735,7 +13991,7 @@ class CfnDistributionTenantProps:
     @builtins.property
     def customizations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDistributionTenant.CustomizationsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.CustomizationsProperty"]]:
         '''Customizations for the distribution tenant.
 
         For each distribution tenant, you can specify the geographic restrictions, and the Amazon Resource Names (ARNs) for the ACM certificate and AWS WAF web ACL. These are specific values that you can override or disable from the multi-tenant distribution that was used to create the distribution tenant.
@@ -13743,12 +13999,12 @@ class CfnDistributionTenantProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distributiontenant.html#cfn-cloudfront-distributiontenant-customizations
         '''
         result = self._values.get("customizations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDistributionTenant.CustomizationsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.CustomizationsProperty"]], result)
 
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the distribution tenant is in an enabled state.
 
         If disabled, the distribution tenant won't serve traffic.
@@ -13756,23 +14012,23 @@ class CfnDistributionTenantProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distributiontenant.html#cfn-cloudfront-distributiontenant-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def managed_certificate_request(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDistributionTenant.ManagedCertificateRequestProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.ManagedCertificateRequestProperty"]]:
         '''An object that represents the request for the Amazon CloudFront managed ACM certificate.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distributiontenant.html#cfn-cloudfront-distributiontenant-managedcertificaterequest
         '''
         result = self._values.get("managed_certificate_request")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDistributionTenant.ManagedCertificateRequestProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.ManagedCertificateRequestProperty"]], result)
 
     @builtins.property
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDistributionTenant.ParameterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.ParameterProperty"]]]]:
         '''A list of parameter values to add to the resource.
 
         A parameter is specified as a key-value pair. A valid parameter value must exist for any parameter that is marked as required in the multi-tenant distribution.
@@ -13780,16 +14036,16 @@ class CfnDistributionTenantProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distributiontenant.html#cfn-cloudfront-distributiontenant-parameters
         '''
         result = self._values.get("parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDistributionTenant.ParameterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDistributionTenant.ParameterProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distributiontenant.html#cfn-cloudfront-distributiontenant-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13852,14 +14108,14 @@ class CfnFunction(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         function_code: builtins.str,
-        function_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.FunctionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        function_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.FunctionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
-        auto_publish: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        function_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.FunctionMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_publish: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        function_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.FunctionMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFront::Function``.
 
@@ -13887,7 +14143,7 @@ class CfnFunction(
 
     @jsii.member(jsii_name="arnForFunction")
     @builtins.classmethod
-    def arn_for_function(cls, resource: _IFunctionRef_2f1d7e70) -> builtins.str:
+    def arn_for_function(cls, resource: "_IFunctionRef_2f1d7e70") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -13909,7 +14165,7 @@ class CfnFunction(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFunction", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -13979,9 +14235,9 @@ class CfnFunction(
 
     @builtins.property
     @jsii.member(jsii_name="functionRef")
-    def function_ref(self) -> _FunctionReference_4d47e97a:
+    def function_ref(self) -> "_FunctionReference_4d47e97a":
         '''A reference to a Function resource.'''
-        return typing.cast(_FunctionReference_4d47e97a, jsii.get(self, "functionRef"))
+        return typing.cast("_FunctionReference_4d47e97a", jsii.get(self, "functionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="functionCode")
@@ -14000,14 +14256,14 @@ class CfnFunction(
     @jsii.member(jsii_name="functionConfig")
     def function_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnFunction.FunctionConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionConfigProperty"]:
         '''Contains configuration information about a CloudFront function.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFunction.FunctionConfigProperty"], jsii.get(self, "functionConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionConfigProperty"], jsii.get(self, "functionConfig"))
 
     @function_config.setter
     def function_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnFunction.FunctionConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4e1085109b32e0c76599f999f799894997c5e13b7588671859ed027f4d0eceaf)
@@ -14031,14 +14287,14 @@ class CfnFunction(
     @jsii.member(jsii_name="autoPublish")
     def auto_publish(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag that determines whether to automatically publish the function to the ``LIVE`` stage when it’s created.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "autoPublish"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "autoPublish"))
 
     @auto_publish.setter
     def auto_publish(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__827ae5409caf9c9196670ea90d3ee72840fe49ac20cace1bd57d5f83fc2617cc)
@@ -14049,14 +14305,14 @@ class CfnFunction(
     @jsii.member(jsii_name="functionMetadata")
     def function_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.FunctionMetadataProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionMetadataProperty"]]:
         '''Contains metadata about a CloudFront function.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.FunctionMetadataProperty"]], jsii.get(self, "functionMetadata"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionMetadataProperty"]], jsii.get(self, "functionMetadata"))
 
     @function_metadata.setter
     def function_metadata(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.FunctionMetadataProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionMetadataProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fe3c43f2af2adeb7b33e657cb565ba1627c04114bab013dcd445631d30026b9e)
@@ -14078,7 +14334,7 @@ class CfnFunction(
             *,
             comment: builtins.str,
             runtime: builtins.str,
-            key_value_store_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.KeyValueStoreAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            key_value_store_associations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.KeyValueStoreAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Contains configuration information about a CloudFront function.
 
@@ -14140,13 +14396,13 @@ class CfnFunction(
         @builtins.property
         def key_value_store_associations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunction.KeyValueStoreAssociationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunction.KeyValueStoreAssociationProperty"]]]]:
             '''The configuration for the key value store associations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-function-functionconfig.html#cfn-cloudfront-function-functionconfig-keyvaluestoreassociations
             '''
             result = self._values.get("key_value_store_associations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunction.KeyValueStoreAssociationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunction.KeyValueStoreAssociationProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14285,10 +14541,10 @@ class CfnFunctionProps:
         self,
         *,
         function_code: builtins.str,
-        function_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FunctionConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        function_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.FunctionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
-        auto_publish: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        function_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FunctionMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        auto_publish: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        function_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.FunctionMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFunction``.
 
@@ -14359,14 +14615,14 @@ class CfnFunctionProps:
     @builtins.property
     def function_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnFunction.FunctionConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionConfigProperty"]:
         '''Contains configuration information about a CloudFront function.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-function.html#cfn-cloudfront-function-functionconfig
         '''
         result = self._values.get("function_config")
         assert result is not None, "Required property 'function_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnFunction.FunctionConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionConfigProperty"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -14381,7 +14637,7 @@ class CfnFunctionProps:
     @builtins.property
     def auto_publish(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag that determines whether to automatically publish the function to the ``LIVE`` stage when it’s created.
 
         To automatically publish to the ``LIVE`` stage, set this property to ``true`` .
@@ -14389,18 +14645,18 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-function.html#cfn-cloudfront-function-autopublish
         '''
         result = self._values.get("auto_publish")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def function_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.FunctionMetadataProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionMetadataProperty"]]:
         '''Contains metadata about a CloudFront function.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-function.html#cfn-cloudfront-function-functionmetadata
         '''
         result = self._values.get("function_metadata")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.FunctionMetadataProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionMetadataProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14447,10 +14703,10 @@ class CfnKeyGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        key_group_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnKeyGroup.KeyGroupConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        key_group_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnKeyGroup.KeyGroupConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::CloudFront::KeyGroup``.
 
@@ -14479,7 +14735,7 @@ class CfnKeyGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnKeyGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -14533,22 +14789,22 @@ class CfnKeyGroup(
 
     @builtins.property
     @jsii.member(jsii_name="keyGroupRef")
-    def key_group_ref(self) -> _KeyGroupReference_d904f6f1:
+    def key_group_ref(self) -> "_KeyGroupReference_d904f6f1":
         '''A reference to a KeyGroup resource.'''
-        return typing.cast(_KeyGroupReference_d904f6f1, jsii.get(self, "keyGroupRef"))
+        return typing.cast("_KeyGroupReference_d904f6f1", jsii.get(self, "keyGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="keyGroupConfig")
     def key_group_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnKeyGroup.KeyGroupConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnKeyGroup.KeyGroupConfigProperty"]:
         '''The key group configuration.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnKeyGroup.KeyGroupConfigProperty"], jsii.get(self, "keyGroupConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnKeyGroup.KeyGroupConfigProperty"], jsii.get(self, "keyGroupConfig"))
 
     @key_group_config.setter
     def key_group_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnKeyGroup.KeyGroupConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnKeyGroup.KeyGroupConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f5ed72b1e268631c85b0ecd81a9bcb5dda1c9af4f25021249f63cf35b6102f2a)
@@ -14657,7 +14913,7 @@ class CfnKeyGroupProps:
     def __init__(
         self,
         *,
-        key_group_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnKeyGroup.KeyGroupConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        key_group_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnKeyGroup.KeyGroupConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnKeyGroup``.
 
@@ -14692,14 +14948,14 @@ class CfnKeyGroupProps:
     @builtins.property
     def key_group_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnKeyGroup.KeyGroupConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnKeyGroup.KeyGroupConfigProperty"]:
         '''The key group configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-keygroup.html#cfn-cloudfront-keygroup-keygroupconfig
         '''
         result = self._values.get("key_group_config")
         assert result is not None, "Required property 'key_group_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnKeyGroup.KeyGroupConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnKeyGroup.KeyGroupConfigProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14747,12 +15003,12 @@ class CfnKeyValueStore(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         comment: typing.Optional[builtins.str] = None,
-        import_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKeyValueStore.ImportSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        import_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKeyValueStore.ImportSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFront::KeyValueStore``.
 
@@ -14776,7 +15032,7 @@ class CfnKeyValueStore(
     @builtins.classmethod
     def arn_for_key_value_store(
         cls,
-        resource: _IKeyValueStoreRef_332470ca,
+        resource: "_IKeyValueStoreRef_332470ca",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -14799,7 +15055,7 @@ class CfnKeyValueStore(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnKeyValueStore", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -14864,9 +15120,9 @@ class CfnKeyValueStore(
 
     @builtins.property
     @jsii.member(jsii_name="keyValueStoreRef")
-    def key_value_store_ref(self) -> _KeyValueStoreReference_0ba0c49f:
+    def key_value_store_ref(self) -> "_KeyValueStoreReference_0ba0c49f":
         '''A reference to a KeyValueStore resource.'''
-        return typing.cast(_KeyValueStoreReference_0ba0c49f, jsii.get(self, "keyValueStoreRef"))
+        return typing.cast("_KeyValueStoreReference_0ba0c49f", jsii.get(self, "keyValueStoreRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -14898,14 +15154,14 @@ class CfnKeyValueStore(
     @jsii.member(jsii_name="importSource")
     def import_source(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKeyValueStore.ImportSourceProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKeyValueStore.ImportSourceProperty"]]:
         '''The import source for the key value store.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKeyValueStore.ImportSourceProperty"]], jsii.get(self, "importSource"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKeyValueStore.ImportSourceProperty"]], jsii.get(self, "importSource"))
 
     @import_source.setter
     def import_source(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKeyValueStore.ImportSourceProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKeyValueStore.ImportSourceProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bfd48a97d25e7b681206f3f821672b491cdb6e27eb4858257cc5f853e5674c56)
@@ -14999,7 +15255,7 @@ class CfnKeyValueStoreProps:
         *,
         name: builtins.str,
         comment: typing.Optional[builtins.str] = None,
-        import_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKeyValueStore.ImportSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        import_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKeyValueStore.ImportSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnKeyValueStore``.
 
@@ -15062,13 +15318,13 @@ class CfnKeyValueStoreProps:
     @builtins.property
     def import_source(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnKeyValueStore.ImportSourceProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKeyValueStore.ImportSourceProperty"]]:
         '''The import source for the key value store.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-keyvaluestore.html#cfn-cloudfront-keyvaluestore-importsource
         '''
         result = self._values.get("import_source")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnKeyValueStore.ImportSourceProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKeyValueStore.ImportSourceProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15114,11 +15370,11 @@ class CfnMonitoringSubscription(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        distribution_id: typing.Union[builtins.str, _IDistributionRef_36fd2094],
-        monitoring_subscription: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMonitoringSubscription.MonitoringSubscriptionProperty", typing.Dict[builtins.str, typing.Any]]],
+        distribution_id: typing.Union[builtins.str, "_IDistributionRef_36fd2094"],
+        monitoring_subscription: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMonitoringSubscription.MonitoringSubscriptionProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::CloudFront::MonitoringSubscription``.
 
@@ -15151,7 +15407,7 @@ class CfnMonitoringSubscription(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMonitoringSubscription", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -15187,9 +15443,11 @@ class CfnMonitoringSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="monitoringSubscriptionRef")
-    def monitoring_subscription_ref(self) -> _MonitoringSubscriptionReference_cb68e740:
+    def monitoring_subscription_ref(
+        self,
+    ) -> "_MonitoringSubscriptionReference_cb68e740":
         '''A reference to a MonitoringSubscription resource.'''
-        return typing.cast(_MonitoringSubscriptionReference_cb68e740, jsii.get(self, "monitoringSubscriptionRef"))
+        return typing.cast("_MonitoringSubscriptionReference_cb68e740", jsii.get(self, "monitoringSubscriptionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="distributionId")
@@ -15208,14 +15466,14 @@ class CfnMonitoringSubscription(
     @jsii.member(jsii_name="monitoringSubscription")
     def monitoring_subscription(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnMonitoringSubscription.MonitoringSubscriptionProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnMonitoringSubscription.MonitoringSubscriptionProperty"]:
         '''A subscription configuration for additional CloudWatch metrics.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMonitoringSubscription.MonitoringSubscriptionProperty"], jsii.get(self, "monitoringSubscription"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMonitoringSubscription.MonitoringSubscriptionProperty"], jsii.get(self, "monitoringSubscription"))
 
     @monitoring_subscription.setter
     def monitoring_subscription(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnMonitoringSubscription.MonitoringSubscriptionProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnMonitoringSubscription.MonitoringSubscriptionProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a6a73e9da7bd64c6f8edfeda9db92c61f11177fd45e61323cc95783240a1f833)
@@ -15233,7 +15491,7 @@ class CfnMonitoringSubscription(
         def __init__(
             self,
             *,
-            realtime_metrics_subscription_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMonitoringSubscription.RealtimeMetricsSubscriptionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            realtime_metrics_subscription_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMonitoringSubscription.RealtimeMetricsSubscriptionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A monitoring subscription.
 
@@ -15266,13 +15524,13 @@ class CfnMonitoringSubscription(
         @builtins.property
         def realtime_metrics_subscription_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitoringSubscription.RealtimeMetricsSubscriptionConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitoringSubscription.RealtimeMetricsSubscriptionConfigProperty"]]:
             '''A subscription configuration for additional CloudWatch metrics.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-monitoringsubscription-monitoringsubscription.html#cfn-cloudfront-monitoringsubscription-monitoringsubscription-realtimemetricssubscriptionconfig
             '''
             result = self._values.get("realtime_metrics_subscription_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMonitoringSubscription.RealtimeMetricsSubscriptionConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMonitoringSubscription.RealtimeMetricsSubscriptionConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15356,8 +15614,8 @@ class CfnMonitoringSubscriptionProps:
     def __init__(
         self,
         *,
-        distribution_id: typing.Union[builtins.str, _IDistributionRef_36fd2094],
-        monitoring_subscription: typing.Union[_IResolvable_da3f097b, typing.Union[CfnMonitoringSubscription.MonitoringSubscriptionProperty, typing.Dict[builtins.str, typing.Any]]],
+        distribution_id: typing.Union[builtins.str, "_IDistributionRef_36fd2094"],
+        monitoring_subscription: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMonitoringSubscription.MonitoringSubscriptionProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnMonitoringSubscription``.
 
@@ -15392,26 +15650,28 @@ class CfnMonitoringSubscriptionProps:
         }
 
     @builtins.property
-    def distribution_id(self) -> typing.Union[builtins.str, _IDistributionRef_36fd2094]:
+    def distribution_id(
+        self,
+    ) -> typing.Union[builtins.str, "_IDistributionRef_36fd2094"]:
         '''The ID of the distribution that you are enabling metrics for.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-monitoringsubscription.html#cfn-cloudfront-monitoringsubscription-distributionid
         '''
         result = self._values.get("distribution_id")
         assert result is not None, "Required property 'distribution_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IDistributionRef_36fd2094], result)
+        return typing.cast(typing.Union[builtins.str, "_IDistributionRef_36fd2094"], result)
 
     @builtins.property
     def monitoring_subscription(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnMonitoringSubscription.MonitoringSubscriptionProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnMonitoringSubscription.MonitoringSubscriptionProperty"]:
         '''A subscription configuration for additional CloudWatch metrics.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-monitoringsubscription.html#cfn-cloudfront-monitoringsubscription-monitoringsubscription
         '''
         result = self._values.get("monitoring_subscription")
         assert result is not None, "Required property 'monitoring_subscription' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnMonitoringSubscription.MonitoringSubscriptionProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMonitoringSubscription.MonitoringSubscriptionProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15464,10 +15724,10 @@ class CfnOriginAccessControl(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        origin_access_control_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginAccessControl.OriginAccessControlConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        origin_access_control_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginAccessControl.OriginAccessControlConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::CloudFront::OriginAccessControl``.
 
@@ -15489,7 +15749,7 @@ class CfnOriginAccessControl(
     @builtins.classmethod
     def arn_for_origin_access_control(
         cls,
-        resource: _IOriginAccessControlRef_c4ffc680,
+        resource: "_IOriginAccessControlRef_c4ffc680",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -15512,7 +15772,7 @@ class CfnOriginAccessControl(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOriginAccessControl", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -15557,22 +15817,22 @@ class CfnOriginAccessControl(
 
     @builtins.property
     @jsii.member(jsii_name="originAccessControlRef")
-    def origin_access_control_ref(self) -> _OriginAccessControlReference_811487ee:
+    def origin_access_control_ref(self) -> "_OriginAccessControlReference_811487ee":
         '''A reference to a OriginAccessControl resource.'''
-        return typing.cast(_OriginAccessControlReference_811487ee, jsii.get(self, "originAccessControlRef"))
+        return typing.cast("_OriginAccessControlReference_811487ee", jsii.get(self, "originAccessControlRef"))
 
     @builtins.property
     @jsii.member(jsii_name="originAccessControlConfig")
     def origin_access_control_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnOriginAccessControl.OriginAccessControlConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnOriginAccessControl.OriginAccessControlConfigProperty"]:
         '''The origin access control.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOriginAccessControl.OriginAccessControlConfigProperty"], jsii.get(self, "originAccessControlConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOriginAccessControl.OriginAccessControlConfigProperty"], jsii.get(self, "originAccessControlConfig"))
 
     @origin_access_control_config.setter
     def origin_access_control_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnOriginAccessControl.OriginAccessControlConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnOriginAccessControl.OriginAccessControlConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0ce66d3b823fd9ddad2c2b62c7851eb33500f3dcb8168e58af67867c2f6aae9d)
@@ -15731,7 +15991,7 @@ class CfnOriginAccessControlProps:
     def __init__(
         self,
         *,
-        origin_access_control_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginAccessControl.OriginAccessControlConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        origin_access_control_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginAccessControl.OriginAccessControlConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnOriginAccessControl``.
 
@@ -15768,14 +16028,14 @@ class CfnOriginAccessControlProps:
     @builtins.property
     def origin_access_control_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnOriginAccessControl.OriginAccessControlConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnOriginAccessControl.OriginAccessControlConfigProperty"]:
         '''The origin access control.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-originaccesscontrol.html#cfn-cloudfront-originaccesscontrol-originaccesscontrolconfig
         '''
         result = self._values.get("origin_access_control_config")
         assert result is not None, "Required property 'origin_access_control_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnOriginAccessControl.OriginAccessControlConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOriginAccessControl.OriginAccessControlConfigProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15845,10 +16105,10 @@ class CfnOriginRequestPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        origin_request_policy_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        origin_request_policy_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::CloudFront::OriginRequestPolicy``.
 
@@ -15870,7 +16130,7 @@ class CfnOriginRequestPolicy(
     @builtins.classmethod
     def arn_for_origin_request_policy(
         cls,
-        resource: _IOriginRequestPolicyRef_affb6d7f,
+        resource: "_IOriginRequestPolicyRef_affb6d7f",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -15893,7 +16153,7 @@ class CfnOriginRequestPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOriginRequestPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -15949,22 +16209,22 @@ class CfnOriginRequestPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="originRequestPolicyRef")
-    def origin_request_policy_ref(self) -> _OriginRequestPolicyReference_850756f5:
+    def origin_request_policy_ref(self) -> "_OriginRequestPolicyReference_850756f5":
         '''A reference to a OriginRequestPolicy resource.'''
-        return typing.cast(_OriginRequestPolicyReference_850756f5, jsii.get(self, "originRequestPolicyRef"))
+        return typing.cast("_OriginRequestPolicyReference_850756f5", jsii.get(self, "originRequestPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="originRequestPolicyConfig")
     def origin_request_policy_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty"]:
         '''The origin request policy configuration.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty"], jsii.get(self, "originRequestPolicyConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty"], jsii.get(self, "originRequestPolicyConfig"))
 
     @origin_request_policy_config.setter
     def origin_request_policy_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__708e0c2a481cb4e4b68fc467580d318614020b97e17eaa433b6804731ced5237)
@@ -16143,10 +16403,10 @@ class CfnOriginRequestPolicy(
         def __init__(
             self,
             *,
-            cookies_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginRequestPolicy.CookiesConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-            headers_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginRequestPolicy.HeadersConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            cookies_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginRequestPolicy.CookiesConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            headers_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginRequestPolicy.HeadersConfigProperty", typing.Dict[builtins.str, typing.Any]]],
             name: builtins.str,
-            query_strings_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginRequestPolicy.QueryStringsConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            query_strings_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginRequestPolicy.QueryStringsConfigProperty", typing.Dict[builtins.str, typing.Any]]],
             comment: typing.Optional[builtins.str] = None,
         ) -> None:
             '''An origin request policy configuration.
@@ -16218,19 +16478,19 @@ class CfnOriginRequestPolicy(
         @builtins.property
         def cookies_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnOriginRequestPolicy.CookiesConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnOriginRequestPolicy.CookiesConfigProperty"]:
             '''The cookies from viewer requests to include in origin requests.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-originrequestpolicy-originrequestpolicyconfig.html#cfn-cloudfront-originrequestpolicy-originrequestpolicyconfig-cookiesconfig
             '''
             result = self._values.get("cookies_config")
             assert result is not None, "Required property 'cookies_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOriginRequestPolicy.CookiesConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOriginRequestPolicy.CookiesConfigProperty"], result)
 
         @builtins.property
         def headers_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnOriginRequestPolicy.HeadersConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnOriginRequestPolicy.HeadersConfigProperty"]:
             '''The HTTP headers to include in origin requests.
 
             These can include headers from viewer requests and additional headers added by CloudFront.
@@ -16239,7 +16499,7 @@ class CfnOriginRequestPolicy(
             '''
             result = self._values.get("headers_config")
             assert result is not None, "Required property 'headers_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOriginRequestPolicy.HeadersConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOriginRequestPolicy.HeadersConfigProperty"], result)
 
         @builtins.property
         def name(self) -> builtins.str:
@@ -16254,14 +16514,14 @@ class CfnOriginRequestPolicy(
         @builtins.property
         def query_strings_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnOriginRequestPolicy.QueryStringsConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnOriginRequestPolicy.QueryStringsConfigProperty"]:
             '''The URL query strings from viewer requests to include in origin requests.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-originrequestpolicy-originrequestpolicyconfig.html#cfn-cloudfront-originrequestpolicy-originrequestpolicyconfig-querystringsconfig
             '''
             result = self._values.get("query_strings_config")
             assert result is not None, "Required property 'query_strings_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOriginRequestPolicy.QueryStringsConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOriginRequestPolicy.QueryStringsConfigProperty"], result)
 
         @builtins.property
         def comment(self) -> typing.Optional[builtins.str]:
@@ -16378,7 +16638,7 @@ class CfnOriginRequestPolicyProps:
     def __init__(
         self,
         *,
-        origin_request_policy_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        origin_request_policy_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnOriginRequestPolicy``.
 
@@ -16430,14 +16690,14 @@ class CfnOriginRequestPolicyProps:
     @builtins.property
     def origin_request_policy_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty"]:
         '''The origin request policy configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-originrequestpolicy.html#cfn-cloudfront-originrequestpolicy-originrequestpolicyconfig
         '''
         result = self._values.get("origin_request_policy_config")
         assert result is not None, "Required property 'origin_request_policy_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16485,10 +16745,10 @@ class CfnPublicKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        public_key_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPublicKey.PublicKeyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        public_key_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPublicKey.PublicKeyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::CloudFront::PublicKey``.
 
@@ -16517,7 +16777,7 @@ class CfnPublicKey(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPublicKey", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -16571,22 +16831,22 @@ class CfnPublicKey(
 
     @builtins.property
     @jsii.member(jsii_name="publicKeyRef")
-    def public_key_ref(self) -> _PublicKeyReference_e5990046:
+    def public_key_ref(self) -> "_PublicKeyReference_e5990046":
         '''A reference to a PublicKey resource.'''
-        return typing.cast(_PublicKeyReference_e5990046, jsii.get(self, "publicKeyRef"))
+        return typing.cast("_PublicKeyReference_e5990046", jsii.get(self, "publicKeyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="publicKeyConfig")
     def public_key_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnPublicKey.PublicKeyConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPublicKey.PublicKeyConfigProperty"]:
         '''Configuration information about a public key that you can use with `signed URLs and signed cookies <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html>`_ , or with `field-level encryption <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html>`_ .'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPublicKey.PublicKeyConfigProperty"], jsii.get(self, "publicKeyConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPublicKey.PublicKeyConfigProperty"], jsii.get(self, "publicKeyConfig"))
 
     @public_key_config.setter
     def public_key_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnPublicKey.PublicKeyConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnPublicKey.PublicKeyConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__58d675c3580a784a3be69561798d55507bf948f7a586b6ccaa1aca861f3e22dd)
@@ -16715,7 +16975,7 @@ class CfnPublicKeyProps:
     def __init__(
         self,
         *,
-        public_key_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPublicKey.PublicKeyConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        public_key_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPublicKey.PublicKeyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnPublicKey``.
 
@@ -16751,14 +17011,14 @@ class CfnPublicKeyProps:
     @builtins.property
     def public_key_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnPublicKey.PublicKeyConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPublicKey.PublicKeyConfigProperty"]:
         '''Configuration information about a public key that you can use with `signed URLs and signed cookies <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html>`_ , or with `field-level encryption <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-publickey.html#cfn-cloudfront-publickey-publickeyconfig
         '''
         result = self._values.get("public_key_config")
         assert result is not None, "Required property 'public_key_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnPublicKey.PublicKeyConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPublicKey.PublicKeyConfigProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16806,10 +17066,10 @@ class CfnRealtimeLogConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        end_points: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRealtimeLogConfig.EndPointProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        end_points: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRealtimeLogConfig.EndPointProperty", typing.Dict[builtins.str, typing.Any]]]]],
         fields: typing.Sequence[builtins.str],
         name: builtins.str,
         sampling_rate: jsii.Number,
@@ -16840,7 +17100,7 @@ class CfnRealtimeLogConfig(
     @builtins.classmethod
     def arn_for_realtime_log_config(
         cls,
-        resource: _IRealtimeLogConfigRef_83cc214a,
+        resource: "_IRealtimeLogConfigRef_83cc214a",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -16863,7 +17123,7 @@ class CfnRealtimeLogConfig(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRealtimeLogConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -16910,22 +17170,22 @@ class CfnRealtimeLogConfig(
 
     @builtins.property
     @jsii.member(jsii_name="realtimeLogConfigRef")
-    def realtime_log_config_ref(self) -> _RealtimeLogConfigReference_30646e4d:
+    def realtime_log_config_ref(self) -> "_RealtimeLogConfigReference_30646e4d":
         '''A reference to a RealtimeLogConfig resource.'''
-        return typing.cast(_RealtimeLogConfigReference_30646e4d, jsii.get(self, "realtimeLogConfigRef"))
+        return typing.cast("_RealtimeLogConfigReference_30646e4d", jsii.get(self, "realtimeLogConfigRef"))
 
     @builtins.property
     @jsii.member(jsii_name="endPoints")
     def end_points(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRealtimeLogConfig.EndPointProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRealtimeLogConfig.EndPointProperty"]]]:
         '''Contains information about the Amazon Kinesis data stream where you are sending real-time log data for this real-time log configuration.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRealtimeLogConfig.EndPointProperty"]]], jsii.get(self, "endPoints"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRealtimeLogConfig.EndPointProperty"]]], jsii.get(self, "endPoints"))
 
     @end_points.setter
     def end_points(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRealtimeLogConfig.EndPointProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRealtimeLogConfig.EndPointProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a399b0f2984cadefbe5ab1596b0a4763a8f456c302dc65036725f1ad9a543e5b)
@@ -16983,7 +17243,7 @@ class CfnRealtimeLogConfig(
         def __init__(
             self,
             *,
-            kinesis_stream_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRealtimeLogConfig.KinesisStreamConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            kinesis_stream_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRealtimeLogConfig.KinesisStreamConfigProperty", typing.Dict[builtins.str, typing.Any]]],
             stream_type: builtins.str,
         ) -> None:
             '''Contains information about the Amazon Kinesis data stream where you are sending real-time log data for this real-time log configuration.
@@ -17020,14 +17280,14 @@ class CfnRealtimeLogConfig(
         @builtins.property
         def kinesis_stream_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRealtimeLogConfig.KinesisStreamConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRealtimeLogConfig.KinesisStreamConfigProperty"]:
             '''Contains information about the Amazon Kinesis data stream where you are sending real-time log data in a real-time log configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-realtimelogconfig-endpoint.html#cfn-cloudfront-realtimelogconfig-endpoint-kinesisstreamconfig
             '''
             result = self._values.get("kinesis_stream_config")
             assert result is not None, "Required property 'kinesis_stream_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRealtimeLogConfig.KinesisStreamConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRealtimeLogConfig.KinesisStreamConfigProperty"], result)
 
         @builtins.property
         def stream_type(self) -> builtins.str:
@@ -17135,7 +17395,7 @@ class CfnRealtimeLogConfigProps:
     def __init__(
         self,
         *,
-        end_points: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRealtimeLogConfig.EndPointProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        end_points: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRealtimeLogConfig.EndPointProperty", typing.Dict[builtins.str, typing.Any]]]]],
         fields: typing.Sequence[builtins.str],
         name: builtins.str,
         sampling_rate: jsii.Number,
@@ -17185,14 +17445,14 @@ class CfnRealtimeLogConfigProps:
     @builtins.property
     def end_points(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRealtimeLogConfig.EndPointProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRealtimeLogConfig.EndPointProperty"]]]:
         '''Contains information about the Amazon Kinesis data stream where you are sending real-time log data for this real-time log configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-realtimelogconfig.html#cfn-cloudfront-realtimelogconfig-endpoints
         '''
         result = self._values.get("end_points")
         assert result is not None, "Required property 'end_points' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRealtimeLogConfig.EndPointProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRealtimeLogConfig.EndPointProperty"]]], result)
 
     @builtins.property
     def fields(self) -> typing.List[builtins.str]:
@@ -17348,10 +17608,10 @@ class CfnResponseHeadersPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        response_headers_policy_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        response_headers_policy_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::CloudFront::ResponseHeadersPolicy``.
 
@@ -17373,7 +17633,7 @@ class CfnResponseHeadersPolicy(
     @builtins.classmethod
     def arn_for_response_headers_policy(
         cls,
-        resource: _IResponseHeadersPolicyRef_25ee5061,
+        resource: "_IResponseHeadersPolicyRef_25ee5061",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -17396,7 +17656,7 @@ class CfnResponseHeadersPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResponseHeadersPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -17452,22 +17712,22 @@ class CfnResponseHeadersPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="responseHeadersPolicyRef")
-    def response_headers_policy_ref(self) -> _ResponseHeadersPolicyReference_bad4201b:
+    def response_headers_policy_ref(self) -> "_ResponseHeadersPolicyReference_bad4201b":
         '''A reference to a ResponseHeadersPolicy resource.'''
-        return typing.cast(_ResponseHeadersPolicyReference_bad4201b, jsii.get(self, "responseHeadersPolicyRef"))
+        return typing.cast("_ResponseHeadersPolicyReference_bad4201b", jsii.get(self, "responseHeadersPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="responseHeadersPolicyConfig")
     def response_headers_policy_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty"]:
         '''A response headers policy configuration.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty"], jsii.get(self, "responseHeadersPolicyConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty"], jsii.get(self, "responseHeadersPolicyConfig"))
 
     @response_headers_policy_config.setter
     def response_headers_policy_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9664ad8baf2a412170daf27d190c8b070be288076aab09583c9dbfb1818b4229)
@@ -17720,7 +17980,7 @@ class CfnResponseHeadersPolicy(
             self,
             *,
             content_security_policy: builtins.str,
-            override: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            override: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''The policy directives and their values that CloudFront includes as values for the ``Content-Security-Policy`` HTTP response header.
 
@@ -17763,14 +18023,14 @@ class CfnResponseHeadersPolicy(
             return typing.cast(builtins.str, result)
 
         @builtins.property
-        def override(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def override(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean that determines whether CloudFront overrides the ``Content-Security-Policy`` HTTP response header received from the origin with the one specified in this response headers policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-contentsecuritypolicy.html#cfn-cloudfront-responseheaderspolicy-contentsecuritypolicy-override
             '''
             result = self._values.get("override")
             assert result is not None, "Required property 'override' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17792,7 +18052,7 @@ class CfnResponseHeadersPolicy(
         def __init__(
             self,
             *,
-            override: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            override: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Determines whether CloudFront includes the ``X-Content-Type-Options`` HTTP response header with its value set to ``nosniff`` .
 
@@ -17821,14 +18081,14 @@ class CfnResponseHeadersPolicy(
             }
 
         @builtins.property
-        def override(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def override(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean that determines whether CloudFront overrides the ``X-Content-Type-Options`` HTTP response header received from the origin with the one specified in this response headers policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-contenttypeoptions.html#cfn-cloudfront-responseheaderspolicy-contenttypeoptions-override
             '''
             result = self._values.get("override")
             assert result is not None, "Required property 'override' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17858,12 +18118,12 @@ class CfnResponseHeadersPolicy(
         def __init__(
             self,
             *,
-            access_control_allow_credentials: typing.Union[builtins.bool, _IResolvable_da3f097b],
-            access_control_allow_headers: typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.AccessControlAllowHeadersProperty", typing.Dict[builtins.str, typing.Any]]],
-            access_control_allow_methods: typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.AccessControlAllowMethodsProperty", typing.Dict[builtins.str, typing.Any]]],
-            access_control_allow_origins: typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.AccessControlAllowOriginsProperty", typing.Dict[builtins.str, typing.Any]]],
-            origin_override: typing.Union[builtins.bool, _IResolvable_da3f097b],
-            access_control_expose_headers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.AccessControlExposeHeadersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            access_control_allow_credentials: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+            access_control_allow_headers: typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.AccessControlAllowHeadersProperty", typing.Dict[builtins.str, typing.Any]]],
+            access_control_allow_methods: typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.AccessControlAllowMethodsProperty", typing.Dict[builtins.str, typing.Any]]],
+            access_control_allow_origins: typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.AccessControlAllowOriginsProperty", typing.Dict[builtins.str, typing.Any]]],
+            origin_override: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+            access_control_expose_headers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.AccessControlExposeHeadersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             access_control_max_age_sec: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''A configuration for a set of HTTP response headers that are used for cross-origin resource sharing (CORS).
@@ -17933,7 +18193,7 @@ class CfnResponseHeadersPolicy(
         @builtins.property
         def access_control_allow_credentials(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean that CloudFront uses as the value for the ``Access-Control-Allow-Credentials`` HTTP response header.
 
             For more information about the ``Access-Control-Allow-Credentials`` HTTP response header, see `Access-Control-Allow-Credentials <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials>`_ in the MDN Web Docs.
@@ -17942,12 +18202,12 @@ class CfnResponseHeadersPolicy(
             '''
             result = self._values.get("access_control_allow_credentials")
             assert result is not None, "Required property 'access_control_allow_credentials' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def access_control_allow_headers(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.AccessControlAllowHeadersProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.AccessControlAllowHeadersProperty"]:
             '''A list of HTTP header names that CloudFront includes as values for the ``Access-Control-Allow-Headers`` HTTP response header.
 
             For more information about the ``Access-Control-Allow-Headers`` HTTP response header, see `Access-Control-Allow-Headers <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers>`_ in the MDN Web Docs.
@@ -17956,12 +18216,12 @@ class CfnResponseHeadersPolicy(
             '''
             result = self._values.get("access_control_allow_headers")
             assert result is not None, "Required property 'access_control_allow_headers' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.AccessControlAllowHeadersProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.AccessControlAllowHeadersProperty"], result)
 
         @builtins.property
         def access_control_allow_methods(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.AccessControlAllowMethodsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.AccessControlAllowMethodsProperty"]:
             '''A list of HTTP methods that CloudFront includes as values for the ``Access-Control-Allow-Methods`` HTTP response header.
 
             For more information about the ``Access-Control-Allow-Methods`` HTTP response header, see `Access-Control-Allow-Methods <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods>`_ in the MDN Web Docs.
@@ -17970,12 +18230,12 @@ class CfnResponseHeadersPolicy(
             '''
             result = self._values.get("access_control_allow_methods")
             assert result is not None, "Required property 'access_control_allow_methods' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.AccessControlAllowMethodsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.AccessControlAllowMethodsProperty"], result)
 
         @builtins.property
         def access_control_allow_origins(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.AccessControlAllowOriginsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.AccessControlAllowOriginsProperty"]:
             '''A list of origins (domain names) that CloudFront can use as the value for the ``Access-Control-Allow-Origin`` HTTP response header.
 
             For more information about the ``Access-Control-Allow-Origin`` HTTP response header, see `Access-Control-Allow-Origin <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin>`_ in the MDN Web Docs.
@@ -17984,22 +18244,24 @@ class CfnResponseHeadersPolicy(
             '''
             result = self._values.get("access_control_allow_origins")
             assert result is not None, "Required property 'access_control_allow_origins' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.AccessControlAllowOriginsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.AccessControlAllowOriginsProperty"], result)
 
         @builtins.property
-        def origin_override(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def origin_override(
+            self,
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean that determines whether CloudFront overrides HTTP response headers received from the origin with the ones specified in this response headers policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-corsconfig.html#cfn-cloudfront-responseheaderspolicy-corsconfig-originoverride
             '''
             result = self._values.get("origin_override")
             assert result is not None, "Required property 'origin_override' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def access_control_expose_headers(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.AccessControlExposeHeadersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.AccessControlExposeHeadersProperty"]]:
             '''A list of HTTP headers that CloudFront includes as values for the ``Access-Control-Expose-Headers`` HTTP response header.
 
             For more information about the ``Access-Control-Expose-Headers`` HTTP response header, see `Access-Control-Expose-Headers <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers>`_ in the MDN Web Docs.
@@ -18007,7 +18269,7 @@ class CfnResponseHeadersPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-corsconfig.html#cfn-cloudfront-responseheaderspolicy-corsconfig-accesscontrolexposeheaders
             '''
             result = self._values.get("access_control_expose_headers")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.AccessControlExposeHeadersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.AccessControlExposeHeadersProperty"]], result)
 
         @builtins.property
         def access_control_max_age_sec(self) -> typing.Optional[jsii.Number]:
@@ -18041,7 +18303,7 @@ class CfnResponseHeadersPolicy(
             self,
             *,
             header: builtins.str,
-            override: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            override: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             value: builtins.str,
         ) -> None:
             '''An HTTP response header name and its value.
@@ -18089,14 +18351,14 @@ class CfnResponseHeadersPolicy(
             return typing.cast(builtins.str, result)
 
         @builtins.property
-        def override(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def override(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean that determines whether CloudFront overrides a response header with the same name received from the origin with the header specified here.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-customheader.html#cfn-cloudfront-responseheaderspolicy-customheader-override
             '''
             result = self._values.get("override")
             assert result is not None, "Required property 'override' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def value(self) -> builtins.str:
@@ -18128,7 +18390,7 @@ class CfnResponseHeadersPolicy(
         def __init__(
             self,
             *,
-            items: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.CustomHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            items: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.CustomHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''A list of HTTP response header names and their values.
 
@@ -18163,14 +18425,14 @@ class CfnResponseHeadersPolicy(
         @builtins.property
         def items(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.CustomHeaderProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.CustomHeaderProperty"]]]:
             '''The list of HTTP response headers and their values.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-customheadersconfig.html#cfn-cloudfront-responseheaderspolicy-customheadersconfig-items
             '''
             result = self._values.get("items")
             assert result is not None, "Required property 'items' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.CustomHeaderProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.CustomHeaderProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18193,7 +18455,7 @@ class CfnResponseHeadersPolicy(
             self,
             *,
             frame_option: builtins.str,
-            override: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            override: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Determines whether CloudFront includes the ``X-Frame-Options`` HTTP response header and the header's value.
 
@@ -18238,14 +18500,14 @@ class CfnResponseHeadersPolicy(
             return typing.cast(builtins.str, result)
 
         @builtins.property
-        def override(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def override(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean that determines whether CloudFront overrides the ``X-Frame-Options`` HTTP response header received from the origin with the one specified in this response headers policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-frameoptions.html#cfn-cloudfront-responseheaderspolicy-frameoptions-override
             '''
             result = self._values.get("override")
             assert result is not None, "Required property 'override' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18267,7 +18529,7 @@ class CfnResponseHeadersPolicy(
         def __init__(
             self,
             *,
-            override: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            override: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             referrer_policy: builtins.str,
         ) -> None:
             '''Determines whether CloudFront includes the ``Referrer-Policy`` HTTP response header and the header's value.
@@ -18301,14 +18563,14 @@ class CfnResponseHeadersPolicy(
             }
 
         @builtins.property
-        def override(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def override(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean that determines whether CloudFront overrides the ``Referrer-Policy`` HTTP response header received from the origin with the one specified in this response headers policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-referrerpolicy.html#cfn-cloudfront-responseheaderspolicy-referrerpolicy-override
             '''
             result = self._values.get("override")
             assert result is not None, "Required property 'override' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def referrer_policy(self) -> builtins.str:
@@ -18403,7 +18665,7 @@ class CfnResponseHeadersPolicy(
         def __init__(
             self,
             *,
-            items: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.RemoveHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            items: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.RemoveHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''A list of HTTP header names that CloudFront removes from HTTP responses to requests that match the cache behavior that this response headers policy is attached to.
 
@@ -18434,14 +18696,14 @@ class CfnResponseHeadersPolicy(
         @builtins.property
         def items(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.RemoveHeaderProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.RemoveHeaderProperty"]]]:
             '''The list of HTTP header names.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-removeheadersconfig.html#cfn-cloudfront-responseheaderspolicy-removeheadersconfig-items
             '''
             result = self._values.get("items")
             assert result is not None, "Required property 'items' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.RemoveHeaderProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.RemoveHeaderProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18473,11 +18735,11 @@ class CfnResponseHeadersPolicy(
             *,
             name: builtins.str,
             comment: typing.Optional[builtins.str] = None,
-            cors_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.CorsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            custom_headers_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.CustomHeadersConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            remove_headers_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.RemoveHeadersConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            security_headers_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.SecurityHeadersConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            server_timing_headers_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.ServerTimingHeadersConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cors_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.CorsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom_headers_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.CustomHeadersConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            remove_headers_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.RemoveHeadersConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            security_headers_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.SecurityHeadersConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            server_timing_headers_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.ServerTimingHeadersConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A response headers policy configuration.
 
@@ -18628,57 +18890,57 @@ class CfnResponseHeadersPolicy(
         @builtins.property
         def cors_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.CorsConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.CorsConfigProperty"]]:
             '''A configuration for a set of HTTP response headers that are used for cross-origin resource sharing (CORS).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-responseheaderspolicyconfig.html#cfn-cloudfront-responseheaderspolicy-responseheaderspolicyconfig-corsconfig
             '''
             result = self._values.get("cors_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.CorsConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.CorsConfigProperty"]], result)
 
         @builtins.property
         def custom_headers_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.CustomHeadersConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.CustomHeadersConfigProperty"]]:
             '''A configuration for a set of custom HTTP response headers.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-responseheaderspolicyconfig.html#cfn-cloudfront-responseheaderspolicy-responseheaderspolicyconfig-customheadersconfig
             '''
             result = self._values.get("custom_headers_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.CustomHeadersConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.CustomHeadersConfigProperty"]], result)
 
         @builtins.property
         def remove_headers_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.RemoveHeadersConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.RemoveHeadersConfigProperty"]]:
             '''A configuration for a set of HTTP headers to remove from the HTTP response.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-responseheaderspolicyconfig.html#cfn-cloudfront-responseheaderspolicy-responseheaderspolicyconfig-removeheadersconfig
             '''
             result = self._values.get("remove_headers_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.RemoveHeadersConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.RemoveHeadersConfigProperty"]], result)
 
         @builtins.property
         def security_headers_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.SecurityHeadersConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.SecurityHeadersConfigProperty"]]:
             '''A configuration for a set of security-related HTTP response headers.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-responseheaderspolicyconfig.html#cfn-cloudfront-responseheaderspolicy-responseheaderspolicyconfig-securityheadersconfig
             '''
             result = self._values.get("security_headers_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.SecurityHeadersConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.SecurityHeadersConfigProperty"]], result)
 
         @builtins.property
         def server_timing_headers_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.ServerTimingHeadersConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ServerTimingHeadersConfigProperty"]]:
             '''A configuration for enabling the ``Server-Timing`` header in HTTP responses sent from CloudFront.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-responseheaderspolicyconfig.html#cfn-cloudfront-responseheaderspolicy-responseheaderspolicyconfig-servertimingheadersconfig
             '''
             result = self._values.get("server_timing_headers_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.ServerTimingHeadersConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ServerTimingHeadersConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18707,12 +18969,12 @@ class CfnResponseHeadersPolicy(
         def __init__(
             self,
             *,
-            content_security_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.ContentSecurityPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            content_type_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.ContentTypeOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            frame_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.FrameOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            referrer_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.ReferrerPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            strict_transport_security: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.StrictTransportSecurityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            xss_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponseHeadersPolicy.XSSProtectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            content_security_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.ContentSecurityPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            content_type_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.ContentTypeOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            frame_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.FrameOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            referrer_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.ReferrerPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            strict_transport_security: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.StrictTransportSecurityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            xss_protection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.XSSProtectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A configuration for a set of security-related HTTP response headers.
 
@@ -18793,7 +19055,7 @@ class CfnResponseHeadersPolicy(
         @builtins.property
         def content_security_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.ContentSecurityPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ContentSecurityPolicyProperty"]]:
             '''The policy directives and their values that CloudFront includes as values for the ``Content-Security-Policy`` HTTP response header.
 
             For more information about the ``Content-Security-Policy`` HTTP response header, see `Content-Security-Policy <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy>`_ in the MDN Web Docs.
@@ -18801,12 +19063,12 @@ class CfnResponseHeadersPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-securityheadersconfig.html#cfn-cloudfront-responseheaderspolicy-securityheadersconfig-contentsecuritypolicy
             '''
             result = self._values.get("content_security_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.ContentSecurityPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ContentSecurityPolicyProperty"]], result)
 
         @builtins.property
         def content_type_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.ContentTypeOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ContentTypeOptionsProperty"]]:
             '''Determines whether CloudFront includes the ``X-Content-Type-Options`` HTTP response header with its value set to ``nosniff`` .
 
             For more information about the ``X-Content-Type-Options`` HTTP response header, see `X-Content-Type-Options <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options>`_ in the MDN Web Docs.
@@ -18814,12 +19076,12 @@ class CfnResponseHeadersPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-securityheadersconfig.html#cfn-cloudfront-responseheaderspolicy-securityheadersconfig-contenttypeoptions
             '''
             result = self._values.get("content_type_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.ContentTypeOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ContentTypeOptionsProperty"]], result)
 
         @builtins.property
         def frame_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.FrameOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.FrameOptionsProperty"]]:
             '''Determines whether CloudFront includes the ``X-Frame-Options`` HTTP response header and the header's value.
 
             For more information about the ``X-Frame-Options`` HTTP response header, see `X-Frame-Options <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options>`_ in the MDN Web Docs.
@@ -18827,12 +19089,12 @@ class CfnResponseHeadersPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-securityheadersconfig.html#cfn-cloudfront-responseheaderspolicy-securityheadersconfig-frameoptions
             '''
             result = self._values.get("frame_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.FrameOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.FrameOptionsProperty"]], result)
 
         @builtins.property
         def referrer_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.ReferrerPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ReferrerPolicyProperty"]]:
             '''Determines whether CloudFront includes the ``Referrer-Policy`` HTTP response header and the header's value.
 
             For more information about the ``Referrer-Policy`` HTTP response header, see `Referrer-Policy <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy>`_ in the MDN Web Docs.
@@ -18840,12 +19102,12 @@ class CfnResponseHeadersPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-securityheadersconfig.html#cfn-cloudfront-responseheaderspolicy-securityheadersconfig-referrerpolicy
             '''
             result = self._values.get("referrer_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.ReferrerPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ReferrerPolicyProperty"]], result)
 
         @builtins.property
         def strict_transport_security(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.StrictTransportSecurityProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.StrictTransportSecurityProperty"]]:
             '''Determines whether CloudFront includes the ``Strict-Transport-Security`` HTTP response header and the header's value.
 
             For more information about the ``Strict-Transport-Security`` HTTP response header, see `Security headers <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/understanding-response-headers-policies.html#understanding-response-headers-policies-security>`_ in the *Amazon CloudFront Developer Guide* and `Strict-Transport-Security <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security>`_ in the MDN Web Docs.
@@ -18853,12 +19115,12 @@ class CfnResponseHeadersPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-securityheadersconfig.html#cfn-cloudfront-responseheaderspolicy-securityheadersconfig-stricttransportsecurity
             '''
             result = self._values.get("strict_transport_security")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.StrictTransportSecurityProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.StrictTransportSecurityProperty"]], result)
 
         @builtins.property
         def xss_protection(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.XSSProtectionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.XSSProtectionProperty"]]:
             '''Determines whether CloudFront includes the ``X-XSS-Protection`` HTTP response header and the header's value.
 
             For more information about the ``X-XSS-Protection`` HTTP response header, see `X-XSS-Protection <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection>`_ in the MDN Web Docs.
@@ -18866,7 +19128,7 @@ class CfnResponseHeadersPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-securityheadersconfig.html#cfn-cloudfront-responseheaderspolicy-securityheadersconfig-xssprotection
             '''
             result = self._values.get("xss_protection")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponseHeadersPolicy.XSSProtectionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.XSSProtectionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18888,7 +19150,7 @@ class CfnResponseHeadersPolicy(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             sampling_rate: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''A configuration for enabling the ``Server-Timing`` header in HTTP responses sent from CloudFront.
@@ -18923,14 +19185,14 @@ class CfnResponseHeadersPolicy(
                 self._values["sampling_rate"] = sampling_rate
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean that determines whether CloudFront adds the ``Server-Timing`` header to HTTP responses that it sends in response to requests that match a cache behavior that's associated with this response headers policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-servertimingheadersconfig.html#cfn-cloudfront-responseheaderspolicy-servertimingheadersconfig-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def sampling_rate(self) -> typing.Optional[jsii.Number]:
@@ -18969,9 +19231,9 @@ class CfnResponseHeadersPolicy(
             self,
             *,
             access_control_max_age_sec: jsii.Number,
-            override: typing.Union[builtins.bool, _IResolvable_da3f097b],
-            include_subdomains: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            preload: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            override: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+            include_subdomains: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            preload: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Determines whether CloudFront includes the ``Strict-Transport-Security`` HTTP response header and the header's value.
 
@@ -19026,36 +19288,36 @@ class CfnResponseHeadersPolicy(
             return typing.cast(jsii.Number, result)
 
         @builtins.property
-        def override(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def override(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean that determines whether CloudFront overrides the ``Strict-Transport-Security`` HTTP response header received from the origin with the one specified in this response headers policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-stricttransportsecurity.html#cfn-cloudfront-responseheaderspolicy-stricttransportsecurity-override
             '''
             result = self._values.get("override")
             assert result is not None, "Required property 'override' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def include_subdomains(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean that determines whether CloudFront includes the ``includeSubDomains`` directive in the ``Strict-Transport-Security`` HTTP response header.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-stricttransportsecurity.html#cfn-cloudfront-responseheaderspolicy-stricttransportsecurity-includesubdomains
             '''
             result = self._values.get("include_subdomains")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def preload(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean that determines whether CloudFront includes the ``preload`` directive in the ``Strict-Transport-Security`` HTTP response header.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-stricttransportsecurity.html#cfn-cloudfront-responseheaderspolicy-stricttransportsecurity-preload
             '''
             result = self._values.get("preload")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19082,9 +19344,9 @@ class CfnResponseHeadersPolicy(
         def __init__(
             self,
             *,
-            override: typing.Union[builtins.bool, _IResolvable_da3f097b],
-            protection: typing.Union[builtins.bool, _IResolvable_da3f097b],
-            mode_block: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            override: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+            protection: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+            mode_block: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             report_uri: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Determines whether CloudFront includes the ``X-XSS-Protection`` HTTP response header and the header's value.
@@ -19130,17 +19392,17 @@ class CfnResponseHeadersPolicy(
                 self._values["report_uri"] = report_uri
 
         @builtins.property
-        def override(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def override(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean that determines whether CloudFront overrides the ``X-XSS-Protection`` HTTP response header received from the origin with the one specified in this response headers policy.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-xssprotection.html#cfn-cloudfront-responseheaderspolicy-xssprotection-override
             '''
             result = self._values.get("override")
             assert result is not None, "Required property 'override' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
-        def protection(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def protection(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean that determines the value of the ``X-XSS-Protection`` HTTP response header.
 
             When this setting is ``true`` , the value of the ``X-XSS-Protection`` header is ``1`` . When this setting is ``false`` , the value of the ``X-XSS-Protection`` header is ``0`` .
@@ -19151,12 +19413,12 @@ class CfnResponseHeadersPolicy(
             '''
             result = self._values.get("protection")
             assert result is not None, "Required property 'protection' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def mode_block(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean that determines whether CloudFront includes the ``mode=block`` directive in the ``X-XSS-Protection`` header.
 
             For more information about this directive, see `X-XSS-Protection <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection>`_ in the MDN Web Docs.
@@ -19164,7 +19426,7 @@ class CfnResponseHeadersPolicy(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-responseheaderspolicy-xssprotection.html#cfn-cloudfront-responseheaderspolicy-xssprotection-modeblock
             '''
             result = self._values.get("mode_block")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def report_uri(self) -> typing.Optional[builtins.str]:
@@ -19200,7 +19462,7 @@ class CfnResponseHeadersPolicyProps:
     def __init__(
         self,
         *,
-        response_headers_policy_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        response_headers_policy_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnResponseHeadersPolicy``.
 
@@ -19304,14 +19566,14 @@ class CfnResponseHeadersPolicyProps:
     @builtins.property
     def response_headers_policy_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty"]:
         '''A response headers policy configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-responseheaderspolicy.html#cfn-cloudfront-responseheaderspolicy-responseheaderspolicyconfig
         '''
         result = self._values.get("response_headers_policy_config")
         assert result is not None, "Required property 'response_headers_policy_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19341,6 +19603,7 @@ class CfnStreamingDistribution(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cloudfront as cloudfront
@@ -19380,11 +19643,11 @@ class CfnStreamingDistribution(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        streaming_distribution_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnStreamingDistribution.StreamingDistributionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        streaming_distribution_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnStreamingDistribution.StreamingDistributionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFront::StreamingDistribution``.
 
@@ -19416,7 +19679,7 @@ class CfnStreamingDistribution(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStreamingDistribution", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -19469,28 +19732,28 @@ class CfnStreamingDistribution(
 
     @builtins.property
     @jsii.member(jsii_name="streamingDistributionRef")
-    def streaming_distribution_ref(self) -> _StreamingDistributionReference_cce28c26:
+    def streaming_distribution_ref(self) -> "_StreamingDistributionReference_cce28c26":
         '''A reference to a StreamingDistribution resource.'''
-        return typing.cast(_StreamingDistributionReference_cce28c26, jsii.get(self, "streamingDistributionRef"))
+        return typing.cast("_StreamingDistributionReference_cce28c26", jsii.get(self, "streamingDistributionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="streamingDistributionConfig")
     def streaming_distribution_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnStreamingDistribution.StreamingDistributionConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnStreamingDistribution.StreamingDistributionConfigProperty"]:
         '''The current configuration information for the RTMP distribution.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnStreamingDistribution.StreamingDistributionConfigProperty"], jsii.get(self, "streamingDistributionConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnStreamingDistribution.StreamingDistributionConfigProperty"], jsii.get(self, "streamingDistributionConfig"))
 
     @streaming_distribution_config.setter
     def streaming_distribution_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnStreamingDistribution.StreamingDistributionConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnStreamingDistribution.StreamingDistributionConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dc8a8d78e195f1bab99bca7ea58d3b6a029844997b8e6940d737f147d8dcc6d2)
@@ -19499,12 +19762,12 @@ class CfnStreamingDistribution(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3a91a3a4fec8e270215622a8e9c4af00c6cfb4cfbe6700e58871b60ab722463f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -19520,7 +19783,7 @@ class CfnStreamingDistribution(
             self,
             *,
             bucket: builtins.str,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             prefix: builtins.str,
         ) -> None:
             '''A complex type that controls whether access logs are written for the streaming distribution.
@@ -19566,7 +19829,7 @@ class CfnStreamingDistribution(
             return typing.cast(builtins.str, result)
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Specifies whether you want CloudFront to save access logs to an Amazon S3 bucket.
 
             If you don't want to enable logging when you create a streaming distribution or if you want to disable logging for an existing streaming distribution, specify ``false`` for ``Enabled`` , and specify ``empty Bucket`` and ``Prefix`` elements. If you specify ``false`` for ``Enabled`` but you specify values for ``Bucket`` and ``Prefix`` , the values are automatically deleted.
@@ -19575,7 +19838,7 @@ class CfnStreamingDistribution(
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def prefix(self) -> builtins.str:
@@ -19702,11 +19965,11 @@ class CfnStreamingDistribution(
             self,
             *,
             comment: builtins.str,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
-            s3_origin: typing.Union[_IResolvable_da3f097b, typing.Union["CfnStreamingDistribution.S3OriginProperty", typing.Dict[builtins.str, typing.Any]]],
-            trusted_signers: typing.Union[_IResolvable_da3f097b, typing.Union["CfnStreamingDistribution.TrustedSignersProperty", typing.Dict[builtins.str, typing.Any]]],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+            s3_origin: typing.Union["_IResolvable_da3f097b", typing.Union["CfnStreamingDistribution.S3OriginProperty", typing.Dict[builtins.str, typing.Any]]],
+            trusted_signers: typing.Union["_IResolvable_da3f097b", typing.Union["CfnStreamingDistribution.TrustedSignersProperty", typing.Dict[builtins.str, typing.Any]]],
             aliases: typing.Optional[typing.Sequence[builtins.str]] = None,
-            logging: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStreamingDistribution.LoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            logging: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStreamingDistribution.LoggingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             price_class: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The RTMP distribution's configuration information.
@@ -19785,31 +20048,31 @@ class CfnStreamingDistribution(
             return typing.cast(builtins.str, result)
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Whether the streaming distribution is enabled to accept user requests for content.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-streamingdistribution-streamingdistributionconfig.html#cfn-cloudfront-streamingdistribution-streamingdistributionconfig-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def s3_origin(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnStreamingDistribution.S3OriginProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnStreamingDistribution.S3OriginProperty"]:
             '''A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-streamingdistribution-streamingdistributionconfig.html#cfn-cloudfront-streamingdistribution-streamingdistributionconfig-s3origin
             '''
             result = self._values.get("s3_origin")
             assert result is not None, "Required property 's3_origin' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnStreamingDistribution.S3OriginProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnStreamingDistribution.S3OriginProperty"], result)
 
         @builtins.property
         def trusted_signers(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnStreamingDistribution.TrustedSignersProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnStreamingDistribution.TrustedSignersProperty"]:
             '''A complex type that specifies any AWS accounts that you want to permit to create signed URLs for private content.
 
             If you want the distribution to use signed URLs, include this element; if you want the distribution to use public URLs, remove this element. For more information, see `Serving Private Content through CloudFront <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html>`_ in the *Amazon CloudFront Developer Guide* .
@@ -19818,7 +20081,7 @@ class CfnStreamingDistribution(
             '''
             result = self._values.get("trusted_signers")
             assert result is not None, "Required property 'trusted_signers' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnStreamingDistribution.TrustedSignersProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnStreamingDistribution.TrustedSignersProperty"], result)
 
         @builtins.property
         def aliases(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -19832,13 +20095,13 @@ class CfnStreamingDistribution(
         @builtins.property
         def logging(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStreamingDistribution.LoggingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStreamingDistribution.LoggingProperty"]]:
             '''A complex type that controls whether access logs are written for the streaming distribution.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-streamingdistribution-streamingdistributionconfig.html#cfn-cloudfront-streamingdistribution-streamingdistributionconfig-logging
             '''
             result = self._values.get("logging")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStreamingDistribution.LoggingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStreamingDistribution.LoggingProperty"]], result)
 
         @builtins.property
         def price_class(self) -> typing.Optional[builtins.str]:
@@ -19872,7 +20135,7 @@ class CfnStreamingDistribution(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             aws_account_numbers: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''A list of AWS accounts whose public keys CloudFront can use to verify the signatures of signed URLs and signed cookies.
@@ -19907,7 +20170,7 @@ class CfnStreamingDistribution(
                 self._values["aws_account_numbers"] = aws_account_numbers
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''This field is ``true`` if any of the AWS accounts in the list are configured as trusted signers.
 
             If not, this field is ``false`` .
@@ -19916,7 +20179,7 @@ class CfnStreamingDistribution(
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def aws_account_numbers(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -19953,8 +20216,8 @@ class CfnStreamingDistributionProps:
     def __init__(
         self,
         *,
-        streaming_distribution_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStreamingDistribution.StreamingDistributionConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        streaming_distribution_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnStreamingDistribution.StreamingDistributionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStreamingDistribution``.
 
@@ -19966,6 +20229,7 @@ class CfnStreamingDistributionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloudfront as cloudfront
@@ -20015,23 +20279,23 @@ class CfnStreamingDistributionProps:
     @builtins.property
     def streaming_distribution_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnStreamingDistribution.StreamingDistributionConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnStreamingDistribution.StreamingDistributionConfigProperty"]:
         '''The current configuration information for the RTMP distribution.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-streamingdistribution.html#cfn-cloudfront-streamingdistribution-streamingdistributionconfig
         '''
         result = self._values.get("streaming_distribution_config")
         assert result is not None, "Required property 'streaming_distribution_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnStreamingDistribution.StreamingDistributionConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnStreamingDistribution.StreamingDistributionConfigProperty"], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-streamingdistribution.html#cfn-cloudfront-streamingdistribution-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20059,6 +20323,7 @@ class CfnTrustStore(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cloudfront as cloudfront
@@ -20086,12 +20351,12 @@ class CfnTrustStore(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        ca_certificates_bundle_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrustStore.CaCertificatesBundleSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        ca_certificates_bundle_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTrustStore.CaCertificatesBundleSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFront::TrustStore``.
 
@@ -20115,7 +20380,7 @@ class CfnTrustStore(
 
     @jsii.member(jsii_name="arnForTrustStore")
     @builtins.classmethod
-    def arn_for_trust_store(cls, resource: _ITrustStoreRef_c9036746) -> builtins.str:
+    def arn_for_trust_store(cls, resource: "_ITrustStoreRef_c9036746") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -20137,7 +20402,7 @@ class CfnTrustStore(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTrustStore", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -20222,9 +20487,9 @@ class CfnTrustStore(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -20233,9 +20498,9 @@ class CfnTrustStore(
 
     @builtins.property
     @jsii.member(jsii_name="trustStoreRef")
-    def trust_store_ref(self) -> _TrustStoreReference_842fa5e4:
+    def trust_store_ref(self) -> "_TrustStoreReference_842fa5e4":
         '''A reference to a TrustStore resource.'''
-        return typing.cast(_TrustStoreReference_842fa5e4, jsii.get(self, "trustStoreRef"))
+        return typing.cast("_TrustStoreReference_842fa5e4", jsii.get(self, "trustStoreRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -20254,14 +20519,14 @@ class CfnTrustStore(
     @jsii.member(jsii_name="caCertificatesBundleSource")
     def ca_certificates_bundle_source(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleSourceProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTrustStore.CaCertificatesBundleSourceProperty"]]:
         '''A CA certificates bundle source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleSourceProperty"]], jsii.get(self, "caCertificatesBundleSource"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTrustStore.CaCertificatesBundleSourceProperty"]], jsii.get(self, "caCertificatesBundleSource"))
 
     @ca_certificates_bundle_source.setter
     def ca_certificates_bundle_source(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleSourceProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTrustStore.CaCertificatesBundleSourceProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__66149a337b49bef3f17a72be067686394c884438665fe2a91d2956adb0d7e84a)
@@ -20270,12 +20535,12 @@ class CfnTrustStore(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8891d288761cbb98e0953cae118faa2d9e32c0832073d4be7c5ae3579a20ff68)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -20400,7 +20665,7 @@ class CfnTrustStore(
         def __init__(
             self,
             *,
-            ca_certificates_bundle_s3_location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrustStore.CaCertificatesBundleS3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+            ca_certificates_bundle_s3_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTrustStore.CaCertificatesBundleS3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''A CA certificates bundle source.
 
@@ -20436,14 +20701,14 @@ class CfnTrustStore(
         @builtins.property
         def ca_certificates_bundle_s3_location(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleS3LocationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTrustStore.CaCertificatesBundleS3LocationProperty"]:
             '''The CA certificates bundle location in Amazon S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundlesource.html#cfn-cloudfront-truststore-cacertificatesbundlesource-cacertificatesbundles3location
             '''
             result = self._values.get("ca_certificates_bundle_s3_location")
             assert result is not None, "Required property 'ca_certificates_bundle_s3_location' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleS3LocationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTrustStore.CaCertificatesBundleS3LocationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20471,8 +20736,8 @@ class CfnTrustStoreProps:
         self,
         *,
         name: builtins.str,
-        ca_certificates_bundle_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrustStore.CaCertificatesBundleSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        ca_certificates_bundle_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTrustStore.CaCertificatesBundleSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTrustStore``.
 
@@ -20485,6 +20750,7 @@ class CfnTrustStoreProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloudfront as cloudfront
@@ -20535,22 +20801,22 @@ class CfnTrustStoreProps:
     @builtins.property
     def ca_certificates_bundle_source(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTrustStore.CaCertificatesBundleSourceProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTrustStore.CaCertificatesBundleSourceProperty"]]:
         '''A CA certificates bundle source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-truststore.html#cfn-cloudfront-truststore-cacertificatesbundlesource
         '''
         result = self._values.get("ca_certificates_bundle_source")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTrustStore.CaCertificatesBundleSourceProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTrustStore.CaCertificatesBundleSourceProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-truststore.html#cfn-cloudfront-truststore-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20578,6 +20844,7 @@ class CfnVpcOrigin(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cloudfront as cloudfront
@@ -20604,11 +20871,11 @@ class CfnVpcOrigin(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        vpc_origin_endpoint_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnVpcOrigin.VpcOriginEndpointConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_origin_endpoint_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVpcOrigin.VpcOriginEndpointConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFront::VpcOrigin``.
 
@@ -20629,7 +20896,7 @@ class CfnVpcOrigin(
 
     @jsii.member(jsii_name="arnForVpcOrigin")
     @builtins.classmethod
-    def arn_for_vpc_origin(cls, resource: _IVpcOriginRef_4a31f77c) -> builtins.str:
+    def arn_for_vpc_origin(cls, resource: "_IVpcOriginRef_4a31f77c") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -20651,7 +20918,7 @@ class CfnVpcOrigin(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVpcOrigin", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -20736,9 +21003,9 @@ class CfnVpcOrigin(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -20747,22 +21014,22 @@ class CfnVpcOrigin(
 
     @builtins.property
     @jsii.member(jsii_name="vpcOriginRef")
-    def vpc_origin_ref(self) -> _VpcOriginReference_e93e6a73:
+    def vpc_origin_ref(self) -> "_VpcOriginReference_e93e6a73":
         '''A reference to a VpcOrigin resource.'''
-        return typing.cast(_VpcOriginReference_e93e6a73, jsii.get(self, "vpcOriginRef"))
+        return typing.cast("_VpcOriginReference_e93e6a73", jsii.get(self, "vpcOriginRef"))
 
     @builtins.property
     @jsii.member(jsii_name="vpcOriginEndpointConfig")
     def vpc_origin_endpoint_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnVpcOrigin.VpcOriginEndpointConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnVpcOrigin.VpcOriginEndpointConfigProperty"]:
         '''The VPC origin endpoint configuration.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnVpcOrigin.VpcOriginEndpointConfigProperty"], jsii.get(self, "vpcOriginEndpointConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVpcOrigin.VpcOriginEndpointConfigProperty"], jsii.get(self, "vpcOriginEndpointConfig"))
 
     @vpc_origin_endpoint_config.setter
     def vpc_origin_endpoint_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnVpcOrigin.VpcOriginEndpointConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnVpcOrigin.VpcOriginEndpointConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9265e1489f928e735dda183f6e028e321fecb788c24bb3ae245d1548533ba74e)
@@ -20771,12 +21038,12 @@ class CfnVpcOrigin(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cc93ea0e93a8ae8f83cf244dcb1cb75eec5e49566a07e24c8943e0e19484ca81)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -20949,8 +21216,8 @@ class CfnVpcOriginProps:
     def __init__(
         self,
         *,
-        vpc_origin_endpoint_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnVpcOrigin.VpcOriginEndpointConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_origin_endpoint_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnVpcOrigin.VpcOriginEndpointConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnVpcOrigin``.
 
@@ -20962,6 +21229,7 @@ class CfnVpcOriginProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloudfront as cloudfront
@@ -20998,23 +21266,23 @@ class CfnVpcOriginProps:
     @builtins.property
     def vpc_origin_endpoint_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnVpcOrigin.VpcOriginEndpointConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnVpcOrigin.VpcOriginEndpointConfigProperty"]:
         '''The VPC origin endpoint configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-vpcorigin.html#cfn-cloudfront-vpcorigin-vpcoriginendpointconfig
         '''
         result = self._values.get("vpc_origin_endpoint_config")
         assert result is not None, "Required property 'vpc_origin_endpoint_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnVpcOrigin.VpcOriginEndpointConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnVpcOrigin.VpcOriginEndpointConfigProperty"], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-vpcorigin.html#cfn-cloudfront-vpcorigin-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -21144,7 +21412,7 @@ class CloudFrontWebDistributionProps:
         default_root_object: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[builtins.bool] = None,
         enable_ip_v6: typing.Optional[builtins.bool] = None,
-        error_configurations: typing.Optional[typing.Sequence[typing.Union[CfnDistribution.CustomErrorResponseProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        error_configurations: typing.Optional[typing.Sequence[typing.Union["CfnDistribution.CustomErrorResponseProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         geo_restriction: typing.Optional["GeoRestriction"] = None,
         http_version: typing.Optional["HttpVersion"] = None,
         logging_config: typing.Optional[typing.Union["LoggingConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -21283,7 +21551,7 @@ class CloudFrontWebDistributionProps:
     @builtins.property
     def error_configurations(
         self,
-    ) -> typing.Optional[typing.List[CfnDistribution.CustomErrorResponseProperty]]:
+    ) -> typing.Optional[typing.List["CfnDistribution.CustomErrorResponseProperty"]]:
         '''How CloudFront should handle requests that are not successful (eg PageNotFound).
 
         By default, CloudFront does not replace HTTP status codes in the 4xx and 5xx range
@@ -21292,7 +21560,7 @@ class CloudFrontWebDistributionProps:
         :default: - No custom error configuration.
         '''
         result = self._values.get("error_configurations")
-        return typing.cast(typing.Optional[typing.List[CfnDistribution.CustomErrorResponseProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnDistribution.CustomErrorResponseProperty"]], result)
 
     @builtins.property
     def geo_restriction(self) -> typing.Optional["GeoRestriction"]:
@@ -21406,10 +21674,10 @@ class CustomOriginConfig:
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
         origin_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        origin_keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        origin_keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         origin_protocol_policy: typing.Optional["OriginProtocolPolicy"] = None,
-        origin_read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        origin_read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
     ) -> None:
         '''A custom origin configuration.
@@ -21534,13 +21802,13 @@ class CustomOriginConfig:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def origin_keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def origin_keepalive_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The keep alive timeout when making calls in seconds.
 
         :default: Duration.seconds(5)
         '''
         result = self._values.get("origin_keepalive_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -21561,13 +21829,13 @@ class CustomOriginConfig:
         return typing.cast(typing.Optional["OriginProtocolPolicy"], result)
 
     @builtins.property
-    def origin_read_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def origin_read_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The read timeout when calling the origin in seconds.
 
         :default: Duration.seconds(30)
         '''
         result = self._values.get("origin_read_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_shield_region(self) -> typing.Optional[builtins.str]:
@@ -21682,7 +21950,7 @@ class DistributionGrants(
     @builtins.classmethod
     def from_distribution(
         cls,
-        resource: _IDistributionRef_36fd2094,
+        resource: "_IDistributionRef_36fd2094",
     ) -> "DistributionGrants":
         '''Creates grants for DistributionGrants.
 
@@ -21694,7 +21962,7 @@ class DistributionGrants(
         return typing.cast("DistributionGrants", jsii.sinvoke(cls, "fromDistribution", [resource]))
 
     @jsii.member(jsii_name="createInvalidation")
-    def create_invalidation(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def create_invalidation(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant to create invalidations for this bucket to an IAM principal (Role/Group/User).
 
         :param grantee: -
@@ -21702,12 +21970,12 @@ class DistributionGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__66af884fdf4d1dc85d885ee026b7e7ce3f3155f8ad2b752a55706b6eb53d0ad1)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "createInvalidation", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "createInvalidation", [grantee]))
 
     @builtins.property
     @jsii.member(jsii_name="resource")
-    def _resource(self) -> _IDistributionRef_36fd2094:
-        return typing.cast(_IDistributionRef_36fd2094, jsii.get(self, "resource"))
+    def _resource(self) -> "_IDistributionRef_36fd2094":
+        return typing.cast("_IDistributionRef_36fd2094", jsii.get(self, "resource"))
 
 
 @jsii.data_type(
@@ -21740,9 +22008,9 @@ class DistributionProps:
     def __init__(
         self,
         *,
-        default_behavior: typing.Union[BehaviorOptions, typing.Dict[builtins.str, typing.Any]],
-        additional_behaviors: typing.Optional[typing.Mapping[builtins.str, typing.Union[BehaviorOptions, typing.Dict[builtins.str, typing.Any]]]] = None,
-        certificate: typing.Optional[_ICertificate_c194c70b] = None,
+        default_behavior: typing.Union["BehaviorOptions", typing.Dict[builtins.str, typing.Any]],
+        additional_behaviors: typing.Optional[typing.Mapping[builtins.str, typing.Union["BehaviorOptions", typing.Dict[builtins.str, typing.Any]]]] = None,
+        certificate: typing.Optional["_ICertificate_c194c70b"] = None,
         comment: typing.Optional[builtins.str] = None,
         default_root_object: typing.Optional[builtins.str] = None,
         domain_names: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -21752,7 +22020,7 @@ class DistributionProps:
         error_responses: typing.Optional[typing.Sequence[typing.Union["ErrorResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
         geo_restriction: typing.Optional["GeoRestriction"] = None,
         http_version: typing.Optional["HttpVersion"] = None,
-        log_bucket: typing.Optional[_IBucket_42e086fd] = None,
+        log_bucket: typing.Optional["_IBucket_42e086fd"] = None,
         log_file_prefix: typing.Optional[builtins.str] = None,
         log_includes_cookies: typing.Optional[builtins.bool] = None,
         minimum_protocol_version: typing.Optional["SecurityPolicyProtocol"] = None,
@@ -21871,25 +22139,25 @@ class DistributionProps:
             self._values["web_acl_id"] = web_acl_id
 
     @builtins.property
-    def default_behavior(self) -> BehaviorOptions:
+    def default_behavior(self) -> "BehaviorOptions":
         '''The default behavior for the distribution.'''
         result = self._values.get("default_behavior")
         assert result is not None, "Required property 'default_behavior' is missing"
-        return typing.cast(BehaviorOptions, result)
+        return typing.cast("BehaviorOptions", result)
 
     @builtins.property
     def additional_behaviors(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, BehaviorOptions]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "BehaviorOptions"]]:
         '''Additional behaviors for the distribution, mapped by the pathPattern that specifies which requests to apply the behavior to.
 
         :default: - no additional behaviors are added.
         '''
         result = self._values.get("additional_behaviors")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, BehaviorOptions]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "BehaviorOptions"]], result)
 
     @builtins.property
-    def certificate(self) -> typing.Optional[_ICertificate_c194c70b]:
+    def certificate(self) -> typing.Optional["_ICertificate_c194c70b"]:
         '''A certificate to associate with the distribution.
 
         The certificate must be located in N. Virginia (us-east-1).
@@ -21897,7 +22165,7 @@ class DistributionProps:
         :default: - the CloudFront wildcard certificate (*.cloudfront.net) will be used.
         '''
         result = self._values.get("certificate")
-        return typing.cast(typing.Optional[_ICertificate_c194c70b], result)
+        return typing.cast(typing.Optional["_ICertificate_c194c70b"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -21993,7 +22261,7 @@ class DistributionProps:
         return typing.cast(typing.Optional["HttpVersion"], result)
 
     @builtins.property
-    def log_bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def log_bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''The Amazon S3 bucket to store the access logs in.
 
         Make sure to set ``objectOwnership`` to ``s3.ObjectOwnership.OBJECT_WRITER`` in your custom bucket.
@@ -22001,7 +22269,7 @@ class DistributionProps:
         :default: - A bucket is created if ``enableLogging`` is true
         '''
         result = self._values.get("log_bucket")
-        return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     @builtins.property
     def log_file_prefix(self) -> typing.Optional[builtins.str]:
@@ -22119,7 +22387,7 @@ class EdgeLambda:
         self,
         *,
         event_type: "LambdaEdgeEventType",
-        function_version: _IVersion_faf7234e,
+        function_version: "_IVersion_faf7234e",
         include_body: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Represents a Lambda function version and event type when using Lambda@Edge.
@@ -22169,14 +22437,14 @@ class EdgeLambda:
         return typing.cast("LambdaEdgeEventType", result)
 
     @builtins.property
-    def function_version(self) -> _IVersion_faf7234e:
+    def function_version(self) -> "_IVersion_faf7234e":
         '''The version of the Lambda function that will be invoked.
 
         **Note**: it's not possible to use the '$LATEST' function version for Lambda@Edge!
         '''
         result = self._values.get("function_version")
         assert result is not None, "Required property 'function_version' is missing"
-        return typing.cast(_IVersion_faf7234e, result)
+        return typing.cast("_IVersion_faf7234e", result)
 
     @builtins.property
     def include_body(self) -> typing.Optional[builtins.bool]:
@@ -22240,8 +22508,8 @@ class Endpoint(
     @builtins.classmethod
     def from_kinesis_stream(
         cls,
-        stream: _IStream_4e2457d2,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        stream: "_IStream_4e2457d2",
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> "Endpoint":
         '''Configure a Kinesis Stream Endpoint for Realtime Log Config.
 
@@ -22281,7 +22549,7 @@ class ErrorResponse:
         http_status: jsii.Number,
         response_http_status: typing.Optional[jsii.Number] = None,
         response_page_path: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Options for configuring custom error responses.
 
@@ -22352,13 +22620,13 @@ class ErrorResponse:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The minimum amount of time, in seconds, that you want CloudFront to cache the HTTP status code specified in ErrorCode.
 
         :default: - the default caching TTL behavior applies
         '''
         result = self._values.get("ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22482,7 +22750,7 @@ class FunctionAssociation:
         self,
         *,
         event_type: "FunctionEventType",
-        function: _IFunctionRef_2f1d7e70,
+        function: "_IFunctionRef_2f1d7e70",
     ) -> None:
         '''Represents a CloudFront function and event type when using CF Functions.
 
@@ -22524,11 +22792,11 @@ class FunctionAssociation:
         return typing.cast("FunctionEventType", result)
 
     @builtins.property
-    def function(self) -> _IFunctionRef_2f1d7e70:
+    def function(self) -> "_IFunctionRef_2f1d7e70":
         '''The CloudFront function that will be invoked.'''
         result = self._values.get("function")
         assert result is not None, "Required property 'function' is missing"
-        return typing.cast(_IFunctionRef_2f1d7e70, result)
+        return typing.cast("_IFunctionRef_2f1d7e70", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22741,11 +23009,11 @@ class FunctionProps:
     def __init__(
         self,
         *,
-        code: FunctionCode,
+        code: "FunctionCode",
         auto_publish: typing.Optional[builtins.bool] = None,
         comment: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        key_value_store: typing.Optional[_IKeyValueStoreRef_332470ca] = None,
+        key_value_store: typing.Optional["_IKeyValueStoreRef_332470ca"] = None,
         runtime: typing.Optional["FunctionRuntime"] = None,
     ) -> None:
         '''Properties for creating a CloudFront Function.
@@ -22792,11 +23060,11 @@ class FunctionProps:
             self._values["runtime"] = runtime
 
     @builtins.property
-    def code(self) -> FunctionCode:
+    def code(self) -> "FunctionCode":
         '''The source code of the function.'''
         result = self._values.get("code")
         assert result is not None, "Required property 'code' is missing"
-        return typing.cast(FunctionCode, result)
+        return typing.cast("FunctionCode", result)
 
     @builtins.property
     def auto_publish(self) -> typing.Optional[builtins.bool]:
@@ -22826,7 +23094,7 @@ class FunctionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def key_value_store(self) -> typing.Optional[_IKeyValueStoreRef_332470ca]:
+    def key_value_store(self) -> typing.Optional["_IKeyValueStoreRef_332470ca"]:
         '''The Key Value Store to associate with this function.
 
         In order to associate a Key Value Store, the ``runtime`` must be
@@ -22835,7 +23103,7 @@ class FunctionProps:
         :default: - no key value store is associated
         '''
         result = self._values.get("key_value_store")
-        return typing.cast(typing.Optional[_IKeyValueStoreRef_332470ca], result)
+        return typing.cast(typing.Optional["_IKeyValueStoreRef_332470ca"], result)
 
     @builtins.property
     def runtime(self) -> typing.Optional["FunctionRuntime"]:
@@ -23204,9 +23472,9 @@ class IDistribution(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this distribution to an IAM principal's policy.
 
         :param identity: The principal.
@@ -23217,8 +23485,8 @@ class IDistribution(
     @jsii.member(jsii_name="grantCreateInvalidation")
     def grant_create_invalidation(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant to create invalidations for this bucket to an IAM principal (Role/Group/User).
 
         :param identity: The principal.
@@ -23264,9 +23532,9 @@ class _IDistributionProxy(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this distribution to an IAM principal's policy.
 
         :param identity: The principal.
@@ -23276,13 +23544,13 @@ class _IDistributionProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__d1f094d764e7044bda61b03a856a844a6c04d7a3a8c3074282ec5cf861c8fe4b)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [identity, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [identity, *actions]))
 
     @jsii.member(jsii_name="grantCreateInvalidation")
     def grant_create_invalidation(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant to create invalidations for this bucket to an IAM principal (Role/Group/User).
 
         :param identity: The principal.
@@ -23290,7 +23558,7 @@ class _IDistributionProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a0da834b81f05c7b03da27ef7cb73b4a87abd54c9f5430cc3f6f2866079c82b8)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantCreateInvalidation", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantCreateInvalidation", [identity]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDistribution).__jsii_proxy_class__ = lambda : _IDistributionProxy
@@ -23477,7 +23745,7 @@ class IOrigin(typing_extensions.Protocol):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
         origin_id: builtins.str,
         distribution_id: typing.Optional[builtins.str] = None,
@@ -23502,7 +23770,7 @@ class _IOriginProxy:
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
         origin_id: builtins.str,
         distribution_id: typing.Optional[builtins.str] = None,
@@ -23897,14 +24165,14 @@ class ImportSource(
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> "ImportSource":
         '''An import source that exists as a local file.
 
@@ -23942,7 +24210,7 @@ class ImportSource(
     @builtins.classmethod
     def from_bucket(
         cls,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         key: builtins.str,
     ) -> "ImportSource":
         '''An import source that exists as an object in an S3 bucket.
@@ -24092,10 +24360,10 @@ class KeyGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        items: typing.Sequence[_IPublicKeyRef_92c807d1],
+        items: typing.Sequence["_IPublicKeyRef_92c807d1"],
         comment: typing.Optional[builtins.str] = None,
         key_group_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -24120,10 +24388,10 @@ class KeyGroup(
     @builtins.classmethod
     def from_key_group_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         key_group_id: builtins.str,
-    ) -> IKeyGroup:
+    ) -> "IKeyGroup":
         '''Imports a Key Group from its id.
 
         :param scope: -
@@ -24135,7 +24403,7 @@ class KeyGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument key_group_id", value=key_group_id, expected_type=type_hints["key_group_id"])
-        return typing.cast(IKeyGroup, jsii.sinvoke(cls, "fromKeyGroupId", [scope, id, key_group_id]))
+        return typing.cast("IKeyGroup", jsii.sinvoke(cls, "fromKeyGroupId", [scope, id, key_group_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -24151,9 +24419,9 @@ class KeyGroup(
 
     @builtins.property
     @jsii.member(jsii_name="keyGroupRef")
-    def key_group_ref(self) -> _KeyGroupReference_d904f6f1:
+    def key_group_ref(self) -> "_KeyGroupReference_d904f6f1":
         '''A reference to a KeyGroup resource.'''
-        return typing.cast(_KeyGroupReference_d904f6f1, jsii.get(self, "keyGroupRef"))
+        return typing.cast("_KeyGroupReference_d904f6f1", jsii.get(self, "keyGroupRef"))
 
 
 @jsii.data_type(
@@ -24169,7 +24437,7 @@ class KeyGroupProps:
     def __init__(
         self,
         *,
-        items: typing.Sequence[_IPublicKeyRef_92c807d1],
+        items: typing.Sequence["_IPublicKeyRef_92c807d1"],
         comment: typing.Optional[builtins.str] = None,
         key_group_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -24219,11 +24487,11 @@ class KeyGroupProps:
             self._values["key_group_name"] = key_group_name
 
     @builtins.property
-    def items(self) -> typing.List[_IPublicKeyRef_92c807d1]:
+    def items(self) -> typing.List["_IPublicKeyRef_92c807d1"]:
         '''A list of public keys to add to the key group.'''
         result = self._values.get("items")
         assert result is not None, "Required property 'items' is missing"
-        return typing.cast(typing.List[_IPublicKeyRef_92c807d1], result)
+        return typing.cast(typing.List["_IPublicKeyRef_92c807d1"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -24279,12 +24547,12 @@ class KeyValueStore(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
         key_value_store_name: typing.Optional[builtins.str] = None,
-        source: typing.Optional[ImportSource] = None,
+        source: typing.Optional["ImportSource"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -24307,10 +24575,10 @@ class KeyValueStore(
     @builtins.classmethod
     def from_key_value_store_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         key_value_store_arn: builtins.str,
-    ) -> IKeyValueStore:
+    ) -> "IKeyValueStore":
         '''Import a Key Value Store using its ARN.
 
         :param scope: -
@@ -24322,7 +24590,7 @@ class KeyValueStore(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument key_value_store_arn", value=key_value_store_arn, expected_type=type_hints["key_value_store_arn"])
-        return typing.cast(IKeyValueStore, jsii.sinvoke(cls, "fromKeyValueStoreArn", [scope, id, key_value_store_arn]))
+        return typing.cast("IKeyValueStore", jsii.sinvoke(cls, "fromKeyValueStoreArn", [scope, id, key_value_store_arn]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -24344,9 +24612,9 @@ class KeyValueStore(
 
     @builtins.property
     @jsii.member(jsii_name="keyValueStoreRef")
-    def key_value_store_ref(self) -> _KeyValueStoreReference_0ba0c49f:
+    def key_value_store_ref(self) -> "_KeyValueStoreReference_0ba0c49f":
         '''A reference to a KeyValueStore resource.'''
-        return typing.cast(_KeyValueStoreReference_0ba0c49f, jsii.get(self, "keyValueStoreRef"))
+        return typing.cast("_KeyValueStoreReference_0ba0c49f", jsii.get(self, "keyValueStoreRef"))
 
     @builtins.property
     @jsii.member(jsii_name="keyValueStoreStatus")
@@ -24370,7 +24638,7 @@ class KeyValueStoreProps:
         *,
         comment: typing.Optional[builtins.str] = None,
         key_value_store_name: typing.Optional[builtins.str] = None,
-        source: typing.Optional[ImportSource] = None,
+        source: typing.Optional["ImportSource"] = None,
     ) -> None:
         '''The properties to create a Key Value Store.
 
@@ -24433,7 +24701,7 @@ class KeyValueStoreProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def source(self) -> typing.Optional[ImportSource]:
+    def source(self) -> typing.Optional["ImportSource"]:
         '''The import source for the Key Value Store.
 
         This will populate the initial items in the Key Value Store. The
@@ -24442,7 +24710,7 @@ class KeyValueStoreProps:
         :default: No data will be imported to the store
         '''
         result = self._values.get("source")
-        return typing.cast(typing.Optional[ImportSource], result)
+        return typing.cast(typing.Optional["ImportSource"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24507,8 +24775,8 @@ class LambdaFunctionAssociation:
     def __init__(
         self,
         *,
-        event_type: LambdaEdgeEventType,
-        lambda_function: _IVersion_faf7234e,
+        event_type: "LambdaEdgeEventType",
+        lambda_function: "_IVersion_faf7234e",
         include_body: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''
@@ -24548,18 +24816,18 @@ class LambdaFunctionAssociation:
             self._values["include_body"] = include_body
 
     @builtins.property
-    def event_type(self) -> LambdaEdgeEventType:
+    def event_type(self) -> "LambdaEdgeEventType":
         '''The lambda event type defines at which event the lambda is called during the request lifecycle.'''
         result = self._values.get("event_type")
         assert result is not None, "Required property 'event_type' is missing"
-        return typing.cast(LambdaEdgeEventType, result)
+        return typing.cast("LambdaEdgeEventType", result)
 
     @builtins.property
-    def lambda_function(self) -> _IVersion_faf7234e:
+    def lambda_function(self) -> "_IVersion_faf7234e":
         '''A version of the lambda to associate.'''
         result = self._values.get("lambda_function")
         assert result is not None, "Required property 'lambda_function' is missing"
-        return typing.cast(_IVersion_faf7234e, result)
+        return typing.cast("_IVersion_faf7234e", result)
 
     @builtins.property
     def include_body(self) -> typing.Optional[builtins.bool]:
@@ -24599,7 +24867,7 @@ class LoggingConfiguration:
     def __init__(
         self,
         *,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         include_cookies: typing.Optional[builtins.bool] = None,
         prefix: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -24640,13 +24908,13 @@ class LoggingConfiguration:
             self._values["prefix"] = prefix
 
     @builtins.property
-    def bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''Bucket to log requests to.
 
         :default: - A logging bucket is automatically created.
         '''
         result = self._values.get("bucket")
-        return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     @builtins.property
     def include_cookies(self) -> typing.Optional[builtins.bool]:
@@ -24814,7 +25082,7 @@ class OriginAccessIdentity(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
@@ -24836,10 +25104,10 @@ class OriginAccessIdentity(
     @builtins.classmethod
     def from_origin_access_identity_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         origin_access_identity_id: builtins.str,
-    ) -> IOriginAccessIdentity:
+    ) -> "IOriginAccessIdentity":
         '''Creates a OriginAccessIdentity by providing the OriginAccessIdentityId.
 
         :param scope: -
@@ -24851,16 +25119,16 @@ class OriginAccessIdentity(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument origin_access_identity_id", value=origin_access_identity_id, expected_type=type_hints["origin_access_identity_id"])
-        return typing.cast(IOriginAccessIdentity, jsii.sinvoke(cls, "fromOriginAccessIdentityId", [scope, id, origin_access_identity_id]))
+        return typing.cast("IOriginAccessIdentity", jsii.sinvoke(cls, "fromOriginAccessIdentityId", [scope, id, origin_access_identity_id]))
 
     @jsii.member(jsii_name="fromOriginAccessIdentityName")
     @builtins.classmethod
     def from_origin_access_identity_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         origin_access_identity_name: builtins.str,
-    ) -> IOriginAccessIdentity:
+    ) -> "IOriginAccessIdentity":
         '''(deprecated) Creates a OriginAccessIdentity by providing the OriginAccessIdentityId.
 
         It is misnamed and superseded by the correctly named fromOriginAccessIdentityId.
@@ -24878,7 +25146,7 @@ class OriginAccessIdentity(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument origin_access_identity_name", value=origin_access_identity_name, expected_type=type_hints["origin_access_identity_name"])
-        return typing.cast(IOriginAccessIdentity, jsii.sinvoke(cls, "fromOriginAccessIdentityName", [scope, id, origin_access_identity_name]))
+        return typing.cast("IOriginAccessIdentity", jsii.sinvoke(cls, "fromOriginAccessIdentityName", [scope, id, origin_access_identity_name]))
 
     @jsii.member(jsii_name="arn")
     def _arn(self) -> builtins.str:
@@ -24895,9 +25163,9 @@ class OriginAccessIdentity(
     @jsii.member(jsii_name="cloudFrontOriginAccessIdentityRef")
     def cloud_front_origin_access_identity_ref(
         self,
-    ) -> _CloudFrontOriginAccessIdentityReference_cc6fe072:
+    ) -> "_CloudFrontOriginAccessIdentityReference_cc6fe072":
         '''A reference to a CloudFrontOriginAccessIdentity resource.'''
-        return typing.cast(_CloudFrontOriginAccessIdentityReference_cc6fe072, jsii.get(self, "cloudFrontOriginAccessIdentityRef"))
+        return typing.cast("_CloudFrontOriginAccessIdentityReference_cc6fe072", jsii.get(self, "cloudFrontOriginAccessIdentityRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cloudFrontOriginAccessIdentityS3CanonicalUserId")
@@ -24910,9 +25178,9 @@ class OriginAccessIdentity(
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''Derived principal value for bucket access.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
     @builtins.property
     @jsii.member(jsii_name="originAccessIdentityId")
@@ -25005,13 +25273,13 @@ class OriginBase(
         *,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param domain_name: -
@@ -25045,7 +25313,7 @@ class OriginBase(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
         origin_id: builtins.str,
         distribution_id: typing.Optional[builtins.str] = None,
@@ -25070,26 +25338,26 @@ class OriginBase(
     @jsii.member(jsii_name="renderCustomOriginConfig")
     def _render_custom_origin_config(
         self,
-    ) -> typing.Optional[CfnDistribution.CustomOriginConfigProperty]:
-        return typing.cast(typing.Optional[CfnDistribution.CustomOriginConfigProperty], jsii.invoke(self, "renderCustomOriginConfig", []))
+    ) -> typing.Optional["CfnDistribution.CustomOriginConfigProperty"]:
+        return typing.cast(typing.Optional["CfnDistribution.CustomOriginConfigProperty"], jsii.invoke(self, "renderCustomOriginConfig", []))
 
     @jsii.member(jsii_name="renderS3OriginConfig")
     def _render_s3_origin_config(
         self,
-    ) -> typing.Optional[CfnDistribution.S3OriginConfigProperty]:
-        return typing.cast(typing.Optional[CfnDistribution.S3OriginConfigProperty], jsii.invoke(self, "renderS3OriginConfig", []))
+    ) -> typing.Optional["CfnDistribution.S3OriginConfigProperty"]:
+        return typing.cast(typing.Optional["CfnDistribution.S3OriginConfigProperty"], jsii.invoke(self, "renderS3OriginConfig", []))
 
     @jsii.member(jsii_name="renderVpcOriginConfig")
     def _render_vpc_origin_config(
         self,
-    ) -> typing.Optional[CfnDistribution.VpcOriginConfigProperty]:
-        return typing.cast(typing.Optional[CfnDistribution.VpcOriginConfigProperty], jsii.invoke(self, "renderVpcOriginConfig", []))
+    ) -> typing.Optional["CfnDistribution.VpcOriginConfigProperty"]:
+        return typing.cast(typing.Optional["CfnDistribution.VpcOriginConfigProperty"], jsii.invoke(self, "renderVpcOriginConfig", []))
 
     @jsii.member(jsii_name="validateResponseCompletionTimeoutWithReadTimeout")
     def _validate_response_completion_timeout_with_read_timeout(
         self,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Validates that responseCompletionTimeout is greater than or equal to readTimeout when both are specified.
 
@@ -25126,7 +25394,7 @@ class OriginBindConfig:
         self,
         *,
         failover_config: typing.Optional[typing.Union["OriginFailoverConfig", typing.Dict[builtins.str, typing.Any]]] = None,
-        origin_property: typing.Optional[typing.Union[CfnDistribution.OriginProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        origin_property: typing.Optional[typing.Union["CfnDistribution.OriginProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         selection_criteria: typing.Optional["OriginSelectionCriteria"] = None,
     ) -> None:
         '''The struct returned from ``IOrigin.bind``.
@@ -25224,13 +25492,13 @@ class OriginBindConfig:
         return typing.cast(typing.Optional["OriginFailoverConfig"], result)
 
     @builtins.property
-    def origin_property(self) -> typing.Optional[CfnDistribution.OriginProperty]:
+    def origin_property(self) -> typing.Optional["CfnDistribution.OriginProperty"]:
         '''The CloudFormation OriginProperty configuration for this Origin.
 
         :default: - nothing is returned
         '''
         result = self._values.get("origin_property")
-        return typing.cast(typing.Optional[CfnDistribution.OriginProperty], result)
+        return typing.cast(typing.Optional["CfnDistribution.OriginProperty"], result)
 
     @builtins.property
     def selection_criteria(self) -> typing.Optional["OriginSelectionCriteria"]:
@@ -25336,7 +25604,7 @@ class OriginFailoverConfig:
     def __init__(
         self,
         *,
-        failover_origin: IOrigin,
+        failover_origin: "IOrigin",
         status_codes: typing.Optional[typing.Sequence[jsii.Number]] = None,
     ) -> None:
         '''The failover configuration used for Origin Groups, returned in ``OriginBindConfig.failoverConfig``.
@@ -25372,11 +25640,11 @@ class OriginFailoverConfig:
             self._values["status_codes"] = status_codes
 
     @builtins.property
-    def failover_origin(self) -> IOrigin:
+    def failover_origin(self) -> "IOrigin":
         '''The origin to use as the fallback origin.'''
         result = self._values.get("failover_origin")
         assert result is not None, "Required property 'failover_origin' is missing"
-        return typing.cast(IOrigin, result)
+        return typing.cast("IOrigin", result)
 
     @builtins.property
     def status_codes(self) -> typing.Optional[typing.List[jsii.Number]]:
@@ -25445,13 +25713,13 @@ class OriginOptions:
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Options to define an Origin.
 
@@ -25526,7 +25794,7 @@ class OriginOptions:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -25534,7 +25802,7 @@ class OriginOptions:
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -25588,7 +25856,7 @@ class OriginOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -25600,7 +25868,7 @@ class OriginOptions:
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -25634,13 +25902,13 @@ class OriginProps(OriginOptions):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties to define an Origin.
@@ -25721,7 +25989,7 @@ class OriginProps(OriginOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -25729,7 +25997,7 @@ class OriginProps(OriginOptions):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -25783,7 +26051,7 @@ class OriginProps(OriginOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -25795,7 +26063,7 @@ class OriginProps(OriginOptions):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -26046,12 +26314,12 @@ class OriginRequestPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
-        cookie_behavior: typing.Optional[OriginRequestCookieBehavior] = None,
-        header_behavior: typing.Optional[OriginRequestHeaderBehavior] = None,
+        cookie_behavior: typing.Optional["OriginRequestCookieBehavior"] = None,
+        header_behavior: typing.Optional["OriginRequestHeaderBehavior"] = None,
         origin_request_policy_name: typing.Optional[builtins.str] = None,
         query_string_behavior: typing.Optional["OriginRequestQueryStringBehavior"] = None,
     ) -> None:
@@ -26082,10 +26350,10 @@ class OriginRequestPolicy(
     @builtins.classmethod
     def from_origin_request_policy_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         origin_request_policy_id: builtins.str,
-    ) -> IOriginRequestPolicy:
+    ) -> "IOriginRequestPolicy":
         '''Imports a Origin Request Policy from its id.
 
         :param scope: -
@@ -26097,43 +26365,43 @@ class OriginRequestPolicy(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument origin_request_policy_id", value=origin_request_policy_id, expected_type=type_hints["origin_request_policy_id"])
-        return typing.cast(IOriginRequestPolicy, jsii.sinvoke(cls, "fromOriginRequestPolicyId", [scope, id, origin_request_policy_id]))
+        return typing.cast("IOriginRequestPolicy", jsii.sinvoke(cls, "fromOriginRequestPolicyId", [scope, id, origin_request_policy_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ALL_VIEWER")
-    def ALL_VIEWER(cls) -> IOriginRequestPolicy:
+    def ALL_VIEWER(cls) -> "IOriginRequestPolicy":
         '''This policy includes all values (query strings, headers, and cookies) in the viewer request.'''
-        return typing.cast(IOriginRequestPolicy, jsii.sget(cls, "ALL_VIEWER"))
+        return typing.cast("IOriginRequestPolicy", jsii.sget(cls, "ALL_VIEWER"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ALL_VIEWER_AND_CLOUDFRONT_2022")
-    def ALL_VIEWER_AND_CLOUDFRONT_2022(cls) -> IOriginRequestPolicy:
+    def ALL_VIEWER_AND_CLOUDFRONT_2022(cls) -> "IOriginRequestPolicy":
         '''This policy includes all values (headers, cookies, and query strings) in the viewer request, and all CloudFront headers that were released through June 2022 (CloudFront headers released after June 2022 are not included).'''
-        return typing.cast(IOriginRequestPolicy, jsii.sget(cls, "ALL_VIEWER_AND_CLOUDFRONT_2022"))
+        return typing.cast("IOriginRequestPolicy", jsii.sget(cls, "ALL_VIEWER_AND_CLOUDFRONT_2022"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ALL_VIEWER_EXCEPT_HOST_HEADER")
-    def ALL_VIEWER_EXCEPT_HOST_HEADER(cls) -> IOriginRequestPolicy:
+    def ALL_VIEWER_EXCEPT_HOST_HEADER(cls) -> "IOriginRequestPolicy":
         '''This policy includes all values (query strings, and cookies) except the header in the viewer request.'''
-        return typing.cast(IOriginRequestPolicy, jsii.sget(cls, "ALL_VIEWER_EXCEPT_HOST_HEADER"))
+        return typing.cast("IOriginRequestPolicy", jsii.sget(cls, "ALL_VIEWER_EXCEPT_HOST_HEADER"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CORS_CUSTOM_ORIGIN")
-    def CORS_CUSTOM_ORIGIN(cls) -> IOriginRequestPolicy:
+    def CORS_CUSTOM_ORIGIN(cls) -> "IOriginRequestPolicy":
         '''This policy includes the header that enables cross-origin resource sharing (CORS) requests when the origin is a custom origin.'''
-        return typing.cast(IOriginRequestPolicy, jsii.sget(cls, "CORS_CUSTOM_ORIGIN"))
+        return typing.cast("IOriginRequestPolicy", jsii.sget(cls, "CORS_CUSTOM_ORIGIN"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CORS_S3_ORIGIN")
-    def CORS_S3_ORIGIN(cls) -> IOriginRequestPolicy:
+    def CORS_S3_ORIGIN(cls) -> "IOriginRequestPolicy":
         '''This policy includes the headers that enable cross-origin resource sharing (CORS) requests when the origin is an Amazon S3 bucket.'''
-        return typing.cast(IOriginRequestPolicy, jsii.sget(cls, "CORS_S3_ORIGIN"))
+        return typing.cast("IOriginRequestPolicy", jsii.sget(cls, "CORS_S3_ORIGIN"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ELEMENTAL_MEDIA_TAILOR")
-    def ELEMENTAL_MEDIA_TAILOR(cls) -> IOriginRequestPolicy:
+    def ELEMENTAL_MEDIA_TAILOR(cls) -> "IOriginRequestPolicy":
         '''This policy is designed for use with an origin that is an AWS Elemental MediaTailor endpoint.'''
-        return typing.cast(IOriginRequestPolicy, jsii.sget(cls, "ELEMENTAL_MEDIA_TAILOR"))
+        return typing.cast("IOriginRequestPolicy", jsii.sget(cls, "ELEMENTAL_MEDIA_TAILOR"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -26143,12 +26411,12 @@ class OriginRequestPolicy(
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="USER_AGENT_REFERER_HEADERS")
-    def USER_AGENT_REFERER_HEADERS(cls) -> IOriginRequestPolicy:
+    def USER_AGENT_REFERER_HEADERS(cls) -> "IOriginRequestPolicy":
         '''This policy includes only the User-Agent and Referer headers.
 
         It doesn’t include any query strings or cookies.
         '''
-        return typing.cast(IOriginRequestPolicy, jsii.sget(cls, "USER_AGENT_REFERER_HEADERS"))
+        return typing.cast("IOriginRequestPolicy", jsii.sget(cls, "USER_AGENT_REFERER_HEADERS"))
 
     @builtins.property
     @jsii.member(jsii_name="originRequestPolicyId")
@@ -26158,9 +26426,9 @@ class OriginRequestPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="originRequestPolicyRef")
-    def origin_request_policy_ref(self) -> _OriginRequestPolicyReference_850756f5:
+    def origin_request_policy_ref(self) -> "_OriginRequestPolicyReference_850756f5":
         '''A reference to a OriginRequestPolicy resource.'''
-        return typing.cast(_OriginRequestPolicyReference_850756f5, jsii.get(self, "originRequestPolicyRef"))
+        return typing.cast("_OriginRequestPolicyReference_850756f5", jsii.get(self, "originRequestPolicyRef"))
 
 
 @jsii.data_type(
@@ -26179,8 +26447,8 @@ class OriginRequestPolicyProps:
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        cookie_behavior: typing.Optional[OriginRequestCookieBehavior] = None,
-        header_behavior: typing.Optional[OriginRequestHeaderBehavior] = None,
+        cookie_behavior: typing.Optional["OriginRequestCookieBehavior"] = None,
+        header_behavior: typing.Optional["OriginRequestHeaderBehavior"] = None,
         origin_request_policy_name: typing.Optional[builtins.str] = None,
         query_string_behavior: typing.Optional["OriginRequestQueryStringBehavior"] = None,
     ) -> None:
@@ -26243,16 +26511,16 @@ class OriginRequestPolicyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def cookie_behavior(self) -> typing.Optional[OriginRequestCookieBehavior]:
+    def cookie_behavior(self) -> typing.Optional["OriginRequestCookieBehavior"]:
         '''The cookies from viewer requests to include in origin requests.
 
         :default: OriginRequestCookieBehavior.none()
         '''
         result = self._values.get("cookie_behavior")
-        return typing.cast(typing.Optional[OriginRequestCookieBehavior], result)
+        return typing.cast(typing.Optional["OriginRequestCookieBehavior"], result)
 
     @builtins.property
-    def header_behavior(self) -> typing.Optional[OriginRequestHeaderBehavior]:
+    def header_behavior(self) -> typing.Optional["OriginRequestHeaderBehavior"]:
         '''The HTTP headers to include in origin requests.
 
         These can include headers from viewer requests and additional headers added by CloudFront.
@@ -26260,7 +26528,7 @@ class OriginRequestPolicyProps:
         :default: OriginRequestHeaderBehavior.none()
         '''
         result = self._values.get("header_behavior")
-        return typing.cast(typing.Optional[OriginRequestHeaderBehavior], result)
+        return typing.cast(typing.Optional["OriginRequestHeaderBehavior"], result)
 
     @builtins.property
     def origin_request_policy_name(self) -> typing.Optional[builtins.str]:
@@ -26460,7 +26728,7 @@ class PublicKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         encoded_key: builtins.str,
@@ -26488,10 +26756,10 @@ class PublicKey(
     @builtins.classmethod
     def from_public_key_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         public_key_id: builtins.str,
-    ) -> IPublicKey:
+    ) -> "IPublicKey":
         '''Imports a Public Key from its id.
 
         :param scope: -
@@ -26503,7 +26771,7 @@ class PublicKey(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument public_key_id", value=public_key_id, expected_type=type_hints["public_key_id"])
-        return typing.cast(IPublicKey, jsii.sinvoke(cls, "fromPublicKeyId", [scope, id, public_key_id]))
+        return typing.cast("IPublicKey", jsii.sinvoke(cls, "fromPublicKeyId", [scope, id, public_key_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -26519,9 +26787,9 @@ class PublicKey(
 
     @builtins.property
     @jsii.member(jsii_name="publicKeyRef")
-    def public_key_ref(self) -> _PublicKeyReference_e5990046:
+    def public_key_ref(self) -> "_PublicKeyReference_e5990046":
         '''A reference to a PublicKey resource.'''
-        return typing.cast(_PublicKeyReference_e5990046, jsii.get(self, "publicKeyRef"))
+        return typing.cast("_PublicKeyReference_e5990046", jsii.get(self, "publicKeyRef"))
 
 
 @jsii.data_type(
@@ -26654,10 +26922,10 @@ class RealtimeLogConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        end_points: typing.Sequence[Endpoint],
+        end_points: typing.Sequence["Endpoint"],
         fields: typing.Sequence[builtins.str],
         sampling_rate: jsii.Number,
         realtime_log_config_name: typing.Optional[builtins.str] = None,
@@ -26703,9 +26971,9 @@ class RealtimeLogConfig(
 
     @builtins.property
     @jsii.member(jsii_name="realtimeLogConfigRef")
-    def realtime_log_config_ref(self) -> _RealtimeLogConfigReference_30646e4d:
+    def realtime_log_config_ref(self) -> "_RealtimeLogConfigReference_30646e4d":
         '''A reference to a RealtimeLogConfig resource.'''
-        return typing.cast(_RealtimeLogConfigReference_30646e4d, jsii.get(self, "realtimeLogConfigRef"))
+        return typing.cast("_RealtimeLogConfigReference_30646e4d", jsii.get(self, "realtimeLogConfigRef"))
 
 
 @jsii.data_type(
@@ -26722,7 +26990,7 @@ class RealtimeLogConfigProps:
     def __init__(
         self,
         *,
-        end_points: typing.Sequence[Endpoint],
+        end_points: typing.Sequence["Endpoint"],
         fields: typing.Sequence[builtins.str],
         sampling_rate: jsii.Number,
         realtime_log_config_name: typing.Optional[builtins.str] = None,
@@ -26776,11 +27044,11 @@ class RealtimeLogConfigProps:
             self._values["realtime_log_config_name"] = realtime_log_config_name
 
     @builtins.property
-    def end_points(self) -> typing.List[Endpoint]:
+    def end_points(self) -> typing.List["Endpoint"]:
         '''Contains information about the Amazon Kinesis data stream where you are sending real-time log data for this real-time log configuration.'''
         result = self._values.get("end_points")
         assert result is not None, "Required property 'end_points' is missing"
-        return typing.cast(typing.List[Endpoint], result)
+        return typing.cast(typing.List["Endpoint"], result)
 
     @builtins.property
     def fields(self) -> typing.List[builtins.str]:
@@ -26908,7 +27176,7 @@ class ResponseCustomHeadersBehavior:
     def __init__(
         self,
         *,
-        custom_headers: typing.Sequence[typing.Union[ResponseCustomHeader, typing.Dict[builtins.str, typing.Any]]],
+        custom_headers: typing.Sequence[typing.Union["ResponseCustomHeader", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Configuration for a set of HTTP response headers that are sent for requests that match a cache behavior that’s associated with this response headers policy.
 
@@ -26971,11 +27239,11 @@ class ResponseCustomHeadersBehavior:
         }
 
     @builtins.property
-    def custom_headers(self) -> typing.List[ResponseCustomHeader]:
+    def custom_headers(self) -> typing.List["ResponseCustomHeader"]:
         '''The list of HTTP response headers and their values.'''
         result = self._values.get("custom_headers")
         assert result is not None, "Required property 'custom_headers' is missing"
-        return typing.cast(typing.List[ResponseCustomHeader], result)
+        return typing.cast(typing.List["ResponseCustomHeader"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -27202,7 +27470,7 @@ class ResponseHeadersCorsBehavior:
         access_control_allow_origins: typing.Sequence[builtins.str],
         origin_override: builtins.bool,
         access_control_expose_headers: typing.Optional[typing.Sequence[builtins.str]] = None,
-        access_control_max_age: typing.Optional[_Duration_4839e8c3] = None,
+        access_control_max_age: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Configuration for a set of HTTP response headers that are used for cross-origin resource sharing (CORS).
 
@@ -27346,13 +27614,13 @@ class ResponseHeadersCorsBehavior:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def access_control_max_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def access_control_max_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''A number that CloudFront uses as the value for the Access-Control-Max-Age HTTP response header.
 
         :default: - no max age
         '''
         result = self._values.get("access_control_max_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -27375,7 +27643,7 @@ class ResponseHeadersFrameOptions:
     def __init__(
         self,
         *,
-        frame_option: HeadersFrameOption,
+        frame_option: "HeadersFrameOption",
         override: builtins.bool,
     ) -> None:
         '''Determines whether CloudFront includes the X-Frame-Options HTTP response header and the header’s value.
@@ -27442,11 +27710,11 @@ class ResponseHeadersFrameOptions:
         }
 
     @builtins.property
-    def frame_option(self) -> HeadersFrameOption:
+    def frame_option(self) -> "HeadersFrameOption":
         '''The value of the X-Frame-Options HTTP response header.'''
         result = self._values.get("frame_option")
         assert result is not None, "Required property 'frame_option' is missing"
-        return typing.cast(HeadersFrameOption, result)
+        return typing.cast("HeadersFrameOption", result)
 
     @builtins.property
     def override(self) -> builtins.bool:
@@ -27528,12 +27796,12 @@ class ResponseHeadersPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comment: typing.Optional[builtins.str] = None,
-        cors_behavior: typing.Optional[typing.Union[ResponseHeadersCorsBehavior, typing.Dict[builtins.str, typing.Any]]] = None,
-        custom_headers_behavior: typing.Optional[typing.Union[ResponseCustomHeadersBehavior, typing.Dict[builtins.str, typing.Any]]] = None,
+        cors_behavior: typing.Optional[typing.Union["ResponseHeadersCorsBehavior", typing.Dict[builtins.str, typing.Any]]] = None,
+        custom_headers_behavior: typing.Optional[typing.Union["ResponseCustomHeadersBehavior", typing.Dict[builtins.str, typing.Any]]] = None,
         remove_headers: typing.Optional[typing.Sequence[builtins.str]] = None,
         response_headers_policy_name: typing.Optional[builtins.str] = None,
         security_headers_behavior: typing.Optional[typing.Union["ResponseSecurityHeadersBehavior", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -27570,10 +27838,10 @@ class ResponseHeadersPolicy(
     @builtins.classmethod
     def from_response_headers_policy_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         response_headers_policy_id: builtins.str,
-    ) -> IResponseHeadersPolicy:
+    ) -> "IResponseHeadersPolicy":
         '''Import an existing Response Headers Policy from its ID.
 
         :param scope: -
@@ -27585,33 +27853,33 @@ class ResponseHeadersPolicy(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument response_headers_policy_id", value=response_headers_policy_id, expected_type=type_hints["response_headers_policy_id"])
-        return typing.cast(IResponseHeadersPolicy, jsii.sinvoke(cls, "fromResponseHeadersPolicyId", [scope, id, response_headers_policy_id]))
+        return typing.cast("IResponseHeadersPolicy", jsii.sinvoke(cls, "fromResponseHeadersPolicyId", [scope, id, response_headers_policy_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CORS_ALLOW_ALL_ORIGINS")
-    def CORS_ALLOW_ALL_ORIGINS(cls) -> IResponseHeadersPolicy:
+    def CORS_ALLOW_ALL_ORIGINS(cls) -> "IResponseHeadersPolicy":
         '''Use this managed policy to allow simple CORS requests from any origin.'''
-        return typing.cast(IResponseHeadersPolicy, jsii.sget(cls, "CORS_ALLOW_ALL_ORIGINS"))
+        return typing.cast("IResponseHeadersPolicy", jsii.sget(cls, "CORS_ALLOW_ALL_ORIGINS"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CORS_ALLOW_ALL_ORIGINS_AND_SECURITY_HEADERS")
-    def CORS_ALLOW_ALL_ORIGINS_AND_SECURITY_HEADERS(cls) -> IResponseHeadersPolicy:
+    def CORS_ALLOW_ALL_ORIGINS_AND_SECURITY_HEADERS(cls) -> "IResponseHeadersPolicy":
         '''Use this managed policy to allow simple CORS requests from any origin and add a set of security headers to all responses that CloudFront sends to viewers.'''
-        return typing.cast(IResponseHeadersPolicy, jsii.sget(cls, "CORS_ALLOW_ALL_ORIGINS_AND_SECURITY_HEADERS"))
+        return typing.cast("IResponseHeadersPolicy", jsii.sget(cls, "CORS_ALLOW_ALL_ORIGINS_AND_SECURITY_HEADERS"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT")
-    def CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT(cls) -> IResponseHeadersPolicy:
+    def CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT(cls) -> "IResponseHeadersPolicy":
         '''Use this managed policy to allow CORS requests from any origin, including preflight requests.'''
-        return typing.cast(IResponseHeadersPolicy, jsii.sget(cls, "CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT"))
+        return typing.cast("IResponseHeadersPolicy", jsii.sget(cls, "CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS")
     def CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS(
         cls,
-    ) -> IResponseHeadersPolicy:
+    ) -> "IResponseHeadersPolicy":
         '''Use this managed policy to allow CORS requests from any origin, including preflight requests, and add a set of security headers to all responses that CloudFront sends to viewers.'''
-        return typing.cast(IResponseHeadersPolicy, jsii.sget(cls, "CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS"))
+        return typing.cast("IResponseHeadersPolicy", jsii.sget(cls, "CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT_AND_SECURITY_HEADERS"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -27621,9 +27889,9 @@ class ResponseHeadersPolicy(
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="SECURITY_HEADERS")
-    def SECURITY_HEADERS(cls) -> IResponseHeadersPolicy:
+    def SECURITY_HEADERS(cls) -> "IResponseHeadersPolicy":
         '''Use this managed policy to add a set of security headers to all responses that CloudFront sends to viewers.'''
-        return typing.cast(IResponseHeadersPolicy, jsii.sget(cls, "SECURITY_HEADERS"))
+        return typing.cast("IResponseHeadersPolicy", jsii.sget(cls, "SECURITY_HEADERS"))
 
     @builtins.property
     @jsii.member(jsii_name="responseHeadersPolicyId")
@@ -27633,9 +27901,9 @@ class ResponseHeadersPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="responseHeadersPolicyRef")
-    def response_headers_policy_ref(self) -> _ResponseHeadersPolicyReference_bad4201b:
+    def response_headers_policy_ref(self) -> "_ResponseHeadersPolicyReference_bad4201b":
         '''A reference to a ResponseHeadersPolicy resource.'''
-        return typing.cast(_ResponseHeadersPolicyReference_bad4201b, jsii.get(self, "responseHeadersPolicyRef"))
+        return typing.cast("_ResponseHeadersPolicyReference_bad4201b", jsii.get(self, "responseHeadersPolicyRef"))
 
 
 @jsii.data_type(
@@ -27656,8 +27924,8 @@ class ResponseHeadersPolicyProps:
         self,
         *,
         comment: typing.Optional[builtins.str] = None,
-        cors_behavior: typing.Optional[typing.Union[ResponseHeadersCorsBehavior, typing.Dict[builtins.str, typing.Any]]] = None,
-        custom_headers_behavior: typing.Optional[typing.Union[ResponseCustomHeadersBehavior, typing.Dict[builtins.str, typing.Any]]] = None,
+        cors_behavior: typing.Optional[typing.Union["ResponseHeadersCorsBehavior", typing.Dict[builtins.str, typing.Any]]] = None,
+        custom_headers_behavior: typing.Optional[typing.Union["ResponseCustomHeadersBehavior", typing.Dict[builtins.str, typing.Any]]] = None,
         remove_headers: typing.Optional[typing.Sequence[builtins.str]] = None,
         response_headers_policy_name: typing.Optional[builtins.str] = None,
         security_headers_behavior: typing.Optional[typing.Union["ResponseSecurityHeadersBehavior", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -27763,22 +28031,24 @@ class ResponseHeadersPolicyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def cors_behavior(self) -> typing.Optional[ResponseHeadersCorsBehavior]:
+    def cors_behavior(self) -> typing.Optional["ResponseHeadersCorsBehavior"]:
         '''A configuration for a set of HTTP response headers that are used for cross-origin resource sharing (CORS).
 
         :default: - no cors behavior
         '''
         result = self._values.get("cors_behavior")
-        return typing.cast(typing.Optional[ResponseHeadersCorsBehavior], result)
+        return typing.cast(typing.Optional["ResponseHeadersCorsBehavior"], result)
 
     @builtins.property
-    def custom_headers_behavior(self) -> typing.Optional[ResponseCustomHeadersBehavior]:
+    def custom_headers_behavior(
+        self,
+    ) -> typing.Optional["ResponseCustomHeadersBehavior"]:
         '''A configuration for a set of custom HTTP response headers.
 
         :default: - no custom headers behavior
         '''
         result = self._values.get("custom_headers_behavior")
-        return typing.cast(typing.Optional[ResponseCustomHeadersBehavior], result)
+        return typing.cast(typing.Optional["ResponseCustomHeadersBehavior"], result)
 
     @builtins.property
     def remove_headers(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -27840,7 +28110,7 @@ class ResponseHeadersReferrerPolicy:
         self,
         *,
         override: builtins.bool,
-        referrer_policy: HeadersReferrerPolicy,
+        referrer_policy: "HeadersReferrerPolicy",
     ) -> None:
         '''Determines whether CloudFront includes the Referrer-Policy HTTP response header and the header’s value.
 
@@ -27913,11 +28183,11 @@ class ResponseHeadersReferrerPolicy:
         return typing.cast(builtins.bool, result)
 
     @builtins.property
-    def referrer_policy(self) -> HeadersReferrerPolicy:
+    def referrer_policy(self) -> "HeadersReferrerPolicy":
         '''The value of the Referrer-Policy HTTP response header.'''
         result = self._values.get("referrer_policy")
         assert result is not None, "Required property 'referrer_policy' is missing"
-        return typing.cast(HeadersReferrerPolicy, result)
+        return typing.cast("HeadersReferrerPolicy", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -27945,7 +28215,7 @@ class ResponseHeadersStrictTransportSecurity:
     def __init__(
         self,
         *,
-        access_control_max_age: _Duration_4839e8c3,
+        access_control_max_age: "_Duration_4839e8c3",
         override: builtins.bool,
         include_subdomains: typing.Optional[builtins.bool] = None,
         preload: typing.Optional[builtins.bool] = None,
@@ -28022,11 +28292,11 @@ class ResponseHeadersStrictTransportSecurity:
             self._values["preload"] = preload
 
     @builtins.property
-    def access_control_max_age(self) -> _Duration_4839e8c3:
+    def access_control_max_age(self) -> "_Duration_4839e8c3":
         '''A number that CloudFront uses as the value for the max-age directive in the Strict-Transport-Security HTTP response header.'''
         result = self._values.get("access_control_max_age")
         assert result is not None, "Required property 'access_control_max_age' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
     def override(self) -> builtins.bool:
@@ -28221,12 +28491,12 @@ class ResponseSecurityHeadersBehavior:
     def __init__(
         self,
         *,
-        content_security_policy: typing.Optional[typing.Union[ResponseHeadersContentSecurityPolicy, typing.Dict[builtins.str, typing.Any]]] = None,
-        content_type_options: typing.Optional[typing.Union[ResponseHeadersContentTypeOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        frame_options: typing.Optional[typing.Union[ResponseHeadersFrameOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        referrer_policy: typing.Optional[typing.Union[ResponseHeadersReferrerPolicy, typing.Dict[builtins.str, typing.Any]]] = None,
-        strict_transport_security: typing.Optional[typing.Union[ResponseHeadersStrictTransportSecurity, typing.Dict[builtins.str, typing.Any]]] = None,
-        xss_protection: typing.Optional[typing.Union[ResponseHeadersXSSProtection, typing.Dict[builtins.str, typing.Any]]] = None,
+        content_security_policy: typing.Optional[typing.Union["ResponseHeadersContentSecurityPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
+        content_type_options: typing.Optional[typing.Union["ResponseHeadersContentTypeOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        frame_options: typing.Optional[typing.Union["ResponseHeadersFrameOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        referrer_policy: typing.Optional[typing.Union["ResponseHeadersReferrerPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
+        strict_transport_security: typing.Optional[typing.Union["ResponseHeadersStrictTransportSecurity", typing.Dict[builtins.str, typing.Any]]] = None,
+        xss_protection: typing.Optional[typing.Union["ResponseHeadersXSSProtection", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Configuration for a set of security-related HTTP response headers.
 
@@ -28326,62 +28596,62 @@ class ResponseSecurityHeadersBehavior:
     @builtins.property
     def content_security_policy(
         self,
-    ) -> typing.Optional[ResponseHeadersContentSecurityPolicy]:
+    ) -> typing.Optional["ResponseHeadersContentSecurityPolicy"]:
         '''The policy directives and their values that CloudFront includes as values for the Content-Security-Policy HTTP response header.
 
         :default: - no content security policy
         '''
         result = self._values.get("content_security_policy")
-        return typing.cast(typing.Optional[ResponseHeadersContentSecurityPolicy], result)
+        return typing.cast(typing.Optional["ResponseHeadersContentSecurityPolicy"], result)
 
     @builtins.property
     def content_type_options(
         self,
-    ) -> typing.Optional[ResponseHeadersContentTypeOptions]:
+    ) -> typing.Optional["ResponseHeadersContentTypeOptions"]:
         '''Determines whether CloudFront includes the X-Content-Type-Options HTTP response header with its value set to nosniff.
 
         :default: - no content type options
         '''
         result = self._values.get("content_type_options")
-        return typing.cast(typing.Optional[ResponseHeadersContentTypeOptions], result)
+        return typing.cast(typing.Optional["ResponseHeadersContentTypeOptions"], result)
 
     @builtins.property
-    def frame_options(self) -> typing.Optional[ResponseHeadersFrameOptions]:
+    def frame_options(self) -> typing.Optional["ResponseHeadersFrameOptions"]:
         '''Determines whether CloudFront includes the X-Frame-Options HTTP response header and the header’s value.
 
         :default: - no frame options
         '''
         result = self._values.get("frame_options")
-        return typing.cast(typing.Optional[ResponseHeadersFrameOptions], result)
+        return typing.cast(typing.Optional["ResponseHeadersFrameOptions"], result)
 
     @builtins.property
-    def referrer_policy(self) -> typing.Optional[ResponseHeadersReferrerPolicy]:
+    def referrer_policy(self) -> typing.Optional["ResponseHeadersReferrerPolicy"]:
         '''Determines whether CloudFront includes the Referrer-Policy HTTP response header and the header’s value.
 
         :default: - no referrer policy
         '''
         result = self._values.get("referrer_policy")
-        return typing.cast(typing.Optional[ResponseHeadersReferrerPolicy], result)
+        return typing.cast(typing.Optional["ResponseHeadersReferrerPolicy"], result)
 
     @builtins.property
     def strict_transport_security(
         self,
-    ) -> typing.Optional[ResponseHeadersStrictTransportSecurity]:
+    ) -> typing.Optional["ResponseHeadersStrictTransportSecurity"]:
         '''Determines whether CloudFront includes the Strict-Transport-Security HTTP response header and the header’s value.
 
         :default: - no strict transport security
         '''
         result = self._values.get("strict_transport_security")
-        return typing.cast(typing.Optional[ResponseHeadersStrictTransportSecurity], result)
+        return typing.cast(typing.Optional["ResponseHeadersStrictTransportSecurity"], result)
 
     @builtins.property
-    def xss_protection(self) -> typing.Optional[ResponseHeadersXSSProtection]:
+    def xss_protection(self) -> typing.Optional["ResponseHeadersXSSProtection"]:
         '''Determines whether CloudFront includes the X-XSS-Protection HTTP response header and the header’s value.
 
         :default: - no xss protection
         '''
         result = self._values.get("xss_protection")
-        return typing.cast(typing.Optional[ResponseHeadersXSSProtection], result)
+        return typing.cast(typing.Optional["ResponseHeadersXSSProtection"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -28457,7 +28727,7 @@ class S3ImportSource(
         )
     '''
 
-    def __init__(self, bucket: _IBucket_42e086fd, key: builtins.str) -> None:
+    def __init__(self, bucket: "_IBucket_42e086fd", key: builtins.str) -> None:
         '''
         :param bucket: the S3 bucket that contains the data.
         :param key: the key within the S3 bucket that contains the data.
@@ -28470,9 +28740,9 @@ class S3ImportSource(
 
     @builtins.property
     @jsii.member(jsii_name="bucket")
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''the S3 bucket that contains the data.'''
-        return typing.cast(_IBucket_42e086fd, jsii.get(self, "bucket"))
+        return typing.cast("_IBucket_42e086fd", jsii.get(self, "bucket"))
 
     @builtins.property
     @jsii.member(jsii_name="key")
@@ -28511,7 +28781,7 @@ class S3OriginAccessControl(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -28541,10 +28811,10 @@ class S3OriginAccessControl(
     @builtins.classmethod
     def from_origin_access_control_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         origin_access_control_id: builtins.str,
-    ) -> IOriginAccessControl:
+    ) -> "IOriginAccessControl":
         '''Imports an S3 origin access control from its id.
 
         :param scope: -
@@ -28556,7 +28826,7 @@ class S3OriginAccessControl(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument origin_access_control_id", value=origin_access_control_id, expected_type=type_hints["origin_access_control_id"])
-        return typing.cast(IOriginAccessControl, jsii.sinvoke(cls, "fromOriginAccessControlId", [scope, id, origin_access_control_id]))
+        return typing.cast("IOriginAccessControl", jsii.sinvoke(cls, "fromOriginAccessControlId", [scope, id, origin_access_control_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -28683,8 +28953,8 @@ class S3OriginConfig:
     def __init__(
         self,
         *,
-        s3_bucket_source: _IBucket_42e086fd,
-        origin_access_identity: typing.Optional[IOriginAccessIdentity] = None,
+        s3_bucket_source: "_IBucket_42e086fd",
+        origin_access_identity: typing.Optional["IOriginAccessIdentity"] = None,
         origin_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_path: typing.Optional[builtins.str] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
@@ -28738,20 +29008,20 @@ class S3OriginConfig:
             self._values["origin_shield_region"] = origin_shield_region
 
     @builtins.property
-    def s3_bucket_source(self) -> _IBucket_42e086fd:
+    def s3_bucket_source(self) -> "_IBucket_42e086fd":
         '''The source bucket to serve content from.'''
         result = self._values.get("s3_bucket_source")
         assert result is not None, "Required property 's3_bucket_source' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
-    def origin_access_identity(self) -> typing.Optional[IOriginAccessIdentity]:
+    def origin_access_identity(self) -> typing.Optional["IOriginAccessIdentity"]:
         '''The optional Origin Access Identity of the origin identity cloudfront will use when calling your s3 bucket.
 
         :default: No Origin Access Identity which requires the S3 bucket to be public accessible
         '''
         result = self._values.get("origin_access_identity")
-        return typing.cast(typing.Optional[IOriginAccessIdentity], result)
+        return typing.cast(typing.Optional["IOriginAccessIdentity"], result)
 
     @builtins.property
     def origin_headers(
@@ -28983,15 +29253,15 @@ class SourceConfiguration:
     def __init__(
         self,
         *,
-        behaviors: typing.Sequence[typing.Union[Behavior, typing.Dict[builtins.str, typing.Any]]],
+        behaviors: typing.Sequence[typing.Union["Behavior", typing.Dict[builtins.str, typing.Any]]],
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        custom_origin_source: typing.Optional[typing.Union[CustomOriginConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        failover_criteria_status_codes: typing.Optional[typing.Sequence[FailoverStatusCode]] = None,
-        failover_custom_origin_source: typing.Optional[typing.Union[CustomOriginConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        failover_s3_origin_source: typing.Optional[typing.Union[S3OriginConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        custom_origin_source: typing.Optional[typing.Union["CustomOriginConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        failover_criteria_status_codes: typing.Optional[typing.Sequence["FailoverStatusCode"]] = None,
+        failover_custom_origin_source: typing.Optional[typing.Union["CustomOriginConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        failover_s3_origin_source: typing.Optional[typing.Union["S3OriginConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        s3_origin_source: typing.Optional[typing.Union[S3OriginConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        s3_origin_source: typing.Optional[typing.Union["S3OriginConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''A source configuration is a wrapper for CloudFront origins and behaviors.
 
@@ -29169,14 +29439,14 @@ class SourceConfiguration:
             self._values["s3_origin_source"] = s3_origin_source
 
     @builtins.property
-    def behaviors(self) -> typing.List[Behavior]:
+    def behaviors(self) -> typing.List["Behavior"]:
         '''The behaviors associated with this source.
 
         At least one (default) behavior must be included.
         '''
         result = self._values.get("behaviors")
         assert result is not None, "Required property 'behaviors' is missing"
-        return typing.cast(typing.List[Behavior], result)
+        return typing.cast(typing.List["Behavior"], result)
 
     @builtins.property
     def connection_attempts(self) -> typing.Optional[jsii.Number]:
@@ -29190,7 +29460,7 @@ class SourceConfiguration:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         You can specify a number of seconds between 1 and 10 (inclusive).
@@ -29198,42 +29468,42 @@ class SourceConfiguration:
         :default: cdk.Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def custom_origin_source(self) -> typing.Optional[CustomOriginConfig]:
+    def custom_origin_source(self) -> typing.Optional["CustomOriginConfig"]:
         '''A custom origin source - for all non-s3 sources.'''
         result = self._values.get("custom_origin_source")
-        return typing.cast(typing.Optional[CustomOriginConfig], result)
+        return typing.cast(typing.Optional["CustomOriginConfig"], result)
 
     @builtins.property
     def failover_criteria_status_codes(
         self,
-    ) -> typing.Optional[typing.List[FailoverStatusCode]]:
+    ) -> typing.Optional[typing.List["FailoverStatusCode"]]:
         '''HTTP status code to failover to second origin.
 
         :default: [500, 502, 503, 504]
         '''
         result = self._values.get("failover_criteria_status_codes")
-        return typing.cast(typing.Optional[typing.List[FailoverStatusCode]], result)
+        return typing.cast(typing.Optional[typing.List["FailoverStatusCode"]], result)
 
     @builtins.property
-    def failover_custom_origin_source(self) -> typing.Optional[CustomOriginConfig]:
+    def failover_custom_origin_source(self) -> typing.Optional["CustomOriginConfig"]:
         '''A custom origin source for failover in case the s3OriginSource returns invalid status code.
 
         :default: - no failover configuration
         '''
         result = self._values.get("failover_custom_origin_source")
-        return typing.cast(typing.Optional[CustomOriginConfig], result)
+        return typing.cast(typing.Optional["CustomOriginConfig"], result)
 
     @builtins.property
-    def failover_s3_origin_source(self) -> typing.Optional[S3OriginConfig]:
+    def failover_s3_origin_source(self) -> typing.Optional["S3OriginConfig"]:
         '''An s3 origin source for failover in case the s3OriginSource returns invalid status code.
 
         :default: - no failover configuration
         '''
         result = self._values.get("failover_s3_origin_source")
-        return typing.cast(typing.Optional[S3OriginConfig], result)
+        return typing.cast(typing.Optional["S3OriginConfig"], result)
 
     @builtins.property
     def origin_shield_region(self) -> typing.Optional[builtins.str]:
@@ -29247,10 +29517,10 @@ class SourceConfiguration:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def s3_origin_source(self) -> typing.Optional[S3OriginConfig]:
+    def s3_origin_source(self) -> typing.Optional["S3OriginConfig"]:
         '''An s3 origin source - if you're using s3 for your assets.'''
         result = self._values.get("s3_origin_source")
-        return typing.cast(typing.Optional[S3OriginConfig], result)
+        return typing.cast(typing.Optional["S3OriginConfig"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -29293,11 +29563,11 @@ class ViewerCertificate(
     @builtins.classmethod
     def from_acm_certificate(
         cls,
-        certificate: _ICertificate_c194c70b,
+        certificate: "_ICertificate_c194c70b",
         *,
         aliases: typing.Optional[typing.Sequence[builtins.str]] = None,
-        security_policy: typing.Optional[SecurityPolicyProtocol] = None,
-        ssl_method: typing.Optional[SSLMethod] = None,
+        security_policy: typing.Optional["SecurityPolicyProtocol"] = None,
+        ssl_method: typing.Optional["SSLMethod"] = None,
     ) -> "ViewerCertificate":
         '''Generate an AWS Certificate Manager (ACM) viewer certificate configuration.
 
@@ -29337,8 +29607,8 @@ class ViewerCertificate(
         iam_certificate_id: builtins.str,
         *,
         aliases: typing.Optional[typing.Sequence[builtins.str]] = None,
-        security_policy: typing.Optional[SecurityPolicyProtocol] = None,
-        ssl_method: typing.Optional[SSLMethod] = None,
+        security_policy: typing.Optional["SecurityPolicyProtocol"] = None,
+        ssl_method: typing.Optional["SSLMethod"] = None,
     ) -> "ViewerCertificate":
         '''Generate an IAM viewer certificate configuration.
 
@@ -29363,8 +29633,8 @@ class ViewerCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="props")
-    def props(self) -> CfnDistribution.ViewerCertificateProperty:
-        return typing.cast(CfnDistribution.ViewerCertificateProperty, jsii.get(self, "props"))
+    def props(self) -> "CfnDistribution.ViewerCertificateProperty":
+        return typing.cast("CfnDistribution.ViewerCertificateProperty", jsii.get(self, "props"))
 
 
 @jsii.data_type(
@@ -29381,8 +29651,8 @@ class ViewerCertificateOptions:
         self,
         *,
         aliases: typing.Optional[typing.Sequence[builtins.str]] = None,
-        security_policy: typing.Optional[SecurityPolicyProtocol] = None,
-        ssl_method: typing.Optional[SSLMethod] = None,
+        security_policy: typing.Optional["SecurityPolicyProtocol"] = None,
+        ssl_method: typing.Optional["SSLMethod"] = None,
     ) -> None:
         '''
         :param aliases: Domain names on the certificate (both main domain name and Subject Alternative names).
@@ -29427,7 +29697,7 @@ class ViewerCertificateOptions:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def security_policy(self) -> typing.Optional[SecurityPolicyProtocol]:
+    def security_policy(self) -> typing.Optional["SecurityPolicyProtocol"]:
         '''The minimum version of the SSL protocol that you want CloudFront to use for HTTPS connections.
 
         CloudFront serves your objects only to browsers or devices that support at
@@ -29436,10 +29706,10 @@ class ViewerCertificateOptions:
         :default: - SSLv3 if sslMethod VIP, TLSv1 if sslMethod SNI
         '''
         result = self._values.get("security_policy")
-        return typing.cast(typing.Optional[SecurityPolicyProtocol], result)
+        return typing.cast(typing.Optional["SecurityPolicyProtocol"], result)
 
     @builtins.property
-    def ssl_method(self) -> typing.Optional[SSLMethod]:
+    def ssl_method(self) -> typing.Optional["SSLMethod"]:
         '''How CloudFront should serve HTTPS requests.
 
         See the notes on SSLMethod if you wish to use other SSL termination types.
@@ -29449,7 +29719,7 @@ class ViewerCertificateOptions:
         :see: https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html
         '''
         result = self._values.get("ssl_method")
-        return typing.cast(typing.Optional[SSLMethod], result)
+        return typing.cast(typing.Optional["SSLMethod"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -29524,14 +29794,14 @@ class VpcOrigin(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         endpoint: "VpcOriginEndpoint",
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[OriginSslPolicy]] = None,
-        protocol_policy: typing.Optional[OriginProtocolPolicy] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["OriginSslPolicy"]] = None,
+        protocol_policy: typing.Optional["OriginProtocolPolicy"] = None,
         vpc_origin_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -29563,10 +29833,10 @@ class VpcOrigin(
     @builtins.classmethod
     def from_vpc_origin_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         vpc_origin_arn: builtins.str,
-    ) -> IVpcOrigin:
+    ) -> "IVpcOrigin":
         '''Import an existing VPC origin from its ARN.
 
         :param scope: -
@@ -29578,19 +29848,19 @@ class VpcOrigin(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument vpc_origin_arn", value=vpc_origin_arn, expected_type=type_hints["vpc_origin_arn"])
-        return typing.cast(IVpcOrigin, jsii.sinvoke(cls, "fromVpcOriginArn", [scope, id, vpc_origin_arn]))
+        return typing.cast("IVpcOrigin", jsii.sinvoke(cls, "fromVpcOriginArn", [scope, id, vpc_origin_arn]))
 
     @jsii.member(jsii_name="fromVpcOriginAttributes")
     @builtins.classmethod
     def from_vpc_origin_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name: typing.Optional[builtins.str] = None,
         vpc_origin_arn: typing.Optional[builtins.str] = None,
         vpc_origin_id: typing.Optional[builtins.str] = None,
-    ) -> IVpcOrigin:
+    ) -> "IVpcOrigin":
         '''Import an existing VPC origin from its attributes.
 
         :param scope: -
@@ -29609,16 +29879,16 @@ class VpcOrigin(
             vpc_origin_id=vpc_origin_id,
         )
 
-        return typing.cast(IVpcOrigin, jsii.sinvoke(cls, "fromVpcOriginAttributes", [scope, id, attrs]))
+        return typing.cast("IVpcOrigin", jsii.sinvoke(cls, "fromVpcOriginAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromVpcOriginId")
     @builtins.classmethod
     def from_vpc_origin_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         vpc_origin_id: builtins.str,
-    ) -> IVpcOrigin:
+    ) -> "IVpcOrigin":
         '''Import an existing VPC origin from its ID.
 
         :param scope: -
@@ -29630,7 +29900,7 @@ class VpcOrigin(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument vpc_origin_id", value=vpc_origin_id, expected_type=type_hints["vpc_origin_id"])
-        return typing.cast(IVpcOrigin, jsii.sinvoke(cls, "fromVpcOriginId", [scope, id, vpc_origin_id]))
+        return typing.cast("IVpcOrigin", jsii.sinvoke(cls, "fromVpcOriginId", [scope, id, vpc_origin_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -29640,9 +29910,9 @@ class VpcOrigin(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''TagManager to set, remove and format tags.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="vpcOriginArn")
@@ -29664,9 +29934,9 @@ class VpcOrigin(
 
     @builtins.property
     @jsii.member(jsii_name="vpcOriginRef")
-    def vpc_origin_ref(self) -> _VpcOriginReference_e93e6a73:
+    def vpc_origin_ref(self) -> "_VpcOriginReference_e93e6a73":
         '''A reference to a VpcOrigin resource.'''
-        return typing.cast(_VpcOriginReference_e93e6a73, jsii.get(self, "vpcOriginRef"))
+        return typing.cast("_VpcOriginReference_e93e6a73", jsii.get(self, "vpcOriginRef"))
 
     @builtins.property
     @jsii.member(jsii_name="domainName")
@@ -29795,7 +30065,7 @@ class VpcOriginEndpoint(
     @builtins.classmethod
     def application_load_balancer(
         cls,
-        alb: _IApplicationLoadBalancer_4cbd50ab,
+        alb: "_IApplicationLoadBalancer_4cbd50ab",
     ) -> "VpcOriginEndpoint":
         '''A VPC origin endpoint from an Application Load Balancer.
 
@@ -29808,7 +30078,7 @@ class VpcOriginEndpoint(
 
     @jsii.member(jsii_name="ec2Instance")
     @builtins.classmethod
-    def ec2_instance(cls, instance: _IInstance_ab239e7c) -> "VpcOriginEndpoint":
+    def ec2_instance(cls, instance: "_IInstance_ab239e7c") -> "VpcOriginEndpoint":
         '''A VPC origin endpoint from an EC2 instance.
 
         :param instance: -
@@ -29822,7 +30092,7 @@ class VpcOriginEndpoint(
     @builtins.classmethod
     def network_load_balancer(
         cls,
-        nlb: _INetworkLoadBalancer_96e17101,
+        nlb: "_INetworkLoadBalancer_96e17101",
     ) -> "VpcOriginEndpoint":
         '''A VPC origin endpoint from an Network Load Balancer.
 
@@ -29888,8 +30158,8 @@ class VpcOriginOptions:
         *,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[OriginSslPolicy]] = None,
-        protocol_policy: typing.Optional[OriginProtocolPolicy] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["OriginSslPolicy"]] = None,
+        protocol_policy: typing.Optional["OriginProtocolPolicy"] = None,
         vpc_origin_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''VPC origin endpoint configuration.
@@ -29954,22 +30224,22 @@ class VpcOriginOptions:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def origin_ssl_protocols(self) -> typing.Optional[typing.List[OriginSslPolicy]]:
+    def origin_ssl_protocols(self) -> typing.Optional[typing.List["OriginSslPolicy"]]:
         '''A list that contains allowed SSL/TLS protocols for this distribution.
 
         :default: - TLSv1.2
         '''
         result = self._values.get("origin_ssl_protocols")
-        return typing.cast(typing.Optional[typing.List[OriginSslPolicy]], result)
+        return typing.cast(typing.Optional[typing.List["OriginSslPolicy"]], result)
 
     @builtins.property
-    def protocol_policy(self) -> typing.Optional[OriginProtocolPolicy]:
+    def protocol_policy(self) -> typing.Optional["OriginProtocolPolicy"]:
         '''The origin protocol policy for the CloudFront VPC origin endpoint configuration.
 
         :default: OriginProtocolPolicy.MATCH_VIEWER
         '''
         result = self._values.get("protocol_policy")
-        return typing.cast(typing.Optional[OriginProtocolPolicy], result)
+        return typing.cast(typing.Optional["OriginProtocolPolicy"], result)
 
     @builtins.property
     def vpc_origin_name(self) -> typing.Optional[builtins.str]:
@@ -30010,10 +30280,10 @@ class VpcOriginProps(VpcOriginOptions):
         *,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[OriginSslPolicy]] = None,
-        protocol_policy: typing.Optional[OriginProtocolPolicy] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["OriginSslPolicy"]] = None,
+        protocol_policy: typing.Optional["OriginProtocolPolicy"] = None,
         vpc_origin_name: typing.Optional[builtins.str] = None,
-        endpoint: VpcOriginEndpoint,
+        endpoint: "VpcOriginEndpoint",
     ) -> None:
         '''VPC origin endpoint configuration.
 
@@ -30086,22 +30356,22 @@ class VpcOriginProps(VpcOriginOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def origin_ssl_protocols(self) -> typing.Optional[typing.List[OriginSslPolicy]]:
+    def origin_ssl_protocols(self) -> typing.Optional[typing.List["OriginSslPolicy"]]:
         '''A list that contains allowed SSL/TLS protocols for this distribution.
 
         :default: - TLSv1.2
         '''
         result = self._values.get("origin_ssl_protocols")
-        return typing.cast(typing.Optional[typing.List[OriginSslPolicy]], result)
+        return typing.cast(typing.Optional[typing.List["OriginSslPolicy"]], result)
 
     @builtins.property
-    def protocol_policy(self) -> typing.Optional[OriginProtocolPolicy]:
+    def protocol_policy(self) -> typing.Optional["OriginProtocolPolicy"]:
         '''The origin protocol policy for the CloudFront VPC origin endpoint configuration.
 
         :default: OriginProtocolPolicy.MATCH_VIEWER
         '''
         result = self._values.get("protocol_policy")
-        return typing.cast(typing.Optional[OriginProtocolPolicy], result)
+        return typing.cast(typing.Optional["OriginProtocolPolicy"], result)
 
     @builtins.property
     def vpc_origin_name(self) -> typing.Optional[builtins.str]:
@@ -30113,11 +30383,11 @@ class VpcOriginProps(VpcOriginOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def endpoint(self) -> VpcOriginEndpoint:
+    def endpoint(self) -> "VpcOriginEndpoint":
         '''The VPC origin endpoint.'''
         result = self._values.get("endpoint")
         assert result is not None, "Required property 'endpoint' is missing"
-        return typing.cast(VpcOriginEndpoint, result)
+        return typing.cast("VpcOriginEndpoint", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -30199,14 +30469,14 @@ class AssetImportSource(
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> None:
         '''
         :param path: the path to the local file.
@@ -30336,19 +30606,19 @@ class CachePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cache_policy_name: typing.Optional[builtins.str] = None,
         comment: typing.Optional[builtins.str] = None,
-        cookie_behavior: typing.Optional[CacheCookieBehavior] = None,
-        default_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        cookie_behavior: typing.Optional["CacheCookieBehavior"] = None,
+        default_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         enable_accept_encoding_brotli: typing.Optional[builtins.bool] = None,
         enable_accept_encoding_gzip: typing.Optional[builtins.bool] = None,
-        header_behavior: typing.Optional[CacheHeaderBehavior] = None,
-        max_ttl: typing.Optional[_Duration_4839e8c3] = None,
-        min_ttl: typing.Optional[_Duration_4839e8c3] = None,
-        query_string_behavior: typing.Optional[CacheQueryStringBehavior] = None,
+        header_behavior: typing.Optional["CacheHeaderBehavior"] = None,
+        max_ttl: typing.Optional["_Duration_4839e8c3"] = None,
+        min_ttl: typing.Optional["_Duration_4839e8c3"] = None,
+        query_string_behavior: typing.Optional["CacheQueryStringBehavior"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -30387,10 +30657,10 @@ class CachePolicy(
     @builtins.classmethod
     def from_cache_policy_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         cache_policy_id: builtins.str,
-    ) -> ICachePolicy:
+    ) -> "ICachePolicy":
         '''Imports a Cache Policy from its id.
 
         :param scope: -
@@ -30402,47 +30672,47 @@ class CachePolicy(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument cache_policy_id", value=cache_policy_id, expected_type=type_hints["cache_policy_id"])
-        return typing.cast(ICachePolicy, jsii.sinvoke(cls, "fromCachePolicyId", [scope, id, cache_policy_id]))
+        return typing.cast("ICachePolicy", jsii.sinvoke(cls, "fromCachePolicyId", [scope, id, cache_policy_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMPLIFY")
-    def AMPLIFY(cls) -> ICachePolicy:
+    def AMPLIFY(cls) -> "ICachePolicy":
         '''This policy is designed for use with an origin that is an AWS Amplify web app.'''
-        return typing.cast(ICachePolicy, jsii.sget(cls, "AMPLIFY"))
+        return typing.cast("ICachePolicy", jsii.sget(cls, "AMPLIFY"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CACHING_DISABLED")
-    def CACHING_DISABLED(cls) -> ICachePolicy:
+    def CACHING_DISABLED(cls) -> "ICachePolicy":
         '''Disables caching.
 
         This policy is useful for dynamic content and for requests that are not cacheable.
         '''
-        return typing.cast(ICachePolicy, jsii.sget(cls, "CACHING_DISABLED"))
+        return typing.cast("ICachePolicy", jsii.sget(cls, "CACHING_DISABLED"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CACHING_OPTIMIZED")
-    def CACHING_OPTIMIZED(cls) -> ICachePolicy:
+    def CACHING_OPTIMIZED(cls) -> "ICachePolicy":
         '''Optimize cache efficiency by minimizing the values that CloudFront includes in the cache key.
 
         Query strings and cookies are not included in the cache key, and only the normalized 'Accept-Encoding' header is included.
         '''
-        return typing.cast(ICachePolicy, jsii.sget(cls, "CACHING_OPTIMIZED"))
+        return typing.cast("ICachePolicy", jsii.sget(cls, "CACHING_OPTIMIZED"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="CACHING_OPTIMIZED_FOR_UNCOMPRESSED_OBJECTS")
-    def CACHING_OPTIMIZED_FOR_UNCOMPRESSED_OBJECTS(cls) -> ICachePolicy:
+    def CACHING_OPTIMIZED_FOR_UNCOMPRESSED_OBJECTS(cls) -> "ICachePolicy":
         '''Optimize cache efficiency by minimizing the values that CloudFront includes in the cache key.
 
         Query strings and cookies are not included in the cache key, and only the normalized 'Accept-Encoding' header is included.
         Disables cache compression.
         '''
-        return typing.cast(ICachePolicy, jsii.sget(cls, "CACHING_OPTIMIZED_FOR_UNCOMPRESSED_OBJECTS"))
+        return typing.cast("ICachePolicy", jsii.sget(cls, "CACHING_OPTIMIZED_FOR_UNCOMPRESSED_OBJECTS"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ELEMENTAL_MEDIA_PACKAGE")
-    def ELEMENTAL_MEDIA_PACKAGE(cls) -> ICachePolicy:
+    def ELEMENTAL_MEDIA_PACKAGE(cls) -> "ICachePolicy":
         '''Designed for use with an origin that is an AWS Elemental MediaPackage endpoint.'''
-        return typing.cast(ICachePolicy, jsii.sget(cls, "ELEMENTAL_MEDIA_PACKAGE"))
+        return typing.cast("ICachePolicy", jsii.sget(cls, "ELEMENTAL_MEDIA_PACKAGE"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -30452,15 +30722,15 @@ class CachePolicy(
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="USE_ORIGIN_CACHE_CONTROL_HEADERS")
-    def USE_ORIGIN_CACHE_CONTROL_HEADERS(cls) -> ICachePolicy:
+    def USE_ORIGIN_CACHE_CONTROL_HEADERS(cls) -> "ICachePolicy":
         '''Designed for use with an origin that returns Cache-Control HTTP response headers and does not serve different content based on values present in the query string.'''
-        return typing.cast(ICachePolicy, jsii.sget(cls, "USE_ORIGIN_CACHE_CONTROL_HEADERS"))
+        return typing.cast("ICachePolicy", jsii.sget(cls, "USE_ORIGIN_CACHE_CONTROL_HEADERS"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="USE_ORIGIN_CACHE_CONTROL_HEADERS_QUERY_STRINGS")
-    def USE_ORIGIN_CACHE_CONTROL_HEADERS_QUERY_STRINGS(cls) -> ICachePolicy:
+    def USE_ORIGIN_CACHE_CONTROL_HEADERS_QUERY_STRINGS(cls) -> "ICachePolicy":
         '''Designed for use with an origin that returns Cache-Control HTTP response headers and serves different content based on values present in the query string.'''
-        return typing.cast(ICachePolicy, jsii.sget(cls, "USE_ORIGIN_CACHE_CONTROL_HEADERS_QUERY_STRINGS"))
+        return typing.cast("ICachePolicy", jsii.sget(cls, "USE_ORIGIN_CACHE_CONTROL_HEADERS_QUERY_STRINGS"))
 
     @builtins.property
     @jsii.member(jsii_name="cachePolicyId")
@@ -30470,9 +30740,9 @@ class CachePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="cachePolicyRef")
-    def cache_policy_ref(self) -> _CachePolicyReference_3d9838b6:
+    def cache_policy_ref(self) -> "_CachePolicyReference_3d9838b6":
         '''A reference to a CachePolicy resource.'''
-        return typing.cast(_CachePolicyReference_3d9838b6, jsii.get(self, "cachePolicyRef"))
+        return typing.cast("_CachePolicyReference_3d9838b6", jsii.get(self, "cachePolicyRef"))
 
 
 @jsii.implements(IDistribution)
@@ -30531,21 +30801,21 @@ class CloudFrontWebDistribution(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        origin_configs: typing.Sequence[typing.Union[SourceConfiguration, typing.Dict[builtins.str, typing.Any]]],
+        origin_configs: typing.Sequence[typing.Union["SourceConfiguration", typing.Dict[builtins.str, typing.Any]]],
         comment: typing.Optional[builtins.str] = None,
         default_root_object: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[builtins.bool] = None,
         enable_ip_v6: typing.Optional[builtins.bool] = None,
-        error_configurations: typing.Optional[typing.Sequence[typing.Union[CfnDistribution.CustomErrorResponseProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        geo_restriction: typing.Optional[GeoRestriction] = None,
-        http_version: typing.Optional[HttpVersion] = None,
-        logging_config: typing.Optional[typing.Union[LoggingConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
-        price_class: typing.Optional[PriceClass] = None,
-        viewer_certificate: typing.Optional[ViewerCertificate] = None,
-        viewer_protocol_policy: typing.Optional[ViewerProtocolPolicy] = None,
+        error_configurations: typing.Optional[typing.Sequence[typing.Union["CfnDistribution.CustomErrorResponseProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        geo_restriction: typing.Optional["GeoRestriction"] = None,
+        http_version: typing.Optional["HttpVersion"] = None,
+        logging_config: typing.Optional[typing.Union["LoggingConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
+        price_class: typing.Optional["PriceClass"] = None,
+        viewer_certificate: typing.Optional["ViewerCertificate"] = None,
+        viewer_protocol_policy: typing.Optional["ViewerProtocolPolicy"] = None,
         web_acl_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -30593,12 +30863,12 @@ class CloudFrontWebDistribution(
     @builtins.classmethod
     def from_distribution_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         distribution_id: builtins.str,
         domain_name: builtins.str,
-    ) -> IDistribution:
+    ) -> "IDistribution":
         '''(deprecated) Creates a construct that represents an external (imported) distribution.
 
         :param scope: -
@@ -30616,14 +30886,14 @@ class CloudFrontWebDistribution(
             distribution_id=distribution_id, domain_name=domain_name
         )
 
-        return typing.cast(IDistribution, jsii.sinvoke(cls, "fromDistributionAttributes", [scope, id, attrs]))
+        return typing.cast("IDistribution", jsii.sinvoke(cls, "fromDistributionAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''(deprecated) Adds an IAM policy statement associated with this distribution to an IAM principal's policy.
 
         :param identity: The principal.
@@ -30635,13 +30905,13 @@ class CloudFrontWebDistribution(
             type_hints = typing.get_type_hints(_typecheckingstub__bbe540671a65a5420a5e19288df418399a2c78bc5c1c07de38b3f735b89a36ed)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [identity, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [identity, *actions]))
 
     @jsii.member(jsii_name="grantCreateInvalidation")
     def grant_create_invalidation(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''(deprecated) Grant to create invalidations for this bucket to an IAM principal (Role/Group/User).
 
         :param identity: The principal.
@@ -30651,7 +30921,7 @@ class CloudFrontWebDistribution(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1e035551f14cb51c65a18baf4f340f3be55199133afe180ca2138a8a0e86e6f8)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantCreateInvalidation", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantCreateInvalidation", [identity]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -30694,32 +30964,32 @@ class CloudFrontWebDistribution(
 
     @builtins.property
     @jsii.member(jsii_name="distributionRef")
-    def distribution_ref(self) -> _DistributionReference_dd610139:
+    def distribution_ref(self) -> "_DistributionReference_dd610139":
         '''(deprecated) A reference to a Distribution resource.
 
         :stability: deprecated
         '''
-        return typing.cast(_DistributionReference_dd610139, jsii.get(self, "distributionRef"))
+        return typing.cast("_DistributionReference_dd610139", jsii.get(self, "distributionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="grants")
-    def grants(self) -> DistributionGrants:
+    def grants(self) -> "DistributionGrants":
         '''(deprecated) Collection of grant methods for a Distribution.
 
         :stability: deprecated
         '''
-        return typing.cast(DistributionGrants, jsii.get(self, "grants"))
+        return typing.cast("DistributionGrants", jsii.get(self, "grants"))
 
     @builtins.property
     @jsii.member(jsii_name="loggingBucket")
-    def logging_bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def logging_bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''(deprecated) The logging bucket for this CloudFront distribution.
 
         If logging is not enabled for this distribution - this property will be undefined.
 
         :stability: deprecated
         '''
-        return typing.cast(typing.Optional[_IBucket_42e086fd], jsii.get(self, "loggingBucket"))
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], jsii.get(self, "loggingBucket"))
 
 
 @jsii.implements(IDistribution)
@@ -30753,28 +31023,28 @@ class Distribution(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        default_behavior: typing.Union[BehaviorOptions, typing.Dict[builtins.str, typing.Any]],
-        additional_behaviors: typing.Optional[typing.Mapping[builtins.str, typing.Union[BehaviorOptions, typing.Dict[builtins.str, typing.Any]]]] = None,
-        certificate: typing.Optional[_ICertificate_c194c70b] = None,
+        default_behavior: typing.Union["BehaviorOptions", typing.Dict[builtins.str, typing.Any]],
+        additional_behaviors: typing.Optional[typing.Mapping[builtins.str, typing.Union["BehaviorOptions", typing.Dict[builtins.str, typing.Any]]]] = None,
+        certificate: typing.Optional["_ICertificate_c194c70b"] = None,
         comment: typing.Optional[builtins.str] = None,
         default_root_object: typing.Optional[builtins.str] = None,
         domain_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         enabled: typing.Optional[builtins.bool] = None,
         enable_ipv6: typing.Optional[builtins.bool] = None,
         enable_logging: typing.Optional[builtins.bool] = None,
-        error_responses: typing.Optional[typing.Sequence[typing.Union[ErrorResponse, typing.Dict[builtins.str, typing.Any]]]] = None,
-        geo_restriction: typing.Optional[GeoRestriction] = None,
-        http_version: typing.Optional[HttpVersion] = None,
-        log_bucket: typing.Optional[_IBucket_42e086fd] = None,
+        error_responses: typing.Optional[typing.Sequence[typing.Union["ErrorResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
+        geo_restriction: typing.Optional["GeoRestriction"] = None,
+        http_version: typing.Optional["HttpVersion"] = None,
+        log_bucket: typing.Optional["_IBucket_42e086fd"] = None,
         log_file_prefix: typing.Optional[builtins.str] = None,
         log_includes_cookies: typing.Optional[builtins.bool] = None,
-        minimum_protocol_version: typing.Optional[SecurityPolicyProtocol] = None,
-        price_class: typing.Optional[PriceClass] = None,
+        minimum_protocol_version: typing.Optional["SecurityPolicyProtocol"] = None,
+        price_class: typing.Optional["PriceClass"] = None,
         publish_additional_metrics: typing.Optional[builtins.bool] = None,
-        ssl_support_method: typing.Optional[SSLMethod] = None,
+        ssl_support_method: typing.Optional["SSLMethod"] = None,
         web_acl_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -30834,12 +31104,12 @@ class Distribution(
     @builtins.classmethod
     def from_distribution_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         distribution_id: builtins.str,
         domain_name: builtins.str,
-    ) -> IDistribution:
+    ) -> "IDistribution":
         '''Creates a Distribution construct that represents an external (imported) distribution.
 
         :param scope: -
@@ -30855,27 +31125,27 @@ class Distribution(
             distribution_id=distribution_id, domain_name=domain_name
         )
 
-        return typing.cast(IDistribution, jsii.sinvoke(cls, "fromDistributionAttributes", [scope, id, attrs]))
+        return typing.cast("IDistribution", jsii.sinvoke(cls, "fromDistributionAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addBehavior")
     def add_behavior(
         self,
         path_pattern: builtins.str,
-        origin: IOrigin,
+        origin: "IOrigin",
         *,
-        allowed_methods: typing.Optional[AllowedMethods] = None,
-        cached_methods: typing.Optional[CachedMethods] = None,
-        cache_policy: typing.Optional[_ICachePolicyRef_4d6ba2ea] = None,
+        allowed_methods: typing.Optional["AllowedMethods"] = None,
+        cached_methods: typing.Optional["CachedMethods"] = None,
+        cache_policy: typing.Optional["_ICachePolicyRef_4d6ba2ea"] = None,
         compress: typing.Optional[builtins.bool] = None,
-        edge_lambdas: typing.Optional[typing.Sequence[typing.Union[EdgeLambda, typing.Dict[builtins.str, typing.Any]]]] = None,
+        edge_lambdas: typing.Optional[typing.Sequence[typing.Union["EdgeLambda", typing.Dict[builtins.str, typing.Any]]]] = None,
         enable_grpc: typing.Optional[builtins.bool] = None,
-        function_associations: typing.Optional[typing.Sequence[typing.Union[FunctionAssociation, typing.Dict[builtins.str, typing.Any]]]] = None,
-        origin_request_policy: typing.Optional[_IOriginRequestPolicyRef_affb6d7f] = None,
-        realtime_log_config: typing.Optional[_IRealtimeLogConfigRef_83cc214a] = None,
-        response_headers_policy: typing.Optional[_IResponseHeadersPolicyRef_25ee5061] = None,
+        function_associations: typing.Optional[typing.Sequence[typing.Union["FunctionAssociation", typing.Dict[builtins.str, typing.Any]]]] = None,
+        origin_request_policy: typing.Optional["_IOriginRequestPolicyRef_affb6d7f"] = None,
+        realtime_log_config: typing.Optional["_IRealtimeLogConfigRef_83cc214a"] = None,
+        response_headers_policy: typing.Optional["_IResponseHeadersPolicyRef_25ee5061"] = None,
         smooth_streaming: typing.Optional[builtins.bool] = None,
-        trusted_key_groups: typing.Optional[typing.Sequence[_IKeyGroupRef_44670bc7]] = None,
-        viewer_protocol_policy: typing.Optional[ViewerProtocolPolicy] = None,
+        trusted_key_groups: typing.Optional[typing.Sequence["_IKeyGroupRef_44670bc7"]] = None,
+        viewer_protocol_policy: typing.Optional["ViewerProtocolPolicy"] = None,
     ) -> None:
         '''Adds a new behavior to this distribution for the given pathPattern.
 
@@ -30933,9 +31203,9 @@ class Distribution(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this distribution to an IAM principal's policy.
 
         :param identity: The principal.
@@ -30945,13 +31215,13 @@ class Distribution(
             type_hints = typing.get_type_hints(_typecheckingstub__570665aa807bcddef2b06088f934fc7c08e51ec76b12bb573dce40bcd558c053)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [identity, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [identity, *actions]))
 
     @jsii.member(jsii_name="grantCreateInvalidation")
     def grant_create_invalidation(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant to create invalidations for this bucket to an IAM principal (Role/Group/User).
 
         :param identity: The principal.
@@ -30959,7 +31229,7 @@ class Distribution(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f120acf6052cd817f09b30ce4d40d0853e41ea258f27908bbd45136d4e56e891)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantCreateInvalidation", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantCreateInvalidation", [identity]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -30971,14 +31241,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Distribution.
 
         :param metric_name: -
@@ -31013,7 +31283,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metric401ErrorRate")
     def metric401_error_rate(
@@ -31024,14 +31294,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the percentage of all viewer requests for which the response's HTTP status code is 401.
 
         To obtain this metric, you need to set ``publishAdditionalMetrics`` to ``true``.
@@ -31066,7 +31336,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric401ErrorRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric401ErrorRate", [props]))
 
     @jsii.member(jsii_name="metric403ErrorRate")
     def metric403_error_rate(
@@ -31077,14 +31347,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the percentage of all viewer requests for which the response's HTTP status code is 403.
 
         To obtain this metric, you need to set ``publishAdditionalMetrics`` to ``true``.
@@ -31119,7 +31389,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric403ErrorRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric403ErrorRate", [props]))
 
     @jsii.member(jsii_name="metric404ErrorRate")
     def metric404_error_rate(
@@ -31130,14 +31400,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the percentage of all viewer requests for which the response's HTTP status code is 404.
 
         To obtain this metric, you need to set ``publishAdditionalMetrics`` to ``true``.
@@ -31172,7 +31442,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric404ErrorRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric404ErrorRate", [props]))
 
     @jsii.member(jsii_name="metric4xxErrorRate")
     def metric4xx_error_rate(
@@ -31183,14 +31453,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the percentage of all viewer requests for which the response's HTTP status code is 4xx.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -31223,7 +31493,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric4xxErrorRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric4xxErrorRate", [props]))
 
     @jsii.member(jsii_name="metric502ErrorRate")
     def metric502_error_rate(
@@ -31234,14 +31504,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the percentage of all viewer requests for which the response's HTTP status code is 502.
 
         To obtain this metric, you need to set ``publishAdditionalMetrics`` to ``true``.
@@ -31276,7 +31546,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric502ErrorRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric502ErrorRate", [props]))
 
     @jsii.member(jsii_name="metric503ErrorRate")
     def metric503_error_rate(
@@ -31287,14 +31557,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the percentage of all viewer requests for which the response's HTTP status code is 503.
 
         To obtain this metric, you need to set ``publishAdditionalMetrics`` to ``true``.
@@ -31329,7 +31599,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric503ErrorRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric503ErrorRate", [props]))
 
     @jsii.member(jsii_name="metric504ErrorRate")
     def metric504_error_rate(
@@ -31340,14 +31610,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the percentage of all viewer requests for which the response's HTTP status code is 504.
 
         To obtain this metric, you need to set ``publishAdditionalMetrics`` to ``true``.
@@ -31382,7 +31652,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric504ErrorRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric504ErrorRate", [props]))
 
     @jsii.member(jsii_name="metric5xxErrorRate")
     def metric5xx_error_rate(
@@ -31393,14 +31663,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the percentage of all viewer requests for which the response's HTTP status code is 5xx.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -31433,7 +31703,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric5xxErrorRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric5xxErrorRate", [props]))
 
     @jsii.member(jsii_name="metricBytesDownloaded")
     def metric_bytes_downloaded(
@@ -31444,14 +31714,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the total number of bytes downloaded by viewers for GET, HEAD, and OPTIONS requests.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -31484,7 +31754,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricBytesDownloaded", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricBytesDownloaded", [props]))
 
     @jsii.member(jsii_name="metricBytesUploaded")
     def metric_bytes_uploaded(
@@ -31495,14 +31765,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the total number of bytes that viewers uploaded to your origin with CloudFront, using POST and PUT requests.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -31535,7 +31805,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricBytesUploaded", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricBytesUploaded", [props]))
 
     @jsii.member(jsii_name="metricCacheHitRate")
     def metric_cache_hit_rate(
@@ -31546,14 +31816,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the percentage of all cacheable requests for which CloudFront served the content from its cache.
 
         HTTP POST and PUT requests, and errors, are not considered cacheable requests.
@@ -31590,7 +31860,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricCacheHitRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCacheHitRate", [props]))
 
     @jsii.member(jsii_name="metricOriginLatency")
     def metric_origin_latency(
@@ -31601,14 +31871,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the total time spent from when CloudFront receives a request to when it starts providing a response to the network (not the viewer), for requests that are served from the origin, not the CloudFront cache.
 
         This is also known as first byte latency, or time-to-first-byte.
@@ -31645,7 +31915,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricOriginLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricOriginLatency", [props]))
 
     @jsii.member(jsii_name="metricRequests")
     def metric_requests(
@@ -31656,14 +31926,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the total number of viewer requests received by CloudFront, for all HTTP methods and for both HTTP and HTTPS requests.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -31696,7 +31966,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricRequests", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricRequests", [props]))
 
     @jsii.member(jsii_name="metricTotalErrorRate")
     def metric_total_error_rate(
@@ -31707,14 +31977,14 @@ class Distribution(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the percentage of all viewer requests for which the response's HTTP status code is 4xx or 5xx.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -31747,7 +32017,7 @@ class Distribution(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricTotalErrorRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricTotalErrorRate", [props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -31775,9 +32045,9 @@ class Distribution(
 
     @builtins.property
     @jsii.member(jsii_name="distributionRef")
-    def distribution_ref(self) -> _DistributionReference_dd610139:
+    def distribution_ref(self) -> "_DistributionReference_dd610139":
         '''A reference to a Distribution resource.'''
-        return typing.cast(_DistributionReference_dd610139, jsii.get(self, "distributionRef"))
+        return typing.cast("_DistributionReference_dd610139", jsii.get(self, "distributionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="domainName")
@@ -31787,9 +32057,9 @@ class Distribution(
 
     @builtins.property
     @jsii.member(jsii_name="grants")
-    def grants(self) -> DistributionGrants:
+    def grants(self) -> "DistributionGrants":
         '''Collection of grant methods for a Distribution.'''
-        return typing.cast(DistributionGrants, jsii.get(self, "grants"))
+        return typing.cast("DistributionGrants", jsii.get(self, "grants"))
 
 
 @jsii.implements(IFunction)
@@ -31816,15 +32086,15 @@ class Function(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        code: FunctionCode,
+        code: "FunctionCode",
         auto_publish: typing.Optional[builtins.bool] = None,
         comment: typing.Optional[builtins.str] = None,
         function_name: typing.Optional[builtins.str] = None,
-        key_value_store: typing.Optional[_IKeyValueStoreRef_332470ca] = None,
-        runtime: typing.Optional[FunctionRuntime] = None,
+        key_value_store: typing.Optional["_IKeyValueStoreRef_332470ca"] = None,
+        runtime: typing.Optional["FunctionRuntime"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -31855,13 +32125,13 @@ class Function(
     @builtins.classmethod
     def from_function_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         function_arn: builtins.str,
         function_name: builtins.str,
         function_runtime: typing.Optional[builtins.str] = None,
-    ) -> IFunction:
+    ) -> "IFunction":
         '''Imports a function by its name and ARN.
 
         :param scope: -
@@ -31880,7 +32150,7 @@ class Function(
             function_runtime=function_runtime,
         )
 
-        return typing.cast(IFunction, jsii.sinvoke(cls, "fromFunctionAttributes", [scope, id, attrs]))
+        return typing.cast("IFunction", jsii.sinvoke(cls, "fromFunctionAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -31908,9 +32178,9 @@ class Function(
 
     @builtins.property
     @jsii.member(jsii_name="functionRef")
-    def function_ref(self) -> _FunctionReference_4d47e97a:
+    def function_ref(self) -> "_FunctionReference_4d47e97a":
         '''A reference to a Function resource.'''
-        return typing.cast(_FunctionReference_4d47e97a, jsii.get(self, "functionRef"))
+        return typing.cast("_FunctionReference_4d47e97a", jsii.get(self, "functionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="functionRuntime")
@@ -31971,12 +32241,12 @@ class FunctionUrlOriginAccessControl(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
         origin_access_control_name: typing.Optional[builtins.str] = None,
-        signing: typing.Optional[Signing] = None,
+        signing: typing.Optional["Signing"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -32001,10 +32271,10 @@ class FunctionUrlOriginAccessControl(
     @builtins.classmethod
     def from_origin_access_control_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         origin_access_control_id: builtins.str,
-    ) -> IOriginAccessControl:
+    ) -> "IOriginAccessControl":
         '''Imports a Lambda Function URL origin access control from its id.
 
         :param scope: -
@@ -32016,7 +32286,7 @@ class FunctionUrlOriginAccessControl(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument origin_access_control_id", value=origin_access_control_id, expected_type=type_hints["origin_access_control_id"])
-        return typing.cast(IOriginAccessControl, jsii.sinvoke(cls, "fromOriginAccessControlId", [scope, id, origin_access_control_id]))
+        return typing.cast("IOriginAccessControl", jsii.sinvoke(cls, "fromOriginAccessControlId", [scope, id, origin_access_control_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -32049,7 +32319,7 @@ class FunctionUrlOriginAccessControlProps(OriginAccessControlBaseProps):
         *,
         description: typing.Optional[builtins.str] = None,
         origin_access_control_name: typing.Optional[builtins.str] = None,
-        signing: typing.Optional[Signing] = None,
+        signing: typing.Optional["Signing"] = None,
     ) -> None:
         '''Properties for creating a Lambda Function URL Origin Access Control resource.
 
@@ -32116,7 +32386,7 @@ class FunctionUrlOriginAccessControlProps(OriginAccessControlBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def signing(self) -> typing.Optional[Signing]:
+    def signing(self) -> typing.Optional["Signing"]:
         '''Specifies which requests CloudFront signs and the signing protocol.
 
         :default: SIGV4_ALWAYS
@@ -32124,7 +32394,7 @@ class FunctionUrlOriginAccessControlProps(OriginAccessControlBaseProps):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-originaccesscontrol-originaccesscontrolconfig.html#cfn-cloudfront-originaccesscontrol-originaccesscontrolconfig-signingbehavior
         '''
         result = self._values.get("signing")
-        return typing.cast(typing.Optional[Signing], result)
+        return typing.cast(typing.Optional["Signing"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -32415,6 +32685,7 @@ def _typecheckingstub__2b13827b228b7c298a17121364286edab0de8f14fd459f83803e07a1c
     ip_count: jsii.Number,
     name: builtins.str,
     ip_address_type: typing.Optional[builtins.str] = None,
+    ipam_cidr_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnycastIpList.IpamCidrConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Union[CfnAnycastIpList.TagsProperty, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -32462,6 +32733,12 @@ def _typecheckingstub__bdda08ac166df373a10568e7cb5f553dce85744030b95b9b2c0b38cd8
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__bb8862dea2d5fd91e3c6f5ebd9a93fb04ff09f68785beb38891d47f54af027a3(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAnycastIpList.IpamCidrConfigProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b1d1dfdc7936ba000dfdec659315150c3bf594d4b2b99b2d3b37e510f78d7e57(
     value: typing.Optional[CfnAnycastIpList.TagsProperty],
 ) -> None:
@@ -32478,6 +32755,25 @@ def _typecheckingstub__52438d74e9c64ccb0851ad4bbbcc3d1dab9c3fa5daeefa73f0df7ada7
     name: builtins.str,
     status: builtins.str,
     ip_address_type: typing.Optional[builtins.str] = None,
+    ipam_cidr_config_results: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnycastIpList.IpamCidrConfigResultProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__16a7c7bfed6e1c5f4bcea8bc3ed2c19688078cdeaa61ccee2b09693c132ee246(
+    *,
+    cidr: builtins.str,
+    ipam_pool_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__936c44014ebfbc575bde100f27807c744ec9bd81e86a4aeef0b31260437f0bec(
+    *,
+    anycast_ip: typing.Optional[builtins.str] = None,
+    cidr: typing.Optional[builtins.str] = None,
+    ipam_pool_arn: typing.Optional[builtins.str] = None,
+    status: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32494,6 +32790,7 @@ def _typecheckingstub__0531888e60306e7fdb982a8f30e2606d9c2f13802b9db82d7dcaa3a27
     ip_count: jsii.Number,
     name: builtins.str,
     ip_address_type: typing.Optional[builtins.str] = None,
+    ipam_cidr_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnycastIpList.IpamCidrConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Union[CfnAnycastIpList.TagsProperty, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
     """Type checking stubs"""

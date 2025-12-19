@@ -154,14 +154,14 @@ class CfnCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        networking: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.NetworkingProperty", typing.Dict[builtins.str, typing.Any]]],
-        scheduler: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.SchedulerProperty", typing.Dict[builtins.str, typing.Any]]],
+        networking: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.NetworkingProperty", typing.Dict[builtins.str, typing.Any]]],
+        scheduler: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.SchedulerProperty", typing.Dict[builtins.str, typing.Any]]],
         size: builtins.str,
         name: typing.Optional[builtins.str] = None,
-        slurm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.SlurmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        slurm_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.SlurmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::PCS::Cluster``.
@@ -192,7 +192,7 @@ class CfnCluster(
 
     @jsii.member(jsii_name="arnForCluster")
     @builtins.classmethod
-    def arn_for_cluster(cls, resource: _IClusterRef_a438c263) -> builtins.str:
+    def arn_for_cluster(cls, resource: "_IClusterRef_a438c263") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -214,7 +214,7 @@ class CfnCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -254,21 +254,21 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="attrEndpoints")
-    def attr_endpoints(self) -> _IResolvable_da3f097b:
+    def attr_endpoints(self) -> "_IResolvable_da3f097b":
         '''The list of endpoints available for interaction with the scheduler.
 
         :cloudformationAttribute: Endpoints
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrEndpoints"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrEndpoints"))
 
     @builtins.property
     @jsii.member(jsii_name="attrErrorInfo")
-    def attr_error_info(self) -> _IResolvable_da3f097b:
+    def attr_error_info(self) -> "_IResolvable_da3f097b":
         '''The list of errors that occurred during cluster provisioning.
 
         :cloudformationAttribute: ErrorInfo
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrErrorInfo"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrErrorInfo"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -294,9 +294,9 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -305,22 +305,22 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> _ClusterReference_ee361793:
+    def cluster_ref(self) -> "_ClusterReference_ee361793":
         '''A reference to a Cluster resource.'''
-        return typing.cast(_ClusterReference_ee361793, jsii.get(self, "clusterRef"))
+        return typing.cast("_ClusterReference_ee361793", jsii.get(self, "clusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="networking")
     def networking(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCluster.NetworkingProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCluster.NetworkingProperty"]:
         '''The networking configuration for the cluster's control plane.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCluster.NetworkingProperty"], jsii.get(self, "networking"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCluster.NetworkingProperty"], jsii.get(self, "networking"))
 
     @networking.setter
     def networking(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCluster.NetworkingProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCluster.NetworkingProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__55c1ec55aa513ac3501a36d2ae996a234035f2352cdef00bfd71db7d9a57e50c)
@@ -331,14 +331,14 @@ class CfnCluster(
     @jsii.member(jsii_name="scheduler")
     def scheduler(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCluster.SchedulerProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCluster.SchedulerProperty"]:
         '''The cluster management and job scheduling software associated with the cluster.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCluster.SchedulerProperty"], jsii.get(self, "scheduler"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCluster.SchedulerProperty"], jsii.get(self, "scheduler"))
 
     @scheduler.setter
     def scheduler(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCluster.SchedulerProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCluster.SchedulerProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d56c39b86f5541062b8866fd13a6f0b7c91e0e765586d45abea04f33cc267998)
@@ -375,14 +375,14 @@ class CfnCluster(
     @jsii.member(jsii_name="slurmConfiguration")
     def slurm_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SlurmConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SlurmConfigurationProperty"]]:
         '''Additional options related to the Slurm scheduler.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SlurmConfigurationProperty"]], jsii.get(self, "slurmConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SlurmConfigurationProperty"]], jsii.get(self, "slurmConfiguration"))
 
     @slurm_configuration.setter
     def slurm_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SlurmConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SlurmConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d87e1a23a15695700ae0058f31b0dfa9d42571eb71c777bac50f89be58cf34fe)
@@ -778,7 +778,7 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            jwt_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.JwtKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            jwt_key: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.JwtKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The JWT authentication configuration for Slurm REST API access.
 
@@ -810,13 +810,13 @@ class CfnCluster(
         @builtins.property
         def jwt_key(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.JwtKeyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.JwtKeyProperty"]]:
             '''The JWT key for Slurm REST API authentication.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-jwtauth.html#cfn-pcs-cluster-jwtauth-jwtkey
             '''
             result = self._values.get("jwt_key")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.JwtKeyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.JwtKeyProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1096,12 +1096,12 @@ class CfnCluster(
         def __init__(
             self,
             *,
-            accounting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.AccountingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            auth_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.AuthKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            jwt_auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.JwtAuthProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            accounting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.AccountingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            auth_key: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.AuthKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            jwt_auth: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.JwtAuthProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             scale_down_idle_time_in_seconds: typing.Optional[jsii.Number] = None,
-            slurm_custom_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.SlurmCustomSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            slurm_rest: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.SlurmRestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            slurm_custom_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.SlurmCustomSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            slurm_rest: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.SlurmRestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Additional options related to the Slurm scheduler.
 
@@ -1173,35 +1173,35 @@ class CfnCluster(
         @builtins.property
         def accounting(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.AccountingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.AccountingProperty"]]:
             '''The accounting configuration includes configurable settings for Slurm accounting.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html#cfn-pcs-cluster-slurmconfiguration-accounting
             '''
             result = self._values.get("accounting")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.AccountingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.AccountingProperty"]], result)
 
         @builtins.property
         def auth_key(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.AuthKeyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.AuthKeyProperty"]]:
             '''The shared Slurm key for authentication, also known as the *cluster secret* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html#cfn-pcs-cluster-slurmconfiguration-authkey
             '''
             result = self._values.get("auth_key")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.AuthKeyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.AuthKeyProperty"]], result)
 
         @builtins.property
         def jwt_auth(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.JwtAuthProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.JwtAuthProperty"]]:
             '''The JWT authentication configuration for Slurm REST API access.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html#cfn-pcs-cluster-slurmconfiguration-jwtauth
             '''
             result = self._values.get("jwt_auth")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.JwtAuthProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.JwtAuthProperty"]], result)
 
         @builtins.property
         def scale_down_idle_time_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -1217,24 +1217,24 @@ class CfnCluster(
         @builtins.property
         def slurm_custom_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.SlurmCustomSettingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.SlurmCustomSettingProperty"]]]]:
             '''Additional Slurm-specific configuration that directly maps to Slurm settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html#cfn-pcs-cluster-slurmconfiguration-slurmcustomsettings
             '''
             result = self._values.get("slurm_custom_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.SlurmCustomSettingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCluster.SlurmCustomSettingProperty"]]]], result)
 
         @builtins.property
         def slurm_rest(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SlurmRestProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SlurmRestProperty"]]:
             '''The Slurm REST API configuration for the cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html#cfn-pcs-cluster-slurmconfiguration-slurmrest
             '''
             result = self._values.get("slurm_rest")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SlurmRestProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SlurmRestProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1402,11 +1402,11 @@ class CfnClusterProps:
     def __init__(
         self,
         *,
-        networking: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.NetworkingProperty, typing.Dict[builtins.str, typing.Any]]],
-        scheduler: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.SchedulerProperty, typing.Dict[builtins.str, typing.Any]]],
+        networking: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.NetworkingProperty", typing.Dict[builtins.str, typing.Any]]],
+        scheduler: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.SchedulerProperty", typing.Dict[builtins.str, typing.Any]]],
         size: builtins.str,
         name: typing.Optional[builtins.str] = None,
-        slurm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.SlurmConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        slurm_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.SlurmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCluster``.
@@ -1495,26 +1495,26 @@ class CfnClusterProps:
     @builtins.property
     def networking(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCluster.NetworkingProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCluster.NetworkingProperty"]:
         '''The networking configuration for the cluster's control plane.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-cluster.html#cfn-pcs-cluster-networking
         '''
         result = self._values.get("networking")
         assert result is not None, "Required property 'networking' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCluster.NetworkingProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCluster.NetworkingProperty"], result)
 
     @builtins.property
     def scheduler(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCluster.SchedulerProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCluster.SchedulerProperty"]:
         '''The cluster management and job scheduling software associated with the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-cluster.html#cfn-pcs-cluster-scheduler
         '''
         result = self._values.get("scheduler")
         assert result is not None, "Required property 'scheduler' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCluster.SchedulerProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCluster.SchedulerProperty"], result)
 
     @builtins.property
     def size(self) -> builtins.str:
@@ -1542,13 +1542,13 @@ class CfnClusterProps:
     @builtins.property
     def slurm_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.SlurmConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SlurmConfigurationProperty"]]:
         '''Additional options related to the Slurm scheduler.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-cluster.html#cfn-pcs-cluster-slurmconfiguration
         '''
         result = self._values.get("slurm_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.SlurmConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.SlurmConfigurationProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -1632,20 +1632,20 @@ class CfnComputeNodeGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster_id: builtins.str,
-        custom_launch_template: typing.Union[_IResolvable_da3f097b, typing.Union["CfnComputeNodeGroup.CustomLaunchTemplateProperty", typing.Dict[builtins.str, typing.Any]]],
+        custom_launch_template: typing.Union["_IResolvable_da3f097b", typing.Union["CfnComputeNodeGroup.CustomLaunchTemplateProperty", typing.Dict[builtins.str, typing.Any]]],
         iam_instance_profile_arn: builtins.str,
-        instance_configs: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComputeNodeGroup.InstanceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        scaling_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnComputeNodeGroup.ScalingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        instance_configs: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComputeNodeGroup.InstanceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        scaling_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnComputeNodeGroup.ScalingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         subnet_ids: typing.Sequence[builtins.str],
         ami_id: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         purchase_option: typing.Optional[builtins.str] = None,
-        slurm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComputeNodeGroup.SlurmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        spot_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComputeNodeGroup.SpotOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        slurm_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComputeNodeGroup.SlurmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        spot_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComputeNodeGroup.SpotOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::PCS::ComputeNodeGroup``.
@@ -1690,7 +1690,7 @@ class CfnComputeNodeGroup(
     @builtins.classmethod
     def arn_for_compute_node_group(
         cls,
-        resource: _IComputeNodeGroupRef_61cc8303,
+        resource: "_IComputeNodeGroupRef_61cc8303",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1713,7 +1713,7 @@ class CfnComputeNodeGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnComputeNodeGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1753,12 +1753,12 @@ class CfnComputeNodeGroup(
 
     @builtins.property
     @jsii.member(jsii_name="attrErrorInfo")
-    def attr_error_info(self) -> _IResolvable_da3f097b:
+    def attr_error_info(self) -> "_IResolvable_da3f097b":
         '''The list of errors that occurred during compute node group provisioning.
 
         :cloudformationAttribute: ErrorInfo
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrErrorInfo"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrErrorInfo"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -1784,9 +1784,9 @@ class CfnComputeNodeGroup(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1795,9 +1795,9 @@ class CfnComputeNodeGroup(
 
     @builtins.property
     @jsii.member(jsii_name="computeNodeGroupRef")
-    def compute_node_group_ref(self) -> _ComputeNodeGroupReference_25cba40d:
+    def compute_node_group_ref(self) -> "_ComputeNodeGroupReference_25cba40d":
         '''A reference to a ComputeNodeGroup resource.'''
-        return typing.cast(_ComputeNodeGroupReference_25cba40d, jsii.get(self, "computeNodeGroupRef"))
+        return typing.cast("_ComputeNodeGroupReference_25cba40d", jsii.get(self, "computeNodeGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterId")
@@ -1816,14 +1816,14 @@ class CfnComputeNodeGroup(
     @jsii.member(jsii_name="customLaunchTemplate")
     def custom_launch_template(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.CustomLaunchTemplateProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.CustomLaunchTemplateProperty"]:
         '''An Amazon EC2 launch template AWS PCS uses to launch compute nodes.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.CustomLaunchTemplateProperty"], jsii.get(self, "customLaunchTemplate"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.CustomLaunchTemplateProperty"], jsii.get(self, "customLaunchTemplate"))
 
     @custom_launch_template.setter
     def custom_launch_template(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.CustomLaunchTemplateProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.CustomLaunchTemplateProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bf4a47490919e9b97683082d58e0ccf8649fd09ec2c5f621c3f8467d84363706)
@@ -1847,14 +1847,14 @@ class CfnComputeNodeGroup(
     @jsii.member(jsii_name="instanceConfigs")
     def instance_configs(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.InstanceConfigProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.InstanceConfigProperty"]]]:
         '''A list of EC2 instance configurations that AWS PCS can provision in the compute node group.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.InstanceConfigProperty"]]], jsii.get(self, "instanceConfigs"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.InstanceConfigProperty"]]], jsii.get(self, "instanceConfigs"))
 
     @instance_configs.setter
     def instance_configs(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.InstanceConfigProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.InstanceConfigProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dd2f09e3d9b4cca4eab96f7862d7a047649e41118beecac43ed36e424625aa02)
@@ -1865,14 +1865,14 @@ class CfnComputeNodeGroup(
     @jsii.member(jsii_name="scalingConfiguration")
     def scaling_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.ScalingConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.ScalingConfigurationProperty"]:
         '''Specifies the boundaries of the compute node group auto scaling.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.ScalingConfigurationProperty"], jsii.get(self, "scalingConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.ScalingConfigurationProperty"], jsii.get(self, "scalingConfiguration"))
 
     @scaling_configuration.setter
     def scaling_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.ScalingConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.ScalingConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__faa6826218f9909223a7fac326f705e3e75a1469e1ec902fe056022fd0a6adf1)
@@ -1935,14 +1935,14 @@ class CfnComputeNodeGroup(
     @jsii.member(jsii_name="slurmConfiguration")
     def slurm_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.SlurmConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.SlurmConfigurationProperty"]]:
         '''Additional options related to the Slurm scheduler.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.SlurmConfigurationProperty"]], jsii.get(self, "slurmConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.SlurmConfigurationProperty"]], jsii.get(self, "slurmConfiguration"))
 
     @slurm_configuration.setter
     def slurm_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.SlurmConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.SlurmConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8d5c6af28cfa6220ac6fe417a830b4b39cfb3320cd91ef31f4ef71aa5f6d934b)
@@ -1953,14 +1953,14 @@ class CfnComputeNodeGroup(
     @jsii.member(jsii_name="spotOptions")
     def spot_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.SpotOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.SpotOptionsProperty"]]:
         '''Additional configuration when you specify ``SPOT`` as the ``purchaseOption`` for the ``CreateComputeNodeGroup`` API action.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.SpotOptionsProperty"]], jsii.get(self, "spotOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.SpotOptionsProperty"]], jsii.get(self, "spotOptions"))
 
     @spot_options.setter
     def spot_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.SpotOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.SpotOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__25d7dc8c33129932f54cb9e69a7f2e96a79caaf423f50891bd309efbb2cf8a56)
@@ -2266,7 +2266,7 @@ class CfnComputeNodeGroup(
         def __init__(
             self,
             *,
-            slurm_custom_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComputeNodeGroup.SlurmCustomSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            slurm_custom_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComputeNodeGroup.SlurmCustomSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Additional options related to the Slurm scheduler.
 
@@ -2298,13 +2298,13 @@ class CfnComputeNodeGroup(
         @builtins.property
         def slurm_custom_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.SlurmCustomSettingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.SlurmCustomSettingProperty"]]]]:
             '''Additional Slurm-specific configuration that directly maps to Slurm settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-computenodegroup-slurmconfiguration.html#cfn-pcs-computenodegroup-slurmconfiguration-slurmcustomsettings
             '''
             result = self._values.get("slurm_custom_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComputeNodeGroup.SlurmCustomSettingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.SlurmCustomSettingProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2478,16 +2478,16 @@ class CfnComputeNodeGroupProps:
         self,
         *,
         cluster_id: builtins.str,
-        custom_launch_template: typing.Union[_IResolvable_da3f097b, typing.Union[CfnComputeNodeGroup.CustomLaunchTemplateProperty, typing.Dict[builtins.str, typing.Any]]],
+        custom_launch_template: typing.Union["_IResolvable_da3f097b", typing.Union["CfnComputeNodeGroup.CustomLaunchTemplateProperty", typing.Dict[builtins.str, typing.Any]]],
         iam_instance_profile_arn: builtins.str,
-        instance_configs: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnComputeNodeGroup.InstanceConfigProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        scaling_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnComputeNodeGroup.ScalingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        instance_configs: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComputeNodeGroup.InstanceConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        scaling_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnComputeNodeGroup.ScalingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         subnet_ids: typing.Sequence[builtins.str],
         ami_id: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         purchase_option: typing.Optional[builtins.str] = None,
-        slurm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnComputeNodeGroup.SlurmConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        spot_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnComputeNodeGroup.SpotOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        slurm_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComputeNodeGroup.SlurmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        spot_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComputeNodeGroup.SpotOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnComputeNodeGroup``.
@@ -2598,14 +2598,14 @@ class CfnComputeNodeGroupProps:
     @builtins.property
     def custom_launch_template(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnComputeNodeGroup.CustomLaunchTemplateProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.CustomLaunchTemplateProperty"]:
         '''An Amazon EC2 launch template AWS PCS uses to launch compute nodes.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-computenodegroup.html#cfn-pcs-computenodegroup-customlaunchtemplate
         '''
         result = self._values.get("custom_launch_template")
         assert result is not None, "Required property 'custom_launch_template' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnComputeNodeGroup.CustomLaunchTemplateProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.CustomLaunchTemplateProperty"], result)
 
     @builtins.property
     def iam_instance_profile_arn(self) -> builtins.str:
@@ -2622,26 +2622,26 @@ class CfnComputeNodeGroupProps:
     @builtins.property
     def instance_configs(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnComputeNodeGroup.InstanceConfigProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.InstanceConfigProperty"]]]:
         '''A list of EC2 instance configurations that AWS PCS can provision in the compute node group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-computenodegroup.html#cfn-pcs-computenodegroup-instanceconfigs
         '''
         result = self._values.get("instance_configs")
         assert result is not None, "Required property 'instance_configs' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnComputeNodeGroup.InstanceConfigProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.InstanceConfigProperty"]]], result)
 
     @builtins.property
     def scaling_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnComputeNodeGroup.ScalingConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.ScalingConfigurationProperty"]:
         '''Specifies the boundaries of the compute node group auto scaling.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-computenodegroup.html#cfn-pcs-computenodegroup-scalingconfiguration
         '''
         result = self._values.get("scaling_configuration")
         assert result is not None, "Required property 'scaling_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnComputeNodeGroup.ScalingConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.ScalingConfigurationProperty"], result)
 
     @builtins.property
     def subnet_ids(self) -> typing.List[builtins.str]:
@@ -2689,24 +2689,24 @@ class CfnComputeNodeGroupProps:
     @builtins.property
     def slurm_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnComputeNodeGroup.SlurmConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.SlurmConfigurationProperty"]]:
         '''Additional options related to the Slurm scheduler.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-computenodegroup.html#cfn-pcs-computenodegroup-slurmconfiguration
         '''
         result = self._values.get("slurm_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnComputeNodeGroup.SlurmConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.SlurmConfigurationProperty"]], result)
 
     @builtins.property
     def spot_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnComputeNodeGroup.SpotOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.SpotOptionsProperty"]]:
         '''Additional configuration when you specify ``SPOT`` as the ``purchaseOption`` for the ``CreateComputeNodeGroup`` API action.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-computenodegroup.html#cfn-pcs-computenodegroup-spotoptions
         '''
         result = self._values.get("spot_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnComputeNodeGroup.SpotOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComputeNodeGroup.SpotOptionsProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -2773,13 +2773,13 @@ class CfnQueue(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster_id: builtins.str,
-        compute_node_group_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQueue.ComputeNodeGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        compute_node_group_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQueue.ComputeNodeGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        slurm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQueue.SlurmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        slurm_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQueue.SlurmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::PCS::Queue``.
@@ -2808,7 +2808,7 @@ class CfnQueue(
 
     @jsii.member(jsii_name="arnForQueue")
     @builtins.classmethod
-    def arn_for_queue(cls, resource: _IQueueRef_533cbfaf) -> builtins.str:
+    def arn_for_queue(cls, resource: "_IQueueRef_533cbfaf") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2830,7 +2830,7 @@ class CfnQueue(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueue", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2870,12 +2870,12 @@ class CfnQueue(
 
     @builtins.property
     @jsii.member(jsii_name="attrErrorInfo")
-    def attr_error_info(self) -> _IResolvable_da3f097b:
+    def attr_error_info(self) -> "_IResolvable_da3f097b":
         '''The list of errors that occurred during queue provisioning.
 
         :cloudformationAttribute: ErrorInfo
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrErrorInfo"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrErrorInfo"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -2901,9 +2901,9 @@ class CfnQueue(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2912,9 +2912,9 @@ class CfnQueue(
 
     @builtins.property
     @jsii.member(jsii_name="queueRef")
-    def queue_ref(self) -> _QueueReference_4d04703d:
+    def queue_ref(self) -> "_QueueReference_4d04703d":
         '''A reference to a Queue resource.'''
-        return typing.cast(_QueueReference_4d04703d, jsii.get(self, "queueRef"))
+        return typing.cast("_QueueReference_4d04703d", jsii.get(self, "queueRef"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterId")
@@ -2933,14 +2933,14 @@ class CfnQueue(
     @jsii.member(jsii_name="computeNodeGroupConfigurations")
     def compute_node_group_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnQueue.ComputeNodeGroupConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnQueue.ComputeNodeGroupConfigurationProperty"]]]]:
         '''The list of compute node group configurations associated with the queue.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnQueue.ComputeNodeGroupConfigurationProperty"]]]], jsii.get(self, "computeNodeGroupConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnQueue.ComputeNodeGroupConfigurationProperty"]]]], jsii.get(self, "computeNodeGroupConfigurations"))
 
     @compute_node_group_configurations.setter
     def compute_node_group_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnQueue.ComputeNodeGroupConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnQueue.ComputeNodeGroupConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9fa120ad7f68494c28ccc4186d82ee7a8ff23a8eb4615bb87e7c325c61e1a497)
@@ -2964,14 +2964,14 @@ class CfnQueue(
     @jsii.member(jsii_name="slurmConfiguration")
     def slurm_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.SlurmConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.SlurmConfigurationProperty"]]:
         '''Additional options related to the Slurm scheduler.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.SlurmConfigurationProperty"]], jsii.get(self, "slurmConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.SlurmConfigurationProperty"]], jsii.get(self, "slurmConfiguration"))
 
     @slurm_configuration.setter
     def slurm_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.SlurmConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.SlurmConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8b7380033da0bbecbc38adb9cf8f52dc687fd71722aa673c38c6fb2beb4cf53c)
@@ -3128,7 +3128,7 @@ class CfnQueue(
         def __init__(
             self,
             *,
-            slurm_custom_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQueue.SlurmCustomSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            slurm_custom_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQueue.SlurmCustomSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The Slurm configuration for the queue.
 
@@ -3160,13 +3160,13 @@ class CfnQueue(
         @builtins.property
         def slurm_custom_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnQueue.SlurmCustomSettingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnQueue.SlurmCustomSettingProperty"]]]]:
             '''Custom Slurm parameters that directly map to Slurm configuration settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-queue-slurmconfiguration.html#cfn-pcs-queue-slurmconfiguration-slurmcustomsettings
             '''
             result = self._values.get("slurm_custom_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnQueue.SlurmCustomSettingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnQueue.SlurmCustomSettingProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3270,9 +3270,9 @@ class CfnQueueProps:
         self,
         *,
         cluster_id: builtins.str,
-        compute_node_group_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnQueue.ComputeNodeGroupConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        compute_node_group_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQueue.ComputeNodeGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        slurm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnQueue.SlurmConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        slurm_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQueue.SlurmConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnQueue``.
@@ -3343,7 +3343,7 @@ class CfnQueueProps:
     @builtins.property
     def compute_node_group_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnQueue.ComputeNodeGroupConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnQueue.ComputeNodeGroupConfigurationProperty"]]]]:
         '''The list of compute node group configurations associated with the queue.
 
         Queues assign jobs to associated compute node groups.
@@ -3351,7 +3351,7 @@ class CfnQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-queue.html#cfn-pcs-queue-computenodegroupconfigurations
         '''
         result = self._values.get("compute_node_group_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnQueue.ComputeNodeGroupConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnQueue.ComputeNodeGroupConfigurationProperty"]]]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -3365,13 +3365,13 @@ class CfnQueueProps:
     @builtins.property
     def slurm_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnQueue.SlurmConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.SlurmConfigurationProperty"]]:
         '''Additional options related to the Slurm scheduler.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-queue.html#cfn-pcs-queue-slurmconfiguration
         '''
         result = self._values.get("slurm_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnQueue.SlurmConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.SlurmConfigurationProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:

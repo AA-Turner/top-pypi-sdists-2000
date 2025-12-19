@@ -679,7 +679,7 @@ class IAIAgentRef(
 
     @builtins.property
     @jsii.member(jsii_name="aiAgentRef")
-    def ai_agent_ref(self) -> AIAgentReference:
+    def ai_agent_ref(self) -> "AIAgentReference":
         '''(experimental) A reference to a AIAgent resource.
 
         :stability: experimental
@@ -700,12 +700,12 @@ class _IAIAgentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aiAgentRef")
-    def ai_agent_ref(self) -> AIAgentReference:
+    def ai_agent_ref(self) -> "AIAgentReference":
         '''(experimental) A reference to a AIAgent resource.
 
         :stability: experimental
         '''
-        return typing.cast(AIAgentReference, jsii.get(self, "aiAgentRef"))
+        return typing.cast("AIAgentReference", jsii.get(self, "aiAgentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAIAgentRef).__jsii_proxy_class__ = lambda : _IAIAgentRefProxy
@@ -724,7 +724,7 @@ class IAIAgentVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="aiAgentVersionRef")
-    def ai_agent_version_ref(self) -> AIAgentVersionReference:
+    def ai_agent_version_ref(self) -> "AIAgentVersionReference":
         '''(experimental) A reference to a AIAgentVersion resource.
 
         :stability: experimental
@@ -745,12 +745,12 @@ class _IAIAgentVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aiAgentVersionRef")
-    def ai_agent_version_ref(self) -> AIAgentVersionReference:
+    def ai_agent_version_ref(self) -> "AIAgentVersionReference":
         '''(experimental) A reference to a AIAgentVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(AIAgentVersionReference, jsii.get(self, "aiAgentVersionRef"))
+        return typing.cast("AIAgentVersionReference", jsii.get(self, "aiAgentVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAIAgentVersionRef).__jsii_proxy_class__ = lambda : _IAIAgentVersionRefProxy
@@ -769,7 +769,7 @@ class IAIGuardrailRef(
 
     @builtins.property
     @jsii.member(jsii_name="aiGuardrailRef")
-    def ai_guardrail_ref(self) -> AIGuardrailReference:
+    def ai_guardrail_ref(self) -> "AIGuardrailReference":
         '''(experimental) A reference to a AIGuardrail resource.
 
         :stability: experimental
@@ -790,12 +790,12 @@ class _IAIGuardrailRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aiGuardrailRef")
-    def ai_guardrail_ref(self) -> AIGuardrailReference:
+    def ai_guardrail_ref(self) -> "AIGuardrailReference":
         '''(experimental) A reference to a AIGuardrail resource.
 
         :stability: experimental
         '''
-        return typing.cast(AIGuardrailReference, jsii.get(self, "aiGuardrailRef"))
+        return typing.cast("AIGuardrailReference", jsii.get(self, "aiGuardrailRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAIGuardrailRef).__jsii_proxy_class__ = lambda : _IAIGuardrailRefProxy
@@ -814,7 +814,7 @@ class IAIGuardrailVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="aiGuardrailVersionRef")
-    def ai_guardrail_version_ref(self) -> AIGuardrailVersionReference:
+    def ai_guardrail_version_ref(self) -> "AIGuardrailVersionReference":
         '''(experimental) A reference to a AIGuardrailVersion resource.
 
         :stability: experimental
@@ -835,12 +835,12 @@ class _IAIGuardrailVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aiGuardrailVersionRef")
-    def ai_guardrail_version_ref(self) -> AIGuardrailVersionReference:
+    def ai_guardrail_version_ref(self) -> "AIGuardrailVersionReference":
         '''(experimental) A reference to a AIGuardrailVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(AIGuardrailVersionReference, jsii.get(self, "aiGuardrailVersionRef"))
+        return typing.cast("AIGuardrailVersionReference", jsii.get(self, "aiGuardrailVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAIGuardrailVersionRef).__jsii_proxy_class__ = lambda : _IAIGuardrailVersionRefProxy
@@ -859,7 +859,7 @@ class IAIPromptRef(
 
     @builtins.property
     @jsii.member(jsii_name="aiPromptRef")
-    def ai_prompt_ref(self) -> AIPromptReference:
+    def ai_prompt_ref(self) -> "AIPromptReference":
         '''(experimental) A reference to a AIPrompt resource.
 
         :stability: experimental
@@ -880,12 +880,12 @@ class _IAIPromptRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aiPromptRef")
-    def ai_prompt_ref(self) -> AIPromptReference:
+    def ai_prompt_ref(self) -> "AIPromptReference":
         '''(experimental) A reference to a AIPrompt resource.
 
         :stability: experimental
         '''
-        return typing.cast(AIPromptReference, jsii.get(self, "aiPromptRef"))
+        return typing.cast("AIPromptReference", jsii.get(self, "aiPromptRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAIPromptRef).__jsii_proxy_class__ = lambda : _IAIPromptRefProxy
@@ -904,7 +904,7 @@ class IAIPromptVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="aiPromptVersionRef")
-    def ai_prompt_version_ref(self) -> AIPromptVersionReference:
+    def ai_prompt_version_ref(self) -> "AIPromptVersionReference":
         '''(experimental) A reference to a AIPromptVersion resource.
 
         :stability: experimental
@@ -925,12 +925,12 @@ class _IAIPromptVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aiPromptVersionRef")
-    def ai_prompt_version_ref(self) -> AIPromptVersionReference:
+    def ai_prompt_version_ref(self) -> "AIPromptVersionReference":
         '''(experimental) A reference to a AIPromptVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(AIPromptVersionReference, jsii.get(self, "aiPromptVersionRef"))
+        return typing.cast("AIPromptVersionReference", jsii.get(self, "aiPromptVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAIPromptVersionRef).__jsii_proxy_class__ = lambda : _IAIPromptVersionRefProxy
@@ -949,7 +949,7 @@ class IAssistantAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="assistantAssociationRef")
-    def assistant_association_ref(self) -> AssistantAssociationReference:
+    def assistant_association_ref(self) -> "AssistantAssociationReference":
         '''(experimental) A reference to a AssistantAssociation resource.
 
         :stability: experimental
@@ -970,12 +970,12 @@ class _IAssistantAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="assistantAssociationRef")
-    def assistant_association_ref(self) -> AssistantAssociationReference:
+    def assistant_association_ref(self) -> "AssistantAssociationReference":
         '''(experimental) A reference to a AssistantAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(AssistantAssociationReference, jsii.get(self, "assistantAssociationRef"))
+        return typing.cast("AssistantAssociationReference", jsii.get(self, "assistantAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAssistantAssociationRef).__jsii_proxy_class__ = lambda : _IAssistantAssociationRefProxy
@@ -994,7 +994,7 @@ class IAssistantRef(
 
     @builtins.property
     @jsii.member(jsii_name="assistantRef")
-    def assistant_ref(self) -> AssistantReference:
+    def assistant_ref(self) -> "AssistantReference":
         '''(experimental) A reference to a Assistant resource.
 
         :stability: experimental
@@ -1015,12 +1015,12 @@ class _IAssistantRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="assistantRef")
-    def assistant_ref(self) -> AssistantReference:
+    def assistant_ref(self) -> "AssistantReference":
         '''(experimental) A reference to a Assistant resource.
 
         :stability: experimental
         '''
-        return typing.cast(AssistantReference, jsii.get(self, "assistantRef"))
+        return typing.cast("AssistantReference", jsii.get(self, "assistantRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAssistantRef).__jsii_proxy_class__ = lambda : _IAssistantRefProxy

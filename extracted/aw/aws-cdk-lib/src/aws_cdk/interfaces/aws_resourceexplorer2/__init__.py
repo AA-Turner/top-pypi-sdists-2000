@@ -98,7 +98,7 @@ class IDefaultViewAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="defaultViewAssociationRef")
-    def default_view_association_ref(self) -> DefaultViewAssociationReference:
+    def default_view_association_ref(self) -> "DefaultViewAssociationReference":
         '''(experimental) A reference to a DefaultViewAssociation resource.
 
         :stability: experimental
@@ -119,12 +119,12 @@ class _IDefaultViewAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="defaultViewAssociationRef")
-    def default_view_association_ref(self) -> DefaultViewAssociationReference:
+    def default_view_association_ref(self) -> "DefaultViewAssociationReference":
         '''(experimental) A reference to a DefaultViewAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(DefaultViewAssociationReference, jsii.get(self, "defaultViewAssociationRef"))
+        return typing.cast("DefaultViewAssociationReference", jsii.get(self, "defaultViewAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDefaultViewAssociationRef).__jsii_proxy_class__ = lambda : _IDefaultViewAssociationRefProxy

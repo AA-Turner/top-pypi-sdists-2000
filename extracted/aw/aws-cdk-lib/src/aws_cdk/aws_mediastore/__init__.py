@@ -91,6 +91,7 @@ class CfnContainer(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_mediastore as mediastore
@@ -127,16 +128,16 @@ class CfnContainer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         container_name: builtins.str,
-        access_logging_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        cors_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.CorsRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        access_logging_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        cors_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.CorsRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         lifecycle_policy: typing.Optional[builtins.str] = None,
-        metric_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.MetricPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        metric_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.MetricPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         policy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::MediaStore::Container``.
 
@@ -168,7 +169,7 @@ class CfnContainer(
 
     @jsii.member(jsii_name="arnForContainer")
     @builtins.classmethod
-    def arn_for_container(cls, resource: _IContainerRef_72a1f507) -> builtins.str:
+    def arn_for_container(cls, resource: "_IContainerRef_72a1f507") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -190,7 +191,7 @@ class CfnContainer(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContainer", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -245,15 +246,15 @@ class CfnContainer(
 
     @builtins.property
     @jsii.member(jsii_name="containerRef")
-    def container_ref(self) -> _ContainerReference_26fdd3c6:
+    def container_ref(self) -> "_ContainerReference_26fdd3c6":
         '''A reference to a Container resource.'''
-        return typing.cast(_ContainerReference_26fdd3c6, jsii.get(self, "containerRef"))
+        return typing.cast("_ContainerReference_26fdd3c6", jsii.get(self, "containerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="containerName")
@@ -272,14 +273,14 @@ class CfnContainer(
     @jsii.member(jsii_name="accessLoggingEnabled")
     def access_logging_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The state of access logging on the container.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "accessLoggingEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "accessLoggingEnabled"))
 
     @access_logging_enabled.setter
     def access_logging_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aa774c7c5a8092f174195c7b605a1516571a888f5be6c2df2f5a2584d8b581c1)
@@ -290,16 +291,16 @@ class CfnContainer(
     @jsii.member(jsii_name="corsPolicy")
     def cors_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.CorsRuleProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.CorsRuleProperty"]]]]:
         '''.. epigraph::
 
    End of support notice: On November 13, 2025, AWS will discontinue support for AWS Elemental MediaStore.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.CorsRuleProperty"]]]], jsii.get(self, "corsPolicy"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.CorsRuleProperty"]]]], jsii.get(self, "corsPolicy"))
 
     @cors_policy.setter
     def cors_policy(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.CorsRuleProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.CorsRuleProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__467426d7f4bad0107abaee763e8b698f349eb6f7e80bec30278bb48af442d70e)
@@ -325,14 +326,14 @@ class CfnContainer(
     @jsii.member(jsii_name="metricPolicy")
     def metric_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.MetricPolicyProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.MetricPolicyProperty"]]:
         '''The metric policy that is associated with the container.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.MetricPolicyProperty"]], jsii.get(self, "metricPolicy"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.MetricPolicyProperty"]], jsii.get(self, "metricPolicy"))
 
     @metric_policy.setter
     def metric_policy(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.MetricPolicyProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.MetricPolicyProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6fbe17101e1cbabe4ada35b516bf8c1866a67969c1a431e3e00e64089669ff87)
@@ -354,11 +355,11 @@ class CfnContainer(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__af8f09217c9fcffb59ad0a4b95e405df0ad5d481e0b17745a0feaf4d46e6c880)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -512,7 +513,7 @@ class CfnContainer(
             self,
             *,
             container_level_metrics: builtins.str,
-            metric_policy_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.MetricPolicyRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            metric_policy_rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.MetricPolicyRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The metric policy that is associated with the container.
 
@@ -565,7 +566,7 @@ class CfnContainer(
         @builtins.property
         def metric_policy_rules(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.MetricPolicyRuleProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.MetricPolicyRuleProperty"]]]]:
             '''A parameter that holds an array of rules that enable metrics at the object level.
 
             This parameter is optional, but if you choose to include it, you must also include at least one rule. By default, you can include up to five rules. You can also `request a quota increase <https://docs.aws.amazon.com/servicequotas/home?region=us-east-1#!/services/mediastore/quotas>`_ to allow up to 300 rules per policy.
@@ -573,7 +574,7 @@ class CfnContainer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediastore-container-metricpolicy.html#cfn-mediastore-container-metricpolicy-metricpolicyrules
             '''
             result = self._values.get("metric_policy_rules")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContainer.MetricPolicyRuleProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.MetricPolicyRuleProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -683,12 +684,12 @@ class CfnContainerProps:
         self,
         *,
         container_name: builtins.str,
-        access_logging_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        cors_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainer.CorsRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        access_logging_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        cors_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.CorsRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         lifecycle_policy: typing.Optional[builtins.str] = None,
-        metric_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainer.MetricPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        metric_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContainer.MetricPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         policy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnContainer``.
 
@@ -705,6 +706,7 @@ class CfnContainerProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_mediastore as mediastore
@@ -778,7 +780,7 @@ class CfnContainerProps:
     @builtins.property
     def access_logging_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The state of access logging on the container.
 
         This value is ``false`` by default, indicating that AWS Elemental MediaStore does not send access logs to Amazon CloudWatch Logs. When you enable access logging on the container, MediaStore changes this value to ``true`` , indicating that the service delivers access logs for objects stored in that container to CloudWatch Logs.
@@ -786,12 +788,12 @@ class CfnContainerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediastore-container.html#cfn-mediastore-container-accessloggingenabled
         '''
         result = self._values.get("access_logging_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def cors_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContainer.CorsRuleProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.CorsRuleProperty"]]]]:
         '''.. epigraph::
 
    End of support notice: On November 13, 2025, AWS will discontinue support for AWS Elemental MediaStore.
@@ -807,7 +809,7 @@ class CfnContainerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediastore-container.html#cfn-mediastore-container-corspolicy
         '''
         result = self._values.get("cors_policy")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContainer.CorsRuleProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContainer.CorsRuleProperty"]]]], result)
 
     @builtins.property
     def lifecycle_policy(self) -> typing.Optional[builtins.str]:
@@ -829,7 +831,7 @@ class CfnContainerProps:
     @builtins.property
     def metric_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainer.MetricPolicyProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.MetricPolicyProperty"]]:
         '''The metric policy that is associated with the container.
 
         A metric policy allows AWS Elemental MediaStore to send metrics to Amazon CloudWatch. In the policy, you must indicate whether you want MediaStore to send container-level metrics. You can also include rules to define groups of objects that you want MediaStore to send object-level metrics for.
@@ -839,7 +841,7 @@ class CfnContainerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediastore-container.html#cfn-mediastore-container-metricpolicy
         '''
         result = self._values.get("metric_policy")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainer.MetricPolicyProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContainer.MetricPolicyProperty"]], result)
 
     @builtins.property
     def policy(self) -> typing.Optional[builtins.str]:
@@ -855,12 +857,12 @@ class CfnContainerProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediastore-container.html#cfn-mediastore-container-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

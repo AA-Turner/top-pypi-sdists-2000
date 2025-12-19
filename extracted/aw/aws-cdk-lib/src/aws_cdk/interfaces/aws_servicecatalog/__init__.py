@@ -196,7 +196,7 @@ class IAcceptedPortfolioShareRef(
 
     @builtins.property
     @jsii.member(jsii_name="acceptedPortfolioShareRef")
-    def accepted_portfolio_share_ref(self) -> AcceptedPortfolioShareReference:
+    def accepted_portfolio_share_ref(self) -> "AcceptedPortfolioShareReference":
         '''(experimental) A reference to a AcceptedPortfolioShare resource.
 
         :stability: experimental
@@ -217,12 +217,12 @@ class _IAcceptedPortfolioShareRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="acceptedPortfolioShareRef")
-    def accepted_portfolio_share_ref(self) -> AcceptedPortfolioShareReference:
+    def accepted_portfolio_share_ref(self) -> "AcceptedPortfolioShareReference":
         '''(experimental) A reference to a AcceptedPortfolioShare resource.
 
         :stability: experimental
         '''
-        return typing.cast(AcceptedPortfolioShareReference, jsii.get(self, "acceptedPortfolioShareRef"))
+        return typing.cast("AcceptedPortfolioShareReference", jsii.get(self, "acceptedPortfolioShareRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAcceptedPortfolioShareRef).__jsii_proxy_class__ = lambda : _IAcceptedPortfolioShareRefProxy
@@ -243,7 +243,7 @@ class ICloudFormationProductRef(
 
     @builtins.property
     @jsii.member(jsii_name="cloudFormationProductRef")
-    def cloud_formation_product_ref(self) -> CloudFormationProductReference:
+    def cloud_formation_product_ref(self) -> "CloudFormationProductReference":
         '''(experimental) A reference to a CloudFormationProduct resource.
 
         :stability: experimental
@@ -264,12 +264,12 @@ class _ICloudFormationProductRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="cloudFormationProductRef")
-    def cloud_formation_product_ref(self) -> CloudFormationProductReference:
+    def cloud_formation_product_ref(self) -> "CloudFormationProductReference":
         '''(experimental) A reference to a CloudFormationProduct resource.
 
         :stability: experimental
         '''
-        return typing.cast(CloudFormationProductReference, jsii.get(self, "cloudFormationProductRef"))
+        return typing.cast("CloudFormationProductReference", jsii.get(self, "cloudFormationProductRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICloudFormationProductRef).__jsii_proxy_class__ = lambda : _ICloudFormationProductRefProxy
@@ -292,7 +292,7 @@ class ICloudFormationProvisionedProductRef(
     @jsii.member(jsii_name="cloudFormationProvisionedProductRef")
     def cloud_formation_provisioned_product_ref(
         self,
-    ) -> CloudFormationProvisionedProductReference:
+    ) -> "CloudFormationProvisionedProductReference":
         '''(experimental) A reference to a CloudFormationProvisionedProduct resource.
 
         :stability: experimental
@@ -315,12 +315,12 @@ class _ICloudFormationProvisionedProductRefProxy(
     @jsii.member(jsii_name="cloudFormationProvisionedProductRef")
     def cloud_formation_provisioned_product_ref(
         self,
-    ) -> CloudFormationProvisionedProductReference:
+    ) -> "CloudFormationProvisionedProductReference":
         '''(experimental) A reference to a CloudFormationProvisionedProduct resource.
 
         :stability: experimental
         '''
-        return typing.cast(CloudFormationProvisionedProductReference, jsii.get(self, "cloudFormationProvisionedProductRef"))
+        return typing.cast("CloudFormationProvisionedProductReference", jsii.get(self, "cloudFormationProvisionedProductRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICloudFormationProvisionedProductRef).__jsii_proxy_class__ = lambda : _ICloudFormationProvisionedProductRefProxy

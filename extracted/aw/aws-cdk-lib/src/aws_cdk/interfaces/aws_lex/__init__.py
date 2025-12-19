@@ -248,7 +248,7 @@ class IBotAliasRef(
 
     @builtins.property
     @jsii.member(jsii_name="botAliasRef")
-    def bot_alias_ref(self) -> BotAliasReference:
+    def bot_alias_ref(self) -> "BotAliasReference":
         '''(experimental) A reference to a BotAlias resource.
 
         :stability: experimental
@@ -269,12 +269,12 @@ class _IBotAliasRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="botAliasRef")
-    def bot_alias_ref(self) -> BotAliasReference:
+    def bot_alias_ref(self) -> "BotAliasReference":
         '''(experimental) A reference to a BotAlias resource.
 
         :stability: experimental
         '''
-        return typing.cast(BotAliasReference, jsii.get(self, "botAliasRef"))
+        return typing.cast("BotAliasReference", jsii.get(self, "botAliasRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBotAliasRef).__jsii_proxy_class__ = lambda : _IBotAliasRefProxy
@@ -293,7 +293,7 @@ class IBotRef(
 
     @builtins.property
     @jsii.member(jsii_name="botRef")
-    def bot_ref(self) -> BotReference:
+    def bot_ref(self) -> "BotReference":
         '''(experimental) A reference to a Bot resource.
 
         :stability: experimental
@@ -314,12 +314,12 @@ class _IBotRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="botRef")
-    def bot_ref(self) -> BotReference:
+    def bot_ref(self) -> "BotReference":
         '''(experimental) A reference to a Bot resource.
 
         :stability: experimental
         '''
-        return typing.cast(BotReference, jsii.get(self, "botRef"))
+        return typing.cast("BotReference", jsii.get(self, "botRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBotRef).__jsii_proxy_class__ = lambda : _IBotRefProxy
@@ -338,7 +338,7 @@ class IBotVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="botVersionRef")
-    def bot_version_ref(self) -> BotVersionReference:
+    def bot_version_ref(self) -> "BotVersionReference":
         '''(experimental) A reference to a BotVersion resource.
 
         :stability: experimental
@@ -359,12 +359,12 @@ class _IBotVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="botVersionRef")
-    def bot_version_ref(self) -> BotVersionReference:
+    def bot_version_ref(self) -> "BotVersionReference":
         '''(experimental) A reference to a BotVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(BotVersionReference, jsii.get(self, "botVersionRef"))
+        return typing.cast("BotVersionReference", jsii.get(self, "botVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBotVersionRef).__jsii_proxy_class__ = lambda : _IBotVersionRefProxy

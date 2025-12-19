@@ -232,7 +232,7 @@ class IApplicationRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
@@ -253,12 +253,12 @@ class _IApplicationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> ApplicationReference:
+    def application_ref(self) -> "ApplicationReference":
         '''(experimental) A reference to a Application resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationReference, jsii.get(self, "applicationRef"))
+        return typing.cast("ApplicationReference", jsii.get(self, "applicationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationRef).__jsii_proxy_class__ = lambda : _IApplicationRefProxy
@@ -279,7 +279,7 @@ class IDataIntegrationRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataIntegrationRef")
-    def data_integration_ref(self) -> DataIntegrationReference:
+    def data_integration_ref(self) -> "DataIntegrationReference":
         '''(experimental) A reference to a DataIntegration resource.
 
         :stability: experimental
@@ -300,12 +300,12 @@ class _IDataIntegrationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataIntegrationRef")
-    def data_integration_ref(self) -> DataIntegrationReference:
+    def data_integration_ref(self) -> "DataIntegrationReference":
         '''(experimental) A reference to a DataIntegration resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataIntegrationReference, jsii.get(self, "dataIntegrationRef"))
+        return typing.cast("DataIntegrationReference", jsii.get(self, "dataIntegrationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataIntegrationRef).__jsii_proxy_class__ = lambda : _IDataIntegrationRefProxy
@@ -326,7 +326,7 @@ class IEventIntegrationRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventIntegrationRef")
-    def event_integration_ref(self) -> EventIntegrationReference:
+    def event_integration_ref(self) -> "EventIntegrationReference":
         '''(experimental) A reference to a EventIntegration resource.
 
         :stability: experimental
@@ -347,12 +347,12 @@ class _IEventIntegrationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventIntegrationRef")
-    def event_integration_ref(self) -> EventIntegrationReference:
+    def event_integration_ref(self) -> "EventIntegrationReference":
         '''(experimental) A reference to a EventIntegration resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventIntegrationReference, jsii.get(self, "eventIntegrationRef"))
+        return typing.cast("EventIntegrationReference", jsii.get(self, "eventIntegrationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventIntegrationRef).__jsii_proxy_class__ = lambda : _IEventIntegrationRefProxy

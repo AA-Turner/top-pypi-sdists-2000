@@ -96,7 +96,7 @@ class IAliasRef(
 
     @builtins.property
     @jsii.member(jsii_name="aliasRef")
-    def alias_ref(self) -> AliasReference:
+    def alias_ref(self) -> "AliasReference":
         '''(experimental) A reference to a Alias resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IAliasRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aliasRef")
-    def alias_ref(self) -> AliasReference:
+    def alias_ref(self) -> "AliasReference":
         '''(experimental) A reference to a Alias resource.
 
         :stability: experimental
         '''
-        return typing.cast(AliasReference, jsii.get(self, "aliasRef"))
+        return typing.cast("AliasReference", jsii.get(self, "aliasRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAliasRef).__jsii_proxy_class__ = lambda : _IAliasRefProxy

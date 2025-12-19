@@ -778,7 +778,7 @@ class IAccountAuditConfigurationRef(
 
     @builtins.property
     @jsii.member(jsii_name="accountAuditConfigurationRef")
-    def account_audit_configuration_ref(self) -> AccountAuditConfigurationReference:
+    def account_audit_configuration_ref(self) -> "AccountAuditConfigurationReference":
         '''(experimental) A reference to a AccountAuditConfiguration resource.
 
         :stability: experimental
@@ -799,12 +799,12 @@ class _IAccountAuditConfigurationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accountAuditConfigurationRef")
-    def account_audit_configuration_ref(self) -> AccountAuditConfigurationReference:
+    def account_audit_configuration_ref(self) -> "AccountAuditConfigurationReference":
         '''(experimental) A reference to a AccountAuditConfiguration resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccountAuditConfigurationReference, jsii.get(self, "accountAuditConfigurationRef"))
+        return typing.cast("AccountAuditConfigurationReference", jsii.get(self, "accountAuditConfigurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccountAuditConfigurationRef).__jsii_proxy_class__ = lambda : _IAccountAuditConfigurationRefProxy
@@ -823,7 +823,7 @@ class IAuthorizerRef(
 
     @builtins.property
     @jsii.member(jsii_name="authorizerRef")
-    def authorizer_ref(self) -> AuthorizerReference:
+    def authorizer_ref(self) -> "AuthorizerReference":
         '''(experimental) A reference to a Authorizer resource.
 
         :stability: experimental
@@ -844,12 +844,12 @@ class _IAuthorizerRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="authorizerRef")
-    def authorizer_ref(self) -> AuthorizerReference:
+    def authorizer_ref(self) -> "AuthorizerReference":
         '''(experimental) A reference to a Authorizer resource.
 
         :stability: experimental
         '''
-        return typing.cast(AuthorizerReference, jsii.get(self, "authorizerRef"))
+        return typing.cast("AuthorizerReference", jsii.get(self, "authorizerRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAuthorizerRef).__jsii_proxy_class__ = lambda : _IAuthorizerRefProxy
@@ -868,7 +868,7 @@ class IBillingGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="billingGroupRef")
-    def billing_group_ref(self) -> BillingGroupReference:
+    def billing_group_ref(self) -> "BillingGroupReference":
         '''(experimental) A reference to a BillingGroup resource.
 
         :stability: experimental
@@ -889,12 +889,12 @@ class _IBillingGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="billingGroupRef")
-    def billing_group_ref(self) -> BillingGroupReference:
+    def billing_group_ref(self) -> "BillingGroupReference":
         '''(experimental) A reference to a BillingGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(BillingGroupReference, jsii.get(self, "billingGroupRef"))
+        return typing.cast("BillingGroupReference", jsii.get(self, "billingGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBillingGroupRef).__jsii_proxy_class__ = lambda : _IBillingGroupRefProxy
@@ -913,7 +913,7 @@ class ICACertificateRef(
 
     @builtins.property
     @jsii.member(jsii_name="caCertificateRef")
-    def ca_certificate_ref(self) -> CACertificateReference:
+    def ca_certificate_ref(self) -> "CACertificateReference":
         '''(experimental) A reference to a CACertificate resource.
 
         :stability: experimental
@@ -934,12 +934,12 @@ class _ICACertificateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="caCertificateRef")
-    def ca_certificate_ref(self) -> CACertificateReference:
+    def ca_certificate_ref(self) -> "CACertificateReference":
         '''(experimental) A reference to a CACertificate resource.
 
         :stability: experimental
         '''
-        return typing.cast(CACertificateReference, jsii.get(self, "caCertificateRef"))
+        return typing.cast("CACertificateReference", jsii.get(self, "caCertificateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICACertificateRef).__jsii_proxy_class__ = lambda : _ICACertificateRefProxy
@@ -958,7 +958,7 @@ class ICertificateProviderRef(
 
     @builtins.property
     @jsii.member(jsii_name="certificateProviderRef")
-    def certificate_provider_ref(self) -> CertificateProviderReference:
+    def certificate_provider_ref(self) -> "CertificateProviderReference":
         '''(experimental) A reference to a CertificateProvider resource.
 
         :stability: experimental
@@ -979,12 +979,12 @@ class _ICertificateProviderRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="certificateProviderRef")
-    def certificate_provider_ref(self) -> CertificateProviderReference:
+    def certificate_provider_ref(self) -> "CertificateProviderReference":
         '''(experimental) A reference to a CertificateProvider resource.
 
         :stability: experimental
         '''
-        return typing.cast(CertificateProviderReference, jsii.get(self, "certificateProviderRef"))
+        return typing.cast("CertificateProviderReference", jsii.get(self, "certificateProviderRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICertificateProviderRef).__jsii_proxy_class__ = lambda : _ICertificateProviderRefProxy
@@ -1003,7 +1003,7 @@ class ICertificateRef(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> CertificateReference:
+    def certificate_ref(self) -> "CertificateReference":
         '''(experimental) A reference to a Certificate resource.
 
         :stability: experimental
@@ -1024,12 +1024,12 @@ class _ICertificateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> CertificateReference:
+    def certificate_ref(self) -> "CertificateReference":
         '''(experimental) A reference to a Certificate resource.
 
         :stability: experimental
         '''
-        return typing.cast(CertificateReference, jsii.get(self, "certificateRef"))
+        return typing.cast("CertificateReference", jsii.get(self, "certificateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICertificateRef).__jsii_proxy_class__ = lambda : _ICertificateRefProxy
@@ -1048,7 +1048,7 @@ class ICommandRef(
 
     @builtins.property
     @jsii.member(jsii_name="commandRef")
-    def command_ref(self) -> CommandReference:
+    def command_ref(self) -> "CommandReference":
         '''(experimental) A reference to a Command resource.
 
         :stability: experimental
@@ -1069,12 +1069,12 @@ class _ICommandRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="commandRef")
-    def command_ref(self) -> CommandReference:
+    def command_ref(self) -> "CommandReference":
         '''(experimental) A reference to a Command resource.
 
         :stability: experimental
         '''
-        return typing.cast(CommandReference, jsii.get(self, "commandRef"))
+        return typing.cast("CommandReference", jsii.get(self, "commandRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICommandRef).__jsii_proxy_class__ = lambda : _ICommandRefProxy
@@ -1093,7 +1093,7 @@ class ICustomMetricRef(
 
     @builtins.property
     @jsii.member(jsii_name="customMetricRef")
-    def custom_metric_ref(self) -> CustomMetricReference:
+    def custom_metric_ref(self) -> "CustomMetricReference":
         '''(experimental) A reference to a CustomMetric resource.
 
         :stability: experimental
@@ -1114,12 +1114,12 @@ class _ICustomMetricRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="customMetricRef")
-    def custom_metric_ref(self) -> CustomMetricReference:
+    def custom_metric_ref(self) -> "CustomMetricReference":
         '''(experimental) A reference to a CustomMetric resource.
 
         :stability: experimental
         '''
-        return typing.cast(CustomMetricReference, jsii.get(self, "customMetricRef"))
+        return typing.cast("CustomMetricReference", jsii.get(self, "customMetricRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICustomMetricRef).__jsii_proxy_class__ = lambda : _ICustomMetricRefProxy
@@ -1138,7 +1138,7 @@ class IDimensionRef(
 
     @builtins.property
     @jsii.member(jsii_name="dimensionRef")
-    def dimension_ref(self) -> DimensionReference:
+    def dimension_ref(self) -> "DimensionReference":
         '''(experimental) A reference to a Dimension resource.
 
         :stability: experimental
@@ -1159,12 +1159,12 @@ class _IDimensionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dimensionRef")
-    def dimension_ref(self) -> DimensionReference:
+    def dimension_ref(self) -> "DimensionReference":
         '''(experimental) A reference to a Dimension resource.
 
         :stability: experimental
         '''
-        return typing.cast(DimensionReference, jsii.get(self, "dimensionRef"))
+        return typing.cast("DimensionReference", jsii.get(self, "dimensionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDimensionRef).__jsii_proxy_class__ = lambda : _IDimensionRefProxy
@@ -1183,7 +1183,7 @@ class IDomainConfigurationRef(
 
     @builtins.property
     @jsii.member(jsii_name="domainConfigurationRef")
-    def domain_configuration_ref(self) -> DomainConfigurationReference:
+    def domain_configuration_ref(self) -> "DomainConfigurationReference":
         '''(experimental) A reference to a DomainConfiguration resource.
 
         :stability: experimental
@@ -1204,12 +1204,12 @@ class _IDomainConfigurationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="domainConfigurationRef")
-    def domain_configuration_ref(self) -> DomainConfigurationReference:
+    def domain_configuration_ref(self) -> "DomainConfigurationReference":
         '''(experimental) A reference to a DomainConfiguration resource.
 
         :stability: experimental
         '''
-        return typing.cast(DomainConfigurationReference, jsii.get(self, "domainConfigurationRef"))
+        return typing.cast("DomainConfigurationReference", jsii.get(self, "domainConfigurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDomainConfigurationRef).__jsii_proxy_class__ = lambda : _IDomainConfigurationRefProxy
@@ -1228,7 +1228,7 @@ class IEncryptionConfigurationRef(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionConfigurationRef")
-    def encryption_configuration_ref(self) -> EncryptionConfigurationReference:
+    def encryption_configuration_ref(self) -> "EncryptionConfigurationReference":
         '''(experimental) A reference to a EncryptionConfiguration resource.
 
         :stability: experimental
@@ -1249,12 +1249,12 @@ class _IEncryptionConfigurationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionConfigurationRef")
-    def encryption_configuration_ref(self) -> EncryptionConfigurationReference:
+    def encryption_configuration_ref(self) -> "EncryptionConfigurationReference":
         '''(experimental) A reference to a EncryptionConfiguration resource.
 
         :stability: experimental
         '''
-        return typing.cast(EncryptionConfigurationReference, jsii.get(self, "encryptionConfigurationRef"))
+        return typing.cast("EncryptionConfigurationReference", jsii.get(self, "encryptionConfigurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEncryptionConfigurationRef).__jsii_proxy_class__ = lambda : _IEncryptionConfigurationRefProxy
@@ -1273,7 +1273,7 @@ class IFleetMetricRef(
 
     @builtins.property
     @jsii.member(jsii_name="fleetMetricRef")
-    def fleet_metric_ref(self) -> FleetMetricReference:
+    def fleet_metric_ref(self) -> "FleetMetricReference":
         '''(experimental) A reference to a FleetMetric resource.
 
         :stability: experimental
@@ -1294,12 +1294,12 @@ class _IFleetMetricRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="fleetMetricRef")
-    def fleet_metric_ref(self) -> FleetMetricReference:
+    def fleet_metric_ref(self) -> "FleetMetricReference":
         '''(experimental) A reference to a FleetMetric resource.
 
         :stability: experimental
         '''
-        return typing.cast(FleetMetricReference, jsii.get(self, "fleetMetricRef"))
+        return typing.cast("FleetMetricReference", jsii.get(self, "fleetMetricRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFleetMetricRef).__jsii_proxy_class__ = lambda : _IFleetMetricRefProxy

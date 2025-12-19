@@ -110,15 +110,15 @@ class CfnMicrosoftAD(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         password: builtins.str,
-        vpc_settings: typing.Union[_IResolvable_da3f097b, typing.Union["CfnMicrosoftAD.VpcSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
-        create_alias: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        vpc_settings: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMicrosoftAD.VpcSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        create_alias: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         edition: typing.Optional[builtins.str] = None,
-        enable_sso: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_sso: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         short_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::DirectoryService::MicrosoftAD``.
@@ -162,7 +162,7 @@ class CfnMicrosoftAD(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMicrosoftAD", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -229,9 +229,9 @@ class CfnMicrosoftAD(
 
     @builtins.property
     @jsii.member(jsii_name="microsoftAdRef")
-    def microsoft_ad_ref(self) -> _MicrosoftADReference_19ed304e:
+    def microsoft_ad_ref(self) -> "_MicrosoftADReference_19ed304e":
         '''A reference to a MicrosoftAD resource.'''
-        return typing.cast(_MicrosoftADReference_19ed304e, jsii.get(self, "microsoftAdRef"))
+        return typing.cast("_MicrosoftADReference_19ed304e", jsii.get(self, "microsoftAdRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -263,14 +263,14 @@ class CfnMicrosoftAD(
     @jsii.member(jsii_name="vpcSettings")
     def vpc_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnMicrosoftAD.VpcSettingsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnMicrosoftAD.VpcSettingsProperty"]:
         '''Specifies the VPC settings of the Microsoft AD directory server in AWS .'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnMicrosoftAD.VpcSettingsProperty"], jsii.get(self, "vpcSettings"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMicrosoftAD.VpcSettingsProperty"], jsii.get(self, "vpcSettings"))
 
     @vpc_settings.setter
     def vpc_settings(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnMicrosoftAD.VpcSettingsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnMicrosoftAD.VpcSettingsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__75297793aadbe4453a84753658d85991f077c5f42c9305cc2731693d29a5901f)
@@ -281,14 +281,14 @@ class CfnMicrosoftAD(
     @jsii.member(jsii_name="createAlias")
     def create_alias(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies an alias for a directory and assigns the alias to the directory.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "createAlias"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "createAlias"))
 
     @create_alias.setter
     def create_alias(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__62ec978df7e1a1e2437893c2704eb4532e0b65321074386cfb030c8e8a99864c)
@@ -312,14 +312,14 @@ class CfnMicrosoftAD(
     @jsii.member(jsii_name="enableSso")
     def enable_sso(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to enable single sign-on for a Microsoft Active Directory in AWS .'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableSso"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enableSso"))
 
     @enable_sso.setter
     def enable_sso(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1ce84c71d0f4e6c8581052317cb887db3b1dcb81863f7e39f3f520193f6c5287)
@@ -432,10 +432,10 @@ class CfnMicrosoftADProps:
         *,
         name: builtins.str,
         password: builtins.str,
-        vpc_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnMicrosoftAD.VpcSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
-        create_alias: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        vpc_settings: typing.Union["_IResolvable_da3f097b", typing.Union["CfnMicrosoftAD.VpcSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        create_alias: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         edition: typing.Optional[builtins.str] = None,
-        enable_sso: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_sso: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         short_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnMicrosoftAD``.
@@ -520,19 +520,19 @@ class CfnMicrosoftADProps:
     @builtins.property
     def vpc_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnMicrosoftAD.VpcSettingsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnMicrosoftAD.VpcSettingsProperty"]:
         '''Specifies the VPC settings of the Microsoft AD directory server in AWS .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-microsoftad.html#cfn-directoryservice-microsoftad-vpcsettings
         '''
         result = self._values.get("vpc_settings")
         assert result is not None, "Required property 'vpc_settings' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnMicrosoftAD.VpcSettingsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnMicrosoftAD.VpcSettingsProperty"], result)
 
     @builtins.property
     def create_alias(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies an alias for a directory and assigns the alias to the directory.
 
         The alias is used to construct the access URL for the directory, such as ``http://<alias>.awsapps.com`` . By default, CloudFormation does not create an alias.
@@ -543,7 +543,7 @@ class CfnMicrosoftADProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-microsoftad.html#cfn-directoryservice-microsoftad-createalias
         '''
         result = self._values.get("create_alias")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def edition(self) -> typing.Optional[builtins.str]:
@@ -559,7 +559,7 @@ class CfnMicrosoftADProps:
     @builtins.property
     def enable_sso(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to enable single sign-on for a Microsoft Active Directory in AWS .
 
         Single sign-on allows users in your directory to access certain AWS services from a computer joined to the directory without having to enter their credentials separately. If you don't specify a value, CloudFormation disables single sign-on by default.
@@ -567,7 +567,7 @@ class CfnMicrosoftADProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-microsoftad.html#cfn-directoryservice-microsoftad-enablesso
         '''
         result = self._values.get("enable_sso")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def short_name(self) -> typing.Optional[builtins.str]:
@@ -631,15 +631,15 @@ class CfnSimpleAD(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         size: builtins.str,
-        vpc_settings: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSimpleAD.VpcSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
-        create_alias: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        vpc_settings: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimpleAD.VpcSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        create_alias: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
-        enable_sso: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_sso: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         password: typing.Optional[builtins.str] = None,
         short_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -675,7 +675,7 @@ class CfnSimpleAD(
 
     @jsii.member(jsii_name="arnForSimpleAD")
     @builtins.classmethod
-    def arn_for_simple_ad(cls, resource: _ISimpleADRef_73ed9e5f) -> builtins.str:
+    def arn_for_simple_ad(cls, resource: "_ISimpleADRef_73ed9e5f") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -688,10 +688,10 @@ class CfnSimpleAD(
     @builtins.classmethod
     def from_directory_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         directory_id: builtins.str,
-    ) -> _ISimpleADRef_73ed9e5f:
+    ) -> "_ISimpleADRef_73ed9e5f":
         '''Creates a new ISimpleADRef from a directoryId.
 
         :param scope: -
@@ -703,7 +703,7 @@ class CfnSimpleAD(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument directory_id", value=directory_id, expected_type=type_hints["directory_id"])
-        return typing.cast(_ISimpleADRef_73ed9e5f, jsii.sinvoke(cls, "fromDirectoryId", [scope, id, directory_id]))
+        return typing.cast("_ISimpleADRef_73ed9e5f", jsii.sinvoke(cls, "fromDirectoryId", [scope, id, directory_id]))
 
     @jsii.member(jsii_name="isCfnSimpleAD")
     @builtins.classmethod
@@ -718,7 +718,7 @@ class CfnSimpleAD(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSimpleAD", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -793,9 +793,9 @@ class CfnSimpleAD(
 
     @builtins.property
     @jsii.member(jsii_name="simpleAdRef")
-    def simple_ad_ref(self) -> _SimpleADReference_3e97e624:
+    def simple_ad_ref(self) -> "_SimpleADReference_3e97e624":
         '''A reference to a SimpleAD resource.'''
-        return typing.cast(_SimpleADReference_3e97e624, jsii.get(self, "simpleAdRef"))
+        return typing.cast("_SimpleADReference_3e97e624", jsii.get(self, "simpleAdRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -827,14 +827,14 @@ class CfnSimpleAD(
     @jsii.member(jsii_name="vpcSettings")
     def vpc_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSimpleAD.VpcSettingsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSimpleAD.VpcSettingsProperty"]:
         '''A `DirectoryVpcSettings <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_DirectoryVpcSettings.html>`_ object that contains additional information for the operation.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSimpleAD.VpcSettingsProperty"], jsii.get(self, "vpcSettings"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSimpleAD.VpcSettingsProperty"], jsii.get(self, "vpcSettings"))
 
     @vpc_settings.setter
     def vpc_settings(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnSimpleAD.VpcSettingsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnSimpleAD.VpcSettingsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6428aafed6f7ca93dde6ec0c6f047a3df0f1e0611e08f0e547ace9ba88f2405f)
@@ -845,14 +845,14 @@ class CfnSimpleAD(
     @jsii.member(jsii_name="createAlias")
     def create_alias(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If set to ``true`` , specifies an alias for a directory and assigns the alias to the directory.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "createAlias"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "createAlias"))
 
     @create_alias.setter
     def create_alias(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6fd6c1eca9f65d5acc1c1fa49fb9c2d7595239e452ab418012abd1a20597b5f3)
@@ -876,14 +876,14 @@ class CfnSimpleAD(
     @jsii.member(jsii_name="enableSso")
     def enable_sso(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to enable single sign-on for a directory.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableSso"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enableSso"))
 
     @enable_sso.setter
     def enable_sso(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c87bb88b5d4bdf801ed5bb1eff487991cd1104ca7311fda40c4c7666e682d3f6)
@@ -1010,10 +1010,10 @@ class CfnSimpleADProps:
         *,
         name: builtins.str,
         size: builtins.str,
-        vpc_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimpleAD.VpcSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
-        create_alias: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        vpc_settings: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimpleAD.VpcSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        create_alias: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
-        enable_sso: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_sso: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         password: typing.Optional[builtins.str] = None,
         short_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -1104,19 +1104,19 @@ class CfnSimpleADProps:
     @builtins.property
     def vpc_settings(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnSimpleAD.VpcSettingsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSimpleAD.VpcSettingsProperty"]:
         '''A `DirectoryVpcSettings <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_DirectoryVpcSettings.html>`_ object that contains additional information for the operation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-vpcsettings
         '''
         result = self._values.get("vpc_settings")
         assert result is not None, "Required property 'vpc_settings' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSimpleAD.VpcSettingsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSimpleAD.VpcSettingsProperty"], result)
 
     @builtins.property
     def create_alias(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If set to ``true`` , specifies an alias for a directory and assigns the alias to the directory.
 
         The alias is used to construct the access URL for the directory, such as ``http://<alias>.awsapps.com`` . By default, this property is set to ``false`` .
@@ -1127,7 +1127,7 @@ class CfnSimpleADProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-createalias
         '''
         result = self._values.get("create_alias")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1141,7 +1141,7 @@ class CfnSimpleADProps:
     @builtins.property
     def enable_sso(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to enable single sign-on for a directory.
 
         If you don't specify a value, CloudFormation disables single sign-on by default.
@@ -1149,7 +1149,7 @@ class CfnSimpleADProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-enablesso
         '''
         result = self._values.get("enable_sso")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def password(self) -> typing.Optional[builtins.str]:

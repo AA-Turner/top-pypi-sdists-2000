@@ -983,7 +983,7 @@ class ICapacityManagerDataExportRef(
 
     @builtins.property
     @jsii.member(jsii_name="capacityManagerDataExportRef")
-    def capacity_manager_data_export_ref(self) -> CapacityManagerDataExportReference:
+    def capacity_manager_data_export_ref(self) -> "CapacityManagerDataExportReference":
         '''(experimental) A reference to a CapacityManagerDataExport resource.
 
         :stability: experimental
@@ -1004,12 +1004,12 @@ class _ICapacityManagerDataExportRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="capacityManagerDataExportRef")
-    def capacity_manager_data_export_ref(self) -> CapacityManagerDataExportReference:
+    def capacity_manager_data_export_ref(self) -> "CapacityManagerDataExportReference":
         '''(experimental) A reference to a CapacityManagerDataExport resource.
 
         :stability: experimental
         '''
-        return typing.cast(CapacityManagerDataExportReference, jsii.get(self, "capacityManagerDataExportRef"))
+        return typing.cast("CapacityManagerDataExportReference", jsii.get(self, "capacityManagerDataExportRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICapacityManagerDataExportRef).__jsii_proxy_class__ = lambda : _ICapacityManagerDataExportRefProxy
@@ -1030,7 +1030,7 @@ class ICapacityReservationFleetRef(
 
     @builtins.property
     @jsii.member(jsii_name="capacityReservationFleetRef")
-    def capacity_reservation_fleet_ref(self) -> CapacityReservationFleetReference:
+    def capacity_reservation_fleet_ref(self) -> "CapacityReservationFleetReference":
         '''(experimental) A reference to a CapacityReservationFleet resource.
 
         :stability: experimental
@@ -1051,12 +1051,12 @@ class _ICapacityReservationFleetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="capacityReservationFleetRef")
-    def capacity_reservation_fleet_ref(self) -> CapacityReservationFleetReference:
+    def capacity_reservation_fleet_ref(self) -> "CapacityReservationFleetReference":
         '''(experimental) A reference to a CapacityReservationFleet resource.
 
         :stability: experimental
         '''
-        return typing.cast(CapacityReservationFleetReference, jsii.get(self, "capacityReservationFleetRef"))
+        return typing.cast("CapacityReservationFleetReference", jsii.get(self, "capacityReservationFleetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICapacityReservationFleetRef).__jsii_proxy_class__ = lambda : _ICapacityReservationFleetRefProxy
@@ -1075,7 +1075,7 @@ class ICapacityReservationRef(
 
     @builtins.property
     @jsii.member(jsii_name="capacityReservationRef")
-    def capacity_reservation_ref(self) -> CapacityReservationReference:
+    def capacity_reservation_ref(self) -> "CapacityReservationReference":
         '''(experimental) A reference to a CapacityReservation resource.
 
         :stability: experimental
@@ -1096,12 +1096,12 @@ class _ICapacityReservationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="capacityReservationRef")
-    def capacity_reservation_ref(self) -> CapacityReservationReference:
+    def capacity_reservation_ref(self) -> "CapacityReservationReference":
         '''(experimental) A reference to a CapacityReservation resource.
 
         :stability: experimental
         '''
-        return typing.cast(CapacityReservationReference, jsii.get(self, "capacityReservationRef"))
+        return typing.cast("CapacityReservationReference", jsii.get(self, "capacityReservationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICapacityReservationRef).__jsii_proxy_class__ = lambda : _ICapacityReservationRefProxy
@@ -1120,7 +1120,7 @@ class ICarrierGatewayRef(
 
     @builtins.property
     @jsii.member(jsii_name="carrierGatewayRef")
-    def carrier_gateway_ref(self) -> CarrierGatewayReference:
+    def carrier_gateway_ref(self) -> "CarrierGatewayReference":
         '''(experimental) A reference to a CarrierGateway resource.
 
         :stability: experimental
@@ -1141,12 +1141,12 @@ class _ICarrierGatewayRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="carrierGatewayRef")
-    def carrier_gateway_ref(self) -> CarrierGatewayReference:
+    def carrier_gateway_ref(self) -> "CarrierGatewayReference":
         '''(experimental) A reference to a CarrierGateway resource.
 
         :stability: experimental
         '''
-        return typing.cast(CarrierGatewayReference, jsii.get(self, "carrierGatewayRef"))
+        return typing.cast("CarrierGatewayReference", jsii.get(self, "carrierGatewayRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICarrierGatewayRef).__jsii_proxy_class__ = lambda : _ICarrierGatewayRefProxy
@@ -1167,7 +1167,9 @@ class IClientVpnAuthorizationRuleRef(
 
     @builtins.property
     @jsii.member(jsii_name="clientVpnAuthorizationRuleRef")
-    def client_vpn_authorization_rule_ref(self) -> ClientVpnAuthorizationRuleReference:
+    def client_vpn_authorization_rule_ref(
+        self,
+    ) -> "ClientVpnAuthorizationRuleReference":
         '''(experimental) A reference to a ClientVpnAuthorizationRule resource.
 
         :stability: experimental
@@ -1188,12 +1190,14 @@ class _IClientVpnAuthorizationRuleRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clientVpnAuthorizationRuleRef")
-    def client_vpn_authorization_rule_ref(self) -> ClientVpnAuthorizationRuleReference:
+    def client_vpn_authorization_rule_ref(
+        self,
+    ) -> "ClientVpnAuthorizationRuleReference":
         '''(experimental) A reference to a ClientVpnAuthorizationRule resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClientVpnAuthorizationRuleReference, jsii.get(self, "clientVpnAuthorizationRuleRef"))
+        return typing.cast("ClientVpnAuthorizationRuleReference", jsii.get(self, "clientVpnAuthorizationRuleRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClientVpnAuthorizationRuleRef).__jsii_proxy_class__ = lambda : _IClientVpnAuthorizationRuleRefProxy
@@ -1212,7 +1216,7 @@ class IClientVpnEndpointRef(
 
     @builtins.property
     @jsii.member(jsii_name="clientVpnEndpointRef")
-    def client_vpn_endpoint_ref(self) -> ClientVpnEndpointReference:
+    def client_vpn_endpoint_ref(self) -> "ClientVpnEndpointReference":
         '''(experimental) A reference to a ClientVpnEndpoint resource.
 
         :stability: experimental
@@ -1233,12 +1237,12 @@ class _IClientVpnEndpointRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clientVpnEndpointRef")
-    def client_vpn_endpoint_ref(self) -> ClientVpnEndpointReference:
+    def client_vpn_endpoint_ref(self) -> "ClientVpnEndpointReference":
         '''(experimental) A reference to a ClientVpnEndpoint resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClientVpnEndpointReference, jsii.get(self, "clientVpnEndpointRef"))
+        return typing.cast("ClientVpnEndpointReference", jsii.get(self, "clientVpnEndpointRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClientVpnEndpointRef).__jsii_proxy_class__ = lambda : _IClientVpnEndpointRefProxy
@@ -1257,7 +1261,7 @@ class IClientVpnRouteRef(
 
     @builtins.property
     @jsii.member(jsii_name="clientVpnRouteRef")
-    def client_vpn_route_ref(self) -> ClientVpnRouteReference:
+    def client_vpn_route_ref(self) -> "ClientVpnRouteReference":
         '''(experimental) A reference to a ClientVpnRoute resource.
 
         :stability: experimental
@@ -1278,12 +1282,12 @@ class _IClientVpnRouteRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clientVpnRouteRef")
-    def client_vpn_route_ref(self) -> ClientVpnRouteReference:
+    def client_vpn_route_ref(self) -> "ClientVpnRouteReference":
         '''(experimental) A reference to a ClientVpnRoute resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClientVpnRouteReference, jsii.get(self, "clientVpnRouteRef"))
+        return typing.cast("ClientVpnRouteReference", jsii.get(self, "clientVpnRouteRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClientVpnRouteRef).__jsii_proxy_class__ = lambda : _IClientVpnRouteRefProxy
@@ -1306,7 +1310,7 @@ class IClientVpnTargetNetworkAssociationRef(
     @jsii.member(jsii_name="clientVpnTargetNetworkAssociationRef")
     def client_vpn_target_network_association_ref(
         self,
-    ) -> ClientVpnTargetNetworkAssociationReference:
+    ) -> "ClientVpnTargetNetworkAssociationReference":
         '''(experimental) A reference to a ClientVpnTargetNetworkAssociation resource.
 
         :stability: experimental
@@ -1329,12 +1333,12 @@ class _IClientVpnTargetNetworkAssociationRefProxy(
     @jsii.member(jsii_name="clientVpnTargetNetworkAssociationRef")
     def client_vpn_target_network_association_ref(
         self,
-    ) -> ClientVpnTargetNetworkAssociationReference:
+    ) -> "ClientVpnTargetNetworkAssociationReference":
         '''(experimental) A reference to a ClientVpnTargetNetworkAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClientVpnTargetNetworkAssociationReference, jsii.get(self, "clientVpnTargetNetworkAssociationRef"))
+        return typing.cast("ClientVpnTargetNetworkAssociationReference", jsii.get(self, "clientVpnTargetNetworkAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClientVpnTargetNetworkAssociationRef).__jsii_proxy_class__ = lambda : _IClientVpnTargetNetworkAssociationRefProxy
@@ -1353,7 +1357,7 @@ class ICustomerGatewayRef(
 
     @builtins.property
     @jsii.member(jsii_name="customerGatewayRef")
-    def customer_gateway_ref(self) -> CustomerGatewayReference:
+    def customer_gateway_ref(self) -> "CustomerGatewayReference":
         '''(experimental) A reference to a CustomerGateway resource.
 
         :stability: experimental
@@ -1374,12 +1378,12 @@ class _ICustomerGatewayRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="customerGatewayRef")
-    def customer_gateway_ref(self) -> CustomerGatewayReference:
+    def customer_gateway_ref(self) -> "CustomerGatewayReference":
         '''(experimental) A reference to a CustomerGateway resource.
 
         :stability: experimental
         '''
-        return typing.cast(CustomerGatewayReference, jsii.get(self, "customerGatewayRef"))
+        return typing.cast("CustomerGatewayReference", jsii.get(self, "customerGatewayRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICustomerGatewayRef).__jsii_proxy_class__ = lambda : _ICustomerGatewayRefProxy
@@ -1398,7 +1402,7 @@ class IDHCPOptionsRef(
 
     @builtins.property
     @jsii.member(jsii_name="dhcpOptionsRef")
-    def dhcp_options_ref(self) -> DHCPOptionsReference:
+    def dhcp_options_ref(self) -> "DHCPOptionsReference":
         '''(experimental) A reference to a DHCPOptions resource.
 
         :stability: experimental
@@ -1419,12 +1423,12 @@ class _IDHCPOptionsRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dhcpOptionsRef")
-    def dhcp_options_ref(self) -> DHCPOptionsReference:
+    def dhcp_options_ref(self) -> "DHCPOptionsReference":
         '''(experimental) A reference to a DHCPOptions resource.
 
         :stability: experimental
         '''
-        return typing.cast(DHCPOptionsReference, jsii.get(self, "dhcpOptionsRef"))
+        return typing.cast("DHCPOptionsReference", jsii.get(self, "dhcpOptionsRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDHCPOptionsRef).__jsii_proxy_class__ = lambda : _IDHCPOptionsRefProxy
@@ -1443,7 +1447,7 @@ class IEC2FleetRef(
 
     @builtins.property
     @jsii.member(jsii_name="ec2FleetRef")
-    def ec2_fleet_ref(self) -> EC2FleetReference:
+    def ec2_fleet_ref(self) -> "EC2FleetReference":
         '''(experimental) A reference to a EC2Fleet resource.
 
         :stability: experimental
@@ -1464,12 +1468,12 @@ class _IEC2FleetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="ec2FleetRef")
-    def ec2_fleet_ref(self) -> EC2FleetReference:
+    def ec2_fleet_ref(self) -> "EC2FleetReference":
         '''(experimental) A reference to a EC2Fleet resource.
 
         :stability: experimental
         '''
-        return typing.cast(EC2FleetReference, jsii.get(self, "ec2FleetRef"))
+        return typing.cast("EC2FleetReference", jsii.get(self, "ec2FleetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEC2FleetRef).__jsii_proxy_class__ = lambda : _IEC2FleetRefProxy
@@ -1488,7 +1492,7 @@ class IEIPAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="eipAssociationRef")
-    def eip_association_ref(self) -> EIPAssociationReference:
+    def eip_association_ref(self) -> "EIPAssociationReference":
         '''(experimental) A reference to a EIPAssociation resource.
 
         :stability: experimental
@@ -1509,12 +1513,12 @@ class _IEIPAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eipAssociationRef")
-    def eip_association_ref(self) -> EIPAssociationReference:
+    def eip_association_ref(self) -> "EIPAssociationReference":
         '''(experimental) A reference to a EIPAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(EIPAssociationReference, jsii.get(self, "eipAssociationRef"))
+        return typing.cast("EIPAssociationReference", jsii.get(self, "eipAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEIPAssociationRef).__jsii_proxy_class__ = lambda : _IEIPAssociationRefProxy
@@ -1533,7 +1537,7 @@ class IEIPRef(
 
     @builtins.property
     @jsii.member(jsii_name="eipRef")
-    def eip_ref(self) -> EIPReference:
+    def eip_ref(self) -> "EIPReference":
         '''(experimental) A reference to a EIP resource.
 
         :stability: experimental
@@ -1554,12 +1558,12 @@ class _IEIPRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eipRef")
-    def eip_ref(self) -> EIPReference:
+    def eip_ref(self) -> "EIPReference":
         '''(experimental) A reference to a EIP resource.
 
         :stability: experimental
         '''
-        return typing.cast(EIPReference, jsii.get(self, "eipRef"))
+        return typing.cast("EIPReference", jsii.get(self, "eipRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEIPRef).__jsii_proxy_class__ = lambda : _IEIPRefProxy
@@ -1580,7 +1584,7 @@ class IEgressOnlyInternetGatewayRef(
 
     @builtins.property
     @jsii.member(jsii_name="egressOnlyInternetGatewayRef")
-    def egress_only_internet_gateway_ref(self) -> EgressOnlyInternetGatewayReference:
+    def egress_only_internet_gateway_ref(self) -> "EgressOnlyInternetGatewayReference":
         '''(experimental) A reference to a EgressOnlyInternetGateway resource.
 
         :stability: experimental
@@ -1601,12 +1605,12 @@ class _IEgressOnlyInternetGatewayRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="egressOnlyInternetGatewayRef")
-    def egress_only_internet_gateway_ref(self) -> EgressOnlyInternetGatewayReference:
+    def egress_only_internet_gateway_ref(self) -> "EgressOnlyInternetGatewayReference":
         '''(experimental) A reference to a EgressOnlyInternetGateway resource.
 
         :stability: experimental
         '''
-        return typing.cast(EgressOnlyInternetGatewayReference, jsii.get(self, "egressOnlyInternetGatewayRef"))
+        return typing.cast("EgressOnlyInternetGatewayReference", jsii.get(self, "egressOnlyInternetGatewayRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEgressOnlyInternetGatewayRef).__jsii_proxy_class__ = lambda : _IEgressOnlyInternetGatewayRefProxy
@@ -1629,7 +1633,7 @@ class IEnclaveCertificateIamRoleAssociationRef(
     @jsii.member(jsii_name="enclaveCertificateIamRoleAssociationRef")
     def enclave_certificate_iam_role_association_ref(
         self,
-    ) -> EnclaveCertificateIamRoleAssociationReference:
+    ) -> "EnclaveCertificateIamRoleAssociationReference":
         '''(experimental) A reference to a EnclaveCertificateIamRoleAssociation resource.
 
         :stability: experimental
@@ -1652,12 +1656,12 @@ class _IEnclaveCertificateIamRoleAssociationRefProxy(
     @jsii.member(jsii_name="enclaveCertificateIamRoleAssociationRef")
     def enclave_certificate_iam_role_association_ref(
         self,
-    ) -> EnclaveCertificateIamRoleAssociationReference:
+    ) -> "EnclaveCertificateIamRoleAssociationReference":
         '''(experimental) A reference to a EnclaveCertificateIamRoleAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnclaveCertificateIamRoleAssociationReference, jsii.get(self, "enclaveCertificateIamRoleAssociationRef"))
+        return typing.cast("EnclaveCertificateIamRoleAssociationReference", jsii.get(self, "enclaveCertificateIamRoleAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnclaveCertificateIamRoleAssociationRef).__jsii_proxy_class__ = lambda : _IEnclaveCertificateIamRoleAssociationRefProxy
@@ -1676,7 +1680,7 @@ class IFlowLogRef(
 
     @builtins.property
     @jsii.member(jsii_name="flowLogRef")
-    def flow_log_ref(self) -> FlowLogReference:
+    def flow_log_ref(self) -> "FlowLogReference":
         '''(experimental) A reference to a FlowLog resource.
 
         :stability: experimental
@@ -1697,12 +1701,12 @@ class _IFlowLogRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="flowLogRef")
-    def flow_log_ref(self) -> FlowLogReference:
+    def flow_log_ref(self) -> "FlowLogReference":
         '''(experimental) A reference to a FlowLog resource.
 
         :stability: experimental
         '''
-        return typing.cast(FlowLogReference, jsii.get(self, "flowLogRef"))
+        return typing.cast("FlowLogReference", jsii.get(self, "flowLogRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFlowLogRef).__jsii_proxy_class__ = lambda : _IFlowLogRefProxy
@@ -1725,7 +1729,7 @@ class IGatewayRouteTableAssociationRef(
     @jsii.member(jsii_name="gatewayRouteTableAssociationRef")
     def gateway_route_table_association_ref(
         self,
-    ) -> GatewayRouteTableAssociationReference:
+    ) -> "GatewayRouteTableAssociationReference":
         '''(experimental) A reference to a GatewayRouteTableAssociation resource.
 
         :stability: experimental
@@ -1748,12 +1752,12 @@ class _IGatewayRouteTableAssociationRefProxy(
     @jsii.member(jsii_name="gatewayRouteTableAssociationRef")
     def gateway_route_table_association_ref(
         self,
-    ) -> GatewayRouteTableAssociationReference:
+    ) -> "GatewayRouteTableAssociationReference":
         '''(experimental) A reference to a GatewayRouteTableAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(GatewayRouteTableAssociationReference, jsii.get(self, "gatewayRouteTableAssociationRef"))
+        return typing.cast("GatewayRouteTableAssociationReference", jsii.get(self, "gatewayRouteTableAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGatewayRouteTableAssociationRef).__jsii_proxy_class__ = lambda : _IGatewayRouteTableAssociationRefProxy
@@ -1772,7 +1776,7 @@ class IHostRef(
 
     @builtins.property
     @jsii.member(jsii_name="hostRef")
-    def host_ref(self) -> HostReference:
+    def host_ref(self) -> "HostReference":
         '''(experimental) A reference to a Host resource.
 
         :stability: experimental
@@ -1793,12 +1797,12 @@ class _IHostRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="hostRef")
-    def host_ref(self) -> HostReference:
+    def host_ref(self) -> "HostReference":
         '''(experimental) A reference to a Host resource.
 
         :stability: experimental
         '''
-        return typing.cast(HostReference, jsii.get(self, "hostRef"))
+        return typing.cast("HostReference", jsii.get(self, "hostRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHostRef).__jsii_proxy_class__ = lambda : _IHostRefProxy

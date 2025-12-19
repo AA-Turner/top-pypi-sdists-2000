@@ -308,6 +308,7 @@ If you're passing a replication bucket created in a different stack,
 like this:
 
 ```python
+from aws_cdk import Environment
 # Passing a replication bucket created in a different stack.
 app = App()
 replication_stack = Stack(app, "ReplicationStack",
@@ -339,6 +340,7 @@ and so you can't reference them across environments.
 In this case, you need to use an alias in place of the key when creating the bucket:
 
 ```python
+from aws_cdk import Environment
 # Passing an encrypted replication bucket created in a different stack.
 app = App()
 replication_stack = Stack(app, "ReplicationStack",
@@ -1092,7 +1094,7 @@ class ActionArtifactBounds:
     name_mapping={"bucket": "bucket", "role": "role"},
 )
 class ActionBindOptions:
-    def __init__(self, *, bucket: _IBucket_42e086fd, role: _IRole_235f5d8e) -> None:
+    def __init__(self, *, bucket: "_IBucket_42e086fd", role: "_IRole_235f5d8e") -> None:
         '''
         :param bucket: 
         :param role: 
@@ -1125,16 +1127,16 @@ class ActionBindOptions:
         }
 
     @builtins.property
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
-        return typing.cast(_IRole_235f5d8e, result)
+        return typing.cast("_IRole_235f5d8e", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1252,8 +1254,8 @@ class ActionProperties:
         self,
         *,
         action_name: builtins.str,
-        artifact_bounds: typing.Union[ActionArtifactBounds, typing.Dict[builtins.str, typing.Any]],
-        category: ActionCategory,
+        artifact_bounds: typing.Union["ActionArtifactBounds", typing.Dict[builtins.str, typing.Any]],
+        category: "ActionCategory",
         provider: builtins.str,
         account: typing.Optional[builtins.str] = None,
         commands: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -1262,10 +1264,10 @@ class ActionProperties:
         output_variables: typing.Optional[typing.Sequence[builtins.str]] = None,
         owner: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
-        resource: typing.Optional[_IResource_c80c4260] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        resource: typing.Optional["_IResource_c80c4260"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         run_order: typing.Optional[jsii.Number] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         variables_namespace: typing.Optional[builtins.str] = None,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -1390,13 +1392,13 @@ class ActionProperties:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def artifact_bounds(self) -> ActionArtifactBounds:
+    def artifact_bounds(self) -> "ActionArtifactBounds":
         result = self._values.get("artifact_bounds")
         assert result is not None, "Required property 'artifact_bounds' is missing"
-        return typing.cast(ActionArtifactBounds, result)
+        return typing.cast("ActionArtifactBounds", result)
 
     @builtins.property
-    def category(self) -> ActionCategory:
+    def category(self) -> "ActionCategory":
         '''The category of the action.
 
         The category defines which action type the owner
@@ -1404,7 +1406,7 @@ class ActionProperties:
         '''
         result = self._values.get("category")
         assert result is not None, "Required property 'category' is missing"
-        return typing.cast(ActionCategory, result)
+        return typing.cast("ActionCategory", result)
 
     @builtins.property
     def provider(self) -> builtins.str:
@@ -1475,19 +1477,19 @@ class ActionProperties:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def resource(self) -> typing.Optional[_IResource_c80c4260]:
+    def resource(self) -> typing.Optional["_IResource_c80c4260"]:
         '''The optional resource that is backing this Action.
 
         This is used for automatically handling Actions backed by
         resources from a different account and/or region.
         '''
         result = self._values.get("resource")
-        return typing.cast(typing.Optional[_IResource_c80c4260], result)
+        return typing.cast(typing.Optional["_IResource_c80c4260"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def run_order(self) -> typing.Optional[jsii.Number]:
@@ -1499,7 +1501,7 @@ class ActionProperties:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''A timeout duration that can be applied against the ActionType’s default timeout value specified in Quotas for AWS CodePipeline.
 
         This attribute is available only to the ``ManualApprovalAction``.
@@ -1511,7 +1513,7 @@ class ActionProperties:
         :see: https://docs.aws.amazon.com/codepipeline/latest/userguide/limits.html
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def variables_namespace(self) -> typing.Optional[builtins.str]:
@@ -1697,9 +1699,9 @@ class Artifact(
 
     @builtins.property
     @jsii.member(jsii_name="s3Location")
-    def s3_location(self) -> _Location_0948fa7f:
+    def s3_location(self) -> "_Location_0948fa7f":
         '''Returns the location of the .zip file in S3 that this Artifact represents. Used by Lambda's ``CfnParametersCode`` when being deployed in a CodePipeline.'''
-        return typing.cast(_Location_0948fa7f, jsii.get(self, "s3Location"))
+        return typing.cast("_Location_0948fa7f", jsii.get(self, "s3Location"))
 
     @builtins.property
     @jsii.member(jsii_name="url")
@@ -1786,7 +1788,7 @@ class ArtifactPath(
         )
     '''
 
-    def __init__(self, artifact: Artifact, file_name: builtins.str) -> None:
+    def __init__(self, artifact: "Artifact", file_name: builtins.str) -> None:
         '''
         :param artifact: -
         :param file_name: -
@@ -1816,8 +1818,8 @@ class ArtifactPath(
 
     @builtins.property
     @jsii.member(jsii_name="artifact")
-    def artifact(self) -> Artifact:
-        return typing.cast(Artifact, jsii.get(self, "artifact"))
+    def artifact(self) -> "Artifact":
+        return typing.cast("Artifact", jsii.get(self, "artifact"))
 
     @builtins.property
     @jsii.member(jsii_name="fileName")
@@ -1846,6 +1848,7 @@ class CfnCustomActionType(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codepipeline as codepipeline
@@ -1890,17 +1893,17 @@ class CfnCustomActionType(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         category: builtins.str,
-        input_artifact_details: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomActionType.ArtifactDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
-        output_artifact_details: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomActionType.ArtifactDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+        input_artifact_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomActionType.ArtifactDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+        output_artifact_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomActionType.ArtifactDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
         provider: builtins.str,
         version: builtins.str,
-        configuration_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomActionType.ConfigurationPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomActionType.SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        configuration_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomActionType.ConfigurationPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomActionType.SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodePipeline::CustomActionType``.
 
@@ -1945,7 +1948,7 @@ class CfnCustomActionType(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCustomActionType", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1989,15 +1992,15 @@ class CfnCustomActionType(
 
     @builtins.property
     @jsii.member(jsii_name="customActionTypeRef")
-    def custom_action_type_ref(self) -> _CustomActionTypeReference_33108ea2:
+    def custom_action_type_ref(self) -> "_CustomActionTypeReference_33108ea2":
         '''A reference to a CustomActionType resource.'''
-        return typing.cast(_CustomActionTypeReference_33108ea2, jsii.get(self, "customActionTypeRef"))
+        return typing.cast("_CustomActionTypeReference_33108ea2", jsii.get(self, "customActionTypeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="category")
@@ -2016,14 +2019,14 @@ class CfnCustomActionType(
     @jsii.member(jsii_name="inputArtifactDetails")
     def input_artifact_details(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCustomActionType.ArtifactDetailsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ArtifactDetailsProperty"]:
         '''The details of the input artifact for the action, such as its commit ID.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCustomActionType.ArtifactDetailsProperty"], jsii.get(self, "inputArtifactDetails"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ArtifactDetailsProperty"], jsii.get(self, "inputArtifactDetails"))
 
     @input_artifact_details.setter
     def input_artifact_details(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCustomActionType.ArtifactDetailsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ArtifactDetailsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5abbefb7711c6ac8fee86970355cf39da61cfdbeeff9fcdd31187c0ea8cd135a)
@@ -2034,14 +2037,14 @@ class CfnCustomActionType(
     @jsii.member(jsii_name="outputArtifactDetails")
     def output_artifact_details(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCustomActionType.ArtifactDetailsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ArtifactDetailsProperty"]:
         '''The details of the output artifact of the action, such as its commit ID.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCustomActionType.ArtifactDetailsProperty"], jsii.get(self, "outputArtifactDetails"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ArtifactDetailsProperty"], jsii.get(self, "outputArtifactDetails"))
 
     @output_artifact_details.setter
     def output_artifact_details(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCustomActionType.ArtifactDetailsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ArtifactDetailsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ca94c06f2447ab8f300404012ca985842a1c924d39b95d7000e4e6100e8920fc)
@@ -2078,14 +2081,14 @@ class CfnCustomActionType(
     @jsii.member(jsii_name="configurationProperties")
     def configuration_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCustomActionType.ConfigurationPropertiesProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ConfigurationPropertiesProperty"]]]]:
         '''The configuration properties for the custom action.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCustomActionType.ConfigurationPropertiesProperty"]]]], jsii.get(self, "configurationProperties"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ConfigurationPropertiesProperty"]]]], jsii.get(self, "configurationProperties"))
 
     @configuration_properties.setter
     def configuration_properties(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCustomActionType.ConfigurationPropertiesProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ConfigurationPropertiesProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__95897f720bf78acfdcb4029f33ba76d388ddec5448f67fcb680d96e2d4077286)
@@ -2096,14 +2099,14 @@ class CfnCustomActionType(
     @jsii.member(jsii_name="settings")
     def settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomActionType.SettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.SettingsProperty"]]:
         '''URLs that provide users information about this custom action.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomActionType.SettingsProperty"]], jsii.get(self, "settings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.SettingsProperty"]], jsii.get(self, "settings"))
 
     @settings.setter
     def settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomActionType.SettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.SettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__800b508e1c17e495d8907c9ede304fd8a7a38490bdc0c4d110dc4b23d97cd524)
@@ -2112,12 +2115,12 @@ class CfnCustomActionType(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the custom action.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a74116a4f73e121e1bb171b9327fc820e06cb39239a52bc2d3ebe44fda9fbbf2)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2214,12 +2217,12 @@ class CfnCustomActionType(
         def __init__(
             self,
             *,
-            key: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            key: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             name: builtins.str,
-            required: typing.Union[builtins.bool, _IResolvable_da3f097b],
-            secret: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            required: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+            secret: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             description: typing.Optional[builtins.str] = None,
-            queryable: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            queryable: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The configuration properties for the custom action.
@@ -2280,14 +2283,14 @@ class CfnCustomActionType(
                 self._values["type"] = type
 
         @builtins.property
-        def key(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def key(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Whether the configuration property is a key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-customactiontype-configurationproperties.html#cfn-codepipeline-customactiontype-configurationproperties-key
             '''
             result = self._values.get("key")
             assert result is not None, "Required property 'key' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def name(self) -> builtins.str:
@@ -2300,17 +2303,17 @@ class CfnCustomActionType(
             return typing.cast(builtins.str, result)
 
         @builtins.property
-        def required(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def required(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Whether the configuration property is a required value.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-customactiontype-configurationproperties.html#cfn-codepipeline-customactiontype-configurationproperties-required
             '''
             result = self._values.get("required")
             assert result is not None, "Required property 'required' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
-        def secret(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def secret(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Whether the configuration property is secret.
 
             Secrets are hidden from all calls except for ``GetJobDetails`` , ``GetThirdPartyJobDetails`` , ``PollForJobs`` , and ``PollForThirdPartyJobs`` .
@@ -2321,7 +2324,7 @@ class CfnCustomActionType(
             '''
             result = self._values.get("secret")
             assert result is not None, "Required property 'secret' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def description(self) -> typing.Optional[builtins.str]:
@@ -2335,7 +2338,7 @@ class CfnCustomActionType(
         @builtins.property
         def queryable(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates that the property is used with ``PollForJobs`` .
 
             When creating a custom action, an action can have up to one queryable property. If it has one, that property must be both required and not secret.
@@ -2345,7 +2348,7 @@ class CfnCustomActionType(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-customactiontype-configurationproperties.html#cfn-codepipeline-customactiontype-configurationproperties-queryable
             '''
             result = self._values.get("queryable")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def type(self) -> typing.Optional[builtins.str]:
@@ -2496,13 +2499,13 @@ class CfnCustomActionTypeProps:
         self,
         *,
         category: builtins.str,
-        input_artifact_details: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomActionType.ArtifactDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
-        output_artifact_details: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomActionType.ArtifactDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+        input_artifact_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomActionType.ArtifactDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+        output_artifact_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomActionType.ArtifactDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
         provider: builtins.str,
         version: builtins.str,
-        configuration_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomActionType.ConfigurationPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomActionType.SettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        configuration_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomActionType.ConfigurationPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomActionType.SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCustomActionType``.
 
@@ -2520,6 +2523,7 @@ class CfnCustomActionTypeProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codepipeline as codepipeline
@@ -2598,26 +2602,26 @@ class CfnCustomActionTypeProps:
     @builtins.property
     def input_artifact_details(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCustomActionType.ArtifactDetailsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ArtifactDetailsProperty"]:
         '''The details of the input artifact for the action, such as its commit ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-customactiontype.html#cfn-codepipeline-customactiontype-inputartifactdetails
         '''
         result = self._values.get("input_artifact_details")
         assert result is not None, "Required property 'input_artifact_details' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCustomActionType.ArtifactDetailsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ArtifactDetailsProperty"], result)
 
     @builtins.property
     def output_artifact_details(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCustomActionType.ArtifactDetailsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ArtifactDetailsProperty"]:
         '''The details of the output artifact of the action, such as its commit ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-customactiontype.html#cfn-codepipeline-customactiontype-outputartifactdetails
         '''
         result = self._values.get("output_artifact_details")
         assert result is not None, "Required property 'output_artifact_details' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCustomActionType.ArtifactDetailsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ArtifactDetailsProperty"], result)
 
     @builtins.property
     def provider(self) -> builtins.str:
@@ -2642,7 +2646,7 @@ class CfnCustomActionTypeProps:
     @builtins.property
     def configuration_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCustomActionType.ConfigurationPropertiesProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ConfigurationPropertiesProperty"]]]]:
         '''The configuration properties for the custom action.
 
         .. epigraph::
@@ -2652,27 +2656,27 @@ class CfnCustomActionTypeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-customactiontype.html#cfn-codepipeline-customactiontype-configurationproperties
         '''
         result = self._values.get("configuration_properties")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCustomActionType.ConfigurationPropertiesProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.ConfigurationPropertiesProperty"]]]], result)
 
     @builtins.property
     def settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCustomActionType.SettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.SettingsProperty"]]:
         '''URLs that provide users information about this custom action.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-customactiontype.html#cfn-codepipeline-customactiontype-settings
         '''
         result = self._values.get("settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCustomActionType.SettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomActionType.SettingsProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the custom action.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-customactiontype.html#cfn-codepipeline-customactiontype-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2704,6 +2708,7 @@ class CfnPipeline(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codepipeline as codepipeline
@@ -2907,21 +2912,21 @@ class CfnPipeline(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        stages: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.StageDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        artifact_store: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ArtifactStoreProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        artifact_stores: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ArtifactStoreMapProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        disable_inbound_stage_transitions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.StageTransitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        stages: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.StageDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        artifact_store: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ArtifactStoreProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        artifact_stores: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ArtifactStoreMapProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        disable_inbound_stage_transitions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.StageTransitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         execution_mode: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         pipeline_type: typing.Optional[builtins.str] = None,
-        restart_execution_on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        triggers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.PipelineTriggerDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.VariableDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        restart_execution_on_update: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        triggers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.PipelineTriggerDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        variables: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.VariableDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodePipeline::Pipeline``.
 
@@ -2963,7 +2968,7 @@ class CfnPipeline(
 
     @jsii.member(jsii_name="arnForPipeline")
     @builtins.classmethod
-    def arn_for_pipeline(cls, resource: _IPipelineRef_fb1b56f9) -> builtins.str:
+    def arn_for_pipeline(cls, resource: "_IPipelineRef_fb1b56f9") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2976,10 +2981,10 @@ class CfnPipeline(
     @builtins.classmethod
     def from_pipeline_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         pipeline_name: builtins.str,
-    ) -> _IPipelineRef_fb1b56f9:
+    ) -> "_IPipelineRef_fb1b56f9":
         '''Creates a new IPipelineRef from a pipelineName.
 
         :param scope: -
@@ -2991,7 +2996,7 @@ class CfnPipeline(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument pipeline_name", value=pipeline_name, expected_type=type_hints["pipeline_name"])
-        return typing.cast(_IPipelineRef_fb1b56f9, jsii.sinvoke(cls, "fromPipelineName", [scope, id, pipeline_name]))
+        return typing.cast("_IPipelineRef_fb1b56f9", jsii.sinvoke(cls, "fromPipelineName", [scope, id, pipeline_name]))
 
     @jsii.member(jsii_name="isCfnPipeline")
     @builtins.classmethod
@@ -3006,7 +3011,7 @@ class CfnPipeline(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPipeline", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3055,15 +3060,15 @@ class CfnPipeline(
 
     @builtins.property
     @jsii.member(jsii_name="pipelineRef")
-    def pipeline_ref(self) -> _PipelineReference_0706267b:
+    def pipeline_ref(self) -> "_PipelineReference_0706267b":
         '''A reference to a Pipeline resource.'''
-        return typing.cast(_PipelineReference_0706267b, jsii.get(self, "pipelineRef"))
+        return typing.cast("_PipelineReference_0706267b", jsii.get(self, "pipelineRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="roleArn")
@@ -3082,14 +3087,14 @@ class CfnPipeline(
     @jsii.member(jsii_name="stages")
     def stages(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.StageDeclarationProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.StageDeclarationProperty"]]]:
         '''Represents information about a stage and its definition.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.StageDeclarationProperty"]]], jsii.get(self, "stages"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.StageDeclarationProperty"]]], jsii.get(self, "stages"))
 
     @stages.setter
     def stages(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.StageDeclarationProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.StageDeclarationProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dfacf0cf69a83fd53ad3a2cce0dd68dd31658b398f54c29f16f9b44d46023b29)
@@ -3100,14 +3105,14 @@ class CfnPipeline(
     @jsii.member(jsii_name="artifactStore")
     def artifact_store(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ArtifactStoreProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ArtifactStoreProperty"]]:
         '''The S3 bucket where artifacts for the pipeline are stored.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ArtifactStoreProperty"]], jsii.get(self, "artifactStore"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ArtifactStoreProperty"]], jsii.get(self, "artifactStore"))
 
     @artifact_store.setter
     def artifact_store(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ArtifactStoreProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ArtifactStoreProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5a40501189eaeb23c9f45754903055f441f62a809b824fce94b0b934a72b33ad)
@@ -3118,14 +3123,14 @@ class CfnPipeline(
     @jsii.member(jsii_name="artifactStores")
     def artifact_stores(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ArtifactStoreMapProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ArtifactStoreMapProperty"]]]]:
         '''A mapping of ``artifactStore`` objects and their corresponding AWS Regions.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ArtifactStoreMapProperty"]]]], jsii.get(self, "artifactStores"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ArtifactStoreMapProperty"]]]], jsii.get(self, "artifactStores"))
 
     @artifact_stores.setter
     def artifact_stores(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ArtifactStoreMapProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ArtifactStoreMapProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__13b2091bcabe548515f4fe0527fdc7e055ac3c68d5fc3b939d5bb97614bf0f94)
@@ -3136,14 +3141,14 @@ class CfnPipeline(
     @jsii.member(jsii_name="disableInboundStageTransitions")
     def disable_inbound_stage_transitions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.StageTransitionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.StageTransitionProperty"]]]]:
         '''Represents the input of a ``DisableStageTransition`` action.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.StageTransitionProperty"]]]], jsii.get(self, "disableInboundStageTransitions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.StageTransitionProperty"]]]], jsii.get(self, "disableInboundStageTransitions"))
 
     @disable_inbound_stage_transitions.setter
     def disable_inbound_stage_transitions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.StageTransitionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.StageTransitionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a8171e6979490d73c864965d74418184aa66850b94084357d00f5bac7460f803)
@@ -3193,14 +3198,14 @@ class CfnPipeline(
     @jsii.member(jsii_name="restartExecutionOnUpdate")
     def restart_execution_on_update(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to rerun the CodePipeline pipeline after you update it.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "restartExecutionOnUpdate"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "restartExecutionOnUpdate"))
 
     @restart_execution_on_update.setter
     def restart_execution_on_update(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__88de08f19f736e80065bcd761beb1e65914ff94f8a626526298e8aceab054efa)
@@ -3209,12 +3214,12 @@ class CfnPipeline(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the tags applied to the pipeline.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__049b30e49190b4a0c262bbc2b2b86e08c2d0b80ed4870924cfa18bba87f06fbf)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3224,14 +3229,14 @@ class CfnPipeline(
     @jsii.member(jsii_name="triggers")
     def triggers(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.PipelineTriggerDeclarationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.PipelineTriggerDeclarationProperty"]]]]:
         '''The trigger configuration specifying a type of event, such as Git tags, that starts the pipeline.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.PipelineTriggerDeclarationProperty"]]]], jsii.get(self, "triggers"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.PipelineTriggerDeclarationProperty"]]]], jsii.get(self, "triggers"))
 
     @triggers.setter
     def triggers(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.PipelineTriggerDeclarationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.PipelineTriggerDeclarationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ec229be1df5c233edfda39851430510bc5b05e1c924f9c4f280d35e90a7a273e)
@@ -3242,14 +3247,14 @@ class CfnPipeline(
     @jsii.member(jsii_name="variables")
     def variables(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.VariableDeclarationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.VariableDeclarationProperty"]]]]:
         '''A list that defines the pipeline variables for a pipeline resource.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.VariableDeclarationProperty"]]]], jsii.get(self, "variables"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.VariableDeclarationProperty"]]]], jsii.get(self, "variables"))
 
     @variables.setter
     def variables(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.VariableDeclarationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.VariableDeclarationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__750515260661993ecfa4350c79274cb5f97f27ed37abd879c232ab4d1d581b16)
@@ -3279,14 +3284,14 @@ class CfnPipeline(
         def __init__(
             self,
             *,
-            action_type_id: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ActionTypeIdProperty", typing.Dict[builtins.str, typing.Any]]],
+            action_type_id: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ActionTypeIdProperty", typing.Dict[builtins.str, typing.Any]]],
             name: builtins.str,
             commands: typing.Optional[typing.Sequence[builtins.str]] = None,
             configuration: typing.Any = None,
-            environment_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            input_artifacts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.InputArtifactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            environment_variables: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            input_artifacts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.InputArtifactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             namespace: typing.Optional[builtins.str] = None,
-            output_artifacts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.OutputArtifactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            output_artifacts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.OutputArtifactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             output_variables: typing.Optional[typing.Sequence[builtins.str]] = None,
             region: typing.Optional[builtins.str] = None,
             role_arn: typing.Optional[builtins.str] = None,
@@ -3401,14 +3406,14 @@ class CfnPipeline(
         @builtins.property
         def action_type_id(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPipeline.ActionTypeIdProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPipeline.ActionTypeIdProperty"]:
             '''Specifies the action type and the provider of the action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-actiondeclaration.html#cfn-codepipeline-pipeline-actiondeclaration-actiontypeid
             '''
             result = self._values.get("action_type_id")
             assert result is not None, "Required property 'action_type_id' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPipeline.ActionTypeIdProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPipeline.ActionTypeIdProperty"], result)
 
         @builtins.property
         def name(self) -> builtins.str:
@@ -3454,18 +3459,18 @@ class CfnPipeline(
         @builtins.property
         def environment_variables(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.EnvironmentVariableProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.EnvironmentVariableProperty"]]]]:
             '''The environment variables for the action.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-actiondeclaration.html#cfn-codepipeline-pipeline-actiondeclaration-environmentvariables
             '''
             result = self._values.get("environment_variables")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.EnvironmentVariableProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.EnvironmentVariableProperty"]]]], result)
 
         @builtins.property
         def input_artifacts(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.InputArtifactProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.InputArtifactProperty"]]]]:
             '''The name or ID of the artifact consumed by the action, such as a test or build artifact.
 
             While the field is not a required parameter, most actions have an action configuration that requires a specified quantity of input artifacts. To refer to the action configuration specification by action provider, see the `Action structure reference <https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference.html>`_ in the *AWS CodePipeline User Guide* .
@@ -3476,7 +3481,7 @@ class CfnPipeline(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-actiondeclaration.html#cfn-codepipeline-pipeline-actiondeclaration-inputartifacts
             '''
             result = self._values.get("input_artifacts")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.InputArtifactProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.InputArtifactProperty"]]]], result)
 
         @builtins.property
         def namespace(self) -> typing.Optional[builtins.str]:
@@ -3492,7 +3497,7 @@ class CfnPipeline(
         @builtins.property
         def output_artifacts(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.OutputArtifactProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.OutputArtifactProperty"]]]]:
             '''The name or ID of the result of the action declaration, such as a test or build artifact.
 
             While the field is not a required parameter, most actions have an action configuration that requires a specified quantity of output artifacts. To refer to the action configuration specification by action provider, see the `Action structure reference <https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference.html>`_ in the *AWS CodePipeline User Guide* .
@@ -3500,7 +3505,7 @@ class CfnPipeline(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-actiondeclaration.html#cfn-codepipeline-pipeline-actiondeclaration-outputartifacts
             '''
             result = self._values.get("output_artifacts")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.OutputArtifactProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.OutputArtifactProperty"]]]], result)
 
         @builtins.property
         def output_variables(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3691,7 +3696,7 @@ class CfnPipeline(
         def __init__(
             self,
             *,
-            artifact_store: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ArtifactStoreProperty", typing.Dict[builtins.str, typing.Any]]],
+            artifact_store: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ArtifactStoreProperty", typing.Dict[builtins.str, typing.Any]]],
             region: builtins.str,
         ) -> None:
             '''A mapping of ``artifactStore`` objects and their corresponding AWS Regions.
@@ -3739,7 +3744,7 @@ class CfnPipeline(
         @builtins.property
         def artifact_store(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPipeline.ArtifactStoreProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPipeline.ArtifactStoreProperty"]:
             '''Represents information about the S3 bucket where artifacts are stored for the pipeline.
 
             .. epigraph::
@@ -3750,7 +3755,7 @@ class CfnPipeline(
             '''
             result = self._values.get("artifact_store")
             assert result is not None, "Required property 'artifact_store' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPipeline.ArtifactStoreProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPipeline.ArtifactStoreProperty"], result)
 
         @builtins.property
         def region(self) -> builtins.str:
@@ -3788,7 +3793,7 @@ class CfnPipeline(
             *,
             location: builtins.str,
             type: builtins.str,
-            encryption_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.EncryptionKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            encryption_key: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.EncryptionKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The S3 bucket where artifacts for the pipeline are stored.
 
@@ -3857,7 +3862,7 @@ class CfnPipeline(
         @builtins.property
         def encryption_key(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.EncryptionKeyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.EncryptionKeyProperty"]]:
             '''The encryption key used to encrypt the data in the artifact store, such as an AWS Key Management Service ( AWS KMS) key.
 
             If this is undefined, the default key for Amazon S3 is used. To see an example artifact store encryption key field, see the example structure here: `AWS::CodePipeline::Pipeline <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html>`_ .
@@ -3865,7 +3870,7 @@ class CfnPipeline(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-artifactstore.html#cfn-codepipeline-pipeline-artifactstore-encryptionkey
             '''
             result = self._values.get("encryption_key")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.EncryptionKeyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.EncryptionKeyProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3887,7 +3892,7 @@ class CfnPipeline(
         def __init__(
             self,
             *,
-            conditions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            conditions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The conditions for making checks for entry to a stage.
 
@@ -3938,13 +3943,13 @@ class CfnPipeline(
         @builtins.property
         def conditions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ConditionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ConditionProperty"]]]]:
             '''The conditions that are configured as entry conditions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-beforeentryconditions.html#cfn-codepipeline-pipeline-beforeentryconditions-conditions
             '''
             result = self._values.get("conditions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ConditionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ConditionProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4033,7 +4038,7 @@ class CfnPipeline(
             self,
             *,
             result: typing.Optional[builtins.str] = None,
-            rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.RuleDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.RuleDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The condition for the stage.
 
@@ -4097,13 +4102,13 @@ class CfnPipeline(
         @builtins.property
         def rules(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.RuleDeclarationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.RuleDeclarationProperty"]]]]:
             '''The rules that make up the condition.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-condition.html#cfn-codepipeline-pipeline-condition-rules
             '''
             result = self._values.get("rules")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.RuleDeclarationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.RuleDeclarationProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4294,9 +4299,9 @@ class CfnPipeline(
         def __init__(
             self,
             *,
-            conditions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            conditions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             result: typing.Optional[builtins.str] = None,
-            retry_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.RetryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retry_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.RetryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration that specifies the result, such as rollback, to occur upon stage failure.
 
@@ -4359,7 +4364,7 @@ class CfnPipeline(
         @builtins.property
         def conditions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ConditionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ConditionProperty"]]]]:
             '''The conditions that are configured as failure conditions.
 
             For more information about conditions, see `Stage conditions <https://docs.aws.amazon.com/codepipeline/latest/userguide/stage-conditions.html>`_ and `How do stage conditions work? <https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts-how-it-works-conditions.html>`_ .
@@ -4367,7 +4372,7 @@ class CfnPipeline(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-failureconditions.html#cfn-codepipeline-pipeline-failureconditions-conditions
             '''
             result = self._values.get("conditions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ConditionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ConditionProperty"]]]], result)
 
         @builtins.property
         def result(self) -> typing.Optional[builtins.str]:
@@ -4381,13 +4386,13 @@ class CfnPipeline(
         @builtins.property
         def retry_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.RetryConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.RetryConfigurationProperty"]]:
             '''The retry configuration specifies automatic retry for a failed stage, along with the configured retry mode.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-failureconditions.html#cfn-codepipeline-pipeline-failureconditions-retryconfiguration
             '''
             result = self._values.get("retry_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.RetryConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.RetryConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4484,8 +4489,8 @@ class CfnPipeline(
             self,
             *,
             source_action_name: builtins.str,
-            pull_request: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.GitPullRequestFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            push: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.GitPushFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            pull_request: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.GitPullRequestFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            push: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.GitPushFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''A type of trigger configuration for Git-based source actions.
 
@@ -4568,24 +4573,24 @@ class CfnPipeline(
         @builtins.property
         def pull_request(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitPullRequestFilterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitPullRequestFilterProperty"]]]]:
             '''The field where the repository event that will start the pipeline is specified as pull requests.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-gitconfiguration.html#cfn-codepipeline-pipeline-gitconfiguration-pullrequest
             '''
             result = self._values.get("pull_request")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitPullRequestFilterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitPullRequestFilterProperty"]]]], result)
 
         @builtins.property
         def push(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitPushFilterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitPushFilterProperty"]]]]:
             '''The field where the repository event that will start the pipeline, such as pushing Git tags, is specified with details.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-gitconfiguration.html#cfn-codepipeline-pipeline-gitconfiguration-push
             '''
             result = self._values.get("push")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitPushFilterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitPushFilterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4681,9 +4686,9 @@ class CfnPipeline(
         def __init__(
             self,
             *,
-            branches: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.GitBranchFilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            branches: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.GitBranchFilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             events: typing.Optional[typing.Sequence[builtins.str]] = None,
-            file_paths: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.GitFilePathFilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            file_paths: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.GitFilePathFilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The event criteria for the pull request trigger configuration, such as the lists of branches or file paths to include and exclude.
 
@@ -4734,13 +4739,13 @@ class CfnPipeline(
         @builtins.property
         def branches(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitBranchFilterCriteriaProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitBranchFilterCriteriaProperty"]]:
             '''The field that specifies to filter on branches for the pull request trigger configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-gitpullrequestfilter.html#cfn-codepipeline-pipeline-gitpullrequestfilter-branches
             '''
             result = self._values.get("branches")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitBranchFilterCriteriaProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitBranchFilterCriteriaProperty"]], result)
 
         @builtins.property
         def events(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -4754,13 +4759,13 @@ class CfnPipeline(
         @builtins.property
         def file_paths(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitFilePathFilterCriteriaProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitFilePathFilterCriteriaProperty"]]:
             '''The field that specifies to filter on file paths for the pull request trigger configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-gitpullrequestfilter.html#cfn-codepipeline-pipeline-gitpullrequestfilter-filepaths
             '''
             result = self._values.get("file_paths")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitFilePathFilterCriteriaProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitFilePathFilterCriteriaProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4786,8 +4791,8 @@ class CfnPipeline(
         def __init__(
             self,
             *,
-            branches: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.GitBranchFilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            file_paths: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.GitFilePathFilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            branches: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.GitBranchFilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            file_paths: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.GitFilePathFilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             tags: typing.Optional[typing.Union["CfnPipeline.GitTagFilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         ) -> None:
             '''The event criteria that specify when a specified repository event will start the pipeline for the specified trigger configuration, such as the lists of Git tags to include and exclude.
@@ -4838,24 +4843,24 @@ class CfnPipeline(
         @builtins.property
         def branches(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitBranchFilterCriteriaProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitBranchFilterCriteriaProperty"]]:
             '''The field that specifies to filter on branches for the push trigger configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-gitpushfilter.html#cfn-codepipeline-pipeline-gitpushfilter-branches
             '''
             result = self._values.get("branches")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitBranchFilterCriteriaProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitBranchFilterCriteriaProperty"]], result)
 
         @builtins.property
         def file_paths(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitFilePathFilterCriteriaProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitFilePathFilterCriteriaProperty"]]:
             '''The field that specifies to filter on file paths for the push trigger configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-gitpushfilter.html#cfn-codepipeline-pipeline-gitpushfilter-filepaths
             '''
             result = self._values.get("file_paths")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitFilePathFilterCriteriaProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitFilePathFilterCriteriaProperty"]], result)
 
         @builtins.property
         def tags(self) -> typing.Optional["CfnPipeline.GitTagFilterCriteriaProperty"]:
@@ -5093,7 +5098,7 @@ class CfnPipeline(
             self,
             *,
             provider_type: builtins.str,
-            git_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.GitConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            git_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.GitConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents information about the specified trigger configuration, such as the filter criteria and the source stage for the action that contains the trigger.
 
@@ -5172,13 +5177,13 @@ class CfnPipeline(
         @builtins.property
         def git_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitConfigurationProperty"]]:
             '''Provides the filter criteria and the source stage for the repository event that starts the pipeline, such as Git tags.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-pipelinetriggerdeclaration.html#cfn-codepipeline-pipeline-pipelinetriggerdeclaration-gitconfiguration
             '''
             result = self._values.get("git_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.GitConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.GitConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5263,11 +5268,11 @@ class CfnPipeline(
             *,
             commands: typing.Optional[typing.Sequence[builtins.str]] = None,
             configuration: typing.Any = None,
-            input_artifacts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.InputArtifactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            input_artifacts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.InputArtifactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             name: typing.Optional[builtins.str] = None,
             region: typing.Optional[builtins.str] = None,
             role_arn: typing.Optional[builtins.str] = None,
-            rule_type_id: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.RuleTypeIdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            rule_type_id: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.RuleTypeIdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents information about the rule to be created for an associated condition.
 
@@ -5360,13 +5365,13 @@ class CfnPipeline(
         @builtins.property
         def input_artifacts(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.InputArtifactProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.InputArtifactProperty"]]]]:
             '''The input artifacts fields for the rule, such as specifying an input file for the rule.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-ruledeclaration.html#cfn-codepipeline-pipeline-ruledeclaration-inputartifacts
             '''
             result = self._values.get("input_artifacts")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.InputArtifactProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.InputArtifactProperty"]]]], result)
 
         @builtins.property
         def name(self) -> typing.Optional[builtins.str]:
@@ -5398,13 +5403,13 @@ class CfnPipeline(
         @builtins.property
         def rule_type_id(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.RuleTypeIdProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.RuleTypeIdProperty"]]:
             '''The ID for the rule type, which is made up of the combined values for category, owner, provider, and version.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-ruledeclaration.html#cfn-codepipeline-pipeline-ruledeclaration-ruletypeid
             '''
             result = self._values.get("rule_type_id")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.RuleTypeIdProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.RuleTypeIdProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5546,12 +5551,12 @@ class CfnPipeline(
         def __init__(
             self,
             *,
-            actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ActionDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            actions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ActionDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]],
             name: builtins.str,
-            before_entry: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.BeforeEntryConditionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            blockers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.BlockerDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            on_failure: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.FailureConditionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            on_success: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.SuccessConditionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            before_entry: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.BeforeEntryConditionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            blockers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.BlockerDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            on_failure: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.FailureConditionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            on_success: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.SuccessConditionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Represents information about a stage and its definition.
 
@@ -5709,14 +5714,14 @@ class CfnPipeline(
         @builtins.property
         def actions(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ActionDeclarationProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ActionDeclarationProperty"]]]:
             '''The actions included in a stage.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-stagedeclaration.html#cfn-codepipeline-pipeline-stagedeclaration-actions
             '''
             result = self._values.get("actions")
             assert result is not None, "Required property 'actions' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ActionDeclarationProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ActionDeclarationProperty"]]], result)
 
         @builtins.property
         def name(self) -> builtins.str:
@@ -5731,7 +5736,7 @@ class CfnPipeline(
         @builtins.property
         def before_entry(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.BeforeEntryConditionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.BeforeEntryConditionsProperty"]]:
             '''The method to use when a stage allows entry.
 
             For example, configuring this field for conditions will allow entry to the stage when the conditions are met.
@@ -5739,23 +5744,23 @@ class CfnPipeline(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-stagedeclaration.html#cfn-codepipeline-pipeline-stagedeclaration-beforeentry
             '''
             result = self._values.get("before_entry")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.BeforeEntryConditionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.BeforeEntryConditionsProperty"]], result)
 
         @builtins.property
         def blockers(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.BlockerDeclarationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.BlockerDeclarationProperty"]]]]:
             '''Reserved for future use.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-stagedeclaration.html#cfn-codepipeline-pipeline-stagedeclaration-blockers
             '''
             result = self._values.get("blockers")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.BlockerDeclarationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.BlockerDeclarationProperty"]]]], result)
 
         @builtins.property
         def on_failure(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.FailureConditionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.FailureConditionsProperty"]]:
             '''The method to use when a stage has not completed successfully.
 
             For example, configuring this field for rollback will roll back a failed stage automatically to the last successful pipeline execution in the stage.
@@ -5763,12 +5768,12 @@ class CfnPipeline(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-stagedeclaration.html#cfn-codepipeline-pipeline-stagedeclaration-onfailure
             '''
             result = self._values.get("on_failure")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.FailureConditionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.FailureConditionsProperty"]], result)
 
         @builtins.property
         def on_success(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.SuccessConditionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.SuccessConditionsProperty"]]:
             '''The method to use when a stage has succeeded.
 
             For example, configuring this field for conditions will allow the stage to succeed when the conditions are met.
@@ -5776,7 +5781,7 @@ class CfnPipeline(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-stagedeclaration.html#cfn-codepipeline-pipeline-stagedeclaration-onsuccess
             '''
             result = self._values.get("on_success")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPipeline.SuccessConditionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.SuccessConditionsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5866,7 +5871,7 @@ class CfnPipeline(
         def __init__(
             self,
             *,
-            conditions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            conditions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ConditionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The conditions for making checks that, if met, succeed a stage.
 
@@ -5917,13 +5922,13 @@ class CfnPipeline(
         @builtins.property
         def conditions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ConditionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ConditionProperty"]]]]:
             '''The conditions that are success conditions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-successconditions.html#cfn-codepipeline-pipeline-successconditions-conditions
             '''
             result = self._values.get("conditions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPipeline.ConditionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ConditionProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6053,18 +6058,18 @@ class CfnPipelineProps:
     def __init__(
         self,
         *,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        stages: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.StageDeclarationProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        artifact_store: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ArtifactStoreProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        artifact_stores: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ArtifactStoreMapProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        disable_inbound_stage_transitions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.StageTransitionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        stages: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.StageDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        artifact_store: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ArtifactStoreProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        artifact_stores: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.ArtifactStoreMapProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        disable_inbound_stage_transitions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.StageTransitionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         execution_mode: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         pipeline_type: typing.Optional[builtins.str] = None,
-        restart_execution_on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        triggers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.PipelineTriggerDeclarationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.VariableDeclarationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        restart_execution_on_update: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        triggers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.PipelineTriggerDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        variables: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPipeline.VariableDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPipeline``.
 
@@ -6086,6 +6091,7 @@ class CfnPipelineProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codepipeline as codepipeline
@@ -6326,31 +6332,31 @@ class CfnPipelineProps:
             self._values["variables"] = variables
 
     @builtins.property
-    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The Amazon Resource Name (ARN) for CodePipeline to use to either perform actions with no ``actionRoleArn`` , or to use to assume roles for actions with an ``actionRoleArn`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html#cfn-codepipeline-pipeline-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def stages(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.StageDeclarationProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.StageDeclarationProperty"]]]:
         '''Represents information about a stage and its definition.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html#cfn-codepipeline-pipeline-stages
         '''
         result = self._values.get("stages")
         assert result is not None, "Required property 'stages' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.StageDeclarationProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.StageDeclarationProperty"]]], result)
 
     @builtins.property
     def artifact_store(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPipeline.ArtifactStoreProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ArtifactStoreProperty"]]:
         '''The S3 bucket where artifacts for the pipeline are stored.
 
         .. epigraph::
@@ -6360,12 +6366,12 @@ class CfnPipelineProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html#cfn-codepipeline-pipeline-artifactstore
         '''
         result = self._values.get("artifact_store")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPipeline.ArtifactStoreProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ArtifactStoreProperty"]], result)
 
     @builtins.property
     def artifact_stores(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.ArtifactStoreMapProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ArtifactStoreMapProperty"]]]]:
         '''A mapping of ``artifactStore`` objects and their corresponding AWS Regions.
 
         There must be an artifact store for the pipeline Region and for each cross-region action in the pipeline.
@@ -6376,18 +6382,18 @@ class CfnPipelineProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html#cfn-codepipeline-pipeline-artifactstores
         '''
         result = self._values.get("artifact_stores")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.ArtifactStoreMapProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.ArtifactStoreMapProperty"]]]], result)
 
     @builtins.property
     def disable_inbound_stage_transitions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.StageTransitionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.StageTransitionProperty"]]]]:
         '''Represents the input of a ``DisableStageTransition`` action.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html#cfn-codepipeline-pipeline-disableinboundstagetransitions
         '''
         result = self._values.get("disable_inbound_stage_transitions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.StageTransitionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.StageTransitionProperty"]]]], result)
 
     @builtins.property
     def execution_mode(self) -> typing.Optional[builtins.str]:
@@ -6434,27 +6440,27 @@ class CfnPipelineProps:
     @builtins.property
     def restart_execution_on_update(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to rerun the CodePipeline pipeline after you update it.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html#cfn-codepipeline-pipeline-restartexecutiononupdate
         '''
         result = self._values.get("restart_execution_on_update")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the tags applied to the pipeline.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html#cfn-codepipeline-pipeline-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def triggers(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.PipelineTriggerDeclarationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.PipelineTriggerDeclarationProperty"]]]]:
         '''The trigger configuration specifying a type of event, such as Git tags, that starts the pipeline.
 
         .. epigraph::
@@ -6464,12 +6470,12 @@ class CfnPipelineProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html#cfn-codepipeline-pipeline-triggers
         '''
         result = self._values.get("triggers")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.PipelineTriggerDeclarationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.PipelineTriggerDeclarationProperty"]]]], result)
 
     @builtins.property
     def variables(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.VariableDeclarationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.VariableDeclarationProperty"]]]]:
         '''A list that defines the pipeline variables for a pipeline resource.
 
         Variable names can have alphanumeric and underscore characters, and the values must match ``[A-Za-z0-9@\\-_]+`` .
@@ -6477,7 +6483,7 @@ class CfnPipelineProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html#cfn-codepipeline-pipeline-variables
         '''
         result = self._values.get("variables")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPipeline.VariableDeclarationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPipeline.VariableDeclarationProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6540,16 +6546,16 @@ class CfnWebhook(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         authentication: builtins.str,
-        authentication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnWebhook.WebhookAuthConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-        filters: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWebhook.WebhookFilterRuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        authentication_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebhook.WebhookAuthConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        filters: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebhook.WebhookFilterRuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
         target_action: builtins.str,
         target_pipeline: builtins.str,
         name: typing.Optional[builtins.str] = None,
-        register_with_third_party: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        register_with_third_party: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         target_pipeline_version: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Create a new ``AWS::CodePipeline::Webhook``.
@@ -6595,7 +6601,7 @@ class CfnWebhook(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWebhook", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6649,9 +6655,9 @@ class CfnWebhook(
 
     @builtins.property
     @jsii.member(jsii_name="webhookRef")
-    def webhook_ref(self) -> _WebhookReference_96b0d16f:
+    def webhook_ref(self) -> "_WebhookReference_96b0d16f":
         '''A reference to a Webhook resource.'''
-        return typing.cast(_WebhookReference_96b0d16f, jsii.get(self, "webhookRef"))
+        return typing.cast("_WebhookReference_96b0d16f", jsii.get(self, "webhookRef"))
 
     @builtins.property
     @jsii.member(jsii_name="authentication")
@@ -6670,14 +6676,14 @@ class CfnWebhook(
     @jsii.member(jsii_name="authenticationConfiguration")
     def authentication_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnWebhook.WebhookAuthConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnWebhook.WebhookAuthConfigurationProperty"]:
         '''Properties that configure the authentication applied to incoming webhook trigger requests.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnWebhook.WebhookAuthConfigurationProperty"], jsii.get(self, "authenticationConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnWebhook.WebhookAuthConfigurationProperty"], jsii.get(self, "authenticationConfiguration"))
 
     @authentication_configuration.setter
     def authentication_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnWebhook.WebhookAuthConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnWebhook.WebhookAuthConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__661e78f47928057e34eff18cc959796c1aeaac5a2037fd1c3cc43d77914ebef7)
@@ -6688,14 +6694,14 @@ class CfnWebhook(
     @jsii.member(jsii_name="filters")
     def filters(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWebhook.WebhookFilterRuleProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWebhook.WebhookFilterRuleProperty"]]]:
         '''A list of rules applied to the body/payload sent in the POST request to a webhook URL.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWebhook.WebhookFilterRuleProperty"]]], jsii.get(self, "filters"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWebhook.WebhookFilterRuleProperty"]]], jsii.get(self, "filters"))
 
     @filters.setter
     def filters(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWebhook.WebhookFilterRuleProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWebhook.WebhookFilterRuleProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2850ab1aedf159b1372121953fbc6d536f0960551cfbef5e9d4c28853a4a21d2)
@@ -6745,14 +6751,14 @@ class CfnWebhook(
     @jsii.member(jsii_name="registerWithThirdParty")
     def register_with_third_party(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Configures a connection between the webhook that was created and the external tool with events to be detected.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "registerWithThirdParty"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "registerWithThirdParty"))
 
     @register_with_third_party.setter
     def register_with_third_party(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bece180dca3b968274dbd53d569afb60e6d46b7d744e84c8607ca6bebd23d1be)
@@ -6948,12 +6954,12 @@ class CfnWebhookProps:
         self,
         *,
         authentication: builtins.str,
-        authentication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnWebhook.WebhookAuthConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-        filters: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWebhook.WebhookFilterRuleProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        authentication_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebhook.WebhookAuthConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        filters: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebhook.WebhookFilterRuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
         target_action: builtins.str,
         target_pipeline: builtins.str,
         name: typing.Optional[builtins.str] = None,
-        register_with_third_party: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        register_with_third_party: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         target_pipeline_version: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties for defining a ``CfnWebhook``.
@@ -7042,7 +7048,7 @@ class CfnWebhookProps:
     @builtins.property
     def authentication_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnWebhook.WebhookAuthConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnWebhook.WebhookAuthConfigurationProperty"]:
         '''Properties that configure the authentication applied to incoming webhook trigger requests.
 
         The required properties depend on the authentication type. For GITHUB_HMAC, only the ``SecretToken`` property must be set. For IP, only the ``AllowedIPRange`` property must be set to a valid CIDR range. For UNAUTHENTICATED, no properties can be set.
@@ -7051,12 +7057,12 @@ class CfnWebhookProps:
         '''
         result = self._values.get("authentication_configuration")
         assert result is not None, "Required property 'authentication_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnWebhook.WebhookAuthConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnWebhook.WebhookAuthConfigurationProperty"], result)
 
     @builtins.property
     def filters(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnWebhook.WebhookFilterRuleProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWebhook.WebhookFilterRuleProperty"]]]:
         '''A list of rules applied to the body/payload sent in the POST request to a webhook URL.
 
         All defined rules must pass for the request to be accepted and the pipeline started.
@@ -7065,7 +7071,7 @@ class CfnWebhookProps:
         '''
         result = self._values.get("filters")
         assert result is not None, "Required property 'filters' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnWebhook.WebhookFilterRuleProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWebhook.WebhookFilterRuleProperty"]]], result)
 
     @builtins.property
     def target_action(self) -> builtins.str:
@@ -7101,13 +7107,13 @@ class CfnWebhookProps:
     @builtins.property
     def register_with_third_party(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Configures a connection between the webhook that was created and the external tool with events to be detected.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-webhook.html#cfn-codepipeline-webhook-registerwiththirdparty
         '''
         result = self._values.get("register_with_third_party")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def target_pipeline_version(self) -> typing.Optional[jsii.Number]:
@@ -7253,7 +7259,7 @@ class CommonAwsActionProps(CommonActionProps):
         action_name: builtins.str,
         run_order: typing.Optional[jsii.Number] = None,
         variables_namespace: typing.Optional[builtins.str] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''Common properties shared by all Actions whose ``ActionProperties.owner`` field is 'AWS' (or unset, as 'AWS' is the default).
 
@@ -7335,7 +7341,7 @@ class CommonAwsActionProps(CommonActionProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The Role in which context's this Action will be executing in.
 
         The Pipeline's Role will assume this Role
@@ -7347,7 +7353,7 @@ class CommonAwsActionProps(CommonActionProps):
         :default: a new Role will be generated
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7444,7 +7450,7 @@ class Conditions:
     def __init__(
         self,
         *,
-        conditions: typing.Optional[typing.Sequence[typing.Union[Condition, typing.Dict[builtins.str, typing.Any]]]] = None,
+        conditions: typing.Optional[typing.Sequence[typing.Union["Condition", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''The conditions for making checks for the stage.
 
@@ -7524,13 +7530,13 @@ class Conditions:
             self._values["conditions"] = conditions
 
     @builtins.property
-    def conditions(self) -> typing.Optional[typing.List[Condition]]:
+    def conditions(self) -> typing.Optional[typing.List["Condition"]]:
         '''The conditions that are configured as entry conditions, making check to succeed the stage, or fail the stage.
 
         :default: - No conditions are configured
         '''
         result = self._values.get("conditions")
-        return typing.cast(typing.Optional[typing.List[Condition]], result)
+        return typing.cast(typing.Optional[typing.List["Condition"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7553,8 +7559,8 @@ class CrossRegionSupport:
     def __init__(
         self,
         *,
-        replication_bucket: _IBucket_42e086fd,
-        stack: _Stack_2866e57f,
+        replication_bucket: "_IBucket_42e086fd",
+        stack: "_Stack_2866e57f",
     ) -> None:
         '''An interface representing resources generated in order to support the cross-region capabilities of CodePipeline.
 
@@ -7591,21 +7597,21 @@ class CrossRegionSupport:
         }
 
     @builtins.property
-    def replication_bucket(self) -> _IBucket_42e086fd:
+    def replication_bucket(self) -> "_IBucket_42e086fd":
         '''The replication Bucket used by CodePipeline to operate in this region.
 
         Belongs to ``stack``.
         '''
         result = self._values.get("replication_bucket")
         assert result is not None, "Required property 'replication_bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
-    def stack(self) -> _Stack_2866e57f:
+    def stack(self) -> "_Stack_2866e57f":
         '''The Stack that has been created to house the replication Bucket required for this  region.'''
         result = self._values.get("stack")
         assert result is not None, "Required property 'stack' is missing"
-        return typing.cast(_Stack_2866e57f, result)
+        return typing.cast("_Stack_2866e57f", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7825,13 +7831,13 @@ class CustomActionRegistration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        artifact_bounds: typing.Union[ActionArtifactBounds, typing.Dict[builtins.str, typing.Any]],
-        category: ActionCategory,
+        artifact_bounds: typing.Union["ActionArtifactBounds", typing.Dict[builtins.str, typing.Any]],
+        category: "ActionCategory",
         provider: builtins.str,
-        action_properties: typing.Optional[typing.Sequence[typing.Union[CustomActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        action_properties: typing.Optional[typing.Sequence[typing.Union["CustomActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         entity_url: typing.Optional[builtins.str] = None,
         execution_url: typing.Optional[builtins.str] = None,
         version: typing.Optional[builtins.str] = None,
@@ -7881,10 +7887,10 @@ class CustomActionRegistrationProps:
     def __init__(
         self,
         *,
-        artifact_bounds: typing.Union[ActionArtifactBounds, typing.Dict[builtins.str, typing.Any]],
-        category: ActionCategory,
+        artifact_bounds: typing.Union["ActionArtifactBounds", typing.Dict[builtins.str, typing.Any]],
+        category: "ActionCategory",
         provider: builtins.str,
-        action_properties: typing.Optional[typing.Sequence[typing.Union[CustomActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        action_properties: typing.Optional[typing.Sequence[typing.Union["CustomActionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         entity_url: typing.Optional[builtins.str] = None,
         execution_url: typing.Optional[builtins.str] = None,
         version: typing.Optional[builtins.str] = None,
@@ -7957,18 +7963,18 @@ class CustomActionRegistrationProps:
             self._values["version"] = version
 
     @builtins.property
-    def artifact_bounds(self) -> ActionArtifactBounds:
+    def artifact_bounds(self) -> "ActionArtifactBounds":
         '''The artifact bounds of the Action.'''
         result = self._values.get("artifact_bounds")
         assert result is not None, "Required property 'artifact_bounds' is missing"
-        return typing.cast(ActionArtifactBounds, result)
+        return typing.cast("ActionArtifactBounds", result)
 
     @builtins.property
-    def category(self) -> ActionCategory:
+    def category(self) -> "ActionCategory":
         '''The category of the Action.'''
         result = self._values.get("category")
         assert result is not None, "Required property 'category' is missing"
-        return typing.cast(ActionCategory, result)
+        return typing.cast("ActionCategory", result)
 
     @builtins.property
     def provider(self) -> builtins.str:
@@ -7981,13 +7987,13 @@ class CustomActionRegistrationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def action_properties(self) -> typing.Optional[typing.List[CustomActionProperty]]:
+    def action_properties(self) -> typing.Optional[typing.List["CustomActionProperty"]]:
         '''The properties used for customizing the instance of your Action.
 
         :default: []
         '''
         result = self._values.get("action_properties")
-        return typing.cast(typing.Optional[typing.List[CustomActionProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CustomActionProperty"]], result)
 
     @builtins.property
     def entity_url(self) -> typing.Optional[builtins.str]:
@@ -8080,7 +8086,7 @@ class FailureConditions(Conditions):
     def __init__(
         self,
         *,
-        conditions: typing.Optional[typing.Sequence[typing.Union[Condition, typing.Dict[builtins.str, typing.Any]]]] = None,
+        conditions: typing.Optional[typing.Sequence[typing.Union["Condition", typing.Dict[builtins.str, typing.Any]]]] = None,
         result: typing.Optional["Result"] = None,
         retry_mode: typing.Optional["RetryMode"] = None,
     ) -> None:
@@ -8170,13 +8176,13 @@ class FailureConditions(Conditions):
             self._values["retry_mode"] = retry_mode
 
     @builtins.property
-    def conditions(self) -> typing.Optional[typing.List[Condition]]:
+    def conditions(self) -> typing.Optional[typing.List["Condition"]]:
         '''The conditions that are configured as entry conditions, making check to succeed the stage, or fail the stage.
 
         :default: - No conditions are configured
         '''
         result = self._values.get("conditions")
-        return typing.cast(typing.Optional[typing.List[Condition]], result)
+        return typing.cast(typing.Optional[typing.List["Condition"]], result)
 
     @builtins.property
     def result(self) -> typing.Optional["Result"]:
@@ -8388,7 +8394,7 @@ class GitPullRequestFilter:
         *,
         branches_excludes: typing.Optional[typing.Sequence[builtins.str]] = None,
         branches_includes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        events: typing.Optional[typing.Sequence[GitPullRequestEvent]] = None,
+        events: typing.Optional[typing.Sequence["GitPullRequestEvent"]] = None,
         file_paths_excludes: typing.Optional[typing.Sequence[builtins.str]] = None,
         file_paths_includes: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
@@ -8464,13 +8470,13 @@ class GitPullRequestFilter:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def events(self) -> typing.Optional[typing.List[GitPullRequestEvent]]:
+    def events(self) -> typing.Optional[typing.List["GitPullRequestEvent"]]:
         '''The field that specifies which pull request events to filter on (opened, updated, closed) for the trigger configuration.
 
         :default: - all events.
         '''
         result = self._values.get("events")
-        return typing.cast(typing.Optional[typing.List[GitPullRequestEvent]], result)
+        return typing.cast(typing.Optional[typing.List["GitPullRequestEvent"]], result)
 
     @builtins.property
     def file_paths_excludes(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -8721,7 +8727,7 @@ class IAction(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="actionProperties")
-    def action_properties(self) -> ActionProperties:
+    def action_properties(self) -> "ActionProperties":
         '''The simple properties of the Action, like its Owner, name, etc.
 
         Note that this accessor will be called before the ``bind`` callback.
@@ -8731,12 +8737,12 @@ class IAction(typing_extensions.Protocol):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         stage: "IStage",
         *,
-        bucket: _IBucket_42e086fd,
-        role: _IRole_235f5d8e,
-    ) -> ActionConfig:
+        bucket: "_IBucket_42e086fd",
+        role: "_IRole_235f5d8e",
+    ) -> "ActionConfig":
         '''The callback invoked when this Action is added to a Pipeline.
 
         :param scope: the Construct tree scope the Action can use if it needs to create any resources.
@@ -8750,18 +8756,18 @@ class IAction(typing_extensions.Protocol):
     def on_state_change(
         self,
         name: builtins.str,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         *,
         enabled: typing.Optional[builtins.bool] = None,
-        event_bus: typing.Optional[_IEventBus_88d13111] = None,
-        role: typing.Optional[_IRoleRef_8400221f] = None,
-        schedule: typing.Optional[_Schedule_c151d01f] = None,
-        targets: typing.Optional[typing.Sequence[_IRuleTarget_7a91f454]] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        event_bus: typing.Optional["_IEventBus_88d13111"] = None,
+        role: typing.Optional["_IRoleRef_8400221f"] = None,
+        schedule: typing.Optional["_Schedule_c151d01f"] = None,
+        targets: typing.Optional[typing.Sequence["_IRuleTarget_7a91f454"]] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Creates an Event that will be triggered whenever the state of this Action changes.
 
         :param name: the name to use for the new Event.
@@ -8791,22 +8797,22 @@ class _IActionProxy:
 
     @builtins.property
     @jsii.member(jsii_name="actionProperties")
-    def action_properties(self) -> ActionProperties:
+    def action_properties(self) -> "ActionProperties":
         '''The simple properties of the Action, like its Owner, name, etc.
 
         Note that this accessor will be called before the ``bind`` callback.
         '''
-        return typing.cast(ActionProperties, jsii.get(self, "actionProperties"))
+        return typing.cast("ActionProperties", jsii.get(self, "actionProperties"))
 
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         stage: "IStage",
         *,
-        bucket: _IBucket_42e086fd,
-        role: _IRole_235f5d8e,
-    ) -> ActionConfig:
+        bucket: "_IBucket_42e086fd",
+        role: "_IRole_235f5d8e",
+    ) -> "ActionConfig":
         '''The callback invoked when this Action is added to a Pipeline.
 
         :param scope: the Construct tree scope the Action can use if it needs to create any resources.
@@ -8820,24 +8826,24 @@ class _IActionProxy:
             check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
         options = ActionBindOptions(bucket=bucket, role=role)
 
-        return typing.cast(ActionConfig, jsii.invoke(self, "bind", [scope, stage, options]))
+        return typing.cast("ActionConfig", jsii.invoke(self, "bind", [scope, stage, options]))
 
     @jsii.member(jsii_name="onStateChange")
     def on_state_change(
         self,
         name: builtins.str,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         *,
         enabled: typing.Optional[builtins.bool] = None,
-        event_bus: typing.Optional[_IEventBus_88d13111] = None,
-        role: typing.Optional[_IRoleRef_8400221f] = None,
-        schedule: typing.Optional[_Schedule_c151d01f] = None,
-        targets: typing.Optional[typing.Sequence[_IRuleTarget_7a91f454]] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        event_bus: typing.Optional["_IEventBus_88d13111"] = None,
+        role: typing.Optional["_IRoleRef_8400221f"] = None,
+        schedule: typing.Optional["_Schedule_c151d01f"] = None,
+        targets: typing.Optional[typing.Sequence["_IRuleTarget_7a91f454"]] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Creates an Event that will be triggered whenever the state of this Action changes.
 
         :param name: the name to use for the new Event.
@@ -8868,7 +8874,7 @@ class _IActionProxy:
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onStateChange", [name, target, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onStateChange", [name, target, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAction).__jsii_proxy_class__ = lambda : _IActionProxy
@@ -8908,14 +8914,14 @@ class IPipeline(
     def notify_on(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         events: typing.Sequence["PipelineNotificationEvents"],
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar notification rule triggered when the pipeline events emitted by you specified, it very similar to ``onEvent`` API.
 
         You can also use the methods ``notifyOnExecutionStateChange``, ``notifyOnAnyStageStateChange``,
@@ -8938,13 +8944,13 @@ class IPipeline(
     def notify_on_any_action_state_change(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Define an notification rule triggered by the set of the "Action execution" events emitted from this pipeline.
 
         :param id: Identifier for this notification handler.
@@ -8962,13 +8968,13 @@ class IPipeline(
     def notify_on_any_manual_approval_state_change(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Define an notification rule triggered by the set of the "Manual approval" events emitted from this pipeline.
 
         :param id: Identifier for this notification handler.
@@ -8986,13 +8992,13 @@ class IPipeline(
     def notify_on_any_stage_state_change(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Define an notification rule triggered by the set of the "Stage execution" events emitted from this pipeline.
 
         :param id: Identifier for this notification handler.
@@ -9010,13 +9016,13 @@ class IPipeline(
     def notify_on_execution_state_change(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Define an notification rule triggered by the set of the "Pipeline execution" events emitted from this pipeline.
 
         :param id: Identifier for this notification handler.
@@ -9035,12 +9041,12 @@ class IPipeline(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Define an event rule triggered by this CodePipeline.
 
         :param id: Identifier for this event handler.
@@ -9057,12 +9063,12 @@ class IPipeline(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Define an event rule triggered by the "CodePipeline Pipeline Execution State Change" event emitted from this pipeline.
 
         :param id: Identifier for this event handler.
@@ -9109,14 +9115,14 @@ class _IPipelineProxy(
     def notify_on(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         events: typing.Sequence["PipelineNotificationEvents"],
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar notification rule triggered when the pipeline events emitted by you specified, it very similar to ``onEvent`` API.
 
         You can also use the methods ``notifyOnExecutionStateChange``, ``notifyOnAnyStageStateChange``,
@@ -9145,19 +9151,19 @@ class _IPipelineProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOn", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOn", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnAnyActionStateChange")
     def notify_on_any_action_state_change(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Define an notification rule triggered by the set of the "Action execution" events emitted from this pipeline.
 
         :param id: Identifier for this notification handler.
@@ -9180,19 +9186,19 @@ class _IPipelineProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnAnyActionStateChange", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnAnyActionStateChange", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnAnyManualApprovalStateChange")
     def notify_on_any_manual_approval_state_change(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Define an notification rule triggered by the set of the "Manual approval" events emitted from this pipeline.
 
         :param id: Identifier for this notification handler.
@@ -9215,19 +9221,19 @@ class _IPipelineProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnAnyManualApprovalStateChange", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnAnyManualApprovalStateChange", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnAnyStageStateChange")
     def notify_on_any_stage_state_change(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Define an notification rule triggered by the set of the "Stage execution" events emitted from this pipeline.
 
         :param id: Identifier for this notification handler.
@@ -9250,19 +9256,19 @@ class _IPipelineProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnAnyStageStateChange", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnAnyStageStateChange", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnExecutionStateChange")
     def notify_on_execution_state_change(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Define an notification rule triggered by the set of the "Pipeline execution" events emitted from this pipeline.
 
         :param id: Identifier for this notification handler.
@@ -9285,19 +9291,19 @@ class _IPipelineProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnExecutionStateChange", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnExecutionStateChange", [id, target, options]))
 
     @jsii.member(jsii_name="onEvent")
     def on_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Define an event rule triggered by this CodePipeline.
 
         :param id: Identifier for this event handler.
@@ -9318,19 +9324,19 @@ class _IPipelineProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onEvent", [id, options]))
 
     @jsii.member(jsii_name="onStateChange")
     def on_state_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Define an event rule triggered by the "CodePipeline Pipeline Execution State Change" event emitted from this pipeline.
 
         :param id: Identifier for this event handler.
@@ -9351,7 +9357,7 @@ class _IPipelineProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onStateChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onStateChange", [id, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IPipeline).__jsii_proxy_class__ = lambda : _IPipelineProxy
@@ -9363,13 +9369,13 @@ class IStage(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="actions")
-    def actions(self) -> typing.List[IAction]:
+    def actions(self) -> typing.List["IAction"]:
         '''The actions belonging to this stage.'''
         ...
 
     @builtins.property
     @jsii.member(jsii_name="pipeline")
-    def pipeline(self) -> IPipeline:
+    def pipeline(self) -> "IPipeline":
         ...
 
     @builtins.property
@@ -9379,7 +9385,7 @@ class IStage(typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="addAction")
-    def add_action(self, action: IAction) -> None:
+    def add_action(self, action: "IAction") -> None:
         '''
         :param action: -
         '''
@@ -9389,18 +9395,18 @@ class IStage(typing_extensions.Protocol):
     def on_state_change(
         self,
         name: builtins.str,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         *,
         enabled: typing.Optional[builtins.bool] = None,
-        event_bus: typing.Optional[_IEventBus_88d13111] = None,
-        role: typing.Optional[_IRoleRef_8400221f] = None,
-        schedule: typing.Optional[_Schedule_c151d01f] = None,
-        targets: typing.Optional[typing.Sequence[_IRuleTarget_7a91f454]] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        event_bus: typing.Optional["_IEventBus_88d13111"] = None,
+        role: typing.Optional["_IRoleRef_8400221f"] = None,
+        schedule: typing.Optional["_Schedule_c151d01f"] = None,
+        targets: typing.Optional[typing.Sequence["_IRuleTarget_7a91f454"]] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''
         :param name: -
         :param target: -
@@ -9424,14 +9430,14 @@ class _IStageProxy:
 
     @builtins.property
     @jsii.member(jsii_name="actions")
-    def actions(self) -> typing.List[IAction]:
+    def actions(self) -> typing.List["IAction"]:
         '''The actions belonging to this stage.'''
-        return typing.cast(typing.List[IAction], jsii.get(self, "actions"))
+        return typing.cast(typing.List["IAction"], jsii.get(self, "actions"))
 
     @builtins.property
     @jsii.member(jsii_name="pipeline")
-    def pipeline(self) -> IPipeline:
-        return typing.cast(IPipeline, jsii.get(self, "pipeline"))
+    def pipeline(self) -> "IPipeline":
+        return typing.cast("IPipeline", jsii.get(self, "pipeline"))
 
     @builtins.property
     @jsii.member(jsii_name="stageName")
@@ -9440,7 +9446,7 @@ class _IStageProxy:
         return typing.cast(builtins.str, jsii.get(self, "stageName"))
 
     @jsii.member(jsii_name="addAction")
-    def add_action(self, action: IAction) -> None:
+    def add_action(self, action: "IAction") -> None:
         '''
         :param action: -
         '''
@@ -9453,18 +9459,18 @@ class _IStageProxy:
     def on_state_change(
         self,
         name: builtins.str,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         *,
         enabled: typing.Optional[builtins.bool] = None,
-        event_bus: typing.Optional[_IEventBus_88d13111] = None,
-        role: typing.Optional[_IRoleRef_8400221f] = None,
-        schedule: typing.Optional[_Schedule_c151d01f] = None,
-        targets: typing.Optional[typing.Sequence[_IRuleTarget_7a91f454]] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        event_bus: typing.Optional["_IEventBus_88d13111"] = None,
+        role: typing.Optional["_IRoleRef_8400221f"] = None,
+        schedule: typing.Optional["_Schedule_c151d01f"] = None,
+        targets: typing.Optional[typing.Sequence["_IRuleTarget_7a91f454"]] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''
         :param name: -
         :param target: -
@@ -9494,7 +9500,7 @@ class _IStageProxy:
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onStateChange", [name, target, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onStateChange", [name, target, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IStage).__jsii_proxy_class__ = lambda : _IStageProxy
@@ -9531,19 +9537,19 @@ class Pipeline(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        artifact_bucket: typing.Optional[_IBucket_42e086fd] = None,
+        artifact_bucket: typing.Optional["_IBucket_42e086fd"] = None,
         cross_account_keys: typing.Optional[builtins.bool] = None,
-        cross_region_replication_buckets: typing.Optional[typing.Mapping[builtins.str, _IBucket_42e086fd]] = None,
+        cross_region_replication_buckets: typing.Optional[typing.Mapping[builtins.str, "_IBucket_42e086fd"]] = None,
         enable_key_rotation: typing.Optional[builtins.bool] = None,
-        execution_mode: typing.Optional[ExecutionMode] = None,
+        execution_mode: typing.Optional["ExecutionMode"] = None,
         pipeline_name: typing.Optional[builtins.str] = None,
         pipeline_type: typing.Optional["PipelineType"] = None,
         restart_execution_on_update: typing.Optional[builtins.bool] = None,
         reuse_cross_region_support_stacks: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         stages: typing.Optional[typing.Sequence[typing.Union["StageProps", typing.Dict[builtins.str, typing.Any]]]] = None,
         triggers: typing.Optional[typing.Sequence[typing.Union["TriggerProps", typing.Dict[builtins.str, typing.Any]]]] = None,
         use_pipeline_role_for_actions: typing.Optional[builtins.bool] = None,
@@ -9594,10 +9600,10 @@ class Pipeline(
     @builtins.classmethod
     def from_pipeline_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         pipeline_arn: builtins.str,
-    ) -> IPipeline:
+    ) -> "IPipeline":
         '''Import a pipeline into this app.
 
         :param scope: the scope into which to import this pipeline.
@@ -9609,7 +9615,7 @@ class Pipeline(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument pipeline_arn", value=pipeline_arn, expected_type=type_hints["pipeline_arn"])
-        return typing.cast(IPipeline, jsii.sinvoke(cls, "fromPipelineArn", [scope, id, pipeline_arn]))
+        return typing.cast("IPipeline", jsii.sinvoke(cls, "fromPipelineArn", [scope, id, pipeline_arn]))
 
     @jsii.member(jsii_name="addStage")
     def add_stage(
@@ -9617,13 +9623,13 @@ class Pipeline(
         *,
         placement: typing.Optional[typing.Union["StagePlacement", typing.Dict[builtins.str, typing.Any]]] = None,
         stage_name: builtins.str,
-        actions: typing.Optional[typing.Sequence[IAction]] = None,
-        before_entry: typing.Optional[typing.Union[Conditions, typing.Dict[builtins.str, typing.Any]]] = None,
-        on_failure: typing.Optional[typing.Union[FailureConditions, typing.Dict[builtins.str, typing.Any]]] = None,
-        on_success: typing.Optional[typing.Union[Conditions, typing.Dict[builtins.str, typing.Any]]] = None,
+        actions: typing.Optional[typing.Sequence["IAction"]] = None,
+        before_entry: typing.Optional[typing.Union["Conditions", typing.Dict[builtins.str, typing.Any]]] = None,
+        on_failure: typing.Optional[typing.Union["FailureConditions", typing.Dict[builtins.str, typing.Any]]] = None,
+        on_success: typing.Optional[typing.Union["Conditions", typing.Dict[builtins.str, typing.Any]]] = None,
         transition_disabled_reason: typing.Optional[builtins.str] = None,
         transition_to_enabled: typing.Optional[builtins.bool] = None,
-    ) -> IStage:
+    ) -> "IStage":
         '''Creates a new Stage, and adds it to this Pipeline.
 
         :param placement: 
@@ -9648,10 +9654,10 @@ class Pipeline(
             transition_to_enabled=transition_to_enabled,
         )
 
-        return typing.cast(IStage, jsii.invoke(self, "addStage", [props]))
+        return typing.cast("IStage", jsii.invoke(self, "addStage", [props]))
 
     @jsii.member(jsii_name="addToRolePolicy")
-    def add_to_role_policy(self, statement: _PolicyStatement_0fe33853) -> None:
+    def add_to_role_policy(self, statement: "_PolicyStatement_0fe33853") -> None:
         '''Adds a statement to the pipeline role.
 
         :param statement: -
@@ -9666,7 +9672,7 @@ class Pipeline(
         self,
         *,
         provider_type: "ProviderType",
-        git_configuration: typing.Optional[typing.Union[GitConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        git_configuration: typing.Optional[typing.Union["GitConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "Trigger":
         '''Adds a new Trigger to this Pipeline.
 
@@ -9697,8 +9703,8 @@ class Pipeline(
     @jsii.member(jsii_name="bindAsNotificationRuleSource")
     def bind_as_notification_rule_source(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
-    ) -> _NotificationRuleSourceConfig_20189a3e:
+        _scope: "_constructs_77d1e7e8.Construct",
+    ) -> "_NotificationRuleSourceConfig_20189a3e":
         '''Returns a source configuration for notification rule.
 
         :param _scope: -
@@ -9706,20 +9712,20 @@ class Pipeline(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__426062ddd10eb07a3be4ad55dd0fe3c2b81732bcdb5a244b2ec7d40db4605efc)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(_NotificationRuleSourceConfig_20189a3e, jsii.invoke(self, "bindAsNotificationRuleSource", [_scope]))
+        return typing.cast("_NotificationRuleSourceConfig_20189a3e", jsii.invoke(self, "bindAsNotificationRuleSource", [_scope]))
 
     @jsii.member(jsii_name="notifyOn")
     def notify_on(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         events: typing.Sequence["PipelineNotificationEvents"],
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar notification rule triggered when the pipeline events emitted by you specified, it very similar to ``onEvent`` API.
 
         You can also use the methods ``notifyOnExecutionStateChange``, ``notifyOnAnyStageStateChange``,
@@ -9746,19 +9752,19 @@ class Pipeline(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOn", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOn", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnAnyActionStateChange")
     def notify_on_any_action_state_change(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Define an notification rule triggered by the set of the "Action execution" events emitted from this pipeline.
 
         :param id: -
@@ -9779,19 +9785,19 @@ class Pipeline(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnAnyActionStateChange", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnAnyActionStateChange", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnAnyManualApprovalStateChange")
     def notify_on_any_manual_approval_state_change(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Define an notification rule triggered by the set of the "Manual approval" events emitted from this pipeline.
 
         :param id: -
@@ -9812,19 +9818,19 @@ class Pipeline(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnAnyManualApprovalStateChange", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnAnyManualApprovalStateChange", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnAnyStageStateChange")
     def notify_on_any_stage_state_change(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Define an notification rule triggered by the set of the "Stage execution" events emitted from this pipeline.
 
         :param id: -
@@ -9845,19 +9851,19 @@ class Pipeline(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnAnyStageStateChange", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnAnyStageStateChange", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnExecutionStateChange")
     def notify_on_execution_state_change(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Define an notification rule triggered by the set of the "Pipeline execution" events emitted from this pipeline.
 
         :param id: -
@@ -9878,19 +9884,19 @@ class Pipeline(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnExecutionStateChange", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnExecutionStateChange", [id, target, options]))
 
     @jsii.member(jsii_name="onEvent")
     def on_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an event rule triggered by this CodePipeline.
 
         :param id: Identifier for this event handler.
@@ -9911,19 +9917,19 @@ class Pipeline(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onEvent", [id, options]))
 
     @jsii.member(jsii_name="onStateChange")
     def on_state_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an event rule triggered by the "CodePipeline Pipeline Execution State Change" event emitted from this pipeline.
 
         :param id: Identifier for this event handler.
@@ -9944,10 +9950,10 @@ class Pipeline(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onStateChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onStateChange", [id, options]))
 
     @jsii.member(jsii_name="stage")
-    def stage(self, stage_name: builtins.str) -> IStage:
+    def stage(self, stage_name: builtins.str) -> "IStage":
         '''Access one of the pipeline's stages by stage name.
 
         :param stage_name: -
@@ -9955,7 +9961,7 @@ class Pipeline(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fe3129dc544ee80782ab12928d846fc8298b3a84c6755877b473b38e9022fca4)
             check_type(argname="argument stage_name", value=stage_name, expected_type=type_hints["stage_name"])
-        return typing.cast(IStage, jsii.invoke(self, "stage", [stage_name]))
+        return typing.cast("IStage", jsii.invoke(self, "stage", [stage_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -9965,15 +9971,17 @@ class Pipeline(
 
     @builtins.property
     @jsii.member(jsii_name="artifactBucket")
-    def artifact_bucket(self) -> _IBucket_42e086fd:
+    def artifact_bucket(self) -> "_IBucket_42e086fd":
         '''Bucket used to store output artifacts.'''
-        return typing.cast(_IBucket_42e086fd, jsii.get(self, "artifactBucket"))
+        return typing.cast("_IBucket_42e086fd", jsii.get(self, "artifactBucket"))
 
     @builtins.property
     @jsii.member(jsii_name="crossRegionSupport")
-    def cross_region_support(self) -> typing.Mapping[builtins.str, CrossRegionSupport]:
+    def cross_region_support(
+        self,
+    ) -> typing.Mapping[builtins.str, "CrossRegionSupport"]:
         '''Returns all of the ``CrossRegionSupportStack``s that were generated automatically when dealing with Actions that reside in a different region than the Pipeline itself.'''
-        return typing.cast(typing.Mapping[builtins.str, CrossRegionSupport], jsii.get(self, "crossRegionSupport"))
+        return typing.cast(typing.Mapping[builtins.str, "CrossRegionSupport"], jsii.get(self, "crossRegionSupport"))
 
     @builtins.property
     @jsii.member(jsii_name="pipelineArn")
@@ -9998,9 +10006,9 @@ class Pipeline(
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''The IAM role AWS CodePipeline will use to perform actions or assume roles for actions with a more specific IAM role.'''
-        return typing.cast(_IRole_235f5d8e, jsii.get(self, "role"))
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "role"))
 
     @builtins.property
     @jsii.member(jsii_name="stageCount")
@@ -10010,7 +10018,7 @@ class Pipeline(
 
     @builtins.property
     @jsii.member(jsii_name="stages")
-    def stages(self) -> typing.List[IStage]:
+    def stages(self) -> typing.List["IStage"]:
         '''Returns the stages that comprise the pipeline.
 
         **Note**: the returned array is a defensive copy,
@@ -10018,7 +10026,7 @@ class Pipeline(
         Instead, use the ``addStage`` method if you want to add more stages
         to the pipeline.
         '''
-        return typing.cast(typing.List[IStage], jsii.get(self, "stages"))
+        return typing.cast(typing.List["IStage"], jsii.get(self, "stages"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_codepipeline.PipelineNotificationEvents")
@@ -10082,10 +10090,10 @@ class PipelineNotifyOnOptions(_NotificationRuleOptions_dff73281):
         self,
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-        events: typing.Sequence[PipelineNotificationEvents],
+        events: typing.Sequence["PipelineNotificationEvents"],
     ) -> None:
         '''Additional options to pass to the notification rule.
 
@@ -10145,7 +10153,7 @@ class PipelineNotifyOnOptions(_NotificationRuleOptions_dff73281):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def detail_type(self) -> typing.Optional[_DetailType_cf8135e7]:
+    def detail_type(self) -> typing.Optional["_DetailType_cf8135e7"]:
         '''The level of detail to include in the notifications for this resource.
 
         BASIC will include only the contents of the event as it would appear in AWS CloudWatch.
@@ -10154,7 +10162,7 @@ class PipelineNotifyOnOptions(_NotificationRuleOptions_dff73281):
         :default: DetailType.FULL
         '''
         result = self._values.get("detail_type")
-        return typing.cast(typing.Optional[_DetailType_cf8135e7], result)
+        return typing.cast(typing.Optional["_DetailType_cf8135e7"], result)
 
     @builtins.property
     def enabled(self) -> typing.Optional[builtins.bool]:
@@ -10179,7 +10187,7 @@ class PipelineNotifyOnOptions(_NotificationRuleOptions_dff73281):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def events(self) -> typing.List[PipelineNotificationEvents]:
+    def events(self) -> typing.List["PipelineNotificationEvents"]:
         '''A list of event types associated with this notification rule for CodePipeline Pipeline.
 
         For a complete list of event types and IDs, see Notification concepts in the Developer Tools Console User Guide.
@@ -10188,7 +10196,7 @@ class PipelineNotifyOnOptions(_NotificationRuleOptions_dff73281):
         '''
         result = self._values.get("events")
         assert result is not None, "Required property 'events' is missing"
-        return typing.cast(typing.List[PipelineNotificationEvents], result)
+        return typing.cast(typing.List["PipelineNotificationEvents"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10226,16 +10234,16 @@ class PipelineProps:
     def __init__(
         self,
         *,
-        artifact_bucket: typing.Optional[_IBucket_42e086fd] = None,
+        artifact_bucket: typing.Optional["_IBucket_42e086fd"] = None,
         cross_account_keys: typing.Optional[builtins.bool] = None,
-        cross_region_replication_buckets: typing.Optional[typing.Mapping[builtins.str, _IBucket_42e086fd]] = None,
+        cross_region_replication_buckets: typing.Optional[typing.Mapping[builtins.str, "_IBucket_42e086fd"]] = None,
         enable_key_rotation: typing.Optional[builtins.bool] = None,
-        execution_mode: typing.Optional[ExecutionMode] = None,
+        execution_mode: typing.Optional["ExecutionMode"] = None,
         pipeline_name: typing.Optional[builtins.str] = None,
         pipeline_type: typing.Optional["PipelineType"] = None,
         restart_execution_on_update: typing.Optional[builtins.bool] = None,
         reuse_cross_region_support_stacks: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         stages: typing.Optional[typing.Sequence[typing.Union["StageProps", typing.Dict[builtins.str, typing.Any]]]] = None,
         triggers: typing.Optional[typing.Sequence[typing.Union["TriggerProps", typing.Dict[builtins.str, typing.Any]]]] = None,
         use_pipeline_role_for_actions: typing.Optional[builtins.bool] = None,
@@ -10341,13 +10349,13 @@ class PipelineProps:
             self._values["variables"] = variables
 
     @builtins.property
-    def artifact_bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def artifact_bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''The S3 bucket used by this Pipeline to store artifacts.
 
         :default: - A new S3 bucket will be created.
         '''
         result = self._values.get("artifact_bucket")
-        return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     @builtins.property
     def cross_account_keys(self) -> typing.Optional[builtins.bool]:
@@ -10374,7 +10382,7 @@ class PipelineProps:
     @builtins.property
     def cross_region_replication_buckets(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, _IBucket_42e086fd]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "_IBucket_42e086fd"]]:
         '''A map of region to S3 bucket name used for cross-region CodePipeline.
 
         For every Action that you specify targeting a different region than the Pipeline itself,
@@ -10384,7 +10392,7 @@ class PipelineProps:
         :default: - None.
         '''
         result = self._values.get("cross_region_replication_buckets")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, _IBucket_42e086fd]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "_IBucket_42e086fd"]], result)
 
     @builtins.property
     def enable_key_rotation(self) -> typing.Optional[builtins.bool]:
@@ -10399,13 +10407,13 @@ class PipelineProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def execution_mode(self) -> typing.Optional[ExecutionMode]:
+    def execution_mode(self) -> typing.Optional["ExecutionMode"]:
         '''The method that the pipeline will use to handle multiple executions.
 
         :default: - ExecutionMode.SUPERSEDED
         '''
         result = self._values.get("execution_mode")
-        return typing.cast(typing.Optional[ExecutionMode], result)
+        return typing.cast(typing.Optional["ExecutionMode"], result)
 
     @builtins.property
     def pipeline_name(self) -> typing.Optional[builtins.str]:
@@ -10449,13 +10457,13 @@ class PipelineProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role to be assumed by this Pipeline.
 
         :default: a new IAM role will be created.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def stages(self) -> typing.Optional[typing.List["StageProps"]]:
@@ -10769,7 +10777,7 @@ class Rule(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_codepipeline.Rule
         name: typing.Optional[builtins.str] = None,
         provider: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
-        role: typing.Optional[_Role_e8c6e11f] = None,
+        role: typing.Optional["_Role_e8c6e11f"] = None,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Creates a new Rule instance.
@@ -10837,7 +10845,7 @@ class RuleProps:
         name: typing.Optional[builtins.str] = None,
         provider: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
-        role: typing.Optional[_Role_e8c6e11f] = None,
+        role: typing.Optional["_Role_e8c6e11f"] = None,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a CodePipeline Rule.
@@ -11023,7 +11031,7 @@ class RuleProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_Role_e8c6e11f]:
+    def role(self) -> typing.Optional["_Role_e8c6e11f"]:
         '''The IAM role that the rule will use to execute its actions.
 
         The role must have sufficient permissions to perform the rule's tasks.
@@ -11031,7 +11039,7 @@ class RuleProps:
         :default: - A new role will be created
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_Role_e8c6e11f], result)
+        return typing.cast(typing.Optional["_Role_e8c6e11f"], result)
 
     @builtins.property
     def version(self) -> typing.Optional[builtins.str]:
@@ -11065,8 +11073,8 @@ class StagePlacement:
     def __init__(
         self,
         *,
-        just_after: typing.Optional[IStage] = None,
-        right_before: typing.Optional[IStage] = None,
+        just_after: typing.Optional["IStage"] = None,
+        right_before: typing.Optional["IStage"] = None,
     ) -> None:
         '''Allows you to control where to place a new Stage when it's added to the Pipeline.
 
@@ -11107,16 +11115,16 @@ class StagePlacement:
             self._values["right_before"] = right_before
 
     @builtins.property
-    def just_after(self) -> typing.Optional[IStage]:
+    def just_after(self) -> typing.Optional["IStage"]:
         '''Inserts the new Stage as a child of the given Stage (changing its current child Stage, if it had one).'''
         result = self._values.get("just_after")
-        return typing.cast(typing.Optional[IStage], result)
+        return typing.cast(typing.Optional["IStage"], result)
 
     @builtins.property
-    def right_before(self) -> typing.Optional[IStage]:
+    def right_before(self) -> typing.Optional["IStage"]:
         '''Inserts the new Stage as a parent of the given Stage (changing its current parent Stage, if it had one).'''
         result = self._values.get("right_before")
-        return typing.cast(typing.Optional[IStage], result)
+        return typing.cast(typing.Optional["IStage"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11148,10 +11156,10 @@ class StageProps:
         self,
         *,
         stage_name: builtins.str,
-        actions: typing.Optional[typing.Sequence[IAction]] = None,
-        before_entry: typing.Optional[typing.Union[Conditions, typing.Dict[builtins.str, typing.Any]]] = None,
-        on_failure: typing.Optional[typing.Union[FailureConditions, typing.Dict[builtins.str, typing.Any]]] = None,
-        on_success: typing.Optional[typing.Union[Conditions, typing.Dict[builtins.str, typing.Any]]] = None,
+        actions: typing.Optional[typing.Sequence["IAction"]] = None,
+        before_entry: typing.Optional[typing.Union["Conditions", typing.Dict[builtins.str, typing.Any]]] = None,
+        on_failure: typing.Optional[typing.Union["FailureConditions", typing.Dict[builtins.str, typing.Any]]] = None,
+        on_success: typing.Optional[typing.Union["Conditions", typing.Dict[builtins.str, typing.Any]]] = None,
         transition_disabled_reason: typing.Optional[builtins.str] = None,
         transition_to_enabled: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -11244,40 +11252,40 @@ class StageProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def actions(self) -> typing.Optional[typing.List[IAction]]:
+    def actions(self) -> typing.Optional[typing.List["IAction"]]:
         '''The list of Actions to create this Stage with.
 
         You can always add more Actions later by calling ``IStage#addAction``.
         '''
         result = self._values.get("actions")
-        return typing.cast(typing.Optional[typing.List[IAction]], result)
+        return typing.cast(typing.Optional[typing.List["IAction"]], result)
 
     @builtins.property
-    def before_entry(self) -> typing.Optional[Conditions]:
+    def before_entry(self) -> typing.Optional["Conditions"]:
         '''The method to use when a stage allows entry.
 
         :default: - No conditions are applied before stage entry
         '''
         result = self._values.get("before_entry")
-        return typing.cast(typing.Optional[Conditions], result)
+        return typing.cast(typing.Optional["Conditions"], result)
 
     @builtins.property
-    def on_failure(self) -> typing.Optional[FailureConditions]:
+    def on_failure(self) -> typing.Optional["FailureConditions"]:
         '''The method to use when a stage has not completed successfully.
 
         :default: - No failure conditions are applied
         '''
         result = self._values.get("on_failure")
-        return typing.cast(typing.Optional[FailureConditions], result)
+        return typing.cast(typing.Optional["FailureConditions"], result)
 
     @builtins.property
-    def on_success(self) -> typing.Optional[Conditions]:
+    def on_success(self) -> typing.Optional["Conditions"]:
         '''The method to use when a stage has succeeded.
 
         :default: - No success conditions are applied
         '''
         result = self._values.get("on_success")
-        return typing.cast(typing.Optional[Conditions], result)
+        return typing.cast(typing.Optional["Conditions"], result)
 
     @builtins.property
     def transition_disabled_reason(self) -> typing.Optional[builtins.str]:
@@ -11358,8 +11366,8 @@ class Trigger(
     def __init__(
         self,
         *,
-        provider_type: ProviderType,
-        git_configuration: typing.Optional[typing.Union[GitConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        provider_type: "ProviderType",
+        git_configuration: typing.Optional[typing.Union["GitConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param provider_type: The source provider for the event, such as connections configured for a repository with Git tags, for the specified trigger configuration.
@@ -11373,9 +11381,9 @@ class Trigger(
 
     @builtins.property
     @jsii.member(jsii_name="sourceAction")
-    def source_action(self) -> typing.Optional[IAction]:
+    def source_action(self) -> typing.Optional["IAction"]:
         '''The pipeline source action where the trigger configuration.'''
-        return typing.cast(typing.Optional[IAction], jsii.get(self, "sourceAction"))
+        return typing.cast(typing.Optional["IAction"], jsii.get(self, "sourceAction"))
 
 
 @jsii.data_type(
@@ -11390,8 +11398,8 @@ class TriggerProps:
     def __init__(
         self,
         *,
-        provider_type: ProviderType,
-        git_configuration: typing.Optional[typing.Union[GitConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        provider_type: "ProviderType",
+        git_configuration: typing.Optional[typing.Union["GitConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties of trigger.
 
@@ -11430,20 +11438,20 @@ class TriggerProps:
             self._values["git_configuration"] = git_configuration
 
     @builtins.property
-    def provider_type(self) -> ProviderType:
+    def provider_type(self) -> "ProviderType":
         '''The source provider for the event, such as connections configured for a repository with Git tags, for the specified trigger configuration.'''
         result = self._values.get("provider_type")
         assert result is not None, "Required property 'provider_type' is missing"
-        return typing.cast(ProviderType, result)
+        return typing.cast("ProviderType", result)
 
     @builtins.property
-    def git_configuration(self) -> typing.Optional[GitConfiguration]:
+    def git_configuration(self) -> typing.Optional["GitConfiguration"]:
         '''Provides the filter criteria and the source stage for the repository event that starts the pipeline, such as Git tags.
 
         :default: - no configuration.
         '''
         result = self._values.get("git_configuration")
-        return typing.cast(typing.Optional[GitConfiguration], result)
+        return typing.cast(typing.Optional["GitConfiguration"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11667,12 +11675,12 @@ class Action(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        stage: IStage,
+        scope: "_constructs_77d1e7e8.Construct",
+        stage: "IStage",
         *,
-        bucket: _IBucket_42e086fd,
-        role: _IRole_235f5d8e,
-    ) -> ActionConfig:
+        bucket: "_IBucket_42e086fd",
+        role: "_IRole_235f5d8e",
+    ) -> "ActionConfig":
         '''The callback invoked when this Action is added to a Pipeline.
 
         :param scope: -
@@ -11686,18 +11694,18 @@ class Action(
             check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
         options = ActionBindOptions(bucket=bucket, role=role)
 
-        return typing.cast(ActionConfig, jsii.invoke(self, "bind", [scope, stage, options]))
+        return typing.cast("ActionConfig", jsii.invoke(self, "bind", [scope, stage, options]))
 
     @jsii.member(jsii_name="bound")
     @abc.abstractmethod
     def _bound(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        stage: IStage,
+        scope: "_constructs_77d1e7e8.Construct",
+        stage: "IStage",
         *,
-        bucket: _IBucket_42e086fd,
-        role: _IRole_235f5d8e,
-    ) -> ActionConfig:
+        bucket: "_IBucket_42e086fd",
+        role: "_IRole_235f5d8e",
+    ) -> "ActionConfig":
         '''This is a renamed version of the ``IAction.bind`` method.
 
         :param scope: -
@@ -11711,18 +11719,18 @@ class Action(
     def on_state_change(
         self,
         name: builtins.str,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         *,
         enabled: typing.Optional[builtins.bool] = None,
-        event_bus: typing.Optional[_IEventBus_88d13111] = None,
-        role: typing.Optional[_IRoleRef_8400221f] = None,
-        schedule: typing.Optional[_Schedule_c151d01f] = None,
-        targets: typing.Optional[typing.Sequence[_IRuleTarget_7a91f454]] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        event_bus: typing.Optional["_IEventBus_88d13111"] = None,
+        role: typing.Optional["_IRoleRef_8400221f"] = None,
+        schedule: typing.Optional["_Schedule_c151d01f"] = None,
+        targets: typing.Optional[typing.Sequence["_IRuleTarget_7a91f454"]] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Creates an Event that will be triggered whenever the state of this Action changes.
 
         :param name: -
@@ -11753,7 +11761,7 @@ class Action(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onStateChange", [name, target, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onStateChange", [name, target, options]))
 
     @jsii.member(jsii_name="variableExpression")
     def _variable_expression(self, variable_name: builtins.str) -> builtins.str:
@@ -11767,17 +11775,17 @@ class Action(
 
     @builtins.property
     @jsii.member(jsii_name="actionProperties")
-    def action_properties(self) -> ActionProperties:
+    def action_properties(self) -> "ActionProperties":
         '''The simple properties of the Action, like its Owner, name, etc.
 
         Note that this accessor will be called before the ``bind`` callback.
         '''
-        return typing.cast(ActionProperties, jsii.get(self, "actionProperties"))
+        return typing.cast("ActionProperties", jsii.get(self, "actionProperties"))
 
     @builtins.property
     @jsii.member(jsii_name="providedActionProperties")
     @abc.abstractmethod
-    def _provided_action_properties(self) -> ActionProperties:
+    def _provided_action_properties(self) -> "ActionProperties":
         '''This is a renamed version of the ``IAction.actionProperties`` property.'''
         ...
 
@@ -11786,12 +11794,12 @@ class _ActionProxy(Action):
     @jsii.member(jsii_name="bound")
     def _bound(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        stage: IStage,
+        scope: "_constructs_77d1e7e8.Construct",
+        stage: "IStage",
         *,
-        bucket: _IBucket_42e086fd,
-        role: _IRole_235f5d8e,
-    ) -> ActionConfig:
+        bucket: "_IBucket_42e086fd",
+        role: "_IRole_235f5d8e",
+    ) -> "ActionConfig":
         '''This is a renamed version of the ``IAction.bind`` method.
 
         :param scope: -
@@ -11805,13 +11813,13 @@ class _ActionProxy(Action):
             check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
         options = ActionBindOptions(bucket=bucket, role=role)
 
-        return typing.cast(ActionConfig, jsii.invoke(self, "bound", [scope, stage, options]))
+        return typing.cast("ActionConfig", jsii.invoke(self, "bound", [scope, stage, options]))
 
     @builtins.property
     @jsii.member(jsii_name="providedActionProperties")
-    def _provided_action_properties(self) -> ActionProperties:
+    def _provided_action_properties(self) -> "ActionProperties":
         '''This is a renamed version of the ``IAction.actionProperties`` property.'''
-        return typing.cast(ActionProperties, jsii.get(self, "providedActionProperties"))
+        return typing.cast("ActionProperties", jsii.get(self, "providedActionProperties"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, Action).__jsii_proxy_class__ = lambda : _ActionProxy
@@ -11836,13 +11844,13 @@ class StageOptions(StageProps):
         self,
         *,
         stage_name: builtins.str,
-        actions: typing.Optional[typing.Sequence[IAction]] = None,
-        before_entry: typing.Optional[typing.Union[Conditions, typing.Dict[builtins.str, typing.Any]]] = None,
-        on_failure: typing.Optional[typing.Union[FailureConditions, typing.Dict[builtins.str, typing.Any]]] = None,
-        on_success: typing.Optional[typing.Union[Conditions, typing.Dict[builtins.str, typing.Any]]] = None,
+        actions: typing.Optional[typing.Sequence["IAction"]] = None,
+        before_entry: typing.Optional[typing.Union["Conditions", typing.Dict[builtins.str, typing.Any]]] = None,
+        on_failure: typing.Optional[typing.Union["FailureConditions", typing.Dict[builtins.str, typing.Any]]] = None,
+        on_success: typing.Optional[typing.Union["Conditions", typing.Dict[builtins.str, typing.Any]]] = None,
         transition_disabled_reason: typing.Optional[builtins.str] = None,
         transition_to_enabled: typing.Optional[builtins.bool] = None,
-        placement: typing.Optional[typing.Union[StagePlacement, typing.Dict[builtins.str, typing.Any]]] = None,
+        placement: typing.Optional[typing.Union["StagePlacement", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param stage_name: The physical, human-readable name to assign to this Pipeline Stage.
@@ -11919,40 +11927,40 @@ class StageOptions(StageProps):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def actions(self) -> typing.Optional[typing.List[IAction]]:
+    def actions(self) -> typing.Optional[typing.List["IAction"]]:
         '''The list of Actions to create this Stage with.
 
         You can always add more Actions later by calling ``IStage#addAction``.
         '''
         result = self._values.get("actions")
-        return typing.cast(typing.Optional[typing.List[IAction]], result)
+        return typing.cast(typing.Optional[typing.List["IAction"]], result)
 
     @builtins.property
-    def before_entry(self) -> typing.Optional[Conditions]:
+    def before_entry(self) -> typing.Optional["Conditions"]:
         '''The method to use when a stage allows entry.
 
         :default: - No conditions are applied before stage entry
         '''
         result = self._values.get("before_entry")
-        return typing.cast(typing.Optional[Conditions], result)
+        return typing.cast(typing.Optional["Conditions"], result)
 
     @builtins.property
-    def on_failure(self) -> typing.Optional[FailureConditions]:
+    def on_failure(self) -> typing.Optional["FailureConditions"]:
         '''The method to use when a stage has not completed successfully.
 
         :default: - No failure conditions are applied
         '''
         result = self._values.get("on_failure")
-        return typing.cast(typing.Optional[FailureConditions], result)
+        return typing.cast(typing.Optional["FailureConditions"], result)
 
     @builtins.property
-    def on_success(self) -> typing.Optional[Conditions]:
+    def on_success(self) -> typing.Optional["Conditions"]:
         '''The method to use when a stage has succeeded.
 
         :default: - No success conditions are applied
         '''
         result = self._values.get("on_success")
-        return typing.cast(typing.Optional[Conditions], result)
+        return typing.cast(typing.Optional["Conditions"], result)
 
     @builtins.property
     def transition_disabled_reason(self) -> typing.Optional[builtins.str]:
@@ -11976,9 +11984,9 @@ class StageOptions(StageProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def placement(self) -> typing.Optional[StagePlacement]:
+    def placement(self) -> typing.Optional["StagePlacement"]:
         result = self._values.get("placement")
-        return typing.cast(typing.Optional[StagePlacement], result)
+        return typing.cast(typing.Optional["StagePlacement"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

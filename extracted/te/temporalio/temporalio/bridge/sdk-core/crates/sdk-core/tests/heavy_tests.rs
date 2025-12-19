@@ -21,15 +21,16 @@ use std::{
     sync::Arc,
     time::{Duration, Instant},
 };
-use temporalio_client::{GetWorkflowResultOpts, WfClientExt, WorkflowClientTrait, WorkflowOptions};
+use temporalio_client::{
+    GetWorkflowResultOptions, WfClientExt, WorkflowClientTrait, WorkflowOptions,
+};
 
-use temporalio_common::worker::WorkerTaskTypes;
 use temporalio_common::{
     protos::{
         coresdk::{AsJsonPayloadExt, workflow_commands::ActivityCancellationType},
         temporal::api::enums::v1::WorkflowIdReusePolicy,
     },
-    worker::PollerBehavior,
+    worker::{PollerBehavior, WorkerTaskTypes},
 };
 use temporalio_sdk::{ActContext, ActivityOptions, WfContext, WorkflowResult};
 use temporalio_sdk_core::{CoreRuntime, ResourceBasedTuner, ResourceSlotOptions};
@@ -39,12 +40,10 @@ async fn activity_load() {
     const CONCURRENCY: usize = 512;
 
     let mut starter = CoreWfStarter::new("activity_load");
-    starter
-        .worker_config
-        .max_outstanding_workflow_tasks(CONCURRENCY)
-        .max_cached_workflows(CONCURRENCY)
-        .activity_task_poller_behavior(PollerBehavior::SimpleMaximum(10_usize))
-        .max_outstanding_activities(CONCURRENCY);
+    starter.worker_config.max_outstanding_workflow_tasks = Some(CONCURRENCY);
+    starter.worker_config.max_cached_workflows = CONCURRENCY;
+    starter.worker_config.activity_task_poller_behavior = PollerBehavior::SimpleMaximum(10);
+    starter.worker_config.max_outstanding_activities = Some(CONCURRENCY);
     let mut worker = starter.worker().await;
 
     let activity_id = "act-1";
@@ -109,11 +108,12 @@ async fn chunky_activities_resource_based() {
     const WORKFLOWS: usize = 100;
 
     let mut starter = CoreWfStarter::new("chunky_activities_resource_based");
-    starter
-        .worker_config
-        .clear_max_outstanding_opts()
-        .workflow_task_poller_behavior(PollerBehavior::SimpleMaximum(10_usize))
-        .activity_task_poller_behavior(PollerBehavior::SimpleMaximum(10_usize));
+    starter.worker_config.max_outstanding_workflow_tasks = None;
+    starter.worker_config.max_outstanding_local_activities = None;
+    starter.worker_config.max_outstanding_activities = None;
+    starter.worker_config.max_outstanding_nexus_tasks = None;
+    starter.worker_config.workflow_task_poller_behavior = PollerBehavior::SimpleMaximum(10_usize);
+    starter.worker_config.activity_task_poller_behavior = PollerBehavior::SimpleMaximum(10_usize);
     let mut tuner = ResourceBasedTuner::new(0.7, 0.7);
     tuner
         .with_workflow_slots_options(ResourceSlotOptions::new(
@@ -122,7 +122,7 @@ async fn chunky_activities_resource_based() {
             Duration::from_millis(0),
         ))
         .with_activity_slots_options(ResourceSlotOptions::new(5, 1000, Duration::from_millis(50)));
-    starter.worker_config.tuner(Arc::new(tuner));
+    starter.worker_config.tuner = Some(Arc::new(tuner));
     let mut worker = starter.worker().await;
 
     let activity_id = "act-1";
@@ -202,12 +202,10 @@ async fn workflow_load() {
     init_integ_telem();
     let rt = CoreRuntime::new_assume_tokio(get_integ_runtime_options(telemopts)).unwrap();
     let mut starter = CoreWfStarter::new_with_runtime("workflow_load", rt);
-    starter
-        .worker_config
-        .max_outstanding_workflow_tasks(5_usize)
-        .max_cached_workflows(200_usize)
-        .activity_task_poller_behavior(PollerBehavior::SimpleMaximum(10_usize))
-        .max_outstanding_activities(100_usize);
+    starter.worker_config.max_outstanding_workflow_tasks = Some(5);
+    starter.worker_config.max_cached_workflows = 200;
+    starter.worker_config.activity_task_poller_behavior = PollerBehavior::SimpleMaximum(10);
+    starter.worker_config.max_outstanding_activities = Some(100);
     let mut worker = starter.worker().await;
     worker.register_wf(wf_name.to_owned(), |ctx: WfContext| async move {
         let sigchan = ctx.make_signal_channel(SIGNAME).map(Ok);
@@ -281,10 +279,8 @@ async fn workflow_load() {
 async fn evict_while_la_running_no_interference() {
     let wf_name = "evict_while_la_running_no_interference";
     let mut starter = CoreWfStarter::new(wf_name);
-    starter
-        .worker_config
-        .max_outstanding_local_activities(20_usize)
-        .max_cached_workflows(20_usize);
+    starter.worker_config.max_outstanding_local_activities = Some(20);
+    starter.worker_config.max_cached_workflows = 20;
     // Though it doesn't make sense to set wft higher than cached workflows, leaving this commented
     // introduces more instability that can be useful in the test.
     // starter.max_wft(20);
@@ -349,11 +345,9 @@ pub async fn many_parallel_timers_longhist(ctx: WfContext) -> WorkflowResult<()>
 async fn can_paginate_long_history() {
     let wf_name = "can_paginate_long_history";
     let mut starter = CoreWfStarter::new(wf_name);
-    starter
-        .worker_config
-        .task_types(WorkerTaskTypes::workflow_only())
-        // Do not use sticky queues so we are forced to paginate once history gets long
-        .max_cached_workflows(0_usize);
+    starter.worker_config.task_types = WorkerTaskTypes::workflow_only();
+    // Do not use sticky queues so we are forced to paginate once history gets long
+    starter.worker_config.max_cached_workflows = 0;
 
     let mut worker = starter.worker().await;
     worker.register_wf(wf_name.to_owned(), many_parallel_timers_longhist);
@@ -393,21 +387,19 @@ async fn poller_autoscaling_basic_loadtest() {
     let num_workflows = 100;
     let wf_name = "poller_load";
     let mut starter = CoreWfStarter::new("poller_load");
-    starter
-        .worker_config
-        .max_cached_workflows(5000_usize)
-        .max_outstanding_workflow_tasks(1000_usize)
-        .max_outstanding_activities(1000_usize)
-        .workflow_task_poller_behavior(PollerBehavior::Autoscaling {
-            minimum: 1,
-            maximum: 200,
-            initial: 5,
-        })
-        .activity_task_poller_behavior(PollerBehavior::Autoscaling {
-            minimum: 1,
-            maximum: 200,
-            initial: 5,
-        });
+    starter.worker_config.max_cached_workflows = 5000;
+    starter.worker_config.max_outstanding_workflow_tasks = Some(1000);
+    starter.worker_config.max_outstanding_activities = Some(1000);
+    starter.worker_config.workflow_task_poller_behavior = PollerBehavior::Autoscaling {
+        minimum: 1,
+        maximum: 200,
+        initial: 5,
+    };
+    starter.worker_config.activity_task_poller_behavior = PollerBehavior::Autoscaling {
+        minimum: 1,
+        maximum: 200,
+        initial: 5,
+    };
     let mut worker = starter.worker().await;
     let shutdown_handle = worker.inner_mut().shutdown_handle();
     worker.register_wf(wf_name.to_owned(), |ctx: WfContext| async move {
@@ -463,7 +455,7 @@ async fn poller_autoscaling_basic_loadtest() {
         stream::iter(mem::take(&mut workflow_handles))
             .for_each_concurrent(25, |handle| async move {
                 let _ = handle
-                    .get_workflow_result(GetWorkflowResultOpts::default())
+                    .get_workflow_result(GetWorkflowResultOptions::default())
                     .await;
             })
             .await;

@@ -145,7 +145,7 @@ class IClusterRef(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IClusterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClusterReference, jsii.get(self, "clusterRef"))
+        return typing.cast("ClusterReference", jsii.get(self, "clusterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRefProxy
@@ -190,7 +190,7 @@ class IComputeNodeGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="computeNodeGroupRef")
-    def compute_node_group_ref(self) -> ComputeNodeGroupReference:
+    def compute_node_group_ref(self) -> "ComputeNodeGroupReference":
         '''(experimental) A reference to a ComputeNodeGroup resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IComputeNodeGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="computeNodeGroupRef")
-    def compute_node_group_ref(self) -> ComputeNodeGroupReference:
+    def compute_node_group_ref(self) -> "ComputeNodeGroupReference":
         '''(experimental) A reference to a ComputeNodeGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(ComputeNodeGroupReference, jsii.get(self, "computeNodeGroupRef"))
+        return typing.cast("ComputeNodeGroupReference", jsii.get(self, "computeNodeGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IComputeNodeGroupRef).__jsii_proxy_class__ = lambda : _IComputeNodeGroupRefProxy

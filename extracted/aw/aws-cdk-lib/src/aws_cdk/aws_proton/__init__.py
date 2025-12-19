@@ -100,6 +100,7 @@ class CfnEnvironmentAccountConnection(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_proton as proton
@@ -120,7 +121,7 @@ class CfnEnvironmentAccountConnection(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         codebuild_role_arn: typing.Optional[builtins.str] = None,
@@ -129,7 +130,7 @@ class CfnEnvironmentAccountConnection(
         environment_name: typing.Optional[builtins.str] = None,
         management_account_id: typing.Optional[builtins.str] = None,
         role_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Proton::EnvironmentAccountConnection``.
 
@@ -163,7 +164,7 @@ class CfnEnvironmentAccountConnection(
     @builtins.classmethod
     def arn_for_environment_account_connection(
         cls,
-        resource: _IEnvironmentAccountConnectionRef_389c5b12,
+        resource: "_IEnvironmentAccountConnectionRef_389c5b12",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -186,7 +187,7 @@ class CfnEnvironmentAccountConnection(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEnvironmentAccountConnection", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -251,15 +252,15 @@ class CfnEnvironmentAccountConnection(
     @jsii.member(jsii_name="environmentAccountConnectionRef")
     def environment_account_connection_ref(
         self,
-    ) -> _EnvironmentAccountConnectionReference_e0cad370:
+    ) -> "_EnvironmentAccountConnectionReference_e0cad370":
         '''A reference to a EnvironmentAccountConnection resource.'''
-        return typing.cast(_EnvironmentAccountConnectionReference_e0cad370, jsii.get(self, "environmentAccountConnectionRef"))
+        return typing.cast("_EnvironmentAccountConnectionReference_e0cad370", jsii.get(self, "environmentAccountConnectionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="codebuildRoleArn")
@@ -341,12 +342,12 @@ class CfnEnvironmentAccountConnection(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional list of metadata items that you can associate with the AWS Proton environment account connection.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__952d5d229754748fd9299ff4728f53f331581c6208e0c33caa4616b211155911)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -376,7 +377,7 @@ class CfnEnvironmentAccountConnectionProps:
         environment_name: typing.Optional[builtins.str] = None,
         management_account_id: typing.Optional[builtins.str] = None,
         role_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEnvironmentAccountConnection``.
 
@@ -393,6 +394,7 @@ class CfnEnvironmentAccountConnectionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_proton as proton
@@ -498,7 +500,7 @@ class CfnEnvironmentAccountConnectionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional list of metadata items that you can associate with the AWS Proton environment account connection.
 
         A tag is a key-value pair.
@@ -508,7 +510,7 @@ class CfnEnvironmentAccountConnectionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-proton-environmentaccountconnection.html#cfn-proton-environmentaccountconnection-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -543,6 +545,7 @@ class CfnEnvironmentTemplate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_proton as proton
@@ -562,7 +565,7 @@ class CfnEnvironmentTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -570,7 +573,7 @@ class CfnEnvironmentTemplate(
         encryption_key: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         provisioning: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Proton::EnvironmentTemplate``.
 
@@ -602,7 +605,7 @@ class CfnEnvironmentTemplate(
     @builtins.classmethod
     def arn_for_environment_template(
         cls,
-        resource: _IEnvironmentTemplateRef_2a7db519,
+        resource: "_IEnvironmentTemplateRef_2a7db519",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -625,7 +628,7 @@ class CfnEnvironmentTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEnvironmentTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -670,15 +673,15 @@ class CfnEnvironmentTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="environmentTemplateRef")
-    def environment_template_ref(self) -> _EnvironmentTemplateReference_7a1abc2b:
+    def environment_template_ref(self) -> "_EnvironmentTemplateReference_7a1abc2b":
         '''A reference to a EnvironmentTemplate resource.'''
-        return typing.cast(_EnvironmentTemplateReference_7a1abc2b, jsii.get(self, "environmentTemplateRef"))
+        return typing.cast("_EnvironmentTemplateReference_7a1abc2b", jsii.get(self, "environmentTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -747,12 +750,12 @@ class CfnEnvironmentTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional list of metadata items that you can associate with the AWS Proton environment template.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a718c60c41780a6528ba1366f7802aa96b0bdb2f952b5fce603cf2d6cbc88470)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -780,7 +783,7 @@ class CfnEnvironmentTemplateProps:
         encryption_key: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         provisioning: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEnvironmentTemplate``.
 
@@ -796,6 +799,7 @@ class CfnEnvironmentTemplateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_proton as proton
@@ -880,7 +884,7 @@ class CfnEnvironmentTemplateProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An optional list of metadata items that you can associate with the AWS Proton environment template.
 
         A tag is a key-value pair.
@@ -890,7 +894,7 @@ class CfnEnvironmentTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-proton-environmenttemplate.html#cfn-proton-environmenttemplate-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -920,6 +924,7 @@ class CfnServiceTemplate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_proton as proton
@@ -939,7 +944,7 @@ class CfnServiceTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -947,7 +952,7 @@ class CfnServiceTemplate(
         encryption_key: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         pipeline_provisioning: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Proton::ServiceTemplate``.
 
@@ -979,7 +984,7 @@ class CfnServiceTemplate(
     @builtins.classmethod
     def arn_for_service_template(
         cls,
-        resource: _IServiceTemplateRef_74ef1fef,
+        resource: "_IServiceTemplateRef_74ef1fef",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1002,7 +1007,7 @@ class CfnServiceTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServiceTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1047,15 +1052,15 @@ class CfnServiceTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="serviceTemplateRef")
-    def service_template_ref(self) -> _ServiceTemplateReference_2e63180b:
+    def service_template_ref(self) -> "_ServiceTemplateReference_2e63180b":
         '''A reference to a ServiceTemplate resource.'''
-        return typing.cast(_ServiceTemplateReference_2e63180b, jsii.get(self, "serviceTemplateRef"))
+        return typing.cast("_ServiceTemplateReference_2e63180b", jsii.get(self, "serviceTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -1124,12 +1129,12 @@ class CfnServiceTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An object that includes the template bundle S3 bucket path and name for the new version of a service template.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__00e30d2907243dab58015f5d20dd35d6a72df42367b8c6db016733a72ca69953)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1157,7 +1162,7 @@ class CfnServiceTemplateProps:
         encryption_key: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         pipeline_provisioning: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnServiceTemplate``.
 
@@ -1173,6 +1178,7 @@ class CfnServiceTemplateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_proton as proton
@@ -1259,13 +1265,13 @@ class CfnServiceTemplateProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An object that includes the template bundle S3 bucket path and name for the new version of a service template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-proton-servicetemplate.html#cfn-proton-servicetemplate-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

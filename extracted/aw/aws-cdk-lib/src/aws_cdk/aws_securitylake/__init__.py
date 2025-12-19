@@ -124,7 +124,7 @@ class CfnAwsLogSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         data_lake_arn: builtins.str,
@@ -167,7 +167,7 @@ class CfnAwsLogSource(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAwsLogSource", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -198,9 +198,9 @@ class CfnAwsLogSource(
 
     @builtins.property
     @jsii.member(jsii_name="awsLogSourceRef")
-    def aws_log_source_ref(self) -> _AwsLogSourceReference_4edbba47:
+    def aws_log_source_ref(self) -> "_AwsLogSourceReference_4edbba47":
         '''A reference to a AwsLogSource resource.'''
-        return typing.cast(_AwsLogSourceReference_4edbba47, jsii.get(self, "awsLogSourceRef"))
+        return typing.cast("_AwsLogSourceReference_4edbba47", jsii.get(self, "awsLogSourceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -394,6 +394,7 @@ class CfnDataLake(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_securitylake as securitylake
@@ -425,14 +426,14 @@ class CfnDataLake(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataLake.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        lifecycle_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataLake.LifecycleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataLake.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lifecycle_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataLake.LifecycleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         meta_store_manager_role_arn: typing.Optional[builtins.str] = None,
-        replication_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataLake.ReplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        replication_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataLake.ReplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SecurityLake::DataLake``.
 
@@ -460,7 +461,7 @@ class CfnDataLake(
 
     @jsii.member(jsii_name="arnForDataLake")
     @builtins.classmethod
-    def arn_for_data_lake(cls, resource: _IDataLakeRef_2b208ad6) -> builtins.str:
+    def arn_for_data_lake(cls, resource: "_IDataLakeRef_2b208ad6") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -482,7 +483,7 @@ class CfnDataLake(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataLake", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -531,9 +532,9 @@ class CfnDataLake(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -542,22 +543,22 @@ class CfnDataLake(
 
     @builtins.property
     @jsii.member(jsii_name="dataLakeRef")
-    def data_lake_ref(self) -> _DataLakeReference_bce4af31:
+    def data_lake_ref(self) -> "_DataLakeReference_bce4af31":
         '''A reference to a DataLake resource.'''
-        return typing.cast(_DataLakeReference_bce4af31, jsii.get(self, "dataLakeRef"))
+        return typing.cast("_DataLakeReference_bce4af31", jsii.get(self, "dataLakeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionConfiguration")
     def encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataLake.EncryptionConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.EncryptionConfigurationProperty"]]:
         '''Provides encryption details of the Amazon Security Lake object.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataLake.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
 
     @encryption_configuration.setter
     def encryption_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataLake.EncryptionConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.EncryptionConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__12edf08ab82b633325fe7034b3424955ea7bff566dfa00928107723a5d0f6a72)
@@ -568,14 +569,14 @@ class CfnDataLake(
     @jsii.member(jsii_name="lifecycleConfiguration")
     def lifecycle_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataLake.LifecycleConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.LifecycleConfigurationProperty"]]:
         '''You can customize Security Lake to store data in your preferred AWS Regions for your preferred amount of time.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataLake.LifecycleConfigurationProperty"]], jsii.get(self, "lifecycleConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.LifecycleConfigurationProperty"]], jsii.get(self, "lifecycleConfiguration"))
 
     @lifecycle_configuration.setter
     def lifecycle_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataLake.LifecycleConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.LifecycleConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__916659d1bcdf1d6d40de689f3b334b766e1a8fb681a493926742e61ce5ba40b7)
@@ -599,14 +600,14 @@ class CfnDataLake(
     @jsii.member(jsii_name="replicationConfiguration")
     def replication_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataLake.ReplicationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.ReplicationConfigurationProperty"]]:
         '''Provides replication details of Amazon Security Lake object.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataLake.ReplicationConfigurationProperty"]], jsii.get(self, "replicationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.ReplicationConfigurationProperty"]], jsii.get(self, "replicationConfiguration"))
 
     @replication_configuration.setter
     def replication_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataLake.ReplicationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.ReplicationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__647257bd68002b29a89b3128d4883d0c748e98d2c70a5b154446993271225230)
@@ -615,12 +616,12 @@ class CfnDataLake(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of objects, one for each tag to associate with the data lake configuration.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6654ce3b2fa02feedc8f03797f96ae7270d4bd79ef3c3791b522e8277fa3798c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -741,8 +742,8 @@ class CfnDataLake(
         def __init__(
             self,
             *,
-            expiration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataLake.ExpirationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            transitions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataLake.TransitionsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            expiration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataLake.ExpirationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            transitions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataLake.TransitionsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Provides lifecycle details of Amazon Security Lake object.
 
@@ -788,18 +789,18 @@ class CfnDataLake(
         @builtins.property
         def expiration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataLake.ExpirationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.ExpirationProperty"]]:
             '''Provides data expiration details of the Amazon Security Lake object.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securitylake-datalake-lifecycleconfiguration.html#cfn-securitylake-datalake-lifecycleconfiguration-expiration
             '''
             result = self._values.get("expiration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataLake.ExpirationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.ExpirationProperty"]], result)
 
         @builtins.property
         def transitions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataLake.TransitionsProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataLake.TransitionsProperty"]]]]:
             '''Provides data storage transition details of Amazon Security Lake object.
 
             By configuring these settings, you can specify your preferred Amazon S3 storage class and the time period for S3 objects to stay in that storage class before they transition to a different storage class.
@@ -807,7 +808,7 @@ class CfnDataLake(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securitylake-datalake-lifecycleconfiguration.html#cfn-securitylake-datalake-lifecycleconfiguration-transitions
             '''
             result = self._values.get("transitions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataLake.TransitionsProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataLake.TransitionsProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -986,11 +987,11 @@ class CfnDataLakeProps:
     def __init__(
         self,
         *,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataLake.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        lifecycle_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataLake.LifecycleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataLake.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lifecycle_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataLake.LifecycleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         meta_store_manager_role_arn: typing.Optional[builtins.str] = None,
-        replication_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataLake.ReplicationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        replication_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataLake.ReplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataLake``.
 
@@ -1005,6 +1006,7 @@ class CfnDataLakeProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_securitylake as securitylake
@@ -1055,18 +1057,18 @@ class CfnDataLakeProps:
     @builtins.property
     def encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataLake.EncryptionConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.EncryptionConfigurationProperty"]]:
         '''Provides encryption details of the Amazon Security Lake object.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securitylake-datalake.html#cfn-securitylake-datalake-encryptionconfiguration
         '''
         result = self._values.get("encryption_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataLake.EncryptionConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.EncryptionConfigurationProperty"]], result)
 
     @builtins.property
     def lifecycle_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataLake.LifecycleConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.LifecycleConfigurationProperty"]]:
         '''You can customize Security Lake to store data in your preferred AWS Regions for your preferred amount of time.
 
         Lifecycle management can help you comply with different compliance requirements. For more details, see `Lifecycle management <https://docs.aws.amazon.com//security-lake/latest/userguide/lifecycle-management.html>`_ in the Amazon Security Lake User Guide.
@@ -1074,7 +1076,7 @@ class CfnDataLakeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securitylake-datalake.html#cfn-securitylake-datalake-lifecycleconfiguration
         '''
         result = self._values.get("lifecycle_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataLake.LifecycleConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.LifecycleConfigurationProperty"]], result)
 
     @builtins.property
     def meta_store_manager_role_arn(self) -> typing.Optional[builtins.str]:
@@ -1090,16 +1092,16 @@ class CfnDataLakeProps:
     @builtins.property
     def replication_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataLake.ReplicationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.ReplicationConfigurationProperty"]]:
         '''Provides replication details of Amazon Security Lake object.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securitylake-datalake.html#cfn-securitylake-datalake-replicationconfiguration
         '''
         result = self._values.get("replication_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataLake.ReplicationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataLake.ReplicationConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of objects, one for each tag to associate with the data lake configuration.
 
         For each tag, you must specify both a tag key and a tag value. A tag value cannot be null, but it can be an empty string.
@@ -1107,7 +1109,7 @@ class CfnDataLakeProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securitylake-datalake.html#cfn-securitylake-datalake-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1137,6 +1139,7 @@ class CfnSubscriber(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_securitylake as securitylake
@@ -1171,16 +1174,16 @@ class CfnSubscriber(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         access_types: typing.Sequence[builtins.str],
         data_lake_arn: builtins.str,
-        sources: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSubscriber.SourceProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        subscriber_identity: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSubscriber.SubscriberIdentityProperty", typing.Dict[builtins.str, typing.Any]]],
+        sources: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriber.SourceProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        subscriber_identity: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriber.SubscriberIdentityProperty", typing.Dict[builtins.str, typing.Any]]],
         subscriber_name: builtins.str,
         subscriber_description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SecurityLake::Subscriber``.
 
@@ -1212,7 +1215,7 @@ class CfnSubscriber(
 
     @jsii.member(jsii_name="arnForSubscriber")
     @builtins.classmethod
-    def arn_for_subscriber(cls, resource: _ISubscriberRef_18c8415b) -> builtins.str:
+    def arn_for_subscriber(cls, resource: "_ISubscriberRef_18c8415b") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1234,7 +1237,7 @@ class CfnSubscriber(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSubscriber", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1310,9 +1313,9 @@ class CfnSubscriber(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1321,9 +1324,9 @@ class CfnSubscriber(
 
     @builtins.property
     @jsii.member(jsii_name="subscriberRef")
-    def subscriber_ref(self) -> _SubscriberReference_e73113de:
+    def subscriber_ref(self) -> "_SubscriberReference_e73113de":
         '''A reference to a Subscriber resource.'''
-        return typing.cast(_SubscriberReference_e73113de, jsii.get(self, "subscriberRef"))
+        return typing.cast("_SubscriberReference_e73113de", jsii.get(self, "subscriberRef"))
 
     @builtins.property
     @jsii.member(jsii_name="accessTypes")
@@ -1355,14 +1358,14 @@ class CfnSubscriber(
     @jsii.member(jsii_name="sources")
     def sources(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSubscriber.SourceProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSubscriber.SourceProperty"]]]:
         '''Amazon Security Lake supports log and event collection for natively supported AWS services .'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSubscriber.SourceProperty"]]], jsii.get(self, "sources"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSubscriber.SourceProperty"]]], jsii.get(self, "sources"))
 
     @sources.setter
     def sources(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSubscriber.SourceProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSubscriber.SourceProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bc932de85d8e0823efeb32cd9962639ee0df5d9caf72a0cc1bd8a74abd3853f1)
@@ -1373,14 +1376,14 @@ class CfnSubscriber(
     @jsii.member(jsii_name="subscriberIdentity")
     def subscriber_identity(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSubscriber.SubscriberIdentityProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSubscriber.SubscriberIdentityProperty"]:
         '''The AWS identity used to access your data.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSubscriber.SubscriberIdentityProperty"], jsii.get(self, "subscriberIdentity"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSubscriber.SubscriberIdentityProperty"], jsii.get(self, "subscriberIdentity"))
 
     @subscriber_identity.setter
     def subscriber_identity(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnSubscriber.SubscriberIdentityProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnSubscriber.SubscriberIdentityProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__844ac1bd9005c05fc49f39ac053da7c40f778e558a2e4cf96983161b114d88a7)
@@ -1415,12 +1418,12 @@ class CfnSubscriber(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of objects, one for each tag to associate with the subscriber.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b8f06145c3b30c94dc03a8f547df3132c6f47f465dc815eb5282aab9542906c1)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1586,8 +1589,8 @@ class CfnSubscriber(
         def __init__(
             self,
             *,
-            aws_log_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSubscriber.AwsLogSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            custom_log_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSubscriber.CustomLogSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            aws_log_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriber.AwsLogSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom_log_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriber.CustomLogSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Sources are logs and events generated from a single system that match a specific event class in the Open Cybersecurity Schema Framework (OCSF) schema.
 
@@ -1629,24 +1632,24 @@ class CfnSubscriber(
         @builtins.property
         def aws_log_source(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSubscriber.AwsLogSourceProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSubscriber.AwsLogSourceProperty"]]:
             '''The natively supported AWS service which is used a Amazon Security Lake source to collect logs and events from.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securitylake-subscriber-source.html#cfn-securitylake-subscriber-source-awslogsource
             '''
             result = self._values.get("aws_log_source")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSubscriber.AwsLogSourceProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSubscriber.AwsLogSourceProperty"]], result)
 
         @builtins.property
         def custom_log_source(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSubscriber.CustomLogSourceProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSubscriber.CustomLogSourceProperty"]]:
             '''The custom log source AWS which is used a Amazon Security Lake source to collect logs and events from.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securitylake-subscriber-source.html#cfn-securitylake-subscriber-source-customlogsource
             '''
             result = self._values.get("custom_log_source")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSubscriber.CustomLogSourceProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSubscriber.CustomLogSourceProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1772,10 +1775,10 @@ class CfnSubscriberNotification(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        notification_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSubscriberNotification.NotificationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        notification_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriberNotification.NotificationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         subscriber_arn: builtins.str,
     ) -> None:
         '''Create a new ``AWS::SecurityLake::SubscriberNotification``.
@@ -1809,7 +1812,7 @@ class CfnSubscriberNotification(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSubscriberNotification", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1854,22 +1857,24 @@ class CfnSubscriberNotification(
 
     @builtins.property
     @jsii.member(jsii_name="subscriberNotificationRef")
-    def subscriber_notification_ref(self) -> _SubscriberNotificationReference_967725a3:
+    def subscriber_notification_ref(
+        self,
+    ) -> "_SubscriberNotificationReference_967725a3":
         '''A reference to a SubscriberNotification resource.'''
-        return typing.cast(_SubscriberNotificationReference_967725a3, jsii.get(self, "subscriberNotificationRef"))
+        return typing.cast("_SubscriberNotificationReference_967725a3", jsii.get(self, "subscriberNotificationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="notificationConfiguration")
     def notification_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSubscriberNotification.NotificationConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSubscriberNotification.NotificationConfigurationProperty"]:
         '''Specify the configurations you want to use for subscriber notification.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSubscriberNotification.NotificationConfigurationProperty"], jsii.get(self, "notificationConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSubscriberNotification.NotificationConfigurationProperty"], jsii.get(self, "notificationConfiguration"))
 
     @notification_configuration.setter
     def notification_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnSubscriberNotification.NotificationConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnSubscriberNotification.NotificationConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f416322e55f2b44fbfc4db060d6295a8133d187a93c3b3323f90fb62986ced47)
@@ -2029,7 +2034,7 @@ class CfnSubscriberNotification(
         def __init__(
             self,
             *,
-            https_notification_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSubscriberNotification.HttpsNotificationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            https_notification_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriberNotification.HttpsNotificationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             sqs_notification_configuration: typing.Any = None,
         ) -> None:
             '''Specify the configurations you want to use for subscriber notification.
@@ -2076,13 +2081,13 @@ class CfnSubscriberNotification(
         @builtins.property
         def https_notification_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSubscriberNotification.HttpsNotificationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSubscriberNotification.HttpsNotificationConfigurationProperty"]]:
             '''The configurations used for HTTPS subscriber notification.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securitylake-subscribernotification-notificationconfiguration.html#cfn-securitylake-subscribernotification-notificationconfiguration-httpsnotificationconfiguration
             '''
             result = self._values.get("https_notification_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSubscriberNotification.HttpsNotificationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSubscriberNotification.HttpsNotificationConfigurationProperty"]], result)
 
         @builtins.property
         def sqs_notification_configuration(self) -> typing.Any:
@@ -2119,7 +2124,7 @@ class CfnSubscriberNotificationProps:
     def __init__(
         self,
         *,
-        notification_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSubscriberNotification.NotificationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        notification_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriberNotification.NotificationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         subscriber_arn: builtins.str,
     ) -> None:
         '''Properties for defining a ``CfnSubscriberNotification``.
@@ -2166,7 +2171,7 @@ class CfnSubscriberNotificationProps:
     @builtins.property
     def notification_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnSubscriberNotification.NotificationConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSubscriberNotification.NotificationConfigurationProperty"]:
         '''Specify the configurations you want to use for subscriber notification.
 
         The subscriber is notified when new data is written to the data lake for sources that the subscriber consumes in Security Lake .
@@ -2175,7 +2180,7 @@ class CfnSubscriberNotificationProps:
         '''
         result = self._values.get("notification_configuration")
         assert result is not None, "Required property 'notification_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSubscriberNotification.NotificationConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSubscriberNotification.NotificationConfigurationProperty"], result)
 
     @builtins.property
     def subscriber_arn(self) -> builtins.str:
@@ -2218,11 +2223,11 @@ class CfnSubscriberProps:
         *,
         access_types: typing.Sequence[builtins.str],
         data_lake_arn: builtins.str,
-        sources: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSubscriber.SourceProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        subscriber_identity: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSubscriber.SubscriberIdentityProperty, typing.Dict[builtins.str, typing.Any]]],
+        sources: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriber.SourceProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        subscriber_identity: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSubscriber.SubscriberIdentityProperty", typing.Dict[builtins.str, typing.Any]]],
         subscriber_name: builtins.str,
         subscriber_description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSubscriber``.
 
@@ -2239,6 +2244,7 @@ class CfnSubscriberProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_securitylake as securitylake
@@ -2316,7 +2322,7 @@ class CfnSubscriberProps:
     @builtins.property
     def sources(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSubscriber.SourceProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSubscriber.SourceProperty"]]]:
         '''Amazon Security Lake supports log and event collection for natively supported AWS services .
 
         For more information, see the `Amazon Security Lake User Guide <https://docs.aws.amazon.com//security-lake/latest/userguide/source-management.html>`_ .
@@ -2325,19 +2331,19 @@ class CfnSubscriberProps:
         '''
         result = self._values.get("sources")
         assert result is not None, "Required property 'sources' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSubscriber.SourceProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSubscriber.SourceProperty"]]], result)
 
     @builtins.property
     def subscriber_identity(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnSubscriber.SubscriberIdentityProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnSubscriber.SubscriberIdentityProperty"]:
         '''The AWS identity used to access your data.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securitylake-subscriber.html#cfn-securitylake-subscriber-subscriberidentity
         '''
         result = self._values.get("subscriber_identity")
         assert result is not None, "Required property 'subscriber_identity' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSubscriber.SubscriberIdentityProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSubscriber.SubscriberIdentityProperty"], result)
 
     @builtins.property
     def subscriber_name(self) -> builtins.str:
@@ -2361,7 +2367,7 @@ class CfnSubscriberProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of objects, one for each tag to associate with the subscriber.
 
         For each tag, you must specify both a tag key and a tag value. A tag value cannot be null, but it can be an empty string.
@@ -2369,7 +2375,7 @@ class CfnSubscriberProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securitylake-subscriber.html#cfn-securitylake-subscriber-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

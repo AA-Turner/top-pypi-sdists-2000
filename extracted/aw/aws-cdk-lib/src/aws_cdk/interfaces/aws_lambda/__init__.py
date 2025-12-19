@@ -406,7 +406,7 @@ class IAliasRef(
 
     @builtins.property
     @jsii.member(jsii_name="aliasRef")
-    def alias_ref(self) -> AliasReference:
+    def alias_ref(self) -> "AliasReference":
         '''(experimental) A reference to a Alias resource.
 
         :stability: experimental
@@ -427,12 +427,12 @@ class _IAliasRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aliasRef")
-    def alias_ref(self) -> AliasReference:
+    def alias_ref(self) -> "AliasReference":
         '''(experimental) A reference to a Alias resource.
 
         :stability: experimental
         '''
-        return typing.cast(AliasReference, jsii.get(self, "aliasRef"))
+        return typing.cast("AliasReference", jsii.get(self, "aliasRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAliasRef).__jsii_proxy_class__ = lambda : _IAliasRefProxy
@@ -451,7 +451,7 @@ class ICapacityProviderRef(
 
     @builtins.property
     @jsii.member(jsii_name="capacityProviderRef")
-    def capacity_provider_ref(self) -> CapacityProviderReference:
+    def capacity_provider_ref(self) -> "CapacityProviderReference":
         '''(experimental) A reference to a CapacityProvider resource.
 
         :stability: experimental
@@ -472,12 +472,12 @@ class _ICapacityProviderRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="capacityProviderRef")
-    def capacity_provider_ref(self) -> CapacityProviderReference:
+    def capacity_provider_ref(self) -> "CapacityProviderReference":
         '''(experimental) A reference to a CapacityProvider resource.
 
         :stability: experimental
         '''
-        return typing.cast(CapacityProviderReference, jsii.get(self, "capacityProviderRef"))
+        return typing.cast("CapacityProviderReference", jsii.get(self, "capacityProviderRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICapacityProviderRef).__jsii_proxy_class__ = lambda : _ICapacityProviderRefProxy
@@ -496,7 +496,7 @@ class ICodeSigningConfigRef(
 
     @builtins.property
     @jsii.member(jsii_name="codeSigningConfigRef")
-    def code_signing_config_ref(self) -> CodeSigningConfigReference:
+    def code_signing_config_ref(self) -> "CodeSigningConfigReference":
         '''(experimental) A reference to a CodeSigningConfig resource.
 
         :stability: experimental
@@ -517,12 +517,12 @@ class _ICodeSigningConfigRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="codeSigningConfigRef")
-    def code_signing_config_ref(self) -> CodeSigningConfigReference:
+    def code_signing_config_ref(self) -> "CodeSigningConfigReference":
         '''(experimental) A reference to a CodeSigningConfig resource.
 
         :stability: experimental
         '''
-        return typing.cast(CodeSigningConfigReference, jsii.get(self, "codeSigningConfigRef"))
+        return typing.cast("CodeSigningConfigReference", jsii.get(self, "codeSigningConfigRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICodeSigningConfigRef).__jsii_proxy_class__ = lambda : _ICodeSigningConfigRefProxy
@@ -541,7 +541,7 @@ class IEventInvokeConfigRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventInvokeConfigRef")
-    def event_invoke_config_ref(self) -> EventInvokeConfigReference:
+    def event_invoke_config_ref(self) -> "EventInvokeConfigReference":
         '''(experimental) A reference to a EventInvokeConfig resource.
 
         :stability: experimental
@@ -562,12 +562,12 @@ class _IEventInvokeConfigRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventInvokeConfigRef")
-    def event_invoke_config_ref(self) -> EventInvokeConfigReference:
+    def event_invoke_config_ref(self) -> "EventInvokeConfigReference":
         '''(experimental) A reference to a EventInvokeConfig resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventInvokeConfigReference, jsii.get(self, "eventInvokeConfigRef"))
+        return typing.cast("EventInvokeConfigReference", jsii.get(self, "eventInvokeConfigRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventInvokeConfigRef).__jsii_proxy_class__ = lambda : _IEventInvokeConfigRefProxy
@@ -586,7 +586,7 @@ class IEventSourceMappingRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventSourceMappingRef")
-    def event_source_mapping_ref(self) -> EventSourceMappingReference:
+    def event_source_mapping_ref(self) -> "EventSourceMappingReference":
         '''(experimental) A reference to a EventSourceMapping resource.
 
         :stability: experimental
@@ -607,12 +607,12 @@ class _IEventSourceMappingRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventSourceMappingRef")
-    def event_source_mapping_ref(self) -> EventSourceMappingReference:
+    def event_source_mapping_ref(self) -> "EventSourceMappingReference":
         '''(experimental) A reference to a EventSourceMapping resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventSourceMappingReference, jsii.get(self, "eventSourceMappingRef"))
+        return typing.cast("EventSourceMappingReference", jsii.get(self, "eventSourceMappingRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventSourceMappingRef).__jsii_proxy_class__ = lambda : _IEventSourceMappingRefProxy
@@ -631,7 +631,7 @@ class IFunctionRef(
 
     @builtins.property
     @jsii.member(jsii_name="functionRef")
-    def function_ref(self) -> FunctionReference:
+    def function_ref(self) -> "FunctionReference":
         '''(experimental) A reference to a Function resource.
 
         :stability: experimental
@@ -652,12 +652,12 @@ class _IFunctionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="functionRef")
-    def function_ref(self) -> FunctionReference:
+    def function_ref(self) -> "FunctionReference":
         '''(experimental) A reference to a Function resource.
 
         :stability: experimental
         '''
-        return typing.cast(FunctionReference, jsii.get(self, "functionRef"))
+        return typing.cast("FunctionReference", jsii.get(self, "functionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFunctionRef).__jsii_proxy_class__ = lambda : _IFunctionRefProxy

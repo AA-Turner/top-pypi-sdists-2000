@@ -1534,7 +1534,7 @@ class ApiKeyConfig:
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        expires: typing.Optional[_Expiration_059d47d0] = None,
+        expires: typing.Optional["_Expiration_059d47d0"] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Configuration for API Key authorization in AppSync.
@@ -1583,7 +1583,7 @@ class ApiKeyConfig:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def expires(self) -> typing.Optional[_Expiration_059d47d0]:
+    def expires(self) -> typing.Optional["_Expiration_059d47d0"]:
         '''The time from creation time after which the API key expires.
 
         It must be a minimum of 1 day and a maximum of 365 days from date of creation.
@@ -1592,7 +1592,7 @@ class ApiKeyConfig:
         :default: - 7 days rounded down to nearest hour
         '''
         result = self._values.get("expires")
-        return typing.cast(typing.Optional[_Expiration_059d47d0], result)
+        return typing.cast(typing.Optional["_Expiration_059d47d0"], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -1625,7 +1625,7 @@ class AppSyncApiKeyConfig:
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        expires: typing.Optional[_Expiration_059d47d0] = None,
+        expires: typing.Optional["_Expiration_059d47d0"] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Configuration for API Key authorization in AppSync.
@@ -1674,7 +1674,7 @@ class AppSyncApiKeyConfig:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def expires(self) -> typing.Optional[_Expiration_059d47d0]:
+    def expires(self) -> typing.Optional["_Expiration_059d47d0"]:
         '''The time from creation time after which the API key expires.
 
         It must be a minimum of 1 day and a maximum of 365 days from date of creation.
@@ -1683,7 +1683,7 @@ class AppSyncApiKeyConfig:
         :default: - 7 days rounded down to nearest hour
         '''
         result = self._values.get("expires")
-        return typing.cast(typing.Optional[_Expiration_059d47d0], result)
+        return typing.cast(typing.Optional["_Expiration_059d47d0"], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -1722,7 +1722,7 @@ class AppSyncAuthProvider:
         self,
         *,
         authorization_type: "AppSyncAuthorizationType",
-        api_key_config: typing.Optional[typing.Union[AppSyncApiKeyConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        api_key_config: typing.Optional[typing.Union["AppSyncApiKeyConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         cognito_config: typing.Optional[typing.Union["AppSyncCognitoConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         lambda_authorizer_config: typing.Optional[typing.Union["AppSyncLambdaAuthorizerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         open_id_connect_config: typing.Optional[typing.Union["AppSyncOpenIdConnectConfig", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1806,13 +1806,13 @@ class AppSyncAuthProvider:
         return typing.cast("AppSyncAuthorizationType", result)
 
     @builtins.property
-    def api_key_config(self) -> typing.Optional[AppSyncApiKeyConfig]:
+    def api_key_config(self) -> typing.Optional["AppSyncApiKeyConfig"]:
         '''If authorizationType is ``AuthorizationType.API_KEY``, this option can be configured.
 
         :default: - name: 'DefaultAPIKey'
         '''
         result = self._values.get("api_key_config")
-        return typing.cast(typing.Optional[AppSyncApiKeyConfig], result)
+        return typing.cast(typing.Optional["AppSyncApiKeyConfig"], result)
 
     @builtins.property
     def cognito_config(self) -> typing.Optional["AppSyncCognitoConfig"]:
@@ -1987,17 +1987,17 @@ class AppSyncBaseDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         props: typing.Union["AppSyncBackedDataSourceProps", typing.Dict[builtins.str, typing.Any]],
         *,
         type: "AppSyncDataSourceType",
-        dynamo_db_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DynamoDBConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        event_bridge_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.EventBridgeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        http_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.HttpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        lambda_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_search_service_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        relational_database_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dynamo_db_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DynamoDBConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_bridge_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.EventBridgeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.HttpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lambda_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_search_service_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        relational_database_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -2054,11 +2054,11 @@ class AppSyncBaseDataSource(
 
     @builtins.property
     @jsii.member(jsii_name="serviceRole")
-    def _service_role(self) -> typing.Optional[_IRole_235f5d8e]:
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "serviceRole"))
+    def _service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "serviceRole"))
 
     @_service_role.setter
-    def _service_role(self, value: typing.Optional[_IRole_235f5d8e]) -> None:
+    def _service_role(self, value: typing.Optional["_IRole_235f5d8e"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c0696048b430ec2cd7bcb73334c99f876ecdb0a5a047acd07237fee239f7b556)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2171,7 +2171,7 @@ class AppSyncCognitoConfig:
     def __init__(
         self,
         *,
-        user_pool: _IUserPool_1f1029e2,
+        user_pool: "_IUserPool_1f1029e2",
         app_id_client_regex: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Configuration for Cognito user-pools in AppSync for Api.
@@ -2208,11 +2208,11 @@ class AppSyncCognitoConfig:
             self._values["app_id_client_regex"] = app_id_client_regex
 
     @builtins.property
-    def user_pool(self) -> _IUserPool_1f1029e2:
+    def user_pool(self) -> "_IUserPool_1f1029e2":
         '''The Cognito user pool to use as identity source.'''
         result = self._values.get("user_pool")
         assert result is not None, "Required property 'user_pool' is missing"
-        return typing.cast(_IUserPool_1f1029e2, result)
+        return typing.cast("_IUserPool_1f1029e2", result)
 
     @builtins.property
     def app_id_client_regex(self) -> typing.Optional[builtins.str]:
@@ -2336,7 +2336,7 @@ class AppSyncDomainOptions:
     def __init__(
         self,
         *,
-        certificate: _ICertificate_c194c70b,
+        certificate: "_ICertificate_c194c70b",
         domain_name: builtins.str,
     ) -> None:
         '''Domain name configuration for AppSync.
@@ -2395,11 +2395,11 @@ class AppSyncDomainOptions:
         }
 
     @builtins.property
-    def certificate(self) -> _ICertificate_c194c70b:
+    def certificate(self) -> "_ICertificate_c194c70b":
         '''The certificate to use with the domain name.'''
         result = self._values.get("certificate")
         assert result is not None, "Required property 'certificate' is missing"
-        return typing.cast(_ICertificate_c194c70b, result)
+        return typing.cast("_ICertificate_c194c70b", result)
 
     @builtins.property
     def domain_name(self) -> builtins.str:
@@ -2502,13 +2502,13 @@ class AppSyncExtendedDataSourceProps:
     def __init__(
         self,
         *,
-        type: AppSyncDataSourceType,
-        dynamo_db_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DynamoDBConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        event_bridge_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.EventBridgeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        http_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.HttpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        lambda_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_search_service_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        relational_database_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        type: "AppSyncDataSourceType",
+        dynamo_db_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DynamoDBConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_bridge_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.EventBridgeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.HttpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lambda_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_search_service_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        relational_database_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Props used by implementations of BaseDataSource to provide configuration.
 
@@ -2613,77 +2613,77 @@ class AppSyncExtendedDataSourceProps:
             self._values["relational_database_config"] = relational_database_config
 
     @builtins.property
-    def type(self) -> AppSyncDataSourceType:
+    def type(self) -> "AppSyncDataSourceType":
         '''The type of the AppSync datasource.'''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
-        return typing.cast(AppSyncDataSourceType, result)
+        return typing.cast("AppSyncDataSourceType", result)
 
     @builtins.property
     def dynamo_db_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DynamoDBConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DynamoDBConfigProperty"]]:
         '''Configuration for DynamoDB Datasource.
 
         :default: - No config
         '''
         result = self._values.get("dynamo_db_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DynamoDBConfigProperty"]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DynamoDBConfigProperty"]], result)
 
     @builtins.property
     def event_bridge_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.EventBridgeConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.EventBridgeConfigProperty"]]:
         '''Configuration for EventBridge Datasource.
 
         :default: - No config
         '''
         result = self._values.get("event_bridge_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.EventBridgeConfigProperty"]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.EventBridgeConfigProperty"]], result)
 
     @builtins.property
     def http_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.HttpConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HttpConfigProperty"]]:
         '''Configuration for HTTP Datasource.
 
         :default: - No config
         '''
         result = self._values.get("http_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.HttpConfigProperty"]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HttpConfigProperty"]], result)
 
     @builtins.property
     def lambda_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.LambdaConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.LambdaConfigProperty"]]:
         '''Configuration for Lambda Datasource.
 
         :default: - No config
         '''
         result = self._values.get("lambda_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.LambdaConfigProperty"]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.LambdaConfigProperty"]], result)
 
     @builtins.property
     def open_search_service_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.OpenSearchServiceConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.OpenSearchServiceConfigProperty"]]:
         '''Configuration for OpenSearch data source.
 
         :default: - No config
         '''
         result = self._values.get("open_search_service_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.OpenSearchServiceConfigProperty"]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.OpenSearchServiceConfigProperty"]], result)
 
     @builtins.property
     def relational_database_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.RelationalDatabaseConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.RelationalDatabaseConfigProperty"]]:
         '''Configuration for RDS Datasource.
 
         :default: - No config
         '''
         result = self._values.get("relational_database_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.RelationalDatabaseConfigProperty"]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.RelationalDatabaseConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2761,7 +2761,7 @@ class AppSyncHttpDataSourceOptions(AppSyncDataSourceOptions):
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        authorization_config: typing.Optional[typing.Union[AppSyncAwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["AppSyncAwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Optional configuration for Http data sources.
 
@@ -2820,13 +2820,13 @@ class AppSyncHttpDataSourceOptions(AppSyncDataSourceOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def authorization_config(self) -> typing.Optional[AppSyncAwsIamConfig]:
+    def authorization_config(self) -> typing.Optional["AppSyncAwsIamConfig"]:
         '''The authorization config in case the HTTP endpoint requires authorization.
 
         :default: - none
         '''
         result = self._values.get("authorization_config")
-        return typing.cast(typing.Optional[AppSyncAwsIamConfig], result)
+        return typing.cast(typing.Optional["AppSyncAwsIamConfig"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2853,8 +2853,8 @@ class AppSyncLambdaAuthorizerConfig:
     def __init__(
         self,
         *,
-        handler: _IFunction_6adb0ab8,
-        results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        handler: "_IFunction_6adb0ab8",
+        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         validation_regex: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Configuration for Lambda authorization in AppSync.
@@ -2921,17 +2921,17 @@ class AppSyncLambdaAuthorizerConfig:
             self._values["validation_regex"] = validation_regex
 
     @builtins.property
-    def handler(self) -> _IFunction_6adb0ab8:
+    def handler(self) -> "_IFunction_6adb0ab8":
         '''The authorizer lambda function.
 
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-graphqlapi-lambdaauthorizerconfig.html
         '''
         result = self._values.get("handler")
         assert result is not None, "Required property 'handler' is missing"
-        return typing.cast(_IFunction_6adb0ab8, result)
+        return typing.cast("_IFunction_6adb0ab8", result)
 
     @builtins.property
-    def results_cache_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def results_cache_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''How long the results are cached.
 
         Disable caching by setting this to 0.
@@ -2939,7 +2939,7 @@ class AppSyncLambdaAuthorizerConfig:
         :default: Duration.minutes(5)
         '''
         result = self._values.get("results_cache_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def validation_regex(self) -> typing.Optional[builtins.str]:
@@ -2977,9 +2977,9 @@ class AppSyncLogConfig:
         self,
         *,
         exclude_verbose_content: typing.Optional[builtins.bool] = None,
-        field_log_level: typing.Optional[AppSyncFieldLogLevel] = None,
-        retention: typing.Optional[_RetentionDays_070f99f0] = None,
-        role: typing.Optional[_IRoleRef_8400221f] = None,
+        field_log_level: typing.Optional["AppSyncFieldLogLevel"] = None,
+        retention: typing.Optional["_RetentionDays_070f99f0"] = None,
+        role: typing.Optional["_IRoleRef_8400221f"] = None,
     ) -> None:
         '''Logging configuration for AppSync.
 
@@ -3046,16 +3046,16 @@ class AppSyncLogConfig:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def field_log_level(self) -> typing.Optional[AppSyncFieldLogLevel]:
+    def field_log_level(self) -> typing.Optional["AppSyncFieldLogLevel"]:
         '''log level for fields.
 
         :default: - Use AppSync default
         '''
         result = self._values.get("field_log_level")
-        return typing.cast(typing.Optional[AppSyncFieldLogLevel], result)
+        return typing.cast(typing.Optional["AppSyncFieldLogLevel"], result)
 
     @builtins.property
-    def retention(self) -> typing.Optional[_RetentionDays_070f99f0]:
+    def retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
         '''The number of days log events are kept in CloudWatch Logs.
 
         By default AppSync keeps the logs infinitely. When updating this property,
@@ -3065,16 +3065,16 @@ class AppSyncLogConfig:
         :default: RetentionDays.INFINITE
         '''
         result = self._values.get("retention")
-        return typing.cast(typing.Optional[_RetentionDays_070f99f0], result)
+        return typing.cast(typing.Optional["_RetentionDays_070f99f0"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRoleRef_8400221f]:
+    def role(self) -> typing.Optional["_IRoleRef_8400221f"]:
         '''The role for CloudWatch Logs.
 
         :default: - None
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRoleRef_8400221f], result)
+        return typing.cast(typing.Optional["_IRoleRef_8400221f"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3362,7 +3362,7 @@ class AttributeValues(
     def __init__(
         self,
         container: builtins.str,
-        assignments: typing.Optional[typing.Sequence[Assign]] = None,
+        assignments: typing.Optional[typing.Sequence["Assign"]] = None,
     ) -> None:
         '''
         :param container: -
@@ -3419,7 +3419,7 @@ class AttributeValuesStep(
         self,
         attr: builtins.str,
         container: builtins.str,
-        assignments: typing.Sequence[Assign],
+        assignments: typing.Sequence["Assign"],
     ) -> None:
         '''
         :param attr: -
@@ -3434,7 +3434,7 @@ class AttributeValuesStep(
         jsii.create(self.__class__, self, [attr, container, assignments])
 
     @jsii.member(jsii_name="is")
-    def is_(self, val: builtins.str) -> AttributeValues:
+    def is_(self, val: builtins.str) -> "AttributeValues":
         '''Assign the value to the current attribute.
 
         :param val: -
@@ -3442,7 +3442,7 @@ class AttributeValuesStep(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__64a719217ebf2092e4a0c549e44dc18cc9048616951d288cac498e6fad568460)
             check_type(argname="argument val", value=val, expected_type=type_hints["val"])
-        return typing.cast(AttributeValues, jsii.invoke(self, "is", [val]))
+        return typing.cast("AttributeValues", jsii.invoke(self, "is", [val]))
 
 
 @jsii.data_type(
@@ -3551,7 +3551,7 @@ class AuthorizationMode:
         self,
         *,
         authorization_type: "AuthorizationType",
-        api_key_config: typing.Optional[typing.Union[ApiKeyConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        api_key_config: typing.Optional[typing.Union["ApiKeyConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         lambda_authorizer_config: typing.Optional[typing.Union["LambdaAuthorizerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         open_id_connect_config: typing.Optional[typing.Union["OpenIdConnectConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         user_pool_config: typing.Optional[typing.Union["UserPoolConfig", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -3630,13 +3630,13 @@ class AuthorizationMode:
         return typing.cast("AuthorizationType", result)
 
     @builtins.property
-    def api_key_config(self) -> typing.Optional[ApiKeyConfig]:
+    def api_key_config(self) -> typing.Optional["ApiKeyConfig"]:
         '''If authorizationType is ``AuthorizationType.API_KEY``, this option can be configured.
 
         :default: - name: 'DefaultAPIKey' | description: 'Default API Key created by CDK'
         '''
         result = self._values.get("api_key_config")
-        return typing.cast(typing.Optional[ApiKeyConfig], result)
+        return typing.cast(typing.Optional["ApiKeyConfig"], result)
 
     @builtins.property
     def lambda_authorizer_config(self) -> typing.Optional["LambdaAuthorizerConfig"]:
@@ -4137,18 +4137,18 @@ class BaseDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         props: typing.Union["BackedDataSourceProps", typing.Dict[builtins.str, typing.Any]],
         *,
         type: builtins.str,
-        dynamo_db_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DynamoDBConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        elasticsearch_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ElasticsearchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        event_bridge_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.EventBridgeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        http_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.HttpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        lambda_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_search_service_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        relational_database_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dynamo_db_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DynamoDBConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        elasticsearch_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ElasticsearchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_bridge_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.EventBridgeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.HttpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lambda_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_search_service_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        relational_database_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -4291,11 +4291,11 @@ class BaseDataSource(
 
     @builtins.property
     @jsii.member(jsii_name="serviceRole")
-    def _service_role(self) -> typing.Optional[_IRole_235f5d8e]:
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "serviceRole"))
+    def _service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "serviceRole"))
 
     @_service_role.setter
-    def _service_role(self, value: typing.Optional[_IRole_235f5d8e]) -> None:
+    def _service_role(self, value: typing.Optional["_IRole_235f5d8e"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f22d536d795f0e6c3516e56fbc4183ece0daab0d19c19d86752c9fd35a21d310)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4633,7 +4633,7 @@ class CachingConfig:
     def __init__(
         self,
         *,
-        ttl: _Duration_4839e8c3,
+        ttl: "_Duration_4839e8c3",
         caching_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''CachingConfig for AppSync resolvers.
@@ -4668,14 +4668,14 @@ class CachingConfig:
             self._values["caching_keys"] = caching_keys
 
     @builtins.property
-    def ttl(self) -> _Duration_4839e8c3:
+    def ttl(self) -> "_Duration_4839e8c3":
         '''The TTL in seconds for a resolver that has caching enabled.
 
         Valid values are between 1 and 3600 seconds.
         '''
         result = self._values.get("ttl")
         assert result is not None, "Required property 'ttl' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
     def caching_keys(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -4714,6 +4714,7 @@ class CfnApi(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appsync as appsync
@@ -4776,13 +4777,13 @@ class CfnApi(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        event_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApi.EventConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApi.EventConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         owner_contact: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppSync::Api``.
 
@@ -4808,7 +4809,7 @@ class CfnApi(
 
     @jsii.member(jsii_name="arnForApi")
     @builtins.classmethod
-    def arn_for_api(cls, resource: _IApiRef_f01990a1) -> builtins.str:
+    def arn_for_api(cls, resource: "_IApiRef_f01990a1") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4830,7 +4831,7 @@ class CfnApi(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApi", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4861,9 +4862,9 @@ class CfnApi(
 
     @builtins.property
     @jsii.member(jsii_name="apiRef")
-    def api_ref(self) -> _ApiReference_f9af25ed:
+    def api_ref(self) -> "_ApiReference_f9af25ed":
         '''A reference to a Api resource.'''
-        return typing.cast(_ApiReference_f9af25ed, jsii.get(self, "apiRef"))
+        return typing.cast("_ApiReference_f9af25ed", jsii.get(self, "apiRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrApiArn")
@@ -4885,12 +4886,12 @@ class CfnApi(
 
     @builtins.property
     @jsii.member(jsii_name="attrDns")
-    def attr_dns(self) -> _IResolvable_da3f097b:
+    def attr_dns(self) -> "_IResolvable_da3f097b":
         '''A map of DNS names for the AppSync API.
 
         :cloudformationAttribute: Dns
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrDns"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrDns"))
 
     @builtins.property
     @jsii.member(jsii_name="attrDnsHttp")
@@ -4912,9 +4913,9 @@ class CfnApi(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4938,14 +4939,14 @@ class CfnApi(
     @jsii.member(jsii_name="eventConfig")
     def event_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApi.EventConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.EventConfigProperty"]]:
         '''Describes the authorization configuration for connections, message publishing, message subscriptions, and logging for an Event API.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApi.EventConfigProperty"]], jsii.get(self, "eventConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.EventConfigProperty"]], jsii.get(self, "eventConfig"))
 
     @event_config.setter
     def event_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApi.EventConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.EventConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9323cec9a000145849866e550b55f0a549087cc444c4fa5706fdbc7c1455d154)
@@ -4967,12 +4968,12 @@ class CfnApi(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A set of tags (key-value pairs) for this API.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a8b30f166f8b9fa0fc02ab2eb4ff33b85277e77827ecebf6d7fd569a6667a8ea)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5046,9 +5047,9 @@ class CfnApi(
             self,
             *,
             auth_type: builtins.str,
-            cognito_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApi.CognitoConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            lambda_authorizer_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApi.LambdaAuthorizerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            open_id_connect_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApi.OpenIDConnectConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cognito_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApi.CognitoConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lambda_authorizer_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApi.LambdaAuthorizerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            open_id_connect_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApi.OpenIDConnectConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes an authorization provider.
 
@@ -5123,18 +5124,18 @@ class CfnApi(
         @builtins.property
         def cognito_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApi.CognitoConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.CognitoConfigProperty"]]:
             '''Describes an Amazon Cognito user pool configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-api-authprovider.html#cfn-appsync-api-authprovider-cognitoconfig
             '''
             result = self._values.get("cognito_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApi.CognitoConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.CognitoConfigProperty"]], result)
 
         @builtins.property
         def lambda_authorizer_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApi.LambdaAuthorizerConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.LambdaAuthorizerConfigProperty"]]:
             '''A ``LambdaAuthorizerConfig`` specifies how to authorize AWS AppSync API access when using the ``AWS_LAMBDA`` authorizer mode.
 
             Be aware that an AWS AppSync API can have only one AWS Lambda authorizer configured at a time.
@@ -5142,18 +5143,18 @@ class CfnApi(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-api-authprovider.html#cfn-appsync-api-authprovider-lambdaauthorizerconfig
             '''
             result = self._values.get("lambda_authorizer_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApi.LambdaAuthorizerConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.LambdaAuthorizerConfigProperty"]], result)
 
         @builtins.property
         def open_id_connect_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApi.OpenIDConnectConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.OpenIDConnectConfigProperty"]]:
             '''Describes an OpenID Connect (OIDC) configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-api-authprovider.html#cfn-appsync-api-authprovider-openidconnectconfig
             '''
             result = self._values.get("open_id_connect_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApi.OpenIDConnectConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.OpenIDConnectConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5345,11 +5346,11 @@ class CfnApi(
         def __init__(
             self,
             *,
-            auth_providers: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApi.AuthProviderProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            connection_auth_modes: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApi.AuthModeProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            default_publish_auth_modes: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApi.AuthModeProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            default_subscribe_auth_modes: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApi.AuthModeProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            log_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApi.EventLogConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            auth_providers: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApi.AuthProviderProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            connection_auth_modes: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApi.AuthModeProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            default_publish_auth_modes: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApi.AuthModeProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            default_subscribe_auth_modes: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApi.AuthModeProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            log_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApi.EventLogConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the authorization configuration for connections, message publishing, message subscriptions, and logging for an Event API.
 
@@ -5432,61 +5433,61 @@ class CfnApi(
         @builtins.property
         def auth_providers(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApi.AuthProviderProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApi.AuthProviderProperty"]]]:
             '''A list of authorization providers.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-api-eventconfig.html#cfn-appsync-api-eventconfig-authproviders
             '''
             result = self._values.get("auth_providers")
             assert result is not None, "Required property 'auth_providers' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApi.AuthProviderProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApi.AuthProviderProperty"]]], result)
 
         @builtins.property
         def connection_auth_modes(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApi.AuthModeProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApi.AuthModeProperty"]]]:
             '''A list of valid authorization modes for the Event API connections.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-api-eventconfig.html#cfn-appsync-api-eventconfig-connectionauthmodes
             '''
             result = self._values.get("connection_auth_modes")
             assert result is not None, "Required property 'connection_auth_modes' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApi.AuthModeProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApi.AuthModeProperty"]]], result)
 
         @builtins.property
         def default_publish_auth_modes(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApi.AuthModeProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApi.AuthModeProperty"]]]:
             '''A list of valid authorization modes for the Event API publishing.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-api-eventconfig.html#cfn-appsync-api-eventconfig-defaultpublishauthmodes
             '''
             result = self._values.get("default_publish_auth_modes")
             assert result is not None, "Required property 'default_publish_auth_modes' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApi.AuthModeProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApi.AuthModeProperty"]]], result)
 
         @builtins.property
         def default_subscribe_auth_modes(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApi.AuthModeProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApi.AuthModeProperty"]]]:
             '''A list of valid authorization modes for the Event API subscriptions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-api-eventconfig.html#cfn-appsync-api-eventconfig-defaultsubscribeauthmodes
             '''
             result = self._values.get("default_subscribe_auth_modes")
             assert result is not None, "Required property 'default_subscribe_auth_modes' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApi.AuthModeProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApi.AuthModeProperty"]]], result)
 
         @builtins.property
         def log_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApi.EventLogConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.EventLogConfigProperty"]]:
             '''The CloudWatch Logs configuration for the Event API.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-api-eventconfig.html#cfn-appsync-api-eventconfig-logconfig
             '''
             result = self._values.get("log_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApi.EventLogConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.EventLogConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5821,16 +5822,16 @@ class CfnApiCache(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         api_caching_behavior: builtins.str,
         api_id: builtins.str,
         ttl: jsii.Number,
         type: builtins.str,
-        at_rest_encryption_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        at_rest_encryption_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         health_metrics_config: typing.Optional[builtins.str] = None,
-        transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::AppSync::ApiCache``.
 
@@ -5873,7 +5874,7 @@ class CfnApiCache(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApiCache", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5904,9 +5905,9 @@ class CfnApiCache(
 
     @builtins.property
     @jsii.member(jsii_name="apiCacheRef")
-    def api_cache_ref(self) -> _ApiCacheReference_7deb2c07:
+    def api_cache_ref(self) -> "_ApiCacheReference_7deb2c07":
         '''A reference to a ApiCache resource.'''
-        return typing.cast(_ApiCacheReference_7deb2c07, jsii.get(self, "apiCacheRef"))
+        return typing.cast("_ApiCacheReference_7deb2c07", jsii.get(self, "apiCacheRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -5980,14 +5981,14 @@ class CfnApiCache(
     @jsii.member(jsii_name="atRestEncryptionEnabled")
     def at_rest_encryption_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*This parameter has been deprecated* .'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "atRestEncryptionEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "atRestEncryptionEnabled"))
 
     @at_rest_encryption_enabled.setter
     def at_rest_encryption_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__93a4abe242f634763c1f128b7e17017d1176924c9b032d5536f4caa3b3fc3bd6)
@@ -6014,14 +6015,14 @@ class CfnApiCache(
     @jsii.member(jsii_name="transitEncryptionEnabled")
     def transit_encryption_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*This parameter has been deprecated* .'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "transitEncryptionEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "transitEncryptionEnabled"))
 
     @transit_encryption_enabled.setter
     def transit_encryption_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__eb39499095e917401c885f7c77781744d09df071b1ed62c6f2c32cbbc6fbdb33)
@@ -6050,9 +6051,9 @@ class CfnApiCacheProps:
         api_id: builtins.str,
         ttl: jsii.Number,
         type: builtins.str,
-        at_rest_encryption_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        at_rest_encryption_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         health_metrics_config: typing.Optional[builtins.str] = None,
-        transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApiCache``.
 
@@ -6177,7 +6178,7 @@ class CfnApiCacheProps:
     @builtins.property
     def at_rest_encryption_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*This parameter has been deprecated* .
 
         At-rest encryption flag for cache. You cannot update this setting after creation.
@@ -6185,7 +6186,7 @@ class CfnApiCacheProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-apicache.html#cfn-appsync-apicache-atrestencryptionenabled
         '''
         result = self._values.get("at_rest_encryption_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def health_metrics_config(self) -> typing.Optional[builtins.str]:
@@ -6204,7 +6205,7 @@ class CfnApiCacheProps:
     @builtins.property
     def transit_encryption_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*This parameter has been deprecated* .
 
         Transit encryption flag when connecting to cache. You cannot update this setting after creation.
@@ -6212,7 +6213,7 @@ class CfnApiCacheProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-apicache.html#cfn-appsync-apicache-transitencryptionenabled
         '''
         result = self._values.get("transit_encryption_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6255,7 +6256,7 @@ class CfnApiKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         api_id: builtins.str,
@@ -6280,7 +6281,7 @@ class CfnApiKey(
 
     @jsii.member(jsii_name="arnForApiKey")
     @builtins.classmethod
-    def arn_for_api_key(cls, resource: _IApiKeyRef_f32c50c4) -> builtins.str:
+    def arn_for_api_key(cls, resource: "_IApiKeyRef_f32c50c4") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -6302,7 +6303,7 @@ class CfnApiKey(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApiKey", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6333,9 +6334,9 @@ class CfnApiKey(
 
     @builtins.property
     @jsii.member(jsii_name="apiKeyRef")
-    def api_key_ref(self) -> _ApiKeyReference_0d3e4a31:
+    def api_key_ref(self) -> "_ApiKeyReference_0d3e4a31":
         '''A reference to a ApiKey resource.'''
-        return typing.cast(_ApiKeyReference_0d3e4a31, jsii.get(self, "apiKeyRef"))
+        return typing.cast("_ApiKeyReference_0d3e4a31", jsii.get(self, "apiKeyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrApiKey")
@@ -6519,9 +6520,9 @@ class CfnApiProps:
         self,
         *,
         name: builtins.str,
-        event_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApi.EventConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApi.EventConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         owner_contact: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApi``.
 
@@ -6535,6 +6536,7 @@ class CfnApiProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appsync as appsync
@@ -6623,13 +6625,13 @@ class CfnApiProps:
     @builtins.property
     def event_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApi.EventConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.EventConfigProperty"]]:
         '''Describes the authorization configuration for connections, message publishing, message subscriptions, and logging for an Event API.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-api.html#cfn-appsync-api-eventconfig
         '''
         result = self._values.get("event_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApi.EventConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApi.EventConfigProperty"]], result)
 
     @builtins.property
     def owner_contact(self) -> typing.Optional[builtins.str]:
@@ -6643,13 +6645,13 @@ class CfnApiProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A set of tags (key-value pairs) for this API.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-api.html#cfn-appsync-api-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6679,6 +6681,7 @@ class CfnChannelNamespace(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appsync as appsync
@@ -6729,17 +6732,17 @@ class CfnChannelNamespace(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         api_id: builtins.str,
         name: builtins.str,
         code_handlers: typing.Optional[builtins.str] = None,
         code_s3_location: typing.Optional[builtins.str] = None,
-        handler_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannelNamespace.HandlerConfigsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        publish_auth_modes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannelNamespace.AuthModeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        subscribe_auth_modes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannelNamespace.AuthModeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        handler_configs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannelNamespace.HandlerConfigsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        publish_auth_modes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannelNamespace.AuthModeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        subscribe_auth_modes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannelNamespace.AuthModeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppSync::ChannelNamespace``.
 
@@ -6775,7 +6778,7 @@ class CfnChannelNamespace(
     @builtins.classmethod
     def arn_for_channel_namespace(
         cls,
-        resource: _IChannelNamespaceRef_68af2ba2,
+        resource: "_IChannelNamespaceRef_68af2ba2",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6798,7 +6801,7 @@ class CfnChannelNamespace(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnChannelNamespace", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6838,9 +6841,9 @@ class CfnChannelNamespace(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -6849,9 +6852,9 @@ class CfnChannelNamespace(
 
     @builtins.property
     @jsii.member(jsii_name="channelNamespaceRef")
-    def channel_namespace_ref(self) -> _ChannelNamespaceReference_be895f9c:
+    def channel_namespace_ref(self) -> "_ChannelNamespaceReference_be895f9c":
         '''A reference to a ChannelNamespace resource.'''
-        return typing.cast(_ChannelNamespaceReference_be895f9c, jsii.get(self, "channelNamespaceRef"))
+        return typing.cast("_ChannelNamespaceReference_be895f9c", jsii.get(self, "channelNamespaceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="apiId")
@@ -6909,14 +6912,14 @@ class CfnChannelNamespace(
     @jsii.member(jsii_name="handlerConfigs")
     def handler_configs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.HandlerConfigsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.HandlerConfigsProperty"]]:
         '''The configuration for the ``OnPublish`` and ``OnSubscribe`` handlers.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.HandlerConfigsProperty"]], jsii.get(self, "handlerConfigs"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.HandlerConfigsProperty"]], jsii.get(self, "handlerConfigs"))
 
     @handler_configs.setter
     def handler_configs(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.HandlerConfigsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.HandlerConfigsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__370c7c9ea6445a588ffb3df0332cccc87b2507390c3af4a48e682e101d555a3a)
@@ -6927,14 +6930,14 @@ class CfnChannelNamespace(
     @jsii.member(jsii_name="publishAuthModes")
     def publish_auth_modes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.AuthModeProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.AuthModeProperty"]]]]:
         '''The authorization mode to use for publishing messages on the channel namespace.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.AuthModeProperty"]]]], jsii.get(self, "publishAuthModes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.AuthModeProperty"]]]], jsii.get(self, "publishAuthModes"))
 
     @publish_auth_modes.setter
     def publish_auth_modes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.AuthModeProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.AuthModeProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__58ae5ceea0ea0efa0414e907917c0f46364396fc667a67ea5eb4524ac6fa4d5d)
@@ -6945,14 +6948,14 @@ class CfnChannelNamespace(
     @jsii.member(jsii_name="subscribeAuthModes")
     def subscribe_auth_modes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.AuthModeProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.AuthModeProperty"]]]]:
         '''The authorization mode to use for subscribing to messages on the channel namespace.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.AuthModeProperty"]]]], jsii.get(self, "subscribeAuthModes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.AuthModeProperty"]]]], jsii.get(self, "subscribeAuthModes"))
 
     @subscribe_auth_modes.setter
     def subscribe_auth_modes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.AuthModeProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.AuthModeProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fc62b054d5e5897ab522adeae0e075f829ec43715bace1f3db8e88e5980f2476)
@@ -6961,12 +6964,12 @@ class CfnChannelNamespace(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A set of tags (key-value pairs) for this channel namespace.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3273a2539d741466392c98ae069010c1b8fcca3604cfaf7fc6da4382ae1eecd7)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7035,7 +7038,7 @@ class CfnChannelNamespace(
             self,
             *,
             behavior: builtins.str,
-            integration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannelNamespace.IntegrationProperty", typing.Dict[builtins.str, typing.Any]]],
+            integration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannelNamespace.IntegrationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The ``HandlerConfig`` property type specifies the configuration for the handler.
 
@@ -7085,14 +7088,14 @@ class CfnChannelNamespace(
         @builtins.property
         def integration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.IntegrationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.IntegrationProperty"]:
             '''The integration data source configuration for the handler.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-handlerconfig.html#cfn-appsync-channelnamespace-handlerconfig-integration
             '''
             result = self._values.get("integration")
             assert result is not None, "Required property 'integration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.IntegrationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.IntegrationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7114,8 +7117,8 @@ class CfnChannelNamespace(
         def __init__(
             self,
             *,
-            on_publish: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannelNamespace.HandlerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            on_subscribe: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannelNamespace.HandlerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            on_publish: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannelNamespace.HandlerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            on_subscribe: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannelNamespace.HandlerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The ``HandlerConfigs`` property type specifies the configuration for the ``OnPublish`` and ``OnSubscribe`` handlers.
 
@@ -7169,24 +7172,24 @@ class CfnChannelNamespace(
         @builtins.property
         def on_publish(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.HandlerConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.HandlerConfigProperty"]]:
             '''The configuration for the ``OnPublish`` handler.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-handlerconfigs.html#cfn-appsync-channelnamespace-handlerconfigs-onpublish
             '''
             result = self._values.get("on_publish")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.HandlerConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.HandlerConfigProperty"]], result)
 
         @builtins.property
         def on_subscribe(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.HandlerConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.HandlerConfigProperty"]]:
             '''The configuration for the ``OnSubscribe`` handler.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-handlerconfigs.html#cfn-appsync-channelnamespace-handlerconfigs-onsubscribe
             '''
             result = self._values.get("on_subscribe")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.HandlerConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.HandlerConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7212,7 +7215,7 @@ class CfnChannelNamespace(
             self,
             *,
             data_source_name: builtins.str,
-            lambda_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannelNamespace.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lambda_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannelNamespace.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The ``Integration`` property type specifies the integration data source configuration for the handler.
 
@@ -7260,13 +7263,13 @@ class CfnChannelNamespace(
         @builtins.property
         def lambda_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.LambdaConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.LambdaConfigProperty"]]:
             '''The configuration for a Lambda data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-channelnamespace-integration.html#cfn-appsync-channelnamespace-integration-lambdaconfig
             '''
             result = self._values.get("lambda_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannelNamespace.LambdaConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.LambdaConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7354,10 +7357,10 @@ class CfnChannelNamespaceProps:
         name: builtins.str,
         code_handlers: typing.Optional[builtins.str] = None,
         code_s3_location: typing.Optional[builtins.str] = None,
-        handler_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannelNamespace.HandlerConfigsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        publish_auth_modes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannelNamespace.AuthModeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        subscribe_auth_modes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannelNamespace.AuthModeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        handler_configs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannelNamespace.HandlerConfigsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        publish_auth_modes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannelNamespace.AuthModeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        subscribe_auth_modes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannelNamespace.AuthModeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnChannelNamespace``.
 
@@ -7375,6 +7378,7 @@ class CfnChannelNamespaceProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appsync as appsync
@@ -7492,18 +7496,18 @@ class CfnChannelNamespaceProps:
     @builtins.property
     def handler_configs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannelNamespace.HandlerConfigsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.HandlerConfigsProperty"]]:
         '''The configuration for the ``OnPublish`` and ``OnSubscribe`` handlers.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-channelnamespace.html#cfn-appsync-channelnamespace-handlerconfigs
         '''
         result = self._values.get("handler_configs")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannelNamespace.HandlerConfigsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.HandlerConfigsProperty"]], result)
 
     @builtins.property
     def publish_auth_modes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnChannelNamespace.AuthModeProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.AuthModeProperty"]]]]:
         '''The authorization mode to use for publishing messages on the channel namespace.
 
         This configuration overrides the default ``Api`` authorization configuration.
@@ -7511,12 +7515,12 @@ class CfnChannelNamespaceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-channelnamespace.html#cfn-appsync-channelnamespace-publishauthmodes
         '''
         result = self._values.get("publish_auth_modes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnChannelNamespace.AuthModeProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.AuthModeProperty"]]]], result)
 
     @builtins.property
     def subscribe_auth_modes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnChannelNamespace.AuthModeProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.AuthModeProperty"]]]]:
         '''The authorization mode to use for subscribing to messages on the channel namespace.
 
         This configuration overrides the default ``Api`` authorization configuration.
@@ -7524,16 +7528,16 @@ class CfnChannelNamespaceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-channelnamespace.html#cfn-appsync-channelnamespace-subscribeauthmodes
         '''
         result = self._values.get("subscribe_auth_modes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnChannelNamespace.AuthModeProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnChannelNamespace.AuthModeProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A set of tags (key-value pairs) for this channel namespace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-channelnamespace.html#cfn-appsync-channelnamespace-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7636,22 +7640,22 @@ class CfnDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
         name: builtins.str,
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        dynamo_db_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DynamoDBConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        elasticsearch_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ElasticsearchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        event_bridge_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.EventBridgeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        http_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.HttpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        lambda_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dynamo_db_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DynamoDBConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        elasticsearch_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ElasticsearchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_bridge_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.EventBridgeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.HttpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lambda_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         metrics_config: typing.Optional[builtins.str] = None,
-        open_search_service_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        relational_database_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        service_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        open_search_service_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        relational_database_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        service_role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
     ) -> None:
         '''Create a new ``AWS::AppSync::DataSource``.
 
@@ -7695,7 +7699,7 @@ class CfnDataSource(
 
     @jsii.member(jsii_name="arnForDataSource")
     @builtins.classmethod
-    def arn_for_data_source(cls, resource: _IDataSourceRef_7564634a) -> builtins.str:
+    def arn_for_data_source(cls, resource: "_IDataSourceRef_7564634a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -7717,7 +7721,7 @@ class CfnDataSource(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataSource", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7771,9 +7775,9 @@ class CfnDataSource(
 
     @builtins.property
     @jsii.member(jsii_name="dataSourceRef")
-    def data_source_ref(self) -> _DataSourceReference_226e115b:
+    def data_source_ref(self) -> "_DataSourceReference_226e115b":
         '''A reference to a DataSource resource.'''
-        return typing.cast(_DataSourceReference_226e115b, jsii.get(self, "dataSourceRef"))
+        return typing.cast("_DataSourceReference_226e115b", jsii.get(self, "dataSourceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="apiId")
@@ -7831,14 +7835,14 @@ class CfnDataSource(
     @jsii.member(jsii_name="dynamoDbConfig")
     def dynamo_db_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DynamoDBConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DynamoDBConfigProperty"]]:
         '''AWS Region and TableName for an Amazon DynamoDB table in your account.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DynamoDBConfigProperty"]], jsii.get(self, "dynamoDbConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DynamoDBConfigProperty"]], jsii.get(self, "dynamoDbConfig"))
 
     @dynamo_db_config.setter
     def dynamo_db_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DynamoDBConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DynamoDBConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cffaca3e4a18d434a01277621d6792259ab70047809af34a6cb0bab3eb7886a2)
@@ -7849,18 +7853,18 @@ class CfnDataSource(
     @jsii.member(jsii_name="elasticsearchConfig")
     def elasticsearch_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ElasticsearchConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ElasticsearchConfigProperty"]]:
         '''
         :deprecated: this property has been deprecated
 
         :stability: deprecated
         '''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ElasticsearchConfigProperty"]], jsii.get(self, "elasticsearchConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ElasticsearchConfigProperty"]], jsii.get(self, "elasticsearchConfig"))
 
     @elasticsearch_config.setter
     def elasticsearch_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ElasticsearchConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ElasticsearchConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5323c0bb4d330a2f6b24616dd2b47847aa913d75611ddeae3cc451eda7ebb774)
@@ -7871,14 +7875,14 @@ class CfnDataSource(
     @jsii.member(jsii_name="eventBridgeConfig")
     def event_bridge_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.EventBridgeConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.EventBridgeConfigProperty"]]:
         '''An EventBridge configuration that contains a valid ARN of an event bus.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.EventBridgeConfigProperty"]], jsii.get(self, "eventBridgeConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.EventBridgeConfigProperty"]], jsii.get(self, "eventBridgeConfig"))
 
     @event_bridge_config.setter
     def event_bridge_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.EventBridgeConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.EventBridgeConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f9aedfd6520add851a257d524d2bcb0a45552a7b99af805456bde2779e658d15)
@@ -7889,14 +7893,14 @@ class CfnDataSource(
     @jsii.member(jsii_name="httpConfig")
     def http_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.HttpConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HttpConfigProperty"]]:
         '''Endpoints for an HTTP data source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.HttpConfigProperty"]], jsii.get(self, "httpConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HttpConfigProperty"]], jsii.get(self, "httpConfig"))
 
     @http_config.setter
     def http_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.HttpConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HttpConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e2b1129f048e5b946eceb4eb9c372f68c9a28e32ebe6091b611c3b1b82e3e83d)
@@ -7907,14 +7911,14 @@ class CfnDataSource(
     @jsii.member(jsii_name="lambdaConfig")
     def lambda_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.LambdaConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.LambdaConfigProperty"]]:
         '''An ARN of a Lambda function in valid ARN format.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.LambdaConfigProperty"]], jsii.get(self, "lambdaConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.LambdaConfigProperty"]], jsii.get(self, "lambdaConfig"))
 
     @lambda_config.setter
     def lambda_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.LambdaConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.LambdaConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__24ff8b510d0035620c1325857ec673c802695c9f3c8dd8fa109d1b44e652a641)
@@ -7938,14 +7942,14 @@ class CfnDataSource(
     @jsii.member(jsii_name="openSearchServiceConfig")
     def open_search_service_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.OpenSearchServiceConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.OpenSearchServiceConfigProperty"]]:
         '''AWS Region and Endpoints for an Amazon OpenSearch Service domain in your account.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.OpenSearchServiceConfigProperty"]], jsii.get(self, "openSearchServiceConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.OpenSearchServiceConfigProperty"]], jsii.get(self, "openSearchServiceConfig"))
 
     @open_search_service_config.setter
     def open_search_service_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.OpenSearchServiceConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.OpenSearchServiceConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__876dd6f7515f1b03442f4aa7a0d78d1d6e5eef401db8d851e96b713bd30f989e)
@@ -7956,14 +7960,14 @@ class CfnDataSource(
     @jsii.member(jsii_name="relationalDatabaseConfig")
     def relational_database_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.RelationalDatabaseConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.RelationalDatabaseConfigProperty"]]:
         '''Relational Database configuration of the relational database data source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.RelationalDatabaseConfigProperty"]], jsii.get(self, "relationalDatabaseConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.RelationalDatabaseConfigProperty"]], jsii.get(self, "relationalDatabaseConfig"))
 
     @relational_database_config.setter
     def relational_database_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.RelationalDatabaseConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.RelationalDatabaseConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__72a1c504ec56f95938bf0b2a05d96acc7eb4b1190dc7285e9c33b6b194318386)
@@ -7996,7 +8000,7 @@ class CfnDataSource(
             self,
             *,
             authorization_type: builtins.str,
-            aws_iam_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.AwsIamConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            aws_iam_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.AwsIamConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The ``AuthorizationConfig`` property type specifies the authorization type and configuration for an AWS AppSync http data source.
 
@@ -8049,13 +8053,13 @@ class CfnDataSource(
         @builtins.property
         def aws_iam_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.AwsIamConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.AwsIamConfigProperty"]]:
             '''The AWS Identity and Access Management settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-authorizationconfig.html#cfn-appsync-datasource-authorizationconfig-awsiamconfig
             '''
             result = self._values.get("aws_iam_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.AwsIamConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.AwsIamConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8250,9 +8254,9 @@ class CfnDataSource(
             *,
             aws_region: builtins.str,
             table_name: builtins.str,
-            delta_sync_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DeltaSyncConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            use_caller_credentials: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            versioned: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            delta_sync_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DeltaSyncConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            use_caller_credentials: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            versioned: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The ``DynamoDBConfig`` property type specifies the ``AwsRegion`` and ``TableName`` for an Amazon DynamoDB table in your account for an AWS AppSync data source.
 
@@ -8328,35 +8332,35 @@ class CfnDataSource(
         @builtins.property
         def delta_sync_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DeltaSyncConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DeltaSyncConfigProperty"]]:
             '''The ``DeltaSyncConfig`` for a versioned datasource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-dynamodbconfig.html#cfn-appsync-datasource-dynamodbconfig-deltasyncconfig
             '''
             result = self._values.get("delta_sync_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DeltaSyncConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DeltaSyncConfigProperty"]], result)
 
         @builtins.property
         def use_caller_credentials(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set to ``TRUE`` to use AWS Identity and Access Management with this data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-dynamodbconfig.html#cfn-appsync-datasource-dynamodbconfig-usecallercredentials
             '''
             result = self._values.get("use_caller_credentials")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def versioned(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set to TRUE to use Conflict Detection and Resolution with this data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-dynamodbconfig.html#cfn-appsync-datasource-dynamodbconfig-versioned
             '''
             result = self._values.get("versioned")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8503,7 +8507,7 @@ class CfnDataSource(
             self,
             *,
             endpoint: builtins.str,
-            authorization_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.AuthorizationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            authorization_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.AuthorizationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Use the ``HttpConfig`` property type to specify ``HttpConfig`` for an AWS AppSync data source.
 
@@ -8559,13 +8563,13 @@ class CfnDataSource(
         @builtins.property
         def authorization_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.AuthorizationConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.AuthorizationConfigProperty"]]:
             '''The authorization configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-httpconfig.html#cfn-appsync-datasource-httpconfig-authorizationconfig
             '''
             result = self._values.get("authorization_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.AuthorizationConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.AuthorizationConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8839,7 +8843,7 @@ class CfnDataSource(
             self,
             *,
             relational_database_source_type: builtins.str,
-            rds_http_endpoint_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.RdsHttpEndpointConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            rds_http_endpoint_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.RdsHttpEndpointConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Use the ``RelationalDatabaseConfig`` property type to specify ``RelationalDatabaseConfig`` for an AWS AppSync data source.
 
@@ -8895,13 +8899,13 @@ class CfnDataSource(
         @builtins.property
         def rds_http_endpoint_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.RdsHttpEndpointConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.RdsHttpEndpointConfigProperty"]]:
             '''Information about the Amazon RDS resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-relationaldatabaseconfig.html#cfn-appsync-datasource-relationaldatabaseconfig-rdshttpendpointconfig
             '''
             result = self._values.get("rds_http_endpoint_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.RdsHttpEndpointConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.RdsHttpEndpointConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8938,19 +8942,19 @@ class CfnDataSourceProps:
     def __init__(
         self,
         *,
-        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
         name: builtins.str,
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        dynamo_db_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.DynamoDBConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        elasticsearch_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.ElasticsearchConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        event_bridge_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.EventBridgeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        http_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.HttpConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        lambda_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.LambdaConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        dynamo_db_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DynamoDBConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        elasticsearch_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ElasticsearchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_bridge_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.EventBridgeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.HttpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lambda_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         metrics_config: typing.Optional[builtins.str] = None,
-        open_search_service_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.OpenSearchServiceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        relational_database_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.RelationalDatabaseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        service_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        open_search_service_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        relational_database_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        service_role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataSource``.
 
@@ -9085,14 +9089,14 @@ class CfnDataSourceProps:
             self._values["service_role_arn"] = service_role_arn
 
     @builtins.property
-    def api_id(self) -> typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba]:
+    def api_id(self) -> typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"]:
         '''Unique AWS AppSync GraphQL API identifier where this data source will be created.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html#cfn-appsync-datasource-apiid
         '''
         result = self._values.get("api_id")
         assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba], result)
+        return typing.cast(typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -9136,18 +9140,18 @@ class CfnDataSourceProps:
     @builtins.property
     def dynamo_db_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.DynamoDBConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DynamoDBConfigProperty"]]:
         '''AWS Region and TableName for an Amazon DynamoDB table in your account.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html#cfn-appsync-datasource-dynamodbconfig
         '''
         result = self._values.get("dynamo_db_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.DynamoDBConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DynamoDBConfigProperty"]], result)
 
     @builtins.property
     def elasticsearch_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.ElasticsearchConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ElasticsearchConfigProperty"]]:
         '''
         :deprecated: this property has been deprecated
 
@@ -9155,34 +9159,34 @@ class CfnDataSourceProps:
         :stability: deprecated
         '''
         result = self._values.get("elasticsearch_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.ElasticsearchConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ElasticsearchConfigProperty"]], result)
 
     @builtins.property
     def event_bridge_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.EventBridgeConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.EventBridgeConfigProperty"]]:
         '''An EventBridge configuration that contains a valid ARN of an event bus.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html#cfn-appsync-datasource-eventbridgeconfig
         '''
         result = self._values.get("event_bridge_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.EventBridgeConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.EventBridgeConfigProperty"]], result)
 
     @builtins.property
     def http_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.HttpConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HttpConfigProperty"]]:
         '''Endpoints for an HTTP data source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html#cfn-appsync-datasource-httpconfig
         '''
         result = self._values.get("http_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.HttpConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HttpConfigProperty"]], result)
 
     @builtins.property
     def lambda_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.LambdaConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.LambdaConfigProperty"]]:
         '''An ARN of a Lambda function in valid ARN format.
 
         This can be the ARN of a Lambda function that exists in the current account or in another account.
@@ -9190,7 +9194,7 @@ class CfnDataSourceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html#cfn-appsync-datasource-lambdaconfig
         '''
         result = self._values.get("lambda_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.LambdaConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.LambdaConfigProperty"]], result)
 
     @builtins.property
     def metrics_config(self) -> typing.Optional[builtins.str]:
@@ -9208,29 +9212,29 @@ class CfnDataSourceProps:
     @builtins.property
     def open_search_service_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.OpenSearchServiceConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.OpenSearchServiceConfigProperty"]]:
         '''AWS Region and Endpoints for an Amazon OpenSearch Service domain in your account.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html#cfn-appsync-datasource-opensearchserviceconfig
         '''
         result = self._values.get("open_search_service_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.OpenSearchServiceConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.OpenSearchServiceConfigProperty"]], result)
 
     @builtins.property
     def relational_database_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.RelationalDatabaseConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.RelationalDatabaseConfigProperty"]]:
         '''Relational Database configuration of the relational database data source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html#cfn-appsync-datasource-relationaldatabaseconfig
         '''
         result = self._values.get("relational_database_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.RelationalDatabaseConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.RelationalDatabaseConfigProperty"]], result)
 
     @builtins.property
     def service_role_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''The AWS Identity and Access Management service role ARN for the data source.
 
         The system assumes this role when accessing the data source.
@@ -9240,7 +9244,7 @@ class CfnDataSourceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html#cfn-appsync-datasource-servicerolearn
         '''
         result = self._values.get("service_role_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9268,6 +9272,7 @@ class CfnDomainName(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appsync as appsync
@@ -9287,13 +9292,13 @@ class CfnDomainName(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         certificate_arn: builtins.str,
         domain_name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppSync::DomainName``.
 
@@ -9319,7 +9324,7 @@ class CfnDomainName(
 
     @jsii.member(jsii_name="arnForDomainName")
     @builtins.classmethod
-    def arn_for_domain_name(cls, resource: _IDomainNameRef_15b9da81) -> builtins.str:
+    def arn_for_domain_name(cls, resource: "_IDomainNameRef_15b9da81") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -9332,10 +9337,10 @@ class CfnDomainName(
     @builtins.classmethod
     def from_domain_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         domain_name: builtins.str,
-    ) -> _IDomainNameRef_15b9da81:
+    ) -> "_IDomainNameRef_15b9da81":
         '''Creates a new IDomainNameRef from a domainName.
 
         :param scope: -
@@ -9347,16 +9352,16 @@ class CfnDomainName(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
-        return typing.cast(_IDomainNameRef_15b9da81, jsii.sinvoke(cls, "fromDomainName", [scope, id, domain_name]))
+        return typing.cast("_IDomainNameRef_15b9da81", jsii.sinvoke(cls, "fromDomainName", [scope, id, domain_name]))
 
     @jsii.member(jsii_name="fromDomainNameArn")
     @builtins.classmethod
     def from_domain_name_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDomainNameRef_15b9da81:
+    ) -> "_IDomainNameRef_15b9da81":
         '''Creates a new IDomainNameRef from an ARN.
 
         :param scope: -
@@ -9368,7 +9373,7 @@ class CfnDomainName(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDomainNameRef_15b9da81, jsii.sinvoke(cls, "fromDomainNameArn", [scope, id, arn]))
+        return typing.cast("_IDomainNameRef_15b9da81", jsii.sinvoke(cls, "fromDomainNameArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="isCfnDomainName")
     @builtins.classmethod
@@ -9383,7 +9388,7 @@ class CfnDomainName(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomainName", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9450,9 +9455,9 @@ class CfnDomainName(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -9461,9 +9466,9 @@ class CfnDomainName(
 
     @builtins.property
     @jsii.member(jsii_name="domainNameRef")
-    def domain_name_ref(self) -> _DomainNameReference_e0f7e463:
+    def domain_name_ref(self) -> "_DomainNameReference_e0f7e463":
         '''A reference to a DomainName resource.'''
-        return typing.cast(_DomainNameReference_e0f7e463, jsii.get(self, "domainNameRef"))
+        return typing.cast("_DomainNameReference_e0f7e463", jsii.get(self, "domainNameRef"))
 
     @builtins.property
     @jsii.member(jsii_name="certificateArn")
@@ -9506,12 +9511,12 @@ class CfnDomainName(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A set of tags (key-value pairs) for this domain name.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9e1a9fceec8bbbf4b6afd473eaf0b2db4d612831194c7972c534dc6849b98a8f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9544,11 +9549,11 @@ class CfnDomainNameApiAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
-        domain_name: typing.Union[builtins.str, _IDomainNameRef_15b9da81],
+        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
+        domain_name: typing.Union[builtins.str, "_IDomainNameRef_15b9da81"],
     ) -> None:
         '''Create a new ``AWS::AppSync::DomainNameApiAssociation``.
 
@@ -9580,7 +9585,7 @@ class CfnDomainNameApiAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomainNameApiAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9626,9 +9631,9 @@ class CfnDomainNameApiAssociation(
     @jsii.member(jsii_name="domainNameApiAssociationRef")
     def domain_name_api_association_ref(
         self,
-    ) -> _DomainNameApiAssociationReference_7ae2b882:
+    ) -> "_DomainNameApiAssociationReference_7ae2b882":
         '''A reference to a DomainNameApiAssociation resource.'''
-        return typing.cast(_DomainNameApiAssociationReference_7ae2b882, jsii.get(self, "domainNameApiAssociationRef"))
+        return typing.cast("_DomainNameApiAssociationReference_7ae2b882", jsii.get(self, "domainNameApiAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="apiId")
@@ -9666,8 +9671,8 @@ class CfnDomainNameApiAssociationProps:
     def __init__(
         self,
         *,
-        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
-        domain_name: typing.Union[builtins.str, _IDomainNameRef_15b9da81],
+        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
+        domain_name: typing.Union[builtins.str, "_IDomainNameRef_15b9da81"],
     ) -> None:
         '''Properties for defining a ``CfnDomainNameApiAssociation``.
 
@@ -9698,24 +9703,24 @@ class CfnDomainNameApiAssociationProps:
         }
 
     @builtins.property
-    def api_id(self) -> typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba]:
+    def api_id(self) -> typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"]:
         '''The API ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-domainnameapiassociation.html#cfn-appsync-domainnameapiassociation-apiid
         '''
         result = self._values.get("api_id")
         assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba], result)
+        return typing.cast(typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"], result)
 
     @builtins.property
-    def domain_name(self) -> typing.Union[builtins.str, _IDomainNameRef_15b9da81]:
+    def domain_name(self) -> typing.Union[builtins.str, "_IDomainNameRef_15b9da81"]:
         '''The domain name.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-domainnameapiassociation.html#cfn-appsync-domainnameapiassociation-domainname
         '''
         result = self._values.get("domain_name")
         assert result is not None, "Required property 'domain_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _IDomainNameRef_15b9da81], result)
+        return typing.cast(typing.Union[builtins.str, "_IDomainNameRef_15b9da81"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9746,7 +9751,7 @@ class CfnDomainNameProps:
         certificate_arn: builtins.str,
         domain_name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDomainName``.
 
@@ -9760,6 +9765,7 @@ class CfnDomainNameProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appsync as appsync
@@ -9823,13 +9829,13 @@ class CfnDomainNameProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A set of tags (key-value pairs) for this domain name.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-domainname.html#cfn-appsync-domainname-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9901,10 +9907,10 @@ class CfnFunctionConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
         data_source_name: builtins.str,
         name: builtins.str,
         code: typing.Optional[builtins.str] = None,
@@ -9916,8 +9922,8 @@ class CfnFunctionConfiguration(
         request_mapping_template_s3_location: typing.Optional[builtins.str] = None,
         response_mapping_template: typing.Optional[builtins.str] = None,
         response_mapping_template_s3_location: typing.Optional[builtins.str] = None,
-        runtime: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionConfiguration.AppSyncRuntimeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        sync_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionConfiguration.SyncConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        runtime: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionConfiguration.AppSyncRuntimeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sync_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionConfiguration.SyncConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppSync::FunctionConfiguration``.
 
@@ -9974,7 +9980,7 @@ class CfnFunctionConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFunctionConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10046,9 +10052,9 @@ class CfnFunctionConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="functionConfigurationRef")
-    def function_configuration_ref(self) -> _FunctionConfigurationReference_8b9e75dc:
+    def function_configuration_ref(self) -> "_FunctionConfigurationReference_8b9e75dc":
         '''A reference to a FunctionConfiguration resource.'''
-        return typing.cast(_FunctionConfigurationReference_8b9e75dc, jsii.get(self, "functionConfigurationRef"))
+        return typing.cast("_FunctionConfigurationReference_8b9e75dc", jsii.get(self, "functionConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="apiId")
@@ -10216,14 +10222,14 @@ class CfnFunctionConfiguration(
     @jsii.member(jsii_name="runtime")
     def runtime(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionConfiguration.AppSyncRuntimeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionConfiguration.AppSyncRuntimeProperty"]]:
         '''Describes a runtime used by an AWS AppSync resolver or AWS AppSync function.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionConfiguration.AppSyncRuntimeProperty"]], jsii.get(self, "runtime"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionConfiguration.AppSyncRuntimeProperty"]], jsii.get(self, "runtime"))
 
     @runtime.setter
     def runtime(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionConfiguration.AppSyncRuntimeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionConfiguration.AppSyncRuntimeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__143abf7cef16b0a5749a28fb00575ff2cb3a1f027e142a59f5e914c1776d09fc)
@@ -10234,14 +10240,14 @@ class CfnFunctionConfiguration(
     @jsii.member(jsii_name="syncConfig")
     def sync_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionConfiguration.SyncConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionConfiguration.SyncConfigProperty"]]:
         '''Describes a Sync configuration for a resolver.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionConfiguration.SyncConfigProperty"]], jsii.get(self, "syncConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionConfiguration.SyncConfigProperty"]], jsii.get(self, "syncConfig"))
 
     @sync_config.setter
     def sync_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionConfiguration.SyncConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionConfiguration.SyncConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a2d1624e61da41b1be885253dc0b667a61deba82d80481d4d6a6b5430b507b05)
@@ -10395,7 +10401,7 @@ class CfnFunctionConfiguration(
             *,
             conflict_detection: builtins.str,
             conflict_handler: typing.Optional[builtins.str] = None,
-            lambda_conflict_handler_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunctionConfiguration.LambdaConflictHandlerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lambda_conflict_handler_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionConfiguration.LambdaConflictHandlerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes a Sync configuration for a resolver.
 
@@ -10466,13 +10472,13 @@ class CfnFunctionConfiguration(
         @builtins.property
         def lambda_conflict_handler_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionConfiguration.LambdaConflictHandlerConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionConfiguration.LambdaConflictHandlerConfigProperty"]]:
             '''The ``LambdaConflictHandlerConfig`` when configuring ``LAMBDA`` as the Conflict Handler.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-functionconfiguration-syncconfig.html#cfn-appsync-functionconfiguration-syncconfig-lambdaconflicthandlerconfig
             '''
             result = self._values.get("lambda_conflict_handler_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunctionConfiguration.LambdaConflictHandlerConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionConfiguration.LambdaConflictHandlerConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10510,7 +10516,7 @@ class CfnFunctionConfigurationProps:
     def __init__(
         self,
         *,
-        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
         data_source_name: builtins.str,
         name: builtins.str,
         code: typing.Optional[builtins.str] = None,
@@ -10522,8 +10528,8 @@ class CfnFunctionConfigurationProps:
         request_mapping_template_s3_location: typing.Optional[builtins.str] = None,
         response_mapping_template: typing.Optional[builtins.str] = None,
         response_mapping_template_s3_location: typing.Optional[builtins.str] = None,
-        runtime: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunctionConfiguration.AppSyncRuntimeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        sync_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunctionConfiguration.SyncConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        runtime: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionConfiguration.AppSyncRuntimeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sync_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunctionConfiguration.SyncConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFunctionConfiguration``.
 
@@ -10626,14 +10632,14 @@ class CfnFunctionConfigurationProps:
             self._values["sync_config"] = sync_config
 
     @builtins.property
-    def api_id(self) -> typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba]:
+    def api_id(self) -> typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"]:
         '''The AWS AppSync GraphQL API that you want to attach using this function.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-functionconfiguration.html#cfn-appsync-functionconfiguration-apiid
         '''
         result = self._values.get("api_id")
         assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba], result)
+        return typing.cast(typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"], result)
 
     @builtins.property
     def data_source_name(self) -> builtins.str:
@@ -10749,7 +10755,7 @@ class CfnFunctionConfigurationProps:
     @builtins.property
     def runtime(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunctionConfiguration.AppSyncRuntimeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionConfiguration.AppSyncRuntimeProperty"]]:
         '''Describes a runtime used by an AWS AppSync resolver or AWS AppSync function.
 
         Specifies the name and version of the runtime to use. Note that if a runtime is specified, code must also be specified.
@@ -10757,12 +10763,12 @@ class CfnFunctionConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-functionconfiguration.html#cfn-appsync-functionconfiguration-runtime
         '''
         result = self._values.get("runtime")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunctionConfiguration.AppSyncRuntimeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionConfiguration.AppSyncRuntimeProperty"]], result)
 
     @builtins.property
     def sync_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunctionConfiguration.SyncConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionConfiguration.SyncConfigProperty"]]:
         '''Describes a Sync configuration for a resolver.
 
         Specifies which Conflict Detection strategy and Resolution strategy to use when the resolver is invoked.
@@ -10770,7 +10776,7 @@ class CfnFunctionConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-functionconfiguration.html#cfn-appsync-functionconfiguration-syncconfig
         '''
         result = self._values.get("sync_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunctionConfiguration.SyncConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunctionConfiguration.SyncConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10800,6 +10806,7 @@ class CfnGraphQLApi(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appsync as appsync
@@ -10877,27 +10884,27 @@ class CfnGraphQLApi(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         authentication_type: builtins.str,
         name: builtins.str,
-        additional_authentication_providers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGraphQLApi.AdditionalAuthenticationProviderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        additional_authentication_providers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.AdditionalAuthenticationProviderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         api_type: typing.Optional[builtins.str] = None,
-        enhanced_metrics_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGraphQLApi.EnhancedMetricsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        environment_variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        enhanced_metrics_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.EnhancedMetricsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        environment_variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         introspection_config: typing.Optional[builtins.str] = None,
-        lambda_authorizer_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGraphQLApi.LambdaAuthorizerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        log_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGraphQLApi.LogConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lambda_authorizer_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.LambdaAuthorizerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        log_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.LogConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         merged_api_execution_role_arn: typing.Optional[builtins.str] = None,
-        open_id_connect_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGraphQLApi.OpenIDConnectConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_id_connect_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.OpenIDConnectConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         owner_contact: typing.Optional[builtins.str] = None,
         query_depth_limit: typing.Optional[jsii.Number] = None,
         resolver_count_limit: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        user_pool_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGraphQLApi.UserPoolConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        user_pool_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.UserPoolConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         visibility: typing.Optional[builtins.str] = None,
-        xray_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        xray_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::AppSync::GraphQLApi``.
 
@@ -10951,7 +10958,7 @@ class CfnGraphQLApi(
 
     @jsii.member(jsii_name="arnForGraphQLApi")
     @builtins.classmethod
-    def arn_for_graph_ql_api(cls, resource: _IGraphQLApiRef_d46d77ba) -> builtins.str:
+    def arn_for_graph_ql_api(cls, resource: "_IGraphQLApiRef_d46d77ba") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -10973,7 +10980,7 @@ class CfnGraphQLApi(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGraphQLApi", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -11074,15 +11081,15 @@ class CfnGraphQLApi(
 
     @builtins.property
     @jsii.member(jsii_name="graphQlApiRef")
-    def graph_ql_api_ref(self) -> _GraphQLApiReference_833f473c:
+    def graph_ql_api_ref(self) -> "_GraphQLApiReference_833f473c":
         '''A reference to a GraphQLApi resource.'''
-        return typing.cast(_GraphQLApiReference_833f473c, jsii.get(self, "graphQlApiRef"))
+        return typing.cast("_GraphQLApiReference_833f473c", jsii.get(self, "graphQlApiRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="authenticationType")
@@ -11114,14 +11121,14 @@ class CfnGraphQLApi(
     @jsii.member(jsii_name="additionalAuthenticationProviders")
     def additional_authentication_providers(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.AdditionalAuthenticationProviderProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.AdditionalAuthenticationProviderProperty"]]]]:
         '''A list of additional authentication providers for the ``GraphqlApi`` API.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.AdditionalAuthenticationProviderProperty"]]]], jsii.get(self, "additionalAuthenticationProviders"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.AdditionalAuthenticationProviderProperty"]]]], jsii.get(self, "additionalAuthenticationProviders"))
 
     @additional_authentication_providers.setter
     def additional_authentication_providers(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.AdditionalAuthenticationProviderProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.AdditionalAuthenticationProviderProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6d98241da3432e0393c78db49e66414c7e91e9bfc9e19f06380f6b18215ab489)
@@ -11145,14 +11152,14 @@ class CfnGraphQLApi(
     @jsii.member(jsii_name="enhancedMetricsConfig")
     def enhanced_metrics_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.EnhancedMetricsConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.EnhancedMetricsConfigProperty"]]:
         '''Enables and controls the enhanced metrics feature.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.EnhancedMetricsConfigProperty"]], jsii.get(self, "enhancedMetricsConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.EnhancedMetricsConfigProperty"]], jsii.get(self, "enhancedMetricsConfig"))
 
     @enhanced_metrics_config.setter
     def enhanced_metrics_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.EnhancedMetricsConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.EnhancedMetricsConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__31ef927293a72b36675d980c2666fdaa13856a6038c9fa984dbc331dec806b66)
@@ -11163,14 +11170,14 @@ class CfnGraphQLApi(
     @jsii.member(jsii_name="environmentVariables")
     def environment_variables(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''A map containing the list of resources with their properties and environment variables.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "environmentVariables"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "environmentVariables"))
 
     @environment_variables.setter
     def environment_variables(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__792a537db4d8dd69989dc47efb8d28c555d2094bfd09895222925621c8b1eeba)
@@ -11194,14 +11201,14 @@ class CfnGraphQLApi(
     @jsii.member(jsii_name="lambdaAuthorizerConfig")
     def lambda_authorizer_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.LambdaAuthorizerConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.LambdaAuthorizerConfigProperty"]]:
         '''A ``LambdaAuthorizerConfig`` holds configuration on how to authorize AWS AppSync API access when using the ``AWS_LAMBDA`` authorizer mode.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.LambdaAuthorizerConfigProperty"]], jsii.get(self, "lambdaAuthorizerConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.LambdaAuthorizerConfigProperty"]], jsii.get(self, "lambdaAuthorizerConfig"))
 
     @lambda_authorizer_config.setter
     def lambda_authorizer_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.LambdaAuthorizerConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.LambdaAuthorizerConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d4ceade9d24f423834d3485476af5c7e3bd2e0ea0899583af5ac44f01e70b244)
@@ -11212,14 +11219,14 @@ class CfnGraphQLApi(
     @jsii.member(jsii_name="logConfig")
     def log_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.LogConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.LogConfigProperty"]]:
         '''The Amazon CloudWatch Logs configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.LogConfigProperty"]], jsii.get(self, "logConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.LogConfigProperty"]], jsii.get(self, "logConfig"))
 
     @log_config.setter
     def log_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.LogConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.LogConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9c0d15f646c5975aec4d344a5e6150a6fec6655df6d4354b817aef3ce9053464)
@@ -11246,14 +11253,14 @@ class CfnGraphQLApi(
     @jsii.member(jsii_name="openIdConnectConfig")
     def open_id_connect_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.OpenIDConnectConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.OpenIDConnectConfigProperty"]]:
         '''The OpenID Connect configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.OpenIDConnectConfigProperty"]], jsii.get(self, "openIdConnectConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.OpenIDConnectConfigProperty"]], jsii.get(self, "openIdConnectConfig"))
 
     @open_id_connect_config.setter
     def open_id_connect_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.OpenIDConnectConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.OpenIDConnectConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cf051032d1109f154a4b02f8368044e2e1266c9008da417ccef7aa84293cc125)
@@ -11301,12 +11308,12 @@ class CfnGraphQLApi(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An arbitrary set of tags (key-value pairs) for this GraphQL API.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a9b6bd673e24289c51e9fb96c96f3ee2bf2f7af27ef9ebcc4ae16d3cdee34b6d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -11316,14 +11323,14 @@ class CfnGraphQLApi(
     @jsii.member(jsii_name="userPoolConfig")
     def user_pool_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.UserPoolConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.UserPoolConfigProperty"]]:
         '''Optional authorization configuration for using Amazon Cognito user pools with your GraphQL endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.UserPoolConfigProperty"]], jsii.get(self, "userPoolConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.UserPoolConfigProperty"]], jsii.get(self, "userPoolConfig"))
 
     @user_pool_config.setter
     def user_pool_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.UserPoolConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.UserPoolConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c1d04f36c4d7d5f26bce761153a8d93212a34634f3833d3080b56cdd7a05e70b)
@@ -11347,14 +11354,14 @@ class CfnGraphQLApi(
     @jsii.member(jsii_name="xrayEnabled")
     def xray_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag indicating whether to use AWS X-Ray tracing for this ``GraphqlApi`` .'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "xrayEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "xrayEnabled"))
 
     @xray_enabled.setter
     def xray_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__863eb629614a817210cd5e0eb8ae7d3264658e2121ad2529a6090b38cd038199)
@@ -11376,9 +11383,9 @@ class CfnGraphQLApi(
             self,
             *,
             authentication_type: builtins.str,
-            lambda_authorizer_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGraphQLApi.LambdaAuthorizerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            open_id_connect_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGraphQLApi.OpenIDConnectConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            user_pool_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGraphQLApi.CognitoUserPoolConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lambda_authorizer_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.LambdaAuthorizerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            open_id_connect_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.OpenIDConnectConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            user_pool_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.CognitoUserPoolConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes an additional authentication provider.
 
@@ -11449,35 +11456,35 @@ class CfnGraphQLApi(
         @builtins.property
         def lambda_authorizer_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.LambdaAuthorizerConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.LambdaAuthorizerConfigProperty"]]:
             '''Configuration for AWS Lambda function authorization.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-graphqlapi-additionalauthenticationprovider.html#cfn-appsync-graphqlapi-additionalauthenticationprovider-lambdaauthorizerconfig
             '''
             result = self._values.get("lambda_authorizer_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.LambdaAuthorizerConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.LambdaAuthorizerConfigProperty"]], result)
 
         @builtins.property
         def open_id_connect_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.OpenIDConnectConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.OpenIDConnectConfigProperty"]]:
             '''The OIDC configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-graphqlapi-additionalauthenticationprovider.html#cfn-appsync-graphqlapi-additionalauthenticationprovider-openidconnectconfig
             '''
             result = self._values.get("open_id_connect_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.OpenIDConnectConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.OpenIDConnectConfigProperty"]], result)
 
         @builtins.property
         def user_pool_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.CognitoUserPoolConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.CognitoUserPoolConfigProperty"]]:
             '''The Amazon Cognito user pool configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-graphqlapi-additionalauthenticationprovider.html#cfn-appsync-graphqlapi-additionalauthenticationprovider-userpoolconfig
             '''
             result = self._values.get("user_pool_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGraphQLApi.CognitoUserPoolConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.CognitoUserPoolConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11807,7 +11814,7 @@ class CfnGraphQLApi(
             self,
             *,
             cloud_watch_logs_role_arn: typing.Optional[builtins.str] = None,
-            exclude_verbose_content: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            exclude_verbose_content: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             field_log_level: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The ``LogConfig`` property type specifies the logging configuration when writing GraphQL operations and tracing to Amazon CloudWatch for an AWS AppSync GraphQL API.
@@ -11858,13 +11865,13 @@ class CfnGraphQLApi(
         @builtins.property
         def exclude_verbose_content(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set to TRUE to exclude sections that contain information such as headers, context, and evaluated mapping templates, regardless of logging level.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-graphqlapi-logconfig.html#cfn-appsync-graphqlapi-logconfig-excludeverbosecontent
             '''
             result = self._values.get("exclude_verbose_content")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def field_log_level(self) -> typing.Optional[builtins.str]:
@@ -12154,22 +12161,22 @@ class CfnGraphQLApiProps:
         *,
         authentication_type: builtins.str,
         name: builtins.str,
-        additional_authentication_providers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGraphQLApi.AdditionalAuthenticationProviderProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        additional_authentication_providers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.AdditionalAuthenticationProviderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         api_type: typing.Optional[builtins.str] = None,
-        enhanced_metrics_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGraphQLApi.EnhancedMetricsConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        environment_variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        enhanced_metrics_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.EnhancedMetricsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        environment_variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         introspection_config: typing.Optional[builtins.str] = None,
-        lambda_authorizer_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGraphQLApi.LambdaAuthorizerConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        log_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGraphQLApi.LogConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        lambda_authorizer_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.LambdaAuthorizerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        log_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.LogConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         merged_api_execution_role_arn: typing.Optional[builtins.str] = None,
-        open_id_connect_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGraphQLApi.OpenIDConnectConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_id_connect_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.OpenIDConnectConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         owner_contact: typing.Optional[builtins.str] = None,
         query_depth_limit: typing.Optional[jsii.Number] = None,
         resolver_count_limit: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        user_pool_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGraphQLApi.UserPoolConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        user_pool_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGraphQLApi.UserPoolConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         visibility: typing.Optional[builtins.str] = None,
-        xray_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        xray_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnGraphQLApi``.
 
@@ -12197,6 +12204,7 @@ class CfnGraphQLApiProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appsync as appsync
@@ -12353,13 +12361,13 @@ class CfnGraphQLApiProps:
     @builtins.property
     def additional_authentication_providers(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGraphQLApi.AdditionalAuthenticationProviderProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.AdditionalAuthenticationProviderProperty"]]]]:
         '''A list of additional authentication providers for the ``GraphqlApi`` API.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-graphqlapi.html#cfn-appsync-graphqlapi-additionalauthenticationproviders
         '''
         result = self._values.get("additional_authentication_providers")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGraphQLApi.AdditionalAuthenticationProviderProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.AdditionalAuthenticationProviderProperty"]]]], result)
 
     @builtins.property
     def api_type(self) -> typing.Optional[builtins.str]:
@@ -12379,7 +12387,7 @@ class CfnGraphQLApiProps:
     @builtins.property
     def enhanced_metrics_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGraphQLApi.EnhancedMetricsConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.EnhancedMetricsConfigProperty"]]:
         '''Enables and controls the enhanced metrics feature.
 
         Enhanced metrics emit granular data on API usage and performance such as AppSync request and error counts, latency, and cache hits/misses. All enhanced metric data is sent to your CloudWatch account, and you can configure the types of data that will be sent.
@@ -12389,12 +12397,12 @@ class CfnGraphQLApiProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-graphqlapi.html#cfn-appsync-graphqlapi-enhancedmetricsconfig
         '''
         result = self._values.get("enhanced_metrics_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGraphQLApi.EnhancedMetricsConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.EnhancedMetricsConfigProperty"]], result)
 
     @builtins.property
     def environment_variables(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''A map containing the list of resources with their properties and environment variables.
 
         For more information, see `Environmental variables <https://docs.aws.amazon.com/appsync/latest/devguide/environmental-variables.html>`_ .
@@ -12408,7 +12416,7 @@ class CfnGraphQLApiProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-graphqlapi.html#cfn-appsync-graphqlapi-environmentvariables
         '''
         result = self._values.get("environment_variables")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def introspection_config(self) -> typing.Optional[builtins.str]:
@@ -12426,7 +12434,7 @@ class CfnGraphQLApiProps:
     @builtins.property
     def lambda_authorizer_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGraphQLApi.LambdaAuthorizerConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.LambdaAuthorizerConfigProperty"]]:
         '''A ``LambdaAuthorizerConfig`` holds configuration on how to authorize AWS AppSync API access when using the ``AWS_LAMBDA`` authorizer mode.
 
         Be aware that an AWS AppSync API may have only one Lambda authorizer configured at a time.
@@ -12434,18 +12442,18 @@ class CfnGraphQLApiProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-graphqlapi.html#cfn-appsync-graphqlapi-lambdaauthorizerconfig
         '''
         result = self._values.get("lambda_authorizer_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGraphQLApi.LambdaAuthorizerConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.LambdaAuthorizerConfigProperty"]], result)
 
     @builtins.property
     def log_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGraphQLApi.LogConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.LogConfigProperty"]]:
         '''The Amazon CloudWatch Logs configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-graphqlapi.html#cfn-appsync-graphqlapi-logconfig
         '''
         result = self._values.get("log_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGraphQLApi.LogConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.LogConfigProperty"]], result)
 
     @builtins.property
     def merged_api_execution_role_arn(self) -> typing.Optional[builtins.str]:
@@ -12461,13 +12469,13 @@ class CfnGraphQLApiProps:
     @builtins.property
     def open_id_connect_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGraphQLApi.OpenIDConnectConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.OpenIDConnectConfigProperty"]]:
         '''The OpenID Connect configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-graphqlapi.html#cfn-appsync-graphqlapi-openidconnectconfig
         '''
         result = self._values.get("open_id_connect_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGraphQLApi.OpenIDConnectConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.OpenIDConnectConfigProperty"]], result)
 
     @builtins.property
     def owner_contact(self) -> typing.Optional[builtins.str]:
@@ -12503,24 +12511,24 @@ class CfnGraphQLApiProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An arbitrary set of tags (key-value pairs) for this GraphQL API.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-graphqlapi.html#cfn-appsync-graphqlapi-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def user_pool_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGraphQLApi.UserPoolConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.UserPoolConfigProperty"]]:
         '''Optional authorization configuration for using Amazon Cognito user pools with your GraphQL endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-graphqlapi.html#cfn-appsync-graphqlapi-userpoolconfig
         '''
         result = self._values.get("user_pool_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGraphQLApi.UserPoolConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGraphQLApi.UserPoolConfigProperty"]], result)
 
     @builtins.property
     def visibility(self) -> typing.Optional[builtins.str]:
@@ -12538,13 +12546,13 @@ class CfnGraphQLApiProps:
     @builtins.property
     def xray_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag indicating whether to use AWS X-Ray tracing for this ``GraphqlApi`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-graphqlapi.html#cfn-appsync-graphqlapi-xrayenabled
         '''
         result = self._values.get("xray_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12594,7 +12602,7 @@ class CfnGraphQLSchema(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         api_id: builtins.str,
@@ -12634,7 +12642,7 @@ class CfnGraphQLSchema(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGraphQLSchema", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12679,9 +12687,9 @@ class CfnGraphQLSchema(
 
     @builtins.property
     @jsii.member(jsii_name="graphQlSchemaRef")
-    def graph_ql_schema_ref(self) -> _GraphQLSchemaReference_af442698:
+    def graph_ql_schema_ref(self) -> "_GraphQLSchemaReference_af442698":
         '''A reference to a GraphQLSchema resource.'''
-        return typing.cast(_GraphQLSchemaReference_af442698, jsii.get(self, "graphQlSchemaRef"))
+        return typing.cast("_GraphQLSchemaReference_af442698", jsii.get(self, "graphQlSchemaRef"))
 
     @builtins.property
     @jsii.member(jsii_name="apiId")
@@ -12888,26 +12896,26 @@ class CfnResolver(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
         field_name: builtins.str,
         type_name: builtins.str,
-        caching_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResolver.CachingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        caching_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResolver.CachingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         code: typing.Optional[builtins.str] = None,
         code_s3_location: typing.Optional[builtins.str] = None,
         data_source_name: typing.Optional[builtins.str] = None,
         kind: typing.Optional[builtins.str] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
         metrics_config: typing.Optional[builtins.str] = None,
-        pipeline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResolver.PipelineConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        pipeline_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResolver.PipelineConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         request_mapping_template: typing.Optional[builtins.str] = None,
         request_mapping_template_s3_location: typing.Optional[builtins.str] = None,
         response_mapping_template: typing.Optional[builtins.str] = None,
         response_mapping_template_s3_location: typing.Optional[builtins.str] = None,
-        runtime: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResolver.AppSyncRuntimeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        sync_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResolver.SyncConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        runtime: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResolver.AppSyncRuntimeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sync_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResolver.SyncConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppSync::Resolver``.
 
@@ -12959,7 +12967,7 @@ class CfnResolver(
 
     @jsii.member(jsii_name="arnForResolver")
     @builtins.classmethod
-    def arn_for_resolver(cls, resource: _IResolverRef_2a44c944) -> builtins.str:
+    def arn_for_resolver(cls, resource: "_IResolverRef_2a44c944") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -12981,7 +12989,7 @@ class CfnResolver(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResolver", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -13044,9 +13052,9 @@ class CfnResolver(
 
     @builtins.property
     @jsii.member(jsii_name="resolverRef")
-    def resolver_ref(self) -> _ResolverReference_1c237cfb:
+    def resolver_ref(self) -> "_ResolverReference_1c237cfb":
         '''A reference to a Resolver resource.'''
-        return typing.cast(_ResolverReference_1c237cfb, jsii.get(self, "resolverRef"))
+        return typing.cast("_ResolverReference_1c237cfb", jsii.get(self, "resolverRef"))
 
     @builtins.property
     @jsii.member(jsii_name="apiId")
@@ -13091,14 +13099,14 @@ class CfnResolver(
     @jsii.member(jsii_name="cachingConfig")
     def caching_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.CachingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.CachingConfigProperty"]]:
         '''The caching configuration for the resolver.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.CachingConfigProperty"]], jsii.get(self, "cachingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.CachingConfigProperty"]], jsii.get(self, "cachingConfig"))
 
     @caching_config.setter
     def caching_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.CachingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.CachingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e6b9e8b849504be748695ce685546b844451460e25485772ca066bc2b65f61b1)
@@ -13187,14 +13195,14 @@ class CfnResolver(
     @jsii.member(jsii_name="pipelineConfig")
     def pipeline_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.PipelineConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.PipelineConfigProperty"]]:
         '''Functions linked with the pipeline resolver.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.PipelineConfigProperty"]], jsii.get(self, "pipelineConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.PipelineConfigProperty"]], jsii.get(self, "pipelineConfig"))
 
     @pipeline_config.setter
     def pipeline_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.PipelineConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.PipelineConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3c6c98074ee2ebbe5b451fe5513433aa3557366ed040722d6e61328ab781da16)
@@ -13263,14 +13271,14 @@ class CfnResolver(
     @jsii.member(jsii_name="runtime")
     def runtime(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.AppSyncRuntimeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.AppSyncRuntimeProperty"]]:
         '''Describes a runtime used by an AWS AppSync resolver or AWS AppSync function.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.AppSyncRuntimeProperty"]], jsii.get(self, "runtime"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.AppSyncRuntimeProperty"]], jsii.get(self, "runtime"))
 
     @runtime.setter
     def runtime(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.AppSyncRuntimeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.AppSyncRuntimeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4a14449468f6ed96319993479a0ae9b3feacd27ec17e068d4d17ce598a964715)
@@ -13281,14 +13289,14 @@ class CfnResolver(
     @jsii.member(jsii_name="syncConfig")
     def sync_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.SyncConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.SyncConfigProperty"]]:
         '''The ``SyncConfig`` for a resolver attached to a versioned data source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.SyncConfigProperty"]], jsii.get(self, "syncConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.SyncConfigProperty"]], jsii.get(self, "syncConfig"))
 
     @sync_config.setter
     def sync_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.SyncConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.SyncConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a111110922e122a02d7d649fe2daaa4c4d7cf1709e2078b92fe101fd93d8e4f5)
@@ -13576,7 +13584,7 @@ class CfnResolver(
             *,
             conflict_detection: builtins.str,
             conflict_handler: typing.Optional[builtins.str] = None,
-            lambda_conflict_handler_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResolver.LambdaConflictHandlerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lambda_conflict_handler_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResolver.LambdaConflictHandlerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes a Sync configuration for a resolver.
 
@@ -13647,13 +13655,13 @@ class CfnResolver(
         @builtins.property
         def lambda_conflict_handler_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.LambdaConflictHandlerConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.LambdaConflictHandlerConfigProperty"]]:
             '''The ``LambdaConflictHandlerConfig`` when configuring ``LAMBDA`` as the Conflict Handler.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-resolver-syncconfig.html#cfn-appsync-resolver-syncconfig-lambdaconflicthandlerconfig
             '''
             result = self._values.get("lambda_conflict_handler_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResolver.LambdaConflictHandlerConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.LambdaConflictHandlerConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13694,23 +13702,23 @@ class CfnResolverProps:
     def __init__(
         self,
         *,
-        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
         field_name: builtins.str,
         type_name: builtins.str,
-        caching_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResolver.CachingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        caching_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResolver.CachingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         code: typing.Optional[builtins.str] = None,
         code_s3_location: typing.Optional[builtins.str] = None,
         data_source_name: typing.Optional[builtins.str] = None,
         kind: typing.Optional[builtins.str] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
         metrics_config: typing.Optional[builtins.str] = None,
-        pipeline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResolver.PipelineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        pipeline_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResolver.PipelineConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         request_mapping_template: typing.Optional[builtins.str] = None,
         request_mapping_template_s3_location: typing.Optional[builtins.str] = None,
         response_mapping_template: typing.Optional[builtins.str] = None,
         response_mapping_template_s3_location: typing.Optional[builtins.str] = None,
-        runtime: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResolver.AppSyncRuntimeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        sync_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResolver.SyncConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        runtime: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResolver.AppSyncRuntimeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        sync_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResolver.SyncConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnResolver``.
 
@@ -13835,14 +13843,14 @@ class CfnResolverProps:
             self._values["sync_config"] = sync_config
 
     @builtins.property
-    def api_id(self) -> typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba]:
+    def api_id(self) -> typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"]:
         '''The AWS AppSync GraphQL API to which you want to attach this resolver.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-apiid
         '''
         result = self._values.get("api_id")
         assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba], result)
+        return typing.cast(typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"], result)
 
     @builtins.property
     def field_name(self) -> builtins.str:
@@ -13867,13 +13875,13 @@ class CfnResolverProps:
     @builtins.property
     def caching_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResolver.CachingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.CachingConfigProperty"]]:
         '''The caching configuration for the resolver.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-cachingconfig
         '''
         result = self._values.get("caching_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResolver.CachingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.CachingConfigProperty"]], result)
 
     @builtins.property
     def code(self) -> typing.Optional[builtins.str]:
@@ -13939,13 +13947,13 @@ class CfnResolverProps:
     @builtins.property
     def pipeline_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResolver.PipelineConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.PipelineConfigProperty"]]:
         '''Functions linked with the pipeline resolver.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-pipelineconfig
         '''
         result = self._values.get("pipeline_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResolver.PipelineConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.PipelineConfigProperty"]], result)
 
     @builtins.property
     def request_mapping_template(self) -> typing.Optional[builtins.str]:
@@ -13992,7 +14000,7 @@ class CfnResolverProps:
     @builtins.property
     def runtime(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResolver.AppSyncRuntimeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.AppSyncRuntimeProperty"]]:
         '''Describes a runtime used by an AWS AppSync resolver or AWS AppSync function.
 
         Specifies the name and version of the runtime to use. Note that if a runtime is specified, code must also be specified.
@@ -14000,18 +14008,18 @@ class CfnResolverProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-runtime
         '''
         result = self._values.get("runtime")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResolver.AppSyncRuntimeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.AppSyncRuntimeProperty"]], result)
 
     @builtins.property
     def sync_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResolver.SyncConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.SyncConfigProperty"]]:
         '''The ``SyncConfig`` for a resolver attached to a versioned data source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-syncconfig
         '''
         result = self._values.get("sync_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResolver.SyncConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResolver.SyncConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14057,12 +14065,12 @@ class CfnSourceApiAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
         merged_api_identifier: typing.Optional[builtins.str] = None,
-        source_api_association_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSourceApiAssociation.SourceApiAssociationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_api_association_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSourceApiAssociation.SourceApiAssociationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         source_api_identifier: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::AppSync::SourceApiAssociation``.
@@ -14100,7 +14108,7 @@ class CfnSourceApiAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSourceApiAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -14223,9 +14231,9 @@ class CfnSourceApiAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="sourceApiAssociationRef")
-    def source_api_association_ref(self) -> _SourceApiAssociationReference_1d1f2085:
+    def source_api_association_ref(self) -> "_SourceApiAssociationReference_1d1f2085":
         '''A reference to a SourceApiAssociation resource.'''
-        return typing.cast(_SourceApiAssociationReference_1d1f2085, jsii.get(self, "sourceApiAssociationRef"))
+        return typing.cast("_SourceApiAssociationReference_1d1f2085", jsii.get(self, "sourceApiAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -14257,14 +14265,14 @@ class CfnSourceApiAssociation(
     @jsii.member(jsii_name="sourceApiAssociationConfig")
     def source_api_association_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSourceApiAssociation.SourceApiAssociationConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSourceApiAssociation.SourceApiAssociationConfigProperty"]]:
         '''The ``SourceApiAssociationConfig`` object data.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSourceApiAssociation.SourceApiAssociationConfigProperty"]], jsii.get(self, "sourceApiAssociationConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSourceApiAssociation.SourceApiAssociationConfigProperty"]], jsii.get(self, "sourceApiAssociationConfig"))
 
     @source_api_association_config.setter
     def source_api_association_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSourceApiAssociation.SourceApiAssociationConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSourceApiAssociation.SourceApiAssociationConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9a343d8ede31db66fa4c54360086ddf77c88c05a902c3cdd250198db59eb0ee5)
@@ -14360,7 +14368,7 @@ class CfnSourceApiAssociationProps:
         *,
         description: typing.Optional[builtins.str] = None,
         merged_api_identifier: typing.Optional[builtins.str] = None,
-        source_api_association_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSourceApiAssociation.SourceApiAssociationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_api_association_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSourceApiAssociation.SourceApiAssociationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         source_api_identifier: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnSourceApiAssociation``.
@@ -14427,13 +14435,13 @@ class CfnSourceApiAssociationProps:
     @builtins.property
     def source_api_association_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSourceApiAssociation.SourceApiAssociationConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSourceApiAssociation.SourceApiAssociationConfigProperty"]]:
         '''The ``SourceApiAssociationConfig`` object data.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-sourceapiassociation.html#cfn-appsync-sourceapiassociation-sourceapiassociationconfig
         '''
         result = self._values.get("source_api_association_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSourceApiAssociation.SourceApiAssociationConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSourceApiAssociation.SourceApiAssociationConfigProperty"]], result)
 
     @builtins.property
     def source_api_identifier(self) -> typing.Optional[builtins.str]:
@@ -14777,14 +14785,14 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_appsync.
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> "AssetCode":
         '''Loads the function code from a local disk path.
 
@@ -14834,7 +14842,7 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_appsync.
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "CodeConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Bind source code to an AppSync Function or resolver.
 
         :param scope: -
@@ -14844,7 +14852,7 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_appsync.
 
 class _CodeProxy(Code):
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "CodeConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Bind source code to an AppSync Function or resolver.
 
         :param scope: -
@@ -15066,7 +15074,7 @@ class Definition(
         cls,
         *,
         source_apis: typing.Sequence[typing.Union["SourceApi", typing.Dict[builtins.str, typing.Any]]],
-        merged_api_execution_role: typing.Optional[_Role_e8c6e11f] = None,
+        merged_api_execution_role: typing.Optional["_Role_e8c6e11f"] = None,
     ) -> "Definition":
         '''Schema from existing AppSync APIs - used for creating a AppSync Merged API.
 
@@ -15111,7 +15119,7 @@ class DomainOptions:
     def __init__(
         self,
         *,
-        certificate: _ICertificate_c194c70b,
+        certificate: "_ICertificate_c194c70b",
         domain_name: builtins.str,
     ) -> None:
         '''Domain name configuration for AppSync.
@@ -15166,11 +15174,11 @@ class DomainOptions:
         }
 
     @builtins.property
-    def certificate(self) -> _ICertificate_c194c70b:
+    def certificate(self) -> "_ICertificate_c194c70b":
         '''The certificate to use with the domain name.'''
         result = self._values.get("certificate")
         assert result is not None, "Required property 'certificate' is missing"
-        return typing.cast(_ICertificate_c194c70b, result)
+        return typing.cast("_ICertificate_c194c70b", result)
 
     @builtins.property
     def domain_name(self) -> builtins.str:
@@ -15215,7 +15223,7 @@ class EventApiAttributes:
         realtime_dns: builtins.str,
         api_arn: typing.Optional[builtins.str] = None,
         api_name: typing.Optional[builtins.str] = None,
-        auth_provider_types: typing.Optional[typing.Sequence[AppSyncAuthorizationType]] = None,
+        auth_provider_types: typing.Optional[typing.Sequence["AppSyncAuthorizationType"]] = None,
     ) -> None:
         '''Attributes for Event API imports.
 
@@ -15307,13 +15315,13 @@ class EventApiAttributes:
     @builtins.property
     def auth_provider_types(
         self,
-    ) -> typing.Optional[typing.List[AppSyncAuthorizationType]]:
+    ) -> typing.Optional[typing.List["AppSyncAuthorizationType"]]:
         '''The Authorization Types for this Event Api.
 
         :default: - none, required to construct event rules from imported APIs
         '''
         result = self._values.get("auth_provider_types")
-        return typing.cast(typing.Optional[typing.List[AppSyncAuthorizationType]], result)
+        return typing.cast(typing.Optional[typing.List["AppSyncAuthorizationType"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15341,10 +15349,10 @@ class EventApiAuthConfig:
     def __init__(
         self,
         *,
-        auth_providers: typing.Optional[typing.Sequence[typing.Union[AppSyncAuthProvider, typing.Dict[builtins.str, typing.Any]]]] = None,
-        connection_auth_mode_types: typing.Optional[typing.Sequence[AppSyncAuthorizationType]] = None,
-        default_publish_auth_mode_types: typing.Optional[typing.Sequence[AppSyncAuthorizationType]] = None,
-        default_subscribe_auth_mode_types: typing.Optional[typing.Sequence[AppSyncAuthorizationType]] = None,
+        auth_providers: typing.Optional[typing.Sequence[typing.Union["AppSyncAuthProvider", typing.Dict[builtins.str, typing.Any]]]] = None,
+        connection_auth_mode_types: typing.Optional[typing.Sequence["AppSyncAuthorizationType"]] = None,
+        default_publish_auth_mode_types: typing.Optional[typing.Sequence["AppSyncAuthorizationType"]] = None,
+        default_subscribe_auth_mode_types: typing.Optional[typing.Sequence["AppSyncAuthorizationType"]] = None,
     ) -> None:
         '''Authorization configuration for the Event API.
 
@@ -15402,46 +15410,46 @@ class EventApiAuthConfig:
             self._values["default_subscribe_auth_mode_types"] = default_subscribe_auth_mode_types
 
     @builtins.property
-    def auth_providers(self) -> typing.Optional[typing.List[AppSyncAuthProvider]]:
+    def auth_providers(self) -> typing.Optional[typing.List["AppSyncAuthProvider"]]:
         '''Auth providers for use in connection, publish, and subscribe operations.
 
         :default: - API Key authorization
         '''
         result = self._values.get("auth_providers")
-        return typing.cast(typing.Optional[typing.List[AppSyncAuthProvider]], result)
+        return typing.cast(typing.Optional[typing.List["AppSyncAuthProvider"]], result)
 
     @builtins.property
     def connection_auth_mode_types(
         self,
-    ) -> typing.Optional[typing.List[AppSyncAuthorizationType]]:
+    ) -> typing.Optional[typing.List["AppSyncAuthorizationType"]]:
         '''Connection auth modes.
 
         :default: - API Key authorization
         '''
         result = self._values.get("connection_auth_mode_types")
-        return typing.cast(typing.Optional[typing.List[AppSyncAuthorizationType]], result)
+        return typing.cast(typing.Optional[typing.List["AppSyncAuthorizationType"]], result)
 
     @builtins.property
     def default_publish_auth_mode_types(
         self,
-    ) -> typing.Optional[typing.List[AppSyncAuthorizationType]]:
+    ) -> typing.Optional[typing.List["AppSyncAuthorizationType"]]:
         '''Default publish auth modes.
 
         :default: - API Key authorization
         '''
         result = self._values.get("default_publish_auth_mode_types")
-        return typing.cast(typing.Optional[typing.List[AppSyncAuthorizationType]], result)
+        return typing.cast(typing.Optional[typing.List["AppSyncAuthorizationType"]], result)
 
     @builtins.property
     def default_subscribe_auth_mode_types(
         self,
-    ) -> typing.Optional[typing.List[AppSyncAuthorizationType]]:
+    ) -> typing.Optional[typing.List["AppSyncAuthorizationType"]]:
         '''Default subscribe auth modes.
 
         :default: - API Key authorization
         '''
         result = self._values.get("default_subscribe_auth_mode_types")
-        return typing.cast(typing.Optional[typing.List[AppSyncAuthorizationType]], result)
+        return typing.cast(typing.Optional[typing.List["AppSyncAuthorizationType"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15471,9 +15479,9 @@ class EventApiProps:
         self,
         *,
         api_name: builtins.str,
-        authorization_config: typing.Optional[typing.Union[EventApiAuthConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        domain_name: typing.Optional[typing.Union[AppSyncDomainOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        log_config: typing.Optional[typing.Union[AppSyncLogConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["EventApiAuthConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        domain_name: typing.Optional[typing.Union["AppSyncDomainOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        log_config: typing.Optional[typing.Union["AppSyncLogConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         owner_contact: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for an AppSync Event API.
@@ -15548,16 +15556,16 @@ class EventApiProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def authorization_config(self) -> typing.Optional[EventApiAuthConfig]:
+    def authorization_config(self) -> typing.Optional["EventApiAuthConfig"]:
         '''Optional authorization configuration.
 
         :default: - API Key authorization
         '''
         result = self._values.get("authorization_config")
-        return typing.cast(typing.Optional[EventApiAuthConfig], result)
+        return typing.cast(typing.Optional["EventApiAuthConfig"], result)
 
     @builtins.property
-    def domain_name(self) -> typing.Optional[AppSyncDomainOptions]:
+    def domain_name(self) -> typing.Optional["AppSyncDomainOptions"]:
         '''The domain name configuration for the Event API.
 
         The Route 53 hosted zone and CName DNS record must be configured in addition to this setting to
@@ -15566,16 +15574,16 @@ class EventApiProps:
         :default: - no domain name
         '''
         result = self._values.get("domain_name")
-        return typing.cast(typing.Optional[AppSyncDomainOptions], result)
+        return typing.cast(typing.Optional["AppSyncDomainOptions"], result)
 
     @builtins.property
-    def log_config(self) -> typing.Optional[AppSyncLogConfig]:
+    def log_config(self) -> typing.Optional["AppSyncLogConfig"]:
         '''Logging configuration for this api.
 
         :default: - None
         '''
         result = self._values.get("log_config")
-        return typing.cast(typing.Optional[AppSyncLogConfig], result)
+        return typing.cast(typing.Optional["AppSyncLogConfig"], result)
 
     @builtins.property
     def owner_contact(self) -> typing.Optional[builtins.str]:
@@ -15619,13 +15627,13 @@ class ExtendedDataSourceProps:
         self,
         *,
         type: builtins.str,
-        dynamo_db_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.DynamoDBConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        elasticsearch_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.ElasticsearchConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        event_bridge_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.EventBridgeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        http_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.HttpConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        lambda_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.LambdaConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_search_service_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.OpenSearchServiceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        relational_database_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.RelationalDatabaseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        dynamo_db_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DynamoDBConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        elasticsearch_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ElasticsearchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_bridge_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.EventBridgeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.HttpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lambda_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_search_service_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        relational_database_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''props used by implementations of BaseDataSource to provide configuration.
 
@@ -15747,18 +15755,18 @@ class ExtendedDataSourceProps:
     @builtins.property
     def dynamo_db_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.DynamoDBConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DynamoDBConfigProperty"]]:
         '''configuration for DynamoDB Datasource.
 
         :default: - No config
         '''
         result = self._values.get("dynamo_db_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.DynamoDBConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DynamoDBConfigProperty"]], result)
 
     @builtins.property
     def elasticsearch_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.ElasticsearchConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ElasticsearchConfigProperty"]]:
         '''(deprecated) configuration for Elasticsearch data source.
 
         :default: - No config
@@ -15768,62 +15776,62 @@ class ExtendedDataSourceProps:
         :stability: deprecated
         '''
         result = self._values.get("elasticsearch_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.ElasticsearchConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ElasticsearchConfigProperty"]], result)
 
     @builtins.property
     def event_bridge_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.EventBridgeConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.EventBridgeConfigProperty"]]:
         '''configuration for EventBridge Datasource.
 
         :default: - No config
         '''
         result = self._values.get("event_bridge_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.EventBridgeConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.EventBridgeConfigProperty"]], result)
 
     @builtins.property
     def http_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.HttpConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HttpConfigProperty"]]:
         '''configuration for HTTP Datasource.
 
         :default: - No config
         '''
         result = self._values.get("http_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.HttpConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HttpConfigProperty"]], result)
 
     @builtins.property
     def lambda_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.LambdaConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.LambdaConfigProperty"]]:
         '''configuration for Lambda Datasource.
 
         :default: - No config
         '''
         result = self._values.get("lambda_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.LambdaConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.LambdaConfigProperty"]], result)
 
     @builtins.property
     def open_search_service_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.OpenSearchServiceConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.OpenSearchServiceConfigProperty"]]:
         '''configuration for OpenSearch data source.
 
         :default: - No config
         '''
         result = self._values.get("open_search_service_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.OpenSearchServiceConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.OpenSearchServiceConfigProperty"]], result)
 
     @builtins.property
     def relational_database_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.RelationalDatabaseConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.RelationalDatabaseConfigProperty"]]:
         '''configuration for RDS Datasource.
 
         :default: - No config
         '''
         result = self._values.get("relational_database_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.RelationalDatabaseConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.RelationalDatabaseConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15859,14 +15867,14 @@ class ExtendedResolverProps(BaseResolverProps):
         *,
         field_name: builtins.str,
         type_name: builtins.str,
-        caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        code: typing.Optional[Code] = None,
+        caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
         pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
         request_mapping_template: typing.Optional["MappingTemplate"] = None,
         response_mapping_template: typing.Optional["MappingTemplate"] = None,
         runtime: typing.Optional["FunctionRuntime"] = None,
-        data_source: typing.Optional[BaseDataSource] = None,
+        data_source: typing.Optional["BaseDataSource"] = None,
     ) -> None:
         '''Additional property for an AppSync resolver for data source reference.
 
@@ -15966,22 +15974,22 @@ class ExtendedResolverProps(BaseResolverProps):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def caching_config(self) -> typing.Optional[CachingConfig]:
+    def caching_config(self) -> typing.Optional["CachingConfig"]:
         '''The caching configuration for this resolver.
 
         :default: - No caching configuration
         '''
         result = self._values.get("caching_config")
-        return typing.cast(typing.Optional[CachingConfig], result)
+        return typing.cast(typing.Optional["CachingConfig"], result)
 
     @builtins.property
-    def code(self) -> typing.Optional[Code]:
+    def code(self) -> typing.Optional["Code"]:
         '''The function code.
 
         :default: - no code is used
         '''
         result = self._values.get("code")
-        return typing.cast(typing.Optional[Code], result)
+        return typing.cast(typing.Optional["Code"], result)
 
     @builtins.property
     def max_batch_size(self) -> typing.Optional[jsii.Number]:
@@ -16032,13 +16040,13 @@ class ExtendedResolverProps(BaseResolverProps):
         return typing.cast(typing.Optional["FunctionRuntime"], result)
 
     @builtins.property
-    def data_source(self) -> typing.Optional[BaseDataSource]:
+    def data_source(self) -> typing.Optional["BaseDataSource"]:
         '''The data source this resolver is using.
 
         :default: - No datasource
         '''
         result = self._values.get("data_source")
-        return typing.cast(typing.Optional[BaseDataSource], result)
+        return typing.cast(typing.Optional["BaseDataSource"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16192,7 +16200,7 @@ class GraphqlApiAttributes:
         graphql_api_id: builtins.str,
         graphql_api_arn: typing.Optional[builtins.str] = None,
         graph_ql_endpoint_arn: typing.Optional[builtins.str] = None,
-        modes: typing.Optional[typing.Sequence[AuthorizationType]] = None,
+        modes: typing.Optional[typing.Sequence["AuthorizationType"]] = None,
         visibility: typing.Optional["Visibility"] = None,
     ) -> None:
         '''Attributes for GraphQL imports.
@@ -16270,13 +16278,13 @@ class GraphqlApiAttributes:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def modes(self) -> typing.Optional[typing.List[AuthorizationType]]:
+    def modes(self) -> typing.Optional[typing.List["AuthorizationType"]]:
         '''The Authorization Types for this GraphQL Api.
 
         :default: - none, required to construct event rules from imported APIs
         '''
         result = self._values.get("modes")
-        return typing.cast(typing.Optional[typing.List[AuthorizationType]], result)
+        return typing.cast(typing.Optional[typing.List["AuthorizationType"]], result)
 
     @builtins.property
     def visibility(self) -> typing.Optional["Visibility"]:
@@ -16323,9 +16331,9 @@ class GraphqlApiProps:
         self,
         *,
         name: builtins.str,
-        authorization_config: typing.Optional[typing.Union[AuthorizationConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        definition: typing.Optional[Definition] = None,
-        domain_name: typing.Optional[typing.Union[DomainOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["AuthorizationConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        definition: typing.Optional["Definition"] = None,
+        domain_name: typing.Optional[typing.Union["DomainOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         environment_variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         introspection_config: typing.Optional["IntrospectionConfig"] = None,
         log_config: typing.Optional[typing.Union["LogConfig", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -16431,22 +16439,22 @@ class GraphqlApiProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def authorization_config(self) -> typing.Optional[AuthorizationConfig]:
+    def authorization_config(self) -> typing.Optional["AuthorizationConfig"]:
         '''Optional authorization configuration.
 
         :default: - API Key authorization
         '''
         result = self._values.get("authorization_config")
-        return typing.cast(typing.Optional[AuthorizationConfig], result)
+        return typing.cast(typing.Optional["AuthorizationConfig"], result)
 
     @builtins.property
-    def definition(self) -> typing.Optional[Definition]:
+    def definition(self) -> typing.Optional["Definition"]:
         '''Definition (schema file or source APIs) for this GraphQL Api.'''
         result = self._values.get("definition")
-        return typing.cast(typing.Optional[Definition], result)
+        return typing.cast(typing.Optional["Definition"], result)
 
     @builtins.property
-    def domain_name(self) -> typing.Optional[DomainOptions]:
+    def domain_name(self) -> typing.Optional["DomainOptions"]:
         '''The domain name configuration for the GraphQL API.
 
         The Route 53 hosted zone and CName DNS record must be configured in addition to this setting to
@@ -16455,7 +16463,7 @@ class GraphqlApiProps:
         :default: - no domain name
         '''
         result = self._values.get("domain_name")
-        return typing.cast(typing.Optional[DomainOptions], result)
+        return typing.cast(typing.Optional["DomainOptions"], result)
 
     @builtins.property
     def environment_variables(
@@ -16692,7 +16700,7 @@ class HttpDataSourceOptions(DataSourceOptions):
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        authorization_config: typing.Optional[typing.Union[AwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["AwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Optional configuration for Http data sources.
 
@@ -16759,13 +16767,13 @@ class HttpDataSourceOptions(DataSourceOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def authorization_config(self) -> typing.Optional[AwsIamConfig]:
+    def authorization_config(self) -> typing.Optional["AwsIamConfig"]:
         '''The authorization config in case the HTTP endpoint requires authorization.
 
         :default: - none
         '''
         result = self._values.get("authorization_config")
-        return typing.cast(typing.Optional[AwsIamConfig], result)
+        return typing.cast(typing.Optional["AwsIamConfig"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16839,7 +16847,7 @@ class IAppSyncAuthConfig(typing_extensions.Protocol):
     def setup_cognito_config(
         self,
         *,
-        user_pool: _IUserPool_1f1029e2,
+        user_pool: "_IUserPool_1f1029e2",
         app_id_client_regex: typing.Optional[builtins.str] = None,
     ) -> typing.Any:
         '''Set up Cognito Authorization configuration for AppSync APIs.
@@ -16853,8 +16861,8 @@ class IAppSyncAuthConfig(typing_extensions.Protocol):
     def setup_lambda_authorizer_config(
         self,
         *,
-        handler: _IFunction_6adb0ab8,
-        results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        handler: "_IFunction_6adb0ab8",
+        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         validation_regex: typing.Optional[builtins.str] = None,
     ) -> typing.Any:
         '''Set up Lambda Authorization configuration AppSync APIs.
@@ -16893,7 +16901,7 @@ class _IAppSyncAuthConfigProxy:
     def setup_cognito_config(
         self,
         *,
-        user_pool: _IUserPool_1f1029e2,
+        user_pool: "_IUserPool_1f1029e2",
         app_id_client_regex: typing.Optional[builtins.str] = None,
     ) -> typing.Any:
         '''Set up Cognito Authorization configuration for AppSync APIs.
@@ -16911,8 +16919,8 @@ class _IAppSyncAuthConfigProxy:
     def setup_lambda_authorizer_config(
         self,
         *,
-        handler: _IFunction_6adb0ab8,
-        results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        handler: "_IFunction_6adb0ab8",
+        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         validation_regex: typing.Optional[builtins.str] = None,
     ) -> typing.Any:
         '''Set up Lambda Authorization configuration AppSync APIs.
@@ -17050,7 +17058,7 @@ class IEventApi(IApi, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="authProviderTypes")
-    def auth_provider_types(self) -> typing.List[AppSyncAuthorizationType]:
+    def auth_provider_types(self) -> typing.List["AppSyncAuthorizationType"]:
         '''The Authorization Types for this Event Api.'''
         ...
 
@@ -17079,9 +17087,9 @@ class IEventApi(IApi, typing_extensions.Protocol):
         *,
         authorization_config: typing.Optional[typing.Union["NamespaceAuthConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         channel_namespace_name: typing.Optional[builtins.str] = None,
-        code: typing.Optional[Code] = None,
-        publish_handler_config: typing.Optional[typing.Union[HandlerConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        subscribe_handler_config: typing.Optional[typing.Union[HandlerConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        code: typing.Optional["Code"] = None,
+        publish_handler_config: typing.Optional[typing.Union["HandlerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        subscribe_handler_config: typing.Optional[typing.Union["HandlerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "ChannelNamespace":
         '''add a new channel namespace.
 
@@ -17100,7 +17108,7 @@ class IEventApi(IApi, typing_extensions.Protocol):
     def add_dynamo_db_data_source(
         self,
         id: builtins.str,
-        table: _ITable_504fd401,
+        table: "_ITable_504fd401",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17118,7 +17126,7 @@ class IEventApi(IApi, typing_extensions.Protocol):
     def add_event_bridge_data_source(
         self,
         id: builtins.str,
-        event_bus: _IEventBus_88d13111,
+        event_bus: "_IEventBus_88d13111",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17138,7 +17146,7 @@ class IEventApi(IApi, typing_extensions.Protocol):
         id: builtins.str,
         endpoint: builtins.str,
         *,
-        authorization_config: typing.Optional[typing.Union[AppSyncAwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["AppSyncAwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> "AppSyncHttpDataSource":
@@ -17156,7 +17164,7 @@ class IEventApi(IApi, typing_extensions.Protocol):
     def add_lambda_data_source(
         self,
         id: builtins.str,
-        lambda_function: _IFunction_6adb0ab8,
+        lambda_function: "_IFunction_6adb0ab8",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17174,7 +17182,7 @@ class IEventApi(IApi, typing_extensions.Protocol):
     def add_open_search_data_source(
         self,
         id: builtins.str,
-        domain: _IDomain_3c13cbdd,
+        domain: "_IDomain_3c13cbdd",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17192,8 +17200,8 @@ class IEventApi(IApi, typing_extensions.Protocol):
     def add_rds_data_source(
         self,
         id: builtins.str,
-        serverless_cluster: typing.Union[_IDatabaseCluster_6554c32b, _IServerlessCluster_adbbb720],
-        secret_store: _ISecret_6e020e6a,
+        serverless_cluster: typing.Union["_IDatabaseCluster_6554c32b", "_IServerlessCluster_adbbb720"],
+        secret_store: "_ISecret_6e020e6a",
         database_name: typing.Optional[builtins.str] = None,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -17213,10 +17221,10 @@ class IEventApi(IApi, typing_extensions.Protocol):
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
-        resources: AppSyncEventResource,
+        grantee: "_IGrantable_71c4f5de",
+        resources: "AppSyncEventResource",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this Event API to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17226,7 +17234,7 @@ class IEventApi(IApi, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantConnect")
-    def grant_connect(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_connect(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventConnect access to this EventApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17234,7 +17242,7 @@ class IEventApi(IApi, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantPublish")
-    def grant_publish(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_publish(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventPublish access to this EventApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17244,8 +17252,8 @@ class IEventApi(IApi, typing_extensions.Protocol):
     @jsii.member(jsii_name="grantPublishAndSubscribe")
     def grant_publish_and_subscribe(
         self,
-        grantee: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement to publish and subscribe to this API for an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17253,7 +17261,7 @@ class IEventApi(IApi, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantSubscribe")
-    def grant_subscribe(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_subscribe(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventSubscribe access to this EventApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17270,9 +17278,9 @@ class _IEventApiProxy(
 
     @builtins.property
     @jsii.member(jsii_name="authProviderTypes")
-    def auth_provider_types(self) -> typing.List[AppSyncAuthorizationType]:
+    def auth_provider_types(self) -> typing.List["AppSyncAuthorizationType"]:
         '''The Authorization Types for this Event Api.'''
-        return typing.cast(typing.List[AppSyncAuthorizationType], jsii.get(self, "authProviderTypes"))
+        return typing.cast(typing.List["AppSyncAuthorizationType"], jsii.get(self, "authProviderTypes"))
 
     @builtins.property
     @jsii.member(jsii_name="httpDns")
@@ -17299,9 +17307,9 @@ class _IEventApiProxy(
         *,
         authorization_config: typing.Optional[typing.Union["NamespaceAuthConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         channel_namespace_name: typing.Optional[builtins.str] = None,
-        code: typing.Optional[Code] = None,
-        publish_handler_config: typing.Optional[typing.Union[HandlerConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        subscribe_handler_config: typing.Optional[typing.Union[HandlerConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        code: typing.Optional["Code"] = None,
+        publish_handler_config: typing.Optional[typing.Union["HandlerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        subscribe_handler_config: typing.Optional[typing.Union["HandlerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "ChannelNamespace":
         '''add a new channel namespace.
 
@@ -17331,7 +17339,7 @@ class _IEventApiProxy(
     def add_dynamo_db_data_source(
         self,
         id: builtins.str,
-        table: _ITable_504fd401,
+        table: "_ITable_504fd401",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17355,7 +17363,7 @@ class _IEventApiProxy(
     def add_event_bridge_data_source(
         self,
         id: builtins.str,
-        event_bus: _IEventBus_88d13111,
+        event_bus: "_IEventBus_88d13111",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17381,7 +17389,7 @@ class _IEventApiProxy(
         id: builtins.str,
         endpoint: builtins.str,
         *,
-        authorization_config: typing.Optional[typing.Union[AppSyncAwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["AppSyncAwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> "AppSyncHttpDataSource":
@@ -17409,7 +17417,7 @@ class _IEventApiProxy(
     def add_lambda_data_source(
         self,
         id: builtins.str,
-        lambda_function: _IFunction_6adb0ab8,
+        lambda_function: "_IFunction_6adb0ab8",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17433,7 +17441,7 @@ class _IEventApiProxy(
     def add_open_search_data_source(
         self,
         id: builtins.str,
-        domain: _IDomain_3c13cbdd,
+        domain: "_IDomain_3c13cbdd",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17457,8 +17465,8 @@ class _IEventApiProxy(
     def add_rds_data_source(
         self,
         id: builtins.str,
-        serverless_cluster: typing.Union[_IDatabaseCluster_6554c32b, _IServerlessCluster_adbbb720],
-        secret_store: _ISecret_6e020e6a,
+        serverless_cluster: typing.Union["_IDatabaseCluster_6554c32b", "_IServerlessCluster_adbbb720"],
+        secret_store: "_ISecret_6e020e6a",
         database_name: typing.Optional[builtins.str] = None,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -17486,10 +17494,10 @@ class _IEventApiProxy(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
-        resources: AppSyncEventResource,
+        grantee: "_IGrantable_71c4f5de",
+        resources: "AppSyncEventResource",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this Event API to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17501,10 +17509,10 @@ class _IEventApiProxy(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument resources", value=resources, expected_type=type_hints["resources"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, resources, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, resources, *actions]))
 
     @jsii.member(jsii_name="grantConnect")
-    def grant_connect(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_connect(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventConnect access to this EventApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17512,10 +17520,10 @@ class _IEventApiProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e22d45b75bff6badd287cd5a314770c2e33512cc45e0ee9681ba0c62917f1b4f)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantConnect", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantConnect", [grantee]))
 
     @jsii.member(jsii_name="grantPublish")
-    def grant_publish(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_publish(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventPublish access to this EventApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17523,13 +17531,13 @@ class _IEventApiProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f592305f86dde340ca6a3ba774ba91b3fe253e9372ef6b31476230626919ff93)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPublish", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPublish", [grantee]))
 
     @jsii.member(jsii_name="grantPublishAndSubscribe")
     def grant_publish_and_subscribe(
         self,
-        grantee: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement to publish and subscribe to this API for an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17537,10 +17545,10 @@ class _IEventApiProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__58ed9414906b10cf326a878bece156d0a2745b5ddaaf28de830398c690bbdc2d)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPublishAndSubscribe", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPublishAndSubscribe", [grantee]))
 
     @jsii.member(jsii_name="grantSubscribe")
-    def grant_subscribe(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_subscribe(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventSubscribe access to this EventApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17548,7 +17556,7 @@ class _IEventApiProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a04521ebda42e83ca5c3229f7a216010c14556a286c4a96248e85967e16421bf)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSubscribe", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSubscribe", [grantee]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventApi).__jsii_proxy_class__ = lambda : _IEventApiProxy
@@ -17584,7 +17592,7 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="modes")
-    def modes(self) -> typing.List[AuthorizationType]:
+    def modes(self) -> typing.List["AuthorizationType"]:
         '''The Authorization Types for this GraphQL Api.'''
         ...
 
@@ -17598,7 +17606,7 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
     def add_dynamo_db_data_source(
         self,
         id: builtins.str,
-        table: _ITable_504fd401,
+        table: "_ITable_504fd401",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17616,7 +17624,7 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
     def add_elasticsearch_data_source(
         self,
         id: builtins.str,
-        domain: _IDomain_0c9006b4,
+        domain: "_IDomain_0c9006b4",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17638,7 +17646,7 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
     def add_event_bridge_data_source(
         self,
         id: builtins.str,
-        event_bus: _IEventBus_88d13111,
+        event_bus: "_IEventBus_88d13111",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17658,7 +17666,7 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
         id: builtins.str,
         endpoint: builtins.str,
         *,
-        authorization_config: typing.Optional[typing.Union[AwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["AwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> "HttpDataSource":
@@ -17676,7 +17684,7 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
     def add_lambda_data_source(
         self,
         id: builtins.str,
-        lambda_function: _IFunction_6adb0ab8,
+        lambda_function: "_IFunction_6adb0ab8",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17713,7 +17721,7 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
     def add_open_search_data_source(
         self,
         id: builtins.str,
-        domain: _IDomain_3c13cbdd,
+        domain: "_IDomain_3c13cbdd",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17731,8 +17739,8 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
     def add_rds_data_source(
         self,
         id: builtins.str,
-        serverless_cluster: _IServerlessCluster_adbbb720,
-        secret_store: _ISecret_6e020e6a,
+        serverless_cluster: "_IServerlessCluster_adbbb720",
+        secret_store: "_ISecret_6e020e6a",
         database_name: typing.Optional[builtins.str] = None,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -17753,8 +17761,8 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
     def add_rds_data_source_v2(
         self,
         id: builtins.str,
-        serverless_cluster: _IDatabaseCluster_6554c32b,
-        secret_store: _ISecret_6e020e6a,
+        serverless_cluster: "_IDatabaseCluster_6554c32b",
+        secret_store: "_ISecret_6e020e6a",
         database_name: typing.Optional[builtins.str] = None,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -17772,7 +17780,10 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="addSchemaDependency")
-    def add_schema_dependency(self, construct: _CfnResource_9df397a6) -> builtins.bool:
+    def add_schema_dependency(
+        self,
+        construct: "_CfnResource_9df397a6",
+    ) -> builtins.bool:
         '''Add schema dependency if not imported.
 
         :param construct: the dependee.
@@ -17784,16 +17795,16 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        data_source: typing.Optional[BaseDataSource] = None,
+        data_source: typing.Optional["BaseDataSource"] = None,
         field_name: builtins.str,
         type_name: builtins.str,
-        caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        code: typing.Optional[Code] = None,
+        caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence[IAppsyncFunction]] = None,
+        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
         request_mapping_template: typing.Optional["MappingTemplate"] = None,
         response_mapping_template: typing.Optional["MappingTemplate"] = None,
-        runtime: typing.Optional[FunctionRuntime] = None,
+        runtime: typing.Optional["FunctionRuntime"] = None,
     ) -> "Resolver":
         '''creates a new resolver for this datasource and API using the given properties.
 
@@ -17814,10 +17825,10 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         resources: "IamResource",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this GraphQLApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17829,9 +17840,9 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="grantMutation")
     def grant_mutation(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *fields: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for Mutation access to this GraphQLApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17842,9 +17853,9 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="grantQuery")
     def grant_query(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *fields: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for Query access to this GraphQLApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17855,9 +17866,9 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="grantSubscription")
     def grant_subscription(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *fields: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for Subscription access to this GraphQLApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -17899,9 +17910,9 @@ class _IGraphqlApiProxy(
 
     @builtins.property
     @jsii.member(jsii_name="modes")
-    def modes(self) -> typing.List[AuthorizationType]:
+    def modes(self) -> typing.List["AuthorizationType"]:
         '''The Authorization Types for this GraphQL Api.'''
-        return typing.cast(typing.List[AuthorizationType], jsii.get(self, "modes"))
+        return typing.cast(typing.List["AuthorizationType"], jsii.get(self, "modes"))
 
     @builtins.property
     @jsii.member(jsii_name="visibility")
@@ -17913,7 +17924,7 @@ class _IGraphqlApiProxy(
     def add_dynamo_db_data_source(
         self,
         id: builtins.str,
-        table: _ITable_504fd401,
+        table: "_ITable_504fd401",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17937,7 +17948,7 @@ class _IGraphqlApiProxy(
     def add_elasticsearch_data_source(
         self,
         id: builtins.str,
-        domain: _IDomain_0c9006b4,
+        domain: "_IDomain_0c9006b4",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17965,7 +17976,7 @@ class _IGraphqlApiProxy(
     def add_event_bridge_data_source(
         self,
         id: builtins.str,
-        event_bus: _IEventBus_88d13111,
+        event_bus: "_IEventBus_88d13111",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -17991,7 +18002,7 @@ class _IGraphqlApiProxy(
         id: builtins.str,
         endpoint: builtins.str,
         *,
-        authorization_config: typing.Optional[typing.Union[AwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["AwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> "HttpDataSource":
@@ -18019,7 +18030,7 @@ class _IGraphqlApiProxy(
     def add_lambda_data_source(
         self,
         id: builtins.str,
-        lambda_function: _IFunction_6adb0ab8,
+        lambda_function: "_IFunction_6adb0ab8",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -18067,7 +18078,7 @@ class _IGraphqlApiProxy(
     def add_open_search_data_source(
         self,
         id: builtins.str,
-        domain: _IDomain_3c13cbdd,
+        domain: "_IDomain_3c13cbdd",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -18091,8 +18102,8 @@ class _IGraphqlApiProxy(
     def add_rds_data_source(
         self,
         id: builtins.str,
-        serverless_cluster: _IServerlessCluster_adbbb720,
-        secret_store: _ISecret_6e020e6a,
+        serverless_cluster: "_IServerlessCluster_adbbb720",
+        secret_store: "_ISecret_6e020e6a",
         database_name: typing.Optional[builtins.str] = None,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -18121,8 +18132,8 @@ class _IGraphqlApiProxy(
     def add_rds_data_source_v2(
         self,
         id: builtins.str,
-        serverless_cluster: _IDatabaseCluster_6554c32b,
-        secret_store: _ISecret_6e020e6a,
+        serverless_cluster: "_IDatabaseCluster_6554c32b",
+        secret_store: "_ISecret_6e020e6a",
         database_name: typing.Optional[builtins.str] = None,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -18148,7 +18159,10 @@ class _IGraphqlApiProxy(
         return typing.cast("RdsDataSource", jsii.invoke(self, "addRdsDataSourceV2", [id, serverless_cluster, secret_store, database_name, options]))
 
     @jsii.member(jsii_name="addSchemaDependency")
-    def add_schema_dependency(self, construct: _CfnResource_9df397a6) -> builtins.bool:
+    def add_schema_dependency(
+        self,
+        construct: "_CfnResource_9df397a6",
+    ) -> builtins.bool:
         '''Add schema dependency if not imported.
 
         :param construct: the dependee.
@@ -18163,16 +18177,16 @@ class _IGraphqlApiProxy(
         self,
         id: builtins.str,
         *,
-        data_source: typing.Optional[BaseDataSource] = None,
+        data_source: typing.Optional["BaseDataSource"] = None,
         field_name: builtins.str,
         type_name: builtins.str,
-        caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        code: typing.Optional[Code] = None,
+        caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence[IAppsyncFunction]] = None,
+        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
         request_mapping_template: typing.Optional["MappingTemplate"] = None,
         response_mapping_template: typing.Optional["MappingTemplate"] = None,
-        runtime: typing.Optional[FunctionRuntime] = None,
+        runtime: typing.Optional["FunctionRuntime"] = None,
     ) -> "Resolver":
         '''creates a new resolver for this datasource and API using the given properties.
 
@@ -18209,10 +18223,10 @@ class _IGraphqlApiProxy(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         resources: "IamResource",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this GraphQLApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -18224,14 +18238,14 @@ class _IGraphqlApiProxy(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument resources", value=resources, expected_type=type_hints["resources"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, resources, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, resources, *actions]))
 
     @jsii.member(jsii_name="grantMutation")
     def grant_mutation(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *fields: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for Mutation access to this GraphQLApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -18241,14 +18255,14 @@ class _IGraphqlApiProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__ea1dc6784e906c65ae30d2b32bc3d957909cc40823fa550036fceb8669830f15)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument fields", value=fields, expected_type=typing.Tuple[type_hints["fields"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantMutation", [grantee, *fields]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantMutation", [grantee, *fields]))
 
     @jsii.member(jsii_name="grantQuery")
     def grant_query(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *fields: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for Query access to this GraphQLApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -18258,14 +18272,14 @@ class _IGraphqlApiProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__663a0e0f33a2e7bf60cd281e18635c3120648a78c22ab54138585fff02631eec)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument fields", value=fields, expected_type=typing.Tuple[type_hints["fields"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantQuery", [grantee, *fields]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantQuery", [grantee, *fields]))
 
     @jsii.member(jsii_name="grantSubscription")
     def grant_subscription(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *fields: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for Subscription access to this GraphQLApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -18275,7 +18289,7 @@ class _IGraphqlApiProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__35a5b1f1ae7dddd4441d16a68e0ce83640393f0cbda788440c0282fefa838996)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument fields", value=fields, expected_type=typing.Tuple[type_hints["fields"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSubscription", [grantee, *fields]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSubscription", [grantee, *fields]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGraphqlApi).__jsii_proxy_class__ = lambda : _IGraphqlApiProxy
@@ -18289,7 +18303,7 @@ class ISchema(typing_extensions.Protocol):
     '''
 
     @jsii.member(jsii_name="bind")
-    def bind(self, api: IGraphqlApi) -> "ISchemaConfig":
+    def bind(self, api: "IGraphqlApi") -> "ISchemaConfig":
         '''Binds a schema string to a GraphQlApi.
 
         :param api: the api to bind the schema to.
@@ -18308,7 +18322,7 @@ class _ISchemaProxy:
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_appsync.ISchema"
 
     @jsii.member(jsii_name="bind")
-    def bind(self, api: IGraphqlApi) -> "ISchemaConfig":
+    def bind(self, api: "IGraphqlApi") -> "ISchemaConfig":
         '''Binds a schema string to a GraphQlApi.
 
         :param api: the api to bind the schema to.
@@ -18410,13 +18424,13 @@ class ISourceApiAssociation(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="mergedApi")
-    def merged_api(self) -> IGraphqlApi:
+    def merged_api(self) -> "IGraphqlApi":
         '''The merged api in the association.'''
         ...
 
     @builtins.property
     @jsii.member(jsii_name="sourceApi")
-    def source_api(self) -> IGraphqlApi:
+    def source_api(self) -> "IGraphqlApi":
         '''The source api in the association.'''
         ...
 
@@ -18442,15 +18456,15 @@ class _ISourceApiAssociationProxy(
 
     @builtins.property
     @jsii.member(jsii_name="mergedApi")
-    def merged_api(self) -> IGraphqlApi:
+    def merged_api(self) -> "IGraphqlApi":
         '''The merged api in the association.'''
-        return typing.cast(IGraphqlApi, jsii.get(self, "mergedApi"))
+        return typing.cast("IGraphqlApi", jsii.get(self, "mergedApi"))
 
     @builtins.property
     @jsii.member(jsii_name="sourceApi")
-    def source_api(self) -> IGraphqlApi:
+    def source_api(self) -> "IGraphqlApi":
         '''The source api in the association.'''
-        return typing.cast(IGraphqlApi, jsii.get(self, "sourceApi"))
+        return typing.cast("IGraphqlApi", jsii.get(self, "sourceApi"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ISourceApiAssociation).__jsii_proxy_class__ = lambda : _ISourceApiAssociationProxy
@@ -18546,7 +18560,7 @@ class InlineCode(
         jsii.create(self.__class__, self, [code])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> CodeConfig:
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Bind source code to an AppSync Function or resolver.
 
         :param _scope: -
@@ -18554,7 +18568,7 @@ class InlineCode(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__83acb173a79e10774f37e4699441474aba7a06c89753cc8bbc811841fb968a5a)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(CodeConfig, jsii.invoke(self, "bind", [_scope]))
+        return typing.cast("CodeConfig", jsii.invoke(self, "bind", [_scope]))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_appsync.IntrospectionConfig")
@@ -18732,8 +18746,8 @@ class LambdaAuthorizerConfig:
     def __init__(
         self,
         *,
-        handler: _IFunction_6adb0ab8,
-        results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        handler: "_IFunction_6adb0ab8",
+        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         validation_regex: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Configuration for Lambda authorization in AppSync.
@@ -18779,17 +18793,17 @@ class LambdaAuthorizerConfig:
             self._values["validation_regex"] = validation_regex
 
     @builtins.property
-    def handler(self) -> _IFunction_6adb0ab8:
+    def handler(self) -> "_IFunction_6adb0ab8":
         '''The authorizer lambda function.
 
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-graphqlapi-lambdaauthorizerconfig.html
         '''
         result = self._values.get("handler")
         assert result is not None, "Required property 'handler' is missing"
-        return typing.cast(_IFunction_6adb0ab8, result)
+        return typing.cast("_IFunction_6adb0ab8", result)
 
     @builtins.property
-    def results_cache_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def results_cache_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''How long the results are cached.
 
         Disable caching by setting this to 0.
@@ -18797,7 +18811,7 @@ class LambdaAuthorizerConfig:
         :default: Duration.minutes(5)
         '''
         result = self._values.get("results_cache_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def validation_regex(self) -> typing.Optional[builtins.str]:
@@ -18877,10 +18891,10 @@ class LogConfig:
     def __init__(
         self,
         *,
-        exclude_verbose_content: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        field_log_level: typing.Optional[FieldLogLevel] = None,
-        retention: typing.Optional[_RetentionDays_070f99f0] = None,
-        role: typing.Optional[_IRoleRef_8400221f] = None,
+        exclude_verbose_content: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        field_log_level: typing.Optional["FieldLogLevel"] = None,
+        retention: typing.Optional["_RetentionDays_070f99f0"] = None,
+        role: typing.Optional["_IRoleRef_8400221f"] = None,
     ) -> None:
         '''Logging configuration for AppSync.
 
@@ -18925,25 +18939,25 @@ class LogConfig:
     @builtins.property
     def exclude_verbose_content(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''exclude verbose content.
 
         :default: false
         '''
         result = self._values.get("exclude_verbose_content")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def field_log_level(self) -> typing.Optional[FieldLogLevel]:
+    def field_log_level(self) -> typing.Optional["FieldLogLevel"]:
         '''log level for fields.
 
         :default: - Use AppSync default
         '''
         result = self._values.get("field_log_level")
-        return typing.cast(typing.Optional[FieldLogLevel], result)
+        return typing.cast(typing.Optional["FieldLogLevel"], result)
 
     @builtins.property
-    def retention(self) -> typing.Optional[_RetentionDays_070f99f0]:
+    def retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
         '''The number of days log events are kept in CloudWatch Logs.
 
         By default AppSync keeps the logs infinitely. When updating this property,
@@ -18953,16 +18967,16 @@ class LogConfig:
         :default: RetentionDays.INFINITE
         '''
         result = self._values.get("retention")
-        return typing.cast(typing.Optional[_RetentionDays_070f99f0], result)
+        return typing.cast(typing.Optional["_RetentionDays_070f99f0"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRoleRef_8400221f]:
+    def role(self) -> typing.Optional["_IRoleRef_8400221f"]:
         '''The role for CloudWatch Logs.
 
         :default: - None
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRoleRef_8400221f], result)
+        return typing.cast(typing.Optional["_IRoleRef_8400221f"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19093,7 +19107,7 @@ class MappingTemplate(
     def dynamo_db_put_item(
         cls,
         key: "PrimaryKey",
-        values: AttributeValues,
+        values: "AttributeValues",
     ) -> "MappingTemplate":
         '''Mapping template to save a single item to a DynamoDB table.
 
@@ -19110,7 +19124,7 @@ class MappingTemplate(
     @builtins.classmethod
     def dynamo_db_query(
         cls,
-        cond: KeyCondition,
+        cond: "KeyCondition",
         index_name: typing.Optional[builtins.str] = None,
         consistent_read: typing.Optional[builtins.bool] = None,
     ) -> "MappingTemplate":
@@ -19282,8 +19296,8 @@ class NamespaceAuthConfig:
     def __init__(
         self,
         *,
-        publish_auth_mode_types: typing.Optional[typing.Sequence[AppSyncAuthorizationType]] = None,
-        subscribe_auth_mode_types: typing.Optional[typing.Sequence[AppSyncAuthorizationType]] = None,
+        publish_auth_mode_types: typing.Optional[typing.Sequence["AppSyncAuthorizationType"]] = None,
+        subscribe_auth_mode_types: typing.Optional[typing.Sequence["AppSyncAuthorizationType"]] = None,
     ) -> None:
         '''Authorization configuration for the Channel Namespace.
 
@@ -19320,24 +19334,24 @@ class NamespaceAuthConfig:
     @builtins.property
     def publish_auth_mode_types(
         self,
-    ) -> typing.Optional[typing.List[AppSyncAuthorizationType]]:
+    ) -> typing.Optional[typing.List["AppSyncAuthorizationType"]]:
         '''The publish auth modes for this Event Api.
 
         :default: - API Key authorization
         '''
         result = self._values.get("publish_auth_mode_types")
-        return typing.cast(typing.Optional[typing.List[AppSyncAuthorizationType]], result)
+        return typing.cast(typing.Optional[typing.List["AppSyncAuthorizationType"]], result)
 
     @builtins.property
     def subscribe_auth_mode_types(
         self,
-    ) -> typing.Optional[typing.List[AppSyncAuthorizationType]]:
+    ) -> typing.Optional[typing.List["AppSyncAuthorizationType"]]:
         '''The subscribe auth modes for this Event Api.
 
         :default: - API Key authorization
         '''
         result = self._values.get("subscribe_auth_mode_types")
-        return typing.cast(typing.Optional[typing.List[AppSyncAuthorizationType]], result)
+        return typing.cast(typing.Optional[typing.List["AppSyncAuthorizationType"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19379,10 +19393,10 @@ class NoneDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api: IGraphqlApi,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -19411,7 +19425,7 @@ class NoneDataSourceProps(BaseDataSourceProps):
     def __init__(
         self,
         *,
-        api: IGraphqlApi,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -19453,11 +19467,11 @@ class NoneDataSourceProps(BaseDataSourceProps):
             self._values["name"] = name
 
     @builtins.property
-    def api(self) -> IGraphqlApi:
+    def api(self) -> "IGraphqlApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -19715,7 +19729,7 @@ class PrimaryKey(
         )
     '''
 
-    def __init__(self, pkey: Assign, skey: typing.Optional[Assign] = None) -> None:
+    def __init__(self, pkey: "Assign", skey: typing.Optional["Assign"] = None) -> None:
         '''
         :param pkey: -
         :param skey: -
@@ -19728,7 +19742,7 @@ class PrimaryKey(
 
     @jsii.member(jsii_name="partition")
     @builtins.classmethod
-    def partition(cls, key: builtins.str) -> PartitionKeyStep:
+    def partition(cls, key: builtins.str) -> "PartitionKeyStep":
         '''Allows assigning a value to the partition key.
 
         :param key: -
@@ -19736,7 +19750,7 @@ class PrimaryKey(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__331614f70c4957ba245389adda042d248e85ee7b1e7ca5531863245ae9efa42b)
             check_type(argname="argument key", value=key, expected_type=type_hints["key"])
-        return typing.cast(PartitionKeyStep, jsii.sinvoke(cls, "partition", [key]))
+        return typing.cast("PartitionKeyStep", jsii.sinvoke(cls, "partition", [key]))
 
     @jsii.member(jsii_name="renderTemplate")
     def render_template(self) -> builtins.str:
@@ -19745,8 +19759,8 @@ class PrimaryKey(
 
     @builtins.property
     @jsii.member(jsii_name="pkey")
-    def _pkey(self) -> Assign:
-        return typing.cast(Assign, jsii.get(self, "pkey"))
+    def _pkey(self) -> "Assign":
+        return typing.cast("Assign", jsii.get(self, "pkey"))
 
 
 class Resolver(
@@ -19777,20 +19791,20 @@ class Resolver(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api: IGraphqlApi,
-        data_source: typing.Optional[BaseDataSource] = None,
+        api: "IGraphqlApi",
+        data_source: typing.Optional["BaseDataSource"] = None,
         field_name: builtins.str,
         type_name: builtins.str,
-        caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        code: typing.Optional[Code] = None,
+        caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence[IAppsyncFunction]] = None,
-        request_mapping_template: typing.Optional[MappingTemplate] = None,
-        response_mapping_template: typing.Optional[MappingTemplate] = None,
-        runtime: typing.Optional[FunctionRuntime] = None,
+        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
+        request_mapping_template: typing.Optional["MappingTemplate"] = None,
+        response_mapping_template: typing.Optional["MappingTemplate"] = None,
+        runtime: typing.Optional["FunctionRuntime"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -19857,15 +19871,15 @@ class ResolverProps(ExtendedResolverProps):
         *,
         field_name: builtins.str,
         type_name: builtins.str,
-        caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        code: typing.Optional[Code] = None,
+        caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence[IAppsyncFunction]] = None,
-        request_mapping_template: typing.Optional[MappingTemplate] = None,
-        response_mapping_template: typing.Optional[MappingTemplate] = None,
-        runtime: typing.Optional[FunctionRuntime] = None,
-        data_source: typing.Optional[BaseDataSource] = None,
-        api: IGraphqlApi,
+        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
+        request_mapping_template: typing.Optional["MappingTemplate"] = None,
+        response_mapping_template: typing.Optional["MappingTemplate"] = None,
+        runtime: typing.Optional["FunctionRuntime"] = None,
+        data_source: typing.Optional["BaseDataSource"] = None,
+        api: "IGraphqlApi",
     ) -> None:
         '''Additional property for an AppSync resolver for GraphQL API reference.
 
@@ -19951,22 +19965,22 @@ class ResolverProps(ExtendedResolverProps):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def caching_config(self) -> typing.Optional[CachingConfig]:
+    def caching_config(self) -> typing.Optional["CachingConfig"]:
         '''The caching configuration for this resolver.
 
         :default: - No caching configuration
         '''
         result = self._values.get("caching_config")
-        return typing.cast(typing.Optional[CachingConfig], result)
+        return typing.cast(typing.Optional["CachingConfig"], result)
 
     @builtins.property
-    def code(self) -> typing.Optional[Code]:
+    def code(self) -> typing.Optional["Code"]:
         '''The function code.
 
         :default: - no code is used
         '''
         result = self._values.get("code")
-        return typing.cast(typing.Optional[Code], result)
+        return typing.cast(typing.Optional["Code"], result)
 
     @builtins.property
     def max_batch_size(self) -> typing.Optional[jsii.Number]:
@@ -19978,7 +19992,7 @@ class ResolverProps(ExtendedResolverProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def pipeline_config(self) -> typing.Optional[typing.List[IAppsyncFunction]]:
+    def pipeline_config(self) -> typing.Optional[typing.List["IAppsyncFunction"]]:
         '''configuration of the pipeline resolver.
 
         :default:
@@ -19987,50 +20001,50 @@ class ResolverProps(ExtendedResolverProps):
         An empty array | undefined sets resolver to be of kind, unit
         '''
         result = self._values.get("pipeline_config")
-        return typing.cast(typing.Optional[typing.List[IAppsyncFunction]], result)
+        return typing.cast(typing.Optional[typing.List["IAppsyncFunction"]], result)
 
     @builtins.property
-    def request_mapping_template(self) -> typing.Optional[MappingTemplate]:
+    def request_mapping_template(self) -> typing.Optional["MappingTemplate"]:
         '''The request mapping template for this resolver.
 
         :default: - No mapping template
         '''
         result = self._values.get("request_mapping_template")
-        return typing.cast(typing.Optional[MappingTemplate], result)
+        return typing.cast(typing.Optional["MappingTemplate"], result)
 
     @builtins.property
-    def response_mapping_template(self) -> typing.Optional[MappingTemplate]:
+    def response_mapping_template(self) -> typing.Optional["MappingTemplate"]:
         '''The response mapping template for this resolver.
 
         :default: - No mapping template
         '''
         result = self._values.get("response_mapping_template")
-        return typing.cast(typing.Optional[MappingTemplate], result)
+        return typing.cast(typing.Optional["MappingTemplate"], result)
 
     @builtins.property
-    def runtime(self) -> typing.Optional[FunctionRuntime]:
+    def runtime(self) -> typing.Optional["FunctionRuntime"]:
         '''The functions runtime.
 
         :default: - no function runtime, VTL mapping templates used
         '''
         result = self._values.get("runtime")
-        return typing.cast(typing.Optional[FunctionRuntime], result)
+        return typing.cast(typing.Optional["FunctionRuntime"], result)
 
     @builtins.property
-    def data_source(self) -> typing.Optional[BaseDataSource]:
+    def data_source(self) -> typing.Optional["BaseDataSource"]:
         '''The data source this resolver is using.
 
         :default: - No datasource
         '''
         result = self._values.get("data_source")
-        return typing.cast(typing.Optional[BaseDataSource], result)
+        return typing.cast(typing.Optional["BaseDataSource"], result)
 
     @builtins.property
-    def api(self) -> IGraphqlApi:
+    def api(self) -> "IGraphqlApi":
         '''The API this resolver is attached to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20211,7 +20225,7 @@ class SchemaFile(
         return typing.cast("SchemaFile", jsii.sinvoke(cls, "fromAsset", [file_path]))
 
     @jsii.member(jsii_name="bind")
-    def bind(self, api: IGraphqlApi) -> ISchemaConfig:
+    def bind(self, api: "IGraphqlApi") -> "ISchemaConfig":
         '''Called when the GraphQL Api is initialized to allow this object to bind to the stack.
 
         :param api: The binding GraphQL Api.
@@ -20221,7 +20235,7 @@ class SchemaFile(
             check_type(argname="argument api", value=api, expected_type=type_hints["api"])
         _options = SchemaBindOptions()
 
-        return typing.cast(ISchemaConfig, jsii.invoke(self, "bind", [api, _options]))
+        return typing.cast("ISchemaConfig", jsii.invoke(self, "bind", [api, _options]))
 
     @builtins.property
     @jsii.member(jsii_name="definition")
@@ -20335,7 +20349,7 @@ class SortKeyStep(
         sort_key_step = appsync.SortKeyStep(assign, "skey")
     '''
 
-    def __init__(self, pkey: Assign, skey: builtins.str) -> None:
+    def __init__(self, pkey: "Assign", skey: builtins.str) -> None:
         '''
         :param pkey: -
         :param skey: -
@@ -20347,12 +20361,12 @@ class SortKeyStep(
         jsii.create(self.__class__, self, [pkey, skey])
 
     @jsii.member(jsii_name="auto")
-    def auto(self) -> PrimaryKey:
+    def auto(self) -> "PrimaryKey":
         '''Assign an auto-generated value to the sort key.'''
-        return typing.cast(PrimaryKey, jsii.invoke(self, "auto", []))
+        return typing.cast("PrimaryKey", jsii.invoke(self, "auto", []))
 
     @jsii.member(jsii_name="is")
-    def is_(self, val: builtins.str) -> PrimaryKey:
+    def is_(self, val: builtins.str) -> "PrimaryKey":
         '''Assign an auto-generated value to the sort key.
 
         :param val: -
@@ -20360,7 +20374,7 @@ class SortKeyStep(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__684d8cf05e18cc8e70df256c4f02edd1174c86389940b94860ac8d3c8a646450)
             check_type(argname="argument val", value=val, expected_type=type_hints["val"])
-        return typing.cast(PrimaryKey, jsii.invoke(self, "is", [val]))
+        return typing.cast("PrimaryKey", jsii.invoke(self, "is", [val]))
 
 
 @jsii.data_type(
@@ -20376,9 +20390,9 @@ class SourceApi:
     def __init__(
         self,
         *,
-        source_api: IGraphqlApi,
+        source_api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
-        merge_type: typing.Optional[MergeType] = None,
+        merge_type: typing.Optional["MergeType"] = None,
     ) -> None:
         '''Configuration of source API.
 
@@ -20418,11 +20432,11 @@ class SourceApi:
             self._values["merge_type"] = merge_type
 
     @builtins.property
-    def source_api(self) -> IGraphqlApi:
+    def source_api(self) -> "IGraphqlApi":
         '''Source API that is associated with the merged API.'''
         result = self._values.get("source_api")
         assert result is not None, "Required property 'source_api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -20431,13 +20445,13 @@ class SourceApi:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def merge_type(self) -> typing.Optional[MergeType]:
+    def merge_type(self) -> typing.Optional["MergeType"]:
         '''Merging option used to associate the source API to the Merged API.
 
         :default: - Auto merge. The merge is triggered automatically when the source API has changed
         '''
         result = self._values.get("merge_type")
-        return typing.cast(typing.Optional[MergeType], result)
+        return typing.cast(typing.Optional["MergeType"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20486,14 +20500,14 @@ class SourceApiAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        merged_api: IGraphqlApi,
-        merged_api_execution_role: _IRole_235f5d8e,
-        source_api: IGraphqlApi,
+        merged_api: "IGraphqlApi",
+        merged_api_execution_role: "_IRole_235f5d8e",
+        source_api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
-        merge_type: typing.Optional[MergeType] = None,
+        merge_type: typing.Optional["MergeType"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -20522,13 +20536,13 @@ class SourceApiAssociation(
     @builtins.classmethod
     def from_source_api_association_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         association_arn: builtins.str,
-        merged_api: IGraphqlApi,
-        source_api: IGraphqlApi,
-    ) -> ISourceApiAssociation:
+        merged_api: "IGraphqlApi",
+        source_api: "IGraphqlApi",
+    ) -> "ISourceApiAssociation":
         '''Import Appsync Source Api Association from source API, merged api, and merge type.
 
         :param scope: -
@@ -20547,7 +20561,7 @@ class SourceApiAssociation(
             source_api=source_api,
         )
 
-        return typing.cast(ISourceApiAssociation, jsii.sinvoke(cls, "fromSourceApiAssociationAttributes", [scope, id, attrs]))
+        return typing.cast("ISourceApiAssociation", jsii.sinvoke(cls, "fromSourceApiAssociationAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -20557,9 +20571,9 @@ class SourceApiAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="association")
-    def association(self) -> CfnSourceApiAssociation:
+    def association(self) -> "CfnSourceApiAssociation":
         '''The underlying CFN source api association resource.'''
-        return typing.cast(CfnSourceApiAssociation, jsii.get(self, "association"))
+        return typing.cast("CfnSourceApiAssociation", jsii.get(self, "association"))
 
     @builtins.property
     @jsii.member(jsii_name="associationArn")
@@ -20575,21 +20589,21 @@ class SourceApiAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="mergedApi")
-    def merged_api(self) -> IGraphqlApi:
+    def merged_api(self) -> "IGraphqlApi":
         '''The merged api in the association.'''
-        return typing.cast(IGraphqlApi, jsii.get(self, "mergedApi"))
+        return typing.cast("IGraphqlApi", jsii.get(self, "mergedApi"))
 
     @builtins.property
     @jsii.member(jsii_name="mergeType")
-    def merge_type(self) -> MergeType:
+    def merge_type(self) -> "MergeType":
         '''The merge type for the source api association.'''
-        return typing.cast(MergeType, jsii.get(self, "mergeType"))
+        return typing.cast("MergeType", jsii.get(self, "mergeType"))
 
     @builtins.property
     @jsii.member(jsii_name="sourceApi")
-    def source_api(self) -> IGraphqlApi:
+    def source_api(self) -> "IGraphqlApi":
         '''The source api in the association.'''
-        return typing.cast(IGraphqlApi, jsii.get(self, "sourceApi"))
+        return typing.cast("IGraphqlApi", jsii.get(self, "sourceApi"))
 
 
 @jsii.data_type(
@@ -20606,8 +20620,8 @@ class SourceApiAssociationAttributes:
         self,
         *,
         association_arn: builtins.str,
-        merged_api: IGraphqlApi,
-        source_api: IGraphqlApi,
+        merged_api: "IGraphqlApi",
+        source_api: "IGraphqlApi",
     ) -> None:
         '''The attributes for imported AppSync Source Api Association.
 
@@ -20650,18 +20664,18 @@ class SourceApiAssociationAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def merged_api(self) -> IGraphqlApi:
+    def merged_api(self) -> "IGraphqlApi":
         '''The merged api in the association.'''
         result = self._values.get("merged_api")
         assert result is not None, "Required property 'merged_api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
-    def source_api(self) -> IGraphqlApi:
+    def source_api(self) -> "IGraphqlApi":
         '''The source api in the association.'''
         result = self._values.get("source_api")
         assert result is not None, "Required property 'source_api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20690,11 +20704,11 @@ class SourceApiAssociationProps:
     def __init__(
         self,
         *,
-        merged_api: IGraphqlApi,
-        merged_api_execution_role: _IRole_235f5d8e,
-        source_api: IGraphqlApi,
+        merged_api: "IGraphqlApi",
+        merged_api_execution_role: "_IRole_235f5d8e",
+        source_api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
-        merge_type: typing.Optional[MergeType] = None,
+        merge_type: typing.Optional["MergeType"] = None,
     ) -> None:
         '''Properties for SourceApiAssociation which associates an AppSync Source API with an AppSync Merged API.
 
@@ -20744,25 +20758,25 @@ class SourceApiAssociationProps:
             self._values["merge_type"] = merge_type
 
     @builtins.property
-    def merged_api(self) -> IGraphqlApi:
+    def merged_api(self) -> "IGraphqlApi":
         '''The merged api to associate.'''
         result = self._values.get("merged_api")
         assert result is not None, "Required property 'merged_api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
-    def merged_api_execution_role(self) -> _IRole_235f5d8e:
+    def merged_api_execution_role(self) -> "_IRole_235f5d8e":
         '''The merged api execution role for adding the access policy for the source api.'''
         result = self._values.get("merged_api_execution_role")
         assert result is not None, "Required property 'merged_api_execution_role' is missing"
-        return typing.cast(_IRole_235f5d8e, result)
+        return typing.cast("_IRole_235f5d8e", result)
 
     @builtins.property
-    def source_api(self) -> IGraphqlApi:
+    def source_api(self) -> "IGraphqlApi":
         '''The source api to associate.'''
         result = self._values.get("source_api")
         assert result is not None, "Required property 'source_api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -20774,13 +20788,13 @@ class SourceApiAssociationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def merge_type(self) -> typing.Optional[MergeType]:
+    def merge_type(self) -> typing.Optional["MergeType"]:
         '''The merge type for the source.
 
         :default: - AUTO_MERGE
         '''
         result = self._values.get("merge_type")
-        return typing.cast(typing.Optional[MergeType], result)
+        return typing.cast(typing.Optional["MergeType"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20806,8 +20820,8 @@ class SourceApiOptions:
     def __init__(
         self,
         *,
-        source_apis: typing.Sequence[typing.Union[SourceApi, typing.Dict[builtins.str, typing.Any]]],
-        merged_api_execution_role: typing.Optional[_Role_e8c6e11f] = None,
+        source_apis: typing.Sequence[typing.Union["SourceApi", typing.Dict[builtins.str, typing.Any]]],
+        merged_api_execution_role: typing.Optional["_Role_e8c6e11f"] = None,
     ) -> None:
         '''Additional API configuration for creating a AppSync Merged API.
 
@@ -20859,20 +20873,20 @@ class SourceApiOptions:
             self._values["merged_api_execution_role"] = merged_api_execution_role
 
     @builtins.property
-    def source_apis(self) -> typing.List[SourceApi]:
+    def source_apis(self) -> typing.List["SourceApi"]:
         '''Definition of source APIs associated with this Merged API.'''
         result = self._values.get("source_apis")
         assert result is not None, "Required property 'source_apis' is missing"
-        return typing.cast(typing.List[SourceApi], result)
+        return typing.cast(typing.List["SourceApi"], result)
 
     @builtins.property
-    def merged_api_execution_role(self) -> typing.Optional[_Role_e8c6e11f]:
+    def merged_api_execution_role(self) -> typing.Optional["_Role_e8c6e11f"]:
         '''IAM Role used to validate access to source APIs at runtime and to update the merged API endpoint with the source API changes.
 
         :default: - An IAM Role with acccess to source schemas will be created
         '''
         result = self._values.get("merged_api_execution_role")
-        return typing.cast(typing.Optional[_Role_e8c6e11f], result)
+        return typing.cast(typing.Optional["_Role_e8c6e11f"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20899,7 +20913,7 @@ class UserPoolConfig:
     def __init__(
         self,
         *,
-        user_pool: _IUserPool_1f1029e2,
+        user_pool: "_IUserPool_1f1029e2",
         app_id_client_regex: typing.Optional[builtins.str] = None,
         default_action: typing.Optional["UserPoolDefaultAction"] = None,
     ) -> None:
@@ -20942,11 +20956,11 @@ class UserPoolConfig:
             self._values["default_action"] = default_action
 
     @builtins.property
-    def user_pool(self) -> _IUserPool_1f1029e2:
+    def user_pool(self) -> "_IUserPool_1f1029e2":
         '''The Cognito user pool to use as identity source.'''
         result = self._values.get("user_pool")
         assert result is not None, "Required property 'user_pool' is missing"
-        return typing.cast(_IUserPool_1f1029e2, result)
+        return typing.cast("_IUserPool_1f1029e2", result)
 
     @builtins.property
     def app_id_client_regex(self) -> typing.Optional[builtins.str]:
@@ -21049,7 +21063,7 @@ class Values(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_appsync.Values"
 
     @jsii.member(jsii_name="attribute")
     @builtins.classmethod
-    def attribute(cls, attr: builtins.str) -> AttributeValuesStep:
+    def attribute(cls, attr: builtins.str) -> "AttributeValuesStep":
         '''Allows assigning a value to the specified attribute.
 
         :param attr: -
@@ -21057,11 +21071,11 @@ class Values(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_appsync.Values"
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b44bb77a68dfd2f3750592928a447287f6d2eb9f026200de390e4380494e5cb8)
             check_type(argname="argument attr", value=attr, expected_type=type_hints["attr"])
-        return typing.cast(AttributeValuesStep, jsii.sinvoke(cls, "attribute", [attr]))
+        return typing.cast("AttributeValuesStep", jsii.sinvoke(cls, "attribute", [attr]))
 
     @jsii.member(jsii_name="projecting")
     @builtins.classmethod
-    def projecting(cls, arg: typing.Optional[builtins.str] = None) -> AttributeValues:
+    def projecting(cls, arg: typing.Optional[builtins.str] = None) -> "AttributeValues":
         '''Treats the specified object as a map of assignments, where the property names represent attribute names.
 
         It’s opinionated about how it represents
@@ -21073,7 +21087,7 @@ class Values(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_appsync.Values"
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f92cb836df619fb1d6788b3bf1522a2affe1a32cec29860d2b16e8bc69fa92ba)
             check_type(argname="argument arg", value=arg, expected_type=type_hints["arg"])
-        return typing.cast(AttributeValues, jsii.sinvoke(cls, "projecting", [arg]))
+        return typing.cast("AttributeValues", jsii.sinvoke(cls, "projecting", [arg]))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_appsync.Visibility")
@@ -21107,7 +21121,7 @@ class ApiBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -21204,17 +21218,17 @@ class AppSyncBackedDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         props: typing.Union["AppSyncBackedDataSourceProps", typing.Dict[builtins.str, typing.Any]],
         *,
-        type: AppSyncDataSourceType,
-        dynamo_db_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.DynamoDBConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        event_bridge_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.EventBridgeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        http_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.HttpConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        lambda_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.LambdaConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_search_service_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.OpenSearchServiceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        relational_database_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.RelationalDatabaseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        type: "AppSyncDataSourceType",
+        dynamo_db_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DynamoDBConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_bridge_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.EventBridgeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.HttpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lambda_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_search_service_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        relational_database_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -21247,9 +21261,9 @@ class AppSyncBackedDataSource(
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The principal of the data source to be IGrantable.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
 
 class _AppSyncBackedDataSourceProxy(
@@ -21276,10 +21290,10 @@ class AppSyncBackedDataSourceProps(AppSyncBaseDataSourceProps):
     def __init__(
         self,
         *,
-        api: IApi,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''Properties for an AppSync datasource backed by a resource.
 
@@ -21326,11 +21340,11 @@ class AppSyncBackedDataSourceProps(AppSyncBaseDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> IApi:
+    def api(self) -> "IApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IApi, result)
+        return typing.cast("IApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -21354,13 +21368,13 @@ class AppSyncBackedDataSourceProps(AppSyncBaseDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -21402,14 +21416,14 @@ class AppSyncDynamoDbDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        table: _ITable_504fd401,
+        table: "_ITable_504fd401",
         read_only_access: typing.Optional[builtins.bool] = None,
         use_caller_credentials: typing.Optional[builtins.bool] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IApi,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -21458,11 +21472,11 @@ class AppSyncDynamoDbDataSourceProps(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IApi,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        table: _ITable_504fd401,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        table: "_ITable_504fd401",
         read_only_access: typing.Optional[builtins.bool] = None,
         use_caller_credentials: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -21527,11 +21541,11 @@ class AppSyncDynamoDbDataSourceProps(AppSyncBackedDataSourceProps):
             self._values["use_caller_credentials"] = use_caller_credentials
 
     @builtins.property
-    def api(self) -> IApi:
+    def api(self) -> "IApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IApi, result)
+        return typing.cast("IApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -21555,20 +21569,20 @@ class AppSyncDynamoDbDataSourceProps(AppSyncBackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def table(self) -> _ITable_504fd401:
+    def table(self) -> "_ITable_504fd401":
         '''The DynamoDB table backing this data source.'''
         result = self._values.get("table")
         assert result is not None, "Required property 'table' is missing"
-        return typing.cast(_ITable_504fd401, result)
+        return typing.cast("_ITable_504fd401", result)
 
     @builtins.property
     def read_only_access(self) -> typing.Optional[builtins.bool]:
@@ -21625,12 +21639,12 @@ class AppSyncEventBridgeDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        event_bus: _IEventBus_88d13111,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IApi,
+        event_bus: "_IEventBus_88d13111",
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -21673,11 +21687,11 @@ class AppSyncEventBridgeDataSourceProps(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IApi,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        event_bus: _IEventBus_88d13111,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        event_bus: "_IEventBus_88d13111",
     ) -> None:
         '''Properties for an AppSync EventBridge datasource.
 
@@ -21730,11 +21744,11 @@ class AppSyncEventBridgeDataSourceProps(AppSyncBackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> IApi:
+    def api(self) -> "IApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IApi, result)
+        return typing.cast("IApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -21758,20 +21772,20 @@ class AppSyncEventBridgeDataSourceProps(AppSyncBackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def event_bus(self) -> _IEventBus_88d13111:
+    def event_bus(self) -> "_IEventBus_88d13111":
         '''The EventBridge EventBus.'''
         result = self._values.get("event_bus")
         assert result is not None, "Required property 'event_bus' is missing"
-        return typing.cast(_IEventBus_88d13111, result)
+        return typing.cast("_IEventBus_88d13111", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -21825,13 +21839,13 @@ class AppSyncHttpDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         endpoint: builtins.str,
-        authorization_config: typing.Optional[typing.Union[AppSyncAwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IApi,
+        authorization_config: typing.Optional[typing.Union["AppSyncAwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -21877,12 +21891,12 @@ class AppSyncHttpDataSourceProps(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IApi,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
         endpoint: builtins.str,
-        authorization_config: typing.Optional[typing.Union[AppSyncAwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["AppSyncAwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties for an AppSync http datasource.
 
@@ -21943,11 +21957,11 @@ class AppSyncHttpDataSourceProps(AppSyncBackedDataSourceProps):
             self._values["authorization_config"] = authorization_config
 
     @builtins.property
-    def api(self) -> IApi:
+    def api(self) -> "IApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IApi, result)
+        return typing.cast("IApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -21971,13 +21985,13 @@ class AppSyncHttpDataSourceProps(AppSyncBackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def endpoint(self) -> builtins.str:
@@ -21987,13 +22001,13 @@ class AppSyncHttpDataSourceProps(AppSyncBackedDataSourceProps):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def authorization_config(self) -> typing.Optional[AppSyncAwsIamConfig]:
+    def authorization_config(self) -> typing.Optional["AppSyncAwsIamConfig"]:
         '''The authorization config in case the HTTP endpoint requires authorization.
 
         :default: - none
         '''
         result = self._values.get("authorization_config")
-        return typing.cast(typing.Optional[AppSyncAwsIamConfig], result)
+        return typing.cast(typing.Optional["AppSyncAwsIamConfig"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22032,12 +22046,12 @@ class AppSyncLambdaDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        lambda_function: _IFunction_6adb0ab8,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IApi,
+        lambda_function: "_IFunction_6adb0ab8",
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -22080,11 +22094,11 @@ class AppSyncLambdaDataSourceProps(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IApi,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        lambda_function: _IFunction_6adb0ab8,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        lambda_function: "_IFunction_6adb0ab8",
     ) -> None:
         '''Properties for an AppSync Lambda datasource.
 
@@ -22137,11 +22151,11 @@ class AppSyncLambdaDataSourceProps(AppSyncBackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> IApi:
+    def api(self) -> "IApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IApi, result)
+        return typing.cast("IApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -22165,20 +22179,20 @@ class AppSyncLambdaDataSourceProps(AppSyncBackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def lambda_function(self) -> _IFunction_6adb0ab8:
+    def lambda_function(self) -> "_IFunction_6adb0ab8":
         '''The Lambda function to call to interact with this data source.'''
         result = self._values.get("lambda_function")
         assert result is not None, "Required property 'lambda_function' is missing"
-        return typing.cast(_IFunction_6adb0ab8, result)
+        return typing.cast("_IFunction_6adb0ab8", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22230,12 +22244,12 @@ class AppSyncOpenSearchDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        domain: _IDomain_3c13cbdd,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IApi,
+        domain: "_IDomain_3c13cbdd",
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -22278,11 +22292,11 @@ class AppSyncOpenSearchDataSourceProps(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IApi,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        domain: _IDomain_3c13cbdd,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        domain: "_IDomain_3c13cbdd",
     ) -> None:
         '''Properties for the OpenSearch Data Source.
 
@@ -22335,11 +22349,11 @@ class AppSyncOpenSearchDataSourceProps(AppSyncBackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> IApi:
+    def api(self) -> "IApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IApi, result)
+        return typing.cast("IApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -22363,20 +22377,20 @@ class AppSyncOpenSearchDataSourceProps(AppSyncBackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def domain(self) -> _IDomain_3c13cbdd:
+    def domain(self) -> "_IDomain_3c13cbdd":
         '''The OpenSearch domain containing the endpoint for the data source.'''
         result = self._values.get("domain")
         assert result is not None, "Required property 'domain' is missing"
-        return typing.cast(_IDomain_3c13cbdd, result)
+        return typing.cast("_IDomain_3c13cbdd", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22426,14 +22440,14 @@ class AppSyncRdsDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        secret_store: _ISecret_6e020e6a,
-        serverless_cluster: _IServerlessCluster_adbbb720,
+        secret_store: "_ISecret_6e020e6a",
+        serverless_cluster: "_IServerlessCluster_adbbb720",
         database_name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IApi,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -22482,12 +22496,12 @@ class AppSyncRdsDataSourceProps(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IApi,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        secret_store: _ISecret_6e020e6a,
-        serverless_cluster: _IServerlessCluster_adbbb720,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        secret_store: "_ISecret_6e020e6a",
+        serverless_cluster: "_IServerlessCluster_adbbb720",
         database_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for an AppSync RDS datasource Aurora Serverless V1.
@@ -22552,11 +22566,11 @@ class AppSyncRdsDataSourceProps(AppSyncBackedDataSourceProps):
             self._values["database_name"] = database_name
 
     @builtins.property
-    def api(self) -> IApi:
+    def api(self) -> "IApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IApi, result)
+        return typing.cast("IApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -22580,27 +22594,27 @@ class AppSyncRdsDataSourceProps(AppSyncBackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def secret_store(self) -> _ISecret_6e020e6a:
+    def secret_store(self) -> "_ISecret_6e020e6a":
         '''The secret containing the credentials for the database.'''
         result = self._values.get("secret_store")
         assert result is not None, "Required property 'secret_store' is missing"
-        return typing.cast(_ISecret_6e020e6a, result)
+        return typing.cast("_ISecret_6e020e6a", result)
 
     @builtins.property
-    def serverless_cluster(self) -> _IServerlessCluster_adbbb720:
+    def serverless_cluster(self) -> "_IServerlessCluster_adbbb720":
         '''The serverless cluster to call to interact with this data source.'''
         result = self._values.get("serverless_cluster")
         assert result is not None, "Required property 'serverless_cluster' is missing"
-        return typing.cast(_IServerlessCluster_adbbb720, result)
+        return typing.cast("_IServerlessCluster_adbbb720", result)
 
     @builtins.property
     def database_name(self) -> typing.Optional[builtins.str]:
@@ -22640,12 +22654,12 @@ class AppSyncRdsDataSourcePropsV2(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IApi,
+        api: "IApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        secret_store: _ISecret_6e020e6a,
-        serverless_cluster: _IDatabaseCluster_6554c32b,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        secret_store: "_ISecret_6e020e6a",
+        serverless_cluster: "_IDatabaseCluster_6554c32b",
         database_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for an AppSync RDS datasource Aurora Serverless V2.
@@ -22710,11 +22724,11 @@ class AppSyncRdsDataSourcePropsV2(AppSyncBackedDataSourceProps):
             self._values["database_name"] = database_name
 
     @builtins.property
-    def api(self) -> IApi:
+    def api(self) -> "IApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IApi, result)
+        return typing.cast("IApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -22738,27 +22752,27 @@ class AppSyncRdsDataSourcePropsV2(AppSyncBackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def secret_store(self) -> _ISecret_6e020e6a:
+    def secret_store(self) -> "_ISecret_6e020e6a":
         '''The secret containing the credentials for the database.'''
         result = self._values.get("secret_store")
         assert result is not None, "Required property 'secret_store' is missing"
-        return typing.cast(_ISecret_6e020e6a, result)
+        return typing.cast("_ISecret_6e020e6a", result)
 
     @builtins.property
-    def serverless_cluster(self) -> _IDatabaseCluster_6554c32b:
+    def serverless_cluster(self) -> "_IDatabaseCluster_6554c32b":
         '''The serverless cluster to call to interact with this data source.'''
         result = self._values.get("serverless_cluster")
         assert result is not None, "Required property 'serverless_cluster' is missing"
-        return typing.cast(_IDatabaseCluster_6554c32b, result)
+        return typing.cast("_IDatabaseCluster_6554c32b", result)
 
     @builtins.property
     def database_name(self) -> typing.Optional[builtins.str]:
@@ -22811,18 +22825,18 @@ class AppsyncFunction(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api: IGraphqlApi,
-        data_source: BaseDataSource,
+        api: "IGraphqlApi",
+        data_source: "BaseDataSource",
         name: builtins.str,
-        code: typing.Optional[Code] = None,
+        code: typing.Optional["Code"] = None,
         description: typing.Optional[builtins.str] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        request_mapping_template: typing.Optional[MappingTemplate] = None,
-        response_mapping_template: typing.Optional[MappingTemplate] = None,
-        runtime: typing.Optional[FunctionRuntime] = None,
+        request_mapping_template: typing.Optional["MappingTemplate"] = None,
+        response_mapping_template: typing.Optional["MappingTemplate"] = None,
+        runtime: typing.Optional["FunctionRuntime"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -22859,11 +22873,11 @@ class AppsyncFunction(
     @builtins.classmethod
     def from_appsync_function_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         function_arn: builtins.str,
-    ) -> IAppsyncFunction:
+    ) -> "IAppsyncFunction":
         '''Import Appsync Function from arn.
 
         :param scope: -
@@ -22876,7 +22890,7 @@ class AppsyncFunction(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         attrs = AppsyncFunctionAttributes(function_arn=function_arn)
 
-        return typing.cast(IAppsyncFunction, jsii.sinvoke(cls, "fromAppsyncFunctionAttributes", [scope, id, attrs]))
+        return typing.cast("IAppsyncFunction", jsii.sinvoke(cls, "fromAppsyncFunctionAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -22886,12 +22900,12 @@ class AppsyncFunction(
 
     @builtins.property
     @jsii.member(jsii_name="dataSource")
-    def data_source(self) -> BaseDataSource:
+    def data_source(self) -> "BaseDataSource":
         '''the data source of this AppSync Function.
 
         :attribute: DataSourceName
         '''
-        return typing.cast(BaseDataSource, jsii.get(self, "dataSource"))
+        return typing.cast("BaseDataSource", jsii.get(self, "dataSource"))
 
     @builtins.property
     @jsii.member(jsii_name="functionArn")
@@ -22941,14 +22955,14 @@ class AppsyncFunctionProps(BaseAppsyncFunctionProps):
         self,
         *,
         name: builtins.str,
-        code: typing.Optional[Code] = None,
+        code: typing.Optional["Code"] = None,
         description: typing.Optional[builtins.str] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        request_mapping_template: typing.Optional[MappingTemplate] = None,
-        response_mapping_template: typing.Optional[MappingTemplate] = None,
-        runtime: typing.Optional[FunctionRuntime] = None,
-        api: IGraphqlApi,
-        data_source: BaseDataSource,
+        request_mapping_template: typing.Optional["MappingTemplate"] = None,
+        response_mapping_template: typing.Optional["MappingTemplate"] = None,
+        runtime: typing.Optional["FunctionRuntime"] = None,
+        api: "IGraphqlApi",
+        data_source: "BaseDataSource",
     ) -> None:
         '''the CDK properties for AppSync Functions.
 
@@ -23014,13 +23028,13 @@ class AppsyncFunctionProps(BaseAppsyncFunctionProps):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def code(self) -> typing.Optional[Code]:
+    def code(self) -> typing.Optional["Code"]:
         '''The function code.
 
         :default: - no code is used
         '''
         result = self._values.get("code")
-        return typing.cast(typing.Optional[Code], result)
+        return typing.cast(typing.Optional["Code"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -23043,45 +23057,45 @@ class AppsyncFunctionProps(BaseAppsyncFunctionProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def request_mapping_template(self) -> typing.Optional[MappingTemplate]:
+    def request_mapping_template(self) -> typing.Optional["MappingTemplate"]:
         '''the request mapping template for the AppSync Function.
 
         :default: - no request mapping template
         '''
         result = self._values.get("request_mapping_template")
-        return typing.cast(typing.Optional[MappingTemplate], result)
+        return typing.cast(typing.Optional["MappingTemplate"], result)
 
     @builtins.property
-    def response_mapping_template(self) -> typing.Optional[MappingTemplate]:
+    def response_mapping_template(self) -> typing.Optional["MappingTemplate"]:
         '''the response mapping template for the AppSync Function.
 
         :default: - no response mapping template
         '''
         result = self._values.get("response_mapping_template")
-        return typing.cast(typing.Optional[MappingTemplate], result)
+        return typing.cast(typing.Optional["MappingTemplate"], result)
 
     @builtins.property
-    def runtime(self) -> typing.Optional[FunctionRuntime]:
+    def runtime(self) -> typing.Optional["FunctionRuntime"]:
         '''The functions runtime.
 
         :default: - no function runtime, VTL mapping templates used
         '''
         result = self._values.get("runtime")
-        return typing.cast(typing.Optional[FunctionRuntime], result)
+        return typing.cast(typing.Optional["FunctionRuntime"], result)
 
     @builtins.property
-    def api(self) -> IGraphqlApi:
+    def api(self) -> "IGraphqlApi":
         '''the GraphQL Api linked to this AppSync Function.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
-    def data_source(self) -> BaseDataSource:
+    def data_source(self) -> "BaseDataSource":
         '''the data source linked to this AppSync Function.'''
         result = self._values.get("data_source")
         assert result is not None, "Required property 'data_source' is missing"
-        return typing.cast(BaseDataSource, result)
+        return typing.cast("BaseDataSource", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -23163,14 +23177,14 @@ class AssetCode(
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> None:
         '''
         :param path: The path to the asset file.
@@ -23204,7 +23218,7 @@ class AssetCode(
         jsii.create(self.__class__, self, [path, options])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> CodeConfig:
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Bind source code to an AppSync Function or resolver.
 
         :param scope: -
@@ -23212,7 +23226,7 @@ class AssetCode(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9565c14ceaf744c92526f1e68f77253854c13aa006a825537bf468bbb035ecbb)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-        return typing.cast(CodeConfig, jsii.invoke(self, "bind", [scope]))
+        return typing.cast("CodeConfig", jsii.invoke(self, "bind", [scope]))
 
     @builtins.property
     @jsii.member(jsii_name="path")
@@ -23234,18 +23248,18 @@ class BackedDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         props: typing.Union["BackedDataSourceProps", typing.Dict[builtins.str, typing.Any]],
         *,
         type: builtins.str,
-        dynamo_db_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.DynamoDBConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        elasticsearch_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.ElasticsearchConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        event_bridge_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.EventBridgeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        http_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.HttpConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        lambda_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.LambdaConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_search_service_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.OpenSearchServiceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        relational_database_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.RelationalDatabaseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        dynamo_db_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DynamoDBConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        elasticsearch_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ElasticsearchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        event_bridge_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.EventBridgeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.HttpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lambda_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.LambdaConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_search_service_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        relational_database_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -23280,9 +23294,9 @@ class BackedDataSource(
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''the principal of the data source to be IGrantable.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
 
 class _BackedDataSourceProxy(
@@ -23309,10 +23323,10 @@ class BackedDataSourceProps(BaseDataSourceProps):
     def __init__(
         self,
         *,
-        api: IGraphqlApi,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''properties for an AppSync datasource backed by a resource.
 
@@ -23359,11 +23373,11 @@ class BackedDataSourceProps(BaseDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> IGraphqlApi:
+    def api(self) -> "IGraphqlApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -23384,13 +23398,13 @@ class BackedDataSourceProps(BaseDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -23432,15 +23446,15 @@ class ChannelNamespace(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api: IEventApi,
-        authorization_config: typing.Optional[typing.Union[NamespaceAuthConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        api: "IEventApi",
+        authorization_config: typing.Optional[typing.Union["NamespaceAuthConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         channel_namespace_name: typing.Optional[builtins.str] = None,
-        code: typing.Optional[Code] = None,
-        publish_handler_config: typing.Optional[typing.Union[HandlerConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        subscribe_handler_config: typing.Optional[typing.Union[HandlerConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        code: typing.Optional["Code"] = None,
+        publish_handler_config: typing.Optional[typing.Union["HandlerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        subscribe_handler_config: typing.Optional[typing.Union["HandlerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -23471,10 +23485,10 @@ class ChannelNamespace(
     @builtins.classmethod
     def from_channel_namespace_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         channel_namespace_arn: builtins.str,
-    ) -> IChannelNamespace:
+    ) -> "IChannelNamespace":
         '''Use an existing channel namespace by ARN.
 
         :param scope: -
@@ -23486,10 +23500,10 @@ class ChannelNamespace(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument channel_namespace_arn", value=channel_namespace_arn, expected_type=type_hints["channel_namespace_arn"])
-        return typing.cast(IChannelNamespace, jsii.sinvoke(cls, "fromChannelNamespaceArn", [scope, id, channel_namespace_arn]))
+        return typing.cast("IChannelNamespace", jsii.sinvoke(cls, "fromChannelNamespaceArn", [scope, id, channel_namespace_arn]))
 
     @jsii.member(jsii_name="grantPublish")
-    def grant_publish(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_publish(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventPublish access to this channel namespace to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -23497,13 +23511,13 @@ class ChannelNamespace(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bf54ccd230ee340df638a03c6766fbdde4ec43fc83ebc89c0805199096d68088)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPublish", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPublish", [grantee]))
 
     @jsii.member(jsii_name="grantPublishAndSubscribe")
     def grant_publish_and_subscribe(
         self,
-        grantee: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventPublish and EventSubscribe access to this channel namespace to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -23511,10 +23525,10 @@ class ChannelNamespace(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5a6a047e1562533e994ccd99d865079ed37f5597f1b524dc190de8e15b10f799)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPublishAndSubscribe", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPublishAndSubscribe", [grantee]))
 
     @jsii.member(jsii_name="grantSubscribe")
-    def grant_subscribe(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_subscribe(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventSubscribe access to this channel namespace to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -23522,7 +23536,7 @@ class ChannelNamespace(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__acfaf0e51a9ed392390560670f7d7337f33c4e25f1b852fc64d06db1f5da18c0)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSubscribe", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSubscribe", [grantee]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -23599,14 +23613,14 @@ class DynamoDbDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        table: _ITable_504fd401,
+        table: "_ITable_504fd401",
         read_only_access: typing.Optional[builtins.bool] = None,
         use_caller_credentials: typing.Optional[builtins.bool] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IGraphqlApi,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -23661,11 +23675,11 @@ class DynamoDbDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IGraphqlApi,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        table: _ITable_504fd401,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        table: "_ITable_504fd401",
         read_only_access: typing.Optional[builtins.bool] = None,
         use_caller_credentials: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -23730,11 +23744,11 @@ class DynamoDbDataSourceProps(BackedDataSourceProps):
             self._values["use_caller_credentials"] = use_caller_credentials
 
     @builtins.property
-    def api(self) -> IGraphqlApi:
+    def api(self) -> "IGraphqlApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -23755,20 +23769,20 @@ class DynamoDbDataSourceProps(BackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def table(self) -> _ITable_504fd401:
+    def table(self) -> "_ITable_504fd401":
         '''The DynamoDB table backing this data source.'''
         result = self._values.get("table")
         assert result is not None, "Required property 'table' is missing"
-        return typing.cast(_ITable_504fd401, result)
+        return typing.cast("_ITable_504fd401", result)
 
     @builtins.property
     def read_only_access(self) -> typing.Optional[builtins.bool]:
@@ -23837,12 +23851,12 @@ class ElasticsearchDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        domain: _IDomain_0c9006b4,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IGraphqlApi,
+        domain: "_IDomain_0c9006b4",
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -23887,11 +23901,11 @@ class ElasticsearchDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IGraphqlApi,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        domain: _IDomain_0c9006b4,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        domain: "_IDomain_0c9006b4",
     ) -> None:
         '''(deprecated) Properties for the Elasticsearch Data Source.
 
@@ -23947,11 +23961,11 @@ class ElasticsearchDataSourceProps(BackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> IGraphqlApi:
+    def api(self) -> "IGraphqlApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -23972,23 +23986,23 @@ class ElasticsearchDataSourceProps(BackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def domain(self) -> _IDomain_0c9006b4:
+    def domain(self) -> "_IDomain_0c9006b4":
         '''(deprecated) The elasticsearch domain containing the endpoint for the data source.
 
         :stability: deprecated
         '''
         result = self._values.get("domain")
         assert result is not None, "Required property 'domain' is missing"
-        return typing.cast(_IDomain_0c9006b4, result)
+        return typing.cast("_IDomain_0c9006b4", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24012,7 +24026,7 @@ class EventApiBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -24046,12 +24060,12 @@ class EventApiBase(
         self,
         id: builtins.str,
         *,
-        authorization_config: typing.Optional[typing.Union[NamespaceAuthConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["NamespaceAuthConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         channel_namespace_name: typing.Optional[builtins.str] = None,
-        code: typing.Optional[Code] = None,
-        publish_handler_config: typing.Optional[typing.Union[HandlerConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        subscribe_handler_config: typing.Optional[typing.Union[HandlerConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-    ) -> ChannelNamespace:
+        code: typing.Optional["Code"] = None,
+        publish_handler_config: typing.Optional[typing.Union["HandlerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        subscribe_handler_config: typing.Optional[typing.Union["HandlerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+    ) -> "ChannelNamespace":
         '''add a new Channel Namespace to this API.
 
         :param id: -
@@ -24072,17 +24086,17 @@ class EventApiBase(
             subscribe_handler_config=subscribe_handler_config,
         )
 
-        return typing.cast(ChannelNamespace, jsii.invoke(self, "addChannelNamespace", [id, options]))
+        return typing.cast("ChannelNamespace", jsii.invoke(self, "addChannelNamespace", [id, options]))
 
     @jsii.member(jsii_name="addDynamoDbDataSource")
     def add_dynamo_db_data_source(
         self,
         id: builtins.str,
-        table: _ITable_504fd401,
+        table: "_ITable_504fd401",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-    ) -> AppSyncDynamoDbDataSource:
+    ) -> "AppSyncDynamoDbDataSource":
         '''add a new DynamoDB data source to this API.
 
         :param id: The data source's id.
@@ -24096,17 +24110,17 @@ class EventApiBase(
             check_type(argname="argument table", value=table, expected_type=type_hints["table"])
         options = AppSyncDataSourceOptions(description=description, name=name)
 
-        return typing.cast(AppSyncDynamoDbDataSource, jsii.invoke(self, "addDynamoDbDataSource", [id, table, options]))
+        return typing.cast("AppSyncDynamoDbDataSource", jsii.invoke(self, "addDynamoDbDataSource", [id, table, options]))
 
     @jsii.member(jsii_name="addEventBridgeDataSource")
     def add_event_bridge_data_source(
         self,
         id: builtins.str,
-        event_bus: _IEventBus_88d13111,
+        event_bus: "_IEventBus_88d13111",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-    ) -> AppSyncEventBridgeDataSource:
+    ) -> "AppSyncEventBridgeDataSource":
         '''Add an EventBridge data source to this api.
 
         :param id: The data source's id.
@@ -24120,7 +24134,7 @@ class EventApiBase(
             check_type(argname="argument event_bus", value=event_bus, expected_type=type_hints["event_bus"])
         options = AppSyncDataSourceOptions(description=description, name=name)
 
-        return typing.cast(AppSyncEventBridgeDataSource, jsii.invoke(self, "addEventBridgeDataSource", [id, event_bus, options]))
+        return typing.cast("AppSyncEventBridgeDataSource", jsii.invoke(self, "addEventBridgeDataSource", [id, event_bus, options]))
 
     @jsii.member(jsii_name="addHttpDataSource")
     def add_http_data_source(
@@ -24128,10 +24142,10 @@ class EventApiBase(
         id: builtins.str,
         endpoint: builtins.str,
         *,
-        authorization_config: typing.Optional[typing.Union[AppSyncAwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["AppSyncAwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-    ) -> AppSyncHttpDataSource:
+    ) -> "AppSyncHttpDataSource":
         '''add a new http data source to this API.
 
         :param id: The data source's id.
@@ -24150,17 +24164,17 @@ class EventApiBase(
             name=name,
         )
 
-        return typing.cast(AppSyncHttpDataSource, jsii.invoke(self, "addHttpDataSource", [id, endpoint, options]))
+        return typing.cast("AppSyncHttpDataSource", jsii.invoke(self, "addHttpDataSource", [id, endpoint, options]))
 
     @jsii.member(jsii_name="addLambdaDataSource")
     def add_lambda_data_source(
         self,
         id: builtins.str,
-        lambda_function: _IFunction_6adb0ab8,
+        lambda_function: "_IFunction_6adb0ab8",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-    ) -> AppSyncLambdaDataSource:
+    ) -> "AppSyncLambdaDataSource":
         '''add a new Lambda data source to this API.
 
         :param id: The data source's id.
@@ -24174,17 +24188,17 @@ class EventApiBase(
             check_type(argname="argument lambda_function", value=lambda_function, expected_type=type_hints["lambda_function"])
         options = AppSyncDataSourceOptions(description=description, name=name)
 
-        return typing.cast(AppSyncLambdaDataSource, jsii.invoke(self, "addLambdaDataSource", [id, lambda_function, options]))
+        return typing.cast("AppSyncLambdaDataSource", jsii.invoke(self, "addLambdaDataSource", [id, lambda_function, options]))
 
     @jsii.member(jsii_name="addOpenSearchDataSource")
     def add_open_search_data_source(
         self,
         id: builtins.str,
-        domain: _IDomain_3c13cbdd,
+        domain: "_IDomain_3c13cbdd",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-    ) -> AppSyncOpenSearchDataSource:
+    ) -> "AppSyncOpenSearchDataSource":
         '''add a new OpenSearch data source to this API.
 
         :param id: The data source's id.
@@ -24198,19 +24212,19 @@ class EventApiBase(
             check_type(argname="argument domain", value=domain, expected_type=type_hints["domain"])
         options = AppSyncDataSourceOptions(description=description, name=name)
 
-        return typing.cast(AppSyncOpenSearchDataSource, jsii.invoke(self, "addOpenSearchDataSource", [id, domain, options]))
+        return typing.cast("AppSyncOpenSearchDataSource", jsii.invoke(self, "addOpenSearchDataSource", [id, domain, options]))
 
     @jsii.member(jsii_name="addRdsDataSource")
     def add_rds_data_source(
         self,
         id: builtins.str,
-        serverless_cluster: typing.Union[_IDatabaseCluster_6554c32b, _IServerlessCluster_adbbb720],
-        secret_store: _ISecret_6e020e6a,
+        serverless_cluster: typing.Union["_IDatabaseCluster_6554c32b", "_IServerlessCluster_adbbb720"],
+        secret_store: "_ISecret_6e020e6a",
         database_name: typing.Optional[builtins.str] = None,
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-    ) -> AppSyncRdsDataSource:
+    ) -> "AppSyncRdsDataSource":
         '''add a new Rds data source to this API.
 
         :param id: The data source's id.
@@ -24228,15 +24242,15 @@ class EventApiBase(
             check_type(argname="argument database_name", value=database_name, expected_type=type_hints["database_name"])
         options = AppSyncDataSourceOptions(description=description, name=name)
 
-        return typing.cast(AppSyncRdsDataSource, jsii.invoke(self, "addRdsDataSource", [id, serverless_cluster, secret_store, database_name, options]))
+        return typing.cast("AppSyncRdsDataSource", jsii.invoke(self, "addRdsDataSource", [id, serverless_cluster, secret_store, database_name, options]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
-        resources: AppSyncEventResource,
+        grantee: "_IGrantable_71c4f5de",
+        resources: "AppSyncEventResource",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this Event API to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -24248,10 +24262,10 @@ class EventApiBase(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument resources", value=resources, expected_type=type_hints["resources"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, resources, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, resources, *actions]))
 
     @jsii.member(jsii_name="grantConnect")
-    def grant_connect(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_connect(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventConnect access to this EventApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -24259,10 +24273,10 @@ class EventApiBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__941012f6edd0baa79634fb79b2047fa81af0271ea2bdf4d007ccb9896c1d8a3d)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantConnect", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantConnect", [grantee]))
 
     @jsii.member(jsii_name="grantPublish")
-    def grant_publish(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_publish(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventPublish access to this EventApi to an IAM principal's policy.
 
         This grants publish permission for all channels within the API.
@@ -24272,13 +24286,13 @@ class EventApiBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7aa9be89950341d299e97bb319e4b1e0b468134b29a7f34edb7b3817ccae1323)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPublish", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPublish", [grantee]))
 
     @jsii.member(jsii_name="grantPublishAndSubscribe")
     def grant_publish_and_subscribe(
         self,
-        grantee: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement to publish and subscribe to this API for an IAM principal's policy.
 
         This grants publish & subscribe permission for all channels within the API.
@@ -24288,10 +24302,10 @@ class EventApiBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9c6d38431c1dc4c39e3ff318ec6281345989874197df24b2c1769737f0ab3159)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPublishAndSubscribe", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPublishAndSubscribe", [grantee]))
 
     @jsii.member(jsii_name="grantSubscribe")
-    def grant_subscribe(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_subscribe(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventSubscribe access to this EventApi to an IAM principal's policy.
 
         This grants subscribe permission for all channels within the API.
@@ -24301,12 +24315,12 @@ class EventApiBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cb179b6818150b7016193865318ae179245e0bbecb1fd35e2fc3bda58786a006)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSubscribe", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSubscribe", [grantee]))
 
     @builtins.property
     @jsii.member(jsii_name="authProviderTypes")
     @abc.abstractmethod
-    def auth_provider_types(self) -> typing.List[AppSyncAuthorizationType]:
+    def auth_provider_types(self) -> typing.List["AppSyncAuthorizationType"]:
         '''The Authorization Types for this Event Api.'''
         ...
 
@@ -24331,9 +24345,9 @@ class _EventApiBaseProxy(
 ):
     @builtins.property
     @jsii.member(jsii_name="authProviderTypes")
-    def auth_provider_types(self) -> typing.List[AppSyncAuthorizationType]:
+    def auth_provider_types(self) -> typing.List["AppSyncAuthorizationType"]:
         '''The Authorization Types for this Event Api.'''
-        return typing.cast(typing.List[AppSyncAuthorizationType], jsii.get(self, "authProviderTypes"))
+        return typing.cast(typing.List["AppSyncAuthorizationType"], jsii.get(self, "authProviderTypes"))
 
     @builtins.property
     @jsii.member(jsii_name="httpDns")
@@ -24384,12 +24398,12 @@ class EventBridgeDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        event_bus: _IEventBus_88d13111,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IGraphqlApi,
+        event_bus: "_IEventBus_88d13111",
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -24438,11 +24452,11 @@ class EventBridgeDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IGraphqlApi,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        event_bus: _IEventBus_88d13111,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        event_bus: "_IEventBus_88d13111",
     ) -> None:
         '''Properties for an AppSync EventBridge datasource.
 
@@ -24495,11 +24509,11 @@ class EventBridgeDataSourceProps(BackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> IGraphqlApi:
+    def api(self) -> "IGraphqlApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -24520,20 +24534,20 @@ class EventBridgeDataSourceProps(BackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def event_bus(self) -> _IEventBus_88d13111:
+    def event_bus(self) -> "_IEventBus_88d13111":
         '''The EventBridge EventBus.'''
         result = self._values.get("event_bus")
         assert result is not None, "Required property 'event_bus' is missing"
-        return typing.cast(_IEventBus_88d13111, result)
+        return typing.cast("_IEventBus_88d13111", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24557,7 +24571,7 @@ class GraphqlApiBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -24590,11 +24604,11 @@ class GraphqlApiBase(
     def add_dynamo_db_data_source(
         self,
         id: builtins.str,
-        table: _ITable_504fd401,
+        table: "_ITable_504fd401",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-    ) -> DynamoDbDataSource:
+    ) -> "DynamoDbDataSource":
         '''add a new DynamoDB data source to this API.
 
         :param id: The data source's id.
@@ -24608,17 +24622,17 @@ class GraphqlApiBase(
             check_type(argname="argument table", value=table, expected_type=type_hints["table"])
         options = DataSourceOptions(description=description, name=name)
 
-        return typing.cast(DynamoDbDataSource, jsii.invoke(self, "addDynamoDbDataSource", [id, table, options]))
+        return typing.cast("DynamoDbDataSource", jsii.invoke(self, "addDynamoDbDataSource", [id, table, options]))
 
     @jsii.member(jsii_name="addElasticsearchDataSource")
     def add_elasticsearch_data_source(
         self,
         id: builtins.str,
-        domain: _IDomain_0c9006b4,
+        domain: "_IDomain_0c9006b4",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-    ) -> ElasticsearchDataSource:
+    ) -> "ElasticsearchDataSource":
         '''(deprecated) add a new elasticsearch data source to this API.
 
         :param id: The data source's id.
@@ -24636,17 +24650,17 @@ class GraphqlApiBase(
             check_type(argname="argument domain", value=domain, expected_type=type_hints["domain"])
         options = DataSourceOptions(description=description, name=name)
 
-        return typing.cast(ElasticsearchDataSource, jsii.invoke(self, "addElasticsearchDataSource", [id, domain, options]))
+        return typing.cast("ElasticsearchDataSource", jsii.invoke(self, "addElasticsearchDataSource", [id, domain, options]))
 
     @jsii.member(jsii_name="addEventBridgeDataSource")
     def add_event_bridge_data_source(
         self,
         id: builtins.str,
-        event_bus: _IEventBus_88d13111,
+        event_bus: "_IEventBus_88d13111",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-    ) -> EventBridgeDataSource:
+    ) -> "EventBridgeDataSource":
         '''Add an EventBridge data source to this api.
 
         :param id: The data source's id.
@@ -24660,7 +24674,7 @@ class GraphqlApiBase(
             check_type(argname="argument event_bus", value=event_bus, expected_type=type_hints["event_bus"])
         options = DataSourceOptions(description=description, name=name)
 
-        return typing.cast(EventBridgeDataSource, jsii.invoke(self, "addEventBridgeDataSource", [id, event_bus, options]))
+        return typing.cast("EventBridgeDataSource", jsii.invoke(self, "addEventBridgeDataSource", [id, event_bus, options]))
 
     @jsii.member(jsii_name="addHttpDataSource")
     def add_http_data_source(
@@ -24668,7 +24682,7 @@ class GraphqlApiBase(
         id: builtins.str,
         endpoint: builtins.str,
         *,
-        authorization_config: typing.Optional[typing.Union[AwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["AwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> "HttpDataSource":
@@ -24696,7 +24710,7 @@ class GraphqlApiBase(
     def add_lambda_data_source(
         self,
         id: builtins.str,
-        lambda_function: _IFunction_6adb0ab8,
+        lambda_function: "_IFunction_6adb0ab8",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -24723,7 +24737,7 @@ class GraphqlApiBase(
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-    ) -> NoneDataSource:
+    ) -> "NoneDataSource":
         '''add a new dummy data source to this API.
 
         Useful for pipeline resolvers
@@ -24738,13 +24752,13 @@ class GraphqlApiBase(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         options = DataSourceOptions(description=description, name=name)
 
-        return typing.cast(NoneDataSource, jsii.invoke(self, "addNoneDataSource", [id, options]))
+        return typing.cast("NoneDataSource", jsii.invoke(self, "addNoneDataSource", [id, options]))
 
     @jsii.member(jsii_name="addOpenSearchDataSource")
     def add_open_search_data_source(
         self,
         id: builtins.str,
-        domain: _IDomain_3c13cbdd,
+        domain: "_IDomain_3c13cbdd",
         *,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -24768,8 +24782,8 @@ class GraphqlApiBase(
     def add_rds_data_source(
         self,
         id: builtins.str,
-        serverless_cluster: _IServerlessCluster_adbbb720,
-        secret_store: _ISecret_6e020e6a,
+        serverless_cluster: "_IServerlessCluster_adbbb720",
+        secret_store: "_ISecret_6e020e6a",
         database_name: typing.Optional[builtins.str] = None,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -24798,8 +24812,8 @@ class GraphqlApiBase(
     def add_rds_data_source_v2(
         self,
         id: builtins.str,
-        serverless_cluster: _IDatabaseCluster_6554c32b,
-        secret_store: _ISecret_6e020e6a,
+        serverless_cluster: "_IDatabaseCluster_6554c32b",
+        secret_store: "_ISecret_6e020e6a",
         database_name: typing.Optional[builtins.str] = None,
         *,
         description: typing.Optional[builtins.str] = None,
@@ -24825,7 +24839,10 @@ class GraphqlApiBase(
         return typing.cast("RdsDataSource", jsii.invoke(self, "addRdsDataSourceV2", [id, serverless_cluster, secret_store, database_name, options]))
 
     @jsii.member(jsii_name="addSchemaDependency")
-    def add_schema_dependency(self, construct: _CfnResource_9df397a6) -> builtins.bool:
+    def add_schema_dependency(
+        self,
+        construct: "_CfnResource_9df397a6",
+    ) -> builtins.bool:
         '''Add schema dependency if not imported.
 
         :param construct: the dependee.
@@ -24840,17 +24857,17 @@ class GraphqlApiBase(
         self,
         id: builtins.str,
         *,
-        data_source: typing.Optional[BaseDataSource] = None,
+        data_source: typing.Optional["BaseDataSource"] = None,
         field_name: builtins.str,
         type_name: builtins.str,
-        caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        code: typing.Optional[Code] = None,
+        caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence[IAppsyncFunction]] = None,
-        request_mapping_template: typing.Optional[MappingTemplate] = None,
-        response_mapping_template: typing.Optional[MappingTemplate] = None,
-        runtime: typing.Optional[FunctionRuntime] = None,
-    ) -> Resolver:
+        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
+        request_mapping_template: typing.Optional["MappingTemplate"] = None,
+        response_mapping_template: typing.Optional["MappingTemplate"] = None,
+        runtime: typing.Optional["FunctionRuntime"] = None,
+    ) -> "Resolver":
         '''creates a new resolver for this datasource and API using the given properties.
 
         :param id: -
@@ -24881,15 +24898,15 @@ class GraphqlApiBase(
             runtime=runtime,
         )
 
-        return typing.cast(Resolver, jsii.invoke(self, "createResolver", [id, props]))
+        return typing.cast("Resolver", jsii.invoke(self, "createResolver", [id, props]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
-        resources: IamResource,
+        grantee: "_IGrantable_71c4f5de",
+        resources: "IamResource",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this GraphQLApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -24901,14 +24918,14 @@ class GraphqlApiBase(
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument resources", value=resources, expected_type=type_hints["resources"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, resources, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, resources, *actions]))
 
     @jsii.member(jsii_name="grantMutation")
     def grant_mutation(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *fields: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for Mutation access to this GraphQLApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -24918,14 +24935,14 @@ class GraphqlApiBase(
             type_hints = typing.get_type_hints(_typecheckingstub__2ef3af2ee92bbe732ce3665a196043366db220efd4931d60c1caffb172992f48)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument fields", value=fields, expected_type=typing.Tuple[type_hints["fields"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantMutation", [grantee, *fields]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantMutation", [grantee, *fields]))
 
     @jsii.member(jsii_name="grantQuery")
     def grant_query(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *fields: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for Query access to this GraphQLApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -24935,14 +24952,14 @@ class GraphqlApiBase(
             type_hints = typing.get_type_hints(_typecheckingstub__c9fe1730c86caa2f932312de2ab1972f23f1faecf2962d173f9e2697a70010ad)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument fields", value=fields, expected_type=typing.Tuple[type_hints["fields"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantQuery", [grantee, *fields]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantQuery", [grantee, *fields]))
 
     @jsii.member(jsii_name="grantSubscription")
     def grant_subscription(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *fields: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for Subscription access to this GraphQLApi to an IAM principal's policy.
 
         :param grantee: The principal.
@@ -24952,7 +24969,7 @@ class GraphqlApiBase(
             type_hints = typing.get_type_hints(_typecheckingstub__16383441288592393f1f757c025e34d1be3ac188b761eaf02a202f2f59a8bd32)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument fields", value=fields, expected_type=typing.Tuple[type_hints["fields"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSubscription", [grantee, *fields]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSubscription", [grantee, *fields]))
 
     @builtins.property
     @jsii.member(jsii_name="apiId")
@@ -24978,14 +24995,14 @@ class GraphqlApiBase(
     @builtins.property
     @jsii.member(jsii_name="modes")
     @abc.abstractmethod
-    def modes(self) -> typing.List[AuthorizationType]:
+    def modes(self) -> typing.List["AuthorizationType"]:
         '''The Authorization Types for this GraphQL Api.'''
         ...
 
     @builtins.property
     @jsii.member(jsii_name="visibility")
     @abc.abstractmethod
-    def visibility(self) -> Visibility:
+    def visibility(self) -> "Visibility":
         '''The visibility of the API.'''
         ...
 
@@ -25014,15 +25031,15 @@ class _GraphqlApiBaseProxy(
 
     @builtins.property
     @jsii.member(jsii_name="modes")
-    def modes(self) -> typing.List[AuthorizationType]:
+    def modes(self) -> typing.List["AuthorizationType"]:
         '''The Authorization Types for this GraphQL Api.'''
-        return typing.cast(typing.List[AuthorizationType], jsii.get(self, "modes"))
+        return typing.cast(typing.List["AuthorizationType"], jsii.get(self, "modes"))
 
     @builtins.property
     @jsii.member(jsii_name="visibility")
-    def visibility(self) -> Visibility:
+    def visibility(self) -> "Visibility":
         '''The visibility of the API.'''
-        return typing.cast(Visibility, jsii.get(self, "visibility"))
+        return typing.cast("Visibility", jsii.get(self, "visibility"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, GraphqlApiBase).__jsii_proxy_class__ = lambda : _GraphqlApiBaseProxy
@@ -25063,13 +25080,13 @@ class HttpDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         endpoint: builtins.str,
-        authorization_config: typing.Optional[typing.Union[AwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IGraphqlApi,
+        authorization_config: typing.Optional[typing.Union["AwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -25121,12 +25138,12 @@ class HttpDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IGraphqlApi,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
         endpoint: builtins.str,
-        authorization_config: typing.Optional[typing.Union[AwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["AwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties for an AppSync http datasource.
 
@@ -25187,11 +25204,11 @@ class HttpDataSourceProps(BackedDataSourceProps):
             self._values["authorization_config"] = authorization_config
 
     @builtins.property
-    def api(self) -> IGraphqlApi:
+    def api(self) -> "IGraphqlApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -25212,13 +25229,13 @@ class HttpDataSourceProps(BackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def endpoint(self) -> builtins.str:
@@ -25228,13 +25245,13 @@ class HttpDataSourceProps(BackedDataSourceProps):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def authorization_config(self) -> typing.Optional[AwsIamConfig]:
+    def authorization_config(self) -> typing.Optional["AwsIamConfig"]:
         '''The authorization config in case the HTTP endpoint requires authorization.
 
         :default: - none
         '''
         result = self._values.get("authorization_config")
-        return typing.cast(typing.Optional[AwsIamConfig], result)
+        return typing.cast(typing.Optional["AwsIamConfig"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -25282,12 +25299,12 @@ class LambdaDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        lambda_function: _IFunction_6adb0ab8,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IGraphqlApi,
+        lambda_function: "_IFunction_6adb0ab8",
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -25336,11 +25353,11 @@ class LambdaDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IGraphqlApi,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        lambda_function: _IFunction_6adb0ab8,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        lambda_function: "_IFunction_6adb0ab8",
     ) -> None:
         '''Properties for an AppSync Lambda datasource.
 
@@ -25393,11 +25410,11 @@ class LambdaDataSourceProps(BackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> IGraphqlApi:
+    def api(self) -> "IGraphqlApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -25418,20 +25435,20 @@ class LambdaDataSourceProps(BackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def lambda_function(self) -> _IFunction_6adb0ab8:
+    def lambda_function(self) -> "_IFunction_6adb0ab8":
         '''The Lambda function to call to interact with this data source.'''
         result = self._values.get("lambda_function")
         assert result is not None, "Required property 'lambda_function' is missing"
-        return typing.cast(_IFunction_6adb0ab8, result)
+        return typing.cast("_IFunction_6adb0ab8", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -25496,12 +25513,12 @@ class OpenSearchDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        domain: _IDomain_3c13cbdd,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IGraphqlApi,
+        domain: "_IDomain_3c13cbdd",
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -25550,11 +25567,11 @@ class OpenSearchDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IGraphqlApi,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        domain: _IDomain_3c13cbdd,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        domain: "_IDomain_3c13cbdd",
     ) -> None:
         '''Properties for the OpenSearch Data Source.
 
@@ -25607,11 +25624,11 @@ class OpenSearchDataSourceProps(BackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> IGraphqlApi:
+    def api(self) -> "IGraphqlApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -25632,20 +25649,20 @@ class OpenSearchDataSourceProps(BackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def domain(self) -> _IDomain_3c13cbdd:
+    def domain(self) -> "_IDomain_3c13cbdd":
         '''The OpenSearch domain containing the endpoint for the data source.'''
         result = self._values.get("domain")
         assert result is not None, "Required property 'domain' is missing"
-        return typing.cast(_IDomain_3c13cbdd, result)
+        return typing.cast("_IDomain_3c13cbdd", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -25682,7 +25699,7 @@ class PartitionKey(
         partition_key = appsync.PartitionKey(assign)
     '''
 
-    def __init__(self, pkey: Assign) -> None:
+    def __init__(self, pkey: "Assign") -> None:
         '''
         :param pkey: -
         '''
@@ -25692,7 +25709,7 @@ class PartitionKey(
         jsii.create(self.__class__, self, [pkey])
 
     @jsii.member(jsii_name="sort")
-    def sort(self, key: builtins.str) -> SortKeyStep:
+    def sort(self, key: builtins.str) -> "SortKeyStep":
         '''Allows assigning a value to the sort key.
 
         :param key: -
@@ -25700,7 +25717,7 @@ class PartitionKey(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d5e39eb491b2b69c3a845d6a2414560f3ccf3cf72641d3a92468e82bf545bcf3)
             check_type(argname="argument key", value=key, expected_type=type_hints["key"])
-        return typing.cast(SortKeyStep, jsii.invoke(self, "sort", [key]))
+        return typing.cast("SortKeyStep", jsii.invoke(self, "sort", [key]))
 
 
 class RdsDataSource(
@@ -25776,14 +25793,14 @@ class RdsDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        secret_store: _ISecret_6e020e6a,
-        serverless_cluster: _IServerlessCluster_adbbb720,
+        secret_store: "_ISecret_6e020e6a",
+        serverless_cluster: "_IServerlessCluster_adbbb720",
         database_name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        api: IGraphqlApi,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -25838,12 +25855,12 @@ class RdsDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IGraphqlApi,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        secret_store: _ISecret_6e020e6a,
-        serverless_cluster: _IServerlessCluster_adbbb720,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        secret_store: "_ISecret_6e020e6a",
+        serverless_cluster: "_IServerlessCluster_adbbb720",
         database_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for an AppSync RDS datasource Aurora Serverless V1.
@@ -25908,11 +25925,11 @@ class RdsDataSourceProps(BackedDataSourceProps):
             self._values["database_name"] = database_name
 
     @builtins.property
-    def api(self) -> IGraphqlApi:
+    def api(self) -> "IGraphqlApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -25933,27 +25950,27 @@ class RdsDataSourceProps(BackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def secret_store(self) -> _ISecret_6e020e6a:
+    def secret_store(self) -> "_ISecret_6e020e6a":
         '''The secret containing the credentials for the database.'''
         result = self._values.get("secret_store")
         assert result is not None, "Required property 'secret_store' is missing"
-        return typing.cast(_ISecret_6e020e6a, result)
+        return typing.cast("_ISecret_6e020e6a", result)
 
     @builtins.property
-    def serverless_cluster(self) -> _IServerlessCluster_adbbb720:
+    def serverless_cluster(self) -> "_IServerlessCluster_adbbb720":
         '''The serverless cluster to call to interact with this data source.'''
         result = self._values.get("serverless_cluster")
         assert result is not None, "Required property 'serverless_cluster' is missing"
-        return typing.cast(_IServerlessCluster_adbbb720, result)
+        return typing.cast("_IServerlessCluster_adbbb720", result)
 
     @builtins.property
     def database_name(self) -> typing.Optional[builtins.str]:
@@ -25993,12 +26010,12 @@ class RdsDataSourcePropsV2(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: IGraphqlApi,
+        api: "IGraphqlApi",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        service_role: typing.Optional[_IRole_235f5d8e] = None,
-        secret_store: _ISecret_6e020e6a,
-        serverless_cluster: _IDatabaseCluster_6554c32b,
+        service_role: typing.Optional["_IRole_235f5d8e"] = None,
+        secret_store: "_ISecret_6e020e6a",
+        serverless_cluster: "_IDatabaseCluster_6554c32b",
         database_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for an AppSync RDS datasource Aurora Serverless V2.
@@ -26063,11 +26080,11 @@ class RdsDataSourcePropsV2(BackedDataSourceProps):
             self._values["database_name"] = database_name
 
     @builtins.property
-    def api(self) -> IGraphqlApi:
+    def api(self) -> "IGraphqlApi":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast(IGraphqlApi, result)
+        return typing.cast("IGraphqlApi", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -26088,27 +26105,27 @@ class RdsDataSourcePropsV2(BackedDataSourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def service_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service role to be assumed by AppSync to interact with the data source.
 
         :default: - Create a new role
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def secret_store(self) -> _ISecret_6e020e6a:
+    def secret_store(self) -> "_ISecret_6e020e6a":
         '''The secret containing the credentials for the database.'''
         result = self._values.get("secret_store")
         assert result is not None, "Required property 'secret_store' is missing"
-        return typing.cast(_ISecret_6e020e6a, result)
+        return typing.cast("_ISecret_6e020e6a", result)
 
     @builtins.property
-    def serverless_cluster(self) -> _IDatabaseCluster_6554c32b:
+    def serverless_cluster(self) -> "_IDatabaseCluster_6554c32b":
         '''The serverless cluster to call to interact with this data source.'''
         result = self._values.get("serverless_cluster")
         assert result is not None, "Required property 'serverless_cluster' is missing"
-        return typing.cast(_IDatabaseCluster_6554c32b, result)
+        return typing.cast("_IDatabaseCluster_6554c32b", result)
 
     @builtins.property
     def database_name(self) -> typing.Optional[builtins.str]:
@@ -26173,13 +26190,13 @@ class EventApi(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         api_name: builtins.str,
-        authorization_config: typing.Optional[typing.Union[EventApiAuthConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        domain_name: typing.Optional[typing.Union[AppSyncDomainOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        log_config: typing.Optional[typing.Union[AppSyncLogConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["EventApiAuthConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        domain_name: typing.Optional[typing.Union["AppSyncDomainOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        log_config: typing.Optional[typing.Union["AppSyncLogConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         owner_contact: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -26209,7 +26226,7 @@ class EventApi(
     @builtins.classmethod
     def from_event_api_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         api_id: builtins.str,
@@ -26217,8 +26234,8 @@ class EventApi(
         realtime_dns: builtins.str,
         api_arn: typing.Optional[builtins.str] = None,
         api_name: typing.Optional[builtins.str] = None,
-        auth_provider_types: typing.Optional[typing.Sequence[AppSyncAuthorizationType]] = None,
-    ) -> IEventApi:
+        auth_provider_types: typing.Optional[typing.Sequence["AppSyncAuthorizationType"]] = None,
+    ) -> "IEventApi":
         '''Import a Event API through this function.
 
         :param scope: scope.
@@ -26243,7 +26260,7 @@ class EventApi(
             auth_provider_types=auth_provider_types,
         )
 
-        return typing.cast(IEventApi, jsii.sinvoke(cls, "fromEventApiAttributes", [scope, id, attrs]))
+        return typing.cast("IEventApi", jsii.sinvoke(cls, "fromEventApiAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -26265,7 +26282,7 @@ class EventApi(
 
     @builtins.property
     @jsii.member(jsii_name="apiKeys")
-    def api_keys(self) -> typing.Mapping[builtins.str, CfnApiKey]:
+    def api_keys(self) -> typing.Mapping[builtins.str, "CfnApiKey"]:
         '''The configured API keys, if present.
 
         The key of this object is an apiKey name (apiKeyConfig.name) if specified, ``Default`` otherwise.
@@ -26274,7 +26291,7 @@ class EventApi(
 
         :attribute: ApiKeys
         '''
-        return typing.cast(typing.Mapping[builtins.str, CfnApiKey], jsii.get(self, "apiKeys"))
+        return typing.cast(typing.Mapping[builtins.str, "CfnApiKey"], jsii.get(self, "apiKeys"))
 
     @builtins.property
     @jsii.member(jsii_name="appSyncDomainName")
@@ -26284,15 +26301,15 @@ class EventApi(
 
     @builtins.property
     @jsii.member(jsii_name="authProviderTypes")
-    def auth_provider_types(self) -> typing.List[AppSyncAuthorizationType]:
+    def auth_provider_types(self) -> typing.List["AppSyncAuthorizationType"]:
         '''The Authorization Types for this Event Api.'''
-        return typing.cast(typing.List[AppSyncAuthorizationType], jsii.get(self, "authProviderTypes"))
+        return typing.cast(typing.List["AppSyncAuthorizationType"], jsii.get(self, "authProviderTypes"))
 
     @builtins.property
     @jsii.member(jsii_name="connectionModeTypes")
-    def connection_mode_types(self) -> typing.List[AppSyncAuthorizationType]:
+    def connection_mode_types(self) -> typing.List["AppSyncAuthorizationType"]:
         '''The connection auth modes for this Event Api.'''
-        return typing.cast(typing.List[AppSyncAuthorizationType], jsii.get(self, "connectionModeTypes"))
+        return typing.cast(typing.List["AppSyncAuthorizationType"], jsii.get(self, "connectionModeTypes"))
 
     @builtins.property
     @jsii.member(jsii_name="customHttpEndpoint")
@@ -26308,15 +26325,15 @@ class EventApi(
 
     @builtins.property
     @jsii.member(jsii_name="defaultPublishModeTypes")
-    def default_publish_mode_types(self) -> typing.List[AppSyncAuthorizationType]:
+    def default_publish_mode_types(self) -> typing.List["AppSyncAuthorizationType"]:
         '''The default publish auth modes for this Event Api.'''
-        return typing.cast(typing.List[AppSyncAuthorizationType], jsii.get(self, "defaultPublishModeTypes"))
+        return typing.cast(typing.List["AppSyncAuthorizationType"], jsii.get(self, "defaultPublishModeTypes"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultSubscribeModeTypes")
-    def default_subscribe_mode_types(self) -> typing.List[AppSyncAuthorizationType]:
+    def default_subscribe_mode_types(self) -> typing.List["AppSyncAuthorizationType"]:
         '''The default subscribe auth modes for this Event Api.'''
-        return typing.cast(typing.List[AppSyncAuthorizationType], jsii.get(self, "defaultSubscribeModeTypes"))
+        return typing.cast(typing.List["AppSyncAuthorizationType"], jsii.get(self, "defaultSubscribeModeTypes"))
 
     @builtins.property
     @jsii.member(jsii_name="httpDns")
@@ -26326,9 +26343,9 @@ class EventApi(
 
     @builtins.property
     @jsii.member(jsii_name="logGroup")
-    def log_group(self) -> _ILogGroup_3c4fa718:
+    def log_group(self) -> "_ILogGroup_3c4fa718":
         '''the CloudWatch Log Group for this API.'''
-        return typing.cast(_ILogGroup_3c4fa718, jsii.get(self, "logGroup"))
+        return typing.cast("_ILogGroup_3c4fa718", jsii.get(self, "logGroup"))
 
     @builtins.property
     @jsii.member(jsii_name="realtimeDns")
@@ -26371,21 +26388,21 @@ class GraphqlApi(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        authorization_config: typing.Optional[typing.Union[AuthorizationConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        definition: typing.Optional[Definition] = None,
-        domain_name: typing.Optional[typing.Union[DomainOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        authorization_config: typing.Optional[typing.Union["AuthorizationConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        definition: typing.Optional["Definition"] = None,
+        domain_name: typing.Optional[typing.Union["DomainOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         environment_variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        introspection_config: typing.Optional[IntrospectionConfig] = None,
-        log_config: typing.Optional[typing.Union[LogConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        introspection_config: typing.Optional["IntrospectionConfig"] = None,
+        log_config: typing.Optional[typing.Union["LogConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         owner_contact: typing.Optional[builtins.str] = None,
         query_depth_limit: typing.Optional[jsii.Number] = None,
         resolver_count_limit: typing.Optional[jsii.Number] = None,
-        schema: typing.Optional[ISchema] = None,
-        visibility: typing.Optional[Visibility] = None,
+        schema: typing.Optional["ISchema"] = None,
+        visibility: typing.Optional["Visibility"] = None,
         xray_enabled: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''
@@ -26431,15 +26448,15 @@ class GraphqlApi(
     @builtins.classmethod
     def from_graphql_api_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         graphql_api_id: builtins.str,
         graphql_api_arn: typing.Optional[builtins.str] = None,
         graph_ql_endpoint_arn: typing.Optional[builtins.str] = None,
-        modes: typing.Optional[typing.Sequence[AuthorizationType]] = None,
-        visibility: typing.Optional[Visibility] = None,
-    ) -> IGraphqlApi:
+        modes: typing.Optional[typing.Sequence["AuthorizationType"]] = None,
+        visibility: typing.Optional["Visibility"] = None,
+    ) -> "IGraphqlApi":
         '''Import a GraphQL API through this function.
 
         :param scope: scope.
@@ -26462,7 +26479,7 @@ class GraphqlApi(
             visibility=visibility,
         )
 
-        return typing.cast(IGraphqlApi, jsii.sinvoke(cls, "fromGraphqlApiAttributes", [scope, id, attrs]))
+        return typing.cast("IGraphqlApi", jsii.sinvoke(cls, "fromGraphqlApiAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addEnvironmentVariable")
     def add_environment_variable(self, key: builtins.str, value: builtins.str) -> None:
@@ -26478,7 +26495,10 @@ class GraphqlApi(
         return typing.cast(None, jsii.invoke(self, "addEnvironmentVariable", [key, value]))
 
     @jsii.member(jsii_name="addSchemaDependency")
-    def add_schema_dependency(self, construct: _CfnResource_9df397a6) -> builtins.bool:
+    def add_schema_dependency(
+        self,
+        construct: "_CfnResource_9df397a6",
+    ) -> builtins.bool:
         '''Add schema dependency to a given construct.
 
         :param construct: the dependee.
@@ -26529,15 +26549,15 @@ class GraphqlApi(
 
     @builtins.property
     @jsii.member(jsii_name="logGroup")
-    def log_group(self) -> _ILogGroup_3c4fa718:
+    def log_group(self) -> "_ILogGroup_3c4fa718":
         '''the CloudWatch Log Group for this API.'''
-        return typing.cast(_ILogGroup_3c4fa718, jsii.get(self, "logGroup"))
+        return typing.cast("_ILogGroup_3c4fa718", jsii.get(self, "logGroup"))
 
     @builtins.property
     @jsii.member(jsii_name="modes")
-    def modes(self) -> typing.List[AuthorizationType]:
+    def modes(self) -> typing.List["AuthorizationType"]:
         '''The Authorization Types for this GraphQL Api.'''
-        return typing.cast(typing.List[AuthorizationType], jsii.get(self, "modes"))
+        return typing.cast(typing.List["AuthorizationType"], jsii.get(self, "modes"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -26547,15 +26567,15 @@ class GraphqlApi(
 
     @builtins.property
     @jsii.member(jsii_name="schema")
-    def schema(self) -> ISchema:
+    def schema(self) -> "ISchema":
         '''the schema attached to this api (only available for GraphQL APIs, not available for merged APIs).'''
-        return typing.cast(ISchema, jsii.get(self, "schema"))
+        return typing.cast("ISchema", jsii.get(self, "schema"))
 
     @builtins.property
     @jsii.member(jsii_name="visibility")
-    def visibility(self) -> Visibility:
+    def visibility(self) -> "Visibility":
         '''the visibility of the API.'''
-        return typing.cast(Visibility, jsii.get(self, "visibility"))
+        return typing.cast("Visibility", jsii.get(self, "visibility"))
 
     @builtins.property
     @jsii.member(jsii_name="apiKey")

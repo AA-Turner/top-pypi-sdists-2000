@@ -112,7 +112,7 @@ class IContainerRef(
 
     @builtins.property
     @jsii.member(jsii_name="containerRef")
-    def container_ref(self) -> ContainerReference:
+    def container_ref(self) -> "ContainerReference":
         '''(experimental) A reference to a Container resource.
 
         :stability: experimental
@@ -133,12 +133,12 @@ class _IContainerRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="containerRef")
-    def container_ref(self) -> ContainerReference:
+    def container_ref(self) -> "ContainerReference":
         '''(experimental) A reference to a Container resource.
 
         :stability: experimental
         '''
-        return typing.cast(ContainerReference, jsii.get(self, "containerRef"))
+        return typing.cast("ContainerReference", jsii.get(self, "containerRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContainerRef).__jsii_proxy_class__ = lambda : _IContainerRefProxy

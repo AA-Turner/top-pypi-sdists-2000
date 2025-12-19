@@ -96,6 +96,7 @@ class CfnCapacityReservation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_athena as athena
@@ -119,13 +120,13 @@ class CfnCapacityReservation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         target_dpus: jsii.Number,
-        capacity_assignment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityReservation.CapacityAssignmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        capacity_assignment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityReservation.CapacityAssignmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Athena::CapacityReservation``.
 
@@ -153,7 +154,7 @@ class CfnCapacityReservation(
     @builtins.classmethod
     def arn_for_capacity_reservation(
         cls,
-        resource: _ICapacityReservationRef_b5ac8483,
+        resource: "_ICapacityReservationRef_b5ac8483",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -176,7 +177,7 @@ class CfnCapacityReservation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCapacityReservation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -252,15 +253,15 @@ class CfnCapacityReservation(
 
     @builtins.property
     @jsii.member(jsii_name="capacityReservationRef")
-    def capacity_reservation_ref(self) -> _CapacityReservationReference_b0153440:
+    def capacity_reservation_ref(self) -> "_CapacityReservationReference_b0153440":
         '''A reference to a CapacityReservation resource.'''
-        return typing.cast(_CapacityReservationReference_b0153440, jsii.get(self, "capacityReservationRef"))
+        return typing.cast("_CapacityReservationReference_b0153440", jsii.get(self, "capacityReservationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -297,14 +298,14 @@ class CfnCapacityReservation(
     @jsii.member(jsii_name="capacityAssignmentConfiguration")
     def capacity_assignment_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityReservation.CapacityAssignmentConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityReservation.CapacityAssignmentConfigurationProperty"]]:
         '''Assigns Athena workgroups (and hence their queries) to capacity reservations.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityReservation.CapacityAssignmentConfigurationProperty"]], jsii.get(self, "capacityAssignmentConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityReservation.CapacityAssignmentConfigurationProperty"]], jsii.get(self, "capacityAssignmentConfiguration"))
 
     @capacity_assignment_configuration.setter
     def capacity_assignment_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityReservation.CapacityAssignmentConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityReservation.CapacityAssignmentConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a48300257a027470aa2568c3011be47c3a12de78febb9a5d2cbc29c8489c9470)
@@ -313,12 +314,12 @@ class CfnCapacityReservation(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the capacity reservation.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f2d5ea5f595f96f7b9cd5f389257bb6c2960294d98f1ab6ad6a6c1ab211b6a2d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -333,7 +334,7 @@ class CfnCapacityReservation(
         def __init__(
             self,
             *,
-            capacity_assignments: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityReservation.CapacityAssignmentProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            capacity_assignments: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityReservation.CapacityAssignmentProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Assigns Athena workgroups (and hence their queries) to capacity reservations.
 
@@ -366,14 +367,14 @@ class CfnCapacityReservation(
         @builtins.property
         def capacity_assignments(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapacityReservation.CapacityAssignmentProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCapacityReservation.CapacityAssignmentProperty"]]]:
             '''The list of assignments that make up the capacity assignment configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-capacityreservation-capacityassignmentconfiguration.html#cfn-athena-capacityreservation-capacityassignmentconfiguration-capacityassignments
             '''
             result = self._values.get("capacity_assignments")
             assert result is not None, "Required property 'capacity_assignments' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapacityReservation.CapacityAssignmentProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCapacityReservation.CapacityAssignmentProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -455,8 +456,8 @@ class CfnCapacityReservationProps:
         *,
         name: builtins.str,
         target_dpus: jsii.Number,
-        capacity_assignment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityReservation.CapacityAssignmentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        capacity_assignment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityReservation.CapacityAssignmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCapacityReservation``.
 
@@ -470,6 +471,7 @@ class CfnCapacityReservationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_athena as athena
@@ -528,7 +530,7 @@ class CfnCapacityReservationProps:
     @builtins.property
     def capacity_assignment_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityReservation.CapacityAssignmentConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityReservation.CapacityAssignmentConfigurationProperty"]]:
         '''Assigns Athena workgroups (and hence their queries) to capacity reservations.
 
         A capacity reservation can have only one capacity assignment configuration, but the capacity assignment configuration can be made up of multiple individual assignments. Each assignment specifies how Athena queries can consume capacity from the capacity reservation that their workgroup is mapped to.
@@ -536,10 +538,10 @@ class CfnCapacityReservationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-capacityreservation.html#cfn-athena-capacityreservation-capacityassignmentconfiguration
         '''
         result = self._values.get("capacity_assignment_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityReservation.CapacityAssignmentConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityReservation.CapacityAssignmentConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the capacity reservation.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -547,7 +549,7 @@ class CfnCapacityReservationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-capacityreservation.html#cfn-athena-capacityreservation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -577,6 +579,7 @@ class CfnDataCatalog(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_athena as athena
@@ -602,7 +605,7 @@ class CfnDataCatalog(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -610,9 +613,9 @@ class CfnDataCatalog(
         connection_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         error: typing.Optional[builtins.str] = None,
-        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         status: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Athena::DataCatalog``.
 
@@ -646,7 +649,10 @@ class CfnDataCatalog(
 
     @jsii.member(jsii_name="arnForDataCatalog")
     @builtins.classmethod
-    def arn_for_data_catalog(cls, resource: _IDataCatalogRef_a1e1d9b1) -> builtins.str:
+    def arn_for_data_catalog(
+        cls,
+        resource: "_IDataCatalogRef_a1e1d9b1",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -659,10 +665,10 @@ class CfnDataCatalog(
     @builtins.classmethod
     def from_data_catalog_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         data_catalog_name: builtins.str,
-    ) -> _IDataCatalogRef_a1e1d9b1:
+    ) -> "_IDataCatalogRef_a1e1d9b1":
         '''Creates a new IDataCatalogRef from a dataCatalogName.
 
         :param scope: -
@@ -674,7 +680,7 @@ class CfnDataCatalog(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument data_catalog_name", value=data_catalog_name, expected_type=type_hints["data_catalog_name"])
-        return typing.cast(_IDataCatalogRef_a1e1d9b1, jsii.sinvoke(cls, "fromDataCatalogName", [scope, id, data_catalog_name]))
+        return typing.cast("_IDataCatalogRef_a1e1d9b1", jsii.sinvoke(cls, "fromDataCatalogName", [scope, id, data_catalog_name]))
 
     @jsii.member(jsii_name="isCfnDataCatalog")
     @builtins.classmethod
@@ -689,7 +695,7 @@ class CfnDataCatalog(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataCatalog", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -725,15 +731,15 @@ class CfnDataCatalog(
 
     @builtins.property
     @jsii.member(jsii_name="dataCatalogRef")
-    def data_catalog_ref(self) -> _DataCatalogReference_623bd693:
+    def data_catalog_ref(self) -> "_DataCatalogReference_623bd693":
         '''A reference to a DataCatalog resource.'''
-        return typing.cast(_DataCatalogReference_623bd693, jsii.get(self, "dataCatalogRef"))
+        return typing.cast("_DataCatalogReference_623bd693", jsii.get(self, "dataCatalogRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -804,14 +810,14 @@ class CfnDataCatalog(
     @jsii.member(jsii_name="parameters")
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''Specifies the Lambda function or functions to use for creating the data catalog.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "parameters"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "parameters"))
 
     @parameters.setter
     def parameters(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2c7bec0cee9cc93380a50923dfa0015a801db986ded37e98f7318cd85af887ed)
@@ -833,12 +839,12 @@ class CfnDataCatalog(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags (key-value pairs) to associate with this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__732720a85a91adafa344b33afc56917f285d76d3c81b8851c7f46aee8ac4b31f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -868,9 +874,9 @@ class CfnDataCatalogProps:
         connection_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         error: typing.Optional[builtins.str] = None,
-        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         status: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataCatalog``.
 
@@ -888,6 +894,7 @@ class CfnDataCatalogProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_athena as athena
@@ -991,7 +998,7 @@ class CfnDataCatalogProps:
     @builtins.property
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''Specifies the Lambda function or functions to use for creating the data catalog.
 
         This is a mapping whose values depend on the catalog type.
@@ -1026,7 +1033,7 @@ class CfnDataCatalogProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-datacatalog.html#cfn-athena-datacatalog-parameters
         '''
         result = self._values.get("parameters")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def status(self) -> typing.Optional[builtins.str]:
@@ -1056,13 +1063,13 @@ class CfnDataCatalogProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags (key-value pairs) to associate with this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-datacatalog.html#cfn-athena-datacatalog-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1107,14 +1114,14 @@ class CfnNamedQuery(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         database: builtins.str,
         query_string: builtins.str,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        work_group: typing.Optional[typing.Union[builtins.str, _IWorkGroupRef_ee1f32da]] = None,
+        work_group: typing.Optional[typing.Union[builtins.str, "_IWorkGroupRef_ee1f32da"]] = None,
     ) -> None:
         '''Create a new ``AWS::Athena::NamedQuery``.
 
@@ -1153,7 +1160,7 @@ class CfnNamedQuery(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnNamedQuery", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1198,9 +1205,9 @@ class CfnNamedQuery(
 
     @builtins.property
     @jsii.member(jsii_name="namedQueryRef")
-    def named_query_ref(self) -> _NamedQueryReference_fe58156f:
+    def named_query_ref(self) -> "_NamedQueryReference_fe58156f":
         '''A reference to a NamedQuery resource.'''
-        return typing.cast(_NamedQueryReference_fe58156f, jsii.get(self, "namedQueryRef"))
+        return typing.cast("_NamedQueryReference_fe58156f", jsii.get(self, "namedQueryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="database")
@@ -1287,7 +1294,7 @@ class CfnNamedQueryProps:
         query_string: builtins.str,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        work_group: typing.Optional[typing.Union[builtins.str, _IWorkGroupRef_ee1f32da]] = None,
+        work_group: typing.Optional[typing.Union[builtins.str, "_IWorkGroupRef_ee1f32da"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnNamedQuery``.
 
@@ -1375,13 +1382,13 @@ class CfnNamedQueryProps:
     @builtins.property
     def work_group(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IWorkGroupRef_ee1f32da]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IWorkGroupRef_ee1f32da"]]:
         '''The name of the workgroup that contains the named query.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-namedquery.html#cfn-athena-namedquery-workgroup
         '''
         result = self._values.get("work_group")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IWorkGroupRef_ee1f32da]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IWorkGroupRef_ee1f32da"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1425,12 +1432,12 @@ class CfnPreparedStatement(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         query_statement: builtins.str,
         statement_name: builtins.str,
-        work_group: typing.Union[builtins.str, _IWorkGroupRef_ee1f32da],
+        work_group: typing.Union[builtins.str, "_IWorkGroupRef_ee1f32da"],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Athena::PreparedStatement``.
@@ -1468,7 +1475,7 @@ class CfnPreparedStatement(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPreparedStatement", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1504,9 +1511,9 @@ class CfnPreparedStatement(
 
     @builtins.property
     @jsii.member(jsii_name="preparedStatementRef")
-    def prepared_statement_ref(self) -> _PreparedStatementReference_7194fb5a:
+    def prepared_statement_ref(self) -> "_PreparedStatementReference_7194fb5a":
         '''A reference to a PreparedStatement resource.'''
-        return typing.cast(_PreparedStatementReference_7194fb5a, jsii.get(self, "preparedStatementRef"))
+        return typing.cast("_PreparedStatementReference_7194fb5a", jsii.get(self, "preparedStatementRef"))
 
     @builtins.property
     @jsii.member(jsii_name="queryStatement")
@@ -1577,7 +1584,7 @@ class CfnPreparedStatementProps:
         *,
         query_statement: builtins.str,
         statement_name: builtins.str,
-        work_group: typing.Union[builtins.str, _IWorkGroupRef_ee1f32da],
+        work_group: typing.Union[builtins.str, "_IWorkGroupRef_ee1f32da"],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnPreparedStatement``.
@@ -1640,14 +1647,14 @@ class CfnPreparedStatementProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def work_group(self) -> typing.Union[builtins.str, _IWorkGroupRef_ee1f32da]:
+    def work_group(self) -> typing.Union[builtins.str, "_IWorkGroupRef_ee1f32da"]:
         '''The workgroup to which the prepared statement belongs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-preparedstatement.html#cfn-athena-preparedstatement-workgroup
         '''
         result = self._values.get("work_group")
         assert result is not None, "Required property 'work_group' is missing"
-        return typing.cast(typing.Union[builtins.str, _IWorkGroupRef_ee1f32da], result)
+        return typing.cast(typing.Union[builtins.str, "_IWorkGroupRef_ee1f32da"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1686,6 +1693,7 @@ class CfnWorkGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_athena as athena
@@ -1852,16 +1860,16 @@ class CfnWorkGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        recursive_delete_option: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        recursive_delete_option: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         state: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        work_group_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.WorkGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        work_group_configuration_updates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.WorkGroupConfigurationUpdatesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        work_group_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.WorkGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        work_group_configuration_updates: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.WorkGroupConfigurationUpdatesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Athena::WorkGroup``.
 
@@ -1893,7 +1901,7 @@ class CfnWorkGroup(
 
     @jsii.member(jsii_name="arnForWorkGroup")
     @builtins.classmethod
-    def arn_for_work_group(cls, resource: _IWorkGroupRef_ee1f32da) -> builtins.str:
+    def arn_for_work_group(cls, resource: "_IWorkGroupRef_ee1f32da") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1906,10 +1914,10 @@ class CfnWorkGroup(
     @builtins.classmethod
     def from_work_group_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         work_group_name: builtins.str,
-    ) -> _IWorkGroupRef_ee1f32da:
+    ) -> "_IWorkGroupRef_ee1f32da":
         '''Creates a new IWorkGroupRef from a workGroupName.
 
         :param scope: -
@@ -1921,7 +1929,7 @@ class CfnWorkGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument work_group_name", value=work_group_name, expected_type=type_hints["work_group_name"])
-        return typing.cast(_IWorkGroupRef_ee1f32da, jsii.sinvoke(cls, "fromWorkGroupName", [scope, id, work_group_name]))
+        return typing.cast("_IWorkGroupRef_ee1f32da", jsii.sinvoke(cls, "fromWorkGroupName", [scope, id, work_group_name]))
 
     @jsii.member(jsii_name="isCfnWorkGroup")
     @builtins.classmethod
@@ -1936,7 +1944,7 @@ class CfnWorkGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWorkGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2009,15 +2017,15 @@ class CfnWorkGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="workGroupRef")
-    def work_group_ref(self) -> _WorkGroupReference_21c92b3e:
+    def work_group_ref(self) -> "_WorkGroupReference_21c92b3e":
         '''A reference to a WorkGroup resource.'''
-        return typing.cast(_WorkGroupReference_21c92b3e, jsii.get(self, "workGroupRef"))
+        return typing.cast("_WorkGroupReference_21c92b3e", jsii.get(self, "workGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2049,14 +2057,14 @@ class CfnWorkGroup(
     @jsii.member(jsii_name="recursiveDeleteOption")
     def recursive_delete_option(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The option to delete a workgroup and its contents even if the workgroup contains any named queries.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "recursiveDeleteOption"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "recursiveDeleteOption"))
 
     @recursive_delete_option.setter
     def recursive_delete_option(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__59a00e8480ec3a751e59ec61ecdf367b39021a964ca18fdc42e47cc0ae3bf52b)
@@ -2078,12 +2086,12 @@ class CfnWorkGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags (key-value pairs) to associate with this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f6dca743e6f0d274bbeac5f19381d936c9a4ea24a2a2ebe3fbd3e468b43fc16f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2093,14 +2101,14 @@ class CfnWorkGroup(
     @jsii.member(jsii_name="workGroupConfiguration")
     def work_group_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.WorkGroupConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.WorkGroupConfigurationProperty"]]:
         '''The configuration of the workgroup, which includes the location in Amazon S3 where query results are stored, the encryption option, if any, used for query results, whether Amazon CloudWatch Metrics are enabled for the workgroup, and the limit for the amount of bytes scanned (cutoff) per query, if it is specified.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.WorkGroupConfigurationProperty"]], jsii.get(self, "workGroupConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.WorkGroupConfigurationProperty"]], jsii.get(self, "workGroupConfiguration"))
 
     @work_group_configuration.setter
     def work_group_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.WorkGroupConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.WorkGroupConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ffe180d9d0a40f65f5055211f5690cad94d8268dbb88d2644e371d7e17725ac6)
@@ -2111,19 +2119,19 @@ class CfnWorkGroup(
     @jsii.member(jsii_name="workGroupConfigurationUpdates")
     def work_group_configuration_updates(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.WorkGroupConfigurationUpdatesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.WorkGroupConfigurationUpdatesProperty"]]:
         '''(deprecated) The configuration information that will be updated for this workgroup, which includes the location in Amazon S3 where query results are stored, the encryption option, if any, used for query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup, whether the workgroup settings override the client-side settings, and the data usage limit for the amount of bytes scanned per query, if it is specified.
 
         :deprecated: this property has been deprecated
 
         :stability: deprecated
         '''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.WorkGroupConfigurationUpdatesProperty"]], jsii.get(self, "workGroupConfigurationUpdates"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.WorkGroupConfigurationUpdatesProperty"]], jsii.get(self, "workGroupConfigurationUpdates"))
 
     @work_group_configuration_updates.setter
     def work_group_configuration_updates(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.WorkGroupConfigurationUpdatesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.WorkGroupConfigurationUpdatesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a488c1ed1dfb72d7cde64a1f15e1f03602827583e7998463eb0cbad4597ab95a)
@@ -2196,7 +2204,7 @@ class CfnWorkGroup(
             self,
             *,
             name: typing.Optional[builtins.str] = None,
-            properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''A classification refers to a set of specific configurations.
 
@@ -2241,13 +2249,13 @@ class CfnWorkGroup(
         @builtins.property
         def properties(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''A set of properties specified within a configuration classification.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-classification.html#cfn-athena-workgroup-classification-properties
             '''
             result = self._values.get("properties")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2274,10 +2282,10 @@ class CfnWorkGroup(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             log_group: typing.Optional[builtins.str] = None,
             log_stream_name_prefix: typing.Optional[builtins.str] = None,
-            log_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Sequence[builtins.str]]]] = None,
+            log_types: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Sequence[builtins.str]]]] = None,
         ) -> None:
             '''Configuration settings for delivering logs to Amazon CloudWatch log groups.
 
@@ -2323,13 +2331,13 @@ class CfnWorkGroup(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables CloudWatch logging.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-cloudwatchloggingconfiguration.html#cfn-athena-workgroup-cloudwatchloggingconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def log_group(self) -> typing.Optional[builtins.str]:
@@ -2352,13 +2360,13 @@ class CfnWorkGroup(
         @builtins.property
         def log_types(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.List[builtins.str]]]]:
             '''The types of logs that you want to publish to CloudWatch.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-cloudwatchloggingconfiguration.html#cfn-athena-workgroup-cloudwatchloggingconfiguration-logtypes
             '''
             result = self._values.get("log_types")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.List[builtins.str]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2516,12 +2524,12 @@ class CfnWorkGroup(
         def __init__(
             self,
             *,
-            additional_configs: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            classifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.ClassificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            additional_configs: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            classifications: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.ClassificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             coordinator_dpu_size: typing.Optional[jsii.Number] = None,
             default_executor_dpu_size: typing.Optional[jsii.Number] = None,
             max_concurrent_dpus: typing.Optional[jsii.Number] = None,
-            spark_properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            spark_properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The engine configuration for the workgroup, which includes the minimum/maximum number of Data Processing Units (DPU) that queries should use when running in provisioned capacity.
 
@@ -2588,7 +2596,7 @@ class CfnWorkGroup(
         @builtins.property
         def additional_configs(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Contains additional notebook engine ``MAP<string, string>`` parameter mappings in the form of key-value pairs.
 
             To specify an Athena notebook that the Jupyter server will download and serve, specify a value for the ``StartSessionRequest$NotebookVersion`` field, and then add a key named ``NotebookId`` to ``AdditionalConfigs`` that has the value of the Athena notebook ID.
@@ -2596,18 +2604,18 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-engineconfiguration.html#cfn-athena-workgroup-engineconfiguration-additionalconfigs
             '''
             result = self._values.get("additional_configs")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def classifications(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ClassificationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ClassificationProperty"]]]]:
             '''The configuration classifications that can be specified for the engine.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-engineconfiguration.html#cfn-athena-workgroup-engineconfiguration-classifications
             '''
             result = self._values.get("classifications")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ClassificationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ClassificationProperty"]]]], result)
 
         @builtins.property
         def coordinator_dpu_size(self) -> typing.Optional[jsii.Number]:
@@ -2643,13 +2651,13 @@ class CfnWorkGroup(
         @builtins.property
         def spark_properties(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Specifies custom jar files and Spark properties for use cases like cluster encryption, table formats, and general Spark tuning.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-engineconfiguration.html#cfn-athena-workgroup-engineconfiguration-sparkproperties
             '''
             result = self._values.get("spark_properties")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2748,7 +2756,7 @@ class CfnWorkGroup(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             kms_key: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Configuration settings for delivering logs to Amazon S3 buckets.
@@ -2783,13 +2791,13 @@ class CfnWorkGroup(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables mamanged log persistence.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-managedloggingconfiguration.html#cfn-athena-workgroup-managedloggingconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def kms_key(self) -> typing.Optional[builtins.str]:
@@ -2823,8 +2831,8 @@ class CfnWorkGroup(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.ManagedStorageEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.ManagedStorageEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration for storing results in Athena owned storage, which includes whether this feature is enabled;
 
@@ -2862,7 +2870,7 @@ class CfnWorkGroup(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If set to true, allows you to store query results in Athena owned storage.
 
             If set to false, workgroup member stores query results in location specified under ``ResultConfiguration$OutputLocation`` . The default is false. A workgroup cannot have the ``ResultConfiguration$OutputLocation`` parameter when you set this field to true.
@@ -2870,18 +2878,18 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-managedqueryresultsconfiguration.html#cfn-athena-workgroup-managedqueryresultsconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def encryption_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ManagedStorageEncryptionConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ManagedStorageEncryptionConfigurationProperty"]]:
             '''If you encrypt query and calculation results in Athena owned storage, this field indicates the encryption option (for example, SSE_KMS or CSE_KMS) and key information.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-managedqueryresultsconfiguration.html#cfn-athena-workgroup-managedqueryresultsconfiguration-encryptionconfiguration
             '''
             result = self._values.get("encryption_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ManagedStorageEncryptionConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ManagedStorageEncryptionConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2960,9 +2968,9 @@ class CfnWorkGroup(
         def __init__(
             self,
             *,
-            cloud_watch_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.CloudWatchLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            managed_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.ManagedLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.S3LoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logging_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.CloudWatchLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            managed_logging_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.ManagedLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_logging_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.S3LoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Contains the configuration settings for managed log persistence, delivering logs to Amazon S3 buckets, Amazon CloudWatch log groups etc.
 
@@ -3015,35 +3023,35 @@ class CfnWorkGroup(
         @builtins.property
         def cloud_watch_logging_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.CloudWatchLoggingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.CloudWatchLoggingConfigurationProperty"]]:
             '''Configuration settings for delivering logs to Amazon CloudWatch log groups.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-monitoringconfiguration.html#cfn-athena-workgroup-monitoringconfiguration-cloudwatchloggingconfiguration
             '''
             result = self._values.get("cloud_watch_logging_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.CloudWatchLoggingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.CloudWatchLoggingConfigurationProperty"]], result)
 
         @builtins.property
         def managed_logging_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ManagedLoggingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ManagedLoggingConfigurationProperty"]]:
             '''Configuration settings for managed log persistence.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-monitoringconfiguration.html#cfn-athena-workgroup-monitoringconfiguration-managedloggingconfiguration
             '''
             result = self._values.get("managed_logging_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ManagedLoggingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ManagedLoggingConfigurationProperty"]], result)
 
         @builtins.property
         def s3_logging_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.S3LoggingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.S3LoggingConfigurationProperty"]]:
             '''Configuration settings for delivering logs to Amazon S3 buckets.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-monitoringconfiguration.html#cfn-athena-workgroup-monitoringconfiguration-s3loggingconfiguration
             '''
             result = self._values.get("s3_logging_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.S3LoggingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.S3LoggingConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3070,8 +3078,8 @@ class CfnWorkGroup(
         def __init__(
             self,
             *,
-            acl_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.AclConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            acl_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.AclConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             expected_bucket_owner: typing.Optional[builtins.str] = None,
             output_location: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -3126,7 +3134,7 @@ class CfnWorkGroup(
         @builtins.property
         def acl_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.AclConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.AclConfigurationProperty"]]:
             '''Indicates that an Amazon S3 canned ACL should be set to control ownership of stored query results.
 
             Currently the only supported canned ACL is ``BUCKET_OWNER_FULL_CONTROL`` . This is a client-side setting. If workgroup settings override client-side settings, then the query uses the ACL configuration that is specified for the workgroup, and also uses the location for storing query results specified in the workgroup. See ``EnforceWorkGroupConfiguration`` .
@@ -3134,12 +3142,12 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-resultconfiguration.html#cfn-athena-workgroup-resultconfiguration-aclconfiguration
             '''
             result = self._values.get("acl_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.AclConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.AclConfigurationProperty"]], result)
 
         @builtins.property
         def encryption_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EncryptionConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.EncryptionConfigurationProperty"]]:
             '''If query results are encrypted in Amazon S3, indicates the encryption option used (for example, ``SSE_KMS`` or ``CSE_KMS`` ) and key information.
 
             This is a client-side setting. If workgroup settings override client-side settings, then the query uses the encryption configuration that is specified for the workgroup, and also uses the location for storing query results specified in the workgroup. See ``EnforceWorkGroupConfiguration`` and `Override client-side settings <https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html>`_ .
@@ -3147,7 +3155,7 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-resultconfiguration.html#cfn-athena-workgroup-resultconfiguration-encryptionconfiguration
             '''
             result = self._values.get("encryption_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EncryptionConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.EncryptionConfigurationProperty"]], result)
 
         @builtins.property
         def expected_bucket_owner(self) -> typing.Optional[builtins.str]:
@@ -3202,14 +3210,14 @@ class CfnWorkGroup(
         def __init__(
             self,
             *,
-            acl_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.AclConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            acl_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.AclConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             expected_bucket_owner: typing.Optional[builtins.str] = None,
             output_location: typing.Optional[builtins.str] = None,
-            remove_acl_configuration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            remove_encryption_configuration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            remove_expected_bucket_owner: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            remove_output_location: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            remove_acl_configuration: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            remove_encryption_configuration: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            remove_expected_bucket_owner: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            remove_output_location: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The information about the updates in the query results, such as output location and encryption configuration for the query results.
 
@@ -3280,24 +3288,24 @@ class CfnWorkGroup(
         @builtins.property
         def acl_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.AclConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.AclConfigurationProperty"]]:
             '''The ACL configuration for the query results.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-resultconfigurationupdates.html#cfn-athena-workgroup-resultconfigurationupdates-aclconfiguration
             '''
             result = self._values.get("acl_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.AclConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.AclConfigurationProperty"]], result)
 
         @builtins.property
         def encryption_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EncryptionConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.EncryptionConfigurationProperty"]]:
             '''The encryption configuration for the query results.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-resultconfigurationupdates.html#cfn-athena-workgroup-resultconfigurationupdates-encryptionconfiguration
             '''
             result = self._values.get("encryption_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EncryptionConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.EncryptionConfigurationProperty"]], result)
 
         @builtins.property
         def expected_bucket_owner(self) -> typing.Optional[builtins.str]:
@@ -3324,7 +3332,7 @@ class CfnWorkGroup(
         @builtins.property
         def remove_acl_configuration(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If set to ``true`` , indicates that the previously-specified ACL configuration for queries in this workgroup should be ignored and set to null.
 
             If set to ``false`` or not set, and a value is present in the ``AclConfiguration`` of ``ResultConfigurationUpdates`` , the ``AclConfiguration`` in the workgroup's ``ResultConfiguration`` is updated with the new value. For more information, see `Workgroup Settings Override Client-Side Settings <https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html>`_ .
@@ -3332,12 +3340,12 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-resultconfigurationupdates.html#cfn-athena-workgroup-resultconfigurationupdates-removeaclconfiguration
             '''
             result = self._values.get("remove_acl_configuration")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def remove_encryption_configuration(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If set to "true", indicates that the previously-specified encryption configuration (also known as the client-side setting) for queries in this workgroup should be ignored and set to null.
 
             If set to "false" or not set, and a value is present in the EncryptionConfiguration in ResultConfigurationUpdates (the client-side setting), the EncryptionConfiguration in the workgroup's ResultConfiguration will be updated with the new value. For more information, see `Override Client-Side Settings <https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html>`_ .
@@ -3345,23 +3353,23 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-resultconfigurationupdates.html#cfn-athena-workgroup-resultconfigurationupdates-removeencryptionconfiguration
             '''
             result = self._values.get("remove_encryption_configuration")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def remove_expected_bucket_owner(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If set to "true", removes the AWS account ID previously specified for ` <https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-properties-athena-workgroup-resultconfiguration.html#cfn-athena-workgroup-resultconfiguration-expectedbucketowner>`_ . If set to "false" or not set, and a value is present in the ``ExpectedBucketOwner`` in ``ResultConfigurationUpdates`` (the client-side setting), the ``ExpectedBucketOwner`` in the workgroup's ``ResultConfiguration`` is updated with the new value. For more information, see `Workgroup Settings Override Client-Side Settings <https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html>`_ .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-resultconfigurationupdates.html#cfn-athena-workgroup-resultconfigurationupdates-removeexpectedbucketowner
             '''
             result = self._values.get("remove_expected_bucket_owner")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def remove_output_location(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If set to "true", indicates that the previously-specified query results location (also known as a client-side setting) for queries in this workgroup should be ignored and set to null.
 
             If set to "false" or not set, and a value is present in the OutputLocation in ResultConfigurationUpdates (the client-side setting), the OutputLocation in the workgroup's ResultConfiguration will be updated with the new value. For more information, see `Override Client-Side Settings <https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html>`_ .
@@ -3369,7 +3377,7 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-resultconfigurationupdates.html#cfn-athena-workgroup-resultconfigurationupdates-removeoutputlocation
             '''
             result = self._values.get("remove_output_location")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3395,7 +3403,7 @@ class CfnWorkGroup(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             kms_key: typing.Optional[builtins.str] = None,
             log_location: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -3436,13 +3444,13 @@ class CfnWorkGroup(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables S3 log delivery.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-s3loggingconfiguration.html#cfn-athena-workgroup-s3loggingconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def kms_key(self) -> typing.Optional[builtins.str]:
@@ -3497,16 +3505,16 @@ class CfnWorkGroup(
             *,
             additional_configuration: typing.Optional[builtins.str] = None,
             bytes_scanned_cutoff_per_query: typing.Optional[jsii.Number] = None,
-            customer_content_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.CustomerContentEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            enforce_work_group_configuration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            engine_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.EngineConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            engine_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.EngineVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            customer_content_encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.CustomerContentEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            enforce_work_group_configuration: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            engine_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.EngineConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            engine_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.EngineVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             execution_role: typing.Optional[builtins.str] = None,
-            managed_query_results_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.ManagedQueryResultsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            publish_cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            requester_pays_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            result_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.ResultConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            managed_query_results_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.ManagedQueryResultsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            monitoring_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            publish_cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            requester_pays_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            result_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.ResultConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration of the workgroup, which includes the location in Amazon S3 where query results are stored, the encryption option, if any, used for query results, whether Amazon CloudWatch Metrics are enabled for the workgroup, and the limit for the amount of bytes scanned (cutoff) per query, if it is specified.
 
@@ -3671,7 +3679,7 @@ class CfnWorkGroup(
         @builtins.property
         def customer_content_encryption_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.CustomerContentEncryptionConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.CustomerContentEncryptionConfigurationProperty"]]:
             '''Specifies the KMS key that is used to encrypt the user's data stores in Athena.
 
             This setting does not apply to Athena SQL workgroups.
@@ -3679,12 +3687,12 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfiguration.html#cfn-athena-workgroup-workgroupconfiguration-customercontentencryptionconfiguration
             '''
             result = self._values.get("customer_content_encryption_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.CustomerContentEncryptionConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.CustomerContentEncryptionConfigurationProperty"]], result)
 
         @builtins.property
         def enforce_work_group_configuration(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If set to "true", the settings for the workgroup override client-side settings.
 
             If set to "false", client-side settings are used. For more information, see `Override client-side settings <https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html>`_ .
@@ -3692,29 +3700,29 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfiguration.html#cfn-athena-workgroup-workgroupconfiguration-enforceworkgroupconfiguration
             '''
             result = self._values.get("enforce_work_group_configuration")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def engine_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.EngineConfigurationProperty"]]:
             '''The engine configuration for running queries.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfiguration.html#cfn-athena-workgroup-workgroupconfiguration-engineconfiguration
             '''
             result = self._values.get("engine_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.EngineConfigurationProperty"]], result)
 
         @builtins.property
         def engine_version(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineVersionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.EngineVersionProperty"]]:
             '''The engine version that all queries running on the workgroup use.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfiguration.html#cfn-athena-workgroup-workgroupconfiguration-engineversion
             '''
             result = self._values.get("engine_version")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineVersionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.EngineVersionProperty"]], result)
 
         @builtins.property
         def execution_role(self) -> typing.Optional[builtins.str]:
@@ -3730,7 +3738,7 @@ class CfnWorkGroup(
         @builtins.property
         def managed_query_results_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ManagedQueryResultsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ManagedQueryResultsConfigurationProperty"]]:
             '''The configuration for storing results in Athena owned storage, which includes whether this feature is enabled;
 
             whether encryption configuration, if any, is used for encrypting query results.
@@ -3738,34 +3746,34 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfiguration.html#cfn-athena-workgroup-workgroupconfiguration-managedqueryresultsconfiguration
             '''
             result = self._values.get("managed_query_results_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ManagedQueryResultsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ManagedQueryResultsConfigurationProperty"]], result)
 
         @builtins.property
         def monitoring_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.MonitoringConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.MonitoringConfigurationProperty"]]:
             '''Contains the configuration settings for managed log persistence, delivering logs to Amazon S3 buckets, Amazon CloudWatch log groups etc.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfiguration.html#cfn-athena-workgroup-workgroupconfiguration-monitoringconfiguration
             '''
             result = self._values.get("monitoring_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.MonitoringConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.MonitoringConfigurationProperty"]], result)
 
         @builtins.property
         def publish_cloud_watch_metrics_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates that the Amazon CloudWatch metrics are enabled for the workgroup.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfiguration.html#cfn-athena-workgroup-workgroupconfiguration-publishcloudwatchmetricsenabled
             '''
             result = self._values.get("publish_cloud_watch_metrics_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def requester_pays_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If set to ``true`` , allows members assigned to a workgroup to reference Amazon S3 Requester Pays buckets in queries.
 
             If set to ``false`` , workgroup members cannot query data from Requester Pays buckets, and queries that retrieve data from Requester Pays buckets cause an error. The default is ``false`` . For more information about Requester Pays buckets, see `Requester Pays Buckets <https://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html>`_ in the *Amazon Simple Storage Service Developer Guide* .
@@ -3773,12 +3781,12 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfiguration.html#cfn-athena-workgroup-workgroupconfiguration-requesterpaysenabled
             '''
             result = self._values.get("requester_pays_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def result_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ResultConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ResultConfigurationProperty"]]:
             '''Specifies the location in Amazon S3 where query results are stored and the encryption option, if any, used for query results.
 
             For more information, see `Work with query results and recent queries <https://docs.aws.amazon.com/athena/latest/ug/querying.html>`_ .
@@ -3786,7 +3794,7 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfiguration.html#cfn-athena-workgroup-workgroupconfiguration-resultconfiguration
             '''
             result = self._values.get("result_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ResultConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ResultConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3825,18 +3833,18 @@ class CfnWorkGroup(
             *,
             additional_configuration: typing.Optional[builtins.str] = None,
             bytes_scanned_cutoff_per_query: typing.Optional[jsii.Number] = None,
-            customer_content_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.CustomerContentEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            enforce_work_group_configuration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            engine_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.EngineConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            engine_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.EngineVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            customer_content_encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.CustomerContentEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            enforce_work_group_configuration: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            engine_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.EngineConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            engine_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.EngineVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             execution_role: typing.Optional[builtins.str] = None,
-            managed_query_results_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.ManagedQueryResultsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            publish_cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            remove_bytes_scanned_cutoff_per_query: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            remove_customer_content_encryption_configuration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            requester_pays_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            result_configuration_updates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.ResultConfigurationUpdatesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            managed_query_results_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.ManagedQueryResultsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            monitoring_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            publish_cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            remove_bytes_scanned_cutoff_per_query: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            remove_customer_content_encryption_configuration: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            requester_pays_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            result_configuration_updates: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.ResultConfigurationUpdatesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration information that will be updated for this workgroup, which includes the location in Amazon S3 where query results are stored, the encryption option, if any, used for query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup, whether the workgroup settings override the client-side settings, and the data usage limit for the amount of bytes scanned per query, if it is specified.
 
@@ -4008,18 +4016,18 @@ class CfnWorkGroup(
         @builtins.property
         def customer_content_encryption_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.CustomerContentEncryptionConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.CustomerContentEncryptionConfigurationProperty"]]:
             '''Indicates the KMS key for encrypting notebook content.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-customercontentencryptionconfiguration
             '''
             result = self._values.get("customer_content_encryption_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.CustomerContentEncryptionConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.CustomerContentEncryptionConfigurationProperty"]], result)
 
         @builtins.property
         def enforce_work_group_configuration(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If set to "true", the settings for the workgroup override client-side settings.
 
             If set to "false", client-side settings are used
@@ -4027,29 +4035,29 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-enforceworkgroupconfiguration
             '''
             result = self._values.get("enforce_work_group_configuration")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def engine_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.EngineConfigurationProperty"]]:
             '''The engine configuration for running queries.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-engineconfiguration
             '''
             result = self._values.get("engine_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.EngineConfigurationProperty"]], result)
 
         @builtins.property
         def engine_version(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineVersionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.EngineVersionProperty"]]:
             '''The Athena engine version for running queries.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-engineversion
             '''
             result = self._values.get("engine_version")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineVersionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.EngineVersionProperty"]], result)
 
         @builtins.property
         def execution_role(self) -> typing.Optional[builtins.str]:
@@ -4065,7 +4073,7 @@ class CfnWorkGroup(
         @builtins.property
         def managed_query_results_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ManagedQueryResultsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ManagedQueryResultsConfigurationProperty"]]:
             '''The configuration for the managed query results and encryption option.
 
             ResultConfiguration and ManagedQueryResultsConfiguration cannot be set at the same time
@@ -4073,55 +4081,55 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-managedqueryresultsconfiguration
             '''
             result = self._values.get("managed_query_results_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ManagedQueryResultsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ManagedQueryResultsConfigurationProperty"]], result)
 
         @builtins.property
         def monitoring_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.MonitoringConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.MonitoringConfigurationProperty"]]:
             '''Contains the configuration settings for managed log persistence, delivering logs to Amazon S3 buckets, Amazon CloudWatch log groups etc.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-monitoringconfiguration
             '''
             result = self._values.get("monitoring_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.MonitoringConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.MonitoringConfigurationProperty"]], result)
 
         @builtins.property
         def publish_cloud_watch_metrics_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates that the Amazon CloudWatch metrics are enabled for the workgroup.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-publishcloudwatchmetricsenabled
             '''
             result = self._values.get("publish_cloud_watch_metrics_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def remove_bytes_scanned_cutoff_per_query(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates that the data usage control limit per query is removed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-removebytesscannedcutoffperquery
             '''
             result = self._values.get("remove_bytes_scanned_cutoff_per_query")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def remove_customer_content_encryption_configuration(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-removecustomercontentencryptionconfiguration
             '''
             result = self._values.get("remove_customer_content_encryption_configuration")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def requester_pays_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If set to true, allows members assigned to a workgroup to reference Amazon S3 Requester Pays buckets in queries.
 
             If set to false, workgroup members cannot query data from Requester Pays buckets, and queries that retrieve data from Requester Pays buckets cause an error.
@@ -4129,12 +4137,12 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-requesterpaysenabled
             '''
             result = self._values.get("requester_pays_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def result_configuration_updates(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ResultConfigurationUpdatesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ResultConfigurationUpdatesProperty"]]:
             '''The result configuration information about the queries in this workgroup that will be updated.
 
             Includes the updated results location and an updated option for encrypting query results.
@@ -4142,7 +4150,7 @@ class CfnWorkGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-resultconfigurationupdates
             '''
             result = self._values.get("result_configuration_updates")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ResultConfigurationUpdatesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.ResultConfigurationUpdatesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4175,11 +4183,11 @@ class CfnWorkGroupProps:
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        recursive_delete_option: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        recursive_delete_option: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         state: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        work_group_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.WorkGroupConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        work_group_configuration_updates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.WorkGroupConfigurationUpdatesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        work_group_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.WorkGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        work_group_configuration_updates: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkGroup.WorkGroupConfigurationUpdatesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnWorkGroup``.
 
@@ -4196,6 +4204,7 @@ class CfnWorkGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_athena as athena
@@ -4406,7 +4415,7 @@ class CfnWorkGroupProps:
     @builtins.property
     def recursive_delete_option(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The option to delete a workgroup and its contents even if the workgroup contains any named queries.
 
         The default is false.
@@ -4414,7 +4423,7 @@ class CfnWorkGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-workgroup.html#cfn-athena-workgroup-recursivedeleteoption
         '''
         result = self._values.get("recursive_delete_option")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def state(self) -> typing.Optional[builtins.str]:
@@ -4426,18 +4435,18 @@ class CfnWorkGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags (key-value pairs) to associate with this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-workgroup.html#cfn-athena-workgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def work_group_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkGroup.WorkGroupConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.WorkGroupConfigurationProperty"]]:
         '''The configuration of the workgroup, which includes the location in Amazon S3 where query results are stored, the encryption option, if any, used for query results, whether Amazon CloudWatch Metrics are enabled for the workgroup, and the limit for the amount of bytes scanned (cutoff) per query, if it is specified.
 
         The ``EnforceWorkGroupConfiguration`` option determines whether workgroup settings override client-side query settings.
@@ -4445,12 +4454,12 @@ class CfnWorkGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-workgroup.html#cfn-athena-workgroup-workgroupconfiguration
         '''
         result = self._values.get("work_group_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkGroup.WorkGroupConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.WorkGroupConfigurationProperty"]], result)
 
     @builtins.property
     def work_group_configuration_updates(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkGroup.WorkGroupConfigurationUpdatesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.WorkGroupConfigurationUpdatesProperty"]]:
         '''(deprecated) The configuration information that will be updated for this workgroup, which includes the location in Amazon S3 where query results are stored, the encryption option, if any, used for query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup, whether the workgroup settings override the client-side settings, and the data usage limit for the amount of bytes scanned per query, if it is specified.
 
         :deprecated: this property has been deprecated
@@ -4459,7 +4468,7 @@ class CfnWorkGroupProps:
         :stability: deprecated
         '''
         result = self._values.get("work_group_configuration_updates")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkGroup.WorkGroupConfigurationUpdatesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkGroup.WorkGroupConfigurationUpdatesProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

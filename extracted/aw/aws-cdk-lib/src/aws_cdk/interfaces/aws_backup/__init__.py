@@ -281,7 +281,7 @@ class IBackupPlanRef(
 
     @builtins.property
     @jsii.member(jsii_name="backupPlanRef")
-    def backup_plan_ref(self) -> BackupPlanReference:
+    def backup_plan_ref(self) -> "BackupPlanReference":
         '''(experimental) A reference to a BackupPlan resource.
 
         :stability: experimental
@@ -302,12 +302,12 @@ class _IBackupPlanRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="backupPlanRef")
-    def backup_plan_ref(self) -> BackupPlanReference:
+    def backup_plan_ref(self) -> "BackupPlanReference":
         '''(experimental) A reference to a BackupPlan resource.
 
         :stability: experimental
         '''
-        return typing.cast(BackupPlanReference, jsii.get(self, "backupPlanRef"))
+        return typing.cast("BackupPlanReference", jsii.get(self, "backupPlanRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBackupPlanRef).__jsii_proxy_class__ = lambda : _IBackupPlanRefProxy
@@ -326,7 +326,7 @@ class IBackupSelectionRef(
 
     @builtins.property
     @jsii.member(jsii_name="backupSelectionRef")
-    def backup_selection_ref(self) -> BackupSelectionReference:
+    def backup_selection_ref(self) -> "BackupSelectionReference":
         '''(experimental) A reference to a BackupSelection resource.
 
         :stability: experimental
@@ -347,12 +347,12 @@ class _IBackupSelectionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="backupSelectionRef")
-    def backup_selection_ref(self) -> BackupSelectionReference:
+    def backup_selection_ref(self) -> "BackupSelectionReference":
         '''(experimental) A reference to a BackupSelection resource.
 
         :stability: experimental
         '''
-        return typing.cast(BackupSelectionReference, jsii.get(self, "backupSelectionRef"))
+        return typing.cast("BackupSelectionReference", jsii.get(self, "backupSelectionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBackupSelectionRef).__jsii_proxy_class__ = lambda : _IBackupSelectionRefProxy
@@ -371,7 +371,7 @@ class IBackupVaultRef(
 
     @builtins.property
     @jsii.member(jsii_name="backupVaultRef")
-    def backup_vault_ref(self) -> BackupVaultReference:
+    def backup_vault_ref(self) -> "BackupVaultReference":
         '''(experimental) A reference to a BackupVault resource.
 
         :stability: experimental
@@ -392,12 +392,12 @@ class _IBackupVaultRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="backupVaultRef")
-    def backup_vault_ref(self) -> BackupVaultReference:
+    def backup_vault_ref(self) -> "BackupVaultReference":
         '''(experimental) A reference to a BackupVault resource.
 
         :stability: experimental
         '''
-        return typing.cast(BackupVaultReference, jsii.get(self, "backupVaultRef"))
+        return typing.cast("BackupVaultReference", jsii.get(self, "backupVaultRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBackupVaultRef).__jsii_proxy_class__ = lambda : _IBackupVaultRefProxy
@@ -416,7 +416,7 @@ class IFrameworkRef(
 
     @builtins.property
     @jsii.member(jsii_name="frameworkRef")
-    def framework_ref(self) -> FrameworkReference:
+    def framework_ref(self) -> "FrameworkReference":
         '''(experimental) A reference to a Framework resource.
 
         :stability: experimental
@@ -437,12 +437,12 @@ class _IFrameworkRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="frameworkRef")
-    def framework_ref(self) -> FrameworkReference:
+    def framework_ref(self) -> "FrameworkReference":
         '''(experimental) A reference to a Framework resource.
 
         :stability: experimental
         '''
-        return typing.cast(FrameworkReference, jsii.get(self, "frameworkRef"))
+        return typing.cast("FrameworkReference", jsii.get(self, "frameworkRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFrameworkRef).__jsii_proxy_class__ = lambda : _IFrameworkRefProxy

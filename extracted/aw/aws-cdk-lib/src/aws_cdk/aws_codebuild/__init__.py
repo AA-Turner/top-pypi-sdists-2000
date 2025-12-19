@@ -394,7 +394,7 @@ is available for specifying Lambda-compatible images.
 You can specify one of the predefined Windows/Linux images by using one
 of the constants such as `WindowsBuildImage.WIN_SERVER_CORE_2019_BASE`,
 `WindowsBuildImage.WINDOWS_BASE_2_0`, `LinuxBuildImage.STANDARD_2_0`,
-`LinuxBuildImage.AMAZON_LINUX_2_5`, `MacBuildImage.BASE_14`, `LinuxArmBuildImage.AMAZON_LINUX_2_ARM`,
+`LinuxBuildImage.AMAZON_LINUX_2_5`, `MacBuildImage.BASE_14`, `MacBuildImage.BASE_15`, `LinuxArmBuildImage.AMAZON_LINUX_2_ARM`,
 `LinuxLambdaBuildImage.AMAZON_LINUX_2_NODE_18` or `LinuxArmLambdaBuildImage.AMAZON_LINUX_2_NODE_18`.
 
 Alternatively, you can specify a custom image using one of the static methods on
@@ -1399,7 +1399,7 @@ class ArtifactsProps:
     name_mapping={"role": "role"},
 )
 class BatchBuildConfig:
-    def __init__(self, *, role: _IRole_235f5d8e) -> None:
+    def __init__(self, *, role: "_IRole_235f5d8e") -> None:
         '''The type returned from ``IProject#enableBatchBuilds``.
 
         :param role: The IAM batch service Role of this Project.
@@ -1427,11 +1427,11 @@ class BatchBuildConfig:
         }
 
     @builtins.property
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''The IAM batch service Role of this Project.'''
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
-        return typing.cast(_IRole_235f5d8e, result)
+        return typing.cast("_IRole_235f5d8e", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1451,7 +1451,7 @@ class BatchBuildConfig:
     name_mapping={"artifact_bucket": "artifactBucket"},
 )
 class BindToCodePipelineOptions:
-    def __init__(self, *, artifact_bucket: _IBucket_42e086fd) -> None:
+    def __init__(self, *, artifact_bucket: "_IBucket_42e086fd") -> None:
         '''The extra options passed to the ``IProject.bindToCodePipeline`` method.
 
         :param artifact_bucket: The artifact bucket that will be used by the action that invokes this project.
@@ -1479,11 +1479,11 @@ class BindToCodePipelineOptions:
         }
 
     @builtins.property
-    def artifact_bucket(self) -> _IBucket_42e086fd:
+    def artifact_bucket(self) -> "_IBucket_42e086fd":
         '''The artifact bucket that will be used by the action that invokes this project.'''
         result = self._values.get("artifact_bucket")
         assert result is not None, "Required property 'artifact_bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1521,11 +1521,11 @@ class BitBucketSourceCredentials(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        password: _SecretValue_3dd0ddae,
-        username: _SecretValue_3dd0ddae,
+        password: "_SecretValue_3dd0ddae",
+        username: "_SecretValue_3dd0ddae",
     ) -> None:
         '''
         :param scope: -
@@ -1557,8 +1557,8 @@ class BitBucketSourceCredentialsProps:
     def __init__(
         self,
         *,
-        password: _SecretValue_3dd0ddae,
-        username: _SecretValue_3dd0ddae,
+        password: "_SecretValue_3dd0ddae",
+        username: "_SecretValue_3dd0ddae",
     ) -> None:
         '''Construction properties of ``BitBucketSourceCredentials``.
 
@@ -1584,18 +1584,18 @@ class BitBucketSourceCredentialsProps:
         }
 
     @builtins.property
-    def password(self) -> _SecretValue_3dd0ddae:
+    def password(self) -> "_SecretValue_3dd0ddae":
         '''Your BitBucket application password.'''
         result = self._values.get("password")
         assert result is not None, "Required property 'password' is missing"
-        return typing.cast(_SecretValue_3dd0ddae, result)
+        return typing.cast("_SecretValue_3dd0ddae", result)
 
     @builtins.property
-    def username(self) -> _SecretValue_3dd0ddae:
+    def username(self) -> "_SecretValue_3dd0ddae":
         '''Your BitBucket username.'''
         result = self._values.get("username")
         assert result is not None, "Required property 'username' is missing"
-        return typing.cast(_SecretValue_3dd0ddae, result)
+        return typing.cast("_SecretValue_3dd0ddae", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1923,7 +1923,12 @@ class BuildEnvironment:
     name_mapping={"bucket": "bucket", "object_key": "objectKey"},
 )
 class BuildEnvironmentCertificate:
-    def __init__(self, *, bucket: _IBucket_42e086fd, object_key: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        bucket: "_IBucket_42e086fd",
+        object_key: builtins.str,
+    ) -> None:
         '''Location of a PEM certificate on S3.
 
         :param bucket: The bucket where the certificate is.
@@ -1957,11 +1962,11 @@ class BuildEnvironmentCertificate:
         }
 
     @builtins.property
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''The bucket where the certificate is.'''
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
     def object_key(self) -> builtins.str:
@@ -2292,7 +2297,7 @@ class BuildSpec(
     @abc.abstractmethod
     def to_build_spec(
         self,
-        scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
     ) -> builtins.str:
         '''Render the represented BuildSpec.
 
@@ -2312,7 +2317,7 @@ class _BuildSpecProxy(BuildSpec):
     @jsii.member(jsii_name="toBuildSpec")
     def to_build_spec(
         self,
-        scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
     ) -> builtins.str:
         '''Render the represented BuildSpec.
 
@@ -2407,7 +2412,7 @@ class Cache(
     @builtins.classmethod
     def bucket(
         cls,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         *,
         cache_namespace: typing.Optional[builtins.str] = None,
         prefix: typing.Optional[builtins.str] = None,
@@ -2464,6 +2469,7 @@ class CfnFleet(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codebuild as codebuild
@@ -2513,21 +2519,21 @@ class CfnFleet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         base_capacity: typing.Optional[jsii.Number] = None,
-        compute_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.ComputeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        compute_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ComputeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         compute_type: typing.Optional[builtins.str] = None,
         environment_type: typing.Optional[builtins.str] = None,
-        fleet_proxy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.ProxyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        fleet_proxy_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ProxyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         fleet_service_role: typing.Optional[builtins.str] = None,
-        fleet_vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        fleet_vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_id: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         overflow_behavior: typing.Optional[builtins.str] = None,
-        scaling_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.ScalingConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        scaling_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ScalingConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeBuild::Fleet``.
 
@@ -2569,7 +2575,7 @@ class CfnFleet(
 
     @jsii.member(jsii_name="arnForFleet")
     @builtins.classmethod
-    def arn_for_fleet(cls, resource: _IFleetRef_31046017) -> builtins.str:
+    def arn_for_fleet(cls, resource: "_IFleetRef_31046017") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2591,7 +2597,7 @@ class CfnFleet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFleet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2631,9 +2637,9 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2642,9 +2648,9 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> _FleetReference_8d121551:
+    def fleet_ref(self) -> "_FleetReference_8d121551":
         '''A reference to a Fleet resource.'''
-        return typing.cast(_FleetReference_8d121551, jsii.get(self, "fleetRef"))
+        return typing.cast("_FleetReference_8d121551", jsii.get(self, "fleetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="baseCapacity")
@@ -2663,14 +2669,14 @@ class CfnFleet(
     @jsii.member(jsii_name="computeConfiguration")
     def compute_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ComputeConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ComputeConfigurationProperty"]]:
         '''The compute configuration of the compute fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ComputeConfigurationProperty"]], jsii.get(self, "computeConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ComputeConfigurationProperty"]], jsii.get(self, "computeConfiguration"))
 
     @compute_configuration.setter
     def compute_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ComputeConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ComputeConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__13d34cf9cb6e1b9e4c774366b62cbdd66383fb9bd63bb3d15a8f1d07cc9939a9)
@@ -2710,14 +2716,14 @@ class CfnFleet(
     @jsii.member(jsii_name="fleetProxyConfiguration")
     def fleet_proxy_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ProxyConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ProxyConfigurationProperty"]]:
         '''Information about the proxy configurations that apply network access control to your reserved capacity instances.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ProxyConfigurationProperty"]], jsii.get(self, "fleetProxyConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ProxyConfigurationProperty"]], jsii.get(self, "fleetProxyConfiguration"))
 
     @fleet_proxy_configuration.setter
     def fleet_proxy_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ProxyConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ProxyConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__72aded04e24b44469c7c8f36cc8bc07ac855e30f085353ae7b830c505400b9a9)
@@ -2741,14 +2747,14 @@ class CfnFleet(
     @jsii.member(jsii_name="fleetVpcConfig")
     def fleet_vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VpcConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VpcConfigProperty"]]:
         '''Information about the VPC configuration that AWS CodeBuild accesses.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VpcConfigProperty"]], jsii.get(self, "fleetVpcConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VpcConfigProperty"]], jsii.get(self, "fleetVpcConfig"))
 
     @fleet_vpc_config.setter
     def fleet_vpc_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VpcConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VpcConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c66d1798050c93d95746b1057fb5b75bf773869be3796e773defefc3ad1bb1fc)
@@ -2798,14 +2804,14 @@ class CfnFleet(
     @jsii.member(jsii_name="scalingConfiguration")
     def scaling_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ScalingConfigurationInputProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ScalingConfigurationInputProperty"]]:
         '''The scaling configuration of the compute fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ScalingConfigurationInputProperty"]], jsii.get(self, "scalingConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ScalingConfigurationInputProperty"]], jsii.get(self, "scalingConfiguration"))
 
     @scaling_configuration.setter
     def scaling_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ScalingConfigurationInputProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ScalingConfigurationInputProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__55a0a09b39fb06cb983cdd0c788b002ef6b06d779cf4e8f6c9dfd6d833171db2)
@@ -2814,12 +2820,12 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tag key and value pairs associated with this compute fleet.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dd8d232a7a18b97fcd2d21d60ea770b5fdd85dd8808e961cb9b071d34e6af4ee)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3046,7 +3052,7 @@ class CfnFleet(
             self,
             *,
             default_behavior: typing.Optional[builtins.str] = None,
-            ordered_proxy_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.FleetProxyRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            ordered_proxy_rules: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.FleetProxyRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Information about the proxy configurations that apply network access control to your reserved capacity instances.
 
@@ -3093,13 +3099,13 @@ class CfnFleet(
         @builtins.property
         def ordered_proxy_rules(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetProxyRuleProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetProxyRuleProperty"]]]]:
             '''An array of ``FleetProxyRule`` objects that represent the specified destination domains or IPs to allow or deny network access control to.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-fleet-proxyconfiguration.html#cfn-codebuild-fleet-proxyconfiguration-orderedproxyrules
             '''
             result = self._values.get("ordered_proxy_rules")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetProxyRuleProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetProxyRuleProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3127,7 +3133,7 @@ class CfnFleet(
             *,
             max_capacity: typing.Optional[jsii.Number] = None,
             scaling_type: typing.Optional[builtins.str] = None,
-            target_tracking_scaling_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.TargetTrackingScalingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            target_tracking_scaling_configs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.TargetTrackingScalingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The scaling configuration input of a compute fleet.
 
@@ -3187,13 +3193,13 @@ class CfnFleet(
         @builtins.property
         def target_tracking_scaling_configs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.TargetTrackingScalingConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.TargetTrackingScalingConfigurationProperty"]]]]:
             '''A list of ``TargetTrackingScalingConfiguration`` objects.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-fleet-scalingconfigurationinput.html#cfn-codebuild-fleet-scalingconfigurationinput-targettrackingscalingconfigs
             '''
             result = self._values.get("target_tracking_scaling_configs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.TargetTrackingScalingConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.TargetTrackingScalingConfigurationProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3389,17 +3395,17 @@ class CfnFleetProps:
         self,
         *,
         base_capacity: typing.Optional[jsii.Number] = None,
-        compute_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.ComputeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        compute_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ComputeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         compute_type: typing.Optional[builtins.str] = None,
         environment_type: typing.Optional[builtins.str] = None,
-        fleet_proxy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.ProxyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        fleet_proxy_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ProxyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         fleet_service_role: typing.Optional[builtins.str] = None,
-        fleet_vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        fleet_vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_id: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         overflow_behavior: typing.Optional[builtins.str] = None,
-        scaling_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.ScalingConfigurationInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        scaling_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ScalingConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFleet``.
 
@@ -3421,6 +3427,7 @@ class CfnFleetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codebuild as codebuild
@@ -3519,7 +3526,7 @@ class CfnFleetProps:
     @builtins.property
     def compute_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.ComputeConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ComputeConfigurationProperty"]]:
         '''The compute configuration of the compute fleet.
 
         This is only required if ``computeType`` is set to ``ATTRIBUTE_BASED_COMPUTE`` or ``CUSTOM_INSTANCE_TYPE`` .
@@ -3527,7 +3534,7 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-fleet.html#cfn-codebuild-fleet-computeconfiguration
         '''
         result = self._values.get("compute_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.ComputeConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ComputeConfigurationProperty"]], result)
 
     @builtins.property
     def compute_type(self) -> typing.Optional[builtins.str]:
@@ -3593,13 +3600,13 @@ class CfnFleetProps:
     @builtins.property
     def fleet_proxy_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.ProxyConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ProxyConfigurationProperty"]]:
         '''Information about the proxy configurations that apply network access control to your reserved capacity instances.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-fleet.html#cfn-codebuild-fleet-fleetproxyconfiguration
         '''
         result = self._values.get("fleet_proxy_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.ProxyConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ProxyConfigurationProperty"]], result)
 
     @builtins.property
     def fleet_service_role(self) -> typing.Optional[builtins.str]:
@@ -3615,13 +3622,13 @@ class CfnFleetProps:
     @builtins.property
     def fleet_vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.VpcConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VpcConfigProperty"]]:
         '''Information about the VPC configuration that AWS CodeBuild accesses.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-fleet.html#cfn-codebuild-fleet-fleetvpcconfig
         '''
         result = self._values.get("fleet_vpc_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.VpcConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VpcConfigProperty"]], result)
 
     @builtins.property
     def image_id(self) -> typing.Optional[builtins.str]:
@@ -3660,16 +3667,16 @@ class CfnFleetProps:
     @builtins.property
     def scaling_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.ScalingConfigurationInputProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ScalingConfigurationInputProperty"]]:
         '''The scaling configuration of the compute fleet.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-fleet.html#cfn-codebuild-fleet-scalingconfiguration
         '''
         result = self._values.get("scaling_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.ScalingConfigurationInputProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ScalingConfigurationInputProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tag key and value pairs associated with this compute fleet.
 
         These tags are available for use by AWS services that support AWS CodeBuild compute fleet tags.
@@ -3677,7 +3684,7 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-fleet.html#cfn-codebuild-fleet-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3710,6 +3717,7 @@ class CfnProject(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codebuild as codebuild
@@ -3920,34 +3928,34 @@ class CfnProject(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        artifacts: typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.ArtifactsProperty", typing.Dict[builtins.str, typing.Any]]],
-        environment: typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.EnvironmentProperty", typing.Dict[builtins.str, typing.Any]]],
+        artifacts: typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ArtifactsProperty", typing.Dict[builtins.str, typing.Any]]],
+        environment: typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.EnvironmentProperty", typing.Dict[builtins.str, typing.Any]]],
         service_role: builtins.str,
-        source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
+        source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
         auto_retry_limit: typing.Optional[jsii.Number] = None,
-        badge_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        build_batch_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.ProjectBuildBatchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.ProjectCacheProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        badge_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        build_batch_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ProjectBuildBatchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ProjectCacheProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         concurrent_build_limit: typing.Optional[jsii.Number] = None,
         description: typing.Optional[builtins.str] = None,
         encryption_key: typing.Optional[builtins.str] = None,
-        file_system_locations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.ProjectFileSystemLocationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        logs_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.LogsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_system_locations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ProjectFileSystemLocationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        logs_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.LogsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         queued_timeout_in_minutes: typing.Optional[jsii.Number] = None,
         resource_access_role: typing.Optional[builtins.str] = None,
-        secondary_artifacts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.ArtifactsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        secondary_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.SourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        secondary_source_versions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.ProjectSourceVersionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        secondary_artifacts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ArtifactsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        secondary_sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.SourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        secondary_source_versions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ProjectSourceVersionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         source_version: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout_in_minutes: typing.Optional[jsii.Number] = None,
-        triggers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.ProjectTriggersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        triggers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ProjectTriggersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         visibility: typing.Optional[builtins.str] = None,
-        vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeBuild::Project``.
 
@@ -4015,7 +4023,7 @@ class CfnProject(
 
     @jsii.member(jsii_name="arnForProject")
     @builtins.classmethod
-    def arn_for_project(cls, resource: _IProjectRef_7528e639) -> builtins.str:
+    def arn_for_project(cls, resource: "_IProjectRef_7528e639") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4037,7 +4045,7 @@ class CfnProject(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProject", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4090,28 +4098,28 @@ class CfnProject(
 
     @builtins.property
     @jsii.member(jsii_name="projectRef")
-    def project_ref(self) -> _ProjectReference_40ed5122:
+    def project_ref(self) -> "_ProjectReference_40ed5122":
         '''A reference to a Project resource.'''
-        return typing.cast(_ProjectReference_40ed5122, jsii.get(self, "projectRef"))
+        return typing.cast("_ProjectReference_40ed5122", jsii.get(self, "projectRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="artifacts")
     def artifacts(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnProject.ArtifactsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnProject.ArtifactsProperty"]:
         '''``Artifacts`` is a property of the `AWS::CodeBuild::Project <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html>`_ resource that specifies output settings for artifacts generated by an AWS CodeBuild build.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnProject.ArtifactsProperty"], jsii.get(self, "artifacts"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnProject.ArtifactsProperty"], jsii.get(self, "artifacts"))
 
     @artifacts.setter
     def artifacts(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnProject.ArtifactsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnProject.ArtifactsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__03ff5e1271d1fde785d59ce0d7942ad69f5b0857878c20212e3070218fc4268d)
@@ -4122,14 +4130,14 @@ class CfnProject(
     @jsii.member(jsii_name="environment")
     def environment(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnProject.EnvironmentProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnProject.EnvironmentProperty"]:
         '''The build environment settings for the project, such as the environment type or the environment variables to use for the build environment.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnProject.EnvironmentProperty"], jsii.get(self, "environment"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnProject.EnvironmentProperty"], jsii.get(self, "environment"))
 
     @environment.setter
     def environment(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnProject.EnvironmentProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnProject.EnvironmentProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e81642ec96eae18f927ec3969adcc27983707dfd99d910c197a50b19ad98bf7e)
@@ -4153,14 +4161,14 @@ class CfnProject(
     @jsii.member(jsii_name="source")
     def source(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnProject.SourceProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnProject.SourceProperty"]:
         '''The source code settings for the project, such as the source code's repository type and location.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnProject.SourceProperty"], jsii.get(self, "source"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnProject.SourceProperty"], jsii.get(self, "source"))
 
     @source.setter
     def source(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnProject.SourceProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnProject.SourceProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1c380bec8add38a9402c557e44b425d5b187bcc5edacf6ce6379ab4da0211d0f)
@@ -4183,14 +4191,14 @@ class CfnProject(
     @jsii.member(jsii_name="badgeEnabled")
     def badge_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether AWS CodeBuild generates a publicly accessible URL for your project's build badge.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "badgeEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "badgeEnabled"))
 
     @badge_enabled.setter
     def badge_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b88d7a5e667269d00acc9148cb550d229e0c38feacefc2756938b6a6e77bd47b)
@@ -4201,14 +4209,14 @@ class CfnProject(
     @jsii.member(jsii_name="buildBatchConfig")
     def build_batch_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectBuildBatchConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectBuildBatchConfigProperty"]]:
         '''A ``ProjectBuildBatchConfig`` object that defines the batch build options for the project.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectBuildBatchConfigProperty"]], jsii.get(self, "buildBatchConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectBuildBatchConfigProperty"]], jsii.get(self, "buildBatchConfig"))
 
     @build_batch_config.setter
     def build_batch_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectBuildBatchConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectBuildBatchConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__40f4681900059263233f1b4da655568b710c3e634e5fa39e0f3fddfed6bbec72)
@@ -4219,14 +4227,14 @@ class CfnProject(
     @jsii.member(jsii_name="cache")
     def cache(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectCacheProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectCacheProperty"]]:
         '''Settings that AWS CodeBuild uses to store and reuse build dependencies.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectCacheProperty"]], jsii.get(self, "cache"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectCacheProperty"]], jsii.get(self, "cache"))
 
     @cache.setter
     def cache(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectCacheProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectCacheProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9ad770edd592e4a05d430d9df3861dc104eeac7d8f7e55beac9bada79626a413)
@@ -4276,14 +4284,14 @@ class CfnProject(
     @jsii.member(jsii_name="fileSystemLocations")
     def file_system_locations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectFileSystemLocationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectFileSystemLocationProperty"]]]]:
         '''An array of ``ProjectFileSystemLocation`` objects for a CodeBuild build project.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectFileSystemLocationProperty"]]]], jsii.get(self, "fileSystemLocations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectFileSystemLocationProperty"]]]], jsii.get(self, "fileSystemLocations"))
 
     @file_system_locations.setter
     def file_system_locations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectFileSystemLocationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectFileSystemLocationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b12b5b2a51f69048e5d0213cc656160cdb2c037679f0fc1ec8984818a2ff90a4)
@@ -4294,14 +4302,14 @@ class CfnProject(
     @jsii.member(jsii_name="logsConfig")
     def logs_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.LogsConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.LogsConfigProperty"]]:
         '''Information about logs for the build project.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.LogsConfigProperty"]], jsii.get(self, "logsConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.LogsConfigProperty"]], jsii.get(self, "logsConfig"))
 
     @logs_config.setter
     def logs_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.LogsConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.LogsConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__134ffcdb9c1aa6100a17c9c78017bc87dc1f3c09e364302fef372df6e51d949c)
@@ -4351,14 +4359,14 @@ class CfnProject(
     @jsii.member(jsii_name="secondaryArtifacts")
     def secondary_artifacts(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.ArtifactsProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ArtifactsProperty"]]]]:
         '''A list of ``Artifacts`` objects.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.ArtifactsProperty"]]]], jsii.get(self, "secondaryArtifacts"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ArtifactsProperty"]]]], jsii.get(self, "secondaryArtifacts"))
 
     @secondary_artifacts.setter
     def secondary_artifacts(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.ArtifactsProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ArtifactsProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a27c587a59a7ad5f961c8c280b4ec76ac3673bc5d885123fce147ba8afdb198d)
@@ -4369,14 +4377,14 @@ class CfnProject(
     @jsii.member(jsii_name="secondarySources")
     def secondary_sources(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.SourceProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.SourceProperty"]]]]:
         '''An array of ``ProjectSource`` objects.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.SourceProperty"]]]], jsii.get(self, "secondarySources"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.SourceProperty"]]]], jsii.get(self, "secondarySources"))
 
     @secondary_sources.setter
     def secondary_sources(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.SourceProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.SourceProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__89ab9bff29a9d3ceda60af0ab1a108771b410dc0e7275ef72b8563087d848435)
@@ -4387,14 +4395,14 @@ class CfnProject(
     @jsii.member(jsii_name="secondarySourceVersions")
     def secondary_source_versions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectSourceVersionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectSourceVersionProperty"]]]]:
         '''An array of ``ProjectSourceVersion`` objects.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectSourceVersionProperty"]]]], jsii.get(self, "secondarySourceVersions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectSourceVersionProperty"]]]], jsii.get(self, "secondarySourceVersions"))
 
     @secondary_source_versions.setter
     def secondary_source_versions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectSourceVersionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectSourceVersionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__554781b1b724736166c94ba418957a36222c7c0e1e88f93ac12241d9adfb4660)
@@ -4416,12 +4424,12 @@ class CfnProject(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An arbitrary set of tags (key-value pairs) for the AWS CodeBuild project.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__99453a77aaac2a951ab2764cccd1e97b204cb9169e1706ad6e2f2c4d831b84a9)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4444,14 +4452,14 @@ class CfnProject(
     @jsii.member(jsii_name="triggers")
     def triggers(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectTriggersProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectTriggersProperty"]]:
         '''For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectTriggersProperty"]], jsii.get(self, "triggers"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectTriggersProperty"]], jsii.get(self, "triggers"))
 
     @triggers.setter
     def triggers(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectTriggersProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectTriggersProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8c2fd2a6384033d1e7925ea66d14357eec6d98d5f6add532aa4ca672784a756f)
@@ -4478,14 +4486,14 @@ class CfnProject(
     @jsii.member(jsii_name="vpcConfig")
     def vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.VpcConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.VpcConfigProperty"]]:
         '''``VpcConfig`` specifies settings that enable AWS CodeBuild to access resources in an Amazon VPC.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.VpcConfigProperty"]], jsii.get(self, "vpcConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.VpcConfigProperty"]], jsii.get(self, "vpcConfig"))
 
     @vpc_config.setter
     def vpc_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.VpcConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.VpcConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__695169be329fc915c4a5842cc33cdd35a02abd9fc92da9b57390f78795c19774)
@@ -4513,11 +4521,11 @@ class CfnProject(
             *,
             type: builtins.str,
             artifact_identifier: typing.Optional[builtins.str] = None,
-            encryption_disabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            encryption_disabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             location: typing.Optional[builtins.str] = None,
             name: typing.Optional[builtins.str] = None,
             namespace_type: typing.Optional[builtins.str] = None,
-            override_artifact_name: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            override_artifact_name: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             packaging: typing.Optional[builtins.str] = None,
             path: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -4618,7 +4626,7 @@ class CfnProject(
         @builtins.property
         def encryption_disabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set to true if you do not want your output artifacts encrypted.
 
             This option is valid only if your artifacts type is Amazon Simple Storage Service (Amazon S3). If this is set with another artifacts type, an ``invalidInputException`` is thrown.
@@ -4626,7 +4634,7 @@ class CfnProject(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-artifacts.html#cfn-codebuild-project-artifacts-encryptiondisabled
             '''
             result = self._values.get("encryption_disabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def location(self) -> typing.Optional[builtins.str]:
@@ -4685,7 +4693,7 @@ class CfnProject(
         @builtins.property
         def override_artifact_name(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If set to true a name specified in the buildspec file overrides the artifact name.
 
             The name specified in a buildspec file is calculated at build time and uses the Shell command language. For example, you can append a date and time to your artifact name so that it is always unique.
@@ -4693,7 +4701,7 @@ class CfnProject(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-artifacts.html#cfn-codebuild-project-artifacts-overrideartifactname
             '''
             result = self._values.get("override_artifact_name")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def packaging(self) -> typing.Optional[builtins.str]:
@@ -5087,12 +5095,12 @@ class CfnProject(
             image: builtins.str,
             type: builtins.str,
             certificate: typing.Optional[builtins.str] = None,
-            docker_server: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.DockerServerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            environment_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            fleet: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.ProjectFleetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            docker_server: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.DockerServerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            environment_variables: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            fleet: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ProjectFleetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             image_pull_credentials_type: typing.Optional[builtins.str] = None,
-            privileged_mode: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            registry_credential: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.RegistryCredentialProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            privileged_mode: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            registry_credential: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.RegistryCredentialProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''``Environment`` is a property of the `AWS::CodeBuild::Project <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html>`_ resource that specifies the environment for an AWS CodeBuild project.
 
@@ -5269,33 +5277,33 @@ class CfnProject(
         @builtins.property
         def docker_server(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.DockerServerProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.DockerServerProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-environment.html#cfn-codebuild-project-environment-dockerserver
             '''
             result = self._values.get("docker_server")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.DockerServerProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.DockerServerProperty"]], result)
 
         @builtins.property
         def environment_variables(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.EnvironmentVariableProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.EnvironmentVariableProperty"]]]]:
             '''A set of environment variables to make available to builds for this build project.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-environment.html#cfn-codebuild-project-environment-environmentvariables
             '''
             result = self._values.get("environment_variables")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.EnvironmentVariableProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.EnvironmentVariableProperty"]]]], result)
 
         @builtins.property
         def fleet(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectFleetProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectFleetProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-environment.html#cfn-codebuild-project-environment-fleet
             '''
             result = self._values.get("fleet")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ProjectFleetProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectFleetProperty"]], result)
 
         @builtins.property
         def image_pull_credentials_type(self) -> typing.Optional[builtins.str]:
@@ -5314,7 +5322,7 @@ class CfnProject(
         @builtins.property
         def privileged_mode(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enables running the Docker daemon inside a Docker container.
 
             Set to true only if the build project is used to build Docker images. Otherwise, a build that attempts to interact with the Docker daemon fails. The default setting is ``false`` .
@@ -5336,12 +5344,12 @@ class CfnProject(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-environment.html#cfn-codebuild-project-environment-privilegedmode
             '''
             result = self._values.get("privileged_mode")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def registry_credential(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.RegistryCredentialProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.RegistryCredentialProperty"]]:
             '''``RegistryCredential`` is a property of the `AWS::CodeBuild::Project Environment <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-environment>`_ property that specifies information about credentials that provide access to a private Docker registry. When this is set:.
 
             - ``imagePullCredentialsType`` must be set to ``SERVICE_ROLE`` .
@@ -5350,7 +5358,7 @@ class CfnProject(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-environment.html#cfn-codebuild-project-environment-registrycredential
             '''
             result = self._values.get("registry_credential")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.RegistryCredentialProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.RegistryCredentialProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5468,7 +5476,7 @@ class CfnProject(
         def __init__(
             self,
             *,
-            fetch_submodules: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            fetch_submodules: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''``GitSubmodulesConfig`` is a property of the `AWS CodeBuild Project Source <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-source.html>`_ property type that specifies information about the Git submodules configuration for the build project.
 
@@ -5497,14 +5505,14 @@ class CfnProject(
         @builtins.property
         def fetch_submodules(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Set to true to fetch Git submodules for your AWS CodeBuild build project.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-gitsubmodulesconfig.html#cfn-codebuild-project-gitsubmodulesconfig-fetchsubmodules
             '''
             result = self._values.get("fetch_submodules")
             assert result is not None, "Required property 'fetch_submodules' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5526,8 +5534,8 @@ class CfnProject(
         def __init__(
             self,
             *,
-            cloud_watch_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.CloudWatchLogsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.S3LogsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.CloudWatchLogsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.S3LogsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''``LogsConfig`` is a property of the `AWS CodeBuild Project <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html>`_ resource that specifies information about logs for a build project. These can be logs in Amazon CloudWatch Logs, built in a specified S3 bucket, or both.
 
@@ -5573,7 +5581,7 @@ class CfnProject(
         @builtins.property
         def cloud_watch_logs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.CloudWatchLogsConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.CloudWatchLogsConfigProperty"]]:
             '''Information about CloudWatch Logs for a build project.
 
             CloudWatch Logs are enabled by default.
@@ -5581,12 +5589,12 @@ class CfnProject(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-logsconfig.html#cfn-codebuild-project-logsconfig-cloudwatchlogs
             '''
             result = self._values.get("cloud_watch_logs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.CloudWatchLogsConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.CloudWatchLogsConfigProperty"]], result)
 
         @builtins.property
         def s3_logs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.S3LogsConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.S3LogsConfigProperty"]]:
             '''Information about logs built to an S3 bucket for a build project.
 
             S3 logs are not enabled by default.
@@ -5594,7 +5602,7 @@ class CfnProject(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-logsconfig.html#cfn-codebuild-project-logsconfig-s3logs
             '''
             result = self._values.get("s3_logs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.S3LogsConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.S3LogsConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5623,8 +5631,8 @@ class CfnProject(
             self,
             *,
             batch_report_mode: typing.Optional[builtins.str] = None,
-            combine_artifacts: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            restrictions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.BatchRestrictionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            combine_artifacts: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            restrictions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.BatchRestrictionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             service_role: typing.Optional[builtins.str] = None,
             timeout_in_mins: typing.Optional[jsii.Number] = None,
         ) -> None:
@@ -5692,24 +5700,24 @@ class CfnProject(
         @builtins.property
         def combine_artifacts(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies if the build artifacts for the batch build should be combined into a single artifact location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-projectbuildbatchconfig.html#cfn-codebuild-project-projectbuildbatchconfig-combineartifacts
             '''
             result = self._values.get("combine_artifacts")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def restrictions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.BatchRestrictionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.BatchRestrictionsProperty"]]:
             '''A ``BatchRestrictions`` object that specifies the restrictions for the batch build.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-projectbuildbatchconfig.html#cfn-codebuild-project-projectbuildbatchconfig-restrictions
             '''
             result = self._values.get("restrictions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.BatchRestrictionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.BatchRestrictionsProperty"]], result)
 
         @builtins.property
         def service_role(self) -> typing.Optional[builtins.str]:
@@ -6168,10 +6176,10 @@ class CfnProject(
             self,
             *,
             build_type: typing.Optional[builtins.str] = None,
-            filter_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.WebhookFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]]]] = None,
-            pull_request_build_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.PullRequestBuildPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            scope_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.ScopeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            webhook: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            filter_groups: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.WebhookFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]]]] = None,
+            pull_request_build_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.PullRequestBuildPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            scope_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ScopeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            webhook: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''``ProjectTriggers`` is a property of the `AWS CodeBuild Project <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html>`_ resource that specifies webhooks that trigger an AWS CodeBuild build.
 
@@ -6253,7 +6261,7 @@ class CfnProject(
         @builtins.property
         def filter_groups(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.WebhookFilterProperty"]]]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.WebhookFilterProperty"]]]]]]:
             '''A list of lists of ``WebhookFilter`` objects used to determine which webhook events are triggered.
 
             At least one ``WebhookFilter`` in the array must specify ``EVENT`` as its type.
@@ -6261,39 +6269,39 @@ class CfnProject(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-projecttriggers.html#cfn-codebuild-project-projecttriggers-filtergroups
             '''
             result = self._values.get("filter_groups")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProject.WebhookFilterProperty"]]]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.WebhookFilterProperty"]]]]]], result)
 
         @builtins.property
         def pull_request_build_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.PullRequestBuildPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.PullRequestBuildPolicyProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-projecttriggers.html#cfn-codebuild-project-projecttriggers-pullrequestbuildpolicy
             '''
             result = self._values.get("pull_request_build_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.PullRequestBuildPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.PullRequestBuildPolicyProperty"]], result)
 
         @builtins.property
         def scope_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ScopeConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ScopeConfigurationProperty"]]:
             '''Contains configuration information about the scope for a webhook.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-projecttriggers.html#cfn-codebuild-project-projecttriggers-scopeconfiguration
             '''
             result = self._values.get("scope_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.ScopeConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ScopeConfigurationProperty"]], result)
 
         @builtins.property
         def webhook(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether or not to begin automatically rebuilding the source code every time a code change is pushed to the repository.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-projecttriggers.html#cfn-codebuild-project-projecttriggers-webhook
             '''
             result = self._values.get("webhook")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6478,7 +6486,7 @@ class CfnProject(
             self,
             *,
             status: builtins.str,
-            encryption_disabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            encryption_disabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             location: typing.Optional[builtins.str] = None,
         ) -> None:
             '''``S3Logs`` is a property of the `AWS CodeBuild Project LogsConfig <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-logsconfig.html>`_ property type that specifies settings for logs generated by an AWS CodeBuild build in an S3 bucket.
@@ -6533,7 +6541,7 @@ class CfnProject(
         @builtins.property
         def encryption_disabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set to true if you do not want your S3 build log output encrypted.
 
             By default S3 build logs are encrypted.
@@ -6541,7 +6549,7 @@ class CfnProject(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-s3logsconfig.html#cfn-codebuild-project-s3logsconfig-encryptiondisabled
             '''
             result = self._values.get("encryption_disabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def location(self) -> typing.Optional[builtins.str]:
@@ -6753,14 +6761,14 @@ class CfnProject(
             self,
             *,
             type: builtins.str,
-            auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.SourceAuthProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            auth: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.SourceAuthProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             build_spec: typing.Optional[builtins.str] = None,
-            build_status_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.BuildStatusConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            build_status_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.BuildStatusConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             git_clone_depth: typing.Optional[jsii.Number] = None,
-            git_submodules_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProject.GitSubmodulesConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            insecure_ssl: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            git_submodules_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.GitSubmodulesConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            insecure_ssl: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             location: typing.Optional[builtins.str] = None,
-            report_build_status: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            report_build_status: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             source_identifier: typing.Optional[builtins.str] = None,
         ) -> None:
             '''``Source`` is a property of the `AWS::CodeBuild::Project <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html>`_ resource that specifies the source code settings for the project, such as the source code's repository type and location.
@@ -6867,13 +6875,13 @@ class CfnProject(
         @builtins.property
         def auth(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.SourceAuthProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.SourceAuthProperty"]]:
             '''Information about the authorization settings for AWS CodeBuild to access the source code to be built.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-source.html#cfn-codebuild-project-source-auth
             '''
             result = self._values.get("auth")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.SourceAuthProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.SourceAuthProperty"]], result)
 
         @builtins.property
         def build_spec(self) -> typing.Optional[builtins.str]:
@@ -6889,7 +6897,7 @@ class CfnProject(
         @builtins.property
         def build_status_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.BuildStatusConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.BuildStatusConfigProperty"]]:
             '''Contains information that defines how the build project reports the build status to the source provider.
 
             This option is only used when the source provider is ``GITHUB`` , ``GITHUB_ENTERPRISE`` , or ``BITBUCKET`` .
@@ -6897,7 +6905,7 @@ class CfnProject(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-source.html#cfn-codebuild-project-source-buildstatusconfig
             '''
             result = self._values.get("build_status_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.BuildStatusConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.BuildStatusConfigProperty"]], result)
 
         @builtins.property
         def git_clone_depth(self) -> typing.Optional[jsii.Number]:
@@ -6913,18 +6921,18 @@ class CfnProject(
         @builtins.property
         def git_submodules_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.GitSubmodulesConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.GitSubmodulesConfigProperty"]]:
             '''Information about the Git submodules configuration for the build project.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-source.html#cfn-codebuild-project-source-gitsubmodulesconfig
             '''
             result = self._values.get("git_submodules_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProject.GitSubmodulesConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.GitSubmodulesConfigProperty"]], result)
 
         @builtins.property
         def insecure_ssl(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''This is used with GitHub Enterprise only.
 
             Set to true to ignore SSL warnings while connecting to your GitHub Enterprise project repository. The default value is ``false`` . ``InsecureSsl`` should be used for testing purposes only. It should not be used in a production environment.
@@ -6932,7 +6940,7 @@ class CfnProject(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-source.html#cfn-codebuild-project-source-insecuressl
             '''
             result = self._values.get("insecure_ssl")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def location(self) -> typing.Optional[builtins.str]:
@@ -6957,7 +6965,7 @@ class CfnProject(
         @builtins.property
         def report_build_status(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set to true to report the status of a build's start and finish to your source provider.
 
             This option is valid only when your source provider is GitHub, GitHub Enterprise, GitLab, GitLab Self Managed, or Bitbucket. If this is set and you use a different source provider, an ``invalidInputException`` is thrown.
@@ -6965,7 +6973,7 @@ class CfnProject(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-source.html#cfn-codebuild-project-source-reportbuildstatus
             '''
             result = self._values.get("report_build_status")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def source_identifier(self) -> typing.Optional[builtins.str]:
@@ -7097,7 +7105,7 @@ class CfnProject(
             *,
             pattern: builtins.str,
             type: builtins.str,
-            exclude_matched_pattern: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            exclude_matched_pattern: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''``WebhookFilter`` is a structure of the ``FilterGroups`` property on the `AWS CodeBuild Project ProjectTriggers <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-projecttriggers.html>`_ property type that specifies which webhooks trigger an AWS CodeBuild build.
 
@@ -7239,7 +7247,7 @@ class CfnProject(
         @builtins.property
         def exclude_matched_pattern(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Used to indicate that the ``pattern`` determines which webhook events do not trigger a build.
 
             If true, then a webhook event that does not match the ``pattern`` triggers a build. If false, then a webhook event that matches the ``pattern`` triggers a build.
@@ -7247,7 +7255,7 @@ class CfnProject(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-webhookfilter.html#cfn-codebuild-project-webhookfilter-excludematchedpattern
             '''
             result = self._values.get("exclude_matched_pattern")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7296,31 +7304,31 @@ class CfnProjectProps:
     def __init__(
         self,
         *,
-        artifacts: typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.ArtifactsProperty, typing.Dict[builtins.str, typing.Any]]],
-        environment: typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.EnvironmentProperty, typing.Dict[builtins.str, typing.Any]]],
+        artifacts: typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ArtifactsProperty", typing.Dict[builtins.str, typing.Any]]],
+        environment: typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.EnvironmentProperty", typing.Dict[builtins.str, typing.Any]]],
         service_role: builtins.str,
-        source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.SourceProperty, typing.Dict[builtins.str, typing.Any]]],
+        source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
         auto_retry_limit: typing.Optional[jsii.Number] = None,
-        badge_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        build_batch_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.ProjectBuildBatchConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.ProjectCacheProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        badge_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        build_batch_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ProjectBuildBatchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ProjectCacheProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         concurrent_build_limit: typing.Optional[jsii.Number] = None,
         description: typing.Optional[builtins.str] = None,
         encryption_key: typing.Optional[builtins.str] = None,
-        file_system_locations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.ProjectFileSystemLocationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        logs_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.LogsConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_system_locations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ProjectFileSystemLocationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        logs_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.LogsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         queued_timeout_in_minutes: typing.Optional[jsii.Number] = None,
         resource_access_role: typing.Optional[builtins.str] = None,
-        secondary_artifacts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.ArtifactsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        secondary_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.SourceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        secondary_source_versions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.ProjectSourceVersionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        secondary_artifacts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ArtifactsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        secondary_sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.SourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        secondary_source_versions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ProjectSourceVersionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         source_version: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout_in_minutes: typing.Optional[jsii.Number] = None,
-        triggers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.ProjectTriggersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        triggers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.ProjectTriggersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         visibility: typing.Optional[builtins.str] = None,
-        vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnProject``.
 
@@ -7355,6 +7363,7 @@ class CfnProjectProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codebuild as codebuild
@@ -7641,26 +7650,26 @@ class CfnProjectProps:
     @builtins.property
     def artifacts(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnProject.ArtifactsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnProject.ArtifactsProperty"]:
         '''``Artifacts`` is a property of the `AWS::CodeBuild::Project <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html>`_ resource that specifies output settings for artifacts generated by an AWS CodeBuild build.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-artifacts
         '''
         result = self._values.get("artifacts")
         assert result is not None, "Required property 'artifacts' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnProject.ArtifactsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnProject.ArtifactsProperty"], result)
 
     @builtins.property
     def environment(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnProject.EnvironmentProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnProject.EnvironmentProperty"]:
         '''The build environment settings for the project, such as the environment type or the environment variables to use for the build environment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-environment
         '''
         result = self._values.get("environment")
         assert result is not None, "Required property 'environment' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnProject.EnvironmentProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnProject.EnvironmentProperty"], result)
 
     @builtins.property
     def service_role(self) -> builtins.str:
@@ -7673,14 +7682,16 @@ class CfnProjectProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def source(self) -> typing.Union[_IResolvable_da3f097b, CfnProject.SourceProperty]:
+    def source(
+        self,
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnProject.SourceProperty"]:
         '''The source code settings for the project, such as the source code's repository type and location.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-source
         '''
         result = self._values.get("source")
         assert result is not None, "Required property 'source' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnProject.SourceProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnProject.SourceProperty"], result)
 
     @builtins.property
     def auto_retry_limit(self) -> typing.Optional[jsii.Number]:
@@ -7693,7 +7704,7 @@ class CfnProjectProps:
     @builtins.property
     def badge_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether AWS CodeBuild generates a publicly accessible URL for your project's build badge.
 
         For more information, see `Build Badges Sample <https://docs.aws.amazon.com/codebuild/latest/userguide/sample-build-badges.html>`_ in the *AWS CodeBuild User Guide* .
@@ -7704,29 +7715,29 @@ class CfnProjectProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-badgeenabled
         '''
         result = self._values.get("badge_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def build_batch_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.ProjectBuildBatchConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectBuildBatchConfigProperty"]]:
         '''A ``ProjectBuildBatchConfig`` object that defines the batch build options for the project.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-buildbatchconfig
         '''
         result = self._values.get("build_batch_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.ProjectBuildBatchConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectBuildBatchConfigProperty"]], result)
 
     @builtins.property
     def cache(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.ProjectCacheProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectCacheProperty"]]:
         '''Settings that AWS CodeBuild uses to store and reuse build dependencies.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-cache
         '''
         result = self._values.get("cache")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.ProjectCacheProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectCacheProperty"]], result)
 
     @builtins.property
     def concurrent_build_limit(self) -> typing.Optional[jsii.Number]:
@@ -7766,7 +7777,7 @@ class CfnProjectProps:
     @builtins.property
     def file_system_locations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProject.ProjectFileSystemLocationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectFileSystemLocationProperty"]]]]:
         '''An array of ``ProjectFileSystemLocation`` objects for a CodeBuild build project.
 
         A ``ProjectFileSystemLocation`` object specifies the ``identifier`` , ``location`` , ``mountOptions`` , ``mountPoint`` , and ``type`` of a file system created using Amazon Elastic File System.
@@ -7774,12 +7785,12 @@ class CfnProjectProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-filesystemlocations
         '''
         result = self._values.get("file_system_locations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProject.ProjectFileSystemLocationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectFileSystemLocationProperty"]]]], result)
 
     @builtins.property
     def logs_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.LogsConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.LogsConfigProperty"]]:
         '''Information about logs for the build project.
 
         A project can create logs in CloudWatch Logs, an S3 bucket, or both.
@@ -7787,7 +7798,7 @@ class CfnProjectProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-logsconfig
         '''
         result = self._values.get("logs_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.LogsConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.LogsConfigProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -7821,7 +7832,7 @@ class CfnProjectProps:
     @builtins.property
     def secondary_artifacts(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProject.ArtifactsProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ArtifactsProperty"]]]]:
         '''A list of ``Artifacts`` objects.
 
         Each artifacts object specifies output settings that the project generates during a build.
@@ -7829,23 +7840,23 @@ class CfnProjectProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-secondaryartifacts
         '''
         result = self._values.get("secondary_artifacts")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProject.ArtifactsProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ArtifactsProperty"]]]], result)
 
     @builtins.property
     def secondary_sources(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProject.SourceProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.SourceProperty"]]]]:
         '''An array of ``ProjectSource`` objects.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-secondarysources
         '''
         result = self._values.get("secondary_sources")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProject.SourceProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.SourceProperty"]]]], result)
 
     @builtins.property
     def secondary_source_versions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProject.ProjectSourceVersionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectSourceVersionProperty"]]]]:
         '''An array of ``ProjectSourceVersion`` objects.
 
         If ``secondarySourceVersions`` is specified at the build level, then they take over these ``secondarySourceVersions`` (at the project level).
@@ -7853,7 +7864,7 @@ class CfnProjectProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-secondarysourceversions
         '''
         result = self._values.get("secondary_source_versions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProject.ProjectSourceVersionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectSourceVersionProperty"]]]], result)
 
     @builtins.property
     def source_version(self) -> typing.Optional[builtins.str]:
@@ -7877,7 +7888,7 @@ class CfnProjectProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An arbitrary set of tags (key-value pairs) for the AWS CodeBuild project.
 
         These tags are available for use by AWS services that support AWS CodeBuild build project tags.
@@ -7885,7 +7896,7 @@ class CfnProjectProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def timeout_in_minutes(self) -> typing.Optional[jsii.Number]:
@@ -7901,13 +7912,13 @@ class CfnProjectProps:
     @builtins.property
     def triggers(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.ProjectTriggersProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectTriggersProperty"]]:
         '''For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-triggers
         '''
         result = self._values.get("triggers")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.ProjectTriggersProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.ProjectTriggersProperty"]], result)
 
     @builtins.property
     def visibility(self) -> typing.Optional[builtins.str]:
@@ -7924,7 +7935,7 @@ class CfnProjectProps:
     @builtins.property
     def vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.VpcConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.VpcConfigProperty"]]:
         '''``VpcConfig`` specifies settings that enable AWS CodeBuild to access resources in an Amazon VPC.
 
         For more information, see `Use AWS CodeBuild with Amazon Virtual Private Cloud <https://docs.aws.amazon.com/codebuild/latest/userguide/vpc-support.html>`_ in the *AWS CodeBuild User Guide* .
@@ -7932,7 +7943,7 @@ class CfnProjectProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-vpcconfig
         '''
         result = self._values.get("vpc_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.VpcConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProject.VpcConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7962,6 +7973,7 @@ class CfnReportGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codebuild as codebuild
@@ -7996,14 +8008,14 @@ class CfnReportGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        export_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnReportGroup.ReportExportConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        export_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnReportGroup.ReportExportConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         type: builtins.str,
-        delete_reports: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        delete_reports: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeBuild::ReportGroup``.
 
@@ -8031,7 +8043,10 @@ class CfnReportGroup(
 
     @jsii.member(jsii_name="arnForReportGroup")
     @builtins.classmethod
-    def arn_for_report_group(cls, resource: _IReportGroupRef_79bc7a1e) -> builtins.str:
+    def arn_for_report_group(
+        cls,
+        resource: "_IReportGroupRef_79bc7a1e",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -8053,7 +8068,7 @@ class CfnReportGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReportGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8106,28 +8121,28 @@ class CfnReportGroup(
 
     @builtins.property
     @jsii.member(jsii_name="reportGroupRef")
-    def report_group_ref(self) -> _ReportGroupReference_9845652f:
+    def report_group_ref(self) -> "_ReportGroupReference_9845652f":
         '''A reference to a ReportGroup resource.'''
-        return typing.cast(_ReportGroupReference_9845652f, jsii.get(self, "reportGroupRef"))
+        return typing.cast("_ReportGroupReference_9845652f", jsii.get(self, "reportGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="exportConfig")
     def export_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnReportGroup.ReportExportConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnReportGroup.ReportExportConfigProperty"]:
         '''Information about the destination where the raw data of this ``ReportGroup`` is exported.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnReportGroup.ReportExportConfigProperty"], jsii.get(self, "exportConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnReportGroup.ReportExportConfigProperty"], jsii.get(self, "exportConfig"))
 
     @export_config.setter
     def export_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnReportGroup.ReportExportConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnReportGroup.ReportExportConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f96cf5e0a1f241a7cbcaffd5be51152e1edd0c6f3e7934c2284e727cccba7b94)
@@ -8154,14 +8169,14 @@ class CfnReportGroup(
     @jsii.member(jsii_name="deleteReports")
     def delete_reports(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When deleting a report group, specifies if reports within the report group should be deleted.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deleteReports"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deleteReports"))
 
     @delete_reports.setter
     def delete_reports(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a7e923011124874f632f5e58a5526939f6dfc98ffa942ca3b7e9b0532bf51284)
@@ -8183,12 +8198,12 @@ class CfnReportGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tag key and value pairs associated with this report group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2b2d2619a3ff3b19527ca1fa7def91f6174aef5a93358549306e21bfe660fe81)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -8207,7 +8222,7 @@ class CfnReportGroup(
             self,
             *,
             export_config_type: builtins.str,
-            s3_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReportGroup.S3ReportExportConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReportGroup.S3ReportExportConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Information about the location where the run of a report is exported.
 
@@ -8265,13 +8280,13 @@ class CfnReportGroup(
         @builtins.property
         def s3_destination(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReportGroup.S3ReportExportConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnReportGroup.S3ReportExportConfigProperty"]]:
             '''A ``S3ReportExportConfig`` object that contains information about the S3 bucket where the run of a report is exported.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-reportgroup-reportexportconfig.html#cfn-codebuild-reportgroup-reportexportconfig-s3destination
             '''
             result = self._values.get("s3_destination")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReportGroup.S3ReportExportConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnReportGroup.S3ReportExportConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8302,7 +8317,7 @@ class CfnReportGroup(
             *,
             bucket: builtins.str,
             bucket_owner: typing.Optional[builtins.str] = None,
-            encryption_disabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            encryption_disabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             encryption_key: typing.Optional[builtins.str] = None,
             packaging: typing.Optional[builtins.str] = None,
             path: typing.Optional[builtins.str] = None,
@@ -8382,13 +8397,13 @@ class CfnReportGroup(
         @builtins.property
         def encryption_disabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A boolean value that specifies if the results of a report are encrypted.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-reportgroup-s3reportexportconfig.html#cfn-codebuild-reportgroup-s3reportexportconfig-encryptiondisabled
             '''
             result = self._values.get("encryption_disabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def encryption_key(self) -> typing.Optional[builtins.str]:
@@ -8447,11 +8462,11 @@ class CfnReportGroupProps:
     def __init__(
         self,
         *,
-        export_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnReportGroup.ReportExportConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        export_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnReportGroup.ReportExportConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         type: builtins.str,
-        delete_reports: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        delete_reports: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnReportGroup``.
 
@@ -8466,6 +8481,7 @@ class CfnReportGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codebuild as codebuild
@@ -8518,14 +8534,14 @@ class CfnReportGroupProps:
     @builtins.property
     def export_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnReportGroup.ReportExportConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnReportGroup.ReportExportConfigProperty"]:
         '''Information about the destination where the raw data of this ``ReportGroup`` is exported.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-reportgroup.html#cfn-codebuild-reportgroup-exportconfig
         '''
         result = self._values.get("export_config")
         assert result is not None, "Required property 'export_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnReportGroup.ReportExportConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnReportGroup.ReportExportConfigProperty"], result)
 
     @builtins.property
     def type(self) -> builtins.str:
@@ -8543,7 +8559,7 @@ class CfnReportGroupProps:
     @builtins.property
     def delete_reports(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When deleting a report group, specifies if reports within the report group should be deleted.
 
         - **true** - Deletes any reports that belong to the report group before deleting the report group.
@@ -8552,7 +8568,7 @@ class CfnReportGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-reportgroup.html#cfn-codebuild-reportgroup-deletereports
         '''
         result = self._values.get("delete_reports")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -8564,7 +8580,7 @@ class CfnReportGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tag key and value pairs associated with this report group.
 
         These tags are available for use by AWS services that support AWS CodeBuild report group tags.
@@ -8572,7 +8588,7 @@ class CfnReportGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-reportgroup.html#cfn-codebuild-reportgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8621,7 +8637,7 @@ class CfnSourceCredential(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         auth_type: builtins.str,
@@ -8664,7 +8680,7 @@ class CfnSourceCredential(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSourceCredential", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8708,9 +8724,9 @@ class CfnSourceCredential(
 
     @builtins.property
     @jsii.member(jsii_name="sourceCredentialRef")
-    def source_credential_ref(self) -> _SourceCredentialReference_97d19067:
+    def source_credential_ref(self) -> "_SourceCredentialReference_97d19067":
         '''A reference to a SourceCredential resource.'''
-        return typing.cast(_SourceCredentialReference_97d19067, jsii.get(self, "sourceCredentialRef"))
+        return typing.cast("_SourceCredentialReference_97d19067", jsii.get(self, "sourceCredentialRef"))
 
     @builtins.property
     @jsii.member(jsii_name="authType")
@@ -8892,7 +8908,7 @@ class CloudWatchLoggingOptions:
         self,
         *,
         enabled: typing.Optional[builtins.bool] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
         prefix: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Information about logs built to a CloudWatch Log Group for a build project.
@@ -8936,13 +8952,13 @@ class CloudWatchLoggingOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
+    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
         '''The Log Group to send logs to.
 
         :default: - no log group specified
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional[_ILogGroup_3c4fa718], result)
+        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
 
     @builtins.property
     def prefix(self) -> typing.Optional[builtins.str]:
@@ -9001,26 +9017,26 @@ class CommonProjectProps:
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         auto_retry_limit: typing.Optional[jsii.Number] = None,
         badge: typing.Optional[builtins.bool] = None,
-        build_spec: typing.Optional[BuildSpec] = None,
-        cache: typing.Optional[Cache] = None,
+        build_spec: typing.Optional["BuildSpec"] = None,
+        cache: typing.Optional["Cache"] = None,
         check_secrets_in_plain_text_env_variables: typing.Optional[builtins.bool] = None,
         concurrent_build_limit: typing.Optional[jsii.Number] = None,
         description: typing.Optional[builtins.str] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
-        environment: typing.Optional[typing.Union[BuildEnvironment, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
+        environment: typing.Optional[typing.Union["BuildEnvironment", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
         file_system_locations: typing.Optional[typing.Sequence["IFileSystemLocation"]] = None,
         grant_report_group_permissions: typing.Optional[builtins.bool] = None,
         logging: typing.Optional[typing.Union["LoggingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         project_name: typing.Optional[builtins.str] = None,
-        queued_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        queued_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         ssm_session_permissions: typing.Optional[builtins.bool] = None,
-        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        subnet_selection: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         visibility: typing.Optional["ProjectVisibility"] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
     ) -> None:
         '''
         :param allow_all_outbound: Whether to allow the CodeBuild to send all network traffic. If set to false, you must individually add traffic rules to allow the CodeBuild project to connect to network targets. Only used if 'vpc' is supplied. Default: true
@@ -9270,7 +9286,7 @@ class CommonProjectProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def build_spec(self) -> typing.Optional[BuildSpec]:
+    def build_spec(self) -> typing.Optional["BuildSpec"]:
         '''Filename or contents of buildspec in JSON format.
 
         :default: - Empty buildspec.
@@ -9278,16 +9294,16 @@ class CommonProjectProps:
         :see: https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec-ref-example
         '''
         result = self._values.get("build_spec")
-        return typing.cast(typing.Optional[BuildSpec], result)
+        return typing.cast(typing.Optional["BuildSpec"], result)
 
     @builtins.property
-    def cache(self) -> typing.Optional[Cache]:
+    def cache(self) -> typing.Optional["Cache"]:
         '''Caching strategy to use.
 
         :default: Cache.none
         '''
         result = self._values.get("cache")
-        return typing.cast(typing.Optional[Cache], result)
+        return typing.cast(typing.Optional["Cache"], result)
 
     @builtins.property
     def check_secrets_in_plain_text_env_variables(
@@ -9324,33 +9340,33 @@ class CommonProjectProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''Encryption key to use to read and write artifacts.
 
         :default: - The AWS-managed CMK for Amazon Simple Storage Service (Amazon S3) is used.
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def environment(self) -> typing.Optional[BuildEnvironment]:
+    def environment(self) -> typing.Optional["BuildEnvironment"]:
         '''Build environment to use for the build.
 
         :default: BuildEnvironment.LinuxBuildImage.STANDARD_7_0
         '''
         result = self._values.get("environment")
-        return typing.cast(typing.Optional[BuildEnvironment], result)
+        return typing.cast(typing.Optional["BuildEnvironment"], result)
 
     @builtins.property
     def environment_variables(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, BuildEnvironmentVariable]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "BuildEnvironmentVariable"]]:
         '''Additional environment variables to add to the build environment.
 
         :default: - No additional environment variables are specified.
         '''
         result = self._values.get("environment_variables")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, BuildEnvironmentVariable]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "BuildEnvironmentVariable"]], result)
 
     @builtins.property
     def file_system_locations(
@@ -9404,7 +9420,7 @@ class CommonProjectProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def queued_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def queued_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of minutes after which AWS CodeBuild stops the build if it's still in queue.
 
         For valid values, see the timeoutInMinutes field in the AWS
@@ -9413,19 +9429,21 @@ class CommonProjectProps:
         :default: - no queue timeout is set
         '''
         result = self._values.get("queued_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Service Role to assume while running the build.
 
         :default: - A role will be created.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''What security group to associate with the codebuild project's network interfaces.
 
         If no security group is identified, one will be created automatically.
@@ -9435,7 +9453,7 @@ class CommonProjectProps:
         :default: - Security group will be automatically created.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
     def ssm_session_permissions(self) -> typing.Optional[builtins.bool]:
@@ -9461,7 +9479,7 @@ class CommonProjectProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def subnet_selection(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def subnet_selection(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where to place the network interfaces within the VPC.
 
         To access AWS services, your CodeBuild project needs to be in one of the following types of subnets:
@@ -9478,10 +9496,10 @@ class CommonProjectProps:
         :see: https://docs.aws.amazon.com/codebuild/latest/userguide/vpc-support.html
         '''
         result = self._values.get("subnet_selection")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of minutes after which AWS CodeBuild stops the build if it's not complete.
 
         For valid values, see the timeoutInMinutes field in the AWS
@@ -9490,7 +9508,7 @@ class CommonProjectProps:
         :default: Duration.hours(1)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def visibility(self) -> typing.Optional["ProjectVisibility"]:
@@ -9502,7 +9520,7 @@ class CommonProjectProps:
         return typing.cast(typing.Optional["ProjectVisibility"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''VPC network to place codebuild network interfaces.
 
         Specify this if the codebuild project needs to access resources in a VPC.
@@ -9510,7 +9528,7 @@ class CommonProjectProps:
         :default: - No VPC is specified.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9539,10 +9557,10 @@ class ComputeConfiguration:
     def __init__(
         self,
         *,
-        disk: typing.Optional[_Size_7b441c34] = None,
-        instance_type: typing.Optional[_InstanceType_f64915b9] = None,
+        disk: typing.Optional["_Size_7b441c34"] = None,
+        instance_type: typing.Optional["_InstanceType_f64915b9"] = None,
         machine_type: typing.Optional["MachineType"] = None,
-        memory: typing.Optional[_Size_7b441c34] = None,
+        memory: typing.Optional["_Size_7b441c34"] = None,
         v_cpu: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''The compute configuration for the fleet.
@@ -9592,7 +9610,7 @@ class ComputeConfiguration:
             self._values["v_cpu"] = v_cpu
 
     @builtins.property
-    def disk(self) -> typing.Optional[_Size_7b441c34]:
+    def disk(self) -> typing.Optional["_Size_7b441c34"]:
         '''When using ATTRIBUTE_BASED, the amount of disk space of the instance type included in your fleet.
 
         When using CUSTOM_INSTANCE_TYPE,
@@ -9602,10 +9620,10 @@ class ComputeConfiguration:
         :default: - No requirement, the actual value will be based on the other selected configuration properties
         '''
         result = self._values.get("disk")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def instance_type(self) -> typing.Optional[_InstanceType_f64915b9]:
+    def instance_type(self) -> typing.Optional["_InstanceType_f64915b9"]:
         '''When using CUSTOM_INSTANCE_TYPE, the EC2 instance type to use for fleet instances.
 
         Not all instance types are supported by CodeBuild. If you use a disallowed type, the
@@ -9616,7 +9634,7 @@ class ComputeConfiguration:
         :see: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment-reserved-capacity.instance-types
         '''
         result = self._values.get("instance_type")
-        return typing.cast(typing.Optional[_InstanceType_f64915b9], result)
+        return typing.cast(typing.Optional["_InstanceType_f64915b9"], result)
 
     @builtins.property
     def machine_type(self) -> typing.Optional["MachineType"]:
@@ -9628,13 +9646,13 @@ class ComputeConfiguration:
         return typing.cast(typing.Optional["MachineType"], result)
 
     @builtins.property
-    def memory(self) -> typing.Optional[_Size_7b441c34]:
+    def memory(self) -> typing.Optional["_Size_7b441c34"]:
         '''When using ATTRIBUTE_BASED, the amount of memory of the instance type included in your fleet.
 
         :default: - No requirement, the actual value will be based on the other selected configuration properties
         '''
         result = self._values.get("memory")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def v_cpu(self) -> typing.Optional[jsii.Number]:
@@ -9743,7 +9761,7 @@ class DockerImageOptions:
     def __init__(
         self,
         *,
-        secrets_manager_credentials: typing.Optional[_ISecret_6e020e6a] = None,
+        secrets_manager_credentials: typing.Optional["_ISecret_6e020e6a"] = None,
     ) -> None:
         '''The options when creating a CodeBuild Docker build image using ``LinuxBuildImage.fromDockerRegistry``, ``WindowsBuildImage.fromDockerRegistry``, or ``MacBuildImage.fromDockerRegistry``.
 
@@ -9767,13 +9785,13 @@ class DockerImageOptions:
             self._values["secrets_manager_credentials"] = secrets_manager_credentials
 
     @builtins.property
-    def secrets_manager_credentials(self) -> typing.Optional[_ISecret_6e020e6a]:
+    def secrets_manager_credentials(self) -> typing.Optional["_ISecret_6e020e6a"]:
         '''The credentials, stored in Secrets Manager, used for accessing the repository holding the image, if the repository is private.
 
         :default: no credentials will be used (we assume the repository is public)
         '''
         result = self._values.get("secrets_manager_credentials")
-        return typing.cast(typing.Optional[_ISecret_6e020e6a], result)
+        return typing.cast(typing.Optional["_ISecret_6e020e6a"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9885,8 +9903,8 @@ class DockerServerOptions:
     def __init__(
         self,
         *,
-        compute_type: DockerServerComputeType,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        compute_type: "DockerServerComputeType",
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
     ) -> None:
         '''The Docker server configuration CodeBuild use to build your Docker image.
 
@@ -9961,17 +9979,19 @@ class DockerServerOptions:
             self._values["security_groups"] = security_groups
 
     @builtins.property
-    def compute_type(self) -> DockerServerComputeType:
+    def compute_type(self) -> "DockerServerComputeType":
         '''The type of compute to use for the docker server.
 
         See the ``DockerServerComputeType`` enum for the possible values.
         '''
         result = self._values.get("compute_type")
         assert result is not None, "Required property 'compute_type' is missing"
-        return typing.cast(DockerServerComputeType, result)
+        return typing.cast("DockerServerComputeType", result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''A list of maximum 5 security groups.
 
         :default: - no security group
@@ -9982,7 +10002,7 @@ class DockerServerOptions:
         from the VPC configured in the project. They should allow ingress on port 9876.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10205,7 +10225,7 @@ class FileSystemConfig:
     def __init__(
         self,
         *,
-        location: typing.Union[CfnProject.ProjectFileSystemLocationProperty, typing.Dict[builtins.str, typing.Any]],
+        location: typing.Union["CfnProject.ProjectFileSystemLocationProperty", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''The type returned from ``IFileSystemLocation#bind``.
 
@@ -10241,14 +10261,14 @@ class FileSystemConfig:
         }
 
     @builtins.property
-    def location(self) -> CfnProject.ProjectFileSystemLocationProperty:
+    def location(self) -> "CfnProject.ProjectFileSystemLocationProperty":
         '''File system location wrapper property.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codebuild-project-projectfilesystemlocation.html
         '''
         result = self._values.get("location")
         assert result is not None, "Required property 'location' is missing"
-        return typing.cast(CfnProject.ProjectFileSystemLocationProperty, result)
+        return typing.cast("CfnProject.ProjectFileSystemLocationProperty", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10348,7 +10368,7 @@ class FilterGroup(
 
     @jsii.member(jsii_name="inEventOf")
     @builtins.classmethod
-    def in_event_of(cls, *actions: EventAction) -> "FilterGroup":
+    def in_event_of(cls, *actions: "EventAction") -> "FilterGroup":
         '''Creates a new event FilterGroup that triggers on any of the provided actions.
 
         :param actions: the actions to trigger the webhook on.
@@ -10696,15 +10716,15 @@ class FleetProps:
         self,
         *,
         base_capacity: jsii.Number,
-        compute_type: FleetComputeType,
-        environment_type: EnvironmentType,
-        compute_configuration: typing.Optional[typing.Union[ComputeConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        compute_type: "FleetComputeType",
+        environment_type: "EnvironmentType",
+        compute_configuration: typing.Optional[typing.Union["ComputeConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         fleet_name: typing.Optional[builtins.str] = None,
-        overflow_behavior: typing.Optional[FleetOverflowBehavior] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
+        overflow_behavior: typing.Optional["FleetOverflowBehavior"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        subnet_selection: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
     ) -> None:
         '''Construction properties of a CodeBuild Fleet.
 
@@ -10785,24 +10805,24 @@ class FleetProps:
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def compute_type(self) -> FleetComputeType:
+    def compute_type(self) -> "FleetComputeType":
         '''The instance type of the compute fleet.
 
         :see: https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_codebuild.ComputeType.html
         '''
         result = self._values.get("compute_type")
         assert result is not None, "Required property 'compute_type' is missing"
-        return typing.cast(FleetComputeType, result)
+        return typing.cast("FleetComputeType", result)
 
     @builtins.property
-    def environment_type(self) -> EnvironmentType:
+    def environment_type(self) -> "EnvironmentType":
         '''The build environment (operating system/architecture/accelerator) type made available to projects using this fleet.'''
         result = self._values.get("environment_type")
         assert result is not None, "Required property 'environment_type' is missing"
-        return typing.cast(EnvironmentType, result)
+        return typing.cast("EnvironmentType", result)
 
     @builtins.property
-    def compute_configuration(self) -> typing.Optional[ComputeConfiguration]:
+    def compute_configuration(self) -> typing.Optional["ComputeConfiguration"]:
         '''The compute configuration of the compute fleet.
 
         This is only permitted if ``computeType`` is set to ATTRIBUTE_BASED or
@@ -10813,7 +10833,7 @@ class FleetProps:
         :see: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html#environment-reserved-capacity.types
         '''
         result = self._values.get("compute_configuration")
-        return typing.cast(typing.Optional[ComputeConfiguration], result)
+        return typing.cast(typing.Optional["ComputeConfiguration"], result)
 
     @builtins.property
     def fleet_name(self) -> typing.Optional[builtins.str]:
@@ -10825,7 +10845,7 @@ class FleetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def overflow_behavior(self) -> typing.Optional[FleetOverflowBehavior]:
+    def overflow_behavior(self) -> typing.Optional["FleetOverflowBehavior"]:
         '''The compute fleet overflow behavior.
 
         For overflow behavior ``QUEUE``, overflow builds need to wait on the existing fleet instances to become available.
@@ -10835,10 +10855,10 @@ class FleetProps:
         :default: undefined - AWS CodeBuild default behavior is QUEUE
         '''
         result = self._values.get("overflow_behavior")
-        return typing.cast(typing.Optional[FleetOverflowBehavior], result)
+        return typing.cast(typing.Optional["FleetOverflowBehavior"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Service Role assumed by Fleet instances.
 
         This Role is not used by Project builds running on Fleet instances; Project
@@ -10847,10 +10867,12 @@ class FleetProps:
         :default: - A role will be created if any permissions are granted
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''What security groups to associate with the fleet's network interfaces. If none are provided, one will be created automatically.
 
         Only used if ``vpc`` is supplied.
@@ -10858,10 +10880,10 @@ class FleetProps:
         :default: - A security group will be automatically created.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
-    def subnet_selection(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def subnet_selection(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where to place the network interfaces within the VPC.
 
         To access AWS services, your fleet needs to be in one of the following types of subnets:
@@ -10878,10 +10900,10 @@ class FleetProps:
         :see: https://docs.aws.amazon.com/codebuild/latest/userguide/vpc-support.html
         '''
         result = self._values.get("subnet_selection")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''VPC network to place fleet instance network interfaces.
 
         Specify this if the fleet needs to access resources in a VPC.
@@ -10889,7 +10911,7 @@ class FleetProps:
         :default: - No VPC is specified.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10933,10 +10955,10 @@ class GitHubEnterpriseSourceCredentials(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        access_token: _SecretValue_3dd0ddae,
+        access_token: "_SecretValue_3dd0ddae",
     ) -> None:
         '''
         :param scope: -
@@ -10964,7 +10986,7 @@ class GitHubEnterpriseSourceCredentials(
     name_mapping={"access_token": "accessToken"},
 )
 class GitHubEnterpriseSourceCredentialsProps:
-    def __init__(self, *, access_token: _SecretValue_3dd0ddae) -> None:
+    def __init__(self, *, access_token: "_SecretValue_3dd0ddae") -> None:
         '''Creation properties for ``GitHubEnterpriseSourceCredentials``.
 
         :param access_token: The personal access token to use when contacting the instance of the GitHub Enterprise API.
@@ -10992,11 +11014,11 @@ class GitHubEnterpriseSourceCredentialsProps:
         }
 
     @builtins.property
-    def access_token(self) -> _SecretValue_3dd0ddae:
+    def access_token(self) -> "_SecretValue_3dd0ddae":
         '''The personal access token to use when contacting the instance of the GitHub Enterprise API.'''
         result = self._values.get("access_token")
         assert result is not None, "Required property 'access_token' is missing"
-        return typing.cast(_SecretValue_3dd0ddae, result)
+        return typing.cast("_SecretValue_3dd0ddae", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11033,10 +11055,10 @@ class GitHubSourceCredentials(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        access_token: _SecretValue_3dd0ddae,
+        access_token: "_SecretValue_3dd0ddae",
     ) -> None:
         '''
         :param scope: -
@@ -11064,7 +11086,7 @@ class GitHubSourceCredentials(
     name_mapping={"access_token": "accessToken"},
 )
 class GitHubSourceCredentialsProps:
-    def __init__(self, *, access_token: _SecretValue_3dd0ddae) -> None:
+    def __init__(self, *, access_token: "_SecretValue_3dd0ddae") -> None:
         '''Creation properties for ``GitHubSourceCredentials``.
 
         :param access_token: The personal access token to use when contacting the GitHub API.
@@ -11085,11 +11107,11 @@ class GitHubSourceCredentialsProps:
         }
 
     @builtins.property
-    def access_token(self) -> _SecretValue_3dd0ddae:
+    def access_token(self) -> "_SecretValue_3dd0ddae":
         '''The personal access token to use when contacting the GitHub API.'''
         result = self._values.get("access_token")
         assert result is not None, "Required property 'access_token' is missing"
-        return typing.cast(_SecretValue_3dd0ddae, result)
+        return typing.cast("_SecretValue_3dd0ddae", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11128,9 +11150,9 @@ class IArtifacts(typing_extensions.Protocol):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         project: "IProject",
-    ) -> ArtifactsConfig:
+    ) -> "ArtifactsConfig":
         '''Callback when an Artifacts class is used in a CodeBuild Project.
 
         :param scope: a root Construct that allows creating new Constructs.
@@ -11165,9 +11187,9 @@ class _IArtifactsProxy:
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         project: "IProject",
-    ) -> ArtifactsConfig:
+    ) -> "ArtifactsConfig":
         '''Callback when an Artifacts class is used in a CodeBuild Project.
 
         :param scope: a root Construct that allows creating new Constructs.
@@ -11177,7 +11199,7 @@ class _IArtifactsProxy:
             type_hints = typing.get_type_hints(_typecheckingstub__6e0c5ffded158f2ed8bc4156b37e518c53155ddfe35219ced2a852cd8384dbd2)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument project", value=project, expected_type=type_hints["project"])
-        return typing.cast(ArtifactsConfig, jsii.invoke(self, "bind", [scope, project]))
+        return typing.cast("ArtifactsConfig", jsii.invoke(self, "bind", [scope, project]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IArtifacts).__jsii_proxy_class__ = lambda : _IArtifactsProxy
@@ -11193,7 +11215,7 @@ class IBuildImage(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="defaultComputeType")
-    def default_compute_type(self) -> ComputeType:
+    def default_compute_type(self) -> "ComputeType":
         '''The default ``ComputeType`` to use with this image, if one was not specified in ``BuildEnvironment#computeType`` explicitly.'''
         ...
 
@@ -11223,7 +11245,7 @@ class IBuildImage(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="repository")
-    def repository(self) -> typing.Optional[_IRepository_e6004aa6]:
+    def repository(self) -> typing.Optional["_IRepository_e6004aa6"]:
         '''An optional ECR repository that the image is hosted in.
 
         :default: no repository
@@ -11232,7 +11254,7 @@ class IBuildImage(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="secretsManagerCredentials")
-    def secrets_manager_credentials(self) -> typing.Optional[_ISecret_6e020e6a]:
+    def secrets_manager_credentials(self) -> typing.Optional["_ISecret_6e020e6a"]:
         '''The secretsManagerCredentials for access to a private registry.
 
         :default: no credentials will be used
@@ -11240,7 +11262,7 @@ class IBuildImage(typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="runScriptBuildspec")
-    def run_script_buildspec(self, entrypoint: builtins.str) -> BuildSpec:
+    def run_script_buildspec(self, entrypoint: builtins.str) -> "BuildSpec":
         '''Make a buildspec to run the indicated script.
 
         :param entrypoint: -
@@ -11252,10 +11274,10 @@ class IBuildImage(typing_extensions.Protocol):
         self,
         *,
         build_image: typing.Optional["IBuildImage"] = None,
-        certificate: typing.Optional[typing.Union[BuildEnvironmentCertificate, typing.Dict[builtins.str, typing.Any]]] = None,
-        compute_type: typing.Optional[ComputeType] = None,
-        docker_server: typing.Optional[typing.Union[DockerServerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
+        certificate: typing.Optional[typing.Union["BuildEnvironmentCertificate", typing.Dict[builtins.str, typing.Any]]] = None,
+        compute_type: typing.Optional["ComputeType"] = None,
+        docker_server: typing.Optional[typing.Union["DockerServerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
         fleet: typing.Optional["IFleet"] = None,
         privileged: typing.Optional[builtins.bool] = None,
     ) -> typing.List[builtins.str]:
@@ -11283,9 +11305,9 @@ class _IBuildImageProxy:
 
     @builtins.property
     @jsii.member(jsii_name="defaultComputeType")
-    def default_compute_type(self) -> ComputeType:
+    def default_compute_type(self) -> "ComputeType":
         '''The default ``ComputeType`` to use with this image, if one was not specified in ``BuildEnvironment#computeType`` explicitly.'''
-        return typing.cast(ComputeType, jsii.get(self, "defaultComputeType"))
+        return typing.cast("ComputeType", jsii.get(self, "defaultComputeType"))
 
     @builtins.property
     @jsii.member(jsii_name="imageId")
@@ -11313,24 +11335,24 @@ class _IBuildImageProxy:
 
     @builtins.property
     @jsii.member(jsii_name="repository")
-    def repository(self) -> typing.Optional[_IRepository_e6004aa6]:
+    def repository(self) -> typing.Optional["_IRepository_e6004aa6"]:
         '''An optional ECR repository that the image is hosted in.
 
         :default: no repository
         '''
-        return typing.cast(typing.Optional[_IRepository_e6004aa6], jsii.get(self, "repository"))
+        return typing.cast(typing.Optional["_IRepository_e6004aa6"], jsii.get(self, "repository"))
 
     @builtins.property
     @jsii.member(jsii_name="secretsManagerCredentials")
-    def secrets_manager_credentials(self) -> typing.Optional[_ISecret_6e020e6a]:
+    def secrets_manager_credentials(self) -> typing.Optional["_ISecret_6e020e6a"]:
         '''The secretsManagerCredentials for access to a private registry.
 
         :default: no credentials will be used
         '''
-        return typing.cast(typing.Optional[_ISecret_6e020e6a], jsii.get(self, "secretsManagerCredentials"))
+        return typing.cast(typing.Optional["_ISecret_6e020e6a"], jsii.get(self, "secretsManagerCredentials"))
 
     @jsii.member(jsii_name="runScriptBuildspec")
-    def run_script_buildspec(self, entrypoint: builtins.str) -> BuildSpec:
+    def run_script_buildspec(self, entrypoint: builtins.str) -> "BuildSpec":
         '''Make a buildspec to run the indicated script.
 
         :param entrypoint: -
@@ -11338,17 +11360,17 @@ class _IBuildImageProxy:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1168d538a6dd082b4d5507e7bbb562982b220a97b20d58cbd181c391d1be5383)
             check_type(argname="argument entrypoint", value=entrypoint, expected_type=type_hints["entrypoint"])
-        return typing.cast(BuildSpec, jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
+        return typing.cast("BuildSpec", jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
 
     @jsii.member(jsii_name="validate")
     def validate(
         self,
         *,
-        build_image: typing.Optional[IBuildImage] = None,
-        certificate: typing.Optional[typing.Union[BuildEnvironmentCertificate, typing.Dict[builtins.str, typing.Any]]] = None,
-        compute_type: typing.Optional[ComputeType] = None,
-        docker_server: typing.Optional[typing.Union[DockerServerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
+        build_image: typing.Optional["IBuildImage"] = None,
+        certificate: typing.Optional[typing.Union["BuildEnvironmentCertificate", typing.Dict[builtins.str, typing.Any]]] = None,
+        compute_type: typing.Optional["ComputeType"] = None,
+        docker_server: typing.Optional[typing.Union["DockerServerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
         fleet: typing.Optional["IFleet"] = None,
         privileged: typing.Optional[builtins.bool] = None,
     ) -> typing.List[builtins.str]:
@@ -11388,9 +11410,9 @@ class IFileSystemLocation(typing_extensions.Protocol):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         project: "IProject",
-    ) -> FileSystemConfig:
+    ) -> "FileSystemConfig":
         '''Called by the project when a file system is added so it can perform binding operations on this file system location.
 
         :param scope: -
@@ -11410,9 +11432,9 @@ class _IFileSystemLocationProxy:
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         project: "IProject",
-    ) -> FileSystemConfig:
+    ) -> "FileSystemConfig":
         '''Called by the project when a file system is added so it can perform binding operations on this file system location.
 
         :param scope: -
@@ -11422,7 +11444,7 @@ class _IFileSystemLocationProxy:
             type_hints = typing.get_type_hints(_typecheckingstub__8c8b7197c206d5c5bcc7971f3699291be13ddb7a5337308dc7143e2a4fca2e09)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument project", value=project, expected_type=type_hints["project"])
-        return typing.cast(FileSystemConfig, jsii.invoke(self, "bind", [scope, project]))
+        return typing.cast("FileSystemConfig", jsii.invoke(self, "bind", [scope, project]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFileSystemLocation).__jsii_proxy_class__ = lambda : _IFileSystemLocationProxy
@@ -11439,7 +11461,7 @@ class IFleet(
 
     @builtins.property
     @jsii.member(jsii_name="computeType")
-    def compute_type(self) -> FleetComputeType:
+    def compute_type(self) -> "FleetComputeType":
         '''The compute type of the fleet.
 
         :see: https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_codebuild.ComputeType.html
@@ -11448,7 +11470,7 @@ class IFleet(
 
     @builtins.property
     @jsii.member(jsii_name="environmentType")
-    def environment_type(self) -> EnvironmentType:
+    def environment_type(self) -> "EnvironmentType":
         '''The build environment (operating system/architecture/accelerator) type made available to projects using this fleet.'''
         ...
 
@@ -11482,18 +11504,18 @@ class _IFleetProxy(
 
     @builtins.property
     @jsii.member(jsii_name="computeType")
-    def compute_type(self) -> FleetComputeType:
+    def compute_type(self) -> "FleetComputeType":
         '''The compute type of the fleet.
 
         :see: https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_codebuild.ComputeType.html
         '''
-        return typing.cast(FleetComputeType, jsii.get(self, "computeType"))
+        return typing.cast("FleetComputeType", jsii.get(self, "computeType"))
 
     @builtins.property
     @jsii.member(jsii_name="environmentType")
-    def environment_type(self) -> EnvironmentType:
+    def environment_type(self) -> "EnvironmentType":
         '''The build environment (operating system/architecture/accelerator) type made available to projects using this fleet.'''
-        return typing.cast(EnvironmentType, jsii.get(self, "environmentType"))
+        return typing.cast("EnvironmentType", jsii.get(self, "environmentType"))
 
     @builtins.property
     @jsii.member(jsii_name="fleetArn")
@@ -11545,7 +11567,7 @@ class IProject(
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service Role of this Project.
 
         Undefined for imported Projects.
@@ -11553,14 +11575,14 @@ class IProject(
         ...
 
     @jsii.member(jsii_name="addToRolePolicy")
-    def add_to_role_policy(self, policy_statement: _PolicyStatement_0fe33853) -> None:
+    def add_to_role_policy(self, policy_statement: "_PolicyStatement_0fe33853") -> None:
         '''
         :param policy_statement: -
         '''
         ...
 
     @jsii.member(jsii_name="enableBatchBuilds")
-    def enable_batch_builds(self) -> typing.Optional[BatchBuildConfig]:
+    def enable_batch_builds(self) -> typing.Optional["BatchBuildConfig"]:
         '''Enable batch builds.
 
         Returns an object contining the batch service role if batch builds
@@ -11578,14 +11600,14 @@ class IProject(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''
         :param metric_name: The name of the metric.
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -11614,14 +11636,14 @@ class IProject(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measures the number of builds triggered.
 
         Units: Count
@@ -11654,14 +11676,14 @@ class IProject(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measures the duration of all builds over time.
 
         Units: Seconds
@@ -11694,14 +11716,14 @@ class IProject(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measures the number of builds that failed because of client error or because of a timeout.
 
         Units: Count
@@ -11734,14 +11756,14 @@ class IProject(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measures the number of successful builds.
 
         Units: Count
@@ -11769,14 +11791,14 @@ class IProject(
     def notify_on(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         events: typing.Sequence["ProjectNotificationEvents"],
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule triggered when the project events emitted by you specified, it very similar to ``onEvent`` API.
 
         You can also use the methods ``notifyOnBuildSucceeded`` and
@@ -11798,13 +11820,13 @@ class IProject(
     def notify_on_build_failed(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar notification rule which triggers when a build fails.
 
         :param id: -
@@ -11820,13 +11842,13 @@ class IProject(
     def notify_on_build_succeeded(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar notification rule which triggers when a build completes successfully.
 
         :param id: -
@@ -11843,12 +11865,12 @@ class IProject(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an event rule which triggers when a build fails.
 
         :param id: -
@@ -11865,12 +11887,12 @@ class IProject(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an event rule which triggers when a build starts.
 
         :param id: -
@@ -11887,12 +11909,12 @@ class IProject(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an event rule which triggers when a build completes successfully.
 
         :param id: -
@@ -11909,12 +11931,12 @@ class IProject(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule triggered when something happens with this project.
 
         :param id: -
@@ -11933,12 +11955,12 @@ class IProject(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule that triggers upon phase change of this build project.
 
         :param id: -
@@ -11957,12 +11979,12 @@ class IProject(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule triggered when the build project state changes.
 
         You can filter specific build status events using an event
@@ -12026,15 +12048,15 @@ class _IProjectProxy(
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM service Role of this Project.
 
         Undefined for imported Projects.
         '''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
     @jsii.member(jsii_name="addToRolePolicy")
-    def add_to_role_policy(self, policy_statement: _PolicyStatement_0fe33853) -> None:
+    def add_to_role_policy(self, policy_statement: "_PolicyStatement_0fe33853") -> None:
         '''
         :param policy_statement: -
         '''
@@ -12044,13 +12066,13 @@ class _IProjectProxy(
         return typing.cast(None, jsii.invoke(self, "addToRolePolicy", [policy_statement]))
 
     @jsii.member(jsii_name="enableBatchBuilds")
-    def enable_batch_builds(self) -> typing.Optional[BatchBuildConfig]:
+    def enable_batch_builds(self) -> typing.Optional["BatchBuildConfig"]:
         '''Enable batch builds.
 
         Returns an object contining the batch service role if batch builds
         could be enabled.
         '''
-        return typing.cast(typing.Optional[BatchBuildConfig], jsii.invoke(self, "enableBatchBuilds", []))
+        return typing.cast(typing.Optional["BatchBuildConfig"], jsii.invoke(self, "enableBatchBuilds", []))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -12062,14 +12084,14 @@ class _IProjectProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''
         :param metric_name: The name of the metric.
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -12105,7 +12127,7 @@ class _IProjectProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricBuilds")
     def metric_builds(
@@ -12116,14 +12138,14 @@ class _IProjectProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measures the number of builds triggered.
 
         Units: Count
@@ -12160,7 +12182,7 @@ class _IProjectProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricBuilds", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricBuilds", [props]))
 
     @jsii.member(jsii_name="metricDuration")
     def metric_duration(
@@ -12171,14 +12193,14 @@ class _IProjectProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measures the duration of all builds over time.
 
         Units: Seconds
@@ -12215,7 +12237,7 @@ class _IProjectProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDuration", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDuration", [props]))
 
     @jsii.member(jsii_name="metricFailedBuilds")
     def metric_failed_builds(
@@ -12226,14 +12248,14 @@ class _IProjectProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measures the number of builds that failed because of client error or because of a timeout.
 
         Units: Count
@@ -12270,7 +12292,7 @@ class _IProjectProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricFailedBuilds", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricFailedBuilds", [props]))
 
     @jsii.member(jsii_name="metricSucceededBuilds")
     def metric_succeeded_builds(
@@ -12281,14 +12303,14 @@ class _IProjectProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measures the number of successful builds.
 
         Units: Count
@@ -12325,20 +12347,20 @@ class _IProjectProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSucceededBuilds", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSucceededBuilds", [props]))
 
     @jsii.member(jsii_name="notifyOn")
     def notify_on(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         events: typing.Sequence["ProjectNotificationEvents"],
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule triggered when the project events emitted by you specified, it very similar to ``onEvent`` API.
 
         You can also use the methods ``notifyOnBuildSucceeded`` and
@@ -12366,19 +12388,19 @@ class _IProjectProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOn", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOn", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnBuildFailed")
     def notify_on_build_failed(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar notification rule which triggers when a build fails.
 
         :param id: -
@@ -12399,19 +12421,19 @@ class _IProjectProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnBuildFailed", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnBuildFailed", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnBuildSucceeded")
     def notify_on_build_succeeded(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar notification rule which triggers when a build completes successfully.
 
         :param id: -
@@ -12432,19 +12454,19 @@ class _IProjectProxy(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnBuildSucceeded", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnBuildSucceeded", [id, target, options]))
 
     @jsii.member(jsii_name="onBuildFailed")
     def on_build_failed(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an event rule which triggers when a build fails.
 
         :param id: -
@@ -12465,19 +12487,19 @@ class _IProjectProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onBuildFailed", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onBuildFailed", [id, options]))
 
     @jsii.member(jsii_name="onBuildStarted")
     def on_build_started(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an event rule which triggers when a build starts.
 
         :param id: -
@@ -12498,19 +12520,19 @@ class _IProjectProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onBuildStarted", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onBuildStarted", [id, options]))
 
     @jsii.member(jsii_name="onBuildSucceeded")
     def on_build_succeeded(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an event rule which triggers when a build completes successfully.
 
         :param id: -
@@ -12531,19 +12553,19 @@ class _IProjectProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onBuildSucceeded", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onBuildSucceeded", [id, options]))
 
     @jsii.member(jsii_name="onEvent")
     def on_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule triggered when something happens with this project.
 
         :param id: -
@@ -12566,19 +12588,19 @@ class _IProjectProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onEvent", [id, options]))
 
     @jsii.member(jsii_name="onPhaseChange")
     def on_phase_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule that triggers upon phase change of this build project.
 
         :param id: -
@@ -12601,19 +12623,19 @@ class _IProjectProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onPhaseChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onPhaseChange", [id, options]))
 
     @jsii.member(jsii_name="onStateChange")
     def on_state_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule triggered when the build project state changes.
 
         You can filter specific build status events using an event
@@ -12657,7 +12679,7 @@ class _IProjectProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onStateChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onStateChange", [id, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IProject).__jsii_proxy_class__ = lambda : _IProjectProxy
@@ -12686,7 +12708,7 @@ class IReportGroup(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants the given entity permissions to write (that is, upload reports to) this report group.
 
         :param identity: -
@@ -12720,7 +12742,7 @@ class _IReportGroupProxy(
         return typing.cast(builtins.str, jsii.get(self, "reportGroupName"))
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants the given entity permissions to write (that is, upload reports to) this report group.
 
         :param identity: -
@@ -12728,7 +12750,7 @@ class _IReportGroupProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5dd81e7f03548e4516bd52da148aa0a14578aa59404612d674be6d05676510e1)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWrite", [identity]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IReportGroup).__jsii_proxy_class__ = lambda : _IReportGroupProxy
@@ -12759,8 +12781,8 @@ class ISource(typing_extensions.Protocol):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        project: IProject,
+        scope: "_constructs_77d1e7e8.Construct",
+        project: "IProject",
     ) -> "SourceConfig":
         '''
         :param scope: -
@@ -12795,8 +12817,8 @@ class _ISourceProxy:
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        project: IProject,
+        scope: "_constructs_77d1e7e8.Construct",
+        project: "IProject",
     ) -> "SourceConfig":
         '''
         :param scope: -
@@ -12858,7 +12880,7 @@ class LinuxArmBuildImage(
 
     @jsii.member(jsii_name="fromCodeBuildImageId")
     @builtins.classmethod
-    def from_code_build_image_id(cls, id: builtins.str) -> IBuildImage:
+    def from_code_build_image_id(cls, id: builtins.str) -> "IBuildImage":
         '''Uses a Docker image provided by CodeBuild.
 
         :param id: The image identifier.
@@ -12874,7 +12896,7 @@ class LinuxArmBuildImage(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0836805afa38e66c63e6a85021aea8c77d6bfdecace48899c71b64ef767b4214)
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromCodeBuildImageId", [id]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromCodeBuildImageId", [id]))
 
     @jsii.member(jsii_name="fromDockerRegistry")
     @builtins.classmethod
@@ -12882,8 +12904,8 @@ class LinuxArmBuildImage(
         cls,
         name: builtins.str,
         *,
-        secrets_manager_credentials: typing.Optional[_ISecret_6e020e6a] = None,
-    ) -> IBuildImage:
+        secrets_manager_credentials: typing.Optional["_ISecret_6e020e6a"] = None,
+    ) -> "IBuildImage":
         '''
         :param name: -
         :param secrets_manager_credentials: The credentials, stored in Secrets Manager, used for accessing the repository holding the image, if the repository is private. Default: no credentials will be used (we assume the repository is public)
@@ -12897,15 +12919,15 @@ class LinuxArmBuildImage(
             secrets_manager_credentials=secrets_manager_credentials
         )
 
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromDockerRegistry", [name, options]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromDockerRegistry", [name, options]))
 
     @jsii.member(jsii_name="fromEcrRepository")
     @builtins.classmethod
     def from_ecr_repository(
         cls,
-        repository: _IRepository_e6004aa6,
+        repository: "_IRepository_e6004aa6",
         tag_or_digest: typing.Optional[builtins.str] = None,
-    ) -> IBuildImage:
+    ) -> "IBuildImage":
         '''Returns an ARM image running Linux from an ECR repository.
 
         NOTE: if the repository is external (i.e. imported), then we won't be able to add
@@ -12922,10 +12944,10 @@ class LinuxArmBuildImage(
             type_hints = typing.get_type_hints(_typecheckingstub__8bac2c238a1320fd111cc24abeca665ec620188c5670aac7e14cb0a622c1b449)
             check_type(argname="argument repository", value=repository, expected_type=type_hints["repository"])
             check_type(argname="argument tag_or_digest", value=tag_or_digest, expected_type=type_hints["tag_or_digest"])
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromEcrRepository", [repository, tag_or_digest]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromEcrRepository", [repository, tag_or_digest]))
 
     @jsii.member(jsii_name="runScriptBuildspec")
-    def run_script_buildspec(self, entrypoint: builtins.str) -> BuildSpec:
+    def run_script_buildspec(self, entrypoint: builtins.str) -> "BuildSpec":
         '''Make a buildspec to run the indicated script.
 
         :param entrypoint: -
@@ -12933,18 +12955,18 @@ class LinuxArmBuildImage(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__492afcd699a4dd81700a4e73242205503687796f2694728a9ab66d68b9fee443)
             check_type(argname="argument entrypoint", value=entrypoint, expected_type=type_hints["entrypoint"])
-        return typing.cast(BuildSpec, jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
+        return typing.cast("BuildSpec", jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
 
     @jsii.member(jsii_name="validate")
     def validate(
         self,
         *,
-        build_image: typing.Optional[IBuildImage] = None,
-        certificate: typing.Optional[typing.Union[BuildEnvironmentCertificate, typing.Dict[builtins.str, typing.Any]]] = None,
-        compute_type: typing.Optional[ComputeType] = None,
-        docker_server: typing.Optional[typing.Union[DockerServerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
-        fleet: typing.Optional[IFleet] = None,
+        build_image: typing.Optional["IBuildImage"] = None,
+        certificate: typing.Optional[typing.Union["BuildEnvironmentCertificate", typing.Dict[builtins.str, typing.Any]]] = None,
+        compute_type: typing.Optional["ComputeType"] = None,
+        docker_server: typing.Optional[typing.Union["DockerServerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
+        fleet: typing.Optional["IFleet"] = None,
         privileged: typing.Optional[builtins.bool] = None,
     ) -> typing.List[builtins.str]:
         '''Validates by checking the BuildEnvironments' images are not Lambda ComputeTypes.
@@ -12971,44 +12993,44 @@ class LinuxArmBuildImage(
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_STANDARD_1_0")
-    def AMAZON_LINUX_2_STANDARD_1_0(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_STANDARD_1_0(cls) -> "IBuildImage":
         '''(deprecated) Image "aws/codebuild/amazonlinux2-aarch64-standard:1.0".
 
         :deprecated: Use {@link LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_3_0 } instead.
 
         :stability: deprecated
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_STANDARD_1_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_STANDARD_1_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_STANDARD_2_0")
-    def AMAZON_LINUX_2_STANDARD_2_0(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_STANDARD_2_0(cls) -> "IBuildImage":
         '''Image "aws/codebuild/amazonlinux2-aarch64-standard:2.0" based on Amazon Linux 2.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_STANDARD_2_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_STANDARD_2_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_STANDARD_3_0")
-    def AMAZON_LINUX_2_STANDARD_3_0(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_STANDARD_3_0(cls) -> "IBuildImage":
         '''Image "aws/codebuild/amazonlinux2-aarch64-standard:3.0" based on Amazon Linux 2023.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_STANDARD_3_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_STANDARD_3_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_STANDARD_2_0")
-    def AMAZON_LINUX_2023_STANDARD_2_0(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_STANDARD_2_0(cls) -> "IBuildImage":
         '''Image "aws/codebuild/amazonlinux-aarch64-standard:2.0" based on Amazon Linux 2023.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_STANDARD_2_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_STANDARD_2_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_STANDARD_3_0")
-    def AMAZON_LINUX_2023_STANDARD_3_0(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_STANDARD_3_0(cls) -> "IBuildImage":
         '''Image "aws/codebuild/amazonlinux-aarch64-standard:3.0" based on Amazon Linux 2023.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_STANDARD_3_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_STANDARD_3_0"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultComputeType")
-    def default_compute_type(self) -> ComputeType:
+    def default_compute_type(self) -> "ComputeType":
         '''The default ``ComputeType`` to use with this image, if one was not specified in ``BuildEnvironment#computeType`` explicitly.'''
-        return typing.cast(ComputeType, jsii.get(self, "defaultComputeType"))
+        return typing.cast("ComputeType", jsii.get(self, "defaultComputeType"))
 
     @builtins.property
     @jsii.member(jsii_name="imageId")
@@ -13024,21 +13046,21 @@ class LinuxArmBuildImage(
 
     @builtins.property
     @jsii.member(jsii_name="imagePullPrincipalType")
-    def image_pull_principal_type(self) -> typing.Optional[ImagePullPrincipalType]:
+    def image_pull_principal_type(self) -> typing.Optional["ImagePullPrincipalType"]:
         '''The type of principal that CodeBuild will use to pull this build Docker image.'''
-        return typing.cast(typing.Optional[ImagePullPrincipalType], jsii.get(self, "imagePullPrincipalType"))
+        return typing.cast(typing.Optional["ImagePullPrincipalType"], jsii.get(self, "imagePullPrincipalType"))
 
     @builtins.property
     @jsii.member(jsii_name="repository")
-    def repository(self) -> typing.Optional[_IRepository_e6004aa6]:
+    def repository(self) -> typing.Optional["_IRepository_e6004aa6"]:
         '''An optional ECR repository that the image is hosted in.'''
-        return typing.cast(typing.Optional[_IRepository_e6004aa6], jsii.get(self, "repository"))
+        return typing.cast(typing.Optional["_IRepository_e6004aa6"], jsii.get(self, "repository"))
 
     @builtins.property
     @jsii.member(jsii_name="secretsManagerCredentials")
-    def secrets_manager_credentials(self) -> typing.Optional[_ISecret_6e020e6a]:
+    def secrets_manager_credentials(self) -> typing.Optional["_ISecret_6e020e6a"]:
         '''The secretsManagerCredentials for access to a private registry.'''
-        return typing.cast(typing.Optional[_ISecret_6e020e6a], jsii.get(self, "secretsManagerCredentials"))
+        return typing.cast(typing.Optional["_ISecret_6e020e6a"], jsii.get(self, "secretsManagerCredentials"))
 
 
 @jsii.implements(IBuildImage)
@@ -13063,7 +13085,7 @@ class LinuxArmLambdaBuildImage(
     '''
 
     @jsii.member(jsii_name="runScriptBuildspec")
-    def run_script_buildspec(self, entrypoint: builtins.str) -> BuildSpec:
+    def run_script_buildspec(self, entrypoint: builtins.str) -> "BuildSpec":
         '''Make a buildspec to run the indicated script.
 
         :param entrypoint: -
@@ -13071,18 +13093,18 @@ class LinuxArmLambdaBuildImage(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ef141bcdd93bafe47985d3f5cc4890eea7891aed6eaa67ef66150877eb5575ae)
             check_type(argname="argument entrypoint", value=entrypoint, expected_type=type_hints["entrypoint"])
-        return typing.cast(BuildSpec, jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
+        return typing.cast("BuildSpec", jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
 
     @jsii.member(jsii_name="validate")
     def validate(
         self,
         *,
-        build_image: typing.Optional[IBuildImage] = None,
-        certificate: typing.Optional[typing.Union[BuildEnvironmentCertificate, typing.Dict[builtins.str, typing.Any]]] = None,
-        compute_type: typing.Optional[ComputeType] = None,
-        docker_server: typing.Optional[typing.Union[DockerServerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
-        fleet: typing.Optional[IFleet] = None,
+        build_image: typing.Optional["IBuildImage"] = None,
+        certificate: typing.Optional[typing.Union["BuildEnvironmentCertificate", typing.Dict[builtins.str, typing.Any]]] = None,
+        compute_type: typing.Optional["ComputeType"] = None,
+        docker_server: typing.Optional[typing.Union["DockerServerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
+        fleet: typing.Optional["IFleet"] = None,
         privileged: typing.Optional[builtins.bool] = None,
     ) -> typing.List[builtins.str]:
         '''Allows the image a chance to validate whether the passed configuration is correct.
@@ -13109,99 +13131,99 @@ class LinuxArmLambdaBuildImage(
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_CORRETTO_11")
-    def AMAZON_LINUX_2_CORRETTO_11(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_CORRETTO_11(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:corretto11`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_CORRETTO_11"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_CORRETTO_11"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_CORRETTO_17")
-    def AMAZON_LINUX_2_CORRETTO_17(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_CORRETTO_17(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:corretto17`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_CORRETTO_17"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_CORRETTO_17"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_DOTNET_6")
-    def AMAZON_LINUX_2_DOTNET_6(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_DOTNET_6(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:dotnet6`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_DOTNET_6"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_DOTNET_6"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_GO_1_21")
-    def AMAZON_LINUX_2_GO_1_21(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_GO_1_21(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:go1.21`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_GO_1_21"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_GO_1_21"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_NODE_18")
-    def AMAZON_LINUX_2_NODE_18(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_NODE_18(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:nodejs18`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_NODE_18"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_NODE_18"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_PYTHON_3_11")
-    def AMAZON_LINUX_2_PYTHON_3_11(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_PYTHON_3_11(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:python3.11`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_PYTHON_3_11"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_PYTHON_3_11"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_RUBY_3_2")
-    def AMAZON_LINUX_2_RUBY_3_2(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_RUBY_3_2(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:ruby3.2`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_RUBY_3_2"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_RUBY_3_2"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_CORRETTO_21")
-    def AMAZON_LINUX_2023_CORRETTO_21(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_CORRETTO_21(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:corretto21`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_CORRETTO_21"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_CORRETTO_21"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_DOTNET_8")
-    def AMAZON_LINUX_2023_DOTNET_8(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_DOTNET_8(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:dotnet8`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_DOTNET_8"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_DOTNET_8"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_GO_1_24")
-    def AMAZON_LINUX_2023_GO_1_24(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_GO_1_24(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:go1.24`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_GO_1_24"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_GO_1_24"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_NODE_20")
-    def AMAZON_LINUX_2023_NODE_20(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_NODE_20(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:nodejs20`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_NODE_20"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_NODE_20"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_NODE_22")
-    def AMAZON_LINUX_2023_NODE_22(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_NODE_22(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:nodejs22`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_NODE_22"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_NODE_22"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_PYTHON_3_12")
-    def AMAZON_LINUX_2023_PYTHON_3_12(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_PYTHON_3_12(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:python3.12`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_PYTHON_3_12"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_PYTHON_3_12"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_PYTHON_3_13")
-    def AMAZON_LINUX_2023_PYTHON_3_13(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_PYTHON_3_13(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:python3.13`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_PYTHON_3_13"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_PYTHON_3_13"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_RUBY_3_4")
-    def AMAZON_LINUX_2023_RUBY_3_4(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_RUBY_3_4(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-aarch64-lambda-standard:ruby3.4`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_RUBY_3_4"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_RUBY_3_4"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultComputeType")
-    def default_compute_type(self) -> ComputeType:
+    def default_compute_type(self) -> "ComputeType":
         '''The default ``ComputeType`` to use with this image, if one was not specified in ``BuildEnvironment#computeType`` explicitly.'''
-        return typing.cast(ComputeType, jsii.get(self, "defaultComputeType"))
+        return typing.cast("ComputeType", jsii.get(self, "defaultComputeType"))
 
     @builtins.property
     @jsii.member(jsii_name="imageId")
@@ -13268,7 +13290,7 @@ class LinuxBuildImage(
     @builtins.classmethod
     def from_asset(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         directory: builtins.str,
@@ -13277,20 +13299,20 @@ class LinuxBuildImage(
         build_secrets: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         build_ssh: typing.Optional[builtins.str] = None,
         cache_disabled: typing.Optional[builtins.bool] = None,
-        cache_from: typing.Optional[typing.Sequence[typing.Union[_DockerCacheOption_58ef18ca, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache_to: typing.Optional[typing.Union[_DockerCacheOption_58ef18ca, typing.Dict[builtins.str, typing.Any]]] = None,
+        cache_from: typing.Optional[typing.Sequence[typing.Union["_DockerCacheOption_58ef18ca", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_to: typing.Optional[typing.Union["_DockerCacheOption_58ef18ca", typing.Dict[builtins.str, typing.Any]]] = None,
         display_name: typing.Optional[builtins.str] = None,
         file: typing.Optional[builtins.str] = None,
-        invalidation: typing.Optional[typing.Union[_DockerImageAssetInvalidationOptions_4deb8d45, typing.Dict[builtins.str, typing.Any]]] = None,
-        network_mode: typing.Optional[_NetworkMode_897e5081] = None,
+        invalidation: typing.Optional[typing.Union["_DockerImageAssetInvalidationOptions_4deb8d45", typing.Dict[builtins.str, typing.Any]]] = None,
+        network_mode: typing.Optional["_NetworkMode_897e5081"] = None,
         outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
-        platform: typing.Optional[_Platform_d16f3cf1] = None,
+        platform: typing.Optional["_Platform_d16f3cf1"] = None,
         target: typing.Optional[builtins.str] = None,
         extra_hash: typing.Optional[builtins.str] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
-    ) -> IBuildImage:
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
+    ) -> "IBuildImage":
         '''Uses an Docker image asset as a x86-64 Linux build image.
 
         :param scope: -
@@ -13341,11 +13363,11 @@ class LinuxBuildImage(
             ignore_mode=ignore_mode,
         )
 
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromAsset", [scope, id, props]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromAsset", [scope, id, props]))
 
     @jsii.member(jsii_name="fromCodeBuildImageId")
     @builtins.classmethod
-    def from_code_build_image_id(cls, id: builtins.str) -> IBuildImage:
+    def from_code_build_image_id(cls, id: builtins.str) -> "IBuildImage":
         '''Uses a Docker image provided by CodeBuild.
 
         :param id: The image identifier.
@@ -13361,7 +13383,7 @@ class LinuxBuildImage(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__612cf682e3f8a2f32a82b2ea0d019cd462107d1efc9403e75a4c9ab113fe2f89)
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromCodeBuildImageId", [id]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromCodeBuildImageId", [id]))
 
     @jsii.member(jsii_name="fromDockerRegistry")
     @builtins.classmethod
@@ -13369,8 +13391,8 @@ class LinuxBuildImage(
         cls,
         name: builtins.str,
         *,
-        secrets_manager_credentials: typing.Optional[_ISecret_6e020e6a] = None,
-    ) -> IBuildImage:
+        secrets_manager_credentials: typing.Optional["_ISecret_6e020e6a"] = None,
+    ) -> "IBuildImage":
         '''
         :param name: -
         :param secrets_manager_credentials: The credentials, stored in Secrets Manager, used for accessing the repository holding the image, if the repository is private. Default: no credentials will be used (we assume the repository is public)
@@ -13384,15 +13406,15 @@ class LinuxBuildImage(
             secrets_manager_credentials=secrets_manager_credentials
         )
 
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromDockerRegistry", [name, options]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromDockerRegistry", [name, options]))
 
     @jsii.member(jsii_name="fromEcrRepository")
     @builtins.classmethod
     def from_ecr_repository(
         cls,
-        repository: _IRepository_e6004aa6,
+        repository: "_IRepository_e6004aa6",
         tag_or_digest: typing.Optional[builtins.str] = None,
-    ) -> IBuildImage:
+    ) -> "IBuildImage":
         '''
         :param repository: The ECR repository.
         :param tag_or_digest: Image tag or digest (default "latest", digests must start with ``sha256:``).
@@ -13410,10 +13432,10 @@ class LinuxBuildImage(
             type_hints = typing.get_type_hints(_typecheckingstub__a09ceacd6d807be1da39433a277386759adfea3c3c6cd87d7e2273ea3d15735e)
             check_type(argname="argument repository", value=repository, expected_type=type_hints["repository"])
             check_type(argname="argument tag_or_digest", value=tag_or_digest, expected_type=type_hints["tag_or_digest"])
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromEcrRepository", [repository, tag_or_digest]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromEcrRepository", [repository, tag_or_digest]))
 
     @jsii.member(jsii_name="runScriptBuildspec")
-    def run_script_buildspec(self, entrypoint: builtins.str) -> BuildSpec:
+    def run_script_buildspec(self, entrypoint: builtins.str) -> "BuildSpec":
         '''Make a buildspec to run the indicated script.
 
         :param entrypoint: -
@@ -13421,18 +13443,18 @@ class LinuxBuildImage(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d99420a9e04e0707715441e930979348a82793a7537fb4ccb6e669a2218e96eb)
             check_type(argname="argument entrypoint", value=entrypoint, expected_type=type_hints["entrypoint"])
-        return typing.cast(BuildSpec, jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
+        return typing.cast("BuildSpec", jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
 
     @jsii.member(jsii_name="validate")
     def validate(
         self,
         *,
-        build_image: typing.Optional[IBuildImage] = None,
-        certificate: typing.Optional[typing.Union[BuildEnvironmentCertificate, typing.Dict[builtins.str, typing.Any]]] = None,
-        compute_type: typing.Optional[ComputeType] = None,
-        docker_server: typing.Optional[typing.Union[DockerServerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
-        fleet: typing.Optional[IFleet] = None,
+        build_image: typing.Optional["IBuildImage"] = None,
+        certificate: typing.Optional[typing.Union["BuildEnvironmentCertificate", typing.Dict[builtins.str, typing.Any]]] = None,
+        compute_type: typing.Optional["ComputeType"] = None,
+        docker_server: typing.Optional[typing.Union["DockerServerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
+        fleet: typing.Optional["IFleet"] = None,
         privileged: typing.Optional[builtins.bool] = None,
     ) -> typing.List[builtins.str]:
         '''Allows the image a chance to validate whether the passed configuration is correct.
@@ -13459,50 +13481,50 @@ class LinuxBuildImage(
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2")
-    def AMAZON_LINUX_2(cls) -> IBuildImage:
+    def AMAZON_LINUX_2(cls) -> "IBuildImage":
         '''
         :deprecated: Use {@link LinuxBuildImage.AMAZON_LINUX_2_5 } instead.
 
         :stability: deprecated
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_2")
-    def AMAZON_LINUX_2_2(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_2(cls) -> "IBuildImage":
         '''
         :deprecated: Use {@link LinuxBuildImage.AMAZON_LINUX_2_5 } instead.
 
         :stability: deprecated
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_2"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_2"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_3")
-    def AMAZON_LINUX_2_3(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_3(cls) -> "IBuildImage":
         '''(deprecated) The Amazon Linux 2 x86_64 standard image, version ``3.0``.
 
         :deprecated: Use {@link LinuxBuildImage.AMAZON_LINUX_2_5 } instead.
 
         :stability: deprecated
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_3"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_3"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_4")
-    def AMAZON_LINUX_2_4(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_4(cls) -> "IBuildImage":
         '''The Amazon Linux 2 x86_64 standard image, version ``4.0``.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_4"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_4"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_5")
-    def AMAZON_LINUX_2_5(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_5(cls) -> "IBuildImage":
         '''The Amazon Linux 2023 x86_64 standard image, version ``5.0``.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_5"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_5"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_ARM")
-    def AMAZON_LINUX_2_ARM(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_ARM(cls) -> "IBuildImage":
         '''(deprecated) Image "aws/codebuild/amazonlinux2-aarch64-standard:1.0".
 
         :deprecated: Use {@link LinuxArmBuildImage.AMAZON_LINUX_2_ARM_3 } instead.
@@ -13510,126 +13532,126 @@ class LinuxBuildImage(
         :see: {LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_1_0}
         :stability: deprecated
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_ARM"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_ARM"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_ARM_2")
-    def AMAZON_LINUX_2_ARM_2(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_ARM_2(cls) -> "IBuildImage":
         '''Image "aws/codebuild/amazonlinux2-aarch64-standard:2.0".
 
         :see: {LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_2_0}
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_ARM_2"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_ARM_2"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_ARM_3")
-    def AMAZON_LINUX_2_ARM_3(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_ARM_3(cls) -> "IBuildImage":
         '''Image "aws/codebuild/amazonlinux2-aarch64-standard:3.0".
 
         :see: {LinuxArmBuildImage.AMAZON_LINUX_2_STANDARD_3_0}
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_ARM_3"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_ARM_3"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_CORETTO_11")
-    def AMAZON_LINUX_2_CORETTO_11(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_CORETTO_11(cls) -> "IBuildImage":
         '''The Amazon Coretto 11 image x86_64, based on Amazon Linux 2.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_CORETTO_11"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_CORETTO_11"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_CORETTO_8")
-    def AMAZON_LINUX_2_CORETTO_8(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_CORETTO_8(cls) -> "IBuildImage":
         '''The Amazon Coretto 8 image x86_64, based on Amazon Linux 2.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_CORETTO_8"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_CORETTO_8"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_4")
-    def AMAZON_LINUX_2023_4(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_4(cls) -> "IBuildImage":
         '''The Amazon Linux 2023 x86_64 standard image, version ``4.0``.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_4"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_4"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_5")
-    def AMAZON_LINUX_2023_5(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_5(cls) -> "IBuildImage":
         '''The Amazon Linux 2023 x86_64 standard image, version ``5.0``.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_5"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_5"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_CORETTO_11")
-    def AMAZON_LINUX_2023_CORETTO_11(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_CORETTO_11(cls) -> "IBuildImage":
         '''The Amazon Coretto 11 image x86_64, based on Amazon Linux 2023.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_CORETTO_11"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_CORETTO_11"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_CORETTO_8")
-    def AMAZON_LINUX_2023_CORETTO_8(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_CORETTO_8(cls) -> "IBuildImage":
         '''The Amazon Coretto 8 image x86_64, based on Amazon Linux 2023.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_CORETTO_8"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_CORETTO_8"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="STANDARD_1_0")
-    def STANDARD_1_0(cls) -> IBuildImage:
+    def STANDARD_1_0(cls) -> "IBuildImage":
         '''
         :deprecated: Use {@link LinuxBuildImage.STANDARD_7_0 } instead.
 
         :stability: deprecated
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "STANDARD_1_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "STANDARD_1_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="STANDARD_2_0")
-    def STANDARD_2_0(cls) -> IBuildImage:
+    def STANDARD_2_0(cls) -> "IBuildImage":
         '''
         :deprecated: Use {@link LinuxBuildImage.STANDARD_7_0 } instead.
 
         :stability: deprecated
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "STANDARD_2_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "STANDARD_2_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="STANDARD_3_0")
-    def STANDARD_3_0(cls) -> IBuildImage:
+    def STANDARD_3_0(cls) -> "IBuildImage":
         '''
         :deprecated: Use {@link LinuxBuildImage.STANDARD_7_0 } instead.
 
         :stability: deprecated
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "STANDARD_3_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "STANDARD_3_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="STANDARD_4_0")
-    def STANDARD_4_0(cls) -> IBuildImage:
+    def STANDARD_4_0(cls) -> "IBuildImage":
         '''(deprecated) The ``aws/codebuild/standard:4.0`` build image.
 
         :deprecated: Use {@link LinuxBuildImage.STANDARD_7_0 } instead.
 
         :stability: deprecated
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "STANDARD_4_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "STANDARD_4_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="STANDARD_5_0")
-    def STANDARD_5_0(cls) -> IBuildImage:
+    def STANDARD_5_0(cls) -> "IBuildImage":
         '''The ``aws/codebuild/standard:5.0`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "STANDARD_5_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "STANDARD_5_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="STANDARD_6_0")
-    def STANDARD_6_0(cls) -> IBuildImage:
+    def STANDARD_6_0(cls) -> "IBuildImage":
         '''The ``aws/codebuild/standard:6.0`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "STANDARD_6_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "STANDARD_6_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="STANDARD_7_0")
-    def STANDARD_7_0(cls) -> IBuildImage:
+    def STANDARD_7_0(cls) -> "IBuildImage":
         '''The ``aws/codebuild/standard:7.0`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "STANDARD_7_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "STANDARD_7_0"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultComputeType")
-    def default_compute_type(self) -> ComputeType:
+    def default_compute_type(self) -> "ComputeType":
         '''The default ``ComputeType`` to use with this image, if one was not specified in ``BuildEnvironment#computeType`` explicitly.'''
-        return typing.cast(ComputeType, jsii.get(self, "defaultComputeType"))
+        return typing.cast("ComputeType", jsii.get(self, "defaultComputeType"))
 
     @builtins.property
     @jsii.member(jsii_name="imageId")
@@ -13645,21 +13667,21 @@ class LinuxBuildImage(
 
     @builtins.property
     @jsii.member(jsii_name="imagePullPrincipalType")
-    def image_pull_principal_type(self) -> typing.Optional[ImagePullPrincipalType]:
+    def image_pull_principal_type(self) -> typing.Optional["ImagePullPrincipalType"]:
         '''The type of principal that CodeBuild will use to pull this build Docker image.'''
-        return typing.cast(typing.Optional[ImagePullPrincipalType], jsii.get(self, "imagePullPrincipalType"))
+        return typing.cast(typing.Optional["ImagePullPrincipalType"], jsii.get(self, "imagePullPrincipalType"))
 
     @builtins.property
     @jsii.member(jsii_name="repository")
-    def repository(self) -> typing.Optional[_IRepository_e6004aa6]:
+    def repository(self) -> typing.Optional["_IRepository_e6004aa6"]:
         '''An optional ECR repository that the image is hosted in.'''
-        return typing.cast(typing.Optional[_IRepository_e6004aa6], jsii.get(self, "repository"))
+        return typing.cast(typing.Optional["_IRepository_e6004aa6"], jsii.get(self, "repository"))
 
     @builtins.property
     @jsii.member(jsii_name="secretsManagerCredentials")
-    def secrets_manager_credentials(self) -> typing.Optional[_ISecret_6e020e6a]:
+    def secrets_manager_credentials(self) -> typing.Optional["_ISecret_6e020e6a"]:
         '''The secretsManagerCredentials for access to a private registry.'''
-        return typing.cast(typing.Optional[_ISecret_6e020e6a], jsii.get(self, "secretsManagerCredentials"))
+        return typing.cast(typing.Optional["_ISecret_6e020e6a"], jsii.get(self, "secretsManagerCredentials"))
 
 
 @jsii.implements(IBuildImage)
@@ -13684,7 +13706,7 @@ class LinuxLambdaBuildImage(
     '''
 
     @jsii.member(jsii_name="runScriptBuildspec")
-    def run_script_buildspec(self, entrypoint: builtins.str) -> BuildSpec:
+    def run_script_buildspec(self, entrypoint: builtins.str) -> "BuildSpec":
         '''Make a buildspec to run the indicated script.
 
         :param entrypoint: -
@@ -13692,18 +13714,18 @@ class LinuxLambdaBuildImage(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__72f4d859d8cc2a62e6ee5404179d7476f0f4688d4b00bc13f2b1a177762f0c5a)
             check_type(argname="argument entrypoint", value=entrypoint, expected_type=type_hints["entrypoint"])
-        return typing.cast(BuildSpec, jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
+        return typing.cast("BuildSpec", jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
 
     @jsii.member(jsii_name="validate")
     def validate(
         self,
         *,
-        build_image: typing.Optional[IBuildImage] = None,
-        certificate: typing.Optional[typing.Union[BuildEnvironmentCertificate, typing.Dict[builtins.str, typing.Any]]] = None,
-        compute_type: typing.Optional[ComputeType] = None,
-        docker_server: typing.Optional[typing.Union[DockerServerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
-        fleet: typing.Optional[IFleet] = None,
+        build_image: typing.Optional["IBuildImage"] = None,
+        certificate: typing.Optional[typing.Union["BuildEnvironmentCertificate", typing.Dict[builtins.str, typing.Any]]] = None,
+        compute_type: typing.Optional["ComputeType"] = None,
+        docker_server: typing.Optional[typing.Union["DockerServerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
+        fleet: typing.Optional["IFleet"] = None,
         privileged: typing.Optional[builtins.bool] = None,
     ) -> typing.List[builtins.str]:
         '''Allows the image a chance to validate whether the passed configuration is correct.
@@ -13730,99 +13752,99 @@ class LinuxLambdaBuildImage(
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_CORRETTO_11")
-    def AMAZON_LINUX_2_CORRETTO_11(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_CORRETTO_11(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:corretto11`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_CORRETTO_11"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_CORRETTO_11"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_CORRETTO_17")
-    def AMAZON_LINUX_2_CORRETTO_17(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_CORRETTO_17(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:corretto17`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_CORRETTO_17"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_CORRETTO_17"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_DOTNET_6")
-    def AMAZON_LINUX_2_DOTNET_6(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_DOTNET_6(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:dotnet6`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_DOTNET_6"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_DOTNET_6"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_GO_1_21")
-    def AMAZON_LINUX_2_GO_1_21(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_GO_1_21(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:go1.21`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_GO_1_21"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_GO_1_21"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_NODE_18")
-    def AMAZON_LINUX_2_NODE_18(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_NODE_18(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:nodejs18`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_NODE_18"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_NODE_18"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_PYTHON_3_11")
-    def AMAZON_LINUX_2_PYTHON_3_11(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_PYTHON_3_11(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:python3.11`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_PYTHON_3_11"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_PYTHON_3_11"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2_RUBY_3_2")
-    def AMAZON_LINUX_2_RUBY_3_2(cls) -> IBuildImage:
+    def AMAZON_LINUX_2_RUBY_3_2(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:ruby3.2`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2_RUBY_3_2"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2_RUBY_3_2"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_CORRETTO_21")
-    def AMAZON_LINUX_2023_CORRETTO_21(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_CORRETTO_21(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:corretto21`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_CORRETTO_21"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_CORRETTO_21"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_DOTNET_8")
-    def AMAZON_LINUX_2023_DOTNET_8(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_DOTNET_8(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:dotnet8`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_DOTNET_8"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_DOTNET_8"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_GO_1_24")
-    def AMAZON_LINUX_2023_GO_1_24(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_GO_1_24(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:go1.24`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_GO_1_24"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_GO_1_24"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_NODE_20")
-    def AMAZON_LINUX_2023_NODE_20(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_NODE_20(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:nodejs20`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_NODE_20"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_NODE_20"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_NODE_22")
-    def AMAZON_LINUX_2023_NODE_22(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_NODE_22(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:nodejs22`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_NODE_22"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_NODE_22"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_PYTHON_3_12")
-    def AMAZON_LINUX_2023_PYTHON_3_12(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_PYTHON_3_12(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:python3.12`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_PYTHON_3_12"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_PYTHON_3_12"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_PYTHON_3_13")
-    def AMAZON_LINUX_2023_PYTHON_3_13(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_PYTHON_3_13(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:python3.13`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_PYTHON_3_13"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_PYTHON_3_13"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="AMAZON_LINUX_2023_RUBY_3_4")
-    def AMAZON_LINUX_2023_RUBY_3_4(cls) -> IBuildImage:
+    def AMAZON_LINUX_2023_RUBY_3_4(cls) -> "IBuildImage":
         '''The ``aws/codebuild/amazonlinux-x86_64-lambda-standard:ruby3.4`` build image.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "AMAZON_LINUX_2023_RUBY_3_4"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "AMAZON_LINUX_2023_RUBY_3_4"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultComputeType")
-    def default_compute_type(self) -> ComputeType:
+    def default_compute_type(self) -> "ComputeType":
         '''The default ``ComputeType`` to use with this image, if one was not specified in ``BuildEnvironment#computeType`` explicitly.'''
-        return typing.cast(ComputeType, jsii.get(self, "defaultComputeType"))
+        return typing.cast("ComputeType", jsii.get(self, "defaultComputeType"))
 
     @builtins.property
     @jsii.member(jsii_name="imageId")
@@ -13887,7 +13909,7 @@ class LoggingOptions:
     def __init__(
         self,
         *,
-        cloud_watch: typing.Optional[typing.Union[CloudWatchLoggingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        cloud_watch: typing.Optional[typing.Union["CloudWatchLoggingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         s3: typing.Optional[typing.Union["S3LoggingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Information about logs for the build project.
@@ -13924,13 +13946,13 @@ class LoggingOptions:
             self._values["s3"] = s3
 
     @builtins.property
-    def cloud_watch(self) -> typing.Optional[CloudWatchLoggingOptions]:
+    def cloud_watch(self) -> typing.Optional["CloudWatchLoggingOptions"]:
         '''Information about Amazon CloudWatch Logs for a build project.
 
         :default: - enabled
         '''
         result = self._values.get("cloud_watch")
-        return typing.cast(typing.Optional[CloudWatchLoggingOptions], result)
+        return typing.cast(typing.Optional["CloudWatchLoggingOptions"], result)
 
     @builtins.property
     def s3(self) -> typing.Optional["S3LoggingOptions"]:
@@ -14040,7 +14062,7 @@ class MacBuildImage(
     @builtins.classmethod
     def from_asset(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         directory: builtins.str,
@@ -14049,20 +14071,20 @@ class MacBuildImage(
         build_secrets: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         build_ssh: typing.Optional[builtins.str] = None,
         cache_disabled: typing.Optional[builtins.bool] = None,
-        cache_from: typing.Optional[typing.Sequence[typing.Union[_DockerCacheOption_58ef18ca, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache_to: typing.Optional[typing.Union[_DockerCacheOption_58ef18ca, typing.Dict[builtins.str, typing.Any]]] = None,
+        cache_from: typing.Optional[typing.Sequence[typing.Union["_DockerCacheOption_58ef18ca", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_to: typing.Optional[typing.Union["_DockerCacheOption_58ef18ca", typing.Dict[builtins.str, typing.Any]]] = None,
         display_name: typing.Optional[builtins.str] = None,
         file: typing.Optional[builtins.str] = None,
-        invalidation: typing.Optional[typing.Union[_DockerImageAssetInvalidationOptions_4deb8d45, typing.Dict[builtins.str, typing.Any]]] = None,
-        network_mode: typing.Optional[_NetworkMode_897e5081] = None,
+        invalidation: typing.Optional[typing.Union["_DockerImageAssetInvalidationOptions_4deb8d45", typing.Dict[builtins.str, typing.Any]]] = None,
+        network_mode: typing.Optional["_NetworkMode_897e5081"] = None,
         outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
-        platform: typing.Optional[_Platform_d16f3cf1] = None,
+        platform: typing.Optional["_Platform_d16f3cf1"] = None,
         target: typing.Optional[builtins.str] = None,
         extra_hash: typing.Optional[builtins.str] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
-    ) -> IBuildImage:
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
+    ) -> "IBuildImage":
         '''Uses an Docker image asset as a ARM MacOS build image.
 
         :param scope: -
@@ -14113,7 +14135,7 @@ class MacBuildImage(
             ignore_mode=ignore_mode,
         )
 
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromAsset", [scope, id, props]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromAsset", [scope, id, props]))
 
     @jsii.member(jsii_name="fromDockerRegistry")
     @builtins.classmethod
@@ -14121,8 +14143,8 @@ class MacBuildImage(
         cls,
         name: builtins.str,
         *,
-        secrets_manager_credentials: typing.Optional[_ISecret_6e020e6a] = None,
-    ) -> IBuildImage:
+        secrets_manager_credentials: typing.Optional["_ISecret_6e020e6a"] = None,
+    ) -> "IBuildImage":
         '''Makes an ARM MacOS build image from a Docker Hub image.
 
         :param name: -
@@ -14135,15 +14157,15 @@ class MacBuildImage(
             secrets_manager_credentials=secrets_manager_credentials
         )
 
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromDockerRegistry", [name, options]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromDockerRegistry", [name, options]))
 
     @jsii.member(jsii_name="fromEcrRepository")
     @builtins.classmethod
     def from_ecr_repository(
         cls,
-        repository: _IRepository_e6004aa6,
+        repository: "_IRepository_e6004aa6",
         tag_or_digest: typing.Optional[builtins.str] = None,
-    ) -> IBuildImage:
+    ) -> "IBuildImage":
         '''Makes an ARM MacOS build image from an ECR repository.
 
         :param repository: -
@@ -14153,10 +14175,10 @@ class MacBuildImage(
             type_hints = typing.get_type_hints(_typecheckingstub__86c63517f15ffab752d46ab62cdbf8292d45fa89a328c7481f83993a790eb5ee)
             check_type(argname="argument repository", value=repository, expected_type=type_hints["repository"])
             check_type(argname="argument tag_or_digest", value=tag_or_digest, expected_type=type_hints["tag_or_digest"])
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromEcrRepository", [repository, tag_or_digest]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromEcrRepository", [repository, tag_or_digest]))
 
     @jsii.member(jsii_name="runScriptBuildspec")
-    def run_script_buildspec(self, entrypoint: builtins.str) -> BuildSpec:
+    def run_script_buildspec(self, entrypoint: builtins.str) -> "BuildSpec":
         '''Make a buildspec to run the indicated script.
 
         :param entrypoint: -
@@ -14164,18 +14186,18 @@ class MacBuildImage(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__088f043d10fcd15701414055dc0a14f58d71044ecaba5c848f1c97225e6000fe)
             check_type(argname="argument entrypoint", value=entrypoint, expected_type=type_hints["entrypoint"])
-        return typing.cast(BuildSpec, jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
+        return typing.cast("BuildSpec", jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
 
     @jsii.member(jsii_name="validate")
     def validate(
         self,
         *,
-        build_image: typing.Optional[IBuildImage] = None,
-        certificate: typing.Optional[typing.Union[BuildEnvironmentCertificate, typing.Dict[builtins.str, typing.Any]]] = None,
-        compute_type: typing.Optional[ComputeType] = None,
-        docker_server: typing.Optional[typing.Union[DockerServerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
-        fleet: typing.Optional[IFleet] = None,
+        build_image: typing.Optional["IBuildImage"] = None,
+        certificate: typing.Optional[typing.Union["BuildEnvironmentCertificate", typing.Dict[builtins.str, typing.Any]]] = None,
+        compute_type: typing.Optional["ComputeType"] = None,
+        docker_server: typing.Optional[typing.Union["DockerServerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
+        fleet: typing.Optional["IFleet"] = None,
         privileged: typing.Optional[builtins.bool] = None,
     ) -> typing.List[builtins.str]:
         '''Allows the image a chance to validate whether the passed configuration is correct.
@@ -14202,15 +14224,21 @@ class MacBuildImage(
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="BASE_14")
-    def BASE_14(cls) -> IBuildImage:
+    def BASE_14(cls) -> "IBuildImage":
         '''Corresponds to the standard CodeBuild image ``aws/codebuild/macos-arm-base:14``.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "BASE_14"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "BASE_14"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="BASE_15")
+    def BASE_15(cls) -> "IBuildImage":
+        '''Corresponds to the CodeBuild image ``aws/codebuild/macos-arm-base:15``.'''
+        return typing.cast("IBuildImage", jsii.sget(cls, "BASE_15"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultComputeType")
-    def default_compute_type(self) -> ComputeType:
+    def default_compute_type(self) -> "ComputeType":
         '''The default ``ComputeType`` to use with this image, if one was not specified in ``BuildEnvironment#computeType`` explicitly.'''
-        return typing.cast(ComputeType, jsii.get(self, "defaultComputeType"))
+        return typing.cast("ComputeType", jsii.get(self, "defaultComputeType"))
 
     @builtins.property
     @jsii.member(jsii_name="imageId")
@@ -14226,21 +14254,21 @@ class MacBuildImage(
 
     @builtins.property
     @jsii.member(jsii_name="imagePullPrincipalType")
-    def image_pull_principal_type(self) -> typing.Optional[ImagePullPrincipalType]:
+    def image_pull_principal_type(self) -> typing.Optional["ImagePullPrincipalType"]:
         '''The type of principal that CodeBuild will use to pull this build Docker image.'''
-        return typing.cast(typing.Optional[ImagePullPrincipalType], jsii.get(self, "imagePullPrincipalType"))
+        return typing.cast(typing.Optional["ImagePullPrincipalType"], jsii.get(self, "imagePullPrincipalType"))
 
     @builtins.property
     @jsii.member(jsii_name="repository")
-    def repository(self) -> typing.Optional[_IRepository_e6004aa6]:
+    def repository(self) -> typing.Optional["_IRepository_e6004aa6"]:
         '''An optional ECR repository that the image is hosted in.'''
-        return typing.cast(typing.Optional[_IRepository_e6004aa6], jsii.get(self, "repository"))
+        return typing.cast(typing.Optional["_IRepository_e6004aa6"], jsii.get(self, "repository"))
 
     @builtins.property
     @jsii.member(jsii_name="secretsManagerCredentials")
-    def secrets_manager_credentials(self) -> typing.Optional[_ISecret_6e020e6a]:
+    def secrets_manager_credentials(self) -> typing.Optional["_ISecret_6e020e6a"]:
         '''The secretsManagerCredentials for access to a private registry.'''
-        return typing.cast(typing.Optional[_ISecret_6e020e6a], jsii.get(self, "secretsManagerCredentials"))
+        return typing.cast(typing.Optional["_ISecret_6e020e6a"], jsii.get(self, "secretsManagerCredentials"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_codebuild.MachineType")
@@ -14355,26 +14383,26 @@ class PipelineProjectProps(CommonProjectProps):
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         auto_retry_limit: typing.Optional[jsii.Number] = None,
         badge: typing.Optional[builtins.bool] = None,
-        build_spec: typing.Optional[BuildSpec] = None,
-        cache: typing.Optional[Cache] = None,
+        build_spec: typing.Optional["BuildSpec"] = None,
+        cache: typing.Optional["Cache"] = None,
         check_secrets_in_plain_text_env_variables: typing.Optional[builtins.bool] = None,
         concurrent_build_limit: typing.Optional[jsii.Number] = None,
         description: typing.Optional[builtins.str] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
-        environment: typing.Optional[typing.Union[BuildEnvironment, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
-        file_system_locations: typing.Optional[typing.Sequence[IFileSystemLocation]] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
+        environment: typing.Optional[typing.Union["BuildEnvironment", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_system_locations: typing.Optional[typing.Sequence["IFileSystemLocation"]] = None,
         grant_report_group_permissions: typing.Optional[builtins.bool] = None,
-        logging: typing.Optional[typing.Union[LoggingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        logging: typing.Optional[typing.Union["LoggingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         project_name: typing.Optional[builtins.str] = None,
-        queued_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        queued_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         ssm_session_permissions: typing.Optional[builtins.bool] = None,
-        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        subnet_selection: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         visibility: typing.Optional["ProjectVisibility"] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
     ) -> None:
         '''
         :param allow_all_outbound: Whether to allow the CodeBuild to send all network traffic. If set to false, you must individually add traffic rules to allow the CodeBuild project to connect to network targets. Only used if 'vpc' is supplied. Default: true
@@ -14575,7 +14603,7 @@ class PipelineProjectProps(CommonProjectProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def build_spec(self) -> typing.Optional[BuildSpec]:
+    def build_spec(self) -> typing.Optional["BuildSpec"]:
         '''Filename or contents of buildspec in JSON format.
 
         :default: - Empty buildspec.
@@ -14583,16 +14611,16 @@ class PipelineProjectProps(CommonProjectProps):
         :see: https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec-ref-example
         '''
         result = self._values.get("build_spec")
-        return typing.cast(typing.Optional[BuildSpec], result)
+        return typing.cast(typing.Optional["BuildSpec"], result)
 
     @builtins.property
-    def cache(self) -> typing.Optional[Cache]:
+    def cache(self) -> typing.Optional["Cache"]:
         '''Caching strategy to use.
 
         :default: Cache.none
         '''
         result = self._values.get("cache")
-        return typing.cast(typing.Optional[Cache], result)
+        return typing.cast(typing.Optional["Cache"], result)
 
     @builtins.property
     def check_secrets_in_plain_text_env_variables(
@@ -14629,38 +14657,38 @@ class PipelineProjectProps(CommonProjectProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''Encryption key to use to read and write artifacts.
 
         :default: - The AWS-managed CMK for Amazon Simple Storage Service (Amazon S3) is used.
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def environment(self) -> typing.Optional[BuildEnvironment]:
+    def environment(self) -> typing.Optional["BuildEnvironment"]:
         '''Build environment to use for the build.
 
         :default: BuildEnvironment.LinuxBuildImage.STANDARD_7_0
         '''
         result = self._values.get("environment")
-        return typing.cast(typing.Optional[BuildEnvironment], result)
+        return typing.cast(typing.Optional["BuildEnvironment"], result)
 
     @builtins.property
     def environment_variables(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, BuildEnvironmentVariable]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "BuildEnvironmentVariable"]]:
         '''Additional environment variables to add to the build environment.
 
         :default: - No additional environment variables are specified.
         '''
         result = self._values.get("environment_variables")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, BuildEnvironmentVariable]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "BuildEnvironmentVariable"]], result)
 
     @builtins.property
     def file_system_locations(
         self,
-    ) -> typing.Optional[typing.List[IFileSystemLocation]]:
+    ) -> typing.Optional[typing.List["IFileSystemLocation"]]:
         '''An  ProjectFileSystemLocation objects for a CodeBuild build project.
 
         A ProjectFileSystemLocation object specifies the identifier, location, mountOptions, mountPoint,
@@ -14669,7 +14697,7 @@ class PipelineProjectProps(CommonProjectProps):
         :default: - no file system locations
         '''
         result = self._values.get("file_system_locations")
-        return typing.cast(typing.Optional[typing.List[IFileSystemLocation]], result)
+        return typing.cast(typing.Optional[typing.List["IFileSystemLocation"]], result)
 
     @builtins.property
     def grant_report_group_permissions(self) -> typing.Optional[builtins.bool]:
@@ -14689,7 +14717,7 @@ class PipelineProjectProps(CommonProjectProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def logging(self) -> typing.Optional[LoggingOptions]:
+    def logging(self) -> typing.Optional["LoggingOptions"]:
         '''Information about logs for the build project.
 
         A project can create logs in Amazon CloudWatch Logs, an S3 bucket, or both.
@@ -14697,7 +14725,7 @@ class PipelineProjectProps(CommonProjectProps):
         :default: - no log configuration is set
         '''
         result = self._values.get("logging")
-        return typing.cast(typing.Optional[LoggingOptions], result)
+        return typing.cast(typing.Optional["LoggingOptions"], result)
 
     @builtins.property
     def project_name(self) -> typing.Optional[builtins.str]:
@@ -14709,7 +14737,7 @@ class PipelineProjectProps(CommonProjectProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def queued_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def queued_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of minutes after which AWS CodeBuild stops the build if it's still in queue.
 
         For valid values, see the timeoutInMinutes field in the AWS
@@ -14718,19 +14746,21 @@ class PipelineProjectProps(CommonProjectProps):
         :default: - no queue timeout is set
         '''
         result = self._values.get("queued_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Service Role to assume while running the build.
 
         :default: - A role will be created.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''What security group to associate with the codebuild project's network interfaces.
 
         If no security group is identified, one will be created automatically.
@@ -14740,7 +14770,7 @@ class PipelineProjectProps(CommonProjectProps):
         :default: - Security group will be automatically created.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
     def ssm_session_permissions(self) -> typing.Optional[builtins.bool]:
@@ -14766,7 +14796,7 @@ class PipelineProjectProps(CommonProjectProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def subnet_selection(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def subnet_selection(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where to place the network interfaces within the VPC.
 
         To access AWS services, your CodeBuild project needs to be in one of the following types of subnets:
@@ -14783,10 +14813,10 @@ class PipelineProjectProps(CommonProjectProps):
         :see: https://docs.aws.amazon.com/codebuild/latest/userguide/vpc-support.html
         '''
         result = self._values.get("subnet_selection")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of minutes after which AWS CodeBuild stops the build if it's not complete.
 
         For valid values, see the timeoutInMinutes field in the AWS
@@ -14795,7 +14825,7 @@ class PipelineProjectProps(CommonProjectProps):
         :default: Duration.hours(1)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def visibility(self) -> typing.Optional["ProjectVisibility"]:
@@ -14807,7 +14837,7 @@ class PipelineProjectProps(CommonProjectProps):
         return typing.cast(typing.Optional["ProjectVisibility"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''VPC network to place codebuild network interfaces.
 
         Specify this if the codebuild project needs to access resources in a VPC.
@@ -14815,7 +14845,7 @@ class PipelineProjectProps(CommonProjectProps):
         :default: - No VPC is specified.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14858,36 +14888,36 @@ class Project(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        artifacts: typing.Optional[IArtifacts] = None,
-        secondary_artifacts: typing.Optional[typing.Sequence[IArtifacts]] = None,
-        secondary_sources: typing.Optional[typing.Sequence[ISource]] = None,
-        source: typing.Optional[ISource] = None,
+        artifacts: typing.Optional["IArtifacts"] = None,
+        secondary_artifacts: typing.Optional[typing.Sequence["IArtifacts"]] = None,
+        secondary_sources: typing.Optional[typing.Sequence["ISource"]] = None,
+        source: typing.Optional["ISource"] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         auto_retry_limit: typing.Optional[jsii.Number] = None,
         badge: typing.Optional[builtins.bool] = None,
-        build_spec: typing.Optional[BuildSpec] = None,
-        cache: typing.Optional[Cache] = None,
+        build_spec: typing.Optional["BuildSpec"] = None,
+        cache: typing.Optional["Cache"] = None,
         check_secrets_in_plain_text_env_variables: typing.Optional[builtins.bool] = None,
         concurrent_build_limit: typing.Optional[jsii.Number] = None,
         description: typing.Optional[builtins.str] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
-        environment: typing.Optional[typing.Union[BuildEnvironment, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
-        file_system_locations: typing.Optional[typing.Sequence[IFileSystemLocation]] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
+        environment: typing.Optional[typing.Union["BuildEnvironment", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_system_locations: typing.Optional[typing.Sequence["IFileSystemLocation"]] = None,
         grant_report_group_permissions: typing.Optional[builtins.bool] = None,
-        logging: typing.Optional[typing.Union[LoggingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        logging: typing.Optional[typing.Union["LoggingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         project_name: typing.Optional[builtins.str] = None,
-        queued_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        queued_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         ssm_session_permissions: typing.Optional[builtins.bool] = None,
-        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        subnet_selection: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         visibility: typing.Optional["ProjectVisibility"] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -14960,10 +14990,10 @@ class Project(
     @builtins.classmethod
     def from_project_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         project_arn: builtins.str,
-    ) -> IProject:
+    ) -> "IProject":
         '''
         :param scope: -
         :param id: -
@@ -14974,16 +15004,16 @@ class Project(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument project_arn", value=project_arn, expected_type=type_hints["project_arn"])
-        return typing.cast(IProject, jsii.sinvoke(cls, "fromProjectArn", [scope, id, project_arn]))
+        return typing.cast("IProject", jsii.sinvoke(cls, "fromProjectArn", [scope, id, project_arn]))
 
     @jsii.member(jsii_name="fromProjectName")
     @builtins.classmethod
     def from_project_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         project_name: builtins.str,
-    ) -> IProject:
+    ) -> "IProject":
         '''Import a Project defined either outside the CDK, or in a different CDK Stack (and exported using the ``export`` method).
 
         :param scope: the parent Construct for this Construct.
@@ -15004,16 +15034,16 @@ class Project(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument project_name", value=project_name, expected_type=type_hints["project_name"])
-        return typing.cast(IProject, jsii.sinvoke(cls, "fromProjectName", [scope, id, project_name]))
+        return typing.cast("IProject", jsii.sinvoke(cls, "fromProjectName", [scope, id, project_name]))
 
     @jsii.member(jsii_name="serializeEnvVariables")
     @builtins.classmethod
     def serialize_env_variables(
         cls,
-        environment_variables: typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]],
+        environment_variables: typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]],
         validate_no_plain_text_secrets: typing.Optional[builtins.bool] = None,
-        principal: typing.Optional[_IGrantable_71c4f5de] = None,
-    ) -> typing.List[CfnProject.EnvironmentVariableProperty]:
+        principal: typing.Optional["_IGrantable_71c4f5de"] = None,
+    ) -> typing.List["CfnProject.EnvironmentVariableProperty"]:
         '''Convert the environment variables map of string to ``BuildEnvironmentVariable``, which is the customer-facing type, to a list of ``CfnProject.EnvironmentVariableProperty``, which is the representation of environment variables in CloudFormation.
 
         :param environment_variables: the map of string to environment variables.
@@ -15027,12 +15057,12 @@ class Project(
             check_type(argname="argument environment_variables", value=environment_variables, expected_type=type_hints["environment_variables"])
             check_type(argname="argument validate_no_plain_text_secrets", value=validate_no_plain_text_secrets, expected_type=type_hints["validate_no_plain_text_secrets"])
             check_type(argname="argument principal", value=principal, expected_type=type_hints["principal"])
-        return typing.cast(typing.List[CfnProject.EnvironmentVariableProperty], jsii.sinvoke(cls, "serializeEnvVariables", [environment_variables, validate_no_plain_text_secrets, principal]))
+        return typing.cast(typing.List["CfnProject.EnvironmentVariableProperty"], jsii.sinvoke(cls, "serializeEnvVariables", [environment_variables, validate_no_plain_text_secrets, principal]))
 
     @jsii.member(jsii_name="addFileSystemLocation")
     def add_file_system_location(
         self,
-        file_system_location: IFileSystemLocation,
+        file_system_location: "IFileSystemLocation",
     ) -> None:
         '''Adds a fileSystemLocation to the Project.
 
@@ -15044,7 +15074,7 @@ class Project(
         return typing.cast(None, jsii.invoke(self, "addFileSystemLocation", [file_system_location]))
 
     @jsii.member(jsii_name="addSecondaryArtifact")
-    def add_secondary_artifact(self, secondary_artifact: IArtifacts) -> None:
+    def add_secondary_artifact(self, secondary_artifact: "IArtifacts") -> None:
         '''Adds a secondary artifact to the Project.
 
         :param secondary_artifact: the artifact to add as a secondary artifact.
@@ -15057,7 +15087,7 @@ class Project(
         return typing.cast(None, jsii.invoke(self, "addSecondaryArtifact", [secondary_artifact]))
 
     @jsii.member(jsii_name="addSecondarySource")
-    def add_secondary_source(self, secondary_source: ISource) -> None:
+    def add_secondary_source(self, secondary_source: "ISource") -> None:
         '''Adds a secondary source to the Project.
 
         :param secondary_source: the source to add as a secondary source.
@@ -15070,7 +15100,7 @@ class Project(
         return typing.cast(None, jsii.invoke(self, "addSecondarySource", [secondary_source]))
 
     @jsii.member(jsii_name="addToRolePolicy")
-    def add_to_role_policy(self, statement: _PolicyStatement_0fe33853) -> None:
+    def add_to_role_policy(self, statement: "_PolicyStatement_0fe33853") -> None:
         '''Add a permission only if there's a policy attached.
 
         :param statement: The permissions statement to add.
@@ -15083,8 +15113,8 @@ class Project(
     @jsii.member(jsii_name="bindAsNotificationRuleSource")
     def bind_as_notification_rule_source(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
-    ) -> _NotificationRuleSourceConfig_20189a3e:
+        _scope: "_constructs_77d1e7e8.Construct",
+    ) -> "_NotificationRuleSourceConfig_20189a3e":
         '''Returns a source configuration for notification rule.
 
         :param _scope: -
@@ -15092,14 +15122,14 @@ class Project(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9e0fb39f144c7e8af0841ff3b7dbff45a68bd1c8a22d976da3bc1c5f7c5bc3d2)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(_NotificationRuleSourceConfig_20189a3e, jsii.invoke(self, "bindAsNotificationRuleSource", [_scope]))
+        return typing.cast("_NotificationRuleSourceConfig_20189a3e", jsii.invoke(self, "bindAsNotificationRuleSource", [_scope]))
 
     @jsii.member(jsii_name="bindToCodePipeline")
     def bind_to_code_pipeline(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
+        _scope: "_constructs_77d1e7e8.Construct",
         *,
-        artifact_bucket: _IBucket_42e086fd,
+        artifact_bucket: "_IBucket_42e086fd",
     ) -> None:
         '''A callback invoked when the given project is added to a CodePipeline.
 
@@ -15114,13 +15144,13 @@ class Project(
         return typing.cast(None, jsii.invoke(self, "bindToCodePipeline", [_scope, options]))
 
     @jsii.member(jsii_name="enableBatchBuilds")
-    def enable_batch_builds(self) -> typing.Optional[BatchBuildConfig]:
+    def enable_batch_builds(self) -> typing.Optional["BatchBuildConfig"]:
         '''Enable batch builds.
 
         Returns an object contining the batch service role if batch builds
         could be enabled.
         '''
-        return typing.cast(typing.Optional[BatchBuildConfig], jsii.invoke(self, "enableBatchBuilds", []))
+        return typing.cast(typing.Optional["BatchBuildConfig"], jsii.invoke(self, "enableBatchBuilds", []))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -15132,14 +15162,14 @@ class Project(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''
         :param metric_name: The name of the metric.
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -15175,7 +15205,7 @@ class Project(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricBuilds")
     def metric_builds(
@@ -15186,14 +15216,14 @@ class Project(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measures the number of builds triggered.
 
         Units: Count
@@ -15230,7 +15260,7 @@ class Project(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricBuilds", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricBuilds", [props]))
 
     @jsii.member(jsii_name="metricDuration")
     def metric_duration(
@@ -15241,14 +15271,14 @@ class Project(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measures the duration of all builds over time.
 
         Units: Seconds
@@ -15285,7 +15315,7 @@ class Project(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDuration", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDuration", [props]))
 
     @jsii.member(jsii_name="metricFailedBuilds")
     def metric_failed_builds(
@@ -15296,14 +15326,14 @@ class Project(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measures the number of builds that failed because of client error or because of a timeout.
 
         Units: Count
@@ -15340,7 +15370,7 @@ class Project(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricFailedBuilds", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricFailedBuilds", [props]))
 
     @jsii.member(jsii_name="metricSucceededBuilds")
     def metric_succeeded_builds(
@@ -15351,14 +15381,14 @@ class Project(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Measures the number of successful builds.
 
         Units: Count
@@ -15395,20 +15425,20 @@ class Project(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSucceededBuilds", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSucceededBuilds", [props]))
 
     @jsii.member(jsii_name="notifyOn")
     def notify_on(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         events: typing.Sequence["ProjectNotificationEvents"],
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar Notification rule triggered when the project events emitted by you specified, it very similar to ``onEvent`` API.
 
         You can also use the methods ``notifyOnBuildSucceeded`` and
@@ -15434,19 +15464,19 @@ class Project(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOn", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOn", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnBuildFailed")
     def notify_on_build_failed(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar notification rule which triggers when a build fails.
 
         :param id: -
@@ -15467,19 +15497,19 @@ class Project(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnBuildFailed", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnBuildFailed", [id, target, options]))
 
     @jsii.member(jsii_name="notifyOnBuildSucceeded")
     def notify_on_build_succeeded(
         self,
         id: builtins.str,
-        target: _INotificationRuleTarget_faa3b79b,
+        target: "_INotificationRuleTarget_faa3b79b",
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-    ) -> _INotificationRule_71939426:
+    ) -> "_INotificationRule_71939426":
         '''Defines a CodeStar notification rule which triggers when a build completes successfully.
 
         :param id: -
@@ -15500,19 +15530,19 @@ class Project(
             notification_rule_name=notification_rule_name,
         )
 
-        return typing.cast(_INotificationRule_71939426, jsii.invoke(self, "notifyOnBuildSucceeded", [id, target, options]))
+        return typing.cast("_INotificationRule_71939426", jsii.invoke(self, "notifyOnBuildSucceeded", [id, target, options]))
 
     @jsii.member(jsii_name="onBuildFailed")
     def on_build_failed(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an event rule which triggers when a build fails.
 
         To access fields from the event in the event target input,
@@ -15536,19 +15566,19 @@ class Project(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onBuildFailed", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onBuildFailed", [id, options]))
 
     @jsii.member(jsii_name="onBuildStarted")
     def on_build_started(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an event rule which triggers when a build starts.
 
         To access fields from the event in the event target input,
@@ -15572,19 +15602,19 @@ class Project(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onBuildStarted", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onBuildStarted", [id, options]))
 
     @jsii.member(jsii_name="onBuildSucceeded")
     def on_build_succeeded(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an event rule which triggers when a build completes successfully.
 
         To access fields from the event in the event target input,
@@ -15608,19 +15638,19 @@ class Project(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onBuildSucceeded", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onBuildSucceeded", [id, options]))
 
     @jsii.member(jsii_name="onEvent")
     def on_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule triggered when something happens with this project.
 
         :param id: -
@@ -15643,19 +15673,19 @@ class Project(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onEvent", [id, options]))
 
     @jsii.member(jsii_name="onPhaseChange")
     def on_phase_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule that triggers upon phase change of this build project.
 
         :param id: -
@@ -15678,19 +15708,19 @@ class Project(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onPhaseChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onPhaseChange", [id, options]))
 
     @jsii.member(jsii_name="onStateChange")
     def on_state_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule triggered when the build project state changes.
 
         You can filter specific build status events using an event
@@ -15734,7 +15764,7 @@ class Project(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onStateChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onStateChange", [id, options]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -15744,18 +15774,18 @@ class Project(
 
     @builtins.property
     @jsii.member(jsii_name="connections")
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''Access the Connections object.
 
         Will fail if this Project does not have a VPC set.
         '''
-        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The principal to grant permissions to.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
     @builtins.property
     @jsii.member(jsii_name="projectArn")
@@ -15771,9 +15801,9 @@ class Project(
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role for this project.'''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_codebuild.ProjectNotificationEvents")
@@ -15813,10 +15843,10 @@ class ProjectNotifyOnOptions(_NotificationRuleOptions_dff73281):
         self,
         *,
         created_by: typing.Optional[builtins.str] = None,
-        detail_type: typing.Optional[_DetailType_cf8135e7] = None,
+        detail_type: typing.Optional["_DetailType_cf8135e7"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         notification_rule_name: typing.Optional[builtins.str] = None,
-        events: typing.Sequence[ProjectNotificationEvents],
+        events: typing.Sequence["ProjectNotificationEvents"],
     ) -> None:
         '''Additional options to pass to the notification rule.
 
@@ -15876,7 +15906,7 @@ class ProjectNotifyOnOptions(_NotificationRuleOptions_dff73281):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def detail_type(self) -> typing.Optional[_DetailType_cf8135e7]:
+    def detail_type(self) -> typing.Optional["_DetailType_cf8135e7"]:
         '''The level of detail to include in the notifications for this resource.
 
         BASIC will include only the contents of the event as it would appear in AWS CloudWatch.
@@ -15885,7 +15915,7 @@ class ProjectNotifyOnOptions(_NotificationRuleOptions_dff73281):
         :default: DetailType.FULL
         '''
         result = self._values.get("detail_type")
-        return typing.cast(typing.Optional[_DetailType_cf8135e7], result)
+        return typing.cast(typing.Optional["_DetailType_cf8135e7"], result)
 
     @builtins.property
     def enabled(self) -> typing.Optional[builtins.bool]:
@@ -15910,7 +15940,7 @@ class ProjectNotifyOnOptions(_NotificationRuleOptions_dff73281):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def events(self) -> typing.List[ProjectNotificationEvents]:
+    def events(self) -> typing.List["ProjectNotificationEvents"]:
         '''A list of event types associated with this notification rule for CodeBuild Project.
 
         For a complete list of event types and IDs, see Notification concepts in the Developer Tools Console User Guide.
@@ -15919,7 +15949,7 @@ class ProjectNotifyOnOptions(_NotificationRuleOptions_dff73281):
         '''
         result = self._values.get("events")
         assert result is not None, "Required property 'events' is missing"
-        return typing.cast(typing.List[ProjectNotificationEvents], result)
+        return typing.cast(typing.List["ProjectNotificationEvents"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15973,30 +16003,30 @@ class ProjectProps(CommonProjectProps):
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         auto_retry_limit: typing.Optional[jsii.Number] = None,
         badge: typing.Optional[builtins.bool] = None,
-        build_spec: typing.Optional[BuildSpec] = None,
-        cache: typing.Optional[Cache] = None,
+        build_spec: typing.Optional["BuildSpec"] = None,
+        cache: typing.Optional["Cache"] = None,
         check_secrets_in_plain_text_env_variables: typing.Optional[builtins.bool] = None,
         concurrent_build_limit: typing.Optional[jsii.Number] = None,
         description: typing.Optional[builtins.str] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
-        environment: typing.Optional[typing.Union[BuildEnvironment, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
-        file_system_locations: typing.Optional[typing.Sequence[IFileSystemLocation]] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
+        environment: typing.Optional[typing.Union["BuildEnvironment", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_system_locations: typing.Optional[typing.Sequence["IFileSystemLocation"]] = None,
         grant_report_group_permissions: typing.Optional[builtins.bool] = None,
-        logging: typing.Optional[typing.Union[LoggingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        logging: typing.Optional[typing.Union["LoggingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         project_name: typing.Optional[builtins.str] = None,
-        queued_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        queued_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         ssm_session_permissions: typing.Optional[builtins.bool] = None,
-        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        subnet_selection: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         visibility: typing.Optional["ProjectVisibility"] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        artifacts: typing.Optional[IArtifacts] = None,
-        secondary_artifacts: typing.Optional[typing.Sequence[IArtifacts]] = None,
-        secondary_sources: typing.Optional[typing.Sequence[ISource]] = None,
-        source: typing.Optional[ISource] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        artifacts: typing.Optional["IArtifacts"] = None,
+        secondary_artifacts: typing.Optional[typing.Sequence["IArtifacts"]] = None,
+        secondary_sources: typing.Optional[typing.Sequence["ISource"]] = None,
+        source: typing.Optional["ISource"] = None,
     ) -> None:
         '''
         :param allow_all_outbound: Whether to allow the CodeBuild to send all network traffic. If set to false, you must individually add traffic rules to allow the CodeBuild project to connect to network targets. Only used if 'vpc' is supplied. Default: true
@@ -16174,7 +16204,7 @@ class ProjectProps(CommonProjectProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def build_spec(self) -> typing.Optional[BuildSpec]:
+    def build_spec(self) -> typing.Optional["BuildSpec"]:
         '''Filename or contents of buildspec in JSON format.
 
         :default: - Empty buildspec.
@@ -16182,16 +16212,16 @@ class ProjectProps(CommonProjectProps):
         :see: https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec-ref-example
         '''
         result = self._values.get("build_spec")
-        return typing.cast(typing.Optional[BuildSpec], result)
+        return typing.cast(typing.Optional["BuildSpec"], result)
 
     @builtins.property
-    def cache(self) -> typing.Optional[Cache]:
+    def cache(self) -> typing.Optional["Cache"]:
         '''Caching strategy to use.
 
         :default: Cache.none
         '''
         result = self._values.get("cache")
-        return typing.cast(typing.Optional[Cache], result)
+        return typing.cast(typing.Optional["Cache"], result)
 
     @builtins.property
     def check_secrets_in_plain_text_env_variables(
@@ -16228,38 +16258,38 @@ class ProjectProps(CommonProjectProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''Encryption key to use to read and write artifacts.
 
         :default: - The AWS-managed CMK for Amazon Simple Storage Service (Amazon S3) is used.
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def environment(self) -> typing.Optional[BuildEnvironment]:
+    def environment(self) -> typing.Optional["BuildEnvironment"]:
         '''Build environment to use for the build.
 
         :default: BuildEnvironment.LinuxBuildImage.STANDARD_7_0
         '''
         result = self._values.get("environment")
-        return typing.cast(typing.Optional[BuildEnvironment], result)
+        return typing.cast(typing.Optional["BuildEnvironment"], result)
 
     @builtins.property
     def environment_variables(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, BuildEnvironmentVariable]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "BuildEnvironmentVariable"]]:
         '''Additional environment variables to add to the build environment.
 
         :default: - No additional environment variables are specified.
         '''
         result = self._values.get("environment_variables")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, BuildEnvironmentVariable]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "BuildEnvironmentVariable"]], result)
 
     @builtins.property
     def file_system_locations(
         self,
-    ) -> typing.Optional[typing.List[IFileSystemLocation]]:
+    ) -> typing.Optional[typing.List["IFileSystemLocation"]]:
         '''An  ProjectFileSystemLocation objects for a CodeBuild build project.
 
         A ProjectFileSystemLocation object specifies the identifier, location, mountOptions, mountPoint,
@@ -16268,7 +16298,7 @@ class ProjectProps(CommonProjectProps):
         :default: - no file system locations
         '''
         result = self._values.get("file_system_locations")
-        return typing.cast(typing.Optional[typing.List[IFileSystemLocation]], result)
+        return typing.cast(typing.Optional[typing.List["IFileSystemLocation"]], result)
 
     @builtins.property
     def grant_report_group_permissions(self) -> typing.Optional[builtins.bool]:
@@ -16288,7 +16318,7 @@ class ProjectProps(CommonProjectProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def logging(self) -> typing.Optional[LoggingOptions]:
+    def logging(self) -> typing.Optional["LoggingOptions"]:
         '''Information about logs for the build project.
 
         A project can create logs in Amazon CloudWatch Logs, an S3 bucket, or both.
@@ -16296,7 +16326,7 @@ class ProjectProps(CommonProjectProps):
         :default: - no log configuration is set
         '''
         result = self._values.get("logging")
-        return typing.cast(typing.Optional[LoggingOptions], result)
+        return typing.cast(typing.Optional["LoggingOptions"], result)
 
     @builtins.property
     def project_name(self) -> typing.Optional[builtins.str]:
@@ -16308,7 +16338,7 @@ class ProjectProps(CommonProjectProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def queued_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def queued_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of minutes after which AWS CodeBuild stops the build if it's still in queue.
 
         For valid values, see the timeoutInMinutes field in the AWS
@@ -16317,19 +16347,21 @@ class ProjectProps(CommonProjectProps):
         :default: - no queue timeout is set
         '''
         result = self._values.get("queued_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Service Role to assume while running the build.
 
         :default: - A role will be created.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''What security group to associate with the codebuild project's network interfaces.
 
         If no security group is identified, one will be created automatically.
@@ -16339,7 +16371,7 @@ class ProjectProps(CommonProjectProps):
         :default: - Security group will be automatically created.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
     def ssm_session_permissions(self) -> typing.Optional[builtins.bool]:
@@ -16365,7 +16397,7 @@ class ProjectProps(CommonProjectProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def subnet_selection(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def subnet_selection(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where to place the network interfaces within the VPC.
 
         To access AWS services, your CodeBuild project needs to be in one of the following types of subnets:
@@ -16382,10 +16414,10 @@ class ProjectProps(CommonProjectProps):
         :see: https://docs.aws.amazon.com/codebuild/latest/userguide/vpc-support.html
         '''
         result = self._values.get("subnet_selection")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of minutes after which AWS CodeBuild stops the build if it's not complete.
 
         For valid values, see the timeoutInMinutes field in the AWS
@@ -16394,7 +16426,7 @@ class ProjectProps(CommonProjectProps):
         :default: Duration.hours(1)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def visibility(self) -> typing.Optional["ProjectVisibility"]:
@@ -16406,7 +16438,7 @@ class ProjectProps(CommonProjectProps):
         return typing.cast(typing.Optional["ProjectVisibility"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''VPC network to place codebuild network interfaces.
 
         Specify this if the codebuild project needs to access resources in a VPC.
@@ -16414,10 +16446,10 @@ class ProjectProps(CommonProjectProps):
         :default: - No VPC is specified.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def artifacts(self) -> typing.Optional[IArtifacts]:
+    def artifacts(self) -> typing.Optional["IArtifacts"]:
         '''Defines where build artifacts will be stored.
 
         Could be: PipelineBuildArtifacts, NoArtifacts and S3Artifacts.
@@ -16425,10 +16457,10 @@ class ProjectProps(CommonProjectProps):
         :default: NoArtifacts
         '''
         result = self._values.get("artifacts")
-        return typing.cast(typing.Optional[IArtifacts], result)
+        return typing.cast(typing.Optional["IArtifacts"], result)
 
     @builtins.property
-    def secondary_artifacts(self) -> typing.Optional[typing.List[IArtifacts]]:
+    def secondary_artifacts(self) -> typing.Optional[typing.List["IArtifacts"]]:
         '''The secondary artifacts for the Project.
 
         Can also be added after the Project has been created by using the ``Project#addSecondaryArtifact`` method.
@@ -16438,10 +16470,10 @@ class ProjectProps(CommonProjectProps):
         :see: https://docs.aws.amazon.com/codebuild/latest/userguide/sample-multi-in-out.html
         '''
         result = self._values.get("secondary_artifacts")
-        return typing.cast(typing.Optional[typing.List[IArtifacts]], result)
+        return typing.cast(typing.Optional[typing.List["IArtifacts"]], result)
 
     @builtins.property
-    def secondary_sources(self) -> typing.Optional[typing.List[ISource]]:
+    def secondary_sources(self) -> typing.Optional[typing.List["ISource"]]:
         '''The secondary sources for the Project.
 
         Can be also added after the Project has been created by using the ``Project#addSecondarySource`` method.
@@ -16451,10 +16483,10 @@ class ProjectProps(CommonProjectProps):
         :see: https://docs.aws.amazon.com/codebuild/latest/userguide/sample-multi-in-out.html
         '''
         result = self._values.get("secondary_sources")
-        return typing.cast(typing.Optional[typing.List[ISource]], result)
+        return typing.cast(typing.Optional[typing.List["ISource"]], result)
 
     @builtins.property
-    def source(self) -> typing.Optional[ISource]:
+    def source(self) -> typing.Optional["ISource"]:
         '''The source of the build.
 
         *Note*: if ``NoSource`` is given as the source,
@@ -16463,7 +16495,7 @@ class ProjectProps(CommonProjectProps):
         :default: - NoSource
         '''
         result = self._values.get("source")
-        return typing.cast(typing.Optional[ISource], result)
+        return typing.cast(typing.Optional["ISource"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16530,12 +16562,12 @@ class ReportGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         delete_reports: typing.Optional[builtins.bool] = None,
-        export_bucket: typing.Optional[_IBucket_42e086fd] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        export_bucket: typing.Optional["_IBucket_42e086fd"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         report_group_name: typing.Optional[builtins.str] = None,
         type: typing.Optional["ReportGroupType"] = None,
         zip_export: typing.Optional[builtins.bool] = None,
@@ -16569,10 +16601,10 @@ class ReportGroup(
     @builtins.classmethod
     def from_report_group_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         report_group_name: builtins.str,
-    ) -> IReportGroup:
+    ) -> "IReportGroup":
         '''Reference an existing ReportGroup, defined outside of the CDK code, by name.
 
         :param scope: -
@@ -16584,10 +16616,10 @@ class ReportGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument report_group_name", value=report_group_name, expected_type=type_hints["report_group_name"])
-        return typing.cast(IReportGroup, jsii.sinvoke(cls, "fromReportGroupName", [scope, id, report_group_name]))
+        return typing.cast("IReportGroup", jsii.sinvoke(cls, "fromReportGroupName", [scope, id, report_group_name]))
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants the given entity permissions to write (that is, upload reports to) this report group.
 
         :param identity: -
@@ -16595,7 +16627,7 @@ class ReportGroup(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0c43f1b89e5327905cbd3ab855ebe25b298798e44abb2a2f958ea30261160e4e)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWrite", [identity]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -16617,8 +16649,8 @@ class ReportGroup(
 
     @builtins.property
     @jsii.member(jsii_name="exportBucket")
-    def _export_bucket(self) -> typing.Optional[_IBucket_42e086fd]:
-        return typing.cast(typing.Optional[_IBucket_42e086fd], jsii.get(self, "exportBucket"))
+    def _export_bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], jsii.get(self, "exportBucket"))
 
     @builtins.property
     @jsii.member(jsii_name="type")
@@ -16643,8 +16675,8 @@ class ReportGroupProps:
         self,
         *,
         delete_reports: typing.Optional[builtins.bool] = None,
-        export_bucket: typing.Optional[_IBucket_42e086fd] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        export_bucket: typing.Optional["_IBucket_42e086fd"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         report_group_name: typing.Optional[builtins.str] = None,
         type: typing.Optional["ReportGroupType"] = None,
         zip_export: typing.Optional[builtins.bool] = None,
@@ -16718,16 +16750,16 @@ class ReportGroupProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def export_bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def export_bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''An optional S3 bucket to export the reports to.
 
         :default: - the reports will not be exported
         '''
         result = self._values.get("export_bucket")
-        return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''What to do when this resource is deleted from a stack.
 
         As CodeBuild does not allow deleting a ResourceGroup that has reports inside of it,
@@ -16736,7 +16768,7 @@ class ReportGroupProps:
         :default: RemovalPolicy.RETAIN
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
     def report_group_name(self) -> typing.Optional[builtins.str]:
@@ -16837,7 +16869,7 @@ class S3ArtifactsProps(ArtifactsProps):
         self,
         *,
         identifier: typing.Optional[builtins.str] = None,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         encryption: typing.Optional[builtins.bool] = None,
         include_build_id: typing.Optional[builtins.bool] = None,
         name: typing.Optional[builtins.str] = None,
@@ -16909,11 +16941,11 @@ class S3ArtifactsProps(ArtifactsProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''The name of the output bucket.'''
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
     def encryption(self) -> typing.Optional[builtins.bool]:
@@ -16997,7 +17029,7 @@ class S3LoggingOptions:
     def __init__(
         self,
         *,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         enabled: typing.Optional[builtins.bool] = None,
         encrypted: typing.Optional[builtins.bool] = None,
         prefix: typing.Optional[builtins.str] = None,
@@ -17038,11 +17070,11 @@ class S3LoggingOptions:
             self._values["prefix"] = prefix
 
     @builtins.property
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''The S3 Bucket to send logs to.'''
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
     def enabled(self) -> typing.Optional[builtins.bool]:
@@ -17144,10 +17176,10 @@ class Source(
         fetch_submodules: typing.Optional[builtins.bool] = None,
         report_build_status: typing.Optional[builtins.bool] = None,
         webhook: typing.Optional[builtins.bool] = None,
-        webhook_filters: typing.Optional[typing.Sequence[FilterGroup]] = None,
+        webhook_filters: typing.Optional[typing.Sequence["FilterGroup"]] = None,
         webhook_triggers_batch_build: typing.Optional[builtins.bool] = None,
         identifier: typing.Optional[builtins.str] = None,
-    ) -> ISource:
+    ) -> "ISource":
         '''
         :param owner: The BitBucket account/user that owns the repo.
         :param repo: The name of the repo (without the username).
@@ -17177,19 +17209,19 @@ class Source(
             identifier=identifier,
         )
 
-        return typing.cast(ISource, jsii.sinvoke(cls, "bitBucket", [props]))
+        return typing.cast("ISource", jsii.sinvoke(cls, "bitBucket", [props]))
 
     @jsii.member(jsii_name="codeCommit")
     @builtins.classmethod
     def code_commit(
         cls,
         *,
-        repository: _IRepository_e7c062a1,
+        repository: "_IRepository_e7c062a1",
         branch_or_ref: typing.Optional[builtins.str] = None,
         clone_depth: typing.Optional[jsii.Number] = None,
         fetch_submodules: typing.Optional[builtins.bool] = None,
         identifier: typing.Optional[builtins.str] = None,
-    ) -> ISource:
+    ) -> "ISource":
         '''
         :param repository: 
         :param branch_or_ref: The commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. Default: the default branch's HEAD commit ID is used
@@ -17205,7 +17237,7 @@ class Source(
             identifier=identifier,
         )
 
-        return typing.cast(ISource, jsii.sinvoke(cls, "codeCommit", [props]))
+        return typing.cast("ISource", jsii.sinvoke(cls, "codeCommit", [props]))
 
     @jsii.member(jsii_name="gitHub")
     @builtins.classmethod
@@ -17221,10 +17253,10 @@ class Source(
         repo: typing.Optional[builtins.str] = None,
         report_build_status: typing.Optional[builtins.bool] = None,
         webhook: typing.Optional[builtins.bool] = None,
-        webhook_filters: typing.Optional[typing.Sequence[FilterGroup]] = None,
+        webhook_filters: typing.Optional[typing.Sequence["FilterGroup"]] = None,
         webhook_triggers_batch_build: typing.Optional[builtins.bool] = None,
         identifier: typing.Optional[builtins.str] = None,
-    ) -> ISource:
+    ) -> "ISource":
         '''
         :param owner: The GitHub Organization/user that owns the repo.
         :param branch_or_ref: The commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. Default: the default branch's HEAD commit ID is used
@@ -17254,7 +17286,7 @@ class Source(
             identifier=identifier,
         )
 
-        return typing.cast(ISource, jsii.sinvoke(cls, "gitHub", [props]))
+        return typing.cast("ISource", jsii.sinvoke(cls, "gitHub", [props]))
 
     @jsii.member(jsii_name="gitHubEnterprise")
     @builtins.classmethod
@@ -17270,10 +17302,10 @@ class Source(
         ignore_ssl_errors: typing.Optional[builtins.bool] = None,
         report_build_status: typing.Optional[builtins.bool] = None,
         webhook: typing.Optional[builtins.bool] = None,
-        webhook_filters: typing.Optional[typing.Sequence[FilterGroup]] = None,
+        webhook_filters: typing.Optional[typing.Sequence["FilterGroup"]] = None,
         webhook_triggers_batch_build: typing.Optional[builtins.bool] = None,
         identifier: typing.Optional[builtins.str] = None,
-    ) -> ISource:
+    ) -> "ISource":
         '''
         :param https_clone_url: The HTTPS URL of the repository in your GitHub Enterprise installation.
         :param branch_or_ref: The commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. Default: the default branch's HEAD commit ID is used
@@ -17303,18 +17335,18 @@ class Source(
             identifier=identifier,
         )
 
-        return typing.cast(ISource, jsii.sinvoke(cls, "gitHubEnterprise", [props]))
+        return typing.cast("ISource", jsii.sinvoke(cls, "gitHubEnterprise", [props]))
 
     @jsii.member(jsii_name="s3")
     @builtins.classmethod
     def s3(
         cls,
         *,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         path: builtins.str,
         version: typing.Optional[builtins.str] = None,
         identifier: typing.Optional[builtins.str] = None,
-    ) -> ISource:
+    ) -> "ISource":
         '''
         :param bucket: 
         :param path: 
@@ -17325,13 +17357,13 @@ class Source(
             bucket=bucket, path=path, version=version, identifier=identifier
         )
 
-        return typing.cast(ISource, jsii.sinvoke(cls, "s3", [props]))
+        return typing.cast("ISource", jsii.sinvoke(cls, "s3", [props]))
 
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
-        _project: IProject,
+        _scope: "_constructs_77d1e7e8.Construct",
+        _project: "IProject",
     ) -> "SourceConfig":
         '''Called by the project when the source is added so that the source can perform binding operations on the source.
 
@@ -17387,8 +17419,8 @@ class SourceConfig:
     def __init__(
         self,
         *,
-        source_property: typing.Union[CfnProject.SourceProperty, typing.Dict[builtins.str, typing.Any]],
-        build_triggers: typing.Optional[typing.Union[CfnProject.ProjectTriggersProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        source_property: typing.Union["CfnProject.SourceProperty", typing.Dict[builtins.str, typing.Any]],
+        build_triggers: typing.Optional[typing.Union["CfnProject.ProjectTriggersProperty", typing.Dict[builtins.str, typing.Any]]] = None,
         source_version: typing.Optional[builtins.str] = None,
     ) -> None:
         '''The type returned from ``ISource#bind``.
@@ -17477,15 +17509,15 @@ class SourceConfig:
             self._values["source_version"] = source_version
 
     @builtins.property
-    def source_property(self) -> CfnProject.SourceProperty:
+    def source_property(self) -> "CfnProject.SourceProperty":
         result = self._values.get("source_property")
         assert result is not None, "Required property 'source_property' is missing"
-        return typing.cast(CfnProject.SourceProperty, result)
+        return typing.cast("CfnProject.SourceProperty", result)
 
     @builtins.property
-    def build_triggers(self) -> typing.Optional[CfnProject.ProjectTriggersProperty]:
+    def build_triggers(self) -> typing.Optional["CfnProject.ProjectTriggersProperty"]:
         result = self._values.get("build_triggers")
-        return typing.cast(typing.Optional[CfnProject.ProjectTriggersProperty], result)
+        return typing.cast(typing.Optional["CfnProject.ProjectTriggersProperty"], result)
 
     @builtins.property
     def source_version(self) -> typing.Optional[builtins.str]:
@@ -17624,10 +17656,10 @@ class UntrustedCodeBoundaryPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        additional_statements: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
+        additional_statements: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
         managed_policy_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -17666,7 +17698,7 @@ class UntrustedCodeBoundaryPolicyProps:
     def __init__(
         self,
         *,
-        additional_statements: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
+        additional_statements: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
         managed_policy_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Construction properties for UntrustedCodeBoundaryPolicy.
@@ -17703,13 +17735,13 @@ class UntrustedCodeBoundaryPolicyProps:
     @builtins.property
     def additional_statements(
         self,
-    ) -> typing.Optional[typing.List[_PolicyStatement_0fe33853]]:
+    ) -> typing.Optional[typing.List["_PolicyStatement_0fe33853"]]:
         '''Additional statements to add to the default set of statements.
 
         :default: - No additional statements
         '''
         result = self._values.get("additional_statements")
-        return typing.cast(typing.Optional[typing.List[_PolicyStatement_0fe33853]], result)
+        return typing.cast(typing.Optional[typing.List["_PolicyStatement_0fe33853"]], result)
 
     @builtins.property
     def managed_policy_name(self) -> typing.Optional[builtins.str]:
@@ -17771,11 +17803,11 @@ class WindowsBuildImage(
     @builtins.classmethod
     def from_asset(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
-        props: typing.Union[_DockerImageAssetProps_6897287d, typing.Dict[builtins.str, typing.Any]],
+        props: typing.Union["_DockerImageAssetProps_6897287d", typing.Dict[builtins.str, typing.Any]],
         image_type: typing.Optional["WindowsImageType"] = None,
-    ) -> IBuildImage:
+    ) -> "IBuildImage":
         '''Uses an Docker image asset as a Windows build image.
 
         :param scope: -
@@ -17789,16 +17821,16 @@ class WindowsBuildImage(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument props", value=props, expected_type=type_hints["props"])
             check_type(argname="argument image_type", value=image_type, expected_type=type_hints["image_type"])
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromAsset", [scope, id, props, image_type]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromAsset", [scope, id, props, image_type]))
 
     @jsii.member(jsii_name="fromDockerRegistry")
     @builtins.classmethod
     def from_docker_registry(
         cls,
         name: builtins.str,
-        options: typing.Optional[typing.Union[DockerImageOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        options: typing.Optional[typing.Union["DockerImageOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         image_type: typing.Optional["WindowsImageType"] = None,
-    ) -> IBuildImage:
+    ) -> "IBuildImage":
         '''
         :param name: -
         :param options: -
@@ -17811,16 +17843,16 @@ class WindowsBuildImage(
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument options", value=options, expected_type=type_hints["options"])
             check_type(argname="argument image_type", value=image_type, expected_type=type_hints["image_type"])
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromDockerRegistry", [name, options, image_type]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromDockerRegistry", [name, options, image_type]))
 
     @jsii.member(jsii_name="fromEcrRepository")
     @builtins.classmethod
     def from_ecr_repository(
         cls,
-        repository: _IRepository_e6004aa6,
+        repository: "_IRepository_e6004aa6",
         tag_or_digest: typing.Optional[builtins.str] = None,
         image_type: typing.Optional["WindowsImageType"] = None,
-    ) -> IBuildImage:
+    ) -> "IBuildImage":
         '''
         :param repository: The ECR repository.
         :param tag_or_digest: Image tag or digest (default "latest", digests must start with ``sha256:``).
@@ -17840,10 +17872,10 @@ class WindowsBuildImage(
             check_type(argname="argument repository", value=repository, expected_type=type_hints["repository"])
             check_type(argname="argument tag_or_digest", value=tag_or_digest, expected_type=type_hints["tag_or_digest"])
             check_type(argname="argument image_type", value=image_type, expected_type=type_hints["image_type"])
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromEcrRepository", [repository, tag_or_digest, image_type]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromEcrRepository", [repository, tag_or_digest, image_type]))
 
     @jsii.member(jsii_name="runScriptBuildspec")
-    def run_script_buildspec(self, entrypoint: builtins.str) -> BuildSpec:
+    def run_script_buildspec(self, entrypoint: builtins.str) -> "BuildSpec":
         '''Make a buildspec to run the indicated script.
 
         :param entrypoint: -
@@ -17851,18 +17883,18 @@ class WindowsBuildImage(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e9cd69ae60d94997bf321a87c34c425c357b6e17726a83f0a8edc421645d9277)
             check_type(argname="argument entrypoint", value=entrypoint, expected_type=type_hints["entrypoint"])
-        return typing.cast(BuildSpec, jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
+        return typing.cast("BuildSpec", jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
 
     @jsii.member(jsii_name="validate")
     def validate(
         self,
         *,
-        build_image: typing.Optional[IBuildImage] = None,
-        certificate: typing.Optional[typing.Union[BuildEnvironmentCertificate, typing.Dict[builtins.str, typing.Any]]] = None,
-        compute_type: typing.Optional[ComputeType] = None,
-        docker_server: typing.Optional[typing.Union[DockerServerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
-        fleet: typing.Optional[IFleet] = None,
+        build_image: typing.Optional["IBuildImage"] = None,
+        certificate: typing.Optional[typing.Union["BuildEnvironmentCertificate", typing.Dict[builtins.str, typing.Any]]] = None,
+        compute_type: typing.Optional["ComputeType"] = None,
+        docker_server: typing.Optional[typing.Union["DockerServerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
+        fleet: typing.Optional["IFleet"] = None,
         privileged: typing.Optional[builtins.bool] = None,
     ) -> typing.List[builtins.str]:
         '''Allows the image a chance to validate whether the passed configuration is correct.
@@ -17889,49 +17921,49 @@ class WindowsBuildImage(
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="WIN_SERVER_CORE_2019_BASE")
-    def WIN_SERVER_CORE_2019_BASE(cls) -> IBuildImage:
+    def WIN_SERVER_CORE_2019_BASE(cls) -> "IBuildImage":
         '''The standard CodeBuild image ``aws/codebuild/windows-base:2019-1.0``, which is based off Windows Server Core 2019.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "WIN_SERVER_CORE_2019_BASE"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "WIN_SERVER_CORE_2019_BASE"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="WIN_SERVER_CORE_2019_BASE_2_0")
-    def WIN_SERVER_CORE_2019_BASE_2_0(cls) -> IBuildImage:
+    def WIN_SERVER_CORE_2019_BASE_2_0(cls) -> "IBuildImage":
         '''The standard CodeBuild image ``aws/codebuild/windows-base:2019-2.0``, which is based off Windows Server Core 2019.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "WIN_SERVER_CORE_2019_BASE_2_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "WIN_SERVER_CORE_2019_BASE_2_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="WIN_SERVER_CORE_2019_BASE_3_0")
-    def WIN_SERVER_CORE_2019_BASE_3_0(cls) -> IBuildImage:
+    def WIN_SERVER_CORE_2019_BASE_3_0(cls) -> "IBuildImage":
         '''The standard CodeBuild image ``aws/codebuild/windows-base:2019-3.0``, which is based off Windows Server Core 2019.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "WIN_SERVER_CORE_2019_BASE_3_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "WIN_SERVER_CORE_2019_BASE_3_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="WIN_SERVER_CORE_2022_BASE_3_0")
-    def WIN_SERVER_CORE_2022_BASE_3_0(cls) -> IBuildImage:
+    def WIN_SERVER_CORE_2022_BASE_3_0(cls) -> "IBuildImage":
         '''The standard CodeBuild image ``aws/codebuild/windows-base:2022-1.0``, which is based off Windows Server Core 2022.
 
         Notice: Cannot be used with on-demand compute, only with a {@link BuildEnvironment.fleet}.
 
         :see: https://docs.aws.amazon.com/codebuild/latest/userguide/fleets.html
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "WIN_SERVER_CORE_2022_BASE_3_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "WIN_SERVER_CORE_2022_BASE_3_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="WINDOWS_BASE_2_0")
-    def WINDOWS_BASE_2_0(cls) -> IBuildImage:
+    def WINDOWS_BASE_2_0(cls) -> "IBuildImage":
         '''(deprecated) The standard CodeBuild image ``aws/codebuild/windows-base:2.0``, which is based off Windows Server Core 2016.
 
         :deprecated: {@link WindowsBuildImage.WIN_SERVER_CORE_2019_BASE_3_0 } should be used instead.
 
         :stability: deprecated
         '''
-        return typing.cast(IBuildImage, jsii.sget(cls, "WINDOWS_BASE_2_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "WINDOWS_BASE_2_0"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultComputeType")
-    def default_compute_type(self) -> ComputeType:
+    def default_compute_type(self) -> "ComputeType":
         '''The default ``ComputeType`` to use with this image, if one was not specified in ``BuildEnvironment#computeType`` explicitly.'''
-        return typing.cast(ComputeType, jsii.get(self, "defaultComputeType"))
+        return typing.cast("ComputeType", jsii.get(self, "defaultComputeType"))
 
     @builtins.property
     @jsii.member(jsii_name="imageId")
@@ -17947,21 +17979,21 @@ class WindowsBuildImage(
 
     @builtins.property
     @jsii.member(jsii_name="imagePullPrincipalType")
-    def image_pull_principal_type(self) -> typing.Optional[ImagePullPrincipalType]:
+    def image_pull_principal_type(self) -> typing.Optional["ImagePullPrincipalType"]:
         '''The type of principal that CodeBuild will use to pull this build Docker image.'''
-        return typing.cast(typing.Optional[ImagePullPrincipalType], jsii.get(self, "imagePullPrincipalType"))
+        return typing.cast(typing.Optional["ImagePullPrincipalType"], jsii.get(self, "imagePullPrincipalType"))
 
     @builtins.property
     @jsii.member(jsii_name="repository")
-    def repository(self) -> typing.Optional[_IRepository_e6004aa6]:
+    def repository(self) -> typing.Optional["_IRepository_e6004aa6"]:
         '''An optional ECR repository that the image is hosted in.'''
-        return typing.cast(typing.Optional[_IRepository_e6004aa6], jsii.get(self, "repository"))
+        return typing.cast(typing.Optional["_IRepository_e6004aa6"], jsii.get(self, "repository"))
 
     @builtins.property
     @jsii.member(jsii_name="secretsManagerCredentials")
-    def secrets_manager_credentials(self) -> typing.Optional[_ISecret_6e020e6a]:
+    def secrets_manager_credentials(self) -> typing.Optional["_ISecret_6e020e6a"]:
         '''The secretsManagerCredentials for access to a private registry.'''
-        return typing.cast(typing.Optional[_ISecret_6e020e6a], jsii.get(self, "secretsManagerCredentials"))
+        return typing.cast(typing.Optional["_ISecret_6e020e6a"], jsii.get(self, "secretsManagerCredentials"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_codebuild.WindowsImageType")
@@ -18041,14 +18073,14 @@ class Artifacts(
     def s3(
         cls,
         *,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         encryption: typing.Optional[builtins.bool] = None,
         include_build_id: typing.Optional[builtins.bool] = None,
         name: typing.Optional[builtins.str] = None,
         package_zip: typing.Optional[builtins.bool] = None,
         path: typing.Optional[builtins.str] = None,
         identifier: typing.Optional[builtins.str] = None,
-    ) -> IArtifacts:
+    ) -> "IArtifacts":
         '''
         :param bucket: The name of the output bucket.
         :param encryption: If this is false, build output will not be encrypted. This is useful if the artifact to publish a static website or sharing content with others Default: true - output will be encrypted
@@ -18068,14 +18100,14 @@ class Artifacts(
             identifier=identifier,
         )
 
-        return typing.cast(IArtifacts, jsii.sinvoke(cls, "s3", [props]))
+        return typing.cast("IArtifacts", jsii.sinvoke(cls, "s3", [props]))
 
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
-        _project: IProject,
-    ) -> ArtifactsConfig:
+        _scope: "_constructs_77d1e7e8.Construct",
+        _project: "IProject",
+    ) -> "ArtifactsConfig":
         '''Callback when an Artifacts class is used in a CodeBuild Project.
 
         :param _scope: -
@@ -18085,7 +18117,7 @@ class Artifacts(
             type_hints = typing.get_type_hints(_typecheckingstub__5f70eecb3d4e820b732f44e6a621a3e6296368831c9eba9409d94cf16324e7ff)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
             check_type(argname="argument _project", value=_project, expected_type=type_hints["_project"])
-        return typing.cast(ArtifactsConfig, jsii.invoke(self, "bind", [_scope, _project]))
+        return typing.cast("ArtifactsConfig", jsii.invoke(self, "bind", [_scope, _project]))
 
     @builtins.property
     @jsii.member(jsii_name="type")
@@ -18147,7 +18179,7 @@ class BitBucketSourceProps(SourceProps):
         fetch_submodules: typing.Optional[builtins.bool] = None,
         report_build_status: typing.Optional[builtins.bool] = None,
         webhook: typing.Optional[builtins.bool] = None,
-        webhook_filters: typing.Optional[typing.Sequence[FilterGroup]] = None,
+        webhook_filters: typing.Optional[typing.Sequence["FilterGroup"]] = None,
         webhook_triggers_batch_build: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Construction properties for ``BitBucketSource``.
@@ -18332,7 +18364,7 @@ class BitBucketSourceProps(SourceProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def webhook_filters(self) -> typing.Optional[typing.List[FilterGroup]]:
+    def webhook_filters(self) -> typing.Optional[typing.List["FilterGroup"]]:
         '''A list of webhook filters that can constraint what events in the repository will trigger a build.
 
         A build is triggered if any of the provided filter groups match.
@@ -18341,7 +18373,7 @@ class BitBucketSourceProps(SourceProps):
         :default: every push and every Pull Request (create or update) triggers a build
         '''
         result = self._values.get("webhook_filters")
-        return typing.cast(typing.Optional[typing.List[FilterGroup]], result)
+        return typing.cast(typing.Optional[typing.List["FilterGroup"]], result)
 
     @builtins.property
     def webhook_triggers_batch_build(self) -> typing.Optional[builtins.bool]:
@@ -18382,7 +18414,7 @@ class CodeCommitSourceProps(SourceProps):
         self,
         *,
         identifier: typing.Optional[builtins.str] = None,
-        repository: _IRepository_e7c062a1,
+        repository: "_IRepository_e7c062a1",
         branch_or_ref: typing.Optional[builtins.str] = None,
         clone_depth: typing.Optional[jsii.Number] = None,
         fetch_submodules: typing.Optional[builtins.bool] = None,
@@ -18450,10 +18482,10 @@ class CodeCommitSourceProps(SourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def repository(self) -> _IRepository_e7c062a1:
+    def repository(self) -> "_IRepository_e7c062a1":
         result = self._values.get("repository")
         assert result is not None, "Required property 'repository' is missing"
-        return typing.cast(_IRepository_e7c062a1, result)
+        return typing.cast("_IRepository_e7c062a1", result)
 
     @builtins.property
     def branch_or_ref(self) -> typing.Optional[builtins.str]:
@@ -18534,19 +18566,19 @@ class Fleet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         base_capacity: jsii.Number,
-        compute_type: FleetComputeType,
-        environment_type: EnvironmentType,
-        compute_configuration: typing.Optional[typing.Union[ComputeConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        compute_type: "FleetComputeType",
+        environment_type: "EnvironmentType",
+        compute_configuration: typing.Optional[typing.Union["ComputeConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         fleet_name: typing.Optional[builtins.str] = None,
-        overflow_behavior: typing.Optional[FleetOverflowBehavior] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
+        overflow_behavior: typing.Optional["FleetOverflowBehavior"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        subnet_selection: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -18585,10 +18617,10 @@ class Fleet(
     @builtins.classmethod
     def from_fleet_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         fleet_arn: builtins.str,
-    ) -> IFleet:
+    ) -> "IFleet":
         '''Creates a Fleet construct that represents an external fleet.
 
         :param scope: The scope creating construct (usually ``this``).
@@ -18600,7 +18632,7 @@ class Fleet(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument fleet_arn", value=fleet_arn, expected_type=type_hints["fleet_arn"])
-        return typing.cast(IFleet, jsii.sinvoke(cls, "fromFleetArn", [scope, id, fleet_arn]))
+        return typing.cast("IFleet", jsii.sinvoke(cls, "fromFleetArn", [scope, id, fleet_arn]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -18610,24 +18642,24 @@ class Fleet(
 
     @builtins.property
     @jsii.member(jsii_name="computeType")
-    def compute_type(self) -> FleetComputeType:
+    def compute_type(self) -> "FleetComputeType":
         '''The compute type of the fleet.
 
         :see: https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_codebuild.ComputeType.html
         '''
-        return typing.cast(FleetComputeType, jsii.get(self, "computeType"))
+        return typing.cast("FleetComputeType", jsii.get(self, "computeType"))
 
     @builtins.property
     @jsii.member(jsii_name="connections")
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''The network connections associated with this Fleet's security group(s) in the configured VPC.'''
-        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
     @jsii.member(jsii_name="environmentType")
-    def environment_type(self) -> EnvironmentType:
+    def environment_type(self) -> "EnvironmentType":
         '''The build environment (operating system/architecture/accelerator) type made available to projects using this fleet.'''
-        return typing.cast(EnvironmentType, jsii.get(self, "environmentType"))
+        return typing.cast("EnvironmentType", jsii.get(self, "environmentType"))
 
     @builtins.property
     @jsii.member(jsii_name="fleetArn")
@@ -18643,9 +18675,9 @@ class Fleet(
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The grant principal for this Fleet's service role.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
 
 @jsii.data_type(
@@ -18680,7 +18712,7 @@ class GitHubEnterpriseSourceProps(SourceProps):
         ignore_ssl_errors: typing.Optional[builtins.bool] = None,
         report_build_status: typing.Optional[builtins.bool] = None,
         webhook: typing.Optional[builtins.bool] = None,
-        webhook_filters: typing.Optional[typing.Sequence[FilterGroup]] = None,
+        webhook_filters: typing.Optional[typing.Sequence["FilterGroup"]] = None,
         webhook_triggers_batch_build: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Construction properties for ``GitHubEnterpriseSource``.
@@ -18877,7 +18909,7 @@ class GitHubEnterpriseSourceProps(SourceProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def webhook_filters(self) -> typing.Optional[typing.List[FilterGroup]]:
+    def webhook_filters(self) -> typing.Optional[typing.List["FilterGroup"]]:
         '''A list of webhook filters that can constraint what events in the repository will trigger a build.
 
         A build is triggered if any of the provided filter groups match.
@@ -18886,7 +18918,7 @@ class GitHubEnterpriseSourceProps(SourceProps):
         :default: every push and every Pull Request (create or update) triggers a build
         '''
         result = self._values.get("webhook_filters")
-        return typing.cast(typing.Optional[typing.List[FilterGroup]], result)
+        return typing.cast(typing.Optional[typing.List["FilterGroup"]], result)
 
     @builtins.property
     def webhook_triggers_batch_build(self) -> typing.Optional[builtins.bool]:
@@ -18943,7 +18975,7 @@ class GitHubSourceProps(SourceProps):
         repo: typing.Optional[builtins.str] = None,
         report_build_status: typing.Optional[builtins.bool] = None,
         webhook: typing.Optional[builtins.bool] = None,
-        webhook_filters: typing.Optional[typing.Sequence[FilterGroup]] = None,
+        webhook_filters: typing.Optional[typing.Sequence["FilterGroup"]] = None,
         webhook_triggers_batch_build: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Construction properties for ``GitHubSource`` and ``GitHubEnterpriseSource``.
@@ -19133,7 +19165,7 @@ class GitHubSourceProps(SourceProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def webhook_filters(self) -> typing.Optional[typing.List[FilterGroup]]:
+    def webhook_filters(self) -> typing.Optional[typing.List["FilterGroup"]]:
         '''A list of webhook filters that can constraint what events in the repository will trigger a build.
 
         A build is triggered if any of the provided filter groups match.
@@ -19142,7 +19174,7 @@ class GitHubSourceProps(SourceProps):
         :default: every push and every Pull Request (create or update) triggers a build
         '''
         result = self._values.get("webhook_filters")
-        return typing.cast(typing.Optional[typing.List[FilterGroup]], result)
+        return typing.cast(typing.Optional[typing.List["FilterGroup"]], result)
 
     @builtins.property
     def webhook_triggers_batch_build(self) -> typing.Optional[builtins.bool]:
@@ -19174,9 +19206,9 @@ class IBindableBuildImage(IBuildImage, typing_extensions.Protocol):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        project: IProject,
-    ) -> BuildImageConfig:
+        scope: "_constructs_77d1e7e8.Construct",
+        project: "IProject",
+    ) -> "BuildImageConfig":
         '''Function that allows the build image access to the construct tree.
 
         :param scope: -
@@ -19195,9 +19227,9 @@ class _IBindableBuildImageProxy(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        project: IProject,
-    ) -> BuildImageConfig:
+        scope: "_constructs_77d1e7e8.Construct",
+        project: "IProject",
+    ) -> "BuildImageConfig":
         '''Function that allows the build image access to the construct tree.
 
         :param scope: -
@@ -19209,7 +19241,7 @@ class _IBindableBuildImageProxy(
             check_type(argname="argument project", value=project, expected_type=type_hints["project"])
         options = BuildImageBindOptions()
 
-        return typing.cast(BuildImageConfig, jsii.invoke(self, "bind", [scope, project, options]))
+        return typing.cast("BuildImageConfig", jsii.invoke(self, "bind", [scope, project, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBindableBuildImage).__jsii_proxy_class__ = lambda : _IBindableBuildImageProxy
@@ -19243,7 +19275,7 @@ class LinuxGpuBuildImage(
         repository_name: builtins.str,
         tag: builtins.str,
         account: typing.Optional[builtins.str] = None,
-    ) -> IBuildImage:
+    ) -> "IBuildImage":
         '''Returns a Linux GPU build image from AWS Deep Learning Containers.
 
         :param repository_name: the name of the repository, for example "pytorch-inference".
@@ -19257,15 +19289,15 @@ class LinuxGpuBuildImage(
             check_type(argname="argument repository_name", value=repository_name, expected_type=type_hints["repository_name"])
             check_type(argname="argument tag", value=tag, expected_type=type_hints["tag"])
             check_type(argname="argument account", value=account, expected_type=type_hints["account"])
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "awsDeepLearningContainersImage", [repository_name, tag, account]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "awsDeepLearningContainersImage", [repository_name, tag, account]))
 
     @jsii.member(jsii_name="fromEcrRepository")
     @builtins.classmethod
     def from_ecr_repository(
         cls,
-        repository: _IRepository_e6004aa6,
+        repository: "_IRepository_e6004aa6",
         tag: typing.Optional[builtins.str] = None,
-    ) -> IBuildImage:
+    ) -> "IBuildImage":
         '''Returns a GPU image running Linux from an ECR repository.
 
         NOTE: if the repository is external (i.e. imported), then we won't be able to add
@@ -19280,14 +19312,14 @@ class LinuxGpuBuildImage(
             type_hints = typing.get_type_hints(_typecheckingstub__2dc1297735d6427a6e9325db9e1fc659d0f58b2d5548798f8256224a159815dc)
             check_type(argname="argument repository", value=repository, expected_type=type_hints["repository"])
             check_type(argname="argument tag", value=tag, expected_type=type_hints["tag"])
-        return typing.cast(IBuildImage, jsii.sinvoke(cls, "fromEcrRepository", [repository, tag]))
+        return typing.cast("IBuildImage", jsii.sinvoke(cls, "fromEcrRepository", [repository, tag]))
 
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        project: IProject,
-    ) -> BuildImageConfig:
+        scope: "_constructs_77d1e7e8.Construct",
+        project: "IProject",
+    ) -> "BuildImageConfig":
         '''Function that allows the build image access to the construct tree.
 
         :param scope: -
@@ -19299,10 +19331,10 @@ class LinuxGpuBuildImage(
             check_type(argname="argument project", value=project, expected_type=type_hints["project"])
         _options = BuildImageBindOptions()
 
-        return typing.cast(BuildImageConfig, jsii.invoke(self, "bind", [scope, project, _options]))
+        return typing.cast("BuildImageConfig", jsii.invoke(self, "bind", [scope, project, _options]))
 
     @jsii.member(jsii_name="runScriptBuildspec")
-    def run_script_buildspec(self, entrypoint: builtins.str) -> BuildSpec:
+    def run_script_buildspec(self, entrypoint: builtins.str) -> "BuildSpec":
         '''Make a buildspec to run the indicated script.
 
         :param entrypoint: -
@@ -19310,18 +19342,18 @@ class LinuxGpuBuildImage(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8c39b73c48d6f0cf2ab308ab6f4b66b31ab881da014970ae085e252077be8951)
             check_type(argname="argument entrypoint", value=entrypoint, expected_type=type_hints["entrypoint"])
-        return typing.cast(BuildSpec, jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
+        return typing.cast("BuildSpec", jsii.invoke(self, "runScriptBuildspec", [entrypoint]))
 
     @jsii.member(jsii_name="validate")
     def validate(
         self,
         *,
-        build_image: typing.Optional[IBuildImage] = None,
-        certificate: typing.Optional[typing.Union[BuildEnvironmentCertificate, typing.Dict[builtins.str, typing.Any]]] = None,
-        compute_type: typing.Optional[ComputeType] = None,
-        docker_server: typing.Optional[typing.Union[DockerServerOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
-        fleet: typing.Optional[IFleet] = None,
+        build_image: typing.Optional["IBuildImage"] = None,
+        certificate: typing.Optional[typing.Union["BuildEnvironmentCertificate", typing.Dict[builtins.str, typing.Any]]] = None,
+        compute_type: typing.Optional["ComputeType"] = None,
+        docker_server: typing.Optional[typing.Union["DockerServerOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
+        fleet: typing.Optional["IFleet"] = None,
         privileged: typing.Optional[builtins.bool] = None,
     ) -> typing.List[builtins.str]:
         '''Allows the image a chance to validate whether the passed configuration is correct.
@@ -19348,111 +19380,111 @@ class LinuxGpuBuildImage(
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_MXNET_1_4_1")
-    def DLC_MXNET_1_4_1(cls) -> IBuildImage:
+    def DLC_MXNET_1_4_1(cls) -> "IBuildImage":
         '''MXNet 1.4.1 GPU image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_MXNET_1_4_1"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_MXNET_1_4_1"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_MXNET_1_6_0")
-    def DLC_MXNET_1_6_0(cls) -> IBuildImage:
+    def DLC_MXNET_1_6_0(cls) -> "IBuildImage":
         '''MXNet 1.6.0 GPU image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_MXNET_1_6_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_MXNET_1_6_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_PYTORCH_1_2_0")
-    def DLC_PYTORCH_1_2_0(cls) -> IBuildImage:
+    def DLC_PYTORCH_1_2_0(cls) -> "IBuildImage":
         '''PyTorch 1.2.0 GPU image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_PYTORCH_1_2_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_PYTORCH_1_2_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_PYTORCH_1_3_1")
-    def DLC_PYTORCH_1_3_1(cls) -> IBuildImage:
+    def DLC_PYTORCH_1_3_1(cls) -> "IBuildImage":
         '''PyTorch 1.3.1 GPU image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_PYTORCH_1_3_1"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_PYTORCH_1_3_1"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_PYTORCH_1_4_0_INFERENCE")
-    def DLC_PYTORCH_1_4_0_INFERENCE(cls) -> IBuildImage:
+    def DLC_PYTORCH_1_4_0_INFERENCE(cls) -> "IBuildImage":
         '''PyTorch 1.4.0 GPU inference image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_PYTORCH_1_4_0_INFERENCE"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_PYTORCH_1_4_0_INFERENCE"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_PYTORCH_1_4_0_TRAINING")
-    def DLC_PYTORCH_1_4_0_TRAINING(cls) -> IBuildImage:
+    def DLC_PYTORCH_1_4_0_TRAINING(cls) -> "IBuildImage":
         '''PyTorch 1.4.0 GPU training image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_PYTORCH_1_4_0_TRAINING"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_PYTORCH_1_4_0_TRAINING"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_PYTORCH_1_5_0_INFERENCE")
-    def DLC_PYTORCH_1_5_0_INFERENCE(cls) -> IBuildImage:
+    def DLC_PYTORCH_1_5_0_INFERENCE(cls) -> "IBuildImage":
         '''PyTorch 1.5.0 GPU inference image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_PYTORCH_1_5_0_INFERENCE"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_PYTORCH_1_5_0_INFERENCE"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_PYTORCH_1_5_0_TRAINING")
-    def DLC_PYTORCH_1_5_0_TRAINING(cls) -> IBuildImage:
+    def DLC_PYTORCH_1_5_0_TRAINING(cls) -> "IBuildImage":
         '''PyTorch 1.5.0 GPU training image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_PYTORCH_1_5_0_TRAINING"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_PYTORCH_1_5_0_TRAINING"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_TENSORFLOW_1_14_0")
-    def DLC_TENSORFLOW_1_14_0(cls) -> IBuildImage:
+    def DLC_TENSORFLOW_1_14_0(cls) -> "IBuildImage":
         '''Tensorflow 1.14.0 GPU image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_TENSORFLOW_1_14_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_TENSORFLOW_1_14_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_TENSORFLOW_1_15_0")
-    def DLC_TENSORFLOW_1_15_0(cls) -> IBuildImage:
+    def DLC_TENSORFLOW_1_15_0(cls) -> "IBuildImage":
         '''Tensorflow 1.15.0 GPU image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_TENSORFLOW_1_15_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_TENSORFLOW_1_15_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_TENSORFLOW_1_15_2_INFERENCE")
-    def DLC_TENSORFLOW_1_15_2_INFERENCE(cls) -> IBuildImage:
+    def DLC_TENSORFLOW_1_15_2_INFERENCE(cls) -> "IBuildImage":
         '''Tensorflow 1.15.2 GPU inference image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_TENSORFLOW_1_15_2_INFERENCE"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_TENSORFLOW_1_15_2_INFERENCE"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_TENSORFLOW_1_15_2_TRAINING")
-    def DLC_TENSORFLOW_1_15_2_TRAINING(cls) -> IBuildImage:
+    def DLC_TENSORFLOW_1_15_2_TRAINING(cls) -> "IBuildImage":
         '''Tensorflow 1.15.2 GPU training image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_TENSORFLOW_1_15_2_TRAINING"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_TENSORFLOW_1_15_2_TRAINING"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_TENSORFLOW_2_0_0")
-    def DLC_TENSORFLOW_2_0_0(cls) -> IBuildImage:
+    def DLC_TENSORFLOW_2_0_0(cls) -> "IBuildImage":
         '''Tensorflow 2.0.0 GPU image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_TENSORFLOW_2_0_0"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_TENSORFLOW_2_0_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_TENSORFLOW_2_0_1")
-    def DLC_TENSORFLOW_2_0_1(cls) -> IBuildImage:
+    def DLC_TENSORFLOW_2_0_1(cls) -> "IBuildImage":
         '''Tensorflow 2.0.1 GPU image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_TENSORFLOW_2_0_1"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_TENSORFLOW_2_0_1"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_TENSORFLOW_2_1_0_INFERENCE")
-    def DLC_TENSORFLOW_2_1_0_INFERENCE(cls) -> IBuildImage:
+    def DLC_TENSORFLOW_2_1_0_INFERENCE(cls) -> "IBuildImage":
         '''Tensorflow 2.1.0 GPU inference image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_TENSORFLOW_2_1_0_INFERENCE"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_TENSORFLOW_2_1_0_INFERENCE"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_TENSORFLOW_2_1_0_TRAINING")
-    def DLC_TENSORFLOW_2_1_0_TRAINING(cls) -> IBuildImage:
+    def DLC_TENSORFLOW_2_1_0_TRAINING(cls) -> "IBuildImage":
         '''Tensorflow 2.1.0 GPU training image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_TENSORFLOW_2_1_0_TRAINING"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_TENSORFLOW_2_1_0_TRAINING"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DLC_TENSORFLOW_2_2_0_TRAINING")
-    def DLC_TENSORFLOW_2_2_0_TRAINING(cls) -> IBuildImage:
+    def DLC_TENSORFLOW_2_2_0_TRAINING(cls) -> "IBuildImage":
         '''Tensorflow 2.2.0 GPU training image from AWS Deep Learning Containers.'''
-        return typing.cast(IBuildImage, jsii.sget(cls, "DLC_TENSORFLOW_2_2_0_TRAINING"))
+        return typing.cast("IBuildImage", jsii.sget(cls, "DLC_TENSORFLOW_2_2_0_TRAINING"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultComputeType")
-    def default_compute_type(self) -> ComputeType:
+    def default_compute_type(self) -> "ComputeType":
         '''The default ``ComputeType`` to use with this image, if one was not specified in ``BuildEnvironment#computeType`` explicitly.'''
-        return typing.cast(ComputeType, jsii.get(self, "defaultComputeType"))
+        return typing.cast("ComputeType", jsii.get(self, "defaultComputeType"))
 
     @builtins.property
     @jsii.member(jsii_name="imageId")
@@ -19468,9 +19500,9 @@ class LinuxGpuBuildImage(
 
     @builtins.property
     @jsii.member(jsii_name="imagePullPrincipalType")
-    def image_pull_principal_type(self) -> typing.Optional[ImagePullPrincipalType]:
+    def image_pull_principal_type(self) -> typing.Optional["ImagePullPrincipalType"]:
         '''The type of principal that CodeBuild will use to pull this build Docker image.'''
-        return typing.cast(typing.Optional[ImagePullPrincipalType], jsii.get(self, "imagePullPrincipalType"))
+        return typing.cast(typing.Optional["ImagePullPrincipalType"], jsii.get(self, "imagePullPrincipalType"))
 
 
 class PipelineProject(
@@ -19540,32 +19572,32 @@ class PipelineProject(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         auto_retry_limit: typing.Optional[jsii.Number] = None,
         badge: typing.Optional[builtins.bool] = None,
-        build_spec: typing.Optional[BuildSpec] = None,
-        cache: typing.Optional[Cache] = None,
+        build_spec: typing.Optional["BuildSpec"] = None,
+        cache: typing.Optional["Cache"] = None,
         check_secrets_in_plain_text_env_variables: typing.Optional[builtins.bool] = None,
         concurrent_build_limit: typing.Optional[jsii.Number] = None,
         description: typing.Optional[builtins.str] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
-        environment: typing.Optional[typing.Union[BuildEnvironment, typing.Dict[builtins.str, typing.Any]]] = None,
-        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union[BuildEnvironmentVariable, typing.Dict[builtins.str, typing.Any]]]] = None,
-        file_system_locations: typing.Optional[typing.Sequence[IFileSystemLocation]] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
+        environment: typing.Optional[typing.Union["BuildEnvironment", typing.Dict[builtins.str, typing.Any]]] = None,
+        environment_variables: typing.Optional[typing.Mapping[builtins.str, typing.Union["BuildEnvironmentVariable", typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_system_locations: typing.Optional[typing.Sequence["IFileSystemLocation"]] = None,
         grant_report_group_permissions: typing.Optional[builtins.bool] = None,
-        logging: typing.Optional[typing.Union[LoggingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        logging: typing.Optional[typing.Union["LoggingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         project_name: typing.Optional[builtins.str] = None,
-        queued_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        queued_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         ssm_session_permissions: typing.Optional[builtins.bool] = None,
-        subnet_selection: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        visibility: typing.Optional[ProjectVisibility] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
+        subnet_selection: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        visibility: typing.Optional["ProjectVisibility"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -19648,7 +19680,7 @@ class S3SourceProps(SourceProps):
         self,
         *,
         identifier: typing.Optional[builtins.str] = None,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         path: builtins.str,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -19697,10 +19729,10 @@ class S3SourceProps(SourceProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
     def path(self) -> builtins.str:

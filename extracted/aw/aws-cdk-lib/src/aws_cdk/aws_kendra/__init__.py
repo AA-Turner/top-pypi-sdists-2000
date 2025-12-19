@@ -97,6 +97,7 @@ class CfnDataSource(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_kendra as kendra
@@ -535,19 +536,19 @@ class CfnDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        index_id: typing.Union[builtins.str, _IIndexRef_a3487225],
+        index_id: typing.Union[builtins.str, "_IIndexRef_a3487225"],
         name: builtins.str,
         type: builtins.str,
-        custom_document_enrichment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.CustomDocumentEnrichmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        data_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_document_enrichment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.CustomDocumentEnrichmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        data_source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         language_code: typing.Optional[builtins.str] = None,
-        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
         schedule: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Kendra::DataSource``.
 
@@ -585,7 +586,7 @@ class CfnDataSource(
 
     @jsii.member(jsii_name="arnForDataSource")
     @builtins.classmethod
-    def arn_for_data_source(cls, resource: _IDataSourceRef_e4576e45) -> builtins.str:
+    def arn_for_data_source(cls, resource: "_IDataSourceRef_e4576e45") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -607,7 +608,7 @@ class CfnDataSource(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataSource", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -665,15 +666,15 @@ class CfnDataSource(
 
     @builtins.property
     @jsii.member(jsii_name="dataSourceRef")
-    def data_source_ref(self) -> _DataSourceReference_9b52a083:
+    def data_source_ref(self) -> "_DataSourceReference_9b52a083":
         '''A reference to a DataSource resource.'''
-        return typing.cast(_DataSourceReference_9b52a083, jsii.get(self, "dataSourceRef"))
+        return typing.cast("_DataSourceReference_9b52a083", jsii.get(self, "dataSourceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="indexId")
@@ -718,14 +719,14 @@ class CfnDataSource(
     @jsii.member(jsii_name="customDocumentEnrichmentConfiguration")
     def custom_document_enrichment_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.CustomDocumentEnrichmentConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.CustomDocumentEnrichmentConfigurationProperty"]]:
         '''Configuration information for altering document metadata and content during the document ingestion process.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.CustomDocumentEnrichmentConfigurationProperty"]], jsii.get(self, "customDocumentEnrichmentConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.CustomDocumentEnrichmentConfigurationProperty"]], jsii.get(self, "customDocumentEnrichmentConfiguration"))
 
     @custom_document_enrichment_configuration.setter
     def custom_document_enrichment_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.CustomDocumentEnrichmentConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.CustomDocumentEnrichmentConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__13b151417bd0a802a711d66b55ba6494eed4691c8ad5b5af2f894a431892d5fb)
@@ -736,14 +737,14 @@ class CfnDataSource(
     @jsii.member(jsii_name="dataSourceConfiguration")
     def data_source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceConfigurationProperty"]]:
         '''Configuration information for an Amazon Kendra data source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceConfigurationProperty"]], jsii.get(self, "dataSourceConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceConfigurationProperty"]], jsii.get(self, "dataSourceConfiguration"))
 
     @data_source_configuration.setter
     def data_source_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ea79eed634a5ae09c1e689638d3ede50cbd8c33dae75c020cff75930d087664e)
@@ -804,12 +805,12 @@ class CfnDataSource(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__41d941d4ebe1dab6bb8a5a20578fb83a77ccb061d82e2760dbdeedd0e890b9fb)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -939,7 +940,7 @@ class CfnDataSource(
             document_data_column_name: builtins.str,
             document_id_column_name: builtins.str,
             document_title_column_name: typing.Optional[builtins.str] = None,
-            field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Provides information about how Amazon Kendra should use the columns of a database in an index.
 
@@ -1033,7 +1034,7 @@ class CfnDataSource(
         @builtins.property
         def field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
             '''An array of objects that map database column names to the corresponding fields in an index.
 
             You must first create the fields in the index using the `UpdateIndex <https://docs.aws.amazon.com/kendra/latest/dg/API_UpdateIndex.html>`_ operation.
@@ -1041,7 +1042,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-columnconfiguration.html#cfn-kendra-datasource-columnconfiguration-fieldmappings
             '''
             result = self._values.get("field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1066,8 +1067,8 @@ class CfnDataSource(
         def __init__(
             self,
             *,
-            attachment_field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ConfluenceAttachmentToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            crawl_attachments: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            attachment_field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ConfluenceAttachmentToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            crawl_attachments: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Configuration of attachment settings for the Confluence data source.
 
@@ -1109,7 +1110,7 @@ class CfnDataSource(
         @builtins.property
         def attachment_field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceAttachmentToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceAttachmentToIndexFieldMappingProperty"]]]]:
             '''Maps attributes or field names of Confluence attachments to Amazon Kendra index field names.
 
             To create custom fields, use the ``UpdateIndex`` API before you map to Confluence fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The Confluence data source field names must exist in your Confluence custom metadata.
@@ -1119,18 +1120,18 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-confluenceattachmentconfiguration.html#cfn-kendra-datasource-confluenceattachmentconfiguration-attachmentfieldmappings
             '''
             result = self._values.get("attachment_field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceAttachmentToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceAttachmentToIndexFieldMappingProperty"]]]], result)
 
         @builtins.property
         def crawl_attachments(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to index attachments of pages and blogs in Confluence.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-confluenceattachmentconfiguration.html#cfn-kendra-datasource-confluenceattachmentconfiguration-crawlattachments
             '''
             result = self._values.get("crawl_attachments")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1252,7 +1253,7 @@ class CfnDataSource(
         def __init__(
             self,
             *,
-            blog_field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ConfluenceBlogToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            blog_field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ConfluenceBlogToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Configuration of blog settings for the Confluence data source.
 
@@ -1289,7 +1290,7 @@ class CfnDataSource(
         @builtins.property
         def blog_field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceBlogToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceBlogToIndexFieldMappingProperty"]]]]:
             '''Maps attributes or field names of Confluence blogs to Amazon Kendra index field names.
 
             To create custom fields, use the ``UpdateIndex`` API before you map to Confluence fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The Confluence data source field names must exist in your Confluence custom metadata.
@@ -1299,7 +1300,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-confluenceblogconfiguration.html#cfn-kendra-datasource-confluenceblogconfiguration-blogfieldmappings
             '''
             result = self._values.get("blog_field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceBlogToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceBlogToIndexFieldMappingProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1433,13 +1434,13 @@ class CfnDataSource(
             secret_arn: builtins.str,
             server_url: builtins.str,
             version: builtins.str,
-            attachment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ConfluenceAttachmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            blog_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ConfluenceBlogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            attachment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ConfluenceAttachmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            blog_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ConfluenceBlogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             exclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
             inclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-            page_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ConfluencePageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            space_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ConfluenceSpaceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceVpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            page_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ConfluencePageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            space_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ConfluenceSpaceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceVpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides the configuration information to connect to Confluence as your data source.
 
@@ -1589,24 +1590,24 @@ class CfnDataSource(
         @builtins.property
         def attachment_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceAttachmentConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceAttachmentConfigurationProperty"]]:
             '''Configuration information for indexing attachments to Confluence blogs and pages.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-confluenceconfiguration.html#cfn-kendra-datasource-confluenceconfiguration-attachmentconfiguration
             '''
             result = self._values.get("attachment_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceAttachmentConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceAttachmentConfigurationProperty"]], result)
 
         @builtins.property
         def blog_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceBlogConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceBlogConfigurationProperty"]]:
             '''Configuration information for indexing Confluence blogs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-confluenceconfiguration.html#cfn-kendra-datasource-confluenceconfiguration-blogconfiguration
             '''
             result = self._values.get("blog_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceBlogConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceBlogConfigurationProperty"]], result)
 
         @builtins.property
         def exclusion_patterns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1633,29 +1634,29 @@ class CfnDataSource(
         @builtins.property
         def page_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluencePageConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluencePageConfigurationProperty"]]:
             '''Configuration information for indexing Confluence pages.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-confluenceconfiguration.html#cfn-kendra-datasource-confluenceconfiguration-pageconfiguration
             '''
             result = self._values.get("page_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluencePageConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluencePageConfigurationProperty"]], result)
 
         @builtins.property
         def space_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceSpaceConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceSpaceConfigurationProperty"]]:
             '''Configuration information for indexing Confluence spaces.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-confluenceconfiguration.html#cfn-kendra-datasource-confluenceconfiguration-spaceconfiguration
             '''
             result = self._values.get("space_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceSpaceConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceSpaceConfigurationProperty"]], result)
 
         @builtins.property
         def vpc_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceVpcConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceVpcConfigurationProperty"]]:
             '''Configuration information for an Amazon Virtual Private Cloud to connect to your Confluence.
 
             For more information, see `Configuring a VPC <https://docs.aws.amazon.com/kendra/latest/dg/vpc-configuration.html>`_ .
@@ -1663,7 +1664,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-confluenceconfiguration.html#cfn-kendra-datasource-confluenceconfiguration-vpcconfiguration
             '''
             result = self._values.get("vpc_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceVpcConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceVpcConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1685,7 +1686,7 @@ class CfnDataSource(
         def __init__(
             self,
             *,
-            page_field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ConfluencePageToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            page_field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ConfluencePageToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Configuration of the page settings for the Confluence data source.
 
@@ -1720,7 +1721,7 @@ class CfnDataSource(
         @builtins.property
         def page_field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluencePageToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluencePageToIndexFieldMappingProperty"]]]]:
             '''Maps attributes or field names of Confluence pages to Amazon Kendra index field names.
 
             To create custom fields, use the ``UpdateIndex`` API before you map to Confluence fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The Confluence data source field names must exist in your Confluence custom metadata.
@@ -1730,7 +1731,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-confluencepageconfiguration.html#cfn-kendra-datasource-confluencepageconfiguration-pagefieldmappings
             '''
             result = self._values.get("page_field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluencePageToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluencePageToIndexFieldMappingProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1856,11 +1857,11 @@ class CfnDataSource(
         def __init__(
             self,
             *,
-            crawl_archived_spaces: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            crawl_personal_spaces: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            crawl_archived_spaces: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            crawl_personal_spaces: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             exclude_spaces: typing.Optional[typing.Sequence[builtins.str]] = None,
             include_spaces: typing.Optional[typing.Sequence[builtins.str]] = None,
-            space_field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ConfluenceSpaceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            space_field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ConfluenceSpaceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Configuration information for indexing Confluence spaces.
 
@@ -1915,18 +1916,18 @@ class CfnDataSource(
         @builtins.property
         def crawl_archived_spaces(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to index archived spaces.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-confluencespaceconfiguration.html#cfn-kendra-datasource-confluencespaceconfiguration-crawlarchivedspaces
             '''
             result = self._values.get("crawl_archived_spaces")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def crawl_personal_spaces(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to index personal spaces.
 
             You can add restrictions to items in personal spaces. If personal spaces are indexed, queries without user context information may return restricted items from a personal space in their results. For more information, see `Filtering on user context <https://docs.aws.amazon.com/kendra/latest/dg/user-context-filter.html>`_ .
@@ -1934,7 +1935,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-confluencespaceconfiguration.html#cfn-kendra-datasource-confluencespaceconfiguration-crawlpersonalspaces
             '''
             result = self._values.get("crawl_personal_spaces")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def exclude_spaces(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1961,7 +1962,7 @@ class CfnDataSource(
         @builtins.property
         def space_field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceSpaceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceSpaceToIndexFieldMappingProperty"]]]]:
             '''Maps attributes or field names of Confluence spaces to Amazon Kendra index field names.
 
             To create custom fields, use the ``UpdateIndex`` API before you map to Confluence fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The Confluence data source field names must exist in your Confluence custom metadata.
@@ -1971,7 +1972,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-confluencespaceconfiguration.html#cfn-kendra-datasource-confluencespaceconfiguration-spacefieldmappings
             '''
             result = self._values.get("space_field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceSpaceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceSpaceToIndexFieldMappingProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2222,9 +2223,9 @@ class CfnDataSource(
         def __init__(
             self,
             *,
-            inline_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.InlineCustomDocumentEnrichmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            post_extraction_hook_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.HookConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            pre_extraction_hook_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.HookConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            inline_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.InlineCustomDocumentEnrichmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            post_extraction_hook_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.HookConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            pre_extraction_hook_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.HookConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             role_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Provides the configuration information for altering document metadata and content during the document ingestion process.
@@ -2331,18 +2332,18 @@ class CfnDataSource(
         @builtins.property
         def inline_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.InlineCustomDocumentEnrichmentConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.InlineCustomDocumentEnrichmentConfigurationProperty"]]]]:
             '''Configuration information to alter document attributes or metadata fields and content when ingesting documents into Amazon Kendra.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-customdocumentenrichmentconfiguration.html#cfn-kendra-datasource-customdocumentenrichmentconfiguration-inlineconfigurations
             '''
             result = self._values.get("inline_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.InlineCustomDocumentEnrichmentConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.InlineCustomDocumentEnrichmentConfigurationProperty"]]]], result)
 
         @builtins.property
         def post_extraction_hook_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.HookConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HookConfigurationProperty"]]:
             '''Configuration information for invoking a Lambda function in AWS Lambda on the structured documents with their metadata and text extracted.
 
             You can use a Lambda function to apply advanced logic for creating, modifying, or deleting document metadata and content. For more information, see `Advanced data manipulation <https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html#advanced-data-manipulation>`_ .
@@ -2350,12 +2351,12 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-customdocumentenrichmentconfiguration.html#cfn-kendra-datasource-customdocumentenrichmentconfiguration-postextractionhookconfiguration
             '''
             result = self._values.get("post_extraction_hook_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.HookConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HookConfigurationProperty"]], result)
 
         @builtins.property
         def pre_extraction_hook_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.HookConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HookConfigurationProperty"]]:
             '''Configuration information for invoking a Lambda function in AWS Lambda on the original or raw documents before extracting their metadata and text.
 
             You can use a Lambda function to apply advanced logic for creating, modifying, or deleting document metadata and content. For more information, see `Advanced data manipulation <https://docs.aws.amazon.com/kendra/latest/dg/custom-document-enrichment.html#advanced-data-manipulation>`_ .
@@ -2363,7 +2364,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-customdocumentenrichmentconfiguration.html#cfn-kendra-datasource-customdocumentenrichmentconfiguration-preextractionhookconfiguration
             '''
             result = self._values.get("pre_extraction_hook_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.HookConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.HookConfigurationProperty"]], result)
 
         @builtins.property
         def role_arn(self) -> typing.Optional[builtins.str]:
@@ -2408,17 +2409,17 @@ class CfnDataSource(
         def __init__(
             self,
             *,
-            confluence_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ConfluenceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            database_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DatabaseConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            google_drive_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.GoogleDriveConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            one_drive_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.OneDriveConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.S3DataSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            salesforce_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.SalesforceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            service_now_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ServiceNowConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            share_point_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.SharePointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            template_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.TemplateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            web_crawler_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.WebCrawlerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            work_docs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.WorkDocsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            confluence_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ConfluenceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            database_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DatabaseConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            google_drive_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.GoogleDriveConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            one_drive_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.OneDriveConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.S3DataSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            salesforce_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.SalesforceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            service_now_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ServiceNowConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            share_point_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.SharePointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            template_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.TemplateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            web_crawler_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.WebCrawlerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            work_docs_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.WorkDocsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides the configuration information for an Amazon Kendra data source.
 
@@ -2833,51 +2834,51 @@ class CfnDataSource(
         @builtins.property
         def confluence_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceConfigurationProperty"]]:
             '''Provides the configuration information to connect to Confluence as your data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-datasourceconfiguration.html#cfn-kendra-datasource-datasourceconfiguration-confluenceconfiguration
             '''
             result = self._values.get("confluence_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConfluenceConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConfluenceConfigurationProperty"]], result)
 
         @builtins.property
         def database_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DatabaseConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DatabaseConfigurationProperty"]]:
             '''Provides the configuration information to connect to a database as your data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-datasourceconfiguration.html#cfn-kendra-datasource-datasourceconfiguration-databaseconfiguration
             '''
             result = self._values.get("database_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DatabaseConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DatabaseConfigurationProperty"]], result)
 
         @builtins.property
         def google_drive_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.GoogleDriveConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.GoogleDriveConfigurationProperty"]]:
             '''Provides the configuration information to connect to Google Drive as your data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-datasourceconfiguration.html#cfn-kendra-datasource-datasourceconfiguration-googledriveconfiguration
             '''
             result = self._values.get("google_drive_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.GoogleDriveConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.GoogleDriveConfigurationProperty"]], result)
 
         @builtins.property
         def one_drive_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.OneDriveConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.OneDriveConfigurationProperty"]]:
             '''Provides the configuration information to connect to Microsoft OneDrive as your data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-datasourceconfiguration.html#cfn-kendra-datasource-datasourceconfiguration-onedriveconfiguration
             '''
             result = self._values.get("one_drive_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.OneDriveConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.OneDriveConfigurationProperty"]], result)
 
         @builtins.property
         def s3_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.S3DataSourceConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.S3DataSourceConfigurationProperty"]]:
             '''Provides the configuration information to connect to an Amazon S3 bucket as your data source.
 
             .. epigraph::
@@ -2893,73 +2894,73 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-datasourceconfiguration.html#cfn-kendra-datasource-datasourceconfiguration-s3configuration
             '''
             result = self._values.get("s3_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.S3DataSourceConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.S3DataSourceConfigurationProperty"]], result)
 
         @builtins.property
         def salesforce_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceConfigurationProperty"]]:
             '''Provides the configuration information to connect to Salesforce as your data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-datasourceconfiguration.html#cfn-kendra-datasource-datasourceconfiguration-salesforceconfiguration
             '''
             result = self._values.get("salesforce_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceConfigurationProperty"]], result)
 
         @builtins.property
         def service_now_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ServiceNowConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ServiceNowConfigurationProperty"]]:
             '''Provides the configuration information to connect to ServiceNow as your data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-datasourceconfiguration.html#cfn-kendra-datasource-datasourceconfiguration-servicenowconfiguration
             '''
             result = self._values.get("service_now_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ServiceNowConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ServiceNowConfigurationProperty"]], result)
 
         @builtins.property
         def share_point_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SharePointConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SharePointConfigurationProperty"]]:
             '''Provides the configuration information to connect to Microsoft SharePoint as your data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-datasourceconfiguration.html#cfn-kendra-datasource-datasourceconfiguration-sharepointconfiguration
             '''
             result = self._values.get("share_point_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SharePointConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SharePointConfigurationProperty"]], result)
 
         @builtins.property
         def template_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.TemplateConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.TemplateConfigurationProperty"]]:
             '''Provides a template for the configuration information to connect to your data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-datasourceconfiguration.html#cfn-kendra-datasource-datasourceconfiguration-templateconfiguration
             '''
             result = self._values.get("template_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.TemplateConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.TemplateConfigurationProperty"]], result)
 
         @builtins.property
         def web_crawler_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.WebCrawlerConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.WebCrawlerConfigurationProperty"]]:
             '''Provides the configuration information required for Amazon Kendra Web Crawler.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-datasourceconfiguration.html#cfn-kendra-datasource-datasourceconfiguration-webcrawlerconfiguration
             '''
             result = self._values.get("web_crawler_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.WebCrawlerConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.WebCrawlerConfigurationProperty"]], result)
 
         @builtins.property
         def work_docs_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.WorkDocsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.WorkDocsConfigurationProperty"]]:
             '''Provides the configuration information to connect to WorkDocs as your data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-datasourceconfiguration.html#cfn-kendra-datasource-datasourceconfiguration-workdocsconfiguration
             '''
             result = self._values.get("work_docs_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.WorkDocsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.WorkDocsConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3166,12 +3167,12 @@ class CfnDataSource(
         def __init__(
             self,
             *,
-            column_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ColumnConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            connection_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ConnectionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            column_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ColumnConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            connection_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ConnectionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             database_engine_type: builtins.str,
-            acl_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.AclConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sql_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.SqlConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceVpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            acl_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.AclConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sql_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.SqlConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceVpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides the configuration information to an `Amazon Kendra supported database <https://docs.aws.amazon.com/kendra/latest/dg/data-source-database.html>`_ .
 
@@ -3252,26 +3253,26 @@ class CfnDataSource(
         @builtins.property
         def column_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDataSource.ColumnConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataSource.ColumnConfigurationProperty"]:
             '''Information about where the index should get the document information from the database.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-databaseconfiguration.html#cfn-kendra-datasource-databaseconfiguration-columnconfiguration
             '''
             result = self._values.get("column_configuration")
             assert result is not None, "Required property 'column_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDataSource.ColumnConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataSource.ColumnConfigurationProperty"], result)
 
         @builtins.property
         def connection_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConnectionConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConnectionConfigurationProperty"]:
             '''Configuration information that's required to connect to a database.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-databaseconfiguration.html#cfn-kendra-datasource-databaseconfiguration-connectionconfiguration
             '''
             result = self._values.get("connection_configuration")
             assert result is not None, "Required property 'connection_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDataSource.ConnectionConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataSource.ConnectionConfigurationProperty"], result)
 
         @builtins.property
         def database_engine_type(self) -> builtins.str:
@@ -3286,35 +3287,35 @@ class CfnDataSource(
         @builtins.property
         def acl_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.AclConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.AclConfigurationProperty"]]:
             '''Information about the database column that provides information for user context filtering.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-databaseconfiguration.html#cfn-kendra-datasource-databaseconfiguration-aclconfiguration
             '''
             result = self._values.get("acl_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.AclConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.AclConfigurationProperty"]], result)
 
         @builtins.property
         def sql_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SqlConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SqlConfigurationProperty"]]:
             '''Provides information about how Amazon Kendra uses quote marks around SQL identifiers when querying a database data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-databaseconfiguration.html#cfn-kendra-datasource-databaseconfiguration-sqlconfiguration
             '''
             result = self._values.get("sql_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SqlConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SqlConfigurationProperty"]], result)
 
         @builtins.property
         def vpc_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceVpcConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceVpcConfigurationProperty"]]:
             '''Provides information for connecting to an Amazon VPC.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-databaseconfiguration.html#cfn-kendra-datasource-databaseconfiguration-vpcconfiguration
             '''
             result = self._values.get("vpc_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceVpcConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceVpcConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3342,7 +3343,7 @@ class CfnDataSource(
             *,
             condition_document_attribute_key: builtins.str,
             operator: builtins.str,
-            condition_on_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DocumentAttributeValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            condition_on_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DocumentAttributeValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The condition used for the target document attribute or metadata field when ingesting documents into Amazon Kendra.
 
@@ -3419,7 +3420,7 @@ class CfnDataSource(
         @builtins.property
         def condition_on_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DocumentAttributeValueProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DocumentAttributeValueProperty"]]:
             '''The value used by the operator.
 
             For example, you can specify the value 'financial' for strings in the 'Source_URI' field that partially match or contain this value.
@@ -3427,7 +3428,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-documentattributecondition.html#cfn-kendra-datasource-documentattributecondition-conditiononvalue
             '''
             result = self._values.get("condition_on_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DocumentAttributeValueProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DocumentAttributeValueProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3454,8 +3455,8 @@ class CfnDataSource(
             self,
             *,
             target_document_attribute_key: builtins.str,
-            target_document_attribute_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DocumentAttributeValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            target_document_attribute_value_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            target_document_attribute_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DocumentAttributeValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            target_document_attribute_value_deletion: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The target document attribute or metadata field you want to alter when ingesting documents into Amazon Kendra.
 
@@ -3519,7 +3520,7 @@ class CfnDataSource(
         @builtins.property
         def target_document_attribute_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DocumentAttributeValueProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DocumentAttributeValueProperty"]]:
             '''The target value you want to create for the target attribute.
 
             For example, 'Finance' could be the target value for the target attribute key 'Department'.
@@ -3527,12 +3528,12 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-documentattributetarget.html#cfn-kendra-datasource-documentattributetarget-targetdocumentattributevalue
             '''
             result = self._values.get("target_document_attribute_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DocumentAttributeValueProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DocumentAttributeValueProperty"]], result)
 
         @builtins.property
         def target_document_attribute_value_deletion(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to delete the existing target value for your specified target attribute key.
 
             You cannot create a target value and set this to ``TRUE`` . To create a target value ( ``TargetDocumentAttributeValue`` ), set this to ``FALSE`` .
@@ -3540,7 +3541,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-documentattributetarget.html#cfn-kendra-datasource-documentattributetarget-targetdocumentattributevaluedeletion
             '''
             result = self._values.get("target_document_attribute_value_deletion")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3741,7 +3742,7 @@ class CfnDataSource(
             exclude_shared_drives: typing.Optional[typing.Sequence[builtins.str]] = None,
             exclude_user_accounts: typing.Optional[typing.Sequence[builtins.str]] = None,
             exclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-            field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             inclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Provides the configuration information to connect to Google Drive as your data source.
@@ -3865,7 +3866,7 @@ class CfnDataSource(
         @builtins.property
         def field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
             '''Maps Google Drive data source attributes or field names to Amazon Kendra index field names.
 
             To create custom fields, use the ``UpdateIndex`` API before you map to Google Drive fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The Google Drive data source field names must exist in your Google Drive custom metadata.
@@ -3873,7 +3874,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-googledriveconfiguration.html#cfn-kendra-datasource-googledriveconfiguration-fieldmappings
             '''
             result = self._values.get("field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
 
         @builtins.property
         def inclusion_patterns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3912,7 +3913,7 @@ class CfnDataSource(
             *,
             lambda_arn: builtins.str,
             s3_bucket: builtins.str,
-            invocation_condition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DocumentAttributeConditionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            invocation_condition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DocumentAttributeConditionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides the configuration information for invoking a Lambda function in AWS Lambda to alter document metadata and content when ingesting documents into Amazon Kendra.
 
@@ -3991,7 +3992,7 @@ class CfnDataSource(
         @builtins.property
         def invocation_condition(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DocumentAttributeConditionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DocumentAttributeConditionProperty"]]:
             '''The condition used for when a Lambda function should be invoked.
 
             For example, you can specify a condition that if there are empty date-time values, then Amazon Kendra should invoke a function that inserts the current date-time.
@@ -3999,7 +4000,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-hookconfiguration.html#cfn-kendra-datasource-hookconfiguration-invocationcondition
             '''
             result = self._values.get("invocation_condition")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DocumentAttributeConditionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DocumentAttributeConditionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4025,9 +4026,9 @@ class CfnDataSource(
         def __init__(
             self,
             *,
-            condition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DocumentAttributeConditionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            document_content_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DocumentAttributeTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            condition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DocumentAttributeConditionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            document_content_deletion: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            target: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DocumentAttributeTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides the configuration information for applying basic logic to alter document metadata and content when ingesting documents into Amazon Kendra.
 
@@ -4092,29 +4093,29 @@ class CfnDataSource(
         @builtins.property
         def condition(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DocumentAttributeConditionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DocumentAttributeConditionProperty"]]:
             '''Configuration of the condition used for the target document attribute or metadata field when ingesting documents into Amazon Kendra.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-inlinecustomdocumentenrichmentconfiguration.html#cfn-kendra-datasource-inlinecustomdocumentenrichmentconfiguration-condition
             '''
             result = self._values.get("condition")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DocumentAttributeConditionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DocumentAttributeConditionProperty"]], result)
 
         @builtins.property
         def document_content_deletion(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to delete content if the condition used for the target attribute is met.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-inlinecustomdocumentenrichmentconfiguration.html#cfn-kendra-datasource-inlinecustomdocumentenrichmentconfiguration-documentcontentdeletion
             '''
             result = self._values.get("document_content_deletion")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def target(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DocumentAttributeTargetProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DocumentAttributeTargetProperty"]]:
             '''Configuration of the target document attribute or metadata field when ingesting documents into Amazon Kendra.
 
             You can also include a value.
@@ -4122,7 +4123,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-inlinecustomdocumentenrichmentconfiguration.html#cfn-kendra-datasource-inlinecustomdocumentenrichmentconfiguration-target
             '''
             result = self._values.get("target")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DocumentAttributeTargetProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DocumentAttributeTargetProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4152,12 +4153,12 @@ class CfnDataSource(
         def __init__(
             self,
             *,
-            one_drive_users: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.OneDriveUsersProperty", typing.Dict[builtins.str, typing.Any]]],
+            one_drive_users: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.OneDriveUsersProperty", typing.Dict[builtins.str, typing.Any]]],
             secret_arn: builtins.str,
             tenant_domain: builtins.str,
-            disable_local_groups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            disable_local_groups: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             exclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-            field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             inclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Provides the configuration information to connect to OneDrive as your data source.
@@ -4229,14 +4230,14 @@ class CfnDataSource(
         @builtins.property
         def one_drive_users(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDataSource.OneDriveUsersProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataSource.OneDriveUsersProperty"]:
             '''A list of user accounts whose documents should be indexed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-onedriveconfiguration.html#cfn-kendra-datasource-onedriveconfiguration-onedriveusers
             '''
             result = self._values.get("one_drive_users")
             assert result is not None, "Required property 'one_drive_users' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDataSource.OneDriveUsersProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataSource.OneDriveUsersProperty"], result)
 
         @builtins.property
         def secret_arn(self) -> builtins.str:
@@ -4263,13 +4264,13 @@ class CfnDataSource(
         @builtins.property
         def disable_local_groups(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to disable local groups information.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-onedriveconfiguration.html#cfn-kendra-datasource-onedriveconfiguration-disablelocalgroups
             '''
             result = self._values.get("disable_local_groups")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def exclusion_patterns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -4287,7 +4288,7 @@ class CfnDataSource(
         @builtins.property
         def field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
             '''A list of ``DataSourceToIndexFieldMapping`` objects that map OneDrive data source attributes or field names to Amazon Kendra index field names.
 
             To create custom fields, use the ``UpdateIndex`` API before you map to OneDrive fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The OneDrive data source field names must exist in your OneDrive custom metadata.
@@ -4295,7 +4296,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-onedriveconfiguration.html#cfn-kendra-datasource-onedriveconfiguration-fieldmappings
             '''
             result = self._values.get("field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
 
         @builtins.property
         def inclusion_patterns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -4334,7 +4335,7 @@ class CfnDataSource(
             self,
             *,
             one_drive_user_list: typing.Optional[typing.Sequence[builtins.str]] = None,
-            one_drive_user_s3_path: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.S3PathProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            one_drive_user_s3_path: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.S3PathProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''User accounts whose documents should be indexed.
 
@@ -4382,13 +4383,13 @@ class CfnDataSource(
         @builtins.property
         def one_drive_user_s3_path(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.S3PathProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.S3PathProperty"]]:
             '''The S3 bucket location of a file containing a list of users whose documents should be indexed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-onedriveusers.html#cfn-kendra-datasource-onedriveusers-onedriveusers3path
             '''
             result = self._values.get("one_drive_user_s3_path")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.S3PathProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.S3PathProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4514,8 +4515,8 @@ class CfnDataSource(
             self,
             *,
             bucket_name: builtins.str,
-            access_control_list_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.AccessControlListConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            documents_metadata_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DocumentsMetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            access_control_list_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.AccessControlListConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            documents_metadata_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DocumentsMetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             exclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
             inclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
             inclusion_prefixes: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -4588,7 +4589,7 @@ class CfnDataSource(
         @builtins.property
         def access_control_list_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.AccessControlListConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.AccessControlListConfigurationProperty"]]:
             '''Provides the path to the S3 bucket that contains the user context filtering files for the data source.
 
             For the format of the file, see `Access control for S3 data sources <https://docs.aws.amazon.com/kendra/latest/dg/s3-acl.html>`_ .
@@ -4596,12 +4597,12 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-s3datasourceconfiguration.html#cfn-kendra-datasource-s3datasourceconfiguration-accesscontrollistconfiguration
             '''
             result = self._values.get("access_control_list_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.AccessControlListConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.AccessControlListConfigurationProperty"]], result)
 
         @builtins.property
         def documents_metadata_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DocumentsMetadataConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DocumentsMetadataConfigurationProperty"]]:
             '''Specifies document metadata files that contain information such as the document access control information, source URI, document author, and custom attributes.
 
             Each metadata file contains metadata about a single document.
@@ -4609,7 +4610,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-s3datasourceconfiguration.html#cfn-kendra-datasource-s3datasourceconfiguration-documentsmetadataconfiguration
             '''
             result = self._values.get("documents_metadata_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DocumentsMetadataConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DocumentsMetadataConfigurationProperty"]], result)
 
         @builtins.property
         def exclusion_patterns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -4765,7 +4766,7 @@ class CfnDataSource(
             *,
             document_data_field_name: builtins.str,
             document_title_field_name: typing.Optional[builtins.str] = None,
-            field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             include_filter_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''The configuration information for syncing a Salesforce chatter feed.
@@ -4843,13 +4844,13 @@ class CfnDataSource(
         @builtins.property
         def field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
             '''Maps fields from a Salesforce chatter feed into Amazon Kendra index fields.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-salesforcechatterfeedconfiguration.html#cfn-kendra-datasource-salesforcechatterfeedconfiguration-fieldmappings
             '''
             result = self._values.get("field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
 
         @builtins.property
         def include_filter_types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -4894,13 +4895,13 @@ class CfnDataSource(
             *,
             secret_arn: builtins.str,
             server_url: builtins.str,
-            chatter_feed_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.SalesforceChatterFeedConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            crawl_attachments: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            chatter_feed_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.SalesforceChatterFeedConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            crawl_attachments: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             exclude_attachment_file_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
             include_attachment_file_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-            knowledge_article_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.SalesforceKnowledgeArticleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            standard_object_attachment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.SalesforceStandardObjectAttachmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            standard_object_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.SalesforceStandardObjectConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            knowledge_article_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.SalesforceKnowledgeArticleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            standard_object_attachment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.SalesforceStandardObjectAttachmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            standard_object_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.SalesforceStandardObjectConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Provides the configuration information to connect to Salesforce as your data source.
 
@@ -5065,24 +5066,24 @@ class CfnDataSource(
         @builtins.property
         def chatter_feed_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceChatterFeedConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceChatterFeedConfigurationProperty"]]:
             '''Configuration information for Salesforce chatter feeds.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-salesforceconfiguration.html#cfn-kendra-datasource-salesforceconfiguration-chatterfeedconfiguration
             '''
             result = self._values.get("chatter_feed_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceChatterFeedConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceChatterFeedConfigurationProperty"]], result)
 
         @builtins.property
         def crawl_attachments(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether Amazon Kendra should index attachments to Salesforce objects.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-salesforceconfiguration.html#cfn-kendra-datasource-salesforceconfiguration-crawlattachments
             '''
             result = self._values.get("crawl_attachments")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def exclude_attachment_file_patterns(
@@ -5117,7 +5118,7 @@ class CfnDataSource(
         @builtins.property
         def knowledge_article_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceKnowledgeArticleConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceKnowledgeArticleConfigurationProperty"]]:
             '''Configuration information for the knowledge article types that Amazon Kendra indexes.
 
             Amazon Kendra indexes standard knowledge articles and the standard fields of knowledge articles, or the custom fields of custom knowledge articles, but not both.
@@ -5125,29 +5126,29 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-salesforceconfiguration.html#cfn-kendra-datasource-salesforceconfiguration-knowledgearticleconfiguration
             '''
             result = self._values.get("knowledge_article_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceKnowledgeArticleConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceKnowledgeArticleConfigurationProperty"]], result)
 
         @builtins.property
         def standard_object_attachment_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceStandardObjectAttachmentConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceStandardObjectAttachmentConfigurationProperty"]]:
             '''Configuration information for processing attachments to Salesforce standard objects.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-salesforceconfiguration.html#cfn-kendra-datasource-salesforceconfiguration-standardobjectattachmentconfiguration
             '''
             result = self._values.get("standard_object_attachment_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceStandardObjectAttachmentConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceStandardObjectAttachmentConfigurationProperty"]], result)
 
         @builtins.property
         def standard_object_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceStandardObjectConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceStandardObjectConfigurationProperty"]]]]:
             '''Configuration of the Salesforce standard objects that Amazon Kendra indexes.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-salesforceconfiguration.html#cfn-kendra-datasource-salesforceconfiguration-standardobjectconfigurations
             '''
             result = self._values.get("standard_object_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceStandardObjectConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceStandardObjectConfigurationProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5177,7 +5178,7 @@ class CfnDataSource(
             document_data_field_name: builtins.str,
             name: builtins.str,
             document_title_field_name: typing.Optional[builtins.str] = None,
-            field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Provides the configuration information for indexing Salesforce custom articles.
 
@@ -5257,7 +5258,7 @@ class CfnDataSource(
         @builtins.property
         def field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
             '''Maps attributes or field names of the custom knowledge article to Amazon Kendra index field names.
 
             To create custom fields, use the ``UpdateIndex`` API before you map to Salesforce fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The Salesforce data source field names must exist in your Salesforce custom metadata.
@@ -5265,7 +5266,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-salesforcecustomknowledgearticletypeconfiguration.html#cfn-kendra-datasource-salesforcecustomknowledgearticletypeconfiguration-fieldmappings
             '''
             result = self._values.get("field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5292,8 +5293,8 @@ class CfnDataSource(
             self,
             *,
             included_states: typing.Sequence[builtins.str],
-            custom_knowledge_article_type_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.SalesforceCustomKnowledgeArticleTypeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            standard_knowledge_article_type_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.SalesforceStandardKnowledgeArticleTypeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom_knowledge_article_type_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.SalesforceCustomKnowledgeArticleTypeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            standard_knowledge_article_type_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.SalesforceStandardKnowledgeArticleTypeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides the configuration information for the knowledge article types that Amazon Kendra indexes.
 
@@ -5373,24 +5374,24 @@ class CfnDataSource(
         @builtins.property
         def custom_knowledge_article_type_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceCustomKnowledgeArticleTypeConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceCustomKnowledgeArticleTypeConfigurationProperty"]]]]:
             '''Configuration information for custom Salesforce knowledge articles.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-salesforceknowledgearticleconfiguration.html#cfn-kendra-datasource-salesforceknowledgearticleconfiguration-customknowledgearticletypeconfigurations
             '''
             result = self._values.get("custom_knowledge_article_type_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceCustomKnowledgeArticleTypeConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceCustomKnowledgeArticleTypeConfigurationProperty"]]]], result)
 
         @builtins.property
         def standard_knowledge_article_type_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceStandardKnowledgeArticleTypeConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceStandardKnowledgeArticleTypeConfigurationProperty"]]:
             '''Configuration information for standard Salesforce knowledge articles.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-salesforceknowledgearticleconfiguration.html#cfn-kendra-datasource-salesforceknowledgearticleconfiguration-standardknowledgearticletypeconfiguration
             '''
             result = self._values.get("standard_knowledge_article_type_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.SalesforceStandardKnowledgeArticleTypeConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.SalesforceStandardKnowledgeArticleTypeConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5418,7 +5419,7 @@ class CfnDataSource(
             *,
             document_data_field_name: builtins.str,
             document_title_field_name: typing.Optional[builtins.str] = None,
-            field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Provides the configuration information for standard Salesforce knowledge articles.
 
@@ -5484,7 +5485,7 @@ class CfnDataSource(
         @builtins.property
         def field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
             '''Maps attributes or field names of the knowledge article to Amazon Kendra index field names.
 
             To create custom fields, use the ``UpdateIndex`` API before you map to Salesforce fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The Salesforce data source field names must exist in your Salesforce custom metadata.
@@ -5492,7 +5493,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-salesforcestandardknowledgearticletypeconfiguration.html#cfn-kendra-datasource-salesforcestandardknowledgearticletypeconfiguration-fieldmappings
             '''
             result = self._values.get("field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5518,7 +5519,7 @@ class CfnDataSource(
             self,
             *,
             document_title_field_name: typing.Optional[builtins.str] = None,
-            field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Provides the configuration information for processing attachments to Salesforce standard objects.
 
@@ -5567,13 +5568,13 @@ class CfnDataSource(
         @builtins.property
         def field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
             '''One or more objects that map fields in attachments to Amazon Kendra index fields.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-salesforcestandardobjectattachmentconfiguration.html#cfn-kendra-datasource-salesforcestandardobjectattachmentconfiguration-fieldmappings
             '''
             result = self._values.get("field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5603,7 +5604,7 @@ class CfnDataSource(
             document_data_field_name: builtins.str,
             name: builtins.str,
             document_title_field_name: typing.Optional[builtins.str] = None,
-            field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Specifies configuration information for indexing a single standard object.
 
@@ -5683,7 +5684,7 @@ class CfnDataSource(
         @builtins.property
         def field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
             '''Maps attributes or field names of the standard object to Amazon Kendra index field names.
 
             To create custom fields, use the ``UpdateIndex`` API before you map to Salesforce fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The Salesforce data source field names must exist in your Salesforce custom metadata.
@@ -5691,7 +5692,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-salesforcestandardobjectconfiguration.html#cfn-kendra-datasource-salesforcestandardobjectconfiguration-fieldmappings
             '''
             result = self._values.get("field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5724,8 +5725,8 @@ class CfnDataSource(
             secret_arn: builtins.str,
             service_now_build_version: builtins.str,
             authentication_type: typing.Optional[builtins.str] = None,
-            knowledge_article_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ServiceNowKnowledgeArticleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            service_catalog_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ServiceNowServiceCatalogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            knowledge_article_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ServiceNowKnowledgeArticleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            service_catalog_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ServiceNowServiceCatalogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides the configuration information to connect to ServiceNow as your data source.
 
@@ -5859,24 +5860,24 @@ class CfnDataSource(
         @builtins.property
         def knowledge_article_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ServiceNowKnowledgeArticleConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ServiceNowKnowledgeArticleConfigurationProperty"]]:
             '''Configuration information for crawling knowledge articles in the ServiceNow site.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-servicenowconfiguration.html#cfn-kendra-datasource-servicenowconfiguration-knowledgearticleconfiguration
             '''
             result = self._values.get("knowledge_article_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ServiceNowKnowledgeArticleConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ServiceNowKnowledgeArticleConfigurationProperty"]], result)
 
         @builtins.property
         def service_catalog_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ServiceNowServiceCatalogConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ServiceNowServiceCatalogConfigurationProperty"]]:
             '''Configuration information for crawling service catalogs in the ServiceNow site.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-servicenowconfiguration.html#cfn-kendra-datasource-servicenowconfiguration-servicecatalogconfiguration
             '''
             result = self._values.get("service_catalog_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ServiceNowServiceCatalogConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ServiceNowServiceCatalogConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5907,10 +5908,10 @@ class CfnDataSource(
             self,
             *,
             document_data_field_name: builtins.str,
-            crawl_attachments: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            crawl_attachments: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             document_title_field_name: typing.Optional[builtins.str] = None,
             exclude_attachment_file_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-            field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             filter_query: typing.Optional[builtins.str] = None,
             include_attachment_file_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -5989,13 +5990,13 @@ class CfnDataSource(
         @builtins.property
         def crawl_attachments(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to index attachments to knowledge articles.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-servicenowknowledgearticleconfiguration.html#cfn-kendra-datasource-servicenowknowledgearticleconfiguration-crawlattachments
             '''
             result = self._values.get("crawl_attachments")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def document_title_field_name(self) -> typing.Optional[builtins.str]:
@@ -6022,7 +6023,7 @@ class CfnDataSource(
         @builtins.property
         def field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
             '''Maps attributes or field names of knoweldge articles to Amazon Kendra index field names.
 
             To create custom fields, use the ``UpdateIndex`` API before you map to ServiceNow fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The ServiceNow data source field names must exist in your ServiceNow custom metadata.
@@ -6030,7 +6031,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-servicenowknowledgearticleconfiguration.html#cfn-kendra-datasource-servicenowknowledgearticleconfiguration-fieldmappings
             '''
             result = self._values.get("field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
 
         @builtins.property
         def filter_query(self) -> typing.Optional[builtins.str]:
@@ -6086,10 +6087,10 @@ class CfnDataSource(
             self,
             *,
             document_data_field_name: builtins.str,
-            crawl_attachments: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            crawl_attachments: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             document_title_field_name: typing.Optional[builtins.str] = None,
             exclude_attachment_file_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-            field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             include_attachment_file_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Provides the configuration information for crawling service catalog items in the ServiceNow site.
@@ -6162,13 +6163,13 @@ class CfnDataSource(
         @builtins.property
         def crawl_attachments(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to index attachments to service catalog items.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-servicenowservicecatalogconfiguration.html#cfn-kendra-datasource-servicenowservicecatalogconfiguration-crawlattachments
             '''
             result = self._values.get("crawl_attachments")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def document_title_field_name(self) -> typing.Optional[builtins.str]:
@@ -6197,7 +6198,7 @@ class CfnDataSource(
         @builtins.property
         def field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
             '''Maps attributes or field names of catalogs to Amazon Kendra index field names.
 
             To create custom fields, use the ``UpdateIndex`` API before you map to ServiceNow fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The ServiceNow data source field names must exist in your ServiceNow custom metadata.
@@ -6205,7 +6206,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-servicenowservicecatalogconfiguration.html#cfn-kendra-datasource-servicenowservicecatalogconfiguration-fieldmappings
             '''
             result = self._values.get("field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
 
         @builtins.property
         def include_attachment_file_patterns(
@@ -6258,15 +6259,15 @@ class CfnDataSource(
             secret_arn: builtins.str,
             share_point_version: builtins.str,
             urls: typing.Sequence[builtins.str],
-            crawl_attachments: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            disable_local_groups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            crawl_attachments: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            disable_local_groups: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             document_title_field_name: typing.Optional[builtins.str] = None,
             exclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-            field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             inclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-            ssl_certificate_s3_path: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.S3PathProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            use_change_log: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceVpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ssl_certificate_s3_path: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.S3PathProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            use_change_log: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceVpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides the configuration information to connect to Microsoft SharePoint as your data source.
 
@@ -6394,24 +6395,24 @@ class CfnDataSource(
         @builtins.property
         def crawl_attachments(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to index document attachments.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-sharepointconfiguration.html#cfn-kendra-datasource-sharepointconfiguration-crawlattachments
             '''
             result = self._values.get("crawl_attachments")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def disable_local_groups(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to disable local groups information.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-sharepointconfiguration.html#cfn-kendra-datasource-sharepointconfiguration-disablelocalgroups
             '''
             result = self._values.get("disable_local_groups")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def document_title_field_name(self) -> typing.Optional[builtins.str]:
@@ -6438,7 +6439,7 @@ class CfnDataSource(
         @builtins.property
         def field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
             '''A list of ``DataSourceToIndexFieldMapping`` objects that map Microsoft SharePoint attributes or fields to Amazon Kendra index fields.
 
             You must first create the index fields using the `UpdateIndex <https://docs.aws.amazon.com/kendra/latest/dg/API_UpdateIndex.html>`_ operation before you map SharePoint attributes. For more information, see `Mapping Data Source Fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ .
@@ -6446,7 +6447,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-sharepointconfiguration.html#cfn-kendra-datasource-sharepointconfiguration-fieldmappings
             '''
             result = self._values.get("field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
 
         @builtins.property
         def inclusion_patterns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -6464,18 +6465,18 @@ class CfnDataSource(
         @builtins.property
         def ssl_certificate_s3_path(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.S3PathProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.S3PathProperty"]]:
             '''Information required to find a specific file in an Amazon S3 bucket.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-sharepointconfiguration.html#cfn-kendra-datasource-sharepointconfiguration-sslcertificates3path
             '''
             result = self._values.get("ssl_certificate_s3_path")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.S3PathProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.S3PathProperty"]], result)
 
         @builtins.property
         def use_change_log(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to use the SharePoint change log to determine which documents require updating in the index.
 
             Depending on the change log's size, it may take longer for Amazon Kendra to use the change log than to scan all of your documents in SharePoint.
@@ -6483,18 +6484,18 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-sharepointconfiguration.html#cfn-kendra-datasource-sharepointconfiguration-usechangelog
             '''
             result = self._values.get("use_change_log")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def vpc_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceVpcConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceVpcConfigurationProperty"]]:
             '''Provides information for connecting to an Amazon VPC.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-sharepointconfiguration.html#cfn-kendra-datasource-sharepointconfiguration-vpcconfiguration
             '''
             result = self._values.get("vpc_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceVpcConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceVpcConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6635,7 +6636,7 @@ class CfnDataSource(
         def __init__(
             self,
             *,
-            basic_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.WebCrawlerBasicAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            basic_authentication: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.WebCrawlerBasicAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Provides the configuration information to connect to websites that require user authentication.
 
@@ -6668,7 +6669,7 @@ class CfnDataSource(
         @builtins.property
         def basic_authentication(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.WebCrawlerBasicAuthenticationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.WebCrawlerBasicAuthenticationProperty"]]]]:
             '''The list of configuration information that's required to connect to and crawl a website host using basic authentication credentials.
 
             The list includes the name and port number of the website host.
@@ -6676,7 +6677,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-webcrawlerauthenticationconfiguration.html#cfn-kendra-datasource-webcrawlerauthenticationconfiguration-basicauthentication
             '''
             result = self._values.get("basic_authentication")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.WebCrawlerBasicAuthenticationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.WebCrawlerBasicAuthenticationProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6802,13 +6803,13 @@ class CfnDataSource(
         def __init__(
             self,
             *,
-            urls: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.WebCrawlerUrlsProperty", typing.Dict[builtins.str, typing.Any]]],
-            authentication_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.WebCrawlerAuthenticationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            urls: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.WebCrawlerUrlsProperty", typing.Dict[builtins.str, typing.Any]]],
+            authentication_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.WebCrawlerAuthenticationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             crawl_depth: typing.Optional[jsii.Number] = None,
             max_content_size_per_page_in_mega_bytes: typing.Optional[jsii.Number] = None,
             max_links_per_page: typing.Optional[jsii.Number] = None,
             max_urls_per_minute_crawl_rate: typing.Optional[jsii.Number] = None,
-            proxy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.ProxyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            proxy_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.ProxyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             url_exclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
             url_inclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -6903,7 +6904,7 @@ class CfnDataSource(
         @builtins.property
         def urls(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDataSource.WebCrawlerUrlsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataSource.WebCrawlerUrlsProperty"]:
             '''Specifies the seed or starting point URLs of the websites or the sitemap URLs of the websites you want to crawl.
 
             You can include website subdomains. You can list up to 100 seed URLs and up to three sitemap URLs.
@@ -6916,12 +6917,12 @@ class CfnDataSource(
             '''
             result = self._values.get("urls")
             assert result is not None, "Required property 'urls' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDataSource.WebCrawlerUrlsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataSource.WebCrawlerUrlsProperty"], result)
 
         @builtins.property
         def authentication_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.WebCrawlerAuthenticationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.WebCrawlerAuthenticationConfigurationProperty"]]:
             '''Configuration information required to connect to websites using authentication.
 
             You can connect to websites using basic authentication of user name and password. You use a secret in `AWS Secrets Manager <https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html>`_ to store your authentication credentials.
@@ -6931,7 +6932,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-webcrawlerconfiguration.html#cfn-kendra-datasource-webcrawlerconfiguration-authenticationconfiguration
             '''
             result = self._values.get("authentication_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.WebCrawlerAuthenticationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.WebCrawlerAuthenticationConfigurationProperty"]], result)
 
         @builtins.property
         def crawl_depth(self) -> typing.Optional[jsii.Number]:
@@ -6990,7 +6991,7 @@ class CfnDataSource(
         @builtins.property
         def proxy_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ProxyConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ProxyConfigurationProperty"]]:
             '''Configuration information required to connect to your internal websites via a web proxy.
 
             You must provide the website host name and port number. For example, the host name of https://a.example.com/page1.html is "a.example.com" and the port is 443, the standard port for HTTPS.
@@ -7000,7 +7001,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-webcrawlerconfiguration.html#cfn-kendra-datasource-webcrawlerconfiguration-proxyconfiguration
             '''
             result = self._values.get("proxy_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.ProxyConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.ProxyConfigurationProperty"]], result)
 
         @builtins.property
         def url_exclusion_patterns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -7186,8 +7187,8 @@ class CfnDataSource(
         def __init__(
             self,
             *,
-            seed_url_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.WebCrawlerSeedUrlConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            site_maps_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.WebCrawlerSiteMapsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            seed_url_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.WebCrawlerSeedUrlConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            site_maps_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.WebCrawlerSiteMapsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the seed or starting point URLs of the websites or the sitemap URLs of the websites you want to crawl.
 
@@ -7234,7 +7235,7 @@ class CfnDataSource(
         @builtins.property
         def seed_url_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.WebCrawlerSeedUrlConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.WebCrawlerSeedUrlConfigurationProperty"]]:
             '''Configuration of the seed or starting point URLs of the websites you want to crawl.
 
             You can choose to crawl only the website host names, or the website host names with subdomains, or the website host names with subdomains and other domains that the web pages link to.
@@ -7244,12 +7245,12 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-webcrawlerurls.html#cfn-kendra-datasource-webcrawlerurls-seedurlconfiguration
             '''
             result = self._values.get("seed_url_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.WebCrawlerSeedUrlConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.WebCrawlerSeedUrlConfigurationProperty"]], result)
 
         @builtins.property
         def site_maps_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.WebCrawlerSiteMapsConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.WebCrawlerSiteMapsConfigurationProperty"]]:
             '''Configuration of the sitemap URLs of the websites you want to crawl.
 
             Only URLs belonging to the same website host names are crawled. You can list up to three sitemap URLs.
@@ -7257,7 +7258,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-webcrawlerurls.html#cfn-kendra-datasource-webcrawlerurls-sitemapsconfiguration
             '''
             result = self._values.get("site_maps_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataSource.WebCrawlerSiteMapsConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.WebCrawlerSiteMapsConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7287,11 +7288,11 @@ class CfnDataSource(
             self,
             *,
             organization_id: builtins.str,
-            crawl_comments: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            crawl_comments: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             exclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-            field_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            field_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceToIndexFieldMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             inclusion_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-            use_change_log: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            use_change_log: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Provides the configuration information to connect to WorkDocs as your data source.
 
@@ -7367,7 +7368,7 @@ class CfnDataSource(
         @builtins.property
         def crawl_comments(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to include comments on documents in your index.
 
             Including comments in your index means each comment is a document that can be searched on.
@@ -7377,7 +7378,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-workdocsconfiguration.html#cfn-kendra-datasource-workdocsconfiguration-crawlcomments
             '''
             result = self._values.get("crawl_comments")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def exclusion_patterns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -7393,7 +7394,7 @@ class CfnDataSource(
         @builtins.property
         def field_mappings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]]:
             '''A list of ``DataSourceToIndexFieldMapping`` objects that map WorkDocs data source attributes or field names to Amazon Kendra index field names.
 
             To create custom fields, use the ``UpdateIndex`` API before you map to WorkDocs fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The WorkDocs data source field names must exist in your WorkDocs custom metadata.
@@ -7401,7 +7402,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-workdocsconfiguration.html#cfn-kendra-datasource-workdocsconfiguration-fieldmappings
             '''
             result = self._values.get("field_mappings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceToIndexFieldMappingProperty"]]]], result)
 
         @builtins.property
         def inclusion_patterns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -7417,7 +7418,7 @@ class CfnDataSource(
         @builtins.property
         def use_change_log(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''``TRUE`` to use the WorkDocs change log to determine which documents require updating in the index.
 
             Depending on the change log's size, it may take longer for Amazon Kendra to use the change log than to scan all of your documents in WorkDocs.
@@ -7425,7 +7426,7 @@ class CfnDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-workdocsconfiguration.html#cfn-kendra-datasource-workdocsconfiguration-usechangelog
             '''
             result = self._values.get("use_change_log")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7459,16 +7460,16 @@ class CfnDataSourceProps:
     def __init__(
         self,
         *,
-        index_id: typing.Union[builtins.str, _IIndexRef_a3487225],
+        index_id: typing.Union[builtins.str, "_IIndexRef_a3487225"],
         name: builtins.str,
         type: builtins.str,
-        custom_document_enrichment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.CustomDocumentEnrichmentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        data_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.DataSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_document_enrichment_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.CustomDocumentEnrichmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        data_source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataSource.DataSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         language_code: typing.Optional[builtins.str] = None,
-        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
         schedule: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataSource``.
 
@@ -7488,6 +7489,7 @@ class CfnDataSourceProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_kendra as kendra
@@ -7956,14 +7958,14 @@ class CfnDataSourceProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def index_id(self) -> typing.Union[builtins.str, _IIndexRef_a3487225]:
+    def index_id(self) -> typing.Union[builtins.str, "_IIndexRef_a3487225"]:
         '''The identifier of the index you want to use with the data source connector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-datasource.html#cfn-kendra-datasource-indexid
         '''
         result = self._values.get("index_id")
         assert result is not None, "Required property 'index_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IIndexRef_a3487225], result)
+        return typing.cast(typing.Union[builtins.str, "_IIndexRef_a3487225"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -7988,18 +7990,18 @@ class CfnDataSourceProps:
     @builtins.property
     def custom_document_enrichment_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.CustomDocumentEnrichmentConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.CustomDocumentEnrichmentConfigurationProperty"]]:
         '''Configuration information for altering document metadata and content during the document ingestion process.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-datasource.html#cfn-kendra-datasource-customdocumentenrichmentconfiguration
         '''
         result = self._values.get("custom_document_enrichment_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.CustomDocumentEnrichmentConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.CustomDocumentEnrichmentConfigurationProperty"]], result)
 
     @builtins.property
     def data_source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.DataSourceConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceConfigurationProperty"]]:
         '''Configuration information for an Amazon Kendra data source.
 
         The contents of the configuration depend on the type of data source. You can only specify one type of data source in the configuration.
@@ -8011,7 +8013,7 @@ class CfnDataSourceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-datasource.html#cfn-kendra-datasource-datasourceconfiguration
         '''
         result = self._values.get("data_source_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.DataSourceConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataSource.DataSourceConfigurationProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -8036,7 +8038,7 @@ class CfnDataSourceProps:
     @builtins.property
     def role_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''The Amazon Resource Name (ARN) of a role with permission to access the data source.
 
         You can't specify the ``RoleArn`` parameter when the ``Type`` parameter is set to ``CUSTOM`` .
@@ -8046,7 +8048,7 @@ class CfnDataSourceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-datasource.html#cfn-kendra-datasource-rolearn
         '''
         result = self._values.get("role_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     @builtins.property
     def schedule(self) -> typing.Optional[builtins.str]:
@@ -8060,7 +8062,7 @@ class CfnDataSourceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -8068,7 +8070,7 @@ class CfnDataSourceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-datasource.html#cfn-kendra-datasource-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8096,6 +8098,7 @@ class CfnFaq(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_kendra as kendra
@@ -8122,17 +8125,17 @@ class CfnFaq(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         index_id: builtins.str,
         name: builtins.str,
         role_arn: builtins.str,
-        s3_path: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFaq.S3PathProperty", typing.Dict[builtins.str, typing.Any]]],
+        s3_path: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFaq.S3PathProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
         file_format: typing.Optional[builtins.str] = None,
         language_code: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Kendra::Faq``.
 
@@ -8166,7 +8169,7 @@ class CfnFaq(
 
     @jsii.member(jsii_name="arnForFaq")
     @builtins.classmethod
-    def arn_for_faq(cls, resource: _IFaqRef_218eeb4a) -> builtins.str:
+    def arn_for_faq(cls, resource: "_IFaqRef_218eeb4a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -8188,7 +8191,7 @@ class CfnFaq(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFaq", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8244,15 +8247,15 @@ class CfnFaq(
 
     @builtins.property
     @jsii.member(jsii_name="faqRef")
-    def faq_ref(self) -> _FaqReference_599fc0ba:
+    def faq_ref(self) -> "_FaqReference_599fc0ba":
         '''A reference to a Faq resource.'''
-        return typing.cast(_FaqReference_599fc0ba, jsii.get(self, "faqRef"))
+        return typing.cast("_FaqReference_599fc0ba", jsii.get(self, "faqRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="indexId")
@@ -8295,14 +8298,14 @@ class CfnFaq(
 
     @builtins.property
     @jsii.member(jsii_name="s3Path")
-    def s3_path(self) -> typing.Union[_IResolvable_da3f097b, "CfnFaq.S3PathProperty"]:
+    def s3_path(self) -> typing.Union["_IResolvable_da3f097b", "CfnFaq.S3PathProperty"]:
         '''The Amazon Simple Storage Service (Amazon S3) location of the FAQ input data.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFaq.S3PathProperty"], jsii.get(self, "s3Path"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFaq.S3PathProperty"], jsii.get(self, "s3Path"))
 
     @s3_path.setter
     def s3_path(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnFaq.S3PathProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnFaq.S3PathProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f1806afef94a938b4b58ebc0c38dcb5cddd53c1cee6e9ac50febc0bea90c9290)
@@ -8350,12 +8353,12 @@ class CfnFaq(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__27bb77f055ab659629cd4ef3a4ee5476228d79b650da56e3e3bb993a67543902)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -8449,11 +8452,11 @@ class CfnFaqProps:
         index_id: builtins.str,
         name: builtins.str,
         role_arn: builtins.str,
-        s3_path: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFaq.S3PathProperty, typing.Dict[builtins.str, typing.Any]]],
+        s3_path: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFaq.S3PathProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
         file_format: typing.Optional[builtins.str] = None,
         language_code: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFaq``.
 
@@ -8471,6 +8474,7 @@ class CfnFaqProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_kendra as kendra
@@ -8550,14 +8554,14 @@ class CfnFaqProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def s3_path(self) -> typing.Union[_IResolvable_da3f097b, CfnFaq.S3PathProperty]:
+    def s3_path(self) -> typing.Union["_IResolvable_da3f097b", "CfnFaq.S3PathProperty"]:
         '''The Amazon Simple Storage Service (Amazon S3) location of the FAQ input data.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-faq.html#cfn-kendra-faq-s3path
         '''
         result = self._values.get("s3_path")
         assert result is not None, "Required property 's3_path' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnFaq.S3PathProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFaq.S3PathProperty"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -8599,7 +8603,7 @@ class CfnFaqProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -8607,7 +8611,7 @@ class CfnFaqProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-faq.html#cfn-kendra-faq-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8637,6 +8641,7 @@ class CfnIndex(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_kendra as kendra
@@ -8704,19 +8709,19 @@ class CfnIndex(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         edition: builtins.str,
         name: builtins.str,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        capacity_units: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.CapacityUnitsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        capacity_units: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.CapacityUnitsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        document_metadata_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.DocumentMetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        server_side_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.ServerSideEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        document_metadata_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.DocumentMetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        server_side_encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.ServerSideEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         user_context_policy: typing.Optional[builtins.str] = None,
-        user_token_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.UserTokenConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        user_token_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.UserTokenConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Kendra::Index``.
 
@@ -8754,7 +8759,7 @@ class CfnIndex(
 
     @jsii.member(jsii_name="arnForIndex")
     @builtins.classmethod
-    def arn_for_index(cls, resource: _IIndexRef_a3487225) -> builtins.str:
+    def arn_for_index(cls, resource: "_IIndexRef_a3487225") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -8767,10 +8772,10 @@ class CfnIndex(
     @builtins.classmethod
     def from_index_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IIndexRef_a3487225:
+    ) -> "_IIndexRef_a3487225":
         '''Creates a new IIndexRef from an ARN.
 
         :param scope: -
@@ -8782,16 +8787,16 @@ class CfnIndex(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IIndexRef_a3487225, jsii.sinvoke(cls, "fromIndexArn", [scope, id, arn]))
+        return typing.cast("_IIndexRef_a3487225", jsii.sinvoke(cls, "fromIndexArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromIndexId")
     @builtins.classmethod
     def from_index_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         index_id: builtins.str,
-    ) -> _IIndexRef_a3487225:
+    ) -> "_IIndexRef_a3487225":
         '''Creates a new IIndexRef from a indexId.
 
         :param scope: -
@@ -8803,7 +8808,7 @@ class CfnIndex(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument index_id", value=index_id, expected_type=type_hints["index_id"])
-        return typing.cast(_IIndexRef_a3487225, jsii.sinvoke(cls, "fromIndexId", [scope, id, index_id]))
+        return typing.cast("_IIndexRef_a3487225", jsii.sinvoke(cls, "fromIndexId", [scope, id, index_id]))
 
     @jsii.member(jsii_name="isCfnIndex")
     @builtins.classmethod
@@ -8818,7 +8823,7 @@ class CfnIndex(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIndex", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8876,15 +8881,15 @@ class CfnIndex(
 
     @builtins.property
     @jsii.member(jsii_name="indexRef")
-    def index_ref(self) -> _IndexReference_ae50038f:
+    def index_ref(self) -> "_IndexReference_ae50038f":
         '''A reference to a Index resource.'''
-        return typing.cast(_IndexReference_ae50038f, jsii.get(self, "indexRef"))
+        return typing.cast("_IndexReference_ae50038f", jsii.get(self, "indexRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="edition")
@@ -8929,14 +8934,14 @@ class CfnIndex(
     @jsii.member(jsii_name="capacityUnits")
     def capacity_units(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.CapacityUnitsConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.CapacityUnitsConfigurationProperty"]]:
         '''Specifies additional capacity units configured for your Enterprise Edition index.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.CapacityUnitsConfigurationProperty"]], jsii.get(self, "capacityUnits"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.CapacityUnitsConfigurationProperty"]], jsii.get(self, "capacityUnits"))
 
     @capacity_units.setter
     def capacity_units(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.CapacityUnitsConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.CapacityUnitsConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6bf6edadfe64bf9cc89fb346617e7ebf299db00a7377538a0131f98173bfe1b5)
@@ -8960,14 +8965,14 @@ class CfnIndex(
     @jsii.member(jsii_name="documentMetadataConfigurations")
     def document_metadata_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIndex.DocumentMetadataConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIndex.DocumentMetadataConfigurationProperty"]]]]:
         '''Specifies the properties of an index field.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIndex.DocumentMetadataConfigurationProperty"]]]], jsii.get(self, "documentMetadataConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIndex.DocumentMetadataConfigurationProperty"]]]], jsii.get(self, "documentMetadataConfigurations"))
 
     @document_metadata_configurations.setter
     def document_metadata_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIndex.DocumentMetadataConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIndex.DocumentMetadataConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dd6a2782afe74760aa4cd4a1e2c5389ae5d499b8e0b17c4f53326aba33c6a5ca)
@@ -8978,14 +8983,14 @@ class CfnIndex(
     @jsii.member(jsii_name="serverSideEncryptionConfiguration")
     def server_side_encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.ServerSideEncryptionConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.ServerSideEncryptionConfigurationProperty"]]:
         '''The identifier of the AWS KMS customer managed key (CMK) to use to encrypt data indexed by Amazon Kendra.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.ServerSideEncryptionConfigurationProperty"]], jsii.get(self, "serverSideEncryptionConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.ServerSideEncryptionConfigurationProperty"]], jsii.get(self, "serverSideEncryptionConfiguration"))
 
     @server_side_encryption_configuration.setter
     def server_side_encryption_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.ServerSideEncryptionConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.ServerSideEncryptionConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__754853a1d856877c480ad0c2d5930ca3be45133cf17bdd2a002ec2af3d8c119d)
@@ -8994,12 +8999,12 @@ class CfnIndex(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__915d9422900005f8c30f3a5b18172d1323dfa0864fccb423b204aa42da664141)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9022,14 +9027,14 @@ class CfnIndex(
     @jsii.member(jsii_name="userTokenConfigurations")
     def user_token_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIndex.UserTokenConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIndex.UserTokenConfigurationProperty"]]]]:
         '''Defines the type of user token used for the index.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIndex.UserTokenConfigurationProperty"]]]], jsii.get(self, "userTokenConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIndex.UserTokenConfigurationProperty"]]]], jsii.get(self, "userTokenConfigurations"))
 
     @user_token_configurations.setter
     def user_token_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIndex.UserTokenConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIndex.UserTokenConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__10cbdc54cc7ee0bf166d3e99163425e74855a9b539e601a9526126b7ad7f7b58)
@@ -9134,8 +9139,8 @@ class CfnIndex(
             *,
             name: builtins.str,
             type: builtins.str,
-            relevance: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.RelevanceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            search: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.SearchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            relevance: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.RelevanceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            search: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.SearchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the properties, such as relevance tuning and searchability, of an index field.
 
@@ -9214,24 +9219,24 @@ class CfnIndex(
         @builtins.property
         def relevance(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.RelevanceProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.RelevanceProperty"]]:
             '''Provides tuning parameters to determine how the field affects the search results.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-index-documentmetadataconfiguration.html#cfn-kendra-index-documentmetadataconfiguration-relevance
             '''
             result = self._values.get("relevance")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.RelevanceProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.RelevanceProperty"]], result)
 
         @builtins.property
         def search(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.SearchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.SearchProperty"]]:
             '''Provides information about how the field is used during a search.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-index-documentmetadataconfiguration.html#cfn-kendra-index-documentmetadataconfiguration-search
             '''
             result = self._values.get("search")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.SearchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.SearchProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9490,10 +9495,10 @@ class CfnIndex(
             self,
             *,
             duration: typing.Optional[builtins.str] = None,
-            freshness: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            freshness: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             importance: typing.Optional[jsii.Number] = None,
             rank_order: typing.Optional[builtins.str] = None,
-            value_importance_items: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.ValueImportanceItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            value_importance_items: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.ValueImportanceItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Provides information for tuning the relevance of a field in a search.
 
@@ -9560,7 +9565,7 @@ class CfnIndex(
         @builtins.property
         def freshness(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates that this field determines how "fresh" a document is.
 
             For example, if document 1 was created on November 5, and document 2 was created on October 31, document 1 is "fresher" than document 2. Only applies to ``DATE`` fields.
@@ -9568,7 +9573,7 @@ class CfnIndex(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-index-relevance.html#cfn-kendra-index-relevance-freshness
             '''
             result = self._values.get("freshness")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def importance(self) -> typing.Optional[jsii.Number]:
@@ -9599,7 +9604,7 @@ class CfnIndex(
         @builtins.property
         def value_importance_items(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIndex.ValueImportanceItemProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIndex.ValueImportanceItemProperty"]]]]:
             '''An array of key-value pairs for different boosts when they appear in the search result list.
 
             For example, if you want to boost query terms that match the "department" field in the result, query terms that match this field are boosted in the result. You can add entries from the department field to boost documents with those values higher.
@@ -9609,7 +9614,7 @@ class CfnIndex(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-index-relevance.html#cfn-kendra-index-relevance-valueimportanceitems
             '''
             result = self._values.get("value_importance_items")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnIndex.ValueImportanceItemProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIndex.ValueImportanceItemProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9636,10 +9641,10 @@ class CfnIndex(
         def __init__(
             self,
             *,
-            displayable: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            facetable: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            searchable: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            sortable: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            displayable: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            facetable: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            searchable: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            sortable: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Provides information about how a custom index field is used during a search.
 
@@ -9683,7 +9688,7 @@ class CfnIndex(
         @builtins.property
         def displayable(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Determines whether the field is returned in the query response.
 
             The default is ``true`` .
@@ -9691,12 +9696,12 @@ class CfnIndex(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-index-search.html#cfn-kendra-index-search-displayable
             '''
             result = self._values.get("displayable")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def facetable(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates that the field can be used to create search facets, a count of results for each value in the field.
 
             The default is ``false`` .
@@ -9704,12 +9709,12 @@ class CfnIndex(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-index-search.html#cfn-kendra-index-search-facetable
             '''
             result = self._values.get("facetable")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def searchable(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Determines whether the field is used in the search.
 
             If the ``Searchable`` field is ``true`` , you can use relevance tuning to manually tune how Amazon Kendra weights the field in the search. The default is ``true`` for string fields and ``false`` for number and date fields.
@@ -9717,12 +9722,12 @@ class CfnIndex(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-index-search.html#cfn-kendra-index-search-searchable
             '''
             result = self._values.get("searchable")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def sortable(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Determines whether the field can be used to sort the results of a query.
 
             The default is ``false`` .
@@ -9730,7 +9735,7 @@ class CfnIndex(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-index-search.html#cfn-kendra-index-search-sortable
             '''
             result = self._values.get("sortable")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9810,8 +9815,8 @@ class CfnIndex(
         def __init__(
             self,
             *,
-            json_token_type_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.JsonTokenTypeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            jwt_token_type_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.JwtTokenTypeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            json_token_type_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.JsonTokenTypeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            jwt_token_type_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.JwtTokenTypeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides the configuration information for a token.
 
@@ -9862,24 +9867,24 @@ class CfnIndex(
         @builtins.property
         def json_token_type_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.JsonTokenTypeConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.JsonTokenTypeConfigurationProperty"]]:
             '''Information about the JSON token type configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-index-usertokenconfiguration.html#cfn-kendra-index-usertokenconfiguration-jsontokentypeconfiguration
             '''
             result = self._values.get("json_token_type_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.JsonTokenTypeConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.JsonTokenTypeConfigurationProperty"]], result)
 
         @builtins.property
         def jwt_token_type_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.JwtTokenTypeConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.JwtTokenTypeConfigurationProperty"]]:
             '''Information about the JWT token type configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-index-usertokenconfiguration.html#cfn-kendra-index-usertokenconfiguration-jwttokentypeconfiguration
             '''
             result = self._values.get("jwt_token_type_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.JwtTokenTypeConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.JwtTokenTypeConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9985,14 +9990,14 @@ class CfnIndexProps:
         *,
         edition: builtins.str,
         name: builtins.str,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        capacity_units: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.CapacityUnitsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        capacity_units: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.CapacityUnitsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        document_metadata_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.DocumentMetadataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        server_side_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.ServerSideEncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        document_metadata_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.DocumentMetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        server_side_encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.ServerSideEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         user_context_policy: typing.Optional[builtins.str] = None,
-        user_token_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.UserTokenConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        user_token_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.UserTokenConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnIndex``.
 
@@ -10012,6 +10017,7 @@ class CfnIndexProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_kendra as kendra
@@ -10129,7 +10135,7 @@ class CfnIndexProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''An IAM role that gives Amazon Kendra permissions to access your Amazon CloudWatch logs and metrics.
 
         This is also the role used when you use the `BatchPutDocument <https://docs.aws.amazon.com/kendra/latest/dg/BatchPutDocument.html>`_ operation to index documents from an Amazon S3 bucket.
@@ -10138,12 +10144,12 @@ class CfnIndexProps:
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def capacity_units(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIndex.CapacityUnitsConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.CapacityUnitsConfigurationProperty"]]:
         '''Specifies additional capacity units configured for your Enterprise Edition index.
 
         You can add and remove capacity units to fit your usage requirements.
@@ -10151,7 +10157,7 @@ class CfnIndexProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-index.html#cfn-kendra-index-capacityunits
         '''
         result = self._values.get("capacity_units")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIndex.CapacityUnitsConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.CapacityUnitsConfigurationProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -10165,7 +10171,7 @@ class CfnIndexProps:
     @builtins.property
     def document_metadata_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnIndex.DocumentMetadataConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIndex.DocumentMetadataConfigurationProperty"]]]]:
         '''Specifies the properties of an index field.
 
         You can add either a custom or a built-in field. You can add and remove built-in fields at any time. When a built-in field is removed it's configuration reverts to the default for the field. Custom fields can't be removed from an index after they are added.
@@ -10173,12 +10179,12 @@ class CfnIndexProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-index.html#cfn-kendra-index-documentmetadataconfigurations
         '''
         result = self._values.get("document_metadata_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnIndex.DocumentMetadataConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIndex.DocumentMetadataConfigurationProperty"]]]], result)
 
     @builtins.property
     def server_side_encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIndex.ServerSideEncryptionConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.ServerSideEncryptionConfigurationProperty"]]:
         '''The identifier of the AWS KMS customer managed key (CMK) to use to encrypt data indexed by Amazon Kendra.
 
         Amazon Kendra doesn't support asymmetric CMKs.
@@ -10186,10 +10192,10 @@ class CfnIndexProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-index.html#cfn-kendra-index-serversideencryptionconfiguration
         '''
         result = self._values.get("server_side_encryption_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIndex.ServerSideEncryptionConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.ServerSideEncryptionConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -10197,7 +10203,7 @@ class CfnIndexProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-index.html#cfn-kendra-index-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def user_context_policy(self) -> typing.Optional[builtins.str]:
@@ -10219,13 +10225,13 @@ class CfnIndexProps:
     @builtins.property
     def user_token_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnIndex.UserTokenConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIndex.UserTokenConfigurationProperty"]]]]:
         '''Defines the type of user token used for the index.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-index.html#cfn-kendra-index-usertokenconfigurations
         '''
         result = self._values.get("user_token_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnIndex.UserTokenConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnIndex.UserTokenConfigurationProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

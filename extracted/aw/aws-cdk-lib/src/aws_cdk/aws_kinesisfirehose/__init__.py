@@ -965,27 +965,27 @@ class CfnDeliveryStream(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        amazon_open_search_serverless_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        amazonopensearchservice_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        database_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DatabaseSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        delivery_stream_encryption_configuration_input: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        delivery_stream_name: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253]] = None,
+        amazon_open_search_serverless_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        amazonopensearchservice_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        database_source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DatabaseSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        delivery_stream_encryption_configuration_input: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        delivery_stream_name: typing.Optional[typing.Union[builtins.str, "_IStreamRef_b484e253"]] = None,
         delivery_stream_type: typing.Optional[builtins.str] = None,
-        direct_put_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DirectPutSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        elasticsearch_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        extended_s3_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        http_endpoint_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        iceberg_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.IcebergDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        kinesis_stream_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.KinesisStreamSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        msk_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.MSKSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        redshift_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.RedshiftDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        s3_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        snowflake_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SnowflakeDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        splunk_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SplunkDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        direct_put_source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DirectPutSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        elasticsearch_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        extended_s3_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_endpoint_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        iceberg_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.IcebergDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kinesis_stream_source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.KinesisStreamSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        msk_source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.MSKSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        redshift_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.RedshiftDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        s3_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        snowflake_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SnowflakeDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        splunk_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SplunkDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::KinesisFirehose::DeliveryStream``.
 
@@ -1041,7 +1041,7 @@ class CfnDeliveryStream(
     @builtins.classmethod
     def arn_for_delivery_stream(
         cls,
-        resource: _IDeliveryStreamRef_678f5e53,
+        resource: "_IDeliveryStreamRef_678f5e53",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1055,10 +1055,10 @@ class CfnDeliveryStream(
     @builtins.classmethod
     def from_delivery_stream_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDeliveryStreamRef_678f5e53:
+    ) -> "_IDeliveryStreamRef_678f5e53":
         '''Creates a new IDeliveryStreamRef from an ARN.
 
         :param scope: -
@@ -1070,16 +1070,16 @@ class CfnDeliveryStream(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDeliveryStreamRef_678f5e53, jsii.sinvoke(cls, "fromDeliveryStreamArn", [scope, id, arn]))
+        return typing.cast("_IDeliveryStreamRef_678f5e53", jsii.sinvoke(cls, "fromDeliveryStreamArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromDeliveryStreamName")
     @builtins.classmethod
     def from_delivery_stream_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         delivery_stream_name: builtins.str,
-    ) -> _IDeliveryStreamRef_678f5e53:
+    ) -> "_IDeliveryStreamRef_678f5e53":
         '''Creates a new IDeliveryStreamRef from a deliveryStreamName.
 
         :param scope: -
@@ -1091,7 +1091,7 @@ class CfnDeliveryStream(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument delivery_stream_name", value=delivery_stream_name, expected_type=type_hints["delivery_stream_name"])
-        return typing.cast(_IDeliveryStreamRef_678f5e53, jsii.sinvoke(cls, "fromDeliveryStreamName", [scope, id, delivery_stream_name]))
+        return typing.cast("_IDeliveryStreamRef_678f5e53", jsii.sinvoke(cls, "fromDeliveryStreamName", [scope, id, delivery_stream_name]))
 
     @jsii.member(jsii_name="isCfnDeliveryStream")
     @builtins.classmethod
@@ -1106,7 +1106,7 @@ class CfnDeliveryStream(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeliveryStream", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1151,28 +1151,28 @@ class CfnDeliveryStream(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryStreamRef")
-    def delivery_stream_ref(self) -> _DeliveryStreamReference_9f72be94:
+    def delivery_stream_ref(self) -> "_DeliveryStreamReference_9f72be94":
         '''A reference to a DeliveryStream resource.'''
-        return typing.cast(_DeliveryStreamReference_9f72be94, jsii.get(self, "deliveryStreamRef"))
+        return typing.cast("_DeliveryStreamReference_9f72be94", jsii.get(self, "deliveryStreamRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="amazonOpenSearchServerlessDestinationConfiguration")
     def amazon_open_search_serverless_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty"]]:
         '''Describes the configuration of a destination in the Serverless offering for Amazon OpenSearch Service.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty"]], jsii.get(self, "amazonOpenSearchServerlessDestinationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty"]], jsii.get(self, "amazonOpenSearchServerlessDestinationConfiguration"))
 
     @amazon_open_search_serverless_destination_configuration.setter
     def amazon_open_search_serverless_destination_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9361f4405d0a8e9a0285d4b343c6420073eedc822c339d1a147f151a3b03f641)
@@ -1183,14 +1183,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="amazonopensearchserviceDestinationConfiguration")
     def amazonopensearchservice_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty"]]:
         '''The destination in Amazon OpenSearch Service.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty"]], jsii.get(self, "amazonopensearchserviceDestinationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty"]], jsii.get(self, "amazonopensearchserviceDestinationConfiguration"))
 
     @amazonopensearchservice_destination_configuration.setter
     def amazonopensearchservice_destination_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__58964b8831d37cbba22a48328508a0d1fc866bb6da992a0c3f544fc6649acc5a)
@@ -1201,14 +1201,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="databaseSourceConfiguration")
     def database_source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabaseSourceConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseSourceConfigurationProperty"]]:
         '''The top level object for configuring streams with database as a source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabaseSourceConfigurationProperty"]], jsii.get(self, "databaseSourceConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseSourceConfigurationProperty"]], jsii.get(self, "databaseSourceConfiguration"))
 
     @database_source_configuration.setter
     def database_source_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabaseSourceConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseSourceConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__671f3a3eb25ab7249d3b64fb9d1c6865a8a68b8a7b92841ab6890851853da1f5)
@@ -1219,14 +1219,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="deliveryStreamEncryptionConfigurationInput")
     def delivery_stream_encryption_configuration_input(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty"]]:
         '''Specifies the type and Amazon Resource Name (ARN) of the CMK to use for Server-Side Encryption (SSE).'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty"]], jsii.get(self, "deliveryStreamEncryptionConfigurationInput"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty"]], jsii.get(self, "deliveryStreamEncryptionConfigurationInput"))
 
     @delivery_stream_encryption_configuration_input.setter
     def delivery_stream_encryption_configuration_input(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3b541613844a306d329ee6aaf12a513672a01cea651f015810fd2ab896394415)
@@ -1266,14 +1266,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="directPutSourceConfiguration")
     def direct_put_source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DirectPutSourceConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DirectPutSourceConfigurationProperty"]]:
         '''The structure that configures parameters such as ``ThroughputHintInMBs`` for a stream configured with Direct PUT as a source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DirectPutSourceConfigurationProperty"]], jsii.get(self, "directPutSourceConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DirectPutSourceConfigurationProperty"]], jsii.get(self, "directPutSourceConfiguration"))
 
     @direct_put_source_configuration.setter
     def direct_put_source_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DirectPutSourceConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DirectPutSourceConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0c2e3d41bd399b2de627c15c37d5d5a53d60ea55a256dc5f1b73146429dd1f24)
@@ -1284,14 +1284,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="elasticsearchDestinationConfiguration")
     def elasticsearch_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty"]]:
         '''An Amazon ES destination for the delivery stream.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty"]], jsii.get(self, "elasticsearchDestinationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty"]], jsii.get(self, "elasticsearchDestinationConfiguration"))
 
     @elasticsearch_destination_configuration.setter
     def elasticsearch_destination_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2485fd6e8467da83435abf801383e98fea4d4ae9797551e1774f2327e1b069c5)
@@ -1302,14 +1302,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="extendedS3DestinationConfiguration")
     def extended_s3_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty"]]:
         '''An Amazon S3 destination for the delivery stream.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty"]], jsii.get(self, "extendedS3DestinationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty"]], jsii.get(self, "extendedS3DestinationConfiguration"))
 
     @extended_s3_destination_configuration.setter
     def extended_s3_destination_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4b3827d67811452e6783eeef4d719d420c5534229b93597dbfafa7256a89932e)
@@ -1320,14 +1320,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="httpEndpointDestinationConfiguration")
     def http_endpoint_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty"]]:
         '''Enables configuring Kinesis Firehose to deliver data to any HTTP endpoint destination.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty"]], jsii.get(self, "httpEndpointDestinationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty"]], jsii.get(self, "httpEndpointDestinationConfiguration"))
 
     @http_endpoint_destination_configuration.setter
     def http_endpoint_destination_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c45396814a2f1f16d85b99c121f14ab851eda0a9f84038025d5ae44a858837a1)
@@ -1338,14 +1338,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="icebergDestinationConfiguration")
     def iceberg_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.IcebergDestinationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.IcebergDestinationConfigurationProperty"]]:
         '''Specifies the destination configure settings for Apache Iceberg Table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.IcebergDestinationConfigurationProperty"]], jsii.get(self, "icebergDestinationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.IcebergDestinationConfigurationProperty"]], jsii.get(self, "icebergDestinationConfiguration"))
 
     @iceberg_destination_configuration.setter
     def iceberg_destination_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.IcebergDestinationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.IcebergDestinationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__94c8f409ef0a75500e50bbf49d47688097508bd257b3ce092b027c552453cd59)
@@ -1356,14 +1356,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="kinesisStreamSourceConfiguration")
     def kinesis_stream_source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.KinesisStreamSourceConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.KinesisStreamSourceConfigurationProperty"]]:
         '''When a Kinesis stream is used as the source for the delivery stream, a `KinesisStreamSourceConfiguration <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-kinesisstreamsourceconfiguration.html>`_ containing the Kinesis stream ARN and the role ARN for the source stream.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.KinesisStreamSourceConfigurationProperty"]], jsii.get(self, "kinesisStreamSourceConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.KinesisStreamSourceConfigurationProperty"]], jsii.get(self, "kinesisStreamSourceConfiguration"))
 
     @kinesis_stream_source_configuration.setter
     def kinesis_stream_source_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.KinesisStreamSourceConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.KinesisStreamSourceConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__025f54a26e52ce42f679eff3aa8b95a5fee2e0e5b3aba7c4320f9900690e60b9)
@@ -1374,14 +1374,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="mskSourceConfiguration")
     def msk_source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.MSKSourceConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.MSKSourceConfigurationProperty"]]:
         '''The configuration for the Amazon MSK cluster to be used as the source for a delivery stream.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.MSKSourceConfigurationProperty"]], jsii.get(self, "mskSourceConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.MSKSourceConfigurationProperty"]], jsii.get(self, "mskSourceConfiguration"))
 
     @msk_source_configuration.setter
     def msk_source_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.MSKSourceConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.MSKSourceConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5d05261de796c66b290d3bf9493dedca3a4f904726566b1e0d28cd6f7e525757)
@@ -1392,14 +1392,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="redshiftDestinationConfiguration")
     def redshift_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.RedshiftDestinationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RedshiftDestinationConfigurationProperty"]]:
         '''An Amazon Redshift destination for the delivery stream.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.RedshiftDestinationConfigurationProperty"]], jsii.get(self, "redshiftDestinationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RedshiftDestinationConfigurationProperty"]], jsii.get(self, "redshiftDestinationConfiguration"))
 
     @redshift_destination_configuration.setter
     def redshift_destination_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.RedshiftDestinationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RedshiftDestinationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9283febc90a4404b9eb41b227b6baf567d66cf4929f4f56dc67252a81e997f1f)
@@ -1410,14 +1410,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="s3DestinationConfiguration")
     def s3_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]]:
         '''The ``S3DestinationConfiguration`` property type specifies an Amazon Simple Storage Service (Amazon S3) destination to which Amazon Kinesis Data Firehose (Kinesis Data Firehose) delivers data.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]], jsii.get(self, "s3DestinationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]], jsii.get(self, "s3DestinationConfiguration"))
 
     @s3_destination_configuration.setter
     def s3_destination_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bb8b949ac7c9700a5ef03cddf3b3be451041166fe7583faee720a903b17ffd7c)
@@ -1428,14 +1428,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="snowflakeDestinationConfiguration")
     def snowflake_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SnowflakeDestinationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeDestinationConfigurationProperty"]]:
         '''Configure Snowflake destination.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SnowflakeDestinationConfigurationProperty"]], jsii.get(self, "snowflakeDestinationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeDestinationConfigurationProperty"]], jsii.get(self, "snowflakeDestinationConfiguration"))
 
     @snowflake_destination_configuration.setter
     def snowflake_destination_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SnowflakeDestinationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeDestinationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4334e067c783ee048616b856f03ad5fb828c1a4c18bbdce130d9850ac2ce4034)
@@ -1446,14 +1446,14 @@ class CfnDeliveryStream(
     @jsii.member(jsii_name="splunkDestinationConfiguration")
     def splunk_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SplunkDestinationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SplunkDestinationConfigurationProperty"]]:
         '''The configuration of a destination in Splunk for the delivery stream.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SplunkDestinationConfigurationProperty"]], jsii.get(self, "splunkDestinationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SplunkDestinationConfigurationProperty"]], jsii.get(self, "splunkDestinationConfiguration"))
 
     @splunk_destination_configuration.setter
     def splunk_destination_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SplunkDestinationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SplunkDestinationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1143a0f5e018d10fdc1fff0bbcada0e3653e2264078be8b5a6441f6918b95c91)
@@ -1462,12 +1462,12 @@ class CfnDeliveryStream(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A set of tags to assign to the Firehose stream.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b611aca673873100e4f1f1366dada7f80beaecdafd39582bd00fb48881dca276)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1574,14 +1574,14 @@ class CfnDeliveryStream(
             *,
             index_name: builtins.str,
             role_arn: builtins.str,
-            s3_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            buffering_hints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.AmazonOpenSearchServerlessBufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloud_watch_logging_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            buffering_hints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.AmazonOpenSearchServerlessBufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logging_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             collection_endpoint: typing.Optional[builtins.str] = None,
-            processing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            retry_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.AmazonOpenSearchServerlessRetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            processing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retry_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.AmazonOpenSearchServerlessRetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             s3_backup_mode: typing.Optional[builtins.str] = None,
-            vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the configuration of a destination in the Serverless offering for Amazon OpenSearch Service.
 
@@ -1722,18 +1722,18 @@ class CfnDeliveryStream(
         @builtins.property
         def s3_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration-s3configuration
             '''
             result = self._values.get("s3_configuration")
             assert result is not None, "Required property 's3_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
 
         @builtins.property
         def buffering_hints(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonOpenSearchServerlessBufferingHintsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonOpenSearchServerlessBufferingHintsProperty"]]:
             '''The buffering options.
 
             If no value is specified, the default values for AmazonopensearchserviceBufferingHints are used.
@@ -1741,17 +1741,17 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration-bufferinghints
             '''
             result = self._values.get("buffering_hints")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonOpenSearchServerlessBufferingHintsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonOpenSearchServerlessBufferingHintsProperty"]], result)
 
         @builtins.property
         def cloud_watch_logging_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration-cloudwatchloggingoptions
             '''
             result = self._values.get("cloud_watch_logging_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
 
         @builtins.property
         def collection_endpoint(self) -> typing.Optional[builtins.str]:
@@ -1765,17 +1765,17 @@ class CfnDeliveryStream(
         @builtins.property
         def processing_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration-processingconfiguration
             '''
             result = self._values.get("processing_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
 
         @builtins.property
         def retry_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonOpenSearchServerlessRetryOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonOpenSearchServerlessRetryOptionsProperty"]]:
             '''The retry behavior in case Firehose is unable to deliver documents to the Serverless offering for Amazon OpenSearch Service.
 
             The default value is 300 (5 minutes).
@@ -1783,7 +1783,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration-retryoptions
             '''
             result = self._values.get("retry_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonOpenSearchServerlessRetryOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonOpenSearchServerlessRetryOptionsProperty"]], result)
 
         @builtins.property
         def s3_backup_mode(self) -> typing.Optional[builtins.str]:
@@ -1799,12 +1799,12 @@ class CfnDeliveryStream(
         @builtins.property
         def vpc_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.VpcConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.VpcConfigurationProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration-vpcconfiguration
             '''
             result = self._values.get("vpc_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.VpcConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.VpcConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1977,18 +1977,18 @@ class CfnDeliveryStream(
             *,
             index_name: builtins.str,
             role_arn: builtins.str,
-            s3_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            buffering_hints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.AmazonopensearchserviceBufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloud_watch_logging_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            buffering_hints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.AmazonopensearchserviceBufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logging_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             cluster_endpoint: typing.Optional[builtins.str] = None,
-            document_id_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DocumentIdOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            document_id_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DocumentIdOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             domain_arn: typing.Optional[builtins.str] = None,
             index_rotation_period: typing.Optional[builtins.str] = None,
-            processing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            retry_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.AmazonopensearchserviceRetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            processing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retry_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.AmazonopensearchserviceRetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             s3_backup_mode: typing.Optional[builtins.str] = None,
             type_name: typing.Optional[builtins.str] = None,
-            vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the configuration of a destination in Amazon OpenSearch Service.
 
@@ -2151,19 +2151,19 @@ class CfnDeliveryStream(
         @builtins.property
         def s3_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
             '''Describes the configuration of a destination in Amazon S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration-s3configuration
             '''
             result = self._values.get("s3_configuration")
             assert result is not None, "Required property 's3_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
 
         @builtins.property
         def buffering_hints(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonopensearchserviceBufferingHintsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonopensearchserviceBufferingHintsProperty"]]:
             '''The buffering options.
 
             If no value is specified, the default values for AmazonopensearchserviceBufferingHints are used.
@@ -2171,18 +2171,18 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration-bufferinghints
             '''
             result = self._values.get("buffering_hints")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonopensearchserviceBufferingHintsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonopensearchserviceBufferingHintsProperty"]], result)
 
         @builtins.property
         def cloud_watch_logging_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
             '''Describes the Amazon CloudWatch logging options for your delivery stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration-cloudwatchloggingoptions
             '''
             result = self._values.get("cloud_watch_logging_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
 
         @builtins.property
         def cluster_endpoint(self) -> typing.Optional[builtins.str]:
@@ -2198,7 +2198,7 @@ class CfnDeliveryStream(
         @builtins.property
         def document_id_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DocumentIdOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DocumentIdOptionsProperty"]]:
             '''Indicates the method for setting up document ID.
 
             The supported methods are Firehose generated document ID and OpenSearch Service generated document ID.
@@ -2206,7 +2206,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration-documentidoptions
             '''
             result = self._values.get("document_id_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DocumentIdOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DocumentIdOptionsProperty"]], result)
 
         @builtins.property
         def domain_arn(self) -> typing.Optional[builtins.str]:
@@ -2231,18 +2231,18 @@ class CfnDeliveryStream(
         @builtins.property
         def processing_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
             '''Describes a data processing configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration-processingconfiguration
             '''
             result = self._values.get("processing_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
 
         @builtins.property
         def retry_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonopensearchserviceRetryOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonopensearchserviceRetryOptionsProperty"]]:
             '''The retry behavior in case Kinesis Data Firehose is unable to deliver documents to Amazon OpenSearch Service.
 
             The default value is 300 (5 minutes).
@@ -2250,7 +2250,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration-retryoptions
             '''
             result = self._values.get("retry_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AmazonopensearchserviceRetryOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonopensearchserviceRetryOptionsProperty"]], result)
 
         @builtins.property
         def s3_backup_mode(self) -> typing.Optional[builtins.str]:
@@ -2273,13 +2273,13 @@ class CfnDeliveryStream(
         @builtins.property
         def vpc_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.VpcConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.VpcConfigurationProperty"]]:
             '''The details of the VPC of the Amazon OpenSearch Service destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration-vpcconfiguration
             '''
             result = self._values.get("vpc_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.VpcConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.VpcConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2589,7 +2589,7 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             log_group_name: typing.Optional[builtins.str] = None,
             log_stream_name: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -2630,13 +2630,13 @@ class CfnDeliveryStream(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether CloudWatch Logs logging is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-cloudwatchloggingoptions.html#cfn-kinesisfirehose-deliverystream-cloudwatchloggingoptions-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def log_group_name(self) -> typing.Optional[builtins.str]:
@@ -2781,10 +2781,10 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            input_format_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.InputFormatConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            output_format_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.OutputFormatConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            schema_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SchemaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            input_format_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.InputFormatConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            output_format_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.OutputFormatConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            schema_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SchemaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies that you want Kinesis Data Firehose to convert data from the JSON format to the Parquet or ORC format before writing it to Amazon S3.
 
@@ -2873,7 +2873,7 @@ class CfnDeliveryStream(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Defaults to ``true`` .
 
             Set it to ``false`` if you want to disable format conversion while preserving the configuration details.
@@ -2881,12 +2881,12 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-dataformatconversionconfiguration.html#cfn-kinesisfirehose-deliverystream-dataformatconversionconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def input_format_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.InputFormatConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.InputFormatConfigurationProperty"]]:
             '''Specifies the deserializer that you want Firehose to use to convert the format of your data from JSON.
 
             This parameter is required if ``Enabled`` is set to true.
@@ -2894,12 +2894,12 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-dataformatconversionconfiguration.html#cfn-kinesisfirehose-deliverystream-dataformatconversionconfiguration-inputformatconfiguration
             '''
             result = self._values.get("input_format_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.InputFormatConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.InputFormatConfigurationProperty"]], result)
 
         @builtins.property
         def output_format_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.OutputFormatConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.OutputFormatConfigurationProperty"]]:
             '''Specifies the serializer that you want Firehose to use to convert the format of your data to the Parquet or ORC format.
 
             This parameter is required if ``Enabled`` is set to true.
@@ -2907,12 +2907,12 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-dataformatconversionconfiguration.html#cfn-kinesisfirehose-deliverystream-dataformatconversionconfiguration-outputformatconfiguration
             '''
             result = self._values.get("output_format_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.OutputFormatConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.OutputFormatConfigurationProperty"]], result)
 
         @builtins.property
         def schema_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SchemaConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SchemaConfigurationProperty"]]:
             '''Specifies the AWS Glue Data Catalog table that contains the column information.
 
             This parameter is required if ``Enabled`` is set to true.
@@ -2920,7 +2920,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-dataformatconversionconfiguration.html#cfn-kinesisfirehose-deliverystream-dataformatconversionconfiguration-schemaconfiguration
             '''
             result = self._values.get("schema_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SchemaConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SchemaConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3009,7 +3009,7 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            secrets_manager_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SecretsManagerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            secrets_manager_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SecretsManagerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The structure to configure the authentication methods for Firehose to connect to source database endpoint.
 
@@ -3046,13 +3046,13 @@ class CfnDeliveryStream(
         @builtins.property
         def secrets_manager_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SecretsManagerConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SecretsManagerConfigurationProperty"]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-databasesourceauthenticationconfiguration.html#cfn-kinesisfirehose-deliverystream-databasesourceauthenticationconfiguration-secretsmanagerconfiguration
             '''
             result = self._values.get("secrets_manager_configuration")
             assert result is not None, "Required property 'secrets_manager_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SecretsManagerConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SecretsManagerConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3088,15 +3088,15 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            databases: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DatabasesProperty", typing.Dict[builtins.str, typing.Any]]],
-            database_source_authentication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DatabaseSourceAuthenticationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            database_source_vpc_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DatabaseSourceVPCConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            databases: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DatabasesProperty", typing.Dict[builtins.str, typing.Any]]],
+            database_source_authentication_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DatabaseSourceAuthenticationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            database_source_vpc_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DatabaseSourceVPCConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             endpoint: builtins.str,
             port: jsii.Number,
             snapshot_watermark_table: builtins.str,
-            tables: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DatabaseTablesProperty", typing.Dict[builtins.str, typing.Any]]],
+            tables: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DatabaseTablesProperty", typing.Dict[builtins.str, typing.Any]]],
             type: builtins.str,
-            columns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DatabaseColumnsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            columns: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DatabaseColumnsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             digest: typing.Optional[builtins.str] = None,
             public_certificate: typing.Optional[builtins.str] = None,
             ssl_mode: typing.Optional[builtins.str] = None,
@@ -3205,7 +3205,7 @@ class CfnDeliveryStream(
         @builtins.property
         def databases(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabasesProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabasesProperty"]:
             '''The list of database patterns in source database endpoint for Firehose to read from.
 
             Amazon Data Firehose is in preview release and is subject to change.
@@ -3214,12 +3214,12 @@ class CfnDeliveryStream(
             '''
             result = self._values.get("databases")
             assert result is not None, "Required property 'databases' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabasesProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabasesProperty"], result)
 
         @builtins.property
         def database_source_authentication_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabaseSourceAuthenticationConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseSourceAuthenticationConfigurationProperty"]:
             '''The structure to configure the authentication methods for Firehose to connect to source database endpoint.
 
             Amazon Data Firehose is in preview release and is subject to change.
@@ -3228,12 +3228,12 @@ class CfnDeliveryStream(
             '''
             result = self._values.get("database_source_authentication_configuration")
             assert result is not None, "Required property 'database_source_authentication_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabaseSourceAuthenticationConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseSourceAuthenticationConfigurationProperty"], result)
 
         @builtins.property
         def database_source_vpc_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabaseSourceVPCConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseSourceVPCConfigurationProperty"]:
             '''The details of the VPC Endpoint Service which Firehose uses to create a PrivateLink to the database.
 
             Amazon Data Firehose is in preview release and is subject to change.
@@ -3242,7 +3242,7 @@ class CfnDeliveryStream(
             '''
             result = self._values.get("database_source_vpc_configuration")
             assert result is not None, "Required property 'database_source_vpc_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabaseSourceVPCConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseSourceVPCConfigurationProperty"], result)
 
         @builtins.property
         def endpoint(self) -> builtins.str:
@@ -3286,7 +3286,7 @@ class CfnDeliveryStream(
         @builtins.property
         def tables(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabaseTablesProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseTablesProperty"]:
             '''The list of table patterns in source database endpoint for Firehose to read from.
 
             Amazon Data Firehose is in preview release and is subject to change.
@@ -3295,7 +3295,7 @@ class CfnDeliveryStream(
             '''
             result = self._values.get("tables")
             assert result is not None, "Required property 'tables' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabaseTablesProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseTablesProperty"], result)
 
         @builtins.property
         def type(self) -> builtins.str:
@@ -3315,7 +3315,7 @@ class CfnDeliveryStream(
         @builtins.property
         def columns(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabaseColumnsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseColumnsProperty"]]:
             '''The list of column patterns in source database endpoint for Firehose to read from.
 
             Amazon Data Firehose is in preview release and is subject to change.
@@ -3323,7 +3323,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-databasesourceconfiguration.html#cfn-kinesisfirehose-deliverystream-databasesourceconfiguration-columns
             '''
             result = self._values.get("columns")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DatabaseColumnsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseColumnsProperty"]], result)
 
         @builtins.property
         def digest(self) -> typing.Optional[builtins.str]:
@@ -3660,8 +3660,8 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            hive_json_ser_de: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.HiveJsonSerDeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            open_x_json_ser_de: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.OpenXJsonSerDeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            hive_json_ser_de: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.HiveJsonSerDeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            open_x_json_ser_de: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.OpenXJsonSerDeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The deserializer you want Kinesis Data Firehose to use for converting the input data from JSON.
 
@@ -3705,7 +3705,7 @@ class CfnDeliveryStream(
         @builtins.property
         def hive_json_ser_de(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.HiveJsonSerDeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HiveJsonSerDeProperty"]]:
             '''The native Hive / HCatalog JsonSerDe.
 
             Used by Firehose for deserializing data, which means converting it from the JSON format in preparation for serializing it to the Parquet or ORC format. This is one of two deserializers you can choose, depending on which one offers the functionality you need. The other option is the OpenX SerDe.
@@ -3713,12 +3713,12 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-deserializer.html#cfn-kinesisfirehose-deliverystream-deserializer-hivejsonserde
             '''
             result = self._values.get("hive_json_ser_de")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.HiveJsonSerDeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HiveJsonSerDeProperty"]], result)
 
         @builtins.property
         def open_x_json_ser_de(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.OpenXJsonSerDeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.OpenXJsonSerDeProperty"]]:
             '''The OpenX SerDe.
 
             Used by Firehose for deserializing data, which means converting it from the JSON format in preparation for serializing it to the Parquet or ORC format. This is one of two deserializers you can choose, depending on which one offers the functionality you need. The other option is the native Hive / HCatalog JsonSerDe.
@@ -3726,7 +3726,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-deserializer.html#cfn-kinesisfirehose-deliverystream-deserializer-openxjsonserde
             '''
             result = self._values.get("open_x_json_ser_de")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.OpenXJsonSerDeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.OpenXJsonSerDeProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3756,7 +3756,7 @@ class CfnDeliveryStream(
             *,
             destination_database_name: builtins.str,
             destination_table_name: builtins.str,
-            partition_spec: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.PartitionSpecProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            partition_spec: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.PartitionSpecProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             s3_error_output_prefix: typing.Optional[builtins.str] = None,
             unique_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -3834,7 +3834,7 @@ class CfnDeliveryStream(
         @builtins.property
         def partition_spec(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.PartitionSpecProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.PartitionSpecProperty"]]:
             '''The partition spec configuration for a table that is used by automatic table creation.
 
             Amazon Data Firehose is in preview release and is subject to change.
@@ -3842,7 +3842,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-destinationtableconfiguration.html#cfn-kinesisfirehose-deliverystream-destinationtableconfiguration-partitionspec
             '''
             result = self._values.get("partition_spec")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.PartitionSpecProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.PartitionSpecProperty"]], result)
 
         @builtins.property
         def s3_error_output_prefix(self) -> typing.Optional[builtins.str]:
@@ -4001,8 +4001,8 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            retry_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.RetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            retry_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.RetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The ``DynamicPartitioningConfiguration`` property type specifies the configuration of the dynamic partitioning mechanism that creates targeted data sets from the streaming data by partitioning it based on partition keys.
 
@@ -4038,24 +4038,24 @@ class CfnDeliveryStream(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether dynamic partitioning is enabled for this Kinesis Data Firehose delivery stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-dynamicpartitioningconfiguration.html#cfn-kinesisfirehose-deliverystream-dynamicpartitioningconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def retry_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.RetryOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RetryOptionsProperty"]]:
             '''Specifies the retry behavior in case Kinesis Data Firehose is unable to deliver data to an Amazon S3 prefix.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-dynamicpartitioningconfiguration.html#cfn-kinesisfirehose-deliverystream-dynamicpartitioningconfiguration-retryoptions
             '''
             result = self._values.get("retry_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.RetryOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RetryOptionsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4175,18 +4175,18 @@ class CfnDeliveryStream(
             *,
             index_name: builtins.str,
             role_arn: builtins.str,
-            s3_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            buffering_hints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ElasticsearchBufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloud_watch_logging_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            buffering_hints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ElasticsearchBufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logging_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             cluster_endpoint: typing.Optional[builtins.str] = None,
-            document_id_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DocumentIdOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            document_id_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DocumentIdOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             domain_arn: typing.Optional[builtins.str] = None,
             index_rotation_period: typing.Optional[builtins.str] = None,
-            processing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            retry_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ElasticsearchRetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            processing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retry_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ElasticsearchRetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             s3_backup_mode: typing.Optional[builtins.str] = None,
             type_name: typing.Optional[builtins.str] = None,
-            vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The ``ElasticsearchDestinationConfiguration`` property type specifies an Amazon Elasticsearch Service (Amazon ES) domain that Amazon Kinesis Data Firehose (Kinesis Data Firehose) delivers data to.
 
@@ -4351,36 +4351,36 @@ class CfnDeliveryStream(
         @builtins.property
         def s3_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
             '''The S3 bucket where Kinesis Data Firehose backs up incoming data.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-s3configuration
             '''
             result = self._values.get("s3_configuration")
             assert result is not None, "Required property 's3_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
 
         @builtins.property
         def buffering_hints(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ElasticsearchBufferingHintsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ElasticsearchBufferingHintsProperty"]]:
             '''Configures how Kinesis Data Firehose buffers incoming data while delivering it to the Amazon ES domain.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-bufferinghints
             '''
             result = self._values.get("buffering_hints")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ElasticsearchBufferingHintsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ElasticsearchBufferingHintsProperty"]], result)
 
         @builtins.property
         def cloud_watch_logging_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
             '''The Amazon CloudWatch Logs logging options for the delivery stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-cloudwatchloggingoptions
             '''
             result = self._values.get("cloud_watch_logging_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
 
         @builtins.property
         def cluster_endpoint(self) -> typing.Optional[builtins.str]:
@@ -4396,7 +4396,7 @@ class CfnDeliveryStream(
         @builtins.property
         def document_id_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DocumentIdOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DocumentIdOptionsProperty"]]:
             '''Indicates the method for setting up document ID.
 
             The supported methods are Firehose generated document ID and OpenSearch Service generated document ID.
@@ -4404,7 +4404,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-documentidoptions
             '''
             result = self._values.get("document_id_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DocumentIdOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DocumentIdOptionsProperty"]], result)
 
         @builtins.property
         def domain_arn(self) -> typing.Optional[builtins.str]:
@@ -4433,24 +4433,24 @@ class CfnDeliveryStream(
         @builtins.property
         def processing_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
             '''The data processing configuration for the Kinesis Data Firehose delivery stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-processingconfiguration
             '''
             result = self._values.get("processing_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
 
         @builtins.property
         def retry_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ElasticsearchRetryOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ElasticsearchRetryOptionsProperty"]]:
             '''The retry behavior when Kinesis Data Firehose is unable to deliver data to Amazon ES.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-retryoptions
             '''
             result = self._values.get("retry_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ElasticsearchRetryOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ElasticsearchRetryOptionsProperty"]], result)
 
         @builtins.property
         def s3_backup_mode(self) -> typing.Optional[builtins.str]:
@@ -4475,13 +4475,13 @@ class CfnDeliveryStream(
         @builtins.property
         def vpc_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.VpcConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.VpcConfigurationProperty"]]:
             '''The details of the VPC of the Amazon ES destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-vpcconfiguration
             '''
             result = self._values.get("vpc_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.VpcConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.VpcConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4563,7 +4563,7 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            kms_encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.KMSEncryptionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            kms_encryption_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.KMSEncryptionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             no_encryption_config: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The ``EncryptionConfiguration`` property type specifies the encryption settings that Amazon Kinesis Data Firehose (Kinesis Data Firehose) uses when delivering data to Amazon Simple Storage Service (Amazon S3).
@@ -4600,13 +4600,13 @@ class CfnDeliveryStream(
         @builtins.property
         def kms_encryption_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.KMSEncryptionConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.KMSEncryptionConfigProperty"]]:
             '''The AWS Key Management Service ( AWS KMS) encryption key that Amazon S3 uses to encrypt your data.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-encryptionconfiguration.html#cfn-kinesisfirehose-deliverystream-encryptionconfiguration-kmsencryptionconfig
             '''
             result = self._values.get("kms_encryption_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.KMSEncryptionConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.KMSEncryptionConfigProperty"]], result)
 
         @builtins.property
         def no_encryption_config(self) -> typing.Optional[builtins.str]:
@@ -4657,18 +4657,18 @@ class CfnDeliveryStream(
             *,
             bucket_arn: builtins.str,
             role_arn: builtins.str,
-            buffering_hints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.BufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloud_watch_logging_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            buffering_hints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.BufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logging_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             compression_format: typing.Optional[builtins.str] = None,
             custom_time_zone: typing.Optional[builtins.str] = None,
-            data_format_conversion_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DataFormatConversionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            dynamic_partitioning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DynamicPartitioningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            data_format_conversion_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DataFormatConversionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            dynamic_partitioning_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DynamicPartitioningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             error_output_prefix: typing.Optional[builtins.str] = None,
             file_extension: typing.Optional[builtins.str] = None,
             prefix: typing.Optional[builtins.str] = None,
-            processing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_backup_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            processing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_backup_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             s3_backup_mode: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The ``ExtendedS3DestinationConfiguration`` property type configures an Amazon S3 destination for an Amazon Kinesis Data Firehose delivery stream.
@@ -4892,24 +4892,24 @@ class CfnDeliveryStream(
         @builtins.property
         def buffering_hints(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.BufferingHintsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.BufferingHintsProperty"]]:
             '''The buffering option.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-bufferinghints
             '''
             result = self._values.get("buffering_hints")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.BufferingHintsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.BufferingHintsProperty"]], result)
 
         @builtins.property
         def cloud_watch_logging_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
             '''The Amazon CloudWatch logging options for your Firehose stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-cloudwatchloggingoptions
             '''
             result = self._values.get("cloud_watch_logging_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
 
         @builtins.property
         def compression_format(self) -> typing.Optional[builtins.str]:
@@ -4936,29 +4936,29 @@ class CfnDeliveryStream(
         @builtins.property
         def data_format_conversion_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DataFormatConversionConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DataFormatConversionConfigurationProperty"]]:
             '''The serializer, deserializer, and schema for converting data from the JSON format to the Parquet or ORC format before writing it to Amazon S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-dataformatconversionconfiguration
             '''
             result = self._values.get("data_format_conversion_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DataFormatConversionConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DataFormatConversionConfigurationProperty"]], result)
 
         @builtins.property
         def dynamic_partitioning_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DynamicPartitioningConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DynamicPartitioningConfigurationProperty"]]:
             '''The configuration of the dynamic partitioning mechanism that creates targeted data sets from the streaming data by partitioning it based on partition keys.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-dynamicpartitioningconfiguration
             '''
             result = self._values.get("dynamic_partitioning_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DynamicPartitioningConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DynamicPartitioningConfigurationProperty"]], result)
 
         @builtins.property
         def encryption_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.EncryptionConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.EncryptionConfigurationProperty"]]:
             '''The encryption configuration for the Kinesis Data Firehose delivery stream.
 
             The default value is ``NoEncryption`` .
@@ -4966,7 +4966,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-encryptionconfiguration
             '''
             result = self._values.get("encryption_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.EncryptionConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.EncryptionConfigurationProperty"]], result)
 
         @builtins.property
         def error_output_prefix(self) -> typing.Optional[builtins.str]:
@@ -5004,24 +5004,24 @@ class CfnDeliveryStream(
         @builtins.property
         def processing_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
             '''The data processing configuration for the Kinesis Data Firehose delivery stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-processingconfiguration
             '''
             result = self._values.get("processing_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
 
         @builtins.property
         def s3_backup_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]]:
             '''The configuration for backup in Amazon S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-s3backupconfiguration
             '''
             result = self._values.get("s3_backup_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]], result)
 
         @builtins.property
         def s3_backup_mode(self) -> typing.Optional[builtins.str]:
@@ -5290,16 +5290,16 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            endpoint_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.HttpEndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            s3_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            buffering_hints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.BufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloud_watch_logging_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            processing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            request_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.HttpEndpointRequestConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            retry_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.RetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            endpoint_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.HttpEndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            s3_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            buffering_hints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.BufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logging_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            processing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            request_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.HttpEndpointRequestConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retry_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.RetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             role_arn: typing.Optional[builtins.str] = None,
             s3_backup_mode: typing.Optional[builtins.str] = None,
-            secrets_manager_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SecretsManagerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            secrets_manager_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SecretsManagerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the configuration of the HTTP endpoint destination.
 
@@ -5437,31 +5437,31 @@ class CfnDeliveryStream(
         @builtins.property
         def endpoint_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.HttpEndpointConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HttpEndpointConfigurationProperty"]:
             '''The configuration of the HTTP endpoint selected as the destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration-endpointconfiguration
             '''
             result = self._values.get("endpoint_configuration")
             assert result is not None, "Required property 'endpoint_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.HttpEndpointConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HttpEndpointConfigurationProperty"], result)
 
         @builtins.property
         def s3_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
             '''Describes the configuration of a destination in Amazon S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration-s3configuration
             '''
             result = self._values.get("s3_configuration")
             assert result is not None, "Required property 's3_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
 
         @builtins.property
         def buffering_hints(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.BufferingHintsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.BufferingHintsProperty"]]:
             '''The buffering options that can be used before data is delivered to the specified destination.
 
             Kinesis Data Firehose treats these options as hints, and it might choose to use more optimal values. The SizeInMBs and IntervalInSeconds parameters are optional. However, if you specify a value for one of them, you must also provide a value for the other.
@@ -5469,51 +5469,51 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration-bufferinghints
             '''
             result = self._values.get("buffering_hints")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.BufferingHintsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.BufferingHintsProperty"]], result)
 
         @builtins.property
         def cloud_watch_logging_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
             '''Describes the Amazon CloudWatch logging options for your delivery stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration-cloudwatchloggingoptions
             '''
             result = self._values.get("cloud_watch_logging_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
 
         @builtins.property
         def processing_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
             '''Describes the data processing configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration-processingconfiguration
             '''
             result = self._values.get("processing_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
 
         @builtins.property
         def request_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.HttpEndpointRequestConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HttpEndpointRequestConfigurationProperty"]]:
             '''The configuration of the request sent to the HTTP endpoint specified as the destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration-requestconfiguration
             '''
             result = self._values.get("request_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.HttpEndpointRequestConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HttpEndpointRequestConfigurationProperty"]], result)
 
         @builtins.property
         def retry_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.RetryOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RetryOptionsProperty"]]:
             '''Describes the retry behavior in case Kinesis Data Firehose is unable to deliver data to the specified HTTP endpoint destination, or if it doesn't receive a valid acknowledgment of receipt from the specified HTTP endpoint destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration-retryoptions
             '''
             result = self._values.get("retry_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.RetryOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RetryOptionsProperty"]], result)
 
         @builtins.property
         def role_arn(self) -> typing.Optional[builtins.str]:
@@ -5538,13 +5538,13 @@ class CfnDeliveryStream(
         @builtins.property
         def secrets_manager_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SecretsManagerConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SecretsManagerConfigurationProperty"]]:
             '''The configuration that defines how you access secrets for HTTP Endpoint destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration-secretsmanagerconfiguration
             '''
             result = self._values.get("secrets_manager_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SecretsManagerConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SecretsManagerConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5569,7 +5569,7 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            common_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.HttpEndpointCommonAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            common_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.HttpEndpointCommonAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             content_encoding: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The configuration of the HTTP endpoint request.
@@ -5609,13 +5609,13 @@ class CfnDeliveryStream(
         @builtins.property
         def common_attributes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.HttpEndpointCommonAttributeProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HttpEndpointCommonAttributeProperty"]]]]:
             '''Describes the metadata sent to the HTTP endpoint destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-httpendpointrequestconfiguration.html#cfn-kinesisfirehose-deliverystream-httpendpointrequestconfiguration-commonattributes
             '''
             result = self._values.get("common_attributes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.HttpEndpointCommonAttributeProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HttpEndpointCommonAttributeProperty"]]]], result)
 
         @builtins.property
         def content_encoding(self) -> typing.Optional[builtins.str]:
@@ -5661,18 +5661,18 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            catalog_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.CatalogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            catalog_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.CatalogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             role_arn: builtins.str,
-            s3_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            append_only: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            buffering_hints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.BufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloud_watch_logging_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            destination_table_configuration_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DestinationTableConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            processing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            retry_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.RetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            append_only: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            buffering_hints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.BufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logging_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            destination_table_configuration_list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DestinationTableConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            processing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retry_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.RetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             s3_backup_mode: typing.Optional[builtins.str] = None,
-            schema_evolution_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SchemaEvolutionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            table_creation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.TableCreationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            schema_evolution_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SchemaEvolutionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            table_creation_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.TableCreationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the destination configure settings for Apache Iceberg Table.
 
@@ -5818,14 +5818,14 @@ class CfnDeliveryStream(
         @builtins.property
         def catalog_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CatalogConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CatalogConfigurationProperty"]:
             '''Configuration describing where the destination Apache Iceberg Tables are persisted.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-icebergdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-icebergdestinationconfiguration-catalogconfiguration
             '''
             result = self._values.get("catalog_configuration")
             assert result is not None, "Required property 'catalog_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CatalogConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CatalogConfigurationProperty"], result)
 
         @builtins.property
         def role_arn(self) -> builtins.str:
@@ -5840,18 +5840,18 @@ class CfnDeliveryStream(
         @builtins.property
         def s3_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-icebergdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-icebergdestinationconfiguration-s3configuration
             '''
             result = self._values.get("s3_configuration")
             assert result is not None, "Required property 's3_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
 
         @builtins.property
         def append_only(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Describes whether all incoming data for this delivery stream will be append only (inserts only and not for updates and deletes) for Iceberg delivery.
 
             This feature is only applicable for Apache Iceberg Tables.
@@ -5861,32 +5861,32 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-icebergdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-icebergdestinationconfiguration-appendonly
             '''
             result = self._values.get("append_only")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def buffering_hints(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.BufferingHintsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.BufferingHintsProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-icebergdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-icebergdestinationconfiguration-bufferinghints
             '''
             result = self._values.get("buffering_hints")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.BufferingHintsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.BufferingHintsProperty"]], result)
 
         @builtins.property
         def cloud_watch_logging_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-icebergdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-icebergdestinationconfiguration-cloudwatchloggingoptions
             '''
             result = self._values.get("cloud_watch_logging_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
 
         @builtins.property
         def destination_table_configuration_list(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DestinationTableConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DestinationTableConfigurationProperty"]]]]:
             '''Provides a list of ``DestinationTableConfigurations`` which Firehose uses to deliver data to Apache Iceberg Tables.
 
             Firehose will write data with insert if table specific configuration is not provided here.
@@ -5894,27 +5894,27 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-icebergdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-icebergdestinationconfiguration-destinationtableconfigurationlist
             '''
             result = self._values.get("destination_table_configuration_list")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DestinationTableConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DestinationTableConfigurationProperty"]]]], result)
 
         @builtins.property
         def processing_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-icebergdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-icebergdestinationconfiguration-processingconfiguration
             '''
             result = self._values.get("processing_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
 
         @builtins.property
         def retry_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.RetryOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RetryOptionsProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-icebergdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-icebergdestinationconfiguration-retryoptions
             '''
             result = self._values.get("retry_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.RetryOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RetryOptionsProperty"]], result)
 
         @builtins.property
         def s3_backup_mode(self) -> typing.Optional[builtins.str]:
@@ -5930,7 +5930,7 @@ class CfnDeliveryStream(
         @builtins.property
         def schema_evolution_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SchemaEvolutionConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SchemaEvolutionConfigurationProperty"]]:
             '''The configuration to enable automatic schema evolution.
 
             Amazon Data Firehose is in preview release and is subject to change.
@@ -5938,12 +5938,12 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-icebergdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-icebergdestinationconfiguration-schemaevolutionconfiguration
             '''
             result = self._values.get("schema_evolution_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SchemaEvolutionConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SchemaEvolutionConfigurationProperty"]], result)
 
         @builtins.property
         def table_creation_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.TableCreationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.TableCreationConfigurationProperty"]]:
             '''The configuration to enable automatic table creation.
 
             Amazon Data Firehose is in preview release and is subject to change.
@@ -5951,7 +5951,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-icebergdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-icebergdestinationconfiguration-tablecreationconfiguration
             '''
             result = self._values.get("table_creation_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.TableCreationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.TableCreationConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5973,7 +5973,7 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            deserializer: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DeserializerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            deserializer: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DeserializerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the deserializer you want to use to convert the format of the input data.
 
@@ -6015,7 +6015,7 @@ class CfnDeliveryStream(
         @builtins.property
         def deserializer(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DeserializerProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DeserializerProperty"]]:
             '''Specifies which deserializer to use.
 
             You can choose either the Apache Hive JSON SerDe or the OpenX JSON SerDe. If both are non-null, the server rejects the request.
@@ -6023,7 +6023,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-inputformatconfiguration.html#cfn-kinesisfirehose-deliverystream-inputformatconfiguration-deserializer
             '''
             result = self._values.get("deserializer")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.DeserializerProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DeserializerProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6175,7 +6175,7 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            authentication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.AuthenticationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            authentication_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.AuthenticationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             msk_cluster_arn: builtins.str,
             topic_name: builtins.str,
             read_from_timestamp: typing.Optional[builtins.str] = None,
@@ -6225,14 +6225,14 @@ class CfnDeliveryStream(
         @builtins.property
         def authentication_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AuthenticationConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AuthenticationConfigurationProperty"]:
             '''The authentication configuration of the Amazon MSK cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-msksourceconfiguration.html#cfn-kinesisfirehose-deliverystream-msksourceconfiguration-authenticationconfiguration
             '''
             result = self._values.get("authentication_configuration")
             assert result is not None, "Required property 'authentication_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.AuthenticationConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AuthenticationConfigurationProperty"], result)
 
         @builtins.property
         def msk_cluster_arn(self) -> builtins.str:
@@ -6291,9 +6291,9 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            case_insensitive: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            column_to_json_key_mappings: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            convert_dots_in_json_keys_to_underscores: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            case_insensitive: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            column_to_json_key_mappings: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            convert_dots_in_json_keys_to_underscores: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The OpenX SerDe.
 
@@ -6336,18 +6336,18 @@ class CfnDeliveryStream(
         @builtins.property
         def case_insensitive(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to ``true`` , which is the default, Firehose converts JSON keys to lowercase before deserializing them.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-openxjsonserde.html#cfn-kinesisfirehose-deliverystream-openxjsonserde-caseinsensitive
             '''
             result = self._values.get("case_insensitive")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def column_to_json_key_mappings(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Maps column names to JSON keys that aren't identical to the column names.
 
             This is useful when the JSON contains keys that are Hive keywords. For example, ``timestamp`` is a Hive keyword. If you have a JSON key named ``timestamp`` , set this parameter to ``{"ts": "timestamp"}`` to map this key to a column named ``ts`` .
@@ -6355,12 +6355,12 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-openxjsonserde.html#cfn-kinesisfirehose-deliverystream-openxjsonserde-columntojsonkeymappings
             '''
             result = self._values.get("column_to_json_key_mappings")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def convert_dots_in_json_keys_to_underscores(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When set to ``true`` , specifies that the names of the keys include dots and that you want Firehose to replace them with underscores.
 
             This is useful because Apache Hive does not allow dots in column names. For example, if the JSON contains a key whose name is "a.b", you can define the column name to be "a_b" when using this option.
@@ -6370,7 +6370,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-openxjsonserde.html#cfn-kinesisfirehose-deliverystream-openxjsonserde-convertdotsinjsonkeystounderscores
             '''
             result = self._values.get("convert_dots_in_json_keys_to_underscores")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6408,7 +6408,7 @@ class CfnDeliveryStream(
             bloom_filter_false_positive_probability: typing.Optional[jsii.Number] = None,
             compression: typing.Optional[builtins.str] = None,
             dictionary_key_threshold: typing.Optional[jsii.Number] = None,
-            enable_padding: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_padding: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             format_version: typing.Optional[builtins.str] = None,
             padding_tolerance: typing.Optional[jsii.Number] = None,
             row_index_stride: typing.Optional[jsii.Number] = None,
@@ -6545,7 +6545,7 @@ class CfnDeliveryStream(
         @builtins.property
         def enable_padding(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this to ``true`` to indicate that you want stripes to be padded to the HDFS block boundaries.
 
             This is useful if you intend to copy the data from Amazon S3 to HDFS before querying. The default is ``false`` .
@@ -6553,7 +6553,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-enablepadding
             '''
             result = self._values.get("enable_padding")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def format_version(self) -> typing.Optional[builtins.str]:
@@ -6623,7 +6623,7 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            serializer: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SerializerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            serializer: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SerializerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the serializer that you want Firehose to use to convert the format of your data before it writes it to Amazon S3.
 
@@ -6675,7 +6675,7 @@ class CfnDeliveryStream(
         @builtins.property
         def serializer(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SerializerProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SerializerProperty"]]:
             '''Specifies which serializer to use.
 
             You can choose either the ORC SerDe or the Parquet SerDe. If both are non-null, the server rejects the request.
@@ -6683,7 +6683,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-outputformatconfiguration.html#cfn-kinesisfirehose-deliverystream-outputformatconfiguration-serializer
             '''
             result = self._values.get("serializer")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SerializerProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SerializerProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6714,7 +6714,7 @@ class CfnDeliveryStream(
             *,
             block_size_bytes: typing.Optional[jsii.Number] = None,
             compression: typing.Optional[builtins.str] = None,
-            enable_dictionary_compression: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_dictionary_compression: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             max_padding_bytes: typing.Optional[jsii.Number] = None,
             page_size_bytes: typing.Optional[jsii.Number] = None,
             writer_version: typing.Optional[builtins.str] = None,
@@ -6795,13 +6795,13 @@ class CfnDeliveryStream(
         @builtins.property
         def enable_dictionary_compression(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether to enable dictionary compression.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-parquetserde.html#cfn-kinesisfirehose-deliverystream-parquetserde-enabledictionarycompression
             '''
             result = self._values.get("enable_dictionary_compression")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def max_padding_bytes(self) -> typing.Optional[jsii.Number]:
@@ -6912,7 +6912,7 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            identity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.PartitionFieldProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            identity: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.PartitionFieldProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Represents how to produce partition data for a table.
 
@@ -6951,7 +6951,7 @@ class CfnDeliveryStream(
         @builtins.property
         def identity(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.PartitionFieldProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.PartitionFieldProperty"]]]]:
             '''List of identity `transforms <https://docs.aws.amazon.com/https://iceberg.apache.org/spec/#partition-transforms>`_ that performs an identity transformation. The transform takes the source value, and does not modify it. Result type is the source type.
 
             Amazon Data Firehose is in preview release and is subject to change.
@@ -6959,7 +6959,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-partitionspec.html#cfn-kinesisfirehose-deliverystream-partitionspec-identity
             '''
             result = self._values.get("identity")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.PartitionFieldProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.PartitionFieldProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6981,8 +6981,8 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            processors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ProcessorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            processors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ProcessorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The ``ProcessingConfiguration`` property configures data processing for an Amazon Kinesis Data Firehose delivery stream.
 
@@ -7024,24 +7024,24 @@ class CfnDeliveryStream(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether data processing is enabled (true) or disabled (false).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-processingconfiguration.html#cfn-kinesisfirehose-deliverystream-processingconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def processors(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessorProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessorProperty"]]]]:
             '''The data processors.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-processingconfiguration.html#cfn-kinesisfirehose-deliverystream-processingconfiguration-processors
             '''
             result = self._values.get("processors")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessorProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessorProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7140,7 +7140,7 @@ class CfnDeliveryStream(
             self,
             *,
             type: builtins.str,
-            parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ProcessorParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ProcessorParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The ``Processor`` property specifies a data processor for an Amazon Kinesis Data Firehose delivery stream.
 
@@ -7191,13 +7191,13 @@ class CfnDeliveryStream(
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessorParameterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessorParameterProperty"]]]]:
             '''The processor parameters.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-processor.html#cfn-kinesisfirehose-deliverystream-processor-parameters
             '''
             result = self._values.get("parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessorParameterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessorParameterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7233,16 +7233,16 @@ class CfnDeliveryStream(
             self,
             *,
             cluster_jdbcurl: builtins.str,
-            copy_command: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.CopyCommandProperty", typing.Dict[builtins.str, typing.Any]]],
+            copy_command: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.CopyCommandProperty", typing.Dict[builtins.str, typing.Any]]],
             role_arn: builtins.str,
-            s3_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            cloud_watch_logging_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            cloud_watch_logging_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             password: typing.Optional[builtins.str] = None,
-            processing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            retry_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.RedshiftRetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_backup_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            processing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retry_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.RedshiftRetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_backup_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             s3_backup_mode: typing.Optional[builtins.str] = None,
-            secrets_manager_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SecretsManagerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            secrets_manager_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SecretsManagerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             username: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The ``RedshiftDestinationConfiguration`` property type specifies an Amazon Redshift cluster to which Amazon Kinesis Data Firehose (Kinesis Data Firehose) delivers data.
@@ -7411,14 +7411,14 @@ class CfnDeliveryStream(
         @builtins.property
         def copy_command(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CopyCommandProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CopyCommandProperty"]:
             '''Configures the Amazon Redshift ``COPY`` command that Kinesis Data Firehose uses to load data into the cluster from the Amazon S3 bucket.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-redshiftdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-redshiftdestinationconfiguration-copycommand
             '''
             result = self._values.get("copy_command")
             assert result is not None, "Required property 'copy_command' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CopyCommandProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CopyCommandProperty"], result)
 
         @builtins.property
         def role_arn(self) -> builtins.str:
@@ -7435,7 +7435,7 @@ class CfnDeliveryStream(
         @builtins.property
         def s3_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
             '''The S3 bucket where Kinesis Data Firehose first delivers data.
 
             After the data is in the bucket, Kinesis Data Firehose uses the ``COPY`` command to load the data into the Amazon Redshift cluster. For the Amazon S3 bucket's compression format, don't specify ``SNAPPY`` or ``ZIP`` because the Amazon Redshift ``COPY`` command doesn't support them.
@@ -7444,18 +7444,18 @@ class CfnDeliveryStream(
             '''
             result = self._values.get("s3_configuration")
             assert result is not None, "Required property 's3_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
 
         @builtins.property
         def cloud_watch_logging_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
             '''The CloudWatch logging options for your Firehose stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-redshiftdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-redshiftdestinationconfiguration-cloudwatchloggingoptions
             '''
             result = self._values.get("cloud_watch_logging_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
 
         @builtins.property
         def password(self) -> typing.Optional[builtins.str]:
@@ -7469,18 +7469,18 @@ class CfnDeliveryStream(
         @builtins.property
         def processing_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
             '''The data processing configuration for the Kinesis Data Firehose delivery stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-redshiftdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-redshiftdestinationconfiguration-processingconfiguration
             '''
             result = self._values.get("processing_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
 
         @builtins.property
         def retry_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.RedshiftRetryOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RedshiftRetryOptionsProperty"]]:
             '''The retry behavior in case Firehose is unable to deliver documents to Amazon Redshift.
 
             Default value is 3600 (60 minutes).
@@ -7488,18 +7488,18 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-redshiftdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-redshiftdestinationconfiguration-retryoptions
             '''
             result = self._values.get("retry_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.RedshiftRetryOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RedshiftRetryOptionsProperty"]], result)
 
         @builtins.property
         def s3_backup_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]]:
             '''The configuration for backup in Amazon S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-redshiftdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-redshiftdestinationconfiguration-s3backupconfiguration
             '''
             result = self._values.get("s3_backup_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]], result)
 
         @builtins.property
         def s3_backup_mode(self) -> typing.Optional[builtins.str]:
@@ -7515,13 +7515,13 @@ class CfnDeliveryStream(
         @builtins.property
         def secrets_manager_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SecretsManagerConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SecretsManagerConfigurationProperty"]]:
             '''The configuration that defines how you access secrets for Amazon Redshift.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-redshiftdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-redshiftdestinationconfiguration-secretsmanagerconfiguration
             '''
             result = self._values.get("secrets_manager_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SecretsManagerConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SecretsManagerConfigurationProperty"]], result)
 
         @builtins.property
         def username(self) -> typing.Optional[builtins.str]:
@@ -7681,10 +7681,10 @@ class CfnDeliveryStream(
             *,
             bucket_arn: builtins.str,
             role_arn: builtins.str,
-            buffering_hints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.BufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloud_watch_logging_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            buffering_hints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.BufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logging_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             compression_format: typing.Optional[builtins.str] = None,
-            encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             error_output_prefix: typing.Optional[builtins.str] = None,
             prefix: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -7785,24 +7785,24 @@ class CfnDeliveryStream(
         @builtins.property
         def buffering_hints(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.BufferingHintsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.BufferingHintsProperty"]]:
             '''Configures how Kinesis Data Firehose buffers incoming data while delivering it to the Amazon S3 bucket.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-s3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-s3destinationconfiguration-bufferinghints
             '''
             result = self._values.get("buffering_hints")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.BufferingHintsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.BufferingHintsProperty"]], result)
 
         @builtins.property
         def cloud_watch_logging_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
             '''The CloudWatch logging options for your Firehose stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-s3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-s3destinationconfiguration-cloudwatchloggingoptions
             '''
             result = self._values.get("cloud_watch_logging_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
 
         @builtins.property
         def compression_format(self) -> typing.Optional[builtins.str]:
@@ -7818,7 +7818,7 @@ class CfnDeliveryStream(
         @builtins.property
         def encryption_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.EncryptionConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.EncryptionConfigurationProperty"]]:
             '''Configures Amazon Simple Storage Service (Amazon S3) server-side encryption.
 
             Kinesis Data Firehose uses AWS Key Management Service ( AWS KMS) to encrypt the data that it delivers to your Amazon S3 bucket.
@@ -7826,7 +7826,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-s3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-s3destinationconfiguration-encryptionconfiguration
             '''
             result = self._values.get("encryption_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.EncryptionConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.EncryptionConfigurationProperty"]], result)
 
         @builtins.property
         def error_output_prefix(self) -> typing.Optional[builtins.str]:
@@ -8026,7 +8026,7 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The configuration to enable schema evolution.
 
@@ -8057,7 +8057,7 @@ class CfnDeliveryStream(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specify whether you want to enable schema evolution.
 
             Amazon Data Firehose is in preview release and is subject to change.
@@ -8065,7 +8065,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-schemaevolutionconfiguration.html#cfn-kinesisfirehose-deliverystream-schemaevolutionconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8091,7 +8091,7 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             role_arn: typing.Optional[builtins.str] = None,
             secret_arn: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -8132,7 +8132,7 @@ class CfnDeliveryStream(
                 self._values["secret_arn"] = secret_arn
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Specifies whether you want to use the secrets manager feature.
 
             When set as ``True`` the secrets manager configuration overwrites the existing secrets in the destination configuration. When it's set to ``False`` Firehose falls back to the credentials in the destination configuration.
@@ -8141,7 +8141,7 @@ class CfnDeliveryStream(
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def role_arn(self) -> typing.Optional[builtins.str]:
@@ -8185,8 +8185,8 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            orc_ser_de: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.OrcSerDeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            parquet_ser_de: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ParquetSerDeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            orc_ser_de: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.OrcSerDeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parquet_ser_de: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ParquetSerDeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The serializer that you want Firehose to use to convert data to the target format before writing it to Amazon S3.
 
@@ -8240,7 +8240,7 @@ class CfnDeliveryStream(
         @builtins.property
         def orc_ser_de(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.OrcSerDeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.OrcSerDeProperty"]]:
             '''A serializer to use for converting data to the ORC format before storing it in Amazon S3.
 
             For more information, see `Apache ORC <https://docs.aws.amazon.com/https://orc.apache.org/docs/>`_ .
@@ -8248,12 +8248,12 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-serializer.html#cfn-kinesisfirehose-deliverystream-serializer-orcserde
             '''
             result = self._values.get("orc_ser_de")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.OrcSerDeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.OrcSerDeProperty"]], result)
 
         @builtins.property
         def parquet_ser_de(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ParquetSerDeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ParquetSerDeProperty"]]:
             '''A serializer to use for converting data to the Parquet format before storing it in Amazon S3.
 
             For more information, see `Apache Parquet <https://docs.aws.amazon.com/https://parquet.apache.org/docs/contribution-guidelines/>`_ .
@@ -8261,7 +8261,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-serializer.html#cfn-kinesisfirehose-deliverystream-serializer-parquetserde
             '''
             result = self._values.get("parquet_ser_de")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ParquetSerDeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ParquetSerDeProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8386,22 +8386,22 @@ class CfnDeliveryStream(
             account_url: builtins.str,
             database: builtins.str,
             role_arn: builtins.str,
-            s3_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            s3_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             schema: builtins.str,
             table: builtins.str,
-            buffering_hints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SnowflakeBufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloud_watch_logging_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            buffering_hints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SnowflakeBufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logging_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             content_column_name: typing.Optional[builtins.str] = None,
             data_loading_option: typing.Optional[builtins.str] = None,
             key_passphrase: typing.Optional[builtins.str] = None,
             meta_data_column_name: typing.Optional[builtins.str] = None,
             private_key: typing.Optional[builtins.str] = None,
-            processing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            retry_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SnowflakeRetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            processing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retry_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SnowflakeRetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             s3_backup_mode: typing.Optional[builtins.str] = None,
-            secrets_manager_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SecretsManagerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            snowflake_role_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SnowflakeRoleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            snowflake_vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SnowflakeVpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            secrets_manager_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SecretsManagerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            snowflake_role_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SnowflakeRoleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            snowflake_vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SnowflakeVpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             user: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Configure Snowflake destination.
@@ -8609,13 +8609,13 @@ class CfnDeliveryStream(
         @builtins.property
         def s3_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-snowflakedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-snowflakedestinationconfiguration-s3configuration
             '''
             result = self._values.get("s3_configuration")
             assert result is not None, "Required property 's3_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
 
         @builtins.property
         def schema(self) -> builtins.str:
@@ -8640,7 +8640,7 @@ class CfnDeliveryStream(
         @builtins.property
         def buffering_hints(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SnowflakeBufferingHintsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeBufferingHintsProperty"]]:
             '''Describes the buffering to perform before delivering data to the Snowflake destination.
 
             If you do not specify any value, Firehose uses the default values.
@@ -8648,17 +8648,17 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-snowflakedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-snowflakedestinationconfiguration-bufferinghints
             '''
             result = self._values.get("buffering_hints")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SnowflakeBufferingHintsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeBufferingHintsProperty"]], result)
 
         @builtins.property
         def cloud_watch_logging_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-snowflakedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-snowflakedestinationconfiguration-cloudwatchloggingoptions
             '''
             result = self._values.get("cloud_watch_logging_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
 
         @builtins.property
         def content_column_name(self) -> typing.Optional[builtins.str]:
@@ -8722,23 +8722,23 @@ class CfnDeliveryStream(
         @builtins.property
         def processing_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-snowflakedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-snowflakedestinationconfiguration-processingconfiguration
             '''
             result = self._values.get("processing_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
 
         @builtins.property
         def retry_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SnowflakeRetryOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeRetryOptionsProperty"]]:
             '''The time period where Firehose will retry sending data to the chosen HTTP endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-snowflakedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-snowflakedestinationconfiguration-retryoptions
             '''
             result = self._values.get("retry_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SnowflakeRetryOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeRetryOptionsProperty"]], result)
 
         @builtins.property
         def s3_backup_mode(self) -> typing.Optional[builtins.str]:
@@ -8752,18 +8752,18 @@ class CfnDeliveryStream(
         @builtins.property
         def secrets_manager_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SecretsManagerConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SecretsManagerConfigurationProperty"]]:
             '''The configuration that defines how you access secrets for Snowflake.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-snowflakedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-snowflakedestinationconfiguration-secretsmanagerconfiguration
             '''
             result = self._values.get("secrets_manager_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SecretsManagerConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SecretsManagerConfigurationProperty"]], result)
 
         @builtins.property
         def snowflake_role_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SnowflakeRoleConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeRoleConfigurationProperty"]]:
             '''Optionally configure a Snowflake role.
 
             Otherwise the default user role will be used.
@@ -8771,12 +8771,12 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-snowflakedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-snowflakedestinationconfiguration-snowflakeroleconfiguration
             '''
             result = self._values.get("snowflake_role_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SnowflakeRoleConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeRoleConfigurationProperty"]], result)
 
         @builtins.property
         def snowflake_vpc_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SnowflakeVpcConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeVpcConfigurationProperty"]]:
             '''The VPCE ID for Firehose to privately connect with Snowflake.
 
             The ID format is com.amazonaws.vpce.[region].vpce-svc-<[id]>. For more information, see `Amazon PrivateLink & Snowflake <https://docs.aws.amazon.com/https://docs.snowflake.com/en/user-guide/admin-security-privatelink>`_
@@ -8784,7 +8784,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-snowflakedestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-snowflakedestinationconfiguration-snowflakevpcconfiguration
             '''
             result = self._values.get("snowflake_vpc_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SnowflakeVpcConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeVpcConfigurationProperty"]], result)
 
         @builtins.property
         def user(self) -> typing.Optional[builtins.str]:
@@ -8872,7 +8872,7 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             snowflake_role: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Optionally configure a Snowflake role.
@@ -8909,13 +8909,13 @@ class CfnDeliveryStream(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enable Snowflake role.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-snowflakeroleconfiguration.html#cfn-kinesisfirehose-deliverystream-snowflakeroleconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def snowflake_role(self) -> typing.Optional[builtins.str]:
@@ -9093,15 +9093,15 @@ class CfnDeliveryStream(
             *,
             hec_endpoint: builtins.str,
             hec_endpoint_type: builtins.str,
-            s3_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-            buffering_hints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SplunkBufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloud_watch_logging_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            buffering_hints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SplunkBufferingHintsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logging_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.CloudWatchLoggingOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             hec_acknowledgment_timeout_in_seconds: typing.Optional[jsii.Number] = None,
             hec_token: typing.Optional[builtins.str] = None,
-            processing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            retry_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SplunkRetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            processing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            retry_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SplunkRetryOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             s3_backup_mode: typing.Optional[builtins.str] = None,
-            secrets_manager_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.SecretsManagerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            secrets_manager_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SecretsManagerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The ``SplunkDestinationConfiguration`` property type specifies the configuration of a destination in Splunk for a Kinesis Data Firehose delivery stream.
 
@@ -9249,19 +9249,19 @@ class CfnDeliveryStream(
         @builtins.property
         def s3_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]:
             '''The configuration for the backup Amazon S3 location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-splunkdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-splunkdestinationconfiguration-s3configuration
             '''
             result = self._values.get("s3_configuration")
             assert result is not None, "Required property 's3_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"], result)
 
         @builtins.property
         def buffering_hints(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SplunkBufferingHintsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SplunkBufferingHintsProperty"]]:
             '''The buffering options.
 
             If no value is specified, the default values for Splunk are used.
@@ -9269,18 +9269,18 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-splunkdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-splunkdestinationconfiguration-bufferinghints
             '''
             result = self._values.get("buffering_hints")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SplunkBufferingHintsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SplunkBufferingHintsProperty"]], result)
 
         @builtins.property
         def cloud_watch_logging_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]]:
             '''The Amazon CloudWatch logging options for your Firehose stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-splunkdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-splunkdestinationconfiguration-cloudwatchloggingoptions
             '''
             result = self._values.get("cloud_watch_logging_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.CloudWatchLoggingOptionsProperty"]], result)
 
         @builtins.property
         def hec_acknowledgment_timeout_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -9305,24 +9305,24 @@ class CfnDeliveryStream(
         @builtins.property
         def processing_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]]:
             '''The data processing configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-splunkdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-splunkdestinationconfiguration-processingconfiguration
             '''
             result = self._values.get("processing_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ProcessingConfigurationProperty"]], result)
 
         @builtins.property
         def retry_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SplunkRetryOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SplunkRetryOptionsProperty"]]:
             '''The retry behavior in case Firehose is unable to deliver data to Splunk, or if it doesn't receive an acknowledgment of receipt from Splunk.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-splunkdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-splunkdestinationconfiguration-retryoptions
             '''
             result = self._values.get("retry_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SplunkRetryOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SplunkRetryOptionsProperty"]], result)
 
         @builtins.property
         def s3_backup_mode(self) -> typing.Optional[builtins.str]:
@@ -9340,13 +9340,13 @@ class CfnDeliveryStream(
         @builtins.property
         def secrets_manager_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SecretsManagerConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SecretsManagerConfigurationProperty"]]:
             '''The configuration that defines how you access secrets for Splunk.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-splunkdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-splunkdestinationconfiguration-secretsmanagerconfiguration
             '''
             result = self._values.get("secrets_manager_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryStream.SecretsManagerConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SecretsManagerConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9425,7 +9425,7 @@ class CfnDeliveryStream(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The configuration to enable automatic table creation.
 
@@ -9456,7 +9456,7 @@ class CfnDeliveryStream(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specify whether you want to enable automatic table creation.
 
             Amazon Data Firehose is in preview release and is subject to change.
@@ -9464,7 +9464,7 @@ class CfnDeliveryStream(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-tablecreationconfiguration.html#cfn-kinesisfirehose-deliverystream-tablecreationconfiguration-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9615,24 +9615,24 @@ class CfnDeliveryStreamProps:
     def __init__(
         self,
         *,
-        amazon_open_search_serverless_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        amazonopensearchservice_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        database_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.DatabaseSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        delivery_stream_encryption_configuration_input: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        delivery_stream_name: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253]] = None,
+        amazon_open_search_serverless_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        amazonopensearchservice_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        database_source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DatabaseSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        delivery_stream_encryption_configuration_input: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        delivery_stream_name: typing.Optional[typing.Union[builtins.str, "_IStreamRef_b484e253"]] = None,
         delivery_stream_type: typing.Optional[builtins.str] = None,
-        direct_put_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.DirectPutSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        elasticsearch_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        extended_s3_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        http_endpoint_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        iceberg_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.IcebergDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kinesis_stream_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.KinesisStreamSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        msk_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.MSKSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        redshift_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.RedshiftDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        s3_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.S3DestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        snowflake_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.SnowflakeDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        splunk_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.SplunkDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        direct_put_source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.DirectPutSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        elasticsearch_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        extended_s3_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        http_endpoint_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        iceberg_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.IcebergDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kinesis_stream_source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.KinesisStreamSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        msk_source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.MSKSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        redshift_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.RedshiftDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        s3_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        snowflake_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SnowflakeDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        splunk_destination_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryStream.SplunkDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDeliveryStream``.
 
@@ -9741,18 +9741,18 @@ class CfnDeliveryStreamProps:
     @builtins.property
     def amazon_open_search_serverless_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty"]]:
         '''Describes the configuration of a destination in the Serverless offering for Amazon OpenSearch Service.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-amazonopensearchserverlessdestinationconfiguration
         '''
         result = self._values.get("amazon_open_search_serverless_destination_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonOpenSearchServerlessDestinationConfigurationProperty"]], result)
 
     @builtins.property
     def amazonopensearchservice_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty"]]:
         '''The destination in Amazon OpenSearch Service.
 
         You can specify only one destination.
@@ -9760,12 +9760,12 @@ class CfnDeliveryStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-amazonopensearchservicedestinationconfiguration
         '''
         result = self._values.get("amazonopensearchservice_destination_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty"]], result)
 
     @builtins.property
     def database_source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.DatabaseSourceConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseSourceConfigurationProperty"]]:
         '''The top level object for configuring streams with database as a source.
 
         Amazon Data Firehose is in preview release and is subject to change.
@@ -9773,29 +9773,29 @@ class CfnDeliveryStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-databasesourceconfiguration
         '''
         result = self._values.get("database_source_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.DatabaseSourceConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DatabaseSourceConfigurationProperty"]], result)
 
     @builtins.property
     def delivery_stream_encryption_configuration_input(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty"]]:
         '''Specifies the type and Amazon Resource Name (ARN) of the CMK to use for Server-Side Encryption (SSE).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-deliverystreamencryptionconfigurationinput
         '''
         result = self._values.get("delivery_stream_encryption_configuration_input")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty"]], result)
 
     @builtins.property
     def delivery_stream_name(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IStreamRef_b484e253"]]:
         '''The name of the Firehose stream.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-deliverystreamname
         '''
         result = self._values.get("delivery_stream_name")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IStreamRef_b484e253"]], result)
 
     @builtins.property
     def delivery_stream_type(self) -> typing.Optional[builtins.str]:
@@ -9812,18 +9812,18 @@ class CfnDeliveryStreamProps:
     @builtins.property
     def direct_put_source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.DirectPutSourceConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DirectPutSourceConfigurationProperty"]]:
         '''The structure that configures parameters such as ``ThroughputHintInMBs`` for a stream configured with Direct PUT as a source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-directputsourceconfiguration
         '''
         result = self._values.get("direct_put_source_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.DirectPutSourceConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.DirectPutSourceConfigurationProperty"]], result)
 
     @builtins.property
     def elasticsearch_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty"]]:
         '''An Amazon ES destination for the delivery stream.
 
         Conditional. You must specify only one destination configuration.
@@ -9833,12 +9833,12 @@ class CfnDeliveryStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration
         '''
         result = self._values.get("elasticsearch_destination_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty"]], result)
 
     @builtins.property
     def extended_s3_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty"]]:
         '''An Amazon S3 destination for the delivery stream.
 
         Conditional. You must specify only one destination configuration.
@@ -9848,12 +9848,12 @@ class CfnDeliveryStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration
         '''
         result = self._values.get("extended_s3_destination_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty"]], result)
 
     @builtins.property
     def http_endpoint_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty"]]:
         '''Enables configuring Kinesis Firehose to deliver data to any HTTP endpoint destination.
 
         You can specify only one destination.
@@ -9861,45 +9861,45 @@ class CfnDeliveryStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-httpendpointdestinationconfiguration
         '''
         result = self._values.get("http_endpoint_destination_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.HttpEndpointDestinationConfigurationProperty"]], result)
 
     @builtins.property
     def iceberg_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.IcebergDestinationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.IcebergDestinationConfigurationProperty"]]:
         '''Specifies the destination configure settings for Apache Iceberg Table.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-icebergdestinationconfiguration
         '''
         result = self._values.get("iceberg_destination_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.IcebergDestinationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.IcebergDestinationConfigurationProperty"]], result)
 
     @builtins.property
     def kinesis_stream_source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.KinesisStreamSourceConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.KinesisStreamSourceConfigurationProperty"]]:
         '''When a Kinesis stream is used as the source for the delivery stream, a `KinesisStreamSourceConfiguration <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-kinesisstreamsourceconfiguration.html>`_ containing the Kinesis stream ARN and the role ARN for the source stream.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-kinesisstreamsourceconfiguration
         '''
         result = self._values.get("kinesis_stream_source_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.KinesisStreamSourceConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.KinesisStreamSourceConfigurationProperty"]], result)
 
     @builtins.property
     def msk_source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.MSKSourceConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.MSKSourceConfigurationProperty"]]:
         '''The configuration for the Amazon MSK cluster to be used as the source for a delivery stream.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-msksourceconfiguration
         '''
         result = self._values.get("msk_source_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.MSKSourceConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.MSKSourceConfigurationProperty"]], result)
 
     @builtins.property
     def redshift_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.RedshiftDestinationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RedshiftDestinationConfigurationProperty"]]:
         '''An Amazon Redshift destination for the delivery stream.
 
         Conditional. You must specify only one destination configuration.
@@ -9909,12 +9909,12 @@ class CfnDeliveryStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-redshiftdestinationconfiguration
         '''
         result = self._values.get("redshift_destination_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.RedshiftDestinationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.RedshiftDestinationConfigurationProperty"]], result)
 
     @builtins.property
     def s3_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.S3DestinationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]]:
         '''The ``S3DestinationConfiguration`` property type specifies an Amazon Simple Storage Service (Amazon S3) destination to which Amazon Kinesis Data Firehose (Kinesis Data Firehose) delivers data.
 
         Conditional. You must specify only one destination configuration.
@@ -9924,32 +9924,32 @@ class CfnDeliveryStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-s3destinationconfiguration
         '''
         result = self._values.get("s3_destination_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.S3DestinationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.S3DestinationConfigurationProperty"]], result)
 
     @builtins.property
     def snowflake_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.SnowflakeDestinationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeDestinationConfigurationProperty"]]:
         '''Configure Snowflake destination.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-snowflakedestinationconfiguration
         '''
         result = self._values.get("snowflake_destination_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.SnowflakeDestinationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SnowflakeDestinationConfigurationProperty"]], result)
 
     @builtins.property
     def splunk_destination_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.SplunkDestinationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SplunkDestinationConfigurationProperty"]]:
         '''The configuration of a destination in Splunk for the delivery stream.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-splunkdestinationconfiguration
         '''
         result = self._values.get("splunk_destination_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.SplunkDestinationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryStream.SplunkDestinationConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A set of tags to assign to the Firehose stream.
 
         A tag is a key-value pair that you can define and assign to AWS resources. Tags are metadata. For example, you can add friendly names and descriptions or other types of information that can help you distinguish the Firehose stream. For more information about tags, see `Using Cost Allocation Tags <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html>`_ in the AWS Billing and Cost Management User Guide.
@@ -9967,7 +9967,7 @@ class CfnDeliveryStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10055,7 +10055,7 @@ class CommonDestinationProps:
         logging_config: typing.Optional["ILoggingConfig"] = None,
         processor: typing.Optional["IDataProcessor"] = None,
         processors: typing.Optional[typing.Sequence["IDataProcessor"]] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         s3_backup: typing.Optional[typing.Union["DestinationS3BackupProps", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Generic properties for defining a delivery stream destination.
@@ -10157,7 +10157,7 @@ class CommonDestinationProps:
         return typing.cast(typing.Optional[typing.List["IDataProcessor"]], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role associated with this destination.
 
         Assumed by Amazon Data Firehose to invoke processors and write to destinations
@@ -10165,7 +10165,7 @@ class CommonDestinationProps:
         :default: - a role will be created with default permissions.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def s3_backup(self) -> typing.Optional["DestinationS3BackupProps"]:
@@ -10204,11 +10204,11 @@ class CommonDestinationS3Props:
     def __init__(
         self,
         *,
-        buffering_interval: typing.Optional[_Duration_4839e8c3] = None,
-        buffering_size: typing.Optional[_Size_7b441c34] = None,
+        buffering_interval: typing.Optional["_Duration_4839e8c3"] = None,
+        buffering_size: typing.Optional["_Size_7b441c34"] = None,
         compression: typing.Optional["Compression"] = None,
         data_output_prefix: typing.Optional[builtins.str] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
         error_output_prefix: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Common properties for defining a backup, intermediary, or final S3 destination for a Amazon Data Firehose delivery stream.
@@ -10266,7 +10266,7 @@ class CommonDestinationS3Props:
             self._values["error_output_prefix"] = error_output_prefix
 
     @builtins.property
-    def buffering_interval(self) -> typing.Optional[_Duration_4839e8c3]:
+    def buffering_interval(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The length of time that Firehose buffers incoming data before delivering it to the S3 bucket.
 
         Minimum: Duration.seconds(0)
@@ -10275,10 +10275,10 @@ class CommonDestinationS3Props:
         :default: Duration.seconds(300)
         '''
         result = self._values.get("buffering_interval")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def buffering_size(self) -> typing.Optional[_Size_7b441c34]:
+    def buffering_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket.
 
         Minimum: Size.mebibytes(1) when record data format conversion is disabled, Size.mebibytes(64) when it is enabled
@@ -10287,7 +10287,7 @@ class CommonDestinationS3Props:
         :default: Size.mebibytes(5) when record data format conversion is disabled, Size.mebibytes(128) when it is enabled
         '''
         result = self._values.get("buffering_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def compression(self) -> typing.Optional["Compression"]:
@@ -10316,13 +10316,13 @@ class CommonDestinationS3Props:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The AWS KMS key used to encrypt the data that it delivers to your Amazon S3 bucket.
 
         :default: - Data is not encrypted.
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def error_output_prefix(self) -> typing.Optional[builtins.str]:
@@ -10523,7 +10523,7 @@ class DataFormatConversionProps:
     name_mapping={"role": "role"},
 )
 class DataProcessorBindOptions:
-    def __init__(self, *, role: _IRole_235f5d8e) -> None:
+    def __init__(self, *, role: "_IRole_235f5d8e") -> None:
         '''Options when binding a DataProcessor to a delivery stream destination.
 
         :param role: The IAM role assumed by Amazon Data Firehose to write to the destination that this DataProcessor will bind to.
@@ -10551,11 +10551,11 @@ class DataProcessorBindOptions:
         }
 
     @builtins.property
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''The IAM role assumed by Amazon Data Firehose to write to the destination that this DataProcessor will bind to.'''
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
-        return typing.cast(_IRole_235f5d8e, result)
+        return typing.cast("_IRole_235f5d8e", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10584,7 +10584,7 @@ class DataProcessorConfig:
         *,
         processor_identifier: typing.Union["DataProcessorIdentifier", typing.Dict[builtins.str, typing.Any]],
         processor_type: builtins.str,
-        parameters: typing.Optional[typing.Sequence[typing.Union[CfnDeliveryStream.ProcessorParameterProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        parameters: typing.Optional[typing.Sequence[typing.Union["CfnDeliveryStream.ProcessorParameterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''The full configuration of a data processor.
 
@@ -10649,13 +10649,13 @@ class DataProcessorConfig:
     @builtins.property
     def parameters(
         self,
-    ) -> typing.Optional[typing.List[CfnDeliveryStream.ProcessorParameterProperty]]:
+    ) -> typing.Optional[typing.List["CfnDeliveryStream.ProcessorParameterProperty"]]:
         '''The processor parameters.
 
         :default: - No processor parameters
         '''
         result = self._values.get("parameters")
-        return typing.cast(typing.Optional[typing.List[CfnDeliveryStream.ProcessorParameterProperty]], result)
+        return typing.cast(typing.Optional[typing.List["CfnDeliveryStream.ProcessorParameterProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10751,8 +10751,8 @@ class DataProcessorProps:
     def __init__(
         self,
         *,
-        buffer_interval: typing.Optional[_Duration_4839e8c3] = None,
-        buffer_size: typing.Optional[_Size_7b441c34] = None,
+        buffer_interval: typing.Optional["_Duration_4839e8c3"] = None,
+        buffer_size: typing.Optional["_Size_7b441c34"] = None,
         retries: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Configure the LambdaFunctionProcessor.
@@ -10799,7 +10799,7 @@ class DataProcessorProps:
             self._values["retries"] = retries
 
     @builtins.property
-    def buffer_interval(self) -> typing.Optional[_Duration_4839e8c3]:
+    def buffer_interval(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The length of time Amazon Data Firehose will buffer incoming data before calling the processor.
 
         s
@@ -10807,16 +10807,16 @@ class DataProcessorProps:
         :default: Duration.minutes(1)
         '''
         result = self._values.get("buffer_interval")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def buffer_size(self) -> typing.Optional[_Size_7b441c34]:
+    def buffer_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The amount of incoming data Amazon Data Firehose will buffer before calling the processor.
 
         :default: Size.mebibytes(3)
         '''
         result = self._values.get("buffer_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def retries(self) -> typing.Optional[jsii.Number]:
@@ -10893,7 +10893,7 @@ class DecompressionProcessorOptions:
     def __init__(
         self,
         *,
-        compression_format: typing.Optional[DecompressionProcessorCompressionFormat] = None,
+        compression_format: typing.Optional["DecompressionProcessorCompressionFormat"] = None,
     ) -> None:
         '''Options for DecompressionProcessor.
 
@@ -10923,13 +10923,13 @@ class DecompressionProcessorOptions:
     @builtins.property
     def compression_format(
         self,
-    ) -> typing.Optional[DecompressionProcessorCompressionFormat]:
+    ) -> typing.Optional["DecompressionProcessorCompressionFormat"]:
         '''The input compression format.
 
         :default: DecompressionProcessorCompressionFormat.GZIP
         '''
         result = self._values.get("compression_format")
-        return typing.cast(typing.Optional[DecompressionProcessorCompressionFormat], result)
+        return typing.cast(typing.Optional["DecompressionProcessorCompressionFormat"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10958,7 +10958,7 @@ class DeliveryStreamAttributes:
         *,
         delivery_stream_arn: typing.Optional[builtins.str] = None,
         delivery_stream_name: typing.Optional[builtins.str] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''A full specification of a delivery stream that can be used to import it fluently into the CDK application.
 
@@ -11019,7 +11019,7 @@ class DeliveryStreamAttributes:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role associated with this delivery stream.
 
         Assumed by Amazon Data Firehose to read from sources and encrypt data server-side.
@@ -11027,7 +11027,7 @@ class DeliveryStreamAttributes:
         :default: - the imported stream cannot be granted access to other resources as an ``iam.IGrantable``.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11065,7 +11065,7 @@ class DeliveryStreamGrants(
     @builtins.classmethod
     def from_delivery_stream(
         cls,
-        resource: _IDeliveryStreamRef_678f5e53,
+        resource: "_IDeliveryStreamRef_678f5e53",
     ) -> "DeliveryStreamGrants":
         '''Creates grants for DeliveryStreamGrants.
 
@@ -11077,7 +11077,7 @@ class DeliveryStreamGrants(
         return typing.cast("DeliveryStreamGrants", jsii.sinvoke(cls, "fromDeliveryStream", [resource]))
 
     @jsii.member(jsii_name="putRecords")
-    def put_records(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def put_records(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the ``grantee`` identity permissions to perform ``actions``.
 
         :param grantee: -
@@ -11085,12 +11085,12 @@ class DeliveryStreamGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fa345bb640d0870a907b276f1424fd4b22587d7238a01bbddaad6ab4852c4b45)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "putRecords", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "putRecords", [grantee]))
 
     @builtins.property
     @jsii.member(jsii_name="resource")
-    def _resource(self) -> _IDeliveryStreamRef_678f5e53:
-        return typing.cast(_IDeliveryStreamRef_678f5e53, jsii.get(self, "resource"))
+    def _resource(self) -> "_IDeliveryStreamRef_678f5e53":
+        return typing.cast("_IDeliveryStreamRef_678f5e53", jsii.get(self, "resource"))
 
 
 @jsii.data_type(
@@ -11111,7 +11111,7 @@ class DeliveryStreamProps:
         destination: "IDestination",
         delivery_stream_name: typing.Optional[builtins.str] = None,
         encryption: typing.Optional["StreamEncryption"] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         source: typing.Optional["ISource"] = None,
     ) -> None:
         '''Properties for a new delivery stream.
@@ -11189,7 +11189,7 @@ class DeliveryStreamProps:
         return typing.cast(typing.Optional["StreamEncryption"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role associated with this delivery stream.
 
         Assumed by Amazon Data Firehose to read from sources and encrypt data server-side.
@@ -11197,7 +11197,7 @@ class DeliveryStreamProps:
         :default: - a role will be created with default permissions.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def source(self) -> typing.Optional["ISource"]:
@@ -11265,8 +11265,8 @@ class DestinationConfig:
     def __init__(
         self,
         *,
-        dependables: typing.Optional[typing.Sequence[_constructs_77d1e7e8.IDependable]] = None,
-        extended_s3_destination_configuration: typing.Optional[typing.Union[CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]] = None,
+        dependables: typing.Optional[typing.Sequence["_constructs_77d1e7e8.IDependable"]] = None,
+        extended_s3_destination_configuration: typing.Optional[typing.Union["CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''An Amazon Data Firehose delivery stream destination configuration.
 
@@ -11421,24 +11421,24 @@ class DestinationConfig:
     @builtins.property
     def dependables(
         self,
-    ) -> typing.Optional[typing.List[_constructs_77d1e7e8.IDependable]]:
+    ) -> typing.Optional[typing.List["_constructs_77d1e7e8.IDependable"]]:
         '''Any resources that were created by the destination when binding it to the stack that must be deployed before the delivery stream is deployed.
 
         :default: []
         '''
         result = self._values.get("dependables")
-        return typing.cast(typing.Optional[typing.List[_constructs_77d1e7e8.IDependable]], result)
+        return typing.cast(typing.Optional[typing.List["_constructs_77d1e7e8.IDependable"]], result)
 
     @builtins.property
     def extended_s3_destination_configuration(
         self,
-    ) -> typing.Optional[CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty]:
+    ) -> typing.Optional["CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty"]:
         '''S3 destination configuration properties.
 
         :default: - S3 destination is not used.
         '''
         result = self._values.get("extended_s3_destination_configuration")
-        return typing.cast(typing.Optional[CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty], result)
+        return typing.cast(typing.Optional["CfnDeliveryStream.ExtendedS3DestinationConfigurationProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11471,15 +11471,15 @@ class DestinationS3BackupProps(CommonDestinationS3Props):
     def __init__(
         self,
         *,
-        buffering_interval: typing.Optional[_Duration_4839e8c3] = None,
-        buffering_size: typing.Optional[_Size_7b441c34] = None,
-        compression: typing.Optional[Compression] = None,
+        buffering_interval: typing.Optional["_Duration_4839e8c3"] = None,
+        buffering_size: typing.Optional["_Size_7b441c34"] = None,
+        compression: typing.Optional["Compression"] = None,
         data_output_prefix: typing.Optional[builtins.str] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
         error_output_prefix: typing.Optional[builtins.str] = None,
-        bucket: typing.Optional[_IBucket_42e086fd] = None,
+        bucket: typing.Optional["_IBucket_42e086fd"] = None,
         logging_config: typing.Optional["ILoggingConfig"] = None,
-        mode: typing.Optional[BackupMode] = None,
+        mode: typing.Optional["BackupMode"] = None,
     ) -> None:
         '''Properties for defining an S3 backup destination.
 
@@ -11563,7 +11563,7 @@ class DestinationS3BackupProps(CommonDestinationS3Props):
             self._values["mode"] = mode
 
     @builtins.property
-    def buffering_interval(self) -> typing.Optional[_Duration_4839e8c3]:
+    def buffering_interval(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The length of time that Firehose buffers incoming data before delivering it to the S3 bucket.
 
         Minimum: Duration.seconds(0)
@@ -11572,10 +11572,10 @@ class DestinationS3BackupProps(CommonDestinationS3Props):
         :default: Duration.seconds(300)
         '''
         result = self._values.get("buffering_interval")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def buffering_size(self) -> typing.Optional[_Size_7b441c34]:
+    def buffering_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket.
 
         Minimum: Size.mebibytes(1) when record data format conversion is disabled, Size.mebibytes(64) when it is enabled
@@ -11584,10 +11584,10 @@ class DestinationS3BackupProps(CommonDestinationS3Props):
         :default: Size.mebibytes(5) when record data format conversion is disabled, Size.mebibytes(128) when it is enabled
         '''
         result = self._values.get("buffering_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def compression(self) -> typing.Optional[Compression]:
+    def compression(self) -> typing.Optional["Compression"]:
         '''The type of compression that Amazon Data Firehose uses to compress the data that it delivers to the Amazon S3 bucket.
 
         The compression formats SNAPPY or ZIP cannot be specified for Amazon Redshift
@@ -11597,7 +11597,7 @@ class DestinationS3BackupProps(CommonDestinationS3Props):
         :default: - UNCOMPRESSED
         '''
         result = self._values.get("compression")
-        return typing.cast(typing.Optional[Compression], result)
+        return typing.cast(typing.Optional["Compression"], result)
 
     @builtins.property
     def data_output_prefix(self) -> typing.Optional[builtins.str]:
@@ -11613,13 +11613,13 @@ class DestinationS3BackupProps(CommonDestinationS3Props):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The AWS KMS key used to encrypt the data that it delivers to your Amazon S3 bucket.
 
         :default: - Data is not encrypted.
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def error_output_prefix(self) -> typing.Optional[builtins.str]:
@@ -11635,13 +11635,13 @@ class DestinationS3BackupProps(CommonDestinationS3Props):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def bucket(self) -> typing.Optional[_IBucket_42e086fd]:
+    def bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
         '''The S3 bucket that will store data and failed records.
 
         :default: - If ``mode`` is set to ``BackupMode.ALL`` or ``BackupMode.FAILED``, a bucket will be created for you.
         '''
         result = self._values.get("bucket")
-        return typing.cast(typing.Optional[_IBucket_42e086fd], result)
+        return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     @builtins.property
     def logging_config(self) -> typing.Optional["ILoggingConfig"]:
@@ -11653,7 +11653,7 @@ class DestinationS3BackupProps(CommonDestinationS3Props):
         return typing.cast(typing.Optional["ILoggingConfig"], result)
 
     @builtins.property
-    def mode(self) -> typing.Optional[BackupMode]:
+    def mode(self) -> typing.Optional["BackupMode"]:
         '''Indicates the mode by which incoming records should be backed up to S3, if any.
 
         If ``bucket`` is provided, this will be implicitly set to ``BackupMode.ALL``.
@@ -11664,7 +11664,7 @@ class DestinationS3BackupProps(CommonDestinationS3Props):
         source records are not backed up to S3.
         '''
         result = self._values.get("mode")
-        return typing.cast(typing.Optional[BackupMode], result)
+        return typing.cast(typing.Optional["BackupMode"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11742,17 +11742,17 @@ class IDataProcessor(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="props")
-    def props(self) -> DataProcessorProps:
+    def props(self) -> "DataProcessorProps":
         '''The constructor props of the DataProcessor.'''
         ...
 
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
-        role: _IRole_235f5d8e,
-    ) -> DataProcessorConfig:
+        role: "_IRole_235f5d8e",
+    ) -> "DataProcessorConfig":
         '''Binds this processor to a destination of a delivery stream.
 
         Implementers should use this method to grant processor invocation permissions to the provided stream and return the
@@ -11771,17 +11771,17 @@ class _IDataProcessorProxy:
 
     @builtins.property
     @jsii.member(jsii_name="props")
-    def props(self) -> DataProcessorProps:
+    def props(self) -> "DataProcessorProps":
         '''The constructor props of the DataProcessor.'''
-        return typing.cast(DataProcessorProps, jsii.get(self, "props"))
+        return typing.cast("DataProcessorProps", jsii.get(self, "props"))
 
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
-        role: _IRole_235f5d8e,
-    ) -> DataProcessorConfig:
+        role: "_IRole_235f5d8e",
+    ) -> "DataProcessorConfig":
         '''Binds this processor to a destination of a delivery stream.
 
         Implementers should use this method to grant processor invocation permissions to the provided stream and return the
@@ -11795,7 +11795,7 @@ class _IDataProcessorProxy:
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
         options = DataProcessorBindOptions(role=role)
 
-        return typing.cast(DataProcessorConfig, jsii.invoke(self, "bind", [scope, options]))
+        return typing.cast("DataProcessorConfig", jsii.invoke(self, "bind", [scope, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataProcessor).__jsii_proxy_class__ = lambda : _IDataProcessorProxy
@@ -11832,9 +11832,9 @@ class IDeliveryStream(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the ``grantee`` identity permissions to perform ``actions``.
 
         :param grantee: -
@@ -11843,7 +11843,7 @@ class IDeliveryStream(
         ...
 
     @jsii.member(jsii_name="grantPutRecords")
-    def grant_put_records(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_put_records(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the ``grantee`` identity permissions to perform ``firehose:PutRecord`` and ``firehose:PutRecordBatch`` actions on this delivery stream.
 
         :param grantee: -
@@ -11860,14 +11860,14 @@ class IDeliveryStream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this delivery stream.
 
         :param metric_name: -
@@ -11895,14 +11895,14 @@ class IDeliveryStream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of bytes delivered to Amazon S3 for backup over the specified time period.
 
         By default, this metric will be calculated as an average over a period of 5 minutes.
@@ -11931,14 +11931,14 @@ class IDeliveryStream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the age (from getting into Amazon Data Firehose to now) of the oldest record in Amazon Data Firehose.
 
         Any record older than this age has been delivered to the Amazon S3 bucket for backup.
@@ -11969,14 +11969,14 @@ class IDeliveryStream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of records delivered to Amazon S3 for backup over the specified time period.
 
         By default, this metric will be calculated as an average over a period of 5 minutes.
@@ -12005,14 +12005,14 @@ class IDeliveryStream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of bytes ingested successfully into the delivery stream over the specified time period after throttling.
 
         By default, this metric will be calculated as an average over a period of 5 minutes.
@@ -12041,14 +12041,14 @@ class IDeliveryStream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of records ingested successfully into the delivery stream over the specified time period after throttling.
 
         By default, this metric will be calculated as an average over a period of 5 minutes.
@@ -12100,9 +12100,9 @@ class _IDeliveryStreamProxy(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the ``grantee`` identity permissions to perform ``actions``.
 
         :param grantee: -
@@ -12112,10 +12112,10 @@ class _IDeliveryStreamProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__2734269481cf10b40e22df40c033138f0b366868257b0867e62eb92924e9f879)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantPutRecords")
-    def grant_put_records(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_put_records(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the ``grantee`` identity permissions to perform ``firehose:PutRecord`` and ``firehose:PutRecordBatch`` actions on this delivery stream.
 
         :param grantee: -
@@ -12123,7 +12123,7 @@ class _IDeliveryStreamProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__430b83a9ce03b133eb0ca75afb61f22cb3d6eac65aafcc08346ba35beea872c2)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPutRecords", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPutRecords", [grantee]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -12135,14 +12135,14 @@ class _IDeliveryStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this delivery stream.
 
         :param metric_name: -
@@ -12177,7 +12177,7 @@ class _IDeliveryStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricBackupToS3Bytes")
     def metric_backup_to_s3_bytes(
@@ -12188,14 +12188,14 @@ class _IDeliveryStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of bytes delivered to Amazon S3 for backup over the specified time period.
 
         By default, this metric will be calculated as an average over a period of 5 minutes.
@@ -12228,7 +12228,7 @@ class _IDeliveryStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricBackupToS3Bytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricBackupToS3Bytes", [props]))
 
     @jsii.member(jsii_name="metricBackupToS3DataFreshness")
     def metric_backup_to_s3_data_freshness(
@@ -12239,14 +12239,14 @@ class _IDeliveryStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the age (from getting into Amazon Data Firehose to now) of the oldest record in Amazon Data Firehose.
 
         Any record older than this age has been delivered to the Amazon S3 bucket for backup.
@@ -12281,7 +12281,7 @@ class _IDeliveryStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricBackupToS3DataFreshness", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricBackupToS3DataFreshness", [props]))
 
     @jsii.member(jsii_name="metricBackupToS3Records")
     def metric_backup_to_s3_records(
@@ -12292,14 +12292,14 @@ class _IDeliveryStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of records delivered to Amazon S3 for backup over the specified time period.
 
         By default, this metric will be calculated as an average over a period of 5 minutes.
@@ -12332,7 +12332,7 @@ class _IDeliveryStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricBackupToS3Records", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricBackupToS3Records", [props]))
 
     @jsii.member(jsii_name="metricIncomingBytes")
     def metric_incoming_bytes(
@@ -12343,14 +12343,14 @@ class _IDeliveryStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of bytes ingested successfully into the delivery stream over the specified time period after throttling.
 
         By default, this metric will be calculated as an average over a period of 5 minutes.
@@ -12383,7 +12383,7 @@ class _IDeliveryStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingBytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIncomingBytes", [props]))
 
     @jsii.member(jsii_name="metricIncomingRecords")
     def metric_incoming_records(
@@ -12394,14 +12394,14 @@ class _IDeliveryStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of records ingested successfully into the delivery stream over the specified time period after throttling.
 
         By default, this metric will be calculated as an average over a period of 5 minutes.
@@ -12434,7 +12434,7 @@ class _IDeliveryStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIncomingRecords", [props]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeliveryStream).__jsii_proxy_class__ = lambda : _IDeliveryStreamProxy
@@ -12445,7 +12445,7 @@ class IDestination(typing_extensions.Protocol):
     '''An Amazon Data Firehose delivery stream destination.'''
 
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> DestinationConfig:
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "DestinationConfig":
         '''Binds this destination to the Amazon Data Firehose delivery stream.
 
         Implementers should use this method to bind resources to the stack and initialize values using the provided stream.
@@ -12461,7 +12461,7 @@ class _IDestinationProxy:
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_kinesisfirehose.IDestination"
 
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> DestinationConfig:
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "DestinationConfig":
         '''Binds this destination to the Amazon Data Firehose delivery stream.
 
         Implementers should use this method to bind resources to the stack and initialize values using the provided stream.
@@ -12473,7 +12473,7 @@ class _IDestinationProxy:
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
         options = DestinationBindOptions()
 
-        return typing.cast(DestinationConfig, jsii.invoke(self, "bind", [scope, options]))
+        return typing.cast("DestinationConfig", jsii.invoke(self, "bind", [scope, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDestination).__jsii_proxy_class__ = lambda : _IDestinationProxy
@@ -12486,7 +12486,7 @@ class IInputFormat(typing_extensions.Protocol):
     @jsii.member(jsii_name="createInputFormatConfig")
     def create_input_format_config(
         self,
-    ) -> CfnDeliveryStream.InputFormatConfigurationProperty:
+    ) -> "CfnDeliveryStream.InputFormatConfigurationProperty":
         '''Renders the cloudformation properties for the input format.'''
         ...
 
@@ -12499,9 +12499,9 @@ class _IInputFormatProxy:
     @jsii.member(jsii_name="createInputFormatConfig")
     def create_input_format_config(
         self,
-    ) -> CfnDeliveryStream.InputFormatConfigurationProperty:
+    ) -> "CfnDeliveryStream.InputFormatConfigurationProperty":
         '''Renders the cloudformation properties for the input format.'''
-        return typing.cast(CfnDeliveryStream.InputFormatConfigurationProperty, jsii.invoke(self, "createInputFormatConfig", []))
+        return typing.cast("CfnDeliveryStream.InputFormatConfigurationProperty", jsii.invoke(self, "createInputFormatConfig", []))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IInputFormat).__jsii_proxy_class__ = lambda : _IInputFormatProxy
@@ -12526,7 +12526,7 @@ class ILoggingConfig(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="logGroup")
-    def log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
+    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
         '''The CloudWatch log group where log streams will be created to hold error logs.
 
         :default: - if ``logging`` is set to ``true``, a log group will be created for you.
@@ -12554,12 +12554,12 @@ class _ILoggingConfigProxy:
 
     @builtins.property
     @jsii.member(jsii_name="logGroup")
-    def log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
+    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
         '''The CloudWatch log group where log streams will be created to hold error logs.
 
         :default: - if ``logging`` is set to ``true``, a log group will be created for you.
         '''
-        return typing.cast(typing.Optional[_ILogGroup_3c4fa718], jsii.get(self, "logGroup"))
+        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], jsii.get(self, "logGroup"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ILoggingConfig).__jsii_proxy_class__ = lambda : _ILoggingConfigProxy
@@ -12572,7 +12572,7 @@ class IOutputFormat(typing_extensions.Protocol):
     @jsii.member(jsii_name="createOutputFormatConfig")
     def create_output_format_config(
         self,
-    ) -> CfnDeliveryStream.OutputFormatConfigurationProperty:
+    ) -> "CfnDeliveryStream.OutputFormatConfigurationProperty":
         '''Renders the cloudformation properties for the output format.'''
         ...
 
@@ -12585,9 +12585,9 @@ class _IOutputFormatProxy:
     @jsii.member(jsii_name="createOutputFormatConfig")
     def create_output_format_config(
         self,
-    ) -> CfnDeliveryStream.OutputFormatConfigurationProperty:
+    ) -> "CfnDeliveryStream.OutputFormatConfigurationProperty":
         '''Renders the cloudformation properties for the output format.'''
-        return typing.cast(CfnDeliveryStream.OutputFormatConfigurationProperty, jsii.invoke(self, "createOutputFormatConfig", []))
+        return typing.cast("CfnDeliveryStream.OutputFormatConfigurationProperty", jsii.invoke(self, "createOutputFormatConfig", []))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IOutputFormat).__jsii_proxy_class__ = lambda : _IOutputFormatProxy
@@ -12598,7 +12598,7 @@ class ISource(typing_extensions.Protocol):
     '''An interface for defining a source that can be used in an Amazon Data Firehose delivery stream.'''
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this source resource and its contents to an IAM principal (the delivery stream).
 
         If an encryption key is used, permission to use the key to decrypt the
@@ -12615,7 +12615,7 @@ class _ISourceProxy:
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_kinesisfirehose.ISource"
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this source resource and its contents to an IAM principal (the delivery stream).
 
         If an encryption key is used, permission to use the key to decrypt the
@@ -12626,7 +12626,7 @@ class _ISourceProxy:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d31d061482330f398322aedbe7845244fe1c55607a37db88ea3629f702ba69b0)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ISource).__jsii_proxy_class__ = lambda : _ISourceProxy
@@ -12691,7 +12691,7 @@ class KinesisStreamSource(
         )
     '''
 
-    def __init__(self, stream: _IStream_4e2457d2) -> None:
+    def __init__(self, stream: "_IStream_4e2457d2") -> None:
         '''Creates a new KinesisStreamSource.
 
         :param stream: -
@@ -12702,7 +12702,7 @@ class KinesisStreamSource(
         jsii.create(self.__class__, self, [stream])
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this source resource and its contents to an IAM principal (the delivery stream).
 
         If an encryption key is used, permission to use the key to decrypt the
@@ -12713,7 +12713,7 @@ class KinesisStreamSource(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e0139dd9374d65b09aeb2cc12f10df74ef6fb54d32d3dbfc129f0e7ca2d14423)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
 
 @jsii.implements(IDataProcessor)
@@ -12750,10 +12750,10 @@ class LambdaFunctionProcessor(
 
     def __init__(
         self,
-        lambda_function: _IFunction_6adb0ab8,
+        lambda_function: "_IFunction_6adb0ab8",
         *,
-        buffer_interval: typing.Optional[_Duration_4839e8c3] = None,
-        buffer_size: typing.Optional[_Size_7b441c34] = None,
+        buffer_interval: typing.Optional["_Duration_4839e8c3"] = None,
+        buffer_size: typing.Optional["_Size_7b441c34"] = None,
         retries: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -12774,10 +12774,10 @@ class LambdaFunctionProcessor(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
+        _scope: "_constructs_77d1e7e8.Construct",
         *,
-        role: _IRole_235f5d8e,
-    ) -> DataProcessorConfig:
+        role: "_IRole_235f5d8e",
+    ) -> "DataProcessorConfig":
         '''Binds this processor to a destination of a delivery stream.
 
         Implementers should use this method to grant processor invocation permissions to the provided stream and return the
@@ -12791,13 +12791,13 @@ class LambdaFunctionProcessor(
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
         options = DataProcessorBindOptions(role=role)
 
-        return typing.cast(DataProcessorConfig, jsii.invoke(self, "bind", [_scope, options]))
+        return typing.cast("DataProcessorConfig", jsii.invoke(self, "bind", [_scope, options]))
 
     @builtins.property
     @jsii.member(jsii_name="props")
-    def props(self) -> DataProcessorProps:
+    def props(self) -> "DataProcessorProps":
         '''The constructor props of the LambdaFunctionProcessor.'''
-        return typing.cast(DataProcessorProps, jsii.get(self, "props"))
+        return typing.cast("DataProcessorProps", jsii.get(self, "props"))
 
 
 @jsii.implements(IInputFormat)
@@ -12843,9 +12843,9 @@ class OpenXJsonInputFormat(
     @jsii.member(jsii_name="createInputFormatConfig")
     def create_input_format_config(
         self,
-    ) -> CfnDeliveryStream.InputFormatConfigurationProperty:
+    ) -> "CfnDeliveryStream.InputFormatConfigurationProperty":
         '''Renders the cloudformation properties for the input format.'''
-        return typing.cast(CfnDeliveryStream.InputFormatConfigurationProperty, jsii.invoke(self, "createInputFormatConfig", []))
+        return typing.cast("CfnDeliveryStream.InputFormatConfigurationProperty", jsii.invoke(self, "createInputFormatConfig", []))
 
     @builtins.property
     @jsii.member(jsii_name="props")
@@ -13069,16 +13069,16 @@ class OrcOutputFormat(
     def __init__(
         self,
         *,
-        block_size: typing.Optional[_Size_7b441c34] = None,
+        block_size: typing.Optional["_Size_7b441c34"] = None,
         bloom_filter_columns: typing.Optional[typing.Sequence[builtins.str]] = None,
         bloom_filter_false_positive_probability: typing.Optional[jsii.Number] = None,
-        compression: typing.Optional[OrcCompression] = None,
+        compression: typing.Optional["OrcCompression"] = None,
         dictionary_key_threshold: typing.Optional[jsii.Number] = None,
         enable_padding: typing.Optional[builtins.bool] = None,
-        format_version: typing.Optional[OrcFormatVersion] = None,
+        format_version: typing.Optional["OrcFormatVersion"] = None,
         padding_tolerance: typing.Optional[jsii.Number] = None,
         row_index_stride: typing.Optional[jsii.Number] = None,
-        stripe_size: typing.Optional[_Size_7b441c34] = None,
+        stripe_size: typing.Optional["_Size_7b441c34"] = None,
     ) -> None:
         '''
         :param block_size: The Hadoop Distributed File System (HDFS) block size. This is useful if you intend to copy the data from Amazon S3 to HDFS before querying. Firehose uses this value for padding calculations. Default: ``Size.mebibytes(256)``
@@ -13110,9 +13110,9 @@ class OrcOutputFormat(
     @jsii.member(jsii_name="createOutputFormatConfig")
     def create_output_format_config(
         self,
-    ) -> CfnDeliveryStream.OutputFormatConfigurationProperty:
+    ) -> "CfnDeliveryStream.OutputFormatConfigurationProperty":
         '''Renders the cloudformation properties for the output format.'''
-        return typing.cast(CfnDeliveryStream.OutputFormatConfigurationProperty, jsii.invoke(self, "createOutputFormatConfig", []))
+        return typing.cast("CfnDeliveryStream.OutputFormatConfigurationProperty", jsii.invoke(self, "createOutputFormatConfig", []))
 
     @builtins.property
     @jsii.member(jsii_name="props")
@@ -13141,16 +13141,16 @@ class OrcOutputFormatProps:
     def __init__(
         self,
         *,
-        block_size: typing.Optional[_Size_7b441c34] = None,
+        block_size: typing.Optional["_Size_7b441c34"] = None,
         bloom_filter_columns: typing.Optional[typing.Sequence[builtins.str]] = None,
         bloom_filter_false_positive_probability: typing.Optional[jsii.Number] = None,
-        compression: typing.Optional[OrcCompression] = None,
+        compression: typing.Optional["OrcCompression"] = None,
         dictionary_key_threshold: typing.Optional[jsii.Number] = None,
         enable_padding: typing.Optional[builtins.bool] = None,
-        format_version: typing.Optional[OrcFormatVersion] = None,
+        format_version: typing.Optional["OrcFormatVersion"] = None,
         padding_tolerance: typing.Optional[jsii.Number] = None,
         row_index_stride: typing.Optional[jsii.Number] = None,
-        stripe_size: typing.Optional[_Size_7b441c34] = None,
+        stripe_size: typing.Optional["_Size_7b441c34"] = None,
     ) -> None:
         '''Props for ORC output format for data record format conversion.
 
@@ -13217,7 +13217,7 @@ class OrcOutputFormatProps:
             self._values["stripe_size"] = stripe_size
 
     @builtins.property
-    def block_size(self) -> typing.Optional[_Size_7b441c34]:
+    def block_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The Hadoop Distributed File System (HDFS) block size.
 
         This is useful if you intend to copy the data from Amazon S3 to HDFS before querying.
@@ -13228,7 +13228,7 @@ class OrcOutputFormatProps:
         :minimum: ``Size.mebibytes(64)``
         '''
         result = self._values.get("block_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def bloom_filter_columns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -13257,7 +13257,7 @@ class OrcOutputFormatProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def compression(self) -> typing.Optional[OrcCompression]:
+    def compression(self) -> typing.Optional["OrcCompression"]:
         '''The compression code to use over data blocks.
 
         The possible values are ``NONE`` , ``SNAPPY`` , and ``ZLIB``.
@@ -13269,7 +13269,7 @@ class OrcOutputFormatProps:
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-compression
         '''
         result = self._values.get("compression")
-        return typing.cast(typing.Optional[OrcCompression], result)
+        return typing.cast(typing.Optional["OrcCompression"], result)
 
     @builtins.property
     def dictionary_key_threshold(self) -> typing.Optional[jsii.Number]:
@@ -13302,7 +13302,7 @@ class OrcOutputFormatProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def format_version(self) -> typing.Optional[OrcFormatVersion]:
+    def format_version(self) -> typing.Optional["OrcFormatVersion"]:
         '''The version of the ORC format to write.
 
         The possible values are ``V0_11`` and ``V0_12``.
@@ -13312,7 +13312,7 @@ class OrcOutputFormatProps:
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-orcserde.html#cfn-kinesisfirehose-deliverystream-orcserde-formatversion
         '''
         result = self._values.get("format_version")
-        return typing.cast(typing.Optional[OrcFormatVersion], result)
+        return typing.cast(typing.Optional["OrcFormatVersion"], result)
 
     @builtins.property
     def padding_tolerance(self) -> typing.Optional[jsii.Number]:
@@ -13346,7 +13346,7 @@ class OrcOutputFormatProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def stripe_size(self) -> typing.Optional[_Size_7b441c34]:
+    def stripe_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The number of bytes in each stripe.
 
         The default is 64 MiB and the minimum is 8 MiB.
@@ -13357,7 +13357,7 @@ class OrcOutputFormatProps:
         :minimum: ``Size.mebibytes(8)``
         '''
         result = self._values.get("stripe_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13395,9 +13395,9 @@ class OutputFormat(
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ORC")
-    def ORC(cls) -> OrcOutputFormat:
+    def ORC(cls) -> "OrcOutputFormat":
         '''Write output files in ORC.'''
-        return typing.cast(OrcOutputFormat, jsii.sget(cls, "ORC"))
+        return typing.cast("OrcOutputFormat", jsii.sget(cls, "ORC"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PARQUET")
@@ -13490,11 +13490,11 @@ class ParquetOutputFormat(
     def __init__(
         self,
         *,
-        block_size: typing.Optional[_Size_7b441c34] = None,
-        compression: typing.Optional[ParquetCompression] = None,
+        block_size: typing.Optional["_Size_7b441c34"] = None,
+        compression: typing.Optional["ParquetCompression"] = None,
         enable_dictionary_compression: typing.Optional[builtins.bool] = None,
-        max_padding: typing.Optional[_Size_7b441c34] = None,
-        page_size: typing.Optional[_Size_7b441c34] = None,
+        max_padding: typing.Optional["_Size_7b441c34"] = None,
+        page_size: typing.Optional["_Size_7b441c34"] = None,
         writer_version: typing.Optional["ParquetWriterVersion"] = None,
     ) -> None:
         '''
@@ -13519,9 +13519,9 @@ class ParquetOutputFormat(
     @jsii.member(jsii_name="createOutputFormatConfig")
     def create_output_format_config(
         self,
-    ) -> CfnDeliveryStream.OutputFormatConfigurationProperty:
+    ) -> "CfnDeliveryStream.OutputFormatConfigurationProperty":
         '''Renders the cloudformation properties for the output format.'''
-        return typing.cast(CfnDeliveryStream.OutputFormatConfigurationProperty, jsii.invoke(self, "createOutputFormatConfig", []))
+        return typing.cast("CfnDeliveryStream.OutputFormatConfigurationProperty", jsii.invoke(self, "createOutputFormatConfig", []))
 
     @builtins.property
     @jsii.member(jsii_name="props")
@@ -13546,11 +13546,11 @@ class ParquetOutputFormatProps:
     def __init__(
         self,
         *,
-        block_size: typing.Optional[_Size_7b441c34] = None,
-        compression: typing.Optional[ParquetCompression] = None,
+        block_size: typing.Optional["_Size_7b441c34"] = None,
+        compression: typing.Optional["ParquetCompression"] = None,
         enable_dictionary_compression: typing.Optional[builtins.bool] = None,
-        max_padding: typing.Optional[_Size_7b441c34] = None,
-        page_size: typing.Optional[_Size_7b441c34] = None,
+        max_padding: typing.Optional["_Size_7b441c34"] = None,
+        page_size: typing.Optional["_Size_7b441c34"] = None,
         writer_version: typing.Optional["ParquetWriterVersion"] = None,
     ) -> None:
         '''Props for Parquet output format for data record format conversion.
@@ -13598,7 +13598,7 @@ class ParquetOutputFormatProps:
             self._values["writer_version"] = writer_version
 
     @builtins.property
-    def block_size(self) -> typing.Optional[_Size_7b441c34]:
+    def block_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The Hadoop Distributed File System (HDFS) block size.
 
         This is useful if you intend to copy the data from Amazon S3 to HDFS before querying.
@@ -13609,10 +13609,10 @@ class ParquetOutputFormatProps:
         :minimum: ``Size.mebibytes(64)``
         '''
         result = self._values.get("block_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def compression(self) -> typing.Optional[ParquetCompression]:
+    def compression(self) -> typing.Optional["ParquetCompression"]:
         '''The compression code to use over data blocks.
 
         The possible values are ``UNCOMPRESSED`` , ``SNAPPY`` , and ``GZIP``.
@@ -13624,7 +13624,7 @@ class ParquetOutputFormatProps:
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-parquetserde.html#cfn-kinesisfirehose-deliverystream-parquetserde-compression
         '''
         result = self._values.get("compression")
-        return typing.cast(typing.Optional[ParquetCompression], result)
+        return typing.cast(typing.Optional["ParquetCompression"], result)
 
     @builtins.property
     def enable_dictionary_compression(self) -> typing.Optional[builtins.bool]:
@@ -13638,7 +13638,7 @@ class ParquetOutputFormatProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def max_padding(self) -> typing.Optional[_Size_7b441c34]:
+    def max_padding(self) -> typing.Optional["_Size_7b441c34"]:
         '''The maximum amount of padding to apply.
 
         This is useful if you intend to copy the data from Amazon S3 to HDFS before querying.
@@ -13648,10 +13648,10 @@ class ParquetOutputFormatProps:
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-parquetserde.html#cfn-kinesisfirehose-deliverystream-parquetserde-maxpaddingbytes
         '''
         result = self._values.get("max_padding")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def page_size(self) -> typing.Optional[_Size_7b441c34]:
+    def page_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The Parquet page size.
 
         Column chunks are divided into pages. A page is conceptually an indivisible unit (in terms of compression and encoding). The minimum value is 64 KiB and the default is 1 MiB.
@@ -13662,7 +13662,7 @@ class ParquetOutputFormatProps:
         :minimum: ``Size.kibibytes(64)``
         '''
         result = self._values.get("page_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def writer_version(self) -> typing.Optional["ParquetWriterVersion"]:
@@ -13745,22 +13745,22 @@ class S3Bucket(
 
     def __init__(
         self,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         *,
-        data_format_conversion: typing.Optional[typing.Union[DataFormatConversionProps, typing.Dict[builtins.str, typing.Any]]] = None,
+        data_format_conversion: typing.Optional[typing.Union["DataFormatConversionProps", typing.Dict[builtins.str, typing.Any]]] = None,
         file_extension: typing.Optional[builtins.str] = None,
-        time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
-        buffering_interval: typing.Optional[_Duration_4839e8c3] = None,
-        buffering_size: typing.Optional[_Size_7b441c34] = None,
-        compression: typing.Optional[Compression] = None,
+        time_zone: typing.Optional["_TimeZone_cdd72ac9"] = None,
+        buffering_interval: typing.Optional["_Duration_4839e8c3"] = None,
+        buffering_size: typing.Optional["_Size_7b441c34"] = None,
+        compression: typing.Optional["Compression"] = None,
         data_output_prefix: typing.Optional[builtins.str] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
         error_output_prefix: typing.Optional[builtins.str] = None,
-        logging_config: typing.Optional[ILoggingConfig] = None,
-        processor: typing.Optional[IDataProcessor] = None,
-        processors: typing.Optional[typing.Sequence[IDataProcessor]] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        s3_backup: typing.Optional[typing.Union[DestinationS3BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
+        logging_config: typing.Optional["ILoggingConfig"] = None,
+        processor: typing.Optional["IDataProcessor"] = None,
+        processors: typing.Optional[typing.Sequence["IDataProcessor"]] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        s3_backup: typing.Optional[typing.Union["DestinationS3BackupProps", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param bucket: -
@@ -13802,7 +13802,7 @@ class S3Bucket(
         jsii.create(self.__class__, self, [bucket, props])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> DestinationConfig:
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "DestinationConfig":
         '''Binds this destination to the Amazon Data Firehose delivery stream.
 
         Implementers should use this method to bind resources to the stack and initialize values using the provided stream.
@@ -13814,7 +13814,7 @@ class S3Bucket(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
         _options = DestinationBindOptions()
 
-        return typing.cast(DestinationConfig, jsii.invoke(self, "bind", [scope, _options]))
+        return typing.cast("DestinationConfig", jsii.invoke(self, "bind", [scope, _options]))
 
 
 @jsii.data_type(
@@ -13841,20 +13841,20 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
     def __init__(
         self,
         *,
-        buffering_interval: typing.Optional[_Duration_4839e8c3] = None,
-        buffering_size: typing.Optional[_Size_7b441c34] = None,
-        compression: typing.Optional[Compression] = None,
+        buffering_interval: typing.Optional["_Duration_4839e8c3"] = None,
+        buffering_size: typing.Optional["_Size_7b441c34"] = None,
+        compression: typing.Optional["Compression"] = None,
         data_output_prefix: typing.Optional[builtins.str] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
         error_output_prefix: typing.Optional[builtins.str] = None,
-        logging_config: typing.Optional[ILoggingConfig] = None,
-        processor: typing.Optional[IDataProcessor] = None,
-        processors: typing.Optional[typing.Sequence[IDataProcessor]] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        s3_backup: typing.Optional[typing.Union[DestinationS3BackupProps, typing.Dict[builtins.str, typing.Any]]] = None,
-        data_format_conversion: typing.Optional[typing.Union[DataFormatConversionProps, typing.Dict[builtins.str, typing.Any]]] = None,
+        logging_config: typing.Optional["ILoggingConfig"] = None,
+        processor: typing.Optional["IDataProcessor"] = None,
+        processors: typing.Optional[typing.Sequence["IDataProcessor"]] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        s3_backup: typing.Optional[typing.Union["DestinationS3BackupProps", typing.Dict[builtins.str, typing.Any]]] = None,
+        data_format_conversion: typing.Optional[typing.Union["DataFormatConversionProps", typing.Dict[builtins.str, typing.Any]]] = None,
         file_extension: typing.Optional[builtins.str] = None,
-        time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
+        time_zone: typing.Optional["_TimeZone_cdd72ac9"] = None,
     ) -> None:
         '''Props for defining an S3 destination of an Amazon Data Firehose delivery stream.
 
@@ -13946,7 +13946,7 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
             self._values["time_zone"] = time_zone
 
     @builtins.property
-    def buffering_interval(self) -> typing.Optional[_Duration_4839e8c3]:
+    def buffering_interval(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The length of time that Firehose buffers incoming data before delivering it to the S3 bucket.
 
         Minimum: Duration.seconds(0)
@@ -13955,10 +13955,10 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         :default: Duration.seconds(300)
         '''
         result = self._values.get("buffering_interval")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def buffering_size(self) -> typing.Optional[_Size_7b441c34]:
+    def buffering_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The size of the buffer that Amazon Data Firehose uses for incoming data before delivering it to the S3 bucket.
 
         Minimum: Size.mebibytes(1) when record data format conversion is disabled, Size.mebibytes(64) when it is enabled
@@ -13967,10 +13967,10 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         :default: Size.mebibytes(5) when record data format conversion is disabled, Size.mebibytes(128) when it is enabled
         '''
         result = self._values.get("buffering_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def compression(self) -> typing.Optional[Compression]:
+    def compression(self) -> typing.Optional["Compression"]:
         '''The type of compression that Amazon Data Firehose uses to compress the data that it delivers to the Amazon S3 bucket.
 
         The compression formats SNAPPY or ZIP cannot be specified for Amazon Redshift
@@ -13980,7 +13980,7 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         :default: - UNCOMPRESSED
         '''
         result = self._values.get("compression")
-        return typing.cast(typing.Optional[Compression], result)
+        return typing.cast(typing.Optional["Compression"], result)
 
     @builtins.property
     def data_output_prefix(self) -> typing.Optional[builtins.str]:
@@ -13996,13 +13996,13 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The AWS KMS key used to encrypt the data that it delivers to your Amazon S3 bucket.
 
         :default: - Data is not encrypted.
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def error_output_prefix(self) -> typing.Optional[builtins.str]:
@@ -14018,16 +14018,16 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def logging_config(self) -> typing.Optional[ILoggingConfig]:
+    def logging_config(self) -> typing.Optional["ILoggingConfig"]:
         '''Configuration that determines whether to log errors during data transformation or delivery failures, and specifies the CloudWatch log group for storing error logs.
 
         :default: - errors will be logged and a log group will be created for you.
         '''
         result = self._values.get("logging_config")
-        return typing.cast(typing.Optional[ILoggingConfig], result)
+        return typing.cast(typing.Optional["ILoggingConfig"], result)
 
     @builtins.property
-    def processor(self) -> typing.Optional[IDataProcessor]:
+    def processor(self) -> typing.Optional["IDataProcessor"]:
         '''(deprecated) The data transformation that should be performed on the data before writing to the destination.
 
         :default: - no data transformation will occur.
@@ -14037,19 +14037,19 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         :stability: deprecated
         '''
         result = self._values.get("processor")
-        return typing.cast(typing.Optional[IDataProcessor], result)
+        return typing.cast(typing.Optional["IDataProcessor"], result)
 
     @builtins.property
-    def processors(self) -> typing.Optional[typing.List[IDataProcessor]]:
+    def processors(self) -> typing.Optional[typing.List["IDataProcessor"]]:
         '''The data transformation that should be performed on the data before writing to the destination.
 
         :default: - no data transformation will occur.
         '''
         result = self._values.get("processors")
-        return typing.cast(typing.Optional[typing.List[IDataProcessor]], result)
+        return typing.cast(typing.Optional[typing.List["IDataProcessor"]], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role associated with this destination.
 
         Assumed by Amazon Data Firehose to invoke processors and write to destinations
@@ -14057,19 +14057,19 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         :default: - a role will be created with default permissions.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def s3_backup(self) -> typing.Optional[DestinationS3BackupProps]:
+    def s3_backup(self) -> typing.Optional["DestinationS3BackupProps"]:
         '''The configuration for backing up source records to S3.
 
         :default: - source records will not be backed up to S3.
         '''
         result = self._values.get("s3_backup")
-        return typing.cast(typing.Optional[DestinationS3BackupProps], result)
+        return typing.cast(typing.Optional["DestinationS3BackupProps"], result)
 
     @builtins.property
-    def data_format_conversion(self) -> typing.Optional[DataFormatConversionProps]:
+    def data_format_conversion(self) -> typing.Optional["DataFormatConversionProps"]:
         '''The input format, output format, and schema config for converting data from the JSON format to the Parquet or ORC format before writing to Amazon S3.
 
         :default: no data format conversion is done
@@ -14077,7 +14077,7 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-dataformatconversionconfiguration
         '''
         result = self._values.get("data_format_conversion")
-        return typing.cast(typing.Optional[DataFormatConversionProps], result)
+        return typing.cast(typing.Optional["DataFormatConversionProps"], result)
 
     @builtins.property
     def file_extension(self) -> typing.Optional[builtins.str]:
@@ -14095,7 +14095,7 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def time_zone(self) -> typing.Optional[_TimeZone_cdd72ac9]:
+    def time_zone(self) -> typing.Optional["_TimeZone_cdd72ac9"]:
         '''The time zone you prefer.
 
         :default: - UTC
@@ -14103,7 +14103,7 @@ class S3BucketProps(CommonDestinationS3Props, CommonDestinationProps):
         :see: https://docs.aws.amazon.com/firehose/latest/dev/s3-prefixes.html#timestamp-namespace
         '''
         result = self._values.get("time_zone")
-        return typing.cast(typing.Optional[_TimeZone_cdd72ac9], result)
+        return typing.cast(typing.Optional["_TimeZone_cdd72ac9"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14144,7 +14144,7 @@ class SchemaConfiguration(
     @builtins.classmethod
     def from_cfn_table(
         cls,
-        table: _CfnTable_63ae0183,
+        table: "_CfnTable_63ae0183",
         *,
         region: typing.Optional[builtins.str] = None,
         version_id: typing.Optional[builtins.str] = None,
@@ -14167,10 +14167,10 @@ class SchemaConfiguration(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
-        role: _IRole_235f5d8e,
-    ) -> CfnDeliveryStream.SchemaConfigurationProperty:
+        role: "_IRole_235f5d8e",
+    ) -> "CfnDeliveryStream.SchemaConfigurationProperty":
         '''Binds this Schema to the Destination, adding the necessary permissions to the Destination role.
 
         :param scope: -
@@ -14181,7 +14181,7 @@ class SchemaConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
         options = SchemaConfigurationBindOptions(role=role)
 
-        return typing.cast(CfnDeliveryStream.SchemaConfigurationProperty, jsii.invoke(self, "bind", [scope, options]))
+        return typing.cast("CfnDeliveryStream.SchemaConfigurationProperty", jsii.invoke(self, "bind", [scope, options]))
 
 
 @jsii.data_type(
@@ -14190,7 +14190,7 @@ class SchemaConfiguration(
     name_mapping={"role": "role"},
 )
 class SchemaConfigurationBindOptions:
-    def __init__(self, *, role: _IRole_235f5d8e) -> None:
+    def __init__(self, *, role: "_IRole_235f5d8e") -> None:
         '''Options when binding a SchemaConfig to a Destination.
 
         :param role: The IAM Role that will be used by the Delivery Stream for access to the Glue data catalog for record format conversion.
@@ -14218,11 +14218,11 @@ class SchemaConfigurationBindOptions:
         }
 
     @builtins.property
-    def role(self) -> _IRole_235f5d8e:
+    def role(self) -> "_IRole_235f5d8e":
         '''The IAM Role that will be used by the Delivery Stream for access to the Glue data catalog for record format conversion.'''
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
-        return typing.cast(_IRole_235f5d8e, result)
+        return typing.cast("_IRole_235f5d8e", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14351,7 +14351,7 @@ class StreamEncryption(
     @builtins.classmethod
     def customer_managed_key(
         cls,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
     ) -> "StreamEncryption":
         '''Configure server-side encryption using customer managed keys.
 
@@ -14376,9 +14376,9 @@ class StreamEncryption(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''Optional KMS key used for customer managed encryption.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionKey"))
 
 
 class _StreamEncryptionProxy(StreamEncryption):
@@ -14477,10 +14477,10 @@ class AppendDelimiterToRecordProcessor(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
+        _scope: "_constructs_77d1e7e8.Construct",
         *,
-        role: _IRole_235f5d8e,
-    ) -> DataProcessorConfig:
+        role: "_IRole_235f5d8e",
+    ) -> "DataProcessorConfig":
         '''Binds this processor to a destination of a delivery stream.
 
         Implementers should use this method to grant processor invocation permissions to the provided stream and return the
@@ -14494,13 +14494,13 @@ class AppendDelimiterToRecordProcessor(
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
         _options = DataProcessorBindOptions(role=role)
 
-        return typing.cast(DataProcessorConfig, jsii.invoke(self, "bind", [_scope, _options]))
+        return typing.cast("DataProcessorConfig", jsii.invoke(self, "bind", [_scope, _options]))
 
     @builtins.property
     @jsii.member(jsii_name="props")
-    def props(self) -> DataProcessorProps:
+    def props(self) -> "DataProcessorProps":
         '''The constructor props of the DataProcessor.'''
-        return typing.cast(DataProcessorProps, jsii.get(self, "props"))
+        return typing.cast("DataProcessorProps", jsii.get(self, "props"))
 
 
 @jsii.implements(IDataProcessor)
@@ -14543,10 +14543,10 @@ class CloudWatchLogProcessor(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
+        _scope: "_constructs_77d1e7e8.Construct",
         *,
-        role: _IRole_235f5d8e,
-    ) -> DataProcessorConfig:
+        role: "_IRole_235f5d8e",
+    ) -> "DataProcessorConfig":
         '''Binds this processor to a destination of a delivery stream.
 
         Implementers should use this method to grant processor invocation permissions to the provided stream and return the
@@ -14560,13 +14560,13 @@ class CloudWatchLogProcessor(
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
         _options = DataProcessorBindOptions(role=role)
 
-        return typing.cast(DataProcessorConfig, jsii.invoke(self, "bind", [_scope, _options]))
+        return typing.cast("DataProcessorConfig", jsii.invoke(self, "bind", [_scope, _options]))
 
     @builtins.property
     @jsii.member(jsii_name="props")
-    def props(self) -> DataProcessorProps:
+    def props(self) -> "DataProcessorProps":
         '''The constructor props of the DataProcessor.'''
-        return typing.cast(DataProcessorProps, jsii.get(self, "props"))
+        return typing.cast("DataProcessorProps", jsii.get(self, "props"))
 
 
 @jsii.implements(IDataProcessor)
@@ -14597,7 +14597,7 @@ class DecompressionProcessor(
     def __init__(
         self,
         *,
-        compression_format: typing.Optional[DecompressionProcessorCompressionFormat] = None,
+        compression_format: typing.Optional["DecompressionProcessorCompressionFormat"] = None,
     ) -> None:
         '''
         :param compression_format: The input compression format. Default: DecompressionProcessorCompressionFormat.GZIP
@@ -14609,10 +14609,10 @@ class DecompressionProcessor(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
+        _scope: "_constructs_77d1e7e8.Construct",
         *,
-        role: _IRole_235f5d8e,
-    ) -> DataProcessorConfig:
+        role: "_IRole_235f5d8e",
+    ) -> "DataProcessorConfig":
         '''Binds this processor to a destination of a delivery stream.
 
         Implementers should use this method to grant processor invocation permissions to the provided stream and return the
@@ -14626,13 +14626,13 @@ class DecompressionProcessor(
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
         _options = DataProcessorBindOptions(role=role)
 
-        return typing.cast(DataProcessorConfig, jsii.invoke(self, "bind", [_scope, _options]))
+        return typing.cast("DataProcessorConfig", jsii.invoke(self, "bind", [_scope, _options]))
 
     @builtins.property
     @jsii.member(jsii_name="props")
-    def props(self) -> DataProcessorProps:
+    def props(self) -> "DataProcessorProps":
         '''The constructor props of the DataProcessor.'''
-        return typing.cast(DataProcessorProps, jsii.get(self, "props"))
+        return typing.cast("DataProcessorProps", jsii.get(self, "props"))
 
 
 @jsii.implements(IDeliveryStream)
@@ -14669,14 +14669,14 @@ class DeliveryStream(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        destination: IDestination,
+        destination: "IDestination",
         delivery_stream_name: typing.Optional[builtins.str] = None,
-        encryption: typing.Optional[StreamEncryption] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        source: typing.Optional[ISource] = None,
+        encryption: typing.Optional["StreamEncryption"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        source: typing.Optional["ISource"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -14705,10 +14705,10 @@ class DeliveryStream(
     @builtins.classmethod
     def from_delivery_stream_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         delivery_stream_arn: builtins.str,
-    ) -> IDeliveryStream:
+    ) -> "IDeliveryStream":
         '''Import an existing delivery stream from its ARN.
 
         :param scope: -
@@ -14720,19 +14720,19 @@ class DeliveryStream(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument delivery_stream_arn", value=delivery_stream_arn, expected_type=type_hints["delivery_stream_arn"])
-        return typing.cast(IDeliveryStream, jsii.sinvoke(cls, "fromDeliveryStreamArn", [scope, id, delivery_stream_arn]))
+        return typing.cast("IDeliveryStream", jsii.sinvoke(cls, "fromDeliveryStreamArn", [scope, id, delivery_stream_arn]))
 
     @jsii.member(jsii_name="fromDeliveryStreamAttributes")
     @builtins.classmethod
     def from_delivery_stream_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         delivery_stream_arn: typing.Optional[builtins.str] = None,
         delivery_stream_name: typing.Optional[builtins.str] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-    ) -> IDeliveryStream:
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+    ) -> "IDeliveryStream":
         '''Import an existing delivery stream from its attributes.
 
         :param scope: -
@@ -14751,16 +14751,16 @@ class DeliveryStream(
             role=role,
         )
 
-        return typing.cast(IDeliveryStream, jsii.sinvoke(cls, "fromDeliveryStreamAttributes", [scope, id, attrs]))
+        return typing.cast("IDeliveryStream", jsii.sinvoke(cls, "fromDeliveryStreamAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromDeliveryStreamName")
     @builtins.classmethod
     def from_delivery_stream_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         delivery_stream_name: builtins.str,
-    ) -> IDeliveryStream:
+    ) -> "IDeliveryStream":
         '''Import an existing delivery stream from its name.
 
         :param scope: -
@@ -14772,14 +14772,14 @@ class DeliveryStream(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument delivery_stream_name", value=delivery_stream_name, expected_type=type_hints["delivery_stream_name"])
-        return typing.cast(IDeliveryStream, jsii.sinvoke(cls, "fromDeliveryStreamName", [scope, id, delivery_stream_name]))
+        return typing.cast("IDeliveryStream", jsii.sinvoke(cls, "fromDeliveryStreamName", [scope, id, delivery_stream_name]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the ``grantee`` identity permissions to perform ``actions``.
 
         :param grantee: -
@@ -14789,10 +14789,10 @@ class DeliveryStream(
             type_hints = typing.get_type_hints(_typecheckingstub__9d29967317f0315691f87af41c6bab889af970cdd0860933427170179ccabb1b)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantPutRecords")
-    def grant_put_records(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_put_records(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the ``grantee`` identity permissions to perform ``firehose:PutRecord`` and ``firehose:PutRecordBatch`` actions on this delivery stream.
 
         :param grantee: -
@@ -14800,7 +14800,7 @@ class DeliveryStream(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__31fc61b3576a2a9576300f38d0cde9d0c42fcad47d437aa8ef160d5016007243)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPutRecords", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPutRecords", [grantee]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -14812,14 +14812,14 @@ class DeliveryStream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this delivery stream.
 
         :param metric_name: -
@@ -14854,7 +14854,7 @@ class DeliveryStream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricBackupToS3Bytes")
     def metric_backup_to_s3_bytes(
@@ -14865,14 +14865,14 @@ class DeliveryStream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of bytes delivered to Amazon S3 for backup over the specified time period.
 
         By default, this metric will be calculated as an average over a period of 5 minutes.
@@ -14905,7 +14905,7 @@ class DeliveryStream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricBackupToS3Bytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricBackupToS3Bytes", [props]))
 
     @jsii.member(jsii_name="metricBackupToS3DataFreshness")
     def metric_backup_to_s3_data_freshness(
@@ -14916,14 +14916,14 @@ class DeliveryStream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the age (from getting into Amazon Data Firehose to now) of the oldest record in Amazon Data Firehose.
 
         Any record older than this age has been delivered to the Amazon S3 bucket for backup.
@@ -14958,7 +14958,7 @@ class DeliveryStream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricBackupToS3DataFreshness", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricBackupToS3DataFreshness", [props]))
 
     @jsii.member(jsii_name="metricBackupToS3Records")
     def metric_backup_to_s3_records(
@@ -14969,14 +14969,14 @@ class DeliveryStream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of records delivered to Amazon S3 for backup over the specified time period.
 
         By default, this metric will be calculated as an average over a period of 5 minutes.
@@ -15009,7 +15009,7 @@ class DeliveryStream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricBackupToS3Records", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricBackupToS3Records", [props]))
 
     @jsii.member(jsii_name="metricIncomingBytes")
     def metric_incoming_bytes(
@@ -15020,14 +15020,14 @@ class DeliveryStream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of bytes ingested successfully into the delivery stream over the specified time period after throttling.
 
         By default, this metric will be calculated as an average over a period of 5 minutes.
@@ -15060,7 +15060,7 @@ class DeliveryStream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingBytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIncomingBytes", [props]))
 
     @jsii.member(jsii_name="metricIncomingRecords")
     def metric_incoming_records(
@@ -15071,14 +15071,14 @@ class DeliveryStream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of records ingested successfully into the delivery stream over the specified time period after throttling.
 
         By default, this metric will be calculated as an average over a period of 5 minutes.
@@ -15111,7 +15111,7 @@ class DeliveryStream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIncomingRecords", [props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -15121,9 +15121,9 @@ class DeliveryStream(
 
     @builtins.property
     @jsii.member(jsii_name="connections")
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''Network connections between Amazon Data Firehose and other resources, i.e. Redshift cluster.'''
-        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
     @jsii.member(jsii_name="deliveryStreamArn")
@@ -15139,21 +15139,21 @@ class DeliveryStream(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryStreamRef")
-    def delivery_stream_ref(self) -> _DeliveryStreamReference_9f72be94:
+    def delivery_stream_ref(self) -> "_DeliveryStreamReference_9f72be94":
         '''A reference to a DeliveryStream resource.'''
-        return typing.cast(_DeliveryStreamReference_9f72be94, jsii.get(self, "deliveryStreamRef"))
+        return typing.cast("_DeliveryStreamReference_9f72be94", jsii.get(self, "deliveryStreamRef"))
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The principal to grant permissions to.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
     @builtins.property
     @jsii.member(jsii_name="grants")
-    def grants(self) -> DeliveryStreamGrants:
+    def grants(self) -> "DeliveryStreamGrants":
         '''Collection of grant methods for a DeliveryStream.'''
-        return typing.cast(DeliveryStreamGrants, jsii.get(self, "grants"))
+        return typing.cast("DeliveryStreamGrants", jsii.get(self, "grants"))
 
 
 @jsii.implements(ILoggingConfig)
@@ -15223,7 +15223,10 @@ class EnableLogging(
         )
     '''
 
-    def __init__(self, log_group: typing.Optional[_ILogGroup_3c4fa718] = None) -> None:
+    def __init__(
+        self,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+    ) -> None:
         '''
         :param log_group: The CloudWatch log group where log streams will be created to hold error logs.
         '''
@@ -15243,9 +15246,9 @@ class EnableLogging(
 
     @builtins.property
     @jsii.member(jsii_name="logGroup")
-    def log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
+    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
         '''The CloudWatch log group where log streams will be created to hold error logs.'''
-        return typing.cast(typing.Optional[_ILogGroup_3c4fa718], jsii.get(self, "logGroup"))
+        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], jsii.get(self, "logGroup"))
 
 
 @jsii.implements(IInputFormat)
@@ -15271,7 +15274,7 @@ class HiveJsonInputFormat(
     def __init__(
         self,
         *,
-        timestamp_parsers: typing.Optional[typing.Sequence[TimestampParser]] = None,
+        timestamp_parsers: typing.Optional[typing.Sequence["TimestampParser"]] = None,
     ) -> None:
         '''
         :param timestamp_parsers: List of TimestampParsers. These are used to parse custom timestamp strings from input JSON into dates. Note: Specifying a parser will override the default timestamp parser. If the default timestamp parser is required, include ``TimestampParser.DEFAULT`` in the list of parsers along with the custom parser. Default: the default timestamp parser is used
@@ -15283,15 +15286,15 @@ class HiveJsonInputFormat(
     @jsii.member(jsii_name="createInputFormatConfig")
     def create_input_format_config(
         self,
-    ) -> CfnDeliveryStream.InputFormatConfigurationProperty:
+    ) -> "CfnDeliveryStream.InputFormatConfigurationProperty":
         '''Renders the cloudformation properties for the input format.'''
-        return typing.cast(CfnDeliveryStream.InputFormatConfigurationProperty, jsii.invoke(self, "createInputFormatConfig", []))
+        return typing.cast("CfnDeliveryStream.InputFormatConfigurationProperty", jsii.invoke(self, "createInputFormatConfig", []))
 
     @builtins.property
     @jsii.member(jsii_name="props")
-    def props(self) -> typing.Optional[HiveJsonInputFormatProps]:
+    def props(self) -> typing.Optional["HiveJsonInputFormatProps"]:
         '''Properties for Hive JSON input format.'''
-        return typing.cast(typing.Optional[HiveJsonInputFormatProps], jsii.get(self, "props"))
+        return typing.cast(typing.Optional["HiveJsonInputFormatProps"], jsii.get(self, "props"))
 
 
 __all__ = [

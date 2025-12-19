@@ -104,7 +104,7 @@ class CfnAccountAlias(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account_alias: builtins.str,
@@ -136,7 +136,7 @@ class CfnAccountAlias(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccountAlias", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -167,9 +167,9 @@ class CfnAccountAlias(
 
     @builtins.property
     @jsii.member(jsii_name="accountAliasRef")
-    def account_alias_ref(self) -> _AccountAliasReference_0ae4a14e:
+    def account_alias_ref(self) -> "_AccountAliasReference_0ae4a14e":
         '''A reference to a AccountAlias resource.'''
-        return typing.cast(_AccountAliasReference_0ae4a14e, jsii.get(self, "accountAliasRef"))
+        return typing.cast("_AccountAliasReference_0ae4a14e", jsii.get(self, "accountAliasRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAccountAliasResourceId")
@@ -301,17 +301,17 @@ class CfnSlackChannelConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         channel_id: builtins.str,
-        channel_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        channel_role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         notify_on_case_severity: builtins.str,
         team_id: builtins.str,
         channel_name: typing.Optional[builtins.str] = None,
-        notify_on_add_correspondence_to_case: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        notify_on_create_or_reopen_case: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        notify_on_resolve_case: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        notify_on_add_correspondence_to_case: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        notify_on_create_or_reopen_case: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        notify_on_resolve_case: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::SupportApp::SlackChannelConfiguration``.
 
@@ -356,7 +356,7 @@ class CfnSlackChannelConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSlackChannelConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -394,9 +394,9 @@ class CfnSlackChannelConfiguration(
     @jsii.member(jsii_name="slackChannelConfigurationRef")
     def slack_channel_configuration_ref(
         self,
-    ) -> _SlackChannelConfigurationReference_c172d31a:
+    ) -> "_SlackChannelConfigurationReference_c172d31a":
         '''A reference to a SlackChannelConfiguration resource.'''
-        return typing.cast(_SlackChannelConfigurationReference_c172d31a, jsii.get(self, "slackChannelConfigurationRef"))
+        return typing.cast("_SlackChannelConfigurationReference_c172d31a", jsii.get(self, "slackChannelConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="channelId")
@@ -467,14 +467,14 @@ class CfnSlackChannelConfiguration(
     @jsii.member(jsii_name="notifyOnAddCorrespondenceToCase")
     def notify_on_add_correspondence_to_case(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to get notified when a correspondence is added to your support cases.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "notifyOnAddCorrespondenceToCase"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "notifyOnAddCorrespondenceToCase"))
 
     @notify_on_add_correspondence_to_case.setter
     def notify_on_add_correspondence_to_case(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b8cd4cea2b5fb7897f3ab091e75cdd4a5ca0265e070b473a358a38c910b33c90)
@@ -485,14 +485,14 @@ class CfnSlackChannelConfiguration(
     @jsii.member(jsii_name="notifyOnCreateOrReopenCase")
     def notify_on_create_or_reopen_case(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to get notified when your support cases are created or reopened.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "notifyOnCreateOrReopenCase"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "notifyOnCreateOrReopenCase"))
 
     @notify_on_create_or_reopen_case.setter
     def notify_on_create_or_reopen_case(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__921399ffc2d54516aa2373e50e1a3e13600afdf675d89510f94d97c081fd7154)
@@ -503,14 +503,14 @@ class CfnSlackChannelConfiguration(
     @jsii.member(jsii_name="notifyOnResolveCase")
     def notify_on_resolve_case(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to get notified when your support cases are resolved.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "notifyOnResolveCase"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "notifyOnResolveCase"))
 
     @notify_on_resolve_case.setter
     def notify_on_resolve_case(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bdf168cfdf59423abb532004d6218672a01d6693597b0f69fecd68f3be197540)
@@ -537,13 +537,13 @@ class CfnSlackChannelConfigurationProps:
         self,
         *,
         channel_id: builtins.str,
-        channel_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        channel_role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         notify_on_case_severity: builtins.str,
         team_id: builtins.str,
         channel_name: typing.Optional[builtins.str] = None,
-        notify_on_add_correspondence_to_case: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        notify_on_create_or_reopen_case: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        notify_on_resolve_case: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        notify_on_add_correspondence_to_case: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        notify_on_create_or_reopen_case: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        notify_on_resolve_case: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSlackChannelConfiguration``.
 
@@ -616,7 +616,7 @@ class CfnSlackChannelConfigurationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def channel_role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def channel_role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The Amazon Resource Name (ARN) of the IAM role for this Slack channel configuration.
 
         The  App uses this role to perform  and Service Quotas actions on your behalf.
@@ -625,7 +625,7 @@ class CfnSlackChannelConfigurationProps:
         '''
         result = self._values.get("channel_role_arn")
         assert result is not None, "Required property 'channel_role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def notify_on_case_severity(self) -> builtins.str:
@@ -665,35 +665,35 @@ class CfnSlackChannelConfigurationProps:
     @builtins.property
     def notify_on_add_correspondence_to_case(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to get notified when a correspondence is added to your support cases.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-supportapp-slackchannelconfiguration.html#cfn-supportapp-slackchannelconfiguration-notifyonaddcorrespondencetocase
         '''
         result = self._values.get("notify_on_add_correspondence_to_case")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def notify_on_create_or_reopen_case(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to get notified when your support cases are created or reopened.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-supportapp-slackchannelconfiguration.html#cfn-supportapp-slackchannelconfiguration-notifyoncreateorreopencase
         '''
         result = self._values.get("notify_on_create_or_reopen_case")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def notify_on_resolve_case(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to get notified when your support cases are resolved.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-supportapp-slackchannelconfiguration.html#cfn-supportapp-slackchannelconfiguration-notifyonresolvecase
         '''
         result = self._values.get("notify_on_resolve_case")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -745,7 +745,7 @@ class CfnSlackWorkspaceConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         team_id: builtins.str,
@@ -781,7 +781,7 @@ class CfnSlackWorkspaceConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSlackWorkspaceConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -819,9 +819,9 @@ class CfnSlackWorkspaceConfiguration(
     @jsii.member(jsii_name="slackWorkspaceConfigurationRef")
     def slack_workspace_configuration_ref(
         self,
-    ) -> _SlackWorkspaceConfigurationReference_b2a7ecf6:
+    ) -> "_SlackWorkspaceConfigurationReference_b2a7ecf6":
         '''A reference to a SlackWorkspaceConfiguration resource.'''
-        return typing.cast(_SlackWorkspaceConfigurationReference_b2a7ecf6, jsii.get(self, "slackWorkspaceConfigurationRef"))
+        return typing.cast("_SlackWorkspaceConfigurationReference_b2a7ecf6", jsii.get(self, "slackWorkspaceConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="teamId")

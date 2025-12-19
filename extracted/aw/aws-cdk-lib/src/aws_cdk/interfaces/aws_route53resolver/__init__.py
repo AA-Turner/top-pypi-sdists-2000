@@ -253,7 +253,7 @@ class IFirewallDomainListRef(
 
     @builtins.property
     @jsii.member(jsii_name="firewallDomainListRef")
-    def firewall_domain_list_ref(self) -> FirewallDomainListReference:
+    def firewall_domain_list_ref(self) -> "FirewallDomainListReference":
         '''(experimental) A reference to a FirewallDomainList resource.
 
         :stability: experimental
@@ -274,12 +274,12 @@ class _IFirewallDomainListRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="firewallDomainListRef")
-    def firewall_domain_list_ref(self) -> FirewallDomainListReference:
+    def firewall_domain_list_ref(self) -> "FirewallDomainListReference":
         '''(experimental) A reference to a FirewallDomainList resource.
 
         :stability: experimental
         '''
-        return typing.cast(FirewallDomainListReference, jsii.get(self, "firewallDomainListRef"))
+        return typing.cast("FirewallDomainListReference", jsii.get(self, "firewallDomainListRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFirewallDomainListRef).__jsii_proxy_class__ = lambda : _IFirewallDomainListRefProxy
@@ -302,7 +302,7 @@ class IFirewallRuleGroupAssociationRef(
     @jsii.member(jsii_name="firewallRuleGroupAssociationRef")
     def firewall_rule_group_association_ref(
         self,
-    ) -> FirewallRuleGroupAssociationReference:
+    ) -> "FirewallRuleGroupAssociationReference":
         '''(experimental) A reference to a FirewallRuleGroupAssociation resource.
 
         :stability: experimental
@@ -325,12 +325,12 @@ class _IFirewallRuleGroupAssociationRefProxy(
     @jsii.member(jsii_name="firewallRuleGroupAssociationRef")
     def firewall_rule_group_association_ref(
         self,
-    ) -> FirewallRuleGroupAssociationReference:
+    ) -> "FirewallRuleGroupAssociationReference":
         '''(experimental) A reference to a FirewallRuleGroupAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(FirewallRuleGroupAssociationReference, jsii.get(self, "firewallRuleGroupAssociationRef"))
+        return typing.cast("FirewallRuleGroupAssociationReference", jsii.get(self, "firewallRuleGroupAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFirewallRuleGroupAssociationRef).__jsii_proxy_class__ = lambda : _IFirewallRuleGroupAssociationRefProxy
@@ -351,7 +351,7 @@ class IFirewallRuleGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="firewallRuleGroupRef")
-    def firewall_rule_group_ref(self) -> FirewallRuleGroupReference:
+    def firewall_rule_group_ref(self) -> "FirewallRuleGroupReference":
         '''(experimental) A reference to a FirewallRuleGroup resource.
 
         :stability: experimental
@@ -372,12 +372,12 @@ class _IFirewallRuleGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="firewallRuleGroupRef")
-    def firewall_rule_group_ref(self) -> FirewallRuleGroupReference:
+    def firewall_rule_group_ref(self) -> "FirewallRuleGroupReference":
         '''(experimental) A reference to a FirewallRuleGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(FirewallRuleGroupReference, jsii.get(self, "firewallRuleGroupRef"))
+        return typing.cast("FirewallRuleGroupReference", jsii.get(self, "firewallRuleGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFirewallRuleGroupRef).__jsii_proxy_class__ = lambda : _IFirewallRuleGroupRefProxy

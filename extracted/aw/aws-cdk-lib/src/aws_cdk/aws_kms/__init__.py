@@ -431,7 +431,7 @@ class AliasProps:
         *,
         alias_name: builtins.str,
         target_key: "IKey",
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
     ) -> None:
         '''Construction properties for a KMS Key Alias object.
 
@@ -443,6 +443,7 @@ class AliasProps:
 
         Example::
 
+            from aws_cdk import Environment
             # Passing an encrypted replication bucket created in a different stack.
             app = App()
             replication_stack = Stack(app, "ReplicationStack",
@@ -498,13 +499,13 @@ class AliasProps:
         return typing.cast("IKey", result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Policy to apply when the alias is removed from this stack.
 
         :default: - The alias will be deleted
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -561,11 +562,11 @@ class CfnAlias(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         alias_name: builtins.str,
-        target_key_id: typing.Union[builtins.str, _IKeyRef_d4fc6ef3, _IReplicaKeyRef_61fa3e10],
+        target_key_id: typing.Union[builtins.str, "_IKeyRef_d4fc6ef3", "_IReplicaKeyRef_61fa3e10"],
     ) -> None:
         '''Create a new ``AWS::KMS::Alias``.
 
@@ -595,7 +596,7 @@ class CfnAlias(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAlias", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -626,9 +627,9 @@ class CfnAlias(
 
     @builtins.property
     @jsii.member(jsii_name="aliasRef")
-    def alias_ref(self) -> _AliasReference_b94b5fd4:
+    def alias_ref(self) -> "_AliasReference_b94b5fd4":
         '''A reference to a Alias resource.'''
-        return typing.cast(_AliasReference_b94b5fd4, jsii.get(self, "aliasRef"))
+        return typing.cast("_AliasReference_b94b5fd4", jsii.get(self, "aliasRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -675,7 +676,7 @@ class CfnAliasProps:
         self,
         *,
         alias_name: builtins.str,
-        target_key_id: typing.Union[builtins.str, _IKeyRef_d4fc6ef3, _IReplicaKeyRef_61fa3e10],
+        target_key_id: typing.Union[builtins.str, "_IKeyRef_d4fc6ef3", "_IReplicaKeyRef_61fa3e10"],
     ) -> None:
         '''Properties for defining a ``CfnAlias``.
 
@@ -724,7 +725,7 @@ class CfnAliasProps:
     @builtins.property
     def target_key_id(
         self,
-    ) -> typing.Union[builtins.str, _IKeyRef_d4fc6ef3, _IReplicaKeyRef_61fa3e10]:
+    ) -> typing.Union[builtins.str, "_IKeyRef_d4fc6ef3", "_IReplicaKeyRef_61fa3e10"]:
         '''Associates the alias with the specified `customer managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk>`_ . The KMS key must be in the same AWS account and Region.
 
         A valid key ID is required. If you supply a null or empty string value, this operation returns an error.
@@ -744,7 +745,7 @@ class CfnAliasProps:
         '''
         result = self._values.get("target_key_id")
         assert result is not None, "Required property 'target_key_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IKeyRef_d4fc6ef3, _IReplicaKeyRef_61fa3e10], result)
+        return typing.cast(typing.Union[builtins.str, "_IKeyRef_d4fc6ef3", "_IReplicaKeyRef_61fa3e10"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -837,21 +838,21 @@ class CfnKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        bypass_policy_lockout_safety_check: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        bypass_policy_lockout_safety_check: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        enable_key_rotation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        enable_key_rotation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         key_policy: typing.Any = None,
         key_spec: typing.Optional[builtins.str] = None,
         key_usage: typing.Optional[builtins.str] = None,
-        multi_region: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        multi_region: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         origin: typing.Optional[builtins.str] = None,
         pending_window_in_days: typing.Optional[jsii.Number] = None,
         rotation_period_in_days: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::KMS::Key``.
 
@@ -893,7 +894,7 @@ class CfnKey(
 
     @jsii.member(jsii_name="arnForKey")
     @builtins.classmethod
-    def arn_for_key(cls, resource: _IKeyRef_d4fc6ef3) -> builtins.str:
+    def arn_for_key(cls, resource: "_IKeyRef_d4fc6ef3") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -906,10 +907,10 @@ class CfnKey(
     @builtins.classmethod
     def from_key_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IKeyRef_d4fc6ef3:
+    ) -> "_IKeyRef_d4fc6ef3":
         '''Creates a new IKeyRef from an ARN.
 
         :param scope: -
@@ -921,16 +922,16 @@ class CfnKey(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IKeyRef_d4fc6ef3, jsii.sinvoke(cls, "fromKeyArn", [scope, id, arn]))
+        return typing.cast("_IKeyRef_d4fc6ef3", jsii.sinvoke(cls, "fromKeyArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromKeyId")
     @builtins.classmethod
     def from_key_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         key_id: builtins.str,
-    ) -> _IKeyRef_d4fc6ef3:
+    ) -> "_IKeyRef_d4fc6ef3":
         '''Creates a new IKeyRef from a keyId.
 
         :param scope: -
@@ -942,7 +943,7 @@ class CfnKey(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument key_id", value=key_id, expected_type=type_hints["key_id"])
-        return typing.cast(_IKeyRef_d4fc6ef3, jsii.sinvoke(cls, "fromKeyId", [scope, id, key_id]))
+        return typing.cast("_IKeyRef_d4fc6ef3", jsii.sinvoke(cls, "fromKeyId", [scope, id, key_id]))
 
     @jsii.member(jsii_name="isCfnKey")
     @builtins.classmethod
@@ -957,7 +958,7 @@ class CfnKey(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnKey", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1015,31 +1016,31 @@ class CfnKey(
 
     @builtins.property
     @jsii.member(jsii_name="keyRef")
-    def key_ref(self) -> _KeyReference_751b3d66:
+    def key_ref(self) -> "_KeyReference_751b3d66":
         '''A reference to a Key resource.'''
-        return typing.cast(_KeyReference_751b3d66, jsii.get(self, "keyRef"))
+        return typing.cast("_KeyReference_751b3d66", jsii.get(self, "keyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="bypassPolicyLockoutSafetyCheck")
     def bypass_policy_lockout_safety_check(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Skips ("bypasses") the key policy lockout safety check.
 
         The default value is false.
         '''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "bypassPolicyLockoutSafetyCheck"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "bypassPolicyLockoutSafetyCheck"))
 
     @bypass_policy_lockout_safety_check.setter
     def bypass_policy_lockout_safety_check(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ba782ca88c8b210d0c18f73ecee5e7266ed06b7428c903676aca9b26b6490443)
@@ -1063,17 +1064,17 @@ class CfnKey(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the KMS key is enabled.
 
         Disabled KMS keys cannot be used in cryptographic operations.
         '''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7d16a27f134df94f3471ae307ddaf158320e92fc426e0a715a044c762a591e56)
@@ -1084,14 +1085,14 @@ class CfnKey(
     @jsii.member(jsii_name="enableKeyRotation")
     def enable_key_rotation(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables automatic rotation of the key material for the specified KMS key.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableKeyRotation"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enableKeyRotation"))
 
     @enable_key_rotation.setter
     def enable_key_rotation(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1949abfe35e26dd5174b35137bea94a550270331496fd2f865d63e22360c88de)
@@ -1141,14 +1142,14 @@ class CfnKey(
     @jsii.member(jsii_name="multiRegion")
     def multi_region(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Creates a multi-Region primary key that you can replicate in other AWS Regions .'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "multiRegion"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "multiRegion"))
 
     @multi_region.setter
     def multi_region(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6a81f5a9d29ef2c8fdbd0a5b47659d6f998118db687737549f32e443f43446da)
@@ -1196,12 +1197,12 @@ class CfnKey(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags to the replica key.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b85648b8166c62900697e128ab3a35c1360fdab37323145ed7b7c76dd91c4576)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1230,18 +1231,18 @@ class CfnKeyProps:
     def __init__(
         self,
         *,
-        bypass_policy_lockout_safety_check: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        bypass_policy_lockout_safety_check: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        enable_key_rotation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        enable_key_rotation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         key_policy: typing.Any = None,
         key_spec: typing.Optional[builtins.str] = None,
         key_usage: typing.Optional[builtins.str] = None,
-        multi_region: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        multi_region: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         origin: typing.Optional[builtins.str] = None,
         pending_window_in_days: typing.Optional[jsii.Number] = None,
         rotation_period_in_days: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnKey``.
 
@@ -1263,6 +1264,7 @@ class CfnKeyProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_kms as kms
@@ -1330,7 +1332,7 @@ class CfnKeyProps:
     @builtins.property
     def bypass_policy_lockout_safety_check(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Skips ("bypasses") the key policy lockout safety check. The default value is false.
 
         .. epigraph::
@@ -1346,7 +1348,7 @@ class CfnKeyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html#cfn-kms-key-bypasspolicylockoutsafetycheck
         '''
         result = self._values.get("bypass_policy_lockout_safety_check")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1362,7 +1364,7 @@ class CfnKeyProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the KMS key is enabled. Disabled KMS keys cannot be used in cryptographic operations.
 
         When ``Enabled`` is ``true`` , the *key state* of the KMS key is ``Enabled`` . When ``Enabled`` is ``false`` , the key state of the KMS key is ``Disabled`` . The default value is ``true`` .
@@ -1374,12 +1376,12 @@ class CfnKeyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html#cfn-kms-key-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def enable_key_rotation(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables automatic rotation of the key material for the specified KMS key.
 
         By default, automatic key rotation is not enabled.
@@ -1393,7 +1395,7 @@ class CfnKeyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html#cfn-kms-key-enablekeyrotation
         '''
         result = self._values.get("enable_key_rotation")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def key_policy(self) -> typing.Any:
@@ -1495,7 +1497,7 @@ class CfnKeyProps:
     @builtins.property
     def multi_region(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Creates a multi-Region primary key that you can replicate in other AWS Regions .
 
         You can't change the ``MultiRegion`` value after the KMS key is created.
@@ -1518,7 +1520,7 @@ class CfnKeyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html#cfn-kms-key-multiregion
         '''
         result = self._values.get("multi_region")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def origin(self) -> typing.Optional[builtins.str]:
@@ -1580,7 +1582,7 @@ class CfnKeyProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags to the replica key.
 
         .. epigraph::
@@ -1592,7 +1594,7 @@ class CfnKeyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html#cfn-kms-key-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1634,6 +1636,7 @@ class CfnReplicaKey(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_kms as kms
@@ -1657,15 +1660,15 @@ class CfnReplicaKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         key_policy: typing.Any,
         primary_key_arn: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         pending_window_in_days: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::KMS::ReplicaKey``.
 
@@ -1695,7 +1698,7 @@ class CfnReplicaKey(
 
     @jsii.member(jsii_name="arnForReplicaKey")
     @builtins.classmethod
-    def arn_for_replica_key(cls, resource: _IReplicaKeyRef_61fa3e10) -> builtins.str:
+    def arn_for_replica_key(cls, resource: "_IReplicaKeyRef_61fa3e10") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1717,7 +1720,7 @@ class CfnReplicaKey(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReplicaKey", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1775,15 +1778,15 @@ class CfnReplicaKey(
 
     @builtins.property
     @jsii.member(jsii_name="replicaKeyRef")
-    def replica_key_ref(self) -> _ReplicaKeyReference_21781a17:
+    def replica_key_ref(self) -> "_ReplicaKeyReference_21781a17":
         '''A reference to a ReplicaKey resource.'''
-        return typing.cast(_ReplicaKeyReference_21781a17, jsii.get(self, "replicaKeyRef"))
+        return typing.cast("_ReplicaKeyReference_21781a17", jsii.get(self, "replicaKeyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="keyPolicy")
@@ -1828,17 +1831,17 @@ class CfnReplicaKey(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the replica key is enabled.
 
         Disabled KMS keys cannot be used in cryptographic operations.
         '''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bb76d39656831fe315be03ed1109d35bd47e49d418dd22bdc531e5665db1e4c7)
@@ -1860,12 +1863,12 @@ class CfnReplicaKey(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags to the replica key.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fc49d1ede5bfd6f35a0c93dafce91a41f79d39c2119895fac0fb0749478472b9)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1891,9 +1894,9 @@ class CfnReplicaKeyProps:
         key_policy: typing.Any,
         primary_key_arn: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         pending_window_in_days: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnReplicaKey``.
 
@@ -1909,6 +1912,7 @@ class CfnReplicaKeyProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_kms as kms
@@ -2012,7 +2016,7 @@ class CfnReplicaKeyProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the replica key is enabled. Disabled KMS keys cannot be used in cryptographic operations.
 
         When ``Enabled`` is ``true`` , the *key state* of the KMS key is ``Enabled`` . When ``Enabled`` is ``false`` , the key state of the KMS key is ``Disabled`` . The default value is ``true`` .
@@ -2024,7 +2028,7 @@ class CfnReplicaKeyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-replicakey.html#cfn-kms-replicakey-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def pending_window_in_days(self) -> typing.Optional[jsii.Number]:
@@ -2048,7 +2052,7 @@ class CfnReplicaKeyProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Assigns one or more tags to the replica key.
 
         .. epigraph::
@@ -2064,7 +2068,7 @@ class CfnReplicaKeyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-replicakey.html#cfn-kms-replicakey-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2115,9 +2119,9 @@ class IKey(_IResource_c80c4260, _IKeyRef_d4fc6ef3, typing_extensions.Protocol):
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
+        statement: "_PolicyStatement_0fe33853",
         allow_no_op: typing.Optional[builtins.bool] = None,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the KMS key resource policy.
 
         :param statement: The policy statement to add.
@@ -2128,9 +2132,9 @@ class IKey(_IResource_c80c4260, _IKeyRef_d4fc6ef3, typing_extensions.Protocol):
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the indicated permissions on this key to the given principal.
 
         :param grantee: -
@@ -2139,7 +2143,7 @@ class IKey(_IResource_c80c4260, _IKeyRef_d4fc6ef3, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantDecrypt")
-    def grant_decrypt(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_decrypt(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant decryption permissions using this key to the given principal.
 
         :param grantee: -
@@ -2147,7 +2151,7 @@ class IKey(_IResource_c80c4260, _IKeyRef_d4fc6ef3, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantEncrypt")
-    def grant_encrypt(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_encrypt(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant encryption permissions using this key to the given principal.
 
         :param grantee: -
@@ -2155,7 +2159,10 @@ class IKey(_IResource_c80c4260, _IKeyRef_d4fc6ef3, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantEncryptDecrypt")
-    def grant_encrypt_decrypt(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_encrypt_decrypt(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant encryption and decryption permissions using this key to the given principal.
 
         :param grantee: -
@@ -2163,7 +2170,7 @@ class IKey(_IResource_c80c4260, _IKeyRef_d4fc6ef3, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantGenerateMac")
-    def grant_generate_mac(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_generate_mac(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant permissions to generating MACs to the given principal.
 
         :param grantee: -
@@ -2171,7 +2178,7 @@ class IKey(_IResource_c80c4260, _IKeyRef_d4fc6ef3, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantSign")
-    def grant_sign(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_sign(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant sign permissions using this key to the given principal.
 
         :param grantee: -
@@ -2179,7 +2186,7 @@ class IKey(_IResource_c80c4260, _IKeyRef_d4fc6ef3, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantSignVerify")
-    def grant_sign_verify(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_sign_verify(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant sign and verify permissions using this key to the given principal.
 
         :param grantee: -
@@ -2187,7 +2194,7 @@ class IKey(_IResource_c80c4260, _IKeyRef_d4fc6ef3, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantVerify")
-    def grant_verify(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_verify(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant verify permissions using this key to the given principal.
 
         :param grantee: -
@@ -2195,7 +2202,7 @@ class IKey(_IResource_c80c4260, _IKeyRef_d4fc6ef3, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantVerifyMac")
-    def grant_verify_mac(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_verify_mac(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant permissions to verifying MACs to the given principal.
 
         :param grantee: -
@@ -2247,9 +2254,9 @@ class _IKeyProxy(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
+        statement: "_PolicyStatement_0fe33853",
         allow_no_op: typing.Optional[builtins.bool] = None,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the KMS key resource policy.
 
         :param statement: The policy statement to add.
@@ -2259,14 +2266,14 @@ class _IKeyProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__49ab7698d2a79e6b83d905354157adf61cc66dcdc514e2f6586029179411a56c)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
             check_type(argname="argument allow_no_op", value=allow_no_op, expected_type=type_hints["allow_no_op"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement, allow_no_op]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement, allow_no_op]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the indicated permissions on this key to the given principal.
 
         :param grantee: -
@@ -2276,10 +2283,10 @@ class _IKeyProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__e75995ff61f7b73643112ecb31c0f51795b9a98794730d4be368915f8c2593c2)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantDecrypt")
-    def grant_decrypt(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_decrypt(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant decryption permissions using this key to the given principal.
 
         :param grantee: -
@@ -2287,10 +2294,10 @@ class _IKeyProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__39902b1c75983f537dc01c509a72cacad7b1f7eac41eb11b78961dad89057e68)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDecrypt", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantDecrypt", [grantee]))
 
     @jsii.member(jsii_name="grantEncrypt")
-    def grant_encrypt(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_encrypt(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant encryption permissions using this key to the given principal.
 
         :param grantee: -
@@ -2298,10 +2305,13 @@ class _IKeyProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__19d45c86cc60f7439a524a94d75c39b726b3b12a4723b2d320f194039f842fcd)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantEncrypt", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantEncrypt", [grantee]))
 
     @jsii.member(jsii_name="grantEncryptDecrypt")
-    def grant_encrypt_decrypt(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_encrypt_decrypt(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant encryption and decryption permissions using this key to the given principal.
 
         :param grantee: -
@@ -2309,10 +2319,10 @@ class _IKeyProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1f2582b1d436c32b0e7fbd6af00bad050f74f9e18f1406e20625022b2a13d294)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantEncryptDecrypt", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantEncryptDecrypt", [grantee]))
 
     @jsii.member(jsii_name="grantGenerateMac")
-    def grant_generate_mac(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_generate_mac(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant permissions to generating MACs to the given principal.
 
         :param grantee: -
@@ -2320,10 +2330,10 @@ class _IKeyProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__678d44f30b3f7854df209779d1ab6c27a0eac432204e7f4ac90a02792d307f03)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantGenerateMac", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantGenerateMac", [grantee]))
 
     @jsii.member(jsii_name="grantSign")
-    def grant_sign(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_sign(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant sign permissions using this key to the given principal.
 
         :param grantee: -
@@ -2331,10 +2341,10 @@ class _IKeyProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__17bf7cf2a33c9cdda910f2942efab62c58f1c1a7a7dd9458dde25eeca2f4682d)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSign", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSign", [grantee]))
 
     @jsii.member(jsii_name="grantSignVerify")
-    def grant_sign_verify(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_sign_verify(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant sign and verify permissions using this key to the given principal.
 
         :param grantee: -
@@ -2342,10 +2352,10 @@ class _IKeyProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c990d684da172804daae0cf29edc7427216184b33a70a020885b86aa21a224d2)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSignVerify", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSignVerify", [grantee]))
 
     @jsii.member(jsii_name="grantVerify")
-    def grant_verify(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_verify(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant verify permissions using this key to the given principal.
 
         :param grantee: -
@@ -2353,10 +2363,10 @@ class _IKeyProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5f56ca61f2a3a6b4719a05ed3f1c1897c7b914146a2f92ae8dd0313130d7111c)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantVerify", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantVerify", [grantee]))
 
     @jsii.member(jsii_name="grantVerifyMac")
-    def grant_verify_mac(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_verify_mac(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant permissions to verifying MACs to the given principal.
 
         :param grantee: -
@@ -2364,7 +2374,7 @@ class _IKeyProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e10fb25b1b8146054e097c61432d71d4ae4493eb15e2a482f90f513e686b24ee)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantVerifyMac", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantVerifyMac", [grantee]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IKey).__jsii_proxy_class__ = lambda : _IKeyProxy
@@ -2402,10 +2412,10 @@ class Key(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        admins: typing.Optional[typing.Sequence[_IPrincipal_539bb2fd]] = None,
+        admins: typing.Optional[typing.Sequence["_IPrincipal_539bb2fd"]] = None,
         alias: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[builtins.bool] = None,
@@ -2413,10 +2423,10 @@ class Key(
         key_spec: typing.Optional["KeySpec"] = None,
         key_usage: typing.Optional["KeyUsage"] = None,
         multi_region: typing.Optional[builtins.bool] = None,
-        pending_window: typing.Optional[_Duration_4839e8c3] = None,
-        policy: typing.Optional[_PolicyDocument_3ac34393] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        rotation_period: typing.Optional[_Duration_4839e8c3] = None,
+        pending_window: typing.Optional["_Duration_4839e8c3"] = None,
+        policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        rotation_period: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -2457,7 +2467,7 @@ class Key(
 
     @jsii.member(jsii_name="fromCfnKey")
     @builtins.classmethod
-    def from_cfn_key(cls, cfn_key: CfnKey) -> IKey:
+    def from_cfn_key(cls, cfn_key: "CfnKey") -> "IKey":
         '''Create a mutable ``IKey`` based on a low-level ``CfnKey``.
 
         This is most useful when combined with the cloudformation-include module.
@@ -2474,16 +2484,16 @@ class Key(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__44fb03a49b50ed40c1e4dfe9c0db8eb33dbd35e3ee425ee8f32dde09abc3287c)
             check_type(argname="argument cfn_key", value=cfn_key, expected_type=type_hints["cfn_key"])
-        return typing.cast(IKey, jsii.sinvoke(cls, "fromCfnKey", [cfn_key]))
+        return typing.cast("IKey", jsii.sinvoke(cls, "fromCfnKey", [cfn_key]))
 
     @jsii.member(jsii_name="fromKeyArn")
     @builtins.classmethod
     def from_key_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         key_arn: builtins.str,
-    ) -> IKey:
+    ) -> "IKey":
         '''Import an externally defined KMS Key using its ARN.
 
         :param scope: the construct that will "own" the imported key.
@@ -2495,18 +2505,18 @@ class Key(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument key_arn", value=key_arn, expected_type=type_hints["key_arn"])
-        return typing.cast(IKey, jsii.sinvoke(cls, "fromKeyArn", [scope, id, key_arn]))
+        return typing.cast("IKey", jsii.sinvoke(cls, "fromKeyArn", [scope, id, key_arn]))
 
     @jsii.member(jsii_name="fromLookup")
     @builtins.classmethod
     def from_lookup(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         alias_name: builtins.str,
         return_dummy_key_on_missing: typing.Optional[builtins.bool] = None,
-    ) -> IKey:
+    ) -> "IKey":
         '''Import an existing Key by querying the AWS environment this stack is deployed to.
 
         This function only needs to be used to use Keys not defined in your CDK
@@ -2545,11 +2555,11 @@ class Key(
             return_dummy_key_on_missing=return_dummy_key_on_missing,
         )
 
-        return typing.cast(IKey, jsii.sinvoke(cls, "fromLookup", [scope, id, options]))
+        return typing.cast("IKey", jsii.sinvoke(cls, "fromLookup", [scope, id, options]))
 
     @jsii.member(jsii_name="isLookupDummy")
     @builtins.classmethod
-    def is_lookup_dummy(cls, key: _IKeyRef_d4fc6ef3) -> builtins.bool:
+    def is_lookup_dummy(cls, key: "_IKeyRef_d4fc6ef3") -> builtins.bool:
         '''Checks if the key returned by the ``Key.fromLookup()`` method is a dummy key, i.e., a key that was not found.
 
         This method can only be used if the ``returnDummyKeyOnMissing`` option
@@ -2576,9 +2586,9 @@ class Key(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
+        statement: "_PolicyStatement_0fe33853",
         allow_no_op: typing.Optional[builtins.bool] = None,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the KMS key resource policy.
 
         :param statement: The policy statement to add.
@@ -2588,14 +2598,14 @@ class Key(
             type_hints = typing.get_type_hints(_typecheckingstub__f20e8e11b4cff0f78acc743ad38d02a945f8e93be1f7bfc67153d317f711d06c)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
             check_type(argname="argument allow_no_op", value=allow_no_op, expected_type=type_hints["allow_no_op"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement, allow_no_op]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement, allow_no_op]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the indicated permissions on this key to the given principal.
 
         This modifies both the principal's policy as well as the resource policy,
@@ -2609,10 +2619,10 @@ class Key(
             type_hints = typing.get_type_hints(_typecheckingstub__3078f1361f1b59b619c5946b92259b4d2eefa0ae12e2e3b01160eae5ce37ceed)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantAdmin")
-    def grant_admin(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_admin(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant admins permissions using this key to the given principal.
 
         Key administrators have permissions to manage the key (e.g., change permissions, revoke), but do not have permissions
@@ -2623,10 +2633,10 @@ class Key(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__767164803c663312dbd0dc562333e5aa71475360f03804af0d572d5e1e00b889)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantAdmin", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantAdmin", [grantee]))
 
     @jsii.member(jsii_name="grantDecrypt")
-    def grant_decrypt(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_decrypt(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant decryption permissions using this key to the given principal.
 
         :param grantee: -
@@ -2634,10 +2644,10 @@ class Key(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__21f59a965699a16e14a1c50712dea7dfff44afb1561561c2ca8c3dc2d510da1d)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDecrypt", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantDecrypt", [grantee]))
 
     @jsii.member(jsii_name="grantEncrypt")
-    def grant_encrypt(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_encrypt(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant encryption permissions using this key to the given principal.
 
         :param grantee: -
@@ -2645,10 +2655,13 @@ class Key(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8b813a815a19cfcc384a90657fd701837adf5051ac8297faee4ede086e7e8ce8)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantEncrypt", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantEncrypt", [grantee]))
 
     @jsii.member(jsii_name="grantEncryptDecrypt")
-    def grant_encrypt_decrypt(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_encrypt_decrypt(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant encryption and decryption permissions using this key to the given principal.
 
         :param grantee: -
@@ -2656,10 +2669,10 @@ class Key(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__14a8599a061fbde74d692dfefcfd2f5f92f1a86fc2beee05e7d53c877d7deb03)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantEncryptDecrypt", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantEncryptDecrypt", [grantee]))
 
     @jsii.member(jsii_name="grantGenerateMac")
-    def grant_generate_mac(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_generate_mac(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant permissions to generating MACs to the given principal.
 
         :param grantee: -
@@ -2667,10 +2680,10 @@ class Key(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__440bf3733f200027c74618bbc6f89d59b060f4aa9d88bb6dbfb057771091f628)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantGenerateMac", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantGenerateMac", [grantee]))
 
     @jsii.member(jsii_name="grantSign")
-    def grant_sign(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_sign(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant sign permissions using this key to the given principal.
 
         :param grantee: -
@@ -2678,10 +2691,10 @@ class Key(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6461815f1d37e6ba54e3cbf1944f9dfd4919e6778f163b7d761b4addf454e443)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSign", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSign", [grantee]))
 
     @jsii.member(jsii_name="grantSignVerify")
-    def grant_sign_verify(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_sign_verify(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant sign and verify permissions using this key to the given principal.
 
         :param grantee: -
@@ -2689,10 +2702,10 @@ class Key(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c9dd17cfd9ba136ab5eb61bfd08f31dab5e9e96d93c1a2e94c0610a4b97524bd)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSignVerify", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSignVerify", [grantee]))
 
     @jsii.member(jsii_name="grantVerify")
-    def grant_verify(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_verify(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant verify permissions using this key to the given principal.
 
         :param grantee: -
@@ -2700,10 +2713,10 @@ class Key(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6177dbf335c9d10ef7ab31fb9b38bda2e2a5301aaa124f44ce6112399ec6d8a6)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantVerify", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantVerify", [grantee]))
 
     @jsii.member(jsii_name="grantVerifyMac")
-    def grant_verify_mac(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_verify_mac(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant permissions to verifying MACs to the given principal.
 
         :param grantee: -
@@ -2711,7 +2724,7 @@ class Key(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__de56bfcabbb83e3ba315f07ba084787bd71e82306a46ddc61555bc4f07b77538)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantVerifyMac", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantVerifyMac", [grantee]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DEFAULT_DUMMY_KEY_ID")
@@ -2743,9 +2756,9 @@ class Key(
 
     @builtins.property
     @jsii.member(jsii_name="keyRef")
-    def key_ref(self) -> _KeyReference_751b3d66:
+    def key_ref(self) -> "_KeyReference_751b3d66":
         '''A reference to a Key resource.'''
-        return typing.cast(_KeyReference_751b3d66, jsii.get(self, "keyRef"))
+        return typing.cast("_KeyReference_751b3d66", jsii.get(self, "keyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="trustAccountIdentities")
@@ -2760,13 +2773,13 @@ class Key(
 
     @builtins.property
     @jsii.member(jsii_name="policy")
-    def _policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def _policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''Optional policy document that represents the resource policy of this key.
 
         If specified, addToResourcePolicy can be used to edit this policy.
         Otherwise this method will no-op.
         '''
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], jsii.get(self, "policy"))
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], jsii.get(self, "policy"))
 
 
 @jsii.data_type(
@@ -2872,7 +2885,7 @@ class KeyProps:
     def __init__(
         self,
         *,
-        admins: typing.Optional[typing.Sequence[_IPrincipal_539bb2fd]] = None,
+        admins: typing.Optional[typing.Sequence["_IPrincipal_539bb2fd"]] = None,
         alias: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[builtins.bool] = None,
@@ -2880,10 +2893,10 @@ class KeyProps:
         key_spec: typing.Optional["KeySpec"] = None,
         key_usage: typing.Optional["KeyUsage"] = None,
         multi_region: typing.Optional[builtins.bool] = None,
-        pending_window: typing.Optional[_Duration_4839e8c3] = None,
-        policy: typing.Optional[_PolicyDocument_3ac34393] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        rotation_period: typing.Optional[_Duration_4839e8c3] = None,
+        pending_window: typing.Optional["_Duration_4839e8c3"] = None,
+        policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        rotation_period: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Construction properties for a KMS Key object.
 
@@ -2968,7 +2981,7 @@ class KeyProps:
             self._values["rotation_period"] = rotation_period
 
     @builtins.property
-    def admins(self) -> typing.Optional[typing.List[_IPrincipal_539bb2fd]]:
+    def admins(self) -> typing.Optional[typing.List["_IPrincipal_539bb2fd"]]:
         '''A list of principals to add as key administrators to the key policy.
 
         Key administrators have permissions to manage the key (e.g., change permissions, revoke), but do not have permissions
@@ -2979,7 +2992,7 @@ class KeyProps:
         :default: []
         '''
         result = self._values.get("admins")
-        return typing.cast(typing.Optional[typing.List[_IPrincipal_539bb2fd]], result)
+        return typing.cast(typing.Optional[typing.List["_IPrincipal_539bb2fd"]], result)
 
     @builtins.property
     def alias(self) -> typing.Optional[builtins.str]:
@@ -3064,7 +3077,7 @@ class KeyProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def pending_window(self) -> typing.Optional[_Duration_4839e8c3]:
+    def pending_window(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies the number of days in the waiting period before AWS KMS deletes a CMK that has been removed from a CloudFormation stack.
 
         When you remove a customer master key (CMK) from a CloudFormation stack, AWS KMS schedules the CMK for deletion
@@ -3079,10 +3092,10 @@ class KeyProps:
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html#cfn-kms-key-pendingwindowindays
         '''
         result = self._values.get("pending_window")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''Custom policy document to attach to the KMS key.
 
         NOTE - If the ``@aws-cdk/aws-kms:defaultKeyPolicies`` feature flag is set (the default for new projects),
@@ -3095,10 +3108,10 @@ class KeyProps:
         administer the key will be created.
         '''
         result = self._values.get("policy")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Whether the encryption key should be retained when it is removed from the Stack.
 
         This is useful when one wants to
@@ -3107,16 +3120,16 @@ class KeyProps:
         :default: RemovalPolicy.Retain
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def rotation_period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def rotation_period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period between each automatic rotation.
 
         :default: - set by CFN to 365 days.
         '''
         result = self._values.get("rotation_period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3274,7 +3287,7 @@ class ViaServicePrincipal(
     def __init__(
         self,
         service_name: builtins.str,
-        base_principal: typing.Optional[_IPrincipal_539bb2fd] = None,
+        base_principal: typing.Optional["_IPrincipal_539bb2fd"] = None,
     ) -> None:
         '''
         :param service_name: -
@@ -3293,9 +3306,9 @@ class ViaServicePrincipal(
 
     @builtins.property
     @jsii.member(jsii_name="policyFragment")
-    def policy_fragment(self) -> _PrincipalPolicyFragment_6a855d11:
+    def policy_fragment(self) -> "_PrincipalPolicyFragment_6a855d11":
         '''Return the policy fragment that identifies this principal in a Policy.'''
-        return typing.cast(_PrincipalPolicyFragment_6a855d11, jsii.get(self, "policyFragment"))
+        return typing.cast("_PrincipalPolicyFragment_6a855d11", jsii.get(self, "policyFragment"))
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kms.IAlias")
@@ -3316,7 +3329,7 @@ class IAlias(IKey, _IAliasRef_43fafabd, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="aliasTargetKey")
-    def alias_target_key(self) -> IKey:
+    def alias_target_key(self) -> "IKey":
         '''The Key to which the Alias refers.
 
         :attribute: true
@@ -3346,12 +3359,12 @@ class _IAliasProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aliasTargetKey")
-    def alias_target_key(self) -> IKey:
+    def alias_target_key(self) -> "IKey":
         '''The Key to which the Alias refers.
 
         :attribute: true
         '''
-        return typing.cast(IKey, jsii.get(self, "aliasTargetKey"))
+        return typing.cast("IKey", jsii.get(self, "aliasTargetKey"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAlias).__jsii_proxy_class__ = lambda : _IAliasProxy
@@ -3377,6 +3390,7 @@ class Alias(
 
     Example::
 
+        from aws_cdk import Environment
         # Passing an encrypted replication bucket created in a different stack.
         app = App()
         replication_stack = Stack(app, "ReplicationStack",
@@ -3398,12 +3412,12 @@ class Alias(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         alias_name: builtins.str,
-        target_key: IKey,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        target_key: "IKey",
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -3426,12 +3440,12 @@ class Alias(
     @builtins.classmethod
     def from_alias_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         alias_name: builtins.str,
-        alias_target_key: IKey,
-    ) -> IAlias:
+        alias_target_key: "IKey",
+    ) -> "IAlias":
         '''Import an existing KMS Alias defined outside the CDK app.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -3447,16 +3461,16 @@ class Alias(
             alias_name=alias_name, alias_target_key=alias_target_key
         )
 
-        return typing.cast(IAlias, jsii.sinvoke(cls, "fromAliasAttributes", [scope, id, attrs]))
+        return typing.cast("IAlias", jsii.sinvoke(cls, "fromAliasAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromAliasName")
     @builtins.classmethod
     def from_alias_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         alias_name: builtins.str,
-    ) -> IAlias:
+    ) -> "IAlias":
         '''Import an existing KMS Alias defined outside the CDK app, by the alias name.
 
         This method should be used
@@ -3477,7 +3491,7 @@ class Alias(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument alias_name", value=alias_name, expected_type=type_hints["alias_name"])
-        return typing.cast(IAlias, jsii.sinvoke(cls, "fromAliasName", [scope, id, alias_name]))
+        return typing.cast("IAlias", jsii.sinvoke(cls, "fromAliasName", [scope, id, alias_name]))
 
     @jsii.member(jsii_name="addAlias")
     def add_alias(self, alias: builtins.str) -> "Alias":
@@ -3493,9 +3507,9 @@ class Alias(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
+        statement: "_PolicyStatement_0fe33853",
         allow_no_op: typing.Optional[builtins.bool] = None,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the KMS key resource policy.
 
         :param statement: -
@@ -3505,7 +3519,7 @@ class Alias(
             type_hints = typing.get_type_hints(_typecheckingstub__b22b27f4615124191ddcb7d43f313a681be5bf126396931e72f2a8086f28d15d)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
             check_type(argname="argument allow_no_op", value=allow_no_op, expected_type=type_hints["allow_no_op"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement, allow_no_op]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement, allow_no_op]))
 
     @jsii.member(jsii_name="generatePhysicalName")
     def _generate_physical_name(self) -> builtins.str:
@@ -3514,9 +3528,9 @@ class Alias(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the indicated permissions on this key to the given principal.
 
         :param grantee: -
@@ -3526,10 +3540,10 @@ class Alias(
             type_hints = typing.get_type_hints(_typecheckingstub__90c67882778cd60cf1af18413a9aaf1ca290ab5a87d50f8929fa64ac66b8923a)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantDecrypt")
-    def grant_decrypt(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_decrypt(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant decryption permissions using this key to the given principal.
 
         :param grantee: -
@@ -3537,10 +3551,10 @@ class Alias(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__76283f5eae879bc6cabdbf046c1d68b45cbf7e0222f84edb498c04a69b69ad79)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDecrypt", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantDecrypt", [grantee]))
 
     @jsii.member(jsii_name="grantEncrypt")
-    def grant_encrypt(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_encrypt(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant encryption permissions using this key to the given principal.
 
         :param grantee: -
@@ -3548,10 +3562,13 @@ class Alias(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a1eddbd590dc8e102f7834fb50d2514218d6a3b73d838b34d7fa52ce858c2c8a)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantEncrypt", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantEncrypt", [grantee]))
 
     @jsii.member(jsii_name="grantEncryptDecrypt")
-    def grant_encrypt_decrypt(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_encrypt_decrypt(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant encryption and decryption permissions using this key to the given principal.
 
         :param grantee: -
@@ -3559,10 +3576,10 @@ class Alias(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__765b50233677797d65a2ccab14fdf25c84306d9da9ab54635a10428ed6a23546)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantEncryptDecrypt", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantEncryptDecrypt", [grantee]))
 
     @jsii.member(jsii_name="grantGenerateMac")
-    def grant_generate_mac(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_generate_mac(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant permissions to generating MACs to the given principal.
 
         :param grantee: -
@@ -3570,10 +3587,10 @@ class Alias(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a08117fd4a61f5dbdfb60de37f9aafd66666c36ccbd553402d5504cdd79a06f2)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantGenerateMac", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantGenerateMac", [grantee]))
 
     @jsii.member(jsii_name="grantSign")
-    def grant_sign(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_sign(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant sign permissions using this key to the given principal.
 
         :param grantee: -
@@ -3581,10 +3598,10 @@ class Alias(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9930639ecbcd35ed216f2d886dc8190db34758bfddca534c0b1a15eec5b03bd4)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSign", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSign", [grantee]))
 
     @jsii.member(jsii_name="grantSignVerify")
-    def grant_sign_verify(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_sign_verify(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant sign and verify permissions using this key to the given principal.
 
         :param grantee: -
@@ -3592,10 +3609,10 @@ class Alias(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fa123781beb7a446099dc1bd3f1e2905a09dd2781b09e4876768625072421ff6)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSignVerify", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSignVerify", [grantee]))
 
     @jsii.member(jsii_name="grantVerify")
-    def grant_verify(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_verify(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant verify permissions using this key to the given principal.
 
         :param grantee: -
@@ -3603,10 +3620,10 @@ class Alias(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b324b24cb913496e78f2a43c74194efd7b11966ae5d2d3b1a5d17611af6d6fca)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantVerify", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantVerify", [grantee]))
 
     @jsii.member(jsii_name="grantVerifyMac")
-    def grant_verify_mac(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_verify_mac(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant permissions to verifying MACs to the given principal.
 
         :param grantee: -
@@ -3614,7 +3631,7 @@ class Alias(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__889887809ebfcb10b086b9443331082b607fe1c8b476e14ebc492583598f19a2)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantVerifyMac", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantVerifyMac", [grantee]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -3639,15 +3656,15 @@ class Alias(
 
     @builtins.property
     @jsii.member(jsii_name="aliasRef")
-    def alias_ref(self) -> _AliasReference_b94b5fd4:
+    def alias_ref(self) -> "_AliasReference_b94b5fd4":
         '''A reference to a Alias resource.'''
-        return typing.cast(_AliasReference_b94b5fd4, jsii.get(self, "aliasRef"))
+        return typing.cast("_AliasReference_b94b5fd4", jsii.get(self, "aliasRef"))
 
     @builtins.property
     @jsii.member(jsii_name="aliasTargetKey")
-    def alias_target_key(self) -> IKey:
+    def alias_target_key(self) -> "IKey":
         '''The Key to which the Alias refers.'''
-        return typing.cast(IKey, jsii.get(self, "aliasTargetKey"))
+        return typing.cast("IKey", jsii.get(self, "aliasTargetKey"))
 
     @builtins.property
     @jsii.member(jsii_name="keyArn")
@@ -3669,9 +3686,9 @@ class Alias(
 
     @builtins.property
     @jsii.member(jsii_name="keyRef")
-    def key_ref(self) -> _KeyReference_751b3d66:
+    def key_ref(self) -> "_KeyReference_751b3d66":
         '''A reference to a Key resource.'''
-        return typing.cast(_KeyReference_751b3d66, jsii.get(self, "keyRef"))
+        return typing.cast("_KeyReference_751b3d66", jsii.get(self, "keyRef"))
 
 
 __all__ = [

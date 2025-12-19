@@ -114,6 +114,7 @@ class CfnAppBlock(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appstream as appstream
@@ -166,17 +167,17 @@ class CfnAppBlock(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        source_s3_location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAppBlock.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+        source_s3_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAppBlock.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
         packaging_type: typing.Optional[builtins.str] = None,
-        post_setup_script_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAppBlock.ScriptDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        setup_script_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAppBlock.ScriptDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        post_setup_script_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAppBlock.ScriptDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        setup_script_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAppBlock.ScriptDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppStream::AppBlock``.
 
@@ -210,7 +211,7 @@ class CfnAppBlock(
 
     @jsii.member(jsii_name="arnForAppBlock")
     @builtins.classmethod
-    def arn_for_app_block(cls, resource: _IAppBlockRef_a928bdd4) -> builtins.str:
+    def arn_for_app_block(cls, resource: "_IAppBlockRef_a928bdd4") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -232,7 +233,7 @@ class CfnAppBlock(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAppBlock", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -263,9 +264,9 @@ class CfnAppBlock(
 
     @builtins.property
     @jsii.member(jsii_name="appBlockRef")
-    def app_block_ref(self) -> _AppBlockReference_1e5e2364:
+    def app_block_ref(self) -> "_AppBlockReference_1e5e2364":
         '''A reference to a AppBlock resource.'''
-        return typing.cast(_AppBlockReference_1e5e2364, jsii.get(self, "appBlockRef"))
+        return typing.cast("_AppBlockReference_1e5e2364", jsii.get(self, "appBlockRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -292,9 +293,9 @@ class CfnAppBlock(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -313,14 +314,14 @@ class CfnAppBlock(
     @jsii.member(jsii_name="sourceS3Location")
     def source_s3_location(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAppBlock.S3LocationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAppBlock.S3LocationProperty"]:
         '''The source S3 location of the app block.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAppBlock.S3LocationProperty"], jsii.get(self, "sourceS3Location"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAppBlock.S3LocationProperty"], jsii.get(self, "sourceS3Location"))
 
     @source_s3_location.setter
     def source_s3_location(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAppBlock.S3LocationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAppBlock.S3LocationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0a504881240dbb8e4d49a5c3509bd9afb394356e43746a04d59cfeedc8ca2949)
@@ -370,14 +371,14 @@ class CfnAppBlock(
     @jsii.member(jsii_name="postSetupScriptDetails")
     def post_setup_script_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAppBlock.ScriptDetailsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAppBlock.ScriptDetailsProperty"]]:
         '''The post setup script details of the app block.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAppBlock.ScriptDetailsProperty"]], jsii.get(self, "postSetupScriptDetails"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAppBlock.ScriptDetailsProperty"]], jsii.get(self, "postSetupScriptDetails"))
 
     @post_setup_script_details.setter
     def post_setup_script_details(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAppBlock.ScriptDetailsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAppBlock.ScriptDetailsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b19b4dc43a42401721ecc3c51a40c838ce7167fe3ecd27eae1eb5639adcdd3d7)
@@ -388,14 +389,14 @@ class CfnAppBlock(
     @jsii.member(jsii_name="setupScriptDetails")
     def setup_script_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAppBlock.ScriptDetailsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAppBlock.ScriptDetailsProperty"]]:
         '''The setup script details of the app block.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAppBlock.ScriptDetailsProperty"]], jsii.get(self, "setupScriptDetails"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAppBlock.ScriptDetailsProperty"]], jsii.get(self, "setupScriptDetails"))
 
     @setup_script_details.setter
     def setup_script_details(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAppBlock.ScriptDetailsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAppBlock.ScriptDetailsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d14e1522f81e1c48d4360cf330cdfac3f189fc416e28492b7d675d522f79a41c)
@@ -404,12 +405,12 @@ class CfnAppBlock(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags of the app block.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__44d020fa00d7c6033b8a7317dffe2fc57d25861244d1c79a52394344ee58e3a8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -505,7 +506,7 @@ class CfnAppBlock(
             self,
             *,
             executable_path: builtins.str,
-            script_s3_location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAppBlock.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+            script_s3_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAppBlock.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
             timeout_in_seconds: jsii.Number,
             executable_parameters: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -566,14 +567,14 @@ class CfnAppBlock(
         @builtins.property
         def script_s3_location(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAppBlock.S3LocationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAppBlock.S3LocationProperty"]:
             '''The S3 object location of the script.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appstream-appblock-scriptdetails.html#cfn-appstream-appblock-scriptdetails-scripts3location
             '''
             result = self._values.get("script_s3_location")
             assert result is not None, "Required property 'script_s3_location' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAppBlock.S3LocationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAppBlock.S3LocationProperty"], result)
 
         @builtins.property
         def timeout_in_seconds(self) -> jsii.Number:
@@ -620,6 +621,7 @@ class CfnAppBlockBuilder(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appstream as appstream
@@ -652,20 +654,20 @@ class CfnAppBlockBuilder(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         instance_type: builtins.str,
         name: builtins.str,
         platform: builtins.str,
-        vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAppBlockBuilder.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        access_endpoints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAppBlockBuilder.AccessEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        vpc_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAppBlockBuilder.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        access_endpoints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAppBlockBuilder.AccessEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         app_block_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
-        enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         iam_role_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppStream::AppBlockBuilder``.
 
@@ -707,7 +709,7 @@ class CfnAppBlockBuilder(
     @builtins.classmethod
     def arn_for_app_block_builder(
         cls,
-        resource: _IAppBlockBuilderRef_173a2da9,
+        resource: "_IAppBlockBuilderRef_173a2da9",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -721,10 +723,10 @@ class CfnAppBlockBuilder(
     @builtins.classmethod
     def from_app_block_builder_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IAppBlockBuilderRef_173a2da9:
+    ) -> "_IAppBlockBuilderRef_173a2da9":
         '''Creates a new IAppBlockBuilderRef from an ARN.
 
         :param scope: -
@@ -736,16 +738,16 @@ class CfnAppBlockBuilder(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IAppBlockBuilderRef_173a2da9, jsii.sinvoke(cls, "fromAppBlockBuilderArn", [scope, id, arn]))
+        return typing.cast("_IAppBlockBuilderRef_173a2da9", jsii.sinvoke(cls, "fromAppBlockBuilderArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromAppBlockBuilderName")
     @builtins.classmethod
     def from_app_block_builder_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         app_block_builder_name: builtins.str,
-    ) -> _IAppBlockBuilderRef_173a2da9:
+    ) -> "_IAppBlockBuilderRef_173a2da9":
         '''Creates a new IAppBlockBuilderRef from a appBlockBuilderName.
 
         :param scope: -
@@ -757,7 +759,7 @@ class CfnAppBlockBuilder(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument app_block_builder_name", value=app_block_builder_name, expected_type=type_hints["app_block_builder_name"])
-        return typing.cast(_IAppBlockBuilderRef_173a2da9, jsii.sinvoke(cls, "fromAppBlockBuilderName", [scope, id, app_block_builder_name]))
+        return typing.cast("_IAppBlockBuilderRef_173a2da9", jsii.sinvoke(cls, "fromAppBlockBuilderName", [scope, id, app_block_builder_name]))
 
     @jsii.member(jsii_name="isCfnAppBlockBuilder")
     @builtins.classmethod
@@ -772,7 +774,7 @@ class CfnAppBlockBuilder(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAppBlockBuilder", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -803,9 +805,9 @@ class CfnAppBlockBuilder(
 
     @builtins.property
     @jsii.member(jsii_name="appBlockBuilderRef")
-    def app_block_builder_ref(self) -> _AppBlockBuilderReference_bce53ba0:
+    def app_block_builder_ref(self) -> "_AppBlockBuilderReference_bce53ba0":
         '''A reference to a AppBlockBuilder resource.'''
-        return typing.cast(_AppBlockBuilderReference_bce53ba0, jsii.get(self, "appBlockBuilderRef"))
+        return typing.cast("_AppBlockBuilderReference_bce53ba0", jsii.get(self, "appBlockBuilderRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -827,9 +829,9 @@ class CfnAppBlockBuilder(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -879,14 +881,14 @@ class CfnAppBlockBuilder(
     @jsii.member(jsii_name="vpcConfig")
     def vpc_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAppBlockBuilder.VpcConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAppBlockBuilder.VpcConfigProperty"]:
         '''The VPC configuration for the app block builder.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAppBlockBuilder.VpcConfigProperty"], jsii.get(self, "vpcConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAppBlockBuilder.VpcConfigProperty"], jsii.get(self, "vpcConfig"))
 
     @vpc_config.setter
     def vpc_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAppBlockBuilder.VpcConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAppBlockBuilder.VpcConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__180d8c618c42d04568f892dee70a7790f7e99eeb61d519960b3b033c12cfe689)
@@ -897,14 +899,14 @@ class CfnAppBlockBuilder(
     @jsii.member(jsii_name="accessEndpoints")
     def access_endpoints(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAppBlockBuilder.AccessEndpointProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAppBlockBuilder.AccessEndpointProperty"]]]]:
         '''The access endpoints of the app block builder.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAppBlockBuilder.AccessEndpointProperty"]]]], jsii.get(self, "accessEndpoints"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAppBlockBuilder.AccessEndpointProperty"]]]], jsii.get(self, "accessEndpoints"))
 
     @access_endpoints.setter
     def access_endpoints(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAppBlockBuilder.AccessEndpointProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAppBlockBuilder.AccessEndpointProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b0c2370cdeeba05804fa6dd3f03d3862ece8f691558c77fb2a589df46ab16118)
@@ -954,14 +956,14 @@ class CfnAppBlockBuilder(
     @jsii.member(jsii_name="enableDefaultInternetAccess")
     def enable_default_internet_access(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether default internet access is enabled for the app block builder.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableDefaultInternetAccess"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enableDefaultInternetAccess"))
 
     @enable_default_internet_access.setter
     def enable_default_internet_access(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__47484d5ec55d944eba05db1c12e9dd2dbf40de14a4080c6840d63d110ec36bbe)
@@ -983,12 +985,12 @@ class CfnAppBlockBuilder(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags of the app block builder.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e7e7e62dce5b776582e32baec62848ca5111cb28b2742ac5e7e945e0160279c6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1165,14 +1167,14 @@ class CfnAppBlockBuilderProps:
         instance_type: builtins.str,
         name: builtins.str,
         platform: builtins.str,
-        vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppBlockBuilder.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        access_endpoints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppBlockBuilder.AccessEndpointProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        vpc_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAppBlockBuilder.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        access_endpoints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAppBlockBuilder.AccessEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         app_block_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
-        enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         iam_role_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAppBlockBuilder``.
 
@@ -1193,6 +1195,7 @@ class CfnAppBlockBuilderProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appstream as appstream
@@ -1291,25 +1294,25 @@ class CfnAppBlockBuilderProps:
     @builtins.property
     def vpc_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAppBlockBuilder.VpcConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAppBlockBuilder.VpcConfigProperty"]:
         '''The VPC configuration for the app block builder.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-appblockbuilder.html#cfn-appstream-appblockbuilder-vpcconfig
         '''
         result = self._values.get("vpc_config")
         assert result is not None, "Required property 'vpc_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAppBlockBuilder.VpcConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAppBlockBuilder.VpcConfigProperty"], result)
 
     @builtins.property
     def access_endpoints(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAppBlockBuilder.AccessEndpointProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAppBlockBuilder.AccessEndpointProperty"]]]]:
         '''The access endpoints of the app block builder.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-appblockbuilder.html#cfn-appstream-appblockbuilder-accessendpoints
         '''
         result = self._values.get("access_endpoints")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAppBlockBuilder.AccessEndpointProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAppBlockBuilder.AccessEndpointProperty"]]]], result)
 
     @builtins.property
     def app_block_arns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1343,13 +1346,13 @@ class CfnAppBlockBuilderProps:
     @builtins.property
     def enable_default_internet_access(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether default internet access is enabled for the app block builder.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-appblockbuilder.html#cfn-appstream-appblockbuilder-enabledefaultinternetaccess
         '''
         result = self._values.get("enable_default_internet_access")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def iam_role_arn(self) -> typing.Optional[builtins.str]:
@@ -1361,13 +1364,13 @@ class CfnAppBlockBuilderProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags of the app block builder.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-appblockbuilder.html#cfn-appstream-appblockbuilder-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1400,13 +1403,13 @@ class CfnAppBlockProps:
         self,
         *,
         name: builtins.str,
-        source_s3_location: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppBlock.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]],
+        source_s3_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAppBlock.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
         packaging_type: typing.Optional[builtins.str] = None,
-        post_setup_script_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppBlock.ScriptDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        setup_script_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppBlock.ScriptDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        post_setup_script_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAppBlock.ScriptDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        setup_script_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAppBlock.ScriptDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAppBlock``.
 
@@ -1424,6 +1427,7 @@ class CfnAppBlockProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appstream as appstream
@@ -1515,14 +1519,14 @@ class CfnAppBlockProps:
     @builtins.property
     def source_s3_location(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAppBlock.S3LocationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAppBlock.S3LocationProperty"]:
         '''The source S3 location of the app block.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-appblock.html#cfn-appstream-appblock-sources3location
         '''
         result = self._values.get("source_s3_location")
         assert result is not None, "Required property 'source_s3_location' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAppBlock.S3LocationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAppBlock.S3LocationProperty"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1554,33 +1558,33 @@ class CfnAppBlockProps:
     @builtins.property
     def post_setup_script_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAppBlock.ScriptDetailsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAppBlock.ScriptDetailsProperty"]]:
         '''The post setup script details of the app block.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-appblock.html#cfn-appstream-appblock-postsetupscriptdetails
         '''
         result = self._values.get("post_setup_script_details")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAppBlock.ScriptDetailsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAppBlock.ScriptDetailsProperty"]], result)
 
     @builtins.property
     def setup_script_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAppBlock.ScriptDetailsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAppBlock.ScriptDetailsProperty"]]:
         '''The setup script details of the app block.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-appblock.html#cfn-appstream-appblock-setupscriptdetails
         '''
         result = self._values.get("setup_script_details")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAppBlock.ScriptDetailsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAppBlock.ScriptDetailsProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags of the app block.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-appblock.html#cfn-appstream-appblock-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1610,6 +1614,7 @@ class CfnApplication(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appstream as appstream
@@ -1640,11 +1645,11 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         app_block_arn: builtins.str,
-        icon_s3_location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+        icon_s3_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         instance_families: typing.Sequence[builtins.str],
         launch_path: builtins.str,
         name: builtins.str,
@@ -1653,7 +1658,7 @@ class CfnApplication(
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
         launch_parameters: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         working_directory: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::AppStream::Application``.
@@ -1696,7 +1701,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_eb705613) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_eb705613") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1718,7 +1723,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1749,9 +1754,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_d6d0d747:
+    def application_ref(self) -> "_ApplicationReference_d6d0d747":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_d6d0d747, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_d6d0d747", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -1778,9 +1783,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="appBlockArn")
@@ -1799,14 +1804,14 @@ class CfnApplication(
     @jsii.member(jsii_name="iconS3Location")
     def icon_s3_location(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnApplication.S3LocationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.S3LocationProperty"]:
         '''The icon S3 location of the application.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplication.S3LocationProperty"], jsii.get(self, "iconS3Location"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.S3LocationProperty"], jsii.get(self, "iconS3Location"))
 
     @icon_s3_location.setter
     def icon_s3_location(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnApplication.S3LocationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnApplication.S3LocationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d27419218adf8ae55a390ca9152b985b34509b75fa155ff05a6a369102ab5a88)
@@ -1922,12 +1927,12 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags of the application.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ef307b076d145751ab1f61dcfc9204a3570e7d2c27321158a89b936291a3acdd)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2040,7 +2045,7 @@ class CfnApplicationEntitlementAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_identifier: builtins.str,
@@ -2080,7 +2085,7 @@ class CfnApplicationEntitlementAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationEntitlementAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2113,9 +2118,9 @@ class CfnApplicationEntitlementAssociation(
     @jsii.member(jsii_name="applicationEntitlementAssociationRef")
     def application_entitlement_association_ref(
         self,
-    ) -> _ApplicationEntitlementAssociationReference_5595d2d7:
+    ) -> "_ApplicationEntitlementAssociationReference_5595d2d7":
         '''A reference to a ApplicationEntitlementAssociation resource.'''
-        return typing.cast(_ApplicationEntitlementAssociationReference_5595d2d7, jsii.get(self, "applicationEntitlementAssociationRef"))
+        return typing.cast("_ApplicationEntitlementAssociationReference_5595d2d7", jsii.get(self, "applicationEntitlementAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2281,7 +2286,7 @@ class CfnApplicationFleetAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_arn: builtins.str,
@@ -2317,7 +2322,7 @@ class CfnApplicationFleetAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationFleetAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2350,9 +2355,9 @@ class CfnApplicationFleetAssociation(
     @jsii.member(jsii_name="applicationFleetAssociationRef")
     def application_fleet_association_ref(
         self,
-    ) -> _ApplicationFleetAssociationReference_4d05f789:
+    ) -> "_ApplicationFleetAssociationReference_4d05f789":
         '''A reference to a ApplicationFleetAssociation resource.'''
-        return typing.cast(_ApplicationFleetAssociationReference_4d05f789, jsii.get(self, "applicationFleetAssociationRef"))
+        return typing.cast("_ApplicationFleetAssociationReference_4d05f789", jsii.get(self, "applicationFleetAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2481,7 +2486,7 @@ class CfnApplicationProps:
         self,
         *,
         app_block_arn: builtins.str,
-        icon_s3_location: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]],
+        icon_s3_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         instance_families: typing.Sequence[builtins.str],
         launch_path: builtins.str,
         name: builtins.str,
@@ -2490,7 +2495,7 @@ class CfnApplicationProps:
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
         launch_parameters: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         working_directory: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplication``.
@@ -2513,6 +2518,7 @@ class CfnApplicationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appstream as appstream
@@ -2588,14 +2594,14 @@ class CfnApplicationProps:
     @builtins.property
     def icon_s3_location(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnApplication.S3LocationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.S3LocationProperty"]:
         '''The icon S3 location of the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-application.html#cfn-appstream-application-icons3location
         '''
         result = self._values.get("icon_s3_location")
         assert result is not None, "Required property 'icon_s3_location' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnApplication.S3LocationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.S3LocationProperty"], result)
 
     @builtins.property
     def instance_families(self) -> typing.List[builtins.str]:
@@ -2684,13 +2690,13 @@ class CfnApplicationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags of the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-application.html#cfn-appstream-application-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def working_directory(self) -> typing.Optional[builtins.str]:
@@ -2749,13 +2755,13 @@ class CfnDirectoryConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         directory_name: builtins.str,
         organizational_unit_distinguished_names: typing.Sequence[builtins.str],
-        service_account_credentials: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDirectoryConfig.ServiceAccountCredentialsProperty", typing.Dict[builtins.str, typing.Any]]],
-        certificate_based_auth_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        service_account_credentials: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDirectoryConfig.ServiceAccountCredentialsProperty", typing.Dict[builtins.str, typing.Any]]],
+        certificate_based_auth_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppStream::DirectoryConfig``.
 
@@ -2792,7 +2798,7 @@ class CfnDirectoryConfig(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDirectoryConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2828,9 +2834,9 @@ class CfnDirectoryConfig(
 
     @builtins.property
     @jsii.member(jsii_name="directoryConfigRef")
-    def directory_config_ref(self) -> _DirectoryConfigReference_228c09c6:
+    def directory_config_ref(self) -> "_DirectoryConfigReference_228c09c6":
         '''A reference to a DirectoryConfig resource.'''
-        return typing.cast(_DirectoryConfigReference_228c09c6, jsii.get(self, "directoryConfigRef"))
+        return typing.cast("_DirectoryConfigReference_228c09c6", jsii.get(self, "directoryConfigRef"))
 
     @builtins.property
     @jsii.member(jsii_name="directoryName")
@@ -2865,14 +2871,14 @@ class CfnDirectoryConfig(
     @jsii.member(jsii_name="serviceAccountCredentials")
     def service_account_credentials(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnDirectoryConfig.ServiceAccountCredentialsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDirectoryConfig.ServiceAccountCredentialsProperty"]:
         '''The credentials for the service account used by the streaming instance to connect to the directory.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDirectoryConfig.ServiceAccountCredentialsProperty"], jsii.get(self, "serviceAccountCredentials"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDirectoryConfig.ServiceAccountCredentialsProperty"], jsii.get(self, "serviceAccountCredentials"))
 
     @service_account_credentials.setter
     def service_account_credentials(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnDirectoryConfig.ServiceAccountCredentialsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnDirectoryConfig.ServiceAccountCredentialsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c3f17c467f37ff964c4e56ff7a5b6800877e168375f3aa44347e71dee2de5ef8)
@@ -2883,14 +2889,14 @@ class CfnDirectoryConfig(
     @jsii.member(jsii_name="certificateBasedAuthProperties")
     def certificate_based_auth_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty"]]:
         '''The certificate-based authentication properties used to authenticate SAML 2.0 Identity Provider (IdP) user identities to Active Directory domain-joined streaming instances.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty"]], jsii.get(self, "certificateBasedAuthProperties"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty"]], jsii.get(self, "certificateBasedAuthProperties"))
 
     @certificate_based_auth_properties.setter
     def certificate_based_auth_properties(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c89617ee3f9d3ab9cc3d861814bdbc0f0dcde8b3fb5da771e78c8feccf0a3e19)
@@ -3065,8 +3071,8 @@ class CfnDirectoryConfigProps:
         *,
         directory_name: builtins.str,
         organizational_unit_distinguished_names: typing.Sequence[builtins.str],
-        service_account_credentials: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDirectoryConfig.ServiceAccountCredentialsProperty, typing.Dict[builtins.str, typing.Any]]],
-        certificate_based_auth_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        service_account_credentials: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDirectoryConfig.ServiceAccountCredentialsProperty", typing.Dict[builtins.str, typing.Any]]],
+        certificate_based_auth_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDirectoryConfig``.
 
@@ -3136,7 +3142,7 @@ class CfnDirectoryConfigProps:
     @builtins.property
     def service_account_credentials(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnDirectoryConfig.ServiceAccountCredentialsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDirectoryConfig.ServiceAccountCredentialsProperty"]:
         '''The credentials for the service account used by the streaming instance to connect to the directory.
 
         Do not use this parameter directly. Use ``ServiceAccountCredentials`` as an input parameter with ``noEcho`` as shown in the `Parameters <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html>`_ . For best practices information, see `Do Not Embed Credentials in Your Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html#creds>`_ .
@@ -3145,18 +3151,18 @@ class CfnDirectoryConfigProps:
         '''
         result = self._values.get("service_account_credentials")
         assert result is not None, "Required property 'service_account_credentials' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnDirectoryConfig.ServiceAccountCredentialsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDirectoryConfig.ServiceAccountCredentialsProperty"], result)
 
     @builtins.property
     def certificate_based_auth_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty"]]:
         '''The certificate-based authentication properties used to authenticate SAML 2.0 Identity Provider (IdP) user identities to Active Directory domain-joined streaming instances.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-directoryconfig.html#cfn-appstream-directoryconfig-certificatebasedauthproperties
         '''
         result = self._values.get("certificate_based_auth_properties")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryConfig.CertificateBasedAuthPropertiesProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3206,11 +3212,11 @@ class CfnEntitlement(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         app_visibility: builtins.str,
-        attributes: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEntitlement.AttributeProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        attributes: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntitlement.AttributeProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
         stack_name: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -3252,7 +3258,7 @@ class CfnEntitlement(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEntitlement", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3306,9 +3312,9 @@ class CfnEntitlement(
 
     @builtins.property
     @jsii.member(jsii_name="entitlementRef")
-    def entitlement_ref(self) -> _EntitlementReference_d31b16d8:
+    def entitlement_ref(self) -> "_EntitlementReference_d31b16d8":
         '''A reference to a Entitlement resource.'''
-        return typing.cast(_EntitlementReference_d31b16d8, jsii.get(self, "entitlementRef"))
+        return typing.cast("_EntitlementReference_d31b16d8", jsii.get(self, "entitlementRef"))
 
     @builtins.property
     @jsii.member(jsii_name="appVisibility")
@@ -3327,14 +3333,14 @@ class CfnEntitlement(
     @jsii.member(jsii_name="attributes")
     def attributes(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEntitlement.AttributeProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEntitlement.AttributeProperty"]]]:
         '''The attributes of the entitlement.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEntitlement.AttributeProperty"]]], jsii.get(self, "attributes"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEntitlement.AttributeProperty"]]], jsii.get(self, "attributes"))
 
     @attributes.setter
     def attributes(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEntitlement.AttributeProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEntitlement.AttributeProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__baa3674f46bbe39146e43d1c3c58c9be8a7fa2b7972b4709b3fa29dcf86420d4)
@@ -3475,7 +3481,7 @@ class CfnEntitlementProps:
         self,
         *,
         app_visibility: builtins.str,
-        attributes: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEntitlement.AttributeProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        attributes: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEntitlement.AttributeProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
         stack_name: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -3539,14 +3545,14 @@ class CfnEntitlementProps:
     @builtins.property
     def attributes(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEntitlement.AttributeProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEntitlement.AttributeProperty"]]]:
         '''The attributes of the entitlement.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-entitlement.html#cfn-appstream-entitlement-attributes
         '''
         result = self._values.get("attributes")
         assert result is not None, "Required property 'attributes' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEntitlement.AttributeProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEntitlement.AttributeProperty"]]], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -3603,6 +3609,7 @@ class CfnFleet(
 
     Example::
 
+        from aws_cdk import CfnCreationPolicy
         fleet = appstream.CfnFleet(self, "Fleet",
             instance_type="stream.standard.small",
             name="Fleet",
@@ -3618,17 +3625,17 @@ class CfnFleet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         instance_type: builtins.str,
         name: builtins.str,
-        compute_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.ComputeCapacityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        compute_capacity: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ComputeCapacityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         disconnect_timeout_in_seconds: typing.Optional[jsii.Number] = None,
         display_name: typing.Optional[builtins.str] = None,
-        domain_join_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.DomainJoinInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        domain_join_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.DomainJoinInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         fleet_type: typing.Optional[builtins.str] = None,
         iam_role_arn: typing.Optional[builtins.str] = None,
         idle_disconnect_timeout_in_seconds: typing.Optional[jsii.Number] = None,
@@ -3638,12 +3645,12 @@ class CfnFleet(
         max_sessions_per_instance: typing.Optional[jsii.Number] = None,
         max_user_duration_in_seconds: typing.Optional[jsii.Number] = None,
         platform: typing.Optional[builtins.str] = None,
-        root_volume_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.VolumeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        session_script_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        root_volume_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.VolumeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        session_script_s3_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         stream_view: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         usb_device_filter_strings: typing.Optional[typing.Sequence[builtins.str]] = None,
-        vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppStream::Fleet``.
 
@@ -3718,7 +3725,7 @@ class CfnFleet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFleet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3762,15 +3769,15 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> _FleetReference_282934ad:
+    def fleet_ref(self) -> "_FleetReference_282934ad":
         '''A reference to a Fleet resource.'''
-        return typing.cast(_FleetReference_282934ad, jsii.get(self, "fleetRef"))
+        return typing.cast("_FleetReference_282934ad", jsii.get(self, "fleetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="instanceType")
@@ -3805,14 +3812,14 @@ class CfnFleet(
     @jsii.member(jsii_name="computeCapacity")
     def compute_capacity(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ComputeCapacityProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ComputeCapacityProperty"]]:
         '''The desired capacity for the fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ComputeCapacityProperty"]], jsii.get(self, "computeCapacity"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ComputeCapacityProperty"]], jsii.get(self, "computeCapacity"))
 
     @compute_capacity.setter
     def compute_capacity(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ComputeCapacityProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ComputeCapacityProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__50699376ca4215fbf67913c64e0ae0edb7e243785d08cef6bc529f44ca0f141a)
@@ -3865,14 +3872,14 @@ class CfnFleet(
     @jsii.member(jsii_name="domainJoinInfo")
     def domain_join_info(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.DomainJoinInfoProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.DomainJoinInfoProperty"]]:
         '''The name of the directory and organizational unit (OU) to use to join the fleet to a Microsoft Active Directory domain.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.DomainJoinInfoProperty"]], jsii.get(self, "domainJoinInfo"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.DomainJoinInfoProperty"]], jsii.get(self, "domainJoinInfo"))
 
     @domain_join_info.setter
     def domain_join_info(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.DomainJoinInfoProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.DomainJoinInfoProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fd86f9dbfba3a27b2385e8b9586bb3aa31b4e2aa0a3e91794b42a6881add1126)
@@ -3883,14 +3890,14 @@ class CfnFleet(
     @jsii.member(jsii_name="enableDefaultInternetAccess")
     def enable_default_internet_access(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables or disables default internet access for the fleet.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableDefaultInternetAccess"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enableDefaultInternetAccess"))
 
     @enable_default_internet_access.setter
     def enable_default_internet_access(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f219b4aa3da3a06d8016cbf3252298a91c9c2811252b39c6ac9adb9b2e3ee798)
@@ -4021,13 +4028,13 @@ class CfnFleet(
     @jsii.member(jsii_name="rootVolumeConfig")
     def root_volume_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VolumeConfigProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VolumeConfigProperty"]], jsii.get(self, "rootVolumeConfig"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VolumeConfigProperty"]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VolumeConfigProperty"]], jsii.get(self, "rootVolumeConfig"))
 
     @root_volume_config.setter
     def root_volume_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VolumeConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VolumeConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0e41397488d10b80b4c28cd6fa62ad914bacfa0a84df2e76b525606e175363f1)
@@ -4038,14 +4045,14 @@ class CfnFleet(
     @jsii.member(jsii_name="sessionScriptS3Location")
     def session_script_s3_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.S3LocationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.S3LocationProperty"]]:
         '''The S3 location of the session scripts configuration zip file.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.S3LocationProperty"]], jsii.get(self, "sessionScriptS3Location"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.S3LocationProperty"]], jsii.get(self, "sessionScriptS3Location"))
 
     @session_script_s3_location.setter
     def session_script_s3_location(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.S3LocationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.S3LocationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__79935e15ee3dfe1dba785d906ccdd9a4e5895f1d61d25026dbdddf01558f5be8)
@@ -4067,12 +4074,12 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__839d0da01c455496fc067fbca5ed5c23c8fb170e5989a05bf711b7b574b7d416)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4098,14 +4105,14 @@ class CfnFleet(
     @jsii.member(jsii_name="vpcConfig")
     def vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VpcConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VpcConfigProperty"]]:
         '''The VPC configuration for the fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VpcConfigProperty"]], jsii.get(self, "vpcConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VpcConfigProperty"]], jsii.get(self, "vpcConfig"))
 
     @vpc_config.setter
     def vpc_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VpcConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VpcConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d8452c6c1c918a8718280c5b321c677cd442bc97d2e69bc3f9aaa1690c901ffc)
@@ -4494,12 +4501,12 @@ class CfnFleetProps:
         *,
         instance_type: builtins.str,
         name: builtins.str,
-        compute_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.ComputeCapacityProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        compute_capacity: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ComputeCapacityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         disconnect_timeout_in_seconds: typing.Optional[jsii.Number] = None,
         display_name: typing.Optional[builtins.str] = None,
-        domain_join_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.DomainJoinInfoProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        domain_join_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.DomainJoinInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         fleet_type: typing.Optional[builtins.str] = None,
         iam_role_arn: typing.Optional[builtins.str] = None,
         idle_disconnect_timeout_in_seconds: typing.Optional[jsii.Number] = None,
@@ -4509,12 +4516,12 @@ class CfnFleetProps:
         max_sessions_per_instance: typing.Optional[jsii.Number] = None,
         max_user_duration_in_seconds: typing.Optional[jsii.Number] = None,
         platform: typing.Optional[builtins.str] = None,
-        root_volume_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.VolumeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        session_script_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        root_volume_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.VolumeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        session_script_s3_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         stream_view: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         usb_device_filter_strings: typing.Optional[typing.Sequence[builtins.str]] = None,
-        vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFleet``.
 
@@ -4547,6 +4554,7 @@ class CfnFleetProps:
 
         Example::
 
+            from aws_cdk import CfnCreationPolicy
             fleet = appstream.CfnFleet(self, "Fleet",
                 instance_type="stream.standard.small",
                 name="Fleet",
@@ -4710,7 +4718,7 @@ class CfnFleetProps:
     @builtins.property
     def compute_capacity(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.ComputeCapacityProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ComputeCapacityProperty"]]:
         '''The desired capacity for the fleet.
 
         This is not allowed for Elastic fleets.
@@ -4718,7 +4726,7 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-fleet.html#cfn-appstream-fleet-computecapacity
         '''
         result = self._values.get("compute_capacity")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.ComputeCapacityProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ComputeCapacityProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -4754,7 +4762,7 @@ class CfnFleetProps:
     @builtins.property
     def domain_join_info(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.DomainJoinInfoProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.DomainJoinInfoProperty"]]:
         '''The name of the directory and organizational unit (OU) to use to join the fleet to a Microsoft Active Directory domain.
 
         This is not allowed for Elastic fleets.
@@ -4762,18 +4770,18 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-fleet.html#cfn-appstream-fleet-domainjoininfo
         '''
         result = self._values.get("domain_join_info")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.DomainJoinInfoProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.DomainJoinInfoProperty"]], result)
 
     @builtins.property
     def enable_default_internet_access(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables or disables default internet access for the fleet.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-fleet.html#cfn-appstream-fleet-enabledefaultinternetaccess
         '''
         result = self._values.get("enable_default_internet_access")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def fleet_type(self) -> typing.Optional[builtins.str]:
@@ -4885,17 +4893,17 @@ class CfnFleetProps:
     @builtins.property
     def root_volume_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.VolumeConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VolumeConfigProperty"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-fleet.html#cfn-appstream-fleet-rootvolumeconfig
         '''
         result = self._values.get("root_volume_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.VolumeConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VolumeConfigProperty"]], result)
 
     @builtins.property
     def session_script_s3_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.S3LocationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.S3LocationProperty"]]:
         '''The S3 location of the session scripts configuration zip file.
 
         This only applies to Elastic fleets.
@@ -4903,7 +4911,7 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-fleet.html#cfn-appstream-fleet-sessionscripts3location
         '''
         result = self._values.get("session_script_s3_location")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.S3LocationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.S3LocationProperty"]], result)
 
     @builtins.property
     def stream_view(self) -> typing.Optional[builtins.str]:
@@ -4919,13 +4927,13 @@ class CfnFleetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-fleet.html#cfn-appstream-fleet-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def usb_device_filter_strings(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -4941,7 +4949,7 @@ class CfnFleetProps:
     @builtins.property
     def vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.VpcConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VpcConfigProperty"]]:
         '''The VPC configuration for the fleet.
 
         This is required for Elastic fleets, but not required for other fleet types.
@@ -4949,7 +4957,7 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-fleet.html#cfn-appstream-fleet-vpcconfig
         '''
         result = self._values.get("vpc_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.VpcConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VpcConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4979,6 +4987,7 @@ class CfnImageBuilder(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appstream as appstream
@@ -5016,22 +5025,22 @@ class CfnImageBuilder(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         instance_type: builtins.str,
         name: builtins.str,
-        access_endpoints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImageBuilder.AccessEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        access_endpoints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnImageBuilder.AccessEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         appstream_agent_version: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
-        domain_join_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImageBuilder.DomainJoinInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        domain_join_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnImageBuilder.DomainJoinInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         iam_role_arn: typing.Optional[builtins.str] = None,
         image_arn: typing.Optional[builtins.str] = None,
         image_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImageBuilder.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnImageBuilder.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppStream::ImageBuilder``.
 
@@ -5077,7 +5086,7 @@ class CfnImageBuilder(
     @builtins.classmethod
     def arn_for_image_builder(
         cls,
-        resource: _IImageBuilderRef_0aae8b7e,
+        resource: "_IImageBuilderRef_0aae8b7e",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -5091,10 +5100,10 @@ class CfnImageBuilder(
     @builtins.classmethod
     def from_image_builder_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         image_builder_name: builtins.str,
-    ) -> _IImageBuilderRef_0aae8b7e:
+    ) -> "_IImageBuilderRef_0aae8b7e":
         '''Creates a new IImageBuilderRef from a imageBuilderName.
 
         :param scope: -
@@ -5106,7 +5115,7 @@ class CfnImageBuilder(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument image_builder_name", value=image_builder_name, expected_type=type_hints["image_builder_name"])
-        return typing.cast(_IImageBuilderRef_0aae8b7e, jsii.sinvoke(cls, "fromImageBuilderName", [scope, id, image_builder_name]))
+        return typing.cast("_IImageBuilderRef_0aae8b7e", jsii.sinvoke(cls, "fromImageBuilderName", [scope, id, image_builder_name]))
 
     @jsii.member(jsii_name="isCfnImageBuilder")
     @builtins.classmethod
@@ -5121,7 +5130,7 @@ class CfnImageBuilder(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnImageBuilder", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5166,15 +5175,15 @@ class CfnImageBuilder(
 
     @builtins.property
     @jsii.member(jsii_name="imageBuilderRef")
-    def image_builder_ref(self) -> _ImageBuilderReference_e9c7a3cf:
+    def image_builder_ref(self) -> "_ImageBuilderReference_e9c7a3cf":
         '''A reference to a ImageBuilder resource.'''
-        return typing.cast(_ImageBuilderReference_e9c7a3cf, jsii.get(self, "imageBuilderRef"))
+        return typing.cast("_ImageBuilderReference_e9c7a3cf", jsii.get(self, "imageBuilderRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="instanceType")
@@ -5209,14 +5218,14 @@ class CfnImageBuilder(
     @jsii.member(jsii_name="accessEndpoints")
     def access_endpoints(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnImageBuilder.AccessEndpointProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.AccessEndpointProperty"]]]]:
         '''The list of virtual private cloud (VPC) interface endpoint objects.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnImageBuilder.AccessEndpointProperty"]]]], jsii.get(self, "accessEndpoints"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.AccessEndpointProperty"]]]], jsii.get(self, "accessEndpoints"))
 
     @access_endpoints.setter
     def access_endpoints(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnImageBuilder.AccessEndpointProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.AccessEndpointProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__746e4a9e3f48985b9bf8079b3d895e3a8b0a7748caeb868365ff2a47e2ed9d36)
@@ -5266,14 +5275,14 @@ class CfnImageBuilder(
     @jsii.member(jsii_name="domainJoinInfo")
     def domain_join_info(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImageBuilder.DomainJoinInfoProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.DomainJoinInfoProperty"]]:
         '''The name of the directory and organizational unit (OU) to use to join the image builder to a Microsoft Active Directory domain.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImageBuilder.DomainJoinInfoProperty"]], jsii.get(self, "domainJoinInfo"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.DomainJoinInfoProperty"]], jsii.get(self, "domainJoinInfo"))
 
     @domain_join_info.setter
     def domain_join_info(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImageBuilder.DomainJoinInfoProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.DomainJoinInfoProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bee5fc96661993bc890e05b1f0ae7eaf9202f05399a6fda1444d3b6323d544d2)
@@ -5284,14 +5293,14 @@ class CfnImageBuilder(
     @jsii.member(jsii_name="enableDefaultInternetAccess")
     def enable_default_internet_access(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables or disables default internet access for the image builder.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableDefaultInternetAccess"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enableDefaultInternetAccess"))
 
     @enable_default_internet_access.setter
     def enable_default_internet_access(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__234082991507fccd1b51ac27db4c813ef4030635f0b32ddf3ab652b7f320fa6f)
@@ -5339,12 +5348,12 @@ class CfnImageBuilder(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__32bb0a47350b5b67e1529a3d54fee7241fa2dab126f8e11eba610f03592bc255)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5354,14 +5363,14 @@ class CfnImageBuilder(
     @jsii.member(jsii_name="vpcConfig")
     def vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImageBuilder.VpcConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.VpcConfigProperty"]]:
         '''The VPC configuration for the image builder.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImageBuilder.VpcConfigProperty"]], jsii.get(self, "vpcConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.VpcConfigProperty"]], jsii.get(self, "vpcConfig"))
 
     @vpc_config.setter
     def vpc_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnImageBuilder.VpcConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.VpcConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0e1029afa7ae41d9f4b692bbfd0623efa3755c15eb5a169b6191a4657ce20885)
@@ -5617,17 +5626,17 @@ class CfnImageBuilderProps:
         *,
         instance_type: builtins.str,
         name: builtins.str,
-        access_endpoints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImageBuilder.AccessEndpointProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        access_endpoints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnImageBuilder.AccessEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         appstream_agent_version: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
-        domain_join_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImageBuilder.DomainJoinInfoProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        domain_join_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnImageBuilder.DomainJoinInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         iam_role_arn: typing.Optional[builtins.str] = None,
         image_arn: typing.Optional[builtins.str] = None,
         image_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImageBuilder.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnImageBuilder.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnImageBuilder``.
 
@@ -5650,6 +5659,7 @@ class CfnImageBuilderProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appstream as appstream
@@ -5800,7 +5810,7 @@ class CfnImageBuilderProps:
     @builtins.property
     def access_endpoints(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnImageBuilder.AccessEndpointProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.AccessEndpointProperty"]]]]:
         '''The list of virtual private cloud (VPC) interface endpoint objects.
 
         Administrators can connect to the image builder only through the specified endpoints.
@@ -5808,7 +5818,7 @@ class CfnImageBuilderProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-imagebuilder.html#cfn-appstream-imagebuilder-accessendpoints
         '''
         result = self._values.get("access_endpoints")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnImageBuilder.AccessEndpointProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.AccessEndpointProperty"]]]], result)
 
     @builtins.property
     def appstream_agent_version(self) -> typing.Optional[builtins.str]:
@@ -5842,24 +5852,24 @@ class CfnImageBuilderProps:
     @builtins.property
     def domain_join_info(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImageBuilder.DomainJoinInfoProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.DomainJoinInfoProperty"]]:
         '''The name of the directory and organizational unit (OU) to use to join the image builder to a Microsoft Active Directory domain.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-imagebuilder.html#cfn-appstream-imagebuilder-domainjoininfo
         '''
         result = self._values.get("domain_join_info")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImageBuilder.DomainJoinInfoProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.DomainJoinInfoProperty"]], result)
 
     @builtins.property
     def enable_default_internet_access(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables or disables default internet access for the image builder.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-imagebuilder.html#cfn-appstream-imagebuilder-enabledefaultinternetaccess
         '''
         result = self._values.get("enable_default_internet_access")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def iam_role_arn(self) -> typing.Optional[builtins.str]:
@@ -5893,18 +5903,18 @@ class CfnImageBuilderProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-imagebuilder.html#cfn-appstream-imagebuilder-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImageBuilder.VpcConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.VpcConfigProperty"]]:
         '''The VPC configuration for the image builder.
 
         You can specify only one subnet.
@@ -5912,7 +5922,7 @@ class CfnImageBuilderProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-imagebuilder.html#cfn-appstream-imagebuilder-vpcconfig
         '''
         result = self._values.get("vpc_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImageBuilder.VpcConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnImageBuilder.VpcConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5940,6 +5950,7 @@ class CfnStack(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appstream as appstream
@@ -5989,23 +6000,23 @@ class CfnStack(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        access_endpoints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStack.AccessEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        application_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStack.ApplicationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        access_endpoints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.AccessEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        application_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.ApplicationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         attributes_to_delete: typing.Optional[typing.Sequence[builtins.str]] = None,
-        delete_storage_connectors: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        delete_storage_connectors: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
         embed_host_domains: typing.Optional[typing.Sequence[builtins.str]] = None,
         feedback_url: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         redirect_url: typing.Optional[builtins.str] = None,
-        storage_connectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStack.StorageConnectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        streaming_experience_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStack.StreamingExperienceSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        user_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStack.UserSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        storage_connectors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.StorageConnectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        streaming_experience_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.StreamingExperienceSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        user_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.UserSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppStream::Stack``.
 
@@ -6062,7 +6073,7 @@ class CfnStack(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStack", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6106,28 +6117,28 @@ class CfnStack(
 
     @builtins.property
     @jsii.member(jsii_name="stackRef")
-    def stack_ref(self) -> _StackReference_4ab8d5cc:
+    def stack_ref(self) -> "_StackReference_4ab8d5cc":
         '''A reference to a Stack resource.'''
-        return typing.cast(_StackReference_4ab8d5cc, jsii.get(self, "stackRef"))
+        return typing.cast("_StackReference_4ab8d5cc", jsii.get(self, "stackRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="accessEndpoints")
     def access_endpoints(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.AccessEndpointProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.AccessEndpointProperty"]]]]:
         '''The list of virtual private cloud (VPC) interface endpoint objects.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.AccessEndpointProperty"]]]], jsii.get(self, "accessEndpoints"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.AccessEndpointProperty"]]]], jsii.get(self, "accessEndpoints"))
 
     @access_endpoints.setter
     def access_endpoints(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.AccessEndpointProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.AccessEndpointProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ad9a87386d835ff4af56b6ca6b53baa12cd008bd109294050154f77511bc98cd)
@@ -6138,14 +6149,14 @@ class CfnStack(
     @jsii.member(jsii_name="applicationSettings")
     def application_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.ApplicationSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.ApplicationSettingsProperty"]]:
         '''The persistent application settings for users of the stack.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.ApplicationSettingsProperty"]], jsii.get(self, "applicationSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.ApplicationSettingsProperty"]], jsii.get(self, "applicationSettings"))
 
     @application_settings.setter
     def application_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.ApplicationSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.ApplicationSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__318b1e9f0d5854a3c702b5b51837caed9c2f8ef41e3bc15d8e0cdac003bf38b5)
@@ -6172,14 +6183,14 @@ class CfnStack(
     @jsii.member(jsii_name="deleteStorageConnectors")
     def delete_storage_connectors(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*This parameter has been deprecated.*.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deleteStorageConnectors"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deleteStorageConnectors"))
 
     @delete_storage_connectors.setter
     def delete_storage_connectors(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fd3eed1a7554981a61b92b8848f5b531271aad947e65c20f9604a014bca0a673)
@@ -6271,14 +6282,14 @@ class CfnStack(
     @jsii.member(jsii_name="storageConnectors")
     def storage_connectors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.StorageConnectorProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.StorageConnectorProperty"]]]]:
         '''The storage connectors to enable.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.StorageConnectorProperty"]]]], jsii.get(self, "storageConnectors"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.StorageConnectorProperty"]]]], jsii.get(self, "storageConnectors"))
 
     @storage_connectors.setter
     def storage_connectors(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.StorageConnectorProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.StorageConnectorProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__275ea87a7dfdce8c58071ca77a17a383b5b77dc023446160cf3c8af4d0ba7238)
@@ -6289,14 +6300,14 @@ class CfnStack(
     @jsii.member(jsii_name="streamingExperienceSettings")
     def streaming_experience_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.StreamingExperienceSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.StreamingExperienceSettingsProperty"]]:
         '''The streaming protocol that you want your stack to prefer.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.StreamingExperienceSettingsProperty"]], jsii.get(self, "streamingExperienceSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.StreamingExperienceSettingsProperty"]], jsii.get(self, "streamingExperienceSettings"))
 
     @streaming_experience_settings.setter
     def streaming_experience_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.StreamingExperienceSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.StreamingExperienceSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ab82aff9577044655905fdadec884f88fa2e07d1163701496f44bb2a9903bda5)
@@ -6305,12 +6316,12 @@ class CfnStack(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1d8194ace5a04925ea85c21feb9edfbcc17535be57ee024386cc650e109718ce)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6320,14 +6331,14 @@ class CfnStack(
     @jsii.member(jsii_name="userSettings")
     def user_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.UserSettingProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.UserSettingProperty"]]]]:
         '''The actions that are enabled or disabled for users during their streaming sessions.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.UserSettingProperty"]]]], jsii.get(self, "userSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.UserSettingProperty"]]]], jsii.get(self, "userSettings"))
 
     @user_settings.setter
     def user_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.UserSettingProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.UserSettingProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5bf30847a0d21a9895ed825ab61f3abb249fb73253d9806ea965739b1698fa46)
@@ -6416,7 +6427,7 @@ class CfnStack(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             settings_group: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The persistent application settings for users of a stack.
@@ -6451,14 +6462,14 @@ class CfnStack(
                 self._values["settings_group"] = settings_group
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Enables or disables persistent application settings for users during their streaming sessions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appstream-stack-applicationsettings.html#cfn-appstream-stack-applicationsettings-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def settings_group(self) -> typing.Optional[builtins.str]:
@@ -6756,7 +6767,7 @@ class CfnStackFleetAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         fleet_name: builtins.str,
@@ -6792,7 +6803,7 @@ class CfnStackFleetAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStackFleetAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6836,9 +6847,9 @@ class CfnStackFleetAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="stackFleetAssociationRef")
-    def stack_fleet_association_ref(self) -> _StackFleetAssociationReference_36085df3:
+    def stack_fleet_association_ref(self) -> "_StackFleetAssociationReference_36085df3":
         '''A reference to a StackFleetAssociation resource.'''
-        return typing.cast(_StackFleetAssociationReference_36085df3, jsii.get(self, "stackFleetAssociationRef"))
+        return typing.cast("_StackFleetAssociationReference_36085df3", jsii.get(self, "stackFleetAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="fleetName")
@@ -6962,20 +6973,20 @@ class CfnStackProps:
     def __init__(
         self,
         *,
-        access_endpoints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStack.AccessEndpointProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        application_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStack.ApplicationSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        access_endpoints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.AccessEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        application_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.ApplicationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         attributes_to_delete: typing.Optional[typing.Sequence[builtins.str]] = None,
-        delete_storage_connectors: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        delete_storage_connectors: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
         embed_host_domains: typing.Optional[typing.Sequence[builtins.str]] = None,
         feedback_url: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         redirect_url: typing.Optional[builtins.str] = None,
-        storage_connectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStack.StorageConnectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        streaming_experience_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStack.StreamingExperienceSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        user_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStack.UserSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        storage_connectors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.StorageConnectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        streaming_experience_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.StreamingExperienceSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        user_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.UserSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStack``.
 
@@ -6999,6 +7010,7 @@ class CfnStackProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appstream as appstream
@@ -7094,7 +7106,7 @@ class CfnStackProps:
     @builtins.property
     def access_endpoints(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStack.AccessEndpointProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.AccessEndpointProperty"]]]]:
         '''The list of virtual private cloud (VPC) interface endpoint objects.
 
         Users of the stack can connect to WorkSpaces Applications only through the specified endpoints.
@@ -7102,12 +7114,12 @@ class CfnStackProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-stack.html#cfn-appstream-stack-accessendpoints
         '''
         result = self._values.get("access_endpoints")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStack.AccessEndpointProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.AccessEndpointProperty"]]]], result)
 
     @builtins.property
     def application_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStack.ApplicationSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.ApplicationSettingsProperty"]]:
         '''The persistent application settings for users of the stack.
 
         When these settings are enabled, changes that users make to applications and Windows settings are automatically saved after each session and applied to the next session.
@@ -7115,7 +7127,7 @@ class CfnStackProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-stack.html#cfn-appstream-stack-applicationsettings
         '''
         result = self._values.get("application_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStack.ApplicationSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.ApplicationSettingsProperty"]], result)
 
     @builtins.property
     def attributes_to_delete(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -7129,7 +7141,7 @@ class CfnStackProps:
     @builtins.property
     def delete_storage_connectors(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''*This parameter has been deprecated.*.
 
         Deletes the storage connectors currently enabled for the stack.
@@ -7137,7 +7149,7 @@ class CfnStackProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-stack.html#cfn-appstream-stack-deletestorageconnectors
         '''
         result = self._values.get("delete_storage_connectors")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -7200,18 +7212,18 @@ class CfnStackProps:
     @builtins.property
     def storage_connectors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStack.StorageConnectorProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.StorageConnectorProperty"]]]]:
         '''The storage connectors to enable.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-stack.html#cfn-appstream-stack-storageconnectors
         '''
         result = self._values.get("storage_connectors")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStack.StorageConnectorProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.StorageConnectorProperty"]]]], result)
 
     @builtins.property
     def streaming_experience_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStack.StreamingExperienceSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.StreamingExperienceSettingsProperty"]]:
         '''The streaming protocol that you want your stack to prefer.
 
         This can be UDP or TCP. Currently, UDP is only supported in the Windows native client.
@@ -7219,21 +7231,21 @@ class CfnStackProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-stack.html#cfn-appstream-stack-streamingexperiencesettings
         '''
         result = self._values.get("streaming_experience_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStack.StreamingExperienceSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.StreamingExperienceSettingsProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-stack.html#cfn-appstream-stack-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def user_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStack.UserSettingProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.UserSettingProperty"]]]]:
         '''The actions that are enabled or disabled for users during their streaming sessions.
 
         By default, these actions are enabled.
@@ -7241,7 +7253,7 @@ class CfnStackProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-stack.html#cfn-appstream-stack-usersettings
         '''
         result = self._values.get("user_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStack.UserSettingProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.UserSettingProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7285,13 +7297,13 @@ class CfnStackUserAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         authentication_type: builtins.str,
         stack_name: builtins.str,
         user_name: builtins.str,
-        send_email_notification: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        send_email_notification: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::AppStream::StackUserAssociation``.
 
@@ -7328,7 +7340,7 @@ class CfnStackUserAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStackUserAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7372,9 +7384,9 @@ class CfnStackUserAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="stackUserAssociationRef")
-    def stack_user_association_ref(self) -> _StackUserAssociationReference_41f4b8fc:
+    def stack_user_association_ref(self) -> "_StackUserAssociationReference_41f4b8fc":
         '''A reference to a StackUserAssociation resource.'''
-        return typing.cast(_StackUserAssociationReference_41f4b8fc, jsii.get(self, "stackUserAssociationRef"))
+        return typing.cast("_StackUserAssociationReference_41f4b8fc", jsii.get(self, "stackUserAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="authenticationType")
@@ -7419,14 +7431,14 @@ class CfnStackUserAssociation(
     @jsii.member(jsii_name="sendEmailNotification")
     def send_email_notification(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether a welcome email is sent to a user after the user is created in the user pool.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "sendEmailNotification"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "sendEmailNotification"))
 
     @send_email_notification.setter
     def send_email_notification(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f3463450ee71bea209f38a68febac5e6a88747dcc544b3bea07a8a94198c6b54)
@@ -7451,7 +7463,7 @@ class CfnStackUserAssociationProps:
         authentication_type: builtins.str,
         stack_name: builtins.str,
         user_name: builtins.str,
-        send_email_notification: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        send_email_notification: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStackUserAssociation``.
 
@@ -7531,13 +7543,13 @@ class CfnStackUserAssociationProps:
     @builtins.property
     def send_email_notification(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether a welcome email is sent to a user after the user is created in the user pool.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-stackuserassociation.html#cfn-appstream-stackuserassociation-sendemailnotification
         '''
         result = self._values.get("send_email_notification")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7582,7 +7594,7 @@ class CfnUser(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         authentication_type: builtins.str,
@@ -7628,7 +7640,7 @@ class CfnUser(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUser", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7672,9 +7684,9 @@ class CfnUser(
 
     @builtins.property
     @jsii.member(jsii_name="userRef")
-    def user_ref(self) -> _UserReference_5b323d0c:
+    def user_ref(self) -> "_UserReference_5b323d0c":
         '''A reference to a User resource.'''
-        return typing.cast(_UserReference_5b323d0c, jsii.get(self, "userRef"))
+        return typing.cast("_UserReference_5b323d0c", jsii.get(self, "userRef"))
 
     @builtins.property
     @jsii.member(jsii_name="authenticationType")

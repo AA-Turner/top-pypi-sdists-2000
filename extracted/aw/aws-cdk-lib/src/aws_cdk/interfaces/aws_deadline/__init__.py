@@ -145,7 +145,7 @@ class IFarmRef(
 
     @builtins.property
     @jsii.member(jsii_name="farmRef")
-    def farm_ref(self) -> FarmReference:
+    def farm_ref(self) -> "FarmReference":
         '''(experimental) A reference to a Farm resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IFarmRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="farmRef")
-    def farm_ref(self) -> FarmReference:
+    def farm_ref(self) -> "FarmReference":
         '''(experimental) A reference to a Farm resource.
 
         :stability: experimental
         '''
-        return typing.cast(FarmReference, jsii.get(self, "farmRef"))
+        return typing.cast("FarmReference", jsii.get(self, "farmRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFarmRef).__jsii_proxy_class__ = lambda : _IFarmRefProxy
@@ -190,7 +190,7 @@ class IFleetRef(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> FleetReference:
+    def fleet_ref(self) -> "FleetReference":
         '''(experimental) A reference to a Fleet resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IFleetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> FleetReference:
+    def fleet_ref(self) -> "FleetReference":
         '''(experimental) A reference to a Fleet resource.
 
         :stability: experimental
         '''
-        return typing.cast(FleetReference, jsii.get(self, "fleetRef"))
+        return typing.cast("FleetReference", jsii.get(self, "fleetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFleetRef).__jsii_proxy_class__ = lambda : _IFleetRefProxy

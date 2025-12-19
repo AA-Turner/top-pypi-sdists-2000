@@ -118,7 +118,7 @@ class CfnAccessPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -158,7 +158,7 @@ class CfnAccessPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -189,9 +189,9 @@ class CfnAccessPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="accessPolicyRef")
-    def access_policy_ref(self) -> _AccessPolicyReference_645132eb:
+    def access_policy_ref(self) -> "_AccessPolicyReference_645132eb":
         '''A reference to a AccessPolicy resource.'''
-        return typing.cast(_AccessPolicyReference_645132eb, jsii.get(self, "accessPolicyRef"))
+        return typing.cast("_AccessPolicyReference_645132eb", jsii.get(self, "accessPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -381,6 +381,7 @@ class CfnCollection(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_opensearchserverless as opensearchserverless
@@ -401,13 +402,13 @@ class CfnCollection(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         standby_replicas: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::OpenSearchServerless::Collection``.
@@ -436,7 +437,7 @@ class CfnCollection(
 
     @jsii.member(jsii_name="arnForCollection")
     @builtins.classmethod
-    def arn_for_collection(cls, resource: _ICollectionRef_3c562476) -> builtins.str:
+    def arn_for_collection(cls, resource: "_ICollectionRef_3c562476") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -449,10 +450,10 @@ class CfnCollection(
     @builtins.classmethod
     def from_collection_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ICollectionRef_3c562476:
+    ) -> "_ICollectionRef_3c562476":
         '''Creates a new ICollectionRef from an ARN.
 
         :param scope: -
@@ -464,16 +465,16 @@ class CfnCollection(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ICollectionRef_3c562476, jsii.sinvoke(cls, "fromCollectionArn", [scope, id, arn]))
+        return typing.cast("_ICollectionRef_3c562476", jsii.sinvoke(cls, "fromCollectionArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromCollectionId")
     @builtins.classmethod
     def from_collection_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         collection_id: builtins.str,
-    ) -> _ICollectionRef_3c562476:
+    ) -> "_ICollectionRef_3c562476":
         '''Creates a new ICollectionRef from a collectionId.
 
         :param scope: -
@@ -485,7 +486,7 @@ class CfnCollection(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument collection_id", value=collection_id, expected_type=type_hints["collection_id"])
-        return typing.cast(_ICollectionRef_3c562476, jsii.sinvoke(cls, "fromCollectionId", [scope, id, collection_id]))
+        return typing.cast("_ICollectionRef_3c562476", jsii.sinvoke(cls, "fromCollectionId", [scope, id, collection_id]))
 
     @jsii.member(jsii_name="isCfnCollection")
     @builtins.classmethod
@@ -500,7 +501,7 @@ class CfnCollection(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCollection", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -589,15 +590,15 @@ class CfnCollection(
 
     @builtins.property
     @jsii.member(jsii_name="collectionRef")
-    def collection_ref(self) -> _CollectionReference_355c1500:
+    def collection_ref(self) -> "_CollectionReference_355c1500":
         '''A reference to a Collection resource.'''
-        return typing.cast(_CollectionReference_355c1500, jsii.get(self, "collectionRef"))
+        return typing.cast("_CollectionReference_355c1500", jsii.get(self, "collectionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -640,12 +641,12 @@ class CfnCollection(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An arbitrary set of tags (key–value pairs) to associate with the collection.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7cfcacecc11d4e30df3a59ae6680ab93be461bc979a2e413a2a77eab2575087a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -683,7 +684,7 @@ class CfnCollectionProps:
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         standby_replicas: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnCollection``.
@@ -699,6 +700,7 @@ class CfnCollectionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_opensearchserverless as opensearchserverless
@@ -773,7 +775,7 @@ class CfnCollectionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An arbitrary set of tags (key–value pairs) to associate with the collection.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -781,7 +783,7 @@ class CfnCollectionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collection.html#cfn-opensearchserverless-collection-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def type(self) -> typing.Optional[builtins.str]:
@@ -869,13 +871,13 @@ class CfnIndex(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         collection_endpoint: builtins.str,
         index_name: builtins.str,
-        mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.MappingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.IndexSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.MappingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.IndexSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::OpenSearchServerless::Index``.
 
@@ -912,7 +914,7 @@ class CfnIndex(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIndex", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -957,9 +959,9 @@ class CfnIndex(
 
     @builtins.property
     @jsii.member(jsii_name="indexRef")
-    def index_ref(self) -> _IndexReference_e9ecd833:
+    def index_ref(self) -> "_IndexReference_e9ecd833":
         '''A reference to a Index resource.'''
-        return typing.cast(_IndexReference_e9ecd833, jsii.get(self, "indexRef"))
+        return typing.cast("_IndexReference_e9ecd833", jsii.get(self, "indexRef"))
 
     @builtins.property
     @jsii.member(jsii_name="collectionEndpoint")
@@ -991,14 +993,14 @@ class CfnIndex(
     @jsii.member(jsii_name="mappings")
     def mappings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.MappingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.MappingsProperty"]]:
         '''Index mappings for the OpenSearch Serverless index.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.MappingsProperty"]], jsii.get(self, "mappings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.MappingsProperty"]], jsii.get(self, "mappings"))
 
     @mappings.setter
     def mappings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.MappingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.MappingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__01f2947a1782e9f60537bf751bb6fc12efd44df6bc7c2efab931f974a2048326)
@@ -1009,14 +1011,14 @@ class CfnIndex(
     @jsii.member(jsii_name="settings")
     def settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.IndexSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.IndexSettingsProperty"]]:
         '''Index settings for the OpenSearch Serverless index.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.IndexSettingsProperty"]], jsii.get(self, "settings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.IndexSettingsProperty"]], jsii.get(self, "settings"))
 
     @settings.setter
     def settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.IndexSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.IndexSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7fa35242932bdcac5598aa8d9552388d7e12b08b01413c30a72c824979d9345c)
@@ -1036,7 +1038,7 @@ class CfnIndex(
         def __init__(
             self,
             *,
-            knn: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            knn: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             knn_algo_param_ef_search: typing.Optional[jsii.Number] = None,
             refresh_interval: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -1077,13 +1079,13 @@ class CfnIndex(
         @builtins.property
         def knn(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Enable or disable k-nearest neighbor search capability.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-index-index.html#cfn-opensearchserverless-index-index-knn
             '''
             result = self._values.get("knn")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def knn_algo_param_ef_search(self) -> typing.Optional[jsii.Number]:
@@ -1125,7 +1127,7 @@ class CfnIndex(
         def __init__(
             self,
             *,
-            index: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.IndexProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            index: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.IndexProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Index settings for the OpenSearch Serverless index.
 
@@ -1158,13 +1160,13 @@ class CfnIndex(
         @builtins.property
         def index(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.IndexProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.IndexProperty"]]:
             '''Index settings.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-index-indexsettings.html#cfn-opensearchserverless-index-indexsettings-index
             '''
             result = self._values.get("index")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.IndexProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.IndexProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1186,7 +1188,7 @@ class CfnIndex(
         def __init__(
             self,
             *,
-            properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.PropertyMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.PropertyMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Index mappings for the OpenSearch Serverless index.
 
@@ -1240,13 +1242,13 @@ class CfnIndex(
         @builtins.property
         def properties(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnIndex.PropertyMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnIndex.PropertyMappingProperty"]]]]:
             '''Nested fields within an object or nested field type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-index-mappings.html#cfn-opensearchserverless-index-mappings-properties
             '''
             result = self._values.get("properties")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnIndex.PropertyMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnIndex.PropertyMappingProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1275,7 +1277,7 @@ class CfnIndex(
             *,
             name: builtins.str,
             engine: typing.Optional[builtins.str] = None,
-            parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.ParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.ParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             space_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Configuration for k-NN search method.
@@ -1344,13 +1346,13 @@ class CfnIndex(
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.ParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.ParametersProperty"]]:
             '''Additional parameters for the k-NN algorithm.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-index-method.html#cfn-opensearchserverless-index-method-parameters
             '''
             result = self._values.get("parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.ParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.ParametersProperty"]], result)
 
         @builtins.property
         def space_type(self) -> typing.Optional[builtins.str]:
@@ -1460,9 +1462,9 @@ class CfnIndex(
             *,
             type: builtins.str,
             dimension: typing.Optional[jsii.Number] = None,
-            index: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            method: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.MethodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.PropertyMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            index: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            method: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.MethodProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.PropertyMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             value: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Property mappings for the OpenSearch Serverless index.
@@ -1554,35 +1556,35 @@ class CfnIndex(
         @builtins.property
         def index(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether a field should be indexed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-index-propertymapping.html#cfn-opensearchserverless-index-propertymapping-index
             '''
             result = self._values.get("index")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def method(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.MethodProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.MethodProperty"]]:
             '''Configuration for k-NN search method.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-index-propertymapping.html#cfn-opensearchserverless-index-propertymapping-method
             '''
             result = self._values.get("method")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIndex.MethodProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.MethodProperty"]], result)
 
         @builtins.property
         def properties(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnIndex.PropertyMappingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnIndex.PropertyMappingProperty"]]]]:
             '''Defines the fields within the mapping, including their types and configurations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-index-propertymapping.html#cfn-opensearchserverless-index-propertymapping-properties
             '''
             result = self._values.get("properties")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnIndex.PropertyMappingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnIndex.PropertyMappingProperty"]]]], result)
 
         @builtins.property
         def value(self) -> typing.Optional[builtins.str]:
@@ -1621,8 +1623,8 @@ class CfnIndexProps:
         *,
         collection_endpoint: builtins.str,
         index_name: builtins.str,
-        mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.MappingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.IndexSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.MappingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnIndex.IndexSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnIndex``.
 
@@ -1720,24 +1722,24 @@ class CfnIndexProps:
     @builtins.property
     def mappings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIndex.MappingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.MappingsProperty"]]:
         '''Index mappings for the OpenSearch Serverless index.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-index.html#cfn-opensearchserverless-index-mappings
         '''
         result = self._values.get("mappings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIndex.MappingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.MappingsProperty"]], result)
 
     @builtins.property
     def settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIndex.IndexSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.IndexSettingsProperty"]]:
         '''Index settings for the OpenSearch Serverless index.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-index.html#cfn-opensearchserverless-index-settings
         '''
         result = self._values.get("settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIndex.IndexSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnIndex.IndexSettingsProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1783,7 +1785,7 @@ class CfnLifecyclePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -1823,7 +1825,7 @@ class CfnLifecyclePolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLifecyclePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1859,9 +1861,9 @@ class CfnLifecyclePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="lifecyclePolicyRef")
-    def lifecycle_policy_ref(self) -> _LifecyclePolicyReference_5f985de6:
+    def lifecycle_policy_ref(self) -> "_LifecyclePolicyReference_5f985de6":
         '''A reference to a LifecyclePolicy resource.'''
-        return typing.cast(_LifecyclePolicyReference_5f985de6, jsii.get(self, "lifecyclePolicyRef"))
+        return typing.cast("_LifecyclePolicyReference_5f985de6", jsii.get(self, "lifecyclePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2077,14 +2079,14 @@ class CfnSecurityConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
-        iam_federation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityConfig.IamFederationConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        iam_identity_center_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        iam_federation_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityConfig.IamFederationConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        iam_identity_center_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        saml_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecurityConfig.SamlConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        saml_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityConfig.SamlConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::OpenSearchServerless::SecurityConfig``.
@@ -2126,7 +2128,7 @@ class CfnSecurityConfig(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSecurityConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2200,9 +2202,9 @@ class CfnSecurityConfig(
 
     @builtins.property
     @jsii.member(jsii_name="securityConfigRef")
-    def security_config_ref(self) -> _SecurityConfigReference_f5680479:
+    def security_config_ref(self) -> "_SecurityConfigReference_f5680479":
         '''A reference to a SecurityConfig resource.'''
-        return typing.cast(_SecurityConfigReference_f5680479, jsii.get(self, "securityConfigRef"))
+        return typing.cast("_SecurityConfigReference_f5680479", jsii.get(self, "securityConfigRef"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -2221,14 +2223,14 @@ class CfnSecurityConfig(
     @jsii.member(jsii_name="iamFederationOptions")
     def iam_federation_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.IamFederationConfigOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.IamFederationConfigOptionsProperty"]]:
         '''Describes IAM federation options in the form of a key-value map.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.IamFederationConfigOptionsProperty"]], jsii.get(self, "iamFederationOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.IamFederationConfigOptionsProperty"]], jsii.get(self, "iamFederationOptions"))
 
     @iam_federation_options.setter
     def iam_federation_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.IamFederationConfigOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.IamFederationConfigOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ccfa7fa0cc51cc5944f3e224a02320990df0f8ebafce43a7009528585ae23975)
@@ -2239,14 +2241,14 @@ class CfnSecurityConfig(
     @jsii.member(jsii_name="iamIdentityCenterOptions")
     def iam_identity_center_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty"]]:
         '''Describes IAM Identity Center options in the form of a key-value map.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty"]], jsii.get(self, "iamIdentityCenterOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty"]], jsii.get(self, "iamIdentityCenterOptions"))
 
     @iam_identity_center_options.setter
     def iam_identity_center_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1158fc0f587cad32843a157af521fc2d669a0bc1f7c84c5e1dcd753237a9ca9a)
@@ -2270,14 +2272,14 @@ class CfnSecurityConfig(
     @jsii.member(jsii_name="samlOptions")
     def saml_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.SamlConfigOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.SamlConfigOptionsProperty"]]:
         '''SAML options for the security configuration in the form of a key-value map.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.SamlConfigOptionsProperty"]], jsii.get(self, "samlOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.SamlConfigOptionsProperty"]], jsii.get(self, "samlOptions"))
 
     @saml_options.setter
     def saml_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSecurityConfig.SamlConfigOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.SamlConfigOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__470a9a05248daf375f793933f5c035aad9eb0363381a3a0f6edb816e11340a12)
@@ -2664,10 +2666,10 @@ class CfnSecurityConfigProps:
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        iam_federation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityConfig.IamFederationConfigOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        iam_identity_center_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        iam_federation_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityConfig.IamFederationConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        iam_identity_center_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        saml_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityConfig.SamlConfigOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        saml_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSecurityConfig.SamlConfigOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnSecurityConfig``.
@@ -2751,7 +2753,7 @@ class CfnSecurityConfigProps:
     @builtins.property
     def iam_federation_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecurityConfig.IamFederationConfigOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.IamFederationConfigOptionsProperty"]]:
         '''Describes IAM federation options in the form of a key-value map.
 
         Contains configuration details about how OpenSearch Serverless integrates with external identity providers through federation.
@@ -2759,18 +2761,18 @@ class CfnSecurityConfigProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-securityconfig.html#cfn-opensearchserverless-securityconfig-iamfederationoptions
         '''
         result = self._values.get("iam_federation_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecurityConfig.IamFederationConfigOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.IamFederationConfigOptionsProperty"]], result)
 
     @builtins.property
     def iam_identity_center_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty"]]:
         '''Describes IAM Identity Center options in the form of a key-value map.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-securityconfig.html#cfn-opensearchserverless-securityconfig-iamidentitycenteroptions
         '''
         result = self._values.get("iam_identity_center_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.IamIdentityCenterConfigOptionsProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -2784,13 +2786,13 @@ class CfnSecurityConfigProps:
     @builtins.property
     def saml_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecurityConfig.SamlConfigOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.SamlConfigOptionsProperty"]]:
         '''SAML options for the security configuration in the form of a key-value map.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-securityconfig.html#cfn-opensearchserverless-securityconfig-samloptions
         '''
         result = self._values.get("saml_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecurityConfig.SamlConfigOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSecurityConfig.SamlConfigOptionsProperty"]], result)
 
     @builtins.property
     def type(self) -> typing.Optional[builtins.str]:
@@ -2849,7 +2851,7 @@ class CfnSecurityPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -2889,7 +2891,7 @@ class CfnSecurityPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSecurityPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2925,9 +2927,9 @@ class CfnSecurityPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="securityPolicyRef")
-    def security_policy_ref(self) -> _SecurityPolicyReference_e3c4978e:
+    def security_policy_ref(self) -> "_SecurityPolicyReference_e3c4978e":
         '''A reference to a SecurityPolicy resource.'''
-        return typing.cast(_SecurityPolicyReference_e3c4978e, jsii.get(self, "securityPolicyRef"))
+        return typing.cast("_SecurityPolicyReference_e3c4978e", jsii.get(self, "securityPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -3125,13 +3127,13 @@ class CfnVpcEndpoint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         subnet_ids: typing.Sequence[builtins.str],
         vpc_id: builtins.str,
-        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]] = None,
     ) -> None:
         '''Create a new ``AWS::OpenSearchServerless::VpcEndpoint``.
 
@@ -3168,7 +3170,7 @@ class CfnVpcEndpoint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVpcEndpoint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3215,9 +3217,9 @@ class CfnVpcEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="vpcEndpointRef")
-    def vpc_endpoint_ref(self) -> _VpcEndpointReference_90f2b7dd:
+    def vpc_endpoint_ref(self) -> "_VpcEndpointReference_90f2b7dd":
         '''A reference to a VpcEndpoint resource.'''
-        return typing.cast(_VpcEndpointReference_90f2b7dd, jsii.get(self, "vpcEndpointRef"))
+        return typing.cast("_VpcEndpointReference_90f2b7dd", jsii.get(self, "vpcEndpointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -3292,7 +3294,7 @@ class CfnVpcEndpointProps:
         name: builtins.str,
         subnet_ids: typing.Sequence[builtins.str],
         vpc_id: builtins.str,
-        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnVpcEndpoint``.
 
@@ -3366,13 +3368,13 @@ class CfnVpcEndpointProps:
     @builtins.property
     def security_group_ids(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]]:
         '''The unique identifiers of the security groups that define the ports, protocols, and sources for inbound traffic that you are authorizing into your endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-vpcendpoint.html#cfn-opensearchserverless-vpcendpoint-securitygroupids
         '''
         result = self._values.get("security_group_ids")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

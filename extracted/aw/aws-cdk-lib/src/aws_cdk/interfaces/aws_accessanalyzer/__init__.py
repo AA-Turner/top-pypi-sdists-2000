@@ -96,7 +96,7 @@ class IAnalyzerRef(
 
     @builtins.property
     @jsii.member(jsii_name="analyzerRef")
-    def analyzer_ref(self) -> AnalyzerReference:
+    def analyzer_ref(self) -> "AnalyzerReference":
         '''(experimental) A reference to a Analyzer resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IAnalyzerRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="analyzerRef")
-    def analyzer_ref(self) -> AnalyzerReference:
+    def analyzer_ref(self) -> "AnalyzerReference":
         '''(experimental) A reference to a Analyzer resource.
 
         :stability: experimental
         '''
-        return typing.cast(AnalyzerReference, jsii.get(self, "analyzerRef"))
+        return typing.cast("AnalyzerReference", jsii.get(self, "analyzerRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAnalyzerRef).__jsii_proxy_class__ = lambda : _IAnalyzerRefProxy

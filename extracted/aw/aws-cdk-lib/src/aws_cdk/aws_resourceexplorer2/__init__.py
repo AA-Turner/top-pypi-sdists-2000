@@ -103,7 +103,7 @@ class CfnDefaultViewAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         view_arn: builtins.str,
@@ -135,7 +135,7 @@ class CfnDefaultViewAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDefaultViewAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -184,9 +184,11 @@ class CfnDefaultViewAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="defaultViewAssociationRef")
-    def default_view_association_ref(self) -> _DefaultViewAssociationReference_765cdca1:
+    def default_view_association_ref(
+        self,
+    ) -> "_DefaultViewAssociationReference_765cdca1":
         '''A reference to a DefaultViewAssociation resource.'''
-        return typing.cast(_DefaultViewAssociationReference_765cdca1, jsii.get(self, "defaultViewAssociationRef"))
+        return typing.cast("_DefaultViewAssociationReference_765cdca1", jsii.get(self, "defaultViewAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="viewArn")
@@ -295,7 +297,7 @@ class CfnIndex(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         type: builtins.str,
@@ -318,7 +320,7 @@ class CfnIndex(
 
     @jsii.member(jsii_name="arnForIndex")
     @builtins.classmethod
-    def arn_for_index(cls, resource: _IIndexRef_4a727770) -> builtins.str:
+    def arn_for_index(cls, resource: "_IIndexRef_4a727770") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -340,7 +342,7 @@ class CfnIndex(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIndex", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -398,15 +400,15 @@ class CfnIndex(
 
     @builtins.property
     @jsii.member(jsii_name="indexRef")
-    def index_ref(self) -> _IndexReference_71f896b9:
+    def index_ref(self) -> "_IndexReference_71f896b9":
         '''A reference to a Index resource.'''
-        return typing.cast(_IndexReference_71f896b9, jsii.get(self, "indexRef"))
+        return typing.cast("_IndexReference_71f896b9", jsii.get(self, "indexRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="type")
@@ -555,12 +557,12 @@ class CfnView(
 
     def __init__(
         self,
-        scope_: _constructs_77d1e7e8.Construct,
+        scope_: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         view_name: builtins.str,
-        filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnView.FiltersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        included_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnView.IncludedPropertyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnView.FiltersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        included_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnView.IncludedPropertyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         scope: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -590,7 +592,7 @@ class CfnView(
 
     @jsii.member(jsii_name="arnForView")
     @builtins.classmethod
-    def arn_for_view(cls, resource: _IViewRef_bd4cee83) -> builtins.str:
+    def arn_for_view(cls, resource: "_IViewRef_bd4cee83") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -612,7 +614,7 @@ class CfnView(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnView", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -659,15 +661,15 @@ class CfnView(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="viewRef")
-    def view_ref(self) -> _ViewReference_09ee265f:
+    def view_ref(self) -> "_ViewReference_09ee265f":
         '''A reference to a View resource.'''
-        return typing.cast(_ViewReference_09ee265f, jsii.get(self, "viewRef"))
+        return typing.cast("_ViewReference_09ee265f", jsii.get(self, "viewRef"))
 
     @builtins.property
     @jsii.member(jsii_name="viewName")
@@ -686,14 +688,14 @@ class CfnView(
     @jsii.member(jsii_name="filters")
     def filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnView.FiltersProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnView.FiltersProperty"]]:
         '''An array of strings that include search keywords, prefixes, and operators that filter the results that are returned for queries made using this view.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnView.FiltersProperty"]], jsii.get(self, "filters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnView.FiltersProperty"]], jsii.get(self, "filters"))
 
     @filters.setter
     def filters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnView.FiltersProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnView.FiltersProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f5fb01321040e194a5b4764d6eb89a25f4149cfd8bf5c274c004d722fdfc3ac9)
@@ -704,14 +706,14 @@ class CfnView(
     @jsii.member(jsii_name="includedProperties")
     def included_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnView.IncludedPropertyProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnView.IncludedPropertyProperty"]]]]:
         '''A list of fields that provide additional information about the view.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnView.IncludedPropertyProperty"]]]], jsii.get(self, "includedProperties"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnView.IncludedPropertyProperty"]]]], jsii.get(self, "includedProperties"))
 
     @included_properties.setter
     def included_properties(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnView.IncludedPropertyProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnView.IncludedPropertyProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__61a4f8894d1b066b915e6771816801795e9d3e2fe0de81b028355665ff6ec0bf)
@@ -923,8 +925,8 @@ class CfnViewProps:
         self,
         *,
         view_name: builtins.str,
-        filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnView.FiltersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        included_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnView.IncludedPropertyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnView.FiltersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        included_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnView.IncludedPropertyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         scope: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -993,7 +995,7 @@ class CfnViewProps:
     @builtins.property
     def filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnView.FiltersProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnView.FiltersProperty"]]:
         '''An array of strings that include search keywords, prefixes, and operators that filter the results that are returned for queries made using this view.
 
         When you use this view in a `Search <https://docs.aws.amazon.com/resource-explorer/latest/apireference/API_Search.html>`_ operation, the filter string is combined with the search's ``QueryString`` parameter using a logical ``AND`` operator.
@@ -1006,18 +1008,18 @@ class CfnViewProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resourceexplorer2-view.html#cfn-resourceexplorer2-view-filters
         '''
         result = self._values.get("filters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnView.FiltersProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnView.FiltersProperty"]], result)
 
     @builtins.property
     def included_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnView.IncludedPropertyProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnView.IncludedPropertyProperty"]]]]:
         '''A list of fields that provide additional information about the view.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resourceexplorer2-view.html#cfn-resourceexplorer2-view-includedproperties
         '''
         result = self._values.get("included_properties")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnView.IncludedPropertyProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnView.IncludedPropertyProperty"]]]], result)
 
     @builtins.property
     def scope(self) -> typing.Optional[builtins.str]:

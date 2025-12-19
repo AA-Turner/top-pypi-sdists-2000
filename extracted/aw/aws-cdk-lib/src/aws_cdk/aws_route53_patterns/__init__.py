@@ -51,6 +51,7 @@ feature flag. If you are creating the stack in a region other than `us-east-1`
 you must also enable `crossRegionReferences` on the stack.
 
 ```python
+from aws_cdk import Environment
 # app: App
 
 stack = Stack(app, "Stack",
@@ -73,6 +74,10 @@ patterns.HttpsRedirect(self, "Redirect",
 It is safe to upgrade to `@aws-cdk/aws-route53-patterns:useCertificate` since
 the new certificate will be created and updated on the CloudFront distribution
 before the old certificate is deleted.
+
+To have `HttpsRedirect` use the `Distribution` construct as the default
+created CloudFront distribution instead of the deprecated `CloudFrontWebDistribution`
+construct, enable the `@aws-cdk/aws-route53-patterns:useDistribution` [feature flag](https://docs.aws.amazon.com/cdk/latest/guide/featureflags.html).
 '''
 from pkgutil import extend_path
 __path__ = extend_path(__path__, __name__)
@@ -136,12 +141,12 @@ class HttpsRedirect(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         target_domain: builtins.str,
-        zone: _IHostedZone_9a6907ad,
-        certificate: typing.Optional[_ICertificate_c194c70b] = None,
+        zone: "_IHostedZone_9a6907ad",
+        certificate: typing.Optional["_ICertificate_c194c70b"] = None,
         record_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
@@ -181,8 +186,8 @@ class HttpsRedirectProps:
         self,
         *,
         target_domain: builtins.str,
-        zone: _IHostedZone_9a6907ad,
-        certificate: typing.Optional[_ICertificate_c194c70b] = None,
+        zone: "_IHostedZone_9a6907ad",
+        certificate: typing.Optional["_ICertificate_c194c70b"] = None,
         record_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties to configure an HTTPS Redirect.
@@ -233,7 +238,7 @@ class HttpsRedirectProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def zone(self) -> _IHostedZone_9a6907ad:
+    def zone(self) -> "_IHostedZone_9a6907ad":
         '''Hosted zone of the domain which will be used to create alias record(s) from domain names in the hosted zone to the target domain.
 
         The hosted zone must
@@ -245,10 +250,10 @@ class HttpsRedirectProps:
         '''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(_IHostedZone_9a6907ad, result)
+        return typing.cast("_IHostedZone_9a6907ad", result)
 
     @builtins.property
-    def certificate(self) -> typing.Optional[_ICertificate_c194c70b]:
+    def certificate(self) -> typing.Optional["_ICertificate_c194c70b"]:
         '''The AWS Certificate Manager (ACM) certificate that will be associated with the CloudFront distribution that will be created.
 
         If provided, the certificate must be
@@ -257,7 +262,7 @@ class HttpsRedirectProps:
         :default: - A new certificate is created in us-east-1 (N. Virginia)
         '''
         result = self._values.get("certificate")
-        return typing.cast(typing.Optional[_ICertificate_c194c70b], result)
+        return typing.cast(typing.Optional["_ICertificate_c194c70b"], result)
 
     @builtins.property
     def record_names(self) -> typing.Optional[typing.List[builtins.str]]:

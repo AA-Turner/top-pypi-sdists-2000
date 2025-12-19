@@ -107,6 +107,7 @@ class CfnCloudAutonomousVmCluster(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_odb as odb
@@ -143,7 +144,7 @@ class CfnCloudAutonomousVmCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         autonomous_data_storage_size_in_t_bs: typing.Optional[jsii.Number] = None,
@@ -152,14 +153,14 @@ class CfnCloudAutonomousVmCluster(
         db_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
-        is_mtls_enabled_vm_cluster: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        is_mtls_enabled_vm_cluster: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         license_model: typing.Optional[builtins.str] = None,
-        maintenance_window: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudAutonomousVmCluster.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        maintenance_window: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudAutonomousVmCluster.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         memory_per_oracle_compute_unit_in_g_bs: typing.Optional[jsii.Number] = None,
         odb_network_id: typing.Optional[builtins.str] = None,
         scan_listener_port_non_tls: typing.Optional[jsii.Number] = None,
         scan_listener_port_tls: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         time_zone: typing.Optional[builtins.str] = None,
         total_container_databases: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -213,7 +214,7 @@ class CfnCloudAutonomousVmCluster(
     @builtins.classmethod
     def arn_for_cloud_autonomous_vm_cluster(
         cls,
-        resource: _ICloudAutonomousVmClusterRef_ec2012b7,
+        resource: "_ICloudAutonomousVmClusterRef_ec2012b7",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -236,7 +237,7 @@ class CfnCloudAutonomousVmCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCloudAutonomousVmCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -267,23 +268,23 @@ class CfnCloudAutonomousVmCluster(
 
     @builtins.property
     @jsii.member(jsii_name="attrAutonomousDataStoragePercentage")
-    def attr_autonomous_data_storage_percentage(self) -> _IResolvable_da3f097b:
+    def attr_autonomous_data_storage_percentage(self) -> "_IResolvable_da3f097b":
         '''The percentage of data storage currently in use for Autonomous Databases in the Autonomous VM cluster.
 
         :cloudformationAttribute: AutonomousDataStoragePercentage
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrAutonomousDataStoragePercentage"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrAutonomousDataStoragePercentage"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAvailableAutonomousDataStorageSizeInTBs")
     def attr_available_autonomous_data_storage_size_in_t_bs(
         self,
-    ) -> _IResolvable_da3f097b:
+    ) -> "_IResolvable_da3f097b":
         '''The available data storage space for Autonomous Databases in the Autonomous VM cluster, in TB.
 
         :cloudformationAttribute: AvailableAutonomousDataStorageSizeInTBs
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrAvailableAutonomousDataStorageSizeInTBs"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrAvailableAutonomousDataStorageSizeInTBs"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAvailableContainerDatabases")
@@ -296,12 +297,12 @@ class CfnCloudAutonomousVmCluster(
 
     @builtins.property
     @jsii.member(jsii_name="attrAvailableCpus")
-    def attr_available_cpus(self) -> _IResolvable_da3f097b:
+    def attr_available_cpus(self) -> "_IResolvable_da3f097b":
         '''The number of CPU cores available for allocation to Autonomous Databases.
 
         :cloudformationAttribute: AvailableCpus
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrAvailableCpus"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrAvailableCpus"))
 
     @builtins.property
     @jsii.member(jsii_name="attrCloudAutonomousVmClusterArn")
@@ -341,30 +342,30 @@ class CfnCloudAutonomousVmCluster(
 
     @builtins.property
     @jsii.member(jsii_name="attrCpuPercentage")
-    def attr_cpu_percentage(self) -> _IResolvable_da3f097b:
+    def attr_cpu_percentage(self) -> "_IResolvable_da3f097b":
         '''The percentage of total CPU cores currently in use in the Autonomous VM cluster.
 
         :cloudformationAttribute: CpuPercentage
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrCpuPercentage"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrCpuPercentage"))
 
     @builtins.property
     @jsii.member(jsii_name="attrDataStorageSizeInGBs")
-    def attr_data_storage_size_in_g_bs(self) -> _IResolvable_da3f097b:
+    def attr_data_storage_size_in_g_bs(self) -> "_IResolvable_da3f097b":
         '''The total data storage allocated to the Autonomous VM cluster, in GB.
 
         :cloudformationAttribute: DataStorageSizeInGBs
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrDataStorageSizeInGBs"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrDataStorageSizeInGBs"))
 
     @builtins.property
     @jsii.member(jsii_name="attrDataStorageSizeInTBs")
-    def attr_data_storage_size_in_t_bs(self) -> _IResolvable_da3f097b:
+    def attr_data_storage_size_in_t_bs(self) -> "_IResolvable_da3f097b":
         '''The total data storage allocated to the Autonomous VM cluster, in TB.
 
         :cloudformationAttribute: DataStorageSizeInTBs
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrDataStorageSizeInTBs"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrDataStorageSizeInTBs"))
 
     @builtins.property
     @jsii.member(jsii_name="attrDbNodeStorageSizeInGBs")
@@ -386,12 +387,14 @@ class CfnCloudAutonomousVmCluster(
 
     @builtins.property
     @jsii.member(jsii_name="attrExadataStorageInTBsLowestScaledValue")
-    def attr_exadata_storage_in_t_bs_lowest_scaled_value(self) -> _IResolvable_da3f097b:
+    def attr_exadata_storage_in_t_bs_lowest_scaled_value(
+        self,
+    ) -> "_IResolvable_da3f097b":
         '''The minimum value to which you can scale down the Exadata storage, in TB.
 
         :cloudformationAttribute: ExadataStorageInTBsLowestScaledValue
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrExadataStorageInTBsLowestScaledValue"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrExadataStorageInTBsLowestScaledValue"))
 
     @builtins.property
     @jsii.member(jsii_name="attrHostname")
@@ -485,30 +488,30 @@ class CfnCloudAutonomousVmCluster(
 
     @builtins.property
     @jsii.member(jsii_name="attrProvisionedCpus")
-    def attr_provisioned_cpus(self) -> _IResolvable_da3f097b:
+    def attr_provisioned_cpus(self) -> "_IResolvable_da3f097b":
         '''The number of CPU cores currently provisioned in the Autonomous VM cluster.
 
         :cloudformationAttribute: ProvisionedCpus
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrProvisionedCpus"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrProvisionedCpus"))
 
     @builtins.property
     @jsii.member(jsii_name="attrReclaimableCpus")
-    def attr_reclaimable_cpus(self) -> _IResolvable_da3f097b:
+    def attr_reclaimable_cpus(self) -> "_IResolvable_da3f097b":
         '''The number of CPU cores that can be reclaimed from terminated or scaled-down Autonomous Databases.
 
         :cloudformationAttribute: ReclaimableCpus
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrReclaimableCpus"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrReclaimableCpus"))
 
     @builtins.property
     @jsii.member(jsii_name="attrReservedCpus")
-    def attr_reserved_cpus(self) -> _IResolvable_da3f097b:
+    def attr_reserved_cpus(self) -> "_IResolvable_da3f097b":
         '''The number of CPU cores reserved for system operations and redundancy.
 
         :cloudformationAttribute: ReservedCpus
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrReservedCpus"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrReservedCpus"))
 
     @builtins.property
     @jsii.member(jsii_name="attrShape")
@@ -521,9 +524,9 @@ class CfnCloudAutonomousVmCluster(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -534,9 +537,9 @@ class CfnCloudAutonomousVmCluster(
     @jsii.member(jsii_name="cloudAutonomousVmClusterRef")
     def cloud_autonomous_vm_cluster_ref(
         self,
-    ) -> _CloudAutonomousVmClusterReference_cd4af1e1:
+    ) -> "_CloudAutonomousVmClusterReference_cd4af1e1":
         '''A reference to a CloudAutonomousVmCluster resource.'''
-        return typing.cast(_CloudAutonomousVmClusterReference_cd4af1e1, jsii.get(self, "cloudAutonomousVmClusterRef"))
+        return typing.cast("_CloudAutonomousVmClusterReference_cd4af1e1", jsii.get(self, "cloudAutonomousVmClusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="autonomousDataStorageSizeInTBs")
@@ -626,14 +629,14 @@ class CfnCloudAutonomousVmCluster(
     @jsii.member(jsii_name="isMtlsEnabledVmCluster")
     def is_mtls_enabled_vm_cluster(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "isMtlsEnabledVmCluster"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "isMtlsEnabledVmCluster"))
 
     @is_mtls_enabled_vm_cluster.setter
     def is_mtls_enabled_vm_cluster(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b71c28f08596e3a8e06bf9ac61f202a72d06b5f6a93ae96a6cd988fa2c8b3457)
@@ -657,14 +660,14 @@ class CfnCloudAutonomousVmCluster(
     @jsii.member(jsii_name="maintenanceWindow")
     def maintenance_window(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudAutonomousVmCluster.MaintenanceWindowProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudAutonomousVmCluster.MaintenanceWindowProperty"]]:
         '''The scheduling details for the maintenance window.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudAutonomousVmCluster.MaintenanceWindowProperty"]], jsii.get(self, "maintenanceWindow"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudAutonomousVmCluster.MaintenanceWindowProperty"]], jsii.get(self, "maintenanceWindow"))
 
     @maintenance_window.setter
     def maintenance_window(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudAutonomousVmCluster.MaintenanceWindowProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudAutonomousVmCluster.MaintenanceWindowProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9893af2fa0c239ed09a25053b836f4c53aa964e484761b3656bf3f69ee2f20aa)
@@ -728,12 +731,12 @@ class CfnCloudAutonomousVmCluster(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Autonomous Vm Cluster.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4c0f9eb455c371aedd7a5d89d20d74ae053b5c2fbe1fd8e6614a484ac7e8c9a1)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -782,11 +785,11 @@ class CfnCloudAutonomousVmCluster(
             self,
             *,
             days_of_week: typing.Optional[typing.Sequence[builtins.str]] = None,
-            hours_of_day: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+            hours_of_day: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
             lead_time_in_weeks: typing.Optional[jsii.Number] = None,
             months: typing.Optional[typing.Sequence[builtins.str]] = None,
             preference: typing.Optional[builtins.str] = None,
-            weeks_of_month: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+            weeks_of_month: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The scheduling details for the maintenance window.
 
@@ -851,13 +854,13 @@ class CfnCloudAutonomousVmCluster(
         @builtins.property
         def hours_of_day(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
             '''The hours of the day when maintenance can be performed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudautonomousvmcluster-maintenancewindow.html#cfn-odb-cloudautonomousvmcluster-maintenancewindow-hoursofday
             '''
             result = self._values.get("hours_of_day")
-            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def lead_time_in_weeks(self) -> typing.Optional[jsii.Number]:
@@ -889,13 +892,13 @@ class CfnCloudAutonomousVmCluster(
         @builtins.property
         def weeks_of_month(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
             '''The weeks of the month when maintenance can be performed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudautonomousvmcluster-maintenancewindow.html#cfn-odb-cloudautonomousvmcluster-maintenancewindow-weeksofmonth
             '''
             result = self._values.get("weeks_of_month")
-            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -941,14 +944,14 @@ class CfnCloudAutonomousVmClusterProps:
         db_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
-        is_mtls_enabled_vm_cluster: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        is_mtls_enabled_vm_cluster: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         license_model: typing.Optional[builtins.str] = None,
-        maintenance_window: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudAutonomousVmCluster.MaintenanceWindowProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        maintenance_window: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudAutonomousVmCluster.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         memory_per_oracle_compute_unit_in_g_bs: typing.Optional[jsii.Number] = None,
         odb_network_id: typing.Optional[builtins.str] = None,
         scan_listener_port_non_tls: typing.Optional[jsii.Number] = None,
         scan_listener_port_tls: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         time_zone: typing.Optional[builtins.str] = None,
         total_container_databases: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -976,6 +979,7 @@ class CfnCloudAutonomousVmClusterProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_odb as odb
@@ -1126,13 +1130,13 @@ class CfnCloudAutonomousVmClusterProps:
     @builtins.property
     def is_mtls_enabled_vm_cluster(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether mutual TLS (mTLS) authentication is enabled for the Autonomous VM cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudautonomousvmcluster.html#cfn-odb-cloudautonomousvmcluster-ismtlsenabledvmcluster
         '''
         result = self._values.get("is_mtls_enabled_vm_cluster")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def license_model(self) -> typing.Optional[builtins.str]:
@@ -1148,7 +1152,7 @@ class CfnCloudAutonomousVmClusterProps:
     @builtins.property
     def maintenance_window(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCloudAutonomousVmCluster.MaintenanceWindowProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudAutonomousVmCluster.MaintenanceWindowProperty"]]:
         '''The scheduling details for the maintenance window.
 
         Patching and system updates take place during the maintenance window.
@@ -1156,7 +1160,7 @@ class CfnCloudAutonomousVmClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudautonomousvmcluster.html#cfn-odb-cloudautonomousvmcluster-maintenancewindow
         '''
         result = self._values.get("maintenance_window")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCloudAutonomousVmCluster.MaintenanceWindowProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudAutonomousVmCluster.MaintenanceWindowProperty"]], result)
 
     @builtins.property
     def memory_per_oracle_compute_unit_in_g_bs(self) -> typing.Optional[jsii.Number]:
@@ -1203,13 +1207,13 @@ class CfnCloudAutonomousVmClusterProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Autonomous Vm Cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudautonomousvmcluster.html#cfn-odb-cloudautonomousvmcluster-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def time_zone(self) -> typing.Optional[builtins.str]:
@@ -1259,6 +1263,7 @@ class CfnCloudExadataInfrastructure(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_odb as odb
@@ -1295,20 +1300,20 @@ class CfnCloudExadataInfrastructure(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         availability_zone: typing.Optional[builtins.str] = None,
         availability_zone_id: typing.Optional[builtins.str] = None,
         compute_count: typing.Optional[jsii.Number] = None,
-        customer_contacts_to_send_to_oci: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudExadataInfrastructure.CustomerContactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        customer_contacts_to_send_to_oci: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudExadataInfrastructure.CustomerContactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         database_server_type: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
-        maintenance_window: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudExadataInfrastructure.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        maintenance_window: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudExadataInfrastructure.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         shape: typing.Optional[builtins.str] = None,
         storage_count: typing.Optional[jsii.Number] = None,
         storage_server_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ODB::CloudExadataInfrastructure``.
 
@@ -1350,7 +1355,7 @@ class CfnCloudExadataInfrastructure(
     @builtins.classmethod
     def arn_for_cloud_exadata_infrastructure(
         cls,
-        resource: _ICloudExadataInfrastructureRef_15dfbe1b,
+        resource: "_ICloudExadataInfrastructureRef_15dfbe1b",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1373,7 +1378,7 @@ class CfnCloudExadataInfrastructure(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCloudExadataInfrastructure", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1469,12 +1474,12 @@ class CfnCloudExadataInfrastructure(
 
     @builtins.property
     @jsii.member(jsii_name="attrDataStorageSizeInTBs")
-    def attr_data_storage_size_in_t_bs(self) -> _IResolvable_da3f097b:
+    def attr_data_storage_size_in_t_bs(self) -> "_IResolvable_da3f097b":
         '''The size of the Exadata infrastructure's data disk group, in terabytes (TB).
 
         :cloudformationAttribute: DataStorageSizeInTBs
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrDataStorageSizeInTBs"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrDataStorageSizeInTBs"))
 
     @builtins.property
     @jsii.member(jsii_name="attrDbNodeStorageSizeInGBs")
@@ -1514,12 +1519,12 @@ class CfnCloudExadataInfrastructure(
 
     @builtins.property
     @jsii.member(jsii_name="attrMaxDataStorageInTBs")
-    def attr_max_data_storage_in_t_bs(self) -> _IResolvable_da3f097b:
+    def attr_max_data_storage_in_t_bs(self) -> "_IResolvable_da3f097b":
         '''The total amount of data disk group storage, in terabytes (TB), that's available on the Exadata infrastructure.
 
         :cloudformationAttribute: MaxDataStorageInTBs
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrMaxDataStorageInTBs"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrMaxDataStorageInTBs"))
 
     @builtins.property
     @jsii.member(jsii_name="attrMaxDbNodeStorageSizeInGBs")
@@ -1595,9 +1600,9 @@ class CfnCloudExadataInfrastructure(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1608,9 +1613,9 @@ class CfnCloudExadataInfrastructure(
     @jsii.member(jsii_name="cloudExadataInfrastructureRef")
     def cloud_exadata_infrastructure_ref(
         self,
-    ) -> _CloudExadataInfrastructureReference_abf63715:
+    ) -> "_CloudExadataInfrastructureReference_abf63715":
         '''A reference to a CloudExadataInfrastructure resource.'''
-        return typing.cast(_CloudExadataInfrastructureReference_abf63715, jsii.get(self, "cloudExadataInfrastructureRef"))
+        return typing.cast("_CloudExadataInfrastructureReference_abf63715", jsii.get(self, "cloudExadataInfrastructureRef"))
 
     @builtins.property
     @jsii.member(jsii_name="availabilityZone")
@@ -1655,14 +1660,14 @@ class CfnCloudExadataInfrastructure(
     @jsii.member(jsii_name="customerContactsToSendToOci")
     def customer_contacts_to_send_to_oci(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudExadataInfrastructure.CustomerContactProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudExadataInfrastructure.CustomerContactProperty"]]]]:
         '''The email addresses of contacts to receive notification from Oracle about maintenance updates for the Exadata infrastructure.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudExadataInfrastructure.CustomerContactProperty"]]]], jsii.get(self, "customerContactsToSendToOci"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudExadataInfrastructure.CustomerContactProperty"]]]], jsii.get(self, "customerContactsToSendToOci"))
 
     @customer_contacts_to_send_to_oci.setter
     def customer_contacts_to_send_to_oci(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudExadataInfrastructure.CustomerContactProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudExadataInfrastructure.CustomerContactProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__564d722d30f571b6b15ec3202d92d33e97da84125c2eabe6a9cebe8d28fed3d6)
@@ -1699,14 +1704,14 @@ class CfnCloudExadataInfrastructure(
     @jsii.member(jsii_name="maintenanceWindow")
     def maintenance_window(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]]:
         '''The scheduling details for the maintenance window.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]], jsii.get(self, "maintenanceWindow"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]], jsii.get(self, "maintenanceWindow"))
 
     @maintenance_window.setter
     def maintenance_window(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1e3bb28409835469386431431fb04ff62da0b9c236f5e4e6de86eaab458aa03d)
@@ -1754,12 +1759,12 @@ class CfnCloudExadataInfrastructure(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Exadata Infrastructure.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9909f2504aae00efa9d8adaf040cb71163078ccb5d88b84ca3af82a80de540b3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1837,13 +1842,13 @@ class CfnCloudExadataInfrastructure(
             *,
             custom_action_timeout_in_mins: typing.Optional[jsii.Number] = None,
             days_of_week: typing.Optional[typing.Sequence[builtins.str]] = None,
-            hours_of_day: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
-            is_custom_action_timeout_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            hours_of_day: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
+            is_custom_action_timeout_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             lead_time_in_weeks: typing.Optional[jsii.Number] = None,
             months: typing.Optional[typing.Sequence[builtins.str]] = None,
             patching_mode: typing.Optional[builtins.str] = None,
             preference: typing.Optional[builtins.str] = None,
-            weeks_of_month: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+            weeks_of_month: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The scheduling details for the maintenance window.
 
@@ -1932,24 +1937,24 @@ class CfnCloudExadataInfrastructure(
         @builtins.property
         def hours_of_day(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
             '''The hours of the day when maintenance can be performed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow-hoursofday
             '''
             result = self._values.get("hours_of_day")
-            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def is_custom_action_timeout_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether custom action timeout is enabled for the maintenance window.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow-iscustomactiontimeoutenabled
             '''
             result = self._values.get("is_custom_action_timeout_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def lead_time_in_weeks(self) -> typing.Optional[jsii.Number]:
@@ -1990,13 +1995,13 @@ class CfnCloudExadataInfrastructure(
         @builtins.property
         def weeks_of_month(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
             '''The weeks of the month when maintenance can be performed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudexadatainfrastructure-maintenancewindow.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow-weeksofmonth
             '''
             result = self._values.get("weeks_of_month")
-            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2034,14 +2039,14 @@ class CfnCloudExadataInfrastructureProps:
         availability_zone: typing.Optional[builtins.str] = None,
         availability_zone_id: typing.Optional[builtins.str] = None,
         compute_count: typing.Optional[jsii.Number] = None,
-        customer_contacts_to_send_to_oci: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudExadataInfrastructure.CustomerContactProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        customer_contacts_to_send_to_oci: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudExadataInfrastructure.CustomerContactProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         database_server_type: typing.Optional[builtins.str] = None,
         display_name: typing.Optional[builtins.str] = None,
-        maintenance_window: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudExadataInfrastructure.MaintenanceWindowProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        maintenance_window: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudExadataInfrastructure.MaintenanceWindowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         shape: typing.Optional[builtins.str] = None,
         storage_count: typing.Optional[jsii.Number] = None,
         storage_server_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCloudExadataInfrastructure``.
 
@@ -2062,6 +2067,7 @@ class CfnCloudExadataInfrastructureProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_odb as odb
@@ -2168,13 +2174,13 @@ class CfnCloudExadataInfrastructureProps:
     @builtins.property
     def customer_contacts_to_send_to_oci(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCloudExadataInfrastructure.CustomerContactProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudExadataInfrastructure.CustomerContactProperty"]]]]:
         '''The email addresses of contacts to receive notification from Oracle about maintenance updates for the Exadata infrastructure.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudexadatainfrastructure.html#cfn-odb-cloudexadatainfrastructure-customercontactstosendtooci
         '''
         result = self._values.get("customer_contacts_to_send_to_oci")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCloudExadataInfrastructure.CustomerContactProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudExadataInfrastructure.CustomerContactProperty"]]]], result)
 
     @builtins.property
     def database_server_type(self) -> typing.Optional[builtins.str]:
@@ -2201,7 +2207,7 @@ class CfnCloudExadataInfrastructureProps:
     @builtins.property
     def maintenance_window(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCloudExadataInfrastructure.MaintenanceWindowProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]]:
         '''The scheduling details for the maintenance window.
 
         Patching and system updates take place during the maintenance window.
@@ -2209,7 +2215,7 @@ class CfnCloudExadataInfrastructureProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudexadatainfrastructure.html#cfn-odb-cloudexadatainfrastructure-maintenancewindow
         '''
         result = self._values.get("maintenance_window")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCloudExadataInfrastructure.MaintenanceWindowProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudExadataInfrastructure.MaintenanceWindowProperty"]], result)
 
     @builtins.property
     def shape(self) -> typing.Optional[builtins.str]:
@@ -2245,13 +2251,13 @@ class CfnCloudExadataInfrastructureProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Exadata Infrastructure.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudexadatainfrastructure.html#cfn-odb-cloudexadatainfrastructure-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2281,6 +2287,7 @@ class CfnCloudVmCluster(
 
     Example::
 
+        from aws_cdk import CfnTag, CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_odb as odb
@@ -2341,29 +2348,29 @@ class CfnCloudVmCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cloud_exadata_infrastructure_id: typing.Optional[builtins.str] = None,
         cluster_name: typing.Optional[builtins.str] = None,
         cpu_core_count: typing.Optional[jsii.Number] = None,
-        data_collection_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudVmCluster.DataCollectionOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        data_collection_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudVmCluster.DataCollectionOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         data_storage_size_in_t_bs: typing.Optional[jsii.Number] = None,
-        db_nodes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCloudVmCluster.DbNodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        db_nodes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudVmCluster.DbNodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         db_node_storage_size_in_g_bs: typing.Optional[jsii.Number] = None,
         db_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         display_name: typing.Optional[builtins.str] = None,
         gi_version: typing.Optional[builtins.str] = None,
         hostname: typing.Optional[builtins.str] = None,
-        is_local_backup_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        is_sparse_diskgroup_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        is_local_backup_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        is_sparse_diskgroup_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         license_model: typing.Optional[builtins.str] = None,
         memory_size_in_g_bs: typing.Optional[jsii.Number] = None,
         odb_network_id: typing.Optional[builtins.str] = None,
         scan_listener_port_tcp: typing.Optional[jsii.Number] = None,
         ssh_public_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
         system_version: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         time_zone: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::ODB::CloudVmCluster``.
@@ -2426,7 +2433,7 @@ class CfnCloudVmCluster(
     @builtins.classmethod
     def arn_for_cloud_vm_cluster(
         cls,
-        resource: _ICloudVmClusterRef_d11cd0d7,
+        resource: "_ICloudVmClusterRef_d11cd0d7",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2449,7 +2456,7 @@ class CfnCloudVmCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCloudVmCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2621,9 +2628,9 @@ class CfnCloudVmCluster(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2632,9 +2639,9 @@ class CfnCloudVmCluster(
 
     @builtins.property
     @jsii.member(jsii_name="cloudVmClusterRef")
-    def cloud_vm_cluster_ref(self) -> _CloudVmClusterReference_5fd0c065:
+    def cloud_vm_cluster_ref(self) -> "_CloudVmClusterReference_5fd0c065":
         '''A reference to a CloudVmCluster resource.'''
-        return typing.cast(_CloudVmClusterReference_5fd0c065, jsii.get(self, "cloudVmClusterRef"))
+        return typing.cast("_CloudVmClusterReference_5fd0c065", jsii.get(self, "cloudVmClusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cloudExadataInfrastructureId")
@@ -2682,14 +2689,14 @@ class CfnCloudVmCluster(
     @jsii.member(jsii_name="dataCollectionOptions")
     def data_collection_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudVmCluster.DataCollectionOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudVmCluster.DataCollectionOptionsProperty"]]:
         '''The set of diagnostic collection options enabled for the VM cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudVmCluster.DataCollectionOptionsProperty"]], jsii.get(self, "dataCollectionOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudVmCluster.DataCollectionOptionsProperty"]], jsii.get(self, "dataCollectionOptions"))
 
     @data_collection_options.setter
     def data_collection_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCloudVmCluster.DataCollectionOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudVmCluster.DataCollectionOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__53fa60e8088e8fcfabc4956f1ab3fbbe0607d6039731af37fdbf97088759d7f1)
@@ -2713,14 +2720,14 @@ class CfnCloudVmCluster(
     @jsii.member(jsii_name="dbNodes")
     def db_nodes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudVmCluster.DbNodeProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudVmCluster.DbNodeProperty"]]]]:
         '''The DB nodes that are implicitly created and managed as part of this VM Cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudVmCluster.DbNodeProperty"]]]], jsii.get(self, "dbNodes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudVmCluster.DbNodeProperty"]]]], jsii.get(self, "dbNodes"))
 
     @db_nodes.setter
     def db_nodes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCloudVmCluster.DbNodeProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudVmCluster.DbNodeProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1d87bde62c7a3c3cf4ed0bfffab6f8bc36cc20a58ede136430e57b23880577ef)
@@ -2796,14 +2803,14 @@ class CfnCloudVmCluster(
     @jsii.member(jsii_name="isLocalBackupEnabled")
     def is_local_backup_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether database backups to local Exadata storage are enabled for the VM cluster.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "isLocalBackupEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "isLocalBackupEnabled"))
 
     @is_local_backup_enabled.setter
     def is_local_backup_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cee2b990c5219e427b51018646f252e8e93f20f5bc21497075e635e6fee21bc6)
@@ -2814,14 +2821,14 @@ class CfnCloudVmCluster(
     @jsii.member(jsii_name="isSparseDiskgroupEnabled")
     def is_sparse_diskgroup_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the VM cluster is configured with a sparse disk group.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "isSparseDiskgroupEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "isSparseDiskgroupEnabled"))
 
     @is_sparse_diskgroup_enabled.setter
     def is_sparse_diskgroup_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3c9800b0f09654567a1b07e3e8f1762764faa4d45ca7c8f2740ead91709fa406)
@@ -2911,12 +2918,12 @@ class CfnCloudVmCluster(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Vm Cluster.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cb35585e2ec32ece572f8bcd0f0a038f35ebbc9d6e29c933404bd886b5900921)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2948,9 +2955,9 @@ class CfnCloudVmCluster(
         def __init__(
             self,
             *,
-            is_diagnostics_events_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            is_health_monitoring_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            is_incident_logs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            is_diagnostics_events_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            is_health_monitoring_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            is_incident_logs_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Information about the data collection options enabled for a VM cluster.
 
@@ -2989,35 +2996,35 @@ class CfnCloudVmCluster(
         @builtins.property
         def is_diagnostics_events_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether diagnostic collection is enabled for the VM cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-datacollectionoptions.html#cfn-odb-cloudvmcluster-datacollectionoptions-isdiagnosticseventsenabled
             '''
             result = self._values.get("is_diagnostics_events_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def is_health_monitoring_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether health monitoring is enabled for the VM cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-datacollectionoptions.html#cfn-odb-cloudvmcluster-datacollectionoptions-ishealthmonitoringenabled
             '''
             result = self._values.get("is_health_monitoring_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def is_incident_logs_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether incident logs are enabled for the VM cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-datacollectionoptions.html#cfn-odb-cloudvmcluster-datacollectionoptions-isincidentlogsenabled
             '''
             result = self._values.get("is_incident_logs_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3069,7 +3076,7 @@ class CfnCloudVmCluster(
             memory_size_in_g_bs: typing.Optional[jsii.Number] = None,
             ocid: typing.Optional[builtins.str] = None,
             status: typing.Optional[builtins.str] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
             vnic2_id: typing.Optional[builtins.str] = None,
             vnic_id: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -3097,6 +3104,7 @@ class CfnCloudVmCluster(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_odb as odb
@@ -3296,12 +3304,12 @@ class CfnCloudVmCluster(
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-cloudvmcluster-dbnode.html#cfn-odb-cloudvmcluster-dbnode-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         @builtins.property
         def vnic2_id(self) -> typing.Optional[builtins.str]:
@@ -3367,23 +3375,23 @@ class CfnCloudVmClusterProps:
         cloud_exadata_infrastructure_id: typing.Optional[builtins.str] = None,
         cluster_name: typing.Optional[builtins.str] = None,
         cpu_core_count: typing.Optional[jsii.Number] = None,
-        data_collection_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudVmCluster.DataCollectionOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        data_collection_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudVmCluster.DataCollectionOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         data_storage_size_in_t_bs: typing.Optional[jsii.Number] = None,
-        db_nodes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCloudVmCluster.DbNodeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        db_nodes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCloudVmCluster.DbNodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         db_node_storage_size_in_g_bs: typing.Optional[jsii.Number] = None,
         db_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         display_name: typing.Optional[builtins.str] = None,
         gi_version: typing.Optional[builtins.str] = None,
         hostname: typing.Optional[builtins.str] = None,
-        is_local_backup_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        is_sparse_diskgroup_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        is_local_backup_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        is_sparse_diskgroup_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         license_model: typing.Optional[builtins.str] = None,
         memory_size_in_g_bs: typing.Optional[jsii.Number] = None,
         odb_network_id: typing.Optional[builtins.str] = None,
         scan_listener_port_tcp: typing.Optional[jsii.Number] = None,
         ssh_public_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
         system_version: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         time_zone: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnCloudVmCluster``.
@@ -3415,6 +3423,7 @@ class CfnCloudVmClusterProps:
 
         Example::
 
+            from aws_cdk import CfnTag, CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_odb as odb
@@ -3573,13 +3582,13 @@ class CfnCloudVmClusterProps:
     @builtins.property
     def data_collection_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCloudVmCluster.DataCollectionOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudVmCluster.DataCollectionOptionsProperty"]]:
         '''The set of diagnostic collection options enabled for the VM cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudvmcluster.html#cfn-odb-cloudvmcluster-datacollectionoptions
         '''
         result = self._values.get("data_collection_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCloudVmCluster.DataCollectionOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCloudVmCluster.DataCollectionOptionsProperty"]], result)
 
     @builtins.property
     def data_storage_size_in_t_bs(self) -> typing.Optional[jsii.Number]:
@@ -3593,13 +3602,13 @@ class CfnCloudVmClusterProps:
     @builtins.property
     def db_nodes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCloudVmCluster.DbNodeProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudVmCluster.DbNodeProperty"]]]]:
         '''The DB nodes that are implicitly created and managed as part of this VM Cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudvmcluster.html#cfn-odb-cloudvmcluster-dbnodes
         '''
         result = self._values.get("db_nodes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCloudVmCluster.DbNodeProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCloudVmCluster.DbNodeProperty"]]]], result)
 
     @builtins.property
     def db_node_storage_size_in_g_bs(self) -> typing.Optional[jsii.Number]:
@@ -3655,24 +3664,24 @@ class CfnCloudVmClusterProps:
     @builtins.property
     def is_local_backup_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether database backups to local Exadata storage are enabled for the VM cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudvmcluster.html#cfn-odb-cloudvmcluster-islocalbackupenabled
         '''
         result = self._values.get("is_local_backup_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def is_sparse_diskgroup_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the VM cluster is configured with a sparse disk group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudvmcluster.html#cfn-odb-cloudvmcluster-issparsediskgroupenabled
         '''
         result = self._values.get("is_sparse_diskgroup_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def license_model(self) -> typing.Optional[builtins.str]:
@@ -3737,13 +3746,13 @@ class CfnCloudVmClusterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Vm Cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-cloudvmcluster.html#cfn-odb-cloudvmcluster-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def time_zone(self) -> typing.Optional[builtins.str]:
@@ -3782,6 +3791,7 @@ class CfnOdbNetwork(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_odb as odb
@@ -3807,7 +3817,7 @@ class CfnOdbNetwork(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         availability_zone: typing.Optional[builtins.str] = None,
@@ -3816,11 +3826,11 @@ class CfnOdbNetwork(
         client_subnet_cidr: typing.Optional[builtins.str] = None,
         custom_domain_name: typing.Optional[builtins.str] = None,
         default_dns_prefix: typing.Optional[builtins.str] = None,
-        delete_associated_resources: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        delete_associated_resources: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         display_name: typing.Optional[builtins.str] = None,
         s3_access: typing.Optional[builtins.str] = None,
         s3_policy_document: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         zero_etl_access: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::ODB::OdbNetwork``.
@@ -3863,7 +3873,7 @@ class CfnOdbNetwork(
 
     @jsii.member(jsii_name="arnForOdbNetwork")
     @builtins.classmethod
-    def arn_for_odb_network(cls, resource: _IOdbNetworkRef_1a4a3229) -> builtins.str:
+    def arn_for_odb_network(cls, resource: "_IOdbNetworkRef_1a4a3229") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3885,7 +3895,7 @@ class CfnOdbNetwork(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOdbNetwork", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3916,12 +3926,12 @@ class CfnOdbNetwork(
 
     @builtins.property
     @jsii.member(jsii_name="attrManagedServices")
-    def attr_managed_services(self) -> _IResolvable_da3f097b:
+    def attr_managed_services(self) -> "_IResolvable_da3f097b":
         '''The managed services configuration for the ODB network.
 
         :cloudformationAttribute: ManagedServices
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrManagedServices"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrManagedServices"))
 
     @builtins.property
     @jsii.member(jsii_name="attrOciNetworkAnchorId")
@@ -3970,9 +3980,9 @@ class CfnOdbNetwork(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3981,9 +3991,9 @@ class CfnOdbNetwork(
 
     @builtins.property
     @jsii.member(jsii_name="odbNetworkRef")
-    def odb_network_ref(self) -> _OdbNetworkReference_3627e1e1:
+    def odb_network_ref(self) -> "_OdbNetworkReference_3627e1e1":
         '''A reference to a OdbNetwork resource.'''
-        return typing.cast(_OdbNetworkReference_3627e1e1, jsii.get(self, "odbNetworkRef"))
+        return typing.cast("_OdbNetworkReference_3627e1e1", jsii.get(self, "odbNetworkRef"))
 
     @builtins.property
     @jsii.member(jsii_name="availabilityZone")
@@ -4067,14 +4077,14 @@ class CfnOdbNetwork(
     @jsii.member(jsii_name="deleteAssociatedResources")
     def delete_associated_resources(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to delete associated OCI networking resources along with the ODB network.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deleteAssociatedResources"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deleteAssociatedResources"))
 
     @delete_associated_resources.setter
     def delete_associated_resources(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cc86642a834ad1214ad781ba4b6b7516ddb5e4df5219e6f1572c3707c253846a)
@@ -4122,12 +4132,12 @@ class CfnOdbNetwork(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Odb Network.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2a78f63e76d627d52015eb8e2a0dc2ab1a80a0926480a2a40fc93da33d803ce3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4233,13 +4243,13 @@ class CfnOdbNetwork(
         def __init__(
             self,
             *,
-            managed_s3_backup_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOdbNetwork.ManagedS3BackupAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            managed_s3_backup_access: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOdbNetwork.ManagedS3BackupAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             managed_services_ipv4_cidrs: typing.Optional[typing.Sequence[builtins.str]] = None,
             resource_gateway_arn: typing.Optional[builtins.str] = None,
-            s3_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOdbNetwork.S3AccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_access: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOdbNetwork.S3AccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             service_network_arn: typing.Optional[builtins.str] = None,
-            service_network_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOdbNetwork.ServiceNetworkEndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            zero_etl_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOdbNetwork.ZeroEtlAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            service_network_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOdbNetwork.ServiceNetworkEndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            zero_etl_access: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOdbNetwork.ZeroEtlAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The managed services configuration for the ODB network.
 
@@ -4312,13 +4322,13 @@ class CfnOdbNetwork(
         @builtins.property
         def managed_s3_backup_access(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.ManagedS3BackupAccessProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOdbNetwork.ManagedS3BackupAccessProperty"]]:
             '''The managed Amazon S3 backup access configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-managedservices.html#cfn-odb-odbnetwork-managedservices-manageds3backupaccess
             '''
             result = self._values.get("managed_s3_backup_access")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.ManagedS3BackupAccessProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOdbNetwork.ManagedS3BackupAccessProperty"]], result)
 
         @builtins.property
         def managed_services_ipv4_cidrs(
@@ -4343,13 +4353,13 @@ class CfnOdbNetwork(
         @builtins.property
         def s3_access(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.S3AccessProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOdbNetwork.S3AccessProperty"]]:
             '''The Amazon S3 access configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-managedservices.html#cfn-odb-odbnetwork-managedservices-s3access
             '''
             result = self._values.get("s3_access")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.S3AccessProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOdbNetwork.S3AccessProperty"]], result)
 
         @builtins.property
         def service_network_arn(self) -> typing.Optional[builtins.str]:
@@ -4363,24 +4373,24 @@ class CfnOdbNetwork(
         @builtins.property
         def service_network_endpoint(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.ServiceNetworkEndpointProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOdbNetwork.ServiceNetworkEndpointProperty"]]:
             '''The service network endpoint configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-managedservices.html#cfn-odb-odbnetwork-managedservices-servicenetworkendpoint
             '''
             result = self._values.get("service_network_endpoint")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.ServiceNetworkEndpointProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOdbNetwork.ServiceNetworkEndpointProperty"]], result)
 
         @builtins.property
         def zero_etl_access(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.ZeroEtlAccessProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOdbNetwork.ZeroEtlAccessProperty"]]:
             '''The Zero-ETL access configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-odb-odbnetwork-managedservices.html#cfn-odb-odbnetwork-managedservices-zeroetlaccess
             '''
             result = self._values.get("zero_etl_access")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOdbNetwork.ZeroEtlAccessProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOdbNetwork.ZeroEtlAccessProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4670,11 +4680,11 @@ class CfnOdbNetworkProps:
         client_subnet_cidr: typing.Optional[builtins.str] = None,
         custom_domain_name: typing.Optional[builtins.str] = None,
         default_dns_prefix: typing.Optional[builtins.str] = None,
-        delete_associated_resources: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        delete_associated_resources: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         display_name: typing.Optional[builtins.str] = None,
         s3_access: typing.Optional[builtins.str] = None,
         s3_policy_document: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         zero_etl_access: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnOdbNetwork``.
@@ -4697,6 +4707,7 @@ class CfnOdbNetworkProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_odb as odb
@@ -4824,7 +4835,7 @@ class CfnOdbNetworkProps:
     @builtins.property
     def delete_associated_resources(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to delete associated OCI networking resources along with the ODB network.
 
         Required when creating an ODB network.
@@ -4832,7 +4843,7 @@ class CfnOdbNetworkProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbnetwork.html#cfn-odb-odbnetwork-deleteassociatedresources
         '''
         result = self._values.get("delete_associated_resources")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def display_name(self) -> typing.Optional[builtins.str]:
@@ -4864,13 +4875,13 @@ class CfnOdbNetworkProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Odb Network.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbnetwork.html#cfn-odb-odbnetwork-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def zero_etl_access(self) -> typing.Optional[builtins.str]:
@@ -4909,6 +4920,7 @@ class CfnOdbPeeringConnection(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_odb as odb
@@ -4927,14 +4939,14 @@ class CfnOdbPeeringConnection(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         additional_peer_network_cidrs: typing.Optional[typing.Sequence[builtins.str]] = None,
         display_name: typing.Optional[builtins.str] = None,
         odb_network_id: typing.Optional[builtins.str] = None,
         peer_network_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ODB::OdbPeeringConnection``.
 
@@ -4964,7 +4976,7 @@ class CfnOdbPeeringConnection(
     @builtins.classmethod
     def arn_for_odb_peering_connection(
         cls,
-        resource: _IOdbPeeringConnectionRef_894341c3,
+        resource: "_IOdbPeeringConnectionRef_894341c3",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -4987,7 +4999,7 @@ class CfnOdbPeeringConnection(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOdbPeeringConnection", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5065,9 +5077,9 @@ class CfnOdbPeeringConnection(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5076,9 +5088,9 @@ class CfnOdbPeeringConnection(
 
     @builtins.property
     @jsii.member(jsii_name="odbPeeringConnectionRef")
-    def odb_peering_connection_ref(self) -> _OdbPeeringConnectionReference_273daf27:
+    def odb_peering_connection_ref(self) -> "_OdbPeeringConnectionReference_273daf27":
         '''A reference to a OdbPeeringConnection resource.'''
-        return typing.cast(_OdbPeeringConnectionReference_273daf27, jsii.get(self, "odbPeeringConnectionRef"))
+        return typing.cast("_OdbPeeringConnectionReference_273daf27", jsii.get(self, "odbPeeringConnectionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="additionalPeerNetworkCidrs")
@@ -5139,12 +5151,12 @@ class CfnOdbPeeringConnection(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Odb peering connection.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e52d668f36d0789e49c0196d151e22c497a4f1c0a77cff71369f51481f5725dc)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5170,7 +5182,7 @@ class CfnOdbPeeringConnectionProps:
         display_name: typing.Optional[builtins.str] = None,
         odb_network_id: typing.Optional[builtins.str] = None,
         peer_network_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnOdbPeeringConnection``.
 
@@ -5185,6 +5197,7 @@ class CfnOdbPeeringConnectionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_odb as odb
@@ -5258,13 +5271,13 @@ class CfnOdbPeeringConnectionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags to assign to the Odb peering connection.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbpeeringconnection.html#cfn-odb-odbpeeringconnection-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

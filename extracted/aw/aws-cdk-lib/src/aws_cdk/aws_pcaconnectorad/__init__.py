@@ -129,12 +129,12 @@ class CfnConnector(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         certificate_authority_arn: builtins.str,
         directory_id: builtins.str,
-        vpc_information: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.VpcInformationProperty", typing.Dict[builtins.str, typing.Any]]],
+        vpc_information: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.VpcInformationProperty", typing.Dict[builtins.str, typing.Any]]],
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::PCAConnectorAD::Connector``.
@@ -161,7 +161,7 @@ class CfnConnector(
 
     @jsii.member(jsii_name="arnForConnector")
     @builtins.classmethod
-    def arn_for_connector(cls, resource: _IConnectorRef_326d99a5) -> builtins.str:
+    def arn_for_connector(cls, resource: "_IConnectorRef_326d99a5") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -183,7 +183,7 @@ class CfnConnector(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnector", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -223,9 +223,9 @@ class CfnConnector(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -234,9 +234,9 @@ class CfnConnector(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> _ConnectorReference_b3c5fbac:
+    def connector_ref(self) -> "_ConnectorReference_b3c5fbac":
         '''A reference to a Connector resource.'''
-        return typing.cast(_ConnectorReference_b3c5fbac, jsii.get(self, "connectorRef"))
+        return typing.cast("_ConnectorReference_b3c5fbac", jsii.get(self, "connectorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="certificateAuthorityArn")
@@ -268,14 +268,14 @@ class CfnConnector(
     @jsii.member(jsii_name="vpcInformation")
     def vpc_information(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.VpcInformationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.VpcInformationProperty"]:
         '''Information of the VPC and security group(s) used with the connector.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.VpcInformationProperty"], jsii.get(self, "vpcInformation"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.VpcInformationProperty"], jsii.get(self, "vpcInformation"))
 
     @vpc_information.setter
     def vpc_information(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnConnector.VpcInformationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnConnector.VpcInformationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7958644c6b6b742a56d7010b862aba24109f3f57815fa7477ed5ff078f149a85)
@@ -393,7 +393,7 @@ class CfnConnectorProps:
         *,
         certificate_authority_arn: builtins.str,
         directory_id: builtins.str,
-        vpc_information: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.VpcInformationProperty, typing.Dict[builtins.str, typing.Any]]],
+        vpc_information: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.VpcInformationProperty", typing.Dict[builtins.str, typing.Any]]],
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConnector``.
@@ -465,14 +465,14 @@ class CfnConnectorProps:
     @builtins.property
     def vpc_information(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnConnector.VpcInformationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.VpcInformationProperty"]:
         '''Information of the VPC and security group(s) used with the connector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorad-connector.html#cfn-pcaconnectorad-connector-vpcinformation
         '''
         result = self._values.get("vpc_information")
         assert result is not None, "Required property 'vpc_information' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnConnector.VpcInformationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.VpcInformationProperty"], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -525,7 +525,7 @@ class CfnDirectoryRegistration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         directory_id: builtins.str,
@@ -550,7 +550,7 @@ class CfnDirectoryRegistration(
     @builtins.classmethod
     def arn_for_directory_registration(
         cls,
-        resource: _IDirectoryRegistrationRef_cd17a4de,
+        resource: "_IDirectoryRegistrationRef_cd17a4de",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -573,7 +573,7 @@ class CfnDirectoryRegistration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDirectoryRegistration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -613,9 +613,9 @@ class CfnDirectoryRegistration(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -624,9 +624,9 @@ class CfnDirectoryRegistration(
 
     @builtins.property
     @jsii.member(jsii_name="directoryRegistrationRef")
-    def directory_registration_ref(self) -> _DirectoryRegistrationReference_1e332e02:
+    def directory_registration_ref(self) -> "_DirectoryRegistrationReference_1e332e02":
         '''A reference to a DirectoryRegistration resource.'''
-        return typing.cast(_DirectoryRegistrationReference_1e332e02, jsii.get(self, "directoryRegistrationRef"))
+        return typing.cast("_DirectoryRegistrationReference_1e332e02", jsii.get(self, "directoryRegistrationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="directoryId")
@@ -762,7 +762,7 @@ class CfnServicePrincipalName(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         connector_arn: typing.Optional[builtins.str] = None,
@@ -799,7 +799,7 @@ class CfnServicePrincipalName(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServicePrincipalName", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -835,9 +835,9 @@ class CfnServicePrincipalName(
 
     @builtins.property
     @jsii.member(jsii_name="servicePrincipalNameRef")
-    def service_principal_name_ref(self) -> _ServicePrincipalNameReference_5bf245cb:
+    def service_principal_name_ref(self) -> "_ServicePrincipalNameReference_5bf245cb":
         '''A reference to a ServicePrincipalName resource.'''
-        return typing.cast(_ServicePrincipalNameReference_5bf245cb, jsii.get(self, "servicePrincipalNameRef"))
+        return typing.cast("_ServicePrincipalNameReference_5bf245cb", jsii.get(self, "servicePrincipalNameRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connectorArn")
@@ -1231,13 +1231,13 @@ class CfnTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         connector_arn: builtins.str,
-        definition: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.TemplateDefinitionProperty", typing.Dict[builtins.str, typing.Any]]],
+        definition: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.TemplateDefinitionProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
-        reenroll_all_certificate_holders: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        reenroll_all_certificate_holders: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::PCAConnectorAD::Template``.
@@ -1266,7 +1266,7 @@ class CfnTemplate(
 
     @jsii.member(jsii_name="arnForTemplate")
     @builtins.classmethod
-    def arn_for_template(cls, resource: _ITemplateRef_1b150fa8) -> builtins.str:
+    def arn_for_template(cls, resource: "_ITemplateRef_1b150fa8") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1288,7 +1288,7 @@ class CfnTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1328,9 +1328,9 @@ class CfnTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1339,9 +1339,9 @@ class CfnTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="templateRef")
-    def template_ref(self) -> _TemplateReference_f7a2f95f:
+    def template_ref(self) -> "_TemplateReference_f7a2f95f":
         '''A reference to a Template resource.'''
-        return typing.cast(_TemplateReference_f7a2f95f, jsii.get(self, "templateRef"))
+        return typing.cast("_TemplateReference_f7a2f95f", jsii.get(self, "templateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connectorArn")
@@ -1360,14 +1360,14 @@ class CfnTemplate(
     @jsii.member(jsii_name="definition")
     def definition(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.TemplateDefinitionProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.TemplateDefinitionProperty"]:
         '''Template configuration to define the information included in certificates.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.TemplateDefinitionProperty"], jsii.get(self, "definition"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.TemplateDefinitionProperty"], jsii.get(self, "definition"))
 
     @definition.setter
     def definition(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnTemplate.TemplateDefinitionProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnTemplate.TemplateDefinitionProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fa952e9ba8af0e0bd9e62b55d0cfdca23958bf5403c595f909316942859ca793)
@@ -1391,14 +1391,14 @@ class CfnTemplate(
     @jsii.member(jsii_name="reenrollAllCertificateHolders")
     def reenroll_all_certificate_holders(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''This setting allows the major version of a template to be increased automatically.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "reenrollAllCertificateHolders"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "reenrollAllCertificateHolders"))
 
     @reenroll_all_certificate_holders.setter
     def reenroll_all_certificate_holders(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__55f6695aacde4eb1d915673bfb7f61d1f0779f429720942c4806aa7044eea5f2)
@@ -1430,8 +1430,8 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            policies: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.ApplicationPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            critical: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            policies: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.ApplicationPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            critical: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Application policies describe what the certificate can be used for.
 
@@ -1470,25 +1470,25 @@ class CfnTemplate(
         @builtins.property
         def policies(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTemplate.ApplicationPolicyProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTemplate.ApplicationPolicyProperty"]]]:
             '''Application policies describe what the certificate can be used for.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-applicationpolicies.html#cfn-pcaconnectorad-template-applicationpolicies-policies
             '''
             result = self._values.get("policies")
             assert result is not None, "Required property 'policies' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTemplate.ApplicationPolicyProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTemplate.ApplicationPolicyProperty"]]], result)
 
         @builtins.property
         def critical(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Marks the application policy extension as critical.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-applicationpolicies.html#cfn-pcaconnectorad-template-applicationpolicies-critical
             '''
             result = self._values.get("critical")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1586,8 +1586,8 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            renewal_period: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.ValidityPeriodProperty", typing.Dict[builtins.str, typing.Any]]],
-            validity_period: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.ValidityPeriodProperty", typing.Dict[builtins.str, typing.Any]]],
+            renewal_period: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.ValidityPeriodProperty", typing.Dict[builtins.str, typing.Any]]],
+            validity_period: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.ValidityPeriodProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Information describing the end of the validity period of the certificate.
 
@@ -1628,19 +1628,19 @@ class CfnTemplate(
         @builtins.property
         def renewal_period(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.ValidityPeriodProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.ValidityPeriodProperty"]:
             '''Renewal period is the period of time before certificate expiration when a new certificate will be requested.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-certificatevalidity.html#cfn-pcaconnectorad-template-certificatevalidity-renewalperiod
             '''
             result = self._values.get("renewal_period")
             assert result is not None, "Required property 'renewal_period' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.ValidityPeriodProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.ValidityPeriodProperty"], result)
 
         @builtins.property
         def validity_period(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.ValidityPeriodProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.ValidityPeriodProperty"]:
             '''Information describing the end of the validity period of the certificate.
 
             This parameter sets the “Not After” date for the certificate. Certificate validity is the period of time during which a certificate is valid. Validity can be expressed as an explicit date and time when the certificate expires, or as a span of time after issuance, stated in days, months, or years. For more information, see Validity in RFC 5280. This value is unaffected when ValidityNotBefore is also specified. For example, if Validity is set to 20 days in the future, the certificate will expire 20 days from issuance time regardless of the ValidityNotBefore value.
@@ -1649,7 +1649,7 @@ class CfnTemplate(
             '''
             result = self._values.get("validity_period")
             assert result is not None, "Required property 'validity_period' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.ValidityPeriodProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.ValidityPeriodProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1677,11 +1677,11 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            enable_key_reuse_on_nt_token_keyset_storage_full: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_symmetric_algorithms: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            no_security_extension: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            remove_invalid_certificate_from_personal_store: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            user_interaction_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_key_reuse_on_nt_token_keyset_storage_full: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_symmetric_algorithms: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            no_security_extension: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            remove_invalid_certificate_from_personal_store: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            user_interaction_required: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Template configurations for v2 template schema.
 
@@ -1730,57 +1730,57 @@ class CfnTemplate(
         @builtins.property
         def enable_key_reuse_on_nt_token_keyset_storage_full(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allow renewal using the same key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv2.html#cfn-pcaconnectorad-template-enrollmentflagsv2-enablekeyreuseonnttokenkeysetstoragefull
             '''
             result = self._values.get("enable_key_reuse_on_nt_token_keyset_storage_full")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_symmetric_algorithms(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include symmetric algorithms allowed by the subject.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv2.html#cfn-pcaconnectorad-template-enrollmentflagsv2-includesymmetricalgorithms
             '''
             result = self._values.get("include_symmetric_algorithms")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def no_security_extension(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''This flag instructs the CA to not include the security extension szOID_NTDS_CA_SECURITY_EXT (OID:1.3.6.1.4.1.311.25.2), as specified in [MS-WCCE] sections 2.2.2.7.7.4 and 3.2.2.6.2.1.4.5.9, in the issued certificate. This addresses a Windows Kerberos elevation-of-privilege vulnerability.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv2.html#cfn-pcaconnectorad-template-enrollmentflagsv2-nosecurityextension
             '''
             result = self._values.get("no_security_extension")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def remove_invalid_certificate_from_personal_store(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Delete expired or revoked certificates instead of archiving them.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv2.html#cfn-pcaconnectorad-template-enrollmentflagsv2-removeinvalidcertificatefrompersonalstore
             '''
             result = self._values.get("remove_invalid_certificate_from_personal_store")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def user_interaction_required(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Require user interaction when the subject is enrolled and the private key associated with the certificate is used.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv2.html#cfn-pcaconnectorad-template-enrollmentflagsv2-userinteractionrequired
             '''
             result = self._values.get("user_interaction_required")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1808,11 +1808,11 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            enable_key_reuse_on_nt_token_keyset_storage_full: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_symmetric_algorithms: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            no_security_extension: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            remove_invalid_certificate_from_personal_store: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            user_interaction_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_key_reuse_on_nt_token_keyset_storage_full: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_symmetric_algorithms: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            no_security_extension: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            remove_invalid_certificate_from_personal_store: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            user_interaction_required: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Template configurations for v3 template schema.
 
@@ -1861,57 +1861,57 @@ class CfnTemplate(
         @builtins.property
         def enable_key_reuse_on_nt_token_keyset_storage_full(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allow renewal using the same key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv3.html#cfn-pcaconnectorad-template-enrollmentflagsv3-enablekeyreuseonnttokenkeysetstoragefull
             '''
             result = self._values.get("enable_key_reuse_on_nt_token_keyset_storage_full")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_symmetric_algorithms(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include symmetric algorithms allowed by the subject.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv3.html#cfn-pcaconnectorad-template-enrollmentflagsv3-includesymmetricalgorithms
             '''
             result = self._values.get("include_symmetric_algorithms")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def no_security_extension(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''This flag instructs the CA to not include the security extension szOID_NTDS_CA_SECURITY_EXT (OID:1.3.6.1.4.1.311.25.2), as specified in [MS-WCCE] sections 2.2.2.7.7.4 and 3.2.2.6.2.1.4.5.9, in the issued certificate. This addresses a Windows Kerberos elevation-of-privilege vulnerability.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv3.html#cfn-pcaconnectorad-template-enrollmentflagsv3-nosecurityextension
             '''
             result = self._values.get("no_security_extension")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def remove_invalid_certificate_from_personal_store(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Delete expired or revoked certificates instead of archiving them.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv3.html#cfn-pcaconnectorad-template-enrollmentflagsv3-removeinvalidcertificatefrompersonalstore
             '''
             result = self._values.get("remove_invalid_certificate_from_personal_store")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def user_interaction_required(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Require user interaction when the subject is enrolled and the private key associated with the certificate is used.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv3.html#cfn-pcaconnectorad-template-enrollmentflagsv3-userinteractionrequired
             '''
             result = self._values.get("user_interaction_required")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1939,11 +1939,11 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            enable_key_reuse_on_nt_token_keyset_storage_full: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_symmetric_algorithms: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            no_security_extension: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            remove_invalid_certificate_from_personal_store: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            user_interaction_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_key_reuse_on_nt_token_keyset_storage_full: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_symmetric_algorithms: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            no_security_extension: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            remove_invalid_certificate_from_personal_store: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            user_interaction_required: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Template configurations for v4 template schema.
 
@@ -1992,57 +1992,57 @@ class CfnTemplate(
         @builtins.property
         def enable_key_reuse_on_nt_token_keyset_storage_full(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allow renewal using the same key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv4.html#cfn-pcaconnectorad-template-enrollmentflagsv4-enablekeyreuseonnttokenkeysetstoragefull
             '''
             result = self._values.get("enable_key_reuse_on_nt_token_keyset_storage_full")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_symmetric_algorithms(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include symmetric algorithms allowed by the subject.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv4.html#cfn-pcaconnectorad-template-enrollmentflagsv4-includesymmetricalgorithms
             '''
             result = self._values.get("include_symmetric_algorithms")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def no_security_extension(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''This flag instructs the CA to not include the security extension szOID_NTDS_CA_SECURITY_EXT (OID:1.3.6.1.4.1.311.25.2), as specified in [MS-WCCE] sections 2.2.2.7.7.4 and 3.2.2.6.2.1.4.5.9, in the issued certificate. This addresses a Windows Kerberos elevation-of-privilege vulnerability.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv4.html#cfn-pcaconnectorad-template-enrollmentflagsv4-nosecurityextension
             '''
             result = self._values.get("no_security_extension")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def remove_invalid_certificate_from_personal_store(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Delete expired or revoked certificates instead of archiving them.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv4.html#cfn-pcaconnectorad-template-enrollmentflagsv4-removeinvalidcertificatefrompersonalstore
             '''
             result = self._values.get("remove_invalid_certificate_from_personal_store")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def user_interaction_required(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Require user interaction when the subject is enrolled and the private key associated with the certificate is used.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-enrollmentflagsv4.html#cfn-pcaconnectorad-template-enrollmentflagsv4-userinteractionrequired
             '''
             result = self._values.get("user_interaction_required")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2067,8 +2067,8 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            key_usage: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.KeyUsageProperty", typing.Dict[builtins.str, typing.Any]]],
-            application_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.ApplicationPoliciesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            key_usage: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.KeyUsageProperty", typing.Dict[builtins.str, typing.Any]]],
+            application_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.ApplicationPoliciesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Certificate extensions for v2 template schema.
 
@@ -2123,25 +2123,25 @@ class CfnTemplate(
         @builtins.property
         def key_usage(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsageProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsageProperty"]:
             '''The key usage extension defines the purpose (e.g., encipherment, signature, certificate signing) of the key contained in the certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-extensionsv2.html#cfn-pcaconnectorad-template-extensionsv2-keyusage
             '''
             result = self._values.get("key_usage")
             assert result is not None, "Required property 'key_usage' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsageProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsageProperty"], result)
 
         @builtins.property
         def application_policies(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.ApplicationPoliciesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.ApplicationPoliciesProperty"]]:
             '''Application policies specify what the certificate is used for and its purpose.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-extensionsv2.html#cfn-pcaconnectorad-template-extensionsv2-applicationpolicies
             '''
             result = self._values.get("application_policies")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.ApplicationPoliciesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.ApplicationPoliciesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2166,8 +2166,8 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            key_usage: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.KeyUsageProperty", typing.Dict[builtins.str, typing.Any]]],
-            application_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.ApplicationPoliciesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            key_usage: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.KeyUsageProperty", typing.Dict[builtins.str, typing.Any]]],
+            application_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.ApplicationPoliciesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Certificate extensions for v3 template schema.
 
@@ -2222,25 +2222,25 @@ class CfnTemplate(
         @builtins.property
         def key_usage(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsageProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsageProperty"]:
             '''The key usage extension defines the purpose (e.g., encipherment, signature, certificate signing) of the key contained in the certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-extensionsv3.html#cfn-pcaconnectorad-template-extensionsv3-keyusage
             '''
             result = self._values.get("key_usage")
             assert result is not None, "Required property 'key_usage' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsageProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsageProperty"], result)
 
         @builtins.property
         def application_policies(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.ApplicationPoliciesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.ApplicationPoliciesProperty"]]:
             '''Application policies specify what the certificate is used for and its purpose.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-extensionsv3.html#cfn-pcaconnectorad-template-extensionsv3-applicationpolicies
             '''
             result = self._values.get("application_policies")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.ApplicationPoliciesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.ApplicationPoliciesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2265,8 +2265,8 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            key_usage: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.KeyUsageProperty", typing.Dict[builtins.str, typing.Any]]],
-            application_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.ApplicationPoliciesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            key_usage: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.KeyUsageProperty", typing.Dict[builtins.str, typing.Any]]],
+            application_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.ApplicationPoliciesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Certificate extensions for v4 template schema.
 
@@ -2321,25 +2321,25 @@ class CfnTemplate(
         @builtins.property
         def key_usage(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsageProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsageProperty"]:
             '''The key usage extension defines the purpose (e.g., encipherment, signature) of the key contained in the certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-extensionsv4.html#cfn-pcaconnectorad-template-extensionsv4-keyusage
             '''
             result = self._values.get("key_usage")
             assert result is not None, "Required property 'key_usage' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsageProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsageProperty"], result)
 
         @builtins.property
         def application_policies(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.ApplicationPoliciesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.ApplicationPoliciesProperty"]]:
             '''Application policies specify what the certificate is used for and its purpose.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-extensionsv4.html#cfn-pcaconnectorad-template-extensionsv4-applicationpolicies
             '''
             result = self._values.get("application_policies")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.ApplicationPoliciesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.ApplicationPoliciesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2364,8 +2364,8 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            auto_enrollment: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            machine_type: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            auto_enrollment: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            machine_type: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''General flags for v2 template schema that defines if the template is for a machine or a user and if the template can be issued using autoenrollment.
 
@@ -2399,7 +2399,7 @@ class CfnTemplate(
         @builtins.property
         def auto_enrollment(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allows certificate issuance using autoenrollment.
 
             Set to TRUE to allow autoenrollment.
@@ -2407,12 +2407,12 @@ class CfnTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-generalflagsv2.html#cfn-pcaconnectorad-template-generalflagsv2-autoenrollment
             '''
             result = self._values.get("auto_enrollment")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def machine_type(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Defines if the template is for machines or users.
 
             Set to TRUE if the template is for machines. Set to FALSE if the template is for users.
@@ -2420,7 +2420,7 @@ class CfnTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-generalflagsv2.html#cfn-pcaconnectorad-template-generalflagsv2-machinetype
             '''
             result = self._values.get("machine_type")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2445,8 +2445,8 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            auto_enrollment: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            machine_type: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            auto_enrollment: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            machine_type: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''General flags for v3 template schema that defines if the template is for a machine or a user and if the template can be issued using autoenrollment.
 
@@ -2480,7 +2480,7 @@ class CfnTemplate(
         @builtins.property
         def auto_enrollment(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allows certificate issuance using autoenrollment.
 
             Set to TRUE to allow autoenrollment.
@@ -2488,12 +2488,12 @@ class CfnTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-generalflagsv3.html#cfn-pcaconnectorad-template-generalflagsv3-autoenrollment
             '''
             result = self._values.get("auto_enrollment")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def machine_type(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Defines if the template is for machines or users.
 
             Set to TRUE if the template is for machines. Set to FALSE if the template is for users
@@ -2501,7 +2501,7 @@ class CfnTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-generalflagsv3.html#cfn-pcaconnectorad-template-generalflagsv3-machinetype
             '''
             result = self._values.get("machine_type")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2526,8 +2526,8 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            auto_enrollment: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            machine_type: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            auto_enrollment: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            machine_type: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''General flags for v4 template schema that defines if the template is for a machine or a user and if the template can be issued using autoenrollment.
 
@@ -2561,7 +2561,7 @@ class CfnTemplate(
         @builtins.property
         def auto_enrollment(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allows certificate issuance using autoenrollment.
 
             Set to TRUE to allow autoenrollment.
@@ -2569,12 +2569,12 @@ class CfnTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-generalflagsv4.html#cfn-pcaconnectorad-template-generalflagsv4-autoenrollment
             '''
             result = self._values.get("auto_enrollment")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def machine_type(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Defines if the template is for machines or users.
 
             Set to TRUE if the template is for machines. Set to FALSE if the template is for users
@@ -2582,7 +2582,7 @@ class CfnTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-generalflagsv4.html#cfn-pcaconnectorad-template-generalflagsv4-machinetype
             '''
             result = self._values.get("machine_type")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2610,11 +2610,11 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            data_encipherment: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            digital_signature: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            key_agreement: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            key_encipherment: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            non_repudiation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            data_encipherment: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            digital_signature: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            key_agreement: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            key_encipherment: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            non_repudiation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The key usage flags represent the purpose (e.g., encipherment, signature) of the key contained in the certificate.
 
@@ -2663,57 +2663,57 @@ class CfnTemplate(
         @builtins.property
         def data_encipherment(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''DataEncipherment is asserted when the subject public key is used for directly enciphering raw user data without the use of an intermediate symmetric cipher.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-keyusageflags.html#cfn-pcaconnectorad-template-keyusageflags-dataencipherment
             '''
             result = self._values.get("data_encipherment")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def digital_signature(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''The digitalSignature is asserted when the subject public key is used for verifying digital signatures.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-keyusageflags.html#cfn-pcaconnectorad-template-keyusageflags-digitalsignature
             '''
             result = self._values.get("digital_signature")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def key_agreement(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''KeyAgreement is asserted when the subject public key is used for key agreement.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-keyusageflags.html#cfn-pcaconnectorad-template-keyusageflags-keyagreement
             '''
             result = self._values.get("key_agreement")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def key_encipherment(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''KeyEncipherment is asserted when the subject public key is used for enciphering private or secret keys, i.e., for key transport.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-keyusageflags.html#cfn-pcaconnectorad-template-keyusageflags-keyencipherment
             '''
             result = self._values.get("key_encipherment")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def non_repudiation(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''NonRepudiation is asserted when the subject public key is used to verify digital signatures.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-keyusageflags.html#cfn-pcaconnectorad-template-keyusageflags-nonrepudiation
             '''
             result = self._values.get("non_repudiation")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2735,8 +2735,8 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            usage_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.KeyUsageFlagsProperty", typing.Dict[builtins.str, typing.Any]]],
-            critical: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            usage_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.KeyUsageFlagsProperty", typing.Dict[builtins.str, typing.Any]]],
+            critical: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The key usage extension defines the purpose (e.g., encipherment, signature) of the key contained in the certificate.
 
@@ -2778,25 +2778,25 @@ class CfnTemplate(
         @builtins.property
         def usage_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsageFlagsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsageFlagsProperty"]:
             '''The key usage flags represent the purpose (e.g., encipherment, signature) of the key contained in the certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-keyusage.html#cfn-pcaconnectorad-template-keyusage-usageflags
             '''
             result = self._values.get("usage_flags")
             assert result is not None, "Required property 'usage_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsageFlagsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsageFlagsProperty"], result)
 
         @builtins.property
         def critical(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Sets the key usage extension to critical.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-keyusage.html#cfn-pcaconnectorad-template-keyusage-critical
             '''
             result = self._values.get("critical")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2822,9 +2822,9 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            decrypt: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            key_agreement: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            sign: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            decrypt: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            key_agreement: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            sign: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Specifies key usage.
 
@@ -2863,35 +2863,35 @@ class CfnTemplate(
         @builtins.property
         def decrypt(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allows key for encryption and decryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-keyusagepropertyflags.html#cfn-pcaconnectorad-template-keyusagepropertyflags-decrypt
             '''
             result = self._values.get("decrypt")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def key_agreement(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allows key exchange without encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-keyusagepropertyflags.html#cfn-pcaconnectorad-template-keyusagepropertyflags-keyagreement
             '''
             result = self._values.get("key_agreement")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def sign(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allow key use for digital signature.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-keyusagepropertyflags.html#cfn-pcaconnectorad-template-keyusagepropertyflags-sign
             '''
             result = self._values.get("sign")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2916,7 +2916,7 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            property_flags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.KeyUsagePropertyFlagsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            property_flags: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.KeyUsagePropertyFlagsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             property_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The key usage property defines the purpose of the private key contained in the certificate.
@@ -2957,7 +2957,7 @@ class CfnTemplate(
         @builtins.property
         def property_flags(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsagePropertyFlagsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsagePropertyFlagsProperty"]]:
             '''You can specify key usage for encryption, key agreement, and signature.
 
             You can use property flags or property type but not both.
@@ -2965,7 +2965,7 @@ class CfnTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-keyusageproperty.html#cfn-pcaconnectorad-template-keyusageproperty-propertyflags
             '''
             result = self._values.get("property_flags")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsagePropertyFlagsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsagePropertyFlagsProperty"]], result)
 
         @builtins.property
         def property_type(self) -> typing.Optional[builtins.str]:
@@ -3100,7 +3100,7 @@ class CfnTemplate(
             *,
             algorithm: builtins.str,
             key_spec: builtins.str,
-            key_usage_property: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.KeyUsagePropertyProperty", typing.Dict[builtins.str, typing.Any]]],
+            key_usage_property: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.KeyUsagePropertyProperty", typing.Dict[builtins.str, typing.Any]]],
             minimal_key_length: jsii.Number,
             crypto_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -3179,7 +3179,7 @@ class CfnTemplate(
         @builtins.property
         def key_usage_property(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsagePropertyProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsagePropertyProperty"]:
             '''The key usage property defines the purpose of the private key contained in the certificate.
 
             You can specify specific purposes using property flags or all by using property type ALL.
@@ -3188,7 +3188,7 @@ class CfnTemplate(
             '''
             result = self._values.get("key_usage_property")
             assert result is not None, "Required property 'key_usage_property' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsagePropertyProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsagePropertyProperty"], result)
 
         @builtins.property
         def minimal_key_length(self) -> jsii.Number:
@@ -3239,7 +3239,7 @@ class CfnTemplate(
             minimal_key_length: jsii.Number,
             algorithm: typing.Optional[builtins.str] = None,
             crypto_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
-            key_usage_property: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.KeyUsagePropertyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            key_usage_property: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.KeyUsagePropertyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Defines the attributes of the private key.
 
@@ -3336,7 +3336,7 @@ class CfnTemplate(
         @builtins.property
         def key_usage_property(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsagePropertyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsagePropertyProperty"]]:
             '''The key usage property defines the purpose of the private key contained in the certificate.
 
             You can specify specific purposes using property flags or all by using property type ALL.
@@ -3344,7 +3344,7 @@ class CfnTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-privatekeyattributesv4.html#cfn-pcaconnectorad-template-privatekeyattributesv4-keyusageproperty
             '''
             result = self._values.get("key_usage_property")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.KeyUsagePropertyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.KeyUsagePropertyProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3371,8 +3371,8 @@ class CfnTemplate(
             self,
             *,
             client_version: builtins.str,
-            exportable_key: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            strong_key_protection_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            exportable_key: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            strong_key_protection_required: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Private key flags for v2 templates specify the client compatibility, if the private key can be exported, and if user input is required when using a private key.
 
@@ -3423,24 +3423,24 @@ class CfnTemplate(
         @builtins.property
         def exportable_key(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allows the private key to be exported.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-privatekeyflagsv2.html#cfn-pcaconnectorad-template-privatekeyflagsv2-exportablekey
             '''
             result = self._values.get("exportable_key")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def strong_key_protection_required(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Require user input when using the private key for enrollment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-privatekeyflagsv2.html#cfn-pcaconnectorad-template-privatekeyflagsv2-strongkeyprotectionrequired
             '''
             result = self._values.get("strong_key_protection_required")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3468,9 +3468,9 @@ class CfnTemplate(
             self,
             *,
             client_version: builtins.str,
-            exportable_key: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            require_alternate_signature_algorithm: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            strong_key_protection_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            exportable_key: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            require_alternate_signature_algorithm: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            strong_key_protection_required: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Private key flags for v3 templates specify the client compatibility, if the private key can be exported, if user input is required when using a private key, and if an alternate signature algorithm should be used.
 
@@ -3526,35 +3526,35 @@ class CfnTemplate(
         @builtins.property
         def exportable_key(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allows the private key to be exported.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-privatekeyflagsv3.html#cfn-pcaconnectorad-template-privatekeyflagsv3-exportablekey
             '''
             result = self._values.get("exportable_key")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def require_alternate_signature_algorithm(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Reguires the PKCS #1 v2.1 signature format for certificates. You should verify that your CA, objects, and applications can accept this signature format.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-privatekeyflagsv3.html#cfn-pcaconnectorad-template-privatekeyflagsv3-requirealternatesignaturealgorithm
             '''
             result = self._values.get("require_alternate_signature_algorithm")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def strong_key_protection_required(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Requirer user input when using the private key for enrollment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-privatekeyflagsv3.html#cfn-pcaconnectorad-template-privatekeyflagsv3-strongkeyprotectionrequired
             '''
             result = self._values.get("strong_key_protection_required")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3584,11 +3584,11 @@ class CfnTemplate(
             self,
             *,
             client_version: builtins.str,
-            exportable_key: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            require_alternate_signature_algorithm: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            require_same_key_renewal: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            strong_key_protection_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            use_legacy_provider: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            exportable_key: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            require_alternate_signature_algorithm: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            require_same_key_renewal: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            strong_key_protection_required: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            use_legacy_provider: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Private key flags for v4 templates specify the client compatibility, if the private key can be exported, if user input is required when using a private key, if an alternate signature algorithm should be used, and if certificates are renewed using the same private key.
 
@@ -3654,51 +3654,51 @@ class CfnTemplate(
         @builtins.property
         def exportable_key(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allows the private key to be exported.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-privatekeyflagsv4.html#cfn-pcaconnectorad-template-privatekeyflagsv4-exportablekey
             '''
             result = self._values.get("exportable_key")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def require_alternate_signature_algorithm(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Requires the PKCS #1 v2.1 signature format for certificates. You should verify that your CA, objects, and applications can accept this signature format.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-privatekeyflagsv4.html#cfn-pcaconnectorad-template-privatekeyflagsv4-requirealternatesignaturealgorithm
             '''
             result = self._values.get("require_alternate_signature_algorithm")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def require_same_key_renewal(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Renew certificate using the same private key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-privatekeyflagsv4.html#cfn-pcaconnectorad-template-privatekeyflagsv4-requiresamekeyrenewal
             '''
             result = self._values.get("require_same_key_renewal")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def strong_key_protection_required(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Require user input when using the private key for enrollment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-privatekeyflagsv4.html#cfn-pcaconnectorad-template-privatekeyflagsv4-strongkeyprotectionrequired
             '''
             result = self._values.get("strong_key_protection_required")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def use_legacy_provider(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies the cryptographic service provider category used to generate private keys.
 
             Set to TRUE to use Legacy Cryptographic Service Providers and FALSE to use Key Storage Providers.
@@ -3706,7 +3706,7 @@ class CfnTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-privatekeyflagsv4.html#cfn-pcaconnectorad-template-privatekeyflagsv4-uselegacyprovider
             '''
             result = self._values.get("use_legacy_provider")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3739,16 +3739,16 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            require_common_name: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            require_directory_path: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            require_dns_as_cn: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            require_email: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_directory_guid: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_dns: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_domain_dns: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_email: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_spn: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_upn: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            require_common_name: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            require_directory_path: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            require_dns_as_cn: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            require_email: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_directory_guid: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_dns: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_domain_dns: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_email: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_spn: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_upn: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Information to include in the subject name and alternate subject name of the certificate.
 
@@ -3824,112 +3824,112 @@ class CfnTemplate(
         @builtins.property
         def require_common_name(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the common name in the subject name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv2.html#cfn-pcaconnectorad-template-subjectnameflagsv2-requirecommonname
             '''
             result = self._values.get("require_common_name")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def require_directory_path(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the directory path in the subject name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv2.html#cfn-pcaconnectorad-template-subjectnameflagsv2-requiredirectorypath
             '''
             result = self._values.get("require_directory_path")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def require_dns_as_cn(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the DNS as common name in the subject name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv2.html#cfn-pcaconnectorad-template-subjectnameflagsv2-requirednsascn
             '''
             result = self._values.get("require_dns_as_cn")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def require_email(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the subject's email in the subject name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv2.html#cfn-pcaconnectorad-template-subjectnameflagsv2-requireemail
             '''
             result = self._values.get("require_email")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_directory_guid(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the globally unique identifier (GUID) in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv2.html#cfn-pcaconnectorad-template-subjectnameflagsv2-sanrequiredirectoryguid
             '''
             result = self._values.get("san_require_directory_guid")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_dns(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the DNS in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv2.html#cfn-pcaconnectorad-template-subjectnameflagsv2-sanrequiredns
             '''
             result = self._values.get("san_require_dns")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_domain_dns(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the domain DNS in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv2.html#cfn-pcaconnectorad-template-subjectnameflagsv2-sanrequiredomaindns
             '''
             result = self._values.get("san_require_domain_dns")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_email(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the subject's email in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv2.html#cfn-pcaconnectorad-template-subjectnameflagsv2-sanrequireemail
             '''
             result = self._values.get("san_require_email")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_spn(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the service principal name (SPN) in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv2.html#cfn-pcaconnectorad-template-subjectnameflagsv2-sanrequirespn
             '''
             result = self._values.get("san_require_spn")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_upn(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the user principal name (UPN) in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv2.html#cfn-pcaconnectorad-template-subjectnameflagsv2-sanrequireupn
             '''
             result = self._values.get("san_require_upn")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3962,16 +3962,16 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            require_common_name: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            require_directory_path: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            require_dns_as_cn: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            require_email: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_directory_guid: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_dns: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_domain_dns: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_email: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_spn: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_upn: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            require_common_name: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            require_directory_path: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            require_dns_as_cn: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            require_email: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_directory_guid: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_dns: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_domain_dns: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_email: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_spn: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_upn: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Information to include in the subject name and alternate subject name of the certificate.
 
@@ -4047,112 +4047,112 @@ class CfnTemplate(
         @builtins.property
         def require_common_name(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the common name in the subject name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv3.html#cfn-pcaconnectorad-template-subjectnameflagsv3-requirecommonname
             '''
             result = self._values.get("require_common_name")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def require_directory_path(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the directory path in the subject name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv3.html#cfn-pcaconnectorad-template-subjectnameflagsv3-requiredirectorypath
             '''
             result = self._values.get("require_directory_path")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def require_dns_as_cn(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the DNS as common name in the subject name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv3.html#cfn-pcaconnectorad-template-subjectnameflagsv3-requirednsascn
             '''
             result = self._values.get("require_dns_as_cn")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def require_email(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the subject's email in the subject name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv3.html#cfn-pcaconnectorad-template-subjectnameflagsv3-requireemail
             '''
             result = self._values.get("require_email")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_directory_guid(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the globally unique identifier (GUID) in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv3.html#cfn-pcaconnectorad-template-subjectnameflagsv3-sanrequiredirectoryguid
             '''
             result = self._values.get("san_require_directory_guid")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_dns(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the DNS in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv3.html#cfn-pcaconnectorad-template-subjectnameflagsv3-sanrequiredns
             '''
             result = self._values.get("san_require_dns")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_domain_dns(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the domain DNS in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv3.html#cfn-pcaconnectorad-template-subjectnameflagsv3-sanrequiredomaindns
             '''
             result = self._values.get("san_require_domain_dns")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_email(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the subject's email in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv3.html#cfn-pcaconnectorad-template-subjectnameflagsv3-sanrequireemail
             '''
             result = self._values.get("san_require_email")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_spn(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the service principal name (SPN) in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv3.html#cfn-pcaconnectorad-template-subjectnameflagsv3-sanrequirespn
             '''
             result = self._values.get("san_require_spn")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_upn(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the user principal name (UPN) in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv3.html#cfn-pcaconnectorad-template-subjectnameflagsv3-sanrequireupn
             '''
             result = self._values.get("san_require_upn")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4185,16 +4185,16 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            require_common_name: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            require_directory_path: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            require_dns_as_cn: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            require_email: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_directory_guid: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_dns: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_domain_dns: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_email: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_spn: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            san_require_upn: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            require_common_name: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            require_directory_path: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            require_dns_as_cn: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            require_email: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_directory_guid: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_dns: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_domain_dns: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_email: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_spn: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            san_require_upn: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Information to include in the subject name and alternate subject name of the certificate.
 
@@ -4270,112 +4270,112 @@ class CfnTemplate(
         @builtins.property
         def require_common_name(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the common name in the subject name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv4.html#cfn-pcaconnectorad-template-subjectnameflagsv4-requirecommonname
             '''
             result = self._values.get("require_common_name")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def require_directory_path(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the directory path in the subject name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv4.html#cfn-pcaconnectorad-template-subjectnameflagsv4-requiredirectorypath
             '''
             result = self._values.get("require_directory_path")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def require_dns_as_cn(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the DNS as common name in the subject name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv4.html#cfn-pcaconnectorad-template-subjectnameflagsv4-requirednsascn
             '''
             result = self._values.get("require_dns_as_cn")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def require_email(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the subject's email in the subject name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv4.html#cfn-pcaconnectorad-template-subjectnameflagsv4-requireemail
             '''
             result = self._values.get("require_email")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_directory_guid(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the globally unique identifier (GUID) in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv4.html#cfn-pcaconnectorad-template-subjectnameflagsv4-sanrequiredirectoryguid
             '''
             result = self._values.get("san_require_directory_guid")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_dns(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the DNS in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv4.html#cfn-pcaconnectorad-template-subjectnameflagsv4-sanrequiredns
             '''
             result = self._values.get("san_require_dns")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_domain_dns(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the domain DNS in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv4.html#cfn-pcaconnectorad-template-subjectnameflagsv4-sanrequiredomaindns
             '''
             result = self._values.get("san_require_domain_dns")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_email(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the subject's email in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv4.html#cfn-pcaconnectorad-template-subjectnameflagsv4-sanrequireemail
             '''
             result = self._values.get("san_require_email")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_spn(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the service principal name (SPN) in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv4.html#cfn-pcaconnectorad-template-subjectnameflagsv4-sanrequirespn
             '''
             result = self._values.get("san_require_spn")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def san_require_upn(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Include the user principal name (UPN) in the subject alternate name.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-subjectnameflagsv4.html#cfn-pcaconnectorad-template-subjectnameflagsv4-sanrequireupn
             '''
             result = self._values.get("san_require_upn")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4401,9 +4401,9 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            template_v2: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.TemplateV2Property", typing.Dict[builtins.str, typing.Any]]]] = None,
-            template_v3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.TemplateV3Property", typing.Dict[builtins.str, typing.Any]]]] = None,
-            template_v4: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.TemplateV4Property", typing.Dict[builtins.str, typing.Any]]]] = None,
+            template_v2: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.TemplateV2Property", typing.Dict[builtins.str, typing.Any]]]] = None,
+            template_v3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.TemplateV3Property", typing.Dict[builtins.str, typing.Any]]]] = None,
+            template_v4: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.TemplateV4Property", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Template configuration to define the information included in certificates.
 
@@ -4696,7 +4696,7 @@ class CfnTemplate(
         @builtins.property
         def template_v2(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.TemplateV2Property"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.TemplateV2Property"]]:
             '''Template configuration to define the information included in certificates.
 
             Define certificate validity and renewal periods, certificate request handling and enrollment options, key usage extensions, application policies, and cryptography settings.
@@ -4704,12 +4704,12 @@ class CfnTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatedefinition.html#cfn-pcaconnectorad-template-templatedefinition-templatev2
             '''
             result = self._values.get("template_v2")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.TemplateV2Property"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.TemplateV2Property"]], result)
 
         @builtins.property
         def template_v3(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.TemplateV3Property"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.TemplateV3Property"]]:
             '''Template configuration to define the information included in certificates.
 
             Define certificate validity and renewal periods, certificate request handling and enrollment options, key usage extensions, application policies, and cryptography settings.
@@ -4717,12 +4717,12 @@ class CfnTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatedefinition.html#cfn-pcaconnectorad-template-templatedefinition-templatev3
             '''
             result = self._values.get("template_v3")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.TemplateV3Property"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.TemplateV3Property"]], result)
 
         @builtins.property
         def template_v4(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.TemplateV4Property"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.TemplateV4Property"]]:
             '''Template configuration to define the information included in certificates.
 
             Define certificate validity and renewal periods, certificate request handling and enrollment options, key usage extensions, application policies, and cryptography settings.
@@ -4730,7 +4730,7 @@ class CfnTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatedefinition.html#cfn-pcaconnectorad-template-templatedefinition-templatev4
             '''
             result = self._values.get("template_v4")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTemplate.TemplateV4Property"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTemplate.TemplateV4Property"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4761,13 +4761,13 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            certificate_validity: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.CertificateValidityProperty", typing.Dict[builtins.str, typing.Any]]],
-            enrollment_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.EnrollmentFlagsV2Property", typing.Dict[builtins.str, typing.Any]]],
-            extensions: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.ExtensionsV2Property", typing.Dict[builtins.str, typing.Any]]],
-            general_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.GeneralFlagsV2Property", typing.Dict[builtins.str, typing.Any]]],
-            private_key_attributes: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.PrivateKeyAttributesV2Property", typing.Dict[builtins.str, typing.Any]]],
-            private_key_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.PrivateKeyFlagsV2Property", typing.Dict[builtins.str, typing.Any]]],
-            subject_name_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.SubjectNameFlagsV2Property", typing.Dict[builtins.str, typing.Any]]],
+            certificate_validity: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.CertificateValidityProperty", typing.Dict[builtins.str, typing.Any]]],
+            enrollment_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.EnrollmentFlagsV2Property", typing.Dict[builtins.str, typing.Any]]],
+            extensions: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.ExtensionsV2Property", typing.Dict[builtins.str, typing.Any]]],
+            general_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.GeneralFlagsV2Property", typing.Dict[builtins.str, typing.Any]]],
+            private_key_attributes: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.PrivateKeyAttributesV2Property", typing.Dict[builtins.str, typing.Any]]],
+            private_key_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.PrivateKeyFlagsV2Property", typing.Dict[builtins.str, typing.Any]]],
+            subject_name_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.SubjectNameFlagsV2Property", typing.Dict[builtins.str, typing.Any]]],
             superseded_templates: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''v2 template schema that uses Legacy Cryptographic Providers.
@@ -4893,55 +4893,55 @@ class CfnTemplate(
         @builtins.property
         def certificate_validity(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.CertificateValidityProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.CertificateValidityProperty"]:
             '''Certificate validity describes the validity and renewal periods of a certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev2.html#cfn-pcaconnectorad-template-templatev2-certificatevalidity
             '''
             result = self._values.get("certificate_validity")
             assert result is not None, "Required property 'certificate_validity' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.CertificateValidityProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.CertificateValidityProperty"], result)
 
         @builtins.property
         def enrollment_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.EnrollmentFlagsV2Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.EnrollmentFlagsV2Property"]:
             '''Enrollment flags describe the enrollment settings for certificates such as using the existing private key and deleting expired or revoked certificates.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev2.html#cfn-pcaconnectorad-template-templatev2-enrollmentflags
             '''
             result = self._values.get("enrollment_flags")
             assert result is not None, "Required property 'enrollment_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.EnrollmentFlagsV2Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.EnrollmentFlagsV2Property"], result)
 
         @builtins.property
         def extensions(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.ExtensionsV2Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.ExtensionsV2Property"]:
             '''Extensions describe the key usage extensions and application policies for a template.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev2.html#cfn-pcaconnectorad-template-templatev2-extensions
             '''
             result = self._values.get("extensions")
             assert result is not None, "Required property 'extensions' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.ExtensionsV2Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.ExtensionsV2Property"], result)
 
         @builtins.property
         def general_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.GeneralFlagsV2Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.GeneralFlagsV2Property"]:
             '''General flags describe whether the template is used for computers or users and if the template can be used with autoenrollment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev2.html#cfn-pcaconnectorad-template-templatev2-generalflags
             '''
             result = self._values.get("general_flags")
             assert result is not None, "Required property 'general_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.GeneralFlagsV2Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.GeneralFlagsV2Property"], result)
 
         @builtins.property
         def private_key_attributes(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.PrivateKeyAttributesV2Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.PrivateKeyAttributesV2Property"]:
             '''Private key attributes allow you to specify the minimal key length, key spec, and cryptographic providers for the private key of a certificate for v2 templates.
 
             V2 templates allow you to use Legacy Cryptographic Service Providers.
@@ -4950,31 +4950,31 @@ class CfnTemplate(
             '''
             result = self._values.get("private_key_attributes")
             assert result is not None, "Required property 'private_key_attributes' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.PrivateKeyAttributesV2Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.PrivateKeyAttributesV2Property"], result)
 
         @builtins.property
         def private_key_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.PrivateKeyFlagsV2Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.PrivateKeyFlagsV2Property"]:
             '''Private key flags for v2 templates specify the client compatibility, if the private key can be exported, and if user input is required when using a private key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev2.html#cfn-pcaconnectorad-template-templatev2-privatekeyflags
             '''
             result = self._values.get("private_key_flags")
             assert result is not None, "Required property 'private_key_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.PrivateKeyFlagsV2Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.PrivateKeyFlagsV2Property"], result)
 
         @builtins.property
         def subject_name_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.SubjectNameFlagsV2Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.SubjectNameFlagsV2Property"]:
             '''Subject name flags describe the subject name and subject alternate name that is included in a certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev2.html#cfn-pcaconnectorad-template-templatev2-subjectnameflags
             '''
             result = self._values.get("subject_name_flags")
             assert result is not None, "Required property 'subject_name_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.SubjectNameFlagsV2Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.SubjectNameFlagsV2Property"], result)
 
         @builtins.property
         def superseded_templates(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5015,14 +5015,14 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            certificate_validity: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.CertificateValidityProperty", typing.Dict[builtins.str, typing.Any]]],
-            enrollment_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.EnrollmentFlagsV3Property", typing.Dict[builtins.str, typing.Any]]],
-            extensions: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.ExtensionsV3Property", typing.Dict[builtins.str, typing.Any]]],
-            general_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.GeneralFlagsV3Property", typing.Dict[builtins.str, typing.Any]]],
+            certificate_validity: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.CertificateValidityProperty", typing.Dict[builtins.str, typing.Any]]],
+            enrollment_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.EnrollmentFlagsV3Property", typing.Dict[builtins.str, typing.Any]]],
+            extensions: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.ExtensionsV3Property", typing.Dict[builtins.str, typing.Any]]],
+            general_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.GeneralFlagsV3Property", typing.Dict[builtins.str, typing.Any]]],
             hash_algorithm: builtins.str,
-            private_key_attributes: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.PrivateKeyAttributesV3Property", typing.Dict[builtins.str, typing.Any]]],
-            private_key_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.PrivateKeyFlagsV3Property", typing.Dict[builtins.str, typing.Any]]],
-            subject_name_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.SubjectNameFlagsV3Property", typing.Dict[builtins.str, typing.Any]]],
+            private_key_attributes: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.PrivateKeyAttributesV3Property", typing.Dict[builtins.str, typing.Any]]],
+            private_key_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.PrivateKeyFlagsV3Property", typing.Dict[builtins.str, typing.Any]]],
+            subject_name_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.SubjectNameFlagsV3Property", typing.Dict[builtins.str, typing.Any]]],
             superseded_templates: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''v3 template schema that uses Key Storage Providers.
@@ -5162,50 +5162,50 @@ class CfnTemplate(
         @builtins.property
         def certificate_validity(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.CertificateValidityProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.CertificateValidityProperty"]:
             '''Certificate validity describes the validity and renewal periods of a certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev3.html#cfn-pcaconnectorad-template-templatev3-certificatevalidity
             '''
             result = self._values.get("certificate_validity")
             assert result is not None, "Required property 'certificate_validity' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.CertificateValidityProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.CertificateValidityProperty"], result)
 
         @builtins.property
         def enrollment_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.EnrollmentFlagsV3Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.EnrollmentFlagsV3Property"]:
             '''Enrollment flags describe the enrollment settings for certificates such as using the existing private key and deleting expired or revoked certificates.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev3.html#cfn-pcaconnectorad-template-templatev3-enrollmentflags
             '''
             result = self._values.get("enrollment_flags")
             assert result is not None, "Required property 'enrollment_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.EnrollmentFlagsV3Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.EnrollmentFlagsV3Property"], result)
 
         @builtins.property
         def extensions(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.ExtensionsV3Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.ExtensionsV3Property"]:
             '''Extensions describe the key usage extensions and application policies for a template.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev3.html#cfn-pcaconnectorad-template-templatev3-extensions
             '''
             result = self._values.get("extensions")
             assert result is not None, "Required property 'extensions' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.ExtensionsV3Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.ExtensionsV3Property"], result)
 
         @builtins.property
         def general_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.GeneralFlagsV3Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.GeneralFlagsV3Property"]:
             '''General flags describe whether the template is used for computers or users and if the template can be used with autoenrollment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev3.html#cfn-pcaconnectorad-template-templatev3-generalflags
             '''
             result = self._values.get("general_flags")
             assert result is not None, "Required property 'general_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.GeneralFlagsV3Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.GeneralFlagsV3Property"], result)
 
         @builtins.property
         def hash_algorithm(self) -> builtins.str:
@@ -5220,7 +5220,7 @@ class CfnTemplate(
         @builtins.property
         def private_key_attributes(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.PrivateKeyAttributesV3Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.PrivateKeyAttributesV3Property"]:
             '''Private key attributes allow you to specify the algorithm, minimal key length, key spec, key usage, and cryptographic providers for the private key of a certificate for v3 templates.
 
             V3 templates allow you to use Key Storage Providers.
@@ -5229,31 +5229,31 @@ class CfnTemplate(
             '''
             result = self._values.get("private_key_attributes")
             assert result is not None, "Required property 'private_key_attributes' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.PrivateKeyAttributesV3Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.PrivateKeyAttributesV3Property"], result)
 
         @builtins.property
         def private_key_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.PrivateKeyFlagsV3Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.PrivateKeyFlagsV3Property"]:
             '''Private key flags for v3 templates specify the client compatibility, if the private key can be exported, if user input is required when using a private key, and if an alternate signature algorithm should be used.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev3.html#cfn-pcaconnectorad-template-templatev3-privatekeyflags
             '''
             result = self._values.get("private_key_flags")
             assert result is not None, "Required property 'private_key_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.PrivateKeyFlagsV3Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.PrivateKeyFlagsV3Property"], result)
 
         @builtins.property
         def subject_name_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.SubjectNameFlagsV3Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.SubjectNameFlagsV3Property"]:
             '''Subject name flags describe the subject name and subject alternate name that is included in a certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev3.html#cfn-pcaconnectorad-template-templatev3-subjectnameflags
             '''
             result = self._values.get("subject_name_flags")
             assert result is not None, "Required property 'subject_name_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.SubjectNameFlagsV3Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.SubjectNameFlagsV3Property"], result)
 
         @builtins.property
         def superseded_templates(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5294,13 +5294,13 @@ class CfnTemplate(
         def __init__(
             self,
             *,
-            certificate_validity: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.CertificateValidityProperty", typing.Dict[builtins.str, typing.Any]]],
-            enrollment_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.EnrollmentFlagsV4Property", typing.Dict[builtins.str, typing.Any]]],
-            extensions: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.ExtensionsV4Property", typing.Dict[builtins.str, typing.Any]]],
-            general_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.GeneralFlagsV4Property", typing.Dict[builtins.str, typing.Any]]],
-            private_key_attributes: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.PrivateKeyAttributesV4Property", typing.Dict[builtins.str, typing.Any]]],
-            private_key_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.PrivateKeyFlagsV4Property", typing.Dict[builtins.str, typing.Any]]],
-            subject_name_flags: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplate.SubjectNameFlagsV4Property", typing.Dict[builtins.str, typing.Any]]],
+            certificate_validity: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.CertificateValidityProperty", typing.Dict[builtins.str, typing.Any]]],
+            enrollment_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.EnrollmentFlagsV4Property", typing.Dict[builtins.str, typing.Any]]],
+            extensions: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.ExtensionsV4Property", typing.Dict[builtins.str, typing.Any]]],
+            general_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.GeneralFlagsV4Property", typing.Dict[builtins.str, typing.Any]]],
+            private_key_attributes: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.PrivateKeyAttributesV4Property", typing.Dict[builtins.str, typing.Any]]],
+            private_key_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.PrivateKeyFlagsV4Property", typing.Dict[builtins.str, typing.Any]]],
+            subject_name_flags: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.SubjectNameFlagsV4Property", typing.Dict[builtins.str, typing.Any]]],
             hash_algorithm: typing.Optional[builtins.str] = None,
             superseded_templates: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -5444,55 +5444,55 @@ class CfnTemplate(
         @builtins.property
         def certificate_validity(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.CertificateValidityProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.CertificateValidityProperty"]:
             '''Certificate validity describes the validity and renewal periods of a certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev4.html#cfn-pcaconnectorad-template-templatev4-certificatevalidity
             '''
             result = self._values.get("certificate_validity")
             assert result is not None, "Required property 'certificate_validity' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.CertificateValidityProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.CertificateValidityProperty"], result)
 
         @builtins.property
         def enrollment_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.EnrollmentFlagsV4Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.EnrollmentFlagsV4Property"]:
             '''Enrollment flags describe the enrollment settings for certificates using the existing private key and deleting expired or revoked certificates.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev4.html#cfn-pcaconnectorad-template-templatev4-enrollmentflags
             '''
             result = self._values.get("enrollment_flags")
             assert result is not None, "Required property 'enrollment_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.EnrollmentFlagsV4Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.EnrollmentFlagsV4Property"], result)
 
         @builtins.property
         def extensions(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.ExtensionsV4Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.ExtensionsV4Property"]:
             '''Extensions describe the key usage extensions and application policies for a template.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev4.html#cfn-pcaconnectorad-template-templatev4-extensions
             '''
             result = self._values.get("extensions")
             assert result is not None, "Required property 'extensions' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.ExtensionsV4Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.ExtensionsV4Property"], result)
 
         @builtins.property
         def general_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.GeneralFlagsV4Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.GeneralFlagsV4Property"]:
             '''General flags describe whether the template is used for computers or users and if the template can be used with autoenrollment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev4.html#cfn-pcaconnectorad-template-templatev4-generalflags
             '''
             result = self._values.get("general_flags")
             assert result is not None, "Required property 'general_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.GeneralFlagsV4Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.GeneralFlagsV4Property"], result)
 
         @builtins.property
         def private_key_attributes(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.PrivateKeyAttributesV4Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.PrivateKeyAttributesV4Property"]:
             '''Private key attributes allow you to specify the minimal key length, key spec, key usage, and cryptographic providers for the private key of a certificate for v4 templates.
 
             V4 templates allow you to use either Key Storage Providers or Legacy Cryptographic Service Providers. You specify the cryptography provider category in private key flags.
@@ -5501,31 +5501,31 @@ class CfnTemplate(
             '''
             result = self._values.get("private_key_attributes")
             assert result is not None, "Required property 'private_key_attributes' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.PrivateKeyAttributesV4Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.PrivateKeyAttributesV4Property"], result)
 
         @builtins.property
         def private_key_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.PrivateKeyFlagsV4Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.PrivateKeyFlagsV4Property"]:
             '''Private key flags for v4 templates specify the client compatibility, if the private key can be exported, if user input is required when using a private key, if an alternate signature algorithm should be used, and if certificates are renewed using the same private key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev4.html#cfn-pcaconnectorad-template-templatev4-privatekeyflags
             '''
             result = self._values.get("private_key_flags")
             assert result is not None, "Required property 'private_key_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.PrivateKeyFlagsV4Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.PrivateKeyFlagsV4Property"], result)
 
         @builtins.property
         def subject_name_flags(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplate.SubjectNameFlagsV4Property"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.SubjectNameFlagsV4Property"]:
             '''Subject name flags describe the subject name and subject alternate name that is included in a certificate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcaconnectorad-template-templatev4.html#cfn-pcaconnectorad-template-templatev4-subjectnameflags
             '''
             result = self._values.get("subject_name_flags")
             assert result is not None, "Required property 'subject_name_flags' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplate.SubjectNameFlagsV4Property"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.SubjectNameFlagsV4Property"], result)
 
         @builtins.property
         def hash_algorithm(self) -> typing.Optional[builtins.str]:
@@ -5664,10 +5664,10 @@ class CfnTemplateGroupAccessControlEntry(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        access_rights: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTemplateGroupAccessControlEntry.AccessRightsProperty", typing.Dict[builtins.str, typing.Any]]],
+        access_rights: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplateGroupAccessControlEntry.AccessRightsProperty", typing.Dict[builtins.str, typing.Any]]],
         group_display_name: builtins.str,
         group_security_identifier: typing.Optional[builtins.str] = None,
         template_arn: typing.Optional[builtins.str] = None,
@@ -5707,7 +5707,7 @@ class CfnTemplateGroupAccessControlEntry(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTemplateGroupAccessControlEntry", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5745,22 +5745,22 @@ class CfnTemplateGroupAccessControlEntry(
     @jsii.member(jsii_name="templateGroupAccessControlEntryRef")
     def template_group_access_control_entry_ref(
         self,
-    ) -> _TemplateGroupAccessControlEntryReference_beff17df:
+    ) -> "_TemplateGroupAccessControlEntryReference_beff17df":
         '''A reference to a TemplateGroupAccessControlEntry resource.'''
-        return typing.cast(_TemplateGroupAccessControlEntryReference_beff17df, jsii.get(self, "templateGroupAccessControlEntryRef"))
+        return typing.cast("_TemplateGroupAccessControlEntryReference_beff17df", jsii.get(self, "templateGroupAccessControlEntryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="accessRights")
     def access_rights(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnTemplateGroupAccessControlEntry.AccessRightsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplateGroupAccessControlEntry.AccessRightsProperty"]:
         '''Permissions to allow or deny an Active Directory group to enroll or autoenroll certificates issued against a template.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTemplateGroupAccessControlEntry.AccessRightsProperty"], jsii.get(self, "accessRights"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplateGroupAccessControlEntry.AccessRightsProperty"], jsii.get(self, "accessRights"))
 
     @access_rights.setter
     def access_rights(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnTemplateGroupAccessControlEntry.AccessRightsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnTemplateGroupAccessControlEntry.AccessRightsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__186451b885ce1f5d39a9062a1daec093b87a1acb9aaeaab87a9c26d0732b7475)
@@ -5893,7 +5893,7 @@ class CfnTemplateGroupAccessControlEntryProps:
     def __init__(
         self,
         *,
-        access_rights: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTemplateGroupAccessControlEntry.AccessRightsProperty, typing.Dict[builtins.str, typing.Any]]],
+        access_rights: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplateGroupAccessControlEntry.AccessRightsProperty", typing.Dict[builtins.str, typing.Any]]],
         group_display_name: builtins.str,
         group_security_identifier: typing.Optional[builtins.str] = None,
         template_arn: typing.Optional[builtins.str] = None,
@@ -5944,14 +5944,14 @@ class CfnTemplateGroupAccessControlEntryProps:
     @builtins.property
     def access_rights(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnTemplateGroupAccessControlEntry.AccessRightsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplateGroupAccessControlEntry.AccessRightsProperty"]:
         '''Permissions to allow or deny an Active Directory group to enroll or autoenroll certificates issued against a template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorad-templategroupaccesscontrolentry.html#cfn-pcaconnectorad-templategroupaccesscontrolentry-accessrights
         '''
         result = self._values.get("access_rights")
         assert result is not None, "Required property 'access_rights' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnTemplateGroupAccessControlEntry.AccessRightsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplateGroupAccessControlEntry.AccessRightsProperty"], result)
 
     @builtins.property
     def group_display_name(self) -> builtins.str:
@@ -6013,9 +6013,9 @@ class CfnTemplateProps:
         self,
         *,
         connector_arn: builtins.str,
-        definition: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTemplate.TemplateDefinitionProperty, typing.Dict[builtins.str, typing.Any]]],
+        definition: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTemplate.TemplateDefinitionProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
-        reenroll_all_certificate_holders: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        reenroll_all_certificate_holders: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTemplate``.
@@ -6333,7 +6333,7 @@ class CfnTemplateProps:
     @builtins.property
     def definition(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnTemplate.TemplateDefinitionProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnTemplate.TemplateDefinitionProperty"]:
         '''Template configuration to define the information included in certificates.
 
         Define certificate validity and renewal periods, certificate request handling and enrollment options, key usage extensions, application policies, and cryptography settings.
@@ -6342,7 +6342,7 @@ class CfnTemplateProps:
         '''
         result = self._values.get("definition")
         assert result is not None, "Required property 'definition' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnTemplate.TemplateDefinitionProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTemplate.TemplateDefinitionProperty"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -6359,7 +6359,7 @@ class CfnTemplateProps:
     @builtins.property
     def reenroll_all_certificate_holders(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''This setting allows the major version of a template to be increased automatically.
 
         All members of Active Directory groups that are allowed to enroll with a template will receive a new certificate issued using that template.
@@ -6367,7 +6367,7 @@ class CfnTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorad-template.html#cfn-pcaconnectorad-template-reenrollallcertificateholders
         '''
         result = self._values.get("reenroll_all_certificate_holders")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:

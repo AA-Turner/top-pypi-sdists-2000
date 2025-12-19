@@ -156,7 +156,7 @@ class IDetectorRef(
 
     @builtins.property
     @jsii.member(jsii_name="detectorRef")
-    def detector_ref(self) -> DetectorReference:
+    def detector_ref(self) -> "DetectorReference":
         '''(experimental) A reference to a Detector resource.
 
         :stability: experimental
@@ -177,12 +177,12 @@ class _IDetectorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="detectorRef")
-    def detector_ref(self) -> DetectorReference:
+    def detector_ref(self) -> "DetectorReference":
         '''(experimental) A reference to a Detector resource.
 
         :stability: experimental
         '''
-        return typing.cast(DetectorReference, jsii.get(self, "detectorRef"))
+        return typing.cast("DetectorReference", jsii.get(self, "detectorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDetectorRef).__jsii_proxy_class__ = lambda : _IDetectorRefProxy
@@ -201,7 +201,7 @@ class IFilterRef(
 
     @builtins.property
     @jsii.member(jsii_name="filterRef")
-    def filter_ref(self) -> FilterReference:
+    def filter_ref(self) -> "FilterReference":
         '''(experimental) A reference to a Filter resource.
 
         :stability: experimental
@@ -222,12 +222,12 @@ class _IFilterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="filterRef")
-    def filter_ref(self) -> FilterReference:
+    def filter_ref(self) -> "FilterReference":
         '''(experimental) A reference to a Filter resource.
 
         :stability: experimental
         '''
-        return typing.cast(FilterReference, jsii.get(self, "filterRef"))
+        return typing.cast("FilterReference", jsii.get(self, "filterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFilterRef).__jsii_proxy_class__ = lambda : _IFilterRefProxy

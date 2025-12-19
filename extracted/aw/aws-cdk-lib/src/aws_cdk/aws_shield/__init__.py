@@ -129,7 +129,7 @@ class CfnDRTAccess(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         role_arn: builtins.str,
@@ -163,7 +163,7 @@ class CfnDRTAccess(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDRTAccess", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -208,9 +208,9 @@ class CfnDRTAccess(
 
     @builtins.property
     @jsii.member(jsii_name="drtAccessRef")
-    def drt_access_ref(self) -> _DRTAccessReference_932569dc:
+    def drt_access_ref(self) -> "_DRTAccessReference_932569dc":
         '''A reference to a DRTAccess resource.'''
-        return typing.cast(_DRTAccessReference_932569dc, jsii.get(self, "drtAccessRef"))
+        return typing.cast("_DRTAccessReference_932569dc", jsii.get(self, "drtAccessRef"))
 
     @builtins.property
     @jsii.member(jsii_name="roleArn")
@@ -380,10 +380,10 @@ class CfnProactiveEngagement(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        emergency_contact_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProactiveEngagement.EmergencyContactProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        emergency_contact_list: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProactiveEngagement.EmergencyContactProperty", typing.Dict[builtins.str, typing.Any]]]]],
         proactive_engagement_status: builtins.str,
     ) -> None:
         '''Create a new ``AWS::Shield::ProactiveEngagement``.
@@ -417,7 +417,7 @@ class CfnProactiveEngagement(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProactiveEngagement", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -462,22 +462,22 @@ class CfnProactiveEngagement(
 
     @builtins.property
     @jsii.member(jsii_name="proactiveEngagementRef")
-    def proactive_engagement_ref(self) -> _ProactiveEngagementReference_9b0d28cb:
+    def proactive_engagement_ref(self) -> "_ProactiveEngagementReference_9b0d28cb":
         '''A reference to a ProactiveEngagement resource.'''
-        return typing.cast(_ProactiveEngagementReference_9b0d28cb, jsii.get(self, "proactiveEngagementRef"))
+        return typing.cast("_ProactiveEngagementReference_9b0d28cb", jsii.get(self, "proactiveEngagementRef"))
 
     @builtins.property
     @jsii.member(jsii_name="emergencyContactList")
     def emergency_contact_list(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProactiveEngagement.EmergencyContactProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProactiveEngagement.EmergencyContactProperty"]]]:
         '''The list of email addresses and phone numbers that the Shield Response Team (SRT) can use to contact you for escalations to the SRT and to initiate proactive customer support, plus any relevant notes.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProactiveEngagement.EmergencyContactProperty"]]], jsii.get(self, "emergencyContactList"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProactiveEngagement.EmergencyContactProperty"]]], jsii.get(self, "emergencyContactList"))
 
     @emergency_contact_list.setter
     def emergency_contact_list(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProactiveEngagement.EmergencyContactProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProactiveEngagement.EmergencyContactProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__124fcf35e2a271c8af4d75b0cf5014b8ad1239720905927de40e52915ba3e15c)
@@ -602,7 +602,7 @@ class CfnProactiveEngagementProps:
     def __init__(
         self,
         *,
-        emergency_contact_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProactiveEngagement.EmergencyContactProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        emergency_contact_list: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProactiveEngagement.EmergencyContactProperty", typing.Dict[builtins.str, typing.Any]]]]],
         proactive_engagement_status: builtins.str,
     ) -> None:
         '''Properties for defining a ``CfnProactiveEngagement``.
@@ -642,7 +642,7 @@ class CfnProactiveEngagementProps:
     @builtins.property
     def emergency_contact_list(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProactiveEngagement.EmergencyContactProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProactiveEngagement.EmergencyContactProperty"]]]:
         '''The list of email addresses and phone numbers that the Shield Response Team (SRT) can use to contact you for escalations to the SRT and to initiate proactive customer support, plus any relevant notes.
 
         To enable proactive engagement, the contact list must include at least one phone number.
@@ -658,7 +658,7 @@ class CfnProactiveEngagementProps:
         '''
         result = self._values.get("emergency_contact_list")
         assert result is not None, "Required property 'emergency_contact_list' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProactiveEngagement.EmergencyContactProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProactiveEngagement.EmergencyContactProperty"]]], result)
 
     @builtins.property
     def proactive_engagement_status(self) -> builtins.str:
@@ -722,6 +722,7 @@ class CfnProtection(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_shield as shield
@@ -751,14 +752,14 @@ class CfnProtection(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         resource_arn: builtins.str,
-        application_layer_automatic_response_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        application_layer_automatic_response_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         health_check_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Shield::Protection``.
 
@@ -786,7 +787,7 @@ class CfnProtection(
 
     @jsii.member(jsii_name="arnForProtection")
     @builtins.classmethod
-    def arn_for_protection(cls, resource: _IProtectionRef_fb08d716) -> builtins.str:
+    def arn_for_protection(cls, resource: "_IProtectionRef_fb08d716") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -808,7 +809,7 @@ class CfnProtection(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProtection", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -857,9 +858,9 @@ class CfnProtection(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -868,9 +869,9 @@ class CfnProtection(
 
     @builtins.property
     @jsii.member(jsii_name="protectionRef")
-    def protection_ref(self) -> _ProtectionReference_329b467b:
+    def protection_ref(self) -> "_ProtectionReference_329b467b":
         '''A reference to a Protection resource.'''
-        return typing.cast(_ProtectionReference_329b467b, jsii.get(self, "protectionRef"))
+        return typing.cast("_ProtectionReference_329b467b", jsii.get(self, "protectionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -905,14 +906,14 @@ class CfnProtection(
     @jsii.member(jsii_name="applicationLayerAutomaticResponseConfiguration")
     def application_layer_automatic_response_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty"]]:
         '''The automatic application layer DDoS mitigation settings for the protection.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty"]], jsii.get(self, "applicationLayerAutomaticResponseConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty"]], jsii.get(self, "applicationLayerAutomaticResponseConfiguration"))
 
     @application_layer_automatic_response_configuration.setter
     def application_layer_automatic_response_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__145ac68c42ad419925aa32644eea217eb08e6ce73993b51c7af4167aab4e13de)
@@ -937,12 +938,12 @@ class CfnProtection(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key:value pairs associated with an AWS resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4cd697bbebfdef8296c6fa9e920e70bb9a5ed569b251c351c36b4e3edbdd61e0)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1044,7 +1045,7 @@ class CfnProtection(
         def __init__(
             self,
             *,
-            action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnProtection.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
+            action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnProtection.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
             status: builtins.str,
         ) -> None:
             '''The automatic application layer DDoS mitigation settings for a ``Protection`` .
@@ -1088,7 +1089,7 @@ class CfnProtection(
         @builtins.property
         def action(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnProtection.ActionProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnProtection.ActionProperty"]:
             '''Specifies the action setting that Shield Advanced should use in the AWS WAF rules that it creates on behalf of the protected resource in response to DDoS attacks.
 
             You specify this as part of the configuration for the automatic application layer DDoS mitigation feature, when you enable or update automatic mitigation. Shield Advanced creates the AWS WAF rules in a Shield Advanced-managed rule group, inside the web ACL that you have associated with the resource.
@@ -1097,7 +1098,7 @@ class CfnProtection(
             '''
             result = self._values.get("action")
             assert result is not None, "Required property 'action' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnProtection.ActionProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnProtection.ActionProperty"], result)
 
         @builtins.property
         def status(self) -> builtins.str:
@@ -1139,6 +1140,7 @@ class CfnProtectionGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_shield as shield
@@ -1160,7 +1162,7 @@ class CfnProtectionGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         aggregation: builtins.str,
@@ -1168,7 +1170,7 @@ class CfnProtectionGroup(
         protection_group_id: builtins.str,
         members: typing.Optional[typing.Sequence[builtins.str]] = None,
         resource_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Shield::ProtectionGroup``.
 
@@ -1200,7 +1202,7 @@ class CfnProtectionGroup(
     @builtins.classmethod
     def arn_for_protection_group(
         cls,
-        resource: _IProtectionGroupRef_d3e72ac4,
+        resource: "_IProtectionGroupRef_d3e72ac4",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1223,7 +1225,7 @@ class CfnProtectionGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProtectionGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1263,9 +1265,9 @@ class CfnProtectionGroup(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1274,9 +1276,9 @@ class CfnProtectionGroup(
 
     @builtins.property
     @jsii.member(jsii_name="protectionGroupRef")
-    def protection_group_ref(self) -> _ProtectionGroupReference_079db2ad:
+    def protection_group_ref(self) -> "_ProtectionGroupReference_079db2ad":
         '''A reference to a ProtectionGroup resource.'''
-        return typing.cast(_ProtectionGroupReference_079db2ad, jsii.get(self, "protectionGroupRef"))
+        return typing.cast("_ProtectionGroupReference_079db2ad", jsii.get(self, "protectionGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="aggregation")
@@ -1345,12 +1347,12 @@ class CfnProtectionGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key:value pairs associated with an AWS resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__70ea7c7493bdebcbd30035fe4d1550d14d6af25225d32845d78baca96ef59493)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1378,7 +1380,7 @@ class CfnProtectionGroupProps:
         protection_group_id: builtins.str,
         members: typing.Optional[typing.Sequence[builtins.str]] = None,
         resource_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnProtectionGroup``.
 
@@ -1394,6 +1396,7 @@ class CfnProtectionGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_shield as shield
@@ -1493,7 +1496,7 @@ class CfnProtectionGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key:value pairs associated with an AWS resource.
 
         The key:value pair can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each AWS resource.
@@ -1501,7 +1504,7 @@ class CfnProtectionGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-shield-protectiongroup.html#cfn-shield-protectiongroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1532,9 +1535,9 @@ class CfnProtectionProps:
         *,
         name: builtins.str,
         resource_arn: builtins.str,
-        application_layer_automatic_response_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        application_layer_automatic_response_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         health_check_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnProtection``.
 
@@ -1549,6 +1552,7 @@ class CfnProtectionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_shield as shield
@@ -1620,7 +1624,7 @@ class CfnProtectionProps:
     @builtins.property
     def application_layer_automatic_response_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty"]]:
         '''The automatic application layer DDoS mitigation settings for the protection.
 
         This configuration determines whether Shield Advanced automatically manages rules in the web ACL in order to respond to application layer events that Shield Advanced determines to be DDoS attacks.
@@ -1630,7 +1634,7 @@ class CfnProtectionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-shield-protection.html#cfn-shield-protection-applicationlayerautomaticresponseconfiguration
         '''
         result = self._values.get("application_layer_automatic_response_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProtection.ApplicationLayerAutomaticResponseConfigurationProperty"]], result)
 
     @builtins.property
     def health_check_arns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1648,7 +1652,7 @@ class CfnProtectionProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key:value pairs associated with an AWS resource.
 
         The key:value pair can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each AWS resource.
@@ -1656,7 +1660,7 @@ class CfnProtectionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-shield-protection.html#cfn-shield-protection-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

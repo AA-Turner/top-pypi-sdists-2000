@@ -175,7 +175,7 @@ class IAPIKeyRef(
 
     @builtins.property
     @jsii.member(jsii_name="apiKeyRef")
-    def api_key_ref(self) -> APIKeyReference:
+    def api_key_ref(self) -> "APIKeyReference":
         '''(experimental) A reference to a APIKey resource.
 
         :stability: experimental
@@ -196,12 +196,12 @@ class _IAPIKeyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="apiKeyRef")
-    def api_key_ref(self) -> APIKeyReference:
+    def api_key_ref(self) -> "APIKeyReference":
         '''(experimental) A reference to a APIKey resource.
 
         :stability: experimental
         '''
-        return typing.cast(APIKeyReference, jsii.get(self, "apiKeyRef"))
+        return typing.cast("APIKeyReference", jsii.get(self, "apiKeyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAPIKeyRef).__jsii_proxy_class__ = lambda : _IAPIKeyRefProxy
@@ -220,7 +220,7 @@ class IGeofenceCollectionRef(
 
     @builtins.property
     @jsii.member(jsii_name="geofenceCollectionRef")
-    def geofence_collection_ref(self) -> GeofenceCollectionReference:
+    def geofence_collection_ref(self) -> "GeofenceCollectionReference":
         '''(experimental) A reference to a GeofenceCollection resource.
 
         :stability: experimental
@@ -241,12 +241,12 @@ class _IGeofenceCollectionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="geofenceCollectionRef")
-    def geofence_collection_ref(self) -> GeofenceCollectionReference:
+    def geofence_collection_ref(self) -> "GeofenceCollectionReference":
         '''(experimental) A reference to a GeofenceCollection resource.
 
         :stability: experimental
         '''
-        return typing.cast(GeofenceCollectionReference, jsii.get(self, "geofenceCollectionRef"))
+        return typing.cast("GeofenceCollectionReference", jsii.get(self, "geofenceCollectionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGeofenceCollectionRef).__jsii_proxy_class__ = lambda : _IGeofenceCollectionRefProxy

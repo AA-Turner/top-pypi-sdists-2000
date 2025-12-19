@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: vllm
-Version: 0.12.0
+Version: 0.13.0
 Summary: A high-throughput and memory-efficient inference and serving engine for LLMs
 Author: vLLM Team
 License-Expression: Apache-2.0
@@ -66,10 +66,12 @@ Requires-Dist: scipy
 Requires-Dist: ninja
 Requires-Dist: pybase64
 Requires-Dist: cbor2
+Requires-Dist: ijson
 Requires-Dist: setproctitle
 Requires-Dist: openai-harmony>=0.0.3
 Requires-Dist: anthropic==0.71.0
 Requires-Dist: model-hosting-container-standards<1.0.0,>=0.1.9
+Requires-Dist: mcp
 Requires-Dist: numba==0.61.2
 Requires-Dist: ray[cgraph]>=2.48.0
 Requires-Dist: torch==2.9.0
@@ -86,7 +88,7 @@ Requires-Dist: tensorizer==2.10.1; extra == "tensorizer"
 Provides-Extra: fastsafetensors
 Requires-Dist: fastsafetensors>=0.1.10; extra == "fastsafetensors"
 Provides-Extra: runai
-Requires-Dist: runai-model-streamer[gcs,s3]>=0.15.0; extra == "runai"
+Requires-Dist: runai-model-streamer[gcs,s3]>=0.15.3; extra == "runai"
 Provides-Extra: audio
 Requires-Dist: librosa; extra == "audio"
 Requires-Dist: soundfile; extra == "audio"
@@ -238,16 +240,19 @@ Compute Resources:
 - Alibaba Cloud
 - AMD
 - Anyscale
+- Arm
 - AWS
 - Crusoe Cloud
 - Databricks
 - DeepInfra
 - Google Cloud
+- IBM
 - Intel
 - Lambda Lab
 - Nebius
 - Novita AI
 - NVIDIA
+- Red Hat
 - Replicate
 - Roblox
 - RunPod

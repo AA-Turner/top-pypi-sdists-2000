@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sagemaker
-Version: 3.1.1
+Version: 3.2.0
 Summary: Open source library for training and deploying models on Amazon SageMaker.
 Author: Amazon Web Services
 Project-URL: Homepage, https://github.com/aws/sagemaker-python-sdk
@@ -17,10 +17,10 @@ Classifier: Programming Language :: Python :: 3.12
 Requires-Python: >=3.9
 Description-Content-Type: text/x-rst
 License-File: LICENSE
-Requires-Dist: sagemaker-core<3.0.0,>=2.1.1
-Requires-Dist: sagemaker-train<2.0.0,>=1.1.1
-Requires-Dist: sagemaker-serve<2.0.0,>=1.1.1
-Requires-Dist: sagemaker-mlops<2.0.0,>=1.1.1
+Requires-Dist: sagemaker-core<3.0.0,>=2.2.0
+Requires-Dist: sagemaker-train<2.0.0,>=1.2.0
+Requires-Dist: sagemaker-serve<2.0.0,>=1.2.0
+Requires-Dist: sagemaker-mlops<2.0.0,>=1.2.0
 Provides-Extra: train
 Requires-Dist: sagemaker-train; extra == "train"
 Provides-Extra: serve
@@ -67,8 +67,6 @@ With the SDK, you can train and deploy models using popular deep learning framew
 You can also train and deploy models with **Amazon algorithms**,
 which are scalable implementations of core machine learning algorithms that are optimized for SageMaker and GPU training.
 If you have **your own algorithms** built into SageMaker compatible Docker containers, you can train and host models using these as well.
-
-For detailed documentation, including the API reference, see `Read the Docs <https://sagemaker.readthedocs.io>`_.
 
 To install SageMaker Python SDK, see `Installing SageMaker Python SDK <#installing-the-sagemaker-python-sdk>`_.
 

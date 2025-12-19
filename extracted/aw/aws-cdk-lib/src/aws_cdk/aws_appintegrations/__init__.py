@@ -92,6 +92,7 @@ class CfnApplication(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appintegrations as appintegrations
@@ -131,19 +132,19 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application_source_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        application_source_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         description: builtins.str,
         name: builtins.str,
         namespace: builtins.str,
-        application_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        iframe_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.IframeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        application_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        iframe_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.IframeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         initialization_timeout: typing.Optional[jsii.Number] = None,
-        is_service: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        is_service: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         permissions: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppIntegrations::Application``.
 
@@ -181,7 +182,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_f88446ed) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_f88446ed") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -203,7 +204,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -234,9 +235,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_eb7f83ac:
+    def application_ref(self) -> "_ApplicationReference_eb7f83ac":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_eb7f83ac, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_eb7f83ac", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrApplicationArn")
@@ -258,9 +259,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -271,14 +272,14 @@ class CfnApplication(
     @jsii.member(jsii_name="applicationSourceConfig")
     def application_source_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationSourceConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationSourceConfigProperty"]:
         '''The configuration for where the application should be loaded from.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationSourceConfigProperty"], jsii.get(self, "applicationSourceConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationSourceConfigProperty"], jsii.get(self, "applicationSourceConfig"))
 
     @application_source_config.setter
     def application_source_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationSourceConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationSourceConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1e6a672bbf82d8b3bb39f56510a2db6c1a10b1776e0b968cd61c6665d29508e7)
@@ -328,13 +329,13 @@ class CfnApplication(
     @jsii.member(jsii_name="applicationConfig")
     def application_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationConfigProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationConfigProperty"]], jsii.get(self, "applicationConfig"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationConfigProperty"]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationConfigProperty"]], jsii.get(self, "applicationConfig"))
 
     @application_config.setter
     def application_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f3caf601b0f569fd019f866e47cc5b0bb49379d4b882f320078ed605052b7ca7)
@@ -345,13 +346,13 @@ class CfnApplication(
     @jsii.member(jsii_name="iframeConfig")
     def iframe_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.IframeConfigProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.IframeConfigProperty"]], jsii.get(self, "iframeConfig"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.IframeConfigProperty"]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.IframeConfigProperty"]], jsii.get(self, "iframeConfig"))
 
     @iframe_config.setter
     def iframe_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.IframeConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.IframeConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__132e84c3b7d79e8adb5125bdb2456de645edaaaecf7c9ace8f172b799e55c46d)
@@ -375,14 +376,14 @@ class CfnApplication(
     @jsii.member(jsii_name="isService")
     def is_service(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the application is a service.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "isService"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "isService"))
 
     @is_service.setter
     def is_service(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__024ff94ee9a9dbd7a4348422377053fce4ef5b4393f67aa6561ab4f37e813332)
@@ -404,12 +405,12 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags used to organize, track, or control access for this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bf726959aa4191428101440b70a3eb393290a7cdec2b995b07413ac05f6d0c28)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -424,7 +425,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            contact_handling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ContactHandlingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            contact_handling: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ContactHandlingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''
             :param contact_handling: 
@@ -454,12 +455,12 @@ class CfnApplication(
         @builtins.property
         def contact_handling(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ContactHandlingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ContactHandlingProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appintegrations-application-applicationconfig.html#cfn-appintegrations-application-applicationconfig-contacthandling
             '''
             result = self._values.get("contact_handling")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ContactHandlingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ContactHandlingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -481,7 +482,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            external_url_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ExternalUrlConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            external_url_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ExternalUrlConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The configuration for where the application should be loaded from.
 
@@ -515,14 +516,14 @@ class CfnApplication(
         @builtins.property
         def external_url_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnApplication.ExternalUrlConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.ExternalUrlConfigProperty"]:
             '''The external URL source for the application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appintegrations-application-applicationsourceconfig.html#cfn-appintegrations-application-applicationsourceconfig-externalurlconfig
             '''
             result = self._values.get("external_url_config")
             assert result is not None, "Required property 'external_url_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplication.ExternalUrlConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.ExternalUrlConfigProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -749,16 +750,16 @@ class CfnApplicationProps:
     def __init__(
         self,
         *,
-        application_source_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        application_source_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         description: builtins.str,
         name: builtins.str,
         namespace: builtins.str,
-        application_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        iframe_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.IframeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        application_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        iframe_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.IframeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         initialization_timeout: typing.Optional[jsii.Number] = None,
-        is_service: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        is_service: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         permissions: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplication``.
 
@@ -778,6 +779,7 @@ class CfnApplicationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appintegrations as appintegrations
@@ -848,14 +850,14 @@ class CfnApplicationProps:
     @builtins.property
     def application_source_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationSourceConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationSourceConfigProperty"]:
         '''The configuration for where the application should be loaded from.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-applicationsourceconfig
         '''
         result = self._values.get("application_source_config")
         assert result is not None, "Required property 'application_source_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationSourceConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationSourceConfigProperty"], result)
 
     @builtins.property
     def description(self) -> builtins.str:
@@ -890,22 +892,22 @@ class CfnApplicationProps:
     @builtins.property
     def application_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationConfigProperty"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-applicationconfig
         '''
         result = self._values.get("application_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationConfigProperty"]], result)
 
     @builtins.property
     def iframe_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.IframeConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.IframeConfigProperty"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-iframeconfig
         '''
         result = self._values.get("iframe_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.IframeConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.IframeConfigProperty"]], result)
 
     @builtins.property
     def initialization_timeout(self) -> typing.Optional[jsii.Number]:
@@ -921,7 +923,7 @@ class CfnApplicationProps:
     @builtins.property
     def is_service(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the application is a service.
 
         :default: - false
@@ -929,7 +931,7 @@ class CfnApplicationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-isservice
         '''
         result = self._values.get("is_service")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def permissions(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -941,7 +943,7 @@ class CfnApplicationProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags used to organize, track, or control access for this resource.
 
         For example, { "tags": {"key1":"value1", "key2":"value2"} }.
@@ -949,7 +951,7 @@ class CfnApplicationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-application.html#cfn-appintegrations-application-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -977,6 +979,7 @@ class CfnDataIntegration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appintegrations as appintegrations
@@ -1014,17 +1017,17 @@ class CfnDataIntegration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         kms_key: builtins.str,
         name: builtins.str,
         source_uri: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        file_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataIntegration.FileConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataIntegration.FileConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         object_configuration: typing.Any = None,
-        schedule_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataIntegration.ScheduleConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        schedule_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataIntegration.ScheduleConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppIntegrations::DataIntegration``.
 
@@ -1060,7 +1063,7 @@ class CfnDataIntegration(
     @builtins.classmethod
     def arn_for_data_integration(
         cls,
-        resource: _IDataIntegrationRef_c5e65586,
+        resource: "_IDataIntegrationRef_c5e65586",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1074,10 +1077,10 @@ class CfnDataIntegration(
     @builtins.classmethod
     def from_data_integration_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDataIntegrationRef_c5e65586:
+    ) -> "_IDataIntegrationRef_c5e65586":
         '''Creates a new IDataIntegrationRef from an ARN.
 
         :param scope: -
@@ -1089,16 +1092,16 @@ class CfnDataIntegration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDataIntegrationRef_c5e65586, jsii.sinvoke(cls, "fromDataIntegrationArn", [scope, id, arn]))
+        return typing.cast("_IDataIntegrationRef_c5e65586", jsii.sinvoke(cls, "fromDataIntegrationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromDataIntegrationId")
     @builtins.classmethod
     def from_data_integration_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         data_integration_id: builtins.str,
-    ) -> _IDataIntegrationRef_c5e65586:
+    ) -> "_IDataIntegrationRef_c5e65586":
         '''Creates a new IDataIntegrationRef from a dataIntegrationId.
 
         :param scope: -
@@ -1110,7 +1113,7 @@ class CfnDataIntegration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument data_integration_id", value=data_integration_id, expected_type=type_hints["data_integration_id"])
-        return typing.cast(_IDataIntegrationRef_c5e65586, jsii.sinvoke(cls, "fromDataIntegrationId", [scope, id, data_integration_id]))
+        return typing.cast("_IDataIntegrationRef_c5e65586", jsii.sinvoke(cls, "fromDataIntegrationId", [scope, id, data_integration_id]))
 
     @jsii.member(jsii_name="isCfnDataIntegration")
     @builtins.classmethod
@@ -1125,7 +1128,7 @@ class CfnDataIntegration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataIntegration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1179,15 +1182,15 @@ class CfnDataIntegration(
 
     @builtins.property
     @jsii.member(jsii_name="dataIntegrationRef")
-    def data_integration_ref(self) -> _DataIntegrationReference_82094d23:
+    def data_integration_ref(self) -> "_DataIntegrationReference_82094d23":
         '''A reference to a DataIntegration resource.'''
-        return typing.cast(_DataIntegrationReference_82094d23, jsii.get(self, "dataIntegrationRef"))
+        return typing.cast("_DataIntegrationReference_82094d23", jsii.get(self, "dataIntegrationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="kmsKey")
@@ -1245,14 +1248,14 @@ class CfnDataIntegration(
     @jsii.member(jsii_name="fileConfiguration")
     def file_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataIntegration.FileConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataIntegration.FileConfigurationProperty"]]:
         '''The configuration for what files should be pulled from the source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataIntegration.FileConfigurationProperty"]], jsii.get(self, "fileConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataIntegration.FileConfigurationProperty"]], jsii.get(self, "fileConfiguration"))
 
     @file_configuration.setter
     def file_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataIntegration.FileConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataIntegration.FileConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fa142812d7a4300d1fdf79595aa40d4ec698ff46a0af150d168d97ee958e67e1)
@@ -1276,14 +1279,14 @@ class CfnDataIntegration(
     @jsii.member(jsii_name="scheduleConfig")
     def schedule_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataIntegration.ScheduleConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataIntegration.ScheduleConfigProperty"]]:
         '''The name of the data and how often it should be pulled from the source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataIntegration.ScheduleConfigProperty"]], jsii.get(self, "scheduleConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataIntegration.ScheduleConfigProperty"]], jsii.get(self, "scheduleConfig"))
 
     @schedule_config.setter
     def schedule_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataIntegration.ScheduleConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataIntegration.ScheduleConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5245bc847871e6f3d723769c28404578dc706f908a62836394d9ef2b6acc8a92)
@@ -1292,12 +1295,12 @@ class CfnDataIntegration(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d778105dbb9cf7d3e71800bafeafc79e0c6102ba3bccf8a3f96fd8b2c9aac3b2)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1493,10 +1496,10 @@ class CfnDataIntegrationProps:
         name: builtins.str,
         source_uri: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        file_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataIntegration.FileConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataIntegration.FileConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         object_configuration: typing.Any = None,
-        schedule_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataIntegration.ScheduleConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        schedule_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataIntegration.ScheduleConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataIntegration``.
 
@@ -1514,6 +1517,7 @@ class CfnDataIntegrationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appintegrations as appintegrations
@@ -1616,13 +1620,13 @@ class CfnDataIntegrationProps:
     @builtins.property
     def file_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataIntegration.FileConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataIntegration.FileConfigurationProperty"]]:
         '''The configuration for what files should be pulled from the source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-fileconfiguration
         '''
         result = self._values.get("file_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataIntegration.FileConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataIntegration.FileConfigurationProperty"]], result)
 
     @builtins.property
     def object_configuration(self) -> typing.Any:
@@ -1636,16 +1640,16 @@ class CfnDataIntegrationProps:
     @builtins.property
     def schedule_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataIntegration.ScheduleConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataIntegration.ScheduleConfigProperty"]]:
         '''The name of the data and how often it should be pulled from the source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-scheduleconfig
         '''
         result = self._values.get("schedule_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataIntegration.ScheduleConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataIntegration.ScheduleConfigProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -1653,7 +1657,7 @@ class CfnDataIntegrationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-dataintegration.html#cfn-appintegrations-dataintegration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1683,6 +1687,7 @@ class CfnEventIntegration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appintegrations as appintegrations
@@ -1705,14 +1710,14 @@ class CfnEventIntegration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         event_bridge_bus: builtins.str,
-        event_filter: typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventIntegration.EventFilterProperty", typing.Dict[builtins.str, typing.Any]]],
+        event_filter: typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventIntegration.EventFilterProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AppIntegrations::EventIntegration``.
 
@@ -1742,7 +1747,7 @@ class CfnEventIntegration(
     @builtins.classmethod
     def arn_for_event_integration(
         cls,
-        resource: _IEventIntegrationRef_d2c58e8f,
+        resource: "_IEventIntegrationRef_d2c58e8f",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1756,10 +1761,10 @@ class CfnEventIntegration(
     @builtins.classmethod
     def from_event_integration_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IEventIntegrationRef_d2c58e8f:
+    ) -> "_IEventIntegrationRef_d2c58e8f":
         '''Creates a new IEventIntegrationRef from an ARN.
 
         :param scope: -
@@ -1771,16 +1776,16 @@ class CfnEventIntegration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IEventIntegrationRef_d2c58e8f, jsii.sinvoke(cls, "fromEventIntegrationArn", [scope, id, arn]))
+        return typing.cast("_IEventIntegrationRef_d2c58e8f", jsii.sinvoke(cls, "fromEventIntegrationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromEventIntegrationName")
     @builtins.classmethod
     def from_event_integration_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         event_integration_name: builtins.str,
-    ) -> _IEventIntegrationRef_d2c58e8f:
+    ) -> "_IEventIntegrationRef_d2c58e8f":
         '''Creates a new IEventIntegrationRef from a eventIntegrationName.
 
         :param scope: -
@@ -1792,7 +1797,7 @@ class CfnEventIntegration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument event_integration_name", value=event_integration_name, expected_type=type_hints["event_integration_name"])
-        return typing.cast(_IEventIntegrationRef_d2c58e8f, jsii.sinvoke(cls, "fromEventIntegrationName", [scope, id, event_integration_name]))
+        return typing.cast("_IEventIntegrationRef_d2c58e8f", jsii.sinvoke(cls, "fromEventIntegrationName", [scope, id, event_integration_name]))
 
     @jsii.member(jsii_name="isCfnEventIntegration")
     @builtins.classmethod
@@ -1807,7 +1812,7 @@ class CfnEventIntegration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventIntegration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1852,15 +1857,15 @@ class CfnEventIntegration(
 
     @builtins.property
     @jsii.member(jsii_name="eventIntegrationRef")
-    def event_integration_ref(self) -> _EventIntegrationReference_2d3a8ab8:
+    def event_integration_ref(self) -> "_EventIntegrationReference_2d3a8ab8":
         '''A reference to a EventIntegration resource.'''
-        return typing.cast(_EventIntegrationReference_2d3a8ab8, jsii.get(self, "eventIntegrationRef"))
+        return typing.cast("_EventIntegrationReference_2d3a8ab8", jsii.get(self, "eventIntegrationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="eventBridgeBus")
@@ -1879,14 +1884,14 @@ class CfnEventIntegration(
     @jsii.member(jsii_name="eventFilter")
     def event_filter(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnEventIntegration.EventFilterProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnEventIntegration.EventFilterProperty"]:
         '''The event integration filter.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnEventIntegration.EventFilterProperty"], jsii.get(self, "eventFilter"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnEventIntegration.EventFilterProperty"], jsii.get(self, "eventFilter"))
 
     @event_filter.setter
     def event_filter(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnEventIntegration.EventFilterProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnEventIntegration.EventFilterProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__26c1d519a62cc46ab080cc71141eaf4a08280d9dfa5cc2110dd627f095a67241)
@@ -1921,12 +1926,12 @@ class CfnEventIntegration(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1545291bb728d092049a68fe1f3f167513ab081a64c955a81627589c9ef4bfa1)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2001,10 +2006,10 @@ class CfnEventIntegrationProps:
         self,
         *,
         event_bridge_bus: builtins.str,
-        event_filter: typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventIntegration.EventFilterProperty, typing.Dict[builtins.str, typing.Any]]],
+        event_filter: typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventIntegration.EventFilterProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEventIntegration``.
 
@@ -2019,6 +2024,7 @@ class CfnEventIntegrationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appintegrations as appintegrations
@@ -2068,14 +2074,14 @@ class CfnEventIntegrationProps:
     @builtins.property
     def event_filter(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnEventIntegration.EventFilterProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnEventIntegration.EventFilterProperty"]:
         '''The event integration filter.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html#cfn-appintegrations-eventintegration-eventfilter
         '''
         result = self._values.get("event_filter")
         assert result is not None, "Required property 'event_filter' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnEventIntegration.EventFilterProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnEventIntegration.EventFilterProperty"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -2097,7 +2103,7 @@ class CfnEventIntegrationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -2105,7 +2111,7 @@ class CfnEventIntegrationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appintegrations-eventintegration.html#cfn-appintegrations-eventintegration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

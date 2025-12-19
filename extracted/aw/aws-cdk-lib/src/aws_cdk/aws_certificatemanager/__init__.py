@@ -99,6 +99,7 @@ in order to access the cross stack/region certificate.
 > **This feature is currently experimental**
 
 ```python
+from aws_cdk import Environment, Environment
 from aws_cdk import aws_cloudfront as cloudfront, aws_cloudfront_origins as origins
 # app: App
 
@@ -272,7 +273,6 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_acmpca import ICertificateAuthority as _ICertificateAuthority_26727cab
 from ..aws_cloudwatch import (
     Metric as _Metric_e396a4dc,
     MetricOptions as _MetricOptions_1788b62f,
@@ -280,6 +280,9 @@ from ..aws_cloudwatch import (
 )
 from ..aws_iam import IRole as _IRole_235f5d8e
 from ..aws_route53 import IHostedZone as _IHostedZone_9a6907ad
+from ..interfaces.aws_acmpca import (
+    ICertificateAuthorityRef as _ICertificateAuthorityRef_240f71c8
+)
 from ..interfaces.aws_certificatemanager import (
     AccountReference as _AccountReference_2fb6748e,
     CertificateReference as _CertificateReference_6d6c82cf,
@@ -494,7 +497,7 @@ class CertificateValidation(
     @builtins.classmethod
     def from_dns(
         cls,
-        hosted_zone: typing.Optional[_IHostedZone_9a6907ad] = None,
+        hosted_zone: typing.Optional["_IHostedZone_9a6907ad"] = None,
     ) -> "CertificateValidation":
         '''Validate the certificate with DNS.
 
@@ -513,7 +516,7 @@ class CertificateValidation(
     @builtins.classmethod
     def from_dns_multi_zone(
         cls,
-        hosted_zones: typing.Mapping[builtins.str, _IHostedZone_9a6907ad],
+        hosted_zones: typing.Mapping[builtins.str, "_IHostedZone_9a6907ad"],
     ) -> "CertificateValidation":
         '''Validate the certificate with automatically created DNS records in multiple Amazon Route 53 hosted zones.
 
@@ -580,8 +583,8 @@ class CertificationValidationProps:
     def __init__(
         self,
         *,
-        hosted_zone: typing.Optional[_IHostedZone_9a6907ad] = None,
-        hosted_zones: typing.Optional[typing.Mapping[builtins.str, _IHostedZone_9a6907ad]] = None,
+        hosted_zone: typing.Optional["_IHostedZone_9a6907ad"] = None,
+        hosted_zones: typing.Optional[typing.Mapping[builtins.str, "_IHostedZone_9a6907ad"]] = None,
         method: typing.Optional["ValidationMethod"] = None,
         validation_domains: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -631,24 +634,24 @@ class CertificationValidationProps:
             self._values["validation_domains"] = validation_domains
 
     @builtins.property
-    def hosted_zone(self) -> typing.Optional[_IHostedZone_9a6907ad]:
+    def hosted_zone(self) -> typing.Optional["_IHostedZone_9a6907ad"]:
         '''Hosted zone to use for DNS validation.
 
         :default: - use email validation
         '''
         result = self._values.get("hosted_zone")
-        return typing.cast(typing.Optional[_IHostedZone_9a6907ad], result)
+        return typing.cast(typing.Optional["_IHostedZone_9a6907ad"], result)
 
     @builtins.property
     def hosted_zones(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, _IHostedZone_9a6907ad]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "_IHostedZone_9a6907ad"]]:
         '''A map of hosted zones to use for DNS validation.
 
         :default: - use ``hostedZone``
         '''
         result = self._values.get("hosted_zones")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, _IHostedZone_9a6907ad]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "_IHostedZone_9a6907ad"]], result)
 
     @builtins.property
     def method(self) -> typing.Optional["ValidationMethod"]:
@@ -709,10 +712,10 @@ class CfnAccount(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        expiry_events_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccount.ExpiryEventsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        expiry_events_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccount.ExpiryEventsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::CertificateManager::Account``.
 
@@ -743,7 +746,7 @@ class CfnAccount(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccount", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -774,9 +777,9 @@ class CfnAccount(
 
     @builtins.property
     @jsii.member(jsii_name="accountRef")
-    def account_ref(self) -> _AccountReference_2fb6748e:
+    def account_ref(self) -> "_AccountReference_2fb6748e":
         '''A reference to a Account resource.'''
-        return typing.cast(_AccountReference_2fb6748e, jsii.get(self, "accountRef"))
+        return typing.cast("_AccountReference_2fb6748e", jsii.get(self, "accountRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAccountId")
@@ -796,14 +799,14 @@ class CfnAccount(
     @jsii.member(jsii_name="expiryEventsConfiguration")
     def expiry_events_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAccount.ExpiryEventsConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAccount.ExpiryEventsConfigurationProperty"]:
         '''Object containing expiration events options associated with an AWS account .'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAccount.ExpiryEventsConfigurationProperty"], jsii.get(self, "expiryEventsConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAccount.ExpiryEventsConfigurationProperty"], jsii.get(self, "expiryEventsConfiguration"))
 
     @expiry_events_configuration.setter
     def expiry_events_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAccount.ExpiryEventsConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAccount.ExpiryEventsConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c44e33adc270e269d609b1c233392549a56a49e07e3459a57e1ecdb35bebeba3)
@@ -879,7 +882,7 @@ class CfnAccountProps:
     def __init__(
         self,
         *,
-        expiry_events_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccount.ExpiryEventsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        expiry_events_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccount.ExpiryEventsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnAccount``.
 
@@ -910,7 +913,7 @@ class CfnAccountProps:
     @builtins.property
     def expiry_events_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAccount.ExpiryEventsConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAccount.ExpiryEventsConfigurationProperty"]:
         '''Object containing expiration events options associated with an AWS account .
 
         For more information, see `ExpiryEventsConfiguration <https://docs.aws.amazon.com/acm/latest/APIReference/API_ExpiryEventsConfiguration.html>`_ in the API reference.
@@ -919,7 +922,7 @@ class CfnAccountProps:
         '''
         result = self._values.get("expiry_events_configuration")
         assert result is not None, "Required property 'expiry_events_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAccount.ExpiryEventsConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAccount.ExpiryEventsConfigurationProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -954,6 +957,7 @@ class CfnCertificate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_certificatemanager as certificatemanager
@@ -984,17 +988,17 @@ class CfnCertificate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name: builtins.str,
         certificate_authority_arn: typing.Optional[builtins.str] = None,
         certificate_export: typing.Optional[builtins.str] = None,
         certificate_transparency_logging_preference: typing.Optional[builtins.str] = None,
-        domain_validation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCertificate.DomainValidationOptionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        domain_validation_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCertificate.DomainValidationOptionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         key_algorithm: typing.Optional[builtins.str] = None,
         subject_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         validation_method: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::CertificateManager::Certificate``.
@@ -1031,7 +1035,7 @@ class CfnCertificate(
 
     @jsii.member(jsii_name="arnForCertificate")
     @builtins.classmethod
-    def arn_for_certificate(cls, resource: _ICertificateRef_1878d79b) -> builtins.str:
+    def arn_for_certificate(cls, resource: "_ICertificateRef_1878d79b") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1044,10 +1048,10 @@ class CfnCertificate(
     @builtins.classmethod
     def from_certificate_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         certificate_id: builtins.str,
-    ) -> _ICertificateRef_1878d79b:
+    ) -> "_ICertificateRef_1878d79b":
         '''Creates a new ICertificateRef from a certificateId.
 
         :param scope: -
@@ -1059,7 +1063,7 @@ class CfnCertificate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument certificate_id", value=certificate_id, expected_type=type_hints["certificate_id"])
-        return typing.cast(_ICertificateRef_1878d79b, jsii.sinvoke(cls, "fromCertificateId", [scope, id, certificate_id]))
+        return typing.cast("_ICertificateRef_1878d79b", jsii.sinvoke(cls, "fromCertificateId", [scope, id, certificate_id]))
 
     @jsii.member(jsii_name="isCfnCertificate")
     @builtins.classmethod
@@ -1074,7 +1078,7 @@ class CfnCertificate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCertificate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1113,9 +1117,9 @@ class CfnCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> _CertificateReference_6d6c82cf:
+    def certificate_ref(self) -> "_CertificateReference_6d6c82cf":
         '''A reference to a Certificate resource.'''
-        return typing.cast(_CertificateReference_6d6c82cf, jsii.get(self, "certificateRef"))
+        return typing.cast("_CertificateReference_6d6c82cf", jsii.get(self, "certificateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1124,9 +1128,9 @@ class CfnCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="domainName")
@@ -1189,14 +1193,14 @@ class CfnCertificate(
     @jsii.member(jsii_name="domainValidationOptions")
     def domain_validation_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCertificate.DomainValidationOptionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCertificate.DomainValidationOptionProperty"]]]]:
         '''Domain information that domain name registrars use to verify your identity.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCertificate.DomainValidationOptionProperty"]]]], jsii.get(self, "domainValidationOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCertificate.DomainValidationOptionProperty"]]]], jsii.get(self, "domainValidationOptions"))
 
     @domain_validation_options.setter
     def domain_validation_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCertificate.DomainValidationOptionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCertificate.DomainValidationOptionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__56d2ab51aeb5167d471668b88dc595eaa9bda575e9837a78ce2083f388a77963)
@@ -1234,12 +1238,12 @@ class CfnCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can identify the certificate.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__42ebedfc2551a20aee372ba1bddbbd7ce73218848ab3d71aad89b1d372061b64)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1393,10 +1397,10 @@ class CfnCertificateProps:
         certificate_authority_arn: typing.Optional[builtins.str] = None,
         certificate_export: typing.Optional[builtins.str] = None,
         certificate_transparency_logging_preference: typing.Optional[builtins.str] = None,
-        domain_validation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCertificate.DomainValidationOptionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        domain_validation_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCertificate.DomainValidationOptionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         key_algorithm: typing.Optional[builtins.str] = None,
         subject_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         validation_method: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnCertificate``.
@@ -1416,6 +1420,7 @@ class CfnCertificateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_certificatemanager as certificatemanager
@@ -1530,7 +1535,7 @@ class CfnCertificateProps:
     @builtins.property
     def domain_validation_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCertificate.DomainValidationOptionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCertificate.DomainValidationOptionProperty"]]]]:
         '''Domain information that domain name registrars use to verify your identity.
 
         .. epigraph::
@@ -1540,7 +1545,7 @@ class CfnCertificateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-certificate.html#cfn-certificatemanager-certificate-domainvalidationoptions
         '''
         result = self._values.get("domain_validation_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCertificate.DomainValidationOptionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCertificate.DomainValidationOptionProperty"]]]], result)
 
     @builtins.property
     def key_algorithm(self) -> typing.Optional[builtins.str]:
@@ -1576,13 +1581,13 @@ class CfnCertificateProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can identify the certificate.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-certificate.html#cfn-certificatemanager-certificate-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def validation_method(self) -> typing.Optional[builtins.str]:
@@ -1637,10 +1642,10 @@ class DnsValidatedCertificateProps(CertificateProps):
         key_algorithm: typing.Optional["KeyAlgorithm"] = None,
         subject_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         transparency_logging_enabled: typing.Optional[builtins.bool] = None,
-        validation: typing.Optional[CertificateValidation] = None,
-        hosted_zone: _IHostedZone_9a6907ad,
+        validation: typing.Optional["CertificateValidation"] = None,
+        hosted_zone: "_IHostedZone_9a6907ad",
         cleanup_route53_records: typing.Optional[builtins.bool] = None,
-        custom_resource_role: typing.Optional[_IRole_235f5d8e] = None,
+        custom_resource_role: typing.Optional["_IRole_235f5d8e"] = None,
         region: typing.Optional[builtins.str] = None,
         route53_endpoint: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -1803,16 +1808,16 @@ class DnsValidatedCertificateProps(CertificateProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def validation(self) -> typing.Optional[CertificateValidation]:
+    def validation(self) -> typing.Optional["CertificateValidation"]:
         '''How to validate this certificate.
 
         :default: CertificateValidation.fromEmail()
         '''
         result = self._values.get("validation")
-        return typing.cast(typing.Optional[CertificateValidation], result)
+        return typing.cast(typing.Optional["CertificateValidation"], result)
 
     @builtins.property
-    def hosted_zone(self) -> _IHostedZone_9a6907ad:
+    def hosted_zone(self) -> "_IHostedZone_9a6907ad":
         '''Route 53 Hosted Zone used to perform DNS validation of the request.
 
         The zone
@@ -1820,7 +1825,7 @@ class DnsValidatedCertificateProps(CertificateProps):
         '''
         result = self._values.get("hosted_zone")
         assert result is not None, "Required property 'hosted_zone' is missing"
-        return typing.cast(_IHostedZone_9a6907ad, result)
+        return typing.cast("_IHostedZone_9a6907ad", result)
 
     @builtins.property
     def cleanup_route53_records(self) -> typing.Optional[builtins.bool]:
@@ -1836,13 +1841,13 @@ class DnsValidatedCertificateProps(CertificateProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def custom_resource_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def custom_resource_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Role to use for the custom resource that creates the validated certificate.
 
         :default: - A new role will be created
         '''
         result = self._values.get("custom_resource_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def region(self) -> typing.Optional[builtins.str]:
@@ -1904,14 +1909,14 @@ class ICertificate(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the DaysToExpiry metric for this AWS Certificate Manager Certificate. By default, this is the minimum value over 1 day.
 
         This metric is no longer emitted once the certificate has effectively
@@ -1959,14 +1964,14 @@ class _ICertificateProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the DaysToExpiry metric for this AWS Certificate Manager Certificate. By default, this is the minimum value over 1 day.
 
         This metric is no longer emitted once the certificate has effectively
@@ -2001,7 +2006,7 @@ class _ICertificateProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDaysToExpiry", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDaysToExpiry", [props]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICertificate).__jsii_proxy_class__ = lambda : _ICertificateProxy
@@ -2116,13 +2121,13 @@ class PrivateCertificate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        certificate_authority: _ICertificateAuthority_26727cab,
+        certificate_authority: "_ICertificateAuthorityRef_240f71c8",
         domain_name: builtins.str,
         allow_export: typing.Optional[builtins.bool] = None,
-        key_algorithm: typing.Optional[KeyAlgorithm] = None,
+        key_algorithm: typing.Optional["KeyAlgorithm"] = None,
         subject_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
@@ -2152,10 +2157,10 @@ class PrivateCertificate(
     @builtins.classmethod
     def from_certificate_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         certificate_arn: builtins.str,
-    ) -> ICertificate:
+    ) -> "ICertificate":
         '''Import a certificate.
 
         :param scope: -
@@ -2167,7 +2172,7 @@ class PrivateCertificate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument certificate_arn", value=certificate_arn, expected_type=type_hints["certificate_arn"])
-        return typing.cast(ICertificate, jsii.sinvoke(cls, "fromCertificateArn", [scope, id, certificate_arn]))
+        return typing.cast("ICertificate", jsii.sinvoke(cls, "fromCertificateArn", [scope, id, certificate_arn]))
 
     @jsii.member(jsii_name="metricDaysToExpiry")
     def metric_days_to_expiry(
@@ -2178,14 +2183,14 @@ class PrivateCertificate(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the DaysToExpiry metric for this AWS Certificate Manager Certificate. By default, this is the minimum value over 1 day.
 
         This metric is no longer emitted once the certificate has effectively
@@ -2220,7 +2225,7 @@ class PrivateCertificate(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDaysToExpiry", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDaysToExpiry", [props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -2256,10 +2261,10 @@ class PrivateCertificateProps:
     def __init__(
         self,
         *,
-        certificate_authority: _ICertificateAuthority_26727cab,
+        certificate_authority: "_ICertificateAuthorityRef_240f71c8",
         domain_name: builtins.str,
         allow_export: typing.Optional[builtins.bool] = None,
-        key_algorithm: typing.Optional[KeyAlgorithm] = None,
+        key_algorithm: typing.Optional["KeyAlgorithm"] = None,
         subject_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for your private certificate.
@@ -2303,11 +2308,11 @@ class PrivateCertificateProps:
             self._values["subject_alternative_names"] = subject_alternative_names
 
     @builtins.property
-    def certificate_authority(self) -> _ICertificateAuthority_26727cab:
+    def certificate_authority(self) -> "_ICertificateAuthorityRef_240f71c8":
         '''Private certificate authority (CA) that will be used to issue the certificate.'''
         result = self._values.get("certificate_authority")
         assert result is not None, "Required property 'certificate_authority' is missing"
-        return typing.cast(_ICertificateAuthority_26727cab, result)
+        return typing.cast("_ICertificateAuthorityRef_240f71c8", result)
 
     @builtins.property
     def domain_name(self) -> builtins.str:
@@ -2332,7 +2337,7 @@ class PrivateCertificateProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def key_algorithm(self) -> typing.Optional[KeyAlgorithm]:
+    def key_algorithm(self) -> typing.Optional["KeyAlgorithm"]:
         '''Specifies the algorithm of the public and private key pair that your certificate uses to encrypt data.
 
         When you request a private PKI certificate signed by a CA from AWS Private CA, the specified signing algorithm family
@@ -2343,7 +2348,7 @@ class PrivateCertificateProps:
         :see: https://docs.aws.amazon.com/acm/latest/userguide/acm-certificate.html#algorithms.title
         '''
         result = self._values.get("key_algorithm")
-        return typing.cast(typing.Optional[KeyAlgorithm], result)
+        return typing.cast(typing.Optional["KeyAlgorithm"], result)
 
     @builtins.property
     def subject_alternative_names(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2417,16 +2422,16 @@ class Certificate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name: builtins.str,
         allow_export: typing.Optional[builtins.bool] = None,
         certificate_name: typing.Optional[builtins.str] = None,
-        key_algorithm: typing.Optional[KeyAlgorithm] = None,
+        key_algorithm: typing.Optional["KeyAlgorithm"] = None,
         subject_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         transparency_logging_enabled: typing.Optional[builtins.bool] = None,
-        validation: typing.Optional[CertificateValidation] = None,
+        validation: typing.Optional["CertificateValidation"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -2459,10 +2464,10 @@ class Certificate(
     @builtins.classmethod
     def from_certificate_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         certificate_arn: builtins.str,
-    ) -> ICertificate:
+    ) -> "ICertificate":
         '''Import a certificate.
 
         :param scope: -
@@ -2474,7 +2479,7 @@ class Certificate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument certificate_arn", value=certificate_arn, expected_type=type_hints["certificate_arn"])
-        return typing.cast(ICertificate, jsii.sinvoke(cls, "fromCertificateArn", [scope, id, certificate_arn]))
+        return typing.cast("ICertificate", jsii.sinvoke(cls, "fromCertificateArn", [scope, id, certificate_arn]))
 
     @jsii.member(jsii_name="metricDaysToExpiry")
     def metric_days_to_expiry(
@@ -2485,14 +2490,14 @@ class Certificate(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the DaysToExpiry metric for this AWS Certificate Manager Certificate. By default, this is the minimum value over 1 day.
 
         This metric is no longer emitted once the certificate has effectively
@@ -2527,7 +2532,7 @@ class Certificate(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDaysToExpiry", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDaysToExpiry", [props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -2598,21 +2603,21 @@ class DnsValidatedCertificate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        hosted_zone: _IHostedZone_9a6907ad,
+        hosted_zone: "_IHostedZone_9a6907ad",
         cleanup_route53_records: typing.Optional[builtins.bool] = None,
-        custom_resource_role: typing.Optional[_IRole_235f5d8e] = None,
+        custom_resource_role: typing.Optional["_IRole_235f5d8e"] = None,
         region: typing.Optional[builtins.str] = None,
         route53_endpoint: typing.Optional[builtins.str] = None,
         domain_name: builtins.str,
         allow_export: typing.Optional[builtins.bool] = None,
         certificate_name: typing.Optional[builtins.str] = None,
-        key_algorithm: typing.Optional[KeyAlgorithm] = None,
+        key_algorithm: typing.Optional["KeyAlgorithm"] = None,
         subject_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         transparency_logging_enabled: typing.Optional[builtins.bool] = None,
-        validation: typing.Optional[CertificateValidation] = None,
+        validation: typing.Optional["CertificateValidation"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -2654,7 +2659,7 @@ class DnsValidatedCertificate(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="applyRemovalPolicy")
-    def apply_removal_policy(self, policy: _RemovalPolicy_9f93c814) -> None:
+    def apply_removal_policy(self, policy: "_RemovalPolicy_9f93c814") -> None:
         '''(deprecated) Apply the given removal policy to this resource.
 
         The Removal Policy controls what happens to this resource when it stops
@@ -2683,14 +2688,14 @@ class DnsValidatedCertificate(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''(deprecated) Return the DaysToExpiry metric for this AWS Certificate Manager Certificate. By default, this is the minimum value over 1 day.
 
         This metric is no longer emitted once the certificate has effectively
@@ -2727,7 +2732,7 @@ class DnsValidatedCertificate(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDaysToExpiry", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDaysToExpiry", [props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -2749,13 +2754,13 @@ class DnsValidatedCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''(deprecated) Resource Tags.
 
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-certificate.html#cfn-certificatemanager-certificate-tags
         :stability: deprecated
         '''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="region")
@@ -3030,7 +3035,7 @@ def _typecheckingstub__f15cee4bdac8e70000027c8ca1386d49408a399d3919aa965c46bb68f
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    certificate_authority: _ICertificateAuthority_26727cab,
+    certificate_authority: _ICertificateAuthorityRef_240f71c8,
     domain_name: builtins.str,
     allow_export: typing.Optional[builtins.bool] = None,
     key_algorithm: typing.Optional[KeyAlgorithm] = None,
@@ -3049,7 +3054,7 @@ def _typecheckingstub__eafcf5967e32f6f738871dd474ec031ff15891454da458a2b6e15d1b8
 
 def _typecheckingstub__74588c43933e5f34a3203601cc823ca974676f71701280dcd43e9f037bba43e3(
     *,
-    certificate_authority: _ICertificateAuthority_26727cab,
+    certificate_authority: _ICertificateAuthorityRef_240f71c8,
     domain_name: builtins.str,
     allow_export: typing.Optional[builtins.bool] = None,
     key_algorithm: typing.Optional[KeyAlgorithm] = None,

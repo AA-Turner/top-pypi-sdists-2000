@@ -115,6 +115,7 @@ class CfnConfigurationSet(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_smsvoice as smsvoice
@@ -151,15 +152,15 @@ class CfnConfigurationSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         configuration_set_name: typing.Optional[builtins.str] = None,
         default_sender_id: typing.Optional[builtins.str] = None,
-        event_destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSet.EventDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        message_feedback_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        event_destinations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.EventDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        message_feedback_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         protect_configuration_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SMSVOICE::ConfigurationSet``.
 
@@ -191,7 +192,7 @@ class CfnConfigurationSet(
     @builtins.classmethod
     def arn_for_configuration_set(
         cls,
-        resource: _IConfigurationSetRef_be3ec7c2,
+        resource: "_IConfigurationSetRef_be3ec7c2",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -205,10 +206,10 @@ class CfnConfigurationSet(
     @builtins.classmethod
     def from_configuration_set_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IConfigurationSetRef_be3ec7c2:
+    ) -> "_IConfigurationSetRef_be3ec7c2":
         '''Creates a new IConfigurationSetRef from an ARN.
 
         :param scope: -
@@ -220,16 +221,16 @@ class CfnConfigurationSet(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IConfigurationSetRef_be3ec7c2, jsii.sinvoke(cls, "fromConfigurationSetArn", [scope, id, arn]))
+        return typing.cast("_IConfigurationSetRef_be3ec7c2", jsii.sinvoke(cls, "fromConfigurationSetArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromConfigurationSetName")
     @builtins.classmethod
     def from_configuration_set_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         configuration_set_name: builtins.str,
-    ) -> _IConfigurationSetRef_be3ec7c2:
+    ) -> "_IConfigurationSetRef_be3ec7c2":
         '''Creates a new IConfigurationSetRef from a configurationSetName.
 
         :param scope: -
@@ -241,7 +242,7 @@ class CfnConfigurationSet(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument configuration_set_name", value=configuration_set_name, expected_type=type_hints["configuration_set_name"])
-        return typing.cast(_IConfigurationSetRef_be3ec7c2, jsii.sinvoke(cls, "fromConfigurationSetName", [scope, id, configuration_set_name]))
+        return typing.cast("_IConfigurationSetRef_be3ec7c2", jsii.sinvoke(cls, "fromConfigurationSetName", [scope, id, configuration_set_name]))
 
     @jsii.member(jsii_name="isCfnConfigurationSet")
     @builtins.classmethod
@@ -256,7 +257,7 @@ class CfnConfigurationSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigurationSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -296,9 +297,9 @@ class CfnConfigurationSet(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -307,9 +308,9 @@ class CfnConfigurationSet(
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetRef")
-    def configuration_set_ref(self) -> _ConfigurationSetReference_540b1fe3:
+    def configuration_set_ref(self) -> "_ConfigurationSetReference_540b1fe3":
         '''A reference to a ConfigurationSet resource.'''
-        return typing.cast(_ConfigurationSetReference_540b1fe3, jsii.get(self, "configurationSetRef"))
+        return typing.cast("_ConfigurationSetReference_540b1fe3", jsii.get(self, "configurationSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetName")
@@ -341,14 +342,14 @@ class CfnConfigurationSet(
     @jsii.member(jsii_name="eventDestinations")
     def event_destinations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.EventDestinationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.EventDestinationProperty"]]]]:
         '''An array of EventDestination objects that describe any events to log and where to log them.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.EventDestinationProperty"]]]], jsii.get(self, "eventDestinations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.EventDestinationProperty"]]]], jsii.get(self, "eventDestinations"))
 
     @event_destinations.setter
     def event_destinations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.EventDestinationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.EventDestinationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2057faf5fb512456c4bc44fe35430b7693158df99536b671cd30ec082b564004)
@@ -359,14 +360,14 @@ class CfnConfigurationSet(
     @jsii.member(jsii_name="messageFeedbackEnabled")
     def message_feedback_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Set to true to enable feedback for the message.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "messageFeedbackEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "messageFeedbackEnabled"))
 
     @message_feedback_enabled.setter
     def message_feedback_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1700a269dd97f8f5889c42356bc0625812eb38d345cd6ab0a47dc65604b9ef5c)
@@ -388,12 +389,12 @@ class CfnConfigurationSet(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key and value pair tags that's associated with the new configuration set.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7aeb00cd60ff4e73014460e95c4362f82c1d73f0b45e4e453a05465afef34da6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -486,12 +487,12 @@ class CfnConfigurationSet(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             event_destination_name: builtins.str,
             matching_event_types: typing.Sequence[builtins.str],
-            cloud_watch_logs_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSet.CloudWatchLogsDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            kinesis_firehose_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSet.KinesisFirehoseDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sns_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationSet.SnsDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logs_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.CloudWatchLogsDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            kinesis_firehose_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.KinesisFirehoseDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sns_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.SnsDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Contains information about an event destination.
 
@@ -553,14 +554,14 @@ class CfnConfigurationSet(
                 self._values["sns_destination"] = sns_destination
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''When set to true events will be logged.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-smsvoice-configurationset-eventdestination.html#cfn-smsvoice-configurationset-eventdestination-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def event_destination_name(self) -> builtins.str:
@@ -589,35 +590,35 @@ class CfnConfigurationSet(
         @builtins.property
         def cloud_watch_logs_destination(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.CloudWatchLogsDestinationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.CloudWatchLogsDestinationProperty"]]:
             '''An object that contains information about an event destination that sends logging events to Amazon CloudWatch logs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-smsvoice-configurationset-eventdestination.html#cfn-smsvoice-configurationset-eventdestination-cloudwatchlogsdestination
             '''
             result = self._values.get("cloud_watch_logs_destination")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.CloudWatchLogsDestinationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.CloudWatchLogsDestinationProperty"]], result)
 
         @builtins.property
         def kinesis_firehose_destination(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.KinesisFirehoseDestinationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.KinesisFirehoseDestinationProperty"]]:
             '''An object that contains information about an event destination for logging to Amazon Data Firehose.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-smsvoice-configurationset-eventdestination.html#cfn-smsvoice-configurationset-eventdestination-kinesisfirehosedestination
             '''
             result = self._values.get("kinesis_firehose_destination")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.KinesisFirehoseDestinationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.KinesisFirehoseDestinationProperty"]], result)
 
         @builtins.property
         def sns_destination(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.SnsDestinationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.SnsDestinationProperty"]]:
             '''An object that contains information about an event destination that sends logging events to Amazon SNS.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-smsvoice-configurationset-eventdestination.html#cfn-smsvoice-configurationset-eventdestination-snsdestination
             '''
             result = self._values.get("sns_destination")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationSet.SnsDestinationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.SnsDestinationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -779,10 +780,10 @@ class CfnConfigurationSetProps:
         *,
         configuration_set_name: typing.Optional[builtins.str] = None,
         default_sender_id: typing.Optional[builtins.str] = None,
-        event_destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSet.EventDestinationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        message_feedback_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        event_destinations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.EventDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        message_feedback_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         protect_configuration_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfigurationSet``.
 
@@ -798,6 +799,7 @@ class CfnConfigurationSetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_smsvoice as smsvoice
@@ -874,24 +876,24 @@ class CfnConfigurationSetProps:
     @builtins.property
     def event_destinations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationSet.EventDestinationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.EventDestinationProperty"]]]]:
         '''An array of EventDestination objects that describe any events to log and where to log them.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-eventdestinations
         '''
         result = self._values.get("event_destinations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationSet.EventDestinationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.EventDestinationProperty"]]]], result)
 
     @builtins.property
     def message_feedback_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Set to true to enable feedback for the message.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-messagefeedbackenabled
         '''
         result = self._values.get("message_feedback_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def protect_configuration_id(self) -> typing.Optional[builtins.str]:
@@ -903,13 +905,13 @@ class CfnConfigurationSetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key and value pair tags that's associated with the new configuration set.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-configurationset.html#cfn-smsvoice-configurationset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -941,6 +943,7 @@ class CfnOptOutList(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_smsvoice as smsvoice
@@ -956,11 +959,11 @@ class CfnOptOutList(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         opt_out_list_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SMSVOICE::OptOutList``.
 
@@ -979,7 +982,7 @@ class CfnOptOutList(
 
     @jsii.member(jsii_name="arnForOptOutList")
     @builtins.classmethod
-    def arn_for_opt_out_list(cls, resource: _IOptOutListRef_1d44f5f8) -> builtins.str:
+    def arn_for_opt_out_list(cls, resource: "_IOptOutListRef_1d44f5f8") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -992,10 +995,10 @@ class CfnOptOutList(
     @builtins.classmethod
     def from_opt_out_list_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IOptOutListRef_1d44f5f8:
+    ) -> "_IOptOutListRef_1d44f5f8":
         '''Creates a new IOptOutListRef from an ARN.
 
         :param scope: -
@@ -1007,16 +1010,16 @@ class CfnOptOutList(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IOptOutListRef_1d44f5f8, jsii.sinvoke(cls, "fromOptOutListArn", [scope, id, arn]))
+        return typing.cast("_IOptOutListRef_1d44f5f8", jsii.sinvoke(cls, "fromOptOutListArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromOptOutListName")
     @builtins.classmethod
     def from_opt_out_list_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         opt_out_list_name: builtins.str,
-    ) -> _IOptOutListRef_1d44f5f8:
+    ) -> "_IOptOutListRef_1d44f5f8":
         '''Creates a new IOptOutListRef from a optOutListName.
 
         :param scope: -
@@ -1028,7 +1031,7 @@ class CfnOptOutList(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument opt_out_list_name", value=opt_out_list_name, expected_type=type_hints["opt_out_list_name"])
-        return typing.cast(_IOptOutListRef_1d44f5f8, jsii.sinvoke(cls, "fromOptOutListName", [scope, id, opt_out_list_name]))
+        return typing.cast("_IOptOutListRef_1d44f5f8", jsii.sinvoke(cls, "fromOptOutListName", [scope, id, opt_out_list_name]))
 
     @jsii.member(jsii_name="isCfnOptOutList")
     @builtins.classmethod
@@ -1043,7 +1046,7 @@ class CfnOptOutList(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOptOutList", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1083,9 +1086,9 @@ class CfnOptOutList(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1094,9 +1097,9 @@ class CfnOptOutList(
 
     @builtins.property
     @jsii.member(jsii_name="optOutListRef")
-    def opt_out_list_ref(self) -> _OptOutListReference_e0a13902:
+    def opt_out_list_ref(self) -> "_OptOutListReference_e0a13902":
         '''A reference to a OptOutList resource.'''
-        return typing.cast(_OptOutListReference_e0a13902, jsii.get(self, "optOutListRef"))
+        return typing.cast("_OptOutListReference_e0a13902", jsii.get(self, "optOutListRef"))
 
     @builtins.property
     @jsii.member(jsii_name="optOutListName")
@@ -1113,12 +1116,12 @@ class CfnOptOutList(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags (key and value pairs) to associate with the new OptOutList.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__35f7671a5586fbcab6fa7a0f53bc16a7df7f5b446336ced45e9ee9df5e1ba997)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1135,7 +1138,7 @@ class CfnOptOutListProps:
         self,
         *,
         opt_out_list_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnOptOutList``.
 
@@ -1147,6 +1150,7 @@ class CfnOptOutListProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_smsvoice as smsvoice
@@ -1179,13 +1183,13 @@ class CfnOptOutListProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags (key and value pairs) to associate with the new OptOutList.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-optoutlist.html#cfn-smsvoice-optoutlist-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1218,6 +1222,7 @@ class CfnPhoneNumber(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_smsvoice as smsvoice
@@ -1260,19 +1265,19 @@ class CfnPhoneNumber(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         iso_country_code: builtins.str,
-        mandatory_keywords: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPhoneNumber.MandatoryKeywordsProperty", typing.Dict[builtins.str, typing.Any]]],
+        mandatory_keywords: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPhoneNumber.MandatoryKeywordsProperty", typing.Dict[builtins.str, typing.Any]]],
         number_capabilities: typing.Sequence[builtins.str],
         number_type: builtins.str,
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        optional_keywords: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPhoneNumber.OptionalKeywordProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        optional_keywords: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPhoneNumber.OptionalKeywordProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         opt_out_list_name: typing.Optional[builtins.str] = None,
-        self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPhoneNumber.TwoWayProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        two_way: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPhoneNumber.TwoWayProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SMSVOICE::PhoneNumber``.
 
@@ -1310,7 +1315,10 @@ class CfnPhoneNumber(
 
     @jsii.member(jsii_name="arnForPhoneNumber")
     @builtins.classmethod
-    def arn_for_phone_number(cls, resource: _IPhoneNumberRef_7c6c9ced) -> builtins.str:
+    def arn_for_phone_number(
+        cls,
+        resource: "_IPhoneNumberRef_7c6c9ced",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1323,10 +1331,10 @@ class CfnPhoneNumber(
     @builtins.classmethod
     def from_phone_number_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IPhoneNumberRef_7c6c9ced:
+    ) -> "_IPhoneNumberRef_7c6c9ced":
         '''Creates a new IPhoneNumberRef from an ARN.
 
         :param scope: -
@@ -1338,16 +1346,16 @@ class CfnPhoneNumber(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IPhoneNumberRef_7c6c9ced, jsii.sinvoke(cls, "fromPhoneNumberArn", [scope, id, arn]))
+        return typing.cast("_IPhoneNumberRef_7c6c9ced", jsii.sinvoke(cls, "fromPhoneNumberArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromPhoneNumberId")
     @builtins.classmethod
     def from_phone_number_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         phone_number_id: builtins.str,
-    ) -> _IPhoneNumberRef_7c6c9ced:
+    ) -> "_IPhoneNumberRef_7c6c9ced":
         '''Creates a new IPhoneNumberRef from a phoneNumberId.
 
         :param scope: -
@@ -1359,7 +1367,7 @@ class CfnPhoneNumber(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument phone_number_id", value=phone_number_id, expected_type=type_hints["phone_number_id"])
-        return typing.cast(_IPhoneNumberRef_7c6c9ced, jsii.sinvoke(cls, "fromPhoneNumberId", [scope, id, phone_number_id]))
+        return typing.cast("_IPhoneNumberRef_7c6c9ced", jsii.sinvoke(cls, "fromPhoneNumberId", [scope, id, phone_number_id]))
 
     @jsii.member(jsii_name="isCfnPhoneNumber")
     @builtins.classmethod
@@ -1374,7 +1382,7 @@ class CfnPhoneNumber(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPhoneNumber", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1432,9 +1440,9 @@ class CfnPhoneNumber(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1443,9 +1451,9 @@ class CfnPhoneNumber(
 
     @builtins.property
     @jsii.member(jsii_name="phoneNumberRef")
-    def phone_number_ref(self) -> _PhoneNumberReference_c338f1b9:
+    def phone_number_ref(self) -> "_PhoneNumberReference_c338f1b9":
         '''A reference to a PhoneNumber resource.'''
-        return typing.cast(_PhoneNumberReference_c338f1b9, jsii.get(self, "phoneNumberRef"))
+        return typing.cast("_PhoneNumberReference_c338f1b9", jsii.get(self, "phoneNumberRef"))
 
     @builtins.property
     @jsii.member(jsii_name="isoCountryCode")
@@ -1464,14 +1472,14 @@ class CfnPhoneNumber(
     @jsii.member(jsii_name="mandatoryKeywords")
     def mandatory_keywords(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.MandatoryKeywordsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.MandatoryKeywordsProperty"]:
         '''Creates or updates a ``MandatoryKeyword`` configuration on an origination phone number For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.MandatoryKeywordsProperty"], jsii.get(self, "mandatoryKeywords"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.MandatoryKeywordsProperty"], jsii.get(self, "mandatoryKeywords"))
 
     @mandatory_keywords.setter
     def mandatory_keywords(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.MandatoryKeywordsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.MandatoryKeywordsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6ad292d2f30a2e7553a75e0648343c13f6d37e2c991e6ccfd9770c6cea89b4e3)
@@ -1508,14 +1516,14 @@ class CfnPhoneNumber(
     @jsii.member(jsii_name="deletionProtectionEnabled")
     def deletion_protection_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''By default this is set to false.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deletionProtectionEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deletionProtectionEnabled"))
 
     @deletion_protection_enabled.setter
     def deletion_protection_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4ce7c946e28467484eeaef46ab5c378bc4d7cf5fabda1308e46f327ee70c4e86)
@@ -1526,14 +1534,14 @@ class CfnPhoneNumber(
     @jsii.member(jsii_name="optionalKeywords")
     def optional_keywords(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.OptionalKeywordProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.OptionalKeywordProperty"]]]]:
         '''A keyword is a word that you can search for on a particular phone number or pool.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.OptionalKeywordProperty"]]]], jsii.get(self, "optionalKeywords"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.OptionalKeywordProperty"]]]], jsii.get(self, "optionalKeywords"))
 
     @optional_keywords.setter
     def optional_keywords(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.OptionalKeywordProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.OptionalKeywordProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2775cd03531ef2f5f4bb38b83c1e7e323c18a0def6ec05b2c4d012ace1ee4d30)
@@ -1557,14 +1565,14 @@ class CfnPhoneNumber(
     @jsii.member(jsii_name="selfManagedOptOutsEnabled")
     def self_managed_opt_outs_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When set to false and an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, End User Messaging  automatically replies with a customizable message and adds the end recipient to the OptOutList.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "selfManagedOptOutsEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "selfManagedOptOutsEnabled"))
 
     @self_managed_opt_outs_enabled.setter
     def self_managed_opt_outs_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__04bf768fe622599912b3a021c396ad4d893de46bcad374eb200ccebe72a3dfd4)
@@ -1573,12 +1581,12 @@ class CfnPhoneNumber(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags (key and value pairs) to associate with the requested phone number.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a29c798a3abd770efeb946661639d64644ab5a22b5c349f873ed430dd74b78c6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1588,14 +1596,14 @@ class CfnPhoneNumber(
     @jsii.member(jsii_name="twoWay")
     def two_way(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.TwoWayProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.TwoWayProperty"]]:
         '''Describes the two-way SMS configuration for a phone number.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.TwoWayProperty"]], jsii.get(self, "twoWay"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.TwoWayProperty"]], jsii.get(self, "twoWay"))
 
     @two_way.setter
     def two_way(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.TwoWayProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.TwoWayProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9d4007552b2a5c50d580a9b5ece55fcd38284b10f7943be06e671add40a07f4c)
@@ -1665,8 +1673,8 @@ class CfnPhoneNumber(
         def __init__(
             self,
             *,
-            help: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPhoneNumber.MandatoryKeywordProperty", typing.Dict[builtins.str, typing.Any]]],
-            stop: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPhoneNumber.MandatoryKeywordProperty", typing.Dict[builtins.str, typing.Any]]],
+            help: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPhoneNumber.MandatoryKeywordProperty", typing.Dict[builtins.str, typing.Any]]],
+            stop: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPhoneNumber.MandatoryKeywordProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The keywords ``HELP`` and ``STOP`` are mandatory keywords that each phone number must have.
 
@@ -1705,7 +1713,7 @@ class CfnPhoneNumber(
         @builtins.property
         def help(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.MandatoryKeywordProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.MandatoryKeywordProperty"]:
             '''Specifies the ``HELP`` keyword that customers use to obtain customer support for this phone number.
 
             For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
@@ -1714,12 +1722,12 @@ class CfnPhoneNumber(
             '''
             result = self._values.get("help")
             assert result is not None, "Required property 'help' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.MandatoryKeywordProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.MandatoryKeywordProperty"], result)
 
         @builtins.property
         def stop(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.MandatoryKeywordProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.MandatoryKeywordProperty"]:
             '''Specifies the ``STOP`` keyword that customers use to opt out of receiving messages from this phone number.
 
             For more information, see `Required opt-out keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords-required.html>`_ in the End User Messaging  User Guide.
@@ -1728,7 +1736,7 @@ class CfnPhoneNumber(
             '''
             result = self._values.get("stop")
             assert result is not None, "Required property 'stop' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPhoneNumber.MandatoryKeywordProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.MandatoryKeywordProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1842,7 +1850,7 @@ class CfnPhoneNumber(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             channel_arn: typing.Optional[builtins.str] = None,
             channel_role: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -1883,7 +1891,7 @@ class CfnPhoneNumber(
                 self._values["channel_role"] = channel_role
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''By default this is set to false.
 
             When set to true you can receive incoming text messages from your end recipients using the TwoWayChannelArn.
@@ -1892,7 +1900,7 @@ class CfnPhoneNumber(
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def channel_arn(self) -> typing.Optional[builtins.str]:
@@ -1945,15 +1953,15 @@ class CfnPhoneNumberProps:
         self,
         *,
         iso_country_code: builtins.str,
-        mandatory_keywords: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.MandatoryKeywordsProperty, typing.Dict[builtins.str, typing.Any]]],
+        mandatory_keywords: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPhoneNumber.MandatoryKeywordsProperty", typing.Dict[builtins.str, typing.Any]]],
         number_capabilities: typing.Sequence[builtins.str],
         number_type: builtins.str,
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        optional_keywords: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.OptionalKeywordProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        optional_keywords: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPhoneNumber.OptionalKeywordProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         opt_out_list_name: typing.Optional[builtins.str] = None,
-        self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.TwoWayProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        two_way: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPhoneNumber.TwoWayProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPhoneNumber``.
 
@@ -1973,6 +1981,7 @@ class CfnPhoneNumberProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_smsvoice as smsvoice
@@ -2056,14 +2065,14 @@ class CfnPhoneNumberProps:
     @builtins.property
     def mandatory_keywords(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnPhoneNumber.MandatoryKeywordsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.MandatoryKeywordsProperty"]:
         '''Creates or updates a ``MandatoryKeyword`` configuration on an origination phone number For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-mandatorykeywords
         '''
         result = self._values.get("mandatory_keywords")
         assert result is not None, "Required property 'mandatory_keywords' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnPhoneNumber.MandatoryKeywordsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.MandatoryKeywordsProperty"], result)
 
     @builtins.property
     def number_capabilities(self) -> typing.List[builtins.str]:
@@ -2092,7 +2101,7 @@ class CfnPhoneNumberProps:
     @builtins.property
     def deletion_protection_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''By default this is set to false.
 
         When set to true the phone number can't be deleted.
@@ -2100,12 +2109,12 @@ class CfnPhoneNumberProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-deletionprotectionenabled
         '''
         result = self._values.get("deletion_protection_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def optional_keywords(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPhoneNumber.OptionalKeywordProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.OptionalKeywordProperty"]]]]:
         '''A keyword is a word that you can search for on a particular phone number or pool.
 
         It is also a specific word or phrase that an end user can send to your number to elicit a response, such as an informational message or a special offer. When your number receives a message that begins with a keyword, End User Messaging  responds with a customizable message. Optional keywords are differentiated from mandatory keywords. For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
@@ -2113,7 +2122,7 @@ class CfnPhoneNumberProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-optionalkeywords
         '''
         result = self._values.get("optional_keywords")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPhoneNumber.OptionalKeywordProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.OptionalKeywordProperty"]]]], result)
 
     @builtins.property
     def opt_out_list_name(self) -> typing.Optional[builtins.str]:
@@ -2127,7 +2136,7 @@ class CfnPhoneNumberProps:
     @builtins.property
     def self_managed_opt_outs_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When set to false and an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, End User Messaging  automatically replies with a customizable message and adds the end recipient to the OptOutList.
 
         When set to true you're responsible for responding to HELP and STOP requests. You're also responsible for tracking and honoring opt-out request. For more information see `Self-managed opt-outs <https://docs.aws.amazon.com/sms-voice/latest/userguide/opt-out-list-self-managed.html>`_
@@ -2135,21 +2144,21 @@ class CfnPhoneNumberProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-selfmanagedoptoutsenabled
         '''
         result = self._values.get("self_managed_opt_outs_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags (key and value pairs) to associate with the requested phone number.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def two_way(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPhoneNumber.TwoWayProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.TwoWayProperty"]]:
         '''Describes the two-way SMS configuration for a phone number.
 
         For more information, see `Two-way SMS messaging <https://docs.aws.amazon.com/sms-voice/latest/userguide/two-way-sms.html>`_ in the End User Messaging  User Guide.
@@ -2157,7 +2166,7 @@ class CfnPhoneNumberProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-phonenumber.html#cfn-smsvoice-phonenumber-twoway
         '''
         result = self._values.get("two_way")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPhoneNumber.TwoWayProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPhoneNumber.TwoWayProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2191,6 +2200,7 @@ class CfnPool(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_smsvoice as smsvoice
@@ -2232,18 +2242,18 @@ class CfnPool(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        mandatory_keywords: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPool.MandatoryKeywordsProperty", typing.Dict[builtins.str, typing.Any]]],
+        mandatory_keywords: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPool.MandatoryKeywordsProperty", typing.Dict[builtins.str, typing.Any]]],
         origination_identities: typing.Sequence[builtins.str],
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        optional_keywords: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPool.OptionalKeywordProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        optional_keywords: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPool.OptionalKeywordProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         opt_out_list_name: typing.Optional[builtins.str] = None,
-        self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        shared_routes_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPool.TwoWayProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        shared_routes_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        two_way: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPool.TwoWayProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SMSVOICE::Pool``.
 
@@ -2279,7 +2289,7 @@ class CfnPool(
 
     @jsii.member(jsii_name="arnForPool")
     @builtins.classmethod
-    def arn_for_pool(cls, resource: _IPoolRef_897848fa) -> builtins.str:
+    def arn_for_pool(cls, resource: "_IPoolRef_897848fa") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2292,10 +2302,10 @@ class CfnPool(
     @builtins.classmethod
     def from_pool_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IPoolRef_897848fa:
+    ) -> "_IPoolRef_897848fa":
         '''Creates a new IPoolRef from an ARN.
 
         :param scope: -
@@ -2307,16 +2317,16 @@ class CfnPool(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IPoolRef_897848fa, jsii.sinvoke(cls, "fromPoolArn", [scope, id, arn]))
+        return typing.cast("_IPoolRef_897848fa", jsii.sinvoke(cls, "fromPoolArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromPoolId")
     @builtins.classmethod
     def from_pool_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         pool_id: builtins.str,
-    ) -> _IPoolRef_897848fa:
+    ) -> "_IPoolRef_897848fa":
         '''Creates a new IPoolRef from a poolId.
 
         :param scope: -
@@ -2328,7 +2338,7 @@ class CfnPool(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument pool_id", value=pool_id, expected_type=type_hints["pool_id"])
-        return typing.cast(_IPoolRef_897848fa, jsii.sinvoke(cls, "fromPoolId", [scope, id, pool_id]))
+        return typing.cast("_IPoolRef_897848fa", jsii.sinvoke(cls, "fromPoolId", [scope, id, pool_id]))
 
     @jsii.member(jsii_name="isCfnPool")
     @builtins.classmethod
@@ -2343,7 +2353,7 @@ class CfnPool(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPool", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2392,9 +2402,9 @@ class CfnPool(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2403,22 +2413,22 @@ class CfnPool(
 
     @builtins.property
     @jsii.member(jsii_name="poolRef")
-    def pool_ref(self) -> _PoolReference_a27a62c2:
+    def pool_ref(self) -> "_PoolReference_a27a62c2":
         '''A reference to a Pool resource.'''
-        return typing.cast(_PoolReference_a27a62c2, jsii.get(self, "poolRef"))
+        return typing.cast("_PoolReference_a27a62c2", jsii.get(self, "poolRef"))
 
     @builtins.property
     @jsii.member(jsii_name="mandatoryKeywords")
     def mandatory_keywords(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnPool.MandatoryKeywordsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPool.MandatoryKeywordsProperty"]:
         '''Creates or updates the pool's ``MandatoryKeyword`` configuration.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPool.MandatoryKeywordsProperty"], jsii.get(self, "mandatoryKeywords"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPool.MandatoryKeywordsProperty"], jsii.get(self, "mandatoryKeywords"))
 
     @mandatory_keywords.setter
     def mandatory_keywords(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnPool.MandatoryKeywordsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnPool.MandatoryKeywordsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bfd14c3ecd877946c0643f80a4e0a099266dc357dd1c9f2fded20c2ed6068511)
@@ -2442,14 +2452,14 @@ class CfnPool(
     @jsii.member(jsii_name="deletionProtectionEnabled")
     def deletion_protection_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When set to true the pool can't be deleted.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deletionProtectionEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deletionProtectionEnabled"))
 
     @deletion_protection_enabled.setter
     def deletion_protection_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5a973c88578554a2711f55af1a74d5bf3a851e51c2372e0b21001f10f4008325)
@@ -2460,14 +2470,14 @@ class CfnPool(
     @jsii.member(jsii_name="optionalKeywords")
     def optional_keywords(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPool.OptionalKeywordProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPool.OptionalKeywordProperty"]]]]:
         '''Specifies any optional keywords to associate with the pool.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPool.OptionalKeywordProperty"]]]], jsii.get(self, "optionalKeywords"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPool.OptionalKeywordProperty"]]]], jsii.get(self, "optionalKeywords"))
 
     @optional_keywords.setter
     def optional_keywords(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPool.OptionalKeywordProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPool.OptionalKeywordProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7b2ca5a55c40a8062edab9da92a8bb55730ecbfd143187de51da50b4e36607bd)
@@ -2491,14 +2501,14 @@ class CfnPool(
     @jsii.member(jsii_name="selfManagedOptOutsEnabled")
     def self_managed_opt_outs_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When set to false, an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, End User Messaging  automatically replies with a customizable message and adds the end recipient to the OptOutList.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "selfManagedOptOutsEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "selfManagedOptOutsEnabled"))
 
     @self_managed_opt_outs_enabled.setter
     def self_managed_opt_outs_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__50cb9c95473e3f15cee6cae1601c885f0fc786075af4a6607253cea1cc7c1057)
@@ -2509,14 +2519,14 @@ class CfnPool(
     @jsii.member(jsii_name="sharedRoutesEnabled")
     def shared_routes_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Allows you to enable shared routes on your pool.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "sharedRoutesEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "sharedRoutesEnabled"))
 
     @shared_routes_enabled.setter
     def shared_routes_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__acfab5fb52186d7cf51c246789b7a8942e05a66e5b635a2323438e15ebf3a85c)
@@ -2525,12 +2535,12 @@ class CfnPool(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags (key and value pairs) associated with the pool.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__80c94b1b39a42b8df6f133aad39a3eaf660a2fa0ae43777c636d9f46c4f0fbf8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2540,14 +2550,14 @@ class CfnPool(
     @jsii.member(jsii_name="twoWay")
     def two_way(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPool.TwoWayProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPool.TwoWayProperty"]]:
         '''Describes the two-way SMS configuration for a phone number.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPool.TwoWayProperty"]], jsii.get(self, "twoWay"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPool.TwoWayProperty"]], jsii.get(self, "twoWay"))
 
     @two_way.setter
     def two_way(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPool.TwoWayProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPool.TwoWayProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__98c3832bba752985f1cbf4bfdbf7efe14a8cf5d35ff7b69c2bc40a36bdc85123)
@@ -2617,8 +2627,8 @@ class CfnPool(
         def __init__(
             self,
             *,
-            help: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPool.MandatoryKeywordProperty", typing.Dict[builtins.str, typing.Any]]],
-            stop: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPool.MandatoryKeywordProperty", typing.Dict[builtins.str, typing.Any]]],
+            help: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPool.MandatoryKeywordProperty", typing.Dict[builtins.str, typing.Any]]],
+            stop: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPool.MandatoryKeywordProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The manadatory keywords, ``HELP`` and ``STOP`` to add to the pool.
 
@@ -2657,7 +2667,7 @@ class CfnPool(
         @builtins.property
         def help(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPool.MandatoryKeywordProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPool.MandatoryKeywordProperty"]:
             '''Specifies the pool's ``HELP`` keyword.
 
             For more information, see `Opt out list required keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/opt-out-list-keywords.html>`_ in the End User Messaging  User Guide.
@@ -2666,12 +2676,12 @@ class CfnPool(
             '''
             result = self._values.get("help")
             assert result is not None, "Required property 'help' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPool.MandatoryKeywordProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPool.MandatoryKeywordProperty"], result)
 
         @builtins.property
         def stop(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPool.MandatoryKeywordProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPool.MandatoryKeywordProperty"]:
             '''Specifies the pool's opt-out keyword.
 
             For more information, see `Required opt-out keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords-required.html>`_ in the End User Messaging  User Guide.
@@ -2680,7 +2690,7 @@ class CfnPool(
             '''
             result = self._values.get("stop")
             assert result is not None, "Required property 'stop' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPool.MandatoryKeywordProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPool.MandatoryKeywordProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2794,7 +2804,7 @@ class CfnPool(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             channel_arn: typing.Optional[builtins.str] = None,
             channel_role: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -2835,7 +2845,7 @@ class CfnPool(
                 self._values["channel_role"] = channel_role
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''By default this is set to false.
 
             When set to true you can receive incoming text messages from your end recipients using the TwoWayChannelArn.
@@ -2844,7 +2854,7 @@ class CfnPool(
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def channel_arn(self) -> typing.Optional[builtins.str]:
@@ -2895,15 +2905,15 @@ class CfnPoolProps:
     def __init__(
         self,
         *,
-        mandatory_keywords: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPool.MandatoryKeywordsProperty, typing.Dict[builtins.str, typing.Any]]],
+        mandatory_keywords: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPool.MandatoryKeywordsProperty", typing.Dict[builtins.str, typing.Any]]],
         origination_identities: typing.Sequence[builtins.str],
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        optional_keywords: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPool.OptionalKeywordProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        optional_keywords: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPool.OptionalKeywordProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         opt_out_list_name: typing.Optional[builtins.str] = None,
-        self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        shared_routes_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPool.TwoWayProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        shared_routes_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        two_way: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPool.TwoWayProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPool``.
 
@@ -2922,6 +2932,7 @@ class CfnPoolProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_smsvoice as smsvoice
@@ -2993,7 +3004,7 @@ class CfnPoolProps:
     @builtins.property
     def mandatory_keywords(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnPool.MandatoryKeywordsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnPool.MandatoryKeywordsProperty"]:
         '''Creates or updates the pool's ``MandatoryKeyword`` configuration.
 
         For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
@@ -3002,7 +3013,7 @@ class CfnPoolProps:
         '''
         result = self._values.get("mandatory_keywords")
         assert result is not None, "Required property 'mandatory_keywords' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnPool.MandatoryKeywordsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPool.MandatoryKeywordsProperty"], result)
 
     @builtins.property
     def origination_identities(self) -> typing.List[builtins.str]:
@@ -3022,18 +3033,18 @@ class CfnPoolProps:
     @builtins.property
     def deletion_protection_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When set to true the pool can't be deleted.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-deletionprotectionenabled
         '''
         result = self._values.get("deletion_protection_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def optional_keywords(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPool.OptionalKeywordProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPool.OptionalKeywordProperty"]]]]:
         '''Specifies any optional keywords to associate with the pool.
 
         For more information, see `Keywords <https://docs.aws.amazon.com/sms-voice/latest/userguide/keywords.html>`_ in the End User Messaging  User Guide.
@@ -3041,7 +3052,7 @@ class CfnPoolProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-optionalkeywords
         '''
         result = self._values.get("optional_keywords")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPool.OptionalKeywordProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPool.OptionalKeywordProperty"]]]], result)
 
     @builtins.property
     def opt_out_list_name(self) -> typing.Optional[builtins.str]:
@@ -3055,7 +3066,7 @@ class CfnPoolProps:
     @builtins.property
     def self_managed_opt_outs_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When set to false, an end recipient sends a message that begins with HELP or STOP to one of your dedicated numbers, End User Messaging  automatically replies with a customizable message and adds the end recipient to the OptOutList.
 
         When set to true you're responsible for responding to HELP and STOP requests. You're also responsible for tracking and honoring opt-out requests. For more information see `Self-managed opt-outs <https://docs.aws.amazon.com//pinpoint/latest/userguide/settings-sms-managing.html#settings-account-sms-self-managed-opt-out>`_
@@ -3063,12 +3074,12 @@ class CfnPoolProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-selfmanagedoptoutsenabled
         '''
         result = self._values.get("self_managed_opt_outs_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def shared_routes_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Allows you to enable shared routes on your pool.
 
         By default, this is set to ``False`` . If you set this value to ``True`` , your messages are sent using phone numbers or sender IDs (depending on the country) that are shared with other users. In some countries, such as the United States, senders aren't allowed to use shared routes and must use a dedicated phone number or short code.
@@ -3076,21 +3087,21 @@ class CfnPoolProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-sharedroutesenabled
         '''
         result = self._values.get("shared_routes_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags (key and value pairs) associated with the pool.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def two_way(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPool.TwoWayProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPool.TwoWayProperty"]]:
         '''Describes the two-way SMS configuration for a phone number.
 
         For more information, see `Two-way SMS messaging <https://docs.aws.amazon.com/sms-voice/latest/userguide/two-way-sms.html>`_ in the End User Messaging  User Guide.
@@ -3098,7 +3109,7 @@ class CfnPoolProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-pool.html#cfn-smsvoice-pool-twoway
         '''
         result = self._values.get("two_way")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPool.TwoWayProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPool.TwoWayProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3128,6 +3139,7 @@ class CfnProtectConfiguration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_smsvoice as smsvoice
@@ -3157,12 +3169,12 @@ class CfnProtectConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        country_rule_set: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProtectConfiguration.CountryRuleSetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        country_rule_set: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProtectConfiguration.CountryRuleSetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SMSVOICE::ProtectConfiguration``.
 
@@ -3188,7 +3200,7 @@ class CfnProtectConfiguration(
     @builtins.classmethod
     def arn_for_protect_configuration(
         cls,
-        resource: _IProtectConfigurationRef_e1ab5693,
+        resource: "_IProtectConfigurationRef_e1ab5693",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3202,10 +3214,10 @@ class CfnProtectConfiguration(
     @builtins.classmethod
     def from_protect_configuration_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IProtectConfigurationRef_e1ab5693:
+    ) -> "_IProtectConfigurationRef_e1ab5693":
         '''Creates a new IProtectConfigurationRef from an ARN.
 
         :param scope: -
@@ -3217,16 +3229,16 @@ class CfnProtectConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IProtectConfigurationRef_e1ab5693, jsii.sinvoke(cls, "fromProtectConfigurationArn", [scope, id, arn]))
+        return typing.cast("_IProtectConfigurationRef_e1ab5693", jsii.sinvoke(cls, "fromProtectConfigurationArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromProtectConfigurationId")
     @builtins.classmethod
     def from_protect_configuration_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         protect_configuration_id: builtins.str,
-    ) -> _IProtectConfigurationRef_e1ab5693:
+    ) -> "_IProtectConfigurationRef_e1ab5693":
         '''Creates a new IProtectConfigurationRef from a protectConfigurationId.
 
         :param scope: -
@@ -3238,7 +3250,7 @@ class CfnProtectConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument protect_configuration_id", value=protect_configuration_id, expected_type=type_hints["protect_configuration_id"])
-        return typing.cast(_IProtectConfigurationRef_e1ab5693, jsii.sinvoke(cls, "fromProtectConfigurationId", [scope, id, protect_configuration_id]))
+        return typing.cast("_IProtectConfigurationRef_e1ab5693", jsii.sinvoke(cls, "fromProtectConfigurationId", [scope, id, protect_configuration_id]))
 
     @jsii.member(jsii_name="isCfnProtectConfiguration")
     @builtins.classmethod
@@ -3253,7 +3265,7 @@ class CfnProtectConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProtectConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3302,9 +3314,9 @@ class CfnProtectConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3313,22 +3325,22 @@ class CfnProtectConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="protectConfigurationRef")
-    def protect_configuration_ref(self) -> _ProtectConfigurationReference_c0c38d05:
+    def protect_configuration_ref(self) -> "_ProtectConfigurationReference_c0c38d05":
         '''A reference to a ProtectConfiguration resource.'''
-        return typing.cast(_ProtectConfigurationReference_c0c38d05, jsii.get(self, "protectConfigurationRef"))
+        return typing.cast("_ProtectConfigurationReference_c0c38d05", jsii.get(self, "protectConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="countryRuleSet")
     def country_rule_set(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProtectConfiguration.CountryRuleSetProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProtectConfiguration.CountryRuleSetProperty"]]:
         '''The set of ``CountryRules`` you specify to control which countries End User Messaging  can send your messages to.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProtectConfiguration.CountryRuleSetProperty"]], jsii.get(self, "countryRuleSet"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProtectConfiguration.CountryRuleSetProperty"]], jsii.get(self, "countryRuleSet"))
 
     @country_rule_set.setter
     def country_rule_set(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnProtectConfiguration.CountryRuleSetProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProtectConfiguration.CountryRuleSetProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f7688334aed3a536c2764f4570242ec488d7d2c28ffdc2e8acbe59bb8451f565)
@@ -3339,14 +3351,14 @@ class CfnProtectConfiguration(
     @jsii.member(jsii_name="deletionProtectionEnabled")
     def deletion_protection_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The status of deletion protection for the protect configuration.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deletionProtectionEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deletionProtectionEnabled"))
 
     @deletion_protection_enabled.setter
     def deletion_protection_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3dbdba6d79324e688bba9234d140d000e34ef557e1f8ce69b4c2334f65476a8b)
@@ -3355,12 +3367,12 @@ class CfnProtectConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key and value pair tags that are associated with the resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__426d023d6055eb2207d58490fb47ae5f69dff7c3c65aeea366fd1f204322407d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3453,9 +3465,9 @@ class CfnProtectConfiguration(
         def __init__(
             self,
             *,
-            mms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProtectConfiguration.CountryRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            sms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProtectConfiguration.CountryRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            voice: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProtectConfiguration.CountryRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            mms: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProtectConfiguration.CountryRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            sms: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProtectConfiguration.CountryRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            voice: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProtectConfiguration.CountryRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The set of ``CountryRules`` you specify to control which countries End User Messaging  can send your messages to.
 
@@ -3507,35 +3519,35 @@ class CfnProtectConfiguration(
         @builtins.property
         def mms(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProtectConfiguration.CountryRuleProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProtectConfiguration.CountryRuleProperty"]]]]:
             '''The set of ``CountryRule`` s to control which destination countries End User Messaging  can send your MMS messages to.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-smsvoice-protectconfiguration-countryruleset.html#cfn-smsvoice-protectconfiguration-countryruleset-mms
             '''
             result = self._values.get("mms")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProtectConfiguration.CountryRuleProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProtectConfiguration.CountryRuleProperty"]]]], result)
 
         @builtins.property
         def sms(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProtectConfiguration.CountryRuleProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProtectConfiguration.CountryRuleProperty"]]]]:
             '''The set of ``CountryRule`` s to control which destination countries End User Messaging  can send your SMS messages to.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-smsvoice-protectconfiguration-countryruleset.html#cfn-smsvoice-protectconfiguration-countryruleset-sms
             '''
             result = self._values.get("sms")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProtectConfiguration.CountryRuleProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProtectConfiguration.CountryRuleProperty"]]]], result)
 
         @builtins.property
         def voice(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProtectConfiguration.CountryRuleProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProtectConfiguration.CountryRuleProperty"]]]]:
             '''The set of ``CountryRule`` s to control which destination countries End User Messaging  can send your VOICE messages to.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-smsvoice-protectconfiguration-countryruleset.html#cfn-smsvoice-protectconfiguration-countryruleset-voice
             '''
             result = self._values.get("voice")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProtectConfiguration.CountryRuleProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProtectConfiguration.CountryRuleProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3562,9 +3574,9 @@ class CfnProtectConfigurationProps:
     def __init__(
         self,
         *,
-        country_rule_set: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProtectConfiguration.CountryRuleSetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        country_rule_set: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProtectConfiguration.CountryRuleSetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnProtectConfiguration``.
 
@@ -3577,6 +3589,7 @@ class CfnProtectConfigurationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_smsvoice as smsvoice
@@ -3619,18 +3632,18 @@ class CfnProtectConfigurationProps:
     @builtins.property
     def country_rule_set(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProtectConfiguration.CountryRuleSetProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProtectConfiguration.CountryRuleSetProperty"]]:
         '''The set of ``CountryRules`` you specify to control which countries End User Messaging  can send your messages to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-protectconfiguration.html#cfn-smsvoice-protectconfiguration-countryruleset
         '''
         result = self._values.get("country_rule_set")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProtectConfiguration.CountryRuleSetProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnProtectConfiguration.CountryRuleSetProperty"]], result)
 
     @builtins.property
     def deletion_protection_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The status of deletion protection for the protect configuration.
 
         When set to true deletion protection is enabled. By default this is set to false.
@@ -3638,16 +3651,16 @@ class CfnProtectConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-protectconfiguration.html#cfn-smsvoice-protectconfiguration-deletionprotectionenabled
         '''
         result = self._values.get("deletion_protection_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key and value pair tags that are associated with the resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-protectconfiguration.html#cfn-smsvoice-protectconfiguration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3691,7 +3704,7 @@ class CfnResourcePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_document: typing.Any,
@@ -3727,7 +3740,7 @@ class CfnResourcePolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourcePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3763,9 +3776,9 @@ class CfnResourcePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicyRef")
-    def resource_policy_ref(self) -> _ResourcePolicyReference_b377e19e:
+    def resource_policy_ref(self) -> "_ResourcePolicyReference_b377e19e":
         '''A reference to a ResourcePolicy resource.'''
-        return typing.cast(_ResourcePolicyReference_b377e19e, jsii.get(self, "resourcePolicyRef"))
+        return typing.cast("_ResourcePolicyReference_b377e19e", jsii.get(self, "resourcePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
@@ -3882,6 +3895,7 @@ class CfnSenderId(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_smsvoice as smsvoice
@@ -3901,13 +3915,13 @@ class CfnSenderId(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         iso_country_code: builtins.str,
         sender_id: builtins.str,
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SMSVOICE::SenderId``.
 
@@ -3933,7 +3947,7 @@ class CfnSenderId(
 
     @jsii.member(jsii_name="arnForSenderId")
     @builtins.classmethod
-    def arn_for_sender_id(cls, resource: _ISenderIdRef_c6023099) -> builtins.str:
+    def arn_for_sender_id(cls, resource: "_ISenderIdRef_c6023099") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3955,7 +3969,7 @@ class CfnSenderId(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSenderId", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3995,9 +4009,9 @@ class CfnSenderId(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4006,9 +4020,9 @@ class CfnSenderId(
 
     @builtins.property
     @jsii.member(jsii_name="senderIdRef")
-    def sender_id_ref(self) -> _SenderIdReference_10c27954:
+    def sender_id_ref(self) -> "_SenderIdReference_10c27954":
         '''A reference to a SenderId resource.'''
-        return typing.cast(_SenderIdReference_10c27954, jsii.get(self, "senderIdRef"))
+        return typing.cast("_SenderIdReference_10c27954", jsii.get(self, "senderIdRef"))
 
     @builtins.property
     @jsii.member(jsii_name="isoCountryCode")
@@ -4040,14 +4054,14 @@ class CfnSenderId(
     @jsii.member(jsii_name="deletionProtectionEnabled")
     def deletion_protection_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''By default this is set to false.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deletionProtectionEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deletionProtectionEnabled"))
 
     @deletion_protection_enabled.setter
     def deletion_protection_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__91773bda3ac0eb8138096da1ce6b25e2934b8604161e1ed8b5b998a2e2a57883)
@@ -4056,12 +4070,12 @@ class CfnSenderId(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags (key and value pairs) to associate with the sender ID.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__032142149c9722a7758daf53b4af657dc1c49bbf0817db09eaabeb3076cf7c07)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4084,8 +4098,8 @@ class CfnSenderIdProps:
         *,
         iso_country_code: builtins.str,
         sender_id: builtins.str,
-        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSenderId``.
 
@@ -4099,6 +4113,7 @@ class CfnSenderIdProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_smsvoice as smsvoice
@@ -4153,7 +4168,7 @@ class CfnSenderIdProps:
     @builtins.property
     def deletion_protection_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''By default this is set to false.
 
         When set to true the sender ID can't be deleted.
@@ -4161,16 +4176,16 @@ class CfnSenderIdProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-senderid.html#cfn-smsvoice-senderid-deletionprotectionenabled
         '''
         result = self._values.get("deletion_protection_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags (key and value pairs) to associate with the sender ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-senderid.html#cfn-smsvoice-senderid-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

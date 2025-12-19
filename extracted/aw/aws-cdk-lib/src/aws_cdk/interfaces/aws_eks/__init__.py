@@ -404,7 +404,7 @@ class IAccessEntryRef(
 
     @builtins.property
     @jsii.member(jsii_name="accessEntryRef")
-    def access_entry_ref(self) -> AccessEntryReference:
+    def access_entry_ref(self) -> "AccessEntryReference":
         '''(experimental) A reference to a AccessEntry resource.
 
         :stability: experimental
@@ -425,12 +425,12 @@ class _IAccessEntryRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accessEntryRef")
-    def access_entry_ref(self) -> AccessEntryReference:
+    def access_entry_ref(self) -> "AccessEntryReference":
         '''(experimental) A reference to a AccessEntry resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccessEntryReference, jsii.get(self, "accessEntryRef"))
+        return typing.cast("AccessEntryReference", jsii.get(self, "accessEntryRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessEntryRef).__jsii_proxy_class__ = lambda : _IAccessEntryRefProxy
@@ -449,7 +449,7 @@ class IAddonRef(
 
     @builtins.property
     @jsii.member(jsii_name="addonRef")
-    def addon_ref(self) -> AddonReference:
+    def addon_ref(self) -> "AddonReference":
         '''(experimental) A reference to a Addon resource.
 
         :stability: experimental
@@ -470,12 +470,12 @@ class _IAddonRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="addonRef")
-    def addon_ref(self) -> AddonReference:
+    def addon_ref(self) -> "AddonReference":
         '''(experimental) A reference to a Addon resource.
 
         :stability: experimental
         '''
-        return typing.cast(AddonReference, jsii.get(self, "addonRef"))
+        return typing.cast("AddonReference", jsii.get(self, "addonRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAddonRef).__jsii_proxy_class__ = lambda : _IAddonRefProxy
@@ -494,7 +494,7 @@ class ICapabilityRef(
 
     @builtins.property
     @jsii.member(jsii_name="capabilityRef")
-    def capability_ref(self) -> CapabilityReference:
+    def capability_ref(self) -> "CapabilityReference":
         '''(experimental) A reference to a Capability resource.
 
         :stability: experimental
@@ -515,12 +515,12 @@ class _ICapabilityRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="capabilityRef")
-    def capability_ref(self) -> CapabilityReference:
+    def capability_ref(self) -> "CapabilityReference":
         '''(experimental) A reference to a Capability resource.
 
         :stability: experimental
         '''
-        return typing.cast(CapabilityReference, jsii.get(self, "capabilityRef"))
+        return typing.cast("CapabilityReference", jsii.get(self, "capabilityRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICapabilityRef).__jsii_proxy_class__ = lambda : _ICapabilityRefProxy
@@ -539,7 +539,7 @@ class IClusterRef(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
@@ -560,12 +560,12 @@ class _IClusterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClusterReference, jsii.get(self, "clusterRef"))
+        return typing.cast("ClusterReference", jsii.get(self, "clusterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRefProxy
@@ -584,7 +584,7 @@ class IFargateProfileRef(
 
     @builtins.property
     @jsii.member(jsii_name="fargateProfileRef")
-    def fargate_profile_ref(self) -> FargateProfileReference:
+    def fargate_profile_ref(self) -> "FargateProfileReference":
         '''(experimental) A reference to a FargateProfile resource.
 
         :stability: experimental
@@ -605,12 +605,12 @@ class _IFargateProfileRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="fargateProfileRef")
-    def fargate_profile_ref(self) -> FargateProfileReference:
+    def fargate_profile_ref(self) -> "FargateProfileReference":
         '''(experimental) A reference to a FargateProfile resource.
 
         :stability: experimental
         '''
-        return typing.cast(FargateProfileReference, jsii.get(self, "fargateProfileRef"))
+        return typing.cast("FargateProfileReference", jsii.get(self, "fargateProfileRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFargateProfileRef).__jsii_proxy_class__ = lambda : _IFargateProfileRefProxy

@@ -118,12 +118,12 @@ class CfnAccessPoint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         bucket: builtins.str,
         name: builtins.str,
-        vpc_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        vpc_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         policy: typing.Any = None,
     ) -> None:
         '''Create a new ``AWS::S3Outposts::AccessPoint``.
@@ -150,7 +150,10 @@ class CfnAccessPoint(
 
     @jsii.member(jsii_name="arnForAccessPoint")
     @builtins.classmethod
-    def arn_for_access_point(cls, resource: _IAccessPointRef_1158a8a6) -> builtins.str:
+    def arn_for_access_point(
+        cls,
+        resource: "_IAccessPointRef_1158a8a6",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -172,7 +175,7 @@ class CfnAccessPoint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessPoint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -203,9 +206,9 @@ class CfnAccessPoint(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointRef")
-    def access_point_ref(self) -> _AccessPointReference_d7311be4:
+    def access_point_ref(self) -> "_AccessPointReference_d7311be4":
         '''A reference to a AccessPoint resource.'''
-        return typing.cast(_AccessPointReference_d7311be4, jsii.get(self, "accessPointRef"))
+        return typing.cast("_AccessPointReference_d7311be4", jsii.get(self, "accessPointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -253,14 +256,14 @@ class CfnAccessPoint(
     @jsii.member(jsii_name="vpcConfiguration")
     def vpc_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.VpcConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.VpcConfigurationProperty"]:
         '''The virtual private cloud (VPC) configuration for this access point, if one exists.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.VpcConfigurationProperty"], jsii.get(self, "vpcConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.VpcConfigurationProperty"], jsii.get(self, "vpcConfiguration"))
 
     @vpc_configuration.setter
     def vpc_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.VpcConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.VpcConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__55812ce12eee7d4ecd641b7985f48f98d2a1667857eae24a92f028f85a0a79a8)
@@ -348,7 +351,7 @@ class CfnAccessPointProps:
         *,
         bucket: builtins.str,
         name: builtins.str,
-        vpc_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.VpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        vpc_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         policy: typing.Any = None,
     ) -> None:
         '''Properties for defining a ``CfnAccessPoint``.
@@ -417,14 +420,14 @@ class CfnAccessPointProps:
     @builtins.property
     def vpc_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAccessPoint.VpcConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.VpcConfigurationProperty"]:
         '''The virtual private cloud (VPC) configuration for this access point, if one exists.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3outposts-accesspoint.html#cfn-s3outposts-accesspoint-vpcconfiguration
         '''
         result = self._values.get("vpc_configuration")
         assert result is not None, "Required property 'vpc_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAccessPoint.VpcConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.VpcConfigurationProperty"], result)
 
     @builtins.property
     def policy(self) -> typing.Any:
@@ -470,6 +473,7 @@ class CfnBucket(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_s3outposts as s3outposts
@@ -504,13 +508,13 @@ class CfnBucket(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         bucket_name: builtins.str,
         outpost_id: builtins.str,
-        lifecycle_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBucket.LifecycleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        lifecycle_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBucket.LifecycleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::S3Outposts::Bucket``.
 
@@ -536,7 +540,7 @@ class CfnBucket(
 
     @jsii.member(jsii_name="arnForBucket")
     @builtins.classmethod
-    def arn_for_bucket(cls, resource: _IBucketRef_62ebb6b0) -> builtins.str:
+    def arn_for_bucket(cls, resource: "_IBucketRef_62ebb6b0") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -558,7 +562,7 @@ class CfnBucket(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBucket", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -600,9 +604,9 @@ class CfnBucket(
 
     @builtins.property
     @jsii.member(jsii_name="bucketRef")
-    def bucket_ref(self) -> _BucketReference_652c67a9:
+    def bucket_ref(self) -> "_BucketReference_652c67a9":
         '''A reference to a Bucket resource.'''
-        return typing.cast(_BucketReference_652c67a9, jsii.get(self, "bucketRef"))
+        return typing.cast("_BucketReference_652c67a9", jsii.get(self, "bucketRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -611,9 +615,9 @@ class CfnBucket(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="bucketName")
@@ -645,14 +649,14 @@ class CfnBucket(
     @jsii.member(jsii_name="lifecycleConfiguration")
     def lifecycle_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.LifecycleConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.LifecycleConfigurationProperty"]]:
         '''Creates a new lifecycle configuration for the S3 on Outposts bucket or replaces an existing lifecycle configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.LifecycleConfigurationProperty"]], jsii.get(self, "lifecycleConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.LifecycleConfigurationProperty"]], jsii.get(self, "lifecycleConfiguration"))
 
     @lifecycle_configuration.setter
     def lifecycle_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.LifecycleConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.LifecycleConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a1fafcae096376ac7aa48be114497eb8862c193af5a8157a978b9d9f1706bfb8)
@@ -661,15 +665,15 @@ class CfnBucket(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Sets the tags for an S3 on Outposts bucket.
 
         For more information, see `Using Amazon S3 on Outposts <https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html>`_ .
         '''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__81e8ae0c57b3dd52dd1453514c9b8759d4f840cef51f71bf06e13f51ba93590b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -813,9 +817,9 @@ class CfnBucket(
         def __init__(
             self,
             *,
-            and_operator: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBucket.FilterAndOperatorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            and_operator: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBucket.FilterAndOperatorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             prefix: typing.Optional[builtins.str] = None,
-            tag: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBucket.FilterTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tag: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBucket.FilterTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The container for the filter of the lifecycle rule.
 
@@ -865,12 +869,12 @@ class CfnBucket(
         @builtins.property
         def and_operator(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.FilterAndOperatorProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.FilterAndOperatorProperty"]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3outposts-bucket-filter.html#cfn-s3outposts-bucket-filter-andoperator
             '''
             result = self._values.get("and_operator")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.FilterAndOperatorProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.FilterAndOperatorProperty"]], result)
 
         @builtins.property
         def prefix(self) -> typing.Optional[builtins.str]:
@@ -884,13 +888,13 @@ class CfnBucket(
         @builtins.property
         def tag(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.FilterTagProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.FilterTagProperty"]]:
             '''Tag used to identify a subset of objects for an Amazon S3Outposts bucket.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3outposts-bucket-filter.html#cfn-s3outposts-bucket-filter-tag
             '''
             result = self._values.get("tag")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.FilterTagProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.FilterTagProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -976,7 +980,7 @@ class CfnBucket(
         def __init__(
             self,
             *,
-            rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBucket.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            rules: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBucket.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''The container for the lifecycle configuration for the objects stored in an S3 on Outposts bucket.
 
@@ -1018,14 +1022,14 @@ class CfnBucket(
         @builtins.property
         def rules(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBucket.RuleProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnBucket.RuleProperty"]]]:
             '''The container for the lifecycle configuration rules for the objects stored in the S3 on Outposts bucket.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3outposts-bucket-lifecycleconfiguration.html#cfn-s3outposts-bucket-lifecycleconfiguration-rules
             '''
             result = self._values.get("rules")
             assert result is not None, "Required property 'rules' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnBucket.RuleProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnBucket.RuleProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1055,7 +1059,7 @@ class CfnBucket(
             self,
             *,
             status: builtins.str,
-            abort_incomplete_multipart_upload: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBucket.AbortIncompleteMultipartUploadProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            abort_incomplete_multipart_upload: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBucket.AbortIncompleteMultipartUploadProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             expiration_date: typing.Optional[builtins.str] = None,
             expiration_in_days: typing.Optional[jsii.Number] = None,
             filter: typing.Any = None,
@@ -1131,13 +1135,13 @@ class CfnBucket(
         @builtins.property
         def abort_incomplete_multipart_upload(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.AbortIncompleteMultipartUploadProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.AbortIncompleteMultipartUploadProperty"]]:
             '''The container for the abort incomplete multipart upload rule.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3outposts-bucket-rule.html#cfn-s3outposts-bucket-rule-abortincompletemultipartupload
             '''
             result = self._values.get("abort_incomplete_multipart_upload")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.AbortIncompleteMultipartUploadProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.AbortIncompleteMultipartUploadProperty"]], result)
 
         @builtins.property
         def expiration_date(self) -> typing.Optional[builtins.str]:
@@ -1226,7 +1230,7 @@ class CfnBucketPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         bucket: builtins.str,
@@ -1260,7 +1264,7 @@ class CfnBucketPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBucketPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1291,9 +1295,9 @@ class CfnBucketPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="bucketPolicyRef")
-    def bucket_policy_ref(self) -> _BucketPolicyReference_5eb54b3d:
+    def bucket_policy_ref(self) -> "_BucketPolicyReference_5eb54b3d":
         '''A reference to a BucketPolicy resource.'''
-        return typing.cast(_BucketPolicyReference_5eb54b3d, jsii.get(self, "bucketPolicyRef"))
+        return typing.cast("_BucketPolicyReference_5eb54b3d", jsii.get(self, "bucketPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1414,8 +1418,8 @@ class CfnBucketProps:
         *,
         bucket_name: builtins.str,
         outpost_id: builtins.str,
-        lifecycle_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.LifecycleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        lifecycle_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnBucket.LifecycleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnBucket``.
 
@@ -1429,6 +1433,7 @@ class CfnBucketProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_s3outposts as s3outposts
@@ -1503,7 +1508,7 @@ class CfnBucketProps:
     @builtins.property
     def lifecycle_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBucket.LifecycleConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.LifecycleConfigurationProperty"]]:
         '''Creates a new lifecycle configuration for the S3 on Outposts bucket or replaces an existing lifecycle configuration.
 
         Outposts buckets only support lifecycle configurations that delete/expire objects after a certain period of time and abort incomplete multipart uploads.
@@ -1511,10 +1516,10 @@ class CfnBucketProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3outposts-bucket.html#cfn-s3outposts-bucket-lifecycleconfiguration
         '''
         result = self._values.get("lifecycle_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBucket.LifecycleConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnBucket.LifecycleConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Sets the tags for an S3 on Outposts bucket. For more information, see `Using Amazon S3 on Outposts <https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html>`_ .
 
         Use tags to organize your AWS bill to reflect your own cost structure. To do this, sign up to get your AWS account bill with tag key values included. Then, to see the cost of combined resources, organize your billing information according to resources with the same tag key values. For example, you can tag several resources with a specific application name, and then organize your billing information to see the total cost of that application across several services. For more information, see `Cost allocation and tags <https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html>`_ .
@@ -1527,7 +1532,7 @@ class CfnBucketProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3outposts-bucket.html#cfn-s3outposts-bucket-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1581,7 +1586,7 @@ class CfnEndpoint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         outpost_id: builtins.str,
@@ -1589,7 +1594,7 @@ class CfnEndpoint(
         subnet_id: builtins.str,
         access_type: typing.Optional[builtins.str] = None,
         customer_owned_ipv4_pool: typing.Optional[builtins.str] = None,
-        failed_reason: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpoint.FailedReasonProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        failed_reason: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.FailedReasonProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::S3Outposts::Endpoint``.
 
@@ -1619,7 +1624,7 @@ class CfnEndpoint(
 
     @jsii.member(jsii_name="arnForEndpoint")
     @builtins.classmethod
-    def arn_for_endpoint(cls, resource: _IEndpointRef_7b579f8b) -> builtins.str:
+    def arn_for_endpoint(cls, resource: "_IEndpointRef_7b579f8b") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1641,7 +1646,7 @@ class CfnEndpoint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEndpoint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1708,12 +1713,12 @@ class CfnEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="attrNetworkInterfaces")
-    def attr_network_interfaces(self) -> _IResolvable_da3f097b:
+    def attr_network_interfaces(self) -> "_IResolvable_da3f097b":
         '''The network interface of the endpoint.
 
         :cloudformationAttribute: NetworkInterfaces
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrNetworkInterfaces"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrNetworkInterfaces"))
 
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
@@ -1731,9 +1736,9 @@ class CfnEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="endpointRef")
-    def endpoint_ref(self) -> _EndpointReference_3fc5227a:
+    def endpoint_ref(self) -> "_EndpointReference_3fc5227a":
         '''A reference to a Endpoint resource.'''
-        return typing.cast(_EndpointReference_3fc5227a, jsii.get(self, "endpointRef"))
+        return typing.cast("_EndpointReference_3fc5227a", jsii.get(self, "endpointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="outpostId")
@@ -1804,14 +1809,14 @@ class CfnEndpoint(
     @jsii.member(jsii_name="failedReason")
     def failed_reason(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.FailedReasonProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.FailedReasonProperty"]]:
         '''The failure reason, if any, for a create or delete endpoint operation.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.FailedReasonProperty"]], jsii.get(self, "failedReason"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.FailedReasonProperty"]], jsii.get(self, "failedReason"))
 
     @failed_reason.setter
     def failed_reason(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEndpoint.FailedReasonProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.FailedReasonProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7f52e5e14ec2f40630ed72fb53578bc8a6cbe6c59dcbb031096376848ff1acad)
@@ -1962,7 +1967,7 @@ class CfnEndpointProps:
         subnet_id: builtins.str,
         access_type: typing.Optional[builtins.str] = None,
         customer_owned_ipv4_pool: typing.Optional[builtins.str] = None,
-        failed_reason: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.FailedReasonProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        failed_reason: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpoint.FailedReasonProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEndpoint``.
 
@@ -2076,13 +2081,13 @@ class CfnEndpointProps:
     @builtins.property
     def failed_reason(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.FailedReasonProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.FailedReasonProperty"]]:
         '''The failure reason, if any, for a create or delete endpoint operation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3outposts-endpoint.html#cfn-s3outposts-endpoint-failedreason
         '''
         result = self._values.get("failed_reason")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEndpoint.FailedReasonProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEndpoint.FailedReasonProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

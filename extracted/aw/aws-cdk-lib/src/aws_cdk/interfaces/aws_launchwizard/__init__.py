@@ -96,7 +96,7 @@ class IDeploymentRef(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentRef")
-    def deployment_ref(self) -> DeploymentReference:
+    def deployment_ref(self) -> "DeploymentReference":
         '''(experimental) A reference to a Deployment resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IDeploymentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentRef")
-    def deployment_ref(self) -> DeploymentReference:
+    def deployment_ref(self) -> "DeploymentReference":
         '''(experimental) A reference to a Deployment resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeploymentReference, jsii.get(self, "deploymentRef"))
+        return typing.cast("DeploymentReference", jsii.get(self, "deploymentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeploymentRef).__jsii_proxy_class__ = lambda : _IDeploymentRefProxy

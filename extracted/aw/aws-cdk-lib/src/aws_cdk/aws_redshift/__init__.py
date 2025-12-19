@@ -122,6 +122,7 @@ class CfnCluster(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_redshift as redshift
@@ -199,61 +200,61 @@ class CfnCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster_type: builtins.str,
         db_name: builtins.str,
         master_username: builtins.str,
         node_type: builtins.str,
-        allow_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        allow_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         aqua_configuration_status: typing.Optional[builtins.str] = None,
         automated_snapshot_retention_period: typing.Optional[jsii.Number] = None,
         availability_zone: typing.Optional[builtins.str] = None,
-        availability_zone_relocation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        availability_zone_relocation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         availability_zone_relocation_status: typing.Optional[builtins.str] = None,
-        classic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        classic: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         cluster_identifier: typing.Optional[builtins.str] = None,
-        cluster_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IClusterParameterGroupRef_daa0f332]] = None,
-        cluster_security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18, _IClusterSecurityGroupRef_b934aac2]]] = None,
-        cluster_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341]] = None,
+        cluster_parameter_group_name: typing.Optional[typing.Union[builtins.str, "_IClusterParameterGroupRef_daa0f332"]] = None,
+        cluster_security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18", "_IClusterSecurityGroupRef_b934aac2"]]] = None,
+        cluster_subnet_group_name: typing.Optional[typing.Union[builtins.str, "_IClusterSubnetGroupRef_ee5ee341"]] = None,
         cluster_version: typing.Optional[builtins.str] = None,
-        defer_maintenance: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        defer_maintenance: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         defer_maintenance_duration: typing.Optional[jsii.Number] = None,
         defer_maintenance_end_time: typing.Optional[builtins.str] = None,
         defer_maintenance_start_time: typing.Optional[builtins.str] = None,
         destination_region: typing.Optional[builtins.str] = None,
-        elastic_ip: typing.Optional[typing.Union[builtins.str, _IEIPRef_60d698bd]] = None,
-        encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        enhanced_vpc_routing: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        elastic_ip: typing.Optional[typing.Union[builtins.str, "_IEIPRef_60d698bd"]] = None,
+        encrypted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        enhanced_vpc_routing: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         hsm_client_certificate_identifier: typing.Optional[builtins.str] = None,
         hsm_configuration_identifier: typing.Optional[builtins.str] = None,
-        iam_roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
-        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
-        logging_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.LoggingPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        iam_roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_IRoleRef_8400221f"]]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
+        logging_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.LoggingPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         maintenance_track_name: typing.Optional[builtins.str] = None,
-        manage_master_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        manage_master_password: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         manual_snapshot_retention_period: typing.Optional[jsii.Number] = None,
-        master_password_secret_kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        master_password_secret_kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
         master_user_password: typing.Optional[builtins.str] = None,
-        multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        multi_az: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         namespace_resource_policy: typing.Any = None,
         number_of_nodes: typing.Optional[jsii.Number] = None,
         owner_account: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         resource_action: typing.Optional[builtins.str] = None,
         revision_target: typing.Optional[builtins.str] = None,
-        rotate_encryption_key: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        rotate_encryption_key: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         snapshot_cluster_identifier: typing.Optional[builtins.str] = None,
         snapshot_copy_grant_name: typing.Optional[builtins.str] = None,
-        snapshot_copy_manual: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        snapshot_copy_manual: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         snapshot_copy_retention_period: typing.Optional[jsii.Number] = None,
         snapshot_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::Cluster``.
 
@@ -386,7 +387,7 @@ class CfnCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -479,15 +480,15 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> _ClusterReference_5953359c:
+    def cluster_ref(self) -> "_ClusterReference_5953359c":
         '''A reference to a Cluster resource.'''
-        return typing.cast(_ClusterReference_5953359c, jsii.get(self, "clusterRef"))
+        return typing.cast("_ClusterReference_5953359c", jsii.get(self, "clusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterType")
@@ -548,14 +549,14 @@ class CfnCluster(
     @jsii.member(jsii_name="allowVersionUpgrade")
     def allow_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If ``true`` , major version upgrades can be applied during the maintenance window to the Amazon Redshift engine that is running on the cluster.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "allowVersionUpgrade"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "allowVersionUpgrade"))
 
     @allow_version_upgrade.setter
     def allow_version_upgrade(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b7ca48fbd412a24c0cb2a878179eca6e182ee7d8c69be5b4dbcc9862b44f73c1)
@@ -608,14 +609,14 @@ class CfnCluster(
     @jsii.member(jsii_name="availabilityZoneRelocation")
     def availability_zone_relocation(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The option to enable relocation for an Amazon Redshift cluster between Availability Zones after the cluster is created.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "availabilityZoneRelocation"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "availabilityZoneRelocation"))
 
     @availability_zone_relocation.setter
     def availability_zone_relocation(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c1b7e4b7b94737e4e8b1853309ee5372d1269f37dcf09d4ee449f352e5c55c0c)
@@ -642,14 +643,14 @@ class CfnCluster(
     @jsii.member(jsii_name="classic")
     def classic(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value indicating whether the resize operation is using the classic resize process.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "classic"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "classic"))
 
     @classic.setter
     def classic(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f86549952f63853b3a6d50c0ea714bcad7fc4bcbeea239762fe3bc3035e81531)
@@ -731,14 +732,14 @@ class CfnCluster(
     @jsii.member(jsii_name="deferMaintenance")
     def defer_maintenance(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean indicating whether to enable the deferred maintenance window.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deferMaintenance"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deferMaintenance"))
 
     @defer_maintenance.setter
     def defer_maintenance(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4237433b5883296c8faff34d0e01925a666684fbee40ec2906e948a41d50e503)
@@ -817,14 +818,14 @@ class CfnCluster(
     @jsii.member(jsii_name="encrypted")
     def encrypted(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If ``true`` , the data in the cluster is encrypted at rest.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "encrypted"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "encrypted"))
 
     @encrypted.setter
     def encrypted(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__57b1075c71946fea633b06672f811d3ed06a3627779b2123983ff2dbad9432e7)
@@ -835,14 +836,14 @@ class CfnCluster(
     @jsii.member(jsii_name="endpoint")
     def endpoint(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EndpointProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EndpointProperty"]]:
         '''The connection endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EndpointProperty"]], jsii.get(self, "endpoint"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EndpointProperty"]], jsii.get(self, "endpoint"))
 
     @endpoint.setter
     def endpoint(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.EndpointProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EndpointProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__91af587b7f602d533107461b26deea688b9ac30f8cff34b2f281da70b5f20be0)
@@ -853,14 +854,14 @@ class CfnCluster(
     @jsii.member(jsii_name="enhancedVpcRouting")
     def enhanced_vpc_routing(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''An option that specifies whether to create the cluster with enhanced VPC routing enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enhancedVpcRouting"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enhancedVpcRouting"))
 
     @enhanced_vpc_routing.setter
     def enhanced_vpc_routing(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__38f39b0b2b5df52249767c8cb6463c876078868c14687667fd735f0b6d22fb18)
@@ -929,14 +930,14 @@ class CfnCluster(
     @jsii.member(jsii_name="loggingProperties")
     def logging_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.LoggingPropertiesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingPropertiesProperty"]]:
         '''Specifies logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.LoggingPropertiesProperty"]], jsii.get(self, "loggingProperties"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingPropertiesProperty"]], jsii.get(self, "loggingProperties"))
 
     @logging_properties.setter
     def logging_properties(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.LoggingPropertiesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingPropertiesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__faccaac60f090449dba9f2adeeb99fa490f6f2532ea91a0f5372422d57002f26)
@@ -960,14 +961,14 @@ class CfnCluster(
     @jsii.member(jsii_name="manageMasterPassword")
     def manage_master_password(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If ``true`` , Amazon Redshift uses AWS Secrets Manager to manage this cluster's admin credentials.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "manageMasterPassword"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "manageMasterPassword"))
 
     @manage_master_password.setter
     def manage_master_password(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__080a467a54b42730471573ef0e1a0c26e7b4f7d5ec0a07e9f75f4d8e6d3e25bf)
@@ -1023,14 +1024,14 @@ class CfnCluster(
     @jsii.member(jsii_name="multiAz")
     def multi_az(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean indicating whether Amazon Redshift should deploy the cluster in two Availability Zones.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "multiAz"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "multiAz"))
 
     @multi_az.setter
     def multi_az(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0db0b21e9462c7db4bfbc5794a72cfec5dad80450cd1acb8174563927b06fa69)
@@ -1109,14 +1110,14 @@ class CfnCluster(
     @jsii.member(jsii_name="publiclyAccessible")
     def publicly_accessible(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If ``true`` , the cluster can be accessed from a public network.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "publiclyAccessible"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "publiclyAccessible"))
 
     @publicly_accessible.setter
     def publicly_accessible(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__da6f0bb2273ecadf755efeb5a905c9ee82720866a8ce8f61a2c6d3d21eb9300b)
@@ -1153,14 +1154,14 @@ class CfnCluster(
     @jsii.member(jsii_name="rotateEncryptionKey")
     def rotate_encryption_key(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Rotates the encryption keys for a cluster.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "rotateEncryptionKey"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "rotateEncryptionKey"))
 
     @rotate_encryption_key.setter
     def rotate_encryption_key(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1bf5df20a75b52e1cdb3d7517d4cb1b82f3940133ad5667db9df487314abf2a2)
@@ -1197,14 +1198,14 @@ class CfnCluster(
     @jsii.member(jsii_name="snapshotCopyManual")
     def snapshot_copy_manual(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to apply the snapshot retention period to newly copied manual snapshots instead of automated snapshots.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "snapshotCopyManual"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "snapshotCopyManual"))
 
     @snapshot_copy_manual.setter
     def snapshot_copy_manual(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__88f25e386153f816099eeca0eba6c12a2141a4398dd600a4a5bcfba56a506c9c)
@@ -1242,12 +1243,12 @@ class CfnCluster(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tag instances.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5764b8f0fdd9373a15be01abce350629381e233414237e16a244d4691af89468)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1474,6 +1475,7 @@ class CfnClusterParameterGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_redshift as redshift
@@ -1497,14 +1499,14 @@ class CfnClusterParameterGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: builtins.str,
         parameter_group_family: builtins.str,
         parameter_group_name: typing.Optional[builtins.str] = None,
-        parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnClusterParameterGroup.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnClusterParameterGroup.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::ClusterParameterGroup``.
 
@@ -1534,7 +1536,7 @@ class CfnClusterParameterGroup(
     @builtins.classmethod
     def arn_for_cluster_parameter_group(
         cls,
-        resource: _IClusterParameterGroupRef_daa0f332,
+        resource: "_IClusterParameterGroupRef_daa0f332",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1548,10 +1550,10 @@ class CfnClusterParameterGroup(
     @builtins.classmethod
     def from_parameter_group_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         parameter_group_name: builtins.str,
-    ) -> _IClusterParameterGroupRef_daa0f332:
+    ) -> "_IClusterParameterGroupRef_daa0f332":
         '''Creates a new IClusterParameterGroupRef from a parameterGroupName.
 
         :param scope: -
@@ -1563,7 +1565,7 @@ class CfnClusterParameterGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument parameter_group_name", value=parameter_group_name, expected_type=type_hints["parameter_group_name"])
-        return typing.cast(_IClusterParameterGroupRef_daa0f332, jsii.sinvoke(cls, "fromParameterGroupName", [scope, id, parameter_group_name]))
+        return typing.cast("_IClusterParameterGroupRef_daa0f332", jsii.sinvoke(cls, "fromParameterGroupName", [scope, id, parameter_group_name]))
 
     @jsii.member(jsii_name="isCfnClusterParameterGroup")
     @builtins.classmethod
@@ -1578,7 +1580,7 @@ class CfnClusterParameterGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnClusterParameterGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1614,15 +1616,15 @@ class CfnClusterParameterGroup(
 
     @builtins.property
     @jsii.member(jsii_name="clusterParameterGroupRef")
-    def cluster_parameter_group_ref(self) -> _ClusterParameterGroupReference_a53380a4:
+    def cluster_parameter_group_ref(self) -> "_ClusterParameterGroupReference_a53380a4":
         '''A reference to a ClusterParameterGroup resource.'''
-        return typing.cast(_ClusterParameterGroupReference_a53380a4, jsii.get(self, "clusterParameterGroupRef"))
+        return typing.cast("_ClusterParameterGroupReference_a53380a4", jsii.get(self, "clusterParameterGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -1667,17 +1669,17 @@ class CfnClusterParameterGroup(
     @jsii.member(jsii_name="parameters")
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnClusterParameterGroup.ParameterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnClusterParameterGroup.ParameterProperty"]]]]:
         '''An array of parameters to be modified.
 
         A maximum of 20 parameters can be modified in a single request.
         '''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnClusterParameterGroup.ParameterProperty"]]]], jsii.get(self, "parameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnClusterParameterGroup.ParameterProperty"]]]], jsii.get(self, "parameters"))
 
     @parameters.setter
     def parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnClusterParameterGroup.ParameterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnClusterParameterGroup.ParameterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0f6965bfa88c2fcb264091e20f622accf9bf23be5cacdb3362545db9e6c9696c)
@@ -1686,12 +1688,12 @@ class CfnClusterParameterGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of tags for the cluster parameter group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ed9d60dbe1f8113e3b7f1c5d9cd93fced6c4ccd359227db112e355b0839bdd7b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1792,8 +1794,8 @@ class CfnClusterParameterGroupProps:
         description: builtins.str,
         parameter_group_family: builtins.str,
         parameter_group_name: typing.Optional[builtins.str] = None,
-        parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnClusterParameterGroup.ParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnClusterParameterGroup.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnClusterParameterGroup``.
 
@@ -1808,6 +1810,7 @@ class CfnClusterParameterGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_redshift as redshift
@@ -1880,7 +1883,7 @@ class CfnClusterParameterGroupProps:
     @builtins.property
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnClusterParameterGroup.ParameterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnClusterParameterGroup.ParameterProperty"]]]]:
         '''An array of parameters to be modified. A maximum of 20 parameters can be modified in a single request.
 
         For each parameter to be modified, you must supply at least the parameter name and parameter value; other name-value pairs of the parameter are optional.
@@ -1890,16 +1893,16 @@ class CfnClusterParameterGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-clusterparametergroup.html#cfn-redshift-clusterparametergroup-parameters
         '''
         result = self._values.get("parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnClusterParameterGroup.ParameterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnClusterParameterGroup.ParameterProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of tags for the cluster parameter group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-clusterparametergroup.html#cfn-redshift-clusterparametergroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1979,54 +1982,54 @@ class CfnClusterProps:
         db_name: builtins.str,
         master_username: builtins.str,
         node_type: builtins.str,
-        allow_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        allow_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         aqua_configuration_status: typing.Optional[builtins.str] = None,
         automated_snapshot_retention_period: typing.Optional[jsii.Number] = None,
         availability_zone: typing.Optional[builtins.str] = None,
-        availability_zone_relocation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        availability_zone_relocation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         availability_zone_relocation_status: typing.Optional[builtins.str] = None,
-        classic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        classic: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         cluster_identifier: typing.Optional[builtins.str] = None,
-        cluster_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IClusterParameterGroupRef_daa0f332]] = None,
-        cluster_security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18, _IClusterSecurityGroupRef_b934aac2]]] = None,
-        cluster_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341]] = None,
+        cluster_parameter_group_name: typing.Optional[typing.Union[builtins.str, "_IClusterParameterGroupRef_daa0f332"]] = None,
+        cluster_security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18", "_IClusterSecurityGroupRef_b934aac2"]]] = None,
+        cluster_subnet_group_name: typing.Optional[typing.Union[builtins.str, "_IClusterSubnetGroupRef_ee5ee341"]] = None,
         cluster_version: typing.Optional[builtins.str] = None,
-        defer_maintenance: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        defer_maintenance: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         defer_maintenance_duration: typing.Optional[jsii.Number] = None,
         defer_maintenance_end_time: typing.Optional[builtins.str] = None,
         defer_maintenance_start_time: typing.Optional[builtins.str] = None,
         destination_region: typing.Optional[builtins.str] = None,
-        elastic_ip: typing.Optional[typing.Union[builtins.str, _IEIPRef_60d698bd]] = None,
-        encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        enhanced_vpc_routing: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        elastic_ip: typing.Optional[typing.Union[builtins.str, "_IEIPRef_60d698bd"]] = None,
+        encrypted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        enhanced_vpc_routing: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         hsm_client_certificate_identifier: typing.Optional[builtins.str] = None,
         hsm_configuration_identifier: typing.Optional[builtins.str] = None,
-        iam_roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
-        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
-        logging_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.LoggingPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        iam_roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_IRoleRef_8400221f"]]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
+        logging_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCluster.LoggingPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         maintenance_track_name: typing.Optional[builtins.str] = None,
-        manage_master_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        manage_master_password: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         manual_snapshot_retention_period: typing.Optional[jsii.Number] = None,
-        master_password_secret_kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        master_password_secret_kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
         master_user_password: typing.Optional[builtins.str] = None,
-        multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        multi_az: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         namespace_resource_policy: typing.Any = None,
         number_of_nodes: typing.Optional[jsii.Number] = None,
         owner_account: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         resource_action: typing.Optional[builtins.str] = None,
         revision_target: typing.Optional[builtins.str] = None,
-        rotate_encryption_key: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        rotate_encryption_key: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         snapshot_cluster_identifier: typing.Optional[builtins.str] = None,
         snapshot_copy_grant_name: typing.Optional[builtins.str] = None,
-        snapshot_copy_manual: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        snapshot_copy_manual: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         snapshot_copy_retention_period: typing.Optional[jsii.Number] = None,
         snapshot_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCluster``.
 
@@ -2088,6 +2091,7 @@ class CfnClusterProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_redshift as redshift
@@ -2391,7 +2395,7 @@ class CfnClusterProps:
     @builtins.property
     def allow_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If ``true`` , major version upgrades can be applied during the maintenance window to the Amazon Redshift engine that is running on the cluster.
 
         When a new major version of the Amazon Redshift engine is released, you can request that the service automatically apply upgrades during the maintenance window to the Amazon Redshift engine that is running on your cluster.
@@ -2401,7 +2405,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-allowversionupgrade
         '''
         result = self._values.get("allow_version_upgrade")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def aqua_configuration_status(self) -> typing.Optional[builtins.str]:
@@ -2449,13 +2453,13 @@ class CfnClusterProps:
     @builtins.property
     def availability_zone_relocation(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The option to enable relocation for an Amazon Redshift cluster between Availability Zones after the cluster is created.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-availabilityzonerelocation
         '''
         result = self._values.get("availability_zone_relocation")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def availability_zone_relocation_status(self) -> typing.Optional[builtins.str]:
@@ -2469,7 +2473,7 @@ class CfnClusterProps:
     @builtins.property
     def classic(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value indicating whether the resize operation is using the classic resize process.
 
         If you don't provide this parameter or set the value to ``false`` , the resize type is elastic.
@@ -2477,7 +2481,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-classic
         '''
         result = self._values.get("classic")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def cluster_identifier(self) -> typing.Optional[builtins.str]:
@@ -2503,7 +2507,7 @@ class CfnClusterProps:
     @builtins.property
     def cluster_parameter_group_name(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IClusterParameterGroupRef_daa0f332]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IClusterParameterGroupRef_daa0f332"]]:
         '''The name of the parameter group to be associated with this cluster.
 
         Default: The default Amazon Redshift cluster parameter group. For information about the default parameter group, go to `Working with Amazon Redshift Parameter Groups <https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html>`_
@@ -2517,12 +2521,12 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-clusterparametergroupname
         '''
         result = self._values.get("cluster_parameter_group_name")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IClusterParameterGroupRef_daa0f332]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IClusterParameterGroupRef_daa0f332"]], result)
 
     @builtins.property
     def cluster_security_groups(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18, _IClusterSecurityGroupRef_b934aac2]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18", "_IClusterSecurityGroupRef_b934aac2"]]]:
         '''A list of security groups to be associated with this cluster.
 
         Default: The default cluster security group for Amazon Redshift.
@@ -2530,12 +2534,12 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-clustersecuritygroups
         '''
         result = self._values.get("cluster_security_groups")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18, _IClusterSecurityGroupRef_b934aac2]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18", "_IClusterSecurityGroupRef_b934aac2"]]], result)
 
     @builtins.property
     def cluster_subnet_group_name(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IClusterSubnetGroupRef_ee5ee341"]]:
         '''The name of a cluster subnet group to be associated with this cluster.
 
         If this parameter is not provided the resulting cluster will be deployed outside virtual private cloud (VPC).
@@ -2543,7 +2547,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-clustersubnetgroupname
         '''
         result = self._values.get("cluster_subnet_group_name")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IClusterSubnetGroupRef_ee5ee341"]], result)
 
     @builtins.property
     def cluster_version(self) -> typing.Optional[builtins.str]:
@@ -2563,13 +2567,13 @@ class CfnClusterProps:
     @builtins.property
     def defer_maintenance(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean indicating whether to enable the deferred maintenance window.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-defermaintenance
         '''
         result = self._values.get("defer_maintenance")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def defer_maintenance_duration(self) -> typing.Optional[jsii.Number]:
@@ -2612,7 +2616,7 @@ class CfnClusterProps:
     @builtins.property
     def elastic_ip(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IEIPRef_60d698bd]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IEIPRef_60d698bd"]]:
         '''The Elastic IP (EIP) address for the cluster.
 
         Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible through an Internet gateway. Don't specify the Elastic IP address for a publicly accessible cluster with availability zone relocation turned on. For more information about provisioning clusters in EC2-VPC, go to `Supported Platforms to Launch Your Cluster <https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms>`_ in the Amazon Redshift Cluster Management Guide.
@@ -2620,12 +2624,12 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-elasticip
         '''
         result = self._values.get("elastic_ip")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IEIPRef_60d698bd]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IEIPRef_60d698bd"]], result)
 
     @builtins.property
     def encrypted(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If ``true`` , the data in the cluster is encrypted at rest.
 
         If you set the value on this parameter to ``false`` , the request will fail.
@@ -2635,23 +2639,23 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-encrypted
         '''
         result = self._values.get("encrypted")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def endpoint(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.EndpointProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EndpointProperty"]]:
         '''The connection endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-endpoint
         '''
         result = self._values.get("endpoint")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.EndpointProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.EndpointProperty"]], result)
 
     @builtins.property
     def enhanced_vpc_routing(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''An option that specifies whether to create the cluster with enhanced VPC routing enabled.
 
         To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see `Enhanced VPC Routing <https://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html>`_ in the Amazon Redshift Cluster Management Guide.
@@ -2663,7 +2667,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-enhancedvpcrouting
         '''
         result = self._values.get("enhanced_vpc_routing")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def hsm_client_certificate_identifier(self) -> typing.Optional[builtins.str]:
@@ -2686,7 +2690,7 @@ class CfnClusterProps:
     @builtins.property
     def iam_roles(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_IRoleRef_8400221f"]]]:
         '''A list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.
 
         You must supply the IAM roles in their Amazon Resource Name (ARN) format.
@@ -2696,29 +2700,29 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-iamroles
         '''
         result = self._values.get("iam_roles")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_IRoleRef_8400221f"]]], result)
 
     @builtins.property
     def kms_key_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]]:
         '''The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]], result)
 
     @builtins.property
     def logging_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.LoggingPropertiesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingPropertiesProperty"]]:
         '''Specifies logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-loggingproperties
         '''
         result = self._values.get("logging_properties")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.LoggingPropertiesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCluster.LoggingPropertiesProperty"]], result)
 
     @builtins.property
     def maintenance_track_name(self) -> typing.Optional[builtins.str]:
@@ -2734,7 +2738,7 @@ class CfnClusterProps:
     @builtins.property
     def manage_master_password(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If ``true`` , Amazon Redshift uses AWS Secrets Manager to manage this cluster's admin credentials.
 
         You can't use ``MasterUserPassword`` if ``ManageMasterPassword`` is true. If ``ManageMasterPassword`` is false or not set, Amazon Redshift uses ``MasterUserPassword`` for the admin user account's password.
@@ -2742,7 +2746,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-managemasterpassword
         '''
         result = self._values.get("manage_master_password")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def manual_snapshot_retention_period(self) -> typing.Optional[jsii.Number]:
@@ -2760,7 +2764,7 @@ class CfnClusterProps:
     @builtins.property
     def master_password_secret_kms_key_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]]:
         '''The ID of the AWS Key Management Service (KMS) key used to encrypt and store the cluster's admin credentials secret.
 
         You can only use this parameter if ``ManageMasterPassword`` is true.
@@ -2768,7 +2772,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-masterpasswordsecretkmskeyid
         '''
         result = self._values.get("master_password_secret_kms_key_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]], result)
 
     @builtins.property
     def master_user_password(self) -> typing.Optional[builtins.str]:
@@ -2792,7 +2796,7 @@ class CfnClusterProps:
     @builtins.property
     def multi_az(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean indicating whether Amazon Redshift should deploy the cluster in two Availability Zones.
 
         The default is false.
@@ -2800,7 +2804,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-multiaz
         '''
         result = self._values.get("multi_az")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def namespace_resource_policy(self) -> typing.Any:
@@ -2879,7 +2883,7 @@ class CfnClusterProps:
     @builtins.property
     def publicly_accessible(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If ``true`` , the cluster can be accessed from a public network.
 
         Default: false
@@ -2887,7 +2891,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-publiclyaccessible
         '''
         result = self._values.get("publicly_accessible")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def resource_action(self) -> typing.Optional[builtins.str]:
@@ -2912,13 +2916,13 @@ class CfnClusterProps:
     @builtins.property
     def rotate_encryption_key(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Rotates the encryption keys for a cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-rotateencryptionkey
         '''
         result = self._values.get("rotate_encryption_key")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def snapshot_cluster_identifier(self) -> typing.Optional[builtins.str]:
@@ -2943,13 +2947,13 @@ class CfnClusterProps:
     @builtins.property
     def snapshot_copy_manual(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to apply the snapshot retention period to newly copied manual snapshots instead of automated snapshots.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-snapshotcopymanual
         '''
         result = self._values.get("snapshot_copy_manual")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def snapshot_copy_retention_period(self) -> typing.Optional[jsii.Number]:
@@ -2986,18 +2990,18 @@ class CfnClusterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tag instances.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def vpc_security_group_ids(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]]:
         '''A list of Virtual Private Cloud (VPC) security groups to be associated with the cluster.
 
         Default: The default VPC security group is associated with the cluster.
@@ -3005,7 +3009,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-vpcsecuritygroupids
         '''
         result = self._values.get("vpc_security_group_ids")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3035,6 +3039,7 @@ class CfnClusterSecurityGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_redshift as redshift
@@ -3052,11 +3057,11 @@ class CfnClusterSecurityGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::ClusterSecurityGroup``.
 
@@ -3086,7 +3091,7 @@ class CfnClusterSecurityGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnClusterSecurityGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3130,15 +3135,15 @@ class CfnClusterSecurityGroup(
 
     @builtins.property
     @jsii.member(jsii_name="clusterSecurityGroupRef")
-    def cluster_security_group_ref(self) -> _ClusterSecurityGroupReference_18f94e00:
+    def cluster_security_group_ref(self) -> "_ClusterSecurityGroupReference_18f94e00":
         '''A reference to a ClusterSecurityGroup resource.'''
-        return typing.cast(_ClusterSecurityGroupReference_18f94e00, jsii.get(self, "clusterSecurityGroupRef"))
+        return typing.cast("_ClusterSecurityGroupReference_18f94e00", jsii.get(self, "clusterSecurityGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -3155,12 +3160,12 @@ class CfnClusterSecurityGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies an arbitrary set of tags (key–value pairs) to associate with this security group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__defdac711f3e7a77b19ec04bc132d682928b4f21ff6be172e15e2ac9f0cd6e8c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3205,7 +3210,7 @@ class CfnClusterSecurityGroupIngress(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster_security_group_name: builtins.str,
@@ -3248,7 +3253,7 @@ class CfnClusterSecurityGroupIngress(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnClusterSecurityGroupIngress", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3295,9 +3300,9 @@ class CfnClusterSecurityGroupIngress(
     @jsii.member(jsii_name="clusterSecurityGroupIngressRef")
     def cluster_security_group_ingress_ref(
         self,
-    ) -> _ClusterSecurityGroupIngressReference_8e92a780:
+    ) -> "_ClusterSecurityGroupIngressReference_8e92a780":
         '''A reference to a ClusterSecurityGroupIngress resource.'''
-        return typing.cast(_ClusterSecurityGroupIngressReference_8e92a780, jsii.get(self, "clusterSecurityGroupIngressRef"))
+        return typing.cast("_ClusterSecurityGroupIngressReference_8e92a780", jsii.get(self, "clusterSecurityGroupIngressRef"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterSecurityGroupName")
@@ -3477,7 +3482,7 @@ class CfnClusterSecurityGroupProps:
         self,
         *,
         description: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnClusterSecurityGroup``.
 
@@ -3489,6 +3494,7 @@ class CfnClusterSecurityGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_redshift as redshift
@@ -3524,7 +3530,7 @@ class CfnClusterSecurityGroupProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies an arbitrary set of tags (key–value pairs) to associate with this security group.
 
         Use tags to manage your resources.
@@ -3532,7 +3538,7 @@ class CfnClusterSecurityGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-clustersecuritygroup.html#cfn-redshift-clustersecuritygroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3564,6 +3570,7 @@ class CfnClusterSubnetGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_redshift as redshift
@@ -3582,12 +3589,12 @@ class CfnClusterSubnetGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: builtins.str,
-        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::ClusterSubnetGroup``.
 
@@ -3620,7 +3627,7 @@ class CfnClusterSubnetGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnClusterSubnetGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3665,15 +3672,15 @@ class CfnClusterSubnetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="clusterSubnetGroupRef")
-    def cluster_subnet_group_ref(self) -> _ClusterSubnetGroupReference_8dcb457e:
+    def cluster_subnet_group_ref(self) -> "_ClusterSubnetGroupReference_8dcb457e":
         '''A reference to a ClusterSubnetGroup resource.'''
-        return typing.cast(_ClusterSubnetGroupReference_8dcb457e, jsii.get(self, "clusterSubnetGroupRef"))
+        return typing.cast("_ClusterSubnetGroupReference_8dcb457e", jsii.get(self, "clusterSubnetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -3703,12 +3710,12 @@ class CfnClusterSubnetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies an arbitrary set of tags (key–value pairs) to associate with this subnet group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d0234790a32423c903d2d0b04af30d14f6232a9d29765580ce78154e1956f53c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3729,8 +3736,8 @@ class CfnClusterSubnetGroupProps:
         self,
         *,
         description: builtins.str,
-        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnClusterSubnetGroup``.
 
@@ -3743,6 +3750,7 @@ class CfnClusterSubnetGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_redshift as redshift
@@ -3783,7 +3791,7 @@ class CfnClusterSubnetGroupProps:
     @builtins.property
     def subnet_ids(
         self,
-    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
+    ) -> typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]]:
         '''An array of VPC subnet IDs.
 
         A maximum of 20 subnets can be modified in a single request.
@@ -3792,10 +3800,10 @@ class CfnClusterSubnetGroupProps:
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies an arbitrary set of tags (key–value pairs) to associate with this subnet group.
 
         Use tags to manage your resources.
@@ -3803,7 +3811,7 @@ class CfnClusterSubnetGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-clustersubnetgroup.html#cfn-redshift-clustersubnetgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3848,13 +3856,13 @@ class CfnEndpointAccess(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cluster_identifier: builtins.str,
         endpoint_name: builtins.str,
-        subnet_group_name: typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341],
-        vpc_security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+        subnet_group_name: typing.Union[builtins.str, "_IClusterSubnetGroupRef_ee5ee341"],
+        vpc_security_group_ids: typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]],
         resource_owner: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::EndpointAccess``.
@@ -3894,7 +3902,7 @@ class CfnEndpointAccess(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEndpointAccess", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3961,20 +3969,20 @@ class CfnEndpointAccess(
 
     @builtins.property
     @jsii.member(jsii_name="attrVpcEndpoint")
-    def attr_vpc_endpoint(self) -> _IResolvable_da3f097b:
+    def attr_vpc_endpoint(self) -> "_IResolvable_da3f097b":
         '''The connection endpoint for connecting to an Amazon Redshift cluster through the proxy.
 
         :cloudformationAttribute: VpcEndpoint
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrVpcEndpoint"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrVpcEndpoint"))
 
     @builtins.property
     @jsii.member(jsii_name="attrVpcEndpointNetworkInterfaces")
-    def attr_vpc_endpoint_network_interfaces(self) -> _IResolvable_da3f097b:
+    def attr_vpc_endpoint_network_interfaces(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: VpcEndpoint.NetworkInterfaces
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrVpcEndpointNetworkInterfaces"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrVpcEndpointNetworkInterfaces"))
 
     @builtins.property
     @jsii.member(jsii_name="attrVpcEndpointVpcEndpointId")
@@ -3996,12 +4004,12 @@ class CfnEndpointAccess(
 
     @builtins.property
     @jsii.member(jsii_name="attrVpcSecurityGroups")
-    def attr_vpc_security_groups(self) -> _IResolvable_da3f097b:
+    def attr_vpc_security_groups(self) -> "_IResolvable_da3f097b":
         '''The security groups associated with the endpoint.
 
         :cloudformationAttribute: VpcSecurityGroups
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrVpcSecurityGroups"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrVpcSecurityGroups"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4010,9 +4018,9 @@ class CfnEndpointAccess(
 
     @builtins.property
     @jsii.member(jsii_name="endpointAccessRef")
-    def endpoint_access_ref(self) -> _EndpointAccessReference_b8e22302:
+    def endpoint_access_ref(self) -> "_EndpointAccessReference_b8e22302":
         '''A reference to a EndpointAccess resource.'''
-        return typing.cast(_EndpointAccessReference_b8e22302, jsii.get(self, "endpointAccessRef"))
+        return typing.cast("_EndpointAccessReference_b8e22302", jsii.get(self, "endpointAccessRef"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterIdentifier")
@@ -4197,7 +4205,7 @@ class CfnEndpointAccess(
         def __init__(
             self,
             *,
-            network_interfaces: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpointAccess.NetworkInterfaceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            network_interfaces: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEndpointAccess.NetworkInterfaceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             vpc_endpoint_id: typing.Optional[builtins.str] = None,
             vpc_id: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -4243,7 +4251,7 @@ class CfnEndpointAccess(
         @builtins.property
         def network_interfaces(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEndpointAccess.NetworkInterfaceProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEndpointAccess.NetworkInterfaceProperty"]]]]:
             '''One or more network interfaces of the endpoint.
 
             Also known as an interface endpoint.
@@ -4251,7 +4259,7 @@ class CfnEndpointAccess(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-redshift-endpointaccess-vpcendpoint.html#cfn-redshift-endpointaccess-vpcendpoint-networkinterfaces
             '''
             result = self._values.get("network_interfaces")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEndpointAccess.NetworkInterfaceProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEndpointAccess.NetworkInterfaceProperty"]]]], result)
 
         @builtins.property
         def vpc_endpoint_id(self) -> typing.Optional[builtins.str]:
@@ -4373,8 +4381,8 @@ class CfnEndpointAccessProps:
         *,
         cluster_identifier: builtins.str,
         endpoint_name: builtins.str,
-        subnet_group_name: typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341],
-        vpc_security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+        subnet_group_name: typing.Union[builtins.str, "_IClusterSubnetGroupRef_ee5ee341"],
+        vpc_security_group_ids: typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]],
         resource_owner: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnEndpointAccess``.
@@ -4443,26 +4451,26 @@ class CfnEndpointAccessProps:
     @builtins.property
     def subnet_group_name(
         self,
-    ) -> typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341]:
+    ) -> typing.Union[builtins.str, "_IClusterSubnetGroupRef_ee5ee341"]:
         '''The subnet group name where Amazon Redshift chooses to deploy the endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-endpointaccess.html#cfn-redshift-endpointaccess-subnetgroupname
         '''
         result = self._values.get("subnet_group_name")
         assert result is not None, "Required property 'subnet_group_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341], result)
+        return typing.cast(typing.Union[builtins.str, "_IClusterSubnetGroupRef_ee5ee341"], result)
 
     @builtins.property
     def vpc_security_group_ids(
         self,
-    ) -> typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]:
+    ) -> typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]:
         '''The security group that defines the ports, protocols, and sources for inbound traffic that you are authorizing into your endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-endpointaccess.html#cfn-redshift-endpointaccess-vpcsecuritygroupids
         '''
         result = self._values.get("vpc_security_group_ids")
         assert result is not None, "Required property 'vpc_security_group_ids' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]], result)
 
     @builtins.property
     def resource_owner(self) -> typing.Optional[builtins.str]:
@@ -4515,13 +4523,13 @@ class CfnEndpointAuthorization(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: builtins.str,
         cluster_identifier: builtins.str,
-        force: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IVPCRef_f02a11df]]] = None,
+        force: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        vpc_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_IVPCRef_f02a11df"]]] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::EndpointAuthorization``.
 
@@ -4558,7 +4566,7 @@ class CfnEndpointAuthorization(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEndpointAuthorization", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4589,12 +4597,12 @@ class CfnEndpointAuthorization(
 
     @builtins.property
     @jsii.member(jsii_name="attrAllowedAllVpCs")
-    def attr_allowed_all_vp_cs(self) -> _IResolvable_da3f097b:
+    def attr_allowed_all_vp_cs(self) -> "_IResolvable_da3f097b":
         '''Indicates whether all VPCs in the grantee account are allowed access to the cluster.
 
         :cloudformationAttribute: AllowedAllVPCs
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrAllowedAllVpCs"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrAllowedAllVpCs"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAllowedVpCs")
@@ -4666,9 +4674,9 @@ class CfnEndpointAuthorization(
 
     @builtins.property
     @jsii.member(jsii_name="endpointAuthorizationRef")
-    def endpoint_authorization_ref(self) -> _EndpointAuthorizationReference_5dbd4723:
+    def endpoint_authorization_ref(self) -> "_EndpointAuthorizationReference_5dbd4723":
         '''A reference to a EndpointAuthorization resource.'''
-        return typing.cast(_EndpointAuthorizationReference_5dbd4723, jsii.get(self, "endpointAuthorizationRef"))
+        return typing.cast("_EndpointAuthorizationReference_5dbd4723", jsii.get(self, "endpointAuthorizationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="account")
@@ -4700,14 +4708,14 @@ class CfnEndpointAuthorization(
     @jsii.member(jsii_name="force")
     def force(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to force the revoke action.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "force"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "force"))
 
     @force.setter
     def force(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e3418ce19499db041cb3822978572e2eeb561625f2fdc69d4a3663277a760194)
@@ -4744,8 +4752,8 @@ class CfnEndpointAuthorizationProps:
         *,
         account: builtins.str,
         cluster_identifier: builtins.str,
-        force: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IVPCRef_f02a11df]]] = None,
+        force: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        vpc_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_IVPCRef_f02a11df"]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEndpointAuthorization``.
 
@@ -4812,7 +4820,7 @@ class CfnEndpointAuthorizationProps:
     @builtins.property
     def force(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether to force the revoke action.
 
         If true, the Redshift-managed VPC endpoints associated with the endpoint authorization are also deleted.
@@ -4820,18 +4828,18 @@ class CfnEndpointAuthorizationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-endpointauthorization.html#cfn-redshift-endpointauthorization-force
         '''
         result = self._values.get("force")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def vpc_ids(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IVPCRef_f02a11df]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_IVPCRef_f02a11df"]]]:
         '''The virtual private cloud (VPC) identifiers to grant access to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-endpointauthorization.html#cfn-redshift-endpointauthorization-vpcids
         '''
         result = self._values.get("vpc_ids")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IVPCRef_f02a11df]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_IVPCRef_f02a11df"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4859,6 +4867,7 @@ class CfnEventSubscription(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_redshift as redshift
@@ -4882,17 +4891,17 @@ class CfnEventSubscription(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         subscription_name: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
         severity: typing.Optional[builtins.str] = None,
-        sns_topic_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]] = None,
+        sns_topic_arn: typing.Optional[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]] = None,
         source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         source_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::EventSubscription``.
 
@@ -4937,7 +4946,7 @@ class CfnEventSubscription(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventSubscription", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5034,15 +5043,15 @@ class CfnEventSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="eventSubscriptionRef")
-    def event_subscription_ref(self) -> _EventSubscriptionReference_087e2478:
+    def event_subscription_ref(self) -> "_EventSubscriptionReference_087e2478":
         '''A reference to a EventSubscription resource.'''
-        return typing.cast(_EventSubscriptionReference_087e2478, jsii.get(self, "eventSubscriptionRef"))
+        return typing.cast("_EventSubscriptionReference_087e2478", jsii.get(self, "eventSubscriptionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="subscriptionName")
@@ -5061,14 +5070,14 @@ class CfnEventSubscription(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value;'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1ea0cdf4a4de28abdd520f9b940b88096f2cf47a52a4e567f3499f9de63decbc)
@@ -5145,12 +5154,12 @@ class CfnEventSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tag instances.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3f8d017fb369cae60fd6db670e2d0711cfe832e31a2eb08dc7c90f07ddc39eaa)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5176,13 +5185,13 @@ class CfnEventSubscriptionProps:
         self,
         *,
         subscription_name: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
         severity: typing.Optional[builtins.str] = None,
-        sns_topic_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]] = None,
+        sns_topic_arn: typing.Optional[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]] = None,
         source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         source_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEventSubscription``.
 
@@ -5200,6 +5209,7 @@ class CfnEventSubscriptionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_redshift as redshift
@@ -5268,7 +5278,7 @@ class CfnEventSubscriptionProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean value;
 
         set to ``true`` to activate the subscription, and set to ``false`` to create the subscription but not activate it.
@@ -5276,7 +5286,7 @@ class CfnEventSubscriptionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-eventsubscription.html#cfn-redshift-eventsubscription-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def event_categories(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5303,7 +5313,7 @@ class CfnEventSubscriptionProps:
     @builtins.property
     def sns_topic_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]:
         '''The Amazon Resource Name (ARN) of the Amazon SNS topic used to transmit the event notifications.
 
         The ARN is created by Amazon SNS when you create a topic and subscribe to it.
@@ -5311,7 +5321,7 @@ class CfnEventSubscriptionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-eventsubscription.html#cfn-redshift-eventsubscription-snstopicarn
         '''
         result = self._values.get("sns_topic_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]], result)
 
     @builtins.property
     def source_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5342,13 +5352,13 @@ class CfnEventSubscriptionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tag instances.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-eventsubscription.html#cfn-redshift-eventsubscription-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5376,6 +5386,7 @@ class CfnIntegration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_redshift as redshift
@@ -5399,15 +5410,15 @@ class CfnIntegration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         source_arn: builtins.str,
         target_arn: builtins.str,
-        additional_encryption_context: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        additional_encryption_context: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         integration_name: typing.Optional[builtins.str] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::Integration``.
 
@@ -5437,7 +5448,7 @@ class CfnIntegration(
 
     @jsii.member(jsii_name="arnForIntegration")
     @builtins.classmethod
-    def arn_for_integration(cls, resource: _IIntegrationRef_8879a683) -> builtins.str:
+    def arn_for_integration(cls, resource: "_IIntegrationRef_8879a683") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5459,7 +5470,7 @@ class CfnIntegration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIntegration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5508,9 +5519,9 @@ class CfnIntegration(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5519,9 +5530,9 @@ class CfnIntegration(
 
     @builtins.property
     @jsii.member(jsii_name="integrationRef")
-    def integration_ref(self) -> _IntegrationReference_5a0a4ae7:
+    def integration_ref(self) -> "_IntegrationReference_5a0a4ae7":
         '''A reference to a Integration resource.'''
-        return typing.cast(_IntegrationReference_5a0a4ae7, jsii.get(self, "integrationRef"))
+        return typing.cast("_IntegrationReference_5a0a4ae7", jsii.get(self, "integrationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="sourceArn")
@@ -5553,14 +5564,14 @@ class CfnIntegration(
     @jsii.member(jsii_name="additionalEncryptionContext")
     def additional_encryption_context(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The encryption context for the integration.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "additionalEncryptionContext"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "additionalEncryptionContext"))
 
     @additional_encryption_context.setter
     def additional_encryption_context(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aa11884b39e9757aed26782736b9cc7a1beb8245295ed73bee247717d47e3404)
@@ -5595,12 +5606,12 @@ class CfnIntegration(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of tags associated with the integration.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aac4f130cef162cff3d53ffc61f9b5174f65de4bbe3fb991ae758426bf75861d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5625,10 +5636,10 @@ class CfnIntegrationProps:
         *,
         source_arn: builtins.str,
         target_arn: builtins.str,
-        additional_encryption_context: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        additional_encryption_context: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         integration_name: typing.Optional[builtins.str] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnIntegration``.
 
@@ -5644,6 +5655,7 @@ class CfnIntegrationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_redshift as redshift
@@ -5708,7 +5720,7 @@ class CfnIntegrationProps:
     @builtins.property
     def additional_encryption_context(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''The encryption context for the integration.
 
         For more information, see `Encryption context <https://docs.aws.amazon.com/>`_ in the *AWS Key Management Service Developer Guide* .
@@ -5716,7 +5728,7 @@ class CfnIntegrationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-integration.html#cfn-redshift-integration-additionalencryptioncontext
         '''
         result = self._values.get("additional_encryption_context")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def integration_name(self) -> typing.Optional[builtins.str]:
@@ -5737,13 +5749,13 @@ class CfnIntegrationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of tags associated with the integration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-integration.html#cfn-redshift-integration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5809,17 +5821,17 @@ class CfnScheduledAction(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         scheduled_action_name: builtins.str,
-        enable: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         end_time: typing.Optional[builtins.str] = None,
         iam_role: typing.Optional[builtins.str] = None,
         schedule: typing.Optional[builtins.str] = None,
         scheduled_action_description: typing.Optional[builtins.str] = None,
         start_time: typing.Optional[builtins.str] = None,
-        target_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScheduledAction.ScheduledActionTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_action: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScheduledAction.ScheduledActionTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::ScheduledAction``.
 
@@ -5864,7 +5876,7 @@ class CfnScheduledAction(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnScheduledAction", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5920,9 +5932,9 @@ class CfnScheduledAction(
 
     @builtins.property
     @jsii.member(jsii_name="scheduledActionRef")
-    def scheduled_action_ref(self) -> _ScheduledActionReference_57ba8aae:
+    def scheduled_action_ref(self) -> "_ScheduledActionReference_57ba8aae":
         '''A reference to a ScheduledAction resource.'''
-        return typing.cast(_ScheduledActionReference_57ba8aae, jsii.get(self, "scheduledActionRef"))
+        return typing.cast("_ScheduledActionReference_57ba8aae", jsii.get(self, "scheduledActionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="scheduledActionName")
@@ -5941,14 +5953,14 @@ class CfnScheduledAction(
     @jsii.member(jsii_name="enable")
     def enable(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If true, the schedule is enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enable"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enable"))
 
     @enable.setter
     def enable(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4d91d9501f12e1db3372aea6023ac844c09772ef705ec20f4e25cb2a1b9febd2)
@@ -6027,14 +6039,14 @@ class CfnScheduledAction(
     @jsii.member(jsii_name="targetAction")
     def target_action(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScheduledAction.ScheduledActionTypeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScheduledAction.ScheduledActionTypeProperty"]]:
         '''A JSON format string of the Amazon Redshift API operation with input parameters.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScheduledAction.ScheduledActionTypeProperty"]], jsii.get(self, "targetAction"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScheduledAction.ScheduledActionTypeProperty"]], jsii.get(self, "targetAction"))
 
     @target_action.setter
     def target_action(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScheduledAction.ScheduledActionTypeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScheduledAction.ScheduledActionTypeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__37dee953d9dbcdfb3a7265aa1538c058a9dde8ebabb0b409a0151155cacc75c4)
@@ -6111,7 +6123,7 @@ class CfnScheduledAction(
             self,
             *,
             cluster_identifier: builtins.str,
-            classic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            classic: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             cluster_type: typing.Optional[builtins.str] = None,
             node_type: typing.Optional[builtins.str] = None,
             number_of_nodes: typing.Optional[jsii.Number] = None,
@@ -6177,7 +6189,7 @@ class CfnScheduledAction(
         @builtins.property
         def classic(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A boolean value indicating whether the resize operation is using the classic resize process.
 
             If you don't provide this parameter or set the value to ``false`` , the resize type is elastic.
@@ -6185,7 +6197,7 @@ class CfnScheduledAction(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-redshift-scheduledaction-resizeclustermessage.html#cfn-redshift-scheduledaction-resizeclustermessage-classic
             '''
             result = self._values.get("classic")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def cluster_type(self) -> typing.Optional[builtins.str]:
@@ -6296,9 +6308,9 @@ class CfnScheduledAction(
         def __init__(
             self,
             *,
-            pause_cluster: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScheduledAction.PauseClusterMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            resize_cluster: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScheduledAction.ResizeClusterMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            resume_cluster: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScheduledAction.ResumeClusterMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            pause_cluster: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScheduledAction.PauseClusterMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            resize_cluster: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScheduledAction.ResizeClusterMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            resume_cluster: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScheduledAction.ResumeClusterMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The action type that specifies an Amazon Redshift API operation that is supported by the Amazon Redshift scheduler.
 
@@ -6349,35 +6361,35 @@ class CfnScheduledAction(
         @builtins.property
         def pause_cluster(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScheduledAction.PauseClusterMessageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScheduledAction.PauseClusterMessageProperty"]]:
             '''An action that runs a ``PauseCluster`` API operation.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-redshift-scheduledaction-scheduledactiontype.html#cfn-redshift-scheduledaction-scheduledactiontype-pausecluster
             '''
             result = self._values.get("pause_cluster")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScheduledAction.PauseClusterMessageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScheduledAction.PauseClusterMessageProperty"]], result)
 
         @builtins.property
         def resize_cluster(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScheduledAction.ResizeClusterMessageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScheduledAction.ResizeClusterMessageProperty"]]:
             '''An action that runs a ``ResizeCluster`` API operation.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-redshift-scheduledaction-scheduledactiontype.html#cfn-redshift-scheduledaction-scheduledactiontype-resizecluster
             '''
             result = self._values.get("resize_cluster")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScheduledAction.ResizeClusterMessageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScheduledAction.ResizeClusterMessageProperty"]], result)
 
         @builtins.property
         def resume_cluster(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScheduledAction.ResumeClusterMessageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScheduledAction.ResumeClusterMessageProperty"]]:
             '''An action that runs a ``ResumeCluster`` API operation.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-redshift-scheduledaction-scheduledactiontype.html#cfn-redshift-scheduledaction-scheduledactiontype-resumecluster
             '''
             result = self._values.get("resume_cluster")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnScheduledAction.ResumeClusterMessageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScheduledAction.ResumeClusterMessageProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6410,13 +6422,13 @@ class CfnScheduledActionProps:
         self,
         *,
         scheduled_action_name: builtins.str,
-        enable: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enable: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         end_time: typing.Optional[builtins.str] = None,
         iam_role: typing.Optional[builtins.str] = None,
         schedule: typing.Optional[builtins.str] = None,
         scheduled_action_description: typing.Optional[builtins.str] = None,
         start_time: typing.Optional[builtins.str] = None,
-        target_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScheduledAction.ScheduledActionTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_action: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnScheduledAction.ScheduledActionTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnScheduledAction``.
 
@@ -6508,7 +6520,7 @@ class CfnScheduledActionProps:
     @builtins.property
     def enable(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If true, the schedule is enabled.
 
         If false, the scheduled action does not trigger. For more information about ``state`` of the scheduled action, see ``ScheduledAction`` .
@@ -6516,7 +6528,7 @@ class CfnScheduledActionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-scheduledaction.html#cfn-redshift-scheduledaction-enable
         '''
         result = self._values.get("enable")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def end_time(self) -> typing.Optional[builtins.str]:
@@ -6578,7 +6590,7 @@ class CfnScheduledActionProps:
     @builtins.property
     def target_action(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScheduledAction.ScheduledActionTypeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScheduledAction.ScheduledActionTypeProperty"]]:
         '''A JSON format string of the Amazon Redshift API operation with input parameters.
 
         " ``{\\"ResizeCluster\\":{\\"NodeType\\":\\"ra3.4xlarge\\",\\"ClusterIdentifier\\":\\"my-test-cluster\\",\\"NumberOfNodes\\":3}}`` ".
@@ -6586,7 +6598,7 @@ class CfnScheduledActionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-scheduledaction.html#cfn-redshift-scheduledaction-targetaction
         '''
         result = self._values.get("target_action")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnScheduledAction.ScheduledActionTypeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnScheduledAction.ScheduledActionTypeProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

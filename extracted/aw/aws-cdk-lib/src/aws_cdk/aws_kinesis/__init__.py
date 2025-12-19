@@ -444,10 +444,10 @@ class CfnResourcePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        resource_arn: typing.Union[builtins.str, _IStreamRef_b484e253, _IStreamConsumerRef_62f6b6ad],
+        resource_arn: typing.Union[builtins.str, "_IStreamRef_b484e253", "_IStreamConsumerRef_62f6b6ad"],
         resource_policy: typing.Any,
     ) -> None:
         '''Create a new ``AWS::Kinesis::ResourcePolicy``.
@@ -480,7 +480,7 @@ class CfnResourcePolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourcePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -516,9 +516,9 @@ class CfnResourcePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicyRef")
-    def resource_policy_ref(self) -> _ResourcePolicyReference_3cd91e96:
+    def resource_policy_ref(self) -> "_ResourcePolicyReference_3cd91e96":
         '''A reference to a ResourcePolicy resource.'''
-        return typing.cast(_ResourcePolicyReference_3cd91e96, jsii.get(self, "resourcePolicyRef"))
+        return typing.cast("_ResourcePolicyReference_3cd91e96", jsii.get(self, "resourcePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="resourceArn")
@@ -556,7 +556,7 @@ class CfnResourcePolicyProps:
     def __init__(
         self,
         *,
-        resource_arn: typing.Union[builtins.str, _IStreamRef_b484e253, _IStreamConsumerRef_62f6b6ad],
+        resource_arn: typing.Union[builtins.str, "_IStreamRef_b484e253", "_IStreamConsumerRef_62f6b6ad"],
         resource_policy: typing.Any,
     ) -> None:
         '''Properties for defining a ``CfnResourcePolicy``.
@@ -592,14 +592,14 @@ class CfnResourcePolicyProps:
     @builtins.property
     def resource_arn(
         self,
-    ) -> typing.Union[builtins.str, _IStreamRef_b484e253, _IStreamConsumerRef_62f6b6ad]:
+    ) -> typing.Union[builtins.str, "_IStreamRef_b484e253", "_IStreamConsumerRef_62f6b6ad"]:
         '''Returns the Amazon Resource Name (ARN) of the resource-based policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesis-resourcepolicy.html#cfn-kinesis-resourcepolicy-resourcearn
         '''
         result = self._values.get("resource_arn")
         assert result is not None, "Required property 'resource_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IStreamRef_b484e253, _IStreamConsumerRef_62f6b6ad], result)
+        return typing.cast(typing.Union[builtins.str, "_IStreamRef_b484e253", "_IStreamConsumerRef_62f6b6ad"], result)
 
     @builtins.property
     def resource_policy(self) -> typing.Any:
@@ -639,6 +639,7 @@ class CfnStream(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_kinesis as kinesis
@@ -666,7 +667,7 @@ class CfnStream(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         desired_shard_level_metrics: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -674,9 +675,9 @@ class CfnStream(
         name: typing.Optional[builtins.str] = None,
         retention_period_hours: typing.Optional[jsii.Number] = None,
         shard_count: typing.Optional[jsii.Number] = None,
-        stream_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStream.StreamEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        stream_mode_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStream.StreamModeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        stream_encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStream.StreamEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        stream_mode_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStream.StreamModeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         warm_throughput_mi_bps: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Create a new ``AWS::Kinesis::Stream``.
@@ -713,7 +714,7 @@ class CfnStream(
 
     @jsii.member(jsii_name="arnForStream")
     @builtins.classmethod
-    def arn_for_stream(cls, resource: _IStreamRef_b484e253) -> builtins.str:
+    def arn_for_stream(cls, resource: "_IStreamRef_b484e253") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -726,10 +727,10 @@ class CfnStream(
     @builtins.classmethod
     def from_stream_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IStreamRef_b484e253:
+    ) -> "_IStreamRef_b484e253":
         '''Creates a new IStreamRef from an ARN.
 
         :param scope: -
@@ -741,16 +742,16 @@ class CfnStream(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IStreamRef_b484e253, jsii.sinvoke(cls, "fromStreamArn", [scope, id, arn]))
+        return typing.cast("_IStreamRef_b484e253", jsii.sinvoke(cls, "fromStreamArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromStreamName")
     @builtins.classmethod
     def from_stream_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         stream_name: builtins.str,
-    ) -> _IStreamRef_b484e253:
+    ) -> "_IStreamRef_b484e253":
         '''Creates a new IStreamRef from a streamName.
 
         :param scope: -
@@ -762,7 +763,7 @@ class CfnStream(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument stream_name", value=stream_name, expected_type=type_hints["stream_name"])
-        return typing.cast(_IStreamRef_b484e253, jsii.sinvoke(cls, "fromStreamName", [scope, id, stream_name]))
+        return typing.cast("_IStreamRef_b484e253", jsii.sinvoke(cls, "fromStreamName", [scope, id, stream_name]))
 
     @jsii.member(jsii_name="isCfnStream")
     @builtins.classmethod
@@ -777,7 +778,7 @@ class CfnStream(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStream", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -817,14 +818,14 @@ class CfnStream(
 
     @builtins.property
     @jsii.member(jsii_name="attrWarmThroughputObject")
-    def attr_warm_throughput_object(self) -> _IResolvable_da3f097b:
+    def attr_warm_throughput_object(self) -> "_IResolvable_da3f097b":
         '''Warm throughput configuration details for the stream.
 
         Only present for ON_DEMAND streams.
 
         :cloudformationAttribute: WarmThroughputObject
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrWarmThroughputObject"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrWarmThroughputObject"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -833,15 +834,15 @@ class CfnStream(
 
     @builtins.property
     @jsii.member(jsii_name="streamRef")
-    def stream_ref(self) -> _StreamReference_030b9268:
+    def stream_ref(self) -> "_StreamReference_030b9268":
         '''A reference to a Stream resource.'''
-        return typing.cast(_StreamReference_030b9268, jsii.get(self, "streamRef"))
+        return typing.cast("_StreamReference_030b9268", jsii.get(self, "streamRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="desiredShardLevelMetrics")
@@ -915,14 +916,14 @@ class CfnStream(
     @jsii.member(jsii_name="streamEncryption")
     def stream_encryption(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStream.StreamEncryptionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStream.StreamEncryptionProperty"]]:
         '''When specified, enables or updates server-side encryption using an AWS KMS key for a specified stream.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStream.StreamEncryptionProperty"]], jsii.get(self, "streamEncryption"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStream.StreamEncryptionProperty"]], jsii.get(self, "streamEncryption"))
 
     @stream_encryption.setter
     def stream_encryption(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStream.StreamEncryptionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStream.StreamEncryptionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2902225dc9e97f52b40ca049308cc001a0b8b7984af8591e5939a73f4564ec30)
@@ -933,14 +934,14 @@ class CfnStream(
     @jsii.member(jsii_name="streamModeDetails")
     def stream_mode_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStream.StreamModeDetailsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStream.StreamModeDetailsProperty"]]:
         '''Specifies the capacity mode to which you want to set your data stream.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStream.StreamModeDetailsProperty"]], jsii.get(self, "streamModeDetails"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStream.StreamModeDetailsProperty"]], jsii.get(self, "streamModeDetails"))
 
     @stream_mode_details.setter
     def stream_mode_details(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStream.StreamModeDetailsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStream.StreamModeDetailsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f162319b0aca53caf885c2507fa53645295796f4a1c5e52d42ffb0b25a723a39)
@@ -949,12 +950,12 @@ class CfnStream(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An arbitrary set of tags (key–value pairs) to associate with the Kinesis stream.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4d0f1c422640008db062b29f115763c109cc7cb0ad3033ed29d2a4f3281b5171)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1220,6 +1221,7 @@ class CfnStreamConsumer(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_kinesis as kinesis
@@ -1238,12 +1240,12 @@ class CfnStreamConsumer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         consumer_name: builtins.str,
         stream_arn: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Kinesis::StreamConsumer``.
 
@@ -1276,7 +1278,7 @@ class CfnStreamConsumer(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStreamConsumer", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1356,9 +1358,9 @@ class CfnStreamConsumer(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1367,9 +1369,9 @@ class CfnStreamConsumer(
 
     @builtins.property
     @jsii.member(jsii_name="streamConsumerRef")
-    def stream_consumer_ref(self) -> _StreamConsumerReference_d7ef801e:
+    def stream_consumer_ref(self) -> "_StreamConsumerReference_d7ef801e":
         '''A reference to a StreamConsumer resource.'''
-        return typing.cast(_StreamConsumerReference_d7ef801e, jsii.get(self, "streamConsumerRef"))
+        return typing.cast("_StreamConsumerReference_d7ef801e", jsii.get(self, "streamConsumerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="consumerName")
@@ -1399,12 +1401,12 @@ class CfnStreamConsumer(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags to be added to a specified Kinesis resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__741a97d9ae28403dd10b071c7777bb76448096ad2b30f06325c121d8271174db)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1426,7 +1428,7 @@ class CfnStreamConsumerProps:
         *,
         consumer_name: builtins.str,
         stream_arn: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStreamConsumer``.
 
@@ -1439,6 +1441,7 @@ class CfnStreamConsumerProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_kinesis as kinesis
@@ -1487,7 +1490,7 @@ class CfnStreamConsumerProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags to be added to a specified Kinesis resource.
 
         A tag consists of a required key and an optional value. You can specify up to 50 tag key-value pairs.
@@ -1495,7 +1498,7 @@ class CfnStreamConsumerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesis-streamconsumer.html#cfn-kinesis-streamconsumer-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1533,9 +1536,9 @@ class CfnStreamProps:
         name: typing.Optional[builtins.str] = None,
         retention_period_hours: typing.Optional[jsii.Number] = None,
         shard_count: typing.Optional[jsii.Number] = None,
-        stream_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamEncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        stream_mode_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamModeDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        stream_encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStream.StreamEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        stream_mode_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStream.StreamModeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         warm_throughput_mi_bps: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties for defining a ``CfnStream``.
@@ -1555,6 +1558,7 @@ class CfnStreamProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_kinesis as kinesis
@@ -1666,7 +1670,7 @@ class CfnStreamProps:
     @builtins.property
     def stream_encryption(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStream.StreamEncryptionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStream.StreamEncryptionProperty"]]:
         '''When specified, enables or updates server-side encryption using an AWS KMS key for a specified stream.
 
         Removing this property from your stack template and updating your stack disables encryption.
@@ -1674,12 +1678,12 @@ class CfnStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesis-stream.html#cfn-kinesis-stream-streamencryption
         '''
         result = self._values.get("stream_encryption")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStream.StreamEncryptionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStream.StreamEncryptionProperty"]], result)
 
     @builtins.property
     def stream_mode_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStream.StreamModeDetailsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStream.StreamModeDetailsProperty"]]:
         '''Specifies the capacity mode to which you want to set your data stream.
 
         Currently, in Kinesis Data Streams, you can choose between an *on-demand* capacity mode and a *provisioned* capacity mode for your data streams.
@@ -1687,10 +1691,10 @@ class CfnStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesis-stream.html#cfn-kinesis-stream-streammodedetails
         '''
         result = self._values.get("stream_mode_details")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStream.StreamModeDetailsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStream.StreamModeDetailsProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An arbitrary set of tags (key–value pairs) to associate with the Kinesis stream.
 
         For information about constraints for this property, see `Tag Restrictions <https://docs.aws.amazon.com/streams/latest/dev/tagging.html#tagging-restrictions>`_ in the *Amazon Kinesis Developer Guide* .
@@ -1698,7 +1702,7 @@ class CfnStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesis-stream.html#cfn-kinesis-stream-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def warm_throughput_mi_bps(self) -> typing.Optional[jsii.Number]:
@@ -1747,15 +1751,15 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''Optional KMS encryption key associated with this stream.'''
         ...
 
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this stream.
 
         If this stream was created in this stack (``new Stream``), a resource policy
@@ -1769,9 +1773,9 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the indicated permissions on this stream to the provided IAM principal.
 
         :param grantee: -
@@ -1780,7 +1784,7 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this stream and its contents to an IAM principal (Role/Group/User).
 
         If an encryption key is used, permission to ues the key to decrypt the
@@ -1791,7 +1795,7 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantReadWrite")
-    def grant_read_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants read/write permissions for this stream and its contents to an IAM principal (Role/Group/User).
 
         If an encryption key is used, permission to use the key for
@@ -1802,7 +1806,7 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant write permissions for this stream and its contents to an IAM principal (Role/Group/User).
 
         If an encryption key is used, permission to ues the key to encrypt the
@@ -1822,14 +1826,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return stream metric based from its metric name.
 
         :param metric_name: name of the stream metric.
@@ -1857,14 +1861,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records retrieved from the shard, measured over the specified time period.
 
         Minimum, Maximum, and
@@ -1897,14 +1901,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of bytes retrieved from the Kinesis stream, measured over the specified time period.
 
         Minimum, Maximum,
@@ -1937,14 +1941,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The age of the last record in all GetRecords calls made against a Kinesis stream, measured over the specified time period.
 
         Age is the difference between the current time and when the last record of the GetRecords call was written
@@ -1977,14 +1981,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The time taken per GetRecords operation, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -2013,14 +2017,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of successful GetRecords operations per stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -2049,14 +2053,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of bytes successfully put to the Kinesis stream over the specified time period.
 
         This metric includes
@@ -2089,14 +2093,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records successfully put to the Kinesis stream over the specified time period.
 
         This metric includes
@@ -2129,14 +2133,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of bytes put to the Kinesis stream using the PutRecord operation over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -2165,14 +2169,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The time taken per PutRecord operation, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -2201,14 +2205,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of bytes put to the Kinesis stream using the PutRecords operation over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -2237,14 +2241,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records rejected due to internal failures in a PutRecords operation per Kinesis data stream, measured over the specified time period.
 
         Occasional internal failures are to be expected and should be retried.
@@ -2275,14 +2279,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The time taken per PutRecords operation, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -2311,14 +2315,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of PutRecords operations where at least one record succeeded, per Kinesis stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -2347,14 +2351,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of successful records in a PutRecords operation per Kinesis data stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -2383,14 +2387,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records rejected due to throttling in a PutRecords operation per Kinesis data stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -2419,14 +2423,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The total number of records sent in a PutRecords operation per Kinesis data stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -2455,14 +2459,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of successful PutRecord operations per Kinesis stream, measured over the specified time period.
 
         Average
@@ -2494,14 +2498,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of GetRecords calls throttled for the stream over the specified time period.
 
         The most commonly used
@@ -2539,14 +2543,14 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records rejected due to throttling for the stream over the specified time period.
 
         This metric
@@ -2603,15 +2607,15 @@ class _IStreamProxy(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''Optional KMS encryption key associated with this stream.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionKey"))
 
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this stream.
 
         If this stream was created in this stack (``new Stream``), a resource policy
@@ -2623,14 +2627,14 @@ class _IStreamProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8f2bc2272d75f698f14f87a303fdf13c87275a121d59d5fa5df4a16bb120598b)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the indicated permissions on this stream to the provided IAM principal.
 
         :param grantee: -
@@ -2640,10 +2644,10 @@ class _IStreamProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__144c672e53e3086b23a7fab80cf6f8440b56b13da782550703291ecf8e7ee03c)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this stream and its contents to an IAM principal (Role/Group/User).
 
         If an encryption key is used, permission to ues the key to decrypt the
@@ -2654,10 +2658,10 @@ class _IStreamProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__31e92e467ef9724bf8c1c834e80eb106fb2f5002d962dd2d6a131eeb921bc9fe)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.member(jsii_name="grantReadWrite")
-    def grant_read_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants read/write permissions for this stream and its contents to an IAM principal (Role/Group/User).
 
         If an encryption key is used, permission to use the key for
@@ -2668,10 +2672,10 @@ class _IStreamProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7cade05201ed2077bc3551ad45ec7b384e8e2f17dcfb79377cb643df1aa83610)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadWrite", [grantee]))
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant write permissions for this stream and its contents to an IAM principal (Role/Group/User).
 
         If an encryption key is used, permission to ues the key to encrypt the
@@ -2682,7 +2686,7 @@ class _IStreamProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__08cbc4e6cc771633979cc23abc4ecb0d8be72cfb4bde81198f87422305f0629e)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWrite", [grantee]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -2694,14 +2698,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return stream metric based from its metric name.
 
         :param metric_name: name of the stream metric.
@@ -2736,7 +2740,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricGetRecords")
     def metric_get_records(
@@ -2747,14 +2751,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records retrieved from the shard, measured over the specified time period.
 
         Minimum, Maximum, and
@@ -2791,7 +2795,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricGetRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricGetRecords", [props]))
 
     @jsii.member(jsii_name="metricGetRecordsBytes")
     def metric_get_records_bytes(
@@ -2802,14 +2806,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of bytes retrieved from the Kinesis stream, measured over the specified time period.
 
         Minimum, Maximum,
@@ -2846,7 +2850,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricGetRecordsBytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricGetRecordsBytes", [props]))
 
     @jsii.member(jsii_name="metricGetRecordsIteratorAgeMilliseconds")
     def metric_get_records_iterator_age_milliseconds(
@@ -2857,14 +2861,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The age of the last record in all GetRecords calls made against a Kinesis stream, measured over the specified time period.
 
         Age is the difference between the current time and when the last record of the GetRecords call was written
@@ -2901,7 +2905,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricGetRecordsIteratorAgeMilliseconds", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricGetRecordsIteratorAgeMilliseconds", [props]))
 
     @jsii.member(jsii_name="metricGetRecordsLatency")
     def metric_get_records_latency(
@@ -2912,14 +2916,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The time taken per GetRecords operation, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -2952,7 +2956,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricGetRecordsLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricGetRecordsLatency", [props]))
 
     @jsii.member(jsii_name="metricGetRecordsSuccess")
     def metric_get_records_success(
@@ -2963,14 +2967,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of successful GetRecords operations per stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -3003,7 +3007,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricGetRecordsSuccess", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricGetRecordsSuccess", [props]))
 
     @jsii.member(jsii_name="metricIncomingBytes")
     def metric_incoming_bytes(
@@ -3014,14 +3018,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of bytes successfully put to the Kinesis stream over the specified time period.
 
         This metric includes
@@ -3058,7 +3062,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingBytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIncomingBytes", [props]))
 
     @jsii.member(jsii_name="metricIncomingRecords")
     def metric_incoming_records(
@@ -3069,14 +3073,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records successfully put to the Kinesis stream over the specified time period.
 
         This metric includes
@@ -3113,7 +3117,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIncomingRecords", [props]))
 
     @jsii.member(jsii_name="metricPutRecordBytes")
     def metric_put_record_bytes(
@@ -3124,14 +3128,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of bytes put to the Kinesis stream using the PutRecord operation over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -3164,7 +3168,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordBytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordBytes", [props]))
 
     @jsii.member(jsii_name="metricPutRecordLatency")
     def metric_put_record_latency(
@@ -3175,14 +3179,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The time taken per PutRecord operation, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -3215,7 +3219,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordLatency", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsBytes")
     def metric_put_records_bytes(
@@ -3226,14 +3230,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of bytes put to the Kinesis stream using the PutRecords operation over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -3266,7 +3270,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsBytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsBytes", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsFailedRecords")
     def metric_put_records_failed_records(
@@ -3277,14 +3281,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records rejected due to internal failures in a PutRecords operation per Kinesis data stream, measured over the specified time period.
 
         Occasional internal failures are to be expected and should be retried.
@@ -3319,7 +3323,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsFailedRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsFailedRecords", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsLatency")
     def metric_put_records_latency(
@@ -3330,14 +3334,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The time taken per PutRecords operation, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -3370,7 +3374,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsLatency", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsSuccess")
     def metric_put_records_success(
@@ -3381,14 +3385,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of PutRecords operations where at least one record succeeded, per Kinesis stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -3421,7 +3425,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsSuccess", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsSuccess", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsSuccessfulRecords")
     def metric_put_records_successful_records(
@@ -3432,14 +3436,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of successful records in a PutRecords operation per Kinesis data stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -3472,7 +3476,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsSuccessfulRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsSuccessfulRecords", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsThrottledRecords")
     def metric_put_records_throttled_records(
@@ -3483,14 +3487,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records rejected due to throttling in a PutRecords operation per Kinesis data stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -3523,7 +3527,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsThrottledRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsThrottledRecords", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsTotalRecords")
     def metric_put_records_total_records(
@@ -3534,14 +3538,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The total number of records sent in a PutRecords operation per Kinesis data stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -3574,7 +3578,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsTotalRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsTotalRecords", [props]))
 
     @jsii.member(jsii_name="metricPutRecordSuccess")
     def metric_put_record_success(
@@ -3585,14 +3589,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of successful PutRecord operations per Kinesis stream, measured over the specified time period.
 
         Average
@@ -3628,7 +3632,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordSuccess", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordSuccess", [props]))
 
     @jsii.member(jsii_name="metricReadProvisionedThroughputExceeded")
     def metric_read_provisioned_throughput_exceeded(
@@ -3639,14 +3643,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of GetRecords calls throttled for the stream over the specified time period.
 
         The most commonly used
@@ -3688,7 +3692,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricReadProvisionedThroughputExceeded", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricReadProvisionedThroughputExceeded", [props]))
 
     @jsii.member(jsii_name="metricWriteProvisionedThroughputExceeded")
     def metric_write_provisioned_throughput_exceeded(
@@ -3699,14 +3703,14 @@ class _IStreamProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records rejected due to throttling for the stream over the specified time period.
 
         This metric
@@ -3748,7 +3752,7 @@ class _IStreamProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricWriteProvisionedThroughputExceeded", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricWriteProvisionedThroughputExceeded", [props]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IStream).__jsii_proxy_class__ = lambda : _IStreamProxy
@@ -3760,7 +3764,7 @@ class IStreamConsumer(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="stream")
-    def stream(self) -> IStream:
+    def stream(self) -> "IStream":
         '''The stream associated with this consumer.
 
         :attribute: true
@@ -3788,8 +3792,8 @@ class IStreamConsumer(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this stream consumer.
 
         If this stream consumer was created in this stack (``new StreamConsumer``), a resource policy
@@ -3803,9 +3807,9 @@ class IStreamConsumer(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the indicated permissions on this stream consumer to the provided IAM principal.
 
         :param grantee: -
@@ -3814,7 +3818,7 @@ class IStreamConsumer(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this stream consumer and its associated stream to an IAM principal (Role/Group/User).
 
         :param grantee: -
@@ -3831,12 +3835,12 @@ class _IStreamConsumerProxy(
 
     @builtins.property
     @jsii.member(jsii_name="stream")
-    def stream(self) -> IStream:
+    def stream(self) -> "IStream":
         '''The stream associated with this consumer.
 
         :attribute: true
         '''
-        return typing.cast(IStream, jsii.get(self, "stream"))
+        return typing.cast("IStream", jsii.get(self, "stream"))
 
     @builtins.property
     @jsii.member(jsii_name="streamConsumerArn")
@@ -3859,8 +3863,8 @@ class _IStreamConsumerProxy(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this stream consumer.
 
         If this stream consumer was created in this stack (``new StreamConsumer``), a resource policy
@@ -3872,14 +3876,14 @@ class _IStreamConsumerProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__37c37a05c26ce89345f11707cf8d0c79c7d0abfdb26093c52bdf5503d8f1d7d3)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the indicated permissions on this stream consumer to the provided IAM principal.
 
         :param grantee: -
@@ -3889,10 +3893,10 @@ class _IStreamConsumerProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__cf3550b30daa1ef048e2fefa63cc0765dc59458fde35eb1301476a6b6c3ac2e9)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this stream consumer and its associated stream to an IAM principal (Role/Group/User).
 
         :param grantee: -
@@ -3900,7 +3904,7 @@ class _IStreamConsumerProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ce58f2c46edcaa40f59d7e5fc1f893d206283c930800a7814a6a4e0636aa7638)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IStreamConsumer).__jsii_proxy_class__ = lambda : _IStreamConsumerProxy
@@ -3961,12 +3965,12 @@ class ResourcePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        policy_document: typing.Optional[_PolicyDocument_3ac34393] = None,
-        stream: typing.Optional[IStream] = None,
-        stream_consumer: typing.Optional[IStreamConsumer] = None,
+        policy_document: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        stream: typing.Optional["IStream"] = None,
+        stream_consumer: typing.Optional["IStreamConsumer"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -3995,9 +3999,9 @@ class ResourcePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="document")
-    def document(self) -> _PolicyDocument_3ac34393:
+    def document(self) -> "_PolicyDocument_3ac34393":
         '''The IAM policy document for this policy.'''
-        return typing.cast(_PolicyDocument_3ac34393, jsii.get(self, "document"))
+        return typing.cast("_PolicyDocument_3ac34393", jsii.get(self, "document"))
 
 
 @jsii.data_type(
@@ -4013,9 +4017,9 @@ class ResourcePolicyProps:
     def __init__(
         self,
         *,
-        policy_document: typing.Optional[_PolicyDocument_3ac34393] = None,
-        stream: typing.Optional[IStream] = None,
-        stream_consumer: typing.Optional[IStreamConsumer] = None,
+        policy_document: typing.Optional["_PolicyDocument_3ac34393"] = None,
+        stream: typing.Optional["IStream"] = None,
+        stream_consumer: typing.Optional["IStreamConsumer"] = None,
     ) -> None:
         '''Properties to associate a data stream with a policy.
 
@@ -4071,16 +4075,16 @@ class ResourcePolicyProps:
             self._values["stream_consumer"] = stream_consumer
 
     @builtins.property
-    def policy_document(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy_document(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''IAM policy document to apply to a data stream.
 
         :default: - empty policy document
         '''
         result = self._values.get("policy_document")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
-    def stream(self) -> typing.Optional[IStream]:
+    def stream(self) -> typing.Optional["IStream"]:
         '''The stream this policy applies to.
 
         Note: only one of ``stream`` and ``streamConsumer`` must be set.
@@ -4088,10 +4092,10 @@ class ResourcePolicyProps:
         :default: - policy is not associated to a stream
         '''
         result = self._values.get("stream")
-        return typing.cast(typing.Optional[IStream], result)
+        return typing.cast(typing.Optional["IStream"], result)
 
     @builtins.property
-    def stream_consumer(self) -> typing.Optional[IStreamConsumer]:
+    def stream_consumer(self) -> typing.Optional["IStreamConsumer"]:
         '''The stream consumer this policy applies to.
 
         Note: only one of ``stream`` and ``streamConsumer`` must be set.
@@ -4099,7 +4103,7 @@ class ResourcePolicyProps:
         :default: - policy is not associated to a consumer
         '''
         result = self._values.get("stream_consumer")
-        return typing.cast(typing.Optional[IStreamConsumer], result)
+        return typing.cast(typing.Optional["IStreamConsumer"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4174,15 +4178,15 @@ class Stream(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         encryption: typing.Optional["StreamEncryption"] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        retention_period: typing.Optional[_Duration_4839e8c3] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        retention_period: typing.Optional["_Duration_4839e8c3"] = None,
         shard_count: typing.Optional[jsii.Number] = None,
-        shard_level_metrics: typing.Optional[typing.Sequence[ShardLevelMetrics]] = None,
+        shard_level_metrics: typing.Optional[typing.Sequence["ShardLevelMetrics"]] = None,
         stream_mode: typing.Optional["StreamMode"] = None,
         stream_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -4219,10 +4223,10 @@ class Stream(
     @builtins.classmethod
     def from_stream_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         stream_arn: builtins.str,
-    ) -> IStream:
+    ) -> "IStream":
         '''Import an existing Kinesis Stream provided an ARN.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -4234,18 +4238,18 @@ class Stream(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument stream_arn", value=stream_arn, expected_type=type_hints["stream_arn"])
-        return typing.cast(IStream, jsii.sinvoke(cls, "fromStreamArn", [scope, id, stream_arn]))
+        return typing.cast("IStream", jsii.sinvoke(cls, "fromStreamArn", [scope, id, stream_arn]))
 
     @jsii.member(jsii_name="fromStreamAttributes")
     @builtins.classmethod
     def from_stream_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         stream_arn: builtins.str,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
-    ) -> IStream:
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
+    ) -> "IStream":
         '''Creates a Stream construct that represents an external stream.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -4259,13 +4263,13 @@ class Stream(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         attrs = StreamAttributes(stream_arn=stream_arn, encryption_key=encryption_key)
 
-        return typing.cast(IStream, jsii.sinvoke(cls, "fromStreamAttributes", [scope, id, attrs]))
+        return typing.cast("IStream", jsii.sinvoke(cls, "fromStreamAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this stream.
 
         If this stream was created in this stack (``new Stream``), a resource policy
@@ -4277,14 +4281,14 @@ class Stream(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a7e5618d0b21ec8f8ee6f75c9ce4726b0e2f49cca4d61efdf76bb36d81eedef9)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the indicated permissions on this stream to the given IAM principal (Role/Group/User).
 
         :param grantee: -
@@ -4294,10 +4298,10 @@ class Stream(
             type_hints = typing.get_type_hints(_typecheckingstub__697192e2b3dde0e9d7ea188584de9b7bc6b68afbd4b7ab621caa32eaeecfb0fe)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this stream and its contents to an IAM principal (Role/Group/User).
 
         If an encryption key is used, permission to ues the key to decrypt the
@@ -4308,10 +4312,10 @@ class Stream(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8d8a44344ae23b587e02380f20d9223ba0009fdb26889454d5dabdb7f0486ec0)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.member(jsii_name="grantReadWrite")
-    def grant_read_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants read/write permissions for this stream and its contents to an IAM principal (Role/Group/User).
 
         If an encryption key is used, permission to use the key for
@@ -4322,10 +4326,10 @@ class Stream(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a5509ff4488c7776193498cd6084a6b43d5e763a82224de3949c3a50731e8cc7)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadWrite", [grantee]))
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant write permissions for this stream and its contents to an IAM principal (Role/Group/User).
 
         If an encryption key is used, permission to ues the key to encrypt the
@@ -4336,7 +4340,7 @@ class Stream(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__305d76f8b58f1507ff0d4bc218bfdedef61b6cb5350c4e4234346a7056d315e4)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWrite", [grantee]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -4348,14 +4352,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return stream metric based from its metric name.
 
         :param metric_name: name of the stream metric.
@@ -4390,7 +4394,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricGetRecords")
     def metric_get_records(
@@ -4401,14 +4405,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records retrieved from the shard, measured over the specified time period.
 
         Minimum, Maximum, and
@@ -4446,7 +4450,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricGetRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricGetRecords", [props]))
 
     @jsii.member(jsii_name="metricGetRecordsBytes")
     def metric_get_records_bytes(
@@ -4457,14 +4461,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of bytes retrieved from the Kinesis stream, measured over the specified time period.
 
         Minimum, Maximum,
@@ -4501,7 +4505,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricGetRecordsBytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricGetRecordsBytes", [props]))
 
     @jsii.member(jsii_name="metricGetRecordsIteratorAgeMilliseconds")
     def metric_get_records_iterator_age_milliseconds(
@@ -4512,14 +4516,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The age of the last record in all GetRecords calls made against a Kinesis stream, measured over the specified time period.
 
         Age is the difference between the current time and when the last record of the GetRecords call was written
@@ -4556,7 +4560,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricGetRecordsIteratorAgeMilliseconds", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricGetRecordsIteratorAgeMilliseconds", [props]))
 
     @jsii.member(jsii_name="metricGetRecordsLatency")
     def metric_get_records_latency(
@@ -4567,14 +4571,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of successful GetRecords operations per stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -4607,7 +4611,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricGetRecordsLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricGetRecordsLatency", [props]))
 
     @jsii.member(jsii_name="metricGetRecordsSuccess")
     def metric_get_records_success(
@@ -4618,14 +4622,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of successful GetRecords operations per stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -4658,7 +4662,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricGetRecordsSuccess", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricGetRecordsSuccess", [props]))
 
     @jsii.member(jsii_name="metricIncomingBytes")
     def metric_incoming_bytes(
@@ -4669,14 +4673,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of bytes successfully put to the Kinesis stream over the specified time period.
 
         This metric includes
@@ -4713,7 +4717,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingBytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIncomingBytes", [props]))
 
     @jsii.member(jsii_name="metricIncomingRecords")
     def metric_incoming_records(
@@ -4724,14 +4728,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records successfully put to the Kinesis stream over the specified time period.
 
         This metric includes
@@ -4768,7 +4772,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIncomingRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIncomingRecords", [props]))
 
     @jsii.member(jsii_name="metricPutRecordBytes")
     def metric_put_record_bytes(
@@ -4779,14 +4783,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of bytes put to the Kinesis stream using the PutRecord operation over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -4819,7 +4823,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordBytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordBytes", [props]))
 
     @jsii.member(jsii_name="metricPutRecordLatency")
     def metric_put_record_latency(
@@ -4830,14 +4834,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The time taken per PutRecord operation, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -4870,7 +4874,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordLatency", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsBytes")
     def metric_put_records_bytes(
@@ -4881,14 +4885,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of bytes put to the Kinesis stream using the PutRecords operation over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -4921,7 +4925,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsBytes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsBytes", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsFailedRecords")
     def metric_put_records_failed_records(
@@ -4932,14 +4936,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records rejected due to internal failures in a PutRecords operation per Kinesis data stream, measured over the specified time period.
 
         Occasional internal failures are to be expected and should be retried.
@@ -4974,7 +4978,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsFailedRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsFailedRecords", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsLatency")
     def metric_put_records_latency(
@@ -4985,14 +4989,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The time taken per PutRecords operation, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -5025,7 +5029,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsLatency", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsSuccess")
     def metric_put_records_success(
@@ -5036,14 +5040,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of PutRecords operations where at least one record succeeded, per Kinesis stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -5076,7 +5080,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsSuccess", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsSuccess", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsSuccessfulRecords")
     def metric_put_records_successful_records(
@@ -5087,14 +5091,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of successful records in a PutRecords operation per Kinesis data stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -5127,7 +5131,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsSuccessfulRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsSuccessfulRecords", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsThrottledRecords")
     def metric_put_records_throttled_records(
@@ -5138,14 +5142,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records rejected due to throttling in a PutRecords operation per Kinesis data stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -5178,7 +5182,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsThrottledRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsThrottledRecords", [props]))
 
     @jsii.member(jsii_name="metricPutRecordsTotalRecords")
     def metric_put_records_total_records(
@@ -5189,14 +5193,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The total number of records sent in a PutRecords operation per Kinesis data stream, measured over the specified time period.
 
         The metric defaults to average over 5 minutes, it can be changed by passing ``statistic`` and ``period`` properties.
@@ -5229,7 +5233,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordsTotalRecords", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordsTotalRecords", [props]))
 
     @jsii.member(jsii_name="metricPutRecordSuccess")
     def metric_put_record_success(
@@ -5240,14 +5244,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of successful PutRecord operations per Kinesis stream, measured over the specified time period.
 
         Average
@@ -5283,7 +5287,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPutRecordSuccess", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPutRecordSuccess", [props]))
 
     @jsii.member(jsii_name="metricReadProvisionedThroughputExceeded")
     def metric_read_provisioned_throughput_exceeded(
@@ -5294,14 +5298,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of GetRecords calls throttled for the stream over the specified time period.
 
         The most commonly used
@@ -5343,7 +5347,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricReadProvisionedThroughputExceeded", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricReadProvisionedThroughputExceeded", [props]))
 
     @jsii.member(jsii_name="metricWriteProvisionedThroughputExceeded")
     def metric_write_provisioned_throughput_exceeded(
@@ -5354,14 +5358,14 @@ class Stream(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of records rejected due to throttling for the stream over the specified time period.
 
         This metric
@@ -5403,7 +5407,7 @@ class Stream(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricWriteProvisionedThroughputExceeded", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricWriteProvisionedThroughputExceeded", [props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -5434,9 +5438,9 @@ class Stream(
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''Optional KMS encryption key associated with this stream.'''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "encryptionKey"))
 
 
 @jsii.data_type(
@@ -5449,7 +5453,7 @@ class StreamAttributes:
         self,
         *,
         stream_arn: builtins.str,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
     ) -> None:
         '''A reference to a stream.
 
@@ -5487,13 +5491,13 @@ class StreamAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The KMS key securing the contents of the stream if encryption is enabled.
 
         :default: - No encryption
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5538,10 +5542,10 @@ class StreamConsumer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        stream: IStream,
+        stream: "IStream",
         stream_consumer_name: builtins.str,
     ) -> None:
         '''
@@ -5564,10 +5568,10 @@ class StreamConsumer(
     @builtins.classmethod
     def from_stream_consumer_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         stream_consumer_arn: builtins.str,
-    ) -> IStreamConsumer:
+    ) -> "IStreamConsumer":
         '''Imports an existing Kinesis Stream Consumer by its arn.
 
         :param scope: the Construct scope.
@@ -5579,17 +5583,17 @@ class StreamConsumer(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument stream_consumer_arn", value=stream_consumer_arn, expected_type=type_hints["stream_consumer_arn"])
-        return typing.cast(IStreamConsumer, jsii.sinvoke(cls, "fromStreamConsumerArn", [scope, id, stream_consumer_arn]))
+        return typing.cast("IStreamConsumer", jsii.sinvoke(cls, "fromStreamConsumerArn", [scope, id, stream_consumer_arn]))
 
     @jsii.member(jsii_name="fromStreamConsumerAttributes")
     @builtins.classmethod
     def from_stream_consumer_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         stream_consumer_arn: builtins.str,
-    ) -> IStreamConsumer:
+    ) -> "IStreamConsumer":
         '''Imports an existing Kinesis Stream Consumer by its attributes.
 
         :param scope: the Construct scope.
@@ -5602,13 +5606,13 @@ class StreamConsumer(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         attrs = StreamConsumerAttributes(stream_consumer_arn=stream_consumer_arn)
 
-        return typing.cast(IStreamConsumer, jsii.sinvoke(cls, "fromStreamConsumerAttributes", [scope, id, attrs]))
+        return typing.cast("IStreamConsumer", jsii.sinvoke(cls, "fromStreamConsumerAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this stream consumer.
 
         If this stream consumer was created in this stack (``new StreamConsumer``), a resource policy
@@ -5620,14 +5624,14 @@ class StreamConsumer(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__106f9684fefb675b40f61d28d1dda945ae52717ea3b5e7e128cfc0199ddead44)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the indicated permissions on this stream consumer to the given IAM principal (Role/Group/User).
 
         :param grantee: -
@@ -5637,10 +5641,10 @@ class StreamConsumer(
             type_hints = typing.get_type_hints(_typecheckingstub__ea5ac90fc600673df96ac4c0dfcc78a85073a04b78101720e951e1ad1275947a)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this stream consumer and its associated stream to an IAM principal (Role/Group/User).
 
         :param grantee: -
@@ -5648,7 +5652,7 @@ class StreamConsumer(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__21b7fc951011e7e3fc14b6da5ab3310f7cb75cec5142637f1f3948367f34ac02)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -5667,9 +5671,9 @@ class StreamConsumer(
 
     @builtins.property
     @jsii.member(jsii_name="stream")
-    def stream(self) -> IStream:
+    def stream(self) -> "IStream":
         '''The Kinesis data stream this consumer is associated with.'''
-        return typing.cast(IStream, jsii.get(self, "stream"))
+        return typing.cast("IStream", jsii.get(self, "stream"))
 
     @builtins.property
     @jsii.member(jsii_name="streamConsumerArn")
@@ -5739,7 +5743,12 @@ class StreamConsumerAttributes:
     name_mapping={"stream": "stream", "stream_consumer_name": "streamConsumerName"},
 )
 class StreamConsumerProps:
-    def __init__(self, *, stream: IStream, stream_consumer_name: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        stream: "IStream",
+        stream_consumer_name: builtins.str,
+    ) -> None:
         '''Properties for a Kinesis Stream Consumer.
 
         :param stream: The Kinesis data stream to associate this consumer with.
@@ -5775,11 +5784,11 @@ class StreamConsumerProps:
         }
 
     @builtins.property
-    def stream(self) -> IStream:
+    def stream(self) -> "IStream":
         '''The Kinesis data stream to associate this consumer with.'''
         result = self._values.get("stream")
         assert result is not None, "Required property 'stream' is missing"
-        return typing.cast(IStream, result)
+        return typing.cast("IStream", result)
 
     @builtins.property
     def stream_consumer_name(self) -> builtins.str:
@@ -5868,13 +5877,13 @@ class StreamProps:
     def __init__(
         self,
         *,
-        encryption: typing.Optional[StreamEncryption] = None,
-        encryption_key: typing.Optional[_IKey_5f11635f] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        retention_period: typing.Optional[_Duration_4839e8c3] = None,
+        encryption: typing.Optional["StreamEncryption"] = None,
+        encryption_key: typing.Optional["_IKey_5f11635f"] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        retention_period: typing.Optional["_Duration_4839e8c3"] = None,
         shard_count: typing.Optional[jsii.Number] = None,
-        shard_level_metrics: typing.Optional[typing.Sequence[ShardLevelMetrics]] = None,
-        stream_mode: typing.Optional[StreamMode] = None,
+        shard_level_metrics: typing.Optional[typing.Sequence["ShardLevelMetrics"]] = None,
+        stream_mode: typing.Optional["StreamMode"] = None,
         stream_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for a Kinesis Stream.
@@ -5928,7 +5937,7 @@ class StreamProps:
             self._values["stream_name"] = stream_name
 
     @builtins.property
-    def encryption(self) -> typing.Optional[StreamEncryption]:
+    def encryption(self) -> typing.Optional["StreamEncryption"]:
         '''The kind of server-side encryption to apply to this stream.
 
         If you choose KMS, you can specify a KMS key via ``encryptionKey``. If
@@ -5941,10 +5950,10 @@ class StreamProps:
         StreamEncryption.KMS if an encryption key is supplied through the encryptionKey property
         '''
         result = self._values.get("encryption")
-        return typing.cast(typing.Optional[StreamEncryption], result)
+        return typing.cast(typing.Optional["StreamEncryption"], result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''External KMS key to use for stream encryption.
 
         The 'encryption' property must be set to "Kms".
@@ -5956,25 +5965,25 @@ class StreamProps:
         will be created and associated with this stream.
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Policy to apply when the stream is removed from the stack.
 
         :default: RemovalPolicy.RETAIN
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def retention_period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def retention_period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of hours for the data records that are stored in shards to remain accessible.
 
         :default: Duration.hours(24)
         '''
         result = self._values.get("retention_period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def shard_count(self) -> typing.Optional[jsii.Number]:
@@ -5988,7 +5997,7 @@ class StreamProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def shard_level_metrics(self) -> typing.Optional[typing.List[ShardLevelMetrics]]:
+    def shard_level_metrics(self) -> typing.Optional[typing.List["ShardLevelMetrics"]]:
         '''A list of shard-level metrics in properties to enable enhanced monitoring mode.
 
         :default: undefined - AWS Kinesis default is disabled
@@ -5996,16 +6005,16 @@ class StreamProps:
         :see: https://docs.aws.amazon.com/streams/latest/dev/monitoring-with-cloudwatch.html#kinesis-metrics-shard
         '''
         result = self._values.get("shard_level_metrics")
-        return typing.cast(typing.Optional[typing.List[ShardLevelMetrics]], result)
+        return typing.cast(typing.Optional[typing.List["ShardLevelMetrics"]], result)
 
     @builtins.property
-    def stream_mode(self) -> typing.Optional[StreamMode]:
+    def stream_mode(self) -> typing.Optional["StreamMode"]:
         '''The capacity mode of this stream.
 
         :default: StreamMode.PROVISIONED
         '''
         result = self._values.get("stream_mode")
-        return typing.cast(typing.Optional[StreamMode], result)
+        return typing.cast(typing.Optional["StreamMode"], result)
 
     @builtins.property
     def stream_name(self) -> typing.Optional[builtins.str]:

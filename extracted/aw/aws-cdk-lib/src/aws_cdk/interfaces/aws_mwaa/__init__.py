@@ -115,7 +115,7 @@ class IEnvironmentRef(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> EnvironmentReference:
+    def environment_ref(self) -> "EnvironmentReference":
         '''(experimental) A reference to a Environment resource.
 
         :stability: experimental
@@ -136,12 +136,12 @@ class _IEnvironmentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> EnvironmentReference:
+    def environment_ref(self) -> "EnvironmentReference":
         '''(experimental) A reference to a Environment resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnvironmentReference, jsii.get(self, "environmentRef"))
+        return typing.cast("EnvironmentReference", jsii.get(self, "environmentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnvironmentRef).__jsii_proxy_class__ = lambda : _IEnvironmentRefProxy

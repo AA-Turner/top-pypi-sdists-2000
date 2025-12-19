@@ -117,7 +117,7 @@ class IApplicationInstanceRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationInstanceRef")
-    def application_instance_ref(self) -> ApplicationInstanceReference:
+    def application_instance_ref(self) -> "ApplicationInstanceReference":
         '''(experimental) A reference to a ApplicationInstance resource.
 
         :stability: experimental
@@ -138,12 +138,12 @@ class _IApplicationInstanceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationInstanceRef")
-    def application_instance_ref(self) -> ApplicationInstanceReference:
+    def application_instance_ref(self) -> "ApplicationInstanceReference":
         '''(experimental) A reference to a ApplicationInstance resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationInstanceReference, jsii.get(self, "applicationInstanceRef"))
+        return typing.cast("ApplicationInstanceReference", jsii.get(self, "applicationInstanceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationInstanceRef).__jsii_proxy_class__ = lambda : _IApplicationInstanceRefProxy

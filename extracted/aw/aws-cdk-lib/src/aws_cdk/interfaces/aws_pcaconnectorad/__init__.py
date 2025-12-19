@@ -145,7 +145,7 @@ class IConnectorRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> ConnectorReference:
+    def connector_ref(self) -> "ConnectorReference":
         '''(experimental) A reference to a Connector resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IConnectorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> ConnectorReference:
+    def connector_ref(self) -> "ConnectorReference":
         '''(experimental) A reference to a Connector resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectorReference, jsii.get(self, "connectorRef"))
+        return typing.cast("ConnectorReference", jsii.get(self, "connectorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectorRef).__jsii_proxy_class__ = lambda : _IConnectorRefProxy
@@ -192,7 +192,7 @@ class IDirectoryRegistrationRef(
 
     @builtins.property
     @jsii.member(jsii_name="directoryRegistrationRef")
-    def directory_registration_ref(self) -> DirectoryRegistrationReference:
+    def directory_registration_ref(self) -> "DirectoryRegistrationReference":
         '''(experimental) A reference to a DirectoryRegistration resource.
 
         :stability: experimental
@@ -213,12 +213,12 @@ class _IDirectoryRegistrationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="directoryRegistrationRef")
-    def directory_registration_ref(self) -> DirectoryRegistrationReference:
+    def directory_registration_ref(self) -> "DirectoryRegistrationReference":
         '''(experimental) A reference to a DirectoryRegistration resource.
 
         :stability: experimental
         '''
-        return typing.cast(DirectoryRegistrationReference, jsii.get(self, "directoryRegistrationRef"))
+        return typing.cast("DirectoryRegistrationReference", jsii.get(self, "directoryRegistrationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDirectoryRegistrationRef).__jsii_proxy_class__ = lambda : _IDirectoryRegistrationRefProxy

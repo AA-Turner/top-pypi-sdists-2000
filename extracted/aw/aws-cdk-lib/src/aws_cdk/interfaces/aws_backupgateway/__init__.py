@@ -96,7 +96,7 @@ class IHypervisorRef(
 
     @builtins.property
     @jsii.member(jsii_name="hypervisorRef")
-    def hypervisor_ref(self) -> HypervisorReference:
+    def hypervisor_ref(self) -> "HypervisorReference":
         '''(experimental) A reference to a Hypervisor resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IHypervisorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="hypervisorRef")
-    def hypervisor_ref(self) -> HypervisorReference:
+    def hypervisor_ref(self) -> "HypervisorReference":
         '''(experimental) A reference to a Hypervisor resource.
 
         :stability: experimental
         '''
-        return typing.cast(HypervisorReference, jsii.get(self, "hypervisorRef"))
+        return typing.cast("HypervisorReference", jsii.get(self, "hypervisorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHypervisorRef).__jsii_proxy_class__ = lambda : _IHypervisorRefProxy

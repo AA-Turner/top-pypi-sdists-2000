@@ -1,13 +1,13 @@
 Metadata-Version: 2.4
 Name: temporalio
-Version: 1.20.0
+Version: 1.21.0
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3.14
-Requires-Dist: nexus-rpc==1.2.0
+Requires-Dist: nexus-rpc==1.3.0
 Requires-Dist: protobuf>=3.20,<7.0.0
 Requires-Dist: python-dateutil>=2.8.2,<3 ; python_full_version < '3.11'
 Requires-Dist: types-protobuf>=3.20
@@ -16,7 +16,7 @@ Requires-Dist: grpcio>=1.48.2,<2 ; extra == 'grpc'
 Requires-Dist: opentelemetry-api>=1.11.1,<2 ; extra == 'opentelemetry'
 Requires-Dist: opentelemetry-sdk>=1.11.1,<2 ; extra == 'opentelemetry'
 Requires-Dist: pydantic>=2.0.0,<3 ; extra == 'pydantic'
-Requires-Dist: openai-agents>=0.3,<0.5 ; extra == 'openai-agents'
+Requires-Dist: openai-agents>=0.3,<0.7 ; extra == 'openai-agents'
 Requires-Dist: mcp>=1.9.4,<2 ; extra == 'openai-agents'
 Provides-Extra: grpc
 Provides-Extra: opentelemetry

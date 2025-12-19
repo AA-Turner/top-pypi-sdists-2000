@@ -117,7 +117,7 @@ class IHttpNamespaceRef(
 
     @builtins.property
     @jsii.member(jsii_name="httpNamespaceRef")
-    def http_namespace_ref(self) -> HttpNamespaceReference:
+    def http_namespace_ref(self) -> "HttpNamespaceReference":
         '''(experimental) A reference to a HttpNamespace resource.
 
         :stability: experimental
@@ -138,12 +138,12 @@ class _IHttpNamespaceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="httpNamespaceRef")
-    def http_namespace_ref(self) -> HttpNamespaceReference:
+    def http_namespace_ref(self) -> "HttpNamespaceReference":
         '''(experimental) A reference to a HttpNamespace resource.
 
         :stability: experimental
         '''
-        return typing.cast(HttpNamespaceReference, jsii.get(self, "httpNamespaceRef"))
+        return typing.cast("HttpNamespaceReference", jsii.get(self, "httpNamespaceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IHttpNamespaceRef).__jsii_proxy_class__ = lambda : _IHttpNamespaceRefProxy

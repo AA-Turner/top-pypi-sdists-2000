@@ -101,7 +101,7 @@ class CfnGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         display_name: builtins.str,
@@ -130,7 +130,7 @@ class CfnGroup(
 
     @jsii.member(jsii_name="arnForGroup")
     @builtins.classmethod
-    def arn_for_group(cls, resource: _IGroupRef_28a5ba9a) -> builtins.str:
+    def arn_for_group(cls, resource: "_IGroupRef_28a5ba9a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -152,7 +152,7 @@ class CfnGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -197,9 +197,9 @@ class CfnGroup(
 
     @builtins.property
     @jsii.member(jsii_name="groupRef")
-    def group_ref(self) -> _GroupReference_05ee17f3:
+    def group_ref(self) -> "_GroupReference_05ee17f3":
         '''A reference to a Group resource.'''
-        return typing.cast(_GroupReference_05ee17f3, jsii.get(self, "groupRef"))
+        return typing.cast("_GroupReference_05ee17f3", jsii.get(self, "groupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="displayName")
@@ -272,12 +272,12 @@ class CfnGroupMembership(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         group_id: builtins.str,
         identity_store_id: builtins.str,
-        member_id: typing.Union[_IResolvable_da3f097b, typing.Union["CfnGroupMembership.MemberIdProperty", typing.Dict[builtins.str, typing.Any]]],
+        member_id: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGroupMembership.MemberIdProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::IdentityStore::GroupMembership``.
 
@@ -301,7 +301,7 @@ class CfnGroupMembership(
     @builtins.classmethod
     def arn_for_group_membership(
         cls,
-        resource: _IGroupMembershipRef_0d737030,
+        resource: "_IGroupMembershipRef_0d737030",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -324,7 +324,7 @@ class CfnGroupMembership(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGroupMembership", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -369,9 +369,9 @@ class CfnGroupMembership(
 
     @builtins.property
     @jsii.member(jsii_name="groupMembershipRef")
-    def group_membership_ref(self) -> _GroupMembershipReference_77539a0d:
+    def group_membership_ref(self) -> "_GroupMembershipReference_77539a0d":
         '''A reference to a GroupMembership resource.'''
-        return typing.cast(_GroupMembershipReference_77539a0d, jsii.get(self, "groupMembershipRef"))
+        return typing.cast("_GroupMembershipReference_77539a0d", jsii.get(self, "groupMembershipRef"))
 
     @builtins.property
     @jsii.member(jsii_name="groupId")
@@ -403,14 +403,14 @@ class CfnGroupMembership(
     @jsii.member(jsii_name="memberId")
     def member_id(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnGroupMembership.MemberIdProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnGroupMembership.MemberIdProperty"]:
         '''An object containing the identifier of a group member.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnGroupMembership.MemberIdProperty"], jsii.get(self, "memberId"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGroupMembership.MemberIdProperty"], jsii.get(self, "memberId"))
 
     @member_id.setter
     def member_id(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnGroupMembership.MemberIdProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnGroupMembership.MemberIdProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1cf491e3e3c3bfc7f52caab31db7140718db94dfca804458b592c7195b7552ec)
@@ -487,7 +487,7 @@ class CfnGroupMembershipProps:
         *,
         group_id: builtins.str,
         identity_store_id: builtins.str,
-        member_id: typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroupMembership.MemberIdProperty, typing.Dict[builtins.str, typing.Any]]],
+        member_id: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGroupMembership.MemberIdProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnGroupMembership``.
 
@@ -546,7 +546,7 @@ class CfnGroupMembershipProps:
     @builtins.property
     def member_id(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnGroupMembership.MemberIdProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnGroupMembership.MemberIdProperty"]:
         '''An object containing the identifier of a group member.
 
         Setting the ``MemberId`` 's ``UserId`` field to a specific User's ID indicates that user is a member of the group.
@@ -555,7 +555,7 @@ class CfnGroupMembershipProps:
         '''
         result = self._values.get("member_id")
         assert result is not None, "Required property 'member_id' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnGroupMembership.MemberIdProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGroupMembership.MemberIdProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

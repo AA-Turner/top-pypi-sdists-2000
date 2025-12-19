@@ -200,7 +200,7 @@ class IConfigurationSetEventDestinationRef(
     @jsii.member(jsii_name="configurationSetEventDestinationRef")
     def configuration_set_event_destination_ref(
         self,
-    ) -> ConfigurationSetEventDestinationReference:
+    ) -> "ConfigurationSetEventDestinationReference":
         '''(experimental) A reference to a ConfigurationSetEventDestination resource.
 
         :stability: experimental
@@ -223,12 +223,12 @@ class _IConfigurationSetEventDestinationRefProxy(
     @jsii.member(jsii_name="configurationSetEventDestinationRef")
     def configuration_set_event_destination_ref(
         self,
-    ) -> ConfigurationSetEventDestinationReference:
+    ) -> "ConfigurationSetEventDestinationReference":
         '''(experimental) A reference to a ConfigurationSetEventDestination resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationSetEventDestinationReference, jsii.get(self, "configurationSetEventDestinationRef"))
+        return typing.cast("ConfigurationSetEventDestinationReference", jsii.get(self, "configurationSetEventDestinationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationSetEventDestinationRef).__jsii_proxy_class__ = lambda : _IConfigurationSetEventDestinationRefProxy
@@ -249,7 +249,7 @@ class IConfigurationSetRef(
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetRef")
-    def configuration_set_ref(self) -> ConfigurationSetReference:
+    def configuration_set_ref(self) -> "ConfigurationSetReference":
         '''(experimental) A reference to a ConfigurationSet resource.
 
         :stability: experimental
@@ -270,12 +270,12 @@ class _IConfigurationSetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configurationSetRef")
-    def configuration_set_ref(self) -> ConfigurationSetReference:
+    def configuration_set_ref(self) -> "ConfigurationSetReference":
         '''(experimental) A reference to a ConfigurationSet resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationSetReference, jsii.get(self, "configurationSetRef"))
+        return typing.cast("ConfigurationSetReference", jsii.get(self, "configurationSetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationSetRef).__jsii_proxy_class__ = lambda : _IConfigurationSetRefProxy
@@ -296,7 +296,7 @@ class IDedicatedIpPoolRef(
 
     @builtins.property
     @jsii.member(jsii_name="dedicatedIpPoolRef")
-    def dedicated_ip_pool_ref(self) -> DedicatedIpPoolReference:
+    def dedicated_ip_pool_ref(self) -> "DedicatedIpPoolReference":
         '''(experimental) A reference to a DedicatedIpPool resource.
 
         :stability: experimental
@@ -317,12 +317,12 @@ class _IDedicatedIpPoolRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dedicatedIpPoolRef")
-    def dedicated_ip_pool_ref(self) -> DedicatedIpPoolReference:
+    def dedicated_ip_pool_ref(self) -> "DedicatedIpPoolReference":
         '''(experimental) A reference to a DedicatedIpPool resource.
 
         :stability: experimental
         '''
-        return typing.cast(DedicatedIpPoolReference, jsii.get(self, "dedicatedIpPoolRef"))
+        return typing.cast("DedicatedIpPoolReference", jsii.get(self, "dedicatedIpPoolRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDedicatedIpPoolRef).__jsii_proxy_class__ = lambda : _IDedicatedIpPoolRefProxy

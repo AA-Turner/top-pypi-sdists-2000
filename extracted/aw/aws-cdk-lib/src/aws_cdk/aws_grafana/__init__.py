@@ -143,7 +143,7 @@ class CfnWorkspace(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account_access_type: builtins.str,
@@ -154,15 +154,15 @@ class CfnWorkspace(
         description: typing.Optional[builtins.str] = None,
         grafana_version: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        network_access_control: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.NetworkAccessControlProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        network_access_control: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkspace.NetworkAccessControlProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         notification_destinations: typing.Optional[typing.Sequence[builtins.str]] = None,
         organizational_units: typing.Optional[typing.Sequence[builtins.str]] = None,
         organization_role_name: typing.Optional[builtins.str] = None,
-        plugin_admin_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
-        saml_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.SamlConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        plugin_admin_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
+        saml_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkspace.SamlConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         stack_set_name: typing.Optional[builtins.str] = None,
-        vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkspace.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Grafana::Workspace``.
 
@@ -225,7 +225,7 @@ class CfnWorkspace(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWorkspace", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -353,9 +353,9 @@ class CfnWorkspace(
 
     @builtins.property
     @jsii.member(jsii_name="workspaceRef")
-    def workspace_ref(self) -> _WorkspaceReference_e8dd807e:
+    def workspace_ref(self) -> "_WorkspaceReference_e8dd807e":
         '''A reference to a Workspace resource.'''
-        return typing.cast(_WorkspaceReference_e8dd807e, jsii.get(self, "workspaceRef"))
+        return typing.cast("_WorkspaceReference_e8dd807e", jsii.get(self, "workspaceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="accountAccessType")
@@ -465,14 +465,14 @@ class CfnWorkspace(
     @jsii.member(jsii_name="networkAccessControl")
     def network_access_control(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.NetworkAccessControlProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.NetworkAccessControlProperty"]]:
         '''The configuration settings for network access to your workspace.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.NetworkAccessControlProperty"]], jsii.get(self, "networkAccessControl"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.NetworkAccessControlProperty"]], jsii.get(self, "networkAccessControl"))
 
     @network_access_control.setter
     def network_access_control(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.NetworkAccessControlProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.NetworkAccessControlProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e2b77604f954551d96e38e737bb2b7eb8862626320461b61a851932a089d4ade)
@@ -528,14 +528,14 @@ class CfnWorkspace(
     @jsii.member(jsii_name="pluginAdminEnabled")
     def plugin_admin_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether plugin administration is enabled in the workspace.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "pluginAdminEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "pluginAdminEnabled"))
 
     @plugin_admin_enabled.setter
     def plugin_admin_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c6fff51e5ca5203d89a130603e0c8c8afd747ed83cfd23221fbe96546480b53b)
@@ -559,14 +559,14 @@ class CfnWorkspace(
     @jsii.member(jsii_name="samlConfiguration")
     def saml_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.SamlConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.SamlConfigurationProperty"]]:
         '''If the workspace uses SAML, use this structure to map SAML assertion attributes to workspace user information and define which groups in the assertion attribute are to have the ``Admin`` and ``Editor`` roles in the workspace.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.SamlConfigurationProperty"]], jsii.get(self, "samlConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.SamlConfigurationProperty"]], jsii.get(self, "samlConfiguration"))
 
     @saml_configuration.setter
     def saml_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.SamlConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.SamlConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__512287bf24818cb838cc5045af81a100afbe0fdcf464601403fff719622ccc4d)
@@ -590,14 +590,14 @@ class CfnWorkspace(
     @jsii.member(jsii_name="vpcConfiguration")
     def vpc_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.VpcConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.VpcConfigurationProperty"]]:
         '''The configuration settings for an Amazon VPC that contains data sources for your Grafana workspace to connect to.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.VpcConfigurationProperty"]], jsii.get(self, "vpcConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.VpcConfigurationProperty"]], jsii.get(self, "vpcConfiguration"))
 
     @vpc_configuration.setter
     def vpc_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.VpcConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.VpcConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3586128c84bb5e8c9eb62049d7b06e9ab6ddb8d155288a89902a4fa5056539a0)
@@ -996,11 +996,11 @@ class CfnWorkspace(
         def __init__(
             self,
             *,
-            idp_metadata: typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.IdpMetadataProperty", typing.Dict[builtins.str, typing.Any]]],
+            idp_metadata: typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkspace.IdpMetadataProperty", typing.Dict[builtins.str, typing.Any]]],
             allowed_organizations: typing.Optional[typing.Sequence[builtins.str]] = None,
-            assertion_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.AssertionAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            assertion_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkspace.AssertionAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             login_validity_duration: typing.Optional[jsii.Number] = None,
-            role_values: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.RoleValuesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            role_values: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkspace.RoleValuesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A structure containing information about how this workspace works with SAML.
 
@@ -1064,14 +1064,14 @@ class CfnWorkspace(
         @builtins.property
         def idp_metadata(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnWorkspace.IdpMetadataProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnWorkspace.IdpMetadataProperty"]:
             '''A structure containing the identity provider (IdP) metadata used to integrate the identity provider with this workspace.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-grafana-workspace-samlconfiguration.html#cfn-grafana-workspace-samlconfiguration-idpmetadata
             '''
             result = self._values.get("idp_metadata")
             assert result is not None, "Required property 'idp_metadata' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnWorkspace.IdpMetadataProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnWorkspace.IdpMetadataProperty"], result)
 
         @builtins.property
         def allowed_organizations(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1087,13 +1087,13 @@ class CfnWorkspace(
         @builtins.property
         def assertion_attributes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.AssertionAttributesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.AssertionAttributesProperty"]]:
             '''A structure that defines which attributes in the SAML assertion are to be used to define information about the users authenticated by that IdP to use the workspace.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-grafana-workspace-samlconfiguration.html#cfn-grafana-workspace-samlconfiguration-assertionattributes
             '''
             result = self._values.get("assertion_attributes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.AssertionAttributesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.AssertionAttributesProperty"]], result)
 
         @builtins.property
         def login_validity_duration(self) -> typing.Optional[jsii.Number]:
@@ -1107,13 +1107,13 @@ class CfnWorkspace(
         @builtins.property
         def role_values(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.RoleValuesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.RoleValuesProperty"]]:
             '''A structure containing arrays that map group names in the SAML assertion to the Grafana ``Admin`` and ``Editor`` roles in the workspace.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-grafana-workspace-samlconfiguration.html#cfn-grafana-workspace-samlconfiguration-rolevalues
             '''
             result = self._values.get("role_values")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkspace.RoleValuesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.RoleValuesProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1254,15 +1254,15 @@ class CfnWorkspaceProps:
         description: typing.Optional[builtins.str] = None,
         grafana_version: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        network_access_control: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.NetworkAccessControlProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        network_access_control: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkspace.NetworkAccessControlProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         notification_destinations: typing.Optional[typing.Sequence[builtins.str]] = None,
         organizational_units: typing.Optional[typing.Sequence[builtins.str]] = None,
         organization_role_name: typing.Optional[builtins.str] = None,
-        plugin_admin_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
-        saml_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.SamlConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        plugin_admin_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
+        saml_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkspace.SamlConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         stack_set_name: typing.Optional[builtins.str] = None,
-        vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.VpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkspace.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnWorkspace``.
 
@@ -1491,13 +1491,13 @@ class CfnWorkspaceProps:
     @builtins.property
     def network_access_control(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.NetworkAccessControlProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.NetworkAccessControlProperty"]]:
         '''The configuration settings for network access to your workspace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-grafana-workspace.html#cfn-grafana-workspace-networkaccesscontrol
         '''
         result = self._values.get("network_access_control")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.NetworkAccessControlProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.NetworkAccessControlProperty"]], result)
 
     @builtins.property
     def notification_destinations(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1531,7 +1531,7 @@ class CfnWorkspaceProps:
     @builtins.property
     def plugin_admin_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether plugin administration is enabled in the workspace.
 
         Setting to ``true`` allows workspace admins to install, uninstall, and update plugins from within the Grafana workspace.
@@ -1542,12 +1542,12 @@ class CfnWorkspaceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-grafana-workspace.html#cfn-grafana-workspace-pluginadminenabled
         '''
         result = self._values.get("plugin_admin_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def role_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''The IAM role that grants permissions to the AWS resources that the workspace will view data from.
 
         This role must already exist.
@@ -1555,18 +1555,18 @@ class CfnWorkspaceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-grafana-workspace.html#cfn-grafana-workspace-rolearn
         '''
         result = self._values.get("role_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     @builtins.property
     def saml_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.SamlConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.SamlConfigurationProperty"]]:
         '''If the workspace uses SAML, use this structure to map SAML assertion attributes to workspace user information and define which groups in the assertion attribute are to have the ``Admin`` and ``Editor`` roles in the workspace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-grafana-workspace.html#cfn-grafana-workspace-samlconfiguration
         '''
         result = self._values.get("saml_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.SamlConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.SamlConfigurationProperty"]], result)
 
     @builtins.property
     def stack_set_name(self) -> typing.Optional[builtins.str]:
@@ -1580,7 +1580,7 @@ class CfnWorkspaceProps:
     @builtins.property
     def vpc_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.VpcConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.VpcConfigurationProperty"]]:
         '''The configuration settings for an Amazon VPC that contains data sources for your Grafana workspace to connect to.
 
         .. epigraph::
@@ -1590,7 +1590,7 @@ class CfnWorkspaceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-grafana-workspace.html#cfn-grafana-workspace-vpcconfiguration
         '''
         result = self._values.get("vpc_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWorkspace.VpcConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkspace.VpcConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

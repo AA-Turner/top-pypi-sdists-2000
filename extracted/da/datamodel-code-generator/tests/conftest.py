@@ -39,14 +39,15 @@ def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line(
         "markers",
         "cli_doc(options, input_schema=None, cli_args=None, golden_output=None, version_outputs=None, "
-        "model_outputs=None, expected_stdout=None, config_content=None, **kwargs): "
+        "model_outputs=None, expected_stdout=None, config_content=None, aliases=None, **kwargs): "
         "Mark test as CLI documentation source. "
-        "Either golden_output, version_outputs, model_outputs, or expected_stdout is required.",
+        "Either golden_output, version_outputs, model_outputs, or expected_stdout is required. "
+        "aliases: list of alternative option names (e.g., ['--capitalise-enum-members']).",
     )
     config._cli_doc_items: list[dict[str, Any]] = []
 
 
-def _validate_cli_doc_marker(node_id: str, kwargs: dict[str, Any]) -> list[str]:  # noqa: ARG001, PLR0912  # pragma: no cover
+def _validate_cli_doc_marker(node_id: str, kwargs: dict[str, Any]) -> list[str]:  # noqa: ARG001, PLR0912, PLR0914  # pragma: no cover
     """Validate marker required fields and types."""
     errors: list[str] = []
 
@@ -128,6 +129,14 @@ def _validate_cli_doc_marker(node_id: str, kwargs: dict[str, Any]) -> list[str]:
             errors.append(f"'related_options' must be a list, got {type(related).__name__}")
         elif not all(isinstance(r, str) for r in related):
             errors.append("'related_options' must be a list of strings")
+
+    if "aliases" in kwargs:
+        aliases = kwargs["aliases"]
+        if aliases is not None:
+            if not isinstance(aliases, list):
+                errors.append(f"'aliases' must be a list, got {type(aliases).__name__}")
+            elif not all(isinstance(a, str) for a in aliases):
+                errors.append("'aliases' must be a list of strings")
 
     return errors
 
@@ -292,7 +301,7 @@ def _get_tox_env() -> str:  # pragma: no cover
 
     Strips '-parallel' suffix since inline-snapshot requires -n0 (single process).
     """
-    import os  # noqa: PLC0415
+    import os
 
     env = os.environ.get("TOX_ENV_NAME", "<version>")
     # Remove -parallel suffix since inline-snapshot needs single process mode
@@ -301,10 +310,10 @@ def _get_tox_env() -> str:  # pragma: no cover
 
 def _format_snapshot_hint(action: str) -> str:  # pragma: no cover
     """Format a hint message for inline-snapshot commands with rich formatting."""
-    from io import StringIO  # noqa: PLC0415
+    from io import StringIO
 
-    from rich.console import Console  # noqa: PLC0415
-    from rich.text import Text  # noqa: PLC0415
+    from rich.console import Console
+    from rich.text import Text
 
     tox_env = _get_tox_env()
     command = f"  tox run -e {tox_env} -- --inline-snapshot={action}"
@@ -322,10 +331,10 @@ def _format_snapshot_hint(action: str) -> str:  # pragma: no cover
 
 def _format_new_content(content: str) -> str:  # pragma: no cover
     """Format new content (for create mode) with green color."""
-    from io import StringIO  # noqa: PLC0415
+    from io import StringIO
 
-    from rich.console import Console  # noqa: PLC0415
-    from rich.text import Text  # noqa: PLC0415
+    from rich.console import Console
+    from rich.text import Text
 
     output = StringIO()
     console = Console(file=output, force_terminal=True, width=200, soft_wrap=False)
@@ -338,10 +347,10 @@ def _format_new_content(content: str) -> str:  # pragma: no cover
 
 def _format_diff(expected: str, actual: str, expected_path: Path) -> str:  # pragma: no cover
     """Format a unified diff between expected and actual content with colors."""
-    from io import StringIO  # noqa: PLC0415
+    from io import StringIO
 
-    from rich.console import Console  # noqa: PLC0415
-    from rich.text import Text  # noqa: PLC0415
+    from rich.console import Console
+    from rich.text import Text
 
     expected_lines = expected.splitlines(keepends=True)
     actual_lines = actual.splitlines(keepends=True)
@@ -587,11 +596,11 @@ def _preload_heavy_modules() -> None:
     This reduces per-test overhead when running with pytest-xdist,
     as each worker only pays the import cost once at session start.
     """
-    import black  # noqa: PLC0415, F401
-    import inflect  # noqa: PLC0415, F401
-    import isort  # noqa: PLC0415, F401
+    import black  # noqa: F401
+    import inflect  # noqa: F401
+    import isort  # noqa: F401
 
-    import datamodel_code_generator  # noqa: PLC0415, F401
+    import datamodel_code_generator  # noqa: F401
 
 
 def validate_generated_code(

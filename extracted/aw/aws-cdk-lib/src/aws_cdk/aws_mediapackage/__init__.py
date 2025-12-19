@@ -97,6 +97,7 @@ class CfnAsset(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_mediapackage as mediapackage
@@ -122,16 +123,16 @@ class CfnAsset(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id_: builtins.str,
         *,
         id: builtins.str,
         packaging_group_id: builtins.str,
         source_arn: builtins.str,
         source_role_arn: builtins.str,
-        egress_endpoints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAsset.EgressEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        egress_endpoints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAsset.EgressEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         resource_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::MediaPackage::Asset``.
 
@@ -163,7 +164,7 @@ class CfnAsset(
 
     @jsii.member(jsii_name="arnForAsset")
     @builtins.classmethod
-    def arn_for_asset(cls, resource: _IAssetRef_d7225408) -> builtins.str:
+    def arn_for_asset(cls, resource: "_IAssetRef_d7225408") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -185,7 +186,7 @@ class CfnAsset(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAsset", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -216,9 +217,9 @@ class CfnAsset(
 
     @builtins.property
     @jsii.member(jsii_name="assetRef")
-    def asset_ref(self) -> _AssetReference_c36cf400:
+    def asset_ref(self) -> "_AssetReference_c36cf400":
         '''A reference to a Asset resource.'''
-        return typing.cast(_AssetReference_c36cf400, jsii.get(self, "assetRef"))
+        return typing.cast("_AssetReference_c36cf400", jsii.get(self, "assetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -247,9 +248,9 @@ class CfnAsset(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="id")
@@ -307,14 +308,14 @@ class CfnAsset(
     @jsii.member(jsii_name="egressEndpoints")
     def egress_endpoints(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAsset.EgressEndpointProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAsset.EgressEndpointProperty"]]]]:
         '''List of playback endpoints that are available for this asset.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAsset.EgressEndpointProperty"]]]], jsii.get(self, "egressEndpoints"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAsset.EgressEndpointProperty"]]]], jsii.get(self, "egressEndpoints"))
 
     @egress_endpoints.setter
     def egress_endpoints(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAsset.EgressEndpointProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAsset.EgressEndpointProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a644764b4a43d734fea1bf555feb1c097efc7cf3b30ba898c866f73a019f663e)
@@ -336,12 +337,12 @@ class CfnAsset(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to assign to the asset.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__40009e0bd275773b97adc81d95be811402372bc85c522f243c45a58fa3a41f3e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -443,9 +444,9 @@ class CfnAssetProps:
         packaging_group_id: builtins.str,
         source_arn: builtins.str,
         source_role_arn: builtins.str,
-        egress_endpoints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAsset.EgressEndpointProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        egress_endpoints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAsset.EgressEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         resource_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAsset``.
 
@@ -462,6 +463,7 @@ class CfnAssetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_mediapackage as mediapackage
@@ -551,13 +553,13 @@ class CfnAssetProps:
     @builtins.property
     def egress_endpoints(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAsset.EgressEndpointProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAsset.EgressEndpointProperty"]]]]:
         '''List of playback endpoints that are available for this asset.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-asset.html#cfn-mediapackage-asset-egressendpoints
         '''
         result = self._values.get("egress_endpoints")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAsset.EgressEndpointProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAsset.EgressEndpointProperty"]]]], result)
 
     @builtins.property
     def resource_id(self) -> typing.Optional[builtins.str]:
@@ -569,13 +571,13 @@ class CfnAssetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to assign to the asset.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-asset.html#cfn-mediapackage-asset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -605,6 +607,7 @@ class CfnChannel(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_mediapackage as mediapackage
@@ -637,15 +640,15 @@ class CfnChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id_: builtins.str,
         *,
         id: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        egress_access_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        hls_ingest: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.HlsIngestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        ingress_access_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        egress_access_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        hls_ingest: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.HlsIngestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ingress_access_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::MediaPackage::Channel``.
 
@@ -675,7 +678,7 @@ class CfnChannel(
 
     @jsii.member(jsii_name="arnForChannel")
     @builtins.classmethod
-    def arn_for_channel(cls, resource: _IChannelRef_0367ac9a) -> builtins.str:
+    def arn_for_channel(cls, resource: "_IChannelRef_0367ac9a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -697,7 +700,7 @@ class CfnChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -742,15 +745,15 @@ class CfnChannel(
 
     @builtins.property
     @jsii.member(jsii_name="channelRef")
-    def channel_ref(self) -> _ChannelReference_1a985c05:
+    def channel_ref(self) -> "_ChannelReference_1a985c05":
         '''A reference to a Channel resource.'''
-        return typing.cast(_ChannelReference_1a985c05, jsii.get(self, "channelRef"))
+        return typing.cast("_ChannelReference_1a985c05", jsii.get(self, "channelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="id")
@@ -782,14 +785,14 @@ class CfnChannel(
     @jsii.member(jsii_name="egressAccessLogs")
     def egress_access_logs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.LogConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LogConfigurationProperty"]]:
         '''Configures egress access logs.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.LogConfigurationProperty"]], jsii.get(self, "egressAccessLogs"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LogConfigurationProperty"]], jsii.get(self, "egressAccessLogs"))
 
     @egress_access_logs.setter
     def egress_access_logs(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.LogConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LogConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0bf5b93815da3604606437071a85affcc9f8a576213172d6442244006725709c)
@@ -800,14 +803,14 @@ class CfnChannel(
     @jsii.member(jsii_name="hlsIngest")
     def hls_ingest(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.HlsIngestProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.HlsIngestProperty"]]:
         '''The input URL where the source stream should be sent.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.HlsIngestProperty"]], jsii.get(self, "hlsIngest"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.HlsIngestProperty"]], jsii.get(self, "hlsIngest"))
 
     @hls_ingest.setter
     def hls_ingest(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.HlsIngestProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.HlsIngestProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cd06c14ed9d8edf5f5e20f5cc9d6e0f82ce9226bf2682de8368e9134dfb2ecca)
@@ -818,14 +821,14 @@ class CfnChannel(
     @jsii.member(jsii_name="ingressAccessLogs")
     def ingress_access_logs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.LogConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LogConfigurationProperty"]]:
         '''Configures ingress access logs.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.LogConfigurationProperty"]], jsii.get(self, "ingressAccessLogs"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LogConfigurationProperty"]], jsii.get(self, "ingressAccessLogs"))
 
     @ingress_access_logs.setter
     def ingress_access_logs(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.LogConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LogConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1eba56f28a4c29c9f6a1b3e1b6fce471204f7c3704ad8b8bfc70d8eea07dc4d6)
@@ -834,12 +837,12 @@ class CfnChannel(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to assign to the channel.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ffcf834ef6a826c28d9aa0d38721dbed5c74dbc38ca930c45f097c244fe6987c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -854,7 +857,7 @@ class CfnChannel(
         def __init__(
             self,
             *,
-            ingest_endpoints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.IngestEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            ingest_endpoints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.IngestEndpointProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''HLS ingest configuration.
 
@@ -888,13 +891,13 @@ class CfnChannel(
         @builtins.property
         def ingest_endpoints(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannel.IngestEndpointProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnChannel.IngestEndpointProperty"]]]]:
             '''The input URL where the source stream should be sent.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-channel-hlsingest.html#cfn-mediapackage-channel-hlsingest-ingestendpoints
             '''
             result = self._values.get("ingest_endpoints")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnChannel.IngestEndpointProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnChannel.IngestEndpointProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1087,10 +1090,10 @@ class CfnChannelProps:
         *,
         id: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        egress_access_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.LogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        hls_ingest: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.HlsIngestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        ingress_access_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.LogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        egress_access_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        hls_ingest: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.HlsIngestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ingress_access_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnChannel``.
 
@@ -1106,6 +1109,7 @@ class CfnChannelProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_mediapackage as mediapackage
@@ -1179,44 +1183,44 @@ class CfnChannelProps:
     @builtins.property
     def egress_access_logs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannel.LogConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LogConfigurationProperty"]]:
         '''Configures egress access logs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-channel.html#cfn-mediapackage-channel-egressaccesslogs
         '''
         result = self._values.get("egress_access_logs")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannel.LogConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LogConfigurationProperty"]], result)
 
     @builtins.property
     def hls_ingest(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannel.HlsIngestProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.HlsIngestProperty"]]:
         '''The input URL where the source stream should be sent.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-channel.html#cfn-mediapackage-channel-hlsingest
         '''
         result = self._values.get("hls_ingest")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannel.HlsIngestProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.HlsIngestProperty"]], result)
 
     @builtins.property
     def ingress_access_logs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannel.LogConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LogConfigurationProperty"]]:
         '''Configures ingress access logs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-channel.html#cfn-mediapackage-channel-ingressaccesslogs
         '''
         result = self._values.get("ingress_access_logs")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannel.LogConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LogConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to assign to the channel.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-channel.html#cfn-mediapackage-channel-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1248,6 +1252,7 @@ class CfnOriginEndpoint(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_mediapackage as mediapackage
@@ -1420,21 +1425,21 @@ class CfnOriginEndpoint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id_: builtins.str,
         *,
         channel_id: builtins.str,
         id: builtins.str,
-        authorization: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.AuthorizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        cmaf_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.CmafPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        dash_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.DashPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        authorization: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.AuthorizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cmaf_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.CmafPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dash_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.DashPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        hls_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.HlsPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        hls_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.HlsPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         manifest_name: typing.Optional[builtins.str] = None,
-        mss_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.MssPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        mss_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.MssPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         origination: typing.Optional[builtins.str] = None,
         startover_window_seconds: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         time_delay_seconds: typing.Optional[jsii.Number] = None,
         whitelist: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
@@ -1484,7 +1489,7 @@ class CfnOriginEndpoint(
     @builtins.classmethod
     def arn_for_origin_endpoint(
         cls,
-        resource: _IOriginEndpointRef_c2596103,
+        resource: "_IOriginEndpointRef_c2596103",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1507,7 +1512,7 @@ class CfnOriginEndpoint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOriginEndpoint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1563,15 +1568,15 @@ class CfnOriginEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="originEndpointRef")
-    def origin_endpoint_ref(self) -> _OriginEndpointReference_42be75e3:
+    def origin_endpoint_ref(self) -> "_OriginEndpointReference_42be75e3":
         '''A reference to a OriginEndpoint resource.'''
-        return typing.cast(_OriginEndpointReference_42be75e3, jsii.get(self, "originEndpointRef"))
+        return typing.cast("_OriginEndpointReference_42be75e3", jsii.get(self, "originEndpointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="channelId")
@@ -1603,14 +1608,14 @@ class CfnOriginEndpoint(
     @jsii.member(jsii_name="authorization")
     def authorization(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.AuthorizationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.AuthorizationProperty"]]:
         '''Parameters for CDN authorization.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.AuthorizationProperty"]], jsii.get(self, "authorization"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.AuthorizationProperty"]], jsii.get(self, "authorization"))
 
     @authorization.setter
     def authorization(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.AuthorizationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.AuthorizationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__156ab3ebea5a8eacd612f1583257bbe7850d21712c1c3dcd5447fd36f76d3ba2)
@@ -1621,14 +1626,14 @@ class CfnOriginEndpoint(
     @jsii.member(jsii_name="cmafPackage")
     def cmaf_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.CmafPackageProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.CmafPackageProperty"]]:
         '''Parameters for Common Media Application Format (CMAF) packaging.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.CmafPackageProperty"]], jsii.get(self, "cmafPackage"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.CmafPackageProperty"]], jsii.get(self, "cmafPackage"))
 
     @cmaf_package.setter
     def cmaf_package(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.CmafPackageProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.CmafPackageProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__25473ff4d9f0fbc872a9885f718995cbcc6ad16528e432dfbadeb748e4129584)
@@ -1639,14 +1644,14 @@ class CfnOriginEndpoint(
     @jsii.member(jsii_name="dashPackage")
     def dash_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.DashPackageProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.DashPackageProperty"]]:
         '''Parameters for DASH packaging.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.DashPackageProperty"]], jsii.get(self, "dashPackage"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.DashPackageProperty"]], jsii.get(self, "dashPackage"))
 
     @dash_package.setter
     def dash_package(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.DashPackageProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.DashPackageProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a0c2c45ab2e510dd522ccbc5accd0905f0fc2d460bf6760ffc34e1a0ce8652f1)
@@ -1670,14 +1675,14 @@ class CfnOriginEndpoint(
     @jsii.member(jsii_name="hlsPackage")
     def hls_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.HlsPackageProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.HlsPackageProperty"]]:
         '''Parameters for Apple HLS packaging.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.HlsPackageProperty"]], jsii.get(self, "hlsPackage"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.HlsPackageProperty"]], jsii.get(self, "hlsPackage"))
 
     @hls_package.setter
     def hls_package(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.HlsPackageProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.HlsPackageProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__65497669bad52e91563221a8604146d8b2b151a2211a913fabce3fd05beb01df)
@@ -1701,14 +1706,14 @@ class CfnOriginEndpoint(
     @jsii.member(jsii_name="mssPackage")
     def mss_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.MssPackageProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.MssPackageProperty"]]:
         '''Parameters for Microsoft Smooth Streaming packaging.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.MssPackageProperty"]], jsii.get(self, "mssPackage"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.MssPackageProperty"]], jsii.get(self, "mssPackage"))
 
     @mss_package.setter
     def mss_package(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.MssPackageProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.MssPackageProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a5b207fa4f25365ce14c50d90586150f16e19390170ef5cbd3169b1037eace1d)
@@ -1743,12 +1748,12 @@ class CfnOriginEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to assign to the endpoint.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__61e0125a3a7672d5a1bf2f0e24eb93f48b6dd949a3c5d94bda3997afcde3e15a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1868,7 +1873,7 @@ class CfnOriginEndpoint(
         def __init__(
             self,
             *,
-            speke_key_provider: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
+            speke_key_provider: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
             constant_initialization_vector: typing.Optional[builtins.str] = None,
             encryption_method: typing.Optional[builtins.str] = None,
             key_rotation_interval_seconds: typing.Optional[jsii.Number] = None,
@@ -1929,14 +1934,14 @@ class CfnOriginEndpoint(
         @builtins.property
         def speke_key_provider(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.SpekeKeyProviderProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.SpekeKeyProviderProperty"]:
             '''Parameters for the SPEKE key provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-cmafencryption.html#cfn-mediapackage-originendpoint-cmafencryption-spekekeyprovider
             '''
             result = self._values.get("speke_key_provider")
             assert result is not None, "Required property 'speke_key_provider' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.SpekeKeyProviderProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.SpekeKeyProviderProperty"], result)
 
         @builtins.property
         def constant_initialization_vector(self) -> typing.Optional[builtins.str]:
@@ -1995,11 +2000,11 @@ class CfnOriginEndpoint(
         def __init__(
             self,
             *,
-            encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.CmafEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            hls_manifests: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.HlsManifestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.CmafEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            hls_manifests: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.HlsManifestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             segment_duration_seconds: typing.Optional[jsii.Number] = None,
             segment_prefix: typing.Optional[builtins.str] = None,
-            stream_selection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            stream_selection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Parameters for Common Media Application Format (CMAF) packaging.
 
@@ -2084,24 +2089,24 @@ class CfnOriginEndpoint(
         @builtins.property
         def encryption(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.CmafEncryptionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.CmafEncryptionProperty"]]:
             '''Parameters for encrypting content.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-cmafpackage.html#cfn-mediapackage-originendpoint-cmafpackage-encryption
             '''
             result = self._values.get("encryption")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.CmafEncryptionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.CmafEncryptionProperty"]], result)
 
         @builtins.property
         def hls_manifests(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.HlsManifestProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.HlsManifestProperty"]]]]:
             '''A list of HLS manifest configurations that are available from this endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-cmafpackage.html#cfn-mediapackage-originendpoint-cmafpackage-hlsmanifests
             '''
             result = self._values.get("hls_manifests")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.HlsManifestProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.HlsManifestProperty"]]]], result)
 
         @builtins.property
         def segment_duration_seconds(self) -> typing.Optional[jsii.Number]:
@@ -2128,13 +2133,13 @@ class CfnOriginEndpoint(
         @builtins.property
         def stream_selection(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.StreamSelectionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.StreamSelectionProperty"]]:
             '''Limitations for outputs from the endpoint, based on the video bitrate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-cmafpackage.html#cfn-mediapackage-originendpoint-cmafpackage-streamselection
             '''
             result = self._values.get("stream_selection")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.StreamSelectionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.StreamSelectionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2159,7 +2164,7 @@ class CfnOriginEndpoint(
         def __init__(
             self,
             *,
-            speke_key_provider: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
+            speke_key_provider: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
             key_rotation_interval_seconds: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Holds encryption information so that access to the content can be controlled by a DRM solution.
@@ -2208,14 +2213,14 @@ class CfnOriginEndpoint(
         @builtins.property
         def speke_key_provider(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.SpekeKeyProviderProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.SpekeKeyProviderProperty"]:
             '''Parameters for the SPEKE key provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-dashencryption.html#cfn-mediapackage-originendpoint-dashencryption-spekekeyprovider
             '''
             result = self._values.get("speke_key_provider")
             assert result is not None, "Required property 'speke_key_provider' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.SpekeKeyProviderProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.SpekeKeyProviderProperty"], result)
 
         @builtins.property
         def key_rotation_interval_seconds(self) -> typing.Optional[jsii.Number]:
@@ -2267,8 +2272,8 @@ class CfnOriginEndpoint(
             *,
             ads_on_delivery_restrictions: typing.Optional[builtins.str] = None,
             ad_triggers: typing.Optional[typing.Sequence[builtins.str]] = None,
-            encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.DashEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            include_iframe_only_stream: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.DashEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            include_iframe_only_stream: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             manifest_layout: typing.Optional[builtins.str] = None,
             manifest_window_seconds: typing.Optional[jsii.Number] = None,
             min_buffer_time_seconds: typing.Optional[jsii.Number] = None,
@@ -2277,7 +2282,7 @@ class CfnOriginEndpoint(
             profile: typing.Optional[builtins.str] = None,
             segment_duration_seconds: typing.Optional[jsii.Number] = None,
             segment_template_format: typing.Optional[builtins.str] = None,
-            stream_selection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            stream_selection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             suggested_presentation_delay_seconds: typing.Optional[jsii.Number] = None,
             utc_timing: typing.Optional[builtins.str] = None,
             utc_timing_uri: typing.Optional[builtins.str] = None,
@@ -2436,18 +2441,18 @@ class CfnOriginEndpoint(
         @builtins.property
         def encryption(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.DashEncryptionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.DashEncryptionProperty"]]:
             '''Parameters for encrypting content.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-dashpackage.html#cfn-mediapackage-originendpoint-dashpackage-encryption
             '''
             result = self._values.get("encryption")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.DashEncryptionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.DashEncryptionProperty"]], result)
 
         @builtins.property
         def include_iframe_only_stream(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''This applies only to stream sets with a single video track.
 
             When true, the stream set includes an additional I-frame trick-play only stream, along with the other tracks. If false, this extra stream is not included.
@@ -2455,7 +2460,7 @@ class CfnOriginEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-dashpackage.html#cfn-mediapackage-originendpoint-dashpackage-includeiframeonlystream
             '''
             result = self._values.get("include_iframe_only_stream")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def manifest_layout(self) -> typing.Optional[builtins.str]:
@@ -2560,13 +2565,13 @@ class CfnOriginEndpoint(
         @builtins.property
         def stream_selection(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.StreamSelectionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.StreamSelectionProperty"]]:
             '''Limitations for outputs from the endpoint, based on the video bitrate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-dashpackage.html#cfn-mediapackage-originendpoint-dashpackage-streamselection
             '''
             result = self._values.get("stream_selection")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.StreamSelectionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.StreamSelectionProperty"]], result)
 
         @builtins.property
         def suggested_presentation_delay_seconds(self) -> typing.Optional[jsii.Number]:
@@ -2722,11 +2727,11 @@ class CfnOriginEndpoint(
         def __init__(
             self,
             *,
-            speke_key_provider: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
+            speke_key_provider: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
             constant_initialization_vector: typing.Optional[builtins.str] = None,
             encryption_method: typing.Optional[builtins.str] = None,
             key_rotation_interval_seconds: typing.Optional[jsii.Number] = None,
-            repeat_ext_x_key: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            repeat_ext_x_key: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Holds encryption information so that access to the content can be controlled by a DRM solution.
 
@@ -2789,14 +2794,14 @@ class CfnOriginEndpoint(
         @builtins.property
         def speke_key_provider(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.SpekeKeyProviderProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.SpekeKeyProviderProperty"]:
             '''Parameters for the SPEKE key provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-hlsencryption.html#cfn-mediapackage-originendpoint-hlsencryption-spekekeyprovider
             '''
             result = self._values.get("speke_key_provider")
             assert result is not None, "Required property 'speke_key_provider' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.SpekeKeyProviderProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.SpekeKeyProviderProperty"], result)
 
         @builtins.property
         def constant_initialization_vector(self) -> typing.Optional[builtins.str]:
@@ -2830,7 +2835,7 @@ class CfnOriginEndpoint(
         @builtins.property
         def repeat_ext_x_key(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Repeat the ``EXT-X-KEY`` directive for every media segment.
 
             This might result in an increase in client requests to the DRM server.
@@ -2838,7 +2843,7 @@ class CfnOriginEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-hlsencryption.html#cfn-mediapackage-originendpoint-hlsencryption-repeatextxkey
             '''
             result = self._values.get("repeat_ext_x_key")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2875,7 +2880,7 @@ class CfnOriginEndpoint(
             ad_markers: typing.Optional[builtins.str] = None,
             ads_on_delivery_restrictions: typing.Optional[builtins.str] = None,
             ad_triggers: typing.Optional[typing.Sequence[builtins.str]] = None,
-            include_iframe_only_stream: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            include_iframe_only_stream: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             manifest_name: typing.Optional[builtins.str] = None,
             playlist_type: typing.Optional[builtins.str] = None,
             playlist_window_seconds: typing.Optional[jsii.Number] = None,
@@ -3014,7 +3019,7 @@ class CfnOriginEndpoint(
         @builtins.property
         def include_iframe_only_stream(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Applies to stream sets with a single video track only.
 
             When true, the stream set includes an additional I-frame only stream, along with the other tracks. If false, this extra stream is not included.
@@ -3022,7 +3027,7 @@ class CfnOriginEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-hlsmanifest.html#cfn-mediapackage-originendpoint-hlsmanifest-includeiframeonlystream
             '''
             result = self._values.get("include_iframe_only_stream")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def manifest_name(self) -> typing.Optional[builtins.str]:
@@ -3113,15 +3118,15 @@ class CfnOriginEndpoint(
             ad_markers: typing.Optional[builtins.str] = None,
             ads_on_delivery_restrictions: typing.Optional[builtins.str] = None,
             ad_triggers: typing.Optional[typing.Sequence[builtins.str]] = None,
-            encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.HlsEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            include_dvb_subtitles: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_iframe_only_stream: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.HlsEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            include_dvb_subtitles: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_iframe_only_stream: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             playlist_type: typing.Optional[builtins.str] = None,
             playlist_window_seconds: typing.Optional[jsii.Number] = None,
             program_date_time_interval_seconds: typing.Optional[jsii.Number] = None,
             segment_duration_seconds: typing.Optional[jsii.Number] = None,
-            stream_selection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            use_audio_rendition_group: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            stream_selection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            use_audio_rendition_group: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Parameters for Apple HLS packaging.
 
@@ -3275,29 +3280,29 @@ class CfnOriginEndpoint(
         @builtins.property
         def encryption(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.HlsEncryptionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.HlsEncryptionProperty"]]:
             '''Parameters for encrypting content.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-hlspackage.html#cfn-mediapackage-originendpoint-hlspackage-encryption
             '''
             result = self._values.get("encryption")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.HlsEncryptionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.HlsEncryptionProperty"]], result)
 
         @builtins.property
         def include_dvb_subtitles(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When enabled, MediaPackage passes through digital video broadcasting (DVB) subtitles into the output.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-hlspackage.html#cfn-mediapackage-originendpoint-hlspackage-includedvbsubtitles
             '''
             result = self._values.get("include_dvb_subtitles")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_iframe_only_stream(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Only applies to stream sets with a single video track.
 
             When true, the stream set includes an additional I-frame only stream, along with the other tracks. If false, this extra stream is not included.
@@ -3305,7 +3310,7 @@ class CfnOriginEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-hlspackage.html#cfn-mediapackage-originendpoint-hlspackage-includeiframeonlystream
             '''
             result = self._values.get("include_iframe_only_stream")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def playlist_type(self) -> typing.Optional[builtins.str]:
@@ -3354,18 +3359,18 @@ class CfnOriginEndpoint(
         @builtins.property
         def stream_selection(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.StreamSelectionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.StreamSelectionProperty"]]:
             '''Limitations for outputs from the endpoint, based on the video bitrate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-hlspackage.html#cfn-mediapackage-originendpoint-hlspackage-streamselection
             '''
             result = self._values.get("stream_selection")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.StreamSelectionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.StreamSelectionProperty"]], result)
 
         @builtins.property
         def use_audio_rendition_group(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When true, AWS Elemental MediaPackage bundles all audio tracks in a rendition group.
 
             All other tracks in the stream can be used with any audio rendition from the group.
@@ -3373,7 +3378,7 @@ class CfnOriginEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-hlspackage.html#cfn-mediapackage-originendpoint-hlspackage-useaudiorenditiongroup
             '''
             result = self._values.get("use_audio_rendition_group")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3395,7 +3400,7 @@ class CfnOriginEndpoint(
         def __init__(
             self,
             *,
-            speke_key_provider: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
+            speke_key_provider: typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Holds encryption information so that access to the content can be controlled by a DRM solution.
 
@@ -3436,14 +3441,14 @@ class CfnOriginEndpoint(
         @builtins.property
         def speke_key_provider(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.SpekeKeyProviderProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.SpekeKeyProviderProperty"]:
             '''Parameters for the SPEKE key provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-mssencryption.html#cfn-mediapackage-originendpoint-mssencryption-spekekeyprovider
             '''
             result = self._values.get("speke_key_provider")
             assert result is not None, "Required property 'speke_key_provider' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.SpekeKeyProviderProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.SpekeKeyProviderProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3470,10 +3475,10 @@ class CfnOriginEndpoint(
         def __init__(
             self,
             *,
-            encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.MssEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.MssEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             manifest_window_seconds: typing.Optional[jsii.Number] = None,
             segment_duration_seconds: typing.Optional[jsii.Number] = None,
-            stream_selection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            stream_selection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Parameters for Microsoft Smooth Streaming packaging.
 
@@ -3535,13 +3540,13 @@ class CfnOriginEndpoint(
         @builtins.property
         def encryption(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.MssEncryptionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.MssEncryptionProperty"]]:
             '''Parameters for encrypting content.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-msspackage.html#cfn-mediapackage-originendpoint-msspackage-encryption
             '''
             result = self._values.get("encryption")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.MssEncryptionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.MssEncryptionProperty"]], result)
 
         @builtins.property
         def manifest_window_seconds(self) -> typing.Optional[jsii.Number]:
@@ -3566,13 +3571,13 @@ class CfnOriginEndpoint(
         @builtins.property
         def stream_selection(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.StreamSelectionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.StreamSelectionProperty"]]:
             '''Limitations for outputs from the endpoint, based on the video bitrate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-msspackage.html#cfn-mediapackage-originendpoint-msspackage-streamselection
             '''
             result = self._values.get("stream_selection")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.StreamSelectionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.StreamSelectionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3606,7 +3611,7 @@ class CfnOriginEndpoint(
             system_ids: typing.Sequence[builtins.str],
             url: builtins.str,
             certificate_arn: typing.Optional[builtins.str] = None,
-            encryption_contract_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOriginEndpoint.EncryptionContractConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            encryption_contract_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.EncryptionContractConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Key provider settings for DRM.
 
@@ -3717,13 +3722,13 @@ class CfnOriginEndpoint(
         @builtins.property
         def encryption_contract_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.EncryptionContractConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.EncryptionContractConfigurationProperty"]]:
             '''Use ``encryptionContractConfiguration`` to configure one or more content encryption keys for your endpoints that use SPEKE Version 2.0. The encryption contract defines which content keys are used to encrypt the audio and video tracks in your stream. To configure the encryption contract, specify which audio and video encryption presets to use.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-originendpoint-spekekeyprovider.html#cfn-mediapackage-originendpoint-spekekeyprovider-encryptioncontractconfiguration
             '''
             result = self._values.get("encryption_contract_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOriginEndpoint.EncryptionContractConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.EncryptionContractConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3858,16 +3863,16 @@ class CfnOriginEndpointProps:
         *,
         channel_id: builtins.str,
         id: builtins.str,
-        authorization: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.AuthorizationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cmaf_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.CmafPackageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        dash_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.DashPackageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        authorization: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.AuthorizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cmaf_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.CmafPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dash_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.DashPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        hls_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.HlsPackageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        hls_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.HlsPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         manifest_name: typing.Optional[builtins.str] = None,
-        mss_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.MssPackageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        mss_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOriginEndpoint.MssPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         origination: typing.Optional[builtins.str] = None,
         startover_window_seconds: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         time_delay_seconds: typing.Optional[jsii.Number] = None,
         whitelist: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
@@ -3893,6 +3898,7 @@ class CfnOriginEndpointProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_mediapackage as mediapackage
@@ -4132,35 +4138,35 @@ class CfnOriginEndpointProps:
     @builtins.property
     def authorization(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.AuthorizationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.AuthorizationProperty"]]:
         '''Parameters for CDN authorization.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-originendpoint.html#cfn-mediapackage-originendpoint-authorization
         '''
         result = self._values.get("authorization")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.AuthorizationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.AuthorizationProperty"]], result)
 
     @builtins.property
     def cmaf_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.CmafPackageProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.CmafPackageProperty"]]:
         '''Parameters for Common Media Application Format (CMAF) packaging.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-originendpoint.html#cfn-mediapackage-originendpoint-cmafpackage
         '''
         result = self._values.get("cmaf_package")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.CmafPackageProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.CmafPackageProperty"]], result)
 
     @builtins.property
     def dash_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.DashPackageProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.DashPackageProperty"]]:
         '''Parameters for DASH packaging.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-originendpoint.html#cfn-mediapackage-originendpoint-dashpackage
         '''
         result = self._values.get("dash_package")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.DashPackageProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.DashPackageProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -4174,13 +4180,13 @@ class CfnOriginEndpointProps:
     @builtins.property
     def hls_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.HlsPackageProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.HlsPackageProperty"]]:
         '''Parameters for Apple HLS packaging.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-originendpoint.html#cfn-mediapackage-originendpoint-hlspackage
         '''
         result = self._values.get("hls_package")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.HlsPackageProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.HlsPackageProperty"]], result)
 
     @builtins.property
     def manifest_name(self) -> typing.Optional[builtins.str]:
@@ -4194,13 +4200,13 @@ class CfnOriginEndpointProps:
     @builtins.property
     def mss_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.MssPackageProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.MssPackageProperty"]]:
         '''Parameters for Microsoft Smooth Streaming packaging.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-originendpoint.html#cfn-mediapackage-originendpoint-msspackage
         '''
         result = self._values.get("mss_package")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOriginEndpoint.MssPackageProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOriginEndpoint.MssPackageProperty"]], result)
 
     @builtins.property
     def origination(self) -> typing.Optional[builtins.str]:
@@ -4228,13 +4234,13 @@ class CfnOriginEndpointProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to assign to the endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-originendpoint.html#cfn-mediapackage-originendpoint-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def time_delay_seconds(self) -> typing.Optional[jsii.Number]:
@@ -4284,6 +4290,7 @@ class CfnPackagingConfiguration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_mediapackage as mediapackage
@@ -4429,16 +4436,16 @@ class CfnPackagingConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id_: builtins.str,
         *,
         id: builtins.str,
         packaging_group_id: builtins.str,
-        cmaf_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.CmafPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        dash_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.DashPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        hls_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.HlsPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        mss_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.MssPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        cmaf_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.CmafPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dash_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.DashPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        hls_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.HlsPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        mss_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.MssPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::MediaPackage::PackagingConfiguration``.
 
@@ -4472,7 +4479,7 @@ class CfnPackagingConfiguration(
     @builtins.classmethod
     def arn_for_packaging_configuration(
         cls,
-        resource: _IPackagingConfigurationRef_fcdeb1f4,
+        resource: "_IPackagingConfigurationRef_fcdeb1f4",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -4495,7 +4502,7 @@ class CfnPackagingConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPackagingConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4542,15 +4549,17 @@ class CfnPackagingConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="packagingConfigurationRef")
-    def packaging_configuration_ref(self) -> _PackagingConfigurationReference_71eb5983:
+    def packaging_configuration_ref(
+        self,
+    ) -> "_PackagingConfigurationReference_71eb5983":
         '''A reference to a PackagingConfiguration resource.'''
-        return typing.cast(_PackagingConfigurationReference_71eb5983, jsii.get(self, "packagingConfigurationRef"))
+        return typing.cast("_PackagingConfigurationReference_71eb5983", jsii.get(self, "packagingConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="id")
@@ -4582,14 +4591,14 @@ class CfnPackagingConfiguration(
     @jsii.member(jsii_name="cmafPackage")
     def cmaf_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.CmafPackageProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.CmafPackageProperty"]]:
         '''Parameters for CMAF packaging.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.CmafPackageProperty"]], jsii.get(self, "cmafPackage"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.CmafPackageProperty"]], jsii.get(self, "cmafPackage"))
 
     @cmaf_package.setter
     def cmaf_package(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.CmafPackageProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.CmafPackageProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__399ba5c2786cade2c25cb41b1be97be2455fdf5dfbae120613c3942b2fca070b)
@@ -4600,14 +4609,14 @@ class CfnPackagingConfiguration(
     @jsii.member(jsii_name="dashPackage")
     def dash_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.DashPackageProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.DashPackageProperty"]]:
         '''Parameters for DASH-ISO packaging.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.DashPackageProperty"]], jsii.get(self, "dashPackage"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.DashPackageProperty"]], jsii.get(self, "dashPackage"))
 
     @dash_package.setter
     def dash_package(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.DashPackageProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.DashPackageProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2d5ed5948330815ccf88262bb614ff3bfcfee39a50c798ef93f31fd435b0cb0a)
@@ -4618,14 +4627,14 @@ class CfnPackagingConfiguration(
     @jsii.member(jsii_name="hlsPackage")
     def hls_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.HlsPackageProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.HlsPackageProperty"]]:
         '''Parameters for Apple HLS packaging.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.HlsPackageProperty"]], jsii.get(self, "hlsPackage"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.HlsPackageProperty"]], jsii.get(self, "hlsPackage"))
 
     @hls_package.setter
     def hls_package(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.HlsPackageProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.HlsPackageProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d206943acdbd5b0d12e1841cff1d1941ed07fb9970ebf2c082e7e5128cc3bfd7)
@@ -4636,14 +4645,14 @@ class CfnPackagingConfiguration(
     @jsii.member(jsii_name="mssPackage")
     def mss_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.MssPackageProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.MssPackageProperty"]]:
         '''Parameters for Microsoft Smooth Streaming packaging.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.MssPackageProperty"]], jsii.get(self, "mssPackage"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.MssPackageProperty"]], jsii.get(self, "mssPackage"))
 
     @mss_package.setter
     def mss_package(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.MssPackageProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.MssPackageProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c7861bbe260077025f4e33fb0ae4337195d16c1ee61d7047a4a9952ab287f760)
@@ -4652,12 +4661,12 @@ class CfnPackagingConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to assign to the packaging configuration.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3b76635d4a00dd9342ff2aee3d299dfc0b57f29c37ac4af92f1dcc355e82475a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4672,7 +4681,7 @@ class CfnPackagingConfiguration(
         def __init__(
             self,
             *,
-            speke_key_provider: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
+            speke_key_provider: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Holds encryption information so that access to the content can be controlled by a DRM solution.
 
@@ -4711,14 +4720,14 @@ class CfnPackagingConfiguration(
         @builtins.property
         def speke_key_provider(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.SpekeKeyProviderProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.SpekeKeyProviderProperty"]:
             '''Parameters for the SPEKE key provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-cmafencryption.html#cfn-mediapackage-packagingconfiguration-cmafencryption-spekekeyprovider
             '''
             result = self._values.get("speke_key_provider")
             assert result is not None, "Required property 'speke_key_provider' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.SpekeKeyProviderProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.SpekeKeyProviderProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4745,9 +4754,9 @@ class CfnPackagingConfiguration(
         def __init__(
             self,
             *,
-            hls_manifests: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.HlsManifestProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.CmafEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            include_encoder_configuration_in_segments: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            hls_manifests: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.HlsManifestProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.CmafEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            include_encoder_configuration_in_segments: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             segment_duration_seconds: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Parameters for a packaging configuration that uses Common Media Application Format (CMAF) packaging.
@@ -4817,30 +4826,30 @@ class CfnPackagingConfiguration(
         @builtins.property
         def hls_manifests(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.HlsManifestProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.HlsManifestProperty"]]]:
             '''A list of HLS manifest configurations that are available from this endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-cmafpackage.html#cfn-mediapackage-packagingconfiguration-cmafpackage-hlsmanifests
             '''
             result = self._values.get("hls_manifests")
             assert result is not None, "Required property 'hls_manifests' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.HlsManifestProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.HlsManifestProperty"]]], result)
 
         @builtins.property
         def encryption(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.CmafEncryptionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.CmafEncryptionProperty"]]:
             '''Parameters for encrypting content.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-cmafpackage.html#cfn-mediapackage-packagingconfiguration-cmafpackage-encryption
             '''
             result = self._values.get("encryption")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.CmafEncryptionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.CmafEncryptionProperty"]], result)
 
         @builtins.property
         def include_encoder_configuration_in_segments(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When includeEncoderConfigurationInSegments is set to true, AWS Elemental MediaPackage places your encoder's Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment.
 
             This lets you use different SPS/PPS/VPS settings for your assets during content playback.
@@ -4848,7 +4857,7 @@ class CfnPackagingConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-cmafpackage.html#cfn-mediapackage-packagingconfiguration-cmafpackage-includeencoderconfigurationinsegments
             '''
             result = self._values.get("include_encoder_configuration_in_segments")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def segment_duration_seconds(self) -> typing.Optional[jsii.Number]:
@@ -4881,7 +4890,7 @@ class CfnPackagingConfiguration(
         def __init__(
             self,
             *,
-            speke_key_provider: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
+            speke_key_provider: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Holds encryption information so that access to the content can be controlled by a DRM solution.
 
@@ -4920,14 +4929,14 @@ class CfnPackagingConfiguration(
         @builtins.property
         def speke_key_provider(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.SpekeKeyProviderProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.SpekeKeyProviderProperty"]:
             '''Parameters for the SPEKE key provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-dashencryption.html#cfn-mediapackage-packagingconfiguration-dashencryption-spekekeyprovider
             '''
             result = self._values.get("speke_key_provider")
             assert result is not None, "Required property 'speke_key_provider' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.SpekeKeyProviderProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.SpekeKeyProviderProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4961,7 +4970,7 @@ class CfnPackagingConfiguration(
             min_buffer_time_seconds: typing.Optional[jsii.Number] = None,
             profile: typing.Optional[builtins.str] = None,
             scte_markers_source: typing.Optional[builtins.str] = None,
-            stream_selection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            stream_selection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Parameters for a DASH manifest.
 
@@ -5073,13 +5082,13 @@ class CfnPackagingConfiguration(
         @builtins.property
         def stream_selection(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.StreamSelectionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.StreamSelectionProperty"]]:
             '''Limitations for outputs from the endpoint, based on the video bitrate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-dashmanifest.html#cfn-mediapackage-packagingconfiguration-dashmanifest-streamselection
             '''
             result = self._values.get("stream_selection")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.StreamSelectionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.StreamSelectionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5109,10 +5118,10 @@ class CfnPackagingConfiguration(
         def __init__(
             self,
             *,
-            dash_manifests: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.DashManifestProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.DashEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            include_encoder_configuration_in_segments: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            include_iframe_only_stream: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            dash_manifests: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.DashManifestProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.DashEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            include_encoder_configuration_in_segments: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            include_iframe_only_stream: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             period_triggers: typing.Optional[typing.Sequence[builtins.str]] = None,
             segment_duration_seconds: typing.Optional[jsii.Number] = None,
             segment_template_format: typing.Optional[builtins.str] = None,
@@ -5199,30 +5208,30 @@ class CfnPackagingConfiguration(
         @builtins.property
         def dash_manifests(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.DashManifestProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.DashManifestProperty"]]]:
             '''A list of DASH manifest configurations that are available from this endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-dashpackage.html#cfn-mediapackage-packagingconfiguration-dashpackage-dashmanifests
             '''
             result = self._values.get("dash_manifests")
             assert result is not None, "Required property 'dash_manifests' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.DashManifestProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.DashManifestProperty"]]], result)
 
         @builtins.property
         def encryption(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.DashEncryptionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.DashEncryptionProperty"]]:
             '''Parameters for encrypting content.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-dashpackage.html#cfn-mediapackage-packagingconfiguration-dashpackage-encryption
             '''
             result = self._values.get("encryption")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.DashEncryptionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.DashEncryptionProperty"]], result)
 
         @builtins.property
         def include_encoder_configuration_in_segments(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When includeEncoderConfigurationInSegments is set to true, AWS Elemental MediaPackage places your encoder's Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment.
 
             This lets you use different SPS/PPS/VPS settings for your assets during content playback.
@@ -5230,12 +5239,12 @@ class CfnPackagingConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-dashpackage.html#cfn-mediapackage-packagingconfiguration-dashpackage-includeencoderconfigurationinsegments
             '''
             result = self._values.get("include_encoder_configuration_in_segments")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def include_iframe_only_stream(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''This applies only to stream sets with a single video track.
 
             When true, the stream set includes an additional I-frame trick-play only stream, along with the other tracks. If false, this extra stream is not included.
@@ -5243,7 +5252,7 @@ class CfnPackagingConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-dashpackage.html#cfn-mediapackage-packagingconfiguration-dashpackage-includeiframeonlystream
             '''
             result = self._values.get("include_iframe_only_stream")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def period_triggers(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5408,7 +5417,7 @@ class CfnPackagingConfiguration(
         def __init__(
             self,
             *,
-            speke_key_provider: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
+            speke_key_provider: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
             constant_initialization_vector: typing.Optional[builtins.str] = None,
             encryption_method: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -5461,14 +5470,14 @@ class CfnPackagingConfiguration(
         @builtins.property
         def speke_key_provider(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.SpekeKeyProviderProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.SpekeKeyProviderProperty"]:
             '''Parameters for the SPEKE key provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-hlsencryption.html#cfn-mediapackage-packagingconfiguration-hlsencryption-spekekeyprovider
             '''
             result = self._values.get("speke_key_provider")
             assert result is not None, "Required property 'speke_key_provider' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.SpekeKeyProviderProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.SpekeKeyProviderProperty"], result)
 
         @builtins.property
         def constant_initialization_vector(self) -> typing.Optional[builtins.str]:
@@ -5518,11 +5527,11 @@ class CfnPackagingConfiguration(
             self,
             *,
             ad_markers: typing.Optional[builtins.str] = None,
-            include_iframe_only_stream: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            include_iframe_only_stream: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             manifest_name: typing.Optional[builtins.str] = None,
             program_date_time_interval_seconds: typing.Optional[jsii.Number] = None,
-            repeat_ext_x_key: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            stream_selection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            repeat_ext_x_key: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            stream_selection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Parameters for an HLS manifest.
 
@@ -5595,7 +5604,7 @@ class CfnPackagingConfiguration(
         @builtins.property
         def include_iframe_only_stream(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Applies to stream sets with a single video track only.
 
             When enabled, the output includes an additional I-frame only stream, along with the other tracks.
@@ -5603,7 +5612,7 @@ class CfnPackagingConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-hlsmanifest.html#cfn-mediapackage-packagingconfiguration-hlsmanifest-includeiframeonlystream
             '''
             result = self._values.get("include_iframe_only_stream")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def manifest_name(self) -> typing.Optional[builtins.str]:
@@ -5630,7 +5639,7 @@ class CfnPackagingConfiguration(
         @builtins.property
         def repeat_ext_x_key(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Repeat the ``EXT-X-KEY`` directive for every media segment.
 
             This might result in an increase in client requests to the DRM server.
@@ -5638,18 +5647,18 @@ class CfnPackagingConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-hlsmanifest.html#cfn-mediapackage-packagingconfiguration-hlsmanifest-repeatextxkey
             '''
             result = self._values.get("repeat_ext_x_key")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def stream_selection(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.StreamSelectionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.StreamSelectionProperty"]]:
             '''Video bitrate limitations for outputs from this packaging configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-hlsmanifest.html#cfn-mediapackage-packagingconfiguration-hlsmanifest-streamselection
             '''
             result = self._values.get("stream_selection")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.StreamSelectionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.StreamSelectionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5677,11 +5686,11 @@ class CfnPackagingConfiguration(
         def __init__(
             self,
             *,
-            hls_manifests: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.HlsManifestProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.HlsEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            include_dvb_subtitles: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            hls_manifests: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.HlsManifestProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.HlsEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            include_dvb_subtitles: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             segment_duration_seconds: typing.Optional[jsii.Number] = None,
-            use_audio_rendition_group: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            use_audio_rendition_group: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Parameters for a packaging configuration that uses HTTP Live Streaming (HLS) packaging.
 
@@ -5759,36 +5768,36 @@ class CfnPackagingConfiguration(
         @builtins.property
         def hls_manifests(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.HlsManifestProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.HlsManifestProperty"]]]:
             '''A list of HLS manifest configurations that are available from this endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-hlspackage.html#cfn-mediapackage-packagingconfiguration-hlspackage-hlsmanifests
             '''
             result = self._values.get("hls_manifests")
             assert result is not None, "Required property 'hls_manifests' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.HlsManifestProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.HlsManifestProperty"]]], result)
 
         @builtins.property
         def encryption(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.HlsEncryptionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.HlsEncryptionProperty"]]:
             '''Parameters for encrypting content.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-hlspackage.html#cfn-mediapackage-packagingconfiguration-hlspackage-encryption
             '''
             result = self._values.get("encryption")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.HlsEncryptionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.HlsEncryptionProperty"]], result)
 
         @builtins.property
         def include_dvb_subtitles(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When enabled, MediaPackage passes through digital video broadcasting (DVB) subtitles into the output.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-hlspackage.html#cfn-mediapackage-packagingconfiguration-hlspackage-includedvbsubtitles
             '''
             result = self._values.get("include_dvb_subtitles")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def segment_duration_seconds(self) -> typing.Optional[jsii.Number]:
@@ -5804,7 +5813,7 @@ class CfnPackagingConfiguration(
         @builtins.property
         def use_audio_rendition_group(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When true, AWS Elemental MediaPackage bundles all audio tracks in a rendition group.
 
             All other tracks in the stream can be used with any audio rendition from the group.
@@ -5812,7 +5821,7 @@ class CfnPackagingConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-hlspackage.html#cfn-mediapackage-packagingconfiguration-hlspackage-useaudiorenditiongroup
             '''
             result = self._values.get("use_audio_rendition_group")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5834,7 +5843,7 @@ class CfnPackagingConfiguration(
         def __init__(
             self,
             *,
-            speke_key_provider: typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
+            speke_key_provider: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.SpekeKeyProviderProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Holds encryption information so that access to the content can be controlled by a DRM solution.
 
@@ -5873,14 +5882,14 @@ class CfnPackagingConfiguration(
         @builtins.property
         def speke_key_provider(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.SpekeKeyProviderProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.SpekeKeyProviderProperty"]:
             '''Parameters for the SPEKE key provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-mssencryption.html#cfn-mediapackage-packagingconfiguration-mssencryption-spekekeyprovider
             '''
             result = self._values.get("speke_key_provider")
             assert result is not None, "Required property 'speke_key_provider' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.SpekeKeyProviderProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.SpekeKeyProviderProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5906,7 +5915,7 @@ class CfnPackagingConfiguration(
             self,
             *,
             manifest_name: typing.Optional[builtins.str] = None,
-            stream_selection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            stream_selection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.StreamSelectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Parameters for a Microsoft Smooth manifest.
 
@@ -5953,13 +5962,13 @@ class CfnPackagingConfiguration(
         @builtins.property
         def stream_selection(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.StreamSelectionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.StreamSelectionProperty"]]:
             '''Video bitrate limitations for outputs from this packaging configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-mssmanifest.html#cfn-mediapackage-packagingconfiguration-mssmanifest-streamselection
             '''
             result = self._values.get("stream_selection")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.StreamSelectionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.StreamSelectionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5985,8 +5994,8 @@ class CfnPackagingConfiguration(
         def __init__(
             self,
             *,
-            mss_manifests: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.MssManifestProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.MssEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mss_manifests: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.MssManifestProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.MssEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             segment_duration_seconds: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Parameters for a packaging configuration that uses Microsoft Smooth Streaming (MSS) packaging.
@@ -6047,25 +6056,25 @@ class CfnPackagingConfiguration(
         @builtins.property
         def mss_manifests(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.MssManifestProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.MssManifestProperty"]]]:
             '''A list of Microsoft Smooth manifest configurations that are available from this endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-msspackage.html#cfn-mediapackage-packagingconfiguration-msspackage-mssmanifests
             '''
             result = self._values.get("mss_manifests")
             assert result is not None, "Required property 'mss_manifests' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.MssManifestProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.MssManifestProperty"]]], result)
 
         @builtins.property
         def encryption(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.MssEncryptionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.MssEncryptionProperty"]]:
             '''Parameters for encrypting content.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-msspackage.html#cfn-mediapackage-packagingconfiguration-msspackage-encryption
             '''
             result = self._values.get("encryption")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.MssEncryptionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.MssEncryptionProperty"]], result)
 
         @builtins.property
         def segment_duration_seconds(self) -> typing.Optional[jsii.Number]:
@@ -6106,7 +6115,7 @@ class CfnPackagingConfiguration(
             role_arn: builtins.str,
             system_ids: typing.Sequence[builtins.str],
             url: builtins.str,
-            encryption_contract_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingConfiguration.EncryptionContractConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            encryption_contract_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.EncryptionContractConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that provides encryption keys.
 
@@ -6187,13 +6196,13 @@ class CfnPackagingConfiguration(
         @builtins.property
         def encryption_contract_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.EncryptionContractConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.EncryptionContractConfigurationProperty"]]:
             '''Use ``encryptionContractConfiguration`` to configure one or more content encryption keys for your endpoints that use SPEKE Version 2.0. The encryption contract defines which content keys are used to encrypt the audio and video tracks in your stream. To configure the encryption contract, specify which audio and video encryption presets to use.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackage-packagingconfiguration-spekekeyprovider.html#cfn-mediapackage-packagingconfiguration-spekekeyprovider-encryptioncontractconfiguration
             '''
             result = self._values.get("encryption_contract_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingConfiguration.EncryptionContractConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.EncryptionContractConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6321,11 +6330,11 @@ class CfnPackagingConfigurationProps:
         *,
         id: builtins.str,
         packaging_group_id: builtins.str,
-        cmaf_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPackagingConfiguration.CmafPackageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        dash_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPackagingConfiguration.DashPackageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        hls_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPackagingConfiguration.HlsPackageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        mss_package: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPackagingConfiguration.MssPackageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        cmaf_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.CmafPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dash_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.DashPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        hls_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.HlsPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        mss_package: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingConfiguration.MssPackageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPackagingConfiguration``.
 
@@ -6342,6 +6351,7 @@ class CfnPackagingConfigurationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_mediapackage as mediapackage
@@ -6531,55 +6541,55 @@ class CfnPackagingConfigurationProps:
     @builtins.property
     def cmaf_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackagingConfiguration.CmafPackageProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.CmafPackageProperty"]]:
         '''Parameters for CMAF packaging.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-packagingconfiguration.html#cfn-mediapackage-packagingconfiguration-cmafpackage
         '''
         result = self._values.get("cmaf_package")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackagingConfiguration.CmafPackageProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.CmafPackageProperty"]], result)
 
     @builtins.property
     def dash_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackagingConfiguration.DashPackageProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.DashPackageProperty"]]:
         '''Parameters for DASH-ISO packaging.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-packagingconfiguration.html#cfn-mediapackage-packagingconfiguration-dashpackage
         '''
         result = self._values.get("dash_package")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackagingConfiguration.DashPackageProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.DashPackageProperty"]], result)
 
     @builtins.property
     def hls_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackagingConfiguration.HlsPackageProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.HlsPackageProperty"]]:
         '''Parameters for Apple HLS packaging.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-packagingconfiguration.html#cfn-mediapackage-packagingconfiguration-hlspackage
         '''
         result = self._values.get("hls_package")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackagingConfiguration.HlsPackageProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.HlsPackageProperty"]], result)
 
     @builtins.property
     def mss_package(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackagingConfiguration.MssPackageProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.MssPackageProperty"]]:
         '''Parameters for Microsoft Smooth Streaming packaging.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-packagingconfiguration.html#cfn-mediapackage-packagingconfiguration-msspackage
         '''
         result = self._values.get("mss_package")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackagingConfiguration.MssPackageProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingConfiguration.MssPackageProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to assign to the packaging configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-packagingconfiguration.html#cfn-mediapackage-packagingconfiguration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6609,6 +6619,7 @@ class CfnPackagingGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_mediapackage as mediapackage
@@ -6633,13 +6644,13 @@ class CfnPackagingGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id_: builtins.str,
         *,
         id: builtins.str,
-        authorization: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingGroup.AuthorizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        egress_access_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPackagingGroup.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        authorization: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingGroup.AuthorizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        egress_access_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingGroup.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::MediaPackage::PackagingGroup``.
 
@@ -6667,7 +6678,7 @@ class CfnPackagingGroup(
     @builtins.classmethod
     def arn_for_packaging_group(
         cls,
-        resource: _IPackagingGroupRef_b90b8e10,
+        resource: "_IPackagingGroupRef_b90b8e10",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6690,7 +6701,7 @@ class CfnPackagingGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPackagingGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6746,15 +6757,15 @@ class CfnPackagingGroup(
 
     @builtins.property
     @jsii.member(jsii_name="packagingGroupRef")
-    def packaging_group_ref(self) -> _PackagingGroupReference_de73824c:
+    def packaging_group_ref(self) -> "_PackagingGroupReference_de73824c":
         '''A reference to a PackagingGroup resource.'''
-        return typing.cast(_PackagingGroupReference_de73824c, jsii.get(self, "packagingGroupRef"))
+        return typing.cast("_PackagingGroupReference_de73824c", jsii.get(self, "packagingGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="id")
@@ -6773,14 +6784,14 @@ class CfnPackagingGroup(
     @jsii.member(jsii_name="authorization")
     def authorization(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingGroup.AuthorizationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingGroup.AuthorizationProperty"]]:
         '''Parameters for CDN authorization.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingGroup.AuthorizationProperty"]], jsii.get(self, "authorization"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingGroup.AuthorizationProperty"]], jsii.get(self, "authorization"))
 
     @authorization.setter
     def authorization(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingGroup.AuthorizationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingGroup.AuthorizationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8c8371f8b34356b36eff32cf2cbea4d3f14fcd556b4ab0bd7f5dd7bd2ea117d3)
@@ -6791,14 +6802,14 @@ class CfnPackagingGroup(
     @jsii.member(jsii_name="egressAccessLogs")
     def egress_access_logs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingGroup.LogConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingGroup.LogConfigurationProperty"]]:
         '''The configuration parameters for egress access logging.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingGroup.LogConfigurationProperty"]], jsii.get(self, "egressAccessLogs"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingGroup.LogConfigurationProperty"]], jsii.get(self, "egressAccessLogs"))
 
     @egress_access_logs.setter
     def egress_access_logs(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPackagingGroup.LogConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingGroup.LogConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b41c84687cbb3318b0cf57c76ee83dd7efbb0ccf04883a441e2999922e95d713)
@@ -6807,12 +6818,12 @@ class CfnPackagingGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to assign to the packaging group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f5205179917b0f19bc336c90cf83e4b7b624469516be6573083daea59caa9f3f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6967,9 +6978,9 @@ class CfnPackagingGroupProps:
         self,
         *,
         id: builtins.str,
-        authorization: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPackagingGroup.AuthorizationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        egress_access_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPackagingGroup.LogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        authorization: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingGroup.AuthorizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        egress_access_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPackagingGroup.LogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPackagingGroup``.
 
@@ -6983,6 +6994,7 @@ class CfnPackagingGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_mediapackage as mediapackage
@@ -7033,33 +7045,33 @@ class CfnPackagingGroupProps:
     @builtins.property
     def authorization(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackagingGroup.AuthorizationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingGroup.AuthorizationProperty"]]:
         '''Parameters for CDN authorization.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-packaginggroup.html#cfn-mediapackage-packaginggroup-authorization
         '''
         result = self._values.get("authorization")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackagingGroup.AuthorizationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingGroup.AuthorizationProperty"]], result)
 
     @builtins.property
     def egress_access_logs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackagingGroup.LogConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingGroup.LogConfigurationProperty"]]:
         '''The configuration parameters for egress access logging.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-packaginggroup.html#cfn-mediapackage-packaginggroup-egressaccesslogs
         '''
         result = self._values.get("egress_access_logs")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPackagingGroup.LogConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPackagingGroup.LogConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to assign to the packaging group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-packaginggroup.html#cfn-mediapackage-packaginggroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

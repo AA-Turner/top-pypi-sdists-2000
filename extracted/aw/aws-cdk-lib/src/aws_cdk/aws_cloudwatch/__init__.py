@@ -1387,7 +1387,7 @@ class AlarmStatusWidgetProps:
         alarms: typing.Sequence["IAlarm"],
         height: typing.Optional[jsii.Number] = None,
         sort_by: typing.Optional["AlarmStatusWidgetSortBy"] = None,
-        states: typing.Optional[typing.Sequence[AlarmState]] = None,
+        states: typing.Optional[typing.Sequence["AlarmState"]] = None,
         title: typing.Optional[builtins.str] = None,
         width: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -1461,7 +1461,7 @@ class AlarmStatusWidgetProps:
         return typing.cast(typing.Optional["AlarmStatusWidgetSortBy"], result)
 
     @builtins.property
-    def states(self) -> typing.Optional[typing.List[AlarmState]]:
+    def states(self) -> typing.Optional[typing.List["AlarmState"]]:
         '''Use this field to filter the list of alarms displayed in the widget to only those alarms currently in the specified states.
 
         You can specify one or more alarm states in the value for this field.
@@ -1472,7 +1472,7 @@ class AlarmStatusWidgetProps:
         :default: - all the alarms specified in alarms are displayed.
         '''
         result = self._values.get("states")
-        return typing.cast(typing.Optional[typing.List[AlarmState]], result)
+        return typing.cast(typing.Optional[typing.List["AlarmState"]], result)
 
     @builtins.property
     def title(self) -> typing.Optional[builtins.str]:
@@ -1568,7 +1568,7 @@ class AnomalyDetectionAlarmProps:
         comparison_operator: typing.Optional["ComparisonOperator"] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         statistic: typing.Optional[builtins.str] = None,
         std_devs: typing.Optional[jsii.Number] = None,
         treat_missing_data: typing.Optional["TreatMissingData"] = None,
@@ -1738,7 +1738,7 @@ class AnomalyDetectionAlarmProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''(deprecated) The period over which the specified statistic is applied.
 
         Cannot be used with ``MathExpression`` objects.
@@ -1750,7 +1750,7 @@ class AnomalyDetectionAlarmProps:
         :stability: deprecated
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def statistic(self) -> typing.Optional[builtins.str]:
@@ -1829,6 +1829,7 @@ class CfnAlarm(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cloudwatch as cloudwatch
@@ -1893,27 +1894,27 @@ class CfnAlarm(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         comparison_operator: builtins.str,
         evaluation_periods: jsii.Number,
-        actions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IScalingPolicyRef_fcca0de5, _ITopicRef_29aa9a88]]] = None,
+        actions_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_IScalingPolicyRef_fcca0de5", "_ITopicRef_29aa9a88"]]] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
-        dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlarm.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlarm.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
         extended_statistic: typing.Optional[builtins.str] = None,
-        insufficient_data_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
+        insufficient_data_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]] = None,
         metric_name: typing.Optional[builtins.str] = None,
-        metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlarm.MetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        metrics: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlarm.MetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         namespace: typing.Optional[builtins.str] = None,
-        ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
+        ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]] = None,
         period: typing.Optional[jsii.Number] = None,
         statistic: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         threshold: typing.Optional[jsii.Number] = None,
         threshold_metric_id: typing.Optional[builtins.str] = None,
         treat_missing_data: typing.Optional[builtins.str] = None,
@@ -1979,7 +1980,7 @@ class CfnAlarm(
 
     @jsii.member(jsii_name="arnForAlarm")
     @builtins.classmethod
-    def arn_for_alarm(cls, resource: _IAlarmRef_2bb0e5de) -> builtins.str:
+    def arn_for_alarm(cls, resource: "_IAlarmRef_2bb0e5de") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1992,10 +1993,10 @@ class CfnAlarm(
     @builtins.classmethod
     def from_alarm_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IAlarmRef_2bb0e5de:
+    ) -> "_IAlarmRef_2bb0e5de":
         '''Creates a new IAlarmRef from an ARN.
 
         :param scope: -
@@ -2007,16 +2008,16 @@ class CfnAlarm(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IAlarmRef_2bb0e5de, jsii.sinvoke(cls, "fromAlarmArn", [scope, id, arn]))
+        return typing.cast("_IAlarmRef_2bb0e5de", jsii.sinvoke(cls, "fromAlarmArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromAlarmName")
     @builtins.classmethod
     def from_alarm_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         alarm_name: builtins.str,
-    ) -> _IAlarmRef_2bb0e5de:
+    ) -> "_IAlarmRef_2bb0e5de":
         '''Creates a new IAlarmRef from a alarmName.
 
         :param scope: -
@@ -2028,7 +2029,7 @@ class CfnAlarm(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument alarm_name", value=alarm_name, expected_type=type_hints["alarm_name"])
-        return typing.cast(_IAlarmRef_2bb0e5de, jsii.sinvoke(cls, "fromAlarmName", [scope, id, alarm_name]))
+        return typing.cast("_IAlarmRef_2bb0e5de", jsii.sinvoke(cls, "fromAlarmName", [scope, id, alarm_name]))
 
     @jsii.member(jsii_name="isCfnAlarm")
     @builtins.classmethod
@@ -2043,7 +2044,7 @@ class CfnAlarm(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAlarm", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2074,9 +2075,9 @@ class CfnAlarm(
 
     @builtins.property
     @jsii.member(jsii_name="alarmRef")
-    def alarm_ref(self) -> _AlarmReference_76b2c14f:
+    def alarm_ref(self) -> "_AlarmReference_76b2c14f":
         '''A reference to a Alarm resource.'''
-        return typing.cast(_AlarmReference_76b2c14f, jsii.get(self, "alarmRef"))
+        return typing.cast("_AlarmReference_76b2c14f", jsii.get(self, "alarmRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -2089,9 +2090,9 @@ class CfnAlarm(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2128,14 +2129,14 @@ class CfnAlarm(
     @jsii.member(jsii_name="actionsEnabled")
     def actions_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether actions should be executed during any changes to the alarm state.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "actionsEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "actionsEnabled"))
 
     @actions_enabled.setter
     def actions_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__605b7067b394998a8071adbf9755ea958792836f86023d0ef23df99b8ee52bcb)
@@ -2198,14 +2199,14 @@ class CfnAlarm(
     @jsii.member(jsii_name="dimensions")
     def dimensions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAlarm.DimensionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlarm.DimensionProperty"]]]]:
         '''The dimensions for the metric associated with the alarm.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAlarm.DimensionProperty"]]]], jsii.get(self, "dimensions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlarm.DimensionProperty"]]]], jsii.get(self, "dimensions"))
 
     @dimensions.setter
     def dimensions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAlarm.DimensionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlarm.DimensionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6076cadb3051943abe05b65350e48c7b75b471794dd9cdc8472d1758a7b8cd4e)
@@ -2277,14 +2278,14 @@ class CfnAlarm(
     @jsii.member(jsii_name="metrics")
     def metrics(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAlarm.MetricDataQueryProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlarm.MetricDataQueryProperty"]]]]:
         '''An array that enables you to create an alarm based on the result of a metric math expression.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAlarm.MetricDataQueryProperty"]]]], jsii.get(self, "metrics"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlarm.MetricDataQueryProperty"]]]], jsii.get(self, "metrics"))
 
     @metrics.setter
     def metrics(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAlarm.MetricDataQueryProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlarm.MetricDataQueryProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__13ee627a7bc97218488ea85296e024a4aa67101fe00623848363348c246cc493)
@@ -2348,12 +2349,12 @@ class CfnAlarm(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of key-value pairs to associate with the alarm.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__895712e62b896ed30b8848bddfdb970fd334934c19393e2eb8ad06392ecf8af9)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2502,9 +2503,9 @@ class CfnAlarm(
             account_id: typing.Optional[builtins.str] = None,
             expression: typing.Optional[builtins.str] = None,
             label: typing.Optional[builtins.str] = None,
-            metric_stat: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlarm.MetricStatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            metric_stat: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlarm.MetricStatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             period: typing.Optional[jsii.Number] = None,
-            return_data: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            return_data: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The ``MetricDataQuery`` property type specifies the metric data to return, and whether this call is just retrieving a batch set of data for one metric, or is performing a math expression on metric data.
 
@@ -2626,7 +2627,7 @@ class CfnAlarm(
         @builtins.property
         def metric_stat(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAlarm.MetricStatProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlarm.MetricStatProperty"]]:
             '''The metric to be returned, along with statistics, period, and units.
 
             Use this parameter only if this object is retrieving a metric and not performing a math expression on returned data.
@@ -2636,7 +2637,7 @@ class CfnAlarm(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-alarm-metricdataquery.html#cfn-cloudwatch-alarm-metricdataquery-metricstat
             '''
             result = self._values.get("metric_stat")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAlarm.MetricStatProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlarm.MetricStatProperty"]], result)
 
         @builtins.property
         def period(self) -> typing.Optional[jsii.Number]:
@@ -2652,7 +2653,7 @@ class CfnAlarm(
         @builtins.property
         def return_data(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''This option indicates whether to return the timestamps and raw data values of this metric.
 
             When you create an alarm based on a metric math expression, specify ``True`` for this value for only the one math expression that the alarm is based on. You must specify ``False`` for ``ReturnData`` for all the other metrics and expressions used in the alarm.
@@ -2662,7 +2663,7 @@ class CfnAlarm(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-alarm-metricdataquery.html#cfn-cloudwatch-alarm-metricdataquery-returndata
             '''
             result = self._values.get("return_data")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2688,7 +2689,7 @@ class CfnAlarm(
         def __init__(
             self,
             *,
-            dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlarm.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlarm.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             metric_name: typing.Optional[builtins.str] = None,
             namespace: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -2734,13 +2735,13 @@ class CfnAlarm(
         @builtins.property
         def dimensions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAlarm.DimensionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlarm.DimensionProperty"]]]]:
             '''The metric dimensions that you want to be used for the metric that the alarm will watch.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-alarm-metric.html#cfn-cloudwatch-alarm-metric-dimensions
             '''
             result = self._values.get("dimensions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAlarm.DimensionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlarm.DimensionProperty"]]]], result)
 
         @builtins.property
         def metric_name(self) -> typing.Optional[builtins.str]:
@@ -2787,7 +2788,7 @@ class CfnAlarm(
         def __init__(
             self,
             *,
-            metric: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlarm.MetricProperty", typing.Dict[builtins.str, typing.Any]]],
+            metric: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlarm.MetricProperty", typing.Dict[builtins.str, typing.Any]]],
             period: jsii.Number,
             stat: builtins.str,
             unit: typing.Optional[builtins.str] = None,
@@ -2843,14 +2844,14 @@ class CfnAlarm(
         @builtins.property
         def metric(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAlarm.MetricProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAlarm.MetricProperty"]:
             '''The metric to return, including the metric name, namespace, and dimensions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-alarm-metricstat.html#cfn-cloudwatch-alarm-metricstat-metric
             '''
             result = self._values.get("metric")
             assert result is not None, "Required property 'metric' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAlarm.MetricProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAlarm.MetricProperty"], result)
 
         @builtins.property
         def period(self) -> jsii.Number:
@@ -2939,22 +2940,22 @@ class CfnAlarmProps:
         *,
         comparison_operator: builtins.str,
         evaluation_periods: jsii.Number,
-        actions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IScalingPolicyRef_fcca0de5, _ITopicRef_29aa9a88]]] = None,
+        actions_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_IScalingPolicyRef_fcca0de5", "_ITopicRef_29aa9a88"]]] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
-        dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAlarm.DimensionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlarm.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
         extended_statistic: typing.Optional[builtins.str] = None,
-        insufficient_data_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
+        insufficient_data_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]] = None,
         metric_name: typing.Optional[builtins.str] = None,
-        metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAlarm.MetricDataQueryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        metrics: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlarm.MetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         namespace: typing.Optional[builtins.str] = None,
-        ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
+        ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]] = None,
         period: typing.Optional[jsii.Number] = None,
         statistic: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         threshold: typing.Optional[jsii.Number] = None,
         threshold_metric_id: typing.Optional[builtins.str] = None,
         treat_missing_data: typing.Optional[builtins.str] = None,
@@ -2990,6 +2991,7 @@ class CfnAlarmProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloudwatch as cloudwatch
@@ -3149,7 +3151,7 @@ class CfnAlarmProps:
     @builtins.property
     def actions_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether actions should be executed during any changes to the alarm state.
 
         The default is TRUE.
@@ -3159,12 +3161,12 @@ class CfnAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#cfn-cloudwatch-alarm-actionsenabled
         '''
         result = self._values.get("actions_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def alarm_actions(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IScalingPolicyRef_fcca0de5, _ITopicRef_29aa9a88]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_IScalingPolicyRef_fcca0de5", "_ITopicRef_29aa9a88"]]]:
         '''The list of actions to execute when this alarm transitions into an ALARM state from any other state.
 
         Specify each action as an Amazon Resource Name (ARN). For more information about creating alarms and the actions that you can specify, see `PutMetricAlarm <https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutMetricAlarm.html>`_ in the *Amazon CloudWatch API Reference* .
@@ -3172,7 +3174,7 @@ class CfnAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#cfn-cloudwatch-alarm-alarmactions
         '''
         result = self._values.get("alarm_actions")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IScalingPolicyRef_fcca0de5, _ITopicRef_29aa9a88]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_IScalingPolicyRef_fcca0de5", "_ITopicRef_29aa9a88"]]], result)
 
     @builtins.property
     def alarm_description(self) -> typing.Optional[builtins.str]:
@@ -3213,7 +3215,7 @@ class CfnAlarmProps:
     @builtins.property
     def dimensions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAlarm.DimensionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlarm.DimensionProperty"]]]]:
         '''The dimensions for the metric associated with the alarm.
 
         For an alarm based on a math expression, you can't specify ``Dimensions`` . Instead, you use ``Metrics`` .
@@ -3221,7 +3223,7 @@ class CfnAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#cfn-cloudwatch-alarm-dimensions
         '''
         result = self._values.get("dimensions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAlarm.DimensionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlarm.DimensionProperty"]]]], result)
 
     @builtins.property
     def evaluate_low_sample_count_percentile(self) -> typing.Optional[builtins.str]:
@@ -3250,7 +3252,7 @@ class CfnAlarmProps:
     @builtins.property
     def insufficient_data_actions(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]]:
         '''The actions to execute when this alarm transitions to the ``INSUFFICIENT_DATA`` state from any other state.
 
         Each action is specified as an Amazon Resource Name (ARN).
@@ -3258,7 +3260,7 @@ class CfnAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#cfn-cloudwatch-alarm-insufficientdataactions
         '''
         result = self._values.get("insufficient_data_actions")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]], result)
 
     @builtins.property
     def metric_name(self) -> typing.Optional[builtins.str]:
@@ -3274,7 +3276,7 @@ class CfnAlarmProps:
     @builtins.property
     def metrics(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAlarm.MetricDataQueryProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlarm.MetricDataQueryProperty"]]]]:
         '''An array that enables you to create an alarm based on the result of a metric math expression.
 
         Each item in the array either retrieves a metric or performs a math expression.
@@ -3284,7 +3286,7 @@ class CfnAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#cfn-cloudwatch-alarm-metrics
         '''
         result = self._values.get("metrics")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAlarm.MetricDataQueryProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlarm.MetricDataQueryProperty"]]]], result)
 
     @builtins.property
     def namespace(self) -> typing.Optional[builtins.str]:
@@ -3302,7 +3304,7 @@ class CfnAlarmProps:
     @builtins.property
     def ok_actions(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]]:
         '''The actions to execute when this alarm transitions to the ``OK`` state from any other state.
 
         Each action is specified as an Amazon Resource Name (ARN).
@@ -3310,7 +3312,7 @@ class CfnAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#cfn-cloudwatch-alarm-okactions
         '''
         result = self._values.get("ok_actions")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]], result)
 
     @builtins.property
     def period(self) -> typing.Optional[jsii.Number]:
@@ -3341,7 +3343,7 @@ class CfnAlarmProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of key-value pairs to associate with the alarm.
 
         You can associate as many as 50 tags with an alarm. To be able to associate tags with the alarm when you create the alarm, you must have the ``cloudwatch:TagResource`` permission.
@@ -3351,7 +3353,7 @@ class CfnAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#cfn-cloudwatch-alarm-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def threshold(self) -> typing.Optional[jsii.Number]:
@@ -3493,16 +3495,16 @@ class CfnAnomalyDetector(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.ConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        metric_characteristics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MetricCharacteristicsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        metric_math_anomaly_detector: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MetricMathAnomalyDetectorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.ConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        metric_characteristics: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.MetricCharacteristicsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        metric_math_anomaly_detector: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.MetricMathAnomalyDetectorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         metric_name: typing.Optional[builtins.str] = None,
         namespace: typing.Optional[builtins.str] = None,
-        single_metric_anomaly_detector: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        single_metric_anomaly_detector: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         stat: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::CloudWatch::AnomalyDetector``.
@@ -3548,7 +3550,7 @@ class CfnAnomalyDetector(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAnomalyDetector", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3579,9 +3581,9 @@ class CfnAnomalyDetector(
 
     @builtins.property
     @jsii.member(jsii_name="anomalyDetectorRef")
-    def anomaly_detector_ref(self) -> _AnomalyDetectorReference_11b9b19b:
+    def anomaly_detector_ref(self) -> "_AnomalyDetectorReference_11b9b19b":
         '''A reference to a AnomalyDetector resource.'''
-        return typing.cast(_AnomalyDetectorReference_11b9b19b, jsii.get(self, "anomalyDetectorRef"))
+        return typing.cast("_AnomalyDetectorReference_11b9b19b", jsii.get(self, "anomalyDetectorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -3600,14 +3602,14 @@ class CfnAnomalyDetector(
     @jsii.member(jsii_name="configuration")
     def configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.ConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.ConfigurationProperty"]]:
         '''Specifies details about how the anomaly detection model is to be trained, including time ranges to exclude when training and updating the model.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.ConfigurationProperty"]], jsii.get(self, "configuration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.ConfigurationProperty"]], jsii.get(self, "configuration"))
 
     @configuration.setter
     def configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.ConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.ConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4577cb9dfe92537d1cc8e64146892876070d141d09590038417ae6ad98c7b32a)
@@ -3618,14 +3620,14 @@ class CfnAnomalyDetector(
     @jsii.member(jsii_name="dimensions")
     def dimensions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.DimensionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.DimensionProperty"]]]]:
         '''The dimensions of the metric associated with the anomaly detection band.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.DimensionProperty"]]]], jsii.get(self, "dimensions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.DimensionProperty"]]]], jsii.get(self, "dimensions"))
 
     @dimensions.setter
     def dimensions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.DimensionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.DimensionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aa81b524032f55c8d3aa5c261568d608ed375b489e67451c339cda6dff9fdd55)
@@ -3636,14 +3638,14 @@ class CfnAnomalyDetector(
     @jsii.member(jsii_name="metricCharacteristics")
     def metric_characteristics(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricCharacteristicsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricCharacteristicsProperty"]]:
         '''Use this object to include parameters to provide information about your metric to CloudWatch to help it build more accurate anomaly detection models.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricCharacteristicsProperty"]], jsii.get(self, "metricCharacteristics"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricCharacteristicsProperty"]], jsii.get(self, "metricCharacteristics"))
 
     @metric_characteristics.setter
     def metric_characteristics(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricCharacteristicsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricCharacteristicsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__730fad039b3befd0235c3dce81008e3d9f65ab635fe956e8ed48f3ba7060aaba)
@@ -3654,14 +3656,14 @@ class CfnAnomalyDetector(
     @jsii.member(jsii_name="metricMathAnomalyDetector")
     def metric_math_anomaly_detector(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricMathAnomalyDetectorProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricMathAnomalyDetectorProperty"]]:
         '''The CloudWatch metric math expression for this anomaly detector.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricMathAnomalyDetectorProperty"]], jsii.get(self, "metricMathAnomalyDetector"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricMathAnomalyDetectorProperty"]], jsii.get(self, "metricMathAnomalyDetector"))
 
     @metric_math_anomaly_detector.setter
     def metric_math_anomaly_detector(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricMathAnomalyDetectorProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricMathAnomalyDetectorProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f8f418300bad7bba64cba09c0d26246445ca23587310af02c4b72408240a1db4)
@@ -3698,14 +3700,14 @@ class CfnAnomalyDetector(
     @jsii.member(jsii_name="singleMetricAnomalyDetector")
     def single_metric_anomaly_detector(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty"]]:
         '''The CloudWatch metric and statistic for this anomaly detector.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty"]], jsii.get(self, "singleMetricAnomalyDetector"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty"]], jsii.get(self, "singleMetricAnomalyDetector"))
 
     @single_metric_anomaly_detector.setter
     def single_metric_anomaly_detector(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f79f6e93c8bc8ee29709af3c665820fb1e16318cf78b4220c7fd5bcb8a1148b8)
@@ -3737,7 +3739,7 @@ class CfnAnomalyDetector(
         def __init__(
             self,
             *,
-            excluded_time_ranges: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.RangeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            excluded_time_ranges: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.RangeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             metric_time_zone: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Specifies details about how the anomaly detection model is to be trained, including time ranges to exclude when training and updating the model.
@@ -3777,7 +3779,7 @@ class CfnAnomalyDetector(
         @builtins.property
         def excluded_time_ranges(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.RangeProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.RangeProperty"]]]]:
             '''Specifies an array of time ranges to exclude from use when the anomaly detection model is trained and updated.
 
             Use this to make sure that events that could cause unusual values for the metric, such as deployments, aren't used when CloudWatch creates or updates the model.
@@ -3785,7 +3787,7 @@ class CfnAnomalyDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-anomalydetector-configuration.html#cfn-cloudwatch-anomalydetector-configuration-excludedtimeranges
             '''
             result = self._values.get("excluded_time_ranges")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.RangeProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.RangeProperty"]]]], result)
 
         @builtins.property
         def metric_time_zone(self) -> typing.Optional[builtins.str]:
@@ -3892,7 +3894,7 @@ class CfnAnomalyDetector(
         def __init__(
             self,
             *,
-            periodic_spikes: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            periodic_spikes: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''This object includes parameters that you can use to provide information to CloudWatch to help it build more accurate anomaly detection models.
 
@@ -3921,7 +3923,7 @@ class CfnAnomalyDetector(
         @builtins.property
         def periodic_spikes(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set this parameter to true if values for this metric consistently include spikes that should not be considered to be anomalies.
 
             With this set to true, CloudWatch will expect to see spikes that occurred consistently during the model training period, and won't flag future similar spikes as anomalies.
@@ -3929,7 +3931,7 @@ class CfnAnomalyDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-anomalydetector-metriccharacteristics.html#cfn-cloudwatch-anomalydetector-metriccharacteristics-periodicspikes
             '''
             result = self._values.get("periodic_spikes")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3963,9 +3965,9 @@ class CfnAnomalyDetector(
             account_id: typing.Optional[builtins.str] = None,
             expression: typing.Optional[builtins.str] = None,
             label: typing.Optional[builtins.str] = None,
-            metric_stat: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MetricStatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            metric_stat: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.MetricStatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             period: typing.Optional[jsii.Number] = None,
-            return_data: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            return_data: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''This structure is used in both ``GetMetricData`` and ``PutMetricAlarm`` .
 
@@ -4105,7 +4107,7 @@ class CfnAnomalyDetector(
         @builtins.property
         def metric_stat(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricStatProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricStatProperty"]]:
             '''The metric to be returned, along with statistics, period, and units.
 
             Use this parameter only if this object is retrieving a metric and not performing a math expression on returned data.
@@ -4115,7 +4117,7 @@ class CfnAnomalyDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-anomalydetector-metricdataquery.html#cfn-cloudwatch-anomalydetector-metricdataquery-metricstat
             '''
             result = self._values.get("metric_stat")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricStatProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricStatProperty"]], result)
 
         @builtins.property
         def period(self) -> typing.Optional[jsii.Number]:
@@ -4131,7 +4133,7 @@ class CfnAnomalyDetector(
         @builtins.property
         def return_data(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When used in ``GetMetricData`` , this option indicates whether to return the timestamps and raw data values of this metric.
 
             If you are performing this call just to do math expressions and do not also need the raw data returned, you can specify ``false`` . If you omit this, the default of ``true`` is used.
@@ -4141,7 +4143,7 @@ class CfnAnomalyDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-anomalydetector-metricdataquery.html#cfn-cloudwatch-anomalydetector-metricdataquery-returndata
             '''
             result = self._values.get("return_data")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4163,7 +4165,7 @@ class CfnAnomalyDetector(
         def __init__(
             self,
             *,
-            metric_data_queries: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            metric_data_queries: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.MetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Indicates the CloudWatch math expression that provides the time series the anomaly detector uses as input.
 
@@ -4220,7 +4222,7 @@ class CfnAnomalyDetector(
         @builtins.property
         def metric_data_queries(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricDataQueryProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricDataQueryProperty"]]]]:
             '''An array of metric data query structures that enables you to create an anomaly detector based on the result of a metric math expression.
 
             Each item in ``MetricDataQueries`` gets a metric or performs a math expression. One item in ``MetricDataQueries`` is the expression that provides the time series that the anomaly detector uses as input. Designate the expression by setting ``ReturnData`` to ``true`` for this object in the array. For all other expressions and metrics, set ``ReturnData`` to ``false`` . The designated expression must return a single time series.
@@ -4228,7 +4230,7 @@ class CfnAnomalyDetector(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-anomalydetector-metricmathanomalydetector.html#cfn-cloudwatch-anomalydetector-metricmathanomalydetector-metricdataqueries
             '''
             result = self._values.get("metric_data_queries")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricDataQueryProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricDataQueryProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4256,7 +4258,7 @@ class CfnAnomalyDetector(
             *,
             metric_name: builtins.str,
             namespace: builtins.str,
-            dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Represents a specific metric.
 
@@ -4321,13 +4323,13 @@ class CfnAnomalyDetector(
         @builtins.property
         def dimensions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.DimensionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.DimensionProperty"]]]]:
             '''The dimensions for the metric.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-anomalydetector-metric.html#cfn-cloudwatch-anomalydetector-metric-dimensions
             '''
             result = self._values.get("dimensions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.DimensionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.DimensionProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4354,7 +4356,7 @@ class CfnAnomalyDetector(
         def __init__(
             self,
             *,
-            metric: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MetricProperty", typing.Dict[builtins.str, typing.Any]]],
+            metric: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.MetricProperty", typing.Dict[builtins.str, typing.Any]]],
             period: jsii.Number,
             stat: builtins.str,
             unit: typing.Optional[builtins.str] = None,
@@ -4410,14 +4412,14 @@ class CfnAnomalyDetector(
         @builtins.property
         def metric(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricProperty"]:
             '''The metric to return, including the metric name, namespace, and dimensions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-anomalydetector-metricstat.html#cfn-cloudwatch-anomalydetector-metricstat-metric
             '''
             result = self._values.get("metric")
             assert result is not None, "Required property 'metric' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricProperty"], result)
 
         @builtins.property
         def period(self) -> jsii.Number:
@@ -4557,7 +4559,7 @@ class CfnAnomalyDetector(
             self,
             *,
             account_id: typing.Optional[builtins.str] = None,
-            dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             metric_name: typing.Optional[builtins.str] = None,
             namespace: typing.Optional[builtins.str] = None,
             stat: typing.Optional[builtins.str] = None,
@@ -4625,13 +4627,13 @@ class CfnAnomalyDetector(
         @builtins.property
         def dimensions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.DimensionProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.DimensionProperty"]]]]:
             '''The metric dimensions to create the anomaly detection model for.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-anomalydetector-singlemetricanomalydetector.html#cfn-cloudwatch-anomalydetector-singlemetricanomalydetector-dimensions
             '''
             result = self._values.get("dimensions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.DimensionProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.DimensionProperty"]]]], result)
 
         @builtins.property
         def metric_name(self) -> typing.Optional[builtins.str]:
@@ -4690,13 +4692,13 @@ class CfnAnomalyDetectorProps:
     def __init__(
         self,
         *,
-        configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.ConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.DimensionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        metric_characteristics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.MetricCharacteristicsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        metric_math_anomaly_detector: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.MetricMathAnomalyDetectorProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.ConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        metric_characteristics: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.MetricCharacteristicsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        metric_math_anomaly_detector: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.MetricMathAnomalyDetectorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         metric_name: typing.Optional[builtins.str] = None,
         namespace: typing.Optional[builtins.str] = None,
-        single_metric_anomaly_detector: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        single_metric_anomaly_detector: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         stat: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnAnomalyDetector``.
@@ -4809,7 +4811,7 @@ class CfnAnomalyDetectorProps:
     @builtins.property
     def configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.ConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.ConfigurationProperty"]]:
         '''Specifies details about how the anomaly detection model is to be trained, including time ranges to exclude when training and updating the model.
 
         The configuration can also include the time zone to use for the metric.
@@ -4817,23 +4819,23 @@ class CfnAnomalyDetectorProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-anomalydetector.html#cfn-cloudwatch-anomalydetector-configuration
         '''
         result = self._values.get("configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.ConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.ConfigurationProperty"]], result)
 
     @builtins.property
     def dimensions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.DimensionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.DimensionProperty"]]]]:
         '''The dimensions of the metric associated with the anomaly detection band.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-anomalydetector.html#cfn-cloudwatch-anomalydetector-dimensions
         '''
         result = self._values.get("dimensions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.DimensionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.DimensionProperty"]]]], result)
 
     @builtins.property
     def metric_characteristics(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.MetricCharacteristicsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricCharacteristicsProperty"]]:
         '''Use this object to include parameters to provide information about your metric to CloudWatch to help it build more accurate anomaly detection models.
 
         Currently, it includes the ``PeriodicSpikes`` parameter.
@@ -4841,18 +4843,18 @@ class CfnAnomalyDetectorProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-anomalydetector.html#cfn-cloudwatch-anomalydetector-metriccharacteristics
         '''
         result = self._values.get("metric_characteristics")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.MetricCharacteristicsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricCharacteristicsProperty"]], result)
 
     @builtins.property
     def metric_math_anomaly_detector(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.MetricMathAnomalyDetectorProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricMathAnomalyDetectorProperty"]]:
         '''The CloudWatch metric math expression for this anomaly detector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-anomalydetector.html#cfn-cloudwatch-anomalydetector-metricmathanomalydetector
         '''
         result = self._values.get("metric_math_anomaly_detector")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.MetricMathAnomalyDetectorProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricMathAnomalyDetectorProperty"]], result)
 
     @builtins.property
     def metric_name(self) -> typing.Optional[builtins.str]:
@@ -4875,13 +4877,13 @@ class CfnAnomalyDetectorProps:
     @builtins.property
     def single_metric_anomaly_detector(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty"]]:
         '''The CloudWatch metric and statistic for this anomaly detector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-anomalydetector.html#cfn-cloudwatch-anomalydetector-singlemetricanomalydetector
         '''
         result = self._values.get("single_metric_anomaly_detector")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.SingleMetricAnomalyDetectorProperty"]], result)
 
     @builtins.property
     def stat(self) -> typing.Optional[builtins.str]:
@@ -4928,6 +4930,7 @@ class CfnCompositeAlarm(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cloudwatch as cloudwatch
@@ -4954,20 +4957,20 @@ class CfnCompositeAlarm(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         alarm_rule: builtins.str,
-        actions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        actions_suppressor: typing.Optional[typing.Union[builtins.str, _IAlarmRef_2bb0e5de, _ICompositeAlarmRef_fa51824d]] = None,
+        actions_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        actions_suppressor: typing.Optional[typing.Union[builtins.str, "_IAlarmRef_2bb0e5de", "_ICompositeAlarmRef_fa51824d"]] = None,
         actions_suppressor_extension_period: typing.Optional[jsii.Number] = None,
         actions_suppressor_wait_period: typing.Optional[jsii.Number] = None,
-        alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
+        alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
         insufficient_data_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
-        ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudWatch::CompositeAlarm``.
 
@@ -5009,7 +5012,7 @@ class CfnCompositeAlarm(
     @builtins.classmethod
     def arn_for_composite_alarm(
         cls,
-        resource: _ICompositeAlarmRef_fa51824d,
+        resource: "_ICompositeAlarmRef_fa51824d",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -5032,7 +5035,7 @@ class CfnCompositeAlarm(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCompositeAlarm", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5072,9 +5075,9 @@ class CfnCompositeAlarm(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5083,9 +5086,9 @@ class CfnCompositeAlarm(
 
     @builtins.property
     @jsii.member(jsii_name="compositeAlarmRef")
-    def composite_alarm_ref(self) -> _CompositeAlarmReference_bca78bf2:
+    def composite_alarm_ref(self) -> "_CompositeAlarmReference_bca78bf2":
         '''A reference to a CompositeAlarm resource.'''
-        return typing.cast(_CompositeAlarmReference_bca78bf2, jsii.get(self, "compositeAlarmRef"))
+        return typing.cast("_CompositeAlarmReference_bca78bf2", jsii.get(self, "compositeAlarmRef"))
 
     @builtins.property
     @jsii.member(jsii_name="alarmRule")
@@ -5104,14 +5107,14 @@ class CfnCompositeAlarm(
     @jsii.member(jsii_name="actionsEnabled")
     def actions_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether actions should be executed during any changes to the alarm state of the composite alarm.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "actionsEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "actionsEnabled"))
 
     @actions_enabled.setter
     def actions_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__43ce9ab8aaafd96e9ff146e41c5e3921be5380953cea24e5da817be9a65afdcb)
@@ -5233,12 +5236,12 @@ class CfnCompositeAlarm(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of key-value pairs to associate with the alarm.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__457680b612885bf2c4b88aebcb2510b437690fdf7d6235bf00d83846c1ee3452)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5267,16 +5270,16 @@ class CfnCompositeAlarmProps:
         self,
         *,
         alarm_rule: builtins.str,
-        actions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        actions_suppressor: typing.Optional[typing.Union[builtins.str, _IAlarmRef_2bb0e5de, _ICompositeAlarmRef_fa51824d]] = None,
+        actions_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        actions_suppressor: typing.Optional[typing.Union[builtins.str, "_IAlarmRef_2bb0e5de", "_ICompositeAlarmRef_fa51824d"]] = None,
         actions_suppressor_extension_period: typing.Optional[jsii.Number] = None,
         actions_suppressor_wait_period: typing.Optional[jsii.Number] = None,
-        alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
+        alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
         insufficient_data_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
-        ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCompositeAlarm``.
 
@@ -5297,6 +5300,7 @@ class CfnCompositeAlarmProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloudwatch as cloudwatch
@@ -5386,7 +5390,7 @@ class CfnCompositeAlarmProps:
     @builtins.property
     def actions_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether actions should be executed during any changes to the alarm state of the composite alarm.
 
         The default is TRUE.
@@ -5394,12 +5398,12 @@ class CfnCompositeAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-compositealarm.html#cfn-cloudwatch-compositealarm-actionsenabled
         '''
         result = self._values.get("actions_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def actions_suppressor(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IAlarmRef_2bb0e5de, _ICompositeAlarmRef_fa51824d]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IAlarmRef_2bb0e5de", "_ICompositeAlarmRef_fa51824d"]]:
         '''Actions will be suppressed if the suppressor alarm is in the ``ALARM`` state.
 
         ``ActionsSuppressor`` can be an AlarmName or an Amazon Resource Name (ARN) from an existing alarm.
@@ -5407,7 +5411,7 @@ class CfnCompositeAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-compositealarm.html#cfn-cloudwatch-compositealarm-actionssuppressor
         '''
         result = self._values.get("actions_suppressor")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IAlarmRef_2bb0e5de, _ICompositeAlarmRef_fa51824d]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IAlarmRef_2bb0e5de", "_ICompositeAlarmRef_fa51824d"]], result)
 
     @builtins.property
     def actions_suppressor_extension_period(self) -> typing.Optional[jsii.Number]:
@@ -5440,7 +5444,7 @@ class CfnCompositeAlarmProps:
     @builtins.property
     def alarm_actions(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]]:
         '''The actions to execute when this alarm transitions to the ALARM state from any other state.
 
         Each action is specified as an Amazon Resource Name (ARN). For more information about creating alarms and the actions that you can specify, see `PutCompositeAlarm <https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutCompositeAlarm.html>`_ in the *Amazon CloudWatch API Reference* .
@@ -5448,7 +5452,7 @@ class CfnCompositeAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-compositealarm.html#cfn-cloudwatch-compositealarm-alarmactions
         '''
         result = self._values.get("alarm_actions")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]], result)
 
     @builtins.property
     def alarm_description(self) -> typing.Optional[builtins.str]:
@@ -5484,7 +5488,7 @@ class CfnCompositeAlarmProps:
     @builtins.property
     def ok_actions(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]]:
         '''The actions to execute when this alarm transitions to the OK state from any other state.
 
         Each action is specified as an Amazon Resource Name (ARN). For more information about creating alarms and the actions that you can specify, see `PutCompositeAlarm <https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutCompositeAlarm.html>`_ in the *Amazon CloudWatch API Reference* .
@@ -5492,10 +5496,10 @@ class CfnCompositeAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-compositealarm.html#cfn-cloudwatch-compositealarm-okactions
         '''
         result = self._values.get("ok_actions")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ITopicRef_29aa9a88"]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of key-value pairs to associate with the alarm.
 
         You can associate as many as 50 tags with an alarm. To be able to associate tags with the alarm when you create the alarm, you must have the ``cloudwatch:TagResource`` permission.
@@ -5505,7 +5509,7 @@ class CfnCompositeAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-compositealarm.html#cfn-cloudwatch-compositealarm-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5551,7 +5555,7 @@ class CfnDashboard(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         dashboard_body: builtins.str,
@@ -5576,7 +5580,7 @@ class CfnDashboard(
 
     @jsii.member(jsii_name="arnForDashboard")
     @builtins.classmethod
-    def arn_for_dashboard(cls, resource: _IDashboardRef_3c35946b) -> builtins.str:
+    def arn_for_dashboard(cls, resource: "_IDashboardRef_3c35946b") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5589,10 +5593,10 @@ class CfnDashboard(
     @builtins.classmethod
     def from_dashboard_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         dashboard_name: builtins.str,
-    ) -> _IDashboardRef_3c35946b:
+    ) -> "_IDashboardRef_3c35946b":
         '''Creates a new IDashboardRef from a dashboardName.
 
         :param scope: -
@@ -5604,7 +5608,7 @@ class CfnDashboard(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument dashboard_name", value=dashboard_name, expected_type=type_hints["dashboard_name"])
-        return typing.cast(_IDashboardRef_3c35946b, jsii.sinvoke(cls, "fromDashboardName", [scope, id, dashboard_name]))
+        return typing.cast("_IDashboardRef_3c35946b", jsii.sinvoke(cls, "fromDashboardName", [scope, id, dashboard_name]))
 
     @jsii.member(jsii_name="isCfnDashboard")
     @builtins.classmethod
@@ -5619,7 +5623,7 @@ class CfnDashboard(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDashboard", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5655,9 +5659,9 @@ class CfnDashboard(
 
     @builtins.property
     @jsii.member(jsii_name="dashboardRef")
-    def dashboard_ref(self) -> _DashboardReference_71933abf:
+    def dashboard_ref(self) -> "_DashboardReference_71933abf":
         '''A reference to a Dashboard resource.'''
-        return typing.cast(_DashboardReference_71933abf, jsii.get(self, "dashboardRef"))
+        return typing.cast("_DashboardReference_71933abf", jsii.get(self, "dashboardRef"))
 
     @builtins.property
     @jsii.member(jsii_name="dashboardBody")
@@ -5785,6 +5789,7 @@ class CfnInsightRule(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cloudwatch as cloudwatch
@@ -5805,14 +5810,14 @@ class CfnInsightRule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         rule_body: builtins.str,
         rule_name: builtins.str,
         rule_state: builtins.str,
-        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudWatch::InsightRule``.
 
@@ -5840,7 +5845,10 @@ class CfnInsightRule(
 
     @jsii.member(jsii_name="arnForInsightRule")
     @builtins.classmethod
-    def arn_for_insight_rule(cls, resource: _IInsightRuleRef_436d0d73) -> builtins.str:
+    def arn_for_insight_rule(
+        cls,
+        resource: "_IInsightRuleRef_436d0d73",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5862,7 +5870,7 @@ class CfnInsightRule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInsightRule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5924,15 +5932,15 @@ class CfnInsightRule(
 
     @builtins.property
     @jsii.member(jsii_name="insightRuleRef")
-    def insight_rule_ref(self) -> _InsightRuleReference_d30ddeea:
+    def insight_rule_ref(self) -> "_InsightRuleReference_d30ddeea":
         '''A reference to a InsightRule resource.'''
-        return typing.cast(_InsightRuleReference_d30ddeea, jsii.get(self, "insightRuleRef"))
+        return typing.cast("_InsightRuleReference_d30ddeea", jsii.get(self, "insightRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="ruleBody")
@@ -5977,14 +5985,14 @@ class CfnInsightRule(
     @jsii.member(jsii_name="applyOnTransformedLogs")
     def apply_on_transformed_logs(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Determines whether the rules is evaluated on transformed versions of logs.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "applyOnTransformedLogs"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "applyOnTransformedLogs"))
 
     @apply_on_transformed_logs.setter
     def apply_on_transformed_logs(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9c9111e23da0920d9dadfa879557f9838793eca0312c1c2bec0dc6eb25325512)
@@ -5993,12 +6001,12 @@ class CfnInsightRule(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of key-value pairs to associate with the Contributor Insights rule.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7d330e494e47f68df8f1753b4e301d3df252f832725f14292abf5fa4ee104054)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6023,8 +6031,8 @@ class CfnInsightRuleProps:
         rule_body: builtins.str,
         rule_name: builtins.str,
         rule_state: builtins.str,
-        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnInsightRule``.
 
@@ -6039,6 +6047,7 @@ class CfnInsightRuleProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloudwatch as cloudwatch
@@ -6110,7 +6119,7 @@ class CfnInsightRuleProps:
     @builtins.property
     def apply_on_transformed_logs(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Determines whether the rules is evaluated on transformed versions of logs.
 
         Valid values are ``TRUE`` and ``FALSE`` .
@@ -6118,10 +6127,10 @@ class CfnInsightRuleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-insightrule.html#cfn-cloudwatch-insightrule-applyontransformedlogs
         '''
         result = self._values.get("apply_on_transformed_logs")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of key-value pairs to associate with the Contributor Insights rule.
 
         You can associate as many as 50 tags with a rule.
@@ -6133,7 +6142,7 @@ class CfnInsightRuleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-insightrule.html#cfn-cloudwatch-insightrule-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6175,6 +6184,7 @@ class CfnMetricStream(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cloudwatch as cloudwatch
@@ -6215,18 +6225,18 @@ class CfnMetricStream(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        firehose_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53],
+        firehose_arn: typing.Union[builtins.str, "_IDeliveryStreamRef_678f5e53"],
         output_format: builtins.str,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        exclude_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMetricStream.MetricStreamFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        include_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMetricStream.MetricStreamFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        include_linked_accounts_metrics: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        exclude_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMetricStream.MetricStreamFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        include_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMetricStream.MetricStreamFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        include_linked_accounts_metrics: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         name: typing.Optional[builtins.str] = None,
-        statistics_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMetricStream.MetricStreamStatisticsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        statistics_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMetricStream.MetricStreamStatisticsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudWatch::MetricStream``.
 
@@ -6264,7 +6274,7 @@ class CfnMetricStream(
     @builtins.classmethod
     def arn_for_metric_stream(
         cls,
-        resource: _IMetricStreamRef_2c784fc6,
+        resource: "_IMetricStreamRef_2c784fc6",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6278,10 +6288,10 @@ class CfnMetricStream(
     @builtins.classmethod
     def from_metric_stream_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IMetricStreamRef_2c784fc6:
+    ) -> "_IMetricStreamRef_2c784fc6":
         '''Creates a new IMetricStreamRef from an ARN.
 
         :param scope: -
@@ -6293,16 +6303,16 @@ class CfnMetricStream(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IMetricStreamRef_2c784fc6, jsii.sinvoke(cls, "fromMetricStreamArn", [scope, id, arn]))
+        return typing.cast("_IMetricStreamRef_2c784fc6", jsii.sinvoke(cls, "fromMetricStreamArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromMetricStreamName")
     @builtins.classmethod
     def from_metric_stream_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         metric_stream_name: builtins.str,
-    ) -> _IMetricStreamRef_2c784fc6:
+    ) -> "_IMetricStreamRef_2c784fc6":
         '''Creates a new IMetricStreamRef from a metricStreamName.
 
         :param scope: -
@@ -6314,7 +6324,7 @@ class CfnMetricStream(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument metric_stream_name", value=metric_stream_name, expected_type=type_hints["metric_stream_name"])
-        return typing.cast(_IMetricStreamRef_2c784fc6, jsii.sinvoke(cls, "fromMetricStreamName", [scope, id, metric_stream_name]))
+        return typing.cast("_IMetricStreamRef_2c784fc6", jsii.sinvoke(cls, "fromMetricStreamName", [scope, id, metric_stream_name]))
 
     @jsii.member(jsii_name="isCfnMetricStream")
     @builtins.classmethod
@@ -6329,7 +6339,7 @@ class CfnMetricStream(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMetricStream", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6401,15 +6411,15 @@ class CfnMetricStream(
 
     @builtins.property
     @jsii.member(jsii_name="metricStreamRef")
-    def metric_stream_ref(self) -> _MetricStreamReference_e417a88f:
+    def metric_stream_ref(self) -> "_MetricStreamReference_e417a88f":
         '''A reference to a MetricStream resource.'''
-        return typing.cast(_MetricStreamReference_e417a88f, jsii.get(self, "metricStreamRef"))
+        return typing.cast("_MetricStreamReference_e417a88f", jsii.get(self, "metricStreamRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="firehoseArn")
@@ -6454,14 +6464,14 @@ class CfnMetricStream(
     @jsii.member(jsii_name="excludeFilters")
     def exclude_filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricStream.MetricStreamFilterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamFilterProperty"]]]]:
         '''If you specify this parameter, the stream sends metrics from all metric namespaces except for the namespaces that you specify here.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricStream.MetricStreamFilterProperty"]]]], jsii.get(self, "excludeFilters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamFilterProperty"]]]], jsii.get(self, "excludeFilters"))
 
     @exclude_filters.setter
     def exclude_filters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricStream.MetricStreamFilterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamFilterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f8a010b725b9721d5a0070180f728cef097b885a9247729c230c1e48162efb49)
@@ -6472,14 +6482,14 @@ class CfnMetricStream(
     @jsii.member(jsii_name="includeFilters")
     def include_filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricStream.MetricStreamFilterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamFilterProperty"]]]]:
         '''If you specify this parameter, the stream sends only the metrics from the metric namespaces that you specify here.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricStream.MetricStreamFilterProperty"]]]], jsii.get(self, "includeFilters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamFilterProperty"]]]], jsii.get(self, "includeFilters"))
 
     @include_filters.setter
     def include_filters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricStream.MetricStreamFilterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamFilterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9fd63e599d47997efeead98c50e00925a352821609b2a35cc5d8286cc277d16d)
@@ -6490,14 +6500,14 @@ class CfnMetricStream(
     @jsii.member(jsii_name="includeLinkedAccountsMetrics")
     def include_linked_accounts_metrics(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If you are creating a metric stream in a monitoring account, specify ``true`` to include metrics from source accounts that are linked to this monitoring account, in the metric stream.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "includeLinkedAccountsMetrics"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "includeLinkedAccountsMetrics"))
 
     @include_linked_accounts_metrics.setter
     def include_linked_accounts_metrics(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__db935a48c332f03a24316c2a8a9a44ae9aee2c31a0f66ccbca7f9645b7f6f148)
@@ -6521,14 +6531,14 @@ class CfnMetricStream(
     @jsii.member(jsii_name="statisticsConfigurations")
     def statistics_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricStream.MetricStreamStatisticsConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamStatisticsConfigurationProperty"]]]]:
         '''By default, a metric stream always sends the MAX, MIN, SUM, and SAMPLECOUNT statistics for each metric that is streamed.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricStream.MetricStreamStatisticsConfigurationProperty"]]]], jsii.get(self, "statisticsConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamStatisticsConfigurationProperty"]]]], jsii.get(self, "statisticsConfigurations"))
 
     @statistics_configurations.setter
     def statistics_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricStream.MetricStreamStatisticsConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamStatisticsConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a5fccdc8e5b648171c23d1254144728db070b30ea4ff96cea910d95125b8aab0)
@@ -6537,12 +6547,12 @@ class CfnMetricStream(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the metric stream.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6ff12b171ab408aef715723528314a6f2877123297d21c2d3c0cf73a13965ffe)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6642,7 +6652,7 @@ class CfnMetricStream(
             self,
             *,
             additional_statistics: typing.Sequence[builtins.str],
-            include_metrics: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMetricStream.MetricStreamStatisticsMetricProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            include_metrics: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMetricStream.MetricStreamStatisticsMetricProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''This structure specifies a list of additional statistics to stream, and the metrics to stream those additional statistics for.
 
@@ -6690,14 +6700,14 @@ class CfnMetricStream(
         @builtins.property
         def include_metrics(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricStream.MetricStreamStatisticsMetricProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamStatisticsMetricProperty"]]]:
             '''An array that defines the metrics that are to have additional statistics streamed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-metricstream-metricstreamstatisticsconfiguration.html#cfn-cloudwatch-metricstream-metricstreamstatisticsconfiguration-includemetrics
             '''
             result = self._values.get("include_metrics")
             assert result is not None, "Required property 'include_metrics' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMetricStream.MetricStreamStatisticsMetricProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamStatisticsMetricProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6801,15 +6811,15 @@ class CfnMetricStreamProps:
     def __init__(
         self,
         *,
-        firehose_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53],
+        firehose_arn: typing.Union[builtins.str, "_IDeliveryStreamRef_678f5e53"],
         output_format: builtins.str,
-        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
-        exclude_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricStream.MetricStreamFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        include_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricStream.MetricStreamFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        include_linked_accounts_metrics: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        role_arn: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        exclude_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMetricStream.MetricStreamFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        include_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMetricStream.MetricStreamFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        include_linked_accounts_metrics: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         name: typing.Optional[builtins.str] = None,
-        statistics_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricStream.MetricStreamStatisticsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        statistics_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMetricStream.MetricStreamStatisticsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMetricStream``.
 
@@ -6828,6 +6838,7 @@ class CfnMetricStreamProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloudwatch as cloudwatch
@@ -6895,7 +6906,9 @@ class CfnMetricStreamProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def firehose_arn(self) -> typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53]:
+    def firehose_arn(
+        self,
+    ) -> typing.Union[builtins.str, "_IDeliveryStreamRef_678f5e53"]:
         '''The ARN of the Amazon Kinesis Firehose delivery stream to use for this metric stream.
 
         This Amazon Kinesis Firehose delivery stream must already exist and must be in the same account as the metric stream.
@@ -6904,7 +6917,7 @@ class CfnMetricStreamProps:
         '''
         result = self._values.get("firehose_arn")
         assert result is not None, "Required property 'firehose_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53], result)
+        return typing.cast(typing.Union[builtins.str, "_IDeliveryStreamRef_678f5e53"], result)
 
     @builtins.property
     def output_format(self) -> builtins.str:
@@ -6921,7 +6934,7 @@ class CfnMetricStreamProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role_arn(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The ARN of an IAM role that this metric stream will use to access Amazon Kinesis Firehose resources.
 
         This IAM role must already exist and must be in the same account as the metric stream. This IAM role must include the ``firehose:PutRecord`` and ``firehose:PutRecordBatch`` permissions.
@@ -6930,12 +6943,12 @@ class CfnMetricStreamProps:
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def exclude_filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMetricStream.MetricStreamFilterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamFilterProperty"]]]]:
         '''If you specify this parameter, the stream sends metrics from all metric namespaces except for the namespaces that you specify here.
 
         You cannot specify both ``IncludeFilters`` and ``ExcludeFilters`` in the same metric stream.
@@ -6945,12 +6958,12 @@ class CfnMetricStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-metricstream.html#cfn-cloudwatch-metricstream-excludefilters
         '''
         result = self._values.get("exclude_filters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMetricStream.MetricStreamFilterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamFilterProperty"]]]], result)
 
     @builtins.property
     def include_filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMetricStream.MetricStreamFilterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamFilterProperty"]]]]:
         '''If you specify this parameter, the stream sends only the metrics from the metric namespaces that you specify here.
 
         You cannot specify both ``IncludeFilters`` and ``ExcludeFilters`` in the same metric stream.
@@ -6960,12 +6973,12 @@ class CfnMetricStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-metricstream.html#cfn-cloudwatch-metricstream-includefilters
         '''
         result = self._values.get("include_filters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMetricStream.MetricStreamFilterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamFilterProperty"]]]], result)
 
     @builtins.property
     def include_linked_accounts_metrics(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If you are creating a metric stream in a monitoring account, specify ``true`` to include metrics from source accounts that are linked to this monitoring account, in the metric stream.
 
         The default is ``false`` .
@@ -6975,7 +6988,7 @@ class CfnMetricStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-metricstream.html#cfn-cloudwatch-metricstream-includelinkedaccountsmetrics
         '''
         result = self._values.get("include_linked_accounts_metrics")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -6993,7 +7006,7 @@ class CfnMetricStreamProps:
     @builtins.property
     def statistics_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMetricStream.MetricStreamStatisticsConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamStatisticsConfigurationProperty"]]]]:
         '''By default, a metric stream always sends the MAX, MIN, SUM, and SAMPLECOUNT statistics for each metric that is streamed.
 
         You can use this parameter to have the metric stream also send additional statistics in the stream. This array can have up to 100 members.
@@ -7003,10 +7016,10 @@ class CfnMetricStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-metricstream.html#cfn-cloudwatch-metricstream-statisticsconfigurations
         '''
         result = self._values.get("statistics_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMetricStream.MetricStreamStatisticsConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMetricStream.MetricStreamStatisticsConfigurationProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to the metric stream.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -7014,7 +7027,7 @@ class CfnMetricStreamProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-metricstream.html#cfn-cloudwatch-metricstream-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7124,7 +7137,7 @@ class CommonMetricOptions:
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
@@ -7274,13 +7287,13 @@ class CommonMetricOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period over which the specified statistic is applied.
 
         :default: Duration.minutes(5)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def region(self) -> typing.Optional[builtins.str]:
@@ -7444,8 +7457,8 @@ class CompositeAlarmProps:
         alarm_rule: "IAlarmRule",
         actions_enabled: typing.Optional[builtins.bool] = None,
         actions_suppressor: typing.Optional["IAlarm"] = None,
-        actions_suppressor_extension_period: typing.Optional[_Duration_4839e8c3] = None,
-        actions_suppressor_wait_period: typing.Optional[_Duration_4839e8c3] = None,
+        actions_suppressor_extension_period: typing.Optional["_Duration_4839e8c3"] = None,
+        actions_suppressor_wait_period: typing.Optional["_Duration_4839e8c3"] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         composite_alarm_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -7533,7 +7546,7 @@ class CompositeAlarmProps:
     @builtins.property
     def actions_suppressor_extension_period(
         self,
-    ) -> typing.Optional[_Duration_4839e8c3]:
+    ) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum duration that the composite alarm waits after suppressor alarm goes out of the ALARM state.
 
         After this time, the composite alarm performs its actions.
@@ -7541,10 +7554,10 @@ class CompositeAlarmProps:
         :default: - 1 minute extension period will be set.
         '''
         result = self._values.get("actions_suppressor_extension_period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def actions_suppressor_wait_period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def actions_suppressor_wait_period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum duration that the composite alarm waits for the suppressor alarm to go into the ALARM state.
 
         After this time, the composite alarm performs its actions.
@@ -7552,7 +7565,7 @@ class CompositeAlarmProps:
         :default: - 1 minute wait period will be set.
         '''
         result = self._values.get("actions_suppressor_wait_period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def alarm_description(self) -> typing.Optional[builtins.str]:
@@ -7608,7 +7621,7 @@ class CreateAlarmOptions:
         actions_enabled: typing.Optional[builtins.bool] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
-        comparison_operator: typing.Optional[ComparisonOperator] = None,
+        comparison_operator: typing.Optional["ComparisonOperator"] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
         treat_missing_data: typing.Optional["TreatMissingData"] = None,
@@ -7715,13 +7728,13 @@ class CreateAlarmOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def comparison_operator(self) -> typing.Optional[ComparisonOperator]:
+    def comparison_operator(self) -> typing.Optional["ComparisonOperator"]:
         '''Comparison to use to check if metric is breaching.
 
         :default: GreaterThanOrEqualToThreshold
         '''
         result = self._values.get("comparison_operator")
-        return typing.cast(typing.Optional[ComparisonOperator], result)
+        return typing.cast(typing.Optional["ComparisonOperator"], result)
 
     @builtins.property
     def datapoints_to_alarm(self) -> typing.Optional[jsii.Number]:
@@ -7963,11 +7976,11 @@ class Dashboard(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         dashboard_name: typing.Optional[builtins.str] = None,
-        default_interval: typing.Optional[_Duration_4839e8c3] = None,
+        default_interval: typing.Optional["_Duration_4839e8c3"] = None,
         end: typing.Optional[builtins.str] = None,
         period_override: typing.Optional["PeriodOverride"] = None,
         start: typing.Optional[builtins.str] = None,
@@ -8074,7 +8087,7 @@ class DashboardProps:
         self,
         *,
         dashboard_name: typing.Optional[builtins.str] = None,
-        default_interval: typing.Optional[_Duration_4839e8c3] = None,
+        default_interval: typing.Optional["_Duration_4839e8c3"] = None,
         end: typing.Optional[builtins.str] = None,
         period_override: typing.Optional["PeriodOverride"] = None,
         start: typing.Optional[builtins.str] = None,
@@ -8148,7 +8161,7 @@ class DashboardProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def default_interval(self) -> typing.Optional[_Duration_4839e8c3]:
+    def default_interval(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Interval duration for metrics. You can specify defaultInterval with the relative time(eg. cdk.Duration.days(7)).
 
         Both properties ``defaultInterval`` and ``start`` cannot be set at once.
@@ -8156,7 +8169,7 @@ class DashboardProps:
         :default: When the dashboard loads, the defaultInterval time will be the default time range.
         '''
         result = self._values.get("default_interval")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def end(self) -> typing.Optional[builtins.str]:
@@ -8674,9 +8687,9 @@ class IAlarmAction(typing_extensions.Protocol):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         alarm: "IAlarm",
-    ) -> AlarmActionConfig:
+    ) -> "AlarmActionConfig":
         '''Return the properties required to send alarm actions to this CloudWatch alarm.
 
         :param scope: root Construct that allows creating new Constructs.
@@ -8693,9 +8706,9 @@ class _IAlarmActionProxy:
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         alarm: "IAlarm",
-    ) -> AlarmActionConfig:
+    ) -> "AlarmActionConfig":
         '''Return the properties required to send alarm actions to this CloudWatch alarm.
 
         :param scope: root Construct that allows creating new Constructs.
@@ -8705,7 +8718,7 @@ class _IAlarmActionProxy:
             type_hints = typing.get_type_hints(_typecheckingstub__19a88cc904e70d7841abfa1406b71edcf34c316b173c37c2881e75702bc0c75a)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument alarm", value=alarm, expected_type=type_hints["alarm"])
-        return typing.cast(AlarmActionConfig, jsii.invoke(self, "bind", [scope, alarm]))
+        return typing.cast("AlarmActionConfig", jsii.invoke(self, "bind", [scope, alarm]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAlarmAction).__jsii_proxy_class__ = lambda : _IAlarmActionProxy
@@ -9055,12 +9068,12 @@ class LogQueryWidgetProps:
         log_group_names: typing.Sequence[builtins.str],
         account_id: typing.Optional[builtins.str] = None,
         height: typing.Optional[jsii.Number] = None,
-        query_language: typing.Optional[LogQueryLanguage] = None,
+        query_language: typing.Optional["LogQueryLanguage"] = None,
         query_lines: typing.Optional[typing.Sequence[builtins.str]] = None,
         query_string: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         title: typing.Optional[builtins.str] = None,
-        view: typing.Optional[LogQueryVisualizationType] = None,
+        view: typing.Optional["LogQueryVisualizationType"] = None,
         width: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties for a Query widget.
@@ -9158,13 +9171,13 @@ class LogQueryWidgetProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def query_language(self) -> typing.Optional[LogQueryLanguage]:
+    def query_language(self) -> typing.Optional["LogQueryLanguage"]:
         '''The query language to use for the query.
 
         :default: LogQueryLanguage.LOGS_INSIGHTS
         '''
         result = self._values.get("query_language")
-        return typing.cast(typing.Optional[LogQueryLanguage], result)
+        return typing.cast(typing.Optional["LogQueryLanguage"], result)
 
     @builtins.property
     def query_lines(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -9208,13 +9221,13 @@ class LogQueryWidgetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def view(self) -> typing.Optional[LogQueryVisualizationType]:
+    def view(self) -> typing.Optional["LogQueryVisualizationType"]:
         '''The type of view to use.
 
         :default: LogQueryVisualizationType.TABLE
         '''
         result = self._values.get("view")
-        return typing.cast(typing.Optional[LogQueryVisualizationType], result)
+        return typing.cast(typing.Optional["LogQueryVisualizationType"], result)
 
     @builtins.property
     def width(self) -> typing.Optional[jsii.Number]:
@@ -9282,10 +9295,10 @@ class MathExpression(
         self,
         *,
         expression: builtins.str,
-        using_metrics: typing.Optional[typing.Mapping[builtins.str, IMetric]] = None,
+        using_metrics: typing.Optional[typing.Mapping[builtins.str, "IMetric"]] = None,
         color: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         search_account: typing.Optional[builtins.str] = None,
         search_region: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -9313,7 +9326,7 @@ class MathExpression(
     @jsii.member(jsii_name="createAlarm")
     def create_alarm(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         evaluation_periods: jsii.Number,
@@ -9321,7 +9334,7 @@ class MathExpression(
         actions_enabled: typing.Optional[builtins.bool] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
-        comparison_operator: typing.Optional[ComparisonOperator] = None,
+        comparison_operator: typing.Optional["ComparisonOperator"] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
         treat_missing_data: typing.Optional["TreatMissingData"] = None,
@@ -9377,7 +9390,7 @@ class MathExpression(
         *,
         color: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         search_account: typing.Optional[builtins.str] = None,
         search_region: typing.Optional[builtins.str] = None,
     ) -> "MathExpression":
@@ -9409,15 +9422,15 @@ class MathExpression(
 
     @builtins.property
     @jsii.member(jsii_name="period")
-    def period(self) -> _Duration_4839e8c3:
+    def period(self) -> "_Duration_4839e8c3":
         '''Aggregation period of this metric.'''
-        return typing.cast(_Duration_4839e8c3, jsii.get(self, "period"))
+        return typing.cast("_Duration_4839e8c3", jsii.get(self, "period"))
 
     @builtins.property
     @jsii.member(jsii_name="usingMetrics")
-    def using_metrics(self) -> typing.Mapping[builtins.str, IMetric]:
+    def using_metrics(self) -> typing.Mapping[builtins.str, "IMetric"]:
         '''The metrics used in the expression as KeyValuePair <id, metric>.'''
-        return typing.cast(typing.Mapping[builtins.str, IMetric], jsii.get(self, "usingMetrics"))
+        return typing.cast(typing.Mapping[builtins.str, "IMetric"], jsii.get(self, "usingMetrics"))
 
     @builtins.property
     @jsii.member(jsii_name="color")
@@ -9480,7 +9493,7 @@ class MathExpressionOptions:
         *,
         color: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         search_account: typing.Optional[builtins.str] = None,
         search_region: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -9566,7 +9579,7 @@ class MathExpressionOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period over which the math expression's statistics are applied.
 
         This period overrides all periods in the metrics used in this
@@ -9575,7 +9588,7 @@ class MathExpressionOptions:
         :default: Duration.minutes(5)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def search_account(self) -> typing.Optional[builtins.str]:
@@ -9632,11 +9645,11 @@ class MathExpressionProps(MathExpressionOptions):
         *,
         color: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         search_account: typing.Optional[builtins.str] = None,
         search_region: typing.Optional[builtins.str] = None,
         expression: builtins.str,
-        using_metrics: typing.Optional[typing.Mapping[builtins.str, IMetric]] = None,
+        using_metrics: typing.Optional[typing.Mapping[builtins.str, "IMetric"]] = None,
     ) -> None:
         '''Properties for a MathExpression.
 
@@ -9731,7 +9744,7 @@ class MathExpressionProps(MathExpressionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period over which the math expression's statistics are applied.
 
         This period overrides all periods in the metrics used in this
@@ -9740,7 +9753,7 @@ class MathExpressionProps(MathExpressionOptions):
         :default: Duration.minutes(5)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def search_account(self) -> typing.Optional[builtins.str]:
@@ -9778,7 +9791,7 @@ class MathExpressionProps(MathExpressionOptions):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def using_metrics(self) -> typing.Optional[typing.Mapping[builtins.str, IMetric]]:
+    def using_metrics(self) -> typing.Optional[typing.Mapping[builtins.str, "IMetric"]]:
         '''The metrics used in the expression, in a map.
 
         The key is the identifier that represents the given metric in the
@@ -9814,7 +9827,7 @@ class MathExpressionProps(MathExpressionOptions):
         :default: - Empty map.
         '''
         result = self._values.get("using_metrics")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, IMetric]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "IMetric"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9878,7 +9891,7 @@ class Metric(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Metr
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
@@ -9926,14 +9939,14 @@ class Metric(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Metr
     def anomaly_detection_for(
         cls,
         *,
-        metric: IMetric,
+        metric: "IMetric",
         std_devs: typing.Optional[jsii.Number] = None,
         color: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         search_account: typing.Optional[builtins.str] = None,
         search_region: typing.Optional[builtins.str] = None,
-    ) -> MathExpression:
+    ) -> "MathExpression":
         '''Creates an anomaly detection metric from the provided metric.
 
         :param metric: The metric to add the alarm on. Metric objects can be obtained from most resources, or you can construct custom Metric objects by instantiating one.
@@ -9956,11 +9969,14 @@ class Metric(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Metr
             search_region=search_region,
         )
 
-        return typing.cast(MathExpression, jsii.sinvoke(cls, "anomalyDetectionFor", [props]))
+        return typing.cast("MathExpression", jsii.sinvoke(cls, "anomalyDetectionFor", [props]))
 
     @jsii.member(jsii_name="grantPutMetricData")
     @builtins.classmethod
-    def grant_put_metric_data(cls, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_put_metric_data(
+        cls,
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant permissions to the given identity to write metrics.
 
         :param grantee: The IAM identity to give permissions to.
@@ -9968,10 +9984,10 @@ class Metric(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Metr
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__80cc2795f9742554fa1b3991c8df3ae2020ca7ee2fdc5766276d72c863b4eb74)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.sinvoke(cls, "grantPutMetricData", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.sinvoke(cls, "grantPutMetricData", [grantee]))
 
     @jsii.member(jsii_name="attachTo")
-    def attach_to(self, scope: _constructs_77d1e7e8.IConstruct) -> "Metric":
+    def attach_to(self, scope: "_constructs_77d1e7e8.IConstruct") -> "Metric":
         '''Attach the metric object to the given construct scope.
 
         Returns a Metric object that uses the account and region from the Stack
@@ -9993,7 +10009,7 @@ class Metric(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Metr
     @jsii.member(jsii_name="createAlarm")
     def create_alarm(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         evaluation_periods: jsii.Number,
@@ -10001,7 +10017,7 @@ class Metric(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Metr
         actions_enabled: typing.Optional[builtins.bool] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
-        comparison_operator: typing.Optional[ComparisonOperator] = None,
+        comparison_operator: typing.Optional["ComparisonOperator"] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
         treat_missing_data: typing.Optional["TreatMissingData"] = None,
@@ -10060,7 +10076,7 @@ class Metric(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Metr
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
@@ -10116,9 +10132,9 @@ class Metric(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Metr
 
     @builtins.property
     @jsii.member(jsii_name="period")
-    def period(self) -> _Duration_4839e8c3:
+    def period(self) -> "_Duration_4839e8c3":
         '''Period of this metric.'''
-        return typing.cast(_Duration_4839e8c3, jsii.get(self, "period"))
+        return typing.cast("_Duration_4839e8c3", jsii.get(self, "period"))
 
     @builtins.property
     @jsii.member(jsii_name="statistic")
@@ -10370,7 +10386,7 @@ class MetricExpressionConfig:
         *,
         expression: builtins.str,
         period: jsii.Number,
-        using_metrics: typing.Mapping[builtins.str, IMetric],
+        using_metrics: typing.Mapping[builtins.str, "IMetric"],
         search_account: typing.Optional[builtins.str] = None,
         search_region: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -10436,11 +10452,11 @@ class MetricExpressionConfig:
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def using_metrics(self) -> typing.Mapping[builtins.str, IMetric]:
+    def using_metrics(self) -> typing.Mapping[builtins.str, "IMetric"]:
         '''Metrics used in the math expression.'''
         result = self._values.get("using_metrics")
         assert result is not None, "Required property 'using_metrics' is missing"
-        return typing.cast(typing.Mapping[builtins.str, IMetric], result)
+        return typing.cast(typing.Mapping[builtins.str, "IMetric"], result)
 
     @builtins.property
     def search_account(self) -> typing.Optional[builtins.str]:
@@ -10499,7 +10515,7 @@ class MetricOptions(CommonMetricOptions):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
@@ -10647,13 +10663,13 @@ class MetricOptions(CommonMetricOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period over which the specified statistic is applied.
 
         :default: Duration.minutes(5)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def region(self) -> typing.Optional[builtins.str]:
@@ -10778,7 +10794,7 @@ class MetricProps(CommonMetricOptions):
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
@@ -10935,13 +10951,13 @@ class MetricProps(CommonMetricOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period over which the specified statistic is applied.
 
         :default: Duration.minutes(5)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def region(self) -> typing.Optional[builtins.str]:
@@ -11073,11 +11089,11 @@ class MetricStatConfig:
         *,
         metric_name: builtins.str,
         namespace: builtins.str,
-        period: _Duration_4839e8c3,
+        period: "_Duration_4839e8c3",
         statistic: builtins.str,
         account: typing.Optional[builtins.str] = None,
         account_override: typing.Optional[builtins.str] = None,
-        dimensions: typing.Optional[typing.Sequence[typing.Union[Dimension, typing.Dict[builtins.str, typing.Any]]]] = None,
+        dimensions: typing.Optional[typing.Sequence[typing.Union["Dimension", typing.Dict[builtins.str, typing.Any]]]] = None,
         region: typing.Optional[builtins.str] = None,
         region_override: typing.Optional[builtins.str] = None,
         unit_filter: typing.Optional["Unit"] = None,
@@ -11173,11 +11189,11 @@ class MetricStatConfig:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def period(self) -> _Duration_4839e8c3:
+    def period(self) -> "_Duration_4839e8c3":
         '''How many seconds to aggregate over.'''
         result = self._values.get("period")
         assert result is not None, "Required property 'period' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
     def statistic(self) -> builtins.str:
@@ -11205,13 +11221,13 @@ class MetricStatConfig:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def dimensions(self) -> typing.Optional[typing.List[Dimension]]:
+    def dimensions(self) -> typing.Optional[typing.List["Dimension"]]:
         '''The dimensions to apply to the alarm.
 
         :default: []
         '''
         result = self._values.get("dimensions")
-        return typing.cast(typing.Optional[typing.List[Dimension]], result)
+        return typing.cast(typing.Optional[typing.List["Dimension"]], result)
 
     @builtins.property
     def region(self) -> typing.Optional[builtins.str]:
@@ -11417,7 +11433,7 @@ class Row(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Row"):
         cloudwatch.Row(widget_a, widget_b)
     '''
 
-    def __init__(self, *widgets: IWidget) -> None:
+    def __init__(self, *widgets: "IWidget") -> None:
         '''
         :param widgets: -
         '''
@@ -11427,7 +11443,7 @@ class Row(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Row"):
         jsii.create(self.__class__, self, [*widgets])
 
     @jsii.member(jsii_name="addWidget")
-    def add_widget(self, w: IWidget) -> None:
+    def add_widget(self, w: "IWidget") -> None:
         '''Add the widget to this container.
 
         :param w: -
@@ -11463,9 +11479,9 @@ class Row(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Row"):
 
     @builtins.property
     @jsii.member(jsii_name="widgets")
-    def widgets(self) -> typing.List[IWidget]:
+    def widgets(self) -> typing.List["IWidget"]:
         '''List of contained widgets.'''
-        return typing.cast(typing.List[IWidget], jsii.get(self, "widgets"))
+        return typing.cast(typing.List["IWidget"], jsii.get(self, "widgets"))
 
     @builtins.property
     @jsii.member(jsii_name="width")
@@ -11619,7 +11635,7 @@ class SearchExpression(
         expression: builtins.str,
         color: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         search_account: typing.Optional[builtins.str] = None,
         search_region: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -11643,9 +11659,9 @@ class SearchExpression(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="toMetricConfig")
-    def to_metric_config(self) -> MetricConfig:
+    def to_metric_config(self) -> "MetricConfig":
         '''Inspect the details of the metric object.'''
-        return typing.cast(MetricConfig, jsii.invoke(self, "toMetricConfig", []))
+        return typing.cast("MetricConfig", jsii.invoke(self, "toMetricConfig", []))
 
     @jsii.member(jsii_name="toString")
     def to_string(self) -> builtins.str:
@@ -11658,7 +11674,7 @@ class SearchExpression(
         *,
         color: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         search_account: typing.Optional[builtins.str] = None,
         search_region: typing.Optional[builtins.str] = None,
     ) -> "SearchExpression":
@@ -11690,9 +11706,9 @@ class SearchExpression(
 
     @builtins.property
     @jsii.member(jsii_name="period")
-    def period(self) -> _Duration_4839e8c3:
+    def period(self) -> "_Duration_4839e8c3":
         '''The aggregation period for the metrics produced by the Search Expression.'''
-        return typing.cast(_Duration_4839e8c3, jsii.get(self, "period"))
+        return typing.cast("_Duration_4839e8c3", jsii.get(self, "period"))
 
     @builtins.property
     @jsii.member(jsii_name="color")
@@ -11755,7 +11771,7 @@ class SearchExpressionOptions:
         *,
         color: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         search_account: typing.Optional[builtins.str] = None,
         search_region: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -11843,7 +11859,7 @@ class SearchExpressionOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period over which the search expression's statistics are applied.
 
         This period overrides the period defined within the search expression.
@@ -11851,7 +11867,7 @@ class SearchExpressionOptions:
         :default: Duration.minutes(5)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def search_account(self) -> typing.Optional[builtins.str]:
@@ -11901,7 +11917,7 @@ class SearchExpressionProps(SearchExpressionOptions):
         *,
         color: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         search_account: typing.Optional[builtins.str] = None,
         search_region: typing.Optional[builtins.str] = None,
         expression: builtins.str,
@@ -11987,7 +12003,7 @@ class SearchExpressionProps(SearchExpressionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period over which the search expression's statistics are applied.
 
         This period overrides the period defined within the search expression.
@@ -11995,7 +12011,7 @@ class SearchExpressionProps(SearchExpressionOptions):
         :default: Duration.minutes(5)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def search_account(self) -> typing.Optional[builtins.str]:
@@ -12088,10 +12104,10 @@ class SingleValueWidgetProps(MetricWidgetProps):
         region: typing.Optional[builtins.str] = None,
         title: typing.Optional[builtins.str] = None,
         width: typing.Optional[jsii.Number] = None,
-        metrics: typing.Sequence[IMetric],
+        metrics: typing.Sequence["IMetric"],
         end: typing.Optional[builtins.str] = None,
         full_precision: typing.Optional[builtins.bool] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         set_period_to_time_range: typing.Optional[builtins.bool] = None,
         sparkline: typing.Optional[builtins.bool] = None,
         start: typing.Optional[builtins.str] = None,
@@ -12220,11 +12236,11 @@ class SingleValueWidgetProps(MetricWidgetProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def metrics(self) -> typing.List[IMetric]:
+    def metrics(self) -> typing.List["IMetric"]:
         '''Metrics to display.'''
         result = self._values.get("metrics")
         assert result is not None, "Required property 'metrics' is missing"
-        return typing.cast(typing.List[IMetric], result)
+        return typing.cast(typing.List["IMetric"], result)
 
     @builtins.property
     def end(self) -> typing.Optional[builtins.str]:
@@ -12248,7 +12264,7 @@ class SingleValueWidgetProps(MetricWidgetProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The default period for all metrics in this widget.
 
         The period is the length of time represented by one data point on the graph.
@@ -12257,7 +12273,7 @@ class SingleValueWidgetProps(MetricWidgetProps):
         :default: cdk.Duration.seconds(300)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def set_period_to_time_range(self) -> typing.Optional[builtins.bool]:
@@ -12930,7 +12946,7 @@ class TableSummaryProps:
     def __init__(
         self,
         *,
-        columns: typing.Optional[typing.Sequence[TableSummaryColumn]] = None,
+        columns: typing.Optional[typing.Sequence["TableSummaryColumn"]] = None,
         hide_non_summary_columns: typing.Optional[builtins.bool] = None,
         sticky: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -12971,13 +12987,13 @@ class TableSummaryProps:
             self._values["sticky"] = sticky
 
     @builtins.property
-    def columns(self) -> typing.Optional[typing.List[TableSummaryColumn]]:
+    def columns(self) -> typing.Optional[typing.List["TableSummaryColumn"]]:
         '''Summary columns.
 
         :default: - No summary columns will be shown
         '''
         result = self._values.get("columns")
-        return typing.cast(typing.Optional[typing.List[TableSummaryColumn]], result)
+        return typing.cast(typing.Optional[typing.List["TableSummaryColumn"]], result)
 
     @builtins.property
     def hide_non_summary_columns(self) -> typing.Optional[builtins.bool]:
@@ -13129,16 +13145,16 @@ class TableWidgetProps(MetricWidgetProps):
         width: typing.Optional[jsii.Number] = None,
         end: typing.Optional[builtins.str] = None,
         full_precision: typing.Optional[builtins.bool] = None,
-        layout: typing.Optional[TableLayout] = None,
+        layout: typing.Optional["TableLayout"] = None,
         live_data: typing.Optional[builtins.bool] = None,
-        metrics: typing.Optional[typing.Sequence[IMetric]] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        metrics: typing.Optional[typing.Sequence["IMetric"]] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         set_period_to_time_range: typing.Optional[builtins.bool] = None,
         show_units_in_label: typing.Optional[builtins.bool] = None,
         start: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        summary: typing.Optional[typing.Union[TableSummaryProps, typing.Dict[builtins.str, typing.Any]]] = None,
-        thresholds: typing.Optional[typing.Sequence[TableThreshold]] = None,
+        summary: typing.Optional[typing.Union["TableSummaryProps", typing.Dict[builtins.str, typing.Any]]] = None,
+        thresholds: typing.Optional[typing.Sequence["TableThreshold"]] = None,
     ) -> None:
         '''Properties for a TableWidget.
 
@@ -13307,13 +13323,13 @@ class TableWidgetProps(MetricWidgetProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def layout(self) -> typing.Optional[TableLayout]:
+    def layout(self) -> typing.Optional["TableLayout"]:
         '''Table layout.
 
         :default: - TableLayout.HORIZONTAL
         '''
         result = self._values.get("layout")
-        return typing.cast(typing.Optional[TableLayout], result)
+        return typing.cast(typing.Optional["TableLayout"], result)
 
     @builtins.property
     def live_data(self) -> typing.Optional[builtins.bool]:
@@ -13325,16 +13341,16 @@ class TableWidgetProps(MetricWidgetProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def metrics(self) -> typing.Optional[typing.List[IMetric]]:
+    def metrics(self) -> typing.Optional[typing.List["IMetric"]]:
         '''Metrics to display in the table.
 
         :default: - No metrics
         '''
         result = self._values.get("metrics")
-        return typing.cast(typing.Optional[typing.List[IMetric]], result)
+        return typing.cast(typing.Optional[typing.List["IMetric"]], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The default period for all metrics in this widget.
 
         The period is the length of time represented by one data point on the graph.
@@ -13343,7 +13359,7 @@ class TableWidgetProps(MetricWidgetProps):
         :default: cdk.Duration.seconds(300)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def set_period_to_time_range(self) -> typing.Optional[builtins.bool]:
@@ -13393,22 +13409,22 @@ class TableWidgetProps(MetricWidgetProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def summary(self) -> typing.Optional[TableSummaryProps]:
+    def summary(self) -> typing.Optional["TableSummaryProps"]:
         '''Properties for displaying summary columns.
 
         :default: - no summary columns are shown
         '''
         result = self._values.get("summary")
-        return typing.cast(typing.Optional[TableSummaryProps], result)
+        return typing.cast(typing.Optional["TableSummaryProps"], result)
 
     @builtins.property
-    def thresholds(self) -> typing.Optional[typing.List[TableThreshold]]:
+    def thresholds(self) -> typing.Optional[typing.List["TableThreshold"]]:
         '''Thresholds for highlighting table cells.
 
         :default: - No thresholds
         '''
         result = self._values.get("thresholds")
-        return typing.cast(typing.Optional[typing.List[TableThreshold]], result)
+        return typing.cast(typing.Optional[typing.List["TableThreshold"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13460,7 +13476,7 @@ class TextWidgetProps:
         self,
         *,
         markdown: builtins.str,
-        background: typing.Optional[TextWidgetBackground] = None,
+        background: typing.Optional["TextWidgetBackground"] = None,
         height: typing.Optional[jsii.Number] = None,
         width: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -13506,13 +13522,13 @@ class TextWidgetProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def background(self) -> typing.Optional[TextWidgetBackground]:
+    def background(self) -> typing.Optional["TextWidgetBackground"]:
         '''Background for the widget.
 
         :default: solid
         '''
         result = self._values.get("background")
-        return typing.cast(typing.Optional[TextWidgetBackground], result)
+        return typing.cast(typing.Optional["TextWidgetBackground"], result)
 
     @builtins.property
     def height(self) -> typing.Optional[jsii.Number]:
@@ -14193,11 +14209,11 @@ class AlarmProps(CreateAlarmOptions):
         actions_enabled: typing.Optional[builtins.bool] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
-        comparison_operator: typing.Optional[ComparisonOperator] = None,
+        comparison_operator: typing.Optional["ComparisonOperator"] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
-        treat_missing_data: typing.Optional[TreatMissingData] = None,
-        metric: IMetric,
+        treat_missing_data: typing.Optional["TreatMissingData"] = None,
+        metric: "IMetric",
     ) -> None:
         '''Properties for Alarms.
 
@@ -14314,13 +14330,13 @@ class AlarmProps(CreateAlarmOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def comparison_operator(self) -> typing.Optional[ComparisonOperator]:
+    def comparison_operator(self) -> typing.Optional["ComparisonOperator"]:
         '''Comparison to use to check if metric is breaching.
 
         :default: GreaterThanOrEqualToThreshold
         '''
         result = self._values.get("comparison_operator")
-        return typing.cast(typing.Optional[ComparisonOperator], result)
+        return typing.cast(typing.Optional["ComparisonOperator"], result)
 
     @builtins.property
     def datapoints_to_alarm(self) -> typing.Optional[jsii.Number]:
@@ -14349,16 +14365,16 @@ class AlarmProps(CreateAlarmOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def treat_missing_data(self) -> typing.Optional[TreatMissingData]:
+    def treat_missing_data(self) -> typing.Optional["TreatMissingData"]:
         '''Sets how this alarm is to handle missing data points.
 
         :default: TreatMissingData.Missing
         '''
         result = self._values.get("treat_missing_data")
-        return typing.cast(typing.Optional[TreatMissingData], result)
+        return typing.cast(typing.Optional["TreatMissingData"], result)
 
     @builtins.property
-    def metric(self) -> IMetric:
+    def metric(self) -> "IMetric":
         '''The metric to add the alarm on.
 
         Metric objects can be obtained from most resources, or you can construct
@@ -14366,7 +14382,7 @@ class AlarmProps(CreateAlarmOptions):
         '''
         result = self._values.get("metric")
         assert result is not None, "Required property 'metric' is missing"
-        return typing.cast(IMetric, result)
+        return typing.cast("IMetric", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14403,7 +14419,7 @@ class AlarmWidgetProps(MetricWidgetProps):
         title: typing.Optional[builtins.str] = None,
         width: typing.Optional[jsii.Number] = None,
         alarm: "IAlarm",
-        left_y_axis: typing.Optional[typing.Union[YAxisProps, typing.Dict[builtins.str, typing.Any]]] = None,
+        left_y_axis: typing.Optional[typing.Union["YAxisProps", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties for an AlarmWidget.
 
@@ -14518,13 +14534,13 @@ class AlarmWidgetProps(MetricWidgetProps):
         return typing.cast("IAlarm", result)
 
     @builtins.property
-    def left_y_axis(self) -> typing.Optional[YAxisProps]:
+    def left_y_axis(self) -> typing.Optional["YAxisProps"]:
         '''Left Y axis.
 
         :default: - No minimum or maximum values for the left Y-axis
         '''
         result = self._values.get("left_y_axis")
-        return typing.cast(typing.Optional[YAxisProps], result)
+        return typing.cast(typing.Optional["YAxisProps"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14557,10 +14573,10 @@ class AnomalyDetectionMetricOptions(MathExpressionOptions):
         *,
         color: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         search_account: typing.Optional[builtins.str] = None,
         search_region: typing.Optional[builtins.str] = None,
-        metric: IMetric,
+        metric: "IMetric",
         std_devs: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Properties needed to make an anomaly detection alarm from a metric.
@@ -14659,7 +14675,7 @@ class AnomalyDetectionMetricOptions(MathExpressionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The period over which the math expression's statistics are applied.
 
         This period overrides all periods in the metrics used in this
@@ -14668,7 +14684,7 @@ class AnomalyDetectionMetricOptions(MathExpressionOptions):
         :default: Duration.minutes(5)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def search_account(self) -> typing.Optional[builtins.str]:
@@ -14695,7 +14711,7 @@ class AnomalyDetectionMetricOptions(MathExpressionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def metric(self) -> IMetric:
+    def metric(self) -> "IMetric":
         '''The metric to add the alarm on.
 
         Metric objects can be obtained from most resources, or you can construct
@@ -14703,7 +14719,7 @@ class AnomalyDetectionMetricOptions(MathExpressionOptions):
         '''
         result = self._values.get("metric")
         assert result is not None, "Required property 'metric' is missing"
-        return typing.cast(IMetric, result)
+        return typing.cast("IMetric", result)
 
     @builtins.property
     def std_devs(self) -> typing.Optional[jsii.Number]:
@@ -14748,7 +14764,7 @@ class Column(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Colu
         cloudwatch.Column(widget_a, widget_b)
     '''
 
-    def __init__(self, *widgets: IWidget) -> None:
+    def __init__(self, *widgets: "IWidget") -> None:
         '''
         :param widgets: -
         '''
@@ -14758,7 +14774,7 @@ class Column(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Colu
         jsii.create(self.__class__, self, [*widgets])
 
     @jsii.member(jsii_name="addWidget")
-    def add_widget(self, w: IWidget) -> None:
+    def add_widget(self, w: "IWidget") -> None:
         '''Add the widget to this container.
 
         :param w: -
@@ -14794,9 +14810,9 @@ class Column(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_cloudwatch.Colu
 
     @builtins.property
     @jsii.member(jsii_name="widgets")
-    def widgets(self) -> typing.List[IWidget]:
+    def widgets(self) -> typing.List["IWidget"]:
         '''List of contained widgets.'''
-        return typing.cast(typing.List[IWidget], jsii.get(self, "widgets"))
+        return typing.cast(typing.List["IWidget"], jsii.get(self, "widgets"))
 
     @builtins.property
     @jsii.member(jsii_name="width")
@@ -14827,7 +14843,7 @@ class ConcreteWidget(
         jsii.create(self.__class__, self, [width, height])
 
     @jsii.member(jsii_name="copyMetricWarnings")
-    def _copy_metric_warnings(self, *ms: IMetric) -> None:
+    def _copy_metric_warnings(self, *ms: "IMetric") -> None:
         '''Copy the warnings from the given metric.
 
         :param ms: -
@@ -15020,12 +15036,12 @@ class DashboardVariable(
         self,
         *,
         id: builtins.str,
-        input_type: VariableInputType,
-        type: VariableType,
+        input_type: "VariableInputType",
+        type: "VariableType",
         value: builtins.str,
-        default_value: typing.Optional[DefaultValue] = None,
+        default_value: typing.Optional["DefaultValue"] = None,
         label: typing.Optional[builtins.str] = None,
-        values: typing.Optional[Values] = None,
+        values: typing.Optional["Values"] = None,
         visible: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''
@@ -15085,13 +15101,13 @@ class GaugeWidget(
     def __init__(
         self,
         *,
-        annotations: typing.Optional[typing.Sequence[typing.Union[HorizontalAnnotation, typing.Dict[builtins.str, typing.Any]]]] = None,
+        annotations: typing.Optional[typing.Sequence[typing.Union["HorizontalAnnotation", typing.Dict[builtins.str, typing.Any]]]] = None,
         end: typing.Optional[builtins.str] = None,
-        left_y_axis: typing.Optional[typing.Union[YAxisProps, typing.Dict[builtins.str, typing.Any]]] = None,
-        legend_position: typing.Optional[LegendPosition] = None,
+        left_y_axis: typing.Optional[typing.Union["YAxisProps", typing.Dict[builtins.str, typing.Any]]] = None,
+        legend_position: typing.Optional["LegendPosition"] = None,
         live_data: typing.Optional[builtins.bool] = None,
-        metrics: typing.Optional[typing.Sequence[IMetric]] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        metrics: typing.Optional[typing.Sequence["IMetric"]] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         set_period_to_time_range: typing.Optional[builtins.bool] = None,
         start: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
@@ -15139,7 +15155,7 @@ class GaugeWidget(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="addMetric")
-    def add_metric(self, metric: IMetric) -> None:
+    def add_metric(self, metric: "IMetric") -> None:
         '''Add another metric to the left Y axis of the GaugeWidget.
 
         :param metric: the metric to add.
@@ -15185,13 +15201,13 @@ class GaugeWidgetProps(MetricWidgetProps):
         region: typing.Optional[builtins.str] = None,
         title: typing.Optional[builtins.str] = None,
         width: typing.Optional[jsii.Number] = None,
-        annotations: typing.Optional[typing.Sequence[typing.Union[HorizontalAnnotation, typing.Dict[builtins.str, typing.Any]]]] = None,
+        annotations: typing.Optional[typing.Sequence[typing.Union["HorizontalAnnotation", typing.Dict[builtins.str, typing.Any]]]] = None,
         end: typing.Optional[builtins.str] = None,
-        left_y_axis: typing.Optional[typing.Union[YAxisProps, typing.Dict[builtins.str, typing.Any]]] = None,
-        legend_position: typing.Optional[LegendPosition] = None,
+        left_y_axis: typing.Optional[typing.Union["YAxisProps", typing.Dict[builtins.str, typing.Any]]] = None,
+        legend_position: typing.Optional["LegendPosition"] = None,
         live_data: typing.Optional[builtins.bool] = None,
-        metrics: typing.Optional[typing.Sequence[IMetric]] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        metrics: typing.Optional[typing.Sequence["IMetric"]] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         set_period_to_time_range: typing.Optional[builtins.bool] = None,
         start: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
@@ -15338,13 +15354,13 @@ class GaugeWidgetProps(MetricWidgetProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def annotations(self) -> typing.Optional[typing.List[HorizontalAnnotation]]:
+    def annotations(self) -> typing.Optional[typing.List["HorizontalAnnotation"]]:
         '''Annotations for the left Y axis.
 
         :default: - No annotations
         '''
         result = self._values.get("annotations")
-        return typing.cast(typing.Optional[typing.List[HorizontalAnnotation]], result)
+        return typing.cast(typing.Optional[typing.List["HorizontalAnnotation"]], result)
 
     @builtins.property
     def end(self) -> typing.Optional[builtins.str]:
@@ -15359,22 +15375,22 @@ class GaugeWidgetProps(MetricWidgetProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def left_y_axis(self) -> typing.Optional[YAxisProps]:
+    def left_y_axis(self) -> typing.Optional["YAxisProps"]:
         '''Left Y axis.
 
         :default: {min:0,max:100}
         '''
         result = self._values.get("left_y_axis")
-        return typing.cast(typing.Optional[YAxisProps], result)
+        return typing.cast(typing.Optional["YAxisProps"], result)
 
     @builtins.property
-    def legend_position(self) -> typing.Optional[LegendPosition]:
+    def legend_position(self) -> typing.Optional["LegendPosition"]:
         '''Position of the legend.
 
         :default: - bottom
         '''
         result = self._values.get("legend_position")
-        return typing.cast(typing.Optional[LegendPosition], result)
+        return typing.cast(typing.Optional["LegendPosition"], result)
 
     @builtins.property
     def live_data(self) -> typing.Optional[builtins.bool]:
@@ -15386,16 +15402,16 @@ class GaugeWidgetProps(MetricWidgetProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def metrics(self) -> typing.Optional[typing.List[IMetric]]:
+    def metrics(self) -> typing.Optional[typing.List["IMetric"]]:
         '''Metrics to display on left Y axis.
 
         :default: - No metrics
         '''
         result = self._values.get("metrics")
-        return typing.cast(typing.Optional[typing.List[IMetric]], result)
+        return typing.cast(typing.Optional[typing.List["IMetric"]], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The default period for all metrics in this widget.
 
         The period is the length of time represented by one data point on the graph.
@@ -15404,7 +15420,7 @@ class GaugeWidgetProps(MetricWidgetProps):
         :default: cdk.Duration.seconds(300)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def set_period_to_time_range(self) -> typing.Optional[builtins.bool]:
@@ -15489,21 +15505,21 @@ class GraphWidget(
         *,
         display_labels_on_chart: typing.Optional[builtins.bool] = None,
         end: typing.Optional[builtins.str] = None,
-        left: typing.Optional[typing.Sequence[IMetric]] = None,
-        left_annotations: typing.Optional[typing.Sequence[typing.Union[HorizontalAnnotation, typing.Dict[builtins.str, typing.Any]]]] = None,
-        left_y_axis: typing.Optional[typing.Union[YAxisProps, typing.Dict[builtins.str, typing.Any]]] = None,
-        legend_position: typing.Optional[LegendPosition] = None,
+        left: typing.Optional[typing.Sequence["IMetric"]] = None,
+        left_annotations: typing.Optional[typing.Sequence[typing.Union["HorizontalAnnotation", typing.Dict[builtins.str, typing.Any]]]] = None,
+        left_y_axis: typing.Optional[typing.Union["YAxisProps", typing.Dict[builtins.str, typing.Any]]] = None,
+        legend_position: typing.Optional["LegendPosition"] = None,
         live_data: typing.Optional[builtins.bool] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
-        right: typing.Optional[typing.Sequence[IMetric]] = None,
-        right_annotations: typing.Optional[typing.Sequence[typing.Union[HorizontalAnnotation, typing.Dict[builtins.str, typing.Any]]]] = None,
-        right_y_axis: typing.Optional[typing.Union[YAxisProps, typing.Dict[builtins.str, typing.Any]]] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        right: typing.Optional[typing.Sequence["IMetric"]] = None,
+        right_annotations: typing.Optional[typing.Sequence[typing.Union["HorizontalAnnotation", typing.Dict[builtins.str, typing.Any]]]] = None,
+        right_y_axis: typing.Optional[typing.Union["YAxisProps", typing.Dict[builtins.str, typing.Any]]] = None,
         set_period_to_time_range: typing.Optional[builtins.bool] = None,
         stacked: typing.Optional[builtins.bool] = None,
         start: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        vertical_annotations: typing.Optional[typing.Sequence[typing.Union[VerticalAnnotation, typing.Dict[builtins.str, typing.Any]]]] = None,
-        view: typing.Optional[GraphWidgetView] = None,
+        vertical_annotations: typing.Optional[typing.Sequence[typing.Union["VerticalAnnotation", typing.Dict[builtins.str, typing.Any]]]] = None,
+        view: typing.Optional["GraphWidgetView"] = None,
         account_id: typing.Optional[builtins.str] = None,
         height: typing.Optional[jsii.Number] = None,
         region: typing.Optional[builtins.str] = None,
@@ -15562,7 +15578,7 @@ class GraphWidget(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="addLeftMetric")
-    def add_left_metric(self, metric: IMetric) -> None:
+    def add_left_metric(self, metric: "IMetric") -> None:
         '''Add another metric to the left Y axis of the GraphWidget.
 
         :param metric: the metric to add.
@@ -15573,7 +15589,7 @@ class GraphWidget(
         return typing.cast(None, jsii.invoke(self, "addLeftMetric", [metric]))
 
     @jsii.member(jsii_name="addRightMetric")
-    def add_right_metric(self, metric: IMetric) -> None:
+    def add_right_metric(self, metric: "IMetric") -> None:
         '''Add another metric to the right Y axis of the GraphWidget.
 
         :param metric: the metric to add.
@@ -15628,21 +15644,21 @@ class GraphWidgetProps(MetricWidgetProps):
         width: typing.Optional[jsii.Number] = None,
         display_labels_on_chart: typing.Optional[builtins.bool] = None,
         end: typing.Optional[builtins.str] = None,
-        left: typing.Optional[typing.Sequence[IMetric]] = None,
-        left_annotations: typing.Optional[typing.Sequence[typing.Union[HorizontalAnnotation, typing.Dict[builtins.str, typing.Any]]]] = None,
-        left_y_axis: typing.Optional[typing.Union[YAxisProps, typing.Dict[builtins.str, typing.Any]]] = None,
-        legend_position: typing.Optional[LegendPosition] = None,
+        left: typing.Optional[typing.Sequence["IMetric"]] = None,
+        left_annotations: typing.Optional[typing.Sequence[typing.Union["HorizontalAnnotation", typing.Dict[builtins.str, typing.Any]]]] = None,
+        left_y_axis: typing.Optional[typing.Union["YAxisProps", typing.Dict[builtins.str, typing.Any]]] = None,
+        legend_position: typing.Optional["LegendPosition"] = None,
         live_data: typing.Optional[builtins.bool] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
-        right: typing.Optional[typing.Sequence[IMetric]] = None,
-        right_annotations: typing.Optional[typing.Sequence[typing.Union[HorizontalAnnotation, typing.Dict[builtins.str, typing.Any]]]] = None,
-        right_y_axis: typing.Optional[typing.Union[YAxisProps, typing.Dict[builtins.str, typing.Any]]] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        right: typing.Optional[typing.Sequence["IMetric"]] = None,
+        right_annotations: typing.Optional[typing.Sequence[typing.Union["HorizontalAnnotation", typing.Dict[builtins.str, typing.Any]]]] = None,
+        right_y_axis: typing.Optional[typing.Union["YAxisProps", typing.Dict[builtins.str, typing.Any]]] = None,
         set_period_to_time_range: typing.Optional[builtins.bool] = None,
         stacked: typing.Optional[builtins.bool] = None,
         start: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        vertical_annotations: typing.Optional[typing.Sequence[typing.Union[VerticalAnnotation, typing.Dict[builtins.str, typing.Any]]]] = None,
-        view: typing.Optional[GraphWidgetView] = None,
+        vertical_annotations: typing.Optional[typing.Sequence[typing.Union["VerticalAnnotation", typing.Dict[builtins.str, typing.Any]]]] = None,
+        view: typing.Optional["GraphWidgetView"] = None,
     ) -> None:
         '''Properties for a GraphWidget.
 
@@ -15842,40 +15858,40 @@ class GraphWidgetProps(MetricWidgetProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def left(self) -> typing.Optional[typing.List[IMetric]]:
+    def left(self) -> typing.Optional[typing.List["IMetric"]]:
         '''Metrics to display on left Y axis.
 
         :default: - No metrics
         '''
         result = self._values.get("left")
-        return typing.cast(typing.Optional[typing.List[IMetric]], result)
+        return typing.cast(typing.Optional[typing.List["IMetric"]], result)
 
     @builtins.property
-    def left_annotations(self) -> typing.Optional[typing.List[HorizontalAnnotation]]:
+    def left_annotations(self) -> typing.Optional[typing.List["HorizontalAnnotation"]]:
         '''Annotations for the left Y axis.
 
         :default: - No annotations
         '''
         result = self._values.get("left_annotations")
-        return typing.cast(typing.Optional[typing.List[HorizontalAnnotation]], result)
+        return typing.cast(typing.Optional[typing.List["HorizontalAnnotation"]], result)
 
     @builtins.property
-    def left_y_axis(self) -> typing.Optional[YAxisProps]:
+    def left_y_axis(self) -> typing.Optional["YAxisProps"]:
         '''Left Y axis.
 
         :default: - None
         '''
         result = self._values.get("left_y_axis")
-        return typing.cast(typing.Optional[YAxisProps], result)
+        return typing.cast(typing.Optional["YAxisProps"], result)
 
     @builtins.property
-    def legend_position(self) -> typing.Optional[LegendPosition]:
+    def legend_position(self) -> typing.Optional["LegendPosition"]:
         '''Position of the legend.
 
         :default: - bottom
         '''
         result = self._values.get("legend_position")
-        return typing.cast(typing.Optional[LegendPosition], result)
+        return typing.cast(typing.Optional["LegendPosition"], result)
 
     @builtins.property
     def live_data(self) -> typing.Optional[builtins.bool]:
@@ -15887,7 +15903,7 @@ class GraphWidgetProps(MetricWidgetProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The default period for all metrics in this widget.
 
         The period is the length of time represented by one data point on the graph.
@@ -15896,34 +15912,34 @@ class GraphWidgetProps(MetricWidgetProps):
         :default: cdk.Duration.seconds(300)
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def right(self) -> typing.Optional[typing.List[IMetric]]:
+    def right(self) -> typing.Optional[typing.List["IMetric"]]:
         '''Metrics to display on right Y axis.
 
         :default: - No metrics
         '''
         result = self._values.get("right")
-        return typing.cast(typing.Optional[typing.List[IMetric]], result)
+        return typing.cast(typing.Optional[typing.List["IMetric"]], result)
 
     @builtins.property
-    def right_annotations(self) -> typing.Optional[typing.List[HorizontalAnnotation]]:
+    def right_annotations(self) -> typing.Optional[typing.List["HorizontalAnnotation"]]:
         '''Annotations for the right Y axis.
 
         :default: - No annotations
         '''
         result = self._values.get("right_annotations")
-        return typing.cast(typing.Optional[typing.List[HorizontalAnnotation]], result)
+        return typing.cast(typing.Optional[typing.List["HorizontalAnnotation"]], result)
 
     @builtins.property
-    def right_y_axis(self) -> typing.Optional[YAxisProps]:
+    def right_y_axis(self) -> typing.Optional["YAxisProps"]:
         '''Right Y axis.
 
         :default: - None
         '''
         result = self._values.get("right_y_axis")
-        return typing.cast(typing.Optional[YAxisProps], result)
+        return typing.cast(typing.Optional["YAxisProps"], result)
 
     @builtins.property
     def set_period_to_time_range(self) -> typing.Optional[builtins.bool]:
@@ -15973,22 +15989,24 @@ class GraphWidgetProps(MetricWidgetProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def vertical_annotations(self) -> typing.Optional[typing.List[VerticalAnnotation]]:
+    def vertical_annotations(
+        self,
+    ) -> typing.Optional[typing.List["VerticalAnnotation"]]:
         '''Annotations for the X axis.
 
         :default: - No annotations
         '''
         result = self._values.get("vertical_annotations")
-        return typing.cast(typing.Optional[typing.List[VerticalAnnotation]], result)
+        return typing.cast(typing.Optional[typing.List["VerticalAnnotation"]], result)
 
     @builtins.property
-    def view(self) -> typing.Optional[GraphWidgetView]:
+    def view(self) -> typing.Optional["GraphWidgetView"]:
         '''Display this metric.
 
         :default: TimeSeries
         '''
         result = self._values.get("view")
-        return typing.cast(typing.Optional[GraphWidgetView], result)
+        return typing.cast(typing.Optional["GraphWidgetView"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16084,12 +16102,12 @@ class LogQueryWidget(
         log_group_names: typing.Sequence[builtins.str],
         account_id: typing.Optional[builtins.str] = None,
         height: typing.Optional[jsii.Number] = None,
-        query_language: typing.Optional[LogQueryLanguage] = None,
+        query_language: typing.Optional["LogQueryLanguage"] = None,
         query_lines: typing.Optional[typing.Sequence[builtins.str]] = None,
         query_string: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         title: typing.Optional[builtins.str] = None,
-        view: typing.Optional[LogQueryVisualizationType] = None,
+        view: typing.Optional["LogQueryVisualizationType"] = None,
         width: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -16149,10 +16167,10 @@ class SingleValueWidget(
     def __init__(
         self,
         *,
-        metrics: typing.Sequence[IMetric],
+        metrics: typing.Sequence["IMetric"],
         end: typing.Optional[builtins.str] = None,
         full_precision: typing.Optional[builtins.bool] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         set_period_to_time_range: typing.Optional[builtins.bool] = None,
         sparkline: typing.Optional[builtins.bool] = None,
         start: typing.Optional[builtins.str] = None,
@@ -16225,16 +16243,16 @@ class TableWidget(
         *,
         end: typing.Optional[builtins.str] = None,
         full_precision: typing.Optional[builtins.bool] = None,
-        layout: typing.Optional[TableLayout] = None,
+        layout: typing.Optional["TableLayout"] = None,
         live_data: typing.Optional[builtins.bool] = None,
-        metrics: typing.Optional[typing.Sequence[IMetric]] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        metrics: typing.Optional[typing.Sequence["IMetric"]] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         set_period_to_time_range: typing.Optional[builtins.bool] = None,
         show_units_in_label: typing.Optional[builtins.bool] = None,
         start: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        summary: typing.Optional[typing.Union[TableSummaryProps, typing.Dict[builtins.str, typing.Any]]] = None,
-        thresholds: typing.Optional[typing.Sequence[TableThreshold]] = None,
+        summary: typing.Optional[typing.Union["TableSummaryProps", typing.Dict[builtins.str, typing.Any]]] = None,
+        thresholds: typing.Optional[typing.Sequence["TableThreshold"]] = None,
         account_id: typing.Optional[builtins.str] = None,
         height: typing.Optional[jsii.Number] = None,
         region: typing.Optional[builtins.str] = None,
@@ -16283,7 +16301,7 @@ class TableWidget(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="addMetric")
-    def add_metric(self, metric: IMetric) -> None:
+    def add_metric(self, metric: "IMetric") -> None:
         '''Add another metric.
 
         :param metric: the metric to add.
@@ -16322,7 +16340,7 @@ class TextWidget(
         self,
         *,
         markdown: builtins.str,
-        background: typing.Optional[TextWidgetBackground] = None,
+        background: typing.Optional["TextWidgetBackground"] = None,
         height: typing.Optional[jsii.Number] = None,
         width: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -16367,7 +16385,7 @@ class AlarmBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -16397,7 +16415,7 @@ class AlarmBase(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="addAlarmAction")
-    def add_alarm_action(self, *actions: IAlarmAction) -> None:
+    def add_alarm_action(self, *actions: "IAlarmAction") -> None:
         '''Trigger this action if the alarm fires.
 
         Typically SnsAction or AutoScalingAction.
@@ -16410,7 +16428,7 @@ class AlarmBase(
         return typing.cast(None, jsii.invoke(self, "addAlarmAction", [*actions]))
 
     @jsii.member(jsii_name="addInsufficientDataAction")
-    def add_insufficient_data_action(self, *actions: IAlarmAction) -> None:
+    def add_insufficient_data_action(self, *actions: "IAlarmAction") -> None:
         '''Trigger this action if there is insufficient data to evaluate the alarm.
 
         Typically SnsAction or AutoScalingAction.
@@ -16423,7 +16441,7 @@ class AlarmBase(
         return typing.cast(None, jsii.invoke(self, "addInsufficientDataAction", [*actions]))
 
     @jsii.member(jsii_name="addOkAction")
-    def add_ok_action(self, *actions: IAlarmAction) -> None:
+    def add_ok_action(self, *actions: "IAlarmAction") -> None:
         '''Trigger this action if the alarm returns from breaching state into ok state.
 
         Typically SnsAction or AutoScalingAction.
@@ -16552,10 +16570,10 @@ class AlarmStatusWidget(
     def __init__(
         self,
         *,
-        alarms: typing.Sequence[IAlarm],
+        alarms: typing.Sequence["IAlarm"],
         height: typing.Optional[jsii.Number] = None,
-        sort_by: typing.Optional[AlarmStatusWidgetSortBy] = None,
-        states: typing.Optional[typing.Sequence[AlarmState]] = None,
+        sort_by: typing.Optional["AlarmStatusWidgetSortBy"] = None,
+        states: typing.Optional[typing.Sequence["AlarmState"]] = None,
         title: typing.Optional[builtins.str] = None,
         width: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -16621,8 +16639,8 @@ class AlarmWidget(
     def __init__(
         self,
         *,
-        alarm: IAlarm,
-        left_y_axis: typing.Optional[typing.Union[YAxisProps, typing.Dict[builtins.str, typing.Any]]] = None,
+        alarm: "IAlarm",
+        left_y_axis: typing.Optional[typing.Union["YAxisProps", typing.Dict[builtins.str, typing.Any]]] = None,
         account_id: typing.Optional[builtins.str] = None,
         height: typing.Optional[jsii.Number] = None,
         region: typing.Optional[builtins.str] = None,
@@ -16687,14 +16705,14 @@ class CompositeAlarm(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        alarm_rule: IAlarmRule,
+        alarm_rule: "IAlarmRule",
         actions_enabled: typing.Optional[builtins.bool] = None,
-        actions_suppressor: typing.Optional[IAlarm] = None,
-        actions_suppressor_extension_period: typing.Optional[_Duration_4839e8c3] = None,
-        actions_suppressor_wait_period: typing.Optional[_Duration_4839e8c3] = None,
+        actions_suppressor: typing.Optional["IAlarm"] = None,
+        actions_suppressor_extension_period: typing.Optional["_Duration_4839e8c3"] = None,
+        actions_suppressor_wait_period: typing.Optional["_Duration_4839e8c3"] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         composite_alarm_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -16729,10 +16747,10 @@ class CompositeAlarm(
     @builtins.classmethod
     def from_composite_alarm_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         composite_alarm_arn: builtins.str,
-    ) -> IAlarm:
+    ) -> "IAlarm":
         '''Import an existing CloudWatch composite alarm provided an ARN.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -16744,16 +16762,16 @@ class CompositeAlarm(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument composite_alarm_arn", value=composite_alarm_arn, expected_type=type_hints["composite_alarm_arn"])
-        return typing.cast(IAlarm, jsii.sinvoke(cls, "fromCompositeAlarmArn", [scope, id, composite_alarm_arn]))
+        return typing.cast("IAlarm", jsii.sinvoke(cls, "fromCompositeAlarmArn", [scope, id, composite_alarm_arn]))
 
     @jsii.member(jsii_name="fromCompositeAlarmName")
     @builtins.classmethod
     def from_composite_alarm_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         composite_alarm_name: builtins.str,
-    ) -> IAlarm:
+    ) -> "IAlarm":
         '''Import an existing CloudWatch composite alarm provided an Name.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -16765,7 +16783,7 @@ class CompositeAlarm(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument composite_alarm_name", value=composite_alarm_name, expected_type=type_hints["composite_alarm_name"])
-        return typing.cast(IAlarm, jsii.sinvoke(cls, "fromCompositeAlarmName", [scope, id, composite_alarm_name]))
+        return typing.cast("IAlarm", jsii.sinvoke(cls, "fromCompositeAlarmName", [scope, id, composite_alarm_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -16830,19 +16848,19 @@ class Alarm(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        metric: IMetric,
+        metric: "IMetric",
         evaluation_periods: jsii.Number,
         threshold: jsii.Number,
         actions_enabled: typing.Optional[builtins.bool] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
-        comparison_operator: typing.Optional[ComparisonOperator] = None,
+        comparison_operator: typing.Optional["ComparisonOperator"] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
-        treat_missing_data: typing.Optional[TreatMissingData] = None,
+        treat_missing_data: typing.Optional["TreatMissingData"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -16881,10 +16899,10 @@ class Alarm(
     @builtins.classmethod
     def from_alarm_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         alarm_arn: builtins.str,
-    ) -> IAlarm:
+    ) -> "IAlarm":
         '''Import an existing CloudWatch alarm provided an ARN.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -16896,16 +16914,16 @@ class Alarm(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument alarm_arn", value=alarm_arn, expected_type=type_hints["alarm_arn"])
-        return typing.cast(IAlarm, jsii.sinvoke(cls, "fromAlarmArn", [scope, id, alarm_arn]))
+        return typing.cast("IAlarm", jsii.sinvoke(cls, "fromAlarmArn", [scope, id, alarm_arn]))
 
     @jsii.member(jsii_name="fromAlarmName")
     @builtins.classmethod
     def from_alarm_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         alarm_name: builtins.str,
-    ) -> IAlarm:
+    ) -> "IAlarm":
         '''Import an existing CloudWatch alarm provided an Name.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -16917,10 +16935,10 @@ class Alarm(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument alarm_name", value=alarm_name, expected_type=type_hints["alarm_name"])
-        return typing.cast(IAlarm, jsii.sinvoke(cls, "fromAlarmName", [scope, id, alarm_name]))
+        return typing.cast("IAlarm", jsii.sinvoke(cls, "fromAlarmName", [scope, id, alarm_name]))
 
     @jsii.member(jsii_name="addAlarmAction")
-    def add_alarm_action(self, *actions: IAlarmAction) -> None:
+    def add_alarm_action(self, *actions: "IAlarmAction") -> None:
         '''Trigger this action if the alarm fires.
 
         Typically SnsAction or AutoScalingAction.
@@ -16933,7 +16951,7 @@ class Alarm(
         return typing.cast(None, jsii.invoke(self, "addAlarmAction", [*actions]))
 
     @jsii.member(jsii_name="toAnnotation")
-    def to_annotation(self) -> HorizontalAnnotation:
+    def to_annotation(self) -> "HorizontalAnnotation":
         '''Turn this alarm into a horizontal annotation.
 
         This is useful if you want to represent an Alarm in a non-AlarmWidget.
@@ -16948,7 +16966,7 @@ class Alarm(
           "large margin/short period" alarm.
         - You want to show an Alarm line in a graph with multiple metrics in it.
         '''
-        return typing.cast(HorizontalAnnotation, jsii.invoke(self, "toAnnotation", []))
+        return typing.cast("HorizontalAnnotation", jsii.invoke(self, "toAnnotation", []))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ANOMALY_DETECTION_NO_THRESHOLD")
@@ -16991,9 +17009,9 @@ class Alarm(
 
     @builtins.property
     @jsii.member(jsii_name="metric")
-    def metric(self) -> IMetric:
+    def metric(self) -> "IMetric":
         '''The metric object this alarm was based on.'''
-        return typing.cast(IMetric, jsii.get(self, "metric"))
+        return typing.cast("IMetric", jsii.get(self, "metric"))
 
 
 class AnomalyDetectionAlarm(
@@ -17033,21 +17051,21 @@ class AnomalyDetectionAlarm(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         evaluation_periods: jsii.Number,
-        metric: IMetric,
+        metric: "IMetric",
         actions_enabled: typing.Optional[builtins.bool] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
-        comparison_operator: typing.Optional[ComparisonOperator] = None,
+        comparison_operator: typing.Optional["ComparisonOperator"] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         statistic: typing.Optional[builtins.str] = None,
         std_devs: typing.Optional[jsii.Number] = None,
-        treat_missing_data: typing.Optional[TreatMissingData] = None,
+        treat_missing_data: typing.Optional["TreatMissingData"] = None,
     ) -> None:
         '''
         :param scope: -

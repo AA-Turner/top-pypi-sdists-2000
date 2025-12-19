@@ -397,7 +397,7 @@ class IAccountPolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="accountPolicyRef")
-    def account_policy_ref(self) -> AccountPolicyReference:
+    def account_policy_ref(self) -> "AccountPolicyReference":
         '''(experimental) A reference to a AccountPolicy resource.
 
         :stability: experimental
@@ -418,12 +418,12 @@ class _IAccountPolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accountPolicyRef")
-    def account_policy_ref(self) -> AccountPolicyReference:
+    def account_policy_ref(self) -> "AccountPolicyReference":
         '''(experimental) A reference to a AccountPolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccountPolicyReference, jsii.get(self, "accountPolicyRef"))
+        return typing.cast("AccountPolicyReference", jsii.get(self, "accountPolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccountPolicyRef).__jsii_proxy_class__ = lambda : _IAccountPolicyRefProxy
@@ -442,7 +442,7 @@ class IDeliveryDestinationRef(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryDestinationRef")
-    def delivery_destination_ref(self) -> DeliveryDestinationReference:
+    def delivery_destination_ref(self) -> "DeliveryDestinationReference":
         '''(experimental) A reference to a DeliveryDestination resource.
 
         :stability: experimental
@@ -463,12 +463,12 @@ class _IDeliveryDestinationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryDestinationRef")
-    def delivery_destination_ref(self) -> DeliveryDestinationReference:
+    def delivery_destination_ref(self) -> "DeliveryDestinationReference":
         '''(experimental) A reference to a DeliveryDestination resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeliveryDestinationReference, jsii.get(self, "deliveryDestinationRef"))
+        return typing.cast("DeliveryDestinationReference", jsii.get(self, "deliveryDestinationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeliveryDestinationRef).__jsii_proxy_class__ = lambda : _IDeliveryDestinationRefProxy
@@ -487,7 +487,7 @@ class IDeliveryRef(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryRef")
-    def delivery_ref(self) -> DeliveryReference:
+    def delivery_ref(self) -> "DeliveryReference":
         '''(experimental) A reference to a Delivery resource.
 
         :stability: experimental
@@ -508,12 +508,12 @@ class _IDeliveryRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryRef")
-    def delivery_ref(self) -> DeliveryReference:
+    def delivery_ref(self) -> "DeliveryReference":
         '''(experimental) A reference to a Delivery resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeliveryReference, jsii.get(self, "deliveryRef"))
+        return typing.cast("DeliveryReference", jsii.get(self, "deliveryRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeliveryRef).__jsii_proxy_class__ = lambda : _IDeliveryRefProxy
@@ -532,7 +532,7 @@ class IDeliverySourceRef(
 
     @builtins.property
     @jsii.member(jsii_name="deliverySourceRef")
-    def delivery_source_ref(self) -> DeliverySourceReference:
+    def delivery_source_ref(self) -> "DeliverySourceReference":
         '''(experimental) A reference to a DeliverySource resource.
 
         :stability: experimental
@@ -553,12 +553,12 @@ class _IDeliverySourceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deliverySourceRef")
-    def delivery_source_ref(self) -> DeliverySourceReference:
+    def delivery_source_ref(self) -> "DeliverySourceReference":
         '''(experimental) A reference to a DeliverySource resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeliverySourceReference, jsii.get(self, "deliverySourceRef"))
+        return typing.cast("DeliverySourceReference", jsii.get(self, "deliverySourceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeliverySourceRef).__jsii_proxy_class__ = lambda : _IDeliverySourceRefProxy
@@ -577,7 +577,7 @@ class IDestinationRef(
 
     @builtins.property
     @jsii.member(jsii_name="destinationRef")
-    def destination_ref(self) -> DestinationReference:
+    def destination_ref(self) -> "DestinationReference":
         '''(experimental) A reference to a Destination resource.
 
         :stability: experimental
@@ -598,12 +598,12 @@ class _IDestinationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="destinationRef")
-    def destination_ref(self) -> DestinationReference:
+    def destination_ref(self) -> "DestinationReference":
         '''(experimental) A reference to a Destination resource.
 
         :stability: experimental
         '''
-        return typing.cast(DestinationReference, jsii.get(self, "destinationRef"))
+        return typing.cast("DestinationReference", jsii.get(self, "destinationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDestinationRef).__jsii_proxy_class__ = lambda : _IDestinationRefProxy

@@ -166,7 +166,7 @@ class IEnabledBaselineRef(
 
     @builtins.property
     @jsii.member(jsii_name="enabledBaselineRef")
-    def enabled_baseline_ref(self) -> EnabledBaselineReference:
+    def enabled_baseline_ref(self) -> "EnabledBaselineReference":
         '''(experimental) A reference to a EnabledBaseline resource.
 
         :stability: experimental
@@ -187,12 +187,12 @@ class _IEnabledBaselineRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="enabledBaselineRef")
-    def enabled_baseline_ref(self) -> EnabledBaselineReference:
+    def enabled_baseline_ref(self) -> "EnabledBaselineReference":
         '''(experimental) A reference to a EnabledBaseline resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnabledBaselineReference, jsii.get(self, "enabledBaselineRef"))
+        return typing.cast("EnabledBaselineReference", jsii.get(self, "enabledBaselineRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnabledBaselineRef).__jsii_proxy_class__ = lambda : _IEnabledBaselineRefProxy
@@ -211,7 +211,7 @@ class IEnabledControlRef(
 
     @builtins.property
     @jsii.member(jsii_name="enabledControlRef")
-    def enabled_control_ref(self) -> EnabledControlReference:
+    def enabled_control_ref(self) -> "EnabledControlReference":
         '''(experimental) A reference to a EnabledControl resource.
 
         :stability: experimental
@@ -232,12 +232,12 @@ class _IEnabledControlRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="enabledControlRef")
-    def enabled_control_ref(self) -> EnabledControlReference:
+    def enabled_control_ref(self) -> "EnabledControlReference":
         '''(experimental) A reference to a EnabledControl resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnabledControlReference, jsii.get(self, "enabledControlRef"))
+        return typing.cast("EnabledControlReference", jsii.get(self, "enabledControlRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnabledControlRef).__jsii_proxy_class__ = lambda : _IEnabledControlRefProxy

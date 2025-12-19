@@ -196,7 +196,7 @@ class ICloudAutonomousVmClusterRef(
 
     @builtins.property
     @jsii.member(jsii_name="cloudAutonomousVmClusterRef")
-    def cloud_autonomous_vm_cluster_ref(self) -> CloudAutonomousVmClusterReference:
+    def cloud_autonomous_vm_cluster_ref(self) -> "CloudAutonomousVmClusterReference":
         '''(experimental) A reference to a CloudAutonomousVmCluster resource.
 
         :stability: experimental
@@ -217,12 +217,12 @@ class _ICloudAutonomousVmClusterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="cloudAutonomousVmClusterRef")
-    def cloud_autonomous_vm_cluster_ref(self) -> CloudAutonomousVmClusterReference:
+    def cloud_autonomous_vm_cluster_ref(self) -> "CloudAutonomousVmClusterReference":
         '''(experimental) A reference to a CloudAutonomousVmCluster resource.
 
         :stability: experimental
         '''
-        return typing.cast(CloudAutonomousVmClusterReference, jsii.get(self, "cloudAutonomousVmClusterRef"))
+        return typing.cast("CloudAutonomousVmClusterReference", jsii.get(self, "cloudAutonomousVmClusterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICloudAutonomousVmClusterRef).__jsii_proxy_class__ = lambda : _ICloudAutonomousVmClusterRefProxy
@@ -243,7 +243,7 @@ class ICloudExadataInfrastructureRef(
 
     @builtins.property
     @jsii.member(jsii_name="cloudExadataInfrastructureRef")
-    def cloud_exadata_infrastructure_ref(self) -> CloudExadataInfrastructureReference:
+    def cloud_exadata_infrastructure_ref(self) -> "CloudExadataInfrastructureReference":
         '''(experimental) A reference to a CloudExadataInfrastructure resource.
 
         :stability: experimental
@@ -264,12 +264,12 @@ class _ICloudExadataInfrastructureRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="cloudExadataInfrastructureRef")
-    def cloud_exadata_infrastructure_ref(self) -> CloudExadataInfrastructureReference:
+    def cloud_exadata_infrastructure_ref(self) -> "CloudExadataInfrastructureReference":
         '''(experimental) A reference to a CloudExadataInfrastructure resource.
 
         :stability: experimental
         '''
-        return typing.cast(CloudExadataInfrastructureReference, jsii.get(self, "cloudExadataInfrastructureRef"))
+        return typing.cast("CloudExadataInfrastructureReference", jsii.get(self, "cloudExadataInfrastructureRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICloudExadataInfrastructureRef).__jsii_proxy_class__ = lambda : _ICloudExadataInfrastructureRefProxy
@@ -288,7 +288,7 @@ class ICloudVmClusterRef(
 
     @builtins.property
     @jsii.member(jsii_name="cloudVmClusterRef")
-    def cloud_vm_cluster_ref(self) -> CloudVmClusterReference:
+    def cloud_vm_cluster_ref(self) -> "CloudVmClusterReference":
         '''(experimental) A reference to a CloudVmCluster resource.
 
         :stability: experimental
@@ -309,12 +309,12 @@ class _ICloudVmClusterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="cloudVmClusterRef")
-    def cloud_vm_cluster_ref(self) -> CloudVmClusterReference:
+    def cloud_vm_cluster_ref(self) -> "CloudVmClusterReference":
         '''(experimental) A reference to a CloudVmCluster resource.
 
         :stability: experimental
         '''
-        return typing.cast(CloudVmClusterReference, jsii.get(self, "cloudVmClusterRef"))
+        return typing.cast("CloudVmClusterReference", jsii.get(self, "cloudVmClusterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICloudVmClusterRef).__jsii_proxy_class__ = lambda : _ICloudVmClusterRefProxy

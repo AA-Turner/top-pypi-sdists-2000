@@ -387,6 +387,7 @@ class CfnAggregationAuthorization(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_config as config
@@ -405,12 +406,12 @@ class CfnAggregationAuthorization(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         authorized_account_id: builtins.str,
         authorized_aws_region: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Config::AggregationAuthorization``.
 
@@ -436,7 +437,7 @@ class CfnAggregationAuthorization(
     @builtins.classmethod
     def arn_for_aggregation_authorization(
         cls,
-        resource: _IAggregationAuthorizationRef_769e70e0,
+        resource: "_IAggregationAuthorizationRef_769e70e0",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -459,7 +460,7 @@ class CfnAggregationAuthorization(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAggregationAuthorization", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -492,9 +493,9 @@ class CfnAggregationAuthorization(
     @jsii.member(jsii_name="aggregationAuthorizationRef")
     def aggregation_authorization_ref(
         self,
-    ) -> _AggregationAuthorizationReference_7b5e35c2:
+    ) -> "_AggregationAuthorizationReference_7b5e35c2":
         '''A reference to a AggregationAuthorization resource.'''
-        return typing.cast(_AggregationAuthorizationReference_7b5e35c2, jsii.get(self, "aggregationAuthorizationRef"))
+        return typing.cast("_AggregationAuthorizationReference_7b5e35c2", jsii.get(self, "aggregationAuthorizationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAggregationAuthorizationArn")
@@ -512,9 +513,9 @@ class CfnAggregationAuthorization(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="authorizedAccountId")
@@ -544,12 +545,12 @@ class CfnAggregationAuthorization(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tag object.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2acb4bb46d29ee80a30777200253cd46f769127ae01597fbc2e951064ea932d4)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -571,7 +572,7 @@ class CfnAggregationAuthorizationProps:
         *,
         authorized_account_id: builtins.str,
         authorized_aws_region: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAggregationAuthorization``.
 
@@ -584,6 +585,7 @@ class CfnAggregationAuthorizationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_config as config
@@ -632,13 +634,13 @@ class CfnAggregationAuthorizationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tag object.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-aggregationauthorization.html#cfn-config-aggregationauthorization-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -734,17 +736,17 @@ class CfnConfigRule(
 
     def __init__(
         self,
-        scope_: _constructs_77d1e7e8.Construct,
+        scope_: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigRule.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
-        compliance: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigRule.ComplianceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigRule.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
+        compliance: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigRule.ComplianceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigRule.EvaluationModeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        evaluation_modes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigRule.EvaluationModeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         input_parameters: typing.Any = None,
         maximum_execution_frequency: typing.Optional[builtins.str] = None,
-        scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigRule.ScopeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        scope: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigRule.ScopeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Config::ConfigRule``.
 
@@ -778,7 +780,7 @@ class CfnConfigRule(
 
     @jsii.member(jsii_name="arnForConfigRule")
     @builtins.classmethod
-    def arn_for_config_rule(cls, resource: _IConfigRuleRef_d9037ddf) -> builtins.str:
+    def arn_for_config_rule(cls, resource: "_IConfigRuleRef_d9037ddf") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -800,7 +802,7 @@ class CfnConfigRule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigRule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -863,22 +865,22 @@ class CfnConfigRule(
 
     @builtins.property
     @jsii.member(jsii_name="configRuleRef")
-    def config_rule_ref(self) -> _ConfigRuleReference_f33c4531:
+    def config_rule_ref(self) -> "_ConfigRuleReference_f33c4531":
         '''A reference to a ConfigRule resource.'''
-        return typing.cast(_ConfigRuleReference_f33c4531, jsii.get(self, "configRuleRef"))
+        return typing.cast("_ConfigRuleReference_f33c4531", jsii.get(self, "configRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="source")
     def source(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnConfigRule.SourceProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConfigRule.SourceProperty"]:
         '''Provides the rule owner ( ``AWS`` for managed rules, ``CUSTOM_POLICY`` for Custom Policy rules, and ``CUSTOM_LAMBDA`` for Custom Lambda rules), the rule identifier, and the notifications that cause the function to evaluate your AWS resources.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConfigRule.SourceProperty"], jsii.get(self, "source"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfigRule.SourceProperty"], jsii.get(self, "source"))
 
     @source.setter
     def source(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnConfigRule.SourceProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnConfigRule.SourceProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a30b5901e0068cf18be7f15f8558e224eb62559802cd26646f648c0dbf5f3680)
@@ -889,14 +891,14 @@ class CfnConfigRule(
     @jsii.member(jsii_name="compliance")
     def compliance(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.ComplianceProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.ComplianceProperty"]]:
         '''Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.ComplianceProperty"]], jsii.get(self, "compliance"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.ComplianceProperty"]], jsii.get(self, "compliance"))
 
     @compliance.setter
     def compliance(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.ComplianceProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.ComplianceProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__743f9ee6243708ed2e606e31e618af32604f35d387093cdc8d8634e961b27324)
@@ -933,14 +935,14 @@ class CfnConfigRule(
     @jsii.member(jsii_name="evaluationModes")
     def evaluation_modes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.EvaluationModeConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.EvaluationModeConfigurationProperty"]]]]:
         '''The modes the AWS Config rule can be evaluated in.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.EvaluationModeConfigurationProperty"]]]], jsii.get(self, "evaluationModes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.EvaluationModeConfigurationProperty"]]]], jsii.get(self, "evaluationModes"))
 
     @evaluation_modes.setter
     def evaluation_modes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.EvaluationModeConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.EvaluationModeConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3563e34d09c0fb5a803e72a8cee06c0ed65b4c596390bf75303600bfd5df9f44)
@@ -977,14 +979,14 @@ class CfnConfigRule(
     @jsii.member(jsii_name="scope")
     def scope(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.ScopeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.ScopeProperty"]]:
         '''Defines which resources can trigger an evaluation for the rule.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.ScopeProperty"]], jsii.get(self, "scope"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.ScopeProperty"]], jsii.get(self, "scope"))
 
     @scope.setter
     def scope(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.ScopeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.ScopeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c70fa274e56c5def397aac6cec3b30f31c7ee9cc7367d5b6bf0c78e63400ca24)
@@ -1063,7 +1065,7 @@ class CfnConfigRule(
         def __init__(
             self,
             *,
-            enable_debug_log_delivery: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enable_debug_log_delivery: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             policy_runtime: typing.Optional[builtins.str] = None,
             policy_text: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -1104,7 +1106,7 @@ class CfnConfigRule(
         @builtins.property
         def enable_debug_log_delivery(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''The boolean expression for enabling debug logging for your AWS Config Custom Policy rule.
 
             The default value is ``false`` .
@@ -1112,7 +1114,7 @@ class CfnConfigRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-configrule-custompolicydetails.html#cfn-config-configrule-custompolicydetails-enabledebuglogdelivery
             '''
             result = self._values.get("enable_debug_log_delivery")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def policy_runtime(self) -> typing.Optional[builtins.str]:
@@ -1440,8 +1442,8 @@ class CfnConfigRule(
             self,
             *,
             owner: builtins.str,
-            custom_policy_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigRule.CustomPolicyDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            source_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigRule.SourceDetailProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            custom_policy_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigRule.CustomPolicyDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            source_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigRule.SourceDetailProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             source_identifier: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Provides the CustomPolicyDetails, the rule owner ( ``AWS`` for managed rules, ``CUSTOM_POLICY`` for Custom Policy rules, and ``CUSTOM_LAMBDA`` for Custom Lambda rules), the rule identifier, and the events that cause the evaluation of your AWS resources.
@@ -1512,7 +1514,7 @@ class CfnConfigRule(
         @builtins.property
         def custom_policy_details(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.CustomPolicyDetailsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.CustomPolicyDetailsProperty"]]:
             '''Provides the runtime system, policy definition, and whether debug logging is enabled.
 
             Required when owner is set to ``CUSTOM_POLICY`` .
@@ -1520,12 +1522,12 @@ class CfnConfigRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-configrule-source.html#cfn-config-configrule-source-custompolicydetails
             '''
             result = self._values.get("custom_policy_details")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.CustomPolicyDetailsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.CustomPolicyDetailsProperty"]], result)
 
         @builtins.property
         def source_details(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.SourceDetailProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.SourceDetailProperty"]]]]:
             '''Provides the source and the message types that cause AWS Config to evaluate your AWS resources against a rule.
 
             It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic.
@@ -1535,7 +1537,7 @@ class CfnConfigRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-configrule-source.html#cfn-config-configrule-source-sourcedetails
             '''
             result = self._values.get("source_details")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigRule.SourceDetailProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.SourceDetailProperty"]]]], result)
 
         @builtins.property
         def source_identifier(self) -> typing.Optional[builtins.str]:
@@ -1582,14 +1584,14 @@ class CfnConfigRuleProps:
     def __init__(
         self,
         *,
-        source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigRule.SourceProperty, typing.Dict[builtins.str, typing.Any]]],
-        compliance: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigRule.ComplianceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigRule.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
+        compliance: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigRule.ComplianceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigRule.EvaluationModeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        evaluation_modes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigRule.EvaluationModeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         input_parameters: typing.Any = None,
         maximum_execution_frequency: typing.Optional[builtins.str] = None,
-        scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigRule.ScopeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        scope: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigRule.ScopeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfigRule``.
 
@@ -1683,25 +1685,25 @@ class CfnConfigRuleProps:
     @builtins.property
     def source(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnConfigRule.SourceProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConfigRule.SourceProperty"]:
         '''Provides the rule owner ( ``AWS`` for managed rules, ``CUSTOM_POLICY`` for Custom Policy rules, and ``CUSTOM_LAMBDA`` for Custom Lambda rules), the rule identifier, and the notifications that cause the function to evaluate your AWS resources.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configrule.html#cfn-config-configrule-source
         '''
         result = self._values.get("source")
         assert result is not None, "Required property 'source' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnConfigRule.SourceProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfigRule.SourceProperty"], result)
 
     @builtins.property
     def compliance(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigRule.ComplianceProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.ComplianceProperty"]]:
         '''Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configrule.html#cfn-config-configrule-compliance
         '''
         result = self._values.get("compliance")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigRule.ComplianceProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.ComplianceProperty"]], result)
 
     @builtins.property
     def config_rule_name(self) -> typing.Optional[builtins.str]:
@@ -1726,7 +1728,7 @@ class CfnConfigRuleProps:
     @builtins.property
     def evaluation_modes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigRule.EvaluationModeConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.EvaluationModeConfigurationProperty"]]]]:
         '''The modes the AWS Config rule can be evaluated in.
 
         The valid values are distinct objects. By default, the value is Detective evaluation mode only.
@@ -1734,7 +1736,7 @@ class CfnConfigRuleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configrule.html#cfn-config-configrule-evaluationmodes
         '''
         result = self._values.get("evaluation_modes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigRule.EvaluationModeConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.EvaluationModeConfigurationProperty"]]]], result)
 
     @builtins.property
     def input_parameters(self) -> typing.Any:
@@ -1766,7 +1768,7 @@ class CfnConfigRuleProps:
     @builtins.property
     def scope(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigRule.ScopeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.ScopeProperty"]]:
         '''Defines which resources can trigger an evaluation for the rule.
 
         The scope can include one or more resource types, a combination of one resource type and one resource ID, or a combination of a tag key and value. Specify a scope to constrain the resources that can trigger an evaluation for the rule. If you do not specify a scope, evaluations are triggered when any resource in the recording group changes.
@@ -1774,7 +1776,7 @@ class CfnConfigRuleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configrule.html#cfn-config-configrule-scope
         '''
         result = self._values.get("scope")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigRule.ScopeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigRule.ScopeProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1802,6 +1804,7 @@ class CfnConfigurationAggregator(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_config as config
@@ -1831,13 +1834,13 @@ class CfnConfigurationAggregator(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        account_aggregation_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationAggregator.AccountAggregationSourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        account_aggregation_sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationAggregator.AccountAggregationSourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         configuration_aggregator_name: typing.Optional[builtins.str] = None,
-        organization_aggregation_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationAggregator.OrganizationAggregationSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        organization_aggregation_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationAggregator.OrganizationAggregationSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Config::ConfigurationAggregator``.
 
@@ -1865,7 +1868,7 @@ class CfnConfigurationAggregator(
     @builtins.classmethod
     def arn_for_configuration_aggregator(
         cls,
-        resource: _IConfigurationAggregatorRef_c6214f1c,
+        resource: "_IConfigurationAggregatorRef_c6214f1c",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1888,7 +1891,7 @@ class CfnConfigurationAggregator(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigurationAggregator", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1935,28 +1938,28 @@ class CfnConfigurationAggregator(
     @jsii.member(jsii_name="configurationAggregatorRef")
     def configuration_aggregator_ref(
         self,
-    ) -> _ConfigurationAggregatorReference_06645f26:
+    ) -> "_ConfigurationAggregatorReference_06645f26":
         '''A reference to a ConfigurationAggregator resource.'''
-        return typing.cast(_ConfigurationAggregatorReference_06645f26, jsii.get(self, "configurationAggregatorRef"))
+        return typing.cast("_ConfigurationAggregatorReference_06645f26", jsii.get(self, "configurationAggregatorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="accountAggregationSources")
     def account_aggregation_sources(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationAggregator.AccountAggregationSourceProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationAggregator.AccountAggregationSourceProperty"]]]]:
         '''Provides a list of source accounts and regions to be aggregated.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationAggregator.AccountAggregationSourceProperty"]]]], jsii.get(self, "accountAggregationSources"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationAggregator.AccountAggregationSourceProperty"]]]], jsii.get(self, "accountAggregationSources"))
 
     @account_aggregation_sources.setter
     def account_aggregation_sources(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationAggregator.AccountAggregationSourceProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationAggregator.AccountAggregationSourceProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ca6667d76e5d18c00525f2f2e305db803462801d9dd67cb2cc46951b67b7e1c9)
@@ -1983,14 +1986,14 @@ class CfnConfigurationAggregator(
     @jsii.member(jsii_name="organizationAggregationSource")
     def organization_aggregation_source(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationAggregator.OrganizationAggregationSourceProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationAggregator.OrganizationAggregationSourceProperty"]]:
         '''Provides an organization and list of regions to be aggregated.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationAggregator.OrganizationAggregationSourceProperty"]], jsii.get(self, "organizationAggregationSource"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationAggregator.OrganizationAggregationSourceProperty"]], jsii.get(self, "organizationAggregationSource"))
 
     @organization_aggregation_source.setter
     def organization_aggregation_source(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationAggregator.OrganizationAggregationSourceProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationAggregator.OrganizationAggregationSourceProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__adc51ade0f3204fdf6726c1ef680ca92c25055c195dce6a07df154db27d4c155)
@@ -1999,12 +2002,12 @@ class CfnConfigurationAggregator(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tag object.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e3d290ef49845b3910d8dfd1137db37b79d04caa1266e44513db09527493d2da)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2024,7 +2027,7 @@ class CfnConfigurationAggregator(
             self,
             *,
             account_ids: typing.Sequence[builtins.str],
-            all_aws_regions: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            all_aws_regions: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             aws_regions: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''A collection of accounts and regions.
@@ -2076,13 +2079,13 @@ class CfnConfigurationAggregator(
         @builtins.property
         def all_aws_regions(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If true, aggregate existing AWS Config regions and future regions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-configurationaggregator-accountaggregationsource.html#cfn-config-configurationaggregator-accountaggregationsource-allawsregions
             '''
             result = self._values.get("all_aws_regions")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def aws_regions(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2118,7 +2121,7 @@ class CfnConfigurationAggregator(
             self,
             *,
             role_arn: builtins.str,
-            all_aws_regions: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            all_aws_regions: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             aws_regions: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''This object contains regions to set up the aggregator and an IAM role to retrieve organization details.
@@ -2170,13 +2173,13 @@ class CfnConfigurationAggregator(
         @builtins.property
         def all_aws_regions(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''If true, aggregate existing AWS Config regions and future regions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-configurationaggregator-organizationaggregationsource.html#cfn-config-configurationaggregator-organizationaggregationsource-allawsregions
             '''
             result = self._values.get("all_aws_regions")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def aws_regions(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2213,10 +2216,10 @@ class CfnConfigurationAggregatorProps:
     def __init__(
         self,
         *,
-        account_aggregation_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationAggregator.AccountAggregationSourceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        account_aggregation_sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationAggregator.AccountAggregationSourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         configuration_aggregator_name: typing.Optional[builtins.str] = None,
-        organization_aggregation_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationAggregator.OrganizationAggregationSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        organization_aggregation_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationAggregator.OrganizationAggregationSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfigurationAggregator``.
 
@@ -2230,6 +2233,7 @@ class CfnConfigurationAggregatorProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_config as config
@@ -2275,13 +2279,13 @@ class CfnConfigurationAggregatorProps:
     @builtins.property
     def account_aggregation_sources(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationAggregator.AccountAggregationSourceProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationAggregator.AccountAggregationSourceProperty"]]]]:
         '''Provides a list of source accounts and regions to be aggregated.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configurationaggregator.html#cfn-config-configurationaggregator-accountaggregationsources
         '''
         result = self._values.get("account_aggregation_sources")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationAggregator.AccountAggregationSourceProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationAggregator.AccountAggregationSourceProperty"]]]], result)
 
     @builtins.property
     def configuration_aggregator_name(self) -> typing.Optional[builtins.str]:
@@ -2295,22 +2299,22 @@ class CfnConfigurationAggregatorProps:
     @builtins.property
     def organization_aggregation_source(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationAggregator.OrganizationAggregationSourceProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationAggregator.OrganizationAggregationSourceProperty"]]:
         '''Provides an organization and list of regions to be aggregated.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configurationaggregator.html#cfn-config-configurationaggregator-organizationaggregationsource
         '''
         result = self._values.get("organization_aggregation_source")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationAggregator.OrganizationAggregationSourceProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationAggregator.OrganizationAggregationSourceProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tag object.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configurationaggregator.html#cfn-config-configurationaggregator-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2388,19 +2392,19 @@ class CfnConfigurationRecorder(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         role_arn: builtins.str,
         name: typing.Optional[builtins.str] = None,
-        recording_group: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationRecorder.RecordingGroupProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        recording_mode: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationRecorder.RecordingModeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        recording_group: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationRecorder.RecordingGroupProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        recording_mode: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationRecorder.RecordingModeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Config::ConfigurationRecorder``.
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param role_arn: Amazon Resource Name (ARN) of the IAM role assumed by AWS Config and used by the configuration recorder. For more information, see `Permissions for the IAM Role Assigned <https://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html>`_ to AWS Config in the AWS Config Developer Guide. .. epigraph:: *Pre-existing AWS Config role* If you have used an AWS service that uses AWS Config , such as Security Hub or AWS Control Tower , and an AWS Config role has already been created, make sure that the IAM role that you use when setting up AWS Config keeps the same minimum permissions as the already created AWS Config role. You must do this so that the other AWS service continues to run as expected. For example, if AWS Control Tower has an IAM role that allows AWS Config to read Amazon Simple Storage Service ( Amazon S3 ) objects, make sure that the same permissions are granted within the IAM role you use when setting up AWS Config . Otherwise, it may interfere with how AWS Control Tower operates. For more information about IAM roles for AWS Config , see `*Identity and Access Management for AWS Config* <https://docs.aws.amazon.com/config/latest/developerguide/security-iam.html>`_ in the *AWS Config Developer Guide* .
+        :param role_arn: Amazon Resource Name (ARN) of the IAM role assumed by AWS Config and used by the configuration recorder. For more information, see `Permissions for the IAM Role Assigned <https://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html>`_ to AWS Config in the AWS Config Developer Guide. .. epigraph:: *Pre-existing AWS Config role* If you have used an AWS service that uses AWS Config , such as AWS Security Hub CSPM or AWS Control Tower , and an AWS Config role has already been created, make sure that the IAM role that you use when setting up AWS Config keeps the same minimum permissions as the already created AWS Config role. You must do this so that the other AWS service continues to run as expected. For example, if AWS Control Tower has an IAM role that allows AWS Config to read Amazon Simple Storage Service ( Amazon S3 ) objects, make sure that the same permissions are granted within the IAM role you use when setting up AWS Config . Otherwise, it may interfere with how AWS Control Tower operates. For more information about IAM roles for AWS Config , see `*Identity and Access Management for AWS Config* <https://docs.aws.amazon.com/config/latest/developerguide/security-iam.html>`_ in the *AWS Config Developer Guide* .
         :param name: The name of the configuration recorder. AWS Config automatically assigns the name of "default" when creating the configuration recorder. You cannot change the name of the configuration recorder after it has been created. To change the configuration recorder name, you must delete it and create a new configuration recorder with a new name.
         :param recording_group: Specifies which resource types AWS Config records for configuration changes. .. epigraph:: *High Number of AWS Config Evaluations* You may notice increased activity in your account during your initial month recording with AWS Config when compared to subsequent months. During the initial bootstrapping process, AWS Config runs evaluations on all the resources in your account that you have selected for AWS Config to record. If you are running ephemeral workloads, you may see increased activity from AWS Config as it records configuration changes associated with creating and deleting these temporary resources. An *ephemeral workload* is a temporary use of computing resources that are loaded and run when needed. Examples include Amazon Elastic Compute Cloud ( Amazon EC2 ) Spot Instances, Amazon EMR jobs, and AWS Auto Scaling . If you want to avoid the increased activity from running ephemeral workloads, you can run these types of workloads in a separate account with AWS Config turned off to avoid increased configuration recording and rule evaluations.
         :param recording_mode: Specifies the default recording frequency for the configuration recorder. AWS Config supports *Continuous recording* and *Daily recording* . - Continuous recording allows you to record configuration changes continuously whenever a change occurs. - Daily recording allows you to receive a configuration item (CI) representing the most recent state of your resources over the last 24-hour period, only if it’s different from the previous CI recorded. .. epigraph:: *Some resource types require continuous recording* AWS Firewall Manager depends on continuous recording to monitor your resources. If you are using Firewall Manager, it is recommended that you set the recording frequency to Continuous. You can also override the recording frequency for specific resource types.
@@ -2431,7 +2435,7 @@ class CfnConfigurationRecorder(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigurationRecorder", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2475,9 +2479,9 @@ class CfnConfigurationRecorder(
 
     @builtins.property
     @jsii.member(jsii_name="configurationRecorderRef")
-    def configuration_recorder_ref(self) -> _ConfigurationRecorderReference_192b42ee:
+    def configuration_recorder_ref(self) -> "_ConfigurationRecorderReference_192b42ee":
         '''A reference to a ConfigurationRecorder resource.'''
-        return typing.cast(_ConfigurationRecorderReference_192b42ee, jsii.get(self, "configurationRecorderRef"))
+        return typing.cast("_ConfigurationRecorderReference_192b42ee", jsii.get(self, "configurationRecorderRef"))
 
     @builtins.property
     @jsii.member(jsii_name="roleArn")
@@ -2512,14 +2516,14 @@ class CfnConfigurationRecorder(
     @jsii.member(jsii_name="recordingGroup")
     def recording_group(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationRecorder.RecordingGroupProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingGroupProperty"]]:
         '''Specifies which resource types AWS Config records for configuration changes.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationRecorder.RecordingGroupProperty"]], jsii.get(self, "recordingGroup"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingGroupProperty"]], jsii.get(self, "recordingGroup"))
 
     @recording_group.setter
     def recording_group(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationRecorder.RecordingGroupProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingGroupProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0e1878a10e77a1aa31c809535803af7748be10257943ccb0147e9c0839dda938)
@@ -2530,17 +2534,17 @@ class CfnConfigurationRecorder(
     @jsii.member(jsii_name="recordingMode")
     def recording_mode(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationRecorder.RecordingModeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingModeProperty"]]:
         '''Specifies the default recording frequency for the configuration recorder.
 
         AWS Config supports *Continuous recording* and *Daily recording* .
         '''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationRecorder.RecordingModeProperty"]], jsii.get(self, "recordingMode"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingModeProperty"]], jsii.get(self, "recordingMode"))
 
     @recording_mode.setter
     def recording_mode(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationRecorder.RecordingModeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingModeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__79c601a52da19c88133151b63852ca6a6ba71894cd962c2e118e75d604e83fe5)
@@ -2639,10 +2643,10 @@ class CfnConfigurationRecorder(
         def __init__(
             self,
             *,
-            all_supported: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            exclusion_by_resource_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationRecorder.ExclusionByResourceTypesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            include_global_resource_types: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            recording_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationRecorder.RecordingStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            all_supported: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            exclusion_by_resource_types: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationRecorder.ExclusionByResourceTypesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            include_global_resource_types: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            recording_strategy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationRecorder.RecordingStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             resource_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''Specifies which resource types AWS Config records for configuration changes.
@@ -2714,7 +2718,7 @@ class CfnConfigurationRecorder(
         @builtins.property
         def all_supported(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether AWS Config records configuration changes for all supported resource types, excluding the global IAM resource types.
 
             If you set this field to ``true`` , when AWS Config adds support for a new resource type, AWS Config starts recording resources of that type automatically.
@@ -2729,12 +2733,12 @@ class CfnConfigurationRecorder(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-configurationrecorder-recordinggroup.html#cfn-config-configurationrecorder-recordinggroup-allsupported
             '''
             result = self._values.get("all_supported")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def exclusion_by_resource_types(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationRecorder.ExclusionByResourceTypesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.ExclusionByResourceTypesProperty"]]:
             '''An object that specifies how AWS Config excludes resource types from being recorded by the configuration recorder.
 
             To use this option, you must set the ``useOnly`` field of `AWS::Config::ConfigurationRecorder RecordingStrategy <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-configurationrecorder-recordingstrategy.html>`_ to ``EXCLUSION_BY_RESOURCE_TYPES`` .
@@ -2742,12 +2746,12 @@ class CfnConfigurationRecorder(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-configurationrecorder-recordinggroup.html#cfn-config-configurationrecorder-recordinggroup-exclusionbyresourcetypes
             '''
             result = self._values.get("exclusion_by_resource_types")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationRecorder.ExclusionByResourceTypesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.ExclusionByResourceTypesProperty"]], result)
 
         @builtins.property
         def include_global_resource_types(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''This option is a bundle which only applies to the global IAM resource types: IAM users, groups, roles, and customer managed policies.
 
             These global IAM resource types can only be recorded by AWS Config in Regions where AWS Config was available before February 2022. You cannot be record the global IAM resouce types in Regions supported by AWS Config after February 2022. This list where you cannot record the global IAM resource types includes the following Regions:
@@ -2788,12 +2792,12 @@ class CfnConfigurationRecorder(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-configurationrecorder-recordinggroup.html#cfn-config-configurationrecorder-recordinggroup-includeglobalresourcetypes
             '''
             result = self._values.get("include_global_resource_types")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def recording_strategy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationRecorder.RecordingStrategyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingStrategyProperty"]]:
             '''An object that specifies the recording strategy for the configuration recorder.
 
             - If you set the ``useOnly`` field of `RecordingStrategy <https://docs.aws.amazon.com/config/latest/APIReference/API_RecordingStrategy.html>`_ to ``ALL_SUPPORTED_RESOURCE_TYPES`` , AWS Config records configuration changes for all supported resource types, excluding the global IAM resource types. You also must set the ``AllSupported`` field of `RecordingGroup <https://docs.aws.amazon.com/config/latest/APIReference/API_RecordingGroup.html>`_ to ``true`` . When AWS Config adds support for a new resource type, AWS Config automatically starts recording resources of that type.
@@ -2831,7 +2835,7 @@ class CfnConfigurationRecorder(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-configurationrecorder-recordinggroup.html#cfn-config-configurationrecorder-recordinggroup-recordingstrategy
             '''
             result = self._values.get("recording_strategy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationRecorder.RecordingStrategyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingStrategyProperty"]], result)
 
         @builtins.property
         def resource_types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2984,7 +2988,7 @@ class CfnConfigurationRecorder(
             self,
             *,
             recording_frequency: builtins.str,
-            recording_mode_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationRecorder.RecordingModeOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            recording_mode_overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationRecorder.RecordingModeOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Specifies the default recording frequency that AWS Config uses to record configuration changes.
 
@@ -3057,7 +3061,7 @@ class CfnConfigurationRecorder(
         @builtins.property
         def recording_mode_overrides(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationRecorder.RecordingModeOverrideProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingModeOverrideProperty"]]]]:
             '''An array of ``recordingModeOverride`` objects for you to specify your overrides for the recording mode.
 
             The ``recordingModeOverride`` object in the ``recordingModeOverrides`` array consists of three fields: a ``description`` , the new ``recordingFrequency`` , and an array of ``resourceTypes`` to override.
@@ -3065,7 +3069,7 @@ class CfnConfigurationRecorder(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-configurationrecorder-recordingmode.html#cfn-config-configurationrecorder-recordingmode-recordingmodeoverrides
             '''
             result = self._values.get("recording_mode_overrides")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationRecorder.RecordingModeOverrideProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingModeOverrideProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3181,12 +3185,12 @@ class CfnConfigurationRecorderProps:
         *,
         role_arn: builtins.str,
         name: typing.Optional[builtins.str] = None,
-        recording_group: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationRecorder.RecordingGroupProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        recording_mode: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationRecorder.RecordingModeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        recording_group: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationRecorder.RecordingGroupProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        recording_mode: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationRecorder.RecordingModeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfigurationRecorder``.
 
-        :param role_arn: Amazon Resource Name (ARN) of the IAM role assumed by AWS Config and used by the configuration recorder. For more information, see `Permissions for the IAM Role Assigned <https://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html>`_ to AWS Config in the AWS Config Developer Guide. .. epigraph:: *Pre-existing AWS Config role* If you have used an AWS service that uses AWS Config , such as Security Hub or AWS Control Tower , and an AWS Config role has already been created, make sure that the IAM role that you use when setting up AWS Config keeps the same minimum permissions as the already created AWS Config role. You must do this so that the other AWS service continues to run as expected. For example, if AWS Control Tower has an IAM role that allows AWS Config to read Amazon Simple Storage Service ( Amazon S3 ) objects, make sure that the same permissions are granted within the IAM role you use when setting up AWS Config . Otherwise, it may interfere with how AWS Control Tower operates. For more information about IAM roles for AWS Config , see `*Identity and Access Management for AWS Config* <https://docs.aws.amazon.com/config/latest/developerguide/security-iam.html>`_ in the *AWS Config Developer Guide* .
+        :param role_arn: Amazon Resource Name (ARN) of the IAM role assumed by AWS Config and used by the configuration recorder. For more information, see `Permissions for the IAM Role Assigned <https://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html>`_ to AWS Config in the AWS Config Developer Guide. .. epigraph:: *Pre-existing AWS Config role* If you have used an AWS service that uses AWS Config , such as AWS Security Hub CSPM or AWS Control Tower , and an AWS Config role has already been created, make sure that the IAM role that you use when setting up AWS Config keeps the same minimum permissions as the already created AWS Config role. You must do this so that the other AWS service continues to run as expected. For example, if AWS Control Tower has an IAM role that allows AWS Config to read Amazon Simple Storage Service ( Amazon S3 ) objects, make sure that the same permissions are granted within the IAM role you use when setting up AWS Config . Otherwise, it may interfere with how AWS Control Tower operates. For more information about IAM roles for AWS Config , see `*Identity and Access Management for AWS Config* <https://docs.aws.amazon.com/config/latest/developerguide/security-iam.html>`_ in the *AWS Config Developer Guide* .
         :param name: The name of the configuration recorder. AWS Config automatically assigns the name of "default" when creating the configuration recorder. You cannot change the name of the configuration recorder after it has been created. To change the configuration recorder name, you must delete it and create a new configuration recorder with a new name.
         :param recording_group: Specifies which resource types AWS Config records for configuration changes. .. epigraph:: *High Number of AWS Config Evaluations* You may notice increased activity in your account during your initial month recording with AWS Config when compared to subsequent months. During the initial bootstrapping process, AWS Config runs evaluations on all the resources in your account that you have selected for AWS Config to record. If you are running ephemeral workloads, you may see increased activity from AWS Config as it records configuration changes associated with creating and deleting these temporary resources. An *ephemeral workload* is a temporary use of computing resources that are loaded and run when needed. Examples include Amazon Elastic Compute Cloud ( Amazon EC2 ) Spot Instances, Amazon EMR jobs, and AWS Auto Scaling . If you want to avoid the increased activity from running ephemeral workloads, you can run these types of workloads in a separate account with AWS Config turned off to avoid increased configuration recording and rule evaluations.
         :param recording_mode: Specifies the default recording frequency for the configuration recorder. AWS Config supports *Continuous recording* and *Daily recording* . - Continuous recording allows you to record configuration changes continuously whenever a change occurs. - Daily recording allows you to receive a configuration item (CI) representing the most recent state of your resources over the last 24-hour period, only if it’s different from the previous CI recorded. .. epigraph:: *Some resource types require continuous recording* AWS Firewall Manager depends on continuous recording to monitor your resources. If you are using Firewall Manager, it is recommended that you set the recording frequency to Continuous. You can also override the recording frequency for specific resource types.
@@ -3255,7 +3259,7 @@ class CfnConfigurationRecorderProps:
 
            *Pre-existing AWS Config role*
 
-           If you have used an AWS service that uses AWS Config , such as Security Hub or AWS Control Tower , and an AWS Config role has already been created, make sure that the IAM role that you use when setting up AWS Config keeps the same minimum permissions as the already created AWS Config role. You must do this so that the other AWS service continues to run as expected.
+           If you have used an AWS service that uses AWS Config , such as AWS Security Hub CSPM or AWS Control Tower , and an AWS Config role has already been created, make sure that the IAM role that you use when setting up AWS Config keeps the same minimum permissions as the already created AWS Config role. You must do this so that the other AWS service continues to run as expected.
 
            For example, if AWS Control Tower has an IAM role that allows AWS Config to read Amazon Simple Storage Service ( Amazon S3 ) objects, make sure that the same permissions are granted within the IAM role you use when setting up AWS Config . Otherwise, it may interfere with how AWS Control Tower operates. For more information about IAM roles for AWS Config , see `*Identity and Access Management for AWS Config* <https://docs.aws.amazon.com/config/latest/developerguide/security-iam.html>`_ in the *AWS Config Developer Guide* .
 
@@ -3279,7 +3283,7 @@ class CfnConfigurationRecorderProps:
     @builtins.property
     def recording_group(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationRecorder.RecordingGroupProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingGroupProperty"]]:
         '''Specifies which resource types AWS Config records for configuration changes.
 
         .. epigraph::
@@ -3293,12 +3297,12 @@ class CfnConfigurationRecorderProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configurationrecorder.html#cfn-config-configurationrecorder-recordinggroup
         '''
         result = self._values.get("recording_group")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationRecorder.RecordingGroupProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingGroupProperty"]], result)
 
     @builtins.property
     def recording_mode(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationRecorder.RecordingModeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingModeProperty"]]:
         '''Specifies the default recording frequency for the configuration recorder. AWS Config supports *Continuous recording* and *Daily recording* .
 
         - Continuous recording allows you to record configuration changes continuously whenever a change occurs.
@@ -3315,7 +3319,7 @@ class CfnConfigurationRecorderProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configurationrecorder.html#cfn-config-configurationrecorder-recordingmode
         '''
         result = self._values.get("recording_mode")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationRecorder.RecordingModeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationRecorder.RecordingModeProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3369,12 +3373,12 @@ class CfnConformancePack(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         conformance_pack_name: builtins.str,
-        conformance_pack_input_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConformancePack.ConformancePackInputParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        delivery_s3_bucket: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
+        conformance_pack_input_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConformancePack.ConformancePackInputParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        delivery_s3_bucket: typing.Optional[typing.Union[builtins.str, "_IBucketRef_3debe44e"]] = None,
         delivery_s3_key_prefix: typing.Optional[builtins.str] = None,
         template_body: typing.Optional[builtins.str] = None,
         template_s3_uri: typing.Optional[builtins.str] = None,
@@ -3421,7 +3425,7 @@ class CfnConformancePack(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConformancePack", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3457,9 +3461,9 @@ class CfnConformancePack(
 
     @builtins.property
     @jsii.member(jsii_name="conformancePackRef")
-    def conformance_pack_ref(self) -> _ConformancePackReference_b73482ec:
+    def conformance_pack_ref(self) -> "_ConformancePackReference_b73482ec":
         '''A reference to a ConformancePack resource.'''
-        return typing.cast(_ConformancePackReference_b73482ec, jsii.get(self, "conformancePackRef"))
+        return typing.cast("_ConformancePackReference_b73482ec", jsii.get(self, "conformancePackRef"))
 
     @builtins.property
     @jsii.member(jsii_name="conformancePackName")
@@ -3478,14 +3482,14 @@ class CfnConformancePack(
     @jsii.member(jsii_name="conformancePackInputParameters")
     def conformance_pack_input_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConformancePack.ConformancePackInputParameterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConformancePack.ConformancePackInputParameterProperty"]]]]:
         '''A list of ConformancePackInputParameter objects.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConformancePack.ConformancePackInputParameterProperty"]]]], jsii.get(self, "conformancePackInputParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConformancePack.ConformancePackInputParameterProperty"]]]], jsii.get(self, "conformancePackInputParameters"))
 
     @conformance_pack_input_parameters.setter
     def conformance_pack_input_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConformancePack.ConformancePackInputParameterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConformancePack.ConformancePackInputParameterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__66a3c1376d21fbc61cfccda9673dabefb2864004881e13f61c2450d58f726d02)
@@ -3736,8 +3740,8 @@ class CfnConformancePackProps:
         self,
         *,
         conformance_pack_name: builtins.str,
-        conformance_pack_input_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConformancePack.ConformancePackInputParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        delivery_s3_bucket: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
+        conformance_pack_input_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConformancePack.ConformancePackInputParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        delivery_s3_bucket: typing.Optional[typing.Union[builtins.str, "_IBucketRef_3debe44e"]] = None,
         delivery_s3_key_prefix: typing.Optional[builtins.str] = None,
         template_body: typing.Optional[builtins.str] = None,
         template_s3_uri: typing.Optional[builtins.str] = None,
@@ -3817,24 +3821,24 @@ class CfnConformancePackProps:
     @builtins.property
     def conformance_pack_input_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConformancePack.ConformancePackInputParameterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConformancePack.ConformancePackInputParameterProperty"]]]]:
         '''A list of ConformancePackInputParameter objects.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-conformancepack.html#cfn-config-conformancepack-conformancepackinputparameters
         '''
         result = self._values.get("conformance_pack_input_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConformancePack.ConformancePackInputParameterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConformancePack.ConformancePackInputParameterProperty"]]]], result)
 
     @builtins.property
     def delivery_s3_bucket(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IBucketRef_3debe44e"]]:
         '''The name of the Amazon S3 bucket where AWS Config stores conformance pack templates.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-conformancepack.html#cfn-config-conformancepack-deliverys3bucket
         '''
         result = self._values.get("delivery_s3_bucket")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IBucketRef_3debe44e"]], result)
 
     @builtins.property
     def delivery_s3_key_prefix(self) -> typing.Optional[builtins.str]:
@@ -3945,11 +3949,11 @@ class CfnDeliveryChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         s3_bucket_name: builtins.str,
-        config_snapshot_delivery_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        config_snapshot_delivery_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         s3_key_prefix: typing.Optional[builtins.str] = None,
         s3_kms_key_arn: typing.Optional[builtins.str] = None,
@@ -3994,7 +3998,7 @@ class CfnDeliveryChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeliveryChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4038,9 +4042,9 @@ class CfnDeliveryChannel(
 
     @builtins.property
     @jsii.member(jsii_name="deliveryChannelRef")
-    def delivery_channel_ref(self) -> _DeliveryChannelReference_e7d3a59b:
+    def delivery_channel_ref(self) -> "_DeliveryChannelReference_e7d3a59b":
         '''A reference to a DeliveryChannel resource.'''
-        return typing.cast(_DeliveryChannelReference_e7d3a59b, jsii.get(self, "deliveryChannelRef"))
+        return typing.cast("_DeliveryChannelReference_e7d3a59b", jsii.get(self, "deliveryChannelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="s3BucketName")
@@ -4059,14 +4063,14 @@ class CfnDeliveryChannel(
     @jsii.member(jsii_name="configSnapshotDeliveryProperties")
     def config_snapshot_delivery_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty"]]:
         '''The options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty"]], jsii.get(self, "configSnapshotDeliveryProperties"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty"]], jsii.get(self, "configSnapshotDeliveryProperties"))
 
     @config_snapshot_delivery_properties.setter
     def config_snapshot_delivery_properties(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__29732799858d5a51a49b644a23b9487d8a731f17a76776d46c2a417f67da3159)
@@ -4218,7 +4222,7 @@ class CfnDeliveryChannelProps:
         self,
         *,
         s3_bucket_name: builtins.str,
-        config_snapshot_delivery_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        config_snapshot_delivery_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         s3_key_prefix: typing.Optional[builtins.str] = None,
         s3_kms_key_arn: typing.Optional[builtins.str] = None,
@@ -4292,13 +4296,13 @@ class CfnDeliveryChannelProps:
     @builtins.property
     def config_snapshot_delivery_properties(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty"]]:
         '''The options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-deliverychannel.html#cfn-config-deliverychannel-configsnapshotdeliveryproperties
         '''
         result = self._values.get("config_snapshot_delivery_properties")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeliveryChannel.ConfigSnapshotDeliveryPropertiesProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -4440,14 +4444,14 @@ class CfnOrganizationConfigRule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         organization_config_rule_name: builtins.str,
         excluded_accounts: typing.Optional[typing.Sequence[builtins.str]] = None,
-        organization_custom_policy_rule_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        organization_custom_rule_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        organization_managed_rule_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        organization_custom_policy_rule_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        organization_custom_rule_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        organization_managed_rule_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Config::OrganizationConfigRule``.
 
@@ -4477,7 +4481,7 @@ class CfnOrganizationConfigRule(
     @builtins.classmethod
     def arn_for_organization_config_rule(
         cls,
-        resource: _IOrganizationConfigRuleRef_657a40fe,
+        resource: "_IOrganizationConfigRuleRef_657a40fe",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -4491,10 +4495,10 @@ class CfnOrganizationConfigRule(
     @builtins.classmethod
     def from_organization_config_rule_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         organization_config_rule_id: builtins.str,
-    ) -> _IOrganizationConfigRuleRef_657a40fe:
+    ) -> "_IOrganizationConfigRuleRef_657a40fe":
         '''Creates a new IOrganizationConfigRuleRef from a organizationConfigRuleId.
 
         :param scope: -
@@ -4506,7 +4510,7 @@ class CfnOrganizationConfigRule(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument organization_config_rule_id", value=organization_config_rule_id, expected_type=type_hints["organization_config_rule_id"])
-        return typing.cast(_IOrganizationConfigRuleRef_657a40fe, jsii.sinvoke(cls, "fromOrganizationConfigRuleId", [scope, id, organization_config_rule_id]))
+        return typing.cast("_IOrganizationConfigRuleRef_657a40fe", jsii.sinvoke(cls, "fromOrganizationConfigRuleId", [scope, id, organization_config_rule_id]))
 
     @jsii.member(jsii_name="isCfnOrganizationConfigRule")
     @builtins.classmethod
@@ -4521,7 +4525,7 @@ class CfnOrganizationConfigRule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOrganizationConfigRule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4565,9 +4569,11 @@ class CfnOrganizationConfigRule(
 
     @builtins.property
     @jsii.member(jsii_name="organizationConfigRuleRef")
-    def organization_config_rule_ref(self) -> _OrganizationConfigRuleReference_30ef913a:
+    def organization_config_rule_ref(
+        self,
+    ) -> "_OrganizationConfigRuleReference_30ef913a":
         '''A reference to a OrganizationConfigRule resource.'''
-        return typing.cast(_OrganizationConfigRuleReference_30ef913a, jsii.get(self, "organizationConfigRuleRef"))
+        return typing.cast("_OrganizationConfigRuleReference_30ef913a", jsii.get(self, "organizationConfigRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="organizationConfigRuleName")
@@ -4602,14 +4608,14 @@ class CfnOrganizationConfigRule(
     @jsii.member(jsii_name="organizationCustomPolicyRuleMetadata")
     def organization_custom_policy_rule_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty"]]:
         '''An object that specifies metadata for your organization's AWS Config Custom Policy rule.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty"]], jsii.get(self, "organizationCustomPolicyRuleMetadata"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty"]], jsii.get(self, "organizationCustomPolicyRuleMetadata"))
 
     @organization_custom_policy_rule_metadata.setter
     def organization_custom_policy_rule_metadata(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d092f1b41cbf019a6c2f797b420e8cb6cce29c52a1fb671c69086ff9b8083246)
@@ -4620,14 +4626,14 @@ class CfnOrganizationConfigRule(
     @jsii.member(jsii_name="organizationCustomRuleMetadata")
     def organization_custom_rule_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty"]]:
         '''An ``OrganizationCustomRuleMetadata`` object.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty"]], jsii.get(self, "organizationCustomRuleMetadata"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty"]], jsii.get(self, "organizationCustomRuleMetadata"))
 
     @organization_custom_rule_metadata.setter
     def organization_custom_rule_metadata(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c45ab894736dadec9d2a359d9fb78b8cce28027988ec287fb21ff6deaac97ea7)
@@ -4638,14 +4644,14 @@ class CfnOrganizationConfigRule(
     @jsii.member(jsii_name="organizationManagedRuleMetadata")
     def organization_managed_rule_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty"]]:
         '''An ``OrganizationManagedRuleMetadata`` object.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty"]], jsii.get(self, "organizationManagedRuleMetadata"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty"]], jsii.get(self, "organizationManagedRuleMetadata"))
 
     @organization_managed_rule_metadata.setter
     def organization_managed_rule_metadata(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__afcd0c2707f5eb2640b1df26b94e2a0dc017a9171de66ccba46831ec339d624b)
@@ -5301,9 +5307,9 @@ class CfnOrganizationConfigRuleProps:
         *,
         organization_config_rule_name: builtins.str,
         excluded_accounts: typing.Optional[typing.Sequence[builtins.str]] = None,
-        organization_custom_policy_rule_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        organization_custom_rule_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        organization_managed_rule_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        organization_custom_policy_rule_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        organization_custom_rule_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        organization_managed_rule_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnOrganizationConfigRule``.
 
@@ -5410,7 +5416,7 @@ class CfnOrganizationConfigRuleProps:
     @builtins.property
     def organization_custom_policy_rule_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty"]]:
         '''An object that specifies metadata for your organization's AWS Config Custom Policy rule.
 
         The metadata includes the runtime system in use, which accounts have debug logging enabled, and other custom rule metadata, such as resource type, resource ID of AWS resource, and organization trigger types that initiate AWS Config to evaluate AWS resources against a rule.
@@ -5418,29 +5424,29 @@ class CfnOrganizationConfigRuleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-organizationconfigrule.html#cfn-config-organizationconfigrule-organizationcustompolicyrulemetadata
         '''
         result = self._values.get("organization_custom_policy_rule_metadata")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty"]], result)
 
     @builtins.property
     def organization_custom_rule_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty"]]:
         '''An ``OrganizationCustomRuleMetadata`` object.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-organizationconfigrule.html#cfn-config-organizationconfigrule-organizationcustomrulemetadata
         '''
         result = self._values.get("organization_custom_rule_metadata")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty"]], result)
 
     @builtins.property
     def organization_managed_rule_metadata(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty"]]:
         '''An ``OrganizationManagedRuleMetadata`` object.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-organizationconfigrule.html#cfn-config-organizationconfigrule-organizationmanagedrulemetadata
         '''
         result = self._values.get("organization_managed_rule_metadata")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5492,11 +5498,11 @@ class CfnOrganizationConformancePack(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         organization_conformance_pack_name: builtins.str,
-        conformance_pack_input_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOrganizationConformancePack.ConformancePackInputParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        conformance_pack_input_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOrganizationConformancePack.ConformancePackInputParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         delivery_s3_bucket: typing.Optional[builtins.str] = None,
         delivery_s3_key_prefix: typing.Optional[builtins.str] = None,
         excluded_accounts: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -5544,7 +5550,7 @@ class CfnOrganizationConformancePack(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOrganizationConformancePack", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5582,9 +5588,9 @@ class CfnOrganizationConformancePack(
     @jsii.member(jsii_name="organizationConformancePackRef")
     def organization_conformance_pack_ref(
         self,
-    ) -> _OrganizationConformancePackReference_add452aa:
+    ) -> "_OrganizationConformancePackReference_add452aa":
         '''A reference to a OrganizationConformancePack resource.'''
-        return typing.cast(_OrganizationConformancePackReference_add452aa, jsii.get(self, "organizationConformancePackRef"))
+        return typing.cast("_OrganizationConformancePackReference_add452aa", jsii.get(self, "organizationConformancePackRef"))
 
     @builtins.property
     @jsii.member(jsii_name="organizationConformancePackName")
@@ -5603,14 +5609,14 @@ class CfnOrganizationConformancePack(
     @jsii.member(jsii_name="conformancePackInputParameters")
     def conformance_pack_input_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOrganizationConformancePack.ConformancePackInputParameterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConformancePack.ConformancePackInputParameterProperty"]]]]:
         '''A list of ``ConformancePackInputParameter`` objects.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOrganizationConformancePack.ConformancePackInputParameterProperty"]]]], jsii.get(self, "conformancePackInputParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConformancePack.ConformancePackInputParameterProperty"]]]], jsii.get(self, "conformancePackInputParameters"))
 
     @conformance_pack_input_parameters.setter
     def conformance_pack_input_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOrganizationConformancePack.ConformancePackInputParameterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConformancePack.ConformancePackInputParameterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__159adc773b03fcb350f20741e9412fc5c36ec7df507a92c7262d5956c971d644)
@@ -5780,7 +5786,7 @@ class CfnOrganizationConformancePackProps:
         self,
         *,
         organization_conformance_pack_name: builtins.str,
-        conformance_pack_input_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationConformancePack.ConformancePackInputParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        conformance_pack_input_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnOrganizationConformancePack.ConformancePackInputParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         delivery_s3_bucket: typing.Optional[builtins.str] = None,
         delivery_s3_key_prefix: typing.Optional[builtins.str] = None,
         excluded_accounts: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -5859,13 +5865,13 @@ class CfnOrganizationConformancePackProps:
     @builtins.property
     def conformance_pack_input_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnOrganizationConformancePack.ConformancePackInputParameterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConformancePack.ConformancePackInputParameterProperty"]]]]:
         '''A list of ``ConformancePackInputParameter`` objects.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-organizationconformancepack.html#cfn-config-organizationconformancepack-conformancepackinputparameters
         '''
         result = self._values.get("conformance_pack_input_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnOrganizationConformancePack.ConformancePackInputParameterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnOrganizationConformancePack.ConformancePackInputParameterProperty"]]]], result)
 
     @builtins.property
     def delivery_s3_bucket(self) -> typing.Optional[builtins.str]:
@@ -5979,14 +5985,14 @@ class CfnRemediationConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         config_rule_name: builtins.str,
         target_id: builtins.str,
         target_type: builtins.str,
-        automatic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        execution_controls: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRemediationConfiguration.ExecutionControlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        automatic: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        execution_controls: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRemediationConfiguration.ExecutionControlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         maximum_automatic_attempts: typing.Optional[jsii.Number] = None,
         parameters: typing.Any = None,
         resource_type: typing.Optional[builtins.str] = None,
@@ -6031,7 +6037,7 @@ class CfnRemediationConfiguration(
     @builtins.classmethod
     def arn_for_remediation_configuration(
         cls,
-        resource: _IRemediationConfigurationRef_520713b3,
+        resource: "_IRemediationConfigurationRef_520713b3",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6045,10 +6051,10 @@ class CfnRemediationConfiguration(
     @builtins.classmethod
     def from_remediation_configuration_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         remediation_configuration_id: builtins.str,
-    ) -> _IRemediationConfigurationRef_520713b3:
+    ) -> "_IRemediationConfigurationRef_520713b3":
         '''Creates a new IRemediationConfigurationRef from a remediationConfigurationId.
 
         :param scope: -
@@ -6060,7 +6066,7 @@ class CfnRemediationConfiguration(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument remediation_configuration_id", value=remediation_configuration_id, expected_type=type_hints["remediation_configuration_id"])
-        return typing.cast(_IRemediationConfigurationRef_520713b3, jsii.sinvoke(cls, "fromRemediationConfigurationId", [scope, id, remediation_configuration_id]))
+        return typing.cast("_IRemediationConfigurationRef_520713b3", jsii.sinvoke(cls, "fromRemediationConfigurationId", [scope, id, remediation_configuration_id]))
 
     @jsii.member(jsii_name="isCfnRemediationConfiguration")
     @builtins.classmethod
@@ -6075,7 +6081,7 @@ class CfnRemediationConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRemediationConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6121,9 +6127,9 @@ class CfnRemediationConfiguration(
     @jsii.member(jsii_name="remediationConfigurationRef")
     def remediation_configuration_ref(
         self,
-    ) -> _RemediationConfigurationReference_ac50dda2:
+    ) -> "_RemediationConfigurationReference_ac50dda2":
         '''A reference to a RemediationConfiguration resource.'''
-        return typing.cast(_RemediationConfigurationReference_ac50dda2, jsii.get(self, "remediationConfigurationRef"))
+        return typing.cast("_RemediationConfigurationReference_ac50dda2", jsii.get(self, "remediationConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="configRuleName")
@@ -6168,14 +6174,14 @@ class CfnRemediationConfiguration(
     @jsii.member(jsii_name="automatic")
     def automatic(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The remediation is triggered automatically.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "automatic"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "automatic"))
 
     @automatic.setter
     def automatic(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7a612c6be9716c299f22f0fc2b57c084a7cafde2f9ec8ebed4b31decea797bb9)
@@ -6186,14 +6192,14 @@ class CfnRemediationConfiguration(
     @jsii.member(jsii_name="executionControls")
     def execution_controls(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRemediationConfiguration.ExecutionControlsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRemediationConfiguration.ExecutionControlsProperty"]]:
         '''An ExecutionControls object.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRemediationConfiguration.ExecutionControlsProperty"]], jsii.get(self, "executionControls"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRemediationConfiguration.ExecutionControlsProperty"]], jsii.get(self, "executionControls"))
 
     @execution_controls.setter
     def execution_controls(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRemediationConfiguration.ExecutionControlsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRemediationConfiguration.ExecutionControlsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__923c16d43d84ed6ed11e372e8cd76942cbebbe48641cade38fc40a0c5b8a7f12)
@@ -6283,7 +6289,7 @@ class CfnRemediationConfiguration(
         def __init__(
             self,
             *,
-            ssm_controls: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRemediationConfiguration.SsmControlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ssm_controls: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRemediationConfiguration.SsmControlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An ExecutionControls object.
 
@@ -6315,13 +6321,13 @@ class CfnRemediationConfiguration(
         @builtins.property
         def ssm_controls(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRemediationConfiguration.SsmControlsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRemediationConfiguration.SsmControlsProperty"]]:
             '''A SsmControls object.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-remediationconfiguration-executioncontrols.html#cfn-config-remediationconfiguration-executioncontrols-ssmcontrols
             '''
             result = self._values.get("ssm_controls")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRemediationConfiguration.SsmControlsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRemediationConfiguration.SsmControlsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6346,8 +6352,8 @@ class CfnRemediationConfiguration(
         def __init__(
             self,
             *,
-            resource_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRemediationConfiguration.ResourceValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            static_value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRemediationConfiguration.StaticValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            resource_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRemediationConfiguration.ResourceValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            static_value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRemediationConfiguration.StaticValueProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The value is either a dynamic (resource) value or a static value.
 
@@ -6388,24 +6394,24 @@ class CfnRemediationConfiguration(
         @builtins.property
         def resource_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRemediationConfiguration.ResourceValueProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRemediationConfiguration.ResourceValueProperty"]]:
             '''The value is dynamic and changes at run-time.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-remediationconfiguration-remediationparametervalue.html#cfn-config-remediationconfiguration-remediationparametervalue-resourcevalue
             '''
             result = self._values.get("resource_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRemediationConfiguration.ResourceValueProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRemediationConfiguration.ResourceValueProperty"]], result)
 
         @builtins.property
         def static_value(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRemediationConfiguration.StaticValueProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRemediationConfiguration.StaticValueProperty"]]:
             '''The value is static and does not change at run-time.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-config-remediationconfiguration-remediationparametervalue.html#cfn-config-remediationconfiguration-remediationparametervalue-staticvalue
             '''
             result = self._values.get("static_value")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRemediationConfiguration.StaticValueProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRemediationConfiguration.StaticValueProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6635,8 +6641,8 @@ class CfnRemediationConfigurationProps:
         config_rule_name: builtins.str,
         target_id: builtins.str,
         target_type: builtins.str,
-        automatic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        execution_controls: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRemediationConfiguration.ExecutionControlsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        automatic: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        execution_controls: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRemediationConfiguration.ExecutionControlsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         maximum_automatic_attempts: typing.Optional[jsii.Number] = None,
         parameters: typing.Any = None,
         resource_type: typing.Optional[builtins.str] = None,
@@ -6754,24 +6760,24 @@ class CfnRemediationConfigurationProps:
     @builtins.property
     def automatic(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The remediation is triggered automatically.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-remediationconfiguration.html#cfn-config-remediationconfiguration-automatic
         '''
         result = self._values.get("automatic")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def execution_controls(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRemediationConfiguration.ExecutionControlsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRemediationConfiguration.ExecutionControlsProperty"]]:
         '''An ExecutionControls object.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-remediationconfiguration.html#cfn-config-remediationconfiguration-executioncontrols
         '''
         result = self._values.get("execution_controls")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRemediationConfiguration.ExecutionControlsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRemediationConfiguration.ExecutionControlsProperty"]], result)
 
     @builtins.property
     def maximum_automatic_attempts(self) -> typing.Optional[jsii.Number]:
@@ -6858,6 +6864,7 @@ class CfnStoredQuery(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_config as config
@@ -6877,13 +6884,13 @@ class CfnStoredQuery(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         query_expression: builtins.str,
         query_name: builtins.str,
         query_description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Config::StoredQuery``.
 
@@ -6920,7 +6927,7 @@ class CfnStoredQuery(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStoredQuery", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6976,15 +6983,15 @@ class CfnStoredQuery(
 
     @builtins.property
     @jsii.member(jsii_name="storedQueryRef")
-    def stored_query_ref(self) -> _StoredQueryReference_385d82e9:
+    def stored_query_ref(self) -> "_StoredQueryReference_385d82e9":
         '''A reference to a StoredQuery resource.'''
-        return typing.cast(_StoredQueryReference_385d82e9, jsii.get(self, "storedQueryRef"))
+        return typing.cast("_StoredQueryReference_385d82e9", jsii.get(self, "storedQueryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="queryExpression")
@@ -7027,12 +7034,12 @@ class CfnStoredQuery(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1eb31c625f25801e6c38cec9ee395832782b987abddb68d127cc6e79701d2fb8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7056,7 +7063,7 @@ class CfnStoredQueryProps:
         query_expression: builtins.str,
         query_name: builtins.str,
         query_description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStoredQuery``.
 
@@ -7070,6 +7077,7 @@ class CfnStoredQueryProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_config as config
@@ -7133,13 +7141,13 @@ class CfnStoredQueryProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-storedquery.html#cfn-config-storedquery-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7235,12 +7243,12 @@ class IRule(_IResource_c80c4260, typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a EventBridge event rule which triggers for rule compliance events.
 
         :param id: -
@@ -7257,12 +7265,12 @@ class IRule(_IResource_c80c4260, typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an EventBridge event rule which triggers for rule events.
 
         Use
@@ -7282,12 +7290,12 @@ class IRule(_IResource_c80c4260, typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a EventBridge event rule which triggers for rule re-evaluation status events.
 
         :param id: -
@@ -7321,12 +7329,12 @@ class _IRuleProxy(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a EventBridge event rule which triggers for rule compliance events.
 
         :param id: -
@@ -7347,19 +7355,19 @@ class _IRuleProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onComplianceChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onComplianceChange", [id, options]))
 
     @jsii.member(jsii_name="onEvent")
     def on_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an EventBridge event rule which triggers for rule events.
 
         Use
@@ -7383,19 +7391,19 @@ class _IRuleProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onEvent", [id, options]))
 
     @jsii.member(jsii_name="onReEvaluationStatus")
     def on_re_evaluation_status(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a EventBridge event rule which triggers for rule re-evaluation status events.
 
         :param id: -
@@ -7416,7 +7424,7 @@ class _IRuleProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReEvaluationStatus", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onReEvaluationStatus", [id, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IRule).__jsii_proxy_class__ = lambda : _IRuleProxy
@@ -7457,13 +7465,13 @@ class ManagedRule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         identifier: builtins.str,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
         rule_scope: typing.Optional["RuleScope"] = None,
@@ -7499,10 +7507,10 @@ class ManagedRule(
     @builtins.classmethod
     def from_config_rule_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         config_rule_name: builtins.str,
-    ) -> IRule:
+    ) -> "IRule":
         '''Imports an existing rule.
 
         :param scope: -
@@ -7514,19 +7522,19 @@ class ManagedRule(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument config_rule_name", value=config_rule_name, expected_type=type_hints["config_rule_name"])
-        return typing.cast(IRule, jsii.sinvoke(cls, "fromConfigRuleName", [scope, id, config_rule_name]))
+        return typing.cast("IRule", jsii.sinvoke(cls, "fromConfigRuleName", [scope, id, config_rule_name]))
 
     @jsii.member(jsii_name="onComplianceChange")
     def on_compliance_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an EventBridge event rule which triggers for rule compliance events.
 
         :param id: -
@@ -7547,19 +7555,19 @@ class ManagedRule(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onComplianceChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onComplianceChange", [id, options]))
 
     @jsii.member(jsii_name="onEvent")
     def on_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an EventBridge event rule which triggers for rule events.
 
         Use
@@ -7583,19 +7591,19 @@ class ManagedRule(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onEvent", [id, options]))
 
     @jsii.member(jsii_name="onReEvaluationStatus")
     def on_re_evaluation_status(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an EventBridge event rule which triggers for rule re-evaluation status events.
 
         :param id: -
@@ -7616,7 +7624,7 @@ class ManagedRule(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReEvaluationStatus", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onReEvaluationStatus", [id, options]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -12833,9 +12841,9 @@ class RuleProps:
         *,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        maximum_execution_frequency: typing.Optional[MaximumExecutionFrequency] = None,
+        maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
         rule_scope: typing.Optional["RuleScope"] = None,
     ) -> None:
         '''Construction properties for a new rule.
@@ -12911,7 +12919,7 @@ class RuleProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def evaluation_modes(self) -> typing.Optional[EvaluationMode]:
+    def evaluation_modes(self) -> typing.Optional["EvaluationMode"]:
         '''The modes the AWS Config rule can be evaluated in.
 
         The valid values are distinct objects.
@@ -12919,7 +12927,7 @@ class RuleProps:
         :default: - Detective evaluation mode only
         '''
         result = self._values.get("evaluation_modes")
-        return typing.cast(typing.Optional[EvaluationMode], result)
+        return typing.cast(typing.Optional["EvaluationMode"], result)
 
     @builtins.property
     def input_parameters(
@@ -12933,13 +12941,15 @@ class RuleProps:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
-    def maximum_execution_frequency(self) -> typing.Optional[MaximumExecutionFrequency]:
+    def maximum_execution_frequency(
+        self,
+    ) -> typing.Optional["MaximumExecutionFrequency"]:
         '''The maximum frequency at which the AWS Config rule runs evaluations.
 
         :default: MaximumExecutionFrequency.TWENTY_FOUR_HOURS
         '''
         result = self._values.get("maximum_execution_frequency")
-        return typing.cast(typing.Optional[MaximumExecutionFrequency], result)
+        return typing.cast(typing.Optional["MaximumExecutionFrequency"], result)
 
     @builtins.property
     def rule_scope(self) -> typing.Optional["RuleScope"]:
@@ -12988,7 +12998,7 @@ class RuleScope(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_config.RuleS
     @builtins.classmethod
     def from_resource(
         cls,
-        resource_type: ResourceType,
+        resource_type: "ResourceType",
         resource_id: typing.Optional[builtins.str] = None,
     ) -> "RuleScope":
         '''restricts scope of changes to a specific resource type or resource identifier.
@@ -13006,7 +13016,7 @@ class RuleScope(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_config.RuleS
     @builtins.classmethod
     def from_resources(
         cls,
-        resource_types: typing.Sequence[ResourceType],
+        resource_types: typing.Sequence["ResourceType"],
     ) -> "RuleScope":
         '''restricts scope of changes to specific resource types.
 
@@ -13049,9 +13059,9 @@ class RuleScope(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_config.RuleS
 
     @builtins.property
     @jsii.member(jsii_name="resourceTypes")
-    def resource_types(self) -> typing.Optional[typing.List[ResourceType]]:
+    def resource_types(self) -> typing.Optional[typing.List["ResourceType"]]:
         '''Resource types that will trigger evaluation of a rule.'''
-        return typing.cast(typing.Optional[typing.List[ResourceType]], jsii.get(self, "resourceTypes"))
+        return typing.cast(typing.Optional[typing.List["ResourceType"]], jsii.get(self, "resourceTypes"))
 
     @builtins.property
     @jsii.member(jsii_name="value")
@@ -13079,16 +13089,16 @@ class AccessKeysRotated(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        max_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_age: typing.Optional["_Duration_4839e8c3"] = None,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        maximum_execution_frequency: typing.Optional[MaximumExecutionFrequency] = None,
-        rule_scope: typing.Optional[RuleScope] = None,
+        maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
+        rule_scope: typing.Optional["RuleScope"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -13143,11 +13153,11 @@ class AccessKeysRotatedProps(RuleProps):
         *,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        maximum_execution_frequency: typing.Optional[MaximumExecutionFrequency] = None,
-        rule_scope: typing.Optional[RuleScope] = None,
-        max_age: typing.Optional[_Duration_4839e8c3] = None,
+        maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
+        rule_scope: typing.Optional["RuleScope"] = None,
+        max_age: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Construction properties for a AccessKeysRotated.
 
@@ -13228,7 +13238,7 @@ class AccessKeysRotatedProps(RuleProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def evaluation_modes(self) -> typing.Optional[EvaluationMode]:
+    def evaluation_modes(self) -> typing.Optional["EvaluationMode"]:
         '''The modes the AWS Config rule can be evaluated in.
 
         The valid values are distinct objects.
@@ -13236,7 +13246,7 @@ class AccessKeysRotatedProps(RuleProps):
         :default: - Detective evaluation mode only
         '''
         result = self._values.get("evaluation_modes")
-        return typing.cast(typing.Optional[EvaluationMode], result)
+        return typing.cast(typing.Optional["EvaluationMode"], result)
 
     @builtins.property
     def input_parameters(
@@ -13250,31 +13260,33 @@ class AccessKeysRotatedProps(RuleProps):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
-    def maximum_execution_frequency(self) -> typing.Optional[MaximumExecutionFrequency]:
+    def maximum_execution_frequency(
+        self,
+    ) -> typing.Optional["MaximumExecutionFrequency"]:
         '''The maximum frequency at which the AWS Config rule runs evaluations.
 
         :default: MaximumExecutionFrequency.TWENTY_FOUR_HOURS
         '''
         result = self._values.get("maximum_execution_frequency")
-        return typing.cast(typing.Optional[MaximumExecutionFrequency], result)
+        return typing.cast(typing.Optional["MaximumExecutionFrequency"], result)
 
     @builtins.property
-    def rule_scope(self) -> typing.Optional[RuleScope]:
+    def rule_scope(self) -> typing.Optional["RuleScope"]:
         '''Defines which resources trigger an evaluation for an AWS Config rule.
 
         :default: - evaluations for the rule are triggered when any resource in the recording group changes.
         '''
         result = self._values.get("rule_scope")
-        return typing.cast(typing.Optional[RuleScope], result)
+        return typing.cast(typing.Optional["RuleScope"], result)
 
     @builtins.property
-    def max_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum number of days within which the access keys must be rotated.
 
         :default: Duration.days(90)
         '''
         result = self._values.get("max_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13312,17 +13324,17 @@ class CloudFormationStackDriftDetectionCheck(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         own_stack_only: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRoleRef_8400221f] = None,
+        role: typing.Optional["_IRoleRef_8400221f"] = None,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        maximum_execution_frequency: typing.Optional[MaximumExecutionFrequency] = None,
-        rule_scope: typing.Optional[RuleScope] = None,
+        maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
+        rule_scope: typing.Optional["RuleScope"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -13380,12 +13392,12 @@ class CloudFormationStackDriftDetectionCheckProps(RuleProps):
         *,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        maximum_execution_frequency: typing.Optional[MaximumExecutionFrequency] = None,
-        rule_scope: typing.Optional[RuleScope] = None,
+        maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
+        rule_scope: typing.Optional["RuleScope"] = None,
         own_stack_only: typing.Optional[builtins.bool] = None,
-        role: typing.Optional[_IRoleRef_8400221f] = None,
+        role: typing.Optional["_IRoleRef_8400221f"] = None,
     ) -> None:
         '''Construction properties for a CloudFormationStackDriftDetectionCheck.
 
@@ -13455,7 +13467,7 @@ class CloudFormationStackDriftDetectionCheckProps(RuleProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def evaluation_modes(self) -> typing.Optional[EvaluationMode]:
+    def evaluation_modes(self) -> typing.Optional["EvaluationMode"]:
         '''The modes the AWS Config rule can be evaluated in.
 
         The valid values are distinct objects.
@@ -13463,7 +13475,7 @@ class CloudFormationStackDriftDetectionCheckProps(RuleProps):
         :default: - Detective evaluation mode only
         '''
         result = self._values.get("evaluation_modes")
-        return typing.cast(typing.Optional[EvaluationMode], result)
+        return typing.cast(typing.Optional["EvaluationMode"], result)
 
     @builtins.property
     def input_parameters(
@@ -13477,22 +13489,24 @@ class CloudFormationStackDriftDetectionCheckProps(RuleProps):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
-    def maximum_execution_frequency(self) -> typing.Optional[MaximumExecutionFrequency]:
+    def maximum_execution_frequency(
+        self,
+    ) -> typing.Optional["MaximumExecutionFrequency"]:
         '''The maximum frequency at which the AWS Config rule runs evaluations.
 
         :default: MaximumExecutionFrequency.TWENTY_FOUR_HOURS
         '''
         result = self._values.get("maximum_execution_frequency")
-        return typing.cast(typing.Optional[MaximumExecutionFrequency], result)
+        return typing.cast(typing.Optional["MaximumExecutionFrequency"], result)
 
     @builtins.property
-    def rule_scope(self) -> typing.Optional[RuleScope]:
+    def rule_scope(self) -> typing.Optional["RuleScope"]:
         '''Defines which resources trigger an evaluation for an AWS Config rule.
 
         :default: - evaluations for the rule are triggered when any resource in the recording group changes.
         '''
         result = self._values.get("rule_scope")
-        return typing.cast(typing.Optional[RuleScope], result)
+        return typing.cast(typing.Optional["RuleScope"], result)
 
     @builtins.property
     def own_stack_only(self) -> typing.Optional[builtins.bool]:
@@ -13504,7 +13518,7 @@ class CloudFormationStackDriftDetectionCheckProps(RuleProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRoleRef_8400221f]:
+    def role(self) -> typing.Optional["_IRoleRef_8400221f"]:
         '''The IAM role to use for this rule.
 
         It must have permissions to detect drift
@@ -13515,7 +13529,7 @@ class CloudFormationStackDriftDetectionCheckProps(RuleProps):
         :default: - A role will be created
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRoleRef_8400221f], result)
+        return typing.cast(typing.Optional["_IRoleRef_8400221f"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13556,16 +13570,16 @@ class CloudFormationStackNotificationCheck(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        topics: typing.Optional[typing.Sequence[_ITopic_9eca4852]] = None,
+        topics: typing.Optional[typing.Sequence["_ITopic_9eca4852"]] = None,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        maximum_execution_frequency: typing.Optional[MaximumExecutionFrequency] = None,
-        rule_scope: typing.Optional[RuleScope] = None,
+        maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
+        rule_scope: typing.Optional["RuleScope"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -13620,11 +13634,11 @@ class CloudFormationStackNotificationCheckProps(RuleProps):
         *,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        maximum_execution_frequency: typing.Optional[MaximumExecutionFrequency] = None,
-        rule_scope: typing.Optional[RuleScope] = None,
-        topics: typing.Optional[typing.Sequence[_ITopic_9eca4852]] = None,
+        maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
+        rule_scope: typing.Optional["RuleScope"] = None,
+        topics: typing.Optional[typing.Sequence["_ITopic_9eca4852"]] = None,
     ) -> None:
         '''Construction properties for a CloudFormationStackNotificationCheck.
 
@@ -13693,7 +13707,7 @@ class CloudFormationStackNotificationCheckProps(RuleProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def evaluation_modes(self) -> typing.Optional[EvaluationMode]:
+    def evaluation_modes(self) -> typing.Optional["EvaluationMode"]:
         '''The modes the AWS Config rule can be evaluated in.
 
         The valid values are distinct objects.
@@ -13701,7 +13715,7 @@ class CloudFormationStackNotificationCheckProps(RuleProps):
         :default: - Detective evaluation mode only
         '''
         result = self._values.get("evaluation_modes")
-        return typing.cast(typing.Optional[EvaluationMode], result)
+        return typing.cast(typing.Optional["EvaluationMode"], result)
 
     @builtins.property
     def input_parameters(
@@ -13715,25 +13729,27 @@ class CloudFormationStackNotificationCheckProps(RuleProps):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
-    def maximum_execution_frequency(self) -> typing.Optional[MaximumExecutionFrequency]:
+    def maximum_execution_frequency(
+        self,
+    ) -> typing.Optional["MaximumExecutionFrequency"]:
         '''The maximum frequency at which the AWS Config rule runs evaluations.
 
         :default: MaximumExecutionFrequency.TWENTY_FOUR_HOURS
         '''
         result = self._values.get("maximum_execution_frequency")
-        return typing.cast(typing.Optional[MaximumExecutionFrequency], result)
+        return typing.cast(typing.Optional["MaximumExecutionFrequency"], result)
 
     @builtins.property
-    def rule_scope(self) -> typing.Optional[RuleScope]:
+    def rule_scope(self) -> typing.Optional["RuleScope"]:
         '''Defines which resources trigger an evaluation for an AWS Config rule.
 
         :default: - evaluations for the rule are triggered when any resource in the recording group changes.
         '''
         result = self._values.get("rule_scope")
-        return typing.cast(typing.Optional[RuleScope], result)
+        return typing.cast(typing.Optional["RuleScope"], result)
 
     @builtins.property
-    def topics(self) -> typing.Optional[typing.List[_ITopic_9eca4852]]:
+    def topics(self) -> typing.Optional[typing.List["_ITopic_9eca4852"]]:
         '''A list of allowed topics.
 
         At most 5 topics.
@@ -13741,7 +13757,7 @@ class CloudFormationStackNotificationCheckProps(RuleProps):
         :default: - No topics.
         '''
         result = self._values.get("topics")
-        return typing.cast(typing.Optional[typing.List[_ITopic_9eca4852]], result)
+        return typing.cast(typing.Optional[typing.List["_ITopic_9eca4852"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13795,17 +13811,17 @@ class CustomPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_text: builtins.str,
         enable_debug_log: typing.Optional[builtins.bool] = None,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        maximum_execution_frequency: typing.Optional[MaximumExecutionFrequency] = None,
-        rule_scope: typing.Optional[RuleScope] = None,
+        maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
+        rule_scope: typing.Optional["RuleScope"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -13840,10 +13856,10 @@ class CustomPolicy(
     @builtins.classmethod
     def from_config_rule_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         config_rule_name: builtins.str,
-    ) -> IRule:
+    ) -> "IRule":
         '''Imports an existing rule.
 
         :param scope: -
@@ -13855,19 +13871,19 @@ class CustomPolicy(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument config_rule_name", value=config_rule_name, expected_type=type_hints["config_rule_name"])
-        return typing.cast(IRule, jsii.sinvoke(cls, "fromConfigRuleName", [scope, id, config_rule_name]))
+        return typing.cast("IRule", jsii.sinvoke(cls, "fromConfigRuleName", [scope, id, config_rule_name]))
 
     @jsii.member(jsii_name="onComplianceChange")
     def on_compliance_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an EventBridge event rule which triggers for rule compliance events.
 
         :param id: -
@@ -13888,19 +13904,19 @@ class CustomPolicy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onComplianceChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onComplianceChange", [id, options]))
 
     @jsii.member(jsii_name="onEvent")
     def on_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an EventBridge event rule which triggers for rule events.
 
         Use
@@ -13924,19 +13940,19 @@ class CustomPolicy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onEvent", [id, options]))
 
     @jsii.member(jsii_name="onReEvaluationStatus")
     def on_re_evaluation_status(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an EventBridge event rule which triggers for rule re-evaluation status events.
 
         :param id: -
@@ -13957,7 +13973,7 @@ class CustomPolicy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReEvaluationStatus", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onReEvaluationStatus", [id, options]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -14027,11 +14043,11 @@ class CustomPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="ruleScope")
-    def _rule_scope(self) -> typing.Optional[RuleScope]:
-        return typing.cast(typing.Optional[RuleScope], jsii.get(self, "ruleScope"))
+    def _rule_scope(self) -> typing.Optional["RuleScope"]:
+        return typing.cast(typing.Optional["RuleScope"], jsii.get(self, "ruleScope"))
 
     @_rule_scope.setter
-    def _rule_scope(self, value: typing.Optional[RuleScope]) -> None:
+    def _rule_scope(self, value: typing.Optional["RuleScope"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ef65597b7cc84c802aee5d97e6dbc9dbf9e0f04df2ae41e5102e9265b7960d0f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -14058,10 +14074,10 @@ class CustomPolicyProps(RuleProps):
         *,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        maximum_execution_frequency: typing.Optional[MaximumExecutionFrequency] = None,
-        rule_scope: typing.Optional[RuleScope] = None,
+        maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
+        rule_scope: typing.Optional["RuleScope"] = None,
         policy_text: builtins.str,
         enable_debug_log: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -14151,7 +14167,7 @@ class CustomPolicyProps(RuleProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def evaluation_modes(self) -> typing.Optional[EvaluationMode]:
+    def evaluation_modes(self) -> typing.Optional["EvaluationMode"]:
         '''The modes the AWS Config rule can be evaluated in.
 
         The valid values are distinct objects.
@@ -14159,7 +14175,7 @@ class CustomPolicyProps(RuleProps):
         :default: - Detective evaluation mode only
         '''
         result = self._values.get("evaluation_modes")
-        return typing.cast(typing.Optional[EvaluationMode], result)
+        return typing.cast(typing.Optional["EvaluationMode"], result)
 
     @builtins.property
     def input_parameters(
@@ -14173,22 +14189,24 @@ class CustomPolicyProps(RuleProps):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
-    def maximum_execution_frequency(self) -> typing.Optional[MaximumExecutionFrequency]:
+    def maximum_execution_frequency(
+        self,
+    ) -> typing.Optional["MaximumExecutionFrequency"]:
         '''The maximum frequency at which the AWS Config rule runs evaluations.
 
         :default: MaximumExecutionFrequency.TWENTY_FOUR_HOURS
         '''
         result = self._values.get("maximum_execution_frequency")
-        return typing.cast(typing.Optional[MaximumExecutionFrequency], result)
+        return typing.cast(typing.Optional["MaximumExecutionFrequency"], result)
 
     @builtins.property
-    def rule_scope(self) -> typing.Optional[RuleScope]:
+    def rule_scope(self) -> typing.Optional["RuleScope"]:
         '''Defines which resources trigger an evaluation for an AWS Config rule.
 
         :default: - evaluations for the rule are triggered when any resource in the recording group changes.
         '''
         result = self._values.get("rule_scope")
-        return typing.cast(typing.Optional[RuleScope], result)
+        return typing.cast(typing.Optional["RuleScope"], result)
 
     @builtins.property
     def policy_text(self) -> builtins.str:
@@ -14253,18 +14271,18 @@ class CustomRule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        lambda_function: _IFunction_6adb0ab8,
+        lambda_function: "_IFunction_6adb0ab8",
         configuration_changes: typing.Optional[builtins.bool] = None,
         periodic: typing.Optional[builtins.bool] = None,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        maximum_execution_frequency: typing.Optional[MaximumExecutionFrequency] = None,
-        rule_scope: typing.Optional[RuleScope] = None,
+        maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
+        rule_scope: typing.Optional["RuleScope"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -14301,10 +14319,10 @@ class CustomRule(
     @builtins.classmethod
     def from_config_rule_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         config_rule_name: builtins.str,
-    ) -> IRule:
+    ) -> "IRule":
         '''Imports an existing rule.
 
         :param scope: -
@@ -14316,19 +14334,19 @@ class CustomRule(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument config_rule_name", value=config_rule_name, expected_type=type_hints["config_rule_name"])
-        return typing.cast(IRule, jsii.sinvoke(cls, "fromConfigRuleName", [scope, id, config_rule_name]))
+        return typing.cast("IRule", jsii.sinvoke(cls, "fromConfigRuleName", [scope, id, config_rule_name]))
 
     @jsii.member(jsii_name="onComplianceChange")
     def on_compliance_change(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an EventBridge event rule which triggers for rule compliance events.
 
         :param id: -
@@ -14349,19 +14367,19 @@ class CustomRule(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onComplianceChange", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onComplianceChange", [id, options]))
 
     @jsii.member(jsii_name="onEvent")
     def on_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an EventBridge event rule which triggers for rule events.
 
         Use
@@ -14385,19 +14403,19 @@ class CustomRule(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onEvent", [id, options]))
 
     @jsii.member(jsii_name="onReEvaluationStatus")
     def on_re_evaluation_status(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an EventBridge event rule which triggers for rule re-evaluation status events.
 
         :param id: -
@@ -14418,7 +14436,7 @@ class CustomRule(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onReEvaluationStatus", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onReEvaluationStatus", [id, options]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -14488,11 +14506,11 @@ class CustomRule(
 
     @builtins.property
     @jsii.member(jsii_name="ruleScope")
-    def _rule_scope(self) -> typing.Optional[RuleScope]:
-        return typing.cast(typing.Optional[RuleScope], jsii.get(self, "ruleScope"))
+    def _rule_scope(self) -> typing.Optional["RuleScope"]:
+        return typing.cast(typing.Optional["RuleScope"], jsii.get(self, "ruleScope"))
 
     @_rule_scope.setter
-    def _rule_scope(self, value: typing.Optional[RuleScope]) -> None:
+    def _rule_scope(self, value: typing.Optional["RuleScope"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b4a42de8a257fafa046633793b8c78f666811737b6939072d51be06693e271c8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -14520,11 +14538,11 @@ class CustomRuleProps(RuleProps):
         *,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        maximum_execution_frequency: typing.Optional[MaximumExecutionFrequency] = None,
-        rule_scope: typing.Optional[RuleScope] = None,
-        lambda_function: _IFunction_6adb0ab8,
+        maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
+        rule_scope: typing.Optional["RuleScope"] = None,
+        lambda_function: "_IFunction_6adb0ab8",
         configuration_changes: typing.Optional[builtins.bool] = None,
         periodic: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -14613,7 +14631,7 @@ class CustomRuleProps(RuleProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def evaluation_modes(self) -> typing.Optional[EvaluationMode]:
+    def evaluation_modes(self) -> typing.Optional["EvaluationMode"]:
         '''The modes the AWS Config rule can be evaluated in.
 
         The valid values are distinct objects.
@@ -14621,7 +14639,7 @@ class CustomRuleProps(RuleProps):
         :default: - Detective evaluation mode only
         '''
         result = self._values.get("evaluation_modes")
-        return typing.cast(typing.Optional[EvaluationMode], result)
+        return typing.cast(typing.Optional["EvaluationMode"], result)
 
     @builtins.property
     def input_parameters(
@@ -14635,29 +14653,31 @@ class CustomRuleProps(RuleProps):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
-    def maximum_execution_frequency(self) -> typing.Optional[MaximumExecutionFrequency]:
+    def maximum_execution_frequency(
+        self,
+    ) -> typing.Optional["MaximumExecutionFrequency"]:
         '''The maximum frequency at which the AWS Config rule runs evaluations.
 
         :default: MaximumExecutionFrequency.TWENTY_FOUR_HOURS
         '''
         result = self._values.get("maximum_execution_frequency")
-        return typing.cast(typing.Optional[MaximumExecutionFrequency], result)
+        return typing.cast(typing.Optional["MaximumExecutionFrequency"], result)
 
     @builtins.property
-    def rule_scope(self) -> typing.Optional[RuleScope]:
+    def rule_scope(self) -> typing.Optional["RuleScope"]:
         '''Defines which resources trigger an evaluation for an AWS Config rule.
 
         :default: - evaluations for the rule are triggered when any resource in the recording group changes.
         '''
         result = self._values.get("rule_scope")
-        return typing.cast(typing.Optional[RuleScope], result)
+        return typing.cast(typing.Optional["RuleScope"], result)
 
     @builtins.property
-    def lambda_function(self) -> _IFunction_6adb0ab8:
+    def lambda_function(self) -> "_IFunction_6adb0ab8":
         '''The Lambda function to run.'''
         result = self._values.get("lambda_function")
         assert result is not None, "Required property 'lambda_function' is missing"
-        return typing.cast(_IFunction_6adb0ab8, result)
+        return typing.cast("_IFunction_6adb0ab8", result)
 
     @builtins.property
     def configuration_changes(self) -> typing.Optional[builtins.bool]:
@@ -14708,10 +14728,10 @@ class ManagedRuleProps(RuleProps):
         *,
         config_rule_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        evaluation_modes: typing.Optional[EvaluationMode] = None,
+        evaluation_modes: typing.Optional["EvaluationMode"] = None,
         input_parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
-        maximum_execution_frequency: typing.Optional[MaximumExecutionFrequency] = None,
-        rule_scope: typing.Optional[RuleScope] = None,
+        maximum_execution_frequency: typing.Optional["MaximumExecutionFrequency"] = None,
+        rule_scope: typing.Optional["RuleScope"] = None,
         identifier: builtins.str,
     ) -> None:
         '''Construction properties for a ManagedRule.
@@ -14791,7 +14811,7 @@ class ManagedRuleProps(RuleProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def evaluation_modes(self) -> typing.Optional[EvaluationMode]:
+    def evaluation_modes(self) -> typing.Optional["EvaluationMode"]:
         '''The modes the AWS Config rule can be evaluated in.
 
         The valid values are distinct objects.
@@ -14799,7 +14819,7 @@ class ManagedRuleProps(RuleProps):
         :default: - Detective evaluation mode only
         '''
         result = self._values.get("evaluation_modes")
-        return typing.cast(typing.Optional[EvaluationMode], result)
+        return typing.cast(typing.Optional["EvaluationMode"], result)
 
     @builtins.property
     def input_parameters(
@@ -14813,22 +14833,24 @@ class ManagedRuleProps(RuleProps):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     @builtins.property
-    def maximum_execution_frequency(self) -> typing.Optional[MaximumExecutionFrequency]:
+    def maximum_execution_frequency(
+        self,
+    ) -> typing.Optional["MaximumExecutionFrequency"]:
         '''The maximum frequency at which the AWS Config rule runs evaluations.
 
         :default: MaximumExecutionFrequency.TWENTY_FOUR_HOURS
         '''
         result = self._values.get("maximum_execution_frequency")
-        return typing.cast(typing.Optional[MaximumExecutionFrequency], result)
+        return typing.cast(typing.Optional["MaximumExecutionFrequency"], result)
 
     @builtins.property
-    def rule_scope(self) -> typing.Optional[RuleScope]:
+    def rule_scope(self) -> typing.Optional["RuleScope"]:
         '''Defines which resources trigger an evaluation for an AWS Config rule.
 
         :default: - evaluations for the rule are triggered when any resource in the recording group changes.
         '''
         result = self._values.get("rule_scope")
-        return typing.cast(typing.Optional[RuleScope], result)
+        return typing.cast(typing.Optional["RuleScope"], result)
 
     @builtins.property
     def identifier(self) -> builtins.str:

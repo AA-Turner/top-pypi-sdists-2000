@@ -102,6 +102,7 @@ class CfnApplication(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_sso as sso
@@ -132,16 +133,16 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_provider_arn: builtins.str,
         instance_arn: builtins.str,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        portal_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.PortalOptionsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        portal_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.PortalOptionsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         status: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SSO::Application``.
 
@@ -173,7 +174,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_8509b5d3) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_8509b5d3") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -195,7 +196,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -226,9 +227,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_a23a56db:
+    def application_ref(self) -> "_ApplicationReference_a23a56db":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_a23a56db, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_a23a56db", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrApplicationArn")
@@ -241,9 +242,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -306,14 +307,14 @@ class CfnApplication(
     @jsii.member(jsii_name="portalOptions")
     def portal_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.PortalOptionsConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.PortalOptionsConfigurationProperty"]]:
         '''A structure that describes the options for the access portal associated with this application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.PortalOptionsConfigurationProperty"]], jsii.get(self, "portalOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.PortalOptionsConfigurationProperty"]], jsii.get(self, "portalOptions"))
 
     @portal_options.setter
     def portal_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.PortalOptionsConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.PortalOptionsConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__59b9af6ead80cc3b937e2b7fe70751b4964334b1a52da19352b8fc87ad7c8b40)
@@ -335,12 +336,12 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies tags to be attached to the application.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b93309bf67faa9d00d995b1c3cacabed71e582b5b2ae932439414536bde54a02)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -355,7 +356,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            sign_in_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.SignInOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sign_in_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.SignInOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             visibility: typing.Optional[builtins.str] = None,
         ) -> None:
             '''A structure that describes the options for the portal associated with an application.
@@ -395,13 +396,13 @@ class CfnApplication(
         @builtins.property
         def sign_in_options(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.SignInOptionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.SignInOptionsProperty"]]:
             '''A structure that describes the sign-in options for the access portal.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sso-application-portaloptionsconfiguration.html#cfn-sso-application-portaloptionsconfiguration-signinoptions
             '''
             result = self._values.get("sign_in_options")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.SignInOptionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.SignInOptionsProperty"]], result)
 
         @builtins.property
         def visibility(self) -> typing.Optional[builtins.str]:
@@ -531,7 +532,7 @@ class CfnApplicationAssignment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_arn: builtins.str,
@@ -571,7 +572,7 @@ class CfnApplicationAssignment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationAssignment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -602,9 +603,9 @@ class CfnApplicationAssignment(
 
     @builtins.property
     @jsii.member(jsii_name="applicationAssignmentRef")
-    def application_assignment_ref(self) -> _ApplicationAssignmentReference_d202ebef:
+    def application_assignment_ref(self) -> "_ApplicationAssignmentReference_d202ebef":
         '''A reference to a ApplicationAssignment resource.'''
-        return typing.cast(_ApplicationAssignmentReference_d202ebef, jsii.get(self, "applicationAssignmentRef"))
+        return typing.cast("_ApplicationAssignmentReference_d202ebef", jsii.get(self, "applicationAssignmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -763,9 +764,9 @@ class CfnApplicationProps:
         instance_arn: builtins.str,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        portal_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.PortalOptionsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        portal_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.PortalOptionsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         status: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplication``.
 
@@ -782,6 +783,7 @@ class CfnApplicationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_sso as sso
@@ -874,13 +876,13 @@ class CfnApplicationProps:
     @builtins.property
     def portal_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.PortalOptionsConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.PortalOptionsConfigurationProperty"]]:
         '''A structure that describes the options for the access portal associated with this application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-application.html#cfn-sso-application-portaloptions
         '''
         result = self._values.get("portal_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.PortalOptionsConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.PortalOptionsConfigurationProperty"]], result)
 
     @builtins.property
     def status(self) -> typing.Optional[builtins.str]:
@@ -892,13 +894,13 @@ class CfnApplicationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies tags to be attached to the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-application.html#cfn-sso-application-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -946,7 +948,7 @@ class CfnAssignment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         instance_arn: builtins.str,
@@ -995,7 +997,7 @@ class CfnAssignment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAssignment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1026,9 +1028,9 @@ class CfnAssignment(
 
     @builtins.property
     @jsii.member(jsii_name="assignmentRef")
-    def assignment_ref(self) -> _AssignmentReference_6e2e2d2a:
+    def assignment_ref(self) -> "_AssignmentReference_6e2e2d2a":
         '''A reference to a Assignment resource.'''
-        return typing.cast(_AssignmentReference_6e2e2d2a, jsii.get(self, "assignmentRef"))
+        return typing.cast("_AssignmentReference_6e2e2d2a", jsii.get(self, "assignmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1278,6 +1280,7 @@ class CfnInstance(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_sso as sso
@@ -1293,11 +1296,11 @@ class CfnInstance(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SSO::Instance``.
 
@@ -1316,7 +1319,7 @@ class CfnInstance(
 
     @jsii.member(jsii_name="arnForInstance")
     @builtins.classmethod
-    def arn_for_instance(cls, resource: _IInstanceRef_1d841987) -> builtins.str:
+    def arn_for_instance(cls, resource: "_IInstanceRef_1d841987") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1338,7 +1341,7 @@ class CfnInstance(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInstance", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1408,9 +1411,9 @@ class CfnInstance(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1419,9 +1422,9 @@ class CfnInstance(
 
     @builtins.property
     @jsii.member(jsii_name="instanceRef")
-    def instance_ref(self) -> _InstanceReference_78f539f5:
+    def instance_ref(self) -> "_InstanceReference_78f539f5":
         '''A reference to a Instance resource.'''
-        return typing.cast(_InstanceReference_78f539f5, jsii.get(self, "instanceRef"))
+        return typing.cast("_InstanceReference_78f539f5", jsii.get(self, "instanceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1438,12 +1441,12 @@ class CfnInstance(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies tags to be attached to the instance of IAM Identity Center.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1d325fc6660cba7432138a31aa3aa63308801d12cd69a35aebde3fb2b2bd9481)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1496,12 +1499,12 @@ class CfnInstanceAccessControlAttributeConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         instance_arn: builtins.str,
-        access_control_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        instance_access_control_attribute_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        access_control_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        instance_access_control_attribute_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SSO::InstanceAccessControlAttributeConfiguration``.
 
@@ -1539,7 +1542,7 @@ class CfnInstanceAccessControlAttributeConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInstanceAccessControlAttributeConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1577,9 +1580,9 @@ class CfnInstanceAccessControlAttributeConfiguration(
     @jsii.member(jsii_name="instanceAccessControlAttributeConfigurationRef")
     def instance_access_control_attribute_configuration_ref(
         self,
-    ) -> _InstanceAccessControlAttributeConfigurationReference_f609c520:
+    ) -> "_InstanceAccessControlAttributeConfigurationReference_f609c520":
         '''A reference to a InstanceAccessControlAttributeConfiguration resource.'''
-        return typing.cast(_InstanceAccessControlAttributeConfigurationReference_f609c520, jsii.get(self, "instanceAccessControlAttributeConfigurationRef"))
+        return typing.cast("_InstanceAccessControlAttributeConfigurationReference_f609c520", jsii.get(self, "instanceAccessControlAttributeConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="instanceArn")
@@ -1598,14 +1601,14 @@ class CfnInstanceAccessControlAttributeConfiguration(
     @jsii.member(jsii_name="accessControlAttributes")
     def access_control_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]]:
         '''Lists the attributes that are configured for ABAC in the specified IAM Identity Center instance.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]], jsii.get(self, "accessControlAttributes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]], jsii.get(self, "accessControlAttributes"))
 
     @access_control_attributes.setter
     def access_control_attributes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__59b30bff10a4ad495a4848654c3d5cc319a787641db9697ed37a6ff4afa259b3)
@@ -1616,19 +1619,19 @@ class CfnInstanceAccessControlAttributeConfiguration(
     @jsii.member(jsii_name="instanceAccessControlAttributeConfiguration")
     def instance_access_control_attribute_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty"]]:
         '''(deprecated) The InstanceAccessControlAttributeConfiguration property has been deprecated but is still supported for backwards compatibility purposes.
 
         :deprecated: this property has been deprecated
 
         :stability: deprecated
         '''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty"]], jsii.get(self, "instanceAccessControlAttributeConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty"]], jsii.get(self, "instanceAccessControlAttributeConfiguration"))
 
     @instance_access_control_attribute_configuration.setter
     def instance_access_control_attribute_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f70c314997f8ad880ed6373ea4fdd6e57467d1c9f2a6df1941fcce50c8b74442)
@@ -1645,7 +1648,7 @@ class CfnInstanceAccessControlAttributeConfiguration(
             self,
             *,
             key: builtins.str,
-            value: typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeValueProperty", typing.Dict[builtins.str, typing.Any]]],
+            value: typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeValueProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''These are IAM Identity Center identity store attributes that you can configure for use in attributes-based access control (ABAC).
 
@@ -1694,14 +1697,14 @@ class CfnInstanceAccessControlAttributeConfiguration(
         @builtins.property
         def value(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeValueProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeValueProperty"]:
             '''The value used for mapping a specified attribute to an identity source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sso-instanceaccesscontrolattributeconfiguration-accesscontrolattribute.html#cfn-sso-instanceaccesscontrolattributeconfiguration-accesscontrolattribute-value
             '''
             result = self._values.get("value")
             assert result is not None, "Required property 'value' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeValueProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeValueProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1775,7 +1778,7 @@ class CfnInstanceAccessControlAttributeConfiguration(
         def __init__(
             self,
             *,
-            access_control_attributes: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            access_control_attributes: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''The InstanceAccessControlAttributeConfiguration property has been deprecated but is still supported for backwards compatibility purposes.
 
@@ -1811,13 +1814,13 @@ class CfnInstanceAccessControlAttributeConfiguration(
         @builtins.property
         def access_control_attributes(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]:
             '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sso-instanceaccesscontrolattributeconfiguration-instanceaccesscontrolattributeconfiguration.html#cfn-sso-instanceaccesscontrolattributeconfiguration-instanceaccesscontrolattributeconfiguration-accesscontrolattributes
             '''
             result = self._values.get("access_control_attributes")
             assert result is not None, "Required property 'access_control_attributes' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1845,8 +1848,8 @@ class CfnInstanceAccessControlAttributeConfigurationProps:
         self,
         *,
         instance_arn: builtins.str,
-        access_control_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        instance_access_control_attribute_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        access_control_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        instance_access_control_attribute_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnInstanceAccessControlAttributeConfiguration``.
 
@@ -1909,18 +1912,18 @@ class CfnInstanceAccessControlAttributeConfigurationProps:
     @builtins.property
     def access_control_attributes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]]:
         '''Lists the attributes that are configured for ABAC in the specified IAM Identity Center instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-instanceaccesscontrolattributeconfiguration.html#cfn-sso-instanceaccesscontrolattributeconfiguration-accesscontrolattributes
         '''
         result = self._values.get("access_control_attributes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]], result)
 
     @builtins.property
     def instance_access_control_attribute_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty"]]:
         '''(deprecated) The InstanceAccessControlAttributeConfiguration property has been deprecated but is still supported for backwards compatibility purposes.
 
         We recomend that you use  AccessControlAttributes property instead.
@@ -1931,7 +1934,7 @@ class CfnInstanceAccessControlAttributeConfigurationProps:
         :stability: deprecated
         '''
         result = self._values.get("instance_access_control_attribute_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.InstanceAccessControlAttributeConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1955,7 +1958,7 @@ class CfnInstanceProps:
         self,
         *,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnInstance``.
 
@@ -1967,6 +1970,7 @@ class CfnInstanceProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_sso as sso
@@ -1999,13 +2003,13 @@ class CfnInstanceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies tags to be attached to the instance of IAM Identity Center.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-instance.html#cfn-sso-instance-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2033,6 +2037,7 @@ class CfnPermissionSet(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_sso as sso
@@ -2073,19 +2078,19 @@ class CfnPermissionSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         instance_arn: builtins.str,
         name: builtins.str,
-        customer_managed_policy_references: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPermissionSet.CustomerManagedPolicyReferenceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        customer_managed_policy_references: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPermissionSet.CustomerManagedPolicyReferenceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         inline_policy: typing.Any = None,
         managed_policies: typing.Optional[typing.Sequence[builtins.str]] = None,
-        permissions_boundary: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPermissionSet.PermissionsBoundaryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        permissions_boundary: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPermissionSet.PermissionsBoundaryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         relay_state_type: typing.Optional[builtins.str] = None,
         session_duration: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SSO::PermissionSet``.
 
@@ -2125,7 +2130,7 @@ class CfnPermissionSet(
     @builtins.classmethod
     def arn_for_permission_set(
         cls,
-        resource: _IPermissionSetRef_367033d3,
+        resource: "_IPermissionSetRef_367033d3",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2148,7 +2153,7 @@ class CfnPermissionSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPermissionSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2193,15 +2198,15 @@ class CfnPermissionSet(
 
     @builtins.property
     @jsii.member(jsii_name="permissionSetRef")
-    def permission_set_ref(self) -> _PermissionSetReference_feb3bfd8:
+    def permission_set_ref(self) -> "_PermissionSetReference_feb3bfd8":
         '''A reference to a PermissionSet resource.'''
-        return typing.cast(_PermissionSetReference_feb3bfd8, jsii.get(self, "permissionSetRef"))
+        return typing.cast("_PermissionSetReference_feb3bfd8", jsii.get(self, "permissionSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="instanceArn")
@@ -2233,14 +2238,14 @@ class CfnPermissionSet(
     @jsii.member(jsii_name="customerManagedPolicyReferences")
     def customer_managed_policy_references(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPermissionSet.CustomerManagedPolicyReferenceProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPermissionSet.CustomerManagedPolicyReferenceProperty"]]]]:
         '''Specifies the names and paths of the customer managed policies that you have attached to your permission set.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPermissionSet.CustomerManagedPolicyReferenceProperty"]]]], jsii.get(self, "customerManagedPolicyReferences"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPermissionSet.CustomerManagedPolicyReferenceProperty"]]]], jsii.get(self, "customerManagedPolicyReferences"))
 
     @customer_managed_policy_references.setter
     def customer_managed_policy_references(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPermissionSet.CustomerManagedPolicyReferenceProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPermissionSet.CustomerManagedPolicyReferenceProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__003c123796d7c694a79f8c7ad67b2fdbcc38205eea6b333607e6795f42a8faaf)
@@ -2293,14 +2298,14 @@ class CfnPermissionSet(
     @jsii.member(jsii_name="permissionsBoundary")
     def permissions_boundary(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPermissionSet.PermissionsBoundaryProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPermissionSet.PermissionsBoundaryProperty"]]:
         '''Specifies the configuration of the AWS managed or customer managed policy that you want to set as a permissions boundary.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPermissionSet.PermissionsBoundaryProperty"]], jsii.get(self, "permissionsBoundary"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPermissionSet.PermissionsBoundaryProperty"]], jsii.get(self, "permissionsBoundary"))
 
     @permissions_boundary.setter
     def permissions_boundary(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPermissionSet.PermissionsBoundaryProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPermissionSet.PermissionsBoundaryProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__69e904509d69f8800277fa40e8b25cf92e223e7d126204001c65d9cd604910e0)
@@ -2335,12 +2340,12 @@ class CfnPermissionSet(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to attach to the new ``PermissionSet`` .'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7544016af765ff22f84936a0567273904ad2dfbeaf6338678ee91dbe144ac8df)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2435,7 +2440,7 @@ class CfnPermissionSet(
         def __init__(
             self,
             *,
-            customer_managed_policy_reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPermissionSet.CustomerManagedPolicyReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            customer_managed_policy_reference: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPermissionSet.CustomerManagedPolicyReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             managed_policy_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Specifies the configuration of the AWS managed or customer managed policy that you want to set as a permissions boundary.
@@ -2480,7 +2485,7 @@ class CfnPermissionSet(
         @builtins.property
         def customer_managed_policy_reference(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPermissionSet.CustomerManagedPolicyReferenceProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPermissionSet.CustomerManagedPolicyReferenceProperty"]]:
             '''Specifies the name and path of a customer managed policy.
 
             You must have an IAM policy that matches the name and path in each AWS account where you want to deploy your permission set.
@@ -2488,7 +2493,7 @@ class CfnPermissionSet(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sso-permissionset-permissionsboundary.html#cfn-sso-permissionset-permissionsboundary-customermanagedpolicyreference
             '''
             result = self._values.get("customer_managed_policy_reference")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPermissionSet.CustomerManagedPolicyReferenceProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPermissionSet.CustomerManagedPolicyReferenceProperty"]], result)
 
         @builtins.property
         def managed_policy_arn(self) -> typing.Optional[builtins.str]:
@@ -2533,14 +2538,14 @@ class CfnPermissionSetProps:
         *,
         instance_arn: builtins.str,
         name: builtins.str,
-        customer_managed_policy_references: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPermissionSet.CustomerManagedPolicyReferenceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        customer_managed_policy_references: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPermissionSet.CustomerManagedPolicyReferenceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         inline_policy: typing.Any = None,
         managed_policies: typing.Optional[typing.Sequence[builtins.str]] = None,
-        permissions_boundary: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPermissionSet.PermissionsBoundaryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        permissions_boundary: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPermissionSet.PermissionsBoundaryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         relay_state_type: typing.Optional[builtins.str] = None,
         session_duration: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPermissionSet``.
 
@@ -2560,6 +2565,7 @@ class CfnPermissionSetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_sso as sso
@@ -2655,13 +2661,13 @@ class CfnPermissionSetProps:
     @builtins.property
     def customer_managed_policy_references(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPermissionSet.CustomerManagedPolicyReferenceProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPermissionSet.CustomerManagedPolicyReferenceProperty"]]]]:
         '''Specifies the names and paths of the customer managed policies that you have attached to your permission set.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-permissionset.html#cfn-sso-permissionset-customermanagedpolicyreferences
         '''
         result = self._values.get("customer_managed_policy_references")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPermissionSet.CustomerManagedPolicyReferenceProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPermissionSet.CustomerManagedPolicyReferenceProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -2697,7 +2703,7 @@ class CfnPermissionSetProps:
     @builtins.property
     def permissions_boundary(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPermissionSet.PermissionsBoundaryProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPermissionSet.PermissionsBoundaryProperty"]]:
         '''Specifies the configuration of the AWS managed or customer managed policy that you want to set as a permissions boundary.
 
         Specify either ``CustomerManagedPolicyReference`` to use the name and path of a customer managed policy, or ``ManagedPolicyArn`` to use the ARN of an AWS managed policy. A permissions boundary represents the maximum permissions that any policy can grant your role. For more information, see `Permissions boundaries for IAM entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html>`_ in the *IAM User Guide* .
@@ -2708,7 +2714,7 @@ class CfnPermissionSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-permissionset.html#cfn-sso-permissionset-permissionsboundary
         '''
         result = self._values.get("permissions_boundary")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPermissionSet.PermissionsBoundaryProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPermissionSet.PermissionsBoundaryProperty"]], result)
 
     @builtins.property
     def relay_state_type(self) -> typing.Optional[builtins.str]:
@@ -2729,13 +2735,13 @@ class CfnPermissionSetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to attach to the new ``PermissionSet`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-permissionset.html#cfn-sso-permissionset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

@@ -145,7 +145,7 @@ class IDatasetGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="datasetGroupRef")
-    def dataset_group_ref(self) -> DatasetGroupReference:
+    def dataset_group_ref(self) -> "DatasetGroupReference":
         '''(experimental) A reference to a DatasetGroup resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IDatasetGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="datasetGroupRef")
-    def dataset_group_ref(self) -> DatasetGroupReference:
+    def dataset_group_ref(self) -> "DatasetGroupReference":
         '''(experimental) A reference to a DatasetGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(DatasetGroupReference, jsii.get(self, "datasetGroupRef"))
+        return typing.cast("DatasetGroupReference", jsii.get(self, "datasetGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDatasetGroupRef).__jsii_proxy_class__ = lambda : _IDatasetGroupRefProxy
@@ -190,7 +190,7 @@ class IDatasetRef(
 
     @builtins.property
     @jsii.member(jsii_name="datasetRef")
-    def dataset_ref(self) -> DatasetReference:
+    def dataset_ref(self) -> "DatasetReference":
         '''(experimental) A reference to a Dataset resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IDatasetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="datasetRef")
-    def dataset_ref(self) -> DatasetReference:
+    def dataset_ref(self) -> "DatasetReference":
         '''(experimental) A reference to a Dataset resource.
 
         :stability: experimental
         '''
-        return typing.cast(DatasetReference, jsii.get(self, "datasetRef"))
+        return typing.cast("DatasetReference", jsii.get(self, "datasetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDatasetRef).__jsii_proxy_class__ = lambda : _IDatasetRefProxy

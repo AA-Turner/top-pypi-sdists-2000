@@ -145,7 +145,7 @@ class ICanaryRef(
 
     @builtins.property
     @jsii.member(jsii_name="canaryRef")
-    def canary_ref(self) -> CanaryReference:
+    def canary_ref(self) -> "CanaryReference":
         '''(experimental) A reference to a Canary resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _ICanaryRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="canaryRef")
-    def canary_ref(self) -> CanaryReference:
+    def canary_ref(self) -> "CanaryReference":
         '''(experimental) A reference to a Canary resource.
 
         :stability: experimental
         '''
-        return typing.cast(CanaryReference, jsii.get(self, "canaryRef"))
+        return typing.cast("CanaryReference", jsii.get(self, "canaryRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICanaryRef).__jsii_proxy_class__ = lambda : _ICanaryRefProxy
@@ -190,7 +190,7 @@ class IGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="groupRef")
-    def group_ref(self) -> GroupReference:
+    def group_ref(self) -> "GroupReference":
         '''(experimental) A reference to a Group resource.
 
         :stability: experimental
@@ -211,12 +211,12 @@ class _IGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="groupRef")
-    def group_ref(self) -> GroupReference:
+    def group_ref(self) -> "GroupReference":
         '''(experimental) A reference to a Group resource.
 
         :stability: experimental
         '''
-        return typing.cast(GroupReference, jsii.get(self, "groupRef"))
+        return typing.cast("GroupReference", jsii.get(self, "groupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGroupRef).__jsii_proxy_class__ = lambda : _IGroupRefProxy

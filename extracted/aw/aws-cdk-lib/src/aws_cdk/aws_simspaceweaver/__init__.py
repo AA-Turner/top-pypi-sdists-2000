@@ -111,14 +111,14 @@ class CfnSimulation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         role_arn: builtins.str,
         maximum_duration: typing.Optional[builtins.str] = None,
-        schema_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSimulation.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        snapshot_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSimulation.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        schema_s3_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimulation.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        snapshot_s3_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimulation.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SimSpaceWeaver::Simulation``.
 
@@ -146,7 +146,7 @@ class CfnSimulation(
 
     @jsii.member(jsii_name="arnForSimulation")
     @builtins.classmethod
-    def arn_for_simulation(cls, resource: _ISimulationRef_91d712eb) -> builtins.str:
+    def arn_for_simulation(cls, resource: "_ISimulationRef_91d712eb") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -159,10 +159,10 @@ class CfnSimulation(
     @builtins.classmethod
     def from_simulation_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         simulation_name: builtins.str,
-    ) -> _ISimulationRef_91d712eb:
+    ) -> "_ISimulationRef_91d712eb":
         '''Creates a new ISimulationRef from a simulationName.
 
         :param scope: -
@@ -174,7 +174,7 @@ class CfnSimulation(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument simulation_name", value=simulation_name, expected_type=type_hints["simulation_name"])
-        return typing.cast(_ISimulationRef_91d712eb, jsii.sinvoke(cls, "fromSimulationName", [scope, id, simulation_name]))
+        return typing.cast("_ISimulationRef_91d712eb", jsii.sinvoke(cls, "fromSimulationName", [scope, id, simulation_name]))
 
     @jsii.member(jsii_name="isCfnSimulation")
     @builtins.classmethod
@@ -189,7 +189,7 @@ class CfnSimulation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSimulation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -234,9 +234,9 @@ class CfnSimulation(
 
     @builtins.property
     @jsii.member(jsii_name="simulationRef")
-    def simulation_ref(self) -> _SimulationReference_4bd7f392:
+    def simulation_ref(self) -> "_SimulationReference_4bd7f392":
         '''A reference to a Simulation resource.'''
-        return typing.cast(_SimulationReference_4bd7f392, jsii.get(self, "simulationRef"))
+        return typing.cast("_SimulationReference_4bd7f392", jsii.get(self, "simulationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -281,14 +281,14 @@ class CfnSimulation(
     @jsii.member(jsii_name="schemaS3Location")
     def schema_s3_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSimulation.S3LocationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulation.S3LocationProperty"]]:
         '''The location of the simulation schema in Amazon Simple Storage Service ( Amazon S3 ).'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSimulation.S3LocationProperty"]], jsii.get(self, "schemaS3Location"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulation.S3LocationProperty"]], jsii.get(self, "schemaS3Location"))
 
     @schema_s3_location.setter
     def schema_s3_location(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSimulation.S3LocationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulation.S3LocationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__19e5b9acd452852f4eb9cb770f11aaf43e111ff00ccb82a5824b65ae6869ef67)
@@ -299,14 +299,14 @@ class CfnSimulation(
     @jsii.member(jsii_name="snapshotS3Location")
     def snapshot_s3_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSimulation.S3LocationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulation.S3LocationProperty"]]:
         '''The location of the snapshot in Amazon Simple Storage Service ( Amazon S3 ).'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSimulation.S3LocationProperty"]], jsii.get(self, "snapshotS3Location"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulation.S3LocationProperty"]], jsii.get(self, "snapshotS3Location"))
 
     @snapshot_s3_location.setter
     def snapshot_s3_location(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSimulation.S3LocationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulation.S3LocationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__eae2ce65a01ef04b46cbcb9953c071289e4b3d8a6e8631a73da64120010bc9c2)
@@ -407,8 +407,8 @@ class CfnSimulationProps:
         name: builtins.str,
         role_arn: builtins.str,
         maximum_duration: typing.Optional[builtins.str] = None,
-        schema_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulation.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        snapshot_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulation.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        schema_s3_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimulation.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        snapshot_s3_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSimulation.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSimulation``.
 
@@ -497,7 +497,7 @@ class CfnSimulationProps:
     @builtins.property
     def schema_s3_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSimulation.S3LocationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulation.S3LocationProperty"]]:
         '''The location of the simulation schema in Amazon Simple Storage Service ( Amazon S3 ).
 
         For more information about Amazon S3 , see the `*Amazon Simple Storage Service User Guide* <https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html>`_ .
@@ -509,12 +509,12 @@ class CfnSimulationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-simspaceweaver-simulation.html#cfn-simspaceweaver-simulation-schemas3location
         '''
         result = self._values.get("schema_s3_location")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSimulation.S3LocationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulation.S3LocationProperty"]], result)
 
     @builtins.property
     def snapshot_s3_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSimulation.S3LocationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulation.S3LocationProperty"]]:
         '''The location of the snapshot in Amazon Simple Storage Service ( Amazon S3 ).
 
         For more information about Amazon S3 , see the `*Amazon Simple Storage Service User Guide* <https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html>`_ .
@@ -526,7 +526,7 @@ class CfnSimulationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-simspaceweaver-simulation.html#cfn-simspaceweaver-simulation-snapshots3location
         '''
         result = self._values.get("snapshot_s3_location")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSimulation.S3LocationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSimulation.S3LocationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

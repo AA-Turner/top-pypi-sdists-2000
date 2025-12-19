@@ -89,6 +89,7 @@ class CfnAssessment(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_auditmanager as auditmanager
@@ -143,19 +144,19 @@ class CfnAssessment(
 
     def __init__(
         self,
-        scope_: _constructs_77d1e7e8.Construct,
+        scope_: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        assessment_reports_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssessment.AssessmentReportsDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        aws_account: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssessment.AWSAccountProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        delegations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssessment.DelegationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        assessment_reports_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssessment.AssessmentReportsDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        aws_account: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssessment.AWSAccountProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        delegations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssessment.DelegationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         framework_id: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        roles: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssessment.RoleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssessment.ScopeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        roles: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssessment.RoleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        scope: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssessment.ScopeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         status: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::AuditManager::Assessment``.
 
@@ -193,7 +194,7 @@ class CfnAssessment(
 
     @jsii.member(jsii_name="arnForAssessment")
     @builtins.classmethod
-    def arn_for_assessment(cls, resource: _IAssessmentRef_c02968a4) -> builtins.str:
+    def arn_for_assessment(cls, resource: "_IAssessmentRef_c02968a4") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -206,10 +207,10 @@ class CfnAssessment(
     @builtins.classmethod
     def from_assessment_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IAssessmentRef_c02968a4:
+    ) -> "_IAssessmentRef_c02968a4":
         '''Creates a new IAssessmentRef from an ARN.
 
         :param scope: -
@@ -221,16 +222,16 @@ class CfnAssessment(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IAssessmentRef_c02968a4, jsii.sinvoke(cls, "fromAssessmentArn", [scope, id, arn]))
+        return typing.cast("_IAssessmentRef_c02968a4", jsii.sinvoke(cls, "fromAssessmentArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromAssessmentId")
     @builtins.classmethod
     def from_assessment_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         assessment_id: builtins.str,
-    ) -> _IAssessmentRef_c02968a4:
+    ) -> "_IAssessmentRef_c02968a4":
         '''Creates a new IAssessmentRef from a assessmentId.
 
         :param scope: -
@@ -242,7 +243,7 @@ class CfnAssessment(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument assessment_id", value=assessment_id, expected_type=type_hints["assessment_id"])
-        return typing.cast(_IAssessmentRef_c02968a4, jsii.sinvoke(cls, "fromAssessmentId", [scope, id, assessment_id]))
+        return typing.cast("_IAssessmentRef_c02968a4", jsii.sinvoke(cls, "fromAssessmentId", [scope, id, assessment_id]))
 
     @jsii.member(jsii_name="isCfnAssessment")
     @builtins.classmethod
@@ -257,7 +258,7 @@ class CfnAssessment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAssessment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -288,9 +289,9 @@ class CfnAssessment(
 
     @builtins.property
     @jsii.member(jsii_name="assessmentRef")
-    def assessment_ref(self) -> _AssessmentReference_b980c781:
+    def assessment_ref(self) -> "_AssessmentReference_b980c781":
         '''A reference to a Assessment resource.'''
-        return typing.cast(_AssessmentReference_b980c781, jsii.get(self, "assessmentRef"))
+        return typing.cast("_AssessmentReference_b980c781", jsii.get(self, "assessmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -312,12 +313,12 @@ class CfnAssessment(
 
     @builtins.property
     @jsii.member(jsii_name="attrCreationTime")
-    def attr_creation_time(self) -> _IResolvable_da3f097b:
+    def attr_creation_time(self) -> "_IResolvable_da3f097b":
         '''Specifies when the assessment was created.
 
         :cloudformationAttribute: CreationTime
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrCreationTime"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrCreationTime"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -326,22 +327,22 @@ class CfnAssessment(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="assessmentReportsDestination")
     def assessment_reports_destination(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssessment.AssessmentReportsDestinationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AssessmentReportsDestinationProperty"]]:
         '''The destination that evidence reports are stored in for the assessment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssessment.AssessmentReportsDestinationProperty"]], jsii.get(self, "assessmentReportsDestination"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AssessmentReportsDestinationProperty"]], jsii.get(self, "assessmentReportsDestination"))
 
     @assessment_reports_destination.setter
     def assessment_reports_destination(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssessment.AssessmentReportsDestinationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AssessmentReportsDestinationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__00a9fcbfa3098ead8f6f1c39b628055baa8f3551041af9549614bef9d0eec479)
@@ -352,14 +353,14 @@ class CfnAssessment(
     @jsii.member(jsii_name="awsAccount")
     def aws_account(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssessment.AWSAccountProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AWSAccountProperty"]]:
         '''The AWS account that's associated with the assessment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssessment.AWSAccountProperty"]], jsii.get(self, "awsAccount"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AWSAccountProperty"]], jsii.get(self, "awsAccount"))
 
     @aws_account.setter
     def aws_account(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssessment.AWSAccountProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AWSAccountProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d4c9a5d085476d4a7f266e7e7925abc970275daaa2a8ab2752994ba1b1d56a7f)
@@ -370,14 +371,14 @@ class CfnAssessment(
     @jsii.member(jsii_name="delegations")
     def delegations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssessment.DelegationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.DelegationProperty"]]]]:
         '''The delegations that are associated with the assessment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssessment.DelegationProperty"]]]], jsii.get(self, "delegations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.DelegationProperty"]]]], jsii.get(self, "delegations"))
 
     @delegations.setter
     def delegations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssessment.DelegationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.DelegationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__15a841dd635da320c870cbc6ccc893b259bee63a4c1cb3d0d5eb5b4eca87c91f)
@@ -427,14 +428,14 @@ class CfnAssessment(
     @jsii.member(jsii_name="roles")
     def roles(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssessment.RoleProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.RoleProperty"]]]]:
         '''The roles that are associated with the assessment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssessment.RoleProperty"]]]], jsii.get(self, "roles"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.RoleProperty"]]]], jsii.get(self, "roles"))
 
     @roles.setter
     def roles(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssessment.RoleProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.RoleProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c91699b8b6b6ac6c9b455c5e5ae26c34f37550e436c81f8d9eab91fa5d5aae69)
@@ -445,14 +446,14 @@ class CfnAssessment(
     @jsii.member(jsii_name="scope")
     def scope(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssessment.ScopeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.ScopeProperty"]]:
         '''The wrapper of AWS accounts and services that are in scope for the assessment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssessment.ScopeProperty"]], jsii.get(self, "scope"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.ScopeProperty"]], jsii.get(self, "scope"))
 
     @scope.setter
     def scope(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAssessment.ScopeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.ScopeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__688a1871cd0766d0092bc2d7f3e18ec40b291fa378ec7291d28d66562fb8ab3e)
@@ -474,12 +475,12 @@ class CfnAssessment(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags that are associated with the assessment.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6ee30b6045910d84a8fae367b39720413cefcdd3486c52a43fc7339254c547e0)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1016,8 +1017,8 @@ class CfnAssessment(
         def __init__(
             self,
             *,
-            aws_accounts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssessment.AWSAccountProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            aws_services: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAssessment.AWSServiceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            aws_accounts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssessment.AWSAccountProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            aws_services: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssessment.AWSServiceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The ``Scope`` property type specifies the wrapper that contains the AWS accounts and services that are in scope for the assessment.
 
@@ -1057,18 +1058,18 @@ class CfnAssessment(
         @builtins.property
         def aws_accounts(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssessment.AWSAccountProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AWSAccountProperty"]]]]:
             '''The AWS accounts that are included in the scope of the assessment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-auditmanager-assessment-scope.html#cfn-auditmanager-assessment-scope-awsaccounts
             '''
             result = self._values.get("aws_accounts")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssessment.AWSAccountProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AWSAccountProperty"]]]], result)
 
         @builtins.property
         def aws_services(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssessment.AWSServiceProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AWSServiceProperty"]]]]:
             '''The AWS services that are included in the scope of the assessment.
 
             .. epigraph::
@@ -1078,7 +1079,7 @@ class CfnAssessment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-auditmanager-assessment-scope.html#cfn-auditmanager-assessment-scope-awsservices
             '''
             result = self._values.get("aws_services")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAssessment.AWSServiceProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AWSServiceProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1112,16 +1113,16 @@ class CfnAssessmentProps:
     def __init__(
         self,
         *,
-        assessment_reports_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssessment.AssessmentReportsDestinationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        aws_account: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssessment.AWSAccountProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        delegations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssessment.DelegationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        assessment_reports_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssessment.AssessmentReportsDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        aws_account: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssessment.AWSAccountProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        delegations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssessment.DelegationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         framework_id: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        roles: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssessment.RoleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssessment.ScopeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        roles: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssessment.RoleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        scope: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssessment.ScopeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         status: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAssessment``.
 
@@ -1141,6 +1142,7 @@ class CfnAssessmentProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_auditmanager as auditmanager
@@ -1229,35 +1231,35 @@ class CfnAssessmentProps:
     @builtins.property
     def assessment_reports_destination(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAssessment.AssessmentReportsDestinationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AssessmentReportsDestinationProperty"]]:
         '''The destination that evidence reports are stored in for the assessment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-auditmanager-assessment.html#cfn-auditmanager-assessment-assessmentreportsdestination
         '''
         result = self._values.get("assessment_reports_destination")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAssessment.AssessmentReportsDestinationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AssessmentReportsDestinationProperty"]], result)
 
     @builtins.property
     def aws_account(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAssessment.AWSAccountProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AWSAccountProperty"]]:
         '''The AWS account that's associated with the assessment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-auditmanager-assessment.html#cfn-auditmanager-assessment-awsaccount
         '''
         result = self._values.get("aws_account")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAssessment.AWSAccountProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.AWSAccountProperty"]], result)
 
     @builtins.property
     def delegations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAssessment.DelegationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.DelegationProperty"]]]]:
         '''The delegations that are associated with the assessment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-auditmanager-assessment.html#cfn-auditmanager-assessment-delegations
         '''
         result = self._values.get("delegations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAssessment.DelegationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.DelegationProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1289,24 +1291,24 @@ class CfnAssessmentProps:
     @builtins.property
     def roles(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAssessment.RoleProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.RoleProperty"]]]]:
         '''The roles that are associated with the assessment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-auditmanager-assessment.html#cfn-auditmanager-assessment-roles
         '''
         result = self._values.get("roles")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAssessment.RoleProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAssessment.RoleProperty"]]]], result)
 
     @builtins.property
     def scope(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAssessment.ScopeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.ScopeProperty"]]:
         '''The wrapper of AWS accounts and services that are in scope for the assessment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-auditmanager-assessment.html#cfn-auditmanager-assessment-scope
         '''
         result = self._values.get("scope")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAssessment.ScopeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssessment.ScopeProperty"]], result)
 
     @builtins.property
     def status(self) -> typing.Optional[builtins.str]:
@@ -1322,13 +1324,13 @@ class CfnAssessmentProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags that are associated with the assessment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-auditmanager-assessment.html#cfn-auditmanager-assessment-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

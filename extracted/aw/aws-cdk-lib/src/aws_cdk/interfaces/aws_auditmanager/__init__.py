@@ -112,7 +112,7 @@ class IAssessmentRef(
 
     @builtins.property
     @jsii.member(jsii_name="assessmentRef")
-    def assessment_ref(self) -> AssessmentReference:
+    def assessment_ref(self) -> "AssessmentReference":
         '''(experimental) A reference to a Assessment resource.
 
         :stability: experimental
@@ -133,12 +133,12 @@ class _IAssessmentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="assessmentRef")
-    def assessment_ref(self) -> AssessmentReference:
+    def assessment_ref(self) -> "AssessmentReference":
         '''(experimental) A reference to a Assessment resource.
 
         :stability: experimental
         '''
-        return typing.cast(AssessmentReference, jsii.get(self, "assessmentRef"))
+        return typing.cast("AssessmentReference", jsii.get(self, "assessmentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAssessmentRef).__jsii_proxy_class__ = lambda : _IAssessmentRefProxy

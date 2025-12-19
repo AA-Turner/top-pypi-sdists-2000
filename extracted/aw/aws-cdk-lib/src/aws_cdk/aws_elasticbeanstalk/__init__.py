@@ -122,12 +122,12 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        resource_lifecycle_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationResourceLifecycleConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        resource_lifecycle_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationResourceLifecycleConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ElasticBeanstalk::Application``.
 
@@ -151,7 +151,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_776a7ba1) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_776a7ba1") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -164,10 +164,10 @@ class CfnApplication(
     @builtins.classmethod
     def from_application_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         application_name: builtins.str,
-    ) -> _IApplicationRef_776a7ba1:
+    ) -> "_IApplicationRef_776a7ba1":
         '''Creates a new IApplicationRef from a applicationName.
 
         :param scope: -
@@ -179,7 +179,7 @@ class CfnApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument application_name", value=application_name, expected_type=type_hints["application_name"])
-        return typing.cast(_IApplicationRef_776a7ba1, jsii.sinvoke(cls, "fromApplicationName", [scope, id, application_name]))
+        return typing.cast("_IApplicationRef_776a7ba1", jsii.sinvoke(cls, "fromApplicationName", [scope, id, application_name]))
 
     @jsii.member(jsii_name="isCfnApplication")
     @builtins.classmethod
@@ -194,7 +194,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -225,9 +225,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_007fdae7:
+    def application_ref(self) -> "_ApplicationReference_007fdae7":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_007fdae7, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_007fdae7", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -264,14 +264,14 @@ class CfnApplication(
     @jsii.member(jsii_name="resourceLifecycleConfig")
     def resource_lifecycle_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationResourceLifecycleConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationResourceLifecycleConfigProperty"]]:
         '''Specifies an application resource lifecycle configuration to prevent your application from accumulating too many versions.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationResourceLifecycleConfigProperty"]], jsii.get(self, "resourceLifecycleConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationResourceLifecycleConfigProperty"]], jsii.get(self, "resourceLifecycleConfig"))
 
     @resource_lifecycle_config.setter
     def resource_lifecycle_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationResourceLifecycleConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationResourceLifecycleConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8a75fb3cf2d34861537e2d37fd676dbea69752fd913fa7086637904894d1654f)
@@ -291,7 +291,7 @@ class CfnApplication(
             self,
             *,
             service_role: typing.Optional[builtins.str] = None,
-            version_lifecycle_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationVersionLifecycleConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            version_lifecycle_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationVersionLifecycleConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Use the ``ApplicationResourceLifecycleConfig`` property type to specify lifecycle settings for resources that belong to an AWS Elastic Beanstalk application when defining an AWS::ElasticBeanstalk::Application resource in an AWS CloudFormation template.
 
@@ -351,13 +351,13 @@ class CfnApplication(
         @builtins.property
         def version_lifecycle_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationVersionLifecycleConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationVersionLifecycleConfigProperty"]]:
             '''Defines lifecycle settings for application versions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticbeanstalk-application-applicationresourcelifecycleconfig.html#cfn-elasticbeanstalk-application-applicationresourcelifecycleconfig-versionlifecycleconfig
             '''
             result = self._values.get("version_lifecycle_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationVersionLifecycleConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationVersionLifecycleConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -379,8 +379,8 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            max_age_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.MaxAgeRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            max_count_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.MaxCountRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            max_age_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.MaxAgeRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            max_count_rule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.MaxCountRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Use the ``ApplicationVersionLifecycleConfig`` property type to specify application version lifecycle settings for an AWS Elastic Beanstalk application when defining an AWS::ElasticBeanstalk::Application resource in an AWS CloudFormation template.
 
@@ -428,24 +428,24 @@ class CfnApplication(
         @builtins.property
         def max_age_rule(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MaxAgeRuleProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MaxAgeRuleProperty"]]:
             '''Specify a max age rule to restrict the length of time that application versions are retained for an application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticbeanstalk-application-applicationversionlifecycleconfig.html#cfn-elasticbeanstalk-application-applicationversionlifecycleconfig-maxagerule
             '''
             result = self._values.get("max_age_rule")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MaxAgeRuleProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MaxAgeRuleProperty"]], result)
 
         @builtins.property
         def max_count_rule(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MaxCountRuleProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MaxCountRuleProperty"]]:
             '''Specify a max count rule to restrict the number of application versions that are retained for an application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticbeanstalk-application-applicationversionlifecycleconfig.html#cfn-elasticbeanstalk-application-applicationversionlifecycleconfig-maxcountrule
             '''
             result = self._values.get("max_count_rule")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MaxCountRuleProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MaxCountRuleProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -471,8 +471,8 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            delete_source_from_s3: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            delete_source_from_s3: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             max_age_in_days: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Use the ``MaxAgeRule`` property type to specify a max age rule to restrict the length of time that application versions are retained for an AWS Elastic Beanstalk application when defining an AWS::ElasticBeanstalk::Application resource in an AWS CloudFormation template.
@@ -516,24 +516,24 @@ class CfnApplication(
         @builtins.property
         def delete_source_from_s3(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set to ``true`` to delete a version's source bundle from Amazon S3 when Elastic Beanstalk deletes the application version.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticbeanstalk-application-maxagerule.html#cfn-elasticbeanstalk-application-maxagerule-deletesourcefroms3
             '''
             result = self._values.get("delete_source_from_s3")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specify ``true`` to apply the rule, or ``false`` to disable it.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticbeanstalk-application-maxagerule.html#cfn-elasticbeanstalk-application-maxagerule-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def max_age_in_days(self) -> typing.Optional[jsii.Number]:
@@ -568,8 +568,8 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            delete_source_from_s3: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            delete_source_from_s3: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             max_count: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Use the ``MaxAgeRule`` property type to specify a max count rule to restrict the number of application versions that are retained for an AWS Elastic Beanstalk application when defining an AWS::ElasticBeanstalk::Application resource in an AWS CloudFormation template.
@@ -613,24 +613,24 @@ class CfnApplication(
         @builtins.property
         def delete_source_from_s3(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Set to ``true`` to delete a version's source bundle from Amazon S3 when Elastic Beanstalk deletes the application version.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticbeanstalk-application-maxcountrule.html#cfn-elasticbeanstalk-application-maxcountrule-deletesourcefroms3
             '''
             result = self._values.get("delete_source_from_s3")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specify ``true`` to apply the rule, or ``false`` to disable it.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticbeanstalk-application-maxcountrule.html#cfn-elasticbeanstalk-application-maxcountrule-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def max_count(self) -> typing.Optional[jsii.Number]:
@@ -668,7 +668,7 @@ class CfnApplicationProps:
         *,
         application_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        resource_lifecycle_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationResourceLifecycleConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        resource_lifecycle_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationResourceLifecycleConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplication``.
 
@@ -744,13 +744,13 @@ class CfnApplicationProps:
     @builtins.property
     def resource_lifecycle_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationResourceLifecycleConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationResourceLifecycleConfigProperty"]]:
         '''Specifies an application resource lifecycle configuration to prevent your application from accumulating too many versions.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-application.html#cfn-elasticbeanstalk-application-resourcelifecycleconfig
         '''
         result = self._values.get("resource_lifecycle_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationResourceLifecycleConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationResourceLifecycleConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -801,11 +801,11 @@ class CfnApplicationVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
-        source_bundle: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationVersion.SourceBundleProperty", typing.Dict[builtins.str, typing.Any]]],
+        application_name: typing.Union[builtins.str, "_IApplicationRef_776a7ba1"],
+        source_bundle: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationVersion.SourceBundleProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::ElasticBeanstalk::ApplicationVersion``.
@@ -841,7 +841,7 @@ class CfnApplicationVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -872,9 +872,9 @@ class CfnApplicationVersion(
 
     @builtins.property
     @jsii.member(jsii_name="applicationVersionRef")
-    def application_version_ref(self) -> _ApplicationVersionReference_198fa3c9:
+    def application_version_ref(self) -> "_ApplicationVersionReference_198fa3c9":
         '''A reference to a ApplicationVersion resource.'''
-        return typing.cast(_ApplicationVersionReference_198fa3c9, jsii.get(self, "applicationVersionRef"))
+        return typing.cast("_ApplicationVersionReference_198fa3c9", jsii.get(self, "applicationVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -906,14 +906,14 @@ class CfnApplicationVersion(
     @jsii.member(jsii_name="sourceBundle")
     def source_bundle(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnApplicationVersion.SourceBundleProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplicationVersion.SourceBundleProperty"]:
         '''The Amazon S3 bucket and key that identify the location of the source bundle for this version.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplicationVersion.SourceBundleProperty"], jsii.get(self, "sourceBundle"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplicationVersion.SourceBundleProperty"], jsii.get(self, "sourceBundle"))
 
     @source_bundle.setter
     def source_bundle(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnApplicationVersion.SourceBundleProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnApplicationVersion.SourceBundleProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e851d2ec17de05de650c602ffaa2d9d6d18f2cb17466abca441fe30ac1b50d80)
@@ -1015,8 +1015,8 @@ class CfnApplicationVersionProps:
     def __init__(
         self,
         *,
-        application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
-        source_bundle: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationVersion.SourceBundleProperty, typing.Dict[builtins.str, typing.Any]]],
+        application_name: typing.Union[builtins.str, "_IApplicationRef_776a7ba1"],
+        source_bundle: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationVersion.SourceBundleProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplicationVersion``.
@@ -1058,19 +1058,21 @@ class CfnApplicationVersionProps:
             self._values["description"] = description
 
     @builtins.property
-    def application_name(self) -> typing.Union[builtins.str, _IApplicationRef_776a7ba1]:
+    def application_name(
+        self,
+    ) -> typing.Union[builtins.str, "_IApplicationRef_776a7ba1"]:
         '''The name of the Elastic Beanstalk application that is associated with this application version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-applicationversion.html#cfn-elasticbeanstalk-applicationversion-applicationname
         '''
         result = self._values.get("application_name")
         assert result is not None, "Required property 'application_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _IApplicationRef_776a7ba1], result)
+        return typing.cast(typing.Union[builtins.str, "_IApplicationRef_776a7ba1"], result)
 
     @builtins.property
     def source_bundle(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnApplicationVersion.SourceBundleProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplicationVersion.SourceBundleProperty"]:
         '''The Amazon S3 bucket and key that identify the location of the source bundle for this version.
 
         .. epigraph::
@@ -1081,7 +1083,7 @@ class CfnApplicationVersionProps:
         '''
         result = self._values.get("source_bundle")
         assert result is not None, "Required property 'source_bundle' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnApplicationVersion.SourceBundleProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplicationVersion.SourceBundleProperty"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1152,16 +1154,16 @@ class CfnConfigurationTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
+        application_name: typing.Union[builtins.str, "_IApplicationRef_776a7ba1"],
         description: typing.Optional[builtins.str] = None,
         environment_id: typing.Optional[builtins.str] = None,
-        option_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationTemplate.ConfigurationOptionSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        option_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationTemplate.ConfigurationOptionSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         platform_arn: typing.Optional[builtins.str] = None,
         solution_stack_name: typing.Optional[builtins.str] = None,
-        source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationTemplate.SourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationTemplate.SourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ElasticBeanstalk::ConfigurationTemplate``.
 
@@ -1204,7 +1206,7 @@ class CfnConfigurationTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigurationTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1251,9 +1253,9 @@ class CfnConfigurationTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="configurationTemplateRef")
-    def configuration_template_ref(self) -> _ConfigurationTemplateReference_a0091062:
+    def configuration_template_ref(self) -> "_ConfigurationTemplateReference_a0091062":
         '''A reference to a ConfigurationTemplate resource.'''
-        return typing.cast(_ConfigurationTemplateReference_a0091062, jsii.get(self, "configurationTemplateRef"))
+        return typing.cast("_ConfigurationTemplateReference_a0091062", jsii.get(self, "configurationTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationName")
@@ -1298,14 +1300,14 @@ class CfnConfigurationTemplate(
     @jsii.member(jsii_name="optionSettings")
     def option_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationTemplate.ConfigurationOptionSettingProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationTemplate.ConfigurationOptionSettingProperty"]]]]:
         '''Option values for the Elastic Beanstalk configuration, such as the instance type.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationTemplate.ConfigurationOptionSettingProperty"]]]], jsii.get(self, "optionSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationTemplate.ConfigurationOptionSettingProperty"]]]], jsii.get(self, "optionSettings"))
 
     @option_settings.setter
     def option_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConfigurationTemplate.ConfigurationOptionSettingProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationTemplate.ConfigurationOptionSettingProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__13d3d231a3a5e4ac5f74ffd51d127adf4d05bd0317b35ba4f5efa5c5b5d9d444)
@@ -1342,14 +1344,14 @@ class CfnConfigurationTemplate(
     @jsii.member(jsii_name="sourceConfiguration")
     def source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationTemplate.SourceConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationTemplate.SourceConfigurationProperty"]]:
         '''An Elastic Beanstalk configuration template to base this one on.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationTemplate.SourceConfigurationProperty"]], jsii.get(self, "sourceConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationTemplate.SourceConfigurationProperty"]], jsii.get(self, "sourceConfiguration"))
 
     @source_configuration.setter
     def source_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfigurationTemplate.SourceConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationTemplate.SourceConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5a7ef0aa6a6895a3055a35a82ea9af1c29b76ca8fa807de3e85b831b17f7da10)
@@ -1566,13 +1568,13 @@ class CfnConfigurationTemplateProps:
     def __init__(
         self,
         *,
-        application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
+        application_name: typing.Union[builtins.str, "_IApplicationRef_776a7ba1"],
         description: typing.Optional[builtins.str] = None,
         environment_id: typing.Optional[builtins.str] = None,
-        option_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationTemplate.ConfigurationOptionSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        option_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationTemplate.ConfigurationOptionSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         platform_arn: typing.Optional[builtins.str] = None,
         solution_stack_name: typing.Optional[builtins.str] = None,
-        source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationTemplate.SourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationTemplate.SourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfigurationTemplate``.
 
@@ -1641,14 +1643,16 @@ class CfnConfigurationTemplateProps:
             self._values["source_configuration"] = source_configuration
 
     @builtins.property
-    def application_name(self) -> typing.Union[builtins.str, _IApplicationRef_776a7ba1]:
+    def application_name(
+        self,
+    ) -> typing.Union[builtins.str, "_IApplicationRef_776a7ba1"]:
         '''The name of the Elastic Beanstalk application to associate with this configuration template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-configurationtemplate.html#cfn-elasticbeanstalk-configurationtemplate-applicationname
         '''
         result = self._values.get("application_name")
         assert result is not None, "Required property 'application_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _IApplicationRef_776a7ba1], result)
+        return typing.cast(typing.Union[builtins.str, "_IApplicationRef_776a7ba1"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1673,7 +1677,7 @@ class CfnConfigurationTemplateProps:
     @builtins.property
     def option_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationTemplate.ConfigurationOptionSettingProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationTemplate.ConfigurationOptionSettingProperty"]]]]:
         '''Option values for the Elastic Beanstalk configuration, such as the instance type.
 
         If specified, these values override the values obtained from the solution stack or the source configuration template. For a complete list of Elastic Beanstalk configuration options, see `Option Values <https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options.html>`_ in the *AWS Elastic Beanstalk Developer Guide* .
@@ -1681,7 +1685,7 @@ class CfnConfigurationTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-configurationtemplate.html#cfn-elasticbeanstalk-configurationtemplate-optionsettings
         '''
         result = self._values.get("option_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConfigurationTemplate.ConfigurationOptionSettingProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnConfigurationTemplate.ConfigurationOptionSettingProperty"]]]], result)
 
     @builtins.property
     def platform_arn(self) -> typing.Optional[builtins.str]:
@@ -1715,7 +1719,7 @@ class CfnConfigurationTemplateProps:
     @builtins.property
     def source_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationTemplate.SourceConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationTemplate.SourceConfigurationProperty"]]:
         '''An Elastic Beanstalk configuration template to base this one on.
 
         If specified, Elastic Beanstalk uses the configuration values from the specified configuration template to create a new configuration.
@@ -1729,7 +1733,7 @@ class CfnConfigurationTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-configurationtemplate.html#cfn-elasticbeanstalk-configurationtemplate-sourceconfiguration
         '''
         result = self._values.get("source_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConfigurationTemplate.SourceConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationTemplate.SourceConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1759,6 +1763,7 @@ class CfnEnvironment(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_elasticbeanstalk as elasticbeanstalk
@@ -1797,20 +1802,20 @@ class CfnEnvironment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
+        application_name: typing.Union[builtins.str, "_IApplicationRef_776a7ba1"],
         cname_prefix: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         environment_name: typing.Optional[builtins.str] = None,
         operations_role: typing.Optional[builtins.str] = None,
-        option_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.OptionSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        option_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.OptionSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         platform_arn: typing.Optional[builtins.str] = None,
         solution_stack_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        template_name: typing.Optional[typing.Union[builtins.str, _IConfigurationTemplateRef_3b882d17]] = None,
-        tier: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.TierProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        template_name: typing.Optional[typing.Union[builtins.str, "_IConfigurationTemplateRef_3b882d17"]] = None,
+        tier: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.TierProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         version_label: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::ElasticBeanstalk::Environment``.
@@ -1864,7 +1869,7 @@ class CfnEnvironment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEnvironment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1915,15 +1920,15 @@ class CfnEnvironment(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> _EnvironmentReference_71071798:
+    def environment_ref(self) -> "_EnvironmentReference_71071798":
         '''A reference to a Environment resource.'''
-        return typing.cast(_EnvironmentReference_71071798, jsii.get(self, "environmentRef"))
+        return typing.cast("_EnvironmentReference_71071798", jsii.get(self, "environmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationName")
@@ -1996,14 +2001,14 @@ class CfnEnvironment(
     @jsii.member(jsii_name="optionSettings")
     def option_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.OptionSettingProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.OptionSettingProperty"]]]]:
         '''Key-value pairs defining configuration options for this environment, such as the instance type.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.OptionSettingProperty"]]]], jsii.get(self, "optionSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.OptionSettingProperty"]]]], jsii.get(self, "optionSettings"))
 
     @option_settings.setter
     def option_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.OptionSettingProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.OptionSettingProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7600abd455a41ff1c834927848b4c43cc4b499702ee8a19f3bf0da07cd3e84ee)
@@ -2038,12 +2043,12 @@ class CfnEnvironment(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the tags applied to resources in the environment.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b89946348997537ce6938ca9985772322b3f46254f3b2d8a8534f716f9e584ac)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2066,14 +2071,14 @@ class CfnEnvironment(
     @jsii.member(jsii_name="tier")
     def tier(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.TierProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.TierProperty"]]:
         '''Specifies the tier to use in creating this environment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.TierProperty"]], jsii.get(self, "tier"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.TierProperty"]], jsii.get(self, "tier"))
 
     @tier.setter
     def tier(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.TierProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.TierProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__26b98f48829b19de15f9b899e224ed744dacdd8304b8d311e0612315637bb776)
@@ -2334,17 +2339,17 @@ class CfnEnvironmentProps:
     def __init__(
         self,
         *,
-        application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
+        application_name: typing.Union[builtins.str, "_IApplicationRef_776a7ba1"],
         cname_prefix: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         environment_name: typing.Optional[builtins.str] = None,
         operations_role: typing.Optional[builtins.str] = None,
-        option_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.OptionSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        option_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.OptionSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         platform_arn: typing.Optional[builtins.str] = None,
         solution_stack_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        template_name: typing.Optional[typing.Union[builtins.str, _IConfigurationTemplateRef_3b882d17]] = None,
-        tier: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.TierProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        template_name: typing.Optional[typing.Union[builtins.str, "_IConfigurationTemplateRef_3b882d17"]] = None,
+        tier: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.TierProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         version_label: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnEnvironment``.
@@ -2367,6 +2372,7 @@ class CfnEnvironmentProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_elasticbeanstalk as elasticbeanstalk
@@ -2443,14 +2449,16 @@ class CfnEnvironmentProps:
             self._values["version_label"] = version_label
 
     @builtins.property
-    def application_name(self) -> typing.Union[builtins.str, _IApplicationRef_776a7ba1]:
+    def application_name(
+        self,
+    ) -> typing.Union[builtins.str, "_IApplicationRef_776a7ba1"]:
         '''The name of the application that is associated with this environment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-environment.html#cfn-elasticbeanstalk-environment-applicationname
         '''
         result = self._values.get("application_name")
         assert result is not None, "Required property 'application_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _IApplicationRef_776a7ba1], result)
+        return typing.cast(typing.Union[builtins.str, "_IApplicationRef_776a7ba1"], result)
 
     @builtins.property
     def cname_prefix(self) -> typing.Optional[builtins.str]:
@@ -2506,7 +2514,7 @@ class CfnEnvironmentProps:
     @builtins.property
     def option_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEnvironment.OptionSettingProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.OptionSettingProperty"]]]]:
         '''Key-value pairs defining configuration options for this environment, such as the instance type.
 
         These options override the values that are defined in the solution stack or the `configuration template <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-beanstalk-configurationtemplate.html>`_ . If you remove any options during a stack update, the removed options retain their current values.
@@ -2514,7 +2522,7 @@ class CfnEnvironmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-environment.html#cfn-elasticbeanstalk-environment-optionsettings
         '''
         result = self._values.get("option_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEnvironment.OptionSettingProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.OptionSettingProperty"]]]], result)
 
     @builtins.property
     def platform_arn(self) -> typing.Optional[builtins.str]:
@@ -2545,18 +2553,18 @@ class CfnEnvironmentProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the tags applied to resources in the environment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-environment.html#cfn-elasticbeanstalk-environment-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def template_name(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IConfigurationTemplateRef_3b882d17]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IConfigurationTemplateRef_3b882d17"]]:
         '''The name of the Elastic Beanstalk configuration template to use with the environment.
 
         .. epigraph::
@@ -2566,12 +2574,12 @@ class CfnEnvironmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-environment.html#cfn-elasticbeanstalk-environment-templatename
         '''
         result = self._values.get("template_name")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IConfigurationTemplateRef_3b882d17]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IConfigurationTemplateRef_3b882d17"]], result)
 
     @builtins.property
     def tier(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEnvironment.TierProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.TierProperty"]]:
         '''Specifies the tier to use in creating this environment.
 
         The environment tier that you choose determines whether Elastic Beanstalk provisions resources to support a web application that handles HTTP(S) requests or a web application that handles background-processing tasks.
@@ -2579,7 +2587,7 @@ class CfnEnvironmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-environment.html#cfn-elasticbeanstalk-environment-tier
         '''
         result = self._values.get("tier")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEnvironment.TierProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.TierProperty"]], result)
 
     @builtins.property
     def version_label(self) -> typing.Optional[builtins.str]:

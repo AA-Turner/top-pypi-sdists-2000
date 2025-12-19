@@ -96,6 +96,7 @@ class CfnContact(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ssmcontacts as ssmcontacts
@@ -129,14 +130,14 @@ class CfnContact(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         alias: builtins.str,
         display_name: builtins.str,
         type: builtins.str,
-        plan: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContact.StageProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        plan: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContact.StageProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SSMContacts::Contact``.
 
@@ -160,7 +161,7 @@ class CfnContact(
 
     @jsii.member(jsii_name="arnForContact")
     @builtins.classmethod
-    def arn_for_contact(cls, resource: _IContactRef_43eeaa3a) -> builtins.str:
+    def arn_for_contact(cls, resource: "_IContactRef_43eeaa3a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -182,7 +183,7 @@ class CfnContact(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContact", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -222,9 +223,9 @@ class CfnContact(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -233,9 +234,9 @@ class CfnContact(
 
     @builtins.property
     @jsii.member(jsii_name="contactRef")
-    def contact_ref(self) -> _ContactReference_c56fd368:
+    def contact_ref(self) -> "_ContactReference_c56fd368":
         '''A reference to a Contact resource.'''
-        return typing.cast(_ContactReference_c56fd368, jsii.get(self, "contactRef"))
+        return typing.cast("_ContactReference_c56fd368", jsii.get(self, "contactRef"))
 
     @builtins.property
     @jsii.member(jsii_name="alias")
@@ -280,14 +281,14 @@ class CfnContact(
     @jsii.member(jsii_name="plan")
     def plan(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContact.StageProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContact.StageProperty"]]]]:
         '''A list of stages.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContact.StageProperty"]]]], jsii.get(self, "plan"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContact.StageProperty"]]]], jsii.get(self, "plan"))
 
     @plan.setter
     def plan(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContact.StageProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContact.StageProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1b53265c2630d58664ca7f46c1ce619caeab6eec0dc5682af154a1d6e5fadc5b)
@@ -296,11 +297,11 @@ class CfnContact(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__59cff570ee94d66883c27c541d2b2e0ef7a60913a10e8561bd8fcab3f1a9341a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -390,7 +391,7 @@ class CfnContact(
             self,
             *,
             contact_id: builtins.str,
-            is_essential: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            is_essential: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''The contact that Incident Manager is engaging during an incident.
 
@@ -431,14 +432,14 @@ class CfnContact(
             return typing.cast(builtins.str, result)
 
         @builtins.property
-        def is_essential(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def is_essential(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean value determining if the contact's acknowledgement stops the progress of stages in the plan.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmcontacts-contact-contacttargetinfo.html#cfn-ssmcontacts-contact-contacttargetinfo-isessential
             '''
             result = self._values.get("is_essential")
             assert result is not None, "Required property 'is_essential' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -466,7 +467,7 @@ class CfnContact(
             *,
             duration_in_minutes: typing.Optional[jsii.Number] = None,
             rotation_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-            targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContact.TargetsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            targets: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContact.TargetsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The ``Stage`` property type specifies a set amount of time that an escalation plan or engagement plan engages the specified contacts or contact methods.
 
@@ -534,13 +535,13 @@ class CfnContact(
         @builtins.property
         def targets(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContact.TargetsProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContact.TargetsProperty"]]]]:
             '''The contacts or contact methods that the escalation plan or engagement plan is engaging.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmcontacts-contact-stage.html#cfn-ssmcontacts-contact-stage-targets
             '''
             result = self._values.get("targets")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnContact.TargetsProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContact.TargetsProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -565,8 +566,8 @@ class CfnContact(
         def __init__(
             self,
             *,
-            channel_target_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContact.ChannelTargetInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            contact_target_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContact.ContactTargetInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            channel_target_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContact.ChannelTargetInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            contact_target_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContact.ContactTargetInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The contact or contact channel that's being engaged.
 
@@ -606,24 +607,24 @@ class CfnContact(
         @builtins.property
         def channel_target_info(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContact.ChannelTargetInfoProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContact.ChannelTargetInfoProperty"]]:
             '''Information about the contact channel that Incident Manager engages.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmcontacts-contact-targets.html#cfn-ssmcontacts-contact-targets-channeltargetinfo
             '''
             result = self._values.get("channel_target_info")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContact.ChannelTargetInfoProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContact.ChannelTargetInfoProperty"]], result)
 
         @builtins.property
         def contact_target_info(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContact.ContactTargetInfoProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContact.ContactTargetInfoProperty"]]:
             '''The contact that Incident Manager is engaging during an incident.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmcontacts-contact-targets.html#cfn-ssmcontacts-contact-targets-contacttargetinfo
             '''
             result = self._values.get("contact_target_info")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContact.ContactTargetInfoProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContact.ContactTargetInfoProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -672,14 +673,14 @@ class CfnContactChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         channel_address: builtins.str,
         channel_name: builtins.str,
         channel_type: builtins.str,
         contact_id: builtins.str,
-        defer_activation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        defer_activation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::SSMContacts::ContactChannel``.
 
@@ -709,7 +710,7 @@ class CfnContactChannel(
     @builtins.classmethod
     def arn_for_contact_channel(
         cls,
-        resource: _IContactChannelRef_c6b96ce3,
+        resource: "_IContactChannelRef_c6b96ce3",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -732,7 +733,7 @@ class CfnContactChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContactChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -777,9 +778,9 @@ class CfnContactChannel(
 
     @builtins.property
     @jsii.member(jsii_name="contactChannelRef")
-    def contact_channel_ref(self) -> _ContactChannelReference_dd79a1a8:
+    def contact_channel_ref(self) -> "_ContactChannelReference_dd79a1a8":
         '''A reference to a ContactChannel resource.'''
-        return typing.cast(_ContactChannelReference_dd79a1a8, jsii.get(self, "contactChannelRef"))
+        return typing.cast("_ContactChannelReference_dd79a1a8", jsii.get(self, "contactChannelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="channelAddress")
@@ -840,14 +841,14 @@ class CfnContactChannel(
     @jsii.member(jsii_name="deferActivation")
     def defer_activation(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If you want to activate the channel at a later time, you can choose to defer activation.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deferActivation"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deferActivation"))
 
     @defer_activation.setter
     def defer_activation(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__99b9167dee5265e65d4f53f0abd17410ef25ee43a5aaa99fd33f989d172a3844)
@@ -874,7 +875,7 @@ class CfnContactChannelProps:
         channel_name: builtins.str,
         channel_type: builtins.str,
         contact_id: builtins.str,
-        defer_activation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        defer_activation: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnContactChannel``.
 
@@ -966,7 +967,7 @@ class CfnContactChannelProps:
     @builtins.property
     def defer_activation(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If you want to activate the channel at a later time, you can choose to defer activation.
 
         Incident Manager can't engage your contact channel until it has been activated.
@@ -974,7 +975,7 @@ class CfnContactChannelProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmcontacts-contactchannel.html#cfn-ssmcontacts-contactchannel-deferactivation
         '''
         result = self._values.get("defer_activation")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1006,8 +1007,8 @@ class CfnContactProps:
         alias: builtins.str,
         display_name: builtins.str,
         type: builtins.str,
-        plan: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContact.StageProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        plan: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContact.StageProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnContact``.
 
@@ -1022,6 +1023,7 @@ class CfnContactProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ssmcontacts as ssmcontacts
@@ -1106,7 +1108,7 @@ class CfnContactProps:
     @builtins.property
     def plan(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContact.StageProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContact.StageProperty"]]]]:
         '''A list of stages.
 
         A contact has an engagement plan with stages that contact specified contact channels. An escalation plan uses stages that contact specified contacts.
@@ -1114,15 +1116,15 @@ class CfnContactProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmcontacts-contact.html#cfn-ssmcontacts-contact-plan
         '''
         result = self._values.get("plan")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnContact.StageProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnContact.StageProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmcontacts-contact.html#cfn-ssmcontacts-contact-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1183,12 +1185,12 @@ class CfnPlan(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         contact_id: builtins.str,
         rotation_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        stages: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPlan.StageProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        stages: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlan.StageProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SSMContacts::Plan``.
 
@@ -1210,7 +1212,7 @@ class CfnPlan(
 
     @jsii.member(jsii_name="arnForPlan")
     @builtins.classmethod
-    def arn_for_plan(cls, resource: _IPlanRef_78302c0c) -> builtins.str:
+    def arn_for_plan(cls, resource: "_IPlanRef_78302c0c") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1232,7 +1234,7 @@ class CfnPlan(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPlan", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1277,9 +1279,9 @@ class CfnPlan(
 
     @builtins.property
     @jsii.member(jsii_name="planRef")
-    def plan_ref(self) -> _PlanReference_94ce2026:
+    def plan_ref(self) -> "_PlanReference_94ce2026":
         '''A reference to a Plan resource.'''
-        return typing.cast(_PlanReference_94ce2026, jsii.get(self, "planRef"))
+        return typing.cast("_PlanReference_94ce2026", jsii.get(self, "planRef"))
 
     @builtins.property
     @jsii.member(jsii_name="contactId")
@@ -1311,14 +1313,14 @@ class CfnPlan(
     @jsii.member(jsii_name="stages")
     def stages(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPlan.StageProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPlan.StageProperty"]]]]:
         '''A list of stages that the escalation plan or engagement plan uses to engage contacts and contact methods.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPlan.StageProperty"]]]], jsii.get(self, "stages"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPlan.StageProperty"]]]], jsii.get(self, "stages"))
 
     @stages.setter
     def stages(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPlan.StageProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPlan.StageProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__98071cbe25b9c5fdcd471387b967afcc5792d313a75945efade94d8eb76ca785)
@@ -1409,7 +1411,7 @@ class CfnPlan(
             self,
             *,
             contact_id: builtins.str,
-            is_essential: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            is_essential: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''The contact that Incident Manager is engaging during an incident.
 
@@ -1450,14 +1452,14 @@ class CfnPlan(
             return typing.cast(builtins.str, result)
 
         @builtins.property
-        def is_essential(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def is_essential(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''A Boolean value determining if the contact's acknowledgement stops the progress of stages in the plan.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmcontacts-plan-contacttargetinfo.html#cfn-ssmcontacts-plan-contacttargetinfo-isessential
             '''
             result = self._values.get("is_essential")
             assert result is not None, "Required property 'is_essential' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1483,7 +1485,7 @@ class CfnPlan(
             self,
             *,
             duration_in_minutes: jsii.Number,
-            targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPlan.TargetsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            targets: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlan.TargetsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''A set amount of time that an escalation plan or engagement plan engages the specified contacts or contact methods.
 
@@ -1540,13 +1542,13 @@ class CfnPlan(
         @builtins.property
         def targets(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPlan.TargetsProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPlan.TargetsProperty"]]]]:
             '''The contacts or contact methods that the escalation plan or engagement plan is engaging.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmcontacts-plan-stage.html#cfn-ssmcontacts-plan-stage-targets
             '''
             result = self._values.get("targets")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnPlan.TargetsProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPlan.TargetsProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1571,8 +1573,8 @@ class CfnPlan(
         def __init__(
             self,
             *,
-            channel_target_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPlan.ChannelTargetInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            contact_target_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPlan.ContactTargetInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            channel_target_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlan.ChannelTargetInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            contact_target_info: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlan.ContactTargetInfoProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The contact or contact channel that's being engaged.
 
@@ -1612,24 +1614,24 @@ class CfnPlan(
         @builtins.property
         def channel_target_info(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPlan.ChannelTargetInfoProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPlan.ChannelTargetInfoProperty"]]:
             '''Information about the contact channel that Incident Manager engages.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmcontacts-plan-targets.html#cfn-ssmcontacts-plan-targets-channeltargetinfo
             '''
             result = self._values.get("channel_target_info")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPlan.ChannelTargetInfoProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPlan.ChannelTargetInfoProperty"]], result)
 
         @builtins.property
         def contact_target_info(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPlan.ContactTargetInfoProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPlan.ContactTargetInfoProperty"]]:
             '''Information about the contact that Incident Manager engages.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmcontacts-plan-targets.html#cfn-ssmcontacts-plan-targets-contacttargetinfo
             '''
             result = self._values.get("contact_target_info")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPlan.ContactTargetInfoProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPlan.ContactTargetInfoProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1658,7 +1660,7 @@ class CfnPlanProps:
         *,
         contact_id: builtins.str,
         rotation_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        stages: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlan.StageProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        stages: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlan.StageProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPlan``.
 
@@ -1732,13 +1734,13 @@ class CfnPlanProps:
     @builtins.property
     def stages(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPlan.StageProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPlan.StageProperty"]]]]:
         '''A list of stages that the escalation plan or engagement plan uses to engage contacts and contact methods.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmcontacts-plan.html#cfn-ssmcontacts-plan-stages
         '''
         result = self._values.get("stages")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnPlan.StageProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnPlan.StageProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1770,6 +1772,7 @@ class CfnRotation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ssmcontacts as ssmcontacts
@@ -1812,15 +1815,15 @@ class CfnRotation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         contact_ids: typing.Sequence[builtins.str],
         name: builtins.str,
-        recurrence: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRotation.RecurrenceSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        recurrence: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRotation.RecurrenceSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
         start_time: builtins.str,
         time_zone_id: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SSMContacts::Rotation``.
 
@@ -1850,7 +1853,7 @@ class CfnRotation(
 
     @jsii.member(jsii_name="arnForRotation")
     @builtins.classmethod
-    def arn_for_rotation(cls, resource: _IRotationRef_bdee0de7) -> builtins.str:
+    def arn_for_rotation(cls, resource: "_IRotationRef_bdee0de7") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1872,7 +1875,7 @@ class CfnRotation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRotation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1917,15 +1920,15 @@ class CfnRotation(
 
     @builtins.property
     @jsii.member(jsii_name="rotationRef")
-    def rotation_ref(self) -> _RotationReference_49f95d50:
+    def rotation_ref(self) -> "_RotationReference_49f95d50":
         '''A reference to a Rotation resource.'''
-        return typing.cast(_RotationReference_49f95d50, jsii.get(self, "rotationRef"))
+        return typing.cast("_RotationReference_49f95d50", jsii.get(self, "rotationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="contactIds")
@@ -1957,14 +1960,14 @@ class CfnRotation(
     @jsii.member(jsii_name="recurrence")
     def recurrence(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnRotation.RecurrenceSettingsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnRotation.RecurrenceSettingsProperty"]:
         '''Information about the rule that specifies when shift team members rotate.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRotation.RecurrenceSettingsProperty"], jsii.get(self, "recurrence"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRotation.RecurrenceSettingsProperty"], jsii.get(self, "recurrence"))
 
     @recurrence.setter
     def recurrence(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnRotation.RecurrenceSettingsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnRotation.RecurrenceSettingsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__15da7772d8591fe2320b8ab1b99e597707b586730055c9d05111aeb272ccd4e9)
@@ -1999,12 +2002,12 @@ class CfnRotation(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata to assign to the rotation.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a05c65df6e2e0154dd878cf7783bed608ad778e57fdc781109dc1f9297a2ff64)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2166,9 +2169,9 @@ class CfnRotation(
             number_of_on_calls: jsii.Number,
             recurrence_multiplier: jsii.Number,
             daily_settings: typing.Optional[typing.Sequence[builtins.str]] = None,
-            monthly_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRotation.MonthlySettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            shift_coverages: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRotation.ShiftCoverageProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            weekly_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRotation.WeeklySettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            monthly_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRotation.MonthlySettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            shift_coverages: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRotation.ShiftCoverageProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            weekly_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRotation.WeeklySettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Information about when an on-call rotation is in effect and how long the rotation period lasts.
 
@@ -2266,35 +2269,35 @@ class CfnRotation(
         @builtins.property
         def monthly_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotation.MonthlySettingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotation.MonthlySettingProperty"]]]]:
             '''Information about on-call rotations that recur monthly.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmcontacts-rotation-recurrencesettings.html#cfn-ssmcontacts-rotation-recurrencesettings-monthlysettings
             '''
             result = self._values.get("monthly_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotation.MonthlySettingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotation.MonthlySettingProperty"]]]], result)
 
         @builtins.property
         def shift_coverages(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotation.ShiftCoverageProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotation.ShiftCoverageProperty"]]]]:
             '''Information about the days of the week included in on-call rotation coverage.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmcontacts-rotation-recurrencesettings.html#cfn-ssmcontacts-rotation-recurrencesettings-shiftcoverages
             '''
             result = self._values.get("shift_coverages")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotation.ShiftCoverageProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotation.ShiftCoverageProperty"]]]], result)
 
         @builtins.property
         def weekly_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotation.WeeklySettingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotation.WeeklySettingProperty"]]]]:
             '''Information about on-call rotations that recur weekly.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmcontacts-rotation-recurrencesettings.html#cfn-ssmcontacts-rotation-recurrencesettings-weeklysettings
             '''
             result = self._values.get("weekly_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotation.WeeklySettingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotation.WeeklySettingProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2316,7 +2319,7 @@ class CfnRotation(
         def __init__(
             self,
             *,
-            coverage_times: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRotation.CoverageTimeProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            coverage_times: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRotation.CoverageTimeProperty", typing.Dict[builtins.str, typing.Any]]]]],
             day_of_week: builtins.str,
         ) -> None:
             '''Information about the days of the week that the on-call rotation coverage includes.
@@ -2353,14 +2356,14 @@ class CfnRotation(
         @builtins.property
         def coverage_times(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotation.CoverageTimeProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotation.CoverageTimeProperty"]]]:
             '''The start and end times of the shift.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmcontacts-rotation-shiftcoverage.html#cfn-ssmcontacts-rotation-shiftcoverage-coveragetimes
             '''
             result = self._values.get("coverage_times")
             assert result is not None, "Required property 'coverage_times' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotation.CoverageTimeProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRotation.CoverageTimeProperty"]]], result)
 
         @builtins.property
         def day_of_week(self) -> builtins.str:
@@ -2473,10 +2476,10 @@ class CfnRotationProps:
         *,
         contact_ids: typing.Sequence[builtins.str],
         name: builtins.str,
-        recurrence: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRotation.RecurrenceSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
+        recurrence: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRotation.RecurrenceSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
         start_time: builtins.str,
         time_zone_id: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRotation``.
 
@@ -2492,6 +2495,7 @@ class CfnRotationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ssmcontacts as ssmcontacts
@@ -2578,14 +2582,14 @@ class CfnRotationProps:
     @builtins.property
     def recurrence(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnRotation.RecurrenceSettingsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnRotation.RecurrenceSettingsProperty"]:
         '''Information about the rule that specifies when shift team members rotate.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmcontacts-rotation.html#cfn-ssmcontacts-rotation-recurrence
         '''
         result = self._values.get("recurrence")
         assert result is not None, "Required property 'recurrence' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnRotation.RecurrenceSettingsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRotation.RecurrenceSettingsProperty"], result)
 
     @builtins.property
     def start_time(self) -> builtins.str:
@@ -2613,7 +2617,7 @@ class CfnRotationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Optional metadata to assign to the rotation.
 
         Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For more information, see `Tagging Incident Manager resources <https://docs.aws.amazon.com/incident-manager/latest/userguide/tagging.html>`_ in the *Incident Manager User Guide* .
@@ -2621,7 +2625,7 @@ class CfnRotationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmcontacts-rotation.html#cfn-ssmcontacts-rotation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

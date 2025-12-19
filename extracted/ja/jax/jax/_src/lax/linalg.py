@@ -45,7 +45,6 @@ from jax._src.lib import cuda_versions
 from jax._src.lib import gpu_linalg
 from jax._src.lib import gpu_solver
 from jax._src.lib import gpu_sparse
-from jax._src.lib import version as jaxlib_version
 from jax._src.lib import lapack
 from jax._src.lib.mlir import ir
 from jax._src.lib.mlir.dialects import chlo
@@ -821,7 +820,7 @@ def linalg_primitive(result_dtype, accepted_dtypes, ranks, result_shape, name,
     prim.def_abstract_eval(
       partial(lax_utils.standard_abstract_eval, prim, shape_rule, dtype_rule,
               lax_utils._standard_weak_type_rule, sharding_rule,
-              partial(core.standard_vma_rule, name), None, None))
+              partial(core.standard_vma_rule, name), None, None, None))
   if supports_batching:
     batching.primitive_batchers[prim] = partial(
         batching.expand_dims_batcher, prim)
@@ -2206,8 +2205,6 @@ def _svd_gpu_sub_lowering(ctx, operand, *, full_matrices, compute_uv,
     use_jacobi = True
   elif algorithm == SvdAlgorithm.POLAR:
     use_polar = True
-    if jaxlib_version < (0, 8, 1):
-      raise NotImplementedError("Polar SVD requires jaxlib >= 0.8.1")
 
   column_major = True
   if use_jacobi:

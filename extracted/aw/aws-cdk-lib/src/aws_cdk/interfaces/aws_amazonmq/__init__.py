@@ -224,7 +224,7 @@ class IBrokerRef(
 
     @builtins.property
     @jsii.member(jsii_name="brokerRef")
-    def broker_ref(self) -> BrokerReference:
+    def broker_ref(self) -> "BrokerReference":
         '''(experimental) A reference to a Broker resource.
 
         :stability: experimental
@@ -245,12 +245,12 @@ class _IBrokerRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="brokerRef")
-    def broker_ref(self) -> BrokerReference:
+    def broker_ref(self) -> "BrokerReference":
         '''(experimental) A reference to a Broker resource.
 
         :stability: experimental
         '''
-        return typing.cast(BrokerReference, jsii.get(self, "brokerRef"))
+        return typing.cast("BrokerReference", jsii.get(self, "brokerRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBrokerRef).__jsii_proxy_class__ = lambda : _IBrokerRefProxy
@@ -271,7 +271,7 @@ class IConfigurationAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="configurationAssociationRef")
-    def configuration_association_ref(self) -> ConfigurationAssociationReference:
+    def configuration_association_ref(self) -> "ConfigurationAssociationReference":
         '''(experimental) A reference to a ConfigurationAssociation resource.
 
         :stability: experimental
@@ -292,12 +292,12 @@ class _IConfigurationAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configurationAssociationRef")
-    def configuration_association_ref(self) -> ConfigurationAssociationReference:
+    def configuration_association_ref(self) -> "ConfigurationAssociationReference":
         '''(experimental) A reference to a ConfigurationAssociation resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationAssociationReference, jsii.get(self, "configurationAssociationRef"))
+        return typing.cast("ConfigurationAssociationReference", jsii.get(self, "configurationAssociationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationAssociationRef).__jsii_proxy_class__ = lambda : _IConfigurationAssociationRefProxy
@@ -316,7 +316,7 @@ class IConfigurationRef(
 
     @builtins.property
     @jsii.member(jsii_name="configurationRef")
-    def configuration_ref(self) -> ConfigurationReference:
+    def configuration_ref(self) -> "ConfigurationReference":
         '''(experimental) A reference to a Configuration resource.
 
         :stability: experimental
@@ -337,12 +337,12 @@ class _IConfigurationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configurationRef")
-    def configuration_ref(self) -> ConfigurationReference:
+    def configuration_ref(self) -> "ConfigurationReference":
         '''(experimental) A reference to a Configuration resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationReference, jsii.get(self, "configurationRef"))
+        return typing.cast("ConfigurationReference", jsii.get(self, "configurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationRef).__jsii_proxy_class__ = lambda : _IConfigurationRefProxy

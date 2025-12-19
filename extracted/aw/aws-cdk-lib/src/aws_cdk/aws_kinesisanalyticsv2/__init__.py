@@ -96,6 +96,7 @@ class CfnApplication(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_kinesisanalyticsv2 as kinesisanalyticsv2
@@ -278,18 +279,18 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         runtime_environment: builtins.str,
-        service_execution_role: typing.Union[builtins.str, _IRoleRef_8400221f],
-        application_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        service_execution_role: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        application_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         application_description: typing.Optional[builtins.str] = None,
-        application_maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationMaintenanceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        application_maintenance_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationMaintenanceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         application_mode: typing.Optional[builtins.str] = None,
         application_name: typing.Optional[builtins.str] = None,
-        run_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.RunConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        run_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.RunConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::KinesisAnalyticsV2::Application``.
 
@@ -325,7 +326,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_f869ed37) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_f869ed37") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -338,10 +339,10 @@ class CfnApplication(
     @builtins.classmethod
     def from_application_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         application_name: builtins.str,
-    ) -> _IApplicationRef_f869ed37:
+    ) -> "_IApplicationRef_f869ed37":
         '''Creates a new IApplicationRef from a applicationName.
 
         :param scope: -
@@ -353,7 +354,7 @@ class CfnApplication(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument application_name", value=application_name, expected_type=type_hints["application_name"])
-        return typing.cast(_IApplicationRef_f869ed37, jsii.sinvoke(cls, "fromApplicationName", [scope, id, application_name]))
+        return typing.cast("_IApplicationRef_f869ed37", jsii.sinvoke(cls, "fromApplicationName", [scope, id, application_name]))
 
     @jsii.member(jsii_name="isCfnApplication")
     @builtins.classmethod
@@ -368,7 +369,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -399,9 +400,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_46694a3d:
+    def application_ref(self) -> "_ApplicationReference_46694a3d":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_46694a3d, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_46694a3d", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -410,9 +411,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="runtimeEnvironment")
@@ -444,14 +445,14 @@ class CfnApplication(
     @jsii.member(jsii_name="applicationConfiguration")
     def application_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationConfigurationProperty"]]:
         '''Use this parameter to configure the application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationConfigurationProperty"]], jsii.get(self, "applicationConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationConfigurationProperty"]], jsii.get(self, "applicationConfiguration"))
 
     @application_configuration.setter
     def application_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ef341da760092c81d8ebf75b2a8fcc6001c1d5719c23f1cb678b9ae9829a47d8)
@@ -475,14 +476,14 @@ class CfnApplication(
     @jsii.member(jsii_name="applicationMaintenanceConfiguration")
     def application_maintenance_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationMaintenanceConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationMaintenanceConfigurationProperty"]]:
         '''Specifies the maintenance window parameters for a Kinesis Data Analytics application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationMaintenanceConfigurationProperty"]], jsii.get(self, "applicationMaintenanceConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationMaintenanceConfigurationProperty"]], jsii.get(self, "applicationMaintenanceConfiguration"))
 
     @application_maintenance_configuration.setter
     def application_maintenance_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationMaintenanceConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationMaintenanceConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bade165998cfb0cb1db2203ff570e24577c9fc19f9a0588e2643ebb1b53632bb)
@@ -519,14 +520,14 @@ class CfnApplication(
     @jsii.member(jsii_name="runConfiguration")
     def run_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.RunConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.RunConfigurationProperty"]]:
         '''Describes the starting parameters for an Managed Service for Apache Flink application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.RunConfigurationProperty"]], jsii.get(self, "runConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.RunConfigurationProperty"]], jsii.get(self, "runConfiguration"))
 
     @run_configuration.setter
     def run_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.RunConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.RunConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2e2a695c3236110568fdc3f1dc24c7e36181eb38a5ed880f710def9c8ec15a0b)
@@ -535,12 +536,12 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of one or more tags to assign to the application.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__da9bbc4a3bcbdc3e98d0c40d2f192d8f85a4239ce18348cde735a4a71b7a5b85)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -558,7 +559,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            code_content: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.CodeContentProperty", typing.Dict[builtins.str, typing.Any]]],
+            code_content: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.CodeContentProperty", typing.Dict[builtins.str, typing.Any]]],
             code_content_type: builtins.str,
         ) -> None:
             '''Describes code configuration for an application.
@@ -602,14 +603,14 @@ class CfnApplication(
         @builtins.property
         def code_content(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnApplication.CodeContentProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.CodeContentProperty"]:
             '''The location and type of the application code.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationcodeconfiguration.html#cfn-kinesisanalyticsv2-application-applicationcodeconfiguration-codecontent
             '''
             result = self._values.get("code_content")
             assert result is not None, "Required property 'code_content' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplication.CodeContentProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.CodeContentProperty"], result)
 
         @builtins.property
         def code_content_type(self) -> builtins.str:
@@ -651,15 +652,15 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            application_code_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationCodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            application_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            application_snapshot_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationSnapshotConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            application_system_rollback_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationSystemRollbackConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            environment_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.EnvironmentPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            flink_application_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.FlinkApplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sql_application_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.SqlApplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            vpc_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            zeppelin_application_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ZeppelinApplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            application_code_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationCodeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            application_encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            application_snapshot_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationSnapshotConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            application_system_rollback_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationSystemRollbackConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            environment_properties: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.EnvironmentPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            flink_application_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.FlinkApplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sql_application_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.SqlApplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            zeppelin_application_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ZeppelinApplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the creation parameters for a Managed Service for Apache Flink application.
 
@@ -864,101 +865,101 @@ class CfnApplication(
         @builtins.property
         def application_code_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationCodeConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationCodeConfigurationProperty"]]:
             '''The code location and type parameters for a Managed Service for Apache Flink application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationconfiguration.html#cfn-kinesisanalyticsv2-application-applicationconfiguration-applicationcodeconfiguration
             '''
             result = self._values.get("application_code_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationCodeConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationCodeConfigurationProperty"]], result)
 
         @builtins.property
         def application_encryption_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationEncryptionConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationEncryptionConfigurationProperty"]]:
             '''The configuration to manage encryption at rest.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationconfiguration.html#cfn-kinesisanalyticsv2-application-applicationconfiguration-applicationencryptionconfiguration
             '''
             result = self._values.get("application_encryption_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationEncryptionConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationEncryptionConfigurationProperty"]], result)
 
         @builtins.property
         def application_snapshot_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationSnapshotConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationSnapshotConfigurationProperty"]]:
             '''Describes whether snapshots are enabled for a Managed Service for Apache Flink application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationconfiguration.html#cfn-kinesisanalyticsv2-application-applicationconfiguration-applicationsnapshotconfiguration
             '''
             result = self._values.get("application_snapshot_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationSnapshotConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationSnapshotConfigurationProperty"]], result)
 
         @builtins.property
         def application_system_rollback_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationSystemRollbackConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationSystemRollbackConfigurationProperty"]]:
             '''Describes whether system rollbacks are enabled for a Managed Service for Apache Flink application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationconfiguration.html#cfn-kinesisanalyticsv2-application-applicationconfiguration-applicationsystemrollbackconfiguration
             '''
             result = self._values.get("application_system_rollback_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationSystemRollbackConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationSystemRollbackConfigurationProperty"]], result)
 
         @builtins.property
         def environment_properties(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.EnvironmentPropertiesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.EnvironmentPropertiesProperty"]]:
             '''Describes execution properties for a Managed Service for Apache Flink application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationconfiguration.html#cfn-kinesisanalyticsv2-application-applicationconfiguration-environmentproperties
             '''
             result = self._values.get("environment_properties")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.EnvironmentPropertiesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.EnvironmentPropertiesProperty"]], result)
 
         @builtins.property
         def flink_application_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.FlinkApplicationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.FlinkApplicationConfigurationProperty"]]:
             '''The creation and update parameters for a Managed Service for Apache Flink application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationconfiguration.html#cfn-kinesisanalyticsv2-application-applicationconfiguration-flinkapplicationconfiguration
             '''
             result = self._values.get("flink_application_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.FlinkApplicationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.FlinkApplicationConfigurationProperty"]], result)
 
         @builtins.property
         def sql_application_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.SqlApplicationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.SqlApplicationConfigurationProperty"]]:
             '''The creation and update parameters for a SQL-based Kinesis Data Analytics application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationconfiguration.html#cfn-kinesisanalyticsv2-application-applicationconfiguration-sqlapplicationconfiguration
             '''
             result = self._values.get("sql_application_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.SqlApplicationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.SqlApplicationConfigurationProperty"]], result)
 
         @builtins.property
         def vpc_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.VpcConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.VpcConfigurationProperty"]]]]:
             '''The array of descriptions of VPC configurations available to the application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationconfiguration.html#cfn-kinesisanalyticsv2-application-applicationconfiguration-vpcconfigurations
             '''
             result = self._values.get("vpc_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.VpcConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.VpcConfigurationProperty"]]]], result)
 
         @builtins.property
         def zeppelin_application_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ZeppelinApplicationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ZeppelinApplicationConfigurationProperty"]]:
             '''The configuration parameters for a Kinesis Data Analytics Studio notebook.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationconfiguration.html#cfn-kinesisanalyticsv2-application-applicationconfiguration-zeppelinapplicationconfiguration
             '''
             result = self._values.get("zeppelin_application_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ZeppelinApplicationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ZeppelinApplicationConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1191,7 +1192,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            snapshots_enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            snapshots_enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Describes whether snapshots are enabled for a Managed Service for Apache Flink application.
 
@@ -1220,14 +1221,14 @@ class CfnApplication(
         @builtins.property
         def snapshots_enabled(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Describes whether snapshots are enabled for a Managed Service for Apache Flink application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationsnapshotconfiguration.html#cfn-kinesisanalyticsv2-application-applicationsnapshotconfiguration-snapshotsenabled
             '''
             result = self._values.get("snapshots_enabled")
             assert result is not None, "Required property 'snapshots_enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1249,7 +1250,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            rollback_enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            rollback_enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Describes the system rollback configuration for a Managed Service for Apache Flink application.
 
@@ -1278,14 +1279,14 @@ class CfnApplication(
         @builtins.property
         def rollback_enabled(
             self,
-        ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Describes whether system rollbacks are enabled for a Managed Service for Apache Flink application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-applicationsystemrollbackconfiguration.html#cfn-kinesisanalyticsv2-application-applicationsystemrollbackconfiguration-rollbackenabled
             '''
             result = self._values.get("rollback_enabled")
             assert result is not None, "Required property 'rollback_enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1393,7 +1394,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            glue_data_catalog_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.GlueDataCatalogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            glue_data_catalog_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.GlueDataCatalogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration parameters for the default Amazon Glue database.
 
@@ -1426,7 +1427,7 @@ class CfnApplication(
         @builtins.property
         def glue_data_catalog_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.GlueDataCatalogConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.GlueDataCatalogConfigurationProperty"]]:
             '''The configuration parameters for the default Amazon Glue database.
 
             You use this database for Apache Flink SQL queries and table API transforms that you write in a Kinesis Data Analytics Studio notebook.
@@ -1434,7 +1435,7 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-catalogconfiguration.html#cfn-kinesisanalyticsv2-application-catalogconfiguration-gluedatacatalogconfiguration
             '''
             result = self._values.get("glue_data_catalog_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.GlueDataCatalogConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.GlueDataCatalogConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1462,7 +1463,7 @@ class CfnApplication(
             self,
             *,
             configuration_type: builtins.str,
-            checkpointing_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            checkpointing_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             checkpoint_interval: typing.Optional[jsii.Number] = None,
             min_pause_between_checkpoints: typing.Optional[jsii.Number] = None,
         ) -> None:
@@ -1531,7 +1532,7 @@ class CfnApplication(
         @builtins.property
         def checkpointing_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Describes whether checkpointing is enabled for a Managed Service for Apache Flink application.
 
             .. epigraph::
@@ -1541,7 +1542,7 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-checkpointconfiguration.html#cfn-kinesisanalyticsv2-application-checkpointconfiguration-checkpointingenabled
             '''
             result = self._values.get("checkpointing_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def checkpoint_interval(self) -> typing.Optional[jsii.Number]:
@@ -1594,7 +1595,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            s3_content_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.S3ContentLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_content_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.S3ContentLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             text_content: typing.Optional[builtins.str] = None,
             zip_file_content: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -1641,13 +1642,13 @@ class CfnApplication(
         @builtins.property
         def s3_content_location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.S3ContentLocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.S3ContentLocationProperty"]]:
             '''Information about the Amazon S3 bucket that contains the application code.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-codecontent.html#cfn-kinesisanalyticsv2-application-codecontent-s3contentlocation
             '''
             result = self._values.get("s3_content_location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.S3ContentLocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.S3ContentLocationProperty"]], result)
 
         @builtins.property
         def text_content(self) -> typing.Optional[builtins.str]:
@@ -1692,8 +1693,8 @@ class CfnApplication(
             self,
             *,
             artifact_type: builtins.str,
-            maven_reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.MavenReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_content_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.S3ContentLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            maven_reference: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.MavenReferenceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_content_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.S3ContentLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration of connectors and user-defined functions.
 
@@ -1756,24 +1757,24 @@ class CfnApplication(
         @builtins.property
         def maven_reference(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MavenReferenceProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MavenReferenceProperty"]]:
             '''The parameters required to fully specify a Maven reference.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-customartifactconfiguration.html#cfn-kinesisanalyticsv2-application-customartifactconfiguration-mavenreference
             '''
             result = self._values.get("maven_reference")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MavenReferenceProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MavenReferenceProperty"]], result)
 
         @builtins.property
         def s3_content_location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.S3ContentLocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.S3ContentLocationProperty"]]:
             '''The location of the custom artifacts.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-customartifactconfiguration.html#cfn-kinesisanalyticsv2-application-customartifactconfiguration-s3contentlocation
             '''
             result = self._values.get("s3_content_location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.S3ContentLocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.S3ContentLocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1795,7 +1796,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            s3_content_location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.S3ContentBaseLocationProperty", typing.Dict[builtins.str, typing.Any]]],
+            s3_content_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.S3ContentBaseLocationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''The information required to deploy a Kinesis Data Analytics Studio notebook as an application with durable state.
 
@@ -1829,14 +1830,14 @@ class CfnApplication(
         @builtins.property
         def s3_content_location(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnApplication.S3ContentBaseLocationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.S3ContentBaseLocationProperty"]:
             '''The description of an Amazon S3 object that contains the Amazon Data Analytics application, including the Amazon Resource Name (ARN) of the S3 bucket, the name of the Amazon S3 object that contains the data, and the version number of the Amazon S3 object that contains the data.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-deployasapplicationconfiguration.html#cfn-kinesisanalyticsv2-application-deployasapplicationconfiguration-s3contentlocation
             '''
             result = self._values.get("s3_content_location")
             assert result is not None, "Required property 's3_content_location' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplication.S3ContentBaseLocationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.S3ContentBaseLocationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1858,7 +1859,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            property_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.PropertyGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            property_groups: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.PropertyGroupProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Describes execution properties for a Managed Service for Apache Flink application.
 
@@ -1892,13 +1893,13 @@ class CfnApplication(
         @builtins.property
         def property_groups(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.PropertyGroupProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.PropertyGroupProperty"]]]]:
             '''Describes the execution property groups.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-environmentproperties.html#cfn-kinesisanalyticsv2-application-environmentproperties-propertygroups
             '''
             result = self._values.get("property_groups")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.PropertyGroupProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.PropertyGroupProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1924,9 +1925,9 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            checkpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.CheckpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            parallelism_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ParallelismConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            checkpoint_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.CheckpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            monitoring_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            parallelism_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ParallelismConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes configuration parameters for a Managed Service for Apache Flink application or a Studio notebook.
 
@@ -1985,7 +1986,7 @@ class CfnApplication(
         @builtins.property
         def checkpoint_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.CheckpointConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.CheckpointConfigurationProperty"]]:
             '''Describes an application's checkpointing configuration.
 
             Checkpointing is the process of persisting application state for fault tolerance. For more information, see `Checkpoints for Fault Tolerance <https://docs.aws.amazon.com/https://ci.apache.org/projects/flink/flink-docs-release-1.8/concepts/programming-model.html#checkpoints-for-fault-tolerance>`_ in the `Apache Flink Documentation <https://docs.aws.amazon.com/https://ci.apache.org/projects/flink/flink-docs-release-1.8/>`_ .
@@ -1993,29 +1994,29 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-flinkapplicationconfiguration.html#cfn-kinesisanalyticsv2-application-flinkapplicationconfiguration-checkpointconfiguration
             '''
             result = self._values.get("checkpoint_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.CheckpointConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.CheckpointConfigurationProperty"]], result)
 
         @builtins.property
         def monitoring_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MonitoringConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MonitoringConfigurationProperty"]]:
             '''Describes configuration parameters for Amazon CloudWatch logging for an application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-flinkapplicationconfiguration.html#cfn-kinesisanalyticsv2-application-flinkapplicationconfiguration-monitoringconfiguration
             '''
             result = self._values.get("monitoring_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MonitoringConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MonitoringConfigurationProperty"]], result)
 
         @builtins.property
         def parallelism_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ParallelismConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ParallelismConfigurationProperty"]]:
             '''Describes parameters for how an application executes multiple tasks simultaneously.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-flinkapplicationconfiguration.html#cfn-kinesisanalyticsv2-application-flinkapplicationconfiguration-parallelismconfiguration
             '''
             result = self._values.get("parallelism_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ParallelismConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ParallelismConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2037,7 +2038,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            allow_non_restored_state: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            allow_non_restored_state: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Describes the starting parameters for a Managed Service for Apache Flink application.
 
@@ -2066,7 +2067,7 @@ class CfnApplication(
         @builtins.property
         def allow_non_restored_state(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''When restoring from a snapshot, specifies whether the runtime is allowed to skip a state that cannot be mapped to the new program.
 
             This will happen if the program is updated between snapshots to remove stateful parameters, and state data in the snapshot no longer corresponds to valid application data. For more information, see `Allowing Non-Restored State <https://docs.aws.amazon.com/https://nightlies.apache.org/flink/flink-docs-master/docs/ops/state/savepoints/#allowing-non-restored-state>`_ in the `Apache Flink documentation <https://docs.aws.amazon.com/https://nightlies.apache.org/flink/flink-docs-master>`_ .
@@ -2077,7 +2078,7 @@ class CfnApplication(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-flinkrunconfiguration.html#cfn-kinesisanalyticsv2-application-flinkrunconfiguration-allownonrestoredstate
             '''
             result = self._values.get("allow_non_restored_state")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2261,7 +2262,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            input_lambda_processor: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.InputLambdaProcessorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            input_lambda_processor: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.InputLambdaProcessorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''For an SQL-based Amazon Kinesis Data Analytics application, describes a processor that is used to preprocess the records in the stream before being processed by your application code.
 
@@ -2294,13 +2295,13 @@ class CfnApplication(
         @builtins.property
         def input_lambda_processor(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.InputLambdaProcessorProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.InputLambdaProcessorProperty"]]:
             '''The `InputLambdaProcessor <https://docs.aws.amazon.com/managed-flink/latest/apiv2/API_InputLambdaProcessor.html>`_ that is used to preprocess the records in the stream before being processed by your application code.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-inputprocessingconfiguration.html#cfn-kinesisanalyticsv2-application-inputprocessingconfiguration-inputlambdaprocessor
             '''
             result = self._values.get("input_lambda_processor")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.InputLambdaProcessorProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.InputLambdaProcessorProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2329,12 +2330,12 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            input_schema: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.InputSchemaProperty", typing.Dict[builtins.str, typing.Any]]],
+            input_schema: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.InputSchemaProperty", typing.Dict[builtins.str, typing.Any]]],
             name_prefix: builtins.str,
-            input_parallelism: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.InputParallelismProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            input_processing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.InputProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            kinesis_firehose_input: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.KinesisFirehoseInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            kinesis_streams_input: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.KinesisStreamsInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            input_parallelism: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.InputParallelismProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            input_processing_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.InputProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            kinesis_firehose_input: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.KinesisFirehoseInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            kinesis_streams_input: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.KinesisStreamsInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''When you configure the application input for a SQL-based Kinesis Data Analytics application, you specify the streaming source, the in-application stream name that is created, and the mapping between the two.
 
@@ -2424,7 +2425,7 @@ class CfnApplication(
         @builtins.property
         def input_schema(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnApplication.InputSchemaProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.InputSchemaProperty"]:
             '''Describes the format of the data in the streaming source, and how each data element maps to corresponding columns in the in-application stream that is being created.
 
             Also used to describe the format of the reference data source.
@@ -2433,7 +2434,7 @@ class CfnApplication(
             '''
             result = self._values.get("input_schema")
             assert result is not None, "Required property 'input_schema' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplication.InputSchemaProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.InputSchemaProperty"], result)
 
         @builtins.property
         def name_prefix(self) -> builtins.str:
@@ -2450,46 +2451,46 @@ class CfnApplication(
         @builtins.property
         def input_parallelism(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.InputParallelismProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.InputParallelismProperty"]]:
             '''Describes the number of in-application streams to create.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-input.html#cfn-kinesisanalyticsv2-application-input-inputparallelism
             '''
             result = self._values.get("input_parallelism")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.InputParallelismProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.InputParallelismProperty"]], result)
 
         @builtins.property
         def input_processing_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.InputProcessingConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.InputProcessingConfigurationProperty"]]:
             '''The `InputProcessingConfiguration <https://docs.aws.amazon.com/managed-flink/latest/apiv2/API_InputProcessingConfiguration.html>`_ for the input. An input processor transforms records as they are received from the stream, before the application's SQL code executes. Currently, the only input processing configuration available is `InputLambdaProcessor <https://docs.aws.amazon.com/managed-flink/latest/apiv2/API_InputLambdaProcessor.html>`_ .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-input.html#cfn-kinesisanalyticsv2-application-input-inputprocessingconfiguration
             '''
             result = self._values.get("input_processing_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.InputProcessingConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.InputProcessingConfigurationProperty"]], result)
 
         @builtins.property
         def kinesis_firehose_input(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.KinesisFirehoseInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.KinesisFirehoseInputProperty"]]:
             '''If the streaming source is an Amazon Kinesis Data Firehose delivery stream, identifies the delivery stream's ARN.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-input.html#cfn-kinesisanalyticsv2-application-input-kinesisfirehoseinput
             '''
             result = self._values.get("kinesis_firehose_input")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.KinesisFirehoseInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.KinesisFirehoseInputProperty"]], result)
 
         @builtins.property
         def kinesis_streams_input(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.KinesisStreamsInputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.KinesisStreamsInputProperty"]]:
             '''If the streaming source is an Amazon Kinesis data stream, identifies the stream's Amazon Resource Name (ARN).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-input.html#cfn-kinesisanalyticsv2-application-input-kinesisstreamsinput
             '''
             result = self._values.get("kinesis_streams_input")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.KinesisStreamsInputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.KinesisStreamsInputProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2515,8 +2516,8 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            record_columns: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.RecordColumnProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            record_format: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.RecordFormatProperty", typing.Dict[builtins.str, typing.Any]]],
+            record_columns: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.RecordColumnProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            record_format: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.RecordFormatProperty", typing.Dict[builtins.str, typing.Any]]],
             record_encoding: typing.Optional[builtins.str] = None,
         ) -> None:
             '''For a SQL-based Kinesis Data Analytics application, describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream.
@@ -2576,26 +2577,26 @@ class CfnApplication(
         @builtins.property
         def record_columns(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.RecordColumnProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.RecordColumnProperty"]]]:
             '''A list of ``RecordColumn`` objects.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-inputschema.html#cfn-kinesisanalyticsv2-application-inputschema-recordcolumns
             '''
             result = self._values.get("record_columns")
             assert result is not None, "Required property 'record_columns' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.RecordColumnProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.RecordColumnProperty"]]], result)
 
         @builtins.property
         def record_format(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnApplication.RecordFormatProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.RecordFormatProperty"]:
             '''Specifies the format of the records on the streaming source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-inputschema.html#cfn-kinesisanalyticsv2-application-inputschema-recordformat
             '''
             result = self._values.get("record_format")
             assert result is not None, "Required property 'record_format' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplication.RecordFormatProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.RecordFormatProperty"], result)
 
         @builtins.property
         def record_encoding(self) -> typing.Optional[builtins.str]:
@@ -2791,8 +2792,8 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            csv_mapping_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.CSVMappingParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            json_mapping_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.JSONMappingParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            csv_mapping_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.CSVMappingParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            json_mapping_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.JSONMappingParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''When you configure a SQL-based Kinesis Data Analytics application's input at the time of creating or updating an application, provides additional mapping information specific to the record format (such as JSON, CSV, or record fields delimited by some delimiter) on the streaming source.
 
@@ -2831,24 +2832,24 @@ class CfnApplication(
         @builtins.property
         def csv_mapping_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.CSVMappingParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.CSVMappingParametersProperty"]]:
             '''Provides additional mapping information when the record format uses delimiters (for example, CSV).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-mappingparameters.html#cfn-kinesisanalyticsv2-application-mappingparameters-csvmappingparameters
             '''
             result = self._values.get("csv_mapping_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.CSVMappingParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.CSVMappingParametersProperty"]], result)
 
         @builtins.property
         def json_mapping_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.JSONMappingParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.JSONMappingParametersProperty"]]:
             '''Provides additional mapping information when JSON is the record format on the streaming source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-mappingparameters.html#cfn-kinesisanalyticsv2-application-mappingparameters-jsonmappingparameters
             '''
             result = self._values.get("json_mapping_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.JSONMappingParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.JSONMappingParametersProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3066,7 +3067,7 @@ class CfnApplication(
             self,
             *,
             configuration_type: builtins.str,
-            auto_scaling_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            auto_scaling_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             parallelism: typing.Optional[jsii.Number] = None,
             parallelism_per_kpu: typing.Optional[jsii.Number] = None,
         ) -> None:
@@ -3128,13 +3129,13 @@ class CfnApplication(
         @builtins.property
         def auto_scaling_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Describes whether the Managed Service for Apache Flink service can increase the parallelism of the application in response to increased throughput.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-parallelismconfiguration.html#cfn-kinesisanalyticsv2-application-parallelismconfiguration-autoscalingenabled
             '''
             result = self._values.get("auto_scaling_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def parallelism(self) -> typing.Optional[jsii.Number]:
@@ -3182,7 +3183,7 @@ class CfnApplication(
             self,
             *,
             property_group_id: typing.Optional[builtins.str] = None,
-            property_map: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            property_map: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Property key-value pairs passed into an application.
 
@@ -3227,13 +3228,13 @@ class CfnApplication(
         @builtins.property
         def property_map(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Describes the value of an application execution property key-value pair.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-propertygroup.html#cfn-kinesisanalyticsv2-application-propertygroup-propertymap
             '''
             result = self._values.get("property_map")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3349,7 +3350,7 @@ class CfnApplication(
             self,
             *,
             record_format_type: builtins.str,
-            mapping_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.MappingParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mapping_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.MappingParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''For a SQL-based Kinesis Data Analytics application, describes the record format and relevant mapping information that should be applied to schematize the records on the stream.
 
@@ -3403,13 +3404,13 @@ class CfnApplication(
         @builtins.property
         def mapping_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MappingParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MappingParametersProperty"]]:
             '''When you configure application input at the time of creating or updating an application, provides additional mapping information specific to the record format (such as JSON, CSV, or record fields delimited by some delimiter) on the streaming source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-recordformat.html#cfn-kinesisanalyticsv2-application-recordformat-mappingparameters
             '''
             result = self._values.get("mapping_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.MappingParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.MappingParametersProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3434,8 +3435,8 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            application_restore_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationRestoreConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            flink_run_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.FlinkRunConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            application_restore_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationRestoreConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            flink_run_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.FlinkRunConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the starting parameters for an Managed Service for Apache Flink application.
 
@@ -3476,24 +3477,24 @@ class CfnApplication(
         @builtins.property
         def application_restore_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationRestoreConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationRestoreConfigurationProperty"]]:
             '''Describes the restore behavior of a restarting application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-runconfiguration.html#cfn-kinesisanalyticsv2-application-runconfiguration-applicationrestoreconfiguration
             '''
             result = self._values.get("application_restore_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ApplicationRestoreConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationRestoreConfigurationProperty"]], result)
 
         @builtins.property
         def flink_run_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.FlinkRunConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.FlinkRunConfigurationProperty"]]:
             '''Describes the starting parameters for a Managed Service for Apache Flink application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-runconfiguration.html#cfn-kinesisanalyticsv2-application-runconfiguration-flinkrunconfiguration
             '''
             result = self._values.get("flink_run_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.FlinkRunConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.FlinkRunConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3680,7 +3681,7 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            inputs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.InputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            inputs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.InputProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Describes the inputs, outputs, and reference data sources for a SQL-based Kinesis Data Analytics application.
 
@@ -3753,13 +3754,13 @@ class CfnApplication(
         @builtins.property
         def inputs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.InputProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.InputProperty"]]]]:
             '''The array of `Input <https://docs.aws.amazon.com/managed-flink/latest/apiv2/API_Input.html>`_ objects describing the input streams used by the application.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-sqlapplicationconfiguration.html#cfn-kinesisanalyticsv2-application-sqlapplicationconfiguration-inputs
             '''
             result = self._values.get("inputs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.InputProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.InputProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3860,10 +3861,10 @@ class CfnApplication(
         def __init__(
             self,
             *,
-            catalog_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.CatalogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            custom_artifacts_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.CustomArtifactConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            deploy_as_application_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.DeployAsApplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ZeppelinMonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            catalog_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.CatalogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom_artifacts_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.CustomArtifactConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            deploy_as_application_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.DeployAsApplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            monitoring_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ZeppelinMonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration of a Kinesis Data Analytics Studio notebook.
 
@@ -3936,46 +3937,46 @@ class CfnApplication(
         @builtins.property
         def catalog_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.CatalogConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.CatalogConfigurationProperty"]]:
             '''The Amazon Glue Data Catalog that you use in queries in a Kinesis Data Analytics Studio notebook.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-zeppelinapplicationconfiguration.html#cfn-kinesisanalyticsv2-application-zeppelinapplicationconfiguration-catalogconfiguration
             '''
             result = self._values.get("catalog_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.CatalogConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.CatalogConfigurationProperty"]], result)
 
         @builtins.property
         def custom_artifacts_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.CustomArtifactConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.CustomArtifactConfigurationProperty"]]]]:
             '''A list of ``CustomArtifactConfiguration`` objects.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-zeppelinapplicationconfiguration.html#cfn-kinesisanalyticsv2-application-zeppelinapplicationconfiguration-customartifactsconfiguration
             '''
             result = self._values.get("custom_artifacts_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplication.CustomArtifactConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplication.CustomArtifactConfigurationProperty"]]]], result)
 
         @builtins.property
         def deploy_as_application_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.DeployAsApplicationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.DeployAsApplicationConfigurationProperty"]]:
             '''The information required to deploy a Kinesis Data Analytics Studio notebook as an application with durable state.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-zeppelinapplicationconfiguration.html#cfn-kinesisanalyticsv2-application-zeppelinapplicationconfiguration-deployasapplicationconfiguration
             '''
             result = self._values.get("deploy_as_application_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.DeployAsApplicationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.DeployAsApplicationConfigurationProperty"]], result)
 
         @builtins.property
         def monitoring_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ZeppelinMonitoringConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ZeppelinMonitoringConfigurationProperty"]]:
             '''The monitoring configuration of a Kinesis Data Analytics Studio notebook.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-application-zeppelinapplicationconfiguration.html#cfn-kinesisanalyticsv2-application-zeppelinapplicationconfiguration-monitoringconfiguration
             '''
             result = self._values.get("monitoring_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.ZeppelinMonitoringConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ZeppelinMonitoringConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4076,11 +4077,11 @@ class CfnApplicationCloudWatchLoggingOption(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_name: builtins.str,
-        cloud_watch_logging_option: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty", typing.Dict[builtins.str, typing.Any]]],
+        cloud_watch_logging_option: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::KinesisAnalyticsV2::ApplicationCloudWatchLoggingOption``.
 
@@ -4116,7 +4117,7 @@ class CfnApplicationCloudWatchLoggingOption(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationCloudWatchLoggingOption", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4149,9 +4150,9 @@ class CfnApplicationCloudWatchLoggingOption(
     @jsii.member(jsii_name="applicationCloudWatchLoggingOptionRef")
     def application_cloud_watch_logging_option_ref(
         self,
-    ) -> _ApplicationCloudWatchLoggingOptionReference_7dfe072d:
+    ) -> "_ApplicationCloudWatchLoggingOptionReference_7dfe072d":
         '''A reference to a ApplicationCloudWatchLoggingOption resource.'''
-        return typing.cast(_ApplicationCloudWatchLoggingOptionReference_7dfe072d, jsii.get(self, "applicationCloudWatchLoggingOptionRef"))
+        return typing.cast("_ApplicationCloudWatchLoggingOptionReference_7dfe072d", jsii.get(self, "applicationCloudWatchLoggingOptionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -4183,14 +4184,14 @@ class CfnApplicationCloudWatchLoggingOption(
     @jsii.member(jsii_name="cloudWatchLoggingOption")
     def cloud_watch_logging_option(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty"]:
         '''Provides a description of Amazon CloudWatch logging options, including the log stream Amazon Resource Name (ARN).'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty"], jsii.get(self, "cloudWatchLoggingOption"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty"], jsii.get(self, "cloudWatchLoggingOption"))
 
     @cloud_watch_logging_option.setter
     def cloud_watch_logging_option(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__416cee59c53a666f8bbc01b2942491b8081db5bb65364b11078b16f208a3e7bd)
@@ -4263,7 +4264,7 @@ class CfnApplicationCloudWatchLoggingOptionProps:
         self,
         *,
         application_name: builtins.str,
-        cloud_watch_logging_option: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty, typing.Dict[builtins.str, typing.Any]]],
+        cloud_watch_logging_option: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnApplicationCloudWatchLoggingOption``.
 
@@ -4308,14 +4309,14 @@ class CfnApplicationCloudWatchLoggingOptionProps:
     @builtins.property
     def cloud_watch_logging_option(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty"]:
         '''Provides a description of Amazon CloudWatch logging options, including the log stream Amazon Resource Name (ARN).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalyticsv2-applicationcloudwatchloggingoption.html#cfn-kinesisanalyticsv2-applicationcloudwatchloggingoption-cloudwatchloggingoption
         '''
         result = self._values.get("cloud_watch_logging_option")
         assert result is not None, "Required property 'cloud_watch_logging_option' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplicationCloudWatchLoggingOption.CloudWatchLoggingOptionProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4380,11 +4381,11 @@ class CfnApplicationOutput(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_name: builtins.str,
-        output: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationOutput.OutputProperty", typing.Dict[builtins.str, typing.Any]]],
+        output: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationOutput.OutputProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::KinesisAnalyticsV2::ApplicationOutput``.
 
@@ -4416,7 +4417,7 @@ class CfnApplicationOutput(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationOutput", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4447,9 +4448,9 @@ class CfnApplicationOutput(
 
     @builtins.property
     @jsii.member(jsii_name="applicationOutputRef")
-    def application_output_ref(self) -> _ApplicationOutputReference_157ab52d:
+    def application_output_ref(self) -> "_ApplicationOutputReference_157ab52d":
         '''A reference to a ApplicationOutput resource.'''
-        return typing.cast(_ApplicationOutputReference_157ab52d, jsii.get(self, "applicationOutputRef"))
+        return typing.cast("_ApplicationOutputReference_157ab52d", jsii.get(self, "applicationOutputRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -4481,14 +4482,14 @@ class CfnApplicationOutput(
     @jsii.member(jsii_name="output")
     def output(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnApplicationOutput.OutputProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.OutputProperty"]:
         '''Describes a SQL-based Kinesis Data Analytics application's output configuration, in which you identify an in-application stream and a destination where you want the in-application stream data to be written.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplicationOutput.OutputProperty"], jsii.get(self, "output"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.OutputProperty"], jsii.get(self, "output"))
 
     @output.setter
     def output(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnApplicationOutput.OutputProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.OutputProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__91bb8a65adbac2b94993092f229f8eb3db0475a55b5e4205baea5c25e71e80fb)
@@ -4731,10 +4732,10 @@ class CfnApplicationOutput(
         def __init__(
             self,
             *,
-            destination_schema: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationOutput.DestinationSchemaProperty", typing.Dict[builtins.str, typing.Any]]],
-            kinesis_firehose_output: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationOutput.KinesisFirehoseOutputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            kinesis_streams_output: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationOutput.KinesisStreamsOutputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            lambda_output: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationOutput.LambdaOutputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            destination_schema: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationOutput.DestinationSchemaProperty", typing.Dict[builtins.str, typing.Any]]],
+            kinesis_firehose_output: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationOutput.KinesisFirehoseOutputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            kinesis_streams_output: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationOutput.KinesisStreamsOutputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lambda_output: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationOutput.LambdaOutputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             name: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Describes a SQL-based Kinesis Data Analytics application's output configuration, in which you identify an in-application stream and a destination where you want the in-application stream data to be written.
@@ -4796,47 +4797,47 @@ class CfnApplicationOutput(
         @builtins.property
         def destination_schema(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnApplicationOutput.DestinationSchemaProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.DestinationSchemaProperty"]:
             '''Describes the data format when records are written to the destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-applicationoutput-output.html#cfn-kinesisanalyticsv2-applicationoutput-output-destinationschema
             '''
             result = self._values.get("destination_schema")
             assert result is not None, "Required property 'destination_schema' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplicationOutput.DestinationSchemaProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.DestinationSchemaProperty"], result)
 
         @builtins.property
         def kinesis_firehose_output(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationOutput.KinesisFirehoseOutputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.KinesisFirehoseOutputProperty"]]:
             '''Identifies a Kinesis Data Firehose delivery stream as the destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-applicationoutput-output.html#cfn-kinesisanalyticsv2-applicationoutput-output-kinesisfirehoseoutput
             '''
             result = self._values.get("kinesis_firehose_output")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationOutput.KinesisFirehoseOutputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.KinesisFirehoseOutputProperty"]], result)
 
         @builtins.property
         def kinesis_streams_output(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationOutput.KinesisStreamsOutputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.KinesisStreamsOutputProperty"]]:
             '''Identifies a Kinesis data stream as the destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-applicationoutput-output.html#cfn-kinesisanalyticsv2-applicationoutput-output-kinesisstreamsoutput
             '''
             result = self._values.get("kinesis_streams_output")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationOutput.KinesisStreamsOutputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.KinesisStreamsOutputProperty"]], result)
 
         @builtins.property
         def lambda_output(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationOutput.LambdaOutputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.LambdaOutputProperty"]]:
             '''Identifies an Amazon Lambda function as the destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-applicationoutput-output.html#cfn-kinesisanalyticsv2-applicationoutput-output-lambdaoutput
             '''
             result = self._values.get("lambda_output")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationOutput.LambdaOutputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.LambdaOutputProperty"]], result)
 
         @builtins.property
         def name(self) -> typing.Optional[builtins.str]:
@@ -4869,7 +4870,7 @@ class CfnApplicationOutputProps:
         self,
         *,
         application_name: builtins.str,
-        output: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationOutput.OutputProperty, typing.Dict[builtins.str, typing.Any]]],
+        output: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationOutput.OutputProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnApplicationOutput``.
 
@@ -4928,7 +4929,7 @@ class CfnApplicationOutputProps:
     @builtins.property
     def output(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnApplicationOutput.OutputProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.OutputProperty"]:
         '''Describes a SQL-based Kinesis Data Analytics application's output configuration, in which you identify an in-application stream and a destination where you want the in-application stream data to be written.
 
         The destination can be a Kinesis data stream or a Kinesis Data Firehose delivery stream.
@@ -4937,7 +4938,7 @@ class CfnApplicationOutputProps:
         '''
         result = self._values.get("output")
         assert result is not None, "Required property 'output' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnApplicationOutput.OutputProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplicationOutput.OutputProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4971,14 +4972,14 @@ class CfnApplicationProps:
         self,
         *,
         runtime_environment: builtins.str,
-        service_execution_role: typing.Union[builtins.str, _IRoleRef_8400221f],
-        application_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        service_execution_role: typing.Union[builtins.str, "_IRoleRef_8400221f"],
+        application_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         application_description: typing.Optional[builtins.str] = None,
-        application_maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationMaintenanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        application_maintenance_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.ApplicationMaintenanceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         application_mode: typing.Optional[builtins.str] = None,
         application_name: typing.Optional[builtins.str] = None,
-        run_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.RunConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        run_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.RunConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplication``.
 
@@ -4997,6 +4998,7 @@ class CfnApplicationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_kinesisanalyticsv2 as kinesisanalyticsv2
@@ -5217,25 +5219,27 @@ class CfnApplicationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def service_execution_role(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def service_execution_role(
+        self,
+    ) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''Specifies the IAM role that the application uses to access external resources.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalyticsv2-application.html#cfn-kinesisanalyticsv2-application-serviceexecutionrole
         '''
         result = self._values.get("service_execution_role")
         assert result is not None, "Required property 'service_execution_role' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def application_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationConfigurationProperty"]]:
         '''Use this parameter to configure the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalyticsv2-application.html#cfn-kinesisanalyticsv2-application-applicationconfiguration
         '''
         result = self._values.get("application_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationConfigurationProperty"]], result)
 
     @builtins.property
     def application_description(self) -> typing.Optional[builtins.str]:
@@ -5251,13 +5255,13 @@ class CfnApplicationProps:
     @builtins.property
     def application_maintenance_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationMaintenanceConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationMaintenanceConfigurationProperty"]]:
         '''Specifies the maintenance window parameters for a Kinesis Data Analytics application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalyticsv2-application.html#cfn-kinesisanalyticsv2-application-applicationmaintenanceconfiguration
         '''
         result = self._values.get("application_maintenance_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.ApplicationMaintenanceConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.ApplicationMaintenanceConfigurationProperty"]], result)
 
     @builtins.property
     def application_mode(self) -> typing.Optional[builtins.str]:
@@ -5282,16 +5286,16 @@ class CfnApplicationProps:
     @builtins.property
     def run_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.RunConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.RunConfigurationProperty"]]:
         '''Describes the starting parameters for an Managed Service for Apache Flink application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalyticsv2-application.html#cfn-kinesisanalyticsv2-application-runconfiguration
         '''
         result = self._values.get("run_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.RunConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.RunConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of one or more tags to assign to the application.
 
         A tag is a key-value pair that identifies an application. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50.
@@ -5299,7 +5303,7 @@ class CfnApplicationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalyticsv2-application.html#cfn-kinesisanalyticsv2-application-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5375,11 +5379,11 @@ class CfnApplicationReferenceDataSource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_name: builtins.str,
-        reference_data_source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationReferenceDataSource.ReferenceDataSourceProperty", typing.Dict[builtins.str, typing.Any]]],
+        reference_data_source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationReferenceDataSource.ReferenceDataSourceProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::KinesisAnalyticsV2::ApplicationReferenceDataSource``.
 
@@ -5412,7 +5416,7 @@ class CfnApplicationReferenceDataSource(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationReferenceDataSource", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5445,9 +5449,9 @@ class CfnApplicationReferenceDataSource(
     @jsii.member(jsii_name="applicationReferenceDataSourceRef")
     def application_reference_data_source_ref(
         self,
-    ) -> _ApplicationReferenceDataSourceReference_462bf76c:
+    ) -> "_ApplicationReferenceDataSourceReference_462bf76c":
         '''A reference to a ApplicationReferenceDataSource resource.'''
-        return typing.cast(_ApplicationReferenceDataSourceReference_462bf76c, jsii.get(self, "applicationReferenceDataSourceRef"))
+        return typing.cast("_ApplicationReferenceDataSourceReference_462bf76c", jsii.get(self, "applicationReferenceDataSourceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -5479,14 +5483,14 @@ class CfnApplicationReferenceDataSource(
     @jsii.member(jsii_name="referenceDataSource")
     def reference_data_source(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.ReferenceDataSourceProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.ReferenceDataSourceProperty"]:
         '''For a SQL-based Kinesis Data Analytics application, describes the reference data source by providing the source information (Amazon S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.ReferenceDataSourceProperty"], jsii.get(self, "referenceDataSource"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.ReferenceDataSourceProperty"], jsii.get(self, "referenceDataSource"))
 
     @reference_data_source.setter
     def reference_data_source(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.ReferenceDataSourceProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.ReferenceDataSourceProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__33c2b40d772882c9571cbc56ba5fc9e7ec6ec48c7133c8292964c2b9b0f1a608)
@@ -5641,8 +5645,8 @@ class CfnApplicationReferenceDataSource(
         def __init__(
             self,
             *,
-            csv_mapping_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationReferenceDataSource.CSVMappingParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            json_mapping_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationReferenceDataSource.JSONMappingParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            csv_mapping_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationReferenceDataSource.CSVMappingParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            json_mapping_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationReferenceDataSource.JSONMappingParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''When you configure a SQL-based Kinesis Data Analytics application's input at the time of creating or updating an application, provides additional mapping information specific to the record format (such as JSON, CSV, or record fields delimited by some delimiter) on the streaming source.
 
@@ -5681,24 +5685,24 @@ class CfnApplicationReferenceDataSource(
         @builtins.property
         def csv_mapping_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.CSVMappingParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.CSVMappingParametersProperty"]]:
             '''Provides additional mapping information when the record format uses delimiters (for example, CSV).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-applicationreferencedatasource-mappingparameters.html#cfn-kinesisanalyticsv2-applicationreferencedatasource-mappingparameters-csvmappingparameters
             '''
             result = self._values.get("csv_mapping_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.CSVMappingParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.CSVMappingParametersProperty"]], result)
 
         @builtins.property
         def json_mapping_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.JSONMappingParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.JSONMappingParametersProperty"]]:
             '''Provides additional mapping information when JSON is the record format on the streaming source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-applicationreferencedatasource-mappingparameters.html#cfn-kinesisanalyticsv2-applicationreferencedatasource-mappingparameters-jsonmappingparameters
             '''
             result = self._values.get("json_mapping_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.JSONMappingParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.JSONMappingParametersProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5814,7 +5818,7 @@ class CfnApplicationReferenceDataSource(
             self,
             *,
             record_format_type: builtins.str,
-            mapping_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationReferenceDataSource.MappingParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            mapping_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationReferenceDataSource.MappingParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''For a SQL-based Kinesis Data Analytics application, describes the record format and relevant mapping information that should be applied to schematize the records on the stream.
 
@@ -5868,13 +5872,13 @@ class CfnApplicationReferenceDataSource(
         @builtins.property
         def mapping_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.MappingParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.MappingParametersProperty"]]:
             '''When you configure application input at the time of creating or updating an application, provides additional mapping information specific to the record format (such as JSON, CSV, or record fields delimited by some delimiter) on the streaming source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-applicationreferencedatasource-recordformat.html#cfn-kinesisanalyticsv2-applicationreferencedatasource-recordformat-mappingparameters
             '''
             result = self._values.get("mapping_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.MappingParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.MappingParametersProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5900,8 +5904,8 @@ class CfnApplicationReferenceDataSource(
         def __init__(
             self,
             *,
-            reference_schema: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationReferenceDataSource.ReferenceSchemaProperty", typing.Dict[builtins.str, typing.Any]]],
-            s3_reference_data_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationReferenceDataSource.S3ReferenceDataSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            reference_schema: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationReferenceDataSource.ReferenceSchemaProperty", typing.Dict[builtins.str, typing.Any]]],
+            s3_reference_data_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationReferenceDataSource.S3ReferenceDataSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             table_name: typing.Optional[builtins.str] = None,
         ) -> None:
             '''For a SQL-based Kinesis Data Analytics application, describes the reference data source by providing the source information (Amazon S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.
@@ -5971,19 +5975,19 @@ class CfnApplicationReferenceDataSource(
         @builtins.property
         def reference_schema(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.ReferenceSchemaProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.ReferenceSchemaProperty"]:
             '''Describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-applicationreferencedatasource-referencedatasource.html#cfn-kinesisanalyticsv2-applicationreferencedatasource-referencedatasource-referenceschema
             '''
             result = self._values.get("reference_schema")
             assert result is not None, "Required property 'reference_schema' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.ReferenceSchemaProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.ReferenceSchemaProperty"], result)
 
         @builtins.property
         def s3_reference_data_source(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.S3ReferenceDataSourceProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.S3ReferenceDataSourceProperty"]]:
             '''Identifies the S3 bucket and object that contains the reference data.
 
             A Kinesis Data Analytics application loads reference data only once. If the data changes, you call the `UpdateApplication <https://docs.aws.amazon.com/managed-flink/latest/apiv2/API_UpdateApplication.html>`_ operation to trigger reloading of data into your application.
@@ -5991,7 +5995,7 @@ class CfnApplicationReferenceDataSource(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-applicationreferencedatasource-referencedatasource.html#cfn-kinesisanalyticsv2-applicationreferencedatasource-referencedatasource-s3referencedatasource
             '''
             result = self._values.get("s3_reference_data_source")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.S3ReferenceDataSourceProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.S3ReferenceDataSourceProperty"]], result)
 
         @builtins.property
         def table_name(self) -> typing.Optional[builtins.str]:
@@ -6026,8 +6030,8 @@ class CfnApplicationReferenceDataSource(
         def __init__(
             self,
             *,
-            record_columns: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationReferenceDataSource.RecordColumnProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            record_format: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationReferenceDataSource.RecordFormatProperty", typing.Dict[builtins.str, typing.Any]]],
+            record_columns: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationReferenceDataSource.RecordColumnProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            record_format: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationReferenceDataSource.RecordFormatProperty", typing.Dict[builtins.str, typing.Any]]],
             record_encoding: typing.Optional[builtins.str] = None,
         ) -> None:
             '''For a SQL-based Kinesis Data Analytics application, describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream.
@@ -6087,26 +6091,26 @@ class CfnApplicationReferenceDataSource(
         @builtins.property
         def record_columns(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.RecordColumnProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.RecordColumnProperty"]]]:
             '''A list of ``RecordColumn`` objects.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-applicationreferencedatasource-referenceschema.html#cfn-kinesisanalyticsv2-applicationreferencedatasource-referenceschema-recordcolumns
             '''
             result = self._values.get("record_columns")
             assert result is not None, "Required property 'record_columns' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.RecordColumnProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.RecordColumnProperty"]]], result)
 
         @builtins.property
         def record_format(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.RecordFormatProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.RecordFormatProperty"]:
             '''Specifies the format of the records on the streaming source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalyticsv2-applicationreferencedatasource-referenceschema.html#cfn-kinesisanalyticsv2-applicationreferencedatasource-referenceschema-recordformat
             '''
             result = self._values.get("record_format")
             assert result is not None, "Required property 'record_format' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplicationReferenceDataSource.RecordFormatProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.RecordFormatProperty"], result)
 
         @builtins.property
         def record_encoding(self) -> typing.Optional[builtins.str]:
@@ -6212,7 +6216,7 @@ class CfnApplicationReferenceDataSourceProps:
         self,
         *,
         application_name: builtins.str,
-        reference_data_source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationReferenceDataSource.ReferenceDataSourceProperty, typing.Dict[builtins.str, typing.Any]]],
+        reference_data_source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationReferenceDataSource.ReferenceDataSourceProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnApplicationReferenceDataSource``.
 
@@ -6289,14 +6293,14 @@ class CfnApplicationReferenceDataSourceProps:
     @builtins.property
     def reference_data_source(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnApplicationReferenceDataSource.ReferenceDataSourceProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.ReferenceDataSourceProperty"]:
         '''For a SQL-based Kinesis Data Analytics application, describes the reference data source by providing the source information (Amazon S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalyticsv2-applicationreferencedatasource.html#cfn-kinesisanalyticsv2-applicationreferencedatasource-referencedatasource
         '''
         result = self._values.get("reference_data_source")
         assert result is not None, "Required property 'reference_data_source' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnApplicationReferenceDataSource.ReferenceDataSourceProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplicationReferenceDataSource.ReferenceDataSourceProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

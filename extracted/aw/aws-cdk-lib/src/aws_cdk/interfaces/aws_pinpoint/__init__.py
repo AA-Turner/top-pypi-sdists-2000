@@ -730,7 +730,7 @@ class IADMChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="admChannelRef")
-    def adm_channel_ref(self) -> ADMChannelReference:
+    def adm_channel_ref(self) -> "ADMChannelReference":
         '''(experimental) A reference to a ADMChannel resource.
 
         :stability: experimental
@@ -751,12 +751,12 @@ class _IADMChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="admChannelRef")
-    def adm_channel_ref(self) -> ADMChannelReference:
+    def adm_channel_ref(self) -> "ADMChannelReference":
         '''(experimental) A reference to a ADMChannel resource.
 
         :stability: experimental
         '''
-        return typing.cast(ADMChannelReference, jsii.get(self, "admChannelRef"))
+        return typing.cast("ADMChannelReference", jsii.get(self, "admChannelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IADMChannelRef).__jsii_proxy_class__ = lambda : _IADMChannelRefProxy
@@ -775,7 +775,7 @@ class IAPNSChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="apnsChannelRef")
-    def apns_channel_ref(self) -> APNSChannelReference:
+    def apns_channel_ref(self) -> "APNSChannelReference":
         '''(experimental) A reference to a APNSChannel resource.
 
         :stability: experimental
@@ -796,12 +796,12 @@ class _IAPNSChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="apnsChannelRef")
-    def apns_channel_ref(self) -> APNSChannelReference:
+    def apns_channel_ref(self) -> "APNSChannelReference":
         '''(experimental) A reference to a APNSChannel resource.
 
         :stability: experimental
         '''
-        return typing.cast(APNSChannelReference, jsii.get(self, "apnsChannelRef"))
+        return typing.cast("APNSChannelReference", jsii.get(self, "apnsChannelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAPNSChannelRef).__jsii_proxy_class__ = lambda : _IAPNSChannelRefProxy
@@ -820,7 +820,7 @@ class IAPNSSandboxChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="apnsSandboxChannelRef")
-    def apns_sandbox_channel_ref(self) -> APNSSandboxChannelReference:
+    def apns_sandbox_channel_ref(self) -> "APNSSandboxChannelReference":
         '''(experimental) A reference to a APNSSandboxChannel resource.
 
         :stability: experimental
@@ -841,12 +841,12 @@ class _IAPNSSandboxChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="apnsSandboxChannelRef")
-    def apns_sandbox_channel_ref(self) -> APNSSandboxChannelReference:
+    def apns_sandbox_channel_ref(self) -> "APNSSandboxChannelReference":
         '''(experimental) A reference to a APNSSandboxChannel resource.
 
         :stability: experimental
         '''
-        return typing.cast(APNSSandboxChannelReference, jsii.get(self, "apnsSandboxChannelRef"))
+        return typing.cast("APNSSandboxChannelReference", jsii.get(self, "apnsSandboxChannelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAPNSSandboxChannelRef).__jsii_proxy_class__ = lambda : _IAPNSSandboxChannelRefProxy
@@ -865,7 +865,7 @@ class IAPNSVoipChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="apnsVoipChannelRef")
-    def apns_voip_channel_ref(self) -> APNSVoipChannelReference:
+    def apns_voip_channel_ref(self) -> "APNSVoipChannelReference":
         '''(experimental) A reference to a APNSVoipChannel resource.
 
         :stability: experimental
@@ -886,12 +886,12 @@ class _IAPNSVoipChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="apnsVoipChannelRef")
-    def apns_voip_channel_ref(self) -> APNSVoipChannelReference:
+    def apns_voip_channel_ref(self) -> "APNSVoipChannelReference":
         '''(experimental) A reference to a APNSVoipChannel resource.
 
         :stability: experimental
         '''
-        return typing.cast(APNSVoipChannelReference, jsii.get(self, "apnsVoipChannelRef"))
+        return typing.cast("APNSVoipChannelReference", jsii.get(self, "apnsVoipChannelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAPNSVoipChannelRef).__jsii_proxy_class__ = lambda : _IAPNSVoipChannelRefProxy
@@ -912,7 +912,7 @@ class IAPNSVoipSandboxChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="apnsVoipSandboxChannelRef")
-    def apns_voip_sandbox_channel_ref(self) -> APNSVoipSandboxChannelReference:
+    def apns_voip_sandbox_channel_ref(self) -> "APNSVoipSandboxChannelReference":
         '''(experimental) A reference to a APNSVoipSandboxChannel resource.
 
         :stability: experimental
@@ -933,12 +933,12 @@ class _IAPNSVoipSandboxChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="apnsVoipSandboxChannelRef")
-    def apns_voip_sandbox_channel_ref(self) -> APNSVoipSandboxChannelReference:
+    def apns_voip_sandbox_channel_ref(self) -> "APNSVoipSandboxChannelReference":
         '''(experimental) A reference to a APNSVoipSandboxChannel resource.
 
         :stability: experimental
         '''
-        return typing.cast(APNSVoipSandboxChannelReference, jsii.get(self, "apnsVoipSandboxChannelRef"))
+        return typing.cast("APNSVoipSandboxChannelReference", jsii.get(self, "apnsVoipSandboxChannelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAPNSVoipSandboxChannelRef).__jsii_proxy_class__ = lambda : _IAPNSVoipSandboxChannelRefProxy
@@ -957,7 +957,7 @@ class IAppRef(
 
     @builtins.property
     @jsii.member(jsii_name="appRef")
-    def app_ref(self) -> AppReference:
+    def app_ref(self) -> "AppReference":
         '''(experimental) A reference to a App resource.
 
         :stability: experimental
@@ -978,12 +978,12 @@ class _IAppRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="appRef")
-    def app_ref(self) -> AppReference:
+    def app_ref(self) -> "AppReference":
         '''(experimental) A reference to a App resource.
 
         :stability: experimental
         '''
-        return typing.cast(AppReference, jsii.get(self, "appRef"))
+        return typing.cast("AppReference", jsii.get(self, "appRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAppRef).__jsii_proxy_class__ = lambda : _IAppRefProxy
@@ -1004,7 +1004,7 @@ class IApplicationSettingsRef(
 
     @builtins.property
     @jsii.member(jsii_name="applicationSettingsRef")
-    def application_settings_ref(self) -> ApplicationSettingsReference:
+    def application_settings_ref(self) -> "ApplicationSettingsReference":
         '''(experimental) A reference to a ApplicationSettings resource.
 
         :stability: experimental
@@ -1025,12 +1025,12 @@ class _IApplicationSettingsRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="applicationSettingsRef")
-    def application_settings_ref(self) -> ApplicationSettingsReference:
+    def application_settings_ref(self) -> "ApplicationSettingsReference":
         '''(experimental) A reference to a ApplicationSettings resource.
 
         :stability: experimental
         '''
-        return typing.cast(ApplicationSettingsReference, jsii.get(self, "applicationSettingsRef"))
+        return typing.cast("ApplicationSettingsReference", jsii.get(self, "applicationSettingsRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IApplicationSettingsRef).__jsii_proxy_class__ = lambda : _IApplicationSettingsRefProxy
@@ -1049,7 +1049,7 @@ class IBaiduChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="baiduChannelRef")
-    def baidu_channel_ref(self) -> BaiduChannelReference:
+    def baidu_channel_ref(self) -> "BaiduChannelReference":
         '''(experimental) A reference to a BaiduChannel resource.
 
         :stability: experimental
@@ -1070,12 +1070,12 @@ class _IBaiduChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="baiduChannelRef")
-    def baidu_channel_ref(self) -> BaiduChannelReference:
+    def baidu_channel_ref(self) -> "BaiduChannelReference":
         '''(experimental) A reference to a BaiduChannel resource.
 
         :stability: experimental
         '''
-        return typing.cast(BaiduChannelReference, jsii.get(self, "baiduChannelRef"))
+        return typing.cast("BaiduChannelReference", jsii.get(self, "baiduChannelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBaiduChannelRef).__jsii_proxy_class__ = lambda : _IBaiduChannelRefProxy
@@ -1094,7 +1094,7 @@ class ICampaignRef(
 
     @builtins.property
     @jsii.member(jsii_name="campaignRef")
-    def campaign_ref(self) -> CampaignReference:
+    def campaign_ref(self) -> "CampaignReference":
         '''(experimental) A reference to a Campaign resource.
 
         :stability: experimental
@@ -1115,12 +1115,12 @@ class _ICampaignRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="campaignRef")
-    def campaign_ref(self) -> CampaignReference:
+    def campaign_ref(self) -> "CampaignReference":
         '''(experimental) A reference to a Campaign resource.
 
         :stability: experimental
         '''
-        return typing.cast(CampaignReference, jsii.get(self, "campaignRef"))
+        return typing.cast("CampaignReference", jsii.get(self, "campaignRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICampaignRef).__jsii_proxy_class__ = lambda : _ICampaignRefProxy
@@ -1139,7 +1139,7 @@ class IEmailChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="emailChannelRef")
-    def email_channel_ref(self) -> EmailChannelReference:
+    def email_channel_ref(self) -> "EmailChannelReference":
         '''(experimental) A reference to a EmailChannel resource.
 
         :stability: experimental
@@ -1160,12 +1160,12 @@ class _IEmailChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="emailChannelRef")
-    def email_channel_ref(self) -> EmailChannelReference:
+    def email_channel_ref(self) -> "EmailChannelReference":
         '''(experimental) A reference to a EmailChannel resource.
 
         :stability: experimental
         '''
-        return typing.cast(EmailChannelReference, jsii.get(self, "emailChannelRef"))
+        return typing.cast("EmailChannelReference", jsii.get(self, "emailChannelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEmailChannelRef).__jsii_proxy_class__ = lambda : _IEmailChannelRefProxy
@@ -1184,7 +1184,7 @@ class IEmailTemplateRef(
 
     @builtins.property
     @jsii.member(jsii_name="emailTemplateRef")
-    def email_template_ref(self) -> EmailTemplateReference:
+    def email_template_ref(self) -> "EmailTemplateReference":
         '''(experimental) A reference to a EmailTemplate resource.
 
         :stability: experimental
@@ -1205,12 +1205,12 @@ class _IEmailTemplateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="emailTemplateRef")
-    def email_template_ref(self) -> EmailTemplateReference:
+    def email_template_ref(self) -> "EmailTemplateReference":
         '''(experimental) A reference to a EmailTemplate resource.
 
         :stability: experimental
         '''
-        return typing.cast(EmailTemplateReference, jsii.get(self, "emailTemplateRef"))
+        return typing.cast("EmailTemplateReference", jsii.get(self, "emailTemplateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEmailTemplateRef).__jsii_proxy_class__ = lambda : _IEmailTemplateRefProxy
@@ -1229,7 +1229,7 @@ class IEventStreamRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventStreamRef")
-    def event_stream_ref(self) -> EventStreamReference:
+    def event_stream_ref(self) -> "EventStreamReference":
         '''(experimental) A reference to a EventStream resource.
 
         :stability: experimental
@@ -1250,12 +1250,12 @@ class _IEventStreamRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventStreamRef")
-    def event_stream_ref(self) -> EventStreamReference:
+    def event_stream_ref(self) -> "EventStreamReference":
         '''(experimental) A reference to a EventStream resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventStreamReference, jsii.get(self, "eventStreamRef"))
+        return typing.cast("EventStreamReference", jsii.get(self, "eventStreamRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventStreamRef).__jsii_proxy_class__ = lambda : _IEventStreamRefProxy
@@ -1274,7 +1274,7 @@ class IGCMChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="gcmChannelRef")
-    def gcm_channel_ref(self) -> GCMChannelReference:
+    def gcm_channel_ref(self) -> "GCMChannelReference":
         '''(experimental) A reference to a GCMChannel resource.
 
         :stability: experimental
@@ -1295,12 +1295,12 @@ class _IGCMChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="gcmChannelRef")
-    def gcm_channel_ref(self) -> GCMChannelReference:
+    def gcm_channel_ref(self) -> "GCMChannelReference":
         '''(experimental) A reference to a GCMChannel resource.
 
         :stability: experimental
         '''
-        return typing.cast(GCMChannelReference, jsii.get(self, "gcmChannelRef"))
+        return typing.cast("GCMChannelReference", jsii.get(self, "gcmChannelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGCMChannelRef).__jsii_proxy_class__ = lambda : _IGCMChannelRefProxy

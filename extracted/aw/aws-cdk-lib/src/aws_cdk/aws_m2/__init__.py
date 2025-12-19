@@ -116,12 +116,12 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         engine_type: builtins.str,
         name: builtins.str,
-        definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.DefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.DefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
         role_arn: typing.Optional[builtins.str] = None,
@@ -157,7 +157,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_1b548a1b) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_1b548a1b") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -179,7 +179,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -210,9 +210,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_760d8e8c:
+    def application_ref(self) -> "_ApplicationReference_760d8e8c":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_760d8e8c, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_760d8e8c", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrApplicationArn")
@@ -239,9 +239,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="engineType")
@@ -273,17 +273,17 @@ class CfnApplication(
     @jsii.member(jsii_name="definition")
     def definition(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.DefinitionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.DefinitionProperty"]]:
         '''The application definition for a particular application.
 
         You can specify either inline JSON or an Amazon S3 bucket location.
         '''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.DefinitionProperty"]], jsii.get(self, "definition"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.DefinitionProperty"]], jsii.get(self, "definition"))
 
     @definition.setter
     def definition(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.DefinitionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.DefinitionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5a8ea13658af5ef1a7d26f032b47b28d17ab527b4ede05c82ee7c653b2de040f)
@@ -439,7 +439,7 @@ class CfnApplicationProps:
         *,
         engine_type: builtins.str,
         name: builtins.str,
-        definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.DefinitionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.DefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
         role_arn: typing.Optional[builtins.str] = None,
@@ -528,7 +528,7 @@ class CfnApplicationProps:
     @builtins.property
     def definition(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.DefinitionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.DefinitionProperty"]]:
         '''The application definition for a particular application. You can specify either inline JSON or an Amazon S3 bucket location.
 
         For information about application definitions, see the `AWS Mainframe Modernization User Guide <https://docs.aws.amazon.com/m2/latest/userguide/applications-m2-definition.html>`_ .
@@ -536,7 +536,7 @@ class CfnApplicationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-m2-application.html#cfn-m2-application-definition
         '''
         result = self._values.get("definition")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.DefinitionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplication.DefinitionProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -621,7 +621,7 @@ class CfnDeployment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
@@ -661,7 +661,7 @@ class CfnDeployment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeployment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -715,9 +715,9 @@ class CfnDeployment(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentRef")
-    def deployment_ref(self) -> _DeploymentReference_2ee2f073:
+    def deployment_ref(self) -> "_DeploymentReference_2ee2f073":
         '''A reference to a Deployment resource.'''
-        return typing.cast(_DeploymentReference_2ee2f073, jsii.get(self, "deploymentRef"))
+        return typing.cast("_DeploymentReference_2ee2f073", jsii.get(self, "deploymentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -903,7 +903,7 @@ class CfnEnvironment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         engine_type: builtins.str,
@@ -911,13 +911,13 @@ class CfnEnvironment(
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
-        high_availability_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.HighAvailabilityConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        high_availability_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.HighAvailabilityConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
         network_type: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        storage_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.StorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        storage_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.StorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -965,7 +965,7 @@ class CfnEnvironment(
 
     @jsii.member(jsii_name="arnForEnvironment")
     @builtins.classmethod
-    def arn_for_environment(cls, resource: _IEnvironmentRef_780520b3) -> builtins.str:
+    def arn_for_environment(cls, resource: "_IEnvironmentRef_780520b3") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -987,7 +987,7 @@ class CfnEnvironment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEnvironment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1041,15 +1041,15 @@ class CfnEnvironment(
 
     @builtins.property
     @jsii.member(jsii_name="environmentRef")
-    def environment_ref(self) -> _EnvironmentReference_cf0881cd:
+    def environment_ref(self) -> "_EnvironmentReference_cf0881cd":
         '''A reference to a Environment resource.'''
-        return typing.cast(_EnvironmentReference_cf0881cd, jsii.get(self, "environmentRef"))
+        return typing.cast("_EnvironmentReference_cf0881cd", jsii.get(self, "environmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="engineType")
@@ -1120,16 +1120,16 @@ class CfnEnvironment(
     @jsii.member(jsii_name="highAvailabilityConfig")
     def high_availability_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.HighAvailabilityConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.HighAvailabilityConfigProperty"]]:
         '''.. epigraph::
 
    AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.HighAvailabilityConfigProperty"]], jsii.get(self, "highAvailabilityConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.HighAvailabilityConfigProperty"]], jsii.get(self, "highAvailabilityConfig"))
 
     @high_availability_config.setter
     def high_availability_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.HighAvailabilityConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.HighAvailabilityConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6ae32ee44c20ee3d62c04275975bd36b0c4b52f1a4e530da019c34c5a304d354)
@@ -1182,14 +1182,14 @@ class CfnEnvironment(
     @jsii.member(jsii_name="publiclyAccessible")
     def publicly_accessible(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the runtime environment is publicly accessible.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "publiclyAccessible"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "publiclyAccessible"))
 
     @publicly_accessible.setter
     def publicly_accessible(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aafc9453ef0e6f29c2ca5627640e99238639f68f55fcd53863b14a7773934a0d)
@@ -1216,16 +1216,16 @@ class CfnEnvironment(
     @jsii.member(jsii_name="storageConfigurations")
     def storage_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.StorageConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.StorageConfigurationProperty"]]]]:
         '''.. epigraph::
 
    AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.StorageConfigurationProperty"]]]], jsii.get(self, "storageConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.StorageConfigurationProperty"]]]], jsii.get(self, "storageConfigurations"))
 
     @storage_configurations.setter
     def storage_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.StorageConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.StorageConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0469c70e4a0b0e01a5d619854f0773c467db7e6e0849f3c4da28fc65e5a14f5f)
@@ -1484,8 +1484,8 @@ class CfnEnvironment(
         def __init__(
             self,
             *,
-            efs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.EfsStorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            fsx: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.FsxStorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            efs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.EfsStorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            fsx: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.FsxStorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''.. epigraph::
 
@@ -1531,24 +1531,24 @@ class CfnEnvironment(
         @builtins.property
         def efs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.EfsStorageConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.EfsStorageConfigurationProperty"]]:
             '''Defines the storage configuration for an Amazon EFS file system.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-m2-environment-storageconfiguration.html#cfn-m2-environment-storageconfiguration-efs
             '''
             result = self._values.get("efs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.EfsStorageConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.EfsStorageConfigurationProperty"]], result)
 
         @builtins.property
         def fsx(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.FsxStorageConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.FsxStorageConfigurationProperty"]]:
             '''Defines the storage configuration for an Amazon FSx file system.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-m2-environment-storageconfiguration.html#cfn-m2-environment-storageconfiguration-fsx
             '''
             result = self._values.get("fsx")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEnvironment.FsxStorageConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.FsxStorageConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1591,13 +1591,13 @@ class CfnEnvironmentProps:
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
-        high_availability_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.HighAvailabilityConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        high_availability_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.HighAvailabilityConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
         network_type: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
-        publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        publicly_accessible: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        storage_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.StorageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        storage_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironment.StorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -1754,7 +1754,7 @@ class CfnEnvironmentProps:
     @builtins.property
     def high_availability_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEnvironment.HighAvailabilityConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.HighAvailabilityConfigProperty"]]:
         '''.. epigraph::
 
    AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.
@@ -1766,7 +1766,7 @@ class CfnEnvironmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-m2-environment.html#cfn-m2-environment-highavailabilityconfig
         '''
         result = self._values.get("high_availability_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEnvironment.HighAvailabilityConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.HighAvailabilityConfigProperty"]], result)
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
@@ -1802,13 +1802,13 @@ class CfnEnvironmentProps:
     @builtins.property
     def publicly_accessible(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the runtime environment is publicly accessible.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-m2-environment.html#cfn-m2-environment-publiclyaccessible
         '''
         result = self._values.get("publicly_accessible")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1822,7 +1822,7 @@ class CfnEnvironmentProps:
     @builtins.property
     def storage_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEnvironment.StorageConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.StorageConfigurationProperty"]]]]:
         '''.. epigraph::
 
    AWS Mainframe Modernization Service (Managed Runtime Environment experience) will no longer be open to new customers starting on November 7, 2025.
@@ -1834,7 +1834,7 @@ class CfnEnvironmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-m2-environment.html#cfn-m2-environment-storageconfigurations
         '''
         result = self._values.get("storage_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEnvironment.StorageConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEnvironment.StorageConfigurationProperty"]]]], result)
 
     @builtins.property
     def subnet_ids(self) -> typing.Optional[typing.List[builtins.str]]:

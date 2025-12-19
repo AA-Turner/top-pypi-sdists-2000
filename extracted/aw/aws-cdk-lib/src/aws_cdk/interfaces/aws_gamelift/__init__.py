@@ -472,7 +472,7 @@ class IAliasRef(
 
     @builtins.property
     @jsii.member(jsii_name="aliasRef")
-    def alias_ref(self) -> AliasReference:
+    def alias_ref(self) -> "AliasReference":
         '''(experimental) A reference to a Alias resource.
 
         :stability: experimental
@@ -493,12 +493,12 @@ class _IAliasRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="aliasRef")
-    def alias_ref(self) -> AliasReference:
+    def alias_ref(self) -> "AliasReference":
         '''(experimental) A reference to a Alias resource.
 
         :stability: experimental
         '''
-        return typing.cast(AliasReference, jsii.get(self, "aliasRef"))
+        return typing.cast("AliasReference", jsii.get(self, "aliasRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAliasRef).__jsii_proxy_class__ = lambda : _IAliasRefProxy
@@ -517,7 +517,7 @@ class IBuildRef(
 
     @builtins.property
     @jsii.member(jsii_name="buildRef")
-    def build_ref(self) -> BuildReference:
+    def build_ref(self) -> "BuildReference":
         '''(experimental) A reference to a Build resource.
 
         :stability: experimental
@@ -538,12 +538,12 @@ class _IBuildRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="buildRef")
-    def build_ref(self) -> BuildReference:
+    def build_ref(self) -> "BuildReference":
         '''(experimental) A reference to a Build resource.
 
         :stability: experimental
         '''
-        return typing.cast(BuildReference, jsii.get(self, "buildRef"))
+        return typing.cast("BuildReference", jsii.get(self, "buildRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBuildRef).__jsii_proxy_class__ = lambda : _IBuildRefProxy
@@ -562,7 +562,7 @@ class IContainerFleetRef(
 
     @builtins.property
     @jsii.member(jsii_name="containerFleetRef")
-    def container_fleet_ref(self) -> ContainerFleetReference:
+    def container_fleet_ref(self) -> "ContainerFleetReference":
         '''(experimental) A reference to a ContainerFleet resource.
 
         :stability: experimental
@@ -583,12 +583,12 @@ class _IContainerFleetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="containerFleetRef")
-    def container_fleet_ref(self) -> ContainerFleetReference:
+    def container_fleet_ref(self) -> "ContainerFleetReference":
         '''(experimental) A reference to a ContainerFleet resource.
 
         :stability: experimental
         '''
-        return typing.cast(ContainerFleetReference, jsii.get(self, "containerFleetRef"))
+        return typing.cast("ContainerFleetReference", jsii.get(self, "containerFleetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContainerFleetRef).__jsii_proxy_class__ = lambda : _IContainerFleetRefProxy
@@ -609,7 +609,7 @@ class IContainerGroupDefinitionRef(
 
     @builtins.property
     @jsii.member(jsii_name="containerGroupDefinitionRef")
-    def container_group_definition_ref(self) -> ContainerGroupDefinitionReference:
+    def container_group_definition_ref(self) -> "ContainerGroupDefinitionReference":
         '''(experimental) A reference to a ContainerGroupDefinition resource.
 
         :stability: experimental
@@ -630,12 +630,12 @@ class _IContainerGroupDefinitionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="containerGroupDefinitionRef")
-    def container_group_definition_ref(self) -> ContainerGroupDefinitionReference:
+    def container_group_definition_ref(self) -> "ContainerGroupDefinitionReference":
         '''(experimental) A reference to a ContainerGroupDefinition resource.
 
         :stability: experimental
         '''
-        return typing.cast(ContainerGroupDefinitionReference, jsii.get(self, "containerGroupDefinitionRef"))
+        return typing.cast("ContainerGroupDefinitionReference", jsii.get(self, "containerGroupDefinitionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContainerGroupDefinitionRef).__jsii_proxy_class__ = lambda : _IContainerGroupDefinitionRefProxy
@@ -654,7 +654,7 @@ class IFleetRef(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> FleetReference:
+    def fleet_ref(self) -> "FleetReference":
         '''(experimental) A reference to a Fleet resource.
 
         :stability: experimental
@@ -675,12 +675,12 @@ class _IFleetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> FleetReference:
+    def fleet_ref(self) -> "FleetReference":
         '''(experimental) A reference to a Fleet resource.
 
         :stability: experimental
         '''
-        return typing.cast(FleetReference, jsii.get(self, "fleetRef"))
+        return typing.cast("FleetReference", jsii.get(self, "fleetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFleetRef).__jsii_proxy_class__ = lambda : _IFleetRefProxy
@@ -699,7 +699,7 @@ class IGameServerGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="gameServerGroupRef")
-    def game_server_group_ref(self) -> GameServerGroupReference:
+    def game_server_group_ref(self) -> "GameServerGroupReference":
         '''(experimental) A reference to a GameServerGroup resource.
 
         :stability: experimental
@@ -720,12 +720,12 @@ class _IGameServerGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="gameServerGroupRef")
-    def game_server_group_ref(self) -> GameServerGroupReference:
+    def game_server_group_ref(self) -> "GameServerGroupReference":
         '''(experimental) A reference to a GameServerGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(GameServerGroupReference, jsii.get(self, "gameServerGroupRef"))
+        return typing.cast("GameServerGroupReference", jsii.get(self, "gameServerGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGameServerGroupRef).__jsii_proxy_class__ = lambda : _IGameServerGroupRefProxy
@@ -744,7 +744,7 @@ class IGameSessionQueueRef(
 
     @builtins.property
     @jsii.member(jsii_name="gameSessionQueueRef")
-    def game_session_queue_ref(self) -> GameSessionQueueReference:
+    def game_session_queue_ref(self) -> "GameSessionQueueReference":
         '''(experimental) A reference to a GameSessionQueue resource.
 
         :stability: experimental
@@ -765,12 +765,12 @@ class _IGameSessionQueueRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="gameSessionQueueRef")
-    def game_session_queue_ref(self) -> GameSessionQueueReference:
+    def game_session_queue_ref(self) -> "GameSessionQueueReference":
         '''(experimental) A reference to a GameSessionQueue resource.
 
         :stability: experimental
         '''
-        return typing.cast(GameSessionQueueReference, jsii.get(self, "gameSessionQueueRef"))
+        return typing.cast("GameSessionQueueReference", jsii.get(self, "gameSessionQueueRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGameSessionQueueRef).__jsii_proxy_class__ = lambda : _IGameSessionQueueRefProxy

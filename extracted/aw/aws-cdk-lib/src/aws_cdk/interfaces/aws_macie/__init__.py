@@ -248,7 +248,7 @@ class IAllowListRef(
 
     @builtins.property
     @jsii.member(jsii_name="allowListRef")
-    def allow_list_ref(self) -> AllowListReference:
+    def allow_list_ref(self) -> "AllowListReference":
         '''(experimental) A reference to a AllowList resource.
 
         :stability: experimental
@@ -269,12 +269,12 @@ class _IAllowListRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="allowListRef")
-    def allow_list_ref(self) -> AllowListReference:
+    def allow_list_ref(self) -> "AllowListReference":
         '''(experimental) A reference to a AllowList resource.
 
         :stability: experimental
         '''
-        return typing.cast(AllowListReference, jsii.get(self, "allowListRef"))
+        return typing.cast("AllowListReference", jsii.get(self, "allowListRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAllowListRef).__jsii_proxy_class__ = lambda : _IAllowListRefProxy
@@ -293,7 +293,7 @@ class ICustomDataIdentifierRef(
 
     @builtins.property
     @jsii.member(jsii_name="customDataIdentifierRef")
-    def custom_data_identifier_ref(self) -> CustomDataIdentifierReference:
+    def custom_data_identifier_ref(self) -> "CustomDataIdentifierReference":
         '''(experimental) A reference to a CustomDataIdentifier resource.
 
         :stability: experimental
@@ -314,12 +314,12 @@ class _ICustomDataIdentifierRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="customDataIdentifierRef")
-    def custom_data_identifier_ref(self) -> CustomDataIdentifierReference:
+    def custom_data_identifier_ref(self) -> "CustomDataIdentifierReference":
         '''(experimental) A reference to a CustomDataIdentifier resource.
 
         :stability: experimental
         '''
-        return typing.cast(CustomDataIdentifierReference, jsii.get(self, "customDataIdentifierRef"))
+        return typing.cast("CustomDataIdentifierReference", jsii.get(self, "customDataIdentifierRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICustomDataIdentifierRef).__jsii_proxy_class__ = lambda : _ICustomDataIdentifierRefProxy
@@ -338,7 +338,7 @@ class IFindingsFilterRef(
 
     @builtins.property
     @jsii.member(jsii_name="findingsFilterRef")
-    def findings_filter_ref(self) -> FindingsFilterReference:
+    def findings_filter_ref(self) -> "FindingsFilterReference":
         '''(experimental) A reference to a FindingsFilter resource.
 
         :stability: experimental
@@ -359,12 +359,12 @@ class _IFindingsFilterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="findingsFilterRef")
-    def findings_filter_ref(self) -> FindingsFilterReference:
+    def findings_filter_ref(self) -> "FindingsFilterReference":
         '''(experimental) A reference to a FindingsFilter resource.
 
         :stability: experimental
         '''
-        return typing.cast(FindingsFilterReference, jsii.get(self, "findingsFilterRef"))
+        return typing.cast("FindingsFilterReference", jsii.get(self, "findingsFilterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFindingsFilterRef).__jsii_proxy_class__ = lambda : _IFindingsFilterRefProxy

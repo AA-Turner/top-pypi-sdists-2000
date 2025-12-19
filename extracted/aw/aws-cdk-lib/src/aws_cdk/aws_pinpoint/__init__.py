@@ -142,13 +142,13 @@ class CfnADMChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
         client_id: builtins.str,
         client_secret: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::Pinpoint::ADMChannel``.
 
@@ -185,7 +185,7 @@ class CfnADMChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnADMChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -216,9 +216,9 @@ class CfnADMChannel(
 
     @builtins.property
     @jsii.member(jsii_name="admChannelRef")
-    def adm_channel_ref(self) -> _ADMChannelReference_be628472:
+    def adm_channel_ref(self) -> "_ADMChannelReference_be628472":
         '''A reference to a ADMChannel resource.'''
-        return typing.cast(_ADMChannelReference_be628472, jsii.get(self, "admChannelRef"))
+        return typing.cast("_ADMChannelReference_be628472", jsii.get(self, "admChannelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -279,14 +279,14 @@ class CfnADMChannel(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the ADM channel for the application.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__29f9495da313043ed76a0fcbe057cba0bc82dd16c11f653c0c4ce29add3f3d6a)
@@ -311,7 +311,7 @@ class CfnADMChannelProps:
         application_id: builtins.str,
         client_id: builtins.str,
         client_secret: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnADMChannel``.
 
@@ -385,13 +385,13 @@ class CfnADMChannelProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the ADM channel for the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-admchannel.html#cfn-pinpoint-admchannel-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -444,14 +444,14 @@ class CfnAPNSChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
         bundle_id: typing.Optional[builtins.str] = None,
         certificate: typing.Optional[builtins.str] = None,
         default_authentication_method: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         private_key: typing.Optional[builtins.str] = None,
         team_id: typing.Optional[builtins.str] = None,
         token_key: typing.Optional[builtins.str] = None,
@@ -502,7 +502,7 @@ class CfnAPNSChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAPNSChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -533,9 +533,9 @@ class CfnAPNSChannel(
 
     @builtins.property
     @jsii.member(jsii_name="apnsChannelRef")
-    def apns_channel_ref(self) -> _APNSChannelReference_573bee61:
+    def apns_channel_ref(self) -> "_APNSChannelReference_573bee61":
         '''A reference to a APNSChannel resource.'''
-        return typing.cast(_APNSChannelReference_573bee61, jsii.get(self, "apnsChannelRef"))
+        return typing.cast("_APNSChannelReference_573bee61", jsii.get(self, "apnsChannelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -612,14 +612,14 @@ class CfnAPNSChannel(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the APNs channel for the application.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1ed3ad95420b6948df7339f9eb6816bcaed443dfcee74ef7485882c3fc6c9be2)
@@ -702,7 +702,7 @@ class CfnAPNSChannelProps:
         bundle_id: typing.Optional[builtins.str] = None,
         certificate: typing.Optional[builtins.str] = None,
         default_authentication_method: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         private_key: typing.Optional[builtins.str] = None,
         team_id: typing.Optional[builtins.str] = None,
         token_key: typing.Optional[builtins.str] = None,
@@ -820,13 +820,13 @@ class CfnAPNSChannelProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the APNs channel for the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-apnschannel.html#cfn-pinpoint-apnschannel-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def private_key(self) -> typing.Optional[builtins.str]:
@@ -919,14 +919,14 @@ class CfnAPNSSandboxChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
         bundle_id: typing.Optional[builtins.str] = None,
         certificate: typing.Optional[builtins.str] = None,
         default_authentication_method: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         private_key: typing.Optional[builtins.str] = None,
         team_id: typing.Optional[builtins.str] = None,
         token_key: typing.Optional[builtins.str] = None,
@@ -977,7 +977,7 @@ class CfnAPNSSandboxChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAPNSSandboxChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1008,9 +1008,9 @@ class CfnAPNSSandboxChannel(
 
     @builtins.property
     @jsii.member(jsii_name="apnsSandboxChannelRef")
-    def apns_sandbox_channel_ref(self) -> _APNSSandboxChannelReference_4a1f1083:
+    def apns_sandbox_channel_ref(self) -> "_APNSSandboxChannelReference_4a1f1083":
         '''A reference to a APNSSandboxChannel resource.'''
-        return typing.cast(_APNSSandboxChannelReference_4a1f1083, jsii.get(self, "apnsSandboxChannelRef"))
+        return typing.cast("_APNSSandboxChannelReference_4a1f1083", jsii.get(self, "apnsSandboxChannelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -1087,14 +1087,14 @@ class CfnAPNSSandboxChannel(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the APNs Sandbox channel for the Amazon Pinpoint application.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a4666c0e59b9ee82106f0a8a6fe42b502df677f3d4e454cc2c1d8a8c3dc1e8d9)
@@ -1177,7 +1177,7 @@ class CfnAPNSSandboxChannelProps:
         bundle_id: typing.Optional[builtins.str] = None,
         certificate: typing.Optional[builtins.str] = None,
         default_authentication_method: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         private_key: typing.Optional[builtins.str] = None,
         team_id: typing.Optional[builtins.str] = None,
         token_key: typing.Optional[builtins.str] = None,
@@ -1295,13 +1295,13 @@ class CfnAPNSSandboxChannelProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the APNs Sandbox channel for the Amazon Pinpoint application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-apnssandboxchannel.html#cfn-pinpoint-apnssandboxchannel-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def private_key(self) -> typing.Optional[builtins.str]:
@@ -1394,14 +1394,14 @@ class CfnAPNSVoipChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
         bundle_id: typing.Optional[builtins.str] = None,
         certificate: typing.Optional[builtins.str] = None,
         default_authentication_method: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         private_key: typing.Optional[builtins.str] = None,
         team_id: typing.Optional[builtins.str] = None,
         token_key: typing.Optional[builtins.str] = None,
@@ -1452,7 +1452,7 @@ class CfnAPNSVoipChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAPNSVoipChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1483,9 +1483,9 @@ class CfnAPNSVoipChannel(
 
     @builtins.property
     @jsii.member(jsii_name="apnsVoipChannelRef")
-    def apns_voip_channel_ref(self) -> _APNSVoipChannelReference_6bb7b5ed:
+    def apns_voip_channel_ref(self) -> "_APNSVoipChannelReference_6bb7b5ed":
         '''A reference to a APNSVoipChannel resource.'''
-        return typing.cast(_APNSVoipChannelReference_6bb7b5ed, jsii.get(self, "apnsVoipChannelRef"))
+        return typing.cast("_APNSVoipChannelReference_6bb7b5ed", jsii.get(self, "apnsVoipChannelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -1562,14 +1562,14 @@ class CfnAPNSVoipChannel(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the APNs VoIP channel for the Amazon Pinpoint application.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e29971c6564c0a97fcd5481816c5791d2527814f70f07c3dc75b5bdd5f178679)
@@ -1652,7 +1652,7 @@ class CfnAPNSVoipChannelProps:
         bundle_id: typing.Optional[builtins.str] = None,
         certificate: typing.Optional[builtins.str] = None,
         default_authentication_method: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         private_key: typing.Optional[builtins.str] = None,
         team_id: typing.Optional[builtins.str] = None,
         token_key: typing.Optional[builtins.str] = None,
@@ -1770,13 +1770,13 @@ class CfnAPNSVoipChannelProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the APNs VoIP channel for the Amazon Pinpoint application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-apnsvoipchannel.html#cfn-pinpoint-apnsvoipchannel-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def private_key(self) -> typing.Optional[builtins.str]:
@@ -1869,14 +1869,14 @@ class CfnAPNSVoipSandboxChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
         bundle_id: typing.Optional[builtins.str] = None,
         certificate: typing.Optional[builtins.str] = None,
         default_authentication_method: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         private_key: typing.Optional[builtins.str] = None,
         team_id: typing.Optional[builtins.str] = None,
         token_key: typing.Optional[builtins.str] = None,
@@ -1927,7 +1927,7 @@ class CfnAPNSVoipSandboxChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAPNSVoipSandboxChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1960,9 +1960,9 @@ class CfnAPNSVoipSandboxChannel(
     @jsii.member(jsii_name="apnsVoipSandboxChannelRef")
     def apns_voip_sandbox_channel_ref(
         self,
-    ) -> _APNSVoipSandboxChannelReference_466ababb:
+    ) -> "_APNSVoipSandboxChannelReference_466ababb":
         '''A reference to a APNSVoipSandboxChannel resource.'''
-        return typing.cast(_APNSVoipSandboxChannelReference_466ababb, jsii.get(self, "apnsVoipSandboxChannelRef"))
+        return typing.cast("_APNSVoipSandboxChannelReference_466ababb", jsii.get(self, "apnsVoipSandboxChannelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -2039,14 +2039,14 @@ class CfnAPNSVoipSandboxChannel(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the APNs VoIP sandbox channel is enabled for the application.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aac5c1ce5cc72d2472a9881976d507f68a31b18a54d9853cc07d5e5f47c1f566)
@@ -2129,7 +2129,7 @@ class CfnAPNSVoipSandboxChannelProps:
         bundle_id: typing.Optional[builtins.str] = None,
         certificate: typing.Optional[builtins.str] = None,
         default_authentication_method: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         private_key: typing.Optional[builtins.str] = None,
         team_id: typing.Optional[builtins.str] = None,
         token_key: typing.Optional[builtins.str] = None,
@@ -2247,13 +2247,13 @@ class CfnAPNSVoipSandboxChannelProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the APNs VoIP sandbox channel is enabled for the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-apnsvoipsandboxchannel.html#cfn-pinpoint-apnsvoipsandboxchannel-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def private_key(self) -> typing.Optional[builtins.str]:
@@ -2346,7 +2346,7 @@ class CfnApp(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -2369,7 +2369,7 @@ class CfnApp(
 
     @jsii.member(jsii_name="arnForApp")
     @builtins.classmethod
-    def arn_for_app(cls, resource: _IAppRef_0c16f66a) -> builtins.str:
+    def arn_for_app(cls, resource: "_IAppRef_0c16f66a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2382,10 +2382,10 @@ class CfnApp(
     @builtins.classmethod
     def from_app_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IAppRef_0c16f66a:
+    ) -> "_IAppRef_0c16f66a":
         '''Creates a new IAppRef from an ARN.
 
         :param scope: -
@@ -2397,16 +2397,16 @@ class CfnApp(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IAppRef_0c16f66a, jsii.sinvoke(cls, "fromAppArn", [scope, id, arn]))
+        return typing.cast("_IAppRef_0c16f66a", jsii.sinvoke(cls, "fromAppArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromAppId")
     @builtins.classmethod
     def from_app_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         app_id: builtins.str,
-    ) -> _IAppRef_0c16f66a:
+    ) -> "_IAppRef_0c16f66a":
         '''Creates a new IAppRef from a appId.
 
         :param scope: -
@@ -2418,7 +2418,7 @@ class CfnApp(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument app_id", value=app_id, expected_type=type_hints["app_id"])
-        return typing.cast(_IAppRef_0c16f66a, jsii.sinvoke(cls, "fromAppId", [scope, id, app_id]))
+        return typing.cast("_IAppRef_0c16f66a", jsii.sinvoke(cls, "fromAppId", [scope, id, app_id]))
 
     @jsii.member(jsii_name="isCfnApp")
     @builtins.classmethod
@@ -2433,7 +2433,7 @@ class CfnApp(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApp", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2464,9 +2464,9 @@ class CfnApp(
 
     @builtins.property
     @jsii.member(jsii_name="appRef")
-    def app_ref(self) -> _AppReference_33075583:
+    def app_ref(self) -> "_AppReference_33075583":
         '''A reference to a App resource.'''
-        return typing.cast(_AppReference_33075583, jsii.get(self, "appRef"))
+        return typing.cast("_AppReference_33075583", jsii.get(self, "appRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -2495,9 +2495,9 @@ class CfnApp(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2644,14 +2644,14 @@ class CfnApplicationSettings(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
-        campaign_hook: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationSettings.CampaignHookProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        limits: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationSettings.LimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        quiet_time: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationSettings.QuietTimeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        campaign_hook: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationSettings.CampaignHookProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        limits: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationSettings.LimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        quiet_time: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationSettings.QuietTimeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Pinpoint::ApplicationSettings``.
 
@@ -2690,7 +2690,7 @@ class CfnApplicationSettings(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationSettings", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2721,9 +2721,9 @@ class CfnApplicationSettings(
 
     @builtins.property
     @jsii.member(jsii_name="applicationSettingsRef")
-    def application_settings_ref(self) -> _ApplicationSettingsReference_59bfcdd6:
+    def application_settings_ref(self) -> "_ApplicationSettingsReference_59bfcdd6":
         '''A reference to a ApplicationSettings resource.'''
-        return typing.cast(_ApplicationSettingsReference_59bfcdd6, jsii.get(self, "applicationSettingsRef"))
+        return typing.cast("_ApplicationSettingsReference_59bfcdd6", jsii.get(self, "applicationSettingsRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -2755,14 +2755,14 @@ class CfnApplicationSettings(
     @jsii.member(jsii_name="campaignHook")
     def campaign_hook(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationSettings.CampaignHookProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.CampaignHookProperty"]]:
         '''The settings for the Lambda function to use by default as a code hook for campaigns in the application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationSettings.CampaignHookProperty"]], jsii.get(self, "campaignHook"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.CampaignHookProperty"]], jsii.get(self, "campaignHook"))
 
     @campaign_hook.setter
     def campaign_hook(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationSettings.CampaignHookProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.CampaignHookProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5230c9c3bb4cc93dbcaf0c5e212a80abd53a33c7588270b53fc93dae0c27d139)
@@ -2773,13 +2773,13 @@ class CfnApplicationSettings(
     @jsii.member(jsii_name="cloudWatchMetricsEnabled")
     def cloud_watch_metrics_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "cloudWatchMetricsEnabled"))
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "cloudWatchMetricsEnabled"))
 
     @cloud_watch_metrics_enabled.setter
     def cloud_watch_metrics_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__755097f5bd91236a9086d9ae0fa2948236768a3b8aa298efa8cb0b079e4f3406)
@@ -2790,14 +2790,14 @@ class CfnApplicationSettings(
     @jsii.member(jsii_name="limits")
     def limits(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationSettings.LimitsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.LimitsProperty"]]:
         '''The default sending limits for campaigns in the application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationSettings.LimitsProperty"]], jsii.get(self, "limits"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.LimitsProperty"]], jsii.get(self, "limits"))
 
     @limits.setter
     def limits(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationSettings.LimitsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.LimitsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__160a20b435f7b6094f46c527888adf81437d233b9f3372717ff3235293b3cb53)
@@ -2808,14 +2808,14 @@ class CfnApplicationSettings(
     @jsii.member(jsii_name="quietTime")
     def quiet_time(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationSettings.QuietTimeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.QuietTimeProperty"]]:
         '''The default quiet time for campaigns in the application.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationSettings.QuietTimeProperty"]], jsii.get(self, "quietTime"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.QuietTimeProperty"]], jsii.get(self, "quietTime"))
 
     @quiet_time.setter
     def quiet_time(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplicationSettings.QuietTimeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.QuietTimeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c87df35c4674de93532f2b097e8a5e8acc739757c089b203b35e483e743d6a56)
@@ -3114,10 +3114,10 @@ class CfnApplicationSettingsProps:
         self,
         *,
         application_id: builtins.str,
-        campaign_hook: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationSettings.CampaignHookProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        limits: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationSettings.LimitsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        quiet_time: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationSettings.QuietTimeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        campaign_hook: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationSettings.CampaignHookProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        limits: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationSettings.LimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        quiet_time: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplicationSettings.QuietTimeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplicationSettings``.
 
@@ -3190,7 +3190,7 @@ class CfnApplicationSettingsProps:
     @builtins.property
     def campaign_hook(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplicationSettings.CampaignHookProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.CampaignHookProperty"]]:
         '''The settings for the Lambda function to use by default as a code hook for campaigns in the application.
 
         To override these settings for a specific campaign, use the Campaign resource to define custom Lambda function settings for the campaign.
@@ -3198,22 +3198,22 @@ class CfnApplicationSettingsProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-applicationsettings.html#cfn-pinpoint-applicationsettings-campaignhook
         '''
         result = self._values.get("campaign_hook")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplicationSettings.CampaignHookProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.CampaignHookProperty"]], result)
 
     @builtins.property
     def cloud_watch_metrics_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-applicationsettings.html#cfn-pinpoint-applicationsettings-cloudwatchmetricsenabled
         '''
         result = self._values.get("cloud_watch_metrics_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def limits(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplicationSettings.LimitsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.LimitsProperty"]]:
         '''The default sending limits for campaigns in the application.
 
         To override these limits for a specific campaign, use the Campaign resource to define custom limits for the campaign.
@@ -3221,12 +3221,12 @@ class CfnApplicationSettingsProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-applicationsettings.html#cfn-pinpoint-applicationsettings-limits
         '''
         result = self._values.get("limits")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplicationSettings.LimitsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.LimitsProperty"]], result)
 
     @builtins.property
     def quiet_time(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplicationSettings.QuietTimeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.QuietTimeProperty"]]:
         '''The default quiet time for campaigns in the application.
 
         Quiet time is a specific time range when campaigns don't send messages to endpoints, if all the following conditions are met:
@@ -3242,7 +3242,7 @@ class CfnApplicationSettingsProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-applicationsettings.html#cfn-pinpoint-applicationsettings-quiettime
         '''
         result = self._values.get("quiet_time")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplicationSettings.QuietTimeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApplicationSettings.QuietTimeProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3290,13 +3290,13 @@ class CfnBaiduChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         api_key: builtins.str,
         application_id: builtins.str,
         secret_key: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::Pinpoint::BaiduChannel``.
 
@@ -3333,7 +3333,7 @@ class CfnBaiduChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBaiduChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3375,9 +3375,9 @@ class CfnBaiduChannel(
 
     @builtins.property
     @jsii.member(jsii_name="baiduChannelRef")
-    def baidu_channel_ref(self) -> _BaiduChannelReference_578f80f4:
+    def baidu_channel_ref(self) -> "_BaiduChannelReference_578f80f4":
         '''A reference to a BaiduChannel resource.'''
-        return typing.cast(_BaiduChannelReference_578f80f4, jsii.get(self, "baiduChannelRef"))
+        return typing.cast("_BaiduChannelReference_578f80f4", jsii.get(self, "baiduChannelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3427,14 +3427,14 @@ class CfnBaiduChannel(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the Baidu channel for the application.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__322e2fecb20c91419f0797aeaab2607597e674c854ce690ae78042ae1dd3e42f)
@@ -3459,7 +3459,7 @@ class CfnBaiduChannelProps:
         api_key: builtins.str,
         application_id: builtins.str,
         secret_key: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnBaiduChannel``.
 
@@ -3533,13 +3533,13 @@ class CfnBaiduChannelProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the Baidu channel for the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-baiduchannel.html#cfn-pinpoint-baiduchannel-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4004,25 +4004,25 @@ class CfnCampaign(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
         name: builtins.str,
-        schedule: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]],
+        schedule: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]],
         segment_id: builtins.str,
-        additional_treatments: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.WriteTreatmentResourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        campaign_hook: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.CampaignHookProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        custom_delivery_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.CustomDeliveryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        additional_treatments: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.WriteTreatmentResourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        campaign_hook: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.CampaignHookProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_delivery_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.CustomDeliveryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         holdout_percent: typing.Optional[jsii.Number] = None,
-        is_paused: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        limits: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.LimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        message_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.MessageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        is_paused: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        limits: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.LimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        message_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.MessageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         priority: typing.Optional[jsii.Number] = None,
         segment_version: typing.Optional[jsii.Number] = None,
         tags: typing.Any = None,
-        template_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.TemplateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        template_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.TemplateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         treatment_description: typing.Optional[builtins.str] = None,
         treatment_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -4078,7 +4078,7 @@ class CfnCampaign(
 
     @jsii.member(jsii_name="arnForCampaign")
     @builtins.classmethod
-    def arn_for_campaign(cls, resource: _ICampaignRef_f0c17498) -> builtins.str:
+    def arn_for_campaign(cls, resource: "_ICampaignRef_f0c17498") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4100,7 +4100,7 @@ class CfnCampaign(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCampaign", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4149,9 +4149,9 @@ class CfnCampaign(
 
     @builtins.property
     @jsii.member(jsii_name="campaignRef")
-    def campaign_ref(self) -> _CampaignReference_3b1bd92c:
+    def campaign_ref(self) -> "_CampaignReference_3b1bd92c":
         '''A reference to a Campaign resource.'''
-        return typing.cast(_CampaignReference_3b1bd92c, jsii.get(self, "campaignRef"))
+        return typing.cast("_CampaignReference_3b1bd92c", jsii.get(self, "campaignRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4160,9 +4160,9 @@ class CfnCampaign(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -4194,14 +4194,14 @@ class CfnCampaign(
     @jsii.member(jsii_name="schedule")
     def schedule(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCampaign.ScheduleProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCampaign.ScheduleProperty"]:
         '''The schedule settings for the treatment.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCampaign.ScheduleProperty"], jsii.get(self, "schedule"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCampaign.ScheduleProperty"], jsii.get(self, "schedule"))
 
     @schedule.setter
     def schedule(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCampaign.ScheduleProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCampaign.ScheduleProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b2181cc1c01db963e61293d6df1af9886ac4eab655deaf6a0e57d1e205e3475d)
@@ -4225,14 +4225,14 @@ class CfnCampaign(
     @jsii.member(jsii_name="additionalTreatments")
     def additional_treatments(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCampaign.WriteTreatmentResourceProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCampaign.WriteTreatmentResourceProperty"]]]]:
         '''An array of requests that defines additional treatments for the campaign, in addition to the default treatment for the campaign.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCampaign.WriteTreatmentResourceProperty"]]]], jsii.get(self, "additionalTreatments"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCampaign.WriteTreatmentResourceProperty"]]]], jsii.get(self, "additionalTreatments"))
 
     @additional_treatments.setter
     def additional_treatments(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCampaign.WriteTreatmentResourceProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCampaign.WriteTreatmentResourceProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0cb8abceb723e5d996583338abd7b9da817cebc58734650cbcd416e12f060c3e)
@@ -4243,14 +4243,14 @@ class CfnCampaign(
     @jsii.member(jsii_name="campaignHook")
     def campaign_hook(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignHookProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignHookProperty"]]:
         '''Specifies the Lambda function to use as a code hook for a campaign.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignHookProperty"]], jsii.get(self, "campaignHook"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignHookProperty"]], jsii.get(self, "campaignHook"))
 
     @campaign_hook.setter
     def campaign_hook(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignHookProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignHookProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cff8453460fff6b3777f9639816cc3be2cbf9b40080e6c14e18992f375f59ae5)
@@ -4261,14 +4261,14 @@ class CfnCampaign(
     @jsii.member(jsii_name="customDeliveryConfiguration")
     def custom_delivery_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CustomDeliveryConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CustomDeliveryConfigurationProperty"]]:
         '''The delivery configuration settings for sending the treatment through a custom channel.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CustomDeliveryConfigurationProperty"]], jsii.get(self, "customDeliveryConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CustomDeliveryConfigurationProperty"]], jsii.get(self, "customDeliveryConfiguration"))
 
     @custom_delivery_configuration.setter
     def custom_delivery_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CustomDeliveryConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CustomDeliveryConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__21d75ff1ff920f03885a49b618f7c1b3b5e9da8ba735b125a3c88ec62fc0fe17)
@@ -4305,14 +4305,14 @@ class CfnCampaign(
     @jsii.member(jsii_name="isPaused")
     def is_paused(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to pause the campaign.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "isPaused"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "isPaused"))
 
     @is_paused.setter
     def is_paused(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__971ecc06c6c0a231935c31808c1d067094e14be95f83916e7193d19d062edff7)
@@ -4323,14 +4323,14 @@ class CfnCampaign(
     @jsii.member(jsii_name="limits")
     def limits(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.LimitsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.LimitsProperty"]]:
         '''The messaging limits for the campaign.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.LimitsProperty"]], jsii.get(self, "limits"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.LimitsProperty"]], jsii.get(self, "limits"))
 
     @limits.setter
     def limits(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.LimitsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.LimitsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__02466c3fea035dae6003b4d892edc226a948018c5026a83391d853e1adb5c661)
@@ -4341,14 +4341,14 @@ class CfnCampaign(
     @jsii.member(jsii_name="messageConfiguration")
     def message_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageConfigurationProperty"]]:
         '''The message configuration settings for the treatment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageConfigurationProperty"]], jsii.get(self, "messageConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageConfigurationProperty"]], jsii.get(self, "messageConfiguration"))
 
     @message_configuration.setter
     def message_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__782bb62da5f39fb9d597470af1efa4fcdb0ff80ce246b1a68705abda99d37c22)
@@ -4398,14 +4398,14 @@ class CfnCampaign(
     @jsii.member(jsii_name="templateConfiguration")
     def template_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateConfigurationProperty"]]:
         '''The message template to use for the treatment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateConfigurationProperty"]], jsii.get(self, "templateConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateConfigurationProperty"]], jsii.get(self, "templateConfiguration"))
 
     @template_configuration.setter
     def template_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0b25bbca63e825ff6b501abde63e2de2d55b4f48c1b50cc14e8f9738d2688f0e)
@@ -4674,7 +4674,7 @@ class CfnCampaign(
         def __init__(
             self,
             *,
-            dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.EventDimensionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.EventDimensionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             filter_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Specifies the settings for events that cause a campaign to be sent.
@@ -4719,13 +4719,13 @@ class CfnCampaign(
         @builtins.property
         def dimensions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.EventDimensionsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.EventDimensionsProperty"]]:
             '''The dimension settings of the event filter for the campaign.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-campaigneventfilter.html#cfn-pinpoint-campaign-campaigneventfilter-dimensions
             '''
             result = self._values.get("dimensions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.EventDimensionsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.EventDimensionsProperty"]], result)
 
         @builtins.property
         def filter_type(self) -> typing.Optional[builtins.str]:
@@ -4854,7 +4854,7 @@ class CfnCampaign(
         def __init__(
             self,
             *,
-            content: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.InAppMessageContentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            content: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.InAppMessageContentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             custom_config: typing.Any = None,
             layout: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -4954,13 +4954,13 @@ class CfnCampaign(
         @builtins.property
         def content(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCampaign.InAppMessageContentProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCampaign.InAppMessageContentProperty"]]]]:
             '''An array that contains configurtion information about the in-app message for the campaign, including title and body text, text colors, background colors, image URLs, and button configurations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-campaigninappmessage.html#cfn-pinpoint-campaign-campaigninappmessage-content
             '''
             result = self._values.get("content")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCampaign.InAppMessageContentProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCampaign.InAppMessageContentProperty"]]]], result)
 
         @builtins.property
         def custom_config(self) -> typing.Any:
@@ -5380,7 +5380,7 @@ class CfnCampaign(
             self,
             *,
             attributes: typing.Any = None,
-            event_type: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            event_type: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             metrics: typing.Any = None,
         ) -> None:
             '''Specifies the dimensions for an event filter that determines when a campaign is sent or a journey activity is performed.
@@ -5437,7 +5437,7 @@ class CfnCampaign(
         @builtins.property
         def event_type(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.SetDimensionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.SetDimensionProperty"]]:
             '''The name of the event that causes the campaign to be sent or the journey activity to be performed.
 
             This can be a standard event that Amazon Pinpoint generates, such as ``_email.delivered`` or ``_custom.delivered`` . For campaigns, this can also be a custom event that's specific to your application. For information about standard events, see `Streaming Amazon Pinpoint Events <https://docs.aws.amazon.com/pinpoint/latest/developerguide/event-streams.html>`_ in the *Amazon Pinpoint Developer Guide* .
@@ -5445,7 +5445,7 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-eventdimensions.html#cfn-pinpoint-campaign-eventdimensions-eventtype
             '''
             result = self._values.get("event_type")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.SetDimensionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.SetDimensionProperty"]], result)
 
         @builtins.property
         def metrics(self) -> typing.Any:
@@ -5574,10 +5574,10 @@ class CfnCampaign(
         def __init__(
             self,
             *,
-            android: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.OverrideButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            default_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.DefaultButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            ios: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.OverrideButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            web: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.OverrideButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            android: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.OverrideButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            default_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.DefaultButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ios: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.OverrideButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            web: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.OverrideButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the configuration of a button that appears in an in-app message.
 
@@ -5637,46 +5637,46 @@ class CfnCampaign(
         @builtins.property
         def android(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.OverrideButtonConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.OverrideButtonConfigurationProperty"]]:
             '''An object that defines the default behavior for a button in in-app messages sent to Android.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-inappmessagebutton.html#cfn-pinpoint-campaign-inappmessagebutton-android
             '''
             result = self._values.get("android")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.OverrideButtonConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.OverrideButtonConfigurationProperty"]], result)
 
         @builtins.property
         def default_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.DefaultButtonConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.DefaultButtonConfigurationProperty"]]:
             '''An object that defines the default behavior for a button in an in-app message.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-inappmessagebutton.html#cfn-pinpoint-campaign-inappmessagebutton-defaultconfig
             '''
             result = self._values.get("default_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.DefaultButtonConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.DefaultButtonConfigurationProperty"]], result)
 
         @builtins.property
         def ios(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.OverrideButtonConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.OverrideButtonConfigurationProperty"]]:
             '''An object that defines the default behavior for a button in in-app messages sent to iOS devices.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-inappmessagebutton.html#cfn-pinpoint-campaign-inappmessagebutton-ios
             '''
             result = self._values.get("ios")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.OverrideButtonConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.OverrideButtonConfigurationProperty"]], result)
 
         @builtins.property
         def web(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.OverrideButtonConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.OverrideButtonConfigurationProperty"]]:
             '''An object that defines the default behavior for a button in in-app messages for web applications.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-inappmessagebutton.html#cfn-pinpoint-campaign-inappmessagebutton-web
             '''
             result = self._values.get("web")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.OverrideButtonConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.OverrideButtonConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5706,11 +5706,11 @@ class CfnCampaign(
             self,
             *,
             background_color: typing.Optional[builtins.str] = None,
-            body_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.InAppMessageBodyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            header_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.InAppMessageHeaderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            body_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.InAppMessageBodyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            header_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.InAppMessageHeaderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             image_url: typing.Optional[builtins.str] = None,
-            primary_btn: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.InAppMessageButtonProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            secondary_btn: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.InAppMessageButtonProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            primary_btn: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.InAppMessageButtonProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            secondary_btn: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.InAppMessageButtonProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the configuration and contents of an in-app message.
 
@@ -5823,24 +5823,24 @@ class CfnCampaign(
         @builtins.property
         def body_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.InAppMessageBodyConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.InAppMessageBodyConfigProperty"]]:
             '''Specifies the configuration of main body text in an in-app message template.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-inappmessagecontent.html#cfn-pinpoint-campaign-inappmessagecontent-bodyconfig
             '''
             result = self._values.get("body_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.InAppMessageBodyConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.InAppMessageBodyConfigProperty"]], result)
 
         @builtins.property
         def header_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.InAppMessageHeaderConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.InAppMessageHeaderConfigProperty"]]:
             '''Specifies the configuration and content of the header or title text of the in-app message.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-inappmessagecontent.html#cfn-pinpoint-campaign-inappmessagecontent-headerconfig
             '''
             result = self._values.get("header_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.InAppMessageHeaderConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.InAppMessageHeaderConfigProperty"]], result)
 
         @builtins.property
         def image_url(self) -> typing.Optional[builtins.str]:
@@ -5854,24 +5854,24 @@ class CfnCampaign(
         @builtins.property
         def primary_btn(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.InAppMessageButtonProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.InAppMessageButtonProperty"]]:
             '''An object that contains configuration information about the primary button in an in-app message.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-inappmessagecontent.html#cfn-pinpoint-campaign-inappmessagecontent-primarybtn
             '''
             result = self._values.get("primary_btn")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.InAppMessageButtonProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.InAppMessageButtonProperty"]], result)
 
         @builtins.property
         def secondary_btn(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.InAppMessageButtonProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.InAppMessageButtonProperty"]]:
             '''An object that contains configuration information about the secondary button in an in-app message.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-inappmessagecontent.html#cfn-pinpoint-campaign-inappmessagecontent-secondarybtn
             '''
             result = self._values.get("secondary_btn")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.InAppMessageButtonProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.InAppMessageButtonProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6123,15 +6123,15 @@ class CfnCampaign(
         def __init__(
             self,
             *,
-            adm_message: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.MessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            apns_message: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.MessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            baidu_message: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.MessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            custom_message: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.CampaignCustomMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            default_message: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.MessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            email_message: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.CampaignEmailMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            gcm_message: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.MessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            in_app_message: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.CampaignInAppMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sms_message: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.CampaignSmsMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            adm_message: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.MessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            apns_message: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.MessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            baidu_message: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.MessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom_message: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.CampaignCustomMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            default_message: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.MessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            email_message: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.CampaignEmailMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            gcm_message: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.MessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            in_app_message: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.CampaignInAppMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sms_message: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.CampaignSmsMessageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the message configuration settings for a campaign.
 
@@ -6342,7 +6342,7 @@ class CfnCampaign(
         @builtins.property
         def adm_message(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageProperty"]]:
             '''The message that the campaign sends through the ADM (Amazon Device Messaging) channel.
 
             If specified, this message overrides the default message.
@@ -6350,12 +6350,12 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-messageconfiguration.html#cfn-pinpoint-campaign-messageconfiguration-admmessage
             '''
             result = self._values.get("adm_message")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageProperty"]], result)
 
         @builtins.property
         def apns_message(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageProperty"]]:
             '''The message that the campaign sends through the APNs (Apple Push Notification service) channel.
 
             If specified, this message overrides the default message.
@@ -6363,12 +6363,12 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-messageconfiguration.html#cfn-pinpoint-campaign-messageconfiguration-apnsmessage
             '''
             result = self._values.get("apns_message")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageProperty"]], result)
 
         @builtins.property
         def baidu_message(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageProperty"]]:
             '''The message that the campaign sends through the Baidu (Baidu Cloud Push) channel.
 
             If specified, this message overrides the default message.
@@ -6376,12 +6376,12 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-messageconfiguration.html#cfn-pinpoint-campaign-messageconfiguration-baidumessage
             '''
             result = self._values.get("baidu_message")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageProperty"]], result)
 
         @builtins.property
         def custom_message(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignCustomMessageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignCustomMessageProperty"]]:
             '''The message that the campaign sends through a custom channel, as specified by the delivery configuration ( ``CustomDeliveryConfiguration`` ) settings for the campaign.
 
             If specified, this message overrides the default message.
@@ -6389,23 +6389,23 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-messageconfiguration.html#cfn-pinpoint-campaign-messageconfiguration-custommessage
             '''
             result = self._values.get("custom_message")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignCustomMessageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignCustomMessageProperty"]], result)
 
         @builtins.property
         def default_message(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageProperty"]]:
             '''The default message that the campaign sends through all the channels that are configured for the campaign.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-messageconfiguration.html#cfn-pinpoint-campaign-messageconfiguration-defaultmessage
             '''
             result = self._values.get("default_message")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageProperty"]], result)
 
         @builtins.property
         def email_message(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignEmailMessageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignEmailMessageProperty"]]:
             '''The message that the campaign sends through the email channel. If specified, this message overrides the default message.
 
             .. epigraph::
@@ -6415,12 +6415,12 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-messageconfiguration.html#cfn-pinpoint-campaign-messageconfiguration-emailmessage
             '''
             result = self._values.get("email_message")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignEmailMessageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignEmailMessageProperty"]], result)
 
         @builtins.property
         def gcm_message(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageProperty"]]:
             '''The message that the campaign sends through the GCM channel, which enables Amazon Pinpoint to send push notifications through the Firebase Cloud Messaging (FCM), formerly Google Cloud Messaging (GCM), service.
 
             If specified, this message overrides the default message.
@@ -6428,12 +6428,12 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-messageconfiguration.html#cfn-pinpoint-campaign-messageconfiguration-gcmmessage
             '''
             result = self._values.get("gcm_message")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageProperty"]], result)
 
         @builtins.property
         def in_app_message(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignInAppMessageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignInAppMessageProperty"]]:
             '''The default message for the in-app messaging channel.
 
             This message overrides the default message ( ``DefaultMessage`` ).
@@ -6441,12 +6441,12 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-messageconfiguration.html#cfn-pinpoint-campaign-messageconfiguration-inappmessage
             '''
             result = self._values.get("in_app_message")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignInAppMessageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignInAppMessageProperty"]], result)
 
         @builtins.property
         def sms_message(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignSmsMessageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignSmsMessageProperty"]]:
             '''The message that the campaign sends through the SMS channel.
 
             If specified, this message overrides the default message.
@@ -6454,7 +6454,7 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-messageconfiguration.html#cfn-pinpoint-campaign-messageconfiguration-smsmessage
             '''
             result = self._values.get("sms_message")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignSmsMessageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignSmsMessageProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6497,7 +6497,7 @@ class CfnCampaign(
             json_body: typing.Optional[builtins.str] = None,
             media_url: typing.Optional[builtins.str] = None,
             raw_content: typing.Optional[builtins.str] = None,
-            silent_push: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            silent_push: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             time_to_live: typing.Optional[jsii.Number] = None,
             title: typing.Optional[builtins.str] = None,
             url: typing.Optional[builtins.str] = None,
@@ -6664,7 +6664,7 @@ class CfnCampaign(
         @builtins.property
         def silent_push(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether the notification is a silent push notification, which is a push notification that doesn't display on a recipient's device.
 
             Silent push notifications can be used for cases such as updating an app's configuration, displaying messages in an in-app message center, or supporting phone home functionality.
@@ -6672,7 +6672,7 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-message.html#cfn-pinpoint-campaign-message-silentpush
             '''
             result = self._values.get("silent_push")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def time_to_live(self) -> typing.Optional[jsii.Number]:
@@ -6947,10 +6947,10 @@ class CfnCampaign(
             self,
             *,
             end_time: typing.Optional[builtins.str] = None,
-            event_filter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.CampaignEventFilterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            event_filter: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.CampaignEventFilterProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             frequency: typing.Optional[builtins.str] = None,
-            is_local_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            quiet_time: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.QuietTimeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            is_local_time: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            quiet_time: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.QuietTimeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             start_time: typing.Optional[builtins.str] = None,
             time_zone: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -7036,13 +7036,13 @@ class CfnCampaign(
         @builtins.property
         def event_filter(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignEventFilterProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignEventFilterProperty"]]:
             '''The type of event that causes the campaign to be sent, if the value of the ``Frequency`` property is ``EVENT`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-schedule.html#cfn-pinpoint-campaign-schedule-eventfilter
             '''
             result = self._values.get("event_filter")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CampaignEventFilterProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignEventFilterProperty"]], result)
 
         @builtins.property
         def frequency(self) -> typing.Optional[builtins.str]:
@@ -7056,7 +7056,7 @@ class CfnCampaign(
         @builtins.property
         def is_local_time(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether the start and end times for the campaign schedule use each recipient's local time.
 
             To base the schedule on each recipient's local time, set this value to ``true`` .
@@ -7064,12 +7064,12 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-schedule.html#cfn-pinpoint-campaign-schedule-islocaltime
             '''
             result = self._values.get("is_local_time")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def quiet_time(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.QuietTimeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.QuietTimeProperty"]]:
             '''The default quiet time for the campaign.
 
             Quiet time is a specific time range when a campaign doesn't send messages to endpoints, if all the following conditions are met:
@@ -7083,7 +7083,7 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-schedule.html#cfn-pinpoint-campaign-schedule-quiettime
             '''
             result = self._values.get("quiet_time")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.QuietTimeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.QuietTimeProperty"]], result)
 
         @builtins.property
         def start_time(self) -> typing.Optional[builtins.str]:
@@ -7206,10 +7206,10 @@ class CfnCampaign(
         def __init__(
             self,
             *,
-            email_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.TemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            push_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.TemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sms_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.TemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            voice_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.TemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            email_template: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.TemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            push_template: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.TemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sms_template: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.TemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            voice_template: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.TemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the message template to use for the message, for each type of channel.
 
@@ -7265,40 +7265,40 @@ class CfnCampaign(
         @builtins.property
         def email_template(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateProperty"]]:
             '''The email template to use for the message.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-templateconfiguration.html#cfn-pinpoint-campaign-templateconfiguration-emailtemplate
             '''
             result = self._values.get("email_template")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateProperty"]], result)
 
         @builtins.property
         def push_template(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateProperty"]]:
             '''The push notification template to use for the message.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-templateconfiguration.html#cfn-pinpoint-campaign-templateconfiguration-pushtemplate
             '''
             result = self._values.get("push_template")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateProperty"]], result)
 
         @builtins.property
         def sms_template(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateProperty"]]:
             '''The SMS template to use for the message.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-templateconfiguration.html#cfn-pinpoint-campaign-templateconfiguration-smstemplate
             '''
             result = self._values.get("sms_template")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateProperty"]], result)
 
         @builtins.property
         def voice_template(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateProperty"]]:
             '''The voice template to use for the message.
 
             This object isn't supported for campaigns.
@@ -7306,7 +7306,7 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-templateconfiguration.html#cfn-pinpoint-campaign-templateconfiguration-voicetemplate
             '''
             result = self._values.get("voice_template")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7412,11 +7412,11 @@ class CfnCampaign(
         def __init__(
             self,
             *,
-            custom_delivery_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.CustomDeliveryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            message_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.MessageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            schedule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            custom_delivery_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.CustomDeliveryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            message_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.MessageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            schedule: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             size_percent: typing.Optional[jsii.Number] = None,
-            template_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.TemplateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            template_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.TemplateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             treatment_description: typing.Optional[builtins.str] = None,
             treatment_name: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -7674,7 +7674,7 @@ class CfnCampaign(
         @builtins.property
         def custom_delivery_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CustomDeliveryConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CustomDeliveryConfigurationProperty"]]:
             '''The delivery configuration settings for sending the treatment through a custom channel.
 
             This object is required if the ``MessageConfiguration`` object for the treatment specifies a ``CustomMessage`` object.
@@ -7682,29 +7682,29 @@ class CfnCampaign(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-writetreatmentresource.html#cfn-pinpoint-campaign-writetreatmentresource-customdeliveryconfiguration
             '''
             result = self._values.get("custom_delivery_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.CustomDeliveryConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CustomDeliveryConfigurationProperty"]], result)
 
         @builtins.property
         def message_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageConfigurationProperty"]]:
             '''The message configuration settings for the treatment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-writetreatmentresource.html#cfn-pinpoint-campaign-writetreatmentresource-messageconfiguration
             '''
             result = self._values.get("message_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.MessageConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageConfigurationProperty"]], result)
 
         @builtins.property
         def schedule(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.ScheduleProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.ScheduleProperty"]]:
             '''The schedule settings for the treatment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-writetreatmentresource.html#cfn-pinpoint-campaign-writetreatmentresource-schedule
             '''
             result = self._values.get("schedule")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.ScheduleProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.ScheduleProperty"]], result)
 
         @builtins.property
         def size_percent(self) -> typing.Optional[jsii.Number]:
@@ -7718,13 +7718,13 @@ class CfnCampaign(
         @builtins.property
         def template_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateConfigurationProperty"]]:
             '''The message template to use for the treatment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-campaign-writetreatmentresource.html#cfn-pinpoint-campaign-writetreatmentresource-templateconfiguration
             '''
             result = self._values.get("template_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCampaign.TemplateConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateConfigurationProperty"]], result)
 
         @builtins.property
         def treatment_description(self) -> typing.Optional[builtins.str]:
@@ -7786,20 +7786,20 @@ class CfnCampaignProps:
         *,
         application_id: builtins.str,
         name: builtins.str,
-        schedule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]],
+        schedule: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]],
         segment_id: builtins.str,
-        additional_treatments: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.WriteTreatmentResourceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        campaign_hook: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.CampaignHookProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        custom_delivery_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.CustomDeliveryConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        additional_treatments: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.WriteTreatmentResourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        campaign_hook: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.CampaignHookProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_delivery_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.CustomDeliveryConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         holdout_percent: typing.Optional[jsii.Number] = None,
-        is_paused: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        limits: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.LimitsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        message_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.MessageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        is_paused: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        limits: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.LimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        message_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.MessageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         priority: typing.Optional[jsii.Number] = None,
         segment_version: typing.Optional[jsii.Number] = None,
         tags: typing.Any = None,
-        template_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.TemplateConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        template_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCampaign.TemplateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         treatment_description: typing.Optional[builtins.str] = None,
         treatment_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -8339,14 +8339,14 @@ class CfnCampaignProps:
     @builtins.property
     def schedule(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCampaign.ScheduleProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCampaign.ScheduleProperty"]:
         '''The schedule settings for the treatment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-campaign.html#cfn-pinpoint-campaign-schedule
         '''
         result = self._values.get("schedule")
         assert result is not None, "Required property 'schedule' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCampaign.ScheduleProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCampaign.ScheduleProperty"], result)
 
     @builtins.property
     def segment_id(self) -> builtins.str:
@@ -8361,29 +8361,29 @@ class CfnCampaignProps:
     @builtins.property
     def additional_treatments(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCampaign.WriteTreatmentResourceProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCampaign.WriteTreatmentResourceProperty"]]]]:
         '''An array of requests that defines additional treatments for the campaign, in addition to the default treatment for the campaign.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-campaign.html#cfn-pinpoint-campaign-additionaltreatments
         '''
         result = self._values.get("additional_treatments")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCampaign.WriteTreatmentResourceProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCampaign.WriteTreatmentResourceProperty"]]]], result)
 
     @builtins.property
     def campaign_hook(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.CampaignHookProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignHookProperty"]]:
         '''Specifies the Lambda function to use as a code hook for a campaign.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-campaign.html#cfn-pinpoint-campaign-campaignhook
         '''
         result = self._values.get("campaign_hook")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.CampaignHookProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CampaignHookProperty"]], result)
 
     @builtins.property
     def custom_delivery_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.CustomDeliveryConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CustomDeliveryConfigurationProperty"]]:
         '''The delivery configuration settings for sending the treatment through a custom channel.
 
         This object is required if the ``MessageConfiguration`` object for the treatment specifies a ``CustomMessage`` object.
@@ -8391,7 +8391,7 @@ class CfnCampaignProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-campaign.html#cfn-pinpoint-campaign-customdeliveryconfiguration
         '''
         result = self._values.get("custom_delivery_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.CustomDeliveryConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.CustomDeliveryConfigurationProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -8414,7 +8414,7 @@ class CfnCampaignProps:
     @builtins.property
     def is_paused(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to pause the campaign.
 
         A paused campaign doesn't run unless you resume it by changing this value to ``false`` . If you restart a campaign, the campaign restarts from the beginning and not at the point you paused it. If a campaign is running it will complete and then pause. Pause only pauses or skips the next run for a recurring future scheduled campaign. A campaign scheduled for immediate can't be paused.
@@ -8422,29 +8422,29 @@ class CfnCampaignProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-campaign.html#cfn-pinpoint-campaign-ispaused
         '''
         result = self._values.get("is_paused")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def limits(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.LimitsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.LimitsProperty"]]:
         '''The messaging limits for the campaign.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-campaign.html#cfn-pinpoint-campaign-limits
         '''
         result = self._values.get("limits")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.LimitsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.LimitsProperty"]], result)
 
     @builtins.property
     def message_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.MessageConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageConfigurationProperty"]]:
         '''The message configuration settings for the treatment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-campaign.html#cfn-pinpoint-campaign-messageconfiguration
         '''
         result = self._values.get("message_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.MessageConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.MessageConfigurationProperty"]], result)
 
     @builtins.property
     def priority(self) -> typing.Optional[jsii.Number]:
@@ -8480,13 +8480,13 @@ class CfnCampaignProps:
     @builtins.property
     def template_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.TemplateConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateConfigurationProperty"]]:
         '''The message template to use for the treatment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-campaign.html#cfn-pinpoint-campaign-templateconfiguration
         '''
         result = self._values.get("template_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCampaign.TemplateConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCampaign.TemplateConfigurationProperty"]], result)
 
     @builtins.property
     def treatment_description(self) -> typing.Optional[builtins.str]:
@@ -8555,14 +8555,14 @@ class CfnEmailChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
         from_address: builtins.str,
         identity: builtins.str,
         configuration_set: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         orchestration_sending_role_arn: typing.Optional[builtins.str] = None,
         role_arn: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -8607,7 +8607,7 @@ class CfnEmailChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEmailChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8654,9 +8654,9 @@ class CfnEmailChannel(
 
     @builtins.property
     @jsii.member(jsii_name="emailChannelRef")
-    def email_channel_ref(self) -> _EmailChannelReference_3999c79c:
+    def email_channel_ref(self) -> "_EmailChannelReference_3999c79c":
         '''A reference to a EmailChannel resource.'''
-        return typing.cast(_EmailChannelReference_3999c79c, jsii.get(self, "emailChannelRef"))
+        return typing.cast("_EmailChannelReference_3999c79c", jsii.get(self, "emailChannelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -8714,14 +8714,14 @@ class CfnEmailChannel(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the email channel for the application.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b6552928532890b0bb4451f89e36f2fd0599fa25332569a30589de6dabd1c2ff)
@@ -8779,7 +8779,7 @@ class CfnEmailChannelProps:
         from_address: builtins.str,
         identity: builtins.str,
         configuration_set: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         orchestration_sending_role_arn: typing.Optional[builtins.str] = None,
         role_arn: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -8879,13 +8879,13 @@ class CfnEmailChannelProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the email channel for the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-emailchannel.html#cfn-pinpoint-emailchannel-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def orchestration_sending_role_arn(self) -> typing.Optional[builtins.str]:
@@ -8954,7 +8954,7 @@ class CfnEmailTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         subject: builtins.str,
@@ -8997,7 +8997,7 @@ class CfnEmailTemplate(
     @builtins.classmethod
     def arn_for_email_template(
         cls,
-        resource: _IEmailTemplateRef_6a5076b2,
+        resource: "_IEmailTemplateRef_6a5076b2",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -9020,7 +9020,7 @@ class CfnEmailTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEmailTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9073,15 +9073,15 @@ class CfnEmailTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="emailTemplateRef")
-    def email_template_ref(self) -> _EmailTemplateReference_bec37928:
+    def email_template_ref(self) -> "_EmailTemplateReference_bec37928":
         '''A reference to a EmailTemplate resource.'''
-        return typing.cast(_EmailTemplateReference_bec37928, jsii.get(self, "emailTemplateRef"))
+        return typing.cast("_EmailTemplateReference_bec37928", jsii.get(self, "emailTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="subject")
@@ -9369,7 +9369,7 @@ class CfnEventStream(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
@@ -9409,7 +9409,7 @@ class CfnEventStream(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventStream", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9453,9 +9453,9 @@ class CfnEventStream(
 
     @builtins.property
     @jsii.member(jsii_name="eventStreamRef")
-    def event_stream_ref(self) -> _EventStreamReference_8092140a:
+    def event_stream_ref(self) -> "_EventStreamReference_8092140a":
         '''A reference to a EventStream resource.'''
-        return typing.cast(_EventStreamReference_8092140a, jsii.get(self, "eventStreamRef"))
+        return typing.cast("_EventStreamReference_8092140a", jsii.get(self, "eventStreamRef"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -9627,13 +9627,13 @@ class CfnGCMChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
         api_key: typing.Optional[builtins.str] = None,
         default_authentication_method: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         service_json: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Pinpoint::GCMChannel``.
@@ -9673,7 +9673,7 @@ class CfnGCMChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGCMChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9720,9 +9720,9 @@ class CfnGCMChannel(
 
     @builtins.property
     @jsii.member(jsii_name="gcmChannelRef")
-    def gcm_channel_ref(self) -> _GCMChannelReference_6b018bc5:
+    def gcm_channel_ref(self) -> "_GCMChannelReference_6b018bc5":
         '''A reference to a GCMChannel resource.'''
-        return typing.cast(_GCMChannelReference_6b018bc5, jsii.get(self, "gcmChannelRef"))
+        return typing.cast("_GCMChannelReference_6b018bc5", jsii.get(self, "gcmChannelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -9770,14 +9770,14 @@ class CfnGCMChannel(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the GCM channel for the Amazon Pinpoint application.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__934c050e152924d121e2ce630b51de8fe2580d8d1dda58e4e88cd58ff0b0bbfa)
@@ -9816,7 +9816,7 @@ class CfnGCMChannelProps:
         application_id: builtins.str,
         api_key: typing.Optional[builtins.str] = None,
         default_authentication_method: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         service_json: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnGCMChannel``.
@@ -9898,13 +9898,13 @@ class CfnGCMChannelProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the GCM channel for the Amazon Pinpoint application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-gcmchannel.html#cfn-pinpoint-gcmchannel-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def service_json(self) -> typing.Optional[builtins.str]:
@@ -10023,11 +10023,11 @@ class CfnInAppTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         template_name: builtins.str,
-        content: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInAppTemplate.InAppMessageContentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        content: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInAppTemplate.InAppMessageContentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         custom_config: typing.Any = None,
         layout: typing.Optional[builtins.str] = None,
         tags: typing.Any = None,
@@ -10063,7 +10063,7 @@ class CfnInAppTemplate(
     @builtins.classmethod
     def arn_for_in_app_template(
         cls,
-        resource: _IInAppTemplateRef_3b6f9dee,
+        resource: "_IInAppTemplateRef_3b6f9dee",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -10077,10 +10077,10 @@ class CfnInAppTemplate(
     @builtins.classmethod
     def from_in_app_template_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IInAppTemplateRef_3b6f9dee:
+    ) -> "_IInAppTemplateRef_3b6f9dee":
         '''Creates a new IInAppTemplateRef from an ARN.
 
         :param scope: -
@@ -10092,16 +10092,16 @@ class CfnInAppTemplate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IInAppTemplateRef_3b6f9dee, jsii.sinvoke(cls, "fromInAppTemplateArn", [scope, id, arn]))
+        return typing.cast("_IInAppTemplateRef_3b6f9dee", jsii.sinvoke(cls, "fromInAppTemplateArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromTemplateName")
     @builtins.classmethod
     def from_template_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         template_name: builtins.str,
-    ) -> _IInAppTemplateRef_3b6f9dee:
+    ) -> "_IInAppTemplateRef_3b6f9dee":
         '''Creates a new IInAppTemplateRef from a templateName.
 
         :param scope: -
@@ -10113,7 +10113,7 @@ class CfnInAppTemplate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument template_name", value=template_name, expected_type=type_hints["template_name"])
-        return typing.cast(_IInAppTemplateRef_3b6f9dee, jsii.sinvoke(cls, "fromTemplateName", [scope, id, template_name]))
+        return typing.cast("_IInAppTemplateRef_3b6f9dee", jsii.sinvoke(cls, "fromTemplateName", [scope, id, template_name]))
 
     @jsii.member(jsii_name="isCfnInAppTemplate")
     @builtins.classmethod
@@ -10128,7 +10128,7 @@ class CfnInAppTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInAppTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10173,15 +10173,15 @@ class CfnInAppTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="inAppTemplateRef")
-    def in_app_template_ref(self) -> _InAppTemplateReference_6277e069:
+    def in_app_template_ref(self) -> "_InAppTemplateReference_6277e069":
         '''A reference to a InAppTemplate resource.'''
-        return typing.cast(_InAppTemplateReference_6277e069, jsii.get(self, "inAppTemplateRef"))
+        return typing.cast("_InAppTemplateReference_6277e069", jsii.get(self, "inAppTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="templateName")
@@ -10200,14 +10200,14 @@ class CfnInAppTemplate(
     @jsii.member(jsii_name="content")
     def content(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.InAppMessageContentProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.InAppMessageContentProperty"]]]]:
         '''An object that contains information about the content of an in-app message, including its title and body text, text colors, background colors, images, buttons, and behaviors.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.InAppMessageContentProperty"]]]], jsii.get(self, "content"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.InAppMessageContentProperty"]]]], jsii.get(self, "content"))
 
     @content.setter
     def content(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.InAppMessageContentProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.InAppMessageContentProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__29c306b59b5a82d785edcc24ad4f92afce261ef2ea4bd786f4c5db21c19d779c)
@@ -10374,10 +10374,10 @@ class CfnInAppTemplate(
         def __init__(
             self,
             *,
-            android: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInAppTemplate.OverrideButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            default_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInAppTemplate.DefaultButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            ios: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInAppTemplate.OverrideButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            web: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInAppTemplate.OverrideButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            android: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInAppTemplate.OverrideButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            default_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInAppTemplate.DefaultButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ios: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInAppTemplate.OverrideButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            web: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInAppTemplate.OverrideButtonConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the behavior of buttons that appear in an in-app message template.
 
@@ -10437,7 +10437,7 @@ class CfnInAppTemplate(
         @builtins.property
         def android(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.OverrideButtonConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.OverrideButtonConfigurationProperty"]]:
             '''Optional button configuration to use for in-app messages sent to Android devices.
 
             This button configuration overrides the default button configuration.
@@ -10445,12 +10445,12 @@ class CfnInAppTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-inapptemplate-buttonconfig.html#cfn-pinpoint-inapptemplate-buttonconfig-android
             '''
             result = self._values.get("android")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.OverrideButtonConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.OverrideButtonConfigurationProperty"]], result)
 
         @builtins.property
         def default_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.DefaultButtonConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.DefaultButtonConfigurationProperty"]]:
             '''Specifies the default behavior of a button that appears in an in-app message.
 
             You can optionally add button configurations that specifically apply to iOS, Android, or web browser users.
@@ -10458,12 +10458,12 @@ class CfnInAppTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-inapptemplate-buttonconfig.html#cfn-pinpoint-inapptemplate-buttonconfig-defaultconfig
             '''
             result = self._values.get("default_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.DefaultButtonConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.DefaultButtonConfigurationProperty"]], result)
 
         @builtins.property
         def ios(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.OverrideButtonConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.OverrideButtonConfigurationProperty"]]:
             '''Optional button configuration to use for in-app messages sent to iOS devices.
 
             This button configuration overrides the default button configuration.
@@ -10471,12 +10471,12 @@ class CfnInAppTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-inapptemplate-buttonconfig.html#cfn-pinpoint-inapptemplate-buttonconfig-ios
             '''
             result = self._values.get("ios")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.OverrideButtonConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.OverrideButtonConfigurationProperty"]], result)
 
         @builtins.property
         def web(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.OverrideButtonConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.OverrideButtonConfigurationProperty"]]:
             '''Optional button configuration to use for in-app messages sent to web applications.
 
             This button configuration overrides the default button configuration.
@@ -10484,7 +10484,7 @@ class CfnInAppTemplate(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-inapptemplate-buttonconfig.html#cfn-pinpoint-inapptemplate-buttonconfig-web
             '''
             result = self._values.get("web")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.OverrideButtonConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.OverrideButtonConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10750,11 +10750,11 @@ class CfnInAppTemplate(
             self,
             *,
             background_color: typing.Optional[builtins.str] = None,
-            body_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInAppTemplate.BodyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            header_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInAppTemplate.HeaderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            body_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInAppTemplate.BodyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            header_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInAppTemplate.HeaderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             image_url: typing.Optional[builtins.str] = None,
-            primary_btn: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInAppTemplate.ButtonConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            secondary_btn: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInAppTemplate.ButtonConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            primary_btn: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInAppTemplate.ButtonConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            secondary_btn: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInAppTemplate.ButtonConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the configuration of an in-app message, including its header, body, buttons, colors, and images.
 
@@ -10867,24 +10867,24 @@ class CfnInAppTemplate(
         @builtins.property
         def body_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.BodyConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.BodyConfigProperty"]]:
             '''An object that contains configuration information about the header or title text of the in-app message.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-inapptemplate-inappmessagecontent.html#cfn-pinpoint-inapptemplate-inappmessagecontent-bodyconfig
             '''
             result = self._values.get("body_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.BodyConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.BodyConfigProperty"]], result)
 
         @builtins.property
         def header_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.HeaderConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.HeaderConfigProperty"]]:
             '''An object that contains configuration information about the header or title text of the in-app message.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-inapptemplate-inappmessagecontent.html#cfn-pinpoint-inapptemplate-inappmessagecontent-headerconfig
             '''
             result = self._values.get("header_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.HeaderConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.HeaderConfigProperty"]], result)
 
         @builtins.property
         def image_url(self) -> typing.Optional[builtins.str]:
@@ -10898,24 +10898,24 @@ class CfnInAppTemplate(
         @builtins.property
         def primary_btn(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.ButtonConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.ButtonConfigProperty"]]:
             '''An object that contains configuration information about the primary button in an in-app message.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-inapptemplate-inappmessagecontent.html#cfn-pinpoint-inapptemplate-inappmessagecontent-primarybtn
             '''
             result = self._values.get("primary_btn")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.ButtonConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.ButtonConfigProperty"]], result)
 
         @builtins.property
         def secondary_btn(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.ButtonConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.ButtonConfigProperty"]]:
             '''An object that contains configuration information about the secondary button in an in-app message.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-inapptemplate-inappmessagecontent.html#cfn-pinpoint-inapptemplate-inappmessagecontent-secondarybtn
             '''
             result = self._values.get("secondary_btn")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInAppTemplate.ButtonConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.ButtonConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11022,7 +11022,7 @@ class CfnInAppTemplateProps:
         self,
         *,
         template_name: builtins.str,
-        content: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInAppTemplate.InAppMessageContentProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        content: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInAppTemplate.InAppMessageContentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         custom_config: typing.Any = None,
         layout: typing.Optional[builtins.str] = None,
         tags: typing.Any = None,
@@ -11152,13 +11152,13 @@ class CfnInAppTemplateProps:
     @builtins.property
     def content(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInAppTemplate.InAppMessageContentProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.InAppMessageContentProperty"]]]]:
         '''An object that contains information about the content of an in-app message, including its title and body text, text colors, background colors, images, buttons, and behaviors.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-inapptemplate.html#cfn-pinpoint-inapptemplate-content
         '''
         result = self._values.get("content")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInAppTemplate.InAppMessageContentProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInAppTemplate.InAppMessageContentProperty"]]]], result)
 
     @builtins.property
     def custom_config(self) -> typing.Any:
@@ -11296,16 +11296,16 @@ class CfnPushTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         template_name: builtins.str,
-        adm: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPushTemplate.AndroidPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        apns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPushTemplate.APNSPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        baidu: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPushTemplate.AndroidPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        default: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPushTemplate.DefaultPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        adm: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPushTemplate.AndroidPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        apns: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPushTemplate.APNSPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        baidu: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPushTemplate.AndroidPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        default: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPushTemplate.DefaultPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         default_substitutions: typing.Optional[builtins.str] = None,
-        gcm: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPushTemplate.AndroidPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        gcm: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPushTemplate.AndroidPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
         template_description: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -11345,7 +11345,7 @@ class CfnPushTemplate(
     @builtins.classmethod
     def arn_for_push_template(
         cls,
-        resource: _IPushTemplateRef_7e742797,
+        resource: "_IPushTemplateRef_7e742797",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -11368,7 +11368,7 @@ class CfnPushTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPushTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -11421,15 +11421,15 @@ class CfnPushTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="pushTemplateRef")
-    def push_template_ref(self) -> _PushTemplateReference_d4d6f948:
+    def push_template_ref(self) -> "_PushTemplateReference_d4d6f948":
         '''A reference to a PushTemplate resource.'''
-        return typing.cast(_PushTemplateReference_d4d6f948, jsii.get(self, "pushTemplateRef"))
+        return typing.cast("_PushTemplateReference_d4d6f948", jsii.get(self, "pushTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="templateName")
@@ -11448,14 +11448,14 @@ class CfnPushTemplate(
     @jsii.member(jsii_name="adm")
     def adm(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]]:
         '''The message template to use for the ADM (Amazon Device Messaging) channel.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]], jsii.get(self, "adm"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]], jsii.get(self, "adm"))
 
     @adm.setter
     def adm(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__32be5ab1563dc059696ad2e290c93a984c7450eb1d680d90dca0e7d42ea02fbd)
@@ -11466,14 +11466,14 @@ class CfnPushTemplate(
     @jsii.member(jsii_name="apns")
     def apns(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.APNSPushNotificationTemplateProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.APNSPushNotificationTemplateProperty"]]:
         '''The message template to use for the APNs (Apple Push Notification service) channel.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.APNSPushNotificationTemplateProperty"]], jsii.get(self, "apns"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.APNSPushNotificationTemplateProperty"]], jsii.get(self, "apns"))
 
     @apns.setter
     def apns(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.APNSPushNotificationTemplateProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.APNSPushNotificationTemplateProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__77bf2e4b13ec2cfe475f08ed23562640cbcde98d9cb8138c3f3573cc417e532f)
@@ -11484,14 +11484,14 @@ class CfnPushTemplate(
     @jsii.member(jsii_name="baidu")
     def baidu(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]]:
         '''The message template to use for the Baidu (Baidu Cloud Push) channel.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]], jsii.get(self, "baidu"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]], jsii.get(self, "baidu"))
 
     @baidu.setter
     def baidu(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2dcb8053ca59ff9c0be19a4383b3295f95ada8ab1360a0c61f563aac118fc624)
@@ -11502,14 +11502,14 @@ class CfnPushTemplate(
     @jsii.member(jsii_name="default")
     def default(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.DefaultPushNotificationTemplateProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.DefaultPushNotificationTemplateProperty"]]:
         '''The default message template to use for push notification channels.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.DefaultPushNotificationTemplateProperty"]], jsii.get(self, "default"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.DefaultPushNotificationTemplateProperty"]], jsii.get(self, "default"))
 
     @default.setter
     def default(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.DefaultPushNotificationTemplateProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.DefaultPushNotificationTemplateProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1c2576f9168b75160bea5859251791623f4dc1decc495cb1d53a55ff7a531800)
@@ -11533,14 +11533,14 @@ class CfnPushTemplate(
     @jsii.member(jsii_name="gcm")
     def gcm(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]]:
         '''The message template to use for the GCM channel, which is used to send notifications through the Firebase Cloud Messaging (FCM), formerly Google Cloud Messaging (GCM), service.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]], jsii.get(self, "gcm"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]], jsii.get(self, "gcm"))
 
     @gcm.setter
     def gcm(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__156c2a5b1c581871d4bbfb9adc0ebccc63555f7c7e7091b1772889dc981ccba4)
@@ -12053,12 +12053,12 @@ class CfnPushTemplateProps:
         self,
         *,
         template_name: builtins.str,
-        adm: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPushTemplate.AndroidPushNotificationTemplateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        apns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPushTemplate.APNSPushNotificationTemplateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        baidu: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPushTemplate.AndroidPushNotificationTemplateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        default: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPushTemplate.DefaultPushNotificationTemplateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        adm: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPushTemplate.AndroidPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        apns: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPushTemplate.APNSPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        baidu: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPushTemplate.AndroidPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        default: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPushTemplate.DefaultPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         default_substitutions: typing.Optional[builtins.str] = None,
-        gcm: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPushTemplate.AndroidPushNotificationTemplateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        gcm: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPushTemplate.AndroidPushNotificationTemplateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
         template_description: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -12185,7 +12185,7 @@ class CfnPushTemplateProps:
     @builtins.property
     def adm(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPushTemplate.AndroidPushNotificationTemplateProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]]:
         '''The message template to use for the ADM (Amazon Device Messaging) channel.
 
         This message template overrides the default template for push notification channels ( ``Default`` ).
@@ -12193,12 +12193,12 @@ class CfnPushTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-pushtemplate.html#cfn-pinpoint-pushtemplate-adm
         '''
         result = self._values.get("adm")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPushTemplate.AndroidPushNotificationTemplateProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]], result)
 
     @builtins.property
     def apns(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPushTemplate.APNSPushNotificationTemplateProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.APNSPushNotificationTemplateProperty"]]:
         '''The message template to use for the APNs (Apple Push Notification service) channel.
 
         This message template overrides the default template for push notification channels ( ``Default`` ).
@@ -12206,12 +12206,12 @@ class CfnPushTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-pushtemplate.html#cfn-pinpoint-pushtemplate-apns
         '''
         result = self._values.get("apns")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPushTemplate.APNSPushNotificationTemplateProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.APNSPushNotificationTemplateProperty"]], result)
 
     @builtins.property
     def baidu(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPushTemplate.AndroidPushNotificationTemplateProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]]:
         '''The message template to use for the Baidu (Baidu Cloud Push) channel.
 
         This message template overrides the default template for push notification channels ( ``Default`` ).
@@ -12219,18 +12219,18 @@ class CfnPushTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-pushtemplate.html#cfn-pinpoint-pushtemplate-baidu
         '''
         result = self._values.get("baidu")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPushTemplate.AndroidPushNotificationTemplateProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]], result)
 
     @builtins.property
     def default(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPushTemplate.DefaultPushNotificationTemplateProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.DefaultPushNotificationTemplateProperty"]]:
         '''The default message template to use for push notification channels.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-pushtemplate.html#cfn-pinpoint-pushtemplate-default
         '''
         result = self._values.get("default")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPushTemplate.DefaultPushNotificationTemplateProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.DefaultPushNotificationTemplateProperty"]], result)
 
     @builtins.property
     def default_substitutions(self) -> typing.Optional[builtins.str]:
@@ -12246,7 +12246,7 @@ class CfnPushTemplateProps:
     @builtins.property
     def gcm(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPushTemplate.AndroidPushNotificationTemplateProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]]:
         '''The message template to use for the GCM channel, which is used to send notifications through the Firebase Cloud Messaging (FCM), formerly Google Cloud Messaging (GCM), service.
 
         This message template overrides the default template for push notification channels ( ``Default`` ).
@@ -12254,7 +12254,7 @@ class CfnPushTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-pushtemplate.html#cfn-pinpoint-pushtemplate-gcm
         '''
         result = self._values.get("gcm")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPushTemplate.AndroidPushNotificationTemplateProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPushTemplate.AndroidPushNotificationTemplateProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Any:
@@ -12322,11 +12322,11 @@ class CfnSMSChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         sender_id: typing.Optional[builtins.str] = None,
         short_code: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -12365,7 +12365,7 @@ class CfnSMSChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSMSChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12412,9 +12412,9 @@ class CfnSMSChannel(
 
     @builtins.property
     @jsii.member(jsii_name="smsChannelRef")
-    def sms_channel_ref(self) -> _SMSChannelReference_c3feaaf4:
+    def sms_channel_ref(self) -> "_SMSChannelReference_c3feaaf4":
         '''A reference to a SMSChannel resource.'''
-        return typing.cast(_SMSChannelReference_c3feaaf4, jsii.get(self, "smsChannelRef"))
+        return typing.cast("_SMSChannelReference_c3feaaf4", jsii.get(self, "smsChannelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -12433,14 +12433,14 @@ class CfnSMSChannel(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the SMS channel for the application.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2854f045b9f30c7825e8267836e4fbe8206a1f421b757b06ed0b04dbb40c5a12)
@@ -12489,7 +12489,7 @@ class CfnSMSChannelProps:
         self,
         *,
         application_id: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         sender_id: typing.Optional[builtins.str] = None,
         short_code: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -12547,13 +12547,13 @@ class CfnSMSChannelProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the SMS channel for the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-smschannel.html#cfn-pinpoint-smschannel-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def sender_id(self) -> typing.Optional[builtins.str]:
@@ -12740,13 +12740,13 @@ class CfnSegment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
         name: builtins.str,
-        dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.SegmentDimensionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        segment_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.SegmentGroupsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SegmentDimensionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        segment_groups: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SegmentGroupsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Create a new ``AWS::Pinpoint::Segment``.
@@ -12775,7 +12775,7 @@ class CfnSegment(
 
     @jsii.member(jsii_name="arnForSegment")
     @builtins.classmethod
-    def arn_for_segment(cls, resource: _ISegmentRef_9a56cdde) -> builtins.str:
+    def arn_for_segment(cls, resource: "_ISegmentRef_9a56cdde") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -12797,7 +12797,7 @@ class CfnSegment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSegment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12851,15 +12851,15 @@ class CfnSegment(
 
     @builtins.property
     @jsii.member(jsii_name="segmentRef")
-    def segment_ref(self) -> _SegmentReference_40db23eb:
+    def segment_ref(self) -> "_SegmentReference_40db23eb":
         '''A reference to a Segment resource.'''
-        return typing.cast(_SegmentReference_40db23eb, jsii.get(self, "segmentRef"))
+        return typing.cast("_SegmentReference_40db23eb", jsii.get(self, "segmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -12891,14 +12891,14 @@ class CfnSegment(
     @jsii.member(jsii_name="dimensions")
     def dimensions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SegmentDimensionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SegmentDimensionsProperty"]]:
         '''An array that defines the dimensions for the segment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SegmentDimensionsProperty"]], jsii.get(self, "dimensions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SegmentDimensionsProperty"]], jsii.get(self, "dimensions"))
 
     @dimensions.setter
     def dimensions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SegmentDimensionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SegmentDimensionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7596346842df00f96b4cdfdbd4c88e3d1ebd1006ff6eef96d986ad843c4fe2e1)
@@ -12909,14 +12909,14 @@ class CfnSegment(
     @jsii.member(jsii_name="segmentGroups")
     def segment_groups(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SegmentGroupsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SegmentGroupsProperty"]]:
         '''The segment group to use and the dimensions to apply to the group's base segments in order to build the segment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SegmentGroupsProperty"]], jsii.get(self, "segmentGroups"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SegmentGroupsProperty"]], jsii.get(self, "segmentGroups"))
 
     @segment_groups.setter
     def segment_groups(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SegmentGroupsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SegmentGroupsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7e5f8482204fc248f33a5d809b6fe0b1a60a440ed824a88a497c788578f74864)
@@ -13012,7 +13012,7 @@ class CfnSegment(
         def __init__(
             self,
             *,
-            recency: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.RecencyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            recency: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.RecencyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies behavior-based criteria for the segment, such as how recently users have used your app.
 
@@ -13044,13 +13044,13 @@ class CfnSegment(
         @builtins.property
         def recency(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.RecencyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.RecencyProperty"]]:
             '''Specifies how recently segment members were active.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-behavior.html#cfn-pinpoint-segment-behavior-recency
             '''
             result = self._values.get("recency")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.RecencyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.RecencyProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13145,12 +13145,12 @@ class CfnSegment(
         def __init__(
             self,
             *,
-            app_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            channel: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            device_type: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            make: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            model: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            platform: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            app_version: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            channel: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            device_type: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            make: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            model: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            platform: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies demographic-based criteria, such as device platform, for the segment.
 
@@ -13222,68 +13222,68 @@ class CfnSegment(
         @builtins.property
         def app_version(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]]:
             '''The app version criteria for the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-demographic.html#cfn-pinpoint-segment-demographic-appversion
             '''
             result = self._values.get("app_version")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]], result)
 
         @builtins.property
         def channel(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]]:
             '''The channel criteria for the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-demographic.html#cfn-pinpoint-segment-demographic-channel
             '''
             result = self._values.get("channel")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]], result)
 
         @builtins.property
         def device_type(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]]:
             '''The device type criteria for the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-demographic.html#cfn-pinpoint-segment-demographic-devicetype
             '''
             result = self._values.get("device_type")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]], result)
 
         @builtins.property
         def make(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]]:
             '''The device make criteria for the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-demographic.html#cfn-pinpoint-segment-demographic-make
             '''
             result = self._values.get("make")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]], result)
 
         @builtins.property
         def model(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]]:
             '''The device model criteria for the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-demographic.html#cfn-pinpoint-segment-demographic-model
             '''
             result = self._values.get("model")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]], result)
 
         @builtins.property
         def platform(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]]:
             '''The device platform criteria for the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-demographic.html#cfn-pinpoint-segment-demographic-platform
             '''
             result = self._values.get("platform")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13308,7 +13308,7 @@ class CfnSegment(
         def __init__(
             self,
             *,
-            coordinates: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.CoordinatesProperty", typing.Dict[builtins.str, typing.Any]]],
+            coordinates: typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.CoordinatesProperty", typing.Dict[builtins.str, typing.Any]]],
             range_in_kilometers: jsii.Number,
         ) -> None:
             '''Specifies the GPS coordinates of the endpoint location.
@@ -13345,14 +13345,14 @@ class CfnSegment(
         @builtins.property
         def coordinates(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnSegment.CoordinatesProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnSegment.CoordinatesProperty"]:
             '''The GPS coordinates to measure distance from.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-gpspoint.html#cfn-pinpoint-segment-gpspoint-coordinates
             '''
             result = self._values.get("coordinates")
             assert result is not None, "Required property 'coordinates' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSegment.CoordinatesProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnSegment.CoordinatesProperty"], result)
 
         @builtins.property
         def range_in_kilometers(self) -> jsii.Number:
@@ -13389,8 +13389,8 @@ class CfnSegment(
         def __init__(
             self,
             *,
-            dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.SegmentDimensionsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            source_segments: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.SourceSegmentsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SegmentDimensionsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            source_segments: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SourceSegmentsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             source_type: typing.Optional[builtins.str] = None,
             type: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -13494,18 +13494,18 @@ class CfnSegment(
         @builtins.property
         def dimensions(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSegment.SegmentDimensionsProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSegment.SegmentDimensionsProperty"]]]]:
             '''An array that defines the dimensions to include or exclude from the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-groups.html#cfn-pinpoint-segment-groups-dimensions
             '''
             result = self._values.get("dimensions")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSegment.SegmentDimensionsProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSegment.SegmentDimensionsProperty"]]]], result)
 
         @builtins.property
         def source_segments(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSegment.SourceSegmentsProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSegment.SourceSegmentsProperty"]]]]:
             '''The base segment to build the segment on.
 
             A base segment, also called a *source segment* , defines the initial population of endpoints for a segment. When you add dimensions to the segment, Amazon Pinpoint filters the base segment by using the dimensions that you specify.
@@ -13515,7 +13515,7 @@ class CfnSegment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-groups.html#cfn-pinpoint-segment-groups-sourcesegments
             '''
             result = self._values.get("source_segments")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSegment.SourceSegmentsProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSegment.SourceSegmentsProperty"]]]], result)
 
         @builtins.property
         def source_type(self) -> typing.Optional[builtins.str]:
@@ -13559,8 +13559,8 @@ class CfnSegment(
         def __init__(
             self,
             *,
-            country: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            gps_point: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.GPSPointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            country: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SetDimensionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            gps_point: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.GPSPointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies location-based criteria, such as region or GPS coordinates, for the segment.
 
@@ -13603,24 +13603,24 @@ class CfnSegment(
         @builtins.property
         def country(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]]:
             '''The country or region code, in ISO 3166-1 alpha-2 format, for the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-location.html#cfn-pinpoint-segment-location-country
             '''
             result = self._values.get("country")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.SetDimensionProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SetDimensionProperty"]], result)
 
         @builtins.property
         def gps_point(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.GPSPointProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.GPSPointProperty"]]:
             '''The GPS point dimension for the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-location.html#cfn-pinpoint-segment-location-gpspoint
             '''
             result = self._values.get("gps_point")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.GPSPointProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.GPSPointProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13725,9 +13725,9 @@ class CfnSegment(
             self,
             *,
             attributes: typing.Any = None,
-            behavior: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.BehaviorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            demographic: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.DemographicProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            behavior: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.BehaviorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            demographic: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.DemographicProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             metrics: typing.Any = None,
             user_attributes: typing.Any = None,
         ) -> None:
@@ -13840,35 +13840,35 @@ class CfnSegment(
         @builtins.property
         def behavior(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.BehaviorProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.BehaviorProperty"]]:
             '''The behavior-based criteria, such as how recently users have used your app, for the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-segmentdimensions.html#cfn-pinpoint-segment-segmentdimensions-behavior
             '''
             result = self._values.get("behavior")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.BehaviorProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.BehaviorProperty"]], result)
 
         @builtins.property
         def demographic(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.DemographicProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.DemographicProperty"]]:
             '''The demographic-based criteria, such as device platform, for the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-segmentdimensions.html#cfn-pinpoint-segment-segmentdimensions-demographic
             '''
             result = self._values.get("demographic")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.DemographicProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.DemographicProperty"]], result)
 
         @builtins.property
         def location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.LocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.LocationProperty"]]:
             '''The location-based criteria, such as region or GPS coordinates, for the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-segmentdimensions.html#cfn-pinpoint-segment-segmentdimensions-location
             '''
             result = self._values.get("location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegment.LocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.LocationProperty"]], result)
 
         @builtins.property
         def metrics(self) -> typing.Any:
@@ -13908,7 +13908,7 @@ class CfnSegment(
         def __init__(
             self,
             *,
-            groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegment.GroupsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            groups: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.GroupsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             include: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Specifies the set of segment criteria to evaluate when handling segment groups for the segment.
@@ -14006,13 +14006,13 @@ class CfnSegment(
         @builtins.property
         def groups(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSegment.GroupsProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSegment.GroupsProperty"]]]]:
             '''Specifies the set of segment criteria to evaluate when handling segment groups for the segment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pinpoint-segment-segmentgroups.html#cfn-pinpoint-segment-segmentgroups-groups
             '''
             result = self._values.get("groups")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSegment.GroupsProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSegment.GroupsProperty"]]]], result)
 
         @builtins.property
         def include(self) -> typing.Optional[builtins.str]:
@@ -14205,8 +14205,8 @@ class CfnSegmentProps:
         *,
         application_id: builtins.str,
         name: builtins.str,
-        dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSegment.SegmentDimensionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        segment_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSegment.SegmentGroupsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        dimensions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SegmentDimensionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        segment_groups: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSegment.SegmentGroupsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Any = None,
     ) -> None:
         '''Properties for defining a ``CfnSegment``.
@@ -14397,18 +14397,18 @@ class CfnSegmentProps:
     @builtins.property
     def dimensions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSegment.SegmentDimensionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SegmentDimensionsProperty"]]:
         '''An array that defines the dimensions for the segment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-segment.html#cfn-pinpoint-segment-dimensions
         '''
         result = self._values.get("dimensions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSegment.SegmentDimensionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SegmentDimensionsProperty"]], result)
 
     @builtins.property
     def segment_groups(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSegment.SegmentGroupsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SegmentGroupsProperty"]]:
         '''The segment group to use and the dimensions to apply to the group's base segments in order to build the segment.
 
         A segment group can consist of zero or more base segments. Your request can include only one segment group.
@@ -14416,7 +14416,7 @@ class CfnSegmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-segment.html#cfn-pinpoint-segment-segmentgroups
         '''
         result = self._values.get("segment_groups")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSegment.SegmentGroupsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSegment.SegmentGroupsProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Any:
@@ -14476,7 +14476,7 @@ class CfnSmsTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         body: builtins.str,
@@ -14511,7 +14511,10 @@ class CfnSmsTemplate(
 
     @jsii.member(jsii_name="arnForSmsTemplate")
     @builtins.classmethod
-    def arn_for_sms_template(cls, resource: _ISmsTemplateRef_657f9e4f) -> builtins.str:
+    def arn_for_sms_template(
+        cls,
+        resource: "_ISmsTemplateRef_657f9e4f",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -14533,7 +14536,7 @@ class CfnSmsTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSmsTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -14586,15 +14589,15 @@ class CfnSmsTemplate(
 
     @builtins.property
     @jsii.member(jsii_name="smsTemplateRef")
-    def sms_template_ref(self) -> _SmsTemplateReference_2ceeb6df:
+    def sms_template_ref(self) -> "_SmsTemplateReference_2ceeb6df":
         '''A reference to a SmsTemplate resource.'''
-        return typing.cast(_SmsTemplateReference_2ceeb6df, jsii.get(self, "smsTemplateRef"))
+        return typing.cast("_SmsTemplateReference_2ceeb6df", jsii.get(self, "smsTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="body")
@@ -14827,11 +14830,11 @@ class CfnVoiceChannel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_id: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::Pinpoint::VoiceChannel``.
 
@@ -14861,7 +14864,7 @@ class CfnVoiceChannel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVoiceChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -14908,9 +14911,9 @@ class CfnVoiceChannel(
 
     @builtins.property
     @jsii.member(jsii_name="voiceChannelRef")
-    def voice_channel_ref(self) -> _VoiceChannelReference_cd116e86:
+    def voice_channel_ref(self) -> "_VoiceChannelReference_cd116e86":
         '''A reference to a VoiceChannel resource.'''
-        return typing.cast(_VoiceChannelReference_cd116e86, jsii.get(self, "voiceChannelRef"))
+        return typing.cast("_VoiceChannelReference_cd116e86", jsii.get(self, "voiceChannelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="applicationId")
@@ -14929,14 +14932,14 @@ class CfnVoiceChannel(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the voice channel for the application.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__55f9072e4ea10db6545a901f75a87f0db23d51ed4c12907c8203b488bc5d23b8)
@@ -14954,7 +14957,7 @@ class CfnVoiceChannelProps:
         self,
         *,
         application_id: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnVoiceChannel``.
 
@@ -15000,13 +15003,13 @@ class CfnVoiceChannelProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether to enable the voice channel for the application.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pinpoint-voicechannel.html#cfn-pinpoint-voicechannel-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

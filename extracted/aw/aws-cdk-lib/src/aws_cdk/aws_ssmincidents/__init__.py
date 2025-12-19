@@ -89,6 +89,7 @@ class CfnReplicationSet(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ssmincidents as ssmincidents
@@ -112,12 +113,12 @@ class CfnReplicationSet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        regions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicationSet.ReplicationRegionProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        deletion_protected: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        regions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationSet.ReplicationRegionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        deletion_protected: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SSMIncidents::ReplicationSet``.
 
@@ -141,7 +142,7 @@ class CfnReplicationSet(
     @builtins.classmethod
     def arn_for_replication_set(
         cls,
-        resource: _IReplicationSetRef_fc6aa93f,
+        resource: "_IReplicationSetRef_fc6aa93f",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -164,7 +165,7 @@ class CfnReplicationSet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReplicationSet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -209,28 +210,28 @@ class CfnReplicationSet(
 
     @builtins.property
     @jsii.member(jsii_name="replicationSetRef")
-    def replication_set_ref(self) -> _ReplicationSetReference_e9b928b8:
+    def replication_set_ref(self) -> "_ReplicationSetReference_e9b928b8":
         '''A reference to a ReplicationSet resource.'''
-        return typing.cast(_ReplicationSetReference_e9b928b8, jsii.get(self, "replicationSetRef"))
+        return typing.cast("_ReplicationSetReference_e9b928b8", jsii.get(self, "replicationSetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="regions")
     def regions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationSet.ReplicationRegionProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationSet.ReplicationRegionProperty"]]]:
         '''Specifies the Regions of the replication set.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationSet.ReplicationRegionProperty"]]], jsii.get(self, "regions"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationSet.ReplicationRegionProperty"]]], jsii.get(self, "regions"))
 
     @regions.setter
     def regions(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationSet.ReplicationRegionProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationSet.ReplicationRegionProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__401a825f2f64c7f43aa191b445089e3f05c7d604910b0cc21cc3247482fe6b87)
@@ -241,14 +242,14 @@ class CfnReplicationSet(
     @jsii.member(jsii_name="deletionProtected")
     def deletion_protected(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Determines if the replication set deletion protection is enabled or not.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "deletionProtected"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deletionProtected"))
 
     @deletion_protected.setter
     def deletion_protected(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f7e80c63bdb3a34f34a60cf2c6007569f91534c850e3e0d5ff81971357b84ceb)
@@ -257,12 +258,12 @@ class CfnReplicationSet(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to add to the replication set.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__62a5418c191d29d34460607507ddfc1db20d9c238a6e3b7c23836c5d8567bb40)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -332,7 +333,7 @@ class CfnReplicationSet(
         def __init__(
             self,
             *,
-            region_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicationSet.RegionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            region_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationSet.RegionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             region_name: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The ``ReplicationRegion`` property type specifies the Region and AWS Key Management Service key to add to the replication set.
@@ -369,13 +370,13 @@ class CfnReplicationSet(
         @builtins.property
         def region_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReplicationSet.RegionConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnReplicationSet.RegionConfigurationProperty"]]:
             '''Specifies the Region configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-replicationset-replicationregion.html#cfn-ssmincidents-replicationset-replicationregion-regionconfiguration
             '''
             result = self._values.get("region_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReplicationSet.RegionConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnReplicationSet.RegionConfigurationProperty"]], result)
 
         @builtins.property
         def region_name(self) -> typing.Optional[builtins.str]:
@@ -411,9 +412,9 @@ class CfnReplicationSetProps:
     def __init__(
         self,
         *,
-        regions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnReplicationSet.ReplicationRegionProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        deletion_protected: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        regions: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationSet.ReplicationRegionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        deletion_protected: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnReplicationSet``.
 
@@ -426,6 +427,7 @@ class CfnReplicationSetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ssmincidents as ssmincidents
@@ -462,19 +464,19 @@ class CfnReplicationSetProps:
     @builtins.property
     def regions(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnReplicationSet.ReplicationRegionProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationSet.ReplicationRegionProperty"]]]:
         '''Specifies the Regions of the replication set.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmincidents-replicationset.html#cfn-ssmincidents-replicationset-regions
         '''
         result = self._values.get("regions")
         assert result is not None, "Required property 'regions' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnReplicationSet.ReplicationRegionProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationSet.ReplicationRegionProperty"]]], result)
 
     @builtins.property
     def deletion_protected(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Determines if the replication set deletion protection is enabled or not.
 
         If deletion protection is enabled, you can't delete the last Region in the replication set.
@@ -482,16 +484,16 @@ class CfnReplicationSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmincidents-replicationset.html#cfn-ssmincidents-replicationset-deletionprotected
         '''
         result = self._values.get("deletion_protected")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to add to the replication set.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmincidents-replicationset.html#cfn-ssmincidents-replicationset-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -519,6 +521,7 @@ class CfnResponsePlan(
 
     Example::
 
+        from aws_cdk import CfnTag, CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ssmincidents as ssmincidents
@@ -585,17 +588,17 @@ class CfnResponsePlan(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        incident_template: typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponsePlan.IncidentTemplateProperty", typing.Dict[builtins.str, typing.Any]]],
+        incident_template: typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.IncidentTemplateProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
-        actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponsePlan.ActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        chat_channel: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponsePlan.ChatChannelProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        actions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.ActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        chat_channel: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.ChatChannelProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         display_name: typing.Optional[builtins.str] = None,
         engagements: typing.Optional[typing.Sequence[builtins.str]] = None,
-        integrations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponsePlan.IntegrationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        integrations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.IntegrationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::SSMIncidents::ResponsePlan``.
 
@@ -631,7 +634,7 @@ class CfnResponsePlan(
     @builtins.classmethod
     def arn_for_response_plan(
         cls,
-        resource: _IResponsePlanRef_e3282c40,
+        resource: "_IResponsePlanRef_e3282c40",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -654,7 +657,7 @@ class CfnResponsePlan(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResponsePlan", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -699,28 +702,28 @@ class CfnResponsePlan(
 
     @builtins.property
     @jsii.member(jsii_name="responsePlanRef")
-    def response_plan_ref(self) -> _ResponsePlanReference_9b8df09f:
+    def response_plan_ref(self) -> "_ResponsePlanReference_9b8df09f":
         '''A reference to a ResponsePlan resource.'''
-        return typing.cast(_ResponsePlanReference_9b8df09f, jsii.get(self, "responsePlanRef"))
+        return typing.cast("_ResponsePlanReference_9b8df09f", jsii.get(self, "responsePlanRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="incidentTemplate")
     def incident_template(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.IncidentTemplateProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.IncidentTemplateProperty"]:
         '''Details used to create an incident when using this response plan.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.IncidentTemplateProperty"], jsii.get(self, "incidentTemplate"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.IncidentTemplateProperty"], jsii.get(self, "incidentTemplate"))
 
     @incident_template.setter
     def incident_template(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.IncidentTemplateProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.IncidentTemplateProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e67df9fc5f3bc8a61eba460486268c2c30023ad53d6df8e842d3e8b9ac30f560)
@@ -744,14 +747,14 @@ class CfnResponsePlan(
     @jsii.member(jsii_name="actions")
     def actions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.ActionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.ActionProperty"]]]]:
         '''The actions that the response plan starts at the beginning of an incident.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.ActionProperty"]]]], jsii.get(self, "actions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.ActionProperty"]]]], jsii.get(self, "actions"))
 
     @actions.setter
     def actions(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.ActionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.ActionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__21ea09daad5c83e024acec967aa141ed17ccce42e9d540fa2d93ad1d5379263e)
@@ -762,14 +765,14 @@ class CfnResponsePlan(
     @jsii.member(jsii_name="chatChannel")
     def chat_channel(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.ChatChannelProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.ChatChannelProperty"]]:
         '''The  chat channel used for collaboration during an incident.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.ChatChannelProperty"]], jsii.get(self, "chatChannel"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.ChatChannelProperty"]], jsii.get(self, "chatChannel"))
 
     @chat_channel.setter
     def chat_channel(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.ChatChannelProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.ChatChannelProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a6cbfd7d3814daad0dc87b791c72d2771e6378248e15dd3bf357c8fc4b21c57c)
@@ -806,14 +809,14 @@ class CfnResponsePlan(
     @jsii.member(jsii_name="integrations")
     def integrations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.IntegrationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.IntegrationProperty"]]]]:
         '''Information about third-party services integrated into the response plan.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.IntegrationProperty"]]]], jsii.get(self, "integrations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.IntegrationProperty"]]]], jsii.get(self, "integrations"))
 
     @integrations.setter
     def integrations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.IntegrationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.IntegrationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__93c4aa71c3c7f4abe746fbb2734c882efd5991921a3de24b0ce273912c0a08ad)
@@ -822,12 +825,12 @@ class CfnResponsePlan(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__69a7be8bb00155310a6bb2a10f552ccab7e10314dc530559615d33902b53b2c9)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -842,7 +845,7 @@ class CfnResponsePlan(
         def __init__(
             self,
             *,
-            ssm_automation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponsePlan.SsmAutomationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ssm_automation: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.SsmAutomationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The ``Action`` property type specifies the configuration to launch.
 
@@ -888,13 +891,13 @@ class CfnResponsePlan(
         @builtins.property
         def ssm_automation(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.SsmAutomationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.SsmAutomationProperty"]]:
             '''Details about the Systems Manager automation document that will be used as a runbook during an incident.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-action.html#cfn-ssmincidents-responseplan-action-ssmautomation
             '''
             result = self._values.get("ssm_automation")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.SsmAutomationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.SsmAutomationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -974,7 +977,7 @@ class CfnResponsePlan(
             self,
             *,
             key: builtins.str,
-            value: typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponsePlan.DynamicSsmParameterValueProperty", typing.Dict[builtins.str, typing.Any]]],
+            value: typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.DynamicSsmParameterValueProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''When you add a runbook to a response plan, you can specify the parameters for the runbook to use at runtime.
 
@@ -1035,14 +1038,14 @@ class CfnResponsePlan(
         @builtins.property
         def value(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.DynamicSsmParameterValueProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.DynamicSsmParameterValueProperty"]:
             '''The dynamic parameter value.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-dynamicssmparameter.html#cfn-ssmincidents-responseplan-dynamicssmparameter-value
             '''
             result = self._values.get("value")
             assert result is not None, "Required property 'value' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.DynamicSsmParameterValueProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.DynamicSsmParameterValueProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1127,8 +1130,8 @@ class CfnResponsePlan(
             impact: jsii.Number,
             title: builtins.str,
             dedupe_string: typing.Optional[builtins.str] = None,
-            incident_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            notification_targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponsePlan.NotificationTargetItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            incident_tags: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            notification_targets: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.NotificationTargetItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             summary: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The ``IncidentTemplate`` property type specifies details used to create an incident when using this response plan.
@@ -1145,6 +1148,7 @@ class CfnResponsePlan(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_ssmincidents as ssmincidents
@@ -1225,7 +1229,7 @@ class CfnResponsePlan(
         @builtins.property
         def incident_tags(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]]:
             '''Tags to assign to the template.
 
             When the ``StartIncident`` API action is called, Incident Manager assigns the tags specified in the template to the incident.
@@ -1233,12 +1237,12 @@ class CfnResponsePlan(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-incidenttemplate.html#cfn-ssmincidents-responseplan-incidenttemplate-incidenttags
             '''
             result = self._values.get("incident_tags")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]], result)
 
         @builtins.property
         def notification_targets(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.NotificationTargetItemProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.NotificationTargetItemProperty"]]]]:
             '''The Amazon Simple Notification Service ( Amazon  ) targets that  uses to notify the chat channel of updates to an incident.
 
             You can also make updates to the incident through the chat channel using the Amazon  topics.
@@ -1246,7 +1250,7 @@ class CfnResponsePlan(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-incidenttemplate.html#cfn-ssmincidents-responseplan-incidenttemplate-notificationtargets
             '''
             result = self._values.get("notification_targets")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.NotificationTargetItemProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.NotificationTargetItemProperty"]]]], result)
 
         @builtins.property
         def summary(self) -> typing.Optional[builtins.str]:
@@ -1277,7 +1281,7 @@ class CfnResponsePlan(
         def __init__(
             self,
             *,
-            pager_duty_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponsePlan.PagerDutyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            pager_duty_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.PagerDutyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Information about third-party services integrated into a response plan.
 
@@ -1312,14 +1316,14 @@ class CfnResponsePlan(
         @builtins.property
         def pager_duty_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.PagerDutyConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.PagerDutyConfigurationProperty"]:
             '''Information about the PagerDuty service where the response plan creates an incident.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-integration.html#cfn-ssmincidents-responseplan-integration-pagerdutyconfiguration
             '''
             result = self._values.get("pager_duty_configuration")
             assert result is not None, "Required property 'pager_duty_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.PagerDutyConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.PagerDutyConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1401,7 +1405,7 @@ class CfnResponsePlan(
             self,
             *,
             name: builtins.str,
-            pager_duty_incident_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponsePlan.PagerDutyIncidentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            pager_duty_incident_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.PagerDutyIncidentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             secret_id: builtins.str,
         ) -> None:
             '''Details about the PagerDuty configuration for a response plan.
@@ -1451,14 +1455,14 @@ class CfnResponsePlan(
         @builtins.property
         def pager_duty_incident_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.PagerDutyIncidentConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.PagerDutyIncidentConfigurationProperty"]:
             '''Details about the PagerDuty service associated with the configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-pagerdutyconfiguration.html#cfn-ssmincidents-responseplan-pagerdutyconfiguration-pagerdutyincidentconfiguration
             '''
             result = self._values.get("pager_duty_incident_configuration")
             assert result is not None, "Required property 'pager_duty_incident_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.PagerDutyIncidentConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.PagerDutyIncidentConfigurationProperty"], result)
 
         @builtins.property
         def secret_id(self) -> builtins.str:
@@ -1552,8 +1556,8 @@ class CfnResponsePlan(
             document_name: builtins.str,
             role_arn: builtins.str,
             document_version: typing.Optional[builtins.str] = None,
-            dynamic_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponsePlan.DynamicSsmParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponsePlan.SsmParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            dynamic_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.DynamicSsmParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.SsmParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             target_account: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The ``SsmAutomation`` property type specifies details about the Systems Manager Automation runbook that will be used as the runbook during an incident.
@@ -1646,24 +1650,24 @@ class CfnResponsePlan(
         @builtins.property
         def dynamic_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.DynamicSsmParameterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.DynamicSsmParameterProperty"]]]]:
             '''The key-value pairs to resolve dynamic parameter values when processing a Systems Manager Automation runbook.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-ssmautomation.html#cfn-ssmincidents-responseplan-ssmautomation-dynamicparameters
             '''
             result = self._values.get("dynamic_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.DynamicSsmParameterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.DynamicSsmParameterProperty"]]]], result)
 
         @builtins.property
         def parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.SsmParameterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.SsmParameterProperty"]]]]:
             '''The key-value pair parameters to use when running the runbook.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-ssmautomation.html#cfn-ssmincidents-responseplan-ssmautomation-parameters
             '''
             result = self._values.get("parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.SsmParameterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.SsmParameterProperty"]]]], result)
 
         @builtins.property
         def target_account(self) -> typing.Optional[builtins.str]:
@@ -1777,14 +1781,14 @@ class CfnResponsePlanProps:
     def __init__(
         self,
         *,
-        incident_template: typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponsePlan.IncidentTemplateProperty, typing.Dict[builtins.str, typing.Any]]],
+        incident_template: typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.IncidentTemplateProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
-        actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponsePlan.ActionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        chat_channel: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponsePlan.ChatChannelProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        actions: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.ActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        chat_channel: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.ChatChannelProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         display_name: typing.Optional[builtins.str] = None,
         engagements: typing.Optional[typing.Sequence[builtins.str]] = None,
-        integrations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponsePlan.IntegrationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        integrations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResponsePlan.IntegrationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnResponsePlan``.
 
@@ -1802,6 +1806,7 @@ class CfnResponsePlanProps:
 
         Example::
 
+            from aws_cdk import CfnTag, CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ssmincidents as ssmincidents
@@ -1895,14 +1900,14 @@ class CfnResponsePlanProps:
     @builtins.property
     def incident_template(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnResponsePlan.IncidentTemplateProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.IncidentTemplateProperty"]:
         '''Details used to create an incident when using this response plan.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmincidents-responseplan.html#cfn-ssmincidents-responseplan-incidenttemplate
         '''
         result = self._values.get("incident_template")
         assert result is not None, "Required property 'incident_template' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnResponsePlan.IncidentTemplateProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.IncidentTemplateProperty"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -1917,24 +1922,24 @@ class CfnResponsePlanProps:
     @builtins.property
     def actions(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnResponsePlan.ActionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.ActionProperty"]]]]:
         '''The actions that the response plan starts at the beginning of an incident.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmincidents-responseplan.html#cfn-ssmincidents-responseplan-actions
         '''
         result = self._values.get("actions")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnResponsePlan.ActionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.ActionProperty"]]]], result)
 
     @builtins.property
     def chat_channel(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResponsePlan.ChatChannelProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.ChatChannelProperty"]]:
         '''The  chat channel used for collaboration during an incident.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmincidents-responseplan.html#cfn-ssmincidents-responseplan-chatchannel
         '''
         result = self._values.get("chat_channel")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResponsePlan.ChatChannelProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.ChatChannelProperty"]], result)
 
     @builtins.property
     def display_name(self) -> typing.Optional[builtins.str]:
@@ -1957,16 +1962,16 @@ class CfnResponsePlanProps:
     @builtins.property
     def integrations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnResponsePlan.IntegrationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.IntegrationProperty"]]]]:
         '''Information about third-party services integrated into the response plan.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmincidents-responseplan.html#cfn-ssmincidents-responseplan-integrations
         '''
         result = self._values.get("integrations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnResponsePlan.IntegrationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnResponsePlan.IntegrationProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -1974,7 +1979,7 @@ class CfnResponsePlanProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmincidents-responseplan.html#cfn-ssmincidents-responseplan-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

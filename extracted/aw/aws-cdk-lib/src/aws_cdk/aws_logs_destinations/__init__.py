@@ -77,9 +77,9 @@ class FirehoseDestination(
 
     def __init__(
         self,
-        stream: _IDeliveryStream_8f118861,
+        stream: "_IDeliveryStream_8f118861",
         *,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''
         :param stream: The Data Firehose delivery stream to use as destination.
@@ -95,9 +95,9 @@ class FirehoseDestination(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        _source_log_group: _ILogGroup_3c4fa718,
-    ) -> _LogSubscriptionDestinationConfig_15877ced:
+        scope: "_constructs_77d1e7e8.Construct",
+        _source_log_group: "_ILogGroup_3c4fa718",
+    ) -> "_LogSubscriptionDestinationConfig_15877ced":
         '''Return the properties required to send subscription events to this destination.
 
         If necessary, the destination can use the properties of the SubscriptionFilter
@@ -114,7 +114,7 @@ class FirehoseDestination(
             type_hints = typing.get_type_hints(_typecheckingstub__b48d2560b01f38d75fb9bf3c773ce107d4b79363d6f0dced504bd870eebb715b)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument _source_log_group", value=_source_log_group, expected_type=type_hints["_source_log_group"])
-        return typing.cast(_LogSubscriptionDestinationConfig_15877ced, jsii.invoke(self, "bind", [scope, _source_log_group]))
+        return typing.cast("_LogSubscriptionDestinationConfig_15877ced", jsii.invoke(self, "bind", [scope, _source_log_group]))
 
 
 @jsii.data_type(
@@ -123,7 +123,7 @@ class FirehoseDestination(
     name_mapping={"role": "role"},
 )
 class FirehoseDestinationProps:
-    def __init__(self, *, role: typing.Optional[_IRole_235f5d8e] = None) -> None:
+    def __init__(self, *, role: typing.Optional["_IRole_235f5d8e"] = None) -> None:
         '''Customize the Amazon Data Firehose Logs Destination.
 
         :param role: The role to assume to write log events to the destination. Default: - A new Role is created
@@ -151,13 +151,13 @@ class FirehoseDestinationProps:
             self._values["role"] = role
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The role to assume to write log events to the destination.
 
         :default: - A new Role is created
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -200,9 +200,9 @@ class KinesisDestination(
 
     def __init__(
         self,
-        stream: _IStream_4e2457d2,
+        stream: "_IStream_4e2457d2",
         *,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
     ) -> None:
         '''
         :param stream: The Kinesis stream to use as destination.
@@ -218,9 +218,9 @@ class KinesisDestination(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        _source_log_group: _ILogGroup_3c4fa718,
-    ) -> _LogSubscriptionDestinationConfig_15877ced:
+        scope: "_constructs_77d1e7e8.Construct",
+        _source_log_group: "_ILogGroup_3c4fa718",
+    ) -> "_LogSubscriptionDestinationConfig_15877ced":
         '''Return the properties required to send subscription events to this destination.
 
         If necessary, the destination can use the properties of the SubscriptionFilter
@@ -237,7 +237,7 @@ class KinesisDestination(
             type_hints = typing.get_type_hints(_typecheckingstub__a07b9b6b39b3253620357aaea5f2db6340db83e8acaeadc70a521c3ba7ff8bc8)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument _source_log_group", value=_source_log_group, expected_type=type_hints["_source_log_group"])
-        return typing.cast(_LogSubscriptionDestinationConfig_15877ced, jsii.invoke(self, "bind", [scope, _source_log_group]))
+        return typing.cast("_LogSubscriptionDestinationConfig_15877ced", jsii.invoke(self, "bind", [scope, _source_log_group]))
 
 
 @jsii.data_type(
@@ -246,7 +246,7 @@ class KinesisDestination(
     name_mapping={"role": "role"},
 )
 class KinesisDestinationProps:
-    def __init__(self, *, role: typing.Optional[_IRole_235f5d8e] = None) -> None:
+    def __init__(self, *, role: typing.Optional["_IRole_235f5d8e"] = None) -> None:
         '''Customize the Kinesis Logs Destination.
 
         :param role: The role to assume to write log events to the destination. Default: - A new Role is created
@@ -274,13 +274,13 @@ class KinesisDestinationProps:
             self._values["role"] = role
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The role to assume to write log events to the destination.
 
         :default: - A new Role is created
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -321,7 +321,7 @@ class LambdaDestination(
 
     def __init__(
         self,
-        fn: _IFunction_6adb0ab8,
+        fn: "_IFunction_6adb0ab8",
         *,
         add_permissions: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -340,9 +340,9 @@ class LambdaDestination(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        log_group: _ILogGroup_3c4fa718,
-    ) -> _LogSubscriptionDestinationConfig_15877ced:
+        scope: "_constructs_77d1e7e8.Construct",
+        log_group: "_ILogGroup_3c4fa718",
+    ) -> "_LogSubscriptionDestinationConfig_15877ced":
         '''Return the properties required to send subscription events to this destination.
 
         If necessary, the destination can use the properties of the SubscriptionFilter
@@ -359,7 +359,7 @@ class LambdaDestination(
             type_hints = typing.get_type_hints(_typecheckingstub__7a6c995782d33f0fc9c3b09e6ca3ad1d26c953c729ccc6f6ce6e0c48579dac67)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument log_group", value=log_group, expected_type=type_hints["log_group"])
-        return typing.cast(_LogSubscriptionDestinationConfig_15877ced, jsii.invoke(self, "bind", [scope, log_group]))
+        return typing.cast("_LogSubscriptionDestinationConfig_15877ced", jsii.invoke(self, "bind", [scope, log_group]))
 
 
 @jsii.data_type(

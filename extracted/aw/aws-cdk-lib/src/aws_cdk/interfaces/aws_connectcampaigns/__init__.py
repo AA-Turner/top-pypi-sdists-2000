@@ -96,7 +96,7 @@ class ICampaignRef(
 
     @builtins.property
     @jsii.member(jsii_name="campaignRef")
-    def campaign_ref(self) -> CampaignReference:
+    def campaign_ref(self) -> "CampaignReference":
         '''(experimental) A reference to a Campaign resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _ICampaignRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="campaignRef")
-    def campaign_ref(self) -> CampaignReference:
+    def campaign_ref(self) -> "CampaignReference":
         '''(experimental) A reference to a Campaign resource.
 
         :stability: experimental
         '''
-        return typing.cast(CampaignReference, jsii.get(self, "campaignRef"))
+        return typing.cast("CampaignReference", jsii.get(self, "campaignRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICampaignRef).__jsii_proxy_class__ = lambda : _ICampaignRefProxy

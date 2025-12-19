@@ -93,6 +93,7 @@ class CfnConnection(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codestarconnections as codestarconnections
@@ -112,13 +113,13 @@ class CfnConnection(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         connection_name: builtins.str,
         host_arn: typing.Optional[builtins.str] = None,
         provider_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeStarConnections::Connection``.
 
@@ -144,7 +145,7 @@ class CfnConnection(
 
     @jsii.member(jsii_name="arnForConnection")
     @builtins.classmethod
-    def arn_for_connection(cls, resource: _IConnectionRef_df05f06e) -> builtins.str:
+    def arn_for_connection(cls, resource: "_IConnectionRef_df05f06e") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -166,7 +167,7 @@ class CfnConnection(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnection", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -235,15 +236,15 @@ class CfnConnection(
 
     @builtins.property
     @jsii.member(jsii_name="connectionRef")
-    def connection_ref(self) -> _ConnectionReference_177186ec:
+    def connection_ref(self) -> "_ConnectionReference_177186ec":
         '''A reference to a Connection resource.'''
-        return typing.cast(_ConnectionReference_177186ec, jsii.get(self, "connectionRef"))
+        return typing.cast("_ConnectionReference_177186ec", jsii.get(self, "connectionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="connectionName")
@@ -286,12 +287,12 @@ class CfnConnection(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the tags applied to the resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e4559e698887f8e503dde8843ff791284d6d9949c323e9ac7625231409f77297)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -315,7 +316,7 @@ class CfnConnectionProps:
         connection_name: builtins.str,
         host_arn: typing.Optional[builtins.str] = None,
         provider_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConnection``.
 
@@ -329,6 +330,7 @@ class CfnConnectionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codestarconnections as codestarconnections
@@ -392,13 +394,13 @@ class CfnConnectionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies the tags applied to the resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestarconnections-connection.html#cfn-codestarconnections-connection-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -426,6 +428,7 @@ class CfnRepositoryLink(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codestarconnections as codestarconnections
@@ -446,14 +449,14 @@ class CfnRepositoryLink(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         connection_arn: builtins.str,
         owner_id: builtins.str,
         repository_name: builtins.str,
         encryption_key_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CodeStarConnections::RepositoryLink``.
 
@@ -483,7 +486,7 @@ class CfnRepositoryLink(
     @builtins.classmethod
     def arn_for_repository_link(
         cls,
-        resource: _IRepositoryLinkRef_d7247fe4,
+        resource: "_IRepositoryLinkRef_d7247fe4",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -506,7 +509,7 @@ class CfnRepositoryLink(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRepositoryLink", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -564,9 +567,9 @@ class CfnRepositoryLink(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -575,9 +578,9 @@ class CfnRepositoryLink(
 
     @builtins.property
     @jsii.member(jsii_name="repositoryLinkRef")
-    def repository_link_ref(self) -> _RepositoryLinkReference_4e0b59d6:
+    def repository_link_ref(self) -> "_RepositoryLinkReference_4e0b59d6":
         '''A reference to a RepositoryLink resource.'''
-        return typing.cast(_RepositoryLinkReference_4e0b59d6, jsii.get(self, "repositoryLinkRef"))
+        return typing.cast("_RepositoryLinkReference_4e0b59d6", jsii.get(self, "repositoryLinkRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connectionArn")
@@ -633,12 +636,12 @@ class CfnRepositoryLink(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the repository to be associated with the repository link.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3169870757b800cdac6097cbe92bb05d72aa36383fc08c2d273a2ef98bdfb961)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -664,7 +667,7 @@ class CfnRepositoryLinkProps:
         owner_id: builtins.str,
         repository_name: builtins.str,
         encryption_key_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRepositoryLink``.
 
@@ -679,6 +682,7 @@ class CfnRepositoryLinkProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_codestarconnections as codestarconnections
@@ -753,13 +757,13 @@ class CfnRepositoryLinkProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the repository to be associated with the repository link.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestarconnections-repositorylink.html#cfn-codestarconnections-repositorylink-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -807,7 +811,7 @@ class CfnSyncConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         branch: builtins.str,
@@ -862,7 +866,7 @@ class CfnSyncConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSyncConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -925,9 +929,9 @@ class CfnSyncConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="syncConfigurationRef")
-    def sync_configuration_ref(self) -> _SyncConfigurationReference_038bc757:
+    def sync_configuration_ref(self) -> "_SyncConfigurationReference_038bc757":
         '''A reference to a SyncConfiguration resource.'''
-        return typing.cast(_SyncConfigurationReference_038bc757, jsii.get(self, "syncConfigurationRef"))
+        return typing.cast("_SyncConfigurationReference_038bc757", jsii.get(self, "syncConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="branch")

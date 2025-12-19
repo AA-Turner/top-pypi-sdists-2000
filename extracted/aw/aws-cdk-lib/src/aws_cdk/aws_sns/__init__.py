@@ -627,20 +627,20 @@ class CfnSubscription(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         protocol: builtins.str,
-        topic_arn: typing.Union[builtins.str, _ITopicRef_29aa9a88],
+        topic_arn: typing.Union[builtins.str, "_ITopicRef_29aa9a88"],
         delivery_policy: typing.Any = None,
-        endpoint: typing.Optional[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198]] = None,
+        endpoint: typing.Optional[typing.Union[builtins.str, "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad", "_IQueueRef_fa8b2198"]] = None,
         filter_policy: typing.Any = None,
         filter_policy_scope: typing.Optional[builtins.str] = None,
-        raw_message_delivery: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        raw_message_delivery: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         redrive_policy: typing.Any = None,
         region: typing.Optional[builtins.str] = None,
         replay_policy: typing.Any = None,
-        subscription_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        subscription_role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
     ) -> None:
         '''Create a new ``AWS::SNS::Subscription``.
 
@@ -680,7 +680,10 @@ class CfnSubscription(
 
     @jsii.member(jsii_name="arnForSubscription")
     @builtins.classmethod
-    def arn_for_subscription(cls, resource: _ISubscriptionRef_6b5d0f32) -> builtins.str:
+    def arn_for_subscription(
+        cls,
+        resource: "_ISubscriptionRef_6b5d0f32",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -702,7 +705,7 @@ class CfnSubscription(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSubscription", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -747,9 +750,9 @@ class CfnSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="subscriptionRef")
-    def subscription_ref(self) -> _SubscriptionReference_58957c21:
+    def subscription_ref(self) -> "_SubscriptionReference_58957c21":
         '''A reference to a Subscription resource.'''
-        return typing.cast(_SubscriptionReference_58957c21, jsii.get(self, "subscriptionRef"))
+        return typing.cast("_SubscriptionReference_58957c21", jsii.get(self, "subscriptionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="protocol")
@@ -833,14 +836,14 @@ class CfnSubscription(
     @jsii.member(jsii_name="rawMessageDelivery")
     def raw_message_delivery(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When set to ``true`` , enables raw message delivery.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "rawMessageDelivery"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "rawMessageDelivery"))
 
     @raw_message_delivery.setter
     def raw_message_delivery(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b31b31d2e697eb675dfd0da4695e87324259ab34307bec1a543ab628d2d371d0)
@@ -922,16 +925,16 @@ class CfnSubscriptionProps:
         self,
         *,
         protocol: builtins.str,
-        topic_arn: typing.Union[builtins.str, _ITopicRef_29aa9a88],
+        topic_arn: typing.Union[builtins.str, "_ITopicRef_29aa9a88"],
         delivery_policy: typing.Any = None,
-        endpoint: typing.Optional[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198]] = None,
+        endpoint: typing.Optional[typing.Union[builtins.str, "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad", "_IQueueRef_fa8b2198"]] = None,
         filter_policy: typing.Any = None,
         filter_policy_scope: typing.Optional[builtins.str] = None,
-        raw_message_delivery: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        raw_message_delivery: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         redrive_policy: typing.Any = None,
         region: typing.Optional[builtins.str] = None,
         replay_policy: typing.Any = None,
-        subscription_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        subscription_role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSubscription``.
 
@@ -1026,14 +1029,14 @@ class CfnSubscriptionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def topic_arn(self) -> typing.Union[builtins.str, _ITopicRef_29aa9a88]:
+    def topic_arn(self) -> typing.Union[builtins.str, "_ITopicRef_29aa9a88"]:
         '''The ARN of the topic to subscribe to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html#cfn-sns-subscription-topicarn
         '''
         result = self._values.get("topic_arn")
         assert result is not None, "Required property 'topic_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _ITopicRef_29aa9a88], result)
+        return typing.cast(typing.Union[builtins.str, "_ITopicRef_29aa9a88"], result)
 
     @builtins.property
     def delivery_policy(self) -> typing.Any:
@@ -1049,7 +1052,7 @@ class CfnSubscriptionProps:
     @builtins.property
     def endpoint(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad", "_IQueueRef_fa8b2198"]]:
         '''The subscription's endpoint.
 
         The endpoint value depends on the protocol that you specify. For more information, see the ``Endpoint`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon  API Reference* .
@@ -1057,7 +1060,7 @@ class CfnSubscriptionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html#cfn-sns-subscription-endpoint
         '''
         result = self._values.get("endpoint")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad", "_IQueueRef_fa8b2198"]], result)
 
     @builtins.property
     def filter_policy(self) -> typing.Any:
@@ -1089,7 +1092,7 @@ class CfnSubscriptionProps:
     @builtins.property
     def raw_message_delivery(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When set to ``true`` , enables raw message delivery.
 
         Raw messages don't contain any JSON formatting and can be sent to Amazon SQS and HTTP/S endpoints. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon  API Reference* .
@@ -1097,7 +1100,7 @@ class CfnSubscriptionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html#cfn-sns-subscription-rawmessagedelivery
         '''
         result = self._values.get("raw_message_delivery")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def redrive_policy(self) -> typing.Any:
@@ -1140,7 +1143,7 @@ class CfnSubscriptionProps:
     @builtins.property
     def subscription_role_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''This property applies only to Amazon Data Firehose delivery stream subscriptions.
 
         Specify the ARN of the IAM role that has the following:
@@ -1153,7 +1156,7 @@ class CfnSubscriptionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html#cfn-sns-subscription-subscriptionrolearn
         '''
         result = self._values.get("subscription_role_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1185,6 +1188,7 @@ class CfnTopic(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_sns as sns
@@ -1224,20 +1228,20 @@ class CfnTopic(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         archive_policy: typing.Any = None,
-        content_based_deduplication: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        content_based_deduplication: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         data_protection_policy: typing.Any = None,
-        delivery_status_logging: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopic.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        delivery_status_logging: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopic.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         display_name: typing.Optional[builtins.str] = None,
         fifo_throughput_scope: typing.Optional[builtins.str] = None,
-        fifo_topic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kms_master_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
+        fifo_topic: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        kms_master_key_id: typing.Optional[typing.Union[builtins.str, "_IAliasRef_43fafabd", "_IKeyRef_d4fc6ef3"]] = None,
         signature_version: typing.Optional[builtins.str] = None,
-        subscription: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopic.SubscriptionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        subscription: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopic.SubscriptionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         topic_name: typing.Optional[builtins.str] = None,
         tracing_config: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -1283,7 +1287,7 @@ class CfnTopic(
 
     @jsii.member(jsii_name="arnForTopic")
     @builtins.classmethod
-    def arn_for_topic(cls, resource: _ITopicRef_29aa9a88) -> builtins.str:
+    def arn_for_topic(cls, resource: "_ITopicRef_29aa9a88") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1305,7 +1309,7 @@ class CfnTopic(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTopic", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1359,15 +1363,15 @@ class CfnTopic(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="topicRef")
-    def topic_ref(self) -> _TopicReference_3fef3390:
+    def topic_ref(self) -> "_TopicReference_3fef3390":
         '''A reference to a Topic resource.'''
-        return typing.cast(_TopicReference_3fef3390, jsii.get(self, "topicRef"))
+        return typing.cast("_TopicReference_3fef3390", jsii.get(self, "topicRef"))
 
     @builtins.property
     @jsii.member(jsii_name="archivePolicy")
@@ -1386,14 +1390,14 @@ class CfnTopic(
     @jsii.member(jsii_name="contentBasedDeduplication")
     def content_based_deduplication(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''``ContentBasedDeduplication`` enables deduplication of messages based on their content for FIFO topics.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "contentBasedDeduplication"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "contentBasedDeduplication"))
 
     @content_based_deduplication.setter
     def content_based_deduplication(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__61855b81d1d953ec33b8c0af7bad8099bc0ec45c2624d213b520131ecf95b724)
@@ -1417,14 +1421,14 @@ class CfnTopic(
     @jsii.member(jsii_name="deliveryStatusLogging")
     def delivery_status_logging(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopic.LoggingConfigProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopic.LoggingConfigProperty"]]]]:
         '''The ``DeliveryStatusLogging`` configuration enables you to log the delivery status of messages sent from your Amazon SNS topic to subscribed endpoints with the following supported delivery protocols:.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopic.LoggingConfigProperty"]]]], jsii.get(self, "deliveryStatusLogging"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopic.LoggingConfigProperty"]]]], jsii.get(self, "deliveryStatusLogging"))
 
     @delivery_status_logging.setter
     def delivery_status_logging(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopic.LoggingConfigProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopic.LoggingConfigProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c45e4d025e306c26000e7fa2d0ac2f744ec4393a8a4418f9a397a2f5c010e0cf)
@@ -1461,14 +1465,14 @@ class CfnTopic(
     @jsii.member(jsii_name="fifoTopic")
     def fifo_topic(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Set to true to create a FIFO topic.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "fifoTopic"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "fifoTopic"))
 
     @fifo_topic.setter
     def fifo_topic(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2a91ed56c1865e9ea5cd3d8d5ffef0aab07b45ce41c2580607fd141166a194ea)
@@ -1505,14 +1509,14 @@ class CfnTopic(
     @jsii.member(jsii_name="subscription")
     def subscription(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopic.SubscriptionProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopic.SubscriptionProperty"]]]]:
         '''The Amazon  subscriptions (endpoints) for this topic.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopic.SubscriptionProperty"]]]], jsii.get(self, "subscription"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopic.SubscriptionProperty"]]]], jsii.get(self, "subscription"))
 
     @subscription.setter
     def subscription(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopic.SubscriptionProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopic.SubscriptionProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f416792b5d579d938563017fc236edff31ba5aeb335512720ae83552c6832e9c)
@@ -1521,12 +1525,12 @@ class CfnTopic(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of tags to add to a new topic.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c4fc70aec71b6f6c75ff5cf5bd0ed0934ffe27fd6747714e83d2cd44e32ff452)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1775,7 +1779,7 @@ class CfnTopicInlinePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_document: typing.Any,
@@ -1811,7 +1815,7 @@ class CfnTopicInlinePolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTopicInlinePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1847,9 +1851,9 @@ class CfnTopicInlinePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="topicInlinePolicyRef")
-    def topic_inline_policy_ref(self) -> _TopicInlinePolicyReference_9c13ec3a:
+    def topic_inline_policy_ref(self) -> "_TopicInlinePolicyReference_9c13ec3a":
         '''A reference to a TopicInlinePolicy resource.'''
-        return typing.cast(_TopicInlinePolicyReference_9c13ec3a, jsii.get(self, "topicInlinePolicyRef"))
+        return typing.cast("_TopicInlinePolicyReference_9c13ec3a", jsii.get(self, "topicInlinePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
@@ -1977,7 +1981,7 @@ class CfnTopicPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_document: typing.Any,
@@ -2011,7 +2015,7 @@ class CfnTopicPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTopicPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2056,9 +2060,9 @@ class CfnTopicPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="topicPolicyRef")
-    def topic_policy_ref(self) -> _TopicPolicyReference_150954d5:
+    def topic_policy_ref(self) -> "_TopicPolicyReference_150954d5":
         '''A reference to a TopicPolicy resource.'''
-        return typing.cast(_TopicPolicyReference_150954d5, jsii.get(self, "topicPolicyRef"))
+        return typing.cast("_TopicPolicyReference_150954d5", jsii.get(self, "topicPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
@@ -2187,16 +2191,16 @@ class CfnTopicProps:
         self,
         *,
         archive_policy: typing.Any = None,
-        content_based_deduplication: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        content_based_deduplication: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         data_protection_policy: typing.Any = None,
-        delivery_status_logging: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopic.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        delivery_status_logging: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopic.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         display_name: typing.Optional[builtins.str] = None,
         fifo_throughput_scope: typing.Optional[builtins.str] = None,
-        fifo_topic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kms_master_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
+        fifo_topic: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        kms_master_key_id: typing.Optional[typing.Union[builtins.str, "_IAliasRef_43fafabd", "_IKeyRef_d4fc6ef3"]] = None,
         signature_version: typing.Optional[builtins.str] = None,
-        subscription: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopic.SubscriptionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        subscription: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopic.SubscriptionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         topic_name: typing.Optional[builtins.str] = None,
         tracing_config: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -2221,6 +2225,7 @@ class CfnTopicProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_sns as sns
@@ -2314,7 +2319,7 @@ class CfnTopicProps:
     @builtins.property
     def content_based_deduplication(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''``ContentBasedDeduplication`` enables deduplication of messages based on their content for FIFO topics.
 
         By default, this property is set to false. If you create a FIFO topic with ``ContentBasedDeduplication`` set to false, you must provide a ``MessageDeduplicationId`` for each ``Publish`` action. When set to true, Amazon  automatically generates a ``MessageDeduplicationId`` using a SHA-256 hash of the message body (excluding message attributes). You can optionally override this generated value by specifying a ``MessageDeduplicationId`` in the ``Publish`` action. Note that this property only applies to FIFO topics; using it with standard topics will cause the creation to fail.
@@ -2322,7 +2327,7 @@ class CfnTopicProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topic.html#cfn-sns-topic-contentbaseddeduplication
         '''
         result = self._values.get("content_based_deduplication")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def data_protection_policy(self) -> typing.Any:
@@ -2342,7 +2347,7 @@ class CfnTopicProps:
     @builtins.property
     def delivery_status_logging(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTopic.LoggingConfigProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopic.LoggingConfigProperty"]]]]:
         '''The ``DeliveryStatusLogging`` configuration enables you to log the delivery status of messages sent from your Amazon SNS topic to subscribed endpoints with the following supported delivery protocols:.
 
         - HTTP
@@ -2356,7 +2361,7 @@ class CfnTopicProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topic.html#cfn-sns-topic-deliverystatuslogging
         '''
         result = self._values.get("delivery_status_logging")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTopic.LoggingConfigProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopic.LoggingConfigProperty"]]]], result)
 
     @builtins.property
     def display_name(self) -> typing.Optional[builtins.str]:
@@ -2383,18 +2388,18 @@ class CfnTopicProps:
     @builtins.property
     def fifo_topic(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Set to true to create a FIFO topic.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topic.html#cfn-sns-topic-fifotopic
         '''
         result = self._values.get("fifo_topic")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def kms_master_key_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IAliasRef_43fafabd", "_IKeyRef_d4fc6ef3"]]:
         '''The ID of an AWS managed customer master key (CMK) for Amazon  or a custom CMK.
 
         For more information, see `Key terms <https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms>`_ . For more examples, see ``[KeyId](https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters)`` in the *AWS Key Management Service API Reference* .
@@ -2404,7 +2409,7 @@ class CfnTopicProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topic.html#cfn-sns-topic-kmsmasterkeyid
         '''
         result = self._values.get("kms_master_key_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IAliasRef_43fafabd", "_IKeyRef_d4fc6ef3"]], result)
 
     @builtins.property
     def signature_version(self) -> typing.Optional[builtins.str]:
@@ -2420,7 +2425,7 @@ class CfnTopicProps:
     @builtins.property
     def subscription(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTopic.SubscriptionProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopic.SubscriptionProperty"]]]]:
         '''The Amazon  subscriptions (endpoints) for this topic.
 
         .. epigraph::
@@ -2430,10 +2435,10 @@ class CfnTopicProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topic.html#cfn-sns-topic-subscription
         '''
         result = self._values.get("subscription")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTopic.SubscriptionProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTopic.SubscriptionProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of tags to add to a new topic.
 
         .. epigraph::
@@ -2443,7 +2448,7 @@ class CfnTopicProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topic.html#cfn-sns-topic-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def topic_name(self) -> typing.Optional[builtins.str]:
@@ -2729,9 +2734,9 @@ class HealthyRetryPolicy:
     def __init__(
         self,
         *,
-        backoff_function: typing.Optional[BackoffFunction] = None,
-        max_delay_target: typing.Optional[_Duration_4839e8c3] = None,
-        min_delay_target: typing.Optional[_Duration_4839e8c3] = None,
+        backoff_function: typing.Optional["BackoffFunction"] = None,
+        max_delay_target: typing.Optional["_Duration_4839e8c3"] = None,
+        min_delay_target: typing.Optional["_Duration_4839e8c3"] = None,
         num_max_delay_retries: typing.Optional[jsii.Number] = None,
         num_min_delay_retries: typing.Optional[jsii.Number] = None,
         num_no_delay_retries: typing.Optional[jsii.Number] = None,
@@ -2797,16 +2802,16 @@ class HealthyRetryPolicy:
             self._values["num_retries"] = num_retries
 
     @builtins.property
-    def backoff_function(self) -> typing.Optional[BackoffFunction]:
+    def backoff_function(self) -> typing.Optional["BackoffFunction"]:
         '''The model for backoff between retries.
 
         :default: - linear
         '''
         result = self._values.get("backoff_function")
-        return typing.cast(typing.Optional[BackoffFunction], result)
+        return typing.cast(typing.Optional["BackoffFunction"], result)
 
     @builtins.property
-    def max_delay_target(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_delay_target(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum delay for a retry.
 
         Must be at least ``minDelayTarget`` less than 3,600 seconds, and correspond to a whole number of seconds,
@@ -2814,10 +2819,10 @@ class HealthyRetryPolicy:
         :default: - 20 seconds
         '''
         result = self._values.get("max_delay_target")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def min_delay_target(self) -> typing.Optional[_Duration_4839e8c3]:
+    def min_delay_target(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The minimum delay for a retry.
 
         Must be at least one second, not exceed ``maxDelayTarget``, and correspond to a whole number of seconds.
@@ -2825,7 +2830,7 @@ class HealthyRetryPolicy:
         :default: - 20 seconds
         '''
         result = self._values.get("min_delay_target")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def num_max_delay_retries(self) -> typing.Optional[jsii.Number]:
@@ -2932,7 +2937,7 @@ class ITopic(
 
     @builtins.property
     @jsii.member(jsii_name="masterKey")
-    def master_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def master_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''A KMS Key, either managed by this CDK app, or imported.
 
         This property applies only to server-side encryption.
@@ -2954,8 +2959,8 @@ class ITopic(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this topic.
 
         If this topic was created in this stack (``new Topic``), a topic policy
@@ -2967,7 +2972,7 @@ class ITopic(
         ...
 
     @jsii.member(jsii_name="grantPublish")
-    def grant_publish(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_publish(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant topic publishing permissions to the given identity.
 
         :param identity: -
@@ -2975,7 +2980,7 @@ class ITopic(
         ...
 
     @jsii.member(jsii_name="grantSubscribe")
-    def grant_subscribe(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_subscribe(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant topic subscribing permissions to the given identity.
 
         :param identity: -
@@ -2992,14 +2997,14 @@ class ITopic(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Topic.
 
         :param metric_name: -
@@ -3027,14 +3032,14 @@ class ITopic(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages published to your Amazon SNS topics.
 
         Sum over 5 minutes
@@ -3063,14 +3068,14 @@ class ITopic(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages successfully delivered from your Amazon SNS topics to subscribing endpoints.
 
         Sum over 5 minutes
@@ -3099,14 +3104,14 @@ class ITopic(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that Amazon SNS failed to deliver.
 
         Sum over 5 minutes
@@ -3135,14 +3140,14 @@ class ITopic(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that were rejected by subscription filter policies.
 
         Sum over 5 minutes
@@ -3171,14 +3176,14 @@ class ITopic(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that were rejected by subscription filter policies because the messages' attributes are invalid.
 
         Sum over 5 minutes
@@ -3207,14 +3212,14 @@ class ITopic(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that were rejected by subscription filter policies because the messages have no attributes.
 
         Sum over 5 minutes
@@ -3243,14 +3248,14 @@ class ITopic(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the size of messages published through this topic.
 
         Average over 5 minutes
@@ -3279,14 +3284,14 @@ class ITopic(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The charges you have accrued since the start of the current calendar month for sending SMS messages.
 
         Maximum over 5 minutes
@@ -3315,14 +3320,14 @@ class ITopic(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The rate of successful SMS message deliveries.
 
         Sum over 5 minutes
@@ -3392,7 +3397,7 @@ class _ITopicProxy(
 
     @builtins.property
     @jsii.member(jsii_name="masterKey")
-    def master_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def master_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''A KMS Key, either managed by this CDK app, or imported.
 
         This property applies only to server-side encryption.
@@ -3401,7 +3406,7 @@ class _ITopicProxy(
 
         :see: https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html
         '''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "masterKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "masterKey"))
 
     @jsii.member(jsii_name="addSubscription")
     def add_subscription(self, subscription: "ITopicSubscription") -> "Subscription":
@@ -3417,8 +3422,8 @@ class _ITopicProxy(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this topic.
 
         If this topic was created in this stack (``new Topic``), a topic policy
@@ -3430,10 +3435,10 @@ class _ITopicProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a25cf01212afa98a52126c366524ccb1dfcf92425078abf30316c0b680f26307)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="grantPublish")
-    def grant_publish(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_publish(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant topic publishing permissions to the given identity.
 
         :param identity: -
@@ -3441,10 +3446,10 @@ class _ITopicProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bf96d0b079cfedfe1ad406a08f2229f4ed5332b9d92fc6d78e1571fce3a1ee5f)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPublish", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPublish", [identity]))
 
     @jsii.member(jsii_name="grantSubscribe")
-    def grant_subscribe(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_subscribe(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant topic subscribing permissions to the given identity.
 
         :param identity: -
@@ -3452,7 +3457,7 @@ class _ITopicProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7aeb5c807ffbca475c72e16b5057cf9e84960ecb69a07c559eacf1d2d9f57d08)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSubscribe", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSubscribe", [identity]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -3464,14 +3469,14 @@ class _ITopicProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Topic.
 
         :param metric_name: -
@@ -3506,7 +3511,7 @@ class _ITopicProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricNumberOfMessagesPublished")
     def metric_number_of_messages_published(
@@ -3517,14 +3522,14 @@ class _ITopicProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages published to your Amazon SNS topics.
 
         Sum over 5 minutes
@@ -3557,7 +3562,7 @@ class _ITopicProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfMessagesPublished", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfMessagesPublished", [props]))
 
     @jsii.member(jsii_name="metricNumberOfNotificationsDelivered")
     def metric_number_of_notifications_delivered(
@@ -3568,14 +3573,14 @@ class _ITopicProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages successfully delivered from your Amazon SNS topics to subscribing endpoints.
 
         Sum over 5 minutes
@@ -3608,7 +3613,7 @@ class _ITopicProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfNotificationsDelivered", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfNotificationsDelivered", [props]))
 
     @jsii.member(jsii_name="metricNumberOfNotificationsFailed")
     def metric_number_of_notifications_failed(
@@ -3619,14 +3624,14 @@ class _ITopicProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that Amazon SNS failed to deliver.
 
         Sum over 5 minutes
@@ -3659,7 +3664,7 @@ class _ITopicProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfNotificationsFailed", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfNotificationsFailed", [props]))
 
     @jsii.member(jsii_name="metricNumberOfNotificationsFilteredOut")
     def metric_number_of_notifications_filtered_out(
@@ -3670,14 +3675,14 @@ class _ITopicProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that were rejected by subscription filter policies.
 
         Sum over 5 minutes
@@ -3710,7 +3715,7 @@ class _ITopicProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfNotificationsFilteredOut", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfNotificationsFilteredOut", [props]))
 
     @jsii.member(jsii_name="metricNumberOfNotificationsFilteredOutInvalidAttributes")
     def metric_number_of_notifications_filtered_out_invalid_attributes(
@@ -3721,14 +3726,14 @@ class _ITopicProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that were rejected by subscription filter policies because the messages' attributes are invalid.
 
         Sum over 5 minutes
@@ -3761,7 +3766,7 @@ class _ITopicProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfNotificationsFilteredOutInvalidAttributes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfNotificationsFilteredOutInvalidAttributes", [props]))
 
     @jsii.member(jsii_name="metricNumberOfNotificationsFilteredOutNoMessageAttributes")
     def metric_number_of_notifications_filtered_out_no_message_attributes(
@@ -3772,14 +3777,14 @@ class _ITopicProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that were rejected by subscription filter policies because the messages have no attributes.
 
         Sum over 5 minutes
@@ -3812,7 +3817,7 @@ class _ITopicProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfNotificationsFilteredOutNoMessageAttributes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfNotificationsFilteredOutNoMessageAttributes", [props]))
 
     @jsii.member(jsii_name="metricPublishSize")
     def metric_publish_size(
@@ -3823,14 +3828,14 @@ class _ITopicProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the size of messages published through this topic.
 
         Average over 5 minutes
@@ -3863,7 +3868,7 @@ class _ITopicProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPublishSize", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPublishSize", [props]))
 
     @jsii.member(jsii_name="metricSMSMonthToDateSpentUSD")
     def metric_sms_month_to_date_spent_usd(
@@ -3874,14 +3879,14 @@ class _ITopicProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The charges you have accrued since the start of the current calendar month for sending SMS messages.
 
         Maximum over 5 minutes
@@ -3914,7 +3919,7 @@ class _ITopicProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSMSMonthToDateSpentUSD", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSMSMonthToDateSpentUSD", [props]))
 
     @jsii.member(jsii_name="metricSMSSuccessRate")
     def metric_sms_success_rate(
@@ -3925,14 +3930,14 @@ class _ITopicProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The rate of successful SMS message deliveries.
 
         Sum over 5 minutes
@@ -3965,7 +3970,7 @@ class _ITopicProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSMSSuccessRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSMSSuccessRate", [props]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ITopic).__jsii_proxy_class__ = lambda : _ITopicProxy
@@ -3976,7 +3981,7 @@ class ITopicSubscription(typing_extensions.Protocol):
     '''Topic subscription.'''
 
     @jsii.member(jsii_name="bind")
-    def bind(self, topic: ITopic) -> "TopicSubscriptionConfig":
+    def bind(self, topic: "ITopic") -> "TopicSubscriptionConfig":
         '''Returns a configuration used to subscribe to an SNS topic.
 
         :param topic: topic for which subscription will be configured.
@@ -3990,7 +3995,7 @@ class _ITopicSubscriptionProxy:
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_sns.ITopicSubscription"
 
     @jsii.member(jsii_name="bind")
-    def bind(self, topic: ITopic) -> "TopicSubscriptionConfig":
+    def bind(self, topic: "ITopic") -> "TopicSubscriptionConfig":
         '''Returns a configuration used to subscribe to an SNS topic.
 
         :param topic: topic for which subscription will be configured.
@@ -4019,8 +4024,8 @@ class LoggingConfig:
         self,
         *,
         protocol: "LoggingProtocol",
-        failure_feedback_role: typing.Optional[_IRoleRef_8400221f] = None,
-        success_feedback_role: typing.Optional[_IRoleRef_8400221f] = None,
+        failure_feedback_role: typing.Optional["_IRoleRef_8400221f"] = None,
+        success_feedback_role: typing.Optional["_IRoleRef_8400221f"] = None,
         success_feedback_sample_rate: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''A logging configuration for delivery status of messages sent from SNS topic to subscribed endpoints.
@@ -4070,22 +4075,22 @@ class LoggingConfig:
         return typing.cast("LoggingProtocol", result)
 
     @builtins.property
-    def failure_feedback_role(self) -> typing.Optional[_IRoleRef_8400221f]:
+    def failure_feedback_role(self) -> typing.Optional["_IRoleRef_8400221f"]:
         '''The IAM role to be used when logging failed message deliveries in Amazon CloudWatch.
 
         :default: None
         '''
         result = self._values.get("failure_feedback_role")
-        return typing.cast(typing.Optional[_IRoleRef_8400221f], result)
+        return typing.cast(typing.Optional["_IRoleRef_8400221f"], result)
 
     @builtins.property
-    def success_feedback_role(self) -> typing.Optional[_IRoleRef_8400221f]:
+    def success_feedback_role(self) -> typing.Optional["_IRoleRef_8400221f"]:
         '''The IAM role to be used when logging successful message deliveries in Amazon CloudWatch.
 
         :default: None
         '''
         result = self._values.get("success_feedback_role")
-        return typing.cast(typing.Optional[_IRoleRef_8400221f], result)
+        return typing.cast(typing.Optional["_IRoleRef_8400221f"], result)
 
     @builtins.property
     def success_feedback_sample_rate(self) -> typing.Optional[jsii.Number]:
@@ -4161,8 +4166,8 @@ class NumericConditions:
         self,
         *,
         allowlist: typing.Optional[typing.Sequence[jsii.Number]] = None,
-        between: typing.Optional[typing.Union[BetweenCondition, typing.Dict[builtins.str, typing.Any]]] = None,
-        between_strict: typing.Optional[typing.Union[BetweenCondition, typing.Dict[builtins.str, typing.Any]]] = None,
+        between: typing.Optional[typing.Union["BetweenCondition", typing.Dict[builtins.str, typing.Any]]] = None,
+        between_strict: typing.Optional[typing.Union["BetweenCondition", typing.Dict[builtins.str, typing.Any]]] = None,
         greater_than: typing.Optional[jsii.Number] = None,
         greater_than_or_equal_to: typing.Optional[jsii.Number] = None,
         less_than: typing.Optional[jsii.Number] = None,
@@ -4250,22 +4255,22 @@ class NumericConditions:
         return typing.cast(typing.Optional[typing.List[jsii.Number]], result)
 
     @builtins.property
-    def between(self) -> typing.Optional[BetweenCondition]:
+    def between(self) -> typing.Optional["BetweenCondition"]:
         '''Match values that are between the specified values.
 
         :default: - None
         '''
         result = self._values.get("between")
-        return typing.cast(typing.Optional[BetweenCondition], result)
+        return typing.cast(typing.Optional["BetweenCondition"], result)
 
     @builtins.property
-    def between_strict(self) -> typing.Optional[BetweenCondition]:
+    def between_strict(self) -> typing.Optional["BetweenCondition"]:
         '''Match values that are strictly between the specified values.
 
         :default: - None
         '''
         result = self._values.get("between_strict")
-        return typing.cast(typing.Optional[BetweenCondition], result)
+        return typing.cast(typing.Optional["BetweenCondition"], result)
 
     @builtins.property
     def greater_than(self) -> typing.Optional[jsii.Number]:
@@ -4339,7 +4344,7 @@ class Policy(
 
     def __init__(
         self,
-        policy_doc: typing.Mapping[builtins.str, FilterOrPolicy],
+        policy_doc: typing.Mapping[builtins.str, "FilterOrPolicy"],
     ) -> None:
         '''Policy constructor.
 
@@ -4352,15 +4357,15 @@ class Policy(
 
     @builtins.property
     @jsii.member(jsii_name="policyDoc")
-    def policy_doc(self) -> typing.Mapping[builtins.str, FilterOrPolicy]:
+    def policy_doc(self) -> typing.Mapping[builtins.str, "FilterOrPolicy"]:
         '''policy argument to construct.'''
-        return typing.cast(typing.Mapping[builtins.str, FilterOrPolicy], jsii.get(self, "policyDoc"))
+        return typing.cast(typing.Mapping[builtins.str, "FilterOrPolicy"], jsii.get(self, "policyDoc"))
 
     @builtins.property
     @jsii.member(jsii_name="type")
-    def type(self) -> FilterOrPolicyType:
+    def type(self) -> "FilterOrPolicyType":
         '''Type used in DFS buildFilterPolicyWithMessageBody to determine json value type.'''
-        return typing.cast(FilterOrPolicyType, jsii.get(self, "type"))
+        return typing.cast("FilterOrPolicyType", jsii.get(self, "type"))
 
 
 @jsii.data_type(
@@ -4583,16 +4588,16 @@ class Subscription(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        topic: ITopic,
+        topic: "ITopic",
         endpoint: builtins.str,
         protocol: "SubscriptionProtocol",
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
-        delivery_policy: typing.Optional[typing.Union[DeliveryPolicy, typing.Dict[builtins.str, typing.Any]]] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
+        delivery_policy: typing.Optional[typing.Union["DeliveryPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
         filter_policy: typing.Optional[typing.Mapping[builtins.str, "SubscriptionFilter"]] = None,
-        filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, FilterOrPolicy]] = None,
+        filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, "FilterOrPolicy"]] = None,
         raw_message_delivery: typing.Optional[builtins.bool] = None,
         region: typing.Optional[builtins.str] = None,
         subscription_role_arn: typing.Optional[builtins.str] = None,
@@ -4638,9 +4643,9 @@ class Subscription(
 
     @builtins.property
     @jsii.member(jsii_name="deadLetterQueue")
-    def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
+    def dead_letter_queue(self) -> typing.Optional["_IQueue_7ed6f679"]:
         '''The DLQ associated with this subscription if present.'''
-        return typing.cast(typing.Optional[_IQueue_7ed6f679], jsii.get(self, "deadLetterQueue"))
+        return typing.cast(typing.Optional["_IQueue_7ed6f679"], jsii.get(self, "deadLetterQueue"))
 
 
 class SubscriptionFilter(
@@ -4713,8 +4718,8 @@ class SubscriptionFilter(
         cls,
         *,
         allowlist: typing.Optional[typing.Sequence[jsii.Number]] = None,
-        between: typing.Optional[typing.Union[BetweenCondition, typing.Dict[builtins.str, typing.Any]]] = None,
-        between_strict: typing.Optional[typing.Union[BetweenCondition, typing.Dict[builtins.str, typing.Any]]] = None,
+        between: typing.Optional[typing.Union["BetweenCondition", typing.Dict[builtins.str, typing.Any]]] = None,
+        between_strict: typing.Optional[typing.Union["BetweenCondition", typing.Dict[builtins.str, typing.Any]]] = None,
         greater_than: typing.Optional[jsii.Number] = None,
         greater_than_or_equal_to: typing.Optional[jsii.Number] = None,
         less_than: typing.Optional[jsii.Number] = None,
@@ -4796,10 +4801,10 @@ class SubscriptionOptions:
         *,
         endpoint: builtins.str,
         protocol: "SubscriptionProtocol",
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
-        delivery_policy: typing.Optional[typing.Union[DeliveryPolicy, typing.Dict[builtins.str, typing.Any]]] = None,
-        filter_policy: typing.Optional[typing.Mapping[builtins.str, SubscriptionFilter]] = None,
-        filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, FilterOrPolicy]] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
+        delivery_policy: typing.Optional[typing.Union["DeliveryPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
+        filter_policy: typing.Optional[typing.Mapping[builtins.str, "SubscriptionFilter"]] = None,
+        filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, "FilterOrPolicy"]] = None,
         raw_message_delivery: typing.Optional[builtins.bool] = None,
         region: typing.Optional[builtins.str] = None,
         subscription_role_arn: typing.Optional[builtins.str] = None,
@@ -4914,7 +4919,7 @@ class SubscriptionOptions:
         return typing.cast("SubscriptionProtocol", result)
 
     @builtins.property
-    def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
+    def dead_letter_queue(self) -> typing.Optional["_IQueue_7ed6f679"]:
         '''Queue to be used as dead letter queue.
 
         If not passed no dead letter queue is enabled.
@@ -4922,32 +4927,32 @@ class SubscriptionOptions:
         :default: - No dead letter queue enabled.
         '''
         result = self._values.get("dead_letter_queue")
-        return typing.cast(typing.Optional[_IQueue_7ed6f679], result)
+        return typing.cast(typing.Optional["_IQueue_7ed6f679"], result)
 
     @builtins.property
-    def delivery_policy(self) -> typing.Optional[DeliveryPolicy]:
+    def delivery_policy(self) -> typing.Optional["DeliveryPolicy"]:
         '''The delivery policy.
 
         :default: - if the initial delivery of the message fails, three retries with a delay between failed attempts set at 20 seconds
         '''
         result = self._values.get("delivery_policy")
-        return typing.cast(typing.Optional[DeliveryPolicy], result)
+        return typing.cast(typing.Optional["DeliveryPolicy"], result)
 
     @builtins.property
     def filter_policy(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, SubscriptionFilter]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "SubscriptionFilter"]]:
         '''The filter policy.
 
         :default: - all messages are delivered
         '''
         result = self._values.get("filter_policy")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, SubscriptionFilter]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "SubscriptionFilter"]], result)
 
     @builtins.property
     def filter_policy_with_message_body(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, FilterOrPolicy]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "FilterOrPolicy"]]:
         '''The filter policy that is applied on the message body.
 
         To apply a filter policy to the message attributes, use ``filterPolicy``. A maximum of one of ``filterPolicyWithMessageBody`` and ``filterPolicy`` may be used.
@@ -4955,7 +4960,7 @@ class SubscriptionOptions:
         :default: - all messages are delivered
         '''
         result = self._values.get("filter_policy_with_message_body")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, FilterOrPolicy]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "FilterOrPolicy"]], result)
 
     @builtins.property
     def raw_message_delivery(self) -> typing.Optional[builtins.bool]:
@@ -5026,14 +5031,14 @@ class SubscriptionProps(SubscriptionOptions):
         *,
         endpoint: builtins.str,
         protocol: "SubscriptionProtocol",
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
-        delivery_policy: typing.Optional[typing.Union[DeliveryPolicy, typing.Dict[builtins.str, typing.Any]]] = None,
-        filter_policy: typing.Optional[typing.Mapping[builtins.str, SubscriptionFilter]] = None,
-        filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, FilterOrPolicy]] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
+        delivery_policy: typing.Optional[typing.Union["DeliveryPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
+        filter_policy: typing.Optional[typing.Mapping[builtins.str, "SubscriptionFilter"]] = None,
+        filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, "FilterOrPolicy"]] = None,
         raw_message_delivery: typing.Optional[builtins.bool] = None,
         region: typing.Optional[builtins.str] = None,
         subscription_role_arn: typing.Optional[builtins.str] = None,
-        topic: ITopic,
+        topic: "ITopic",
     ) -> None:
         '''Properties for creating a new subscription.
 
@@ -5117,7 +5122,7 @@ class SubscriptionProps(SubscriptionOptions):
         return typing.cast("SubscriptionProtocol", result)
 
     @builtins.property
-    def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
+    def dead_letter_queue(self) -> typing.Optional["_IQueue_7ed6f679"]:
         '''Queue to be used as dead letter queue.
 
         If not passed no dead letter queue is enabled.
@@ -5125,32 +5130,32 @@ class SubscriptionProps(SubscriptionOptions):
         :default: - No dead letter queue enabled.
         '''
         result = self._values.get("dead_letter_queue")
-        return typing.cast(typing.Optional[_IQueue_7ed6f679], result)
+        return typing.cast(typing.Optional["_IQueue_7ed6f679"], result)
 
     @builtins.property
-    def delivery_policy(self) -> typing.Optional[DeliveryPolicy]:
+    def delivery_policy(self) -> typing.Optional["DeliveryPolicy"]:
         '''The delivery policy.
 
         :default: - if the initial delivery of the message fails, three retries with a delay between failed attempts set at 20 seconds
         '''
         result = self._values.get("delivery_policy")
-        return typing.cast(typing.Optional[DeliveryPolicy], result)
+        return typing.cast(typing.Optional["DeliveryPolicy"], result)
 
     @builtins.property
     def filter_policy(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, SubscriptionFilter]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "SubscriptionFilter"]]:
         '''The filter policy.
 
         :default: - all messages are delivered
         '''
         result = self._values.get("filter_policy")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, SubscriptionFilter]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "SubscriptionFilter"]], result)
 
     @builtins.property
     def filter_policy_with_message_body(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, FilterOrPolicy]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "FilterOrPolicy"]]:
         '''The filter policy that is applied on the message body.
 
         To apply a filter policy to the message attributes, use ``filterPolicy``. A maximum of one of ``filterPolicyWithMessageBody`` and ``filterPolicy`` may be used.
@@ -5158,7 +5163,7 @@ class SubscriptionProps(SubscriptionOptions):
         :default: - all messages are delivered
         '''
         result = self._values.get("filter_policy_with_message_body")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, FilterOrPolicy]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "FilterOrPolicy"]], result)
 
     @builtins.property
     def raw_message_delivery(self) -> typing.Optional[builtins.bool]:
@@ -5196,11 +5201,11 @@ class SubscriptionProps(SubscriptionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def topic(self) -> ITopic:
+    def topic(self) -> "ITopic":
         '''The topic to subscribe to.'''
         result = self._values.get("topic")
         assert result is not None, "Required property 'topic' is missing"
-        return typing.cast(ITopic, result)
+        return typing.cast("ITopic", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5424,7 +5429,7 @@ class TopicBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -5459,7 +5464,10 @@ class TopicBase(
         return typing.cast(None, jsii.invoke(self, "addSSLPolicy", []))
 
     @jsii.member(jsii_name="addSubscription")
-    def add_subscription(self, topic_subscription: ITopicSubscription) -> Subscription:
+    def add_subscription(
+        self,
+        topic_subscription: "ITopicSubscription",
+    ) -> "Subscription":
         '''Subscribe some endpoint to this topic.
 
         :param topic_subscription: -
@@ -5467,13 +5475,13 @@ class TopicBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3af87d479cce0479b13b487a212b9eb786dc4faba1cadb3a6451209927770a60)
             check_type(argname="argument topic_subscription", value=topic_subscription, expected_type=type_hints["topic_subscription"])
-        return typing.cast(Subscription, jsii.invoke(self, "addSubscription", [topic_subscription]))
+        return typing.cast("Subscription", jsii.invoke(self, "addSubscription", [topic_subscription]))
 
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the IAM resource policy associated with this topic.
 
         If this topic was created in this stack (``new Topic``), a topic policy
@@ -5488,13 +5496,13 @@ class TopicBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c7f4d520e0fc706fbd4e1415b076009a3ab58db83ac7b721c03dba894f99c83d)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="bindAsNotificationRuleTarget")
     def bind_as_notification_rule_target(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
-    ) -> _NotificationRuleTargetConfig_ea27e095:
+        _scope: "_constructs_77d1e7e8.Construct",
+    ) -> "_NotificationRuleTargetConfig_ea27e095":
         '''Represents a notification target That allows SNS topic to associate with this rule target.
 
         :param _scope: -
@@ -5502,15 +5510,15 @@ class TopicBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__04cdaba4727d1a890bbc0d5d2854229f71f59b72c42feadb21ad6387b14c83bd)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(_NotificationRuleTargetConfig_ea27e095, jsii.invoke(self, "bindAsNotificationRuleTarget", [_scope]))
+        return typing.cast("_NotificationRuleTargetConfig_ea27e095", jsii.invoke(self, "bindAsNotificationRuleTarget", [_scope]))
 
     @jsii.member(jsii_name="createSSLPolicyDocument")
-    def _create_ssl_policy_document(self) -> _PolicyStatement_0fe33853:
+    def _create_ssl_policy_document(self) -> "_PolicyStatement_0fe33853":
         '''Adds a statement to enforce encryption of data in transit when publishing to the topic.
 
         For more information, see https://docs.aws.amazon.com/sns/latest/dg/sns-security-best-practices.html#enforce-encryption-data-in-transit.
         '''
-        return typing.cast(_PolicyStatement_0fe33853, jsii.invoke(self, "createSSLPolicyDocument", []))
+        return typing.cast("_PolicyStatement_0fe33853", jsii.invoke(self, "createSSLPolicyDocument", []))
 
     @jsii.member(jsii_name="createTopicPolicy")
     def _create_topic_policy(self) -> None:
@@ -5520,9 +5528,9 @@ class TopicBase(
     @jsii.member(jsii_name="grantOnKey")
     def grant_on_key(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _GrantOnKeyResult_35320c49:
+    ) -> "_GrantOnKeyResult_35320c49":
         '''Gives permissions to a grantable entity to perform actions on the encryption key.
 
         :param grantee: -
@@ -5532,10 +5540,10 @@ class TopicBase(
             type_hints = typing.get_type_hints(_typecheckingstub__7ce89a40f3ee891286bc5bec459e09598cca501355d0cfc14590802e29b63400)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_GrantOnKeyResult_35320c49, jsii.invoke(self, "grantOnKey", [grantee, *actions]))
+        return typing.cast("_GrantOnKeyResult_35320c49", jsii.invoke(self, "grantOnKey", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantPublish")
-    def grant_publish(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_publish(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant topic publishing permissions to the given identity.
 
         :param grantee: -
@@ -5543,10 +5551,10 @@ class TopicBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6461236ee087e9f8e6de731371b913e918bbd3ec5d928bd677a69c9c8eb82381)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPublish", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPublish", [grantee]))
 
     @jsii.member(jsii_name="grantSubscribe")
-    def grant_subscribe(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_subscribe(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant topic subscribing permissions to the given identity.
 
         :param grantee: -
@@ -5554,7 +5562,7 @@ class TopicBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cdc643adf708f1051e215b34e0def5de91fed4799b3870f5be0d3e0ddf1702b2)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantSubscribe", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantSubscribe", [grantee]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -5566,14 +5574,14 @@ class TopicBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Topic.
 
         :param metric_name: -
@@ -5608,7 +5616,7 @@ class TopicBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricNumberOfMessagesPublished")
     def metric_number_of_messages_published(
@@ -5619,14 +5627,14 @@ class TopicBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages published to your Amazon SNS topics.
 
         Sum over 5 minutes
@@ -5659,7 +5667,7 @@ class TopicBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfMessagesPublished", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfMessagesPublished", [props]))
 
     @jsii.member(jsii_name="metricNumberOfNotificationsDelivered")
     def metric_number_of_notifications_delivered(
@@ -5670,14 +5678,14 @@ class TopicBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages successfully delivered from your Amazon SNS topics to subscribing endpoints.
 
         Sum over 5 minutes
@@ -5710,7 +5718,7 @@ class TopicBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfNotificationsDelivered", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfNotificationsDelivered", [props]))
 
     @jsii.member(jsii_name="metricNumberOfNotificationsFailed")
     def metric_number_of_notifications_failed(
@@ -5721,14 +5729,14 @@ class TopicBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that Amazon SNS failed to deliver.
 
         Sum over 5 minutes
@@ -5761,7 +5769,7 @@ class TopicBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfNotificationsFailed", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfNotificationsFailed", [props]))
 
     @jsii.member(jsii_name="metricNumberOfNotificationsFilteredOut")
     def metric_number_of_notifications_filtered_out(
@@ -5772,14 +5780,14 @@ class TopicBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that were rejected by subscription filter policies.
 
         Sum over 5 minutes
@@ -5812,7 +5820,7 @@ class TopicBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfNotificationsFilteredOut", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfNotificationsFilteredOut", [props]))
 
     @jsii.member(jsii_name="metricNumberOfNotificationsFilteredOutInvalidAttributes")
     def metric_number_of_notifications_filtered_out_invalid_attributes(
@@ -5823,14 +5831,14 @@ class TopicBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that were rejected by subscription filter policies because the messages' attributes are invalid.
 
         Sum over 5 minutes
@@ -5863,7 +5871,7 @@ class TopicBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfNotificationsFilteredOutInvalidAttributes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfNotificationsFilteredOutInvalidAttributes", [props]))
 
     @jsii.member(jsii_name="metricNumberOfNotificationsFilteredOutNoMessageAttributes")
     def metric_number_of_notifications_filtered_out_no_message_attributes(
@@ -5874,14 +5882,14 @@ class TopicBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The number of messages that were rejected by subscription filter policies because the messages have no attributes.
 
         Sum over 5 minutes
@@ -5914,7 +5922,7 @@ class TopicBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricNumberOfNotificationsFilteredOutNoMessageAttributes", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricNumberOfNotificationsFilteredOutNoMessageAttributes", [props]))
 
     @jsii.member(jsii_name="metricPublishSize")
     def metric_publish_size(
@@ -5925,14 +5933,14 @@ class TopicBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the size of messages published through this topic.
 
         Average over 5 minutes
@@ -5965,7 +5973,7 @@ class TopicBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricPublishSize", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricPublishSize", [props]))
 
     @jsii.member(jsii_name="metricSMSMonthToDateSpentUSD")
     def metric_sms_month_to_date_spent_usd(
@@ -5976,14 +5984,14 @@ class TopicBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The charges you have accrued since the start of the current calendar month for sending SMS messages.
 
         Maximum over 5 minutes
@@ -6016,7 +6024,7 @@ class TopicBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSMSMonthToDateSpentUSD", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSMSMonthToDateSpentUSD", [props]))
 
     @jsii.member(jsii_name="metricSMSSuccessRate")
     def metric_sms_success_rate(
@@ -6027,14 +6035,14 @@ class TopicBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The rate of successful SMS message deliveries.
 
         Sum over 5 minutes
@@ -6067,7 +6075,7 @@ class TopicBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricSMSSuccessRate", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricSMSSuccessRate", [props]))
 
     @builtins.property
     @jsii.member(jsii_name="autoCreatePolicy")
@@ -6118,14 +6126,14 @@ class TopicBase(
 
     @builtins.property
     @jsii.member(jsii_name="topicRef")
-    def topic_ref(self) -> _TopicReference_3fef3390:
+    def topic_ref(self) -> "_TopicReference_3fef3390":
         '''A reference to a Topic resource.'''
-        return typing.cast(_TopicReference_3fef3390, jsii.get(self, "topicRef"))
+        return typing.cast("_TopicReference_3fef3390", jsii.get(self, "topicRef"))
 
     @builtins.property
     @jsii.member(jsii_name="masterKey")
     @abc.abstractmethod
-    def master_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def master_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''A KMS Key, either managed by this CDK app, or imported.
 
         This property applies only to server-side encryption.
@@ -6188,12 +6196,12 @@ class _TopicBaseProxy(
 
     @builtins.property
     @jsii.member(jsii_name="masterKey")
-    def master_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def master_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''A KMS Key, either managed by this CDK app, or imported.
 
         This property applies only to server-side encryption.
         '''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "masterKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "masterKey"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, TopicBase).__jsii_proxy_class__ = lambda : _TopicBaseProxy
@@ -6218,7 +6226,7 @@ class TopicGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.TopicG
 
     @jsii.member(jsii_name="fromTopic")
     @builtins.classmethod
-    def from_topic(cls, resource: _ITopicRef_29aa9a88) -> "TopicGrants":
+    def from_topic(cls, resource: "_ITopicRef_29aa9a88") -> "TopicGrants":
         '''Creates grants for TopicGrants.
 
         :param resource: -
@@ -6229,7 +6237,7 @@ class TopicGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.TopicG
         return typing.cast("TopicGrants", jsii.sinvoke(cls, "fromTopic", [resource]))
 
     @jsii.member(jsii_name="publish")
-    def publish(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def publish(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant topic publishing permissions to the given identity.
 
         :param grantee: -
@@ -6237,10 +6245,10 @@ class TopicGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.TopicG
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8bf479968ed22475a7cf3ba952d0fbaf29b257cdc1f6fc41ee3373aa47616b16)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "publish", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "publish", [grantee]))
 
     @jsii.member(jsii_name="subscribe")
-    def subscribe(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def subscribe(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant topic subscribing permissions to the given identity.
 
         :param grantee: -
@@ -6248,22 +6256,22 @@ class TopicGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.TopicG
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f34ce9741908a1b428b55a6e2f87344241a8bf1141078a293c323f21ef7d8603)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "subscribe", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "subscribe", [grantee]))
 
     @builtins.property
     @jsii.member(jsii_name="resource")
-    def _resource(self) -> _ITopicRef_29aa9a88:
-        return typing.cast(_ITopicRef_29aa9a88, jsii.get(self, "resource"))
+    def _resource(self) -> "_ITopicRef_29aa9a88":
+        return typing.cast("_ITopicRef_29aa9a88", jsii.get(self, "resource"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptedResource")
-    def _encrypted_resource(self) -> typing.Optional[_IEncryptedResource_8e9bf351]:
-        return typing.cast(typing.Optional[_IEncryptedResource_8e9bf351], jsii.get(self, "encryptedResource"))
+    def _encrypted_resource(self) -> typing.Optional["_IEncryptedResource_8e9bf351"]:
+        return typing.cast(typing.Optional["_IEncryptedResource_8e9bf351"], jsii.get(self, "encryptedResource"))
 
     @builtins.property
     @jsii.member(jsii_name="policyResource")
-    def _policy_resource(self) -> typing.Optional[_IResourceWithPolicyV2_01035ec6]:
-        return typing.cast(typing.Optional[_IResourceWithPolicyV2_01035ec6], jsii.get(self, "policyResource"))
+    def _policy_resource(self) -> typing.Optional["_IResourceWithPolicyV2_01035ec6"]:
+        return typing.cast(typing.Optional["_IResourceWithPolicyV2_01035ec6"], jsii.get(self, "policyResource"))
 
 
 class TopicPolicy(
@@ -6308,12 +6316,12 @@ class TopicPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        topics: typing.Sequence[ITopic],
+        topics: typing.Sequence["ITopic"],
         enforce_ssl: typing.Optional[builtins.bool] = None,
-        policy_document: typing.Optional[_PolicyDocument_3ac34393] = None,
+        policy_document: typing.Optional["_PolicyDocument_3ac34393"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -6336,7 +6344,7 @@ class TopicPolicy(
     def _create_ssl_policy_document(
         self,
         topic_arn: builtins.str,
-    ) -> _PolicyStatement_0fe33853:
+    ) -> "_PolicyStatement_0fe33853":
         '''Adds a statement to enforce encryption of data in transit when publishing to the topic.
 
         For more information, see https://docs.aws.amazon.com/sns/latest/dg/sns-security-best-practices.html#enforce-encryption-data-in-transit.
@@ -6346,7 +6354,7 @@ class TopicPolicy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__68fd01009ddae128e0ad9f5816da32ac0ad127b82df6140a2431cf829c9a7488)
             check_type(argname="argument topic_arn", value=topic_arn, expected_type=type_hints["topic_arn"])
-        return typing.cast(_PolicyStatement_0fe33853, jsii.invoke(self, "createSSLPolicyDocument", [topic_arn]))
+        return typing.cast("_PolicyStatement_0fe33853", jsii.invoke(self, "createSSLPolicyDocument", [topic_arn]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -6356,9 +6364,9 @@ class TopicPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="document")
-    def document(self) -> _PolicyDocument_3ac34393:
+    def document(self) -> "_PolicyDocument_3ac34393":
         '''The IAM policy document for this policy.'''
-        return typing.cast(_PolicyDocument_3ac34393, jsii.get(self, "document"))
+        return typing.cast("_PolicyDocument_3ac34393", jsii.get(self, "document"))
 
 
 @jsii.data_type(
@@ -6374,9 +6382,9 @@ class TopicPolicyProps:
     def __init__(
         self,
         *,
-        topics: typing.Sequence[ITopic],
+        topics: typing.Sequence["ITopic"],
         enforce_ssl: typing.Optional[builtins.bool] = None,
-        policy_document: typing.Optional[_PolicyDocument_3ac34393] = None,
+        policy_document: typing.Optional["_PolicyDocument_3ac34393"] = None,
     ) -> None:
         '''Properties to associate SNS topics with a policy.
 
@@ -6419,11 +6427,11 @@ class TopicPolicyProps:
             self._values["policy_document"] = policy_document
 
     @builtins.property
-    def topics(self) -> typing.List[ITopic]:
+    def topics(self) -> typing.List["ITopic"]:
         '''The set of topics this policy applies to.'''
         result = self._values.get("topics")
         assert result is not None, "Required property 'topics' is missing"
-        return typing.cast(typing.List[ITopic], result)
+        return typing.cast(typing.List["ITopic"], result)
 
     @builtins.property
     def enforce_ssl(self) -> typing.Optional[builtins.bool]:
@@ -6437,13 +6445,13 @@ class TopicPolicyProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def policy_document(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy_document(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''IAM policy document to apply to topic(s).
 
         :default: empty policy document
         '''
         result = self._values.get("policy_document")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6482,9 +6490,9 @@ class TopicProps:
         display_name: typing.Optional[builtins.str] = None,
         enforce_ssl: typing.Optional[builtins.bool] = None,
         fifo: typing.Optional[builtins.bool] = None,
-        fifo_throughput_scope: typing.Optional[FifoThroughputScope] = None,
-        logging_configs: typing.Optional[typing.Sequence[typing.Union[LoggingConfig, typing.Dict[builtins.str, typing.Any]]]] = None,
-        master_key: typing.Optional[_IKey_5f11635f] = None,
+        fifo_throughput_scope: typing.Optional["FifoThroughputScope"] = None,
+        logging_configs: typing.Optional[typing.Sequence[typing.Union["LoggingConfig", typing.Dict[builtins.str, typing.Any]]]] = None,
+        master_key: typing.Optional["_IKey_5f11635f"] = None,
         message_retention_period_in_days: typing.Optional[jsii.Number] = None,
         signature_version: typing.Optional[builtins.str] = None,
         topic_name: typing.Optional[builtins.str] = None,
@@ -6592,7 +6600,7 @@ class TopicProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def fifo_throughput_scope(self) -> typing.Optional[FifoThroughputScope]:
+    def fifo_throughput_scope(self) -> typing.Optional["FifoThroughputScope"]:
         '''Specifies the throughput quota and deduplication behavior to apply for the FIFO topic.
 
         You can only set this property when ``fifo`` is ``true``.
@@ -6600,10 +6608,10 @@ class TopicProps:
         :default: undefined - SNS default setting is FifoThroughputScope.TOPIC
         '''
         result = self._values.get("fifo_throughput_scope")
-        return typing.cast(typing.Optional[FifoThroughputScope], result)
+        return typing.cast(typing.Optional["FifoThroughputScope"], result)
 
     @builtins.property
-    def logging_configs(self) -> typing.Optional[typing.List[LoggingConfig]]:
+    def logging_configs(self) -> typing.Optional[typing.List["LoggingConfig"]]:
         '''The list of delivery status logging configurations for the topic.
 
         :default: None
@@ -6611,16 +6619,16 @@ class TopicProps:
         :see: https://docs.aws.amazon.com/sns/latest/dg/sns-topic-attributes.html.
         '''
         result = self._values.get("logging_configs")
-        return typing.cast(typing.Optional[typing.List[LoggingConfig]], result)
+        return typing.cast(typing.Optional[typing.List["LoggingConfig"]], result)
 
     @builtins.property
-    def master_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def master_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''A KMS Key, either managed by this CDK app, or imported.
 
         :default: None
         '''
         result = self._values.get("master_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def message_retention_period_in_days(self) -> typing.Optional[jsii.Number]:
@@ -6705,17 +6713,17 @@ class TopicSubscriptionConfig(SubscriptionOptions):
         self,
         *,
         endpoint: builtins.str,
-        protocol: SubscriptionProtocol,
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
-        delivery_policy: typing.Optional[typing.Union[DeliveryPolicy, typing.Dict[builtins.str, typing.Any]]] = None,
-        filter_policy: typing.Optional[typing.Mapping[builtins.str, SubscriptionFilter]] = None,
-        filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, FilterOrPolicy]] = None,
+        protocol: "SubscriptionProtocol",
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
+        delivery_policy: typing.Optional[typing.Union["DeliveryPolicy", typing.Dict[builtins.str, typing.Any]]] = None,
+        filter_policy: typing.Optional[typing.Mapping[builtins.str, "SubscriptionFilter"]] = None,
+        filter_policy_with_message_body: typing.Optional[typing.Mapping[builtins.str, "FilterOrPolicy"]] = None,
         raw_message_delivery: typing.Optional[builtins.bool] = None,
         region: typing.Optional[builtins.str] = None,
         subscription_role_arn: typing.Optional[builtins.str] = None,
         subscriber_id: builtins.str,
-        subscriber_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
-        subscription_dependency: typing.Optional[_constructs_77d1e7e8.IDependable] = None,
+        subscriber_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
+        subscription_dependency: typing.Optional["_constructs_77d1e7e8.IDependable"] = None,
     ) -> None:
         '''Subscription configuration.
 
@@ -6837,14 +6845,14 @@ class TopicSubscriptionConfig(SubscriptionOptions):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def protocol(self) -> SubscriptionProtocol:
+    def protocol(self) -> "SubscriptionProtocol":
         '''What type of subscription to add.'''
         result = self._values.get("protocol")
         assert result is not None, "Required property 'protocol' is missing"
-        return typing.cast(SubscriptionProtocol, result)
+        return typing.cast("SubscriptionProtocol", result)
 
     @builtins.property
-    def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
+    def dead_letter_queue(self) -> typing.Optional["_IQueue_7ed6f679"]:
         '''Queue to be used as dead letter queue.
 
         If not passed no dead letter queue is enabled.
@@ -6852,32 +6860,32 @@ class TopicSubscriptionConfig(SubscriptionOptions):
         :default: - No dead letter queue enabled.
         '''
         result = self._values.get("dead_letter_queue")
-        return typing.cast(typing.Optional[_IQueue_7ed6f679], result)
+        return typing.cast(typing.Optional["_IQueue_7ed6f679"], result)
 
     @builtins.property
-    def delivery_policy(self) -> typing.Optional[DeliveryPolicy]:
+    def delivery_policy(self) -> typing.Optional["DeliveryPolicy"]:
         '''The delivery policy.
 
         :default: - if the initial delivery of the message fails, three retries with a delay between failed attempts set at 20 seconds
         '''
         result = self._values.get("delivery_policy")
-        return typing.cast(typing.Optional[DeliveryPolicy], result)
+        return typing.cast(typing.Optional["DeliveryPolicy"], result)
 
     @builtins.property
     def filter_policy(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, SubscriptionFilter]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "SubscriptionFilter"]]:
         '''The filter policy.
 
         :default: - all messages are delivered
         '''
         result = self._values.get("filter_policy")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, SubscriptionFilter]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "SubscriptionFilter"]], result)
 
     @builtins.property
     def filter_policy_with_message_body(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, FilterOrPolicy]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "FilterOrPolicy"]]:
         '''The filter policy that is applied on the message body.
 
         To apply a filter policy to the message attributes, use ``filterPolicy``. A maximum of one of ``filterPolicyWithMessageBody`` and ``filterPolicy`` may be used.
@@ -6885,7 +6893,7 @@ class TopicSubscriptionConfig(SubscriptionOptions):
         :default: - all messages are delivered
         '''
         result = self._values.get("filter_policy_with_message_body")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, FilterOrPolicy]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "FilterOrPolicy"]], result)
 
     @builtins.property
     def raw_message_delivery(self) -> typing.Optional[builtins.bool]:
@@ -6935,7 +6943,7 @@ class TopicSubscriptionConfig(SubscriptionOptions):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def subscriber_scope(self) -> typing.Optional[_constructs_77d1e7e8.Construct]:
+    def subscriber_scope(self) -> typing.Optional["_constructs_77d1e7e8.Construct"]:
         '''The scope in which to create the SNS subscription resource.
 
         Normally you'd
@@ -6948,12 +6956,12 @@ class TopicSubscriptionConfig(SubscriptionOptions):
         :default: - use the topic as the scope of the subscription, in which case ``subscriberId`` must be defined.
         '''
         result = self._values.get("subscriber_scope")
-        return typing.cast(typing.Optional[_constructs_77d1e7e8.Construct], result)
+        return typing.cast(typing.Optional["_constructs_77d1e7e8.Construct"], result)
 
     @builtins.property
     def subscription_dependency(
         self,
-    ) -> typing.Optional[_constructs_77d1e7e8.IDependable]:
+    ) -> typing.Optional["_constructs_77d1e7e8.IDependable"]:
         '''The resources that need to be created before the subscription can be safely created.
 
         For example for SQS subscription, the subscription needs to have a dependency on the SQS queue policy
@@ -6962,7 +6970,7 @@ class TopicSubscriptionConfig(SubscriptionOptions):
         :default: - empty list
         '''
         result = self._values.get("subscription_dependency")
-        return typing.cast(typing.Optional[_constructs_77d1e7e8.IDependable], result)
+        return typing.cast(typing.Optional["_constructs_77d1e7e8.IDependable"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7015,7 +7023,7 @@ class Filter(
         filter = sns.Filter(subscription_filter)
     '''
 
-    def __init__(self, filter_doc: SubscriptionFilter) -> None:
+    def __init__(self, filter_doc: "SubscriptionFilter") -> None:
         '''Policy constructor.
 
         :param filter_doc: filter argument to construct.
@@ -7027,15 +7035,15 @@ class Filter(
 
     @builtins.property
     @jsii.member(jsii_name="filterDoc")
-    def filter_doc(self) -> SubscriptionFilter:
+    def filter_doc(self) -> "SubscriptionFilter":
         '''filter argument to construct.'''
-        return typing.cast(SubscriptionFilter, jsii.get(self, "filterDoc"))
+        return typing.cast("SubscriptionFilter", jsii.get(self, "filterDoc"))
 
     @builtins.property
     @jsii.member(jsii_name="type")
-    def type(self) -> FilterOrPolicyType:
+    def type(self) -> "FilterOrPolicyType":
         '''Type used in DFS buildFilterPolicyWithMessageBody to determine json value type.'''
-        return typing.cast(FilterOrPolicyType, jsii.get(self, "type"))
+        return typing.cast("FilterOrPolicyType", jsii.get(self, "type"))
 
 
 class Topic(TopicBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.Topic"):
@@ -7062,20 +7070,20 @@ class Topic(TopicBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.T
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         content_based_deduplication: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
         enforce_ssl: typing.Optional[builtins.bool] = None,
         fifo: typing.Optional[builtins.bool] = None,
-        fifo_throughput_scope: typing.Optional[FifoThroughputScope] = None,
-        logging_configs: typing.Optional[typing.Sequence[typing.Union[LoggingConfig, typing.Dict[builtins.str, typing.Any]]]] = None,
-        master_key: typing.Optional[_IKey_5f11635f] = None,
+        fifo_throughput_scope: typing.Optional["FifoThroughputScope"] = None,
+        logging_configs: typing.Optional[typing.Sequence[typing.Union["LoggingConfig", typing.Dict[builtins.str, typing.Any]]]] = None,
+        master_key: typing.Optional["_IKey_5f11635f"] = None,
         message_retention_period_in_days: typing.Optional[jsii.Number] = None,
         signature_version: typing.Optional[builtins.str] = None,
         topic_name: typing.Optional[builtins.str] = None,
-        tracing_config: typing.Optional[TracingConfig] = None,
+        tracing_config: typing.Optional["TracingConfig"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -7116,10 +7124,10 @@ class Topic(TopicBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.T
     @builtins.classmethod
     def from_topic_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         topic_arn: builtins.str,
-    ) -> ITopic:
+    ) -> "ITopic":
         '''Import an existing SNS topic provided an ARN.
 
         :param scope: The parent creating construct.
@@ -7131,19 +7139,19 @@ class Topic(TopicBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.T
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument topic_arn", value=topic_arn, expected_type=type_hints["topic_arn"])
-        return typing.cast(ITopic, jsii.sinvoke(cls, "fromTopicArn", [scope, id, topic_arn]))
+        return typing.cast("ITopic", jsii.sinvoke(cls, "fromTopicArn", [scope, id, topic_arn]))
 
     @jsii.member(jsii_name="fromTopicAttributes")
     @builtins.classmethod
     def from_topic_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         topic_arn: builtins.str,
         content_based_deduplication: typing.Optional[builtins.bool] = None,
         key_arn: typing.Optional[builtins.str] = None,
-    ) -> ITopic:
+    ) -> "ITopic":
         '''Import an existing SNS topic provided a topic attributes.
 
         :param scope: The parent creating construct.
@@ -7162,15 +7170,15 @@ class Topic(TopicBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.T
             key_arn=key_arn,
         )
 
-        return typing.cast(ITopic, jsii.sinvoke(cls, "fromTopicAttributes", [scope, id, attrs]))
+        return typing.cast("ITopic", jsii.sinvoke(cls, "fromTopicAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addLoggingConfig")
     def add_logging_config(
         self,
         *,
-        protocol: LoggingProtocol,
-        failure_feedback_role: typing.Optional[_IRoleRef_8400221f] = None,
-        success_feedback_role: typing.Optional[_IRoleRef_8400221f] = None,
+        protocol: "LoggingProtocol",
+        failure_feedback_role: typing.Optional["_IRoleRef_8400221f"] = None,
+        success_feedback_role: typing.Optional["_IRoleRef_8400221f"] = None,
         success_feedback_sample_rate: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Adds a delivery status logging configuration to the topic.
@@ -7233,12 +7241,12 @@ class Topic(TopicBase, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.T
 
     @builtins.property
     @jsii.member(jsii_name="masterKey")
-    def master_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def master_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''A KMS Key, either managed by this CDK app, or imported.
 
         This property applies only to server-side encryption.
         '''
-        return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "masterKey"))
+        return typing.cast(typing.Optional["_IKey_5f11635f"], jsii.get(self, "masterKey"))
 
 
 __all__ = [

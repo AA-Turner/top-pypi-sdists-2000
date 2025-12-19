@@ -96,7 +96,7 @@ class IFlowTemplateRef(
 
     @builtins.property
     @jsii.member(jsii_name="flowTemplateRef")
-    def flow_template_ref(self) -> FlowTemplateReference:
+    def flow_template_ref(self) -> "FlowTemplateReference":
         '''(experimental) A reference to a FlowTemplate resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IFlowTemplateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="flowTemplateRef")
-    def flow_template_ref(self) -> FlowTemplateReference:
+    def flow_template_ref(self) -> "FlowTemplateReference":
         '''(experimental) A reference to a FlowTemplate resource.
 
         :stability: experimental
         '''
-        return typing.cast(FlowTemplateReference, jsii.get(self, "flowTemplateRef"))
+        return typing.cast("FlowTemplateReference", jsii.get(self, "flowTemplateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFlowTemplateRef).__jsii_proxy_class__ = lambda : _IFlowTemplateRefProxy

@@ -103,6 +103,7 @@ class CfnAccessPoint(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_s3express as s3express
@@ -138,17 +139,17 @@ class CfnAccessPoint(
 
     def __init__(
         self,
-        scope_: _constructs_77d1e7e8.Construct,
+        scope_: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         bucket: builtins.str,
         bucket_account_id: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         policy: typing.Any = None,
-        public_access_block_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.PublicAccessBlockConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.ScopeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        public_access_block_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.PublicAccessBlockConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        scope: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.ScopeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::S3Express::AccessPoint``.
 
@@ -182,7 +183,10 @@ class CfnAccessPoint(
 
     @jsii.member(jsii_name="arnForAccessPoint")
     @builtins.classmethod
-    def arn_for_access_point(cls, resource: _IAccessPointRef_97eca07d) -> builtins.str:
+    def arn_for_access_point(
+        cls,
+        resource: "_IAccessPointRef_97eca07d",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -195,10 +199,10 @@ class CfnAccessPoint(
     @builtins.classmethod
     def from_access_point_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IAccessPointRef_97eca07d:
+    ) -> "_IAccessPointRef_97eca07d":
         '''Creates a new IAccessPointRef from an ARN.
 
         :param scope: -
@@ -210,16 +214,16 @@ class CfnAccessPoint(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IAccessPointRef_97eca07d, jsii.sinvoke(cls, "fromAccessPointArn", [scope, id, arn]))
+        return typing.cast("_IAccessPointRef_97eca07d", jsii.sinvoke(cls, "fromAccessPointArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromAccessPointName")
     @builtins.classmethod
     def from_access_point_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         access_point_name: builtins.str,
-    ) -> _IAccessPointRef_97eca07d:
+    ) -> "_IAccessPointRef_97eca07d":
         '''Creates a new IAccessPointRef from a accessPointName.
 
         :param scope: -
@@ -231,7 +235,7 @@ class CfnAccessPoint(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument access_point_name", value=access_point_name, expected_type=type_hints["access_point_name"])
-        return typing.cast(_IAccessPointRef_97eca07d, jsii.sinvoke(cls, "fromAccessPointName", [scope, id, access_point_name]))
+        return typing.cast("_IAccessPointRef_97eca07d", jsii.sinvoke(cls, "fromAccessPointName", [scope, id, access_point_name]))
 
     @jsii.member(jsii_name="isCfnAccessPoint")
     @builtins.classmethod
@@ -246,7 +250,7 @@ class CfnAccessPoint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessPoint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -277,9 +281,9 @@ class CfnAccessPoint(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointRef")
-    def access_point_ref(self) -> _AccessPointReference_15cfd2e8:
+    def access_point_ref(self) -> "_AccessPointReference_15cfd2e8":
         '''A reference to a AccessPoint resource.'''
-        return typing.cast(_AccessPointReference_15cfd2e8, jsii.get(self, "accessPointRef"))
+        return typing.cast("_AccessPointReference_15cfd2e8", jsii.get(self, "accessPointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -301,9 +305,9 @@ class CfnAccessPoint(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -366,14 +370,14 @@ class CfnAccessPoint(
     @jsii.member(jsii_name="publicAccessBlockConfiguration")
     def public_access_block_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.PublicAccessBlockConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.PublicAccessBlockConfigurationProperty"]]:
         '''Public access is blocked by default to access points for directory buckets.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.PublicAccessBlockConfigurationProperty"]], jsii.get(self, "publicAccessBlockConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.PublicAccessBlockConfigurationProperty"]], jsii.get(self, "publicAccessBlockConfiguration"))
 
     @public_access_block_configuration.setter
     def public_access_block_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.PublicAccessBlockConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.PublicAccessBlockConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fc74f25f5a3136d66174ea811ed4ae44e659d23502d10285f8bc72b9f01fcc79)
@@ -384,14 +388,14 @@ class CfnAccessPoint(
     @jsii.member(jsii_name="scope")
     def scope(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.ScopeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.ScopeProperty"]]:
         '''You can use the access point scope to restrict access to specific prefixes, API operations, or a combination of both.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.ScopeProperty"]], jsii.get(self, "scope"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.ScopeProperty"]], jsii.get(self, "scope"))
 
     @scope.setter
     def scope(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.ScopeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.ScopeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__48d7fd3100a689dec8bdc6613bf9b51376dd53745e5ef8f3e45a997d4050fbd5)
@@ -400,12 +404,12 @@ class CfnAccessPoint(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags that you can apply to access points.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0e608b2906b65b5e91d11512e46e4a81458516822fd076cc4c4cfa631021f147)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -415,14 +419,14 @@ class CfnAccessPoint(
     @jsii.member(jsii_name="vpcConfiguration")
     def vpc_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.VpcConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.VpcConfigurationProperty"]]:
         '''If you include this field, Amazon S3 restricts access to this access point to requests from the specified virtual private cloud (VPC).'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.VpcConfigurationProperty"]], jsii.get(self, "vpcConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.VpcConfigurationProperty"]], jsii.get(self, "vpcConfiguration"))
 
     @vpc_configuration.setter
     def vpc_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAccessPoint.VpcConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.VpcConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__854fbbe66a8f2a9a585ce20da917f5abf17e2ec117ac4321757853590651821a)
@@ -443,10 +447,10 @@ class CfnAccessPoint(
         def __init__(
             self,
             *,
-            block_public_acls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            block_public_policy: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            ignore_public_acls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            restrict_public_buckets: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            block_public_acls: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            block_public_policy: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            ignore_public_acls: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            restrict_public_buckets: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Public access is blocked by default to access points for directory buckets.
 
@@ -490,7 +494,7 @@ class CfnAccessPoint(
         @builtins.property
         def block_public_acls(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket and objects in this bucket.
 
             Setting this element to ``TRUE`` causes the following behavior:
@@ -504,12 +508,12 @@ class CfnAccessPoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-publicaccessblockconfiguration.html#cfn-s3express-accesspoint-publicaccessblockconfiguration-blockpublicacls
             '''
             result = self._values.get("block_public_acls")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def block_public_policy(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether Amazon S3 should block public bucket policies for this bucket.
 
             Setting this element to ``TRUE`` causes Amazon S3 to reject calls to PUT Bucket policy if the specified bucket policy allows public access.
@@ -519,12 +523,12 @@ class CfnAccessPoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-publicaccessblockconfiguration.html#cfn-s3express-accesspoint-publicaccessblockconfiguration-blockpublicpolicy
             '''
             result = self._values.get("block_public_policy")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def ignore_public_acls(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether Amazon S3 should ignore public ACLs for this bucket and objects in this bucket.
 
             Setting this element to ``TRUE`` causes Amazon S3 to ignore all public ACLs on this bucket and objects in this bucket.
@@ -534,12 +538,12 @@ class CfnAccessPoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-publicaccessblockconfiguration.html#cfn-s3express-accesspoint-publicaccessblockconfiguration-ignorepublicacls
             '''
             result = self._values.get("ignore_public_acls")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def restrict_public_buckets(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether Amazon S3 should restrict public bucket policies for this bucket.
 
             Setting this element to ``TRUE`` restricts access to this bucket to only AWS service principals and authorized users within this account if the bucket has a public policy.
@@ -549,7 +553,7 @@ class CfnAccessPoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-accesspoint-publicaccessblockconfiguration.html#cfn-s3express-accesspoint-publicaccessblockconfiguration-restrictpublicbuckets
             '''
             result = self._values.get("restrict_public_buckets")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -708,10 +712,10 @@ class CfnAccessPointProps:
         bucket_account_id: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         policy: typing.Any = None,
-        public_access_block_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.PublicAccessBlockConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.ScopeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.VpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        public_access_block_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.PublicAccessBlockConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        scope: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.ScopeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAccessPoint.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAccessPoint``.
 
@@ -729,6 +733,7 @@ class CfnAccessPointProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_s3express as s3express
@@ -831,18 +836,18 @@ class CfnAccessPointProps:
     @builtins.property
     def public_access_block_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.PublicAccessBlockConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.PublicAccessBlockConfigurationProperty"]]:
         '''Public access is blocked by default to access points for directory buckets.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html#cfn-s3express-accesspoint-publicaccessblockconfiguration
         '''
         result = self._values.get("public_access_block_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.PublicAccessBlockConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.PublicAccessBlockConfigurationProperty"]], result)
 
     @builtins.property
     def scope(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.ScopeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.ScopeProperty"]]:
         '''You can use the access point scope to restrict access to specific prefixes, API operations, or a combination of both.
 
         For more information, see `Manage the scope of your access points for directory buckets. <https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points-directory-buckets-manage-scope.html>`_
@@ -850,10 +855,10 @@ class CfnAccessPointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html#cfn-s3express-accesspoint-scope
         '''
         result = self._values.get("scope")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.ScopeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.ScopeProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags that you can apply to access points.
 
         Tags are key-value pairs of metadata used to categorize your access points and control access. For more information, see `Using tags for attribute-based access control (ABAC) <https://docs.aws.amazon.com/AmazonS3/latest/userguide/tagging.html#using-tags-for-abac>`_ .
@@ -861,18 +866,18 @@ class CfnAccessPointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html#cfn-s3express-accesspoint-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def vpc_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.VpcConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.VpcConfigurationProperty"]]:
         '''If you include this field, Amazon S3 restricts access to this access point to requests from the specified virtual private cloud (VPC).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-accesspoint.html#cfn-s3express-accesspoint-vpcconfiguration
         '''
         result = self._values.get("vpc_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAccessPoint.VpcConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAccessPoint.VpcConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -946,7 +951,7 @@ class CfnBucketPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         bucket: builtins.str,
@@ -980,7 +985,7 @@ class CfnBucketPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBucketPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1011,9 +1016,9 @@ class CfnBucketPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="bucketPolicyRef")
-    def bucket_policy_ref(self) -> _BucketPolicyReference_4bc4663a:
+    def bucket_policy_ref(self) -> "_BucketPolicyReference_4bc4663a":
         '''A reference to a BucketPolicy resource.'''
-        return typing.cast(_BucketPolicyReference_4bc4663a, jsii.get(self, "bucketPolicyRef"))
+        return typing.cast("_BucketPolicyReference_4bc4663a", jsii.get(self, "bucketPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1163,6 +1168,7 @@ class CfnDirectoryBucket(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_s3express as s3express
@@ -1208,15 +1214,15 @@ class CfnDirectoryBucket(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         data_redundancy: builtins.str,
         location_name: builtins.str,
-        bucket_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDirectoryBucket.BucketEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        bucket_encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDirectoryBucket.BucketEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         bucket_name: typing.Optional[builtins.str] = None,
-        lifecycle_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDirectoryBucket.LifecycleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        lifecycle_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDirectoryBucket.LifecycleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::S3Express::DirectoryBucket``.
 
@@ -1248,7 +1254,7 @@ class CfnDirectoryBucket(
     @builtins.classmethod
     def arn_for_directory_bucket(
         cls,
-        resource: _IDirectoryBucketRef_ce513f97,
+        resource: "_IDirectoryBucketRef_ce513f97",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1262,10 +1268,10 @@ class CfnDirectoryBucket(
     @builtins.classmethod
     def from_bucket_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         bucket_name: builtins.str,
-    ) -> _IDirectoryBucketRef_ce513f97:
+    ) -> "_IDirectoryBucketRef_ce513f97":
         '''Creates a new IDirectoryBucketRef from a bucketName.
 
         :param scope: -
@@ -1277,16 +1283,16 @@ class CfnDirectoryBucket(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument bucket_name", value=bucket_name, expected_type=type_hints["bucket_name"])
-        return typing.cast(_IDirectoryBucketRef_ce513f97, jsii.sinvoke(cls, "fromBucketName", [scope, id, bucket_name]))
+        return typing.cast("_IDirectoryBucketRef_ce513f97", jsii.sinvoke(cls, "fromBucketName", [scope, id, bucket_name]))
 
     @jsii.member(jsii_name="fromDirectoryBucketArn")
     @builtins.classmethod
     def from_directory_bucket_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDirectoryBucketRef_ce513f97:
+    ) -> "_IDirectoryBucketRef_ce513f97":
         '''Creates a new IDirectoryBucketRef from an ARN.
 
         :param scope: -
@@ -1298,7 +1304,7 @@ class CfnDirectoryBucket(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDirectoryBucketRef_ce513f97, jsii.sinvoke(cls, "fromDirectoryBucketArn", [scope, id, arn]))
+        return typing.cast("_IDirectoryBucketRef_ce513f97", jsii.sinvoke(cls, "fromDirectoryBucketArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="isCfnDirectoryBucket")
     @builtins.classmethod
@@ -1313,7 +1319,7 @@ class CfnDirectoryBucket(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDirectoryBucket", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1369,9 +1375,9 @@ class CfnDirectoryBucket(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1380,9 +1386,9 @@ class CfnDirectoryBucket(
 
     @builtins.property
     @jsii.member(jsii_name="directoryBucketRef")
-    def directory_bucket_ref(self) -> _DirectoryBucketReference_a8b58d31:
+    def directory_bucket_ref(self) -> "_DirectoryBucketReference_a8b58d31":
         '''A reference to a DirectoryBucket resource.'''
-        return typing.cast(_DirectoryBucketReference_a8b58d31, jsii.get(self, "directoryBucketRef"))
+        return typing.cast("_DirectoryBucketReference_a8b58d31", jsii.get(self, "directoryBucketRef"))
 
     @builtins.property
     @jsii.member(jsii_name="dataRedundancy")
@@ -1414,14 +1420,14 @@ class CfnDirectoryBucket(
     @jsii.member(jsii_name="bucketEncryption")
     def bucket_encryption(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.BucketEncryptionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.BucketEncryptionProperty"]]:
         '''Specifies default encryption for a bucket using server-side encryption with Amazon S3 managed keys (SSE-S3) or AWS KMS keys (SSE-KMS).'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.BucketEncryptionProperty"]], jsii.get(self, "bucketEncryption"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.BucketEncryptionProperty"]], jsii.get(self, "bucketEncryption"))
 
     @bucket_encryption.setter
     def bucket_encryption(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.BucketEncryptionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.BucketEncryptionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ec12f12e4471077fcc9afe2e16208df6b915dc349584d6784410dc28aeaa9ac3)
@@ -1445,17 +1451,17 @@ class CfnDirectoryBucket(
     @jsii.member(jsii_name="lifecycleConfiguration")
     def lifecycle_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.LifecycleConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.LifecycleConfigurationProperty"]]:
         '''Container for lifecycle rules.
 
         You can add as many as 1000 rules.
         '''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.LifecycleConfigurationProperty"]], jsii.get(self, "lifecycleConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.LifecycleConfigurationProperty"]], jsii.get(self, "lifecycleConfiguration"))
 
     @lifecycle_configuration.setter
     def lifecycle_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.LifecycleConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.LifecycleConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ddfd3872142b33ae9fa409c0018df1c791508213de3582b65e63e55af438eb3b)
@@ -1464,12 +1470,12 @@ class CfnDirectoryBucket(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags that you can apply to the S3 directory bucket.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__33beef481039e735a6eece9cb8670801f4ba6324284d9ed7c5f1e794009634d3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1540,7 +1546,7 @@ class CfnDirectoryBucket(
         def __init__(
             self,
             *,
-            server_side_encryption_configuration: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDirectoryBucket.ServerSideEncryptionRuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            server_side_encryption_configuration: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDirectoryBucket.ServerSideEncryptionRuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Specifies default encryption for a bucket using server-side encryption with Amazon S3 managed keys (SSE-S3) or AWS KMS keys (SSE-KMS).
 
@@ -1579,14 +1585,14 @@ class CfnDirectoryBucket(
         @builtins.property
         def server_side_encryption_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.ServerSideEncryptionRuleProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.ServerSideEncryptionRuleProperty"]]]:
             '''Specifies the default server-side-encryption configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-directorybucket-bucketencryption.html#cfn-s3express-directorybucket-bucketencryption-serversideencryptionconfiguration
             '''
             result = self._values.get("server_side_encryption_configuration")
             assert result is not None, "Required property 'server_side_encryption_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.ServerSideEncryptionRuleProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.ServerSideEncryptionRuleProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1608,7 +1614,7 @@ class CfnDirectoryBucket(
         def __init__(
             self,
             *,
-            rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDirectoryBucket.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            rules: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDirectoryBucket.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Container for lifecycle rules. You can add as many as 1000 rules.
 
@@ -1651,14 +1657,14 @@ class CfnDirectoryBucket(
         @builtins.property
         def rules(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.RuleProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.RuleProperty"]]]:
             '''A lifecycle rule for individual objects in an Amazon S3 Express bucket.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-directorybucket-lifecycleconfiguration.html#cfn-s3express-directorybucket-lifecycleconfiguration-rules
             '''
             result = self._values.get("rules")
             assert result is not None, "Required property 'rules' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.RuleProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.RuleProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1689,7 +1695,7 @@ class CfnDirectoryBucket(
             self,
             *,
             status: builtins.str,
-            abort_incomplete_multipart_upload: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDirectoryBucket.AbortIncompleteMultipartUploadProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            abort_incomplete_multipart_upload: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDirectoryBucket.AbortIncompleteMultipartUploadProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             expiration_in_days: typing.Optional[jsii.Number] = None,
             id: typing.Optional[builtins.str] = None,
             object_size_greater_than: typing.Optional[builtins.str] = None,
@@ -1773,13 +1779,13 @@ class CfnDirectoryBucket(
         @builtins.property
         def abort_incomplete_multipart_upload(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.AbortIncompleteMultipartUploadProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.AbortIncompleteMultipartUploadProperty"]]:
             '''Specifies the days since the initiation of an incomplete multipart upload that Amazon S3 will wait before permanently removing all parts of the upload.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-directorybucket-rule.html#cfn-s3express-directorybucket-rule-abortincompletemultipartupload
             '''
             result = self._values.get("abort_incomplete_multipart_upload")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.AbortIncompleteMultipartUploadProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.AbortIncompleteMultipartUploadProperty"]], result)
 
         @builtins.property
         def expiration_in_days(self) -> typing.Optional[jsii.Number]:
@@ -1955,8 +1961,8 @@ class CfnDirectoryBucket(
         def __init__(
             self,
             *,
-            bucket_key_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            server_side_encryption_by_default: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDirectoryBucket.ServerSideEncryptionByDefaultProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            bucket_key_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            server_side_encryption_by_default: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDirectoryBucket.ServerSideEncryptionByDefaultProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the default server-side encryption configuration.
 
@@ -1995,7 +2001,7 @@ class CfnDirectoryBucket(
         @builtins.property
         def bucket_key_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether Amazon S3 should use an S3 Bucket Key with server-side encryption using KMS (SSE-KMS) for new objects in the bucket.
 
             S3 Bucket Keys are always enabled for ``GET`` and ``PUT`` operations on a directory bucket and can’t be disabled. It's only allowed to set the ``BucketKeyEnabled`` element to ``true`` .
@@ -2007,12 +2013,12 @@ class CfnDirectoryBucket(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-directorybucket-serversideencryptionrule.html#cfn-s3express-directorybucket-serversideencryptionrule-bucketkeyenabled
             '''
             result = self._values.get("bucket_key_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def server_side_encryption_by_default(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.ServerSideEncryptionByDefaultProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.ServerSideEncryptionByDefaultProperty"]]:
             '''Specifies the default server-side encryption to apply to new objects in the bucket.
 
             If a PUT Object request doesn't specify any server-side encryption, this default encryption will be applied.
@@ -2020,7 +2026,7 @@ class CfnDirectoryBucket(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3express-directorybucket-serversideencryptionrule.html#cfn-s3express-directorybucket-serversideencryptionrule-serversideencryptionbydefault
             '''
             result = self._values.get("server_side_encryption_by_default")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDirectoryBucket.ServerSideEncryptionByDefaultProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.ServerSideEncryptionByDefaultProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2052,10 +2058,10 @@ class CfnDirectoryBucketProps:
         *,
         data_redundancy: builtins.str,
         location_name: builtins.str,
-        bucket_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDirectoryBucket.BucketEncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        bucket_encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDirectoryBucket.BucketEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         bucket_name: typing.Optional[builtins.str] = None,
-        lifecycle_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDirectoryBucket.LifecycleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        lifecycle_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDirectoryBucket.LifecycleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDirectoryBucket``.
 
@@ -2071,6 +2077,7 @@ class CfnDirectoryBucketProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_s3express as s3express
@@ -2159,7 +2166,7 @@ class CfnDirectoryBucketProps:
     @builtins.property
     def bucket_encryption(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDirectoryBucket.BucketEncryptionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.BucketEncryptionProperty"]]:
         '''Specifies default encryption for a bucket using server-side encryption with Amazon S3 managed keys (SSE-S3) or AWS KMS keys (SSE-KMS).
 
         For information about default encryption for directory buckets, see `Setting and monitoring default encryption for directory buckets <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-bucket-encryption.html>`_ in the *Amazon S3 User Guide* .
@@ -2167,7 +2174,7 @@ class CfnDirectoryBucketProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-directorybucket.html#cfn-s3express-directorybucket-bucketencryption
         '''
         result = self._values.get("bucket_encryption")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDirectoryBucket.BucketEncryptionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.BucketEncryptionProperty"]], result)
 
     @builtins.property
     def bucket_name(self) -> typing.Optional[builtins.str]:
@@ -2186,7 +2193,7 @@ class CfnDirectoryBucketProps:
     @builtins.property
     def lifecycle_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDirectoryBucket.LifecycleConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.LifecycleConfigurationProperty"]]:
         '''Container for lifecycle rules. You can add as many as 1000 rules.
 
         For more information see, `Creating and managing a lifecycle configuration for directory buckets <https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-buckets-objects-lifecycle.html>`_ in the *Amazon S3 User Guide* .
@@ -2194,10 +2201,10 @@ class CfnDirectoryBucketProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-directorybucket.html#cfn-s3express-directorybucket-lifecycleconfiguration
         '''
         result = self._values.get("lifecycle_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDirectoryBucket.LifecycleConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDirectoryBucket.LifecycleConfigurationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of tags that you can apply to the S3 directory bucket.
 
         Tags are key-value pairs of metadata used to categorize and organize your buckets, track costs, and control access. For more information, see `Using tags with directory buckets <https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-buckets-tagging.html>`_ .
@@ -2205,7 +2212,7 @@ class CfnDirectoryBucketProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3express-directorybucket.html#cfn-s3express-directorybucket-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

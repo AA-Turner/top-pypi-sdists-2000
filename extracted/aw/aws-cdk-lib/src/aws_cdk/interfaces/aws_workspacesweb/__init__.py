@@ -147,7 +147,7 @@ class IBrowserSettingsRef(
 
     @builtins.property
     @jsii.member(jsii_name="browserSettingsRef")
-    def browser_settings_ref(self) -> BrowserSettingsReference:
+    def browser_settings_ref(self) -> "BrowserSettingsReference":
         '''(experimental) A reference to a BrowserSettings resource.
 
         :stability: experimental
@@ -168,12 +168,12 @@ class _IBrowserSettingsRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="browserSettingsRef")
-    def browser_settings_ref(self) -> BrowserSettingsReference:
+    def browser_settings_ref(self) -> "BrowserSettingsReference":
         '''(experimental) A reference to a BrowserSettings resource.
 
         :stability: experimental
         '''
-        return typing.cast(BrowserSettingsReference, jsii.get(self, "browserSettingsRef"))
+        return typing.cast("BrowserSettingsReference", jsii.get(self, "browserSettingsRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBrowserSettingsRef).__jsii_proxy_class__ = lambda : _IBrowserSettingsRefProxy
@@ -194,7 +194,7 @@ class IDataProtectionSettingsRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataProtectionSettingsRef")
-    def data_protection_settings_ref(self) -> DataProtectionSettingsReference:
+    def data_protection_settings_ref(self) -> "DataProtectionSettingsReference":
         '''(experimental) A reference to a DataProtectionSettings resource.
 
         :stability: experimental
@@ -215,12 +215,12 @@ class _IDataProtectionSettingsRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataProtectionSettingsRef")
-    def data_protection_settings_ref(self) -> DataProtectionSettingsReference:
+    def data_protection_settings_ref(self) -> "DataProtectionSettingsReference":
         '''(experimental) A reference to a DataProtectionSettings resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataProtectionSettingsReference, jsii.get(self, "dataProtectionSettingsRef"))
+        return typing.cast("DataProtectionSettingsReference", jsii.get(self, "dataProtectionSettingsRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataProtectionSettingsRef).__jsii_proxy_class__ = lambda : _IDataProtectionSettingsRefProxy

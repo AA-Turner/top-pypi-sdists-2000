@@ -126,13 +126,13 @@ class CfnApplication(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         application_source_uri: builtins.str,
         description: builtins.str,
         executable_path: builtins.str,
-        runtime_environment: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.RuntimeEnvironmentProperty", typing.Dict[builtins.str, typing.Any]]],
+        runtime_environment: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.RuntimeEnvironmentProperty", typing.Dict[builtins.str, typing.Any]]],
         application_log_output_uri: typing.Optional[builtins.str] = None,
         application_log_paths: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -167,7 +167,7 @@ class CfnApplication(
 
     @jsii.member(jsii_name="arnForApplication")
     @builtins.classmethod
-    def arn_for_application(cls, resource: _IApplicationRef_2ee70e7c) -> builtins.str:
+    def arn_for_application(cls, resource: "_IApplicationRef_2ee70e7c") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -189,7 +189,7 @@ class CfnApplication(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -220,9 +220,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="applicationRef")
-    def application_ref(self) -> _ApplicationReference_3d673e1c:
+    def application_ref(self) -> "_ApplicationReference_3d673e1c":
         '''A reference to a Application resource.'''
-        return typing.cast(_ApplicationReference_3d673e1c, jsii.get(self, "applicationRef"))
+        return typing.cast("_ApplicationReference_3d673e1c", jsii.get(self, "applicationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -248,9 +248,9 @@ class CfnApplication(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -300,14 +300,14 @@ class CfnApplication(
     @jsii.member(jsii_name="runtimeEnvironment")
     def runtime_environment(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnApplication.RuntimeEnvironmentProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.RuntimeEnvironmentProperty"]:
         '''A set of configuration settings to run the application on a stream group.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnApplication.RuntimeEnvironmentProperty"], jsii.get(self, "runtimeEnvironment"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.RuntimeEnvironmentProperty"], jsii.get(self, "runtimeEnvironment"))
 
     @runtime_environment.setter
     def runtime_environment(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnApplication.RuntimeEnvironmentProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnApplication.RuntimeEnvironmentProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__99f6582f76f3c6a11837e068e6e72ca864955b2789dca17c695fab2bad3ca516)
@@ -460,7 +460,7 @@ class CfnApplicationProps:
         application_source_uri: builtins.str,
         description: builtins.str,
         executable_path: builtins.str,
-        runtime_environment: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.RuntimeEnvironmentProperty, typing.Dict[builtins.str, typing.Any]]],
+        runtime_environment: typing.Union["_IResolvable_da3f097b", typing.Union["CfnApplication.RuntimeEnvironmentProperty", typing.Dict[builtins.str, typing.Any]]],
         application_log_output_uri: typing.Optional[builtins.str] = None,
         application_log_paths: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -567,7 +567,7 @@ class CfnApplicationProps:
     @builtins.property
     def runtime_environment(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnApplication.RuntimeEnvironmentProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnApplication.RuntimeEnvironmentProperty"]:
         '''A set of configuration settings to run the application on a stream group.
 
         This configures the operating system, and can include compatibility layers and other drivers.
@@ -576,7 +576,7 @@ class CfnApplicationProps:
         '''
         result = self._values.get("runtime_environment")
         assert result is not None, "Required property 'runtime_environment' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnApplication.RuntimeEnvironmentProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnApplication.RuntimeEnvironmentProperty"], result)
 
     @builtins.property
     def application_log_output_uri(self) -> typing.Optional[builtins.str]:
@@ -677,13 +677,13 @@ class CfnStreamGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: builtins.str,
-        location_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStreamGroup.LocationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        location_configurations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStreamGroup.LocationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         stream_class: builtins.str,
-        default_application: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStreamGroup.DefaultApplicationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        default_application: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStreamGroup.DefaultApplicationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::GameLiftStreams::StreamGroup``.
@@ -712,7 +712,10 @@ class CfnStreamGroup(
 
     @jsii.member(jsii_name="arnForStreamGroup")
     @builtins.classmethod
-    def arn_for_stream_group(cls, resource: _IStreamGroupRef_ad23a873) -> builtins.str:
+    def arn_for_stream_group(
+        cls,
+        resource: "_IStreamGroupRef_ad23a873",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -734,7 +737,7 @@ class CfnStreamGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStreamGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -785,9 +788,9 @@ class CfnStreamGroup(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -796,9 +799,9 @@ class CfnStreamGroup(
 
     @builtins.property
     @jsii.member(jsii_name="streamGroupRef")
-    def stream_group_ref(self) -> _StreamGroupReference_fe90a10e:
+    def stream_group_ref(self) -> "_StreamGroupReference_fe90a10e":
         '''A reference to a StreamGroup resource.'''
-        return typing.cast(_StreamGroupReference_fe90a10e, jsii.get(self, "streamGroupRef"))
+        return typing.cast("_StreamGroupReference_fe90a10e", jsii.get(self, "streamGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -817,14 +820,14 @@ class CfnStreamGroup(
     @jsii.member(jsii_name="locationConfigurations")
     def location_configurations(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStreamGroup.LocationConfigurationProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStreamGroup.LocationConfigurationProperty"]]]:
         '''A set of one or more locations and the streaming capacity for each location.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStreamGroup.LocationConfigurationProperty"]]], jsii.get(self, "locationConfigurations"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStreamGroup.LocationConfigurationProperty"]]], jsii.get(self, "locationConfigurations"))
 
     @location_configurations.setter
     def location_configurations(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStreamGroup.LocationConfigurationProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStreamGroup.LocationConfigurationProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5dce7069bc18c5adbe92459796919490fb80e38f9a3fe455b779e19b0b30da98)
@@ -848,14 +851,14 @@ class CfnStreamGroup(
     @jsii.member(jsii_name="defaultApplication")
     def default_application(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStreamGroup.DefaultApplicationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStreamGroup.DefaultApplicationProperty"]]:
         '''Object that identifies the Amazon GameLift Streams application to stream with this stream group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStreamGroup.DefaultApplicationProperty"]], jsii.get(self, "defaultApplication"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStreamGroup.DefaultApplicationProperty"]], jsii.get(self, "defaultApplication"))
 
     @default_application.setter
     def default_application(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStreamGroup.DefaultApplicationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStreamGroup.DefaultApplicationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4aa4ce53af802ec6bb329423326bcefed0b20e44bbe786ff2d23e1de4a242ec9)
@@ -1067,9 +1070,9 @@ class CfnStreamGroupProps:
         self,
         *,
         description: builtins.str,
-        location_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStreamGroup.LocationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        location_configurations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStreamGroup.LocationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         stream_class: builtins.str,
-        default_application: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStreamGroup.DefaultApplicationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        default_application: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStreamGroup.DefaultApplicationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStreamGroup``.
@@ -1140,7 +1143,7 @@ class CfnStreamGroupProps:
     @builtins.property
     def location_configurations(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStreamGroup.LocationConfigurationProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStreamGroup.LocationConfigurationProperty"]]]:
         '''A set of one or more locations and the streaming capacity for each location.
 
         One of the locations MUST be your primary location, which is the AWS Region where you are specifying this resource.
@@ -1149,7 +1152,7 @@ class CfnStreamGroupProps:
         '''
         result = self._values.get("location_configurations")
         assert result is not None, "Required property 'location_configurations' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStreamGroup.LocationConfigurationProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStreamGroup.LocationConfigurationProperty"]]], result)
 
     @builtins.property
     def stream_class(self) -> builtins.str:
@@ -1199,13 +1202,13 @@ class CfnStreamGroupProps:
     @builtins.property
     def default_application(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStreamGroup.DefaultApplicationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStreamGroup.DefaultApplicationProperty"]]:
         '''Object that identifies the Amazon GameLift Streams application to stream with this stream group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gameliftstreams-streamgroup.html#cfn-gameliftstreams-streamgroup-defaultapplication
         '''
         result = self._values.get("default_application")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStreamGroup.DefaultApplicationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStreamGroup.DefaultApplicationProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:

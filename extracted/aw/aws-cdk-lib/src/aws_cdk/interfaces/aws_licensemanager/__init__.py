@@ -96,7 +96,7 @@ class IGrantRef(
 
     @builtins.property
     @jsii.member(jsii_name="grantRef")
-    def grant_ref(self) -> GrantReference:
+    def grant_ref(self) -> "GrantReference":
         '''(experimental) A reference to a Grant resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IGrantRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="grantRef")
-    def grant_ref(self) -> GrantReference:
+    def grant_ref(self) -> "GrantReference":
         '''(experimental) A reference to a Grant resource.
 
         :stability: experimental
         '''
-        return typing.cast(GrantReference, jsii.get(self, "grantRef"))
+        return typing.cast("GrantReference", jsii.get(self, "grantRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGrantRef).__jsii_proxy_class__ = lambda : _IGrantRefProxy

@@ -539,7 +539,7 @@ class IBridgeOutputRef(
 
     @builtins.property
     @jsii.member(jsii_name="bridgeOutputRef")
-    def bridge_output_ref(self) -> BridgeOutputReference:
+    def bridge_output_ref(self) -> "BridgeOutputReference":
         '''(experimental) A reference to a BridgeOutput resource.
 
         :stability: experimental
@@ -560,12 +560,12 @@ class _IBridgeOutputRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="bridgeOutputRef")
-    def bridge_output_ref(self) -> BridgeOutputReference:
+    def bridge_output_ref(self) -> "BridgeOutputReference":
         '''(experimental) A reference to a BridgeOutput resource.
 
         :stability: experimental
         '''
-        return typing.cast(BridgeOutputReference, jsii.get(self, "bridgeOutputRef"))
+        return typing.cast("BridgeOutputReference", jsii.get(self, "bridgeOutputRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBridgeOutputRef).__jsii_proxy_class__ = lambda : _IBridgeOutputRefProxy
@@ -584,7 +584,7 @@ class IBridgeRef(
 
     @builtins.property
     @jsii.member(jsii_name="bridgeRef")
-    def bridge_ref(self) -> BridgeReference:
+    def bridge_ref(self) -> "BridgeReference":
         '''(experimental) A reference to a Bridge resource.
 
         :stability: experimental
@@ -605,12 +605,12 @@ class _IBridgeRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="bridgeRef")
-    def bridge_ref(self) -> BridgeReference:
+    def bridge_ref(self) -> "BridgeReference":
         '''(experimental) A reference to a Bridge resource.
 
         :stability: experimental
         '''
-        return typing.cast(BridgeReference, jsii.get(self, "bridgeRef"))
+        return typing.cast("BridgeReference", jsii.get(self, "bridgeRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBridgeRef).__jsii_proxy_class__ = lambda : _IBridgeRefProxy
@@ -629,7 +629,7 @@ class IBridgeSourceRef(
 
     @builtins.property
     @jsii.member(jsii_name="bridgeSourceRef")
-    def bridge_source_ref(self) -> BridgeSourceReference:
+    def bridge_source_ref(self) -> "BridgeSourceReference":
         '''(experimental) A reference to a BridgeSource resource.
 
         :stability: experimental
@@ -650,12 +650,12 @@ class _IBridgeSourceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="bridgeSourceRef")
-    def bridge_source_ref(self) -> BridgeSourceReference:
+    def bridge_source_ref(self) -> "BridgeSourceReference":
         '''(experimental) A reference to a BridgeSource resource.
 
         :stability: experimental
         '''
-        return typing.cast(BridgeSourceReference, jsii.get(self, "bridgeSourceRef"))
+        return typing.cast("BridgeSourceReference", jsii.get(self, "bridgeSourceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBridgeSourceRef).__jsii_proxy_class__ = lambda : _IBridgeSourceRefProxy
@@ -676,7 +676,7 @@ class IFlowEntitlementRef(
 
     @builtins.property
     @jsii.member(jsii_name="flowEntitlementRef")
-    def flow_entitlement_ref(self) -> FlowEntitlementReference:
+    def flow_entitlement_ref(self) -> "FlowEntitlementReference":
         '''(experimental) A reference to a FlowEntitlement resource.
 
         :stability: experimental
@@ -697,12 +697,12 @@ class _IFlowEntitlementRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="flowEntitlementRef")
-    def flow_entitlement_ref(self) -> FlowEntitlementReference:
+    def flow_entitlement_ref(self) -> "FlowEntitlementReference":
         '''(experimental) A reference to a FlowEntitlement resource.
 
         :stability: experimental
         '''
-        return typing.cast(FlowEntitlementReference, jsii.get(self, "flowEntitlementRef"))
+        return typing.cast("FlowEntitlementReference", jsii.get(self, "flowEntitlementRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFlowEntitlementRef).__jsii_proxy_class__ = lambda : _IFlowEntitlementRefProxy
@@ -721,7 +721,7 @@ class IFlowOutputRef(
 
     @builtins.property
     @jsii.member(jsii_name="flowOutputRef")
-    def flow_output_ref(self) -> FlowOutputReference:
+    def flow_output_ref(self) -> "FlowOutputReference":
         '''(experimental) A reference to a FlowOutput resource.
 
         :stability: experimental
@@ -742,12 +742,12 @@ class _IFlowOutputRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="flowOutputRef")
-    def flow_output_ref(self) -> FlowOutputReference:
+    def flow_output_ref(self) -> "FlowOutputReference":
         '''(experimental) A reference to a FlowOutput resource.
 
         :stability: experimental
         '''
-        return typing.cast(FlowOutputReference, jsii.get(self, "flowOutputRef"))
+        return typing.cast("FlowOutputReference", jsii.get(self, "flowOutputRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFlowOutputRef).__jsii_proxy_class__ = lambda : _IFlowOutputRefProxy
@@ -766,7 +766,7 @@ class IFlowRef(
 
     @builtins.property
     @jsii.member(jsii_name="flowRef")
-    def flow_ref(self) -> FlowReference:
+    def flow_ref(self) -> "FlowReference":
         '''(experimental) A reference to a Flow resource.
 
         :stability: experimental
@@ -787,12 +787,12 @@ class _IFlowRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="flowRef")
-    def flow_ref(self) -> FlowReference:
+    def flow_ref(self) -> "FlowReference":
         '''(experimental) A reference to a Flow resource.
 
         :stability: experimental
         '''
-        return typing.cast(FlowReference, jsii.get(self, "flowRef"))
+        return typing.cast("FlowReference", jsii.get(self, "flowRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFlowRef).__jsii_proxy_class__ = lambda : _IFlowRefProxy
@@ -811,7 +811,7 @@ class IFlowSourceRef(
 
     @builtins.property
     @jsii.member(jsii_name="flowSourceRef")
-    def flow_source_ref(self) -> FlowSourceReference:
+    def flow_source_ref(self) -> "FlowSourceReference":
         '''(experimental) A reference to a FlowSource resource.
 
         :stability: experimental
@@ -832,12 +832,12 @@ class _IFlowSourceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="flowSourceRef")
-    def flow_source_ref(self) -> FlowSourceReference:
+    def flow_source_ref(self) -> "FlowSourceReference":
         '''(experimental) A reference to a FlowSource resource.
 
         :stability: experimental
         '''
-        return typing.cast(FlowSourceReference, jsii.get(self, "flowSourceRef"))
+        return typing.cast("FlowSourceReference", jsii.get(self, "flowSourceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFlowSourceRef).__jsii_proxy_class__ = lambda : _IFlowSourceRefProxy
@@ -858,7 +858,7 @@ class IFlowVpcInterfaceRef(
 
     @builtins.property
     @jsii.member(jsii_name="flowVpcInterfaceRef")
-    def flow_vpc_interface_ref(self) -> FlowVpcInterfaceReference:
+    def flow_vpc_interface_ref(self) -> "FlowVpcInterfaceReference":
         '''(experimental) A reference to a FlowVpcInterface resource.
 
         :stability: experimental
@@ -879,12 +879,12 @@ class _IFlowVpcInterfaceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="flowVpcInterfaceRef")
-    def flow_vpc_interface_ref(self) -> FlowVpcInterfaceReference:
+    def flow_vpc_interface_ref(self) -> "FlowVpcInterfaceReference":
         '''(experimental) A reference to a FlowVpcInterface resource.
 
         :stability: experimental
         '''
-        return typing.cast(FlowVpcInterfaceReference, jsii.get(self, "flowVpcInterfaceRef"))
+        return typing.cast("FlowVpcInterfaceReference", jsii.get(self, "flowVpcInterfaceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFlowVpcInterfaceRef).__jsii_proxy_class__ = lambda : _IFlowVpcInterfaceRefProxy
@@ -903,7 +903,7 @@ class IGatewayRef(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayRef")
-    def gateway_ref(self) -> GatewayReference:
+    def gateway_ref(self) -> "GatewayReference":
         '''(experimental) A reference to a Gateway resource.
 
         :stability: experimental
@@ -924,12 +924,12 @@ class _IGatewayRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayRef")
-    def gateway_ref(self) -> GatewayReference:
+    def gateway_ref(self) -> "GatewayReference":
         '''(experimental) A reference to a Gateway resource.
 
         :stability: experimental
         '''
-        return typing.cast(GatewayReference, jsii.get(self, "gatewayRef"))
+        return typing.cast("GatewayReference", jsii.get(self, "gatewayRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGatewayRef).__jsii_proxy_class__ = lambda : _IGatewayRefProxy

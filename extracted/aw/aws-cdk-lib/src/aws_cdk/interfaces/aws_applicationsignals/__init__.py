@@ -147,7 +147,7 @@ class IDiscoveryRef(
 
     @builtins.property
     @jsii.member(jsii_name="discoveryRef")
-    def discovery_ref(self) -> DiscoveryReference:
+    def discovery_ref(self) -> "DiscoveryReference":
         '''(experimental) A reference to a Discovery resource.
 
         :stability: experimental
@@ -168,12 +168,12 @@ class _IDiscoveryRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="discoveryRef")
-    def discovery_ref(self) -> DiscoveryReference:
+    def discovery_ref(self) -> "DiscoveryReference":
         '''(experimental) A reference to a Discovery resource.
 
         :stability: experimental
         '''
-        return typing.cast(DiscoveryReference, jsii.get(self, "discoveryRef"))
+        return typing.cast("DiscoveryReference", jsii.get(self, "discoveryRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDiscoveryRef).__jsii_proxy_class__ = lambda : _IDiscoveryRefProxy
@@ -194,7 +194,7 @@ class IGroupingConfigurationRef(
 
     @builtins.property
     @jsii.member(jsii_name="groupingConfigurationRef")
-    def grouping_configuration_ref(self) -> GroupingConfigurationReference:
+    def grouping_configuration_ref(self) -> "GroupingConfigurationReference":
         '''(experimental) A reference to a GroupingConfiguration resource.
 
         :stability: experimental
@@ -215,12 +215,12 @@ class _IGroupingConfigurationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="groupingConfigurationRef")
-    def grouping_configuration_ref(self) -> GroupingConfigurationReference:
+    def grouping_configuration_ref(self) -> "GroupingConfigurationReference":
         '''(experimental) A reference to a GroupingConfiguration resource.
 
         :stability: experimental
         '''
-        return typing.cast(GroupingConfigurationReference, jsii.get(self, "groupingConfigurationRef"))
+        return typing.cast("GroupingConfigurationReference", jsii.get(self, "groupingConfigurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGroupingConfigurationRef).__jsii_proxy_class__ = lambda : _IGroupingConfigurationRefProxy

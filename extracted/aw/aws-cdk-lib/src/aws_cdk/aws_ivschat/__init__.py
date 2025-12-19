@@ -91,6 +91,7 @@ class CfnLoggingConfiguration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ivschat as ivschat
@@ -119,12 +120,12 @@ class CfnLoggingConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        destination_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoggingConfiguration.DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        destination_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLoggingConfiguration.DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IVSChat::LoggingConfiguration``.
 
@@ -148,7 +149,7 @@ class CfnLoggingConfiguration(
     @builtins.classmethod
     def arn_for_logging_configuration(
         cls,
-        resource: _ILoggingConfigurationRef_0ca02c43,
+        resource: "_ILoggingConfigurationRef_0ca02c43",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -171,7 +172,7 @@ class CfnLoggingConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLoggingConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -240,28 +241,28 @@ class CfnLoggingConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="loggingConfigurationRef")
-    def logging_configuration_ref(self) -> _LoggingConfigurationReference_415d9c3a:
+    def logging_configuration_ref(self) -> "_LoggingConfigurationReference_415d9c3a":
         '''A reference to a LoggingConfiguration resource.'''
-        return typing.cast(_LoggingConfigurationReference_415d9c3a, jsii.get(self, "loggingConfigurationRef"))
+        return typing.cast("_LoggingConfigurationReference_415d9c3a", jsii.get(self, "loggingConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="destinationConfiguration")
     def destination_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnLoggingConfiguration.DestinationConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLoggingConfiguration.DestinationConfigurationProperty"]:
         '''The DestinationConfiguration is a complex type that contains information about where chat content will be logged.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLoggingConfiguration.DestinationConfigurationProperty"], jsii.get(self, "destinationConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLoggingConfiguration.DestinationConfigurationProperty"], jsii.get(self, "destinationConfiguration"))
 
     @destination_configuration.setter
     def destination_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnLoggingConfiguration.DestinationConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnLoggingConfiguration.DestinationConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e46decd1e1c506586056a4500db47bf530da54ddb65e39302dbbaf6ec3a931d1)
@@ -283,12 +284,12 @@ class CfnLoggingConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__836b5ee2ad1b8daae63f67c3a8136ba0d9480523fa98563aacd6b2dbb595de39)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -359,9 +360,9 @@ class CfnLoggingConfiguration(
         def __init__(
             self,
             *,
-            cloud_watch_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoggingConfiguration.CloudWatchLogsDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            firehose: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoggingConfiguration.FirehoseDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoggingConfiguration.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLoggingConfiguration.CloudWatchLogsDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            firehose: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLoggingConfiguration.FirehoseDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLoggingConfiguration.S3DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The DestinationConfiguration property type describes a location where chat logs will be stored.
 
@@ -408,35 +409,35 @@ class CfnLoggingConfiguration(
         @builtins.property
         def cloud_watch_logs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLoggingConfiguration.CloudWatchLogsDestinationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLoggingConfiguration.CloudWatchLogsDestinationConfigurationProperty"]]:
             '''An Amazon CloudWatch Logs destination configuration where chat activity will be logged.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivschat-loggingconfiguration-destinationconfiguration.html#cfn-ivschat-loggingconfiguration-destinationconfiguration-cloudwatchlogs
             '''
             result = self._values.get("cloud_watch_logs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLoggingConfiguration.CloudWatchLogsDestinationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLoggingConfiguration.CloudWatchLogsDestinationConfigurationProperty"]], result)
 
         @builtins.property
         def firehose(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLoggingConfiguration.FirehoseDestinationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLoggingConfiguration.FirehoseDestinationConfigurationProperty"]]:
             '''An Amazon Kinesis Data Firehose destination configuration where chat activity will be logged.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivschat-loggingconfiguration-destinationconfiguration.html#cfn-ivschat-loggingconfiguration-destinationconfiguration-firehose
             '''
             result = self._values.get("firehose")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLoggingConfiguration.FirehoseDestinationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLoggingConfiguration.FirehoseDestinationConfigurationProperty"]], result)
 
         @builtins.property
         def s3(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLoggingConfiguration.S3DestinationConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLoggingConfiguration.S3DestinationConfigurationProperty"]]:
             '''An Amazon S3 destination configuration where chat activity will be logged.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivschat-loggingconfiguration-destinationconfiguration.html#cfn-ivschat-loggingconfiguration-destinationconfiguration-s3
             '''
             result = self._values.get("s3")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLoggingConfiguration.S3DestinationConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLoggingConfiguration.S3DestinationConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -567,9 +568,9 @@ class CfnLoggingConfigurationProps:
     def __init__(
         self,
         *,
-        destination_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoggingConfiguration.DestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        destination_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLoggingConfiguration.DestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLoggingConfiguration``.
 
@@ -582,6 +583,7 @@ class CfnLoggingConfigurationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ivschat as ivschat
@@ -623,14 +625,14 @@ class CfnLoggingConfigurationProps:
     @builtins.property
     def destination_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnLoggingConfiguration.DestinationConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLoggingConfiguration.DestinationConfigurationProperty"]:
         '''The DestinationConfiguration is a complex type that contains information about where chat content will be logged.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivschat-loggingconfiguration.html#cfn-ivschat-loggingconfiguration-destinationconfiguration
         '''
         result = self._values.get("destination_configuration")
         assert result is not None, "Required property 'destination_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnLoggingConfiguration.DestinationConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLoggingConfiguration.DestinationConfigurationProperty"], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -644,7 +646,7 @@ class CfnLoggingConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivschat-loggingconfiguration-tag.html>`_ .
@@ -652,7 +654,7 @@ class CfnLoggingConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivschat-loggingconfiguration.html#cfn-ivschat-loggingconfiguration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -682,6 +684,7 @@ class CfnRoom(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ivschat as ivschat
@@ -704,15 +707,15 @@ class CfnRoom(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        logging_configuration_identifiers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILoggingConfigurationRef_0ca02c43]]] = None,
+        logging_configuration_identifiers: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ILoggingConfigurationRef_0ca02c43"]]] = None,
         maximum_message_length: typing.Optional[jsii.Number] = None,
         maximum_message_rate_per_second: typing.Optional[jsii.Number] = None,
-        message_review_handler: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoom.MessageReviewHandlerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        message_review_handler: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoom.MessageReviewHandlerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::IVSChat::Room``.
 
@@ -742,7 +745,7 @@ class CfnRoom(
 
     @jsii.member(jsii_name="arnForRoom")
     @builtins.classmethod
-    def arn_for_room(cls, resource: _IRoomRef_54a258f7) -> builtins.str:
+    def arn_for_room(cls, resource: "_IRoomRef_54a258f7") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -764,7 +767,7 @@ class CfnRoom(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRoom", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -822,15 +825,15 @@ class CfnRoom(
 
     @builtins.property
     @jsii.member(jsii_name="roomRef")
-    def room_ref(self) -> _RoomReference_99cba8a5:
+    def room_ref(self) -> "_RoomReference_99cba8a5":
         '''A reference to a Room resource.'''
-        return typing.cast(_RoomReference_99cba8a5, jsii.get(self, "roomRef"))
+        return typing.cast("_RoomReference_99cba8a5", jsii.get(self, "roomRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="loggingConfigurationIdentifiers")
@@ -883,14 +886,14 @@ class CfnRoom(
     @jsii.member(jsii_name="messageReviewHandler")
     def message_review_handler(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoom.MessageReviewHandlerProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoom.MessageReviewHandlerProperty"]]:
         '''Configuration information for optional review of messages.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoom.MessageReviewHandlerProperty"]], jsii.get(self, "messageReviewHandler"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoom.MessageReviewHandlerProperty"]], jsii.get(self, "messageReviewHandler"))
 
     @message_review_handler.setter
     def message_review_handler(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRoom.MessageReviewHandlerProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoom.MessageReviewHandlerProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9e799bee581432f25d4ae8c52d6061972639da5726d12f7994dd765f9dce685f)
@@ -912,12 +915,12 @@ class CfnRoom(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c129383c713cecd593f8d586f57442188747729d3736326bbf0a38bacba4a349)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1018,12 +1021,12 @@ class CfnRoomProps:
     def __init__(
         self,
         *,
-        logging_configuration_identifiers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILoggingConfigurationRef_0ca02c43]]] = None,
+        logging_configuration_identifiers: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ILoggingConfigurationRef_0ca02c43"]]] = None,
         maximum_message_length: typing.Optional[jsii.Number] = None,
         maximum_message_rate_per_second: typing.Optional[jsii.Number] = None,
-        message_review_handler: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoom.MessageReviewHandlerProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        message_review_handler: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRoom.MessageReviewHandlerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRoom``.
 
@@ -1039,6 +1042,7 @@ class CfnRoomProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ivschat as ivschat
@@ -1083,13 +1087,13 @@ class CfnRoomProps:
     @builtins.property
     def logging_configuration_identifiers(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ILoggingConfigurationRef_0ca02c43]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ILoggingConfigurationRef_0ca02c43"]]]:
         '''List of logging-configuration identifiers attached to the room.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivschat-room.html#cfn-ivschat-room-loggingconfigurationidentifiers
         '''
         result = self._values.get("logging_configuration_identifiers")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ILoggingConfigurationRef_0ca02c43]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ILoggingConfigurationRef_0ca02c43"]]], result)
 
     @builtins.property
     def maximum_message_length(self) -> typing.Optional[jsii.Number]:
@@ -1118,13 +1122,13 @@ class CfnRoomProps:
     @builtins.property
     def message_review_handler(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRoom.MessageReviewHandlerProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoom.MessageReviewHandlerProperty"]]:
         '''Configuration information for optional review of messages.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivschat-room.html#cfn-ivschat-room-messagereviewhandler
         '''
         result = self._values.get("message_review_handler")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRoom.MessageReviewHandlerProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRoom.MessageReviewHandlerProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -1138,7 +1142,7 @@ class CfnRoomProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivschat-room-tag.html>`_ .
@@ -1146,7 +1150,7 @@ class CfnRoomProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivschat-room.html#cfn-ivschat-room-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

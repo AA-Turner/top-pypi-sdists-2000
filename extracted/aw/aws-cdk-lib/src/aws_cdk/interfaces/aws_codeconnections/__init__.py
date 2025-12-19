@@ -96,7 +96,7 @@ class IConnectionRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectionRef")
-    def connection_ref(self) -> ConnectionReference:
+    def connection_ref(self) -> "ConnectionReference":
         '''(experimental) A reference to a Connection resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IConnectionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectionRef")
-    def connection_ref(self) -> ConnectionReference:
+    def connection_ref(self) -> "ConnectionReference":
         '''(experimental) A reference to a Connection resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectionReference, jsii.get(self, "connectionRef"))
+        return typing.cast("ConnectionReference", jsii.get(self, "connectionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectionRef).__jsii_proxy_class__ = lambda : _IConnectionRefProxy

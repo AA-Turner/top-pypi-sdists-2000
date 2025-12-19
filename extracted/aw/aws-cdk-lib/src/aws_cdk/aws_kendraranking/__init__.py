@@ -91,6 +91,7 @@ class CfnExecutionPlan(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_kendraranking as kendraranking
@@ -112,13 +113,13 @@ class CfnExecutionPlan(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        capacity_units: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExecutionPlan.CapacityUnitsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        capacity_units: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExecutionPlan.CapacityUnitsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::KendraRanking::ExecutionPlan``.
 
@@ -146,7 +147,7 @@ class CfnExecutionPlan(
     @builtins.classmethod
     def arn_for_execution_plan(
         cls,
-        resource: _IExecutionPlanRef_0496b464,
+        resource: "_IExecutionPlanRef_0496b464",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -169,7 +170,7 @@ class CfnExecutionPlan(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnExecutionPlan", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -223,15 +224,15 @@ class CfnExecutionPlan(
 
     @builtins.property
     @jsii.member(jsii_name="executionPlanRef")
-    def execution_plan_ref(self) -> _ExecutionPlanReference_e2683022:
+    def execution_plan_ref(self) -> "_ExecutionPlanReference_e2683022":
         '''A reference to a ExecutionPlan resource.'''
-        return typing.cast(_ExecutionPlanReference_e2683022, jsii.get(self, "executionPlanRef"))
+        return typing.cast("_ExecutionPlanReference_e2683022", jsii.get(self, "executionPlanRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -250,14 +251,14 @@ class CfnExecutionPlan(
     @jsii.member(jsii_name="capacityUnits")
     def capacity_units(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExecutionPlan.CapacityUnitsConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExecutionPlan.CapacityUnitsConfigurationProperty"]]:
         '''You can set additional capacity units to meet the needs of your rescore execution plan.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExecutionPlan.CapacityUnitsConfigurationProperty"]], jsii.get(self, "capacityUnits"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExecutionPlan.CapacityUnitsConfigurationProperty"]], jsii.get(self, "capacityUnits"))
 
     @capacity_units.setter
     def capacity_units(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExecutionPlan.CapacityUnitsConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExecutionPlan.CapacityUnitsConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cf82105f97a1c94ff72a8269c751d540ea7e092450fdb48e2bbdbb2d8314735d)
@@ -279,12 +280,12 @@ class CfnExecutionPlan(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of key-value pairs that identify or categorize your rescore execution plan.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__55d68c9f299d528d643242539117e67cdcb6d318233fbecc0794963d32a7dd69)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -362,9 +363,9 @@ class CfnExecutionPlanProps:
         self,
         *,
         name: builtins.str,
-        capacity_units: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExecutionPlan.CapacityUnitsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        capacity_units: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnExecutionPlan.CapacityUnitsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnExecutionPlan``.
 
@@ -378,6 +379,7 @@ class CfnExecutionPlanProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_kendraranking as kendraranking
@@ -425,7 +427,7 @@ class CfnExecutionPlanProps:
     @builtins.property
     def capacity_units(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExecutionPlan.CapacityUnitsConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExecutionPlan.CapacityUnitsConfigurationProperty"]]:
         '''You can set additional capacity units to meet the needs of your rescore execution plan.
 
         You are given a single capacity unit by default. If you want to use the default capacity, you don't set additional capacity units. For more information on the default capacity and additional capacity units, see `Adjusting capacity <https://docs.aws.amazon.com/kendra/latest/dg/adjusting-capacity.html>`_ .
@@ -433,7 +435,7 @@ class CfnExecutionPlanProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendraranking-executionplan.html#cfn-kendraranking-executionplan-capacityunits
         '''
         result = self._values.get("capacity_units")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExecutionPlan.CapacityUnitsConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnExecutionPlan.CapacityUnitsConfigurationProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -445,7 +447,7 @@ class CfnExecutionPlanProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of key-value pairs that identify or categorize your rescore execution plan.
 
         You can also use tags to help control access to the rescore execution plan. Tag keys and values can consist of Unicode letters, digits, white space. They can also consist of underscore, period, colon, equal, plus, and asperand.
@@ -453,7 +455,7 @@ class CfnExecutionPlanProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendraranking-executionplan.html#cfn-kendraranking-executionplan-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

@@ -355,9 +355,14 @@ ASSISTANT_ENCRYPTION_FIELDS = ["metadata", "config", "context"]
 CRON_ENCRYPTION_FIELDS = ["metadata", "payload"]
 
 # The middleware automatically decrypts these subfields when decrypting the parent field.
+# This is recursive: if a subfield is also in NESTED_ENCRYPTED_SUBFIELDS, its subfields
+# are decrypted too (e.g., run.kwargs.config.configurable).
 NESTED_ENCRYPTED_SUBFIELDS: dict[tuple[str, str], list[str]] = {
     ("run", "kwargs"): ["input", "config", "context", "command"],
+    ("run", "config"): ["configurable", "metadata"],
     ("cron", "payload"): ["metadata", "context", "input", "config"],
+    ("cron", "config"): ["configurable", "metadata"],
+    ("assistant", "config"): ["configurable"],
 }
 
 # Convenience alias for cron payload subfields.
@@ -369,3 +374,6 @@ NESTED_ENCRYPTED_SUBFIELDS: dict[tuple[str, str], list[str]] = {
 # metadata also duplicated as a top-level column). This alias is used to encrypt
 # those fields in the flat request before storage.
 CRON_PAYLOAD_ENCRYPTION_SUBFIELDS = NESTED_ENCRYPTED_SUBFIELDS[("cron", "payload")]
+
+# Convenience alias for run kwargs subfields, used by the worker for decryption.
+RUN_KWARGS_ENCRYPTION_SUBFIELDS = NESTED_ENCRYPTED_SUBFIELDS[("run", "kwargs")]

@@ -96,7 +96,7 @@ class IAppMonitorRef(
 
     @builtins.property
     @jsii.member(jsii_name="appMonitorRef")
-    def app_monitor_ref(self) -> AppMonitorReference:
+    def app_monitor_ref(self) -> "AppMonitorReference":
         '''(experimental) A reference to a AppMonitor resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IAppMonitorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="appMonitorRef")
-    def app_monitor_ref(self) -> AppMonitorReference:
+    def app_monitor_ref(self) -> "AppMonitorReference":
         '''(experimental) A reference to a AppMonitor resource.
 
         :stability: experimental
         '''
-        return typing.cast(AppMonitorReference, jsii.get(self, "appMonitorRef"))
+        return typing.cast("AppMonitorReference", jsii.get(self, "appMonitorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAppMonitorRef).__jsii_proxy_class__ = lambda : _IAppMonitorRefProxy

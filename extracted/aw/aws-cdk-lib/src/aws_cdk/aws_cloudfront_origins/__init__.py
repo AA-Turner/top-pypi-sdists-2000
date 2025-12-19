@@ -1025,20 +1025,20 @@ class FunctionUrlOrigin(
 
     def __init__(
         self,
-        lambda_function_url: _IFunctionUrl_1a74cd94,
+        lambda_function_url: "_IFunctionUrl_1a74cd94",
         *,
-        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        ip_address_type: typing.Optional["_OriginIpAddressType_1c01e1a0"] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param lambda_function_url: -
@@ -1079,22 +1079,22 @@ class FunctionUrlOrigin(
     @builtins.classmethod
     def with_origin_access_control(
         cls,
-        lambda_function_url: _IFunctionUrl_1a74cd94,
+        lambda_function_url: "_IFunctionUrl_1a74cd94",
         *,
-        origin_access_control: typing.Optional[_IOriginAccessControl_82a6fe5a] = None,
-        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        origin_access_control: typing.Optional["_IOriginAccessControl_82a6fe5a"] = None,
+        ip_address_type: typing.Optional["_OriginIpAddressType_1c01e1a0"] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
-    ) -> _IOrigin_83d4c1fa:
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+    ) -> "_IOrigin_83d4c1fa":
         '''Create a Lambda Function URL Origin with Origin Access Control (OAC) configured.
 
         :param lambda_function_url: -
@@ -1131,13 +1131,13 @@ class FunctionUrlOrigin(
             response_completion_timeout=response_completion_timeout,
         )
 
-        return typing.cast(_IOrigin_83d4c1fa, jsii.sinvoke(cls, "withOriginAccessControl", [lambda_function_url, props]))
+        return typing.cast("_IOrigin_83d4c1fa", jsii.sinvoke(cls, "withOriginAccessControl", [lambda_function_url, props]))
 
     @jsii.member(jsii_name="renderCustomOriginConfig")
     def _render_custom_origin_config(
         self,
-    ) -> typing.Optional[_CfnDistribution_d9ad3595.CustomOriginConfigProperty]:
-        return typing.cast(typing.Optional[_CfnDistribution_d9ad3595.CustomOriginConfigProperty], jsii.invoke(self, "renderCustomOriginConfig", []))
+    ) -> typing.Optional["_CfnDistribution_d9ad3595.CustomOriginConfigProperty"]:
+        return typing.cast(typing.Optional["_CfnDistribution_d9ad3595.CustomOriginConfigProperty"], jsii.invoke(self, "renderCustomOriginConfig", []))
 
 
 @jsii.data_type(
@@ -1160,13 +1160,13 @@ class FunctionUrlOriginBaseProps(_OriginProps_0675928d):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for configuring a origin using a standard Lambda Functions URLs.
@@ -1247,7 +1247,7 @@ class FunctionUrlOriginBaseProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -1255,7 +1255,7 @@ class FunctionUrlOriginBaseProps(_OriginProps_0675928d):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -1309,7 +1309,7 @@ class FunctionUrlOriginBaseProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -1321,7 +1321,7 @@ class FunctionUrlOriginBaseProps(_OriginProps_0675928d):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -1369,17 +1369,17 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
-        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        ip_address_type: typing.Optional["_OriginIpAddressType_1c01e1a0"] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Properties for a Lambda Function URL Origin.
 
@@ -1468,7 +1468,7 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -1476,7 +1476,7 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -1530,7 +1530,7 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -1542,7 +1542,7 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -1556,7 +1556,7 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ip_address_type(self) -> typing.Optional[_OriginIpAddressType_1c01e1a0]:
+    def ip_address_type(self) -> typing.Optional["_OriginIpAddressType_1c01e1a0"]:
         '''Specifies which IP protocol CloudFront uses when connecting to your origin.
 
         If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability.
@@ -1564,10 +1564,10 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         :default: OriginIpAddressType.IPV4
         '''
         result = self._values.get("ip_address_type")
-        return typing.cast(typing.Optional[_OriginIpAddressType_1c01e1a0], result)
+        return typing.cast(typing.Optional["_OriginIpAddressType_1c01e1a0"], result)
 
     @builtins.property
-    def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def keepalive_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront persists its connection to the origin.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -1578,10 +1578,10 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(5)
         '''
         result = self._values.get("keepalive_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def read_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def read_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront waits for a response from the origin.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -1592,7 +1592,7 @@ class FunctionUrlOriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(30)
         '''
         result = self._values.get("read_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1630,18 +1630,18 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
-        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        origin_access_control: typing.Optional[_IOriginAccessControl_82a6fe5a] = None,
+        ip_address_type: typing.Optional["_OriginIpAddressType_1c01e1a0"] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        origin_access_control: typing.Optional["_IOriginAccessControl_82a6fe5a"] = None,
     ) -> None:
         '''Properties for configuring a Lambda Functions URLs with OAC.
 
@@ -1741,7 +1741,7 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -1749,7 +1749,7 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -1803,7 +1803,7 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -1815,7 +1815,7 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -1829,7 +1829,7 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ip_address_type(self) -> typing.Optional[_OriginIpAddressType_1c01e1a0]:
+    def ip_address_type(self) -> typing.Optional["_OriginIpAddressType_1c01e1a0"]:
         '''Specifies which IP protocol CloudFront uses when connecting to your origin.
 
         If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability.
@@ -1837,10 +1837,10 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         :default: OriginIpAddressType.IPV4
         '''
         result = self._values.get("ip_address_type")
-        return typing.cast(typing.Optional[_OriginIpAddressType_1c01e1a0], result)
+        return typing.cast(typing.Optional["_OriginIpAddressType_1c01e1a0"], result)
 
     @builtins.property
-    def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def keepalive_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront persists its connection to the origin.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -1851,10 +1851,10 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         :default: Duration.seconds(5)
         '''
         result = self._values.get("keepalive_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def read_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def read_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront waits for a response from the origin.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -1865,16 +1865,18 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         :default: Duration.seconds(30)
         '''
         result = self._values.get("read_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def origin_access_control(self) -> typing.Optional[_IOriginAccessControl_82a6fe5a]:
+    def origin_access_control(
+        self,
+    ) -> typing.Optional["_IOriginAccessControl_82a6fe5a"]:
         '''An optional Origin Access Control.
 
         :default: - an Origin Access Control will be created.
         '''
         result = self._values.get("origin_access_control")
-        return typing.cast(typing.Optional[_IOriginAccessControl_82a6fe5a], result)
+        return typing.cast(typing.Optional["_IOriginAccessControl_82a6fe5a"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1918,20 +1920,20 @@ class HttpOrigin(
         *,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
-        protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        ip_address_type: typing.Optional["_OriginIpAddressType_1c01e1a0"] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["_OriginSslPolicy_d65cede2"]] = None,
+        protocol_policy: typing.Optional["_OriginProtocolPolicy_967ed73c"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param domain_name: -
@@ -1979,8 +1981,8 @@ class HttpOrigin(
     @jsii.member(jsii_name="renderCustomOriginConfig")
     def _render_custom_origin_config(
         self,
-    ) -> typing.Optional[_CfnDistribution_d9ad3595.CustomOriginConfigProperty]:
-        return typing.cast(typing.Optional[_CfnDistribution_d9ad3595.CustomOriginConfigProperty], jsii.invoke(self, "renderCustomOriginConfig", []))
+    ) -> typing.Optional["_CfnDistribution_d9ad3595.CustomOriginConfigProperty"]:
+        return typing.cast(typing.Optional["_CfnDistribution_d9ad3595.CustomOriginConfigProperty"], jsii.invoke(self, "renderCustomOriginConfig", []))
 
 
 @jsii.data_type(
@@ -2010,21 +2012,21 @@ class HttpOriginProps(_OriginProps_0675928d):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
-        protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        ip_address_type: typing.Optional["_OriginIpAddressType_1c01e1a0"] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["_OriginSslPolicy_d65cede2"]] = None,
+        protocol_policy: typing.Optional["_OriginProtocolPolicy_967ed73c"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Properties for an Origin backed by an S3 website-configured bucket, load balancer, or custom HTTP server.
 
@@ -2121,7 +2123,7 @@ class HttpOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -2129,7 +2131,7 @@ class HttpOriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -2183,7 +2185,7 @@ class HttpOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -2195,7 +2197,7 @@ class HttpOriginProps(_OriginProps_0675928d):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -2227,7 +2229,7 @@ class HttpOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def ip_address_type(self) -> typing.Optional[_OriginIpAddressType_1c01e1a0]:
+    def ip_address_type(self) -> typing.Optional["_OriginIpAddressType_1c01e1a0"]:
         '''Specifies which IP protocol CloudFront uses when connecting to your origin.
 
         If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability.
@@ -2235,10 +2237,10 @@ class HttpOriginProps(_OriginProps_0675928d):
         :default: undefined - AWS Cloudfront default is IPv4
         '''
         result = self._values.get("ip_address_type")
-        return typing.cast(typing.Optional[_OriginIpAddressType_1c01e1a0], result)
+        return typing.cast(typing.Optional["_OriginIpAddressType_1c01e1a0"], result)
 
     @builtins.property
-    def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def keepalive_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront persists its connection to the origin.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -2249,30 +2251,30 @@ class HttpOriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(5)
         '''
         result = self._values.get("keepalive_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_ssl_protocols(
         self,
-    ) -> typing.Optional[typing.List[_OriginSslPolicy_d65cede2]]:
+    ) -> typing.Optional[typing.List["_OriginSslPolicy_d65cede2"]]:
         '''The SSL versions to use when interacting with the origin.
 
         :default: OriginSslPolicy.TLS_V1_2
         '''
         result = self._values.get("origin_ssl_protocols")
-        return typing.cast(typing.Optional[typing.List[_OriginSslPolicy_d65cede2]], result)
+        return typing.cast(typing.Optional[typing.List["_OriginSslPolicy_d65cede2"]], result)
 
     @builtins.property
-    def protocol_policy(self) -> typing.Optional[_OriginProtocolPolicy_967ed73c]:
+    def protocol_policy(self) -> typing.Optional["_OriginProtocolPolicy_967ed73c"]:
         '''Specifies the protocol (HTTP or HTTPS) that CloudFront uses to connect to the origin.
 
         :default: OriginProtocolPolicy.HTTPS_ONLY
         '''
         result = self._values.get("protocol_policy")
-        return typing.cast(typing.Optional[_OriginProtocolPolicy_967ed73c], result)
+        return typing.cast(typing.Optional["_OriginProtocolPolicy_967ed73c"], result)
 
     @builtins.property
-    def read_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def read_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront waits for a response from the origin, also known as the origin response timeout.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -2283,7 +2285,7 @@ class HttpOriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(30)
         '''
         result = self._values.get("read_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2324,24 +2326,24 @@ class LoadBalancerV2Origin(
 
     def __init__(
         self,
-        load_balancer: _ILoadBalancerV2_4c5c0fbb,
+        load_balancer: "_ILoadBalancerV2_4c5c0fbb",
         *,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
-        protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        ip_address_type: typing.Optional["_OriginIpAddressType_1c01e1a0"] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["_OriginSslPolicy_d65cede2"]] = None,
+        protocol_policy: typing.Optional["_OriginProtocolPolicy_967ed73c"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param load_balancer: -
@@ -2414,21 +2416,21 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
-        protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        ip_address_type: typing.Optional["_OriginIpAddressType_1c01e1a0"] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["_OriginSslPolicy_d65cede2"]] = None,
+        protocol_policy: typing.Optional["_OriginProtocolPolicy_967ed73c"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Properties for an Origin backed by a v2 load balancer.
 
@@ -2528,7 +2530,7 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -2536,7 +2538,7 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -2590,7 +2592,7 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -2602,7 +2604,7 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -2634,7 +2636,7 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def ip_address_type(self) -> typing.Optional[_OriginIpAddressType_1c01e1a0]:
+    def ip_address_type(self) -> typing.Optional["_OriginIpAddressType_1c01e1a0"]:
         '''Specifies which IP protocol CloudFront uses when connecting to your origin.
 
         If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability.
@@ -2642,10 +2644,10 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
         :default: undefined - AWS Cloudfront default is IPv4
         '''
         result = self._values.get("ip_address_type")
-        return typing.cast(typing.Optional[_OriginIpAddressType_1c01e1a0], result)
+        return typing.cast(typing.Optional["_OriginIpAddressType_1c01e1a0"], result)
 
     @builtins.property
-    def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def keepalive_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront persists its connection to the origin.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -2656,30 +2658,30 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
         :default: Duration.seconds(5)
         '''
         result = self._values.get("keepalive_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_ssl_protocols(
         self,
-    ) -> typing.Optional[typing.List[_OriginSslPolicy_d65cede2]]:
+    ) -> typing.Optional[typing.List["_OriginSslPolicy_d65cede2"]]:
         '''The SSL versions to use when interacting with the origin.
 
         :default: OriginSslPolicy.TLS_V1_2
         '''
         result = self._values.get("origin_ssl_protocols")
-        return typing.cast(typing.Optional[typing.List[_OriginSslPolicy_d65cede2]], result)
+        return typing.cast(typing.Optional[typing.List["_OriginSslPolicy_d65cede2"]], result)
 
     @builtins.property
-    def protocol_policy(self) -> typing.Optional[_OriginProtocolPolicy_967ed73c]:
+    def protocol_policy(self) -> typing.Optional["_OriginProtocolPolicy_967ed73c"]:
         '''Specifies the protocol (HTTP or HTTPS) that CloudFront uses to connect to the origin.
 
         :default: OriginProtocolPolicy.HTTPS_ONLY
         '''
         result = self._values.get("protocol_policy")
-        return typing.cast(typing.Optional[_OriginProtocolPolicy_967ed73c], result)
+        return typing.cast(typing.Optional["_OriginProtocolPolicy_967ed73c"], result)
 
     @builtins.property
-    def read_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def read_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront waits for a response from the origin, also known as the origin response timeout.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -2690,7 +2692,7 @@ class LoadBalancerV2OriginProps(HttpOriginProps):
         :default: Duration.seconds(30)
         '''
         result = self._values.get("read_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2734,10 +2736,10 @@ class OriginGroup(
     def __init__(
         self,
         *,
-        fallback_origin: _IOrigin_83d4c1fa,
-        primary_origin: _IOrigin_83d4c1fa,
+        fallback_origin: "_IOrigin_83d4c1fa",
+        primary_origin: "_IOrigin_83d4c1fa",
         fallback_status_codes: typing.Optional[typing.Sequence[jsii.Number]] = None,
-        selection_criteria: typing.Optional[_OriginSelectionCriteria_ba6d3e21] = None,
+        selection_criteria: typing.Optional["_OriginSelectionCriteria_ba6d3e21"] = None,
     ) -> None:
         '''
         :param fallback_origin: The fallback origin that should serve requests when the primary fails.
@@ -2757,11 +2759,11 @@ class OriginGroup(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
         origin_id: builtins.str,
         distribution_id: typing.Optional[builtins.str] = None,
-    ) -> _OriginBindConfig_25a57096:
+    ) -> "_OriginBindConfig_25a57096":
         '''The method called when a given Origin is added (for the first time) to a Distribution.
 
         :param scope: -
@@ -2775,7 +2777,7 @@ class OriginGroup(
             origin_id=origin_id, distribution_id=distribution_id
         )
 
-        return typing.cast(_OriginBindConfig_25a57096, jsii.invoke(self, "bind", [scope, options]))
+        return typing.cast("_OriginBindConfig_25a57096", jsii.invoke(self, "bind", [scope, options]))
 
 
 @jsii.data_type(
@@ -2792,10 +2794,10 @@ class OriginGroupProps:
     def __init__(
         self,
         *,
-        fallback_origin: _IOrigin_83d4c1fa,
-        primary_origin: _IOrigin_83d4c1fa,
+        fallback_origin: "_IOrigin_83d4c1fa",
+        primary_origin: "_IOrigin_83d4c1fa",
         fallback_status_codes: typing.Optional[typing.Sequence[jsii.Number]] = None,
-        selection_criteria: typing.Optional[_OriginSelectionCriteria_ba6d3e21] = None,
+        selection_criteria: typing.Optional["_OriginSelectionCriteria_ba6d3e21"] = None,
     ) -> None:
         '''Construction properties for ``OriginGroup``.
 
@@ -2836,18 +2838,18 @@ class OriginGroupProps:
             self._values["selection_criteria"] = selection_criteria
 
     @builtins.property
-    def fallback_origin(self) -> _IOrigin_83d4c1fa:
+    def fallback_origin(self) -> "_IOrigin_83d4c1fa":
         '''The fallback origin that should serve requests when the primary fails.'''
         result = self._values.get("fallback_origin")
         assert result is not None, "Required property 'fallback_origin' is missing"
-        return typing.cast(_IOrigin_83d4c1fa, result)
+        return typing.cast("_IOrigin_83d4c1fa", result)
 
     @builtins.property
-    def primary_origin(self) -> _IOrigin_83d4c1fa:
+    def primary_origin(self) -> "_IOrigin_83d4c1fa":
         '''The primary origin that should serve requests for this group.'''
         result = self._values.get("primary_origin")
         assert result is not None, "Required property 'primary_origin' is missing"
-        return typing.cast(_IOrigin_83d4c1fa, result)
+        return typing.cast("_IOrigin_83d4c1fa", result)
 
     @builtins.property
     def fallback_status_codes(self) -> typing.Optional[typing.List[jsii.Number]]:
@@ -2859,7 +2861,9 @@ class OriginGroupProps:
         return typing.cast(typing.Optional[typing.List[jsii.Number]], result)
 
     @builtins.property
-    def selection_criteria(self) -> typing.Optional[_OriginSelectionCriteria_ba6d3e21]:
+    def selection_criteria(
+        self,
+    ) -> typing.Optional["_OriginSelectionCriteria_ba6d3e21"]:
         '''The selection criteria for the origin group.
 
         :default: - OriginSelectionCriteria.DEFAULT
@@ -2867,7 +2871,7 @@ class OriginGroupProps:
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/high_availability_origin_failover.html#concept_origin_groups.creating
         '''
         result = self._values.get("selection_criteria")
-        return typing.cast(typing.Optional[_OriginSelectionCriteria_ba6d3e21], result)
+        return typing.cast(typing.Optional["_OriginSelectionCriteria_ba6d3e21"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2901,19 +2905,19 @@ class RestApiOrigin(
 
     def __init__(
         self,
-        rest_api: _RestApiBase_0431da32,
+        rest_api: "_RestApiBase_0431da32",
         *,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param rest_api: -
@@ -2951,8 +2955,8 @@ class RestApiOrigin(
     @jsii.member(jsii_name="renderCustomOriginConfig")
     def _render_custom_origin_config(
         self,
-    ) -> typing.Optional[_CfnDistribution_d9ad3595.CustomOriginConfigProperty]:
-        return typing.cast(typing.Optional[_CfnDistribution_d9ad3595.CustomOriginConfigProperty], jsii.invoke(self, "renderCustomOriginConfig", []))
+    ) -> typing.Optional["_CfnDistribution_d9ad3595.CustomOriginConfigProperty"]:
+        return typing.cast(typing.Optional["_CfnDistribution_d9ad3595.CustomOriginConfigProperty"], jsii.invoke(self, "renderCustomOriginConfig", []))
 
 
 @jsii.data_type(
@@ -2977,16 +2981,16 @@ class RestApiOriginProps(_OriginProps_0675928d):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Properties for an Origin for an API Gateway REST API.
 
@@ -3061,7 +3065,7 @@ class RestApiOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -3069,7 +3073,7 @@ class RestApiOriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -3123,7 +3127,7 @@ class RestApiOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -3135,7 +3139,7 @@ class RestApiOriginProps(_OriginProps_0675928d):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -3149,7 +3153,7 @@ class RestApiOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def keepalive_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront persists its connection to the origin.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -3160,10 +3164,10 @@ class RestApiOriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(5)
         '''
         result = self._values.get("keepalive_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def read_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def read_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront waits for a response from the origin, also known as the origin response timeout.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -3174,7 +3178,7 @@ class RestApiOriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(30)
         '''
         result = self._values.get("read_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3217,17 +3221,17 @@ class S3BucketOrigin(
 
     def __init__(
         self,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         *,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param bucket: -
@@ -3262,18 +3266,18 @@ class S3BucketOrigin(
     @builtins.classmethod
     def with_bucket_defaults(
         cls,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         *,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
-    ) -> _IOrigin_83d4c1fa:
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+    ) -> "_IOrigin_83d4c1fa":
         '''Create a S3 Origin with default S3 bucket settings (no origin access control).
 
         :param bucket: -
@@ -3302,26 +3306,26 @@ class S3BucketOrigin(
             response_completion_timeout=response_completion_timeout,
         )
 
-        return typing.cast(_IOrigin_83d4c1fa, jsii.sinvoke(cls, "withBucketDefaults", [bucket, props]))
+        return typing.cast("_IOrigin_83d4c1fa", jsii.sinvoke(cls, "withBucketDefaults", [bucket, props]))
 
     @jsii.member(jsii_name="withOriginAccessControl")
     @builtins.classmethod
     def with_origin_access_control(
         cls,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         *,
-        origin_access_control: typing.Optional[_IOriginAccessControl_82a6fe5a] = None,
-        origin_access_levels: typing.Optional[typing.Sequence[_AccessLevel_315d9a76]] = None,
+        origin_access_control: typing.Optional["_IOriginAccessControl_82a6fe5a"] = None,
+        origin_access_levels: typing.Optional[typing.Sequence["_AccessLevel_315d9a76"]] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
-    ) -> _IOrigin_83d4c1fa:
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+    ) -> "_IOrigin_83d4c1fa":
         '''Create a S3 Origin with Origin Access Control (OAC) configured.
 
         :param bucket: -
@@ -3354,25 +3358,25 @@ class S3BucketOrigin(
             response_completion_timeout=response_completion_timeout,
         )
 
-        return typing.cast(_IOrigin_83d4c1fa, jsii.sinvoke(cls, "withOriginAccessControl", [bucket, props]))
+        return typing.cast("_IOrigin_83d4c1fa", jsii.sinvoke(cls, "withOriginAccessControl", [bucket, props]))
 
     @jsii.member(jsii_name="withOriginAccessIdentity")
     @builtins.classmethod
     def with_origin_access_identity(
         cls,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         *,
-        origin_access_identity: typing.Optional[_IOriginAccessIdentity_a922494c] = None,
+        origin_access_identity: typing.Optional["_IOriginAccessIdentity_a922494c"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
-    ) -> _IOrigin_83d4c1fa:
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+    ) -> "_IOrigin_83d4c1fa":
         '''Create a S3 Origin with Origin Access Identity (OAI) configured OAI is a legacy feature and we **strongly** recommend you to use OAC via ``withOriginAccessControl()`` unless it is not supported in your required region (e.g. China regions).
 
         :param bucket: -
@@ -3403,13 +3407,13 @@ class S3BucketOrigin(
             response_completion_timeout=response_completion_timeout,
         )
 
-        return typing.cast(_IOrigin_83d4c1fa, jsii.sinvoke(cls, "withOriginAccessIdentity", [bucket, props]))
+        return typing.cast("_IOrigin_83d4c1fa", jsii.sinvoke(cls, "withOriginAccessIdentity", [bucket, props]))
 
     @jsii.member(jsii_name="renderS3OriginConfig")
     def _render_s3_origin_config(
         self,
-    ) -> typing.Optional[_CfnDistribution_d9ad3595.S3OriginConfigProperty]:
-        return typing.cast(typing.Optional[_CfnDistribution_d9ad3595.S3OriginConfigProperty], jsii.invoke(self, "renderS3OriginConfig", []))
+    ) -> typing.Optional["_CfnDistribution_d9ad3595.S3OriginConfigProperty"]:
+        return typing.cast(typing.Optional["_CfnDistribution_d9ad3595.S3OriginConfigProperty"], jsii.invoke(self, "renderS3OriginConfig", []))
 
 
 class _S3BucketOriginProxy(
@@ -3442,13 +3446,13 @@ class S3BucketOriginBaseProps(_OriginProps_0675928d):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for configuring a origin using a standard S3 bucket.
@@ -3529,7 +3533,7 @@ class S3BucketOriginBaseProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -3537,7 +3541,7 @@ class S3BucketOriginBaseProps(_OriginProps_0675928d):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -3591,7 +3595,7 @@ class S3BucketOriginBaseProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -3603,7 +3607,7 @@ class S3BucketOriginBaseProps(_OriginProps_0675928d):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -3650,16 +3654,16 @@ class S3BucketOriginWithOACProps(S3BucketOriginBaseProps):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
-        origin_access_control: typing.Optional[_IOriginAccessControl_82a6fe5a] = None,
-        origin_access_levels: typing.Optional[typing.Sequence[_AccessLevel_315d9a76]] = None,
+        origin_access_control: typing.Optional["_IOriginAccessControl_82a6fe5a"] = None,
+        origin_access_levels: typing.Optional[typing.Sequence["_AccessLevel_315d9a76"]] = None,
     ) -> None:
         '''Properties for configuring a S3 origin with OAC.
 
@@ -3741,7 +3745,7 @@ class S3BucketOriginWithOACProps(S3BucketOriginBaseProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -3749,7 +3753,7 @@ class S3BucketOriginWithOACProps(S3BucketOriginBaseProps):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -3803,7 +3807,7 @@ class S3BucketOriginWithOACProps(S3BucketOriginBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -3815,7 +3819,7 @@ class S3BucketOriginWithOACProps(S3BucketOriginBaseProps):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -3829,24 +3833,26 @@ class S3BucketOriginWithOACProps(S3BucketOriginBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def origin_access_control(self) -> typing.Optional[_IOriginAccessControl_82a6fe5a]:
+    def origin_access_control(
+        self,
+    ) -> typing.Optional["_IOriginAccessControl_82a6fe5a"]:
         '''An optional Origin Access Control.
 
         :default: - an Origin Access Control will be created.
         '''
         result = self._values.get("origin_access_control")
-        return typing.cast(typing.Optional[_IOriginAccessControl_82a6fe5a], result)
+        return typing.cast(typing.Optional["_IOriginAccessControl_82a6fe5a"], result)
 
     @builtins.property
     def origin_access_levels(
         self,
-    ) -> typing.Optional[typing.List[_AccessLevel_315d9a76]]:
+    ) -> typing.Optional[typing.List["_AccessLevel_315d9a76"]]:
         '''The level of permissions granted in the bucket policy and key policy (if applicable) to the CloudFront distribution.
 
         :default: [AccessLevel.READ]
         '''
         result = self._values.get("origin_access_levels")
-        return typing.cast(typing.Optional[typing.List[_AccessLevel_315d9a76]], result)
+        return typing.cast(typing.Optional[typing.List["_AccessLevel_315d9a76"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3881,15 +3887,15 @@ class S3BucketOriginWithOAIProps(S3BucketOriginBaseProps):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
-        origin_access_identity: typing.Optional[_IOriginAccessIdentity_a922494c] = None,
+        origin_access_identity: typing.Optional["_IOriginAccessIdentity_a922494c"] = None,
     ) -> None:
         '''Properties for configuring a S3 origin with OAI.
 
@@ -3967,7 +3973,7 @@ class S3BucketOriginWithOAIProps(S3BucketOriginBaseProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -3975,7 +3981,7 @@ class S3BucketOriginWithOAIProps(S3BucketOriginBaseProps):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -4029,7 +4035,7 @@ class S3BucketOriginWithOAIProps(S3BucketOriginBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -4041,7 +4047,7 @@ class S3BucketOriginWithOAIProps(S3BucketOriginBaseProps):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -4057,13 +4063,13 @@ class S3BucketOriginWithOAIProps(S3BucketOriginBaseProps):
     @builtins.property
     def origin_access_identity(
         self,
-    ) -> typing.Optional[_IOriginAccessIdentity_a922494c]:
+    ) -> typing.Optional["_IOriginAccessIdentity_a922494c"]:
         '''An optional Origin Access Identity.
 
         :default: - an Origin Access Identity will be created.
         '''
         result = self._values.get("origin_access_identity")
-        return typing.cast(typing.Optional[_IOriginAccessIdentity_a922494c], result)
+        return typing.cast(typing.Optional["_IOriginAccessIdentity_a922494c"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4114,18 +4120,18 @@ class S3Origin(
 
     def __init__(
         self,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         *,
-        origin_access_identity: typing.Optional[_IOriginAccessIdentity_a922494c] = None,
+        origin_access_identity: typing.Optional["_IOriginAccessIdentity_a922494c"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param bucket: -
@@ -4163,11 +4169,11 @@ class S3Origin(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         *,
         origin_id: builtins.str,
         distribution_id: typing.Optional[builtins.str] = None,
-    ) -> _OriginBindConfig_25a57096:
+    ) -> "_OriginBindConfig_25a57096":
         '''(deprecated) The method called when a given Origin is added (for the first time) to a Distribution.
 
         :param scope: -
@@ -4183,7 +4189,7 @@ class S3Origin(
             origin_id=origin_id, distribution_id=distribution_id
         )
 
-        return typing.cast(_OriginBindConfig_25a57096, jsii.invoke(self, "bind", [scope, options]))
+        return typing.cast("_OriginBindConfig_25a57096", jsii.invoke(self, "bind", [scope, options]))
 
 
 @jsii.data_type(
@@ -4207,15 +4213,15 @@ class S3OriginProps(_OriginProps_0675928d):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
-        origin_access_identity: typing.Optional[_IOriginAccessIdentity_a922494c] = None,
+        origin_access_identity: typing.Optional["_IOriginAccessIdentity_a922494c"] = None,
     ) -> None:
         '''Properties to use to customize an S3 Origin.
 
@@ -4303,7 +4309,7 @@ class S3OriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -4311,7 +4317,7 @@ class S3OriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -4365,7 +4371,7 @@ class S3OriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -4377,7 +4383,7 @@ class S3OriginProps(_OriginProps_0675928d):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -4393,13 +4399,13 @@ class S3OriginProps(_OriginProps_0675928d):
     @builtins.property
     def origin_access_identity(
         self,
-    ) -> typing.Optional[_IOriginAccessIdentity_a922494c]:
+    ) -> typing.Optional["_IOriginAccessIdentity_a922494c"]:
         '''An optional Origin Access Identity of the origin identity cloudfront will use when calling your s3 bucket.
 
         :default: - An Origin Access Identity will be created.
         '''
         result = self._values.get("origin_access_identity")
-        return typing.cast(typing.Optional[_IOriginAccessIdentity_a922494c], result)
+        return typing.cast(typing.Optional["_IOriginAccessIdentity_a922494c"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4432,24 +4438,24 @@ class S3StaticWebsiteOrigin(
 
     def __init__(
         self,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         *,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
-        protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        ip_address_type: typing.Optional["_OriginIpAddressType_1c01e1a0"] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["_OriginSslPolicy_d65cede2"]] = None,
+        protocol_policy: typing.Optional["_OriginProtocolPolicy_967ed73c"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param bucket: -
@@ -4522,21 +4528,21 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
-        protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        ip_address_type: typing.Optional["_OriginIpAddressType_1c01e1a0"] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["_OriginSslPolicy_d65cede2"]] = None,
+        protocol_policy: typing.Optional["_OriginProtocolPolicy_967ed73c"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Properties for configuring a origin using a S3 bucket configured as a website endpoint.
 
@@ -4652,7 +4658,7 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -4660,7 +4666,7 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -4714,7 +4720,7 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -4726,7 +4732,7 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -4758,7 +4764,7 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def ip_address_type(self) -> typing.Optional[_OriginIpAddressType_1c01e1a0]:
+    def ip_address_type(self) -> typing.Optional["_OriginIpAddressType_1c01e1a0"]:
         '''Specifies which IP protocol CloudFront uses when connecting to your origin.
 
         If your origin uses both IPv4 and IPv6 protocols, you can choose dualstack to help optimize reliability.
@@ -4766,10 +4772,10 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
         :default: undefined - AWS Cloudfront default is IPv4
         '''
         result = self._values.get("ip_address_type")
-        return typing.cast(typing.Optional[_OriginIpAddressType_1c01e1a0], result)
+        return typing.cast(typing.Optional["_OriginIpAddressType_1c01e1a0"], result)
 
     @builtins.property
-    def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def keepalive_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront persists its connection to the origin.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -4780,30 +4786,30 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
         :default: Duration.seconds(5)
         '''
         result = self._values.get("keepalive_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_ssl_protocols(
         self,
-    ) -> typing.Optional[typing.List[_OriginSslPolicy_d65cede2]]:
+    ) -> typing.Optional[typing.List["_OriginSslPolicy_d65cede2"]]:
         '''The SSL versions to use when interacting with the origin.
 
         :default: OriginSslPolicy.TLS_V1_2
         '''
         result = self._values.get("origin_ssl_protocols")
-        return typing.cast(typing.Optional[typing.List[_OriginSslPolicy_d65cede2]], result)
+        return typing.cast(typing.Optional[typing.List["_OriginSslPolicy_d65cede2"]], result)
 
     @builtins.property
-    def protocol_policy(self) -> typing.Optional[_OriginProtocolPolicy_967ed73c]:
+    def protocol_policy(self) -> typing.Optional["_OriginProtocolPolicy_967ed73c"]:
         '''Specifies the protocol (HTTP or HTTPS) that CloudFront uses to connect to the origin.
 
         :default: OriginProtocolPolicy.HTTPS_ONLY
         '''
         result = self._values.get("protocol_policy")
-        return typing.cast(typing.Optional[_OriginProtocolPolicy_967ed73c], result)
+        return typing.cast(typing.Optional["_OriginProtocolPolicy_967ed73c"], result)
 
     @builtins.property
-    def read_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def read_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront waits for a response from the origin, also known as the origin response timeout.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -4814,7 +4820,7 @@ class S3StaticWebsiteOriginProps(HttpOriginProps):
         :default: Duration.seconds(30)
         '''
         result = self._values.get("read_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4859,17 +4865,17 @@ class VpcOrigin(
         domain_name_: builtins.str,
         *,
         domain_name: typing.Optional[builtins.str] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param domain_name_: -
@@ -4910,25 +4916,25 @@ class VpcOrigin(
     @builtins.classmethod
     def with_application_load_balancer(
         cls,
-        alb: _IApplicationLoadBalancer_4cbd50ab,
+        alb: "_IApplicationLoadBalancer_4cbd50ab",
         *,
         domain_name: typing.Optional[builtins.str] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
-        protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["_OriginSslPolicy_d65cede2"]] = None,
+        protocol_policy: typing.Optional["_OriginProtocolPolicy_967ed73c"] = None,
         vpc_origin_name: typing.Optional[builtins.str] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "VpcOrigin":
         '''Create a VPC origin with an Application Load Balancer.
 
@@ -4980,25 +4986,25 @@ class VpcOrigin(
     @builtins.classmethod
     def with_ec2_instance(
         cls,
-        instance: _IInstance_ab239e7c,
+        instance: "_IInstance_ab239e7c",
         *,
         domain_name: typing.Optional[builtins.str] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
-        protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["_OriginSslPolicy_d65cede2"]] = None,
+        protocol_policy: typing.Optional["_OriginProtocolPolicy_967ed73c"] = None,
         vpc_origin_name: typing.Optional[builtins.str] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "VpcOrigin":
         '''Create a VPC origin with an EC2 instance.
 
@@ -5050,25 +5056,25 @@ class VpcOrigin(
     @builtins.classmethod
     def with_network_load_balancer(
         cls,
-        nlb: _INetworkLoadBalancer_96e17101,
+        nlb: "_INetworkLoadBalancer_96e17101",
         *,
         domain_name: typing.Optional[builtins.str] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
-        protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["_OriginSslPolicy_d65cede2"]] = None,
+        protocol_policy: typing.Optional["_OriginProtocolPolicy_967ed73c"] = None,
         vpc_origin_name: typing.Optional[builtins.str] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "VpcOrigin":
         '''Create a VPC origin with a Network Load Balancer.
 
@@ -5120,20 +5126,20 @@ class VpcOrigin(
     @builtins.classmethod
     def with_vpc_origin(
         cls,
-        origin: _IVpcOrigin_6f584d50,
+        origin: "_IVpcOrigin_6f584d50",
         *,
         domain_name: typing.Optional[builtins.str] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "VpcOrigin":
         '''Create a VPC origin with an existing VPC origin resource.
 
@@ -5174,8 +5180,8 @@ class VpcOrigin(
     @jsii.member(jsii_name="renderVpcOriginConfig")
     def _render_vpc_origin_config(
         self,
-    ) -> typing.Optional[_CfnDistribution_d9ad3595.VpcOriginConfigProperty]:
-        return typing.cast(typing.Optional[_CfnDistribution_d9ad3595.VpcOriginConfigProperty], jsii.invoke(self, "renderVpcOriginConfig", []))
+    ) -> typing.Optional["_CfnDistribution_d9ad3595.VpcOriginConfigProperty"]:
+        return typing.cast(typing.Optional["_CfnDistribution_d9ad3595.VpcOriginConfigProperty"], jsii.invoke(self, "renderVpcOriginConfig", []))
 
     @builtins.property
     @jsii.member(jsii_name="props")
@@ -5184,11 +5190,11 @@ class VpcOrigin(
 
     @builtins.property
     @jsii.member(jsii_name="vpcOrigin")
-    def _vpc_origin(self) -> typing.Optional[_IVpcOrigin_6f584d50]:
-        return typing.cast(typing.Optional[_IVpcOrigin_6f584d50], jsii.get(self, "vpcOrigin"))
+    def _vpc_origin(self) -> typing.Optional["_IVpcOrigin_6f584d50"]:
+        return typing.cast(typing.Optional["_IVpcOrigin_6f584d50"], jsii.get(self, "vpcOrigin"))
 
     @_vpc_origin.setter
-    def _vpc_origin(self, value: typing.Optional[_IVpcOrigin_6f584d50]) -> None:
+    def _vpc_origin(self, value: typing.Optional["_IVpcOrigin_6f584d50"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1d0218fc5ea8fbca94cbaeda39ab353fe5c35e197d6d8d60852fb576332785ce)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5228,17 +5234,17 @@ class VpcOriginProps(_OriginProps_0675928d):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Properties to define a VPC origin.
 
@@ -5333,7 +5339,7 @@ class VpcOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -5341,7 +5347,7 @@ class VpcOriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -5395,7 +5401,7 @@ class VpcOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -5407,7 +5413,7 @@ class VpcOriginProps(_OriginProps_0675928d):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -5430,7 +5436,7 @@ class VpcOriginProps(_OriginProps_0675928d):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def keepalive_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront persists its connection to the origin.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -5441,10 +5447,10 @@ class VpcOriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(5)
         '''
         result = self._values.get("keepalive_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def read_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def read_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront waits for a response from the origin, also known as the origin response timeout.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -5455,7 +5461,7 @@ class VpcOriginProps(_OriginProps_0675928d):
         :default: Duration.seconds(30)
         '''
         result = self._values.get("read_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5497,21 +5503,21 @@ class VpcOriginWithEndpointProps(VpcOriginProps, _VpcOriginOptions_f9e74bd8):
         self,
         *,
         connection_attempts: typing.Optional[jsii.Number] = None,
-        connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         custom_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_access_control_id: typing.Optional[builtins.str] = None,
         origin_id: typing.Optional[builtins.str] = None,
         origin_shield_enabled: typing.Optional[builtins.bool] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
-        response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
-        keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        read_timeout: typing.Optional[_Duration_4839e8c3] = None,
+        keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         http_port: typing.Optional[jsii.Number] = None,
         https_port: typing.Optional[jsii.Number] = None,
-        origin_ssl_protocols: typing.Optional[typing.Sequence[_OriginSslPolicy_d65cede2]] = None,
-        protocol_policy: typing.Optional[_OriginProtocolPolicy_967ed73c] = None,
+        origin_ssl_protocols: typing.Optional[typing.Sequence["_OriginSslPolicy_d65cede2"]] = None,
+        protocol_policy: typing.Optional["_OriginProtocolPolicy_967ed73c"] = None,
         vpc_origin_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties to define a VPC origin with endpoint.
@@ -5633,7 +5639,7 @@ class VpcOriginWithEndpointProps(VpcOriginProps, _VpcOriginOptions_f9e74bd8):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def connection_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def connection_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of seconds that CloudFront waits when trying to establish a connection to the origin.
 
         Valid values are 1-10 seconds, inclusive.
@@ -5641,7 +5647,7 @@ class VpcOriginWithEndpointProps(VpcOriginProps, _VpcOriginOptions_f9e74bd8):
         :default: Duration.seconds(10)
         '''
         result = self._values.get("connection_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def custom_headers(
@@ -5695,7 +5701,7 @@ class VpcOriginWithEndpointProps(VpcOriginProps, _VpcOriginOptions_f9e74bd8):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def response_completion_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def response_completion_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time that a request from CloudFront to the origin can stay open and wait for a response.
 
         If the complete response isn't received from the origin by this time, CloudFront ends the connection.
@@ -5707,7 +5713,7 @@ class VpcOriginWithEndpointProps(VpcOriginProps, _VpcOriginOptions_f9e74bd8):
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#response-completion-timeout
         '''
         result = self._values.get("response_completion_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def origin_path(self) -> typing.Optional[builtins.str]:
@@ -5730,7 +5736,7 @@ class VpcOriginWithEndpointProps(VpcOriginProps, _VpcOriginOptions_f9e74bd8):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def keepalive_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def keepalive_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront persists its connection to the origin.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -5741,10 +5747,10 @@ class VpcOriginWithEndpointProps(VpcOriginProps, _VpcOriginOptions_f9e74bd8):
         :default: Duration.seconds(5)
         '''
         result = self._values.get("keepalive_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def read_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def read_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies how long, in seconds, CloudFront waits for a response from the origin, also known as the origin response timeout.
 
         The valid range is from 1 to 180 seconds, inclusive.
@@ -5755,7 +5761,7 @@ class VpcOriginWithEndpointProps(VpcOriginProps, _VpcOriginOptions_f9e74bd8):
         :default: Duration.seconds(30)
         '''
         result = self._values.get("read_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def http_port(self) -> typing.Optional[jsii.Number]:
@@ -5778,22 +5784,22 @@ class VpcOriginWithEndpointProps(VpcOriginProps, _VpcOriginOptions_f9e74bd8):
     @builtins.property
     def origin_ssl_protocols(
         self,
-    ) -> typing.Optional[typing.List[_OriginSslPolicy_d65cede2]]:
+    ) -> typing.Optional[typing.List["_OriginSslPolicy_d65cede2"]]:
         '''A list that contains allowed SSL/TLS protocols for this distribution.
 
         :default: - TLSv1.2
         '''
         result = self._values.get("origin_ssl_protocols")
-        return typing.cast(typing.Optional[typing.List[_OriginSslPolicy_d65cede2]], result)
+        return typing.cast(typing.Optional[typing.List["_OriginSslPolicy_d65cede2"]], result)
 
     @builtins.property
-    def protocol_policy(self) -> typing.Optional[_OriginProtocolPolicy_967ed73c]:
+    def protocol_policy(self) -> typing.Optional["_OriginProtocolPolicy_967ed73c"]:
         '''The origin protocol policy for the CloudFront VPC origin endpoint configuration.
 
         :default: OriginProtocolPolicy.MATCH_VIEWER
         '''
         result = self._values.get("protocol_policy")
-        return typing.cast(typing.Optional[_OriginProtocolPolicy_967ed73c], result)
+        return typing.cast(typing.Optional["_OriginProtocolPolicy_967ed73c"], result)
 
     @builtins.property
     def vpc_origin_name(self) -> typing.Optional[builtins.str]:

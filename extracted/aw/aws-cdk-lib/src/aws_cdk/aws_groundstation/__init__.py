@@ -93,6 +93,7 @@ class CfnConfig(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_groundstation as groundstation
@@ -174,12 +175,12 @@ class CfnConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        config_data: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.ConfigDataProperty", typing.Dict[builtins.str, typing.Any]]],
+        config_data: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.ConfigDataProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GroundStation::Config``.
 
@@ -199,7 +200,7 @@ class CfnConfig(
 
     @jsii.member(jsii_name="arnForConfig")
     @builtins.classmethod
-    def arn_for_config(cls, resource: _IConfigRef_dc69720e) -> builtins.str:
+    def arn_for_config(cls, resource: "_IConfigRef_dc69720e") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -221,7 +222,7 @@ class CfnConfig(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -284,28 +285,28 @@ class CfnConfig(
 
     @builtins.property
     @jsii.member(jsii_name="configRef")
-    def config_ref(self) -> _ConfigReference_865aabc6:
+    def config_ref(self) -> "_ConfigReference_865aabc6":
         '''A reference to a Config resource.'''
-        return typing.cast(_ConfigReference_865aabc6, jsii.get(self, "configRef"))
+        return typing.cast("_ConfigReference_865aabc6", jsii.get(self, "configRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="configData")
     def config_data(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnConfig.ConfigDataProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConfig.ConfigDataProperty"]:
         '''Object containing the parameters of a config.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConfig.ConfigDataProperty"], jsii.get(self, "configData"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfig.ConfigDataProperty"], jsii.get(self, "configData"))
 
     @config_data.setter
     def config_data(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnConfig.ConfigDataProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnConfig.ConfigDataProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1563feeaa37deb3f7ed7d57717d9cfb0c9d0d00d4203ece4f573e5ceaf951329)
@@ -327,12 +328,12 @@ class CfnConfig(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags assigned to a resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5239786ac786ccdad1f55bd40cbcac2fd2c846b2a7de2861dbb7b912f8c930a0)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -347,7 +348,7 @@ class CfnConfig(
         def __init__(
             self,
             *,
-            spectrum_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.SpectrumConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            spectrum_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.SpectrumConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides information about how AWS Ground Station should configure an antenna for downlink during a contact.
 
@@ -388,13 +389,13 @@ class CfnConfig(
         @builtins.property
         def spectrum_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.SpectrumConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.SpectrumConfigProperty"]]:
             '''Defines the spectrum configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-antennadownlinkconfig.html#cfn-groundstation-config-antennadownlinkconfig-spectrumconfig
             '''
             result = self._values.get("spectrum_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.SpectrumConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.SpectrumConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -420,9 +421,9 @@ class CfnConfig(
         def __init__(
             self,
             *,
-            decode_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.DecodeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            demodulation_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.DemodulationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            spectrum_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.SpectrumConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            decode_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.DecodeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            demodulation_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.DemodulationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            spectrum_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.SpectrumConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides information about how AWS Ground Station should configure an antenna for downlink during a contact.
 
@@ -477,35 +478,35 @@ class CfnConfig(
         @builtins.property
         def decode_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.DecodeConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.DecodeConfigProperty"]]:
             '''Defines how the RF signal will be decoded.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-antennadownlinkdemoddecodeconfig.html#cfn-groundstation-config-antennadownlinkdemoddecodeconfig-decodeconfig
             '''
             result = self._values.get("decode_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.DecodeConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.DecodeConfigProperty"]], result)
 
         @builtins.property
         def demodulation_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.DemodulationConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.DemodulationConfigProperty"]]:
             '''Defines how the RF signal will be demodulated.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-antennadownlinkdemoddecodeconfig.html#cfn-groundstation-config-antennadownlinkdemoddecodeconfig-demodulationconfig
             '''
             result = self._values.get("demodulation_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.DemodulationConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.DemodulationConfigProperty"]], result)
 
         @builtins.property
         def spectrum_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.SpectrumConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.SpectrumConfigProperty"]]:
             '''Defines the spectrum configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-antennadownlinkdemoddecodeconfig.html#cfn-groundstation-config-antennadownlinkdemoddecodeconfig-spectrumconfig
             '''
             result = self._values.get("spectrum_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.SpectrumConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.SpectrumConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -531,9 +532,9 @@ class CfnConfig(
         def __init__(
             self,
             *,
-            spectrum_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.UplinkSpectrumConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            target_eirp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.EirpProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            transmit_disabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            spectrum_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.UplinkSpectrumConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            target_eirp: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.EirpProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            transmit_disabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Provides information about how AWS Ground Station should configure an antenna for uplink during a contact.
 
@@ -581,18 +582,18 @@ class CfnConfig(
         @builtins.property
         def spectrum_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.UplinkSpectrumConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.UplinkSpectrumConfigProperty"]]:
             '''Defines the spectrum configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-antennauplinkconfig.html#cfn-groundstation-config-antennauplinkconfig-spectrumconfig
             '''
             result = self._values.get("spectrum_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.UplinkSpectrumConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.UplinkSpectrumConfigProperty"]], result)
 
         @builtins.property
         def target_eirp(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.EirpProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.EirpProperty"]]:
             '''The equivalent isotropically radiated power (EIRP) to use for uplink transmissions.
 
             Valid values are between 20.0 to 50.0 dBW.
@@ -600,18 +601,18 @@ class CfnConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-antennauplinkconfig.html#cfn-groundstation-config-antennauplinkconfig-targeteirp
             '''
             result = self._values.get("target_eirp")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.EirpProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.EirpProperty"]], result)
 
         @builtins.property
         def transmit_disabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether or not uplink transmit is disabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-antennauplinkconfig.html#cfn-groundstation-config-antennauplinkconfig-transmitdisabled
             '''
             result = self._values.get("transmit_disabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -641,13 +642,13 @@ class CfnConfig(
         def __init__(
             self,
             *,
-            antenna_downlink_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.AntennaDownlinkConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            antenna_downlink_demod_decode_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.AntennaDownlinkDemodDecodeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            antenna_uplink_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.AntennaUplinkConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            dataflow_endpoint_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.DataflowEndpointConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_recording_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.S3RecordingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            tracking_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.TrackingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            uplink_echo_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.UplinkEchoConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            antenna_downlink_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.AntennaDownlinkConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            antenna_downlink_demod_decode_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.AntennaDownlinkDemodDecodeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            antenna_uplink_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.AntennaUplinkConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            dataflow_endpoint_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.DataflowEndpointConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_recording_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.S3RecordingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tracking_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.TrackingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            uplink_echo_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.UplinkEchoConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Config objects provide information to Ground Station about how to configure the antenna and how data flows during a contact.
 
@@ -761,7 +762,7 @@ class CfnConfig(
         @builtins.property
         def antenna_downlink_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.AntennaDownlinkConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.AntennaDownlinkConfigProperty"]]:
             '''Provides information for an antenna downlink config object.
 
             Antenna downlink config objects are used to provide parameters for downlinks where no demodulation or decoding is performed by Ground Station (RF over IP downlinks).
@@ -769,12 +770,12 @@ class CfnConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-configdata.html#cfn-groundstation-config-configdata-antennadownlinkconfig
             '''
             result = self._values.get("antenna_downlink_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.AntennaDownlinkConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.AntennaDownlinkConfigProperty"]], result)
 
         @builtins.property
         def antenna_downlink_demod_decode_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.AntennaDownlinkDemodDecodeConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.AntennaDownlinkDemodDecodeConfigProperty"]]:
             '''Provides information for a downlink demod decode config object.
 
             Downlink demod decode config objects are used to provide parameters for downlinks where the Ground Station service will demodulate and decode the downlinked data.
@@ -782,12 +783,12 @@ class CfnConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-configdata.html#cfn-groundstation-config-configdata-antennadownlinkdemoddecodeconfig
             '''
             result = self._values.get("antenna_downlink_demod_decode_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.AntennaDownlinkDemodDecodeConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.AntennaDownlinkDemodDecodeConfigProperty"]], result)
 
         @builtins.property
         def antenna_uplink_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.AntennaUplinkConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.AntennaUplinkConfigProperty"]]:
             '''Provides information for an uplink config object.
 
             Uplink config objects are used to provide parameters for uplink contacts.
@@ -795,12 +796,12 @@ class CfnConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-configdata.html#cfn-groundstation-config-configdata-antennauplinkconfig
             '''
             result = self._values.get("antenna_uplink_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.AntennaUplinkConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.AntennaUplinkConfigProperty"]], result)
 
         @builtins.property
         def dataflow_endpoint_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.DataflowEndpointConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.DataflowEndpointConfigProperty"]]:
             '''Provides information for a dataflow endpoint config object.
 
             Dataflow endpoint config objects are used to provide parameters about which IP endpoint(s) to use during a contact. Dataflow endpoints are where Ground Station sends data during a downlink contact and where Ground Station receives data to send to the satellite during an uplink contact.
@@ -808,12 +809,12 @@ class CfnConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-configdata.html#cfn-groundstation-config-configdata-dataflowendpointconfig
             '''
             result = self._values.get("dataflow_endpoint_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.DataflowEndpointConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.DataflowEndpointConfigProperty"]], result)
 
         @builtins.property
         def s3_recording_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.S3RecordingConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.S3RecordingConfigProperty"]]:
             '''Provides information for an S3 recording config object.
 
             S3 recording config objects are used to provide parameters for S3 recording during downlink contacts.
@@ -821,12 +822,12 @@ class CfnConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-configdata.html#cfn-groundstation-config-configdata-s3recordingconfig
             '''
             result = self._values.get("s3_recording_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.S3RecordingConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.S3RecordingConfigProperty"]], result)
 
         @builtins.property
         def tracking_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.TrackingConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.TrackingConfigProperty"]]:
             '''Provides information for a tracking config object.
 
             Tracking config objects are used to provide parameters about how to track the satellite through the sky during a contact.
@@ -834,12 +835,12 @@ class CfnConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-configdata.html#cfn-groundstation-config-configdata-trackingconfig
             '''
             result = self._values.get("tracking_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.TrackingConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.TrackingConfigProperty"]], result)
 
         @builtins.property
         def uplink_echo_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.UplinkEchoConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.UplinkEchoConfigProperty"]]:
             '''Provides information for an uplink echo config object.
 
             Uplink echo config objects are used to provide parameters for uplink echo during uplink contacts.
@@ -847,7 +848,7 @@ class CfnConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-configdata.html#cfn-groundstation-config-configdata-uplinkechoconfig
             '''
             result = self._values.get("uplink_echo_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.UplinkEchoConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.UplinkEchoConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1371,8 +1372,8 @@ class CfnConfig(
         def __init__(
             self,
             *,
-            bandwidth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.FrequencyBandwidthProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            center_frequency: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.FrequencyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            bandwidth: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.FrequencyBandwidthProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            center_frequency: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.FrequencyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             polarization: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Defines a spectrum.
@@ -1418,7 +1419,7 @@ class CfnConfig(
         @builtins.property
         def bandwidth(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.FrequencyBandwidthProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.FrequencyBandwidthProperty"]]:
             '''The bandwidth of the spectrum. AWS Ground Station currently has the following bandwidth limitations:.
 
             - For ``AntennaDownlinkDemodDecodeconfig`` , valid values are between 125 kHz to 650 MHz.
@@ -1428,12 +1429,12 @@ class CfnConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-spectrumconfig.html#cfn-groundstation-config-spectrumconfig-bandwidth
             '''
             result = self._values.get("bandwidth")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.FrequencyBandwidthProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.FrequencyBandwidthProperty"]], result)
 
         @builtins.property
         def center_frequency(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.FrequencyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.FrequencyProperty"]]:
             '''The center frequency of the spectrum.
 
             Valid values are between 2200 to 2300 MHz and 7750 to 8400 MHz for downlink and 2025 to 2120 MHz for uplink.
@@ -1441,7 +1442,7 @@ class CfnConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-spectrumconfig.html#cfn-groundstation-config-spectrumconfig-centerfrequency
             '''
             result = self._values.get("center_frequency")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.FrequencyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.FrequencyProperty"]], result)
 
         @builtins.property
         def polarization(self) -> typing.Optional[builtins.str]:
@@ -1531,7 +1532,7 @@ class CfnConfig(
             self,
             *,
             antenna_uplink_config_arn: typing.Optional[builtins.str] = None,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Provides information about how AWS Ground Station should echo back uplink transmissions to a dataflow endpoint.
 
@@ -1574,13 +1575,13 @@ class CfnConfig(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether or not uplink echo is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-uplinkechoconfig.html#cfn-groundstation-config-uplinkechoconfig-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1605,7 +1606,7 @@ class CfnConfig(
         def __init__(
             self,
             *,
-            center_frequency: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfig.FrequencyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            center_frequency: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.FrequencyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             polarization: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Defines a uplink spectrum.
@@ -1643,7 +1644,7 @@ class CfnConfig(
         @builtins.property
         def center_frequency(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.FrequencyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.FrequencyProperty"]]:
             '''The center frequency of the spectrum.
 
             Valid values are between 2200 to 2300 MHz and 7750 to 8400 MHz for downlink and 2025 to 2120 MHz for uplink.
@@ -1651,7 +1652,7 @@ class CfnConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-config-uplinkspectrumconfig.html#cfn-groundstation-config-uplinkspectrumconfig-centerfrequency
             '''
             result = self._values.get("center_frequency")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConfig.FrequencyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfig.FrequencyProperty"]], result)
 
         @builtins.property
         def polarization(self) -> typing.Optional[builtins.str]:
@@ -1685,9 +1686,9 @@ class CfnConfigProps:
     def __init__(
         self,
         *,
-        config_data: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfig.ConfigDataProperty, typing.Dict[builtins.str, typing.Any]]],
+        config_data: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfig.ConfigDataProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConfig``.
 
@@ -1700,6 +1701,7 @@ class CfnConfigProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_groundstation as groundstation
@@ -1793,7 +1795,7 @@ class CfnConfigProps:
     @builtins.property
     def config_data(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnConfig.ConfigDataProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnConfig.ConfigDataProperty"]:
         '''Object containing the parameters of a config.
 
         Only one subtype may be specified per config. See the subtype definitions for a description of each config subtype.
@@ -1802,7 +1804,7 @@ class CfnConfigProps:
         '''
         result = self._values.get("config_data")
         assert result is not None, "Required property 'config_data' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnConfig.ConfigDataProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfig.ConfigDataProperty"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -1815,13 +1817,13 @@ class CfnConfigProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags assigned to a resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-groundstation-config.html#cfn-groundstation-config-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1853,6 +1855,7 @@ class CfnDataflowEndpointGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_groundstation as groundstation
@@ -1908,13 +1911,13 @@ class CfnDataflowEndpointGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        endpoint_details: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataflowEndpointGroup.EndpointDetailsProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        endpoint_details: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroup.EndpointDetailsProperty", typing.Dict[builtins.str, typing.Any]]]]],
         contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
         contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GroundStation::DataflowEndpointGroup``.
 
@@ -1942,7 +1945,7 @@ class CfnDataflowEndpointGroup(
     @builtins.classmethod
     def arn_for_dataflow_endpoint_group(
         cls,
-        resource: _IDataflowEndpointGroupRef_cf3d8979,
+        resource: "_IDataflowEndpointGroupRef_cf3d8979",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1956,10 +1959,10 @@ class CfnDataflowEndpointGroup(
     @builtins.classmethod
     def from_dataflow_endpoint_group_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDataflowEndpointGroupRef_cf3d8979:
+    ) -> "_IDataflowEndpointGroupRef_cf3d8979":
         '''Creates a new IDataflowEndpointGroupRef from an ARN.
 
         :param scope: -
@@ -1971,16 +1974,16 @@ class CfnDataflowEndpointGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDataflowEndpointGroupRef_cf3d8979, jsii.sinvoke(cls, "fromDataflowEndpointGroupArn", [scope, id, arn]))
+        return typing.cast("_IDataflowEndpointGroupRef_cf3d8979", jsii.sinvoke(cls, "fromDataflowEndpointGroupArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromDataflowEndpointGroupId")
     @builtins.classmethod
     def from_dataflow_endpoint_group_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         dataflow_endpoint_group_id: builtins.str,
-    ) -> _IDataflowEndpointGroupRef_cf3d8979:
+    ) -> "_IDataflowEndpointGroupRef_cf3d8979":
         '''Creates a new IDataflowEndpointGroupRef from a dataflowEndpointGroupId.
 
         :param scope: -
@@ -1992,7 +1995,7 @@ class CfnDataflowEndpointGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument dataflow_endpoint_group_id", value=dataflow_endpoint_group_id, expected_type=type_hints["dataflow_endpoint_group_id"])
-        return typing.cast(_IDataflowEndpointGroupRef_cf3d8979, jsii.sinvoke(cls, "fromDataflowEndpointGroupId", [scope, id, dataflow_endpoint_group_id]))
+        return typing.cast("_IDataflowEndpointGroupRef_cf3d8979", jsii.sinvoke(cls, "fromDataflowEndpointGroupId", [scope, id, dataflow_endpoint_group_id]))
 
     @jsii.member(jsii_name="isCfnDataflowEndpointGroup")
     @builtins.classmethod
@@ -2007,7 +2010,7 @@ class CfnDataflowEndpointGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataflowEndpointGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2061,28 +2064,28 @@ class CfnDataflowEndpointGroup(
 
     @builtins.property
     @jsii.member(jsii_name="dataflowEndpointGroupRef")
-    def dataflow_endpoint_group_ref(self) -> _DataflowEndpointGroupReference_badac723:
+    def dataflow_endpoint_group_ref(self) -> "_DataflowEndpointGroupReference_badac723":
         '''A reference to a DataflowEndpointGroup resource.'''
-        return typing.cast(_DataflowEndpointGroupReference_badac723, jsii.get(self, "dataflowEndpointGroupRef"))
+        return typing.cast("_DataflowEndpointGroupReference_badac723", jsii.get(self, "dataflowEndpointGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="endpointDetails")
     def endpoint_details(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.EndpointDetailsProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.EndpointDetailsProperty"]]]:
         '''List of Endpoint Details, containing address and port for each endpoint.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.EndpointDetailsProperty"]]], jsii.get(self, "endpointDetails"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.EndpointDetailsProperty"]]], jsii.get(self, "endpointDetails"))
 
     @endpoint_details.setter
     def endpoint_details(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.EndpointDetailsProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.EndpointDetailsProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__605270fdb212e4afd622fd5047d2f46f173b44dc28a4370f48d78fa181366952)
@@ -2123,12 +2126,12 @@ class CfnDataflowEndpointGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags assigned to a resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d91f97011b987224f8e61448ddca1df20f67e7b2188ee8ce55208bdeb4bbc53a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2151,8 +2154,8 @@ class CfnDataflowEndpointGroup(
             *,
             agent_status: typing.Optional[builtins.str] = None,
             audit_results: typing.Optional[builtins.str] = None,
-            egress_address: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataflowEndpointGroup.ConnectionDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            ingress_address: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataflowEndpointGroup.RangedConnectionDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            egress_address: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroup.ConnectionDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ingress_address: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroup.RangedConnectionDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             name: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Information about AwsGroundStationAgentEndpoint.
@@ -2235,24 +2238,24 @@ class CfnDataflowEndpointGroup(
         @builtins.property
         def egress_address(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.ConnectionDetailsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.ConnectionDetailsProperty"]]:
             '''The egress address of AgentEndpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroup-awsgroundstationagentendpoint.html#cfn-groundstation-dataflowendpointgroup-awsgroundstationagentendpoint-egressaddress
             '''
             result = self._values.get("egress_address")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.ConnectionDetailsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.ConnectionDetailsProperty"]], result)
 
         @builtins.property
         def ingress_address(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.RangedConnectionDetailsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.RangedConnectionDetailsProperty"]]:
             '''The ingress address of AgentEndpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroup-awsgroundstationagentendpoint.html#cfn-groundstation-dataflowendpointgroup-awsgroundstationagentendpoint-ingressaddress
             '''
             result = self._values.get("ingress_address")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.RangedConnectionDetailsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.RangedConnectionDetailsProperty"]], result)
 
         @builtins.property
         def name(self) -> typing.Optional[builtins.str]:
@@ -2286,7 +2289,7 @@ class CfnDataflowEndpointGroup(
             self,
             *,
             mtu: typing.Optional[jsii.Number] = None,
-            socket_address: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataflowEndpointGroup.SocketAddressProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            socket_address: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroup.SocketAddressProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Egress address of AgentEndpoint with an optional mtu.
 
@@ -2332,13 +2335,13 @@ class CfnDataflowEndpointGroup(
         @builtins.property
         def socket_address(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.SocketAddressProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.SocketAddressProperty"]]:
             '''A socket address.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroup-connectiondetails.html#cfn-groundstation-dataflowendpointgroup-connectiondetails-socketaddress
             '''
             result = self._values.get("socket_address")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.SocketAddressProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.SocketAddressProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2360,7 +2363,7 @@ class CfnDataflowEndpointGroup(
         def __init__(
             self,
             *,
-            address: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataflowEndpointGroup.SocketAddressProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            address: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroup.SocketAddressProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             mtu: typing.Optional[jsii.Number] = None,
             name: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -2404,13 +2407,13 @@ class CfnDataflowEndpointGroup(
         @builtins.property
         def address(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.SocketAddressProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.SocketAddressProperty"]]:
             '''The address and port of an endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroup-dataflowendpoint.html#cfn-groundstation-dataflowendpointgroup-dataflowendpoint-address
             '''
             result = self._values.get("address")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.SocketAddressProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.SocketAddressProperty"]], result)
 
         @builtins.property
         def mtu(self) -> typing.Optional[jsii.Number]:
@@ -2458,9 +2461,9 @@ class CfnDataflowEndpointGroup(
         def __init__(
             self,
             *,
-            aws_ground_station_agent_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataflowEndpointGroup.AwsGroundStationAgentEndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataflowEndpointGroup.DataflowEndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            security_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataflowEndpointGroup.SecurityDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            aws_ground_station_agent_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroup.AwsGroundStationAgentEndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroup.DataflowEndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            security_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroup.SecurityDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The security details and endpoint information.
 
@@ -2531,35 +2534,35 @@ class CfnDataflowEndpointGroup(
         @builtins.property
         def aws_ground_station_agent_endpoint(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.AwsGroundStationAgentEndpointProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.AwsGroundStationAgentEndpointProperty"]]:
             '''An agent endpoint.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroup-endpointdetails.html#cfn-groundstation-dataflowendpointgroup-endpointdetails-awsgroundstationagentendpoint
             '''
             result = self._values.get("aws_ground_station_agent_endpoint")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.AwsGroundStationAgentEndpointProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.AwsGroundStationAgentEndpointProperty"]], result)
 
         @builtins.property
         def endpoint(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.DataflowEndpointProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.DataflowEndpointProperty"]]:
             '''Information about the endpoint such as name and the endpoint address.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroup-endpointdetails.html#cfn-groundstation-dataflowendpointgroup-endpointdetails-endpoint
             '''
             result = self._values.get("endpoint")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.DataflowEndpointProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.DataflowEndpointProperty"]], result)
 
         @builtins.property
         def security_details(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.SecurityDetailsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.SecurityDetailsProperty"]]:
             '''The role ARN, and IDs for security groups and subnets.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroup-endpointdetails.html#cfn-groundstation-dataflowendpointgroup-endpointdetails-securitydetails
             '''
             result = self._values.get("security_details")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.SecurityDetailsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.SecurityDetailsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2652,7 +2655,7 @@ class CfnDataflowEndpointGroup(
             self,
             *,
             mtu: typing.Optional[jsii.Number] = None,
-            socket_address: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataflowEndpointGroup.RangedSocketAddressProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            socket_address: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroup.RangedSocketAddressProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Ingress address of AgentEndpoint with a port range and an optional mtu.
 
@@ -2701,13 +2704,13 @@ class CfnDataflowEndpointGroup(
         @builtins.property
         def socket_address(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.RangedSocketAddressProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.RangedSocketAddressProperty"]]:
             '''A ranged socket address.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroup-rangedconnectiondetails.html#cfn-groundstation-dataflowendpointgroup-rangedconnectiondetails-socketaddress
             '''
             result = self._values.get("socket_address")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.RangedSocketAddressProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.RangedSocketAddressProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2730,7 +2733,7 @@ class CfnDataflowEndpointGroup(
             self,
             *,
             name: typing.Optional[builtins.str] = None,
-            port_range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataflowEndpointGroup.IntegerRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            port_range: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroup.IntegerRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A socket address with a port range.
 
@@ -2776,13 +2779,13 @@ class CfnDataflowEndpointGroup(
         @builtins.property
         def port_range(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.IntegerRangeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.IntegerRangeProperty"]]:
             '''Port range of a socket address.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroup-rangedsocketaddress.html#cfn-groundstation-dataflowendpointgroup-rangedsocketaddress-portrange
             '''
             result = self._values.get("port_range")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataflowEndpointGroup.IntegerRangeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.IntegerRangeProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2971,10 +2974,10 @@ class CfnDataflowEndpointGroupProps:
     def __init__(
         self,
         *,
-        endpoint_details: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroup.EndpointDetailsProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        endpoint_details: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroup.EndpointDetailsProperty", typing.Dict[builtins.str, typing.Any]]]]],
         contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
         contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataflowEndpointGroup``.
 
@@ -2988,6 +2991,7 @@ class CfnDataflowEndpointGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_groundstation as groundstation
@@ -3059,7 +3063,7 @@ class CfnDataflowEndpointGroupProps:
     @builtins.property
     def endpoint_details(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDataflowEndpointGroup.EndpointDetailsProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.EndpointDetailsProperty"]]]:
         '''List of Endpoint Details, containing address and port for each endpoint.
 
         All dataflow endpoints within a single dataflow endpoint group must be of the same type. You cannot mix AWS Ground Station Agent endpoints with Dataflow endpoints in the same group. If your use case requires both types of endpoints, you must create separate dataflow endpoint groups for each type.
@@ -3068,7 +3072,7 @@ class CfnDataflowEndpointGroupProps:
         '''
         result = self._values.get("endpoint_details")
         assert result is not None, "Required property 'endpoint_details' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDataflowEndpointGroup.EndpointDetailsProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroup.EndpointDetailsProperty"]]], result)
 
     @builtins.property
     def contact_post_pass_duration_seconds(self) -> typing.Optional[jsii.Number]:
@@ -3093,13 +3097,13 @@ class CfnDataflowEndpointGroupProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags assigned to a resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-groundstation-dataflowendpointgroup.html#cfn-groundstation-dataflowendpointgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3127,6 +3131,7 @@ class CfnMissionProfile(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_groundstation as groundstation
@@ -3158,18 +3163,18 @@ class CfnMissionProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        dataflow_edges: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMissionProfile.DataflowEdgeProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        dataflow_edges: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMissionProfile.DataflowEdgeProperty", typing.Dict[builtins.str, typing.Any]]]]],
         minimum_viable_contact_duration_seconds: jsii.Number,
         name: builtins.str,
-        tracking_config_arn: typing.Union[builtins.str, _IConfigRef_dc69720e],
+        tracking_config_arn: typing.Union[builtins.str, "_IConfigRef_dc69720e"],
         contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
         contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
-        streams_kms_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMissionProfile.StreamsKmsKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        streams_kms_key: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMissionProfile.StreamsKmsKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         streams_kms_role: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::GroundStation::MissionProfile``.
 
@@ -3207,7 +3212,7 @@ class CfnMissionProfile(
     @builtins.classmethod
     def arn_for_mission_profile(
         cls,
-        resource: _IMissionProfileRef_941bd296,
+        resource: "_IMissionProfileRef_941bd296",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3221,10 +3226,10 @@ class CfnMissionProfile(
     @builtins.classmethod
     def from_mission_profile_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         mission_profile_id: builtins.str,
-    ) -> _IMissionProfileRef_941bd296:
+    ) -> "_IMissionProfileRef_941bd296":
         '''Creates a new IMissionProfileRef from a missionProfileId.
 
         :param scope: -
@@ -3236,7 +3241,7 @@ class CfnMissionProfile(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument mission_profile_id", value=mission_profile_id, expected_type=type_hints["mission_profile_id"])
-        return typing.cast(_IMissionProfileRef_941bd296, jsii.sinvoke(cls, "fromMissionProfileId", [scope, id, mission_profile_id]))
+        return typing.cast("_IMissionProfileRef_941bd296", jsii.sinvoke(cls, "fromMissionProfileId", [scope, id, mission_profile_id]))
 
     @jsii.member(jsii_name="isCfnMissionProfile")
     @builtins.classmethod
@@ -3251,7 +3256,7 @@ class CfnMissionProfile(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMissionProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3314,28 +3319,28 @@ class CfnMissionProfile(
 
     @builtins.property
     @jsii.member(jsii_name="missionProfileRef")
-    def mission_profile_ref(self) -> _MissionProfileReference_ba21ddb1:
+    def mission_profile_ref(self) -> "_MissionProfileReference_ba21ddb1":
         '''A reference to a MissionProfile resource.'''
-        return typing.cast(_MissionProfileReference_ba21ddb1, jsii.get(self, "missionProfileRef"))
+        return typing.cast("_MissionProfileReference_ba21ddb1", jsii.get(self, "missionProfileRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="dataflowEdges")
     def dataflow_edges(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMissionProfile.DataflowEdgeProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMissionProfile.DataflowEdgeProperty"]]]:
         '''A list containing lists of config ARNs.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMissionProfile.DataflowEdgeProperty"]]], jsii.get(self, "dataflowEdges"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMissionProfile.DataflowEdgeProperty"]]], jsii.get(self, "dataflowEdges"))
 
     @dataflow_edges.setter
     def dataflow_edges(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMissionProfile.DataflowEdgeProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMissionProfile.DataflowEdgeProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f43bc20ed2a3d495db8c8b44a4e70f977393b7a6c9733040eeb7509592d7adda)
@@ -3417,14 +3422,14 @@ class CfnMissionProfile(
     @jsii.member(jsii_name="streamsKmsKey")
     def streams_kms_key(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMissionProfile.StreamsKmsKeyProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMissionProfile.StreamsKmsKeyProperty"]]:
         '''KMS key to use for encrypting streams.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMissionProfile.StreamsKmsKeyProperty"]], jsii.get(self, "streamsKmsKey"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMissionProfile.StreamsKmsKeyProperty"]], jsii.get(self, "streamsKmsKey"))
 
     @streams_kms_key.setter
     def streams_kms_key(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMissionProfile.StreamsKmsKeyProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMissionProfile.StreamsKmsKeyProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__207e70bf5d230a887fe9bbaff20bf2acd3b70bbddcaee80fc84f715f95423e2f)
@@ -3446,12 +3451,12 @@ class CfnMissionProfile(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags assigned to the mission profile.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1b63fbf7e02cfd3cabb495b47d8b525e2d0166b8195e578f79a444bec82c3b76)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3640,15 +3645,15 @@ class CfnMissionProfileProps:
     def __init__(
         self,
         *,
-        dataflow_edges: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMissionProfile.DataflowEdgeProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        dataflow_edges: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMissionProfile.DataflowEdgeProperty", typing.Dict[builtins.str, typing.Any]]]]],
         minimum_viable_contact_duration_seconds: jsii.Number,
         name: builtins.str,
-        tracking_config_arn: typing.Union[builtins.str, _IConfigRef_dc69720e],
+        tracking_config_arn: typing.Union[builtins.str, "_IConfigRef_dc69720e"],
         contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
         contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
-        streams_kms_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMissionProfile.StreamsKmsKeyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        streams_kms_key: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMissionProfile.StreamsKmsKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         streams_kms_role: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMissionProfile``.
 
@@ -3667,6 +3672,7 @@ class CfnMissionProfileProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_groundstation as groundstation
@@ -3726,7 +3732,7 @@ class CfnMissionProfileProps:
     @builtins.property
     def dataflow_edges(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMissionProfile.DataflowEdgeProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMissionProfile.DataflowEdgeProperty"]]]:
         '''A list containing lists of config ARNs.
 
         Each list of config ARNs is an edge, with a "from" config and a "to" config.
@@ -3735,7 +3741,7 @@ class CfnMissionProfileProps:
         '''
         result = self._values.get("dataflow_edges")
         assert result is not None, "Required property 'dataflow_edges' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMissionProfile.DataflowEdgeProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMissionProfile.DataflowEdgeProperty"]]], result)
 
     @builtins.property
     def minimum_viable_contact_duration_seconds(self) -> jsii.Number:
@@ -3760,14 +3766,14 @@ class CfnMissionProfileProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tracking_config_arn(self) -> typing.Union[builtins.str, _IConfigRef_dc69720e]:
+    def tracking_config_arn(self) -> typing.Union[builtins.str, "_IConfigRef_dc69720e"]:
         '''The ARN of a tracking config objects that defines how to track the satellite through the sky during a contact.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-groundstation-missionprofile.html#cfn-groundstation-missionprofile-trackingconfigarn
         '''
         result = self._values.get("tracking_config_arn")
         assert result is not None, "Required property 'tracking_config_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IConfigRef_dc69720e], result)
+        return typing.cast(typing.Union[builtins.str, "_IConfigRef_dc69720e"], result)
 
     @builtins.property
     def contact_post_pass_duration_seconds(self) -> typing.Optional[jsii.Number]:
@@ -3790,13 +3796,13 @@ class CfnMissionProfileProps:
     @builtins.property
     def streams_kms_key(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMissionProfile.StreamsKmsKeyProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMissionProfile.StreamsKmsKeyProperty"]]:
         '''KMS key to use for encrypting streams.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-groundstation-missionprofile.html#cfn-groundstation-missionprofile-streamskmskey
         '''
         result = self._values.get("streams_kms_key")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMissionProfile.StreamsKmsKeyProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMissionProfile.StreamsKmsKeyProperty"]], result)
 
     @builtins.property
     def streams_kms_role(self) -> typing.Optional[builtins.str]:
@@ -3808,13 +3814,13 @@ class CfnMissionProfileProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Tags assigned to the mission profile.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-groundstation-missionprofile.html#cfn-groundstation-missionprofile-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

@@ -43,7 +43,7 @@ class AlertReference:
     def __init__(self, *, alert_arn: builtins.str) -> None:
         '''A reference to a Alert resource.
 
-        :param alert_arn: The Arn of the Alert resource.
+        :param alert_arn: The ARN of the Alert resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -66,7 +66,7 @@ class AlertReference:
 
     @builtins.property
     def alert_arn(self) -> builtins.str:
-        '''The Arn of the Alert resource.'''
+        '''The ARN of the Alert resource.'''
         result = self._values.get("alert_arn")
         assert result is not None, "Required property 'alert_arn' is missing"
         return typing.cast(builtins.str, result)
@@ -92,7 +92,7 @@ class AnomalyDetectorReference:
     def __init__(self, *, anomaly_detector_arn: builtins.str) -> None:
         '''A reference to a AnomalyDetector resource.
 
-        :param anomaly_detector_arn: The Arn of the AnomalyDetector resource.
+        :param anomaly_detector_arn: The ARN of the AnomalyDetector resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -115,7 +115,7 @@ class AnomalyDetectorReference:
 
     @builtins.property
     def anomaly_detector_arn(self) -> builtins.str:
-        '''The Arn of the AnomalyDetector resource.'''
+        '''The ARN of the AnomalyDetector resource.'''
         result = self._values.get("anomaly_detector_arn")
         assert result is not None, "Required property 'anomaly_detector_arn' is missing"
         return typing.cast(builtins.str, result)
@@ -145,7 +145,7 @@ class IAlertRef(
 
     @builtins.property
     @jsii.member(jsii_name="alertRef")
-    def alert_ref(self) -> AlertReference:
+    def alert_ref(self) -> "AlertReference":
         '''(experimental) A reference to a Alert resource.
 
         :stability: experimental
@@ -166,12 +166,12 @@ class _IAlertRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="alertRef")
-    def alert_ref(self) -> AlertReference:
+    def alert_ref(self) -> "AlertReference":
         '''(experimental) A reference to a Alert resource.
 
         :stability: experimental
         '''
-        return typing.cast(AlertReference, jsii.get(self, "alertRef"))
+        return typing.cast("AlertReference", jsii.get(self, "alertRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAlertRef).__jsii_proxy_class__ = lambda : _IAlertRefProxy
@@ -192,7 +192,7 @@ class IAnomalyDetectorRef(
 
     @builtins.property
     @jsii.member(jsii_name="anomalyDetectorRef")
-    def anomaly_detector_ref(self) -> AnomalyDetectorReference:
+    def anomaly_detector_ref(self) -> "AnomalyDetectorReference":
         '''(experimental) A reference to a AnomalyDetector resource.
 
         :stability: experimental
@@ -213,12 +213,12 @@ class _IAnomalyDetectorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="anomalyDetectorRef")
-    def anomaly_detector_ref(self) -> AnomalyDetectorReference:
+    def anomaly_detector_ref(self) -> "AnomalyDetectorReference":
         '''(experimental) A reference to a AnomalyDetector resource.
 
         :stability: experimental
         '''
-        return typing.cast(AnomalyDetectorReference, jsii.get(self, "anomalyDetectorRef"))
+        return typing.cast("AnomalyDetectorReference", jsii.get(self, "anomalyDetectorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAnomalyDetectorRef).__jsii_proxy_class__ = lambda : _IAnomalyDetectorRefProxy

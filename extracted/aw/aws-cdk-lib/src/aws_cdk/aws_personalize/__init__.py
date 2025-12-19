@@ -140,14 +140,14 @@ class CfnDataset(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         dataset_group_arn: builtins.str,
         dataset_type: builtins.str,
         name: builtins.str,
         schema_arn: builtins.str,
-        dataset_import_job: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataset.DatasetImportJobProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dataset_import_job: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.DatasetImportJobProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Personalize::Dataset``.
 
@@ -175,7 +175,7 @@ class CfnDataset(
 
     @jsii.member(jsii_name="arnForDataset")
     @builtins.classmethod
-    def arn_for_dataset(cls, resource: _IDatasetRef_db535d84) -> builtins.str:
+    def arn_for_dataset(cls, resource: "_IDatasetRef_db535d84") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -197,7 +197,7 @@ class CfnDataset(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataset", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -242,9 +242,9 @@ class CfnDataset(
 
     @builtins.property
     @jsii.member(jsii_name="datasetRef")
-    def dataset_ref(self) -> _DatasetReference_8d005425:
+    def dataset_ref(self) -> "_DatasetReference_8d005425":
         '''A reference to a Dataset resource.'''
-        return typing.cast(_DatasetReference_8d005425, jsii.get(self, "datasetRef"))
+        return typing.cast("_DatasetReference_8d005425", jsii.get(self, "datasetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="datasetGroupArn")
@@ -302,14 +302,14 @@ class CfnDataset(
     @jsii.member(jsii_name="datasetImportJob")
     def dataset_import_job(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.DatasetImportJobProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.DatasetImportJobProperty"]]:
         '''Describes a job that imports training data from a data source (Amazon S3 bucket) to an Amazon Personalize dataset.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.DatasetImportJobProperty"]], jsii.get(self, "datasetImportJob"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.DatasetImportJobProperty"]], jsii.get(self, "datasetImportJob"))
 
     @dataset_import_job.setter
     def dataset_import_job(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataset.DatasetImportJobProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.DatasetImportJobProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__afd06f21a72ea38837a666025b223a4003de38fe4bd9ff9796a64ce7a35f855d)
@@ -545,7 +545,7 @@ class CfnDatasetGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -576,7 +576,7 @@ class CfnDatasetGroup(
     @builtins.classmethod
     def arn_for_dataset_group(
         cls,
-        resource: _IDatasetGroupRef_6f468c87,
+        resource: "_IDatasetGroupRef_6f468c87",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -599,7 +599,7 @@ class CfnDatasetGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDatasetGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -644,9 +644,9 @@ class CfnDatasetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="datasetGroupRef")
-    def dataset_group_ref(self) -> _DatasetGroupReference_a34e1e39:
+    def dataset_group_ref(self) -> "_DatasetGroupReference_a34e1e39":
         '''A reference to a DatasetGroup resource.'''
-        return typing.cast(_DatasetGroupReference_a34e1e39, jsii.get(self, "datasetGroupRef"))
+        return typing.cast("_DatasetGroupReference_a34e1e39", jsii.get(self, "datasetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -831,7 +831,7 @@ class CfnDatasetProps:
         dataset_type: builtins.str,
         name: builtins.str,
         schema_arn: builtins.str,
-        dataset_import_job: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataset.DatasetImportJobProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        dataset_import_job: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataset.DatasetImportJobProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataset``.
 
@@ -935,7 +935,7 @@ class CfnDatasetProps:
     @builtins.property
     def dataset_import_job(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataset.DatasetImportJobProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.DatasetImportJobProperty"]]:
         '''Describes a job that imports training data from a data source (Amazon S3 bucket) to an Amazon Personalize dataset.
 
         If you specify a dataset import job as part of a dataset, all dataset import job fields are required.
@@ -943,7 +943,7 @@ class CfnDatasetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-dataset.html#cfn-personalize-dataset-datasetimportjob
         '''
         result = self._values.get("dataset_import_job")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataset.DatasetImportJobProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.DatasetImportJobProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -997,7 +997,7 @@ class CfnSchema(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -1022,7 +1022,7 @@ class CfnSchema(
 
     @jsii.member(jsii_name="arnForSchema")
     @builtins.classmethod
-    def arn_for_schema(cls, resource: _ISchemaRef_5dff9e57) -> builtins.str:
+    def arn_for_schema(cls, resource: "_ISchemaRef_5dff9e57") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1044,7 +1044,7 @@ class CfnSchema(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSchema", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1089,9 +1089,9 @@ class CfnSchema(
 
     @builtins.property
     @jsii.member(jsii_name="schemaRef")
-    def schema_ref(self) -> _SchemaReference_9d80c9d2:
+    def schema_ref(self) -> "_SchemaReference_9d80c9d2":
         '''A reference to a Schema resource.'''
-        return typing.cast(_SchemaReference_9d80c9d2, jsii.get(self, "schemaRef"))
+        return typing.cast("_SchemaReference_9d80c9d2", jsii.get(self, "schemaRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1276,16 +1276,16 @@ class CfnSolution(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         dataset_group_arn: builtins.str,
         name: builtins.str,
         event_type: typing.Optional[builtins.str] = None,
-        perform_auto_ml: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        perform_hpo: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        perform_auto_ml: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        perform_hpo: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         recipe_arn: typing.Optional[builtins.str] = None,
-        solution_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSolution.SolutionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        solution_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSolution.SolutionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Personalize::Solution``.
 
@@ -1317,7 +1317,7 @@ class CfnSolution(
 
     @jsii.member(jsii_name="arnForSolution")
     @builtins.classmethod
-    def arn_for_solution(cls, resource: _ISolutionRef_a5db870c) -> builtins.str:
+    def arn_for_solution(cls, resource: "_ISolutionRef_a5db870c") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1339,7 +1339,7 @@ class CfnSolution(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSolution", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1384,9 +1384,9 @@ class CfnSolution(
 
     @builtins.property
     @jsii.member(jsii_name="solutionRef")
-    def solution_ref(self) -> _SolutionReference_411795ba:
+    def solution_ref(self) -> "_SolutionReference_411795ba":
         '''A reference to a Solution resource.'''
-        return typing.cast(_SolutionReference_411795ba, jsii.get(self, "solutionRef"))
+        return typing.cast("_SolutionReference_411795ba", jsii.get(self, "solutionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="datasetGroupArn")
@@ -1431,16 +1431,16 @@ class CfnSolution(
     @jsii.member(jsii_name="performAutoMl")
     def perform_auto_ml(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''.. epigraph::
 
    We don't recommend enabling automated machine learning.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "performAutoMl"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "performAutoMl"))
 
     @perform_auto_ml.setter
     def perform_auto_ml(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7718a36d374a6f4c0570601284b1537a39320cca5ec21282175c284739ff0baa)
@@ -1451,14 +1451,14 @@ class CfnSolution(
     @jsii.member(jsii_name="performHpo")
     def perform_hpo(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to perform hyperparameter optimization (HPO) on the chosen recipe.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "performHpo"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "performHpo"))
 
     @perform_hpo.setter
     def perform_hpo(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a842fa66bea7e72d79a5717b13f90eded16557305c4bfd04d9cb6dbbcbaaf256)
@@ -1482,14 +1482,14 @@ class CfnSolution(
     @jsii.member(jsii_name="solutionConfig")
     def solution_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSolution.SolutionConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSolution.SolutionConfigProperty"]]:
         '''Describes the configuration properties for the solution.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSolution.SolutionConfigProperty"]], jsii.get(self, "solutionConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSolution.SolutionConfigProperty"]], jsii.get(self, "solutionConfig"))
 
     @solution_config.setter
     def solution_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSolution.SolutionConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSolution.SolutionConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7e94786b77ef81c42aefe1283c359b1bdf642a0315a4f2aac948ab2421fb6de5)
@@ -1509,9 +1509,9 @@ class CfnSolution(
         def __init__(
             self,
             *,
-            categorical_hyper_parameter_ranges: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSolution.CategoricalHyperParameterRangeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            continuous_hyper_parameter_ranges: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSolution.ContinuousHyperParameterRangeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            integer_hyper_parameter_ranges: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSolution.IntegerHyperParameterRangeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            categorical_hyper_parameter_ranges: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSolution.CategoricalHyperParameterRangeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            continuous_hyper_parameter_ranges: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSolution.ContinuousHyperParameterRangeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            integer_hyper_parameter_ranges: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSolution.IntegerHyperParameterRangeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Specifies the hyperparameters and their ranges.
 
@@ -1563,35 +1563,35 @@ class CfnSolution(
         @builtins.property
         def categorical_hyper_parameter_ranges(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSolution.CategoricalHyperParameterRangeProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSolution.CategoricalHyperParameterRangeProperty"]]]]:
             '''Provides the name and range of a categorical hyperparameter.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-personalize-solution-algorithmhyperparameterranges.html#cfn-personalize-solution-algorithmhyperparameterranges-categoricalhyperparameterranges
             '''
             result = self._values.get("categorical_hyper_parameter_ranges")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSolution.CategoricalHyperParameterRangeProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSolution.CategoricalHyperParameterRangeProperty"]]]], result)
 
         @builtins.property
         def continuous_hyper_parameter_ranges(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSolution.ContinuousHyperParameterRangeProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSolution.ContinuousHyperParameterRangeProperty"]]]]:
             '''Provides the name and range of a continuous hyperparameter.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-personalize-solution-algorithmhyperparameterranges.html#cfn-personalize-solution-algorithmhyperparameterranges-continuoushyperparameterranges
             '''
             result = self._values.get("continuous_hyper_parameter_ranges")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSolution.ContinuousHyperParameterRangeProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSolution.ContinuousHyperParameterRangeProperty"]]]], result)
 
         @builtins.property
         def integer_hyper_parameter_ranges(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSolution.IntegerHyperParameterRangeProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSolution.IntegerHyperParameterRangeProperty"]]]]:
             '''Provides the name and range of an integer-valued hyperparameter.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-personalize-solution-algorithmhyperparameterranges.html#cfn-personalize-solution-algorithmhyperparameterranges-integerhyperparameterranges
             '''
             result = self._values.get("integer_hyper_parameter_ranges")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSolution.IntegerHyperParameterRangeProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSolution.IntegerHyperParameterRangeProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1846,9 +1846,9 @@ class CfnSolution(
         def __init__(
             self,
             *,
-            algorithm_hyper_parameter_ranges: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSolution.AlgorithmHyperParameterRangesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            hpo_objective: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSolution.HpoObjectiveProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            hpo_resource_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSolution.HpoResourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            algorithm_hyper_parameter_ranges: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSolution.AlgorithmHyperParameterRangesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            hpo_objective: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSolution.HpoObjectiveProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            hpo_resource_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSolution.HpoResourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the properties for hyperparameter optimization (HPO).
 
@@ -1909,18 +1909,18 @@ class CfnSolution(
         @builtins.property
         def algorithm_hyper_parameter_ranges(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSolution.AlgorithmHyperParameterRangesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSolution.AlgorithmHyperParameterRangesProperty"]]:
             '''The hyperparameters and their allowable ranges.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-personalize-solution-hpoconfig.html#cfn-personalize-solution-hpoconfig-algorithmhyperparameterranges
             '''
             result = self._values.get("algorithm_hyper_parameter_ranges")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSolution.AlgorithmHyperParameterRangesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSolution.AlgorithmHyperParameterRangesProperty"]], result)
 
         @builtins.property
         def hpo_objective(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSolution.HpoObjectiveProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSolution.HpoObjectiveProperty"]]:
             '''The metric to optimize during HPO.
 
             .. epigraph::
@@ -1930,18 +1930,18 @@ class CfnSolution(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-personalize-solution-hpoconfig.html#cfn-personalize-solution-hpoconfig-hpoobjective
             '''
             result = self._values.get("hpo_objective")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSolution.HpoObjectiveProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSolution.HpoObjectiveProperty"]], result)
 
         @builtins.property
         def hpo_resource_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSolution.HpoResourceConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSolution.HpoResourceConfigProperty"]]:
             '''Describes the resource configuration for HPO.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-personalize-solution-hpoconfig.html#cfn-personalize-solution-hpoconfig-hporesourceconfig
             '''
             result = self._values.get("hpo_resource_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSolution.HpoResourceConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSolution.HpoResourceConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2230,10 +2230,10 @@ class CfnSolution(
         def __init__(
             self,
             *,
-            algorithm_hyper_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            algorithm_hyper_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             auto_ml_config: typing.Any = None,
             event_value_threshold: typing.Optional[builtins.str] = None,
-            feature_transformation_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            feature_transformation_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             hpo_config: typing.Any = None,
         ) -> None:
             '''Describes the configuration properties for the solution.
@@ -2290,13 +2290,13 @@ class CfnSolution(
         @builtins.property
         def algorithm_hyper_parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Lists the algorithm hyperparameters and their values.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-personalize-solution-solutionconfig.html#cfn-personalize-solution-solutionconfig-algorithmhyperparameters
             '''
             result = self._values.get("algorithm_hyper_parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def auto_ml_config(self) -> typing.Any:
@@ -2319,13 +2319,13 @@ class CfnSolution(
         @builtins.property
         def feature_transformation_parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Lists the feature transformation parameters.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-personalize-solution-solutionconfig.html#cfn-personalize-solution-solutionconfig-featuretransformationparameters
             '''
             result = self._values.get("feature_transformation_parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def hpo_config(self) -> typing.Any:
@@ -2368,10 +2368,10 @@ class CfnSolutionProps:
         dataset_group_arn: builtins.str,
         name: builtins.str,
         event_type: typing.Optional[builtins.str] = None,
-        perform_auto_ml: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        perform_hpo: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        perform_auto_ml: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        perform_hpo: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         recipe_arn: typing.Optional[builtins.str] = None,
-        solution_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSolution.SolutionConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        solution_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSolution.SolutionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSolution``.
 
@@ -2475,7 +2475,7 @@ class CfnSolutionProps:
     @builtins.property
     def perform_auto_ml(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''.. epigraph::
 
    We don't recommend enabling automated machine learning.
@@ -2487,12 +2487,12 @@ class CfnSolutionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-solution.html#cfn-personalize-solution-performautoml
         '''
         result = self._values.get("perform_auto_ml")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def perform_hpo(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to perform hyperparameter optimization (HPO) on the chosen recipe.
 
         The default is ``false`` .
@@ -2500,7 +2500,7 @@ class CfnSolutionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-solution.html#cfn-personalize-solution-performhpo
         '''
         result = self._values.get("perform_hpo")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def recipe_arn(self) -> typing.Optional[builtins.str]:
@@ -2516,13 +2516,13 @@ class CfnSolutionProps:
     @builtins.property
     def solution_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSolution.SolutionConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSolution.SolutionConfigProperty"]]:
         '''Describes the configuration properties for the solution.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-solution.html#cfn-personalize-solution-solutionconfig
         '''
         result = self._values.get("solution_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSolution.SolutionConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnSolution.SolutionConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

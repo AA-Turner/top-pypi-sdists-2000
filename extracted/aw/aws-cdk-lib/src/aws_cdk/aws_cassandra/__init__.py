@@ -93,6 +93,7 @@ class CfnKeyspace(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cassandra as cassandra
@@ -113,13 +114,13 @@ class CfnKeyspace(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        client_side_timestamps_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        client_side_timestamps_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         keyspace_name: typing.Optional[builtins.str] = None,
-        replication_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKeyspace.ReplicationSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        replication_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKeyspace.ReplicationSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Cassandra::Keyspace``.
 
@@ -145,7 +146,7 @@ class CfnKeyspace(
 
     @jsii.member(jsii_name="arnForKeyspace")
     @builtins.classmethod
-    def arn_for_keyspace(cls, resource: _IKeyspaceRef_f37c6d41) -> builtins.str:
+    def arn_for_keyspace(cls, resource: "_IKeyspaceRef_f37c6d41") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -158,10 +159,10 @@ class CfnKeyspace(
     @builtins.classmethod
     def from_keyspace_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         keyspace_name: builtins.str,
-    ) -> _IKeyspaceRef_f37c6d41:
+    ) -> "_IKeyspaceRef_f37c6d41":
         '''Creates a new IKeyspaceRef from a keyspaceName.
 
         :param scope: -
@@ -173,7 +174,7 @@ class CfnKeyspace(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument keyspace_name", value=keyspace_name, expected_type=type_hints["keyspace_name"])
-        return typing.cast(_IKeyspaceRef_f37c6d41, jsii.sinvoke(cls, "fromKeyspaceName", [scope, id, keyspace_name]))
+        return typing.cast("_IKeyspaceRef_f37c6d41", jsii.sinvoke(cls, "fromKeyspaceName", [scope, id, keyspace_name]))
 
     @jsii.member(jsii_name="isCfnKeyspace")
     @builtins.classmethod
@@ -188,7 +189,7 @@ class CfnKeyspace(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnKeyspace", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -224,28 +225,28 @@ class CfnKeyspace(
 
     @builtins.property
     @jsii.member(jsii_name="keyspaceRef")
-    def keyspace_ref(self) -> _KeyspaceReference_04b3c97a:
+    def keyspace_ref(self) -> "_KeyspaceReference_04b3c97a":
         '''A reference to a Keyspace resource.'''
-        return typing.cast(_KeyspaceReference_04b3c97a, jsii.get(self, "keyspaceRef"))
+        return typing.cast("_KeyspaceReference_04b3c97a", jsii.get(self, "keyspaceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="clientSideTimestampsEnabled")
     def client_side_timestamps_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether client-side timestamps are enabled (true) or disabled (false) for all tables in the keyspace.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "clientSideTimestampsEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "clientSideTimestampsEnabled"))
 
     @client_side_timestamps_enabled.setter
     def client_side_timestamps_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fd8481bc3a8aed79ca56b1da03537eb72d1f39b5048347b1f8ac5f28b494a9e8)
@@ -269,17 +270,17 @@ class CfnKeyspace(
     @jsii.member(jsii_name="replicationSpecification")
     def replication_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKeyspace.ReplicationSpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKeyspace.ReplicationSpecificationProperty"]]:
         '''Specifies the ``ReplicationStrategy`` of a keyspace.
 
         The options are:.
         '''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKeyspace.ReplicationSpecificationProperty"]], jsii.get(self, "replicationSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKeyspace.ReplicationSpecificationProperty"]], jsii.get(self, "replicationSpecification"))
 
     @replication_specification.setter
     def replication_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKeyspace.ReplicationSpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKeyspace.ReplicationSpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bb87739fda4abfb9cec927655958eeed2ab44c06374fbd6f52c9ff6c3303247e)
@@ -288,12 +289,12 @@ class CfnKeyspace(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6bbd84051da75f3e01d5eeefad9f72e1f8f65ba4f3cf7969332aab7dc8d01a19)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -402,10 +403,10 @@ class CfnKeyspaceProps:
     def __init__(
         self,
         *,
-        client_side_timestamps_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        client_side_timestamps_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         keyspace_name: typing.Optional[builtins.str] = None,
-        replication_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKeyspace.ReplicationSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        replication_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKeyspace.ReplicationSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnKeyspace``.
 
@@ -419,6 +420,7 @@ class CfnKeyspaceProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cassandra as cassandra
@@ -455,7 +457,7 @@ class CfnKeyspaceProps:
     @builtins.property
     def client_side_timestamps_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether client-side timestamps are enabled (true) or disabled (false) for all tables in the keyspace.
 
         To add a Region to a single-Region keyspace with at least one table, the value must be set to true. After you've enabled client-side timestamps for a table, you can’t disable it again.
@@ -463,7 +465,7 @@ class CfnKeyspaceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-keyspace.html#cfn-cassandra-keyspace-clientsidetimestampsenabled
         '''
         result = self._values.get("client_side_timestamps_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def keyspace_name(self) -> typing.Optional[builtins.str]:
@@ -481,7 +483,7 @@ class CfnKeyspaceProps:
     @builtins.property
     def replication_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnKeyspace.ReplicationSpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKeyspace.ReplicationSpecificationProperty"]]:
         '''Specifies the ``ReplicationStrategy`` of a keyspace. The options are:.
 
         - ``SINGLE_REGION`` for a single Region keyspace (optional) or
@@ -492,10 +494,10 @@ class CfnKeyspaceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-keyspace.html#cfn-cassandra-keyspace-replicationspecification
         '''
         result = self._values.get("replication_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnKeyspace.ReplicationSpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKeyspace.ReplicationSpecificationProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -503,7 +505,7 @@ class CfnKeyspaceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-keyspace.html#cfn-cassandra-keyspace-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -533,6 +535,7 @@ class CfnTable(
 
     Example::
 
+        from aws_cdk import CfnTag, CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cassandra as cassandra
@@ -653,24 +656,24 @@ class CfnTable(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         keyspace_name: builtins.str,
-        partition_key_columns: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ColumnProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        auto_scaling_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.AutoScalingSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        billing_mode: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.BillingModeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        cdc_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.CdcSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        client_side_timestamps_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        clustering_key_columns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ClusteringKeyColumnProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        partition_key_columns: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ColumnProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        auto_scaling_specifications: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.AutoScalingSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        billing_mode: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.BillingModeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cdc_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.CdcSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        client_side_timestamps_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        clustering_key_columns: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ClusteringKeyColumnProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         default_time_to_live: typing.Optional[jsii.Number] = None,
-        encryption_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.EncryptionSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        point_in_time_recovery_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        regular_columns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ColumnProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        replica_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ReplicaSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        encryption_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.EncryptionSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        point_in_time_recovery_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        regular_columns: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ColumnProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        replica_specifications: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ReplicaSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         table_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Cassandra::Table``.
 
@@ -729,7 +732,7 @@ class CfnTable(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTable", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -765,15 +768,15 @@ class CfnTable(
 
     @builtins.property
     @jsii.member(jsii_name="tableRef")
-    def table_ref(self) -> _TableReference_025e15ef:
+    def table_ref(self) -> "_TableReference_025e15ef":
         '''A reference to a Table resource.'''
-        return typing.cast(_TableReference_025e15ef, jsii.get(self, "tableRef"))
+        return typing.cast("_TableReference_025e15ef", jsii.get(self, "tableRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="keyspaceName")
@@ -792,14 +795,14 @@ class CfnTable(
     @jsii.member(jsii_name="partitionKeyColumns")
     def partition_key_columns(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.ColumnProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ColumnProperty"]]]:
         '''One or more columns that uniquely identify every row in the table.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.ColumnProperty"]]], jsii.get(self, "partitionKeyColumns"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ColumnProperty"]]], jsii.get(self, "partitionKeyColumns"))
 
     @partition_key_columns.setter
     def partition_key_columns(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.ColumnProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ColumnProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e1db183d8a51a33cc93b8d90f2611025ff7f3e6539e707de86fd9a5073f0a785)
@@ -810,14 +813,14 @@ class CfnTable(
     @jsii.member(jsii_name="autoScalingSpecifications")
     def auto_scaling_specifications(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.AutoScalingSpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.AutoScalingSpecificationProperty"]]:
         '''The optional auto scaling capacity settings for a table in provisioned capacity mode.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.AutoScalingSpecificationProperty"]], jsii.get(self, "autoScalingSpecifications"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.AutoScalingSpecificationProperty"]], jsii.get(self, "autoScalingSpecifications"))
 
     @auto_scaling_specifications.setter
     def auto_scaling_specifications(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.AutoScalingSpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.AutoScalingSpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3195a4a3cd982603dec093989818a9b10de0aea3609d08a8cb43f320ba2a2228)
@@ -828,14 +831,14 @@ class CfnTable(
     @jsii.member(jsii_name="billingMode")
     def billing_mode(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.BillingModeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.BillingModeProperty"]]:
         '''The billing mode for the table, which determines how you'll be charged for reads and writes:.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.BillingModeProperty"]], jsii.get(self, "billingMode"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.BillingModeProperty"]], jsii.get(self, "billingMode"))
 
     @billing_mode.setter
     def billing_mode(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.BillingModeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.BillingModeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b2219a43361bf3ff1d1bf29e1b2907d75a53df3b7016d534579938eea5d4e91d)
@@ -846,14 +849,14 @@ class CfnTable(
     @jsii.member(jsii_name="cdcSpecification")
     def cdc_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.CdcSpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.CdcSpecificationProperty"]]:
         '''The settings for the CDC stream of a table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.CdcSpecificationProperty"]], jsii.get(self, "cdcSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.CdcSpecificationProperty"]], jsii.get(self, "cdcSpecification"))
 
     @cdc_specification.setter
     def cdc_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.CdcSpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.CdcSpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6d6f243fb6b53b3d40f8fc1ed0b3c81e11937e534f5c4e508a4afcf41e5bb3b5)
@@ -864,14 +867,14 @@ class CfnTable(
     @jsii.member(jsii_name="clientSideTimestampsEnabled")
     def client_side_timestamps_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables client-side timestamps for the table.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "clientSideTimestampsEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "clientSideTimestampsEnabled"))
 
     @client_side_timestamps_enabled.setter
     def client_side_timestamps_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fd9370f4f1ef0d5c1349ef8d576cad345ff735c9ca5c01758d25b48bfb48e5bb)
@@ -882,14 +885,14 @@ class CfnTable(
     @jsii.member(jsii_name="clusteringKeyColumns")
     def clustering_key_columns(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.ClusteringKeyColumnProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ClusteringKeyColumnProperty"]]]]:
         '''One or more columns that determine how the table data is sorted.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.ClusteringKeyColumnProperty"]]]], jsii.get(self, "clusteringKeyColumns"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ClusteringKeyColumnProperty"]]]], jsii.get(self, "clusteringKeyColumns"))
 
     @clustering_key_columns.setter
     def clustering_key_columns(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.ClusteringKeyColumnProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ClusteringKeyColumnProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__629a90c3101172766e4de27d7d3ce237b18da87338a09c0e62d788bfeb846292)
@@ -913,14 +916,14 @@ class CfnTable(
     @jsii.member(jsii_name="encryptionSpecification")
     def encryption_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.EncryptionSpecificationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.EncryptionSpecificationProperty"]]:
         '''The encryption at rest options for the table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.EncryptionSpecificationProperty"]], jsii.get(self, "encryptionSpecification"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.EncryptionSpecificationProperty"]], jsii.get(self, "encryptionSpecification"))
 
     @encryption_specification.setter
     def encryption_specification(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.EncryptionSpecificationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.EncryptionSpecificationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__105d2928be0de10d33f2dd6f9726d0b2413424d98fe5d151ccbce2002420a1f2)
@@ -931,14 +934,14 @@ class CfnTable(
     @jsii.member(jsii_name="pointInTimeRecoveryEnabled")
     def point_in_time_recovery_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies if point-in-time recovery is enabled or disabled for the table.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "pointInTimeRecoveryEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "pointInTimeRecoveryEnabled"))
 
     @point_in_time_recovery_enabled.setter
     def point_in_time_recovery_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__367fd6c13ef0060b69d310dfec8e4128d6d23ab9f7c5c2c6f4fde1840336b733)
@@ -949,14 +952,14 @@ class CfnTable(
     @jsii.member(jsii_name="regularColumns")
     def regular_columns(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.ColumnProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ColumnProperty"]]]]:
         '''One or more columns that are not part of the primary key - that is, columns that are *not* defined as partition key columns or clustering key columns.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.ColumnProperty"]]]], jsii.get(self, "regularColumns"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ColumnProperty"]]]], jsii.get(self, "regularColumns"))
 
     @regular_columns.setter
     def regular_columns(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.ColumnProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ColumnProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c15490d5659aeda79f13514b12c87f518d6de130270ffd24df4af663b6785f59)
@@ -967,14 +970,14 @@ class CfnTable(
     @jsii.member(jsii_name="replicaSpecifications")
     def replica_specifications(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.ReplicaSpecificationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ReplicaSpecificationProperty"]]]]:
         '''The AWS Region specific settings of a multi-Region table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.ReplicaSpecificationProperty"]]]], jsii.get(self, "replicaSpecifications"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ReplicaSpecificationProperty"]]]], jsii.get(self, "replicaSpecifications"))
 
     @replica_specifications.setter
     def replica_specifications(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTable.ReplicaSpecificationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ReplicaSpecificationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5733bf7940cc5b4e0c443c9b292d6c2f440a7bede5a0f631d4c1f894170bff53)
@@ -996,12 +999,12 @@ class CfnTable(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4224e4814f153e9978b91f35f9c02cfe00615e65fb97b060775097a1c70669ec)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1011,14 +1014,14 @@ class CfnTable(
     @jsii.member(jsii_name="warmThroughput")
     def warm_throughput(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.WarmThroughputProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.WarmThroughputProperty"]]:
         '''Warm throughput configuration for the table.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.WarmThroughputProperty"]], jsii.get(self, "warmThroughput"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.WarmThroughputProperty"]], jsii.get(self, "warmThroughput"))
 
     @warm_throughput.setter
     def warm_throughput(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.WarmThroughputProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.WarmThroughputProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d19ce0025aaac972492a134560945d75be6baf85bf80420a89312af74503253a)
@@ -1039,10 +1042,10 @@ class CfnTable(
         def __init__(
             self,
             *,
-            auto_scaling_disabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            auto_scaling_disabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             maximum_units: typing.Optional[jsii.Number] = None,
             minimum_units: typing.Optional[jsii.Number] = None,
-            scaling_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            scaling_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The optional auto scaling settings for a table with provisioned throughput capacity.
 
@@ -1105,7 +1108,7 @@ class CfnTable(
         @builtins.property
         def auto_scaling_disabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''This optional parameter enables auto scaling for the table if set to ``false`` .
 
             :default: - false
@@ -1113,7 +1116,7 @@ class CfnTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-autoscalingsetting.html#cfn-cassandra-table-autoscalingsetting-autoscalingdisabled
             '''
             result = self._values.get("auto_scaling_disabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def maximum_units(self) -> typing.Optional[jsii.Number]:
@@ -1140,7 +1143,7 @@ class CfnTable(
         @builtins.property
         def scaling_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ScalingPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ScalingPolicyProperty"]]:
             '''Amazon Keyspaces supports the ``target tracking`` auto scaling policy.
 
             With this policy, Amazon Keyspaces auto scaling ensures that the table's ratio of consumed to provisioned capacity stays at or near the target value that you specify. You define the target value as a percentage between 20 and 90.
@@ -1148,7 +1151,7 @@ class CfnTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-autoscalingsetting.html#cfn-cassandra-table-autoscalingsetting-scalingpolicy
             '''
             result = self._values.get("scaling_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ScalingPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ScalingPolicyProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1173,8 +1176,8 @@ class CfnTable(
         def __init__(
             self,
             *,
-            read_capacity_auto_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.AutoScalingSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            write_capacity_auto_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.AutoScalingSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            read_capacity_auto_scaling: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.AutoScalingSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            write_capacity_auto_scaling: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.AutoScalingSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The optional auto scaling capacity settings for a table in provisioned capacity mode.
 
@@ -1236,24 +1239,24 @@ class CfnTable(
         @builtins.property
         def read_capacity_auto_scaling(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.AutoScalingSettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.AutoScalingSettingProperty"]]:
             '''The auto scaling settings for the table's read capacity.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-autoscalingspecification.html#cfn-cassandra-table-autoscalingspecification-readcapacityautoscaling
             '''
             result = self._values.get("read_capacity_auto_scaling")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.AutoScalingSettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.AutoScalingSettingProperty"]], result)
 
         @builtins.property
         def write_capacity_auto_scaling(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.AutoScalingSettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.AutoScalingSettingProperty"]]:
             '''The auto scaling settings for the table's write capacity.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-autoscalingspecification.html#cfn-cassandra-table-autoscalingspecification-writecapacityautoscaling
             '''
             result = self._values.get("write_capacity_auto_scaling")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.AutoScalingSettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.AutoScalingSettingProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1279,7 +1282,7 @@ class CfnTable(
             self,
             *,
             mode: builtins.str,
-            provisioned_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ProvisionedThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            provisioned_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ProvisionedThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Determines the billing mode for the table - on-demand or provisioned.
 
@@ -1339,7 +1342,7 @@ class CfnTable(
         @builtins.property
         def provisioned_throughput(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ProvisionedThroughputProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ProvisionedThroughputProperty"]]:
             '''The provisioned read capacity and write capacity for the table.
 
             For more information, see `Provisioned throughput capacity mode <https://docs.aws.amazon.com/keyspaces/latest/devguide/ReadWriteCapacityMode.html#ReadWriteCapacityMode.Provisioned>`_ in the *Amazon Keyspaces Developer Guide* .
@@ -1347,7 +1350,7 @@ class CfnTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-billingmode.html#cfn-cassandra-table-billingmode-provisionedthroughput
             '''
             result = self._values.get("provisioned_throughput")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.ProvisionedThroughputProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.ProvisionedThroughputProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1370,7 +1373,7 @@ class CfnTable(
             self,
             *,
             status: builtins.str,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
             view_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The settings for the CDC stream of a table.
@@ -1386,6 +1389,7 @@ class CfnTable(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_cassandra as cassandra
@@ -1427,13 +1431,13 @@ class CfnTable(
             return typing.cast(builtins.str, result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''The tags (key-value pairs) that you want to apply to the stream.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-cdcspecification.html#cfn-cassandra-table-cdcspecification-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         @builtins.property
         def view_type(self) -> typing.Optional[builtins.str]:
@@ -1475,7 +1479,7 @@ class CfnTable(
         def __init__(
             self,
             *,
-            column: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ColumnProperty", typing.Dict[builtins.str, typing.Any]]],
+            column: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ColumnProperty", typing.Dict[builtins.str, typing.Any]]],
             order_by: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Defines an individual column within the clustering key.
@@ -1515,14 +1519,14 @@ class CfnTable(
         @builtins.property
         def column(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTable.ColumnProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTable.ColumnProperty"]:
             '''The name and data type of this clustering key column.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-clusteringkeycolumn.html#cfn-cassandra-table-clusteringkeycolumn-column
             '''
             result = self._values.get("column")
             assert result is not None, "Required property 'column' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTable.ColumnProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTable.ColumnProperty"], result)
 
         @builtins.property
         def order_by(self) -> typing.Optional[builtins.str]:
@@ -1808,7 +1812,7 @@ class CfnTable(
             self,
             *,
             region: builtins.str,
-            read_capacity_auto_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.AutoScalingSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            read_capacity_auto_scaling: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.AutoScalingSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             read_capacity_units: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''The AWS Region specific settings of a multi-Region table.
@@ -1880,13 +1884,13 @@ class CfnTable(
         @builtins.property
         def read_capacity_auto_scaling(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.AutoScalingSettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.AutoScalingSettingProperty"]]:
             '''The read capacity auto scaling settings for the multi-Region table in the specified AWS Region.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-replicaspecification.html#cfn-cassandra-table-replicaspecification-readcapacityautoscaling
             '''
             result = self._values.get("read_capacity_auto_scaling")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.AutoScalingSettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.AutoScalingSettingProperty"]], result)
 
         @builtins.property
         def read_capacity_units(self) -> typing.Optional[jsii.Number]:
@@ -1919,7 +1923,7 @@ class CfnTable(
         def __init__(
             self,
             *,
-            target_tracking_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.TargetTrackingScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            target_tracking_scaling_policy_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.TargetTrackingScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Amazon Keyspaces supports the ``target tracking`` auto scaling policy.
 
@@ -1957,13 +1961,13 @@ class CfnTable(
         @builtins.property
         def target_tracking_scaling_policy_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.TargetTrackingScalingPolicyConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.TargetTrackingScalingPolicyConfigurationProperty"]]:
             '''The auto scaling policy that scales a table based on the ratio of consumed to provisioned capacity.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-scalingpolicy.html#cfn-cassandra-table-scalingpolicy-targettrackingscalingpolicyconfiguration
             '''
             result = self._values.get("target_tracking_scaling_policy_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.TargetTrackingScalingPolicyConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.TargetTrackingScalingPolicyConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1991,7 +1995,7 @@ class CfnTable(
             self,
             *,
             target_value: jsii.Number,
-            disable_scale_in: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            disable_scale_in: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             scale_in_cooldown: typing.Optional[jsii.Number] = None,
             scale_out_cooldown: typing.Optional[jsii.Number] = None,
         ) -> None:
@@ -2059,7 +2063,7 @@ class CfnTable(
         @builtins.property
         def disable_scale_in(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies if ``scale-in`` is enabled.
 
             When auto scaling automatically decreases capacity for a table, the table *scales in* . When scaling policies are set, they can't scale in the table lower than its minimum capacity.
@@ -2067,7 +2071,7 @@ class CfnTable(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-targettrackingscalingpolicyconfiguration.html#cfn-cassandra-table-targettrackingscalingpolicyconfiguration-disablescalein
             '''
             result = self._values.get("disable_scale_in")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def scale_in_cooldown(self) -> typing.Optional[jsii.Number]:
@@ -2204,20 +2208,20 @@ class CfnTableProps:
         self,
         *,
         keyspace_name: builtins.str,
-        partition_key_columns: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ColumnProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        auto_scaling_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.AutoScalingSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        billing_mode: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.BillingModeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cdc_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.CdcSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        client_side_timestamps_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        clustering_key_columns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ClusteringKeyColumnProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        partition_key_columns: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ColumnProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        auto_scaling_specifications: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.AutoScalingSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        billing_mode: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.BillingModeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cdc_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.CdcSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        client_side_timestamps_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        clustering_key_columns: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ClusteringKeyColumnProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         default_time_to_live: typing.Optional[jsii.Number] = None,
-        encryption_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.EncryptionSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        point_in_time_recovery_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        regular_columns: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ColumnProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        replica_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ReplicaSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        encryption_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.EncryptionSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        point_in_time_recovery_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        regular_columns: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ColumnProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        replica_specifications: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.ReplicaSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         table_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.WarmThroughputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTable``.
 
@@ -2242,6 +2246,7 @@ class CfnTableProps:
 
         Example::
 
+            from aws_cdk import CfnTag, CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cassandra as cassandra
@@ -2422,7 +2427,7 @@ class CfnTableProps:
     @builtins.property
     def partition_key_columns(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.ColumnProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ColumnProperty"]]]:
         '''One or more columns that uniquely identify every row in the table.
 
         Every table must have a partition key.
@@ -2431,23 +2436,23 @@ class CfnTableProps:
         '''
         result = self._values.get("partition_key_columns")
         assert result is not None, "Required property 'partition_key_columns' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.ColumnProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ColumnProperty"]]], result)
 
     @builtins.property
     def auto_scaling_specifications(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.AutoScalingSpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.AutoScalingSpecificationProperty"]]:
         '''The optional auto scaling capacity settings for a table in provisioned capacity mode.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html#cfn-cassandra-table-autoscalingspecifications
         '''
         result = self._values.get("auto_scaling_specifications")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.AutoScalingSpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.AutoScalingSpecificationProperty"]], result)
 
     @builtins.property
     def billing_mode(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.BillingModeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.BillingModeProperty"]]:
         '''The billing mode for the table, which determines how you'll be charged for reads and writes:.
 
         - *On-demand mode* (default) - You pay based on the actual reads and writes your application performs.
@@ -2458,12 +2463,12 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html#cfn-cassandra-table-billingmode
         '''
         result = self._values.get("billing_mode")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.BillingModeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.BillingModeProperty"]], result)
 
     @builtins.property
     def cdc_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.CdcSpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.CdcSpecificationProperty"]]:
         '''The settings for the CDC stream of a table.
 
         For more information about CDC streams, see `Working with change data capture (CDC) streams in Amazon Keyspaces <https://docs.aws.amazon.com/keyspaces/latest/devguide/cdc.html>`_ in the *Amazon Keyspaces Developer Guide* .
@@ -2471,12 +2476,12 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html#cfn-cassandra-table-cdcspecification
         '''
         result = self._values.get("cdc_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.CdcSpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.CdcSpecificationProperty"]], result)
 
     @builtins.property
     def client_side_timestamps_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables client-side timestamps for the table.
 
         By default, the setting is disabled. You can enable client-side timestamps with the following option:
@@ -2488,18 +2493,18 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html#cfn-cassandra-table-clientsidetimestampsenabled
         '''
         result = self._values.get("client_side_timestamps_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def clustering_key_columns(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.ClusteringKeyColumnProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ClusteringKeyColumnProperty"]]]]:
         '''One or more columns that determine how the table data is sorted.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html#cfn-cassandra-table-clusteringkeycolumns
         '''
         result = self._values.get("clustering_key_columns")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.ClusteringKeyColumnProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ClusteringKeyColumnProperty"]]]], result)
 
     @builtins.property
     def default_time_to_live(self) -> typing.Optional[jsii.Number]:
@@ -2517,7 +2522,7 @@ class CfnTableProps:
     @builtins.property
     def encryption_specification(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.EncryptionSpecificationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.EncryptionSpecificationProperty"]]:
         '''The encryption at rest options for the table.
 
         - *AWS owned key* (default) - The key is owned by Amazon Keyspaces .
@@ -2532,12 +2537,12 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html#cfn-cassandra-table-encryptionspecification
         '''
         result = self._values.get("encryption_specification")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.EncryptionSpecificationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.EncryptionSpecificationProperty"]], result)
 
     @builtins.property
     def point_in_time_recovery_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies if point-in-time recovery is enabled or disabled for the table.
 
         The options are ``PointInTimeRecoveryEnabled=true`` and ``PointInTimeRecoveryEnabled=false`` . If not specified, the default is ``PointInTimeRecoveryEnabled=false`` .
@@ -2545,12 +2550,12 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html#cfn-cassandra-table-pointintimerecoveryenabled
         '''
         result = self._values.get("point_in_time_recovery_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def regular_columns(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.ColumnProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ColumnProperty"]]]]:
         '''One or more columns that are not part of the primary key - that is, columns that are *not* defined as partition key columns or clustering key columns.
 
         You can add regular columns to existing tables by adding them to the template.
@@ -2558,12 +2563,12 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html#cfn-cassandra-table-regularcolumns
         '''
         result = self._values.get("regular_columns")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.ColumnProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ColumnProperty"]]]], result)
 
     @builtins.property
     def replica_specifications(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.ReplicaSpecificationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ReplicaSpecificationProperty"]]]]:
         '''The AWS Region specific settings of a multi-Region table.
 
         For a multi-Region table, you can configure the table's read capacity differently per AWS Region. You can do this by configuring the following parameters.
@@ -2575,7 +2580,7 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html#cfn-cassandra-table-replicaspecifications
         '''
         result = self._values.get("replica_specifications")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTable.ReplicaSpecificationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTable.ReplicaSpecificationProperty"]]]], result)
 
     @builtins.property
     def table_name(self) -> typing.Optional[builtins.str]:
@@ -2596,7 +2601,7 @@ class CfnTableProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -2604,18 +2609,18 @@ class CfnTableProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html#cfn-cassandra-table-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def warm_throughput(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.WarmThroughputProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.WarmThroughputProperty"]]:
         '''Warm throughput configuration for the table.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html#cfn-cassandra-table-warmthroughput
         '''
         result = self._values.get("warm_throughput")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.WarmThroughputProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTable.WarmThroughputProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2663,10 +2668,10 @@ class CfnType(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        fields: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnType.FieldProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        fields: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnType.FieldProperty", typing.Dict[builtins.str, typing.Any]]]]],
         keyspace_name: builtins.str,
         type_name: builtins.str,
     ) -> None:
@@ -2701,7 +2706,7 @@ class CfnType(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnType", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2759,12 +2764,12 @@ class CfnType(
 
     @builtins.property
     @jsii.member(jsii_name="attrLastModifiedTimestamp")
-    def attr_last_modified_timestamp(self) -> _IResolvable_da3f097b:
+    def attr_last_modified_timestamp(self) -> "_IResolvable_da3f097b":
         '''The last time this type was modified.
 
         :cloudformationAttribute: LastModifiedTimestamp
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLastModifiedTimestamp"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrLastModifiedTimestamp"))
 
     @builtins.property
     @jsii.member(jsii_name="attrMaxNestingDepth")
@@ -2784,22 +2789,22 @@ class CfnType(
 
     @builtins.property
     @jsii.member(jsii_name="typeRef")
-    def type_ref(self) -> _TypeReference_7c17f292:
+    def type_ref(self) -> "_TypeReference_7c17f292":
         '''A reference to a Type resource.'''
-        return typing.cast(_TypeReference_7c17f292, jsii.get(self, "typeRef"))
+        return typing.cast("_TypeReference_7c17f292", jsii.get(self, "typeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="fields")
     def fields(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnType.FieldProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnType.FieldProperty"]]]:
         '''A list of fields that define this type.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnType.FieldProperty"]]], jsii.get(self, "fields"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnType.FieldProperty"]]], jsii.get(self, "fields"))
 
     @fields.setter
     def fields(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnType.FieldProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnType.FieldProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ca4dbc25b8389c762695ecb965e0cd985e70c9dae5c5a02153927c352e82d0a4)
@@ -2921,7 +2926,7 @@ class CfnTypeProps:
     def __init__(
         self,
         *,
-        fields: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnType.FieldProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        fields: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnType.FieldProperty", typing.Dict[builtins.str, typing.Any]]]]],
         keyspace_name: builtins.str,
         type_name: builtins.str,
     ) -> None:
@@ -2963,14 +2968,14 @@ class CfnTypeProps:
     @builtins.property
     def fields(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnType.FieldProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnType.FieldProperty"]]]:
         '''A list of fields that define this type.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-type.html#cfn-cassandra-type-fields
         '''
         result = self._values.get("fields")
         assert result is not None, "Required property 'fields' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnType.FieldProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnType.FieldProperty"]]], result)
 
     @builtins.property
     def keyspace_name(self) -> builtins.str:

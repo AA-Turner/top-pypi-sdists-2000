@@ -533,7 +533,7 @@ class IAnalysisRef(
 
     @builtins.property
     @jsii.member(jsii_name="analysisRef")
-    def analysis_ref(self) -> AnalysisReference:
+    def analysis_ref(self) -> "AnalysisReference":
         '''(experimental) A reference to a Analysis resource.
 
         :stability: experimental
@@ -554,12 +554,12 @@ class _IAnalysisRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="analysisRef")
-    def analysis_ref(self) -> AnalysisReference:
+    def analysis_ref(self) -> "AnalysisReference":
         '''(experimental) A reference to a Analysis resource.
 
         :stability: experimental
         '''
-        return typing.cast(AnalysisReference, jsii.get(self, "analysisRef"))
+        return typing.cast("AnalysisReference", jsii.get(self, "analysisRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAnalysisRef).__jsii_proxy_class__ = lambda : _IAnalysisRefProxy
@@ -580,7 +580,7 @@ class ICustomPermissionsRef(
 
     @builtins.property
     @jsii.member(jsii_name="customPermissionsRef")
-    def custom_permissions_ref(self) -> CustomPermissionsReference:
+    def custom_permissions_ref(self) -> "CustomPermissionsReference":
         '''(experimental) A reference to a CustomPermissions resource.
 
         :stability: experimental
@@ -601,12 +601,12 @@ class _ICustomPermissionsRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="customPermissionsRef")
-    def custom_permissions_ref(self) -> CustomPermissionsReference:
+    def custom_permissions_ref(self) -> "CustomPermissionsReference":
         '''(experimental) A reference to a CustomPermissions resource.
 
         :stability: experimental
         '''
-        return typing.cast(CustomPermissionsReference, jsii.get(self, "customPermissionsRef"))
+        return typing.cast("CustomPermissionsReference", jsii.get(self, "customPermissionsRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICustomPermissionsRef).__jsii_proxy_class__ = lambda : _ICustomPermissionsRefProxy
@@ -625,7 +625,7 @@ class IDashboardRef(
 
     @builtins.property
     @jsii.member(jsii_name="dashboardRef")
-    def dashboard_ref(self) -> DashboardReference:
+    def dashboard_ref(self) -> "DashboardReference":
         '''(experimental) A reference to a Dashboard resource.
 
         :stability: experimental
@@ -646,12 +646,12 @@ class _IDashboardRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dashboardRef")
-    def dashboard_ref(self) -> DashboardReference:
+    def dashboard_ref(self) -> "DashboardReference":
         '''(experimental) A reference to a Dashboard resource.
 
         :stability: experimental
         '''
-        return typing.cast(DashboardReference, jsii.get(self, "dashboardRef"))
+        return typing.cast("DashboardReference", jsii.get(self, "dashboardRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDashboardRef).__jsii_proxy_class__ = lambda : _IDashboardRefProxy
@@ -670,7 +670,7 @@ class IDataSetRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataSetRef")
-    def data_set_ref(self) -> DataSetReference:
+    def data_set_ref(self) -> "DataSetReference":
         '''(experimental) A reference to a DataSet resource.
 
         :stability: experimental
@@ -691,12 +691,12 @@ class _IDataSetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataSetRef")
-    def data_set_ref(self) -> DataSetReference:
+    def data_set_ref(self) -> "DataSetReference":
         '''(experimental) A reference to a DataSet resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataSetReference, jsii.get(self, "dataSetRef"))
+        return typing.cast("DataSetReference", jsii.get(self, "dataSetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataSetRef).__jsii_proxy_class__ = lambda : _IDataSetRefProxy
@@ -715,7 +715,7 @@ class IDataSourceRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataSourceRef")
-    def data_source_ref(self) -> DataSourceReference:
+    def data_source_ref(self) -> "DataSourceReference":
         '''(experimental) A reference to a DataSource resource.
 
         :stability: experimental
@@ -736,12 +736,12 @@ class _IDataSourceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataSourceRef")
-    def data_source_ref(self) -> DataSourceReference:
+    def data_source_ref(self) -> "DataSourceReference":
         '''(experimental) A reference to a DataSource resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataSourceReference, jsii.get(self, "dataSourceRef"))
+        return typing.cast("DataSourceReference", jsii.get(self, "dataSourceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataSourceRef).__jsii_proxy_class__ = lambda : _IDataSourceRefProxy
@@ -760,7 +760,7 @@ class IFolderRef(
 
     @builtins.property
     @jsii.member(jsii_name="folderRef")
-    def folder_ref(self) -> FolderReference:
+    def folder_ref(self) -> "FolderReference":
         '''(experimental) A reference to a Folder resource.
 
         :stability: experimental
@@ -781,12 +781,12 @@ class _IFolderRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="folderRef")
-    def folder_ref(self) -> FolderReference:
+    def folder_ref(self) -> "FolderReference":
         '''(experimental) A reference to a Folder resource.
 
         :stability: experimental
         '''
-        return typing.cast(FolderReference, jsii.get(self, "folderRef"))
+        return typing.cast("FolderReference", jsii.get(self, "folderRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFolderRef).__jsii_proxy_class__ = lambda : _IFolderRefProxy

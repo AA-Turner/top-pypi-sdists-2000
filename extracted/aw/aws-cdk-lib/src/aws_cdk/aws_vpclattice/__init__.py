@@ -120,6 +120,7 @@ class CfnAccessLogSubscription(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_vpclattice as vpclattice
@@ -139,13 +140,13 @@ class CfnAccessLogSubscription(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         destination_arn: builtins.str,
         resource_identifier: typing.Optional[builtins.str] = None,
         service_network_log_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::AccessLogSubscription``.
 
@@ -173,7 +174,7 @@ class CfnAccessLogSubscription(
     @builtins.classmethod
     def arn_for_access_log_subscription(
         cls,
-        resource: _IAccessLogSubscriptionRef_3411271a,
+        resource: "_IAccessLogSubscriptionRef_3411271a",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -196,7 +197,7 @@ class CfnAccessLogSubscription(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessLogSubscription", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -227,9 +228,9 @@ class CfnAccessLogSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="accessLogSubscriptionRef")
-    def access_log_subscription_ref(self) -> _AccessLogSubscriptionReference_25905b5c:
+    def access_log_subscription_ref(self) -> "_AccessLogSubscriptionReference_25905b5c":
         '''A reference to a AccessLogSubscription resource.'''
-        return typing.cast(_AccessLogSubscriptionReference_25905b5c, jsii.get(self, "accessLogSubscriptionRef"))
+        return typing.cast("_AccessLogSubscriptionReference_25905b5c", jsii.get(self, "accessLogSubscriptionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -274,9 +275,9 @@ class CfnAccessLogSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="destinationArn")
@@ -319,12 +320,12 @@ class CfnAccessLogSubscription(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the access log subscription.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f88ce1faaa39f21f51b79668a87b932a07532be6cdddad83e4090e05f9de003e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -348,7 +349,7 @@ class CfnAccessLogSubscriptionProps:
         destination_arn: builtins.str,
         resource_identifier: typing.Optional[builtins.str] = None,
         service_network_log_type: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAccessLogSubscription``.
 
@@ -362,6 +363,7 @@ class CfnAccessLogSubscriptionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_vpclattice as vpclattice
@@ -425,13 +427,13 @@ class CfnAccessLogSubscriptionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the access log subscription.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-accesslogsubscription.html#cfn-vpclattice-accesslogsubscription-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -475,7 +477,7 @@ class CfnAuthPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy: typing.Any,
@@ -511,7 +513,7 @@ class CfnAuthPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAuthPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -553,9 +555,9 @@ class CfnAuthPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="authPolicyRef")
-    def auth_policy_ref(self) -> _AuthPolicyReference_2a1c0bc7:
+    def auth_policy_ref(self) -> "_AuthPolicyReference_2a1c0bc7":
         '''A reference to a AuthPolicy resource.'''
-        return typing.cast(_AuthPolicyReference_2a1c0bc7, jsii.get(self, "authPolicyRef"))
+        return typing.cast("_AuthPolicyReference_2a1c0bc7", jsii.get(self, "authPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -679,6 +681,7 @@ class CfnDomainVerification(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_vpclattice as vpclattice
@@ -696,11 +699,11 @@ class CfnDomainVerification(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::DomainVerification``.
 
@@ -721,7 +724,7 @@ class CfnDomainVerification(
     @builtins.classmethod
     def arn_for_domain_verification(
         cls,
-        resource: _IDomainVerificationRef_2bb01157,
+        resource: "_IDomainVerificationRef_2bb01157",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -744,7 +747,7 @@ class CfnDomainVerification(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomainVerification", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -802,17 +805,17 @@ class CfnDomainVerification(
 
     @builtins.property
     @jsii.member(jsii_name="attrTxtMethodConfig")
-    def attr_txt_method_config(self) -> _IResolvable_da3f097b:
+    def attr_txt_method_config(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: TxtMethodConfig
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrTxtMethodConfig"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrTxtMethodConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -821,9 +824,9 @@ class CfnDomainVerification(
 
     @builtins.property
     @jsii.member(jsii_name="domainVerificationRef")
-    def domain_verification_ref(self) -> _DomainVerificationReference_9b6bf03d:
+    def domain_verification_ref(self) -> "_DomainVerificationReference_9b6bf03d":
         '''A reference to a DomainVerification resource.'''
-        return typing.cast(_DomainVerificationReference_9b6bf03d, jsii.get(self, "domainVerificationRef"))
+        return typing.cast("_DomainVerificationReference_9b6bf03d", jsii.get(self, "domainVerificationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="domainName")
@@ -840,12 +843,12 @@ class CfnDomainVerification(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags associated with the domain verification.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0cdbc9351627dba59de976196e827173a6dc3cfd19e7026f2d1156106e4c17e8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -932,7 +935,7 @@ class CfnDomainVerificationProps:
         self,
         *,
         domain_name: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDomainVerification``.
 
@@ -944,6 +947,7 @@ class CfnDomainVerificationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_vpclattice as vpclattice
@@ -979,13 +983,13 @@ class CfnDomainVerificationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags associated with the domain verification.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-domainverification.html#cfn-vpclattice-domainverification-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1015,6 +1019,7 @@ class CfnListener(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_vpclattice as vpclattice
@@ -1048,15 +1053,15 @@ class CfnListener(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        default_action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.DefaultActionProperty", typing.Dict[builtins.str, typing.Any]]],
+        default_action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnListener.DefaultActionProperty", typing.Dict[builtins.str, typing.Any]]],
         protocol: builtins.str,
         name: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
         service_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::Listener``.
 
@@ -1086,7 +1091,7 @@ class CfnListener(
 
     @jsii.member(jsii_name="arnForListener")
     @builtins.classmethod
-    def arn_for_listener(cls, resource: _IListenerRef_04c46b6b) -> builtins.str:
+    def arn_for_listener(cls, resource: "_IListenerRef_04c46b6b") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1108,7 +1113,7 @@ class CfnListener(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnListener", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1180,28 +1185,28 @@ class CfnListener(
 
     @builtins.property
     @jsii.member(jsii_name="listenerRef")
-    def listener_ref(self) -> _ListenerReference_c52b20d4:
+    def listener_ref(self) -> "_ListenerReference_c52b20d4":
         '''A reference to a Listener resource.'''
-        return typing.cast(_ListenerReference_c52b20d4, jsii.get(self, "listenerRef"))
+        return typing.cast("_ListenerReference_c52b20d4", jsii.get(self, "listenerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultAction")
     def default_action(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnListener.DefaultActionProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnListener.DefaultActionProperty"]:
         '''The action for the default rule.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnListener.DefaultActionProperty"], jsii.get(self, "defaultAction"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnListener.DefaultActionProperty"], jsii.get(self, "defaultAction"))
 
     @default_action.setter
     def default_action(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnListener.DefaultActionProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnListener.DefaultActionProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d1229fc3c4aaabfa1f9070833cc86ddb5be622124d223b483013096dc0aa21c3)
@@ -1262,12 +1267,12 @@ class CfnListener(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the listener.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6bdb1d86bfde2da64bd233fa7351069e7394020e32eca07770f43cd1b50cca3a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1282,8 +1287,8 @@ class CfnListener(
         def __init__(
             self,
             *,
-            fixed_response: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.FixedResponseProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            forward: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.ForwardProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            fixed_response: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnListener.FixedResponseProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            forward: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnListener.ForwardProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The action for the default rule.
 
@@ -1328,18 +1333,18 @@ class CfnListener(
         @builtins.property
         def fixed_response(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListener.FixedResponseProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnListener.FixedResponseProperty"]]:
             '''Describes an action that returns a custom HTTP response.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-listener-defaultaction.html#cfn-vpclattice-listener-defaultaction-fixedresponse
             '''
             result = self._values.get("fixed_response")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListener.FixedResponseProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnListener.FixedResponseProperty"]], result)
 
         @builtins.property
         def forward(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListener.ForwardProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnListener.ForwardProperty"]]:
             '''Describes a forward action.
 
             You can use forward actions to route requests to one or more target groups.
@@ -1347,7 +1352,7 @@ class CfnListener(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-listener-defaultaction.html#cfn-vpclattice-listener-defaultaction-forward
             '''
             result = self._values.get("forward")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListener.ForwardProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnListener.ForwardProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1423,7 +1428,7 @@ class CfnListener(
         def __init__(
             self,
             *,
-            target_groups: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.WeightedTargetGroupProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            target_groups: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnListener.WeightedTargetGroupProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''The forward action.
 
@@ -1459,7 +1464,7 @@ class CfnListener(
         @builtins.property
         def target_groups(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListener.WeightedTargetGroupProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnListener.WeightedTargetGroupProperty"]]]:
             '''The target groups.
 
             Traffic matching the rule is forwarded to the specified target groups. With forward actions, you can assign a weight that controls the prioritization and selection of each target group. This means that requests are distributed to individual target groups based on their weights. For example, if two target groups have the same weight, each target group receives half of the traffic.
@@ -1470,7 +1475,7 @@ class CfnListener(
             '''
             result = self._values.get("target_groups")
             assert result is not None, "Required property 'target_groups' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnListener.WeightedTargetGroupProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnListener.WeightedTargetGroupProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1578,12 +1583,12 @@ class CfnListenerProps:
     def __init__(
         self,
         *,
-        default_action: typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.DefaultActionProperty, typing.Dict[builtins.str, typing.Any]]],
+        default_action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnListener.DefaultActionProperty", typing.Dict[builtins.str, typing.Any]]],
         protocol: builtins.str,
         name: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
         service_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnListener``.
 
@@ -1599,6 +1604,7 @@ class CfnListenerProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_vpclattice as vpclattice
@@ -1653,7 +1659,7 @@ class CfnListenerProps:
     @builtins.property
     def default_action(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnListener.DefaultActionProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnListener.DefaultActionProperty"]:
         '''The action for the default rule.
 
         Each listener has a default rule. The default rule is used if no other rules match.
@@ -1662,7 +1668,7 @@ class CfnListenerProps:
         '''
         result = self._values.get("default_action")
         assert result is not None, "Required property 'default_action' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnListener.DefaultActionProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnListener.DefaultActionProperty"], result)
 
     @builtins.property
     def protocol(self) -> builtins.str:
@@ -1708,13 +1714,13 @@ class CfnListenerProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the listener.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-listener.html#cfn-vpclattice-listener-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1744,6 +1750,7 @@ class CfnResourceConfiguration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_vpclattice as vpclattice
@@ -1779,22 +1786,22 @@ class CfnResourceConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         resource_configuration_type: builtins.str,
-        allow_association_to_sharable_service_network: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        allow_association_to_sharable_service_network: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         custom_domain_name: typing.Optional[builtins.str] = None,
         domain_verification_id: typing.Optional[builtins.str] = None,
         group_domain: typing.Optional[builtins.str] = None,
         port_ranges: typing.Optional[typing.Sequence[builtins.str]] = None,
         protocol_type: typing.Optional[builtins.str] = None,
         resource_configuration_auth_type: typing.Optional[builtins.str] = None,
-        resource_configuration_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceConfiguration.ResourceConfigurationDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        resource_configuration_definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceConfiguration.ResourceConfigurationDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resource_configuration_group_id: typing.Optional[builtins.str] = None,
         resource_gateway_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::ResourceConfiguration``.
 
@@ -1840,7 +1847,7 @@ class CfnResourceConfiguration(
     @builtins.classmethod
     def arn_for_resource_configuration(
         cls,
-        resource: _IResourceConfigurationRef_b9c2bd0b,
+        resource: "_IResourceConfigurationRef_b9c2bd0b",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1863,7 +1870,7 @@ class CfnResourceConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourceConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1912,9 +1919,9 @@ class CfnResourceConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1923,9 +1930,9 @@ class CfnResourceConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="resourceConfigurationRef")
-    def resource_configuration_ref(self) -> _ResourceConfigurationReference_b8808895:
+    def resource_configuration_ref(self) -> "_ResourceConfigurationReference_b8808895":
         '''A reference to a ResourceConfiguration resource.'''
-        return typing.cast(_ResourceConfigurationReference_b8808895, jsii.get(self, "resourceConfigurationRef"))
+        return typing.cast("_ResourceConfigurationReference_b8808895", jsii.get(self, "resourceConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1960,14 +1967,14 @@ class CfnResourceConfiguration(
     @jsii.member(jsii_name="allowAssociationToSharableServiceNetwork")
     def allow_association_to_sharable_service_network(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the resource configuration can be associated with a sharable service network.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "allowAssociationToSharableServiceNetwork"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "allowAssociationToSharableServiceNetwork"))
 
     @allow_association_to_sharable_service_network.setter
     def allow_association_to_sharable_service_network(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d1ef450fae7a40fb3e9c4ee0eb161050d61b06bd98ab10bb1187f14c7b5c9ceb)
@@ -2059,14 +2066,14 @@ class CfnResourceConfiguration(
     @jsii.member(jsii_name="resourceConfigurationDefinition")
     def resource_configuration_definition(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceConfiguration.ResourceConfigurationDefinitionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceConfiguration.ResourceConfigurationDefinitionProperty"]]:
         '''Identifies the resource configuration in one of the following ways:.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceConfiguration.ResourceConfigurationDefinitionProperty"]], jsii.get(self, "resourceConfigurationDefinition"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceConfiguration.ResourceConfigurationDefinitionProperty"]], jsii.get(self, "resourceConfigurationDefinition"))
 
     @resource_configuration_definition.setter
     def resource_configuration_definition(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceConfiguration.ResourceConfigurationDefinitionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceConfiguration.ResourceConfigurationDefinitionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7788613af96a11a7c69e0fffa865e7ae3848958ee2d19e159a8a81638e218ca2)
@@ -2104,12 +2111,12 @@ class CfnResourceConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the resource configuration.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4f5f1b5a9415ccd7fa5ca852ef4adaa16d7ede062f9c3e53659f7d70469e270f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2202,7 +2209,7 @@ class CfnResourceConfiguration(
             self,
             *,
             arn_resource: typing.Optional[builtins.str] = None,
-            dns_resource: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResourceConfiguration.DnsResourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            dns_resource: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceConfiguration.DnsResourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             ip_resource: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Identifies the resource configuration in one of the following ways:.
@@ -2260,13 +2267,13 @@ class CfnResourceConfiguration(
         @builtins.property
         def dns_resource(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceConfiguration.DnsResourceProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceConfiguration.DnsResourceProperty"]]:
             '''The DNS name of the resource configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-resourceconfiguration-resourceconfigurationdefinition.html#cfn-vpclattice-resourceconfiguration-resourceconfigurationdefinition-dnsresource
             '''
             result = self._values.get("dns_resource")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnResourceConfiguration.DnsResourceProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceConfiguration.DnsResourceProperty"]], result)
 
         @builtins.property
         def ip_resource(self) -> typing.Optional[builtins.str]:
@@ -2314,17 +2321,17 @@ class CfnResourceConfigurationProps:
         *,
         name: builtins.str,
         resource_configuration_type: builtins.str,
-        allow_association_to_sharable_service_network: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        allow_association_to_sharable_service_network: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         custom_domain_name: typing.Optional[builtins.str] = None,
         domain_verification_id: typing.Optional[builtins.str] = None,
         group_domain: typing.Optional[builtins.str] = None,
         port_ranges: typing.Optional[typing.Sequence[builtins.str]] = None,
         protocol_type: typing.Optional[builtins.str] = None,
         resource_configuration_auth_type: typing.Optional[builtins.str] = None,
-        resource_configuration_definition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResourceConfiguration.ResourceConfigurationDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        resource_configuration_definition: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResourceConfiguration.ResourceConfigurationDefinitionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resource_configuration_group_id: typing.Optional[builtins.str] = None,
         resource_gateway_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnResourceConfiguration``.
 
@@ -2347,6 +2354,7 @@ class CfnResourceConfigurationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_vpclattice as vpclattice
@@ -2449,13 +2457,13 @@ class CfnResourceConfigurationProps:
     @builtins.property
     def allow_association_to_sharable_service_network(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the resource configuration can be associated with a sharable service network.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-allowassociationtosharableservicenetwork
         '''
         result = self._values.get("allow_association_to_sharable_service_network")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def custom_domain_name(self) -> typing.Optional[builtins.str]:
@@ -2518,7 +2526,7 @@ class CfnResourceConfigurationProps:
     @builtins.property
     def resource_configuration_definition(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResourceConfiguration.ResourceConfigurationDefinitionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceConfiguration.ResourceConfigurationDefinitionProperty"]]:
         '''Identifies the resource configuration in one of the following ways:.
 
         - *Amazon Resource Name (ARN)* - Supported resource-types that are provisioned by AWS services, such as RDS databases, can be identified by their ARN.
@@ -2528,7 +2536,7 @@ class CfnResourceConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-resourceconfigurationdefinition
         '''
         result = self._values.get("resource_configuration_definition")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnResourceConfiguration.ResourceConfigurationDefinitionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnResourceConfiguration.ResourceConfigurationDefinitionProperty"]], result)
 
     @builtins.property
     def resource_configuration_group_id(self) -> typing.Optional[builtins.str]:
@@ -2549,13 +2557,13 @@ class CfnResourceConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the resource configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2585,6 +2593,7 @@ class CfnResourceGateway(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_vpclattice as vpclattice
@@ -2607,16 +2616,16 @@ class CfnResourceGateway(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
         vpc_identifier: builtins.str,
         ip_address_type: typing.Optional[builtins.str] = None,
         ipv4_addresses_per_eni: typing.Optional[jsii.Number] = None,
-        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::ResourceGateway``.
 
@@ -2650,7 +2659,7 @@ class CfnResourceGateway(
     @builtins.classmethod
     def arn_for_resource_gateway(
         cls,
-        resource: _IResourceGatewayRef_f860a76d,
+        resource: "_IResourceGatewayRef_f860a76d",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2673,7 +2682,7 @@ class CfnResourceGateway(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourceGateway", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2722,9 +2731,9 @@ class CfnResourceGateway(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -2733,9 +2742,9 @@ class CfnResourceGateway(
 
     @builtins.property
     @jsii.member(jsii_name="resourceGatewayRef")
-    def resource_gateway_ref(self) -> _ResourceGatewayReference_8df20c1e:
+    def resource_gateway_ref(self) -> "_ResourceGatewayReference_8df20c1e":
         '''A reference to a ResourceGateway resource.'''
-        return typing.cast(_ResourceGatewayReference_8df20c1e, jsii.get(self, "resourceGatewayRef"))
+        return typing.cast("_ResourceGatewayReference_8df20c1e", jsii.get(self, "resourceGatewayRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2820,12 +2829,12 @@ class CfnResourceGateway(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the resource gateway.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bf6ddd6a110cbcda973426d8df8b1e68b145ff32b0292ba9db84cd36b76d4da5)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2850,12 +2859,12 @@ class CfnResourceGatewayProps:
         self,
         *,
         name: builtins.str,
-        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
         vpc_identifier: builtins.str,
         ip_address_type: typing.Optional[builtins.str] = None,
         ipv4_addresses_per_eni: typing.Optional[jsii.Number] = None,
-        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnResourceGateway``.
 
@@ -2872,6 +2881,7 @@ class CfnResourceGatewayProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_vpclattice as vpclattice
@@ -2927,14 +2937,14 @@ class CfnResourceGatewayProps:
     @builtins.property
     def subnet_ids(
         self,
-    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
+    ) -> typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]]:
         '''The IDs of the VPC subnets for the resource gateway.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-subnetids
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]], result)
 
     @builtins.property
     def vpc_identifier(self) -> builtins.str:
@@ -2967,22 +2977,22 @@ class CfnResourceGatewayProps:
     @builtins.property
     def security_group_ids(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]]:
         '''The IDs of the security groups applied to the resource gateway.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-securitygroupids
         '''
         result = self._values.get("security_group_ids")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the resource gateway.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3026,7 +3036,7 @@ class CfnResourcePolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy: typing.Any,
@@ -3060,7 +3070,7 @@ class CfnResourcePolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourcePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3096,9 +3106,9 @@ class CfnResourcePolicy(
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicyRef")
-    def resource_policy_ref(self) -> _ResourcePolicyReference_0b2635a1:
+    def resource_policy_ref(self) -> "_ResourcePolicyReference_0b2635a1":
         '''A reference to a ResourcePolicy resource.'''
-        return typing.cast(_ResourcePolicyReference_0b2635a1, jsii.get(self, "resourcePolicyRef"))
+        return typing.cast("_ResourcePolicyReference_0b2635a1", jsii.get(self, "resourcePolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policy")
@@ -3212,6 +3222,7 @@ class CfnRule(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_vpclattice as vpclattice
@@ -3270,16 +3281,16 @@ class CfnRule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRule.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
-        match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRule.MatchProperty", typing.Dict[builtins.str, typing.Any]]],
+        action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
+        match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.MatchProperty", typing.Dict[builtins.str, typing.Any]]],
         priority: jsii.Number,
         listener_identifier: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::Rule``.
 
@@ -3311,7 +3322,7 @@ class CfnRule(
 
     @jsii.member(jsii_name="arnForRule")
     @builtins.classmethod
-    def arn_for_rule(cls, resource: _IRuleRef_b63824ff) -> builtins.str:
+    def arn_for_rule(cls, resource: "_IRuleRef_b63824ff") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3333,7 +3344,7 @@ class CfnRule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3387,26 +3398,26 @@ class CfnRule(
 
     @builtins.property
     @jsii.member(jsii_name="ruleRef")
-    def rule_ref(self) -> _RuleReference_7f707c6c:
+    def rule_ref(self) -> "_RuleReference_7f707c6c":
         '''A reference to a Rule resource.'''
-        return typing.cast(_RuleReference_7f707c6c, jsii.get(self, "ruleRef"))
+        return typing.cast("_RuleReference_7f707c6c", jsii.get(self, "ruleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="action")
-    def action(self) -> typing.Union[_IResolvable_da3f097b, "CfnRule.ActionProperty"]:
+    def action(self) -> typing.Union["_IResolvable_da3f097b", "CfnRule.ActionProperty"]:
         '''Describes the action for a rule.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRule.ActionProperty"], jsii.get(self, "action"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRule.ActionProperty"], jsii.get(self, "action"))
 
     @action.setter
     def action(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnRule.ActionProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnRule.ActionProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4831a0ebaf652d9b7e5a895ef4da1dc54804353e6303bbcb314ad42908d8c965)
@@ -3415,14 +3426,14 @@ class CfnRule(
 
     @builtins.property
     @jsii.member(jsii_name="match")
-    def match(self) -> typing.Union[_IResolvable_da3f097b, "CfnRule.MatchProperty"]:
+    def match(self) -> typing.Union["_IResolvable_da3f097b", "CfnRule.MatchProperty"]:
         '''The rule match.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRule.MatchProperty"], jsii.get(self, "match"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRule.MatchProperty"], jsii.get(self, "match"))
 
     @match.setter
     def match(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnRule.MatchProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnRule.MatchProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1bd4d52163d104bfa08417185bdade5bedb8947694d6ba4b6a9e8bc741f0321b)
@@ -3483,12 +3494,12 @@ class CfnRule(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the rule.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__39474ed0177df79f9fd5f7c9f646a32fa2d33929af64c4284c7219a8b2b00b99)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3503,8 +3514,8 @@ class CfnRule(
         def __init__(
             self,
             *,
-            fixed_response: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRule.FixedResponseProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            forward: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRule.ForwardProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            fixed_response: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.FixedResponseProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            forward: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.ForwardProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes the action for a rule.
 
@@ -3547,7 +3558,7 @@ class CfnRule(
         @builtins.property
         def fixed_response(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRule.FixedResponseProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRule.FixedResponseProperty"]]:
             '''The fixed response action.
 
             The rule returns a custom HTTP response.
@@ -3555,12 +3566,12 @@ class CfnRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-rule-action.html#cfn-vpclattice-rule-action-fixedresponse
             '''
             result = self._values.get("fixed_response")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRule.FixedResponseProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRule.FixedResponseProperty"]], result)
 
         @builtins.property
         def forward(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRule.ForwardProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRule.ForwardProperty"]]:
             '''The forward action.
 
             Traffic that matches the rule is forwarded to the specified target groups.
@@ -3568,7 +3579,7 @@ class CfnRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-rule-action.html#cfn-vpclattice-rule-action-forward
             '''
             result = self._values.get("forward")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRule.ForwardProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRule.ForwardProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3644,7 +3655,7 @@ class CfnRule(
         def __init__(
             self,
             *,
-            target_groups: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRule.WeightedTargetGroupProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            target_groups: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.WeightedTargetGroupProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''The forward action.
 
@@ -3680,7 +3691,7 @@ class CfnRule(
         @builtins.property
         def target_groups(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRule.WeightedTargetGroupProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRule.WeightedTargetGroupProperty"]]]:
             '''The target groups.
 
             Traffic matching the rule is forwarded to the specified target groups. With forward actions, you can assign a weight that controls the prioritization and selection of each target group. This means that requests are distributed to individual target groups based on their weights. For example, if two target groups have the same weight, each target group receives half of the traffic.
@@ -3691,7 +3702,7 @@ class CfnRule(
             '''
             result = self._values.get("target_groups")
             assert result is not None, "Required property 'target_groups' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRule.WeightedTargetGroupProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRule.WeightedTargetGroupProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3717,9 +3728,9 @@ class CfnRule(
         def __init__(
             self,
             *,
-            match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRule.HeaderMatchTypeProperty", typing.Dict[builtins.str, typing.Any]]],
+            match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.HeaderMatchTypeProperty", typing.Dict[builtins.str, typing.Any]]],
             name: builtins.str,
-            case_sensitive: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            case_sensitive: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Describes the constraints for a header match.
 
@@ -3765,14 +3776,14 @@ class CfnRule(
         @builtins.property
         def match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRule.HeaderMatchTypeProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRule.HeaderMatchTypeProperty"]:
             '''The header match type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-rule-headermatch.html#cfn-vpclattice-rule-headermatch-match
             '''
             result = self._values.get("match")
             assert result is not None, "Required property 'match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRule.HeaderMatchTypeProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRule.HeaderMatchTypeProperty"], result)
 
         @builtins.property
         def name(self) -> builtins.str:
@@ -3787,7 +3798,7 @@ class CfnRule(
         @builtins.property
         def case_sensitive(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the match is case sensitive.
 
             :default: - false
@@ -3795,7 +3806,7 @@ class CfnRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-rule-headermatch.html#cfn-vpclattice-rule-headermatch-casesensitive
             '''
             result = self._values.get("case_sensitive")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3908,9 +3919,9 @@ class CfnRule(
         def __init__(
             self,
             *,
-            header_matches: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRule.HeaderMatchProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            header_matches: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.HeaderMatchProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             method: typing.Optional[builtins.str] = None,
-            path_match: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRule.PathMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            path_match: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.PathMatchProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Describes criteria that can be applied to incoming requests.
 
@@ -3967,7 +3978,7 @@ class CfnRule(
         @builtins.property
         def header_matches(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRule.HeaderMatchProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRule.HeaderMatchProperty"]]]]:
             '''The header matches.
 
             Matches incoming requests with rule based on request header value before applying rule action.
@@ -3975,7 +3986,7 @@ class CfnRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-rule-httpmatch.html#cfn-vpclattice-rule-httpmatch-headermatches
             '''
             result = self._values.get("header_matches")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRule.HeaderMatchProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRule.HeaderMatchProperty"]]]], result)
 
         @builtins.property
         def method(self) -> typing.Optional[builtins.str]:
@@ -3989,13 +4000,13 @@ class CfnRule(
         @builtins.property
         def path_match(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRule.PathMatchProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRule.PathMatchProperty"]]:
             '''The path match.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-rule-httpmatch.html#cfn-vpclattice-rule-httpmatch-pathmatch
             '''
             result = self._values.get("path_match")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRule.PathMatchProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRule.PathMatchProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4017,7 +4028,7 @@ class CfnRule(
         def __init__(
             self,
             *,
-            http_match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRule.HttpMatchProperty", typing.Dict[builtins.str, typing.Any]]],
+            http_match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.HttpMatchProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Describes a rule match.
 
@@ -4068,14 +4079,14 @@ class CfnRule(
         @builtins.property
         def http_match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRule.HttpMatchProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRule.HttpMatchProperty"]:
             '''The HTTP criteria that a rule must match.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-rule-match.html#cfn-vpclattice-rule-match-httpmatch
             '''
             result = self._values.get("http_match")
             assert result is not None, "Required property 'http_match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRule.HttpMatchProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRule.HttpMatchProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4097,8 +4108,8 @@ class CfnRule(
         def __init__(
             self,
             *,
-            match: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRule.PathMatchTypeProperty", typing.Dict[builtins.str, typing.Any]]],
-            case_sensitive: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.PathMatchTypeProperty", typing.Dict[builtins.str, typing.Any]]],
+            case_sensitive: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Describes the conditions that can be applied when matching a path for incoming requests.
 
@@ -4137,19 +4148,19 @@ class CfnRule(
         @builtins.property
         def match(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnRule.PathMatchTypeProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnRule.PathMatchTypeProperty"]:
             '''The type of path match.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-rule-pathmatch.html#cfn-vpclattice-rule-pathmatch-match
             '''
             result = self._values.get("match")
             assert result is not None, "Required property 'match' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRule.PathMatchTypeProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRule.PathMatchTypeProperty"], result)
 
         @builtins.property
         def case_sensitive(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the match is case sensitive.
 
             :default: - false
@@ -4157,7 +4168,7 @@ class CfnRule(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-rule-pathmatch.html#cfn-vpclattice-rule-pathmatch-casesensitive
             '''
             result = self._values.get("case_sensitive")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4338,13 +4349,13 @@ class CfnRuleProps:
     def __init__(
         self,
         *,
-        action: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRule.ActionProperty, typing.Dict[builtins.str, typing.Any]]],
-        match: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRule.MatchProperty, typing.Dict[builtins.str, typing.Any]]],
+        action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
+        match: typing.Union["_IResolvable_da3f097b", typing.Union["CfnRule.MatchProperty", typing.Dict[builtins.str, typing.Any]]],
         priority: jsii.Number,
         listener_identifier: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRule``.
 
@@ -4361,6 +4372,7 @@ class CfnRuleProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_vpclattice as vpclattice
@@ -4440,24 +4452,24 @@ class CfnRuleProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def action(self) -> typing.Union[_IResolvable_da3f097b, CfnRule.ActionProperty]:
+    def action(self) -> typing.Union["_IResolvable_da3f097b", "CfnRule.ActionProperty"]:
         '''Describes the action for a rule.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-rule.html#cfn-vpclattice-rule-action
         '''
         result = self._values.get("action")
         assert result is not None, "Required property 'action' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnRule.ActionProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRule.ActionProperty"], result)
 
     @builtins.property
-    def match(self) -> typing.Union[_IResolvable_da3f097b, CfnRule.MatchProperty]:
+    def match(self) -> typing.Union["_IResolvable_da3f097b", "CfnRule.MatchProperty"]:
         '''The rule match.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-rule.html#cfn-vpclattice-rule-match
         '''
         result = self._values.get("match")
         assert result is not None, "Required property 'match' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnRule.MatchProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnRule.MatchProperty"], result)
 
     @builtins.property
     def priority(self) -> jsii.Number:
@@ -4503,13 +4515,13 @@ class CfnRuleProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the rule.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-rule.html#cfn-vpclattice-rule-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4541,6 +4553,7 @@ class CfnService(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_vpclattice as vpclattice
@@ -4563,15 +4576,15 @@ class CfnService(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         auth_type: typing.Optional[builtins.str] = None,
         certificate_arn: typing.Optional[builtins.str] = None,
         custom_domain_name: typing.Optional[builtins.str] = None,
-        dns_entry: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.DnsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dns_entry: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnService.DnsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::Service``.
 
@@ -4601,7 +4614,7 @@ class CfnService(
 
     @jsii.member(jsii_name="arnForService")
     @builtins.classmethod
-    def arn_for_service(cls, resource: _IServiceRef_a78feffa) -> builtins.str:
+    def arn_for_service(cls, resource: "_IServiceRef_a78feffa") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4623,7 +4636,7 @@ class CfnService(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnService", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4722,15 +4735,15 @@ class CfnService(
 
     @builtins.property
     @jsii.member(jsii_name="serviceRef")
-    def service_ref(self) -> _ServiceReference_d8f4325a:
+    def service_ref(self) -> "_ServiceReference_d8f4325a":
         '''A reference to a Service resource.'''
-        return typing.cast(_ServiceReference_d8f4325a, jsii.get(self, "serviceRef"))
+        return typing.cast("_ServiceReference_d8f4325a", jsii.get(self, "serviceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="authType")
@@ -4775,14 +4788,14 @@ class CfnService(
     @jsii.member(jsii_name="dnsEntry")
     def dns_entry(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnService.DnsEntryProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnService.DnsEntryProperty"]]:
         '''Describes the DNS information of the service.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnService.DnsEntryProperty"]], jsii.get(self, "dnsEntry"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnService.DnsEntryProperty"]], jsii.get(self, "dnsEntry"))
 
     @dns_entry.setter
     def dns_entry(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnService.DnsEntryProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnService.DnsEntryProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f69a25412bdecd3b0a07c10496705afe686d7dda967f747cf78a50c21f26ba5e)
@@ -4804,12 +4817,12 @@ class CfnService(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the service.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__25281814f89f12d37427d1d0bc5ca08326738dbfdba7392691e4723e9c4dcadd)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4904,6 +4917,7 @@ class CfnServiceNetwork(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_vpclattice as vpclattice
@@ -4923,13 +4937,13 @@ class CfnServiceNetwork(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         auth_type: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        sharing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServiceNetwork.SharingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sharing_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServiceNetwork.SharingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::ServiceNetwork``.
 
@@ -4954,7 +4968,7 @@ class CfnServiceNetwork(
     @builtins.classmethod
     def arn_for_service_network(
         cls,
-        resource: _IServiceNetworkRef_1e3df588,
+        resource: "_IServiceNetworkRef_1e3df588",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -4977,7 +4991,7 @@ class CfnServiceNetwork(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServiceNetwork", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5049,15 +5063,15 @@ class CfnServiceNetwork(
 
     @builtins.property
     @jsii.member(jsii_name="serviceNetworkRef")
-    def service_network_ref(self) -> _ServiceNetworkReference_e27144ae:
+    def service_network_ref(self) -> "_ServiceNetworkReference_e27144ae":
         '''A reference to a ServiceNetwork resource.'''
-        return typing.cast(_ServiceNetworkReference_e27144ae, jsii.get(self, "serviceNetworkRef"))
+        return typing.cast("_ServiceNetworkReference_e27144ae", jsii.get(self, "serviceNetworkRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="authType")
@@ -5089,14 +5103,14 @@ class CfnServiceNetwork(
     @jsii.member(jsii_name="sharingConfig")
     def sharing_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceNetwork.SharingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetwork.SharingConfigProperty"]]:
         '''Specify if the service network should be enabled for sharing.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceNetwork.SharingConfigProperty"]], jsii.get(self, "sharingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetwork.SharingConfigProperty"]], jsii.get(self, "sharingConfig"))
 
     @sharing_config.setter
     def sharing_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceNetwork.SharingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetwork.SharingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ddecac5c408d967f992d70c89bd4765bbb82e33176cd3302f38d8583ed3e75cf)
@@ -5105,12 +5119,12 @@ class CfnServiceNetwork(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the service network.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7f79b2202986ede0dc063bd10252c9e40fc261092241edb5b4d3a67b64f7b30e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5125,7 +5139,7 @@ class CfnServiceNetwork(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''Specify if the service network should be enabled for sharing.
 
@@ -5152,14 +5166,14 @@ class CfnServiceNetwork(
             }
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Specify if the service network should be enabled for sharing.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-servicenetwork-sharingconfig.html#cfn-vpclattice-servicenetwork-sharingconfig-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5189,8 +5203,8 @@ class CfnServiceNetworkProps:
         *,
         auth_type: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        sharing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceNetwork.SharingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sharing_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServiceNetwork.SharingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnServiceNetwork``.
 
@@ -5204,6 +5218,7 @@ class CfnServiceNetworkProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_vpclattice as vpclattice
@@ -5266,22 +5281,22 @@ class CfnServiceNetworkProps:
     @builtins.property
     def sharing_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceNetwork.SharingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetwork.SharingConfigProperty"]]:
         '''Specify if the service network should be enabled for sharing.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetwork.html#cfn-vpclattice-servicenetwork-sharingconfig
         '''
         result = self._values.get("sharing_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceNetwork.SharingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetwork.SharingConfigProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the service network.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetwork.html#cfn-vpclattice-servicenetwork-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5311,6 +5326,7 @@ class CfnServiceNetworkResourceAssociation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_vpclattice as vpclattice
@@ -5328,13 +5344,13 @@ class CfnServiceNetworkResourceAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        private_dns_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        private_dns_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         resource_configuration_id: typing.Optional[builtins.str] = None,
         service_network_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::ServiceNetworkResourceAssociation``.
 
@@ -5362,7 +5378,7 @@ class CfnServiceNetworkResourceAssociation(
     @builtins.classmethod
     def arn_for_service_network_resource_association(
         cls,
-        resource: _IServiceNetworkResourceAssociationRef_82997816,
+        resource: "_IServiceNetworkResourceAssociationRef_82997816",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -5388,7 +5404,7 @@ class CfnServiceNetworkResourceAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServiceNetworkResourceAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5437,9 +5453,9 @@ class CfnServiceNetworkResourceAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5450,22 +5466,22 @@ class CfnServiceNetworkResourceAssociation(
     @jsii.member(jsii_name="serviceNetworkResourceAssociationRef")
     def service_network_resource_association_ref(
         self,
-    ) -> _ServiceNetworkResourceAssociationReference_02618c82:
+    ) -> "_ServiceNetworkResourceAssociationReference_02618c82":
         '''A reference to a ServiceNetworkResourceAssociation resource.'''
-        return typing.cast(_ServiceNetworkResourceAssociationReference_02618c82, jsii.get(self, "serviceNetworkResourceAssociationRef"))
+        return typing.cast("_ServiceNetworkResourceAssociationReference_02618c82", jsii.get(self, "serviceNetworkResourceAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="privateDnsEnabled")
     def private_dns_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates if private DNS is enabled for the service network resource association.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "privateDnsEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "privateDnsEnabled"))
 
     @private_dns_enabled.setter
     def private_dns_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__049099c6a1901e52b5f08209c26332c7529a9d788fa834296fd8651843a26a74)
@@ -5500,12 +5516,12 @@ class CfnServiceNetworkResourceAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A key-value pair to associate with a resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a7b2caf1b457306227662fd5f3d77c20c3a7709749640ee23bd13b6a28d4b4c6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5526,10 +5542,10 @@ class CfnServiceNetworkResourceAssociationProps:
     def __init__(
         self,
         *,
-        private_dns_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        private_dns_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         resource_configuration_id: typing.Optional[builtins.str] = None,
         service_network_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnServiceNetworkResourceAssociation``.
 
@@ -5543,6 +5559,7 @@ class CfnServiceNetworkResourceAssociationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_vpclattice as vpclattice
@@ -5576,13 +5593,13 @@ class CfnServiceNetworkResourceAssociationProps:
     @builtins.property
     def private_dns_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates if private DNS is enabled for the service network resource association.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetworkresourceassociation.html#cfn-vpclattice-servicenetworkresourceassociation-privatednsenabled
         '''
         result = self._values.get("private_dns_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def resource_configuration_id(self) -> typing.Optional[builtins.str]:
@@ -5603,13 +5620,13 @@ class CfnServiceNetworkResourceAssociationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A key-value pair to associate with a resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetworkresourceassociation.html#cfn-vpclattice-servicenetworkresourceassociation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5645,6 +5662,7 @@ class CfnServiceNetworkServiceAssociation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_vpclattice as vpclattice
@@ -5665,13 +5683,13 @@ class CfnServiceNetworkServiceAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        dns_entry: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServiceNetworkServiceAssociation.DnsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        dns_entry: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServiceNetworkServiceAssociation.DnsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         service_identifier: typing.Optional[builtins.str] = None,
         service_network_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::ServiceNetworkServiceAssociation``.
 
@@ -5699,7 +5717,7 @@ class CfnServiceNetworkServiceAssociation(
     @builtins.classmethod
     def arn_for_service_network_service_association(
         cls,
-        resource: _IServiceNetworkServiceAssociationRef_c2d152c8,
+        resource: "_IServiceNetworkServiceAssociationRef_c2d152c8",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -5722,7 +5740,7 @@ class CfnServiceNetworkServiceAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServiceNetworkServiceAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5868,28 +5886,28 @@ class CfnServiceNetworkServiceAssociation(
     @jsii.member(jsii_name="serviceNetworkServiceAssociationRef")
     def service_network_service_association_ref(
         self,
-    ) -> _ServiceNetworkServiceAssociationReference_4ecaad47:
+    ) -> "_ServiceNetworkServiceAssociationReference_4ecaad47":
         '''A reference to a ServiceNetworkServiceAssociation resource.'''
-        return typing.cast(_ServiceNetworkServiceAssociationReference_4ecaad47, jsii.get(self, "serviceNetworkServiceAssociationRef"))
+        return typing.cast("_ServiceNetworkServiceAssociationReference_4ecaad47", jsii.get(self, "serviceNetworkServiceAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="dnsEntry")
     def dns_entry(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceNetworkServiceAssociation.DnsEntryProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetworkServiceAssociation.DnsEntryProperty"]]:
         '''The DNS information of the service.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceNetworkServiceAssociation.DnsEntryProperty"]], jsii.get(self, "dnsEntry"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetworkServiceAssociation.DnsEntryProperty"]], jsii.get(self, "dnsEntry"))
 
     @dns_entry.setter
     def dns_entry(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceNetworkServiceAssociation.DnsEntryProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetworkServiceAssociation.DnsEntryProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f68128cc2cb951cff136fe7dc696b177c6548c0bcd99175bcb34be9901b080af)
@@ -5924,12 +5942,12 @@ class CfnServiceNetworkServiceAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the association.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fb2c0792733dff1f8284dd7ee58181b21c87eab3a32ab103634656eb91059a42)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6020,10 +6038,10 @@ class CfnServiceNetworkServiceAssociationProps:
     def __init__(
         self,
         *,
-        dns_entry: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceNetworkServiceAssociation.DnsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        dns_entry: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServiceNetworkServiceAssociation.DnsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         service_identifier: typing.Optional[builtins.str] = None,
         service_network_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnServiceNetworkServiceAssociation``.
 
@@ -6037,6 +6055,7 @@ class CfnServiceNetworkServiceAssociationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_vpclattice as vpclattice
@@ -6073,13 +6092,13 @@ class CfnServiceNetworkServiceAssociationProps:
     @builtins.property
     def dns_entry(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceNetworkServiceAssociation.DnsEntryProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetworkServiceAssociation.DnsEntryProperty"]]:
         '''The DNS information of the service.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetworkserviceassociation.html#cfn-vpclattice-servicenetworkserviceassociation-dnsentry
         '''
         result = self._values.get("dns_entry")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceNetworkServiceAssociation.DnsEntryProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetworkServiceAssociation.DnsEntryProperty"]], result)
 
     @builtins.property
     def service_identifier(self) -> typing.Optional[builtins.str]:
@@ -6102,13 +6121,13 @@ class CfnServiceNetworkServiceAssociationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the association.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetworkserviceassociation.html#cfn-vpclattice-servicenetworkserviceassociation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6144,6 +6163,7 @@ class CfnServiceNetworkVpcAssociation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_vpclattice as vpclattice
@@ -6166,14 +6186,14 @@ class CfnServiceNetworkVpcAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        dns_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServiceNetworkVpcAssociation.DnsOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        private_dns_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        dns_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServiceNetworkVpcAssociation.DnsOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        private_dns_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         service_network_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_identifier: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::ServiceNetworkVpcAssociation``.
@@ -6206,7 +6226,7 @@ class CfnServiceNetworkVpcAssociation(
     @builtins.classmethod
     def arn_for_service_network_vpc_association(
         cls,
-        resource: _IServiceNetworkVpcAssociationRef_6dc1c638,
+        resource: "_IServiceNetworkVpcAssociationRef_6dc1c638",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6229,7 +6249,7 @@ class CfnServiceNetworkVpcAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServiceNetworkVpcAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6339,28 +6359,28 @@ class CfnServiceNetworkVpcAssociation(
     @jsii.member(jsii_name="serviceNetworkVpcAssociationRef")
     def service_network_vpc_association_ref(
         self,
-    ) -> _ServiceNetworkVpcAssociationReference_b2c1552d:
+    ) -> "_ServiceNetworkVpcAssociationReference_b2c1552d":
         '''A reference to a ServiceNetworkVpcAssociation resource.'''
-        return typing.cast(_ServiceNetworkVpcAssociationReference_b2c1552d, jsii.get(self, "serviceNetworkVpcAssociationRef"))
+        return typing.cast("_ServiceNetworkVpcAssociationReference_b2c1552d", jsii.get(self, "serviceNetworkVpcAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="dnsOptions")
     def dns_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceNetworkVpcAssociation.DnsOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetworkVpcAssociation.DnsOptionsProperty"]]:
         '''The DNS options for the service network VPC association.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceNetworkVpcAssociation.DnsOptionsProperty"]], jsii.get(self, "dnsOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetworkVpcAssociation.DnsOptionsProperty"]], jsii.get(self, "dnsOptions"))
 
     @dns_options.setter
     def dns_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceNetworkVpcAssociation.DnsOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetworkVpcAssociation.DnsOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__638bb9ade5742fe013f48391df59e2f89dad80bd292e3ef34d071293e2571243)
@@ -6371,14 +6391,14 @@ class CfnServiceNetworkVpcAssociation(
     @jsii.member(jsii_name="privateDnsEnabled")
     def private_dns_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates if private DNS is enabled for the service network VPC association.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "privateDnsEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "privateDnsEnabled"))
 
     @private_dns_enabled.setter
     def private_dns_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__400b1487d13484965e883f5258624ffe18e543dde71c79c91ff3084df8a434b7)
@@ -6416,12 +6436,12 @@ class CfnServiceNetworkVpcAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the association.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__50bc759b63592b5a79a57951c96725b2b895bdf89f2c8cf8ac09f44f09c10ce3)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6536,11 +6556,11 @@ class CfnServiceNetworkVpcAssociationProps:
     def __init__(
         self,
         *,
-        dns_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceNetworkVpcAssociation.DnsOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        private_dns_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        dns_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServiceNetworkVpcAssociation.DnsOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        private_dns_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         service_network_identifier: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_identifier: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnServiceNetworkVpcAssociation``.
@@ -6557,6 +6577,7 @@ class CfnServiceNetworkVpcAssociationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_vpclattice as vpclattice
@@ -6601,24 +6622,24 @@ class CfnServiceNetworkVpcAssociationProps:
     @builtins.property
     def dns_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceNetworkVpcAssociation.DnsOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetworkVpcAssociation.DnsOptionsProperty"]]:
         '''The DNS options for the service network VPC association.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetworkvpcassociation.html#cfn-vpclattice-servicenetworkvpcassociation-dnsoptions
         '''
         result = self._values.get("dns_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceNetworkVpcAssociation.DnsOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServiceNetworkVpcAssociation.DnsOptionsProperty"]], result)
 
     @builtins.property
     def private_dns_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates if private DNS is enabled for the service network VPC association.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetworkvpcassociation.html#cfn-vpclattice-servicenetworkvpcassociation-privatednsenabled
         '''
         result = self._values.get("private_dns_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -6643,13 +6664,13 @@ class CfnServiceNetworkVpcAssociationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the association.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetworkvpcassociation.html#cfn-vpclattice-servicenetworkvpcassociation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def vpc_identifier(self) -> typing.Optional[builtins.str]:
@@ -6691,9 +6712,9 @@ class CfnServiceProps:
         auth_type: typing.Optional[builtins.str] = None,
         certificate_arn: typing.Optional[builtins.str] = None,
         custom_domain_name: typing.Optional[builtins.str] = None,
-        dns_entry: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.DnsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        dns_entry: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnService.DnsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnService``.
 
@@ -6709,6 +6730,7 @@ class CfnServiceProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_vpclattice as vpclattice
@@ -6785,7 +6807,7 @@ class CfnServiceProps:
     @builtins.property
     def dns_entry(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnService.DnsEntryProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnService.DnsEntryProperty"]]:
         '''Describes the DNS information of the service.
 
         This field is read-only.
@@ -6793,7 +6815,7 @@ class CfnServiceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-service.html#cfn-vpclattice-service-dnsentry
         '''
         result = self._values.get("dns_entry")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnService.DnsEntryProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnService.DnsEntryProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -6809,13 +6831,13 @@ class CfnServiceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the service.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-service.html#cfn-vpclattice-service-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6847,6 +6869,7 @@ class CfnTargetGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_vpclattice as vpclattice
@@ -6893,14 +6916,14 @@ class CfnTargetGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         type: builtins.str,
-        config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTargetGroup.TargetGroupConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTargetGroup.TargetGroupConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTargetGroup.TargetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        targets: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTargetGroup.TargetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::TargetGroup``.
 
@@ -6924,7 +6947,10 @@ class CfnTargetGroup(
 
     @jsii.member(jsii_name="arnForTargetGroup")
     @builtins.classmethod
-    def arn_for_target_group(cls, resource: _ITargetGroupRef_52994392) -> builtins.str:
+    def arn_for_target_group(
+        cls,
+        resource: "_ITargetGroupRef_52994392",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -6946,7 +6972,7 @@ class CfnTargetGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTargetGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7029,15 +7055,15 @@ class CfnTargetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="targetGroupRef")
-    def target_group_ref(self) -> _TargetGroupReference_6c9bb51b:
+    def target_group_ref(self) -> "_TargetGroupReference_6c9bb51b":
         '''A reference to a TargetGroup resource.'''
-        return typing.cast(_TargetGroupReference_6c9bb51b, jsii.get(self, "targetGroupRef"))
+        return typing.cast("_TargetGroupReference_6c9bb51b", jsii.get(self, "targetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="type")
@@ -7056,14 +7082,14 @@ class CfnTargetGroup(
     @jsii.member(jsii_name="config")
     def config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTargetGroup.TargetGroupConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.TargetGroupConfigProperty"]]:
         '''The target group configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTargetGroup.TargetGroupConfigProperty"]], jsii.get(self, "config"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.TargetGroupConfigProperty"]], jsii.get(self, "config"))
 
     @config.setter
     def config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTargetGroup.TargetGroupConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.TargetGroupConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aa8640187487f07eca4afad1c9572ddd8bc8c999dcf3d4db28459391b85f9cab)
@@ -7085,12 +7111,12 @@ class CfnTargetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the target group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__136df6fcae40b885020641351e843f89511c6e92fa2173475366a4820c5ddd41)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7100,14 +7126,14 @@ class CfnTargetGroup(
     @jsii.member(jsii_name="targets")
     def targets(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTargetGroup.TargetProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.TargetProperty"]]]]:
         '''Describes a target.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTargetGroup.TargetProperty"]]]], jsii.get(self, "targets"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.TargetProperty"]]]], jsii.get(self, "targets"))
 
     @targets.setter
     def targets(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTargetGroup.TargetProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.TargetProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fc9e71a8b226ae62bf17321c794331f8bbbd90e67522bffd60ad5a876cf88391)
@@ -7134,11 +7160,11 @@ class CfnTargetGroup(
         def __init__(
             self,
             *,
-            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             health_check_interval_seconds: typing.Optional[jsii.Number] = None,
             health_check_timeout_seconds: typing.Optional[jsii.Number] = None,
             healthy_threshold_count: typing.Optional[jsii.Number] = None,
-            matcher: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTargetGroup.MatcherProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            matcher: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTargetGroup.MatcherProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             path: typing.Optional[builtins.str] = None,
             port: typing.Optional[jsii.Number] = None,
             protocol: typing.Optional[builtins.str] = None,
@@ -7221,13 +7247,13 @@ class CfnTargetGroup(
         @builtins.property
         def enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether health checking is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-targetgroup-healthcheckconfig.html#cfn-vpclattice-targetgroup-healthcheckconfig-enabled
             '''
             result = self._values.get("enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def health_check_interval_seconds(self) -> typing.Optional[jsii.Number]:
@@ -7265,13 +7291,13 @@ class CfnTargetGroup(
         @builtins.property
         def matcher(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTargetGroup.MatcherProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.MatcherProperty"]]:
             '''The codes to use when checking for a successful response from a target.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-targetgroup-healthcheckconfig.html#cfn-vpclattice-targetgroup-healthcheckconfig-matcher
             '''
             result = self._values.get("matcher")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTargetGroup.MatcherProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.MatcherProperty"]], result)
 
         @builtins.property
         def path(self) -> typing.Optional[builtins.str]:
@@ -7408,7 +7434,7 @@ class CfnTargetGroup(
         def __init__(
             self,
             *,
-            health_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTargetGroup.HealthCheckConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            health_check: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTargetGroup.HealthCheckConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             ip_address_type: typing.Optional[builtins.str] = None,
             lambda_event_structure_version: typing.Optional[builtins.str] = None,
             port: typing.Optional[jsii.Number] = None,
@@ -7488,7 +7514,7 @@ class CfnTargetGroup(
         @builtins.property
         def health_check(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTargetGroup.HealthCheckConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.HealthCheckConfigProperty"]]:
             '''The health check configuration.
 
             Not supported if the target group type is ``LAMBDA`` or ``ALB`` .
@@ -7496,7 +7522,7 @@ class CfnTargetGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-targetgroup-targetgroupconfig.html#cfn-vpclattice-targetgroup-targetgroupconfig-healthcheck
             '''
             result = self._values.get("health_check")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTargetGroup.HealthCheckConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.HealthCheckConfigProperty"]], result)
 
         @builtins.property
         def ip_address_type(self) -> typing.Optional[builtins.str]:
@@ -7673,10 +7699,10 @@ class CfnTargetGroupProps:
         self,
         *,
         type: builtins.str,
-        config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTargetGroup.TargetGroupConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTargetGroup.TargetGroupConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTargetGroup.TargetProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        targets: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTargetGroup.TargetProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTargetGroup``.
 
@@ -7691,6 +7717,7 @@ class CfnTargetGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_vpclattice as vpclattice
@@ -7766,13 +7793,13 @@ class CfnTargetGroupProps:
     @builtins.property
     def config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTargetGroup.TargetGroupConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.TargetGroupConfigProperty"]]:
         '''The target group configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-targetgroup.html#cfn-vpclattice-targetgroup-config
         '''
         result = self._values.get("config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTargetGroup.TargetGroupConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.TargetGroupConfigProperty"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -7788,24 +7815,24 @@ class CfnTargetGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags for the target group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-targetgroup.html#cfn-vpclattice-targetgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def targets(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTargetGroup.TargetProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.TargetProperty"]]]]:
         '''Describes a target.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-targetgroup.html#cfn-vpclattice-targetgroup-targets
         '''
         result = self._values.get("targets")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTargetGroup.TargetProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTargetGroup.TargetProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

@@ -41,7 +41,6 @@ use std::{
 };
 use temporalio_common::telemetry::{
     CoreLog, CoreTelemetry, Logger, TaskQueueLabelStrategy, TelemetryOptions,
-    TelemetryOptionsBuilder,
     metrics::{CoreMeter, MetricKeyValue, NewAttributes, TemporalMeter},
 };
 use tracing::{Level, Subscriber};
@@ -249,7 +248,7 @@ pub fn telemetry_init(opts: TelemetryOptions) -> Result<TelemetryInstance, anyho
     ))
 }
 
-/// WARNING: Calling can cause panics because of https://github.com/tokio-rs/tracing/issues/1656
+/// WARNING: Calling can cause panics because of <https://github.com/tokio-rs/tracing/issues/1656>
 /// Lang must not start using until resolved
 ///
 /// Initialize telemetry/tracing globally. Useful for testing. Only takes affect when called
@@ -268,7 +267,7 @@ pub fn telemetry_init_global(opts: TelemetryOptions) -> Result<(), anyhow::Error
     Ok(())
 }
 
-/// WARNING: Calling can cause panics because of https://github.com/tokio-rs/tracing/issues/1656
+/// WARNING: Calling can cause panics because of <https://github.com/tokio-rs/tracing/issues/1656>
 /// Lang must not start using until resolved
 ///
 /// Initialize the fallback global handler. All lang SDKs should call this somewhere, once, at
@@ -277,11 +276,11 @@ pub fn telemetry_init_global(opts: TelemetryOptions) -> Result<(), anyhow::Error
 /// that uses the default console logger.
 pub fn telemetry_init_fallback() -> Result<(), anyhow::Error> {
     telemetry_init_global(
-        TelemetryOptionsBuilder::default()
+        TelemetryOptions::builder()
             .logging(Logger::Console {
                 filter: construct_filter_string(Level::DEBUG, Level::WARN),
             })
-            .build()?,
+            .build(),
     )?;
     Ok(())
 }

@@ -6,18 +6,19 @@ from docket import Docket, Worker
 
 from prefect.server.api.flow_runs import delete_flow_run_logs
 from prefect.server.api.task_runs import delete_task_run_logs
+from prefect.server.events.services import triggers as _triggers_module  # noqa: F401
 from prefect.server.models.deployments import mark_deployments_ready
 from prefect.server.models.work_queues import mark_work_queues_ready
-
-# Import task functions that need to be registered with docket
 from prefect.server.services.cancellation_cleanup import (
     cancel_child_task_runs,
     cancel_subflow_run,
 )
+from prefect.server.services.late_runs import mark_flow_run_late
 from prefect.server.services.pause_expirations import fail_expired_pause
 from prefect.server.services.perpetual_services import (
     register_and_schedule_perpetual_services,
 )
+from prefect.server.services.repossessor import revoke_expired_lease
 
 # Task functions to register with docket for background processing
 task_functions: list[Callable[..., Any]] = [
@@ -30,6 +31,8 @@ task_functions: list[Callable[..., Any]] = [
     cancel_child_task_runs,
     cancel_subflow_run,
     fail_expired_pause,
+    mark_flow_run_late,
+    revoke_expired_lease,
 ]
 
 

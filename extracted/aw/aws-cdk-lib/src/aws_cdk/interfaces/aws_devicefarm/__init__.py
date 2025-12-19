@@ -96,7 +96,7 @@ class IDevicePoolRef(
 
     @builtins.property
     @jsii.member(jsii_name="devicePoolRef")
-    def device_pool_ref(self) -> DevicePoolReference:
+    def device_pool_ref(self) -> "DevicePoolReference":
         '''(experimental) A reference to a DevicePool resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IDevicePoolRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="devicePoolRef")
-    def device_pool_ref(self) -> DevicePoolReference:
+    def device_pool_ref(self) -> "DevicePoolReference":
         '''(experimental) A reference to a DevicePool resource.
 
         :stability: experimental
         '''
-        return typing.cast(DevicePoolReference, jsii.get(self, "devicePoolRef"))
+        return typing.cast("DevicePoolReference", jsii.get(self, "devicePoolRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDevicePoolRef).__jsii_proxy_class__ = lambda : _IDevicePoolRefProxy

@@ -1776,6 +1776,7 @@ Docker container is responsible for putting content at `/asset-output`. The cont
 Example with Python:
 
 ```python
+from aws_cdk import BundlingOptions
 lambda_.Function(self, "Function",
     code=lambda_.Code.from_asset(path.join(__dirname, "my-python-handler"),
         bundling=BundlingOptions(
@@ -1795,6 +1796,7 @@ Use `cdk.DockerImage.fromRegistry(image)` to use an existing image or
 `cdk.DockerImage.fromBuild(path)` to build a specific image:
 
 ```python
+from aws_cdk import BundlingOptions
 lambda_.Function(self, "Function",
     code=lambda_.Code.from_asset("/path/to/handler",
         bundling=BundlingOptions(
@@ -2174,7 +2176,7 @@ class AdotLambdaLayerGenericVersion(
     @jsii.member(jsii_name="layerArn")
     def layer_arn(
         self,
-        scope: _constructs_77d1e7e8.IConstruct,
+        scope: "_constructs_77d1e7e8.IConstruct",
         architecture: "Architecture",
     ) -> builtins.str:
         '''The ARN of the Lambda layer.
@@ -2272,7 +2274,7 @@ class AdotLambdaLayerJavaAutoInstrumentationVersion(
     @jsii.member(jsii_name="layerArn")
     def layer_arn(
         self,
-        scope: _constructs_77d1e7e8.IConstruct,
+        scope: "_constructs_77d1e7e8.IConstruct",
         architecture: "Architecture",
     ) -> builtins.str:
         '''The ARN of the Lambda layer.
@@ -2365,7 +2367,7 @@ class AdotLambdaLayerJavaScriptSdkVersion(
     @jsii.member(jsii_name="layerArn")
     def layer_arn(
         self,
-        scope: _constructs_77d1e7e8.IConstruct,
+        scope: "_constructs_77d1e7e8.IConstruct",
         architecture: "Architecture",
     ) -> builtins.str:
         '''The ARN of the Lambda layer.
@@ -2449,7 +2451,7 @@ class AdotLambdaLayerJavaSdkVersion(
     @jsii.member(jsii_name="layerArn")
     def layer_arn(
         self,
-        scope: _constructs_77d1e7e8.IConstruct,
+        scope: "_constructs_77d1e7e8.IConstruct",
         architecture: "Architecture",
     ) -> builtins.str:
         '''The ARN of the Lambda layer.
@@ -2535,7 +2537,7 @@ class AdotLambdaLayerPythonSdkVersion(
     @jsii.member(jsii_name="layerArn")
     def layer_arn(
         self,
-        scope: _constructs_77d1e7e8.IConstruct,
+        scope: "_constructs_77d1e7e8.IConstruct",
         architecture: "Architecture",
     ) -> builtins.str:
         '''The ARN of the Lambda layer.
@@ -2674,7 +2676,7 @@ class AdotLayerVersion(
     @builtins.classmethod
     def from_generic_layer_version(
         cls,
-        version: AdotLambdaLayerGenericVersion,
+        version: "AdotLambdaLayerGenericVersion",
     ) -> "AdotLayerVersion":
         '''The ADOT Lambda layer for generic use cases.
 
@@ -2689,7 +2691,7 @@ class AdotLayerVersion(
     @builtins.classmethod
     def from_java_auto_instrumentation_layer_version(
         cls,
-        version: AdotLambdaLayerJavaAutoInstrumentationVersion,
+        version: "AdotLambdaLayerJavaAutoInstrumentationVersion",
     ) -> "AdotLayerVersion":
         '''The ADOT Lambda layer for Java auto instrumentation.
 
@@ -2704,7 +2706,7 @@ class AdotLayerVersion(
     @builtins.classmethod
     def from_java_script_sdk_layer_version(
         cls,
-        version: AdotLambdaLayerJavaScriptSdkVersion,
+        version: "AdotLambdaLayerJavaScriptSdkVersion",
     ) -> "AdotLayerVersion":
         '''The ADOT Lambda layer for JavaScript SDK.
 
@@ -2719,7 +2721,7 @@ class AdotLayerVersion(
     @builtins.classmethod
     def from_java_sdk_layer_version(
         cls,
-        version: AdotLambdaLayerJavaSdkVersion,
+        version: "AdotLambdaLayerJavaSdkVersion",
     ) -> "AdotLayerVersion":
         '''The ADOT Lambda layer for Java SDK.
 
@@ -2734,7 +2736,7 @@ class AdotLayerVersion(
     @builtins.classmethod
     def from_python_sdk_layer_version(
         cls,
-        version: AdotLambdaLayerPythonSdkVersion,
+        version: "AdotLambdaLayerPythonSdkVersion",
     ) -> "AdotLayerVersion":
         '''The ADOT Lambda layer for Python SDK.
 
@@ -2951,22 +2953,22 @@ class AssetImageCodeProps(_DockerImageAssetOptions_9580cd76):
         self,
         *,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
         extra_hash: typing.Optional[builtins.str] = None,
         asset_name: typing.Optional[builtins.str] = None,
         build_args: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         build_secrets: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         build_ssh: typing.Optional[builtins.str] = None,
         cache_disabled: typing.Optional[builtins.bool] = None,
-        cache_from: typing.Optional[typing.Sequence[typing.Union[_DockerCacheOption_58ef18ca, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache_to: typing.Optional[typing.Union[_DockerCacheOption_58ef18ca, typing.Dict[builtins.str, typing.Any]]] = None,
+        cache_from: typing.Optional[typing.Sequence[typing.Union["_DockerCacheOption_58ef18ca", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_to: typing.Optional[typing.Union["_DockerCacheOption_58ef18ca", typing.Dict[builtins.str, typing.Any]]] = None,
         display_name: typing.Optional[builtins.str] = None,
         file: typing.Optional[builtins.str] = None,
-        invalidation: typing.Optional[typing.Union[_DockerImageAssetInvalidationOptions_4deb8d45, typing.Dict[builtins.str, typing.Any]]] = None,
-        network_mode: typing.Optional[_NetworkMode_897e5081] = None,
+        invalidation: typing.Optional[typing.Union["_DockerImageAssetInvalidationOptions_4deb8d45", typing.Dict[builtins.str, typing.Any]]] = None,
+        network_mode: typing.Optional["_NetworkMode_897e5081"] = None,
         outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
-        platform: typing.Optional[_Platform_d16f3cf1] = None,
+        platform: typing.Optional["_Platform_d16f3cf1"] = None,
         target: typing.Optional[builtins.str] = None,
         cmd: typing.Optional[typing.Sequence[builtins.str]] = None,
         entrypoint: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -3146,22 +3148,22 @@ class AssetImageCodeProps(_DockerImageAssetOptions_9580cd76):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def follow_symlinks(self) -> typing.Optional[_SymlinkFollowMode_047ec1f6]:
+    def follow_symlinks(self) -> typing.Optional["_SymlinkFollowMode_047ec1f6"]:
         '''A strategy for how to handle symlinks.
 
         :default: SymlinkFollowMode.NEVER
         '''
         result = self._values.get("follow_symlinks")
-        return typing.cast(typing.Optional[_SymlinkFollowMode_047ec1f6], result)
+        return typing.cast(typing.Optional["_SymlinkFollowMode_047ec1f6"], result)
 
     @builtins.property
-    def ignore_mode(self) -> typing.Optional[_IgnoreMode_655a98e8]:
+    def ignore_mode(self) -> typing.Optional["_IgnoreMode_655a98e8"]:
         '''The ignore behavior to use for ``exclude`` patterns.
 
         :default: IgnoreMode.GLOB
         '''
         result = self._values.get("ignore_mode")
-        return typing.cast(typing.Optional[_IgnoreMode_655a98e8], result)
+        return typing.cast(typing.Optional["_IgnoreMode_655a98e8"], result)
 
     @builtins.property
     def extra_hash(self) -> typing.Optional[builtins.str]:
@@ -3243,7 +3245,7 @@ class AssetImageCodeProps(_DockerImageAssetOptions_9580cd76):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def cache_from(self) -> typing.Optional[typing.List[_DockerCacheOption_58ef18ca]]:
+    def cache_from(self) -> typing.Optional[typing.List["_DockerCacheOption_58ef18ca"]]:
         '''Cache from options to pass to the ``docker build`` command.
 
         :default: - no cache from options are passed to the build command
@@ -3251,10 +3253,10 @@ class AssetImageCodeProps(_DockerImageAssetOptions_9580cd76):
         :see: https://docs.docker.com/build/cache/backends/
         '''
         result = self._values.get("cache_from")
-        return typing.cast(typing.Optional[typing.List[_DockerCacheOption_58ef18ca]], result)
+        return typing.cast(typing.Optional[typing.List["_DockerCacheOption_58ef18ca"]], result)
 
     @builtins.property
-    def cache_to(self) -> typing.Optional[_DockerCacheOption_58ef18ca]:
+    def cache_to(self) -> typing.Optional["_DockerCacheOption_58ef18ca"]:
         '''Cache to options to pass to the ``docker build`` command.
 
         :default: - no cache to options are passed to the build command
@@ -3262,7 +3264,7 @@ class AssetImageCodeProps(_DockerImageAssetOptions_9580cd76):
         :see: https://docs.docker.com/build/cache/backends/
         '''
         result = self._values.get("cache_to")
-        return typing.cast(typing.Optional[_DockerCacheOption_58ef18ca], result)
+        return typing.cast(typing.Optional["_DockerCacheOption_58ef18ca"], result)
 
     @builtins.property
     def display_name(self) -> typing.Optional[builtins.str]:
@@ -3301,16 +3303,16 @@ class AssetImageCodeProps(_DockerImageAssetOptions_9580cd76):
     @builtins.property
     def invalidation(
         self,
-    ) -> typing.Optional[_DockerImageAssetInvalidationOptions_4deb8d45]:
+    ) -> typing.Optional["_DockerImageAssetInvalidationOptions_4deb8d45"]:
         '''Options to control which parameters are used to invalidate the asset hash.
 
         :default: - hash all parameters
         '''
         result = self._values.get("invalidation")
-        return typing.cast(typing.Optional[_DockerImageAssetInvalidationOptions_4deb8d45], result)
+        return typing.cast(typing.Optional["_DockerImageAssetInvalidationOptions_4deb8d45"], result)
 
     @builtins.property
-    def network_mode(self) -> typing.Optional[_NetworkMode_897e5081]:
+    def network_mode(self) -> typing.Optional["_NetworkMode_897e5081"]:
         '''Networking mode for the RUN commands during build.
 
         Support docker API 1.25+.
@@ -3318,7 +3320,7 @@ class AssetImageCodeProps(_DockerImageAssetOptions_9580cd76):
         :default: - no networking mode specified (the default networking mode ``NetworkMode.DEFAULT`` will be used)
         '''
         result = self._values.get("network_mode")
-        return typing.cast(typing.Optional[_NetworkMode_897e5081], result)
+        return typing.cast(typing.Optional["_NetworkMode_897e5081"], result)
 
     @builtins.property
     def outputs(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3332,7 +3334,7 @@ class AssetImageCodeProps(_DockerImageAssetOptions_9580cd76):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def platform(self) -> typing.Optional[_Platform_d16f3cf1]:
+    def platform(self) -> typing.Optional["_Platform_d16f3cf1"]:
         '''Platform to build for.
 
         *Requires Docker Buildx*.
@@ -3340,7 +3342,7 @@ class AssetImageCodeProps(_DockerImageAssetOptions_9580cd76):
         :default: - no platform specified (the current machine architecture will be used)
         '''
         result = self._values.get("platform")
-        return typing.cast(typing.Optional[_Platform_d16f3cf1], result)
+        return typing.cast(typing.Optional["_Platform_d16f3cf1"], result)
 
     @builtins.property
     def target(self) -> typing.Optional[builtins.str]:
@@ -3492,7 +3494,7 @@ class BucketOptions:
         self,
         *,
         object_version: typing.Optional[builtins.str] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
     ) -> None:
         '''Optional parameters for creating code using bucket.
 
@@ -3536,13 +3538,13 @@ class BucketOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def source_kms_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def source_kms_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The ARN of the KMS key used to encrypt the handler code.
 
         :default: - the default server-side encryption with Amazon S3 managed keys(SSE-S3) key will be used.
         '''
         result = self._values.get("source_kms_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3743,14 +3745,14 @@ class CapacityProviderProps:
     def __init__(
         self,
         *,
-        security_groups: typing.Sequence[_ISecurityGroup_acf8a799],
-        subnets: typing.Sequence[_ISubnet_d57d1229],
-        architectures: typing.Optional[typing.Sequence[Architecture]] = None,
+        security_groups: typing.Sequence["_ISecurityGroup_acf8a799"],
+        subnets: typing.Sequence["_ISubnet_d57d1229"],
+        architectures: typing.Optional[typing.Sequence["Architecture"]] = None,
         capacity_provider_name: typing.Optional[builtins.str] = None,
         instance_type_filter: typing.Optional["InstanceTypeFilter"] = None,
-        kms_key: typing.Optional[_IKey_5f11635f] = None,
+        kms_key: typing.Optional["_IKey_5f11635f"] = None,
         max_v_cpu_count: typing.Optional[jsii.Number] = None,
-        operator_role: typing.Optional[_IRole_235f5d8e] = None,
+        operator_role: typing.Optional["_IRole_235f5d8e"] = None,
         scaling_options: typing.Optional["ScalingOptions"] = None,
     ) -> None:
         '''Properties for creating a Lambda capacity provider.
@@ -3814,27 +3816,27 @@ class CapacityProviderProps:
             self._values["scaling_options"] = scaling_options
 
     @builtins.property
-    def security_groups(self) -> typing.List[_ISecurityGroup_acf8a799]:
+    def security_groups(self) -> typing.List["_ISecurityGroup_acf8a799"]:
         '''A list of security group IDs to associate with EC2 instances launched by the capacity provider.
 
         Up to 5 security groups can be specified.
         '''
         result = self._values.get("security_groups")
         assert result is not None, "Required property 'security_groups' is missing"
-        return typing.cast(typing.List[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.List["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
-    def subnets(self) -> typing.List[_ISubnet_d57d1229]:
+    def subnets(self) -> typing.List["_ISubnet_d57d1229"]:
         '''A list of subnets where the capacity provider can launch EC2 instances.
 
         At least one subnet must be specified, and up to 16 subnets are supported.
         '''
         result = self._values.get("subnets")
         assert result is not None, "Required property 'subnets' is missing"
-        return typing.cast(typing.List[_ISubnet_d57d1229], result)
+        return typing.cast(typing.List["_ISubnet_d57d1229"], result)
 
     @builtins.property
-    def architectures(self) -> typing.Optional[typing.List[Architecture]]:
+    def architectures(self) -> typing.Optional[typing.List["Architecture"]]:
         '''The instruction set architecture required for compute instances.
 
         Only one architecture can be specified per capacity provider.
@@ -3842,7 +3844,7 @@ class CapacityProviderProps:
         :default: - No architecture constraints specified
         '''
         result = self._values.get("architectures")
-        return typing.cast(typing.Optional[typing.List[Architecture]], result)
+        return typing.cast(typing.Optional[typing.List["Architecture"]], result)
 
     @builtins.property
     def capacity_provider_name(self) -> typing.Optional[builtins.str]:
@@ -3868,13 +3870,13 @@ class CapacityProviderProps:
         return typing.cast(typing.Optional["InstanceTypeFilter"], result)
 
     @builtins.property
-    def kms_key(self) -> typing.Optional[_IKey_5f11635f]:
+    def kms_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''The AWS Key Management Service (KMS) key used to encrypt data associated with the capacity provider.
 
         :default: - No KMS key specified, uses an AWS-managed key instead
         '''
         result = self._values.get("kms_key")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def max_v_cpu_count(self) -> typing.Optional[jsii.Number]:
@@ -3886,13 +3888,13 @@ class CapacityProviderProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def operator_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def operator_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role that the Lambda service assumes to manage the capacity provider.
 
         :default: - A role will be generated containing the AWSLambdaManagedEC2ResourceOperator managed policy
         '''
         result = self._values.get("operator_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def scaling_options(self) -> typing.Optional["ScalingOptions"]:
@@ -3956,15 +3958,15 @@ class CfnAlias(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         function_name: builtins.str,
         function_version: builtins.str,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlias.ProvisionedConcurrencyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        routing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlias.AliasRoutingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        provisioned_concurrency_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlias.ProvisionedConcurrencyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        routing_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlias.AliasRoutingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lambda::Alias``.
 
@@ -3994,7 +3996,7 @@ class CfnAlias(
 
     @jsii.member(jsii_name="arnForAlias")
     @builtins.classmethod
-    def arn_for_alias(cls, resource: _IAliasRef_ff1cf51c) -> builtins.str:
+    def arn_for_alias(cls, resource: "_IAliasRef_ff1cf51c") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4016,7 +4018,7 @@ class CfnAlias(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAlias", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4047,9 +4049,9 @@ class CfnAlias(
 
     @builtins.property
     @jsii.member(jsii_name="aliasRef")
-    def alias_ref(self) -> _AliasReference_de21ecaa:
+    def alias_ref(self) -> "_AliasReference_de21ecaa":
         '''A reference to a Alias resource.'''
-        return typing.cast(_AliasReference_de21ecaa, jsii.get(self, "aliasRef"))
+        return typing.cast("_AliasReference_de21ecaa", jsii.get(self, "aliasRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAliasArn")
@@ -4121,14 +4123,14 @@ class CfnAlias(
     @jsii.member(jsii_name="provisionedConcurrencyConfig")
     def provisioned_concurrency_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAlias.ProvisionedConcurrencyConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlias.ProvisionedConcurrencyConfigurationProperty"]]:
         '''Specifies a `provisioned concurrency <https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html>`_ configuration for a function's alias.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAlias.ProvisionedConcurrencyConfigurationProperty"]], jsii.get(self, "provisionedConcurrencyConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlias.ProvisionedConcurrencyConfigurationProperty"]], jsii.get(self, "provisionedConcurrencyConfig"))
 
     @provisioned_concurrency_config.setter
     def provisioned_concurrency_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAlias.ProvisionedConcurrencyConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlias.ProvisionedConcurrencyConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a958bc2b3267e229d2253296cdbb66337d157b0c6e2ec1711eb372278993a948)
@@ -4139,14 +4141,14 @@ class CfnAlias(
     @jsii.member(jsii_name="routingConfig")
     def routing_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAlias.AliasRoutingConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlias.AliasRoutingConfigurationProperty"]]:
         '''The `routing configuration <https://docs.aws.amazon.com/lambda/latest/dg/lambda-traffic-shifting-using-aliases.html>`_ of the alias.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAlias.AliasRoutingConfigurationProperty"]], jsii.get(self, "routingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlias.AliasRoutingConfigurationProperty"]], jsii.get(self, "routingConfig"))
 
     @routing_config.setter
     def routing_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAlias.AliasRoutingConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlias.AliasRoutingConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7525467ed4a8de7249cf79d24091ae59273412647fd30558b48ead6b615e5f51)
@@ -4162,7 +4164,7 @@ class CfnAlias(
         def __init__(
             self,
             *,
-            additional_version_weights: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlias.VersionWeightProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            additional_version_weights: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlias.VersionWeightProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The `traffic-shifting <https://docs.aws.amazon.com/lambda/latest/dg/lambda-traffic-shifting-using-aliases.html>`_ configuration of a Lambda function alias.
 
@@ -4194,13 +4196,13 @@ class CfnAlias(
         @builtins.property
         def additional_version_weights(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAlias.VersionWeightProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlias.VersionWeightProperty"]]]]:
             '''The second version, and the percentage of traffic that's routed to it.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-alias-aliasroutingconfiguration.html#cfn-lambda-alias-aliasroutingconfiguration-additionalversionweights
             '''
             result = self._values.get("additional_version_weights")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAlias.VersionWeightProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAlias.VersionWeightProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4362,8 +4364,8 @@ class CfnAliasProps:
         function_version: builtins.str,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAlias.ProvisionedConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        routing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAlias.AliasRoutingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        provisioned_concurrency_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlias.ProvisionedConcurrencyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        routing_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlias.AliasRoutingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAlias``.
 
@@ -4470,24 +4472,24 @@ class CfnAliasProps:
     @builtins.property
     def provisioned_concurrency_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAlias.ProvisionedConcurrencyConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlias.ProvisionedConcurrencyConfigurationProperty"]]:
         '''Specifies a `provisioned concurrency <https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html>`_ configuration for a function's alias.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-alias.html#cfn-lambda-alias-provisionedconcurrencyconfig
         '''
         result = self._values.get("provisioned_concurrency_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAlias.ProvisionedConcurrencyConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlias.ProvisionedConcurrencyConfigurationProperty"]], result)
 
     @builtins.property
     def routing_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAlias.AliasRoutingConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlias.AliasRoutingConfigurationProperty"]]:
         '''The `routing configuration <https://docs.aws.amazon.com/lambda/latest/dg/lambda-traffic-shifting-using-aliases.html>`_ of the alias.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-alias.html#cfn-lambda-alias-routingconfig
         '''
         result = self._values.get("routing_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAlias.AliasRoutingConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlias.AliasRoutingConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4507,7 +4509,7 @@ class CfnCapacityProvider(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_lambda.CfnCapacityProvider",
 ):
-    '''Resource Type definition for AWS::Lambda::CapacityProvider.
+    '''Creates a capacity provider that manages compute resources for Lambda functions.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html
     :cloudformationResource: AWS::Lambda::CapacityProvider
@@ -4515,6 +4517,7 @@ class CfnCapacityProvider(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lambda as lambda_
@@ -4553,28 +4556,28 @@ class CfnCapacityProvider(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        permissions_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.CapacityProviderPermissionsConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.CapacityProviderVpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        permissions_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.CapacityProviderPermissionsConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        vpc_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.CapacityProviderVpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         capacity_provider_name: typing.Optional[builtins.str] = None,
-        capacity_provider_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.CapacityProviderScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        instance_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.InstanceRequirementsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        capacity_provider_scaling_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.CapacityProviderScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        instance_requirements: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.InstanceRequirementsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lambda::CapacityProvider``.
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param permissions_config: IAM permissions configuration for the capacity provider.
-        :param vpc_config: VPC configuration for the capacity provider.
+        :param permissions_config: The permissions configuration for the capacity provider.
+        :param vpc_config: The VPC configuration for the capacity provider.
         :param capacity_provider_name: The name of the capacity provider. The name must be unique within your AWS account and region. If you don't specify a name, CloudFormation generates one.
         :param capacity_provider_scaling_config: The scaling configuration for the capacity provider.
-        :param instance_requirements: Specifications for the types of EC2 instances that the capacity provider can use.
-        :param kms_key_arn: The ARN of the AWS Key Management Service (KMS) key used by the capacity provider.
-        :param tags: A list of tags to apply to the capacity provider.
+        :param instance_requirements: The instance requirements for compute resources managed by the capacity provider.
+        :param kms_key_arn: The ARN of the KMS key used to encrypt the capacity provider's resources.
+        :param tags: A key-value pair that provides metadata for the capacity provider.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a330cee966095402be57b20cbf348c99c8e7dbae1f12bacb4337a86817b66c21)
@@ -4596,7 +4599,7 @@ class CfnCapacityProvider(
     @builtins.classmethod
     def arn_for_capacity_provider(
         cls,
-        resource: _ICapacityProviderRef_2d9bc4af,
+        resource: "_ICapacityProviderRef_2d9bc4af",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -4610,10 +4613,10 @@ class CfnCapacityProvider(
     @builtins.classmethod
     def from_capacity_provider_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ICapacityProviderRef_2d9bc4af:
+    ) -> "_ICapacityProviderRef_2d9bc4af":
         '''Creates a new ICapacityProviderRef from an ARN.
 
         :param scope: -
@@ -4625,16 +4628,16 @@ class CfnCapacityProvider(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ICapacityProviderRef_2d9bc4af, jsii.sinvoke(cls, "fromCapacityProviderArn", [scope, id, arn]))
+        return typing.cast("_ICapacityProviderRef_2d9bc4af", jsii.sinvoke(cls, "fromCapacityProviderArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromCapacityProviderName")
     @builtins.classmethod
     def from_capacity_provider_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         capacity_provider_name: builtins.str,
-    ) -> _ICapacityProviderRef_2d9bc4af:
+    ) -> "_ICapacityProviderRef_2d9bc4af":
         '''Creates a new ICapacityProviderRef from a capacityProviderName.
 
         :param scope: -
@@ -4646,7 +4649,7 @@ class CfnCapacityProvider(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
-        return typing.cast(_ICapacityProviderRef_2d9bc4af, jsii.sinvoke(cls, "fromCapacityProviderName", [scope, id, capacity_provider_name]))
+        return typing.cast("_ICapacityProviderRef_2d9bc4af", jsii.sinvoke(cls, "fromCapacityProviderName", [scope, id, capacity_provider_name]))
 
     @jsii.member(jsii_name="isCfnCapacityProvider")
     @builtins.classmethod
@@ -4661,7 +4664,7 @@ class CfnCapacityProvider(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCapacityProvider", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4706,23 +4709,21 @@ class CfnCapacityProvider(
     def attr_state(self) -> builtins.str:
         '''The current state of the capacity provider.
 
-        Indicates whether the provider is being created, is active and ready for use, has failed, or is being deleted.
-
         :cloudformationAttribute: State
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrState"))
 
     @builtins.property
     @jsii.member(jsii_name="capacityProviderRef")
-    def capacity_provider_ref(self) -> _CapacityProviderReference_4bee18a0:
+    def capacity_provider_ref(self) -> "_CapacityProviderReference_4bee18a0":
         '''A reference to a CapacityProvider resource.'''
-        return typing.cast(_CapacityProviderReference_4bee18a0, jsii.get(self, "capacityProviderRef"))
+        return typing.cast("_CapacityProviderReference_4bee18a0", jsii.get(self, "capacityProviderRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4733,14 +4734,14 @@ class CfnCapacityProvider(
     @jsii.member(jsii_name="permissionsConfig")
     def permissions_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderPermissionsConfigProperty"]:
-        '''IAM permissions configuration for the capacity provider.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderPermissionsConfigProperty"], jsii.get(self, "permissionsConfig"))
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderPermissionsConfigProperty"]:
+        '''The permissions configuration for the capacity provider.'''
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderPermissionsConfigProperty"], jsii.get(self, "permissionsConfig"))
 
     @permissions_config.setter
     def permissions_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderPermissionsConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderPermissionsConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4da5c865971ec867455f111a65aeeea18373d1202c6155c3b3f2643d959dbb9e)
@@ -4751,14 +4752,14 @@ class CfnCapacityProvider(
     @jsii.member(jsii_name="vpcConfig")
     def vpc_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderVpcConfigProperty"]:
-        '''VPC configuration for the capacity provider.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderVpcConfigProperty"], jsii.get(self, "vpcConfig"))
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderVpcConfigProperty"]:
+        '''The VPC configuration for the capacity provider.'''
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderVpcConfigProperty"], jsii.get(self, "vpcConfig"))
 
     @vpc_config.setter
     def vpc_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderVpcConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderVpcConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__be843671d3accd5ecfc5957632a0f96a0331f0914704d3db7433c61c7b2c6ff2)
@@ -4782,14 +4783,14 @@ class CfnCapacityProvider(
     @jsii.member(jsii_name="capacityProviderScalingConfig")
     def capacity_provider_scaling_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderScalingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderScalingConfigProperty"]]:
         '''The scaling configuration for the capacity provider.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderScalingConfigProperty"]], jsii.get(self, "capacityProviderScalingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderScalingConfigProperty"]], jsii.get(self, "capacityProviderScalingConfig"))
 
     @capacity_provider_scaling_config.setter
     def capacity_provider_scaling_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderScalingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderScalingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__af37ed055df6865ea66e2c1d678b2ec8c66ffbd4b9a02dc52c0bfb5687082f59)
@@ -4800,14 +4801,14 @@ class CfnCapacityProvider(
     @jsii.member(jsii_name="instanceRequirements")
     def instance_requirements(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceRequirementsProperty"]]:
-        '''Specifications for the types of EC2 instances that the capacity provider can use.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceRequirementsProperty"]], jsii.get(self, "instanceRequirements"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.InstanceRequirementsProperty"]]:
+        '''The instance requirements for compute resources managed by the capacity provider.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.InstanceRequirementsProperty"]], jsii.get(self, "instanceRequirements"))
 
     @instance_requirements.setter
     def instance_requirements(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceRequirementsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.InstanceRequirementsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0b75930e1c1908e1a06f76e3a5593ecdc271d89365c7584c1f7a9b397f1774f5)
@@ -4817,7 +4818,7 @@ class CfnCapacityProvider(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyArn")
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The ARN of the AWS Key Management Service (KMS) key used by the capacity provider.'''
+        '''The ARN of the KMS key used to encrypt the capacity provider's resources.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyArn"))
 
     @kms_key_arn.setter
@@ -4829,12 +4830,12 @@ class CfnCapacityProvider(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''A list of tags to apply to the capacity provider.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
+        '''A key-value pair that provides metadata for the capacity provider.'''
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a3d57757477f5395c4e105ab2ba74a856bc7d4a2af7c4b17d35842fa01c99151)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4853,9 +4854,9 @@ class CfnCapacityProvider(
             *,
             capacity_provider_operator_role_arn: builtins.str,
         ) -> None:
-            '''IAM permissions configuration for the capacity provider.
+            '''Configuration that specifies the permissions required for the capacity provider to manage compute resources.
 
-            :param capacity_provider_operator_role_arn: The ARN of the IAM role that Lambda assumes to manage the capacity provider.
+            :param capacity_provider_operator_role_arn: The ARN of the IAM role that the capacity provider uses to manage compute instances and other AWS resources.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityproviderpermissionsconfig.html
             :exampleMetadata: fixture=_generated
@@ -4879,7 +4880,7 @@ class CfnCapacityProvider(
 
         @builtins.property
         def capacity_provider_operator_role_arn(self) -> builtins.str:
-            '''The ARN of the IAM role that Lambda assumes to manage the capacity provider.
+            '''The ARN of the IAM role that the capacity provider uses to manage compute instances and other AWS resources.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityproviderpermissionsconfig.html#cfn-lambda-capacityprovider-capacityproviderpermissionsconfig-capacityprovideroperatorrolearn
             '''
@@ -4913,12 +4914,12 @@ class CfnCapacityProvider(
             *,
             max_v_cpu_count: typing.Optional[jsii.Number] = None,
             scaling_mode: typing.Optional[builtins.str] = None,
-            scaling_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.TargetTrackingScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            scaling_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.TargetTrackingScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
-            '''The scaling configuration for the capacity provider.
+            '''Configuration that defines how the capacity provider scales compute instances based on demand and policies.
 
-            :param max_v_cpu_count: The maximum number of EC2 instances that the capacity provider can scale up to.
-            :param scaling_mode: The scaling mode for the capacity provider.
+            :param max_v_cpu_count: The maximum number of vCPUs that the capacity provider can provision across all compute instances.
+            :param scaling_mode: The scaling mode that determines how the capacity provider responds to changes in demand.
             :param scaling_policies: A list of target tracking scaling policies for the capacity provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityproviderscalingconfig.html
@@ -4954,7 +4955,7 @@ class CfnCapacityProvider(
 
         @builtins.property
         def max_v_cpu_count(self) -> typing.Optional[jsii.Number]:
-            '''The maximum number of EC2 instances that the capacity provider can scale up to.
+            '''The maximum number of vCPUs that the capacity provider can provision across all compute instances.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityproviderscalingconfig.html#cfn-lambda-capacityprovider-capacityproviderscalingconfig-maxvcpucount
             '''
@@ -4963,7 +4964,7 @@ class CfnCapacityProvider(
 
         @builtins.property
         def scaling_mode(self) -> typing.Optional[builtins.str]:
-            '''The scaling mode for the capacity provider.
+            '''The scaling mode that determines how the capacity provider responds to changes in demand.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityproviderscalingconfig.html#cfn-lambda-capacityprovider-capacityproviderscalingconfig-scalingmode
             '''
@@ -4973,13 +4974,13 @@ class CfnCapacityProvider(
         @builtins.property
         def scaling_policies(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.TargetTrackingScalingPolicyProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.TargetTrackingScalingPolicyProperty"]]]]:
             '''A list of target tracking scaling policies for the capacity provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityproviderscalingconfig.html#cfn-lambda-capacityprovider-capacityproviderscalingconfig-scalingpolicies
             '''
             result = self._values.get("scaling_policies")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.TargetTrackingScalingPolicyProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.TargetTrackingScalingPolicyProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5007,10 +5008,10 @@ class CfnCapacityProvider(
             security_group_ids: typing.Sequence[builtins.str],
             subnet_ids: typing.Sequence[builtins.str],
         ) -> None:
-            '''VPC configuration for the capacity provider.
+            '''VPC configuration that specifies the network settings for compute instances managed by the capacity provider.
 
-            :param security_group_ids: A list of security group IDs to associate with EC2 instances.
-            :param subnet_ids: A list of subnet IDs where the capacity provider can launch EC2 instances.
+            :param security_group_ids: A list of security group IDs that control network access for compute instances managed by the capacity provider.
+            :param subnet_ids: A list of subnet IDs where the capacity provider launches compute instances.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityprovidervpcconfig.html
             :exampleMetadata: fixture=_generated
@@ -5037,7 +5038,7 @@ class CfnCapacityProvider(
 
         @builtins.property
         def security_group_ids(self) -> typing.List[builtins.str]:
-            '''A list of security group IDs to associate with EC2 instances.
+            '''A list of security group IDs that control network access for compute instances managed by the capacity provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityprovidervpcconfig.html#cfn-lambda-capacityprovider-capacityprovidervpcconfig-securitygroupids
             '''
@@ -5047,7 +5048,7 @@ class CfnCapacityProvider(
 
         @builtins.property
         def subnet_ids(self) -> typing.List[builtins.str]:
-            '''A list of subnet IDs where the capacity provider can launch EC2 instances.
+            '''A list of subnet IDs where the capacity provider launches compute instances.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityprovidervpcconfig.html#cfn-lambda-capacityprovider-capacityprovidervpcconfig-subnetids
             '''
@@ -5083,11 +5084,11 @@ class CfnCapacityProvider(
             architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
             excluded_instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
-            '''Specifications for the types of EC2 instances that the capacity provider can use.
+            '''Specifications that define the characteristics and constraints for compute instances used by the capacity provider.
 
-            :param allowed_instance_types: A list of instance types that the capacity provider can use. Supports wildcards (for example, m5.*).
-            :param architectures: The instruction set architecture for EC2 instances. Specify either x86_64 or arm64.
-            :param excluded_instance_types: A list of instance types that the capacity provider should not use. Takes precedence over AllowedInstanceTypes.
+            :param allowed_instance_types: A list of EC2 instance types that the capacity provider is allowed to use. If not specified, all compatible instance types are allowed.
+            :param architectures: A list of supported CPU architectures for compute instances. Valid values include ``x86_64`` and ``arm64`` .
+            :param excluded_instance_types: A list of EC2 instance types that the capacity provider should not use, even if they meet other requirements.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-instancerequirements.html
             :exampleMetadata: fixture=_generated
@@ -5119,9 +5120,9 @@ class CfnCapacityProvider(
 
         @builtins.property
         def allowed_instance_types(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''A list of instance types that the capacity provider can use.
+            '''A list of EC2 instance types that the capacity provider is allowed to use.
 
-            Supports wildcards (for example, m5.*).
+            If not specified, all compatible instance types are allowed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-instancerequirements.html#cfn-lambda-capacityprovider-instancerequirements-allowedinstancetypes
             '''
@@ -5130,9 +5131,9 @@ class CfnCapacityProvider(
 
         @builtins.property
         def architectures(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''The instruction set architecture for EC2 instances.
+            '''A list of supported CPU architectures for compute instances.
 
-            Specify either x86_64 or arm64.
+            Valid values include ``x86_64`` and ``arm64`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-instancerequirements.html#cfn-lambda-capacityprovider-instancerequirements-architectures
             '''
@@ -5141,9 +5142,7 @@ class CfnCapacityProvider(
 
         @builtins.property
         def excluded_instance_types(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''A list of instance types that the capacity provider should not use.
-
-            Takes precedence over AllowedInstanceTypes.
+            '''A list of EC2 instance types that the capacity provider should not use, even if they meet other requirements.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-instancerequirements.html#cfn-lambda-capacityprovider-instancerequirements-excludedinstancetypes
             '''
@@ -5176,10 +5175,10 @@ class CfnCapacityProvider(
             predefined_metric_type: builtins.str,
             target_value: jsii.Number,
         ) -> None:
-            '''A target tracking scaling policy for the capacity provider.
+            '''A scaling policy for the capacity provider that automatically adjusts capacity to maintain a target value for a specific metric.
 
-            :param predefined_metric_type: The predefined metric for target tracking.
-            :param target_value: The target value for the metric as a percentage (for example, 70.0 for 70%).
+            :param predefined_metric_type: The predefined metric type to track for scaling decisions.
+            :param target_value: The target value for the metric that the scaling policy attempts to maintain through scaling actions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-targettrackingscalingpolicy.html
             :exampleMetadata: fixture=_generated
@@ -5206,7 +5205,7 @@ class CfnCapacityProvider(
 
         @builtins.property
         def predefined_metric_type(self) -> builtins.str:
-            '''The predefined metric for target tracking.
+            '''The predefined metric type to track for scaling decisions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-targettrackingscalingpolicy.html#cfn-lambda-capacityprovider-targettrackingscalingpolicy-predefinedmetrictype
             '''
@@ -5216,7 +5215,7 @@ class CfnCapacityProvider(
 
         @builtins.property
         def target_value(self) -> jsii.Number:
-            '''The target value for the metric as a percentage (for example, 70.0 for 70%).
+            '''The target value for the metric that the scaling policy attempts to maintain through scaling actions.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-targettrackingscalingpolicy.html#cfn-lambda-capacityprovider-targettrackingscalingpolicy-targetvalue
             '''
@@ -5253,29 +5252,30 @@ class CfnCapacityProviderProps:
     def __init__(
         self,
         *,
-        permissions_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.CapacityProviderPermissionsConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.CapacityProviderVpcConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        permissions_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.CapacityProviderPermissionsConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        vpc_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.CapacityProviderVpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         capacity_provider_name: typing.Optional[builtins.str] = None,
-        capacity_provider_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.CapacityProviderScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        instance_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.InstanceRequirementsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        capacity_provider_scaling_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.CapacityProviderScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        instance_requirements: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.InstanceRequirementsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCapacityProvider``.
 
-        :param permissions_config: IAM permissions configuration for the capacity provider.
-        :param vpc_config: VPC configuration for the capacity provider.
+        :param permissions_config: The permissions configuration for the capacity provider.
+        :param vpc_config: The VPC configuration for the capacity provider.
         :param capacity_provider_name: The name of the capacity provider. The name must be unique within your AWS account and region. If you don't specify a name, CloudFormation generates one.
         :param capacity_provider_scaling_config: The scaling configuration for the capacity provider.
-        :param instance_requirements: Specifications for the types of EC2 instances that the capacity provider can use.
-        :param kms_key_arn: The ARN of the AWS Key Management Service (KMS) key used by the capacity provider.
-        :param tags: A list of tags to apply to the capacity provider.
+        :param instance_requirements: The instance requirements for compute resources managed by the capacity provider.
+        :param kms_key_arn: The ARN of the KMS key used to encrypt the capacity provider's resources.
+        :param tags: A key-value pair that provides metadata for the capacity provider.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html
         :exampleMetadata: fixture=_generated
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lambda as lambda_
@@ -5338,26 +5338,26 @@ class CfnCapacityProviderProps:
     @builtins.property
     def permissions_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderPermissionsConfigProperty]:
-        '''IAM permissions configuration for the capacity provider.
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderPermissionsConfigProperty"]:
+        '''The permissions configuration for the capacity provider.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-permissionsconfig
         '''
         result = self._values.get("permissions_config")
         assert result is not None, "Required property 'permissions_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderPermissionsConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderPermissionsConfigProperty"], result)
 
     @builtins.property
     def vpc_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderVpcConfigProperty]:
-        '''VPC configuration for the capacity provider.
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderVpcConfigProperty"]:
+        '''The VPC configuration for the capacity provider.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-vpcconfig
         '''
         result = self._values.get("vpc_config")
         assert result is not None, "Required property 'vpc_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderVpcConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderVpcConfigProperty"], result)
 
     @builtins.property
     def capacity_provider_name(self) -> typing.Optional[builtins.str]:
@@ -5373,28 +5373,28 @@ class CfnCapacityProviderProps:
     @builtins.property
     def capacity_provider_scaling_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderScalingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderScalingConfigProperty"]]:
         '''The scaling configuration for the capacity provider.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-capacityproviderscalingconfig
         '''
         result = self._values.get("capacity_provider_scaling_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderScalingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.CapacityProviderScalingConfigProperty"]], result)
 
     @builtins.property
     def instance_requirements(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.InstanceRequirementsProperty]]:
-        '''Specifications for the types of EC2 instances that the capacity provider can use.
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.InstanceRequirementsProperty"]]:
+        '''The instance requirements for compute resources managed by the capacity provider.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-instancerequirements
         '''
         result = self._values.get("instance_requirements")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.InstanceRequirementsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.InstanceRequirementsProperty"]], result)
 
     @builtins.property
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The ARN of the AWS Key Management Service (KMS) key used by the capacity provider.
+        '''The ARN of the KMS key used to encrypt the capacity provider's resources.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-kmskeyarn
         '''
@@ -5402,13 +5402,13 @@ class CfnCapacityProviderProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''A list of tags to apply to the capacity provider.
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
+        '''A key-value pair that provides metadata for the capacity provider.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5436,6 +5436,7 @@ class CfnCodeSigningConfig(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lambda as lambda_
@@ -5459,13 +5460,13 @@ class CfnCodeSigningConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        allowed_publishers: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCodeSigningConfig.AllowedPublishersProperty", typing.Dict[builtins.str, typing.Any]]],
-        code_signing_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCodeSigningConfig.CodeSigningPoliciesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        allowed_publishers: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCodeSigningConfig.AllowedPublishersProperty", typing.Dict[builtins.str, typing.Any]]],
+        code_signing_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCodeSigningConfig.CodeSigningPoliciesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lambda::CodeSigningConfig``.
 
@@ -5493,7 +5494,7 @@ class CfnCodeSigningConfig(
     @builtins.classmethod
     def arn_for_code_signing_config(
         cls,
-        resource: _ICodeSigningConfigRef_1d909622,
+        resource: "_ICodeSigningConfigRef_1d909622",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -5516,7 +5517,7 @@ class CfnCodeSigningConfig(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCodeSigningConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5565,9 +5566,9 @@ class CfnCodeSigningConfig(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5576,22 +5577,22 @@ class CfnCodeSigningConfig(
 
     @builtins.property
     @jsii.member(jsii_name="codeSigningConfigRef")
-    def code_signing_config_ref(self) -> _CodeSigningConfigReference_5381ca24:
+    def code_signing_config_ref(self) -> "_CodeSigningConfigReference_5381ca24":
         '''A reference to a CodeSigningConfig resource.'''
-        return typing.cast(_CodeSigningConfigReference_5381ca24, jsii.get(self, "codeSigningConfigRef"))
+        return typing.cast("_CodeSigningConfigReference_5381ca24", jsii.get(self, "codeSigningConfigRef"))
 
     @builtins.property
     @jsii.member(jsii_name="allowedPublishers")
     def allowed_publishers(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnCodeSigningConfig.AllowedPublishersProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCodeSigningConfig.AllowedPublishersProperty"]:
         '''List of allowed publishers.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCodeSigningConfig.AllowedPublishersProperty"], jsii.get(self, "allowedPublishers"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCodeSigningConfig.AllowedPublishersProperty"], jsii.get(self, "allowedPublishers"))
 
     @allowed_publishers.setter
     def allowed_publishers(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnCodeSigningConfig.AllowedPublishersProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnCodeSigningConfig.AllowedPublishersProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9bdbcfbe2ec024e11d4aa4a7f377a3ccf0e4dee3dbe6d9fe92735973e52807e0)
@@ -5602,14 +5603,14 @@ class CfnCodeSigningConfig(
     @jsii.member(jsii_name="codeSigningPolicies")
     def code_signing_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCodeSigningConfig.CodeSigningPoliciesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCodeSigningConfig.CodeSigningPoliciesProperty"]]:
         '''The code signing policy controls the validation failure action for signature mismatch or expiry.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCodeSigningConfig.CodeSigningPoliciesProperty"]], jsii.get(self, "codeSigningPolicies"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCodeSigningConfig.CodeSigningPoliciesProperty"]], jsii.get(self, "codeSigningPolicies"))
 
     @code_signing_policies.setter
     def code_signing_policies(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCodeSigningConfig.CodeSigningPoliciesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCodeSigningConfig.CodeSigningPoliciesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a765b217f65bf891367822f789aa6352de94fbe3b47883e28a1b13ebfcc06fc8)
@@ -5631,12 +5632,12 @@ class CfnCodeSigningConfig(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to add to the code signing configuration.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__81744cfe981e606b04aa7e4811cb5be2a56198c9076feeda37ccfd2c7437ac1d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5775,10 +5776,10 @@ class CfnCodeSigningConfigProps:
     def __init__(
         self,
         *,
-        allowed_publishers: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCodeSigningConfig.AllowedPublishersProperty, typing.Dict[builtins.str, typing.Any]]],
-        code_signing_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCodeSigningConfig.CodeSigningPoliciesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        allowed_publishers: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCodeSigningConfig.AllowedPublishersProperty", typing.Dict[builtins.str, typing.Any]]],
+        code_signing_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCodeSigningConfig.CodeSigningPoliciesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCodeSigningConfig``.
 
@@ -5792,6 +5793,7 @@ class CfnCodeSigningConfigProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lambda as lambda_
@@ -5831,25 +5833,25 @@ class CfnCodeSigningConfigProps:
     @builtins.property
     def allowed_publishers(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnCodeSigningConfig.AllowedPublishersProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnCodeSigningConfig.AllowedPublishersProperty"]:
         '''List of allowed publishers.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-codesigningconfig.html#cfn-lambda-codesigningconfig-allowedpublishers
         '''
         result = self._values.get("allowed_publishers")
         assert result is not None, "Required property 'allowed_publishers' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCodeSigningConfig.AllowedPublishersProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCodeSigningConfig.AllowedPublishersProperty"], result)
 
     @builtins.property
     def code_signing_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCodeSigningConfig.CodeSigningPoliciesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCodeSigningConfig.CodeSigningPoliciesProperty"]]:
         '''The code signing policy controls the validation failure action for signature mismatch or expiry.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-codesigningconfig.html#cfn-lambda-codesigningconfig-codesigningpolicies
         '''
         result = self._values.get("code_signing_policies")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCodeSigningConfig.CodeSigningPoliciesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCodeSigningConfig.CodeSigningPoliciesProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -5861,7 +5863,7 @@ class CfnCodeSigningConfigProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to add to the code signing configuration.
 
         .. epigraph::
@@ -5871,7 +5873,7 @@ class CfnCodeSigningConfigProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-codesigningconfig.html#cfn-lambda-codesigningconfig-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5925,12 +5927,12 @@ class CfnEventInvokeConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
+        function_name: typing.Union[builtins.str, "_IFunctionRef_2601eb33"],
         qualifier: builtins.str,
-        destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventInvokeConfig.DestinationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        destination_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventInvokeConfig.DestinationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         maximum_event_age_in_seconds: typing.Optional[jsii.Number] = None,
         maximum_retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -5971,7 +5973,7 @@ class CfnEventInvokeConfig(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventInvokeConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6007,9 +6009,9 @@ class CfnEventInvokeConfig(
 
     @builtins.property
     @jsii.member(jsii_name="eventInvokeConfigRef")
-    def event_invoke_config_ref(self) -> _EventInvokeConfigReference_97d3225e:
+    def event_invoke_config_ref(self) -> "_EventInvokeConfigReference_97d3225e":
         '''A reference to a EventInvokeConfig resource.'''
-        return typing.cast(_EventInvokeConfigReference_97d3225e, jsii.get(self, "eventInvokeConfigRef"))
+        return typing.cast("_EventInvokeConfigReference_97d3225e", jsii.get(self, "eventInvokeConfigRef"))
 
     @builtins.property
     @jsii.member(jsii_name="functionName")
@@ -6041,14 +6043,14 @@ class CfnEventInvokeConfig(
     @jsii.member(jsii_name="destinationConfig")
     def destination_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventInvokeConfig.DestinationConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventInvokeConfig.DestinationConfigProperty"]]:
         '''A destination for events after they have been sent to a function for processing.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventInvokeConfig.DestinationConfigProperty"]], jsii.get(self, "destinationConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventInvokeConfig.DestinationConfigProperty"]], jsii.get(self, "destinationConfig"))
 
     @destination_config.setter
     def destination_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventInvokeConfig.DestinationConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventInvokeConfig.DestinationConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__07a740f6e4de90b7e4fc9ea661a30309dea4d28202f3a3214fa5ece3946e15b2)
@@ -6090,8 +6092,8 @@ class CfnEventInvokeConfig(
         def __init__(
             self,
             *,
-            on_failure: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventInvokeConfig.OnFailureProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            on_success: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventInvokeConfig.OnSuccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            on_failure: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventInvokeConfig.OnFailureProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            on_success: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventInvokeConfig.OnSuccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A configuration object that specifies the destination of an event after Lambda processes it.
 
@@ -6131,7 +6133,7 @@ class CfnEventInvokeConfig(
         @builtins.property
         def on_failure(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventInvokeConfig.OnFailureProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventInvokeConfig.OnFailureProperty"]]:
             '''The destination configuration for failed invocations.
 
             .. epigraph::
@@ -6141,12 +6143,12 @@ class CfnEventInvokeConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventinvokeconfig-destinationconfig.html#cfn-lambda-eventinvokeconfig-destinationconfig-onfailure
             '''
             result = self._values.get("on_failure")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventInvokeConfig.OnFailureProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventInvokeConfig.OnFailureProperty"]], result)
 
         @builtins.property
         def on_success(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventInvokeConfig.OnSuccessProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventInvokeConfig.OnSuccessProperty"]]:
             '''The destination configuration for successful invocations.
 
             .. epigraph::
@@ -6156,7 +6158,7 @@ class CfnEventInvokeConfig(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventinvokeconfig-destinationconfig.html#cfn-lambda-eventinvokeconfig-destinationconfig-onsuccess
             '''
             result = self._values.get("on_success")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventInvokeConfig.OnSuccessProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventInvokeConfig.OnSuccessProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6307,9 +6309,9 @@ class CfnEventInvokeConfigProps:
     def __init__(
         self,
         *,
-        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
+        function_name: typing.Union[builtins.str, "_IFunctionRef_2601eb33"],
         qualifier: builtins.str,
-        destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventInvokeConfig.DestinationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        destination_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventInvokeConfig.DestinationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         maximum_event_age_in_seconds: typing.Optional[jsii.Number] = None,
         maximum_retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -6366,7 +6368,7 @@ class CfnEventInvokeConfigProps:
             self._values["maximum_retry_attempts"] = maximum_retry_attempts
 
     @builtins.property
-    def function_name(self) -> typing.Union[builtins.str, _IFunctionRef_2601eb33]:
+    def function_name(self) -> typing.Union[builtins.str, "_IFunctionRef_2601eb33"]:
         '''The name of the Lambda function.
 
         *Minimum* : ``1``
@@ -6379,7 +6381,7 @@ class CfnEventInvokeConfigProps:
         '''
         result = self._values.get("function_name")
         assert result is not None, "Required property 'function_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _IFunctionRef_2601eb33], result)
+        return typing.cast(typing.Union[builtins.str, "_IFunctionRef_2601eb33"], result)
 
     @builtins.property
     def qualifier(self) -> builtins.str:
@@ -6398,7 +6400,7 @@ class CfnEventInvokeConfigProps:
     @builtins.property
     def destination_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventInvokeConfig.DestinationConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventInvokeConfig.DestinationConfigProperty"]]:
         '''A destination for events after they have been sent to a function for processing.
 
         **Destinations** - *Function* - The Amazon Resource Name (ARN) of a Lambda function.
@@ -6415,7 +6417,7 @@ class CfnEventInvokeConfigProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventinvokeconfig.html#cfn-lambda-eventinvokeconfig-destinationconfig
         '''
         result = self._values.get("destination_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventInvokeConfig.DestinationConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventInvokeConfig.DestinationConfigProperty"]], result)
 
     @builtins.property
     def maximum_event_age_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -6473,6 +6475,7 @@ class CfnEventSourceMapping(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lambda as lambda_
@@ -6571,35 +6574,35 @@ class CfnEventSourceMapping(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad],
-        amazon_managed_kafka_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        function_name: typing.Union[builtins.str, "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad"],
+        amazon_managed_kafka_event_source_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         batch_size: typing.Optional[jsii.Number] = None,
-        bisect_batch_on_function_error: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.DestinationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        document_db_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.DocumentDBEventSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        event_source_arn: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198, _IClusterRef_c904150a]] = None,
-        filter_criteria: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.FilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        bisect_batch_on_function_error: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        destination_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.DestinationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        document_db_event_source_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.DocumentDBEventSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        event_source_arn: typing.Optional[typing.Union[builtins.str, "_IStreamRef_b484e253", "_IClusterRef_c904150a", "_IQueueRef_fa8b2198"]] = None,
+        filter_criteria: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.FilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         function_response_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
-        logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         maximum_batching_window_in_seconds: typing.Optional[jsii.Number] = None,
         maximum_record_age_in_seconds: typing.Optional[jsii.Number] = None,
         maximum_retry_attempts: typing.Optional[jsii.Number] = None,
-        metrics_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.MetricsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        metrics_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.MetricsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         parallelization_factor: typing.Optional[jsii.Number] = None,
-        provisioned_poller_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.ProvisionedPollerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        provisioned_poller_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.ProvisionedPollerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         queues: typing.Optional[typing.Sequence[builtins.str]] = None,
-        scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.ScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        self_managed_event_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.SelfManagedEventSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        self_managed_kafka_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        source_access_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.SourceAccessConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        scaling_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.ScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        self_managed_event_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.SelfManagedEventSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        self_managed_kafka_event_source_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_access_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.SourceAccessConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         starting_position: typing.Optional[builtins.str] = None,
         starting_position_timestamp: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         topics: typing.Optional[typing.Sequence[builtins.str]] = None,
         tumbling_window_in_seconds: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -6677,7 +6680,7 @@ class CfnEventSourceMapping(
     @builtins.classmethod
     def arn_for_event_source_mapping(
         cls,
-        resource: _IEventSourceMappingRef_4f65ddd1,
+        resource: "_IEventSourceMappingRef_4f65ddd1",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6700,7 +6703,7 @@ class CfnEventSourceMapping(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventSourceMapping", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6749,9 +6752,9 @@ class CfnEventSourceMapping(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -6760,9 +6763,9 @@ class CfnEventSourceMapping(
 
     @builtins.property
     @jsii.member(jsii_name="eventSourceMappingRef")
-    def event_source_mapping_ref(self) -> _EventSourceMappingReference_943d80a5:
+    def event_source_mapping_ref(self) -> "_EventSourceMappingReference_943d80a5":
         '''A reference to a EventSourceMapping resource.'''
-        return typing.cast(_EventSourceMappingReference_943d80a5, jsii.get(self, "eventSourceMappingRef"))
+        return typing.cast("_EventSourceMappingReference_943d80a5", jsii.get(self, "eventSourceMappingRef"))
 
     @builtins.property
     @jsii.member(jsii_name="functionName")
@@ -6781,14 +6784,14 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="amazonManagedKafkaEventSourceConfig")
     def amazon_managed_kafka_event_source_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty"]]:
         '''Specific configuration settings for an Amazon Managed Streaming for Apache Kafka (Amazon MSK) event source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty"]], jsii.get(self, "amazonManagedKafkaEventSourceConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty"]], jsii.get(self, "amazonManagedKafkaEventSourceConfig"))
 
     @amazon_managed_kafka_event_source_config.setter
     def amazon_managed_kafka_event_source_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__233d764d5ec4392f85e17319f53d7f6cc4067ccb274960b08fca3eafb9c77754)
@@ -6812,14 +6815,14 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="bisectBatchOnFunctionError")
     def bisect_batch_on_function_error(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''(Kinesis and DynamoDB Streams only) If the function returns an error, split the batch in two and retry.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "bisectBatchOnFunctionError"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "bisectBatchOnFunctionError"))
 
     @bisect_batch_on_function_error.setter
     def bisect_batch_on_function_error(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__66e2f20929a797c8075830f4ba3b2b69a933a7156ee29e476bb0e6ab51bd7773)
@@ -6830,14 +6833,14 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="destinationConfig")
     def destination_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.DestinationConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.DestinationConfigProperty"]]:
         '''(Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) A configuration object that specifies the destination of an event after Lambda processes it.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.DestinationConfigProperty"]], jsii.get(self, "destinationConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.DestinationConfigProperty"]], jsii.get(self, "destinationConfig"))
 
     @destination_config.setter
     def destination_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.DestinationConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.DestinationConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4ef86f269722ebd1d0b07f5394393f897ab44755b8f3c66d64b760c718d22522)
@@ -6848,14 +6851,14 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="documentDbEventSourceConfig")
     def document_db_event_source_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.DocumentDBEventSourceConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.DocumentDBEventSourceConfigProperty"]]:
         '''Specific configuration settings for a DocumentDB event source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.DocumentDBEventSourceConfigProperty"]], jsii.get(self, "documentDbEventSourceConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.DocumentDBEventSourceConfigProperty"]], jsii.get(self, "documentDbEventSourceConfig"))
 
     @document_db_event_source_config.setter
     def document_db_event_source_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.DocumentDBEventSourceConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.DocumentDBEventSourceConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__882060edb289a46d9c4b6ceb5996d087250387c92842a4cd33fc60bd9fe03b6a)
@@ -6866,17 +6869,17 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When true, the event source mapping is active.
 
         When false, Lambda pauses polling and invocation.
         '''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__335aaf4ac58e917092578e94eea7b9439ca7a0365c948efd390845cdd23ba119)
@@ -6900,14 +6903,14 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="filterCriteria")
     def filter_criteria(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.FilterCriteriaProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.FilterCriteriaProperty"]]:
         '''An object that defines the filter criteria that determine whether Lambda should process an event.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.FilterCriteriaProperty"]], jsii.get(self, "filterCriteria"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.FilterCriteriaProperty"]], jsii.get(self, "filterCriteria"))
 
     @filter_criteria.setter
     def filter_criteria(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.FilterCriteriaProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.FilterCriteriaProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c72364a986837059e36a836853d19e31b439e0fdf4870137207ee5b4529f4096)
@@ -6947,14 +6950,14 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="loggingConfig")
     def logging_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.LoggingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.LoggingConfigProperty"]]:
         '''The function's Amazon CloudWatch Logs configuration settings.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.LoggingConfigProperty"]], jsii.get(self, "loggingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.LoggingConfigProperty"]], jsii.get(self, "loggingConfig"))
 
     @logging_config.setter
     def logging_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.LoggingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.LoggingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__50572dc451e3255eed97449e37c01de9cf1dd845d673eda663a86b2a920b36c6)
@@ -7010,14 +7013,14 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="metricsConfig")
     def metrics_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.MetricsConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.MetricsConfigProperty"]]:
         '''The metrics configuration for your event source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.MetricsConfigProperty"]], jsii.get(self, "metricsConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.MetricsConfigProperty"]], jsii.get(self, "metricsConfig"))
 
     @metrics_config.setter
     def metrics_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.MetricsConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.MetricsConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f5cd631413afcb74b02a0787cd61ff6f1062e9e8d6f6d0f366555a10ce55240b)
@@ -7041,14 +7044,14 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="provisionedPollerConfig")
     def provisioned_poller_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.ProvisionedPollerConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.ProvisionedPollerConfigProperty"]]:
         '''(Amazon SQS, Amazon MSK, and self-managed Apache Kafka only) The provisioned mode configuration for the event source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.ProvisionedPollerConfigProperty"]], jsii.get(self, "provisionedPollerConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.ProvisionedPollerConfigProperty"]], jsii.get(self, "provisionedPollerConfig"))
 
     @provisioned_poller_config.setter
     def provisioned_poller_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.ProvisionedPollerConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.ProvisionedPollerConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0fc82a3bfe1479a23e85d77c5f26cb1797656cf4b8a7e4285b0054919d70b267)
@@ -7072,14 +7075,14 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="scalingConfig")
     def scaling_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.ScalingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.ScalingConfigProperty"]]:
         '''This property is for Amazon SQS event sources only.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.ScalingConfigProperty"]], jsii.get(self, "scalingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.ScalingConfigProperty"]], jsii.get(self, "scalingConfig"))
 
     @scaling_config.setter
     def scaling_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.ScalingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.ScalingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1bd15b2a9fc8690809ee4226401692bd7666f069a0af6a98c56ccac182d01bbd)
@@ -7090,14 +7093,14 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="selfManagedEventSource")
     def self_managed_event_source(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SelfManagedEventSourceProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SelfManagedEventSourceProperty"]]:
         '''The self-managed Apache Kafka cluster for your event source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SelfManagedEventSourceProperty"]], jsii.get(self, "selfManagedEventSource"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SelfManagedEventSourceProperty"]], jsii.get(self, "selfManagedEventSource"))
 
     @self_managed_event_source.setter
     def self_managed_event_source(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SelfManagedEventSourceProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SelfManagedEventSourceProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__15f5a09c4e7c4882e5dd5f88d18a0698fbb755bbebbd097310ad730d1aacb102)
@@ -7108,14 +7111,14 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="selfManagedKafkaEventSourceConfig")
     def self_managed_kafka_event_source_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty"]]:
         '''Specific configuration settings for a self-managed Apache Kafka event source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty"]], jsii.get(self, "selfManagedKafkaEventSourceConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty"]], jsii.get(self, "selfManagedKafkaEventSourceConfig"))
 
     @self_managed_kafka_event_source_config.setter
     def self_managed_kafka_event_source_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__17bcf58d3b47186861370700f8542dc2f8d90ca869836ac1190e0846d32ee199)
@@ -7126,14 +7129,14 @@ class CfnEventSourceMapping(
     @jsii.member(jsii_name="sourceAccessConfigurations")
     def source_access_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SourceAccessConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SourceAccessConfigurationProperty"]]]]:
         '''An array of the authentication protocol, VPC components, or virtual host to secure and define your event source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SourceAccessConfigurationProperty"]]]], jsii.get(self, "sourceAccessConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SourceAccessConfigurationProperty"]]]], jsii.get(self, "sourceAccessConfigurations"))
 
     @source_access_configurations.setter
     def source_access_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SourceAccessConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SourceAccessConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__154d952f087be022c948a51daee6d069392148a886ae7ab449b53c66e12c44d3)
@@ -7171,12 +7174,12 @@ class CfnEventSourceMapping(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to add to the event source mapping.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9bb6ad1b3bce01f266ad309d35f842ead20e44f25952e0d033834fd0e9d063c4)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7221,7 +7224,7 @@ class CfnEventSourceMapping(
             self,
             *,
             consumer_group_id: typing.Optional[builtins.str] = None,
-            schema_registry_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.SchemaRegistryConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            schema_registry_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.SchemaRegistryConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specific configuration settings for an Amazon Managed Streaming for Apache Kafka (Amazon MSK) event source.
 
@@ -7276,13 +7279,13 @@ class CfnEventSourceMapping(
         @builtins.property
         def schema_registry_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SchemaRegistryConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SchemaRegistryConfigProperty"]]:
             '''Specific configuration settings for a Kafka schema registry.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-amazonmanagedkafkaeventsourceconfig.html#cfn-lambda-eventsourcemapping-amazonmanagedkafkaeventsourceconfig-schemaregistryconfig
             '''
             result = self._values.get("schema_registry_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SchemaRegistryConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SchemaRegistryConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7304,7 +7307,7 @@ class CfnEventSourceMapping(
         def __init__(
             self,
             *,
-            on_failure: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.OnFailureProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            on_failure: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.OnFailureProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A configuration object that specifies the destination of an event after Lambda processes it.
 
@@ -7337,13 +7340,13 @@ class CfnEventSourceMapping(
         @builtins.property
         def on_failure(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.OnFailureProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.OnFailureProperty"]]:
             '''The destination configuration for failed invocations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-destinationconfig.html#cfn-lambda-eventsourcemapping-destinationconfig-onfailure
             '''
             result = self._values.get("on_failure")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.OnFailureProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.OnFailureProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7513,7 +7516,7 @@ class CfnEventSourceMapping(
         def __init__(
             self,
             *,
-            filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.FilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.FilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''An object that contains the filters for an event source.
 
@@ -7544,13 +7547,13 @@ class CfnEventSourceMapping(
         @builtins.property
         def filters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.FilterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.FilterProperty"]]]]:
             '''A list of filters.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-filtercriteria.html#cfn-lambda-eventsourcemapping-filtercriteria-filters
             '''
             result = self._values.get("filters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.FilterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.FilterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8036,10 +8039,10 @@ class CfnEventSourceMapping(
         def __init__(
             self,
             *,
-            access_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.SchemaRegistryAccessConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            access_configs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.SchemaRegistryAccessConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             event_record_format: typing.Optional[builtins.str] = None,
             schema_registry_uri: typing.Optional[builtins.str] = None,
-            schema_validation_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.SchemaValidationConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            schema_validation_configs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.SchemaValidationConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Specific configuration settings for a Kafka schema registry.
 
@@ -8088,13 +8091,13 @@ class CfnEventSourceMapping(
         @builtins.property
         def access_configs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SchemaRegistryAccessConfigProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SchemaRegistryAccessConfigProperty"]]]]:
             '''An array of access configuration objects that tell Lambda how to authenticate with your schema registry.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-schemaregistryconfig.html#cfn-lambda-eventsourcemapping-schemaregistryconfig-accessconfigs
             '''
             result = self._values.get("access_configs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SchemaRegistryAccessConfigProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SchemaRegistryAccessConfigProperty"]]]], result)
 
         @builtins.property
         def event_record_format(self) -> typing.Optional[builtins.str]:
@@ -8123,13 +8126,13 @@ class CfnEventSourceMapping(
         @builtins.property
         def schema_validation_configs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SchemaValidationConfigProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SchemaValidationConfigProperty"]]]]:
             '''An array of schema validation configuration objects, which tell Lambda the message attributes you want to validate and filter using your schema registry.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-schemaregistryconfig.html#cfn-lambda-eventsourcemapping-schemaregistryconfig-schemavalidationconfigs
             '''
             result = self._values.get("schema_validation_configs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SchemaValidationConfigProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SchemaValidationConfigProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8204,7 +8207,7 @@ class CfnEventSourceMapping(
         def __init__(
             self,
             *,
-            endpoints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.EndpointsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            endpoints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.EndpointsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The self-managed Apache Kafka cluster for your event source.
 
@@ -8235,13 +8238,13 @@ class CfnEventSourceMapping(
         @builtins.property
         def endpoints(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.EndpointsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.EndpointsProperty"]]:
             '''The list of bootstrap servers for your Kafka brokers in the following format: ``"KafkaBootstrapServers": ["abc.xyz.com:xxxx","abc2.xyz.com:xxxx"]`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-selfmanagedeventsource.html#cfn-lambda-eventsourcemapping-selfmanagedeventsource-endpoints
             '''
             result = self._values.get("endpoints")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.EndpointsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.EndpointsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8267,7 +8270,7 @@ class CfnEventSourceMapping(
             self,
             *,
             consumer_group_id: typing.Optional[builtins.str] = None,
-            schema_registry_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.SchemaRegistryConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            schema_registry_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.SchemaRegistryConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specific configuration settings for a self-managed Apache Kafka event source.
 
@@ -8322,13 +8325,13 @@ class CfnEventSourceMapping(
         @builtins.property
         def schema_registry_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SchemaRegistryConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SchemaRegistryConfigProperty"]]:
             '''Specific configuration settings for a Kafka schema registry.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-selfmanagedkafkaeventsourceconfig.html#cfn-lambda-eventsourcemapping-selfmanagedkafkaeventsourceconfig-schemaregistryconfig
             '''
             result = self._values.get("schema_registry_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.SchemaRegistryConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SchemaRegistryConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8462,32 +8465,32 @@ class CfnEventSourceMappingProps:
     def __init__(
         self,
         *,
-        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad],
-        amazon_managed_kafka_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        function_name: typing.Union[builtins.str, "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad"],
+        amazon_managed_kafka_event_source_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         batch_size: typing.Optional[jsii.Number] = None,
-        bisect_batch_on_function_error: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.DestinationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        document_db_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.DocumentDBEventSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        event_source_arn: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198, _IClusterRef_c904150a]] = None,
-        filter_criteria: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.FilterCriteriaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        bisect_batch_on_function_error: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        destination_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.DestinationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        document_db_event_source_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.DocumentDBEventSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        event_source_arn: typing.Optional[typing.Union[builtins.str, "_IStreamRef_b484e253", "_IClusterRef_c904150a", "_IQueueRef_fa8b2198"]] = None,
+        filter_criteria: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.FilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         function_response_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
-        logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        logging_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         maximum_batching_window_in_seconds: typing.Optional[jsii.Number] = None,
         maximum_record_age_in_seconds: typing.Optional[jsii.Number] = None,
         maximum_retry_attempts: typing.Optional[jsii.Number] = None,
-        metrics_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.MetricsConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        metrics_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.MetricsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         parallelization_factor: typing.Optional[jsii.Number] = None,
-        provisioned_poller_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.ProvisionedPollerConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        provisioned_poller_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.ProvisionedPollerConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         queues: typing.Optional[typing.Sequence[builtins.str]] = None,
-        scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.ScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        self_managed_event_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.SelfManagedEventSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        self_managed_kafka_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        source_access_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.SourceAccessConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        scaling_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.ScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        self_managed_event_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.SelfManagedEventSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        self_managed_kafka_event_source_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        source_access_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEventSourceMapping.SourceAccessConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         starting_position: typing.Optional[builtins.str] = None,
         starting_position_timestamp: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         topics: typing.Optional[typing.Sequence[builtins.str]] = None,
         tumbling_window_in_seconds: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -8527,6 +8530,7 @@ class CfnEventSourceMappingProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lambda as lambda_
@@ -8713,7 +8717,7 @@ class CfnEventSourceMappingProps:
     @builtins.property
     def function_name(
         self,
-    ) -> typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad]:
+    ) -> typing.Union[builtins.str, "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad"]:
         '''The name or ARN of the Lambda function.
 
         **Name formats** - *Function name* – ``MyFunction`` .
@@ -8728,18 +8732,18 @@ class CfnEventSourceMappingProps:
         '''
         result = self._values.get("function_name")
         assert result is not None, "Required property 'function_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad], result)
+        return typing.cast(typing.Union[builtins.str, "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad"], result)
 
     @builtins.property
     def amazon_managed_kafka_event_source_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty"]]:
         '''Specific configuration settings for an Amazon Managed Streaming for Apache Kafka (Amazon MSK) event source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-amazonmanagedkafkaeventsourceconfig
         '''
         result = self._values.get("amazon_managed_kafka_event_source_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty"]], result)
 
     @builtins.property
     def batch_size(self) -> typing.Optional[jsii.Number]:
@@ -8763,7 +8767,7 @@ class CfnEventSourceMappingProps:
     @builtins.property
     def bisect_batch_on_function_error(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''(Kinesis and DynamoDB Streams only) If the function returns an error, split the batch in two and retry.
 
         The default value is false.
@@ -8774,34 +8778,34 @@ class CfnEventSourceMappingProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-bisectbatchonfunctionerror
         '''
         result = self._values.get("bisect_batch_on_function_error")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def destination_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.DestinationConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.DestinationConfigProperty"]]:
         '''(Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) A configuration object that specifies the destination of an event after Lambda processes it.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-destinationconfig
         '''
         result = self._values.get("destination_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.DestinationConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.DestinationConfigProperty"]], result)
 
     @builtins.property
     def document_db_event_source_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.DocumentDBEventSourceConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.DocumentDBEventSourceConfigProperty"]]:
         '''Specific configuration settings for a DocumentDB event source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-documentdbeventsourceconfig
         '''
         result = self._values.get("document_db_event_source_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.DocumentDBEventSourceConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.DocumentDBEventSourceConfigProperty"]], result)
 
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''When true, the event source mapping is active. When false, Lambda pauses polling and invocation.
 
         Default: True
@@ -8809,12 +8813,12 @@ class CfnEventSourceMappingProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def event_source_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198, _IClusterRef_c904150a]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IStreamRef_b484e253", "_IClusterRef_c904150a", "_IQueueRef_fa8b2198"]]:
         '''The Amazon Resource Name (ARN) of the event source.
 
         - *Amazon Kinesis* – The ARN of the data stream or a stream consumer.
@@ -8827,12 +8831,12 @@ class CfnEventSourceMappingProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-eventsourcearn
         '''
         result = self._values.get("event_source_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198, _IClusterRef_c904150a]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IStreamRef_b484e253", "_IClusterRef_c904150a", "_IQueueRef_fa8b2198"]], result)
 
     @builtins.property
     def filter_criteria(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.FilterCriteriaProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.FilterCriteriaProperty"]]:
         '''An object that defines the filter criteria that determine whether Lambda should process an event.
 
         For more information, see `Lambda event filtering <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html>`_ .
@@ -8840,7 +8844,7 @@ class CfnEventSourceMappingProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-filtercriteria
         '''
         result = self._values.get("filter_criteria")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.FilterCriteriaProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.FilterCriteriaProperty"]], result)
 
     @builtins.property
     def function_response_types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -8865,13 +8869,13 @@ class CfnEventSourceMappingProps:
     @builtins.property
     def logging_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.LoggingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.LoggingConfigProperty"]]:
         '''The function's Amazon CloudWatch Logs configuration settings.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-loggingconfig
         '''
         result = self._values.get("logging_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.LoggingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.LoggingConfigProperty"]], result)
 
     @builtins.property
     def maximum_batching_window_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -8918,7 +8922,7 @@ class CfnEventSourceMappingProps:
     @builtins.property
     def metrics_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.MetricsConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.MetricsConfigProperty"]]:
         '''The metrics configuration for your event source.
 
         For more information, see `Event source mapping metrics <https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics-types.html#event-source-mapping-metrics>`_ .
@@ -8926,7 +8930,7 @@ class CfnEventSourceMappingProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-metricsconfig
         '''
         result = self._values.get("metrics_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.MetricsConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.MetricsConfigProperty"]], result)
 
     @builtins.property
     def parallelization_factor(self) -> typing.Optional[jsii.Number]:
@@ -8942,7 +8946,7 @@ class CfnEventSourceMappingProps:
     @builtins.property
     def provisioned_poller_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.ProvisionedPollerConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.ProvisionedPollerConfigProperty"]]:
         '''(Amazon SQS, Amazon MSK, and self-managed Apache Kafka only) The provisioned mode configuration for the event source.
 
         For more information, see `provisioned mode <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html#invocation-eventsourcemapping-provisioned-mode>`_ .
@@ -8950,7 +8954,7 @@ class CfnEventSourceMappingProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-provisionedpollerconfig
         '''
         result = self._values.get("provisioned_poller_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.ProvisionedPollerConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.ProvisionedPollerConfigProperty"]], result)
 
     @builtins.property
     def queues(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -8964,7 +8968,7 @@ class CfnEventSourceMappingProps:
     @builtins.property
     def scaling_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.ScalingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.ScalingConfigProperty"]]:
         '''This property is for Amazon SQS event sources only.
 
         You cannot use ``ProvisionedPollerConfig`` while using ``ScalingConfig`` . These options are mutually exclusive. To remove the scaling configuration, pass an empty value.
@@ -8972,40 +8976,40 @@ class CfnEventSourceMappingProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-scalingconfig
         '''
         result = self._values.get("scaling_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.ScalingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.ScalingConfigProperty"]], result)
 
     @builtins.property
     def self_managed_event_source(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.SelfManagedEventSourceProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SelfManagedEventSourceProperty"]]:
         '''The self-managed Apache Kafka cluster for your event source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-selfmanagedeventsource
         '''
         result = self._values.get("self_managed_event_source")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.SelfManagedEventSourceProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SelfManagedEventSourceProperty"]], result)
 
     @builtins.property
     def self_managed_kafka_event_source_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty"]]:
         '''Specific configuration settings for a self-managed Apache Kafka event source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-selfmanagedkafkaeventsourceconfig
         '''
         result = self._values.get("self_managed_kafka_event_source_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SelfManagedKafkaEventSourceConfigProperty"]], result)
 
     @builtins.property
     def source_access_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.SourceAccessConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SourceAccessConfigurationProperty"]]]]:
         '''An array of the authentication protocol, VPC components, or virtual host to secure and define your event source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-sourceaccessconfigurations
         '''
         result = self._values.get("source_access_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.SourceAccessConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEventSourceMapping.SourceAccessConfigurationProperty"]]]], result)
 
     @builtins.property
     def starting_position(self) -> typing.Optional[builtins.str]:
@@ -9032,7 +9036,7 @@ class CfnEventSourceMappingProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to add to the event source mapping.
 
         .. epigraph::
@@ -9042,7 +9046,7 @@ class CfnEventSourceMappingProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def topics(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -9104,6 +9108,7 @@ class CfnFunction(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_lambda as lambda_
@@ -9208,40 +9213,40 @@ class CfnFunction(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        code: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.CodeProperty", typing.Dict[builtins.str, typing.Any]]],
-        role: typing.Union[builtins.str, _IRoleRef_8400221f],
+        code: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.CodeProperty", typing.Dict[builtins.str, typing.Any]]],
+        role: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
-        capacity_provider_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.CapacityProviderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
-        dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.DeadLetterConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        capacity_provider_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.CapacityProviderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        code_signing_config_arn: typing.Optional[typing.Union[builtins.str, "_ICodeSigningConfigRef_1d909622"]] = None,
+        dead_letter_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.DeadLetterConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.DurableConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.EnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.EphemeralStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        file_system_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.FileSystemConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        durable_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.DurableConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        environment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.EnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ephemeral_storage: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.EphemeralStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_system_configs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.FileSystemConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         function_name: typing.Optional[builtins.str] = None,
-        function_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.FunctionScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        function_scaling_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.FunctionScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         handler: typing.Optional[builtins.str] = None,
-        image_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.ImageConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
-        layers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILayerVersionRef_45d18037]]] = None,
-        logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        image_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.ImageConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kms_key_arn: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
+        layers: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ILayerVersionRef_45d18037"]]] = None,
+        logging_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         memory_size: typing.Optional[jsii.Number] = None,
         package_type: typing.Optional[builtins.str] = None,
-        publish_to_latest_published: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        publish_to_latest_published: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         recursive_loop: typing.Optional[builtins.str] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
         runtime: typing.Optional[builtins.str] = None,
-        runtime_management_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.RuntimeManagementConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        snap_start: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.SnapStartProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tenancy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.TenancyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        runtime_management_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.RuntimeManagementConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        snap_start: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.SnapStartProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tenancy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.TenancyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout: typing.Optional[jsii.Number] = None,
-        tracing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.TracingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tracing_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.TracingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lambda::Function``.
 
@@ -9250,16 +9255,16 @@ class CfnFunction(
         :param code: The code for the function. You can define your function code in multiple ways:. - For .zip deployment packages, you can specify the Amazon S3 location of the .zip file in the ``S3Bucket`` , ``S3Key`` , and ``S3ObjectVersion`` properties. - For .zip deployment packages, you can alternatively define the function code inline in the ``ZipFile`` property. This method works only for Node.js and Python functions. - For container images, specify the URI of your container image in the Amazon ECR registry in the ``ImageUri`` property.
         :param role: The Amazon Resource Name (ARN) of the function's execution role.
         :param architectures: The instruction set architecture that the function supports. Enter a string array with one of the valid values (arm64 or x86_64). The default value is ``x86_64`` .
-        :param capacity_provider_config: 
+        :param capacity_provider_config: Configuration for the capacity provider that manages compute resources for Lambda functions.
         :param code_signing_config_arn: To enable code signing for this function, specify the ARN of a code-signing configuration. A code-signing configuration includes a set of signing profiles, which define the trusted publishers for this function.
         :param dead_letter_config: A dead-letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see `Dead-letter queues <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-dlq>`_ .
         :param description: A description of the function.
-        :param durable_config: 
+        :param durable_config: Configuration settings for `durable functions <https://docs.aws.amazon.com/lambda/latest/dg/durable-functions.html>`_ , including execution timeout and retention period for execution history.
         :param environment: Environment variables that are accessible from function code during execution.
         :param ephemeral_storage: The size of the function's ``/tmp`` directory in MB. The default value is 512, but it can be any whole number between 512 and 10,240 MB.
         :param file_system_configs: Connection settings for an Amazon EFS file system. To connect a function to a file system, a mount target must be available in every Availability Zone that your function connects to. If your template contains an `AWS::EFS::MountTarget <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-mounttarget.html>`_ resource, you must also specify a ``DependsOn`` attribute to ensure that the mount target is created or updated before the function. For more information about using the ``DependsOn`` attribute, see `DependsOn Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ .
         :param function_name: The name of the Lambda function, up to 64 characters in length. If you don't specify a name, CloudFormation generates one. If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
-        :param function_scaling_config: 
+        :param function_scaling_config: Configuration that defines the scaling behavior for a Lambda Managed Instances function, including the minimum and maximum number of execution environments that can be provisioned.
         :param handler: The name of the method within your code that Lambda calls to run your function. Handler is required if the deployment package is a .zip file archive. The format includes the file name. It can also include namespaces and other qualifiers, depending on the runtime. For more information, see `Lambda programming model <https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html>`_ .
         :param image_config: Configuration values that override the container image Dockerfile settings. For more information, see `Container image settings <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-parms>`_ .
         :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS ) customer managed key that's used to encrypt the following resources:. - The function's `environment variables <https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-encryption>`_ . - The function's `Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart-security.html>`_ snapshots. - When used with ``SourceKMSKeyArn`` , the unzipped version of the .zip deployment package that's used for function invocations. For more information, see `Specifying a customer managed key for Lambda <https://docs.aws.amazon.com/lambda/latest/dg/encrypt-zip-package.html#enable-zip-custom-encryption>`_ . - The optimized version of the container image that's used for function invocations. Note that this is not the same key that's used to protect your container image in the Amazon Elastic Container Registry (Amazon ECR). For more information, see `Function lifecycle <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-lifecycle>`_ . If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ or an `AWS managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk>`_ .
@@ -9321,7 +9326,7 @@ class CfnFunction(
 
     @jsii.member(jsii_name="arnForFunction")
     @builtins.classmethod
-    def arn_for_function(cls, resource: _IFunctionRef_2601eb33) -> builtins.str:
+    def arn_for_function(cls, resource: "_IFunctionRef_2601eb33") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -9334,10 +9339,10 @@ class CfnFunction(
     @builtins.classmethod
     def from_function_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IFunctionRef_2601eb33:
+    ) -> "_IFunctionRef_2601eb33":
         '''Creates a new IFunctionRef from an ARN.
 
         :param scope: -
@@ -9349,16 +9354,16 @@ class CfnFunction(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IFunctionRef_2601eb33, jsii.sinvoke(cls, "fromFunctionArn", [scope, id, arn]))
+        return typing.cast("_IFunctionRef_2601eb33", jsii.sinvoke(cls, "fromFunctionArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromFunctionName")
     @builtins.classmethod
     def from_function_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         function_name: builtins.str,
-    ) -> _IFunctionRef_2601eb33:
+    ) -> "_IFunctionRef_2601eb33":
         '''Creates a new IFunctionRef from a functionName.
 
         :param scope: -
@@ -9370,7 +9375,7 @@ class CfnFunction(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument function_name", value=function_name, expected_type=type_hints["function_name"])
-        return typing.cast(_IFunctionRef_2601eb33, jsii.sinvoke(cls, "fromFunctionName", [scope, id, function_name]))
+        return typing.cast("_IFunctionRef_2601eb33", jsii.sinvoke(cls, "fromFunctionName", [scope, id, function_name]))
 
     @jsii.member(jsii_name="isCfnFunction")
     @builtins.classmethod
@@ -9385,7 +9390,7 @@ class CfnFunction(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFunction", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9425,12 +9430,12 @@ class CfnFunction(
 
     @builtins.property
     @jsii.member(jsii_name="attrSnapStartResponse")
-    def attr_snap_start_response(self) -> _IResolvable_da3f097b:
+    def attr_snap_start_response(self) -> "_IResolvable_da3f097b":
         '''The function's `SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart.html>`_ setting.
 
         :cloudformationAttribute: SnapStartResponse
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrSnapStartResponse"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrSnapStartResponse"))
 
     @builtins.property
     @jsii.member(jsii_name="attrSnapStartResponseApplyOn")
@@ -9457,29 +9462,29 @@ class CfnFunction(
 
     @builtins.property
     @jsii.member(jsii_name="functionRef")
-    def function_ref(self) -> _FunctionReference_82f2efe9:
+    def function_ref(self) -> "_FunctionReference_82f2efe9":
         '''A reference to a Function resource.'''
-        return typing.cast(_FunctionReference_82f2efe9, jsii.get(self, "functionRef"))
+        return typing.cast("_FunctionReference_82f2efe9", jsii.get(self, "functionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="code")
-    def code(self) -> typing.Union[_IResolvable_da3f097b, "CfnFunction.CodeProperty"]:
+    def code(self) -> typing.Union["_IResolvable_da3f097b", "CfnFunction.CodeProperty"]:
         '''The code for the function.
 
         You can define your function code in multiple ways:.
         '''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFunction.CodeProperty"], jsii.get(self, "code"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFunction.CodeProperty"], jsii.get(self, "code"))
 
     @code.setter
     def code(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnFunction.CodeProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnFunction.CodeProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__58971d313bbb31e4a176049232e48d257e2707fa93bae32f75eda0c6327c3121)
@@ -9516,13 +9521,14 @@ class CfnFunction(
     @jsii.member(jsii_name="capacityProviderConfig")
     def capacity_provider_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.CapacityProviderConfigProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.CapacityProviderConfigProperty"]], jsii.get(self, "capacityProviderConfig"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.CapacityProviderConfigProperty"]]:
+        '''Configuration for the capacity provider that manages compute resources for Lambda functions.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.CapacityProviderConfigProperty"]], jsii.get(self, "capacityProviderConfig"))
 
     @capacity_provider_config.setter
     def capacity_provider_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.CapacityProviderConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.CapacityProviderConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8e95fb4274a98029e1c2cba30dd84cdeec86aba8b7dd475bf48c9825be092329)
@@ -9546,14 +9552,14 @@ class CfnFunction(
     @jsii.member(jsii_name="deadLetterConfig")
     def dead_letter_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.DeadLetterConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.DeadLetterConfigProperty"]]:
         '''A dead-letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.DeadLetterConfigProperty"]], jsii.get(self, "deadLetterConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.DeadLetterConfigProperty"]], jsii.get(self, "deadLetterConfig"))
 
     @dead_letter_config.setter
     def dead_letter_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.DeadLetterConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.DeadLetterConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8e7260bd37534ff38acbffbc9ae7d7473b79520cd7320ebd30eb30dda7fd6aa1)
@@ -9577,13 +9583,14 @@ class CfnFunction(
     @jsii.member(jsii_name="durableConfig")
     def durable_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.DurableConfigProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.DurableConfigProperty"]], jsii.get(self, "durableConfig"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.DurableConfigProperty"]]:
+        '''Configuration settings for `durable functions <https://docs.aws.amazon.com/lambda/latest/dg/durable-functions.html>`_ , including execution timeout and retention period for execution history.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.DurableConfigProperty"]], jsii.get(self, "durableConfig"))
 
     @durable_config.setter
     def durable_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.DurableConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.DurableConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6d689f4ecbf183f4657451c14bc06108d6e3689e24bf76b6cc31fb72be5fa1b5)
@@ -9594,14 +9601,14 @@ class CfnFunction(
     @jsii.member(jsii_name="environment")
     def environment(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.EnvironmentProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.EnvironmentProperty"]]:
         '''Environment variables that are accessible from function code during execution.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.EnvironmentProperty"]], jsii.get(self, "environment"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.EnvironmentProperty"]], jsii.get(self, "environment"))
 
     @environment.setter
     def environment(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.EnvironmentProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.EnvironmentProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__317039d2b9e835e52b1f6d855c9ef90ff3e3707ae46ff7505464e0c0ba080e32)
@@ -9612,14 +9619,14 @@ class CfnFunction(
     @jsii.member(jsii_name="ephemeralStorage")
     def ephemeral_storage(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.EphemeralStorageProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.EphemeralStorageProperty"]]:
         '''The size of the function's ``/tmp`` directory in MB.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.EphemeralStorageProperty"]], jsii.get(self, "ephemeralStorage"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.EphemeralStorageProperty"]], jsii.get(self, "ephemeralStorage"))
 
     @ephemeral_storage.setter
     def ephemeral_storage(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.EphemeralStorageProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.EphemeralStorageProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__19d417a7ef6f6dbe162ed6a9f33a83f606d97e53766d0a551f162f1a623bfce6)
@@ -9630,14 +9637,14 @@ class CfnFunction(
     @jsii.member(jsii_name="fileSystemConfigs")
     def file_system_configs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunction.FileSystemConfigProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunction.FileSystemConfigProperty"]]]]:
         '''Connection settings for an Amazon EFS file system.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunction.FileSystemConfigProperty"]]]], jsii.get(self, "fileSystemConfigs"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunction.FileSystemConfigProperty"]]]], jsii.get(self, "fileSystemConfigs"))
 
     @file_system_configs.setter
     def file_system_configs(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFunction.FileSystemConfigProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunction.FileSystemConfigProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__42281c8b42403c865af9a471e854ee48ac9c9efd9ed8eb48e102fae4dca64865)
@@ -9661,13 +9668,14 @@ class CfnFunction(
     @jsii.member(jsii_name="functionScalingConfig")
     def function_scaling_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.FunctionScalingConfigProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.FunctionScalingConfigProperty"]], jsii.get(self, "functionScalingConfig"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionScalingConfigProperty"]]:
+        '''Configuration that defines the scaling behavior for a Lambda Managed Instances function, including the minimum and maximum number of execution environments that can be provisioned.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionScalingConfigProperty"]], jsii.get(self, "functionScalingConfig"))
 
     @function_scaling_config.setter
     def function_scaling_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.FunctionScalingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionScalingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__59b4ae04dc699803bc702a21c13064ef8eb4a76d8bd334722ef3ac7f1c254de6)
@@ -9691,14 +9699,14 @@ class CfnFunction(
     @jsii.member(jsii_name="imageConfig")
     def image_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.ImageConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.ImageConfigProperty"]]:
         '''Configuration values that override the container image Dockerfile settings.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.ImageConfigProperty"]], jsii.get(self, "imageConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.ImageConfigProperty"]], jsii.get(self, "imageConfig"))
 
     @image_config.setter
     def image_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.ImageConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.ImageConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fc473fff3eab69974e86b6ab728c48e766dacc39517c01dfd62e30519976a9de)
@@ -9735,14 +9743,14 @@ class CfnFunction(
     @jsii.member(jsii_name="loggingConfig")
     def logging_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.LoggingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.LoggingConfigProperty"]]:
         '''The function's Amazon CloudWatch Logs configuration settings.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.LoggingConfigProperty"]], jsii.get(self, "loggingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.LoggingConfigProperty"]], jsii.get(self, "loggingConfig"))
 
     @logging_config.setter
     def logging_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.LoggingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.LoggingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3ce38cf1c7b3713eca9725f79f526f3b663f05dec93fd7dff426e717e1dc9d7c)
@@ -9779,13 +9787,13 @@ class CfnFunction(
     @jsii.member(jsii_name="publishToLatestPublished")
     def publish_to_latest_published(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "publishToLatestPublished"))
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "publishToLatestPublished"))
 
     @publish_to_latest_published.setter
     def publish_to_latest_published(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8dfcd9e5465e988ca53cb0a12e23c9593b87f05a07151fdcc1b2c852531d8d07)
@@ -9838,14 +9846,14 @@ class CfnFunction(
     @jsii.member(jsii_name="runtimeManagementConfig")
     def runtime_management_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.RuntimeManagementConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.RuntimeManagementConfigProperty"]]:
         '''Sets the runtime management configuration for a function's version.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.RuntimeManagementConfigProperty"]], jsii.get(self, "runtimeManagementConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.RuntimeManagementConfigProperty"]], jsii.get(self, "runtimeManagementConfig"))
 
     @runtime_management_config.setter
     def runtime_management_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.RuntimeManagementConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.RuntimeManagementConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0eb811f391544dcb8176a15cfd354317bce582d6de91f3a92abe633f8871c3f5)
@@ -9856,14 +9864,14 @@ class CfnFunction(
     @jsii.member(jsii_name="snapStart")
     def snap_start(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.SnapStartProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.SnapStartProperty"]]:
         '''The function's `AWS Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart.html>`_ setting.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.SnapStartProperty"]], jsii.get(self, "snapStart"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.SnapStartProperty"]], jsii.get(self, "snapStart"))
 
     @snap_start.setter
     def snap_start(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.SnapStartProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.SnapStartProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3da00ae175903856cd5e3dffd1383604e1e7cca41ca0995aaf7f3ff2e12ae143)
@@ -9872,12 +9880,12 @@ class CfnFunction(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of `tags <https://docs.aws.amazon.com/lambda/latest/dg/tagging.html>`_ to apply to the function.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__174edd947716c328063162b1193e4d16e0c3ac15949326027a5bfae9fe02dbc1)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9887,14 +9895,14 @@ class CfnFunction(
     @jsii.member(jsii_name="tenancyConfig")
     def tenancy_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.TenancyConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.TenancyConfigProperty"]]:
         '''The function's tenant isolation configuration settings.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.TenancyConfigProperty"]], jsii.get(self, "tenancyConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.TenancyConfigProperty"]], jsii.get(self, "tenancyConfig"))
 
     @tenancy_config.setter
     def tenancy_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.TenancyConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.TenancyConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3bc85c6d0eed7e19d7938f47d9fbed1a3bc285103ee041df5e42d20226858747)
@@ -9918,14 +9926,14 @@ class CfnFunction(
     @jsii.member(jsii_name="tracingConfig")
     def tracing_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.TracingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.TracingConfigProperty"]]:
         '''Set ``Mode`` to ``Active`` to sample and trace a subset of incoming requests with `X-Ray <https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html>`_ .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.TracingConfigProperty"]], jsii.get(self, "tracingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.TracingConfigProperty"]], jsii.get(self, "tracingConfig"))
 
     @tracing_config.setter
     def tracing_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.TracingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.TracingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2e2ae2e6d2b74fc490159641853a6b239db977126bd780dc9b5d3931c1e47577)
@@ -9936,14 +9944,14 @@ class CfnFunction(
     @jsii.member(jsii_name="vpcConfig")
     def vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.VpcConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.VpcConfigProperty"]]:
         '''For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.VpcConfigProperty"]], jsii.get(self, "vpcConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.VpcConfigProperty"]], jsii.get(self, "vpcConfig"))
 
     @vpc_config.setter
     def vpc_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.VpcConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.VpcConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__033cfa97016c411e045aae5002e1ed6a505aefcc7ef38007d08100468c8903b9)
@@ -9961,10 +9969,11 @@ class CfnFunction(
         def __init__(
             self,
             *,
-            lambda_managed_instances_capacity_provider_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            lambda_managed_instances_capacity_provider_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
-            '''
-            :param lambda_managed_instances_capacity_provider_config: 
+            '''Configuration for the capacity provider that manages compute resources for Lambda functions.
+
+            :param lambda_managed_instances_capacity_provider_config: Configuration for Lambda-managed instances used by the capacity provider.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-capacityproviderconfig.html
             :exampleMetadata: fixture=_generated
@@ -9995,13 +10004,14 @@ class CfnFunction(
         @builtins.property
         def lambda_managed_instances_capacity_provider_config(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty"]:
-            '''
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty"]:
+            '''Configuration for Lambda-managed instances used by the capacity provider.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-capacityproviderconfig.html#cfn-lambda-function-capacityproviderconfig-lambdamanagedinstancescapacityproviderconfig
             '''
             result = self._values.get("lambda_managed_instances_capacity_provider_config")
             assert result is not None, "Required property 'lambda_managed_instances_capacity_provider_config' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10235,9 +10245,10 @@ class CfnFunction(
             execution_timeout: jsii.Number,
             retention_period_in_days: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param execution_timeout: The amount of time (in seconds) that Lambda allows a durable function to run before stopping it. The maximum is one 366-day year or 31,622,400 seconds.
-            :param retention_period_in_days: The number of days after a durable execution is closed that Lambda retains its history, from one to 90 days. The default is 14 days. Default: - 14
+            '''Configuration settings for `durable functions <https://docs.aws.amazon.com/lambda/latest/dg/durable-functions.html>`_ , including execution timeout and retention period for execution history.
+
+            :param execution_timeout: The maximum time (in seconds) that a durable execution can run before timing out. This timeout applies to the entire durable execution, not individual function invocations.
+            :param retention_period_in_days: The number of days to retain execution history after a durable execution completes. After this period, execution history is no longer available through the GetDurableExecutionHistory API. Default: - 14
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-durableconfig.html
             :exampleMetadata: fixture=_generated
@@ -10267,9 +10278,9 @@ class CfnFunction(
 
         @builtins.property
         def execution_timeout(self) -> jsii.Number:
-            '''The amount of time (in seconds) that Lambda allows a durable function to run before stopping it.
+            '''The maximum time (in seconds) that a durable execution can run before timing out.
 
-            The maximum is one 366-day year or 31,622,400 seconds.
+            This timeout applies to the entire durable execution, not individual function invocations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-durableconfig.html#cfn-lambda-function-durableconfig-executiontimeout
             '''
@@ -10279,9 +10290,9 @@ class CfnFunction(
 
         @builtins.property
         def retention_period_in_days(self) -> typing.Optional[jsii.Number]:
-            '''The number of days after a durable execution is closed that Lambda retains its history, from one to 90 days.
+            '''The number of days to retain execution history after a durable execution completes.
 
-            The default is 14 days.
+            After this period, execution history is no longer available through the GetDurableExecutionHistory API.
 
             :default: - 14
 
@@ -10310,7 +10321,7 @@ class CfnFunction(
         def __init__(
             self,
             *,
-            variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''A function's environment variable settings.
 
@@ -10343,7 +10354,7 @@ class CfnFunction(
         @builtins.property
         def variables(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Environment variable key-value pairs. For more information, see `Using Lambda environment variables <https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html>`_ .
 
             If the value of the environment variable is a time or a duration, enclose the value in quotes.
@@ -10351,7 +10362,7 @@ class CfnFunction(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-environment.html#cfn-lambda-function-environment-variables
             '''
             result = self._values.get("variables")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10504,7 +10515,8 @@ class CfnFunction(
             max_execution_environments: typing.Optional[jsii.Number] = None,
             min_execution_environments: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
+            '''Configuration that defines the scaling behavior for a Lambda Managed Instances function, including the minimum and maximum number of execution environments that can be provisioned.
+
             :param max_execution_environments: The maximum number of execution environments that can be provisioned for the function.
             :param min_execution_environments: The minimum number of execution environments to maintain for the function.
 
@@ -10675,10 +10687,11 @@ class CfnFunction(
             execution_environment_memory_gib_per_v_cpu: typing.Optional[jsii.Number] = None,
             per_execution_environment_max_concurrency: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
+            '''Configuration for Lambda-managed instances used by the capacity provider.
+
             :param capacity_provider_arn: The Amazon Resource Name (ARN) of the capacity provider.
             :param execution_environment_memory_gib_per_v_cpu: The amount of memory in GiB allocated per vCPU for execution environments.
-            :param per_execution_environment_max_concurrency: The maximum number of concurrent execution environments that can run on each compute instance.
+            :param per_execution_environment_max_concurrency: The maximum number of concurrent executions that can run on each execution environment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-lambdamanagedinstancescapacityproviderconfig.html
             :exampleMetadata: fixture=_generated
@@ -10735,7 +10748,7 @@ class CfnFunction(
         def per_execution_environment_max_concurrency(
             self,
         ) -> typing.Optional[jsii.Number]:
-            '''The maximum number of concurrent execution environments that can run on each compute instance.
+            '''The maximum number of concurrent executions that can run on each execution environment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-lambdamanagedinstancescapacityproviderconfig.html#cfn-lambda-function-lambdamanagedinstancescapacityproviderconfig-perexecutionenvironmentmaxconcurrency
             '''
@@ -11197,7 +11210,7 @@ class CfnFunction(
         def __init__(
             self,
             *,
-            ipv6_allowed_for_dual_stack: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            ipv6_allowed_for_dual_stack: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
             subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -11245,13 +11258,13 @@ class CfnFunction(
         @builtins.property
         def ipv6_allowed_for_dual_stack(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Allows outbound IPv6 traffic on VPC functions that are connected to dual-stack subnets.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-vpcconfig.html#cfn-lambda-function-vpcconfig-ipv6allowedfordualstack
             '''
             result = self._values.get("ipv6_allowed_for_dual_stack")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -11324,53 +11337,53 @@ class CfnFunctionProps:
     def __init__(
         self,
         *,
-        code: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.CodeProperty, typing.Dict[builtins.str, typing.Any]]],
-        role: typing.Union[builtins.str, _IRoleRef_8400221f],
+        code: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.CodeProperty", typing.Dict[builtins.str, typing.Any]]],
+        role: typing.Union[builtins.str, "_IRoleRef_8400221f"],
         architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
-        capacity_provider_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.CapacityProviderConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
-        dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DeadLetterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        capacity_provider_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.CapacityProviderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        code_signing_config_arn: typing.Optional[typing.Union[builtins.str, "_ICodeSigningConfigRef_1d909622"]] = None,
+        dead_letter_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.DeadLetterConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DurableConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EnvironmentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EphemeralStorageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        file_system_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FileSystemConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        durable_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.DurableConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        environment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.EnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ephemeral_storage: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.EphemeralStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        file_system_configs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.FileSystemConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         function_name: typing.Optional[builtins.str] = None,
-        function_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FunctionScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        function_scaling_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.FunctionScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         handler: typing.Optional[builtins.str] = None,
-        image_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.ImageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
-        layers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILayerVersionRef_45d18037]]] = None,
-        logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        image_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.ImageConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kms_key_arn: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
+        layers: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ILayerVersionRef_45d18037"]]] = None,
+        logging_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         memory_size: typing.Optional[jsii.Number] = None,
         package_type: typing.Optional[builtins.str] = None,
-        publish_to_latest_published: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        publish_to_latest_published: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         recursive_loop: typing.Optional[builtins.str] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
         runtime: typing.Optional[builtins.str] = None,
-        runtime_management_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.RuntimeManagementConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        snap_start: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.SnapStartProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tenancy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.TenancyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        runtime_management_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.RuntimeManagementConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        snap_start: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.SnapStartProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tenancy_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.TenancyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout: typing.Optional[jsii.Number] = None,
-        tracing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.TracingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tracing_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.TracingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFunction.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFunction``.
 
         :param code: The code for the function. You can define your function code in multiple ways:. - For .zip deployment packages, you can specify the Amazon S3 location of the .zip file in the ``S3Bucket`` , ``S3Key`` , and ``S3ObjectVersion`` properties. - For .zip deployment packages, you can alternatively define the function code inline in the ``ZipFile`` property. This method works only for Node.js and Python functions. - For container images, specify the URI of your container image in the Amazon ECR registry in the ``ImageUri`` property.
         :param role: The Amazon Resource Name (ARN) of the function's execution role.
         :param architectures: The instruction set architecture that the function supports. Enter a string array with one of the valid values (arm64 or x86_64). The default value is ``x86_64`` .
-        :param capacity_provider_config: 
+        :param capacity_provider_config: Configuration for the capacity provider that manages compute resources for Lambda functions.
         :param code_signing_config_arn: To enable code signing for this function, specify the ARN of a code-signing configuration. A code-signing configuration includes a set of signing profiles, which define the trusted publishers for this function.
         :param dead_letter_config: A dead-letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see `Dead-letter queues <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-dlq>`_ .
         :param description: A description of the function.
-        :param durable_config: 
+        :param durable_config: Configuration settings for `durable functions <https://docs.aws.amazon.com/lambda/latest/dg/durable-functions.html>`_ , including execution timeout and retention period for execution history.
         :param environment: Environment variables that are accessible from function code during execution.
         :param ephemeral_storage: The size of the function's ``/tmp`` directory in MB. The default value is 512, but it can be any whole number between 512 and 10,240 MB.
         :param file_system_configs: Connection settings for an Amazon EFS file system. To connect a function to a file system, a mount target must be available in every Availability Zone that your function connects to. If your template contains an `AWS::EFS::MountTarget <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-mounttarget.html>`_ resource, you must also specify a ``DependsOn`` attribute to ensure that the mount target is created or updated before the function. For more information about using the ``DependsOn`` attribute, see `DependsOn Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ .
         :param function_name: The name of the Lambda function, up to 64 characters in length. If you don't specify a name, CloudFormation generates one. If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
-        :param function_scaling_config: 
+        :param function_scaling_config: Configuration that defines the scaling behavior for a Lambda Managed Instances function, including the minimum and maximum number of execution environments that can be provisioned.
         :param handler: The name of the method within your code that Lambda calls to run your function. Handler is required if the deployment package is a .zip file archive. The format includes the file name. It can also include namespaces and other qualifiers, depending on the runtime. For more information, see `Lambda programming model <https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html>`_ .
         :param image_config: Configuration values that override the container image Dockerfile settings. For more information, see `Container image settings <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-parms>`_ .
         :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS ) customer managed key that's used to encrypt the following resources:. - The function's `environment variables <https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-encryption>`_ . - The function's `Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart-security.html>`_ snapshots. - When used with ``SourceKMSKeyArn`` , the unzipped version of the .zip deployment package that's used for function invocations. For more information, see `Specifying a customer managed key for Lambda <https://docs.aws.amazon.com/lambda/latest/dg/encrypt-zip-package.html#enable-zip-custom-encryption>`_ . - The optimized version of the container image that's used for function invocations. Note that this is not the same key that's used to protect your container image in the Amazon Elastic Container Registry (Amazon ECR). For more information, see `Function lifecycle <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-lifecycle>`_ . If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ or an `AWS managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk>`_ .
@@ -11395,6 +11408,7 @@ class CfnFunctionProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lambda as lambda_
@@ -11593,7 +11607,7 @@ class CfnFunctionProps:
             self._values["vpc_config"] = vpc_config
 
     @builtins.property
-    def code(self) -> typing.Union[_IResolvable_da3f097b, CfnFunction.CodeProperty]:
+    def code(self) -> typing.Union["_IResolvable_da3f097b", "CfnFunction.CodeProperty"]:
         '''The code for the function. You can define your function code in multiple ways:.
 
         - For .zip deployment packages, you can specify the Amazon S3 location of the .zip file in the ``S3Bucket`` , ``S3Key`` , and ``S3ObjectVersion`` properties.
@@ -11604,17 +11618,17 @@ class CfnFunctionProps:
         '''
         result = self._values.get("code")
         assert result is not None, "Required property 'code' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnFunction.CodeProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFunction.CodeProperty"], result)
 
     @builtins.property
-    def role(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
+    def role(self) -> typing.Union[builtins.str, "_IRoleRef_8400221f"]:
         '''The Amazon Resource Name (ARN) of the function's execution role.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-role
         '''
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f"], result)
 
     @builtins.property
     def architectures(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -11630,17 +11644,18 @@ class CfnFunctionProps:
     @builtins.property
     def capacity_provider_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.CapacityProviderConfigProperty]]:
-        '''
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.CapacityProviderConfigProperty"]]:
+        '''Configuration for the capacity provider that manages compute resources for Lambda functions.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-capacityproviderconfig
         '''
         result = self._values.get("capacity_provider_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.CapacityProviderConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.CapacityProviderConfigProperty"]], result)
 
     @builtins.property
     def code_signing_config_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_ICodeSigningConfigRef_1d909622"]]:
         '''To enable code signing for this function, specify the ARN of a code-signing configuration.
 
         A code-signing configuration
@@ -11649,12 +11664,12 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-codesigningconfigarn
         '''
         result = self._values.get("code_signing_config_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_ICodeSigningConfigRef_1d909622"]], result)
 
     @builtins.property
     def dead_letter_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.DeadLetterConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.DeadLetterConfigProperty"]]:
         '''A dead-letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing.
 
         For more information, see `Dead-letter queues <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-dlq>`_ .
@@ -11662,7 +11677,7 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-deadletterconfig
         '''
         result = self._values.get("dead_letter_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.DeadLetterConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.DeadLetterConfigProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -11676,28 +11691,29 @@ class CfnFunctionProps:
     @builtins.property
     def durable_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.DurableConfigProperty]]:
-        '''
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.DurableConfigProperty"]]:
+        '''Configuration settings for `durable functions <https://docs.aws.amazon.com/lambda/latest/dg/durable-functions.html>`_ , including execution timeout and retention period for execution history.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-durableconfig
         '''
         result = self._values.get("durable_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.DurableConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.DurableConfigProperty"]], result)
 
     @builtins.property
     def environment(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.EnvironmentProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.EnvironmentProperty"]]:
         '''Environment variables that are accessible from function code during execution.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-environment
         '''
         result = self._values.get("environment")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.EnvironmentProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.EnvironmentProperty"]], result)
 
     @builtins.property
     def ephemeral_storage(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.EphemeralStorageProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.EphemeralStorageProperty"]]:
         '''The size of the function's ``/tmp`` directory in MB.
 
         The default value is 512, but it can be any whole number between 512 and 10,240 MB.
@@ -11705,12 +11721,12 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-ephemeralstorage
         '''
         result = self._values.get("ephemeral_storage")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.EphemeralStorageProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.EphemeralStorageProperty"]], result)
 
     @builtins.property
     def file_system_configs(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFunction.FileSystemConfigProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunction.FileSystemConfigProperty"]]]]:
         '''Connection settings for an Amazon EFS file system.
 
         To connect a function to a file system, a mount target must be available in every Availability Zone that your function connects to. If your template contains an `AWS::EFS::MountTarget <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-mounttarget.html>`_ resource, you must also specify a ``DependsOn`` attribute to ensure that the mount target is created or updated before the function.
@@ -11720,7 +11736,7 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-filesystemconfigs
         '''
         result = self._values.get("file_system_configs")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnFunction.FileSystemConfigProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFunction.FileSystemConfigProperty"]]]], result)
 
     @builtins.property
     def function_name(self) -> typing.Optional[builtins.str]:
@@ -11738,12 +11754,13 @@ class CfnFunctionProps:
     @builtins.property
     def function_scaling_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.FunctionScalingConfigProperty]]:
-        '''
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionScalingConfigProperty"]]:
+        '''Configuration that defines the scaling behavior for a Lambda Managed Instances function, including the minimum and maximum number of execution environments that can be provisioned.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-functionscalingconfig
         '''
         result = self._values.get("function_scaling_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.FunctionScalingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.FunctionScalingConfigProperty"]], result)
 
     @builtins.property
     def handler(self) -> typing.Optional[builtins.str]:
@@ -11759,7 +11776,7 @@ class CfnFunctionProps:
     @builtins.property
     def image_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.ImageConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.ImageConfigProperty"]]:
         '''Configuration values that override the container image Dockerfile settings.
 
         For more information, see `Container image settings <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-parms>`_ .
@@ -11767,12 +11784,12 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-imageconfig
         '''
         result = self._values.get("image_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.ImageConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.ImageConfigProperty"]], result)
 
     @builtins.property
     def kms_key_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]]:
         '''The ARN of the AWS Key Management Service ( AWS  ) customer managed key that's used to encrypt the following resources:.
 
         - The function's `environment variables <https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-encryption>`_ .
@@ -11785,29 +11802,29 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-kmskeyarn
         '''
         result = self._values.get("kms_key_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]], result)
 
     @builtins.property
     def layers(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ILayerVersionRef_45d18037]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ILayerVersionRef_45d18037"]]]:
         '''A list of `function layers <https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html>`_ to add to the function's execution environment. Specify each layer by its ARN, including the version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-layers
         '''
         result = self._values.get("layers")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ILayerVersionRef_45d18037]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ILayerVersionRef_45d18037"]]], result)
 
     @builtins.property
     def logging_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.LoggingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.LoggingConfigProperty"]]:
         '''The function's Amazon CloudWatch Logs configuration settings.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-loggingconfig
         '''
         result = self._values.get("logging_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.LoggingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.LoggingConfigProperty"]], result)
 
     @builtins.property
     def memory_size(self) -> typing.Optional[jsii.Number]:
@@ -11832,12 +11849,12 @@ class CfnFunctionProps:
     @builtins.property
     def publish_to_latest_published(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-publishtolatestpublished
         '''
         result = self._values.get("publish_to_latest_published")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def recursive_loop(self) -> typing.Optional[builtins.str]:
@@ -11877,7 +11894,7 @@ class CfnFunctionProps:
     @builtins.property
     def runtime_management_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.RuntimeManagementConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.RuntimeManagementConfigProperty"]]:
         '''Sets the runtime management configuration for a function's version.
 
         For more information, see `Runtime updates <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html>`_ .
@@ -11885,21 +11902,21 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-runtimemanagementconfig
         '''
         result = self._values.get("runtime_management_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.RuntimeManagementConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.RuntimeManagementConfigProperty"]], result)
 
     @builtins.property
     def snap_start(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.SnapStartProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.SnapStartProperty"]]:
         '''The function's `AWS Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart.html>`_ setting.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-snapstart
         '''
         result = self._values.get("snap_start")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.SnapStartProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.SnapStartProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of `tags <https://docs.aws.amazon.com/lambda/latest/dg/tagging.html>`_ to apply to the function.
 
         .. epigraph::
@@ -11909,12 +11926,12 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def tenancy_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.TenancyConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.TenancyConfigProperty"]]:
         '''The function's tenant isolation configuration settings.
 
         Determines whether the Lambda function runs on a shared or dedicated infrastructure per unique tenant.
@@ -11922,7 +11939,7 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-tenancyconfig
         '''
         result = self._values.get("tenancy_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.TenancyConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.TenancyConfigProperty"]], result)
 
     @builtins.property
     def timeout(self) -> typing.Optional[jsii.Number]:
@@ -11938,18 +11955,18 @@ class CfnFunctionProps:
     @builtins.property
     def tracing_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.TracingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.TracingConfigProperty"]]:
         '''Set ``Mode`` to ``Active`` to sample and trace a subset of incoming requests with `X-Ray <https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-tracingconfig
         '''
         result = self._values.get("tracing_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.TracingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.TracingConfigProperty"]], result)
 
     @builtins.property
     def vpc_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.VpcConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.VpcConfigProperty"]]:
         '''For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC.
 
         When you connect a function to a VPC, it can access resources and the internet only through that VPC. For more information, see `Configuring a Lambda function to access resources in a VPC <https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html>`_ .
@@ -11957,7 +11974,7 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-vpcconfig
         '''
         result = self._values.get("vpc_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.VpcConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFunction.VpcConfigProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12009,10 +12026,10 @@ class CfnLayerVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        content: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLayerVersion.ContentProperty", typing.Dict[builtins.str, typing.Any]]],
+        content: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayerVersion.ContentProperty", typing.Dict[builtins.str, typing.Any]]],
         compatible_architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
         compatible_runtimes: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
@@ -12049,7 +12066,7 @@ class CfnLayerVersion(
     @builtins.classmethod
     def arn_for_layer_version(
         cls,
-        resource: _ILayerVersionRef_45d18037,
+        resource: "_ILayerVersionRef_45d18037",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -12072,7 +12089,7 @@ class CfnLayerVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLayerVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12117,22 +12134,22 @@ class CfnLayerVersion(
 
     @builtins.property
     @jsii.member(jsii_name="layerVersionRef")
-    def layer_version_ref(self) -> _LayerVersionReference_e97cf2a7:
+    def layer_version_ref(self) -> "_LayerVersionReference_e97cf2a7":
         '''A reference to a LayerVersion resource.'''
-        return typing.cast(_LayerVersionReference_e97cf2a7, jsii.get(self, "layerVersionRef"))
+        return typing.cast("_LayerVersionReference_e97cf2a7", jsii.get(self, "layerVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="content")
     def content(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnLayerVersion.ContentProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLayerVersion.ContentProperty"]:
         '''The function layer archive.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnLayerVersion.ContentProperty"], jsii.get(self, "content"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLayerVersion.ContentProperty"], jsii.get(self, "content"))
 
     @content.setter
     def content(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnLayerVersion.ContentProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnLayerVersion.ContentProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__16fdce2009fa44459d262b1473f3f14ba14cc73bd0ed3916d4bd0edcf3e43b4d)
@@ -12340,11 +12357,11 @@ class CfnLayerVersionPermission(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         action: builtins.str,
-        layer_version_arn: typing.Union[builtins.str, _ILayerVersionRef_45d18037],
+        layer_version_arn: typing.Union[builtins.str, "_ILayerVersionRef_45d18037"],
         principal: builtins.str,
         organization_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -12383,7 +12400,7 @@ class CfnLayerVersionPermission(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLayerVersionPermission", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12428,9 +12445,11 @@ class CfnLayerVersionPermission(
 
     @builtins.property
     @jsii.member(jsii_name="layerVersionPermissionRef")
-    def layer_version_permission_ref(self) -> _LayerVersionPermissionReference_743fb6e1:
+    def layer_version_permission_ref(
+        self,
+    ) -> "_LayerVersionPermissionReference_743fb6e1":
         '''A reference to a LayerVersionPermission resource.'''
-        return typing.cast(_LayerVersionPermissionReference_743fb6e1, jsii.get(self, "layerVersionPermissionRef"))
+        return typing.cast("_LayerVersionPermissionReference_743fb6e1", jsii.get(self, "layerVersionPermissionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="action")
@@ -12500,7 +12519,7 @@ class CfnLayerVersionPermissionProps:
         self,
         *,
         action: builtins.str,
-        layer_version_arn: typing.Union[builtins.str, _ILayerVersionRef_45d18037],
+        layer_version_arn: typing.Union[builtins.str, "_ILayerVersionRef_45d18037"],
         principal: builtins.str,
         organization_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -12558,14 +12577,14 @@ class CfnLayerVersionPermissionProps:
     @builtins.property
     def layer_version_arn(
         self,
-    ) -> typing.Union[builtins.str, _ILayerVersionRef_45d18037]:
+    ) -> typing.Union[builtins.str, "_ILayerVersionRef_45d18037"]:
         '''The name or Amazon Resource Name (ARN) of the layer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-layerversionpermission.html#cfn-lambda-layerversionpermission-layerversionarn
         '''
         result = self._values.get("layer_version_arn")
         assert result is not None, "Required property 'layer_version_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _ILayerVersionRef_45d18037], result)
+        return typing.cast(typing.Union[builtins.str, "_ILayerVersionRef_45d18037"], result)
 
     @builtins.property
     def principal(self) -> builtins.str:
@@ -12616,7 +12635,7 @@ class CfnLayerVersionProps:
     def __init__(
         self,
         *,
-        content: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLayerVersion.ContentProperty, typing.Dict[builtins.str, typing.Any]]],
+        content: typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayerVersion.ContentProperty", typing.Dict[builtins.str, typing.Any]]],
         compatible_architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
         compatible_runtimes: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
@@ -12683,14 +12702,14 @@ class CfnLayerVersionProps:
     @builtins.property
     def content(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnLayerVersion.ContentProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnLayerVersion.ContentProperty"]:
         '''The function layer archive.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-layerversion.html#cfn-lambda-layerversion-content
         '''
         result = self._values.get("content")
         assert result is not None, "Required property 'content' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnLayerVersion.ContentProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnLayerVersion.ContentProperty"], result)
 
     @builtins.property
     def compatible_architectures(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -12766,9 +12785,9 @@ class CfnParametersCodeProps:
     def __init__(
         self,
         *,
-        bucket_name_param: typing.Optional[_CfnParameter_48fc1866] = None,
-        object_key_param: typing.Optional[_CfnParameter_48fc1866] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        bucket_name_param: typing.Optional["_CfnParameter_48fc1866"] = None,
+        object_key_param: typing.Optional["_CfnParameter_48fc1866"] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
     ) -> None:
         '''Construction properties for ``CfnParametersCode``.
 
@@ -12809,7 +12828,7 @@ class CfnParametersCodeProps:
             self._values["source_kms_key"] = source_kms_key
 
     @builtins.property
-    def bucket_name_param(self) -> typing.Optional[_CfnParameter_48fc1866]:
+    def bucket_name_param(self) -> typing.Optional["_CfnParameter_48fc1866"]:
         '''The CloudFormation parameter that represents the name of the S3 Bucket where the Lambda code will be located in.
 
         Must be of type 'String'.
@@ -12817,10 +12836,10 @@ class CfnParametersCodeProps:
         :default: a new parameter will be created
         '''
         result = self._values.get("bucket_name_param")
-        return typing.cast(typing.Optional[_CfnParameter_48fc1866], result)
+        return typing.cast(typing.Optional["_CfnParameter_48fc1866"], result)
 
     @builtins.property
-    def object_key_param(self) -> typing.Optional[_CfnParameter_48fc1866]:
+    def object_key_param(self) -> typing.Optional["_CfnParameter_48fc1866"]:
         '''The CloudFormation parameter that represents the path inside the S3 Bucket where the Lambda code will be located at.
 
         Must be of type 'String'.
@@ -12828,16 +12847,16 @@ class CfnParametersCodeProps:
         :default: a new parameter will be created
         '''
         result = self._values.get("object_key_param")
-        return typing.cast(typing.Optional[_CfnParameter_48fc1866], result)
+        return typing.cast(typing.Optional["_CfnParameter_48fc1866"], result)
 
     @builtins.property
-    def source_kms_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def source_kms_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The ARN of the KMS key used to encrypt the handler code.
 
         :default: - the default server-side encryption with Amazon S3 managed keys(SSE-S3) key will be used.
         '''
         result = self._values.get("source_kms_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12894,18 +12913,18 @@ class CfnPermission(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         action: builtins.str,
-        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad],
-        principal: typing.Union[builtins.str, _IRoleRef_8400221f, _IUserRef_b0ccca76],
+        function_name: typing.Union[builtins.str, "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad"],
+        principal: typing.Union[builtins.str, "_IRoleRef_8400221f", "_IUserRef_b0ccca76"],
         event_source_token: typing.Optional[builtins.str] = None,
         function_url_auth_type: typing.Optional[builtins.str] = None,
-        invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         principal_org_id: typing.Optional[builtins.str] = None,
         source_account: typing.Optional[builtins.str] = None,
-        source_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]] = None,
+        source_arn: typing.Optional[typing.Union[builtins.str, "_IUserPoolRef_0b7d02b5", "_IRuleRef_4038a611", "_IRoleRef_8400221f", "_ITopicRuleRef_748e9f37", "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33", "_ILogGroupRef_874d025a", "_IBucketRef_3debe44e", "_ITopicRef_29aa9a88", "_IQueueRef_fa8b2198"]] = None,
     ) -> None:
         '''Create a new ``AWS::Lambda::Permission``.
 
@@ -12916,7 +12935,7 @@ class CfnPermission(
         :param principal: The AWS service , AWS account , IAM user, or IAM role that invokes the function. If you specify a service, use ``SourceArn`` or ``SourceAccount`` to limit who can invoke the function through that service.
         :param event_source_token: For Alexa Smart Home functions, a token that the invoker must supply.
         :param function_url_auth_type: The type of authentication that your function URL uses. Set to ``AWS_IAM`` if you want to restrict access to authenticated users only. Set to ``NONE`` if you want to bypass IAM authentication to create a public endpoint. For more information, see `Control access to Lambda function URLs <https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html>`_ .
-        :param invoked_via_function_url: Restricts the ``lambda:InvokeFunction`` action to function URL calls. When specified, this option prevents the principal from invoking the function by any means other than the function URL. For more information, see `Control access to Lambda function URLs <https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html>`_ .
+        :param invoked_via_function_url: Indicates whether the permission applies when the function is invoked through a function URL.
         :param principal_org_id: The identifier for your organization in AWS Organizations . Use this to grant permissions to all the AWS accounts under this organization.
         :param source_account: For AWS service , the ID of the AWS account that owns the resource. Use this together with ``SourceArn`` to ensure that the specified account owns the resource. It is possible for an Amazon S3 bucket to be deleted by its owner and recreated by another account.
         :param source_arn: For AWS services , the ARN of the AWS resource that invokes the function. For example, an Amazon S3 bucket or Amazon SNS topic. Note that Lambda configures the comparison using the ``StringLike`` operator.
@@ -12952,7 +12971,7 @@ class CfnPermission(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPermission", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12996,9 +13015,9 @@ class CfnPermission(
 
     @builtins.property
     @jsii.member(jsii_name="permissionRef")
-    def permission_ref(self) -> _PermissionReference_fd31327c:
+    def permission_ref(self) -> "_PermissionReference_fd31327c":
         '''A reference to a Permission resource.'''
-        return typing.cast(_PermissionReference_fd31327c, jsii.get(self, "permissionRef"))
+        return typing.cast("_PermissionReference_fd31327c", jsii.get(self, "permissionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="action")
@@ -13069,14 +13088,14 @@ class CfnPermission(
     @jsii.member(jsii_name="invokedViaFunctionUrl")
     def invoked_via_function_url(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Restricts the ``lambda:InvokeFunction`` action to function URL calls.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "invokedViaFunctionUrl"))
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+        '''Indicates whether the permission applies when the function is invoked through a function URL.'''
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "invokedViaFunctionUrl"))
 
     @invoked_via_function_url.setter
     def invoked_via_function_url(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__27448921eb884e35f652e485f1520f21a151aabd99f5cd26586c6fbaaf7385ab)
@@ -13143,14 +13162,14 @@ class CfnPermissionProps:
         self,
         *,
         action: builtins.str,
-        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad],
-        principal: typing.Union[builtins.str, _IRoleRef_8400221f, _IUserRef_b0ccca76],
+        function_name: typing.Union[builtins.str, "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad"],
+        principal: typing.Union[builtins.str, "_IRoleRef_8400221f", "_IUserRef_b0ccca76"],
         event_source_token: typing.Optional[builtins.str] = None,
         function_url_auth_type: typing.Optional[builtins.str] = None,
-        invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         principal_org_id: typing.Optional[builtins.str] = None,
         source_account: typing.Optional[builtins.str] = None,
-        source_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]] = None,
+        source_arn: typing.Optional[typing.Union[builtins.str, "_IUserPoolRef_0b7d02b5", "_IRuleRef_4038a611", "_IRoleRef_8400221f", "_ITopicRuleRef_748e9f37", "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33", "_ILogGroupRef_874d025a", "_IBucketRef_3debe44e", "_ITopicRef_29aa9a88", "_IQueueRef_fa8b2198"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPermission``.
 
@@ -13159,7 +13178,7 @@ class CfnPermissionProps:
         :param principal: The AWS service , AWS account , IAM user, or IAM role that invokes the function. If you specify a service, use ``SourceArn`` or ``SourceAccount`` to limit who can invoke the function through that service.
         :param event_source_token: For Alexa Smart Home functions, a token that the invoker must supply.
         :param function_url_auth_type: The type of authentication that your function URL uses. Set to ``AWS_IAM`` if you want to restrict access to authenticated users only. Set to ``NONE`` if you want to bypass IAM authentication to create a public endpoint. For more information, see `Control access to Lambda function URLs <https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html>`_ .
-        :param invoked_via_function_url: Restricts the ``lambda:InvokeFunction`` action to function URL calls. When specified, this option prevents the principal from invoking the function by any means other than the function URL. For more information, see `Control access to Lambda function URLs <https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html>`_ .
+        :param invoked_via_function_url: Indicates whether the permission applies when the function is invoked through a function URL.
         :param principal_org_id: The identifier for your organization in AWS Organizations . Use this to grant permissions to all the AWS accounts under this organization.
         :param source_account: For AWS service , the ID of the AWS account that owns the resource. Use this together with ``SourceArn`` to ensure that the specified account owns the resource. It is possible for an Amazon S3 bucket to be deleted by its owner and recreated by another account.
         :param source_arn: For AWS services , the ARN of the AWS resource that invokes the function. For example, an Amazon S3 bucket or Amazon SNS topic. Note that Lambda configures the comparison using the ``StringLike`` operator.
@@ -13231,7 +13250,7 @@ class CfnPermissionProps:
     @builtins.property
     def function_name(
         self,
-    ) -> typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad]:
+    ) -> typing.Union[builtins.str, "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad"]:
         '''The name or ARN of the Lambda function, version, or alias.
 
         **Name formats** - *Function name* – ``my-function`` (name-only), ``my-function:v1`` (with alias).
@@ -13245,12 +13264,12 @@ class CfnPermissionProps:
         '''
         result = self._values.get("function_name")
         assert result is not None, "Required property 'function_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad], result)
+        return typing.cast(typing.Union[builtins.str, "_IFunctionRef_2601eb33", "_IVersionRef_4fdb94ad"], result)
 
     @builtins.property
     def principal(
         self,
-    ) -> typing.Union[builtins.str, _IRoleRef_8400221f, _IUserRef_b0ccca76]:
+    ) -> typing.Union[builtins.str, "_IRoleRef_8400221f", "_IUserRef_b0ccca76"]:
         '''The AWS service , AWS account , IAM user, or IAM role that invokes the function.
 
         If you specify a service, use ``SourceArn`` or ``SourceAccount`` to limit who can invoke the function through that service.
@@ -13259,7 +13278,7 @@ class CfnPermissionProps:
         '''
         result = self._values.get("principal")
         assert result is not None, "Required property 'principal' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f, _IUserRef_b0ccca76], result)
+        return typing.cast(typing.Union[builtins.str, "_IRoleRef_8400221f", "_IUserRef_b0ccca76"], result)
 
     @builtins.property
     def event_source_token(self) -> typing.Optional[builtins.str]:
@@ -13284,15 +13303,13 @@ class CfnPermissionProps:
     @builtins.property
     def invoked_via_function_url(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Restricts the ``lambda:InvokeFunction`` action to function URL calls.
-
-        When specified, this option prevents the principal from invoking the function by any means other than the function URL. For more information, see `Control access to Lambda function URLs <https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html>`_ .
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+        '''Indicates whether the permission applies when the function is invoked through a function URL.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-permission.html#cfn-lambda-permission-invokedviafunctionurl
         '''
         result = self._values.get("invoked_via_function_url")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def principal_org_id(self) -> typing.Optional[builtins.str]:
@@ -13319,7 +13336,7 @@ class CfnPermissionProps:
     @builtins.property
     def source_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IUserPoolRef_0b7d02b5", "_IRuleRef_4038a611", "_IRoleRef_8400221f", "_ITopicRuleRef_748e9f37", "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33", "_ILogGroupRef_874d025a", "_IBucketRef_3debe44e", "_ITopicRef_29aa9a88", "_IQueueRef_fa8b2198"]]:
         '''For AWS services , the ARN of the AWS resource that invokes the function.
 
         For example, an Amazon S3 bucket or Amazon SNS topic.
@@ -13329,7 +13346,7 @@ class CfnPermissionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-permission.html#cfn-lambda-permission-sourcearn
         '''
         result = self._values.get("source_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IUserPoolRef_0b7d02b5", "_IRuleRef_4038a611", "_IRoleRef_8400221f", "_ITopicRuleRef_748e9f37", "_IDeliveryStreamRef_678f5e53", "_IFunctionRef_2601eb33", "_ILogGroupRef_874d025a", "_IBucketRef_3debe44e", "_ITopicRef_29aa9a88", "_IQueueRef_fa8b2198"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13383,12 +13400,12 @@ class CfnUrl(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         auth_type: builtins.str,
-        target_function_arn: typing.Union[builtins.str, _IFunctionRef_2601eb33],
-        cors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUrl.CorsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_function_arn: typing.Union[builtins.str, "_IFunctionRef_2601eb33"],
+        cors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUrl.CorsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         invoke_mode: typing.Optional[builtins.str] = None,
         qualifier: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -13429,7 +13446,7 @@ class CfnUrl(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUrl", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -13483,9 +13500,9 @@ class CfnUrl(
 
     @builtins.property
     @jsii.member(jsii_name="urlRef")
-    def url_ref(self) -> _UrlReference_4ae6d27d:
+    def url_ref(self) -> "_UrlReference_4ae6d27d":
         '''A reference to a Url resource.'''
-        return typing.cast(_UrlReference_4ae6d27d, jsii.get(self, "urlRef"))
+        return typing.cast("_UrlReference_4ae6d27d", jsii.get(self, "urlRef"))
 
     @builtins.property
     @jsii.member(jsii_name="authType")
@@ -13517,14 +13534,14 @@ class CfnUrl(
     @jsii.member(jsii_name="cors")
     def cors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUrl.CorsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUrl.CorsProperty"]]:
         '''The `Cross-Origin Resource Sharing (CORS) <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS>`_ settings for your function URL.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUrl.CorsProperty"]], jsii.get(self, "cors"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUrl.CorsProperty"]], jsii.get(self, "cors"))
 
     @cors.setter
     def cors(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUrl.CorsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUrl.CorsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d41b12f6e3c274633a1ab237c9d2c8dae2757548abbc8e5bde3fe4176ff93b35)
@@ -13573,7 +13590,7 @@ class CfnUrl(
         def __init__(
             self,
             *,
-            allow_credentials: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            allow_credentials: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             allow_headers: typing.Optional[typing.Sequence[builtins.str]] = None,
             allow_methods: typing.Optional[typing.Sequence[builtins.str]] = None,
             allow_origins: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -13632,7 +13649,7 @@ class CfnUrl(
         @builtins.property
         def allow_credentials(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether you want to allow cookies or other credentials in requests to your function URL.
 
             The default is ``false`` .
@@ -13640,7 +13657,7 @@ class CfnUrl(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-url-cors.html#cfn-lambda-url-cors-allowcredentials
             '''
             result = self._values.get("allow_credentials")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def allow_headers(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -13727,8 +13744,8 @@ class CfnUrlProps:
         self,
         *,
         auth_type: builtins.str,
-        target_function_arn: typing.Union[builtins.str, _IFunctionRef_2601eb33],
-        cors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUrl.CorsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_function_arn: typing.Union[builtins.str, "_IFunctionRef_2601eb33"],
+        cors: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUrl.CorsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         invoke_mode: typing.Optional[builtins.str] = None,
         qualifier: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -13797,7 +13814,9 @@ class CfnUrlProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def target_function_arn(self) -> typing.Union[builtins.str, _IFunctionRef_2601eb33]:
+    def target_function_arn(
+        self,
+    ) -> typing.Union[builtins.str, "_IFunctionRef_2601eb33"]:
         '''The name of the Lambda function.
 
         **Name formats** - *Function name* - ``my-function`` .
@@ -13811,18 +13830,18 @@ class CfnUrlProps:
         '''
         result = self._values.get("target_function_arn")
         assert result is not None, "Required property 'target_function_arn' is missing"
-        return typing.cast(typing.Union[builtins.str, _IFunctionRef_2601eb33], result)
+        return typing.cast(typing.Union[builtins.str, "_IFunctionRef_2601eb33"], result)
 
     @builtins.property
     def cors(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnUrl.CorsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUrl.CorsProperty"]]:
         '''The `Cross-Origin Resource Sharing (CORS) <https://docs.aws.amazon.com/https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS>`_ settings for your function URL.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-url.html#cfn-lambda-url-cors
         '''
         result = self._values.get("cors")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnUrl.CorsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUrl.CorsProperty"]], result)
 
     @builtins.property
     def invoke_mode(self) -> typing.Optional[builtins.str]:
@@ -13899,15 +13918,15 @@ class CfnVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
+        function_name: typing.Union[builtins.str, "_IFunctionRef_2601eb33"],
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        function_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVersion.FunctionScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVersion.ProvisionedConcurrencyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        runtime_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVersion.RuntimePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        function_scaling_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVersion.FunctionScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        provisioned_concurrency_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVersion.ProvisionedConcurrencyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        runtime_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVersion.RuntimePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Lambda::Version``.
 
@@ -13948,7 +13967,7 @@ class CfnVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -14002,9 +14021,9 @@ class CfnVersion(
 
     @builtins.property
     @jsii.member(jsii_name="versionRef")
-    def version_ref(self) -> _VersionReference_91666182:
+    def version_ref(self) -> "_VersionReference_91666182":
         '''A reference to a Version resource.'''
-        return typing.cast(_VersionReference_91666182, jsii.get(self, "versionRef"))
+        return typing.cast("_VersionReference_91666182", jsii.get(self, "versionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="functionName")
@@ -14049,14 +14068,14 @@ class CfnVersion(
     @jsii.member(jsii_name="functionScalingConfig")
     def function_scaling_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVersion.FunctionScalingConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.FunctionScalingConfigProperty"]]:
         '''Configuration that defines the scaling behavior for a Lambda Managed Instances function, including the minimum and maximum number of execution environments that can be provisioned.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVersion.FunctionScalingConfigProperty"]], jsii.get(self, "functionScalingConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.FunctionScalingConfigProperty"]], jsii.get(self, "functionScalingConfig"))
 
     @function_scaling_config.setter
     def function_scaling_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVersion.FunctionScalingConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.FunctionScalingConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a05734859d1b39a13f71bc2c259b3b20118b152c494683544a20b341ae92800a)
@@ -14067,14 +14086,14 @@ class CfnVersion(
     @jsii.member(jsii_name="provisionedConcurrencyConfig")
     def provisioned_concurrency_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVersion.ProvisionedConcurrencyConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.ProvisionedConcurrencyConfigurationProperty"]]:
         '''Specifies a provisioned concurrency configuration for a function's version.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVersion.ProvisionedConcurrencyConfigurationProperty"]], jsii.get(self, "provisionedConcurrencyConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.ProvisionedConcurrencyConfigurationProperty"]], jsii.get(self, "provisionedConcurrencyConfig"))
 
     @provisioned_concurrency_config.setter
     def provisioned_concurrency_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVersion.ProvisionedConcurrencyConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.ProvisionedConcurrencyConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e46534e1d83b58a93edc70a851ca891701ea58cfe9a3fc7dc106915c1a475fa6)
@@ -14085,14 +14104,14 @@ class CfnVersion(
     @jsii.member(jsii_name="runtimePolicy")
     def runtime_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVersion.RuntimePolicyProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.RuntimePolicyProperty"]]:
         '''Runtime Management Config of a function.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVersion.RuntimePolicyProperty"]], jsii.get(self, "runtimePolicy"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.RuntimePolicyProperty"]], jsii.get(self, "runtimePolicy"))
 
     @runtime_policy.setter
     def runtime_policy(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVersion.RuntimePolicyProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.RuntimePolicyProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__584bd4a88ccc7115243718679495b0e532174830ccb955a353592cc13c8ac084)
@@ -14331,12 +14350,12 @@ class CfnVersionProps:
     def __init__(
         self,
         *,
-        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
+        function_name: typing.Union[builtins.str, "_IFunctionRef_2601eb33"],
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        function_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.FunctionScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.ProvisionedConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        runtime_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.RuntimePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        function_scaling_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVersion.FunctionScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        provisioned_concurrency_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVersion.ProvisionedConcurrencyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        runtime_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnVersion.RuntimePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnVersion``.
 
@@ -14400,7 +14419,7 @@ class CfnVersionProps:
             self._values["runtime_policy"] = runtime_policy
 
     @builtins.property
-    def function_name(self) -> typing.Union[builtins.str, _IFunctionRef_2601eb33]:
+    def function_name(self) -> typing.Union[builtins.str, "_IFunctionRef_2601eb33"]:
         '''The name or ARN of the Lambda function.
 
         **Name formats** - *Function name* - ``MyFunction`` .
@@ -14414,7 +14433,7 @@ class CfnVersionProps:
         '''
         result = self._values.get("function_name")
         assert result is not None, "Required property 'function_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _IFunctionRef_2601eb33], result)
+        return typing.cast(typing.Union[builtins.str, "_IFunctionRef_2601eb33"], result)
 
     @builtins.property
     def code_sha256(self) -> typing.Optional[builtins.str]:
@@ -14441,18 +14460,18 @@ class CfnVersionProps:
     @builtins.property
     def function_scaling_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.FunctionScalingConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.FunctionScalingConfigProperty"]]:
         '''Configuration that defines the scaling behavior for a Lambda Managed Instances function, including the minimum and maximum number of execution environments that can be provisioned.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-version.html#cfn-lambda-version-functionscalingconfig
         '''
         result = self._values.get("function_scaling_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.FunctionScalingConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.FunctionScalingConfigProperty"]], result)
 
     @builtins.property
     def provisioned_concurrency_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.ProvisionedConcurrencyConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.ProvisionedConcurrencyConfigurationProperty"]]:
         '''Specifies a provisioned concurrency configuration for a function's version.
 
         Updates are not supported for this property.
@@ -14460,18 +14479,18 @@ class CfnVersionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-version.html#cfn-lambda-version-provisionedconcurrencyconfig
         '''
         result = self._values.get("provisioned_concurrency_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.ProvisionedConcurrencyConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.ProvisionedConcurrencyConfigurationProperty"]], result)
 
     @builtins.property
     def runtime_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.RuntimePolicyProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.RuntimePolicyProperty"]]:
         '''Runtime Management Config of a function.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-version.html#cfn-lambda-version-runtimepolicy
         '''
         result = self._values.get("runtime_policy")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.RuntimePolicyProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnVersion.RuntimePolicyProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14519,14 +14538,14 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.C
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> "AssetCode":
         '''Loads the function code from a local disk path.
 
@@ -14574,19 +14593,19 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.C
         build_secrets: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         build_ssh: typing.Optional[builtins.str] = None,
         cache_disabled: typing.Optional[builtins.bool] = None,
-        cache_from: typing.Optional[typing.Sequence[typing.Union[_DockerCacheOption_58ef18ca, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache_to: typing.Optional[typing.Union[_DockerCacheOption_58ef18ca, typing.Dict[builtins.str, typing.Any]]] = None,
+        cache_from: typing.Optional[typing.Sequence[typing.Union["_DockerCacheOption_58ef18ca", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_to: typing.Optional[typing.Union["_DockerCacheOption_58ef18ca", typing.Dict[builtins.str, typing.Any]]] = None,
         display_name: typing.Optional[builtins.str] = None,
         file: typing.Optional[builtins.str] = None,
-        invalidation: typing.Optional[typing.Union[_DockerImageAssetInvalidationOptions_4deb8d45, typing.Dict[builtins.str, typing.Any]]] = None,
-        network_mode: typing.Optional[_NetworkMode_897e5081] = None,
+        invalidation: typing.Optional[typing.Union["_DockerImageAssetInvalidationOptions_4deb8d45", typing.Dict[builtins.str, typing.Any]]] = None,
+        network_mode: typing.Optional["_NetworkMode_897e5081"] = None,
         outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
-        platform: typing.Optional[_Platform_d16f3cf1] = None,
+        platform: typing.Optional["_Platform_d16f3cf1"] = None,
         target: typing.Optional[builtins.str] = None,
         extra_hash: typing.Optional[builtins.str] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> "AssetImageCode":
         '''Create an ECR image from the specified asset and bind it as the Lambda code.
 
@@ -14646,7 +14665,7 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.C
     @builtins.classmethod
     def from_bucket(
         cls,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         key: builtins.str,
         object_version: typing.Optional[builtins.str] = None,
     ) -> "S3Code":
@@ -14670,11 +14689,11 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.C
     @builtins.classmethod
     def from_bucket_v2(
         cls,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         key: builtins.str,
         *,
         object_version: typing.Optional[builtins.str] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
     ) -> "S3CodeV2":
         '''Lambda handler code as an S3 object.
 
@@ -14701,9 +14720,9 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.C
     def from_cfn_parameters(
         cls,
         *,
-        bucket_name_param: typing.Optional[_CfnParameter_48fc1866] = None,
-        object_key_param: typing.Optional[_CfnParameter_48fc1866] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        bucket_name_param: typing.Optional["_CfnParameter_48fc1866"] = None,
+        object_key_param: typing.Optional["_CfnParameter_48fc1866"] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
     ) -> "CfnParametersCode":
         '''Creates a new Lambda source defined using CloudFormation parameters.
 
@@ -14731,14 +14750,14 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.C
         command_options: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> "AssetCode":
         '''Runs a command to build the code asset that will be used.
 
@@ -14786,8 +14805,8 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.C
         output_path: typing.Optional[builtins.str] = None,
         build_args: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         cache_disabled: typing.Optional[builtins.bool] = None,
-        cache_from: typing.Optional[typing.Sequence[typing.Union[_DockerCacheOption_63aeecf2, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache_to: typing.Optional[typing.Union[_DockerCacheOption_63aeecf2, typing.Dict[builtins.str, typing.Any]]] = None,
+        cache_from: typing.Optional[typing.Sequence[typing.Union["_DockerCacheOption_63aeecf2", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_to: typing.Optional[typing.Union["_DockerCacheOption_63aeecf2", typing.Dict[builtins.str, typing.Any]]] = None,
         file: typing.Optional[builtins.str] = None,
         network: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
@@ -14832,7 +14851,7 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.C
     @builtins.classmethod
     def from_ecr_image(
         cls,
-        repository: _IRepository_e6004aa6,
+        repository: "_IRepository_e6004aa6",
         *,
         cmd: typing.Optional[typing.Sequence[builtins.str]] = None,
         entrypoint: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -14878,7 +14897,7 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.C
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "CodeConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Called when the lambda or layer is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param scope: The binding scope. Don't be smart about trying to down-cast or assume it's initialized. You may just use it as a construct scope.
@@ -14888,7 +14907,7 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.C
     @jsii.member(jsii_name="bindToResource")
     def bind_to_resource(
         self,
-        _resource: _CfnResource_9df397a6,
+        _resource: "_CfnResource_9df397a6",
         *,
         resource_property: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -14910,7 +14929,7 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.C
 
 class _CodeProxy(Code):
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "CodeConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Called when the lambda or layer is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param scope: The binding scope. Don't be smart about trying to down-cast or assume it's initialized. You may just use it as a construct scope.
@@ -14940,7 +14959,7 @@ class CodeConfig:
         *,
         image: typing.Optional[typing.Union["CodeImageConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         inline_code: typing.Optional[builtins.str] = None,
-        s3_location: typing.Optional[typing.Union[_Location_0948fa7f, typing.Dict[builtins.str, typing.Any]]] = None,
+        s3_location: typing.Optional[typing.Union["_Location_0948fa7f", typing.Dict[builtins.str, typing.Any]]] = None,
         source_kms_key_arn: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Result of binding ``Code`` into a ``Function``.
@@ -14954,6 +14973,7 @@ class CodeConfig:
 
         Example::
 
+            from aws_cdk.aws_s3 import Location
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lambda as lambda_
@@ -15017,13 +15037,13 @@ class CodeConfig:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def s3_location(self) -> typing.Optional[_Location_0948fa7f]:
+    def s3_location(self) -> typing.Optional["_Location_0948fa7f"]:
         '''The location of the code in S3 (mutually exclusive with ``inlineCode`` and ``image``).
 
         :default: - code is not an s3 location
         '''
         result = self._values.get("s3_location")
-        return typing.cast(typing.Optional[_Location_0948fa7f], result)
+        return typing.cast(typing.Optional["_Location_0948fa7f"], result)
 
     @builtins.property
     def source_kms_key_arn(self) -> typing.Optional[builtins.str]:
@@ -15177,7 +15197,7 @@ class CodeSigningConfigProps:
     def __init__(
         self,
         *,
-        signing_profiles: typing.Sequence[_ISigningProfile_5140a756],
+        signing_profiles: typing.Sequence["_ISigningProfile_5140a756"],
         description: typing.Optional[builtins.str] = None,
         untrusted_artifact_on_deployment: typing.Optional["UntrustedArtifactOnDeployment"] = None,
     ) -> None:
@@ -15223,11 +15243,11 @@ class CodeSigningConfigProps:
             self._values["untrusted_artifact_on_deployment"] = untrusted_artifact_on_deployment
 
     @builtins.property
-    def signing_profiles(self) -> typing.List[_ISigningProfile_5140a756]:
+    def signing_profiles(self) -> typing.List["_ISigningProfile_5140a756"]:
         '''List of signing profiles that defines a trusted user who can sign a code package.'''
         result = self._values.get("signing_profiles")
         assert result is not None, "Required property 'signing_profiles' is missing"
-        return typing.cast(typing.List[_ISigningProfile_5140a756], result)
+        return typing.cast(typing.List["_ISigningProfile_5140a756"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -15288,15 +15308,15 @@ class CustomCommandOptions(_AssetOptions_2aa69621):
         self,
         *,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         command_options: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     ) -> None:
         '''Options for creating ``AssetCode`` with a custom command, such as running a buildfile.
@@ -15431,7 +15451,7 @@ class CustomCommandOptions(_AssetOptions_2aa69621):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def asset_hash_type(self) -> typing.Optional[_AssetHashType_05b67f2d]:
+    def asset_hash_type(self) -> typing.Optional["_AssetHashType_05b67f2d"]:
         '''Specifies the type of hash to calculate for this asset.
 
         If ``assetHash`` is configured, this option must be ``undefined`` or
@@ -15443,10 +15463,10 @@ class CustomCommandOptions(_AssetOptions_2aa69621):
         explicitly specified this value defaults to ``AssetHashType.CUSTOM``.
         '''
         result = self._values.get("asset_hash_type")
-        return typing.cast(typing.Optional[_AssetHashType_05b67f2d], result)
+        return typing.cast(typing.Optional["_AssetHashType_05b67f2d"], result)
 
     @builtins.property
-    def bundling(self) -> typing.Optional[_BundlingOptions_588cc936]:
+    def bundling(self) -> typing.Optional["_BundlingOptions_588cc936"]:
         '''Bundle the asset by executing a command in a Docker container or a custom bundling provider.
 
         The asset path will be mounted at ``/asset-input``. The Docker
@@ -15460,7 +15480,7 @@ class CustomCommandOptions(_AssetOptions_2aa69621):
         archived into a .zip file and uploaded to S3 otherwise
         '''
         result = self._values.get("bundling")
-        return typing.cast(typing.Optional[_BundlingOptions_588cc936], result)
+        return typing.cast(typing.Optional["_BundlingOptions_588cc936"], result)
 
     @builtins.property
     def exclude(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -15475,22 +15495,22 @@ class CustomCommandOptions(_AssetOptions_2aa69621):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def follow_symlinks(self) -> typing.Optional[_SymlinkFollowMode_047ec1f6]:
+    def follow_symlinks(self) -> typing.Optional["_SymlinkFollowMode_047ec1f6"]:
         '''A strategy for how to handle symlinks.
 
         :default: SymlinkFollowMode.NEVER
         '''
         result = self._values.get("follow_symlinks")
-        return typing.cast(typing.Optional[_SymlinkFollowMode_047ec1f6], result)
+        return typing.cast(typing.Optional["_SymlinkFollowMode_047ec1f6"], result)
 
     @builtins.property
-    def ignore_mode(self) -> typing.Optional[_IgnoreMode_655a98e8]:
+    def ignore_mode(self) -> typing.Optional["_IgnoreMode_655a98e8"]:
         '''The ignore behavior to use for ``exclude`` patterns.
 
         :default: IgnoreMode.GLOB
         '''
         result = self._values.get("ignore_mode")
-        return typing.cast(typing.Optional[_IgnoreMode_655a98e8], result)
+        return typing.cast(typing.Optional["_IgnoreMode_655a98e8"], result)
 
     @builtins.property
     def deploy_time(self) -> typing.Optional[builtins.bool]:
@@ -15536,7 +15556,7 @@ class CustomCommandOptions(_AssetOptions_2aa69621):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def readers(self) -> typing.Optional[typing.List[_IGrantable_71c4f5de]]:
+    def readers(self) -> typing.Optional[typing.List["_IGrantable_71c4f5de"]]:
         '''A list of principals that should be able to read this asset from S3.
 
         You can use ``asset.grantRead(principal)`` to grant read permissions later.
@@ -15544,16 +15564,16 @@ class CustomCommandOptions(_AssetOptions_2aa69621):
         :default: - No principals that can read file asset.
         '''
         result = self._values.get("readers")
-        return typing.cast(typing.Optional[typing.List[_IGrantable_71c4f5de]], result)
+        return typing.cast(typing.Optional[typing.List["_IGrantable_71c4f5de"]], result)
 
     @builtins.property
-    def source_kms_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def source_kms_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The ARN of the KMS key used to encrypt the handler code.
 
         :default: - the default server-side encryption with Amazon S3 managed keys(SSE-S3) key will be used.
         '''
         result = self._values.get("source_kms_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
     def command_options(
@@ -15757,8 +15777,8 @@ class DockerBuildAssetOptions(_DockerBuildOptions_8e28be8a):
         *,
         build_args: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         cache_disabled: typing.Optional[builtins.bool] = None,
-        cache_from: typing.Optional[typing.Sequence[typing.Union[_DockerCacheOption_63aeecf2, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache_to: typing.Optional[typing.Union[_DockerCacheOption_63aeecf2, typing.Dict[builtins.str, typing.Any]]] = None,
+        cache_from: typing.Optional[typing.Sequence[typing.Union["_DockerCacheOption_63aeecf2", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_to: typing.Optional[typing.Union["_DockerCacheOption_63aeecf2", typing.Dict[builtins.str, typing.Any]]] = None,
         file: typing.Optional[builtins.str] = None,
         network: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
@@ -15783,6 +15803,7 @@ class DockerBuildAssetOptions(_DockerBuildOptions_8e28be8a):
 
         Example::
 
+            from aws_cdk import DockerCacheOption, DockerCacheOption
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_lambda as lambda_
@@ -15871,22 +15892,22 @@ class DockerBuildAssetOptions(_DockerBuildOptions_8e28be8a):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def cache_from(self) -> typing.Optional[typing.List[_DockerCacheOption_63aeecf2]]:
+    def cache_from(self) -> typing.Optional[typing.List["_DockerCacheOption_63aeecf2"]]:
         '''Cache from options to pass to the ``docker build`` command.
 
         :default: - no cache from args are passed
         '''
         result = self._values.get("cache_from")
-        return typing.cast(typing.Optional[typing.List[_DockerCacheOption_63aeecf2]], result)
+        return typing.cast(typing.Optional[typing.List["_DockerCacheOption_63aeecf2"]], result)
 
     @builtins.property
-    def cache_to(self) -> typing.Optional[_DockerCacheOption_63aeecf2]:
+    def cache_to(self) -> typing.Optional["_DockerCacheOption_63aeecf2"]:
         '''Cache to options to pass to the ``docker build`` command.
 
         :default: - no cache to args are passed
         '''
         result = self._values.get("cache_to")
-        return typing.cast(typing.Optional[_DockerCacheOption_63aeecf2], result)
+        return typing.cast(typing.Optional["_DockerCacheOption_63aeecf2"], result)
 
     @builtins.property
     def file(self) -> typing.Optional[builtins.str]:
@@ -15980,7 +16001,7 @@ class DockerImageCode(
     @builtins.classmethod
     def from_ecr(
         cls,
-        repository: _IRepository_e6004aa6,
+        repository: "_IRepository_e6004aa6",
         *,
         cmd: typing.Optional[typing.Sequence[builtins.str]] = None,
         entrypoint: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -16024,19 +16045,19 @@ class DockerImageCode(
         build_secrets: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         build_ssh: typing.Optional[builtins.str] = None,
         cache_disabled: typing.Optional[builtins.bool] = None,
-        cache_from: typing.Optional[typing.Sequence[typing.Union[_DockerCacheOption_58ef18ca, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache_to: typing.Optional[typing.Union[_DockerCacheOption_58ef18ca, typing.Dict[builtins.str, typing.Any]]] = None,
+        cache_from: typing.Optional[typing.Sequence[typing.Union["_DockerCacheOption_58ef18ca", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_to: typing.Optional[typing.Union["_DockerCacheOption_58ef18ca", typing.Dict[builtins.str, typing.Any]]] = None,
         display_name: typing.Optional[builtins.str] = None,
         file: typing.Optional[builtins.str] = None,
-        invalidation: typing.Optional[typing.Union[_DockerImageAssetInvalidationOptions_4deb8d45, typing.Dict[builtins.str, typing.Any]]] = None,
-        network_mode: typing.Optional[_NetworkMode_897e5081] = None,
+        invalidation: typing.Optional[typing.Union["_DockerImageAssetInvalidationOptions_4deb8d45", typing.Dict[builtins.str, typing.Any]]] = None,
+        network_mode: typing.Optional["_NetworkMode_897e5081"] = None,
         outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
-        platform: typing.Optional[_Platform_d16f3cf1] = None,
+        platform: typing.Optional["_Platform_d16f3cf1"] = None,
         target: typing.Optional[builtins.str] = None,
         extra_hash: typing.Optional[builtins.str] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> "DockerImageCode":
         '''Create an ECR image from the specified asset and bind it as the Lambda code.
 
@@ -16112,8 +16133,8 @@ class DurableConfig:
     def __init__(
         self,
         *,
-        execution_timeout: _Duration_4839e8c3,
-        retention_period: typing.Optional[_Duration_4839e8c3] = None,
+        execution_timeout: "_Duration_4839e8c3",
+        retention_period: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Configuration for durable functions.
 
@@ -16144,17 +16165,17 @@ class DurableConfig:
             self._values["retention_period"] = retention_period
 
     @builtins.property
-    def execution_timeout(self) -> _Duration_4839e8c3:
+    def execution_timeout(self) -> "_Duration_4839e8c3":
         '''The amount of time that Lambda allows a durable function to run before stopping it.
 
         Must be between 1 and 31,622,400 seconds (366 days).
         '''
         result = self._values.get("execution_timeout")
         assert result is not None, "Required property 'execution_timeout' is missing"
-        return typing.cast(_Duration_4839e8c3, result)
+        return typing.cast("_Duration_4839e8c3", result)
 
     @builtins.property
-    def retention_period(self) -> typing.Optional[_Duration_4839e8c3]:
+    def retention_period(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The number of days after a durable execution is closed that Lambda retains its history.
 
         Must be between 1 and 90 days.
@@ -16165,7 +16186,7 @@ class DurableConfig:
         :default: Duration.days(14)
         '''
         result = self._values.get("retention_period")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16208,7 +16229,7 @@ class EcrImageCode(
 
     def __init__(
         self,
-        repository: _IRepository_e6004aa6,
+        repository: "_IRepository_e6004aa6",
         *,
         cmd: typing.Optional[typing.Sequence[builtins.str]] = None,
         entrypoint: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -16238,7 +16259,7 @@ class EcrImageCode(
         jsii.create(self.__class__, self, [repository, props])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> CodeConfig:
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Called when the lambda or layer is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param _scope: -
@@ -16246,7 +16267,7 @@ class EcrImageCode(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b5869e46cce31df5131a9eeeb1bfdc90c539d66df725b2c91d1710fa524b0c2f)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(CodeConfig, jsii.invoke(self, "bind", [_scope]))
+        return typing.cast("CodeConfig", jsii.invoke(self, "bind", [_scope]))
 
     @builtins.property
     @jsii.member(jsii_name="isInline")
@@ -16490,12 +16511,12 @@ class EventInvokeConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         function: "IFunction",
         qualifier: typing.Optional[builtins.str] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
         on_failure: typing.Optional["IDestination"] = None,
         on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
@@ -16546,7 +16567,7 @@ class EventInvokeConfigOptions:
     def __init__(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
         on_failure: typing.Optional["IDestination"] = None,
         on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
@@ -16593,7 +16614,7 @@ class EventInvokeConfigOptions:
             self._values["retry_attempts"] = retry_attempts
 
     @builtins.property
-    def max_event_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_event_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a request that Lambda sends to a function for processing.
 
         Minimum: 60 seconds
@@ -16602,7 +16623,7 @@ class EventInvokeConfigOptions:
         :default: Duration.hours(6)
         '''
         result = self._values.get("max_event_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def on_failure(self) -> typing.Optional["IDestination"]:
@@ -16662,7 +16683,7 @@ class EventInvokeConfigProps(EventInvokeConfigOptions):
     def __init__(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
         on_failure: typing.Optional["IDestination"] = None,
         on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
@@ -16724,7 +16745,7 @@ class EventInvokeConfigProps(EventInvokeConfigOptions):
             self._values["qualifier"] = qualifier
 
     @builtins.property
-    def max_event_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_event_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a request that Lambda sends to a function for processing.
 
         Minimum: 60 seconds
@@ -16733,7 +16754,7 @@ class EventInvokeConfigProps(EventInvokeConfigOptions):
         :default: Duration.hours(6)
         '''
         result = self._values.get("max_event_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def on_failure(self) -> typing.Optional["IDestination"]:
@@ -16803,6 +16824,7 @@ class EventRecordFormat(
 
     Example::
 
+        from aws_cdk.aws_lambda_event_sources import ProvisionedPollerConfig
         from aws_cdk.aws_lambda_event_sources import ManagedKafkaEventSource, ConfluentSchemaRegistry
         from aws_cdk.aws_secretsmanager import Secret
         
@@ -16903,14 +16925,14 @@ class EventSourceMappingOptions:
         bisect_batch_on_error: typing.Optional[builtins.bool] = None,
         enabled: typing.Optional[builtins.bool] = None,
         event_source_arn: typing.Optional[builtins.str] = None,
-        filter_encryption: typing.Optional[_IKey_5f11635f] = None,
+        filter_encryption: typing.Optional["_IKey_5f11635f"] = None,
         filters: typing.Optional[typing.Sequence[typing.Mapping[builtins.str, typing.Any]]] = None,
         kafka_bootstrap_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         kafka_consumer_group_id: typing.Optional[builtins.str] = None,
         kafka_topic: typing.Optional[builtins.str] = None,
-        max_batching_window: typing.Optional[_Duration_4839e8c3] = None,
+        max_batching_window: typing.Optional["_Duration_4839e8c3"] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
-        max_record_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_record_age: typing.Optional["_Duration_4839e8c3"] = None,
         metrics_config: typing.Optional[typing.Union["MetricsConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         on_failure: typing.Optional["IEventSourceDlq"] = None,
         parallelization_factor: typing.Optional[jsii.Number] = None,
@@ -16922,7 +16944,7 @@ class EventSourceMappingOptions:
         starting_position: typing.Optional["StartingPosition"] = None,
         starting_position_timestamp: typing.Optional[jsii.Number] = None,
         support_s3_on_failure_destination: typing.Optional[builtins.bool] = None,
-        tumbling_window: typing.Optional[_Duration_4839e8c3] = None,
+        tumbling_window: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param batch_size: The largest number of records that AWS Lambda will retrieve from your event source at the time of invoking your function. Your function receives an event with all the retrieved records. Valid Range: Minimum value of 1. Maximum value of 10000. Default: - Amazon Kinesis, Amazon DynamoDB, and Amazon MSK is 100 records. The default for Amazon SQS is 10 messages. For standard SQS queues, the maximum is 10,000. For FIFO SQS queues, the maximum is 10.
@@ -17132,7 +17154,7 @@ class EventSourceMappingOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def filter_encryption(self) -> typing.Optional[_IKey_5f11635f]:
+    def filter_encryption(self) -> typing.Optional["_IKey_5f11635f"]:
         '''Add Customer managed KMS key to encrypt Filter Criteria.
 
         :default: - none
@@ -17140,7 +17162,7 @@ class EventSourceMappingOptions:
         :see: https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk
         '''
         result = self._values.get("filter_encryption")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def filters(
@@ -17189,7 +17211,7 @@ class EventSourceMappingOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def max_batching_window(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_batching_window(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum amount of time to gather records before invoking the function.
 
         Maximum of Duration.minutes(5)
@@ -17197,7 +17219,7 @@ class EventSourceMappingOptions:
         :default: Duration.seconds(0)
         '''
         result = self._values.get("max_batching_window")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def max_concurrency(self) -> typing.Optional[jsii.Number]:
@@ -17215,7 +17237,7 @@ class EventSourceMappingOptions:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def max_record_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_record_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a record that Lambda sends to a function for processing.
 
         Valid Range:
@@ -17226,7 +17248,7 @@ class EventSourceMappingOptions:
         :default: - infinite or until the record expires.
         '''
         result = self._values.get("max_record_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def metrics_config(self) -> typing.Optional["MetricsConfig"]:
@@ -17354,7 +17376,7 @@ class EventSourceMappingOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def tumbling_window(self) -> typing.Optional[_Duration_4839e8c3]:
+    def tumbling_window(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The size of the tumbling windows to group records sent to DynamoDB or Kinesis.
 
         :default: - None
@@ -17366,7 +17388,7 @@ class EventSourceMappingOptions:
         Valid Range: 0 - 15 minutes
         '''
         result = self._values.get("tumbling_window")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17419,14 +17441,14 @@ class EventSourceMappingProps(EventSourceMappingOptions):
         bisect_batch_on_error: typing.Optional[builtins.bool] = None,
         enabled: typing.Optional[builtins.bool] = None,
         event_source_arn: typing.Optional[builtins.str] = None,
-        filter_encryption: typing.Optional[_IKey_5f11635f] = None,
+        filter_encryption: typing.Optional["_IKey_5f11635f"] = None,
         filters: typing.Optional[typing.Sequence[typing.Mapping[builtins.str, typing.Any]]] = None,
         kafka_bootstrap_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         kafka_consumer_group_id: typing.Optional[builtins.str] = None,
         kafka_topic: typing.Optional[builtins.str] = None,
-        max_batching_window: typing.Optional[_Duration_4839e8c3] = None,
+        max_batching_window: typing.Optional["_Duration_4839e8c3"] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
-        max_record_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_record_age: typing.Optional["_Duration_4839e8c3"] = None,
         metrics_config: typing.Optional[typing.Union["MetricsConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         on_failure: typing.Optional["IEventSourceDlq"] = None,
         parallelization_factor: typing.Optional[jsii.Number] = None,
@@ -17438,7 +17460,7 @@ class EventSourceMappingProps(EventSourceMappingOptions):
         starting_position: typing.Optional["StartingPosition"] = None,
         starting_position_timestamp: typing.Optional[jsii.Number] = None,
         support_s3_on_failure_destination: typing.Optional[builtins.bool] = None,
-        tumbling_window: typing.Optional[_Duration_4839e8c3] = None,
+        tumbling_window: typing.Optional["_Duration_4839e8c3"] = None,
         target: "IFunction",
     ) -> None:
         '''Properties for declaring a new event source mapping.
@@ -17658,7 +17680,7 @@ class EventSourceMappingProps(EventSourceMappingOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def filter_encryption(self) -> typing.Optional[_IKey_5f11635f]:
+    def filter_encryption(self) -> typing.Optional["_IKey_5f11635f"]:
         '''Add Customer managed KMS key to encrypt Filter Criteria.
 
         :default: - none
@@ -17666,7 +17688,7 @@ class EventSourceMappingProps(EventSourceMappingOptions):
         :see: https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk
         '''
         result = self._values.get("filter_encryption")
-        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+        return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
     def filters(
@@ -17715,7 +17737,7 @@ class EventSourceMappingProps(EventSourceMappingOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def max_batching_window(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_batching_window(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum amount of time to gather records before invoking the function.
 
         Maximum of Duration.minutes(5)
@@ -17723,7 +17745,7 @@ class EventSourceMappingProps(EventSourceMappingOptions):
         :default: Duration.seconds(0)
         '''
         result = self._values.get("max_batching_window")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def max_concurrency(self) -> typing.Optional[jsii.Number]:
@@ -17741,7 +17763,7 @@ class EventSourceMappingProps(EventSourceMappingOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def max_record_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_record_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a record that Lambda sends to a function for processing.
 
         Valid Range:
@@ -17752,7 +17774,7 @@ class EventSourceMappingProps(EventSourceMappingOptions):
         :default: - infinite or until the record expires.
         '''
         result = self._values.get("max_record_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def metrics_config(self) -> typing.Optional["MetricsConfig"]:
@@ -17880,7 +17902,7 @@ class EventSourceMappingProps(EventSourceMappingOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def tumbling_window(self) -> typing.Optional[_Duration_4839e8c3]:
+    def tumbling_window(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The size of the tumbling windows to group records sent to DynamoDB or Kinesis.
 
         :default: - None
@@ -17892,7 +17914,7 @@ class EventSourceMappingProps(EventSourceMappingOptions):
         Valid Range: 0 - 15 minutes
         '''
         result = self._values.get("tumbling_window")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def target(self) -> "IFunction":
@@ -17965,9 +17987,9 @@ class FileSystem(
         *,
         arn: builtins.str,
         local_mount_path: builtins.str,
-        connections: typing.Optional[_Connections_0f31fce8] = None,
-        dependency: typing.Optional[typing.Sequence[_constructs_77d1e7e8.IDependable]] = None,
-        policies: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
+        connections: typing.Optional["_Connections_0f31fce8"] = None,
+        dependency: typing.Optional[typing.Sequence["_constructs_77d1e7e8.IDependable"]] = None,
+        policies: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
     ) -> None:
         '''
         :param arn: ARN of the access point.
@@ -17990,7 +18012,7 @@ class FileSystem(
     @builtins.classmethod
     def from_efs_access_point(
         cls,
-        ap: _IAccessPoint_ce87b375,
+        ap: "_IAccessPoint_ce87b375",
         mount_path: builtins.str,
     ) -> "FileSystem":
         '''mount the filesystem from Amazon EFS.
@@ -18028,9 +18050,9 @@ class FileSystemConfig:
         *,
         arn: builtins.str,
         local_mount_path: builtins.str,
-        connections: typing.Optional[_Connections_0f31fce8] = None,
-        dependency: typing.Optional[typing.Sequence[_constructs_77d1e7e8.IDependable]] = None,
-        policies: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
+        connections: typing.Optional["_Connections_0f31fce8"] = None,
+        dependency: typing.Optional[typing.Sequence["_constructs_77d1e7e8.IDependable"]] = None,
+        policies: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
     ) -> None:
         '''FileSystem configurations for the Lambda function.
 
@@ -18098,33 +18120,33 @@ class FileSystemConfig:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def connections(self) -> typing.Optional[_Connections_0f31fce8]:
+    def connections(self) -> typing.Optional["_Connections_0f31fce8"]:
         '''connections object used to allow ingress traffic from lambda function.
 
         :default: - no connections required to add extra ingress rules for Lambda function
         '''
         result = self._values.get("connections")
-        return typing.cast(typing.Optional[_Connections_0f31fce8], result)
+        return typing.cast(typing.Optional["_Connections_0f31fce8"], result)
 
     @builtins.property
     def dependency(
         self,
-    ) -> typing.Optional[typing.List[_constructs_77d1e7e8.IDependable]]:
+    ) -> typing.Optional[typing.List["_constructs_77d1e7e8.IDependable"]]:
         '''array of IDependable that lambda function depends on.
 
         :default: - no dependency
         '''
         result = self._values.get("dependency")
-        return typing.cast(typing.Optional[typing.List[_constructs_77d1e7e8.IDependable]], result)
+        return typing.cast(typing.Optional[typing.List["_constructs_77d1e7e8.IDependable"]], result)
 
     @builtins.property
-    def policies(self) -> typing.Optional[typing.List[_PolicyStatement_0fe33853]]:
+    def policies(self) -> typing.Optional[typing.List["_PolicyStatement_0fe33853"]]:
         '''additional IAM policies required for the lambda function.
 
         :default: - no additional policies required
         '''
         result = self._values.get("policies")
-        return typing.cast(typing.Optional[typing.List[_PolicyStatement_0fe33853]], result)
+        return typing.cast(typing.Optional[typing.List["_PolicyStatement_0fe33853"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18342,10 +18364,10 @@ class FunctionAttributes:
         self,
         *,
         function_arn: builtins.str,
-        architecture: typing.Optional[Architecture] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        architecture: typing.Optional["Architecture"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         same_environment: typing.Optional[builtins.bool] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
         skip_permissions: typing.Optional[builtins.bool] = None,
         tenancy_config: typing.Optional["TenancyConfig"] = None,
     ) -> None:
@@ -18412,22 +18434,22 @@ class FunctionAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def architecture(self) -> typing.Optional[Architecture]:
+    def architecture(self) -> typing.Optional["Architecture"]:
         '''The architecture of this Lambda Function (this is an optional attribute and defaults to X86_64).
 
         :default: - Architecture.X86_64
         '''
         result = self._values.get("architecture")
-        return typing.cast(typing.Optional[Architecture], result)
+        return typing.cast(typing.Optional["Architecture"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM execution role associated with this function.
 
         If the role is not specified, any role-related operations will no-op.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def same_environment(self) -> typing.Optional[builtins.bool]:
@@ -18449,14 +18471,14 @@ class FunctionAttributes:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def security_group(self) -> typing.Optional[_ISecurityGroup_acf8a799]:
+    def security_group(self) -> typing.Optional["_ISecurityGroup_acf8a799"]:
         '''The security group of this Lambda, if in a VPC.
 
         This needs to be given in order to support allowing connections
         to this Lambda.
         '''
         result = self._values.get("security_group")
-        return typing.cast(typing.Optional[_ISecurityGroup_acf8a799], result)
+        return typing.cast(typing.Optional["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
     def skip_permissions(self) -> typing.Optional[builtins.bool]:
@@ -18558,58 +18580,58 @@ class FunctionOptions(EventInvokeConfigOptions):
     def __init__(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
         on_failure: typing.Optional["IDestination"] = None,
         on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-        adot_instrumentation: typing.Optional[typing.Union[AdotInstrumentationConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        adot_instrumentation: typing.Optional[typing.Union["AdotInstrumentationConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         allow_all_ipv6_outbound: typing.Optional[builtins.bool] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         allow_public_subnet: typing.Optional[builtins.bool] = None,
         application_log_level: typing.Optional[builtins.str] = None,
-        application_log_level_v2: typing.Optional[ApplicationLogLevel] = None,
-        architecture: typing.Optional[Architecture] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
+        application_log_level_v2: typing.Optional["ApplicationLogLevel"] = None,
+        architecture: typing.Optional["Architecture"] = None,
+        code_signing_config: typing.Optional["_ICodeSigningConfigRef_1d909622"] = None,
         current_version_options: typing.Optional[typing.Union["VersionOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
-        dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
+        dead_letter_topic: typing.Optional["_ITopic_9eca4852"] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        durable_config: typing.Optional[typing.Union["DurableConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
+        environment_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
         events: typing.Optional[typing.Sequence["IEventSource"]] = None,
-        filesystem: typing.Optional[FileSystem] = None,
+        filesystem: typing.Optional["FileSystem"] = None,
         function_name: typing.Optional[builtins.str] = None,
-        initial_policy: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
+        initial_policy: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
         insights_version: typing.Optional["LambdaInsightsVersion"] = None,
         ipv6_allowed_for_dual_stack: typing.Optional[builtins.bool] = None,
         layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["LoggingFormat"] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-        log_retention_role: typing.Optional[_IRole_235f5d8e] = None,
+        log_retention_role: typing.Optional["_IRole_235f5d8e"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
         params_and_secrets: typing.Optional["ParamsAndSecretsLayerVersion"] = None,
         profiling: typing.Optional[builtins.bool] = None,
-        profiling_group: typing.Optional[_IProfilingGroup_0bba72c4] = None,
+        profiling_group: typing.Optional["_IProfilingGroup_0bba72c4"] = None,
         recursive_loop: typing.Optional["RecursiveLoop"] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         runtime_management_mode: typing.Optional["RuntimeManagementMode"] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         snap_start: typing.Optional["SnapStartConf"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
         system_log_level_v2: typing.Optional["SystemLogLevel"] = None,
         tenancy_config: typing.Optional["TenancyConfig"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         tracing: typing.Optional["Tracing"] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Non runtime options.
 
@@ -18965,7 +18987,7 @@ class FunctionOptions(EventInvokeConfigOptions):
             self._values["vpc_subnets"] = vpc_subnets
 
     @builtins.property
-    def max_event_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_event_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a request that Lambda sends to a function for processing.
 
         Minimum: 60 seconds
@@ -18974,7 +18996,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :default: Duration.hours(6)
         '''
         result = self._values.get("max_event_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def on_failure(self) -> typing.Optional["IDestination"]:
@@ -19007,7 +19029,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def adot_instrumentation(self) -> typing.Optional[AdotInstrumentationConfig]:
+    def adot_instrumentation(self) -> typing.Optional["AdotInstrumentationConfig"]:
         '''Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation.
 
         :default: - No ADOT instrumentation
@@ -19015,7 +19037,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :see: https://aws-otel.github.io/docs/getting-started/lambda
         '''
         result = self._values.get("adot_instrumentation")
-        return typing.cast(typing.Optional[AdotInstrumentationConfig], result)
+        return typing.cast(typing.Optional["AdotInstrumentationConfig"], result)
 
     @builtins.property
     def allow_all_ipv6_outbound(self) -> typing.Optional[builtins.bool]:
@@ -19075,31 +19097,31 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def application_log_level_v2(self) -> typing.Optional[ApplicationLogLevel]:
+    def application_log_level_v2(self) -> typing.Optional["ApplicationLogLevel"]:
         '''Sets the application log level for the function.
 
         :default: ApplicationLogLevel.INFO
         '''
         result = self._values.get("application_log_level_v2")
-        return typing.cast(typing.Optional[ApplicationLogLevel], result)
+        return typing.cast(typing.Optional["ApplicationLogLevel"], result)
 
     @builtins.property
-    def architecture(self) -> typing.Optional[Architecture]:
+    def architecture(self) -> typing.Optional["Architecture"]:
         '''The system architectures compatible with this lambda function.
 
         :default: Architecture.X86_64
         '''
         result = self._values.get("architecture")
-        return typing.cast(typing.Optional[Architecture], result)
+        return typing.cast(typing.Optional["Architecture"], result)
 
     @builtins.property
-    def code_signing_config(self) -> typing.Optional[_ICodeSigningConfigRef_1d909622]:
+    def code_signing_config(self) -> typing.Optional["_ICodeSigningConfigRef_1d909622"]:
         '''Code signing config associated with this function.
 
         :default: - Not Sign the Code
         '''
         result = self._values.get("code_signing_config")
-        return typing.cast(typing.Optional[_ICodeSigningConfigRef_1d909622], result)
+        return typing.cast(typing.Optional["_ICodeSigningConfigRef_1d909622"], result)
 
     @builtins.property
     def current_version_options(self) -> typing.Optional["VersionOptions"]:
@@ -19111,7 +19133,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional["VersionOptions"], result)
 
     @builtins.property
-    def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
+    def dead_letter_queue(self) -> typing.Optional["_IQueue_7ed6f679"]:
         '''The SQS queue to use if DLQ is enabled.
 
         If SNS topic is desired, specify ``deadLetterTopic`` property instead.
@@ -19119,7 +19141,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :default: - SQS queue with 14 day retention period if ``deadLetterQueueEnabled`` is ``true``
         '''
         result = self._values.get("dead_letter_queue")
-        return typing.cast(typing.Optional[_IQueue_7ed6f679], result)
+        return typing.cast(typing.Optional["_IQueue_7ed6f679"], result)
 
     @builtins.property
     def dead_letter_queue_enabled(self) -> typing.Optional[builtins.bool]:
@@ -19134,7 +19156,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def dead_letter_topic(self) -> typing.Optional[_ITopic_9eca4852]:
+    def dead_letter_topic(self) -> typing.Optional["_ITopic_9eca4852"]:
         '''The SNS topic to use as a DLQ.
 
         Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created
@@ -19143,7 +19165,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :default: - no SNS topic
         '''
         result = self._values.get("dead_letter_topic")
-        return typing.cast(typing.Optional[_ITopic_9eca4852], result)
+        return typing.cast(typing.Optional["_ITopic_9eca4852"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -19155,7 +19177,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def durable_config(self) -> typing.Optional[DurableConfig]:
+    def durable_config(self) -> typing.Optional["DurableConfig"]:
         '''The durable configuration for the function.
 
         If durability is added to an existing function, a resource replacement will be triggered.
@@ -19164,7 +19186,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :default: - No durable configuration
         '''
         result = self._values.get("durable_config")
-        return typing.cast(typing.Optional[DurableConfig], result)
+        return typing.cast(typing.Optional["DurableConfig"], result)
 
     @builtins.property
     def environment(
@@ -19182,22 +19204,22 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def environment_encryption(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def environment_encryption(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The AWS KMS key that's used to encrypt your function's environment variables.
 
         :default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         '''
         result = self._values.get("environment_encryption")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
-    def ephemeral_storage_size(self) -> typing.Optional[_Size_7b441c34]:
+    def ephemeral_storage_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The size of the function’s /tmp directory in MiB.
 
         :default: 512 MiB
         '''
         result = self._values.get("ephemeral_storage_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def events(self) -> typing.Optional[typing.List["IEventSource"]]:
@@ -19211,13 +19233,13 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional[typing.List["IEventSource"]], result)
 
     @builtins.property
-    def filesystem(self) -> typing.Optional[FileSystem]:
+    def filesystem(self) -> typing.Optional["FileSystem"]:
         '''The filesystem configuration for the lambda function.
 
         :default: - will not mount any filesystem
         '''
         result = self._values.get("filesystem")
-        return typing.cast(typing.Optional[FileSystem], result)
+        return typing.cast(typing.Optional["FileSystem"], result)
 
     @builtins.property
     def function_name(self) -> typing.Optional[builtins.str]:
@@ -19232,7 +19254,9 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def initial_policy(self) -> typing.Optional[typing.List[_PolicyStatement_0fe33853]]:
+    def initial_policy(
+        self,
+    ) -> typing.Optional[typing.List["_PolicyStatement_0fe33853"]]:
         '''Initial policy statements to add to the created Lambda Role.
 
         You can call ``addToRolePolicy`` to the created lambda to add statements post creation.
@@ -19240,7 +19264,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :default: - No policy statements are added to the created Lambda role.
         '''
         result = self._values.get("initial_policy")
-        return typing.cast(typing.Optional[typing.List[_PolicyStatement_0fe33853]], result)
+        return typing.cast(typing.Optional[typing.List["_PolicyStatement_0fe33853"]], result)
 
     @builtins.property
     def insights_version(self) -> typing.Optional["LambdaInsightsVersion"]:
@@ -19300,7 +19324,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional["LoggingFormat"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
+    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
         '''The log group the function sends logs to.
 
         By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/.
@@ -19314,10 +19338,10 @@ class FunctionOptions(EventInvokeConfigOptions):
         :default: ``/aws/lambda/${this.functionName}`` - default log group created by Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional[_ILogGroup_3c4fa718], result)
+        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
 
     @builtins.property
-    def log_removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def log_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''(deprecated) Determine the removal policy of the log group that is auto-created by this construct.
 
         Normally you want to retain the log group so you can diagnose issues
@@ -19332,10 +19356,10 @@ class FunctionOptions(EventInvokeConfigOptions):
         :stability: deprecated
         '''
         result = self._values.get("log_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def log_retention(self) -> typing.Optional[_RetentionDays_070f99f0]:
+    def log_retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
         '''(deprecated) The number of days log events are kept in CloudWatch Logs.
 
         When updating
@@ -19363,7 +19387,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :stability: deprecated
         '''
         result = self._values.get("log_retention")
-        return typing.cast(typing.Optional[_RetentionDays_070f99f0], result)
+        return typing.cast(typing.Optional["_RetentionDays_070f99f0"], result)
 
     @builtins.property
     def log_retention_retry_options(
@@ -19382,7 +19406,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional["LogRetentionRetryOptions"], result)
 
     @builtins.property
-    def log_retention_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def log_retention_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role for the Lambda function associated with the custom resource that sets the retention policy.
 
         This is a legacy API and we strongly recommend you migrate to ``logGroup`` if you can.
@@ -19391,7 +19415,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :default: - A new role is created.
         '''
         result = self._values.get("log_retention_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def memory_size(self) -> typing.Optional[jsii.Number]:
@@ -19429,7 +19453,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def profiling_group(self) -> typing.Optional[_IProfilingGroup_0bba72c4]:
+    def profiling_group(self) -> typing.Optional["_IProfilingGroup_0bba72c4"]:
         '''Profiling Group.
 
         :default: - A new profiling group will be created if ``profiling`` is set.
@@ -19437,7 +19461,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :see: https://docs.aws.amazon.com/codeguru/latest/profiler-ug/setting-up-lambda.html
         '''
         result = self._values.get("profiling_group")
-        return typing.cast(typing.Optional[_IProfilingGroup_0bba72c4], result)
+        return typing.cast(typing.Optional["_IProfilingGroup_0bba72c4"], result)
 
     @builtins.property
     def recursive_loop(self) -> typing.Optional["RecursiveLoop"]:
@@ -19462,7 +19486,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Lambda execution role.
 
         This is the role that will be assumed by the function upon execution.
@@ -19481,7 +19505,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         Both supplied and generated roles can always be changed by calling ``addToRolePolicy``.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def runtime_management_mode(self) -> typing.Optional["RuntimeManagementMode"]:
@@ -19493,7 +19517,9 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional["RuntimeManagementMode"], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''The list of security groups to associate with the Lambda's network interfaces.
 
         Only used if 'vpc' is supplied.
@@ -19505,7 +19531,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         group will be created for this function.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
     def snap_start(self) -> typing.Optional["SnapStartConf"]:
@@ -19550,7 +19576,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional["TenancyConfig"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The function execution time (in seconds) after which Lambda terminates the function.
 
         Because the execution time affects cost, set this value
@@ -19559,7 +19585,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :default: Duration.seconds(3)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def tracing(self) -> typing.Optional["Tracing"]:
@@ -19571,7 +19597,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional["Tracing"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''VPC network to place Lambda network interfaces.
 
         Specify this if the Lambda function needs to access resources in a VPC.
@@ -19580,10 +19606,10 @@ class FunctionOptions(EventInvokeConfigOptions):
         :default: - Function is not placed within a VPC.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where to place the network interfaces within the VPC.
 
         This requires ``vpc`` to be specified in order for interfaces to actually be
@@ -19595,7 +19621,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :default: - the Vpc default strategy if not specified
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19674,59 +19700,59 @@ class FunctionProps(FunctionOptions):
     def __init__(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
         on_failure: typing.Optional["IDestination"] = None,
         on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-        adot_instrumentation: typing.Optional[typing.Union[AdotInstrumentationConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        adot_instrumentation: typing.Optional[typing.Union["AdotInstrumentationConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         allow_all_ipv6_outbound: typing.Optional[builtins.bool] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         allow_public_subnet: typing.Optional[builtins.bool] = None,
         application_log_level: typing.Optional[builtins.str] = None,
-        application_log_level_v2: typing.Optional[ApplicationLogLevel] = None,
-        architecture: typing.Optional[Architecture] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
+        application_log_level_v2: typing.Optional["ApplicationLogLevel"] = None,
+        architecture: typing.Optional["Architecture"] = None,
+        code_signing_config: typing.Optional["_ICodeSigningConfigRef_1d909622"] = None,
         current_version_options: typing.Optional[typing.Union["VersionOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
-        dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
+        dead_letter_topic: typing.Optional["_ITopic_9eca4852"] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        durable_config: typing.Optional[typing.Union["DurableConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
+        environment_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
         events: typing.Optional[typing.Sequence["IEventSource"]] = None,
-        filesystem: typing.Optional[FileSystem] = None,
+        filesystem: typing.Optional["FileSystem"] = None,
         function_name: typing.Optional[builtins.str] = None,
-        initial_policy: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
+        initial_policy: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
         insights_version: typing.Optional["LambdaInsightsVersion"] = None,
         ipv6_allowed_for_dual_stack: typing.Optional[builtins.bool] = None,
         layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["LoggingFormat"] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-        log_retention_role: typing.Optional[_IRole_235f5d8e] = None,
+        log_retention_role: typing.Optional["_IRole_235f5d8e"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
         params_and_secrets: typing.Optional["ParamsAndSecretsLayerVersion"] = None,
         profiling: typing.Optional[builtins.bool] = None,
-        profiling_group: typing.Optional[_IProfilingGroup_0bba72c4] = None,
+        profiling_group: typing.Optional["_IProfilingGroup_0bba72c4"] = None,
         recursive_loop: typing.Optional["RecursiveLoop"] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         runtime_management_mode: typing.Optional["RuntimeManagementMode"] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         snap_start: typing.Optional["SnapStartConf"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
         system_log_level_v2: typing.Optional["SystemLogLevel"] = None,
         tenancy_config: typing.Optional["TenancyConfig"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         tracing: typing.Optional["Tracing"] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        code: Code,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        code: "Code",
         handler: builtins.str,
         runtime: "Runtime",
     ) -> None:
@@ -19990,7 +20016,7 @@ class FunctionProps(FunctionOptions):
             self._values["vpc_subnets"] = vpc_subnets
 
     @builtins.property
-    def max_event_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_event_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a request that Lambda sends to a function for processing.
 
         Minimum: 60 seconds
@@ -19999,7 +20025,7 @@ class FunctionProps(FunctionOptions):
         :default: Duration.hours(6)
         '''
         result = self._values.get("max_event_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def on_failure(self) -> typing.Optional["IDestination"]:
@@ -20032,7 +20058,7 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def adot_instrumentation(self) -> typing.Optional[AdotInstrumentationConfig]:
+    def adot_instrumentation(self) -> typing.Optional["AdotInstrumentationConfig"]:
         '''Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation.
 
         :default: - No ADOT instrumentation
@@ -20040,7 +20066,7 @@ class FunctionProps(FunctionOptions):
         :see: https://aws-otel.github.io/docs/getting-started/lambda
         '''
         result = self._values.get("adot_instrumentation")
-        return typing.cast(typing.Optional[AdotInstrumentationConfig], result)
+        return typing.cast(typing.Optional["AdotInstrumentationConfig"], result)
 
     @builtins.property
     def allow_all_ipv6_outbound(self) -> typing.Optional[builtins.bool]:
@@ -20100,31 +20126,31 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def application_log_level_v2(self) -> typing.Optional[ApplicationLogLevel]:
+    def application_log_level_v2(self) -> typing.Optional["ApplicationLogLevel"]:
         '''Sets the application log level for the function.
 
         :default: ApplicationLogLevel.INFO
         '''
         result = self._values.get("application_log_level_v2")
-        return typing.cast(typing.Optional[ApplicationLogLevel], result)
+        return typing.cast(typing.Optional["ApplicationLogLevel"], result)
 
     @builtins.property
-    def architecture(self) -> typing.Optional[Architecture]:
+    def architecture(self) -> typing.Optional["Architecture"]:
         '''The system architectures compatible with this lambda function.
 
         :default: Architecture.X86_64
         '''
         result = self._values.get("architecture")
-        return typing.cast(typing.Optional[Architecture], result)
+        return typing.cast(typing.Optional["Architecture"], result)
 
     @builtins.property
-    def code_signing_config(self) -> typing.Optional[_ICodeSigningConfigRef_1d909622]:
+    def code_signing_config(self) -> typing.Optional["_ICodeSigningConfigRef_1d909622"]:
         '''Code signing config associated with this function.
 
         :default: - Not Sign the Code
         '''
         result = self._values.get("code_signing_config")
-        return typing.cast(typing.Optional[_ICodeSigningConfigRef_1d909622], result)
+        return typing.cast(typing.Optional["_ICodeSigningConfigRef_1d909622"], result)
 
     @builtins.property
     def current_version_options(self) -> typing.Optional["VersionOptions"]:
@@ -20136,7 +20162,7 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional["VersionOptions"], result)
 
     @builtins.property
-    def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
+    def dead_letter_queue(self) -> typing.Optional["_IQueue_7ed6f679"]:
         '''The SQS queue to use if DLQ is enabled.
 
         If SNS topic is desired, specify ``deadLetterTopic`` property instead.
@@ -20144,7 +20170,7 @@ class FunctionProps(FunctionOptions):
         :default: - SQS queue with 14 day retention period if ``deadLetterQueueEnabled`` is ``true``
         '''
         result = self._values.get("dead_letter_queue")
-        return typing.cast(typing.Optional[_IQueue_7ed6f679], result)
+        return typing.cast(typing.Optional["_IQueue_7ed6f679"], result)
 
     @builtins.property
     def dead_letter_queue_enabled(self) -> typing.Optional[builtins.bool]:
@@ -20159,7 +20185,7 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def dead_letter_topic(self) -> typing.Optional[_ITopic_9eca4852]:
+    def dead_letter_topic(self) -> typing.Optional["_ITopic_9eca4852"]:
         '''The SNS topic to use as a DLQ.
 
         Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created
@@ -20168,7 +20194,7 @@ class FunctionProps(FunctionOptions):
         :default: - no SNS topic
         '''
         result = self._values.get("dead_letter_topic")
-        return typing.cast(typing.Optional[_ITopic_9eca4852], result)
+        return typing.cast(typing.Optional["_ITopic_9eca4852"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -20180,7 +20206,7 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def durable_config(self) -> typing.Optional[DurableConfig]:
+    def durable_config(self) -> typing.Optional["DurableConfig"]:
         '''The durable configuration for the function.
 
         If durability is added to an existing function, a resource replacement will be triggered.
@@ -20189,7 +20215,7 @@ class FunctionProps(FunctionOptions):
         :default: - No durable configuration
         '''
         result = self._values.get("durable_config")
-        return typing.cast(typing.Optional[DurableConfig], result)
+        return typing.cast(typing.Optional["DurableConfig"], result)
 
     @builtins.property
     def environment(
@@ -20207,22 +20233,22 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def environment_encryption(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def environment_encryption(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The AWS KMS key that's used to encrypt your function's environment variables.
 
         :default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         '''
         result = self._values.get("environment_encryption")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
-    def ephemeral_storage_size(self) -> typing.Optional[_Size_7b441c34]:
+    def ephemeral_storage_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The size of the function’s /tmp directory in MiB.
 
         :default: 512 MiB
         '''
         result = self._values.get("ephemeral_storage_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def events(self) -> typing.Optional[typing.List["IEventSource"]]:
@@ -20236,13 +20262,13 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[typing.List["IEventSource"]], result)
 
     @builtins.property
-    def filesystem(self) -> typing.Optional[FileSystem]:
+    def filesystem(self) -> typing.Optional["FileSystem"]:
         '''The filesystem configuration for the lambda function.
 
         :default: - will not mount any filesystem
         '''
         result = self._values.get("filesystem")
-        return typing.cast(typing.Optional[FileSystem], result)
+        return typing.cast(typing.Optional["FileSystem"], result)
 
     @builtins.property
     def function_name(self) -> typing.Optional[builtins.str]:
@@ -20257,7 +20283,9 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def initial_policy(self) -> typing.Optional[typing.List[_PolicyStatement_0fe33853]]:
+    def initial_policy(
+        self,
+    ) -> typing.Optional[typing.List["_PolicyStatement_0fe33853"]]:
         '''Initial policy statements to add to the created Lambda Role.
 
         You can call ``addToRolePolicy`` to the created lambda to add statements post creation.
@@ -20265,7 +20293,7 @@ class FunctionProps(FunctionOptions):
         :default: - No policy statements are added to the created Lambda role.
         '''
         result = self._values.get("initial_policy")
-        return typing.cast(typing.Optional[typing.List[_PolicyStatement_0fe33853]], result)
+        return typing.cast(typing.Optional[typing.List["_PolicyStatement_0fe33853"]], result)
 
     @builtins.property
     def insights_version(self) -> typing.Optional["LambdaInsightsVersion"]:
@@ -20325,7 +20353,7 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional["LoggingFormat"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
+    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
         '''The log group the function sends logs to.
 
         By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/.
@@ -20339,10 +20367,10 @@ class FunctionProps(FunctionOptions):
         :default: ``/aws/lambda/${this.functionName}`` - default log group created by Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional[_ILogGroup_3c4fa718], result)
+        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
 
     @builtins.property
-    def log_removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def log_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''(deprecated) Determine the removal policy of the log group that is auto-created by this construct.
 
         Normally you want to retain the log group so you can diagnose issues
@@ -20357,10 +20385,10 @@ class FunctionProps(FunctionOptions):
         :stability: deprecated
         '''
         result = self._values.get("log_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def log_retention(self) -> typing.Optional[_RetentionDays_070f99f0]:
+    def log_retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
         '''(deprecated) The number of days log events are kept in CloudWatch Logs.
 
         When updating
@@ -20388,7 +20416,7 @@ class FunctionProps(FunctionOptions):
         :stability: deprecated
         '''
         result = self._values.get("log_retention")
-        return typing.cast(typing.Optional[_RetentionDays_070f99f0], result)
+        return typing.cast(typing.Optional["_RetentionDays_070f99f0"], result)
 
     @builtins.property
     def log_retention_retry_options(
@@ -20407,7 +20435,7 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional["LogRetentionRetryOptions"], result)
 
     @builtins.property
-    def log_retention_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def log_retention_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role for the Lambda function associated with the custom resource that sets the retention policy.
 
         This is a legacy API and we strongly recommend you migrate to ``logGroup`` if you can.
@@ -20416,7 +20444,7 @@ class FunctionProps(FunctionOptions):
         :default: - A new role is created.
         '''
         result = self._values.get("log_retention_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def memory_size(self) -> typing.Optional[jsii.Number]:
@@ -20454,7 +20482,7 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def profiling_group(self) -> typing.Optional[_IProfilingGroup_0bba72c4]:
+    def profiling_group(self) -> typing.Optional["_IProfilingGroup_0bba72c4"]:
         '''Profiling Group.
 
         :default: - A new profiling group will be created if ``profiling`` is set.
@@ -20462,7 +20490,7 @@ class FunctionProps(FunctionOptions):
         :see: https://docs.aws.amazon.com/codeguru/latest/profiler-ug/setting-up-lambda.html
         '''
         result = self._values.get("profiling_group")
-        return typing.cast(typing.Optional[_IProfilingGroup_0bba72c4], result)
+        return typing.cast(typing.Optional["_IProfilingGroup_0bba72c4"], result)
 
     @builtins.property
     def recursive_loop(self) -> typing.Optional["RecursiveLoop"]:
@@ -20487,7 +20515,7 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Lambda execution role.
 
         This is the role that will be assumed by the function upon execution.
@@ -20506,7 +20534,7 @@ class FunctionProps(FunctionOptions):
         Both supplied and generated roles can always be changed by calling ``addToRolePolicy``.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def runtime_management_mode(self) -> typing.Optional["RuntimeManagementMode"]:
@@ -20518,7 +20546,9 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional["RuntimeManagementMode"], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''The list of security groups to associate with the Lambda's network interfaces.
 
         Only used if 'vpc' is supplied.
@@ -20530,7 +20560,7 @@ class FunctionProps(FunctionOptions):
         group will be created for this function.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
     def snap_start(self) -> typing.Optional["SnapStartConf"]:
@@ -20575,7 +20605,7 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional["TenancyConfig"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The function execution time (in seconds) after which Lambda terminates the function.
 
         Because the execution time affects cost, set this value
@@ -20584,7 +20614,7 @@ class FunctionProps(FunctionOptions):
         :default: Duration.seconds(3)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def tracing(self) -> typing.Optional["Tracing"]:
@@ -20596,7 +20626,7 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional["Tracing"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''VPC network to place Lambda network interfaces.
 
         Specify this if the Lambda function needs to access resources in a VPC.
@@ -20605,10 +20635,10 @@ class FunctionProps(FunctionOptions):
         :default: - Function is not placed within a VPC.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where to place the network interfaces within the VPC.
 
         This requires ``vpc`` to be specified in order for interfaces to actually be
@@ -20620,10 +20650,10 @@ class FunctionProps(FunctionOptions):
         :default: - the Vpc default strategy if not specified
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def code(self) -> Code:
+    def code(self) -> "Code":
         '''The source code of your Lambda function.
 
         You can point to a file in an
@@ -20632,7 +20662,7 @@ class FunctionProps(FunctionOptions):
         '''
         result = self._values.get("code")
         assert result is not None, "Required property 'code' is missing"
-        return typing.cast(Code, result)
+        return typing.cast("Code", result)
 
     @builtins.property
     def handler(self) -> builtins.str:
@@ -20727,7 +20757,7 @@ class FunctionUrlCorsOptions:
         allowed_methods: typing.Optional[typing.Sequence["HttpMethod"]] = None,
         allowed_origins: typing.Optional[typing.Sequence[builtins.str]] = None,
         exposed_headers: typing.Optional[typing.Sequence[builtins.str]] = None,
-        max_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_age: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Specifies a cross-origin access property for a function URL.
 
@@ -20822,13 +20852,13 @@ class FunctionUrlCorsOptions:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def max_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time in seconds that your browser is to cache the preflight response for the specified resource.
 
         :default: - Browser default of 5 seconds.
         '''
         result = self._values.get("max_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20855,8 +20885,8 @@ class FunctionUrlOptions:
     def __init__(
         self,
         *,
-        auth_type: typing.Optional[FunctionUrlAuthType] = None,
-        cors: typing.Optional[typing.Union[FunctionUrlCorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        auth_type: typing.Optional["FunctionUrlAuthType"] = None,
+        cors: typing.Optional[typing.Union["FunctionUrlCorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         invoke_mode: typing.Optional["InvokeMode"] = None,
     ) -> None:
         '''Options to add a url to a Lambda function.
@@ -20899,22 +20929,22 @@ class FunctionUrlOptions:
             self._values["invoke_mode"] = invoke_mode
 
     @builtins.property
-    def auth_type(self) -> typing.Optional[FunctionUrlAuthType]:
+    def auth_type(self) -> typing.Optional["FunctionUrlAuthType"]:
         '''The type of authentication that your function URL uses.
 
         :default: FunctionUrlAuthType.AWS_IAM
         '''
         result = self._values.get("auth_type")
-        return typing.cast(typing.Optional[FunctionUrlAuthType], result)
+        return typing.cast(typing.Optional["FunctionUrlAuthType"], result)
 
     @builtins.property
-    def cors(self) -> typing.Optional[FunctionUrlCorsOptions]:
+    def cors(self) -> typing.Optional["FunctionUrlCorsOptions"]:
         '''The cross-origin resource sharing (CORS) settings for your function URL.
 
         :default: - No CORS configuration.
         '''
         result = self._values.get("cors")
-        return typing.cast(typing.Optional[FunctionUrlCorsOptions], result)
+        return typing.cast(typing.Optional["FunctionUrlCorsOptions"], result)
 
     @builtins.property
     def invoke_mode(self) -> typing.Optional["InvokeMode"]:
@@ -20951,8 +20981,8 @@ class FunctionUrlProps(FunctionUrlOptions):
     def __init__(
         self,
         *,
-        auth_type: typing.Optional[FunctionUrlAuthType] = None,
-        cors: typing.Optional[typing.Union[FunctionUrlCorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        auth_type: typing.Optional["FunctionUrlAuthType"] = None,
+        cors: typing.Optional[typing.Union["FunctionUrlCorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         invoke_mode: typing.Optional["InvokeMode"] = None,
         function: "IFunction",
     ) -> None:
@@ -21009,22 +21039,22 @@ class FunctionUrlProps(FunctionUrlOptions):
             self._values["invoke_mode"] = invoke_mode
 
     @builtins.property
-    def auth_type(self) -> typing.Optional[FunctionUrlAuthType]:
+    def auth_type(self) -> typing.Optional["FunctionUrlAuthType"]:
         '''The type of authentication that your function URL uses.
 
         :default: FunctionUrlAuthType.AWS_IAM
         '''
         result = self._values.get("auth_type")
-        return typing.cast(typing.Optional[FunctionUrlAuthType], result)
+        return typing.cast(typing.Optional["FunctionUrlAuthType"], result)
 
     @builtins.property
-    def cors(self) -> typing.Optional[FunctionUrlCorsOptions]:
+    def cors(self) -> typing.Optional["FunctionUrlCorsOptions"]:
         '''The cross-origin resource sharing (CORS) settings for your function URL.
 
         :default: - No CORS configuration.
         '''
         result = self._values.get("cors")
-        return typing.cast(typing.Optional[FunctionUrlCorsOptions], result)
+        return typing.cast(typing.Optional["FunctionUrlCorsOptions"], result)
 
     @builtins.property
     def invoke_mode(self) -> typing.Optional["InvokeMode"]:
@@ -21093,7 +21123,7 @@ class FunctionVersionUpgrade(
         jsii.create(self.__class__, self, [feature_flag, enabled])
 
     @jsii.member(jsii_name="visit")
-    def visit(self, node: _constructs_77d1e7e8.IConstruct) -> None:
+    def visit(self, node: "_constructs_77d1e7e8.IConstruct") -> None:
         '''All aspects can visit an IConstruct.
 
         :param node: -
@@ -21252,11 +21282,11 @@ class IDestination(typing_extensions.Protocol):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         fn: "IFunction",
         *,
-        type: DestinationType,
-    ) -> DestinationConfig:
+        type: "DestinationType",
+    ) -> "DestinationConfig":
         '''Binds this destination to the Lambda function.
 
         :param scope: -
@@ -21274,11 +21304,11 @@ class _IDestinationProxy:
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         fn: "IFunction",
         *,
-        type: DestinationType,
-    ) -> DestinationConfig:
+        type: "DestinationType",
+    ) -> "DestinationConfig":
         '''Binds this destination to the Lambda function.
 
         :param scope: -
@@ -21291,7 +21321,7 @@ class _IDestinationProxy:
             check_type(argname="argument fn", value=fn, expected_type=type_hints["fn"])
         options = DestinationOptions(type=type)
 
-        return typing.cast(DestinationConfig, jsii.invoke(self, "bind", [scope, fn, options]))
+        return typing.cast("DestinationConfig", jsii.invoke(self, "bind", [scope, fn, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDestination).__jsii_proxy_class__ = lambda : _IDestinationProxy
@@ -21339,7 +21369,7 @@ class IEventSourceDlq(typing_extensions.Protocol):
         self,
         target: "IEventSourceMapping",
         target_handler: "IFunction",
-    ) -> DlqDestinationConfig:
+    ) -> "DlqDestinationConfig":
         '''Returns the DLQ destination config of the DLQ.
 
         :param target: -
@@ -21358,7 +21388,7 @@ class _IEventSourceDlqProxy:
         self,
         target: "IEventSourceMapping",
         target_handler: "IFunction",
-    ) -> DlqDestinationConfig:
+    ) -> "DlqDestinationConfig":
         '''Returns the DLQ destination config of the DLQ.
 
         :param target: -
@@ -21368,7 +21398,7 @@ class _IEventSourceDlqProxy:
             type_hints = typing.get_type_hints(_typecheckingstub__6606d66e2e03f7c17fbcbb3ef40d22586d15236fc21bc250dc4534d120f7ad4b)
             check_type(argname="argument target", value=target, expected_type=type_hints["target"])
             check_type(argname="argument target_handler", value=target_handler, expected_type=type_hints["target_handler"])
-        return typing.cast(DlqDestinationConfig, jsii.invoke(self, "bind", [target, target_handler]))
+        return typing.cast("DlqDestinationConfig", jsii.invoke(self, "bind", [target, target_handler]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventSourceDlq).__jsii_proxy_class__ = lambda : _IEventSourceDlqProxy
@@ -21441,7 +21471,7 @@ class IFunction(
 ):
     @builtins.property
     @jsii.member(jsii_name="architecture")
-    def architecture(self) -> Architecture:
+    def architecture(self) -> "Architecture":
         '''The system architectures compatible with this lambda function.'''
         ...
 
@@ -21488,7 +21518,7 @@ class IFunction(
 
     @builtins.property
     @jsii.member(jsii_name="permissionsNode")
-    def permissions_node(self) -> _constructs_77d1e7e8.Node:
+    def permissions_node(self) -> "_constructs_77d1e7e8.Node":
         '''The construct node where permissions are attached.'''
         ...
 
@@ -21504,7 +21534,7 @@ class IFunction(
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role associated with this function.'''
         ...
 
@@ -21515,7 +21545,7 @@ class IFunction(
         ...
 
     @jsii.member(jsii_name="addEventSource")
-    def add_event_source(self, source: IEventSource) -> None:
+    def add_event_source(self, source: "IEventSource") -> None:
         '''Adds an event source to this function.
 
         Event sources are implemented in the aws-cdk-lib/aws-lambda-event-sources module.
@@ -21538,16 +21568,16 @@ class IFunction(
         bisect_batch_on_error: typing.Optional[builtins.bool] = None,
         enabled: typing.Optional[builtins.bool] = None,
         event_source_arn: typing.Optional[builtins.str] = None,
-        filter_encryption: typing.Optional[_IKey_5f11635f] = None,
+        filter_encryption: typing.Optional["_IKey_5f11635f"] = None,
         filters: typing.Optional[typing.Sequence[typing.Mapping[builtins.str, typing.Any]]] = None,
         kafka_bootstrap_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         kafka_consumer_group_id: typing.Optional[builtins.str] = None,
         kafka_topic: typing.Optional[builtins.str] = None,
-        max_batching_window: typing.Optional[_Duration_4839e8c3] = None,
+        max_batching_window: typing.Optional["_Duration_4839e8c3"] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
-        max_record_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_record_age: typing.Optional["_Duration_4839e8c3"] = None,
         metrics_config: typing.Optional[typing.Union["MetricsConfig", typing.Dict[builtins.str, typing.Any]]] = None,
-        on_failure: typing.Optional[IEventSourceDlq] = None,
+        on_failure: typing.Optional["IEventSourceDlq"] = None,
         parallelization_factor: typing.Optional[jsii.Number] = None,
         provisioned_poller_config: typing.Optional[typing.Union["ProvisionedPollerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         report_batch_item_failures: typing.Optional[builtins.bool] = None,
@@ -21557,7 +21587,7 @@ class IFunction(
         starting_position: typing.Optional["StartingPosition"] = None,
         starting_position_timestamp: typing.Optional[jsii.Number] = None,
         support_s3_on_failure_destination: typing.Optional[builtins.bool] = None,
-        tumbling_window: typing.Optional[_Duration_4839e8c3] = None,
+        tumbling_window: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "EventSourceMapping":
         '''Adds an event source that maps to this AWS Lambda function.
 
@@ -21593,8 +21623,8 @@ class IFunction(
     def add_function_url(
         self,
         *,
-        auth_type: typing.Optional[FunctionUrlAuthType] = None,
-        cors: typing.Optional[typing.Union[FunctionUrlCorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        auth_type: typing.Optional["FunctionUrlAuthType"] = None,
+        cors: typing.Optional[typing.Union["FunctionUrlCorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         invoke_mode: typing.Optional["InvokeMode"] = None,
     ) -> "FunctionUrl":
         '''Adds a url to this lambda function.
@@ -21610,13 +21640,13 @@ class IFunction(
         self,
         id: builtins.str,
         *,
-        principal: _IPrincipal_539bb2fd,
+        principal: "_IPrincipal_539bb2fd",
         action: typing.Optional[builtins.str] = None,
         event_source_token: typing.Optional[builtins.str] = None,
-        function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+        function_url_auth_type: typing.Optional["FunctionUrlAuthType"] = None,
         invoked_via_function_url: typing.Optional[builtins.bool] = None,
         organization_id: typing.Optional[builtins.str] = None,
-        scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         source_account: typing.Optional[builtins.str] = None,
         source_arn: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -21638,7 +21668,7 @@ class IFunction(
         ...
 
     @jsii.member(jsii_name="addToRolePolicy")
-    def add_to_role_policy(self, statement: _PolicyStatement_0fe33853) -> None:
+    def add_to_role_policy(self, statement: "_PolicyStatement_0fe33853") -> None:
         '''Adds a statement to the IAM role assumed by the instance.
 
         :param statement: -
@@ -21649,9 +21679,9 @@ class IFunction(
     def configure_async_invoke(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Configures options for asynchronous invocation.
@@ -21664,7 +21694,7 @@ class IFunction(
         ...
 
     @jsii.member(jsii_name="grantInvoke")
-    def grant_invoke(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_invoke(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda.
 
         :param identity: -
@@ -21674,8 +21704,8 @@ class IFunction(
     @jsii.member(jsii_name="grantInvokeCompositePrincipal")
     def grant_invoke_composite_principal(
         self,
-        composite_principal: _CompositePrincipal_c2fe180a,
-    ) -> typing.List[_Grant_a7ae64f8]:
+        composite_principal: "_CompositePrincipal_c2fe180a",
+    ) -> typing.List["_Grant_a7ae64f8"]:
         '''Grant multiple principals the ability to invoke this Lambda via CompositePrincipal.
 
         :param composite_principal: -
@@ -21685,8 +21715,8 @@ class IFunction(
     @jsii.member(jsii_name="grantInvokeLatestVersion")
     def grant_invoke_latest_version(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke the $LATEST version or unqualified version of this Lambda.
 
         :param identity: -
@@ -21694,7 +21724,7 @@ class IFunction(
         ...
 
     @jsii.member(jsii_name="grantInvokeUrl")
-    def grant_invoke_url(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_invoke_url(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda Function URL.
 
         :param identity: -
@@ -21704,9 +21734,9 @@ class IFunction(
     @jsii.member(jsii_name="grantInvokeVersion")
     def grant_invoke_version(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         version: "IVersion",
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke the given version of this Lambda.
 
         :param identity: -
@@ -21724,14 +21754,14 @@ class IFunction(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Lambda Return the given named metric for this Function.
 
         :param metric_name: -
@@ -21759,14 +21789,14 @@ class IFunction(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the Duration of this Lambda How long execution of this Lambda takes.
 
         Average over 5 minutes
@@ -21797,14 +21827,14 @@ class IFunction(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''How many invocations of this Lambda fail.
 
         Sum over 5 minutes
@@ -21833,14 +21863,14 @@ class IFunction(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of invocations of this Lambda How often this Lambda is invoked.
 
         Sum over 5 minutes
@@ -21871,14 +21901,14 @@ class IFunction(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of throttled invocations of this Lambda How often this Lambda is throttled.
 
         Sum over 5 minutes
@@ -21911,9 +21941,9 @@ class _IFunctionProxy(
 
     @builtins.property
     @jsii.member(jsii_name="architecture")
-    def architecture(self) -> Architecture:
+    def architecture(self) -> "Architecture":
         '''The system architectures compatible with this lambda function.'''
-        return typing.cast(Architecture, jsii.get(self, "architecture"))
+        return typing.cast("Architecture", jsii.get(self, "architecture"))
 
     @builtins.property
     @jsii.member(jsii_name="functionArn")
@@ -21958,9 +21988,9 @@ class _IFunctionProxy(
 
     @builtins.property
     @jsii.member(jsii_name="permissionsNode")
-    def permissions_node(self) -> _constructs_77d1e7e8.Node:
+    def permissions_node(self) -> "_constructs_77d1e7e8.Node":
         '''The construct node where permissions are attached.'''
-        return typing.cast(_constructs_77d1e7e8.Node, jsii.get(self, "permissionsNode"))
+        return typing.cast("_constructs_77d1e7e8.Node", jsii.get(self, "permissionsNode"))
 
     @builtins.property
     @jsii.member(jsii_name="resourceArnsForGrantInvoke")
@@ -21974,9 +22004,9 @@ class _IFunctionProxy(
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role associated with this function.'''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
     @builtins.property
     @jsii.member(jsii_name="tenancyConfig")
@@ -21985,7 +22015,7 @@ class _IFunctionProxy(
         return typing.cast(typing.Optional["TenancyConfig"], jsii.get(self, "tenancyConfig"))
 
     @jsii.member(jsii_name="addEventSource")
-    def add_event_source(self, source: IEventSource) -> None:
+    def add_event_source(self, source: "IEventSource") -> None:
         '''Adds an event source to this function.
 
         Event sources are implemented in the aws-cdk-lib/aws-lambda-event-sources module.
@@ -22011,16 +22041,16 @@ class _IFunctionProxy(
         bisect_batch_on_error: typing.Optional[builtins.bool] = None,
         enabled: typing.Optional[builtins.bool] = None,
         event_source_arn: typing.Optional[builtins.str] = None,
-        filter_encryption: typing.Optional[_IKey_5f11635f] = None,
+        filter_encryption: typing.Optional["_IKey_5f11635f"] = None,
         filters: typing.Optional[typing.Sequence[typing.Mapping[builtins.str, typing.Any]]] = None,
         kafka_bootstrap_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         kafka_consumer_group_id: typing.Optional[builtins.str] = None,
         kafka_topic: typing.Optional[builtins.str] = None,
-        max_batching_window: typing.Optional[_Duration_4839e8c3] = None,
+        max_batching_window: typing.Optional["_Duration_4839e8c3"] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
-        max_record_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_record_age: typing.Optional["_Duration_4839e8c3"] = None,
         metrics_config: typing.Optional[typing.Union["MetricsConfig", typing.Dict[builtins.str, typing.Any]]] = None,
-        on_failure: typing.Optional[IEventSourceDlq] = None,
+        on_failure: typing.Optional["IEventSourceDlq"] = None,
         parallelization_factor: typing.Optional[jsii.Number] = None,
         provisioned_poller_config: typing.Optional[typing.Union["ProvisionedPollerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         report_batch_item_failures: typing.Optional[builtins.bool] = None,
@@ -22030,7 +22060,7 @@ class _IFunctionProxy(
         starting_position: typing.Optional["StartingPosition"] = None,
         starting_position_timestamp: typing.Optional[jsii.Number] = None,
         support_s3_on_failure_destination: typing.Optional[builtins.bool] = None,
-        tumbling_window: typing.Optional[_Duration_4839e8c3] = None,
+        tumbling_window: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "EventSourceMapping":
         '''Adds an event source that maps to this AWS Lambda function.
 
@@ -22096,8 +22126,8 @@ class _IFunctionProxy(
     def add_function_url(
         self,
         *,
-        auth_type: typing.Optional[FunctionUrlAuthType] = None,
-        cors: typing.Optional[typing.Union[FunctionUrlCorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        auth_type: typing.Optional["FunctionUrlAuthType"] = None,
+        cors: typing.Optional[typing.Union["FunctionUrlCorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         invoke_mode: typing.Optional["InvokeMode"] = None,
     ) -> "FunctionUrl":
         '''Adds a url to this lambda function.
@@ -22117,13 +22147,13 @@ class _IFunctionProxy(
         self,
         id: builtins.str,
         *,
-        principal: _IPrincipal_539bb2fd,
+        principal: "_IPrincipal_539bb2fd",
         action: typing.Optional[builtins.str] = None,
         event_source_token: typing.Optional[builtins.str] = None,
-        function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+        function_url_auth_type: typing.Optional["FunctionUrlAuthType"] = None,
         invoked_via_function_url: typing.Optional[builtins.bool] = None,
         organization_id: typing.Optional[builtins.str] = None,
-        scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         source_account: typing.Optional[builtins.str] = None,
         source_arn: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -22160,7 +22190,7 @@ class _IFunctionProxy(
         return typing.cast(None, jsii.invoke(self, "addPermission", [id, permission]))
 
     @jsii.member(jsii_name="addToRolePolicy")
-    def add_to_role_policy(self, statement: _PolicyStatement_0fe33853) -> None:
+    def add_to_role_policy(self, statement: "_PolicyStatement_0fe33853") -> None:
         '''Adds a statement to the IAM role assumed by the instance.
 
         :param statement: -
@@ -22174,9 +22204,9 @@ class _IFunctionProxy(
     def configure_async_invoke(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Configures options for asynchronous invocation.
@@ -22196,7 +22226,7 @@ class _IFunctionProxy(
         return typing.cast(None, jsii.invoke(self, "configureAsyncInvoke", [options]))
 
     @jsii.member(jsii_name="grantInvoke")
-    def grant_invoke(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_invoke(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda.
 
         :param identity: -
@@ -22204,13 +22234,13 @@ class _IFunctionProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f317cfcc67eb7690b5ddb542c0329bcfdf593986fa6e6509673392e6b075b8a7)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvoke", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvoke", [identity]))
 
     @jsii.member(jsii_name="grantInvokeCompositePrincipal")
     def grant_invoke_composite_principal(
         self,
-        composite_principal: _CompositePrincipal_c2fe180a,
-    ) -> typing.List[_Grant_a7ae64f8]:
+        composite_principal: "_CompositePrincipal_c2fe180a",
+    ) -> typing.List["_Grant_a7ae64f8"]:
         '''Grant multiple principals the ability to invoke this Lambda via CompositePrincipal.
 
         :param composite_principal: -
@@ -22218,13 +22248,13 @@ class _IFunctionProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b41f7a8884c79da2a08c98c11c3765d581d5778fa1a443d28b401f23f3bb3016)
             check_type(argname="argument composite_principal", value=composite_principal, expected_type=type_hints["composite_principal"])
-        return typing.cast(typing.List[_Grant_a7ae64f8], jsii.invoke(self, "grantInvokeCompositePrincipal", [composite_principal]))
+        return typing.cast(typing.List["_Grant_a7ae64f8"], jsii.invoke(self, "grantInvokeCompositePrincipal", [composite_principal]))
 
     @jsii.member(jsii_name="grantInvokeLatestVersion")
     def grant_invoke_latest_version(
         self,
-        identity: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke the $LATEST version or unqualified version of this Lambda.
 
         :param identity: -
@@ -22232,10 +22262,10 @@ class _IFunctionProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__884f2452df3f9676c8bc0e107f18e458c3b66e7dbc2451a5ca8f79e5712e0ebe)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvokeLatestVersion", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvokeLatestVersion", [identity]))
 
     @jsii.member(jsii_name="grantInvokeUrl")
-    def grant_invoke_url(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_invoke_url(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda Function URL.
 
         :param identity: -
@@ -22243,14 +22273,14 @@ class _IFunctionProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b972e7e894d282c51659e86093da7d1e2bb4ae8b58f466ab15fb9a669cab71dc)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvokeUrl", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvokeUrl", [identity]))
 
     @jsii.member(jsii_name="grantInvokeVersion")
     def grant_invoke_version(
         self,
-        identity: _IGrantable_71c4f5de,
+        identity: "_IGrantable_71c4f5de",
         version: "IVersion",
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke the given version of this Lambda.
 
         :param identity: -
@@ -22260,7 +22290,7 @@ class _IFunctionProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__2aed3b0cf53d3556908aec24116f312807479d0ffe320981a88007d793a142b3)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument version", value=version, expected_type=type_hints["version"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvokeVersion", [identity, version]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvokeVersion", [identity, version]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -22272,14 +22302,14 @@ class _IFunctionProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Lambda Return the given named metric for this Function.
 
         :param metric_name: -
@@ -22314,7 +22344,7 @@ class _IFunctionProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricDuration")
     def metric_duration(
@@ -22325,14 +22355,14 @@ class _IFunctionProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the Duration of this Lambda How long execution of this Lambda takes.
 
         Average over 5 minutes
@@ -22367,7 +22397,7 @@ class _IFunctionProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDuration", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDuration", [props]))
 
     @jsii.member(jsii_name="metricErrors")
     def metric_errors(
@@ -22378,14 +22408,14 @@ class _IFunctionProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''How many invocations of this Lambda fail.
 
         Sum over 5 minutes
@@ -22418,7 +22448,7 @@ class _IFunctionProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricErrors", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricErrors", [props]))
 
     @jsii.member(jsii_name="metricInvocations")
     def metric_invocations(
@@ -22429,14 +22459,14 @@ class _IFunctionProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of invocations of this Lambda How often this Lambda is invoked.
 
         Sum over 5 minutes
@@ -22471,7 +22501,7 @@ class _IFunctionProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricInvocations", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricInvocations", [props]))
 
     @jsii.member(jsii_name="metricThrottles")
     def metric_throttles(
@@ -22482,14 +22512,14 @@ class _IFunctionProxy(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of throttled invocations of this Lambda How often this Lambda is throttled.
 
         Sum over 5 minutes
@@ -22524,7 +22554,7 @@ class _IFunctionProxy(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricThrottles", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricThrottles", [props]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFunction).__jsii_proxy_class__ = lambda : _IFunctionProxy
@@ -22536,7 +22566,7 @@ class IFunctionUrl(_IResource_c80c4260, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="authType")
-    def auth_type(self) -> FunctionUrlAuthType:
+    def auth_type(self) -> "FunctionUrlAuthType":
         '''The authType of the function URL, used for access control.
 
         :attribute: AuthType
@@ -22562,7 +22592,7 @@ class IFunctionUrl(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantInvokeUrl")
-    def grant_invoke_url(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_invoke_url(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda Function URL.
 
         :param identity: -
@@ -22579,12 +22609,12 @@ class _IFunctionUrlProxy(
 
     @builtins.property
     @jsii.member(jsii_name="authType")
-    def auth_type(self) -> FunctionUrlAuthType:
+    def auth_type(self) -> "FunctionUrlAuthType":
         '''The authType of the function URL, used for access control.
 
         :attribute: AuthType
         '''
-        return typing.cast(FunctionUrlAuthType, jsii.get(self, "authType"))
+        return typing.cast("FunctionUrlAuthType", jsii.get(self, "authType"))
 
     @builtins.property
     @jsii.member(jsii_name="functionArn")
@@ -22605,7 +22635,7 @@ class _IFunctionUrlProxy(
         return typing.cast(builtins.str, jsii.get(self, "url"))
 
     @jsii.member(jsii_name="grantInvokeUrl")
-    def grant_invoke_url(self, identity: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_invoke_url(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda Function URL.
 
         :param identity: -
@@ -22613,7 +22643,7 @@ class _IFunctionUrlProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__03bfc1d5d87f3a9b17578a58e843e6bcecf2b34cb51c8c1de983279890634bd6)
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvokeUrl", [identity]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvokeUrl", [identity]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFunctionUrl).__jsii_proxy_class__ = lambda : _IFunctionUrlProxy
@@ -22737,12 +22767,12 @@ class IScalableFunctionAttribute(
         self,
         id: builtins.str,
         *,
-        schedule: _Schedule_e93ba733,
+        schedule: "_Schedule_e93ba733",
         end_time: typing.Optional[datetime.datetime] = None,
         max_capacity: typing.Optional[jsii.Number] = None,
         min_capacity: typing.Optional[jsii.Number] = None,
         start_time: typing.Optional[datetime.datetime] = None,
-        time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
+        time_zone: typing.Optional["_TimeZone_cdd72ac9"] = None,
     ) -> None:
         '''Scale out or in based on schedule.
 
@@ -22763,8 +22793,8 @@ class IScalableFunctionAttribute(
         utilization_target: jsii.Number,
         disable_scale_in: typing.Optional[builtins.bool] = None,
         policy_name: typing.Optional[builtins.str] = None,
-        scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scale_in_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        scale_out_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Scale out or in to keep utilization at a given level.
 
@@ -22793,12 +22823,12 @@ class _IScalableFunctionAttributeProxy(
         self,
         id: builtins.str,
         *,
-        schedule: _Schedule_e93ba733,
+        schedule: "_Schedule_e93ba733",
         end_time: typing.Optional[datetime.datetime] = None,
         max_capacity: typing.Optional[jsii.Number] = None,
         min_capacity: typing.Optional[jsii.Number] = None,
         start_time: typing.Optional[datetime.datetime] = None,
-        time_zone: typing.Optional[_TimeZone_cdd72ac9] = None,
+        time_zone: typing.Optional["_TimeZone_cdd72ac9"] = None,
     ) -> None:
         '''Scale out or in based on schedule.
 
@@ -22831,8 +22861,8 @@ class _IScalableFunctionAttributeProxy(
         utilization_target: jsii.Number,
         disable_scale_in: typing.Optional[builtins.bool] = None,
         policy_name: typing.Optional[builtins.str] = None,
-        scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scale_in_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        scale_out_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Scale out or in to keep utilization at a given level.
 
@@ -22867,8 +22897,8 @@ class ISchemaRegistry(typing_extensions.Protocol):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        target: IEventSourceMapping,
-        target_handler: IFunction,
+        target: "IEventSourceMapping",
+        target_handler: "IFunction",
     ) -> "KafkaSchemaRegistryConfig":
         '''Returns the schema registry config of the event source.
 
@@ -22886,8 +22916,8 @@ class _ISchemaRegistryProxy:
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        target: IEventSourceMapping,
-        target_handler: IFunction,
+        target: "IEventSourceMapping",
+        target_handler: "IFunction",
     ) -> "KafkaSchemaRegistryConfig":
         '''Returns the schema registry config of the event source.
 
@@ -22914,7 +22944,7 @@ class IVersion(IFunction, _IVersionRef_4fdb94ad, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="lambda")
-    def lambda_(self) -> IFunction:
+    def lambda_(self) -> "IFunction":
         '''The underlying AWS Lambda function.'''
         ...
 
@@ -22935,9 +22965,9 @@ class IVersion(IFunction, _IVersionRef_4fdb94ad, typing_extensions.Protocol):
         additional_versions: typing.Optional[typing.Sequence[typing.Union["VersionWeight", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> "Alias":
         '''(deprecated) Defines an alias for this version.
@@ -22972,9 +23002,9 @@ class _IVersionProxy(
 
     @builtins.property
     @jsii.member(jsii_name="lambda")
-    def lambda_(self) -> IFunction:
+    def lambda_(self) -> "IFunction":
         '''The underlying AWS Lambda function.'''
-        return typing.cast(IFunction, jsii.get(self, "lambda"))
+        return typing.cast("IFunction", jsii.get(self, "lambda"))
 
     @builtins.property
     @jsii.member(jsii_name="version")
@@ -22993,9 +23023,9 @@ class _IVersionProxy(
         additional_versions: typing.Optional[typing.Sequence[typing.Union["VersionWeight", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> "Alias":
         '''(deprecated) Defines an alias for this version.
@@ -23074,7 +23104,7 @@ class InlineCode(
         jsii.create(self.__class__, self, [code])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> CodeConfig:
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Called when the lambda or layer is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param _scope: -
@@ -23082,7 +23112,7 @@ class InlineCode(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__68701e0be659943818e792689f9c11f6ea386ae16b7e76ef2e090037d1e4bff1)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(CodeConfig, jsii.invoke(self, "bind", [_scope]))
+        return typing.cast("CodeConfig", jsii.invoke(self, "bind", [_scope]))
 
     @builtins.property
     @jsii.member(jsii_name="isInline")
@@ -23133,7 +23163,7 @@ class InstanceTypeFilter(
     @builtins.classmethod
     def allow(
         cls,
-        instance_types: typing.Sequence[_InstanceType_f64915b9],
+        instance_types: typing.Sequence["_InstanceType_f64915b9"],
     ) -> "InstanceTypeFilter":
         '''Creates an instance type filter that allows only the specified instance types.
 
@@ -23148,7 +23178,7 @@ class InstanceTypeFilter(
     @builtins.classmethod
     def exclude(
         cls,
-        instance_types: typing.Sequence[_InstanceType_f64915b9],
+        instance_types: typing.Sequence["_InstanceType_f64915b9"],
     ) -> "InstanceTypeFilter":
         '''Creates an instance type filter that excludes the specified instance types.
 
@@ -23163,17 +23193,17 @@ class InstanceTypeFilter(
     @jsii.member(jsii_name="allowedInstanceTypes")
     def allowed_instance_types(
         self,
-    ) -> typing.Optional[typing.List[_InstanceType_f64915b9]]:
+    ) -> typing.Optional[typing.List["_InstanceType_f64915b9"]]:
         '''A list of instance types that the capacity provider is allowed to use.'''
-        return typing.cast(typing.Optional[typing.List[_InstanceType_f64915b9]], jsii.get(self, "allowedInstanceTypes"))
+        return typing.cast(typing.Optional[typing.List["_InstanceType_f64915b9"]], jsii.get(self, "allowedInstanceTypes"))
 
     @builtins.property
     @jsii.member(jsii_name="excludedInstanceTypes")
     def excluded_instance_types(
         self,
-    ) -> typing.Optional[typing.List[_InstanceType_f64915b9]]:
+    ) -> typing.Optional[typing.List["_InstanceType_f64915b9"]]:
         '''A list of instance types that the capacity provider should not use.'''
-        return typing.cast(typing.Optional[typing.List[_InstanceType_f64915b9]], jsii.get(self, "excludedInstanceTypes"))
+        return typing.cast(typing.Optional[typing.List["_InstanceType_f64915b9"]], jsii.get(self, "excludedInstanceTypes"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_lambda.InvokeMode")
@@ -23292,6 +23322,7 @@ class KafkaSchemaRegistryAccessConfigType(
 
     Example::
 
+        from aws_cdk.aws_lambda_event_sources import ProvisionedPollerConfig
         from aws_cdk.aws_lambda_event_sources import ManagedKafkaEventSource, ConfluentSchemaRegistry
         from aws_cdk.aws_secretsmanager import Secret
         
@@ -23410,10 +23441,10 @@ class KafkaSchemaRegistryConfig:
     def __init__(
         self,
         *,
-        event_record_format: EventRecordFormat,
+        event_record_format: "EventRecordFormat",
         schema_registry_uri: builtins.str,
         schema_validation_configs: typing.Sequence[typing.Union["KafkaSchemaValidationConfig", typing.Dict[builtins.str, typing.Any]]],
-        access_configs: typing.Optional[typing.Sequence[typing.Union[KafkaSchemaRegistryAccessConfig, typing.Dict[builtins.str, typing.Any]]]] = None,
+        access_configs: typing.Optional[typing.Sequence[typing.Union["KafkaSchemaRegistryAccessConfig", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''(Amazon MSK and self-managed Apache Kafka only) Specific configuration settings for a Kafka schema registry.
 
@@ -23463,7 +23494,7 @@ class KafkaSchemaRegistryConfig:
             self._values["access_configs"] = access_configs
 
     @builtins.property
-    def event_record_format(self) -> EventRecordFormat:
+    def event_record_format(self) -> "EventRecordFormat":
         '''The record format that Lambda delivers to your function after schema validation.
 
         - Choose JSON to have Lambda deliver the record to your function as a standard JSON object.
@@ -23473,7 +23504,7 @@ class KafkaSchemaRegistryConfig:
         '''
         result = self._values.get("event_record_format")
         assert result is not None, "Required property 'event_record_format' is missing"
-        return typing.cast(EventRecordFormat, result)
+        return typing.cast("EventRecordFormat", result)
 
     @builtins.property
     def schema_registry_uri(self) -> builtins.str:
@@ -23500,13 +23531,13 @@ class KafkaSchemaRegistryConfig:
     @builtins.property
     def access_configs(
         self,
-    ) -> typing.Optional[typing.List[KafkaSchemaRegistryAccessConfig]]:
+    ) -> typing.Optional[typing.List["KafkaSchemaRegistryAccessConfig"]]:
         '''An array of access configuration objects that tell Lambda how to authenticate with your schema registry.
 
         :default: - none
         '''
         result = self._values.get("access_configs")
-        return typing.cast(typing.Optional[typing.List[KafkaSchemaRegistryAccessConfig]], result)
+        return typing.cast(typing.Optional[typing.List["KafkaSchemaRegistryAccessConfig"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -23530,6 +23561,7 @@ class KafkaSchemaValidationAttribute(
 
     Example::
 
+        from aws_cdk.aws_lambda_event_sources import ProvisionedPollerConfig
         from aws_cdk.aws_lambda_event_sources import ManagedKafkaEventSource, ConfluentSchemaRegistry
         from aws_cdk.aws_secretsmanager import Secret
         
@@ -23598,7 +23630,7 @@ class KafkaSchemaValidationAttribute(
     name_mapping={"attribute": "attribute"},
 )
 class KafkaSchemaValidationConfig:
-    def __init__(self, *, attribute: KafkaSchemaValidationAttribute) -> None:
+    def __init__(self, *, attribute: "KafkaSchemaValidationAttribute") -> None:
         '''Specific schema validation configuration settings that tell Lambda the message attributes you want to validate and filter using your schema registry.
 
         :param attribute: The attributes you want your schema registry to validate and filter for. If you selected JSON as the EventRecordFormat, Lambda also deserializes the selected message attributes.
@@ -23625,14 +23657,14 @@ class KafkaSchemaValidationConfig:
         }
 
     @builtins.property
-    def attribute(self) -> KafkaSchemaValidationAttribute:
+    def attribute(self) -> "KafkaSchemaValidationAttribute":
         '''The attributes you want your schema registry to validate and filter for.
 
         If you selected JSON as the EventRecordFormat, Lambda also deserializes the selected message attributes.
         '''
         result = self._values.get("attribute")
         assert result is not None, "Required property 'attribute' is missing"
-        return typing.cast(KafkaSchemaValidationAttribute, result)
+        return typing.cast("KafkaSchemaValidationAttribute", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -23756,6 +23788,12 @@ class LambdaInsightsVersion(
     def VERSION_1_0_404_0(cls) -> "LambdaInsightsVersion":
         '''Version 1.0.404.0.'''
         return typing.cast("LambdaInsightsVersion", jsii.sget(cls, "VERSION_1_0_404_0"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="VERSION_1_0_498_0")
+    def VERSION_1_0_498_0(cls) -> "LambdaInsightsVersion":
+        '''Version 1.0.498.0.'''
+        return typing.cast("LambdaInsightsVersion", jsii.sget(cls, "VERSION_1_0_498_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VERSION_1_0_54_0")
@@ -24017,16 +24055,16 @@ class LayerVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        code: Code,
-        compatible_architectures: typing.Optional[typing.Sequence[Architecture]] = None,
+        code: "Code",
+        compatible_architectures: typing.Optional[typing.Sequence["Architecture"]] = None,
         compatible_runtimes: typing.Optional[typing.Sequence["Runtime"]] = None,
         description: typing.Optional[builtins.str] = None,
         layer_version_name: typing.Optional[builtins.str] = None,
         license: typing.Optional[builtins.str] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -24059,10 +24097,10 @@ class LayerVersion(
     @builtins.classmethod
     def from_layer_version_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         layer_version_arn: builtins.str,
-    ) -> ILayerVersion:
+    ) -> "ILayerVersion":
         '''Imports a layer version by ARN.
 
         Assumes it is compatible with all Lambda runtimes.
@@ -24076,18 +24114,18 @@ class LayerVersion(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument layer_version_arn", value=layer_version_arn, expected_type=type_hints["layer_version_arn"])
-        return typing.cast(ILayerVersion, jsii.sinvoke(cls, "fromLayerVersionArn", [scope, id, layer_version_arn]))
+        return typing.cast("ILayerVersion", jsii.sinvoke(cls, "fromLayerVersionArn", [scope, id, layer_version_arn]))
 
     @jsii.member(jsii_name="fromLayerVersionAttributes")
     @builtins.classmethod
     def from_layer_version_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         layer_version_arn: builtins.str,
         compatible_runtimes: typing.Optional[typing.Sequence["Runtime"]] = None,
-    ) -> ILayerVersion:
+    ) -> "ILayerVersion":
         '''Imports a Layer that has been defined externally.
 
         :param scope: the parent Construct that will use the imported layer.
@@ -24104,7 +24142,7 @@ class LayerVersion(
             compatible_runtimes=compatible_runtimes,
         )
 
-        return typing.cast(ILayerVersion, jsii.sinvoke(cls, "fromLayerVersionAttributes", [scope, id, attrs]))
+        return typing.cast("ILayerVersion", jsii.sinvoke(cls, "fromLayerVersionAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addPermission")
     def add_permission(
@@ -24150,9 +24188,9 @@ class LayerVersion(
 
     @builtins.property
     @jsii.member(jsii_name="layerVersionRef")
-    def layer_version_ref(self) -> _LayerVersionReference_e97cf2a7:
+    def layer_version_ref(self) -> "_LayerVersionReference_e97cf2a7":
         '''A reference to a LayerVersion resource.'''
-        return typing.cast(_LayerVersionReference_e97cf2a7, jsii.get(self, "layerVersionRef"))
+        return typing.cast("_LayerVersionReference_e97cf2a7", jsii.get(self, "layerVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="compatibleRuntimes")
@@ -24250,7 +24288,7 @@ class LayerVersionOptions:
         description: typing.Optional[builtins.str] = None,
         layer_version_name: typing.Optional[builtins.str] = None,
         license: typing.Optional[builtins.str] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
     ) -> None:
         '''Non runtime options.
 
@@ -24319,13 +24357,13 @@ class LayerVersionOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Whether to retain this version of the layer when a new version is added or when the stack is deleted.
 
         :default: RemovalPolicy.DESTROY
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24442,9 +24480,9 @@ class LayerVersionProps(LayerVersionOptions):
         description: typing.Optional[builtins.str] = None,
         layer_version_name: typing.Optional[builtins.str] = None,
         license: typing.Optional[builtins.str] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        code: Code,
-        compatible_architectures: typing.Optional[typing.Sequence[Architecture]] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        code: "Code",
+        compatible_architectures: typing.Optional[typing.Sequence["Architecture"]] = None,
         compatible_runtimes: typing.Optional[typing.Sequence["Runtime"]] = None,
     ) -> None:
         '''
@@ -24519,32 +24557,32 @@ class LayerVersionProps(LayerVersionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Whether to retain this version of the layer when a new version is added or when the stack is deleted.
 
         :default: RemovalPolicy.DESTROY
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def code(self) -> Code:
+    def code(self) -> "Code":
         '''The content of this Layer.
 
         Using ``Code.fromInline`` is not supported.
         '''
         result = self._values.get("code")
         assert result is not None, "Required property 'code' is missing"
-        return typing.cast(Code, result)
+        return typing.cast("Code", result)
 
     @builtins.property
-    def compatible_architectures(self) -> typing.Optional[typing.List[Architecture]]:
+    def compatible_architectures(self) -> typing.Optional[typing.List["Architecture"]]:
         '''The system architectures compatible with this layer.
 
         :default: [Architecture.X86_64]
         '''
         result = self._values.get("compatible_architectures")
-        return typing.cast(typing.Optional[typing.List[Architecture]], result)
+        return typing.cast(typing.Optional[typing.List["Architecture"]], result)
 
     @builtins.property
     def compatible_runtimes(self) -> typing.Optional[typing.List["Runtime"]]:
@@ -24593,7 +24631,7 @@ class LogRetentionRetryOptions(_LogRetentionRetryOptions_62d80a14):
     def __init__(
         self,
         *,
-        base: typing.Optional[_Duration_4839e8c3] = None,
+        base: typing.Optional["_Duration_4839e8c3"] = None,
         max_retries: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Retry options for all AWS API calls.
@@ -24626,7 +24664,7 @@ class LogRetentionRetryOptions(_LogRetentionRetryOptions_62d80a14):
             self._values["max_retries"] = max_retries
 
     @builtins.property
-    def base(self) -> typing.Optional[_Duration_4839e8c3]:
+    def base(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''(deprecated) The base duration to use in the exponential backoff for operation retries.
 
         :default: - none, not used anymore
@@ -24636,7 +24674,7 @@ class LogRetentionRetryOptions(_LogRetentionRetryOptions_62d80a14):
         :stability: deprecated
         '''
         result = self._values.get("base")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def max_retries(self) -> typing.Optional[jsii.Number]:
@@ -24736,7 +24774,7 @@ class MetricType(enum.Enum):
     name_mapping={"metrics": "metrics"},
 )
 class MetricsConfig:
-    def __init__(self, *, metrics: typing.Sequence[MetricType]) -> None:
+    def __init__(self, *, metrics: typing.Sequence["MetricType"]) -> None:
         '''Configuration for collecting metrics from the event source.
 
         :param metrics: List of metric types to enable for this event source.
@@ -24773,11 +24811,11 @@ class MetricsConfig:
         }
 
     @builtins.property
-    def metrics(self) -> typing.List[MetricType]:
+    def metrics(self) -> typing.List["MetricType"]:
         '''List of metric types to enable for this event source.'''
         result = self._values.get("metrics")
         assert result is not None, "Required property 'metrics' is missing"
-        return typing.cast(typing.List[MetricType], result)
+        return typing.cast(typing.List["MetricType"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24839,10 +24877,10 @@ class ParamsAndSecretsLayerVersion(
         http_port: typing.Optional[jsii.Number] = None,
         log_level: typing.Optional["ParamsAndSecretsLogLevel"] = None,
         max_connections: typing.Optional[jsii.Number] = None,
-        parameter_store_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        parameter_store_ttl: typing.Optional[_Duration_4839e8c3] = None,
-        secrets_manager_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        secrets_manager_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        parameter_store_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        parameter_store_ttl: typing.Optional["_Duration_4839e8c3"] = None,
+        secrets_manager_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        secrets_manager_ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "ParamsAndSecretsLayerVersion":
         '''Use a specific version of the Parameters and Secrets Extension to generate a layer version.
 
@@ -24885,10 +24923,10 @@ class ParamsAndSecretsLayerVersion(
         http_port: typing.Optional[jsii.Number] = None,
         log_level: typing.Optional["ParamsAndSecretsLogLevel"] = None,
         max_connections: typing.Optional[jsii.Number] = None,
-        parameter_store_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        parameter_store_ttl: typing.Optional[_Duration_4839e8c3] = None,
-        secrets_manager_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        secrets_manager_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        parameter_store_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        parameter_store_ttl: typing.Optional["_Duration_4839e8c3"] = None,
+        secrets_manager_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        secrets_manager_ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> "ParamsAndSecretsLayerVersion":
         '''Use the Parameters and Secrets Extension associated with the provided ARN.
 
@@ -25002,12 +25040,12 @@ class ParamsAndSecretsOptions:
         cache_enabled: typing.Optional[builtins.bool] = None,
         cache_size: typing.Optional[jsii.Number] = None,
         http_port: typing.Optional[jsii.Number] = None,
-        log_level: typing.Optional[ParamsAndSecretsLogLevel] = None,
+        log_level: typing.Optional["ParamsAndSecretsLogLevel"] = None,
         max_connections: typing.Optional[jsii.Number] = None,
-        parameter_store_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        parameter_store_ttl: typing.Optional[_Duration_4839e8c3] = None,
-        secrets_manager_timeout: typing.Optional[_Duration_4839e8c3] = None,
-        secrets_manager_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        parameter_store_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        parameter_store_ttl: typing.Optional["_Duration_4839e8c3"] = None,
+        secrets_manager_timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        secrets_manager_ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Parameters and Secrets Extension configuration options.
 
@@ -25118,7 +25156,7 @@ class ParamsAndSecretsOptions:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def log_level(self) -> typing.Optional[ParamsAndSecretsLogLevel]:
+    def log_level(self) -> typing.Optional["ParamsAndSecretsLogLevel"]:
         '''The level of logging provided by the Parameters and Secrets Extension.
 
         Note: Set to debug to see the cache configuration.
@@ -25126,7 +25164,7 @@ class ParamsAndSecretsOptions:
         :default: - Logging level will be ``info``
         '''
         result = self._values.get("log_level")
-        return typing.cast(typing.Optional[ParamsAndSecretsLogLevel], result)
+        return typing.cast(typing.Optional["ParamsAndSecretsLogLevel"], result)
 
     @builtins.property
     def max_connections(self) -> typing.Optional[jsii.Number]:
@@ -25144,7 +25182,7 @@ class ParamsAndSecretsOptions:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def parameter_store_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def parameter_store_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The timeout for requests to Parameter Store.
 
         A value of 0 means that there is no
@@ -25153,10 +25191,10 @@ class ParamsAndSecretsOptions:
         :default: 0
         '''
         result = self._values.get("parameter_store_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def parameter_store_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def parameter_store_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time-to-live of a parameter in the cache.
 
         A value of 0 means there is no caching.
@@ -25167,10 +25205,10 @@ class ParamsAndSecretsOptions:
         :default: 300 seconds
         '''
         result = self._values.get("parameter_store_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def secrets_manager_timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def secrets_manager_timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The timeout for requests to Secrets Manager.
 
         A value of 0 means that there is
@@ -25179,10 +25217,10 @@ class ParamsAndSecretsOptions:
         :default: 0
         '''
         result = self._values.get("secrets_manager_timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def secrets_manager_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def secrets_manager_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The time-to-live of a secret in the cache.
 
         A value of 0 means there is no caching.
@@ -25193,7 +25231,7 @@ class ParamsAndSecretsOptions:
         :default: 300 seconds
         '''
         result = self._values.get("secrets_manager_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -25268,13 +25306,13 @@ class Permission:
     def __init__(
         self,
         *,
-        principal: _IPrincipal_539bb2fd,
+        principal: "_IPrincipal_539bb2fd",
         action: typing.Optional[builtins.str] = None,
         event_source_token: typing.Optional[builtins.str] = None,
-        function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+        function_url_auth_type: typing.Optional["FunctionUrlAuthType"] = None,
         invoked_via_function_url: typing.Optional[builtins.bool] = None,
         organization_id: typing.Optional[builtins.str] = None,
-        scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         source_account: typing.Optional[builtins.str] = None,
         source_arn: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -25338,7 +25376,7 @@ class Permission:
             self._values["source_arn"] = source_arn
 
     @builtins.property
-    def principal(self) -> _IPrincipal_539bb2fd:
+    def principal(self) -> "_IPrincipal_539bb2fd":
         '''The entity for which you are granting permission to invoke the Lambda function.
 
         This entity can be any of the following:
@@ -25354,7 +25392,7 @@ class Permission:
         '''
         result = self._values.get("principal")
         assert result is not None, "Required property 'principal' is missing"
-        return typing.cast(_IPrincipal_539bb2fd, result)
+        return typing.cast("_IPrincipal_539bb2fd", result)
 
     @builtins.property
     def action(self) -> typing.Optional[builtins.str]:
@@ -25381,13 +25419,13 @@ class Permission:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def function_url_auth_type(self) -> typing.Optional[FunctionUrlAuthType]:
+    def function_url_auth_type(self) -> typing.Optional["FunctionUrlAuthType"]:
         '''The authType for the function URL that you are granting permissions for.
 
         :default: - No functionUrlAuthType
         '''
         result = self._values.get("function_url_auth_type")
-        return typing.cast(typing.Optional[FunctionUrlAuthType], result)
+        return typing.cast(typing.Optional["FunctionUrlAuthType"], result)
 
     @builtins.property
     def invoked_via_function_url(self) -> typing.Optional[builtins.bool]:
@@ -25418,7 +25456,7 @@ class Permission:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def scope(self) -> typing.Optional[_constructs_77d1e7e8.Construct]:
+    def scope(self) -> typing.Optional["_constructs_77d1e7e8.Construct"]:
         '''The scope to which the permission constructs be attached.
 
         The default is
@@ -25429,7 +25467,7 @@ class Permission:
         :default: - The instance of lambda.IFunction
         '''
         result = self._values.get("scope")
-        return typing.cast(typing.Optional[_constructs_77d1e7e8.Construct], result)
+        return typing.cast(typing.Optional["_constructs_77d1e7e8.Construct"], result)
 
     @builtins.property
     def source_account(self) -> typing.Optional[builtins.str]:
@@ -25702,7 +25740,7 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_lambda.Runtime
     @builtins.classmethod
     def determine_latest_python_runtime(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> "Runtime":
         '''The latest Python version currently available.
 
@@ -25732,6 +25770,12 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_lambda.Runtime
     def ALL(cls) -> typing.List["Runtime"]:
         '''A list of all known ``Runtime``'s.'''
         return typing.cast(typing.List["Runtime"], jsii.sget(cls, "ALL"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="DOTNET_10")
+    def DOTNET_10(cls) -> "Runtime":
+        '''The .NET 10 runtime (dotnet10).'''
+        return typing.cast("Runtime", jsii.sget(cls, "DOTNET_10"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="DOTNET_6")
@@ -26118,9 +26162,9 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_lambda.Runtime
 
     @builtins.property
     @jsii.member(jsii_name="bundlingImage")
-    def bundling_image(self) -> _DockerImage_f97a0c12:
+    def bundling_image(self) -> "_DockerImage_f97a0c12":
         '''The bundling Docker image for this runtime.'''
-        return typing.cast(_DockerImage_f97a0c12, jsii.get(self, "bundlingImage"))
+        return typing.cast("_DockerImage_f97a0c12", jsii.get(self, "bundlingImage"))
 
     @builtins.property
     @jsii.member(jsii_name="isVariable")
@@ -26247,9 +26291,11 @@ class RuntimeManagementMode(
 
     @builtins.property
     @jsii.member(jsii_name="runtimeManagementConfig")
-    def runtime_management_config(self) -> CfnFunction.RuntimeManagementConfigProperty:
+    def runtime_management_config(
+        self,
+    ) -> "CfnFunction.RuntimeManagementConfigProperty":
         '''https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-runtimemanagementconfig.html.'''
-        return typing.cast(CfnFunction.RuntimeManagementConfigProperty, jsii.get(self, "runtimeManagementConfig"))
+        return typing.cast("CfnFunction.RuntimeManagementConfigProperty", jsii.get(self, "runtimeManagementConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="arn")
@@ -26276,7 +26322,7 @@ class S3Code(Code, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_lambda.S3
 
     def __init__(
         self,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         key: builtins.str,
         object_version: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -26293,7 +26339,7 @@ class S3Code(Code, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_lambda.S3
         jsii.create(self.__class__, self, [bucket, key, object_version])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> CodeConfig:
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Called when the lambda or layer is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param _scope: -
@@ -26301,7 +26347,7 @@ class S3Code(Code, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_lambda.S3
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cbc76142aaf180fc781ccfffd9ddf0cea89284555d302bceebc998bd3dc6341f)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(CodeConfig, jsii.invoke(self, "bind", [_scope]))
+        return typing.cast("CodeConfig", jsii.invoke(self, "bind", [_scope]))
 
     @builtins.property
     @jsii.member(jsii_name="isInline")
@@ -26340,11 +26386,11 @@ class S3CodeV2(
 
     def __init__(
         self,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         key: builtins.str,
         *,
         object_version: typing.Optional[builtins.str] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
     ) -> None:
         '''
         :param bucket: -
@@ -26363,7 +26409,7 @@ class S3CodeV2(
         jsii.create(self.__class__, self, [bucket, key, options])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> CodeConfig:
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Called when the lambda or layer is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param _scope: -
@@ -26371,7 +26417,7 @@ class S3CodeV2(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__304505e97ff3b397f5306079c5410e06bb217281e1cc348ada6eef6ae77771f2)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(CodeConfig, jsii.invoke(self, "bind", [_scope]))
+        return typing.cast("CodeConfig", jsii.invoke(self, "bind", [_scope]))
 
     @builtins.property
     @jsii.member(jsii_name="isInline")
@@ -26455,8 +26501,8 @@ class SchemaRegistryProps:
     def __init__(
         self,
         *,
-        event_record_format: EventRecordFormat,
-        schema_validation_configs: typing.Sequence[typing.Union[KafkaSchemaValidationConfig, typing.Dict[builtins.str, typing.Any]]],
+        event_record_format: "EventRecordFormat",
+        schema_validation_configs: typing.Sequence[typing.Union["KafkaSchemaValidationConfig", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for schema registry configuration.
 
@@ -26491,7 +26537,7 @@ class SchemaRegistryProps:
         }
 
     @builtins.property
-    def event_record_format(self) -> EventRecordFormat:
+    def event_record_format(self) -> "EventRecordFormat":
         '''The record format that Lambda delivers to your function after schema validation.
 
         - Choose JSON to have Lambda deliver the record to your function as a standard JSON object.
@@ -26501,17 +26547,17 @@ class SchemaRegistryProps:
         '''
         result = self._values.get("event_record_format")
         assert result is not None, "Required property 'event_record_format' is missing"
-        return typing.cast(EventRecordFormat, result)
+        return typing.cast("EventRecordFormat", result)
 
     @builtins.property
-    def schema_validation_configs(self) -> typing.List[KafkaSchemaValidationConfig]:
+    def schema_validation_configs(self) -> typing.List["KafkaSchemaValidationConfig"]:
         '''An array of schema validation configuration objects, which tell Lambda the message attributes you want to validate and filter using your schema registry.
 
         :default: - none
         '''
         result = self._values.get("schema_validation_configs")
         assert result is not None, "Required property 'schema_validation_configs' is missing"
-        return typing.cast(typing.List[KafkaSchemaValidationConfig], result)
+        return typing.cast(typing.List["KafkaSchemaValidationConfig"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -26592,61 +26638,61 @@ class SingletonFunctionProps(FunctionProps):
     def __init__(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-        adot_instrumentation: typing.Optional[typing.Union[AdotInstrumentationConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        adot_instrumentation: typing.Optional[typing.Union["AdotInstrumentationConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         allow_all_ipv6_outbound: typing.Optional[builtins.bool] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         allow_public_subnet: typing.Optional[builtins.bool] = None,
         application_log_level: typing.Optional[builtins.str] = None,
-        application_log_level_v2: typing.Optional[ApplicationLogLevel] = None,
-        architecture: typing.Optional[Architecture] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
+        application_log_level_v2: typing.Optional["ApplicationLogLevel"] = None,
+        architecture: typing.Optional["Architecture"] = None,
+        code_signing_config: typing.Optional["_ICodeSigningConfigRef_1d909622"] = None,
         current_version_options: typing.Optional[typing.Union["VersionOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
-        dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
+        dead_letter_topic: typing.Optional["_ITopic_9eca4852"] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        durable_config: typing.Optional[typing.Union["DurableConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
-        events: typing.Optional[typing.Sequence[IEventSource]] = None,
-        filesystem: typing.Optional[FileSystem] = None,
+        environment_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
+        events: typing.Optional[typing.Sequence["IEventSource"]] = None,
+        filesystem: typing.Optional["FileSystem"] = None,
         function_name: typing.Optional[builtins.str] = None,
-        initial_policy: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
-        insights_version: typing.Optional[LambdaInsightsVersion] = None,
+        initial_policy: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
+        insights_version: typing.Optional["LambdaInsightsVersion"] = None,
         ipv6_allowed_for_dual_stack: typing.Optional[builtins.bool] = None,
-        layers: typing.Optional[typing.Sequence[ILayerVersion]] = None,
+        layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
-        logging_format: typing.Optional[LoggingFormat] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
-        log_retention_retry_options: typing.Optional[typing.Union[LogRetentionRetryOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        log_retention_role: typing.Optional[_IRole_235f5d8e] = None,
+        logging_format: typing.Optional["LoggingFormat"] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
+        log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        log_retention_role: typing.Optional["_IRole_235f5d8e"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
-        params_and_secrets: typing.Optional[ParamsAndSecretsLayerVersion] = None,
+        params_and_secrets: typing.Optional["ParamsAndSecretsLayerVersion"] = None,
         profiling: typing.Optional[builtins.bool] = None,
-        profiling_group: typing.Optional[_IProfilingGroup_0bba72c4] = None,
-        recursive_loop: typing.Optional[RecursiveLoop] = None,
+        profiling_group: typing.Optional["_IProfilingGroup_0bba72c4"] = None,
+        recursive_loop: typing.Optional["RecursiveLoop"] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        runtime_management_mode: typing.Optional[RuntimeManagementMode] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        runtime_management_mode: typing.Optional["RuntimeManagementMode"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         snap_start: typing.Optional["SnapStartConf"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
         system_log_level_v2: typing.Optional["SystemLogLevel"] = None,
         tenancy_config: typing.Optional["TenancyConfig"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
         tracing: typing.Optional["Tracing"] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        code: Code,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        code: "Code",
         handler: builtins.str,
-        runtime: Runtime,
+        runtime: "Runtime",
         uuid: builtins.str,
         lambda_purpose: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -26903,7 +26949,7 @@ class SingletonFunctionProps(FunctionProps):
             self._values["lambda_purpose"] = lambda_purpose
 
     @builtins.property
-    def max_event_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_event_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a request that Lambda sends to a function for processing.
 
         Minimum: 60 seconds
@@ -26912,25 +26958,25 @@ class SingletonFunctionProps(FunctionProps):
         :default: Duration.hours(6)
         '''
         result = self._values.get("max_event_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def on_failure(self) -> typing.Optional[IDestination]:
+    def on_failure(self) -> typing.Optional["IDestination"]:
         '''The destination for failed invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_failure")
-        return typing.cast(typing.Optional[IDestination], result)
+        return typing.cast(typing.Optional["IDestination"], result)
 
     @builtins.property
-    def on_success(self) -> typing.Optional[IDestination]:
+    def on_success(self) -> typing.Optional["IDestination"]:
         '''The destination for successful invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_success")
-        return typing.cast(typing.Optional[IDestination], result)
+        return typing.cast(typing.Optional["IDestination"], result)
 
     @builtins.property
     def retry_attempts(self) -> typing.Optional[jsii.Number]:
@@ -26945,7 +26991,7 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def adot_instrumentation(self) -> typing.Optional[AdotInstrumentationConfig]:
+    def adot_instrumentation(self) -> typing.Optional["AdotInstrumentationConfig"]:
         '''Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation.
 
         :default: - No ADOT instrumentation
@@ -26953,7 +26999,7 @@ class SingletonFunctionProps(FunctionProps):
         :see: https://aws-otel.github.io/docs/getting-started/lambda
         '''
         result = self._values.get("adot_instrumentation")
-        return typing.cast(typing.Optional[AdotInstrumentationConfig], result)
+        return typing.cast(typing.Optional["AdotInstrumentationConfig"], result)
 
     @builtins.property
     def allow_all_ipv6_outbound(self) -> typing.Optional[builtins.bool]:
@@ -27013,31 +27059,31 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def application_log_level_v2(self) -> typing.Optional[ApplicationLogLevel]:
+    def application_log_level_v2(self) -> typing.Optional["ApplicationLogLevel"]:
         '''Sets the application log level for the function.
 
         :default: ApplicationLogLevel.INFO
         '''
         result = self._values.get("application_log_level_v2")
-        return typing.cast(typing.Optional[ApplicationLogLevel], result)
+        return typing.cast(typing.Optional["ApplicationLogLevel"], result)
 
     @builtins.property
-    def architecture(self) -> typing.Optional[Architecture]:
+    def architecture(self) -> typing.Optional["Architecture"]:
         '''The system architectures compatible with this lambda function.
 
         :default: Architecture.X86_64
         '''
         result = self._values.get("architecture")
-        return typing.cast(typing.Optional[Architecture], result)
+        return typing.cast(typing.Optional["Architecture"], result)
 
     @builtins.property
-    def code_signing_config(self) -> typing.Optional[_ICodeSigningConfigRef_1d909622]:
+    def code_signing_config(self) -> typing.Optional["_ICodeSigningConfigRef_1d909622"]:
         '''Code signing config associated with this function.
 
         :default: - Not Sign the Code
         '''
         result = self._values.get("code_signing_config")
-        return typing.cast(typing.Optional[_ICodeSigningConfigRef_1d909622], result)
+        return typing.cast(typing.Optional["_ICodeSigningConfigRef_1d909622"], result)
 
     @builtins.property
     def current_version_options(self) -> typing.Optional["VersionOptions"]:
@@ -27049,7 +27095,7 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional["VersionOptions"], result)
 
     @builtins.property
-    def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
+    def dead_letter_queue(self) -> typing.Optional["_IQueue_7ed6f679"]:
         '''The SQS queue to use if DLQ is enabled.
 
         If SNS topic is desired, specify ``deadLetterTopic`` property instead.
@@ -27057,7 +27103,7 @@ class SingletonFunctionProps(FunctionProps):
         :default: - SQS queue with 14 day retention period if ``deadLetterQueueEnabled`` is ``true``
         '''
         result = self._values.get("dead_letter_queue")
-        return typing.cast(typing.Optional[_IQueue_7ed6f679], result)
+        return typing.cast(typing.Optional["_IQueue_7ed6f679"], result)
 
     @builtins.property
     def dead_letter_queue_enabled(self) -> typing.Optional[builtins.bool]:
@@ -27072,7 +27118,7 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def dead_letter_topic(self) -> typing.Optional[_ITopic_9eca4852]:
+    def dead_letter_topic(self) -> typing.Optional["_ITopic_9eca4852"]:
         '''The SNS topic to use as a DLQ.
 
         Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created
@@ -27081,7 +27127,7 @@ class SingletonFunctionProps(FunctionProps):
         :default: - no SNS topic
         '''
         result = self._values.get("dead_letter_topic")
-        return typing.cast(typing.Optional[_ITopic_9eca4852], result)
+        return typing.cast(typing.Optional["_ITopic_9eca4852"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -27093,7 +27139,7 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def durable_config(self) -> typing.Optional[DurableConfig]:
+    def durable_config(self) -> typing.Optional["DurableConfig"]:
         '''The durable configuration for the function.
 
         If durability is added to an existing function, a resource replacement will be triggered.
@@ -27102,7 +27148,7 @@ class SingletonFunctionProps(FunctionProps):
         :default: - No durable configuration
         '''
         result = self._values.get("durable_config")
-        return typing.cast(typing.Optional[DurableConfig], result)
+        return typing.cast(typing.Optional["DurableConfig"], result)
 
     @builtins.property
     def environment(
@@ -27120,25 +27166,25 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def environment_encryption(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def environment_encryption(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The AWS KMS key that's used to encrypt your function's environment variables.
 
         :default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         '''
         result = self._values.get("environment_encryption")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
-    def ephemeral_storage_size(self) -> typing.Optional[_Size_7b441c34]:
+    def ephemeral_storage_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The size of the function’s /tmp directory in MiB.
 
         :default: 512 MiB
         '''
         result = self._values.get("ephemeral_storage_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def events(self) -> typing.Optional[typing.List[IEventSource]]:
+    def events(self) -> typing.Optional[typing.List["IEventSource"]]:
         '''Event sources for this function.
 
         You can also add event sources using ``addEventSource``.
@@ -27146,16 +27192,16 @@ class SingletonFunctionProps(FunctionProps):
         :default: - No event sources.
         '''
         result = self._values.get("events")
-        return typing.cast(typing.Optional[typing.List[IEventSource]], result)
+        return typing.cast(typing.Optional[typing.List["IEventSource"]], result)
 
     @builtins.property
-    def filesystem(self) -> typing.Optional[FileSystem]:
+    def filesystem(self) -> typing.Optional["FileSystem"]:
         '''The filesystem configuration for the lambda function.
 
         :default: - will not mount any filesystem
         '''
         result = self._values.get("filesystem")
-        return typing.cast(typing.Optional[FileSystem], result)
+        return typing.cast(typing.Optional["FileSystem"], result)
 
     @builtins.property
     def function_name(self) -> typing.Optional[builtins.str]:
@@ -27170,7 +27216,9 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def initial_policy(self) -> typing.Optional[typing.List[_PolicyStatement_0fe33853]]:
+    def initial_policy(
+        self,
+    ) -> typing.Optional[typing.List["_PolicyStatement_0fe33853"]]:
         '''Initial policy statements to add to the created Lambda Role.
 
         You can call ``addToRolePolicy`` to the created lambda to add statements post creation.
@@ -27178,10 +27226,10 @@ class SingletonFunctionProps(FunctionProps):
         :default: - No policy statements are added to the created Lambda role.
         '''
         result = self._values.get("initial_policy")
-        return typing.cast(typing.Optional[typing.List[_PolicyStatement_0fe33853]], result)
+        return typing.cast(typing.Optional[typing.List["_PolicyStatement_0fe33853"]], result)
 
     @builtins.property
-    def insights_version(self) -> typing.Optional[LambdaInsightsVersion]:
+    def insights_version(self) -> typing.Optional["LambdaInsightsVersion"]:
         '''Specify the version of CloudWatch Lambda insights to use for monitoring.
 
         :default: - No Lambda Insights
@@ -27189,7 +27237,7 @@ class SingletonFunctionProps(FunctionProps):
         :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-Getting-Started-docker.html
         '''
         result = self._values.get("insights_version")
-        return typing.cast(typing.Optional[LambdaInsightsVersion], result)
+        return typing.cast(typing.Optional["LambdaInsightsVersion"], result)
 
     @builtins.property
     def ipv6_allowed_for_dual_stack(self) -> typing.Optional[builtins.bool]:
@@ -27203,7 +27251,7 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def layers(self) -> typing.Optional[typing.List[ILayerVersion]]:
+    def layers(self) -> typing.Optional[typing.List["ILayerVersion"]]:
         '''A list of layers to add to the function's execution environment.
 
         You can configure your Lambda function to pull in
@@ -27213,7 +27261,7 @@ class SingletonFunctionProps(FunctionProps):
         :default: - No layers.
         '''
         result = self._values.get("layers")
-        return typing.cast(typing.Optional[typing.List[ILayerVersion]], result)
+        return typing.cast(typing.Optional[typing.List["ILayerVersion"]], result)
 
     @builtins.property
     def log_format(self) -> typing.Optional[builtins.str]:
@@ -27229,16 +27277,16 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def logging_format(self) -> typing.Optional[LoggingFormat]:
+    def logging_format(self) -> typing.Optional["LoggingFormat"]:
         '''Sets the loggingFormat for the function.
 
         :default: LoggingFormat.TEXT
         '''
         result = self._values.get("logging_format")
-        return typing.cast(typing.Optional[LoggingFormat], result)
+        return typing.cast(typing.Optional["LoggingFormat"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
+    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
         '''The log group the function sends logs to.
 
         By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/.
@@ -27252,10 +27300,10 @@ class SingletonFunctionProps(FunctionProps):
         :default: ``/aws/lambda/${this.functionName}`` - default log group created by Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional[_ILogGroup_3c4fa718], result)
+        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
 
     @builtins.property
-    def log_removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def log_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''(deprecated) Determine the removal policy of the log group that is auto-created by this construct.
 
         Normally you want to retain the log group so you can diagnose issues
@@ -27270,10 +27318,10 @@ class SingletonFunctionProps(FunctionProps):
         :stability: deprecated
         '''
         result = self._values.get("log_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def log_retention(self) -> typing.Optional[_RetentionDays_070f99f0]:
+    def log_retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
         '''(deprecated) The number of days log events are kept in CloudWatch Logs.
 
         When updating
@@ -27301,10 +27349,12 @@ class SingletonFunctionProps(FunctionProps):
         :stability: deprecated
         '''
         result = self._values.get("log_retention")
-        return typing.cast(typing.Optional[_RetentionDays_070f99f0], result)
+        return typing.cast(typing.Optional["_RetentionDays_070f99f0"], result)
 
     @builtins.property
-    def log_retention_retry_options(self) -> typing.Optional[LogRetentionRetryOptions]:
+    def log_retention_retry_options(
+        self,
+    ) -> typing.Optional["LogRetentionRetryOptions"]:
         '''When log retention is specified, a custom resource attempts to create the CloudWatch log group.
 
         These options control the retry policy when interacting with CloudWatch APIs.
@@ -27315,10 +27365,10 @@ class SingletonFunctionProps(FunctionProps):
         :default: - Default AWS SDK retry options.
         '''
         result = self._values.get("log_retention_retry_options")
-        return typing.cast(typing.Optional[LogRetentionRetryOptions], result)
+        return typing.cast(typing.Optional["LogRetentionRetryOptions"], result)
 
     @builtins.property
-    def log_retention_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def log_retention_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role for the Lambda function associated with the custom resource that sets the retention policy.
 
         This is a legacy API and we strongly recommend you migrate to ``logGroup`` if you can.
@@ -27327,7 +27377,7 @@ class SingletonFunctionProps(FunctionProps):
         :default: - A new role is created.
         '''
         result = self._values.get("log_retention_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def memory_size(self) -> typing.Optional[jsii.Number]:
@@ -27343,7 +27393,7 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def params_and_secrets(self) -> typing.Optional[ParamsAndSecretsLayerVersion]:
+    def params_and_secrets(self) -> typing.Optional["ParamsAndSecretsLayerVersion"]:
         '''Specify the configuration of Parameters and Secrets Extension.
 
         :default: - No Parameters and Secrets Extension
@@ -27351,7 +27401,7 @@ class SingletonFunctionProps(FunctionProps):
         :see: https://docs.aws.amazon.com/systems-manager/latest/userguide/ps-integration-lambda-extensions.html
         '''
         result = self._values.get("params_and_secrets")
-        return typing.cast(typing.Optional[ParamsAndSecretsLayerVersion], result)
+        return typing.cast(typing.Optional["ParamsAndSecretsLayerVersion"], result)
 
     @builtins.property
     def profiling(self) -> typing.Optional[builtins.bool]:
@@ -27365,7 +27415,7 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def profiling_group(self) -> typing.Optional[_IProfilingGroup_0bba72c4]:
+    def profiling_group(self) -> typing.Optional["_IProfilingGroup_0bba72c4"]:
         '''Profiling Group.
 
         :default: - A new profiling group will be created if ``profiling`` is set.
@@ -27373,10 +27423,10 @@ class SingletonFunctionProps(FunctionProps):
         :see: https://docs.aws.amazon.com/codeguru/latest/profiler-ug/setting-up-lambda.html
         '''
         result = self._values.get("profiling_group")
-        return typing.cast(typing.Optional[_IProfilingGroup_0bba72c4], result)
+        return typing.cast(typing.Optional["_IProfilingGroup_0bba72c4"], result)
 
     @builtins.property
-    def recursive_loop(self) -> typing.Optional[RecursiveLoop]:
+    def recursive_loop(self) -> typing.Optional["RecursiveLoop"]:
         '''Sets the Recursive Loop Protection for Lambda Function.
 
         It lets Lambda detect and terminate unintended recursive loops.
@@ -27384,7 +27434,7 @@ class SingletonFunctionProps(FunctionProps):
         :default: RecursiveLoop.Terminate
         '''
         result = self._values.get("recursive_loop")
-        return typing.cast(typing.Optional[RecursiveLoop], result)
+        return typing.cast(typing.Optional["RecursiveLoop"], result)
 
     @builtins.property
     def reserved_concurrent_executions(self) -> typing.Optional[jsii.Number]:
@@ -27398,7 +27448,7 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Lambda execution role.
 
         This is the role that will be assumed by the function upon execution.
@@ -27417,19 +27467,21 @@ class SingletonFunctionProps(FunctionProps):
         Both supplied and generated roles can always be changed by calling ``addToRolePolicy``.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def runtime_management_mode(self) -> typing.Optional[RuntimeManagementMode]:
+    def runtime_management_mode(self) -> typing.Optional["RuntimeManagementMode"]:
         '''Sets the runtime management configuration for a function's version.
 
         :default: Auto
         '''
         result = self._values.get("runtime_management_mode")
-        return typing.cast(typing.Optional[RuntimeManagementMode], result)
+        return typing.cast(typing.Optional["RuntimeManagementMode"], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''The list of security groups to associate with the Lambda's network interfaces.
 
         Only used if 'vpc' is supplied.
@@ -27441,7 +27493,7 @@ class SingletonFunctionProps(FunctionProps):
         group will be created for this function.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
     def snap_start(self) -> typing.Optional["SnapStartConf"]:
@@ -27486,7 +27538,7 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional["TenancyConfig"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The function execution time (in seconds) after which Lambda terminates the function.
 
         Because the execution time affects cost, set this value
@@ -27495,7 +27547,7 @@ class SingletonFunctionProps(FunctionProps):
         :default: Duration.seconds(3)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def tracing(self) -> typing.Optional["Tracing"]:
@@ -27507,7 +27559,7 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional["Tracing"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''VPC network to place Lambda network interfaces.
 
         Specify this if the Lambda function needs to access resources in a VPC.
@@ -27516,10 +27568,10 @@ class SingletonFunctionProps(FunctionProps):
         :default: - Function is not placed within a VPC.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where to place the network interfaces within the VPC.
 
         This requires ``vpc`` to be specified in order for interfaces to actually be
@@ -27531,10 +27583,10 @@ class SingletonFunctionProps(FunctionProps):
         :default: - the Vpc default strategy if not specified
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def code(self) -> Code:
+    def code(self) -> "Code":
         '''The source code of your Lambda function.
 
         You can point to a file in an
@@ -27543,7 +27595,7 @@ class SingletonFunctionProps(FunctionProps):
         '''
         result = self._values.get("code")
         assert result is not None, "Required property 'code' is missing"
-        return typing.cast(Code, result)
+        return typing.cast("Code", result)
 
     @builtins.property
     def handler(self) -> builtins.str:
@@ -27564,7 +27616,7 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def runtime(self) -> Runtime:
+    def runtime(self) -> "Runtime":
         '''The runtime environment for the Lambda function that you are uploading.
 
         For valid values, see the Runtime property in the AWS Lambda Developer
@@ -27574,7 +27626,7 @@ class SingletonFunctionProps(FunctionProps):
         '''
         result = self._values.get("runtime")
         assert result is not None, "Required property 'runtime' is missing"
-        return typing.cast(Runtime, result)
+        return typing.cast("Runtime", result)
 
     @builtins.property
     def uuid(self) -> builtins.str:
@@ -28001,9 +28053,9 @@ class TenancyConfig(
 
     @builtins.property
     @jsii.member(jsii_name="tenancyConfigProperty")
-    def tenancy_config_property(self) -> CfnFunction.TenancyConfigProperty:
+    def tenancy_config_property(self) -> "CfnFunction.TenancyConfigProperty":
         '''The CloudFormation property for tenancy configuration.'''
-        return typing.cast(CfnFunction.TenancyConfigProperty, jsii.get(self, "tenancyConfigProperty"))
+        return typing.cast("CfnFunction.TenancyConfigProperty", jsii.get(self, "tenancyConfigProperty"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_lambda.Tracing")
@@ -28063,8 +28115,8 @@ class UtilizationScalingOptions(_BaseTargetTrackingProps_540ba713):
         *,
         disable_scale_in: typing.Optional[builtins.bool] = None,
         policy_name: typing.Optional[builtins.str] = None,
-        scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
-        scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+        scale_in_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
+        scale_out_cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         utilization_target: jsii.Number,
     ) -> None:
         '''Options for enabling Lambda utilization tracking.
@@ -28142,7 +28194,7 @@ class UtilizationScalingOptions(_BaseTargetTrackingProps_540ba713):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def scale_in_cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def scale_in_cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Period after a scale in activity completes before another scale in activity can start.
 
         :default:
@@ -28155,10 +28207,10 @@ class UtilizationScalingOptions(_BaseTargetTrackingProps_540ba713):
         Lambda provisioned concurrency
         '''
         result = self._values.get("scale_in_cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def scale_out_cooldown(self) -> typing.Optional[_Duration_4839e8c3]:
+    def scale_out_cooldown(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Period after a scale out activity completes before another scale out activity can start.
 
         :default:
@@ -28171,7 +28223,7 @@ class UtilizationScalingOptions(_BaseTargetTrackingProps_540ba713):
         Lambda provisioned concurrency
         '''
         result = self._values.get("scale_out_cooldown")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def utilization_target(self) -> jsii.Number:
@@ -28201,7 +28253,7 @@ class UtilizationScalingOptions(_BaseTargetTrackingProps_540ba713):
     name_mapping={"lambda_": "lambda", "version": "version"},
 )
 class VersionAttributes:
-    def __init__(self, *, lambda_: IFunction, version: builtins.str) -> None:
+    def __init__(self, *, lambda_: "IFunction", version: builtins.str) -> None:
         '''
         :param lambda_: The lambda function.
         :param version: The version.
@@ -28231,11 +28283,11 @@ class VersionAttributes:
         }
 
     @builtins.property
-    def lambda_(self) -> IFunction:
+    def lambda_(self) -> "IFunction":
         '''The lambda function.'''
         result = self._values.get("lambda_")
         assert result is not None, "Required property 'lambda_' is missing"
-        return typing.cast(IFunction, result)
+        return typing.cast("IFunction", result)
 
     @builtins.property
     def version(self) -> builtins.str:
@@ -28276,16 +28328,16 @@ class VersionOptions(EventInvokeConfigOptions):
     def __init__(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         max_execution_environments: typing.Optional[jsii.Number] = None,
         min_execution_environments: typing.Optional[jsii.Number] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
     ) -> None:
         '''Options for ``lambda.Version``.
 
@@ -28351,7 +28403,7 @@ class VersionOptions(EventInvokeConfigOptions):
             self._values["removal_policy"] = removal_policy
 
     @builtins.property
-    def max_event_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_event_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a request that Lambda sends to a function for processing.
 
         Minimum: 60 seconds
@@ -28360,25 +28412,25 @@ class VersionOptions(EventInvokeConfigOptions):
         :default: Duration.hours(6)
         '''
         result = self._values.get("max_event_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def on_failure(self) -> typing.Optional[IDestination]:
+    def on_failure(self) -> typing.Optional["IDestination"]:
         '''The destination for failed invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_failure")
-        return typing.cast(typing.Optional[IDestination], result)
+        return typing.cast(typing.Optional["IDestination"], result)
 
     @builtins.property
-    def on_success(self) -> typing.Optional[IDestination]:
+    def on_success(self) -> typing.Optional["IDestination"]:
         '''The destination for successful invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_success")
-        return typing.cast(typing.Optional[IDestination], result)
+        return typing.cast(typing.Optional["IDestination"], result)
 
     @builtins.property
     def retry_attempts(self) -> typing.Optional[jsii.Number]:
@@ -28446,13 +28498,13 @@ class VersionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Whether to retain old versions of this function when a new version is created.
 
         :default: RemovalPolicy.DESTROY
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -28487,17 +28539,17 @@ class VersionProps(VersionOptions):
     def __init__(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         max_execution_environments: typing.Optional[jsii.Number] = None,
         min_execution_environments: typing.Optional[jsii.Number] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        lambda_: IFunction,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        lambda_: "IFunction",
     ) -> None:
         '''Properties for a new Lambda version.
 
@@ -28561,7 +28613,7 @@ class VersionProps(VersionOptions):
             self._values["removal_policy"] = removal_policy
 
     @builtins.property
-    def max_event_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_event_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a request that Lambda sends to a function for processing.
 
         Minimum: 60 seconds
@@ -28570,25 +28622,25 @@ class VersionProps(VersionOptions):
         :default: Duration.hours(6)
         '''
         result = self._values.get("max_event_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def on_failure(self) -> typing.Optional[IDestination]:
+    def on_failure(self) -> typing.Optional["IDestination"]:
         '''The destination for failed invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_failure")
-        return typing.cast(typing.Optional[IDestination], result)
+        return typing.cast(typing.Optional["IDestination"], result)
 
     @builtins.property
-    def on_success(self) -> typing.Optional[IDestination]:
+    def on_success(self) -> typing.Optional["IDestination"]:
         '''The destination for successful invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_success")
-        return typing.cast(typing.Optional[IDestination], result)
+        return typing.cast(typing.Optional["IDestination"], result)
 
     @builtins.property
     def retry_attempts(self) -> typing.Optional[jsii.Number]:
@@ -28656,20 +28708,20 @@ class VersionProps(VersionOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Whether to retain old versions of this function when a new version is created.
 
         :default: RemovalPolicy.DESTROY
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def lambda_(self) -> IFunction:
+    def lambda_(self) -> "IFunction":
         '''Function to get the value of.'''
         result = self._values.get("lambda_")
         assert result is not None, "Required property 'lambda_' is missing"
-        return typing.cast(IFunction, result)
+        return typing.cast("IFunction", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -28689,7 +28741,7 @@ class VersionProps(VersionOptions):
     name_mapping={"version": "version", "weight": "weight"},
 )
 class VersionWeight:
-    def __init__(self, *, version: IVersion, weight: jsii.Number) -> None:
+    def __init__(self, *, version: "IVersion", weight: jsii.Number) -> None:
         '''A version/weight pair for routing traffic to Lambda functions.
 
         :param version: The version to route traffic to.
@@ -28720,11 +28772,11 @@ class VersionWeight:
         }
 
     @builtins.property
-    def version(self) -> IVersion:
+    def version(self) -> "IVersion":
         '''The version to route traffic to.'''
         result = self._values.get("version")
         assert result is not None, "Required property 'version' is missing"
-        return typing.cast(IVersion, result)
+        return typing.cast("IVersion", result)
 
     @builtins.property
     def weight(self) -> jsii.Number:
@@ -28762,11 +28814,11 @@ class AliasOptions(EventInvokeConfigOptions):
     def __init__(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-        additional_versions: typing.Optional[typing.Sequence[typing.Union[VersionWeight, typing.Dict[builtins.str, typing.Any]]]] = None,
+        additional_versions: typing.Optional[typing.Sequence[typing.Union["VersionWeight", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -28831,7 +28883,7 @@ class AliasOptions(EventInvokeConfigOptions):
             self._values["provisioned_concurrent_executions"] = provisioned_concurrent_executions
 
     @builtins.property
-    def max_event_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_event_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a request that Lambda sends to a function for processing.
 
         Minimum: 60 seconds
@@ -28840,25 +28892,25 @@ class AliasOptions(EventInvokeConfigOptions):
         :default: Duration.hours(6)
         '''
         result = self._values.get("max_event_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def on_failure(self) -> typing.Optional[IDestination]:
+    def on_failure(self) -> typing.Optional["IDestination"]:
         '''The destination for failed invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_failure")
-        return typing.cast(typing.Optional[IDestination], result)
+        return typing.cast(typing.Optional["IDestination"], result)
 
     @builtins.property
-    def on_success(self) -> typing.Optional[IDestination]:
+    def on_success(self) -> typing.Optional["IDestination"]:
         '''The destination for successful invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_success")
-        return typing.cast(typing.Optional[IDestination], result)
+        return typing.cast(typing.Optional["IDestination"], result)
 
     @builtins.property
     def retry_attempts(self) -> typing.Optional[jsii.Number]:
@@ -28873,7 +28925,7 @@ class AliasOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def additional_versions(self) -> typing.Optional[typing.List[VersionWeight]]:
+    def additional_versions(self) -> typing.Optional[typing.List["VersionWeight"]]:
         '''Additional versions with individual weights this alias points to.
 
         Individual additional version weights specified here should add up to
@@ -28891,7 +28943,7 @@ class AliasOptions(EventInvokeConfigOptions):
         :default: No additional versions
         '''
         result = self._values.get("additional_versions")
-        return typing.cast(typing.Optional[typing.List[VersionWeight]], result)
+        return typing.cast(typing.Optional[typing.List["VersionWeight"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -28942,15 +28994,15 @@ class AliasProps(AliasOptions):
     def __init__(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-        additional_versions: typing.Optional[typing.Sequence[typing.Union[VersionWeight, typing.Dict[builtins.str, typing.Any]]]] = None,
+        additional_versions: typing.Optional[typing.Sequence[typing.Union["VersionWeight", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
         alias_name: builtins.str,
-        version: IVersion,
+        version: "IVersion",
     ) -> None:
         '''Properties for a new Lambda alias.
 
@@ -29017,7 +29069,7 @@ class AliasProps(AliasOptions):
             self._values["provisioned_concurrent_executions"] = provisioned_concurrent_executions
 
     @builtins.property
-    def max_event_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_event_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a request that Lambda sends to a function for processing.
 
         Minimum: 60 seconds
@@ -29026,25 +29078,25 @@ class AliasProps(AliasOptions):
         :default: Duration.hours(6)
         '''
         result = self._values.get("max_event_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def on_failure(self) -> typing.Optional[IDestination]:
+    def on_failure(self) -> typing.Optional["IDestination"]:
         '''The destination for failed invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_failure")
-        return typing.cast(typing.Optional[IDestination], result)
+        return typing.cast(typing.Optional["IDestination"], result)
 
     @builtins.property
-    def on_success(self) -> typing.Optional[IDestination]:
+    def on_success(self) -> typing.Optional["IDestination"]:
         '''The destination for successful invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_success")
-        return typing.cast(typing.Optional[IDestination], result)
+        return typing.cast(typing.Optional["IDestination"], result)
 
     @builtins.property
     def retry_attempts(self) -> typing.Optional[jsii.Number]:
@@ -29059,7 +29111,7 @@ class AliasProps(AliasOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def additional_versions(self) -> typing.Optional[typing.List[VersionWeight]]:
+    def additional_versions(self) -> typing.Optional[typing.List["VersionWeight"]]:
         '''Additional versions with individual weights this alias points to.
 
         Individual additional version weights specified here should add up to
@@ -29077,7 +29129,7 @@ class AliasProps(AliasOptions):
         :default: No additional versions
         '''
         result = self._values.get("additional_versions")
-        return typing.cast(typing.Optional[typing.List[VersionWeight]], result)
+        return typing.cast(typing.Optional[typing.List["VersionWeight"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -29105,14 +29157,14 @@ class AliasProps(AliasOptions):
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def version(self) -> IVersion:
+    def version(self) -> "IVersion":
         '''Function version this alias refers to.
 
         Use lambda.currentVersion to reference a version with your latest changes.
         '''
         result = self._values.get("version")
         assert result is not None, "Required property 'version' is missing"
-        return typing.cast(IVersion, result)
+        return typing.cast("IVersion", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -29169,14 +29221,14 @@ class AssetCode(
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> None:
         '''
         :param path: The path to the asset file or directory.
@@ -29210,7 +29262,7 @@ class AssetCode(
         jsii.create(self.__class__, self, [path, options])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> CodeConfig:
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Called when the lambda or layer is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param scope: -
@@ -29218,12 +29270,12 @@ class AssetCode(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8024a2e1fb783987e4f9a2cfe4810fa21a036c5de7a23f5da062bc8e307bd623)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-        return typing.cast(CodeConfig, jsii.invoke(self, "bind", [scope]))
+        return typing.cast("CodeConfig", jsii.invoke(self, "bind", [scope]))
 
     @jsii.member(jsii_name="bindToResource")
     def bind_to_resource(
         self,
-        resource: _CfnResource_9df397a6,
+        resource: "_CfnResource_9df397a6",
         *,
         resource_property: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -29341,19 +29393,19 @@ class AssetImageCode(
         build_secrets: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         build_ssh: typing.Optional[builtins.str] = None,
         cache_disabled: typing.Optional[builtins.bool] = None,
-        cache_from: typing.Optional[typing.Sequence[typing.Union[_DockerCacheOption_58ef18ca, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache_to: typing.Optional[typing.Union[_DockerCacheOption_58ef18ca, typing.Dict[builtins.str, typing.Any]]] = None,
+        cache_from: typing.Optional[typing.Sequence[typing.Union["_DockerCacheOption_58ef18ca", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_to: typing.Optional[typing.Union["_DockerCacheOption_58ef18ca", typing.Dict[builtins.str, typing.Any]]] = None,
         display_name: typing.Optional[builtins.str] = None,
         file: typing.Optional[builtins.str] = None,
-        invalidation: typing.Optional[typing.Union[_DockerImageAssetInvalidationOptions_4deb8d45, typing.Dict[builtins.str, typing.Any]]] = None,
-        network_mode: typing.Optional[_NetworkMode_897e5081] = None,
+        invalidation: typing.Optional[typing.Union["_DockerImageAssetInvalidationOptions_4deb8d45", typing.Dict[builtins.str, typing.Any]]] = None,
+        network_mode: typing.Optional["_NetworkMode_897e5081"] = None,
         outputs: typing.Optional[typing.Sequence[builtins.str]] = None,
-        platform: typing.Optional[_Platform_d16f3cf1] = None,
+        platform: typing.Optional["_Platform_d16f3cf1"] = None,
         target: typing.Optional[builtins.str] = None,
         extra_hash: typing.Optional[builtins.str] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> None:
         '''
         :param directory: -
@@ -29409,7 +29461,7 @@ class AssetImageCode(
         jsii.create(self.__class__, self, [directory, props])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> CodeConfig:
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Called when the lambda or layer is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param scope: -
@@ -29417,12 +29469,12 @@ class AssetImageCode(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a357d798c040cb0661686134baa10d243ab3b8577839e2c2164a4fdad2c48158)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-        return typing.cast(CodeConfig, jsii.invoke(self, "bind", [scope]))
+        return typing.cast("CodeConfig", jsii.invoke(self, "bind", [scope]))
 
     @jsii.member(jsii_name="bindToResource")
     def bind_to_resource(
         self,
-        resource: _CfnResource_9df397a6,
+        resource: "_CfnResource_9df397a6",
         *,
         resource_property: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -29477,18 +29529,18 @@ class CapacityProvider(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        security_groups: typing.Sequence[_ISecurityGroup_acf8a799],
-        subnets: typing.Sequence[_ISubnet_d57d1229],
-        architectures: typing.Optional[typing.Sequence[Architecture]] = None,
+        security_groups: typing.Sequence["_ISecurityGroup_acf8a799"],
+        subnets: typing.Sequence["_ISubnet_d57d1229"],
+        architectures: typing.Optional[typing.Sequence["Architecture"]] = None,
         capacity_provider_name: typing.Optional[builtins.str] = None,
-        instance_type_filter: typing.Optional[InstanceTypeFilter] = None,
-        kms_key: typing.Optional[_IKey_5f11635f] = None,
+        instance_type_filter: typing.Optional["InstanceTypeFilter"] = None,
+        kms_key: typing.Optional["_IKey_5f11635f"] = None,
         max_v_cpu_count: typing.Optional[jsii.Number] = None,
-        operator_role: typing.Optional[_IRole_235f5d8e] = None,
-        scaling_options: typing.Optional[ScalingOptions] = None,
+        operator_role: typing.Optional["_IRole_235f5d8e"] = None,
+        scaling_options: typing.Optional["ScalingOptions"] = None,
     ) -> None:
         '''Creates a new Lambda capacity provider.
 
@@ -29526,10 +29578,10 @@ class CapacityProvider(
     @builtins.classmethod
     def from_capacity_provider_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         capacity_provider_arn: builtins.str,
-    ) -> ICapacityProvider:
+    ) -> "ICapacityProvider":
         '''Import an existing capacity provider by ARN.
 
         :param scope: The parent construct.
@@ -29541,17 +29593,17 @@ class CapacityProvider(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument capacity_provider_arn", value=capacity_provider_arn, expected_type=type_hints["capacity_provider_arn"])
-        return typing.cast(ICapacityProvider, jsii.sinvoke(cls, "fromCapacityProviderArn", [scope, id, capacity_provider_arn]))
+        return typing.cast("ICapacityProvider", jsii.sinvoke(cls, "fromCapacityProviderArn", [scope, id, capacity_provider_arn]))
 
     @jsii.member(jsii_name="fromCapacityProviderAttributes")
     @builtins.classmethod
     def from_capacity_provider_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         capacity_provider_arn: builtins.str,
-    ) -> ICapacityProvider:
+    ) -> "ICapacityProvider":
         '''Import an existing capacity provider using its attributes.
 
         :param scope: The parent construct.
@@ -29564,16 +29616,16 @@ class CapacityProvider(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         attrs = CapacityProviderAttributes(capacity_provider_arn=capacity_provider_arn)
 
-        return typing.cast(ICapacityProvider, jsii.sinvoke(cls, "fromCapacityProviderAttributes", [scope, id, attrs]))
+        return typing.cast("ICapacityProvider", jsii.sinvoke(cls, "fromCapacityProviderAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromCapacityProviderName")
     @builtins.classmethod
     def from_capacity_provider_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         capacity_provider_name: builtins.str,
-    ) -> ICapacityProvider:
+    ) -> "ICapacityProvider":
         '''Import an existing capacity provider by name.
 
         :param scope: The parent construct.
@@ -29585,15 +29637,15 @@ class CapacityProvider(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
-        return typing.cast(ICapacityProvider, jsii.sinvoke(cls, "fromCapacityProviderName", [scope, id, capacity_provider_name]))
+        return typing.cast("ICapacityProvider", jsii.sinvoke(cls, "fromCapacityProviderName", [scope, id, capacity_provider_name]))
 
     @jsii.member(jsii_name="addFunction")
     def add_function(
         self,
-        func: IFunction,
+        func: "IFunction",
         *,
         execution_environment_memory_gib_per_v_cpu: typing.Optional[jsii.Number] = None,
-        latest_published_scaling_config: typing.Optional[typing.Union[LatestPublishedScalingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        latest_published_scaling_config: typing.Optional[typing.Union["LatestPublishedScalingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         per_execution_environment_max_concurrency: typing.Optional[jsii.Number] = None,
         publish_to_latest_published: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -29775,9 +29827,9 @@ class CfnParametersCode(
     def __init__(
         self,
         *,
-        bucket_name_param: typing.Optional[_CfnParameter_48fc1866] = None,
-        object_key_param: typing.Optional[_CfnParameter_48fc1866] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        bucket_name_param: typing.Optional["_CfnParameter_48fc1866"] = None,
+        object_key_param: typing.Optional["_CfnParameter_48fc1866"] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
     ) -> None:
         '''
         :param bucket_name_param: The CloudFormation parameter that represents the name of the S3 Bucket where the Lambda code will be located in. Must be of type 'String'. Default: a new parameter will be created
@@ -29822,7 +29874,7 @@ class CfnParametersCode(
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "assign", [location]))
 
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> CodeConfig:
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "CodeConfig":
         '''Called when the lambda or layer is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param scope: -
@@ -29830,7 +29882,7 @@ class CfnParametersCode(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__34baa25578524fcdbb2964fbbadba90446d8df685f7a1fb5e11395b3ea454a47)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-        return typing.cast(CodeConfig, jsii.invoke(self, "bind", [scope]))
+        return typing.cast("CodeConfig", jsii.invoke(self, "bind", [scope]))
 
     @builtins.property
     @jsii.member(jsii_name="bucketNameParam")
@@ -29883,12 +29935,12 @@ class CodeSigningConfig(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        signing_profiles: typing.Sequence[_ISigningProfile_5140a756],
+        signing_profiles: typing.Sequence["_ISigningProfile_5140a756"],
         description: typing.Optional[builtins.str] = None,
-        untrusted_artifact_on_deployment: typing.Optional[UntrustedArtifactOnDeployment] = None,
+        untrusted_artifact_on_deployment: typing.Optional["UntrustedArtifactOnDeployment"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -29913,10 +29965,10 @@ class CodeSigningConfig(
     @builtins.classmethod
     def from_code_signing_config_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         code_signing_config_arn: builtins.str,
-    ) -> ICodeSigningConfig:
+    ) -> "ICodeSigningConfig":
         '''Creates a Signing Profile construct that represents an external Signing Profile.
 
         :param scope: The parent creating construct (usually ``this``).
@@ -29928,7 +29980,7 @@ class CodeSigningConfig(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument code_signing_config_arn", value=code_signing_config_arn, expected_type=type_hints["code_signing_config_arn"])
-        return typing.cast(ICodeSigningConfig, jsii.sinvoke(cls, "fromCodeSigningConfigArn", [scope, id, code_signing_config_arn]))
+        return typing.cast("ICodeSigningConfig", jsii.sinvoke(cls, "fromCodeSigningConfigArn", [scope, id, code_signing_config_arn]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -29950,9 +30002,9 @@ class CodeSigningConfig(
 
     @builtins.property
     @jsii.member(jsii_name="codeSigningConfigRef")
-    def code_signing_config_ref(self) -> _CodeSigningConfigReference_5381ca24:
+    def code_signing_config_ref(self) -> "_CodeSigningConfigReference_5381ca24":
         '''A reference to a CodeSigningConfig resource.'''
-        return typing.cast(_CodeSigningConfigReference_5381ca24, jsii.get(self, "codeSigningConfigRef"))
+        return typing.cast("_CodeSigningConfigReference_5381ca24", jsii.get(self, "codeSigningConfigRef"))
 
 
 @jsii.data_type(
@@ -30018,59 +30070,59 @@ class DockerImageFunctionProps(FunctionOptions):
     def __init__(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-        adot_instrumentation: typing.Optional[typing.Union[AdotInstrumentationConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        adot_instrumentation: typing.Optional[typing.Union["AdotInstrumentationConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         allow_all_ipv6_outbound: typing.Optional[builtins.bool] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         allow_public_subnet: typing.Optional[builtins.bool] = None,
         application_log_level: typing.Optional[builtins.str] = None,
-        application_log_level_v2: typing.Optional[ApplicationLogLevel] = None,
-        architecture: typing.Optional[Architecture] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
-        current_version_options: typing.Optional[typing.Union[VersionOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        application_log_level_v2: typing.Optional["ApplicationLogLevel"] = None,
+        architecture: typing.Optional["Architecture"] = None,
+        code_signing_config: typing.Optional["_ICodeSigningConfigRef_1d909622"] = None,
+        current_version_options: typing.Optional[typing.Union["VersionOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
-        dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
+        dead_letter_topic: typing.Optional["_ITopic_9eca4852"] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        durable_config: typing.Optional[typing.Union["DurableConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
-        events: typing.Optional[typing.Sequence[IEventSource]] = None,
-        filesystem: typing.Optional[FileSystem] = None,
+        environment_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
+        events: typing.Optional[typing.Sequence["IEventSource"]] = None,
+        filesystem: typing.Optional["FileSystem"] = None,
         function_name: typing.Optional[builtins.str] = None,
-        initial_policy: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
-        insights_version: typing.Optional[LambdaInsightsVersion] = None,
+        initial_policy: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
+        insights_version: typing.Optional["LambdaInsightsVersion"] = None,
         ipv6_allowed_for_dual_stack: typing.Optional[builtins.bool] = None,
-        layers: typing.Optional[typing.Sequence[ILayerVersion]] = None,
+        layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
-        logging_format: typing.Optional[LoggingFormat] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
-        log_retention_retry_options: typing.Optional[typing.Union[LogRetentionRetryOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        log_retention_role: typing.Optional[_IRole_235f5d8e] = None,
+        logging_format: typing.Optional["LoggingFormat"] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
+        log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        log_retention_role: typing.Optional["_IRole_235f5d8e"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
-        params_and_secrets: typing.Optional[ParamsAndSecretsLayerVersion] = None,
+        params_and_secrets: typing.Optional["ParamsAndSecretsLayerVersion"] = None,
         profiling: typing.Optional[builtins.bool] = None,
-        profiling_group: typing.Optional[_IProfilingGroup_0bba72c4] = None,
-        recursive_loop: typing.Optional[RecursiveLoop] = None,
+        profiling_group: typing.Optional["_IProfilingGroup_0bba72c4"] = None,
+        recursive_loop: typing.Optional["RecursiveLoop"] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        runtime_management_mode: typing.Optional[RuntimeManagementMode] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        snap_start: typing.Optional[SnapStartConf] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        runtime_management_mode: typing.Optional["RuntimeManagementMode"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        snap_start: typing.Optional["SnapStartConf"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
-        system_log_level_v2: typing.Optional[SystemLogLevel] = None,
-        tenancy_config: typing.Optional[TenancyConfig] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        tracing: typing.Optional[Tracing] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        code: DockerImageCode,
+        system_log_level_v2: typing.Optional["SystemLogLevel"] = None,
+        tenancy_config: typing.Optional["TenancyConfig"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        tracing: typing.Optional["Tracing"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        code: "DockerImageCode",
     ) -> None:
         '''Properties to configure a new DockerImageFunction construct.
 
@@ -30310,7 +30362,7 @@ class DockerImageFunctionProps(FunctionOptions):
             self._values["vpc_subnets"] = vpc_subnets
 
     @builtins.property
-    def max_event_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_event_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a request that Lambda sends to a function for processing.
 
         Minimum: 60 seconds
@@ -30319,25 +30371,25 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: Duration.hours(6)
         '''
         result = self._values.get("max_event_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def on_failure(self) -> typing.Optional[IDestination]:
+    def on_failure(self) -> typing.Optional["IDestination"]:
         '''The destination for failed invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_failure")
-        return typing.cast(typing.Optional[IDestination], result)
+        return typing.cast(typing.Optional["IDestination"], result)
 
     @builtins.property
-    def on_success(self) -> typing.Optional[IDestination]:
+    def on_success(self) -> typing.Optional["IDestination"]:
         '''The destination for successful invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_success")
-        return typing.cast(typing.Optional[IDestination], result)
+        return typing.cast(typing.Optional["IDestination"], result)
 
     @builtins.property
     def retry_attempts(self) -> typing.Optional[jsii.Number]:
@@ -30352,7 +30404,7 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def adot_instrumentation(self) -> typing.Optional[AdotInstrumentationConfig]:
+    def adot_instrumentation(self) -> typing.Optional["AdotInstrumentationConfig"]:
         '''Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation.
 
         :default: - No ADOT instrumentation
@@ -30360,7 +30412,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :see: https://aws-otel.github.io/docs/getting-started/lambda
         '''
         result = self._values.get("adot_instrumentation")
-        return typing.cast(typing.Optional[AdotInstrumentationConfig], result)
+        return typing.cast(typing.Optional["AdotInstrumentationConfig"], result)
 
     @builtins.property
     def allow_all_ipv6_outbound(self) -> typing.Optional[builtins.bool]:
@@ -30420,43 +30472,43 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def application_log_level_v2(self) -> typing.Optional[ApplicationLogLevel]:
+    def application_log_level_v2(self) -> typing.Optional["ApplicationLogLevel"]:
         '''Sets the application log level for the function.
 
         :default: ApplicationLogLevel.INFO
         '''
         result = self._values.get("application_log_level_v2")
-        return typing.cast(typing.Optional[ApplicationLogLevel], result)
+        return typing.cast(typing.Optional["ApplicationLogLevel"], result)
 
     @builtins.property
-    def architecture(self) -> typing.Optional[Architecture]:
+    def architecture(self) -> typing.Optional["Architecture"]:
         '''The system architectures compatible with this lambda function.
 
         :default: Architecture.X86_64
         '''
         result = self._values.get("architecture")
-        return typing.cast(typing.Optional[Architecture], result)
+        return typing.cast(typing.Optional["Architecture"], result)
 
     @builtins.property
-    def code_signing_config(self) -> typing.Optional[_ICodeSigningConfigRef_1d909622]:
+    def code_signing_config(self) -> typing.Optional["_ICodeSigningConfigRef_1d909622"]:
         '''Code signing config associated with this function.
 
         :default: - Not Sign the Code
         '''
         result = self._values.get("code_signing_config")
-        return typing.cast(typing.Optional[_ICodeSigningConfigRef_1d909622], result)
+        return typing.cast(typing.Optional["_ICodeSigningConfigRef_1d909622"], result)
 
     @builtins.property
-    def current_version_options(self) -> typing.Optional[VersionOptions]:
+    def current_version_options(self) -> typing.Optional["VersionOptions"]:
         '''Options for the ``lambda.Version`` resource automatically created by the ``fn.currentVersion`` method.
 
         :default: - default options as described in ``VersionOptions``
         '''
         result = self._values.get("current_version_options")
-        return typing.cast(typing.Optional[VersionOptions], result)
+        return typing.cast(typing.Optional["VersionOptions"], result)
 
     @builtins.property
-    def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
+    def dead_letter_queue(self) -> typing.Optional["_IQueue_7ed6f679"]:
         '''The SQS queue to use if DLQ is enabled.
 
         If SNS topic is desired, specify ``deadLetterTopic`` property instead.
@@ -30464,7 +30516,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: - SQS queue with 14 day retention period if ``deadLetterQueueEnabled`` is ``true``
         '''
         result = self._values.get("dead_letter_queue")
-        return typing.cast(typing.Optional[_IQueue_7ed6f679], result)
+        return typing.cast(typing.Optional["_IQueue_7ed6f679"], result)
 
     @builtins.property
     def dead_letter_queue_enabled(self) -> typing.Optional[builtins.bool]:
@@ -30479,7 +30531,7 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def dead_letter_topic(self) -> typing.Optional[_ITopic_9eca4852]:
+    def dead_letter_topic(self) -> typing.Optional["_ITopic_9eca4852"]:
         '''The SNS topic to use as a DLQ.
 
         Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created
@@ -30488,7 +30540,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: - no SNS topic
         '''
         result = self._values.get("dead_letter_topic")
-        return typing.cast(typing.Optional[_ITopic_9eca4852], result)
+        return typing.cast(typing.Optional["_ITopic_9eca4852"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -30500,7 +30552,7 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def durable_config(self) -> typing.Optional[DurableConfig]:
+    def durable_config(self) -> typing.Optional["DurableConfig"]:
         '''The durable configuration for the function.
 
         If durability is added to an existing function, a resource replacement will be triggered.
@@ -30509,7 +30561,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: - No durable configuration
         '''
         result = self._values.get("durable_config")
-        return typing.cast(typing.Optional[DurableConfig], result)
+        return typing.cast(typing.Optional["DurableConfig"], result)
 
     @builtins.property
     def environment(
@@ -30527,25 +30579,25 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def environment_encryption(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def environment_encryption(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The AWS KMS key that's used to encrypt your function's environment variables.
 
         :default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         '''
         result = self._values.get("environment_encryption")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
-    def ephemeral_storage_size(self) -> typing.Optional[_Size_7b441c34]:
+    def ephemeral_storage_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The size of the function’s /tmp directory in MiB.
 
         :default: 512 MiB
         '''
         result = self._values.get("ephemeral_storage_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def events(self) -> typing.Optional[typing.List[IEventSource]]:
+    def events(self) -> typing.Optional[typing.List["IEventSource"]]:
         '''Event sources for this function.
 
         You can also add event sources using ``addEventSource``.
@@ -30553,16 +30605,16 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: - No event sources.
         '''
         result = self._values.get("events")
-        return typing.cast(typing.Optional[typing.List[IEventSource]], result)
+        return typing.cast(typing.Optional[typing.List["IEventSource"]], result)
 
     @builtins.property
-    def filesystem(self) -> typing.Optional[FileSystem]:
+    def filesystem(self) -> typing.Optional["FileSystem"]:
         '''The filesystem configuration for the lambda function.
 
         :default: - will not mount any filesystem
         '''
         result = self._values.get("filesystem")
-        return typing.cast(typing.Optional[FileSystem], result)
+        return typing.cast(typing.Optional["FileSystem"], result)
 
     @builtins.property
     def function_name(self) -> typing.Optional[builtins.str]:
@@ -30577,7 +30629,9 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def initial_policy(self) -> typing.Optional[typing.List[_PolicyStatement_0fe33853]]:
+    def initial_policy(
+        self,
+    ) -> typing.Optional[typing.List["_PolicyStatement_0fe33853"]]:
         '''Initial policy statements to add to the created Lambda Role.
 
         You can call ``addToRolePolicy`` to the created lambda to add statements post creation.
@@ -30585,10 +30639,10 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: - No policy statements are added to the created Lambda role.
         '''
         result = self._values.get("initial_policy")
-        return typing.cast(typing.Optional[typing.List[_PolicyStatement_0fe33853]], result)
+        return typing.cast(typing.Optional[typing.List["_PolicyStatement_0fe33853"]], result)
 
     @builtins.property
-    def insights_version(self) -> typing.Optional[LambdaInsightsVersion]:
+    def insights_version(self) -> typing.Optional["LambdaInsightsVersion"]:
         '''Specify the version of CloudWatch Lambda insights to use for monitoring.
 
         :default: - No Lambda Insights
@@ -30596,7 +30650,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-Getting-Started-docker.html
         '''
         result = self._values.get("insights_version")
-        return typing.cast(typing.Optional[LambdaInsightsVersion], result)
+        return typing.cast(typing.Optional["LambdaInsightsVersion"], result)
 
     @builtins.property
     def ipv6_allowed_for_dual_stack(self) -> typing.Optional[builtins.bool]:
@@ -30610,7 +30664,7 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def layers(self) -> typing.Optional[typing.List[ILayerVersion]]:
+    def layers(self) -> typing.Optional[typing.List["ILayerVersion"]]:
         '''A list of layers to add to the function's execution environment.
 
         You can configure your Lambda function to pull in
@@ -30620,7 +30674,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: - No layers.
         '''
         result = self._values.get("layers")
-        return typing.cast(typing.Optional[typing.List[ILayerVersion]], result)
+        return typing.cast(typing.Optional[typing.List["ILayerVersion"]], result)
 
     @builtins.property
     def log_format(self) -> typing.Optional[builtins.str]:
@@ -30636,16 +30690,16 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def logging_format(self) -> typing.Optional[LoggingFormat]:
+    def logging_format(self) -> typing.Optional["LoggingFormat"]:
         '''Sets the loggingFormat for the function.
 
         :default: LoggingFormat.TEXT
         '''
         result = self._values.get("logging_format")
-        return typing.cast(typing.Optional[LoggingFormat], result)
+        return typing.cast(typing.Optional["LoggingFormat"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
+    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
         '''The log group the function sends logs to.
 
         By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/.
@@ -30659,10 +30713,10 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: ``/aws/lambda/${this.functionName}`` - default log group created by Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional[_ILogGroup_3c4fa718], result)
+        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
 
     @builtins.property
-    def log_removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def log_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''(deprecated) Determine the removal policy of the log group that is auto-created by this construct.
 
         Normally you want to retain the log group so you can diagnose issues
@@ -30677,10 +30731,10 @@ class DockerImageFunctionProps(FunctionOptions):
         :stability: deprecated
         '''
         result = self._values.get("log_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def log_retention(self) -> typing.Optional[_RetentionDays_070f99f0]:
+    def log_retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
         '''(deprecated) The number of days log events are kept in CloudWatch Logs.
 
         When updating
@@ -30708,10 +30762,12 @@ class DockerImageFunctionProps(FunctionOptions):
         :stability: deprecated
         '''
         result = self._values.get("log_retention")
-        return typing.cast(typing.Optional[_RetentionDays_070f99f0], result)
+        return typing.cast(typing.Optional["_RetentionDays_070f99f0"], result)
 
     @builtins.property
-    def log_retention_retry_options(self) -> typing.Optional[LogRetentionRetryOptions]:
+    def log_retention_retry_options(
+        self,
+    ) -> typing.Optional["LogRetentionRetryOptions"]:
         '''When log retention is specified, a custom resource attempts to create the CloudWatch log group.
 
         These options control the retry policy when interacting with CloudWatch APIs.
@@ -30722,10 +30778,10 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: - Default AWS SDK retry options.
         '''
         result = self._values.get("log_retention_retry_options")
-        return typing.cast(typing.Optional[LogRetentionRetryOptions], result)
+        return typing.cast(typing.Optional["LogRetentionRetryOptions"], result)
 
     @builtins.property
-    def log_retention_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def log_retention_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role for the Lambda function associated with the custom resource that sets the retention policy.
 
         This is a legacy API and we strongly recommend you migrate to ``logGroup`` if you can.
@@ -30734,7 +30790,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: - A new role is created.
         '''
         result = self._values.get("log_retention_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def memory_size(self) -> typing.Optional[jsii.Number]:
@@ -30750,7 +30806,7 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def params_and_secrets(self) -> typing.Optional[ParamsAndSecretsLayerVersion]:
+    def params_and_secrets(self) -> typing.Optional["ParamsAndSecretsLayerVersion"]:
         '''Specify the configuration of Parameters and Secrets Extension.
 
         :default: - No Parameters and Secrets Extension
@@ -30758,7 +30814,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :see: https://docs.aws.amazon.com/systems-manager/latest/userguide/ps-integration-lambda-extensions.html
         '''
         result = self._values.get("params_and_secrets")
-        return typing.cast(typing.Optional[ParamsAndSecretsLayerVersion], result)
+        return typing.cast(typing.Optional["ParamsAndSecretsLayerVersion"], result)
 
     @builtins.property
     def profiling(self) -> typing.Optional[builtins.bool]:
@@ -30772,7 +30828,7 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def profiling_group(self) -> typing.Optional[_IProfilingGroup_0bba72c4]:
+    def profiling_group(self) -> typing.Optional["_IProfilingGroup_0bba72c4"]:
         '''Profiling Group.
 
         :default: - A new profiling group will be created if ``profiling`` is set.
@@ -30780,10 +30836,10 @@ class DockerImageFunctionProps(FunctionOptions):
         :see: https://docs.aws.amazon.com/codeguru/latest/profiler-ug/setting-up-lambda.html
         '''
         result = self._values.get("profiling_group")
-        return typing.cast(typing.Optional[_IProfilingGroup_0bba72c4], result)
+        return typing.cast(typing.Optional["_IProfilingGroup_0bba72c4"], result)
 
     @builtins.property
-    def recursive_loop(self) -> typing.Optional[RecursiveLoop]:
+    def recursive_loop(self) -> typing.Optional["RecursiveLoop"]:
         '''Sets the Recursive Loop Protection for Lambda Function.
 
         It lets Lambda detect and terminate unintended recursive loops.
@@ -30791,7 +30847,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: RecursiveLoop.Terminate
         '''
         result = self._values.get("recursive_loop")
-        return typing.cast(typing.Optional[RecursiveLoop], result)
+        return typing.cast(typing.Optional["RecursiveLoop"], result)
 
     @builtins.property
     def reserved_concurrent_executions(self) -> typing.Optional[jsii.Number]:
@@ -30805,7 +30861,7 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Lambda execution role.
 
         This is the role that will be assumed by the function upon execution.
@@ -30824,19 +30880,21 @@ class DockerImageFunctionProps(FunctionOptions):
         Both supplied and generated roles can always be changed by calling ``addToRolePolicy``.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def runtime_management_mode(self) -> typing.Optional[RuntimeManagementMode]:
+    def runtime_management_mode(self) -> typing.Optional["RuntimeManagementMode"]:
         '''Sets the runtime management configuration for a function's version.
 
         :default: Auto
         '''
         result = self._values.get("runtime_management_mode")
-        return typing.cast(typing.Optional[RuntimeManagementMode], result)
+        return typing.cast(typing.Optional["RuntimeManagementMode"], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''The list of security groups to associate with the Lambda's network interfaces.
 
         Only used if 'vpc' is supplied.
@@ -30848,10 +30906,10 @@ class DockerImageFunctionProps(FunctionOptions):
         group will be created for this function.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
-    def snap_start(self) -> typing.Optional[SnapStartConf]:
+    def snap_start(self) -> typing.Optional["SnapStartConf"]:
         '''Enable SnapStart for Lambda Function.
 
         SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13, and .NET 8 runtime
@@ -30859,7 +30917,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: - No snapstart
         '''
         result = self._values.get("snap_start")
-        return typing.cast(typing.Optional[SnapStartConf], result)
+        return typing.cast(typing.Optional["SnapStartConf"], result)
 
     @builtins.property
     def system_log_level(self) -> typing.Optional[builtins.str]:
@@ -30875,25 +30933,25 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def system_log_level_v2(self) -> typing.Optional[SystemLogLevel]:
+    def system_log_level_v2(self) -> typing.Optional["SystemLogLevel"]:
         '''Sets the system log level for the function.
 
         :default: SystemLogLevel.INFO
         '''
         result = self._values.get("system_log_level_v2")
-        return typing.cast(typing.Optional[SystemLogLevel], result)
+        return typing.cast(typing.Optional["SystemLogLevel"], result)
 
     @builtins.property
-    def tenancy_config(self) -> typing.Optional[TenancyConfig]:
+    def tenancy_config(self) -> typing.Optional["TenancyConfig"]:
         '''The tenancy configuration for the function.
 
         :default: - Tenant isolation is not enabled
         '''
         result = self._values.get("tenancy_config")
-        return typing.cast(typing.Optional[TenancyConfig], result)
+        return typing.cast(typing.Optional["TenancyConfig"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The function execution time (in seconds) after which Lambda terminates the function.
 
         Because the execution time affects cost, set this value
@@ -30902,19 +30960,19 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: Duration.seconds(3)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def tracing(self) -> typing.Optional[Tracing]:
+    def tracing(self) -> typing.Optional["Tracing"]:
         '''Enable AWS X-Ray Tracing for Lambda Function.
 
         :default: Tracing.Disabled
         '''
         result = self._values.get("tracing")
-        return typing.cast(typing.Optional[Tracing], result)
+        return typing.cast(typing.Optional["Tracing"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''VPC network to place Lambda network interfaces.
 
         Specify this if the Lambda function needs to access resources in a VPC.
@@ -30923,10 +30981,10 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: - Function is not placed within a VPC.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where to place the network interfaces within the VPC.
 
         This requires ``vpc`` to be specified in order for interfaces to actually be
@@ -30938,10 +30996,10 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: - the Vpc default strategy if not specified
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def code(self) -> DockerImageCode:
+    def code(self) -> "DockerImageCode":
         '''The source code of your Lambda function.
 
         You can point to a file in an
@@ -30950,7 +31008,7 @@ class DockerImageFunctionProps(FunctionOptions):
         '''
         result = self._values.get("code")
         assert result is not None, "Required property 'code' is missing"
-        return typing.cast(DockerImageCode, result)
+        return typing.cast("DockerImageCode", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -31048,34 +31106,34 @@ class EventSourceMapping(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        target: IFunction,
+        target: "IFunction",
         batch_size: typing.Optional[jsii.Number] = None,
         bisect_batch_on_error: typing.Optional[builtins.bool] = None,
         enabled: typing.Optional[builtins.bool] = None,
         event_source_arn: typing.Optional[builtins.str] = None,
-        filter_encryption: typing.Optional[_IKey_5f11635f] = None,
+        filter_encryption: typing.Optional["_IKey_5f11635f"] = None,
         filters: typing.Optional[typing.Sequence[typing.Mapping[builtins.str, typing.Any]]] = None,
         kafka_bootstrap_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         kafka_consumer_group_id: typing.Optional[builtins.str] = None,
         kafka_topic: typing.Optional[builtins.str] = None,
-        max_batching_window: typing.Optional[_Duration_4839e8c3] = None,
+        max_batching_window: typing.Optional["_Duration_4839e8c3"] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
-        max_record_age: typing.Optional[_Duration_4839e8c3] = None,
-        metrics_config: typing.Optional[typing.Union[MetricsConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        on_failure: typing.Optional[IEventSourceDlq] = None,
+        max_record_age: typing.Optional["_Duration_4839e8c3"] = None,
+        metrics_config: typing.Optional[typing.Union["MetricsConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        on_failure: typing.Optional["IEventSourceDlq"] = None,
         parallelization_factor: typing.Optional[jsii.Number] = None,
-        provisioned_poller_config: typing.Optional[typing.Union[ProvisionedPollerConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        provisioned_poller_config: typing.Optional[typing.Union["ProvisionedPollerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         report_batch_item_failures: typing.Optional[builtins.bool] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-        schema_registry_config: typing.Optional[ISchemaRegistry] = None,
-        source_access_configurations: typing.Optional[typing.Sequence[typing.Union[SourceAccessConfiguration, typing.Dict[builtins.str, typing.Any]]]] = None,
-        starting_position: typing.Optional[StartingPosition] = None,
+        schema_registry_config: typing.Optional["ISchemaRegistry"] = None,
+        source_access_configurations: typing.Optional[typing.Sequence[typing.Union["SourceAccessConfiguration", typing.Dict[builtins.str, typing.Any]]]] = None,
+        starting_position: typing.Optional["StartingPosition"] = None,
         starting_position_timestamp: typing.Optional[jsii.Number] = None,
         support_s3_on_failure_destination: typing.Optional[builtins.bool] = None,
-        tumbling_window: typing.Optional[_Duration_4839e8c3] = None,
+        tumbling_window: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -31144,10 +31202,10 @@ class EventSourceMapping(
     @builtins.classmethod
     def from_event_source_mapping_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         event_source_mapping_id: builtins.str,
-    ) -> IEventSourceMapping:
+    ) -> "IEventSourceMapping":
         '''Import an event source into this stack from its event source id.
 
         :param scope: -
@@ -31159,7 +31217,7 @@ class EventSourceMapping(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument event_source_mapping_id", value=event_source_mapping_id, expected_type=type_hints["event_source_mapping_id"])
-        return typing.cast(IEventSourceMapping, jsii.sinvoke(cls, "fromEventSourceMappingId", [scope, id, event_source_mapping_id]))
+        return typing.cast("IEventSourceMapping", jsii.sinvoke(cls, "fromEventSourceMappingId", [scope, id, event_source_mapping_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -31181,9 +31239,9 @@ class EventSourceMapping(
 
     @builtins.property
     @jsii.member(jsii_name="eventSourceMappingRef")
-    def event_source_mapping_ref(self) -> _EventSourceMappingReference_943d80a5:
+    def event_source_mapping_ref(self) -> "_EventSourceMappingReference_943d80a5":
         '''A reference to a EventSourceMapping resource.'''
-        return typing.cast(_EventSourceMappingReference_943d80a5, jsii.get(self, "eventSourceMappingRef"))
+        return typing.cast("_EventSourceMappingReference_943d80a5", jsii.get(self, "eventSourceMappingRef"))
 
 
 @jsii.implements(IFunction, _IClientVpnConnectionHandler_715171c2)
@@ -31194,7 +31252,7 @@ class FunctionBase(
 ):
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -31224,7 +31282,7 @@ class FunctionBase(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="addEventSource")
-    def add_event_source(self, source: IEventSource) -> None:
+    def add_event_source(self, source: "IEventSource") -> None:
         '''Adds an event source to this function.
 
         Event sources are implemented in the aws-cdk-lib/aws-lambda-event-sources module.
@@ -31250,27 +31308,27 @@ class FunctionBase(
         bisect_batch_on_error: typing.Optional[builtins.bool] = None,
         enabled: typing.Optional[builtins.bool] = None,
         event_source_arn: typing.Optional[builtins.str] = None,
-        filter_encryption: typing.Optional[_IKey_5f11635f] = None,
+        filter_encryption: typing.Optional["_IKey_5f11635f"] = None,
         filters: typing.Optional[typing.Sequence[typing.Mapping[builtins.str, typing.Any]]] = None,
         kafka_bootstrap_servers: typing.Optional[typing.Sequence[builtins.str]] = None,
         kafka_consumer_group_id: typing.Optional[builtins.str] = None,
         kafka_topic: typing.Optional[builtins.str] = None,
-        max_batching_window: typing.Optional[_Duration_4839e8c3] = None,
+        max_batching_window: typing.Optional["_Duration_4839e8c3"] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
-        max_record_age: typing.Optional[_Duration_4839e8c3] = None,
-        metrics_config: typing.Optional[typing.Union[MetricsConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        on_failure: typing.Optional[IEventSourceDlq] = None,
+        max_record_age: typing.Optional["_Duration_4839e8c3"] = None,
+        metrics_config: typing.Optional[typing.Union["MetricsConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        on_failure: typing.Optional["IEventSourceDlq"] = None,
         parallelization_factor: typing.Optional[jsii.Number] = None,
-        provisioned_poller_config: typing.Optional[typing.Union[ProvisionedPollerConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        provisioned_poller_config: typing.Optional[typing.Union["ProvisionedPollerConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         report_batch_item_failures: typing.Optional[builtins.bool] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-        schema_registry_config: typing.Optional[ISchemaRegistry] = None,
-        source_access_configurations: typing.Optional[typing.Sequence[typing.Union[SourceAccessConfiguration, typing.Dict[builtins.str, typing.Any]]]] = None,
-        starting_position: typing.Optional[StartingPosition] = None,
+        schema_registry_config: typing.Optional["ISchemaRegistry"] = None,
+        source_access_configurations: typing.Optional[typing.Sequence[typing.Union["SourceAccessConfiguration", typing.Dict[builtins.str, typing.Any]]]] = None,
+        starting_position: typing.Optional["StartingPosition"] = None,
         starting_position_timestamp: typing.Optional[jsii.Number] = None,
         support_s3_on_failure_destination: typing.Optional[builtins.bool] = None,
-        tumbling_window: typing.Optional[_Duration_4839e8c3] = None,
-    ) -> EventSourceMapping:
+        tumbling_window: typing.Optional["_Duration_4839e8c3"] = None,
+    ) -> "EventSourceMapping":
         '''Adds an event source that maps to this AWS Lambda function.
 
         :param id: -
@@ -31329,15 +31387,15 @@ class FunctionBase(
             tumbling_window=tumbling_window,
         )
 
-        return typing.cast(EventSourceMapping, jsii.invoke(self, "addEventSourceMapping", [id, options]))
+        return typing.cast("EventSourceMapping", jsii.invoke(self, "addEventSourceMapping", [id, options]))
 
     @jsii.member(jsii_name="addFunctionUrl")
     def add_function_url(
         self,
         *,
-        auth_type: typing.Optional[FunctionUrlAuthType] = None,
-        cors: typing.Optional[typing.Union[FunctionUrlCorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        invoke_mode: typing.Optional[InvokeMode] = None,
+        auth_type: typing.Optional["FunctionUrlAuthType"] = None,
+        cors: typing.Optional[typing.Union["FunctionUrlCorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        invoke_mode: typing.Optional["InvokeMode"] = None,
     ) -> "FunctionUrl":
         '''Adds a url to this lambda function.
 
@@ -31356,13 +31414,13 @@ class FunctionBase(
         self,
         id: builtins.str,
         *,
-        principal: _IPrincipal_539bb2fd,
+        principal: "_IPrincipal_539bb2fd",
         action: typing.Optional[builtins.str] = None,
         event_source_token: typing.Optional[builtins.str] = None,
-        function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+        function_url_auth_type: typing.Optional["FunctionUrlAuthType"] = None,
         invoked_via_function_url: typing.Optional[builtins.bool] = None,
         organization_id: typing.Optional[builtins.str] = None,
-        scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         source_account: typing.Optional[builtins.str] = None,
         source_arn: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -31399,7 +31457,7 @@ class FunctionBase(
         return typing.cast(None, jsii.invoke(self, "addPermission", [id, permission]))
 
     @jsii.member(jsii_name="addToRolePolicy")
-    def add_to_role_policy(self, statement: _PolicyStatement_0fe33853) -> None:
+    def add_to_role_policy(self, statement: "_PolicyStatement_0fe33853") -> None:
         '''Adds a statement to the IAM role assumed by the instance.
 
         :param statement: -
@@ -31413,9 +31471,9 @@ class FunctionBase(
     def configure_async_invoke(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Configures options for asynchronous invocation.
@@ -31437,7 +31495,7 @@ class FunctionBase(
     @jsii.member(jsii_name="considerWarningOnInvokeFunctionPermissions")
     def consider_warning_on_invoke_function_permissions(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         action: builtins.str,
     ) -> None:
         '''A warning will be added to functions under the following conditions: - permissions that include ``lambda:InvokeFunction`` are added to the unqualified function.
@@ -31457,7 +31515,7 @@ class FunctionBase(
         return typing.cast(None, jsii.invoke(self, "considerWarningOnInvokeFunctionPermissions", [scope, action]))
 
     @jsii.member(jsii_name="grantInvoke")
-    def grant_invoke(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_invoke(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda.
 
         :param grantee: -
@@ -31465,13 +31523,13 @@ class FunctionBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d5e7bbbbaa74ef04efc500a0fd077372ee74e3822315b427c1445ebd0fbaa665)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvoke", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvoke", [grantee]))
 
     @jsii.member(jsii_name="grantInvokeCompositePrincipal")
     def grant_invoke_composite_principal(
         self,
-        composite_principal: _CompositePrincipal_c2fe180a,
-    ) -> typing.List[_Grant_a7ae64f8]:
+        composite_principal: "_CompositePrincipal_c2fe180a",
+    ) -> typing.List["_Grant_a7ae64f8"]:
         '''Grant multiple principals the ability to invoke this Lambda via CompositePrincipal.
 
         :param composite_principal: -
@@ -31479,13 +31537,13 @@ class FunctionBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a1dca9bb3e9980db72592dc2b0a89c1ab8651c48bbd2501d14095c2d16886ea5)
             check_type(argname="argument composite_principal", value=composite_principal, expected_type=type_hints["composite_principal"])
-        return typing.cast(typing.List[_Grant_a7ae64f8], jsii.invoke(self, "grantInvokeCompositePrincipal", [composite_principal]))
+        return typing.cast(typing.List["_Grant_a7ae64f8"], jsii.invoke(self, "grantInvokeCompositePrincipal", [composite_principal]))
 
     @jsii.member(jsii_name="grantInvokeLatestVersion")
     def grant_invoke_latest_version(
         self,
-        grantee: _IGrantable_71c4f5de,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke the $LATEST version or unqualified version of this Lambda.
 
         :param grantee: -
@@ -31493,10 +31551,10 @@ class FunctionBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a2135bba55f75cbc48f2d5dbe92ea64da9279fb078416de1e0dca40dd8a7064c)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvokeLatestVersion", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvokeLatestVersion", [grantee]))
 
     @jsii.member(jsii_name="grantInvokeUrl")
-    def grant_invoke_url(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_invoke_url(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda Function URL.
 
         :param grantee: -
@@ -31504,14 +31562,14 @@ class FunctionBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6219a5c582aa3d967fbadd2667576ec16c8db45beb6f762433b4390a8f08e074)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvokeUrl", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvokeUrl", [grantee]))
 
     @jsii.member(jsii_name="grantInvokeVersion")
     def grant_invoke_version(
         self,
-        grantee: _IGrantable_71c4f5de,
-        version: IVersion,
-    ) -> _Grant_a7ae64f8:
+        grantee: "_IGrantable_71c4f5de",
+        version: "IVersion",
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke the given version of this Lambda.
 
         :param grantee: -
@@ -31521,7 +31579,7 @@ class FunctionBase(
             type_hints = typing.get_type_hints(_typecheckingstub__36e4d0f502fee64a697bcb1dbb3f595ea114baca6f1ccd56b4dba1b8a7dfa965)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument version", value=version, expected_type=type_hints["version"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvokeVersion", [grantee, version]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvokeVersion", [grantee, version]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -31533,14 +31591,14 @@ class FunctionBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Function.
 
         :param metric_name: -
@@ -31575,7 +31633,7 @@ class FunctionBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricDuration")
     def metric_duration(
@@ -31586,14 +31644,14 @@ class FunctionBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''How long execution of this Lambda takes.
 
         Average over 5 minutes
@@ -31626,7 +31684,7 @@ class FunctionBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricDuration", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDuration", [props]))
 
     @jsii.member(jsii_name="metricErrors")
     def metric_errors(
@@ -31637,14 +31695,14 @@ class FunctionBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''How many invocations of this Lambda fail.
 
         Sum over 5 minutes
@@ -31677,7 +31735,7 @@ class FunctionBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricErrors", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricErrors", [props]))
 
     @jsii.member(jsii_name="metricInvocations")
     def metric_invocations(
@@ -31688,14 +31746,14 @@ class FunctionBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''How often this Lambda is invoked.
 
         Sum over 5 minutes
@@ -31728,7 +31786,7 @@ class FunctionBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricInvocations", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricInvocations", [props]))
 
     @jsii.member(jsii_name="metricThrottles")
     def metric_throttles(
@@ -31739,14 +31797,14 @@ class FunctionBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''How often this Lambda is throttled.
 
         Sum over 5 minutes
@@ -31779,12 +31837,12 @@ class FunctionBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricThrottles", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricThrottles", [props]))
 
     @jsii.member(jsii_name="warnInvokeFunctionPermissions")
     def _warn_invoke_function_permissions(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
     ) -> None:
         '''
         :param scope: -
@@ -31797,7 +31855,7 @@ class FunctionBase(
     @builtins.property
     @jsii.member(jsii_name="architecture")
     @abc.abstractmethod
-    def architecture(self) -> Architecture:
+    def architecture(self) -> "Architecture":
         '''The architecture of this Lambda Function.'''
         ...
 
@@ -31814,12 +31872,12 @@ class FunctionBase(
 
     @builtins.property
     @jsii.member(jsii_name="connections")
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''Access the Connections object.
 
         Will fail if not a VPC-enabled Lambda Function
         '''
-        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
     @jsii.member(jsii_name="functionArn")
@@ -31837,14 +31895,14 @@ class FunctionBase(
 
     @builtins.property
     @jsii.member(jsii_name="functionRef")
-    def function_ref(self) -> _FunctionReference_82f2efe9:
+    def function_ref(self) -> "_FunctionReference_82f2efe9":
         '''A reference to a Function resource.'''
-        return typing.cast(_FunctionReference_82f2efe9, jsii.get(self, "functionRef"))
+        return typing.cast("_FunctionReference_82f2efe9", jsii.get(self, "functionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
     @abc.abstractmethod
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The principal this Lambda Function is running as.'''
         ...
 
@@ -31859,7 +31917,7 @@ class FunctionBase(
 
     @builtins.property
     @jsii.member(jsii_name="latestVersion")
-    def latest_version(self) -> IVersion:
+    def latest_version(self) -> "IVersion":
         '''The ``$LATEST`` version of this function.
 
         Note that this is reference to a non-specific AWS Lambda version, which
@@ -31869,12 +31927,12 @@ class FunctionBase(
         To obtain a reference to an explicit version which references the current
         function configuration, use ``lambdaFunction.currentVersion`` instead.
         '''
-        return typing.cast(IVersion, jsii.get(self, "latestVersion"))
+        return typing.cast("IVersion", jsii.get(self, "latestVersion"))
 
     @builtins.property
     @jsii.member(jsii_name="permissionsNode")
     @abc.abstractmethod
-    def permissions_node(self) -> _constructs_77d1e7e8.Node:
+    def permissions_node(self) -> "_constructs_77d1e7e8.Node":
         '''The construct node where permissions are attached.'''
         ...
 
@@ -31888,7 +31946,7 @@ class FunctionBase(
     @builtins.property
     @jsii.member(jsii_name="role")
     @abc.abstractmethod
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role associated with this function.
 
         Undefined if the function was imported without a role.
@@ -31898,7 +31956,7 @@ class FunctionBase(
     @builtins.property
     @jsii.member(jsii_name="tenancyConfig")
     @abc.abstractmethod
-    def tenancy_config(self) -> typing.Optional[TenancyConfig]:
+    def tenancy_config(self) -> typing.Optional["TenancyConfig"]:
         '''The tenancy configuration for this function.'''
         ...
 
@@ -31909,9 +31967,9 @@ class _FunctionBaseProxy(
 ):
     @builtins.property
     @jsii.member(jsii_name="architecture")
-    def architecture(self) -> Architecture:
+    def architecture(self) -> "Architecture":
         '''The architecture of this Lambda Function.'''
-        return typing.cast(Architecture, jsii.get(self, "architecture"))
+        return typing.cast("Architecture", jsii.get(self, "architecture"))
 
     @builtins.property
     @jsii.member(jsii_name="canCreatePermissions")
@@ -31937,15 +31995,15 @@ class _FunctionBaseProxy(
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The principal this Lambda Function is running as.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
     @builtins.property
     @jsii.member(jsii_name="permissionsNode")
-    def permissions_node(self) -> _constructs_77d1e7e8.Node:
+    def permissions_node(self) -> "_constructs_77d1e7e8.Node":
         '''The construct node where permissions are attached.'''
-        return typing.cast(_constructs_77d1e7e8.Node, jsii.get(self, "permissionsNode"))
+        return typing.cast("_constructs_77d1e7e8.Node", jsii.get(self, "permissionsNode"))
 
     @builtins.property
     @jsii.member(jsii_name="resourceArnsForGrantInvoke")
@@ -31955,18 +32013,18 @@ class _FunctionBaseProxy(
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role associated with this function.
 
         Undefined if the function was imported without a role.
         '''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
     @builtins.property
     @jsii.member(jsii_name="tenancyConfig")
-    def tenancy_config(self) -> typing.Optional[TenancyConfig]:
+    def tenancy_config(self) -> typing.Optional["TenancyConfig"]:
         '''The tenancy configuration for this function.'''
-        return typing.cast(typing.Optional[TenancyConfig], jsii.get(self, "tenancyConfig"))
+        return typing.cast(typing.Optional["TenancyConfig"], jsii.get(self, "tenancyConfig"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, FunctionBase).__jsii_proxy_class__ = lambda : _FunctionBaseProxy
@@ -32002,13 +32060,13 @@ class FunctionUrl(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        function: IFunction,
-        auth_type: typing.Optional[FunctionUrlAuthType] = None,
-        cors: typing.Optional[typing.Union[FunctionUrlCorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        invoke_mode: typing.Optional[InvokeMode] = None,
+        function: "IFunction",
+        auth_type: typing.Optional["FunctionUrlAuthType"] = None,
+        cors: typing.Optional[typing.Union["FunctionUrlCorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        invoke_mode: typing.Optional["InvokeMode"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -32029,7 +32087,7 @@ class FunctionUrl(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="grantInvokeUrl")
-    def grant_invoke_url(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_invoke_url(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda Function URL.
 
         :param grantee: -
@@ -32037,7 +32095,7 @@ class FunctionUrl(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0752ae689fc0d34797f94bffa8ae23ab1779a717afff0d868f069e474b5ac772)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantInvokeUrl", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvokeUrl", [grantee]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -32047,9 +32105,9 @@ class FunctionUrl(
 
     @builtins.property
     @jsii.member(jsii_name="authType")
-    def auth_type(self) -> FunctionUrlAuthType:
+    def auth_type(self) -> "FunctionUrlAuthType":
         '''The authentication type used for this Function URL.'''
-        return typing.cast(FunctionUrlAuthType, jsii.get(self, "authType"))
+        return typing.cast("FunctionUrlAuthType", jsii.get(self, "authType"))
 
     @builtins.property
     @jsii.member(jsii_name="functionArn")
@@ -32077,7 +32135,7 @@ class IAlias(IFunction, _IAliasRef_ff1cf51c, typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="version")
-    def version(self) -> IVersion:
+    def version(self) -> "IVersion":
         '''The underlying Lambda function version.'''
         ...
 
@@ -32099,9 +32157,9 @@ class _IAliasProxy(
 
     @builtins.property
     @jsii.member(jsii_name="version")
-    def version(self) -> IVersion:
+    def version(self) -> "IVersion":
         '''The underlying Lambda function version.'''
-        return typing.cast(IVersion, jsii.get(self, "version"))
+        return typing.cast("IVersion", jsii.get(self, "version"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAlias).__jsii_proxy_class__ = lambda : _IAliasProxy
@@ -32114,7 +32172,7 @@ class QualifiedFunctionBase(
 ):
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -32147,9 +32205,9 @@ class QualifiedFunctionBase(
     def configure_async_invoke(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Configures options for asynchronous invocation.
@@ -32171,7 +32229,7 @@ class QualifiedFunctionBase(
     @jsii.member(jsii_name="considerWarningOnInvokeFunctionPermissions")
     def consider_warning_on_invoke_function_permissions(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
+        _scope: "_constructs_77d1e7e8.Construct",
         _action: builtins.str,
     ) -> None:
         '''A warning will be added to functions under the following conditions: - permissions that include ``lambda:InvokeFunction`` are added to the unqualified function.
@@ -32193,13 +32251,13 @@ class QualifiedFunctionBase(
     @builtins.property
     @jsii.member(jsii_name="lambda")
     @abc.abstractmethod
-    def lambda_(self) -> IFunction:
+    def lambda_(self) -> "IFunction":
         '''The underlying ``IFunction``.'''
         ...
 
     @builtins.property
     @jsii.member(jsii_name="latestVersion")
-    def latest_version(self) -> IVersion:
+    def latest_version(self) -> "IVersion":
         '''The ``$LATEST`` version of this function.
 
         Note that this is reference to a non-specific AWS Lambda version, which
@@ -32209,13 +32267,13 @@ class QualifiedFunctionBase(
         To obtain a reference to an explicit version which references the current
         function configuration, use ``lambdaFunction.currentVersion`` instead.
         '''
-        return typing.cast(IVersion, jsii.get(self, "latestVersion"))
+        return typing.cast("IVersion", jsii.get(self, "latestVersion"))
 
     @builtins.property
     @jsii.member(jsii_name="permissionsNode")
-    def permissions_node(self) -> _constructs_77d1e7e8.Node:
+    def permissions_node(self) -> "_constructs_77d1e7e8.Node":
         '''The construct node where permissions are attached.'''
-        return typing.cast(_constructs_77d1e7e8.Node, jsii.get(self, "permissionsNode"))
+        return typing.cast("_constructs_77d1e7e8.Node", jsii.get(self, "permissionsNode"))
 
     @builtins.property
     @jsii.member(jsii_name="qualifier")
@@ -32237,9 +32295,9 @@ class QualifiedFunctionBase(
 
     @builtins.property
     @jsii.member(jsii_name="tenancyConfig")
-    def tenancy_config(self) -> typing.Optional[TenancyConfig]:
+    def tenancy_config(self) -> typing.Optional["TenancyConfig"]:
         '''The tenancy configuration for this function.'''
-        return typing.cast(typing.Optional[TenancyConfig], jsii.get(self, "tenancyConfig"))
+        return typing.cast(typing.Optional["TenancyConfig"], jsii.get(self, "tenancyConfig"))
 
 
 class _QualifiedFunctionBaseProxy(
@@ -32248,9 +32306,9 @@ class _QualifiedFunctionBaseProxy(
 ):
     @builtins.property
     @jsii.member(jsii_name="lambda")
-    def lambda_(self) -> IFunction:
+    def lambda_(self) -> "IFunction":
         '''The underlying ``IFunction``.'''
-        return typing.cast(IFunction, jsii.get(self, "lambda"))
+        return typing.cast("IFunction", jsii.get(self, "lambda"))
 
     @builtins.property
     @jsii.member(jsii_name="qualifier")
@@ -32293,65 +32351,65 @@ class SingletonFunction(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         uuid: builtins.str,
         lambda_purpose: typing.Optional[builtins.str] = None,
-        code: Code,
+        code: "Code",
         handler: builtins.str,
-        runtime: Runtime,
-        adot_instrumentation: typing.Optional[typing.Union[AdotInstrumentationConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        runtime: "Runtime",
+        adot_instrumentation: typing.Optional[typing.Union["AdotInstrumentationConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         allow_all_ipv6_outbound: typing.Optional[builtins.bool] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         allow_public_subnet: typing.Optional[builtins.bool] = None,
         application_log_level: typing.Optional[builtins.str] = None,
-        application_log_level_v2: typing.Optional[ApplicationLogLevel] = None,
-        architecture: typing.Optional[Architecture] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
-        current_version_options: typing.Optional[typing.Union[VersionOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        application_log_level_v2: typing.Optional["ApplicationLogLevel"] = None,
+        architecture: typing.Optional["Architecture"] = None,
+        code_signing_config: typing.Optional["_ICodeSigningConfigRef_1d909622"] = None,
+        current_version_options: typing.Optional[typing.Union["VersionOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
-        dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
+        dead_letter_topic: typing.Optional["_ITopic_9eca4852"] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        durable_config: typing.Optional[typing.Union["DurableConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
-        events: typing.Optional[typing.Sequence[IEventSource]] = None,
-        filesystem: typing.Optional[FileSystem] = None,
+        environment_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
+        events: typing.Optional[typing.Sequence["IEventSource"]] = None,
+        filesystem: typing.Optional["FileSystem"] = None,
         function_name: typing.Optional[builtins.str] = None,
-        initial_policy: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
-        insights_version: typing.Optional[LambdaInsightsVersion] = None,
+        initial_policy: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
+        insights_version: typing.Optional["LambdaInsightsVersion"] = None,
         ipv6_allowed_for_dual_stack: typing.Optional[builtins.bool] = None,
-        layers: typing.Optional[typing.Sequence[ILayerVersion]] = None,
+        layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
-        logging_format: typing.Optional[LoggingFormat] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
-        log_retention_retry_options: typing.Optional[typing.Union[LogRetentionRetryOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        log_retention_role: typing.Optional[_IRole_235f5d8e] = None,
+        logging_format: typing.Optional["LoggingFormat"] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
+        log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        log_retention_role: typing.Optional["_IRole_235f5d8e"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
-        params_and_secrets: typing.Optional[ParamsAndSecretsLayerVersion] = None,
+        params_and_secrets: typing.Optional["ParamsAndSecretsLayerVersion"] = None,
         profiling: typing.Optional[builtins.bool] = None,
-        profiling_group: typing.Optional[_IProfilingGroup_0bba72c4] = None,
-        recursive_loop: typing.Optional[RecursiveLoop] = None,
+        profiling_group: typing.Optional["_IProfilingGroup_0bba72c4"] = None,
+        recursive_loop: typing.Optional["RecursiveLoop"] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        runtime_management_mode: typing.Optional[RuntimeManagementMode] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        snap_start: typing.Optional[SnapStartConf] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        runtime_management_mode: typing.Optional["RuntimeManagementMode"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        snap_start: typing.Optional["SnapStartConf"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
-        system_log_level_v2: typing.Optional[SystemLogLevel] = None,
-        tenancy_config: typing.Optional[TenancyConfig] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        tracing: typing.Optional[Tracing] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        system_log_level_v2: typing.Optional["SystemLogLevel"] = None,
+        tenancy_config: typing.Optional["TenancyConfig"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        tracing: typing.Optional["Tracing"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -32482,7 +32540,7 @@ class SingletonFunction(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="addDependency")
-    def add_dependency(self, *up: _constructs_77d1e7e8.IDependable) -> None:
+    def add_dependency(self, *up: "_constructs_77d1e7e8.IDependable") -> None:
         '''Using node.addDependency() does not work on this method as the underlying lambda function is modeled as a singleton across the stack. Use this method instead to declare dependencies.
 
         :param up: -
@@ -32517,7 +32575,7 @@ class SingletonFunction(
         return typing.cast("Function", jsii.invoke(self, "addEnvironment", [key, value, options]))
 
     @jsii.member(jsii_name="addLayers")
-    def add_layers(self, *layers: ILayerVersion) -> None:
+    def add_layers(self, *layers: "ILayerVersion") -> None:
         '''Adds one or more Lambda Layers to this Lambda function.
 
         :param layers: the layers to be added.
@@ -32562,13 +32620,13 @@ class SingletonFunction(
         self,
         name: builtins.str,
         *,
-        principal: _IPrincipal_539bb2fd,
+        principal: "_IPrincipal_539bb2fd",
         action: typing.Optional[builtins.str] = None,
         event_source_token: typing.Optional[builtins.str] = None,
-        function_url_auth_type: typing.Optional[FunctionUrlAuthType] = None,
+        function_url_auth_type: typing.Optional["FunctionUrlAuthType"] = None,
         invoked_via_function_url: typing.Optional[builtins.bool] = None,
         organization_id: typing.Optional[builtins.str] = None,
-        scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         source_account: typing.Optional[builtins.str] = None,
         source_arn: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -32603,7 +32661,7 @@ class SingletonFunction(
         return typing.cast(None, jsii.invoke(self, "addPermission", [name, permission]))
 
     @jsii.member(jsii_name="dependOn")
-    def depend_on(self, down: _constructs_77d1e7e8.IConstruct) -> None:
+    def depend_on(self, down: "_constructs_77d1e7e8.IConstruct") -> None:
         '''The SingletonFunction construct cannot be added as a dependency of another construct using node.addDependency(). Use this method instead to declare this as a dependency of another construct.
 
         :param down: -
@@ -32621,9 +32679,9 @@ class SingletonFunction(
 
     @builtins.property
     @jsii.member(jsii_name="architecture")
-    def architecture(self) -> Architecture:
+    def architecture(self) -> "Architecture":
         '''The architecture of this Lambda Function.'''
-        return typing.cast(Architecture, jsii.get(self, "architecture"))
+        return typing.cast("Architecture", jsii.get(self, "architecture"))
 
     @builtins.property
     @jsii.member(jsii_name="canCreatePermissions")
@@ -32637,14 +32695,14 @@ class SingletonFunction(
 
     @builtins.property
     @jsii.member(jsii_name="connections")
-    def connections(self) -> _Connections_0f31fce8:
+    def connections(self) -> "_Connections_0f31fce8":
         '''Access the Connections object.
 
         Will fail if not a VPC-enabled Lambda Function
 
         :inheritdoc: true
         '''
-        return typing.cast(_Connections_0f31fce8, jsii.get(self, "connections"))
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
     @jsii.member(jsii_name="constructName")
@@ -32679,9 +32737,9 @@ class SingletonFunction(
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The principal this Lambda Function is running as.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
     @builtins.property
     @jsii.member(jsii_name="isBoundToVpc")
@@ -32696,7 +32754,7 @@ class SingletonFunction(
 
     @builtins.property
     @jsii.member(jsii_name="logGroup")
-    def log_group(self) -> _ILogGroup_3c4fa718:
+    def log_group(self) -> "_ILogGroup_3c4fa718":
         '''The LogGroup where the Lambda function's logs are made available.
 
         If either ``logRetention`` is set or this property is called, a CloudFormation custom resource is added to the stack that
@@ -32706,13 +32764,13 @@ class SingletonFunction(
         Further, if the log group already exists and the ``logRetention`` is not set, the custom resource will reset the log retention
         to never expire even if it was configured with a different value.
         '''
-        return typing.cast(_ILogGroup_3c4fa718, jsii.get(self, "logGroup"))
+        return typing.cast("_ILogGroup_3c4fa718", jsii.get(self, "logGroup"))
 
     @builtins.property
     @jsii.member(jsii_name="permissionsNode")
-    def permissions_node(self) -> _constructs_77d1e7e8.Node:
+    def permissions_node(self) -> "_constructs_77d1e7e8.Node":
         '''The construct node where permissions are attached.'''
-        return typing.cast(_constructs_77d1e7e8.Node, jsii.get(self, "permissionsNode"))
+        return typing.cast("_constructs_77d1e7e8.Node", jsii.get(self, "permissionsNode"))
 
     @builtins.property
     @jsii.member(jsii_name="resourceArnsForGrantInvoke")
@@ -32722,24 +32780,24 @@ class SingletonFunction(
 
     @builtins.property
     @jsii.member(jsii_name="runtime")
-    def runtime(self) -> Runtime:
+    def runtime(self) -> "Runtime":
         '''The runtime environment for the Lambda function.'''
-        return typing.cast(Runtime, jsii.get(self, "runtime"))
+        return typing.cast("Runtime", jsii.get(self, "runtime"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role associated with this function.
 
         Undefined if the function was imported without a role.
         '''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
     @builtins.property
     @jsii.member(jsii_name="tenancyConfig")
-    def tenancy_config(self) -> typing.Optional[TenancyConfig]:
+    def tenancy_config(self) -> typing.Optional["TenancyConfig"]:
         '''The tenancy configuration for this function.'''
-        return typing.cast(typing.Optional[TenancyConfig], jsii.get(self, "tenancyConfig"))
+        return typing.cast(typing.Optional["TenancyConfig"], jsii.get(self, "tenancyConfig"))
 
 
 @jsii.implements(IVersion)
@@ -32789,19 +32847,19 @@ class Version(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        lambda_: IFunction,
+        lambda_: "IFunction",
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         max_execution_environments: typing.Optional[jsii.Number] = None,
         min_execution_environments: typing.Optional[jsii.Number] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -32843,10 +32901,10 @@ class Version(
     @builtins.classmethod
     def from_version_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         version_arn: builtins.str,
-    ) -> IVersion:
+    ) -> "IVersion":
         '''Construct a Version object from a Version ARN.
 
         :param scope: The cdk scope creating this resource.
@@ -32858,18 +32916,18 @@ class Version(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument version_arn", value=version_arn, expected_type=type_hints["version_arn"])
-        return typing.cast(IVersion, jsii.sinvoke(cls, "fromVersionArn", [scope, id, version_arn]))
+        return typing.cast("IVersion", jsii.sinvoke(cls, "fromVersionArn", [scope, id, version_arn]))
 
     @jsii.member(jsii_name="fromVersionAttributes")
     @builtins.classmethod
     def from_version_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        lambda_: IFunction,
+        lambda_: "IFunction",
         version: builtins.str,
-    ) -> IVersion:
+    ) -> "IVersion":
         '''
         :param scope: -
         :param id: -
@@ -32882,19 +32940,19 @@ class Version(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         attrs = VersionAttributes(lambda_=lambda_, version=version)
 
-        return typing.cast(IVersion, jsii.sinvoke(cls, "fromVersionAttributes", [scope, id, attrs]))
+        return typing.cast("IVersion", jsii.sinvoke(cls, "fromVersionAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addAlias")
     def add_alias(
         self,
         alias_name: builtins.str,
         *,
-        additional_versions: typing.Optional[typing.Sequence[typing.Union[VersionWeight, typing.Dict[builtins.str, typing.Any]]]] = None,
+        additional_versions: typing.Optional[typing.Sequence[typing.Union["VersionWeight", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> "Alias":
         '''(deprecated) Defines an alias for this version.
@@ -32937,14 +32995,14 @@ class Version(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Function.
 
         :param metric_name: -
@@ -32979,7 +33037,7 @@ class Version(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -32989,9 +33047,9 @@ class Version(
 
     @builtins.property
     @jsii.member(jsii_name="architecture")
-    def architecture(self) -> Architecture:
+    def architecture(self) -> "Architecture":
         '''The architecture of this Lambda Function.'''
-        return typing.cast(Architecture, jsii.get(self, "architecture"))
+        return typing.cast("Architecture", jsii.get(self, "architecture"))
 
     @builtins.property
     @jsii.member(jsii_name="canCreatePermissions")
@@ -33023,15 +33081,15 @@ class Version(
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The principal this Lambda Function is running as.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
     @builtins.property
     @jsii.member(jsii_name="lambda")
-    def lambda_(self) -> IFunction:
+    def lambda_(self) -> "IFunction":
         '''The underlying ``IFunction``.'''
-        return typing.cast(IFunction, jsii.get(self, "lambda"))
+        return typing.cast("IFunction", jsii.get(self, "lambda"))
 
     @builtins.property
     @jsii.member(jsii_name="qualifier")
@@ -33050,18 +33108,18 @@ class Version(
 
     @builtins.property
     @jsii.member(jsii_name="versionRef")
-    def version_ref(self) -> _VersionReference_91666182:
+    def version_ref(self) -> "_VersionReference_91666182":
         '''A reference to a Version resource.'''
-        return typing.cast(_VersionReference_91666182, jsii.get(self, "versionRef"))
+        return typing.cast("_VersionReference_91666182", jsii.get(self, "versionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role associated with this function.
 
         Undefined if the function was imported without a role.
         '''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
 
 @jsii.implements(IAlias)
@@ -33097,17 +33155,17 @@ class Alias(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         alias_name: builtins.str,
-        version: IVersion,
-        additional_versions: typing.Optional[typing.Sequence[typing.Union[VersionWeight, typing.Dict[builtins.str, typing.Any]]]] = None,
+        version: "IVersion",
+        additional_versions: typing.Optional[typing.Sequence[typing.Union["VersionWeight", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -33145,12 +33203,12 @@ class Alias(
     @builtins.classmethod
     def from_alias_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         alias_name: builtins.str,
-        alias_version: IVersion,
-    ) -> IAlias:
+        alias_version: "IVersion",
+    ) -> "IAlias":
         '''
         :param scope: -
         :param id: -
@@ -33163,7 +33221,7 @@ class Alias(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         attrs = AliasAttributes(alias_name=alias_name, alias_version=alias_version)
 
-        return typing.cast(IAlias, jsii.sinvoke(cls, "fromAliasAttributes", [scope, id, attrs]))
+        return typing.cast("IAlias", jsii.sinvoke(cls, "fromAliasAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addAutoScaling")
     def add_auto_scaling(
@@ -33171,7 +33229,7 @@ class Alias(
         *,
         max_capacity: jsii.Number,
         min_capacity: typing.Optional[jsii.Number] = None,
-    ) -> IScalableFunctionAttribute:
+    ) -> "IScalableFunctionAttribute":
         '''Configure provisioned concurrency autoscaling on a function alias.
 
         Returns a scalable attribute that can call
@@ -33184,7 +33242,7 @@ class Alias(
             max_capacity=max_capacity, min_capacity=min_capacity
         )
 
-        return typing.cast(IScalableFunctionAttribute, jsii.invoke(self, "addAutoScaling", [options]))
+        return typing.cast("IScalableFunctionAttribute", jsii.invoke(self, "addAutoScaling", [options]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -33196,14 +33254,14 @@ class Alias(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Function.
 
         :param metric_name: -
@@ -33238,7 +33296,7 @@ class Alias(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -33257,15 +33315,15 @@ class Alias(
 
     @builtins.property
     @jsii.member(jsii_name="aliasRef")
-    def alias_ref(self) -> _AliasReference_de21ecaa:
+    def alias_ref(self) -> "_AliasReference_de21ecaa":
         '''A reference to a Alias resource.'''
-        return typing.cast(_AliasReference_de21ecaa, jsii.get(self, "aliasRef"))
+        return typing.cast("_AliasReference_de21ecaa", jsii.get(self, "aliasRef"))
 
     @builtins.property
     @jsii.member(jsii_name="architecture")
-    def architecture(self) -> Architecture:
+    def architecture(self) -> "Architecture":
         '''The architecture of this Lambda Function.'''
-        return typing.cast(Architecture, jsii.get(self, "architecture"))
+        return typing.cast("Architecture", jsii.get(self, "architecture"))
 
     @builtins.property
     @jsii.member(jsii_name="canCreatePermissions")
@@ -33299,15 +33357,15 @@ class Alias(
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The principal this Lambda Function is running as.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
     @builtins.property
     @jsii.member(jsii_name="lambda")
-    def lambda_(self) -> IFunction:
+    def lambda_(self) -> "IFunction":
         '''The underlying ``IFunction``.'''
-        return typing.cast(IFunction, jsii.get(self, "lambda"))
+        return typing.cast("IFunction", jsii.get(self, "lambda"))
 
     @builtins.property
     @jsii.member(jsii_name="qualifier")
@@ -33320,18 +33378,18 @@ class Alias(
 
     @builtins.property
     @jsii.member(jsii_name="version")
-    def version(self) -> IVersion:
+    def version(self) -> "IVersion":
         '''The underlying Lambda function version.'''
-        return typing.cast(IVersion, jsii.get(self, "version"))
+        return typing.cast("IVersion", jsii.get(self, "version"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role associated with this function.
 
         Undefined if the function was imported without a role.
         '''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
 
 class Function(
@@ -33369,63 +33427,63 @@ class Function(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        code: Code,
+        code: "Code",
         handler: builtins.str,
-        runtime: Runtime,
-        adot_instrumentation: typing.Optional[typing.Union[AdotInstrumentationConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        runtime: "Runtime",
+        adot_instrumentation: typing.Optional[typing.Union["AdotInstrumentationConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         allow_all_ipv6_outbound: typing.Optional[builtins.bool] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         allow_public_subnet: typing.Optional[builtins.bool] = None,
         application_log_level: typing.Optional[builtins.str] = None,
-        application_log_level_v2: typing.Optional[ApplicationLogLevel] = None,
-        architecture: typing.Optional[Architecture] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
-        current_version_options: typing.Optional[typing.Union[VersionOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        application_log_level_v2: typing.Optional["ApplicationLogLevel"] = None,
+        architecture: typing.Optional["Architecture"] = None,
+        code_signing_config: typing.Optional["_ICodeSigningConfigRef_1d909622"] = None,
+        current_version_options: typing.Optional[typing.Union["VersionOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
-        dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
+        dead_letter_topic: typing.Optional["_ITopic_9eca4852"] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        durable_config: typing.Optional[typing.Union["DurableConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
-        events: typing.Optional[typing.Sequence[IEventSource]] = None,
-        filesystem: typing.Optional[FileSystem] = None,
+        environment_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
+        events: typing.Optional[typing.Sequence["IEventSource"]] = None,
+        filesystem: typing.Optional["FileSystem"] = None,
         function_name: typing.Optional[builtins.str] = None,
-        initial_policy: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
-        insights_version: typing.Optional[LambdaInsightsVersion] = None,
+        initial_policy: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
+        insights_version: typing.Optional["LambdaInsightsVersion"] = None,
         ipv6_allowed_for_dual_stack: typing.Optional[builtins.bool] = None,
-        layers: typing.Optional[typing.Sequence[ILayerVersion]] = None,
+        layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
-        logging_format: typing.Optional[LoggingFormat] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
-        log_retention_retry_options: typing.Optional[typing.Union[LogRetentionRetryOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        log_retention_role: typing.Optional[_IRole_235f5d8e] = None,
+        logging_format: typing.Optional["LoggingFormat"] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
+        log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        log_retention_role: typing.Optional["_IRole_235f5d8e"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
-        params_and_secrets: typing.Optional[ParamsAndSecretsLayerVersion] = None,
+        params_and_secrets: typing.Optional["ParamsAndSecretsLayerVersion"] = None,
         profiling: typing.Optional[builtins.bool] = None,
-        profiling_group: typing.Optional[_IProfilingGroup_0bba72c4] = None,
-        recursive_loop: typing.Optional[RecursiveLoop] = None,
+        profiling_group: typing.Optional["_IProfilingGroup_0bba72c4"] = None,
+        recursive_loop: typing.Optional["RecursiveLoop"] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        runtime_management_mode: typing.Optional[RuntimeManagementMode] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        snap_start: typing.Optional[SnapStartConf] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        runtime_management_mode: typing.Optional["RuntimeManagementMode"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        snap_start: typing.Optional["SnapStartConf"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
-        system_log_level_v2: typing.Optional[SystemLogLevel] = None,
-        tenancy_config: typing.Optional[TenancyConfig] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        tracing: typing.Optional[Tracing] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        system_log_level_v2: typing.Optional["SystemLogLevel"] = None,
+        tenancy_config: typing.Optional["TenancyConfig"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        tracing: typing.Optional["Tracing"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -33575,10 +33633,10 @@ class Function(
     @builtins.classmethod
     def from_function_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         function_arn: builtins.str,
-    ) -> IFunction:
+    ) -> "IFunction":
         '''Import a lambda function into the CDK using its ARN.
 
         For ``Function.addPermissions()`` to work on this imported lambda, make sure that is
@@ -33593,23 +33651,23 @@ class Function(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument function_arn", value=function_arn, expected_type=type_hints["function_arn"])
-        return typing.cast(IFunction, jsii.sinvoke(cls, "fromFunctionArn", [scope, id, function_arn]))
+        return typing.cast("IFunction", jsii.sinvoke(cls, "fromFunctionArn", [scope, id, function_arn]))
 
     @jsii.member(jsii_name="fromFunctionAttributes")
     @builtins.classmethod
     def from_function_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         function_arn: builtins.str,
-        architecture: typing.Optional[Architecture] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        architecture: typing.Optional["Architecture"] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         same_environment: typing.Optional[builtins.bool] = None,
-        security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
+        security_group: typing.Optional["_ISecurityGroup_acf8a799"] = None,
         skip_permissions: typing.Optional[builtins.bool] = None,
-        tenancy_config: typing.Optional[TenancyConfig] = None,
-    ) -> IFunction:
+        tenancy_config: typing.Optional["TenancyConfig"] = None,
+    ) -> "IFunction":
         '''Creates a Lambda function object which represents a function not defined within this stack.
 
         For ``Function.addPermissions()`` to work on this imported lambda, set the sameEnvironment property to true
@@ -33639,16 +33697,16 @@ class Function(
             tenancy_config=tenancy_config,
         )
 
-        return typing.cast(IFunction, jsii.sinvoke(cls, "fromFunctionAttributes", [scope, id, attrs]))
+        return typing.cast("IFunction", jsii.sinvoke(cls, "fromFunctionAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromFunctionName")
     @builtins.classmethod
     def from_function_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         function_name: builtins.str,
-    ) -> IFunction:
+    ) -> "IFunction":
         '''Import a lambda function into the CDK using its name.
 
         :param scope: -
@@ -33660,7 +33718,7 @@ class Function(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument function_name", value=function_name, expected_type=type_hints["function_name"])
-        return typing.cast(IFunction, jsii.sinvoke(cls, "fromFunctionName", [scope, id, function_name]))
+        return typing.cast("IFunction", jsii.sinvoke(cls, "fromFunctionName", [scope, id, function_name]))
 
     @jsii.member(jsii_name="metricAll")
     @builtins.classmethod
@@ -33673,14 +33731,14 @@ class Function(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Return the given named metric for this Lambda.
 
         :param metric_name: -
@@ -33715,7 +33773,7 @@ class Function(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metricAll", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.sinvoke(cls, "metricAll", [metric_name, props]))
 
     @jsii.member(jsii_name="metricAllConcurrentExecutions")
     @builtins.classmethod
@@ -33727,14 +33785,14 @@ class Function(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of concurrent executions across all Lambdas.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -33767,7 +33825,7 @@ class Function(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metricAllConcurrentExecutions", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.sinvoke(cls, "metricAllConcurrentExecutions", [props]))
 
     @jsii.member(jsii_name="metricAllDuration")
     @builtins.classmethod
@@ -33779,14 +33837,14 @@ class Function(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the Duration executing all Lambdas.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -33819,7 +33877,7 @@ class Function(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metricAllDuration", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.sinvoke(cls, "metricAllDuration", [props]))
 
     @jsii.member(jsii_name="metricAllErrors")
     @builtins.classmethod
@@ -33831,14 +33889,14 @@ class Function(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of Errors executing all Lambdas.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -33871,7 +33929,7 @@ class Function(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metricAllErrors", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.sinvoke(cls, "metricAllErrors", [props]))
 
     @jsii.member(jsii_name="metricAllInvocations")
     @builtins.classmethod
@@ -33883,14 +33941,14 @@ class Function(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of invocations of all Lambdas.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -33923,7 +33981,7 @@ class Function(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metricAllInvocations", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.sinvoke(cls, "metricAllInvocations", [props]))
 
     @jsii.member(jsii_name="metricAllThrottles")
     @builtins.classmethod
@@ -33935,14 +33993,14 @@ class Function(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of throttled invocations of all Lambdas.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -33975,7 +34033,7 @@ class Function(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metricAllThrottles", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.sinvoke(cls, "metricAllThrottles", [props]))
 
     @jsii.member(jsii_name="metricAllUnreservedConcurrentExecutions")
     @builtins.classmethod
@@ -33987,14 +34045,14 @@ class Function(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of unreserved concurrent executions across all Lambdas.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -34027,21 +34085,21 @@ class Function(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.sinvoke(cls, "metricAllUnreservedConcurrentExecutions", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.sinvoke(cls, "metricAllUnreservedConcurrentExecutions", [props]))
 
     @jsii.member(jsii_name="addAlias")
     def add_alias(
         self,
         alias_name: builtins.str,
         *,
-        additional_versions: typing.Optional[typing.Sequence[typing.Union[VersionWeight, typing.Dict[builtins.str, typing.Any]]]] = None,
+        additional_versions: typing.Optional[typing.Sequence[typing.Union["VersionWeight", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-    ) -> Alias:
+    ) -> "Alias":
         '''Defines an alias for this function.
 
         The alias will automatically be updated to point to the latest version of
@@ -34081,7 +34139,7 @@ class Function(
             retry_attempts=retry_attempts,
         )
 
-        return typing.cast(Alias, jsii.invoke(self, "addAlias", [alias_name, options]))
+        return typing.cast("Alias", jsii.invoke(self, "addAlias", [alias_name, options]))
 
     @jsii.member(jsii_name="addEnvironment")
     def add_environment(
@@ -34108,7 +34166,7 @@ class Function(
         return typing.cast("Function", jsii.invoke(self, "addEnvironment", [key, value, options]))
 
     @jsii.member(jsii_name="addLayers")
-    def add_layers(self, *layers: ILayerVersion) -> None:
+    def add_layers(self, *layers: "ILayerVersion") -> None:
         '''Adds one or more Lambda Layers to this Lambda function.
 
         :param layers: the layers to be added.
@@ -34154,9 +34212,9 @@ class Function(
 
     @builtins.property
     @jsii.member(jsii_name="architecture")
-    def architecture(self) -> Architecture:
+    def architecture(self) -> "Architecture":
         '''The architecture of this Lambda Function (this is an optional attribute and defaults to X86_64).'''
-        return typing.cast(Architecture, jsii.get(self, "architecture"))
+        return typing.cast("Architecture", jsii.get(self, "architecture"))
 
     @builtins.property
     @jsii.member(jsii_name="canCreatePermissions")
@@ -34170,13 +34228,13 @@ class Function(
 
     @builtins.property
     @jsii.member(jsii_name="currentVersion")
-    def current_version(self) -> Version:
+    def current_version(self) -> "Version":
         '''Returns a ``lambda.Version`` which represents the current version of this Lambda function. A new version will be created every time the function's configuration changes.
 
         You can specify options for this version using the ``currentVersionOptions``
         prop when initializing the ``lambda.Function``.
         '''
-        return typing.cast(Version, jsii.get(self, "currentVersion"))
+        return typing.cast("Version", jsii.get(self, "currentVersion"))
 
     @builtins.property
     @jsii.member(jsii_name="functionArn")
@@ -34192,13 +34250,13 @@ class Function(
 
     @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
-    def grant_principal(self) -> _IPrincipal_539bb2fd:
+    def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The principal this Lambda Function is running as.'''
-        return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+        return typing.cast("_IPrincipal_539bb2fd", jsii.get(self, "grantPrincipal"))
 
     @builtins.property
     @jsii.member(jsii_name="logGroup")
-    def log_group(self) -> _ILogGroup_3c4fa718:
+    def log_group(self) -> "_ILogGroup_3c4fa718":
         '''The LogGroup where the Lambda function's logs are made available.
 
         If either ``logRetention`` is set or this property is called, a CloudFormation custom resource is added to the stack that
@@ -34208,13 +34266,13 @@ class Function(
         Further, if the log group already exists and the ``logRetention`` is not set, the custom resource will reset the log retention
         to never expire even if it was configured with a different value.
         '''
-        return typing.cast(_ILogGroup_3c4fa718, jsii.get(self, "logGroup"))
+        return typing.cast("_ILogGroup_3c4fa718", jsii.get(self, "logGroup"))
 
     @builtins.property
     @jsii.member(jsii_name="permissionsNode")
-    def permissions_node(self) -> _constructs_77d1e7e8.Node:
+    def permissions_node(self) -> "_constructs_77d1e7e8.Node":
         '''The construct node where permissions are attached.'''
-        return typing.cast(_constructs_77d1e7e8.Node, jsii.get(self, "permissionsNode"))
+        return typing.cast("_constructs_77d1e7e8.Node", jsii.get(self, "permissionsNode"))
 
     @builtins.property
     @jsii.member(jsii_name="resourceArnsForGrantInvoke")
@@ -34224,39 +34282,39 @@ class Function(
 
     @builtins.property
     @jsii.member(jsii_name="runtime")
-    def runtime(self) -> Runtime:
+    def runtime(self) -> "Runtime":
         '''The runtime configured for this lambda.'''
-        return typing.cast(Runtime, jsii.get(self, "runtime"))
+        return typing.cast("Runtime", jsii.get(self, "runtime"))
 
     @builtins.property
     @jsii.member(jsii_name="deadLetterQueue")
-    def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
+    def dead_letter_queue(self) -> typing.Optional["_IQueue_7ed6f679"]:
         '''The DLQ (as queue) associated with this Lambda Function (this is an optional attribute).'''
-        return typing.cast(typing.Optional[_IQueue_7ed6f679], jsii.get(self, "deadLetterQueue"))
+        return typing.cast(typing.Optional["_IQueue_7ed6f679"], jsii.get(self, "deadLetterQueue"))
 
     @builtins.property
     @jsii.member(jsii_name="deadLetterTopic")
-    def dead_letter_topic(self) -> typing.Optional[_ITopic_9eca4852]:
+    def dead_letter_topic(self) -> typing.Optional["_ITopic_9eca4852"]:
         '''The DLQ (as topic) associated with this Lambda Function (this is an optional attribute).'''
-        return typing.cast(typing.Optional[_ITopic_9eca4852], jsii.get(self, "deadLetterTopic"))
+        return typing.cast(typing.Optional["_ITopic_9eca4852"], jsii.get(self, "deadLetterTopic"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Execution role associated with this function.'''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
     @builtins.property
     @jsii.member(jsii_name="tenancyConfig")
-    def tenancy_config(self) -> typing.Optional[TenancyConfig]:
+    def tenancy_config(self) -> typing.Optional["TenancyConfig"]:
         '''The tenancy configuration for this function.'''
-        return typing.cast(typing.Optional[TenancyConfig], jsii.get(self, "tenancyConfig"))
+        return typing.cast(typing.Optional["TenancyConfig"], jsii.get(self, "tenancyConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="timeout")
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The timeout configured for this lambda.'''
-        return typing.cast(typing.Optional[_Duration_4839e8c3], jsii.get(self, "timeout"))
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], jsii.get(self, "timeout"))
 
 
 class DockerImageFunction(
@@ -34277,61 +34335,61 @@ class DockerImageFunction(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        code: DockerImageCode,
-        adot_instrumentation: typing.Optional[typing.Union[AdotInstrumentationConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        code: "DockerImageCode",
+        adot_instrumentation: typing.Optional[typing.Union["AdotInstrumentationConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         allow_all_ipv6_outbound: typing.Optional[builtins.bool] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         allow_public_subnet: typing.Optional[builtins.bool] = None,
         application_log_level: typing.Optional[builtins.str] = None,
-        application_log_level_v2: typing.Optional[ApplicationLogLevel] = None,
-        architecture: typing.Optional[Architecture] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
-        current_version_options: typing.Optional[typing.Union[VersionOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        application_log_level_v2: typing.Optional["ApplicationLogLevel"] = None,
+        architecture: typing.Optional["Architecture"] = None,
+        code_signing_config: typing.Optional["_ICodeSigningConfigRef_1d909622"] = None,
+        current_version_options: typing.Optional[typing.Union["VersionOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
-        dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
+        dead_letter_topic: typing.Optional["_ITopic_9eca4852"] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        durable_config: typing.Optional[typing.Union["DurableConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
-        events: typing.Optional[typing.Sequence[IEventSource]] = None,
-        filesystem: typing.Optional[FileSystem] = None,
+        environment_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
+        events: typing.Optional[typing.Sequence["IEventSource"]] = None,
+        filesystem: typing.Optional["FileSystem"] = None,
         function_name: typing.Optional[builtins.str] = None,
-        initial_policy: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
-        insights_version: typing.Optional[LambdaInsightsVersion] = None,
+        initial_policy: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
+        insights_version: typing.Optional["LambdaInsightsVersion"] = None,
         ipv6_allowed_for_dual_stack: typing.Optional[builtins.bool] = None,
-        layers: typing.Optional[typing.Sequence[ILayerVersion]] = None,
+        layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
-        logging_format: typing.Optional[LoggingFormat] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
-        log_retention_retry_options: typing.Optional[typing.Union[LogRetentionRetryOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        log_retention_role: typing.Optional[_IRole_235f5d8e] = None,
+        logging_format: typing.Optional["LoggingFormat"] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
+        log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        log_retention_role: typing.Optional["_IRole_235f5d8e"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
-        params_and_secrets: typing.Optional[ParamsAndSecretsLayerVersion] = None,
+        params_and_secrets: typing.Optional["ParamsAndSecretsLayerVersion"] = None,
         profiling: typing.Optional[builtins.bool] = None,
-        profiling_group: typing.Optional[_IProfilingGroup_0bba72c4] = None,
-        recursive_loop: typing.Optional[RecursiveLoop] = None,
+        profiling_group: typing.Optional["_IProfilingGroup_0bba72c4"] = None,
+        recursive_loop: typing.Optional["RecursiveLoop"] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        runtime_management_mode: typing.Optional[RuntimeManagementMode] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        snap_start: typing.Optional[SnapStartConf] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        runtime_management_mode: typing.Optional["RuntimeManagementMode"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        snap_start: typing.Optional["SnapStartConf"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
-        system_log_level_v2: typing.Optional[SystemLogLevel] = None,
-        tenancy_config: typing.Optional[TenancyConfig] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        tracing: typing.Optional[Tracing] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[IDestination] = None,
-        on_success: typing.Optional[IDestination] = None,
+        system_log_level_v2: typing.Optional["SystemLogLevel"] = None,
+        tenancy_config: typing.Optional["TenancyConfig"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        tracing: typing.Optional["Tracing"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["IDestination"] = None,
+        on_success: typing.Optional["IDestination"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -35232,7 +35290,7 @@ def _typecheckingstub__2fc9432254acf5a7dbe3c68dcedbda61de1f0e804a81d20ae79e04857
     destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.DestinationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     document_db_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.DocumentDBEventSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    event_source_arn: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198, _IClusterRef_c904150a]] = None,
+    event_source_arn: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IClusterRef_c904150a, _IQueueRef_fa8b2198]] = None,
     filter_criteria: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.FilterCriteriaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     function_response_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     kms_key_arn: typing.Optional[builtins.str] = None,
@@ -35588,7 +35646,7 @@ def _typecheckingstub__28f15573fb2525439f034f01287568e3c4a4d28fda953b3059f294655
     destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.DestinationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     document_db_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.DocumentDBEventSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    event_source_arn: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198, _IClusterRef_c904150a]] = None,
+    event_source_arn: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IClusterRef_c904150a, _IQueueRef_fa8b2198]] = None,
     filter_criteria: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.FilterCriteriaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     function_response_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     kms_key_arn: typing.Optional[builtins.str] = None,
@@ -36233,7 +36291,7 @@ def _typecheckingstub__c457a277b84dbba5bd94a2c0135335b8d7dbb3d409b1fa988b4f5a219
     invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     principal_org_id: typing.Optional[builtins.str] = None,
     source_account: typing.Optional[builtins.str] = None,
-    source_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]] = None,
+    source_arn: typing.Optional[typing.Union[builtins.str, _IUserPoolRef_0b7d02b5, _IRuleRef_4038a611, _IRoleRef_8400221f, _ITopicRuleRef_748e9f37, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _ILogGroupRef_874d025a, _IBucketRef_3debe44e, _ITopicRef_29aa9a88, _IQueueRef_fa8b2198]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -36320,7 +36378,7 @@ def _typecheckingstub__b0c90e5a512dc08c54978bc1f6bf13992ad2d1d5c793f2b05fc82eef3
     invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     principal_org_id: typing.Optional[builtins.str] = None,
     source_account: typing.Optional[builtins.str] = None,
-    source_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]] = None,
+    source_arn: typing.Optional[typing.Union[builtins.str, _IUserPoolRef_0b7d02b5, _IRuleRef_4038a611, _IRoleRef_8400221f, _ITopicRuleRef_748e9f37, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _ILogGroupRef_874d025a, _IBucketRef_3debe44e, _ITopicRef_29aa9a88, _IQueueRef_fa8b2198]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

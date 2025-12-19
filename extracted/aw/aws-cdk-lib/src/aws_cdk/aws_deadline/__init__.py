@@ -119,6 +119,7 @@ class CfnFarm(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_deadline as deadline
@@ -138,13 +139,13 @@ class CfnFarm(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         display_name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Deadline::Farm``.
 
@@ -170,7 +171,7 @@ class CfnFarm(
 
     @jsii.member(jsii_name="arnForFarm")
     @builtins.classmethod
-    def arn_for_farm(cls, resource: _IFarmRef_21a39bdf) -> builtins.str:
+    def arn_for_farm(cls, resource: "_IFarmRef_21a39bdf") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -192,7 +193,7 @@ class CfnFarm(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFarm", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -241,9 +242,9 @@ class CfnFarm(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -252,9 +253,9 @@ class CfnFarm(
 
     @builtins.property
     @jsii.member(jsii_name="farmRef")
-    def farm_ref(self) -> _FarmReference_8cd16459:
+    def farm_ref(self) -> "_FarmReference_8cd16459":
         '''A reference to a Farm resource.'''
-        return typing.cast(_FarmReference_8cd16459, jsii.get(self, "farmRef"))
+        return typing.cast("_FarmReference_8cd16459", jsii.get(self, "farmRef"))
 
     @builtins.property
     @jsii.member(jsii_name="displayName")
@@ -297,12 +298,12 @@ class CfnFarm(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to add to your farm.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0e0688a8dc8cdc7f618bc0975895ced63b43e9c85cd1b97a6a84272f1b38fefe)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -326,7 +327,7 @@ class CfnFarmProps:
         display_name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFarm``.
 
@@ -340,6 +341,7 @@ class CfnFarmProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_deadline as deadline
@@ -411,7 +413,7 @@ class CfnFarmProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to add to your farm.
 
         Each tag consists of a tag key and a tag value. Tag keys and values are both required, but tag values can be empty strings.
@@ -419,7 +421,7 @@ class CfnFarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-farm.html#cfn-deadline-farm-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -449,6 +451,7 @@ class CfnFleet(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_deadline as deadline
@@ -591,18 +594,18 @@ class CfnFleet(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.FleetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.FleetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         display_name: builtins.str,
         farm_id: builtins.str,
         max_worker_count: jsii.Number,
         role_arn: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        host_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.HostConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        host_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.HostConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         min_worker_count: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Deadline::Fleet``.
 
@@ -638,7 +641,7 @@ class CfnFleet(
 
     @jsii.member(jsii_name="arnForFleet")
     @builtins.classmethod
-    def arn_for_fleet(cls, resource: _IFleetRef_7c29970e) -> builtins.str:
+    def arn_for_fleet(cls, resource: "_IFleetRef_7c29970e") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -660,7 +663,7 @@ class CfnFleet(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFleet", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -700,11 +703,11 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="attrCapabilities")
-    def attr_capabilities(self) -> _IResolvable_da3f097b:
+    def attr_capabilities(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: Capabilities
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrCapabilities"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrCapabilities"))
 
     @builtins.property
     @jsii.member(jsii_name="attrFleetId")
@@ -744,9 +747,9 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -755,22 +758,22 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="fleetRef")
-    def fleet_ref(self) -> _FleetReference_47de59d9:
+    def fleet_ref(self) -> "_FleetReference_47de59d9":
         '''A reference to a Fleet resource.'''
-        return typing.cast(_FleetReference_47de59d9, jsii.get(self, "fleetRef"))
+        return typing.cast("_FleetReference_47de59d9", jsii.get(self, "fleetRef"))
 
     @builtins.property
     @jsii.member(jsii_name="configuration")
     def configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetConfigurationProperty"]:
         '''The configuration details for the fleet.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetConfigurationProperty"], jsii.get(self, "configuration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetConfigurationProperty"], jsii.get(self, "configuration"))
 
     @configuration.setter
     def configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9e2fe844317b39494e7f7a1851d6e5842bc0627b2cc937a6709042cb43a27a3f)
@@ -846,14 +849,14 @@ class CfnFleet(
     @jsii.member(jsii_name="hostConfiguration")
     def host_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.HostConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.HostConfigurationProperty"]]:
         '''Provides a script that runs as a worker is starting up that you can use to provide additional configuration for workers in your fleet.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.HostConfigurationProperty"]], jsii.get(self, "hostConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.HostConfigurationProperty"]], jsii.get(self, "hostConfiguration"))
 
     @host_configuration.setter
     def host_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.HostConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.HostConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5cb78c2488fd0676b6c07d92f69a0cf51c19a186b0a6d2f13bbc62aec7608cfe)
@@ -875,12 +878,12 @@ class CfnFleet(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to add to your fleet.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9c9ddff2a0e8eb5e8397bf64d0158ac4f8fba30ee673a959c2d550657e6f0248)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -895,8 +898,8 @@ class CfnFleet(
         def __init__(
             self,
             *,
-            selections: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.AcceleratorSelectionProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            count: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.AcceleratorCountRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            selections: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.AcceleratorSelectionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            count: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.AcceleratorCountRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Provides information about the GPU accelerators used for jobs processed by a fleet.
 
@@ -942,7 +945,7 @@ class CfnFleet(
         @builtins.property
         def selections(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.AcceleratorSelectionProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.AcceleratorSelectionProperty"]]]:
             '''A list of accelerator capabilities requested for this fleet.
 
             Only Amazon Elastic Compute Cloud instances that provide these capabilities will be used. For example, if you specify both L4 and T4 chips, AWS Deadline Cloud will use Amazon EC2 instances that have either the L4 or the T4 chip installed.
@@ -951,18 +954,18 @@ class CfnFleet(
             '''
             result = self._values.get("selections")
             assert result is not None, "Required property 'selections' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.AcceleratorSelectionProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.AcceleratorSelectionProperty"]]], result)
 
         @builtins.property
         def count(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.AcceleratorCountRangeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AcceleratorCountRangeProperty"]]:
             '''The number of GPU accelerators specified for worker hosts in this fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-acceleratorcapabilities.html#cfn-deadline-fleet-acceleratorcapabilities-count
             '''
             result = self._values.get("count")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.AcceleratorCountRangeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AcceleratorCountRangeProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1226,7 +1229,7 @@ class CfnFleet(
             self,
             *,
             mode: builtins.str,
-            worker_capabilities: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.CustomerManagedWorkerCapabilitiesProperty", typing.Dict[builtins.str, typing.Any]]],
+            worker_capabilities: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.CustomerManagedWorkerCapabilitiesProperty", typing.Dict[builtins.str, typing.Any]]],
             storage_profile_id: typing.Optional[builtins.str] = None,
             tag_propagation_mode: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -1324,14 +1327,14 @@ class CfnFleet(
         @builtins.property
         def worker_capabilities(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnFleet.CustomerManagedWorkerCapabilitiesProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnFleet.CustomerManagedWorkerCapabilitiesProperty"]:
             '''The worker capabilities for the customer managed fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedfleetconfiguration.html#cfn-deadline-fleet-customermanagedfleetconfiguration-workercapabilities
             '''
             result = self._values.get("worker_capabilities")
             assert result is not None, "Required property 'worker_capabilities' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFleet.CustomerManagedWorkerCapabilitiesProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFleet.CustomerManagedWorkerCapabilitiesProperty"], result)
 
         @builtins.property
         def storage_profile_id(self) -> typing.Optional[builtins.str]:
@@ -1382,14 +1385,14 @@ class CfnFleet(
             self,
             *,
             cpu_architecture_type: builtins.str,
-            memory_mib: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.MemoryMiBRangeProperty", typing.Dict[builtins.str, typing.Any]]],
+            memory_mib: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.MemoryMiBRangeProperty", typing.Dict[builtins.str, typing.Any]]],
             os_family: builtins.str,
-            v_cpu_count: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.VCpuCountRangeProperty", typing.Dict[builtins.str, typing.Any]]],
-            accelerator_count: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.AcceleratorCountRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            accelerator_total_memory_mib: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.AcceleratorTotalMemoryMiBRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            v_cpu_count: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.VCpuCountRangeProperty", typing.Dict[builtins.str, typing.Any]]],
+            accelerator_count: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.AcceleratorCountRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            accelerator_total_memory_mib: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.AcceleratorTotalMemoryMiBRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             accelerator_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-            custom_amounts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.FleetAmountCapabilityProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            custom_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.FleetAttributeCapabilityProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            custom_amounts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.FleetAmountCapabilityProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            custom_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.FleetAttributeCapabilityProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The worker capabilities for a customer managed workflow.
 
@@ -1496,14 +1499,14 @@ class CfnFleet(
         @builtins.property
         def memory_mib(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnFleet.MemoryMiBRangeProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnFleet.MemoryMiBRangeProperty"]:
             '''The memory (MiB).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedworkercapabilities.html#cfn-deadline-fleet-customermanagedworkercapabilities-memorymib
             '''
             result = self._values.get("memory_mib")
             assert result is not None, "Required property 'memory_mib' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFleet.MemoryMiBRangeProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFleet.MemoryMiBRangeProperty"], result)
 
         @builtins.property
         def os_family(self) -> builtins.str:
@@ -1518,36 +1521,36 @@ class CfnFleet(
         @builtins.property
         def v_cpu_count(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnFleet.VCpuCountRangeProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnFleet.VCpuCountRangeProperty"]:
             '''The vCPU count for the customer manged worker capabilities.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedworkercapabilities.html#cfn-deadline-fleet-customermanagedworkercapabilities-vcpucount
             '''
             result = self._values.get("v_cpu_count")
             assert result is not None, "Required property 'v_cpu_count' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFleet.VCpuCountRangeProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFleet.VCpuCountRangeProperty"], result)
 
         @builtins.property
         def accelerator_count(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.AcceleratorCountRangeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AcceleratorCountRangeProperty"]]:
             '''The range of the accelerator.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedworkercapabilities.html#cfn-deadline-fleet-customermanagedworkercapabilities-acceleratorcount
             '''
             result = self._values.get("accelerator_count")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.AcceleratorCountRangeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AcceleratorCountRangeProperty"]], result)
 
         @builtins.property
         def accelerator_total_memory_mib(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.AcceleratorTotalMemoryMiBRangeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AcceleratorTotalMemoryMiBRangeProperty"]]:
             '''The total memory (MiB) for the customer managed worker capabilities.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedworkercapabilities.html#cfn-deadline-fleet-customermanagedworkercapabilities-acceleratortotalmemorymib
             '''
             result = self._values.get("accelerator_total_memory_mib")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.AcceleratorTotalMemoryMiBRangeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AcceleratorTotalMemoryMiBRangeProperty"]], result)
 
         @builtins.property
         def accelerator_types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1561,24 +1564,24 @@ class CfnFleet(
         @builtins.property
         def custom_amounts(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetAmountCapabilityProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetAmountCapabilityProperty"]]]]:
             '''Custom requirement ranges for customer managed worker capabilities.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedworkercapabilities.html#cfn-deadline-fleet-customermanagedworkercapabilities-customamounts
             '''
             result = self._values.get("custom_amounts")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetAmountCapabilityProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetAmountCapabilityProperty"]]]], result)
 
         @builtins.property
         def custom_attributes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetAttributeCapabilityProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetAttributeCapabilityProperty"]]]]:
             '''Custom attributes for the customer manged worker capabilities.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedworkercapabilities.html#cfn-deadline-fleet-customermanagedworkercapabilities-customattributes
             '''
             result = self._values.get("custom_attributes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetAttributeCapabilityProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetAttributeCapabilityProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1854,8 +1857,8 @@ class CfnFleet(
         def __init__(
             self,
             *,
-            amounts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.FleetAmountCapabilityProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.FleetAttributeCapabilityProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            amounts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.FleetAmountCapabilityProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.FleetAttributeCapabilityProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''The amounts and attributes of fleets.
 
@@ -1898,24 +1901,24 @@ class CfnFleet(
         @builtins.property
         def amounts(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetAmountCapabilityProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetAmountCapabilityProperty"]]]]:
             '''Amount capabilities of the fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-fleetcapabilities.html#cfn-deadline-fleet-fleetcapabilities-amounts
             '''
             result = self._values.get("amounts")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetAmountCapabilityProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetAmountCapabilityProperty"]]]], result)
 
         @builtins.property
         def attributes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetAttributeCapabilityProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetAttributeCapabilityProperty"]]]]:
             '''Attribute capabilities of the fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-fleetcapabilities.html#cfn-deadline-fleet-fleetcapabilities-attributes
             '''
             result = self._values.get("attributes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetAttributeCapabilityProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetAttributeCapabilityProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1940,8 +1943,8 @@ class CfnFleet(
         def __init__(
             self,
             *,
-            customer_managed: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.CustomerManagedFleetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            service_managed_ec2: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.ServiceManagedEc2FleetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            customer_managed: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.CustomerManagedFleetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            service_managed_ec2: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ServiceManagedEc2FleetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Fleet configuration details.
 
@@ -2085,24 +2088,24 @@ class CfnFleet(
         @builtins.property
         def customer_managed(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.CustomerManagedFleetConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.CustomerManagedFleetConfigurationProperty"]]:
             '''The customer managed fleets within a fleet configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-fleetconfiguration.html#cfn-deadline-fleet-fleetconfiguration-customermanaged
             '''
             result = self._values.get("customer_managed")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.CustomerManagedFleetConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.CustomerManagedFleetConfigurationProperty"]], result)
 
         @builtins.property
         def service_managed_ec2(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ServiceManagedEc2FleetConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ServiceManagedEc2FleetConfigurationProperty"]]:
             '''The service managed Amazon EC2 instances for a fleet configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-fleetconfiguration.html#cfn-deadline-fleet-fleetconfiguration-servicemanagedec2
             '''
             result = self._values.get("service_managed_ec2")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.ServiceManagedEc2FleetConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.ServiceManagedEc2FleetConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2296,10 +2299,10 @@ class CfnFleet(
         def __init__(
             self,
             *,
-            instance_capabilities: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.ServiceManagedEc2InstanceCapabilitiesProperty", typing.Dict[builtins.str, typing.Any]]],
-            instance_market_options: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.ServiceManagedEc2InstanceMarketOptionsProperty", typing.Dict[builtins.str, typing.Any]]],
+            instance_capabilities: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ServiceManagedEc2InstanceCapabilitiesProperty", typing.Dict[builtins.str, typing.Any]]],
+            instance_market_options: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.ServiceManagedEc2InstanceMarketOptionsProperty", typing.Dict[builtins.str, typing.Any]]],
             storage_profile_id: typing.Optional[builtins.str] = None,
-            vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            vpc_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The configuration details for a service managed EC2 fleet.
 
@@ -2399,26 +2402,26 @@ class CfnFleet(
         @builtins.property
         def instance_capabilities(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnFleet.ServiceManagedEc2InstanceCapabilitiesProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnFleet.ServiceManagedEc2InstanceCapabilitiesProperty"]:
             '''The instance capabilities for the service managed EC2 fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2fleetconfiguration.html#cfn-deadline-fleet-servicemanagedec2fleetconfiguration-instancecapabilities
             '''
             result = self._values.get("instance_capabilities")
             assert result is not None, "Required property 'instance_capabilities' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFleet.ServiceManagedEc2InstanceCapabilitiesProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFleet.ServiceManagedEc2InstanceCapabilitiesProperty"], result)
 
         @builtins.property
         def instance_market_options(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnFleet.ServiceManagedEc2InstanceMarketOptionsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnFleet.ServiceManagedEc2InstanceMarketOptionsProperty"]:
             '''The instance market options for the service managed EC2 fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2fleetconfiguration.html#cfn-deadline-fleet-servicemanagedec2fleetconfiguration-instancemarketoptions
             '''
             result = self._values.get("instance_market_options")
             assert result is not None, "Required property 'instance_market_options' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFleet.ServiceManagedEc2InstanceMarketOptionsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFleet.ServiceManagedEc2InstanceMarketOptionsProperty"], result)
 
         @builtins.property
         def storage_profile_id(self) -> typing.Optional[builtins.str]:
@@ -2432,13 +2435,13 @@ class CfnFleet(
         @builtins.property
         def vpc_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VpcConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VpcConfigurationProperty"]]:
             '''The VPC configuration for the service managed EC2 fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2fleetconfiguration.html#cfn-deadline-fleet-servicemanagedec2fleetconfiguration-vpcconfiguration
             '''
             result = self._values.get("vpc_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VpcConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.VpcConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2472,15 +2475,15 @@ class CfnFleet(
             self,
             *,
             cpu_architecture_type: builtins.str,
-            memory_mib: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.MemoryMiBRangeProperty", typing.Dict[builtins.str, typing.Any]]],
+            memory_mib: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.MemoryMiBRangeProperty", typing.Dict[builtins.str, typing.Any]]],
             os_family: builtins.str,
-            v_cpu_count: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.VCpuCountRangeProperty", typing.Dict[builtins.str, typing.Any]]],
-            accelerator_capabilities: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.AcceleratorCapabilitiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            v_cpu_count: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.VCpuCountRangeProperty", typing.Dict[builtins.str, typing.Any]]],
+            accelerator_capabilities: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.AcceleratorCapabilitiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             allowed_instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-            custom_amounts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.FleetAmountCapabilityProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            custom_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.FleetAttributeCapabilityProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            custom_amounts: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.FleetAmountCapabilityProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            custom_attributes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.FleetAttributeCapabilityProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             excluded_instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-            root_ebs_volume: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.Ec2EbsVolumeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            root_ebs_volume: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.Ec2EbsVolumeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The Amazon EC2 instance capabilities.
 
@@ -2601,14 +2604,14 @@ class CfnFleet(
         @builtins.property
         def memory_mib(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnFleet.MemoryMiBRangeProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnFleet.MemoryMiBRangeProperty"]:
             '''The memory, as MiB, for the Amazon EC2 instance type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2instancecapabilities.html#cfn-deadline-fleet-servicemanagedec2instancecapabilities-memorymib
             '''
             result = self._values.get("memory_mib")
             assert result is not None, "Required property 'memory_mib' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFleet.MemoryMiBRangeProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFleet.MemoryMiBRangeProperty"], result)
 
         @builtins.property
         def os_family(self) -> builtins.str:
@@ -2623,25 +2626,25 @@ class CfnFleet(
         @builtins.property
         def v_cpu_count(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnFleet.VCpuCountRangeProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnFleet.VCpuCountRangeProperty"]:
             '''The amount of vCPU to require for instances in this fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2instancecapabilities.html#cfn-deadline-fleet-servicemanagedec2instancecapabilities-vcpucount
             '''
             result = self._values.get("v_cpu_count")
             assert result is not None, "Required property 'v_cpu_count' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFleet.VCpuCountRangeProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFleet.VCpuCountRangeProperty"], result)
 
         @builtins.property
         def accelerator_capabilities(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.AcceleratorCapabilitiesProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AcceleratorCapabilitiesProperty"]]:
             '''Describes the GPU accelerator capabilities required for worker host instances in this fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2instancecapabilities.html#cfn-deadline-fleet-servicemanagedec2instancecapabilities-acceleratorcapabilities
             '''
             result = self._values.get("accelerator_capabilities")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.AcceleratorCapabilitiesProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.AcceleratorCapabilitiesProperty"]], result)
 
         @builtins.property
         def allowed_instance_types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2655,24 +2658,24 @@ class CfnFleet(
         @builtins.property
         def custom_amounts(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetAmountCapabilityProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetAmountCapabilityProperty"]]]]:
             '''The custom capability amounts to require for instances in this fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2instancecapabilities.html#cfn-deadline-fleet-servicemanagedec2instancecapabilities-customamounts
             '''
             result = self._values.get("custom_amounts")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetAmountCapabilityProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetAmountCapabilityProperty"]]]], result)
 
         @builtins.property
         def custom_attributes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetAttributeCapabilityProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetAttributeCapabilityProperty"]]]]:
             '''The custom capability attributes to require for instances in this fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2instancecapabilities.html#cfn-deadline-fleet-servicemanagedec2instancecapabilities-customattributes
             '''
             result = self._values.get("custom_attributes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.FleetAttributeCapabilityProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetAttributeCapabilityProperty"]]]], result)
 
         @builtins.property
         def excluded_instance_types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2686,13 +2689,13 @@ class CfnFleet(
         @builtins.property
         def root_ebs_volume(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.Ec2EbsVolumeProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.Ec2EbsVolumeProperty"]]:
             '''The root EBS volume.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2instancecapabilities.html#cfn-deadline-fleet-servicemanagedec2instancecapabilities-rootebsvolume
             '''
             result = self._values.get("root_ebs_volume")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.Ec2EbsVolumeProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.Ec2EbsVolumeProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2907,15 +2910,15 @@ class CfnFleetProps:
     def __init__(
         self,
         *,
-        configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.FleetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.FleetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         display_name: builtins.str,
         farm_id: builtins.str,
         max_worker_count: jsii.Number,
         role_arn: builtins.str,
         description: typing.Optional[builtins.str] = None,
-        host_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.HostConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        host_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnFleet.HostConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         min_worker_count: typing.Optional[jsii.Number] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFleet``.
 
@@ -2934,6 +2937,7 @@ class CfnFleetProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_deadline as deadline
@@ -3103,14 +3107,14 @@ class CfnFleetProps:
     @builtins.property
     def configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnFleet.FleetConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetConfigurationProperty"]:
         '''The configuration details for the fleet.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-fleet.html#cfn-deadline-fleet-configuration
         '''
         result = self._values.get("configuration")
         assert result is not None, "Required property 'configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnFleet.FleetConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnFleet.FleetConfigurationProperty"], result)
 
     @builtins.property
     def display_name(self) -> builtins.str:
@@ -3174,7 +3178,7 @@ class CfnFleetProps:
     @builtins.property
     def host_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.HostConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.HostConfigurationProperty"]]:
         '''Provides a script that runs as a worker is starting up that you can use to provide additional configuration for workers in your fleet.
 
         To remove a script from a fleet, use the `UpdateFleet <https://docs.aws.amazon.com/deadline-cloud/latest/APIReference/API_UpdateFleet.html>`_ operation with the ``hostConfiguration`` ``scriptBody`` parameter set to an empty string ("").
@@ -3182,7 +3186,7 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-fleet.html#cfn-deadline-fleet-hostconfiguration
         '''
         result = self._values.get("host_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.HostConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnFleet.HostConfigurationProperty"]], result)
 
     @builtins.property
     def min_worker_count(self) -> typing.Optional[jsii.Number]:
@@ -3196,7 +3200,7 @@ class CfnFleetProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to add to your fleet.
 
         Each tag consists of a tag key and a tag value. Tag keys and values are both required, but tag values can be empty strings.
@@ -3204,7 +3208,7 @@ class CfnFleetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-fleet.html#cfn-deadline-fleet-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3232,6 +3236,7 @@ class CfnLicenseEndpoint(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_deadline as deadline
@@ -3251,13 +3256,13 @@ class CfnLicenseEndpoint(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         security_group_ids: typing.Sequence[builtins.str],
         subnet_ids: typing.Sequence[builtins.str],
         vpc_id: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Deadline::LicenseEndpoint``.
 
@@ -3285,7 +3290,7 @@ class CfnLicenseEndpoint(
     @builtins.classmethod
     def arn_for_license_endpoint(
         cls,
-        resource: _ILicenseEndpointRef_6214b46a,
+        resource: "_ILicenseEndpointRef_6214b46a",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3308,7 +3313,7 @@ class CfnLicenseEndpoint(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLicenseEndpoint", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3384,9 +3389,9 @@ class CfnLicenseEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -3395,9 +3400,9 @@ class CfnLicenseEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="licenseEndpointRef")
-    def license_endpoint_ref(self) -> _LicenseEndpointReference_98798f08:
+    def license_endpoint_ref(self) -> "_LicenseEndpointReference_98798f08":
         '''A reference to a LicenseEndpoint resource.'''
-        return typing.cast(_LicenseEndpointReference_98798f08, jsii.get(self, "licenseEndpointRef"))
+        return typing.cast("_LicenseEndpointReference_98798f08", jsii.get(self, "licenseEndpointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="securityGroupIds")
@@ -3440,12 +3445,12 @@ class CfnLicenseEndpoint(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to add to your license endpoint.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__328d44ddd074858e36e2c2a2c68ed8b77068feeb72199a2b74d4b41ff444c616)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3469,7 +3474,7 @@ class CfnLicenseEndpointProps:
         security_group_ids: typing.Sequence[builtins.str],
         subnet_ids: typing.Sequence[builtins.str],
         vpc_id: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLicenseEndpoint``.
 
@@ -3483,6 +3488,7 @@ class CfnLicenseEndpointProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_deadline as deadline
@@ -3544,7 +3550,7 @@ class CfnLicenseEndpointProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to add to your license endpoint.
 
         Each tag consists of a tag key and a tag value. Tag keys and values are both required, but tag values can be empty strings.
@@ -3552,7 +3558,7 @@ class CfnLicenseEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-licenseendpoint.html#cfn-deadline-licenseendpoint-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3601,7 +3607,7 @@ class CfnLimit(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         amount_requirement_name: builtins.str,
@@ -3647,7 +3653,7 @@ class CfnLimit(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLimit", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3703,9 +3709,9 @@ class CfnLimit(
 
     @builtins.property
     @jsii.member(jsii_name="limitRef")
-    def limit_ref(self) -> _LimitReference_af2940e5:
+    def limit_ref(self) -> "_LimitReference_af2940e5":
         '''A reference to a Limit resource.'''
-        return typing.cast(_LimitReference_af2940e5, jsii.get(self, "limitRef"))
+        return typing.cast("_LimitReference_af2940e5", jsii.get(self, "limitRef"))
 
     @builtins.property
     @jsii.member(jsii_name="amountRequirementName")
@@ -3941,7 +3947,7 @@ class CfnMeteredProduct(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         license_endpoint_id: typing.Optional[builtins.str] = None,
@@ -3968,7 +3974,7 @@ class CfnMeteredProduct(
     @builtins.classmethod
     def arn_for_metered_product(
         cls,
-        resource: _IMeteredProductRef_9ac23750,
+        resource: "_IMeteredProductRef_9ac23750",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3991,7 +3997,7 @@ class CfnMeteredProduct(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMeteredProduct", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4063,9 +4069,9 @@ class CfnMeteredProduct(
 
     @builtins.property
     @jsii.member(jsii_name="meteredProductRef")
-    def metered_product_ref(self) -> _MeteredProductReference_a77c5423:
+    def metered_product_ref(self) -> "_MeteredProductReference_a77c5423":
         '''A reference to a MeteredProduct resource.'''
-        return typing.cast(_MeteredProductReference_a77c5423, jsii.get(self, "meteredProductRef"))
+        return typing.cast("_MeteredProductReference_a77c5423", jsii.get(self, "meteredProductRef"))
 
     @builtins.property
     @jsii.member(jsii_name="licenseEndpointId")
@@ -4184,6 +4190,7 @@ class CfnMonitor(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_deadline as deadline
@@ -4204,14 +4211,14 @@ class CfnMonitor(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         display_name: builtins.str,
         identity_center_instance_arn: builtins.str,
         role_arn: builtins.str,
         subdomain: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Deadline::Monitor``.
 
@@ -4239,7 +4246,7 @@ class CfnMonitor(
 
     @jsii.member(jsii_name="arnForMonitor")
     @builtins.classmethod
-    def arn_for_monitor(cls, resource: _IMonitorRef_af35d2ec) -> builtins.str:
+    def arn_for_monitor(cls, resource: "_IMonitorRef_af35d2ec") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4261,7 +4268,7 @@ class CfnMonitor(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMonitor", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4330,9 +4337,9 @@ class CfnMonitor(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4341,9 +4348,9 @@ class CfnMonitor(
 
     @builtins.property
     @jsii.member(jsii_name="monitorRef")
-    def monitor_ref(self) -> _MonitorReference_53b151fe:
+    def monitor_ref(self) -> "_MonitorReference_53b151fe":
         '''A reference to a Monitor resource.'''
-        return typing.cast(_MonitorReference_53b151fe, jsii.get(self, "monitorRef"))
+        return typing.cast("_MonitorReference_53b151fe", jsii.get(self, "monitorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="displayName")
@@ -4399,12 +4406,12 @@ class CfnMonitor(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d79166c0c9556907ea6c9def114020487a556a49bf64ecf1e6334c0fe7e8efac)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4430,7 +4437,7 @@ class CfnMonitorProps:
         identity_center_instance_arn: builtins.str,
         role_arn: builtins.str,
         subdomain: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMonitor``.
 
@@ -4445,6 +4452,7 @@ class CfnMonitorProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_deadline as deadline
@@ -4527,13 +4535,13 @@ class CfnMonitorProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-monitor.html#cfn-deadline-monitor-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4563,6 +4571,7 @@ class CfnQueue(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_deadline as deadline
@@ -4603,7 +4612,7 @@ class CfnQueue(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         display_name: builtins.str,
@@ -4611,11 +4620,11 @@ class CfnQueue(
         allowed_storage_profile_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         default_budget_action: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        job_attachment_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQueue.JobAttachmentSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        job_run_as_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQueue.JobRunAsUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        job_attachment_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQueue.JobAttachmentSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        job_run_as_user: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQueue.JobRunAsUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         required_file_system_location_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         role_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Deadline::Queue``.
 
@@ -4653,7 +4662,7 @@ class CfnQueue(
 
     @jsii.member(jsii_name="arnForQueue")
     @builtins.classmethod
-    def arn_for_queue(cls, resource: _IQueueRef_00ca677f) -> builtins.str:
+    def arn_for_queue(cls, resource: "_IQueueRef_00ca677f") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4675,7 +4684,7 @@ class CfnQueue(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueue", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4724,9 +4733,9 @@ class CfnQueue(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -4735,9 +4744,9 @@ class CfnQueue(
 
     @builtins.property
     @jsii.member(jsii_name="queueRef")
-    def queue_ref(self) -> _QueueReference_c081843e:
+    def queue_ref(self) -> "_QueueReference_c081843e":
         '''A reference to a Queue resource.'''
-        return typing.cast(_QueueReference_c081843e, jsii.get(self, "queueRef"))
+        return typing.cast("_QueueReference_c081843e", jsii.get(self, "queueRef"))
 
     @builtins.property
     @jsii.member(jsii_name="displayName")
@@ -4811,14 +4820,14 @@ class CfnQueue(
     @jsii.member(jsii_name="jobAttachmentSettings")
     def job_attachment_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.JobAttachmentSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.JobAttachmentSettingsProperty"]]:
         '''The job attachment settings.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.JobAttachmentSettingsProperty"]], jsii.get(self, "jobAttachmentSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.JobAttachmentSettingsProperty"]], jsii.get(self, "jobAttachmentSettings"))
 
     @job_attachment_settings.setter
     def job_attachment_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.JobAttachmentSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.JobAttachmentSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__358c548fac5f624a3c1d72ec9252063f4d1a9bd3c0342b2e54358d53c0204b5c)
@@ -4829,14 +4838,14 @@ class CfnQueue(
     @jsii.member(jsii_name="jobRunAsUser")
     def job_run_as_user(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.JobRunAsUserProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.JobRunAsUserProperty"]]:
         '''Identifies the user for a job.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.JobRunAsUserProperty"]], jsii.get(self, "jobRunAsUser"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.JobRunAsUserProperty"]], jsii.get(self, "jobRunAsUser"))
 
     @job_run_as_user.setter
     def job_run_as_user(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.JobRunAsUserProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.JobRunAsUserProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5b1f44b18bbd9cd34d33d3fe1de23e5f60be6648dd1ee50efa7531459cd7ae65)
@@ -4876,12 +4885,12 @@ class CfnQueue(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to add to your queue.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__57b6aaea7cc5d22bb58ee62113bb0f076ca6250b3869aeb5848ed24fd0103755)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4970,8 +4979,8 @@ class CfnQueue(
             self,
             *,
             run_as: builtins.str,
-            posix: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQueue.PosixUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            windows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnQueue.WindowsUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            posix: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQueue.PosixUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            windows: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQueue.WindowsUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Identifies the user for a job.
 
@@ -5028,24 +5037,24 @@ class CfnQueue(
         @builtins.property
         def posix(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.PosixUserProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.PosixUserProperty"]]:
             '''The user and group that the jobs in the queue run as.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-queue-jobrunasuser.html#cfn-deadline-queue-jobrunasuser-posix
             '''
             result = self._values.get("posix")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.PosixUserProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.PosixUserProperty"]], result)
 
         @builtins.property
         def windows(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.WindowsUserProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.WindowsUserProperty"]]:
             '''Identifies a Microsoft Windows user.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-queue-jobrunasuser.html#cfn-deadline-queue-jobrunasuser-windows
             '''
             result = self._values.get("windows")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnQueue.WindowsUserProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.WindowsUserProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5220,7 +5229,7 @@ class CfnQueueEnvironment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         farm_id: builtins.str,
@@ -5266,7 +5275,7 @@ class CfnQueueEnvironment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueueEnvironment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5320,9 +5329,9 @@ class CfnQueueEnvironment(
 
     @builtins.property
     @jsii.member(jsii_name="queueEnvironmentRef")
-    def queue_environment_ref(self) -> _QueueEnvironmentReference_ed60dec7:
+    def queue_environment_ref(self) -> "_QueueEnvironmentReference_ed60dec7":
         '''A reference to a QueueEnvironment resource.'''
-        return typing.cast(_QueueEnvironmentReference_ed60dec7, jsii.get(self, "queueEnvironmentRef"))
+        return typing.cast("_QueueEnvironmentReference_ed60dec7", jsii.get(self, "queueEnvironmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="farmId")
@@ -5540,7 +5549,7 @@ class CfnQueueFleetAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         farm_id: builtins.str,
@@ -5578,7 +5587,7 @@ class CfnQueueFleetAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueueFleetAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5614,9 +5623,9 @@ class CfnQueueFleetAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="queueFleetAssociationRef")
-    def queue_fleet_association_ref(self) -> _QueueFleetAssociationReference_953e1b0e:
+    def queue_fleet_association_ref(self) -> "_QueueFleetAssociationReference_953e1b0e":
         '''A reference to a QueueFleetAssociation resource.'''
-        return typing.cast(_QueueFleetAssociationReference_953e1b0e, jsii.get(self, "queueFleetAssociationRef"))
+        return typing.cast("_QueueFleetAssociationReference_953e1b0e", jsii.get(self, "queueFleetAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="farmId")
@@ -5774,7 +5783,7 @@ class CfnQueueLimitAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         farm_id: builtins.str,
@@ -5812,7 +5821,7 @@ class CfnQueueLimitAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueueLimitAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5848,9 +5857,9 @@ class CfnQueueLimitAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="queueLimitAssociationRef")
-    def queue_limit_association_ref(self) -> _QueueLimitAssociationReference_aeea1939:
+    def queue_limit_association_ref(self) -> "_QueueLimitAssociationReference_aeea1939":
         '''A reference to a QueueLimitAssociation resource.'''
-        return typing.cast(_QueueLimitAssociationReference_aeea1939, jsii.get(self, "queueLimitAssociationRef"))
+        return typing.cast("_QueueLimitAssociationReference_aeea1939", jsii.get(self, "queueLimitAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="farmId")
@@ -6004,11 +6013,11 @@ class CfnQueueProps:
         allowed_storage_profile_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         default_budget_action: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        job_attachment_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnQueue.JobAttachmentSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        job_run_as_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnQueue.JobRunAsUserProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        job_attachment_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQueue.JobAttachmentSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        job_run_as_user: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnQueue.JobRunAsUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         required_file_system_location_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         role_arn: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnQueue``.
 
@@ -6028,6 +6037,7 @@ class CfnQueueProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_deadline as deadline
@@ -6160,7 +6170,7 @@ class CfnQueueProps:
     @builtins.property
     def job_attachment_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnQueue.JobAttachmentSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.JobAttachmentSettingsProperty"]]:
         '''The job attachment settings.
 
         These are the Amazon S3 bucket name and the Amazon S3 prefix.
@@ -6168,18 +6178,18 @@ class CfnQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-queue.html#cfn-deadline-queue-jobattachmentsettings
         '''
         result = self._values.get("job_attachment_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnQueue.JobAttachmentSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.JobAttachmentSettingsProperty"]], result)
 
     @builtins.property
     def job_run_as_user(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnQueue.JobRunAsUserProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.JobRunAsUserProperty"]]:
         '''Identifies the user for a job.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-queue.html#cfn-deadline-queue-jobrunasuser
         '''
         result = self._values.get("job_run_as_user")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnQueue.JobRunAsUserProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnQueue.JobRunAsUserProperty"]], result)
 
     @builtins.property
     def required_file_system_location_names(
@@ -6202,7 +6212,7 @@ class CfnQueueProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to add to your queue.
 
         Each tag consists of a tag key and a tag value. Tag keys and values are both required, but tag values can be empty strings.
@@ -6210,7 +6220,7 @@ class CfnQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-queue.html#cfn-deadline-queue-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6258,13 +6268,13 @@ class CfnStorageProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         display_name: builtins.str,
         farm_id: builtins.str,
         os_family: builtins.str,
-        file_system_locations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageProfile.FileSystemLocationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        file_system_locations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStorageProfile.FileSystemLocationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Deadline::StorageProfile``.
 
@@ -6301,7 +6311,7 @@ class CfnStorageProfile(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStorageProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6346,9 +6356,9 @@ class CfnStorageProfile(
 
     @builtins.property
     @jsii.member(jsii_name="storageProfileRef")
-    def storage_profile_ref(self) -> _StorageProfileReference_4e288a9f:
+    def storage_profile_ref(self) -> "_StorageProfileReference_4e288a9f":
         '''A reference to a StorageProfile resource.'''
-        return typing.cast(_StorageProfileReference_4e288a9f, jsii.get(self, "storageProfileRef"))
+        return typing.cast("_StorageProfileReference_4e288a9f", jsii.get(self, "storageProfileRef"))
 
     @builtins.property
     @jsii.member(jsii_name="displayName")
@@ -6393,14 +6403,14 @@ class CfnStorageProfile(
     @jsii.member(jsii_name="fileSystemLocations")
     def file_system_locations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStorageProfile.FileSystemLocationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStorageProfile.FileSystemLocationProperty"]]]]:
         '''Operating system specific file system path to the storage location.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStorageProfile.FileSystemLocationProperty"]]]], jsii.get(self, "fileSystemLocations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStorageProfile.FileSystemLocationProperty"]]]], jsii.get(self, "fileSystemLocations"))
 
     @file_system_locations.setter
     def file_system_locations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStorageProfile.FileSystemLocationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStorageProfile.FileSystemLocationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__41022fa9902dd4229e3676de8f74c666e01c3237936ce7470d2c1ab45b6055ea)
@@ -6511,7 +6521,7 @@ class CfnStorageProfileProps:
         display_name: builtins.str,
         farm_id: builtins.str,
         os_family: builtins.str,
-        file_system_locations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageProfile.FileSystemLocationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        file_system_locations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStorageProfile.FileSystemLocationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStorageProfile``.
 
@@ -6593,13 +6603,13 @@ class CfnStorageProfileProps:
     @builtins.property
     def file_system_locations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStorageProfile.FileSystemLocationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStorageProfile.FileSystemLocationProperty"]]]]:
         '''Operating system specific file system path to the storage location.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-storageprofile.html#cfn-deadline-storageprofile-filesystemlocations
         '''
         result = self._values.get("file_system_locations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStorageProfile.FileSystemLocationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStorageProfile.FileSystemLocationProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

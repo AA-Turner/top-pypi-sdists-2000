@@ -346,6 +346,7 @@ as a source of inspiration.
 You can set additional Docker options to configure the build environment:
 
 ```python
+from aws_cdk import DockerVolume
 nodejs.NodejsFunction(self, "my-handler",
     bundling=nodejs.BundlingOptions(
         network="host",
@@ -592,18 +593,18 @@ class BundlingOptions(_DockerRunOptions_81583d32):
         platform: typing.Optional[builtins.str] = None,
         security_opt: typing.Optional[builtins.str] = None,
         user: typing.Optional[builtins.str] = None,
-        volumes: typing.Optional[typing.Sequence[typing.Union[_DockerVolume_849485b7, typing.Dict[builtins.str, typing.Any]]]] = None,
+        volumes: typing.Optional[typing.Sequence[typing.Union["_DockerVolume_849485b7", typing.Dict[builtins.str, typing.Any]]]] = None,
         volumes_from: typing.Optional[typing.Sequence[builtins.str]] = None,
         working_directory: typing.Optional[builtins.str] = None,
         asset_hash: typing.Optional[builtins.str] = None,
         banner: typing.Optional[builtins.str] = None,
         build_args: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         bundle_aws_sdk: typing.Optional[builtins.bool] = None,
-        bundling_file_access: typing.Optional[_BundlingFileAccess_281370cc] = None,
+        bundling_file_access: typing.Optional["_BundlingFileAccess_281370cc"] = None,
         charset: typing.Optional["Charset"] = None,
         command_hooks: typing.Optional["ICommandHooks"] = None,
         define: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        docker_image: typing.Optional[_DockerImage_f97a0c12] = None,
+        docker_image: typing.Optional["_DockerImage_f97a0c12"] = None,
         esbuild_args: typing.Optional[typing.Mapping[builtins.str, typing.Union[builtins.str, builtins.bool]]] = None,
         esbuild_version: typing.Optional[builtins.str] = None,
         external_modules: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -866,13 +867,13 @@ class BundlingOptions(_DockerRunOptions_81583d32):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def volumes(self) -> typing.Optional[typing.List[_DockerVolume_849485b7]]:
+    def volumes(self) -> typing.Optional[typing.List["_DockerVolume_849485b7"]]:
         '''Docker volumes to mount.
 
         :default: - no volumes are mounted
         '''
         result = self._values.get("volumes")
-        return typing.cast(typing.Optional[typing.List[_DockerVolume_849485b7]], result)
+        return typing.cast(typing.Optional[typing.List["_DockerVolume_849485b7"]], result)
 
     @builtins.property
     def volumes_from(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -949,13 +950,13 @@ class BundlingOptions(_DockerRunOptions_81583d32):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def bundling_file_access(self) -> typing.Optional[_BundlingFileAccess_281370cc]:
+    def bundling_file_access(self) -> typing.Optional["_BundlingFileAccess_281370cc"]:
         '''Which option to use to copy the source files to the docker container and output files back.
 
         :default: - BundlingFileAccess.BIND_MOUNT
         '''
         result = self._values.get("bundling_file_access")
-        return typing.cast(typing.Optional[_BundlingFileAccess_281370cc], result)
+        return typing.cast(typing.Optional["_BundlingFileAccess_281370cc"], result)
 
     @builtins.property
     def charset(self) -> typing.Optional["Charset"]:
@@ -996,7 +997,7 @@ class BundlingOptions(_DockerRunOptions_81583d32):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def docker_image(self) -> typing.Optional[_DockerImage_f97a0c12]:
+    def docker_image(self) -> typing.Optional["_DockerImage_f97a0c12"]:
         '''A custom bundling Docker image.
 
         This image should have esbuild installed globally. If you plan to use ``nodeModules``
@@ -1008,7 +1009,7 @@ class BundlingOptions(_DockerRunOptions_81583d32):
         :default: - use the Docker image provided by aws-cdk-lib/aws-lambda-nodejs
         '''
         result = self._values.get("docker_image")
-        return typing.cast(typing.Optional[_DockerImage_f97a0c12], result)
+        return typing.cast(typing.Optional["_DockerImage_f97a0c12"], result)
 
     @builtins.property
     def esbuild_args(
@@ -1550,6 +1551,7 @@ class NodejsFunction(
 
     Example::
 
+        from aws_cdk import DockerVolume
         nodejs.NodejsFunction(self, "my-handler",
             bundling=nodejs.BundlingOptions(
                 network="host",
@@ -1563,68 +1565,68 @@ class NodejsFunction(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         aws_sdk_connection_reuse: typing.Optional[builtins.bool] = None,
-        bundling: typing.Optional[typing.Union[BundlingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        code: typing.Optional[_Code_7848f942] = None,
+        bundling: typing.Optional[typing.Union["BundlingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        code: typing.Optional["_Code_7848f942"] = None,
         deps_lock_file_path: typing.Optional[builtins.str] = None,
         entry: typing.Optional[builtins.str] = None,
         handler: typing.Optional[builtins.str] = None,
         project_root: typing.Optional[builtins.str] = None,
-        runtime: typing.Optional[_Runtime_b4eaa844] = None,
-        adot_instrumentation: typing.Optional[typing.Union[_AdotInstrumentationConfig_7c38d65d, typing.Dict[builtins.str, typing.Any]]] = None,
+        runtime: typing.Optional["_Runtime_b4eaa844"] = None,
+        adot_instrumentation: typing.Optional[typing.Union["_AdotInstrumentationConfig_7c38d65d", typing.Dict[builtins.str, typing.Any]]] = None,
         allow_all_ipv6_outbound: typing.Optional[builtins.bool] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         allow_public_subnet: typing.Optional[builtins.bool] = None,
         application_log_level: typing.Optional[builtins.str] = None,
-        application_log_level_v2: typing.Optional[_ApplicationLogLevel_cd92660a] = None,
-        architecture: typing.Optional[_Architecture_12d5a53f] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
-        current_version_options: typing.Optional[typing.Union[_VersionOptions_981bb3c0, typing.Dict[builtins.str, typing.Any]]] = None,
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        application_log_level_v2: typing.Optional["_ApplicationLogLevel_cd92660a"] = None,
+        architecture: typing.Optional["_Architecture_12d5a53f"] = None,
+        code_signing_config: typing.Optional["_ICodeSigningConfigRef_1d909622"] = None,
+        current_version_options: typing.Optional[typing.Union["_VersionOptions_981bb3c0", typing.Dict[builtins.str, typing.Any]]] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
-        dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
+        dead_letter_topic: typing.Optional["_ITopic_9eca4852"] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[_DurableConfig_05b238fa, typing.Dict[builtins.str, typing.Any]]] = None,
+        durable_config: typing.Optional[typing.Union["_DurableConfig_05b238fa", typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
-        events: typing.Optional[typing.Sequence[_IEventSource_3686b3f8]] = None,
-        filesystem: typing.Optional[_FileSystem_a5fa005d] = None,
+        environment_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
+        events: typing.Optional[typing.Sequence["_IEventSource_3686b3f8"]] = None,
+        filesystem: typing.Optional["_FileSystem_a5fa005d"] = None,
         function_name: typing.Optional[builtins.str] = None,
-        initial_policy: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
-        insights_version: typing.Optional[_LambdaInsightsVersion_9dfbfef9] = None,
+        initial_policy: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
+        insights_version: typing.Optional["_LambdaInsightsVersion_9dfbfef9"] = None,
         ipv6_allowed_for_dual_stack: typing.Optional[builtins.bool] = None,
-        layers: typing.Optional[typing.Sequence[_ILayerVersion_5ac127c8]] = None,
+        layers: typing.Optional[typing.Sequence["_ILayerVersion_5ac127c8"]] = None,
         log_format: typing.Optional[builtins.str] = None,
-        logging_format: typing.Optional[_LoggingFormat_30be8e01] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
-        log_retention_retry_options: typing.Optional[typing.Union[_LogRetentionRetryOptions_ad797a7a, typing.Dict[builtins.str, typing.Any]]] = None,
-        log_retention_role: typing.Optional[_IRole_235f5d8e] = None,
+        logging_format: typing.Optional["_LoggingFormat_30be8e01"] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
+        log_retention_retry_options: typing.Optional[typing.Union["_LogRetentionRetryOptions_ad797a7a", typing.Dict[builtins.str, typing.Any]]] = None,
+        log_retention_role: typing.Optional["_IRole_235f5d8e"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
-        params_and_secrets: typing.Optional[_ParamsAndSecretsLayerVersion_dce97f06] = None,
+        params_and_secrets: typing.Optional["_ParamsAndSecretsLayerVersion_dce97f06"] = None,
         profiling: typing.Optional[builtins.bool] = None,
-        profiling_group: typing.Optional[_IProfilingGroup_0bba72c4] = None,
-        recursive_loop: typing.Optional[_RecursiveLoop_fc293827] = None,
+        profiling_group: typing.Optional["_IProfilingGroup_0bba72c4"] = None,
+        recursive_loop: typing.Optional["_RecursiveLoop_fc293827"] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        runtime_management_mode: typing.Optional[_RuntimeManagementMode_688c173b] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        snap_start: typing.Optional[_SnapStartConf_2ffaa769] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        runtime_management_mode: typing.Optional["_RuntimeManagementMode_688c173b"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        snap_start: typing.Optional["_SnapStartConf_2ffaa769"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
-        system_log_level_v2: typing.Optional[_SystemLogLevel_aea49dc2] = None,
-        tenancy_config: typing.Optional[_TenancyConfig_9e2f75ea] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        tracing: typing.Optional[_Tracing_9fe8e2bb] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[_IDestination_40f19de4] = None,
-        on_success: typing.Optional[_IDestination_40f19de4] = None,
+        system_log_level_v2: typing.Optional["_SystemLogLevel_aea49dc2"] = None,
+        tenancy_config: typing.Optional["_TenancyConfig_9e2f75ea"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        tracing: typing.Optional["_Tracing_9fe8e2bb"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["_IDestination_40f19de4"] = None,
+        on_success: typing.Optional["_IDestination_40f19de4"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -1831,66 +1833,66 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
     def __init__(
         self,
         *,
-        max_event_age: typing.Optional[_Duration_4839e8c3] = None,
-        on_failure: typing.Optional[_IDestination_40f19de4] = None,
-        on_success: typing.Optional[_IDestination_40f19de4] = None,
+        max_event_age: typing.Optional["_Duration_4839e8c3"] = None,
+        on_failure: typing.Optional["_IDestination_40f19de4"] = None,
+        on_success: typing.Optional["_IDestination_40f19de4"] = None,
         retry_attempts: typing.Optional[jsii.Number] = None,
-        adot_instrumentation: typing.Optional[typing.Union[_AdotInstrumentationConfig_7c38d65d, typing.Dict[builtins.str, typing.Any]]] = None,
+        adot_instrumentation: typing.Optional[typing.Union["_AdotInstrumentationConfig_7c38d65d", typing.Dict[builtins.str, typing.Any]]] = None,
         allow_all_ipv6_outbound: typing.Optional[builtins.bool] = None,
         allow_all_outbound: typing.Optional[builtins.bool] = None,
         allow_public_subnet: typing.Optional[builtins.bool] = None,
         application_log_level: typing.Optional[builtins.str] = None,
-        application_log_level_v2: typing.Optional[_ApplicationLogLevel_cd92660a] = None,
-        architecture: typing.Optional[_Architecture_12d5a53f] = None,
-        code_signing_config: typing.Optional[_ICodeSigningConfigRef_1d909622] = None,
-        current_version_options: typing.Optional[typing.Union[_VersionOptions_981bb3c0, typing.Dict[builtins.str, typing.Any]]] = None,
-        dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
+        application_log_level_v2: typing.Optional["_ApplicationLogLevel_cd92660a"] = None,
+        architecture: typing.Optional["_Architecture_12d5a53f"] = None,
+        code_signing_config: typing.Optional["_ICodeSigningConfigRef_1d909622"] = None,
+        current_version_options: typing.Optional[typing.Union["_VersionOptions_981bb3c0", typing.Dict[builtins.str, typing.Any]]] = None,
+        dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
-        dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
+        dead_letter_topic: typing.Optional["_ITopic_9eca4852"] = None,
         description: typing.Optional[builtins.str] = None,
-        durable_config: typing.Optional[typing.Union[_DurableConfig_05b238fa, typing.Dict[builtins.str, typing.Any]]] = None,
+        durable_config: typing.Optional[typing.Union["_DurableConfig_05b238fa", typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
-        ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
-        events: typing.Optional[typing.Sequence[_IEventSource_3686b3f8]] = None,
-        filesystem: typing.Optional[_FileSystem_a5fa005d] = None,
+        environment_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
+        ephemeral_storage_size: typing.Optional["_Size_7b441c34"] = None,
+        events: typing.Optional[typing.Sequence["_IEventSource_3686b3f8"]] = None,
+        filesystem: typing.Optional["_FileSystem_a5fa005d"] = None,
         function_name: typing.Optional[builtins.str] = None,
-        initial_policy: typing.Optional[typing.Sequence[_PolicyStatement_0fe33853]] = None,
-        insights_version: typing.Optional[_LambdaInsightsVersion_9dfbfef9] = None,
+        initial_policy: typing.Optional[typing.Sequence["_PolicyStatement_0fe33853"]] = None,
+        insights_version: typing.Optional["_LambdaInsightsVersion_9dfbfef9"] = None,
         ipv6_allowed_for_dual_stack: typing.Optional[builtins.bool] = None,
-        layers: typing.Optional[typing.Sequence[_ILayerVersion_5ac127c8]] = None,
+        layers: typing.Optional[typing.Sequence["_ILayerVersion_5ac127c8"]] = None,
         log_format: typing.Optional[builtins.str] = None,
-        logging_format: typing.Optional[_LoggingFormat_30be8e01] = None,
-        log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
-        log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-        log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
-        log_retention_retry_options: typing.Optional[typing.Union[_LogRetentionRetryOptions_ad797a7a, typing.Dict[builtins.str, typing.Any]]] = None,
-        log_retention_role: typing.Optional[_IRole_235f5d8e] = None,
+        logging_format: typing.Optional["_LoggingFormat_30be8e01"] = None,
+        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
+        log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
+        log_retention_retry_options: typing.Optional[typing.Union["_LogRetentionRetryOptions_ad797a7a", typing.Dict[builtins.str, typing.Any]]] = None,
+        log_retention_role: typing.Optional["_IRole_235f5d8e"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
-        params_and_secrets: typing.Optional[_ParamsAndSecretsLayerVersion_dce97f06] = None,
+        params_and_secrets: typing.Optional["_ParamsAndSecretsLayerVersion_dce97f06"] = None,
         profiling: typing.Optional[builtins.bool] = None,
-        profiling_group: typing.Optional[_IProfilingGroup_0bba72c4] = None,
-        recursive_loop: typing.Optional[_RecursiveLoop_fc293827] = None,
+        profiling_group: typing.Optional["_IProfilingGroup_0bba72c4"] = None,
+        recursive_loop: typing.Optional["_RecursiveLoop_fc293827"] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
-        runtime_management_mode: typing.Optional[_RuntimeManagementMode_688c173b] = None,
-        security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-        snap_start: typing.Optional[_SnapStartConf_2ffaa769] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
+        runtime_management_mode: typing.Optional["_RuntimeManagementMode_688c173b"] = None,
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
+        snap_start: typing.Optional["_SnapStartConf_2ffaa769"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
-        system_log_level_v2: typing.Optional[_SystemLogLevel_aea49dc2] = None,
-        tenancy_config: typing.Optional[_TenancyConfig_9e2f75ea] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        tracing: typing.Optional[_Tracing_9fe8e2bb] = None,
-        vpc: typing.Optional[_IVpc_f30d5663] = None,
-        vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
+        system_log_level_v2: typing.Optional["_SystemLogLevel_aea49dc2"] = None,
+        tenancy_config: typing.Optional["_TenancyConfig_9e2f75ea"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        tracing: typing.Optional["_Tracing_9fe8e2bb"] = None,
+        vpc: typing.Optional["_IVpc_f30d5663"] = None,
+        vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         aws_sdk_connection_reuse: typing.Optional[builtins.bool] = None,
-        bundling: typing.Optional[typing.Union[BundlingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        code: typing.Optional[_Code_7848f942] = None,
+        bundling: typing.Optional[typing.Union["BundlingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        code: typing.Optional["_Code_7848f942"] = None,
         deps_lock_file_path: typing.Optional[builtins.str] = None,
         entry: typing.Optional[builtins.str] = None,
         handler: typing.Optional[builtins.str] = None,
         project_root: typing.Optional[builtins.str] = None,
-        runtime: typing.Optional[_Runtime_b4eaa844] = None,
+        runtime: typing.Optional["_Runtime_b4eaa844"] = None,
     ) -> None:
         '''Properties for a NodejsFunction.
 
@@ -1959,6 +1961,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
 
         Example::
 
+            from aws_cdk import DockerVolume
             nodejs.NodejsFunction(self, "my-handler",
                 bundling=nodejs.BundlingOptions(
                     network="host",
@@ -2166,7 +2169,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
             self._values["runtime"] = runtime
 
     @builtins.property
-    def max_event_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_event_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of a request that Lambda sends to a function for processing.
 
         Minimum: 60 seconds
@@ -2175,25 +2178,25 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: Duration.hours(6)
         '''
         result = self._values.get("max_event_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def on_failure(self) -> typing.Optional[_IDestination_40f19de4]:
+    def on_failure(self) -> typing.Optional["_IDestination_40f19de4"]:
         '''The destination for failed invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_failure")
-        return typing.cast(typing.Optional[_IDestination_40f19de4], result)
+        return typing.cast(typing.Optional["_IDestination_40f19de4"], result)
 
     @builtins.property
-    def on_success(self) -> typing.Optional[_IDestination_40f19de4]:
+    def on_success(self) -> typing.Optional["_IDestination_40f19de4"]:
         '''The destination for successful invocations.
 
         :default: - no destination
         '''
         result = self._values.get("on_success")
-        return typing.cast(typing.Optional[_IDestination_40f19de4], result)
+        return typing.cast(typing.Optional["_IDestination_40f19de4"], result)
 
     @builtins.property
     def retry_attempts(self) -> typing.Optional[jsii.Number]:
@@ -2210,7 +2213,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
     @builtins.property
     def adot_instrumentation(
         self,
-    ) -> typing.Optional[_AdotInstrumentationConfig_7c38d65d]:
+    ) -> typing.Optional["_AdotInstrumentationConfig_7c38d65d"]:
         '''Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation.
 
         :default: - No ADOT instrumentation
@@ -2218,7 +2221,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :see: https://aws-otel.github.io/docs/getting-started/lambda
         '''
         result = self._values.get("adot_instrumentation")
-        return typing.cast(typing.Optional[_AdotInstrumentationConfig_7c38d65d], result)
+        return typing.cast(typing.Optional["_AdotInstrumentationConfig_7c38d65d"], result)
 
     @builtins.property
     def allow_all_ipv6_outbound(self) -> typing.Optional[builtins.bool]:
@@ -2280,43 +2283,43 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
     @builtins.property
     def application_log_level_v2(
         self,
-    ) -> typing.Optional[_ApplicationLogLevel_cd92660a]:
+    ) -> typing.Optional["_ApplicationLogLevel_cd92660a"]:
         '''Sets the application log level for the function.
 
         :default: ApplicationLogLevel.INFO
         '''
         result = self._values.get("application_log_level_v2")
-        return typing.cast(typing.Optional[_ApplicationLogLevel_cd92660a], result)
+        return typing.cast(typing.Optional["_ApplicationLogLevel_cd92660a"], result)
 
     @builtins.property
-    def architecture(self) -> typing.Optional[_Architecture_12d5a53f]:
+    def architecture(self) -> typing.Optional["_Architecture_12d5a53f"]:
         '''The system architectures compatible with this lambda function.
 
         :default: Architecture.X86_64
         '''
         result = self._values.get("architecture")
-        return typing.cast(typing.Optional[_Architecture_12d5a53f], result)
+        return typing.cast(typing.Optional["_Architecture_12d5a53f"], result)
 
     @builtins.property
-    def code_signing_config(self) -> typing.Optional[_ICodeSigningConfigRef_1d909622]:
+    def code_signing_config(self) -> typing.Optional["_ICodeSigningConfigRef_1d909622"]:
         '''Code signing config associated with this function.
 
         :default: - Not Sign the Code
         '''
         result = self._values.get("code_signing_config")
-        return typing.cast(typing.Optional[_ICodeSigningConfigRef_1d909622], result)
+        return typing.cast(typing.Optional["_ICodeSigningConfigRef_1d909622"], result)
 
     @builtins.property
-    def current_version_options(self) -> typing.Optional[_VersionOptions_981bb3c0]:
+    def current_version_options(self) -> typing.Optional["_VersionOptions_981bb3c0"]:
         '''Options for the ``lambda.Version`` resource automatically created by the ``fn.currentVersion`` method.
 
         :default: - default options as described in ``VersionOptions``
         '''
         result = self._values.get("current_version_options")
-        return typing.cast(typing.Optional[_VersionOptions_981bb3c0], result)
+        return typing.cast(typing.Optional["_VersionOptions_981bb3c0"], result)
 
     @builtins.property
-    def dead_letter_queue(self) -> typing.Optional[_IQueue_7ed6f679]:
+    def dead_letter_queue(self) -> typing.Optional["_IQueue_7ed6f679"]:
         '''The SQS queue to use if DLQ is enabled.
 
         If SNS topic is desired, specify ``deadLetterTopic`` property instead.
@@ -2324,7 +2327,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: - SQS queue with 14 day retention period if ``deadLetterQueueEnabled`` is ``true``
         '''
         result = self._values.get("dead_letter_queue")
-        return typing.cast(typing.Optional[_IQueue_7ed6f679], result)
+        return typing.cast(typing.Optional["_IQueue_7ed6f679"], result)
 
     @builtins.property
     def dead_letter_queue_enabled(self) -> typing.Optional[builtins.bool]:
@@ -2339,7 +2342,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def dead_letter_topic(self) -> typing.Optional[_ITopic_9eca4852]:
+    def dead_letter_topic(self) -> typing.Optional["_ITopic_9eca4852"]:
         '''The SNS topic to use as a DLQ.
 
         Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created
@@ -2348,7 +2351,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: - no SNS topic
         '''
         result = self._values.get("dead_letter_topic")
-        return typing.cast(typing.Optional[_ITopic_9eca4852], result)
+        return typing.cast(typing.Optional["_ITopic_9eca4852"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -2360,7 +2363,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def durable_config(self) -> typing.Optional[_DurableConfig_05b238fa]:
+    def durable_config(self) -> typing.Optional["_DurableConfig_05b238fa"]:
         '''The durable configuration for the function.
 
         If durability is added to an existing function, a resource replacement will be triggered.
@@ -2369,7 +2372,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: - No durable configuration
         '''
         result = self._values.get("durable_config")
-        return typing.cast(typing.Optional[_DurableConfig_05b238fa], result)
+        return typing.cast(typing.Optional["_DurableConfig_05b238fa"], result)
 
     @builtins.property
     def environment(
@@ -2387,25 +2390,25 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def environment_encryption(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def environment_encryption(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''The AWS KMS key that's used to encrypt your function's environment variables.
 
         :default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         '''
         result = self._values.get("environment_encryption")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
-    def ephemeral_storage_size(self) -> typing.Optional[_Size_7b441c34]:
+    def ephemeral_storage_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''The size of the function’s /tmp directory in MiB.
 
         :default: 512 MiB
         '''
         result = self._values.get("ephemeral_storage_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def events(self) -> typing.Optional[typing.List[_IEventSource_3686b3f8]]:
+    def events(self) -> typing.Optional[typing.List["_IEventSource_3686b3f8"]]:
         '''Event sources for this function.
 
         You can also add event sources using ``addEventSource``.
@@ -2413,16 +2416,16 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: - No event sources.
         '''
         result = self._values.get("events")
-        return typing.cast(typing.Optional[typing.List[_IEventSource_3686b3f8]], result)
+        return typing.cast(typing.Optional[typing.List["_IEventSource_3686b3f8"]], result)
 
     @builtins.property
-    def filesystem(self) -> typing.Optional[_FileSystem_a5fa005d]:
+    def filesystem(self) -> typing.Optional["_FileSystem_a5fa005d"]:
         '''The filesystem configuration for the lambda function.
 
         :default: - will not mount any filesystem
         '''
         result = self._values.get("filesystem")
-        return typing.cast(typing.Optional[_FileSystem_a5fa005d], result)
+        return typing.cast(typing.Optional["_FileSystem_a5fa005d"], result)
 
     @builtins.property
     def function_name(self) -> typing.Optional[builtins.str]:
@@ -2437,7 +2440,9 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def initial_policy(self) -> typing.Optional[typing.List[_PolicyStatement_0fe33853]]:
+    def initial_policy(
+        self,
+    ) -> typing.Optional[typing.List["_PolicyStatement_0fe33853"]]:
         '''Initial policy statements to add to the created Lambda Role.
 
         You can call ``addToRolePolicy`` to the created lambda to add statements post creation.
@@ -2445,10 +2450,10 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: - No policy statements are added to the created Lambda role.
         '''
         result = self._values.get("initial_policy")
-        return typing.cast(typing.Optional[typing.List[_PolicyStatement_0fe33853]], result)
+        return typing.cast(typing.Optional[typing.List["_PolicyStatement_0fe33853"]], result)
 
     @builtins.property
-    def insights_version(self) -> typing.Optional[_LambdaInsightsVersion_9dfbfef9]:
+    def insights_version(self) -> typing.Optional["_LambdaInsightsVersion_9dfbfef9"]:
         '''Specify the version of CloudWatch Lambda insights to use for monitoring.
 
         :default: - No Lambda Insights
@@ -2456,7 +2461,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-Getting-Started-docker.html
         '''
         result = self._values.get("insights_version")
-        return typing.cast(typing.Optional[_LambdaInsightsVersion_9dfbfef9], result)
+        return typing.cast(typing.Optional["_LambdaInsightsVersion_9dfbfef9"], result)
 
     @builtins.property
     def ipv6_allowed_for_dual_stack(self) -> typing.Optional[builtins.bool]:
@@ -2470,7 +2475,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def layers(self) -> typing.Optional[typing.List[_ILayerVersion_5ac127c8]]:
+    def layers(self) -> typing.Optional[typing.List["_ILayerVersion_5ac127c8"]]:
         '''A list of layers to add to the function's execution environment.
 
         You can configure your Lambda function to pull in
@@ -2480,7 +2485,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: - No layers.
         '''
         result = self._values.get("layers")
-        return typing.cast(typing.Optional[typing.List[_ILayerVersion_5ac127c8]], result)
+        return typing.cast(typing.Optional[typing.List["_ILayerVersion_5ac127c8"]], result)
 
     @builtins.property
     def log_format(self) -> typing.Optional[builtins.str]:
@@ -2496,16 +2501,16 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def logging_format(self) -> typing.Optional[_LoggingFormat_30be8e01]:
+    def logging_format(self) -> typing.Optional["_LoggingFormat_30be8e01"]:
         '''Sets the loggingFormat for the function.
 
         :default: LoggingFormat.TEXT
         '''
         result = self._values.get("logging_format")
-        return typing.cast(typing.Optional[_LoggingFormat_30be8e01], result)
+        return typing.cast(typing.Optional["_LoggingFormat_30be8e01"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
+    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
         '''The log group the function sends logs to.
 
         By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/.
@@ -2519,10 +2524,10 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: ``/aws/lambda/${this.functionName}`` - default log group created by Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional[_ILogGroup_3c4fa718], result)
+        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
 
     @builtins.property
-    def log_removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def log_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''(deprecated) Determine the removal policy of the log group that is auto-created by this construct.
 
         Normally you want to retain the log group so you can diagnose issues
@@ -2537,10 +2542,10 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :stability: deprecated
         '''
         result = self._values.get("log_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def log_retention(self) -> typing.Optional[_RetentionDays_070f99f0]:
+    def log_retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
         '''(deprecated) The number of days log events are kept in CloudWatch Logs.
 
         When updating
@@ -2568,12 +2573,12 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :stability: deprecated
         '''
         result = self._values.get("log_retention")
-        return typing.cast(typing.Optional[_RetentionDays_070f99f0], result)
+        return typing.cast(typing.Optional["_RetentionDays_070f99f0"], result)
 
     @builtins.property
     def log_retention_retry_options(
         self,
-    ) -> typing.Optional[_LogRetentionRetryOptions_ad797a7a]:
+    ) -> typing.Optional["_LogRetentionRetryOptions_ad797a7a"]:
         '''When log retention is specified, a custom resource attempts to create the CloudWatch log group.
 
         These options control the retry policy when interacting with CloudWatch APIs.
@@ -2584,10 +2589,10 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: - Default AWS SDK retry options.
         '''
         result = self._values.get("log_retention_retry_options")
-        return typing.cast(typing.Optional[_LogRetentionRetryOptions_ad797a7a], result)
+        return typing.cast(typing.Optional["_LogRetentionRetryOptions_ad797a7a"], result)
 
     @builtins.property
-    def log_retention_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def log_retention_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role for the Lambda function associated with the custom resource that sets the retention policy.
 
         This is a legacy API and we strongly recommend you migrate to ``logGroup`` if you can.
@@ -2596,7 +2601,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: - A new role is created.
         '''
         result = self._values.get("log_retention_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def memory_size(self) -> typing.Optional[jsii.Number]:
@@ -2614,7 +2619,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
     @builtins.property
     def params_and_secrets(
         self,
-    ) -> typing.Optional[_ParamsAndSecretsLayerVersion_dce97f06]:
+    ) -> typing.Optional["_ParamsAndSecretsLayerVersion_dce97f06"]:
         '''Specify the configuration of Parameters and Secrets Extension.
 
         :default: - No Parameters and Secrets Extension
@@ -2622,7 +2627,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :see: https://docs.aws.amazon.com/systems-manager/latest/userguide/ps-integration-lambda-extensions.html
         '''
         result = self._values.get("params_and_secrets")
-        return typing.cast(typing.Optional[_ParamsAndSecretsLayerVersion_dce97f06], result)
+        return typing.cast(typing.Optional["_ParamsAndSecretsLayerVersion_dce97f06"], result)
 
     @builtins.property
     def profiling(self) -> typing.Optional[builtins.bool]:
@@ -2636,7 +2641,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def profiling_group(self) -> typing.Optional[_IProfilingGroup_0bba72c4]:
+    def profiling_group(self) -> typing.Optional["_IProfilingGroup_0bba72c4"]:
         '''Profiling Group.
 
         :default: - A new profiling group will be created if ``profiling`` is set.
@@ -2644,10 +2649,10 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :see: https://docs.aws.amazon.com/codeguru/latest/profiler-ug/setting-up-lambda.html
         '''
         result = self._values.get("profiling_group")
-        return typing.cast(typing.Optional[_IProfilingGroup_0bba72c4], result)
+        return typing.cast(typing.Optional["_IProfilingGroup_0bba72c4"], result)
 
     @builtins.property
-    def recursive_loop(self) -> typing.Optional[_RecursiveLoop_fc293827]:
+    def recursive_loop(self) -> typing.Optional["_RecursiveLoop_fc293827"]:
         '''Sets the Recursive Loop Protection for Lambda Function.
 
         It lets Lambda detect and terminate unintended recursive loops.
@@ -2655,7 +2660,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: RecursiveLoop.Terminate
         '''
         result = self._values.get("recursive_loop")
-        return typing.cast(typing.Optional[_RecursiveLoop_fc293827], result)
+        return typing.cast(typing.Optional["_RecursiveLoop_fc293827"], result)
 
     @builtins.property
     def reserved_concurrent_executions(self) -> typing.Optional[jsii.Number]:
@@ -2669,7 +2674,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''Lambda execution role.
 
         This is the role that will be assumed by the function upon execution.
@@ -2688,21 +2693,23 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         Both supplied and generated roles can always be changed by calling ``addToRolePolicy``.
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def runtime_management_mode(
         self,
-    ) -> typing.Optional[_RuntimeManagementMode_688c173b]:
+    ) -> typing.Optional["_RuntimeManagementMode_688c173b"]:
         '''Sets the runtime management configuration for a function's version.
 
         :default: Auto
         '''
         result = self._values.get("runtime_management_mode")
-        return typing.cast(typing.Optional[_RuntimeManagementMode_688c173b], result)
+        return typing.cast(typing.Optional["_RuntimeManagementMode_688c173b"], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[_ISecurityGroup_acf8a799]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
         '''The list of security groups to associate with the Lambda's network interfaces.
 
         Only used if 'vpc' is supplied.
@@ -2714,10 +2721,10 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         group will be created for this function.
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[_ISecurityGroup_acf8a799]], result)
+        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
-    def snap_start(self) -> typing.Optional[_SnapStartConf_2ffaa769]:
+    def snap_start(self) -> typing.Optional["_SnapStartConf_2ffaa769"]:
         '''Enable SnapStart for Lambda Function.
 
         SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13, and .NET 8 runtime
@@ -2725,7 +2732,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: - No snapstart
         '''
         result = self._values.get("snap_start")
-        return typing.cast(typing.Optional[_SnapStartConf_2ffaa769], result)
+        return typing.cast(typing.Optional["_SnapStartConf_2ffaa769"], result)
 
     @builtins.property
     def system_log_level(self) -> typing.Optional[builtins.str]:
@@ -2741,25 +2748,25 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def system_log_level_v2(self) -> typing.Optional[_SystemLogLevel_aea49dc2]:
+    def system_log_level_v2(self) -> typing.Optional["_SystemLogLevel_aea49dc2"]:
         '''Sets the system log level for the function.
 
         :default: SystemLogLevel.INFO
         '''
         result = self._values.get("system_log_level_v2")
-        return typing.cast(typing.Optional[_SystemLogLevel_aea49dc2], result)
+        return typing.cast(typing.Optional["_SystemLogLevel_aea49dc2"], result)
 
     @builtins.property
-    def tenancy_config(self) -> typing.Optional[_TenancyConfig_9e2f75ea]:
+    def tenancy_config(self) -> typing.Optional["_TenancyConfig_9e2f75ea"]:
         '''The tenancy configuration for the function.
 
         :default: - Tenant isolation is not enabled
         '''
         result = self._values.get("tenancy_config")
-        return typing.cast(typing.Optional[_TenancyConfig_9e2f75ea], result)
+        return typing.cast(typing.Optional["_TenancyConfig_9e2f75ea"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The function execution time (in seconds) after which Lambda terminates the function.
 
         Because the execution time affects cost, set this value
@@ -2768,19 +2775,19 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: Duration.seconds(3)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def tracing(self) -> typing.Optional[_Tracing_9fe8e2bb]:
+    def tracing(self) -> typing.Optional["_Tracing_9fe8e2bb"]:
         '''Enable AWS X-Ray Tracing for Lambda Function.
 
         :default: Tracing.Disabled
         '''
         result = self._values.get("tracing")
-        return typing.cast(typing.Optional[_Tracing_9fe8e2bb], result)
+        return typing.cast(typing.Optional["_Tracing_9fe8e2bb"], result)
 
     @builtins.property
-    def vpc(self) -> typing.Optional[_IVpc_f30d5663]:
+    def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
         '''VPC network to place Lambda network interfaces.
 
         Specify this if the Lambda function needs to access resources in a VPC.
@@ -2789,10 +2796,10 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: - Function is not placed within a VPC.
         '''
         result = self._values.get("vpc")
-        return typing.cast(typing.Optional[_IVpc_f30d5663], result)
+        return typing.cast(typing.Optional["_IVpc_f30d5663"], result)
 
     @builtins.property
-    def vpc_subnets(self) -> typing.Optional[_SubnetSelection_e57d76df]:
+    def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
         '''Where to place the network interfaces within the VPC.
 
         This requires ``vpc`` to be specified in order for interfaces to actually be
@@ -2804,7 +2811,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: - the Vpc default strategy if not specified
         '''
         result = self._values.get("vpc_subnets")
-        return typing.cast(typing.Optional[_SubnetSelection_e57d76df], result)
+        return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
     def aws_sdk_connection_reuse(self) -> typing.Optional[builtins.bool]:
@@ -2829,7 +2836,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def bundling(self) -> typing.Optional[BundlingOptions]:
+    def bundling(self) -> typing.Optional["BundlingOptions"]:
         '''Bundling options.
 
         :default:
@@ -2838,10 +2845,10 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         modules are bundled.
         '''
         result = self._values.get("bundling")
-        return typing.cast(typing.Optional[BundlingOptions], result)
+        return typing.cast(typing.Optional["BundlingOptions"], result)
 
     @builtins.property
-    def code(self) -> typing.Optional[_Code_7848f942]:
+    def code(self) -> typing.Optional["_Code_7848f942"]:
         '''The code that will be deployed to the Lambda Handler.
 
         If included, then properties related to
@@ -2852,7 +2859,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: - the code is bundled by esbuild
         '''
         result = self._values.get("code")
-        return typing.cast(typing.Optional[_Code_7848f942], result)
+        return typing.cast(typing.Optional["_Code_7848f942"], result)
 
     @builtins.property
     def deps_lock_file_path(self) -> typing.Optional[builtins.str]:
@@ -2911,7 +2918,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def runtime(self) -> typing.Optional[_Runtime_b4eaa844]:
+    def runtime(self) -> typing.Optional["_Runtime_b4eaa844"]:
         '''The runtime environment.
 
         Only runtimes of the Node.js family are
@@ -2920,7 +2927,7 @@ class NodejsFunctionProps(_FunctionOptions_328f4d39):
         :default: ``Runtime.NODEJS_LATEST`` if the ``@aws-cdk/aws-lambda-nodejs:useLatestRuntimeVersion`` feature flag is enabled, otherwise ``Runtime.NODEJS_16_X``
         '''
         result = self._values.get("runtime")
-        return typing.cast(typing.Optional[_Runtime_b4eaa844], result)
+        return typing.cast(typing.Optional["_Runtime_b4eaa844"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

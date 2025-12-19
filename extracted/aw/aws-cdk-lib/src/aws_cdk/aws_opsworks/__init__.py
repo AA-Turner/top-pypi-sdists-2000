@@ -146,21 +146,21 @@ class CfnApp(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         stack_id: builtins.str,
         type: builtins.str,
-        app_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApp.SourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        data_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApp.DataSourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        app_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.SourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        data_sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.DataSourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         domains: typing.Optional[typing.Sequence[builtins.str]] = None,
-        enable_ssl: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApp.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        enable_ssl: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        environment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         shortname: typing.Optional[builtins.str] = None,
-        ssl_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApp.SslConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ssl_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.SslConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::OpsWorks::App``.
 
@@ -213,7 +213,7 @@ class CfnApp(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApp", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -244,9 +244,9 @@ class CfnApp(
 
     @builtins.property
     @jsii.member(jsii_name="appRef")
-    def app_ref(self) -> _AppReference_a581ee2c:
+    def app_ref(self) -> "_AppReference_a581ee2c":
         '''A reference to a App resource.'''
-        return typing.cast(_AppReference_a581ee2c, jsii.get(self, "appRef"))
+        return typing.cast("_AppReference_a581ee2c", jsii.get(self, "appRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -304,14 +304,14 @@ class CfnApp(
     @jsii.member(jsii_name="appSource")
     def app_source(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApp.SourceProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.SourceProperty"]]:
         '''A ``Source`` object that specifies the app repository.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApp.SourceProperty"]], jsii.get(self, "appSource"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.SourceProperty"]], jsii.get(self, "appSource"))
 
     @app_source.setter
     def app_source(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApp.SourceProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.SourceProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__185dad1883ad44edf530c80eedb41525e399494340def4de222a61617999031a)
@@ -322,14 +322,14 @@ class CfnApp(
     @jsii.member(jsii_name="attributes")
     def attributes(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''One or more user-defined key/value pairs to be added to the stack attributes.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "attributes"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "attributes"))
 
     @attributes.setter
     def attributes(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bced3305a9b7d70a45a3681d489962e84c64c8313a37872dfa4339ac6982d92d)
@@ -340,14 +340,14 @@ class CfnApp(
     @jsii.member(jsii_name="dataSources")
     def data_sources(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApp.DataSourceProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.DataSourceProperty"]]]]:
         '''The app's data source.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApp.DataSourceProperty"]]]], jsii.get(self, "dataSources"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.DataSourceProperty"]]]], jsii.get(self, "dataSources"))
 
     @data_sources.setter
     def data_sources(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApp.DataSourceProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.DataSourceProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__64566650c8e8b9d3d6b7f320ae9f2fd02d48557d1d06b6133a991557c9326de8)
@@ -384,14 +384,14 @@ class CfnApp(
     @jsii.member(jsii_name="enableSsl")
     def enable_ssl(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to enable SSL for the app.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableSsl"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enableSsl"))
 
     @enable_ssl.setter
     def enable_ssl(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8518eeb92295cd7150f12a3df695529ec26a1dd47aa59533a210493d9ee8bd8d)
@@ -402,14 +402,14 @@ class CfnApp(
     @jsii.member(jsii_name="environment")
     def environment(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApp.EnvironmentVariableProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.EnvironmentVariableProperty"]]]]:
         '''An array of ``EnvironmentVariable`` objects that specify environment variables to be associated with the app.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApp.EnvironmentVariableProperty"]]]], jsii.get(self, "environment"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.EnvironmentVariableProperty"]]]], jsii.get(self, "environment"))
 
     @environment.setter
     def environment(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApp.EnvironmentVariableProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.EnvironmentVariableProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b9d5c35bc69f1bf2418216b8439788ce44352eba1ce1bd2f8c6d0ed3fa939b21)
@@ -433,14 +433,14 @@ class CfnApp(
     @jsii.member(jsii_name="sslConfiguration")
     def ssl_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApp.SslConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.SslConfigurationProperty"]]:
         '''An ``SslConfiguration`` object with the SSL configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApp.SslConfigurationProperty"]], jsii.get(self, "sslConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.SslConfigurationProperty"]], jsii.get(self, "sslConfiguration"))
 
     @ssl_configuration.setter
     def ssl_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApp.SslConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.SslConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fb8571a770edf95757d930ebc880d2330b6605dcf2c857c4616ee5cb1bd02163)
@@ -542,7 +542,7 @@ class CfnApp(
             *,
             key: builtins.str,
             value: builtins.str,
-            secure: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            secure: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''
             :param key: (Required) The environment variable's name, which can consist of up to 64 characters and must be specified. The name can contain upper- and lowercase letters, numbers, and underscores (_), but it must start with a letter or underscore.
@@ -605,7 +605,7 @@ class CfnApp(
         @builtins.property
         def secure(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''(Optional) Whether the variable's value is returned by the ``DescribeApps`` action.
 
             To hide an environment variable's value, set ``Secure`` to ``true`` . ``DescribeApps`` returns ``*****FILTERED*****`` instead of the actual value. The default value for ``Secure`` is ``false`` .
@@ -613,7 +613,7 @@ class CfnApp(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-app-environmentvariable.html#cfn-opsworks-app-environmentvariable-secure
             '''
             result = self._values.get("secure")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -896,15 +896,15 @@ class CfnAppProps:
         name: builtins.str,
         stack_id: builtins.str,
         type: builtins.str,
-        app_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.SourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        data_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.DataSourceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        app_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.SourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        data_sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.DataSourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         domains: typing.Optional[typing.Sequence[builtins.str]] = None,
-        enable_ssl: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.EnvironmentVariableProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        enable_ssl: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        environment: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         shortname: typing.Optional[builtins.str] = None,
-        ssl_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.SslConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        ssl_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApp.SslConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApp``.
 
@@ -1043,35 +1043,35 @@ class CfnAppProps:
     @builtins.property
     def app_source(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApp.SourceProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.SourceProperty"]]:
         '''A ``Source`` object that specifies the app repository.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-appsource
         '''
         result = self._values.get("app_source")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApp.SourceProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.SourceProperty"]], result)
 
     @builtins.property
     def attributes(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''One or more user-defined key/value pairs to be added to the stack attributes.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-attributes
         '''
         result = self._values.get("attributes")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def data_sources(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApp.DataSourceProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.DataSourceProperty"]]]]:
         '''The app's data source.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-datasources
         '''
         result = self._values.get("data_sources")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApp.DataSourceProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.DataSourceProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1096,18 +1096,18 @@ class CfnAppProps:
     @builtins.property
     def enable_ssl(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to enable SSL for the app.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-enablessl
         '''
         result = self._values.get("enable_ssl")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def environment(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApp.EnvironmentVariableProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.EnvironmentVariableProperty"]]]]:
         '''An array of ``EnvironmentVariable`` objects that specify environment variables to be associated with the app.
 
         After you deploy the app, these variables are defined on the associated app server instance. For more information, see `Environment Variables <https://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-creating.html#workingapps-creating-environment>`_ .
@@ -1120,7 +1120,7 @@ class CfnAppProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-environment
         '''
         result = self._values.get("environment")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApp.EnvironmentVariableProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApp.EnvironmentVariableProperty"]]]], result)
 
     @builtins.property
     def shortname(self) -> typing.Optional[builtins.str]:
@@ -1134,13 +1134,13 @@ class CfnAppProps:
     @builtins.property
     def ssl_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApp.SslConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.SslConfigurationProperty"]]:
         '''An ``SslConfiguration`` object with the SSL configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-sslconfiguration
         '''
         result = self._values.get("ssl_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApp.SslConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnApp.SslConfigurationProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1180,7 +1180,7 @@ class CfnElasticLoadBalancerAttachment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         elastic_load_balancer_name: builtins.str,
@@ -1216,7 +1216,7 @@ class CfnElasticLoadBalancerAttachment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnElasticLoadBalancerAttachment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1262,9 +1262,9 @@ class CfnElasticLoadBalancerAttachment(
     @jsii.member(jsii_name="elasticLoadBalancerAttachmentRef")
     def elastic_load_balancer_attachment_ref(
         self,
-    ) -> _ElasticLoadBalancerAttachmentReference_1524b89b:
+    ) -> "_ElasticLoadBalancerAttachmentReference_1524b89b":
         '''A reference to a ElasticLoadBalancerAttachment resource.'''
-        return typing.cast(_ElasticLoadBalancerAttachmentReference_1524b89b, jsii.get(self, "elasticLoadBalancerAttachmentRef"))
+        return typing.cast("_ElasticLoadBalancerAttachmentReference_1524b89b", jsii.get(self, "elasticLoadBalancerAttachmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="elasticLoadBalancerName")
@@ -1448,7 +1448,7 @@ class CfnInstance(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         instance_type: builtins.str,
@@ -1459,17 +1459,17 @@ class CfnInstance(
         architecture: typing.Optional[builtins.str] = None,
         auto_scaling_type: typing.Optional[builtins.str] = None,
         availability_zone: typing.Optional[builtins.str] = None,
-        block_device_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstance.BlockDeviceMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        ebs_optimized: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        block_device_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.BlockDeviceMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ebs_optimized: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         elastic_ips: typing.Optional[typing.Sequence[builtins.str]] = None,
         hostname: typing.Optional[builtins.str] = None,
-        install_updates_on_boot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        install_updates_on_boot: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         os: typing.Optional[builtins.str] = None,
         root_device_type: typing.Optional[builtins.str] = None,
         ssh_key_name: typing.Optional[builtins.str] = None,
         subnet_id: typing.Optional[builtins.str] = None,
         tenancy: typing.Optional[builtins.str] = None,
-        time_based_auto_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstance.TimeBasedAutoScalingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        time_based_auto_scaling: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.TimeBasedAutoScalingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         virtualization_type: typing.Optional[builtins.str] = None,
         volumes: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
@@ -1542,7 +1542,7 @@ class CfnInstance(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInstance", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1635,9 +1635,9 @@ class CfnInstance(
 
     @builtins.property
     @jsii.member(jsii_name="instanceRef")
-    def instance_ref(self) -> _InstanceReference_b90fe411:
+    def instance_ref(self) -> "_InstanceReference_b90fe411":
         '''A reference to a Instance resource.'''
-        return typing.cast(_InstanceReference_b90fe411, jsii.get(self, "instanceRef"))
+        return typing.cast("_InstanceReference_b90fe411", jsii.get(self, "instanceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="instanceType")
@@ -1750,14 +1750,14 @@ class CfnInstance(
     @jsii.member(jsii_name="blockDeviceMappings")
     def block_device_mappings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstance.BlockDeviceMappingProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.BlockDeviceMappingProperty"]]]]:
         '''An array of ``BlockDeviceMapping`` objects that specify the instance's block devices.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstance.BlockDeviceMappingProperty"]]]], jsii.get(self, "blockDeviceMappings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.BlockDeviceMappingProperty"]]]], jsii.get(self, "blockDeviceMappings"))
 
     @block_device_mappings.setter
     def block_device_mappings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInstance.BlockDeviceMappingProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.BlockDeviceMappingProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e26b3e54531ea4750ebcd10acbcacbf456f6855c3b5272dfcd85ceeaa432c455)
@@ -1768,14 +1768,14 @@ class CfnInstance(
     @jsii.member(jsii_name="ebsOptimized")
     def ebs_optimized(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to create an Amazon EBS-optimized instance.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "ebsOptimized"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "ebsOptimized"))
 
     @ebs_optimized.setter
     def ebs_optimized(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5ec1bf27e5cd83c8ba7388dfe17956f009f9836f2f5afa9558fb3ba8aa872cc7)
@@ -1815,14 +1815,14 @@ class CfnInstance(
     @jsii.member(jsii_name="installUpdatesOnBoot")
     def install_updates_on_boot(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to install operating system and package updates when the instance boots.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "installUpdatesOnBoot"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "installUpdatesOnBoot"))
 
     @install_updates_on_boot.setter
     def install_updates_on_boot(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__feb45fe733de533d0fde9a771368ef2623aef37105aafd42bee26dfa53e01db5)
@@ -1898,14 +1898,14 @@ class CfnInstance(
     @jsii.member(jsii_name="timeBasedAutoScaling")
     def time_based_auto_scaling(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.TimeBasedAutoScalingProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.TimeBasedAutoScalingProperty"]]:
         '''The time-based scaling configuration for the instance.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.TimeBasedAutoScalingProperty"]], jsii.get(self, "timeBasedAutoScaling"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.TimeBasedAutoScalingProperty"]], jsii.get(self, "timeBasedAutoScaling"))
 
     @time_based_auto_scaling.setter
     def time_based_auto_scaling(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.TimeBasedAutoScalingProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.TimeBasedAutoScalingProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9ffbe8115388f44a1f41ec2ceb16db364e3519d629ba7a55a34bbc3a12c9a7a1)
@@ -1953,7 +1953,7 @@ class CfnInstance(
             self,
             *,
             device_name: typing.Optional[builtins.str] = None,
-            ebs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstance.EbsBlockDeviceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ebs: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.EbsBlockDeviceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             no_device: typing.Optional[builtins.str] = None,
             virtual_name: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -2015,7 +2015,7 @@ class CfnInstance(
         @builtins.property
         def ebs(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.EbsBlockDeviceProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.EbsBlockDeviceProperty"]]:
             '''An ``EBSBlockDevice`` that defines how to configure an Amazon EBS volume when the instance is launched.
 
             You can specify either the ``VirtualName`` or ``Ebs`` , but not both.
@@ -2023,7 +2023,7 @@ class CfnInstance(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-instance-blockdevicemapping.html#cfn-opsworks-instance-blockdevicemapping-ebs
             '''
             result = self._values.get("ebs")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInstance.EbsBlockDeviceProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.EbsBlockDeviceProperty"]], result)
 
         @builtins.property
         def no_device(self) -> typing.Optional[builtins.str]:
@@ -2071,7 +2071,7 @@ class CfnInstance(
         def __init__(
             self,
             *,
-            delete_on_termination: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            delete_on_termination: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             iops: typing.Optional[jsii.Number] = None,
             snapshot_id: typing.Optional[builtins.str] = None,
             volume_size: typing.Optional[jsii.Number] = None,
@@ -2123,13 +2123,13 @@ class CfnInstance(
         @builtins.property
         def delete_on_termination(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether the volume is deleted on instance termination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-instance-ebsblockdevice.html#cfn-opsworks-instance-ebsblockdevice-deleteontermination
             '''
             result = self._values.get("delete_on_termination")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def iops(self) -> typing.Optional[jsii.Number]:
@@ -2203,13 +2203,13 @@ class CfnInstance(
         def __init__(
             self,
             *,
-            friday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            monday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            saturday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            sunday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            thursday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            tuesday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            wednesday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            friday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            monday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            saturday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            sunday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            thursday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            tuesday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            wednesday: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''
             :param friday: The schedule for Friday.
@@ -2281,79 +2281,79 @@ class CfnInstance(
         @builtins.property
         def friday(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The schedule for Friday.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-instance-timebasedautoscaling.html#cfn-opsworks-instance-timebasedautoscaling-friday
             '''
             result = self._values.get("friday")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def monday(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The schedule for Monday.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-instance-timebasedautoscaling.html#cfn-opsworks-instance-timebasedautoscaling-monday
             '''
             result = self._values.get("monday")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def saturday(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The schedule for Saturday.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-instance-timebasedautoscaling.html#cfn-opsworks-instance-timebasedautoscaling-saturday
             '''
             result = self._values.get("saturday")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def sunday(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The schedule for Sunday.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-instance-timebasedautoscaling.html#cfn-opsworks-instance-timebasedautoscaling-sunday
             '''
             result = self._values.get("sunday")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def thursday(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The schedule for Thursday.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-instance-timebasedautoscaling.html#cfn-opsworks-instance-timebasedautoscaling-thursday
             '''
             result = self._values.get("thursday")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def tuesday(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The schedule for Tuesday.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-instance-timebasedautoscaling.html#cfn-opsworks-instance-timebasedautoscaling-tuesday
             '''
             result = self._values.get("tuesday")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def wednesday(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The schedule for Wednesday.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-instance-timebasedautoscaling.html#cfn-opsworks-instance-timebasedautoscaling-wednesday
             '''
             result = self._values.get("wednesday")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2406,17 +2406,17 @@ class CfnInstanceProps:
         architecture: typing.Optional[builtins.str] = None,
         auto_scaling_type: typing.Optional[builtins.str] = None,
         availability_zone: typing.Optional[builtins.str] = None,
-        block_device_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstance.BlockDeviceMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        ebs_optimized: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        block_device_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.BlockDeviceMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ebs_optimized: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         elastic_ips: typing.Optional[typing.Sequence[builtins.str]] = None,
         hostname: typing.Optional[builtins.str] = None,
-        install_updates_on_boot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        install_updates_on_boot: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         os: typing.Optional[builtins.str] = None,
         root_device_type: typing.Optional[builtins.str] = None,
         ssh_key_name: typing.Optional[builtins.str] = None,
         subnet_id: typing.Optional[builtins.str] = None,
         tenancy: typing.Optional[builtins.str] = None,
-        time_based_auto_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstance.TimeBasedAutoScalingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        time_based_auto_scaling: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstance.TimeBasedAutoScalingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         virtualization_type: typing.Optional[builtins.str] = None,
         volumes: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
@@ -2669,7 +2669,7 @@ class CfnInstanceProps:
     @builtins.property
     def block_device_mappings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInstance.BlockDeviceMappingProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.BlockDeviceMappingProperty"]]]]:
         '''An array of ``BlockDeviceMapping`` objects that specify the instance's block devices.
 
         For more information, see `Block Device Mapping <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html>`_ . Note that block device mappings are not supported for custom AMIs.
@@ -2677,18 +2677,18 @@ class CfnInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-instance.html#cfn-opsworks-instance-blockdevicemappings
         '''
         result = self._values.get("block_device_mappings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInstance.BlockDeviceMappingProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstance.BlockDeviceMappingProperty"]]]], result)
 
     @builtins.property
     def ebs_optimized(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to create an Amazon EBS-optimized instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-instance.html#cfn-opsworks-instance-ebsoptimized
         '''
         result = self._values.get("ebs_optimized")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def elastic_ips(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2714,7 +2714,7 @@ class CfnInstanceProps:
     @builtins.property
     def install_updates_on_boot(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to install operating system and package updates when the instance boots.
 
         The default value is ``true`` . To control when updates are installed, set this value to ``false`` . You must then update your instances manually by using ``CreateDeployment`` to run the ``update_dependencies`` stack command or by manually running ``yum`` (Amazon Linux) or ``apt-get`` (Ubuntu) on the instances.
@@ -2725,7 +2725,7 @@ class CfnInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-instance.html#cfn-opsworks-instance-installupdatesonboot
         '''
         result = self._values.get("install_updates_on_boot")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def os(self) -> typing.Optional[builtins.str]:
@@ -2792,13 +2792,13 @@ class CfnInstanceProps:
     @builtins.property
     def time_based_auto_scaling(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInstance.TimeBasedAutoScalingProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.TimeBasedAutoScalingProperty"]]:
         '''The time-based scaling configuration for the instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-instance.html#cfn-opsworks-instance-timebasedautoscaling
         '''
         result = self._values.get("time_based_auto_scaling")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInstance.TimeBasedAutoScalingProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnInstance.TimeBasedAutoScalingProperty"]], result)
 
     @builtins.property
     def virtualization_type(self) -> typing.Optional[builtins.str]:
@@ -2846,6 +2846,7 @@ class CfnLayer(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_opsworks as opsworks
@@ -2921,28 +2922,28 @@ class CfnLayer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        auto_assign_elastic_ips: typing.Union[builtins.bool, _IResolvable_da3f097b],
-        auto_assign_public_ips: typing.Union[builtins.bool, _IResolvable_da3f097b],
-        enable_auto_healing: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        auto_assign_elastic_ips: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+        auto_assign_public_ips: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+        enable_auto_healing: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         name: builtins.str,
         shortname: builtins.str,
         stack_id: builtins.str,
         type: builtins.str,
-        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         custom_instance_profile_arn: typing.Optional[builtins.str] = None,
         custom_json: typing.Any = None,
-        custom_recipes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLayer.RecipesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_recipes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayer.RecipesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         custom_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        install_updates_on_boot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        lifecycle_event_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLayer.LifecycleEventConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        load_based_auto_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLayer.LoadBasedAutoScalingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        install_updates_on_boot: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        lifecycle_event_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayer.LifecycleEventConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        load_based_auto_scaling: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayer.LoadBasedAutoScalingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         packages: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        use_ebs_optimized_instances: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        volume_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLayer.VolumeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        use_ebs_optimized_instances: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        volume_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayer.VolumeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::OpsWorks::Layer``.
 
@@ -3009,7 +3010,7 @@ class CfnLayer(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLayer", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3053,28 +3054,28 @@ class CfnLayer(
 
     @builtins.property
     @jsii.member(jsii_name="layerRef")
-    def layer_ref(self) -> _LayerReference_a6340078:
+    def layer_ref(self) -> "_LayerReference_a6340078":
         '''A reference to a Layer resource.'''
-        return typing.cast(_LayerReference_a6340078, jsii.get(self, "layerRef"))
+        return typing.cast("_LayerReference_a6340078", jsii.get(self, "layerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="autoAssignElasticIps")
     def auto_assign_elastic_ips(
         self,
-    ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''Whether to automatically assign an `Elastic IP address <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html>`_ to the layer's instances. For more information, see `How to Edit a Layer <https://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-edit.html>`_ .'''
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], jsii.get(self, "autoAssignElasticIps"))
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], jsii.get(self, "autoAssignElasticIps"))
 
     @auto_assign_elastic_ips.setter
     def auto_assign_elastic_ips(
         self,
-        value: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        value: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__85978378733517803f89d7ce8ed749075b2acc8dc7d04f6b6e0c7e704d227ace)
@@ -3085,14 +3086,14 @@ class CfnLayer(
     @jsii.member(jsii_name="autoAssignPublicIps")
     def auto_assign_public_ips(
         self,
-    ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''For stacks that are running in a VPC, whether to automatically assign a public IP address to the layer's instances.'''
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], jsii.get(self, "autoAssignPublicIps"))
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], jsii.get(self, "autoAssignPublicIps"))
 
     @auto_assign_public_ips.setter
     def auto_assign_public_ips(
         self,
-        value: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        value: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a8ba55dbdeca1c05ff112a4836e57cd64cee40b72e11ac77b619cf736bfd51b1)
@@ -3101,14 +3102,16 @@ class CfnLayer(
 
     @builtins.property
     @jsii.member(jsii_name="enableAutoHealing")
-    def enable_auto_healing(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    def enable_auto_healing(
+        self,
+    ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''Whether to disable auto healing for the layer.'''
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], jsii.get(self, "enableAutoHealing"))
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], jsii.get(self, "enableAutoHealing"))
 
     @enable_auto_healing.setter
     def enable_auto_healing(
         self,
-        value: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        value: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2351ccfe7eb13aba979ae0e393a2fd47e40926de22ecf6aba42a950ceba9ccca)
@@ -3171,14 +3174,14 @@ class CfnLayer(
     @jsii.member(jsii_name="attributes")
     def attributes(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''One or more user-defined key-value pairs to be added to the stack attributes.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "attributes"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "attributes"))
 
     @attributes.setter
     def attributes(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9395644dbf3af1a765e40fb019bf24792671a4e69e059385183e9f7d8c09cef2)
@@ -3215,14 +3218,14 @@ class CfnLayer(
     @jsii.member(jsii_name="customRecipes")
     def custom_recipes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.RecipesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.RecipesProperty"]]:
         '''A ``LayerCustomRecipes`` object that specifies the layer custom recipes.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.RecipesProperty"]], jsii.get(self, "customRecipes"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.RecipesProperty"]], jsii.get(self, "customRecipes"))
 
     @custom_recipes.setter
     def custom_recipes(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.RecipesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.RecipesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b3e8c90b7b1058521d04d7f21c3b8bccb95a8c0f24ba2839b2d6f0cd9595fdc4)
@@ -3249,14 +3252,14 @@ class CfnLayer(
     @jsii.member(jsii_name="installUpdatesOnBoot")
     def install_updates_on_boot(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to install operating system and package updates when the instance boots.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "installUpdatesOnBoot"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "installUpdatesOnBoot"))
 
     @install_updates_on_boot.setter
     def install_updates_on_boot(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b42c4216b135b2a7074bfed5d80d9da1ba492a773d32e212a7237b6ebc391540)
@@ -3267,14 +3270,14 @@ class CfnLayer(
     @jsii.member(jsii_name="lifecycleEventConfiguration")
     def lifecycle_event_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.LifecycleEventConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.LifecycleEventConfigurationProperty"]]:
         '''A ``LifeCycleEventConfiguration`` object that you can use to configure the Shutdown event to specify an execution timeout and enable or disable Elastic Load Balancer connection draining.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.LifecycleEventConfigurationProperty"]], jsii.get(self, "lifecycleEventConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.LifecycleEventConfigurationProperty"]], jsii.get(self, "lifecycleEventConfiguration"))
 
     @lifecycle_event_configuration.setter
     def lifecycle_event_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.LifecycleEventConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.LifecycleEventConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cbfa971c40efb5d7a653e36e1485b5fbe539dada94fc400376fe7e3b2cc83f34)
@@ -3285,14 +3288,14 @@ class CfnLayer(
     @jsii.member(jsii_name="loadBasedAutoScaling")
     def load_based_auto_scaling(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.LoadBasedAutoScalingProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.LoadBasedAutoScalingProperty"]]:
         '''The load-based scaling configuration for the OpsWorks layer.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.LoadBasedAutoScalingProperty"]], jsii.get(self, "loadBasedAutoScaling"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.LoadBasedAutoScalingProperty"]], jsii.get(self, "loadBasedAutoScaling"))
 
     @load_based_auto_scaling.setter
     def load_based_auto_scaling(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.LoadBasedAutoScalingProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.LoadBasedAutoScalingProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8787d1ac56a7ea2ee28e6088302bfb26415ba39511d17c7faa187287901d8aca)
@@ -3314,12 +3317,12 @@ class CfnLayer(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies one or more sets of tags (key–value pairs) to associate with this OpsWorks layer.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2c7cab1714e0f9090eff8c2189561d0d041f66002f761e700cf53a8945ad6a1c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3329,14 +3332,14 @@ class CfnLayer(
     @jsii.member(jsii_name="useEbsOptimizedInstances")
     def use_ebs_optimized_instances(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to use Amazon EBS-optimized instances.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "useEbsOptimizedInstances"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "useEbsOptimizedInstances"))
 
     @use_ebs_optimized_instances.setter
     def use_ebs_optimized_instances(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__33349ab02f637b084f62e0224a27ce7354d923ff559128f7665a25e2318617ee)
@@ -3347,14 +3350,14 @@ class CfnLayer(
     @jsii.member(jsii_name="volumeConfigurations")
     def volume_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLayer.VolumeConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLayer.VolumeConfigurationProperty"]]]]:
         '''A ``VolumeConfigurations`` object that describes the layer's Amazon EBS volumes.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLayer.VolumeConfigurationProperty"]]]], jsii.get(self, "volumeConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLayer.VolumeConfigurationProperty"]]]], jsii.get(self, "volumeConfigurations"))
 
     @volume_configurations.setter
     def volume_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnLayer.VolumeConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLayer.VolumeConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__35ed3702ce91b7433e1b5faab32e09d55b2da499fcfb988423341ceb00a2b770)
@@ -3514,7 +3517,7 @@ class CfnLayer(
         def __init__(
             self,
             *,
-            shutdown_event_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLayer.ShutdownEventConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            shutdown_event_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayer.ShutdownEventConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''
             :param shutdown_event_configuration: The Shutdown event configuration.
@@ -3545,13 +3548,13 @@ class CfnLayer(
         @builtins.property
         def shutdown_event_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.ShutdownEventConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.ShutdownEventConfigurationProperty"]]:
             '''The Shutdown event configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-layer-lifecycleeventconfiguration.html#cfn-opsworks-layer-lifecycleeventconfiguration-shutdowneventconfiguration
             '''
             result = self._values.get("shutdown_event_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.ShutdownEventConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.ShutdownEventConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3577,9 +3580,9 @@ class CfnLayer(
         def __init__(
             self,
             *,
-            down_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLayer.AutoScalingThresholdsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            enable: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            up_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLayer.AutoScalingThresholdsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            down_scaling: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayer.AutoScalingThresholdsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            enable: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            up_scaling: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayer.AutoScalingThresholdsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''
             :param down_scaling: An ``AutoScalingThresholds`` object that describes the downscaling configuration, which defines how and when OpsWorks Stacks reduces the number of instances.
@@ -3631,35 +3634,35 @@ class CfnLayer(
         @builtins.property
         def down_scaling(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.AutoScalingThresholdsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.AutoScalingThresholdsProperty"]]:
             '''An ``AutoScalingThresholds`` object that describes the downscaling configuration, which defines how and when OpsWorks Stacks reduces the number of instances.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-layer-loadbasedautoscaling.html#cfn-opsworks-layer-loadbasedautoscaling-downscaling
             '''
             result = self._values.get("down_scaling")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.AutoScalingThresholdsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.AutoScalingThresholdsProperty"]], result)
 
         @builtins.property
         def enable(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether load-based auto scaling is enabled for the layer.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-layer-loadbasedautoscaling.html#cfn-opsworks-layer-loadbasedautoscaling-enable
             '''
             result = self._values.get("enable")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def up_scaling(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.AutoScalingThresholdsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.AutoScalingThresholdsProperty"]]:
             '''An ``AutoScalingThresholds`` object that describes the upscaling configuration, which defines how and when OpsWorks Stacks increases the number of instances.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-layer-loadbasedautoscaling.html#cfn-opsworks-layer-loadbasedautoscaling-upscaling
             '''
             result = self._values.get("up_scaling")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnLayer.AutoScalingThresholdsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.AutoScalingThresholdsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3804,7 +3807,7 @@ class CfnLayer(
         def __init__(
             self,
             *,
-            delay_until_elb_connections_drained: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            delay_until_elb_connections_drained: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             execution_timeout: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''
@@ -3838,7 +3841,7 @@ class CfnLayer(
         @builtins.property
         def delay_until_elb_connections_drained(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether to enable Elastic Load Balancing connection draining.
 
             For more information, see `Connection Draining <https://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/TerminologyandKeyConcepts.html#conn-drain>`_
@@ -3846,7 +3849,7 @@ class CfnLayer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-layer-shutdowneventconfiguration.html#cfn-opsworks-layer-shutdowneventconfiguration-delayuntilelbconnectionsdrained
             '''
             result = self._values.get("delay_until_elb_connections_drained")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def execution_timeout(self) -> typing.Optional[jsii.Number]:
@@ -3885,7 +3888,7 @@ class CfnLayer(
         def __init__(
             self,
             *,
-            encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            encrypted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             iops: typing.Optional[jsii.Number] = None,
             mount_point: typing.Optional[builtins.str] = None,
             number_of_disks: typing.Optional[jsii.Number] = None,
@@ -3949,7 +3952,7 @@ class CfnLayer(
         @builtins.property
         def encrypted(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether an Amazon EBS volume is encrypted.
 
             For more information, see `Amazon EBS Encryption <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html>`_ .
@@ -3957,7 +3960,7 @@ class CfnLayer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-layer-volumeconfiguration.html#cfn-opsworks-layer-volumeconfiguration-encrypted
             '''
             result = self._values.get("encrypted")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def iops(self) -> typing.Optional[jsii.Number]:
@@ -4066,25 +4069,25 @@ class CfnLayerProps:
     def __init__(
         self,
         *,
-        auto_assign_elastic_ips: typing.Union[builtins.bool, _IResolvable_da3f097b],
-        auto_assign_public_ips: typing.Union[builtins.bool, _IResolvable_da3f097b],
-        enable_auto_healing: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        auto_assign_elastic_ips: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+        auto_assign_public_ips: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+        enable_auto_healing: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         name: builtins.str,
         shortname: builtins.str,
         stack_id: builtins.str,
         type: builtins.str,
-        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         custom_instance_profile_arn: typing.Optional[builtins.str] = None,
         custom_json: typing.Any = None,
-        custom_recipes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLayer.RecipesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_recipes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayer.RecipesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         custom_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        install_updates_on_boot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        lifecycle_event_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLayer.LifecycleEventConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        load_based_auto_scaling: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLayer.LoadBasedAutoScalingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        install_updates_on_boot: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        lifecycle_event_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayer.LifecycleEventConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        load_based_auto_scaling: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayer.LoadBasedAutoScalingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         packages: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        use_ebs_optimized_instances: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        volume_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLayer.VolumeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        use_ebs_optimized_instances: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        volume_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnLayer.VolumeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLayer``.
 
@@ -4113,6 +4116,7 @@ class CfnLayerProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_opsworks as opsworks
@@ -4243,19 +4247,19 @@ class CfnLayerProps:
     @builtins.property
     def auto_assign_elastic_ips(
         self,
-    ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''Whether to automatically assign an `Elastic IP address <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html>`_ to the layer's instances. For more information, see `How to Edit a Layer <https://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-edit.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-autoassignelasticips
         '''
         result = self._values.get("auto_assign_elastic_ips")
         assert result is not None, "Required property 'auto_assign_elastic_ips' is missing"
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
     @builtins.property
     def auto_assign_public_ips(
         self,
-    ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''For stacks that are running in a VPC, whether to automatically assign a public IP address to the layer's instances.
 
         For more information, see `How to Edit a Layer <https://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-edit.html>`_ .
@@ -4264,17 +4268,19 @@ class CfnLayerProps:
         '''
         result = self._values.get("auto_assign_public_ips")
         assert result is not None, "Required property 'auto_assign_public_ips' is missing"
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
     @builtins.property
-    def enable_auto_healing(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+    def enable_auto_healing(
+        self,
+    ) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
         '''Whether to disable auto healing for the layer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-enableautohealing
         '''
         result = self._values.get("enable_auto_healing")
         assert result is not None, "Required property 'enable_auto_healing' is missing"
-        return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+        return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -4327,7 +4333,7 @@ class CfnLayerProps:
     @builtins.property
     def attributes(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''One or more user-defined key-value pairs to be added to the stack attributes.
 
         To create a cluster layer, set the ``EcsClusterArn`` attribute to the cluster's ARN.
@@ -4335,7 +4341,7 @@ class CfnLayerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-attributes
         '''
         result = self._values.get("attributes")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def custom_instance_profile_arn(self) -> typing.Optional[builtins.str]:
@@ -4362,13 +4368,13 @@ class CfnLayerProps:
     @builtins.property
     def custom_recipes(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLayer.RecipesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.RecipesProperty"]]:
         '''A ``LayerCustomRecipes`` object that specifies the layer custom recipes.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-customrecipes
         '''
         result = self._values.get("custom_recipes")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLayer.RecipesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.RecipesProperty"]], result)
 
     @builtins.property
     def custom_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -4382,7 +4388,7 @@ class CfnLayerProps:
     @builtins.property
     def install_updates_on_boot(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to install operating system and package updates when the instance boots.
 
         The default value is ``true`` . To control when updates are installed, set this value to ``false`` . You must then update your instances manually by using ``CreateDeployment`` to run the ``update_dependencies`` stack command or by manually running ``yum`` (Amazon Linux) or ``apt-get`` (Ubuntu) on the instances.
@@ -4393,29 +4399,29 @@ class CfnLayerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-installupdatesonboot
         '''
         result = self._values.get("install_updates_on_boot")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def lifecycle_event_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLayer.LifecycleEventConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.LifecycleEventConfigurationProperty"]]:
         '''A ``LifeCycleEventConfiguration`` object that you can use to configure the Shutdown event to specify an execution timeout and enable or disable Elastic Load Balancer connection draining.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-lifecycleeventconfiguration
         '''
         result = self._values.get("lifecycle_event_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLayer.LifecycleEventConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.LifecycleEventConfigurationProperty"]], result)
 
     @builtins.property
     def load_based_auto_scaling(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLayer.LoadBasedAutoScalingProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.LoadBasedAutoScalingProperty"]]:
         '''The load-based scaling configuration for the OpsWorks layer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-loadbasedautoscaling
         '''
         result = self._values.get("load_based_auto_scaling")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLayer.LoadBasedAutoScalingProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnLayer.LoadBasedAutoScalingProperty"]], result)
 
     @builtins.property
     def packages(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -4427,7 +4433,7 @@ class CfnLayerProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Specifies one or more sets of tags (key–value pairs) to associate with this OpsWorks layer.
 
         Use tags to manage your resources.
@@ -4435,29 +4441,29 @@ class CfnLayerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def use_ebs_optimized_instances(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to use Amazon EBS-optimized instances.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-useebsoptimizedinstances
         '''
         result = self._values.get("use_ebs_optimized_instances")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def volume_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLayer.VolumeConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLayer.VolumeConfigurationProperty"]]]]:
         '''A ``VolumeConfigurations`` object that describes the layer's Amazon EBS volumes.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-volumeconfigurations
         '''
         result = self._values.get("volume_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLayer.VolumeConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnLayer.VolumeConfigurationProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4485,6 +4491,7 @@ class CfnStack(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_opsworks as opsworks
@@ -4551,19 +4558,19 @@ class CfnStack(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         default_instance_profile_arn: builtins.str,
         name: builtins.str,
         service_role_arn: builtins.str,
         agent_version: typing.Optional[builtins.str] = None,
-        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        chef_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStack.ChefConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        chef_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.ChefConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         clone_app_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        clone_permissions: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        configuration_manager: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStack.StackConfigurationManagerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        custom_cookbooks_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStack.SourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        clone_permissions: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        configuration_manager: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.StackConfigurationManagerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_cookbooks_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.SourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         custom_json: typing.Any = None,
         default_availability_zone: typing.Optional[builtins.str] = None,
         default_os: typing.Optional[builtins.str] = None,
@@ -4571,13 +4578,13 @@ class CfnStack(
         default_ssh_key_name: typing.Optional[builtins.str] = None,
         default_subnet_id: typing.Optional[builtins.str] = None,
         ecs_cluster_arn: typing.Optional[builtins.str] = None,
-        elastic_ips: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStack.ElasticIpProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        elastic_ips: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.ElasticIpProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         hostname_theme: typing.Optional[builtins.str] = None,
-        rds_db_instances: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStack.RdsDbInstanceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        rds_db_instances: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.RdsDbInstanceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         source_stack_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        use_custom_cookbooks: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        use_opsworks_security_groups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        use_custom_cookbooks: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        use_opsworks_security_groups: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         vpc_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::OpsWorks::Stack``.
@@ -4646,7 +4653,7 @@ class CfnStack(
 
     @jsii.member(jsii_name="arnForStack")
     @builtins.classmethod
-    def arn_for_stack(cls, resource: _IStackRef_2db8adee) -> builtins.str:
+    def arn_for_stack(cls, resource: "_IStackRef_2db8adee") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4659,10 +4666,10 @@ class CfnStack(
     @builtins.classmethod
     def from_stack_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         stack_id: builtins.str,
-    ) -> _IStackRef_2db8adee:
+    ) -> "_IStackRef_2db8adee":
         '''Creates a new IStackRef from a stackId.
 
         :param scope: -
@@ -4674,7 +4681,7 @@ class CfnStack(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument stack_id", value=stack_id, expected_type=type_hints["stack_id"])
-        return typing.cast(_IStackRef_2db8adee, jsii.sinvoke(cls, "fromStackId", [scope, id, stack_id]))
+        return typing.cast("_IStackRef_2db8adee", jsii.sinvoke(cls, "fromStackId", [scope, id, stack_id]))
 
     @jsii.member(jsii_name="isCfnStack")
     @builtins.classmethod
@@ -4689,7 +4696,7 @@ class CfnStack(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStack", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4733,15 +4740,15 @@ class CfnStack(
 
     @builtins.property
     @jsii.member(jsii_name="stackRef")
-    def stack_ref(self) -> _StackReference_a7b46089:
+    def stack_ref(self) -> "_StackReference_a7b46089":
         '''A reference to a Stack resource.'''
-        return typing.cast(_StackReference_a7b46089, jsii.get(self, "stackRef"))
+        return typing.cast("_StackReference_a7b46089", jsii.get(self, "stackRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultInstanceProfileArn")
@@ -4802,14 +4809,14 @@ class CfnStack(
     @jsii.member(jsii_name="attributes")
     def attributes(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''One or more user-defined key-value pairs to be added to the stack attributes.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "attributes"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "attributes"))
 
     @attributes.setter
     def attributes(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6f53c27695b37fef5c31ad65f5466de830aad0d0e404b030255b9b656ad9b651)
@@ -4820,14 +4827,14 @@ class CfnStack(
     @jsii.member(jsii_name="chefConfiguration")
     def chef_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.ChefConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.ChefConfigurationProperty"]]:
         '''A ``ChefConfiguration`` object that specifies whether to enable Berkshelf and the Berkshelf version on Chef 11.10 stacks. For more information, see `Create a New Stack <https://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-creating.html>`_ .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.ChefConfigurationProperty"]], jsii.get(self, "chefConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.ChefConfigurationProperty"]], jsii.get(self, "chefConfiguration"))
 
     @chef_configuration.setter
     def chef_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.ChefConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.ChefConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__199cd836015029791dcb4c989b8ee7c17c9da5ef5f21511d039b62b20758d88b)
@@ -4851,14 +4858,14 @@ class CfnStack(
     @jsii.member(jsii_name="clonePermissions")
     def clone_permissions(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If you're cloning an OpsWorks stack, indicates whether to clone the source stack's permissions.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "clonePermissions"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "clonePermissions"))
 
     @clone_permissions.setter
     def clone_permissions(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__39351cb814c7f03e34818b747d34f2049f3376b379272c0f23b6fa4a1729cf48)
@@ -4869,14 +4876,14 @@ class CfnStack(
     @jsii.member(jsii_name="configurationManager")
     def configuration_manager(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.StackConfigurationManagerProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.StackConfigurationManagerProperty"]]:
         '''The configuration manager.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.StackConfigurationManagerProperty"]], jsii.get(self, "configurationManager"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.StackConfigurationManagerProperty"]], jsii.get(self, "configurationManager"))
 
     @configuration_manager.setter
     def configuration_manager(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.StackConfigurationManagerProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.StackConfigurationManagerProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f4a10239804abfac0b9d5794c751a6f72e554b611f7631b0a15f7bae4472fc18)
@@ -4887,14 +4894,14 @@ class CfnStack(
     @jsii.member(jsii_name="customCookbooksSource")
     def custom_cookbooks_source(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.SourceProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.SourceProperty"]]:
         '''Contains the information required to retrieve an app or cookbook from a repository.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.SourceProperty"]], jsii.get(self, "customCookbooksSource"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.SourceProperty"]], jsii.get(self, "customCookbooksSource"))
 
     @custom_cookbooks_source.setter
     def custom_cookbooks_source(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStack.SourceProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.SourceProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b869d48381b55b175cfbaba7ef0f8953ebdc1078d9d078e8bc09422eee78ec0d)
@@ -4996,14 +5003,14 @@ class CfnStack(
     @jsii.member(jsii_name="elasticIps")
     def elastic_ips(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.ElasticIpProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.ElasticIpProperty"]]]]:
         '''A list of Elastic IP addresses to register with the OpsWorks stack.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.ElasticIpProperty"]]]], jsii.get(self, "elasticIps"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.ElasticIpProperty"]]]], jsii.get(self, "elasticIps"))
 
     @elastic_ips.setter
     def elastic_ips(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.ElasticIpProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.ElasticIpProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8166a03c0b2b271ef176beca6de587fdfbf1f5c676c8d7d58b600ce5bb52738b)
@@ -5027,14 +5034,14 @@ class CfnStack(
     @jsii.member(jsii_name="rdsDbInstances")
     def rds_db_instances(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.RdsDbInstanceProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.RdsDbInstanceProperty"]]]]:
         '''The Amazon Relational Database Service ( Amazon RDS ) database instance to register with the OpsWorks stack.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.RdsDbInstanceProperty"]]]], jsii.get(self, "rdsDbInstances"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.RdsDbInstanceProperty"]]]], jsii.get(self, "rdsDbInstances"))
 
     @rds_db_instances.setter
     def rds_db_instances(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStack.RdsDbInstanceProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.RdsDbInstanceProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6e5c5e4acdf62f9ce5d722219f3d8ea43ee54e485cbe2d141d73dcfd9b1b9b7d)
@@ -5056,12 +5063,12 @@ class CfnStack(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map that contains tag keys and tag values that are attached to a stack or layer.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0b63dc4ecfd6df94a2c43b724328516c740a7518772217390f2712f6f5be41ae)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5071,14 +5078,14 @@ class CfnStack(
     @jsii.member(jsii_name="useCustomCookbooks")
     def use_custom_cookbooks(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether the stack uses custom cookbooks.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "useCustomCookbooks"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "useCustomCookbooks"))
 
     @use_custom_cookbooks.setter
     def use_custom_cookbooks(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f4c8233bb88e60d83459f630fa2811d4e9bcbc58db4b583deecc08f372dc1753)
@@ -5089,14 +5096,14 @@ class CfnStack(
     @jsii.member(jsii_name="useOpsworksSecurityGroups")
     def use_opsworks_security_groups(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to associate the OpsWorks Stacks built-in security groups with the stack's layers.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "useOpsworksSecurityGroups"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "useOpsworksSecurityGroups"))
 
     @use_opsworks_security_groups.setter
     def use_opsworks_security_groups(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0ac7bd4cfa5842431efd855ba2ad80900d00e084c7d85e9a5de10abac8159d5f)
@@ -5129,7 +5136,7 @@ class CfnStack(
             self,
             *,
             berkshelf_version: typing.Optional[builtins.str] = None,
-            manage_berkshelf: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            manage_berkshelf: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''
             :param berkshelf_version: The Berkshelf version.
@@ -5171,13 +5178,13 @@ class CfnStack(
         @builtins.property
         def manage_berkshelf(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether to enable Berkshelf.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opsworks-stack-chefconfiguration.html#cfn-opsworks-stack-chefconfiguration-manageberkshelf
             '''
             result = self._values.get("manage_berkshelf")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5618,12 +5625,12 @@ class CfnStackProps:
         name: builtins.str,
         service_role_arn: builtins.str,
         agent_version: typing.Optional[builtins.str] = None,
-        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        chef_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStack.ChefConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        chef_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.ChefConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         clone_app_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        clone_permissions: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        configuration_manager: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStack.StackConfigurationManagerProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        custom_cookbooks_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStack.SourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        clone_permissions: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        configuration_manager: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.StackConfigurationManagerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_cookbooks_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.SourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         custom_json: typing.Any = None,
         default_availability_zone: typing.Optional[builtins.str] = None,
         default_os: typing.Optional[builtins.str] = None,
@@ -5631,13 +5638,13 @@ class CfnStackProps:
         default_ssh_key_name: typing.Optional[builtins.str] = None,
         default_subnet_id: typing.Optional[builtins.str] = None,
         ecs_cluster_arn: typing.Optional[builtins.str] = None,
-        elastic_ips: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStack.ElasticIpProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        elastic_ips: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.ElasticIpProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         hostname_theme: typing.Optional[builtins.str] = None,
-        rds_db_instances: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStack.RdsDbInstanceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        rds_db_instances: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStack.RdsDbInstanceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         source_stack_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        use_custom_cookbooks: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        use_opsworks_security_groups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        use_custom_cookbooks: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        use_opsworks_security_groups: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         vpc_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnStack``.
@@ -5673,6 +5680,7 @@ class CfnStackProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_opsworks as opsworks
@@ -5869,24 +5877,24 @@ class CfnStackProps:
     @builtins.property
     def attributes(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''One or more user-defined key-value pairs to be added to the stack attributes.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-attributes
         '''
         result = self._values.get("attributes")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def chef_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStack.ChefConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.ChefConfigurationProperty"]]:
         '''A ``ChefConfiguration`` object that specifies whether to enable Berkshelf and the Berkshelf version on Chef 11.10 stacks. For more information, see `Create a New Stack <https://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-creating.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-chefconfiguration
         '''
         result = self._values.get("chef_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStack.ChefConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.ChefConfigurationProperty"]], result)
 
     @builtins.property
     def clone_app_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5900,18 +5908,18 @@ class CfnStackProps:
     @builtins.property
     def clone_permissions(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If you're cloning an OpsWorks stack, indicates whether to clone the source stack's permissions.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-clonepermissions
         '''
         result = self._values.get("clone_permissions")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def configuration_manager(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStack.StackConfigurationManagerProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.StackConfigurationManagerProperty"]]:
         '''The configuration manager.
 
         When you create a stack we recommend that you use the configuration manager to specify the Chef version: 12, 11.10, or 11.4 for Linux stacks, or 12.2 for Windows stacks. The default value for Linux stacks is currently 12.
@@ -5919,12 +5927,12 @@ class CfnStackProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-configurationmanager
         '''
         result = self._values.get("configuration_manager")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStack.StackConfigurationManagerProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.StackConfigurationManagerProperty"]], result)
 
     @builtins.property
     def custom_cookbooks_source(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStack.SourceProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.SourceProperty"]]:
         '''Contains the information required to retrieve an app or cookbook from a repository.
 
         For more information, see `Adding Apps <https://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-creating.html>`_ or `Cookbooks and Recipes <https://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook.html>`_ .
@@ -5932,7 +5940,7 @@ class CfnStackProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-customcookbookssource
         '''
         result = self._values.get("custom_cookbooks_source")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStack.SourceProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStack.SourceProperty"]], result)
 
     @builtins.property
     def custom_json(self) -> typing.Any:
@@ -6029,7 +6037,7 @@ class CfnStackProps:
     @builtins.property
     def elastic_ips(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStack.ElasticIpProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.ElasticIpProperty"]]]]:
         '''A list of Elastic IP addresses to register with the OpsWorks stack.
 
         .. epigraph::
@@ -6039,7 +6047,7 @@ class CfnStackProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-elasticips
         '''
         result = self._values.get("elastic_ips")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStack.ElasticIpProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.ElasticIpProperty"]]]], result)
 
     @builtins.property
     def hostname_theme(self) -> typing.Optional[builtins.str]:
@@ -6069,7 +6077,7 @@ class CfnStackProps:
     @builtins.property
     def rds_db_instances(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStack.RdsDbInstanceProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.RdsDbInstanceProperty"]]]]:
         '''The Amazon Relational Database Service ( Amazon RDS ) database instance to register with the OpsWorks stack.
 
         .. epigraph::
@@ -6079,7 +6087,7 @@ class CfnStackProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-rdsdbinstances
         '''
         result = self._values.get("rds_db_instances")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStack.RdsDbInstanceProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStack.RdsDbInstanceProperty"]]]], result)
 
     @builtins.property
     def source_stack_id(self) -> typing.Optional[builtins.str]:
@@ -6091,7 +6099,7 @@ class CfnStackProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map that contains tag keys and tag values that are attached to a stack or layer.
 
         - The key cannot be empty.
@@ -6103,23 +6111,23 @@ class CfnStackProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def use_custom_cookbooks(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether the stack uses custom cookbooks.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-usecustomcookbooks
         '''
         result = self._values.get("use_custom_cookbooks")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def use_opsworks_security_groups(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether to associate the OpsWorks Stacks built-in security groups with the stack's layers.
 
         OpsWorks Stacks provides a standard set of built-in security groups, one for each layer, which are associated with layers by default. With ``UseOpsworksSecurityGroups`` you can instead provide your own custom security groups. ``UseOpsworksSecurityGroups`` has the following settings:
@@ -6132,7 +6140,7 @@ class CfnStackProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-useopsworkssecuritygroups
         '''
         result = self._values.get("use_opsworks_security_groups")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def vpc_id(self) -> typing.Optional[builtins.str]:
@@ -6199,11 +6207,11 @@ class CfnUserProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         iam_user_arn: builtins.str,
-        allow_self_management: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        allow_self_management: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ssh_public_key: typing.Optional[builtins.str] = None,
         ssh_username: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -6242,7 +6250,7 @@ class CfnUserProfile(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6295,9 +6303,9 @@ class CfnUserProfile(
 
     @builtins.property
     @jsii.member(jsii_name="userProfileRef")
-    def user_profile_ref(self) -> _UserProfileReference_1302fa6f:
+    def user_profile_ref(self) -> "_UserProfileReference_1302fa6f":
         '''A reference to a UserProfile resource.'''
-        return typing.cast(_UserProfileReference_1302fa6f, jsii.get(self, "userProfileRef"))
+        return typing.cast("_UserProfileReference_1302fa6f", jsii.get(self, "userProfileRef"))
 
     @builtins.property
     @jsii.member(jsii_name="iamUserArn")
@@ -6316,14 +6324,14 @@ class CfnUserProfile(
     @jsii.member(jsii_name="allowSelfManagement")
     def allow_self_management(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether users can specify their own SSH public key through the My Settings page.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "allowSelfManagement"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "allowSelfManagement"))
 
     @allow_self_management.setter
     def allow_self_management(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__128de556beee0c143ac666faced9d32f126718068e45c973130b0b1e5f8ad3e3)
@@ -6372,7 +6380,7 @@ class CfnUserProfileProps:
         self,
         *,
         iam_user_arn: builtins.str,
-        allow_self_management: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        allow_self_management: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ssh_public_key: typing.Optional[builtins.str] = None,
         ssh_username: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -6430,7 +6438,7 @@ class CfnUserProfileProps:
     @builtins.property
     def allow_self_management(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Whether users can specify their own SSH public key through the My Settings page.
 
         For more information, see `Managing User Permissions <https://docs.aws.amazon.com/opsworks/latest/userguide/security-settingsshkey.html>`_ .
@@ -6438,7 +6446,7 @@ class CfnUserProfileProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-userprofile.html#cfn-opsworks-userprofile-allowselfmanagement
         '''
         result = self._values.get("allow_self_management")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def ssh_public_key(self) -> typing.Optional[builtins.str]:
@@ -6500,7 +6508,7 @@ class CfnVolume(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         ec2_volume_id: builtins.str,
@@ -6543,7 +6551,7 @@ class CfnVolume(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVolume", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6587,9 +6595,9 @@ class CfnVolume(
 
     @builtins.property
     @jsii.member(jsii_name="volumeRef")
-    def volume_ref(self) -> _VolumeReference_7ca25fdc:
+    def volume_ref(self) -> "_VolumeReference_7ca25fdc":
         '''A reference to a Volume resource.'''
-        return typing.cast(_VolumeReference_7ca25fdc, jsii.get(self, "volumeRef"))
+        return typing.cast("_VolumeReference_7ca25fdc", jsii.get(self, "volumeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="ec2VolumeId")

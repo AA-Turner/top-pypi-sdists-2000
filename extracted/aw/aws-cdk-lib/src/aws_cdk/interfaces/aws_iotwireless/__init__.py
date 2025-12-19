@@ -248,7 +248,7 @@ class IDestinationRef(
 
     @builtins.property
     @jsii.member(jsii_name="destinationRef")
-    def destination_ref(self) -> DestinationReference:
+    def destination_ref(self) -> "DestinationReference":
         '''(experimental) A reference to a Destination resource.
 
         :stability: experimental
@@ -269,12 +269,12 @@ class _IDestinationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="destinationRef")
-    def destination_ref(self) -> DestinationReference:
+    def destination_ref(self) -> "DestinationReference":
         '''(experimental) A reference to a Destination resource.
 
         :stability: experimental
         '''
-        return typing.cast(DestinationReference, jsii.get(self, "destinationRef"))
+        return typing.cast("DestinationReference", jsii.get(self, "destinationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDestinationRef).__jsii_proxy_class__ = lambda : _IDestinationRefProxy
@@ -293,7 +293,7 @@ class IDeviceProfileRef(
 
     @builtins.property
     @jsii.member(jsii_name="deviceProfileRef")
-    def device_profile_ref(self) -> DeviceProfileReference:
+    def device_profile_ref(self) -> "DeviceProfileReference":
         '''(experimental) A reference to a DeviceProfile resource.
 
         :stability: experimental
@@ -314,12 +314,12 @@ class _IDeviceProfileRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deviceProfileRef")
-    def device_profile_ref(self) -> DeviceProfileReference:
+    def device_profile_ref(self) -> "DeviceProfileReference":
         '''(experimental) A reference to a DeviceProfile resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeviceProfileReference, jsii.get(self, "deviceProfileRef"))
+        return typing.cast("DeviceProfileReference", jsii.get(self, "deviceProfileRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeviceProfileRef).__jsii_proxy_class__ = lambda : _IDeviceProfileRefProxy
@@ -338,7 +338,7 @@ class IFuotaTaskRef(
 
     @builtins.property
     @jsii.member(jsii_name="fuotaTaskRef")
-    def fuota_task_ref(self) -> FuotaTaskReference:
+    def fuota_task_ref(self) -> "FuotaTaskReference":
         '''(experimental) A reference to a FuotaTask resource.
 
         :stability: experimental
@@ -359,12 +359,12 @@ class _IFuotaTaskRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="fuotaTaskRef")
-    def fuota_task_ref(self) -> FuotaTaskReference:
+    def fuota_task_ref(self) -> "FuotaTaskReference":
         '''(experimental) A reference to a FuotaTask resource.
 
         :stability: experimental
         '''
-        return typing.cast(FuotaTaskReference, jsii.get(self, "fuotaTaskRef"))
+        return typing.cast("FuotaTaskReference", jsii.get(self, "fuotaTaskRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFuotaTaskRef).__jsii_proxy_class__ = lambda : _IFuotaTaskRefProxy

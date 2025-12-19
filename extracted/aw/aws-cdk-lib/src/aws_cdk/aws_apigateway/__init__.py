@@ -977,6 +977,7 @@ books.add_method("GET", apigateway.HttpIntegration("http://amazon.com"),
 A full working example is shown below.
 
 ```python
+from aws_cdk.aws_apigateway import MethodOptions, CorsOptions, IntegrationResponse, MethodResponse
 class MyStack(Stack):
     def __init__(self, scope, id):
         super().__init__(scope, id)
@@ -3004,14 +3005,14 @@ class ApiDefinition(
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> "AssetApiDefinition":
         '''Loads the API specification from a local disk asset.
 
@@ -3049,7 +3050,7 @@ class ApiDefinition(
     @builtins.classmethod
     def from_bucket(
         cls,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         key: builtins.str,
         object_version: typing.Optional[builtins.str] = None,
     ) -> "S3ApiDefinition":
@@ -3126,7 +3127,7 @@ class ApiDefinition(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "ApiDefinitionConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "ApiDefinitionConfig":
         '''Called when the specification is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param scope: The binding scope. Don't be smart about trying to down-cast or assume it's initialized. You may just use it as a construct scope.
@@ -3136,8 +3137,8 @@ class ApiDefinition(
     @jsii.member(jsii_name="bindAfterCreate")
     def bind_after_create(
         self,
-        _scope: _constructs_77d1e7e8.Construct,
-        _rest_api: _IRestApiRef_72dcbda0,
+        _scope: "_constructs_77d1e7e8.Construct",
+        _rest_api: "_IRestApiRef_72dcbda0",
     ) -> None:
         '''Called after the CFN RestApi resource has been created to allow the Api Definition to bind to it.
 
@@ -3156,7 +3157,7 @@ class ApiDefinition(
 
 class _ApiDefinitionProxy(ApiDefinition):
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> "ApiDefinitionConfig":
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "ApiDefinitionConfig":
         '''Called when the specification is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param scope: The binding scope. Don't be smart about trying to down-cast or assume it's initialized. You may just use it as a construct scope.
@@ -3357,7 +3358,7 @@ class ApiKeyGrants(
 
     @jsii.member(jsii_name="fromApiKey")
     @builtins.classmethod
-    def from_api_key(cls, resource: _IApiKeyRef_6e16b46a) -> "ApiKeyGrants":
+    def from_api_key(cls, resource: "_IApiKeyRef_6e16b46a") -> "ApiKeyGrants":
         '''Creates grants for ApiKeyGrants.
 
         :param resource: -
@@ -3368,7 +3369,7 @@ class ApiKeyGrants(
         return typing.cast("ApiKeyGrants", jsii.sinvoke(cls, "fromApiKey", [resource]))
 
     @jsii.member(jsii_name="read")
-    def read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits the IAM principal all read operations through this key.
 
         :param grantee: -
@@ -3376,10 +3377,10 @@ class ApiKeyGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__92b6b2c1e82ead5fcc57470b7070cbea0667e1113ef85be4ec4bae94dade48f7)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "read", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "read", [grantee]))
 
     @jsii.member(jsii_name="readWrite")
-    def read_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def read_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits the IAM principal all read and write operations through this key.
 
         :param grantee: -
@@ -3387,10 +3388,10 @@ class ApiKeyGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__87319b0a64eee705d6d4fb704c32bd5676a2663ee44675503f96a5d9f1206343)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "readWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "readWrite", [grantee]))
 
     @jsii.member(jsii_name="write")
-    def write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits the IAM principal all write operations through this key.
 
         :param grantee: -
@@ -3398,12 +3399,12 @@ class ApiKeyGrants(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dcccf9b7d942d0cfef5b69a678e4c25c2bf970888c4781e7b127480d2f2aa328)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "write", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "write", [grantee]))
 
     @builtins.property
     @jsii.member(jsii_name="resource")
-    def _resource(self) -> _IApiKeyRef_6e16b46a:
-        return typing.cast(_IApiKeyRef_6e16b46a, jsii.get(self, "resource"))
+    def _resource(self) -> "_IApiKeyRef_6e16b46a":
+        return typing.cast("_IApiKeyRef_6e16b46a", jsii.get(self, "resource"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_apigateway.ApiKeySourceType")
@@ -3510,14 +3511,14 @@ class AssetApiDefinition(
         *,
         deploy_time: typing.Optional[builtins.bool] = None,
         display_name: typing.Optional[builtins.str] = None,
-        readers: typing.Optional[typing.Sequence[_IGrantable_71c4f5de]] = None,
-        source_kms_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        readers: typing.Optional[typing.Sequence["_IGrantable_71c4f5de"]] = None,
+        source_kms_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         asset_hash: typing.Optional[builtins.str] = None,
-        asset_hash_type: typing.Optional[_AssetHashType_05b67f2d] = None,
-        bundling: typing.Optional[typing.Union[_BundlingOptions_588cc936, typing.Dict[builtins.str, typing.Any]]] = None,
+        asset_hash_type: typing.Optional["_AssetHashType_05b67f2d"] = None,
+        bundling: typing.Optional[typing.Union["_BundlingOptions_588cc936", typing.Dict[builtins.str, typing.Any]]] = None,
         exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
-        follow_symlinks: typing.Optional[_SymlinkFollowMode_047ec1f6] = None,
-        ignore_mode: typing.Optional[_IgnoreMode_655a98e8] = None,
+        follow_symlinks: typing.Optional["_SymlinkFollowMode_047ec1f6"] = None,
+        ignore_mode: typing.Optional["_IgnoreMode_655a98e8"] = None,
     ) -> None:
         '''
         :param path: -
@@ -3551,7 +3552,7 @@ class AssetApiDefinition(
         jsii.create(self.__class__, self, [path, options])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, scope: _constructs_77d1e7e8.Construct) -> ApiDefinitionConfig:
+    def bind(self, scope: "_constructs_77d1e7e8.Construct") -> "ApiDefinitionConfig":
         '''Called when the specification is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param scope: -
@@ -3559,13 +3560,13 @@ class AssetApiDefinition(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e81dd80c8a5aadd62f5dcc884b89ddc1076b787b54c75f996c03c1f1859e9b79)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-        return typing.cast(ApiDefinitionConfig, jsii.invoke(self, "bind", [scope]))
+        return typing.cast("ApiDefinitionConfig", jsii.invoke(self, "bind", [scope]))
 
     @jsii.member(jsii_name="bindAfterCreate")
     def bind_after_create(
         self,
-        scope: _constructs_77d1e7e8.Construct,
-        rest_api: _IRestApiRef_72dcbda0,
+        scope: "_constructs_77d1e7e8.Construct",
+        rest_api: "_IRestApiRef_72dcbda0",
     ) -> None:
         '''Called after the CFN RestApi resource has been created to allow the Api Definition to bind to it.
 
@@ -3818,11 +3819,11 @@ class BasePathMapping(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        domain_name: _IDomainNameRef_8b0ccf94,
-        rest_api: _IRestApiRef_72dcbda0,
+        domain_name: "_IDomainNameRef_8b0ccf94",
+        rest_api: "_IRestApiRef_72dcbda0",
         attach_to_stage: typing.Optional[builtins.bool] = None,
         base_path: typing.Optional[builtins.str] = None,
         stage: typing.Optional["Stage"] = None,
@@ -3967,8 +3968,8 @@ class BasePathMappingProps(BasePathMappingOptions):
         attach_to_stage: typing.Optional[builtins.bool] = None,
         base_path: typing.Optional[builtins.str] = None,
         stage: typing.Optional["Stage"] = None,
-        domain_name: _IDomainNameRef_8b0ccf94,
-        rest_api: _IRestApiRef_72dcbda0,
+        domain_name: "_IDomainNameRef_8b0ccf94",
+        rest_api: "_IRestApiRef_72dcbda0",
     ) -> None:
         '''
         :param attach_to_stage: Whether to attach the base path mapping to a stage. Use this property to create a base path mapping without attaching it to the Rest API default stage. This property is ignored if ``stage`` is provided. Default: - true
@@ -4047,18 +4048,18 @@ class BasePathMappingProps(BasePathMappingOptions):
         return typing.cast(typing.Optional["Stage"], result)
 
     @builtins.property
-    def domain_name(self) -> _IDomainNameRef_8b0ccf94:
+    def domain_name(self) -> "_IDomainNameRef_8b0ccf94":
         '''The DomainName to associate with this base path mapping.'''
         result = self._values.get("domain_name")
         assert result is not None, "Required property 'domain_name' is missing"
-        return typing.cast(_IDomainNameRef_8b0ccf94, result)
+        return typing.cast("_IDomainNameRef_8b0ccf94", result)
 
     @builtins.property
-    def rest_api(self) -> _IRestApiRef_72dcbda0:
+    def rest_api(self) -> "_IRestApiRef_72dcbda0":
         '''The RestApi resource to target.'''
         result = self._values.get("rest_api")
         assert result is not None, "Required property 'rest_api' is missing"
-        return typing.cast(_IRestApiRef_72dcbda0, result)
+        return typing.cast("_IRestApiRef_72dcbda0", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4101,10 +4102,10 @@ class CfnAccount(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        cloud_watch_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        cloud_watch_role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::Account``.
 
@@ -4133,7 +4134,7 @@ class CfnAccount(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccount", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4164,9 +4165,9 @@ class CfnAccount(
 
     @builtins.property
     @jsii.member(jsii_name="accountRef")
-    def account_ref(self) -> _AccountReference_3ce7fd09:
+    def account_ref(self) -> "_AccountReference_3ce7fd09":
         '''A reference to a Account resource.'''
-        return typing.cast(_AccountReference_3ce7fd09, jsii.get(self, "accountRef"))
+        return typing.cast("_AccountReference_3ce7fd09", jsii.get(self, "accountRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrId")
@@ -4207,7 +4208,7 @@ class CfnAccountProps:
     def __init__(
         self,
         *,
-        cloud_watch_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        cloud_watch_role_arn: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAccount``.
 
@@ -4236,13 +4237,13 @@ class CfnAccountProps:
     @builtins.property
     def cloud_watch_role_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''The ARN of an Amazon CloudWatch role for the current Account.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-account.html#cfn-apigateway-account-cloudwatchrolearn
         '''
         result = self._values.get("cloud_watch_role_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4272,6 +4273,7 @@ class CfnApiKey(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigateway as apigateway
@@ -4296,16 +4298,16 @@ class CfnApiKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         customer_id: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        generate_distinct_id: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        generate_distinct_id: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         name: typing.Optional[builtins.str] = None,
-        stage_keys: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApiKey.StageKeyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        stage_keys: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApiKey.StageKeyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::ApiKey``.
@@ -4340,7 +4342,7 @@ class CfnApiKey(
 
     @jsii.member(jsii_name="arnForApiKey")
     @builtins.classmethod
-    def arn_for_api_key(cls, resource: _IApiKeyRef_6e16b46a) -> builtins.str:
+    def arn_for_api_key(cls, resource: "_IApiKeyRef_6e16b46a") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4353,10 +4355,10 @@ class CfnApiKey(
     @builtins.classmethod
     def from_api_key_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         api_key_id: builtins.str,
-    ) -> _IApiKeyRef_6e16b46a:
+    ) -> "_IApiKeyRef_6e16b46a":
         '''Creates a new IApiKeyRef from a apiKeyId.
 
         :param scope: -
@@ -4368,7 +4370,7 @@ class CfnApiKey(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument api_key_id", value=api_key_id, expected_type=type_hints["api_key_id"])
-        return typing.cast(_IApiKeyRef_6e16b46a, jsii.sinvoke(cls, "fromApiKeyId", [scope, id, api_key_id]))
+        return typing.cast("_IApiKeyRef_6e16b46a", jsii.sinvoke(cls, "fromApiKeyId", [scope, id, api_key_id]))
 
     @jsii.member(jsii_name="isCfnApiKey")
     @builtins.classmethod
@@ -4383,7 +4385,7 @@ class CfnApiKey(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApiKey", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4414,9 +4416,9 @@ class CfnApiKey(
 
     @builtins.property
     @jsii.member(jsii_name="apiKeyRef")
-    def api_key_ref(self) -> _ApiKeyReference_6382fd3a:
+    def api_key_ref(self) -> "_ApiKeyReference_6382fd3a":
         '''A reference to a ApiKey resource.'''
-        return typing.cast(_ApiKeyReference_6382fd3a, jsii.get(self, "apiKeyRef"))
+        return typing.cast("_ApiKeyReference_6382fd3a", jsii.get(self, "apiKeyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrApiKeyId")
@@ -4436,9 +4438,9 @@ class CfnApiKey(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="customerId")
@@ -4470,14 +4472,14 @@ class CfnApiKey(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the ApiKey can be used by callers.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__55577c77ce38fb70e6dc28c7fe5a30c2189533e40f2941cf7f725d0744353a8b)
@@ -4488,14 +4490,14 @@ class CfnApiKey(
     @jsii.member(jsii_name="generateDistinctId")
     def generate_distinct_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether ( ``true`` ) or not ( ``false`` ) the key identifier is distinct from the created API key value.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "generateDistinctId"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "generateDistinctId"))
 
     @generate_distinct_id.setter
     def generate_distinct_id(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5e376c81196abe5988b927a412341a6e2d2a2afcbc15de891ab4ab515d7d8575)
@@ -4519,14 +4521,14 @@ class CfnApiKey(
     @jsii.member(jsii_name="stageKeys")
     def stage_keys(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApiKey.StageKeyProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApiKey.StageKeyProperty"]]]]:
         '''DEPRECATED FOR USAGE PLANS - Specifies stages associated with the API key.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApiKey.StageKeyProperty"]]]], jsii.get(self, "stageKeys"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApiKey.StageKeyProperty"]]]], jsii.get(self, "stageKeys"))
 
     @stage_keys.setter
     def stage_keys(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnApiKey.StageKeyProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApiKey.StageKeyProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f2912acb683bf8ab1749c9ae328a9eb41061f378f662bb1e5c7a0f9511b2f9a6)
@@ -4535,12 +4537,12 @@ class CfnApiKey(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The key-value map of strings.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__278929d2497b6992ae8c54f09fa48eee91bfd399ce109802d2af49204daa464d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4650,11 +4652,11 @@ class CfnApiKeyProps:
         *,
         customer_id: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        generate_distinct_id: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        generate_distinct_id: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         name: typing.Optional[builtins.str] = None,
-        stage_keys: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApiKey.StageKeyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        stage_keys: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnApiKey.StageKeyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnApiKey``.
@@ -4673,6 +4675,7 @@ class CfnApiKeyProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_apigateway as apigateway
@@ -4743,7 +4746,7 @@ class CfnApiKeyProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the ApiKey can be used by callers.
 
         :default: - false
@@ -4751,12 +4754,12 @@ class CfnApiKeyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-apikey.html#cfn-apigateway-apikey-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def generate_distinct_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether ( ``true`` ) or not ( ``false`` ) the key identifier is distinct from the created API key value.
 
         This parameter is deprecated and should not be used.
@@ -4764,7 +4767,7 @@ class CfnApiKeyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-apikey.html#cfn-apigateway-apikey-generatedistinctid
         '''
         result = self._values.get("generate_distinct_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -4783,16 +4786,16 @@ class CfnApiKeyProps:
     @builtins.property
     def stage_keys(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApiKey.StageKeyProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApiKey.StageKeyProperty"]]]]:
         '''DEPRECATED FOR USAGE PLANS - Specifies stages associated with the API key.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-apikey.html#cfn-apigateway-apikey-stagekeys
         '''
         result = self._values.get("stage_keys")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApiKey.StageKeyProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnApiKey.StageKeyProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The key-value map of strings.
 
         The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with ``aws:`` . The tag value can be up to 256 characters.
@@ -4800,7 +4803,7 @@ class CfnApiKeyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-apikey.html#cfn-apigateway-apikey-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def value(self) -> typing.Optional[builtins.str]:
@@ -4861,19 +4864,19 @@ class CfnAuthorizer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
         type: builtins.str,
-        authorizer_credentials: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        authorizer_credentials: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
         authorizer_result_ttl_in_seconds: typing.Optional[jsii.Number] = None,
         authorizer_uri: typing.Optional[builtins.str] = None,
         auth_type: typing.Optional[builtins.str] = None,
         identity_source: typing.Optional[builtins.str] = None,
         identity_validation_expression: typing.Optional[builtins.str] = None,
-        provider_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]]] = None,
+        provider_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_IUserPoolRef_0b7d02b5"]]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::Authorizer``.
 
@@ -4922,7 +4925,7 @@ class CfnAuthorizer(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAuthorizer", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4964,9 +4967,9 @@ class CfnAuthorizer(
 
     @builtins.property
     @jsii.member(jsii_name="authorizerRef")
-    def authorizer_ref(self) -> _AuthorizerReference_9227c976:
+    def authorizer_ref(self) -> "_AuthorizerReference_9227c976":
         '''A reference to a Authorizer resource.'''
-        return typing.cast(_AuthorizerReference_9227c976, jsii.get(self, "authorizerRef"))
+        return typing.cast("_AuthorizerReference_9227c976", jsii.get(self, "authorizerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5131,15 +5134,15 @@ class CfnAuthorizerProps:
         self,
         *,
         name: builtins.str,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
         type: builtins.str,
-        authorizer_credentials: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        authorizer_credentials: typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]] = None,
         authorizer_result_ttl_in_seconds: typing.Optional[jsii.Number] = None,
         authorizer_uri: typing.Optional[builtins.str] = None,
         auth_type: typing.Optional[builtins.str] = None,
         identity_source: typing.Optional[builtins.str] = None,
         identity_validation_expression: typing.Optional[builtins.str] = None,
-        provider_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]]] = None,
+        provider_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_IUserPoolRef_0b7d02b5"]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAuthorizer``.
 
@@ -5221,14 +5224,14 @@ class CfnAuthorizerProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
+    def rest_api_id(self) -> typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-authorizer.html#cfn-apigateway-authorizer-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
+        return typing.cast(typing.Union[builtins.str, "_IRestApiRef_72dcbda0"], result)
 
     @builtins.property
     def type(self) -> builtins.str:
@@ -5245,7 +5248,7 @@ class CfnAuthorizerProps:
     @builtins.property
     def authorizer_credentials(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer.
 
         To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.
@@ -5253,7 +5256,7 @@ class CfnAuthorizerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-authorizer.html#cfn-apigateway-authorizer-authorizercredentials
         '''
         result = self._values.get("authorizer_credentials")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     @builtins.property
     def authorizer_result_ttl_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -5311,7 +5314,7 @@ class CfnAuthorizerProps:
     @builtins.property
     def provider_arns(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_IUserPoolRef_0b7d02b5"]]]:
         '''A list of the Amazon Cognito user pool ARNs for the ``COGNITO_USER_POOLS`` authorizer.
 
         Each element is of this format: ``arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}`` . For a ``TOKEN`` or ``REQUEST`` authorizer, this is not defined.
@@ -5319,7 +5322,7 @@ class CfnAuthorizerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-authorizer.html#cfn-apigateway-authorizer-providerarns
         '''
         result = self._values.get("provider_arns")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_IUserPoolRef_0b7d02b5"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5366,14 +5369,14 @@ class CfnBasePathMapping(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id_: builtins.str,
         *,
-        domain_name: typing.Union[builtins.str, _IDomainNameRef_8b0ccf94],
+        domain_name: typing.Union[builtins.str, "_IDomainNameRef_8b0ccf94"],
         base_path: typing.Optional[builtins.str] = None,
         id: typing.Optional[builtins.str] = None,
-        rest_api_id: typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]] = None,
-        stage: typing.Optional[typing.Union[builtins.str, _IStageRef_b829c330]] = None,
+        rest_api_id: typing.Optional[typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]] = None,
+        stage: typing.Optional[typing.Union[builtins.str, "_IStageRef_b829c330"]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::BasePathMapping``.
 
@@ -5412,7 +5415,7 @@ class CfnBasePathMapping(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBasePathMapping", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5443,9 +5446,9 @@ class CfnBasePathMapping(
 
     @builtins.property
     @jsii.member(jsii_name="basePathMappingRef")
-    def base_path_mapping_ref(self) -> _BasePathMappingReference_0fb943e6:
+    def base_path_mapping_ref(self) -> "_BasePathMappingReference_0fb943e6":
         '''A reference to a BasePathMapping resource.'''
-        return typing.cast(_BasePathMappingReference_0fb943e6, jsii.get(self, "basePathMappingRef"))
+        return typing.cast("_BasePathMappingReference_0fb943e6", jsii.get(self, "basePathMappingRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5532,11 +5535,11 @@ class CfnBasePathMappingProps:
     def __init__(
         self,
         *,
-        domain_name: typing.Union[builtins.str, _IDomainNameRef_8b0ccf94],
+        domain_name: typing.Union[builtins.str, "_IDomainNameRef_8b0ccf94"],
         base_path: typing.Optional[builtins.str] = None,
         id: typing.Optional[builtins.str] = None,
-        rest_api_id: typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]] = None,
-        stage: typing.Optional[typing.Union[builtins.str, _IStageRef_b829c330]] = None,
+        rest_api_id: typing.Optional[typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]] = None,
+        stage: typing.Optional[typing.Union[builtins.str, "_IStageRef_b829c330"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnBasePathMapping``.
 
@@ -5585,14 +5588,14 @@ class CfnBasePathMappingProps:
             self._values["stage"] = stage
 
     @builtins.property
-    def domain_name(self) -> typing.Union[builtins.str, _IDomainNameRef_8b0ccf94]:
+    def domain_name(self) -> typing.Union[builtins.str, "_IDomainNameRef_8b0ccf94"]:
         '''The domain name of the BasePathMapping resource to be described.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-basepathmapping.html#cfn-apigateway-basepathmapping-domainname
         '''
         result = self._values.get("domain_name")
         assert result is not None, "Required property 'domain_name' is missing"
-        return typing.cast(typing.Union[builtins.str, _IDomainNameRef_8b0ccf94], result)
+        return typing.cast(typing.Union[builtins.str, "_IDomainNameRef_8b0ccf94"], result)
 
     @builtins.property
     def base_path(self) -> typing.Optional[builtins.str]:
@@ -5614,22 +5617,24 @@ class CfnBasePathMappingProps:
     @builtins.property
     def rest_api_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-basepathmapping.html#cfn-apigateway-basepathmapping-restapiid
         '''
         result = self._values.get("rest_api_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]], result)
 
     @builtins.property
-    def stage(self) -> typing.Optional[typing.Union[builtins.str, _IStageRef_b829c330]]:
+    def stage(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, "_IStageRef_b829c330"]]:
         '''The name of the associated stage.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-basepathmapping.html#cfn-apigateway-basepathmapping-stage
         '''
         result = self._values.get("stage")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IStageRef_b829c330]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IStageRef_b829c330"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5675,7 +5680,7 @@ class CfnBasePathMappingV2(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name_arn: builtins.str,
@@ -5718,7 +5723,7 @@ class CfnBasePathMappingV2(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBasePathMappingV2", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5758,9 +5763,9 @@ class CfnBasePathMappingV2(
 
     @builtins.property
     @jsii.member(jsii_name="basePathMappingV2Ref")
-    def base_path_mapping_v2_ref(self) -> _BasePathMappingV2Reference_bd6138fa:
+    def base_path_mapping_v2_ref(self) -> "_BasePathMappingV2Reference_bd6138fa":
         '''A reference to a BasePathMappingV2 resource.'''
-        return typing.cast(_BasePathMappingV2Reference_bd6138fa, jsii.get(self, "basePathMappingV2Ref"))
+        return typing.cast("_BasePathMappingV2Reference_bd6138fa", jsii.get(self, "basePathMappingV2Ref"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5947,6 +5952,7 @@ class CfnClientCertificate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigateway as apigateway
@@ -5962,11 +5968,11 @@ class CfnClientCertificate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::ClientCertificate``.
 
@@ -5987,7 +5993,7 @@ class CfnClientCertificate(
     @builtins.classmethod
     def arn_for_client_certificate(
         cls,
-        resource: _IClientCertificateRef_2a4b2b38,
+        resource: "_IClientCertificateRef_2a4b2b38",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -6001,10 +6007,10 @@ class CfnClientCertificate(
     @builtins.classmethod
     def from_client_certificate_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         client_certificate_id: builtins.str,
-    ) -> _IClientCertificateRef_2a4b2b38:
+    ) -> "_IClientCertificateRef_2a4b2b38":
         '''Creates a new IClientCertificateRef from a clientCertificateId.
 
         :param scope: -
@@ -6016,7 +6022,7 @@ class CfnClientCertificate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument client_certificate_id", value=client_certificate_id, expected_type=type_hints["client_certificate_id"])
-        return typing.cast(_IClientCertificateRef_2a4b2b38, jsii.sinvoke(cls, "fromClientCertificateId", [scope, id, client_certificate_id]))
+        return typing.cast("_IClientCertificateRef_2a4b2b38", jsii.sinvoke(cls, "fromClientCertificateId", [scope, id, client_certificate_id]))
 
     @jsii.member(jsii_name="isCfnClientCertificate")
     @builtins.classmethod
@@ -6031,7 +6037,7 @@ class CfnClientCertificate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnClientCertificate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6078,15 +6084,15 @@ class CfnClientCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="clientCertificateRef")
-    def client_certificate_ref(self) -> _ClientCertificateReference_dc31fb12:
+    def client_certificate_ref(self) -> "_ClientCertificateReference_dc31fb12":
         '''A reference to a ClientCertificate resource.'''
-        return typing.cast(_ClientCertificateReference_dc31fb12, jsii.get(self, "clientCertificateRef"))
+        return typing.cast("_ClientCertificateReference_dc31fb12", jsii.get(self, "clientCertificateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -6103,12 +6109,12 @@ class CfnClientCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The collection of tags.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__51a7fa7b78e089f078490333228634a14677f57b2a113b895fc04982489e409b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6125,7 +6131,7 @@ class CfnClientCertificateProps:
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnClientCertificate``.
 
@@ -6137,6 +6143,7 @@ class CfnClientCertificateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_apigateway as apigateway
@@ -6169,7 +6176,7 @@ class CfnClientCertificateProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The collection of tags.
 
         Each tag element is associated with a given resource.
@@ -6177,7 +6184,7 @@ class CfnClientCertificateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-clientcertificate.html#cfn-apigateway-clientcertificate-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6207,6 +6214,7 @@ class CfnDeployment(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigateway as apigateway
@@ -6275,13 +6283,13 @@ class CfnDeployment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
-        deployment_canary_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.DeploymentCanarySettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
+        deployment_canary_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.DeploymentCanarySettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        stage_description: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.StageDescriptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        stage_description: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.StageDescriptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         stage_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::Deployment``.
@@ -6321,7 +6329,7 @@ class CfnDeployment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeployment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6368,9 +6376,9 @@ class CfnDeployment(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentRef")
-    def deployment_ref(self) -> _DeploymentReference_d6bd3ce1:
+    def deployment_ref(self) -> "_DeploymentReference_d6bd3ce1":
         '''A reference to a Deployment resource.'''
-        return typing.cast(_DeploymentReference_d6bd3ce1, jsii.get(self, "deploymentRef"))
+        return typing.cast("_DeploymentReference_d6bd3ce1", jsii.get(self, "deploymentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="restApiId")
@@ -6389,14 +6397,14 @@ class CfnDeployment(
     @jsii.member(jsii_name="deploymentCanarySettings")
     def deployment_canary_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentCanarySettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentCanarySettingsProperty"]]:
         '''The input configuration for a canary deployment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentCanarySettingsProperty"]], jsii.get(self, "deploymentCanarySettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentCanarySettingsProperty"]], jsii.get(self, "deploymentCanarySettings"))
 
     @deployment_canary_settings.setter
     def deployment_canary_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentCanarySettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentCanarySettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__05dc0fbe57a1a262a9a6339c53b1f2ffdf9620fc527d11d71935e87b39d713cf)
@@ -6420,14 +6428,14 @@ class CfnDeployment(
     @jsii.member(jsii_name="stageDescription")
     def stage_description(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.StageDescriptionProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.StageDescriptionProperty"]]:
         '''The description of the Stage resource for the Deployment resource to create.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.StageDescriptionProperty"]], jsii.get(self, "stageDescription"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.StageDescriptionProperty"]], jsii.get(self, "stageDescription"))
 
     @stage_description.setter
     def stage_description(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.StageDescriptionProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.StageDescriptionProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6024f7e0d42bb4e5be9c3f4d821e4187c174774ed464c46036ecb95e43bf0fe7)
@@ -6537,8 +6545,8 @@ class CfnDeployment(
             self,
             *,
             percent_traffic: typing.Optional[jsii.Number] = None,
-            stage_variable_overrides: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            use_stage_cache: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            stage_variable_overrides: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            use_stage_cache: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The ``CanarySetting`` property type specifies settings for the canary deployment in this stage.
 
@@ -6590,7 +6598,7 @@ class CfnDeployment(
         @builtins.property
         def stage_variable_overrides(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Stage variables overridden for a canary release deployment, including new stage variables introduced in the canary.
 
             These stage variables are represented as a string-to-string map between stage variable names and their values.
@@ -6598,18 +6606,18 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-canarysetting.html#cfn-apigateway-deployment-canarysetting-stagevariableoverrides
             '''
             result = self._values.get("stage_variable_overrides")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def use_stage_cache(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean flag to indicate whether the canary deployment uses the stage cache or not.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-canarysetting.html#cfn-apigateway-deployment-canarysetting-usestagecache
             '''
             result = self._values.get("use_stage_cache")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6636,8 +6644,8 @@ class CfnDeployment(
             self,
             *,
             percent_traffic: typing.Optional[jsii.Number] = None,
-            stage_variable_overrides: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            use_stage_cache: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            stage_variable_overrides: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            use_stage_cache: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The ``DeploymentCanarySettings`` property type specifies settings for the canary deployment.
 
@@ -6687,7 +6695,7 @@ class CfnDeployment(
         @builtins.property
         def stage_variable_overrides(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''A stage variable overrides used for the canary release deployment.
 
             They can override existing stage variables or add new stage variables for the canary release deployment. These stage variables are represented as a string-to-string map between stage variable names and their values.
@@ -6695,18 +6703,18 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-deploymentcanarysettings.html#cfn-apigateway-deployment-deploymentcanarysettings-stagevariableoverrides
             '''
             result = self._values.get("stage_variable_overrides")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def use_stage_cache(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean flag to indicate whether the canary release deployment uses the stage cache or not.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-deploymentcanarysettings.html#cfn-apigateway-deployment-deploymentcanarysettings-usestagecache
             '''
             result = self._values.get("use_stage_cache")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6739,13 +6747,13 @@ class CfnDeployment(
         def __init__(
             self,
             *,
-            cache_data_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            cache_data_encrypted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             cache_ttl_in_seconds: typing.Optional[jsii.Number] = None,
-            caching_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            data_trace_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            caching_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            data_trace_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             http_method: typing.Optional[builtins.str] = None,
             logging_level: typing.Optional[builtins.str] = None,
-            metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            metrics_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             resource_path: typing.Optional[builtins.str] = None,
             throttling_burst_limit: typing.Optional[jsii.Number] = None,
             throttling_rate_limit: typing.Optional[jsii.Number] = None,
@@ -6826,13 +6834,13 @@ class CfnDeployment(
         @builtins.property
         def cache_data_encrypted(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether the cached responses are encrypted.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-methodsetting.html#cfn-apigateway-deployment-methodsetting-cachedataencrypted
             '''
             result = self._values.get("cache_data_encrypted")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def cache_ttl_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -6848,7 +6856,7 @@ class CfnDeployment(
         @builtins.property
         def caching_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether responses should be cached and returned for requests.
 
             A cache cluster must be enabled on the stage for responses to be cached.
@@ -6856,12 +6864,12 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-methodsetting.html#cfn-apigateway-deployment-methodsetting-cachingenabled
             '''
             result = self._values.get("caching_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def data_trace_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether data trace logging is enabled for this method, which affects the log entries pushed to Amazon CloudWatch Logs.
 
             This can be useful to troubleshoot APIs, but can result in logging sensitive data. We recommend that you don't enable this option for production APIs.
@@ -6869,7 +6877,7 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-methodsetting.html#cfn-apigateway-deployment-methodsetting-datatraceenabled
             '''
             result = self._values.get("data_trace_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def http_method(self) -> typing.Optional[builtins.str]:
@@ -6894,13 +6902,13 @@ class CfnDeployment(
         @builtins.property
         def metrics_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether Amazon CloudWatch metrics are enabled for this method.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-methodsetting.html#cfn-apigateway-deployment-methodsetting-metricsenabled
             '''
             result = self._values.get("metrics_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def resource_path(self) -> typing.Optional[builtins.str]:
@@ -6971,25 +6979,25 @@ class CfnDeployment(
         def __init__(
             self,
             *,
-            access_log_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.AccessLogSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cache_cluster_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            access_log_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.AccessLogSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cache_cluster_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             cache_cluster_size: typing.Optional[builtins.str] = None,
-            cache_data_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            cache_data_encrypted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             cache_ttl_in_seconds: typing.Optional[jsii.Number] = None,
-            caching_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            canary_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.CanarySettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            caching_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            canary_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.CanarySettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             client_certificate_id: typing.Optional[builtins.str] = None,
-            data_trace_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            data_trace_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             description: typing.Optional[builtins.str] = None,
             documentation_version: typing.Optional[builtins.str] = None,
             logging_level: typing.Optional[builtins.str] = None,
-            method_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.MethodSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+            method_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.MethodSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            metrics_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
             throttling_burst_limit: typing.Optional[jsii.Number] = None,
             throttling_rate_limit: typing.Optional[jsii.Number] = None,
-            tracing_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            tracing_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''``StageDescription`` is a property of the `AWS::ApiGateway::Deployment <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-deployment.html>`_ resource that configures a deployment stage.
 
@@ -7018,6 +7026,7 @@ class CfnDeployment(
 
             Example::
 
+                from aws_cdk import CfnTag
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_apigateway as apigateway
@@ -7133,18 +7142,18 @@ class CfnDeployment(
         @builtins.property
         def access_log_setting(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.AccessLogSettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.AccessLogSettingProperty"]]:
             '''Specifies settings for logging access in this stage.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-accesslogsetting
             '''
             result = self._values.get("access_log_setting")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.AccessLogSettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.AccessLogSettingProperty"]], result)
 
         @builtins.property
         def cache_cluster_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether a cache cluster is enabled for the stage.
 
             To activate a method-level cache, set ``CachingEnabled`` to ``true`` for a method.
@@ -7152,7 +7161,7 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-cacheclusterenabled
             '''
             result = self._values.get("cache_cluster_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def cache_cluster_size(self) -> typing.Optional[builtins.str]:
@@ -7168,13 +7177,13 @@ class CfnDeployment(
         @builtins.property
         def cache_data_encrypted(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether the cached responses are encrypted.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-cachedataencrypted
             '''
             result = self._values.get("cache_data_encrypted")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def cache_ttl_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -7188,7 +7197,7 @@ class CfnDeployment(
         @builtins.property
         def caching_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether responses are cached and returned for requests.
 
             You must enable a cache cluster on the stage to cache responses. For more information, see `Enable API Gateway Caching in a Stage to Enhance API Performance <https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html>`_ in the *API Gateway Developer Guide* .
@@ -7196,18 +7205,18 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-cachingenabled
             '''
             result = self._values.get("caching_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def canary_setting(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.CanarySettingProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.CanarySettingProperty"]]:
             '''Specifies settings for the canary deployment in this stage.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-canarysetting
             '''
             result = self._values.get("canary_setting")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.CanarySettingProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.CanarySettingProperty"]], result)
 
         @builtins.property
         def client_certificate_id(self) -> typing.Optional[builtins.str]:
@@ -7221,7 +7230,7 @@ class CfnDeployment(
         @builtins.property
         def data_trace_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether data trace logging is enabled for methods in the stage.
 
             API Gateway pushes these logs to Amazon CloudWatch Logs.
@@ -7229,7 +7238,7 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-datatraceenabled
             '''
             result = self._values.get("data_trace_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def description(self) -> typing.Optional[builtins.str]:
@@ -7263,33 +7272,33 @@ class CfnDeployment(
         @builtins.property
         def method_settings(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeployment.MethodSettingProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeployment.MethodSettingProperty"]]]]:
             '''Configures settings for all of the stage's methods.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-methodsettings
             '''
             result = self._values.get("method_settings")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeployment.MethodSettingProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeployment.MethodSettingProperty"]]]], result)
 
         @builtins.property
         def metrics_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Indicates whether Amazon CloudWatch metrics are enabled for methods in the stage.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-metricsenabled
             '''
             result = self._values.get("metrics_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
-        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
             '''An array of arbitrary tags (key-value pairs) to associate with the stage.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-tags
             '''
             result = self._values.get("tags")
-            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+            return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
         @builtins.property
         def throttling_burst_limit(self) -> typing.Optional[jsii.Number]:
@@ -7316,7 +7325,7 @@ class CfnDeployment(
         @builtins.property
         def tracing_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether active tracing with X-ray is enabled for this stage.
 
             For more information, see `Trace API Gateway API Execution with AWS X-Ray <https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-xray.html>`_ in the *API Gateway Developer Guide* .
@@ -7324,12 +7333,12 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-tracingenabled
             '''
             result = self._values.get("tracing_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def variables(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''A map that defines the stage variables.
 
             Variable names must consist of alphanumeric characters, and the values must match the following regular expression: ``[A-Za-z0-9-._~:/?#&=,]+`` .
@@ -7337,7 +7346,7 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-variables
             '''
             result = self._values.get("variables")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7366,10 +7375,10 @@ class CfnDeploymentProps:
     def __init__(
         self,
         *,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
-        deployment_canary_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.DeploymentCanarySettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
+        deployment_canary_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.DeploymentCanarySettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        stage_description: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.StageDescriptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        stage_description: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.StageDescriptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         stage_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnDeployment``.
@@ -7385,6 +7394,7 @@ class CfnDeploymentProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_apigateway as apigateway
@@ -7470,25 +7480,25 @@ class CfnDeploymentProps:
             self._values["stage_name"] = stage_name
 
     @builtins.property
-    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
+    def rest_api_id(self) -> typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-deployment.html#cfn-apigateway-deployment-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
+        return typing.cast(typing.Union[builtins.str, "_IRestApiRef_72dcbda0"], result)
 
     @builtins.property
     def deployment_canary_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeployment.DeploymentCanarySettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentCanarySettingsProperty"]]:
         '''The input configuration for a canary deployment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-deployment.html#cfn-apigateway-deployment-deploymentcanarysettings
         '''
         result = self._values.get("deployment_canary_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeployment.DeploymentCanarySettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentCanarySettingsProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -7502,7 +7512,7 @@ class CfnDeploymentProps:
     @builtins.property
     def stage_description(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeployment.StageDescriptionProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.StageDescriptionProperty"]]:
         '''The description of the Stage resource for the Deployment resource to create.
 
         To specify a stage description, you must also provide a stage name.
@@ -7510,7 +7520,7 @@ class CfnDeploymentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-deployment.html#cfn-apigateway-deployment-stagedescription
         '''
         result = self._values.get("stage_description")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeployment.StageDescriptionProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.StageDescriptionProperty"]], result)
 
     @builtins.property
     def stage_name(self) -> typing.Optional[builtins.str]:
@@ -7568,12 +7578,12 @@ class CfnDocumentationPart(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDocumentationPart.LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+        location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDocumentationPart.LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         properties: builtins.str,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
     ) -> None:
         '''Create a new ``AWS::ApiGateway::DocumentationPart``.
 
@@ -7606,7 +7616,7 @@ class CfnDocumentationPart(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDocumentationPart", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7651,22 +7661,22 @@ class CfnDocumentationPart(
 
     @builtins.property
     @jsii.member(jsii_name="documentationPartRef")
-    def documentation_part_ref(self) -> _DocumentationPartReference_95653832:
+    def documentation_part_ref(self) -> "_DocumentationPartReference_95653832":
         '''A reference to a DocumentationPart resource.'''
-        return typing.cast(_DocumentationPartReference_95653832, jsii.get(self, "documentationPartRef"))
+        return typing.cast("_DocumentationPartReference_95653832", jsii.get(self, "documentationPartRef"))
 
     @builtins.property
     @jsii.member(jsii_name="location")
     def location(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnDocumentationPart.LocationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDocumentationPart.LocationProperty"]:
         '''The location of the targeted API entity of the to-be-created documentation part.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnDocumentationPart.LocationProperty"], jsii.get(self, "location"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDocumentationPart.LocationProperty"], jsii.get(self, "location"))
 
     @location.setter
     def location(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnDocumentationPart.LocationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnDocumentationPart.LocationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__14f4e665aec867e4a2272885876c056410b925cd0b123c722ea45b2955af85a1)
@@ -7849,9 +7859,9 @@ class CfnDocumentationPartProps:
     def __init__(
         self,
         *,
-        location: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDocumentationPart.LocationProperty, typing.Dict[builtins.str, typing.Any]]],
+        location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDocumentationPart.LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         properties: builtins.str,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
     ) -> None:
         '''Properties for defining a ``CfnDocumentationPart``.
 
@@ -7894,14 +7904,14 @@ class CfnDocumentationPartProps:
     @builtins.property
     def location(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnDocumentationPart.LocationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnDocumentationPart.LocationProperty"]:
         '''The location of the targeted API entity of the to-be-created documentation part.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-documentationpart.html#cfn-apigateway-documentationpart-location
         '''
         result = self._values.get("location")
         assert result is not None, "Required property 'location' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnDocumentationPart.LocationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDocumentationPart.LocationProperty"], result)
 
     @builtins.property
     def properties(self) -> builtins.str:
@@ -7916,14 +7926,14 @@ class CfnDocumentationPartProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
+    def rest_api_id(self) -> typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-documentationpart.html#cfn-apigateway-documentationpart-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
+        return typing.cast(typing.Union[builtins.str, "_IRestApiRef_72dcbda0"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7968,11 +7978,11 @@ class CfnDocumentationVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         documentation_version: builtins.str,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::DocumentationVersion``.
@@ -8008,7 +8018,7 @@ class CfnDocumentationVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDocumentationVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8044,9 +8054,9 @@ class CfnDocumentationVersion(
 
     @builtins.property
     @jsii.member(jsii_name="documentationVersionRef")
-    def documentation_version_ref(self) -> _DocumentationVersionReference_b6913e6e:
+    def documentation_version_ref(self) -> "_DocumentationVersionReference_b6913e6e":
         '''A reference to a DocumentationVersion resource.'''
-        return typing.cast(_DocumentationVersionReference_b6913e6e, jsii.get(self, "documentationVersionRef"))
+        return typing.cast("_DocumentationVersionReference_b6913e6e", jsii.get(self, "documentationVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="documentationVersion")
@@ -8102,7 +8112,7 @@ class CfnDocumentationVersionProps:
         self,
         *,
         documentation_version: builtins.str,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnDocumentationVersion``.
@@ -8151,14 +8161,14 @@ class CfnDocumentationVersionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
+    def rest_api_id(self) -> typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-documentationversion.html#cfn-apigateway-documentationversion-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
+        return typing.cast(typing.Union[builtins.str, "_IRestApiRef_72dcbda0"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -8199,6 +8209,7 @@ class CfnDomainName(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigateway as apigateway
@@ -8228,19 +8239,19 @@ class CfnDomainName(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         certificate_arn: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
         endpoint_access_mode: typing.Optional[builtins.str] = None,
-        endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainName.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainName.MutualTlsAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainName.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        mutual_tls_authentication: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainName.MutualTlsAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ownership_verification_certificate_arn: typing.Optional[builtins.str] = None,
         regional_certificate_arn: typing.Optional[builtins.str] = None,
         routing_mode: typing.Optional[builtins.str] = None,
         security_policy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::DomainName``.
 
@@ -8278,7 +8289,7 @@ class CfnDomainName(
 
     @jsii.member(jsii_name="arnForDomainName")
     @builtins.classmethod
-    def arn_for_domain_name(cls, resource: _IDomainNameRef_8b0ccf94) -> builtins.str:
+    def arn_for_domain_name(cls, resource: "_IDomainNameRef_8b0ccf94") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -8291,10 +8302,10 @@ class CfnDomainName(
     @builtins.classmethod
     def from_domain_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         domain_name: builtins.str,
-    ) -> _IDomainNameRef_8b0ccf94:
+    ) -> "_IDomainNameRef_8b0ccf94":
         '''Creates a new IDomainNameRef from a domainName.
 
         :param scope: -
@@ -8306,16 +8317,16 @@ class CfnDomainName(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
-        return typing.cast(_IDomainNameRef_8b0ccf94, jsii.sinvoke(cls, "fromDomainName", [scope, id, domain_name]))
+        return typing.cast("_IDomainNameRef_8b0ccf94", jsii.sinvoke(cls, "fromDomainName", [scope, id, domain_name]))
 
     @jsii.member(jsii_name="fromDomainNameArn")
     @builtins.classmethod
     def from_domain_name_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IDomainNameRef_8b0ccf94:
+    ) -> "_IDomainNameRef_8b0ccf94":
         '''Creates a new IDomainNameRef from an ARN.
 
         :param scope: -
@@ -8327,7 +8338,7 @@ class CfnDomainName(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IDomainNameRef_8b0ccf94, jsii.sinvoke(cls, "fromDomainNameArn", [scope, id, arn]))
+        return typing.cast("_IDomainNameRef_8b0ccf94", jsii.sinvoke(cls, "fromDomainNameArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="isCfnDomainName")
     @builtins.classmethod
@@ -8342,7 +8353,7 @@ class CfnDomainName(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomainName", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8431,15 +8442,15 @@ class CfnDomainName(
 
     @builtins.property
     @jsii.member(jsii_name="domainNameRef")
-    def domain_name_ref(self) -> _DomainNameReference_f4138423:
+    def domain_name_ref(self) -> "_DomainNameReference_f4138423":
         '''A reference to a DomainName resource.'''
-        return typing.cast(_DomainNameReference_f4138423, jsii.get(self, "domainNameRef"))
+        return typing.cast("_DomainNameReference_f4138423", jsii.get(self, "domainNameRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="certificateArn")
@@ -8484,14 +8495,14 @@ class CfnDomainName(
     @jsii.member(jsii_name="endpointConfiguration")
     def endpoint_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainName.EndpointConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainName.EndpointConfigurationProperty"]]:
         '''The endpoint configuration of this DomainName showing the endpoint types and IP address types of the domain name.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainName.EndpointConfigurationProperty"]], jsii.get(self, "endpointConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainName.EndpointConfigurationProperty"]], jsii.get(self, "endpointConfiguration"))
 
     @endpoint_configuration.setter
     def endpoint_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainName.EndpointConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainName.EndpointConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5b6543b7bdb9b509d16f1b80ad0629b95916d74d5bfa3d2cd3479381295a54c3)
@@ -8502,14 +8513,14 @@ class CfnDomainName(
     @jsii.member(jsii_name="mutualTlsAuthentication")
     def mutual_tls_authentication(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainName.MutualTlsAuthenticationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainName.MutualTlsAuthenticationProperty"]]:
         '''The mutual TLS authentication configuration for a custom domain name.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainName.MutualTlsAuthenticationProperty"]], jsii.get(self, "mutualTlsAuthentication"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainName.MutualTlsAuthenticationProperty"]], jsii.get(self, "mutualTlsAuthentication"))
 
     @mutual_tls_authentication.setter
     def mutual_tls_authentication(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainName.MutualTlsAuthenticationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainName.MutualTlsAuthenticationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2f97eed060618803071c91479b39994cbcdc98cdd93e5b0b72f4ffc2872d7544)
@@ -8573,12 +8584,12 @@ class CfnDomainName(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The collection of tags.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__30658cbd8b896f811f887630d934f0751b5370d775062da4c8686d7caa346a6d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -8758,6 +8769,7 @@ class CfnDomainNameAccessAssociation(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigateway as apigateway
@@ -8777,13 +8789,13 @@ class CfnDomainNameAccessAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         access_association_source: builtins.str,
         access_association_source_type: builtins.str,
         domain_name_arn: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::DomainNameAccessAssociation``.
 
@@ -8811,7 +8823,7 @@ class CfnDomainNameAccessAssociation(
     @builtins.classmethod
     def arn_for_domain_name_access_association(
         cls,
-        resource: _IDomainNameAccessAssociationRef_f9b99574,
+        resource: "_IDomainNameAccessAssociationRef_f9b99574",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -8834,7 +8846,7 @@ class CfnDomainNameAccessAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomainNameAccessAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -8876,9 +8888,9 @@ class CfnDomainNameAccessAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -8889,9 +8901,9 @@ class CfnDomainNameAccessAssociation(
     @jsii.member(jsii_name="domainNameAccessAssociationRef")
     def domain_name_access_association_ref(
         self,
-    ) -> _DomainNameAccessAssociationReference_558a7d70:
+    ) -> "_DomainNameAccessAssociationReference_558a7d70":
         '''A reference to a DomainNameAccessAssociation resource.'''
-        return typing.cast(_DomainNameAccessAssociationReference_558a7d70, jsii.get(self, "domainNameAccessAssociationRef"))
+        return typing.cast("_DomainNameAccessAssociationReference_558a7d70", jsii.get(self, "domainNameAccessAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="accessAssociationSource")
@@ -8934,12 +8946,12 @@ class CfnDomainNameAccessAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The collection of tags.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2c58e960117de6ef208f31f47e57fea4a9b3894dc90dde201f0f6f182cab17d8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -8963,7 +8975,7 @@ class CfnDomainNameAccessAssociationProps:
         access_association_source: builtins.str,
         access_association_source_type: builtins.str,
         domain_name_arn: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDomainNameAccessAssociation``.
 
@@ -8977,6 +8989,7 @@ class CfnDomainNameAccessAssociationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_apigateway as apigateway
@@ -9042,7 +9055,7 @@ class CfnDomainNameAccessAssociationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The collection of tags.
 
         Each tag element is associated with a given resource.
@@ -9050,7 +9063,7 @@ class CfnDomainNameAccessAssociationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainnameaccessassociation.html#cfn-apigateway-domainnameaccessassociation-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9087,13 +9100,13 @@ class CfnDomainNameProps:
         certificate_arn: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
         endpoint_access_mode: typing.Optional[builtins.str] = None,
-        endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        mutual_tls_authentication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainName.MutualTlsAuthenticationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainName.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        mutual_tls_authentication: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainName.MutualTlsAuthenticationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ownership_verification_certificate_arn: typing.Optional[builtins.str] = None,
         regional_certificate_arn: typing.Optional[builtins.str] = None,
         routing_mode: typing.Optional[builtins.str] = None,
         security_policy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDomainName``.
 
@@ -9113,6 +9126,7 @@ class CfnDomainNameProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_apigateway as apigateway
@@ -9205,18 +9219,18 @@ class CfnDomainNameProps:
     @builtins.property
     def endpoint_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainName.EndpointConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainName.EndpointConfigurationProperty"]]:
         '''The endpoint configuration of this DomainName showing the endpoint types and IP address types of the domain name.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-endpointconfiguration
         '''
         result = self._values.get("endpoint_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainName.EndpointConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainName.EndpointConfigurationProperty"]], result)
 
     @builtins.property
     def mutual_tls_authentication(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainName.MutualTlsAuthenticationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainName.MutualTlsAuthenticationProperty"]]:
         '''The mutual TLS authentication configuration for a custom domain name.
 
         If specified, API Gateway performs two-way authentication between the client and the server. Clients must present a trusted certificate to access your API.
@@ -9224,7 +9238,7 @@ class CfnDomainNameProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-mutualtlsauthentication
         '''
         result = self._values.get("mutual_tls_authentication")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainName.MutualTlsAuthenticationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainName.MutualTlsAuthenticationProperty"]], result)
 
     @builtins.property
     def ownership_verification_certificate_arn(self) -> typing.Optional[builtins.str]:
@@ -9271,7 +9285,7 @@ class CfnDomainNameProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The collection of tags.
 
         Each tag element is associated with a given resource.
@@ -9279,7 +9293,7 @@ class CfnDomainNameProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9309,6 +9323,7 @@ class CfnDomainNameV2(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigateway as apigateway
@@ -9335,17 +9350,17 @@ class CfnDomainNameV2(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         certificate_arn: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
         endpoint_access_mode: typing.Optional[builtins.str] = None,
-        endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomainNameV2.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainNameV2.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         policy: typing.Any = None,
         routing_mode: typing.Optional[builtins.str] = None,
         security_policy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::DomainNameV2``.
 
@@ -9390,7 +9405,7 @@ class CfnDomainNameV2(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomainNameV2", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9439,9 +9454,9 @@ class CfnDomainNameV2(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -9450,9 +9465,9 @@ class CfnDomainNameV2(
 
     @builtins.property
     @jsii.member(jsii_name="domainNameV2Ref")
-    def domain_name_v2_ref(self) -> _DomainNameV2Reference_ca1122a1:
+    def domain_name_v2_ref(self) -> "_DomainNameV2Reference_ca1122a1":
         '''A reference to a DomainNameV2 resource.'''
-        return typing.cast(_DomainNameV2Reference_ca1122a1, jsii.get(self, "domainNameV2Ref"))
+        return typing.cast("_DomainNameV2Reference_ca1122a1", jsii.get(self, "domainNameV2Ref"))
 
     @builtins.property
     @jsii.member(jsii_name="certificateArn")
@@ -9497,14 +9512,14 @@ class CfnDomainNameV2(
     @jsii.member(jsii_name="endpointConfiguration")
     def endpoint_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainNameV2.EndpointConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainNameV2.EndpointConfigurationProperty"]]:
         '''The endpoint configuration to indicate the types of endpoints an API (RestApi) or its custom domain name (DomainName) has and the IP address types that can invoke it.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainNameV2.EndpointConfigurationProperty"]], jsii.get(self, "endpointConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainNameV2.EndpointConfigurationProperty"]], jsii.get(self, "endpointConfiguration"))
 
     @endpoint_configuration.setter
     def endpoint_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomainNameV2.EndpointConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainNameV2.EndpointConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a1f648b520c9d40bb72a9028880e48540125da8ba68522e25c483400d79142dc)
@@ -9552,12 +9567,12 @@ class CfnDomainNameV2(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The collection of tags.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__476074ac17a2d9034c89e6475b463dcb2b5ab63eb68064fdc492d43a910b9470)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -9659,11 +9674,11 @@ class CfnDomainNameV2Props:
         certificate_arn: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
         endpoint_access_mode: typing.Optional[builtins.str] = None,
-        endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainNameV2.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDomainNameV2.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         policy: typing.Any = None,
         routing_mode: typing.Optional[builtins.str] = None,
         security_policy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDomainNameV2``.
 
@@ -9681,6 +9696,7 @@ class CfnDomainNameV2Props:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_apigateway as apigateway
@@ -9764,13 +9780,13 @@ class CfnDomainNameV2Props:
     @builtins.property
     def endpoint_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainNameV2.EndpointConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainNameV2.EndpointConfigurationProperty"]]:
         '''The endpoint configuration to indicate the types of endpoints an API (RestApi) or its custom domain name (DomainName) has and the IP address types that can invoke it.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainnamev2.html#cfn-apigateway-domainnamev2-endpointconfiguration
         '''
         result = self._values.get("endpoint_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomainNameV2.EndpointConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDomainNameV2.EndpointConfigurationProperty"]], result)
 
     @builtins.property
     def policy(self) -> typing.Any:
@@ -9806,7 +9822,7 @@ class CfnDomainNameV2Props:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The collection of tags.
 
         Each tag element is associated with a given resource.
@@ -9814,7 +9830,7 @@ class CfnDomainNameV2Props:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainnamev2.html#cfn-apigateway-domainnamev2-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9865,13 +9881,13 @@ class CfnGatewayResponse(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         response_type: builtins.str,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
-        response_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        response_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
+        response_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        response_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         status_code: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::GatewayResponse``.
@@ -9911,7 +9927,7 @@ class CfnGatewayResponse(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGatewayResponse", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -9958,9 +9974,9 @@ class CfnGatewayResponse(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayResponseRef")
-    def gateway_response_ref(self) -> _GatewayResponseReference_0f1f239c:
+    def gateway_response_ref(self) -> "_GatewayResponseReference_0f1f239c":
         '''A reference to a GatewayResponse resource.'''
-        return typing.cast(_GatewayResponseReference_0f1f239c, jsii.get(self, "gatewayResponseRef"))
+        return typing.cast("_GatewayResponseReference_0f1f239c", jsii.get(self, "gatewayResponseRef"))
 
     @builtins.property
     @jsii.member(jsii_name="responseType")
@@ -9992,14 +10008,14 @@ class CfnGatewayResponse(
     @jsii.member(jsii_name="responseParameters")
     def response_parameters(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''Response parameters (paths, query strings and headers) of the GatewayResponse as a string-to-string map of key-value pairs.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "responseParameters"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "responseParameters"))
 
     @response_parameters.setter
     def response_parameters(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__14cecdeaa3ee3a718e1e415f74286686a7f74799e862f6644b9196fb61ecd39e)
@@ -10010,14 +10026,14 @@ class CfnGatewayResponse(
     @jsii.member(jsii_name="responseTemplates")
     def response_templates(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''Response templates of the GatewayResponse as a string-to-string map of key-value pairs.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "responseTemplates"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "responseTemplates"))
 
     @response_templates.setter
     def response_templates(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__632192144f7b8204333bf1adf1d758ee8653c884b9a77e07436f3f92f3cc02f1)
@@ -10054,9 +10070,9 @@ class CfnGatewayResponseProps:
         self,
         *,
         response_type: builtins.str,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
-        response_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        response_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
+        response_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        response_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         status_code: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnGatewayResponse``.
@@ -10119,36 +10135,36 @@ class CfnGatewayResponseProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
+    def rest_api_id(self) -> typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-gatewayresponse.html#cfn-apigateway-gatewayresponse-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
+        return typing.cast(typing.Union[builtins.str, "_IRestApiRef_72dcbda0"], result)
 
     @builtins.property
     def response_parameters(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''Response parameters (paths, query strings and headers) of the GatewayResponse as a string-to-string map of key-value pairs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-gatewayresponse.html#cfn-apigateway-gatewayresponse-responseparameters
         '''
         result = self._values.get("response_parameters")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def response_templates(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''Response templates of the GatewayResponse as a string-to-string map of key-value pairs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-gatewayresponse.html#cfn-apigateway-gatewayresponse-responsetemplates
         '''
         result = self._values.get("response_templates")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def status_code(self) -> typing.Optional[builtins.str]:
@@ -10259,22 +10275,22 @@ class CfnMethod(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         http_method: builtins.str,
-        resource_id: typing.Union[builtins.str, _IResourceRef_c7defb81],
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
-        api_key_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        resource_id: typing.Union[builtins.str, "_IResourceRef_c7defb81"],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
+        api_key_required: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
         authorization_type: typing.Optional[builtins.str] = None,
-        authorizer_id: typing.Optional[typing.Union[builtins.str, _IAuthorizerRef_5e7c8723]] = None,
-        integration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMethod.IntegrationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        method_responses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMethod.MethodResponseProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        authorizer_id: typing.Optional[typing.Union[builtins.str, "_IAuthorizerRef_5e7c8723"]] = None,
+        integration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMethod.IntegrationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        method_responses: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMethod.MethodResponseProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         operation_name: typing.Optional[builtins.str] = None,
-        request_models: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        request_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]] = None,
-        request_validator_id: typing.Optional[typing.Union[builtins.str, _IRequestValidatorRef_ad0e2de5]] = None,
+        request_models: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        request_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union[builtins.bool, "_IResolvable_da3f097b"]]]] = None,
+        request_validator_id: typing.Optional[typing.Union[builtins.str, "_IRequestValidatorRef_ad0e2de5"]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::Method``.
 
@@ -10329,7 +10345,7 @@ class CfnMethod(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMethod", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -10365,9 +10381,9 @@ class CfnMethod(
 
     @builtins.property
     @jsii.member(jsii_name="methodRef")
-    def method_ref(self) -> _MethodReference_cf812dcd:
+    def method_ref(self) -> "_MethodReference_cf812dcd":
         '''A reference to a Method resource.'''
-        return typing.cast(_MethodReference_cf812dcd, jsii.get(self, "methodRef"))
+        return typing.cast("_MethodReference_cf812dcd", jsii.get(self, "methodRef"))
 
     @builtins.property
     @jsii.member(jsii_name="httpMethod")
@@ -10412,14 +10428,14 @@ class CfnMethod(
     @jsii.member(jsii_name="apiKeyRequired")
     def api_key_required(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean flag specifying whether a valid ApiKey is required to invoke this method.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "apiKeyRequired"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "apiKeyRequired"))
 
     @api_key_required.setter
     def api_key_required(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e69e781a2c7e540d207896f94419e3f760ed4c29f9ce3139745233fa6b7981c2)
@@ -10472,14 +10488,14 @@ class CfnMethod(
     @jsii.member(jsii_name="integration")
     def integration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMethod.IntegrationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMethod.IntegrationProperty"]]:
         '''Represents an ``HTTP`` , ``HTTP_PROXY`` , ``AWS`` , ``AWS_PROXY`` , or Mock integration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMethod.IntegrationProperty"]], jsii.get(self, "integration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMethod.IntegrationProperty"]], jsii.get(self, "integration"))
 
     @integration.setter
     def integration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnMethod.IntegrationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMethod.IntegrationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9045db34a991c4e4d9f8cd01b69765ec28cd43ce199d57d60ca42a869e0c8b2f)
@@ -10490,14 +10506,14 @@ class CfnMethod(
     @jsii.member(jsii_name="methodResponses")
     def method_responses(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMethod.MethodResponseProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMethod.MethodResponseProperty"]]]]:
         '''Gets a method response associated with a given HTTP status code.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMethod.MethodResponseProperty"]]]], jsii.get(self, "methodResponses"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMethod.MethodResponseProperty"]]]], jsii.get(self, "methodResponses"))
 
     @method_responses.setter
     def method_responses(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMethod.MethodResponseProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMethod.MethodResponseProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f4cd1cd1b53b103d49142d6ce4ddb3ed1e1c07e1d12b9f7f674058a0bf66dbfc)
@@ -10521,14 +10537,14 @@ class CfnMethod(
     @jsii.member(jsii_name="requestModels")
     def request_models(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''A key-value map specifying data schemas, represented by Model resources, (as the mapped value) of the request payloads of given content types (as the mapping key).'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "requestModels"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "requestModels"))
 
     @request_models.setter
     def request_models(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9410b580162450075529d443a9b6c428be7f00e0ec91767954a58ac8cd280749)
@@ -10539,14 +10555,14 @@ class CfnMethod(
     @jsii.member(jsii_name="requestParameters")
     def request_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union[builtins.bool, "_IResolvable_da3f097b"]]]]:
         '''A key-value map defining required or optional method request parameters that can be accepted by API Gateway.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]], jsii.get(self, "requestParameters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union[builtins.bool, "_IResolvable_da3f097b"]]]], jsii.get(self, "requestParameters"))
 
     @request_parameters.setter
     def request_parameters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union[builtins.bool, "_IResolvable_da3f097b"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__872f1b72145d5ceb544a38e2fd82115857a21400a026e9830b7b2459e6e4b0b3)
@@ -10600,11 +10616,11 @@ class CfnMethod(
             content_handling: typing.Optional[builtins.str] = None,
             credentials: typing.Optional[builtins.str] = None,
             integration_http_method: typing.Optional[builtins.str] = None,
-            integration_responses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMethod.IntegrationResponseProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            integration_responses: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMethod.IntegrationResponseProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             integration_target: typing.Optional[builtins.str] = None,
             passthrough_behavior: typing.Optional[builtins.str] = None,
-            request_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            request_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            request_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            request_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             response_transfer_mode: typing.Optional[builtins.str] = None,
             timeout_in_millis: typing.Optional[jsii.Number] = None,
             uri: typing.Optional[builtins.str] = None,
@@ -10818,13 +10834,13 @@ class CfnMethod(
         @builtins.property
         def integration_responses(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMethod.IntegrationResponseProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMethod.IntegrationResponseProperty"]]]]:
             '''Specifies the integration's responses.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-method-integration.html#cfn-apigateway-method-integration-integrationresponses
             '''
             result = self._values.get("integration_responses")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnMethod.IntegrationResponseProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMethod.IntegrationResponseProperty"]]]], result)
 
         @builtins.property
         def integration_target(self) -> typing.Optional[builtins.str]:
@@ -10851,7 +10867,7 @@ class CfnMethod(
         @builtins.property
         def request_parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''A key-value map specifying request parameters that are passed from the method request to the back end.
 
             The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the back end. The method request parameter value must match the pattern of ``method.request.{location}.{name}`` , where ``location`` is ``querystring`` , ``path`` , or ``header`` and ``name`` must be a valid and unique method request parameter name.
@@ -10859,12 +10875,12 @@ class CfnMethod(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-method-integration.html#cfn-apigateway-method-integration-requestparameters
             '''
             result = self._values.get("request_parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def request_templates(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client.
 
             The content type value is the key in this map, and the template (as a String) is the value.
@@ -10872,7 +10888,7 @@ class CfnMethod(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-method-integration.html#cfn-apigateway-method-integration-requesttemplates
             '''
             result = self._values.get("request_templates")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def response_transfer_mode(self) -> typing.Optional[builtins.str]:
@@ -10937,8 +10953,8 @@ class CfnMethod(
             *,
             status_code: builtins.str,
             content_handling: typing.Optional[builtins.str] = None,
-            response_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            response_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            response_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            response_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             selection_pattern: typing.Optional[builtins.str] = None,
         ) -> None:
             '''``IntegrationResponse`` is a property of the `Amazon API Gateway Method Integration <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html>`_ property type that specifies the response that API Gateway sends after a method's backend finishes processing a request.
@@ -11017,7 +11033,7 @@ class CfnMethod(
         @builtins.property
         def response_parameters(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''A key-value map specifying response parameters that are passed to the method response from the back end.
 
             The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of ``method.response.header.{name}`` , where ``name`` is a valid and unique header name. The mapped non-static value must match the pattern of ``integration.response.header.{name}`` or ``integration.response.body.{JSON-expression}`` , where ``name`` is a valid and unique response header name and ``JSON-expression`` is a valid JSON expression without the ``$`` prefix.
@@ -11025,12 +11041,12 @@ class CfnMethod(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-method-integrationresponse.html#cfn-apigateway-method-integrationresponse-responseparameters
             '''
             result = self._values.get("response_parameters")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def response_templates(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Specifies the templates used to transform the integration response body.
 
             Response templates are represented as a key/value map, with a content-type as the key and a template as the value.
@@ -11038,7 +11054,7 @@ class CfnMethod(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-method-integrationresponse.html#cfn-apigateway-method-integrationresponse-responsetemplates
             '''
             result = self._values.get("response_templates")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def selection_pattern(self) -> typing.Optional[builtins.str]:
@@ -11076,8 +11092,8 @@ class CfnMethod(
             self,
             *,
             status_code: builtins.str,
-            response_models: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            response_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]] = None,
+            response_models: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            response_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union[builtins.bool, "_IResolvable_da3f097b"]]]] = None,
         ) -> None:
             '''Represents a method response of a given HTTP status code returned to the client.
 
@@ -11134,7 +11150,7 @@ class CfnMethod(
         @builtins.property
         def response_models(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Specifies the Model resources used for the response's content-type.
 
             Response models are represented as a key/value map, with a content-type as the key and a Model name as the value.
@@ -11142,12 +11158,12 @@ class CfnMethod(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-method-methodresponse.html#cfn-apigateway-method-methodresponse-responsemodels
             '''
             result = self._values.get("response_models")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def response_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union[builtins.bool, "_IResolvable_da3f097b"]]]]:
             '''A key-value map specifying required or optional response parameters that API Gateway can send back to the caller.
 
             A key defines a method response header and the value specifies whether the associated method response header is required or not. The expression of the key must match the pattern ``method.response.header.{name}`` , where ``name`` is a valid and unique header name. API Gateway passes certain integration response data to the method response headers specified here according to the mapping you prescribe in the API's IntegrationResponse. The integration response data that can be mapped include an integration response header expressed in ``integration.response.header.{name}`` , a static value enclosed within a pair of single quotes (e.g., ``'application/json'`` ), or a JSON expression from the back-end response payload in the form of ``integration.response.body.{JSON-expression}`` , where ``JSON-expression`` is a valid JSON expression without the ``$`` prefix.)
@@ -11155,7 +11171,7 @@ class CfnMethod(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-method-methodresponse.html#cfn-apigateway-method-methodresponse-responseparameters
             '''
             result = self._values.get("response_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union[builtins.bool, "_IResolvable_da3f097b"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11193,18 +11209,18 @@ class CfnMethodProps:
         self,
         *,
         http_method: builtins.str,
-        resource_id: typing.Union[builtins.str, _IResourceRef_c7defb81],
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
-        api_key_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        resource_id: typing.Union[builtins.str, "_IResourceRef_c7defb81"],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
+        api_key_required: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
         authorization_type: typing.Optional[builtins.str] = None,
-        authorizer_id: typing.Optional[typing.Union[builtins.str, _IAuthorizerRef_5e7c8723]] = None,
-        integration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMethod.IntegrationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        method_responses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMethod.MethodResponseProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        authorizer_id: typing.Optional[typing.Union[builtins.str, "_IAuthorizerRef_5e7c8723"]] = None,
+        integration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMethod.IntegrationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        method_responses: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnMethod.MethodResponseProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         operation_name: typing.Optional[builtins.str] = None,
-        request_models: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        request_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]] = None,
-        request_validator_id: typing.Optional[typing.Union[builtins.str, _IRequestValidatorRef_ad0e2de5]] = None,
+        request_models: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        request_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union[builtins.bool, "_IResolvable_da3f097b"]]]] = None,
+        request_validator_id: typing.Optional[typing.Union[builtins.str, "_IRequestValidatorRef_ad0e2de5"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMethod``.
 
@@ -11350,35 +11366,35 @@ class CfnMethodProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def resource_id(self) -> typing.Union[builtins.str, _IResourceRef_c7defb81]:
+    def resource_id(self) -> typing.Union[builtins.str, "_IResourceRef_c7defb81"]:
         '''The Resource identifier for the MethodResponse resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-resourceid
         '''
         result = self._values.get("resource_id")
         assert result is not None, "Required property 'resource_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IResourceRef_c7defb81], result)
+        return typing.cast(typing.Union[builtins.str, "_IResourceRef_c7defb81"], result)
 
     @builtins.property
-    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
+    def rest_api_id(self) -> typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
+        return typing.cast(typing.Union[builtins.str, "_IRestApiRef_72dcbda0"], result)
 
     @builtins.property
     def api_key_required(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A boolean flag specifying whether a valid ApiKey is required to invoke this method.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-apikeyrequired
         '''
         result = self._values.get("api_key_required")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def authorization_scopes(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -11408,7 +11424,7 @@ class CfnMethodProps:
     @builtins.property
     def authorizer_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IAuthorizerRef_5e7c8723]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IAuthorizerRef_5e7c8723"]]:
         '''The identifier of an authorizer to use on this method.
 
         The method's authorization type must be ``CUSTOM`` or ``COGNITO_USER_POOLS`` .
@@ -11416,29 +11432,29 @@ class CfnMethodProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-authorizerid
         '''
         result = self._values.get("authorizer_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IAuthorizerRef_5e7c8723]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IAuthorizerRef_5e7c8723"]], result)
 
     @builtins.property
     def integration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMethod.IntegrationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMethod.IntegrationProperty"]]:
         '''Represents an ``HTTP`` , ``HTTP_PROXY`` , ``AWS`` , ``AWS_PROXY`` , or Mock integration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-integration
         '''
         result = self._values.get("integration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnMethod.IntegrationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnMethod.IntegrationProperty"]], result)
 
     @builtins.property
     def method_responses(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMethod.MethodResponseProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMethod.MethodResponseProperty"]]]]:
         '''Gets a method response associated with a given HTTP status code.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-methodresponses
         '''
         result = self._values.get("method_responses")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnMethod.MethodResponseProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMethod.MethodResponseProperty"]]]], result)
 
     @builtins.property
     def operation_name(self) -> typing.Optional[builtins.str]:
@@ -11454,18 +11470,18 @@ class CfnMethodProps:
     @builtins.property
     def request_models(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''A key-value map specifying data schemas, represented by Model resources, (as the mapped value) of the request payloads of given content types (as the mapping key).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-requestmodels
         '''
         result = self._values.get("request_models")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def request_parameters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union[builtins.bool, "_IResolvable_da3f097b"]]]]:
         '''A key-value map defining required or optional method request parameters that can be accepted by API Gateway.
 
         A key is a method request parameter name matching the pattern of ``method.request.{location}.{name}`` , where ``location`` is ``querystring`` , ``path`` , or ``header`` and ``name`` is a valid and unique parameter name. The value associated with the key is a Boolean flag indicating whether the parameter is required ( ``true`` ) or optional ( ``false`` ). The method request parameter names defined here are available in Integration to be mapped to integration request parameters or templates.
@@ -11473,18 +11489,18 @@ class CfnMethodProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-requestparameters
         '''
         result = self._values.get("request_parameters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union[builtins.bool, "_IResolvable_da3f097b"]]]], result)
 
     @builtins.property
     def request_validator_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRequestValidatorRef_ad0e2de5]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRequestValidatorRef_ad0e2de5"]]:
         '''The identifier of a RequestValidator for request validation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-requestvalidatorid
         '''
         result = self._values.get("request_validator_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRequestValidatorRef_ad0e2de5]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRequestValidatorRef_ad0e2de5"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11531,10 +11547,10 @@ class CfnModel(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
         content_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -11577,7 +11593,7 @@ class CfnModel(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnModel", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -11613,9 +11629,9 @@ class CfnModel(
 
     @builtins.property
     @jsii.member(jsii_name="modelRef")
-    def model_ref(self) -> _ModelReference_19c194a0:
+    def model_ref(self) -> "_ModelReference_19c194a0":
         '''A reference to a Model resource.'''
-        return typing.cast(_ModelReference_19c194a0, jsii.get(self, "modelRef"))
+        return typing.cast("_ModelReference_19c194a0", jsii.get(self, "modelRef"))
 
     @builtins.property
     @jsii.member(jsii_name="restApiId")
@@ -11698,7 +11714,7 @@ class CfnModelProps:
     def __init__(
         self,
         *,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
         content_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -11753,14 +11769,14 @@ class CfnModelProps:
             self._values["schema"] = schema
 
     @builtins.property
-    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
+    def rest_api_id(self) -> typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-model.html#cfn-apigateway-model-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
+        return typing.cast(typing.Union[builtins.str, "_IRestApiRef_72dcbda0"], result)
 
     @builtins.property
     def content_type(self) -> typing.Optional[builtins.str]:
@@ -11849,13 +11865,13 @@ class CfnRequestValidator(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
         name: typing.Optional[builtins.str] = None,
-        validate_request_body: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        validate_request_parameters: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        validate_request_body: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        validate_request_parameters: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::RequestValidator``.
 
@@ -11892,7 +11908,7 @@ class CfnRequestValidator(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRequestValidator", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -11939,9 +11955,9 @@ class CfnRequestValidator(
 
     @builtins.property
     @jsii.member(jsii_name="requestValidatorRef")
-    def request_validator_ref(self) -> _RequestValidatorReference_432e1849:
+    def request_validator_ref(self) -> "_RequestValidatorReference_432e1849":
         '''A reference to a RequestValidator resource.'''
-        return typing.cast(_RequestValidatorReference_432e1849, jsii.get(self, "requestValidatorRef"))
+        return typing.cast("_RequestValidatorReference_432e1849", jsii.get(self, "requestValidatorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="restApiId")
@@ -11973,14 +11989,14 @@ class CfnRequestValidator(
     @jsii.member(jsii_name="validateRequestBody")
     def validate_request_body(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean flag to indicate whether to validate a request body according to the configured Model schema.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "validateRequestBody"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "validateRequestBody"))
 
     @validate_request_body.setter
     def validate_request_body(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b15e7c43afb2ebc0faf4f31ac1e746c2f98b627e8a0e48213f58832ba86c3ec7)
@@ -11991,14 +12007,14 @@ class CfnRequestValidator(
     @jsii.member(jsii_name="validateRequestParameters")
     def validate_request_parameters(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean flag to indicate whether to validate request parameters ( ``true`` ) or not ( ``false`` ).'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "validateRequestParameters"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "validateRequestParameters"))
 
     @validate_request_parameters.setter
     def validate_request_parameters(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__373b014f81740f98fc49cfce56f72c1e0b243f647842baa67363b94506b1aed5)
@@ -12020,10 +12036,10 @@ class CfnRequestValidatorProps:
     def __init__(
         self,
         *,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
         name: typing.Optional[builtins.str] = None,
-        validate_request_body: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        validate_request_parameters: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        validate_request_body: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        validate_request_parameters: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRequestValidator``.
 
@@ -12067,14 +12083,14 @@ class CfnRequestValidatorProps:
             self._values["validate_request_parameters"] = validate_request_parameters
 
     @builtins.property
-    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
+    def rest_api_id(self) -> typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-requestvalidator.html#cfn-apigateway-requestvalidator-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
+        return typing.cast(typing.Union[builtins.str, "_IRestApiRef_72dcbda0"], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -12088,24 +12104,24 @@ class CfnRequestValidatorProps:
     @builtins.property
     def validate_request_body(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean flag to indicate whether to validate a request body according to the configured Model schema.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-requestvalidator.html#cfn-apigateway-requestvalidator-validaterequestbody
         '''
         result = self._values.get("validate_request_body")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def validate_request_parameters(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A Boolean flag to indicate whether to validate request parameters ( ``true`` ) or not ( ``false`` ).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-requestvalidator.html#cfn-apigateway-requestvalidator-validaterequestparameters
         '''
         result = self._values.get("validate_request_parameters")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12146,12 +12162,12 @@ class CfnResource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        parent_id: typing.Union[builtins.str, _IResourceRef_c7defb81],
+        parent_id: typing.Union[builtins.str, "_IResourceRef_c7defb81"],
         path_part: builtins.str,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
     ) -> None:
         '''Create a new ``AWS::ApiGateway::Resource``.
 
@@ -12184,7 +12200,7 @@ class CfnResource(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResource", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12231,9 +12247,9 @@ class CfnResource(
 
     @builtins.property
     @jsii.member(jsii_name="resourceRef")
-    def resource_ref(self) -> _ResourceReference_c72d8a5a:
+    def resource_ref(self) -> "_ResourceReference_c72d8a5a":
         '''A reference to a Resource resource.'''
-        return typing.cast(_ResourceReference_c72d8a5a, jsii.get(self, "resourceRef"))
+        return typing.cast("_ResourceReference_c72d8a5a", jsii.get(self, "resourceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="parentId")
@@ -12288,9 +12304,9 @@ class CfnResourceProps:
     def __init__(
         self,
         *,
-        parent_id: typing.Union[builtins.str, _IResourceRef_c7defb81],
+        parent_id: typing.Union[builtins.str, "_IResourceRef_c7defb81"],
         path_part: builtins.str,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
     ) -> None:
         '''Properties for defining a ``CfnResource``.
 
@@ -12325,14 +12341,14 @@ class CfnResourceProps:
         }
 
     @builtins.property
-    def parent_id(self) -> typing.Union[builtins.str, _IResourceRef_c7defb81]:
+    def parent_id(self) -> typing.Union[builtins.str, "_IResourceRef_c7defb81"]:
         '''The parent resource's identifier.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-resource.html#cfn-apigateway-resource-parentid
         '''
         result = self._values.get("parent_id")
         assert result is not None, "Required property 'parent_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IResourceRef_c7defb81], result)
+        return typing.cast(typing.Union[builtins.str, "_IResourceRef_c7defb81"], result)
 
     @builtins.property
     def path_part(self) -> builtins.str:
@@ -12345,14 +12361,14 @@ class CfnResourceProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
+    def rest_api_id(self) -> typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-resource.html#cfn-apigateway-resource-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
+        return typing.cast(typing.Union[builtins.str, "_IRestApiRef_72dcbda0"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12385,6 +12401,7 @@ class CfnRestApi(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigateway as apigateway
@@ -12429,26 +12446,26 @@ class CfnRestApi(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         api_key_source_type: typing.Optional[builtins.str] = None,
         binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         body: typing.Any = None,
-        body_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRestApi.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        clone_from: typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]] = None,
+        body_s3_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRestApi.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        clone_from: typing.Optional[typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]] = None,
         description: typing.Optional[builtins.str] = None,
-        disable_execute_api_endpoint: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        disable_execute_api_endpoint: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         endpoint_access_mode: typing.Optional[builtins.str] = None,
-        endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRestApi.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        fail_on_warnings: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRestApi.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        fail_on_warnings: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         minimum_compression_size: typing.Optional[jsii.Number] = None,
         mode: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         policy: typing.Any = None,
         security_policy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::RestApi``.
 
@@ -12500,7 +12517,7 @@ class CfnRestApi(
 
     @jsii.member(jsii_name="arnForRestApi")
     @builtins.classmethod
-    def arn_for_rest_api(cls, resource: _IRestApiRef_72dcbda0) -> builtins.str:
+    def arn_for_rest_api(cls, resource: "_IRestApiRef_72dcbda0") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -12513,10 +12530,10 @@ class CfnRestApi(
     @builtins.classmethod
     def from_rest_api_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         rest_api_id: builtins.str,
-    ) -> _IRestApiRef_72dcbda0:
+    ) -> "_IRestApiRef_72dcbda0":
         '''Creates a new IRestApiRef from a restApiId.
 
         :param scope: -
@@ -12528,7 +12545,7 @@ class CfnRestApi(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument rest_api_id", value=rest_api_id, expected_type=type_hints["rest_api_id"])
-        return typing.cast(_IRestApiRef_72dcbda0, jsii.sinvoke(cls, "fromRestApiId", [scope, id, rest_api_id]))
+        return typing.cast("_IRestApiRef_72dcbda0", jsii.sinvoke(cls, "fromRestApiId", [scope, id, rest_api_id]))
 
     @jsii.member(jsii_name="isCfnRestApi")
     @builtins.classmethod
@@ -12543,7 +12560,7 @@ class CfnRestApi(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRestApi", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -12597,15 +12614,15 @@ class CfnRestApi(
 
     @builtins.property
     @jsii.member(jsii_name="restApiRef")
-    def rest_api_ref(self) -> _RestApiReference_0863f937:
+    def rest_api_ref(self) -> "_RestApiReference_0863f937":
         '''A reference to a RestApi resource.'''
-        return typing.cast(_RestApiReference_0863f937, jsii.get(self, "restApiRef"))
+        return typing.cast("_RestApiReference_0863f937", jsii.get(self, "restApiRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="apiKeySourceType")
@@ -12653,14 +12670,14 @@ class CfnRestApi(
     @jsii.member(jsii_name="bodyS3Location")
     def body_s3_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRestApi.S3LocationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRestApi.S3LocationProperty"]]:
         '''The Amazon Simple Storage Service (Amazon S3) location that points to an OpenAPI file, which defines a set of RESTful APIs in JSON or YAML format.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRestApi.S3LocationProperty"]], jsii.get(self, "bodyS3Location"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRestApi.S3LocationProperty"]], jsii.get(self, "bodyS3Location"))
 
     @body_s3_location.setter
     def body_s3_location(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRestApi.S3LocationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRestApi.S3LocationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ef1ea351452be8b47bde86a70f6ceb7d6cdf7e0f3cadbc3aa763c8e6a8ebe58c)
@@ -12697,14 +12714,14 @@ class CfnRestApi(
     @jsii.member(jsii_name="disableExecuteApiEndpoint")
     def disable_execute_api_endpoint(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether clients can invoke your API by using the default ``execute-api`` endpoint.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "disableExecuteApiEndpoint"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "disableExecuteApiEndpoint"))
 
     @disable_execute_api_endpoint.setter
     def disable_execute_api_endpoint(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b9945526e80dc90cbfbb86ac5f423295588dfd680221afef09db1c77df2985fb)
@@ -12728,14 +12745,14 @@ class CfnRestApi(
     @jsii.member(jsii_name="endpointConfiguration")
     def endpoint_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRestApi.EndpointConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRestApi.EndpointConfigurationProperty"]]:
         '''A list of the endpoint types and IP address types of the API.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRestApi.EndpointConfigurationProperty"]], jsii.get(self, "endpointConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRestApi.EndpointConfigurationProperty"]], jsii.get(self, "endpointConfiguration"))
 
     @endpoint_configuration.setter
     def endpoint_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRestApi.EndpointConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRestApi.EndpointConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d74e18e19938f0a8587b0106d2093ba2b9044df35435213edb73072f46f6877e)
@@ -12746,14 +12763,14 @@ class CfnRestApi(
     @jsii.member(jsii_name="failOnWarnings")
     def fail_on_warnings(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A query parameter to indicate whether to rollback the API update ( ``true`` ) or not ( ``false`` ) when a warning is encountered.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "failOnWarnings"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "failOnWarnings"))
 
     @fail_on_warnings.setter
     def fail_on_warnings(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__58328de38298447d398e8e44c69092ec4537ecc0e975cba2b8fcfcd76fba050c)
@@ -12803,14 +12820,14 @@ class CfnRestApi(
     @jsii.member(jsii_name="parameters")
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''Custom header parameters as part of the request.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "parameters"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "parameters"))
 
     @parameters.setter
     def parameters(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ccaf03012418784e0b764088769b0e23937e2028288348151f0ccfbfd74daa7b)
@@ -12845,12 +12862,12 @@ class CfnRestApi(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The key-value map of strings.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9ae71bb5beb4f360ca0016003cbb508243a9ad4b5e494d1a4655780f8350d620)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -13095,20 +13112,20 @@ class CfnRestApiProps:
         api_key_source_type: typing.Optional[builtins.str] = None,
         binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         body: typing.Any = None,
-        body_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRestApi.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        clone_from: typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]] = None,
+        body_s3_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRestApi.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        clone_from: typing.Optional[typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]] = None,
         description: typing.Optional[builtins.str] = None,
-        disable_execute_api_endpoint: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        disable_execute_api_endpoint: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         endpoint_access_mode: typing.Optional[builtins.str] = None,
-        endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRestApi.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        fail_on_warnings: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRestApi.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        fail_on_warnings: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         minimum_compression_size: typing.Optional[jsii.Number] = None,
         mode: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         policy: typing.Any = None,
         security_policy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRestApi``.
 
@@ -13135,6 +13152,7 @@ class CfnRestApiProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_apigateway as apigateway
@@ -13267,24 +13285,24 @@ class CfnRestApiProps:
     @builtins.property
     def body_s3_location(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRestApi.S3LocationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRestApi.S3LocationProperty"]]:
         '''The Amazon Simple Storage Service (Amazon S3) location that points to an OpenAPI file, which defines a set of RESTful APIs in JSON or YAML format.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-bodys3location
         '''
         result = self._values.get("body_s3_location")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRestApi.S3LocationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRestApi.S3LocationProperty"]], result)
 
     @builtins.property
     def clone_from(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]]:
         '''The ID of the RestApi that you want to clone from.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-clonefrom
         '''
         result = self._values.get("clone_from")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -13298,7 +13316,7 @@ class CfnRestApiProps:
     @builtins.property
     def disable_execute_api_endpoint(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether clients can invoke your API by using the default ``execute-api`` endpoint.
 
         By default, clients can invoke your API with the default ``https://{api_id}.execute-api.{region}.amazonaws.com`` endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint
@@ -13306,7 +13324,7 @@ class CfnRestApiProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-disableexecuteapiendpoint
         '''
         result = self._values.get("disable_execute_api_endpoint")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
@@ -13320,7 +13338,7 @@ class CfnRestApiProps:
     @builtins.property
     def endpoint_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRestApi.EndpointConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRestApi.EndpointConfigurationProperty"]]:
         '''A list of the endpoint types and IP address types of the API.
 
         Use this property when creating an API. When importing an existing API, specify the endpoint configuration types using the ``Parameters`` property.
@@ -13328,12 +13346,12 @@ class CfnRestApiProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-endpointconfiguration
         '''
         result = self._values.get("endpoint_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRestApi.EndpointConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRestApi.EndpointConfigurationProperty"]], result)
 
     @builtins.property
     def fail_on_warnings(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A query parameter to indicate whether to rollback the API update ( ``true`` ) or not ( ``false`` ) when a warning is encountered.
 
         The default value is ``false`` .
@@ -13341,7 +13359,7 @@ class CfnRestApiProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-failonwarnings
         '''
         result = self._values.get("fail_on_warnings")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def minimum_compression_size(self) -> typing.Optional[jsii.Number]:
@@ -13389,7 +13407,7 @@ class CfnRestApiProps:
     @builtins.property
     def parameters(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''Custom header parameters as part of the request.
 
         For example, to exclude DocumentationParts from an imported API, set ``ignore=documentation`` as a ``parameters`` value, as in the AWS CLI command of ``aws apigateway import-rest-api --parameters ignore=documentation --body 'file:///path/to/imported-api-body.json'`` .
@@ -13397,7 +13415,7 @@ class CfnRestApiProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-parameters
         '''
         result = self._values.get("parameters")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def policy(self) -> typing.Any:
@@ -13420,7 +13438,7 @@ class CfnRestApiProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The key-value map of strings.
 
         The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with ``aws:`` . The tag value can be up to 256 characters.
@@ -13428,7 +13446,7 @@ class CfnRestApiProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -13456,6 +13474,7 @@ class CfnStage(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigateway as apigateway
@@ -13508,23 +13527,23 @@ class CfnStage(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
-        access_log_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStage.AccessLogSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache_cluster_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
+        access_log_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStage.AccessLogSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_cluster_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         cache_cluster_size: typing.Optional[builtins.str] = None,
-        canary_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStage.CanarySettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        client_certificate_id: typing.Optional[typing.Union[builtins.str, _IClientCertificateRef_2a4b2b38]] = None,
-        deployment_id: typing.Optional[typing.Union[builtins.str, _IDeploymentRef_e5a0678c]] = None,
+        canary_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStage.CanarySettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        client_certificate_id: typing.Optional[typing.Union[builtins.str, "_IClientCertificateRef_2a4b2b38"]] = None,
+        deployment_id: typing.Optional[typing.Union[builtins.str, "_IDeploymentRef_e5a0678c"]] = None,
         description: typing.Optional[builtins.str] = None,
         documentation_version: typing.Optional[builtins.str] = None,
-        method_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStage.MethodSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        method_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStage.MethodSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         stage_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tracing_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tracing_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::Stage``.
 
@@ -13581,7 +13600,7 @@ class CfnStage(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStage", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -13617,15 +13636,15 @@ class CfnStage(
 
     @builtins.property
     @jsii.member(jsii_name="stageRef")
-    def stage_ref(self) -> _StageReference_3eb94694:
+    def stage_ref(self) -> "_StageReference_3eb94694":
         '''A reference to a Stage resource.'''
-        return typing.cast(_StageReference_3eb94694, jsii.get(self, "stageRef"))
+        return typing.cast("_StageReference_3eb94694", jsii.get(self, "stageRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="restApiId")
@@ -13644,14 +13663,14 @@ class CfnStage(
     @jsii.member(jsii_name="accessLogSetting")
     def access_log_setting(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.AccessLogSettingProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.AccessLogSettingProperty"]]:
         '''Access log settings, including the access log format and access log destination ARN.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.AccessLogSettingProperty"]], jsii.get(self, "accessLogSetting"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.AccessLogSettingProperty"]], jsii.get(self, "accessLogSetting"))
 
     @access_log_setting.setter
     def access_log_setting(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.AccessLogSettingProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.AccessLogSettingProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4ec6e534bced79a9cafcc6abbc05784c0cb0288cb0ceddf15685c1b08de26154)
@@ -13662,14 +13681,14 @@ class CfnStage(
     @jsii.member(jsii_name="cacheClusterEnabled")
     def cache_cluster_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether a cache cluster is enabled for the stage.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "cacheClusterEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "cacheClusterEnabled"))
 
     @cache_cluster_enabled.setter
     def cache_cluster_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3ee668c29f68c01d258ef4be4dd02663e6079d12d2e7a426bb59ee67ced9e11a)
@@ -13693,14 +13712,14 @@ class CfnStage(
     @jsii.member(jsii_name="canarySetting")
     def canary_setting(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.CanarySettingProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.CanarySettingProperty"]]:
         '''Settings for the canary deployment in this stage.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.CanarySettingProperty"]], jsii.get(self, "canarySetting"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.CanarySettingProperty"]], jsii.get(self, "canarySetting"))
 
     @canary_setting.setter
     def canary_setting(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStage.CanarySettingProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.CanarySettingProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9d5d7d1801b50fbfd2d815556acd623df5f38aeb7411e52819b30b70c8f8c10e)
@@ -13763,14 +13782,14 @@ class CfnStage(
     @jsii.member(jsii_name="methodSettings")
     def method_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStage.MethodSettingProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStage.MethodSettingProperty"]]]]:
         '''A map that defines the method settings for a Stage resource.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStage.MethodSettingProperty"]]]], jsii.get(self, "methodSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStage.MethodSettingProperty"]]]], jsii.get(self, "methodSettings"))
 
     @method_settings.setter
     def method_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnStage.MethodSettingProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStage.MethodSettingProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1e6c0cd8393b418858c9216e7b06705c7834d5bc728b465c401f21e5ea5f71be)
@@ -13792,12 +13811,12 @@ class CfnStage(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The collection of tags.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dfc53c1ffa80a62c546222c14af688ddd25a1a97b9dea37ac1ed4738123c0369)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -13807,14 +13826,14 @@ class CfnStage(
     @jsii.member(jsii_name="tracingEnabled")
     def tracing_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether active tracing with X-ray is enabled for the Stage.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "tracingEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "tracingEnabled"))
 
     @tracing_enabled.setter
     def tracing_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__080398f14f82f9de64dfd739f23cedcc4a0465bf221903bff436a81eae9e6934)
@@ -13825,14 +13844,14 @@ class CfnStage(
     @jsii.member(jsii_name="variables")
     def variables(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''A map (string-to-string map) that defines the stage variables, where the variable name is the key and the variable value is the value.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "variables"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "variables"))
 
     @variables.setter
     def variables(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0ce3ef85d7e159e99ea72997d34d02601f6ebfa6c900e82024469d23fa9822c8)
@@ -13929,8 +13948,8 @@ class CfnStage(
             *,
             deployment_id: typing.Optional[builtins.str] = None,
             percent_traffic: typing.Optional[jsii.Number] = None,
-            stage_variable_overrides: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            use_stage_cache: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            stage_variable_overrides: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            use_stage_cache: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''Configuration settings of a canary deployment.
 
@@ -13994,7 +14013,7 @@ class CfnStage(
         @builtins.property
         def stage_variable_overrides(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''Stage variables overridden for a canary release deployment, including new stage variables introduced in the canary.
 
             These stage variables are represented as a string-to-string map between stage variable names and their values.
@@ -14002,18 +14021,18 @@ class CfnStage(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-stage-canarysetting.html#cfn-apigateway-stage-canarysetting-stagevariableoverrides
             '''
             result = self._values.get("stage_variable_overrides")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def use_stage_cache(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''A Boolean flag to indicate whether the canary deployment uses the stage cache or not.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-stage-canarysetting.html#cfn-apigateway-stage-canarysetting-usestagecache
             '''
             result = self._values.get("use_stage_cache")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14046,13 +14065,13 @@ class CfnStage(
         def __init__(
             self,
             *,
-            cache_data_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            cache_data_encrypted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             cache_ttl_in_seconds: typing.Optional[jsii.Number] = None,
-            caching_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            data_trace_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            caching_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            data_trace_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             http_method: typing.Optional[builtins.str] = None,
             logging_level: typing.Optional[builtins.str] = None,
-            metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            metrics_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             resource_path: typing.Optional[builtins.str] = None,
             throttling_burst_limit: typing.Optional[jsii.Number] = None,
             throttling_rate_limit: typing.Optional[jsii.Number] = None,
@@ -14131,13 +14150,13 @@ class CfnStage(
         @builtins.property
         def cache_data_encrypted(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether the cached responses are encrypted.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-cachedataencrypted
             '''
             result = self._values.get("cache_data_encrypted")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def cache_ttl_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -14153,7 +14172,7 @@ class CfnStage(
         @builtins.property
         def caching_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether responses should be cached and returned for requests.
 
             A cache cluster must be enabled on the stage for responses to be cached.
@@ -14161,12 +14180,12 @@ class CfnStage(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-cachingenabled
             '''
             result = self._values.get("caching_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def data_trace_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether data trace logging is enabled for this method, which affects the log entries pushed to Amazon CloudWatch Logs.
 
             This can be useful to troubleshoot APIs, but can result in logging sensitive data. We recommend that you don't enable this option for production APIs.
@@ -14174,7 +14193,7 @@ class CfnStage(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-datatraceenabled
             '''
             result = self._values.get("data_trace_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def http_method(self) -> typing.Optional[builtins.str]:
@@ -14201,13 +14220,13 @@ class CfnStage(
         @builtins.property
         def metrics_enabled(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies whether Amazon CloudWatch metrics are enabled for this method.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-metricsenabled
             '''
             result = self._values.get("metrics_enabled")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def resource_path(self) -> typing.Optional[builtins.str]:
@@ -14274,20 +14293,20 @@ class CfnStageProps:
     def __init__(
         self,
         *,
-        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
-        access_log_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.AccessLogSettingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        cache_cluster_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        rest_api_id: typing.Union[builtins.str, "_IRestApiRef_72dcbda0"],
+        access_log_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStage.AccessLogSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_cluster_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         cache_cluster_size: typing.Optional[builtins.str] = None,
-        canary_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.CanarySettingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        client_certificate_id: typing.Optional[typing.Union[builtins.str, _IClientCertificateRef_2a4b2b38]] = None,
-        deployment_id: typing.Optional[typing.Union[builtins.str, _IDeploymentRef_e5a0678c]] = None,
+        canary_setting: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStage.CanarySettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        client_certificate_id: typing.Optional[typing.Union[builtins.str, "_IClientCertificateRef_2a4b2b38"]] = None,
+        deployment_id: typing.Optional[typing.Union[builtins.str, "_IDeploymentRef_e5a0678c"]] = None,
         description: typing.Optional[builtins.str] = None,
         documentation_version: typing.Optional[builtins.str] = None,
-        method_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.MethodSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        method_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStage.MethodSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         stage_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tracing_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tracing_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStage``.
 
@@ -14311,6 +14330,7 @@ class CfnStageProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_apigateway as apigateway
@@ -14407,30 +14427,30 @@ class CfnStageProps:
             self._values["variables"] = variables
 
     @builtins.property
-    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
+    def rest_api_id(self) -> typing.Union[builtins.str, "_IRestApiRef_72dcbda0"]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
+        return typing.cast(typing.Union[builtins.str, "_IRestApiRef_72dcbda0"], result)
 
     @builtins.property
     def access_log_setting(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStage.AccessLogSettingProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.AccessLogSettingProperty"]]:
         '''Access log settings, including the access log format and access log destination ARN.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-accesslogsetting
         '''
         result = self._values.get("access_log_setting")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStage.AccessLogSettingProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.AccessLogSettingProperty"]], result)
 
     @builtins.property
     def cache_cluster_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether a cache cluster is enabled for the stage.
 
         To activate a method-level cache, set ``CachingEnabled`` to ``true`` for a method.
@@ -14438,7 +14458,7 @@ class CfnStageProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-cacheclusterenabled
         '''
         result = self._values.get("cache_cluster_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def cache_cluster_size(self) -> typing.Optional[builtins.str]:
@@ -14454,35 +14474,35 @@ class CfnStageProps:
     @builtins.property
     def canary_setting(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStage.CanarySettingProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.CanarySettingProperty"]]:
         '''Settings for the canary deployment in this stage.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-canarysetting
         '''
         result = self._values.get("canary_setting")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStage.CanarySettingProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStage.CanarySettingProperty"]], result)
 
     @builtins.property
     def client_certificate_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IClientCertificateRef_2a4b2b38]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IClientCertificateRef_2a4b2b38"]]:
         '''The identifier of a client certificate for an API stage.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-clientcertificateid
         '''
         result = self._values.get("client_certificate_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IClientCertificateRef_2a4b2b38]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IClientCertificateRef_2a4b2b38"]], result)
 
     @builtins.property
     def deployment_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IDeploymentRef_e5a0678c]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IDeploymentRef_e5a0678c"]]:
         '''The identifier of the Deployment that the stage points to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-deploymentid
         '''
         result = self._values.get("deployment_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDeploymentRef_e5a0678c]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IDeploymentRef_e5a0678c"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -14505,7 +14525,7 @@ class CfnStageProps:
     @builtins.property
     def method_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStage.MethodSettingProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStage.MethodSettingProperty"]]]]:
         '''A map that defines the method settings for a Stage resource.
 
         Keys (designated as ``/{method_setting_key`` below) are method paths defined as ``{resource_path}/{http_method}`` for an individual method override, or ``/\\* /\\*`` for overriding all methods in the stage.
@@ -14513,7 +14533,7 @@ class CfnStageProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-methodsettings
         '''
         result = self._values.get("method_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnStage.MethodSettingProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnStage.MethodSettingProperty"]]]], result)
 
     @builtins.property
     def stage_name(self) -> typing.Optional[builtins.str]:
@@ -14527,7 +14547,7 @@ class CfnStageProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The collection of tags.
 
         Each tag element is associated with a given resource.
@@ -14535,23 +14555,23 @@ class CfnStageProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def tracing_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether active tracing with X-ray is enabled for the Stage.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-tracingenabled
         '''
         result = self._values.get("tracing_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def variables(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''A map (string-to-string map) that defines the stage variables, where the variable name is the key and the variable value is the value.
 
         Variable names are limited to alphanumeric characters. Values must match the following regular expression: ``[A-Za-z0-9-._~:/?#&=,]+`` .
@@ -14559,7 +14579,7 @@ class CfnStageProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-variables
         '''
         result = self._values.get("variables")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14591,6 +14611,7 @@ class CfnUsagePlan(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigateway as apigateway
@@ -14626,14 +14647,14 @@ class CfnUsagePlan(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api_stages: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUsagePlan.ApiStageProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        api_stages: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUsagePlan.ApiStageProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        quota: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUsagePlan.QuotaSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        throttle: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUsagePlan.ThrottleSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        quota: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUsagePlan.QuotaSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        throttle: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUsagePlan.ThrottleSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         usage_plan_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::UsagePlan``.
@@ -14664,7 +14685,7 @@ class CfnUsagePlan(
 
     @jsii.member(jsii_name="arnForUsagePlan")
     @builtins.classmethod
-    def arn_for_usage_plan(cls, resource: _IUsagePlanRef_7a28b470) -> builtins.str:
+    def arn_for_usage_plan(cls, resource: "_IUsagePlanRef_7a28b470") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -14677,10 +14698,10 @@ class CfnUsagePlan(
     @builtins.classmethod
     def from_usage_plan_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         usage_plan_id: builtins.str,
-    ) -> _IUsagePlanRef_7a28b470:
+    ) -> "_IUsagePlanRef_7a28b470":
         '''Creates a new IUsagePlanRef from a usagePlanId.
 
         :param scope: -
@@ -14692,7 +14713,7 @@ class CfnUsagePlan(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument usage_plan_id", value=usage_plan_id, expected_type=type_hints["usage_plan_id"])
-        return typing.cast(_IUsagePlanRef_7a28b470, jsii.sinvoke(cls, "fromUsagePlanId", [scope, id, usage_plan_id]))
+        return typing.cast("_IUsagePlanRef_7a28b470", jsii.sinvoke(cls, "fromUsagePlanId", [scope, id, usage_plan_id]))
 
     @jsii.member(jsii_name="isCfnUsagePlan")
     @builtins.classmethod
@@ -14707,7 +14728,7 @@ class CfnUsagePlan(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUsagePlan", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -14754,28 +14775,28 @@ class CfnUsagePlan(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="usagePlanRef")
-    def usage_plan_ref(self) -> _UsagePlanReference_3d3ec4d2:
+    def usage_plan_ref(self) -> "_UsagePlanReference_3d3ec4d2":
         '''A reference to a UsagePlan resource.'''
-        return typing.cast(_UsagePlanReference_3d3ec4d2, jsii.get(self, "usagePlanRef"))
+        return typing.cast("_UsagePlanReference_3d3ec4d2", jsii.get(self, "usagePlanRef"))
 
     @builtins.property
     @jsii.member(jsii_name="apiStages")
     def api_stages(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnUsagePlan.ApiStageProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.ApiStageProperty"]]]]:
         '''The associated API stages of a usage plan.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnUsagePlan.ApiStageProperty"]]]], jsii.get(self, "apiStages"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.ApiStageProperty"]]]], jsii.get(self, "apiStages"))
 
     @api_stages.setter
     def api_stages(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnUsagePlan.ApiStageProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.ApiStageProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__eeb3717cd8ad7650ffb0c5ab0567712b5232a5dc6e6703261d556db1205cf97b)
@@ -14799,14 +14820,14 @@ class CfnUsagePlan(
     @jsii.member(jsii_name="quota")
     def quota(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUsagePlan.QuotaSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.QuotaSettingsProperty"]]:
         '''The target maximum number of permitted requests per a given unit time interval.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUsagePlan.QuotaSettingsProperty"]], jsii.get(self, "quota"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.QuotaSettingsProperty"]], jsii.get(self, "quota"))
 
     @quota.setter
     def quota(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUsagePlan.QuotaSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.QuotaSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1a290093c5b354ddfe1c3c09c8300496bbaf7cc35398f091f46ac078b87e5e0c)
@@ -14815,12 +14836,12 @@ class CfnUsagePlan(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The collection of tags.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__19cbff4e5b2762a5c6d1fe84db84662e69843a892de1e65537b240e3cd06aeda)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -14830,14 +14851,14 @@ class CfnUsagePlan(
     @jsii.member(jsii_name="throttle")
     def throttle(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUsagePlan.ThrottleSettingsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.ThrottleSettingsProperty"]]:
         '''A map containing method level throttling information for API stage in a usage plan.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUsagePlan.ThrottleSettingsProperty"]], jsii.get(self, "throttle"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.ThrottleSettingsProperty"]], jsii.get(self, "throttle"))
 
     @throttle.setter
     def throttle(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUsagePlan.ThrottleSettingsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.ThrottleSettingsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3bd5e493b47368f8e04fdd1f81de0527fa9c9c1fd5b9390595a6be1196acab73)
@@ -14868,7 +14889,7 @@ class CfnUsagePlan(
             *,
             api_id: typing.Optional[builtins.str] = None,
             stage: typing.Optional[builtins.str] = None,
-            throttle: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnUsagePlan.ThrottleSettingsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            throttle: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnUsagePlan.ThrottleSettingsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''API stage name of the associated API stage in a usage plan.
 
@@ -14930,13 +14951,13 @@ class CfnUsagePlan(
         @builtins.property
         def throttle(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnUsagePlan.ThrottleSettingsProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.ThrottleSettingsProperty"]]]]:
             '''Map containing method level throttling information for API stage in a usage plan.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-usageplan-apistage.html#cfn-apigateway-usageplan-apistage-throttle
             '''
             result = self._values.get("throttle")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnUsagePlan.ThrottleSettingsProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.ThrottleSettingsProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15140,12 +15161,12 @@ class CfnUsagePlanKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        key_id: typing.Union[builtins.str, _IApiKeyRef_6e16b46a],
+        key_id: typing.Union[builtins.str, "_IApiKeyRef_6e16b46a"],
         key_type: builtins.str,
-        usage_plan_id: typing.Union[builtins.str, _IUsagePlanRef_7a28b470],
+        usage_plan_id: typing.Union[builtins.str, "_IUsagePlanRef_7a28b470"],
     ) -> None:
         '''Create a new ``AWS::ApiGateway::UsagePlanKey``.
 
@@ -15178,7 +15199,7 @@ class CfnUsagePlanKey(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUsagePlanKey", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -15225,9 +15246,9 @@ class CfnUsagePlanKey(
 
     @builtins.property
     @jsii.member(jsii_name="usagePlanKeyRef")
-    def usage_plan_key_ref(self) -> _UsagePlanKeyReference_cfe985c6:
+    def usage_plan_key_ref(self) -> "_UsagePlanKeyReference_cfe985c6":
         '''A reference to a UsagePlanKey resource.'''
-        return typing.cast(_UsagePlanKeyReference_cfe985c6, jsii.get(self, "usagePlanKeyRef"))
+        return typing.cast("_UsagePlanKeyReference_cfe985c6", jsii.get(self, "usagePlanKeyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="keyId")
@@ -15282,9 +15303,9 @@ class CfnUsagePlanKeyProps:
     def __init__(
         self,
         *,
-        key_id: typing.Union[builtins.str, _IApiKeyRef_6e16b46a],
+        key_id: typing.Union[builtins.str, "_IApiKeyRef_6e16b46a"],
         key_type: builtins.str,
-        usage_plan_id: typing.Union[builtins.str, _IUsagePlanRef_7a28b470],
+        usage_plan_id: typing.Union[builtins.str, "_IUsagePlanRef_7a28b470"],
     ) -> None:
         '''Properties for defining a ``CfnUsagePlanKey``.
 
@@ -15319,14 +15340,14 @@ class CfnUsagePlanKeyProps:
         }
 
     @builtins.property
-    def key_id(self) -> typing.Union[builtins.str, _IApiKeyRef_6e16b46a]:
+    def key_id(self) -> typing.Union[builtins.str, "_IApiKeyRef_6e16b46a"]:
         '''The Id of the UsagePlanKey resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-usageplankey.html#cfn-apigateway-usageplankey-keyid
         '''
         result = self._values.get("key_id")
         assert result is not None, "Required property 'key_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IApiKeyRef_6e16b46a], result)
+        return typing.cast(typing.Union[builtins.str, "_IApiKeyRef_6e16b46a"], result)
 
     @builtins.property
     def key_type(self) -> builtins.str:
@@ -15339,14 +15360,14 @@ class CfnUsagePlanKeyProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def usage_plan_id(self) -> typing.Union[builtins.str, _IUsagePlanRef_7a28b470]:
+    def usage_plan_id(self) -> typing.Union[builtins.str, "_IUsagePlanRef_7a28b470"]:
         '''The Id of the UsagePlan resource representing the usage plan containing the UsagePlanKey resource representing a plan customer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-usageplankey.html#cfn-apigateway-usageplankey-usageplanid
         '''
         result = self._values.get("usage_plan_id")
         assert result is not None, "Required property 'usage_plan_id' is missing"
-        return typing.cast(typing.Union[builtins.str, _IUsagePlanRef_7a28b470], result)
+        return typing.cast(typing.Union[builtins.str, "_IUsagePlanRef_7a28b470"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15376,11 +15397,11 @@ class CfnUsagePlanProps:
     def __init__(
         self,
         *,
-        api_stages: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUsagePlan.ApiStageProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        api_stages: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUsagePlan.ApiStageProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        quota: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUsagePlan.QuotaSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        throttle: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUsagePlan.ThrottleSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        quota: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUsagePlan.QuotaSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        throttle: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUsagePlan.ThrottleSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         usage_plan_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnUsagePlan``.
@@ -15397,6 +15418,7 @@ class CfnUsagePlanProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_apigateway as apigateway
@@ -15454,13 +15476,13 @@ class CfnUsagePlanProps:
     @builtins.property
     def api_stages(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnUsagePlan.ApiStageProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.ApiStageProperty"]]]]:
         '''The associated API stages of a usage plan.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-usageplan.html#cfn-apigateway-usageplan-apistages
         '''
         result = self._values.get("api_stages")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnUsagePlan.ApiStageProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.ApiStageProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -15474,16 +15496,16 @@ class CfnUsagePlanProps:
     @builtins.property
     def quota(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnUsagePlan.QuotaSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.QuotaSettingsProperty"]]:
         '''The target maximum number of permitted requests per a given unit time interval.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-usageplan.html#cfn-apigateway-usageplan-quota
         '''
         result = self._values.get("quota")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnUsagePlan.QuotaSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.QuotaSettingsProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The collection of tags.
 
         Each tag element is associated with a given resource.
@@ -15491,18 +15513,18 @@ class CfnUsagePlanProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-usageplan.html#cfn-apigateway-usageplan-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def throttle(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnUsagePlan.ThrottleSettingsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.ThrottleSettingsProperty"]]:
         '''A map containing method level throttling information for API stage in a usage plan.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-usageplan.html#cfn-apigateway-usageplan-throttle
         '''
         result = self._values.get("throttle")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnUsagePlan.ThrottleSettingsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUsagePlan.ThrottleSettingsProperty"]], result)
 
     @builtins.property
     def usage_plan_name(self) -> typing.Optional[builtins.str]:
@@ -15541,6 +15563,7 @@ class CfnVpcLink(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigateway as apigateway
@@ -15560,13 +15583,13 @@ class CfnVpcLink(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        target_arns: typing.Sequence[typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1]],
+        target_arns: typing.Sequence[typing.Union[builtins.str, "_ILoadBalancerRef_13acd8f1"]],
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::VpcLink``.
 
@@ -15589,7 +15612,7 @@ class CfnVpcLink(
 
     @jsii.member(jsii_name="arnForVpcLink")
     @builtins.classmethod
-    def arn_for_vpc_link(cls, resource: _IVpcLinkRef_0afd9621) -> builtins.str:
+    def arn_for_vpc_link(cls, resource: "_IVpcLinkRef_0afd9621") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -15602,10 +15625,10 @@ class CfnVpcLink(
     @builtins.classmethod
     def from_vpc_link_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         vpc_link_id: builtins.str,
-    ) -> _IVpcLinkRef_0afd9621:
+    ) -> "_IVpcLinkRef_0afd9621":
         '''Creates a new IVpcLinkRef from a vpcLinkId.
 
         :param scope: -
@@ -15617,7 +15640,7 @@ class CfnVpcLink(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument vpc_link_id", value=vpc_link_id, expected_type=type_hints["vpc_link_id"])
-        return typing.cast(_IVpcLinkRef_0afd9621, jsii.sinvoke(cls, "fromVpcLinkId", [scope, id, vpc_link_id]))
+        return typing.cast("_IVpcLinkRef_0afd9621", jsii.sinvoke(cls, "fromVpcLinkId", [scope, id, vpc_link_id]))
 
     @jsii.member(jsii_name="isCfnVpcLink")
     @builtins.classmethod
@@ -15632,7 +15655,7 @@ class CfnVpcLink(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVpcLink", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -15679,15 +15702,15 @@ class CfnVpcLink(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="vpcLinkRef")
-    def vpc_link_ref(self) -> _VpcLinkReference_cccde188:
+    def vpc_link_ref(self) -> "_VpcLinkReference_cccde188":
         '''A reference to a VpcLink resource.'''
-        return typing.cast(_VpcLinkReference_cccde188, jsii.get(self, "vpcLinkRef"))
+        return typing.cast("_VpcLinkReference_cccde188", jsii.get(self, "vpcLinkRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -15730,12 +15753,12 @@ class CfnVpcLink(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of arbitrary tags (key-value pairs) to associate with the VPC link.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__652ea3fc4dcb1c64632ca0820a4de66a3d5f773676a1a643b6de49530a665c93)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -15757,9 +15780,9 @@ class CfnVpcLinkProps:
         self,
         *,
         name: builtins.str,
-        target_arns: typing.Sequence[typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1]],
+        target_arns: typing.Sequence[typing.Union[builtins.str, "_ILoadBalancerRef_13acd8f1"]],
         description: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnVpcLink``.
 
@@ -15773,6 +15796,7 @@ class CfnVpcLinkProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_apigateway as apigateway
@@ -15817,7 +15841,7 @@ class CfnVpcLinkProps:
     @builtins.property
     def target_arns(
         self,
-    ) -> typing.List[typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1]]:
+    ) -> typing.List[typing.Union[builtins.str, "_ILoadBalancerRef_13acd8f1"]]:
         '''The ARN of the network load balancer of the VPC targeted by the VPC link.
 
         The network load balancer must be owned by the same AWS account of the API owner.
@@ -15826,7 +15850,7 @@ class CfnVpcLinkProps:
         '''
         result = self._values.get("target_arns")
         assert result is not None, "Required property 'target_arns' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_ILoadBalancerRef_13acd8f1"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -15838,13 +15862,13 @@ class CfnVpcLinkProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of arbitrary tags (key-value pairs) to associate with the VPC link.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-vpclink.html#cfn-apigateway-vpclink-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15872,10 +15896,10 @@ class CognitoUserPoolsAuthorizerProps:
     def __init__(
         self,
         *,
-        cognito_user_pools: typing.Sequence[_IUserPool_1f1029e2],
+        cognito_user_pools: typing.Sequence["_IUserPool_1f1029e2"],
         authorizer_name: typing.Optional[builtins.str] = None,
         identity_source: typing.Optional[builtins.str] = None,
-        results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Properties for CognitoUserPoolsAuthorizer.
 
@@ -15916,11 +15940,11 @@ class CognitoUserPoolsAuthorizerProps:
             self._values["results_cache_ttl"] = results_cache_ttl
 
     @builtins.property
-    def cognito_user_pools(self) -> typing.List[_IUserPool_1f1029e2]:
+    def cognito_user_pools(self) -> typing.List["_IUserPool_1f1029e2"]:
         '''The user pools to associate with this authorizer.'''
         result = self._values.get("cognito_user_pools")
         assert result is not None, "Required property 'cognito_user_pools' is missing"
-        return typing.cast(typing.List[_IUserPool_1f1029e2], result)
+        return typing.cast(typing.List["_IUserPool_1f1029e2"], result)
 
     @builtins.property
     def authorizer_name(self) -> typing.Optional[builtins.str]:
@@ -15948,7 +15972,7 @@ class CognitoUserPoolsAuthorizerProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def results_cache_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def results_cache_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''How long APIGateway should cache the results.
 
         Max 1 hour.
@@ -15957,7 +15981,7 @@ class CognitoUserPoolsAuthorizerProps:
         :default: Duration.minutes(5)
         '''
         result = self._values.get("results_cache_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16085,7 +16109,7 @@ class CorsOptions:
         allow_methods: typing.Optional[typing.Sequence[builtins.str]] = None,
         disable_cache: typing.Optional[builtins.bool] = None,
         expose_headers: typing.Optional[typing.Sequence[builtins.str]] = None,
-        max_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_age: typing.Optional["_Duration_4839e8c3"] = None,
         status_code: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
@@ -16225,7 +16249,7 @@ class CorsOptions:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def max_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The Access-Control-Max-Age response header indicates how long the results of a preflight request (that is the information contained in the Access-Control-Allow-Methods and Access-Control-Allow-Headers headers) can be cached.
 
         To disable caching altogether use ``disableCache: true``.
@@ -16235,7 +16259,7 @@ class CorsOptions:
         :see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
         '''
         result = self._values.get("max_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def status_code(self) -> typing.Optional[jsii.Number]:
@@ -16327,7 +16351,7 @@ class Deployment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         api: "IRestApi",
@@ -16623,7 +16647,7 @@ class DomainNameOptions:
     def __init__(
         self,
         *,
-        certificate: _ICertificate_c194c70b,
+        certificate: "_ICertificate_c194c70b",
         domain_name: builtins.str,
         base_path: typing.Optional[builtins.str] = None,
         endpoint_type: typing.Optional["EndpointType"] = None,
@@ -16676,7 +16700,7 @@ class DomainNameOptions:
             self._values["security_policy"] = security_policy
 
     @builtins.property
-    def certificate(self) -> _ICertificate_c194c70b:
+    def certificate(self) -> "_ICertificate_c194c70b":
         '''The reference to an AWS-managed certificate for use by the edge-optimized endpoint for the domain name.
 
         For "EDGE" domain names, the certificate
@@ -16684,7 +16708,7 @@ class DomainNameOptions:
         '''
         result = self._values.get("certificate")
         assert result is not None, "Required property 'certificate' is missing"
-        return typing.cast(_ICertificate_c194c70b, result)
+        return typing.cast("_ICertificate_c194c70b", result)
 
     @builtins.property
     def domain_name(self) -> builtins.str:
@@ -16763,7 +16787,7 @@ class DomainNameProps(DomainNameOptions):
     def __init__(
         self,
         *,
-        certificate: _ICertificate_c194c70b,
+        certificate: "_ICertificate_c194c70b",
         domain_name: builtins.str,
         base_path: typing.Optional[builtins.str] = None,
         endpoint_type: typing.Optional["EndpointType"] = None,
@@ -16822,7 +16846,7 @@ class DomainNameProps(DomainNameOptions):
             self._values["mapping"] = mapping
 
     @builtins.property
-    def certificate(self) -> _ICertificate_c194c70b:
+    def certificate(self) -> "_ICertificate_c194c70b":
         '''The reference to an AWS-managed certificate for use by the edge-optimized endpoint for the domain name.
 
         For "EDGE" domain names, the certificate
@@ -16830,7 +16854,7 @@ class DomainNameProps(DomainNameOptions):
         '''
         result = self._values.get("certificate")
         assert result is not None, "Required property 'certificate' is missing"
-        return typing.cast(_ICertificate_c194c70b, result)
+        return typing.cast("_ICertificate_c194c70b", result)
 
     @builtins.property
     def domain_name(self) -> builtins.str:
@@ -16922,7 +16946,7 @@ class EndpointConfiguration:
         *,
         types: typing.Sequence["EndpointType"],
         ip_address_type: typing.Optional["IpAddressType"] = None,
-        vpc_endpoints: typing.Optional[typing.Sequence[_IVpcEndpoint_d8ea9bc3]] = None,
+        vpc_endpoints: typing.Optional[typing.Sequence["_IVpcEndpoint_d8ea9bc3"]] = None,
     ) -> None:
         '''The endpoint configuration of a REST API, including VPCs and endpoint types.
 
@@ -16981,13 +17005,13 @@ class EndpointConfiguration:
         return typing.cast(typing.Optional["IpAddressType"], result)
 
     @builtins.property
-    def vpc_endpoints(self) -> typing.Optional[typing.List[_IVpcEndpoint_d8ea9bc3]]:
+    def vpc_endpoints(self) -> typing.Optional[typing.List["_IVpcEndpoint_d8ea9bc3"]]:
         '''A list of VPC Endpoints against which to create Route53 ALIASes.
 
         :default: - no ALIASes are created for the endpoint.
         '''
         result = self._values.get("vpc_endpoints")
-        return typing.cast(typing.Optional[typing.List[_IVpcEndpoint_d8ea9bc3]], result)
+        return typing.cast(typing.Optional[typing.List["_IVpcEndpoint_d8ea9bc3"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17394,7 +17418,7 @@ class IAccessLogDestination(typing_extensions.Protocol):
     '''Access log destination for a RestApi Stage.'''
 
     @jsii.member(jsii_name="bind")
-    def bind(self, stage: _IStageRef_b829c330) -> AccessLogDestinationConfig:
+    def bind(self, stage: "_IStageRef_b829c330") -> "AccessLogDestinationConfig":
         '''Binds this destination to the RestApi Stage.
 
         :param stage: -
@@ -17408,7 +17432,7 @@ class _IAccessLogDestinationProxy:
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigateway.IAccessLogDestination"
 
     @jsii.member(jsii_name="bind")
-    def bind(self, stage: _IStageRef_b829c330) -> AccessLogDestinationConfig:
+    def bind(self, stage: "_IStageRef_b829c330") -> "AccessLogDestinationConfig":
         '''Binds this destination to the RestApi Stage.
 
         :param stage: -
@@ -17416,7 +17440,7 @@ class _IAccessLogDestinationProxy:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5584cb6e6dfde7a0ce69d852df52ee6697c36df3a33e7d95f1f8945c57eb76d0)
             check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
-        return typing.cast(AccessLogDestinationConfig, jsii.invoke(self, "bind", [stage]))
+        return typing.cast("AccessLogDestinationConfig", jsii.invoke(self, "bind", [stage]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessLogDestination).__jsii_proxy_class__ = lambda : _IAccessLogDestinationProxy
@@ -17484,7 +17508,7 @@ class IAuthorizer(typing_extensions.Protocol):
 
     @builtins.property
     @jsii.member(jsii_name="authorizationType")
-    def authorization_type(self) -> typing.Optional[AuthorizationType]:
+    def authorization_type(self) -> typing.Optional["AuthorizationType"]:
         '''The authorization type of this authorizer.'''
         ...
 
@@ -17505,9 +17529,9 @@ class _IAuthorizerProxy:
 
     @builtins.property
     @jsii.member(jsii_name="authorizationType")
-    def authorization_type(self) -> typing.Optional[AuthorizationType]:
+    def authorization_type(self) -> typing.Optional["AuthorizationType"]:
         '''The authorization type of this authorizer.'''
-        return typing.cast(typing.Optional[AuthorizationType], jsii.get(self, "authorizationType"))
+        return typing.cast(typing.Optional["AuthorizationType"], jsii.get(self, "authorizationType"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAuthorizer).__jsii_proxy_class__ = lambda : _IAuthorizerProxy
@@ -17637,7 +17661,11 @@ typing.cast(typing.Any, IModel).__jsii_proxy_class__ = lambda : _IModelProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigateway.IRequestValidator")
-class IRequestValidator(_IResource_c80c4260, typing_extensions.Protocol):
+class IRequestValidator(
+    _IResource_c80c4260,
+    _IRequestValidatorRef_ad0e2de5,
+    typing_extensions.Protocol,
+):
     @builtins.property
     @jsii.member(jsii_name="requestValidatorId")
     def request_validator_id(self) -> builtins.str:
@@ -17650,6 +17678,7 @@ class IRequestValidator(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IRequestValidatorProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IRequestValidatorRef_ad0e2de5), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigateway.IRequestValidator"
 
@@ -17701,7 +17730,7 @@ class IResource(
 
     @builtins.property
     @jsii.member(jsii_name="defaultCorsPreflightOptions")
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Default options for CORS preflight OPTIONS method.'''
         ...
 
@@ -17733,7 +17762,7 @@ class IResource(
         allow_methods: typing.Optional[typing.Sequence[builtins.str]] = None,
         disable_cache: typing.Optional[builtins.bool] = None,
         expose_headers: typing.Optional[typing.Sequence[builtins.str]] = None,
-        max_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_age: typing.Optional["_Duration_4839e8c3"] = None,
         status_code: typing.Optional[jsii.Number] = None,
     ) -> "Method":
         '''Adds an OPTIONS method to this resource which responds to Cross-Origin Resource Sharing (CORS) preflight requests.
@@ -17768,13 +17797,13 @@ class IResource(
         *,
         api_key_required: typing.Optional[builtins.bool] = None,
         authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        authorization_type: typing.Optional[AuthorizationType] = None,
-        authorizer: typing.Optional[IAuthorizer] = None,
+        authorization_type: typing.Optional["AuthorizationType"] = None,
+        authorizer: typing.Optional["IAuthorizer"] = None,
         method_responses: typing.Optional[typing.Sequence[typing.Union["MethodResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
         operation_name: typing.Optional[builtins.str] = None,
-        request_models: typing.Optional[typing.Mapping[builtins.str, IModel]] = None,
+        request_models: typing.Optional[typing.Mapping[builtins.str, "IModel"]] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.bool]] = None,
-        request_validator: typing.Optional[IRequestValidator] = None,
+        request_validator: typing.Optional["IRequestValidator"] = None,
         request_validator_options: typing.Optional[typing.Union["RequestValidatorOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "Method":
         '''Defines a new method for this resource.
@@ -17801,7 +17830,7 @@ class IResource(
         self,
         *,
         any_method: typing.Optional[builtins.bool] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         default_integration: typing.Optional["Integration"] = None,
         default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "ProxyResource":
@@ -17819,7 +17848,7 @@ class IResource(
         self,
         path_part: builtins.str,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         default_integration: typing.Optional["Integration"] = None,
         default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "Resource":
@@ -17893,9 +17922,9 @@ class _IResourceProxy(
 
     @builtins.property
     @jsii.member(jsii_name="defaultCorsPreflightOptions")
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Default options for CORS preflight OPTIONS method.'''
-        return typing.cast(typing.Optional[CorsOptions], jsii.get(self, "defaultCorsPreflightOptions"))
+        return typing.cast(typing.Optional["CorsOptions"], jsii.get(self, "defaultCorsPreflightOptions"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultIntegration")
@@ -17911,9 +17940,9 @@ class _IResourceProxy(
 
     @builtins.property
     @jsii.member(jsii_name="parentResource")
-    def parent_resource(self) -> typing.Optional[IResource]:
+    def parent_resource(self) -> typing.Optional["IResource"]:
         '''The parent of this resource or undefined for the root resource.'''
-        return typing.cast(typing.Optional[IResource], jsii.get(self, "parentResource"))
+        return typing.cast(typing.Optional["IResource"], jsii.get(self, "parentResource"))
 
     @jsii.member(jsii_name="addCorsPreflight")
     def add_cors_preflight(
@@ -17925,7 +17954,7 @@ class _IResourceProxy(
         allow_methods: typing.Optional[typing.Sequence[builtins.str]] = None,
         disable_cache: typing.Optional[builtins.bool] = None,
         expose_headers: typing.Optional[typing.Sequence[builtins.str]] = None,
-        max_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_age: typing.Optional["_Duration_4839e8c3"] = None,
         status_code: typing.Optional[jsii.Number] = None,
     ) -> "Method":
         '''Adds an OPTIONS method to this resource which responds to Cross-Origin Resource Sharing (CORS) preflight requests.
@@ -17971,13 +18000,13 @@ class _IResourceProxy(
         *,
         api_key_required: typing.Optional[builtins.bool] = None,
         authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        authorization_type: typing.Optional[AuthorizationType] = None,
-        authorizer: typing.Optional[IAuthorizer] = None,
+        authorization_type: typing.Optional["AuthorizationType"] = None,
+        authorizer: typing.Optional["IAuthorizer"] = None,
         method_responses: typing.Optional[typing.Sequence[typing.Union["MethodResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
         operation_name: typing.Optional[builtins.str] = None,
-        request_models: typing.Optional[typing.Mapping[builtins.str, IModel]] = None,
+        request_models: typing.Optional[typing.Mapping[builtins.str, "IModel"]] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.bool]] = None,
-        request_validator: typing.Optional[IRequestValidator] = None,
+        request_validator: typing.Optional["IRequestValidator"] = None,
         request_validator_options: typing.Optional[typing.Union["RequestValidatorOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "Method":
         '''Defines a new method for this resource.
@@ -18021,7 +18050,7 @@ class _IResourceProxy(
         self,
         *,
         any_method: typing.Optional[builtins.bool] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         default_integration: typing.Optional["Integration"] = None,
         default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "ProxyResource":
@@ -18046,7 +18075,7 @@ class _IResourceProxy(
         self,
         path_part: builtins.str,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         default_integration: typing.Optional["Integration"] = None,
         default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "Resource":
@@ -18071,7 +18100,7 @@ class _IResourceProxy(
         return typing.cast("Resource", jsii.invoke(self, "addResource", [path_part, options]))
 
     @jsii.member(jsii_name="getResource")
-    def get_resource(self, path_part: builtins.str) -> typing.Optional[IResource]:
+    def get_resource(self, path_part: builtins.str) -> typing.Optional["IResource"]:
         '''Retrieves a child resource by path part.
 
         :param path_part: The path part of the child resource.
@@ -18081,7 +18110,7 @@ class _IResourceProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__00e0e2a62a3bcf18c94f25245cbbeaee0c7674687c580c8af8a0f658cd6e1c03)
             check_type(argname="argument path_part", value=path_part, expected_type=type_hints["path_part"])
-        return typing.cast(typing.Optional[IResource], jsii.invoke(self, "getResource", [path_part]))
+        return typing.cast(typing.Optional["IResource"], jsii.invoke(self, "getResource", [path_part]))
 
     @jsii.member(jsii_name="resourceForPath")
     def resource_for_path(self, path: builtins.str) -> "Resource":
@@ -18134,7 +18163,7 @@ class IRestApi(_IResource_c80c4260, _IRestApiRef_72dcbda0, typing_extensions.Pro
 
     @builtins.property
     @jsii.member(jsii_name="root")
-    def root(self) -> IResource:
+    def root(self) -> "IResource":
         '''Represents the root resource ("/") of this API. Use it to define the API model:.
 
         api.root.addMethod('ANY', redirectToHomePage); // "ANY /"
@@ -18144,7 +18173,7 @@ class IRestApi(_IResource_c80c4260, _IRestApiRef_72dcbda0, typing_extensions.Pro
 
     @builtins.property
     @jsii.member(jsii_name="latestDeployment")
-    def latest_deployment(self) -> typing.Optional[Deployment]:
+    def latest_deployment(self) -> typing.Optional["Deployment"]:
         '''API Gateway deployment that represents the latest changes of the API.
 
         This resource will be automatically updated every time the REST API model changes.
@@ -18220,23 +18249,23 @@ class _IRestApiProxy(
 
     @builtins.property
     @jsii.member(jsii_name="root")
-    def root(self) -> IResource:
+    def root(self) -> "IResource":
         '''Represents the root resource ("/") of this API. Use it to define the API model:.
 
         api.root.addMethod('ANY', redirectToHomePage); // "ANY /"
         api.root.addResource('friends').addMethod('GET', getFriendsHandler); // "GET /friends"
         '''
-        return typing.cast(IResource, jsii.get(self, "root"))
+        return typing.cast("IResource", jsii.get(self, "root"))
 
     @builtins.property
     @jsii.member(jsii_name="latestDeployment")
-    def latest_deployment(self) -> typing.Optional[Deployment]:
+    def latest_deployment(self) -> typing.Optional["Deployment"]:
         '''API Gateway deployment that represents the latest changes of the API.
 
         This resource will be automatically updated every time the REST API model changes.
         ``undefined`` when no deployment is configured.
         '''
-        return typing.cast(typing.Optional[Deployment], jsii.get(self, "latestDeployment"))
+        return typing.cast(typing.Optional["Deployment"], jsii.get(self, "latestDeployment"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentStage")
@@ -18288,7 +18317,7 @@ class IStage(_IResource_c80c4260, _IStageRef_b829c330, typing_extensions.Protoco
 
     @builtins.property
     @jsii.member(jsii_name="restApi")
-    def rest_api(self) -> IRestApi:
+    def rest_api(self) -> "IRestApi":
         '''RestApi to which this stage is associated.'''
         ...
 
@@ -18309,10 +18338,10 @@ class IStage(_IResource_c80c4260, _IStageRef_b829c330, typing_extensions.Protoco
         api_key_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         value: typing.Optional[builtins.str] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         default_integration: typing.Optional["Integration"] = None,
         default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-    ) -> IApiKey:
+    ) -> "IApiKey":
         '''Add an ApiKey to this Stage.
 
         :param id: -
@@ -18336,9 +18365,9 @@ class _IStageProxy(
 
     @builtins.property
     @jsii.member(jsii_name="restApi")
-    def rest_api(self) -> IRestApi:
+    def rest_api(self) -> "IRestApi":
         '''RestApi to which this stage is associated.'''
-        return typing.cast(IRestApi, jsii.get(self, "restApi"))
+        return typing.cast("IRestApi", jsii.get(self, "restApi"))
 
     @builtins.property
     @jsii.member(jsii_name="stageName")
@@ -18357,10 +18386,10 @@ class _IStageProxy(
         api_key_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         value: typing.Optional[builtins.str] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         default_integration: typing.Optional["Integration"] = None,
         default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-    ) -> IApiKey:
+    ) -> "IApiKey":
         '''Add an ApiKey to this Stage.
 
         :param id: -
@@ -18383,7 +18412,7 @@ class _IStageProxy(
             default_method_options=default_method_options,
         )
 
-        return typing.cast(IApiKey, jsii.invoke(self, "addApiKey", [id, options]))
+        return typing.cast("IApiKey", jsii.invoke(self, "addApiKey", [id, options]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IStage).__jsii_proxy_class__ = lambda : _IStageProxy
@@ -18409,7 +18438,7 @@ class IUsagePlan(
     @jsii.member(jsii_name="addApiKey")
     def add_api_key(
         self,
-        api_key: _IApiKeyRef_6e16b46a,
+        api_key: "_IApiKeyRef_6e16b46a",
         *,
         override_logical_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -18441,7 +18470,7 @@ class _IUsagePlanProxy(
     @jsii.member(jsii_name="addApiKey")
     def add_api_key(
         self,
-        api_key: _IApiKeyRef_6e16b46a,
+        api_key: "_IApiKeyRef_6e16b46a",
         *,
         override_logical_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -18613,7 +18642,7 @@ class InlineApiDefinition(
         jsii.create(self.__class__, self, [definition])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> ApiDefinitionConfig:
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "ApiDefinitionConfig":
         '''Called when the specification is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param _scope: -
@@ -18621,7 +18650,7 @@ class InlineApiDefinition(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2a6eac2ed74c360a3baed610dd89c5ccd9b5b2451bca09fe462592d4e1b55400)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(ApiDefinitionConfig, jsii.invoke(self, "bind", [_scope]))
+        return typing.cast("ApiDefinitionConfig", jsii.invoke(self, "bind", [_scope]))
 
 
 class Integration(
@@ -18883,17 +18912,17 @@ class IntegrationOptions:
         *,
         cache_key_parameters: typing.Optional[typing.Sequence[builtins.str]] = None,
         cache_namespace: typing.Optional[builtins.str] = None,
-        connection_type: typing.Optional[ConnectionType] = None,
-        content_handling: typing.Optional[ContentHandling] = None,
+        connection_type: typing.Optional["ConnectionType"] = None,
+        content_handling: typing.Optional["ContentHandling"] = None,
         credentials_passthrough: typing.Optional[builtins.bool] = None,
-        credentials_role: typing.Optional[_IRole_235f5d8e] = None,
+        credentials_role: typing.Optional["_IRole_235f5d8e"] = None,
         integration_responses: typing.Optional[typing.Sequence[typing.Union["IntegrationResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
         passthrough_behavior: typing.Optional["PassthroughBehavior"] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         response_transfer_mode: typing.Optional["ResponseTransferMode"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        vpc_link: typing.Optional[IVpcLink] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        vpc_link: typing.Optional["IVpcLink"] = None,
     ) -> None:
         '''
         :param cache_key_parameters: A list of request parameters whose values are to be cached. It determines request parameters that will make it into the cache key.
@@ -19032,16 +19061,16 @@ class IntegrationOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def connection_type(self) -> typing.Optional[ConnectionType]:
+    def connection_type(self) -> typing.Optional["ConnectionType"]:
         '''The type of network connection to the integration endpoint.
 
         :default: - ConnectionType.VPC_LINK if ``vpcLink`` property is configured; ConnectionType.Internet otherwise.
         '''
         result = self._values.get("connection_type")
-        return typing.cast(typing.Optional[ConnectionType], result)
+        return typing.cast(typing.Optional["ConnectionType"], result)
 
     @builtins.property
-    def content_handling(self) -> typing.Optional[ContentHandling]:
+    def content_handling(self) -> typing.Optional["ContentHandling"]:
         '''Specifies how to handle request payload content type conversions.
 
         :default:
@@ -19052,7 +19081,7 @@ class IntegrationOptions:
         configured to support payload pass-through.
         '''
         result = self._values.get("content_handling")
-        return typing.cast(typing.Optional[ContentHandling], result)
+        return typing.cast(typing.Optional["ContentHandling"], result)
 
     @builtins.property
     def credentials_passthrough(self) -> typing.Optional[builtins.bool]:
@@ -19064,7 +19093,7 @@ class IntegrationOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def credentials_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def credentials_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that API Gateway assumes.
 
         Mutually exclusive with ``credentialsPassThrough``.
@@ -19072,7 +19101,7 @@ class IntegrationOptions:
         :default: A role is not assumed
         '''
         result = self._values.get("credentials_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def integration_responses(
@@ -19148,7 +19177,7 @@ class IntegrationOptions:
         return typing.cast(typing.Optional["ResponseTransferMode"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum amount of time an integration will run before it returns without a response.
 
         By default, the value must be between 50 milliseconds and 29 seconds.
@@ -19161,16 +19190,16 @@ class IntegrationOptions:
         :default: Duration.seconds(29)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def vpc_link(self) -> typing.Optional[IVpcLink]:
+    def vpc_link(self) -> typing.Optional["IVpcLink"]:
         '''The VpcLink used for the integration.
 
         Required if connectionType is VPC_LINK
         '''
         result = self._values.get("vpc_link")
-        return typing.cast(typing.Optional[IVpcLink], result)
+        return typing.cast(typing.Optional["IVpcLink"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19200,7 +19229,7 @@ class IntegrationProps:
         *,
         type: "IntegrationType",
         integration_http_method: typing.Optional[builtins.str] = None,
-        options: typing.Optional[typing.Union[IntegrationOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        options: typing.Optional[typing.Union["IntegrationOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         uri: typing.Any = None,
     ) -> None:
         '''
@@ -19268,10 +19297,10 @@ class IntegrationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def options(self) -> typing.Optional[IntegrationOptions]:
+    def options(self) -> typing.Optional["IntegrationOptions"]:
         '''Integration options.'''
         result = self._values.get("options")
-        return typing.cast(typing.Optional[IntegrationOptions], result)
+        return typing.cast(typing.Optional["IntegrationOptions"], result)
 
     @builtins.property
     def uri(self) -> typing.Any:
@@ -19318,7 +19347,7 @@ class IntegrationResponse:
         self,
         *,
         status_code: builtins.str,
-        content_handling: typing.Optional[ContentHandling] = None,
+        content_handling: typing.Optional["ContentHandling"] = None,
         response_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         response_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         selection_pattern: typing.Optional[builtins.str] = None,
@@ -19379,7 +19408,7 @@ class IntegrationResponse:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def content_handling(self) -> typing.Optional[ContentHandling]:
+    def content_handling(self) -> typing.Optional["ContentHandling"]:
         '''Specifies how to handle request payload content type conversions.
 
         :default:
@@ -19388,7 +19417,7 @@ class IntegrationResponse:
         request to the integration request without modification.
         '''
         result = self._values.get("content_handling")
-        return typing.cast(typing.Optional[ContentHandling], result)
+        return typing.cast(typing.Optional["ContentHandling"], result)
 
     @builtins.property
     def response_parameters(
@@ -20303,10 +20332,10 @@ class LambdaAuthorizerProps:
     def __init__(
         self,
         *,
-        handler: _IFunction_6adb0ab8,
-        assume_role: typing.Optional[_IRole_235f5d8e] = None,
+        handler: "_IFunction_6adb0ab8",
+        assume_role: typing.Optional["_IRole_235f5d8e"] = None,
         authorizer_name: typing.Optional[builtins.str] = None,
-        results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''Base properties for all lambda authorizers.
 
@@ -20355,7 +20384,7 @@ class LambdaAuthorizerProps:
             self._values["results_cache_ttl"] = results_cache_ttl
 
     @builtins.property
-    def handler(self) -> _IFunction_6adb0ab8:
+    def handler(self) -> "_IFunction_6adb0ab8":
         '''The handler for the authorizer lambda function.
 
         The handler must follow a very specific protocol on the input it receives
@@ -20365,10 +20394,10 @@ class LambdaAuthorizerProps:
         '''
         result = self._values.get("handler")
         assert result is not None, "Required property 'handler' is missing"
-        return typing.cast(_IFunction_6adb0ab8, result)
+        return typing.cast("_IFunction_6adb0ab8", result)
 
     @builtins.property
-    def assume_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def assume_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An optional IAM role for APIGateway to assume before calling the Lambda-based authorizer.
 
         The IAM role must be
@@ -20377,7 +20406,7 @@ class LambdaAuthorizerProps:
         :default: - A resource policy is added to the Lambda function allowing apigateway.amazonaws.com to invoke the function.
         '''
         result = self._values.get("assume_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def authorizer_name(self) -> typing.Optional[builtins.str]:
@@ -20391,7 +20420,7 @@ class LambdaAuthorizerProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def results_cache_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def results_cache_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''How long APIGateway should cache the results.
 
         Max 1 hour.
@@ -20400,7 +20429,7 @@ class LambdaAuthorizerProps:
         :default: - Duration.minutes(5)
         '''
         result = self._values.get("results_cache_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20442,17 +20471,17 @@ class LambdaIntegrationOptions(IntegrationOptions):
         *,
         cache_key_parameters: typing.Optional[typing.Sequence[builtins.str]] = None,
         cache_namespace: typing.Optional[builtins.str] = None,
-        connection_type: typing.Optional[ConnectionType] = None,
-        content_handling: typing.Optional[ContentHandling] = None,
+        connection_type: typing.Optional["ConnectionType"] = None,
+        content_handling: typing.Optional["ContentHandling"] = None,
         credentials_passthrough: typing.Optional[builtins.bool] = None,
-        credentials_role: typing.Optional[_IRole_235f5d8e] = None,
-        integration_responses: typing.Optional[typing.Sequence[typing.Union[IntegrationResponse, typing.Dict[builtins.str, typing.Any]]]] = None,
+        credentials_role: typing.Optional["_IRole_235f5d8e"] = None,
+        integration_responses: typing.Optional[typing.Sequence[typing.Union["IntegrationResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
         passthrough_behavior: typing.Optional["PassthroughBehavior"] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         response_transfer_mode: typing.Optional["ResponseTransferMode"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        vpc_link: typing.Optional[IVpcLink] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        vpc_link: typing.Optional["IVpcLink"] = None,
         allow_test_invoke: typing.Optional[builtins.bool] = None,
         proxy: typing.Optional[builtins.bool] = None,
         scope_permission_to_method: typing.Optional[builtins.bool] = None,
@@ -20559,16 +20588,16 @@ class LambdaIntegrationOptions(IntegrationOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def connection_type(self) -> typing.Optional[ConnectionType]:
+    def connection_type(self) -> typing.Optional["ConnectionType"]:
         '''The type of network connection to the integration endpoint.
 
         :default: - ConnectionType.VPC_LINK if ``vpcLink`` property is configured; ConnectionType.Internet otherwise.
         '''
         result = self._values.get("connection_type")
-        return typing.cast(typing.Optional[ConnectionType], result)
+        return typing.cast(typing.Optional["ConnectionType"], result)
 
     @builtins.property
-    def content_handling(self) -> typing.Optional[ContentHandling]:
+    def content_handling(self) -> typing.Optional["ContentHandling"]:
         '''Specifies how to handle request payload content type conversions.
 
         :default:
@@ -20579,7 +20608,7 @@ class LambdaIntegrationOptions(IntegrationOptions):
         configured to support payload pass-through.
         '''
         result = self._values.get("content_handling")
-        return typing.cast(typing.Optional[ContentHandling], result)
+        return typing.cast(typing.Optional["ContentHandling"], result)
 
     @builtins.property
     def credentials_passthrough(self) -> typing.Optional[builtins.bool]:
@@ -20591,7 +20620,7 @@ class LambdaIntegrationOptions(IntegrationOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def credentials_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def credentials_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that API Gateway assumes.
 
         Mutually exclusive with ``credentialsPassThrough``.
@@ -20599,12 +20628,12 @@ class LambdaIntegrationOptions(IntegrationOptions):
         :default: A role is not assumed
         '''
         result = self._values.get("credentials_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def integration_responses(
         self,
-    ) -> typing.Optional[typing.List[IntegrationResponse]]:
+    ) -> typing.Optional[typing.List["IntegrationResponse"]]:
         '''The response that API Gateway provides after a method's backend completes processing a request.
 
         API Gateway intercepts the response from the
@@ -20613,7 +20642,7 @@ class LambdaIntegrationOptions(IntegrationOptions):
         that you define.
         '''
         result = self._values.get("integration_responses")
-        return typing.cast(typing.Optional[typing.List[IntegrationResponse]], result)
+        return typing.cast(typing.Optional[typing.List["IntegrationResponse"]], result)
 
     @builtins.property
     def passthrough_behavior(self) -> typing.Optional["PassthroughBehavior"]:
@@ -20675,7 +20704,7 @@ class LambdaIntegrationOptions(IntegrationOptions):
         return typing.cast(typing.Optional["ResponseTransferMode"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum amount of time an integration will run before it returns without a response.
 
         By default, the value must be between 50 milliseconds and 29 seconds.
@@ -20688,16 +20717,16 @@ class LambdaIntegrationOptions(IntegrationOptions):
         :default: Duration.seconds(29)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def vpc_link(self) -> typing.Optional[IVpcLink]:
+    def vpc_link(self) -> typing.Optional["IVpcLink"]:
         '''The VpcLink used for the integration.
 
         Required if connectionType is VPC_LINK
         '''
         result = self._values.get("vpc_link")
-        return typing.cast(typing.Optional[IVpcLink], result)
+        return typing.cast(typing.Optional["IVpcLink"], result)
 
     @builtins.property
     def allow_test_invoke(self) -> typing.Optional[builtins.bool]:
@@ -20774,7 +20803,7 @@ class LogGroupLogDestination(
         )
     '''
 
-    def __init__(self, log_group: _ILogGroup_3c4fa718) -> None:
+    def __init__(self, log_group: "_ILogGroup_3c4fa718") -> None:
         '''
         :param log_group: -
         '''
@@ -20784,7 +20813,7 @@ class LogGroupLogDestination(
         jsii.create(self.__class__, self, [log_group])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, _stage: _IStageRef_b829c330) -> AccessLogDestinationConfig:
+    def bind(self, _stage: "_IStageRef_b829c330") -> "AccessLogDestinationConfig":
         '''Binds this destination to the CloudWatch Logs.
 
         :param _stage: -
@@ -20792,7 +20821,7 @@ class LogGroupLogDestination(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4a19c59b494e920f4294a640b251c2f8c481a6f520483bb6a66bf0f645b448fc)
             check_type(argname="argument _stage", value=_stage, expected_type=type_hints["_stage"])
-        return typing.cast(AccessLogDestinationConfig, jsii.invoke(self, "bind", [_stage]))
+        return typing.cast("AccessLogDestinationConfig", jsii.invoke(self, "bind", [_stage]))
 
 
 @jsii.data_type(
@@ -20804,7 +20833,7 @@ class MTLSConfig:
     def __init__(
         self,
         *,
-        bucket: _IBucket_42e086fd,
+        bucket: "_IBucket_42e086fd",
         key: builtins.str,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -20844,11 +20873,11 @@ class MTLSConfig:
             self._values["version"] = version
 
     @builtins.property
-    def bucket(self) -> _IBucket_42e086fd:
+    def bucket(self) -> "_IBucket_42e086fd":
         '''The bucket that the trust store is hosted in.'''
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
-        return typing.cast(_IBucket_42e086fd, result)
+        return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
     def key(self) -> builtins.str:
@@ -20913,12 +20942,12 @@ class Method(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         http_method: builtins.str,
-        resource: IResource,
-        integration: typing.Optional[Integration] = None,
+        resource: "IResource",
+        integration: typing.Optional["Integration"] = None,
         options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
@@ -20947,7 +20976,7 @@ class Method(
         self,
         *,
         status_code: builtins.str,
-        response_models: typing.Optional[typing.Mapping[builtins.str, IModel]] = None,
+        response_models: typing.Optional[typing.Mapping[builtins.str, "IModel"]] = None,
         response_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.bool]] = None,
     ) -> None:
         '''Add a method response to this method.
@@ -20969,7 +20998,7 @@ class Method(
         return typing.cast(None, jsii.invoke(self, "addMethodResponse", [method_response]))
 
     @jsii.member(jsii_name="grantExecute")
-    def grant_execute(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_execute(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants an IAM principal permission to invoke this method.
 
         :param grantee: the principal.
@@ -20977,27 +21006,27 @@ class Method(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2b4cbdc48aca0832309ead12cf98a5327de5337263bcb7451db5561ae4d1ea2f)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantExecute", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantExecute", [grantee]))
 
     @jsii.member(jsii_name="metric")
     def metric(
         self,
         metric_name: builtins.str,
-        stage: _IStageRef_b829c330,
+        stage: "_IStageRef_b829c330",
         *,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Returns the given named metric for this API method.
 
         :param metric_name: -
@@ -21034,26 +21063,26 @@ class Method(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, stage, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, stage, props]))
 
     @jsii.member(jsii_name="metricCacheHitCount")
     def metric_cache_hit_count(
         self,
-        stage: _IStageRef_b829c330,
+        stage: "_IStageRef_b829c330",
         *,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of requests served from the API cache in a given period.
 
         :param stage: -
@@ -21090,26 +21119,26 @@ class Method(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricCacheHitCount", [stage, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCacheHitCount", [stage, props]))
 
     @jsii.member(jsii_name="metricCacheMissCount")
     def metric_cache_miss_count(
         self,
-        stage: _IStageRef_b829c330,
+        stage: "_IStageRef_b829c330",
         *,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of requests served from the backend in a given period, when API caching is enabled.
 
         :param stage: -
@@ -21146,26 +21175,26 @@ class Method(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricCacheMissCount", [stage, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCacheMissCount", [stage, props]))
 
     @jsii.member(jsii_name="metricClientError")
     def metric_client_error(
         self,
-        stage: _IStageRef_b829c330,
+        stage: "_IStageRef_b829c330",
         *,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of client-side errors captured in a given period.
 
         :param stage: -
@@ -21202,26 +21231,26 @@ class Method(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricClientError", [stage, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricClientError", [stage, props]))
 
     @jsii.member(jsii_name="metricCount")
     def metric_count(
         self,
-        stage: _IStageRef_b829c330,
+        stage: "_IStageRef_b829c330",
         *,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the total number API requests in a given period.
 
         :param stage: -
@@ -21258,26 +21287,26 @@ class Method(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricCount", [stage, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCount", [stage, props]))
 
     @jsii.member(jsii_name="metricIntegrationLatency")
     def metric_integration_latency(
         self,
-        stage: _IStageRef_b829c330,
+        stage: "_IStageRef_b829c330",
         *,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the time between when API Gateway relays a request to the backend and when it receives a response from the backend.
 
         :param stage: -
@@ -21314,26 +21343,26 @@ class Method(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIntegrationLatency", [stage, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIntegrationLatency", [stage, props]))
 
     @jsii.member(jsii_name="metricLatency")
     def metric_latency(
         self,
-        stage: _IStageRef_b829c330,
+        stage: "_IStageRef_b829c330",
         *,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The time between when API Gateway receives a request from a client and when it returns a response to the client.
 
         The latency includes the integration latency and other API Gateway overhead.
@@ -21372,26 +21401,26 @@ class Method(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricLatency", [stage, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricLatency", [stage, props]))
 
     @jsii.member(jsii_name="metricServerError")
     def metric_server_error(
         self,
-        stage: _IStageRef_b829c330,
+        stage: "_IStageRef_b829c330",
         *,
         account: typing.Optional[builtins.str] = None,
         color: typing.Optional[builtins.str] = None,
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of server-side errors captured in a given period.
 
         :param stage: -
@@ -21428,7 +21457,7 @@ class Method(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricServerError", [stage, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricServerError", [stage, props]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -21438,9 +21467,9 @@ class Method(
 
     @builtins.property
     @jsii.member(jsii_name="api")
-    def api(self) -> IRestApi:
+    def api(self) -> "IRestApi":
         '''The API Gateway RestApi associated with this method.'''
-        return typing.cast(IRestApi, jsii.get(self, "api"))
+        return typing.cast("IRestApi", jsii.get(self, "api"))
 
     @builtins.property
     @jsii.member(jsii_name="httpMethod")
@@ -21472,8 +21501,8 @@ class Method(
 
     @builtins.property
     @jsii.member(jsii_name="resource")
-    def resource(self) -> IResource:
-        return typing.cast(IResource, jsii.get(self, "resource"))
+    def resource(self) -> "IResource":
+        return typing.cast("IResource", jsii.get(self, "resource"))
 
     @builtins.property
     @jsii.member(jsii_name="testMethodArn")
@@ -21504,7 +21533,7 @@ class MethodDeploymentOptions:
         self,
         *,
         cache_data_encrypted: typing.Optional[builtins.bool] = None,
-        cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         caching_enabled: typing.Optional[builtins.bool] = None,
         data_trace_enabled: typing.Optional[builtins.bool] = None,
         logging_level: typing.Optional["MethodLoggingLevel"] = None,
@@ -21575,7 +21604,7 @@ class MethodDeploymentOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def cache_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def cache_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies the time to live (TTL), in seconds, for cached responses.
 
         The
@@ -21586,7 +21615,7 @@ class MethodDeploymentOptions:
         :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html
         '''
         result = self._values.get("cache_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def caching_enabled(self) -> typing.Optional[builtins.bool]:
@@ -21712,13 +21741,13 @@ class MethodOptions:
         *,
         api_key_required: typing.Optional[builtins.bool] = None,
         authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        authorization_type: typing.Optional[AuthorizationType] = None,
-        authorizer: typing.Optional[IAuthorizer] = None,
+        authorization_type: typing.Optional["AuthorizationType"] = None,
+        authorizer: typing.Optional["IAuthorizer"] = None,
         method_responses: typing.Optional[typing.Sequence[typing.Union["MethodResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
         operation_name: typing.Optional[builtins.str] = None,
-        request_models: typing.Optional[typing.Mapping[builtins.str, IModel]] = None,
+        request_models: typing.Optional[typing.Mapping[builtins.str, "IModel"]] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.bool]] = None,
-        request_validator: typing.Optional[IRequestValidator] = None,
+        request_validator: typing.Optional["IRequestValidator"] = None,
         request_validator_options: typing.Optional[typing.Union["RequestValidatorOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
@@ -21822,7 +21851,7 @@ class MethodOptions:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def authorization_type(self) -> typing.Optional[AuthorizationType]:
+    def authorization_type(self) -> typing.Optional["AuthorizationType"]:
         '''Method authorization. If the value is set of ``Custom``, an ``authorizer`` must also be specified.
 
         If you're using one of the authorizers that are available via the ``Authorizer`` class, such as ``Authorizer#token()``,
@@ -21833,16 +21862,16 @@ class MethodOptions:
         :default: - open access unless ``authorizer`` is specified
         '''
         result = self._values.get("authorization_type")
-        return typing.cast(typing.Optional[AuthorizationType], result)
+        return typing.cast(typing.Optional["AuthorizationType"], result)
 
     @builtins.property
-    def authorizer(self) -> typing.Optional[IAuthorizer]:
+    def authorizer(self) -> typing.Optional["IAuthorizer"]:
         '''If ``authorizationType`` is ``Custom``, this specifies the ID of the method authorizer resource.
 
         If specified, the value of ``authorizationType`` must be set to ``Custom``
         '''
         result = self._values.get("authorizer")
-        return typing.cast(typing.Optional[IAuthorizer], result)
+        return typing.cast(typing.Optional["IAuthorizer"], result)
 
     @builtins.property
     def method_responses(self) -> typing.Optional[typing.List["MethodResponse"]]:
@@ -21872,7 +21901,7 @@ class MethodOptions:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def request_models(self) -> typing.Optional[typing.Mapping[builtins.str, IModel]]:
+    def request_models(self) -> typing.Optional[typing.Mapping[builtins.str, "IModel"]]:
         '''The models which describe data structure of request payload.
 
         When
@@ -21911,7 +21940,7 @@ class MethodOptions:
                 )
         '''
         result = self._values.get("request_models")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, IModel]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "IModel"]], result)
 
     @builtins.property
     def request_parameters(
@@ -21931,7 +21960,7 @@ class MethodOptions:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.bool]], result)
 
     @builtins.property
-    def request_validator(self) -> typing.Optional[IRequestValidator]:
+    def request_validator(self) -> typing.Optional["IRequestValidator"]:
         '''The ID of the associated request validator.
 
         Only one of ``requestValidator`` or ``requestValidatorOptions`` must be specified.
@@ -21941,7 +21970,7 @@ class MethodOptions:
         :default: - No default validator
         '''
         result = self._values.get("request_validator")
-        return typing.cast(typing.Optional[IRequestValidator], result)
+        return typing.cast(typing.Optional["IRequestValidator"], result)
 
     @builtins.property
     def request_validator_options(self) -> typing.Optional["RequestValidatorOptions"]:
@@ -21982,9 +22011,9 @@ class MethodProps:
         self,
         *,
         http_method: builtins.str,
-        resource: IResource,
-        integration: typing.Optional[Integration] = None,
-        options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        resource: "IResource",
+        integration: typing.Optional["Integration"] = None,
+        options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param http_method: The HTTP method ("GET", "POST", "PUT", ...) that clients use to call this method.
@@ -22069,7 +22098,7 @@ class MethodProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def resource(self) -> IResource:
+    def resource(self) -> "IResource":
         '''The resource this method is associated with.
 
         For root resource methods,
@@ -22077,25 +22106,25 @@ class MethodProps:
         '''
         result = self._values.get("resource")
         assert result is not None, "Required property 'resource' is missing"
-        return typing.cast(IResource, result)
+        return typing.cast("IResource", result)
 
     @builtins.property
-    def integration(self) -> typing.Optional[Integration]:
+    def integration(self) -> typing.Optional["Integration"]:
         '''The backend system that the method calls when it receives a request.
 
         :default: - a new ``MockIntegration``.
         '''
         result = self._values.get("integration")
-        return typing.cast(typing.Optional[Integration], result)
+        return typing.cast(typing.Optional["Integration"], result)
 
     @builtins.property
-    def options(self) -> typing.Optional[MethodOptions]:
+    def options(self) -> typing.Optional["MethodOptions"]:
         '''Method options.
 
         :default: - No options.
         '''
         result = self._values.get("options")
-        return typing.cast(typing.Optional[MethodOptions], result)
+        return typing.cast(typing.Optional["MethodOptions"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22123,7 +22152,7 @@ class MethodResponse:
         self,
         *,
         status_code: builtins.str,
-        response_models: typing.Optional[typing.Mapping[builtins.str, IModel]] = None,
+        response_models: typing.Optional[typing.Mapping[builtins.str, "IModel"]] = None,
         response_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.bool]] = None,
     ) -> None:
         '''
@@ -22177,7 +22206,9 @@ class MethodResponse:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def response_models(self) -> typing.Optional[typing.Mapping[builtins.str, IModel]]:
+    def response_models(
+        self,
+    ) -> typing.Optional[typing.Mapping[builtins.str, "IModel"]]:
         '''The resources used for the response's content type.
 
         Specify response models as
@@ -22187,7 +22218,7 @@ class MethodResponse:
         :default: None
         '''
         result = self._values.get("response_models")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, IModel]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "IModel"]], result)
 
     @builtins.property
     def response_parameters(
@@ -22302,17 +22333,17 @@ class MockIntegration(
         *,
         cache_key_parameters: typing.Optional[typing.Sequence[builtins.str]] = None,
         cache_namespace: typing.Optional[builtins.str] = None,
-        connection_type: typing.Optional[ConnectionType] = None,
-        content_handling: typing.Optional[ContentHandling] = None,
+        connection_type: typing.Optional["ConnectionType"] = None,
+        content_handling: typing.Optional["ContentHandling"] = None,
         credentials_passthrough: typing.Optional[builtins.bool] = None,
-        credentials_role: typing.Optional[_IRole_235f5d8e] = None,
-        integration_responses: typing.Optional[typing.Sequence[typing.Union[IntegrationResponse, typing.Dict[builtins.str, typing.Any]]]] = None,
+        credentials_role: typing.Optional["_IRole_235f5d8e"] = None,
+        integration_responses: typing.Optional[typing.Sequence[typing.Union["IntegrationResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
         passthrough_behavior: typing.Optional["PassthroughBehavior"] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         response_transfer_mode: typing.Optional["ResponseTransferMode"] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        vpc_link: typing.Optional[IVpcLink] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        vpc_link: typing.Optional["IVpcLink"] = None,
     ) -> None:
         '''
         :param cache_key_parameters: A list of request parameters whose values are to be cached. It determines request parameters that will make it into the cache key.
@@ -22395,11 +22426,11 @@ class Model(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rest_api: IRestApi,
-        schema: typing.Union[JsonSchema, typing.Dict[builtins.str, typing.Any]],
+        rest_api: "IRestApi",
+        schema: typing.Union["JsonSchema", typing.Dict[builtins.str, typing.Any]],
         content_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         model_name: typing.Optional[builtins.str] = None,
@@ -22431,10 +22462,10 @@ class Model(
     @builtins.classmethod
     def from_model_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         model_name: builtins.str,
-    ) -> IModel:
+    ) -> "IModel":
         '''
         :param scope: -
         :param id: -
@@ -22445,11 +22476,11 @@ class Model(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument model_name", value=model_name, expected_type=type_hints["model_name"])
-        return typing.cast(IModel, jsii.sinvoke(cls, "fromModelName", [scope, id, model_name]))
+        return typing.cast("IModel", jsii.sinvoke(cls, "fromModelName", [scope, id, model_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="EMPTY_MODEL")
-    def EMPTY_MODEL(cls) -> IModel:
+    def EMPTY_MODEL(cls) -> "IModel":
         '''Represents a reference to a REST API's Empty model, which is available as part of the model collection by default.
 
         This can be used for mapping
@@ -22467,11 +22498,11 @@ class Model(
 
         :see: https://docs.amazonaws.cn/en_us/apigateway/latest/developerguide/models-mappings.html#models-mappings-models
         '''
-        return typing.cast(IModel, jsii.sget(cls, "EMPTY_MODEL"))
+        return typing.cast("IModel", jsii.sget(cls, "EMPTY_MODEL"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="ERROR_MODEL")
-    def ERROR_MODEL(cls) -> IModel:
+    def ERROR_MODEL(cls) -> "IModel":
         '''Represents a reference to a REST API's Error model, which is available as part of the model collection by default.
 
         This can be used for mapping
@@ -22488,7 +22519,7 @@ class Model(
         }
         }
         '''
-        return typing.cast(IModel, jsii.sget(cls, "ERROR_MODEL"))
+        return typing.cast("IModel", jsii.sget(cls, "ERROR_MODEL"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -22520,7 +22551,7 @@ class ModelOptions:
     def __init__(
         self,
         *,
-        schema: typing.Union[JsonSchema, typing.Dict[builtins.str, typing.Any]],
+        schema: typing.Union["JsonSchema", typing.Dict[builtins.str, typing.Any]],
         content_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         model_name: typing.Optional[builtins.str] = None,
@@ -22587,14 +22618,14 @@ class ModelOptions:
             self._values["model_name"] = model_name
 
     @builtins.property
-    def schema(self) -> JsonSchema:
+    def schema(self) -> "JsonSchema":
         '''The schema to use to transform data to one or more output formats.
 
         Specify null ({}) if you don't want to specify a schema.
         '''
         result = self._values.get("schema")
         assert result is not None, "Required property 'schema' is missing"
-        return typing.cast(JsonSchema, result)
+        return typing.cast("JsonSchema", result)
 
     @builtins.property
     def content_type(self) -> typing.Optional[builtins.str]:
@@ -22664,11 +22695,11 @@ class ModelProps(ModelOptions):
     def __init__(
         self,
         *,
-        schema: typing.Union[JsonSchema, typing.Dict[builtins.str, typing.Any]],
+        schema: typing.Union["JsonSchema", typing.Dict[builtins.str, typing.Any]],
         content_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         model_name: typing.Optional[builtins.str] = None,
-        rest_api: IRestApi,
+        rest_api: "IRestApi",
     ) -> None:
         '''
         :param schema: The schema to use to transform data to one or more output formats. Specify null ({}) if you don't want to specify a schema.
@@ -22766,14 +22797,14 @@ class ModelProps(ModelOptions):
             self._values["model_name"] = model_name
 
     @builtins.property
-    def schema(self) -> JsonSchema:
+    def schema(self) -> "JsonSchema":
         '''The schema to use to transform data to one or more output formats.
 
         Specify null ({}) if you don't want to specify a schema.
         '''
         result = self._values.get("schema")
         assert result is not None, "Required property 'schema' is missing"
-        return typing.cast(JsonSchema, result)
+        return typing.cast("JsonSchema", result)
 
     @builtins.property
     def content_type(self) -> typing.Optional[builtins.str]:
@@ -22817,7 +22848,7 @@ class ModelProps(ModelOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def rest_api(self) -> IRestApi:
+    def rest_api(self) -> "IRestApi":
         '''The rest API that this model is part of.
 
         The reason we need the RestApi object itself and not just the ID is because the model
@@ -22827,7 +22858,7 @@ class ModelProps(ModelOptions):
         '''
         result = self._values.get("rest_api")
         assert result is not None, "Required property 'rest_api' is missing"
-        return typing.cast(IRestApi, result)
+        return typing.cast("IRestApi", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22956,7 +22987,7 @@ class QuotaSettings:
         *,
         limit: typing.Optional[jsii.Number] = None,
         offset: typing.Optional[jsii.Number] = None,
-        period: typing.Optional[Period] = None,
+        period: typing.Optional["Period"] = None,
     ) -> None:
         '''Specifies the maximum number of requests that clients can make to API Gateway APIs.
 
@@ -23012,13 +23043,13 @@ class QuotaSettings:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def period(self) -> typing.Optional[Period]:
+    def period(self) -> typing.Optional["Period"]:
         '''The time period for which the maximum limit of requests applies.
 
         :default: none
         '''
         result = self._values.get("period")
-        return typing.cast(typing.Optional[Period], result)
+        return typing.cast(typing.Optional["Period"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -23060,23 +23091,23 @@ class RateLimitedApiKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         api_stages: typing.Optional[typing.Sequence[typing.Union["UsagePlanPerApiStage", typing.Dict[builtins.str, typing.Any]]]] = None,
-        quota: typing.Optional[typing.Union[QuotaSettings, typing.Dict[builtins.str, typing.Any]]] = None,
+        quota: typing.Optional[typing.Union["QuotaSettings", typing.Dict[builtins.str, typing.Any]]] = None,
         throttle: typing.Optional[typing.Union["ThrottleSettings", typing.Dict[builtins.str, typing.Any]]] = None,
         customer_id: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[builtins.bool] = None,
         generate_distinct_id: typing.Optional[builtins.bool] = None,
-        resources: typing.Optional[typing.Sequence[IRestApi]] = None,
-        stages: typing.Optional[typing.Sequence[IStage]] = None,
+        resources: typing.Optional[typing.Sequence["IRestApi"]] = None,
+        stages: typing.Optional[typing.Sequence["IStage"]] = None,
         api_key_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         value: typing.Optional[builtins.str] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -23120,7 +23151,7 @@ class RateLimitedApiKey(
         jsii.create(self.__class__, self, [scope, id, props])
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits the IAM principal all read operations through this key.
 
         :param grantee: The principal to grant access to.
@@ -23128,10 +23159,10 @@ class RateLimitedApiKey(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ce0af2e8aef6fbba011f1e7ebe321f78b1d0fd8ee1106ffe480b7020c93a0f55)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.member(jsii_name="grantReadWrite")
-    def grant_read_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits the IAM principal all read and write operations through this key.
 
         :param grantee: The principal to grant access to.
@@ -23139,10 +23170,10 @@ class RateLimitedApiKey(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dbb60421332cdd3a0d42735efb21cba58ebcca03009f96b5b27ac6fa314ed036)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadWrite", [grantee]))
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits the IAM principal all write operations through this key.
 
         :param grantee: The principal to grant access to.
@@ -23150,7 +23181,7 @@ class RateLimitedApiKey(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ac6c0adb5482e5bc5f20e3e55d89178641486eeebabd55958a379c680020fdaf)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWrite", [grantee]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -23160,15 +23191,15 @@ class RateLimitedApiKey(
 
     @builtins.property
     @jsii.member(jsii_name="apiKeyRef")
-    def api_key_ref(self) -> _ApiKeyReference_6382fd3a:
+    def api_key_ref(self) -> "_ApiKeyReference_6382fd3a":
         '''A reference to a ApiKey resource.'''
-        return typing.cast(_ApiKeyReference_6382fd3a, jsii.get(self, "apiKeyRef"))
+        return typing.cast("_ApiKeyReference_6382fd3a", jsii.get(self, "apiKeyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="grants")
-    def grants(self) -> ApiKeyGrants:
+    def grants(self) -> "ApiKeyGrants":
         '''Collection of grant methods for an ApiKey.'''
-        return typing.cast(ApiKeyGrants, jsii.get(self, "grants"))
+        return typing.cast("ApiKeyGrants", jsii.get(self, "grants"))
 
     @builtins.property
     @jsii.member(jsii_name="keyArn")
@@ -23198,10 +23229,10 @@ class RequestAuthorizerProps(LambdaAuthorizerProps):
     def __init__(
         self,
         *,
-        handler: _IFunction_6adb0ab8,
-        assume_role: typing.Optional[_IRole_235f5d8e] = None,
+        handler: "_IFunction_6adb0ab8",
+        assume_role: typing.Optional["_IRole_235f5d8e"] = None,
         authorizer_name: typing.Optional[builtins.str] = None,
-        results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         identity_sources: typing.Sequence[builtins.str],
     ) -> None:
         '''Properties for RequestAuthorizer.
@@ -23248,7 +23279,7 @@ class RequestAuthorizerProps(LambdaAuthorizerProps):
             self._values["results_cache_ttl"] = results_cache_ttl
 
     @builtins.property
-    def handler(self) -> _IFunction_6adb0ab8:
+    def handler(self) -> "_IFunction_6adb0ab8":
         '''The handler for the authorizer lambda function.
 
         The handler must follow a very specific protocol on the input it receives
@@ -23258,10 +23289,10 @@ class RequestAuthorizerProps(LambdaAuthorizerProps):
         '''
         result = self._values.get("handler")
         assert result is not None, "Required property 'handler' is missing"
-        return typing.cast(_IFunction_6adb0ab8, result)
+        return typing.cast("_IFunction_6adb0ab8", result)
 
     @builtins.property
-    def assume_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def assume_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An optional IAM role for APIGateway to assume before calling the Lambda-based authorizer.
 
         The IAM role must be
@@ -23270,7 +23301,7 @@ class RequestAuthorizerProps(LambdaAuthorizerProps):
         :default: - A resource policy is added to the Lambda function allowing apigateway.amazonaws.com to invoke the function.
         '''
         result = self._values.get("assume_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def authorizer_name(self) -> typing.Optional[builtins.str]:
@@ -23284,7 +23315,7 @@ class RequestAuthorizerProps(LambdaAuthorizerProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def results_cache_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def results_cache_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''How long APIGateway should cache the results.
 
         Max 1 hour.
@@ -23293,7 +23324,7 @@ class RequestAuthorizerProps(LambdaAuthorizerProps):
         :default: - Duration.minutes(5)
         '''
         result = self._values.get("results_cache_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def identity_sources(self) -> typing.List[builtins.str]:
@@ -23720,10 +23751,10 @@ class RequestValidator(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rest_api: IRestApi,
+        rest_api: "IRestApi",
         request_validator_name: typing.Optional[builtins.str] = None,
         validate_request_body: typing.Optional[builtins.bool] = None,
         validate_request_parameters: typing.Optional[builtins.bool] = None,
@@ -23753,10 +23784,10 @@ class RequestValidator(
     @builtins.classmethod
     def from_request_validator_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         request_validator_id: builtins.str,
-    ) -> IRequestValidator:
+    ) -> "IRequestValidator":
         '''
         :param scope: -
         :param id: -
@@ -23767,7 +23798,7 @@ class RequestValidator(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument request_validator_id", value=request_validator_id, expected_type=type_hints["request_validator_id"])
-        return typing.cast(IRequestValidator, jsii.sinvoke(cls, "fromRequestValidatorId", [scope, id, request_validator_id]))
+        return typing.cast("IRequestValidator", jsii.sinvoke(cls, "fromRequestValidatorId", [scope, id, request_validator_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -23783,6 +23814,12 @@ class RequestValidator(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "requestValidatorId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="requestValidatorRef")
+    def request_validator_ref(self) -> "_RequestValidatorReference_432e1849":
+        '''A reference to a RequestValidator resource.'''
+        return typing.cast("_RequestValidatorReference_432e1849", jsii.get(self, "requestValidatorRef"))
 
 
 @jsii.data_type(
@@ -23925,7 +23962,7 @@ class RequestValidatorProps(RequestValidatorOptions):
         request_validator_name: typing.Optional[builtins.str] = None,
         validate_request_body: typing.Optional[builtins.bool] = None,
         validate_request_parameters: typing.Optional[builtins.bool] = None,
-        rest_api: IRestApi,
+        rest_api: "IRestApi",
     ) -> None:
         '''
         :param request_validator_name: The name of this request validator. Default: None
@@ -23996,7 +24033,7 @@ class RequestValidatorProps(RequestValidatorOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def rest_api(self) -> IRestApi:
+    def rest_api(self) -> "IRestApi":
         '''The rest API that this model is part of.
 
         The reason we need the RestApi object itself and not just the ID is because the model
@@ -24006,7 +24043,7 @@ class RequestValidatorProps(RequestValidatorOptions):
         '''
         result = self._values.get("rest_api")
         assert result is not None, "Required property 'rest_api' is missing"
-        return typing.cast(IRestApi, result)
+        return typing.cast("IRestApi", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24031,7 +24068,7 @@ class ResourceAttributes:
         *,
         path: builtins.str,
         resource_id: builtins.str,
-        rest_api: IRestApi,
+        rest_api: "IRestApi",
     ) -> None:
         '''Attributes that can be specified when importing a Resource.
 
@@ -24081,11 +24118,11 @@ class ResourceAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def rest_api(self) -> IRestApi:
+    def rest_api(self) -> "IRestApi":
         '''The rest API that this resource is part of.'''
         result = self._values.get("rest_api")
         assert result is not None, "Required property 'rest_api' is missing"
-        return typing.cast(IRestApi, result)
+        return typing.cast("IRestApi", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24105,7 +24142,11 @@ class ResourceBase(
     metaclass=jsii.JSIIAbstractClass,
     jsii_type="aws-cdk-lib.aws_apigateway.ResourceBase",
 ):
-    def __init__(self, scope: _constructs_77d1e7e8.Construct, id: builtins.str) -> None:
+    def __init__(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+    ) -> None:
         '''
         :param scope: -
         :param id: -
@@ -24126,9 +24167,9 @@ class ResourceBase(
         allow_methods: typing.Optional[typing.Sequence[builtins.str]] = None,
         disable_cache: typing.Optional[builtins.bool] = None,
         expose_headers: typing.Optional[typing.Sequence[builtins.str]] = None,
-        max_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_age: typing.Optional["_Duration_4839e8c3"] = None,
         status_code: typing.Optional[jsii.Number] = None,
-    ) -> Method:
+    ) -> "Method":
         '''Adds an OPTIONS method to this resource which responds to Cross-Origin Resource Sharing (CORS) preflight requests.
 
         Cross-Origin Resource Sharing (CORS) is a mechanism that uses additional
@@ -24158,25 +24199,25 @@ class ResourceBase(
             status_code=status_code,
         )
 
-        return typing.cast(Method, jsii.invoke(self, "addCorsPreflight", [options]))
+        return typing.cast("Method", jsii.invoke(self, "addCorsPreflight", [options]))
 
     @jsii.member(jsii_name="addMethod")
     def add_method(
         self,
         http_method: builtins.str,
-        integration: typing.Optional[Integration] = None,
+        integration: typing.Optional["Integration"] = None,
         *,
         api_key_required: typing.Optional[builtins.bool] = None,
         authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        authorization_type: typing.Optional[AuthorizationType] = None,
-        authorizer: typing.Optional[IAuthorizer] = None,
-        method_responses: typing.Optional[typing.Sequence[typing.Union[MethodResponse, typing.Dict[builtins.str, typing.Any]]]] = None,
+        authorization_type: typing.Optional["AuthorizationType"] = None,
+        authorizer: typing.Optional["IAuthorizer"] = None,
+        method_responses: typing.Optional[typing.Sequence[typing.Union["MethodResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
         operation_name: typing.Optional[builtins.str] = None,
-        request_models: typing.Optional[typing.Mapping[builtins.str, IModel]] = None,
+        request_models: typing.Optional[typing.Mapping[builtins.str, "IModel"]] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.bool]] = None,
-        request_validator: typing.Optional[IRequestValidator] = None,
-        request_validator_options: typing.Optional[typing.Union[RequestValidatorOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-    ) -> Method:
+        request_validator: typing.Optional["IRequestValidator"] = None,
+        request_validator_options: typing.Optional[typing.Union["RequestValidatorOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+    ) -> "Method":
         '''Defines a new method for this resource.
 
         :param http_method: -
@@ -24209,16 +24250,16 @@ class ResourceBase(
             request_validator_options=request_validator_options,
         )
 
-        return typing.cast(Method, jsii.invoke(self, "addMethod", [http_method, integration, options]))
+        return typing.cast("Method", jsii.invoke(self, "addMethod", [http_method, integration, options]))
 
     @jsii.member(jsii_name="addProxy")
     def add_proxy(
         self,
         *,
         any_method: typing.Optional[builtins.bool] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "ProxyResource":
         '''Adds a greedy proxy resource ("{proxy+}") and an ANY method to this route.
 
@@ -24241,9 +24282,9 @@ class ResourceBase(
         self,
         path_part: builtins.str,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "Resource":
         '''Defines a new child resource where this resource is the parent.
 
@@ -24264,7 +24305,7 @@ class ResourceBase(
         return typing.cast("Resource", jsii.invoke(self, "addResource", [path_part, options]))
 
     @jsii.member(jsii_name="getResource")
-    def get_resource(self, path_part: builtins.str) -> typing.Optional[IResource]:
+    def get_resource(self, path_part: builtins.str) -> typing.Optional["IResource"]:
         '''Retrieves a child resource by path part.
 
         :param path_part: -
@@ -24272,7 +24313,7 @@ class ResourceBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dbfb9f3d7195bb47794fcd0ef5c67ff41754c69a769f9448be91825c3359f65d)
             check_type(argname="argument path_part", value=path_part, expected_type=type_hints["path_part"])
-        return typing.cast(typing.Optional[IResource], jsii.invoke(self, "getResource", [path_part]))
+        return typing.cast(typing.Optional["IResource"], jsii.invoke(self, "getResource", [path_part]))
 
     @jsii.member(jsii_name="resourceForPath")
     def resource_for_path(self, path: builtins.str) -> "Resource":
@@ -24291,7 +24332,7 @@ class ResourceBase(
     @builtins.property
     @jsii.member(jsii_name="api")
     @abc.abstractmethod
-    def api(self) -> IRestApi:
+    def api(self) -> "IRestApi":
         '''The rest API that this resource is part of.
 
         The reason we need the RestApi object itself and not just the ID is because the model
@@ -24317,35 +24358,35 @@ class ResourceBase(
 
     @builtins.property
     @jsii.member(jsii_name="resourceRef")
-    def resource_ref(self) -> _ResourceReference_c72d8a5a:
+    def resource_ref(self) -> "_ResourceReference_c72d8a5a":
         '''A reference to a Resource resource.'''
-        return typing.cast(_ResourceReference_c72d8a5a, jsii.get(self, "resourceRef"))
+        return typing.cast("_ResourceReference_c72d8a5a", jsii.get(self, "resourceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultCorsPreflightOptions")
     @abc.abstractmethod
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Default options for CORS preflight OPTIONS method.'''
         ...
 
     @builtins.property
     @jsii.member(jsii_name="defaultIntegration")
     @abc.abstractmethod
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.'''
         ...
 
     @builtins.property
     @jsii.member(jsii_name="defaultMethodOptions")
     @abc.abstractmethod
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.'''
         ...
 
     @builtins.property
     @jsii.member(jsii_name="parentResource")
     @abc.abstractmethod
-    def parent_resource(self) -> typing.Optional[IResource]:
+    def parent_resource(self) -> typing.Optional["IResource"]:
         '''The parent of this resource or undefined for the root resource.'''
         ...
 
@@ -24356,7 +24397,7 @@ class _ResourceBaseProxy(
 ):
     @builtins.property
     @jsii.member(jsii_name="api")
-    def api(self) -> IRestApi:
+    def api(self) -> "IRestApi":
         '''The rest API that this resource is part of.
 
         The reason we need the RestApi object itself and not just the ID is because the model
@@ -24364,7 +24405,7 @@ class _ResourceBaseProxy(
         hash to determine the ID of the deployment. This allows us to automatically update
         the deployment when the model of the REST API changes.
         '''
-        return typing.cast(IRestApi, jsii.get(self, "api"))
+        return typing.cast("IRestApi", jsii.get(self, "api"))
 
     @builtins.property
     @jsii.member(jsii_name="path")
@@ -24380,27 +24421,27 @@ class _ResourceBaseProxy(
 
     @builtins.property
     @jsii.member(jsii_name="defaultCorsPreflightOptions")
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Default options for CORS preflight OPTIONS method.'''
-        return typing.cast(typing.Optional[CorsOptions], jsii.get(self, "defaultCorsPreflightOptions"))
+        return typing.cast(typing.Optional["CorsOptions"], jsii.get(self, "defaultCorsPreflightOptions"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultIntegration")
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.'''
-        return typing.cast(typing.Optional[Integration], jsii.get(self, "defaultIntegration"))
+        return typing.cast(typing.Optional["Integration"], jsii.get(self, "defaultIntegration"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultMethodOptions")
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.'''
-        return typing.cast(typing.Optional[MethodOptions], jsii.get(self, "defaultMethodOptions"))
+        return typing.cast(typing.Optional["MethodOptions"], jsii.get(self, "defaultMethodOptions"))
 
     @builtins.property
     @jsii.member(jsii_name="parentResource")
-    def parent_resource(self) -> typing.Optional[IResource]:
+    def parent_resource(self) -> typing.Optional["IResource"]:
         '''The parent of this resource or undefined for the root resource.'''
-        return typing.cast(typing.Optional[IResource], jsii.get(self, "parentResource"))
+        return typing.cast(typing.Optional["IResource"], jsii.get(self, "parentResource"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, ResourceBase).__jsii_proxy_class__ = lambda : _ResourceBaseProxy
@@ -24419,9 +24460,9 @@ class ResourceOptions:
     def __init__(
         self,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param default_cors_preflight_options: Adds a CORS preflight OPTIONS method to this resource and all child resources. You can add CORS at the resource-level using ``addCorsPreflight``. Default: - CORS is disabled
@@ -24459,7 +24500,7 @@ class ResourceOptions:
             self._values["default_method_options"] = default_method_options
 
     @builtins.property
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Adds a CORS preflight OPTIONS method to this resource and all child resources.
 
         You can add CORS at the resource-level using ``addCorsPreflight``.
@@ -24467,25 +24508,25 @@ class ResourceOptions:
         :default: - CORS is disabled
         '''
         result = self._values.get("default_cors_preflight_options")
-        return typing.cast(typing.Optional[CorsOptions], result)
+        return typing.cast(typing.Optional["CorsOptions"], result)
 
     @builtins.property
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_integration")
-        return typing.cast(typing.Optional[Integration], result)
+        return typing.cast(typing.Optional["Integration"], result)
 
     @builtins.property
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_method_options")
-        return typing.cast(typing.Optional[MethodOptions], result)
+        return typing.cast(typing.Optional["MethodOptions"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24514,10 +24555,10 @@ class ResourceProps(ResourceOptions):
     def __init__(
         self,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        parent: IResource,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        parent: "IResource",
         path_part: builtins.str,
     ) -> None:
         '''
@@ -24615,7 +24656,7 @@ class ResourceProps(ResourceOptions):
             self._values["default_method_options"] = default_method_options
 
     @builtins.property
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Adds a CORS preflight OPTIONS method to this resource and all child resources.
 
         You can add CORS at the resource-level using ``addCorsPreflight``.
@@ -24623,28 +24664,28 @@ class ResourceProps(ResourceOptions):
         :default: - CORS is disabled
         '''
         result = self._values.get("default_cors_preflight_options")
-        return typing.cast(typing.Optional[CorsOptions], result)
+        return typing.cast(typing.Optional["CorsOptions"], result)
 
     @builtins.property
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_integration")
-        return typing.cast(typing.Optional[Integration], result)
+        return typing.cast(typing.Optional["Integration"], result)
 
     @builtins.property
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_method_options")
-        return typing.cast(typing.Optional[MethodOptions], result)
+        return typing.cast(typing.Optional["MethodOptions"], result)
 
     @builtins.property
-    def parent(self) -> IResource:
+    def parent(self) -> "IResource":
         '''The parent resource of this resource.
 
         You can either pass another
@@ -24652,7 +24693,7 @@ class ResourceProps(ResourceOptions):
         '''
         result = self._values.get("parent")
         assert result is not None, "Required property 'parent' is missing"
-        return typing.cast(IResource, result)
+        return typing.cast("IResource", result)
 
     @builtins.property
     def path_part(self) -> builtins.str:
@@ -25071,22 +25112,22 @@ class RestApiBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cloud_watch_role: typing.Optional[builtins.bool] = None,
-        cloud_watch_role_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        cloud_watch_role_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         deploy: typing.Optional[builtins.bool] = None,
         deploy_options: typing.Optional[typing.Union["StageOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[builtins.bool] = None,
-        domain_name: typing.Optional[typing.Union[DomainNameOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        endpoint_configuration: typing.Optional[typing.Union[EndpointConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        domain_name: typing.Optional[typing.Union["DomainNameOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["EndpointConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         endpoint_export_name: typing.Optional[builtins.str] = None,
-        endpoint_types: typing.Optional[typing.Sequence[EndpointType]] = None,
+        endpoint_types: typing.Optional[typing.Sequence["EndpointType"]] = None,
         fail_on_warnings: typing.Optional[builtins.bool] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        policy: typing.Optional[_PolicyDocument_3ac34393] = None,
+        policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
         rest_api_name: typing.Optional[builtins.str] = None,
         retain_deployments: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -25141,10 +25182,10 @@ class RestApiBase(
         api_key_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         value: typing.Optional[builtins.str] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-    ) -> IApiKey:
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+    ) -> "IApiKey":
         '''Add an ApiKey to the deploymentStage.
 
         :param id: -
@@ -25167,18 +25208,18 @@ class RestApiBase(
             default_method_options=default_method_options,
         )
 
-        return typing.cast(IApiKey, jsii.invoke(self, "addApiKey", [id, options]))
+        return typing.cast("IApiKey", jsii.invoke(self, "addApiKey", [id, options]))
 
     @jsii.member(jsii_name="addDomainName")
     def add_domain_name(
         self,
         id: builtins.str,
         *,
-        certificate: _ICertificate_c194c70b,
+        certificate: "_ICertificate_c194c70b",
         domain_name: builtins.str,
         base_path: typing.Optional[builtins.str] = None,
-        endpoint_type: typing.Optional[EndpointType] = None,
-        mtls: typing.Optional[typing.Union[MTLSConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        endpoint_type: typing.Optional["EndpointType"] = None,
+        mtls: typing.Optional[typing.Union["MTLSConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         security_policy: typing.Optional["SecurityPolicy"] = None,
     ) -> "DomainName":
         '''Defines an API Gateway domain name and maps it to this API.
@@ -25210,7 +25251,7 @@ class RestApiBase(
         self,
         id: builtins.str,
         *,
-        type: ResponseType,
+        type: "ResponseType",
         response_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         status_code: typing.Optional[builtins.str] = None,
         templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -25239,8 +25280,8 @@ class RestApiBase(
     @abc.abstractmethod
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Add a statement to the resource's resource policy.
 
         :param statement: -
@@ -25255,7 +25296,7 @@ class RestApiBase(
         api_stages: typing.Optional[typing.Sequence[typing.Union["UsagePlanPerApiStage", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        quota: typing.Optional[typing.Union[QuotaSettings, typing.Dict[builtins.str, typing.Any]]] = None,
+        quota: typing.Optional[typing.Union["QuotaSettings", typing.Dict[builtins.str, typing.Any]]] = None,
         throttle: typing.Optional[typing.Union["ThrottleSettings", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> "UsagePlan":
         '''Adds a usage plan.
@@ -25303,7 +25344,7 @@ class RestApiBase(
     @jsii.member(jsii_name="grantInvokeFromVpcEndpointsOnly")
     def grant_invoke_from_vpc_endpoints_only(
         self,
-        vpc_endpoints: typing.Sequence[_IVpcEndpoint_d8ea9bc3],
+        vpc_endpoints: typing.Sequence["_IVpcEndpoint_d8ea9bc3"],
     ) -> None:
         '''Add a resource policy that only allows API execution from a VPC Endpoint to create a private API.
 
@@ -25326,14 +25367,14 @@ class RestApiBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Returns the given named metric for this API.
 
         :param metric_name: -
@@ -25368,7 +25409,7 @@ class RestApiBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricCacheHitCount")
     def metric_cache_hit_count(
@@ -25379,14 +25420,14 @@ class RestApiBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of requests served from the API cache in a given period.
 
         Default: sum over 5 minutes
@@ -25419,7 +25460,7 @@ class RestApiBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricCacheHitCount", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCacheHitCount", [props]))
 
     @jsii.member(jsii_name="metricCacheMissCount")
     def metric_cache_miss_count(
@@ -25430,14 +25471,14 @@ class RestApiBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of requests served from the backend in a given period, when API caching is enabled.
 
         Default: sum over 5 minutes
@@ -25470,7 +25511,7 @@ class RestApiBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricCacheMissCount", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCacheMissCount", [props]))
 
     @jsii.member(jsii_name="metricClientError")
     def metric_client_error(
@@ -25481,14 +25522,14 @@ class RestApiBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of client-side errors captured in a given period.
 
         Default: sum over 5 minutes
@@ -25521,7 +25562,7 @@ class RestApiBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricClientError", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricClientError", [props]))
 
     @jsii.member(jsii_name="metricCount")
     def metric_count(
@@ -25532,14 +25573,14 @@ class RestApiBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the total number API requests in a given period.
 
         Default: sample count over 5 minutes
@@ -25572,7 +25613,7 @@ class RestApiBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricCount", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCount", [props]))
 
     @jsii.member(jsii_name="metricIntegrationLatency")
     def metric_integration_latency(
@@ -25583,14 +25624,14 @@ class RestApiBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the time between when API Gateway relays a request to the backend and when it receives a response from the backend.
 
         Default: average over 5 minutes.
@@ -25623,7 +25664,7 @@ class RestApiBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIntegrationLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIntegrationLatency", [props]))
 
     @jsii.member(jsii_name="metricLatency")
     def metric_latency(
@@ -25634,14 +25675,14 @@ class RestApiBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The time between when API Gateway receives a request from a client and when it returns a response to the client.
 
         The latency includes the integration latency and other API Gateway overhead.
@@ -25676,7 +25717,7 @@ class RestApiBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricLatency", [props]))
 
     @jsii.member(jsii_name="metricServerError")
     def metric_server_error(
@@ -25687,14 +25728,14 @@ class RestApiBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of server-side errors captured in a given period.
 
         Default: sum over 5 minutes
@@ -25727,7 +25768,7 @@ class RestApiBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricServerError", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricServerError", [props]))
 
     @jsii.member(jsii_name="urlForPath")
     def url_for_path(self, path: typing.Optional[builtins.str] = None) -> builtins.str:
@@ -25762,9 +25803,9 @@ class RestApiBase(
 
     @builtins.property
     @jsii.member(jsii_name="restApiRef")
-    def rest_api_ref(self) -> _RestApiReference_0863f937:
+    def rest_api_ref(self) -> "_RestApiReference_0863f937":
         '''A reference to a RestApi resource.'''
-        return typing.cast(_RestApiReference_0863f937, jsii.get(self, "restApiRef"))
+        return typing.cast("_RestApiReference_0863f937", jsii.get(self, "restApiRef"))
 
     @builtins.property
     @jsii.member(jsii_name="restApiRootResourceId")
@@ -25779,7 +25820,7 @@ class RestApiBase(
     @builtins.property
     @jsii.member(jsii_name="root")
     @abc.abstractmethod
-    def root(self) -> IResource:
+    def root(self) -> "IResource":
         '''Represents the root resource of this API endpoint ('/').
 
         Resources and Methods are added to this resource.
@@ -25800,13 +25841,13 @@ class RestApiBase(
 
     @builtins.property
     @jsii.member(jsii_name="latestDeployment")
-    def latest_deployment(self) -> typing.Optional[Deployment]:
+    def latest_deployment(self) -> typing.Optional["Deployment"]:
         '''API Gateway deployment that represents the latest changes of the API.
 
         This resource will be automatically updated every time the REST API model changes.
         This will be undefined if ``deploy`` is false.
         '''
-        return typing.cast(typing.Optional[Deployment], jsii.get(self, "latestDeployment"))
+        return typing.cast(typing.Optional["Deployment"], jsii.get(self, "latestDeployment"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentStage")
@@ -25827,11 +25868,11 @@ class RestApiBase(
 
     @builtins.property
     @jsii.member(jsii_name="cloudWatchAccount")
-    def _cloud_watch_account(self) -> typing.Optional[CfnAccount]:
-        return typing.cast(typing.Optional[CfnAccount], jsii.get(self, "cloudWatchAccount"))
+    def _cloud_watch_account(self) -> typing.Optional["CfnAccount"]:
+        return typing.cast(typing.Optional["CfnAccount"], jsii.get(self, "cloudWatchAccount"))
 
     @_cloud_watch_account.setter
-    def _cloud_watch_account(self, value: typing.Optional[CfnAccount]) -> None:
+    def _cloud_watch_account(self, value: typing.Optional["CfnAccount"]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7f2c768d74b0b943c1a251d6140ff29b65485077acf73526ebf83da3d18dbf4e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -25839,13 +25880,13 @@ class RestApiBase(
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicy")
-    def _resource_policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], jsii.get(self, "resourcePolicy"))
+    def _resource_policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], jsii.get(self, "resourcePolicy"))
 
     @_resource_policy.setter
     def _resource_policy(
         self,
-        value: typing.Optional[_PolicyDocument_3ac34393],
+        value: typing.Optional["_PolicyDocument_3ac34393"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__055b7d6b7f5983f0cbe73bf5302adcab621abc6451932928f4fc669ed6ce3182)
@@ -25860,8 +25901,8 @@ class _RestApiBaseProxy(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Add a statement to the resource's resource policy.
 
         :param statement: -
@@ -25869,7 +25910,7 @@ class _RestApiBaseProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e5b96ed4eaeba0605aea131fd9bd60ab19b56a3504a62607ee5eff63a4b41ae8)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @builtins.property
     @jsii.member(jsii_name="restApiId")
@@ -25888,12 +25929,12 @@ class _RestApiBaseProxy(
 
     @builtins.property
     @jsii.member(jsii_name="root")
-    def root(self) -> IResource:
+    def root(self) -> "IResource":
         '''Represents the root resource of this API endpoint ('/').
 
         Resources and Methods are added to this resource.
         '''
-        return typing.cast(IResource, jsii.get(self, "root"))
+        return typing.cast("IResource", jsii.get(self, "root"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, RestApiBase).__jsii_proxy_class__ = lambda : _RestApiBaseProxy
@@ -25925,18 +25966,18 @@ class RestApiBaseProps:
         self,
         *,
         cloud_watch_role: typing.Optional[builtins.bool] = None,
-        cloud_watch_role_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        cloud_watch_role_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         deploy: typing.Optional[builtins.bool] = None,
         deploy_options: typing.Optional[typing.Union["StageOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[builtins.bool] = None,
-        domain_name: typing.Optional[typing.Union[DomainNameOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        endpoint_configuration: typing.Optional[typing.Union[EndpointConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        domain_name: typing.Optional[typing.Union["DomainNameOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["EndpointConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         endpoint_export_name: typing.Optional[builtins.str] = None,
-        endpoint_types: typing.Optional[typing.Sequence[EndpointType]] = None,
+        endpoint_types: typing.Optional[typing.Sequence["EndpointType"]] = None,
         fail_on_warnings: typing.Optional[builtins.bool] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        policy: typing.Optional[_PolicyDocument_3ac34393] = None,
+        policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
         rest_api_name: typing.Optional[builtins.str] = None,
         retain_deployments: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -26119,7 +26160,7 @@ class RestApiBaseProps:
     @builtins.property
     def cloud_watch_role_removal_policy(
         self,
-    ) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    ) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy applied to the AWS CloudWatch role when this resource is removed from the application.
 
         Requires ``cloudWatchRole`` to be enabled.
@@ -26127,7 +26168,7 @@ class RestApiBaseProps:
         :default: - RemovalPolicy.RETAIN
         '''
         result = self._values.get("cloud_watch_role_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
     def deploy(self) -> typing.Optional[builtins.bool]:
@@ -26189,16 +26230,16 @@ class RestApiBaseProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def domain_name(self) -> typing.Optional[DomainNameOptions]:
+    def domain_name(self) -> typing.Optional["DomainNameOptions"]:
         '''Configure a custom domain name and map it to this API.
 
         :default: - no domain name is defined, use ``addDomainName`` or directly define a ``DomainName``.
         '''
         result = self._values.get("domain_name")
-        return typing.cast(typing.Optional[DomainNameOptions], result)
+        return typing.cast(typing.Optional["DomainNameOptions"], result)
 
     @builtins.property
-    def endpoint_configuration(self) -> typing.Optional[EndpointConfiguration]:
+    def endpoint_configuration(self) -> typing.Optional["EndpointConfiguration"]:
         '''The EndpointConfiguration property type specifies the endpoint types of a REST API.
 
         :default: EndpointType.EDGE
@@ -26206,7 +26247,7 @@ class RestApiBaseProps:
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-restapi-endpointconfiguration.html
         '''
         result = self._values.get("endpoint_configuration")
-        return typing.cast(typing.Optional[EndpointConfiguration], result)
+        return typing.cast(typing.Optional["EndpointConfiguration"], result)
 
     @builtins.property
     def endpoint_export_name(self) -> typing.Optional[builtins.str]:
@@ -26218,7 +26259,7 @@ class RestApiBaseProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def endpoint_types(self) -> typing.Optional[typing.List[EndpointType]]:
+    def endpoint_types(self) -> typing.Optional[typing.List["EndpointType"]]:
         '''A list of the endpoint types of the API.
 
         Use this property when creating
@@ -26227,7 +26268,7 @@ class RestApiBaseProps:
         :default: EndpointType.EDGE
         '''
         result = self._values.get("endpoint_types")
-        return typing.cast(typing.Optional[typing.List[EndpointType]], result)
+        return typing.cast(typing.Optional[typing.List["EndpointType"]], result)
 
     @builtins.property
     def fail_on_warnings(self) -> typing.Optional[builtins.bool]:
@@ -26250,13 +26291,13 @@ class RestApiBaseProps:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''A policy document that contains the permissions for this RestApi.
 
         :default: - No policy.
         '''
         result = self._values.get("policy")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
     def rest_api_name(self) -> typing.Optional[builtins.str]:
@@ -26345,28 +26386,28 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
     def __init__(
         self,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_watch_role: typing.Optional[builtins.bool] = None,
-        cloud_watch_role_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        cloud_watch_role_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         deploy: typing.Optional[builtins.bool] = None,
         deploy_options: typing.Optional[typing.Union["StageOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[builtins.bool] = None,
-        domain_name: typing.Optional[typing.Union[DomainNameOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        endpoint_configuration: typing.Optional[typing.Union[EndpointConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        domain_name: typing.Optional[typing.Union["DomainNameOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["EndpointConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         endpoint_export_name: typing.Optional[builtins.str] = None,
-        endpoint_types: typing.Optional[typing.Sequence[EndpointType]] = None,
+        endpoint_types: typing.Optional[typing.Sequence["EndpointType"]] = None,
         fail_on_warnings: typing.Optional[builtins.bool] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        policy: typing.Optional[_PolicyDocument_3ac34393] = None,
+        policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
         rest_api_name: typing.Optional[builtins.str] = None,
         retain_deployments: typing.Optional[builtins.bool] = None,
-        api_key_source_type: typing.Optional[ApiKeySourceType] = None,
+        api_key_source_type: typing.Optional["ApiKeySourceType"] = None,
         binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-        clone_from: typing.Optional[IRestApi] = None,
-        min_compression_size: typing.Optional[_Size_7b441c34] = None,
+        clone_from: typing.Optional["IRestApi"] = None,
+        min_compression_size: typing.Optional["_Size_7b441c34"] = None,
         minimum_compression_size: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Props to create a new instance of RestApi.
@@ -26493,7 +26534,7 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
             self._values["minimum_compression_size"] = minimum_compression_size
 
     @builtins.property
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Adds a CORS preflight OPTIONS method to this resource and all child resources.
 
         You can add CORS at the resource-level using ``addCorsPreflight``.
@@ -26501,25 +26542,25 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
         :default: - CORS is disabled
         '''
         result = self._values.get("default_cors_preflight_options")
-        return typing.cast(typing.Optional[CorsOptions], result)
+        return typing.cast(typing.Optional["CorsOptions"], result)
 
     @builtins.property
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_integration")
-        return typing.cast(typing.Optional[Integration], result)
+        return typing.cast(typing.Optional["Integration"], result)
 
     @builtins.property
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_method_options")
-        return typing.cast(typing.Optional[MethodOptions], result)
+        return typing.cast(typing.Optional["MethodOptions"], result)
 
     @builtins.property
     def cloud_watch_role(self) -> typing.Optional[builtins.bool]:
@@ -26533,7 +26574,7 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
     @builtins.property
     def cloud_watch_role_removal_policy(
         self,
-    ) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    ) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy applied to the AWS CloudWatch role when this resource is removed from the application.
 
         Requires ``cloudWatchRole`` to be enabled.
@@ -26541,7 +26582,7 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
         :default: - RemovalPolicy.RETAIN
         '''
         result = self._values.get("cloud_watch_role_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
     def deploy(self) -> typing.Optional[builtins.bool]:
@@ -26603,16 +26644,16 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def domain_name(self) -> typing.Optional[DomainNameOptions]:
+    def domain_name(self) -> typing.Optional["DomainNameOptions"]:
         '''Configure a custom domain name and map it to this API.
 
         :default: - no domain name is defined, use ``addDomainName`` or directly define a ``DomainName``.
         '''
         result = self._values.get("domain_name")
-        return typing.cast(typing.Optional[DomainNameOptions], result)
+        return typing.cast(typing.Optional["DomainNameOptions"], result)
 
     @builtins.property
-    def endpoint_configuration(self) -> typing.Optional[EndpointConfiguration]:
+    def endpoint_configuration(self) -> typing.Optional["EndpointConfiguration"]:
         '''The EndpointConfiguration property type specifies the endpoint types of a REST API.
 
         :default: EndpointType.EDGE
@@ -26620,7 +26661,7 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-restapi-endpointconfiguration.html
         '''
         result = self._values.get("endpoint_configuration")
-        return typing.cast(typing.Optional[EndpointConfiguration], result)
+        return typing.cast(typing.Optional["EndpointConfiguration"], result)
 
     @builtins.property
     def endpoint_export_name(self) -> typing.Optional[builtins.str]:
@@ -26632,7 +26673,7 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def endpoint_types(self) -> typing.Optional[typing.List[EndpointType]]:
+    def endpoint_types(self) -> typing.Optional[typing.List["EndpointType"]]:
         '''A list of the endpoint types of the API.
 
         Use this property when creating
@@ -26641,7 +26682,7 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
         :default: EndpointType.EDGE
         '''
         result = self._values.get("endpoint_types")
-        return typing.cast(typing.Optional[typing.List[EndpointType]], result)
+        return typing.cast(typing.Optional[typing.List["EndpointType"]], result)
 
     @builtins.property
     def fail_on_warnings(self) -> typing.Optional[builtins.bool]:
@@ -26664,13 +26705,13 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''A policy document that contains the permissions for this RestApi.
 
         :default: - No policy.
         '''
         result = self._values.get("policy")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
     def rest_api_name(self) -> typing.Optional[builtins.str]:
@@ -26695,13 +26736,13 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def api_key_source_type(self) -> typing.Optional[ApiKeySourceType]:
+    def api_key_source_type(self) -> typing.Optional["ApiKeySourceType"]:
         '''The source of the API key for metering requests according to a usage plan.
 
         :default: - Metering is disabled.
         '''
         result = self._values.get("api_key_source_type")
-        return typing.cast(typing.Optional[ApiKeySourceType], result)
+        return typing.cast(typing.Optional["ApiKeySourceType"], result)
 
     @builtins.property
     def binary_media_types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -26713,16 +26754,16 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def clone_from(self) -> typing.Optional[IRestApi]:
+    def clone_from(self) -> typing.Optional["IRestApi"]:
         '''The ID of the API Gateway RestApi resource that you want to clone.
 
         :default: - None.
         '''
         result = self._values.get("clone_from")
-        return typing.cast(typing.Optional[IRestApi], result)
+        return typing.cast(typing.Optional["IRestApi"], result)
 
     @builtins.property
-    def min_compression_size(self) -> typing.Optional[_Size_7b441c34]:
+    def min_compression_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''A Size(in bytes, kibibytes, mebibytes etc) that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (when undefined) on an API.
 
         When compression is enabled, compression or
@@ -26733,7 +26774,7 @@ class RestApiProps(ResourceOptions, RestApiBaseProps):
         :default: - Compression is disabled.
         '''
         result = self._values.get("min_compression_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def minimum_compression_size(self) -> typing.Optional[jsii.Number]:
@@ -26788,7 +26829,7 @@ class S3ApiDefinition(
 
     def __init__(
         self,
-        bucket: _IBucketRef_3debe44e,
+        bucket: "_IBucketRef_3debe44e",
         key: builtins.str,
         object_version: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -26805,7 +26846,7 @@ class S3ApiDefinition(
         jsii.create(self.__class__, self, [bucket, key, object_version])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, _scope: _constructs_77d1e7e8.Construct) -> ApiDefinitionConfig:
+    def bind(self, _scope: "_constructs_77d1e7e8.Construct") -> "ApiDefinitionConfig":
         '''Called when the specification is initialized to allow this object to bind to the stack, add resources and have fun.
 
         :param _scope: -
@@ -26813,7 +26854,7 @@ class S3ApiDefinition(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d7ca7ef7a6e88688fd1ae04eb3324144b90b7c93f9c1dfbde96faec085f1b27c)
             check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
-        return typing.cast(ApiDefinitionConfig, jsii.invoke(self, "bind", [_scope]))
+        return typing.cast("ApiDefinitionConfig", jsii.invoke(self, "bind", [_scope]))
 
 
 @jsii.data_type(
@@ -26841,17 +26882,17 @@ class SagemakerIntegrationOptions(IntegrationOptions):
         *,
         cache_key_parameters: typing.Optional[typing.Sequence[builtins.str]] = None,
         cache_namespace: typing.Optional[builtins.str] = None,
-        connection_type: typing.Optional[ConnectionType] = None,
-        content_handling: typing.Optional[ContentHandling] = None,
+        connection_type: typing.Optional["ConnectionType"] = None,
+        content_handling: typing.Optional["ContentHandling"] = None,
         credentials_passthrough: typing.Optional[builtins.bool] = None,
-        credentials_role: typing.Optional[_IRole_235f5d8e] = None,
-        integration_responses: typing.Optional[typing.Sequence[typing.Union[IntegrationResponse, typing.Dict[builtins.str, typing.Any]]]] = None,
-        passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
+        credentials_role: typing.Optional["_IRole_235f5d8e"] = None,
+        integration_responses: typing.Optional[typing.Sequence[typing.Union["IntegrationResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
+        passthrough_behavior: typing.Optional["PassthroughBehavior"] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        vpc_link: typing.Optional[IVpcLink] = None,
+        response_transfer_mode: typing.Optional["ResponseTransferMode"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        vpc_link: typing.Optional["IVpcLink"] = None,
     ) -> None:
         '''Options for SageMakerIntegration.
 
@@ -26974,16 +27015,16 @@ class SagemakerIntegrationOptions(IntegrationOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def connection_type(self) -> typing.Optional[ConnectionType]:
+    def connection_type(self) -> typing.Optional["ConnectionType"]:
         '''The type of network connection to the integration endpoint.
 
         :default: - ConnectionType.VPC_LINK if ``vpcLink`` property is configured; ConnectionType.Internet otherwise.
         '''
         result = self._values.get("connection_type")
-        return typing.cast(typing.Optional[ConnectionType], result)
+        return typing.cast(typing.Optional["ConnectionType"], result)
 
     @builtins.property
-    def content_handling(self) -> typing.Optional[ContentHandling]:
+    def content_handling(self) -> typing.Optional["ContentHandling"]:
         '''Specifies how to handle request payload content type conversions.
 
         :default:
@@ -26994,7 +27035,7 @@ class SagemakerIntegrationOptions(IntegrationOptions):
         configured to support payload pass-through.
         '''
         result = self._values.get("content_handling")
-        return typing.cast(typing.Optional[ContentHandling], result)
+        return typing.cast(typing.Optional["ContentHandling"], result)
 
     @builtins.property
     def credentials_passthrough(self) -> typing.Optional[builtins.bool]:
@@ -27006,7 +27047,7 @@ class SagemakerIntegrationOptions(IntegrationOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def credentials_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def credentials_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that API Gateway assumes.
 
         Mutually exclusive with ``credentialsPassThrough``.
@@ -27014,12 +27055,12 @@ class SagemakerIntegrationOptions(IntegrationOptions):
         :default: A role is not assumed
         '''
         result = self._values.get("credentials_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def integration_responses(
         self,
-    ) -> typing.Optional[typing.List[IntegrationResponse]]:
+    ) -> typing.Optional[typing.List["IntegrationResponse"]]:
         '''The response that API Gateway provides after a method's backend completes processing a request.
 
         API Gateway intercepts the response from the
@@ -27028,17 +27069,17 @@ class SagemakerIntegrationOptions(IntegrationOptions):
         that you define.
         '''
         result = self._values.get("integration_responses")
-        return typing.cast(typing.Optional[typing.List[IntegrationResponse]], result)
+        return typing.cast(typing.Optional[typing.List["IntegrationResponse"]], result)
 
     @builtins.property
-    def passthrough_behavior(self) -> typing.Optional[PassthroughBehavior]:
+    def passthrough_behavior(self) -> typing.Optional["PassthroughBehavior"]:
         '''Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource.
 
         There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
         NEVER.
         '''
         result = self._values.get("passthrough_behavior")
-        return typing.cast(typing.Optional[PassthroughBehavior], result)
+        return typing.cast(typing.Optional["PassthroughBehavior"], result)
 
     @builtins.property
     def request_parameters(
@@ -27079,7 +27120,7 @@ class SagemakerIntegrationOptions(IntegrationOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def response_transfer_mode(self) -> typing.Optional[ResponseTransferMode]:
+    def response_transfer_mode(self) -> typing.Optional["ResponseTransferMode"]:
         '''The response transfer mode for the integration.
 
         To enable response streaming, set this value to ``ResponseTransferMode.STREAM``.
@@ -27087,10 +27128,10 @@ class SagemakerIntegrationOptions(IntegrationOptions):
         :default: ResponseTransferMode.BUFFERED
         '''
         result = self._values.get("response_transfer_mode")
-        return typing.cast(typing.Optional[ResponseTransferMode], result)
+        return typing.cast(typing.Optional["ResponseTransferMode"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum amount of time an integration will run before it returns without a response.
 
         By default, the value must be between 50 milliseconds and 29 seconds.
@@ -27103,16 +27144,16 @@ class SagemakerIntegrationOptions(IntegrationOptions):
         :default: Duration.seconds(29)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def vpc_link(self) -> typing.Optional[IVpcLink]:
+    def vpc_link(self) -> typing.Optional["IVpcLink"]:
         '''The VpcLink used for the integration.
 
         Required if connectionType is VPC_LINK
         '''
         result = self._values.get("vpc_link")
-        return typing.cast(typing.Optional[IVpcLink], result)
+        return typing.cast(typing.Optional["IVpcLink"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -27181,26 +27222,26 @@ class SpecRestApi(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api_definition: ApiDefinition,
+        api_definition: "ApiDefinition",
         binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-        min_compression_size: typing.Optional[_Size_7b441c34] = None,
-        mode: typing.Optional[RestApiMode] = None,
+        min_compression_size: typing.Optional["_Size_7b441c34"] = None,
+        mode: typing.Optional["RestApiMode"] = None,
         cloud_watch_role: typing.Optional[builtins.bool] = None,
-        cloud_watch_role_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        cloud_watch_role_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         deploy: typing.Optional[builtins.bool] = None,
         deploy_options: typing.Optional[typing.Union["StageOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[builtins.bool] = None,
-        domain_name: typing.Optional[typing.Union[DomainNameOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        endpoint_configuration: typing.Optional[typing.Union[EndpointConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        domain_name: typing.Optional[typing.Union["DomainNameOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["EndpointConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         endpoint_export_name: typing.Optional[builtins.str] = None,
-        endpoint_types: typing.Optional[typing.Sequence[EndpointType]] = None,
+        endpoint_types: typing.Optional[typing.Sequence["EndpointType"]] = None,
         fail_on_warnings: typing.Optional[builtins.bool] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        policy: typing.Optional[_PolicyDocument_3ac34393] = None,
+        policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
         rest_api_name: typing.Optional[builtins.str] = None,
         retain_deployments: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -27258,8 +27299,8 @@ class SpecRestApi(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the resource policy associated with this rest api.
 
         A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
@@ -27271,7 +27312,7 @@ class SpecRestApi(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a598fa29dde7454edf374298a15d782fc9a7cfb24aea9c673988425532fdfaa8)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -27296,12 +27337,12 @@ class SpecRestApi(
 
     @builtins.property
     @jsii.member(jsii_name="root")
-    def root(self) -> IResource:
+    def root(self) -> "IResource":
         '''Represents the root resource of this API endpoint ('/').
 
         Resources and Methods are added to this resource.
         '''
-        return typing.cast(IResource, jsii.get(self, "root"))
+        return typing.cast("IResource", jsii.get(self, "root"))
 
 
 @jsii.data_type(
@@ -27334,24 +27375,24 @@ class SpecRestApiProps(RestApiBaseProps):
         self,
         *,
         cloud_watch_role: typing.Optional[builtins.bool] = None,
-        cloud_watch_role_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        cloud_watch_role_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         deploy: typing.Optional[builtins.bool] = None,
         deploy_options: typing.Optional[typing.Union["StageOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[builtins.bool] = None,
-        domain_name: typing.Optional[typing.Union[DomainNameOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        endpoint_configuration: typing.Optional[typing.Union[EndpointConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        domain_name: typing.Optional[typing.Union["DomainNameOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["EndpointConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         endpoint_export_name: typing.Optional[builtins.str] = None,
-        endpoint_types: typing.Optional[typing.Sequence[EndpointType]] = None,
+        endpoint_types: typing.Optional[typing.Sequence["EndpointType"]] = None,
         fail_on_warnings: typing.Optional[builtins.bool] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        policy: typing.Optional[_PolicyDocument_3ac34393] = None,
+        policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
         rest_api_name: typing.Optional[builtins.str] = None,
         retain_deployments: typing.Optional[builtins.bool] = None,
-        api_definition: ApiDefinition,
+        api_definition: "ApiDefinition",
         binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-        min_compression_size: typing.Optional[_Size_7b441c34] = None,
-        mode: typing.Optional[RestApiMode] = None,
+        min_compression_size: typing.Optional["_Size_7b441c34"] = None,
+        mode: typing.Optional["RestApiMode"] = None,
     ) -> None:
         '''Props to instantiate a new SpecRestApi.
 
@@ -27463,7 +27504,7 @@ class SpecRestApiProps(RestApiBaseProps):
     @builtins.property
     def cloud_watch_role_removal_policy(
         self,
-    ) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    ) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy applied to the AWS CloudWatch role when this resource is removed from the application.
 
         Requires ``cloudWatchRole`` to be enabled.
@@ -27471,7 +27512,7 @@ class SpecRestApiProps(RestApiBaseProps):
         :default: - RemovalPolicy.RETAIN
         '''
         result = self._values.get("cloud_watch_role_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
     def deploy(self) -> typing.Optional[builtins.bool]:
@@ -27533,16 +27574,16 @@ class SpecRestApiProps(RestApiBaseProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def domain_name(self) -> typing.Optional[DomainNameOptions]:
+    def domain_name(self) -> typing.Optional["DomainNameOptions"]:
         '''Configure a custom domain name and map it to this API.
 
         :default: - no domain name is defined, use ``addDomainName`` or directly define a ``DomainName``.
         '''
         result = self._values.get("domain_name")
-        return typing.cast(typing.Optional[DomainNameOptions], result)
+        return typing.cast(typing.Optional["DomainNameOptions"], result)
 
     @builtins.property
-    def endpoint_configuration(self) -> typing.Optional[EndpointConfiguration]:
+    def endpoint_configuration(self) -> typing.Optional["EndpointConfiguration"]:
         '''The EndpointConfiguration property type specifies the endpoint types of a REST API.
 
         :default: EndpointType.EDGE
@@ -27550,7 +27591,7 @@ class SpecRestApiProps(RestApiBaseProps):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-restapi-endpointconfiguration.html
         '''
         result = self._values.get("endpoint_configuration")
-        return typing.cast(typing.Optional[EndpointConfiguration], result)
+        return typing.cast(typing.Optional["EndpointConfiguration"], result)
 
     @builtins.property
     def endpoint_export_name(self) -> typing.Optional[builtins.str]:
@@ -27562,7 +27603,7 @@ class SpecRestApiProps(RestApiBaseProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def endpoint_types(self) -> typing.Optional[typing.List[EndpointType]]:
+    def endpoint_types(self) -> typing.Optional[typing.List["EndpointType"]]:
         '''A list of the endpoint types of the API.
 
         Use this property when creating
@@ -27571,7 +27612,7 @@ class SpecRestApiProps(RestApiBaseProps):
         :default: EndpointType.EDGE
         '''
         result = self._values.get("endpoint_types")
-        return typing.cast(typing.Optional[typing.List[EndpointType]], result)
+        return typing.cast(typing.Optional[typing.List["EndpointType"]], result)
 
     @builtins.property
     def fail_on_warnings(self) -> typing.Optional[builtins.bool]:
@@ -27594,13 +27635,13 @@ class SpecRestApiProps(RestApiBaseProps):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''A policy document that contains the permissions for this RestApi.
 
         :default: - No policy.
         '''
         result = self._values.get("policy")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
     def rest_api_name(self) -> typing.Optional[builtins.str]:
@@ -27625,14 +27666,14 @@ class SpecRestApiProps(RestApiBaseProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def api_definition(self) -> ApiDefinition:
+    def api_definition(self) -> "ApiDefinition":
         '''An OpenAPI definition compatible with API Gateway.
 
         :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-import-api.html
         '''
         result = self._values.get("api_definition")
         assert result is not None, "Required property 'api_definition' is missing"
-        return typing.cast(ApiDefinition, result)
+        return typing.cast("ApiDefinition", result)
 
     @builtins.property
     def binary_media_types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -27644,7 +27685,7 @@ class SpecRestApiProps(RestApiBaseProps):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def min_compression_size(self) -> typing.Optional[_Size_7b441c34]:
+    def min_compression_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''A Size(in bytes, kibibytes, mebibytes etc) that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (when undefined) on an API.
 
         When compression is enabled, compression or
@@ -27655,10 +27696,10 @@ class SpecRestApiProps(RestApiBaseProps):
         :default: - Compression is disabled.
         '''
         result = self._values.get("min_compression_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
-    def mode(self) -> typing.Optional[RestApiMode]:
+    def mode(self) -> typing.Optional["RestApiMode"]:
         '''The Mode that determines how API Gateway handles resource updates.
 
         Valid values are ``overwrite`` or ``merge``.
@@ -27679,7 +27720,7 @@ class SpecRestApiProps(RestApiBaseProps):
         :default: - ``merge`` for REST APIs created after March 29, 2021, otherwise ``overwrite``
         '''
         result = self._values.get("mode")
-        return typing.cast(typing.Optional[RestApiMode], result)
+        return typing.cast(typing.Optional["RestApiMode"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -27699,7 +27740,7 @@ class SpecRestApiProps(RestApiBaseProps):
     name_mapping={"rest_api": "restApi", "stage_name": "stageName"},
 )
 class StageAttributes:
-    def __init__(self, *, rest_api: IRestApi, stage_name: builtins.str) -> None:
+    def __init__(self, *, rest_api: "IRestApi", stage_name: builtins.str) -> None:
         '''The attributes of an imported Stage.
 
         :param rest_api: The RestApi that the stage belongs to.
@@ -27728,11 +27769,11 @@ class StageAttributes:
         }
 
     @builtins.property
-    def rest_api(self) -> IRestApi:
+    def rest_api(self) -> "IRestApi":
         '''The RestApi that the stage belongs to.'''
         result = self._values.get("rest_api")
         assert result is not None, "Required property 'rest_api' is missing"
-        return typing.cast(IRestApi, result)
+        return typing.cast("IRestApi", result)
 
     @builtins.property
     def stage_name(self) -> builtins.str:
@@ -27763,7 +27804,7 @@ class StageBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -27800,10 +27841,10 @@ class StageBase(
         api_key_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         value: typing.Optional[builtins.str] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-    ) -> IApiKey:
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+    ) -> "IApiKey":
         '''Add an ApiKey to this stage.
 
         :param id: -
@@ -27826,7 +27867,7 @@ class StageBase(
             default_method_options=default_method_options,
         )
 
-        return typing.cast(IApiKey, jsii.invoke(self, "addApiKey", [id, options]))
+        return typing.cast("IApiKey", jsii.invoke(self, "addApiKey", [id, options]))
 
     @jsii.member(jsii_name="metric")
     def metric(
@@ -27838,14 +27879,14 @@ class StageBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Returns the given named metric for this stage.
 
         :param metric_name: -
@@ -27880,7 +27921,7 @@ class StageBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metric", [metric_name, props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
 
     @jsii.member(jsii_name="metricCacheHitCount")
     def metric_cache_hit_count(
@@ -27891,14 +27932,14 @@ class StageBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of requests served from the API cache in a given period.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -27931,7 +27972,7 @@ class StageBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricCacheHitCount", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCacheHitCount", [props]))
 
     @jsii.member(jsii_name="metricCacheMissCount")
     def metric_cache_miss_count(
@@ -27942,14 +27983,14 @@ class StageBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of requests served from the backend in a given period, when API caching is enabled.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -27982,7 +28023,7 @@ class StageBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricCacheMissCount", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCacheMissCount", [props]))
 
     @jsii.member(jsii_name="metricClientError")
     def metric_client_error(
@@ -27993,14 +28034,14 @@ class StageBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of client-side errors captured in a given period.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -28033,7 +28074,7 @@ class StageBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricClientError", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricClientError", [props]))
 
     @jsii.member(jsii_name="metricCount")
     def metric_count(
@@ -28044,14 +28085,14 @@ class StageBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the total number API requests in a given period.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -28084,7 +28125,7 @@ class StageBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricCount", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCount", [props]))
 
     @jsii.member(jsii_name="metricIntegrationLatency")
     def metric_integration_latency(
@@ -28095,14 +28136,14 @@ class StageBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the time between when API Gateway relays a request to the backend and when it receives a response from the backend.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -28135,7 +28176,7 @@ class StageBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricIntegrationLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIntegrationLatency", [props]))
 
     @jsii.member(jsii_name="metricLatency")
     def metric_latency(
@@ -28146,14 +28187,14 @@ class StageBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''The time between when API Gateway receives a request from a client and when it returns a response to the client.
 
         The latency includes the integration latency and other API Gateway overhead.
@@ -28188,7 +28229,7 @@ class StageBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricLatency", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricLatency", [props]))
 
     @jsii.member(jsii_name="metricServerError")
     def metric_server_error(
@@ -28199,14 +28240,14 @@ class StageBase(
         dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
         label: typing.Optional[builtins.str] = None,
-        period: typing.Optional[_Duration_4839e8c3] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
         region: typing.Optional[builtins.str] = None,
         stack_account: typing.Optional[builtins.str] = None,
         stack_region: typing.Optional[builtins.str] = None,
         statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional[_Unit_61bc6f70] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
-    ) -> _Metric_e396a4dc:
+    ) -> "_Metric_e396a4dc":
         '''Metric for the number of server-side errors captured in a given period.
 
         :param account: Account which this metric comes from. Default: - Deployment account.
@@ -28239,7 +28280,7 @@ class StageBase(
             visible=visible,
         )
 
-        return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricServerError", [props]))
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricServerError", [props]))
 
     @jsii.member(jsii_name="urlForPath")
     def url_for_path(self, path: typing.Optional[builtins.str] = None) -> builtins.str:
@@ -28255,7 +28296,7 @@ class StageBase(
     @builtins.property
     @jsii.member(jsii_name="restApi")
     @abc.abstractmethod
-    def rest_api(self) -> IRestApi:
+    def rest_api(self) -> "IRestApi":
         '''RestApi to which this stage is associated.'''
         ...
 
@@ -28282,9 +28323,9 @@ class StageBase(
 
     @builtins.property
     @jsii.member(jsii_name="stageRef")
-    def stage_ref(self) -> _StageReference_3eb94694:
+    def stage_ref(self) -> "_StageReference_3eb94694":
         '''A reference to a Stage resource.'''
-        return typing.cast(_StageReference_3eb94694, jsii.get(self, "stageRef"))
+        return typing.cast("_StageReference_3eb94694", jsii.get(self, "stageRef"))
 
 
 class _StageBaseProxy(
@@ -28293,9 +28334,9 @@ class _StageBaseProxy(
 ):
     @builtins.property
     @jsii.member(jsii_name="restApi")
-    def rest_api(self) -> IRestApi:
+    def rest_api(self) -> "IRestApi":
         '''RestApi to which this stage is associated.'''
-        return typing.cast(IRestApi, jsii.get(self, "restApi"))
+        return typing.cast("IRestApi", jsii.get(self, "restApi"))
 
     @builtins.property
     @jsii.member(jsii_name="stageName")
@@ -28337,21 +28378,21 @@ class StageOptions(MethodDeploymentOptions):
         self,
         *,
         cache_data_encrypted: typing.Optional[builtins.bool] = None,
-        cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         caching_enabled: typing.Optional[builtins.bool] = None,
         data_trace_enabled: typing.Optional[builtins.bool] = None,
-        logging_level: typing.Optional[MethodLoggingLevel] = None,
+        logging_level: typing.Optional["MethodLoggingLevel"] = None,
         metrics_enabled: typing.Optional[builtins.bool] = None,
         throttling_burst_limit: typing.Optional[jsii.Number] = None,
         throttling_rate_limit: typing.Optional[jsii.Number] = None,
-        access_log_destination: typing.Optional[IAccessLogDestination] = None,
-        access_log_format: typing.Optional[AccessLogFormat] = None,
+        access_log_destination: typing.Optional["IAccessLogDestination"] = None,
+        access_log_format: typing.Optional["AccessLogFormat"] = None,
         cache_cluster_enabled: typing.Optional[builtins.bool] = None,
         cache_cluster_size: typing.Optional[builtins.str] = None,
         client_certificate_id: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         documentation_version: typing.Optional[builtins.str] = None,
-        method_options: typing.Optional[typing.Mapping[builtins.str, typing.Union[MethodDeploymentOptions, typing.Dict[builtins.str, typing.Any]]]] = None,
+        method_options: typing.Optional[typing.Mapping[builtins.str, typing.Union["MethodDeploymentOptions", typing.Dict[builtins.str, typing.Any]]]] = None,
         stage_name: typing.Optional[builtins.str] = None,
         tracing_enabled: typing.Optional[builtins.bool] = None,
         variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -28460,7 +28501,7 @@ class StageOptions(MethodDeploymentOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def cache_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def cache_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies the time to live (TTL), in seconds, for cached responses.
 
         The
@@ -28471,7 +28512,7 @@ class StageOptions(MethodDeploymentOptions):
         :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html
         '''
         result = self._values.get("cache_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def caching_enabled(self) -> typing.Optional[builtins.bool]:
@@ -28499,13 +28540,13 @@ class StageOptions(MethodDeploymentOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def logging_level(self) -> typing.Optional[MethodLoggingLevel]:
+    def logging_level(self) -> typing.Optional["MethodLoggingLevel"]:
         '''Specifies the logging level for this method, which effects the log entries pushed to Amazon CloudWatch Logs.
 
         :default: - Off
         '''
         result = self._values.get("logging_level")
-        return typing.cast(typing.Optional[MethodLoggingLevel], result)
+        return typing.cast(typing.Optional["MethodLoggingLevel"], result)
 
     @builtins.property
     def metrics_enabled(self) -> typing.Optional[builtins.bool]:
@@ -28543,16 +28584,16 @@ class StageOptions(MethodDeploymentOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def access_log_destination(self) -> typing.Optional[IAccessLogDestination]:
+    def access_log_destination(self) -> typing.Optional["IAccessLogDestination"]:
         '''The CloudWatch Logs log group or Firehose delivery stream where to write access logs.
 
         :default: - No destination
         '''
         result = self._values.get("access_log_destination")
-        return typing.cast(typing.Optional[IAccessLogDestination], result)
+        return typing.cast(typing.Optional["IAccessLogDestination"], result)
 
     @builtins.property
-    def access_log_format(self) -> typing.Optional[AccessLogFormat]:
+    def access_log_format(self) -> typing.Optional["AccessLogFormat"]:
         '''A single line format of access logs of data, as specified by selected $content variables.
 
         The format must include either ``AccessLogFormat.contextRequestId()``
@@ -28563,7 +28604,7 @@ class StageOptions(MethodDeploymentOptions):
         :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#context-variable-reference
         '''
         result = self._values.get("access_log_format")
-        return typing.cast(typing.Optional[AccessLogFormat], result)
+        return typing.cast(typing.Optional["AccessLogFormat"], result)
 
     @builtins.property
     def cache_cluster_enabled(self) -> typing.Optional[builtins.bool]:
@@ -28613,7 +28654,7 @@ class StageOptions(MethodDeploymentOptions):
     @builtins.property
     def method_options(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, MethodDeploymentOptions]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "MethodDeploymentOptions"]]:
         '''Method deployment options for specific resources/methods.
 
         These will
@@ -28622,7 +28663,7 @@ class StageOptions(MethodDeploymentOptions):
         :default: - Common options will be used.
         '''
         result = self._values.get("method_options")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, MethodDeploymentOptions]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "MethodDeploymentOptions"]], result)
 
     @builtins.property
     def stage_name(self) -> typing.Optional[builtins.str]:
@@ -28698,25 +28739,25 @@ class StageProps(StageOptions):
         self,
         *,
         cache_data_encrypted: typing.Optional[builtins.bool] = None,
-        cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         caching_enabled: typing.Optional[builtins.bool] = None,
         data_trace_enabled: typing.Optional[builtins.bool] = None,
-        logging_level: typing.Optional[MethodLoggingLevel] = None,
+        logging_level: typing.Optional["MethodLoggingLevel"] = None,
         metrics_enabled: typing.Optional[builtins.bool] = None,
         throttling_burst_limit: typing.Optional[jsii.Number] = None,
         throttling_rate_limit: typing.Optional[jsii.Number] = None,
-        access_log_destination: typing.Optional[IAccessLogDestination] = None,
-        access_log_format: typing.Optional[AccessLogFormat] = None,
+        access_log_destination: typing.Optional["IAccessLogDestination"] = None,
+        access_log_format: typing.Optional["AccessLogFormat"] = None,
         cache_cluster_enabled: typing.Optional[builtins.bool] = None,
         cache_cluster_size: typing.Optional[builtins.str] = None,
         client_certificate_id: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         documentation_version: typing.Optional[builtins.str] = None,
-        method_options: typing.Optional[typing.Mapping[builtins.str, typing.Union[MethodDeploymentOptions, typing.Dict[builtins.str, typing.Any]]]] = None,
+        method_options: typing.Optional[typing.Mapping[builtins.str, typing.Union["MethodDeploymentOptions", typing.Dict[builtins.str, typing.Any]]]] = None,
         stage_name: typing.Optional[builtins.str] = None,
         tracing_enabled: typing.Optional[builtins.bool] = None,
         variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        deployment: Deployment,
+        deployment: "Deployment",
     ) -> None:
         '''
         :param cache_data_encrypted: Indicates whether the cached responses are encrypted. Default: false
@@ -28846,7 +28887,7 @@ class StageProps(StageOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def cache_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def cache_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''Specifies the time to live (TTL), in seconds, for cached responses.
 
         The
@@ -28857,7 +28898,7 @@ class StageProps(StageOptions):
         :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html
         '''
         result = self._values.get("cache_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def caching_enabled(self) -> typing.Optional[builtins.bool]:
@@ -28885,13 +28926,13 @@ class StageProps(StageOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def logging_level(self) -> typing.Optional[MethodLoggingLevel]:
+    def logging_level(self) -> typing.Optional["MethodLoggingLevel"]:
         '''Specifies the logging level for this method, which effects the log entries pushed to Amazon CloudWatch Logs.
 
         :default: - Off
         '''
         result = self._values.get("logging_level")
-        return typing.cast(typing.Optional[MethodLoggingLevel], result)
+        return typing.cast(typing.Optional["MethodLoggingLevel"], result)
 
     @builtins.property
     def metrics_enabled(self) -> typing.Optional[builtins.bool]:
@@ -28929,16 +28970,16 @@ class StageProps(StageOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def access_log_destination(self) -> typing.Optional[IAccessLogDestination]:
+    def access_log_destination(self) -> typing.Optional["IAccessLogDestination"]:
         '''The CloudWatch Logs log group or Firehose delivery stream where to write access logs.
 
         :default: - No destination
         '''
         result = self._values.get("access_log_destination")
-        return typing.cast(typing.Optional[IAccessLogDestination], result)
+        return typing.cast(typing.Optional["IAccessLogDestination"], result)
 
     @builtins.property
-    def access_log_format(self) -> typing.Optional[AccessLogFormat]:
+    def access_log_format(self) -> typing.Optional["AccessLogFormat"]:
         '''A single line format of access logs of data, as specified by selected $content variables.
 
         The format must include either ``AccessLogFormat.contextRequestId()``
@@ -28949,7 +28990,7 @@ class StageProps(StageOptions):
         :see: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#context-variable-reference
         '''
         result = self._values.get("access_log_format")
-        return typing.cast(typing.Optional[AccessLogFormat], result)
+        return typing.cast(typing.Optional["AccessLogFormat"], result)
 
     @builtins.property
     def cache_cluster_enabled(self) -> typing.Optional[builtins.bool]:
@@ -28999,7 +29040,7 @@ class StageProps(StageOptions):
     @builtins.property
     def method_options(
         self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, MethodDeploymentOptions]]:
+    ) -> typing.Optional[typing.Mapping[builtins.str, "MethodDeploymentOptions"]]:
         '''Method deployment options for specific resources/methods.
 
         These will
@@ -29008,7 +29049,7 @@ class StageProps(StageOptions):
         :default: - Common options will be used.
         '''
         result = self._values.get("method_options")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, MethodDeploymentOptions]], result)
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, "MethodDeploymentOptions"]], result)
 
     @builtins.property
     def stage_name(self) -> typing.Optional[builtins.str]:
@@ -29042,11 +29083,11 @@ class StageProps(StageOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def deployment(self) -> Deployment:
+    def deployment(self) -> "Deployment":
         '''The deployment that this stage points to [disable-awslint:ref-via-interface].'''
         result = self._values.get("deployment")
         assert result is not None, "Required property 'deployment' is missing"
-        return typing.cast(Deployment, result)
+        return typing.cast("Deployment", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -29091,22 +29132,22 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         *,
         cache_key_parameters: typing.Optional[typing.Sequence[builtins.str]] = None,
         cache_namespace: typing.Optional[builtins.str] = None,
-        connection_type: typing.Optional[ConnectionType] = None,
-        content_handling: typing.Optional[ContentHandling] = None,
+        connection_type: typing.Optional["ConnectionType"] = None,
+        content_handling: typing.Optional["ContentHandling"] = None,
         credentials_passthrough: typing.Optional[builtins.bool] = None,
-        credentials_role: typing.Optional[_IRole_235f5d8e] = None,
-        integration_responses: typing.Optional[typing.Sequence[typing.Union[IntegrationResponse, typing.Dict[builtins.str, typing.Any]]]] = None,
-        passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
+        credentials_role: typing.Optional["_IRole_235f5d8e"] = None,
+        integration_responses: typing.Optional[typing.Sequence[typing.Union["IntegrationResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
+        passthrough_behavior: typing.Optional["PassthroughBehavior"] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        vpc_link: typing.Optional[IVpcLink] = None,
+        response_transfer_mode: typing.Optional["ResponseTransferMode"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        vpc_link: typing.Optional["IVpcLink"] = None,
         authorizer: typing.Optional[builtins.bool] = None,
         headers: typing.Optional[builtins.bool] = None,
         path: typing.Optional[builtins.bool] = None,
         querystring: typing.Optional[builtins.bool] = None,
-        request_context: typing.Optional[typing.Union[RequestContext, typing.Dict[builtins.str, typing.Any]]] = None,
+        request_context: typing.Optional[typing.Union["RequestContext", typing.Dict[builtins.str, typing.Any]]] = None,
         use_default_method_responses: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Options when configuring Step Functions synchronous integration with Rest API.
@@ -29281,16 +29322,16 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def connection_type(self) -> typing.Optional[ConnectionType]:
+    def connection_type(self) -> typing.Optional["ConnectionType"]:
         '''The type of network connection to the integration endpoint.
 
         :default: - ConnectionType.VPC_LINK if ``vpcLink`` property is configured; ConnectionType.Internet otherwise.
         '''
         result = self._values.get("connection_type")
-        return typing.cast(typing.Optional[ConnectionType], result)
+        return typing.cast(typing.Optional["ConnectionType"], result)
 
     @builtins.property
-    def content_handling(self) -> typing.Optional[ContentHandling]:
+    def content_handling(self) -> typing.Optional["ContentHandling"]:
         '''Specifies how to handle request payload content type conversions.
 
         :default:
@@ -29301,7 +29342,7 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         configured to support payload pass-through.
         '''
         result = self._values.get("content_handling")
-        return typing.cast(typing.Optional[ContentHandling], result)
+        return typing.cast(typing.Optional["ContentHandling"], result)
 
     @builtins.property
     def credentials_passthrough(self) -> typing.Optional[builtins.bool]:
@@ -29313,7 +29354,7 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def credentials_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def credentials_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that API Gateway assumes.
 
         Mutually exclusive with ``credentialsPassThrough``.
@@ -29321,12 +29362,12 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         :default: A role is not assumed
         '''
         result = self._values.get("credentials_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def integration_responses(
         self,
-    ) -> typing.Optional[typing.List[IntegrationResponse]]:
+    ) -> typing.Optional[typing.List["IntegrationResponse"]]:
         '''The response that API Gateway provides after a method's backend completes processing a request.
 
         API Gateway intercepts the response from the
@@ -29335,17 +29376,17 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         that you define.
         '''
         result = self._values.get("integration_responses")
-        return typing.cast(typing.Optional[typing.List[IntegrationResponse]], result)
+        return typing.cast(typing.Optional[typing.List["IntegrationResponse"]], result)
 
     @builtins.property
-    def passthrough_behavior(self) -> typing.Optional[PassthroughBehavior]:
+    def passthrough_behavior(self) -> typing.Optional["PassthroughBehavior"]:
         '''Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource.
 
         There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
         NEVER.
         '''
         result = self._values.get("passthrough_behavior")
-        return typing.cast(typing.Optional[PassthroughBehavior], result)
+        return typing.cast(typing.Optional["PassthroughBehavior"], result)
 
     @builtins.property
     def request_parameters(
@@ -29386,7 +29427,7 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def response_transfer_mode(self) -> typing.Optional[ResponseTransferMode]:
+    def response_transfer_mode(self) -> typing.Optional["ResponseTransferMode"]:
         '''The response transfer mode for the integration.
 
         To enable response streaming, set this value to ``ResponseTransferMode.STREAM``.
@@ -29394,10 +29435,10 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         :default: ResponseTransferMode.BUFFERED
         '''
         result = self._values.get("response_transfer_mode")
-        return typing.cast(typing.Optional[ResponseTransferMode], result)
+        return typing.cast(typing.Optional["ResponseTransferMode"], result)
 
     @builtins.property
-    def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
+    def timeout(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum amount of time an integration will run before it returns without a response.
 
         By default, the value must be between 50 milliseconds and 29 seconds.
@@ -29410,16 +29451,16 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         :default: Duration.seconds(29)
         '''
         result = self._values.get("timeout")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def vpc_link(self) -> typing.Optional[IVpcLink]:
+    def vpc_link(self) -> typing.Optional["IVpcLink"]:
         '''The VpcLink used for the integration.
 
         Required if connectionType is VPC_LINK
         '''
         result = self._values.get("vpc_link")
-        return typing.cast(typing.Optional[IVpcLink], result)
+        return typing.cast(typing.Optional["IVpcLink"], result)
 
     @builtins.property
     def authorizer(self) -> typing.Optional[builtins.bool]:
@@ -29495,7 +29536,7 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def request_context(self) -> typing.Optional[RequestContext]:
+    def request_context(self) -> typing.Optional["RequestContext"]:
         '''Which details of the incoming request must be passed onto the underlying state machine, such as, account id, user identity, request id, etc.
 
         The execution input will include a new key ``requestContext``:
@@ -29510,7 +29551,7 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         :default: - all parameters within request context will be set as false
         '''
         result = self._values.get("request_context")
-        return typing.cast(typing.Optional[RequestContext], result)
+        return typing.cast(typing.Optional["RequestContext"], result)
 
     @builtins.property
     def use_default_method_responses(self) -> typing.Optional[builtins.bool]:
@@ -29561,27 +29602,27 @@ class StepFunctionsIntegration(
     @builtins.classmethod
     def start_execution(
         cls,
-        state_machine: _IStateMachine_73e8d2b0,
+        state_machine: "_IStateMachine_73e8d2b0",
         *,
         authorizer: typing.Optional[builtins.bool] = None,
         headers: typing.Optional[builtins.bool] = None,
         path: typing.Optional[builtins.bool] = None,
         querystring: typing.Optional[builtins.bool] = None,
-        request_context: typing.Optional[typing.Union[RequestContext, typing.Dict[builtins.str, typing.Any]]] = None,
+        request_context: typing.Optional[typing.Union["RequestContext", typing.Dict[builtins.str, typing.Any]]] = None,
         use_default_method_responses: typing.Optional[builtins.bool] = None,
         cache_key_parameters: typing.Optional[typing.Sequence[builtins.str]] = None,
         cache_namespace: typing.Optional[builtins.str] = None,
-        connection_type: typing.Optional[ConnectionType] = None,
-        content_handling: typing.Optional[ContentHandling] = None,
+        connection_type: typing.Optional["ConnectionType"] = None,
+        content_handling: typing.Optional["ContentHandling"] = None,
         credentials_passthrough: typing.Optional[builtins.bool] = None,
-        credentials_role: typing.Optional[_IRole_235f5d8e] = None,
-        integration_responses: typing.Optional[typing.Sequence[typing.Union[IntegrationResponse, typing.Dict[builtins.str, typing.Any]]]] = None,
-        passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
+        credentials_role: typing.Optional["_IRole_235f5d8e"] = None,
+        integration_responses: typing.Optional[typing.Sequence[typing.Union["IntegrationResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
+        passthrough_behavior: typing.Optional["PassthroughBehavior"] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        vpc_link: typing.Optional[IVpcLink] = None,
+        response_transfer_mode: typing.Optional["ResponseTransferMode"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        vpc_link: typing.Optional["IVpcLink"] = None,
     ) -> "AwsIntegration":
         '''Integrates a Synchronous Express State Machine from AWS Step Functions to an API Gateway method.
 
@@ -29687,36 +29728,36 @@ class StepFunctionsRestApiProps(RestApiProps):
     def __init__(
         self,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_watch_role: typing.Optional[builtins.bool] = None,
-        cloud_watch_role_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        cloud_watch_role_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         deploy: typing.Optional[builtins.bool] = None,
-        deploy_options: typing.Optional[typing.Union[StageOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        deploy_options: typing.Optional[typing.Union["StageOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[builtins.bool] = None,
-        domain_name: typing.Optional[typing.Union[DomainNameOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        endpoint_configuration: typing.Optional[typing.Union[EndpointConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        domain_name: typing.Optional[typing.Union["DomainNameOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["EndpointConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         endpoint_export_name: typing.Optional[builtins.str] = None,
-        endpoint_types: typing.Optional[typing.Sequence[EndpointType]] = None,
+        endpoint_types: typing.Optional[typing.Sequence["EndpointType"]] = None,
         fail_on_warnings: typing.Optional[builtins.bool] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        policy: typing.Optional[_PolicyDocument_3ac34393] = None,
+        policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
         rest_api_name: typing.Optional[builtins.str] = None,
         retain_deployments: typing.Optional[builtins.bool] = None,
-        api_key_source_type: typing.Optional[ApiKeySourceType] = None,
+        api_key_source_type: typing.Optional["ApiKeySourceType"] = None,
         binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-        clone_from: typing.Optional[IRestApi] = None,
-        min_compression_size: typing.Optional[_Size_7b441c34] = None,
+        clone_from: typing.Optional["IRestApi"] = None,
+        min_compression_size: typing.Optional["_Size_7b441c34"] = None,
         minimum_compression_size: typing.Optional[jsii.Number] = None,
-        state_machine: _IStateMachine_73e8d2b0,
+        state_machine: "_IStateMachine_73e8d2b0",
         authorizer: typing.Optional[builtins.bool] = None,
         headers: typing.Optional[builtins.bool] = None,
         path: typing.Optional[builtins.bool] = None,
         querystring: typing.Optional[builtins.bool] = None,
-        request_context: typing.Optional[typing.Union[RequestContext, typing.Dict[builtins.str, typing.Any]]] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        request_context: typing.Optional[typing.Union["RequestContext", typing.Dict[builtins.str, typing.Any]]] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         use_default_method_responses: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Properties for StepFunctionsRestApi.
@@ -29875,7 +29916,7 @@ class StepFunctionsRestApiProps(RestApiProps):
             self._values["use_default_method_responses"] = use_default_method_responses
 
     @builtins.property
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Adds a CORS preflight OPTIONS method to this resource and all child resources.
 
         You can add CORS at the resource-level using ``addCorsPreflight``.
@@ -29883,25 +29924,25 @@ class StepFunctionsRestApiProps(RestApiProps):
         :default: - CORS is disabled
         '''
         result = self._values.get("default_cors_preflight_options")
-        return typing.cast(typing.Optional[CorsOptions], result)
+        return typing.cast(typing.Optional["CorsOptions"], result)
 
     @builtins.property
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_integration")
-        return typing.cast(typing.Optional[Integration], result)
+        return typing.cast(typing.Optional["Integration"], result)
 
     @builtins.property
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_method_options")
-        return typing.cast(typing.Optional[MethodOptions], result)
+        return typing.cast(typing.Optional["MethodOptions"], result)
 
     @builtins.property
     def cloud_watch_role(self) -> typing.Optional[builtins.bool]:
@@ -29915,7 +29956,7 @@ class StepFunctionsRestApiProps(RestApiProps):
     @builtins.property
     def cloud_watch_role_removal_policy(
         self,
-    ) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    ) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy applied to the AWS CloudWatch role when this resource is removed from the application.
 
         Requires ``cloudWatchRole`` to be enabled.
@@ -29923,7 +29964,7 @@ class StepFunctionsRestApiProps(RestApiProps):
         :default: - RemovalPolicy.RETAIN
         '''
         result = self._values.get("cloud_watch_role_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
     def deploy(self) -> typing.Optional[builtins.bool]:
@@ -29950,7 +29991,7 @@ class StepFunctionsRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def deploy_options(self) -> typing.Optional[StageOptions]:
+    def deploy_options(self) -> typing.Optional["StageOptions"]:
         '''Options for the API Gateway stage that will always point to the latest deployment when ``deploy`` is enabled.
 
         If ``deploy`` is disabled,
@@ -29959,7 +30000,7 @@ class StepFunctionsRestApiProps(RestApiProps):
         :default: - Based on defaults of ``StageOptions``.
         '''
         result = self._values.get("deploy_options")
-        return typing.cast(typing.Optional[StageOptions], result)
+        return typing.cast(typing.Optional["StageOptions"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -29985,16 +30026,16 @@ class StepFunctionsRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def domain_name(self) -> typing.Optional[DomainNameOptions]:
+    def domain_name(self) -> typing.Optional["DomainNameOptions"]:
         '''Configure a custom domain name and map it to this API.
 
         :default: - no domain name is defined, use ``addDomainName`` or directly define a ``DomainName``.
         '''
         result = self._values.get("domain_name")
-        return typing.cast(typing.Optional[DomainNameOptions], result)
+        return typing.cast(typing.Optional["DomainNameOptions"], result)
 
     @builtins.property
-    def endpoint_configuration(self) -> typing.Optional[EndpointConfiguration]:
+    def endpoint_configuration(self) -> typing.Optional["EndpointConfiguration"]:
         '''The EndpointConfiguration property type specifies the endpoint types of a REST API.
 
         :default: EndpointType.EDGE
@@ -30002,7 +30043,7 @@ class StepFunctionsRestApiProps(RestApiProps):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-restapi-endpointconfiguration.html
         '''
         result = self._values.get("endpoint_configuration")
-        return typing.cast(typing.Optional[EndpointConfiguration], result)
+        return typing.cast(typing.Optional["EndpointConfiguration"], result)
 
     @builtins.property
     def endpoint_export_name(self) -> typing.Optional[builtins.str]:
@@ -30014,7 +30055,7 @@ class StepFunctionsRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def endpoint_types(self) -> typing.Optional[typing.List[EndpointType]]:
+    def endpoint_types(self) -> typing.Optional[typing.List["EndpointType"]]:
         '''A list of the endpoint types of the API.
 
         Use this property when creating
@@ -30023,7 +30064,7 @@ class StepFunctionsRestApiProps(RestApiProps):
         :default: EndpointType.EDGE
         '''
         result = self._values.get("endpoint_types")
-        return typing.cast(typing.Optional[typing.List[EndpointType]], result)
+        return typing.cast(typing.Optional[typing.List["EndpointType"]], result)
 
     @builtins.property
     def fail_on_warnings(self) -> typing.Optional[builtins.bool]:
@@ -30046,13 +30087,13 @@ class StepFunctionsRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''A policy document that contains the permissions for this RestApi.
 
         :default: - No policy.
         '''
         result = self._values.get("policy")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
     def rest_api_name(self) -> typing.Optional[builtins.str]:
@@ -30077,13 +30118,13 @@ class StepFunctionsRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def api_key_source_type(self) -> typing.Optional[ApiKeySourceType]:
+    def api_key_source_type(self) -> typing.Optional["ApiKeySourceType"]:
         '''The source of the API key for metering requests according to a usage plan.
 
         :default: - Metering is disabled.
         '''
         result = self._values.get("api_key_source_type")
-        return typing.cast(typing.Optional[ApiKeySourceType], result)
+        return typing.cast(typing.Optional["ApiKeySourceType"], result)
 
     @builtins.property
     def binary_media_types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -30095,16 +30136,16 @@ class StepFunctionsRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def clone_from(self) -> typing.Optional[IRestApi]:
+    def clone_from(self) -> typing.Optional["IRestApi"]:
         '''The ID of the API Gateway RestApi resource that you want to clone.
 
         :default: - None.
         '''
         result = self._values.get("clone_from")
-        return typing.cast(typing.Optional[IRestApi], result)
+        return typing.cast(typing.Optional["IRestApi"], result)
 
     @builtins.property
-    def min_compression_size(self) -> typing.Optional[_Size_7b441c34]:
+    def min_compression_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''A Size(in bytes, kibibytes, mebibytes etc) that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (when undefined) on an API.
 
         When compression is enabled, compression or
@@ -30115,7 +30156,7 @@ class StepFunctionsRestApiProps(RestApiProps):
         :default: - Compression is disabled.
         '''
         result = self._values.get("min_compression_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def minimum_compression_size(self) -> typing.Optional[jsii.Number]:
@@ -30136,7 +30177,7 @@ class StepFunctionsRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def state_machine(self) -> _IStateMachine_73e8d2b0:
+    def state_machine(self) -> "_IStateMachine_73e8d2b0":
         '''The default State Machine that handles all requests from this API.
 
         This stateMachine will be used as a the default integration for all methods in
@@ -30144,7 +30185,7 @@ class StepFunctionsRestApiProps(RestApiProps):
         '''
         result = self._values.get("state_machine")
         assert result is not None, "Required property 'state_machine' is missing"
-        return typing.cast(_IStateMachine_73e8d2b0, result)
+        return typing.cast("_IStateMachine_73e8d2b0", result)
 
     @builtins.property
     def authorizer(self) -> typing.Optional[builtins.bool]:
@@ -30220,7 +30261,7 @@ class StepFunctionsRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def request_context(self) -> typing.Optional[RequestContext]:
+    def request_context(self) -> typing.Optional["RequestContext"]:
         '''Which details of the incoming request must be passed onto the underlying state machine, such as, account id, user identity, request id, etc.
 
         The execution input will include a new key ``requestContext``:
@@ -30235,16 +30276,16 @@ class StepFunctionsRestApiProps(RestApiProps):
         :default: - all parameters within request context will be set as false
         '''
         result = self._values.get("request_context")
-        return typing.cast(typing.Optional[RequestContext], result)
+        return typing.cast(typing.Optional["RequestContext"], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An IAM role that API Gateway will assume to start the execution of the state machine.
 
         :default: - a new role is created
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def use_default_method_responses(self) -> typing.Optional[builtins.bool]:
@@ -30358,8 +30399,8 @@ class ThrottlingPerMethod:
     def __init__(
         self,
         *,
-        method: Method,
-        throttle: typing.Union[ThrottleSettings, typing.Dict[builtins.str, typing.Any]],
+        method: "Method",
+        throttle: typing.Union["ThrottleSettings", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''Represents per-method throttling for a resource.
 
@@ -30396,24 +30437,24 @@ class ThrottlingPerMethod:
         }
 
     @builtins.property
-    def method(self) -> Method:
+    def method(self) -> "Method":
         '''[disable-awslint:ref-via-interface] The method for which you specify the throttling settings.
 
         :default: none
         '''
         result = self._values.get("method")
         assert result is not None, "Required property 'method' is missing"
-        return typing.cast(Method, result)
+        return typing.cast("Method", result)
 
     @builtins.property
-    def throttle(self) -> ThrottleSettings:
+    def throttle(self) -> "ThrottleSettings":
         '''Specifies the overall request rate (average requests per second) and burst capacity.
 
         :default: none
         '''
         result = self._values.get("throttle")
         assert result is not None, "Required property 'throttle' is missing"
-        return typing.cast(ThrottleSettings, result)
+        return typing.cast("ThrottleSettings", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -30443,10 +30484,10 @@ class TokenAuthorizerProps(LambdaAuthorizerProps):
     def __init__(
         self,
         *,
-        handler: _IFunction_6adb0ab8,
-        assume_role: typing.Optional[_IRole_235f5d8e] = None,
+        handler: "_IFunction_6adb0ab8",
+        assume_role: typing.Optional["_IRole_235f5d8e"] = None,
         authorizer_name: typing.Optional[builtins.str] = None,
-        results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         identity_source: typing.Optional[builtins.str] = None,
         validation_regex: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -30498,7 +30539,7 @@ class TokenAuthorizerProps(LambdaAuthorizerProps):
             self._values["validation_regex"] = validation_regex
 
     @builtins.property
-    def handler(self) -> _IFunction_6adb0ab8:
+    def handler(self) -> "_IFunction_6adb0ab8":
         '''The handler for the authorizer lambda function.
 
         The handler must follow a very specific protocol on the input it receives
@@ -30508,10 +30549,10 @@ class TokenAuthorizerProps(LambdaAuthorizerProps):
         '''
         result = self._values.get("handler")
         assert result is not None, "Required property 'handler' is missing"
-        return typing.cast(_IFunction_6adb0ab8, result)
+        return typing.cast("_IFunction_6adb0ab8", result)
 
     @builtins.property
-    def assume_role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def assume_role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''An optional IAM role for APIGateway to assume before calling the Lambda-based authorizer.
 
         The IAM role must be
@@ -30520,7 +30561,7 @@ class TokenAuthorizerProps(LambdaAuthorizerProps):
         :default: - A resource policy is added to the Lambda function allowing apigateway.amazonaws.com to invoke the function.
         '''
         result = self._values.get("assume_role")
-        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
     def authorizer_name(self) -> typing.Optional[builtins.str]:
@@ -30534,7 +30575,7 @@ class TokenAuthorizerProps(LambdaAuthorizerProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def results_cache_ttl(self) -> typing.Optional[_Duration_4839e8c3]:
+    def results_cache_ttl(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''How long APIGateway should cache the results.
 
         Max 1 hour.
@@ -30543,7 +30584,7 @@ class TokenAuthorizerProps(LambdaAuthorizerProps):
         :default: - Duration.minutes(5)
         '''
         result = self._values.get("results_cache_ttl")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def identity_source(self) -> typing.Optional[builtins.str]:
@@ -30617,14 +30658,14 @@ class UsagePlan(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         api_stages: typing.Optional[typing.Sequence[typing.Union["UsagePlanPerApiStage", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        quota: typing.Optional[typing.Union[QuotaSettings, typing.Dict[builtins.str, typing.Any]]] = None,
-        throttle: typing.Optional[typing.Union[ThrottleSettings, typing.Dict[builtins.str, typing.Any]]] = None,
+        quota: typing.Optional[typing.Union["QuotaSettings", typing.Dict[builtins.str, typing.Any]]] = None,
+        throttle: typing.Optional[typing.Union["ThrottleSettings", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -30653,10 +30694,10 @@ class UsagePlan(
     @builtins.classmethod
     def from_usage_plan_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         usage_plan_id: builtins.str,
-    ) -> IUsagePlan:
+    ) -> "IUsagePlan":
         '''Import an externally defined usage plan using its ARN.
 
         :param scope: the construct that will "own" the imported usage plan.
@@ -30668,12 +30709,12 @@ class UsagePlan(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument usage_plan_id", value=usage_plan_id, expected_type=type_hints["usage_plan_id"])
-        return typing.cast(IUsagePlan, jsii.sinvoke(cls, "fromUsagePlanId", [scope, id, usage_plan_id]))
+        return typing.cast("IUsagePlan", jsii.sinvoke(cls, "fromUsagePlanId", [scope, id, usage_plan_id]))
 
     @jsii.member(jsii_name="addApiKey")
     def add_api_key(
         self,
-        api_key: _IApiKeyRef_6e16b46a,
+        api_key: "_IApiKeyRef_6e16b46a",
         *,
         override_logical_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -30693,9 +30734,9 @@ class UsagePlan(
     def add_api_stage(
         self,
         *,
-        api: typing.Optional[IRestApi] = None,
+        api: typing.Optional["IRestApi"] = None,
         stage: typing.Optional["Stage"] = None,
-        throttle: typing.Optional[typing.Sequence[typing.Union[ThrottlingPerMethod, typing.Dict[builtins.str, typing.Any]]]] = None,
+        throttle: typing.Optional[typing.Sequence[typing.Union["ThrottlingPerMethod", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Adds an apiStage.
 
@@ -30724,9 +30765,9 @@ class UsagePlan(
 
     @builtins.property
     @jsii.member(jsii_name="usagePlanRef")
-    def usage_plan_ref(self) -> _UsagePlanReference_3d3ec4d2:
+    def usage_plan_ref(self) -> "_UsagePlanReference_3d3ec4d2":
         '''A reference to a UsagePlan resource.'''
-        return typing.cast(_UsagePlanReference_3d3ec4d2, jsii.get(self, "usagePlanRef"))
+        return typing.cast("_UsagePlanReference_3d3ec4d2", jsii.get(self, "usagePlanRef"))
 
 
 @jsii.data_type(
@@ -30738,9 +30779,9 @@ class UsagePlanPerApiStage:
     def __init__(
         self,
         *,
-        api: typing.Optional[IRestApi] = None,
+        api: typing.Optional["IRestApi"] = None,
         stage: typing.Optional["Stage"] = None,
-        throttle: typing.Optional[typing.Sequence[typing.Union[ThrottlingPerMethod, typing.Dict[builtins.str, typing.Any]]]] = None,
+        throttle: typing.Optional[typing.Sequence[typing.Union["ThrottlingPerMethod", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Represents the API stages that a usage plan applies to.
 
@@ -30783,12 +30824,12 @@ class UsagePlanPerApiStage:
             self._values["throttle"] = throttle
 
     @builtins.property
-    def api(self) -> typing.Optional[IRestApi]:
+    def api(self) -> typing.Optional["IRestApi"]:
         '''
         :default: none
         '''
         result = self._values.get("api")
-        return typing.cast(typing.Optional[IRestApi], result)
+        return typing.cast(typing.Optional["IRestApi"], result)
 
     @builtins.property
     def stage(self) -> typing.Optional["Stage"]:
@@ -30800,12 +30841,12 @@ class UsagePlanPerApiStage:
         return typing.cast(typing.Optional["Stage"], result)
 
     @builtins.property
-    def throttle(self) -> typing.Optional[typing.List[ThrottlingPerMethod]]:
+    def throttle(self) -> typing.Optional[typing.List["ThrottlingPerMethod"]]:
         '''
         :default: none
         '''
         result = self._values.get("throttle")
-        return typing.cast(typing.Optional[typing.List[ThrottlingPerMethod]], result)
+        return typing.cast(typing.Optional[typing.List["ThrottlingPerMethod"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -30834,11 +30875,11 @@ class UsagePlanProps:
     def __init__(
         self,
         *,
-        api_stages: typing.Optional[typing.Sequence[typing.Union[UsagePlanPerApiStage, typing.Dict[builtins.str, typing.Any]]]] = None,
+        api_stages: typing.Optional[typing.Sequence[typing.Union["UsagePlanPerApiStage", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        quota: typing.Optional[typing.Union[QuotaSettings, typing.Dict[builtins.str, typing.Any]]] = None,
-        throttle: typing.Optional[typing.Union[ThrottleSettings, typing.Dict[builtins.str, typing.Any]]] = None,
+        quota: typing.Optional[typing.Union["QuotaSettings", typing.Dict[builtins.str, typing.Any]]] = None,
+        throttle: typing.Optional[typing.Union["ThrottleSettings", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param api_stages: API Stages to be associated with the usage plan. Default: none
@@ -30895,13 +30936,13 @@ class UsagePlanProps:
             self._values["throttle"] = throttle
 
     @builtins.property
-    def api_stages(self) -> typing.Optional[typing.List[UsagePlanPerApiStage]]:
+    def api_stages(self) -> typing.Optional[typing.List["UsagePlanPerApiStage"]]:
         '''API Stages to be associated with the usage plan.
 
         :default: none
         '''
         result = self._values.get("api_stages")
-        return typing.cast(typing.Optional[typing.List[UsagePlanPerApiStage]], result)
+        return typing.cast(typing.Optional[typing.List["UsagePlanPerApiStage"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -30922,22 +30963,22 @@ class UsagePlanProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def quota(self) -> typing.Optional[QuotaSettings]:
+    def quota(self) -> typing.Optional["QuotaSettings"]:
         '''Number of requests clients can make in a given time period.
 
         :default: none
         '''
         result = self._values.get("quota")
-        return typing.cast(typing.Optional[QuotaSettings], result)
+        return typing.cast(typing.Optional["QuotaSettings"], result)
 
     @builtins.property
-    def throttle(self) -> typing.Optional[ThrottleSettings]:
+    def throttle(self) -> typing.Optional["ThrottleSettings"]:
         '''Overall throttle settings for the API.
 
         :default: none
         '''
         result = self._values.get("throttle")
-        return typing.cast(typing.Optional[ThrottleSettings], result)
+        return typing.cast(typing.Optional["ThrottleSettings"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -30986,11 +31027,11 @@ class VpcLink(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
-        targets: typing.Optional[typing.Sequence[_INetworkLoadBalancer_96e17101]] = None,
+        targets: typing.Optional[typing.Sequence["_INetworkLoadBalancer_96e17101"]] = None,
         vpc_link_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -31014,10 +31055,10 @@ class VpcLink(
     @builtins.classmethod
     def from_vpc_link_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         vpc_link_id: builtins.str,
-    ) -> IVpcLink:
+    ) -> "IVpcLink":
         '''Import a VPC Link by its Id.
 
         :param scope: -
@@ -31029,10 +31070,10 @@ class VpcLink(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument vpc_link_id", value=vpc_link_id, expected_type=type_hints["vpc_link_id"])
-        return typing.cast(IVpcLink, jsii.sinvoke(cls, "fromVpcLinkId", [scope, id, vpc_link_id]))
+        return typing.cast("IVpcLink", jsii.sinvoke(cls, "fromVpcLinkId", [scope, id, vpc_link_id]))
 
     @jsii.member(jsii_name="addTargets")
-    def add_targets(self, *targets: _INetworkLoadBalancer_96e17101) -> None:
+    def add_targets(self, *targets: "_INetworkLoadBalancer_96e17101") -> None:
         '''
         :param targets: -
         '''
@@ -31058,9 +31099,9 @@ class VpcLink(
 
     @builtins.property
     @jsii.member(jsii_name="vpcLinkRef")
-    def vpc_link_ref(self) -> _VpcLinkReference_cccde188:
+    def vpc_link_ref(self) -> "_VpcLinkReference_cccde188":
         '''A reference to a VpcLink resource.'''
-        return typing.cast(_VpcLinkReference_cccde188, jsii.get(self, "vpcLinkRef"))
+        return typing.cast("_VpcLinkReference_cccde188", jsii.get(self, "vpcLinkRef"))
 
 
 @jsii.data_type(
@@ -31077,7 +31118,7 @@ class VpcLinkProps:
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        targets: typing.Optional[typing.Sequence[_INetworkLoadBalancer_96e17101]] = None,
+        targets: typing.Optional[typing.Sequence["_INetworkLoadBalancer_96e17101"]] = None,
         vpc_link_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for a VpcLink.
@@ -31133,7 +31174,7 @@ class VpcLinkProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def targets(self) -> typing.Optional[typing.List[_INetworkLoadBalancer_96e17101]]:
+    def targets(self) -> typing.Optional[typing.List["_INetworkLoadBalancer_96e17101"]]:
         '''The network load balancers of the VPC targeted by the VPC link.
 
         The network load balancers must be owned by the same AWS account of the API owner.
@@ -31141,7 +31182,7 @@ class VpcLinkProps:
         :default: - no targets. Use ``addTargets`` to add targets
         '''
         result = self._values.get("targets")
-        return typing.cast(typing.Optional[typing.List[_INetworkLoadBalancer_96e17101]], result)
+        return typing.cast(typing.Optional[typing.List["_INetworkLoadBalancer_96e17101"]], result)
 
     @builtins.property
     def vpc_link_name(self) -> typing.Optional[builtins.str]:
@@ -31187,20 +31228,20 @@ class ApiKey(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         customer_id: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[builtins.bool] = None,
         generate_distinct_id: typing.Optional[builtins.bool] = None,
-        resources: typing.Optional[typing.Sequence[IRestApi]] = None,
-        stages: typing.Optional[typing.Sequence[IStage]] = None,
+        resources: typing.Optional[typing.Sequence["IRestApi"]] = None,
+        stages: typing.Optional[typing.Sequence["IStage"]] = None,
         api_key_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         value: typing.Optional[builtins.str] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -31241,10 +31282,10 @@ class ApiKey(
     @builtins.classmethod
     def from_api_key_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         api_key_id: builtins.str,
-    ) -> IApiKey:
+    ) -> "IApiKey":
         '''Import an ApiKey by its Id.
 
         :param scope: -
@@ -31256,10 +31297,10 @@ class ApiKey(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument api_key_id", value=api_key_id, expected_type=type_hints["api_key_id"])
-        return typing.cast(IApiKey, jsii.sinvoke(cls, "fromApiKeyId", [scope, id, api_key_id]))
+        return typing.cast("IApiKey", jsii.sinvoke(cls, "fromApiKeyId", [scope, id, api_key_id]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits the IAM principal all read operations through this key.
 
         :param grantee: The principal to grant access to.
@@ -31267,10 +31308,10 @@ class ApiKey(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__043a5d262ced7507cdada0f44360dfe7f4371c5d28756372225cb79c8c8c769d)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.member(jsii_name="grantReadWrite")
-    def grant_read_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits the IAM principal all read and write operations through this key.
 
         :param grantee: The principal to grant access to.
@@ -31278,10 +31319,10 @@ class ApiKey(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7e226a9f065098a5e2614303adcf4f2a99695979bc77df4a82ec815ddb953058)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantReadWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantReadWrite", [grantee]))
 
     @jsii.member(jsii_name="grantWrite")
-    def grant_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Permits the IAM principal all write operations through this key.
 
         :param grantee: The principal to grant access to.
@@ -31289,7 +31330,7 @@ class ApiKey(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__208197c4bdb65d9de7e77781bb300689a0372537c67bea69b947ce2e66fc4db3)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantWrite", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantWrite", [grantee]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -31299,15 +31340,15 @@ class ApiKey(
 
     @builtins.property
     @jsii.member(jsii_name="apiKeyRef")
-    def api_key_ref(self) -> _ApiKeyReference_6382fd3a:
+    def api_key_ref(self) -> "_ApiKeyReference_6382fd3a":
         '''A reference to a ApiKey resource.'''
-        return typing.cast(_ApiKeyReference_6382fd3a, jsii.get(self, "apiKeyRef"))
+        return typing.cast("_ApiKeyReference_6382fd3a", jsii.get(self, "apiKeyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="grants")
-    def grants(self) -> ApiKeyGrants:
+    def grants(self) -> "ApiKeyGrants":
         '''Collection of grant methods for an ApiKey.'''
-        return typing.cast(ApiKeyGrants, jsii.get(self, "grants"))
+        return typing.cast("ApiKeyGrants", jsii.get(self, "grants"))
 
     @builtins.property
     @jsii.member(jsii_name="keyArn")
@@ -31338,9 +31379,9 @@ class ApiKeyOptions(ResourceOptions):
     def __init__(
         self,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         api_key_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         value: typing.Optional[builtins.str] = None,
@@ -31392,7 +31433,7 @@ class ApiKeyOptions(ResourceOptions):
             self._values["value"] = value
 
     @builtins.property
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Adds a CORS preflight OPTIONS method to this resource and all child resources.
 
         You can add CORS at the resource-level using ``addCorsPreflight``.
@@ -31400,25 +31441,25 @@ class ApiKeyOptions(ResourceOptions):
         :default: - CORS is disabled
         '''
         result = self._values.get("default_cors_preflight_options")
-        return typing.cast(typing.Optional[CorsOptions], result)
+        return typing.cast(typing.Optional["CorsOptions"], result)
 
     @builtins.property
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_integration")
-        return typing.cast(typing.Optional[Integration], result)
+        return typing.cast(typing.Optional["Integration"], result)
 
     @builtins.property
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_method_options")
-        return typing.cast(typing.Optional[MethodOptions], result)
+        return typing.cast(typing.Optional["MethodOptions"], result)
 
     @builtins.property
     def api_key_name(self) -> typing.Optional[builtins.str]:
@@ -31490,17 +31531,17 @@ class ApiKeyProps(ApiKeyOptions):
     def __init__(
         self,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         api_key_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         value: typing.Optional[builtins.str] = None,
         customer_id: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[builtins.bool] = None,
         generate_distinct_id: typing.Optional[builtins.bool] = None,
-        resources: typing.Optional[typing.Sequence[IRestApi]] = None,
-        stages: typing.Optional[typing.Sequence[IStage]] = None,
+        resources: typing.Optional[typing.Sequence["IRestApi"]] = None,
+        stages: typing.Optional[typing.Sequence["IStage"]] = None,
     ) -> None:
         '''ApiKey Properties.
 
@@ -31567,7 +31608,7 @@ class ApiKeyProps(ApiKeyOptions):
             self._values["stages"] = stages
 
     @builtins.property
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Adds a CORS preflight OPTIONS method to this resource and all child resources.
 
         You can add CORS at the resource-level using ``addCorsPreflight``.
@@ -31575,25 +31616,25 @@ class ApiKeyProps(ApiKeyOptions):
         :default: - CORS is disabled
         '''
         result = self._values.get("default_cors_preflight_options")
-        return typing.cast(typing.Optional[CorsOptions], result)
+        return typing.cast(typing.Optional["CorsOptions"], result)
 
     @builtins.property
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_integration")
-        return typing.cast(typing.Optional[Integration], result)
+        return typing.cast(typing.Optional["Integration"], result)
 
     @builtins.property
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_method_options")
-        return typing.cast(typing.Optional[MethodOptions], result)
+        return typing.cast(typing.Optional["MethodOptions"], result)
 
     @builtins.property
     def api_key_name(self) -> typing.Optional[builtins.str]:
@@ -31666,7 +31707,7 @@ class ApiKeyProps(ApiKeyOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def resources(self) -> typing.Optional[typing.List[IRestApi]]:
+    def resources(self) -> typing.Optional[typing.List["IRestApi"]]:
         '''(deprecated) A list of resources this api key is associated with.
 
         :default: none
@@ -31676,16 +31717,16 @@ class ApiKeyProps(ApiKeyOptions):
         :stability: deprecated
         '''
         result = self._values.get("resources")
-        return typing.cast(typing.Optional[typing.List[IRestApi]], result)
+        return typing.cast(typing.Optional[typing.List["IRestApi"]], result)
 
     @builtins.property
-    def stages(self) -> typing.Optional[typing.List[IStage]]:
+    def stages(self) -> typing.Optional[typing.List["IStage"]]:
         '''A list of Stages this api key is associated with.
 
         :default: - the api key is not associated with any stages
         '''
         result = self._values.get("stages")
-        return typing.cast(typing.Optional[typing.List[IStage]], result)
+        return typing.cast(typing.Optional[typing.List["IStage"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -31709,7 +31750,7 @@ class Authorizer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -31759,9 +31800,9 @@ class Authorizer(
 
     @builtins.property
     @jsii.member(jsii_name="authorizationType")
-    def authorization_type(self) -> typing.Optional[AuthorizationType]:
+    def authorization_type(self) -> typing.Optional["AuthorizationType"]:
         '''The authorization type of this authorizer.'''
-        return typing.cast(typing.Optional[AuthorizationType], jsii.get(self, "authorizationType"))
+        return typing.cast(typing.Optional["AuthorizationType"], jsii.get(self, "authorizationType"))
 
 
 class _AuthorizerProxy(
@@ -31808,7 +31849,7 @@ class AwsIntegration(
         action: typing.Optional[builtins.str] = None,
         action_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         integration_http_method: typing.Optional[builtins.str] = None,
-        options: typing.Optional[typing.Union[IntegrationOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        options: typing.Optional[typing.Union["IntegrationOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         path: typing.Optional[builtins.str] = None,
         proxy: typing.Optional[builtins.bool] = None,
         region: typing.Optional[builtins.str] = None,
@@ -31840,7 +31881,7 @@ class AwsIntegration(
         jsii.create(self.__class__, self, [props])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, method: Method) -> IntegrationConfig:
+    def bind(self, method: "Method") -> "IntegrationConfig":
         '''Can be overridden by subclasses to allow the integration to interact with the method being integrated, access the REST API object, method ARNs, etc.
 
         :param method: -
@@ -31848,7 +31889,7 @@ class AwsIntegration(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d94da0bb5d98c022dc421a8cdf343d3e1199c0fe57e80327f01187317d0921e4)
             check_type(argname="argument method", value=method, expected_type=type_hints["method"])
-        return typing.cast(IntegrationConfig, jsii.invoke(self, "bind", [method]))
+        return typing.cast("IntegrationConfig", jsii.invoke(self, "bind", [method]))
 
 
 @jsii.implements(IAuthorizer)
@@ -31878,13 +31919,13 @@ class CognitoUserPoolsAuthorizer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        cognito_user_pools: typing.Sequence[_IUserPool_1f1029e2],
+        cognito_user_pools: typing.Sequence["_IUserPool_1f1029e2"],
         authorizer_name: typing.Optional[builtins.str] = None,
         identity_source: typing.Optional[builtins.str] = None,
-        results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -31933,9 +31974,9 @@ class CognitoUserPoolsAuthorizer(
 
     @builtins.property
     @jsii.member(jsii_name="authorizationType")
-    def authorization_type(self) -> typing.Optional[AuthorizationType]:
+    def authorization_type(self) -> typing.Optional["AuthorizationType"]:
         '''The authorization type of this authorizer.'''
-        return typing.cast(typing.Optional[AuthorizationType], jsii.get(self, "authorizationType"))
+        return typing.cast(typing.Optional["AuthorizationType"], jsii.get(self, "authorizationType"))
 
 
 @jsii.implements(IDomainName)
@@ -31966,16 +32007,16 @@ class DomainName(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        mapping: typing.Optional[IRestApi] = None,
-        certificate: _ICertificate_c194c70b,
+        mapping: typing.Optional["IRestApi"] = None,
+        certificate: "_ICertificate_c194c70b",
         domain_name: builtins.str,
         base_path: typing.Optional[builtins.str] = None,
-        endpoint_type: typing.Optional[EndpointType] = None,
-        mtls: typing.Optional[typing.Union[MTLSConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-        security_policy: typing.Optional[SecurityPolicy] = None,
+        endpoint_type: typing.Optional["EndpointType"] = None,
+        mtls: typing.Optional[typing.Union["MTLSConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        security_policy: typing.Optional["SecurityPolicy"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -32008,13 +32049,13 @@ class DomainName(
     @builtins.classmethod
     def from_domain_name_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         domain_name: builtins.str,
         domain_name_alias_hosted_zone_id: builtins.str,
         domain_name_alias_target: builtins.str,
-    ) -> IDomainName:
+    ) -> "IDomainName":
         '''Imports an existing domain name.
 
         :param scope: -
@@ -32033,12 +32074,12 @@ class DomainName(
             domain_name_alias_target=domain_name_alias_target,
         )
 
-        return typing.cast(IDomainName, jsii.sinvoke(cls, "fromDomainNameAttributes", [scope, id, attrs]))
+        return typing.cast("IDomainName", jsii.sinvoke(cls, "fromDomainNameAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addApiMapping")
     def add_api_mapping(
         self,
-        target_stage: _IStageRef_b829c330,
+        target_stage: "_IStageRef_b829c330",
         *,
         base_path: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -32063,12 +32104,12 @@ class DomainName(
     @jsii.member(jsii_name="addBasePathMapping")
     def add_base_path_mapping(
         self,
-        target_api: _IRestApiRef_72dcbda0,
+        target_api: "_IRestApiRef_72dcbda0",
         *,
         attach_to_stage: typing.Optional[builtins.bool] = None,
         base_path: typing.Optional[builtins.str] = None,
         stage: typing.Optional["Stage"] = None,
-    ) -> BasePathMapping:
+    ) -> "BasePathMapping":
         '''Maps this domain to an API endpoint.
 
         This uses the BasePathMapping from ApiGateway v1 which does not support multi-level paths.
@@ -32087,7 +32128,7 @@ class DomainName(
             attach_to_stage=attach_to_stage, base_path=base_path, stage=stage
         )
 
-        return typing.cast(BasePathMapping, jsii.invoke(self, "addBasePathMapping", [target_api, options]))
+        return typing.cast("BasePathMapping", jsii.invoke(self, "addBasePathMapping", [target_api, options]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -32115,9 +32156,9 @@ class DomainName(
 
     @builtins.property
     @jsii.member(jsii_name="domainNameRef")
-    def domain_name_ref(self) -> _DomainNameReference_f4138423:
+    def domain_name_ref(self) -> "_DomainNameReference_f4138423":
         '''A reference to a DomainName resource.'''
-        return typing.cast(_DomainNameReference_f4138423, jsii.get(self, "domainNameRef"))
+        return typing.cast("_DomainNameReference_f4138423", jsii.get(self, "domainNameRef"))
 
 
 @jsii.implements(IAccessLogDestination)
@@ -32152,7 +32193,7 @@ class FirehoseLogDestination(
         )
     '''
 
-    def __init__(self, stream: _CfnDeliveryStream_8f3b1735) -> None:
+    def __init__(self, stream: "_CfnDeliveryStream_8f3b1735") -> None:
         '''
         :param stream: -
         '''
@@ -32162,7 +32203,7 @@ class FirehoseLogDestination(
         jsii.create(self.__class__, self, [stream])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, stage: _IStageRef_b829c330) -> AccessLogDestinationConfig:
+    def bind(self, stage: "_IStageRef_b829c330") -> "AccessLogDestinationConfig":
         '''Binds this destination to the Firehose delivery stream.
 
         :param stage: -
@@ -32170,7 +32211,7 @@ class FirehoseLogDestination(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__179d80b091f382f3efa388133eb4dc48f8c0278a36829a78d55f8c9c52eccd07)
             check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
-        return typing.cast(AccessLogDestinationConfig, jsii.invoke(self, "bind", [stage]))
+        return typing.cast("AccessLogDestinationConfig", jsii.invoke(self, "bind", [stage]))
 
 
 @jsii.implements(IGatewayResponse)
@@ -32210,11 +32251,11 @@ class GatewayResponse(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rest_api: IRestApi,
-        type: ResponseType,
+        rest_api: "IRestApi",
+        type: "ResponseType",
         response_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         status_code: typing.Optional[builtins.str] = None,
         templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -32246,10 +32287,10 @@ class GatewayResponse(
     @builtins.classmethod
     def from_gateway_response_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         gateway_response_id: builtins.str,
-    ) -> IGatewayResponse:
+    ) -> "IGatewayResponse":
         '''Reference an existing GatewayResponse given a gateway response ID.
 
         :param scope: -
@@ -32261,7 +32302,7 @@ class GatewayResponse(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument gateway_response_id", value=gateway_response_id, expected_type=type_hints["gateway_response_id"])
-        return typing.cast(IGatewayResponse, jsii.sinvoke(cls, "fromGatewayResponseId", [scope, id, gateway_response_id]))
+        return typing.cast("IGatewayResponse", jsii.sinvoke(cls, "fromGatewayResponseId", [scope, id, gateway_response_id]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -32271,9 +32312,9 @@ class GatewayResponse(
 
     @builtins.property
     @jsii.member(jsii_name="gatewayResponseRef")
-    def gateway_response_ref(self) -> _GatewayResponseReference_0f1f239c:
+    def gateway_response_ref(self) -> "_GatewayResponseReference_0f1f239c":
         '''A reference to a GatewayResponse resource.'''
-        return typing.cast(_GatewayResponseReference_0f1f239c, jsii.get(self, "gatewayResponseRef"))
+        return typing.cast("_GatewayResponseReference_0f1f239c", jsii.get(self, "gatewayResponseRef"))
 
 
 class HttpIntegration(
@@ -32315,7 +32356,7 @@ class HttpIntegration(
         url: builtins.str,
         *,
         http_method: typing.Optional[builtins.str] = None,
-        options: typing.Optional[typing.Union[IntegrationOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        options: typing.Optional[typing.Union["IntegrationOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         proxy: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''
@@ -32351,24 +32392,24 @@ class LambdaIntegration(
 
     def __init__(
         self,
-        handler: _IFunction_6adb0ab8,
+        handler: "_IFunction_6adb0ab8",
         *,
         allow_test_invoke: typing.Optional[builtins.bool] = None,
         proxy: typing.Optional[builtins.bool] = None,
         scope_permission_to_method: typing.Optional[builtins.bool] = None,
         cache_key_parameters: typing.Optional[typing.Sequence[builtins.str]] = None,
         cache_namespace: typing.Optional[builtins.str] = None,
-        connection_type: typing.Optional[ConnectionType] = None,
-        content_handling: typing.Optional[ContentHandling] = None,
+        connection_type: typing.Optional["ConnectionType"] = None,
+        content_handling: typing.Optional["ContentHandling"] = None,
         credentials_passthrough: typing.Optional[builtins.bool] = None,
-        credentials_role: typing.Optional[_IRole_235f5d8e] = None,
-        integration_responses: typing.Optional[typing.Sequence[typing.Union[IntegrationResponse, typing.Dict[builtins.str, typing.Any]]]] = None,
-        passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
+        credentials_role: typing.Optional["_IRole_235f5d8e"] = None,
+        integration_responses: typing.Optional[typing.Sequence[typing.Union["IntegrationResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
+        passthrough_behavior: typing.Optional["PassthroughBehavior"] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        vpc_link: typing.Optional[IVpcLink] = None,
+        response_transfer_mode: typing.Optional["ResponseTransferMode"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        vpc_link: typing.Optional["IVpcLink"] = None,
     ) -> None:
         '''
         :param handler: -
@@ -32414,7 +32455,7 @@ class LambdaIntegration(
         jsii.create(self.__class__, self, [handler, options])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, method: Method) -> IntegrationConfig:
+    def bind(self, method: "Method") -> "IntegrationConfig":
         '''Can be overridden by subclasses to allow the integration to interact with the method being integrated, access the REST API object, method ARNs, etc.
 
         :param method: -
@@ -32422,7 +32463,7 @@ class LambdaIntegration(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6424ed2f5157f94ac198da36b72bd7d7d65aac51871cd09cbe72589b1b39b0b1)
             check_type(argname="argument method", value=method, expected_type=type_hints["method"])
-        return typing.cast(IntegrationConfig, jsii.invoke(self, "bind", [method]))
+        return typing.cast("IntegrationConfig", jsii.invoke(self, "bind", [method]))
 
 
 @jsii.data_type(
@@ -32461,31 +32502,31 @@ class LambdaRestApiProps(RestApiProps):
     def __init__(
         self,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_watch_role: typing.Optional[builtins.bool] = None,
-        cloud_watch_role_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        cloud_watch_role_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         deploy: typing.Optional[builtins.bool] = None,
-        deploy_options: typing.Optional[typing.Union[StageOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        deploy_options: typing.Optional[typing.Union["StageOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[builtins.bool] = None,
-        domain_name: typing.Optional[typing.Union[DomainNameOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        endpoint_configuration: typing.Optional[typing.Union[EndpointConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        domain_name: typing.Optional[typing.Union["DomainNameOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["EndpointConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         endpoint_export_name: typing.Optional[builtins.str] = None,
-        endpoint_types: typing.Optional[typing.Sequence[EndpointType]] = None,
+        endpoint_types: typing.Optional[typing.Sequence["EndpointType"]] = None,
         fail_on_warnings: typing.Optional[builtins.bool] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        policy: typing.Optional[_PolicyDocument_3ac34393] = None,
+        policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
         rest_api_name: typing.Optional[builtins.str] = None,
         retain_deployments: typing.Optional[builtins.bool] = None,
-        api_key_source_type: typing.Optional[ApiKeySourceType] = None,
+        api_key_source_type: typing.Optional["ApiKeySourceType"] = None,
         binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-        clone_from: typing.Optional[IRestApi] = None,
-        min_compression_size: typing.Optional[_Size_7b441c34] = None,
+        clone_from: typing.Optional["IRestApi"] = None,
+        min_compression_size: typing.Optional["_Size_7b441c34"] = None,
         minimum_compression_size: typing.Optional[jsii.Number] = None,
-        handler: _IFunction_6adb0ab8,
-        integration_options: typing.Optional[typing.Union[LambdaIntegrationOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        handler: "_IFunction_6adb0ab8",
+        integration_options: typing.Optional[typing.Union["LambdaIntegrationOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         proxy: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''
@@ -32632,7 +32673,7 @@ class LambdaRestApiProps(RestApiProps):
             self._values["proxy"] = proxy
 
     @builtins.property
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Adds a CORS preflight OPTIONS method to this resource and all child resources.
 
         You can add CORS at the resource-level using ``addCorsPreflight``.
@@ -32640,25 +32681,25 @@ class LambdaRestApiProps(RestApiProps):
         :default: - CORS is disabled
         '''
         result = self._values.get("default_cors_preflight_options")
-        return typing.cast(typing.Optional[CorsOptions], result)
+        return typing.cast(typing.Optional["CorsOptions"], result)
 
     @builtins.property
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_integration")
-        return typing.cast(typing.Optional[Integration], result)
+        return typing.cast(typing.Optional["Integration"], result)
 
     @builtins.property
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_method_options")
-        return typing.cast(typing.Optional[MethodOptions], result)
+        return typing.cast(typing.Optional["MethodOptions"], result)
 
     @builtins.property
     def cloud_watch_role(self) -> typing.Optional[builtins.bool]:
@@ -32672,7 +32713,7 @@ class LambdaRestApiProps(RestApiProps):
     @builtins.property
     def cloud_watch_role_removal_policy(
         self,
-    ) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    ) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''The removal policy applied to the AWS CloudWatch role when this resource is removed from the application.
 
         Requires ``cloudWatchRole`` to be enabled.
@@ -32680,7 +32721,7 @@ class LambdaRestApiProps(RestApiProps):
         :default: - RemovalPolicy.RETAIN
         '''
         result = self._values.get("cloud_watch_role_removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
     def deploy(self) -> typing.Optional[builtins.bool]:
@@ -32707,7 +32748,7 @@ class LambdaRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def deploy_options(self) -> typing.Optional[StageOptions]:
+    def deploy_options(self) -> typing.Optional["StageOptions"]:
         '''Options for the API Gateway stage that will always point to the latest deployment when ``deploy`` is enabled.
 
         If ``deploy`` is disabled,
@@ -32716,7 +32757,7 @@ class LambdaRestApiProps(RestApiProps):
         :default: - Based on defaults of ``StageOptions``.
         '''
         result = self._values.get("deploy_options")
-        return typing.cast(typing.Optional[StageOptions], result)
+        return typing.cast(typing.Optional["StageOptions"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -32742,16 +32783,16 @@ class LambdaRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def domain_name(self) -> typing.Optional[DomainNameOptions]:
+    def domain_name(self) -> typing.Optional["DomainNameOptions"]:
         '''Configure a custom domain name and map it to this API.
 
         :default: - no domain name is defined, use ``addDomainName`` or directly define a ``DomainName``.
         '''
         result = self._values.get("domain_name")
-        return typing.cast(typing.Optional[DomainNameOptions], result)
+        return typing.cast(typing.Optional["DomainNameOptions"], result)
 
     @builtins.property
-    def endpoint_configuration(self) -> typing.Optional[EndpointConfiguration]:
+    def endpoint_configuration(self) -> typing.Optional["EndpointConfiguration"]:
         '''The EndpointConfiguration property type specifies the endpoint types of a REST API.
 
         :default: EndpointType.EDGE
@@ -32759,7 +32800,7 @@ class LambdaRestApiProps(RestApiProps):
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-restapi-endpointconfiguration.html
         '''
         result = self._values.get("endpoint_configuration")
-        return typing.cast(typing.Optional[EndpointConfiguration], result)
+        return typing.cast(typing.Optional["EndpointConfiguration"], result)
 
     @builtins.property
     def endpoint_export_name(self) -> typing.Optional[builtins.str]:
@@ -32771,7 +32812,7 @@ class LambdaRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def endpoint_types(self) -> typing.Optional[typing.List[EndpointType]]:
+    def endpoint_types(self) -> typing.Optional[typing.List["EndpointType"]]:
         '''A list of the endpoint types of the API.
 
         Use this property when creating
@@ -32780,7 +32821,7 @@ class LambdaRestApiProps(RestApiProps):
         :default: EndpointType.EDGE
         '''
         result = self._values.get("endpoint_types")
-        return typing.cast(typing.Optional[typing.List[EndpointType]], result)
+        return typing.cast(typing.Optional[typing.List["EndpointType"]], result)
 
     @builtins.property
     def fail_on_warnings(self) -> typing.Optional[builtins.bool]:
@@ -32803,13 +32844,13 @@ class LambdaRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def policy(self) -> typing.Optional[_PolicyDocument_3ac34393]:
+    def policy(self) -> typing.Optional["_PolicyDocument_3ac34393"]:
         '''A policy document that contains the permissions for this RestApi.
 
         :default: - No policy.
         '''
         result = self._values.get("policy")
-        return typing.cast(typing.Optional[_PolicyDocument_3ac34393], result)
+        return typing.cast(typing.Optional["_PolicyDocument_3ac34393"], result)
 
     @builtins.property
     def rest_api_name(self) -> typing.Optional[builtins.str]:
@@ -32834,13 +32875,13 @@ class LambdaRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def api_key_source_type(self) -> typing.Optional[ApiKeySourceType]:
+    def api_key_source_type(self) -> typing.Optional["ApiKeySourceType"]:
         '''The source of the API key for metering requests according to a usage plan.
 
         :default: - Metering is disabled.
         '''
         result = self._values.get("api_key_source_type")
-        return typing.cast(typing.Optional[ApiKeySourceType], result)
+        return typing.cast(typing.Optional["ApiKeySourceType"], result)
 
     @builtins.property
     def binary_media_types(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -32852,16 +32893,16 @@ class LambdaRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def clone_from(self) -> typing.Optional[IRestApi]:
+    def clone_from(self) -> typing.Optional["IRestApi"]:
         '''The ID of the API Gateway RestApi resource that you want to clone.
 
         :default: - None.
         '''
         result = self._values.get("clone_from")
-        return typing.cast(typing.Optional[IRestApi], result)
+        return typing.cast(typing.Optional["IRestApi"], result)
 
     @builtins.property
-    def min_compression_size(self) -> typing.Optional[_Size_7b441c34]:
+    def min_compression_size(self) -> typing.Optional["_Size_7b441c34"]:
         '''A Size(in bytes, kibibytes, mebibytes etc) that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (when undefined) on an API.
 
         When compression is enabled, compression or
@@ -32872,7 +32913,7 @@ class LambdaRestApiProps(RestApiProps):
         :default: - Compression is disabled.
         '''
         result = self._values.get("min_compression_size")
-        return typing.cast(typing.Optional[_Size_7b441c34], result)
+        return typing.cast(typing.Optional["_Size_7b441c34"], result)
 
     @builtins.property
     def minimum_compression_size(self) -> typing.Optional[jsii.Number]:
@@ -32893,7 +32934,7 @@ class LambdaRestApiProps(RestApiProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def handler(self) -> _IFunction_6adb0ab8:
+    def handler(self) -> "_IFunction_6adb0ab8":
         '''The default Lambda function that handles all requests from this API.
 
         This handler will be used as a the default integration for all methods in
@@ -32901,16 +32942,16 @@ class LambdaRestApiProps(RestApiProps):
         '''
         result = self._values.get("handler")
         assert result is not None, "Required property 'handler' is missing"
-        return typing.cast(_IFunction_6adb0ab8, result)
+        return typing.cast("_IFunction_6adb0ab8", result)
 
     @builtins.property
-    def integration_options(self) -> typing.Optional[LambdaIntegrationOptions]:
+    def integration_options(self) -> typing.Optional["LambdaIntegrationOptions"]:
         '''Specific Lambda integration options.
 
         :default: see defaults defined in ``LambdaIntegrationOptions``.
         '''
         result = self._values.get("integration_options")
-        return typing.cast(typing.Optional[LambdaIntegrationOptions], result)
+        return typing.cast(typing.Optional["LambdaIntegrationOptions"], result)
 
     @builtins.property
     def proxy(self) -> typing.Optional[builtins.bool]:
@@ -32950,9 +32991,9 @@ class ProxyResourceOptions(ResourceOptions):
     def __init__(
         self,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         any_method: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''
@@ -32996,7 +33037,7 @@ class ProxyResourceOptions(ResourceOptions):
             self._values["any_method"] = any_method
 
     @builtins.property
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Adds a CORS preflight OPTIONS method to this resource and all child resources.
 
         You can add CORS at the resource-level using ``addCorsPreflight``.
@@ -33004,25 +33045,25 @@ class ProxyResourceOptions(ResourceOptions):
         :default: - CORS is disabled
         '''
         result = self._values.get("default_cors_preflight_options")
-        return typing.cast(typing.Optional[CorsOptions], result)
+        return typing.cast(typing.Optional["CorsOptions"], result)
 
     @builtins.property
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_integration")
-        return typing.cast(typing.Optional[Integration], result)
+        return typing.cast(typing.Optional["Integration"], result)
 
     @builtins.property
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_method_options")
-        return typing.cast(typing.Optional[MethodOptions], result)
+        return typing.cast(typing.Optional["MethodOptions"], result)
 
     @builtins.property
     def any_method(self) -> typing.Optional[builtins.bool]:
@@ -33063,11 +33104,11 @@ class ProxyResourceProps(ProxyResourceOptions):
     def __init__(
         self,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         any_method: typing.Optional[builtins.bool] = None,
-        parent: IResource,
+        parent: "IResource",
     ) -> None:
         '''
         :param default_cors_preflight_options: Adds a CORS preflight OPTIONS method to this resource and all child resources. You can add CORS at the resource-level using ``addCorsPreflight``. Default: - CORS is disabled
@@ -33165,7 +33206,7 @@ class ProxyResourceProps(ProxyResourceOptions):
             self._values["any_method"] = any_method
 
     @builtins.property
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Adds a CORS preflight OPTIONS method to this resource and all child resources.
 
         You can add CORS at the resource-level using ``addCorsPreflight``.
@@ -33173,25 +33214,25 @@ class ProxyResourceProps(ProxyResourceOptions):
         :default: - CORS is disabled
         '''
         result = self._values.get("default_cors_preflight_options")
-        return typing.cast(typing.Optional[CorsOptions], result)
+        return typing.cast(typing.Optional["CorsOptions"], result)
 
     @builtins.property
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_integration")
-        return typing.cast(typing.Optional[Integration], result)
+        return typing.cast(typing.Optional["Integration"], result)
 
     @builtins.property
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_method_options")
-        return typing.cast(typing.Optional[MethodOptions], result)
+        return typing.cast(typing.Optional["MethodOptions"], result)
 
     @builtins.property
     def any_method(self) -> typing.Optional[builtins.bool]:
@@ -33206,7 +33247,7 @@ class ProxyResourceProps(ProxyResourceOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def parent(self) -> IResource:
+    def parent(self) -> "IResource":
         '''The parent resource of this resource.
 
         You can either pass another
@@ -33214,7 +33255,7 @@ class ProxyResourceProps(ProxyResourceOptions):
         '''
         result = self._values.get("parent")
         assert result is not None, "Required property 'parent' is missing"
-        return typing.cast(IResource, result)
+        return typing.cast("IResource", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -33252,20 +33293,20 @@ class RateLimitedApiKeyProps(ApiKeyProps):
     def __init__(
         self,
         *,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         api_key_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         value: typing.Optional[builtins.str] = None,
         customer_id: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[builtins.bool] = None,
         generate_distinct_id: typing.Optional[builtins.bool] = None,
-        resources: typing.Optional[typing.Sequence[IRestApi]] = None,
-        stages: typing.Optional[typing.Sequence[IStage]] = None,
-        api_stages: typing.Optional[typing.Sequence[typing.Union[UsagePlanPerApiStage, typing.Dict[builtins.str, typing.Any]]]] = None,
-        quota: typing.Optional[typing.Union[QuotaSettings, typing.Dict[builtins.str, typing.Any]]] = None,
-        throttle: typing.Optional[typing.Union[ThrottleSettings, typing.Dict[builtins.str, typing.Any]]] = None,
+        resources: typing.Optional[typing.Sequence["IRestApi"]] = None,
+        stages: typing.Optional[typing.Sequence["IStage"]] = None,
+        api_stages: typing.Optional[typing.Sequence[typing.Union["UsagePlanPerApiStage", typing.Dict[builtins.str, typing.Any]]]] = None,
+        quota: typing.Optional[typing.Union["QuotaSettings", typing.Dict[builtins.str, typing.Any]]] = None,
+        throttle: typing.Optional[typing.Union["ThrottleSettings", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''RateLimitedApiKey properties.
 
@@ -33355,7 +33396,7 @@ class RateLimitedApiKeyProps(ApiKeyProps):
             self._values["throttle"] = throttle
 
     @builtins.property
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Adds a CORS preflight OPTIONS method to this resource and all child resources.
 
         You can add CORS at the resource-level using ``addCorsPreflight``.
@@ -33363,25 +33404,25 @@ class RateLimitedApiKeyProps(ApiKeyProps):
         :default: - CORS is disabled
         '''
         result = self._values.get("default_cors_preflight_options")
-        return typing.cast(typing.Optional[CorsOptions], result)
+        return typing.cast(typing.Optional["CorsOptions"], result)
 
     @builtins.property
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_integration")
-        return typing.cast(typing.Optional[Integration], result)
+        return typing.cast(typing.Optional["Integration"], result)
 
     @builtins.property
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.
 
         :default: - Inherited from parent.
         '''
         result = self._values.get("default_method_options")
-        return typing.cast(typing.Optional[MethodOptions], result)
+        return typing.cast(typing.Optional["MethodOptions"], result)
 
     @builtins.property
     def api_key_name(self) -> typing.Optional[builtins.str]:
@@ -33454,7 +33495,7 @@ class RateLimitedApiKeyProps(ApiKeyProps):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def resources(self) -> typing.Optional[typing.List[IRestApi]]:
+    def resources(self) -> typing.Optional[typing.List["IRestApi"]]:
         '''(deprecated) A list of resources this api key is associated with.
 
         :default: none
@@ -33464,19 +33505,19 @@ class RateLimitedApiKeyProps(ApiKeyProps):
         :stability: deprecated
         '''
         result = self._values.get("resources")
-        return typing.cast(typing.Optional[typing.List[IRestApi]], result)
+        return typing.cast(typing.Optional[typing.List["IRestApi"]], result)
 
     @builtins.property
-    def stages(self) -> typing.Optional[typing.List[IStage]]:
+    def stages(self) -> typing.Optional[typing.List["IStage"]]:
         '''A list of Stages this api key is associated with.
 
         :default: - the api key is not associated with any stages
         '''
         result = self._values.get("stages")
-        return typing.cast(typing.Optional[typing.List[IStage]], result)
+        return typing.cast(typing.Optional[typing.List["IStage"]], result)
 
     @builtins.property
-    def api_stages(self) -> typing.Optional[typing.List[UsagePlanPerApiStage]]:
+    def api_stages(self) -> typing.Optional[typing.List["UsagePlanPerApiStage"]]:
         '''API Stages to be associated with the RateLimitedApiKey.
 
         If you already prepared UsagePlan resource explicitly, you should use ``stages`` property.
@@ -33486,25 +33527,25 @@ class RateLimitedApiKeyProps(ApiKeyProps):
         :default: none
         '''
         result = self._values.get("api_stages")
-        return typing.cast(typing.Optional[typing.List[UsagePlanPerApiStage]], result)
+        return typing.cast(typing.Optional[typing.List["UsagePlanPerApiStage"]], result)
 
     @builtins.property
-    def quota(self) -> typing.Optional[QuotaSettings]:
+    def quota(self) -> typing.Optional["QuotaSettings"]:
         '''Number of requests clients can make in a given time period.
 
         :default: none
         '''
         result = self._values.get("quota")
-        return typing.cast(typing.Optional[QuotaSettings], result)
+        return typing.cast(typing.Optional["QuotaSettings"], result)
 
     @builtins.property
-    def throttle(self) -> typing.Optional[ThrottleSettings]:
+    def throttle(self) -> typing.Optional["ThrottleSettings"]:
         '''Overall throttle settings for the API.
 
         :default: none
         '''
         result = self._values.get("throttle")
-        return typing.cast(typing.Optional[ThrottleSettings], result)
+        return typing.cast(typing.Optional["ThrottleSettings"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -33549,14 +33590,14 @@ class RequestAuthorizer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         identity_sources: typing.Sequence[builtins.str],
-        handler: _IFunction_6adb0ab8,
-        assume_role: typing.Optional[_IRole_235f5d8e] = None,
+        handler: "_IFunction_6adb0ab8",
+        assume_role: typing.Optional["_IRole_235f5d8e"] = None,
         authorizer_name: typing.Optional[builtins.str] = None,
-        results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -33614,20 +33655,20 @@ class RequestAuthorizer(
 
     @builtins.property
     @jsii.member(jsii_name="authorizerProps")
-    def _authorizer_props(self) -> CfnAuthorizerProps:
-        return typing.cast(CfnAuthorizerProps, jsii.get(self, "authorizerProps"))
+    def _authorizer_props(self) -> "CfnAuthorizerProps":
+        return typing.cast("CfnAuthorizerProps", jsii.get(self, "authorizerProps"))
 
     @builtins.property
     @jsii.member(jsii_name="handler")
-    def _handler(self) -> _IFunction_6adb0ab8:
+    def _handler(self) -> "_IFunction_6adb0ab8":
         '''The Lambda function handler that this authorizer uses.'''
-        return typing.cast(_IFunction_6adb0ab8, jsii.get(self, "handler"))
+        return typing.cast("_IFunction_6adb0ab8", jsii.get(self, "handler"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def _role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def _role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role that the API Gateway service assumes while invoking the Lambda function.'''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
     @builtins.property
     @jsii.member(jsii_name="restApiId")
@@ -33668,14 +33709,14 @@ class Resource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        parent: IResource,
+        parent: "IResource",
         path_part: builtins.str,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -33704,13 +33745,13 @@ class Resource(
     @builtins.classmethod
     def from_resource_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         path: builtins.str,
         resource_id: builtins.str,
-        rest_api: IRestApi,
-    ) -> IResource:
+        rest_api: "IRestApi",
+    ) -> "IResource":
         '''Import an existing resource.
 
         :param scope: -
@@ -33727,7 +33768,7 @@ class Resource(
             path=path, resource_id=resource_id, rest_api=rest_api
         )
 
-        return typing.cast(IResource, jsii.sinvoke(cls, "fromResourceAttributes", [scope, id, attrs]))
+        return typing.cast("IResource", jsii.sinvoke(cls, "fromResourceAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -33737,7 +33778,7 @@ class Resource(
 
     @builtins.property
     @jsii.member(jsii_name="api")
-    def api(self) -> IRestApi:
+    def api(self) -> "IRestApi":
         '''The rest API that this resource is part of.
 
         The reason we need the RestApi object itself and not just the ID is because the model
@@ -33745,7 +33786,7 @@ class Resource(
         hash to determine the ID of the deployment. This allows us to automatically update
         the deployment when the model of the REST API changes.
         '''
-        return typing.cast(IRestApi, jsii.get(self, "api"))
+        return typing.cast("IRestApi", jsii.get(self, "api"))
 
     @builtins.property
     @jsii.member(jsii_name="path")
@@ -33761,27 +33802,27 @@ class Resource(
 
     @builtins.property
     @jsii.member(jsii_name="defaultCorsPreflightOptions")
-    def default_cors_preflight_options(self) -> typing.Optional[CorsOptions]:
+    def default_cors_preflight_options(self) -> typing.Optional["CorsOptions"]:
         '''Default options for CORS preflight OPTIONS method.'''
-        return typing.cast(typing.Optional[CorsOptions], jsii.get(self, "defaultCorsPreflightOptions"))
+        return typing.cast(typing.Optional["CorsOptions"], jsii.get(self, "defaultCorsPreflightOptions"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultIntegration")
-    def default_integration(self) -> typing.Optional[Integration]:
+    def default_integration(self) -> typing.Optional["Integration"]:
         '''An integration to use as a default for all methods created within this API unless an integration is specified.'''
-        return typing.cast(typing.Optional[Integration], jsii.get(self, "defaultIntegration"))
+        return typing.cast(typing.Optional["Integration"], jsii.get(self, "defaultIntegration"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultMethodOptions")
-    def default_method_options(self) -> typing.Optional[MethodOptions]:
+    def default_method_options(self) -> typing.Optional["MethodOptions"]:
         '''Method options to use as a default for all methods created within this API unless custom options are specified.'''
-        return typing.cast(typing.Optional[MethodOptions], jsii.get(self, "defaultMethodOptions"))
+        return typing.cast(typing.Optional["MethodOptions"], jsii.get(self, "defaultMethodOptions"))
 
     @builtins.property
     @jsii.member(jsii_name="parentResource")
-    def parent_resource(self) -> typing.Optional[IResource]:
+    def parent_resource(self) -> typing.Optional["IResource"]:
         '''The parent of this resource or undefined for the root resource.'''
-        return typing.cast(typing.Optional[IResource], jsii.get(self, "parentResource"))
+        return typing.cast(typing.Optional["IResource"], jsii.get(self, "parentResource"))
 
 
 class RestApi(
@@ -33813,30 +33854,30 @@ class RestApi(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api_key_source_type: typing.Optional[ApiKeySourceType] = None,
+        api_key_source_type: typing.Optional["ApiKeySourceType"] = None,
         binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-        clone_from: typing.Optional[IRestApi] = None,
-        min_compression_size: typing.Optional[_Size_7b441c34] = None,
+        clone_from: typing.Optional["IRestApi"] = None,
+        min_compression_size: typing.Optional["_Size_7b441c34"] = None,
         minimum_compression_size: typing.Optional[jsii.Number] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_watch_role: typing.Optional[builtins.bool] = None,
-        cloud_watch_role_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        cloud_watch_role_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         deploy: typing.Optional[builtins.bool] = None,
-        deploy_options: typing.Optional[typing.Union[StageOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        deploy_options: typing.Optional[typing.Union["StageOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[builtins.bool] = None,
-        domain_name: typing.Optional[typing.Union[DomainNameOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        endpoint_configuration: typing.Optional[typing.Union[EndpointConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        domain_name: typing.Optional[typing.Union["DomainNameOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["EndpointConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         endpoint_export_name: typing.Optional[builtins.str] = None,
-        endpoint_types: typing.Optional[typing.Sequence[EndpointType]] = None,
+        endpoint_types: typing.Optional[typing.Sequence["EndpointType"]] = None,
         fail_on_warnings: typing.Optional[builtins.bool] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        policy: typing.Optional[_PolicyDocument_3ac34393] = None,
+        policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
         rest_api_name: typing.Optional[builtins.str] = None,
         retain_deployments: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -33903,13 +33944,13 @@ class RestApi(
     @builtins.classmethod
     def from_rest_api_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         rest_api_id: builtins.str,
         root_resource_id: builtins.str,
         rest_api_name: typing.Optional[builtins.str] = None,
-    ) -> IRestApi:
+    ) -> "IRestApi":
         '''Import an existing RestApi that can be configured with additional Methods and Resources.
 
         :param scope: -
@@ -33928,16 +33969,16 @@ class RestApi(
             rest_api_name=rest_api_name,
         )
 
-        return typing.cast(IRestApi, jsii.sinvoke(cls, "fromRestApiAttributes", [scope, id, attrs]))
+        return typing.cast("IRestApi", jsii.sinvoke(cls, "fromRestApiAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromRestApiId")
     @builtins.classmethod
     def from_rest_api_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         rest_api_id: builtins.str,
-    ) -> IRestApi:
+    ) -> "IRestApi":
         '''Import an existing RestApi.
 
         :param scope: -
@@ -33949,7 +33990,7 @@ class RestApi(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument rest_api_id", value=rest_api_id, expected_type=type_hints["rest_api_id"])
-        return typing.cast(IRestApi, jsii.sinvoke(cls, "fromRestApiId", [scope, id, rest_api_id]))
+        return typing.cast("IRestApi", jsii.sinvoke(cls, "fromRestApiId", [scope, id, rest_api_id]))
 
     @jsii.member(jsii_name="isRestApi")
     @builtins.classmethod
@@ -33968,11 +34009,11 @@ class RestApi(
         self,
         id: builtins.str,
         *,
-        schema: typing.Union[JsonSchema, typing.Dict[builtins.str, typing.Any]],
+        schema: typing.Union["JsonSchema", typing.Dict[builtins.str, typing.Any]],
         content_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         model_name: typing.Optional[builtins.str] = None,
-    ) -> Model:
+    ) -> "Model":
         '''Adds a new model.
 
         :param id: -
@@ -33991,7 +34032,7 @@ class RestApi(
             model_name=model_name,
         )
 
-        return typing.cast(Model, jsii.invoke(self, "addModel", [id, props]))
+        return typing.cast("Model", jsii.invoke(self, "addModel", [id, props]))
 
     @jsii.member(jsii_name="addRequestValidator")
     def add_request_validator(
@@ -34001,7 +34042,7 @@ class RestApi(
         request_validator_name: typing.Optional[builtins.str] = None,
         validate_request_body: typing.Optional[builtins.bool] = None,
         validate_request_parameters: typing.Optional[builtins.bool] = None,
-    ) -> RequestValidator:
+    ) -> "RequestValidator":
         '''Adds a new request validator.
 
         :param id: -
@@ -34018,13 +34059,13 @@ class RestApi(
             validate_request_parameters=validate_request_parameters,
         )
 
-        return typing.cast(RequestValidator, jsii.invoke(self, "addRequestValidator", [id, props]))
+        return typing.cast("RequestValidator", jsii.invoke(self, "addRequestValidator", [id, props]))
 
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Adds a statement to the resource policy associated with this rest api.
 
         A resource policy will be automatically created upon the first call to ``addToResourcePolicy``.
@@ -34036,7 +34077,7 @@ class RestApi(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__52663697f28f1fd364df71313e30a1c7fde152016b3381ce552603f8a5dfc54f)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -34046,9 +34087,9 @@ class RestApi(
 
     @builtins.property
     @jsii.member(jsii_name="methods")
-    def methods(self) -> typing.List[Method]:
+    def methods(self) -> typing.List["Method"]:
         '''The list of methods bound to this RestApi.'''
-        return typing.cast(typing.List[Method], jsii.get(self, "methods"))
+        return typing.cast(typing.List["Method"], jsii.get(self, "methods"))
 
     @builtins.property
     @jsii.member(jsii_name="restApiId")
@@ -34064,12 +34105,12 @@ class RestApi(
 
     @builtins.property
     @jsii.member(jsii_name="root")
-    def root(self) -> IResource:
+    def root(self) -> "IResource":
         '''Represents the root resource of this API endpoint ('/').
 
         Resources and Methods are added to this resource.
         '''
-        return typing.cast(IResource, jsii.get(self, "root"))
+        return typing.cast("IResource", jsii.get(self, "root"))
 
 
 class SagemakerIntegration(
@@ -34089,21 +34130,21 @@ class SagemakerIntegration(
 
     def __init__(
         self,
-        endpoint: _IEndpoint_58fe201a,
+        endpoint: "_IEndpoint_58fe201a",
         *,
         cache_key_parameters: typing.Optional[typing.Sequence[builtins.str]] = None,
         cache_namespace: typing.Optional[builtins.str] = None,
-        connection_type: typing.Optional[ConnectionType] = None,
-        content_handling: typing.Optional[ContentHandling] = None,
+        connection_type: typing.Optional["ConnectionType"] = None,
+        content_handling: typing.Optional["ContentHandling"] = None,
         credentials_passthrough: typing.Optional[builtins.bool] = None,
-        credentials_role: typing.Optional[_IRole_235f5d8e] = None,
-        integration_responses: typing.Optional[typing.Sequence[typing.Union[IntegrationResponse, typing.Dict[builtins.str, typing.Any]]]] = None,
-        passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
+        credentials_role: typing.Optional["_IRole_235f5d8e"] = None,
+        integration_responses: typing.Optional[typing.Sequence[typing.Union["IntegrationResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
+        passthrough_behavior: typing.Optional["PassthroughBehavior"] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
-        timeout: typing.Optional[_Duration_4839e8c3] = None,
-        vpc_link: typing.Optional[IVpcLink] = None,
+        response_transfer_mode: typing.Optional["ResponseTransferMode"] = None,
+        timeout: typing.Optional["_Duration_4839e8c3"] = None,
+        vpc_link: typing.Optional["IVpcLink"] = None,
     ) -> None:
         '''
         :param endpoint: -
@@ -34143,7 +34184,7 @@ class SagemakerIntegration(
         jsii.create(self.__class__, self, [endpoint, options])
 
     @jsii.member(jsii_name="bind")
-    def bind(self, method: Method) -> IntegrationConfig:
+    def bind(self, method: "Method") -> "IntegrationConfig":
         '''Can be overridden by subclasses to allow the integration to interact with the method being integrated, access the REST API object, method ARNs, etc.
 
         :param method: -
@@ -34151,7 +34192,7 @@ class SagemakerIntegration(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__016d3108b9c42ab2c5cfee1152171b4298ea7d403383c2555ea4ae5043c6984b)
             check_type(argname="argument method", value=method, expected_type=type_hints["method"])
-        return typing.cast(IntegrationConfig, jsii.invoke(self, "bind", [method]))
+        return typing.cast("IntegrationConfig", jsii.invoke(self, "bind", [method]))
 
 
 class Stage(
@@ -34195,26 +34236,26 @@ class Stage(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        deployment: Deployment,
-        access_log_destination: typing.Optional[IAccessLogDestination] = None,
-        access_log_format: typing.Optional[AccessLogFormat] = None,
+        deployment: "Deployment",
+        access_log_destination: typing.Optional["IAccessLogDestination"] = None,
+        access_log_format: typing.Optional["AccessLogFormat"] = None,
         cache_cluster_enabled: typing.Optional[builtins.bool] = None,
         cache_cluster_size: typing.Optional[builtins.str] = None,
         client_certificate_id: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         documentation_version: typing.Optional[builtins.str] = None,
-        method_options: typing.Optional[typing.Mapping[builtins.str, typing.Union[MethodDeploymentOptions, typing.Dict[builtins.str, typing.Any]]]] = None,
+        method_options: typing.Optional[typing.Mapping[builtins.str, typing.Union["MethodDeploymentOptions", typing.Dict[builtins.str, typing.Any]]]] = None,
         stage_name: typing.Optional[builtins.str] = None,
         tracing_enabled: typing.Optional[builtins.bool] = None,
         variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         cache_data_encrypted: typing.Optional[builtins.bool] = None,
-        cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         caching_enabled: typing.Optional[builtins.bool] = None,
         data_trace_enabled: typing.Optional[builtins.bool] = None,
-        logging_level: typing.Optional[MethodLoggingLevel] = None,
+        logging_level: typing.Optional["MethodLoggingLevel"] = None,
         metrics_enabled: typing.Optional[builtins.bool] = None,
         throttling_burst_limit: typing.Optional[jsii.Number] = None,
         throttling_rate_limit: typing.Optional[jsii.Number] = None,
@@ -34276,12 +34317,12 @@ class Stage(
     @builtins.classmethod
     def from_stage_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rest_api: IRestApi,
+        rest_api: "IRestApi",
         stage_name: builtins.str,
-    ) -> IStage:
+    ) -> "IStage":
         '''Import a Stage by its attributes.
 
         :param scope: -
@@ -34295,7 +34336,7 @@ class Stage(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         attrs = StageAttributes(rest_api=rest_api, stage_name=stage_name)
 
-        return typing.cast(IStage, jsii.sinvoke(cls, "fromStageAttributes", [scope, id, attrs]))
+        return typing.cast("IStage", jsii.sinvoke(cls, "fromStageAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -34305,9 +34346,9 @@ class Stage(
 
     @builtins.property
     @jsii.member(jsii_name="restApi")
-    def rest_api(self) -> IRestApi:
+    def rest_api(self) -> "IRestApi":
         '''RestApi to which this stage is associated.'''
-        return typing.cast(IRestApi, jsii.get(self, "restApi"))
+        return typing.cast("IRestApi", jsii.get(self, "restApi"))
 
     @builtins.property
     @jsii.member(jsii_name="stageName")
@@ -34338,38 +34379,38 @@ class StepFunctionsRestApi(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        state_machine: _IStateMachine_73e8d2b0,
+        state_machine: "_IStateMachine_73e8d2b0",
         authorizer: typing.Optional[builtins.bool] = None,
         headers: typing.Optional[builtins.bool] = None,
         path: typing.Optional[builtins.bool] = None,
         querystring: typing.Optional[builtins.bool] = None,
-        request_context: typing.Optional[typing.Union[RequestContext, typing.Dict[builtins.str, typing.Any]]] = None,
-        role: typing.Optional[_IRole_235f5d8e] = None,
+        request_context: typing.Optional[typing.Union["RequestContext", typing.Dict[builtins.str, typing.Any]]] = None,
+        role: typing.Optional["_IRole_235f5d8e"] = None,
         use_default_method_responses: typing.Optional[builtins.bool] = None,
-        api_key_source_type: typing.Optional[ApiKeySourceType] = None,
+        api_key_source_type: typing.Optional["ApiKeySourceType"] = None,
         binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-        clone_from: typing.Optional[IRestApi] = None,
-        min_compression_size: typing.Optional[_Size_7b441c34] = None,
+        clone_from: typing.Optional["IRestApi"] = None,
+        min_compression_size: typing.Optional["_Size_7b441c34"] = None,
         minimum_compression_size: typing.Optional[jsii.Number] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_watch_role: typing.Optional[builtins.bool] = None,
-        cloud_watch_role_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        cloud_watch_role_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         deploy: typing.Optional[builtins.bool] = None,
-        deploy_options: typing.Optional[typing.Union[StageOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        deploy_options: typing.Optional[typing.Union["StageOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[builtins.bool] = None,
-        domain_name: typing.Optional[typing.Union[DomainNameOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        endpoint_configuration: typing.Optional[typing.Union[EndpointConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        domain_name: typing.Optional[typing.Union["DomainNameOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["EndpointConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         endpoint_export_name: typing.Optional[builtins.str] = None,
-        endpoint_types: typing.Optional[typing.Sequence[EndpointType]] = None,
+        endpoint_types: typing.Optional[typing.Sequence["EndpointType"]] = None,
         fail_on_warnings: typing.Optional[builtins.bool] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        policy: typing.Optional[_PolicyDocument_3ac34393] = None,
+        policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
         rest_api_name: typing.Optional[builtins.str] = None,
         retain_deployments: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -34485,15 +34526,15 @@ class TokenAuthorizer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         identity_source: typing.Optional[builtins.str] = None,
         validation_regex: typing.Optional[builtins.str] = None,
-        handler: _IFunction_6adb0ab8,
-        assume_role: typing.Optional[_IRole_235f5d8e] = None,
+        handler: "_IFunction_6adb0ab8",
+        assume_role: typing.Optional["_IRole_235f5d8e"] = None,
         authorizer_name: typing.Optional[builtins.str] = None,
-        results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -34553,20 +34594,20 @@ class TokenAuthorizer(
 
     @builtins.property
     @jsii.member(jsii_name="authorizerProps")
-    def _authorizer_props(self) -> CfnAuthorizerProps:
-        return typing.cast(CfnAuthorizerProps, jsii.get(self, "authorizerProps"))
+    def _authorizer_props(self) -> "CfnAuthorizerProps":
+        return typing.cast("CfnAuthorizerProps", jsii.get(self, "authorizerProps"))
 
     @builtins.property
     @jsii.member(jsii_name="handler")
-    def _handler(self) -> _IFunction_6adb0ab8:
+    def _handler(self) -> "_IFunction_6adb0ab8":
         '''The Lambda function handler that this authorizer uses.'''
-        return typing.cast(_IFunction_6adb0ab8, jsii.get(self, "handler"))
+        return typing.cast("_IFunction_6adb0ab8", jsii.get(self, "handler"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
-    def _role(self) -> typing.Optional[_IRole_235f5d8e]:
+    def _role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role that the API Gateway service assumes while invoking the Lambda function.'''
-        return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+        return typing.cast(typing.Optional["_IRole_235f5d8e"], jsii.get(self, "role"))
 
     @builtins.property
     @jsii.member(jsii_name="restApiId")
@@ -34616,33 +34657,33 @@ class LambdaRestApi(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        handler: _IFunction_6adb0ab8,
-        integration_options: typing.Optional[typing.Union[LambdaIntegrationOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        handler: "_IFunction_6adb0ab8",
+        integration_options: typing.Optional[typing.Union["LambdaIntegrationOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         proxy: typing.Optional[builtins.bool] = None,
-        api_key_source_type: typing.Optional[ApiKeySourceType] = None,
+        api_key_source_type: typing.Optional["ApiKeySourceType"] = None,
         binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
-        clone_from: typing.Optional[IRestApi] = None,
-        min_compression_size: typing.Optional[_Size_7b441c34] = None,
+        clone_from: typing.Optional["IRestApi"] = None,
+        min_compression_size: typing.Optional["_Size_7b441c34"] = None,
         minimum_compression_size: typing.Optional[jsii.Number] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_watch_role: typing.Optional[builtins.bool] = None,
-        cloud_watch_role_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        cloud_watch_role_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         deploy: typing.Optional[builtins.bool] = None,
-        deploy_options: typing.Optional[typing.Union[StageOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        deploy_options: typing.Optional[typing.Union["StageOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[builtins.bool] = None,
-        domain_name: typing.Optional[typing.Union[DomainNameOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        endpoint_configuration: typing.Optional[typing.Union[EndpointConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
+        domain_name: typing.Optional[typing.Union["DomainNameOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        endpoint_configuration: typing.Optional[typing.Union["EndpointConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         endpoint_export_name: typing.Optional[builtins.str] = None,
-        endpoint_types: typing.Optional[typing.Sequence[EndpointType]] = None,
+        endpoint_types: typing.Optional[typing.Sequence["EndpointType"]] = None,
         fail_on_warnings: typing.Optional[builtins.bool] = None,
         parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        policy: typing.Optional[_PolicyDocument_3ac34393] = None,
+        policy: typing.Optional["_PolicyDocument_3ac34393"] = None,
         rest_api_name: typing.Optional[builtins.str] = None,
         retain_deployments: typing.Optional[builtins.bool] = None,
     ) -> None:
@@ -34743,14 +34784,14 @@ class ProxyResource(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        parent: IResource,
+        parent: "IResource",
         any_method: typing.Optional[builtins.bool] = None,
-        default_cors_preflight_options: typing.Optional[typing.Union[CorsOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-        default_integration: typing.Optional[Integration] = None,
-        default_method_options: typing.Optional[typing.Union[MethodOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+        default_cors_preflight_options: typing.Optional[typing.Union["CorsOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_integration: typing.Optional["Integration"] = None,
+        default_method_options: typing.Optional[typing.Union["MethodOptions", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -34779,19 +34820,19 @@ class ProxyResource(
     def add_method(
         self,
         http_method: builtins.str,
-        integration: typing.Optional[Integration] = None,
+        integration: typing.Optional["Integration"] = None,
         *,
         api_key_required: typing.Optional[builtins.bool] = None,
         authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
-        authorization_type: typing.Optional[AuthorizationType] = None,
-        authorizer: typing.Optional[IAuthorizer] = None,
-        method_responses: typing.Optional[typing.Sequence[typing.Union[MethodResponse, typing.Dict[builtins.str, typing.Any]]]] = None,
+        authorization_type: typing.Optional["AuthorizationType"] = None,
+        authorizer: typing.Optional["IAuthorizer"] = None,
+        method_responses: typing.Optional[typing.Sequence[typing.Union["MethodResponse", typing.Dict[builtins.str, typing.Any]]]] = None,
         operation_name: typing.Optional[builtins.str] = None,
-        request_models: typing.Optional[typing.Mapping[builtins.str, IModel]] = None,
+        request_models: typing.Optional[typing.Mapping[builtins.str, "IModel"]] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.bool]] = None,
-        request_validator: typing.Optional[IRequestValidator] = None,
-        request_validator_options: typing.Optional[typing.Union[RequestValidatorOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-    ) -> Method:
+        request_validator: typing.Optional["IRequestValidator"] = None,
+        request_validator_options: typing.Optional[typing.Union["RequestValidatorOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+    ) -> "Method":
         '''Defines a new method for this resource.
 
         :param http_method: -
@@ -34824,7 +34865,7 @@ class ProxyResource(
             request_validator_options=request_validator_options,
         )
 
-        return typing.cast(Method, jsii.invoke(self, "addMethod", [http_method, integration, options]))
+        return typing.cast("Method", jsii.invoke(self, "addMethod", [http_method, integration, options]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -34834,9 +34875,9 @@ class ProxyResource(
 
     @builtins.property
     @jsii.member(jsii_name="anyMethod")
-    def any_method(self) -> typing.Optional[Method]:
+    def any_method(self) -> typing.Optional["Method"]:
         '''If ``props.anyMethod`` is ``true``, this will be the reference to the 'ANY' method associated with this proxy resource.'''
-        return typing.cast(typing.Optional[Method], jsii.get(self, "anyMethod"))
+        return typing.cast(typing.Optional["Method"], jsii.get(self, "anyMethod"))
 
 
 __all__ = [

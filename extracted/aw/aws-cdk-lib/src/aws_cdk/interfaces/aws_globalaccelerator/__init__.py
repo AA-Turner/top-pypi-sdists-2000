@@ -196,7 +196,7 @@ class IAcceleratorRef(
 
     @builtins.property
     @jsii.member(jsii_name="acceleratorRef")
-    def accelerator_ref(self) -> AcceleratorReference:
+    def accelerator_ref(self) -> "AcceleratorReference":
         '''(experimental) A reference to a Accelerator resource.
 
         :stability: experimental
@@ -217,12 +217,12 @@ class _IAcceleratorRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="acceleratorRef")
-    def accelerator_ref(self) -> AcceleratorReference:
+    def accelerator_ref(self) -> "AcceleratorReference":
         '''(experimental) A reference to a Accelerator resource.
 
         :stability: experimental
         '''
-        return typing.cast(AcceleratorReference, jsii.get(self, "acceleratorRef"))
+        return typing.cast("AcceleratorReference", jsii.get(self, "acceleratorRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAcceleratorRef).__jsii_proxy_class__ = lambda : _IAcceleratorRefProxy
@@ -243,7 +243,7 @@ class ICrossAccountAttachmentRef(
 
     @builtins.property
     @jsii.member(jsii_name="crossAccountAttachmentRef")
-    def cross_account_attachment_ref(self) -> CrossAccountAttachmentReference:
+    def cross_account_attachment_ref(self) -> "CrossAccountAttachmentReference":
         '''(experimental) A reference to a CrossAccountAttachment resource.
 
         :stability: experimental
@@ -264,12 +264,12 @@ class _ICrossAccountAttachmentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="crossAccountAttachmentRef")
-    def cross_account_attachment_ref(self) -> CrossAccountAttachmentReference:
+    def cross_account_attachment_ref(self) -> "CrossAccountAttachmentReference":
         '''(experimental) A reference to a CrossAccountAttachment resource.
 
         :stability: experimental
         '''
-        return typing.cast(CrossAccountAttachmentReference, jsii.get(self, "crossAccountAttachmentRef"))
+        return typing.cast("CrossAccountAttachmentReference", jsii.get(self, "crossAccountAttachmentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICrossAccountAttachmentRef).__jsii_proxy_class__ = lambda : _ICrossAccountAttachmentRefProxy
@@ -290,7 +290,7 @@ class IEndpointGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="endpointGroupRef")
-    def endpoint_group_ref(self) -> EndpointGroupReference:
+    def endpoint_group_ref(self) -> "EndpointGroupReference":
         '''(experimental) A reference to a EndpointGroup resource.
 
         :stability: experimental
@@ -311,12 +311,12 @@ class _IEndpointGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="endpointGroupRef")
-    def endpoint_group_ref(self) -> EndpointGroupReference:
+    def endpoint_group_ref(self) -> "EndpointGroupReference":
         '''(experimental) A reference to a EndpointGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(EndpointGroupReference, jsii.get(self, "endpointGroupRef"))
+        return typing.cast("EndpointGroupReference", jsii.get(self, "endpointGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEndpointGroupRef).__jsii_proxy_class__ = lambda : _IEndpointGroupRefProxy

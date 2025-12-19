@@ -161,7 +161,7 @@ class IAwsLogSourceRef(
 
     @builtins.property
     @jsii.member(jsii_name="awsLogSourceRef")
-    def aws_log_source_ref(self) -> AwsLogSourceReference:
+    def aws_log_source_ref(self) -> "AwsLogSourceReference":
         '''(experimental) A reference to a AwsLogSource resource.
 
         :stability: experimental
@@ -182,12 +182,12 @@ class _IAwsLogSourceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="awsLogSourceRef")
-    def aws_log_source_ref(self) -> AwsLogSourceReference:
+    def aws_log_source_ref(self) -> "AwsLogSourceReference":
         '''(experimental) A reference to a AwsLogSource resource.
 
         :stability: experimental
         '''
-        return typing.cast(AwsLogSourceReference, jsii.get(self, "awsLogSourceRef"))
+        return typing.cast("AwsLogSourceReference", jsii.get(self, "awsLogSourceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAwsLogSourceRef).__jsii_proxy_class__ = lambda : _IAwsLogSourceRefProxy
@@ -206,7 +206,7 @@ class IDataLakeRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataLakeRef")
-    def data_lake_ref(self) -> DataLakeReference:
+    def data_lake_ref(self) -> "DataLakeReference":
         '''(experimental) A reference to a DataLake resource.
 
         :stability: experimental
@@ -227,12 +227,12 @@ class _IDataLakeRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataLakeRef")
-    def data_lake_ref(self) -> DataLakeReference:
+    def data_lake_ref(self) -> "DataLakeReference":
         '''(experimental) A reference to a DataLake resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataLakeReference, jsii.get(self, "dataLakeRef"))
+        return typing.cast("DataLakeReference", jsii.get(self, "dataLakeRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataLakeRef).__jsii_proxy_class__ = lambda : _IDataLakeRefProxy

@@ -217,7 +217,7 @@ class ICertificateAuthorityActivationRef(
     @jsii.member(jsii_name="certificateAuthorityActivationRef")
     def certificate_authority_activation_ref(
         self,
-    ) -> CertificateAuthorityActivationReference:
+    ) -> "CertificateAuthorityActivationReference":
         '''(experimental) A reference to a CertificateAuthorityActivation resource.
 
         :stability: experimental
@@ -240,12 +240,12 @@ class _ICertificateAuthorityActivationRefProxy(
     @jsii.member(jsii_name="certificateAuthorityActivationRef")
     def certificate_authority_activation_ref(
         self,
-    ) -> CertificateAuthorityActivationReference:
+    ) -> "CertificateAuthorityActivationReference":
         '''(experimental) A reference to a CertificateAuthorityActivation resource.
 
         :stability: experimental
         '''
-        return typing.cast(CertificateAuthorityActivationReference, jsii.get(self, "certificateAuthorityActivationRef"))
+        return typing.cast("CertificateAuthorityActivationReference", jsii.get(self, "certificateAuthorityActivationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICertificateAuthorityActivationRef).__jsii_proxy_class__ = lambda : _ICertificateAuthorityActivationRefProxy
@@ -264,7 +264,7 @@ class ICertificateAuthorityRef(
 
     @builtins.property
     @jsii.member(jsii_name="certificateAuthorityRef")
-    def certificate_authority_ref(self) -> CertificateAuthorityReference:
+    def certificate_authority_ref(self) -> "CertificateAuthorityReference":
         '''(experimental) A reference to a CertificateAuthority resource.
 
         :stability: experimental
@@ -285,12 +285,12 @@ class _ICertificateAuthorityRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="certificateAuthorityRef")
-    def certificate_authority_ref(self) -> CertificateAuthorityReference:
+    def certificate_authority_ref(self) -> "CertificateAuthorityReference":
         '''(experimental) A reference to a CertificateAuthority resource.
 
         :stability: experimental
         '''
-        return typing.cast(CertificateAuthorityReference, jsii.get(self, "certificateAuthorityRef"))
+        return typing.cast("CertificateAuthorityReference", jsii.get(self, "certificateAuthorityRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICertificateAuthorityRef).__jsii_proxy_class__ = lambda : _ICertificateAuthorityRefProxy
@@ -309,7 +309,7 @@ class ICertificateRef(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> CertificateReference:
+    def certificate_ref(self) -> "CertificateReference":
         '''(experimental) A reference to a Certificate resource.
 
         :stability: experimental
@@ -330,12 +330,12 @@ class _ICertificateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> CertificateReference:
+    def certificate_ref(self) -> "CertificateReference":
         '''(experimental) A reference to a Certificate resource.
 
         :stability: experimental
         '''
-        return typing.cast(CertificateReference, jsii.get(self, "certificateRef"))
+        return typing.cast("CertificateReference", jsii.get(self, "certificateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICertificateRef).__jsii_proxy_class__ = lambda : _ICertificateRefProxy

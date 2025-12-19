@@ -180,7 +180,7 @@ class IAgentSpaceRef(
 
     @builtins.property
     @jsii.member(jsii_name="agentSpaceRef")
-    def agent_space_ref(self) -> AgentSpaceReference:
+    def agent_space_ref(self) -> "AgentSpaceReference":
         '''(experimental) A reference to a AgentSpace resource.
 
         :stability: experimental
@@ -201,12 +201,12 @@ class _IAgentSpaceRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="agentSpaceRef")
-    def agent_space_ref(self) -> AgentSpaceReference:
+    def agent_space_ref(self) -> "AgentSpaceReference":
         '''(experimental) A reference to a AgentSpace resource.
 
         :stability: experimental
         '''
-        return typing.cast(AgentSpaceReference, jsii.get(self, "agentSpaceRef"))
+        return typing.cast("AgentSpaceReference", jsii.get(self, "agentSpaceRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAgentSpaceRef).__jsii_proxy_class__ = lambda : _IAgentSpaceRefProxy
@@ -225,7 +225,7 @@ class IAssociationRef(
 
     @builtins.property
     @jsii.member(jsii_name="associationRef")
-    def association_ref(self) -> AssociationReference:
+    def association_ref(self) -> "AssociationReference":
         '''(experimental) A reference to a Association resource.
 
         :stability: experimental
@@ -246,12 +246,12 @@ class _IAssociationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="associationRef")
-    def association_ref(self) -> AssociationReference:
+    def association_ref(self) -> "AssociationReference":
         '''(experimental) A reference to a Association resource.
 
         :stability: experimental
         '''
-        return typing.cast(AssociationReference, jsii.get(self, "associationRef"))
+        return typing.cast("AssociationReference", jsii.get(self, "associationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAssociationRef).__jsii_proxy_class__ = lambda : _IAssociationRefProxy

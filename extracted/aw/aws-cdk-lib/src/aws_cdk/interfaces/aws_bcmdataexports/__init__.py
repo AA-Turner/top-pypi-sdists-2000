@@ -96,7 +96,7 @@ class IExportRef(
 
     @builtins.property
     @jsii.member(jsii_name="exportRef")
-    def export_ref(self) -> ExportReference:
+    def export_ref(self) -> "ExportReference":
         '''(experimental) A reference to a Export resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IExportRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="exportRef")
-    def export_ref(self) -> ExportReference:
+    def export_ref(self) -> "ExportReference":
         '''(experimental) A reference to a Export resource.
 
         :stability: experimental
         '''
-        return typing.cast(ExportReference, jsii.get(self, "exportRef"))
+        return typing.cast("ExportReference", jsii.get(self, "exportRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IExportRef).__jsii_proxy_class__ = lambda : _IExportRefProxy

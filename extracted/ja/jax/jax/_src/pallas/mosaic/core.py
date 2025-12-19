@@ -16,20 +16,23 @@
 from __future__ import annotations
 
 import collections
+from collections.abc import Mapping
 from collections.abc import Sequence
 import dataclasses
 import enum
 from typing import Any, ClassVar, Literal
-from collections.abc import Mapping
 
 import jax
-import jax.numpy as jnp
-from jax.extend import backend as jex_backend
 from jax._src import core as jax_core
+from jax._src import deprecations
+from jax._src import linear_util as lu
 from jax._src import state
 from jax._src import util
 from jax._src.frozen_dict import FrozenDict
+from jax._src.interpreters import partial_eval as pe
 from jax._src.pallas import core as pallas_core
+from jax.extend import backend as jex_backend
+import jax.numpy as jnp
 import numpy as np
 
 
@@ -100,6 +103,8 @@ class CompilerParams(pallas_core.CompilerParams):
     skip_device_barrier: Skip the default device barrier for the kernel.
     allow_collective_id_without_custom_barrier: Allow the use of collective_id
       without a custom barrier.
+    use_tc_tiling_on_sc: Use TensorCore tiling for SparseCore. This flag is
+      only used for ``SC_*_SUBCORE`` kernels.
   """
   BACKEND: ClassVar[pallas_core.Backend] = "mosaic_tpu"
   dimension_semantics: tuple[DimensionSemantics, ...] | None = None
@@ -115,6 +120,7 @@ class CompilerParams(pallas_core.CompilerParams):
   skip_device_barrier: bool = False
   allow_collective_id_without_custom_barrier: bool = False
   shape_invariant_numerics: bool = True
+  use_tc_tiling_on_sc: bool | None = None
 
   def __init__(
       self,
@@ -131,6 +137,7 @@ class CompilerParams(pallas_core.CompilerParams):
       skip_device_barrier: bool = False,
       allow_collective_id_without_custom_barrier: bool = False,
       shape_invariant_numerics: bool = True,
+      use_tc_tiling_on_sc: bool | None = None,
   ):
     object.__setattr__(
         self,
@@ -163,12 +170,13 @@ class CompilerParams(pallas_core.CompilerParams):
     object.__setattr__(
         self, "shape_invariant_numerics", shape_invariant_numerics
     )
+    object.__setattr__(self, "use_tc_tiling_on_sc", use_tc_tiling_on_sc)
 
   # Replace is a method, not a field.
   replace = dataclasses.replace
 
+
 class MemorySpace(enum.Enum):
-  ANY = "any"  # TODO(b/368401328): Remove this and just use pl.ANY.
   VMEM = "vmem"
   VMEM_SHARED = "vmem_shared"
   SMEM = "smem"
@@ -183,9 +191,24 @@ class MemorySpace(enum.Enum):
   def from_type(self, ty):
     return pallas_core.MemoryRef(ty, memory_space=self)
 
-  def __call__(self, shape: tuple[int, ...], dtype: jnp.dtype):
+  def __call__(self, shape: Sequence[int], dtype: jnp.dtype):
     # A convenience function for constructing MemoryRef types of ShapedArrays.
-    return self.from_type(jax_core.ShapedArray(shape, dtype))
+    return self.from_type(jax_core.ShapedArray(tuple(shape), dtype))
+
+  def __getattr__(self, name):
+    if name == "ANY":
+      # Deprecated on Dec 10, 2025.
+      deprecations.warn(
+          "pltpu-memory-space-any",
+          "pltpu.MemorySpace.ANY is deprecated. Use pl.ANY instead.",
+          stacklevel=2,
+      )
+      return pallas_core.MemorySpace.ANY
+    return super().__getattr__(name)  # type: ignore
+
+
+# TODO(slebedev): Remove this after
+MemorySpace.ANY = pallas_core.MemorySpace.ANY
 
 class dma_semaphore(pallas_core.semaphore_dtype): pass
 
@@ -336,6 +359,49 @@ def _tensorcore_mesh_discharge_rule(
           "TensorCoreMesh does not support VMEM inputs/outputs when there are"
           " >1 cores. Use HBM or ANY instead."
       )
+  def allowed_aval(aval):
+    if isinstance(aval, state.AbstractRef):
+      return True
+    if isinstance(aval, jax_core.ShapedArray):
+      # Only scalars are allowed.
+      return not aval.shape
+    return False
+  assert all(allowed_aval(v.aval) for v in jaxpr.constvars + jaxpr.invars)
+
+  is_scalar_const = [
+      isinstance(v.aval, jax_core.ShapedArray) and not v.aval.shape
+      for v in jaxpr.constvars
+  ]
+  if any(is_scalar_const):
+    # Rewrite body jaxpr to take in scalar values as Refs.
+    def new_body(*args):
+      args = [
+          a[0] if is_scalar else a
+          for a, is_scalar in zip(args, is_scalar_const)
+      ]
+      return jax_core.eval_jaxpr(jaxpr, args)
+    # TODO(sharadmv): Remove this once Mosaic support passing scalars as values.
+    new_trace_avals = [
+        state.AbstractRef(  # pylint: disable=g-long-ternary
+            jax_core.ShapedArray((1,), v.aval.dtype),
+            memory_space=MemorySpace.SMEM,
+        )
+        if is_scalar
+        else v.aval
+        for v, is_scalar in zip(jaxpr.constvars, is_scalar_const)
+    ]
+    new_jaxpr, _, _ = pe.trace_to_jaxpr_dynamic(
+        lu.wrap_init(
+            new_body, debug_info=jaxpr.debug_info.with_unknown_names()
+        ),
+        new_trace_avals,
+    )
+    jaxpr = new_jaxpr.replace(invars=[], constvars=new_jaxpr.invars)
+    args = tuple(
+        a[None] if is_scalar else a
+        for a, is_scalar in zip(args, is_scalar_const)
+    )
+    in_avals, out_avals = util.split_list(new_trace_avals, [len(in_avals)])
   return pallas_core.default_mesh_discharge_rule(
       in_avals,
       out_avals,

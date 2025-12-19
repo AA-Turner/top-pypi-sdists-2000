@@ -459,7 +459,7 @@ class IClusterParameterGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="clusterParameterGroupRef")
-    def cluster_parameter_group_ref(self) -> ClusterParameterGroupReference:
+    def cluster_parameter_group_ref(self) -> "ClusterParameterGroupReference":
         '''(experimental) A reference to a ClusterParameterGroup resource.
 
         :stability: experimental
@@ -480,12 +480,12 @@ class _IClusterParameterGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterParameterGroupRef")
-    def cluster_parameter_group_ref(self) -> ClusterParameterGroupReference:
+    def cluster_parameter_group_ref(self) -> "ClusterParameterGroupReference":
         '''(experimental) A reference to a ClusterParameterGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClusterParameterGroupReference, jsii.get(self, "clusterParameterGroupRef"))
+        return typing.cast("ClusterParameterGroupReference", jsii.get(self, "clusterParameterGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClusterParameterGroupRef).__jsii_proxy_class__ = lambda : _IClusterParameterGroupRefProxy
@@ -504,7 +504,7 @@ class IClusterRef(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
@@ -525,12 +525,12 @@ class _IClusterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClusterReference, jsii.get(self, "clusterRef"))
+        return typing.cast("ClusterReference", jsii.get(self, "clusterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRefProxy
@@ -553,7 +553,7 @@ class IClusterSecurityGroupIngressRef(
     @jsii.member(jsii_name="clusterSecurityGroupIngressRef")
     def cluster_security_group_ingress_ref(
         self,
-    ) -> ClusterSecurityGroupIngressReference:
+    ) -> "ClusterSecurityGroupIngressReference":
         '''(experimental) A reference to a ClusterSecurityGroupIngress resource.
 
         :stability: experimental
@@ -576,12 +576,12 @@ class _IClusterSecurityGroupIngressRefProxy(
     @jsii.member(jsii_name="clusterSecurityGroupIngressRef")
     def cluster_security_group_ingress_ref(
         self,
-    ) -> ClusterSecurityGroupIngressReference:
+    ) -> "ClusterSecurityGroupIngressReference":
         '''(experimental) A reference to a ClusterSecurityGroupIngress resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClusterSecurityGroupIngressReference, jsii.get(self, "clusterSecurityGroupIngressRef"))
+        return typing.cast("ClusterSecurityGroupIngressReference", jsii.get(self, "clusterSecurityGroupIngressRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClusterSecurityGroupIngressRef).__jsii_proxy_class__ = lambda : _IClusterSecurityGroupIngressRefProxy
@@ -602,7 +602,7 @@ class IClusterSecurityGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="clusterSecurityGroupRef")
-    def cluster_security_group_ref(self) -> ClusterSecurityGroupReference:
+    def cluster_security_group_ref(self) -> "ClusterSecurityGroupReference":
         '''(experimental) A reference to a ClusterSecurityGroup resource.
 
         :stability: experimental
@@ -623,12 +623,12 @@ class _IClusterSecurityGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterSecurityGroupRef")
-    def cluster_security_group_ref(self) -> ClusterSecurityGroupReference:
+    def cluster_security_group_ref(self) -> "ClusterSecurityGroupReference":
         '''(experimental) A reference to a ClusterSecurityGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClusterSecurityGroupReference, jsii.get(self, "clusterSecurityGroupRef"))
+        return typing.cast("ClusterSecurityGroupReference", jsii.get(self, "clusterSecurityGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClusterSecurityGroupRef).__jsii_proxy_class__ = lambda : _IClusterSecurityGroupRefProxy
@@ -647,7 +647,7 @@ class IClusterSubnetGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="clusterSubnetGroupRef")
-    def cluster_subnet_group_ref(self) -> ClusterSubnetGroupReference:
+    def cluster_subnet_group_ref(self) -> "ClusterSubnetGroupReference":
         '''(experimental) A reference to a ClusterSubnetGroup resource.
 
         :stability: experimental
@@ -668,12 +668,12 @@ class _IClusterSubnetGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterSubnetGroupRef")
-    def cluster_subnet_group_ref(self) -> ClusterSubnetGroupReference:
+    def cluster_subnet_group_ref(self) -> "ClusterSubnetGroupReference":
         '''(experimental) A reference to a ClusterSubnetGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClusterSubnetGroupReference, jsii.get(self, "clusterSubnetGroupRef"))
+        return typing.cast("ClusterSubnetGroupReference", jsii.get(self, "clusterSubnetGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClusterSubnetGroupRef).__jsii_proxy_class__ = lambda : _IClusterSubnetGroupRefProxy
@@ -692,7 +692,7 @@ class IEndpointAccessRef(
 
     @builtins.property
     @jsii.member(jsii_name="endpointAccessRef")
-    def endpoint_access_ref(self) -> EndpointAccessReference:
+    def endpoint_access_ref(self) -> "EndpointAccessReference":
         '''(experimental) A reference to a EndpointAccess resource.
 
         :stability: experimental
@@ -713,12 +713,12 @@ class _IEndpointAccessRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="endpointAccessRef")
-    def endpoint_access_ref(self) -> EndpointAccessReference:
+    def endpoint_access_ref(self) -> "EndpointAccessReference":
         '''(experimental) A reference to a EndpointAccess resource.
 
         :stability: experimental
         '''
-        return typing.cast(EndpointAccessReference, jsii.get(self, "endpointAccessRef"))
+        return typing.cast("EndpointAccessReference", jsii.get(self, "endpointAccessRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEndpointAccessRef).__jsii_proxy_class__ = lambda : _IEndpointAccessRefProxy
@@ -739,7 +739,7 @@ class IEndpointAuthorizationRef(
 
     @builtins.property
     @jsii.member(jsii_name="endpointAuthorizationRef")
-    def endpoint_authorization_ref(self) -> EndpointAuthorizationReference:
+    def endpoint_authorization_ref(self) -> "EndpointAuthorizationReference":
         '''(experimental) A reference to a EndpointAuthorization resource.
 
         :stability: experimental
@@ -760,12 +760,12 @@ class _IEndpointAuthorizationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="endpointAuthorizationRef")
-    def endpoint_authorization_ref(self) -> EndpointAuthorizationReference:
+    def endpoint_authorization_ref(self) -> "EndpointAuthorizationReference":
         '''(experimental) A reference to a EndpointAuthorization resource.
 
         :stability: experimental
         '''
-        return typing.cast(EndpointAuthorizationReference, jsii.get(self, "endpointAuthorizationRef"))
+        return typing.cast("EndpointAuthorizationReference", jsii.get(self, "endpointAuthorizationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEndpointAuthorizationRef).__jsii_proxy_class__ = lambda : _IEndpointAuthorizationRefProxy
@@ -784,7 +784,7 @@ class IEventSubscriptionRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventSubscriptionRef")
-    def event_subscription_ref(self) -> EventSubscriptionReference:
+    def event_subscription_ref(self) -> "EventSubscriptionReference":
         '''(experimental) A reference to a EventSubscription resource.
 
         :stability: experimental
@@ -805,12 +805,12 @@ class _IEventSubscriptionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventSubscriptionRef")
-    def event_subscription_ref(self) -> EventSubscriptionReference:
+    def event_subscription_ref(self) -> "EventSubscriptionReference":
         '''(experimental) A reference to a EventSubscription resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventSubscriptionReference, jsii.get(self, "eventSubscriptionRef"))
+        return typing.cast("EventSubscriptionReference", jsii.get(self, "eventSubscriptionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventSubscriptionRef).__jsii_proxy_class__ = lambda : _IEventSubscriptionRefProxy

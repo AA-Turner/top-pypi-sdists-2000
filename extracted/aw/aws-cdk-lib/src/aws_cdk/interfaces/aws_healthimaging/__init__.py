@@ -112,7 +112,7 @@ class IDatastoreRef(
 
     @builtins.property
     @jsii.member(jsii_name="datastoreRef")
-    def datastore_ref(self) -> DatastoreReference:
+    def datastore_ref(self) -> "DatastoreReference":
         '''(experimental) A reference to a Datastore resource.
 
         :stability: experimental
@@ -133,12 +133,12 @@ class _IDatastoreRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="datastoreRef")
-    def datastore_ref(self) -> DatastoreReference:
+    def datastore_ref(self) -> "DatastoreReference":
         '''(experimental) A reference to a Datastore resource.
 
         :stability: experimental
         '''
-        return typing.cast(DatastoreReference, jsii.get(self, "datastoreRef"))
+        return typing.cast("DatastoreReference", jsii.get(self, "datastoreRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDatastoreRef).__jsii_proxy_class__ = lambda : _IDatastoreRefProxy

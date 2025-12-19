@@ -111,6 +111,7 @@ class CfnCacheCluster(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_elasticache as elasticache
@@ -163,13 +164,13 @@ class CfnCacheCluster(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cache_node_type: builtins.str,
         engine: builtins.str,
         num_cache_nodes: jsii.Number,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         az_mode: typing.Optional[builtins.str] = None,
         cache_parameter_group_name: typing.Optional[builtins.str] = None,
         cache_security_group_names: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -177,7 +178,7 @@ class CfnCacheCluster(
         cluster_name: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
         ip_discovery: typing.Optional[builtins.str] = None,
-        log_delivery_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCacheCluster.LogDeliveryConfigurationRequestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        log_delivery_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCacheCluster.LogDeliveryConfigurationRequestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         network_type: typing.Optional[builtins.str] = None,
         notification_topic_arn: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
@@ -188,8 +189,8 @@ class CfnCacheCluster(
         snapshot_name: typing.Optional[builtins.str] = None,
         snapshot_retention_limit: typing.Optional[jsii.Number] = None,
         snapshot_window: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::ElastiCache::CacheCluster``.
@@ -269,7 +270,7 @@ class CfnCacheCluster(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCacheCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -353,9 +354,9 @@ class CfnCacheCluster(
 
     @builtins.property
     @jsii.member(jsii_name="cacheClusterRef")
-    def cache_cluster_ref(self) -> _CacheClusterReference_eaa6c194:
+    def cache_cluster_ref(self) -> "_CacheClusterReference_eaa6c194":
         '''A reference to a CacheCluster resource.'''
-        return typing.cast(_CacheClusterReference_eaa6c194, jsii.get(self, "cacheClusterRef"))
+        return typing.cast("_CacheClusterReference_eaa6c194", jsii.get(self, "cacheClusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -364,9 +365,9 @@ class CfnCacheCluster(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="cacheNodeType")
@@ -411,14 +412,14 @@ class CfnCacheCluster(
     @jsii.member(jsii_name="autoMinorVersionUpgrade")
     def auto_minor_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If you are running Valkey 7.2 or later, or Redis OSS engine version 6.0 or later, set this parameter to yes if you want to opt-in to the next minor version upgrade campaign. This parameter is disabled for previous versions.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "autoMinorVersionUpgrade"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "autoMinorVersionUpgrade"))
 
     @auto_minor_version_upgrade.setter
     def auto_minor_version_upgrade(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b74ab91b309fe8b033442df78ec7c947ef8b8ceac25b5fb4347e7e697fb388da)
@@ -523,14 +524,14 @@ class CfnCacheCluster(
     @jsii.member(jsii_name="logDeliveryConfigurations")
     def log_delivery_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCacheCluster.LogDeliveryConfigurationRequestProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCacheCluster.LogDeliveryConfigurationRequestProperty"]]]]:
         '''Specifies the destination, format and type of the logs.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCacheCluster.LogDeliveryConfigurationRequestProperty"]]]], jsii.get(self, "logDeliveryConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCacheCluster.LogDeliveryConfigurationRequestProperty"]]]], jsii.get(self, "logDeliveryConfigurations"))
 
     @log_delivery_configurations.setter
     def log_delivery_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCacheCluster.LogDeliveryConfigurationRequestProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCacheCluster.LogDeliveryConfigurationRequestProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__92cc1290aacd3e87fdb8540c5a430dd3781b4d21f64685730ff4176b05840454)
@@ -677,12 +678,12 @@ class CfnCacheCluster(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to be added to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bb033789ee709e38cf2df5c67f41474c2337ba8ce07eac9ee4a2c714fc9bc989)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -692,14 +693,14 @@ class CfnCacheCluster(
     @jsii.member(jsii_name="transitEncryptionEnabled")
     def transit_encryption_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag that enables in-transit encryption when set to true.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "transitEncryptionEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "transitEncryptionEnabled"))
 
     @transit_encryption_enabled.setter
     def transit_encryption_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5b5c36f3eb4db3de564bb875816a147602a4348d296a24fafccdae0acba9440b)
@@ -788,8 +789,8 @@ class CfnCacheCluster(
         def __init__(
             self,
             *,
-            cloud_watch_logs_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCacheCluster.CloudWatchLogsDestinationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            kinesis_firehose_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCacheCluster.KinesisFirehoseDestinationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logs_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCacheCluster.CloudWatchLogsDestinationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            kinesis_firehose_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCacheCluster.KinesisFirehoseDestinationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Configuration details of either a CloudWatch Logs destination or Kinesis Data Firehose destination.
 
@@ -827,7 +828,7 @@ class CfnCacheCluster(
         @builtins.property
         def cloud_watch_logs_details(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCacheCluster.CloudWatchLogsDestinationDetailsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCacheCluster.CloudWatchLogsDestinationDetailsProperty"]]:
             '''The configuration details of the CloudWatch Logs destination.
 
             Note that this field is marked as required but only if CloudWatch Logs was chosen as the destination.
@@ -835,12 +836,12 @@ class CfnCacheCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-cachecluster-destinationdetails.html#cfn-elasticache-cachecluster-destinationdetails-cloudwatchlogsdetails
             '''
             result = self._values.get("cloud_watch_logs_details")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCacheCluster.CloudWatchLogsDestinationDetailsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCacheCluster.CloudWatchLogsDestinationDetailsProperty"]], result)
 
         @builtins.property
         def kinesis_firehose_details(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCacheCluster.KinesisFirehoseDestinationDetailsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCacheCluster.KinesisFirehoseDestinationDetailsProperty"]]:
             '''The configuration details of the Kinesis Data Firehose destination.
 
             Note that this field is marked as required but only if Kinesis Data Firehose was chosen as the destination.
@@ -848,7 +849,7 @@ class CfnCacheCluster(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-cachecluster-destinationdetails.html#cfn-elasticache-cachecluster-destinationdetails-kinesisfirehosedetails
             '''
             result = self._values.get("kinesis_firehose_details")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCacheCluster.KinesisFirehoseDestinationDetailsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCacheCluster.KinesisFirehoseDestinationDetailsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -929,7 +930,7 @@ class CfnCacheCluster(
         def __init__(
             self,
             *,
-            destination_details: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCacheCluster.DestinationDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+            destination_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCacheCluster.DestinationDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
             destination_type: builtins.str,
             log_format: builtins.str,
             log_type: builtins.str,
@@ -980,14 +981,14 @@ class CfnCacheCluster(
         @builtins.property
         def destination_details(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnCacheCluster.DestinationDetailsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnCacheCluster.DestinationDetailsProperty"]:
             '''Configuration details of either a CloudWatch Logs destination or Kinesis Data Firehose destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-cachecluster-logdeliveryconfigurationrequest.html#cfn-elasticache-cachecluster-logdeliveryconfigurationrequest-destinationdetails
             '''
             result = self._values.get("destination_details")
             assert result is not None, "Required property 'destination_details' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCacheCluster.DestinationDetailsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCacheCluster.DestinationDetailsProperty"], result)
 
         @builtins.property
         def destination_type(self) -> builtins.str:
@@ -1071,7 +1072,7 @@ class CfnCacheClusterProps:
         cache_node_type: builtins.str,
         engine: builtins.str,
         num_cache_nodes: jsii.Number,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         az_mode: typing.Optional[builtins.str] = None,
         cache_parameter_group_name: typing.Optional[builtins.str] = None,
         cache_security_group_names: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -1079,7 +1080,7 @@ class CfnCacheClusterProps:
         cluster_name: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
         ip_discovery: typing.Optional[builtins.str] = None,
-        log_delivery_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCacheCluster.LogDeliveryConfigurationRequestProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        log_delivery_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCacheCluster.LogDeliveryConfigurationRequestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         network_type: typing.Optional[builtins.str] = None,
         notification_topic_arn: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
@@ -1090,8 +1091,8 @@ class CfnCacheClusterProps:
         snapshot_name: typing.Optional[builtins.str] = None,
         snapshot_retention_limit: typing.Optional[jsii.Number] = None,
         snapshot_window: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCacheCluster``.
@@ -1127,6 +1128,7 @@ class CfnCacheClusterProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_elasticache as elasticache
@@ -1351,13 +1353,13 @@ class CfnCacheClusterProps:
     @builtins.property
     def auto_minor_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If you are running Valkey 7.2 or later, or Redis OSS engine version 6.0 or later, set this parameter to yes if you want to opt-in to the next minor version upgrade campaign. This parameter is disabled for previous versions.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-cachecluster.html#cfn-elasticache-cachecluster-autominorversionupgrade
         '''
         result = self._values.get("auto_minor_version_upgrade")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def az_mode(self) -> typing.Optional[builtins.str]:
@@ -1448,13 +1450,13 @@ class CfnCacheClusterProps:
     @builtins.property
     def log_delivery_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCacheCluster.LogDeliveryConfigurationRequestProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCacheCluster.LogDeliveryConfigurationRequestProperty"]]]]:
         '''Specifies the destination, format and type of the logs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-cachecluster.html#cfn-elasticache-cachecluster-logdeliveryconfigurations
         '''
         result = self._values.get("log_delivery_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnCacheCluster.LogDeliveryConfigurationRequestProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCacheCluster.LogDeliveryConfigurationRequestProperty"]]]], result)
 
     @builtins.property
     def network_type(self) -> typing.Optional[builtins.str]:
@@ -1612,24 +1614,24 @@ class CfnCacheClusterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to be added to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-cachecluster.html#cfn-elasticache-cachecluster-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def transit_encryption_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag that enables in-transit encryption when set to true.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-cachecluster.html#cfn-elasticache-cachecluster-transitencryptionenabled
         '''
         result = self._values.get("transit_encryption_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def vpc_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1705,11 +1707,11 @@ class CfnGlobalReplicationGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        members: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        automatic_failover_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        members: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        automatic_failover_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         cache_node_type: typing.Optional[builtins.str] = None,
         cache_parameter_group_name: typing.Optional[builtins.str] = None,
         engine: typing.Optional[builtins.str] = None,
@@ -1717,7 +1719,7 @@ class CfnGlobalReplicationGroup(
         global_node_group_count: typing.Optional[jsii.Number] = None,
         global_replication_group_description: typing.Optional[builtins.str] = None,
         global_replication_group_id_suffix: typing.Optional[builtins.str] = None,
-        regional_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalReplicationGroup.RegionalConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        regional_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalReplicationGroup.RegionalConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ElastiCache::GlobalReplicationGroup``.
 
@@ -1757,7 +1759,7 @@ class CfnGlobalReplicationGroup(
     @builtins.classmethod
     def arn_for_global_replication_group(
         cls,
-        resource: _IGlobalReplicationGroupRef_64ba38b1,
+        resource: "_IGlobalReplicationGroupRef_64ba38b1",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1771,10 +1773,10 @@ class CfnGlobalReplicationGroup(
     @builtins.classmethod
     def from_global_replication_group_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         global_replication_group_id: builtins.str,
-    ) -> _IGlobalReplicationGroupRef_64ba38b1:
+    ) -> "_IGlobalReplicationGroupRef_64ba38b1":
         '''Creates a new IGlobalReplicationGroupRef from a globalReplicationGroupId.
 
         :param scope: -
@@ -1786,7 +1788,7 @@ class CfnGlobalReplicationGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument global_replication_group_id", value=global_replication_group_id, expected_type=type_hints["global_replication_group_id"])
-        return typing.cast(_IGlobalReplicationGroupRef_64ba38b1, jsii.sinvoke(cls, "fromGlobalReplicationGroupId", [scope, id, global_replication_group_id]))
+        return typing.cast("_IGlobalReplicationGroupRef_64ba38b1", jsii.sinvoke(cls, "fromGlobalReplicationGroupId", [scope, id, global_replication_group_id]))
 
     @jsii.member(jsii_name="isCfnGlobalReplicationGroup")
     @builtins.classmethod
@@ -1801,7 +1803,7 @@ class CfnGlobalReplicationGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGlobalReplicationGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1857,22 +1859,24 @@ class CfnGlobalReplicationGroup(
 
     @builtins.property
     @jsii.member(jsii_name="globalReplicationGroupRef")
-    def global_replication_group_ref(self) -> _GlobalReplicationGroupReference_6fafc89d:
+    def global_replication_group_ref(
+        self,
+    ) -> "_GlobalReplicationGroupReference_6fafc89d":
         '''A reference to a GlobalReplicationGroup resource.'''
-        return typing.cast(_GlobalReplicationGroupReference_6fafc89d, jsii.get(self, "globalReplicationGroupRef"))
+        return typing.cast("_GlobalReplicationGroupReference_6fafc89d", jsii.get(self, "globalReplicationGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="members")
     def members(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty"]]]:
         '''The replication groups that comprise the Global datastore.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty"]]], jsii.get(self, "members"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty"]]], jsii.get(self, "members"))
 
     @members.setter
     def members(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e868e518f50b5b48c699f872e36b8e20be2702ad6acf8d5f4500e986aac55b3d)
@@ -1883,14 +1887,14 @@ class CfnGlobalReplicationGroup(
     @jsii.member(jsii_name="automaticFailoverEnabled")
     def automatic_failover_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether a read-only replica is automatically promoted to read/write primary if the existing primary fails.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "automaticFailoverEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "automaticFailoverEnabled"))
 
     @automatic_failover_enabled.setter
     def automatic_failover_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8f937e9779d5fe5d88540d353152c5e7637a4c898506e495763dc389bca1a193)
@@ -1998,14 +2002,14 @@ class CfnGlobalReplicationGroup(
     @jsii.member(jsii_name="regionalConfigurations")
     def regional_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalReplicationGroup.RegionalConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalReplicationGroup.RegionalConfigurationProperty"]]]]:
         '''The Regions that comprise the Global Datastore.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalReplicationGroup.RegionalConfigurationProperty"]]]], jsii.get(self, "regionalConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalReplicationGroup.RegionalConfigurationProperty"]]]], jsii.get(self, "regionalConfigurations"))
 
     @regional_configurations.setter
     def regional_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalReplicationGroup.RegionalConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalReplicationGroup.RegionalConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__efeee031dd310c05cefd1733ccdb9d7b436fc018669200525c6f11542ae97dac)
@@ -2118,7 +2122,7 @@ class CfnGlobalReplicationGroup(
             *,
             replication_group_id: typing.Optional[builtins.str] = None,
             replication_group_region: typing.Optional[builtins.str] = None,
-            resharding_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGlobalReplicationGroup.ReshardingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            resharding_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalReplicationGroup.ReshardingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''A list of the replication groups.
 
@@ -2178,13 +2182,13 @@ class CfnGlobalReplicationGroup(
         @builtins.property
         def resharding_configurations(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalReplicationGroup.ReshardingConfigurationProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalReplicationGroup.ReshardingConfigurationProperty"]]]]:
             '''A list of PreferredAvailabilityZones objects that specifies the configuration of a node group in the resharded cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-globalreplicationgroup-regionalconfiguration.html#cfn-elasticache-globalreplicationgroup-regionalconfiguration-reshardingconfigurations
             '''
             result = self._values.get("resharding_configurations")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnGlobalReplicationGroup.ReshardingConfigurationProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalReplicationGroup.ReshardingConfigurationProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2293,8 +2297,8 @@ class CfnGlobalReplicationGroupProps:
     def __init__(
         self,
         *,
-        members: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        automatic_failover_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        members: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        automatic_failover_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         cache_node_type: typing.Optional[builtins.str] = None,
         cache_parameter_group_name: typing.Optional[builtins.str] = None,
         engine: typing.Optional[builtins.str] = None,
@@ -2302,7 +2306,7 @@ class CfnGlobalReplicationGroupProps:
         global_node_group_count: typing.Optional[jsii.Number] = None,
         global_replication_group_description: typing.Optional[builtins.str] = None,
         global_replication_group_id_suffix: typing.Optional[builtins.str] = None,
-        regional_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalReplicationGroup.RegionalConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        regional_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGlobalReplicationGroup.RegionalConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnGlobalReplicationGroup``.
 
@@ -2389,19 +2393,19 @@ class CfnGlobalReplicationGroupProps:
     @builtins.property
     def members(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty"]]]:
         '''The replication groups that comprise the Global datastore.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-globalreplicationgroup.html#cfn-elasticache-globalreplicationgroup-members
         '''
         result = self._values.get("members")
         assert result is not None, "Required property 'members' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalReplicationGroup.GlobalReplicationGroupMemberProperty"]]], result)
 
     @builtins.property
     def automatic_failover_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether a read-only replica is automatically promoted to read/write primary if the existing primary fails.
 
         ``AutomaticFailoverEnabled`` must be enabled for Valkey or Redis OSS (cluster mode enabled) replication groups.
@@ -2409,7 +2413,7 @@ class CfnGlobalReplicationGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-globalreplicationgroup.html#cfn-elasticache-globalreplicationgroup-automaticfailoverenabled
         '''
         result = self._values.get("automatic_failover_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def cache_node_type(self) -> typing.Optional[builtins.str]:
@@ -2483,13 +2487,13 @@ class CfnGlobalReplicationGroupProps:
     @builtins.property
     def regional_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalReplicationGroup.RegionalConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalReplicationGroup.RegionalConfigurationProperty"]]]]:
         '''The Regions that comprise the Global Datastore.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-globalreplicationgroup.html#cfn-elasticache-globalreplicationgroup-regionalconfigurations
         '''
         result = self._values.get("regional_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGlobalReplicationGroup.RegionalConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGlobalReplicationGroup.RegionalConfigurationProperty"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2519,6 +2523,7 @@ class CfnParameterGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_elasticache as elasticache
@@ -2540,13 +2545,13 @@ class CfnParameterGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cache_parameter_group_family: builtins.str,
         description: builtins.str,
-        properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ElastiCache::ParameterGroup``.
 
@@ -2574,7 +2579,7 @@ class CfnParameterGroup(
     @builtins.classmethod
     def arn_for_parameter_group(
         cls,
-        resource: _IParameterGroupRef_f36b5e48,
+        resource: "_IParameterGroupRef_f36b5e48",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -2588,10 +2593,10 @@ class CfnParameterGroup(
     @builtins.classmethod
     def from_cache_parameter_group_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         cache_parameter_group_name: builtins.str,
-    ) -> _IParameterGroupRef_f36b5e48:
+    ) -> "_IParameterGroupRef_f36b5e48":
         '''Creates a new IParameterGroupRef from a cacheParameterGroupName.
 
         :param scope: -
@@ -2603,7 +2608,7 @@ class CfnParameterGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument cache_parameter_group_name", value=cache_parameter_group_name, expected_type=type_hints["cache_parameter_group_name"])
-        return typing.cast(_IParameterGroupRef_f36b5e48, jsii.sinvoke(cls, "fromCacheParameterGroupName", [scope, id, cache_parameter_group_name]))
+        return typing.cast("_IParameterGroupRef_f36b5e48", jsii.sinvoke(cls, "fromCacheParameterGroupName", [scope, id, cache_parameter_group_name]))
 
     @jsii.member(jsii_name="isCfnParameterGroup")
     @builtins.classmethod
@@ -2618,7 +2623,7 @@ class CfnParameterGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnParameterGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2663,15 +2668,15 @@ class CfnParameterGroup(
 
     @builtins.property
     @jsii.member(jsii_name="parameterGroupRef")
-    def parameter_group_ref(self) -> _ParameterGroupReference_22889308:
+    def parameter_group_ref(self) -> "_ParameterGroupReference_22889308":
         '''A reference to a ParameterGroup resource.'''
-        return typing.cast(_ParameterGroupReference_22889308, jsii.get(self, "parameterGroupRef"))
+        return typing.cast("_ParameterGroupReference_22889308", jsii.get(self, "parameterGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="cacheParameterGroupFamily")
@@ -2703,14 +2708,14 @@ class CfnParameterGroup(
     @jsii.member(jsii_name="properties")
     def properties(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''A comma-delimited list of parameter name/value pairs.'''
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "properties"))
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "properties"))
 
     @properties.setter
     def properties(
         self,
-        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ad995d05e00fe4d7296f16776a975d33eb5d75180391440607e5d71ae30d1f08)
@@ -2719,12 +2724,12 @@ class CfnParameterGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A tag that can be added to an ElastiCache parameter group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f00caea2443ab3a4d0d9d2f1836e1d360d238f759643e2af050c00c5ea4f3efb)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2747,8 +2752,8 @@ class CfnParameterGroupProps:
         *,
         cache_parameter_group_family: builtins.str,
         description: builtins.str,
-        properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnParameterGroup``.
 
@@ -2762,6 +2767,7 @@ class CfnParameterGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_elasticache as elasticache
@@ -2820,7 +2826,7 @@ class CfnParameterGroupProps:
     @builtins.property
     def properties(
         self,
-    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
         '''A comma-delimited list of parameter name/value pairs.
 
         For example::
@@ -2831,10 +2837,10 @@ class CfnParameterGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-parametergroup.html#cfn-elasticache-parametergroup-properties
         '''
         result = self._values.get("properties")
-        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A tag that can be added to an ElastiCache parameter group.
 
         Tags are composed of a Key/Value pair. You can use tags to categorize and track all your parameter groups. A tag with a null Value is permitted.
@@ -2842,7 +2848,7 @@ class CfnParameterGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-parametergroup.html#cfn-elasticache-parametergroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2878,6 +2884,7 @@ class CfnReplicationGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_elasticache as elasticache
@@ -2950,29 +2957,29 @@ class CfnReplicationGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         replication_group_description: builtins.str,
-        at_rest_encryption_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        at_rest_encryption_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         auth_token: typing.Optional[builtins.str] = None,
-        automatic_failover_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        automatic_failover_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         cache_node_type: typing.Optional[builtins.str] = None,
         cache_parameter_group_name: typing.Optional[builtins.str] = None,
         cache_security_group_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         cache_subnet_group_name: typing.Optional[builtins.str] = None,
         cluster_mode: typing.Optional[builtins.str] = None,
-        data_tiering_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        data_tiering_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         engine: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
         global_replication_group_id: typing.Optional[builtins.str] = None,
         ip_discovery: typing.Optional[builtins.str] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        log_delivery_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicationGroup.LogDeliveryConfigurationRequestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        multi_az_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        log_delivery_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationGroup.LogDeliveryConfigurationRequestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        multi_az_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         network_type: typing.Optional[builtins.str] = None,
-        node_group_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicationGroup.NodeGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        node_group_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationGroup.NodeGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         notification_topic_arn: typing.Optional[builtins.str] = None,
         num_cache_clusters: typing.Optional[jsii.Number] = None,
         num_node_groups: typing.Optional[jsii.Number] = None,
@@ -2988,8 +2995,8 @@ class CfnReplicationGroup(
         snapshot_retention_limit: typing.Optional[jsii.Number] = None,
         snapshotting_cluster_id: typing.Optional[builtins.str] = None,
         snapshot_window: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         transit_encryption_mode: typing.Optional[builtins.str] = None,
         user_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
@@ -3089,7 +3096,7 @@ class CfnReplicationGroup(
     @builtins.classmethod
     def arn_for_replication_group(
         cls,
-        resource: _IReplicationGroupRef_0d541dee,
+        resource: "_IReplicationGroupRef_0d541dee",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -3103,10 +3110,10 @@ class CfnReplicationGroup(
     @builtins.classmethod
     def from_replication_group_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         replication_group_id: builtins.str,
-    ) -> _IReplicationGroupRef_0d541dee:
+    ) -> "_IReplicationGroupRef_0d541dee":
         '''Creates a new IReplicationGroupRef from a replicationGroupId.
 
         :param scope: -
@@ -3118,7 +3125,7 @@ class CfnReplicationGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument replication_group_id", value=replication_group_id, expected_type=type_hints["replication_group_id"])
-        return typing.cast(_IReplicationGroupRef_0d541dee, jsii.sinvoke(cls, "fromReplicationGroupId", [scope, id, replication_group_id]))
+        return typing.cast("_IReplicationGroupRef_0d541dee", jsii.sinvoke(cls, "fromReplicationGroupId", [scope, id, replication_group_id]))
 
     @jsii.member(jsii_name="isCfnReplicationGroup")
     @builtins.classmethod
@@ -3133,7 +3140,7 @@ class CfnReplicationGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReplicationGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3271,15 +3278,15 @@ class CfnReplicationGroup(
 
     @builtins.property
     @jsii.member(jsii_name="replicationGroupRef")
-    def replication_group_ref(self) -> _ReplicationGroupReference_623f8ee0:
+    def replication_group_ref(self) -> "_ReplicationGroupReference_623f8ee0":
         '''A reference to a ReplicationGroup resource.'''
-        return typing.cast(_ReplicationGroupReference_623f8ee0, jsii.get(self, "replicationGroupRef"))
+        return typing.cast("_ReplicationGroupReference_623f8ee0", jsii.get(self, "replicationGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="replicationGroupDescription")
@@ -3298,14 +3305,14 @@ class CfnReplicationGroup(
     @jsii.member(jsii_name="atRestEncryptionEnabled")
     def at_rest_encryption_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag that enables encryption at rest when set to ``true`` .'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "atRestEncryptionEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "atRestEncryptionEnabled"))
 
     @at_rest_encryption_enabled.setter
     def at_rest_encryption_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__aa546aa730ad1a4db1a42606474b6045ffc32ec777b50d6ba31f3dbdab3a48df)
@@ -3329,14 +3336,14 @@ class CfnReplicationGroup(
     @jsii.member(jsii_name="automaticFailoverEnabled")
     def automatic_failover_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether a read-only replica is automatically promoted to read/write primary if the existing primary fails.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "automaticFailoverEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "automaticFailoverEnabled"))
 
     @automatic_failover_enabled.setter
     def automatic_failover_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b966eb1df615199d14bbc7fd9f3b39c9f4709837783a9a97f8945e6c623dc56d)
@@ -3347,14 +3354,14 @@ class CfnReplicationGroup(
     @jsii.member(jsii_name="autoMinorVersionUpgrade")
     def auto_minor_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If you are running Valkey 7.2 or later, or Redis OSS 6.0 or later, set this parameter to yes if you want to opt-in to the next minor version upgrade campaign. This parameter is disabled for previous versions.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "autoMinorVersionUpgrade"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "autoMinorVersionUpgrade"))
 
     @auto_minor_version_upgrade.setter
     def auto_minor_version_upgrade(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__86b4cffb8c5e43d27133f190ebeba6d314ad935e730a8628bef824306d4d6356)
@@ -3433,14 +3440,14 @@ class CfnReplicationGroup(
     @jsii.member(jsii_name="dataTieringEnabled")
     def data_tiering_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables data tiering.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "dataTieringEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "dataTieringEnabled"))
 
     @data_tiering_enabled.setter
     def data_tiering_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a4366a0fcdd44e261b8f1399689f3ac4bb635223727a5c70ecced2835cb18c15)
@@ -3516,14 +3523,14 @@ class CfnReplicationGroup(
     @jsii.member(jsii_name="logDeliveryConfigurations")
     def log_delivery_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationGroup.LogDeliveryConfigurationRequestProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.LogDeliveryConfigurationRequestProperty"]]]]:
         '''Specifies the destination, format and type of the logs.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationGroup.LogDeliveryConfigurationRequestProperty"]]]], jsii.get(self, "logDeliveryConfigurations"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.LogDeliveryConfigurationRequestProperty"]]]], jsii.get(self, "logDeliveryConfigurations"))
 
     @log_delivery_configurations.setter
     def log_delivery_configurations(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationGroup.LogDeliveryConfigurationRequestProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.LogDeliveryConfigurationRequestProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c6abdf1dfe7ce2cb6bd74fcf5e71f8d01354d2ebe730f2f8811c7cca3c29115c)
@@ -3534,14 +3541,14 @@ class CfnReplicationGroup(
     @jsii.member(jsii_name="multiAzEnabled")
     def multi_az_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag indicating if you have Multi-AZ enabled to enhance fault tolerance.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "multiAzEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "multiAzEnabled"))
 
     @multi_az_enabled.setter
     def multi_az_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__45ea9e8732e19a78795fe185be2450c918f0ad9505938ce18be98a47595e698f)
@@ -3565,14 +3572,14 @@ class CfnReplicationGroup(
     @jsii.member(jsii_name="nodeGroupConfiguration")
     def node_group_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationGroup.NodeGroupConfigurationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.NodeGroupConfigurationProperty"]]]]:
         '''``NodeGroupConfiguration`` is a property of the ``AWS::ElastiCache::ReplicationGroup`` resource that configures an Amazon ElastiCache (ElastiCache) Valkey or Redis OSS cluster node group.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationGroup.NodeGroupConfigurationProperty"]]]], jsii.get(self, "nodeGroupConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.NodeGroupConfigurationProperty"]]]], jsii.get(self, "nodeGroupConfiguration"))
 
     @node_group_configuration.setter
     def node_group_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationGroup.NodeGroupConfigurationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.NodeGroupConfigurationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__063232de740d4c4cf752ba9532e0b046f204c4d85a17ea560f3688d5c78d5126)
@@ -3790,12 +3797,12 @@ class CfnReplicationGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to be added to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dd34df081f3adeec74e0b10c42a2c6579d5328d707ac88af6a4c22338f3c9035)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3805,14 +3812,14 @@ class CfnReplicationGroup(
     @jsii.member(jsii_name="transitEncryptionEnabled")
     def transit_encryption_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag that enables in-transit encryption when set to ``true`` .'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "transitEncryptionEnabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "transitEncryptionEnabled"))
 
     @transit_encryption_enabled.setter
     def transit_encryption_enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4af0273d0b69e8bd3f65054f8d56651f1f9d315c9e60fa092dd4b8e4e8844e85)
@@ -3911,8 +3918,8 @@ class CfnReplicationGroup(
         def __init__(
             self,
             *,
-            cloud_watch_logs_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicationGroup.CloudWatchLogsDestinationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            kinesis_firehose_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicationGroup.KinesisFirehoseDestinationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloud_watch_logs_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationGroup.CloudWatchLogsDestinationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            kinesis_firehose_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationGroup.KinesisFirehoseDestinationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Configuration details of either a CloudWatch Logs destination or Kinesis Data Firehose destination.
 
@@ -3950,7 +3957,7 @@ class CfnReplicationGroup(
         @builtins.property
         def cloud_watch_logs_details(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReplicationGroup.CloudWatchLogsDestinationDetailsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.CloudWatchLogsDestinationDetailsProperty"]]:
             '''The configuration details of the CloudWatch Logs destination.
 
             Note that this field is marked as required but only if CloudWatch Logs was chosen as the destination.
@@ -3958,12 +3965,12 @@ class CfnReplicationGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-replicationgroup-destinationdetails.html#cfn-elasticache-replicationgroup-destinationdetails-cloudwatchlogsdetails
             '''
             result = self._values.get("cloud_watch_logs_details")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReplicationGroup.CloudWatchLogsDestinationDetailsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.CloudWatchLogsDestinationDetailsProperty"]], result)
 
         @builtins.property
         def kinesis_firehose_details(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReplicationGroup.KinesisFirehoseDestinationDetailsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.KinesisFirehoseDestinationDetailsProperty"]]:
             '''The configuration details of the Kinesis Data Firehose destination.
 
             Note that this field is marked as required but only if Kinesis Data Firehose was chosen as the destination.
@@ -3971,7 +3978,7 @@ class CfnReplicationGroup(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-replicationgroup-destinationdetails.html#cfn-elasticache-replicationgroup-destinationdetails-kinesisfirehosedetails
             '''
             result = self._values.get("kinesis_firehose_details")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnReplicationGroup.KinesisFirehoseDestinationDetailsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.KinesisFirehoseDestinationDetailsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4052,7 +4059,7 @@ class CfnReplicationGroup(
         def __init__(
             self,
             *,
-            destination_details: typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicationGroup.DestinationDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+            destination_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationGroup.DestinationDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
             destination_type: builtins.str,
             log_format: builtins.str,
             log_type: builtins.str,
@@ -4103,14 +4110,14 @@ class CfnReplicationGroup(
         @builtins.property
         def destination_details(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnReplicationGroup.DestinationDetailsProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.DestinationDetailsProperty"]:
             '''Configuration details of either a CloudWatch Logs destination or Kinesis Data Firehose destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-replicationgroup-logdeliveryconfigurationrequest.html#cfn-elasticache-replicationgroup-logdeliveryconfigurationrequest-destinationdetails
             '''
             result = self._values.get("destination_details")
             assert result is not None, "Required property 'destination_details' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnReplicationGroup.DestinationDetailsProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.DestinationDetailsProperty"], result)
 
         @builtins.property
         def destination_type(self) -> builtins.str:
@@ -4337,25 +4344,25 @@ class CfnReplicationGroupProps:
         self,
         *,
         replication_group_description: builtins.str,
-        at_rest_encryption_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        at_rest_encryption_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         auth_token: typing.Optional[builtins.str] = None,
-        automatic_failover_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        automatic_failover_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         cache_node_type: typing.Optional[builtins.str] = None,
         cache_parameter_group_name: typing.Optional[builtins.str] = None,
         cache_security_group_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         cache_subnet_group_name: typing.Optional[builtins.str] = None,
         cluster_mode: typing.Optional[builtins.str] = None,
-        data_tiering_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        data_tiering_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         engine: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
         global_replication_group_id: typing.Optional[builtins.str] = None,
         ip_discovery: typing.Optional[builtins.str] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        log_delivery_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnReplicationGroup.LogDeliveryConfigurationRequestProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        multi_az_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        log_delivery_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationGroup.LogDeliveryConfigurationRequestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        multi_az_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         network_type: typing.Optional[builtins.str] = None,
-        node_group_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnReplicationGroup.NodeGroupConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        node_group_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationGroup.NodeGroupConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         notification_topic_arn: typing.Optional[builtins.str] = None,
         num_cache_clusters: typing.Optional[jsii.Number] = None,
         num_node_groups: typing.Optional[jsii.Number] = None,
@@ -4371,8 +4378,8 @@ class CfnReplicationGroupProps:
         snapshot_retention_limit: typing.Optional[jsii.Number] = None,
         snapshotting_cluster_id: typing.Optional[builtins.str] = None,
         snapshot_window: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         transit_encryption_mode: typing.Optional[builtins.str] = None,
         user_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
@@ -4423,6 +4430,7 @@ class CfnReplicationGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_elasticache as elasticache
@@ -4626,7 +4634,7 @@ class CfnReplicationGroupProps:
     @builtins.property
     def at_rest_encryption_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag that enables encryption at rest when set to ``true`` .
 
         *Required:* Only available when creating a replication group in an Amazon VPC using Redis OSS version ``3.2.6`` or ``4.x`` onward.
@@ -4636,7 +4644,7 @@ class CfnReplicationGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-atrestencryptionenabled
         '''
         result = self._values.get("at_rest_encryption_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def auth_token(self) -> typing.Optional[builtins.str]:
@@ -4666,7 +4674,7 @@ class CfnReplicationGroupProps:
     @builtins.property
     def automatic_failover_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether a read-only replica is automatically promoted to read/write primary if the existing primary fails.
 
         ``AutomaticFailoverEnabled`` must be enabled for Valkey or Redis OSS (cluster mode enabled) replication groups.
@@ -4676,18 +4684,18 @@ class CfnReplicationGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-automaticfailoverenabled
         '''
         result = self._values.get("automatic_failover_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def auto_minor_version_upgrade(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If you are running Valkey 7.2 or later, or Redis OSS 6.0 or later, set this parameter to yes if you want to opt-in to the next minor version upgrade campaign. This parameter is disabled for previous versions.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-autominorversionupgrade
         '''
         result = self._values.get("auto_minor_version_upgrade")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def cache_node_type(self) -> typing.Optional[builtins.str]:
@@ -4802,7 +4810,7 @@ class CfnReplicationGroupProps:
     @builtins.property
     def data_tiering_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Enables data tiering.
 
         Data tiering is only supported for replication groups using the r6gd node type. This parameter must be set to true when using r6gd nodes. For more information, see `Data tiering <https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/data-tiering.html>`_ .
@@ -4810,7 +4818,7 @@ class CfnReplicationGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-datatieringenabled
         '''
         result = self._values.get("data_tiering_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def engine(self) -> typing.Optional[builtins.str]:
@@ -4871,18 +4879,18 @@ class CfnReplicationGroupProps:
     @builtins.property
     def log_delivery_configurations(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnReplicationGroup.LogDeliveryConfigurationRequestProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.LogDeliveryConfigurationRequestProperty"]]]]:
         '''Specifies the destination, format and type of the logs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-logdeliveryconfigurations
         '''
         result = self._values.get("log_delivery_configurations")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnReplicationGroup.LogDeliveryConfigurationRequestProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.LogDeliveryConfigurationRequestProperty"]]]], result)
 
     @builtins.property
     def multi_az_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag indicating if you have Multi-AZ enabled to enhance fault tolerance.
 
         For more information, see `Minimizing Downtime: Multi-AZ <https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/AutoFailover.html>`_ .
@@ -4890,7 +4898,7 @@ class CfnReplicationGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-multiazenabled
         '''
         result = self._values.get("multi_az_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def network_type(self) -> typing.Optional[builtins.str]:
@@ -4906,7 +4914,7 @@ class CfnReplicationGroupProps:
     @builtins.property
     def node_group_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnReplicationGroup.NodeGroupConfigurationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.NodeGroupConfigurationProperty"]]]]:
         '''``NodeGroupConfiguration`` is a property of the ``AWS::ElastiCache::ReplicationGroup`` resource that configures an Amazon ElastiCache (ElastiCache) Valkey or Redis OSS cluster node group.
 
         If you set `UseOnlineResharding <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html#cfn-attributes-updatepolicy-useonlineresharding>`_ to ``true`` , you can update ``NodeGroupConfiguration`` without interruption. When ``UseOnlineResharding`` is set to ``false`` , or is not specified, updating ``NodeGroupConfiguration`` results in `replacement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement>`_ .
@@ -4914,7 +4922,7 @@ class CfnReplicationGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-nodegroupconfiguration
         '''
         result = self._values.get("node_group_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnReplicationGroup.NodeGroupConfigurationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationGroup.NodeGroupConfigurationProperty"]]]], result)
 
     @builtins.property
     def notification_topic_arn(self) -> typing.Optional[builtins.str]:
@@ -5125,7 +5133,7 @@ class CfnReplicationGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to be added to this resource.
 
         Tags are comma-separated key,value pairs (e.g. Key= ``myKey`` , Value= ``myKeyValue`` . You can include multiple tags as shown following: Key= ``myKey`` , Value= ``myKeyValue`` Key= ``mySecondKey`` , Value= ``mySecondKeyValue`` . Tags on replication groups will be replicated to all nodes.
@@ -5133,12 +5141,12 @@ class CfnReplicationGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def transit_encryption_enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''A flag that enables in-transit encryption when set to ``true`` .
 
         This parameter is only available when creating a replication group in an Amazon VPC using Valkey version ``7.2`` and above, Redis OSS version ``3.2.6`` , or Redis OSS version ``4.x`` and above, and the cluster is being created in an Amazon VPC.
@@ -5156,7 +5164,7 @@ class CfnReplicationGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-transitencryptionenabled
         '''
         result = self._values.get("transit_encryption_enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def transit_encryption_mode(self) -> typing.Optional[builtins.str]:
@@ -5212,6 +5220,7 @@ class CfnSecurityGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_elasticache as elasticache
@@ -5229,11 +5238,11 @@ class CfnSecurityGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ElastiCache::SecurityGroup``.
 
@@ -5263,7 +5272,7 @@ class CfnSecurityGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSecurityGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5307,15 +5316,15 @@ class CfnSecurityGroup(
 
     @builtins.property
     @jsii.member(jsii_name="securityGroupRef")
-    def security_group_ref(self) -> _SecurityGroupReference_b5e68c6a:
+    def security_group_ref(self) -> "_SecurityGroupReference_b5e68c6a":
         '''A reference to a SecurityGroup resource.'''
-        return typing.cast(_SecurityGroupReference_b5e68c6a, jsii.get(self, "securityGroupRef"))
+        return typing.cast("_SecurityGroupReference_b5e68c6a", jsii.get(self, "securityGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -5332,12 +5341,12 @@ class CfnSecurityGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A tag that can be added to an ElastiCache security group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8d0db95241a79cc90ce9ac36752f3ee20a66c04797f992822d1387e95ab0d3dc)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5378,7 +5387,7 @@ class CfnSecurityGroupIngress(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         cache_security_group_name: builtins.str,
@@ -5418,7 +5427,7 @@ class CfnSecurityGroupIngress(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSecurityGroupIngress", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5462,9 +5471,9 @@ class CfnSecurityGroupIngress(
 
     @builtins.property
     @jsii.member(jsii_name="securityGroupIngressRef")
-    def security_group_ingress_ref(self) -> _SecurityGroupIngressReference_4d9c7f2d:
+    def security_group_ingress_ref(self) -> "_SecurityGroupIngressReference_4d9c7f2d":
         '''A reference to a SecurityGroupIngress resource.'''
-        return typing.cast(_SecurityGroupIngressReference_4d9c7f2d, jsii.get(self, "securityGroupIngressRef"))
+        return typing.cast("_SecurityGroupIngressReference_4d9c7f2d", jsii.get(self, "securityGroupIngressRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cacheSecurityGroupName")
@@ -5611,7 +5620,7 @@ class CfnSecurityGroupProps:
         self,
         *,
         description: builtins.str,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSecurityGroup``.
 
@@ -5623,6 +5632,7 @@ class CfnSecurityGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_elasticache as elasticache
@@ -5658,7 +5668,7 @@ class CfnSecurityGroupProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A tag that can be added to an ElastiCache security group.
 
         Tags are composed of a Key/Value pair. You can use tags to categorize and track all your security groups. A tag with a null Value is permitted.
@@ -5666,7 +5676,7 @@ class CfnSecurityGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-securitygroup.html#cfn-elasticache-securitygroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5694,6 +5704,7 @@ class CfnServerlessCache(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_elasticache as elasticache
@@ -5743,25 +5754,25 @@ class CfnServerlessCache(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         engine: builtins.str,
         serverless_cache_name: builtins.str,
-        cache_usage_limits: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServerlessCache.CacheUsageLimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_usage_limits: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCache.CacheUsageLimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         daily_snapshot_time: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServerlessCache.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCache.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         final_snapshot_name: typing.Optional[builtins.str] = None,
-        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
         major_engine_version: typing.Optional[builtins.str] = None,
-        reader_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServerlessCache.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+        reader_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCache.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]] = None,
         snapshot_arns_to_restore: typing.Optional[typing.Sequence[builtins.str]] = None,
         snapshot_retention_limit: typing.Optional[jsii.Number] = None,
-        subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        user_group_id: typing.Optional[typing.Union[builtins.str, _IUserGroupRef_2cd8e96b]] = None,
+        subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        user_group_id: typing.Optional[typing.Union[builtins.str, "_IUserGroupRef_2cd8e96b"]] = None,
     ) -> None:
         '''Create a new ``AWS::ElastiCache::ServerlessCache``.
 
@@ -5813,7 +5824,7 @@ class CfnServerlessCache(
     @builtins.classmethod
     def arn_for_serverless_cache(
         cls,
-        resource: _IServerlessCacheRef_27114db2,
+        resource: "_IServerlessCacheRef_27114db2",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -5827,10 +5838,10 @@ class CfnServerlessCache(
     @builtins.classmethod
     def from_serverless_cache_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IServerlessCacheRef_27114db2:
+    ) -> "_IServerlessCacheRef_27114db2":
         '''Creates a new IServerlessCacheRef from an ARN.
 
         :param scope: -
@@ -5842,16 +5853,16 @@ class CfnServerlessCache(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IServerlessCacheRef_27114db2, jsii.sinvoke(cls, "fromServerlessCacheArn", [scope, id, arn]))
+        return typing.cast("_IServerlessCacheRef_27114db2", jsii.sinvoke(cls, "fromServerlessCacheArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromServerlessCacheName")
     @builtins.classmethod
     def from_serverless_cache_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         serverless_cache_name: builtins.str,
-    ) -> _IServerlessCacheRef_27114db2:
+    ) -> "_IServerlessCacheRef_27114db2":
         '''Creates a new IServerlessCacheRef from a serverlessCacheName.
 
         :param scope: -
@@ -5863,7 +5874,7 @@ class CfnServerlessCache(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument serverless_cache_name", value=serverless_cache_name, expected_type=type_hints["serverless_cache_name"])
-        return typing.cast(_IServerlessCacheRef_27114db2, jsii.sinvoke(cls, "fromServerlessCacheName", [scope, id, serverless_cache_name]))
+        return typing.cast("_IServerlessCacheRef_27114db2", jsii.sinvoke(cls, "fromServerlessCacheName", [scope, id, serverless_cache_name]))
 
     @jsii.member(jsii_name="isCfnServerlessCache")
     @builtins.classmethod
@@ -5878,7 +5889,7 @@ class CfnServerlessCache(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServerlessCache", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5983,9 +5994,9 @@ class CfnServerlessCache(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5994,9 +6005,9 @@ class CfnServerlessCache(
 
     @builtins.property
     @jsii.member(jsii_name="serverlessCacheRef")
-    def serverless_cache_ref(self) -> _ServerlessCacheReference_b26de323:
+    def serverless_cache_ref(self) -> "_ServerlessCacheReference_b26de323":
         '''A reference to a ServerlessCache resource.'''
-        return typing.cast(_ServerlessCacheReference_b26de323, jsii.get(self, "serverlessCacheRef"))
+        return typing.cast("_ServerlessCacheReference_b26de323", jsii.get(self, "serverlessCacheRef"))
 
     @builtins.property
     @jsii.member(jsii_name="engine")
@@ -6028,14 +6039,14 @@ class CfnServerlessCache(
     @jsii.member(jsii_name="cacheUsageLimits")
     def cache_usage_limits(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.CacheUsageLimitsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.CacheUsageLimitsProperty"]]:
         '''The cache usage limit for the serverless cache.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.CacheUsageLimitsProperty"]], jsii.get(self, "cacheUsageLimits"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.CacheUsageLimitsProperty"]], jsii.get(self, "cacheUsageLimits"))
 
     @cache_usage_limits.setter
     def cache_usage_limits(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.CacheUsageLimitsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.CacheUsageLimitsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a90cce9924849d9cc9e8f897f51cd6502787503e9fe6f9c0b146111c1c445aa8)
@@ -6072,14 +6083,14 @@ class CfnServerlessCache(
     @jsii.member(jsii_name="endpoint")
     def endpoint(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.EndpointProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.EndpointProperty"]]:
         '''Represents the information required for client programs to connect to a cache node.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.EndpointProperty"]], jsii.get(self, "endpoint"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.EndpointProperty"]], jsii.get(self, "endpoint"))
 
     @endpoint.setter
     def endpoint(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.EndpointProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.EndpointProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cf26818381fc6b07f8a2615330e14830cc8722c7bea067d80e6017ceab59af6a)
@@ -6129,14 +6140,14 @@ class CfnServerlessCache(
     @jsii.member(jsii_name="readerEndpoint")
     def reader_endpoint(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.EndpointProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.EndpointProperty"]]:
         '''Represents the information required for client programs to connect to a cache node.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.EndpointProperty"]], jsii.get(self, "readerEndpoint"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.EndpointProperty"]], jsii.get(self, "readerEndpoint"))
 
     @reader_endpoint.setter
     def reader_endpoint(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.EndpointProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.EndpointProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d7e3145e59d2b03c61c29dd7fc18ce6d775561dcfa018b131c81d1f6e06fcd65)
@@ -6203,12 +6214,12 @@ class CfnServerlessCache(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to be added to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2054e990234791671dd0f6c1b491baebdfaaa093bc590373b8cbe5d6a7dec291)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6239,8 +6250,8 @@ class CfnServerlessCache(
         def __init__(
             self,
             *,
-            data_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServerlessCache.DataStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            ecpu_per_second: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServerlessCache.ECPUPerSecondProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            data_storage: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCache.DataStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            ecpu_per_second: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCache.ECPUPerSecondProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The usage limits for storage and ElastiCache Processing Units for the cache.
 
@@ -6283,24 +6294,24 @@ class CfnServerlessCache(
         @builtins.property
         def data_storage(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.DataStorageProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.DataStorageProperty"]]:
             '''The maximum data storage limit in the cache, expressed in Gigabytes.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-serverlesscache-cacheusagelimits.html#cfn-elasticache-serverlesscache-cacheusagelimits-datastorage
             '''
             result = self._values.get("data_storage")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.DataStorageProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.DataStorageProperty"]], result)
 
         @builtins.property
         def ecpu_per_second(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.ECPUPerSecondProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.ECPUPerSecondProperty"]]:
             '''The number of ElastiCache Processing Units (ECPU) the cache can consume per second.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-serverlesscache-cacheusagelimits.html#cfn-elasticache-serverlesscache-cacheusagelimits-ecpupersecond
             '''
             result = self._values.get("ecpu_per_second")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServerlessCache.ECPUPerSecondProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.ECPUPerSecondProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6572,20 +6583,20 @@ class CfnServerlessCacheProps:
         *,
         engine: builtins.str,
         serverless_cache_name: builtins.str,
-        cache_usage_limits: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServerlessCache.CacheUsageLimitsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        cache_usage_limits: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCache.CacheUsageLimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         daily_snapshot_time: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServerlessCache.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCache.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         final_snapshot_name: typing.Optional[builtins.str] = None,
-        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
         major_engine_version: typing.Optional[builtins.str] = None,
-        reader_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServerlessCache.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+        reader_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServerlessCache.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]] = None,
         snapshot_arns_to_restore: typing.Optional[typing.Sequence[builtins.str]] = None,
         snapshot_retention_limit: typing.Optional[jsii.Number] = None,
-        subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        user_group_id: typing.Optional[typing.Union[builtins.str, _IUserGroupRef_2cd8e96b]] = None,
+        subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        user_group_id: typing.Optional[typing.Union[builtins.str, "_IUserGroupRef_2cd8e96b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnServerlessCache``.
 
@@ -6611,6 +6622,7 @@ class CfnServerlessCacheProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_elasticache as elasticache
@@ -6731,13 +6743,13 @@ class CfnServerlessCacheProps:
     @builtins.property
     def cache_usage_limits(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServerlessCache.CacheUsageLimitsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.CacheUsageLimitsProperty"]]:
         '''The cache usage limit for the serverless cache.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-cacheusagelimits
         '''
         result = self._values.get("cache_usage_limits")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServerlessCache.CacheUsageLimitsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.CacheUsageLimitsProperty"]], result)
 
     @builtins.property
     def daily_snapshot_time(self) -> typing.Optional[builtins.str]:
@@ -6762,7 +6774,7 @@ class CfnServerlessCacheProps:
     @builtins.property
     def endpoint(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServerlessCache.EndpointProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.EndpointProperty"]]:
         '''Represents the information required for client programs to connect to a cache node.
 
         This value is read-only.
@@ -6770,7 +6782,7 @@ class CfnServerlessCacheProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-endpoint
         '''
         result = self._values.get("endpoint")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServerlessCache.EndpointProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.EndpointProperty"]], result)
 
     @builtins.property
     def final_snapshot_name(self) -> typing.Optional[builtins.str]:
@@ -6784,13 +6796,13 @@ class CfnServerlessCacheProps:
     @builtins.property
     def kms_key_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]]:
         '''The ID of the AWS Key Management Service (KMS) key that is used to encrypt data at rest in the serverless cache.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]], result)
 
     @builtins.property
     def major_engine_version(self) -> typing.Optional[builtins.str]:
@@ -6804,7 +6816,7 @@ class CfnServerlessCacheProps:
     @builtins.property
     def reader_endpoint(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServerlessCache.EndpointProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.EndpointProperty"]]:
         '''Represents the information required for client programs to connect to a cache node.
 
         This value is read-only.
@@ -6812,18 +6824,18 @@ class CfnServerlessCacheProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-readerendpoint
         '''
         result = self._values.get("reader_endpoint")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServerlessCache.EndpointProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServerlessCache.EndpointProperty"]], result)
 
     @builtins.property
     def security_group_ids(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]]:
         '''The IDs of the EC2 security groups associated with the serverless cache.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-securitygroupids
         '''
         result = self._values.get("security_group_ids")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ISecurityGroupRef_efa4ff18"]]], result)
 
     @builtins.property
     def snapshot_arns_to_restore(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -6848,7 +6860,7 @@ class CfnServerlessCacheProps:
     @builtins.property
     def subnet_ids(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]]]:
         '''If no subnet IDs are given and your VPC is in us-west-1, then ElastiCache will select 2 default subnets across AZs in your VPC.
 
         For all other Regions, if no subnet IDs are given then ElastiCache will select 3 default subnets across AZs in your default VPC.
@@ -6856,21 +6868,21 @@ class CfnServerlessCacheProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-subnetids
         '''
         result = self._values.get("subnet_ids")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to be added to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def user_group_id(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IUserGroupRef_2cd8e96b]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IUserGroupRef_2cd8e96b"]]:
         '''The identifier of the user group associated with the serverless cache.
 
         Available for Valkey and Redis OSS only. Default is NULL.
@@ -6878,7 +6890,7 @@ class CfnServerlessCacheProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-usergroupid
         '''
         result = self._values.get("user_group_id")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IUserGroupRef_2cd8e96b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IUserGroupRef_2cd8e96b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6908,6 +6920,7 @@ class CfnSubnetGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_elasticache as elasticache
@@ -6927,13 +6940,13 @@ class CfnSubnetGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: builtins.str,
-        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
         cache_subnet_group_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ElastiCache::SubnetGroup``.
 
@@ -6959,7 +6972,10 @@ class CfnSubnetGroup(
 
     @jsii.member(jsii_name="arnForSubnetGroup")
     @builtins.classmethod
-    def arn_for_subnet_group(cls, resource: _ISubnetGroupRef_b7141182) -> builtins.str:
+    def arn_for_subnet_group(
+        cls,
+        resource: "_ISubnetGroupRef_b7141182",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -6972,10 +6988,10 @@ class CfnSubnetGroup(
     @builtins.classmethod
     def from_cache_subnet_group_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         cache_subnet_group_name: builtins.str,
-    ) -> _ISubnetGroupRef_b7141182:
+    ) -> "_ISubnetGroupRef_b7141182":
         '''Creates a new ISubnetGroupRef from a cacheSubnetGroupName.
 
         :param scope: -
@@ -6987,7 +7003,7 @@ class CfnSubnetGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument cache_subnet_group_name", value=cache_subnet_group_name, expected_type=type_hints["cache_subnet_group_name"])
-        return typing.cast(_ISubnetGroupRef_b7141182, jsii.sinvoke(cls, "fromCacheSubnetGroupName", [scope, id, cache_subnet_group_name]))
+        return typing.cast("_ISubnetGroupRef_b7141182", jsii.sinvoke(cls, "fromCacheSubnetGroupName", [scope, id, cache_subnet_group_name]))
 
     @jsii.member(jsii_name="isCfnSubnetGroup")
     @builtins.classmethod
@@ -7002,7 +7018,7 @@ class CfnSubnetGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSubnetGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7038,15 +7054,15 @@ class CfnSubnetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="subnetGroupRef")
-    def subnet_group_ref(self) -> _SubnetGroupReference_532b6eda:
+    def subnet_group_ref(self) -> "_SubnetGroupReference_532b6eda":
         '''A reference to a SubnetGroup resource.'''
-        return typing.cast(_SubnetGroupReference_532b6eda, jsii.get(self, "subnetGroupRef"))
+        return typing.cast("_SubnetGroupReference_532b6eda", jsii.get(self, "subnetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -7092,12 +7108,12 @@ class CfnSubnetGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A tag that can be added to an ElastiCache subnet group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3f6670815d10d752e7b16bcf0f681bfa6e802161e1b1eba4c63dd3a6d9846719)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7119,9 +7135,9 @@ class CfnSubnetGroupProps:
         self,
         *,
         description: builtins.str,
-        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]],
         cache_subnet_group_name: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSubnetGroup``.
 
@@ -7135,6 +7151,7 @@ class CfnSubnetGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_elasticache as elasticache
@@ -7179,14 +7196,14 @@ class CfnSubnetGroupProps:
     @builtins.property
     def subnet_ids(
         self,
-    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
+    ) -> typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]]:
         '''The EC2 subnet IDs for the cache subnet group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-subnetgroup.html#cfn-elasticache-subnetgroup-subnetids
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_ISubnetRef_ac31e361"]], result)
 
     @builtins.property
     def cache_subnet_group_name(self) -> typing.Optional[builtins.str]:
@@ -7202,7 +7219,7 @@ class CfnSubnetGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A tag that can be added to an ElastiCache subnet group.
 
         Tags are composed of a Key/Value pair. You can use tags to categorize and track all your subnet groups. A tag with a null Value is permitted.
@@ -7210,7 +7227,7 @@ class CfnSubnetGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-subnetgroup.html#cfn-elasticache-subnetgroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7238,6 +7255,7 @@ class CfnUser(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_elasticache as elasticache
@@ -7263,7 +7281,7 @@ class CfnUser(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         engine: builtins.str,
@@ -7271,9 +7289,9 @@ class CfnUser(
         user_name: builtins.str,
         access_string: typing.Optional[builtins.str] = None,
         authentication_mode: typing.Any = None,
-        no_password_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        no_password_required: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         passwords: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ElastiCache::User``.
 
@@ -7307,7 +7325,7 @@ class CfnUser(
 
     @jsii.member(jsii_name="arnForUser")
     @builtins.classmethod
-    def arn_for_user(cls, resource: _IUserRef_7cc9cbc0) -> builtins.str:
+    def arn_for_user(cls, resource: "_IUserRef_7cc9cbc0") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -7320,10 +7338,10 @@ class CfnUser(
     @builtins.classmethod
     def from_user_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IUserRef_7cc9cbc0:
+    ) -> "_IUserRef_7cc9cbc0":
         '''Creates a new IUserRef from an ARN.
 
         :param scope: -
@@ -7335,16 +7353,16 @@ class CfnUser(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IUserRef_7cc9cbc0, jsii.sinvoke(cls, "fromUserArn", [scope, id, arn]))
+        return typing.cast("_IUserRef_7cc9cbc0", jsii.sinvoke(cls, "fromUserArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromUserId")
     @builtins.classmethod
     def from_user_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         user_id: builtins.str,
-    ) -> _IUserRef_7cc9cbc0:
+    ) -> "_IUserRef_7cc9cbc0":
         '''Creates a new IUserRef from a userId.
 
         :param scope: -
@@ -7356,7 +7374,7 @@ class CfnUser(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument user_id", value=user_id, expected_type=type_hints["user_id"])
-        return typing.cast(_IUserRef_7cc9cbc0, jsii.sinvoke(cls, "fromUserId", [scope, id, user_id]))
+        return typing.cast("_IUserRef_7cc9cbc0", jsii.sinvoke(cls, "fromUserId", [scope, id, user_id]))
 
     @jsii.member(jsii_name="isCfnUser")
     @builtins.classmethod
@@ -7371,7 +7389,7 @@ class CfnUser(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUser", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7427,15 +7445,15 @@ class CfnUser(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="userRef")
-    def user_ref(self) -> _UserReference_7ff80ad9:
+    def user_ref(self) -> "_UserReference_7ff80ad9":
         '''A reference to a User resource.'''
-        return typing.cast(_UserReference_7ff80ad9, jsii.get(self, "userRef"))
+        return typing.cast("_UserReference_7ff80ad9", jsii.get(self, "userRef"))
 
     @builtins.property
     @jsii.member(jsii_name="engine")
@@ -7509,14 +7527,14 @@ class CfnUser(
     @jsii.member(jsii_name="noPasswordRequired")
     def no_password_required(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates a password is not required for this user.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "noPasswordRequired"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "noPasswordRequired"))
 
     @no_password_required.setter
     def no_password_required(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1dc0162c51746ac68f8e6c599bd425920aec49776f251d176073c998647b402e)
@@ -7538,12 +7556,12 @@ class CfnUser(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of tags.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__eda53c926e8acd673280fda87bee7f7bcf1def006ab1883b24a6a077e43b7449)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7639,6 +7657,7 @@ class CfnUserGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_elasticache as elasticache
@@ -7658,13 +7677,13 @@ class CfnUserGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         engine: builtins.str,
         user_group_id: builtins.str,
-        user_ids: typing.Sequence[typing.Union[builtins.str, _IUserRef_7cc9cbc0]],
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        user_ids: typing.Sequence[typing.Union[builtins.str, "_IUserRef_7cc9cbc0"]],
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ElastiCache::UserGroup``.
 
@@ -7687,7 +7706,7 @@ class CfnUserGroup(
 
     @jsii.member(jsii_name="arnForUserGroup")
     @builtins.classmethod
-    def arn_for_user_group(cls, resource: _IUserGroupRef_2cd8e96b) -> builtins.str:
+    def arn_for_user_group(cls, resource: "_IUserGroupRef_2cd8e96b") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -7700,10 +7719,10 @@ class CfnUserGroup(
     @builtins.classmethod
     def from_user_group_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IUserGroupRef_2cd8e96b:
+    ) -> "_IUserGroupRef_2cd8e96b":
         '''Creates a new IUserGroupRef from an ARN.
 
         :param scope: -
@@ -7715,16 +7734,16 @@ class CfnUserGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IUserGroupRef_2cd8e96b, jsii.sinvoke(cls, "fromUserGroupArn", [scope, id, arn]))
+        return typing.cast("_IUserGroupRef_2cd8e96b", jsii.sinvoke(cls, "fromUserGroupArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromUserGroupId")
     @builtins.classmethod
     def from_user_group_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         user_group_id: builtins.str,
-    ) -> _IUserGroupRef_2cd8e96b:
+    ) -> "_IUserGroupRef_2cd8e96b":
         '''Creates a new IUserGroupRef from a userGroupId.
 
         :param scope: -
@@ -7736,7 +7755,7 @@ class CfnUserGroup(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument user_group_id", value=user_group_id, expected_type=type_hints["user_group_id"])
-        return typing.cast(_IUserGroupRef_2cd8e96b, jsii.sinvoke(cls, "fromUserGroupId", [scope, id, user_group_id]))
+        return typing.cast("_IUserGroupRef_2cd8e96b", jsii.sinvoke(cls, "fromUserGroupId", [scope, id, user_group_id]))
 
     @jsii.member(jsii_name="isCfnUserGroup")
     @builtins.classmethod
@@ -7751,7 +7770,7 @@ class CfnUserGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -7807,15 +7826,15 @@ class CfnUserGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="userGroupRef")
-    def user_group_ref(self) -> _UserGroupReference_d89cdf7b:
+    def user_group_ref(self) -> "_UserGroupReference_d89cdf7b":
         '''A reference to a UserGroup resource.'''
-        return typing.cast(_UserGroupReference_d89cdf7b, jsii.get(self, "userGroupRef"))
+        return typing.cast("_UserGroupReference_d89cdf7b", jsii.get(self, "userGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="engine")
@@ -7858,12 +7877,12 @@ class CfnUserGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of tags.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f91d8988fa4ff59ae0f0f6e912aaa87f88df9ee98afddb86934a2611c1d0da39)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -7886,8 +7905,8 @@ class CfnUserGroupProps:
         *,
         engine: builtins.str,
         user_group_id: builtins.str,
-        user_ids: typing.Sequence[typing.Union[builtins.str, _IUserRef_7cc9cbc0]],
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        user_ids: typing.Sequence[typing.Union[builtins.str, "_IUserRef_7cc9cbc0"]],
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnUserGroup``.
 
@@ -7901,6 +7920,7 @@ class CfnUserGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_elasticache as elasticache
@@ -7952,7 +7972,7 @@ class CfnUserGroupProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def user_ids(self) -> typing.List[typing.Union[builtins.str, _IUserRef_7cc9cbc0]]:
+    def user_ids(self) -> typing.List[typing.Union[builtins.str, "_IUserRef_7cc9cbc0"]]:
         '''The list of user IDs that belong to the user group.
 
         A user named ``default`` must be included.
@@ -7961,16 +7981,16 @@ class CfnUserGroupProps:
         '''
         result = self._values.get("user_ids")
         assert result is not None, "Required property 'user_ids' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _IUserRef_7cc9cbc0]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_IUserRef_7cc9cbc0"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of tags.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-usergroup.html#cfn-elasticache-usergroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8007,9 +8027,9 @@ class CfnUserProps:
         user_name: builtins.str,
         access_string: typing.Optional[builtins.str] = None,
         authentication_mode: typing.Any = None,
-        no_password_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        no_password_required: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         passwords: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnUser``.
 
@@ -8027,6 +8047,7 @@ class CfnUserProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_elasticache as elasticache
@@ -8131,13 +8152,13 @@ class CfnUserProps:
     @builtins.property
     def no_password_required(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates a password is not required for this user.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-user.html#cfn-elasticache-user-nopasswordrequired
         '''
         result = self._values.get("no_password_required")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def passwords(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -8151,13 +8172,13 @@ class CfnUserProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The list of tags.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-user.html#cfn-elasticache-user-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

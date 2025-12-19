@@ -10,8 +10,10 @@ pub use temporalio_common::worker::{WorkerConfig, WorkerConfigBuilder};
 pub use tuner::{
     FixedSizeSlotSupplier, ResourceBasedSlotsOptions, ResourceBasedSlotsOptionsBuilder,
     ResourceBasedTuner, ResourceSlotOptions, SlotSupplierOptions, TunerBuilder, TunerHolder,
-    TunerHolderOptions, TunerHolderOptionsBuilder,
+    TunerHolderOptions,
 };
+// Re-export the generated builder (it's in the tuner module)
+pub use tuner::TunerHolderOptionsBuilder;
 pub(crate) use tuner::{RealSysInfo, SystemResourceInfo};
 
 pub(crate) use activities::{
@@ -64,10 +66,9 @@ use std::{
     },
     time::{Duration, SystemTime},
 };
-use temporalio_client::{
+use temporalio_client::worker::{
     ClientWorker, HeartbeatCallback, SharedNamespaceWorkerTrait, Slot as SlotTrait,
 };
-use temporalio_common::worker::WorkerTaskTypes;
 use temporalio_common::{
     errors::{CompleteNexusError, WorkerValidationError},
     protos::{
@@ -90,7 +91,7 @@ use temporalio_common::{
     telemetry::metrics::{TemporalMeter, WorkerHeartbeatMetrics},
     worker::{
         ActivitySlotKind, LocalActivitySlotKind, NexusSlotKind, PollerBehavior, SlotKind,
-        WorkflowSlotKind,
+        WorkerTaskTypes, WorkflowSlotKind,
     },
 };
 use tokio::sync::{mpsc::unbounded_channel, watch};
@@ -308,10 +309,8 @@ impl WorkerTrait for Worker {
 }
 
 impl Worker {
-    /// Creates a new [Worker] from a [WorkerClient] instance with real task pollers and optional telemetry.
-    ///
-    /// This is a convenience constructor that logs initialization and delegates to
-    /// [Worker::new_with_pollers()] using [TaskPollers::Real].
+    /// Creates a new [Worker] from a [WorkerClient] instance with real task pollers and optional
+    /// telemetry.
     pub fn new(
         config: WorkerConfig,
         sticky_queue_name: Option<String>,
@@ -1193,6 +1192,9 @@ impl WorkerHeartbeatManager {
                 }
             });
 
+            let mut plugins: Vec<_> = config.plugins.clone().into_iter().collect();
+            plugins.sort_by(|a, b| a.name.cmp(&b.name));
+
             let mut worker_heartbeat = WorkerHeartbeat {
                 worker_instance_key: worker_instance_key.to_string(),
                 host_info: Some(WorkerHostInfo {
@@ -1211,7 +1213,7 @@ impl WorkerHeartbeatManager {
 
                 status: (*heartbeat_manager_metrics.status.read()) as i32,
                 start_time,
-                plugins: config.plugins.clone(),
+                plugins,
 
                 // Some Metrics dependent fields are set below, and
                 // some fields like sdk_name, sdk_version, and worker_identity, must be set by
@@ -1436,10 +1438,11 @@ mod tests {
 
     #[test]
     fn max_polls_calculated_properly() {
-        let cfg = test_worker_cfg()
-            .workflow_task_poller_behavior(PollerBehavior::SimpleMaximum(5_usize))
-            .build()
-            .unwrap();
+        let cfg = {
+            let mut cfg = test_worker_cfg().build().unwrap();
+            cfg.workflow_task_poller_behavior = PollerBehavior::SimpleMaximum(5_usize);
+            cfg
+        };
         assert_eq!(
             wft_poller_behavior(&cfg, false),
             PollerBehavior::SimpleMaximum(1)
@@ -1452,8 +1455,15 @@ mod tests {
 
     #[test]
     fn max_polls_zero_is_err() {
+        use temporalio_common::worker::{WorkerConfig, WorkerTaskTypes, WorkerVersioningStrategy};
         assert!(
-            test_worker_cfg()
+            WorkerConfig::builder()
+                .namespace("test")
+                .task_queue("test")
+                .versioning_strategy(WorkerVersioningStrategy::None {
+                    build_id: "test".to_string(),
+                })
+                .task_types(WorkerTaskTypes::all())
                 .workflow_task_poller_behavior(PollerBehavior::SimpleMaximum(0_usize))
                 .build()
                 .is_err()

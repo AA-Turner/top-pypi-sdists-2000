@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: great_expectations
-Version: 1.9.3
+Version: 1.10.0
 Summary: Always know what to expect from your data.
 Home-page: https://greatexpectations.io
 Download-URL: https://github.com/great-expectations/great_expectations
@@ -152,7 +152,7 @@ Requires-Dist: adr-tools-python==1.0.3; extra == "test"
 Requires-Dist: invoke>=2.0.0; extra == "test"
 Requires-Dist: mypy==1.19.0; extra == "test"
 Requires-Dist: pre-commit>=2.21.0; extra == "test"
-Requires-Dist: ruff==0.14.8; extra == "test"
+Requires-Dist: ruff==0.14.9; extra == "test"
 Requires-Dist: tomli>=2.0.1; extra == "test"
 Requires-Dist: datasets>=4.1.0; extra == "test"
 Requires-Dist: docstring-parser==0.16; extra == "test"

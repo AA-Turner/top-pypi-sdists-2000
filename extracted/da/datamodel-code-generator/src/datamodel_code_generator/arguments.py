@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 import locale
-from argparse import ArgumentParser, ArgumentTypeError, BooleanOptionalAction, HelpFormatter, Namespace
+from argparse import ArgumentParser, ArgumentTypeError, BooleanOptionalAction, Namespace, RawDescriptionHelpFormatter
 from operator import attrgetter
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
@@ -22,6 +22,7 @@ from datamodel_code_generator import (
     DataclassArguments,
     DataModelType,
     InputFileType,
+    ModuleSplitMode,
     OpenAPIScope,
     ReadOnlyWriteOnlyModelType,
     ReuseScope,
@@ -62,8 +63,8 @@ def _dataclass_arguments(value: str) -> DataclassArguments:
     return cast("DataclassArguments", result)
 
 
-class SortingHelpFormatter(HelpFormatter):
-    """Help formatter that sorts arguments and adds color to section headers."""
+class SortingHelpFormatter(RawDescriptionHelpFormatter):
+    """Help formatter that sorts arguments, adds color to section headers, and preserves epilog formatting."""
 
     def _bold_cyan(self, text: str) -> str:  # noqa: PLR6301
         """Wrap text in ANSI bold cyan escape codes."""
@@ -81,7 +82,10 @@ class SortingHelpFormatter(HelpFormatter):
 
 arg_parser = ArgumentParser(
     usage="\n  datamodel-codegen [options]",
-    description="Generate Python data models from schema definitions or structured data",
+    description="Generate Python data models from schema definitions or structured data\n\n"
+    "For detailed usage, see: https://koxudaxi.github.io/datamodel-code-generator",
+    epilog="Documentation: https://koxudaxi.github.io/datamodel-code-generator\n"
+    "GitHub: https://github.com/koxudaxi/datamodel-code-generator",
     formatter_class=SortingHelpFormatter,
     add_help=False,
 )
@@ -192,6 +196,12 @@ model_options.add_argument(
 model_options.add_argument(
     "--enable-version-header",
     help="Enable package version on file headers",
+    action="store_true",
+    default=None,
+)
+model_options.add_argument(
+    "--enable-command-header",
+    help="Enable command-line options on file headers for reproducibility",
     action="store_true",
     default=None,
 )
@@ -312,6 +322,12 @@ model_options.add_argument(
     "'minimal-prefix': add module prefix only to colliding names. "
     "'full-prefix': add full module path prefix to colliding names.",
     choices=[s.value for s in AllExportsCollisionStrategy],
+    default=None,
+)
+model_options.add_argument(
+    "--module-split-mode",
+    help="Split generated models into separate files. 'single': generate one file per model class.",
+    choices=[m.value for m in ModuleSplitMode],
     default=None,
 )
 
@@ -756,6 +772,18 @@ general_options.add_argument(
     "--profile",
     help="Use a named profile from pyproject.toml [tool.datamodel-codegen.profiles.<name>]",
     default=None,
+)
+general_options.add_argument(
+    "--watch",
+    action="store_true",
+    default=None,
+    help="Watch input file(s) for changes and regenerate output automatically",
+)
+general_options.add_argument(
+    "--watch-delay",
+    type=float,
+    default=None,
+    help="Debounce delay in seconds for watch mode (default: 0.5)",
 )
 general_options.add_argument(
     "--version",

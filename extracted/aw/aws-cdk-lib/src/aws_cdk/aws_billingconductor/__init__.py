@@ -93,6 +93,7 @@ class CfnBillingGroup(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_billingconductor as billingconductor
@@ -120,15 +121,15 @@ class CfnBillingGroup(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        account_grouping: typing.Union[_IResolvable_da3f097b, typing.Union["CfnBillingGroup.AccountGroupingProperty", typing.Dict[builtins.str, typing.Any]]],
-        computation_preference: typing.Union[_IResolvable_da3f097b, typing.Union["CfnBillingGroup.ComputationPreferenceProperty", typing.Dict[builtins.str, typing.Any]]],
+        account_grouping: typing.Union["_IResolvable_da3f097b", typing.Union["CfnBillingGroup.AccountGroupingProperty", typing.Dict[builtins.str, typing.Any]]],
+        computation_preference: typing.Union["_IResolvable_da3f097b", typing.Union["CfnBillingGroup.ComputationPreferenceProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         primary_account_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::BillingConductor::BillingGroup``.
 
@@ -160,7 +161,7 @@ class CfnBillingGroup(
     @builtins.classmethod
     def arn_for_billing_group(
         cls,
-        resource: _IBillingGroupRef_86ba3c16,
+        resource: "_IBillingGroupRef_86ba3c16",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -183,7 +184,7 @@ class CfnBillingGroup(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBillingGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -270,9 +271,9 @@ class CfnBillingGroup(
 
     @builtins.property
     @jsii.member(jsii_name="billingGroupRef")
-    def billing_group_ref(self) -> _BillingGroupReference_3424ca75:
+    def billing_group_ref(self) -> "_BillingGroupReference_3424ca75":
         '''A reference to a BillingGroup resource.'''
-        return typing.cast(_BillingGroupReference_3424ca75, jsii.get(self, "billingGroupRef"))
+        return typing.cast("_BillingGroupReference_3424ca75", jsii.get(self, "billingGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -281,22 +282,22 @@ class CfnBillingGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="accountGrouping")
     def account_grouping(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnBillingGroup.AccountGroupingProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.AccountGroupingProperty"]:
         '''The set of accounts that will be under the billing group.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnBillingGroup.AccountGroupingProperty"], jsii.get(self, "accountGrouping"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.AccountGroupingProperty"], jsii.get(self, "accountGrouping"))
 
     @account_grouping.setter
     def account_grouping(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnBillingGroup.AccountGroupingProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.AccountGroupingProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8f9c708fbe7d54cdef59ed3204494cecda18538e1eec10d86fd8f55ae7daf752)
@@ -307,14 +308,14 @@ class CfnBillingGroup(
     @jsii.member(jsii_name="computationPreference")
     def computation_preference(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnBillingGroup.ComputationPreferenceProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.ComputationPreferenceProperty"]:
         '''The preferences and settings that will be used to compute the AWS charges for a billing group.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnBillingGroup.ComputationPreferenceProperty"], jsii.get(self, "computationPreference"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.ComputationPreferenceProperty"], jsii.get(self, "computationPreference"))
 
     @computation_preference.setter
     def computation_preference(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnBillingGroup.ComputationPreferenceProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.ComputationPreferenceProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__41f3295fe992f9cb25a58aec6654eb24d1e80cbee0cd3de14d958df63c247d19)
@@ -362,12 +363,12 @@ class CfnBillingGroup(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map that contains tag keys and tag values that are attached to a billing group.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b79940f00b13b42629eb04481540a4b5f0ae2c81a08ba0818cb87b23aa91dbcd)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -386,7 +387,7 @@ class CfnBillingGroup(
         def __init__(
             self,
             *,
-            auto_associate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            auto_associate: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             linked_account_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
             responsibility_transfer_arn: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -429,13 +430,13 @@ class CfnBillingGroup(
         @builtins.property
         def auto_associate(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Specifies if this billing group will automatically associate newly added AWS accounts that join your consolidated billing family.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-billinggroup-accountgrouping.html#cfn-billingconductor-billinggroup-accountgrouping-autoassociate
             '''
             result = self._values.get("auto_associate")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def linked_account_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -536,12 +537,12 @@ class CfnBillingGroupProps:
     def __init__(
         self,
         *,
-        account_grouping: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBillingGroup.AccountGroupingProperty, typing.Dict[builtins.str, typing.Any]]],
-        computation_preference: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBillingGroup.ComputationPreferenceProperty, typing.Dict[builtins.str, typing.Any]]],
+        account_grouping: typing.Union["_IResolvable_da3f097b", typing.Union["CfnBillingGroup.AccountGroupingProperty", typing.Dict[builtins.str, typing.Any]]],
+        computation_preference: typing.Union["_IResolvable_da3f097b", typing.Union["CfnBillingGroup.ComputationPreferenceProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         primary_account_id: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnBillingGroup``.
 
@@ -557,6 +558,7 @@ class CfnBillingGroupProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_billingconductor as billingconductor
@@ -604,7 +606,7 @@ class CfnBillingGroupProps:
     @builtins.property
     def account_grouping(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnBillingGroup.AccountGroupingProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.AccountGroupingProperty"]:
         '''The set of accounts that will be under the billing group.
 
         The set of accounts resemble the linked accounts in a consolidated billing family.
@@ -613,19 +615,19 @@ class CfnBillingGroupProps:
         '''
         result = self._values.get("account_grouping")
         assert result is not None, "Required property 'account_grouping' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnBillingGroup.AccountGroupingProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.AccountGroupingProperty"], result)
 
     @builtins.property
     def computation_preference(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnBillingGroup.ComputationPreferenceProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.ComputationPreferenceProperty"]:
         '''The preferences and settings that will be used to compute the AWS charges for a billing group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-billinggroup.html#cfn-billingconductor-billinggroup-computationpreference
         '''
         result = self._values.get("computation_preference")
         assert result is not None, "Required property 'computation_preference' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnBillingGroup.ComputationPreferenceProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnBillingGroup.ComputationPreferenceProperty"], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -656,13 +658,13 @@ class CfnBillingGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map that contains tag keys and tag values that are attached to a billing group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-billinggroup.html#cfn-billingconductor-billinggroup-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -692,6 +694,7 @@ class CfnCustomLineItem(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_billingconductor as billingconductor
@@ -717,6 +720,9 @@ class CfnCustomLineItem(
                 line_item_filters=[billingconductor.CfnCustomLineItem.LineItemFilterProperty(
                     attribute="attribute",
                     match_option="matchOption",
+        
+                    # the properties below are optional
+                    attribute_values=["attributeValues"],
                     values=["values"]
                 )],
                 percentage=billingconductor.CfnCustomLineItem.CustomLineItemPercentageChargeDetailsProperty(
@@ -739,18 +745,18 @@ class CfnCustomLineItem(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         billing_group_arn: builtins.str,
         name: builtins.str,
         account_id: typing.Optional[builtins.str] = None,
-        billing_period_range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomLineItem.BillingPeriodRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        billing_period_range: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomLineItem.BillingPeriodRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         computation_rule: typing.Optional[builtins.str] = None,
-        custom_line_item_charge_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomLineItem.CustomLineItemChargeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_line_item_charge_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomLineItem.CustomLineItemChargeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        presentation_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomLineItem.PresentationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        presentation_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomLineItem.PresentationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::BillingConductor::CustomLineItem``.
 
@@ -760,10 +766,10 @@ class CfnCustomLineItem(
         :param name: The custom line item's name.
         :param account_id: The AWS account in which this custom line item will be applied to.
         :param billing_period_range: A time range for which the custom line item is effective.
-        :param computation_rule: The display settings of the Custom Line Item.
+        :param computation_rule: The computation rule that determines how the custom line item charges are computed and reflected in the bill.
         :param custom_line_item_charge_details: The charge details of a custom line item. It should contain only one of ``Flat`` or ``Percentage`` .
         :param description: The custom line item's description. This is shown on the Bills page in association with the charge value.
-        :param presentation_details: 
+        :param presentation_details: Configuration details specifying how the custom line item charges are presented, including which service the charges are shown under.
         :param tags: A map that contains tag keys and tag values that are attached to a custom line item.
         '''
         if __debug__:
@@ -788,7 +794,7 @@ class CfnCustomLineItem(
     @builtins.classmethod
     def arn_for_custom_line_item(
         cls,
-        resource: _ICustomLineItemRef_c7ad9dbf,
+        resource: "_ICustomLineItemRef_c7ad9dbf",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -811,7 +817,7 @@ class CfnCustomLineItem(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCustomLineItem", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -903,15 +909,15 @@ class CfnCustomLineItem(
 
     @builtins.property
     @jsii.member(jsii_name="customLineItemRef")
-    def custom_line_item_ref(self) -> _CustomLineItemReference_83763218:
+    def custom_line_item_ref(self) -> "_CustomLineItemReference_83763218":
         '''A reference to a CustomLineItem resource.'''
-        return typing.cast(_CustomLineItemReference_83763218, jsii.get(self, "customLineItemRef"))
+        return typing.cast("_CustomLineItemReference_83763218", jsii.get(self, "customLineItemRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="billingGroupArn")
@@ -956,14 +962,14 @@ class CfnCustomLineItem(
     @jsii.member(jsii_name="billingPeriodRange")
     def billing_period_range(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.BillingPeriodRangeProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.BillingPeriodRangeProperty"]]:
         '''A time range for which the custom line item is effective.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.BillingPeriodRangeProperty"]], jsii.get(self, "billingPeriodRange"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.BillingPeriodRangeProperty"]], jsii.get(self, "billingPeriodRange"))
 
     @billing_period_range.setter
     def billing_period_range(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.BillingPeriodRangeProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.BillingPeriodRangeProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4c5735856393235c9af0411ca8b7a8879608ebdefed633e1a33f50f454aac347)
@@ -973,7 +979,7 @@ class CfnCustomLineItem(
     @builtins.property
     @jsii.member(jsii_name="computationRule")
     def computation_rule(self) -> typing.Optional[builtins.str]:
-        '''The display settings of the Custom Line Item.'''
+        '''The computation rule that determines how the custom line item charges are computed and reflected in the bill.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "computationRule"))
 
     @computation_rule.setter
@@ -987,14 +993,14 @@ class CfnCustomLineItem(
     @jsii.member(jsii_name="customLineItemChargeDetails")
     def custom_line_item_charge_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.CustomLineItemChargeDetailsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.CustomLineItemChargeDetailsProperty"]]:
         '''The charge details of a custom line item.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.CustomLineItemChargeDetailsProperty"]], jsii.get(self, "customLineItemChargeDetails"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.CustomLineItemChargeDetailsProperty"]], jsii.get(self, "customLineItemChargeDetails"))
 
     @custom_line_item_charge_details.setter
     def custom_line_item_charge_details(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.CustomLineItemChargeDetailsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.CustomLineItemChargeDetailsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d9dcde3b5032942c5c0db649ffe03d9f28478316ee33c4e6c60e10f14100a1f9)
@@ -1018,13 +1024,14 @@ class CfnCustomLineItem(
     @jsii.member(jsii_name="presentationDetails")
     def presentation_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.PresentationDetailsProperty"]]:
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.PresentationDetailsProperty"]], jsii.get(self, "presentationDetails"))
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.PresentationDetailsProperty"]]:
+        '''Configuration details specifying how the custom line item charges are presented, including which service the charges are shown under.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.PresentationDetailsProperty"]], jsii.get(self, "presentationDetails"))
 
     @presentation_details.setter
     def presentation_details(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.PresentationDetailsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.PresentationDetailsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2cded875a02d3fb7f6d21e8a3d9c516c5ea7cdbc3aa87ed23d8ef0f632686e7f)
@@ -1033,12 +1040,12 @@ class CfnCustomLineItem(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map that contains tag keys and tag values that are attached to a custom line item.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fa592de606b3d5a71ae8db1a73d086b2ca9f2b304f221694b72a7d7dbb74b841)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1132,9 +1139,9 @@ class CfnCustomLineItem(
             self,
             *,
             type: builtins.str,
-            flat: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomLineItem.CustomLineItemFlatChargeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            line_item_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomLineItem.LineItemFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            percentage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCustomLineItem.CustomLineItemPercentageChargeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            flat: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomLineItem.CustomLineItemFlatChargeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            line_item_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomLineItem.LineItemFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            percentage: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomLineItem.CustomLineItemPercentageChargeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The charge details of a custom line item.
 
@@ -1164,6 +1171,9 @@ class CfnCustomLineItem(
                     line_item_filters=[billingconductor.CfnCustomLineItem.LineItemFilterProperty(
                         attribute="attribute",
                         match_option="matchOption",
+                
+                        # the properties below are optional
+                        attribute_values=["attributeValues"],
                         values=["values"]
                     )],
                     percentage=billingconductor.CfnCustomLineItem.CustomLineItemPercentageChargeDetailsProperty(
@@ -1203,35 +1213,35 @@ class CfnCustomLineItem(
         @builtins.property
         def flat(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.CustomLineItemFlatChargeDetailsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.CustomLineItemFlatChargeDetailsProperty"]]:
             '''A ``CustomLineItemFlatChargeDetails`` that describes the charge details of a flat custom line item.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-customlineitem-customlineitemchargedetails.html#cfn-billingconductor-customlineitem-customlineitemchargedetails-flat
             '''
             result = self._values.get("flat")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.CustomLineItemFlatChargeDetailsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.CustomLineItemFlatChargeDetailsProperty"]], result)
 
         @builtins.property
         def line_item_filters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.LineItemFilterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.LineItemFilterProperty"]]]]:
             '''A representation of the line item filter.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-customlineitem-customlineitemchargedetails.html#cfn-billingconductor-customlineitem-customlineitemchargedetails-lineitemfilters
             '''
             result = self._values.get("line_item_filters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.LineItemFilterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.LineItemFilterProperty"]]]], result)
 
         @builtins.property
         def percentage(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.CustomLineItemPercentageChargeDetailsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.CustomLineItemPercentageChargeDetailsProperty"]]:
             '''A ``CustomLineItemPercentageChargeDetails`` that describes the charge details of a percentage custom line item.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-customlineitem-customlineitemchargedetails.html#cfn-billingconductor-customlineitem-customlineitemchargedetails-percentage
             '''
             result = self._values.get("percentage")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCustomLineItem.CustomLineItemPercentageChargeDetailsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.CustomLineItemPercentageChargeDetailsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1384,6 +1394,7 @@ class CfnCustomLineItem(
         name_mapping={
             "attribute": "attribute",
             "match_option": "matchOption",
+            "attribute_values": "attributeValues",
             "values": "values",
         },
     )
@@ -1393,7 +1404,8 @@ class CfnCustomLineItem(
             *,
             attribute: builtins.str,
             match_option: builtins.str,
-            values: typing.Sequence[builtins.str],
+            attribute_values: typing.Optional[typing.Sequence[builtins.str]] = None,
+            values: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''A representation of the line item filter for your custom line item.
 
@@ -1401,6 +1413,7 @@ class CfnCustomLineItem(
 
             :param attribute: The attribute of the line item filter. This specifies what attribute that you can filter on.
             :param match_option: The match criteria of the line item filter. This parameter specifies whether not to include the resource value from the billing group total cost.
+            :param attribute_values: The values of the line item filter. This specifies the values to filter on.
             :param values: The values of the line item filter. This specifies the values to filter on. Currently, you can only exclude Savings Plans discounts.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-customlineitem-lineitemfilter.html
@@ -1415,6 +1428,9 @@ class CfnCustomLineItem(
                 line_item_filter_property = billingconductor.CfnCustomLineItem.LineItemFilterProperty(
                     attribute="attribute",
                     match_option="matchOption",
+                
+                    # the properties below are optional
+                    attribute_values=["attributeValues"],
                     values=["values"]
                 )
             '''
@@ -1422,12 +1438,16 @@ class CfnCustomLineItem(
                 type_hints = typing.get_type_hints(_typecheckingstub__b18020b11e9da0d6827e72c5f07b3b822dfc78578e5de5d6bb554c27cdb13c82)
                 check_type(argname="argument attribute", value=attribute, expected_type=type_hints["attribute"])
                 check_type(argname="argument match_option", value=match_option, expected_type=type_hints["match_option"])
+                check_type(argname="argument attribute_values", value=attribute_values, expected_type=type_hints["attribute_values"])
                 check_type(argname="argument values", value=values, expected_type=type_hints["values"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "attribute": attribute,
                 "match_option": match_option,
-                "values": values,
             }
+            if attribute_values is not None:
+                self._values["attribute_values"] = attribute_values
+            if values is not None:
+                self._values["values"] = values
 
         @builtins.property
         def attribute(self) -> builtins.str:
@@ -1454,7 +1474,18 @@ class CfnCustomLineItem(
             return typing.cast(builtins.str, result)
 
         @builtins.property
-        def values(self) -> typing.List[builtins.str]:
+        def attribute_values(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The values of the line item filter.
+
+            This specifies the values to filter on.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-customlineitem-lineitemfilter.html#cfn-billingconductor-customlineitem-lineitemfilter-attributevalues
+            '''
+            result = self._values.get("attribute_values")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def values(self) -> typing.Optional[typing.List[builtins.str]]:
             '''The values of the line item filter.
 
             This specifies the values to filter on. Currently, you can only exclude Savings Plans discounts.
@@ -1462,8 +1493,7 @@ class CfnCustomLineItem(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-customlineitem-lineitemfilter.html#cfn-billingconductor-customlineitem-lineitemfilter-values
             '''
             result = self._values.get("values")
-            assert result is not None, "Required property 'values' is missing"
-            return typing.cast(typing.List[builtins.str], result)
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1483,8 +1513,9 @@ class CfnCustomLineItem(
     )
     class PresentationDetailsProperty:
         def __init__(self, *, service: builtins.str) -> None:
-            '''
-            :param service: 
+            '''An object that defines how custom line item charges are presented in the bill, containing specifications for service presentation.
+
+            :param service: The service under which the custom line item charges will be presented. Must be a string between 1 and 128 characters matching the pattern ``^[a-zA-Z0-9]+$`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-customlineitem-presentationdetails.html
             :exampleMetadata: fixture=_generated
@@ -1508,7 +1539,10 @@ class CfnCustomLineItem(
 
         @builtins.property
         def service(self) -> builtins.str:
-            '''
+            '''The service under which the custom line item charges will be presented.
+
+            Must be a string between 1 and 128 characters matching the pattern ``^[a-zA-Z0-9]+$`` .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-customlineitem-presentationdetails.html#cfn-billingconductor-customlineitem-presentationdetails-service
             '''
             result = self._values.get("service")
@@ -1549,12 +1583,12 @@ class CfnCustomLineItemProps:
         billing_group_arn: builtins.str,
         name: builtins.str,
         account_id: typing.Optional[builtins.str] = None,
-        billing_period_range: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomLineItem.BillingPeriodRangeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        billing_period_range: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomLineItem.BillingPeriodRangeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         computation_rule: typing.Optional[builtins.str] = None,
-        custom_line_item_charge_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomLineItem.CustomLineItemChargeDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_line_item_charge_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomLineItem.CustomLineItemChargeDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
-        presentation_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomLineItem.PresentationDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        presentation_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCustomLineItem.PresentationDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCustomLineItem``.
 
@@ -1562,10 +1596,10 @@ class CfnCustomLineItemProps:
         :param name: The custom line item's name.
         :param account_id: The AWS account in which this custom line item will be applied to.
         :param billing_period_range: A time range for which the custom line item is effective.
-        :param computation_rule: The display settings of the Custom Line Item.
+        :param computation_rule: The computation rule that determines how the custom line item charges are computed and reflected in the bill.
         :param custom_line_item_charge_details: The charge details of a custom line item. It should contain only one of ``Flat`` or ``Percentage`` .
         :param description: The custom line item's description. This is shown on the Bills page in association with the charge value.
-        :param presentation_details: 
+        :param presentation_details: Configuration details specifying how the custom line item charges are presented, including which service the charges are shown under.
         :param tags: A map that contains tag keys and tag values that are attached to a custom line item.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-customlineitem.html
@@ -1573,6 +1607,7 @@ class CfnCustomLineItemProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_billingconductor as billingconductor
@@ -1598,6 +1633,9 @@ class CfnCustomLineItemProps:
                     line_item_filters=[billingconductor.CfnCustomLineItem.LineItemFilterProperty(
                         attribute="attribute",
                         match_option="matchOption",
+            
+                        # the properties below are optional
+                        attribute_values=["attributeValues"],
                         values=["values"]
                     )],
                     percentage=billingconductor.CfnCustomLineItem.CustomLineItemPercentageChargeDetailsProperty(
@@ -1679,17 +1717,17 @@ class CfnCustomLineItemProps:
     @builtins.property
     def billing_period_range(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCustomLineItem.BillingPeriodRangeProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.BillingPeriodRangeProperty"]]:
         '''A time range for which the custom line item is effective.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-customlineitem.html#cfn-billingconductor-customlineitem-billingperiodrange
         '''
         result = self._values.get("billing_period_range")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCustomLineItem.BillingPeriodRangeProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.BillingPeriodRangeProperty"]], result)
 
     @builtins.property
     def computation_rule(self) -> typing.Optional[builtins.str]:
-        '''The display settings of the Custom Line Item.
+        '''The computation rule that determines how the custom line item charges are computed and reflected in the bill.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-customlineitem.html#cfn-billingconductor-customlineitem-computationrule
         '''
@@ -1699,7 +1737,7 @@ class CfnCustomLineItemProps:
     @builtins.property
     def custom_line_item_charge_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCustomLineItem.CustomLineItemChargeDetailsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.CustomLineItemChargeDetailsProperty"]]:
         '''The charge details of a custom line item.
 
         It should contain only one of ``Flat`` or ``Percentage`` .
@@ -1707,7 +1745,7 @@ class CfnCustomLineItemProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-customlineitem.html#cfn-billingconductor-customlineitem-customlineitemchargedetails
         '''
         result = self._values.get("custom_line_item_charge_details")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCustomLineItem.CustomLineItemChargeDetailsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.CustomLineItemChargeDetailsProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1723,21 +1761,22 @@ class CfnCustomLineItemProps:
     @builtins.property
     def presentation_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCustomLineItem.PresentationDetailsProperty]]:
-        '''
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.PresentationDetailsProperty"]]:
+        '''Configuration details specifying how the custom line item charges are presented, including which service the charges are shown under.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-customlineitem.html#cfn-billingconductor-customlineitem-presentationdetails
         '''
         result = self._values.get("presentation_details")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCustomLineItem.PresentationDetailsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnCustomLineItem.PresentationDetailsProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map that contains tag keys and tag values that are attached to a custom line item.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-customlineitem.html#cfn-billingconductor-customlineitem-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1765,6 +1804,7 @@ class CfnPricingPlan(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_billingconductor as billingconductor
@@ -1784,13 +1824,13 @@ class CfnPricingPlan(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         pricing_rule_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::BillingConductor::PricingPlan``.
 
@@ -1816,7 +1856,10 @@ class CfnPricingPlan(
 
     @jsii.member(jsii_name="arnForPricingPlan")
     @builtins.classmethod
-    def arn_for_pricing_plan(cls, resource: _IPricingPlanRef_bcdd307a) -> builtins.str:
+    def arn_for_pricing_plan(
+        cls,
+        resource: "_IPricingPlanRef_bcdd307a",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1838,7 +1881,7 @@ class CfnPricingPlan(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPricingPlan", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1910,15 +1953,15 @@ class CfnPricingPlan(
 
     @builtins.property
     @jsii.member(jsii_name="pricingPlanRef")
-    def pricing_plan_ref(self) -> _PricingPlanReference_a980cb5a:
+    def pricing_plan_ref(self) -> "_PricingPlanReference_a980cb5a":
         '''A reference to a PricingPlan resource.'''
-        return typing.cast(_PricingPlanReference_a980cb5a, jsii.get(self, "pricingPlanRef"))
+        return typing.cast("_PricingPlanReference_a980cb5a", jsii.get(self, "pricingPlanRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1964,12 +2007,12 @@ class CfnPricingPlan(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map that contains tag keys and tag values that are attached to a pricing plan.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__13df144317e29f0d4607aebf7ab331e5ce6b9d66d406f1e7f703e3b979bee860)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1993,7 +2036,7 @@ class CfnPricingPlanProps:
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         pricing_rule_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPricingPlan``.
 
@@ -2007,6 +2050,7 @@ class CfnPricingPlanProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_billingconductor as billingconductor
@@ -2068,13 +2112,13 @@ class CfnPricingPlanProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map that contains tag keys and tag values that are attached to a pricing plan.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-pricingplan.html#cfn-billingconductor-pricingplan-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2102,6 +2146,7 @@ class CfnPricingRule(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_billingconductor as billingconductor
@@ -2132,7 +2177,7 @@ class CfnPricingRule(
 
     def __init__(
         self,
-        scope_: _constructs_77d1e7e8.Construct,
+        scope_: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
@@ -2143,8 +2188,8 @@ class CfnPricingRule(
         modifier_percentage: typing.Optional[jsii.Number] = None,
         operation: typing.Optional[builtins.str] = None,
         service: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tiering: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPricingRule.TieringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tiering: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPricingRule.TieringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         usage_type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::BillingConductor::PricingRule``.
@@ -2185,7 +2230,10 @@ class CfnPricingRule(
 
     @jsii.member(jsii_name="arnForPricingRule")
     @builtins.classmethod
-    def arn_for_pricing_rule(cls, resource: _IPricingRuleRef_3b8a6f60) -> builtins.str:
+    def arn_for_pricing_rule(
+        cls,
+        resource: "_IPricingRuleRef_3b8a6f60",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2207,7 +2255,7 @@ class CfnPricingRule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPricingRule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2279,15 +2327,15 @@ class CfnPricingRule(
 
     @builtins.property
     @jsii.member(jsii_name="pricingRuleRef")
-    def pricing_rule_ref(self) -> _PricingRuleReference_111bcfd2:
+    def pricing_rule_ref(self) -> "_PricingRuleReference_111bcfd2":
         '''A reference to a PricingRule resource.'''
-        return typing.cast(_PricingRuleReference_111bcfd2, jsii.get(self, "pricingRuleRef"))
+        return typing.cast("_PricingRuleReference_111bcfd2", jsii.get(self, "pricingRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -2395,12 +2443,12 @@ class CfnPricingRule(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map that contains tag keys and tag values that are attached to a pricing rule.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__74aa4f5ff17ac08d7ca00b5728574783a055d9af8627efe28321973e6be1f235)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2410,14 +2458,14 @@ class CfnPricingRule(
     @jsii.member(jsii_name="tiering")
     def tiering(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPricingRule.TieringProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPricingRule.TieringProperty"]]:
         '''The set of tiering configurations for the pricing rule.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPricingRule.TieringProperty"]], jsii.get(self, "tiering"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPricingRule.TieringProperty"]], jsii.get(self, "tiering"))
 
     @tiering.setter
     def tiering(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPricingRule.TieringProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPricingRule.TieringProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8fe55809e6cb1b74a3bfa69e7578e482e14e7ff52be1b0106d1bcca12ff71b9d)
@@ -2446,7 +2494,7 @@ class CfnPricingRule(
         def __init__(
             self,
             *,
-            activated: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            activated: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
         ) -> None:
             '''The possible AWS Free Tier configurations.
 
@@ -2473,14 +2521,14 @@ class CfnPricingRule(
             }
 
         @builtins.property
-        def activated(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def activated(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Activate or deactivate AWS Free Tier.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-pricingrule-freetier.html#cfn-billingconductor-pricingrule-freetier-activated
             '''
             result = self._values.get("activated")
             assert result is not None, "Required property 'activated' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2502,7 +2550,7 @@ class CfnPricingRule(
         def __init__(
             self,
             *,
-            free_tier: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPricingRule.FreeTierProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            free_tier: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPricingRule.FreeTierProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The set of tiering configurations for the pricing rule.
 
@@ -2533,13 +2581,13 @@ class CfnPricingRule(
         @builtins.property
         def free_tier(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPricingRule.FreeTierProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPricingRule.FreeTierProperty"]]:
             '''The possible AWS Free Tier configurations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-pricingrule-tiering.html#cfn-billingconductor-pricingrule-tiering-freetier
             '''
             result = self._values.get("free_tier")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnPricingRule.FreeTierProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPricingRule.FreeTierProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2582,8 +2630,8 @@ class CfnPricingRuleProps:
         modifier_percentage: typing.Optional[jsii.Number] = None,
         operation: typing.Optional[builtins.str] = None,
         service: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tiering: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPricingRule.TieringProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tiering: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPricingRule.TieringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         usage_type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnPricingRule``.
@@ -2605,6 +2653,7 @@ class CfnPricingRuleProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_billingconductor as billingconductor
@@ -2747,24 +2796,24 @@ class CfnPricingRuleProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map that contains tag keys and tag values that are attached to a pricing rule.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-pricingrule.html#cfn-billingconductor-pricingrule-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def tiering(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPricingRule.TieringProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPricingRule.TieringProperty"]]:
         '''The set of tiering configurations for the pricing rule.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-pricingrule.html#cfn-billingconductor-pricingrule-tiering
         '''
         result = self._values.get("tiering")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPricingRule.TieringProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPricingRule.TieringProperty"]], result)
 
     @builtins.property
     def usage_type(self) -> typing.Optional[builtins.str]:
@@ -3034,7 +3083,8 @@ def _typecheckingstub__b18020b11e9da0d6827e72c5f07b3b822dfc78578e5de5d6bb554c27c
     *,
     attribute: builtins.str,
     match_option: builtins.str,
-    values: typing.Sequence[builtins.str],
+    attribute_values: typing.Optional[typing.Sequence[builtins.str]] = None,
+    values: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

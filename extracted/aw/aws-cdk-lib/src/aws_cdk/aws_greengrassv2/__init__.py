@@ -172,11 +172,11 @@ class CfnComponentVersion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         inline_recipe: typing.Optional[builtins.str] = None,
-        lambda_function: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentVersion.LambdaFunctionRecipeSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        lambda_function: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentVersion.LambdaFunctionRecipeSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::GreengrassV2::ComponentVersion``.
@@ -201,7 +201,7 @@ class CfnComponentVersion(
     @builtins.classmethod
     def arn_for_component_version(
         cls,
-        resource: _IComponentVersionRef_0bf9ff8c,
+        resource: "_IComponentVersionRef_0bf9ff8c",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -224,7 +224,7 @@ class CfnComponentVersion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnComponentVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -287,15 +287,15 @@ class CfnComponentVersion(
 
     @builtins.property
     @jsii.member(jsii_name="componentVersionRef")
-    def component_version_ref(self) -> _ComponentVersionReference_bcf75086:
+    def component_version_ref(self) -> "_ComponentVersionReference_bcf75086":
         '''A reference to a ComponentVersion resource.'''
-        return typing.cast(_ComponentVersionReference_bcf75086, jsii.get(self, "componentVersionRef"))
+        return typing.cast("_ComponentVersionReference_bcf75086", jsii.get(self, "componentVersionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="inlineRecipe")
@@ -314,14 +314,14 @@ class CfnComponentVersion(
     @jsii.member(jsii_name="lambdaFunction")
     def lambda_function(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaFunctionRecipeSourceProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaFunctionRecipeSourceProperty"]]:
         '''The parameters to create a component from a Lambda function.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaFunctionRecipeSourceProperty"]], jsii.get(self, "lambdaFunction"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaFunctionRecipeSourceProperty"]], jsii.get(self, "lambdaFunction"))
 
     @lambda_function.setter
     def lambda_function(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaFunctionRecipeSourceProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaFunctionRecipeSourceProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d0ccfa77f00c9c04773ae0643b7f2f0b369127a28b9747cbe78bfe426dc32f46)
@@ -433,7 +433,7 @@ class CfnComponentVersion(
         def __init__(
             self,
             *,
-            attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            attributes: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
             name: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Contains information about a platform that a component supports.
@@ -470,7 +470,7 @@ class CfnComponentVersion(
         @builtins.property
         def attributes(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''A dictionary of attributes for the platform.
 
             The AWS IoT Greengrass Core software defines the ``os`` and ``platform`` by default. You can specify additional platform attributes for a core device when you deploy the AWS IoT Greengrass nucleus component. For more information, see the `AWS IoT Greengrass nucleus component <https://docs.aws.amazon.com/greengrass/v2/developerguide/greengrass-nucleus-component.html>`_ in the *AWS IoT Greengrass V2 Developer Guide* .
@@ -478,7 +478,7 @@ class CfnComponentVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-componentplatform.html#cfn-greengrassv2-componentversion-componentplatform-attributes
             '''
             result = self._values.get("attributes")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def name(self) -> typing.Optional[builtins.str]:
@@ -516,10 +516,10 @@ class CfnComponentVersion(
         def __init__(
             self,
             *,
-            devices: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentVersion.LambdaDeviceMountProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            devices: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentVersion.LambdaDeviceMountProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             memory_size_in_kb: typing.Optional[jsii.Number] = None,
-            mount_ro_sysfs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-            volumes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentVersion.LambdaVolumeMountProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            mount_ro_sysfs: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+            volumes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentVersion.LambdaVolumeMountProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Contains information about a container in which AWS Lambda functions run on AWS IoT Greengrass core devices.
 
@@ -572,13 +572,13 @@ class CfnComponentVersion(
         @builtins.property
         def devices(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaDeviceMountProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaDeviceMountProperty"]]]]:
             '''The list of system devices that the container can access.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdacontainerparams.html#cfn-greengrassv2-componentversion-lambdacontainerparams-devices
             '''
             result = self._values.get("devices")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaDeviceMountProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaDeviceMountProperty"]]]], result)
 
         @builtins.property
         def memory_size_in_kb(self) -> typing.Optional[jsii.Number]:
@@ -594,7 +594,7 @@ class CfnComponentVersion(
         @builtins.property
         def mount_ro_sysfs(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether or not the container can read information from the device's ``/sys`` folder.
 
             Default: ``false``
@@ -602,18 +602,18 @@ class CfnComponentVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdacontainerparams.html#cfn-greengrassv2-componentversion-lambdacontainerparams-mountrosysfs
             '''
             result = self._values.get("mount_ro_sysfs")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def volumes(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaVolumeMountProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaVolumeMountProperty"]]]]:
             '''The list of volumes that the container can access.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdacontainerparams.html#cfn-greengrassv2-componentversion-lambdacontainerparams-volumes
             '''
             result = self._values.get("volumes")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaVolumeMountProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaVolumeMountProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -639,7 +639,7 @@ class CfnComponentVersion(
         def __init__(
             self,
             *,
-            add_group_owner: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            add_group_owner: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             path: typing.Optional[builtins.str] = None,
             permission: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -680,7 +680,7 @@ class CfnComponentVersion(
         @builtins.property
         def add_group_owner(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether or not to add the component's system user as an owner of the device.
 
             Default: ``false``
@@ -688,7 +688,7 @@ class CfnComponentVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdadevicemount.html#cfn-greengrassv2-componentversion-lambdadevicemount-addgroupowner
             '''
             result = self._values.get("add_group_owner")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def path(self) -> typing.Optional[builtins.str]:
@@ -817,15 +817,15 @@ class CfnComponentVersion(
         def __init__(
             self,
             *,
-            environment_variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
-            event_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentVersion.LambdaEventSourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            environment_variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            event_sources: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentVersion.LambdaEventSourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             exec_args: typing.Optional[typing.Sequence[builtins.str]] = None,
             input_payload_encoding_type: typing.Optional[builtins.str] = None,
-            linux_process_params: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentVersion.LambdaLinuxProcessParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            linux_process_params: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentVersion.LambdaLinuxProcessParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             max_idle_time_in_seconds: typing.Optional[jsii.Number] = None,
             max_instances_count: typing.Optional[jsii.Number] = None,
             max_queue_size: typing.Optional[jsii.Number] = None,
-            pinned: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            pinned: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             status_timeout_in_seconds: typing.Optional[jsii.Number] = None,
             timeout_in_seconds: typing.Optional[jsii.Number] = None,
         ) -> None:
@@ -928,18 +928,18 @@ class CfnComponentVersion(
         @builtins.property
         def environment_variables(
             self,
-        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
             '''The map of environment variables that are available to the Lambda function when it runs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdaexecutionparameters.html#cfn-greengrassv2-componentversion-lambdaexecutionparameters-environmentvariables
             '''
             result = self._values.get("environment_variables")
-            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def event_sources(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaEventSourceProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaEventSourceProperty"]]]]:
             '''The list of event sources to which to subscribe to receive work messages.
 
             The Lambda function runs when it receives a message from an event source. You can subscribe this function to local publish/subscribe messages and AWS IoT Core MQTT messages.
@@ -947,7 +947,7 @@ class CfnComponentVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdaexecutionparameters.html#cfn-greengrassv2-componentversion-lambdaexecutionparameters-eventsources
             '''
             result = self._values.get("event_sources")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaEventSourceProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaEventSourceProperty"]]]], result)
 
         @builtins.property
         def exec_args(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -972,13 +972,13 @@ class CfnComponentVersion(
         @builtins.property
         def linux_process_params(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaLinuxProcessParamsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaLinuxProcessParamsProperty"]]:
             '''The parameters for the Linux process that contains the Lambda function.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdaexecutionparameters.html#cfn-greengrassv2-componentversion-lambdaexecutionparameters-linuxprocessparams
             '''
             result = self._values.get("linux_process_params")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaLinuxProcessParamsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaLinuxProcessParamsProperty"]], result)
 
         @builtins.property
         def max_idle_time_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -1012,7 +1012,7 @@ class CfnComponentVersion(
         @builtins.property
         def pinned(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether or not the Lambda function is pinned, or long-lived.
 
             - A pinned Lambda function starts when the AWS IoT Greengrass Core starts and keeps running in its own container.
@@ -1023,7 +1023,7 @@ class CfnComponentVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdaexecutionparameters.html#cfn-greengrassv2-componentversion-lambdaexecutionparameters-pinned
             '''
             result = self._values.get("pinned")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def status_timeout_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -1070,10 +1070,10 @@ class CfnComponentVersion(
         def __init__(
             self,
             *,
-            component_dependencies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentVersion.ComponentDependencyRequirementProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            component_lambda_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentVersion.LambdaExecutionParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            component_dependencies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentVersion.ComponentDependencyRequirementProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            component_lambda_parameters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentVersion.LambdaExecutionParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             component_name: typing.Optional[builtins.str] = None,
-            component_platforms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentVersion.ComponentPlatformProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            component_platforms: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentVersion.ComponentPlatformProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             component_version: typing.Optional[builtins.str] = None,
             lambda_arn: typing.Optional[builtins.str] = None,
         ) -> None:
@@ -1173,24 +1173,24 @@ class CfnComponentVersion(
         @builtins.property
         def component_dependencies(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.ComponentDependencyRequirementProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.ComponentDependencyRequirementProperty"]]]]:
             '''The component versions on which this Lambda function component depends.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdafunctionrecipesource.html#cfn-greengrassv2-componentversion-lambdafunctionrecipesource-componentdependencies
             '''
             result = self._values.get("component_dependencies")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.ComponentDependencyRequirementProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.ComponentDependencyRequirementProperty"]]]], result)
 
         @builtins.property
         def component_lambda_parameters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaExecutionParametersProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaExecutionParametersProperty"]]:
             '''The system and runtime parameters for the Lambda function as it runs on the AWS IoT Greengrass core device.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdafunctionrecipesource.html#cfn-greengrassv2-componentversion-lambdafunctionrecipesource-componentlambdaparameters
             '''
             result = self._values.get("component_lambda_parameters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaExecutionParametersProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaExecutionParametersProperty"]], result)
 
         @builtins.property
         def component_name(self) -> typing.Optional[builtins.str]:
@@ -1206,13 +1206,13 @@ class CfnComponentVersion(
         @builtins.property
         def component_platforms(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.ComponentPlatformProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.ComponentPlatformProperty"]]]]:
             '''The platforms that the component version supports.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdafunctionrecipesource.html#cfn-greengrassv2-componentversion-lambdafunctionrecipesource-componentplatforms
             '''
             result = self._values.get("component_platforms")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.ComponentPlatformProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.ComponentPlatformProperty"]]]], result)
 
         @builtins.property
         def component_version(self) -> typing.Optional[builtins.str]:
@@ -1259,7 +1259,7 @@ class CfnComponentVersion(
         def __init__(
             self,
             *,
-            container_params: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComponentVersion.LambdaContainerParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            container_params: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentVersion.LambdaContainerParamsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             isolation_mode: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Contains parameters for a Linux process that contains an AWS Lambda function.
@@ -1308,13 +1308,13 @@ class CfnComponentVersion(
         @builtins.property
         def container_params(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaContainerParamsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaContainerParamsProperty"]]:
             '''The parameters for the container in which the Lambda function runs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdalinuxprocessparams.html#cfn-greengrassv2-componentversion-lambdalinuxprocessparams-containerparams
             '''
             result = self._values.get("container_params")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnComponentVersion.LambdaContainerParamsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaContainerParamsProperty"]], result)
 
         @builtins.property
         def isolation_mode(self) -> typing.Optional[builtins.str]:
@@ -1354,7 +1354,7 @@ class CfnComponentVersion(
         def __init__(
             self,
             *,
-            add_group_owner: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            add_group_owner: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             destination_path: typing.Optional[builtins.str] = None,
             permission: typing.Optional[builtins.str] = None,
             source_path: typing.Optional[builtins.str] = None,
@@ -1403,7 +1403,7 @@ class CfnComponentVersion(
         @builtins.property
         def add_group_owner(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether or not to add the AWS IoT Greengrass user group as an owner of the volume.
 
             Default: ``false``
@@ -1411,7 +1411,7 @@ class CfnComponentVersion(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-componentversion-lambdavolumemount.html#cfn-greengrassv2-componentversion-lambdavolumemount-addgroupowner
             '''
             result = self._values.get("add_group_owner")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def destination_path(self) -> typing.Optional[builtins.str]:
@@ -1468,7 +1468,7 @@ class CfnComponentVersionProps:
         self,
         *,
         inline_recipe: typing.Optional[builtins.str] = None,
-        lambda_function: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnComponentVersion.LambdaFunctionRecipeSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        lambda_function: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnComponentVersion.LambdaFunctionRecipeSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnComponentVersion``.
@@ -1574,7 +1574,7 @@ class CfnComponentVersionProps:
     @builtins.property
     def lambda_function(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnComponentVersion.LambdaFunctionRecipeSourceProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaFunctionRecipeSourceProperty"]]:
         '''The parameters to create a component from a Lambda function.
 
         You must specify either ``InlineRecipe`` or ``LambdaFunction`` .
@@ -1582,7 +1582,7 @@ class CfnComponentVersionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrassv2-componentversion.html#cfn-greengrassv2-componentversion-lambdafunction
         '''
         result = self._values.get("lambda_function")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnComponentVersion.LambdaFunctionRecipeSourceProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnComponentVersion.LambdaFunctionRecipeSourceProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
@@ -1709,14 +1709,14 @@ class CfnDeployment(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         target_arn: builtins.str,
-        components: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.ComponentDeploymentSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        components: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.ComponentDeploymentSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         deployment_name: typing.Optional[builtins.str] = None,
-        deployment_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.DeploymentPoliciesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        iot_job_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.DeploymentIoTJobConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        deployment_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.DeploymentPoliciesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        iot_job_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.DeploymentIoTJobConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         parent_target_arn: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -1750,7 +1750,7 @@ class CfnDeployment(
 
     @jsii.member(jsii_name="arnForDeployment")
     @builtins.classmethod
-    def arn_for_deployment(cls, resource: _IDeploymentRef_59e837ab) -> builtins.str:
+    def arn_for_deployment(cls, resource: "_IDeploymentRef_59e837ab") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1763,10 +1763,10 @@ class CfnDeployment(
     @builtins.classmethod
     def from_deployment_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         deployment_id: builtins.str,
-    ) -> _IDeploymentRef_59e837ab:
+    ) -> "_IDeploymentRef_59e837ab":
         '''Creates a new IDeploymentRef from a deploymentId.
 
         :param scope: -
@@ -1778,7 +1778,7 @@ class CfnDeployment(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument deployment_id", value=deployment_id, expected_type=type_hints["deployment_id"])
-        return typing.cast(_IDeploymentRef_59e837ab, jsii.sinvoke(cls, "fromDeploymentId", [scope, id, deployment_id]))
+        return typing.cast("_IDeploymentRef_59e837ab", jsii.sinvoke(cls, "fromDeploymentId", [scope, id, deployment_id]))
 
     @jsii.member(jsii_name="isCfnDeployment")
     @builtins.classmethod
@@ -1793,7 +1793,7 @@ class CfnDeployment(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeployment", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1838,15 +1838,15 @@ class CfnDeployment(
 
     @builtins.property
     @jsii.member(jsii_name="deploymentRef")
-    def deployment_ref(self) -> _DeploymentReference_f170fd96:
+    def deployment_ref(self) -> "_DeploymentReference_f170fd96":
         '''A reference to a Deployment resource.'''
-        return typing.cast(_DeploymentReference_f170fd96, jsii.get(self, "deploymentRef"))
+        return typing.cast("_DeploymentReference_f170fd96", jsii.get(self, "deploymentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="targetArn")
@@ -1865,14 +1865,14 @@ class CfnDeployment(
     @jsii.member(jsii_name="components")
     def components(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnDeployment.ComponentDeploymentSpecificationProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnDeployment.ComponentDeploymentSpecificationProperty"]]]]:
         '''The components to deploy.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnDeployment.ComponentDeploymentSpecificationProperty"]]]], jsii.get(self, "components"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnDeployment.ComponentDeploymentSpecificationProperty"]]]], jsii.get(self, "components"))
 
     @components.setter
     def components(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, "CfnDeployment.ComponentDeploymentSpecificationProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnDeployment.ComponentDeploymentSpecificationProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e1eb46eb9aeb60a7ab5ad1127528e8840b937def6fe38be8c8a850d599c3f07d)
@@ -1896,14 +1896,14 @@ class CfnDeployment(
     @jsii.member(jsii_name="deploymentPolicies")
     def deployment_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentPoliciesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentPoliciesProperty"]]:
         '''The deployment policies for the deployment.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentPoliciesProperty"]], jsii.get(self, "deploymentPolicies"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentPoliciesProperty"]], jsii.get(self, "deploymentPolicies"))
 
     @deployment_policies.setter
     def deployment_policies(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentPoliciesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentPoliciesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bef596cb6c3ad06c55fcfb702aa42ec9c1d3b9107e9691ab1154ce9d7b05ae46)
@@ -1914,14 +1914,14 @@ class CfnDeployment(
     @jsii.member(jsii_name="iotJobConfiguration")
     def iot_job_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentIoTJobConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentIoTJobConfigurationProperty"]]:
         '''The job configuration for the deployment configuration.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentIoTJobConfigurationProperty"]], jsii.get(self, "iotJobConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentIoTJobConfigurationProperty"]], jsii.get(self, "iotJobConfiguration"))
 
     @iot_job_configuration.setter
     def iot_job_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentIoTJobConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentIoTJobConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__879253a12cc1ff77fae7f0478b8930b3954ee32057720a99435120f7439281a2)
@@ -2047,8 +2047,8 @@ class CfnDeployment(
             self,
             *,
             component_version: typing.Optional[builtins.str] = None,
-            configuration_update: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.ComponentConfigurationUpdateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            run_with: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.ComponentRunWithProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            configuration_update: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.ComponentConfigurationUpdateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            run_with: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.ComponentRunWithProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Contains information about a component to deploy.
 
@@ -2106,7 +2106,7 @@ class CfnDeployment(
         @builtins.property
         def configuration_update(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.ComponentConfigurationUpdateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.ComponentConfigurationUpdateProperty"]]:
             '''The configuration updates to deploy for the component.
 
             You can define reset updates and merge updates. A reset updates the keys that you specify to the default configuration for the component. A merge updates the core device's component configuration with the keys and values that you specify. The AWS IoT Greengrass Core software applies reset updates before it applies merge updates. For more information, see `Update component configuration <https://docs.aws.amazon.com/greengrass/v2/developerguide/update-component-configurations.html>`_ .
@@ -2114,12 +2114,12 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-deployment-componentdeploymentspecification.html#cfn-greengrassv2-deployment-componentdeploymentspecification-configurationupdate
             '''
             result = self._values.get("configuration_update")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.ComponentConfigurationUpdateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.ComponentConfigurationUpdateProperty"]], result)
 
         @builtins.property
         def run_with(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.ComponentRunWithProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.ComponentRunWithProperty"]]:
             '''The system user and group that the  software uses to run component processes on the core device.
 
             If you omit this parameter, the  software uses the system user and group that you configure for the core device. For more information, see `Configure the user and group that run components <https://docs.aws.amazon.com/greengrass/v2/developerguide/configure-greengrass-core-v2.html#configure-component-user>`_ in the *AWS IoT Greengrass V2 Developer Guide* .
@@ -2127,7 +2127,7 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-deployment-componentdeploymentspecification.html#cfn-greengrassv2-deployment-componentdeploymentspecification-runwith
             '''
             result = self._values.get("run_with")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.ComponentRunWithProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.ComponentRunWithProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2154,7 +2154,7 @@ class CfnDeployment(
             self,
             *,
             posix_user: typing.Optional[builtins.str] = None,
-            system_resource_limits: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.SystemResourceLimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            system_resource_limits: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.SystemResourceLimitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             windows_user: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Contains information system user and group that the AWS IoT Greengrass Core software uses to run component processes on the core device.
@@ -2210,7 +2210,7 @@ class CfnDeployment(
         @builtins.property
         def system_resource_limits(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.SystemResourceLimitsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.SystemResourceLimitsProperty"]]:
             '''The system resource limits to apply to this component's process on the core device.
 
             AWS IoT Greengrass supports this feature only on Linux core devices.
@@ -2220,7 +2220,7 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-deployment-componentrunwith.html#cfn-greengrassv2-deployment-componentrunwith-systemresourcelimits
             '''
             result = self._values.get("system_resource_limits")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.SystemResourceLimitsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.SystemResourceLimitsProperty"]], result)
 
         @builtins.property
         def windows_user(self) -> typing.Optional[builtins.str]:
@@ -2403,9 +2403,9 @@ class CfnDeployment(
         def __init__(
             self,
             *,
-            abort_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.IoTJobAbortConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            job_executions_rollout_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.IoTJobExecutionsRolloutConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            timeout_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.IoTJobTimeoutConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            abort_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.IoTJobAbortConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            job_executions_rollout_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.IoTJobExecutionsRolloutConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            timeout_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.IoTJobTimeoutConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Contains information about an AWS IoT job configuration.
 
@@ -2462,7 +2462,7 @@ class CfnDeployment(
         @builtins.property
         def abort_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.IoTJobAbortConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.IoTJobAbortConfigProperty"]]:
             '''The stop configuration for the job.
 
             This configuration defines when and how to stop a job rollout.
@@ -2470,12 +2470,12 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-deployment-deploymentiotjobconfiguration.html#cfn-greengrassv2-deployment-deploymentiotjobconfiguration-abortconfig
             '''
             result = self._values.get("abort_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.IoTJobAbortConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.IoTJobAbortConfigProperty"]], result)
 
         @builtins.property
         def job_executions_rollout_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.IoTJobExecutionsRolloutConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.IoTJobExecutionsRolloutConfigProperty"]]:
             '''The rollout configuration for the job.
 
             This configuration defines the rate at which the job rolls out to the fleet of target devices.
@@ -2483,12 +2483,12 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-deployment-deploymentiotjobconfiguration.html#cfn-greengrassv2-deployment-deploymentiotjobconfiguration-jobexecutionsrolloutconfig
             '''
             result = self._values.get("job_executions_rollout_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.IoTJobExecutionsRolloutConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.IoTJobExecutionsRolloutConfigProperty"]], result)
 
         @builtins.property
         def timeout_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.IoTJobTimeoutConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.IoTJobTimeoutConfigProperty"]]:
             '''The timeout configuration for the job.
 
             This configuration defines the amount of time each device has to complete the job.
@@ -2496,7 +2496,7 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-deployment-deploymentiotjobconfiguration.html#cfn-greengrassv2-deployment-deploymentiotjobconfiguration-timeoutconfig
             '''
             result = self._values.get("timeout_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.IoTJobTimeoutConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.IoTJobTimeoutConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2522,8 +2522,8 @@ class CfnDeployment(
         def __init__(
             self,
             *,
-            component_update_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.DeploymentComponentUpdatePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            configuration_validation_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.DeploymentConfigurationValidationPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            component_update_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.DeploymentComponentUpdatePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            configuration_validation_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.DeploymentConfigurationValidationPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             failure_handling_policy: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Contains information about policies that define how a deployment updates components and handles failure.
@@ -2568,7 +2568,7 @@ class CfnDeployment(
         @builtins.property
         def component_update_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentComponentUpdatePolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentComponentUpdatePolicyProperty"]]:
             '''The component update policy for the configuration deployment.
 
             This policy defines when it's safe to deploy the configuration to devices.
@@ -2576,12 +2576,12 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-deployment-deploymentpolicies.html#cfn-greengrassv2-deployment-deploymentpolicies-componentupdatepolicy
             '''
             result = self._values.get("component_update_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentComponentUpdatePolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentComponentUpdatePolicyProperty"]], result)
 
         @builtins.property
         def configuration_validation_policy(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentConfigurationValidationPolicyProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentConfigurationValidationPolicyProperty"]]:
             '''The configuration validation policy for the configuration deployment.
 
             This policy defines how long each component has to validate its configure updates.
@@ -2589,7 +2589,7 @@ class CfnDeployment(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-deployment-deploymentpolicies.html#cfn-greengrassv2-deployment-deploymentpolicies-configurationvalidationpolicy
             '''
             result = self._values.get("configuration_validation_policy")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.DeploymentConfigurationValidationPolicyProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentConfigurationValidationPolicyProperty"]], result)
 
         @builtins.property
         def failure_handling_policy(self) -> typing.Optional[builtins.str]:
@@ -2622,7 +2622,7 @@ class CfnDeployment(
         def __init__(
             self,
             *,
-            criteria_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.IoTJobAbortCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            criteria_list: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.IoTJobAbortCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''Contains a list of criteria that define when and how to cancel a configuration deployment.
 
@@ -2656,14 +2656,14 @@ class CfnDeployment(
         @builtins.property
         def criteria_list(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeployment.IoTJobAbortCriteriaProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeployment.IoTJobAbortCriteriaProperty"]]]:
             '''The list of criteria that define when and how to cancel the configuration deployment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-deployment-iotjobabortconfig.html#cfn-greengrassv2-deployment-iotjobabortconfig-criterialist
             '''
             result = self._values.get("criteria_list")
             assert result is not None, "Required property 'criteria_list' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnDeployment.IoTJobAbortCriteriaProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDeployment.IoTJobAbortCriteriaProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2801,7 +2801,7 @@ class CfnDeployment(
         def __init__(
             self,
             *,
-            exponential_rate: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.IoTJobExponentialRolloutRateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            exponential_rate: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.IoTJobExponentialRolloutRateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             maximum_per_minute: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Contains information about the rollout configuration for a job.
@@ -2844,13 +2844,13 @@ class CfnDeployment(
         @builtins.property
         def exponential_rate(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.IoTJobExponentialRolloutRateProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.IoTJobExponentialRolloutRateProperty"]]:
             '''The exponential rate to increase the job rollout rate.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-greengrassv2-deployment-iotjobexecutionsrolloutconfig.html#cfn-greengrassv2-deployment-iotjobexecutionsrolloutconfig-exponentialrate
             '''
             result = self._values.get("exponential_rate")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDeployment.IoTJobExponentialRolloutRateProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.IoTJobExponentialRolloutRateProperty"]], result)
 
         @builtins.property
         def maximum_per_minute(self) -> typing.Optional[jsii.Number]:
@@ -3120,10 +3120,10 @@ class CfnDeploymentProps:
         self,
         *,
         target_arn: builtins.str,
-        components: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.ComponentDeploymentSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        components: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.ComponentDeploymentSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         deployment_name: typing.Optional[builtins.str] = None,
-        deployment_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.DeploymentPoliciesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        iot_job_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.DeploymentIoTJobConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        deployment_policies: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.DeploymentPoliciesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        iot_job_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDeployment.DeploymentIoTJobConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         parent_target_arn: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -3245,7 +3245,7 @@ class CfnDeploymentProps:
     @builtins.property
     def components(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnDeployment.ComponentDeploymentSpecificationProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnDeployment.ComponentDeploymentSpecificationProperty"]]]]:
         '''The components to deploy.
 
         This is a dictionary, where each key is the name of a component, and each key's value is the version and configuration to deploy for that component.
@@ -3253,7 +3253,7 @@ class CfnDeploymentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrassv2-deployment.html#cfn-greengrassv2-deployment-components
         '''
         result = self._values.get("components")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, CfnDeployment.ComponentDeploymentSpecificationProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnDeployment.ComponentDeploymentSpecificationProperty"]]]], result)
 
     @builtins.property
     def deployment_name(self) -> typing.Optional[builtins.str]:
@@ -3267,7 +3267,7 @@ class CfnDeploymentProps:
     @builtins.property
     def deployment_policies(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeployment.DeploymentPoliciesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentPoliciesProperty"]]:
         '''The deployment policies for the deployment.
 
         These policies define how the deployment updates components and handles failure.
@@ -3275,12 +3275,12 @@ class CfnDeploymentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrassv2-deployment.html#cfn-greengrassv2-deployment-deploymentpolicies
         '''
         result = self._values.get("deployment_policies")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeployment.DeploymentPoliciesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentPoliciesProperty"]], result)
 
     @builtins.property
     def iot_job_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeployment.DeploymentIoTJobConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentIoTJobConfigurationProperty"]]:
         '''The job configuration for the deployment configuration.
 
         The job configuration specifies the rollout, timeout, and stop configurations for the deployment configuration.
@@ -3288,7 +3288,7 @@ class CfnDeploymentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrassv2-deployment.html#cfn-greengrassv2-deployment-iotjobconfiguration
         '''
         result = self._values.get("iot_job_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeployment.DeploymentIoTJobConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDeployment.DeploymentIoTJobConfigurationProperty"]], result)
 
     @builtins.property
     def parent_target_arn(self) -> typing.Optional[builtins.str]:

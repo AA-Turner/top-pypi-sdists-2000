@@ -115,7 +115,7 @@ class IEnvironmentEC2Ref(
 
     @builtins.property
     @jsii.member(jsii_name="environmentEc2Ref")
-    def environment_ec2_ref(self) -> EnvironmentEC2Reference:
+    def environment_ec2_ref(self) -> "EnvironmentEC2Reference":
         '''(experimental) A reference to a EnvironmentEC2 resource.
 
         :stability: experimental
@@ -136,12 +136,12 @@ class _IEnvironmentEC2RefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="environmentEc2Ref")
-    def environment_ec2_ref(self) -> EnvironmentEC2Reference:
+    def environment_ec2_ref(self) -> "EnvironmentEC2Reference":
         '''(experimental) A reference to a EnvironmentEC2 resource.
 
         :stability: experimental
         '''
-        return typing.cast(EnvironmentEC2Reference, jsii.get(self, "environmentEc2Ref"))
+        return typing.cast("EnvironmentEC2Reference", jsii.get(self, "environmentEc2Ref"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEnvironmentEC2Ref).__jsii_proxy_class__ = lambda : _IEnvironmentEC2RefProxy

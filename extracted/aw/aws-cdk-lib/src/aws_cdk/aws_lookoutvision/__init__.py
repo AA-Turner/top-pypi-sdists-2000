@@ -96,7 +96,7 @@ class CfnProject(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         project_name: builtins.str,
@@ -117,7 +117,7 @@ class CfnProject(
 
     @jsii.member(jsii_name="arnForProject")
     @builtins.classmethod
-    def arn_for_project(cls, resource: _IProjectRef_ebc63cfa) -> builtins.str:
+    def arn_for_project(cls, resource: "_IProjectRef_ebc63cfa") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -130,10 +130,10 @@ class CfnProject(
     @builtins.classmethod
     def from_project_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IProjectRef_ebc63cfa:
+    ) -> "_IProjectRef_ebc63cfa":
         '''Creates a new IProjectRef from an ARN.
 
         :param scope: -
@@ -145,16 +145,16 @@ class CfnProject(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IProjectRef_ebc63cfa, jsii.sinvoke(cls, "fromProjectArn", [scope, id, arn]))
+        return typing.cast("_IProjectRef_ebc63cfa", jsii.sinvoke(cls, "fromProjectArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromProjectName")
     @builtins.classmethod
     def from_project_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         project_name: builtins.str,
-    ) -> _IProjectRef_ebc63cfa:
+    ) -> "_IProjectRef_ebc63cfa":
         '''Creates a new IProjectRef from a projectName.
 
         :param scope: -
@@ -166,7 +166,7 @@ class CfnProject(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument project_name", value=project_name, expected_type=type_hints["project_name"])
-        return typing.cast(_IProjectRef_ebc63cfa, jsii.sinvoke(cls, "fromProjectName", [scope, id, project_name]))
+        return typing.cast("_IProjectRef_ebc63cfa", jsii.sinvoke(cls, "fromProjectName", [scope, id, project_name]))
 
     @jsii.member(jsii_name="isCfnProject")
     @builtins.classmethod
@@ -181,7 +181,7 @@ class CfnProject(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProject", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -226,9 +226,9 @@ class CfnProject(
 
     @builtins.property
     @jsii.member(jsii_name="projectRef")
-    def project_ref(self) -> _ProjectReference_b65b6f0d:
+    def project_ref(self) -> "_ProjectReference_b65b6f0d":
         '''A reference to a Project resource.'''
-        return typing.cast(_ProjectReference_b65b6f0d, jsii.get(self, "projectRef"))
+        return typing.cast("_ProjectReference_b65b6f0d", jsii.get(self, "projectRef"))
 
     @builtins.property
     @jsii.member(jsii_name="projectName")

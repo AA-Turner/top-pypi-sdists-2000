@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: astronomer-cosmos
-Version: 1.11.3
+Version: 1.12.0
 Summary: Orchestrate your dbt projects in Airflow
 Project-URL: Homepage, https://github.com/astronomer/astronomer-cosmos
 Project-URL: Documentation, https://astronomer.github.io/astronomer-cosmos
@@ -18,13 +18,13 @@ Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
-Requires-Python: >=3.9
+Classifier: Programming Language :: Python :: 3.13
+Requires-Python: >=3.10
 Requires-Dist: aenum
-Requires-Dist: apache-airflow>=2.4.0
+Requires-Dist: apache-airflow>=2.6.0
 Requires-Dist: attrs
 Requires-Dist: deprecation
 Requires-Dist: jinja2>=3.0.0

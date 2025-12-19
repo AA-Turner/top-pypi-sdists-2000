@@ -522,7 +522,7 @@ class IChannelPlacementGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="channelPlacementGroupRef")
-    def channel_placement_group_ref(self) -> ChannelPlacementGroupReference:
+    def channel_placement_group_ref(self) -> "ChannelPlacementGroupReference":
         '''(experimental) A reference to a ChannelPlacementGroup resource.
 
         :stability: experimental
@@ -543,12 +543,12 @@ class _IChannelPlacementGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="channelPlacementGroupRef")
-    def channel_placement_group_ref(self) -> ChannelPlacementGroupReference:
+    def channel_placement_group_ref(self) -> "ChannelPlacementGroupReference":
         '''(experimental) A reference to a ChannelPlacementGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(ChannelPlacementGroupReference, jsii.get(self, "channelPlacementGroupRef"))
+        return typing.cast("ChannelPlacementGroupReference", jsii.get(self, "channelPlacementGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IChannelPlacementGroupRef).__jsii_proxy_class__ = lambda : _IChannelPlacementGroupRefProxy
@@ -567,7 +567,7 @@ class IChannelRef(
 
     @builtins.property
     @jsii.member(jsii_name="channelRef")
-    def channel_ref(self) -> ChannelReference:
+    def channel_ref(self) -> "ChannelReference":
         '''(experimental) A reference to a Channel resource.
 
         :stability: experimental
@@ -588,12 +588,12 @@ class _IChannelRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="channelRef")
-    def channel_ref(self) -> ChannelReference:
+    def channel_ref(self) -> "ChannelReference":
         '''(experimental) A reference to a Channel resource.
 
         :stability: experimental
         '''
-        return typing.cast(ChannelReference, jsii.get(self, "channelRef"))
+        return typing.cast("ChannelReference", jsii.get(self, "channelRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IChannelRef).__jsii_proxy_class__ = lambda : _IChannelRefProxy
@@ -616,7 +616,7 @@ class ICloudWatchAlarmTemplateGroupRef(
     @jsii.member(jsii_name="cloudWatchAlarmTemplateGroupRef")
     def cloud_watch_alarm_template_group_ref(
         self,
-    ) -> CloudWatchAlarmTemplateGroupReference:
+    ) -> "CloudWatchAlarmTemplateGroupReference":
         '''(experimental) A reference to a CloudWatchAlarmTemplateGroup resource.
 
         :stability: experimental
@@ -639,12 +639,12 @@ class _ICloudWatchAlarmTemplateGroupRefProxy(
     @jsii.member(jsii_name="cloudWatchAlarmTemplateGroupRef")
     def cloud_watch_alarm_template_group_ref(
         self,
-    ) -> CloudWatchAlarmTemplateGroupReference:
+    ) -> "CloudWatchAlarmTemplateGroupReference":
         '''(experimental) A reference to a CloudWatchAlarmTemplateGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(CloudWatchAlarmTemplateGroupReference, jsii.get(self, "cloudWatchAlarmTemplateGroupRef"))
+        return typing.cast("CloudWatchAlarmTemplateGroupReference", jsii.get(self, "cloudWatchAlarmTemplateGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICloudWatchAlarmTemplateGroupRef).__jsii_proxy_class__ = lambda : _ICloudWatchAlarmTemplateGroupRefProxy
@@ -665,7 +665,7 @@ class ICloudWatchAlarmTemplateRef(
 
     @builtins.property
     @jsii.member(jsii_name="cloudWatchAlarmTemplateRef")
-    def cloud_watch_alarm_template_ref(self) -> CloudWatchAlarmTemplateReference:
+    def cloud_watch_alarm_template_ref(self) -> "CloudWatchAlarmTemplateReference":
         '''(experimental) A reference to a CloudWatchAlarmTemplate resource.
 
         :stability: experimental
@@ -686,12 +686,12 @@ class _ICloudWatchAlarmTemplateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="cloudWatchAlarmTemplateRef")
-    def cloud_watch_alarm_template_ref(self) -> CloudWatchAlarmTemplateReference:
+    def cloud_watch_alarm_template_ref(self) -> "CloudWatchAlarmTemplateReference":
         '''(experimental) A reference to a CloudWatchAlarmTemplate resource.
 
         :stability: experimental
         '''
-        return typing.cast(CloudWatchAlarmTemplateReference, jsii.get(self, "cloudWatchAlarmTemplateRef"))
+        return typing.cast("CloudWatchAlarmTemplateReference", jsii.get(self, "cloudWatchAlarmTemplateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICloudWatchAlarmTemplateRef).__jsii_proxy_class__ = lambda : _ICloudWatchAlarmTemplateRefProxy
@@ -710,7 +710,7 @@ class IClusterRef(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
@@ -731,12 +731,12 @@ class _IClusterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClusterReference, jsii.get(self, "clusterRef"))
+        return typing.cast("ClusterReference", jsii.get(self, "clusterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRefProxy
@@ -759,7 +759,7 @@ class IEventBridgeRuleTemplateGroupRef(
     @jsii.member(jsii_name="eventBridgeRuleTemplateGroupRef")
     def event_bridge_rule_template_group_ref(
         self,
-    ) -> EventBridgeRuleTemplateGroupReference:
+    ) -> "EventBridgeRuleTemplateGroupReference":
         '''(experimental) A reference to a EventBridgeRuleTemplateGroup resource.
 
         :stability: experimental
@@ -782,12 +782,12 @@ class _IEventBridgeRuleTemplateGroupRefProxy(
     @jsii.member(jsii_name="eventBridgeRuleTemplateGroupRef")
     def event_bridge_rule_template_group_ref(
         self,
-    ) -> EventBridgeRuleTemplateGroupReference:
+    ) -> "EventBridgeRuleTemplateGroupReference":
         '''(experimental) A reference to a EventBridgeRuleTemplateGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventBridgeRuleTemplateGroupReference, jsii.get(self, "eventBridgeRuleTemplateGroupRef"))
+        return typing.cast("EventBridgeRuleTemplateGroupReference", jsii.get(self, "eventBridgeRuleTemplateGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventBridgeRuleTemplateGroupRef).__jsii_proxy_class__ = lambda : _IEventBridgeRuleTemplateGroupRefProxy
@@ -808,7 +808,7 @@ class IEventBridgeRuleTemplateRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventBridgeRuleTemplateRef")
-    def event_bridge_rule_template_ref(self) -> EventBridgeRuleTemplateReference:
+    def event_bridge_rule_template_ref(self) -> "EventBridgeRuleTemplateReference":
         '''(experimental) A reference to a EventBridgeRuleTemplate resource.
 
         :stability: experimental
@@ -829,12 +829,12 @@ class _IEventBridgeRuleTemplateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventBridgeRuleTemplateRef")
-    def event_bridge_rule_template_ref(self) -> EventBridgeRuleTemplateReference:
+    def event_bridge_rule_template_ref(self) -> "EventBridgeRuleTemplateReference":
         '''(experimental) A reference to a EventBridgeRuleTemplate resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventBridgeRuleTemplateReference, jsii.get(self, "eventBridgeRuleTemplateRef"))
+        return typing.cast("EventBridgeRuleTemplateReference", jsii.get(self, "eventBridgeRuleTemplateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventBridgeRuleTemplateRef).__jsii_proxy_class__ = lambda : _IEventBridgeRuleTemplateRefProxy

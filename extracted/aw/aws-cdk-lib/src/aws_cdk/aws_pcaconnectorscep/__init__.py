@@ -118,7 +118,7 @@ class CfnChallenge(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         connector_arn: builtins.str,
@@ -141,7 +141,7 @@ class CfnChallenge(
 
     @jsii.member(jsii_name="arnForChallenge")
     @builtins.classmethod
-    def arn_for_challenge(cls, resource: _IChallengeRef_b8b2f04e) -> builtins.str:
+    def arn_for_challenge(cls, resource: "_IChallengeRef_b8b2f04e") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -163,7 +163,7 @@ class CfnChallenge(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnChallenge", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -203,9 +203,9 @@ class CfnChallenge(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -214,9 +214,9 @@ class CfnChallenge(
 
     @builtins.property
     @jsii.member(jsii_name="challengeRef")
-    def challenge_ref(self) -> _ChallengeReference_af70af46:
+    def challenge_ref(self) -> "_ChallengeReference_af70af46":
         '''A reference to a Challenge resource.'''
-        return typing.cast(_ChallengeReference_af70af46, jsii.get(self, "challengeRef"))
+        return typing.cast("_ChallengeReference_af70af46", jsii.get(self, "challengeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connectorArn")
@@ -360,11 +360,11 @@ class CfnConnector(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         certificate_authority_arn: builtins.str,
-        mobile_device_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.MobileDeviceManagementProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        mobile_device_management: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.MobileDeviceManagementProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::PCAConnectorSCEP::Connector``.
@@ -389,7 +389,7 @@ class CfnConnector(
 
     @jsii.member(jsii_name="arnForConnector")
     @builtins.classmethod
-    def arn_for_connector(cls, resource: _IConnectorRef_19318bf1) -> builtins.str:
+    def arn_for_connector(cls, resource: "_IConnectorRef_19318bf1") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -411,7 +411,7 @@ class CfnConnector(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnector", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -460,11 +460,11 @@ class CfnConnector(
 
     @builtins.property
     @jsii.member(jsii_name="attrOpenIdConfiguration")
-    def attr_open_id_configuration(self) -> _IResolvable_da3f097b:
+    def attr_open_id_configuration(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: OpenIdConfiguration
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrOpenIdConfiguration"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrOpenIdConfiguration"))
 
     @builtins.property
     @jsii.member(jsii_name="attrType")
@@ -477,9 +477,9 @@ class CfnConnector(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -488,9 +488,9 @@ class CfnConnector(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> _ConnectorReference_d9584376:
+    def connector_ref(self) -> "_ConnectorReference_d9584376":
         '''A reference to a Connector resource.'''
-        return typing.cast(_ConnectorReference_d9584376, jsii.get(self, "connectorRef"))
+        return typing.cast("_ConnectorReference_d9584376", jsii.get(self, "connectorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="certificateAuthorityArn")
@@ -509,14 +509,14 @@ class CfnConnector(
     @jsii.member(jsii_name="mobileDeviceManagement")
     def mobile_device_management(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.MobileDeviceManagementProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.MobileDeviceManagementProperty"]]:
         '''Contains settings relevant to the mobile device management system that you chose for the connector.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.MobileDeviceManagementProperty"]], jsii.get(self, "mobileDeviceManagement"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.MobileDeviceManagementProperty"]], jsii.get(self, "mobileDeviceManagement"))
 
     @mobile_device_management.setter
     def mobile_device_management(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.MobileDeviceManagementProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.MobileDeviceManagementProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0ad5d7a17f85a90225f468c73bd52466319e1c0daa9fee8bb5eb5ffcd32bd5c3)
@@ -625,7 +625,7 @@ class CfnConnector(
         def __init__(
             self,
             *,
-            intune: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.IntuneConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            intune: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.IntuneConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''If you don't supply a value, by default Connector for SCEP creates a connector for general-purpose use.
 
@@ -661,7 +661,7 @@ class CfnConnector(
         @builtins.property
         def intune(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.IntuneConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.IntuneConfigurationProperty"]:
             '''Configuration settings for use with Microsoft Intune.
 
             For information about using Connector for SCEP for Microsoft Intune, see `Using Connector for SCEP for Microsoft Intune <https://docs.aws.amazon.com/privateca/latest/userguide/scep-connector.htmlconnector-for-scep-intune.html>`_ .
@@ -670,7 +670,7 @@ class CfnConnector(
             '''
             result = self._values.get("intune")
             assert result is not None, "Required property 'intune' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.IntuneConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.IntuneConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -789,7 +789,7 @@ class CfnConnectorProps:
         self,
         *,
         certificate_authority_arn: builtins.str,
-        mobile_device_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.MobileDeviceManagementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        mobile_device_management: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.MobileDeviceManagementProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnConnector``.
@@ -848,7 +848,7 @@ class CfnConnectorProps:
     @builtins.property
     def mobile_device_management(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.MobileDeviceManagementProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.MobileDeviceManagementProperty"]]:
         '''Contains settings relevant to the mobile device management system that you chose for the connector.
 
         If you didn't configure ``MobileDeviceManagement`` , then the connector is for general-purpose use and this object is empty.
@@ -856,7 +856,7 @@ class CfnConnectorProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcaconnectorscep-connector.html#cfn-pcaconnectorscep-connector-mobiledevicemanagement
         '''
         result = self._values.get("mobile_device_management")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.MobileDeviceManagementProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.MobileDeviceManagementProperty"]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:

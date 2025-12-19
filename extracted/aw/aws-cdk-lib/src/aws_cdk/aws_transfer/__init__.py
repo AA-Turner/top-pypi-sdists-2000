@@ -109,6 +109,7 @@ class CfnAgreement(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_transfer as transfer
@@ -141,7 +142,7 @@ class CfnAgreement(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         access_role: builtins.str,
@@ -149,12 +150,12 @@ class CfnAgreement(
         partner_profile_id: builtins.str,
         server_id: builtins.str,
         base_directory: typing.Optional[builtins.str] = None,
-        custom_directories: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAgreement.CustomDirectoriesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_directories: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAgreement.CustomDirectoriesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         enforce_message_signing: typing.Optional[builtins.str] = None,
         preserve_filename: typing.Optional[builtins.str] = None,
         status: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Transfer::Agreement``.
 
@@ -194,7 +195,7 @@ class CfnAgreement(
 
     @jsii.member(jsii_name="arnForAgreement")
     @builtins.classmethod
-    def arn_for_agreement(cls, resource: _IAgreementRef_d820bcad) -> builtins.str:
+    def arn_for_agreement(cls, resource: "_IAgreementRef_d820bcad") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -216,7 +217,7 @@ class CfnAgreement(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAgreement", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -247,9 +248,9 @@ class CfnAgreement(
 
     @builtins.property
     @jsii.member(jsii_name="agreementRef")
-    def agreement_ref(self) -> _AgreementReference_1bc96f6e:
+    def agreement_ref(self) -> "_AgreementReference_1bc96f6e":
         '''A reference to a Agreement resource.'''
-        return typing.cast(_AgreementReference_1bc96f6e, jsii.get(self, "agreementRef"))
+        return typing.cast("_AgreementReference_1bc96f6e", jsii.get(self, "agreementRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrAgreementId")
@@ -276,9 +277,9 @@ class CfnAgreement(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="accessRole")
@@ -349,14 +350,14 @@ class CfnAgreement(
     @jsii.member(jsii_name="customDirectories")
     def custom_directories(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAgreement.CustomDirectoriesProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAgreement.CustomDirectoriesProperty"]]:
         '''A ``CustomDirectoriesType`` structure.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAgreement.CustomDirectoriesProperty"]], jsii.get(self, "customDirectories"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAgreement.CustomDirectoriesProperty"]], jsii.get(self, "customDirectories"))
 
     @custom_directories.setter
     def custom_directories(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAgreement.CustomDirectoriesProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAgreement.CustomDirectoriesProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0dfcc069ad404f24e1d3d66293208f393508273f19347e58f547f45ba5f8a952)
@@ -417,12 +418,12 @@ class CfnAgreement(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for agreements.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dbeccb7f697f73180ad5ee02e1bc0a8b54212c0eb54c653977d2989de01ad6f1)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -577,12 +578,12 @@ class CfnAgreementProps:
         partner_profile_id: builtins.str,
         server_id: builtins.str,
         base_directory: typing.Optional[builtins.str] = None,
-        custom_directories: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAgreement.CustomDirectoriesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        custom_directories: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAgreement.CustomDirectoriesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         enforce_message_signing: typing.Optional[builtins.str] = None,
         preserve_filename: typing.Optional[builtins.str] = None,
         status: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAgreement``.
 
@@ -603,6 +604,7 @@ class CfnAgreementProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_transfer as transfer
@@ -732,7 +734,7 @@ class CfnAgreementProps:
     @builtins.property
     def custom_directories(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAgreement.CustomDirectoriesProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAgreement.CustomDirectoriesProperty"]]:
         '''A ``CustomDirectoriesType`` structure.
 
         This structure specifies custom directories for storing various AS2 message files. You can specify directories for the following types of files.
@@ -746,7 +748,7 @@ class CfnAgreementProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-agreement.html#cfn-transfer-agreement-customdirectories
         '''
         result = self._values.get("custom_directories")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAgreement.CustomDirectoriesProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAgreement.CustomDirectoriesProperty"]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -791,13 +793,13 @@ class CfnAgreementProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for agreements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-agreement.html#cfn-transfer-agreement-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -841,6 +843,7 @@ class CfnCertificate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_transfer as transfer
@@ -864,7 +867,7 @@ class CfnCertificate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         certificate: builtins.str,
@@ -874,7 +877,7 @@ class CfnCertificate(
         description: typing.Optional[builtins.str] = None,
         inactive_date: typing.Optional[builtins.str] = None,
         private_key: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Transfer::Certificate``.
 
@@ -908,7 +911,7 @@ class CfnCertificate(
 
     @jsii.member(jsii_name="arnForCertificate")
     @builtins.classmethod
-    def arn_for_certificate(cls, resource: _ICertificateRef_0de2a67f) -> builtins.str:
+    def arn_for_certificate(cls, resource: "_ICertificateRef_0de2a67f") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -921,10 +924,10 @@ class CfnCertificate(
     @builtins.classmethod
     def from_certificate_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ICertificateRef_0de2a67f:
+    ) -> "_ICertificateRef_0de2a67f":
         '''Creates a new ICertificateRef from an ARN.
 
         :param scope: -
@@ -936,16 +939,16 @@ class CfnCertificate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ICertificateRef_0de2a67f, jsii.sinvoke(cls, "fromCertificateArn", [scope, id, arn]))
+        return typing.cast("_ICertificateRef_0de2a67f", jsii.sinvoke(cls, "fromCertificateArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromCertificateId")
     @builtins.classmethod
     def from_certificate_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         certificate_id: builtins.str,
-    ) -> _ICertificateRef_0de2a67f:
+    ) -> "_ICertificateRef_0de2a67f":
         '''Creates a new ICertificateRef from a certificateId.
 
         :param scope: -
@@ -957,7 +960,7 @@ class CfnCertificate(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument certificate_id", value=certificate_id, expected_type=type_hints["certificate_id"])
-        return typing.cast(_ICertificateRef_0de2a67f, jsii.sinvoke(cls, "fromCertificateId", [scope, id, certificate_id]))
+        return typing.cast("_ICertificateRef_0de2a67f", jsii.sinvoke(cls, "fromCertificateId", [scope, id, certificate_id]))
 
     @jsii.member(jsii_name="isCfnCertificate")
     @builtins.classmethod
@@ -972,7 +975,7 @@ class CfnCertificate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCertificate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1072,9 +1075,9 @@ class CfnCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> _CertificateReference_5d56fe88:
+    def certificate_ref(self) -> "_CertificateReference_5d56fe88":
         '''A reference to a Certificate resource.'''
-        return typing.cast(_CertificateReference_5d56fe88, jsii.get(self, "certificateRef"))
+        return typing.cast("_CertificateReference_5d56fe88", jsii.get(self, "certificateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1083,9 +1086,9 @@ class CfnCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="certificate")
@@ -1183,12 +1186,12 @@ class CfnCertificate(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for certificates.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__112d41348367dd1df7b4520890e43a0633334e24689066a3866ad51862dc97c9)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1220,7 +1223,7 @@ class CfnCertificateProps:
         description: typing.Optional[builtins.str] = None,
         inactive_date: typing.Optional[builtins.str] = None,
         private_key: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCertificate``.
 
@@ -1238,6 +1241,7 @@ class CfnCertificateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_transfer as transfer
@@ -1359,13 +1363,13 @@ class CfnCertificateProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for certificates.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-certificate.html#cfn-transfer-certificate-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1398,6 +1402,7 @@ class CfnConnector(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_transfer as transfer
@@ -1435,17 +1440,17 @@ class CfnConnector(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         access_role: builtins.str,
         as2_config: typing.Any = None,
-        egress_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.ConnectorEgressConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        egress_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.ConnectorEgressConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         egress_type: typing.Optional[builtins.str] = None,
         logging_role: typing.Optional[builtins.str] = None,
         security_policy_name: typing.Optional[builtins.str] = None,
-        sftp_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.SftpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sftp_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.SftpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Transfer::Connector``.
@@ -1482,7 +1487,7 @@ class CfnConnector(
 
     @jsii.member(jsii_name="arnForConnector")
     @builtins.classmethod
-    def arn_for_connector(cls, resource: _IConnectorRef_b3a29b7e) -> builtins.str:
+    def arn_for_connector(cls, resource: "_IConnectorRef_b3a29b7e") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1495,10 +1500,10 @@ class CfnConnector(
     @builtins.classmethod
     def from_connector_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IConnectorRef_b3a29b7e:
+    ) -> "_IConnectorRef_b3a29b7e":
         '''Creates a new IConnectorRef from an ARN.
 
         :param scope: -
@@ -1510,16 +1515,16 @@ class CfnConnector(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IConnectorRef_b3a29b7e, jsii.sinvoke(cls, "fromConnectorArn", [scope, id, arn]))
+        return typing.cast("_IConnectorRef_b3a29b7e", jsii.sinvoke(cls, "fromConnectorArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromConnectorId")
     @builtins.classmethod
     def from_connector_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         connector_id: builtins.str,
-    ) -> _IConnectorRef_b3a29b7e:
+    ) -> "_IConnectorRef_b3a29b7e":
         '''Creates a new IConnectorRef from a connectorId.
 
         :param scope: -
@@ -1531,7 +1536,7 @@ class CfnConnector(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument connector_id", value=connector_id, expected_type=type_hints["connector_id"])
-        return typing.cast(_IConnectorRef_b3a29b7e, jsii.sinvoke(cls, "fromConnectorId", [scope, id, connector_id]))
+        return typing.cast("_IConnectorRef_b3a29b7e", jsii.sinvoke(cls, "fromConnectorId", [scope, id, connector_id]))
 
     @jsii.member(jsii_name="isCfnConnector")
     @builtins.classmethod
@@ -1546,7 +1551,7 @@ class CfnConnector(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnector", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1594,6 +1599,17 @@ class CfnConnector(
         return typing.cast(builtins.str, jsii.get(self, "attrConnectorId"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrErrorMessage")
+    def attr_error_message(self) -> builtins.str:
+        '''Error message providing details when the connector is in ERRORED status.
+
+        Contains information to help troubleshoot connector creation or operation failures.
+
+        :cloudformationAttribute: ErrorMessage
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrErrorMessage"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrServiceManagedEgressIpAddresses")
     def attr_service_managed_egress_ip_addresses(self) -> typing.List[builtins.str]:
         '''The list of egress IP addresses of this connector.
@@ -1622,15 +1638,15 @@ class CfnConnector(
 
     @builtins.property
     @jsii.member(jsii_name="connectorRef")
-    def connector_ref(self) -> _ConnectorReference_32f54b47:
+    def connector_ref(self) -> "_ConnectorReference_32f54b47":
         '''A reference to a Connector resource.'''
-        return typing.cast(_ConnectorReference_32f54b47, jsii.get(self, "connectorRef"))
+        return typing.cast("_ConnectorReference_32f54b47", jsii.get(self, "connectorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="accessRole")
@@ -1662,14 +1678,14 @@ class CfnConnector(
     @jsii.member(jsii_name="egressConfig")
     def egress_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.ConnectorEgressConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.ConnectorEgressConfigProperty"]]:
         '''Current egress configuration of the connector, showing how traffic is routed to the SFTP server.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.ConnectorEgressConfigProperty"]], jsii.get(self, "egressConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.ConnectorEgressConfigProperty"]], jsii.get(self, "egressConfig"))
 
     @egress_config.setter
     def egress_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.ConnectorEgressConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.ConnectorEgressConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__55aea3d9a7ecfbca3e7720afc14e3094de156e071c5256ed2311a1836a9c6b83)
@@ -1719,14 +1735,14 @@ class CfnConnector(
     @jsii.member(jsii_name="sftpConfig")
     def sftp_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.SftpConfigProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.SftpConfigProperty"]]:
         '''A structure that contains the parameters for an SFTP connector object.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.SftpConfigProperty"]], jsii.get(self, "sftpConfig"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.SftpConfigProperty"]], jsii.get(self, "sftpConfig"))
 
     @sftp_config.setter
     def sftp_config(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnector.SftpConfigProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.SftpConfigProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__391f4dfc56c4811c4c4aedb8ffcfac5c521d440de2f0de853365abcdec435568)
@@ -1735,12 +1751,12 @@ class CfnConnector(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for connectors.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__207f7abcb769a2e1717d82ad1c8c7df0c05b8d8d3d89a23127362727dcd65473)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2002,7 +2018,7 @@ class CfnConnector(
         def __init__(
             self,
             *,
-            vpc_lattice: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnector.ConnectorVpcLatticeEgressConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            vpc_lattice: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.ConnectorVpcLatticeEgressConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Configuration structure that defines how traffic is routed from the connector to the SFTP server.
 
@@ -2038,7 +2054,7 @@ class CfnConnector(
         @builtins.property
         def vpc_lattice(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnConnector.ConnectorVpcLatticeEgressConfigProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConnector.ConnectorVpcLatticeEgressConfigProperty"]:
             '''VPC_LATTICE configuration for routing connector traffic through customer VPCs.
 
             Enables private connectivity to SFTP servers without requiring public internet access or complex network configurations.
@@ -2047,7 +2063,7 @@ class CfnConnector(
             '''
             result = self._values.get("vpc_lattice")
             assert result is not None, "Required property 'vpc_lattice' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnector.ConnectorVpcLatticeEgressConfigProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConnector.ConnectorVpcLatticeEgressConfigProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2294,12 +2310,12 @@ class CfnConnectorProps:
         *,
         access_role: builtins.str,
         as2_config: typing.Any = None,
-        egress_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.ConnectorEgressConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        egress_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.ConnectorEgressConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         egress_type: typing.Optional[builtins.str] = None,
         logging_role: typing.Optional[builtins.str] = None,
         security_policy_name: typing.Optional[builtins.str] = None,
-        sftp_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.SftpConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        sftp_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.SftpConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnConnector``.
@@ -2319,6 +2335,7 @@ class CfnConnectorProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_transfer as transfer
@@ -2418,7 +2435,7 @@ class CfnConnectorProps:
     @builtins.property
     def egress_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.ConnectorEgressConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.ConnectorEgressConfigProperty"]]:
         '''Current egress configuration of the connector, showing how traffic is routed to the SFTP server.
 
         Contains VPC Lattice settings when using VPC_LATTICE egress type.
@@ -2428,7 +2445,7 @@ class CfnConnectorProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-connector.html#cfn-transfer-connector-egressconfig
         '''
         result = self._values.get("egress_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.ConnectorEgressConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.ConnectorEgressConfigProperty"]], result)
 
     @builtins.property
     def egress_type(self) -> typing.Optional[builtins.str]:
@@ -2464,22 +2481,22 @@ class CfnConnectorProps:
     @builtins.property
     def sftp_config(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.SftpConfigProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.SftpConfigProperty"]]:
         '''A structure that contains the parameters for an SFTP connector object.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-connector.html#cfn-transfer-connector-sftpconfig
         '''
         result = self._values.get("sftp_config")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.SftpConfigProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.SftpConfigProperty"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for connectors.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-connector.html#cfn-transfer-connector-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def url(self) -> typing.Optional[builtins.str]:
@@ -2518,6 +2535,7 @@ class CfnProfile(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_transfer as transfer
@@ -2537,13 +2555,13 @@ class CfnProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         as2_id: builtins.str,
         profile_type: builtins.str,
         certificate_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Transfer::Profile``.
 
@@ -2569,7 +2587,7 @@ class CfnProfile(
 
     @jsii.member(jsii_name="arnForProfile")
     @builtins.classmethod
-    def arn_for_profile(cls, resource: _IProfileRef_fed8deac) -> builtins.str:
+    def arn_for_profile(cls, resource: "_IProfileRef_fed8deac") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2582,10 +2600,10 @@ class CfnProfile(
     @builtins.classmethod
     def from_profile_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IProfileRef_fed8deac:
+    ) -> "_IProfileRef_fed8deac":
         '''Creates a new IProfileRef from an ARN.
 
         :param scope: -
@@ -2597,16 +2615,16 @@ class CfnProfile(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IProfileRef_fed8deac, jsii.sinvoke(cls, "fromProfileArn", [scope, id, arn]))
+        return typing.cast("_IProfileRef_fed8deac", jsii.sinvoke(cls, "fromProfileArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromProfileId")
     @builtins.classmethod
     def from_profile_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         profile_id: builtins.str,
-    ) -> _IProfileRef_fed8deac:
+    ) -> "_IProfileRef_fed8deac":
         '''Creates a new IProfileRef from a profileId.
 
         :param scope: -
@@ -2618,7 +2636,7 @@ class CfnProfile(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument profile_id", value=profile_id, expected_type=type_hints["profile_id"])
-        return typing.cast(_IProfileRef_fed8deac, jsii.sinvoke(cls, "fromProfileId", [scope, id, profile_id]))
+        return typing.cast("_IProfileRef_fed8deac", jsii.sinvoke(cls, "fromProfileId", [scope, id, profile_id]))
 
     @jsii.member(jsii_name="isCfnProfile")
     @builtins.classmethod
@@ -2633,7 +2651,7 @@ class CfnProfile(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2687,15 +2705,15 @@ class CfnProfile(
 
     @builtins.property
     @jsii.member(jsii_name="profileRef")
-    def profile_ref(self) -> _ProfileReference_0268b426:
+    def profile_ref(self) -> "_ProfileReference_0268b426":
         '''A reference to a Profile resource.'''
-        return typing.cast(_ProfileReference_0268b426, jsii.get(self, "profileRef"))
+        return typing.cast("_ProfileReference_0268b426", jsii.get(self, "profileRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="as2Id")
@@ -2741,12 +2759,12 @@ class CfnProfile(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for profiles.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c41001d8363b6450b3342fb333eb5b5d2a570b2a64b0911308cd8d2824ad0419)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2770,7 +2788,7 @@ class CfnProfileProps:
         as2_id: builtins.str,
         profile_type: builtins.str,
         certificate_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnProfile``.
 
@@ -2784,6 +2802,7 @@ class CfnProfileProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_transfer as transfer
@@ -2849,13 +2868,13 @@ class CfnProfileProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for profiles.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-profile.html#cfn-transfer-profile-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2885,6 +2904,7 @@ class CfnServer(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_transfer as transfer
@@ -2943,26 +2963,26 @@ class CfnServer(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         certificate: typing.Optional[builtins.str] = None,
         domain: typing.Optional[builtins.str] = None,
-        endpoint_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServer.EndpointDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        endpoint_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.EndpointDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         endpoint_type: typing.Optional[builtins.str] = None,
-        identity_provider_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServer.IdentityProviderDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        identity_provider_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.IdentityProviderDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         identity_provider_type: typing.Optional[builtins.str] = None,
         ip_address_type: typing.Optional[builtins.str] = None,
         logging_role: typing.Optional[builtins.str] = None,
         post_authentication_login_banner: typing.Optional[builtins.str] = None,
         pre_authentication_login_banner: typing.Optional[builtins.str] = None,
-        protocol_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServer.ProtocolDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        protocol_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.ProtocolDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         protocols: typing.Optional[typing.Sequence[builtins.str]] = None,
-        s3_storage_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServer.S3StorageOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        s3_storage_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.S3StorageOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         security_policy_name: typing.Optional[builtins.str] = None,
         structured_log_destinations: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        workflow_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServer.WorkflowDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        workflow_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.WorkflowDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Transfer::Server``.
 
@@ -3014,7 +3034,7 @@ class CfnServer(
 
     @jsii.member(jsii_name="arnForServer")
     @builtins.classmethod
-    def arn_for_server(cls, resource: _IServerRef_6fa6fa22) -> builtins.str:
+    def arn_for_server(cls, resource: "_IServerRef_6fa6fa22") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -3036,7 +3056,7 @@ class CfnServer(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServer", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3116,15 +3136,15 @@ class CfnServer(
 
     @builtins.property
     @jsii.member(jsii_name="serverRef")
-    def server_ref(self) -> _ServerReference_ef7b9b24:
+    def server_ref(self) -> "_ServerReference_ef7b9b24":
         '''A reference to a Server resource.'''
-        return typing.cast(_ServerReference_ef7b9b24, jsii.get(self, "serverRef"))
+        return typing.cast("_ServerReference_ef7b9b24", jsii.get(self, "serverRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="certificate")
@@ -3159,14 +3179,14 @@ class CfnServer(
     @jsii.member(jsii_name="endpointDetails")
     def endpoint_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.EndpointDetailsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.EndpointDetailsProperty"]]:
         '''The virtual private cloud (VPC) endpoint settings that are configured for your server.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.EndpointDetailsProperty"]], jsii.get(self, "endpointDetails"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.EndpointDetailsProperty"]], jsii.get(self, "endpointDetails"))
 
     @endpoint_details.setter
     def endpoint_details(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.EndpointDetailsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.EndpointDetailsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__823691982357b872378325dd203d71148265650854d8786177cbfe72d5cd1cef)
@@ -3190,14 +3210,14 @@ class CfnServer(
     @jsii.member(jsii_name="identityProviderDetails")
     def identity_provider_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.IdentityProviderDetailsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.IdentityProviderDetailsProperty"]]:
         '''Required when ``IdentityProviderType`` is set to ``AWS_DIRECTORY_SERVICE`` , ``AWS _LAMBDA`` or ``API_GATEWAY`` .'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.IdentityProviderDetailsProperty"]], jsii.get(self, "identityProviderDetails"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.IdentityProviderDetailsProperty"]], jsii.get(self, "identityProviderDetails"))
 
     @identity_provider_details.setter
     def identity_provider_details(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.IdentityProviderDetailsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.IdentityProviderDetailsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1216795787e100411fafd375b3cfc4b841d96cdfab5edb3bdaad0c4035f93113)
@@ -3282,14 +3302,14 @@ class CfnServer(
     @jsii.member(jsii_name="protocolDetails")
     def protocol_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.ProtocolDetailsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.ProtocolDetailsProperty"]]:
         '''The protocol settings that are configured for your server.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.ProtocolDetailsProperty"]], jsii.get(self, "protocolDetails"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.ProtocolDetailsProperty"]], jsii.get(self, "protocolDetails"))
 
     @protocol_details.setter
     def protocol_details(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.ProtocolDetailsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.ProtocolDetailsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4a9f48a90693f920a173d0269d8553ecc5b0e8d2f2d14cb94fe1075b3651a3d1)
@@ -3313,14 +3333,14 @@ class CfnServer(
     @jsii.member(jsii_name="s3StorageOptions")
     def s3_storage_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.S3StorageOptionsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.S3StorageOptionsProperty"]]:
         '''Specifies whether or not performance for your Amazon S3 directories is optimized.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.S3StorageOptionsProperty"]], jsii.get(self, "s3StorageOptions"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.S3StorageOptionsProperty"]], jsii.get(self, "s3StorageOptions"))
 
     @s3_storage_options.setter
     def s3_storage_options(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.S3StorageOptionsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.S3StorageOptionsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__163a1c09687c961e3488fbf0c1737554423fa0fc38fcd229be5018973ec9bb51)
@@ -3358,12 +3378,12 @@ class CfnServer(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for servers.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f6c88c4497661801373ac6dc027449a26f4bf736a03ee6cf692728004fb17b26)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -3373,14 +3393,14 @@ class CfnServer(
     @jsii.member(jsii_name="workflowDetails")
     def workflow_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.WorkflowDetailsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.WorkflowDetailsProperty"]]:
         '''Specifies the workflow ID for the workflow to assign and the execution role that's used for executing the workflow.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.WorkflowDetailsProperty"]], jsii.get(self, "workflowDetails"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.WorkflowDetailsProperty"]], jsii.get(self, "workflowDetails"))
 
     @workflow_details.setter
     def workflow_details(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServer.WorkflowDetailsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.WorkflowDetailsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1b4b59cf92c244a6a1f87cc398c2d4baeea212278bda328f2dd6f2c84abc67e4)
@@ -3965,8 +3985,8 @@ class CfnServer(
         def __init__(
             self,
             *,
-            on_partial_upload: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServer.WorkflowDetailProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-            on_upload: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServer.WorkflowDetailProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            on_partial_upload: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.WorkflowDetailProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            on_upload: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.WorkflowDetailProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Container for the ``WorkflowDetail`` data type.
 
@@ -4008,7 +4028,7 @@ class CfnServer(
         @builtins.property
         def on_partial_upload(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServer.WorkflowDetailProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServer.WorkflowDetailProperty"]]]]:
             '''A trigger that starts a workflow if a file is only partially uploaded.
 
             You can attach a workflow to a server that executes whenever there is a partial upload.
@@ -4021,12 +4041,12 @@ class CfnServer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-server-workflowdetails.html#cfn-transfer-server-workflowdetails-onpartialupload
             '''
             result = self._values.get("on_partial_upload")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServer.WorkflowDetailProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServer.WorkflowDetailProperty"]]]], result)
 
         @builtins.property
         def on_upload(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServer.WorkflowDetailProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServer.WorkflowDetailProperty"]]]]:
             '''A trigger that starts a workflow: the workflow begins to execute after a file is uploaded.
 
             To remove an associated workflow from a server, you can provide an empty ``OnUpload`` object, as in the following example.
@@ -4039,7 +4059,7 @@ class CfnServer(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-server-workflowdetails.html#cfn-transfer-server-workflowdetails-onupload
             '''
             result = self._values.get("on_upload")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnServer.WorkflowDetailProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnServer.WorkflowDetailProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4082,21 +4102,21 @@ class CfnServerProps:
         *,
         certificate: typing.Optional[builtins.str] = None,
         domain: typing.Optional[builtins.str] = None,
-        endpoint_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServer.EndpointDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        endpoint_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.EndpointDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         endpoint_type: typing.Optional[builtins.str] = None,
-        identity_provider_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServer.IdentityProviderDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        identity_provider_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.IdentityProviderDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         identity_provider_type: typing.Optional[builtins.str] = None,
         ip_address_type: typing.Optional[builtins.str] = None,
         logging_role: typing.Optional[builtins.str] = None,
         post_authentication_login_banner: typing.Optional[builtins.str] = None,
         pre_authentication_login_banner: typing.Optional[builtins.str] = None,
-        protocol_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServer.ProtocolDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        protocol_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.ProtocolDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         protocols: typing.Optional[typing.Sequence[builtins.str]] = None,
-        s3_storage_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServer.S3StorageOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        s3_storage_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.S3StorageOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         security_policy_name: typing.Optional[builtins.str] = None,
         structured_log_destinations: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        workflow_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServer.WorkflowDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        workflow_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnServer.WorkflowDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnServer``.
 
@@ -4123,6 +4143,7 @@ class CfnServerProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_transfer as transfer
@@ -4274,7 +4295,7 @@ class CfnServerProps:
     @builtins.property
     def endpoint_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServer.EndpointDetailsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.EndpointDetailsProperty"]]:
         '''The virtual private cloud (VPC) endpoint settings that are configured for your server.
 
         When you host your endpoint within your VPC, you can make your endpoint accessible only to resources within your VPC, or you can attach Elastic IP addresses and make your endpoint accessible to clients over the internet. Your VPC's default security groups are automatically assigned to your endpoint.
@@ -4282,7 +4303,7 @@ class CfnServerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-server.html#cfn-transfer-server-endpointdetails
         '''
         result = self._values.get("endpoint_details")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServer.EndpointDetailsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.EndpointDetailsProperty"]], result)
 
     @builtins.property
     def endpoint_type(self) -> typing.Optional[builtins.str]:
@@ -4305,7 +4326,7 @@ class CfnServerProps:
     @builtins.property
     def identity_provider_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServer.IdentityProviderDetailsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.IdentityProviderDetailsProperty"]]:
         '''Required when ``IdentityProviderType`` is set to ``AWS_DIRECTORY_SERVICE`` , ``AWS _LAMBDA`` or ``API_GATEWAY`` .
 
         Accepts an array containing all of the information required to use a directory in ``AWS_DIRECTORY_SERVICE`` or invoke a customer-supplied authentication API, including the API Gateway URL. Cannot be specified when ``IdentityProviderType`` is set to ``SERVICE_MANAGED`` .
@@ -4313,7 +4334,7 @@ class CfnServerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-server.html#cfn-transfer-server-identityproviderdetails
         '''
         result = self._values.get("identity_provider_details")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServer.IdentityProviderDetailsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.IdentityProviderDetailsProperty"]], result)
 
     @builtins.property
     def identity_provider_type(self) -> typing.Optional[builtins.str]:
@@ -4389,7 +4410,7 @@ class CfnServerProps:
     @builtins.property
     def protocol_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServer.ProtocolDetailsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.ProtocolDetailsProperty"]]:
         '''The protocol settings that are configured for your server.
 
         - To indicate passive mode (for FTP and FTPS protocols), use the ``PassiveIp`` parameter. Enter a single dotted-quad IPv4 address, such as the external IP address of a firewall, router, or load balancer.
@@ -4404,7 +4425,7 @@ class CfnServerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-server.html#cfn-transfer-server-protocoldetails
         '''
         result = self._values.get("protocol_details")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServer.ProtocolDetailsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.ProtocolDetailsProperty"]], result)
 
     @builtins.property
     def protocols(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -4437,7 +4458,7 @@ class CfnServerProps:
     @builtins.property
     def s3_storage_options(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServer.S3StorageOptionsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.S3StorageOptionsProperty"]]:
         '''Specifies whether or not performance for your Amazon S3 directories is optimized.
 
         - If using the console, this is enabled by default.
@@ -4448,7 +4469,7 @@ class CfnServerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-server.html#cfn-transfer-server-s3storageoptions
         '''
         result = self._values.get("s3_storage_options")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServer.S3StorageOptionsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.S3StorageOptionsProperty"]], result)
 
     @builtins.property
     def security_policy_name(self) -> typing.Optional[builtins.str]:
@@ -4479,18 +4500,18 @@ class CfnServerProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for servers.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-server.html#cfn-transfer-server-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def workflow_details(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServer.WorkflowDetailsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.WorkflowDetailsProperty"]]:
         '''Specifies the workflow ID for the workflow to assign and the execution role that's used for executing the workflow.
 
         In addition to a workflow to execute when a file is uploaded completely, ``WorkflowDetails`` can also contain a workflow ID (and execution role) for a workflow to execute on partial upload. A partial upload occurs when a file is open when the session disconnects.
@@ -4498,7 +4519,7 @@ class CfnServerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-server.html#cfn-transfer-server-workflowdetails
         '''
         result = self._values.get("workflow_details")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServer.WorkflowDetailsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnServer.WorkflowDetailsProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4528,6 +4549,7 @@ class CfnUser(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_transfer as transfer
@@ -4565,19 +4587,19 @@ class CfnUser(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         role: builtins.str,
         server_id: builtins.str,
         user_name: builtins.str,
         home_directory: typing.Optional[builtins.str] = None,
-        home_directory_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUser.HomeDirectoryMapEntryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        home_directory_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUser.HomeDirectoryMapEntryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         home_directory_type: typing.Optional[builtins.str] = None,
         policy: typing.Optional[builtins.str] = None,
-        posix_profile: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUser.PosixProfileProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        posix_profile: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUser.PosixProfileProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ssh_public_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Transfer::User``.
 
@@ -4615,7 +4637,7 @@ class CfnUser(
 
     @jsii.member(jsii_name="arnForUser")
     @builtins.classmethod
-    def arn_for_user(cls, resource: _IUserRef_344ece73) -> builtins.str:
+    def arn_for_user(cls, resource: "_IUserRef_344ece73") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -4637,7 +4659,7 @@ class CfnUser(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUser", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4706,15 +4728,15 @@ class CfnUser(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="userRef")
-    def user_ref(self) -> _UserReference_c3e4eb82:
+    def user_ref(self) -> "_UserReference_c3e4eb82":
         '''A reference to a User resource.'''
-        return typing.cast(_UserReference_c3e4eb82, jsii.get(self, "userRef"))
+        return typing.cast("_UserReference_c3e4eb82", jsii.get(self, "userRef"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
@@ -4772,14 +4794,14 @@ class CfnUser(
     @jsii.member(jsii_name="homeDirectoryMappings")
     def home_directory_mappings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnUser.HomeDirectoryMapEntryProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnUser.HomeDirectoryMapEntryProperty"]]]]:
         '''Logical directory mappings that specify what Amazon S3 or Amazon EFS paths and keys should be visible to your user and how you want to make them visible.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnUser.HomeDirectoryMapEntryProperty"]]]], jsii.get(self, "homeDirectoryMappings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnUser.HomeDirectoryMapEntryProperty"]]]], jsii.get(self, "homeDirectoryMappings"))
 
     @home_directory_mappings.setter
     def home_directory_mappings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnUser.HomeDirectoryMapEntryProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnUser.HomeDirectoryMapEntryProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__42f7f6bf54b856d03c6d1447bb9d5afe1e603f3c84d196395834b94ac8e1ad43)
@@ -4816,14 +4838,14 @@ class CfnUser(
     @jsii.member(jsii_name="posixProfile")
     def posix_profile(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUser.PosixProfileProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUser.PosixProfileProperty"]]:
         '''Specifies the full POSIX identity, including user ID ( ``Uid`` ), group ID ( ``Gid`` ), and any secondary groups IDs ( ``SecondaryGids`` ), that controls your users' access to your Amazon Elastic File System (Amazon EFS) file systems.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUser.PosixProfileProperty"]], jsii.get(self, "posixProfile"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUser.PosixProfileProperty"]], jsii.get(self, "posixProfile"))
 
     @posix_profile.setter
     def posix_profile(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUser.PosixProfileProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUser.PosixProfileProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__edc3910325c95eaad6c5b004cc7944e382cb7676aa1a2431f7113b2151ec86b9)
@@ -4848,12 +4870,12 @@ class CfnUser(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for users.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5cd778c7c12e09594b9e52b3ef35f802dbbc36612c72eb9993d5f0bdb892407f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -4963,7 +4985,7 @@ class CfnUser(
             *,
             gid: jsii.Number,
             uid: jsii.Number,
-            secondary_gids: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+            secondary_gids: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The full POSIX identity, including user ID ( ``Uid`` ), group ID ( ``Gid`` ), and any secondary groups IDs ( ``SecondaryGids`` ), that controls your users' access to your Amazon EFS file systems.
 
@@ -5025,13 +5047,13 @@ class CfnUser(
         @builtins.property
         def secondary_gids(
             self,
-        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
             '''The secondary POSIX group IDs used for all EFS operations by this user.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-user-posixprofile.html#cfn-transfer-user-posixprofile-secondarygids
             '''
             result = self._values.get("secondary_gids")
-            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5069,12 +5091,12 @@ class CfnUserProps:
         server_id: builtins.str,
         user_name: builtins.str,
         home_directory: typing.Optional[builtins.str] = None,
-        home_directory_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUser.HomeDirectoryMapEntryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        home_directory_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUser.HomeDirectoryMapEntryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         home_directory_type: typing.Optional[builtins.str] = None,
         policy: typing.Optional[builtins.str] = None,
-        posix_profile: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUser.PosixProfileProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        posix_profile: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUser.PosixProfileProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ssh_public_keys: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnUser``.
 
@@ -5094,6 +5116,7 @@ class CfnUserProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_transfer as transfer
@@ -5213,7 +5236,7 @@ class CfnUserProps:
     @builtins.property
     def home_directory_mappings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnUser.HomeDirectoryMapEntryProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnUser.HomeDirectoryMapEntryProperty"]]]]:
         '''Logical directory mappings that specify what Amazon S3 or Amazon EFS paths and keys should be visible to your user and how you want to make them visible.
 
         You must specify the ``Entry`` and ``Target`` pair, where ``Entry`` shows how the path is made visible and ``Target`` is the actual Amazon S3 or Amazon EFS path. If you only specify a target, it is displayed as is. You also must ensure that your AWS Identity and Access Management (IAM) role provides access to paths in ``Target`` . This value can be set only when ``HomeDirectoryType`` is set to *LOGICAL* .
@@ -5231,7 +5254,7 @@ class CfnUserProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-user.html#cfn-transfer-user-homedirectorymappings
         '''
         result = self._values.get("home_directory_mappings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnUser.HomeDirectoryMapEntryProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnUser.HomeDirectoryMapEntryProperty"]]]], result)
 
     @builtins.property
     def home_directory_type(self) -> typing.Optional[builtins.str]:
@@ -5268,7 +5291,7 @@ class CfnUserProps:
     @builtins.property
     def posix_profile(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnUser.PosixProfileProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUser.PosixProfileProperty"]]:
         '''Specifies the full POSIX identity, including user ID ( ``Uid`` ), group ID ( ``Gid`` ), and any secondary groups IDs ( ``SecondaryGids`` ), that controls your users' access to your Amazon Elastic File System (Amazon EFS) file systems.
 
         The POSIX permissions that are set on files and directories in your file system determine the level of access your users get when transferring files into and out of your Amazon EFS file systems.
@@ -5276,7 +5299,7 @@ class CfnUserProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-user.html#cfn-transfer-user-posixprofile
         '''
         result = self._values.get("posix_profile")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnUser.PosixProfileProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUser.PosixProfileProperty"]], result)
 
     @builtins.property
     def ssh_public_keys(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5294,7 +5317,7 @@ class CfnUserProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for users.
 
         Tags are metadata attached to users for any purpose.
@@ -5302,7 +5325,7 @@ class CfnUserProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-user.html#cfn-transfer-user-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5334,6 +5357,7 @@ class CfnWebApp(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_transfer as transfer
@@ -5365,15 +5389,15 @@ class CfnWebApp(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        identity_provider_details: typing.Union[_IResolvable_da3f097b, typing.Union["CfnWebApp.IdentityProviderDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+        identity_provider_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebApp.IdentityProviderDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
         access_endpoint: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        web_app_customization: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWebApp.WebAppCustomizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        web_app_customization: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebApp.WebAppCustomizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         web_app_endpoint_policy: typing.Optional[builtins.str] = None,
-        web_app_units: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWebApp.WebAppUnitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        web_app_units: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebApp.WebAppUnitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Transfer::WebApp``.
 
@@ -5403,7 +5427,7 @@ class CfnWebApp(
 
     @jsii.member(jsii_name="arnForWebApp")
     @builtins.classmethod
-    def arn_for_web_app(cls, resource: _IWebAppRef_5ec8f507) -> builtins.str:
+    def arn_for_web_app(cls, resource: "_IWebAppRef_5ec8f507") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -5425,7 +5449,7 @@ class CfnWebApp(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWebApp", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -5483,9 +5507,9 @@ class CfnWebApp(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -5494,22 +5518,22 @@ class CfnWebApp(
 
     @builtins.property
     @jsii.member(jsii_name="webAppRef")
-    def web_app_ref(self) -> _WebAppReference_b5630dd4:
+    def web_app_ref(self) -> "_WebAppReference_b5630dd4":
         '''A reference to a WebApp resource.'''
-        return typing.cast(_WebAppReference_b5630dd4, jsii.get(self, "webAppRef"))
+        return typing.cast("_WebAppReference_b5630dd4", jsii.get(self, "webAppRef"))
 
     @builtins.property
     @jsii.member(jsii_name="identityProviderDetails")
     def identity_provider_details(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnWebApp.IdentityProviderDetailsProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnWebApp.IdentityProviderDetailsProperty"]:
         '''You can provide a structure that contains the details for the identity provider to use with your web app.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnWebApp.IdentityProviderDetailsProperty"], jsii.get(self, "identityProviderDetails"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnWebApp.IdentityProviderDetailsProperty"], jsii.get(self, "identityProviderDetails"))
 
     @identity_provider_details.setter
     def identity_provider_details(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnWebApp.IdentityProviderDetailsProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnWebApp.IdentityProviderDetailsProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a143104dc72055a6346499a1c42dc1e9a55e0a2fac758a5fdb73cc172530fe8b)
@@ -5531,12 +5555,12 @@ class CfnWebApp(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for web apps.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__30b2b42c451b5cf18bc021ed1ab027f439a56a366c31b4bec2874a1319670127)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -5546,14 +5570,14 @@ class CfnWebApp(
     @jsii.member(jsii_name="webAppCustomization")
     def web_app_customization(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWebApp.WebAppCustomizationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWebApp.WebAppCustomizationProperty"]]:
         '''A structure that contains the customization fields for the web app.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWebApp.WebAppCustomizationProperty"]], jsii.get(self, "webAppCustomization"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWebApp.WebAppCustomizationProperty"]], jsii.get(self, "webAppCustomization"))
 
     @web_app_customization.setter
     def web_app_customization(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWebApp.WebAppCustomizationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWebApp.WebAppCustomizationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__06cf7fb4d03ba1e31e57310f7a4e5b9ee65fd97449295a5fcca203aa59c8b3df)
@@ -5580,14 +5604,14 @@ class CfnWebApp(
     @jsii.member(jsii_name="webAppUnits")
     def web_app_units(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWebApp.WebAppUnitsProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWebApp.WebAppUnitsProperty"]]:
         '''A union that contains the value for number of concurrent connections or the user sessions on your web app.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWebApp.WebAppUnitsProperty"]], jsii.get(self, "webAppUnits"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWebApp.WebAppUnitsProperty"]], jsii.get(self, "webAppUnits"))
 
     @web_app_units.setter
     def web_app_units(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWebApp.WebAppUnitsProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWebApp.WebAppUnitsProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__05c81ce4f64dae1408aa42ef29823b95b141813512df0fe6ef85a451fc930f0a)
@@ -5845,12 +5869,12 @@ class CfnWebAppProps:
     def __init__(
         self,
         *,
-        identity_provider_details: typing.Union[_IResolvable_da3f097b, typing.Union[CfnWebApp.IdentityProviderDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+        identity_provider_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebApp.IdentityProviderDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
         access_endpoint: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        web_app_customization: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWebApp.WebAppCustomizationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+        web_app_customization: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebApp.WebAppCustomizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         web_app_endpoint_policy: typing.Optional[builtins.str] = None,
-        web_app_units: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWebApp.WebAppUnitsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        web_app_units: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWebApp.WebAppUnitsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnWebApp``.
 
@@ -5866,6 +5890,7 @@ class CfnWebAppProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_transfer as transfer
@@ -5919,7 +5944,7 @@ class CfnWebAppProps:
     @builtins.property
     def identity_provider_details(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnWebApp.IdentityProviderDetailsProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnWebApp.IdentityProviderDetailsProperty"]:
         '''You can provide a structure that contains the details for the identity provider to use with your web app.
 
         For more details about this parameter, see `Configure your identity provider for Transfer Family web apps <https://docs.aws.amazon.com//transfer/latest/userguide/webapp-identity-center.html>`_ .
@@ -5928,7 +5953,7 @@ class CfnWebAppProps:
         '''
         result = self._values.get("identity_provider_details")
         assert result is not None, "Required property 'identity_provider_details' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnWebApp.IdentityProviderDetailsProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnWebApp.IdentityProviderDetailsProperty"], result)
 
     @builtins.property
     def access_endpoint(self) -> typing.Optional[builtins.str]:
@@ -5944,7 +5969,7 @@ class CfnWebAppProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for web apps.
 
         Tags are metadata attached to web apps for any purpose.
@@ -5952,12 +5977,12 @@ class CfnWebAppProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-webapp.html#cfn-transfer-webapp-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def web_app_customization(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWebApp.WebAppCustomizationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWebApp.WebAppCustomizationProperty"]]:
         '''A structure that contains the customization fields for the web app.
 
         You can provide a title, logo, and icon to customize the appearance of your web app.
@@ -5965,7 +5990,7 @@ class CfnWebAppProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-webapp.html#cfn-transfer-webapp-webappcustomization
         '''
         result = self._values.get("web_app_customization")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWebApp.WebAppCustomizationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWebApp.WebAppCustomizationProperty"]], result)
 
     @builtins.property
     def web_app_endpoint_policy(self) -> typing.Optional[builtins.str]:
@@ -5981,13 +6006,13 @@ class CfnWebAppProps:
     @builtins.property
     def web_app_units(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWebApp.WebAppUnitsProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWebApp.WebAppUnitsProperty"]]:
         '''A union that contains the value for number of concurrent connections or the user sessions on your web app.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-webapp.html#cfn-transfer-webapp-webappunits
         '''
         result = self._values.get("web_app_units")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnWebApp.WebAppUnitsProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWebApp.WebAppUnitsProperty"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6017,6 +6042,7 @@ class CfnWorkflow(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_transfer as transfer
@@ -6089,13 +6115,13 @@ class CfnWorkflow(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        steps: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.WorkflowStepProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        steps: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkflow.WorkflowStepProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
-        on_exception_steps: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.WorkflowStepProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        on_exception_steps: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkflow.WorkflowStepProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Transfer::Workflow``.
 
@@ -6121,7 +6147,7 @@ class CfnWorkflow(
 
     @jsii.member(jsii_name="arnForWorkflow")
     @builtins.classmethod
-    def arn_for_workflow(cls, resource: _IWorkflowRef_1a79a531) -> builtins.str:
+    def arn_for_workflow(cls, resource: "_IWorkflowRef_1a79a531") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -6134,10 +6160,10 @@ class CfnWorkflow(
     @builtins.classmethod
     def from_workflow_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IWorkflowRef_1a79a531:
+    ) -> "_IWorkflowRef_1a79a531":
         '''Creates a new IWorkflowRef from an ARN.
 
         :param scope: -
@@ -6149,16 +6175,16 @@ class CfnWorkflow(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IWorkflowRef_1a79a531, jsii.sinvoke(cls, "fromWorkflowArn", [scope, id, arn]))
+        return typing.cast("_IWorkflowRef_1a79a531", jsii.sinvoke(cls, "fromWorkflowArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromWorkflowId")
     @builtins.classmethod
     def from_workflow_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         workflow_id: builtins.str,
-    ) -> _IWorkflowRef_1a79a531:
+    ) -> "_IWorkflowRef_1a79a531":
         '''Creates a new IWorkflowRef from a workflowId.
 
         :param scope: -
@@ -6170,7 +6196,7 @@ class CfnWorkflow(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument workflow_id", value=workflow_id, expected_type=type_hints["workflow_id"])
-        return typing.cast(_IWorkflowRef_1a79a531, jsii.sinvoke(cls, "fromWorkflowId", [scope, id, workflow_id]))
+        return typing.cast("_IWorkflowRef_1a79a531", jsii.sinvoke(cls, "fromWorkflowId", [scope, id, workflow_id]))
 
     @jsii.member(jsii_name="isCfnWorkflow")
     @builtins.classmethod
@@ -6185,7 +6211,7 @@ class CfnWorkflow(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWorkflow", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -6239,28 +6265,28 @@ class CfnWorkflow(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="workflowRef")
-    def workflow_ref(self) -> _WorkflowReference_25a0bf6c:
+    def workflow_ref(self) -> "_WorkflowReference_25a0bf6c":
         '''A reference to a Workflow resource.'''
-        return typing.cast(_WorkflowReference_25a0bf6c, jsii.get(self, "workflowRef"))
+        return typing.cast("_WorkflowReference_25a0bf6c", jsii.get(self, "workflowRef"))
 
     @builtins.property
     @jsii.member(jsii_name="steps")
     def steps(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.WorkflowStepProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.WorkflowStepProperty"]]]:
         '''Specifies the details for the steps that are in the specified workflow.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.WorkflowStepProperty"]]], jsii.get(self, "steps"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.WorkflowStepProperty"]]], jsii.get(self, "steps"))
 
     @steps.setter
     def steps(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.WorkflowStepProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.WorkflowStepProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dad6eb0cfc84813f42cb30691eac8687d1c244e7b0c7a08584547c461c60b6e6)
@@ -6284,14 +6310,14 @@ class CfnWorkflow(
     @jsii.member(jsii_name="onExceptionSteps")
     def on_exception_steps(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.WorkflowStepProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.WorkflowStepProperty"]]]]:
         '''Specifies the steps (actions) to take if errors are encountered during execution of the workflow.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.WorkflowStepProperty"]]]], jsii.get(self, "onExceptionSteps"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.WorkflowStepProperty"]]]], jsii.get(self, "onExceptionSteps"))
 
     @on_exception_steps.setter
     def on_exception_steps(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.WorkflowStepProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.WorkflowStepProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dbe5eec53a115ade4f8181ac2122f17276111f9d5675380186d596e738cbb4c7)
@@ -6300,12 +6326,12 @@ class CfnWorkflow(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for workflows.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__71de7009c6ec1a7256bbbf8d8fea07e111e611f3c7ca8306d2156be4ff00a297)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -6325,7 +6351,7 @@ class CfnWorkflow(
         def __init__(
             self,
             *,
-            destination_file_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.S3FileLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            destination_file_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkflow.S3FileLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             name: typing.Optional[builtins.str] = None,
             overwrite_existing: typing.Optional[builtins.str] = None,
             source_file_location: typing.Optional[builtins.str] = None,
@@ -6383,7 +6409,7 @@ class CfnWorkflow(
         @builtins.property
         def destination_file_location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.S3FileLocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.S3FileLocationProperty"]]:
             '''Specifies the location for the file being copied.
 
             Use ``${Transfer:UserName}`` or ``${Transfer:UploadDate}`` in this field to parametrize the destination prefix by username or uploaded date.
@@ -6398,7 +6424,7 @@ class CfnWorkflow(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-workflow-copystepdetails.html#cfn-transfer-workflow-copystepdetails-destinationfilelocation
             '''
             result = self._values.get("destination_file_location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.S3FileLocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.S3FileLocationProperty"]], result)
 
         @builtins.property
         def name(self) -> typing.Optional[builtins.str]:
@@ -6571,7 +6597,7 @@ class CfnWorkflow(
         def __init__(
             self,
             *,
-            destination_file_location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.InputFileLocationProperty", typing.Dict[builtins.str, typing.Any]]],
+            destination_file_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkflow.InputFileLocationProperty", typing.Dict[builtins.str, typing.Any]]],
             type: builtins.str,
             name: typing.Optional[builtins.str] = None,
             overwrite_existing: typing.Optional[builtins.str] = None,
@@ -6642,7 +6668,7 @@ class CfnWorkflow(
         @builtins.property
         def destination_file_location(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnWorkflow.InputFileLocationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnWorkflow.InputFileLocationProperty"]:
             '''Specifies the location for the file being decrypted.
 
             Use ``${Transfer:UserName}`` or ``${Transfer:UploadDate}`` in this field to parametrize the destination prefix by username or uploaded date.
@@ -6658,7 +6684,7 @@ class CfnWorkflow(
             '''
             result = self._values.get("destination_file_location")
             assert result is not None, "Required property 'destination_file_location' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnWorkflow.InputFileLocationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnWorkflow.InputFileLocationProperty"], result)
 
         @builtins.property
         def type(self) -> builtins.str:
@@ -6873,8 +6899,8 @@ class CfnWorkflow(
         def __init__(
             self,
             *,
-            efs_file_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.EfsInputFileLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_file_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.S3InputFileLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            efs_file_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkflow.EfsInputFileLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_file_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkflow.S3InputFileLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the location for the file that's being processed.
 
@@ -6914,24 +6940,24 @@ class CfnWorkflow(
         @builtins.property
         def efs_file_location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.EfsInputFileLocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.EfsInputFileLocationProperty"]]:
             '''Specifies the details for the Amazon Elastic File System (Amazon EFS) file that's being decrypted.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-workflow-inputfilelocation.html#cfn-transfer-workflow-inputfilelocation-efsfilelocation
             '''
             result = self._values.get("efs_file_location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.EfsInputFileLocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.EfsInputFileLocationProperty"]], result)
 
         @builtins.property
         def s3_file_location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.S3InputFileLocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.S3InputFileLocationProperty"]]:
             '''Specifies the details for the Amazon S3 file that's being copied or decrypted.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-workflow-inputfilelocation.html#cfn-transfer-workflow-inputfilelocation-s3filelocation
             '''
             result = self._values.get("s3_file_location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.S3InputFileLocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.S3InputFileLocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6953,7 +6979,7 @@ class CfnWorkflow(
         def __init__(
             self,
             *,
-            s3_file_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.S3InputFileLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_file_location: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkflow.S3InputFileLocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Specifies the S3 details for the file being used, such as bucket, ETag, and so forth.
 
@@ -6985,7 +7011,7 @@ class CfnWorkflow(
         @builtins.property
         def s3_file_location(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.S3InputFileLocationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.S3InputFileLocationProperty"]]:
             '''Specifies the details for the file location for the file that's being used in the workflow.
 
             Only applicable if you are using Amazon S3 storage.
@@ -6993,7 +7019,7 @@ class CfnWorkflow(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-workflow-s3filelocation.html#cfn-transfer-workflow-s3filelocation-s3filelocation
             '''
             result = self._values.get("s3_file_location")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.S3InputFileLocationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.S3InputFileLocationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7259,7 +7285,7 @@ class CfnWorkflow(
             *,
             copy_step_details: typing.Any = None,
             custom_step_details: typing.Any = None,
-            decrypt_step_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkflow.DecryptStepDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            decrypt_step_details: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkflow.DecryptStepDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             delete_step_details: typing.Any = None,
             tag_step_details: typing.Any = None,
             type: typing.Optional[builtins.str] = None,
@@ -7364,7 +7390,7 @@ class CfnWorkflow(
         @builtins.property
         def decrypt_step_details(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.DecryptStepDetailsProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.DecryptStepDetailsProperty"]]:
             '''Details for a step that decrypts an encrypted file.
 
             Consists of the following values:
@@ -7378,7 +7404,7 @@ class CfnWorkflow(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-transfer-workflow-workflowstep.html#cfn-transfer-workflow-workflowstep-decryptstepdetails
             '''
             result = self._values.get("decrypt_step_details")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkflow.DecryptStepDetailsProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.DecryptStepDetailsProperty"]], result)
 
         @builtins.property
         def delete_step_details(self) -> typing.Any:
@@ -7441,10 +7467,10 @@ class CfnWorkflowProps:
     def __init__(
         self,
         *,
-        steps: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.WorkflowStepProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        steps: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkflow.WorkflowStepProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
-        on_exception_steps: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkflow.WorkflowStepProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        on_exception_steps: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnWorkflow.WorkflowStepProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnWorkflow``.
 
@@ -7458,6 +7484,7 @@ class CfnWorkflowProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_transfer as transfer
@@ -7546,14 +7573,14 @@ class CfnWorkflowProps:
     @builtins.property
     def steps(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnWorkflow.WorkflowStepProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.WorkflowStepProperty"]]]:
         '''Specifies the details for the steps that are in the specified workflow.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-workflow.html#cfn-transfer-workflow-steps
         '''
         result = self._values.get("steps")
         assert result is not None, "Required property 'steps' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnWorkflow.WorkflowStepProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.WorkflowStepProperty"]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -7567,16 +7594,16 @@ class CfnWorkflowProps:
     @builtins.property
     def on_exception_steps(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnWorkflow.WorkflowStepProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.WorkflowStepProperty"]]]]:
         '''Specifies the steps (actions) to take if errors are encountered during execution of the workflow.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-workflow.html#cfn-transfer-workflow-onexceptionsteps
         '''
         result = self._values.get("on_exception_steps")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnWorkflow.WorkflowStepProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnWorkflow.WorkflowStepProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''Key-value pairs that can be used to group and search for workflows.
 
         Tags are metadata attached to workflows for any purpose.
@@ -7584,7 +7611,7 @@ class CfnWorkflowProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-workflow.html#cfn-transfer-workflow-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

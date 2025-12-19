@@ -96,7 +96,7 @@ class IAgentRef(
 
     @builtins.property
     @jsii.member(jsii_name="agentRef")
-    def agent_ref(self) -> AgentReference:
+    def agent_ref(self) -> "AgentReference":
         '''(experimental) A reference to a Agent resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IAgentRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="agentRef")
-    def agent_ref(self) -> AgentReference:
+    def agent_ref(self) -> "AgentReference":
         '''(experimental) A reference to a Agent resource.
 
         :stability: experimental
         '''
-        return typing.cast(AgentReference, jsii.get(self, "agentRef"))
+        return typing.cast("AgentReference", jsii.get(self, "agentRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAgentRef).__jsii_proxy_class__ = lambda : _IAgentRefProxy

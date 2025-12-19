@@ -92,6 +92,7 @@ class CfnCRL(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_rolesanywhere as rolesanywhere
@@ -112,13 +113,13 @@ class CfnCRL(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         crl_data: builtins.str,
         name: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         trust_anchor_arn: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::RolesAnywhere::CRL``.
@@ -147,7 +148,7 @@ class CfnCRL(
 
     @jsii.member(jsii_name="arnForCRL")
     @builtins.classmethod
-    def arn_for_crl(cls, resource: _ICRLRef_21f48bbb) -> builtins.str:
+    def arn_for_crl(cls, resource: "_ICRLRef_21f48bbb") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -160,10 +161,10 @@ class CfnCRL(
     @builtins.classmethod
     def from_crl_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         crl_id: builtins.str,
-    ) -> _ICRLRef_21f48bbb:
+    ) -> "_ICRLRef_21f48bbb":
         '''Creates a new ICRLRef from a crlId.
 
         :param scope: -
@@ -175,7 +176,7 @@ class CfnCRL(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument crl_id", value=crl_id, expected_type=type_hints["crl_id"])
-        return typing.cast(_ICRLRef_21f48bbb, jsii.sinvoke(cls, "fromCrlId", [scope, id, crl_id]))
+        return typing.cast("_ICRLRef_21f48bbb", jsii.sinvoke(cls, "fromCrlId", [scope, id, crl_id]))
 
     @jsii.member(jsii_name="isCfnCRL")
     @builtins.classmethod
@@ -190,7 +191,7 @@ class CfnCRL(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCRL", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -235,15 +236,15 @@ class CfnCRL(
 
     @builtins.property
     @jsii.member(jsii_name="crlRef")
-    def crl_ref(self) -> _CRLReference_1b9465ab:
+    def crl_ref(self) -> "_CRLReference_1b9465ab":
         '''A reference to a CRL resource.'''
-        return typing.cast(_CRLReference_1b9465ab, jsii.get(self, "crlRef"))
+        return typing.cast("_CRLReference_1b9465ab", jsii.get(self, "crlRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="crlData")
@@ -275,14 +276,14 @@ class CfnCRL(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the certificate revocation list (CRL) is enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__67f67da1cd6496f50acb69ea70845c06791dc58959676ea4d9ad986cf862e13d)
@@ -291,12 +292,12 @@ class CfnCRL(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to attach to the certificate revocation list (CRL).'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d3f1ac51324ba6d6018ab752309c8b3267919f50018712dd42bc06bee1676aaa)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -333,8 +334,8 @@ class CfnCRLProps:
         *,
         crl_data: builtins.str,
         name: builtins.str,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         trust_anchor_arn: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnCRL``.
@@ -350,6 +351,7 @@ class CfnCRLProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_rolesanywhere as rolesanywhere
@@ -408,22 +410,22 @@ class CfnCRLProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether the certificate revocation list (CRL) is enabled.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-crl.html#cfn-rolesanywhere-crl-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of tags to attach to the certificate revocation list (CRL).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-crl.html#cfn-rolesanywhere-crl-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     @builtins.property
     def trust_anchor_arn(self) -> typing.Optional[builtins.str]:
@@ -460,6 +462,7 @@ class CfnProfile(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_rolesanywhere as rolesanywhere
@@ -490,19 +493,19 @@ class CfnProfile(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        role_arns: typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]],
-        accept_role_session_name: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        attribute_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProfile.AttributeMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        role_arns: typing.Sequence[typing.Union[builtins.str, "_IRoleRef_8400221f"]],
+        accept_role_session_name: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        attribute_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProfile.AttributeMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         duration_seconds: typing.Optional[jsii.Number] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        require_instance_properties: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        require_instance_properties: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         session_policy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::RolesAnywhere::Profile``.
 
@@ -540,7 +543,7 @@ class CfnProfile(
 
     @jsii.member(jsii_name="arnForProfile")
     @builtins.classmethod
-    def arn_for_profile(cls, resource: _IProfileRef_cfaa2db9) -> builtins.str:
+    def arn_for_profile(cls, resource: "_IProfileRef_cfaa2db9") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -553,10 +556,10 @@ class CfnProfile(
     @builtins.classmethod
     def from_profile_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IProfileRef_cfaa2db9:
+    ) -> "_IProfileRef_cfaa2db9":
         '''Creates a new IProfileRef from an ARN.
 
         :param scope: -
@@ -568,16 +571,16 @@ class CfnProfile(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IProfileRef_cfaa2db9, jsii.sinvoke(cls, "fromProfileArn", [scope, id, arn]))
+        return typing.cast("_IProfileRef_cfaa2db9", jsii.sinvoke(cls, "fromProfileArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromProfileId")
     @builtins.classmethod
     def from_profile_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         profile_id: builtins.str,
-    ) -> _IProfileRef_cfaa2db9:
+    ) -> "_IProfileRef_cfaa2db9":
         '''Creates a new IProfileRef from a profileId.
 
         :param scope: -
@@ -589,7 +592,7 @@ class CfnProfile(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument profile_id", value=profile_id, expected_type=type_hints["profile_id"])
-        return typing.cast(_IProfileRef_cfaa2db9, jsii.sinvoke(cls, "fromProfileId", [scope, id, profile_id]))
+        return typing.cast("_IProfileRef_cfaa2db9", jsii.sinvoke(cls, "fromProfileId", [scope, id, profile_id]))
 
     @jsii.member(jsii_name="isCfnProfile")
     @builtins.classmethod
@@ -604,7 +607,7 @@ class CfnProfile(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -658,15 +661,15 @@ class CfnProfile(
 
     @builtins.property
     @jsii.member(jsii_name="profileRef")
-    def profile_ref(self) -> _ProfileReference_e6717c14:
+    def profile_ref(self) -> "_ProfileReference_e6717c14":
         '''A reference to a Profile resource.'''
-        return typing.cast(_ProfileReference_e6717c14, jsii.get(self, "profileRef"))
+        return typing.cast("_ProfileReference_e6717c14", jsii.get(self, "profileRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -698,14 +701,14 @@ class CfnProfile(
     @jsii.member(jsii_name="acceptRoleSessionName")
     def accept_role_session_name(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Used to determine if a custom role session name will be accepted in a temporary credential request.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "acceptRoleSessionName"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "acceptRoleSessionName"))
 
     @accept_role_session_name.setter
     def accept_role_session_name(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b73e942d39a5b84fc4c5c5ea2f2c292a52e77c9c53c9877b433b70fea88f171d)
@@ -716,14 +719,14 @@ class CfnProfile(
     @jsii.member(jsii_name="attributeMappings")
     def attribute_mappings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProfile.AttributeMappingProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProfile.AttributeMappingProperty"]]]]:
         '''A mapping applied to the authenticating end-entity certificate.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProfile.AttributeMappingProperty"]]]], jsii.get(self, "attributeMappings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProfile.AttributeMappingProperty"]]]], jsii.get(self, "attributeMappings"))
 
     @attribute_mappings.setter
     def attribute_mappings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProfile.AttributeMappingProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProfile.AttributeMappingProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a933bc8a589ca2e29de261062eefb4537f3f9eee0b743f26a28b8b55ea20b163)
@@ -747,14 +750,14 @@ class CfnProfile(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The enabled status of the resource.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5c15a55f732285f57f742ed7762ed5a0b7ee11c61c9fe4d09dae35efacf487f6)
@@ -781,14 +784,14 @@ class CfnProfile(
     @jsii.member(jsii_name="requireInstanceProperties")
     def require_instance_properties(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether instance properties are required in CreateSession requests with this profile.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "requireInstanceProperties"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "requireInstanceProperties"))
 
     @require_instance_properties.setter
     def require_instance_properties(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a0e912d03975c81c39b553f40f759c521d19500722ee88d157ee1f254cbba4b8)
@@ -810,12 +813,12 @@ class CfnProfile(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of Tags.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__99305adebaa684e99f5f2849196087f9cc1788f2b87af7300c436a0feeab285b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -834,7 +837,7 @@ class CfnProfile(
             self,
             *,
             certificate_field: builtins.str,
-            mapping_rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProfile.MappingRuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            mapping_rules: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProfile.MappingRuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''A mapping applied to the authenticating end-entity certificate.
 
@@ -879,14 +882,14 @@ class CfnProfile(
         @builtins.property
         def mapping_rules(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProfile.MappingRuleProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProfile.MappingRuleProperty"]]]:
             '''A list of mapping entries for every supported specifier or sub-field.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rolesanywhere-profile-attributemapping.html#cfn-rolesanywhere-profile-attributemapping-mappingrules
             '''
             result = self._values.get("mapping_rules")
             assert result is not None, "Required property 'mapping_rules' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnProfile.MappingRuleProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProfile.MappingRuleProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -973,15 +976,15 @@ class CfnProfileProps:
         self,
         *,
         name: builtins.str,
-        role_arns: typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]],
-        accept_role_session_name: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        attribute_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProfile.AttributeMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        role_arns: typing.Sequence[typing.Union[builtins.str, "_IRoleRef_8400221f"]],
+        accept_role_session_name: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        attribute_mappings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProfile.AttributeMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         duration_seconds: typing.Optional[jsii.Number] = None,
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        require_instance_properties: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        require_instance_properties: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         session_policy: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnProfile``.
 
@@ -1001,6 +1004,7 @@ class CfnProfileProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_rolesanywhere as rolesanywhere
@@ -1072,36 +1076,38 @@ class CfnProfileProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arns(self) -> typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]]:
+    def role_arns(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, "_IRoleRef_8400221f"]]:
         '''A list of IAM role ARNs that can be assumed when this profile is specified in a CreateSession request.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-profile.html#cfn-rolesanywhere-profile-rolearns
         '''
         result = self._values.get("role_arns")
         assert result is not None, "Required property 'role_arns' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, "_IRoleRef_8400221f"]], result)
 
     @builtins.property
     def accept_role_session_name(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Used to determine if a custom role session name will be accepted in a temporary credential request.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-profile.html#cfn-rolesanywhere-profile-acceptrolesessionname
         '''
         result = self._values.get("accept_role_session_name")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def attribute_mappings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProfile.AttributeMappingProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProfile.AttributeMappingProperty"]]]]:
         '''A mapping applied to the authenticating end-entity certificate.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-profile.html#cfn-rolesanywhere-profile-attributemappings
         '''
         result = self._values.get("attribute_mappings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProfile.AttributeMappingProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProfile.AttributeMappingProperty"]]]], result)
 
     @builtins.property
     def duration_seconds(self) -> typing.Optional[jsii.Number]:
@@ -1115,13 +1121,13 @@ class CfnProfileProps:
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''The enabled status of the resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-profile.html#cfn-rolesanywhere-profile-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def managed_policy_arns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1137,13 +1143,13 @@ class CfnProfileProps:
     @builtins.property
     def require_instance_properties(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Specifies whether instance properties are required in CreateSession requests with this profile.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-profile.html#cfn-rolesanywhere-profile-requireinstanceproperties
         '''
         result = self._values.get("require_instance_properties")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def session_policy(self) -> typing.Optional[builtins.str]:
@@ -1155,13 +1161,13 @@ class CfnProfileProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of Tags.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-profile.html#cfn-rolesanywhere-profile-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1189,6 +1195,7 @@ class CfnTrustAnchor(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_rolesanywhere as rolesanywhere
@@ -1222,14 +1229,14 @@ class CfnTrustAnchor(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         name: builtins.str,
-        source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrustAnchor.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        notification_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrustAnchor.NotificationSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTrustAnchor.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        notification_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTrustAnchor.NotificationSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::RolesAnywhere::TrustAnchor``.
 
@@ -1257,7 +1264,10 @@ class CfnTrustAnchor(
 
     @jsii.member(jsii_name="arnForTrustAnchor")
     @builtins.classmethod
-    def arn_for_trust_anchor(cls, resource: _ITrustAnchorRef_2e6950c3) -> builtins.str:
+    def arn_for_trust_anchor(
+        cls,
+        resource: "_ITrustAnchorRef_2e6950c3",
+    ) -> builtins.str:
         '''
         :param resource: -
         '''
@@ -1270,10 +1280,10 @@ class CfnTrustAnchor(
     @builtins.classmethod
     def from_trust_anchor_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _ITrustAnchorRef_2e6950c3:
+    ) -> "_ITrustAnchorRef_2e6950c3":
         '''Creates a new ITrustAnchorRef from an ARN.
 
         :param scope: -
@@ -1285,16 +1295,16 @@ class CfnTrustAnchor(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_ITrustAnchorRef_2e6950c3, jsii.sinvoke(cls, "fromTrustAnchorArn", [scope, id, arn]))
+        return typing.cast("_ITrustAnchorRef_2e6950c3", jsii.sinvoke(cls, "fromTrustAnchorArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromTrustAnchorId")
     @builtins.classmethod
     def from_trust_anchor_id(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         trust_anchor_id: builtins.str,
-    ) -> _ITrustAnchorRef_2e6950c3:
+    ) -> "_ITrustAnchorRef_2e6950c3":
         '''Creates a new ITrustAnchorRef from a trustAnchorId.
 
         :param scope: -
@@ -1306,7 +1316,7 @@ class CfnTrustAnchor(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument trust_anchor_id", value=trust_anchor_id, expected_type=type_hints["trust_anchor_id"])
-        return typing.cast(_ITrustAnchorRef_2e6950c3, jsii.sinvoke(cls, "fromTrustAnchorId", [scope, id, trust_anchor_id]))
+        return typing.cast("_ITrustAnchorRef_2e6950c3", jsii.sinvoke(cls, "fromTrustAnchorId", [scope, id, trust_anchor_id]))
 
     @jsii.member(jsii_name="isCfnTrustAnchor")
     @builtins.classmethod
@@ -1321,7 +1331,7 @@ class CfnTrustAnchor(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTrustAnchor", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1375,15 +1385,15 @@ class CfnTrustAnchor(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="trustAnchorRef")
-    def trust_anchor_ref(self) -> _TrustAnchorReference_d67a5ef8:
+    def trust_anchor_ref(self) -> "_TrustAnchorReference_d67a5ef8":
         '''A reference to a TrustAnchor resource.'''
-        return typing.cast(_TrustAnchorReference_d67a5ef8, jsii.get(self, "trustAnchorRef"))
+        return typing.cast("_TrustAnchorReference_d67a5ef8", jsii.get(self, "trustAnchorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -1402,14 +1412,14 @@ class CfnTrustAnchor(
     @jsii.member(jsii_name="source")
     def source(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnTrustAnchor.SourceProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnTrustAnchor.SourceProperty"]:
         '''The trust anchor type and its related certificate data.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTrustAnchor.SourceProperty"], jsii.get(self, "source"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTrustAnchor.SourceProperty"], jsii.get(self, "source"))
 
     @source.setter
     def source(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnTrustAnchor.SourceProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnTrustAnchor.SourceProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b96b35b1c2f1a1254cda56368cc47ef0b688766951d9ea203e33c12867524fc6)
@@ -1420,14 +1430,14 @@ class CfnTrustAnchor(
     @jsii.member(jsii_name="enabled")
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the trust anchor is enabled.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enabled"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "enabled"))
 
     @enabled.setter
     def enabled(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__71c1dcfb08f1fa865b29567c29660256ff1249099dfa782cfa24a3d18aa3505b)
@@ -1438,14 +1448,14 @@ class CfnTrustAnchor(
     @jsii.member(jsii_name="notificationSettings")
     def notification_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTrustAnchor.NotificationSettingProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTrustAnchor.NotificationSettingProperty"]]]]:
         '''A list of notification settings to be associated to the trust anchor.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTrustAnchor.NotificationSettingProperty"]]]], jsii.get(self, "notificationSettings"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTrustAnchor.NotificationSettingProperty"]]]], jsii.get(self, "notificationSettings"))
 
     @notification_settings.setter
     def notification_settings(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTrustAnchor.NotificationSettingProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTrustAnchor.NotificationSettingProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__23701df66bc277a4e25d78f1e47cfa62da72b1c3d4213f38fc9576a483ebe50a)
@@ -1454,12 +1464,12 @@ class CfnTrustAnchor(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to attach to the trust anchor.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2d275a36ee2ff1f9512bd9df7c7f4cb41f4083d1e9467ade7c410954159920c6)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1479,7 +1489,7 @@ class CfnTrustAnchor(
         def __init__(
             self,
             *,
-            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             event: builtins.str,
             channel: typing.Optional[builtins.str] = None,
             threshold: typing.Optional[jsii.Number] = None,
@@ -1527,14 +1537,14 @@ class CfnTrustAnchor(
                 self._values["threshold"] = threshold
 
         @builtins.property
-        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
             '''Indicates whether the notification setting is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rolesanywhere-trustanchor-notificationsetting.html#cfn-rolesanywhere-trustanchor-notificationsetting-enabled
             '''
             result = self._values.get("enabled")
             assert result is not None, "Required property 'enabled' is missing"
-            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
 
         @builtins.property
         def event(self) -> builtins.str:
@@ -1671,7 +1681,7 @@ class CfnTrustAnchor(
         def __init__(
             self,
             *,
-            source_data: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrustAnchor.SourceDataProperty", typing.Dict[builtins.str, typing.Any]]],
+            source_data: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTrustAnchor.SourceDataProperty", typing.Dict[builtins.str, typing.Any]]],
             source_type: builtins.str,
         ) -> None:
             '''Object representing the TrustAnchor type and its related certificate data.
@@ -1708,14 +1718,14 @@ class CfnTrustAnchor(
         @builtins.property
         def source_data(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnTrustAnchor.SourceDataProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnTrustAnchor.SourceDataProperty"]:
             '''A union object representing the data field of the TrustAnchor depending on its type.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rolesanywhere-trustanchor-source.html#cfn-rolesanywhere-trustanchor-source-sourcedata
             '''
             result = self._values.get("source_data")
             assert result is not None, "Required property 'source_data' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTrustAnchor.SourceDataProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTrustAnchor.SourceDataProperty"], result)
 
         @builtins.property
         def source_type(self) -> builtins.str:
@@ -1755,10 +1765,10 @@ class CfnTrustAnchorProps:
         self,
         *,
         name: builtins.str,
-        source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrustAnchor.SourceProperty, typing.Dict[builtins.str, typing.Any]]],
-        enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        notification_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrustAnchor.NotificationSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnTrustAnchor.SourceProperty", typing.Dict[builtins.str, typing.Any]]],
+        enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        notification_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTrustAnchor.NotificationSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTrustAnchor``.
 
@@ -1773,6 +1783,7 @@ class CfnTrustAnchorProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_rolesanywhere as rolesanywhere
@@ -1834,45 +1845,45 @@ class CfnTrustAnchorProps:
     @builtins.property
     def source(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnTrustAnchor.SourceProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnTrustAnchor.SourceProperty"]:
         '''The trust anchor type and its related certificate data.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-trustanchor.html#cfn-rolesanywhere-trustanchor-source
         '''
         result = self._values.get("source")
         assert result is not None, "Required property 'source' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnTrustAnchor.SourceProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTrustAnchor.SourceProperty"], result)
 
     @builtins.property
     def enabled(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''Indicates whether the trust anchor is enabled.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-trustanchor.html#cfn-rolesanywhere-trustanchor-enabled
         '''
         result = self._values.get("enabled")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def notification_settings(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTrustAnchor.NotificationSettingProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTrustAnchor.NotificationSettingProperty"]]]]:
         '''A list of notification settings to be associated to the trust anchor.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-trustanchor.html#cfn-rolesanywhere-trustanchor-notificationsettings
         '''
         result = self._values.get("notification_settings")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTrustAnchor.NotificationSettingProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnTrustAnchor.NotificationSettingProperty"]]]], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to attach to the trust anchor.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-trustanchor.html#cfn-rolesanywhere-trustanchor-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

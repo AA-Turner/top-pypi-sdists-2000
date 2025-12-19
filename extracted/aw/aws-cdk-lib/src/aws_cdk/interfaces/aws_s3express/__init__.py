@@ -232,7 +232,7 @@ class IAccessPointRef(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointRef")
-    def access_point_ref(self) -> AccessPointReference:
+    def access_point_ref(self) -> "AccessPointReference":
         '''(experimental) A reference to a AccessPoint resource.
 
         :stability: experimental
@@ -253,12 +253,12 @@ class _IAccessPointRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="accessPointRef")
-    def access_point_ref(self) -> AccessPointReference:
+    def access_point_ref(self) -> "AccessPointReference":
         '''(experimental) A reference to a AccessPoint resource.
 
         :stability: experimental
         '''
-        return typing.cast(AccessPointReference, jsii.get(self, "accessPointRef"))
+        return typing.cast("AccessPointReference", jsii.get(self, "accessPointRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessPointRef).__jsii_proxy_class__ = lambda : _IAccessPointRefProxy
@@ -277,7 +277,7 @@ class IBucketPolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="bucketPolicyRef")
-    def bucket_policy_ref(self) -> BucketPolicyReference:
+    def bucket_policy_ref(self) -> "BucketPolicyReference":
         '''(experimental) A reference to a BucketPolicy resource.
 
         :stability: experimental
@@ -298,12 +298,12 @@ class _IBucketPolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="bucketPolicyRef")
-    def bucket_policy_ref(self) -> BucketPolicyReference:
+    def bucket_policy_ref(self) -> "BucketPolicyReference":
         '''(experimental) A reference to a BucketPolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(BucketPolicyReference, jsii.get(self, "bucketPolicyRef"))
+        return typing.cast("BucketPolicyReference", jsii.get(self, "bucketPolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBucketPolicyRef).__jsii_proxy_class__ = lambda : _IBucketPolicyRefProxy
@@ -322,7 +322,7 @@ class IDirectoryBucketRef(
 
     @builtins.property
     @jsii.member(jsii_name="directoryBucketRef")
-    def directory_bucket_ref(self) -> DirectoryBucketReference:
+    def directory_bucket_ref(self) -> "DirectoryBucketReference":
         '''(experimental) A reference to a DirectoryBucket resource.
 
         :stability: experimental
@@ -343,12 +343,12 @@ class _IDirectoryBucketRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="directoryBucketRef")
-    def directory_bucket_ref(self) -> DirectoryBucketReference:
+    def directory_bucket_ref(self) -> "DirectoryBucketReference":
         '''(experimental) A reference to a DirectoryBucket resource.
 
         :stability: experimental
         '''
-        return typing.cast(DirectoryBucketReference, jsii.get(self, "directoryBucketRef"))
+        return typing.cast("DirectoryBucketReference", jsii.get(self, "directoryBucketRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDirectoryBucketRef).__jsii_proxy_class__ = lambda : _IDirectoryBucketRefProxy

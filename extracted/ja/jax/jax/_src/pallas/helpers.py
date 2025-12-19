@@ -16,33 +16,48 @@
 from collections.abc import Callable, Mapping, Sequence
 import functools
 
-
-import jax
-from jax import lax
 from jax._src import api
 from jax._src import checkify
 from jax._src import config
 from jax._src import core as jax_core
+from jax._src import tree_util
+from jax._src import typing as jax_typing
+from jax._src import util
+import jax._src.lax as lax
+from jax._src.lax.control_flow import conditionals
 from jax._src.pallas import core as pl_core
 from jax._src.pallas import primitives as pl_primitives
 from jax._src.pallas import utils as pl_utils
-import jax.numpy as jnp
+from jax._src import numpy as jnp
 
 
-empty = jax.named_call(lax.empty)
+empty = api.named_call(lax.empty)
 
 
-@jax.named_call
+@api.named_call
 def empty_like(x: object):
-  return jax.tree.map(lambda leaf: empty(leaf.shape, leaf.dtype), x)
+  """Create an empty PyTree of possibly uninitialized values.
+
+  Args:
+    x: A PyTree with leaves specifying the shape and dtype of
+      the uninitialized object.
+
+  Returns:
+    A PyTree with the same structure as ``x``, but with uninitialized
+    values.
+
+  See Also:
+    :func:`jax.lax.empty`
+  """
+  return tree_util.tree_map(lambda leaf: empty(leaf.shape, leaf.dtype), x)
 
 
-def empty_ref_like(x: object) -> jax.Array:
+def empty_ref_like(x: object) -> jax_typing.Array:
   """Returns an empty array Ref with same shape/dtype/memory space as x."""
   match x:
     case pl_core.MemoryRef():
       memory_space = x.memory_space
-    case jax.ShapeDtypeStruct():
+    case jax_core.ShapeDtypeStruct():
       memory_space = pl_core.MemorySpace.ANY
     case _:
       raise ValueError(f'empty_ref_like does not support {type(x)}')
@@ -50,7 +65,7 @@ def empty_ref_like(x: object) -> jax.Array:
 
 
 def when(
-    condition: bool | jax.typing.ArrayLike, /
+    condition: bool | jax_typing.ArrayLike, /
 ) -> Callable[[Callable[[], None]], Callable[[], None]]:
   """Calls the decorated function when the condition is met.
 
@@ -67,30 +82,30 @@ def when(
       if condition:
         f()
     else:
-      jax.lax.cond(condition, f, lambda: None)
+      conditionals.cond(condition, f, lambda: None)
   return _wrapped
 
 
 def loop(
-    lower: jax.typing.ArrayLike,
-    upper: jax.typing.ArrayLike,
+    lower: jax_typing.ArrayLike,
+    upper: jax_typing.ArrayLike,
     *,
-    step: jax.typing.ArrayLike = 1,
+    step: jax_typing.ArrayLike = 1,
     unroll: int | bool | None = None,
-) -> Callable[[Callable[[jax.Array], None]], None]:
+) -> Callable[[Callable[[jax_typing.Array], None]], None]:
   """Returns a decorator that calls the decorated function in a loop."""
-  zero: jax.typing.ArrayLike
+  zero: jax_typing.ArrayLike
   if not all(map(jax_core.is_concrete, (lower, upper, step))):
     idx_type = jnp.result_type(lower, upper, step)
-    lower = jax.lax.convert_element_type(lower, idx_type)
-    upper = jax.lax.convert_element_type(upper, idx_type)
-    step = jax.lax.convert_element_type(step, idx_type)
+    lower = lax.convert_element_type(lower, idx_type)
+    upper = lax.convert_element_type(upper, idx_type)
+    step = lax.convert_element_type(step, idx_type)
     zero = jnp.array(0, dtype=idx_type)
   else:
     zero = 0
 
   def decorator(body):
-    jax.lax.fori_loop(
+    lax.fori_loop(
         zero,
         pl_utils.cdiv(upper - lower, step),
         lambda idx, _: body(lower + idx * step),
@@ -131,15 +146,16 @@ def _make_kernel(body,
                  out_shape: object,
                  mesh: pl_core.Mesh,
                  scratch_shapes: pl_core.ScratchShapeTree = (),
+                 name: str | None = None,
                  **mesh_kwargs
                  ):
   if unwrap_out := not isinstance(out_shape, (tuple, list)):
     out_shape = (out_shape,)
 
-  @jax.jit
+  @api.jit
   def wrapper(*operands):
-    arg_refs = jax.tree.map(jax_core.new_ref, operands)
-    out_refs = jax.tree.map(
+    arg_refs = tree_util.tree_map(jax_core.new_ref, operands)
+    out_refs = tree_util.tree_map(
         lambda out: jax_core.new_ref(
             lax.empty(out.shape, out.dtype),
             memory_space=(
@@ -154,7 +170,8 @@ def _make_kernel(body,
         out_shape,
     )
 
-    @pl_core.core_map(mesh, **mesh_kwargs)
+
+    @pl_core.core_map(mesh, **mesh_kwargs, name=name or util.fun_name(body))
     def _():
       return pl_primitives.run_scoped(
           functools.partial(body, *arg_refs, *out_refs),
@@ -162,7 +179,7 @@ def _make_kernel(body,
           **scratch_shapes if isinstance(scratch_shapes, Mapping) else {},
       )
 
-    outs = jax.tree.map(lambda ref: ref[...], out_refs)
+    outs = tree_util.tree_map(lambda ref: ref[...], out_refs)
     return outs[0] if unwrap_out else outs
   return wrapper
 
@@ -184,24 +201,28 @@ def kernel(body: Callable | api.NotSpecified = api.NotSpecified(),  # pylint: di
   This is a convenience wrapper around ``core_map`` for executing a kernel
   over a mesh and ``run_scoped`` for allocating scratch memory.
 
-  If ``body`` is provided, this function behaves as a decorator::
+  If ``body`` is provided, this function behaves as a decorator:
 
-  def kernel_body(in_ref, out_ref):
-    ...
-  kernel = pl.kernel(kernel_body, out_shape=...)
+  .. code-block:: python
+
+    def kernel_body(in_ref, out_ref):
+      ...
+    kernel = pl.kernel(kernel_body, out_shape=...)
 
   If ``body`` is omitted, this function behaves as a decorator factory and
-  will return a decorator that can be used to annotate a kernel body::
+  will return a decorator that can be used to annotate a kernel body:
 
-  @pl.kernel(out_shape=...)
-  def kernel(in_ref, out_ref):
-    ...
+  .. code-block:: python
+
+    @pl.kernel(out_shape=...)
+    def kernel(in_ref, out_ref):
+      ...
 
   Args:
     body: The body of the kernel. If provided, this function behaves as a
       decorator, and if omitted, this function behaves as a decorator factory.
     out_shape: The shape of the output. Should be a PyTree of
-      ``jax.ShapeDtypeStruct`` or ``jax.Array``s.
+      ``jax.ShapeDtypeStruct`` or ``jax.Array`` s.
     mesh: The mesh to run the kernel on.
     scratch_shapes: The shapes of the scratch arrays.
     compiler_params: The compiler parameters to pass to the backend.

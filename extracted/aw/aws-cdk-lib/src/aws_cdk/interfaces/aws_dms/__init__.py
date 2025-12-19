@@ -292,7 +292,7 @@ class ICertificateRef(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> CertificateReference:
+    def certificate_ref(self) -> "CertificateReference":
         '''(experimental) A reference to a Certificate resource.
 
         :stability: experimental
@@ -313,12 +313,12 @@ class _ICertificateRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="certificateRef")
-    def certificate_ref(self) -> CertificateReference:
+    def certificate_ref(self) -> "CertificateReference":
         '''(experimental) A reference to a Certificate resource.
 
         :stability: experimental
         '''
-        return typing.cast(CertificateReference, jsii.get(self, "certificateRef"))
+        return typing.cast("CertificateReference", jsii.get(self, "certificateRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICertificateRef).__jsii_proxy_class__ = lambda : _ICertificateRefProxy
@@ -337,7 +337,7 @@ class IDataMigrationRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataMigrationRef")
-    def data_migration_ref(self) -> DataMigrationReference:
+    def data_migration_ref(self) -> "DataMigrationReference":
         '''(experimental) A reference to a DataMigration resource.
 
         :stability: experimental
@@ -358,12 +358,12 @@ class _IDataMigrationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataMigrationRef")
-    def data_migration_ref(self) -> DataMigrationReference:
+    def data_migration_ref(self) -> "DataMigrationReference":
         '''(experimental) A reference to a DataMigration resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataMigrationReference, jsii.get(self, "dataMigrationRef"))
+        return typing.cast("DataMigrationReference", jsii.get(self, "dataMigrationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataMigrationRef).__jsii_proxy_class__ = lambda : _IDataMigrationRefProxy
@@ -382,7 +382,7 @@ class IDataProviderRef(
 
     @builtins.property
     @jsii.member(jsii_name="dataProviderRef")
-    def data_provider_ref(self) -> DataProviderReference:
+    def data_provider_ref(self) -> "DataProviderReference":
         '''(experimental) A reference to a DataProvider resource.
 
         :stability: experimental
@@ -403,12 +403,12 @@ class _IDataProviderRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="dataProviderRef")
-    def data_provider_ref(self) -> DataProviderReference:
+    def data_provider_ref(self) -> "DataProviderReference":
         '''(experimental) A reference to a DataProvider resource.
 
         :stability: experimental
         '''
-        return typing.cast(DataProviderReference, jsii.get(self, "dataProviderRef"))
+        return typing.cast("DataProviderReference", jsii.get(self, "dataProviderRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataProviderRef).__jsii_proxy_class__ = lambda : _IDataProviderRefProxy
@@ -427,7 +427,7 @@ class IEndpointRef(
 
     @builtins.property
     @jsii.member(jsii_name="endpointRef")
-    def endpoint_ref(self) -> EndpointReference:
+    def endpoint_ref(self) -> "EndpointReference":
         '''(experimental) A reference to a Endpoint resource.
 
         :stability: experimental
@@ -448,12 +448,12 @@ class _IEndpointRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="endpointRef")
-    def endpoint_ref(self) -> EndpointReference:
+    def endpoint_ref(self) -> "EndpointReference":
         '''(experimental) A reference to a Endpoint resource.
 
         :stability: experimental
         '''
-        return typing.cast(EndpointReference, jsii.get(self, "endpointRef"))
+        return typing.cast("EndpointReference", jsii.get(self, "endpointRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEndpointRef).__jsii_proxy_class__ = lambda : _IEndpointRefProxy
@@ -472,7 +472,7 @@ class IEventSubscriptionRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventSubscriptionRef")
-    def event_subscription_ref(self) -> EventSubscriptionReference:
+    def event_subscription_ref(self) -> "EventSubscriptionReference":
         '''(experimental) A reference to a EventSubscription resource.
 
         :stability: experimental
@@ -493,12 +493,12 @@ class _IEventSubscriptionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventSubscriptionRef")
-    def event_subscription_ref(self) -> EventSubscriptionReference:
+    def event_subscription_ref(self) -> "EventSubscriptionReference":
         '''(experimental) A reference to a EventSubscription resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventSubscriptionReference, jsii.get(self, "eventSubscriptionRef"))
+        return typing.cast("EventSubscriptionReference", jsii.get(self, "eventSubscriptionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventSubscriptionRef).__jsii_proxy_class__ = lambda : _IEventSubscriptionRefProxy

@@ -243,7 +243,7 @@ class IBatchScramSecretRef(
 
     @builtins.property
     @jsii.member(jsii_name="batchScramSecretRef")
-    def batch_scram_secret_ref(self) -> BatchScramSecretReference:
+    def batch_scram_secret_ref(self) -> "BatchScramSecretReference":
         '''(experimental) A reference to a BatchScramSecret resource.
 
         :stability: experimental
@@ -264,12 +264,12 @@ class _IBatchScramSecretRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="batchScramSecretRef")
-    def batch_scram_secret_ref(self) -> BatchScramSecretReference:
+    def batch_scram_secret_ref(self) -> "BatchScramSecretReference":
         '''(experimental) A reference to a BatchScramSecret resource.
 
         :stability: experimental
         '''
-        return typing.cast(BatchScramSecretReference, jsii.get(self, "batchScramSecretRef"))
+        return typing.cast("BatchScramSecretReference", jsii.get(self, "batchScramSecretRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBatchScramSecretRef).__jsii_proxy_class__ = lambda : _IBatchScramSecretRefProxy
@@ -288,7 +288,7 @@ class IClusterPolicyRef(
 
     @builtins.property
     @jsii.member(jsii_name="clusterPolicyRef")
-    def cluster_policy_ref(self) -> ClusterPolicyReference:
+    def cluster_policy_ref(self) -> "ClusterPolicyReference":
         '''(experimental) A reference to a ClusterPolicy resource.
 
         :stability: experimental
@@ -309,12 +309,12 @@ class _IClusterPolicyRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterPolicyRef")
-    def cluster_policy_ref(self) -> ClusterPolicyReference:
+    def cluster_policy_ref(self) -> "ClusterPolicyReference":
         '''(experimental) A reference to a ClusterPolicy resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClusterPolicyReference, jsii.get(self, "clusterPolicyRef"))
+        return typing.cast("ClusterPolicyReference", jsii.get(self, "clusterPolicyRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClusterPolicyRef).__jsii_proxy_class__ = lambda : _IClusterPolicyRefProxy
@@ -333,7 +333,7 @@ class IClusterRef(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
@@ -354,12 +354,12 @@ class _IClusterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="clusterRef")
-    def cluster_ref(self) -> ClusterReference:
+    def cluster_ref(self) -> "ClusterReference":
         '''(experimental) A reference to a Cluster resource.
 
         :stability: experimental
         '''
-        return typing.cast(ClusterReference, jsii.get(self, "clusterRef"))
+        return typing.cast("ClusterReference", jsii.get(self, "clusterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IClusterRef).__jsii_proxy_class__ = lambda : _IClusterRefProxy
@@ -378,7 +378,7 @@ class IConfigurationRef(
 
     @builtins.property
     @jsii.member(jsii_name="configurationRef")
-    def configuration_ref(self) -> ConfigurationReference:
+    def configuration_ref(self) -> "ConfigurationReference":
         '''(experimental) A reference to a Configuration resource.
 
         :stability: experimental
@@ -399,12 +399,12 @@ class _IConfigurationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="configurationRef")
-    def configuration_ref(self) -> ConfigurationReference:
+    def configuration_ref(self) -> "ConfigurationReference":
         '''(experimental) A reference to a Configuration resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConfigurationReference, jsii.get(self, "configurationRef"))
+        return typing.cast("ConfigurationReference", jsii.get(self, "configurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationRef).__jsii_proxy_class__ = lambda : _IConfigurationRefProxy

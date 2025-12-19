@@ -399,7 +399,7 @@ class AuthorizationToken(
 
     @jsii.member(jsii_name="grantRead")
     @builtins.classmethod
-    def grant_read(cls, grantee: _IGrantable_71c4f5de) -> None:
+    def grant_read(cls, grantee: "_IGrantable_71c4f5de") -> None:
         '''Grant access to retrieve an authorization token.
 
         :param grantee: -
@@ -426,6 +426,7 @@ class CfnPublicRepository(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ecr as ecr
@@ -446,13 +447,13 @@ class CfnPublicRepository(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         repository_catalog_data: typing.Any = None,
         repository_name: typing.Optional[builtins.str] = None,
         repository_policy_text: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ECR::PublicRepository``.
 
@@ -480,7 +481,7 @@ class CfnPublicRepository(
     @builtins.classmethod
     def arn_for_public_repository(
         cls,
-        resource: _IPublicRepositoryRef_fef651e6,
+        resource: "_IPublicRepositoryRef_fef651e6",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -494,10 +495,10 @@ class CfnPublicRepository(
     @builtins.classmethod
     def from_public_repository_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IPublicRepositoryRef_fef651e6:
+    ) -> "_IPublicRepositoryRef_fef651e6":
         '''Creates a new IPublicRepositoryRef from an ARN.
 
         :param scope: -
@@ -509,16 +510,16 @@ class CfnPublicRepository(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IPublicRepositoryRef_fef651e6, jsii.sinvoke(cls, "fromPublicRepositoryArn", [scope, id, arn]))
+        return typing.cast("_IPublicRepositoryRef_fef651e6", jsii.sinvoke(cls, "fromPublicRepositoryArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromRepositoryName")
     @builtins.classmethod
     def from_repository_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         repository_name: builtins.str,
-    ) -> _IPublicRepositoryRef_fef651e6:
+    ) -> "_IPublicRepositoryRef_fef651e6":
         '''Creates a new IPublicRepositoryRef from a repositoryName.
 
         :param scope: -
@@ -530,7 +531,7 @@ class CfnPublicRepository(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument repository_name", value=repository_name, expected_type=type_hints["repository_name"])
-        return typing.cast(_IPublicRepositoryRef_fef651e6, jsii.sinvoke(cls, "fromRepositoryName", [scope, id, repository_name]))
+        return typing.cast("_IPublicRepositoryRef_fef651e6", jsii.sinvoke(cls, "fromRepositoryName", [scope, id, repository_name]))
 
     @jsii.member(jsii_name="isCfnPublicRepository")
     @builtins.classmethod
@@ -545,7 +546,7 @@ class CfnPublicRepository(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPublicRepository", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -592,15 +593,15 @@ class CfnPublicRepository(
 
     @builtins.property
     @jsii.member(jsii_name="publicRepositoryRef")
-    def public_repository_ref(self) -> _PublicRepositoryReference_b2001418:
+    def public_repository_ref(self) -> "_PublicRepositoryReference_b2001418":
         '''A reference to a PublicRepository resource.'''
-        return typing.cast(_PublicRepositoryReference_b2001418, jsii.get(self, "publicRepositoryRef"))
+        return typing.cast("_PublicRepositoryReference_b2001418", jsii.get(self, "publicRepositoryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="repositoryCatalogData")
@@ -643,12 +644,12 @@ class CfnPublicRepository(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e01e3d955755b76bef4d0ce1b9a558313454d69c44cb97d65b4fcb564602a54d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -799,7 +800,7 @@ class CfnPublicRepositoryProps:
         repository_catalog_data: typing.Any = None,
         repository_name: typing.Optional[builtins.str] = None,
         repository_policy_text: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPublicRepository``.
 
@@ -813,6 +814,7 @@ class CfnPublicRepositoryProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ecr as ecr
@@ -883,13 +885,13 @@ class CfnPublicRepositoryProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -935,7 +937,7 @@ class CfnPullThroughCacheRule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         credential_arn: typing.Optional[builtins.str] = None,
@@ -984,7 +986,7 @@ class CfnPullThroughCacheRule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPullThroughCacheRule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1020,9 +1022,9 @@ class CfnPullThroughCacheRule(
 
     @builtins.property
     @jsii.member(jsii_name="pullThroughCacheRuleRef")
-    def pull_through_cache_rule_ref(self) -> _PullThroughCacheRuleReference_c998144d:
+    def pull_through_cache_rule_ref(self) -> "_PullThroughCacheRuleReference_c998144d":
         '''A reference to a PullThroughCacheRule resource.'''
-        return typing.cast(_PullThroughCacheRuleReference_c998144d, jsii.get(self, "pullThroughCacheRuleRef"))
+        return typing.cast("_PullThroughCacheRuleReference_c998144d", jsii.get(self, "pullThroughCacheRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="credentialArn")
@@ -1266,7 +1268,7 @@ class CfnPullTimeUpdateExclusion(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         principal_arn: builtins.str,
@@ -1298,7 +1300,7 @@ class CfnPullTimeUpdateExclusion(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPullTimeUpdateExclusion", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1336,9 +1338,9 @@ class CfnPullTimeUpdateExclusion(
     @jsii.member(jsii_name="pullTimeUpdateExclusionRef")
     def pull_time_update_exclusion_ref(
         self,
-    ) -> _PullTimeUpdateExclusionReference_61dc265f:
+    ) -> "_PullTimeUpdateExclusionReference_61dc265f":
         '''A reference to a PullTimeUpdateExclusion resource.'''
-        return typing.cast(_PullTimeUpdateExclusionReference_61dc265f, jsii.get(self, "pullTimeUpdateExclusionRef"))
+        return typing.cast("_PullTimeUpdateExclusionReference_61dc265f", jsii.get(self, "pullTimeUpdateExclusionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="principalArn")
@@ -1436,7 +1438,7 @@ class CfnRegistryPolicy(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         policy_text: typing.Any,
@@ -1468,7 +1470,7 @@ class CfnRegistryPolicy(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRegistryPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1513,9 +1515,9 @@ class CfnRegistryPolicy(
 
     @builtins.property
     @jsii.member(jsii_name="registryPolicyRef")
-    def registry_policy_ref(self) -> _RegistryPolicyReference_2d2e9fdc:
+    def registry_policy_ref(self) -> "_RegistryPolicyReference_2d2e9fdc":
         '''A reference to a RegistryPolicy resource.'''
-        return typing.cast(_RegistryPolicyReference_2d2e9fdc, jsii.get(self, "registryPolicyRef"))
+        return typing.cast("_RegistryPolicyReference_2d2e9fdc", jsii.get(self, "registryPolicyRef"))
 
     @builtins.property
     @jsii.member(jsii_name="policyText")
@@ -1618,10 +1620,10 @@ class CfnRegistryScanningConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRegistryScanningConfiguration.ScanningRuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        rules: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRegistryScanningConfiguration.ScanningRuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
         scan_type: builtins.str,
     ) -> None:
         '''Create a new ``AWS::ECR::RegistryScanningConfiguration``.
@@ -1652,7 +1654,7 @@ class CfnRegistryScanningConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRegistryScanningConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1699,22 +1701,22 @@ class CfnRegistryScanningConfiguration(
     @jsii.member(jsii_name="registryScanningConfigurationRef")
     def registry_scanning_configuration_ref(
         self,
-    ) -> _RegistryScanningConfigurationReference_4b2666f2:
+    ) -> "_RegistryScanningConfigurationReference_4b2666f2":
         '''A reference to a RegistryScanningConfiguration resource.'''
-        return typing.cast(_RegistryScanningConfigurationReference_4b2666f2, jsii.get(self, "registryScanningConfigurationRef"))
+        return typing.cast("_RegistryScanningConfigurationReference_4b2666f2", jsii.get(self, "registryScanningConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="rules")
     def rules(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRegistryScanningConfiguration.ScanningRuleProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRegistryScanningConfiguration.ScanningRuleProperty"]]]:
         '''The scanning rules associated with the registry.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRegistryScanningConfiguration.ScanningRuleProperty"]]], jsii.get(self, "rules"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRegistryScanningConfiguration.ScanningRuleProperty"]]], jsii.get(self, "rules"))
 
     @rules.setter
     def rules(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRegistryScanningConfiguration.ScanningRuleProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRegistryScanningConfiguration.ScanningRuleProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__921150d6d5faa8474ec7f3be3b2d6d58c6eb0b5024b547f0c929470055982457)
@@ -1814,7 +1816,7 @@ class CfnRegistryScanningConfiguration(
         def __init__(
             self,
             *,
-            repository_filters: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRegistryScanningConfiguration.RepositoryFilterProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            repository_filters: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRegistryScanningConfiguration.RepositoryFilterProperty", typing.Dict[builtins.str, typing.Any]]]]],
             scan_frequency: builtins.str,
         ) -> None:
             '''The scanning rules associated with the registry.
@@ -1851,7 +1853,7 @@ class CfnRegistryScanningConfiguration(
         @builtins.property
         def repository_filters(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRegistryScanningConfiguration.RepositoryFilterProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRegistryScanningConfiguration.RepositoryFilterProperty"]]]:
             '''The details of a scanning repository filter.
 
             For more information on how to use filters, see `Using filters <https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html#image-scanning-filters>`_ in the *Amazon Elastic Container Registry User Guide* .
@@ -1860,7 +1862,7 @@ class CfnRegistryScanningConfiguration(
             '''
             result = self._values.get("repository_filters")
             assert result is not None, "Required property 'repository_filters' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRegistryScanningConfiguration.RepositoryFilterProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRegistryScanningConfiguration.RepositoryFilterProperty"]]], result)
 
         @builtins.property
         def scan_frequency(self) -> builtins.str:
@@ -1895,7 +1897,7 @@ class CfnRegistryScanningConfigurationProps:
     def __init__(
         self,
         *,
-        rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRegistryScanningConfiguration.ScanningRuleProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        rules: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRegistryScanningConfiguration.ScanningRuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
         scan_type: builtins.str,
     ) -> None:
         '''Properties for defining a ``CfnRegistryScanningConfiguration``.
@@ -1935,14 +1937,14 @@ class CfnRegistryScanningConfigurationProps:
     @builtins.property
     def rules(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRegistryScanningConfiguration.ScanningRuleProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRegistryScanningConfiguration.ScanningRuleProperty"]]]:
         '''The scanning rules associated with the registry.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-registryscanningconfiguration.html#cfn-ecr-registryscanningconfiguration-rules
         '''
         result = self._values.get("rules")
         assert result is not None, "Required property 'rules' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRegistryScanningConfiguration.ScanningRuleProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRegistryScanningConfiguration.ScanningRuleProperty"]]], result)
 
     @builtins.property
     def scan_type(self) -> builtins.str:
@@ -2009,10 +2011,10 @@ class CfnReplicationConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        replication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicationConfiguration.ReplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        replication_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationConfiguration.ReplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::ECR::ReplicationConfiguration``.
 
@@ -2043,7 +2045,7 @@ class CfnReplicationConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReplicationConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2090,22 +2092,22 @@ class CfnReplicationConfiguration(
     @jsii.member(jsii_name="replicationConfigurationRef")
     def replication_configuration_ref(
         self,
-    ) -> _ReplicationConfigurationReference_d963555d:
+    ) -> "_ReplicationConfigurationReference_d963555d":
         '''A reference to a ReplicationConfiguration resource.'''
-        return typing.cast(_ReplicationConfigurationReference_d963555d, jsii.get(self, "replicationConfigurationRef"))
+        return typing.cast("_ReplicationConfigurationReference_d963555d", jsii.get(self, "replicationConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="replicationConfiguration")
     def replication_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnReplicationConfiguration.ReplicationConfigurationProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnReplicationConfiguration.ReplicationConfigurationProperty"]:
         '''The replication configuration for a registry.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnReplicationConfiguration.ReplicationConfigurationProperty"], jsii.get(self, "replicationConfiguration"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnReplicationConfiguration.ReplicationConfigurationProperty"], jsii.get(self, "replicationConfiguration"))
 
     @replication_configuration.setter
     def replication_configuration(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnReplicationConfiguration.ReplicationConfigurationProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnReplicationConfiguration.ReplicationConfigurationProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__99f4c1062f6a81bbbbbb1ec51556be75ca089974820458f2cf7c2b6ef30a1f4b)
@@ -2121,7 +2123,7 @@ class CfnReplicationConfiguration(
         def __init__(
             self,
             *,
-            rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicationConfiguration.ReplicationRuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            rules: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationConfiguration.ReplicationRuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
         ) -> None:
             '''The replication configuration for a registry.
 
@@ -2161,14 +2163,14 @@ class CfnReplicationConfiguration(
         @builtins.property
         def rules(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationConfiguration.ReplicationRuleProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationConfiguration.ReplicationRuleProperty"]]]:
             '''An array of objects representing the replication destinations and repository filters for a replication configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationconfiguration.html#cfn-ecr-replicationconfiguration-replicationconfiguration-rules
             '''
             result = self._values.get("rules")
             assert result is not None, "Required property 'rules' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationConfiguration.ReplicationRuleProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationConfiguration.ReplicationRuleProperty"]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2261,8 +2263,8 @@ class CfnReplicationConfiguration(
         def __init__(
             self,
             *,
-            destinations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicationConfiguration.ReplicationDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]],
-            repository_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnReplicationConfiguration.RepositoryFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            destinations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationConfiguration.ReplicationDestinationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            repository_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationConfiguration.RepositoryFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''An array of objects representing the replication destinations and repository filters for a replication configuration.
 
@@ -2304,19 +2306,19 @@ class CfnReplicationConfiguration(
         @builtins.property
         def destinations(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationConfiguration.ReplicationDestinationProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationConfiguration.ReplicationDestinationProperty"]]]:
             '''An array of objects representing the destination for a replication rule.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationrule.html#cfn-ecr-replicationconfiguration-replicationrule-destinations
             '''
             result = self._values.get("destinations")
             assert result is not None, "Required property 'destinations' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationConfiguration.ReplicationDestinationProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationConfiguration.ReplicationDestinationProperty"]]], result)
 
         @builtins.property
         def repository_filters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationConfiguration.RepositoryFilterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationConfiguration.RepositoryFilterProperty"]]]]:
             '''An array of objects representing the filters for a replication rule.
 
             Specifying a repository filter for a replication rule provides a method for controlling which repositories in a private registry are replicated.
@@ -2324,7 +2326,7 @@ class CfnReplicationConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationrule.html#cfn-ecr-replicationconfiguration-replicationrule-repositoryfilters
             '''
             result = self._values.get("repository_filters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnReplicationConfiguration.RepositoryFilterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnReplicationConfiguration.RepositoryFilterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2419,7 +2421,7 @@ class CfnReplicationConfigurationProps:
     def __init__(
         self,
         *,
-        replication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnReplicationConfiguration.ReplicationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        replication_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnReplicationConfiguration.ReplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnReplicationConfiguration``.
 
@@ -2461,14 +2463,14 @@ class CfnReplicationConfigurationProps:
     @builtins.property
     def replication_configuration(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnReplicationConfiguration.ReplicationConfigurationProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnReplicationConfiguration.ReplicationConfigurationProperty"]:
         '''The replication configuration for a registry.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-replicationconfiguration.html#cfn-ecr-replicationconfiguration-replicationconfiguration
         '''
         result = self._values.get("replication_configuration")
         assert result is not None, "Required property 'replication_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnReplicationConfiguration.ReplicationConfigurationProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnReplicationConfiguration.ReplicationConfigurationProperty"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2498,6 +2500,7 @@ class CfnRepository(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ecr as ecr
@@ -2535,18 +2538,18 @@ class CfnRepository(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        empty_on_delete: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRepository.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRepository.ImageScanningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        empty_on_delete: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        image_scanning_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.ImageScanningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tag_mutability: typing.Optional[builtins.str] = None,
-        image_tag_mutability_exclusion_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRepository.ImageTagMutabilityExclusionFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        lifecycle_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRepository.LifecyclePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        image_tag_mutability_exclusion_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.ImageTagMutabilityExclusionFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        lifecycle_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.LifecyclePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         repository_name: typing.Optional[builtins.str] = None,
         repository_policy_text: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ECR::Repository``.
 
@@ -2582,7 +2585,7 @@ class CfnRepository(
 
     @jsii.member(jsii_name="arnForRepository")
     @builtins.classmethod
-    def arn_for_repository(cls, resource: _IRepositoryRef_f3b81117) -> builtins.str:
+    def arn_for_repository(cls, resource: "_IRepositoryRef_f3b81117") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -2595,10 +2598,10 @@ class CfnRepository(
     @builtins.classmethod
     def from_repository_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         arn: builtins.str,
-    ) -> _IRepositoryRef_f3b81117:
+    ) -> "_IRepositoryRef_f3b81117":
         '''Creates a new IRepositoryRef from an ARN.
 
         :param scope: -
@@ -2610,16 +2613,16 @@ class CfnRepository(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast(_IRepositoryRef_f3b81117, jsii.sinvoke(cls, "fromRepositoryArn", [scope, id, arn]))
+        return typing.cast("_IRepositoryRef_f3b81117", jsii.sinvoke(cls, "fromRepositoryArn", [scope, id, arn]))
 
     @jsii.member(jsii_name="fromRepositoryName")
     @builtins.classmethod
     def from_repository_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         repository_name: builtins.str,
-    ) -> _IRepositoryRef_f3b81117:
+    ) -> "_IRepositoryRef_f3b81117":
         '''Creates a new IRepositoryRef from a repositoryName.
 
         :param scope: -
@@ -2631,7 +2634,7 @@ class CfnRepository(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument repository_name", value=repository_name, expected_type=type_hints["repository_name"])
-        return typing.cast(_IRepositoryRef_f3b81117, jsii.sinvoke(cls, "fromRepositoryName", [scope, id, repository_name]))
+        return typing.cast("_IRepositoryRef_f3b81117", jsii.sinvoke(cls, "fromRepositoryName", [scope, id, repository_name]))
 
     @jsii.member(jsii_name="isCfnRepository")
     @builtins.classmethod
@@ -2646,7 +2649,7 @@ class CfnRepository(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRepository", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -2704,28 +2707,28 @@ class CfnRepository(
 
     @builtins.property
     @jsii.member(jsii_name="repositoryRef")
-    def repository_ref(self) -> _RepositoryReference_af4d81f0:
+    def repository_ref(self) -> "_RepositoryReference_af4d81f0":
         '''A reference to a Repository resource.'''
-        return typing.cast(_RepositoryReference_af4d81f0, jsii.get(self, "repositoryRef"))
+        return typing.cast("_RepositoryReference_af4d81f0", jsii.get(self, "repositoryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> _TagManager_0a598cb3:
+    def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
 
     @builtins.property
     @jsii.member(jsii_name="emptyOnDelete")
     def empty_on_delete(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If true, deleting the repository force deletes the contents of the repository.'''
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "emptyOnDelete"))
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "emptyOnDelete"))
 
     @empty_on_delete.setter
     def empty_on_delete(
         self,
-        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0cdf31a68d1403243dabdc584938d9cf5b1769c665a1d405daaaa8438f7d0367)
@@ -2736,14 +2739,14 @@ class CfnRepository(
     @jsii.member(jsii_name="encryptionConfiguration")
     def encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.EncryptionConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.EncryptionConfigurationProperty"]]:
         '''The encryption configuration for the repository.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
 
     @encryption_configuration.setter
     def encryption_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.EncryptionConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.EncryptionConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cf78a5a76e0710f9d352977f8ee877ef0fc7f3c43b6cd9839d2fbeaff522caa1)
@@ -2754,16 +2757,16 @@ class CfnRepository(
     @jsii.member(jsii_name="imageScanningConfiguration")
     def image_scanning_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.ImageScanningConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.ImageScanningConfigurationProperty"]]:
         '''.. epigraph::
 
    The ``imageScanningConfiguration`` parameter is being deprecated, in favor of specifying the image scanning configuration at the registry level.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.ImageScanningConfigurationProperty"]], jsii.get(self, "imageScanningConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.ImageScanningConfigurationProperty"]], jsii.get(self, "imageScanningConfiguration"))
 
     @image_scanning_configuration.setter
     def image_scanning_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.ImageScanningConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.ImageScanningConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0ae9439aabd4d324bf1d5bdb5b430c995fa4f0fdc0cb44daa41909d48e778564)
@@ -2787,14 +2790,14 @@ class CfnRepository(
     @jsii.member(jsii_name="imageTagMutabilityExclusionFilters")
     def image_tag_mutability_exclusion_filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepository.ImageTagMutabilityExclusionFilterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepository.ImageTagMutabilityExclusionFilterProperty"]]]]:
         '''A list of filters that specify which image tags are excluded from the repository's image tag mutability setting.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepository.ImageTagMutabilityExclusionFilterProperty"]]]], jsii.get(self, "imageTagMutabilityExclusionFilters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepository.ImageTagMutabilityExclusionFilterProperty"]]]], jsii.get(self, "imageTagMutabilityExclusionFilters"))
 
     @image_tag_mutability_exclusion_filters.setter
     def image_tag_mutability_exclusion_filters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepository.ImageTagMutabilityExclusionFilterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepository.ImageTagMutabilityExclusionFilterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__28c5038f217a4c1109664243a2d67cd421822e67f8352aa51ee8780d8e6fbe3e)
@@ -2805,14 +2808,14 @@ class CfnRepository(
     @jsii.member(jsii_name="lifecyclePolicy")
     def lifecycle_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.LifecyclePolicyProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.LifecyclePolicyProperty"]]:
         '''Creates or updates a lifecycle policy.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.LifecyclePolicyProperty"]], jsii.get(self, "lifecyclePolicy"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.LifecyclePolicyProperty"]], jsii.get(self, "lifecyclePolicy"))
 
     @lifecycle_policy.setter
     def lifecycle_policy(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepository.LifecyclePolicyProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.LifecyclePolicyProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__47418c52de9eb82b5a96dfa3524d84345309cf3a2f06fbbc30eaa7da852a33fa)
@@ -2847,12 +2850,12 @@ class CfnRepository(
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
-    def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
-    def tags_raw(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags_raw(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a187140649b7378ce5c825b26017544130f832c6f44250242ffcc01b801ada76)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -2954,7 +2957,7 @@ class CfnRepository(
         def __init__(
             self,
             *,
-            scan_on_push: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            scan_on_push: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
             '''The image scanning configuration for a repository.
 
@@ -2983,7 +2986,7 @@ class CfnRepository(
         @builtins.property
         def scan_on_push(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''The setting that determines whether images are scanned after being pushed to a repository.
 
             If set to ``true`` , images will be scanned after being pushed. If this parameter is not specified, it will default to ``false`` and images will not be scanned unless a scan is manually started.
@@ -2991,7 +2994,7 @@ class CfnRepository(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-imagescanningconfiguration.html#cfn-ecr-repository-imagescanningconfiguration-scanonpush
             '''
             result = self._values.get("scan_on_push")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3170,6 +3173,7 @@ class CfnRepositoryCreationTemplate(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ecr as ecr
@@ -3203,19 +3207,19 @@ class CfnRepositoryCreationTemplate(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         applied_for: typing.Sequence[builtins.str],
         prefix: builtins.str,
         custom_role_arn: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRepositoryCreationTemplate.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepositoryCreationTemplate.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tag_mutability: typing.Optional[builtins.str] = None,
-        image_tag_mutability_exclusion_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        image_tag_mutability_exclusion_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         lifecycle_policy: typing.Optional[builtins.str] = None,
         repository_policy: typing.Optional[builtins.str] = None,
-        resource_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        resource_tags: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ECR::RepositoryCreationTemplate``.
 
@@ -3264,7 +3268,7 @@ class CfnRepositoryCreationTemplate(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRepositoryCreationTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -3320,9 +3324,9 @@ class CfnRepositoryCreationTemplate(
     @jsii.member(jsii_name="repositoryCreationTemplateRef")
     def repository_creation_template_ref(
         self,
-    ) -> _RepositoryCreationTemplateReference_4a34e559:
+    ) -> "_RepositoryCreationTemplateReference_4a34e559":
         '''A reference to a RepositoryCreationTemplate resource.'''
-        return typing.cast(_RepositoryCreationTemplateReference_4a34e559, jsii.get(self, "repositoryCreationTemplateRef"))
+        return typing.cast("_RepositoryCreationTemplateReference_4a34e559", jsii.get(self, "repositoryCreationTemplateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="appliedFor")
@@ -3380,14 +3384,14 @@ class CfnRepositoryCreationTemplate(
     @jsii.member(jsii_name="encryptionConfiguration")
     def encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepositoryCreationTemplate.EncryptionConfigurationProperty"]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepositoryCreationTemplate.EncryptionConfigurationProperty"]]:
         '''The encryption configuration associated with the repository creation template.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepositoryCreationTemplate.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepositoryCreationTemplate.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
 
     @encryption_configuration.setter
     def encryption_configuration(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRepositoryCreationTemplate.EncryptionConfigurationProperty"]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepositoryCreationTemplate.EncryptionConfigurationProperty"]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dc9a1c0060c4bcb98843249551561d40d0d01c6137b55d2fc6b20909c4d50df4)
@@ -3411,14 +3415,14 @@ class CfnRepositoryCreationTemplate(
     @jsii.member(jsii_name="imageTagMutabilityExclusionFilters")
     def image_tag_mutability_exclusion_filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty"]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty"]]]]:
         '''A list of filters that specify which image tags are excluded from the repository creation template's image tag mutability setting.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty"]]]], jsii.get(self, "imageTagMutabilityExclusionFilters"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty"]]]], jsii.get(self, "imageTagMutabilityExclusionFilters"))
 
     @image_tag_mutability_exclusion_filters.setter
     def image_tag_mutability_exclusion_filters(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty"]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__686708849f7a8d060ba78b1f975486b8f424fe3ede8590146ea58544a5f10f12)
@@ -3455,14 +3459,14 @@ class CfnRepositoryCreationTemplate(
     @jsii.member(jsii_name="resourceTags")
     def resource_tags(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]]:
         '''The metadata to apply to the repository to help you categorize and organize.'''
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]], jsii.get(self, "resourceTags"))
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]], jsii.get(self, "resourceTags"))
 
     @resource_tags.setter
     def resource_tags(
         self,
-        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]],
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c2fb99e1f96881ee2eeb1081388dcf7c16b80d047a366d3bbc0d4a883ac0e52b)
@@ -3653,12 +3657,12 @@ class CfnRepositoryCreationTemplateProps:
         prefix: builtins.str,
         custom_role_arn: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRepositoryCreationTemplate.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepositoryCreationTemplate.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tag_mutability: typing.Optional[builtins.str] = None,
-        image_tag_mutability_exclusion_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        image_tag_mutability_exclusion_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         lifecycle_policy: typing.Optional[builtins.str] = None,
         repository_policy: typing.Optional[builtins.str] = None,
-        resource_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        resource_tags: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRepositoryCreationTemplate``.
 
@@ -3678,6 +3682,7 @@ class CfnRepositoryCreationTemplateProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ecr as ecr
@@ -3786,13 +3791,13 @@ class CfnRepositoryCreationTemplateProps:
     @builtins.property
     def encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRepositoryCreationTemplate.EncryptionConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepositoryCreationTemplate.EncryptionConfigurationProperty"]]:
         '''The encryption configuration associated with the repository creation template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repositorycreationtemplate.html#cfn-ecr-repositorycreationtemplate-encryptionconfiguration
         '''
         result = self._values.get("encryption_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRepositoryCreationTemplate.EncryptionConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepositoryCreationTemplate.EncryptionConfigurationProperty"]], result)
 
     @builtins.property
     def image_tag_mutability(self) -> typing.Optional[builtins.str]:
@@ -3808,13 +3813,13 @@ class CfnRepositoryCreationTemplateProps:
     @builtins.property
     def image_tag_mutability_exclusion_filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty"]]]]:
         '''A list of filters that specify which image tags are excluded from the repository creation template's image tag mutability setting.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repositorycreationtemplate.html#cfn-ecr-repositorycreationtemplate-imagetagmutabilityexclusionfilters
         '''
         result = self._values.get("image_tag_mutability_exclusion_filters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepositoryCreationTemplate.ImageTagMutabilityExclusionFilterProperty"]]]], result)
 
     @builtins.property
     def lifecycle_policy(self) -> typing.Optional[builtins.str]:
@@ -3839,7 +3844,7 @@ class CfnRepositoryCreationTemplateProps:
     @builtins.property
     def resource_tags(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]]:
         '''The metadata to apply to the repository to help you categorize and organize.
 
         Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.
@@ -3847,7 +3852,7 @@ class CfnRepositoryCreationTemplateProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repositorycreationtemplate.html#cfn-ecr-repositorycreationtemplate-resourcetags
         '''
         result = self._values.get("resource_tags")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, _CfnTag_f6864754]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "_CfnTag_f6864754"]]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3880,15 +3885,15 @@ class CfnRepositoryProps:
     def __init__(
         self,
         *,
-        empty_on_delete: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRepository.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRepository.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        empty_on_delete: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        encryption_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        image_scanning_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.ImageScanningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tag_mutability: typing.Optional[builtins.str] = None,
-        image_tag_mutability_exclusion_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRepository.ImageTagMutabilityExclusionFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        lifecycle_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRepository.LifecyclePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        image_tag_mutability_exclusion_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.ImageTagMutabilityExclusionFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        lifecycle_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnRepository.LifecyclePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         repository_name: typing.Optional[builtins.str] = None,
         repository_policy_text: typing.Any = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRepository``.
 
@@ -3907,6 +3912,7 @@ class CfnRepositoryProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ecr as ecr
@@ -3975,7 +3981,7 @@ class CfnRepositoryProps:
     @builtins.property
     def empty_on_delete(
         self,
-    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
         '''If true, deleting the repository force deletes the contents of the repository.
 
         If false, the repository must be empty before attempting to delete it.
@@ -3983,12 +3989,12 @@ class CfnRepositoryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-emptyondelete
         '''
         result = self._values.get("empty_on_delete")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def encryption_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRepository.EncryptionConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.EncryptionConfigurationProperty"]]:
         '''The encryption configuration for the repository.
 
         This determines how the contents of your repository are encrypted at rest.
@@ -3996,12 +4002,12 @@ class CfnRepositoryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-encryptionconfiguration
         '''
         result = self._values.get("encryption_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRepository.EncryptionConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.EncryptionConfigurationProperty"]], result)
 
     @builtins.property
     def image_scanning_configuration(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRepository.ImageScanningConfigurationProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.ImageScanningConfigurationProperty"]]:
         '''.. epigraph::
 
    The ``imageScanningConfiguration`` parameter is being deprecated, in favor of specifying the image scanning configuration at the registry level.
@@ -4013,7 +4019,7 @@ class CfnRepositoryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-imagescanningconfiguration
         '''
         result = self._values.get("image_scanning_configuration")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRepository.ImageScanningConfigurationProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.ImageScanningConfigurationProperty"]], result)
 
     @builtins.property
     def image_tag_mutability(self) -> typing.Optional[builtins.str]:
@@ -4029,18 +4035,18 @@ class CfnRepositoryProps:
     @builtins.property
     def image_tag_mutability_exclusion_filters(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRepository.ImageTagMutabilityExclusionFilterProperty]]]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepository.ImageTagMutabilityExclusionFilterProperty"]]]]:
         '''A list of filters that specify which image tags are excluded from the repository's image tag mutability setting.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-imagetagmutabilityexclusionfilters
         '''
         result = self._values.get("image_tag_mutability_exclusion_filters")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRepository.ImageTagMutabilityExclusionFilterProperty]]]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnRepository.ImageTagMutabilityExclusionFilterProperty"]]]], result)
 
     @builtins.property
     def lifecycle_policy(
         self,
-    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRepository.LifecyclePolicyProperty]]:
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.LifecyclePolicyProperty"]]:
         '''Creates or updates a lifecycle policy.
 
         For information about lifecycle policy syntax, see `Lifecycle policy template <https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html>`_ .
@@ -4048,7 +4054,7 @@ class CfnRepositoryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-lifecyclepolicy
         '''
         result = self._values.get("lifecycle_policy")
-        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRepository.LifecyclePolicyProperty]], result)
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnRepository.LifecyclePolicyProperty"]], result)
 
     @builtins.property
     def repository_name(self) -> typing.Optional[builtins.str]:
@@ -4078,13 +4084,13 @@ class CfnRepositoryProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''An array of key-value pairs to apply to this resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4131,10 +4137,10 @@ class CfnSigningConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSigningConfiguration.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        rules: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSigningConfiguration.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Create a new ``AWS::ECR::SigningConfiguration``.
 
@@ -4163,7 +4169,7 @@ class CfnSigningConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSigningConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -4208,22 +4214,22 @@ class CfnSigningConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="signingConfigurationRef")
-    def signing_configuration_ref(self) -> _SigningConfigurationReference_56e7e84d:
+    def signing_configuration_ref(self) -> "_SigningConfigurationReference_56e7e84d":
         '''A reference to a SigningConfiguration resource.'''
-        return typing.cast(_SigningConfigurationReference_56e7e84d, jsii.get(self, "signingConfigurationRef"))
+        return typing.cast("_SigningConfigurationReference_56e7e84d", jsii.get(self, "signingConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="rules")
     def rules(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RuleProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSigningConfiguration.RuleProperty"]]]:
         '''A list of signing rules.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RuleProperty"]]], jsii.get(self, "rules"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSigningConfiguration.RuleProperty"]]], jsii.get(self, "rules"))
 
     @rules.setter
     def rules(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RuleProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSigningConfiguration.RuleProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a4bcef62f5b0eb74ec0fd850761728249600513301f24cd3b16b7fc93b8db93a)
@@ -4321,7 +4327,7 @@ class CfnSigningConfiguration(
             self,
             *,
             signing_profile_arn: builtins.str,
-            repository_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSigningConfiguration.RepositoryFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            repository_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSigningConfiguration.RepositoryFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''A signing rule that specifies a signing profile and optional repository filters.
 
@@ -4374,7 +4380,7 @@ class CfnSigningConfiguration(
         @builtins.property
         def repository_filters(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RepositoryFilterProperty"]]]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSigningConfiguration.RepositoryFilterProperty"]]]]:
             '''A list of repository filters that determine which repositories have their images signed on push.
 
             If no filters are specified, all images pushed to the registry are signed using the rule's signing profile. Maximum of 100 filters per rule.
@@ -4382,7 +4388,7 @@ class CfnSigningConfiguration(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-rule.html#cfn-ecr-signingconfiguration-rule-repositoryfilters
             '''
             result = self._values.get("repository_filters")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RepositoryFilterProperty"]]]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSigningConfiguration.RepositoryFilterProperty"]]]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4405,7 +4411,7 @@ class CfnSigningConfigurationProps:
     def __init__(
         self,
         *,
-        rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSigningConfiguration.RuleProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        rules: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnSigningConfiguration.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
     ) -> None:
         '''Properties for defining a ``CfnSigningConfiguration``.
 
@@ -4442,7 +4448,7 @@ class CfnSigningConfigurationProps:
     @builtins.property
     def rules(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSigningConfiguration.RuleProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSigningConfiguration.RuleProperty"]]]:
         '''A list of signing rules.
 
         Each rule defines a signing profile and optional repository filters that determine which images are automatically signed.
@@ -4451,7 +4457,7 @@ class CfnSigningConfigurationProps:
         '''
         result = self._values.get("rules")
         assert result is not None, "Required property 'rules' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSigningConfiguration.RuleProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnSigningConfiguration.RuleProperty"]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4512,8 +4518,8 @@ class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Add a policy statement to the repository's resource policy.
 
         :param statement: -
@@ -4523,9 +4529,9 @@ class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given principal identity permissions to perform the actions on this repository.
 
         :param grantee: -
@@ -4534,7 +4540,7 @@ class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantPull")
-    def grant_pull(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_pull(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to pull images in this repository.
 
         :param grantee: -
@@ -4542,7 +4548,7 @@ class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantPullPush")
-    def grant_pull_push(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_pull_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to pull and push images to this repository.
 
         :param grantee: -
@@ -4550,7 +4556,7 @@ class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantPush")
-    def grant_push(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to push images in this repository.
 
         :param grantee: -
@@ -4558,7 +4564,7 @@ class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to read images in this repository.
 
         :param grantee: -
@@ -4570,12 +4576,12 @@ class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Define a CloudWatch event that triggers when something happens to this repository.
 
         Requires that there exists at least one CloudTrail Trail in your account
@@ -4596,12 +4602,12 @@ class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
         id: builtins.str,
         *,
         image_tag: typing.Optional[builtins.str] = None,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an AWS CloudWatch event rule that can trigger a target when an image is pushed to this repository.
 
         Requires that there exists at least one CloudTrail Trail in your account
@@ -4622,12 +4628,12 @@ class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers for repository events.
 
         Use
@@ -4648,12 +4654,12 @@ class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
         id: builtins.str,
         *,
         image_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an AWS CloudWatch event rule that can trigger a target when the image scan is completed.
 
         :param id: The id of the rule.
@@ -4759,8 +4765,8 @@ class _IRepositoryProxy(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Add a policy statement to the repository's resource policy.
 
         :param statement: -
@@ -4768,14 +4774,14 @@ class _IRepositoryProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1b93b76e3ed83c647651e88dbe69b68aa31811ba690fb413bbf493b24ddae92f)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given principal identity permissions to perform the actions on this repository.
 
         :param grantee: -
@@ -4785,10 +4791,10 @@ class _IRepositoryProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__18f0b3f711a06661adb3c2b503f084f1e6774a4c435313ce60aeb9b9c0862a78)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantPull")
-    def grant_pull(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_pull(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to pull images in this repository.
 
         :param grantee: -
@@ -4796,10 +4802,10 @@ class _IRepositoryProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__14c48998ec9021e98f12464e9359edb24e2b0f539ca596d1d12fb187b8364316)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPull", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPull", [grantee]))
 
     @jsii.member(jsii_name="grantPullPush")
-    def grant_pull_push(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_pull_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to pull and push images to this repository.
 
         :param grantee: -
@@ -4807,10 +4813,10 @@ class _IRepositoryProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__73c31def1a2c005caef141293abd28f7d52bc6b3cd34b9aab72ad4461456bf52)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPullPush", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPullPush", [grantee]))
 
     @jsii.member(jsii_name="grantPush")
-    def grant_push(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to push images in this repository.
 
         :param grantee: -
@@ -4818,10 +4824,10 @@ class _IRepositoryProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__40780df047155d20f169a5f7d2e3cec9d737795fbd2fd65bfbfbff880a95f552)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPush", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPush", [grantee]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to read images in this repository.
 
         :param grantee: -
@@ -4829,19 +4835,19 @@ class _IRepositoryProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__03f9678bf6d1275cad4a69c4327c5ec4e50a698bcb71b91bc565ec5c00d17ebd)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.member(jsii_name="onCloudTrailEvent")
     def on_cloud_trail_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Define a CloudWatch event that triggers when something happens to this repository.
 
         Requires that there exists at least one CloudTrail Trail in your account
@@ -4865,7 +4871,7 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onCloudTrailEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onCloudTrailEvent", [id, options]))
 
     @jsii.member(jsii_name="onCloudTrailImagePushed")
     def on_cloud_trail_image_pushed(
@@ -4873,12 +4879,12 @@ class _IRepositoryProxy(
         id: builtins.str,
         *,
         image_tag: typing.Optional[builtins.str] = None,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an AWS CloudWatch event rule that can trigger a target when an image is pushed to this repository.
 
         Requires that there exists at least one CloudTrail Trail in your account
@@ -4904,19 +4910,19 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onCloudTrailImagePushed", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onCloudTrailImagePushed", [id, options]))
 
     @jsii.member(jsii_name="onEvent")
     def on_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers for repository events.
 
         Use
@@ -4940,7 +4946,7 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onEvent", [id, options]))
 
     @jsii.member(jsii_name="onImageScanCompleted")
     def on_image_scan_completed(
@@ -4948,12 +4954,12 @@ class _IRepositoryProxy(
         id: builtins.str,
         *,
         image_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an AWS CloudWatch event rule that can trigger a target when the image scan is completed.
 
         :param id: The id of the rule.
@@ -4976,7 +4982,7 @@ class _IRepositoryProxy(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onImageScanCompleted", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onImageScanCompleted", [id, options]))
 
     @jsii.member(jsii_name="repositoryUriForDigest")
     def repository_uri_for_digest(
@@ -5084,7 +5090,7 @@ class LifecycleRule:
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        max_image_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_image_age: typing.Optional["_Duration_4839e8c3"] = None,
         max_image_count: typing.Optional[jsii.Number] = None,
         rule_priority: typing.Optional[jsii.Number] = None,
         tag_pattern_list: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -5145,13 +5151,13 @@ class LifecycleRule:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def max_image_age(self) -> typing.Optional[_Duration_4839e8c3]:
+    def max_image_age(self) -> typing.Optional["_Duration_4839e8c3"]:
         '''The maximum age of images to retain. The value must represent a number of days.
 
         Specify exactly one of maxImageCount and maxImageAge.
         '''
         result = self._values.get("max_image_age")
-        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
     def max_image_count(self) -> typing.Optional[jsii.Number]:
@@ -5251,11 +5257,11 @@ class OnCloudTrailImagePushedOptions(_OnEventOptions_8711b8b3):
     def __init__(
         self,
         *,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         image_tag: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Options for the onCloudTrailImagePushed method.
@@ -5327,7 +5333,7 @@ class OnCloudTrailImagePushedOptions(_OnEventOptions_8711b8b3):
             self._values["image_tag"] = image_tag
 
     @builtins.property
-    def cross_stack_scope(self) -> typing.Optional[_constructs_77d1e7e8.Construct]:
+    def cross_stack_scope(self) -> typing.Optional["_constructs_77d1e7e8.Construct"]:
         '''The scope to use if the source of the rule and its target are in different Stacks (but in the same account & region).
 
         This helps dealing with cycles that often arise in these situations.
@@ -5335,7 +5341,7 @@ class OnCloudTrailImagePushedOptions(_OnEventOptions_8711b8b3):
         :default: - none (the main scope will be used, even for cross-stack Events)
         '''
         result = self._values.get("cross_stack_scope")
-        return typing.cast(typing.Optional[_constructs_77d1e7e8.Construct], result)
+        return typing.cast(typing.Optional["_constructs_77d1e7e8.Construct"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -5347,7 +5353,7 @@ class OnCloudTrailImagePushedOptions(_OnEventOptions_8711b8b3):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def event_pattern(self) -> typing.Optional[_EventPattern_fe557901]:
+    def event_pattern(self) -> typing.Optional["_EventPattern_fe557901"]:
         '''Additional restrictions for the event to route to the specified target.
 
         The method that generates the rule probably imposes some type of event
@@ -5359,7 +5365,7 @@ class OnCloudTrailImagePushedOptions(_OnEventOptions_8711b8b3):
         :see: https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html
         '''
         result = self._values.get("event_pattern")
-        return typing.cast(typing.Optional[_EventPattern_fe557901], result)
+        return typing.cast(typing.Optional["_EventPattern_fe557901"], result)
 
     @builtins.property
     def rule_name(self) -> typing.Optional[builtins.str]:
@@ -5371,13 +5377,13 @@ class OnCloudTrailImagePushedOptions(_OnEventOptions_8711b8b3):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def target(self) -> typing.Optional[_IRuleTarget_7a91f454]:
+    def target(self) -> typing.Optional["_IRuleTarget_7a91f454"]:
         '''The target to register for the event.
 
         :default: - No target is added to the rule. Use ``addTarget()`` to add a target.
         '''
         result = self._values.get("target")
-        return typing.cast(typing.Optional[_IRuleTarget_7a91f454], result)
+        return typing.cast(typing.Optional["_IRuleTarget_7a91f454"], result)
 
     @builtins.property
     def image_tag(self) -> typing.Optional[builtins.str]:
@@ -5416,11 +5422,11 @@ class OnImageScanCompletedOptions(_OnEventOptions_8711b8b3):
     def __init__(
         self,
         *,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         image_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Options for the OnImageScanCompleted method.
@@ -5492,7 +5498,7 @@ class OnImageScanCompletedOptions(_OnEventOptions_8711b8b3):
             self._values["image_tags"] = image_tags
 
     @builtins.property
-    def cross_stack_scope(self) -> typing.Optional[_constructs_77d1e7e8.Construct]:
+    def cross_stack_scope(self) -> typing.Optional["_constructs_77d1e7e8.Construct"]:
         '''The scope to use if the source of the rule and its target are in different Stacks (but in the same account & region).
 
         This helps dealing with cycles that often arise in these situations.
@@ -5500,7 +5506,7 @@ class OnImageScanCompletedOptions(_OnEventOptions_8711b8b3):
         :default: - none (the main scope will be used, even for cross-stack Events)
         '''
         result = self._values.get("cross_stack_scope")
-        return typing.cast(typing.Optional[_constructs_77d1e7e8.Construct], result)
+        return typing.cast(typing.Optional["_constructs_77d1e7e8.Construct"], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -5512,7 +5518,7 @@ class OnImageScanCompletedOptions(_OnEventOptions_8711b8b3):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def event_pattern(self) -> typing.Optional[_EventPattern_fe557901]:
+    def event_pattern(self) -> typing.Optional["_EventPattern_fe557901"]:
         '''Additional restrictions for the event to route to the specified target.
 
         The method that generates the rule probably imposes some type of event
@@ -5524,7 +5530,7 @@ class OnImageScanCompletedOptions(_OnEventOptions_8711b8b3):
         :see: https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html
         '''
         result = self._values.get("event_pattern")
-        return typing.cast(typing.Optional[_EventPattern_fe557901], result)
+        return typing.cast(typing.Optional["_EventPattern_fe557901"], result)
 
     @builtins.property
     def rule_name(self) -> typing.Optional[builtins.str]:
@@ -5536,13 +5542,13 @@ class OnImageScanCompletedOptions(_OnEventOptions_8711b8b3):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def target(self) -> typing.Optional[_IRuleTarget_7a91f454]:
+    def target(self) -> typing.Optional["_IRuleTarget_7a91f454"]:
         '''The target to register for the event.
 
         :default: - No target is added to the rule. Use ``addTarget()`` to add a target.
         '''
         result = self._values.get("target")
-        return typing.cast(typing.Optional[_IRuleTarget_7a91f454], result)
+        return typing.cast(typing.Optional["_IRuleTarget_7a91f454"], result)
 
     @builtins.property
     def image_tags(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5584,7 +5590,7 @@ class PublicGalleryAuthorizationToken(
 
     @jsii.member(jsii_name="grantRead")
     @builtins.classmethod
-    def grant_read(cls, grantee: _IGrantable_71c4f5de) -> None:
+    def grant_read(cls, grantee: "_IGrantable_71c4f5de") -> None:
         '''Grant access to retrieve an authorization token.
 
         :param grantee: -
@@ -5673,7 +5679,7 @@ class RepositoryBase(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         account: typing.Optional[builtins.str] = None,
@@ -5706,8 +5712,8 @@ class RepositoryBase(
     @abc.abstractmethod
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Add a policy statement to the repository's resource policy.
 
         :param statement: -
@@ -5717,9 +5723,9 @@ class RepositoryBase(
     @jsii.member(jsii_name="grant")
     def grant(
         self,
-        grantee: _IGrantable_71c4f5de,
+        grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
-    ) -> _Grant_a7ae64f8:
+    ) -> "_Grant_a7ae64f8":
         '''Grant the given principal identity permissions to perform the actions on this repository.
 
         :param grantee: -
@@ -5729,10 +5735,10 @@ class RepositoryBase(
             type_hints = typing.get_type_hints(_typecheckingstub__0332d345aba5679afe9fb0b7ab696008671005f2f0d37df9b84a4e6c8e76114a)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
             check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grant", [grantee, *actions]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantPull")
-    def grant_pull(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_pull(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to use the images in this repository.
 
         :param grantee: -
@@ -5740,10 +5746,10 @@ class RepositoryBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a73c5a3d57036dda31cb310868d740db73df050bd928d1f98a2aa6dc7f8f8195)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPull", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPull", [grantee]))
 
     @jsii.member(jsii_name="grantPullPush")
-    def grant_pull_push(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_pull_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to pull and push images to this repository.
 
         :param grantee: -
@@ -5751,10 +5757,10 @@ class RepositoryBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ee46b08a597ed3ce199cf26924cf11ab5fabd9d17bedcc7efc476d1d1c700e2c)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPullPush", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPullPush", [grantee]))
 
     @jsii.member(jsii_name="grantPush")
-    def grant_push(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to use the images in this repository.
 
         :param grantee: -
@@ -5762,10 +5768,10 @@ class RepositoryBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7b0273082d293ef1f0dde5de95fd611df83c06e41660b7409f297f562363e104)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantPush", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantPush", [grantee]))
 
     @jsii.member(jsii_name="grantRead")
-    def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+    def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to read the images in this repository.
 
         :param grantee: -
@@ -5773,19 +5779,19 @@ class RepositoryBase(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__31a099ab10f2924b872f9278330820dffe9b52373bfaa3e8885d4ff563eac580)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantRead", [grantee]))
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantRead", [grantee]))
 
     @jsii.member(jsii_name="onCloudTrailEvent")
     def on_cloud_trail_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Define a CloudWatch event that triggers when something happens to this repository.
 
         Requires that there exists at least one CloudTrail Trail in your account
@@ -5809,7 +5815,7 @@ class RepositoryBase(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onCloudTrailEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onCloudTrailEvent", [id, options]))
 
     @jsii.member(jsii_name="onCloudTrailImagePushed")
     def on_cloud_trail_image_pushed(
@@ -5817,12 +5823,12 @@ class RepositoryBase(
         id: builtins.str,
         *,
         image_tag: typing.Optional[builtins.str] = None,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an AWS CloudWatch event rule that can trigger a target when an image is pushed to this repository.
 
         Requires that there exists at least one CloudTrail Trail in your account
@@ -5848,19 +5854,19 @@ class RepositoryBase(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onCloudTrailImagePushed", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onCloudTrailImagePushed", [id, options]))
 
     @jsii.member(jsii_name="onEvent")
     def on_event(
         self,
         id: builtins.str,
         *,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines a CloudWatch event rule which triggers for repository events.
 
         Use
@@ -5884,7 +5890,7 @@ class RepositoryBase(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onEvent", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onEvent", [id, options]))
 
     @jsii.member(jsii_name="onImageScanCompleted")
     def on_image_scan_completed(
@@ -5892,12 +5898,12 @@ class RepositoryBase(
         id: builtins.str,
         *,
         image_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-        target: typing.Optional[_IRuleTarget_7a91f454] = None,
-        cross_stack_scope: typing.Optional[_constructs_77d1e7e8.Construct] = None,
+        target: typing.Optional["_IRuleTarget_7a91f454"] = None,
+        cross_stack_scope: typing.Optional["_constructs_77d1e7e8.Construct"] = None,
         description: typing.Optional[builtins.str] = None,
-        event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
+        event_pattern: typing.Optional[typing.Union["_EventPattern_fe557901", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
-    ) -> _Rule_334ed2b5:
+    ) -> "_Rule_334ed2b5":
         '''Defines an AWS CloudWatch event rule that can trigger a target when an image scan is completed.
 
         :param id: The id of the rule.
@@ -5920,7 +5926,7 @@ class RepositoryBase(
             rule_name=rule_name,
         )
 
-        return typing.cast(_Rule_334ed2b5, jsii.invoke(self, "onImageScanCompleted", [id, options]))
+        return typing.cast("_Rule_334ed2b5", jsii.invoke(self, "onImageScanCompleted", [id, options]))
 
     @jsii.member(jsii_name="repositoryUriForDigest")
     def repository_uri_for_digest(
@@ -6011,8 +6017,8 @@ class _RepositoryBaseProxy(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Add a policy statement to the repository's resource policy.
 
         :param statement: -
@@ -6020,7 +6026,7 @@ class _RepositoryBaseProxy(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6698dcafdf5c8416d9634135d68ec261fb74e16ec8e5fa780d78a8a8fa822ee6)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @builtins.property
     @jsii.member(jsii_name="repositoryArn")
@@ -6188,14 +6194,14 @@ class RepositoryProps:
         *,
         auto_delete_images: typing.Optional[builtins.bool] = None,
         empty_on_delete: typing.Optional[builtins.bool] = None,
-        encryption: typing.Optional[RepositoryEncryption] = None,
-        encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        encryption: typing.Optional["RepositoryEncryption"] = None,
+        encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         image_scan_on_push: typing.Optional[builtins.bool] = None,
         image_tag_mutability: typing.Optional["TagMutability"] = None,
-        image_tag_mutability_exclusion_filters: typing.Optional[typing.Sequence[ImageTagMutabilityExclusionFilter]] = None,
+        image_tag_mutability_exclusion_filters: typing.Optional[typing.Sequence["ImageTagMutabilityExclusionFilter"]] = None,
         lifecycle_registry_id: typing.Optional[builtins.str] = None,
-        lifecycle_rules: typing.Optional[typing.Sequence[typing.Union[LifecycleRule, typing.Dict[builtins.str, typing.Any]]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        lifecycle_rules: typing.Optional[typing.Sequence[typing.Union["LifecycleRule", typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         repository_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -6291,7 +6297,7 @@ class RepositoryProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def encryption(self) -> typing.Optional[RepositoryEncryption]:
+    def encryption(self) -> typing.Optional["RepositoryEncryption"]:
         '''The kind of server-side encryption to apply to this repository.
 
         If you choose KMS, you can specify a KMS key via ``encryptionKey``. If
@@ -6300,10 +6306,10 @@ class RepositoryProps:
         :default: - ``KMS`` if ``encryptionKey`` is specified, or ``AES256`` otherwise.
         '''
         result = self._values.get("encryption")
-        return typing.cast(typing.Optional[RepositoryEncryption], result)
+        return typing.cast(typing.Optional["RepositoryEncryption"], result)
 
     @builtins.property
-    def encryption_key(self) -> typing.Optional[_IKeyRef_d4fc6ef3]:
+    def encryption_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
         '''External KMS key to use for repository encryption.
 
         The 'encryption' property must be either not specified or set to "KMS".
@@ -6315,7 +6321,7 @@ class RepositoryProps:
         an AWS managed KMS key is used.
         '''
         result = self._values.get("encryption_key")
-        return typing.cast(typing.Optional[_IKeyRef_d4fc6ef3], result)
+        return typing.cast(typing.Optional["_IKeyRef_d4fc6ef3"], result)
 
     @builtins.property
     def image_scan_on_push(self) -> typing.Optional[builtins.bool]:
@@ -6340,7 +6346,7 @@ class RepositoryProps:
     @builtins.property
     def image_tag_mutability_exclusion_filters(
         self,
-    ) -> typing.Optional[typing.List[ImageTagMutabilityExclusionFilter]]:
+    ) -> typing.Optional[typing.List["ImageTagMutabilityExclusionFilter"]]:
         '''The image tag mutability exclusion filters for the repository.
 
         These filters specify which image tags can override the repository's default image tag mutability setting.
@@ -6350,7 +6356,7 @@ class RepositoryProps:
         :see: https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html
         '''
         result = self._values.get("image_tag_mutability_exclusion_filters")
-        return typing.cast(typing.Optional[typing.List[ImageTagMutabilityExclusionFilter]], result)
+        return typing.cast(typing.Optional[typing.List["ImageTagMutabilityExclusionFilter"]], result)
 
     @builtins.property
     def lifecycle_registry_id(self) -> typing.Optional[builtins.str]:
@@ -6364,22 +6370,22 @@ class RepositoryProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def lifecycle_rules(self) -> typing.Optional[typing.List[LifecycleRule]]:
+    def lifecycle_rules(self) -> typing.Optional[typing.List["LifecycleRule"]]:
         '''Life cycle rules to apply to this registry.
 
         :default: No life cycle rules
         '''
         result = self._values.get("lifecycle_rules")
-        return typing.cast(typing.Optional[typing.List[LifecycleRule]], result)
+        return typing.cast(typing.Optional[typing.List["LifecycleRule"]], result)
 
     @builtins.property
-    def removal_policy(self) -> typing.Optional[_RemovalPolicy_9f93c814]:
+    def removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
         '''Determine what happens to the repository when the resource/stack is deleted.
 
         :default: RemovalPolicy.Retain
         '''
         result = self._values.get("removal_policy")
-        return typing.cast(typing.Optional[_RemovalPolicy_9f93c814], result)
+        return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
     def repository_name(self) -> typing.Optional[builtins.str]:
@@ -6476,19 +6482,19 @@ class Repository(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         auto_delete_images: typing.Optional[builtins.bool] = None,
         empty_on_delete: typing.Optional[builtins.bool] = None,
-        encryption: typing.Optional[RepositoryEncryption] = None,
-        encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
+        encryption: typing.Optional["RepositoryEncryption"] = None,
+        encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         image_scan_on_push: typing.Optional[builtins.bool] = None,
-        image_tag_mutability: typing.Optional[TagMutability] = None,
-        image_tag_mutability_exclusion_filters: typing.Optional[typing.Sequence[ImageTagMutabilityExclusionFilter]] = None,
+        image_tag_mutability: typing.Optional["TagMutability"] = None,
+        image_tag_mutability_exclusion_filters: typing.Optional[typing.Sequence["ImageTagMutabilityExclusionFilter"]] = None,
         lifecycle_registry_id: typing.Optional[builtins.str] = None,
-        lifecycle_rules: typing.Optional[typing.Sequence[typing.Union[LifecycleRule, typing.Dict[builtins.str, typing.Any]]]] = None,
-        removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+        lifecycle_rules: typing.Optional[typing.Sequence[typing.Union["LifecycleRule", typing.Dict[builtins.str, typing.Any]]]] = None,
+        removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         repository_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
@@ -6531,7 +6537,7 @@ class Repository(
     def arn_for_local_repository(
         cls,
         repository_name: builtins.str,
-        scope: _constructs_77d1e7e8.IConstruct,
+        scope: "_constructs_77d1e7e8.IConstruct",
         account: typing.Optional[builtins.str] = None,
     ) -> builtins.str:
         '''Returns an ECR ARN for a repository that resides in the same account/region as the current stack.
@@ -6551,12 +6557,12 @@ class Repository(
     @builtins.classmethod
     def from_lookup(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         repository_arn: typing.Optional[builtins.str] = None,
         repository_name: typing.Optional[builtins.str] = None,
-    ) -> IRepository:
+    ) -> "IRepository":
         '''Lookup an existing repository.
 
         :param scope: -
@@ -6572,16 +6578,16 @@ class Repository(
             repository_arn=repository_arn, repository_name=repository_name
         )
 
-        return typing.cast(IRepository, jsii.sinvoke(cls, "fromLookup", [scope, id, options]))
+        return typing.cast("IRepository", jsii.sinvoke(cls, "fromLookup", [scope, id, options]))
 
     @jsii.member(jsii_name="fromRepositoryArn")
     @builtins.classmethod
     def from_repository_arn(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         repository_arn: builtins.str,
-    ) -> IRepository:
+    ) -> "IRepository":
         '''
         :param scope: -
         :param id: -
@@ -6592,18 +6598,18 @@ class Repository(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument repository_arn", value=repository_arn, expected_type=type_hints["repository_arn"])
-        return typing.cast(IRepository, jsii.sinvoke(cls, "fromRepositoryArn", [scope, id, repository_arn]))
+        return typing.cast("IRepository", jsii.sinvoke(cls, "fromRepositoryArn", [scope, id, repository_arn]))
 
     @jsii.member(jsii_name="fromRepositoryAttributes")
     @builtins.classmethod
     def from_repository_attributes(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         repository_arn: builtins.str,
         repository_name: builtins.str,
-    ) -> IRepository:
+    ) -> "IRepository":
         '''Import a repository.
 
         :param scope: -
@@ -6619,16 +6625,16 @@ class Repository(
             repository_arn=repository_arn, repository_name=repository_name
         )
 
-        return typing.cast(IRepository, jsii.sinvoke(cls, "fromRepositoryAttributes", [scope, id, attrs]))
+        return typing.cast("IRepository", jsii.sinvoke(cls, "fromRepositoryAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="fromRepositoryName")
     @builtins.classmethod
     def from_repository_name(
         cls,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         repository_name: builtins.str,
-    ) -> IRepository:
+    ) -> "IRepository":
         '''
         :param scope: -
         :param id: -
@@ -6639,19 +6645,19 @@ class Repository(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument repository_name", value=repository_name, expected_type=type_hints["repository_name"])
-        return typing.cast(IRepository, jsii.sinvoke(cls, "fromRepositoryName", [scope, id, repository_name]))
+        return typing.cast("IRepository", jsii.sinvoke(cls, "fromRepositoryName", [scope, id, repository_name]))
 
     @jsii.member(jsii_name="addLifecycleRule")
     def add_lifecycle_rule(
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        max_image_age: typing.Optional[_Duration_4839e8c3] = None,
+        max_image_age: typing.Optional["_Duration_4839e8c3"] = None,
         max_image_count: typing.Optional[jsii.Number] = None,
         rule_priority: typing.Optional[jsii.Number] = None,
         tag_pattern_list: typing.Optional[typing.Sequence[builtins.str]] = None,
         tag_prefix_list: typing.Optional[typing.Sequence[builtins.str]] = None,
-        tag_status: typing.Optional[TagStatus] = None,
+        tag_status: typing.Optional["TagStatus"] = None,
     ) -> None:
         '''Add a life cycle rule to the repository.
 
@@ -6681,8 +6687,8 @@ class Repository(
     @jsii.member(jsii_name="addToResourcePolicy")
     def add_to_resource_policy(
         self,
-        statement: _PolicyStatement_0fe33853,
-    ) -> _AddToResourcePolicyResult_1d0a53ad:
+        statement: "_PolicyStatement_0fe33853",
+    ) -> "_AddToResourcePolicyResult_1d0a53ad":
         '''Add a policy statement to the repository's resource policy.
 
         While other resources policies in AWS either require or accept a resource section,
@@ -6694,7 +6700,7 @@ class Repository(
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a4c2e425a71ed909d2a0bfefe861aad7c34b251f3ef1f93f5dd7f2be5afffd6b)
             check_type(argname="argument statement", value=statement, expected_type=type_hints["statement"])
-        return typing.cast(_AddToResourcePolicyResult_1d0a53ad, jsii.invoke(self, "addToResourcePolicy", [statement]))
+        return typing.cast("_AddToResourcePolicyResult_1d0a53ad", jsii.invoke(self, "addToResourcePolicy", [statement]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")

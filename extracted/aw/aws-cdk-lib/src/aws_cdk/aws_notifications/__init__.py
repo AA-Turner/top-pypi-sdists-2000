@@ -123,7 +123,7 @@ class CfnChannelAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         arn: builtins.str,
@@ -159,7 +159,7 @@ class CfnChannelAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnChannelAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -195,9 +195,9 @@ class CfnChannelAssociation(
 
     @builtins.property
     @jsii.member(jsii_name="channelAssociationRef")
-    def channel_association_ref(self) -> _ChannelAssociationReference_72294042:
+    def channel_association_ref(self) -> "_ChannelAssociationReference_72294042":
         '''A reference to a ChannelAssociation resource.'''
-        return typing.cast(_ChannelAssociationReference_72294042, jsii.get(self, "channelAssociationRef"))
+        return typing.cast("_ChannelAssociationReference_72294042", jsii.get(self, "channelAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="arn")
@@ -332,7 +332,7 @@ class CfnEventRule(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         event_type: builtins.str,
@@ -367,7 +367,7 @@ class CfnEventRule(
 
     @jsii.member(jsii_name="arnForEventRule")
     @builtins.classmethod
-    def arn_for_event_rule(cls, resource: _IEventRuleRef_2a7b3cf1) -> builtins.str:
+    def arn_for_event_rule(cls, resource: "_IEventRuleRef_2a7b3cf1") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -389,7 +389,7 @@ class CfnEventRule(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventRule", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -453,11 +453,11 @@ class CfnEventRule(
 
     @builtins.property
     @jsii.member(jsii_name="attrStatusSummaryByRegion")
-    def attr_status_summary_by_region(self) -> _IResolvable_da3f097b:
+    def attr_status_summary_by_region(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: StatusSummaryByRegion
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrStatusSummaryByRegion"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrStatusSummaryByRegion"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -466,9 +466,9 @@ class CfnEventRule(
 
     @builtins.property
     @jsii.member(jsii_name="eventRuleRef")
-    def event_rule_ref(self) -> _EventRuleReference_7519f795:
+    def event_rule_ref(self) -> "_EventRuleReference_7519f795":
         '''A reference to a EventRule resource.'''
-        return typing.cast(_EventRuleReference_7519f795, jsii.get(self, "eventRuleRef"))
+        return typing.cast("_EventRuleReference_7519f795", jsii.get(self, "eventRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="eventType")
@@ -781,7 +781,7 @@ class CfnManagedNotificationAccountContactAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         contact_identifier: builtins.str,
@@ -821,7 +821,7 @@ class CfnManagedNotificationAccountContactAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnManagedNotificationAccountContactAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -859,9 +859,9 @@ class CfnManagedNotificationAccountContactAssociation(
     @jsii.member(jsii_name="managedNotificationAccountContactAssociationRef")
     def managed_notification_account_contact_association_ref(
         self,
-    ) -> _ManagedNotificationAccountContactAssociationReference_e7cb9818:
+    ) -> "_ManagedNotificationAccountContactAssociationReference_e7cb9818":
         '''A reference to a ManagedNotificationAccountContactAssociation resource.'''
-        return typing.cast(_ManagedNotificationAccountContactAssociationReference_e7cb9818, jsii.get(self, "managedNotificationAccountContactAssociationRef"))
+        return typing.cast("_ManagedNotificationAccountContactAssociationReference_e7cb9818", jsii.get(self, "managedNotificationAccountContactAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="contactIdentifier")
@@ -995,7 +995,7 @@ class CfnManagedNotificationAdditionalChannelAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         channel_arn: builtins.str,
@@ -1035,7 +1035,7 @@ class CfnManagedNotificationAdditionalChannelAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnManagedNotificationAdditionalChannelAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1073,9 +1073,9 @@ class CfnManagedNotificationAdditionalChannelAssociation(
     @jsii.member(jsii_name="managedNotificationAdditionalChannelAssociationRef")
     def managed_notification_additional_channel_association_ref(
         self,
-    ) -> _ManagedNotificationAdditionalChannelAssociationReference_929878f3:
+    ) -> "_ManagedNotificationAdditionalChannelAssociationReference_929878f3":
         '''A reference to a ManagedNotificationAdditionalChannelAssociation resource.'''
-        return typing.cast(_ManagedNotificationAdditionalChannelAssociationReference_929878f3, jsii.get(self, "managedNotificationAdditionalChannelAssociationRef"))
+        return typing.cast("_ManagedNotificationAdditionalChannelAssociationReference_929878f3", jsii.get(self, "managedNotificationAdditionalChannelAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="channelArn")
@@ -1193,6 +1193,7 @@ class CfnNotificationConfiguration(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_notifications as notifications
@@ -1212,13 +1213,13 @@ class CfnNotificationConfiguration(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         description: builtins.str,
         name: builtins.str,
         aggregation_duration: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Notifications::NotificationConfiguration``.
 
@@ -1246,7 +1247,7 @@ class CfnNotificationConfiguration(
     @builtins.classmethod
     def arn_for_notification_configuration(
         cls,
-        resource: _INotificationConfigurationRef_52a9226d,
+        resource: "_INotificationConfigurationRef_52a9226d",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -1269,7 +1270,7 @@ class CfnNotificationConfiguration(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnNotificationConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1327,9 +1328,9 @@ class CfnNotificationConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
-    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
-        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1340,9 +1341,9 @@ class CfnNotificationConfiguration(
     @jsii.member(jsii_name="notificationConfigurationRef")
     def notification_configuration_ref(
         self,
-    ) -> _NotificationConfigurationReference_ab5ea829:
+    ) -> "_NotificationConfigurationReference_ab5ea829":
         '''A reference to a NotificationConfiguration resource.'''
-        return typing.cast(_NotificationConfigurationReference_ab5ea829, jsii.get(self, "notificationConfigurationRef"))
+        return typing.cast("_NotificationConfigurationReference_ab5ea829", jsii.get(self, "notificationConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -1385,12 +1386,12 @@ class CfnNotificationConfiguration(
 
     @builtins.property
     @jsii.member(jsii_name="tags")
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map of tags assigned to a ``NotificationConfiguration`` .'''
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
-    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d80fd02377dda29814fae801cf32c8200e2aa5b9ff4b7440916ad6d4efbeb00b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
@@ -1414,7 +1415,7 @@ class CfnNotificationConfigurationProps:
         description: builtins.str,
         name: builtins.str,
         aggregation_duration: typing.Optional[builtins.str] = None,
-        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnNotificationConfiguration``.
 
@@ -1428,6 +1429,7 @@ class CfnNotificationConfigurationProps:
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_notifications as notifications
@@ -1499,13 +1501,13 @@ class CfnNotificationConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A map of tags assigned to a ``NotificationConfiguration`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-notifications-notificationconfiguration.html#cfn-notifications-notificationconfiguration-tags
         '''
         result = self._values.get("tags")
-        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1546,7 +1548,7 @@ class CfnNotificationHub(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         region: builtins.str,
@@ -1578,7 +1580,7 @@ class CfnNotificationHub(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnNotificationHub", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1618,11 +1620,11 @@ class CfnNotificationHub(
 
     @builtins.property
     @jsii.member(jsii_name="attrNotificationHubStatusSummary")
-    def attr_notification_hub_status_summary(self) -> _IResolvable_da3f097b:
+    def attr_notification_hub_status_summary(self) -> "_IResolvable_da3f097b":
         '''
         :cloudformationAttribute: NotificationHubStatusSummary
         '''
-        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrNotificationHubStatusSummary"))
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrNotificationHubStatusSummary"))
 
     @builtins.property
     @jsii.member(jsii_name="cfnProperties")
@@ -1631,9 +1633,9 @@ class CfnNotificationHub(
 
     @builtins.property
     @jsii.member(jsii_name="notificationHubRef")
-    def notification_hub_ref(self) -> _NotificationHubReference_8c4cd07b:
+    def notification_hub_ref(self) -> "_NotificationHubReference_8c4cd07b":
         '''A reference to a NotificationHub resource.'''
-        return typing.cast(_NotificationHubReference_8c4cd07b, jsii.get(self, "notificationHubRef"))
+        return typing.cast("_NotificationHubReference_8c4cd07b", jsii.get(self, "notificationHubRef"))
 
     @builtins.property
     @jsii.member(jsii_name="region")
@@ -1802,7 +1804,7 @@ class CfnOrganizationalUnitAssociation(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
         notification_configuration_arn: builtins.str,
@@ -1839,7 +1841,7 @@ class CfnOrganizationalUnitAssociation(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOrganizationalUnitAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -1877,9 +1879,9 @@ class CfnOrganizationalUnitAssociation(
     @jsii.member(jsii_name="organizationalUnitAssociationRef")
     def organizational_unit_association_ref(
         self,
-    ) -> _OrganizationalUnitAssociationReference_7b321074:
+    ) -> "_OrganizationalUnitAssociationReference_7b321074":
         '''A reference to a OrganizationalUnitAssociation resource.'''
-        return typing.cast(_OrganizationalUnitAssociationReference_7b321074, jsii.get(self, "organizationalUnitAssociationRef"))
+        return typing.cast("_OrganizationalUnitAssociationReference_7b321074", jsii.get(self, "organizationalUnitAssociationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="notificationConfigurationArn")

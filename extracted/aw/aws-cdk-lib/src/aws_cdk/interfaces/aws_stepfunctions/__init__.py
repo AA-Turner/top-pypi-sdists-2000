@@ -96,7 +96,7 @@ class IActivityRef(
 
     @builtins.property
     @jsii.member(jsii_name="activityRef")
-    def activity_ref(self) -> ActivityReference:
+    def activity_ref(self) -> "ActivityReference":
         '''(experimental) A reference to a Activity resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IActivityRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="activityRef")
-    def activity_ref(self) -> ActivityReference:
+    def activity_ref(self) -> "ActivityReference":
         '''(experimental) A reference to a Activity resource.
 
         :stability: experimental
         '''
-        return typing.cast(ActivityReference, jsii.get(self, "activityRef"))
+        return typing.cast("ActivityReference", jsii.get(self, "activityRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IActivityRef).__jsii_proxy_class__ = lambda : _IActivityRefProxy

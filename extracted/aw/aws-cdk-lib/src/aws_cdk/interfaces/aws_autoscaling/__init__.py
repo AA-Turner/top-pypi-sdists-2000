@@ -117,7 +117,7 @@ class IAutoScalingGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="autoScalingGroupRef")
-    def auto_scaling_group_ref(self) -> AutoScalingGroupReference:
+    def auto_scaling_group_ref(self) -> "AutoScalingGroupReference":
         '''(experimental) A reference to a AutoScalingGroup resource.
 
         :stability: experimental
@@ -138,12 +138,12 @@ class _IAutoScalingGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="autoScalingGroupRef")
-    def auto_scaling_group_ref(self) -> AutoScalingGroupReference:
+    def auto_scaling_group_ref(self) -> "AutoScalingGroupReference":
         '''(experimental) A reference to a AutoScalingGroup resource.
 
         :stability: experimental
         '''
-        return typing.cast(AutoScalingGroupReference, jsii.get(self, "autoScalingGroupRef"))
+        return typing.cast("AutoScalingGroupReference", jsii.get(self, "autoScalingGroupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAutoScalingGroupRef).__jsii_proxy_class__ = lambda : _IAutoScalingGroupRefProxy

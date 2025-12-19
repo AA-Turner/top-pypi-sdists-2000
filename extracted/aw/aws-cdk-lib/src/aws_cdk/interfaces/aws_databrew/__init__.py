@@ -96,7 +96,7 @@ class IDatasetRef(
 
     @builtins.property
     @jsii.member(jsii_name="datasetRef")
-    def dataset_ref(self) -> DatasetReference:
+    def dataset_ref(self) -> "DatasetReference":
         '''(experimental) A reference to a Dataset resource.
 
         :stability: experimental
@@ -117,12 +117,12 @@ class _IDatasetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="datasetRef")
-    def dataset_ref(self) -> DatasetReference:
+    def dataset_ref(self) -> "DatasetReference":
         '''(experimental) A reference to a Dataset resource.
 
         :stability: experimental
         '''
-        return typing.cast(DatasetReference, jsii.get(self, "datasetRef"))
+        return typing.cast("DatasetReference", jsii.get(self, "datasetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDatasetRef).__jsii_proxy_class__ = lambda : _IDatasetRefProxy

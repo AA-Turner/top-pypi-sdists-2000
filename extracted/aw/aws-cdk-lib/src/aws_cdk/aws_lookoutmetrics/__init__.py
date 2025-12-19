@@ -119,10 +119,10 @@ class CfnAlert(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        action: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlert.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
+        action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlert.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
         alert_sensitivity_threshold: jsii.Number,
         anomaly_detector_arn: builtins.str,
         alert_description: typing.Optional[builtins.str] = None,
@@ -154,7 +154,7 @@ class CfnAlert(
 
     @jsii.member(jsii_name="arnForAlert")
     @builtins.classmethod
-    def arn_for_alert(cls, resource: _IAlertRef_f1434fff) -> builtins.str:
+    def arn_for_alert(cls, resource: "_IAlertRef_f1434fff") -> builtins.str:
         '''
         :param resource: -
         '''
@@ -176,7 +176,7 @@ class CfnAlert(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAlert", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -207,9 +207,9 @@ class CfnAlert(
 
     @builtins.property
     @jsii.member(jsii_name="alertRef")
-    def alert_ref(self) -> _AlertReference_73a426bb:
+    def alert_ref(self) -> "_AlertReference_73a426bb":
         '''A reference to a Alert resource.'''
-        return typing.cast(_AlertReference_73a426bb, jsii.get(self, "alertRef"))
+        return typing.cast("_AlertReference_73a426bb", jsii.get(self, "alertRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -229,14 +229,16 @@ class CfnAlert(
 
     @builtins.property
     @jsii.member(jsii_name="action")
-    def action(self) -> typing.Union[_IResolvable_da3f097b, "CfnAlert.ActionProperty"]:
+    def action(
+        self,
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAlert.ActionProperty"]:
         '''Action that will be triggered when there is an alert.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAlert.ActionProperty"], jsii.get(self, "action"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAlert.ActionProperty"], jsii.get(self, "action"))
 
     @action.setter
     def action(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAlert.ActionProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAlert.ActionProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bca437e28138e0e51d01ea6b47ad80cc5df1f7e9796134c417b7df120770fed4)
@@ -307,8 +309,8 @@ class CfnAlert(
         def __init__(
             self,
             *,
-            lambda_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlert.LambdaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            sns_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlert.SNSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            lambda_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlert.LambdaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sns_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlert.SNSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A configuration that specifies the action to perform when anomalies are detected.
 
@@ -348,24 +350,24 @@ class CfnAlert(
         @builtins.property
         def lambda_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAlert.LambdaConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlert.LambdaConfigurationProperty"]]:
             '''A configuration for an AWS Lambda channel.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-alert-action.html#cfn-lookoutmetrics-alert-action-lambdaconfiguration
             '''
             result = self._values.get("lambda_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAlert.LambdaConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlert.LambdaConfigurationProperty"]], result)
 
         @builtins.property
         def sns_configuration(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAlert.SNSConfigurationProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlert.SNSConfigurationProperty"]]:
             '''A configuration for an Amazon SNS channel.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-alert-action.html#cfn-lookoutmetrics-alert-action-snsconfiguration
             '''
             result = self._values.get("sns_configuration")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAlert.SNSConfigurationProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAlert.SNSConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -531,7 +533,7 @@ class CfnAlertProps:
     def __init__(
         self,
         *,
-        action: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAlert.ActionProperty, typing.Dict[builtins.str, typing.Any]]],
+        action: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAlert.ActionProperty", typing.Dict[builtins.str, typing.Any]]],
         alert_sensitivity_threshold: jsii.Number,
         anomaly_detector_arn: builtins.str,
         alert_description: typing.Optional[builtins.str] = None,
@@ -591,14 +593,16 @@ class CfnAlertProps:
             self._values["alert_name"] = alert_name
 
     @builtins.property
-    def action(self) -> typing.Union[_IResolvable_da3f097b, CfnAlert.ActionProperty]:
+    def action(
+        self,
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAlert.ActionProperty"]:
         '''Action that will be triggered when there is an alert.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lookoutmetrics-alert.html#cfn-lookoutmetrics-alert-action
         '''
         result = self._values.get("action")
         assert result is not None, "Required property 'action' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAlert.ActionProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAlert.ActionProperty"], result)
 
     @builtins.property
     def alert_sensitivity_threshold(self) -> jsii.Number:
@@ -765,14 +769,14 @@ class CfnAnomalyDetector(
 
     def __init__(
         self,
-        scope: _constructs_77d1e7e8.Construct,
+        scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        anomaly_detector_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.AnomalyDetectorConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        metric_set_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MetricSetProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        anomaly_detector_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.AnomalyDetectorConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        metric_set_list: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.MetricSetProperty", typing.Dict[builtins.str, typing.Any]]]]],
         anomaly_detector_description: typing.Optional[builtins.str] = None,
         anomaly_detector_name: typing.Optional[builtins.str] = None,
-        kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        kms_key_arn: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
     ) -> None:
         '''Create a new ``AWS::LookoutMetrics::AnomalyDetector``.
 
@@ -802,7 +806,7 @@ class CfnAnomalyDetector(
     @builtins.classmethod
     def arn_for_anomaly_detector(
         cls,
-        resource: _IAnomalyDetectorRef_2d878a8f,
+        resource: "_IAnomalyDetectorRef_2d878a8f",
     ) -> builtins.str:
         '''
         :param resource: -
@@ -825,7 +829,7 @@ class CfnAnomalyDetector(
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAnomalyDetector", [x]))
 
     @jsii.member(jsii_name="inspect")
-    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
         '''Examines the CloudFormation resource and discloses attributes.
 
         :param inspector: tree inspector to collect and process attributes.
@@ -856,9 +860,9 @@ class CfnAnomalyDetector(
 
     @builtins.property
     @jsii.member(jsii_name="anomalyDetectorRef")
-    def anomaly_detector_ref(self) -> _AnomalyDetectorReference_c01b78d5:
+    def anomaly_detector_ref(self) -> "_AnomalyDetectorReference_c01b78d5":
         '''A reference to a AnomalyDetector resource.'''
-        return typing.cast(_AnomalyDetectorReference_c01b78d5, jsii.get(self, "anomalyDetectorRef"))
+        return typing.cast("_AnomalyDetectorReference_c01b78d5", jsii.get(self, "anomalyDetectorRef"))
 
     @builtins.property
     @jsii.member(jsii_name="attrArn")
@@ -880,14 +884,14 @@ class CfnAnomalyDetector(
     @jsii.member(jsii_name="anomalyDetectorConfig")
     def anomaly_detector_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigProperty"]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.AnomalyDetectorConfigProperty"]:
         '''Contains information about the configuration of the anomaly detector.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigProperty"], jsii.get(self, "anomalyDetectorConfig"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.AnomalyDetectorConfigProperty"], jsii.get(self, "anomalyDetectorConfig"))
 
     @anomaly_detector_config.setter
     def anomaly_detector_config(
         self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AnomalyDetectorConfigProperty"],
+        value: typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.AnomalyDetectorConfigProperty"],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8b781658d3f414a12c1a279f742c28faf8517d54f6c4bb78a545064da65050d8)
@@ -898,14 +902,14 @@ class CfnAnomalyDetector(
     @jsii.member(jsii_name="metricSetList")
     def metric_set_list(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricSetProperty"]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricSetProperty"]]]:
         '''The detector's dataset.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricSetProperty"]]], jsii.get(self, "metricSetList"))
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricSetProperty"]]], jsii.get(self, "metricSetList"))
 
     @metric_set_list.setter
     def metric_set_list(
         self,
-        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricSetProperty"]]],
+        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricSetProperty"]]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__330a8461f141824d57906ef5a9c3660a9eb1a3a24dcf63724b3baff3125fdb5d)
@@ -1141,7 +1145,7 @@ class CfnAnomalyDetector(
             self,
             *,
             charset: typing.Optional[builtins.str] = None,
-            contains_header: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            contains_header: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             delimiter: typing.Optional[builtins.str] = None,
             file_compression: typing.Optional[builtins.str] = None,
             header_list: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -1208,13 +1212,13 @@ class CfnAnomalyDetector(
         @builtins.property
         def contains_header(
             self,
-        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
             '''Whether or not the source CSV file contains a header.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-csvformatdescriptor.html#cfn-lookoutmetrics-anomalydetector-csvformatdescriptor-containsheader
             '''
             result = self._values.get("contains_header")
-            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def delimiter(self) -> typing.Optional[builtins.str]:
@@ -1275,8 +1279,8 @@ class CfnAnomalyDetector(
         def __init__(
             self,
             *,
-            csv_format_descriptor: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.CsvFormatDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            json_format_descriptor: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.JsonFormatDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            csv_format_descriptor: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.CsvFormatDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            json_format_descriptor: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.JsonFormatDescriptorProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Contains information about a source file's formatting.
 
@@ -1320,24 +1324,24 @@ class CfnAnomalyDetector(
         @builtins.property
         def csv_format_descriptor(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.CsvFormatDescriptorProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.CsvFormatDescriptorProperty"]]:
             '''Contains information about how a source CSV data file should be analyzed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-fileformatdescriptor.html#cfn-lookoutmetrics-anomalydetector-fileformatdescriptor-csvformatdescriptor
             '''
             result = self._values.get("csv_format_descriptor")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.CsvFormatDescriptorProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.CsvFormatDescriptorProperty"]], result)
 
         @builtins.property
         def json_format_descriptor(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.JsonFormatDescriptorProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.JsonFormatDescriptorProperty"]]:
             '''Contains information about how a source JSON data file should be analyzed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-fileformatdescriptor.html#cfn-lookoutmetrics-anomalydetector-fileformatdescriptor-jsonformatdescriptor
             '''
             result = self._values.get("json_format_descriptor")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.JsonFormatDescriptorProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.JsonFormatDescriptorProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1531,14 +1535,14 @@ class CfnAnomalyDetector(
         def __init__(
             self,
             *,
-            metric_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MetricProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            metric_list: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.MetricProperty", typing.Dict[builtins.str, typing.Any]]]]],
             metric_set_name: builtins.str,
-            metric_source: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MetricSourceProperty", typing.Dict[builtins.str, typing.Any]]],
+            metric_source: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.MetricSourceProperty", typing.Dict[builtins.str, typing.Any]]],
             dimension_list: typing.Optional[typing.Sequence[builtins.str]] = None,
             metric_set_description: typing.Optional[builtins.str] = None,
             metric_set_frequency: typing.Optional[builtins.str] = None,
             offset: typing.Optional[jsii.Number] = None,
-            timestamp_column: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.TimestampColumnProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            timestamp_column: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.TimestampColumnProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             timezone: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Contains information about a dataset.
@@ -1672,14 +1676,14 @@ class CfnAnomalyDetector(
         @builtins.property
         def metric_list(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricProperty"]]]:
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricProperty"]]]:
             '''A list of metrics that the dataset will contain.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-metricset.html#cfn-lookoutmetrics-anomalydetector-metricset-metriclist
             '''
             result = self._values.get("metric_list")
             assert result is not None, "Required property 'metric_list' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricProperty"]]], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricProperty"]]], result)
 
         @builtins.property
         def metric_set_name(self) -> builtins.str:
@@ -1694,14 +1698,14 @@ class CfnAnomalyDetector(
         @builtins.property
         def metric_source(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricSourceProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricSourceProperty"]:
             '''Contains information about how the source data should be interpreted.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-metricset.html#cfn-lookoutmetrics-anomalydetector-metricset-metricsource
             '''
             result = self._values.get("metric_source")
             assert result is not None, "Required property 'metric_source' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.MetricSourceProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricSourceProperty"], result)
 
         @builtins.property
         def dimension_list(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1744,13 +1748,13 @@ class CfnAnomalyDetector(
         @builtins.property
         def timestamp_column(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.TimestampColumnProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.TimestampColumnProperty"]]:
             '''Contains information about the column used for tracking time in your source data.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-metricset.html#cfn-lookoutmetrics-anomalydetector-metricset-timestampcolumn
             '''
             result = self._values.get("timestamp_column")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.TimestampColumnProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.TimestampColumnProperty"]], result)
 
         @builtins.property
         def timezone(self) -> typing.Optional[builtins.str]:
@@ -1787,11 +1791,11 @@ class CfnAnomalyDetector(
         def __init__(
             self,
             *,
-            app_flow_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.AppFlowConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            cloudwatch_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.CloudwatchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            rds_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.RDSSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            redshift_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.RedshiftSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-            s3_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.S3SourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            app_flow_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.AppFlowConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            cloudwatch_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.CloudwatchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            rds_source_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.RDSSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            redshift_source_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.RedshiftSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_source_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.S3SourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Contains information about how the source data should be interpreted.
 
@@ -1889,57 +1893,57 @@ class CfnAnomalyDetector(
         @builtins.property
         def app_flow_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AppFlowConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.AppFlowConfigProperty"]]:
             '''Details about an AppFlow datasource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-metricsource.html#cfn-lookoutmetrics-anomalydetector-metricsource-appflowconfig
             '''
             result = self._values.get("app_flow_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.AppFlowConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.AppFlowConfigProperty"]], result)
 
         @builtins.property
         def cloudwatch_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.CloudwatchConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.CloudwatchConfigProperty"]]:
             '''Details about an Amazon CloudWatch monitoring datasource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-metricsource.html#cfn-lookoutmetrics-anomalydetector-metricsource-cloudwatchconfig
             '''
             result = self._values.get("cloudwatch_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.CloudwatchConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.CloudwatchConfigProperty"]], result)
 
         @builtins.property
         def rds_source_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.RDSSourceConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.RDSSourceConfigProperty"]]:
             '''Details about an Amazon Relational Database Service (RDS) datasource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-metricsource.html#cfn-lookoutmetrics-anomalydetector-metricsource-rdssourceconfig
             '''
             result = self._values.get("rds_source_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.RDSSourceConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.RDSSourceConfigProperty"]], result)
 
         @builtins.property
         def redshift_source_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.RedshiftSourceConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.RedshiftSourceConfigProperty"]]:
             '''Details about an Amazon Redshift database datasource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-metricsource.html#cfn-lookoutmetrics-anomalydetector-metricsource-redshiftsourceconfig
             '''
             result = self._values.get("redshift_source_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.RedshiftSourceConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.RedshiftSourceConfigProperty"]], result)
 
         @builtins.property
         def s3_source_config(
             self,
-        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.S3SourceConfigProperty"]]:
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.S3SourceConfigProperty"]]:
             '''Contains information about the configuration of the S3 bucket that contains source files.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-metricsource.html#cfn-lookoutmetrics-anomalydetector-metricsource-s3sourceconfig
             '''
             result = self._values.get("s3_source_config")
-            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.S3SourceConfigProperty"]], result)
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.S3SourceConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1977,7 +1981,7 @@ class CfnAnomalyDetector(
             role_arn: builtins.str,
             secret_manager_arn: builtins.str,
             table_name: builtins.str,
-            vpc_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            vpc_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Contains information about the Amazon Relational Database Service (RDS) configuration.
 
@@ -2107,14 +2111,14 @@ class CfnAnomalyDetector(
         @builtins.property
         def vpc_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.VpcConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.VpcConfigurationProperty"]:
             '''An object containing information about the Amazon Virtual Private Cloud (VPC) configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-rdssourceconfig.html#cfn-lookoutmetrics-anomalydetector-rdssourceconfig-vpcconfiguration
             '''
             result = self._values.get("vpc_configuration")
             assert result is not None, "Required property 'vpc_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.VpcConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.VpcConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2152,7 +2156,7 @@ class CfnAnomalyDetector(
             role_arn: builtins.str,
             secret_manager_arn: builtins.str,
             table_name: builtins.str,
-            vpc_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            vpc_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
             '''Provides information about the Amazon Redshift database configuration.
 
@@ -2282,14 +2286,14 @@ class CfnAnomalyDetector(
         @builtins.property
         def vpc_configuration(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.VpcConfigurationProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.VpcConfigurationProperty"]:
             '''Contains information about the Amazon Virtual Private Cloud (VPC) configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-redshiftsourceconfig.html#cfn-lookoutmetrics-anomalydetector-redshiftsourceconfig-vpcconfiguration
             '''
             result = self._values.get("vpc_configuration")
             assert result is not None, "Required property 'vpc_configuration' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.VpcConfigurationProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.VpcConfigurationProperty"], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2316,7 +2320,7 @@ class CfnAnomalyDetector(
         def __init__(
             self,
             *,
-            file_format_descriptor: typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.FileFormatDescriptorProperty", typing.Dict[builtins.str, typing.Any]]],
+            file_format_descriptor: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.FileFormatDescriptorProperty", typing.Dict[builtins.str, typing.Any]]],
             role_arn: builtins.str,
             historical_data_path_list: typing.Optional[typing.Sequence[builtins.str]] = None,
             templated_path_list: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -2377,14 +2381,14 @@ class CfnAnomalyDetector(
         @builtins.property
         def file_format_descriptor(
             self,
-        ) -> typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.FileFormatDescriptorProperty"]:
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.FileFormatDescriptorProperty"]:
             '''Contains information about a source file's formatting.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lookoutmetrics-anomalydetector-s3sourceconfig.html#cfn-lookoutmetrics-anomalydetector-s3sourceconfig-fileformatdescriptor
             '''
             result = self._values.get("file_format_descriptor")
             assert result is not None, "Required property 'file_format_descriptor' is missing"
-            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnAnomalyDetector.FileFormatDescriptorProperty"], result)
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.FileFormatDescriptorProperty"], result)
 
         @builtins.property
         def role_arn(self) -> builtins.str:
@@ -2587,11 +2591,11 @@ class CfnAnomalyDetectorProps:
     def __init__(
         self,
         *,
-        anomaly_detector_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.AnomalyDetectorConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        metric_set_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.MetricSetProperty, typing.Dict[builtins.str, typing.Any]]]]],
+        anomaly_detector_config: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.AnomalyDetectorConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        metric_set_list: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAnomalyDetector.MetricSetProperty", typing.Dict[builtins.str, typing.Any]]]]],
         anomaly_detector_description: typing.Optional[builtins.str] = None,
         anomaly_detector_name: typing.Optional[builtins.str] = None,
-        kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        kms_key_arn: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAnomalyDetector``.
 
@@ -2719,26 +2723,26 @@ class CfnAnomalyDetectorProps:
     @builtins.property
     def anomaly_detector_config(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.AnomalyDetectorConfigProperty]:
+    ) -> typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.AnomalyDetectorConfigProperty"]:
         '''Contains information about the configuration of the anomaly detector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lookoutmetrics-anomalydetector.html#cfn-lookoutmetrics-anomalydetector-anomalydetectorconfig
         '''
         result = self._values.get("anomaly_detector_config")
         assert result is not None, "Required property 'anomaly_detector_config' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.AnomalyDetectorConfigProperty], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.AnomalyDetectorConfigProperty"], result)
 
     @builtins.property
     def metric_set_list(
         self,
-    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.MetricSetProperty]]]:
+    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricSetProperty"]]]:
         '''The detector's dataset.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lookoutmetrics-anomalydetector.html#cfn-lookoutmetrics-anomalydetector-metricsetlist
         '''
         result = self._values.get("metric_set_list")
         assert result is not None, "Required property 'metric_set_list' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAnomalyDetector.MetricSetProperty]]], result)
+        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnomalyDetector.MetricSetProperty"]]], result)
 
     @builtins.property
     def anomaly_detector_description(self) -> typing.Optional[builtins.str]:
@@ -2761,13 +2765,13 @@ class CfnAnomalyDetectorProps:
     @builtins.property
     def kms_key_arn(
         self,
-    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+    ) -> typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]]:
         '''The ARN of the KMS key to use to encrypt your data.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lookoutmetrics-anomalydetector.html#cfn-lookoutmetrics-anomalydetector-kmskeyarn
         '''
         result = self._values.get("kms_key_arn")
-        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values

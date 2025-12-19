@@ -247,7 +247,7 @@ class ICisScanConfigurationRef(
 
     @builtins.property
     @jsii.member(jsii_name="cisScanConfigurationRef")
-    def cis_scan_configuration_ref(self) -> CisScanConfigurationReference:
+    def cis_scan_configuration_ref(self) -> "CisScanConfigurationReference":
         '''(experimental) A reference to a CisScanConfiguration resource.
 
         :stability: experimental
@@ -268,12 +268,12 @@ class _ICisScanConfigurationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="cisScanConfigurationRef")
-    def cis_scan_configuration_ref(self) -> CisScanConfigurationReference:
+    def cis_scan_configuration_ref(self) -> "CisScanConfigurationReference":
         '''(experimental) A reference to a CisScanConfiguration resource.
 
         :stability: experimental
         '''
-        return typing.cast(CisScanConfigurationReference, jsii.get(self, "cisScanConfigurationRef"))
+        return typing.cast("CisScanConfigurationReference", jsii.get(self, "cisScanConfigurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICisScanConfigurationRef).__jsii_proxy_class__ = lambda : _ICisScanConfigurationRefProxy
@@ -294,7 +294,7 @@ class ICodeSecurityIntegrationRef(
 
     @builtins.property
     @jsii.member(jsii_name="codeSecurityIntegrationRef")
-    def code_security_integration_ref(self) -> CodeSecurityIntegrationReference:
+    def code_security_integration_ref(self) -> "CodeSecurityIntegrationReference":
         '''(experimental) A reference to a CodeSecurityIntegration resource.
 
         :stability: experimental
@@ -315,12 +315,12 @@ class _ICodeSecurityIntegrationRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="codeSecurityIntegrationRef")
-    def code_security_integration_ref(self) -> CodeSecurityIntegrationReference:
+    def code_security_integration_ref(self) -> "CodeSecurityIntegrationReference":
         '''(experimental) A reference to a CodeSecurityIntegration resource.
 
         :stability: experimental
         '''
-        return typing.cast(CodeSecurityIntegrationReference, jsii.get(self, "codeSecurityIntegrationRef"))
+        return typing.cast("CodeSecurityIntegrationReference", jsii.get(self, "codeSecurityIntegrationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICodeSecurityIntegrationRef).__jsii_proxy_class__ = lambda : _ICodeSecurityIntegrationRefProxy
@@ -343,7 +343,7 @@ class ICodeSecurityScanConfigurationRef(
     @jsii.member(jsii_name="codeSecurityScanConfigurationRef")
     def code_security_scan_configuration_ref(
         self,
-    ) -> CodeSecurityScanConfigurationReference:
+    ) -> "CodeSecurityScanConfigurationReference":
         '''(experimental) A reference to a CodeSecurityScanConfiguration resource.
 
         :stability: experimental
@@ -366,12 +366,12 @@ class _ICodeSecurityScanConfigurationRefProxy(
     @jsii.member(jsii_name="codeSecurityScanConfigurationRef")
     def code_security_scan_configuration_ref(
         self,
-    ) -> CodeSecurityScanConfigurationReference:
+    ) -> "CodeSecurityScanConfigurationReference":
         '''(experimental) A reference to a CodeSecurityScanConfiguration resource.
 
         :stability: experimental
         '''
-        return typing.cast(CodeSecurityScanConfigurationReference, jsii.get(self, "codeSecurityScanConfigurationRef"))
+        return typing.cast("CodeSecurityScanConfigurationReference", jsii.get(self, "codeSecurityScanConfigurationRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICodeSecurityScanConfigurationRef).__jsii_proxy_class__ = lambda : _ICodeSecurityScanConfigurationRefProxy
@@ -390,7 +390,7 @@ class IFilterRef(
 
     @builtins.property
     @jsii.member(jsii_name="filterRef")
-    def filter_ref(self) -> FilterReference:
+    def filter_ref(self) -> "FilterReference":
         '''(experimental) A reference to a Filter resource.
 
         :stability: experimental
@@ -411,12 +411,12 @@ class _IFilterRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="filterRef")
-    def filter_ref(self) -> FilterReference:
+    def filter_ref(self) -> "FilterReference":
         '''(experimental) A reference to a Filter resource.
 
         :stability: experimental
         '''
-        return typing.cast(FilterReference, jsii.get(self, "filterRef"))
+        return typing.cast("FilterReference", jsii.get(self, "filterRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFilterRef).__jsii_proxy_class__ = lambda : _IFilterRefProxy

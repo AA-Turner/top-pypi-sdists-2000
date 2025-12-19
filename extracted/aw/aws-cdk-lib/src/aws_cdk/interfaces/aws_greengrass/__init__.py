@@ -626,7 +626,7 @@ class IConnectorDefinitionRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectorDefinitionRef")
-    def connector_definition_ref(self) -> ConnectorDefinitionReference:
+    def connector_definition_ref(self) -> "ConnectorDefinitionReference":
         '''(experimental) A reference to a ConnectorDefinition resource.
 
         :stability: experimental
@@ -647,12 +647,12 @@ class _IConnectorDefinitionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectorDefinitionRef")
-    def connector_definition_ref(self) -> ConnectorDefinitionReference:
+    def connector_definition_ref(self) -> "ConnectorDefinitionReference":
         '''(experimental) A reference to a ConnectorDefinition resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectorDefinitionReference, jsii.get(self, "connectorDefinitionRef"))
+        return typing.cast("ConnectorDefinitionReference", jsii.get(self, "connectorDefinitionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectorDefinitionRef).__jsii_proxy_class__ = lambda : _IConnectorDefinitionRefProxy
@@ -673,7 +673,7 @@ class IConnectorDefinitionVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="connectorDefinitionVersionRef")
-    def connector_definition_version_ref(self) -> ConnectorDefinitionVersionReference:
+    def connector_definition_version_ref(self) -> "ConnectorDefinitionVersionReference":
         '''(experimental) A reference to a ConnectorDefinitionVersion resource.
 
         :stability: experimental
@@ -694,12 +694,12 @@ class _IConnectorDefinitionVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="connectorDefinitionVersionRef")
-    def connector_definition_version_ref(self) -> ConnectorDefinitionVersionReference:
+    def connector_definition_version_ref(self) -> "ConnectorDefinitionVersionReference":
         '''(experimental) A reference to a ConnectorDefinitionVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(ConnectorDefinitionVersionReference, jsii.get(self, "connectorDefinitionVersionRef"))
+        return typing.cast("ConnectorDefinitionVersionReference", jsii.get(self, "connectorDefinitionVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConnectorDefinitionVersionRef).__jsii_proxy_class__ = lambda : _IConnectorDefinitionVersionRefProxy
@@ -718,7 +718,7 @@ class ICoreDefinitionRef(
 
     @builtins.property
     @jsii.member(jsii_name="coreDefinitionRef")
-    def core_definition_ref(self) -> CoreDefinitionReference:
+    def core_definition_ref(self) -> "CoreDefinitionReference":
         '''(experimental) A reference to a CoreDefinition resource.
 
         :stability: experimental
@@ -739,12 +739,12 @@ class _ICoreDefinitionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="coreDefinitionRef")
-    def core_definition_ref(self) -> CoreDefinitionReference:
+    def core_definition_ref(self) -> "CoreDefinitionReference":
         '''(experimental) A reference to a CoreDefinition resource.
 
         :stability: experimental
         '''
-        return typing.cast(CoreDefinitionReference, jsii.get(self, "coreDefinitionRef"))
+        return typing.cast("CoreDefinitionReference", jsii.get(self, "coreDefinitionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICoreDefinitionRef).__jsii_proxy_class__ = lambda : _ICoreDefinitionRefProxy
@@ -765,7 +765,7 @@ class ICoreDefinitionVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="coreDefinitionVersionRef")
-    def core_definition_version_ref(self) -> CoreDefinitionVersionReference:
+    def core_definition_version_ref(self) -> "CoreDefinitionVersionReference":
         '''(experimental) A reference to a CoreDefinitionVersion resource.
 
         :stability: experimental
@@ -786,12 +786,12 @@ class _ICoreDefinitionVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="coreDefinitionVersionRef")
-    def core_definition_version_ref(self) -> CoreDefinitionVersionReference:
+    def core_definition_version_ref(self) -> "CoreDefinitionVersionReference":
         '''(experimental) A reference to a CoreDefinitionVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(CoreDefinitionVersionReference, jsii.get(self, "coreDefinitionVersionRef"))
+        return typing.cast("CoreDefinitionVersionReference", jsii.get(self, "coreDefinitionVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICoreDefinitionVersionRef).__jsii_proxy_class__ = lambda : _ICoreDefinitionVersionRefProxy
@@ -810,7 +810,7 @@ class IDeviceDefinitionRef(
 
     @builtins.property
     @jsii.member(jsii_name="deviceDefinitionRef")
-    def device_definition_ref(self) -> DeviceDefinitionReference:
+    def device_definition_ref(self) -> "DeviceDefinitionReference":
         '''(experimental) A reference to a DeviceDefinition resource.
 
         :stability: experimental
@@ -831,12 +831,12 @@ class _IDeviceDefinitionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deviceDefinitionRef")
-    def device_definition_ref(self) -> DeviceDefinitionReference:
+    def device_definition_ref(self) -> "DeviceDefinitionReference":
         '''(experimental) A reference to a DeviceDefinition resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeviceDefinitionReference, jsii.get(self, "deviceDefinitionRef"))
+        return typing.cast("DeviceDefinitionReference", jsii.get(self, "deviceDefinitionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeviceDefinitionRef).__jsii_proxy_class__ = lambda : _IDeviceDefinitionRefProxy
@@ -857,7 +857,7 @@ class IDeviceDefinitionVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="deviceDefinitionVersionRef")
-    def device_definition_version_ref(self) -> DeviceDefinitionVersionReference:
+    def device_definition_version_ref(self) -> "DeviceDefinitionVersionReference":
         '''(experimental) A reference to a DeviceDefinitionVersion resource.
 
         :stability: experimental
@@ -878,12 +878,12 @@ class _IDeviceDefinitionVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="deviceDefinitionVersionRef")
-    def device_definition_version_ref(self) -> DeviceDefinitionVersionReference:
+    def device_definition_version_ref(self) -> "DeviceDefinitionVersionReference":
         '''(experimental) A reference to a DeviceDefinitionVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(DeviceDefinitionVersionReference, jsii.get(self, "deviceDefinitionVersionRef"))
+        return typing.cast("DeviceDefinitionVersionReference", jsii.get(self, "deviceDefinitionVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDeviceDefinitionVersionRef).__jsii_proxy_class__ = lambda : _IDeviceDefinitionVersionRefProxy
@@ -904,7 +904,7 @@ class IFunctionDefinitionRef(
 
     @builtins.property
     @jsii.member(jsii_name="functionDefinitionRef")
-    def function_definition_ref(self) -> FunctionDefinitionReference:
+    def function_definition_ref(self) -> "FunctionDefinitionReference":
         '''(experimental) A reference to a FunctionDefinition resource.
 
         :stability: experimental
@@ -925,12 +925,12 @@ class _IFunctionDefinitionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="functionDefinitionRef")
-    def function_definition_ref(self) -> FunctionDefinitionReference:
+    def function_definition_ref(self) -> "FunctionDefinitionReference":
         '''(experimental) A reference to a FunctionDefinition resource.
 
         :stability: experimental
         '''
-        return typing.cast(FunctionDefinitionReference, jsii.get(self, "functionDefinitionRef"))
+        return typing.cast("FunctionDefinitionReference", jsii.get(self, "functionDefinitionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFunctionDefinitionRef).__jsii_proxy_class__ = lambda : _IFunctionDefinitionRefProxy
@@ -951,7 +951,7 @@ class IFunctionDefinitionVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="functionDefinitionVersionRef")
-    def function_definition_version_ref(self) -> FunctionDefinitionVersionReference:
+    def function_definition_version_ref(self) -> "FunctionDefinitionVersionReference":
         '''(experimental) A reference to a FunctionDefinitionVersion resource.
 
         :stability: experimental
@@ -972,12 +972,12 @@ class _IFunctionDefinitionVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="functionDefinitionVersionRef")
-    def function_definition_version_ref(self) -> FunctionDefinitionVersionReference:
+    def function_definition_version_ref(self) -> "FunctionDefinitionVersionReference":
         '''(experimental) A reference to a FunctionDefinitionVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(FunctionDefinitionVersionReference, jsii.get(self, "functionDefinitionVersionRef"))
+        return typing.cast("FunctionDefinitionVersionReference", jsii.get(self, "functionDefinitionVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IFunctionDefinitionVersionRef).__jsii_proxy_class__ = lambda : _IFunctionDefinitionVersionRefProxy
@@ -996,7 +996,7 @@ class IGroupRef(
 
     @builtins.property
     @jsii.member(jsii_name="groupRef")
-    def group_ref(self) -> GroupReference:
+    def group_ref(self) -> "GroupReference":
         '''(experimental) A reference to a Group resource.
 
         :stability: experimental
@@ -1017,12 +1017,12 @@ class _IGroupRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="groupRef")
-    def group_ref(self) -> GroupReference:
+    def group_ref(self) -> "GroupReference":
         '''(experimental) A reference to a Group resource.
 
         :stability: experimental
         '''
-        return typing.cast(GroupReference, jsii.get(self, "groupRef"))
+        return typing.cast("GroupReference", jsii.get(self, "groupRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGroupRef).__jsii_proxy_class__ = lambda : _IGroupRefProxy
@@ -1041,7 +1041,7 @@ class IGroupVersionRef(
 
     @builtins.property
     @jsii.member(jsii_name="groupVersionRef")
-    def group_version_ref(self) -> GroupVersionReference:
+    def group_version_ref(self) -> "GroupVersionReference":
         '''(experimental) A reference to a GroupVersion resource.
 
         :stability: experimental
@@ -1062,12 +1062,12 @@ class _IGroupVersionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="groupVersionRef")
-    def group_version_ref(self) -> GroupVersionReference:
+    def group_version_ref(self) -> "GroupVersionReference":
         '''(experimental) A reference to a GroupVersion resource.
 
         :stability: experimental
         '''
-        return typing.cast(GroupVersionReference, jsii.get(self, "groupVersionRef"))
+        return typing.cast("GroupVersionReference", jsii.get(self, "groupVersionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IGroupVersionRef).__jsii_proxy_class__ = lambda : _IGroupVersionRefProxy

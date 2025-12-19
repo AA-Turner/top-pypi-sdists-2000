@@ -156,7 +156,7 @@ class IBudgetRef(
 
     @builtins.property
     @jsii.member(jsii_name="budgetRef")
-    def budget_ref(self) -> BudgetReference:
+    def budget_ref(self) -> "BudgetReference":
         '''(experimental) A reference to a Budget resource.
 
         :stability: experimental
@@ -177,12 +177,12 @@ class _IBudgetRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="budgetRef")
-    def budget_ref(self) -> BudgetReference:
+    def budget_ref(self) -> "BudgetReference":
         '''(experimental) A reference to a Budget resource.
 
         :stability: experimental
         '''
-        return typing.cast(BudgetReference, jsii.get(self, "budgetRef"))
+        return typing.cast("BudgetReference", jsii.get(self, "budgetRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBudgetRef).__jsii_proxy_class__ = lambda : _IBudgetRefProxy
@@ -201,7 +201,7 @@ class IBudgetsActionRef(
 
     @builtins.property
     @jsii.member(jsii_name="budgetsActionRef")
-    def budgets_action_ref(self) -> BudgetsActionReference:
+    def budgets_action_ref(self) -> "BudgetsActionReference":
         '''(experimental) A reference to a BudgetsAction resource.
 
         :stability: experimental
@@ -222,12 +222,12 @@ class _IBudgetsActionRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="budgetsActionRef")
-    def budgets_action_ref(self) -> BudgetsActionReference:
+    def budgets_action_ref(self) -> "BudgetsActionReference":
         '''(experimental) A reference to a BudgetsAction resource.
 
         :stability: experimental
         '''
-        return typing.cast(BudgetsActionReference, jsii.get(self, "budgetsActionRef"))
+        return typing.cast("BudgetsActionReference", jsii.get(self, "budgetsActionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IBudgetsActionRef).__jsii_proxy_class__ = lambda : _IBudgetsActionRefProxy

@@ -317,7 +317,7 @@ class ICalculatedAttributeDefinitionRef(
     @jsii.member(jsii_name="calculatedAttributeDefinitionRef")
     def calculated_attribute_definition_ref(
         self,
-    ) -> CalculatedAttributeDefinitionReference:
+    ) -> "CalculatedAttributeDefinitionReference":
         '''(experimental) A reference to a CalculatedAttributeDefinition resource.
 
         :stability: experimental
@@ -340,12 +340,12 @@ class _ICalculatedAttributeDefinitionRefProxy(
     @jsii.member(jsii_name="calculatedAttributeDefinitionRef")
     def calculated_attribute_definition_ref(
         self,
-    ) -> CalculatedAttributeDefinitionReference:
+    ) -> "CalculatedAttributeDefinitionReference":
         '''(experimental) A reference to a CalculatedAttributeDefinition resource.
 
         :stability: experimental
         '''
-        return typing.cast(CalculatedAttributeDefinitionReference, jsii.get(self, "calculatedAttributeDefinitionRef"))
+        return typing.cast("CalculatedAttributeDefinitionReference", jsii.get(self, "calculatedAttributeDefinitionRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICalculatedAttributeDefinitionRef).__jsii_proxy_class__ = lambda : _ICalculatedAttributeDefinitionRefProxy
@@ -364,7 +364,7 @@ class IDomainRef(
 
     @builtins.property
     @jsii.member(jsii_name="domainRef")
-    def domain_ref(self) -> DomainReference:
+    def domain_ref(self) -> "DomainReference":
         '''(experimental) A reference to a Domain resource.
 
         :stability: experimental
@@ -385,12 +385,12 @@ class _IDomainRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="domainRef")
-    def domain_ref(self) -> DomainReference:
+    def domain_ref(self) -> "DomainReference":
         '''(experimental) A reference to a Domain resource.
 
         :stability: experimental
         '''
-        return typing.cast(DomainReference, jsii.get(self, "domainRef"))
+        return typing.cast("DomainReference", jsii.get(self, "domainRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDomainRef).__jsii_proxy_class__ = lambda : _IDomainRefProxy
@@ -411,7 +411,7 @@ class IEventStreamRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventStreamRef")
-    def event_stream_ref(self) -> EventStreamReference:
+    def event_stream_ref(self) -> "EventStreamReference":
         '''(experimental) A reference to a EventStream resource.
 
         :stability: experimental
@@ -432,12 +432,12 @@ class _IEventStreamRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventStreamRef")
-    def event_stream_ref(self) -> EventStreamReference:
+    def event_stream_ref(self) -> "EventStreamReference":
         '''(experimental) A reference to a EventStream resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventStreamReference, jsii.get(self, "eventStreamRef"))
+        return typing.cast("EventStreamReference", jsii.get(self, "eventStreamRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventStreamRef).__jsii_proxy_class__ = lambda : _IEventStreamRefProxy
@@ -458,7 +458,7 @@ class IEventTriggerRef(
 
     @builtins.property
     @jsii.member(jsii_name="eventTriggerRef")
-    def event_trigger_ref(self) -> EventTriggerReference:
+    def event_trigger_ref(self) -> "EventTriggerReference":
         '''(experimental) A reference to a EventTrigger resource.
 
         :stability: experimental
@@ -479,12 +479,12 @@ class _IEventTriggerRefProxy(
 
     @builtins.property
     @jsii.member(jsii_name="eventTriggerRef")
-    def event_trigger_ref(self) -> EventTriggerReference:
+    def event_trigger_ref(self) -> "EventTriggerReference":
         '''(experimental) A reference to a EventTrigger resource.
 
         :stability: experimental
         '''
-        return typing.cast(EventTriggerReference, jsii.get(self, "eventTriggerRef"))
+        return typing.cast("EventTriggerReference", jsii.get(self, "eventTriggerRef"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IEventTriggerRef).__jsii_proxy_class__ = lambda : _IEventTriggerRefProxy
